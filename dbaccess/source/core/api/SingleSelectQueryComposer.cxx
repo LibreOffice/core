@@ -614,9 +614,8 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _r
     {
         parseAndCheck_throwError( m_aSqlParser, composeStatementFromParts( aAdditiveClauses ), m_aAdditiveIterator, *this );
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        (void)e;
         SAL_WARN("dbaccess", "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
         DBG_UNHANDLED_EXCEPTION();
         // every part of the additive statement should have passed other tests already, and should not
@@ -692,9 +691,8 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     {
         parseAndCheck_throwError( m_aSqlParser, aSql.makeStringAndClear(), m_aAdditiveIterator, *this );
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
-        (void)e;
         SAL_WARN("dbaccess", "OSingleSelectQueryComposer::setSingleAdditiveClause: there should be no error anymore for the additive statement!" );
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks

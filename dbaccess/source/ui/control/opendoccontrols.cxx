@@ -91,10 +91,7 @@ namespace dbaui
                 }
                 while ( false );
             }
-            catch ( Exception& rException )
-            {
-                (void)rException;
-            }
+            catch ( Exception& ) {}
 
             return aIcon;
         }
@@ -185,10 +182,7 @@ namespace dbaui
                     m_aURLs.insert( MapIndexToStringPair::value_type( nPos, StringPair( sDecodedURL, sFilter ) ) );
                 }
             }
-            catch( Exception& rException )
-            {
-                (void)rException;
-            }
+            catch( Exception& ) {}
         }
     }
 

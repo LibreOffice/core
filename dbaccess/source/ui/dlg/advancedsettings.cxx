@@ -531,10 +531,7 @@ namespace dbaui
         SetText(_sTitle);
     }
 
-    void AdvancedSettingsDialog::enableConfirmSettings( bool _bEnable )
-    {
-        (void)_bEnable;
-    }
+    void AdvancedSettingsDialog::enableConfirmSettings( bool ) {}
 
     void AdvancedSettingsDialog::saveDatasource()
     {

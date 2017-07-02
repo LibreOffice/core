@@ -532,10 +532,6 @@ namespace
                 ++object
             )
         {
-#if OSL_DEBUG_LEVEL > 0
-            const OUString& rName( object->first ); (void)rName;
-#endif
-
             const TContentPtr& rDefinition( object->second );
             const OUString& rPersistentName( rDefinition->m_aProps.sPersistentName );
 
