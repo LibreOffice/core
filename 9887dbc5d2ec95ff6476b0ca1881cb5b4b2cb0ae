@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_24b098dd",
+        "filename": "sal/osl/w32/pipe.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-02T11:40:36Z",
+      "side": 1,
+      "message": "discertionary-\u003ediscretionary",
+      "revId": "9887dbc5d2ec95ff6476b0ca1881cb5b4b2cb0ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
