@@ -1344,8 +1344,6 @@ void SbModule::implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC
 
 void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
 {
-    (void)pDeletedBasic;
-
     for( sal_uInt16 i = 0 ; i < pProps->Count() ; i++ )
     {
         SbProperty* p = dynamic_cast<SbProperty*>( pProps->Get( i )  );
@@ -1915,10 +1913,8 @@ SbJScriptModule::SbJScriptModule()
 {
 }
 
-bool SbJScriptModule::LoadData( SvStream& rStrm, sal_uInt16 nVer )
+bool SbJScriptModule::LoadData( SvStream& rStrm, sal_uInt16 )
 {
-    (void)nVer;
-
     Clear();
     if( !SbxObject::LoadData( rStrm, 1 ) )
         return false;

@@ -290,27 +290,23 @@ bool SbxDecimal::getDouble( double& rVal )
 #else
 // !WIN32
 
-bool SbxDecimal::operator -= ( const SbxDecimal &r )
+bool SbxDecimal::operator -= ( const SbxDecimal & )
 {
-    (void)r;
     return false;
 }
 
-bool SbxDecimal::operator += ( const SbxDecimal &r )
+bool SbxDecimal::operator += ( const SbxDecimal & )
 {
-    (void)r;
     return false;
 }
 
-bool SbxDecimal::operator /= ( const SbxDecimal &r )
+bool SbxDecimal::operator /= ( const SbxDecimal & )
 {
-    (void)r;
     return false;
 }
 
-bool SbxDecimal::operator *= ( const SbxDecimal &r )
+bool SbxDecimal::operator *= ( const SbxDecimal & )
 {
-    (void)r;
     return false;
 }
 
@@ -324,32 +320,30 @@ bool SbxDecimal::isZero()
     return false;
 }
 
-SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight )
+SbxDecimal::CmpResult compare( SAL_UNUSED_PARAMETER const SbxDecimal &, SAL_UNUSED_PARAMETER const SbxDecimal & )
 {
-    (void)rLeft;
-    (void)rRight;
     return SbxDecimal::CmpResult::LT;
 }
 
-void SbxDecimal::setChar( sal_Unicode val )     { (void)val; }
-void SbxDecimal::setByte( sal_uInt8 val )           { (void)val; }
-void SbxDecimal::setShort( sal_Int16 val )          { (void)val; }
-void SbxDecimal::setLong( sal_Int32 val )           { (void)val; }
-void SbxDecimal::setUShort( sal_uInt16 val )        { (void)val; }
-void SbxDecimal::setULong( sal_uInt32 val )         { (void)val; }
-bool SbxDecimal::setSingle( float val )         { (void)val; return false; }
-bool SbxDecimal::setDouble( double val )        { (void)val; return false; }
-void SbxDecimal::setInt( int val )              { (void)val; }
-void SbxDecimal::setUInt( unsigned int val )    { (void)val; }
-bool SbxDecimal::setString( OUString* pOUString )    { (void)pOUString;  return false; }
+void SbxDecimal::setChar( SAL_UNUSED_PARAMETER sal_Unicode ) {}
+void SbxDecimal::setByte( SAL_UNUSED_PARAMETER sal_uInt8 ) {}
+void SbxDecimal::setShort( SAL_UNUSED_PARAMETER sal_Int16 ) {}
+void SbxDecimal::setLong( SAL_UNUSED_PARAMETER sal_Int32 ) {}
+void SbxDecimal::setUShort( SAL_UNUSED_PARAMETER sal_uInt16 ) {}
+void SbxDecimal::setULong( SAL_UNUSED_PARAMETER sal_uInt32 ) {}
+bool SbxDecimal::setSingle( SAL_UNUSED_PARAMETER float ) { return false; }
+bool SbxDecimal::setDouble( SAL_UNUSED_PARAMETER double ) { return false; }
+void SbxDecimal::setInt( SAL_UNUSED_PARAMETER int ) {}
+void SbxDecimal::setUInt( SAL_UNUSED_PARAMETER unsigned int ) {}
+bool SbxDecimal::setString( SAL_UNUSED_PARAMETER OUString* ) { return false; }
 
-bool SbxDecimal::getChar( sal_Unicode& rVal )   { (void)rVal; return false; }
-bool SbxDecimal::getShort( sal_Int16& rVal )        { (void)rVal; return false; }
-bool SbxDecimal::getLong( sal_Int32& rVal )         { (void)rVal; return false; }
-bool SbxDecimal::getUShort( sal_uInt16& rVal )      { (void)rVal; return false; }
-bool SbxDecimal::getULong( sal_uInt32& rVal )       { (void)rVal; return false; }
-bool SbxDecimal::getSingle( float& rVal )       { (void)rVal; return false; }
-bool SbxDecimal::getDouble( double& rVal )      { (void)rVal; return false; }
+bool SbxDecimal::getChar( SAL_UNUSED_PARAMETER sal_Unicode& ) { return false; }
+bool SbxDecimal::getShort( SAL_UNUSED_PARAMETER sal_Int16& ) { return false; }
+bool SbxDecimal::getLong( SAL_UNUSED_PARAMETER sal_Int32& ) { return false; }
+bool SbxDecimal::getUShort( SAL_UNUSED_PARAMETER sal_uInt16& ) { return false; }
+bool SbxDecimal::getULong( SAL_UNUSED_PARAMETER sal_uInt32& ) { return false; }
+bool SbxDecimal::getSingle( SAL_UNUSED_PARAMETER float& ) { return false; }
+bool SbxDecimal::getDouble( SAL_UNUSED_PARAMETER double& ) { return false; }
 
 #endif
 

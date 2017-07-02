@@ -71,10 +71,9 @@ public:
     virtual void SAL_CALL setPropertyValues(const css::uno::Sequence< css::beans::PropertyValue >& PropertyValues_) override;
 };
 
-class StarBASIC;
 class SbxArray;
 
-void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite );
+void RTL_Impl_CreatePropertySet( SbxArray& rPar );
 
 #endif
 

@@ -608,9 +608,6 @@ RTLFUNC(Kill)
 
 RTLFUNC(MkDir)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutEmpty();
     if (rPar.Count() == 2)
     {
@@ -1182,7 +1179,6 @@ RTLFUNC(LTrim)
 RTLFUNC(Mid)
 {
     (void)pBasic;
-    (void)bWrite;
 
     int nArgCount = rPar.Count()-1;
     if ( nArgCount < 2 )
@@ -1450,7 +1446,6 @@ RTLFUNC(Right)
 
 RTLFUNC(RTL)
 {
-    (void)pBasic;
     (void)bWrite;
 
     rPar.Get( 0 )->PutObject( pBasic->getRTL().get() );
@@ -2521,7 +2516,6 @@ RTLFUNC(Timer)
 RTLFUNC(Date)
 {
     (void)pBasic;
-    (void)bWrite;
 
     if ( !bWrite )
     {
@@ -4735,7 +4729,6 @@ RTLFUNC(Reset)
 
 RTLFUNC(DumpAllObjects)
 {
-    (void)pBasic;
     (void)bWrite;
 
     sal_uInt16 nArgCount = rPar.Count();
