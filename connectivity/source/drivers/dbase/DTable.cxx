@@ -282,8 +282,11 @@ void ODbaseTable::readHeader()
                 }
                 else
                 {
-                    // Default Encoding
-                    m_eEncoding = RTL_TEXTENCODING_IBM_850;
+                    if (getConnection()->isTextEncodingDefaulted())
+                    {
+                        // Default Encoding
+                        m_eEncoding = RTL_TEXTENCODING_IBM_850;
+                    }
                 }
                 break;
             case dBaseIVMemo:
