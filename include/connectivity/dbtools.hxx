@@ -789,7 +789,9 @@ namespace dbtools
 
 }   // namespace dbtools
 
-namespace connectivity::dbase
+namespace connectivity
+{
+namespace dbase
 {
     enum DBFType  { dBaseIII         = 0x03,
                     dBaseIV          = 0x04,
@@ -831,7 +833,9 @@ namespace connectivity::dbase
             false if nothing was written to _out_nCharset
     */
     OOO_DLLPUBLIC_DBTOOLS bool dbfReadCharset(rtl_TextEncoding &nCharSet, SvStream* dbf_Stream);
+
 } // namespace connectivity::dbase
+} // namespace connectivity
 
 #endif // INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 
