@@ -94,7 +94,6 @@ class ViewShellManager::Implementation
 {
 public:
     Implementation (
-        ViewShellManager& rManager,
         ViewShellBase& rBase);
     ~Implementation() COVERITY_NOEXCEPT_FALSE;
 
@@ -228,7 +227,7 @@ private:
 //===== ViewShellManager ======================================================
 
 ViewShellManager::ViewShellManager (ViewShellBase& rBase)
-    : mpImpl(new Implementation(*this,rBase)),
+    : mpImpl(new Implementation(rBase)),
       mbValid(true)
 {
 }
@@ -356,7 +355,6 @@ void ViewShellManager::UnlockUpdate()
 //===== ViewShellManager::Implementation ======================================
 
 ViewShellManager::Implementation::Implementation (
-    ViewShellManager& rManager,
     ViewShellBase& rBase)
     : mrBase(rBase),
       maMutex(),
@@ -370,9 +368,7 @@ ViewShellManager::Implementation::Implementation (
       mbFormShellAboveParent(true),
       mpTopShell(nullptr),
       mpTopViewShell(nullptr)
-{
-    (void)rManager;
-}
+{}
 
 ViewShellManager::Implementation::~Implementation() COVERITY_NOEXCEPT_FALSE
 {
