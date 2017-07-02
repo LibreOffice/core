@@ -328,10 +328,9 @@ namespace connectivity
                 {
                     xOrig = xDriver->connect( sConnectURL, aConnectionArgs );
                 }
-                catch(const Exception& e)
+                catch(const Exception&)
                 {
                     StorageContainer::revokeStorage(sKey,nullptr);
-                    (void)e;
                     throw;
                 }
 

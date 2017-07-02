@@ -315,11 +315,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable()
     return true;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 fromType,
-                                                     sal_Int32 toType)
+sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32,
+                                                     sal_Int32)
 {
-    (void) fromType;
-    (void) toType;
     return false;
 }
 
@@ -718,57 +716,48 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency(
         return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType )
+sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible( sal_Int32 )
 {
-    (void) setType;
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType )
+sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible( sal_Int32 )
 {
-    (void) setType;
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType )
+sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible( sal_Int32 )
 {
-    (void) setType;
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType )
+sal_Bool SAL_CALL ODatabaseMetaData::othersUpdatesAreVisible( sal_Int32 )
 {
-    (void) setType;
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::othersDeletesAreVisible( sal_Int32 setType )
+sal_Bool SAL_CALL ODatabaseMetaData::othersDeletesAreVisible( sal_Int32 )
 {
-    (void) setType;
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::othersInsertsAreVisible( sal_Int32 setType )
+sal_Bool SAL_CALL ODatabaseMetaData::othersInsertsAreVisible( sal_Int32 )
 {
-    (void) setType;
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::updatesAreDetected( sal_Int32 setType )
+sal_Bool SAL_CALL ODatabaseMetaData::updatesAreDetected( sal_Int32 )
 {
-    (void) setType;
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected( sal_Int32 setType )
+sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected( sal_Int32 )
 {
-    (void) setType;
     return false;
 }
 
-sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected( sal_Int32 setType )
+sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected( sal_Int32 )
 {
-    (void) setType;
     return false;
 }
 
@@ -1412,65 +1401,49 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
-    const Any& catalog, const OUString& schemaPattern,
-    const OUString& procedureNamePattern, const OUString& columnNamePattern )
+    const Any&, const OUString&,
+    const OUString&, const OUString& )
 {
     SAL_WARN("connectivity.firebird", "Not yet implemented");
-    (void) catalog;
-    (void) schemaPattern;
-    (void) procedureNamePattern;
-    (void) columnNamePattern;
     OSL_FAIL("Not implemented yet!");
     // TODO implement
     return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eProcedureColumns);
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
-    const Any& catalog, const OUString& schemaPattern,
-    const OUString& procedureNamePattern )
+    const Any&, const OUString&,
+    const OUString& )
 {
     SAL_WARN("connectivity.firebird", "Not yet implemented");
-    (void) catalog;
-    (void) schemaPattern;
-    (void) procedureNamePattern;
     OSL_FAIL("Not implemented yet!");
     // TODO implement
     return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eProcedures);
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
-    const Any& catalog, const OUString& schema, const OUString& table )
+    const Any&, const OUString&, const OUString& )
 {
     SAL_WARN("connectivity.firebird", "Not yet implemented");
-    (void) catalog;
-    (void) schema;
-    (void) table;
     OSL_FAIL("Not implemented yet!");
     // TODO implement
     return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eVersionColumns);
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
-    const Any& catalog, const OUString& schema, const OUString& table )
+    const Any&, const OUString&, const OUString& )
 {
     // List the columns in a table which are foreign keys. This is actually
     // never used anywhere in the LO codebase currently. Retrieval from firebird
     // requires using a 5-table join.
     SAL_WARN("connectivity.firebird", "Not yet implemented");
-    (void) catalog;
-    (void) schema;
-    (void) table;
     OSL_FAIL("Not implemented yet!");
     // TODO implement
     return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eExportedKeys);
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
-    const Any& catalog, const OUString& schema, const OUString& table )
+    const Any&, const OUString&, const OUString& table )
 {
-    (void) catalog;
-    (void) schema;
-
     ODatabaseMetaDataResultSet* pResultSet = new
         ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eImportedKeys);
     uno::Reference< XResultSet > xResultSet = pResultSet;
@@ -1619,7 +1592,8 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
         const OUString& /*sSchema*/,
         const OUString& sTable,
         sal_Bool bIsUnique,
-        sal_Bool bIsApproximate)
+        sal_Bool) // TODO: what is bIsApproximate?
+
 {
     // Apparently this method can also return a "tableIndexStatistic"
     // However this is only mentioned in XDatabaseMetaData.idl (whose comments
@@ -1647,9 +1621,6 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     // If false we return all indices, if true we return only unique indices
     if (bIsUnique)
         aQueryBuf.append("AND (indices.RDB$UNIQUE_FLAG = 1) ");
-
-    // TODO: what is bIsApproximate?
-    (void) bIsApproximate;
 
     OUString sQuery = aQueryBuf.makeStringAndClear();
 
@@ -1708,14 +1679,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
-    const Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope,
-    sal_Bool nullable )
+    const Any&, const OUString&, const OUString&, sal_Int32,
+    sal_Bool )
 {
-    (void) catalog;
-    (void) schema;
-    (void) table;
-    (void) scope;
-    (void) nullable;
     OSL_FAIL("Not implemented yet!");
     // TODO implement
     return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eBestRowIdentifier);
@@ -1789,27 +1755,17 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 }
 
 uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
-    const Any& primaryCatalog, const OUString& primarySchema,
-    const OUString& primaryTable, const Any& foreignCatalog,
-    const OUString& foreignSchema, const OUString& foreignTable )
+    const Any&, const OUString&,
+    const OUString&, const Any&,
+    const OUString&, const OUString& )
 {
-    (void) primaryCatalog;
-    (void) primarySchema;
-    (void) primaryTable;
-    (void) foreignCatalog;
-    (void) foreignSchema;
-    (void) foreignTable;
     OSL_FAIL("Not implemented yet!");
     // TODO implement
     return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eCrossReference);
 }
 
-uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const Sequence< sal_Int32 >& types )
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any&, const OUString&, const OUString&, const Sequence< sal_Int32 >& )
 {
-    (void) catalog;
-    (void) schemaPattern;
-    (void) typeNamePattern;
-    (void) types;
     OSL_FAIL("Not implemented yet!");
     // TODO implement
     return new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eUDTs);

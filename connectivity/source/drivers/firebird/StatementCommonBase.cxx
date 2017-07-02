@@ -293,22 +293,17 @@ void SAL_CALL OStatementCommonBase::clearWarnings()
 }
 
 sal_Bool OStatementCommonBase::convertFastPropertyValue(
-                            Any & rConvertedValue,
-                            Any & rOldValue,
-                            sal_Int32 nHandle,
-                            const Any& rValue )
+                            Any &,
+                            Any &,
+                            sal_Int32,
+                            const Any& )
 {
-    (void) rConvertedValue;
-    (void) rOldValue;
-    (void) nHandle;
-    (void) rValue;
     // here we have to try to convert
     return false;
 }
 
-void OStatementCommonBase::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)
+void OStatementCommonBase::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any&)
 {
-    (void) rValue;
     // set the value to what ever is necessary
     switch(nHandle)
     {
@@ -327,9 +322,8 @@ void OStatementCommonBase::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,co
     }
 }
 
-void OStatementCommonBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
+void OStatementCommonBase::getFastPropertyValue(Any&,sal_Int32 nHandle) const
 {
-    (void) rValue;
     switch(nHandle)
     {
         case PROPERTY_ID_QUERYTIMEOUT:

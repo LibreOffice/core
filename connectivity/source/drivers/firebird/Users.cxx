@@ -47,7 +47,7 @@ void Users::impl_refresh()
 
 ObjectType Users::createObject(const OUString& rName)
 {
-    return new User(m_xMetaData->getConnection(), rName);
+    return new User(rName);
 }
 
 uno::Reference< XPropertySet > Users::createDescriptor()
@@ -55,16 +55,14 @@ uno::Reference< XPropertySet > Users::createDescriptor()
     // There is some internal magic so that the same class can be used as either
     // a descriptor or as a normal user. See VUser.cxx for the details. In our
     // case we just need to ensure we use the correct constructor.
-    return new User(m_xMetaData->getConnection());
+    return new User;
 }
 
 //----- XAppend ---------------------------------------------------------------
 ObjectType Users::appendObject(const OUString& rName,
-                                const uno::Reference< XPropertySet >& rDescriptor)
+                                const uno::Reference< XPropertySet >&)
 {
     // TODO: set sSql as appropriate
-    (void) rName;
-    (void) rDescriptor;
     OUString sSql;
     m_xMetaData->getConnection()->createStatement()->execute(sSql);
 
@@ -72,13 +70,12 @@ ObjectType Users::appendObject(const OUString& rName,
 }
 
 //----- XDrop -----------------------------------------------------------------
-void Users::dropObject(sal_Int32 nPosition, const OUString& sName)
+void Users::dropObject(sal_Int32 nPosition, const OUString&)
 {
     uno::Reference< XPropertySet > xUser(getObject(nPosition));
 
     if (!ODescriptor::isNew(xUser))
     {
-        (void) sName;
         // TODO: drop me
     }
 }

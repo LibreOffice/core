@@ -197,10 +197,8 @@ namespace connectivity
             const ProfileStruct& rProfile = (*rProduct.mProfileList.begin()).second;
             return rProfile.getProfileName();
         }
-        bool ProfileAccess::isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName )
+        bool ProfileAccess::isProfileLocked( css::mozilla::MozillaProductType, const OUString& )
         {
-            (void)product; /* avoid warning about unused parameter */
-            (void)profileName; /* avoid warning about unused parameter */
             return true;
         }
 

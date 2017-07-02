@@ -45,11 +45,9 @@ css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames()
 
 css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
     OUString const & url,
-    css::uno::Sequence< css::beans::PropertyValue > const & info)
+    css::uno::Sequence< css::beans::PropertyValue > const &)
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::connect()" );
-
-    (void) url; (void) info; // avoid warnings
 
     // Profile discovery
     css::uno::Reference<css::uno::XInterface> xInstance = context_->getServiceManager()->createInstanceWithContext("com.sun.star.mozilla.MozillaBootstrap", context_);
@@ -72,7 +70,7 @@ css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
     css::uno::Reference< css::sdbc::XConnection > xCon;
     OConnection* pCon = new OConnection(this);
     xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-    pCon->construct(url, info);
+    pCon->construct(url);
     return xCon;
 }
 
@@ -112,11 +110,10 @@ sal_Bool MorkDriver::acceptsURL(OUString const & url)
 }
 
 css::uno::Sequence< css::sdbc::DriverPropertyInfo > MorkDriver::getPropertyInfo(
-    OUString const & url,
-    css::uno::Sequence< css::beans::PropertyValue > const & info)
+    OUString const &,
+    css::uno::Sequence< css::beans::PropertyValue > const &)
 {
     //... TODO
-    (void) url; (void) info; // avoid warnings
     return css::uno::Sequence< css::sdbc::DriverPropertyInfo >();
 }
 

@@ -339,18 +339,16 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& rColumnName)
     return 0; // Never reached
 }
 
-uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex )
+uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 )
 {
-    (void) columnIndex;
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     return nullptr;
 }
 
-uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex )
+uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 )
 {
-    (void) columnIndex;
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -659,9 +657,8 @@ sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 nColumnIndex)
     return safelyRetrieveValue< ORowSetValue >(nColumnIndex);
 }
 
-Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 columnIndex)
+Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32)
 {
-    (void) columnIndex;
     return Sequence< sal_Int8 >(); // TODO: implement
     //return safelyRetrieveValue(columnIndex);
 }
@@ -724,9 +721,8 @@ uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  )
     return m_xMetaData;
 }
 
-uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex )
+uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 )
 {
-    (void) columnIndex;
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -736,7 +732,6 @@ uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex )
 
 uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex )
 {
-    (void) columnIndex;
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -765,9 +760,8 @@ uno::Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 columnIndex)
 }
 
 
-uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex )
+uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 )
 {
-    (void) columnIndex;
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
@@ -775,10 +769,8 @@ uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex )
 }
 
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference< css::container::XNameAccess >& typeMap )
+Any SAL_CALL OResultSet::getObject( sal_Int32, const uno::Reference< css::container::XNameAccess >& )
 {
-    (void) columnIndex;
-    (void) typeMap;
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 

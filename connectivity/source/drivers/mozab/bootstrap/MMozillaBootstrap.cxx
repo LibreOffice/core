@@ -113,10 +113,8 @@ sal_Bool SAL_CALL MozillaBootstrap::getProfileExists( css::mozilla::MozillaProdu
 }
 
 // XProfileManager
-::sal_Int32 SAL_CALL MozillaBootstrap::bootupProfile( css::mozilla::MozillaProductType product, const OUString& profileName )
+::sal_Int32 SAL_CALL MozillaBootstrap::bootupProfile( css::mozilla::MozillaProductType, const OUString& )
 {
-    (void)product; /* avoid warning about unused parameter */
-    (void)profileName; /* avoid warning about unused parameter */
         return -1;
 }
 ::sal_Int32 SAL_CALL MozillaBootstrap::shutdownProfile(  )
@@ -135,17 +133,14 @@ sal_Bool SAL_CALL MozillaBootstrap::isCurrentProfileLocked(  )
 {
     return true;
 }
-OUString SAL_CALL MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProductType product, const OUString& profileName )
+OUString SAL_CALL MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProductType, const OUString& )
 {
-    (void)product; /* avoid warning about unused parameter */
-    (void)profileName; /* avoid warning about unused parameter */
     return OUString();
 }
 
 // XProxyRunner
-::sal_Int32 SAL_CALL MozillaBootstrap::Run( const css::uno::Reference< css::mozilla::XCodeProxy >& aCode )
+::sal_Int32 SAL_CALL MozillaBootstrap::Run( const css::uno::Reference< css::mozilla::XCodeProxy >& )
 {
-    (void)aCode; /* avoid warning about unused parameter */
     return -1;
 }
 
