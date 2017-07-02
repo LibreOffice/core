@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_644b802c",
+        "filename": "sw/source/uibase/uiview/view.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-02T02:50:33Z",
+      "side": 1,
+      "message": "Is this warning then still necessary/correct?",
+      "revId": "c9fef17a6c17dd645f836a1983f412fc0c745607",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
