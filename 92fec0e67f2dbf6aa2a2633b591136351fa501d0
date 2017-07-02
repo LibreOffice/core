@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_c4eef4eb",
+        "filename": "sal/osl/unx/pipe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-02T07:25:25Z",
+      "side": 1,
+      "message": "so now there is no warning at all?",
+      "revId": "92fec0e67f2dbf6aa2a2633b591136351fa501d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e4b930ee",
+        "filename": "sal/osl/unx/pipe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-02T07:25:25Z",
+      "side": 1,
+      "message": "unnecessary parentheses",
+      "revId": "92fec0e67f2dbf6aa2a2633b591136351fa501d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_04bf1cd1",
+        "filename": "sal/osl/unx/pipe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-02T07:25:25Z",
+      "side": 1,
+      "message": "warning?",
+      "revId": "92fec0e67f2dbf6aa2a2633b591136351fa501d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_24b418f1",
+        "filename": "sal/osl/unx/pipe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-02T07:25:25Z",
+      "side": 1,
+      "message": "should be outside the loop",
+      "revId": "92fec0e67f2dbf6aa2a2633b591136351fa501d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_44b924e9",
+        "filename": "sal/osl/unx/pipe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-02T07:25:25Z",
+      "side": 1,
+      "message": "outside loop",
+      "revId": "92fec0e67f2dbf6aa2a2633b591136351fa501d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_64ce2085",
+        "filename": "sal/osl/w32/pipe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-02T07:25:25Z",
+      "side": 1,
+      "message": "discetionary -\u003e discretionary",
+      "revId": "92fec0e67f2dbf6aa2a2633b591136351fa501d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_84cb0c72",
+        "filename": "sal/osl/w32/pipe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-02T07:25:25Z",
+      "side": 1,
+      "message": "you have changed the logic here, now SetSecurityDescriptorDacl is not called if InitializeSecurityDescriptor fails. Are you sure this is correct?",
+      "revId": "92fec0e67f2dbf6aa2a2633b591136351fa501d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
