@@ -870,27 +870,6 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
             ++nCell;
             ++aCellIterator;
         }
-#ifdef DEBUG_WRITERFILTER
-        //-->debug cell properties
-        {
-            OUString sNames;
-            const uno::Sequence< beans::PropertyValues > aDebugCurrentRow = aCellProperties[nRow];
-            sal_Int32 nDebugCells = aDebugCurrentRow.getLength();
-            (void) nDebugCells;
-            for( sal_Int32  nDebugCell = 0; nDebugCell < nDebugCells; ++nDebugCell)
-            {
-                const uno::Sequence< beans::PropertyValue >& aDebugCellProperties = aDebugCurrentRow[nDebugCell];
-                sal_Int32 nDebugCellProperties = aDebugCellProperties.getLength();
-                for( sal_Int32  nDebugProperty = 0; nDebugProperty < nDebugCellProperties; ++nDebugProperty)
-                {
-                    sNames += aDebugCellProperties[nDebugProperty].Name + "-";
-                }
-                sNames += "\n";
-            }
-            (void)sNames;
-        }
-        //--<
-#endif
         ++nRow;
         ++aRowOfCellsIterator;
         ++aRowIter;

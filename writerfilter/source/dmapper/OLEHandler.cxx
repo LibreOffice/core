@@ -69,7 +69,6 @@ OLEHandler::~OLEHandler()
 void OLEHandler::lcl_attribute(Id rName, Value & rVal)
 {
     OUString sStringValue = rVal.getString();
-    (void)rName;
     switch( rName )
     {
         case NS_ooxml::LN_CT_OLEObject_Type:
