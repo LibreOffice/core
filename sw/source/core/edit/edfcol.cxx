@@ -531,6 +531,25 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     }
 }
 
+void SwEditShell::SignParagraph(SwPaM* pPaM)
+{
+    if (!pPaM)
+        return;
+
+    const SwPosition* pPosStart = pPaM->Start();
+    SwContentNode* pNode = pPosStart->nNode.GetNode().GetContentNode();
+
+    if (pNode && pNode->IsTextNode())
+    {
+        // Get the text (without fields).
+        SwTextNode* pTextNode = pNode->GetTextNode();
+        const OUString text = pTextNode->GetText();
+        const auto len = text.getLength();
+
+        //TODO: get signature, add signature field and metadata.
+    }
+}
+
 // #i62675#
 void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
                                 const bool bResetListAttrs)
