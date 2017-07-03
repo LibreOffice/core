@@ -2740,8 +2740,6 @@ sd/inc/sdmod.hxx:131
     SdModule mpErrorHdl class SfxErrorHandler *
 sd/source/filter/eppt/eppt.hxx:176
     PPTWriter mnTxId sal_uInt32
-sd/source/filter/eppt/epptbase.hxx:140
-    FontCollectionEntry bIsConverted _Bool
 sd/source/filter/ppt/ppt97animations.hxx:41
     Ppt97AnimationInfoAtom nSlideCount sal_uInt16
 sd/source/filter/ppt/ppt97animations.hxx:47
@@ -2750,14 +2748,6 @@ sd/source/filter/ppt/ppt97animations.hxx:50
     Ppt97AnimationInfoAtom nUnknown1 sal_uInt8
 sd/source/filter/ppt/ppt97animations.hxx:51
     Ppt97AnimationInfoAtom nUnknown2 sal_uInt8
-sd/source/filter/ppt/propread.hxx:142
-    PropRead mnFormat sal_uInt16
-sd/source/filter/ppt/propread.hxx:143
-    PropRead mnVersionLo sal_uInt16
-sd/source/filter/ppt/propread.hxx:144
-    PropRead mnVersionHi sal_uInt16
-sd/source/ui/framework/factories/BasicPaneFactory.cxx:74
-    sd::framework::BasicPaneFactory::PaneDescriptor mbIsChildWindow _Bool
 sd/source/ui/inc/animobjs.hxx:129
     sd::AnimationWindow pControllerItem class sd::AnimationControllerItem *
 sd/source/ui/inc/navigatr.hxx:122
@@ -2770,24 +2760,6 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL class rtl::OUString
-sd/source/ui/slidesorter/inc/controller/SlsClipboard.hxx:135
-    sd::slidesorter::controller::Clipboard mbUpdateSelectionPending _Bool
-sd/source/ui/slidesorter/inc/model/SlsVisualState.hxx:57
-    sd::slidesorter::model::VisualState meCurrentVisualState enum sd::slidesorter::model::VisualState::State
-sd/source/ui/slidesorter/inc/view/SlsTheme.hxx:121
-    sd::slidesorter::view::Theme::GradientDescriptor maBaseColor ColorData
-sd/source/ui/slidesorter/inc/view/SlsTheme.hxx:123
-    sd::slidesorter::view::Theme::GradientDescriptor mnSaturationOverride sal_Int32
-sd/source/ui/slidesorter/inc/view/SlsTheme.hxx:124
-    sd::slidesorter::view::Theme::GradientDescriptor mnBrightnessOverride sal_Int32
-sd/source/ui/slidesorter/inc/view/SlsTheme.hxx:131
-    sd::slidesorter::view::Theme::GradientDescriptor mnFillOffset1 sal_Int32
-sd/source/ui/slidesorter/inc/view/SlsTheme.hxx:132
-    sd::slidesorter::view::Theme::GradientDescriptor mnFillOffset2 sal_Int32
-sd/source/ui/slidesorter/inc/view/SlsTheme.hxx:133
-    sd::slidesorter::view::Theme::GradientDescriptor mnBorderOffset1 sal_Int32
-sd/source/ui/slidesorter/inc/view/SlsTheme.hxx:134
-    sd::slidesorter::view::Theme::GradientDescriptor mnBorderOffset2 sal_Int32
 sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:113
@@ -2804,8 +2776,6 @@ sd/source/ui/view/viewshel.cxx:1236
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:195
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
-sdext/source/pdfimport/pdfiadaptor.hxx:92
-    pdfi::PDFIRawAdaptor m_bEnableToplevelText _Bool
 sfx2/source/doc/doctempl.cxx:118
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 sfx2/source/doc/docundomanager.cxx:198

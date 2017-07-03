@@ -137,7 +137,6 @@ struct FontCollectionEntry
         sal_Int16               CharSet;
 
         OUString                Original;
-        bool                    bIsConverted;
 
         FontCollectionEntry( const OUString& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
                             Scaling ( 1.0 ),

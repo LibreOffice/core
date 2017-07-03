@@ -128,12 +128,6 @@ private:
     */
     PageList maPagesToSelect;
 
-    /** When pages are moved or copied then the selection of the slide
-        sorter has to be updated.  This flag is used to remember whether the
-        selection has to be updated or can stay as it is (sal_False).
-    */
-    bool mbUpdateSelectionPending;
-
     /** Used when a drop is executed to combine all undo actions into one.
         Typically created in ExecuteDrop() and released in DragFinish().
     */
