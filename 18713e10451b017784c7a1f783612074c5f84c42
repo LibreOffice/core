@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_472be630",
+        "filename": "sc/source/filter/excel/xelink.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-03T11:21:48Z",
+      "side": 1,
+      "message": "Looks like this can be removed, the \"side effect part\" of getSingleRefToken() is not executed with the nullptr passed as ScAddress* pCurPos.",
+      "range": {
+        "startLine": 1869,
+        "startChar": 0,
+        "endLine": 1872,
+        "endChar": 15
+      },
+      "revId": "18713e10451b017784c7a1f783612074c5f84c42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6720e24a",
+        "filename": "sc/source/filter/excel/xelink.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1910,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-03T11:21:48Z",
+      "side": 1,
+      "message": "Keep this check for mismatch detection.",
+      "revId": "18713e10451b017784c7a1f783612074c5f84c42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
