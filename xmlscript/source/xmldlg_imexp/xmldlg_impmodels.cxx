@@ -1833,7 +1833,7 @@ Reference< xml::input::XElement > WindowElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException( "expected styles ot bulletinboard element!", Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected styles or bulletinboard element!", Reference< XInterface >(), Any() );
     }
 }
 
