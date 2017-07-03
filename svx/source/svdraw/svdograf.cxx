@@ -474,20 +474,63 @@ Graphic SdrGrafObj::GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformF
     // Refactored most of the code to GraphicObject, where
     // everybody can use e.g. the cropping functionality
 
-    GraphicType     eType = GetGraphicType();
+//    GraphicType     eType = GetGraphicType();
     MapMode         aDestMap( pModel->GetScaleUnit(), Point(), pModel->GetScaleFraction(), pModel->GetScaleFraction() );
     const Size      aDestSize( GetLogicRect().GetSize() );
-    const bool      bMirror = bool( nTransformFlags & SdrGrafObjTransformsAttrs::MIRROR );
-    const bool      bRotate = bool( nTransformFlags & SdrGrafObjTransformsAttrs::ROTATE ) &&
-        ( aGeo.nRotationAngle && aGeo.nRotationAngle != 18000 ) && ( GraphicType::NONE != eType );
+//    const bool      bMirror = bool( nTransformFlags & SdrGrafObjTransformsAttrs::MIRROR );
+//    const bool      bRotate = bool( nTransformFlags & SdrGrafObjTransformsAttrs::ROTATE ) &&
+//        ( aGeo.nRotationAngle && aGeo.nRotationAngle != 18000 ) && ( GraphicType::NONE != eType );
+//
+//    // Need cropping info earlier
+//    const_cast<SdrGrafObj*>(this)->ImpSetAttrToGrafInfo();
+//    GraphicAttr aActAttr;
+//
+//    if( SdrGrafObjTransformsAttrs::NONE != nTransformFlags &&
+//        GraphicType::NONE != eType )
+//    {
+//        // Actually transform the graphic only in this case.
+//        // Cropping always happens, though.
+//        aActAttr = aGrafInfo;
+//
+//        if( bMirror )
+//        {
+//            sal_uInt16      nMirrorCase = ( aGeo.nRotationAngle == 18000 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
+//            bool bHMirr = nMirrorCase == 2 || nMirrorCase == 4;
+//            bool bVMirr = nMirrorCase == 3 || nMirrorCase == 4;
+//
+//            aActAttr.SetMirrorFlags( ( bHMirr ? BmpMirrorFlags::Horizontal : BmpMirrorFlags::NONE ) | ( bVMirr ? BmpMirrorFlags::Vertical : BmpMirrorFlags::NONE ) );
+//        }
+//
+//        if( bRotate )
+//            aActAttr.SetRotation( sal_uInt16(aGeo.nRotationAngle / 10) );
+//    }
 
-    // Need cropping info earlier
-    const_cast<SdrGrafObj*>(this)->ImpSetAttrToGrafInfo();
+    GraphicAttr aActAttr = GetGraphicAttr(nTransformFlags);
+
+    // Delegate to moved code in GraphicObject
+    return GetGraphicObject().GetTransformedGraphic( aDestSize, aDestMap, aActAttr );
+}
+
+GraphicType SdrGrafObj::GetGraphicType() const
+{
+    return pGraphic->GetType();
+}
+
+GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlags ) const
+{
     GraphicAttr aActAttr;
 
+    GraphicType eType = GetGraphicType();
     if( SdrGrafObjTransformsAttrs::NONE != nTransformFlags &&
         GraphicType::NONE != eType )
     {
+        const bool      bMirror = bool( nTransformFlags & SdrGrafObjTransformsAttrs::MIRROR );
+        const bool      bRotate = bool( nTransformFlags & SdrGrafObjTransformsAttrs::ROTATE ) &&
+            ( aGeo.nRotationAngle && aGeo.nRotationAngle != 18000 ) && ( GraphicType::NONE != eType );
+
+        // Need cropping info earlier
+        const_cast<SdrGrafObj*>(this)->ImpSetAttrToGrafInfo();
+
         // Actually transform the graphic only in this case.
         // Cropping always happens, though.
         aActAttr = aGrafInfo;
@@ -505,13 +548,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformF
             aActAttr.SetRotation( sal_uInt16(aGeo.nRotationAngle / 10) );
     }
 
-    // Delegate to moved code in GraphicObject
-    return GetGraphicObject().GetTransformedGraphic( aDestSize, aDestMap, aActAttr );
-}
-
-GraphicType SdrGrafObj::GetGraphicType() const
-{
-    return pGraphic->GetType();
+    return aActAttr;
 }
 
 bool SdrGrafObj::IsAnimated() const
