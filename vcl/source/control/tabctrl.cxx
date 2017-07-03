@@ -50,7 +50,7 @@ struct ImplTabItem
     OUString            maHelpText;
     OString             maHelpId;
     OString             maTabName;
-    tools::Rectangle           maRect;
+    tools::Rectangle    maRect;
     sal_uInt16          mnLine;
     bool                mbFullVisible;
     bool                mbEnabled;
@@ -73,6 +73,7 @@ struct ImplTabCtrlData
 
 // for the Tab positions
 #define TAB_PAGERECT        0xFFFF
+#define HAMBURGER_DIM       28
 
 void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
@@ -1179,7 +1180,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         ImplTabItem* pLastTab = nullptr;
         size_t idx;
 
-        // Event though there is a tab overlap with GTK+, the first tab is not
+        // Even though there is a tab overlap with GTK+, the first tab is not
         // overlapped on the left side. Other toolkits ignore this option.
         if (bDrawTabsRTL)
         {
@@ -2201,14 +2202,23 @@ FactoryFunction TabControl::GetUITestFactory() const
 
 sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;
 
+IMPL_LINK_NOARG(NotebookbarTabControlBase, OpenMenu, Button*, void)
+{
+    m_aIconClickHdl.Call(static_cast<NotebookBar*>(GetParent()->GetParent()));
+}
+
 NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     : TabControl(pParent, WB_STDTABCONTROL)
     , bLastContextWasSupported(true)
     , eLastContext(vcl::EnumContext::Context::Any)
 {
     BitmapEx aBitmap(SV_RESID_BITMAP_NOTEBOOKBAR);
-    InsertPage(1, "");
-    SetPageImage(1, Image(aBitmap));
+
+    m_pOpenMenu = VclPtr<PushButton>::Create(this);
+    m_pOpenMenu->SetSizePixel(Size(HAMBURGER_DIM, HAMBURGER_DIM));
+    m_pOpenMenu->SetClickHdl(LINK(this, NotebookbarTabControlBase, OpenMenu));
+    m_pOpenMenu->SetModeImage(Image(aBitmap));
+    m_pOpenMenu->Show();
 }
 
 NotebookbarTabControlBase::~NotebookbarTabControlBase()
@@ -2258,6 +2268,7 @@ void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
 void NotebookbarTabControlBase::dispose()
 {
     m_pShortcuts.disposeAndClear();
+    m_pOpenMenu.disposeAndClear();
     TabControl::dispose();
 }
 
@@ -2285,22 +2296,14 @@ sal_uInt16 NotebookbarTabControlBase::GetPageId( const Point& rPos ) const
 
 void NotebookbarTabControlBase::SelectTabPage( sal_uInt16 nPageId )
 {
-    if ( nPageId == 1 )
-        m_aIconClickHdl.Call( static_cast<NotebookBar*>(GetParent()->GetParent()) );
-    else
-    {
-        TabControl::SelectTabPage( nPageId );
-        Resize();
-    }
+    TabControl::SelectTabPage( nPageId );
+    Resize();
 }
 
 void NotebookbarTabControlBase::SetCurPageId( sal_uInt16 nPageId )
 {
-    if ( nPageId != 1 )
-    {
-        TabControl::SetCurPageId( nPageId );
-        Resize();
-    }
+    TabControl::SetCurPageId( nPageId );
+    Resize();
     if ( nPageId == GetPageCount() )
         ImplActivateTabPage( true );
 }
@@ -2350,10 +2353,10 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     if ( mpTabCtrlData->maItemList.empty() )
         return false;
 
-    long nMaxWidth = nWidth;
-    long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() : 0;
+    long nMaxWidth = nWidth - HAMBURGER_DIM;
+    long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() + 1 : 0;
 
-    const long nOffsetX = 2 + GetItemsOffset().X();
+    const long nOffsetX = 2 + GetItemsOffset().X() + nShortcutsWidth;
     const long nOffsetY = 2 + GetItemsOffset().Y();
 
     //fdo#66435 throw Knuth/Tex minimum raggedness algorithm at the problem
@@ -2361,14 +2364,18 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
     //collect widths
     std::vector<sal_Int32> aWidths;
-    aWidths.push_back(ImplGetItemSize( &(*(mpTabCtrlData->maItemList.begin())), nMaxWidth ).Width() + nShortcutsWidth);
-    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin() + 1;
+    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
-        long aSize = ImplGetItemSize( &(*it), nMaxWidth ).getWidth();
-        if( !it->maText.isEmpty() && aSize < 100)
-            aSize = 100;
-        aWidths.push_back(aSize);
+        if( it->mbEnabled )
+        {
+            long aSize = ImplGetItemSize( &(*it), nMaxWidth ).getWidth();
+            if( !it->maText.isEmpty() && aSize < 100)
+                aSize = 100;
+            aWidths.push_back(aSize);
+        }
+        else
+            aWidths.push_back(0);
     }
 
     //aBreakIndexes will contain the indexes of the last tab on each row
@@ -2391,7 +2398,6 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
     size_t nIndex = 0;
     sal_uInt16 nPos = 0;
-    sal_uInt16 nHiddenWidth = 0;
 
     for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it, ++nIndex )
@@ -2417,6 +2423,13 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
             nLinePosAry[nLines] = nPos;
         }
 
+        if ( !it->mbEnabled )
+        {
+            nPos++;
+            continue;
+        }
+
+        // set minimum tab size
         if( !it->maText.isEmpty() && aSize.getWidth() < 100)
             aSize.Width() = 100;
 
@@ -2427,25 +2440,12 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         if ( mbSmallInvalidate && (it->maRect != aNewRect) )
             mbSmallInvalidate = false;
 
-        // don't show empty space when tab is hidden, move next tabs to the left
-        if ( it->mpTabPage && !it->mpTabPage->HasContext(vcl::EnumContext::Context::Any) )
-        {
-            aNewRect.setX(aNewRect.getX() - nHiddenWidth);
-            nHiddenWidth += aNewRect.getWidth();
-        }
-
         it->maRect = aNewRect;
         it->mnLine = nLines;
         it->mbFullVisible = true;
 
         nLineWidthAry[nLines] += aSize.Width();
         nX += aSize.Width();
-
-        if( it == mpTabCtrlData->maItemList.begin() )
-        {
-            nLineWidthAry[nLines] += nShortcutsWidth;
-            nX += nShortcutsWidth;
-        }
 
         if ( it->mnId == mnCurPageId )
             nCurLine = nLines;
@@ -2485,8 +2485,9 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
                 nIDX = 0;
                 if( nLinePosAry[n+1]-i > 0 )
                 {
-                    nDX = ( nWidth - nOffsetX - nLineWidthAry[n] ) / ( nLinePosAry[n+1] - i );
-                    nModDX = ( nWidth - nOffsetX - nLineWidthAry[n] ) % ( nLinePosAry[n+1] - i );
+                    long nAvailableWidth = nWidth - nOffsetX - nLineWidthAry[n] - HAMBURGER_DIM;
+                    nDX = nAvailableWidth / ( nLinePosAry[n+1] - i );
+                    nModDX = nAvailableWidth % ( nLinePosAry[n+1] - i );
                 }
                 else
                 {
@@ -2498,19 +2499,10 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
             }
 
             it->maRect.Left() += nIDX;
-            if( it == mpTabCtrlData->maItemList.begin() )
-                it->maRect.Right() += nIDX;
-            else
-                it->maRect.Right() += nIDX + nDX;
+            it->maRect.Right() += nIDX + nDX;
             it->maRect.Top() = nLineHeightAry[n-1];
             it->maRect.Bottom() = nLineHeightAry[n-1] + nIH;
             nIDX += nDX;
-
-            if( m_pShortcuts && ( it == mpTabCtrlData->maItemList.begin() ) )
-            {
-                Point aPos(it->maRect.Right(), nLineHeightAry[n-1]);
-                m_pShortcuts->SetPosPixel(aPos);
-            }
 
             if ( nModDX )
             {
@@ -2524,14 +2516,6 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     }
     else
     { // only one line
-
-        if( m_pShortcuts && mpTabCtrlData
-            && mpTabCtrlData->maItemList.begin() != mpTabCtrlData->maItemList.end() )
-        {
-            Point aPos(mpTabCtrlData->maItemList.begin()->maRect.Right(), 0);
-            m_pShortcuts->SetPosPixel(aPos);
-        }
-
         if(ImplGetSVData()->maNWFData.mbCenteredTabs)
         {
             int nRightSpace = nMaxWidth;//space left on the right by the tabs
@@ -2548,6 +2532,12 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
             }
         }
     }
+
+    // potition the shortcutbox
+    m_pShortcuts->SetPosPixel(Point(0, 0));
+
+    // position the menu
+    m_pOpenMenu->SetPosPixel(Point(nWidth - HAMBURGER_DIM, 0));
 
     return true;
 }
