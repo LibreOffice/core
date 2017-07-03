@@ -174,7 +174,7 @@ Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
     {
         Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
         aResult.realloc( aValues.getLength());
-        std::transform( aValues.getConstArray(), aValues.getConstArray() + aValues.getLength(),
+        std::transform( aValues.begin(), aValues.end(),
                           aResult.getArray(), CommonFunctors::AnyToDouble());
     }
     return aResult;
@@ -189,7 +189,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
     {
         Sequence< uno::Any > aValues( m_xDataProvider->getDataByRangeRepresentation( m_aSourceRepresentation ));
         aResult.realloc( aValues.getLength());
-        std::transform( aValues.getConstArray(), aValues.getConstArray() + aValues.getLength(),
+        std::transform( aValues.begin(), aValues.end(),
                           aResult.getArray(), CommonFunctors::AnyToString());
     }
     return aResult;

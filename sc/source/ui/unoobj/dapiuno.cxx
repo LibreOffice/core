@@ -2811,7 +2811,7 @@ bool lclExtractGroupMembers( ScFieldGroupMembers& rMembers, const Any& rElement 
     if( rElement >>= aSeq )
     {
         if( aSeq.hasElements() )
-            rMembers.insert( rMembers.end(), aSeq.getConstArray(), aSeq.getConstArray() + aSeq.getLength() );
+            rMembers.insert( rMembers.end(), aSeq.begin(), aSeq.end() );
         return true;
     }
 

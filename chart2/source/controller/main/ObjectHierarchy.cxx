@@ -308,7 +308,7 @@ void ImplObjectHierarchy::createAxesTree(
     {
         Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true ) );
         if( !m_bOrderingForElementSelector )
-            std::transform( aAxes.getConstArray(), aAxes.getConstArray() + aAxes.getLength(),
+            std::transform( aAxes.begin(), aAxes.end(),
                           std::back_inserter( rContainer ),
                           lcl_ObjectToOID( xChartDoc ));
 

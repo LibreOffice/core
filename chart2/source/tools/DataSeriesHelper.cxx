@@ -231,7 +231,7 @@ std::vector< Reference< chart2::data::XLabeledDataSequence > >
                                const OUString& aRole, bool bMatchPrefix /* = false */ )
 {
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVec;
-    std::remove_copy_if( aDataSequences.getConstArray(), aDataSequences.getConstArray() + aDataSequences.getLength(),
+    std::remove_copy_if( aDataSequences.begin(), aDataSequences.end(),
                            std::back_inserter( aResultVec ),
                            std::not1( lcl_MatchesRole( aRole, bMatchPrefix )));
     return aResultVec;

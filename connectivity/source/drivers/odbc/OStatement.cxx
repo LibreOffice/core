@@ -139,8 +139,8 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  )
     Sequence< Type > aOldTypes = OStatement_BASE::getTypes();
     if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() )
     {
-        std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
-                        cppu::UnoType<XGeneratedResultSet>::get());
+        std::remove(aOldTypes.begin(), aOldTypes.end(),
+                    cppu::UnoType<XGeneratedResultSet>::get());
         aOldTypes.realloc(aOldTypes.getLength() - 1);
     }
 
