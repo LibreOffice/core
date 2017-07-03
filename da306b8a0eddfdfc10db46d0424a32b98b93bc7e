@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_a762cad6",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2217,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-07-03T09:17:49Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure it works (I tried to finish that task before and I had working LO without first tab). Maybe have you some additional not-committed changes or not builded/linked correctly?",
+      "parentUuid": "3a461143_8486acb7",
+      "revId": "da306b8a0eddfdfc10db46d0424a32b98b93bc7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_e1492290",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 15
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Doesn\u0027t this line provide it without checking if the first element is removed or not? Doesn\u0027t it work on any arbitrarily sized vector?",
       "parentUuid": "3a461143_e1492290",
+      "revId": "da306b8a0eddfdfc10db46d0424a32b98b93bc7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_8765cee2",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-07-03T09:17:49Z",
+      "side": 1,
+      "message": "ah sorry I didn\u0027t see that this is checked above:\n\nif ( mpTabCtrlData-\u003emaItemList.empty() )\n        return false;",
+      "parentUuid": "3a461143_6489c0ca",
       "revId": "da306b8a0eddfdfc10db46d0424a32b98b93bc7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
