@@ -166,10 +166,8 @@ WinInetBackend::WinInetBackend()
             OUString aProxyBypassList = OUString::createFromAscii( lpi->lpszProxyBypass );
 
             // override default for ProxyType, which is "0" meaning "No proxies".
-            sal_Int32 nProperties = 1;
-
             valueProxyType_.IsPresent = true;
-            valueProxyType_.Value <<= nProperties;
+            valueProxyType_.Value <<= sal_Int32(1);
 
             // fill proxy bypass list
             if( aProxyBypassList.getLength() > 0 )

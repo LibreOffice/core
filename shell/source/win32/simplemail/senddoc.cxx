@@ -264,7 +264,7 @@ int main(int argc, char* argv[])
         // selection dialog must appear because we specify no
         // profile name, so the user has to specify a profile
 
-        LHANDLE hSession = 0;
+        LHANDLE const hSession = 0;
 
         MapiRecipDesc mapiOriginator;
         MapiRecipientList_t mapiRecipientList;
