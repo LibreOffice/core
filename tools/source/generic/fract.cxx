@@ -483,10 +483,11 @@ static int impl_NumberOfBits( unsigned long nNum )
     nNum |= ( nNum >> 16 );
 
     sal_uInt32 nNumber;
-    int nBonus = 0;
+    int nBonus;
 
 #if SAL_TYPES_SIZEOFLONG == 4
     nNumber = nNum;
+    nBonus = 0;
 #elif SAL_TYPES_SIZEOFLONG == 8
     nNum |= ( nNum >> 32 );
 
@@ -499,7 +500,10 @@ static int impl_NumberOfBits( unsigned long nNum )
             return 32;
     }
     else
+    {
         nNumber = sal_uInt32( nNum & 0xFFFFFFFF );
+        nBonus = 0;
+    }
 #else
 #error "Unknown size of long!"
 #endif
