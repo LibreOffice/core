@@ -146,7 +146,7 @@ void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
 
 void SdNavigatorWin::FreshEntry( )
 {
-    maTlbObjects->FreshCurEntry();
+    maTlbObjects->Invalidate();
 }
 
 void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
@@ -333,7 +333,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
                     SID_NAVIGATOR_OBJECT,
                     SfxCallMode::SLOT | SfxCallMode::RECORD, { &aItem });
                 //set sign variable
-                maTlbObjects->MarkCurEntry(aStr);
+                maTlbObjects->Invalidate();
 
                 // moved here from SetGetFocusHdl. Reset the
                 // focus only if something has been selected in the

@@ -61,7 +61,6 @@ class SVT_DLLPUBLIC SvTreeListEntry
     sal_uLong           nAbsPos;
     sal_uLong           nListPos;
     ItemsType           m_Items;
-    bool                bIsMarked;
     void*               pUserData;
     SvTLEntryFlags      nEntryFlags;
     Color               maBackColor;
@@ -109,8 +108,6 @@ public:
 
     SvTLEntryFlags GetFlags() const { return nEntryFlags;}
     void SetFlags( SvTLEntryFlags nFlags );
-
-    void SetMarked( bool IsMarked ) { bIsMarked = IsMarked; }
 
     void SetBackColor( const Color& aColor ) { maBackColor = aColor; }
     const Color& GetBackColor() const { return maBackColor; }
