@@ -2200,7 +2200,7 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
                 if (pThisObject)
                 {
                     if (!bArrayFound)
-                        // The the toplevel dictionary of the object.
+                        // Then the toplevel dictionary of the object.
                         pThisObject->SetDictionary(pDictionary);
                     pThisDictionary = pDictionary;
                     pThisObject->SetDictionaryOffset(nDictionaryOffset);
