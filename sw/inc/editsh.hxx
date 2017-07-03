@@ -371,6 +371,9 @@ public:
     SfxWatermarkItem GetWatermark();
     void SetWatermark(const SfxWatermarkItem& rText);
 
+    /// Sign the paragraph at the cursor.
+    void SignParagraph(SwPaM* pPaM);
+
     void Insert2(SwField&, const bool bForceExpandHints);
 
     void UpdateFields( SwField & );   ///< One single field.
