@@ -659,7 +659,6 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         SmSym aSymbol ( pDescriptor->sName, aFont, static_cast < sal_Unicode > (pDescriptor->nCharacter),
                                         pDescriptor->sSymbolSet );
                         aSymbol.SetExportName ( pDescriptor->sExportName );
-                        aSymbol.SetDocSymbol( true );
                         rManager.AddOrReplaceSymbol ( aSymbol );
                     }
                 }

@@ -237,21 +237,18 @@ OUString SvInplaceEdit2::GetText() const
 SvLBoxTab::SvLBoxTab()
 {
     nPos = 0;
-    pUserData = nullptr;
     nFlags = SvLBoxTabFlags::NONE;
 }
 
 SvLBoxTab::SvLBoxTab( long nPosition, SvLBoxTabFlags nTabFlags )
 {
     nPos = nPosition;
-    pUserData = nullptr;
     nFlags = nTabFlags;
 }
 
 SvLBoxTab::SvLBoxTab( const SvLBoxTab& rTab )
 {
     nPos = rTab.nPos;
-    pUserData = rTab.pUserData;
     nFlags = rTab.nFlags;
 }
 
@@ -3261,7 +3258,6 @@ void SvTreeListBox::AddTab(long nTabPos, SvLBoxTabFlags nFlags )
 {
     nFocusWidth = -1;
     SvLBoxTab* pTab = new SvLBoxTab( nTabPos, nFlags );
-    pTab->SetUserData( nullptr );
     aTabs.push_back( pTab );
     if( nTreeFlags & SvTreeFlags::USESEL )
     {

@@ -76,8 +76,6 @@ void StgDirEntry::InitMembers()
     m_nMode       = StreamMode::READ;
     m_bDirect     = true;
     m_bInvalid    =
-    m_bCreated    =
-    m_bRenamed    =
     m_bRemoved    =
     m_bTemp       =
     m_bDirty      =
@@ -959,7 +957,6 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
         pRes->m_bInvalid =
         pRes->m_bRemoved =
         pRes->m_bTemp    = false;
-        pRes->m_bCreated =
         pRes->m_bDirty   = true;
     }
     else
@@ -968,7 +965,6 @@ StgDirEntry* StgDirStrm::Create( StgDirEntry& rStg, const OUString& rName, StgEn
         if( StgAvlNode::Insert( reinterpret_cast<StgAvlNode**>(&rStg.m_pDown), pRes ) )
         {
             pRes->m_pUp    = &rStg;
-            pRes->m_bCreated =
             pRes->m_bDirty = true;
         }
         else

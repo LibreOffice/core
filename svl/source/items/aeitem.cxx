@@ -34,47 +34,31 @@ class SfxAllEnumValueArr : public std::vector<SfxAllEnumValue_Impl> {};
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
     SfxAllEnumItem_Base(which, nVal),
-    pValues( nullptr ),
-    pDisabledValues( nullptr )
+    pValues( nullptr )
 {
     InsertValue( nVal );
 }
 
 SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, SvStream &rStream ):
-    SfxAllEnumItem_Base(which, rStream),
-    pValues( nullptr ),
-    pDisabledValues( nullptr )
+    SfxAllEnumItem_Base(which, rStream)
 {
     InsertValue( GetValue() );
 }
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which):
-    SfxAllEnumItem_Base(which, 0),
-    pValues( nullptr ),
-    pDisabledValues( nullptr )
+    SfxAllEnumItem_Base(which, 0)
 {
 }
 
 SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
-    SfxAllEnumItem_Base(rCopy),
-    pValues(nullptr),
-    pDisabledValues( nullptr )
+    SfxAllEnumItem_Base(rCopy)
 {
-    if ( !rCopy.pValues )
-        return;
-
-    pValues = new SfxAllEnumValueArr(*rCopy.pValues);
-
-    if( rCopy.pDisabledValues )
-    {
-        pDisabledValues = new std::vector<sal_uInt16>( *(rCopy.pDisabledValues) );
-    }
+    if ( rCopy.pValues )
+        pValues.reset( new SfxAllEnumValueArr(*rCopy.pValues) );
 }
 
 SfxAllEnumItem::~SfxAllEnumItem()
 {
-    delete pValues;
-    delete pDisabledValues;
 }
 
 sal_uInt16 SfxAllEnumItem::GetValueCount() const
@@ -139,7 +123,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
     aVal.nValue = nValue;
     aVal.aText = rValue;
     if ( !pValues )
-        pValues = new SfxAllEnumValueArr;
+        pValues.reset( new SfxAllEnumValueArr );
     else if ( GetPosByValue( nValue ) != USHRT_MAX )
         // remove when exists
         RemoveValue( nValue );
@@ -153,7 +137,7 @@ void SfxAllEnumItem::InsertValue( sal_uInt16 nValue )
     aVal.nValue = nValue;
     aVal.aText = OUString::number(nValue);
     if ( !pValues )
-        pValues = new SfxAllEnumValueArr;
+        pValues.reset( new SfxAllEnumValueArr );
 
     pValues->insert(pValues->begin() + GetPosByValue_(nValue), aVal); // FIXME: Duplicates?
 }

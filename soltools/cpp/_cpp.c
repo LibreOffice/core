@@ -29,7 +29,7 @@ char outbuf[OUTS];
 char *outptr = outbuf;
 Source *cursource;
 int nerrs;
-struct token nltoken = {NL, 0, 0, 1, (uchar *) "\n", 0};
+struct token nltoken = {NL, 0, 1, (uchar *) "\n", 0};
 char *curtime;
 int incdepth;
 int ifdepth;

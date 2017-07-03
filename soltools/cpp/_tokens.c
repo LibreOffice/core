@@ -280,7 +280,6 @@ void
         strncpy((char *)tt, (char *)ntp->t - ntp->wslen, ntp->wslen);
         tp->t = tt + ntp->wslen;
         tp->wslen = ntp->wslen;
-        tp->flag |= XPWS;
     }
 }
 

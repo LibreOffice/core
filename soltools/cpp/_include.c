@@ -149,7 +149,7 @@ syntax:
 void
     genline(void)
 {
-    static Token ta = {UNCLASS, 0, 0, 0, NULL, 0};
+    static Token ta = {UNCLASS, 0, 0, NULL, 0};
     static Tokenrow tr = {&ta, &ta, &ta + 1, 1};
     uchar *p;
 
@@ -181,7 +181,7 @@ void
 void
     genimport(char *fname, int angled, char *iname, int import)
 {
-    static Token ta = {UNCLASS, 0, 0, 0, NULL, 0};
+    static Token ta = {UNCLASS, 0, 0, NULL, 0};
     static Tokenrow tr = {&ta, &ta, &ta + 1, 1};
     uchar *p;
 
@@ -223,7 +223,7 @@ void
 void
     genwrap(int end)
 {
-    static Token ta = {UNCLASS, 0, 0, 0, NULL, 0};
+    static Token ta = {UNCLASS, 0, 0, NULL, 0};
     static Tokenrow tr = {&ta, &ta, &ta + 1, 1};
     uchar *p;
 

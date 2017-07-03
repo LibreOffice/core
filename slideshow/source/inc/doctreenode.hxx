@@ -63,8 +63,7 @@ namespace slideshow
              */
             DocTreeNode() :
                 mnStartIndex(-1),
-                mnEndIndex(-1),
-                meType(NodeType::Invalid)
+                mnEndIndex(-1)
             {
             }
 
@@ -82,11 +81,9 @@ namespace slideshow
                 Node type
              */
             DocTreeNode( sal_Int32 nStartIndex,
-                         sal_Int32 nEndIndex,
-                         NodeType  eType ) :
+                         sal_Int32 nEndIndex ) :
                 mnStartIndex(nStartIndex),
-                mnEndIndex(nEndIndex),
-                meType(eType)
+                mnEndIndex(nEndIndex)
             {
             }
 
@@ -100,13 +97,11 @@ namespace slideshow
             {
                 mnStartIndex = -1;
                 mnEndIndex   = -1;
-                meType = NodeType::Invalid;
             }
 
         private:
             sal_Int32   mnStartIndex;
             sal_Int32   mnEndIndex;
-            NodeType    meType;
 
         };
 

@@ -932,13 +932,6 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
             SvTreeListEntry* pParentEntry = GetParent(pNewEntry);
             if (!pParentEntry)
                 return;
-            OUString  aStr(GetSelectEntry());
-            sd::DrawDocShell* pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
-            if (pSdDrawDocShell)
-            {
-                pSdDrawDocShell->GetObjectIsmarked(aStr, true);
-                pSdDrawDocShell->GetObjectIsmarked(aStr, false);
-            }
             Invalidate();
         }
     }

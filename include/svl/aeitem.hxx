@@ -24,6 +24,7 @@
 #include <svl/eitem.hxx>
 
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 class SfxAllEnumValueArr;
@@ -42,8 +43,7 @@ protected:
 
 class SVL_DLLPUBLIC SfxAllEnumItem: public SfxAllEnumItem_Base
 {
-    SfxAllEnumValueArr*      pValues;
-    std::vector<sal_uInt16>* pDisabledValues;
+    std::unique_ptr<SfxAllEnumValueArr>   pValues;
 
     sal_uInt16              GetPosByValue( sal_uInt16 nValue ) const;
     std::size_t             GetPosByValue_( sal_uInt16 nValue ) const;

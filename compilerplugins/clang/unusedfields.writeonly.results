@@ -1218,14 +1218,8 @@ include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
-include/svl/aeitem.hxx:46
-    SfxAllEnumItem pDisabledValues std::vector<sal_uInt16> *
 include/svtools/genericunodialog.hxx:170
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
-include/svtools/treelistbox.hxx:131
-    SvLBoxTab pUserData void *
-include/svtools/treelistentry.hxx:64
-    SvTreeListEntry bIsMarked _Bool
 include/svtools/unoevent.hxx:159
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/bmpmask.hxx:129
@@ -2846,20 +2840,8 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
-slideshow/source/inc/doctreenode.hxx:109
-    slideshow::internal::DocTreeNode meType enum slideshow::internal::DocTreeNode::NodeType
-solenv/bin/concat-deps.c:304
-    hash flags int
-soltools/cpp/cpp.h:77
-    token flag unsigned char
 soltools/cpp/cpp.h:144
     macroValidator pMacro Nlist *
-sot/source/sdstor/stgdir.hxx:46
-    StgDirEntry m_bCreated _Bool
-sot/source/sdstor/stgdir.hxx:48
-    StgDirEntry m_bRenamed _Bool
-starmath/inc/symbol.hxx:46
-    SmSym m_bDocSymbol _Bool
 starmath/inc/view.hxx:163
     SmCmdBoxWindow aController class SmEditController
 starmath/inc/view.hxx:224

@@ -43,7 +43,6 @@ private:
     OUString            m_aSetName;
     sal_UCS4            m_cChar;
     bool                m_bPredefined;
-    bool                m_bDocSymbol;
 
 public:
     SmSym();
@@ -61,8 +60,6 @@ public:
     const OUString& GetSymbolSetName() const    { return m_aSetName; }
     const OUString& GetExportName() const       { return m_aExportName; }
     void            SetExportName( const OUString &rName )        { m_aExportName = rName; }
-
-    void            SetDocSymbol( bool bVal )   { m_bDocSymbol = bVal; }
 
     // true if rSymbol has the same name, font and character
     bool            IsEqualInUI( const SmSym& rSymbol ) const;

@@ -43,9 +43,7 @@ class StgDirEntry : public StgAvlNode
     sal_Int32    m_nEntry;                    // entry # in TOC stream (temp)
     sal_Int32    m_nPos;                      // current position
     bool         m_bDirty;                    // dirty directory entry
-    bool         m_bCreated;                  // newly created entry
     bool         m_bRemoved;                  // removed per Invalidate()
-    bool         m_bRenamed;                  // renamed
     void         InitMembers();             // ctor helper
     virtual short Compare( const StgAvlNode* ) const override;
     bool         StoreStream( StgIo& );     // store the stream

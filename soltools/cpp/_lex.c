@@ -371,7 +371,6 @@ continue2:
         tp->type = UNCLASS;
         tp->t = ip;
         tp->wslen = 0;
-        tp->flag = 0;
         state = START;
         for (;;)
         {
@@ -532,7 +531,6 @@ continue2:
                         runelen = 1;
                         s->lineinc = 0;
                         tp->type = COMMENT;
-                        tp->flag |= XTWS;
                     }
             }
             break;
