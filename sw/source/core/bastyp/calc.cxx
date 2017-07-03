@@ -459,9 +459,10 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
         }
     }
 
+    SwCalcExp* pFndExp = nullptr;
     if( pFnd )
     {
-        SwCalcExp* pFndExp = static_cast<SwCalcExp*>(pFnd);
+        pFndExp = static_cast<SwCalcExp*>(pFnd);
 
         if( pFndExp->pFieldType && pFndExp->pFieldType->Which() == SwFieldIds::User )
         {
@@ -495,7 +496,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
                 pFndExp->nValue.PutDouble( pUField->GetValue() );
             }
         }
-        return pFndExp;
+        // Don't return here, we still need to enter the 'if ( !bIns )' branch, tdf#108873
     }
 
     // At this point the "real" case variable has to be used
@@ -504,6 +505,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     if( !bIns )
     {
 #if HAVE_FEATURE_DBCONNECTIVITY
+
         SwDBManager *pMgr = m_rDoc.GetDBManager();
 
         OUString sDBName(GetDBName( sTmpName ));
@@ -557,6 +559,9 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
         // NEVER save!
         return &m_aErrExpr;
     }
+
+    if (pFndExp)
+        return pFndExp;
 
     SwCalcExp* pNewExp = new SwCalcExp( aStr, SwSbxValue(), nullptr );
     pNewExp->pNext.reset( m_aVarTable[ ii ] );
