@@ -767,7 +767,7 @@ void OConnection::impl_checkTableQueryNames_nothrow()
     {
         Reference< XNameAccess > xTables( getTables() );
         Sequence< OUString > aTableNames( xTables->getElementNames() );
-        std::set< OUString > aSortedTableNames( aTableNames.getConstArray(), aTableNames.getConstArray() + aTableNames.getLength() );
+        std::set< OUString > aSortedTableNames( aTableNames.begin(), aTableNames.end() );
 
         Reference< XNameAccess > xQueries( getQueries() );
         Sequence< OUString > aQueryNames( xQueries->getElementNames() );

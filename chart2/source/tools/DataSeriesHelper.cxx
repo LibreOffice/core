@@ -230,7 +230,7 @@ std::vector< Reference< chart2::data::XLabeledDataSequence > >
                                const OUString& aRole, bool bMatchPrefix /* = false */ )
 {
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVec;
-    std::remove_copy_if( aDataSequences.getConstArray(), aDataSequences.getConstArray() + aDataSequences.getLength(),
+    std::remove_copy_if( aDataSequences.begin(), aDataSequences.end(),
                            std::back_inserter( aResultVec ),
                            [&aRole, bMatchPrefix](const Reference< chart2::data::XLabeledDataSequence > & xSeq)
                            {return !(lcl_MatchesRole(aRole, bMatchPrefix).operator()(xSeq));});

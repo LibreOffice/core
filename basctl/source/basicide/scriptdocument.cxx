@@ -1253,7 +1253,7 @@ namespace basctl
         }
 
         // sort
-        std::sort( aModuleNames.getArray() , aModuleNames.getArray() + aModuleNames.getLength() , StringCompareLessThan );
+        std::sort( aModuleNames.begin(), aModuleNames.end(), StringCompareLessThan );
 
         return aModuleNames;
     }

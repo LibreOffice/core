@@ -908,7 +908,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
         {
             Sequence< OUString > aLabels = m_bDataInColumns ? this->getRowDescriptions() : this->getColumnDescriptions();
             aResult.realloc( aLabels.getLength() );
-            transform( aLabels.getConstArray(), aLabels.getConstArray() + aLabels.getLength(),
+            transform( aLabels.begin(), aLabels.end(),
                        aResult.getArray(), CommonFunctors::makeAny< OUString >() );
         }
     }
@@ -925,7 +925,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
             if( aData.getLength() )
             {
                 aResult.realloc( aData.getLength());
-                transform( aData.getConstArray(), aData.getConstArray() + aData.getLength(),
+                transform( aData.begin(), aData.end(),
                            aResult.getArray(), CommonFunctors::makeAny< double >());
             }
         }
@@ -990,7 +990,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
         if( nIndex>=0 )
         {
             vector< double > aNewDataVec;
-            transform( aNewData.getConstArray(), aNewData.getConstArray() + aNewData.getLength(),
+            transform( aNewData.begin(), aNewData.end(),
                        back_inserter( aNewDataVec ), CommonFunctors::AnyToDouble());
             if( m_bDataInColumns )
                 m_aInternalData.setColumnValues( nIndex, aNewDataVec );

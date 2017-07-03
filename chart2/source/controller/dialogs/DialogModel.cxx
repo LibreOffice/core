@@ -440,7 +440,7 @@ std::vector< Reference< XDataSeriesContainer > >
                 Reference< XChartTypeContainer > xCTCnt( aCooSysSeq[i], uno::UNO_QUERY_THROW );
                 Sequence< Reference< XChartType > > aChartTypeSeq( xCTCnt->getChartTypes());
                 std::transform(
-                    aChartTypeSeq.getConstArray(), aChartTypeSeq.getConstArray() + aChartTypeSeq.getLength(),
+                    aChartTypeSeq.begin(), aChartTypeSeq.end(),
                     std::back_inserter( aResult ),
                     lcl_ChartTypeToSeriesCnt() );
             }

@@ -593,7 +593,7 @@ namespace pcr
             if ( xInfo.is() )
             {
                 Sequence< Property > aProperties = xInfo->getProperties();
-                std::for_each( aProperties.getConstArray(), aProperties.getConstArray() + aProperties.getLength(),
+                std::for_each( aProperties.begin(), aProperties.end(),
                     PropertyBagInserter( _rBag )
                 );
             }
