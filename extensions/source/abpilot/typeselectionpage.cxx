@@ -66,11 +66,10 @@ namespace abp
         // - MORK, THUNDERBIRD
         // - OTHER
 
+#if !defined(_WIN32)
         bool bHaveEvolution = false;
         bool bHaveKab = false;
         bool bHaveMacab = false;
-
-#if !defined(_WIN32)
 
         Reference< XDriverManager2 > xManager = DriverManager::create( _pParent->getORB() );
 
@@ -106,7 +105,10 @@ namespace abp
         catch(...)
         {
         }
-
+#else
+        bool const bHaveEvolution = false;
+        bool const bHaveKab = false;
+        bool const bHaveMacab = false;
 #endif
 
         // Items are displayed in list order

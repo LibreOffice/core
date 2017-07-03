@@ -1156,9 +1156,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
 
 STDMETHODIMP InterfaceOleWrapper_Impl::GetDispID(BSTR /*bstrName*/, DWORD /*grfdex*/, DISPID __RPC_FAR* /*pid*/)
 {
-    HRESULT ret = ResultFromScode(E_NOTIMPL);
-
-    return ret;
+    return ResultFromScode(E_NOTIMPL);
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::InvokeEx(
@@ -1170,25 +1168,19 @@ STDMETHODIMP InterfaceOleWrapper_Impl::InvokeEx(
     /* [out] */ EXCEPINFO __RPC_FAR* /*pei*/,
     /* [unique][in] */ IServiceProvider __RPC_FAR* /*pspCaller*/)
 {
-    HRESULT ret = ResultFromScode(E_NOTIMPL);
-
-    return ret;
+    return ResultFromScode(E_NOTIMPL);
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::DeleteMemberByName(
     /* [in] */ BSTR /*bstr*/,
     /* [in] */ DWORD /*grfdex*/)
 {
-    HRESULT ret = ResultFromScode(E_NOTIMPL);
-
-    return ret;
+    return ResultFromScode(E_NOTIMPL);
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::DeleteMemberByDispID(DISPID /*id*/)
 {
-    HRESULT ret = ResultFromScode(E_NOTIMPL);
-
-    return ret;
+    return ResultFromScode(E_NOTIMPL);
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::GetMemberProperties(
@@ -1196,18 +1188,14 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetMemberProperties(
     /* [in] */ DWORD /*grfdexFetch*/,
     /* [out] */ DWORD __RPC_FAR* /*pgrfdex*/)
 {
-    HRESULT ret = ResultFromScode(E_NOTIMPL);
-
-    return ret;
+    return ResultFromScode(E_NOTIMPL);
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::GetMemberName(
     /* [in] */ DISPID /*id*/,
     /* [out] */ BSTR __RPC_FAR* /*pbstrName*/)
 {
-    HRESULT ret = ResultFromScode(E_NOTIMPL);
-
-    return ret;
+    return ResultFromScode(E_NOTIMPL);
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::GetNextDispID(
@@ -1215,17 +1203,13 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetNextDispID(
     /* [in] */ DISPID /*id*/,
     /* [out] */ DISPID __RPC_FAR* /*pid*/)
 {
-    HRESULT ret = ResultFromScode(E_NOTIMPL);
-
-    return ret;
+    return ResultFromScode(E_NOTIMPL);
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::GetNameSpaceParent(
     /* [out] */ IUnknown __RPC_FAR *__RPC_FAR* /*ppunk*/)
 {
-    HRESULT ret = ResultFromScode(E_NOTIMPL);
-
-    return ret;
+    return ResultFromScode(E_NOTIMPL);
 }
 
 // UnoObjectWrapperRemoteOpt ---------------------------------------------------

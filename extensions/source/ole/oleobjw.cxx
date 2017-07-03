@@ -1389,10 +1389,9 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
 
         dispparams.rgvarg = arArgs;
         // invoking OLE method
-        DWORD localeId = LOCALE_USER_DEFAULT;
         hInvRes = m_spDispatch->Invoke( dispid,
                                         IID_NULL,
-                                        localeId,
+                                        LOCALE_USER_DEFAULT,
                                         ::sal::static_int_cast< WORD, INVOKEKIND >( pInvkinds[nStep] ),
                                         &dispparams,
                                         &varResult,
@@ -1957,10 +1956,9 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
     }
     dispparams.rgvarg= arArgs;
     // invoking OLE method
-    DWORD localeId = LOCALE_USER_DEFAULT;
     result = m_spDispatch->Invoke(aFuncDesc->memid,
                                  IID_NULL,
-                                 localeId,
+                                 LOCALE_USER_DEFAULT,
                                  ::sal::static_int_cast< WORD, INVOKEKIND >( aFuncDesc->invkind ),
                                  &dispparams,
                                  &varResult,
