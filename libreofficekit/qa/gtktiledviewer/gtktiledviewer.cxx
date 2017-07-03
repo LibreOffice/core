@@ -152,6 +152,7 @@ public:
     GtkWidget* m_pMainHBox;
     GtkComboBoxText* m_pPartSelector;
     GtkWidget* m_pPartModeComboBox;
+    GtkWidget* m_pDialogComboBox;
     /// Should the part selector avoid calling lok::Document::setPart()?
     bool m_bPartSelectorBroadcast;
     GtkWidget* m_pFindbar;
@@ -166,6 +167,8 @@ public:
     boost::property_tree::ptree m_aRenderingArguments;
     /// Author of this window
     std::string m_aAuthor;
+    /// UnoName of the dialog to render
+    std::string m_aDialogUnoName;
 
     TiledWindow()
         : m_pDocView(nullptr),
@@ -201,6 +204,7 @@ public:
         m_pMainHBox(nullptr),
         m_pPartSelector(nullptr),
         m_pPartModeComboBox(nullptr),
+        m_pDialogComboBox(nullptr),
         m_bPartSelectorBroadcast(true),
         m_pFindbar(nullptr),
         m_pFindbarEntry(nullptr),
@@ -219,10 +223,14 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
 static void changePartMode( GtkWidget* pSelector, gpointer /*pItem*/);
 /// Handler for m_pPartSelector.
 static void changePart( GtkWidget* pSelector, gpointer /*pItem*/ );
+/// Handler when dialog to open is selected from the combo box
+static void openDialog(GtkWidget* pSelector, gpointer);
 /// Part selector populator
 static void populatePartSelector(LOKDocView* pLOKDocView);
 /// Part mode selector populator
 static void populatePartModeSelector( GtkComboBoxText* pSelector );
+/// Dialog box populator
+static void populateDialogs( GtkComboBoxText* pDialogBox );
 
 static TiledWindow& lcl_getTiledWindow(GtkWidget* pWidget)
 {
@@ -1093,6 +1101,7 @@ static void registerSelectorHandlers(TiledWindow& rWindow)
     // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
     g_signal_connect(G_OBJECT(rWindow.m_pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
     g_signal_connect(G_OBJECT(rWindow.m_pPartSelector), "changed", G_CALLBACK(changePart), 0);
+    g_signal_connect(G_OBJECT(rWindow.m_pDialogComboBox), "changed", G_CALLBACK(openDialog), 0);
 }
 
 /// Helper function to do some tasks after widget is fully loaded (including
@@ -1104,7 +1113,7 @@ static void initWindow(TiledWindow& rWindow)
     rWindow.m_bPartSelectorBroadcast = true;
 
     populatePartModeSelector( GTK_COMBO_BOX_TEXT(rWindow.m_pPartModeComboBox) );
-    registerSelectorHandlers(rWindow);
+    populateDialogs(GTK_COMBO_BOX_TEXT(rWindow.m_pDialogComboBox));
 
     registerSelectorHandlers(rWindow);
 
@@ -1807,6 +1816,48 @@ static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
     }
 }
 
+static gboolean drawOnDialogArea(GtkWidget* pWidget, cairo_t* pCairo, gpointer userdata)
+{
+    g_warning("drawing on dialog %d ", userdata);
+    GtkWidget* pWidget1 = static_cast<GtkWidget*>(userdata);
+    TiledWindow& rWindow = lcl_getTiledWindow(pWidget1);
+    int nWidth = 1024;
+    int nHeight = 768;
+    cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+    unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
+
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(rWindow.m_pDocView));
+    pDocument->pClass->paintDialog(pDocument, rWindow.m_aDialogUnoName.c_str(), pBuffer, &nWidth, &nHeight);
+
+    gtk_widget_set_size_request(pWidget, nWidth, nHeight);
+
+    cairo_surface_flush(pSurface);
+    cairo_surface_mark_dirty(pSurface);
+
+    cairo_set_source_surface(pCairo, pSurface, 0, 0);
+    cairo_paint(pCairo);
+}
+
+static void openDialog(GtkWidget* pSelector, gpointer)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(pSelector);
+    if (rWindow.m_pDocView)
+    {
+        gchar* pSelected = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(pSelector));
+        rWindow.m_aDialogUnoName = std::string(pSelected);
+        g_free(pSelected);
+
+        GtkWidget* pDialog = gtk_dialog_new();
+        GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG(pDialog));
+        GtkWidget* pDialogDrawingArea = gtk_drawing_area_new();
+        g_signal_connect(G_OBJECT(pDialogDrawingArea), "draw", G_CALLBACK(drawOnDialogArea), rWindow.m_pDocView);
+        gtk_container_add(GTK_CONTAINER(pContentArea), pDialogDrawingArea);
+
+        gtk_widget_show_all(pDialog);
+        gtk_dialog_run(GTK_DIALOG(pDialog));
+    }
+}
+
 static void removeChildrenFromStatusbar(GtkWidget* children, gpointer pData)
 {
     GtkWidget* pStatusBar = static_cast<GtkWidget*>(pData);
@@ -1819,6 +1870,14 @@ static void populatePartModeSelector( GtkComboBoxText* pSelector )
     gtk_combo_box_text_append_text( pSelector, "Standard" );
     gtk_combo_box_text_append_text( pSelector, "Notes" );
     gtk_combo_box_set_active( GTK_COMBO_BOX(pSelector), 0 );
+}
+
+static void populateDialogs( GtkComboBoxText* pSelector )
+{
+    gtk_combo_box_text_append_text( pSelector, ".uno:SearchDialog" );
+    gtk_combo_box_text_append_text( pSelector, ".uno:AcceptTrackedChanges" );
+    gtk_combo_box_text_append_text( pSelector, ".uno:SpellDialog" );
+    gtk_combo_box_text_append_text( pSelector, ".uno:InsertField" );
 }
 
 static void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
@@ -2130,6 +2189,11 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     g_signal_connect(G_OBJECT(rWindow.m_pTrackChanges), "toggled", G_CALLBACK(toggleToolItem), nullptr);
     lcl_registerToolItem(rWindow, rWindow.m_pTrackChanges, ".uno:TrackChanges");
     gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pTrackChanges), false);
+
+    GtkToolItem* pDialogBoxToolItem = gtk_tool_item_new();
+    rWindow.m_pDialogComboBox = gtk_combo_box_text_new();
+    gtk_container_add(GTK_CONTAINER(pDialogBoxToolItem), rWindow.m_pDialogComboBox);
+    gtk_toolbar_insert(GTK_TOOLBAR(pUpperToolbar), pDialogBoxToolItem, -1);
 
     // Address bar
     GtkToolItem* pAddressEntryContainer = gtk_tool_item_new();
