@@ -258,6 +258,13 @@ const GraphicObject* SwEditShell::GetGraphicObj() const
     return pGrfNode ? &(pGrfNode->GetGrfObj()) : nullptr;
 }
 
+const GraphicAttr* SwEditShell::GetGraphicAttr( GraphicAttr& rGA ) const
+{
+    SwGrfNode* pGrfNode = GetGrfNode_();
+    const SwFrame* pFrame = GetCurrFrame(false);
+    return pGrfNode ? &(pGrfNode->GetGraphicAttr( rGA, pFrame )) : nullptr;
+}
+
 GraphicType SwEditShell::GetGraphicType() const
 {
     SwGrfNode *pGrfNode = GetGrfNode_();
