@@ -23,18 +23,13 @@
 
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/app.hxx>
+#include <memory>
 
 struct SfxFrameDescriptor_Impl
 {
-    Wallpaper*  pWallpaper;
-    SfxItemSet* pArgs;
+    std::unique_ptr<SfxItemSet> pArgs;
 
-    SfxFrameDescriptor_Impl() : pWallpaper( nullptr ), pArgs( nullptr ) {}
-    ~SfxFrameDescriptor_Impl()
-    {
-        delete pWallpaper;
-        delete pArgs;
-    }
+    SfxFrameDescriptor_Impl() {}
 };
 
 SfxFrameDescriptor::SfxFrameDescriptor() :
@@ -42,7 +37,6 @@ SfxFrameDescriptor::SfxFrameDescriptor() :
     eScroll( ScrollingMode::Auto ),
     bHasBorder( true ),
     bHasBorderSet( false ),
-    bResizeVertical( true ),
     pImpl( new SfxFrameDescriptor_Impl )
 {
 }
@@ -54,8 +48,8 @@ SfxFrameDescriptor::~SfxFrameDescriptor()
 SfxItemSet* SfxFrameDescriptor::GetArgs()
 {
     if( !pImpl->pArgs )
-        pImpl->pArgs = new SfxAllItemSet( SfxGetpApp()->GetPool() );
-    return pImpl->pArgs;
+        pImpl->pArgs.reset( new SfxAllItemSet( SfxGetpApp()->GetPool() ) );
+    return pImpl->pArgs.get();
 }
 
 void SfxFrameDescriptor::SetURL( const OUString& rURL )
@@ -69,14 +63,6 @@ void SfxFrameDescriptor::SetActualURL( const OUString& rURL )
     aActualURL = INetURLObject(rURL);
     if ( pImpl->pArgs )
         pImpl->pArgs->ClearItem();
-}
-
-void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
-{
-    DELETEZ( pImpl->pWallpaper );
-
-    if ( rWallpaper.GetStyle() != WallpaperStyle::NONE )
-        pImpl->pWallpaper = new Wallpaper( rWallpaper );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -303,9 +303,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl, Button*, void)
             for(const auto & i : pLinkMgr->GetLinks())
                 if( xLink == i )
                 {
-                    xLink->SetUseCache( false );
                     SetType( *xLink, aPosArr[ n ], xLink->GetUpdateMode() );
-                    xLink->SetUseCache( true );
                     break;
                 }
         }

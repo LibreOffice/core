@@ -1000,7 +1000,6 @@ void SfxWorkWindow::SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags
     }
 
     SfxObjectBar_Impl aObjBar;
-    aObjBar.pIFace = pIFace;
     aObjBar.eId = eId;
     aObjBar.nPos = nPos;
     aObjBar.nMode = nFlags;

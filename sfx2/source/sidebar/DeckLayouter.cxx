@@ -47,11 +47,10 @@ namespace {
         css::ui::LayoutSize maLayoutSize;
         sal_Int32 mnDistributedHeight;
         sal_Int32 mnWeight;
-        sal_Int32 mnPanelIndex;
         bool mbShowTitleBar;
 
         LayoutItem()
-            : mpPanel(),maLayoutSize(0,0,0),mnDistributedHeight(0),mnWeight(0),mnPanelIndex(0),mbShowTitleBar(true)
+            : mpPanel(),maLayoutSize(0,0,0),mnDistributedHeight(0),mnWeight(0),mbShowTitleBar(true)
         {}
     };
     tools::Rectangle LayoutPanels (
@@ -115,7 +114,6 @@ void DeckLayouter::LayoutDeck (
         for (sal_Int32 nIndex(0),nCount(rPanels.size()); nIndex<nCount; ++nIndex)
         {
             aLayoutItems[nIndex].mpPanel = rPanels[nIndex];
-            aLayoutItems[nIndex].mnPanelIndex = nIndex;
         }
         aBox = LayoutPanels(
             aBox,

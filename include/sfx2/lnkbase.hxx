@@ -76,7 +76,6 @@ private:
     sal_uInt16              nObjType;
     bool                    bVisible : 1;
     bool                    bSynchron : 1;
-    bool                    bUseCache : 1;  // for Graphics Links!
     bool                    bWasLastEditOK : 1;
 
     DECL_LINK( EndEditHdl, const OUString&, void );
@@ -153,8 +152,6 @@ public:
     // should the Link be loaded synchronous or asynchronous?
     bool            IsSynchron() const          { return bSynchron; }
     void            SetSynchron( bool bFlag )   { bSynchron = bFlag; }
-
-    void            SetUseCache( bool bFlag )   { bUseCache = bFlag; }
 
     void            setStreamToLoadFrom(
                         const css::uno::Reference<css::io::XInputStream>& xInputStream,
