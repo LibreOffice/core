@@ -43,7 +43,6 @@ ScVbaFont::ScVbaFont(
         const uno::Reference< beans::XPropertySet >& xPropertySet,
         ScCellRangeObj* pRangeObj, bool bFormControl ) :
     ScVbaFont_BASE( xParent, xContext, dPalette.getPalette(), xPropertySet, bFormControl ),
-    mPalette( dPalette ),
     mpRangeObj( pRangeObj )
 {
 }

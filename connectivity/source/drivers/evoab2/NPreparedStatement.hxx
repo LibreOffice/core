@@ -46,19 +46,6 @@ namespace connectivity
                                         ,public OPreparedStatement_BASE
         {
         protected:
-            struct Parameter
-            {
-                css::uno::Any               aValue;
-                sal_Int32                   nDataType;
-
-                Parameter(const css::uno::Any& rValue, sal_Int32 rDataType) : aValue(rValue),nDataType(rDataType)
-                {
-                }
-
-            };
-
-            std::vector< Parameter>       m_aParameters;
-
             // Data attributes
 
 

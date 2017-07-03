@@ -33,7 +33,6 @@ typedef cppu::ImplInheritanceHelper< VbaFontBase, ov::excel::XFont > ScVbaFont_B
 
 class ScVbaFont : public ScVbaFont_BASE
 {
-    ScVbaPalette mPalette;
     ScCellRangeObj* mpRangeObj;
     SfxItemSet*  GetDataSet();
 public:

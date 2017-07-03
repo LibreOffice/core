@@ -20,16 +20,6 @@ connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
 connectivity/source/drivers/evoab2/EApi.h:126
     (anonymous) ext char *
-connectivity/source/drivers/evoab2/NPreparedStatement.hxx:51
-    connectivity::evoab::OEvoabPreparedStatement::Parameter aValue css::uno::Any
-connectivity/source/drivers/evoab2/NPreparedStatement.hxx:52
-    connectivity::evoab::OEvoabPreparedStatement::Parameter nDataType sal_Int32
-connectivity/source/drivers/evoab2/NPreparedStatement.hxx:60
-    connectivity::evoab::OEvoabPreparedStatement m_aParameters std::vector<Parameter>
-connectivity/source/drivers/evoab2/NResultSet.hxx:91
-    connectivity::evoab::OEvoabResultSet m_aStatement css::uno::WeakReferenceHelper
-connectivity/source/drivers/evoab2/NTable.hxx:34
-    connectivity::evoab::OEvoabTable m_xMetaData css::uno::Reference<css::sdbc::XDatabaseMetaData>
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 connectivity/source/inc/OTypeInfo.hxx:31
@@ -138,8 +128,6 @@ sc/source/ui/inc/dataprovider.hxx:46
     sc::ExternalDataMapper maDocument class ScDocument
 sc/source/ui/inc/docsh.hxx:438
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
-sc/source/ui/vba/vbafont.hxx:36
-    ScVbaFont mPalette class ScVbaPalette
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
 sd/source/ui/table/TableDesignPane.hxx:113
