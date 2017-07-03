@@ -3030,7 +3030,7 @@ static ImplTextEncodingData const aImplISO885913TextEncodingData
 
 /* APPLE-CentEuro */
 /* Apple CharSet for Eastern Europa (Polish, Czech, Slovak, Hungarian, Estonian, Latvian, Lithuanian) */
-/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* 1-byte, 0x00-0x7F ASCII, but actually special characters between 0x00-0x1F */
 /* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/centeuro.txt from 02/05/98 */
 /* Last-Changes from us: */
@@ -3235,7 +3235,7 @@ static ImplTextEncodingData const aImplAPPLECENTEUROTextEncodingData
 
 /* APPLE-Croatian */
 /* Standard Apple CharSet for Croatian */
-/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* 1-byte, 0x00-0x7F ASCII, but actually special characters between 0x00-0x1F */
 /* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/croatien.txt from 02/05/98 */
 /* Last-Changes from us: */
@@ -3383,7 +3383,7 @@ static ImplTextEncodingData const aImplAPPLECROATIANTextEncodingData
 
 /* APPLE-Cyrillic */
 /* Apple CharSet for Cyrillic */
-/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* 1-byte, 0x00-0x7F ASCII, but actually special characters between 0x00-0x1F */
 /* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/cyrillic.txt from 02/15/98 */
 /* Last-Changes from us: */
@@ -3518,7 +3518,7 @@ static ImplTextEncodingData const aImplAPPLECYRILLICTextEncodingData
 
 /* APPLE-Greek */
 /* Apple CharSet for Greek */
-/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* 1-byte, 0x00-0x7F ASCII, but actually special characters between 0x00-0x1F */
 /* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/roman.txt from 08/18/98 */
 /* Last-Changes from us: */
@@ -3672,7 +3672,7 @@ static ImplTextEncodingData const aImplAPPLEGREEKTextEncodingData
 
 /* APPLE-Romanian */
 /* Standard Apple CharSet for Romanian */
-/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* 1-byte, 0x00-0x7F ASCII, but actually special characters between 0x00-0x1F */
 /* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/romanian.txt from 02/05/98 */
 /* Last-Changes from us: */
@@ -3826,7 +3826,7 @@ static ImplTextEncodingData const aImplAPPLEROMANIANTextEncodingData
 
 /* APPLE-Turkish */
 /* Apple CharSet for Turkish */
-/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* 1-byte, 0x00-0x7F ASCII, but actually special characters between 0x00-0x1F */
 /* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/turkish.txt from 02/05/98 */
 /* Last-Changes from us: */
@@ -3973,7 +3973,7 @@ static ImplTextEncodingData const aImplAPPLETURKISHTextEncodingData
 
 /* APPLE-Ukrainian */
 /* Apple CharSet for Ukrainian */
-/* 1-byte, 0x00-0x7F ASCII, but actually control character between 0x00-0x1F */
+/* 1-byte, 0x00-0x7F ASCII, but actually special characters between 0x00-0x1F */
 /* which we don't consider, though */
 /* Convert-Tables: mappings/vendors/apple/ukraine.txt from 02/05/98 */
 /* Last-Changes from us: */
