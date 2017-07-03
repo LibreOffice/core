@@ -31,7 +31,6 @@ namespace connectivity
 
         class OEvoabTable : public OEvoabTable_TYPEDEF
         {
-            css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData;
             OEvoabConnection* m_pConnection;
 
         public:

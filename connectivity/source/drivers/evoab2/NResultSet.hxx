@@ -88,7 +88,6 @@ namespace connectivity
 
             OCommonStatement*                           m_pStatement;
             OEvoabConnection*                           m_pConnection;
-            css::uno::WeakReferenceHelper               m_aStatement;
             rtl::Reference<OEvoabResultSetMetaData>     m_xMetaData;
             ::dbtools::WarningsContainer                m_aWarnings;
 
