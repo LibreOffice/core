@@ -601,6 +601,13 @@ void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
     sal_uInt16 nPos = 0;
     SwCalcExp* pFnd = static_cast<SwCalcExp*>(Find( aStr, m_aVarTable, TBLSZ, &nPos ));
 
+     if( !pFnd )
+     {
+         // Try searching for the non-lowercase string, tdf#70346
+         pFnd = static_cast<SwCalcExp*>(Find( rStr, m_aVarTable, TBLSZ, &nPos ));
+     }
+
+    // Still not found, create it
     if( !pFnd )
     {
         pFnd = new SwCalcExp( aStr, SwSbxValue( rValue ), nullptr );
