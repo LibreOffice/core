@@ -25,7 +25,7 @@
         </prop>
         <prop oor:name="Mode" oor:type="xs:int" oor:nillable="false">
             <info>
-                <desc>Selects if the the user should be asked about updates or not</desc>
+                <desc>Selects if the user should be asked about updates or not</desc>
             </info>
             <value>Some Value</value>
         </prop>
