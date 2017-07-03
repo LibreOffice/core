@@ -531,10 +531,9 @@ namespace dxcanvas
             maPageSize=aPageSize;
 
             IDirect3DVertexBuffer9 *pVB(nullptr);
-            DWORD aFVF(D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1);
             if( FAILED(mpDevice->CreateVertexBuffer(sizeof(dxvertex)*maNumVertices,
                                                     D3DUSAGE_DYNAMIC|D3DUSAGE_WRITEONLY,
-                                                    aFVF,
+                                                    D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1,
                                                     D3DPOOL_DEFAULT,
                                                     &pVB,
                                                     nullptr)) )
@@ -864,10 +863,9 @@ namespace dxcanvas
                     if(SUCCEEDED(hr))
                     {
                         IDirect3DVertexBuffer9 *pVB(nullptr);
-                        DWORD aFVF(D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1);
                         if( FAILED(mpDevice->CreateVertexBuffer(sizeof(dxvertex)*maNumVertices,
                                                                 D3DUSAGE_DYNAMIC|D3DUSAGE_WRITEONLY,
-                                                                aFVF,
+                                                                D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1,
                                                                 D3DPOOL_DEFAULT,
                                                                 &pVB,
                                                                 nullptr)) )
