@@ -27,6 +27,7 @@
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
 #include <UndoDelete.hxx>
+#include <comcore.hrc>
 #include <rolbck.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
@@ -146,6 +147,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     bCanGroup( false ), bIsDelim( false ), bIsBackspace( false )
 {
     const SwTextNode* pTNd;
+    SetRedlineText(rRange.GetText());
     if( SwUndoId::DELETE == mnUserId &&
         nSttNode == nEndNode && nSttContent + 1 == nEndContent &&
         nullptr != (pTNd = rRange.GetNode().GetTextNode()) )
@@ -161,6 +163,22 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     }
 
     bCacheComment = false;
+}
+
+SwRewriter SwUndoRedlineDelete::GetRewriter() const
+{
+    SwRewriter aResult;
+    OUString aStr = m_sRedlineText;
+    aStr = DenoteSpecialCharacters(aStr);
+    aStr = ShortenString(aStr, nUndoStringLength, SwResId(STR_LDOTS));
+    aResult.AddRule(UndoArg1, aStr);
+    return aResult;
+}
+
+
+void SwUndoRedlineDelete::SetRedlineText(const OUString & rText)
+{
+    m_sRedlineText = rText;
 }
 
 void SwUndoRedlineDelete::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)

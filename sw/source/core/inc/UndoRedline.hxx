@@ -56,17 +56,22 @@ class SwUndoRedlineDelete : public SwUndoRedline
     bool bIsDelim : 1;
     bool bIsBackspace : 1;
 
+    OUString m_sRedlineText;
+
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
     SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUserId );
+    virtual SwRewriter GetRewriter() const override;
 
     bool CanGrouping( const SwUndoRedlineDelete& rPrev );
 
     // SwUndoTableCpyTable needs this information:
     long NodeDiff() const { return nSttNode - nEndNode; }
     sal_Int32 ContentStart() const { return nSttContent; }
+
+    void SetRedlineText(const OUString & rText);
 };
 
 class SwUndoRedlineSort : public SwUndoRedline
