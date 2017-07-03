@@ -209,9 +209,7 @@ public:
     OUString                GetSelectEntry();
 
     //Mark Current Entry
-    void                    MarkCurEntry( const OUString& rName );
     void                    SetSdNavigatorWinFlag(bool isInSdNavigatorWin){bisInSdNavigatorWin =isInSdNavigatorWin;};
-    void                    FreshCurEntry();
 
     void                    Clear();
     void                    SetSaveTreeItemStateFlag(bool bState){mbSaveTreeItemState = bState;}

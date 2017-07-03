@@ -986,26 +986,7 @@ void ScContentTree::GetDrawNames( ScContentId nType )
                                 SvTreeListEntry* pParent = pRootNodes[nType];
                                 if (pParent)
                                 {
-                                    SvTreeListEntry* pChild=InsertEntry( aName, pParent );
-                                    if(pChild)
-                                        pChild->SetMarked(false);
-                                    vcl::Window* pWindow=nullptr;
-                                    ScTabViewShell* pScTabViewShell=nullptr;
-                                    ScDrawView* pScDrawView=nullptr;
-                                    ScNavigatorDlg* pScNavigatorDlg=nullptr;
-                                    if(pChild)
-                                         pWindow=reinterpret_cast<vcl::Window*>(GetParent(pChild));
-                                    if(pWindow)
-                                            pScNavigatorDlg = static_cast<ScNavigatorDlg*>(pWindow);
-                                    if (pScNavigatorDlg!=nullptr)
-                                          pScTabViewShell = ScNavigatorDlg::GetTabViewShell();
-                                    if(pScTabViewShell !=nullptr)
-                                          pScDrawView =pScTabViewShell->GetViewData().GetScDrawView();
-                                    if(pScDrawView!=nullptr)
-                                     {
-                                         bool bMarked =pScDrawView->GetObjectIsMarked(pObject);
-                                         pChild->SetMarked( bMarked );
-                                      }
+                                    InsertEntry( aName, pParent );
                                 }//end if parent
                                 else
                                     SAL_WARN("sc", "InsertContent without parent");

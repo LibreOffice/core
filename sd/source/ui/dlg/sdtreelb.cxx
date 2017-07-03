@@ -289,60 +289,6 @@ OUString SdPageObjsTLB::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
     return getAltLongDescText( pEntry, false);
 }
 
-void  SdPageObjsTLB::MarkCurEntry( const OUString& rName )
-{
-
-    if (!rName.isEmpty())
-    {
-        SvTreeListEntry* pCurEntry =GetCurEntry();
-        SvTreeListEntry* pEntry =nullptr;
-        OUString aTmp1;
-        OUString aTmp2;
-
-        if( GetParent(pCurEntry)==nullptr )
-        {
-            aTmp1 = GetEntryText( pCurEntry );
-            for( pEntry = First(); pEntry ; pEntry = Next( pEntry ) )
-            {
-               if(GetParent( pEntry )==nullptr)
-                   continue;
-                aTmp2 = GetEntryText( GetParent( pEntry ));
-                if( aTmp1 != aTmp2)
-                {
-                    // IA2 CWS. MT: Removed in SvTreeListEntry for now - only used in Sw/Sd/ScContentLBoxString, they should decide if they need this
-                    pEntry->SetMarked(false);
-                }
-            }
-        }
-        else
-        {
-            for( pEntry = First(); pEntry ; pEntry = Next( pEntry ) )
-            {
-                aTmp2 = GetEntryText( pEntry );
-                if( aTmp2 == rName)
-                {
-                    pEntry->SetMarked(true);
-                }
-                else
-                {
-                    pEntry->SetMarked(false);
-                }
-            }
-        }
-    }
-    Invalidate();
-}
-
-void  SdPageObjsTLB:: FreshCurEntry()
-{
-    SvTreeListEntry* pEntry =nullptr;
-    for( pEntry = First(); pEntry ; pEntry = Next( pEntry ) )
-    {
-                pEntry->SetMarked(false);
-    }
-    Invalidate();
-}
-
 void SdPageObjsTLB::InitEntry(SvTreeListEntry* pEntry,
     const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
 {
@@ -579,28 +525,6 @@ void SdPageObjsTLB::AddShapeList (
         !rList.HasObjectNavigationOrder() /* use navigation order, if available */,
         SdrIterMode::Flat);
 
-    bool  bMarked=false;
-    if(bisInSdNavigatorWin)
-    {
-        vcl::Window* pWindow=nullptr;
-        SdNavigatorWin* pSdNavigatorWin=nullptr;
-        sd::DrawDocShell* pSdDrawDocShell = nullptr;
-        if(pEntry)
-            pWindow=reinterpret_cast<vcl::Window*>(GetParent(pEntry));
-        if(pWindow)
-            pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
-        if( pSdNavigatorWin )
-            pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
-        if(pSdDrawDocShell)
-            bMarked = pSdDrawDocShell->IsMarked(pShape);
-        if(pEntry)
-        {
-            if(bMarked)
-                pEntry->SetMarked(true);
-            else
-                pEntry->SetMarked(false);
-        }
-    }
     while( aIter.IsMore() )
     {
         SdrObject* pObj = aIter.Next();
@@ -613,7 +537,7 @@ void SdPageObjsTLB::AddShapeList (
         {
             if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_OLE2 )
             {
-                SvTreeListEntry *pNewEntry = InsertEntry(
+                InsertEntry(
                     aStr,
                     maImgOle,
                     maImgOle,
@@ -622,32 +546,10 @@ void SdPageObjsTLB::AddShapeList (
                     TREELIST_APPEND,
                     pObj
                 );
-
-                if(bisInSdNavigatorWin)
-                {
-                    vcl::Window* pWindow=nullptr;
-                    SdNavigatorWin* pSdNavigatorWin=nullptr;
-                    sd::DrawDocShell* pSdDrawDocShell = nullptr;
-                    if(pNewEntry)
-                        pWindow=reinterpret_cast<vcl::Window*>(GetParent(pNewEntry));
-                    if(pWindow)
-                        pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
-                    if( pSdNavigatorWin )
-                        pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
-                    if(pSdDrawDocShell)
-                        bMarked = pSdDrawDocShell->IsMarked(pObj);
-                    if(pNewEntry)
-                    {
-                        if(bMarked)
-                            pNewEntry->SetMarked(true);
-                        else
-                            pNewEntry->SetMarked(false);
-                    }
-                }
             }
             else if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == OBJ_GRAF )
             {
-                SvTreeListEntry *pNewEntry = InsertEntry(
+                InsertEntry(
                     aStr,
                     maImgGraphic,
                     maImgGraphic,
@@ -656,32 +558,6 @@ void SdPageObjsTLB::AddShapeList (
                     TREELIST_APPEND,
                     pObj
                 );
-
-                if(bisInSdNavigatorWin)
-                {
-                    vcl::Window* pWindow=nullptr;
-                    SdNavigatorWin* pSdNavigatorWin=nullptr;
-                    sd::DrawDocShell* pSdDrawDocShell = nullptr;
-                    if(pNewEntry)
-                        pWindow=reinterpret_cast<vcl::Window*>(GetParent(pNewEntry));
-                    if(pWindow)
-                        pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
-                    if( pSdNavigatorWin )
-                        pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
-                    if(pSdDrawDocShell)
-                        bMarked = pSdDrawDocShell->IsMarked(pObj);
-                    if(pNewEntry)
-                    {
-                        if(bMarked)
-                        {
-                            pNewEntry->SetMarked(true);
-                        }
-                        else
-                        {
-                            pNewEntry->SetMarked(false);
-                        }
-                    }
-                }
             }
             else if (pObj->IsGroupObject())
             {
@@ -696,7 +572,7 @@ void SdPageObjsTLB::AddShapeList (
             }
             else
             {
-                SvTreeListEntry *pNewEntry = InsertEntry(
+                InsertEntry(
                     aStr,
                     rIconProvider.maImgObjects,
                     rIconProvider.maImgObjects,
@@ -705,32 +581,6 @@ void SdPageObjsTLB::AddShapeList (
                     TREELIST_APPEND,
                     pObj
                 );
-
-                if(bisInSdNavigatorWin)
-                {
-                    vcl::Window* pWindow=nullptr;
-                    SdNavigatorWin* pSdNavigatorWin=nullptr;
-                    sd::DrawDocShell* pSdDrawDocShell = nullptr;
-                    if(pNewEntry)
-                        pWindow=reinterpret_cast<vcl::Window*>(GetParent(pNewEntry));
-                    if(pWindow)
-                        pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
-                    if( pSdNavigatorWin )
-                        pSdDrawDocShell = SdNavigatorWin::GetDrawDocShell(mpDoc);
-                    if(pSdDrawDocShell)
-                        bMarked = pSdDrawDocShell->IsMarked(pObj);
-                    if(pNewEntry)
-                    {
-                        if(bMarked)
-                        {
-                            pNewEntry->SetMarked(true);
-                        }
-                        else
-                        {
-                            pNewEntry->SetMarked(false);
-                        }
-                    }
-                }
             }
         }
     }
@@ -1076,7 +926,6 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
     {
         if(bisInSdNavigatorWin)
         {
-            bool bMarked=false;
             SvTreeListEntry* pNewEntry = GetCurEntry();
             if (!pNewEntry)
                 return;
@@ -1088,9 +937,8 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
             if (pSdDrawDocShell)
             {
                 pSdDrawDocShell->GetObjectIsmarked(aStr, true);
-                bMarked = pSdDrawDocShell->GetObjectIsmarked(aStr, false);
+                pSdDrawDocShell->GetObjectIsmarked(aStr, false);
             }
-            pNewEntry->SetMarked(bMarked);
             Invalidate();
         }
     }

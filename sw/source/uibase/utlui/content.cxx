@@ -1337,34 +1337,13 @@ void SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
             {
                 for(size_t i = 0; i < nCount; ++i)
                 {
-                    SvTreeListEntry* pChild = nullptr;
                     const SwContent* pCnt = pCntType->GetMember(i);
                     if (pCnt)
                     {
                         OUString sEntry = pCnt->GetName();
                         if (sEntry.isEmpty())
                             sEntry = m_sSpace;
-                        pChild = InsertEntry(sEntry, pParent, false, TREELIST_APPEND, const_cast<SwContent *>(pCnt));
-                    }
-                    if (pChild)
-                    {
-                        //If object is marked , the corresponding entry is set true,
-                        //else the corresponding entry is set false .
-                        pChild->SetMarked(false);
-                        SdrObject * pObj = GetDrawingObjectsByContent(pCnt);
-                        if(pObj)
-                        {
-                            SdrView* pDrawView = m_pActiveShell->GetDrawView();
-                            SdrPageView* pPV = pDrawView->/*GetPageViewPvNum*/GetSdrPageView(/*0*/);
-                            if( pPV )
-                            {
-                                bool Marked = pDrawView->IsObjMarked(pObj);
-                                if(Marked)
-                                {
-                                    pChild->SetMarked(true);
-                                }
-                            }
-                        }
+                        InsertEntry(sEntry, pParent, false, TREELIST_APPEND, const_cast<SwContent *>(pCnt));
                     }
                 }
             }
