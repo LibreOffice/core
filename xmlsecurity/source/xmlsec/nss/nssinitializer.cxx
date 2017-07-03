@@ -239,8 +239,6 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
 //was successful and therefore NSS_Shutdown should be called when terminating.
 bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool & out_nss_init )
 {
-    bool return_value = true;
-
     // this method must be called only once, no need for additional lock
     OString sCertDir;
 
@@ -290,6 +288,8 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
     out_nss_init = true;
 
 #ifdef XMLSEC_CRYPTO_NSS
+    bool return_value = true;
+
 #if defined SYSTEM_NSS
     if (!SECMOD_HasRootCerts())
 #endif
@@ -343,9 +343,11 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
             return_value = false;
         }
     }
-#endif
 
     return return_value;
+#else
+    return true;
+#endif
 }
 
 } // namespace
