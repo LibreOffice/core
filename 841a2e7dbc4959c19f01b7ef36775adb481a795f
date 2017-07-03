@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_c403540e",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-03T06:18:36Z",
+      "side": 1,
+      "message": "You could use SwNode::GetTextNode() here directly, no need to go via content node, I think.",
+      "revId": "841a2e7dbc4959c19f01b7ef36775adb481a795f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e7fe9204",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-03T06:18:36Z",
+      "side": 1,
+      "message": "In sw code auto usage is conservative, usually only used when there is a cast at the same line, for iterators and for range-based for loops. Better to spell out sal_Int32 here explicitly.",
+      "revId": "841a2e7dbc4959c19f01b7ef36775adb481a795f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
