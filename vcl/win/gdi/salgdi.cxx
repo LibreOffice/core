@@ -225,7 +225,7 @@ void ImplInitSalGDI()
         if( pSalData->mhDitherPal )
         {
             // create DIBPattern for 8Bit dithering
-            long nSize = sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) ) + 64;
+            long const nSize = sizeof( BITMAPINFOHEADER ) + ( 256 * sizeof( short ) ) + 64;
             long n;
 
             pSalData->mhDitherDIB = GlobalAlloc( GMEM_FIXED, nSize );

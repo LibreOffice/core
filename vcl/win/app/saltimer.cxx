@@ -150,7 +150,7 @@ void EmitTimerCallback()
     // try this a short time later again.
     if (pSVData->mpSalTimer && ImplSalYieldMutexTryToAcquire())
     {
-        bool idle = true; // TODO
+        bool const idle = true; // TODO
         pSVData->mpSalTimer->CallCallback( idle );
         ImplSalYieldMutexRelease();
 

@@ -1078,7 +1078,7 @@ bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
         aFileName[2] = sal::static_int_cast<char>('A' + (15 & (nCounter>>4)));
         aFileName[3] = sal::static_int_cast<char>('A' + (15 & nCounter));
         char aResourceName[512];
-        int nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
+        int const nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
         int nLen = ::GetTempPathA( nMaxLen, aResourceName );
         ::strncpy( aResourceName + nLen, aFileName, sizeof( aResourceName )- nLen );
         // security: end buffer in any case

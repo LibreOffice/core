@@ -166,14 +166,12 @@ tools::Rectangle WinSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScree
 
 int WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage)
 {
-    int nFlags = MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | MB_DEFBUTTON1;
-
     ImplHideSplash();
     return MessageBoxW(
         nullptr,
         reinterpret_cast<LPCWSTR>(rMessage.getStr()),
         reinterpret_cast<LPCWSTR>(rTitle.getStr()),
-        nFlags);
+        MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | MB_DEFBUTTON1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
