@@ -910,13 +910,13 @@ OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  )
 
         aRecordset.MoveFirst();
         OLEVariant  aValue;
-        OUString aRet, aComma(",");
+        OUString aRet;
         while(!aRecordset.IsAtEOF())
         {
             WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
             WpADOField aField(aFields.GetItem(0));
             aField.get_Value(aValue);
-            aRet = aRet + aValue.getString() + aComma;
+            aRet = aRet + aValue.getString() + ",";
             aRecordset.MoveNext();
         }
         aRecordset.Close();

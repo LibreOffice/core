@@ -480,9 +480,8 @@ sal_Int32 WpADOField::GetAttributes() const
 sal_Int32 WpADOField::GetStatus() const
 {
     assert(pInterface);
-    sal_Int32 eADOSFieldAttributes=0;
     //  pInterface->get_Status(&eADOSFieldAttributes);
-    return eADOSFieldAttributes;
+    return 0;
 }
 
 sal_Int32 WpADOField::GetDefinedSize() const
@@ -1978,13 +1977,12 @@ ADORecordset* WpADOConnection::getTables( const css::uno::Any& catalog,
 
     ++nPos;
     OUStringBuffer aTypes;
-    OUString aComma( "," );
     const OUString* pIter = types.getConstArray();
     const OUString* pEnd = pIter + types.getLength();
     for( ; pIter != pEnd ; ++pIter)
     {
         if ( aTypes.getLength() )
-            aTypes.append(aComma);
+            aTypes.append(",");
         aTypes.append(*pIter);
     }
 

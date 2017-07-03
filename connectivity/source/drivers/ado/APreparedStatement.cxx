@@ -66,8 +66,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection, const OUStrin
         //  we recursive replace all occurrences of ? in the statement and
         //  replace them with name like "parame" */
         sal_Int32 nParameterCount = 0;
-        OUString sDefaultName( "parame" );
-        replaceParameterNodeName(pNode,sDefaultName,nParameterCount);
+        replaceParameterNodeName(pNode,"parame",nParameterCount);
         pNode->parseNodeToStr( sNewSql, _pConnection );
         delete pNode;
     }
