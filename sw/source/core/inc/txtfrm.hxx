@@ -742,17 +742,17 @@ inline void SwTextFrame::ResetBlinkPor() const
 class TemporarySwap {
 protected:
     explicit TemporarySwap(SwTextFrame * frame, bool swap):
-        frame_(frame), undo_(false)
+        m_frame(frame), m_undo(false)
     {
-        if (frame_->IsVertical() && swap) {
-            undo_ = true;
-            frame_->SwapWidthAndHeight();
+        if (m_frame->IsVertical() && swap) {
+            m_undo = true;
+            m_frame->SwapWidthAndHeight();
         }
     }
 
     ~TemporarySwap() {
-        if (undo_) {
-            frame_->SwapWidthAndHeight();
+        if (m_undo) {
+            m_frame->SwapWidthAndHeight();
         }
     }
 
@@ -760,8 +760,8 @@ private:
     TemporarySwap(TemporarySwap &) = delete;
     void operator =(TemporarySwap &) = delete;
 
-    SwTextFrame * frame_;
-    bool undo_;
+    SwTextFrame * m_frame;
+    bool m_undo;
 };
 
 class SwSwapIfSwapped: private TemporarySwap {
