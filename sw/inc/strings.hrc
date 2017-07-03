@@ -536,6 +536,7 @@
 #define STR_DRAWING_OBJECTS                     NC_("STR_DRAWING_OBJECTS", "drawing object(s)")
 #define STR_TABLE_NAME                          NC_("STR_TABLE_NAME", "table: $1$2$3")
 #define STR_PARAGRAPH_UNDO                      NC_("STR_PARAGRAPH_UNDO", "paragraph")
+#define STR_PARAGRAPH_SIGN_UNDO                 NC_("STR_PARAGRAPH_SIGN_UNDO", "Paragraph sign")
 #define STR_UNDO_FLYFRMFMT_TITLE                NC_("STR_UNDO_FLYFRMFMT_TITLE", "Change object title of $1")
 #define STR_UNDO_FLYFRMFMT_DESCRITPTION         NC_("STR_UNDO_FLYFRMFMT_DESCRITPTION", "Change object description of $1")
 #define STR_UNDO_TBLSTYLE_CREATE                NC_("STR_UNDO_TBLSTYLE_CREATE", "Create table style: $1")

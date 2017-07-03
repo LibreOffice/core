@@ -658,6 +658,9 @@ OUString GetUndoComment(SwUndoId eId)
             break;
         case SwUndoId::CONFLICT:
             break;
+        case SwUndoId::PARA_SIGN_ADD:
+            pId = STR_PARAGRAPH_SIGN_UNDO;
+            break;
     };
 
     assert(pId);
