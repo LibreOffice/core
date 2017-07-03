@@ -487,7 +487,7 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("casttovoid");
+static loplugin::Plugin::Registration<Visitor> reg("casttovoid", false);
 
 }
 
