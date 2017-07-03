@@ -4247,7 +4247,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
             short nDiff = nColWidth -
                 rCol.CalcPrtColWidth( n, (sal_uInt16)nPageSize );
 
-            if ( nDiff > 10 || nDiff < -10 )      // Toleranz: 10 tw
+            if ( nDiff > 10 || nDiff < -10 )      // Tolerance: 10 tw
             {
                 bEven = false;
                 break;

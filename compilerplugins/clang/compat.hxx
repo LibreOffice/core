@@ -224,8 +224,8 @@ inline llvm::StringRef getImmediateMacroNameForDiagnostics(
     using namespace clang;
     // Verbatim copy from Clang's lib/Lex/Lexer.cpp:
 
-    assert(Loc.isMacroID() && "Only reasonble to call this on macros");
-    // Walk past macro argument expanions.
+    assert(Loc.isMacroID() && "Only reasonable to call this on macros");
+    // Walk past macro argument expansion.
     while (SM.isMacroArgExpansion(Loc))
         Loc = SM.getImmediateExpansionRange(Loc).first;
 

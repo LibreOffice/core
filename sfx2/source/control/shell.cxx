@@ -354,7 +354,7 @@ void SfxShell::Activate
                             FALSE
                             the <SfxViewFrame>, on which SfxDispatcher
                             the SfxShell instance is located, was
-                            activated. (for example by a closing dialoge) */
+                            activated. (for example by a closing dialog) */
 )
 {
     BroadcastContextForActivation(true);
@@ -371,7 +371,7 @@ void SfxShell::Deactivate
                             FALSE
                             the <SfxViewFrame>, on which SfxDispatcher
                             the SfxShell instance is located, was
-                            deactivated. (for example by a dialoge) */
+                            deactivated. (for example by a dialog) */
 )
 {
     BroadcastContextForActivation(false);

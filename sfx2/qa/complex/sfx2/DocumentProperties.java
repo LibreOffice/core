@@ -217,7 +217,7 @@ public class DocumentProperties
             udps.getPropertyValue("Hinweis"));
         assertEquals(
             "UserDefined 2", "Kann Spuren von N\u00FCssen enthalten",
-            udps.getPropertyValue("Warnung"));
+            udps.getPropertyValue("Warning"));
 
         System.out.println("...done");
 

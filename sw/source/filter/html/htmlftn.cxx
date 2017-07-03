@@ -547,7 +547,7 @@ void SwHTMLWriter::OutFootEndNoteInfo()
     // Dok/Seite/Kap (D)
     // Position (S)
     // Folgeseite
-    // Beginn
+    // Begin
 
     {
         const SwFootnoteInfo& rInfo = pDoc->GetFootnoteInfo();

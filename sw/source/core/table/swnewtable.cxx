@@ -1487,7 +1487,7 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
         lcl_UnMerge( *this, *rBoxes[*pCurrBox++], nCnt, bSameHeight );
 
     CHECK_TABLE( *this )
-    //Layout updaten
+    //Layout update
     aFndBox.MakeFrames( *this );
 
     return true;

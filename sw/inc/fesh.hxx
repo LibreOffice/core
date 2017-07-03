@@ -305,7 +305,7 @@ public:
      Although (0,TRUE) is kind of a standard, the parameters are not defaulted here
      in order to force more conscious use especially of bStopAtFly. */
     FrameTypeFlags GetFrameType( const Point *pPt, bool bStopAtFly ) const;
-    FrameTypeFlags GetSelFrameType() const;               //Selektion (Drawing)
+    FrameTypeFlags GetSelFrameType() const;               //Selection (Drawing)
 
     /** check whether selected frame contains a control;
      * companion method to GetSelFrameType, used for preventing

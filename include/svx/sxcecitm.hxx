@@ -45,8 +45,8 @@ public:
 
 
 // class SdrCaptionEscIsRelItem
-// sal_True=Linienaustrittsposition relativ
-// sal_False=Linienaustrittsposition absolut
+// sal_True=Linienaustrittsposition relative
+// sal_False=Linienaustrittsposition absolute
 
 class SVX_DLLPUBLIC SdrCaptionEscIsRelItem: public SdrYesNoItem {
 public:

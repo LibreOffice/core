@@ -104,7 +104,7 @@ namespace o3tl
     template<> struct typed_flags<MouseEventModifiers> : is_typed_flags<MouseEventModifiers, 0xff7> {};
 }
 
-// Maus-Buttons
+// Mause-Buttons
 #define MOUSE_LEFT              ((sal_uInt16)0x0001)
 #define MOUSE_MIDDLE            ((sal_uInt16)0x0002)
 #define MOUSE_RIGHT             ((sal_uInt16)0x0004)
