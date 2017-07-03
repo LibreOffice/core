@@ -70,19 +70,6 @@ namespace
         charset_from_user_setting,
         charset_default
     };
-    // TODO: use DTable.hxx instead
-            enum DBFType  { dBaseIII         = 0x03,
-                            dBaseIV          = 0x04,
-                            dBaseV           = 0x05,
-                            VisualFoxPro     = 0x30,
-                            VisualFoxProAuto = 0x31, // Visual FoxPro with AutoIncrement field
-                            dBaseFS          = 0x43,
-                            dBaseFSMemo      = 0xB3,
-                            dBaseIIIMemo     = 0x83,
-                            dBaseIVMemo      = 0x8B,
-                            dBaseIVMemoSQL   = 0x8E,
-                            FoxProMemo       = 0xF5
-                          };
 
     charsetSource load_CharSet(rtl_TextEncoding &nCharSet, bool bExport, SvStream* dbf_Stream)
     {
