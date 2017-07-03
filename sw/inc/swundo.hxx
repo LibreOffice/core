@@ -153,7 +153,9 @@ enum class SwUndoId
     TBLSTYLE_CREATE,                   // 114
     TBLSTYLE_DELETE,                   // 115
     TBLSTYLE_UPDATE,                   // 116
-    STD_END = TBLSTYLE_UPDATE,
+    PARA_SIGN_ADD,                     // 117
+    PARA_SIGN_REM,                     // 118
+    STD_END = PARA_SIGN_REM,
 
     // UI undo ID's...
     UI_REPLACE = STD_END + 1,
