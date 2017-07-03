@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_a71d6a68",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2597,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-07-03T07:22:40Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"if it\u0027s\"?",
+      "range": {
+        "startLine": 2597,
+        "startChar": 28,
+        "endLine": 2597,
+        "endChar": 36
+      },
+      "revId": "3eabcc80af3cd0d3e3bcc49e57a84b4854bb7582",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

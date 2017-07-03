@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_072b9e83",
+        "filename": "framework/source/uielement/progressbarwrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-07-03T07:22:40Z",
+      "side": 0,
+      "message": "shouldn\u0027t it be \"of our\"?",
+      "range": {
+        "startLine": 58,
+        "startChar": 37,
+        "endLine": 58,
+        "endChar": 44
+      },
+      "revId": "ba72478f61d80ce6613a6ad3f9b633d59b6099e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
