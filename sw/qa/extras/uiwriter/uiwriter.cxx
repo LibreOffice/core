@@ -253,9 +253,7 @@ public:
     void testTdf107976();
     void testTdf113790();
     void testParagraphOfTextRange();
-#if 0
     void testTdf108524();
-#endif
     void testTableInSection();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -397,9 +395,7 @@ public:
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf113790);
     CPPUNIT_TEST(testParagraphOfTextRange);
-#if 0
     CPPUNIT_TEST(testTdf108524);
-#endif
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST_SUITE_END();
 
@@ -5054,7 +5050,6 @@ void SwUiWriterTest::testParagraphOfTextRange()
     CPPUNIT_ASSERT_EQUAL(OUString("In section"), xParagraph->getString());
 }
 
-#if 0
 void SwUiWriterTest::testTdf108524()
 {
     createDoc("tdf108524.odt");
@@ -5067,7 +5062,6 @@ void SwUiWriterTest::testTdf108524()
     // and it was cut off.
     assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
 }
-#endif
 
 void SwUiWriterTest::testTableInSection()
 {
