@@ -288,7 +288,7 @@ void OleStorage::implGetElementNames( ::std::vector< OUString >& orElementNames 
     {
         aNames = mxStorage->getElementNames();
         if( aNames.getLength() > 0 )
-            orElementNames.insert( orElementNames.end(), aNames.getConstArray(), aNames.getConstArray() + aNames.getLength() );
+            orElementNames.insert( orElementNames.end(), aNames.begin(), aNames.end() );
     }
     catch(const Exception& )
     {

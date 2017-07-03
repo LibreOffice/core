@@ -86,9 +86,9 @@ namespace connectivity
             describeProperties( aProperties );
 
             if ( isNew() )
-                std::for_each( aProperties.getArray(), aProperties.getArray() + aProperties.getLength(), ResetROAttribute() );
+                std::for_each( aProperties.begin(), aProperties.end(), ResetROAttribute() );
             else
-                std::for_each( aProperties.getArray(), aProperties.getArray() + aProperties.getLength(), SetROAttribute() );
+                std::for_each( aProperties.begin(), aProperties.end(), SetROAttribute() );
 
             return new ::cppu::OPropertyArrayHelper( aProperties );
         }

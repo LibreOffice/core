@@ -260,7 +260,7 @@ namespace frm
 
         Sequence< Property > aProperties( xPSI->getProperties() );
         Sequence< OUString > aPropertyNames( aProperties.getLength() );
-        ::std::transform( aProperties.getConstArray(), aProperties.getConstArray() + aProperties.getLength(),
+        ::std::transform( aProperties.begin(), aProperties.end(),
             aPropertyNames.getArray(), SelectNameOfProperty() );
 
         Sequence< Any > aValues;

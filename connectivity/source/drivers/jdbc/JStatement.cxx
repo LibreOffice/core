@@ -133,8 +133,8 @@ Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  )
     Sequence< Type > aOldTypes = java_sql_Statement_BASE::getTypes();
     if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() )
     {
-        (void) std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
-                         cppu::UnoType<XGeneratedResultSet>::get());
+        std::remove(aOldTypes.begin(), aOldTypes.end(),
+                    cppu::UnoType<XGeneratedResultSet>::get());
         aOldTypes.realloc(aOldTypes.getLength() - 1);
     }
 

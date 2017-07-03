@@ -64,7 +64,7 @@ template< class Interface >
         css::uno::Sequence< css::uno::Reference<Interface> > & rDestination )
 {
     rDestination.realloc( rSource.getLength());
-    std::transform( rSource.getConstArray(), rSource.getConstArray() + rSource.getLength(),
+    std::transform( rSource.begin(), rSource.end(),
                       rDestination.getArray(),
                       CreateRefClone< Interface >());
 }

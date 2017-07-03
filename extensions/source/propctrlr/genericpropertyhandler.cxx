@@ -116,7 +116,7 @@ namespace pcr
             OSL_FAIL( "EnumRepresentation::getDescriptions: caught an exception!" );
         }
 
-        return std::vector< OUString >( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength() );
+        return std::vector< OUString >( aNames.begin(), aNames.end() );
     }
 
     void EnumRepresentation::impl_getValues( Sequence< sal_Int32 >& _out_rValues ) const
@@ -162,8 +162,7 @@ namespace pcr
         Sequence< sal_Int32 > aValues;
         impl_getValues( aValues );
 
-        sal_Int32 index = std::find( aValues.getConstArray(), aValues.getConstArray() + aValues.getLength(),
-            nAsInt ) - aValues.getConstArray();
+        sal_Int32 index = std::find( aValues.begin(), aValues.end(), nAsInt ) - aValues.begin();
 
         std::vector< OUString > aDescriptions( getDescriptions() );
         if ( ( index >= 0 ) && ( index < (sal_Int32)aDescriptions.size() ) )

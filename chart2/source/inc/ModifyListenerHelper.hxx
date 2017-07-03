@@ -213,7 +213,7 @@ void addListenerToAllSequenceElements(
     const css::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
-        std::for_each( rSequence.getConstArray(), rSequence.getConstArray() + rSequence.getLength(),
+        std::for_each( rSequence.begin(), rSequence.end(),
                          impl::addListenerFunctor< T >( xListener ));
 }
 
@@ -255,7 +255,7 @@ void removeListenerFromAllSequenceElements(
     const css::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
-        std::for_each( rSequence.getConstArray(), rSequence.getConstArray() + rSequence.getLength(),
+        std::for_each( rSequence.begin(), rSequence.end(),
                          impl::removeListenerFunctor< T >( xListener ));
 }
 
