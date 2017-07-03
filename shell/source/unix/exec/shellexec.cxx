@@ -37,7 +37,6 @@
 
 #include "uno/current_context.hxx"
 
-#include <cstdlib>
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
@@ -146,11 +145,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         aBuffer.append("open --");
 #else
         // Just use xdg-open on non-Mac
-        if (std::getenv("LIBO_FLATPAK") != nullptr) {
-            aBuffer.append("/app/bin/xdg-open");
-        } else {
-            aBuffer.append("/usr/bin/xdg-open");
-        }
+        aBuffer.append("/usr/bin/xdg-open");
 #endif
         aBuffer.append(" ");
         escapeForShell(aBuffer, OUStringToOString(aURL, osl_getThreadTextEncoding()));
