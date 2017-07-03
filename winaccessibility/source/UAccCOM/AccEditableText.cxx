@@ -228,11 +228,10 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
     ::rtl::OUString ouStr(reinterpret_cast<sal_Unicode const *>(*attributes));
 
     sal_Int32 nIndex = 0;
-    sal_Unicode cTok = ';';
     vector< ::rtl::OUString > vecAttr;
     do
     {
-        ::rtl::OUString ouToken = ouStr.getToken(0, cTok, nIndex);
+        ::rtl::OUString ouToken = ouStr.getToken(0, ';', nIndex);
         vecAttr.push_back(ouToken);
     }
     while(nIndex >= 0);

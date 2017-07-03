@@ -429,7 +429,6 @@ void AccContainerEventListener::HandleValueChangedEvent(Any, Any)
 
 bool AccContainerEventListener::IsEditable(Reference<XAccessibleContext> const & xContext)
 {
-    bool ret = false;
     Reference< XAccessibleStateSet > pRState = xContext->getAccessibleStateSet();
     if( !pRState.is() )
         return false;
@@ -441,7 +440,7 @@ bool AccContainerEventListener::IsEditable(Reference<XAccessibleContext> const &
         if(pStates[iIndex] == AccessibleStateType::EDITABLE)
             return true;
     }
-    return ret;
+    return false;
 }
 
 bool AccContainerEventListener::NotifyChildEvent(short nWinEvent,const Any &Value)
