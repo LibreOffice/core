@@ -162,10 +162,26 @@ bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
             }
         }
     }
-    if (!foundStringLiteral
-        && !varDecl->getInit()->isConstantInitializer(compiler.getASTContext(), false/*ForRef*/))
-    {
-        return true;
+    if (!foundStringLiteral) {
+        auto const init = varDecl->getInit();
+#if CLANG_VERSION < 30900
+        // Work around missing Clang 3.9 fix <https://reviews.llvm.org/rL271762>
+        // "Sema: do not attempt to sizeof a dependent type" (while an
+        // initializer expression of the form
+        //
+        //   sizeof (T)
+        //
+        // with dependent type T /is/ constant, keep consistent here with the
+        // (arguably broken) behavior of isConstantInitalizer returning false in
+        // Clang >= 3.9):
+        if (init->isValueDependent()) {
+            return true;
+        }
+#endif
+        if (!init->isConstantInitializer(compiler.getASTContext(), false/*ForRef*/))
+        {
+            return true;
+        }
     }
 
     maVarDeclSet.insert(varDecl);
