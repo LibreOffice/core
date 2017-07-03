@@ -89,7 +89,6 @@ namespace pdfi
         css::uno::Reference<
             css::frame::XModel >           m_xModel;
         TreeVisitorFactorySharedPtr                   m_pVisitorFactory;
-        bool                                          m_bEnableToplevelText;
 
         bool parse( const css::uno::Reference<css::io::XInputStream>&       xInput,
                     const css::uno::Reference<css::task::XInteractionHandler>& xIHdl,
@@ -110,9 +109,6 @@ namespace pdfi
             format (writer, draw, etc)
          */
         void setTreeVisitorFactory(const TreeVisitorFactorySharedPtr& rVisitorFactory);
-
-        /// TEMP - enable writer-like text:p on doc level
-        void enableToplevelText() { m_bEnableToplevelText=true; }
 
         /** Export pdf document to ODG
 

@@ -43,7 +43,6 @@ namespace
         pdfi::PDFIRawAdaptor* pAdaptor = new pdfi::PDFIRawAdaptor( "org.libreoffice.comp.documents.WriterPDFImport", _rxContext );
 
         pAdaptor->setTreeVisitorFactory(pdfi::createWriterTreeVisitorFactory());
-        pAdaptor->enableToplevelText(); // TEMP! TEMP!
 
         return uno::Reference<uno::XInterface>(static_cast<xml::XImportFilter*>(pAdaptor));
     }

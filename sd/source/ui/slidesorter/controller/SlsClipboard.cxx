@@ -145,7 +145,6 @@ Clipboard::Clipboard (SlideSorter& rSlideSorter)
       mrController(mrSlideSorter.GetController()),
       maPagesToRemove(),
       maPagesToSelect(),
-      mbUpdateSelectionPending(false),
       mxUndoContext(),
       mxSelectionObserverContext(),
       mnDragFinishedUserEventId(nullptr)
@@ -577,7 +576,6 @@ void Clipboard::StartDrag (
 {
     maPagesToRemove.clear();
     maPagesToSelect.clear();
-    mbUpdateSelectionPending = false;
     CreateSlideTransferable(pWindow, true);
 
     mrController.GetInsertionIndicatorHandler()->UpdatePosition(
@@ -850,8 +848,6 @@ sal_uInt16 Clipboard::InsertSlides (
         for (sal_Int32 i=0; i<=nInsertedPageCount; i+=2)
             maPagesToSelect.push_back(
                 dynamic_cast<SdPage*>(pDocument->GetPage(nInsertPosition+i)));
-
-    mbUpdateSelectionPending |= (nInsertedPageCount>0);
 
     return nInsertedPageCount;
 }

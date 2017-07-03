@@ -196,10 +196,6 @@ void Theme::SetGradient (
 {
     GradientDescriptor& rGradient (GetGradient(eType));
 
-    rGradient.maBaseColor = aBaseColor;
-
-    rGradient.mnSaturationOverride = nSaturationOverride;
-    rGradient.mnBrightnessOverride = nBrightnessOverride;
     const ColorData aColor (nSaturationOverride>=0 || nBrightnessOverride>=0
         ? HGBAdapt(aBaseColor, nSaturationOverride, nBrightnessOverride)
         : aBaseColor);
@@ -208,11 +204,6 @@ void Theme::SetGradient (
     rGradient.maFillColor2 = ChangeLuminance(aColor, nFillEndOffset);
     rGradient.maBorderColor1 = ChangeLuminance(aColor, nBorderStartOffset);
     rGradient.maBorderColor2 = ChangeLuminance(aColor, nBorderEndOffset);
-
-    rGradient.mnFillOffset1 = nFillStartOffset;
-    rGradient.mnFillOffset2 = nFillEndOffset;
-    rGradient.mnBorderOffset1 = nBorderStartOffset;
-    rGradient.mnBorderOffset2 = nBorderEndOffset;
 }
 
 const BitmapEx& Theme::GetIcon (const IconType eType)

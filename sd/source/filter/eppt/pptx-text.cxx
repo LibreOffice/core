@@ -1371,12 +1371,10 @@ void FontCollectionEntry::ImplInit( const OUString& rName )
     if ( !aSubstName.isEmpty() )
     {
         Name = aSubstName;
-        bIsConverted = true;
     }
     else
     {
         Name = rName;
-        bIsConverted = false;
     }
 }
 

@@ -219,8 +219,7 @@ PDFIRawAdaptor::PDFIRawAdaptor( OUString const & implementationName, const uno::
     m_implementationName(implementationName),
     m_xContext( xContext ),
     m_xModel(),
-    m_pVisitorFactory(),
-    m_bEnableToplevelText(false)
+    m_pVisitorFactory()
 {
 }
 

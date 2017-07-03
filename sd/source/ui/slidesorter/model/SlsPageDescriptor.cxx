@@ -183,8 +183,6 @@ bool PageDescriptor::SetState (const State eState, const bool bNewStateValue)
             break;
     }
 
-    if (bModified)
-        maVisualState.UpdateVisualState(*this);
     return bModified;
 }
 

@@ -536,10 +536,7 @@ Section& Section::operator=( const Section& rSection )
 
 PropRead::PropRead( SotStorage& rStorage, const OUString& rName ) :
         mbStatus            ( false ),
-        mnByteOrder         ( 0xfffe ),
-        mnFormat            ( 0 ),
-        mnVersionLo         ( 4 ),
-        mnVersionHi         ( 2 )
+        mnByteOrder         ( 0xfffe )
 {
     if ( rStorage.IsStream( rName ) )
     {
@@ -570,6 +567,9 @@ void PropRead::Read()
 
     if ( mbStatus )
     {
+        sal_uInt16              mnVersionLo;
+        sal_uInt16              mnVersionHi;
+        sal_uInt16              mnFormat;
         mpSvStream->ReadUInt16( mnByteOrder ).ReadUInt16( mnFormat ).ReadUInt16( mnVersionLo ).ReadUInt16( mnVersionHi );
         if ( mnByteOrder == 0xfffe )
         {
@@ -605,9 +605,6 @@ PropRead& PropRead::operator=( const PropRead& rPropRead )
         mpSvStream = rPropRead.mpSvStream;
 
         mnByteOrder = rPropRead.mnByteOrder;
-        mnFormat = rPropRead.mnFormat;
-        mnVersionLo = rPropRead.mnVersionLo;
-        mnVersionHi = rPropRead.mnVersionHi;
         memcpy( mApplicationCLSID, rPropRead.mApplicationCLSID, 16 );
 
         for(const std::unique_ptr<Section>& rSection : rPropRead.maSections)
