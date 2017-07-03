@@ -432,6 +432,13 @@ public:
         Point* pPos, int* pGetNextGlypInfo) override;
 };
 
+enum class D2DTextAntiAliasMode
+{
+    Default,
+    ClearType,
+    AntiAliased,
+};
+
 class D2DWriteTextOutRenderer : public TextOutRenderer
 {
     typedef HRESULT(WINAPI *pD2D1CreateFactory_t)(D2D1_FACTORY_TYPE,
@@ -481,6 +488,11 @@ public:
 
     inline bool Ready() const { return mpGdiInterop && mpRT; }
 
+    void applyTextAntiAliasMode();
+    void setTextAntiAliasMode(D2DTextAntiAliasMode eMode)
+    {
+        meTextAntiAliasMode = eMode;
+    }
 private:
     static void CleanupModules();
 
@@ -500,6 +512,8 @@ private:
     IDWriteFontFace * mpFontFace;
     float             mlfEmHeight;
     HDC               mhDC;
+    D2DTextAntiAliasMode meTextAntiAliasMode;
+    IDWriteRenderingParams* mpRenderingParameters;
 };
 
 #endif // INCLUDED_VCL_INC_WIN_WINLAYOUT_HXX
