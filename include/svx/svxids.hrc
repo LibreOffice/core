@@ -984,18 +984,16 @@
 #define SID_DRAW_MEASURELINE                            ( SID_SVX_START + 1167 )
 #define SID_AUTHOR_COLOR                                ( SID_SVX_START + 1168 )
 #define SID_BMPMASK_COLOR                               ( SID_SVX_START + 1169 )
+#define SID_PARA_SIGNATURE_ADD                          ( SID_SVX_START + 1170 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_BMPMASK_COLOR + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_PARA_SIGNATURE_ADD + 1 )
 
 // Overflow check for slot IDs
-
 #if SID_SVX_FIRSTFREE > SID_SVX_END
-#error Resource-Ueberlauf in #line, #file
+#error Resource-overflow in #line, #file
 #endif
 
 #endif
-
-// ******************************************************************* EOF
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
