@@ -130,12 +130,9 @@ public:
 
 NotebookbarTabControl::NotebookbarTabControl( Window* pParent )
 : NotebookbarTabControlBase( pParent )
+, m_pListener( nullptr )
 , m_bInitialized( false )
 , m_bInvalidate( true )
-{
-}
-
-NotebookbarTabControl::~NotebookbarTabControl()
 {
 }
 
@@ -255,7 +252,7 @@ IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebo
         xPopupController->setPopupMenu(xPopupMenu);
         VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation(xPopupMenu);
         PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
-        Point aPos(0, NotebookbarTabControl::GetHeaderHeight());
+        Point aPos(pNotebookbar->GetSizePixel().getWidth(), NotebookbarTabControl::GetHeaderHeight() - ICON_SIZE + 10);
         pVCLMenu->Execute(pNotebookbar, tools::Rectangle(aPos, aPos),PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
 
         Reference<css::lang::XComponent> xComponent(xPopupController, UNO_QUERY);
