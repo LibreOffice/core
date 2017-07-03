@@ -16,6 +16,24 @@
       "revId": "e584b14b0071b3e43acf38a640a7fe0285bda3d4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a703aab7",
+        "filename": "include/comphelper/accessiblecontexthelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2017-07-03T10:58:27Z",
+      "side": 1,
+      "message": "In fact the weird thing is the release is about the local mutex, not the SolarMutex.",
+      "parentUuid": "3a461143_a44e48bf",
+      "revId": "e584b14b0071b3e43acf38a640a7fe0285bda3d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
