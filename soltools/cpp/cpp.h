@@ -74,7 +74,6 @@ extern void setup_kwtab(void);
 typedef struct token
 {
     unsigned char type;
-    unsigned char flag;
     size_t wslen;
     size_t len;
     uchar *t;

@@ -128,7 +128,6 @@ enum class SvLBoxItemType {String, Button, ContextBmp};
 class SvLBoxTab
 {
     long    nPos;
-    void*   pUserData;
 public:
             SvLBoxTab();
             SvLBoxTab( long nPos, SvLBoxTabFlags nFlags );
@@ -137,7 +136,6 @@ public:
 
     SvLBoxTabFlags nFlags;
 
-    void    SetUserData( void* pPtr ) { pUserData = pPtr; }
     bool    IsDynamic() const { return bool(nFlags & SvLBoxTabFlags::DYNAMIC); }
     void    SetPos( long nNewPos) { nPos = nNewPos; }
     long    GetPos() const { return nPos; }

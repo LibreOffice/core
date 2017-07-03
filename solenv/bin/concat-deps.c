@@ -301,7 +301,6 @@ struct hash
 {
     struct hash_elem** array;
     struct pool* elems_pool;
-    int flags;
     unsigned int used;
     unsigned int size;
     unsigned int load_limit;
@@ -312,7 +311,6 @@ struct hash
     int memcmp;
 #endif
 };
-#define HASH_F_NO_RESIZE (1<<0)
 
 /* The following hash_compute function was adapted from :
  * lookup3.c, by Bob Jenkins, May 2006, Public Domain.
@@ -483,7 +481,6 @@ unsigned int i;
     fprintf(stderr, "resize hash %u -> %u\n", old_size, hash->size);
     if(hash->size == old_size)
     {
-        hash->flags |= HASH_F_NO_RESIZE;
         return;
     }
     array = calloc(hash->size + 1, sizeof(struct hash_elem*));
@@ -509,7 +506,6 @@ unsigned int i;
     else
     {
         hash->size = old_size;
-        hash->flags |= HASH_F_NO_RESIZE;
     }
 }
 

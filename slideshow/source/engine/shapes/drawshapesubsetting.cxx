@@ -186,22 +186,18 @@ namespace slideshow
                     // non-subsetted node, with some child subsets
                     // that subtract from it
                     maCurrentSubsets.push_back( DocTreeNode( 0,
-                                                             mnMinSubsetActionIndex,
-                                                             DocTreeNode::NodeType::Invalid ) );
+                                                             mnMinSubsetActionIndex ) );
                     maCurrentSubsets.push_back( DocTreeNode( mnMaxSubsetActionIndex,
-                                                             maActionClassVector.size(),
-                                                             DocTreeNode::NodeType::Invalid ) );
+                                                             maActionClassVector.size() ) );
                 }
                 else
                 {
                     // subsetted node, from which some further child
                     // subsets subtract content
                     maCurrentSubsets.push_back( DocTreeNode( maSubset.getStartIndex(),
-                                                             mnMinSubsetActionIndex,
-                                                             DocTreeNode::NodeType::Invalid ) );
+                                                             mnMinSubsetActionIndex ) );
                     maCurrentSubsets.push_back( DocTreeNode( mnMaxSubsetActionIndex,
-                                                             maSubset.getEndIndex(),
-                                                             DocTreeNode::NodeType::Invalid ) );
+                                                             maSubset.getEndIndex() ) );
                 }
             }
             else
@@ -717,14 +713,12 @@ namespace slideshow
 
             DocTreeNode makeTreeNode( const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rBegin,
                                       const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rStart,
-                                      const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd,
-                                      DocTreeNode::NodeType                                                eNodeType )
+                                      const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rEnd   )
             {
                 return DocTreeNode( ::std::distance(rBegin,
                                                     rStart),
                                     ::std::distance(rBegin,
-                                                    rEnd),
-                                    eNodeType );
+                                                    rEnd) );
             }
         }
 
@@ -750,8 +744,7 @@ namespace slideshow
             iterateActionClassifications( aFunctor, rBegin, rEnd );
 
             return makeTreeNode( maActionClassVector.begin(),
-                                 aLastBegin, aLastEnd,
-                                 eNodeType );
+                                 aLastBegin, aLastEnd );
         }
 
         DocTreeNode DrawShapeSubsetting::getTreeNode( sal_Int32             nNodeIndex,

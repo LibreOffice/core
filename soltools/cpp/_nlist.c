@@ -80,7 +80,7 @@ void
     struct kwtab *kp;
     Nlist *np;
     Token t;
-    static Token deftoken[1] = {{NAME, 0, 0, 7, (uchar *) "defined", 0}};
+    static Token deftoken[1] = {{NAME, 0, 7, (uchar *) "defined", 0}};
     static Tokenrow deftr = {deftoken, deftoken, deftoken + 1, 1};
 
     for (kp = kwtab; kp->kw; kp++)

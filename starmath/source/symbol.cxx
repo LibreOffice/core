@@ -33,8 +33,7 @@ SmSym::SmSym() :
     m_aName(OUString("unknown")),
     m_aSetName(OUString("unknown")),
     m_cChar('\0'),
-    m_bPredefined(false),
-    m_bDocSymbol(false)
+    m_bPredefined(false)
 {
     m_aExportName = m_aName;
     m_aFace.SetTransparent(true);
@@ -60,7 +59,6 @@ SmSym::SmSym(const OUString& rName, const vcl::Font& rFont, sal_UCS4 cChar,
     m_cChar         = cChar;
     m_aSetName      = rSet;
     m_bPredefined   = bIsPredefined;
-    m_bDocSymbol    = false;
 }
 
 
@@ -72,7 +70,6 @@ SmSym& SmSym::operator = (const SmSym& rSymbol)
     m_aFace         = rSymbol.m_aFace;
     m_aSetName      = rSymbol.m_aSetName;
     m_bPredefined   = rSymbol.m_bPredefined;
-    m_bDocSymbol    = rSymbol.m_bDocSymbol;
 
     SmSymbolManager * pSymSetManager = &SM_MOD()->GetSymbolManager();
     if (pSymSetManager)
