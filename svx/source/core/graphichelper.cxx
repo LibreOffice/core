@@ -26,6 +26,8 @@
 #include <svx/graphichelper.hxx>
 #include <svx/dialogs.hrc>
 
+#include <vcl/layout.hxx>
+
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
@@ -282,6 +284,13 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
     catch( Exception& )
     {
     }
+}
+
+short GraphicHelper::HasToSaveTransformedImage(vcl::Window* pWin)
+{
+    OUString aMsg(SVX_RESSTR(RID_SVXSTR_SAVE_MODIFIED_IMAGE));
+    ScopedVclPtrInstance< MessageDialog > aBox(pWin, aMsg, VclMessageType::Question, VCL_BUTTONS_YES_NO);
+    return aBox->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -132,13 +132,45 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
         case SID_SAVE_GRAPHIC:
         {
-            const Graphic *pGraphic;
-            if(nullptr != (pGraphic = rSh.GetGraphic()))
+            GraphicAttr aGraphicAttr;
+            const GraphicObject* pGraphicObj = rSh.GetGraphicObj();
+            if (pGraphicObj)
             {
+                rSh.GetGraphicAttr(aGraphicAttr);
+            }
+
+            short nState = RET_CANCEL;
+            if (aGraphicAttr != GraphicAttr()) // the image has been modified
+            {
+                vcl::Window* pWin = GetView().GetWindow();
+                if (pWin)
+                {
+                    nState = GraphicHelper::HasToSaveTransformedImage(pWin);
+                }
+            }
+            else
+            {
+                nState = RET_NO;
+            }
+
+            if (nState == RET_YES)
+            {
+                Graphic aGraphic = pGraphicObj->GetTransformedGraphic(pGraphicObj->GetPrefSize(), pGraphicObj->GetPrefMapMode(), aGraphicAttr);
                 OUString sGrfNm;
                 OUString sFilterNm;
                 rSh.GetGrfNms( &sGrfNm, &sFilterNm );
-                GraphicHelper::ExportGraphic( *pGraphic, sGrfNm );
+                GraphicHelper::ExportGraphic( aGraphic, sGrfNm );
+            }
+            else if (nState == RET_NO)
+            {
+                const Graphic *pGraphic;
+                if(nullptr != (pGraphic = rSh.GetGraphic()))
+                {
+                    OUString sGrfNm;
+                    OUString sFilterNm;
+                    rSh.GetGrfNms( &sGrfNm, &sFilterNm );
+                    GraphicHelper::ExportGraphic( *pGraphic, sGrfNm );
+                }
             }
         }
         break;

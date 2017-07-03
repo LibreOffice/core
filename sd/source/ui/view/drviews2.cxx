@@ -929,8 +929,28 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 const SdrGrafObj* pObj = dynamic_cast<const SdrGrafObj*>(rMarkList.GetMark(0)->GetMarkedSdrObj());
                 if (pObj && pObj->GetGraphicType() == GraphicType::Bitmap)
                 {
-                    GraphicObject aGraphicObject(pObj->GetGraphicObject());
+                    GraphicAttr aGraphicAttr = pObj->GetGraphicAttr();
+                    short nState = RET_CANCEL;
+                    if (aGraphicAttr != GraphicAttr()) // the image has been modified
                     {
+                        vcl::Window* pWin = GetActiveWindow();
+                        if (pWin)
+                        {
+                            nState = GraphicHelper::HasToSaveTransformedImage(pWin);
+                        }
+                    }
+                    else
+                    {
+                        nState = RET_NO;
+                    }
+
+                    if (nState == RET_YES)
+                    {
+                        GraphicHelper::ExportGraphic( pObj->GetTransformedGraphic(), "" );
+                    }
+                    else if (nState == RET_NO)
+                    {
+                        GraphicObject aGraphicObject(pObj->GetGraphicObject());
                         GraphicHelper::ExportGraphic( aGraphicObject.GetGraphic(), "" );
                     }
                 }

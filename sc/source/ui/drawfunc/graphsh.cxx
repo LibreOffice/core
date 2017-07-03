@@ -261,11 +261,31 @@ void ScGraphicShell::ExecuteSaveGraphic(SfxRequest& /*rReq*/)
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
-        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
+        const SdrGrafObj* pObj = dynamic_cast<const SdrGrafObj*>(rMarkList.GetMark( 0 )->GetMarkedSdrObj());
+        if( pObj && pObj->GetGraphicType() == GraphicType::Bitmap )
         {
-            GraphicObject aGraphicObject( static_cast<SdrGrafObj*>( pObj )->GetGraphicObject() );
+            GraphicAttr aGraphicAttr = pObj->GetGraphicAttr();
+            short nState = RET_CANCEL;
+            if (aGraphicAttr != GraphicAttr()) // the image has been modified
             {
+                vcl::Window* pWin = GetViewData()->GetActiveWin();
+                if (pWin)
+                {
+                    nState = GraphicHelper::HasToSaveTransformedImage(pWin);
+                }
+            }
+            else
+            {
+                nState = RET_NO;
+            }
+
+            if (nState == RET_YES)
+            {
+                GraphicHelper::ExportGraphic( pObj->GetTransformedGraphic(), "" );
+            }
+            else if (nState == RET_NO)
+            {
+                GraphicObject aGraphicObject(pObj->GetGraphicObject());
                 GraphicHelper::ExportGraphic( aGraphicObject.GetGraphic(), "" );
             }
         }
