@@ -16,6 +16,24 @@
       "revId": "c9fef17a6c17dd645f836a1983f412fc0c745607",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_27417a0c",
+        "filename": "sw/source/uibase/uiview/view.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-03T10:15:56Z",
+      "side": 1,
+      "message": "well running with Undo disabled isn\u0027t something any actual end user should ever do, so a SAL_WARN looks appropriate to me",
+      "parentUuid": "3a461143_644b802c",
+      "revId": "c9fef17a6c17dd645f836a1983f412fc0c745607",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
