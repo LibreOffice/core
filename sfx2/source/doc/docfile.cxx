@@ -1431,7 +1431,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
 
                 // There the version is stored as packed Stream
                 uno::Reference < io::XStream > xStr = xSub->openStreamElement( rTag.Identifier, embed::ElementModes::READ );
-                SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStr );
+                std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( xStr ));
                 if ( pStream && pStream->GetError() == ERRCODE_NONE )
                 {
                     // Unpack Stream  in TempDir
@@ -1440,6 +1440,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
                     SvFileStream    aTmpStream( aTmpName, SFX_STREAM_READWRITE );
 
                     pStream->ReadStream( aTmpStream );
+                    pStream.reset();
                     aTmpStream.Close();
 
                     // Open data as Storage
