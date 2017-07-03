@@ -133,6 +133,8 @@ public:
 
     GraphicType             GetGraphicType() const;
 
+    GraphicAttr             GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlags = SdrGrafObjTransformsAttrs::ALL  ) const;
+
     // Keep ATM for SD.
     bool IsAnimated() const;
     bool IsEPS() const;
