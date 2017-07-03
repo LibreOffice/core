@@ -32,6 +32,7 @@ public:
     static void GetPreferredExtension( OUString& rExtension, const Graphic& rGraphic );
     static OUString ExportGraphic( const Graphic& rGraphic, const OUString& rGraphicName );
     static void SaveShapeAsGraphic( const css::uno::Reference< css::drawing::XShape >& xShape );
+    static short HasToSaveTransformedImage(vcl::Window* pWin);
 };
 
 
