@@ -77,6 +77,8 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     if (!pTxt)
         return false;
 
+    pTxt->setTextAntiAliasMode(D2DTextAntiAliasMode::AntiAliased);
+
     if (!pTxt->BindFont(aHDC.get()))
     {
         SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by Direct Write.");
@@ -173,6 +175,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     };
 
     pRT->BeginDraw();
+    pTxt->applyTextAntiAliasMode();
     pRT->DrawGlyphRun(baseline, &glyphs, pBrush);
     HRESULT hResult = pRT->EndDraw();
 
@@ -315,6 +318,47 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
 
     return true;
 }
+namespace
+{
+
+D2DTextAntiAliasMode lclGetSystemTextAntiAliasMode()
+{
+    D2DTextAntiAliasMode eMode = D2DTextAntiAliasMode::Default;
+
+    BOOL bFontSmoothing;
+    if (!SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &bFontSmoothing, 0))
+        return eMode;
+
+    if (bFontSmoothing)
+    {
+        UINT nType;
+        if (!SystemParametersInfo(SPI_GETFONTSMOOTHINGTYPE, 0, &nType, 0))
+            return eMode;
+
+        eMode = (nType == FE_FONTSMOOTHINGCLEARTYPE) ? D2DTextAntiAliasMode::ClearType
+                                                     : D2DTextAntiAliasMode::AntiAliased;
+    }
+
+    return eMode;
+}
+
+IDWriteRenderingParams* lclSetRenderingMode(IDWriteFactory* pDWriteFactory, DWRITE_RENDERING_MODE eRenderingMode)
+{
+    IDWriteRenderingParams* pDefaultParameters = nullptr;
+    pDWriteFactory->CreateRenderingParams(&pDefaultParameters);
+
+    IDWriteRenderingParams* pParameters = nullptr;
+    pDWriteFactory->CreateCustomRenderingParams(
+        pDefaultParameters->GetGamma(),
+        pDefaultParameters->GetEnhancedContrast(),
+        pDefaultParameters->GetClearTypeLevel(),
+        pDefaultParameters->GetPixelGeometry(),
+        eRenderingMode,
+        &pParameters);
+    return pParameters;
+}
+
+} // end anonymous namespace
 
 D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
     : mpD2DFactory(nullptr),
@@ -322,11 +366,12 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
     mpGdiInterop(nullptr),
     mpRT(nullptr),
     mRTProps(D2D1::RenderTargetProperties(D2D1_RENDER_TARGET_TYPE_DEFAULT,
-    D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
-    0, 0)),
+                                          D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
+                                          0, 0)),
     mpFontFace(nullptr),
     mlfEmHeight(0.0f),
-    mhDC(nullptr)
+    mhDC(nullptr),
+    meTextAntiAliasMode(D2DTextAntiAliasMode::Default)
 {
     HRESULT hr = S_OK;
     hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), nullptr, reinterpret_cast<void **>(&mpD2DFactory));
@@ -336,6 +381,8 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
         hr = mpDWriteFactory->GetGdiInterop(&mpGdiInterop);
         hr = CreateRenderTarget();
     }
+    meTextAntiAliasMode = lclGetSystemTextAntiAliasMode();
+    mpRenderingParameters = lclSetRenderingMode(mpDWriteFactory, DWRITE_RENDERING_MODE_GDI_CLASSIC);
 }
 
 D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
@@ -350,6 +397,27 @@ D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
         mpD2DFactory->Release();
 
     CleanupModules();
+}
+
+void D2DWriteTextOutRenderer::applyTextAntiAliasMode()
+{
+    D2D1_TEXT_ANTIALIAS_MODE eMode = D2D1_TEXT_ANTIALIAS_MODE_DEFAULT;
+    switch (meTextAntiAliasMode)
+    {
+        case D2DTextAntiAliasMode::Default:
+            eMode = D2D1_TEXT_ANTIALIAS_MODE_ALIASED;
+            break;
+        case D2DTextAntiAliasMode::AntiAliased:
+            eMode = D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE;
+            break;
+        case D2DTextAntiAliasMode::ClearType:
+            eMode = D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE;
+            break;
+        default:
+            break;
+    }
+    mpRT->SetTextAntialiasMode(eMode);
+    mpRT->SetTextRenderingParams(mpRenderingParameters);
 }
 
 bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
@@ -377,6 +445,7 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     if (succeeded)
     {
         mpRT->BeginDraw();
+        applyTextAntiAliasMode();
 
         int nStart = 0;
         Point aPos(0, 0);
