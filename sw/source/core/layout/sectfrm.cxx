@@ -22,6 +22,7 @@
 #include <fmtftn.hxx>
 #include <fmtclbl.hxx>
 #include "sectfrm.hxx"
+#include "cellfrm.hxx"
 #include "section.hxx"
 #include <IDocumentSettingAccess.hxx>
 #include "rootfrm.hxx"
@@ -586,6 +587,16 @@ namespace
         if (pLayFrame->Lower() && pLayFrame->Lower()->IsColumnFrame())
             return pLayFrame->GetNextLayoutLeaf();
         return pLayFrame;
+    }
+
+    /// Checks if pFrame is in a table, which itself is in a section.
+    bool IsInTableInSection(SwFrame* pFrame)
+    {
+        if (!pFrame->IsInTab())
+            return false;
+
+        // The frame is in a table, see if the table is in a section.
+        return pFrame->FindTabFrame()->IsInSct();
     }
 }
 
@@ -1439,9 +1450,9 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
         return static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(GetUpper()->GetNext())->Lower());
     if( GetUpper()->IsColBodyFrame() && GetUpper()->GetUpper()->GetNext() )
         return static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(GetUpper()->GetUpper()->GetNext())->Lower());
-    // Inside a section, in tables, or sections of headers/footers, there can be only
+    // Inside a table-in-section, or sections of headers/footers, there can be only
     // one column shift be made, one of the above shortcuts should have applied!
-    if( GetUpper()->IsInTab() || FindFooterOrHeader() )
+    if( IsInTableInSection(GetUpper()) || FindFooterOrHeader() )
         return nullptr;
 
     SwSectionFrame *pSect = FindSctFrame();
@@ -1498,7 +1509,23 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
     const bool bBody = IsInDocBody();
     const bool bFootnotePage = FindPageFrame()->IsFootnotePage();
 
+    // The "pLayLeaf is in a table" case is rejected by default, so that it
+    // can't happen that we try to move a table to one of its own cells.
+    bool bLayLeafTableAllowed = false;
     SwLayoutFrame *pLayLeaf;
+
+    SwLayoutFrame* pCellLeaf = nullptr;
+    if (IsInTab())
+    {
+        // We are in a table, see if there is a follow cell frame created already.
+        pCellLeaf = GetNextCellLeaf();
+        if (!pCellLeaf)
+        {
+            SAL_WARN("sw.layout", "section is in table, but the table is not split");
+            return nullptr;
+        }
+    }
+
     // A shortcut for TabFrames such that not all cells need to be visited
     if( bWrongPage )
         pLayLeaf = nullptr;
@@ -1506,6 +1533,16 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
     {
         SwContentFrame* pTmpCnt = static_cast<SwTabFrame*>(this)->FindLastContent();
         pLayLeaf = pTmpCnt ? pTmpCnt->GetUpper() : nullptr;
+    }
+    else if (pCellLeaf && !IsInTableInSection(this))
+    {
+        // This frame is in a table-not-in-section, its follow should be
+        // inserted under the follow of the frame's cell.
+        pLayLeaf = pCellLeaf;
+        if (pLayLeaf->FindTabFrame() == FindTabFrame())
+            SAL_WARN("sw.layout", "my table frame and my follow's table frame is the same");
+        // In this case pLayLeaf pointing to an in-table frame is OK.
+        bLayLeafTableAllowed = true;
     }
     else
     {
@@ -1534,10 +1571,10 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                 pLayLeaf = nullptr;
                 continue;
             }
-            // Once inBody always inBody, don't step into tables and not into other sections
+            // Once inBody always inBody, don't step into tables-in-sections and not into other sections
             if ( (bBody && !pLayLeaf->IsInDocBody()) ||
                  (IsInFootnote() != pLayLeaf->IsInFootnote() ) ||
-                 pLayLeaf->IsInTab() ||
+                 (pLayLeaf->IsInTab() && !bLayLeafTableAllowed) ||
                  ( pLayLeaf->IsInSct() && ( !pSect->HasFollow()
                    || pSect->GetFollow() != pLayLeaf->FindSctFrame() ) ) )
             {
