@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_47f846e6",
+        "filename": "chart2/source/tools/DataSeriesHelper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-07-03T09:54:11Z",
+      "side": 1,
+      "message": "capture aRole by reference,\n\n  [\u0026aRole, ...",
+      "revId": "665f011865c553b38422e37aa48e723377a8287b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
