@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_4725a6a9",
+        "filename": "xmlscript/source/xmldlg_imexp/xmldlg_impmodels.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1836,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-07-03T07:23:36Z",
+      "side": 0,
+      "message": "shouldn\u0027t it be \"or\"?",
+      "range": {
+        "startLine": 1836,
+        "startChar": 55,
+        "endLine": 1836,
+        "endChar": 57
+      },
+      "revId": "a8aaf9063318a42c88d577aa606e5e0ba4a2de29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
