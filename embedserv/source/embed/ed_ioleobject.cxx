@@ -89,8 +89,6 @@ STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
 
 HRESULT EmbedDocument_Impl::OLENotifyClosing()
 {
-    HRESULT hr = S_OK;
-
     AdviseSinkHashMap aAHM(m_aAdviseHashMap);
 
     for ( AdviseSinkHashMapIterator iAdvise = aAHM.begin();
@@ -100,7 +98,7 @@ HRESULT EmbedDocument_Impl::OLENotifyClosing()
             iAdvise->second->OnClose();
     }
 
-    return hr;
+    return S_OK;
 
 }
 
