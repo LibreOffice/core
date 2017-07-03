@@ -71,7 +71,6 @@ public:
         flag is reset.
     */
     bool mbIsReleased;
-    bool mbIsChildWindow;
 
     bool CompareURL(const OUString& rsPaneURL) const { return msPaneURL.equals(rsPaneURL); }
     bool ComparePane(const Reference<XResource>& rxPane) const { return mxPane == rxPane; }
@@ -161,7 +160,6 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
                 aDescriptor.msPaneURL = FrameworkHelper::msCenterPaneURL;
                 aDescriptor.mePaneId = CenterPaneId;
                 aDescriptor.mbIsReleased = false;
-                aDescriptor.mbIsChildWindow = false;
                 mpPaneContainer->push_back(aDescriptor);
                 xCC->addResourceFactory(aDescriptor.msPaneURL, this);
 
@@ -172,7 +170,6 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
 
                 aDescriptor.msPaneURL = FrameworkHelper::msLeftImpressPaneURL;
                 aDescriptor.mePaneId = LeftImpressPaneId;
-                aDescriptor.mbIsChildWindow = true;
                 mpPaneContainer->push_back(aDescriptor);
                 xCC->addResourceFactory(aDescriptor.msPaneURL, this);
 

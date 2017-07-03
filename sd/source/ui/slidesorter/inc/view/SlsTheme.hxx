@@ -118,20 +118,10 @@ private:
     class GradientDescriptor
     {
     public:
-        ColorData maBaseColor;
-
-        sal_Int32 mnSaturationOverride;
-        sal_Int32 mnBrightnessOverride;
-
         ColorData maFillColor1;
         ColorData maFillColor2;
         ColorData maBorderColor1;
         ColorData maBorderColor2;
-
-        sal_Int32 mnFillOffset1;
-        sal_Int32 mnFillOffset2;
-        sal_Int32 mnBorderOffset1;
-        sal_Int32 mnBorderOffset2;
     };
     ColorData maBackgroundColor;
     ::std::vector<GradientDescriptor> maGradients;

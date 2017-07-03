@@ -34,19 +34,8 @@ class PageDescriptor;
 class VisualState
 {
 public:
-    enum State {
-        VS_Selected,
-        VS_Focused,
-        VS_Current,
-        VS_Excluded,
-        VS_None };
-
     VisualState (const sal_Int32 nPageId);
     ~VisualState();
-
-    void SetVisualState (const State eState);
-
-    void UpdateVisualState (const PageDescriptor& rDescriptor);
 
     const Point& GetLocationOffset() const { return maLocationOffset;}
     void SetLocationOffset (const Point& rPoint);
@@ -54,7 +43,6 @@ public:
     sal_Int32 mnPageId; // For debugging
 
 private:
-    State meCurrentVisualState;
     Point maLocationOffset;
 };
 
