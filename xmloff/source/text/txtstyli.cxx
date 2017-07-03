@@ -85,33 +85,35 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         if( IsXMLToken( rLocalName, XML_AUTO_UPDATE ) )
         {
             if( IsXMLToken( rValue, XML_TRUE ) )
-                bAutoUpdate = true;
+                m_isAutoUpdate = true;
         }
         else if( IsXMLToken( rLocalName, XML_LIST_STYLE_NAME ) )
         {
-            sListStyleName = rValue;
+            m_sListStyleName = rValue;
             // Inherited paragraph style lost information about unset numbering (#i69523#)
-            mbListStyleSet = true;
+            m_bListStyleSet = true;
         }
         else if( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
         {
-            sMasterPageName = rValue;
-            bHasMasterPageName = true;
+            m_sMasterPageName = rValue;
+            m_bHasMasterPageName = true;
         }
         else if( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
         {
-            sDataStyleName = rValue;
+            m_sDataStyleName = rValue;
         }
         else if( IsXMLToken( rLocalName, XML_CLASS ) )
         {
-            sCategoryVal = rValue;
+            m_sCategoryVal = rValue;
         }
         else if( IsXMLToken( rLocalName, XML_DEFAULT_OUTLINE_LEVEL ) )
         {
             sal_Int32 nTmp;
             if (::sax::Converter::convertNumber( nTmp, rValue ) &&
                 0 <= nTmp && nTmp <= 10 )
-                nOutlineLevel = static_cast< sal_Int8 >( nTmp );
+            {
+                m_nOutlineLevel = static_cast<sal_Int8>(nTmp);
+            }
         }
         else
         {
@@ -137,12 +139,12 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 ,       sOutlineLevel("OutlineLevel" )
 ,   sDropCapCharStyleName( "DropCapCharStyleName" )
 ,   sPageDescName( "PageDescName" )
-,   nOutlineLevel( -1 )
-,   bAutoUpdate( false )
-,   bHasMasterPageName( false )
-,   bHasCombinedCharactersLetter( false )
+,   m_nOutlineLevel( -1 )
+,   m_isAutoUpdate( false )
+,   m_bHasMasterPageName( false )
+,   m_bHasCombinedCharactersLetter( false )
 // Inherited paragraph style lost information about unset numbering (#i69523#)
-,   mbListStyleSet( false )
+,   m_bListStyleSet( false )
 {
 }
 
@@ -179,7 +181,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
                                                         nFamily,
                                                         GetProperties(),
                                                         xImpPrMap,
-                                                        sDropCapTextStyleName );
+                                                        m_sDropCapTextStyleName);
         }
     }
     else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
@@ -187,9 +189,9 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
     {
         // create and remember events import context
         // (for delayed processing of events)
-        mxEventContext.set(new XMLEventsImportContext( GetImport(), nPrefix,
+        m_xEventContext.set(new XMLEventsImportContext( GetImport(), nPrefix,
                                                    rLocalName));
-        pContext = mxEventContext.get();
+        pContext = m_xEventContext.get();
     }
 
     if( !pContext )
@@ -211,31 +213,31 @@ void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )
                 xPropSet->getPropertySetInfo();
     if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
     {
-        xPropSet->setPropertyValue( sIsAutoUpdate, Any(bAutoUpdate) );
+        xPropSet->setPropertyValue( sIsAutoUpdate, Any(m_isAutoUpdate) );
     }
 
     sal_uInt16 nCategory = ParagraphStyleCategory::TEXT;
     if(  XML_STYLE_FAMILY_TEXT_PARAGRAPH == GetFamily() &&
-         !sCategoryVal.isEmpty() && xStyle->isUserDefined() &&
+         !m_sCategoryVal.isEmpty() && xStyle->isUserDefined() &&
          xPropSetInfo->hasPropertyByName( sCategory ) &&
-          SvXMLUnitConverter::convertEnum( nCategory, sCategoryVal, aCategoryMap ) )
+        SvXMLUnitConverter::convertEnum( nCategory, m_sCategoryVal, aCategoryMap))
     {
         xPropSet->setPropertyValue( sCategory, Any((sal_Int16)nCategory) );
     }
 
     // tell the style about it's events (if applicable)
-    if (mxEventContext.is())
+    if (m_xEventContext.is())
     {
         // pass events into event suppplier
         Reference<document::XEventsSupplier> xEventsSupplier(xStyle,UNO_QUERY);
-        mxEventContext->SetEvents(xEventsSupplier);
-        mxEventContext.clear();
+        m_xEventContext->SetEvents(xEventsSupplier);
+        m_xEventContext.clear();
     }
 
     // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
-    if ( nOutlineLevel > 0 )
+    if (m_nOutlineLevel > 0)
     {
-        GetImport().GetTextImport()->AddOutlineStyleCandidate( nOutlineLevel,
+        GetImport().GetTextImport()->AddOutlineStyleCandidate(m_nOutlineLevel,
                                                       GetDisplayName() );
     }
 }
@@ -263,10 +265,10 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
 
     Reference < XStyle > xStyle = GetStyle();
     // Consider set empty list style (#i69523#)
-    if ( !( mbListStyleSet ||
-            nOutlineLevel >= 0 ||
-            !sDropCapTextStyleName.isEmpty() ||
-            bHasMasterPageName ) ||
+    if ( !( m_bListStyleSet ||
+            m_nOutlineLevel >= 0 ||
+            !m_sDropCapTextStyleName.isEmpty() ||
+            m_bHasMasterPageName ) ||
          !xStyle.is() ||
          !( bOverwrite || IsNew() ) )
         return;
@@ -277,14 +279,14 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
 
     if( xPropSetInfo->hasPropertyByName( sOutlineLevel ))
     {
-        if( nOutlineLevel >= 0 )
+        if (m_nOutlineLevel >= 0)
         {
-            xPropSet->setPropertyValue( sOutlineLevel, Any(nOutlineLevel) );
+            xPropSet->setPropertyValue( sOutlineLevel, Any(m_nOutlineLevel) );
         }
     }
 
     // Consider set empty list style (#i69523#)
-    if ( mbListStyleSet &&
+    if (m_bListStyleSet &&
          xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
         /* Only for text document from version prior OOo 2.1 resp. SO 8 PU5:
@@ -293,7 +295,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
              level of the outline style. (#i70223#)
         */
         bool bApplyListStyle( true );
-        if ( nOutlineLevel > 0 )
+        if (m_nOutlineLevel > 0)
         {
             if ( GetImport().IsTextDocInOOoFileFormat() )
             {
@@ -315,16 +317,16 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
 
         if ( bApplyListStyle )
         {
-            if ( sListStyleName.isEmpty() )
+            if (m_sListStyleName.isEmpty())
             {
-                xPropSet->setPropertyValue( sNumberingStyleName, Any(sListStyleName) ); /* empty string */;
+                xPropSet->setPropertyValue(sNumberingStyleName, Any(m_sListStyleName)); /* empty string */
             }
             else
             {
                 // change list style name to display name
                 OUString sDisplayListStyleName(
-                    GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
-                                                  sListStyleName ) );
+                    GetImport().GetStyleDisplayName(XML_STYLE_FAMILY_TEXT_LIST,
+                                                  m_sListStyleName));
                 // The families container must exist
                 const Reference < XNameContainer >& rNumStyles =
                     GetImport().GetTextImport()->GetNumberingStyles();
@@ -339,12 +341,12 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
         }
     }
 
-    if( !sDropCapTextStyleName.isEmpty() )
+    if (!m_sDropCapTextStyleName.isEmpty())
     {
         // change list style name to display name
         OUString sDisplayDropCapTextStyleName(
             GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_TEXT,
-                                          sDropCapTextStyleName ) );
+                                          m_sDropCapTextStyleName));
         // The families container must exist
         const Reference < XNameContainer >& rTextStyles =
             GetImport().GetTextImport()->GetTextStyles();
@@ -356,11 +358,11 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
         }
     }
 
-    if( bHasMasterPageName )
+    if (m_bHasMasterPageName)
     {
         OUString sDisplayName(
             GetImport().GetStyleDisplayName(
-                            XML_STYLE_FAMILY_MASTER_PAGE, sMasterPageName ) );
+                            XML_STYLE_FAMILY_MASTER_PAGE, m_sMasterPageName));
         // The families container must exist
         const Reference < XNameContainer >& rPageStyles =
             GetImport().GetTextImport()->GetPageStyles();
@@ -479,7 +481,7 @@ void XMLTextStyleContext::FillPropertySet(
         {
             Any& rAny = GetProperties()[nIndex].maValue;
             bool bVal = *o3tl::doAccess<bool>(rAny);
-            bHasCombinedCharactersLetter = bVal;
+            m_bHasCombinedCharactersLetter = bVal;
         }
 
         // keep-together: the application default is different from
