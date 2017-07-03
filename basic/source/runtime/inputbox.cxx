@@ -147,11 +147,8 @@ IMPL_LINK_NOARG( SvRTLInputBox, CancelHdl, Button *, void )
 
 // Syntax: String InputBox( Prompt, [Title], [Default] [, nXpos, nYpos ] )
 
-RTLFUNC(InputBox)
+void SbRtl_InputBox(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     sal_uInt32 nArgCount = rPar.Count();
     if ( nArgCount < 2 )
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );

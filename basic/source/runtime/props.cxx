@@ -29,18 +29,13 @@
 // at the element 0 of the Argv; at Put (bWrite = sal_True) the value from
 // element 0 is stored.
 
-RTLFUNC(Erl)
+void SbRtl_Erl(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get( 0 )->PutLong( StarBASIC::GetErl() );
 }
 
-RTLFUNC(Err)
+void SbRtl_Err(StarBASIC *, SbxArray & rPar, bool bWrite)
 {
-    (void)pBasic;
-
     if( SbiRuntime::isVBAEnabled() )
     {
         rPar.Get( 0 )->PutObject( SbxErrObject::getErrObject().get() );
@@ -58,679 +53,395 @@ RTLFUNC(Err)
     }
 }
 
-RTLFUNC(False)
+void SbRtl_False(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutBool( false );
 }
 
-RTLFUNC(Empty)
-{
-    (void)pBasic;
-    (void)bWrite;
-    (void)rPar;
-}
+void SbRtl_Empty(StarBASIC *, SbxArray &, bool) {}
 
-RTLFUNC(Nothing)
+void SbRtl_Nothing(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     // return an empty object
     rPar.Get( 0 )->PutObject( nullptr );
 }
 
-RTLFUNC(Null)
+void SbRtl_Null(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     // returns an empty object-variable
     rPar.Get( 0 )->PutNull();
 }
 
-RTLFUNC(PI)
+void SbRtl_PI(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get( 0 )->PutDouble( F_PI );
 }
 
-RTLFUNC(True)
+void SbRtl_True(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get( 0 )->PutBool( true );
 }
 
-RTLFUNC(ATTR_NORMAL)
+void SbRtl_ATTR_NORMAL(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(0);
 }
-RTLFUNC(ATTR_READONLY)
+void SbRtl_ATTR_READONLY(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(1);
 }
-RTLFUNC(ATTR_HIDDEN)
+void SbRtl_ATTR_HIDDEN(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(2);
 }
-RTLFUNC(ATTR_SYSTEM)
+void SbRtl_ATTR_SYSTEM(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(4);
 }
-RTLFUNC(ATTR_VOLUME)
+void SbRtl_ATTR_VOLUME(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(8);
 }
-RTLFUNC(ATTR_DIRECTORY)
+void SbRtl_ATTR_DIRECTORY(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(16);
 }
-RTLFUNC(ATTR_ARCHIVE)
+void SbRtl_ATTR_ARCHIVE(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(32);
 }
 
-RTLFUNC(V_EMPTY)
+void SbRtl_V_EMPTY(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(0);
 }
-RTLFUNC(V_NULL)
+void SbRtl_V_NULL(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(1);
 }
-RTLFUNC(V_INTEGER)
+void SbRtl_V_INTEGER(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(2);
 }
-RTLFUNC(V_LONG)
+void SbRtl_V_LONG(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(3);
 }
-RTLFUNC(V_SINGLE)
+void SbRtl_V_SINGLE(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(4);
 }
-RTLFUNC(V_DOUBLE)
+void SbRtl_V_DOUBLE(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(5);
 }
-RTLFUNC(V_CURRENCY)
+void SbRtl_V_CURRENCY(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(6);
 }
-RTLFUNC(V_DATE)
+void SbRtl_V_DATE(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(7);
 }
-RTLFUNC(V_STRING)
+void SbRtl_V_STRING(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(8);
 }
 
-RTLFUNC(MB_OK)
+void SbRtl_MB_OK(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(0);
 }
-RTLFUNC(MB_OKCANCEL)
+void SbRtl_MB_OKCANCEL(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(1);
 }
-RTLFUNC(MB_ABORTRETRYIGNORE)
+void SbRtl_MB_ABORTRETRYIGNORE(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(2);
 }
-RTLFUNC(MB_YESNOCANCEL)
+void SbRtl_MB_YESNOCANCEL(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(3);
 }
-RTLFUNC(MB_YESNO)
+void SbRtl_MB_YESNO(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(4);
 }
-RTLFUNC(MB_RETRYCANCEL)
+void SbRtl_MB_RETRYCANCEL(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(5);
 }
-RTLFUNC(MB_ICONSTOP)
+void SbRtl_MB_ICONSTOP(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(16);
 }
-RTLFUNC(MB_ICONQUESTION)
+void SbRtl_MB_ICONQUESTION(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(32);
 }
-RTLFUNC(MB_ICONEXCLAMATION)
+void SbRtl_MB_ICONEXCLAMATION(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(48);
 }
-RTLFUNC(MB_ICONINFORMATION)
+void SbRtl_MB_ICONINFORMATION(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(64);
 }
-RTLFUNC(MB_DEFBUTTON1)
+void SbRtl_MB_DEFBUTTON1(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(0);
 }
-RTLFUNC(MB_DEFBUTTON2)
+void SbRtl_MB_DEFBUTTON2(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(256);
 }
-RTLFUNC(MB_DEFBUTTON3)
+void SbRtl_MB_DEFBUTTON3(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(512);
 }
-RTLFUNC(MB_APPLMODAL)
+void SbRtl_MB_APPLMODAL(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(0);
 }
-RTLFUNC(MB_SYSTEMMODAL)
+void SbRtl_MB_SYSTEMMODAL(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(4096);
 }
 
-RTLFUNC(IDOK)
+void SbRtl_IDOK(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(1);
 }
 
-RTLFUNC(IDCANCEL)
+void SbRtl_IDCANCEL(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(2);
 }
-RTLFUNC(IDABORT)
+void SbRtl_IDABORT(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(3);
 }
-RTLFUNC(IDRETRY)
+void SbRtl_IDRETRY(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(4);
 }
-RTLFUNC(IDYES)
+void SbRtl_IDYES(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(6);
 }
-RTLFUNC(IDNO)
+void SbRtl_IDNO(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(7);
 }
 
-RTLFUNC(CF_TEXT)
+void SbRtl_CF_TEXT(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(1);
 }
-RTLFUNC(CF_BITMAP)
+void SbRtl_CF_BITMAP(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(2);
 }
-RTLFUNC(CF_METAFILEPICT)
+void SbRtl_CF_METAFILEPICT(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(3);
 }
 
-RTLFUNC(TYP_AUTHORFLD)
+void SbRtl_TYP_AUTHORFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(7);
 }
-RTLFUNC(TYP_CHAPTERFLD)
+void SbRtl_TYP_CHAPTERFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(4);
 }
-RTLFUNC(TYP_CONDTXTFLD)
+void SbRtl_TYP_CONDTXTFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(27);
 }
-RTLFUNC(TYP_DATEFLD)
+void SbRtl_TYP_DATEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(0);
 }
-RTLFUNC(TYP_DBFLD)
+void SbRtl_TYP_DBFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(19);
 }
-RTLFUNC(TYP_DBNAMEFLD)
+void SbRtl_TYP_DBNAMEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(3);
 }
-RTLFUNC(TYP_DBNEXTSETFLD)
+void SbRtl_TYP_DBNEXTSETFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(24);
 }
-RTLFUNC(TYP_DBNUMSETFLD)
+void SbRtl_TYP_DBNUMSETFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(25);
 }
-RTLFUNC(TYP_DBSETNUMBERFLD)
+void SbRtl_TYP_DBSETNUMBERFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(26);
 }
-RTLFUNC(TYP_DDEFLD)
+void SbRtl_TYP_DDEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(14);
 }
-RTLFUNC(TYP_DOCINFOFLD)
+void SbRtl_TYP_DOCINFOFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(18);
 }
-RTLFUNC(TYP_DOCSTATFLD)
+void SbRtl_TYP_DOCSTATFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(6);
 }
-RTLFUNC(TYP_EXTUSERFLD)
+void SbRtl_TYP_EXTUSERFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(30);
 }
-RTLFUNC(TYP_FILENAMEFLD)
+void SbRtl_TYP_FILENAMEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(2);
 }
-RTLFUNC(TYP_FIXDATEFLD)
+void SbRtl_TYP_FIXDATEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(31);
 }
-RTLFUNC(TYP_FIXTIMEFLD)
+void SbRtl_TYP_FIXTIMEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(32);
 }
-RTLFUNC(TYP_FORMELFLD)
+void SbRtl_TYP_FORMELFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(10);
 }
-RTLFUNC(TYP_GETFLD)
+void SbRtl_TYP_GETFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(9);
 }
-RTLFUNC(TYP_GETREFFLD)
+void SbRtl_TYP_GETREFFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(13);
 }
-RTLFUNC(TYP_HIDDENPARAFLD)
+void SbRtl_TYP_HIDDENPARAFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(17);
 }
-RTLFUNC(TYP_HIDDENTXTFLD)
+void SbRtl_TYP_HIDDENTXTFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(11);
 }
-RTLFUNC(TYP_INPUTFLD)
+void SbRtl_TYP_INPUTFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(16);
 }
-RTLFUNC(TYP_MACROFLD)
+void SbRtl_TYP_MACROFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(15);
 }
-RTLFUNC(TYP_NEXTPAGEFLD)
+void SbRtl_TYP_NEXTPAGEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(28);
 }
-RTLFUNC(TYP_PAGENUMBERFLD)
+void SbRtl_TYP_PAGENUMBERFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(5);
 }
-RTLFUNC(TYP_POSTITFLD)
+void SbRtl_TYP_POSTITFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(21);
 }
-RTLFUNC(TYP_PREVPAGEFLD)
+void SbRtl_TYP_PREVPAGEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(29);
 }
-RTLFUNC(TYP_SEQFLD)
+void SbRtl_TYP_SEQFLD(StarBASIC * , SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(23);
 }
-RTLFUNC(TYP_SETFLD)
+void SbRtl_TYP_SETFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(8);
 }
-RTLFUNC(TYP_SETINPFLD)
+void SbRtl_TYP_SETINPFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(33);
 }
-RTLFUNC(TYP_SETREFFLD)
+void SbRtl_TYP_SETREFFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(12);
 }
-RTLFUNC(TYP_TEMPLNAMEFLD)
+void SbRtl_TYP_TEMPLNAMEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(22);
 }
-RTLFUNC(TYP_TIMEFLD)
+void SbRtl_TYP_TIMEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(1);
 }
-RTLFUNC(TYP_USERFLD)
+void SbRtl_TYP_USERFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(20);
 }
-RTLFUNC(TYP_USRINPFLD)
+void SbRtl_TYP_USRINPFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(34);
 }
-RTLFUNC(TYP_SETREFPAGEFLD)
+void SbRtl_TYP_SETREFPAGEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(35);
 }
-RTLFUNC(TYP_GETREFPAGEFLD)
+void SbRtl_TYP_GETREFPAGEFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(36);
 }
-RTLFUNC(TYP_INTERNETFLD)
+void SbRtl_TYP_INTERNETFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(37);
 }
 
-RTLFUNC(SET_ON)
+void SbRtl_SET_ON(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(1);
 }
-RTLFUNC(SET_OFF)
+void SbRtl_SET_OFF(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(0);
 }
-RTLFUNC(TOGGLE)
+void SbRtl_TOGGLE(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(2);
 }
 
-RTLFUNC(FRAMEANCHORPAGE)
+void SbRtl_FRAMEANCHORPAGE(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(1);
 }
-RTLFUNC(FRAMEANCHORPARA)
+void SbRtl_FRAMEANCHORPARA(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(14);
 }
-RTLFUNC(FRAMEANCHORCHAR)
+void SbRtl_FRAMEANCHORCHAR(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(15);
 }
 
-RTLFUNC(CLEAR_ALLTABS)
+void SbRtl_CLEAR_ALLTABS(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(2);
 }
-RTLFUNC(CLEAR_TAB)
+void SbRtl_CLEAR_TAB(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(1);
 }
-RTLFUNC(SET_TAB)
+void SbRtl_SET_TAB(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(0);
 }
 
-RTLFUNC(TYP_JUMPEDITFLD)
+void SbRtl_TYP_JUMPEDITFLD(StarBASIC *, SbxArray & rPar, bool)
 {
-    (void)pBasic;
-    (void)bWrite;
-
     rPar.Get(0)->PutInteger(38);
 }
 
