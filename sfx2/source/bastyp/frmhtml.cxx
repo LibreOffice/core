@@ -60,13 +60,6 @@ void SfxFrameHTMLParser::ParseFrameOptions(
     {
         switch( rOption.GetToken() )
         {
-        case HtmlOptionId::BORDERCOLOR:
-            {
-                Color aColor;
-                rOption.GetColor( aColor );
-                pFrame->SetWallpaper( Wallpaper( aColor ) );
-                break;
-            }
         case HtmlOptionId::SRC:
             pFrame->SetURL(
                     INetURLObject::GetAbsURL(
@@ -102,9 +95,6 @@ void SfxFrameHTMLParser::ParseFrameOptions(
             pFrame->SetFrameBorder( bBorder );
             break;
         }
-        case HtmlOptionId::NORESIZE:
-            pFrame->SetResizable( false );
-            break;
         default:
             break;
         }

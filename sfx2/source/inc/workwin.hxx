@@ -49,14 +49,12 @@ struct SfxObjectBar_Impl
     SfxVisibilityFlags nMode; // special visibility flags
     sal_uInt16         nPos;
     bool               bDestroy;
-    SfxInterface*      pIFace;
 
     SfxObjectBar_Impl() :
         eId(ToolbarId::None),
         nMode(SfxVisibilityFlags::Invisible),
         nPos(0),
-        bDestroy(false),
-        pIFace(nullptr)
+        bDestroy(false)
     {}
 };
 

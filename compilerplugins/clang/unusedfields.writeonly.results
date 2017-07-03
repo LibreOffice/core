@@ -1210,10 +1210,6 @@ include/opencl/platforminfo.hxx:30
     OpenCLDeviceInfo mnComputeUnits size_t
 include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
-include/sfx2/frmdescr.hxx:69
-    SfxFrameDescriptor bResizeVertical _Bool
-include/sfx2/lnkbase.hxx:79
-    sfx2::SvBaseLink bUseCache _Bool
 include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
@@ -2814,8 +2810,6 @@ sfx2/source/doc/doctempl.cxx:118
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 sfx2/source/doc/docundomanager.cxx:198
     sfx2::UndoManagerGuard m_guard class SfxModelGuard
-sfx2/source/doc/frmdescr.cxx:29
-    SfxFrameDescriptor_Impl pWallpaper class Wallpaper *
 sfx2/source/inc/appdata.hxx:76
     SfxAppData_Impl pDocTopics SfxDdeDocTopics_Impl *
 sfx2/source/inc/appdata.hxx:77
@@ -2830,10 +2824,6 @@ sfx2/source/inc/appdata.hxx:93
     SfxAppData_Impl m_pSbxErrorHdl class SfxErrorHandler *
 sfx2/source/inc/docundomanager.hxx:92
     SfxModelGuard m_aGuard class SolarMutexResettableGuard
-sfx2/source/inc/workwin.hxx:52
-    SfxObjectBar_Impl pIFace class SfxInterface *
-sfx2/source/sidebar/DeckLayouter.cxx:50
-    sfx2::sidebar::(anonymous namespace)::LayoutItem mnPanelIndex sal_Int32
 sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:296

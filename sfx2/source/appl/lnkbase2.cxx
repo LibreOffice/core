@@ -126,7 +126,7 @@ SvBaseLink::SvBaseLink()
 {
     nObjType = OBJECT_CLIENT_SO;
     pImplData = new ImplBaseLinkData;
-    bVisible = bSynchron = bUseCache = true;
+    bVisible = bSynchron = true;
     bWasLastEditOK = false;
 }
 
@@ -137,7 +137,7 @@ SvBaseLink::SvBaseLink( SfxLinkUpdateMode nUpdateMode, SotClipboardFormatId nCon
 {
     nObjType = OBJECT_CLIENT_SO;
     pImplData = new ImplBaseLinkData;
-    bVisible = bSynchron = bUseCache = true;
+    bVisible = bSynchron = true;
     bWasLastEditOK = false;
 
     // It is going to be a Ole-Link,
@@ -184,7 +184,7 @@ SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLin
     : pImpl()
     , m_bIsReadOnly(false)
 {
-    bVisible = bSynchron = bUseCache = true;
+    bVisible = bSynchron = true;
     bWasLastEditOK = false;
     aLinkName = rLinkName;
     pImplData = new ImplBaseLinkData;

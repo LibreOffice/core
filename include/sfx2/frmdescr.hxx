@@ -66,7 +66,6 @@ class SFX2_DLLPUBLIC SfxFrameDescriptor
     ScrollingMode           eScroll;
     bool                    bHasBorder;
     bool                    bHasBorderSet;
-    bool                    bResizeVertical;
     std::unique_ptr< SfxFrameDescriptor_Impl > pImpl;
 
 public:
@@ -79,10 +78,6 @@ public:
                             { return aURL; }
     void                    SetURL( const OUString& rURL );
     void                    SetActualURL( const OUString& rURL );
-
-                            // Size
-    void                    SetResizable( bool bRes )
-                            { bResizeVertical = bRes; }
 
                             // FrameName
     const OUString&         GetName() const
@@ -99,8 +94,6 @@ public:
                             { return eScroll; }
     void                    SetScrollingMode( ScrollingMode eMode )
                             { eScroll = eMode; }
-
-    void                    SetWallpaper( const Wallpaper& rWallpaper );
 
                             // FrameBorder
     bool                    HasFrameBorder() const
