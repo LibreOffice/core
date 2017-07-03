@@ -24,4 +24,9 @@ String RID_SVXSTR_EXPORT_GRAPHIC_TITLE
     Text [ en-US ] = "Image Export" ;
 };
 
+
+String RID_SVXSTR_SAVE_MODIFIED_IMAGE
+{
+    Text [ en-US ] = "The image has been modified. By default the original image will be saved.\nDo you want to save the modified version instead ?" ;
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

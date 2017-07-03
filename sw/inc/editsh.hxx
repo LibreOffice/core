@@ -78,6 +78,7 @@ class SwCharFormat;
 class SwExtTextInput;
 class Graphic;
 class GraphicObject;
+class GraphicAttr;
 class SwFormatINetFormat;
 class SwTable;
 class SwTextBlocks;
@@ -609,6 +610,7 @@ public:
 
     const Graphic* GetGraphic( bool bWait = true ) const;
     const GraphicObject* GetGraphicObj() const;
+    const GraphicAttr* GetGraphicAttr( GraphicAttr& rGA ) const;
 
     bool IsLinkedGrfSwapOut() const;
     GraphicType GetGraphicType() const;
