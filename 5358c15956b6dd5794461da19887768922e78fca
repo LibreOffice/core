@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_475f6672",
+        "filename": "include/svx/sxcecitm.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-03T17:17:16Z",
+      "side": 1,
+      "message": "This actually is a German comment, in German \"absolut\" and \"relativ\" are correct. No adhoc idea how to translate \"Linienaustrittsposition\" though..",
+      "revId": "5358c15956b6dd5794461da19887768922e78fca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_67546254",
+        "filename": "include/vcl/event.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-03T17:17:16Z",
+      "side": 1,
+      "message": "This is wrong. Maus is German for mouse.",
+      "revId": "5358c15956b6dd5794461da19887768922e78fca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_87514e65",
+        "filename": "sc/source/filter/inc/eeparser.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-03T17:17:16Z",
+      "side": 1,
+      "message": "This is wrong, actually a German comment and \"beides\" translates to \"both\".",
+      "revId": "5358c15956b6dd5794461da19887768922e78fca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c74b56af",
+        "filename": "sw/source/core/table/swnewtable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-03T17:17:16Z",
+      "side": 1,
+      "message": "German-English \"Layout updaten\" (where \"updaten\" is a \"Denglisch\" verb form as in \"to update\") translates to \"Update Layout\".",
+      "revId": "5358c15956b6dd5794461da19887768922e78fca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e7c69215",
+        "filename": "sw/source/filter/html/htmlftn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-03T17:17:16Z",
+      "side": 1,
+      "message": "The entire comment is German, it makes no sense to \"correct\" one word to English.",
+      "revId": "5358c15956b6dd5794461da19887768922e78fca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
