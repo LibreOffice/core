@@ -214,9 +214,8 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
                 aFormatEtcContainer.addFormatEtc( fetc );
 
                 // and HTML Format
-                OUString htmlFormat( "HTML Format" );
                 aFormatEtcContainer.addFormatEtc(
-                    CDataFormatTranslator::getFormatEtcForClipformatName( htmlFormat ) );
+                    CDataFormatTranslator::getFormatEtcForClipformatName( "HTML Format" ) );
             }
         }
     }

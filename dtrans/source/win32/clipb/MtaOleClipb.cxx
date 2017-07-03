@@ -427,8 +427,6 @@ bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipV
         return false;
     }
 
-    bool bRet = false;
-
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, "registerClipViewer from within the OleThread called" );
 
     MsgCtx  aMsgCtx;
@@ -439,7 +437,7 @@ bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncClipV
 
     aMsgCtx.aCondition.wait( /* infinite */ );
 
-    return bRet;
+    return false;
 }
 
 // register a clipboard viewer
