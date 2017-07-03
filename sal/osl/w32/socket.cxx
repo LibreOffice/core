@@ -1888,7 +1888,6 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents (
     oslSocketSet OutOfBandSet,
     const TimeValue* pTimeout)
 {
-    int             MaxHandle= 0;
     struct timeval  tv;
 
     if(pTimeout)
@@ -1898,7 +1897,7 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents (
         tv.tv_usec = pTimeout->Nanosec / 1000L;
     }
 
-    return select(MaxHandle,                /* redundant in WIN32 */
+    return select(0,                /* redundant in WIN32 */
                   IncomingSet ? &IncomingSet->m_Set : nullptr,
                   OutgoingSet ? &OutgoingSet->m_Set : nullptr,
                   OutOfBandSet ? &OutOfBandSet->m_Set : nullptr,

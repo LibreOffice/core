@@ -76,7 +76,7 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     // that the handle doesn't have the appropriate level of access...
 
     // see https://msdn.microsoft.com/en-au/library/windows/desktop/ms684880(v=vs.85).aspx
-    DWORD dwAccessFlags = (PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION
+    DWORD const dwAccessFlags = (PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION
                                     | PROCESS_VM_WRITE | PROCESS_VM_READ);
 
     BOOL bHaveDuplHdl = DuplicateHandle(GetCurrentProcess(),    // handle to process that has handle
@@ -105,7 +105,6 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
         // process
 
         DWORD dwTID = 0;    // dummy variable as we don't need to track the thread ID
-        UINT uExitCode = 0; // dummy variable... ExitProcess has no return value
 
         // Note: we want to call on ExitProcess() and not TerminateProcess() - this is
         // because with ExitProcess() Windows notifies all attached dlls that the process
@@ -121,7 +120,7 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
                             0,                  /* initial size of stack in bytes is default
                                                    size for executable */
                             reinterpret_cast<LPTHREAD_START_ROUTINE>(pfnExitProc), /* Win32 ExitProcess() */
-                            reinterpret_cast<PVOID>(uExitCode),   /* ExitProcess() dummy return... */
+                            reinterpret_cast<PVOID>(UINT(0)), /* ExitProcess(UINT uExitCode) argument */
                             0,                  /* value of 0 tells thread to run immediately
                                                    after creation */
                             &dwTID);            /* new remote thread's identifier */

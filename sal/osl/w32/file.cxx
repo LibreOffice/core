@@ -711,7 +711,7 @@ oslFileError SAL_CALL osl_openFile(
     if (result != osl_File_E_None)
         return result;
 
-    DWORD dwAccess = GENERIC_READ, dwShare = FILE_SHARE_READ, dwCreation = 0, dwAttributes = 0;
+    DWORD dwAccess = GENERIC_READ, dwShare = FILE_SHARE_READ, dwCreation = 0;
 
     if (uFlags & osl_File_OpenFlag_Write)
         dwAccess |= GENERIC_WRITE;
@@ -728,7 +728,7 @@ oslFileError SAL_CALL osl_openFile(
 
     HANDLE hFile = CreateFileW(
         SAL_W(rtl_uString_getStr(strSysPath)),
-        dwAccess, dwShare, nullptr, dwCreation, dwAttributes, nullptr);
+        dwAccess, dwShare, nullptr, dwCreation, 0, nullptr);
 
     // @@@ ERROR HANDLING @@@
     if (!IsValidHandle(hFile))

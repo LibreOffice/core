@@ -65,8 +65,8 @@ void sal_detail_initialize(int argc, char ** argv)
     error = WSAStartup(wVersionRequested, &wsaData);
     if ( 0 == error )
     {
-        WORD wMajorVersionRequired = 1;
-        WORD wMinorVersionRequired = 1;
+        WORD const wMajorVersionRequired = 1;
+        WORD const wMinorVersionRequired = 1;
 
         if ((LOBYTE(wsaData.wVersion) <  wMajorVersionRequired) ||
             ((LOBYTE(wsaData.wVersion) == wMajorVersionRequired) &&

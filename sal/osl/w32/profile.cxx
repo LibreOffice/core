@@ -1744,8 +1744,6 @@ static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
 
 static bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
 {
-    bool bRet = false;
-
     rtl_uString* ustrBakFile=nullptr;
     rtl_uString* ustrTmpFile=nullptr;
     rtl_uString* ustrIniFile=nullptr;
@@ -1778,7 +1776,7 @@ static bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
     /* rename tmp ini */
     MoveFileExW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrTmpFile )), reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrIniFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
 
-    return bRet;
+    return false;
 }
 
 static rtl_uString* osl_ProfileGenerateExtension(rtl_uString* ustrFileName, rtl_uString* ustrExtension)

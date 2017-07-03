@@ -335,7 +335,6 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                 PSID pSid = reinterpret_cast<PTOKEN_USER>(pInfoBuffer)->User.Sid;
                 PSID_IDENTIFIER_AUTHORITY psia;
                 DWORD dwSubAuthorities;
-                DWORD dwSidRev=SID_REVISION;
                 DWORD dwCounter;
                 DWORD dwSidSize;
                 PUCHAR pSSACount;
@@ -351,7 +350,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                 Ident=static_cast<sal_Char *>(malloc(88*sizeof(sal_Char)));
 
                 /* prepare S-SID_REVISION- */
-                dwSidSize=wsprintf(Ident, TEXT("S-%lu-"), dwSidRev);
+                dwSidSize=wsprintf(Ident, TEXT("S-%lu-"), SID_REVISION);
 
                 /* prepare SidIdentifierAuthority */
                 if ((psia->Value[0] != 0) || (psia->Value[1] != 0))
