@@ -1848,6 +1848,7 @@ static void openDialog(GtkWidget* pSelector, gpointer)
         g_free(pSelected);
 
         GtkWidget* pDialog = gtk_dialog_new();
+        gtk_window_set_resizable(GTK_WINDOW(pDialog), false);
         GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG(pDialog));
         GtkWidget* pDialogDrawingArea = gtk_drawing_area_new();
         g_signal_connect(G_OBJECT(pDialogDrawingArea), "draw", G_CALLBACK(drawOnDialogArea), rWindow.m_pDocView);
@@ -1876,8 +1877,10 @@ static void populateDialogs( GtkComboBoxText* pSelector )
 {
     gtk_combo_box_text_append_text( pSelector, ".uno:SearchDialog" );
     gtk_combo_box_text_append_text( pSelector, ".uno:AcceptTrackedChanges" );
-    gtk_combo_box_text_append_text( pSelector, ".uno:SpellDialog" );
+    gtk_combo_box_text_append_text( pSelector, ".uno:SpellingAndGrammarDialog" );
     gtk_combo_box_text_append_text( pSelector, ".uno:InsertField" );
+    gtk_combo_box_text_append_text( pSelector, ".uno:ImageMapDialog" );
+    gtk_combo_box_text_append_text( pSelector, ".uno:WordCountDialog" );
 }
 
 static void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
