@@ -923,7 +923,7 @@ Dim i As Integer, oObject As Object
 			If Not ( oObject._BOF And oObject._EOF ) Then oObject.MoveFirst()		&apos;	Do nothing if resultset empty
 			Set _PropertyGet = oObject
 		Case UCase(&quot;RecordSource&quot;)
-			_PropertyGet = DatabaseForm.ActiveCommand
+			_PropertyGet = DatabaseForm.Command
 		Case UCase(&quot;Visible&quot;)
 			_PropertyGet = ContainerWindow.IsVisible()
 		Case UCase(&quot;Width&quot;)
