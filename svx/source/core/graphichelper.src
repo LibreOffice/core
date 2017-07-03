@@ -28,4 +28,9 @@ String RID_SVXSTR_SAVEAS_IMAGE
 {
     Text [ en-US ] = "Save as Image" ;
 };
+
+String RID_SVXSTR_SAVE_MODIFIED_IMAGE
+{
+    Text [ en-US ] = "The image has been modified. By default the original image will be saved.\nDo you want to save the modified version instead ?" ;
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

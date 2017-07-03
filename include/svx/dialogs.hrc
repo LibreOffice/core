@@ -750,6 +750,9 @@
 #define RID_SVX_EXTRUSION_BAR               (RID_SVX_START + 986)
 #define RID_SVX_FONTWORK_BAR                (RID_SVX_START + 987)
 
+// String for saving modified image (instead of original)
+#define RID_SVXSTR_SAVE_MODIFIED_IMAGE      (RID_SVX_START + 988)
+
 #define RID_SVXSTR_DEPTH_0                  (RID_SVX_START + 992)
 #define RID_SVXSTR_DEPTH_1                  (RID_SVX_START + 993)
 #define RID_SVXSTR_DEPTH_2                  (RID_SVX_START + 994)
