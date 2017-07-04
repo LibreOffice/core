@@ -24,7 +24,6 @@
 
 #include <deque>
 #include <exception>
-#include <functional>
 #include <map>
 #include <memory>
 #include <vector>
@@ -177,12 +176,16 @@ namespace dbaui
                         >   SupportedFeatures;
 
 
-    struct CompareFeatureById : ::std::binary_function< SupportedFeatures::value_type, sal_Int32, bool >
+    class CompareFeatureById
     {
+        const sal_Int32 m_nId;
+    public:
+        CompareFeatureById(sal_Int32 _nId) : m_nId(_nId)
+        {}
 
-        bool operator()( const SupportedFeatures::value_type& _aType, sal_Int32 _nId ) const
+        bool operator()( const SupportedFeatures::value_type& _aType ) const
         {
-            return !!( _nId == _aType.second.nFeatureId );
+            return m_nId == _aType.second.nFeatureId;
         }
     };
 
@@ -199,12 +202,17 @@ namespace dbaui
     typedef ::std::deque< FeatureListener > FeatureListeners;
 
 
-    struct FindFeatureListener : ::std::binary_function< FeatureListener, css::uno::Reference< css::frame::XStatusListener >, bool >
+    class FindFeatureListener
     {
+        const css::uno::Reference< css::frame::XStatusListener >& m_xListener;
+    public:
+        FindFeatureListener(const css::uno::Reference< css::frame::XStatusListener >& _xListener)
+            : m_xListener(_xListener)
+        {}
 
-        bool operator()( const FeatureListener& lhs, const css::uno::Reference< css::frame::XStatusListener >& rhs ) const
+        bool operator()( const FeatureListener& lhs ) const
         {
-            return !!( lhs.xListener == rhs );
+            return lhs.xListener == m_xListener;
         }
     };
 
