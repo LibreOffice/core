@@ -34,7 +34,6 @@
 #include <map>
 #include <vector>
 #include <algorithm>
-#include <functional>
 #include <string.h>
 #include <time.h>
 
@@ -49,18 +48,6 @@ namespace /* private */ {
     #define TAG_PRIVATE      "Private"
     #define TAG_GROUPS       "Groups"
     #define TAG_GROUP        "Group"
-
-
-    // compare two string_t's case insensitive, may also be done
-    // by specifying special traits for the string type but in this
-    // case it's easier to do it this way
-    struct str_icase_cmp :
-        public std::binary_function<string_t, string_t, bool>
-    {
-        bool operator() (const string_t& s1, const string_t& s2) const
-        { return (0 == strcasecmp(s1.c_str(), s2.c_str())); }
-    };
-
 
     struct recently_used_item
     {
@@ -116,7 +103,11 @@ namespace /* private */ {
             return (has_groups() &&
                     iter_end != std::find_if(
                         groups_.begin(), iter_end,
-                        std::bind2nd(str_icase_cmp(), name)));
+                        [&name](const string_t& s)
+                        { return (0 == strcasecmp(s.c_str(), name.c_str())); })
+                        // compare two string_t's case insensitive
+                   );
+
         }
 
         void write_xml(const recently_used_file& file) const
