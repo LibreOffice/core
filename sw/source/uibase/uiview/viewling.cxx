@@ -234,7 +234,7 @@ void SwView::StartTextConversion(
         return;
     }
 
-    SpellKontext();
+    SpellContext();
 
     const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
     const bool bOldIdle = pVOpt->IsIdle();
@@ -260,7 +260,7 @@ void SwView::StartTextConversion(
 
     m_pWrtShell->SetInsMode( bOldIns );
     pVOpt->SetIdle( bOldIdle );
-    SpellKontext(false);
+    SpellContext(false);
 }
 
 // spellcheck and text conversion related stuff

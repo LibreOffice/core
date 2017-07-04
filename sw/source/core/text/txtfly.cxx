@@ -791,14 +791,14 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             const IDocumentSettingAccess* pIDSA = pCurrFrame->GetTextNode()->getIDocumentSettingAccess();
             if ( (  pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) ||
                    !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ) &&
-                 ::FindKontext( pTmp, SwFrameType::None ) == ::FindKontext( pCurrFrame, SwFrameType::None ) )
+                 ::FindContext( pTmp, SwFrameType::None ) == ::FindContext( pCurrFrame, SwFrameType::None ) )
             {
                 return true;
             }
 
             const SwFrame* pHeader = nullptr;
             if ( pCurrFrame->GetNext() != pTmp &&
-                 ( IsFrameInSameKontext( pTmp, pCurrFrame ) ||
+                 ( IsFrameInSameContext( pTmp, pCurrFrame ) ||
                    // #i13832#, #i24135# wrap around objects in page header
                    ( !pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) &&
                      nullptr != ( pHeader = pTmp->FindFooterOrHeader() ) &&
