@@ -38,7 +38,6 @@
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <vcl/lstbox.hxx>
-#include <functional>
 #include <map>
 #include <algorithm>
 
@@ -88,7 +87,8 @@ namespace dbaui
         bool operator()(const OUString& _sColumnName) const override
         {
             return std::any_of(m_pVector->begin(),m_pVector->end(),
-                std::bind2nd(m_aCase, _sColumnName));
+                [this, &_sColumnName](const OUString& rhs)
+                { return m_aCase(_sColumnName, rhs); });
         }
     };
 

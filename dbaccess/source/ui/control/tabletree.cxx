@@ -190,7 +190,9 @@ namespace
             aRet.first = lhs;
             const OUString* pIter = m_aViews.getConstArray();
             const OUString* pEnd = m_aViews.getConstArray() + m_aViews.getLength();
-            aRet.second = std::any_of(pIter,pEnd,std::bind2nd(m_aEqualFunctor,lhs));
+            aRet.second = std::any_of(pIter, pEnd,
+                                      [this, &lhs](const OUString& rhs)
+                                      { return m_aEqualFunctor(lhs, rhs); } );
 
             return aRet;
         }
