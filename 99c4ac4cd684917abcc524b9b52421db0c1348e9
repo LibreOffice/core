@@ -16,6 +16,24 @@
       "revId": "99c4ac4cd684917abcc524b9b52421db0c1348e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_d2a072a8",
+        "filename": "extensions/source/activex/SOActiveX.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-04T11:10:28Z",
+      "side": 1,
+      "message": "oh, i hadn\u0027t expected a difference on Windows because \"long\" is always 32-bit there - but clearly i should have checked.\n\nhmm...\n\nCComVariant(int nSrc, VARTYPE vtSrc \u003d VT_I4) throw();\nCComVariant(long  nSrc, VARTYPE vtSrc \u003d VT_I4) throw();\n\nvtSrc\n[in] The type of the variant. When the first parameter is int, valid types are VT_I4 and VT_INT. When the first parameter is long, valid types are VT_I4 and VT_ERROR.\n\n^ that seems to indicate there is no difference after all?",
+      "parentUuid": "3a461143_f262ceac",
+      "revId": "99c4ac4cd684917abcc524b9b52421db0c1348e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
