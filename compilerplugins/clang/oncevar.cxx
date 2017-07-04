@@ -172,8 +172,8 @@ bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
         //   sizeof (T)
         //
         // with dependent type T /is/ constant, keep consistent here with the
-        // (arguably broken) behavior of isConstantInitalizer returning false in
-        // Clang >= 3.9):
+        // (arguably broken) behavior of isConstantInitializer returning false
+        // in Clang >= 3.9):
         if (init->isValueDependent()) {
             return true;
         }
