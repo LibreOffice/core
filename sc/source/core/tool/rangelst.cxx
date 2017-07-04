@@ -42,7 +42,6 @@ class FindEnclosingRange
 {
 public:
     explicit FindEnclosingRange(const T& rTest) : mrTest(rTest) {}
-    FindEnclosingRange(const FindEnclosingRange& r) : mrTest(r.mrTest) {}
     bool operator() (const ScRange* pRange) const
     {
         return pRange->In(mrTest);
@@ -56,7 +55,6 @@ class FindRangeIn
 {
 public:
     FindRangeIn(const T& rTest) : mrTest(rTest) {}
-    FindRangeIn(const FindRangeIn& r) : mrTest(r.mrTest) {}
     bool operator() (const ScRange* pRange) const
     {
         return mrTest.In(*pRange);
@@ -70,7 +68,6 @@ class FindIntersectingRange
 {
 public:
     explicit FindIntersectingRange(const T& rTest) : mrTest(rTest) {}
-    FindIntersectingRange(const FindIntersectingRange& r) : mrTest(r.mrTest) {}
     bool operator() (const ScRange* pRange) const
     {
         return pRange->Intersects(mrTest);
@@ -83,7 +80,6 @@ class AppendToList
 {
 public:
     explicit AppendToList(vector<ScRange*>& rRanges) : mrRanges(rRanges) {}
-    AppendToList(const AppendToList& r) : mrRanges(r.mrRanges) {}
     void operator() (const ScRange* p)
     {
         mrRanges.push_back(new ScRange(*p));
@@ -96,7 +92,6 @@ class CountCells
 {
 public:
     CountCells() : mnCellCount(0) {}
-    CountCells(const CountCells& r) : mnCellCount(r.mnCellCount) {}
 
     void operator() (const ScRange* p)
     {
@@ -122,14 +117,6 @@ public:
         meConv(eConv),
         mcDelim(cDelim),
         mbFirst(true) {}
-
-    FormatString(const FormatString& r) :
-        mrStr(r.mrStr),
-        mnFlags(r.mnFlags),
-        mpDoc(r.mpDoc),
-        meConv(r.meConv),
-        mcDelim(r.mcDelim),
-        mbFirst(r.mbFirst) {}
 
     void operator() (const ScRange* p)
     {
