@@ -34,9 +34,8 @@ OConnectionURLEdit::OConnectionURLEdit(vcl::Window* _pParent, WinBits _nBits,boo
 {
 }
 
-VCL_BUILDER_DECL_FACTORY(ConnectionURLEdit)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeConnectionURLEdit(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    (void)rMap;
     rRet = VclPtr<OConnectionURLEdit>::Create(pParent, WB_BORDER, false);
 }
 

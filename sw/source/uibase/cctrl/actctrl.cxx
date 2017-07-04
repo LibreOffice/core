@@ -56,7 +56,7 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
         Edit::KeyInput(rEvt);
 }
 
-VCL_BUILDER_DECL_FACTORY(ReturnActionEdit)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeReturnActionEdit(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     VclBuilder::ensureDefaultWidthChars(rMap);
     rRet = VclPtr<ReturnActionEdit>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);

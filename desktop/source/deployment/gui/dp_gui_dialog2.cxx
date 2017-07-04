@@ -150,9 +150,8 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
     m_pParent = pParentDialog;
 }
 
-VCL_BUILDER_DECL_FACTORY(ExtBoxWithBtns)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeExtBoxWithBtns(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    (void)rMap;
     rRet = VclPtr<ExtBoxWithBtns_Impl>::Create(pParent);
 }
 

@@ -13,26 +13,22 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/builder.hxx>
 
-#define VCL_BUILDER_DECL_FACTORY(typeName) \
-    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL \
-        make##typeName(VclPtr<vcl::Window> &rRet, VclPtr<vcl::Window> &pParent, VclBuilder::stringmap &rMap)
-
 #define VCL_BUILDER_FACTORY(typeName) \
-    VCL_BUILDER_DECL_FACTORY(typeName) \
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
     { \
         (void)rMap; \
         rRet = VclPtr<typeName>::Create(pParent); \
     }
 
 #define VCL_BUILDER_FACTORY_ARGS(typeName,arg1) \
-    VCL_BUILDER_DECL_FACTORY(typeName) \
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
     { \
         (void)rMap; \
         rRet = VclPtr<typeName>::Create(pParent,arg1); \
     }
 
 #define VCL_BUILDER_FACTORY_CONSTRUCTOR(typeName,arg2) \
-    VCL_BUILDER_DECL_FACTORY(typeName) \
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
     { \
         OUString sBorder = VclBuilder::extractCustomProperty(rMap); \
         WinBits wb = arg2; \

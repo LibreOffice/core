@@ -36,7 +36,7 @@ SvxRelativeField::SvxRelativeField(
     SetMax( 9999 );
 }
 
-VCL_BUILDER_DECL_FACTORY(SvxRelativeField)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxRelativeField(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     OUString const custom(VclBuilder::extractCustomProperty(rMap));
     FieldUnit const eUnit(VclBuilder::detectUnit(custom));

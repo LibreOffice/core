@@ -146,7 +146,7 @@ void ScTabBgColorDlg::ScTabBgColorValueSet::dispose()
     SvxColorValueSet::dispose();
 }
 
-VCL_BUILDER_DECL_FACTORY(ScTabBgColorValueSet)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeScTabBgColorValueSet(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 

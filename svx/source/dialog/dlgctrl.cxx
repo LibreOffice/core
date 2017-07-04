@@ -1032,7 +1032,7 @@ HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
     SetEdgeBlending(true);
 }
 
-VCL_BUILDER_DECL_FACTORY(HatchingLB)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeHatchingLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OUString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1072,7 +1072,7 @@ GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
     SetEdgeBlending(true);
 }
 
-VCL_BUILDER_DECL_FACTORY(GradientLB)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeGradientLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OUString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1112,7 +1112,7 @@ BitmapLB::BitmapLB( vcl::Window* pParent, WinBits aWB)
     SetEdgeBlending(true);
 }
 
-VCL_BUILDER_DECL_FACTORY(BitmapLB)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeBitmapLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
     OUString sBorder = VclBuilder::extractCustomProperty(rMap);
@@ -1246,7 +1246,7 @@ LineLB::LineLB(vcl::Window* pParent, WinBits aWB)
     // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
 }
 
-VCL_BUILDER_DECL_FACTORY(LineLB)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeLineLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
@@ -1344,7 +1344,7 @@ LineEndLB::LineEndLB( vcl::Window* pParent, WinBits aWB )
     // No EdgeBlending for LineEnds SetEdgeBlending(true);
 }
 
-VCL_BUILDER_DECL_FACTORY(LineEndLB)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeLineEndLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     bool bDropdown = VclBuilder::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;

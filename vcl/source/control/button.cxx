@@ -3882,9 +3882,8 @@ void DisclosureButton::KeyInput( const KeyEvent& rKEvt )
         CheckBox::KeyInput( rKEvt );
 }
 
-VCL_BUILDER_DECL_FACTORY(SmallButton)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSmallButton(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    (void)rMap;
     rRet = VclPtr<PushButton>::Create(pParent, WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_FLATBUTTON|WB_SMALLSTYLE);
 }
 

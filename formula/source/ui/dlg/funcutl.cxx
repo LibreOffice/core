@@ -411,9 +411,8 @@ RefEdit::RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits 
     aIdle.SetPriority( TaskPriority::LOW );
 }
 
-VCL_BUILDER_DECL_FACTORY(RefEdit)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeRefEdit(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    (void)rMap;
     rRet = VclPtr<RefEdit>::Create(pParent, nullptr, WB_BORDER);
 }
 

@@ -980,7 +980,7 @@ void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
         ComboBox::KeyInput(rEvt);
 }
 
-VCL_BUILDER_DECL_FACTORY(CaptionComboBox)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeCaptionComboBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
     bool bDropdown = VclBuilder::extractDropdown(rMap);

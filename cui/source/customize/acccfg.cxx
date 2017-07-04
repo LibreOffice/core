@@ -656,7 +656,7 @@ void SfxAccCfgLBoxString_Impl::Paint(const Point& aPos, SvTreeListBox& /*rDevice
 
 }
 
-VCL_BUILDER_DECL_FACTORY(SfxAccCfgTabListBox)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSfxAccCfgTabListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinBits = WB_TABSTOP;
 

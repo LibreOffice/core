@@ -31,9 +31,8 @@ namespace svt
         DisableHistory();
     }
 
-    VCL_BUILDER_DECL_FACTORY(OFileURLControl)
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeOFileURLControl(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
     {
-        (void)rMap;
         WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                            WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
         VclPtrInstance<OFileURLControl> pListBox(pParent, nWinBits);

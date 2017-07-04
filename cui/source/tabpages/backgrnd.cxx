@@ -178,9 +178,8 @@ BackgroundPreviewImpl::BackgroundPreviewImpl(vcl::Window* pParent)
     Invalidate(aDrawRect);
 }
 
-VCL_BUILDER_DECL_FACTORY(BackgroundPreview)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeBackgroundPreview(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    (void)rMap;
     rRet = VclPtr<BackgroundPreviewImpl>::Create(pParent);
 }
 

@@ -129,9 +129,8 @@ void ScEditWindow::dispose()
     Control::dispose();
 }
 
-VCL_BUILDER_DECL_FACTORY(ScEditWindow)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeScEditWindow(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    (void)rMap;
     rRet = VclPtr<ScEditWindow>::Create(pParent, WB_BORDER|WB_TABSTOP, Left);
 }
 

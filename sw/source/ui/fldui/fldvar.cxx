@@ -1256,7 +1256,7 @@ SelectionListBox::SelectionListBox(vcl::Window* pParent, WinBits nStyle)
 {
 }
 
-VCL_BUILDER_DECL_FACTORY(SelectionListBox)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSelectionListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
 

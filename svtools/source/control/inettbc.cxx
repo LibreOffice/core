@@ -844,9 +844,8 @@ SvtURLBox::SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart
     Init(bSetDefaultHelpID);
 }
 
-VCL_BUILDER_DECL_FACTORY(SvtURLBox)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvtURLBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    (void)rMap;
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP|
                        WB_DROPDOWN|WB_AUTOSIZE|WB_AUTOHSCROLL;
     VclPtrInstance<SvtURLBox> pListBox(pParent, nWinBits, INetProtocol::NotValid, false);

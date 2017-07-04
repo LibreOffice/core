@@ -54,15 +54,13 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 
-VCL_BUILDER_DECL_FACTORY(PrintPreviewWindow)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makePrintPreviewWindow(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    (void)rMap;
     rRet = VclPtr<PrintDialog::PrintPreviewWindow>::Create(pParent);
 }
 
-VCL_BUILDER_DECL_FACTORY(ShowNupOrderWindow)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeShowNupOrderWindow(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    (void)rMap;
     rRet = VclPtr<PrintDialog::ShowNupOrderWindow>::Create(pParent);
 }
 

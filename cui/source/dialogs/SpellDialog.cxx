@@ -1164,9 +1164,8 @@ SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
     disposeOnce();
 }
 
-VCL_BUILDER_DECL_FACTORY(SentenceEditWindow)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSentenceEditWindow(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
 {
-    (void)rMap;
     rRet = VclPtr<SentenceEditWindow_Impl>::Create(pParent, WB_BORDER|WB_VSCROLL|WB_IGNORETAB);
 }
 
