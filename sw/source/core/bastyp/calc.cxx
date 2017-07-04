@@ -495,6 +495,14 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
                 pFndExp->nValue.PutDouble( pUField->GetValue() );
             }
         }
+        else if ( !pFndExp->pFieldType )
+        {
+            if ( pFndExp->nValue.IsString() )
+                m_aErrExpr.nValue.PutString( pFndExp->nValue.GetOUString() );
+            else if ( pFndExp->nValue.IsDouble() )
+                m_aErrExpr.nValue.PutDouble( pFndExp->nValue.GetDouble() );
+            pFndExp = &m_aErrExpr;
+        }
         return pFndExp;
     }
 

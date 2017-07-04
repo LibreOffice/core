@@ -2183,7 +2183,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
                 if( bValidValue )
                 {
                     SwSbxValue aValue;
-                    aValue.PutString( aString );
+                    aValue.PutDouble( aNumber );
                     SAL_INFO( "sw.ui", "'" << pColNames[nCol] << "': " << aNumber << " / " << aString );
                     rCalc.VarChange( pColNames[nCol], aValue );
                 }
