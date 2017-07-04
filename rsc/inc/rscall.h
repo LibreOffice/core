@@ -80,10 +80,7 @@ struct RSCINST
 /********************** S U B I N F O S T R U C T ************************/
 struct SUBINFO_STRUCT
 {
-    SUBINFO_STRUCT(){ nPos = 0; pClass = nullptr; };
     RscId        aId;    // resource identifier
-    sal_uInt32   nPos;   // position of resource
-    RscTop *     pClass; // class of entry
 };
 
 /******************* F u n c t i o n *************************************/

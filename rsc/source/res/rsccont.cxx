@@ -315,8 +315,6 @@ SUBINFO_STRUCT RscBaseCont::GetInfoEle( const RSCINST & rInst, sal_uInt32 nPos )
     if( nPos < pClassData->nEntries )
     {
         aInfo.aId = pClassData->pEntries[ nPos ].aName;
-        aInfo.nPos = nPos;
-        aInfo.pClass = pClassData->pEntries[ nPos ].aInst.pClass;
     }
     return aInfo;
 }

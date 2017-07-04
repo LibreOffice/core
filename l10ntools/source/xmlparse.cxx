@@ -419,7 +419,7 @@ XMLFile& XMLFile::operator=(const XMLFile& rObj)
     return *this;
 }
 
-void XMLFile::SearchL10NElements( XMLChildNode *pCur, int nPos )
+void XMLFile::SearchL10NElements( XMLChildNode *pCur )
 {
     if ( !pCur )
         SearchL10NElements( this  );
@@ -435,7 +435,7 @@ void XMLFile::SearchL10NElements( XMLChildNode *pCur, int nPos )
                     {
                         XMLChildNode* pElement = (*GetChildList())[ i ];
                         if( pElement->GetNodeType() ==  XMLNodeType::ELEMENT )
-                            SearchL10NElements( pElement , i);
+                            SearchL10NElements( pElement );
                     }
                 }
             }
@@ -466,7 +466,6 @@ void XMLFile::SearchL10NElements( XMLChildNode *pCur, int nPos )
                     }
                     pElement->SetLanguageId( sLanguage );
                     pElement->SetId( sTmpStrVal );
-                    pElement->SetPos( nPos );
                 }
 
                 if ( bInsert && ( m_aNodes_localize.find( sName ) != m_aNodes_localize.end() ) )
@@ -474,7 +473,7 @@ void XMLFile::SearchL10NElements( XMLChildNode *pCur, int nPos )
                 else if ( bInsert && pElement->GetChildList() )
                 {
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
-                        SearchL10NElements( (*pElement->GetChildList())[ k ], k);
+                        SearchL10NElements( (*pElement->GetChildList())[ k ] );
                 }
             }
             break;
@@ -550,7 +549,6 @@ XMLElement::XMLElement(
     , m_sElementName( rName )
     , m_sId(OString())
     , m_sLanguageId(OString())
-    , m_nPos(0)
 {
 }
 
@@ -559,7 +557,6 @@ XMLElement::XMLElement(const XMLElement& rObj)
     , m_sElementName( rObj.m_sElementName )
     , m_sId( rObj.m_sId )
     , m_sLanguageId( rObj.m_sLanguageId )
-    , m_nPos( rObj.m_nPos )
 {
     if ( rObj.m_pAttributes )
     {
@@ -577,7 +574,6 @@ XMLElement& XMLElement::operator=(const XMLElement& rObj)
         m_sElementName = rObj.m_sElementName;
         m_sId = rObj.m_sId;
         m_sLanguageId = rObj.m_sLanguageId;
-        m_nPos = rObj.m_nPos;
 
         if ( m_pAttributes )
         {

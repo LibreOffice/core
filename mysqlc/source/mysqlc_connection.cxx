@@ -97,7 +97,6 @@ void OConnection::construct(const rtl::OUString& url, const Sequence< PropertyVa
     rtl::OUString aDbName;
 
     m_settings.encoding = MysqlCDriver::getDefaultEncoding();
-    m_settings.quoteIdentifier.clear();
 
     // parse url. Url has the following format:
     // external server: sdbc:mysqlc:[hostname]:[port]/[dbname]
