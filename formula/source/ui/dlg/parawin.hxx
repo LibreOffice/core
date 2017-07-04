@@ -82,7 +82,6 @@ private:
         VclPtr<ScrollBar>       m_pSlider;
         OUString        m_sOptional;
         OUString        m_sRequired;
-        bool        bRefMode;
 
         sal_uInt16      nEdFocus;
         sal_uInt16      nActiveLine;
@@ -126,8 +125,6 @@ public:
         void            SetEditDesc(const OUString& aText);
         void            UpdateParas();
         void            ClearAll();
-
-        void            SetRefMode(bool bFlag) {bRefMode=bFlag;}
 
         sal_uInt16      GetActiveLine() { return nActiveLine;}
         void            SetActiveLine(sal_uInt16 no);

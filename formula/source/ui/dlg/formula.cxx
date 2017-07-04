@@ -140,14 +140,11 @@ public:
     ::std::unique_ptr<FormulaTokenArray>                    m_pTokenArray;
     ::std::unique_ptr<FormulaTokenArrayPlainIterator>       m_pTokenArrayIterator;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aSpecialOpCodes;
-    mutable const sheet::FormulaOpCodeMapEntry*             m_pSpecialOpCodesEnd;
     mutable uno::Sequence< sheet::FormulaToken >            m_aSeparatorsOpCodes;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aFunctionOpCodes;
     mutable const sheet::FormulaOpCodeMapEntry*             m_pFunctionOpCodesEnd;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aUnaryOpCodes;
-    mutable const sheet::FormulaOpCodeMapEntry*             m_pUnaryOpCodesEnd;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aBinaryOpCodes;
-    mutable const sheet::FormulaOpCodeMapEntry*             m_pBinaryOpCodesEnd;
     ::std::map<FormulaToken*,sheet::FormulaToken>           m_aTokenMap;
     IFormulaEditorHelper*                                   m_pHelper;
     VclPtr<Dialog>          m_pParent;
@@ -230,10 +227,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
                                         ,const IFunctionManager* _pFunctionMgr
                                         ,IControlReferenceHandler* _pDlg)
     :
-    m_pSpecialOpCodesEnd(nullptr),
     m_pFunctionOpCodesEnd(nullptr),
-    m_pUnaryOpCodesEnd(nullptr),
-    m_pBinaryOpCodesEnd(nullptr),
     m_pHelper       (_pHelper),
     m_pParent       (pParent),
     pTheRefEdit     (nullptr),
@@ -415,10 +409,8 @@ void FormulaDlg_Impl::InitFormulaOpCodeMapper()
     m_pFunctionOpCodesEnd = m_aFunctionOpCodes.getConstArray() + m_aFunctionOpCodes.getLength();
 
     m_aUnaryOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::UNARY_OPERATORS);
-    m_pUnaryOpCodesEnd = m_aUnaryOpCodes.getConstArray() + m_aUnaryOpCodes.getLength();
 
     m_aBinaryOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::BINARY_OPERATORS);
-    m_pBinaryOpCodesEnd = m_aBinaryOpCodes.getConstArray() + m_aBinaryOpCodes.getLength();
 
     uno::Sequence< OUString > aArgs(3);
     aArgs[TOKEN_OPEN]   = "(";
@@ -427,7 +419,6 @@ void FormulaDlg_Impl::InitFormulaOpCodeMapper()
     m_aSeparatorsOpCodes = m_xOpCodeMapper->getMappings(aArgs,sheet::FormulaLanguage::ODFF);
 
     m_aSpecialOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::SPECIAL);
-    m_pSpecialOpCodesEnd = m_aSpecialOpCodes.getConstArray() + m_aSpecialOpCodes.getLength();
 }
 
 void FormulaDlg_Impl::DeleteArgs()
@@ -1642,13 +1633,10 @@ void FormulaDlg_Impl::UpdateParaWin(const Selection& _rSelection, const OUString
     Edit* pEd = GetCurrRefEdit();
     if( pEd != nullptr )
         pEd->SetSelection( theSel );
-
-    pParaWin->SetRefMode(false);
 }
+
 bool FormulaDlg_Impl::UpdateParaWin(Selection& _rSelection)
 {
-    pParaWin->SetRefMode(true);
-
     OUString      aStrEd;
     Edit* pEd = GetCurrRefEdit();
     if(pEd!=nullptr && pTheRefEdit==nullptr)
@@ -1889,15 +1877,11 @@ IMPL_LINK_NOARG(FormulaDlg, UpdateFocusHdl, Timer *, void)
 
 void FormEditData::SaveValues()
 {
-    FormEditData* pTemp = new FormEditData(*this);
-
     Reset();
-    pParent = pTemp;
 }
 
 void FormEditData::Reset()
 {
-    pParent = nullptr;
     nMode = 0;
     nFStart = 0;
     nOffset = 0;
@@ -1911,7 +1895,6 @@ void FormEditData::Reset()
 
 FormEditData& FormEditData::operator=( const FormEditData& r )
 {
-    pParent         = r.pParent;
     nMode           = r.nMode;
     nFStart         = r.nFStart;
     nOffset         = r.nOffset;
@@ -1930,7 +1913,6 @@ FormEditData::FormEditData()
 
 FormEditData::~FormEditData()
 {
-    delete pParent;
 }
 
 FormEditData::FormEditData( const FormEditData& r )

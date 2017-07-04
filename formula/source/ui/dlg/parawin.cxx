@@ -40,8 +40,7 @@ ParaWin::ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg):
     pFuncDesc       ( nullptr ),
     pMyParent       (_pDlg),
     m_sOptional     ( ModuleRes( STR_OPTIONAL ) ),
-    m_sRequired     ( ModuleRes( STR_REQUIRED ) ),
-    bRefMode        (false)
+    m_sRequired     ( ModuleRes( STR_REQUIRED ) )
 {
     get(m_pFtEditDesc, "editdesc");
     get(m_pFtArgName, "parname");

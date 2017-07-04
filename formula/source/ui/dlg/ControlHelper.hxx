@@ -32,7 +32,6 @@ private:
     VclPtr<MultiLineEdit>  pMEdit;
     Link<EditBox&,void>    aSelChangedLink;
     Selection              aOldSel;
-    bool                   bMouseFlag;
 
     DECL_LINK(ChangedHdl, void *, void);
 

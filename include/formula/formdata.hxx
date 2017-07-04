@@ -59,7 +59,6 @@ protected:
     FormEditData( const FormEditData& );
     FormEditData& operator=( const FormEditData& r );
 
-    FormEditData*   pParent;            // for nesting
 private:
     sal_uInt16          nMode;              // enum ScFormulaDlgMode
     sal_Int32           nFStart;
