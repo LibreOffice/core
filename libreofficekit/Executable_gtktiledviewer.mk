@@ -12,6 +12,7 @@ $(eval $(call gb_Executable_Executable,gtktiledviewer))
 $(eval $(call gb_Executable_set_include,gtktiledviewer,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \
+    -I$(SRCDIR)/libreofficekit/qa/gtktiledviewer/ \
 ))
 
 $(eval $(call gb_Executable_use_externals,gtktiledviewer,\
@@ -43,7 +44,12 @@ $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
 endif
 
 $(eval $(call gb_Executable_add_exception_objects,gtktiledviewer,\
-    libreofficekit/qa/gtktiledviewer/gtktiledviewer \
+    libreofficekit/qa/gtktiledviewer/gtv-main \
+    libreofficekit/qa/gtktiledviewer/gtv-application \
+    libreofficekit/qa/gtktiledviewer/gtv-application-window \
+    libreofficekit/qa/gtktiledviewer/gtv-main-toolbar \
+    libreofficekit/qa/gtktiledviewer/gtv-signal-handlers \
+    libreofficekit/qa/gtktiledviewer/gtv-helpers \
 ))
 
 # vim: set noet sw=4 ts=4:
