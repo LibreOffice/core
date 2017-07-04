@@ -148,9 +148,9 @@ const SwFrame* GetVirtualUpper( const SwFrame* pFrame, const Point& rPos );
 bool Is_Lower_Of( const SwFrame *pCurrFrame, const SdrObject* pObj );
 
 // FIXME: EasyHack (refactoring): rename method and parameter name in all files
-const SwFrame *FindKontext( const SwFrame *pFrame, SwFrameType nAdditionalKontextTyp );
+const SwFrame *FindContext( const SwFrame *pFrame, SwFrameType nAdditionalContextTyp );
 
-bool IsFrameInSameKontext( const SwFrame *pInnerFrame, const SwFrame *pFrame );
+bool IsFrameInSameContext( const SwFrame *pInnerFrame, const SwFrame *pFrame );
 
 const SwFrame * FindPage( const SwRect &rRect, const SwFrame *pPage );
 

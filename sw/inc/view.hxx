@@ -308,7 +308,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs );
 
     SAL_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
-    SAL_DLLPRIVATE void          SpellKontext(bool bOn = true)
+    SAL_DLLPRIVATE void          SpellContext(bool bOn = true)
                                  { m_bCenterCursor = bOn; }
 
     // for readonly switching

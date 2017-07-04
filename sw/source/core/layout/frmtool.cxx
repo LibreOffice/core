@@ -3058,7 +3058,7 @@ bool Is_Lower_Of(const SwFrame *pCurrFrame, const SdrObject* pObj)
 }
 
 /// provides the area of a frame in that no Fly from another area can overlap
-const SwFrame *FindKontext( const SwFrame *pFrame, SwFrameType nAdditionalContextType )
+const SwFrame *FindContext( const SwFrame *pFrame, SwFrameType nAdditionalContextType )
 {
     const SwFrameType nTyp = SwFrameType::Root | SwFrameType::Header   | SwFrameType::Footer | SwFrameType::FtnCont  |
                         SwFrameType::Ftn  | SwFrameType::Fly      |
@@ -3072,9 +3072,9 @@ const SwFrame *FindKontext( const SwFrame *pFrame, SwFrameType nAdditionalContex
     return pFrame;
 }
 
-bool IsFrameInSameKontext( const SwFrame *pInnerFrame, const SwFrame *pFrame )
+bool IsFrameInSameContext( const SwFrame *pInnerFrame, const SwFrame *pFrame )
 {
-    const SwFrame *pKontext = FindKontext( pInnerFrame, SwFrameType::None );
+    const SwFrame *pContext = FindContext( pInnerFrame, SwFrameType::None );
 
     const SwFrameType nTyp = SwFrameType::Root | SwFrameType::Header | SwFrameType::Footer | SwFrameType::FtnCont |
                         SwFrameType::Ftn  | SwFrameType::Fly      |
@@ -3082,7 +3082,7 @@ bool IsFrameInSameKontext( const SwFrame *pInnerFrame, const SwFrame *pFrame )
     do
     {   if ( pFrame->GetType() & nTyp )
         {
-            if( pFrame == pKontext )
+            if( pFrame == pContext )
                 return true;
             if( pFrame->IsCellFrame() )
                 return false;

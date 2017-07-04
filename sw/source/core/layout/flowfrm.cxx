@@ -325,7 +325,7 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
 
                 // Don't do this if the object is anchored behind me in the text
                 // flow, because then I wouldn't evade it.
-                if ( ::IsFrameInSameKontext( pAnchor, &m_rThis ) )
+                if ( ::IsFrameInSameContext( pAnchor, &m_rThis ) )
                 {
                     if ( rFormat.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PARA )
                     {
