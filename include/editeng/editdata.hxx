@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <editeng/editengdllapi.h>
 #include <memory>
+#include <ostream>
 
 class SfxItemSet;
 class SfxPoolItem;
@@ -106,6 +107,13 @@ struct EPosition
         { }
 };
 
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, EPosition const& pos)
+{
+    return stream << "EPosition(" << pos.nPara << ',' << pos.nIndex << ")";
+}
+
 struct ESelection
 {
     sal_Int32   nStartPara;
@@ -137,6 +145,13 @@ struct ESelection
     bool    IsZero() const;
     bool    HasRange() const;
 };
+
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, ESelection const& sel)
+{
+    return stream << "ESelection(" << sel.nStartPara << ',' << sel.nStartPos << "," << sel.nEndPara << "," << sel.nEndPos << ")";
+}
 
 inline bool ESelection::HasRange() const
 {
