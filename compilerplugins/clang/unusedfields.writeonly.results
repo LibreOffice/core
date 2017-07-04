@@ -112,70 +112,26 @@ connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
 connectivity/source/drivers/evoab2/EApi.h:126
     (anonymous) ext char *
-connectivity/source/drivers/evoab2/NPreparedStatement.hxx:51
-    connectivity::evoab::OEvoabPreparedStatement::Parameter aValue css::uno::Any
-connectivity/source/drivers/evoab2/NPreparedStatement.hxx:52
-    connectivity::evoab::OEvoabPreparedStatement::Parameter nDataType sal_Int32
-connectivity/source/drivers/evoab2/NPreparedStatement.hxx:60
-    connectivity::evoab::OEvoabPreparedStatement m_aParameters std::vector<Parameter>
 connectivity/source/drivers/evoab2/NResultSet.hxx:91
     connectivity::evoab::OEvoabResultSet m_aStatement css::uno::WeakReferenceHelper
 connectivity/source/drivers/evoab2/NStatement.hxx:58
     connectivity::evoab::FieldSort bAscending _Bool
-connectivity/source/drivers/evoab2/NTable.hxx:34
-    connectivity::evoab::OEvoabTable m_xMetaData css::uno::Reference<css::sdbc::XDatabaseMetaData>
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 connectivity/source/drivers/mork/MorkParser.hxx:133
     MorkParser error_ enum MorkErrors
-connectivity/source/drivers/mork/MResultSet.hxx:232
-    connectivity::mork::OResultSet m_nUpdatedRow sal_Int32
-connectivity/source/drivers/mozab/bootstrap/MNSProfileDiscover.hxx:55
-    connectivity::mozab::ProfileStruct product enum com::sun::star::mozilla::MozillaProductType
 connectivity/source/inc/dbase/DTable.hxx:62
     connectivity::dbase::ODbaseTable::DBFHeader dateElems sal_uInt8 [3]
 connectivity/source/inc/dbase/DTable.hxx:86
     connectivity::dbase::ODbaseTable::DBFColumn db_adr sal_uInt32
-connectivity/source/inc/file/fcomp.hxx:46
-    connectivity::file::OPredicateCompiler m_bORCondition _Bool
-connectivity/source/inc/file/FConnection.hxx:63
-    connectivity::file::OConnection m_bClosed _Bool
-connectivity/source/inc/file/FResultSet.hxx:116
-    connectivity::file::OResultSet m_bEOF _Bool
-connectivity/source/inc/odbc/ODatabaseMetaData.hxx:41
-    connectivity::odbc::ODatabaseMetaData m_bOdbc3 _Bool
-connectivity/source/inc/odbc/OResultSet.hxx:147
-    connectivity::odbc::OResultSet m_bInserting _Bool
 connectivity/source/inc/OTypeInfo.hxx:31
     connectivity::OTypeInfo aTypeName class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:32
-    connectivity::OTypeInfo aLiteralPrefix class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:33
-    connectivity::OTypeInfo aLiteralSuffix class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:34
-    connectivity::OTypeInfo aCreateParams class rtl::OUString
 connectivity/source/inc/OTypeInfo.hxx:35
     connectivity::OTypeInfo aLocalTypeName class rtl::OUString
 connectivity/source/inc/OTypeInfo.hxx:37
     connectivity::OTypeInfo nPrecision sal_Int32
 connectivity/source/inc/OTypeInfo.hxx:39
     connectivity::OTypeInfo nMaximumScale sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:40
-    connectivity::OTypeInfo nMinimumScale sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:43
-    connectivity::OTypeInfo nSearchType sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:44
-    connectivity::OTypeInfo nNumPrecRadix sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:46
-    connectivity::OTypeInfo bCurrency _Bool
-connectivity/source/inc/OTypeInfo.hxx:47
-    connectivity::OTypeInfo bAutoIncrement _Bool
-connectivity/source/inc/OTypeInfo.hxx:48
-    connectivity::OTypeInfo bNullable _Bool
-connectivity/source/inc/OTypeInfo.hxx:49
-    connectivity::OTypeInfo bCaseSensitive _Bool
-connectivity/source/inc/OTypeInfo.hxx:50
-    connectivity::OTypeInfo bUnsigned _Bool
 cppcanvas/source/mtfrenderer/emfpbrush.hxx:102
     cppcanvas::internal::EMFPBrush wrapMode sal_Int32
 cppcanvas/source/mtfrenderer/emfppen.hxx:41

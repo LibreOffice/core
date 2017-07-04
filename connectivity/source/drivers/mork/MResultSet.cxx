@@ -82,7 +82,6 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     ,m_nParamIndex(0)
     ,m_bIsAlwaysFalseQuery(false)
     ,m_pKeySet(nullptr)
-    ,m_nUpdatedRow(0)
     ,m_bIsReadOnly(TRISTATE_INDET)
 {
     //m_aQuery.setMaxNrOfReturns(pStmt->getOwnConnection()->getMaxResultRecords());
@@ -1538,8 +1537,6 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x)
 
     (m_aRow->get())[columnIndex].setBound(true);
     (m_aRow->get())[columnIndex] = x;
-    m_nUpdatedRow = getCurrentCardNumber();
-//    m_RowStates = m_RowStates | RowStates_Updated;
 }
 
 
@@ -1556,8 +1553,6 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex )
 
     (m_aRow->get())[columnIndex].setBound(true);
     (m_aRow->get())[columnIndex].setNull();
-    m_nUpdatedRow = getCurrentCardNumber();
-//    m_RowStates = m_RowStates | RowStates_Updated;
 }
 
 

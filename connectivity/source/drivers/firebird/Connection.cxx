@@ -898,19 +898,19 @@ void Connection::buildTypeInfo()
         aInfo.aTypeName         = xRow->getString   (1);
         aInfo.nType             = xRow->getShort    (2);
         aInfo.nPrecision        = xRow->getInt      (3);
-        aInfo.aLiteralPrefix    = xRow->getString   (4);
-        aInfo.aLiteralSuffix    = xRow->getString   (5);
-        aInfo.aCreateParams     = xRow->getString   (6);
-        aInfo.bNullable         = xRow->getBoolean  (7);
-        aInfo.bCaseSensitive    = xRow->getBoolean  (8);
-        aInfo.nSearchType       = xRow->getShort    (9);
-        aInfo.bUnsigned         = xRow->getBoolean  (10);
-        aInfo.bCurrency         = xRow->getBoolean  (11);
-        aInfo.bAutoIncrement    = xRow->getBoolean  (12);
+        // aLiteralPrefix    = xRow->getString   (4);
+        // aLiteralSuffix    = xRow->getString   (5);
+        // aCreateParams     = xRow->getString   (6);
+        // bNullable         = xRow->getBoolean  (7);
+        // bCaseSensitive    = xRow->getBoolean  (8);
+        // nSearchType       = xRow->getShort    (9);
+        // bUnsigned         = xRow->getBoolean  (10);
+        // bCurrency         = xRow->getBoolean  (11);
+        // bAutoIncrement    = xRow->getBoolean  (12);
         aInfo.aLocalTypeName    = xRow->getString   (13);
-        aInfo.nMinimumScale     = xRow->getShort    (14);
+        // nMinimumScale     = xRow->getShort    (14);
         aInfo.nMaximumScale     = xRow->getShort    (15);
-        aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt(18);
+        // nNumPrecRadix     = (sal_Int16)xRow->getInt(18);
 
 
         // Now that we have the type info, save it

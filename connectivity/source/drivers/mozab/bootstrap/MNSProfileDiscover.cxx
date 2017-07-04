@@ -27,15 +27,12 @@ namespace connectivity
     namespace mozab
     {
         ProfileStruct::ProfileStruct()
-            : product(css::mozilla::MozillaProductType_Default)
         {
         }
 
-        ProfileStruct::ProfileStruct(MozillaProductType aProduct,
-                                     const OUString& aProfileName,
+        ProfileStruct::ProfileStruct(const OUString& aProfileName,
                                      const OUString& aProfilePath)
-            : product(aProduct)
-            , profileName(aProfileName)
+            : profileName(aProfileName)
             , profilePath(aProfilePath)
         {
         }
@@ -128,7 +125,7 @@ namespace connectivity
                         fullProfilePath = profilePath;
                     }
 
-                    rProduct.mProfileList[profileName] = ProfileStruct(product,profileName,fullProfilePath);
+                    rProduct.mProfileList[profileName] = ProfileStruct(profileName,fullProfilePath);
 
                     sal_Int32 isDefault = 0;
                     if (!sIsDefault.isEmpty())

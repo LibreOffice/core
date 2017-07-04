@@ -95,7 +95,6 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_nRowCountResult(-1)
                         ,m_nColumnCount(0)
                         ,m_bWasNull(false)
-                        ,m_bEOF(false)
                         ,m_bInserted(false)
                         ,m_bRowUpdated(false)
                         ,m_bRowInserted(false)
@@ -394,7 +393,6 @@ void SAL_CALL OResultSet::afterLast(  )
 
     if(last())
         next();
-    m_bEOF = true;
 }
 
 
@@ -1039,7 +1037,6 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
         }
         else
         {
-            m_bEOF = true;
             m_nRowPos = 1;
             return false;
         }
