@@ -15,6 +15,10 @@
 #include <gtv-application-window.hxx>
 #include <gtv-main-toolbar.hxx>
 
+#include <pwd.h>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/optional.hpp>
+
 struct _GtvApplicationWindow
 {
     GtkApplicationWindow parent_instance;
@@ -28,6 +32,9 @@ struct GtvApplicationWindowPrivate
     GtkWidget* scrolledwindow;
     GtkWidget* lokdocview;
     GtkWidget* statusbar;
+
+    // Rendering args; options with which lokdocview was rendered in this window
+    GtvRenderingArgs* m_pRenderingArgs;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(GtvApplicationWindow, gtv_application_window, GTK_TYPE_APPLICATION_WINDOW);
@@ -55,8 +62,6 @@ gtv_application_window_init(GtvApplicationWindow* win)
 
     // scrolled window containing the main drawing area
     priv->scrolledwindow = GTK_WIDGET(gtk_builder_get_object(builder, "scrolledwindow"));
-    // give life to lokdocview
-    priv->lokdocview = lok_doc_view_new_from_user_profile(pLOPath, pUserProfile, nullptr, nullptr);
 
     // statusbar
     priv->statusbar = GTK_WIDGET(gtk_builder_get_object(builder, "statusbar"));
@@ -64,16 +69,106 @@ gtv_application_window_init(GtvApplicationWindow* win)
     gtk_container_add(GTK_CONTAINER(win), priv->container);
 
     g_object_unref(builder);
+
+    priv->m_pRenderingArgs = new GtvRenderingArgs();
 }
 
 static void
-gtv_application_window_class_init(GtvApplicationWindowClass*)
+gtv_application_window_dispose(GObject* object)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(GTV_APPLICATION_WINDOW(object));
+
+    delete priv->m_pRenderingArgs;
+    priv->m_pRenderingArgs = nullptr;
+
+    G_OBJECT_CLASS (gtv_application_window_parent_class)->dispose (object);
+}
+
+static void
+gtv_application_window_class_init(GtvApplicationWindowClass* klass)
 {
     // TODO: Use templates to bind objects maybe ?
     // But that requires compiling the .ui file into C source requiring
     // glib-compile-resources (another dependency) as I can't find any gtk
     // method to set the template from the .ui file directly; can only be set
     // from gresource
+    G_OBJECT_CLASS(klass)->dispose = gtv_application_window_dispose;
+}
+
+/// Generate an author string for multiple views.
+static std::string getNextAuthor()
+{
+    static int nCounter = 0;
+    struct passwd* pPasswd = getpwuid(getuid());
+    return std::string(pPasswd->pw_gecos) + " #" + std::to_string(++nCounter);
+}
+
+static void
+gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res, gpointer /*userdata*/)
+{
+    LOKDocView* pDocView = LOK_DOC_VIEW (source_object);
+    GError* error = nullptr;
+    if (!lok_doc_view_open_document_finish(pDocView, res, &error))
+    {
+        GtkDialogFlags eFlags = GTK_DIALOG_DESTROY_WITH_PARENT;
+        GtkWidget* pDialog = gtk_message_dialog_new(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+                                                    eFlags,
+                                                    GTK_MESSAGE_ERROR,
+                                                    GTK_BUTTONS_CLOSE,
+                                                    "Error occurred while opening the document: '%s'",
+                                                    error->message);
+        gtk_dialog_run(GTK_DIALOG(pDialog));
+        gtk_widget_destroy(pDialog);
+
+        g_error_free(error);
+        gtk_widget_destroy(GTK_WIDGET(pDocView));
+        gtk_main_quit();
+        return;
+    }
+}
+
+void
+gtv_application_window_load_document(GtvApplicationWindow* window,
+                                     const GtvRenderingArgs* aArgs,
+                                     const std::string& aDocPath)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    // keep a copy of it; we need to use these for creating new views later
+    *(priv->m_pRenderingArgs) = *aArgs;
+
+    // setup lokdocview
+    priv->lokdocview = lok_doc_view_new_from_user_profile(priv->m_pRenderingArgs->m_aLoPath.c_str(),
+                                                          priv->m_pRenderingArgs->m_aUserProfile.empty() ? nullptr : priv->m_pRenderingArgs->m_aUserProfile.c_str(),
+                                                          nullptr, nullptr);
+    gtk_container_add(GTK_CONTAINER(priv->scrolledwindow), priv->lokdocview);
+    g_object_set(G_OBJECT(priv->lokdocview),
+                 "doc-password", TRUE,
+                 "doc-password-to-modify", TRUE,
+                 "tiled-annotations", priv->m_pRenderingArgs->m_bEnableTiledAnnotations,
+                 nullptr);
+
+    // Create argument JSON
+    boost::property_tree::ptree aTree;
+    if (priv->m_pRenderingArgs->m_bHidePageShadow)
+    {
+        aTree.put(boost::property_tree::ptree::path_type(".uno:ShowBorderShadow/type", '/'), "boolean");
+        aTree.put(boost::property_tree::ptree::path_type(".uno:ShowBorderShadow/value", '/'), false);
+    }
+    if (priv->m_pRenderingArgs->m_bHideWhiteSpace)
+    {
+        aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/type", '/'), "boolean");
+        aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/value", '/'), true);
+    }
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), getNextAuthor());
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aArguments = aStream.str();
+    lok_doc_view_open_document(LOK_DOC_VIEW(priv->lokdocview), aDocPath.c_str(),
+                               aArguments.c_str(), nullptr,
+                               gtv_application_open_document_callback, priv->lokdocview);
+
+    gtk_widget_show_all(GTK_WIDGET(priv->scrolledwindow));
 }
 
 GtvApplicationWindow*
