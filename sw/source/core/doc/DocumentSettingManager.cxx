@@ -421,7 +421,7 @@ const css::i18n::ForbiddenCharacters*
     sw::DocumentSettingManager::getForbiddenCharacters(/*[in]*/ LanguageType nLang, /*[in]*/ bool bLocaleData ) const
 {
     const css::i18n::ForbiddenCharacters* pRet = nullptr;
-    if( mxForbiddenCharsTable.is() )
+    if (mxForbiddenCharsTable)
         pRet = mxForbiddenCharsTable->GetForbiddenCharacters( nLang, false );
     if( bLocaleData && !pRet && g_pBreakIt )
         pRet = &g_pBreakIt->GetForbidden( nLang );
@@ -431,16 +431,14 @@ const css::i18n::ForbiddenCharacters*
 void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ LanguageType nLang,
                                    /*[in]*/ const css::i18n::ForbiddenCharacters& rFChars )
 {
-    if( !mxForbiddenCharsTable.is() )
-    {
-        mxForbiddenCharsTable = new SvxForbiddenCharactersTable( ::comphelper::getProcessComponentContext() );
-    }
+    if (!mxForbiddenCharsTable)
+        mxForbiddenCharsTable.reset(new SvxForbiddenCharactersTable(::comphelper::getProcessComponentContext()));
     mxForbiddenCharsTable->SetForbiddenCharacters( nLang, rFChars );
 
     SdrModel *pDrawModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
     if( pDrawModel )
     {
-        pDrawModel->SetForbiddenCharsTable( mxForbiddenCharsTable );
+        pDrawModel->SetForbiddenCharsTable(mxForbiddenCharsTable);
         if( !m_rDoc.IsInReading() )
             pDrawModel->ReformatAllTextObjects();
     }
@@ -456,16 +454,14 @@ void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ LanguageType nL
     m_rDoc.getIDocumentState().SetModified();
 }
 
-rtl::Reference<SvxForbiddenCharactersTable>& sw::DocumentSettingManager::getForbiddenCharacterTable()
+std::shared_ptr<SvxForbiddenCharactersTable>& sw::DocumentSettingManager::getForbiddenCharacterTable()
 {
-    if( !mxForbiddenCharsTable.is() )
-    {
-        mxForbiddenCharsTable = new SvxForbiddenCharactersTable( ::comphelper::getProcessComponentContext() );
-    }
+    if (!mxForbiddenCharsTable)
+        mxForbiddenCharsTable.reset(new SvxForbiddenCharactersTable(::comphelper::getProcessComponentContext()));
     return mxForbiddenCharsTable;
 }
 
-const rtl::Reference<SvxForbiddenCharactersTable>& sw::DocumentSettingManager::getForbiddenCharacterTable() const
+const std::shared_ptr<SvxForbiddenCharactersTable>& sw::DocumentSettingManager::getForbiddenCharacterTable() const
 {
     return mxForbiddenCharsTable;
 }

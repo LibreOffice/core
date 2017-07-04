@@ -22,10 +22,9 @@
 
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
-#include <rtl/ref.hxx>
-
 #include <cppuhelper/implbase.hxx>
 #include <editeng/editengdllapi.h>
+#include <memory>
 
 class SvxForbiddenCharactersTable;
 
@@ -37,10 +36,10 @@ protected:
     /** this virtual function is called if the forbidden characters are changed */
     virtual void onChange();
 
-    rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenChars;
+    std::shared_ptr<SvxForbiddenCharactersTable> mxForbiddenChars;
 
 public:
-    SvxUnoForbiddenCharsTable(rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars);
+    SvxUnoForbiddenCharsTable(std::shared_ptr<SvxForbiddenCharactersTable> const & xForbiddenChars);
     virtual ~SvxUnoForbiddenCharsTable() override;
 
     // XForbiddenCharacters

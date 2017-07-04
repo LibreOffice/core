@@ -348,7 +348,7 @@ private:
     ScChangeViewSettings* pChangeViewSettings;
     ScScriptTypeData*   pScriptTypeData;
     ScRefreshTimerControl* pRefreshTimerControl;
-    rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharacters;
+    std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenCharacters;
     ScDBData*           mpAnonymousDBData;
 
     ScFieldEditEngine*  pCacheFieldEditEngine;
@@ -1972,8 +1972,8 @@ public:
     ScChangeViewSettings* GetChangeViewSettings() const     { return pChangeViewSettings; }
     SC_DLLPUBLIC void     SetChangeViewSettings(const ScChangeViewSettings& rNew);
 
-    const rtl::Reference<SvxForbiddenCharactersTable>& GetForbiddenCharacters();
-    void            SetForbiddenCharacters(const rtl::Reference<SvxForbiddenCharactersTable>& rNew);
+    const std::shared_ptr<SvxForbiddenCharactersTable>& GetForbiddenCharacters();
+    void            SetForbiddenCharacters(const std::shared_ptr<SvxForbiddenCharactersTable>& rNew);
 
     CharCompressType GetAsianCompression() const;
     bool             IsValidAsianCompression() const;

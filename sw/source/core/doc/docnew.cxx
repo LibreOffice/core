@@ -712,7 +712,7 @@ void SwDoc::ClearDoc()
     else
         mpFrameFormatTable->DeleteAndDestroyAll( true );
 
-    mxForbiddenCharsTable.clear();
+    mxForbiddenCharsTable.reset();
 
     GetDocumentFieldsManager().ClearFieldTypes();
 

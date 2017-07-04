@@ -194,7 +194,7 @@ protected:
 
 
 public:
-    rtl::Reference<SvxForbiddenCharactersTable> mpForbiddenCharactersTable;
+    std::shared_ptr<SvxForbiddenCharactersTable> mpForbiddenCharactersTable;
     SdrSwapGraphicsMode nSwapGraphicsMode;
 
     SdrOutlinerCache*   mpOutlinerCache;
@@ -522,8 +522,8 @@ public:
     bool isLocked() const { return mbModelLocked; }
     void setLock( bool bLock );
 
-    void            SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars );
-    const rtl::Reference<SvxForbiddenCharactersTable>& GetForbiddenCharsTable() const { return mpForbiddenCharactersTable;}
+    void            SetForbiddenCharsTable( const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars );
+    const std::shared_ptr<SvxForbiddenCharactersTable>& GetForbiddenCharsTable() const { return mpForbiddenCharactersTable;}
 
     void SetCharCompressType( CharCompressType nType );
     CharCompressType GetCharCompressType() const { return mnCharCompressType; }

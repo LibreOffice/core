@@ -290,7 +290,7 @@ SdrModel::~SdrModel()
         SfxItemPool::Free(pOutlPool);
     }
 
-    mpForbiddenCharactersTable.clear();
+    mpForbiddenCharactersTable.reset();
 
     delete mpImpl->mpUndoFactory;
 }
@@ -1842,7 +1842,7 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
 }
 
 
-void SdrModel::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars )
+void SdrModel::SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars)
 {
     mpForbiddenCharactersTable = xForbiddenChars;
 

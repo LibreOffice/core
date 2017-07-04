@@ -26,7 +26,7 @@ namespace sw {
 class DocumentSettingManager :
     public IDocumentSettingAccess
 {
-    rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenCharsTable;
+    std::shared_ptr<SvxForbiddenCharactersTable> mxForbiddenCharsTable;
     SwDoc &m_rDoc;
 
     sal_uInt16  mnLinkUpdMode;       //< UpdateMode for links.
@@ -165,8 +165,8 @@ public:
     virtual void set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value) override;
     virtual const css::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ LanguageType nLang, /*[in]*/ bool bLocaleData ) const override;
     virtual void setForbiddenCharacters(/*[in]*/ LanguageType nLang, /*[in]*/ const css::i18n::ForbiddenCharacters& rForbiddenCharacters ) override;
-    virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() override;
-    virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const override;
+    virtual std::shared_ptr<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() override;
+    virtual const std::shared_ptr<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const override;
     virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const override;
     virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode ) override;
     virtual SwFieldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const override;

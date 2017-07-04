@@ -24,19 +24,18 @@
 
 using namespace ::com::sun::star;
 
-static rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
+static std::shared_ptr<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
 {
-    rtl::Reference<SvxForbiddenCharactersTable> xRet;
+    std::shared_ptr<SvxForbiddenCharactersTable> xRet;
     if ( pDocSh )
     {
         ScDocument& rDoc = pDocSh->GetDocument();
         xRet = rDoc.GetForbiddenCharacters();
-        if ( !xRet.is() )
+        if (!xRet)
         {
             //  create an empty SvxForbiddenCharactersTable for SvxUnoForbiddenCharsTable,
             //  so changes can be stored.
-
-            xRet = new SvxForbiddenCharactersTable( comphelper::getProcessComponentContext() );
+            xRet.reset(new SvxForbiddenCharactersTable(comphelper::getProcessComponentContext()));
             rDoc.SetForbiddenCharacters( xRet );
         }
     }

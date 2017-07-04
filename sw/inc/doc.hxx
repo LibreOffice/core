@@ -325,7 +325,7 @@ class SW_DLLPUBLIC SwDoc :
     IGrammarContact *mpGrammarContact;             //< for grammar checking in paragraphs during editing
 
     // table of forbidden characters of this document
-    rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenCharsTable;
+    std::shared_ptr<SvxForbiddenCharactersTable> mxForbiddenCharsTable;
     css::uno::Reference< css::script::vba::XVBAEventProcessor > mxVbaEvents;
     css::uno::Reference<css::container::XNameContainer> m_xTemplateToProjectCache;
 
