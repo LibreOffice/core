@@ -16,6 +16,24 @@
       "revId": "7c6ccc424eec53cac72a9fc81913f6ad780d91aa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_92db4a1b",
+        "filename": "sal/osl/unx/file.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-07-04T13:44:47Z",
+      "side": 1,
+      "message": "Will review and fix. Thanks Stephan, appreciate your feedback :-)",
+      "parentUuid": "3a461143_27cfc1b1",
+      "revId": "7c6ccc424eec53cac72a9fc81913f6ad780d91aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
