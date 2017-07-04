@@ -512,7 +512,6 @@ private:
     bool            bUseAutoColor:1;
     bool            bForceAutoColor:1;
     bool            bCallParaInsertedOrDeleted:1;
-    bool            bImpConvertFirstCall:1;   // specifies if ImpConvert is called the very first time after Convert was called
     bool            bFirstWordCapitalization:1;   // specifies if auto-correction should capitalize the first word or not
     bool            mbLastTryMerge:1;
     bool            mbReplaceLeadingSingleQuotationMark:1;

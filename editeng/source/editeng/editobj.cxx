@@ -756,7 +756,6 @@ void EditTextObjectImpl::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttr
         const XEditAttribute& rAttr = *aAttrib.get();
         EECharAttrib aEEAttr;
         aEEAttr.pAttr = rAttr.GetItem();
-        aEEAttr.nPara = nPara;
         aEEAttr.nStart = rAttr.GetStart();
         aEEAttr.nEnd = rAttr.GetEnd();
         rLst.push_back(aEEAttr);

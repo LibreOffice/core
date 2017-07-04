@@ -98,9 +98,6 @@ namespace pcr
     typedef CommonBehaviourControl< css::inspection::XPropertyControl, FormattedField > OFormattedNumericControl_Base;
     class OFormattedNumericControl : public OFormattedNumericControl_Base
     {
-    private:
-        sal_Int32   m_nLastDecimalDigits;
-
     public:
         OFormattedNumericControl( vcl::Window* pParent, WinBits nWinStyle);
 
@@ -112,7 +109,7 @@ namespace pcr
         void SetFormatDescription( const FormatDescription& rDesc );
 
         // make some FormattedField methods available
-        void SetDecimalDigits(sal_uInt16 nPrecision) { getTypedControlWindow()->SetDecimalDigits(nPrecision); m_nLastDecimalDigits = nPrecision; }
+        void SetDecimalDigits(sal_uInt16 nPrecision) { getTypedControlWindow()->SetDecimalDigits(nPrecision); }
         void SetDefaultValue(double dDef) { getTypedControlWindow()->SetDefaultValue(dDef); }
         void EnableEmptyField(bool bEnable) { getTypedControlWindow()->EnableEmptyField(bEnable); }
         void SetThousandsSep(bool bEnable) { getTypedControlWindow()->SetThousandsSep(bEnable); }

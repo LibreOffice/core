@@ -78,7 +78,6 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     bool bAutoCorrect : 1;
     bool bCapitalStartSentence : 1;
     bool bCapitalStartWord : 1;
-    bool bChkFontAttr : 1;
 
     bool bChgUserColl : 1;
     bool bChgEnumNum : 1;
@@ -96,7 +95,6 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     bool bSetBorder : 1;
     bool bCreateTable : 1;
     bool bReplaceStyles : 1;
-    bool bDummy : 1;
 
     bool bWithRedlining : 1;
 
@@ -115,12 +113,6 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     bool bAFormatByInpDelSpacesBetweenLines : 1;
 
     bool bAutoCmpltKeepList : 1;
-
-    // some dummies for any new options
-    bool bDummy6 : 1,
-         bDummy7 : 1,
-         bDummy8 : 1
-         ;
 
     SvxSwAutoFormatFlags();
     SvxSwAutoFormatFlags( const SvxSwAutoFormatFlags& rAFFlags ) { *this = rAFFlags; }

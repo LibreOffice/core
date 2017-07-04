@@ -44,7 +44,6 @@ HtmlImportInfo::HtmlImportInfo( HtmlImportState eSt, SvParser<HtmlTokenId>* pPrs
     pParser     = pPrsrs;
     eState      = eSt;
     nToken      = HtmlTokenId::NONE;
-    nTokenValue = 0;
 }
 
 HtmlImportInfo::~HtmlImportInfo()

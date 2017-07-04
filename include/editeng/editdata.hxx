@@ -223,7 +223,6 @@ struct HtmlImportInfo
     HtmlImportState         eState;
 
     HtmlTokenId             nToken;
-    short                   nTokenValue;
 
     OUString                aText;
 
@@ -249,21 +248,12 @@ struct RtfImportInfo
 struct ParagraphInfos
 {
     ParagraphInfos()
-        : nParaHeight( 0 )
-        , nLines( 0 )
-        , nFirstLineStartX( 0 )
-        , nFirstLineOffset( 0 )
-        , nFirstLineHeight( 0 )
+        : nFirstLineHeight( 0 )
         , nFirstLineTextHeight ( 0 )
         , nFirstLineMaxAscent( 0 )
         , bValid( false )
         {}
-    sal_uInt16  nParaHeight;
-    sal_uInt16  nLines;
 
-    sal_uInt16  nFirstLineStartX;
-
-    sal_uInt16  nFirstLineOffset;
     sal_uInt16  nFirstLineHeight;
     sal_uInt16  nFirstLineTextHeight;
     sal_uInt16  nFirstLineMaxAscent;
@@ -275,7 +265,6 @@ struct EECharAttrib
 {
     const SfxPoolItem*  pAttr;
 
-    sal_Int32           nPara;
     sal_Int32           nStart;
     sal_Int32           nEnd;
 };
@@ -344,8 +333,6 @@ enum EENotifyType
 struct EENotify
 {
     EENotifyType    eNotificationType;
-    EditEngine*     pEditEngine;
-    EditView*       pEditView;
 
     sal_Int32       nParagraph; // only valid in PARAGRAPHINSERTED/EE_NOTIFY_PARAGRAPHREMOVED
 
@@ -353,7 +340,7 @@ struct EENotify
     sal_Int32       nParam2;
 
     EENotify( EENotifyType eType )
-        { eNotificationType = eType; pEditEngine = nullptr; pEditView = nullptr; nParagraph = EE_PARA_NOT_FOUND; nParam1 = 0; nParam2 = 0; }
+        { eNotificationType = eType; nParagraph = EE_PARA_NOT_FOUND; nParam1 = 0; nParam2 = 0; }
 };
 
 #endif // INCLUDED_EDITENG_EDITDATA_HXX

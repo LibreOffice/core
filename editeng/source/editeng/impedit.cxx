@@ -149,10 +149,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
         {
             eNotifyType = EE_NOTIFY_TEXTVIEWSELECTIONCHANGED;
         }
-        //EENotify aNotify( EE_NOTIFY_TEXTVIEWSELECTIONCHANGED );
         EENotify aNotify( eNotifyType );
-        aNotify.pEditEngine = pEditEngine;
-        aNotify.pEditView = GetEditViewPtr();
         pEditEngine->pImpEditEngine->CallNotify( aNotify );
     }
 }
@@ -1204,8 +1201,6 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
         {
             EENotify aNotify( EE_NOTIFY_TEXTVIEWSCROLLED );
-            aNotify.pEditEngine = pEditEngine;
-            aNotify.pEditView = GetEditViewPtr();
             pEditEngine->pImpEditEngine->CallNotify( aNotify );
         }
     }

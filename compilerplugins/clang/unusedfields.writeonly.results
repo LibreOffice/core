@@ -282,8 +282,6 @@ desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:120
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/unx/source/splashx.c:369
      input_mode long
-editeng/source/editeng/impedit.hxx:515
-    ImpEditEngine bImpConvertFirstCall _Bool
 embeddedobj/source/inc/oleembobj.hxx:127
     OleEmbeddedObject m_nTargetState sal_Int32
 embeddedobj/source/inc/oleembobj.hxx:139
@@ -302,12 +300,8 @@ embeddedobj/source/inc/oleembobj.hxx:170
     OleEmbeddedObject m_nStatusAspect sal_Int64
 embeddedobj/source/inc/oleembobj.hxx:184
     OleEmbeddedObject m_bFromClipboard _Bool
-extensions/source/abpilot/datasourcehandling.cxx:303
-    abp::ODataSourceImpl bTablesUpToDate _Bool
 extensions/source/propctrlr/propertyhandler.hxx:80
     pcr::PropertyHandler m_aEnsureResAccess class pcr::PcrClient
-extensions/source/propctrlr/usercontrol.hxx:102
-    pcr::OFormattedNumericControl m_nLastDecimalDigits sal_Int32
 extensions/source/scanner/scanner.hxx:46
     ScannerManager maProtector osl::Mutex
 extensions/source/scanner/scanner.hxx:47
@@ -928,32 +922,6 @@ include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/editeng/adjustitem.hxx:39
     SvxAdjustItem bLeft _Bool
-include/editeng/editdata.hxx:226
-    HtmlImportInfo nTokenValue short
-include/editeng/editdata.hxx:261
-    ParagraphInfos nParaHeight sal_uInt16
-include/editeng/editdata.hxx:262
-    ParagraphInfos nLines sal_uInt16
-include/editeng/editdata.hxx:264
-    ParagraphInfos nFirstLineStartX sal_uInt16
-include/editeng/editdata.hxx:266
-    ParagraphInfos nFirstLineOffset sal_uInt16
-include/editeng/editdata.hxx:278
-    EECharAttrib nPara sal_Int32
-include/editeng/editdata.hxx:347
-    EENotify pEditEngine class EditEngine *
-include/editeng/editdata.hxx:348
-    EENotify pEditView class EditView *
-include/editeng/swafopt.hxx:81
-    SvxSwAutoFormatFlags bChkFontAttr _Bool
-include/editeng/swafopt.hxx:99
-    SvxSwAutoFormatFlags bDummy _Bool
-include/editeng/swafopt.hxx:120
-    SvxSwAutoFormatFlags bDummy6 _Bool
-include/editeng/swafopt.hxx:121
-    SvxSwAutoFormatFlags bDummy7 _Bool
-include/editeng/swafopt.hxx:122
-    SvxSwAutoFormatFlags bDummy8 _Bool
 include/editeng/unotext.hxx:606
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/filter/msfilter/dffpropset.hxx:35
