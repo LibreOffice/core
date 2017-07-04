@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_32f8d6e5",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-04T09:29:32Z",
+      "side": 1,
+      "message": "Nitpick: sounds like you did not read \u0027git diff\u0027 before committing. :-)",
+      "revId": "5883a7e5b744fed92da343eac7ad73bacf776c09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
