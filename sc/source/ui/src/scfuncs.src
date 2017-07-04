@@ -764,7 +764,7 @@ StringArray SC_OPCODE_NPV+RID_SC_FUNC_DESCRIPTIONS_START
         < "RATE" ; >;
         < "The rate of discount for one period." ; >;
         < "value " ; >;
-        < "Value 1, value 2,... are 1 to 30 arguments representing payments and income." ; >;
+        < "Value 1, value 2,... are arguments representing payments and income." ; >;
     };
 };
  // -=*# Resource for function IRR #*=-
@@ -1066,7 +1066,7 @@ StringArray SC_OPCODE_OR+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns TRUE if an argument is TRUE." ; >;
         < "Logical value " ; >;
-        < "Logical value 1, logical value 2,... are 1 to 30 conditions to be tested and which return either TRUE or FALSE." ; >;
+        < "Logical value 1, logical value 2,... are conditions to be tested and which return either TRUE or FALSE." ; >;
     };
 };
  // -=*# Resource for function XOR #*=-
@@ -1076,7 +1076,7 @@ StringArray SC_OPCODE_XOR+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns TRUE if an odd number of arguments evaluates to TRUE." ; >;
         < "Logical value " ; >;
-        < "Logical value 1, logical value 2, ... are 1 to 30 conditions to be tested and which return either TRUE or FALSE." ; >;
+        < "Logical value 1, logical value 2, ... are conditions to be tested and which return either TRUE or FALSE." ; >;
     };
 };
  // -=*# Resource for function AND #*=-
@@ -1086,7 +1086,7 @@ StringArray SC_OPCODE_AND+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns TRUE if all arguments are TRUE." ; >;
         < "Logical value " ; >;
-        < "Logical value 1, logical value 2;...are 1 to 30 conditions to be tested and each returns either TRUE or FALSE." ; >;
+        < "Logical value 1, logical value 2;...are conditions to be tested and each returns either TRUE or FALSE." ; >;
     };
 };
  // -=*# Resource for function ABS #*=-
@@ -1136,7 +1136,7 @@ StringArray SC_OPCODE_SUM+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the sum of all arguments." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 arguments whose total is to be calculated." ; >;
+        < "Number 1, number 2, ... are arguments whose total is to be calculated." ; >;
     };
 };
  // -=*# Resource for function SUMSQ #*=-
@@ -1146,7 +1146,7 @@ StringArray SC_OPCODE_SUM_SQ+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the sum of the squares of the arguments." ; >;
         < "number " ; >;
-        < "Number 1, number 2,... are 1 to 30 arguments for which the sum of the squares is to be calculated." ; >;
+        < "Number 1, number 2,... are arguments for which the sum of the squares is to be calculated." ; >;
     };
 };
  // -=*# Resource for function PRODUCT #*=-
@@ -1156,7 +1156,7 @@ StringArray SC_OPCODE_PRODUCT+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Multiplies the arguments." ; >;
         < "Number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 arguments to be multiplied and a result returned." ; >;
+        < "Number 1, number 2, ... are arguments to be multiplied and a result returned." ; >;
     };
 };
  // -=*# Resource for function SUMIF #*=-
@@ -1915,7 +1915,7 @@ StringArray SC_OPCODE_SUM_PRODUCT+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "(Inner products) Returns the sum of the products of array arguments." ; >;
         < "Array " ; >;
-        < "Array 1, array 2, ... are up to 30 arrays whose arguments are to be multiplied." ; >;
+        < "Array 1, array 2, ... are arrays whose arguments are to be multiplied." ; >;
     };
 };
  // -=*# Resource for function SUMX2MY2 #*=-
@@ -2038,7 +2038,7 @@ StringArray SC_OPCODE_COUNT+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Counts how many numbers are in the list of arguments." ; >;
         < "value " ; >;
-        < "Value 1, value 2, ... are 1 to 30 arguments containing different data types but where only numbers are counted." ; >;
+        < "Value 1, value 2, ... are arguments containing different data types but where only numbers are counted." ; >;
     };
 };
  // -=*# Resource for function COUNTA #*=-
@@ -2048,7 +2048,7 @@ StringArray SC_OPCODE_COUNT_2+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Counts how many values are in the list of arguments." ; >;
         < "value " ; >;
-        < "Value 1, value 2, ... are 1 to 30 arguments representing the values to be counted." ; >;
+        < "Value 1, value 2, ... are arguments representing the values to be counted." ; >;
     };
 };
  // -=*# Resource for function MAX #*=-
@@ -2058,7 +2058,7 @@ StringArray SC_OPCODE_MAX+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the maximum value in a list of arguments." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments for which the largest number is to be determined." ; >;
+        < "Number 1, number 2, ... are numerical arguments for which the largest number is to be determined." ; >;
     };
 };
  // -=*# Resource for function MAXA #*=-
@@ -2068,7 +2068,7 @@ StringArray SC_OPCODE_MAX_A+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the maximum value in a list of arguments. Text is evaluated as Zero."; >;
         < "value "; >;
-        < "Value 1, value 2,    are 1 to 30 arguments whose largest value is to be determined."; >;
+        < "Value 1, value 2,    are arguments whose largest value is to be determined."; >;
     };
 };
  // -=*# Resource for function MIN #*=-
@@ -2078,7 +2078,7 @@ StringArray SC_OPCODE_MIN+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the minimum value in a list of arguments." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments for which the smallest number is to be determined." ; >;
+        < "Number 1, number 2, ... are numerical arguments for which the smallest number is to be determined." ; >;
     };
 };
  // -=*# Resource for function MINA #*=-
@@ -2088,7 +2088,7 @@ StringArray SC_OPCODE_MIN_A+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the smallest value in a list of arguments. Text is evaluated as zero."; >;
         < "value "; >;
-        < "Value 1; value 2;... are 1 to 30 arguments whose smallest number is to be determined."; >;
+        < "Value 1; value 2;... are arguments whose smallest number is to be determined."; >;
     };
 };
  // -=*# Resource for function VAR #*=-
@@ -2098,7 +2098,7 @@ StringArray SC_OPCODE_VAR+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Calculates the variance based on a sample." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a sample of a population." ; >;
     };
 };
  // -=*# Resource for function VAR.S #*=-
@@ -2108,7 +2108,7 @@ StringArray SC_OPCODE_VAR_S+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Calculates the variance based on a sample." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a sample of a population." ; >;
     };
 };
  // -=*# Resource for function VARA #*=-
@@ -2118,7 +2118,7 @@ StringArray SC_OPCODE_VAR_A+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the variance based on a sample. Text is evaluated as zero."; >;
         < "value "; >;
-        < "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population."; >;
+        < "Value 1; value 2; ... are arguments representing a sample taken from a basic total population."; >;
     };
 };
  // -=*# Resource for function VARP #*=-
@@ -2128,7 +2128,7 @@ StringArray SC_OPCODE_VAR_P+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Calculates variance based on the entire population." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which represent a population." ; >;
+        < "Number 1, number 2, ... are numerical arguments which represent a population." ; >;
     };
 };
  // -=*# Resource for function VAR.P #*=-
@@ -2138,7 +2138,7 @@ StringArray SC_OPCODE_VAR_P_MS+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Calculates variance based on the entire population." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which represent a population." ; >;
+        < "Number 1, number 2, ... are numerical arguments which represent a population." ; >;
     };
 };
  // -=*# Resource for function VARPA #*=-
@@ -2148,7 +2148,7 @@ StringArray SC_OPCODE_VAR_P_A+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the variance based on the entire population. Text is evaluated as zero."; >;
         < "value "; >;
-        < "Value 1; value 2;... are 1 to 30 arguments representing a population."; >;
+        < "Value 1; value 2;... are arguments representing a population."; >;
     };
 };
  // -=*# Resource for function STDEV #*=-
@@ -2158,7 +2158,7 @@ StringArray SC_OPCODE_ST_DEV+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Calculates the standard deviation based on a sample." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a sample of a population." ; >;
     };
 };
  // -=*# Resource for function STDEV.S #*=-
@@ -2168,7 +2168,7 @@ StringArray SC_OPCODE_ST_DEV_S+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Calculates the standard deviation based on a sample." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a sample of a population." ; >;
     };
 };
  // -=*# Resource for function STDEVA #*=-
@@ -2178,7 +2178,7 @@ StringArray SC_OPCODE_ST_DEV_A+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the standard deviation based on a sample. Text is evaluated as zero."; >;
         < "value "; >;
-        < "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population."; >;
+        < "Value 1; value 2; ... are arguments representing a sample taken from a basic total population."; >;
     };
 };
  // -=*# Resource for function STDEVP #*=-
@@ -2188,7 +2188,7 @@ StringArray SC_OPCODE_ST_DEV_P+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Calculates the standard deviation based on the entire population." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a population." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a population." ; >;
     };
 };
  // -=*# Resource for function STDEV.P #*=-
@@ -2198,7 +2198,7 @@ StringArray SC_OPCODE_ST_DEV_P_MS+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Calculates the standard deviation based on the entire population." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a population." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a population." ; >;
     };
 };
  // -=*# Resource for function STDEVPA #*=-
@@ -2208,7 +2208,7 @@ StringArray SC_OPCODE_ST_DEV_P_A+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the standard deviation based on the entire population. Text is evaluated as zero."; >;
         < "value "; >;
-        < "Value 1; value 2;... are 1 to 30 arguments corresponding to a population."; >;
+        < "Value 1; value 2;... are arguments corresponding to a population."; >;
     };
 };
  // -=*# Resource for function AVERAGE #*=-
@@ -2218,7 +2218,7 @@ StringArray SC_OPCODE_AVERAGE+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the average of a sample." ; >;
         < "number " ; >;
-        < "Number 1, number 2;...are 1 to 30 numeric arguments representing a population sample." ; >;
+        < "Number 1, number 2;...are numeric arguments representing a population sample." ; >;
     };
 };
  // -=*# Resource for function AVERAGEA #*=-
@@ -2228,7 +2228,7 @@ StringArray SC_OPCODE_AVERAGE_A+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the average value for a sample. Text is evaluated as zero."; >;
         < "value "; >;
-        < "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population."; >;
+        < "Value 1; value 2; ... are arguments representing a sample taken from a basic total population."; >;
     };
 };
  // -=*# Resource for function DEVSQ #*=-
@@ -2238,7 +2238,7 @@ StringArray SC_OPCODE_DEV_SQ+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the sum of squares of deviations from the sample mean value" ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a sample." ; >;
     };
 };
  // -=*# Resource for function AVEDEV #*=-
@@ -2248,7 +2248,7 @@ StringArray SC_OPCODE_AVE_DEV+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the average of the absolute deviations of a sample from the mean." ; >;
         < "number " ; >;
-        < "Number 1, number 2;...are 1 to 30 numerical arguments representing a sample." ; >;
+        < "Number 1, number 2;...are numerical arguments representing a sample." ; >;
     };
 };
  // -=*# Resource for function SKEW #*=-
@@ -2258,7 +2258,7 @@ StringArray SC_OPCODE_SKEW+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the skewness of a distribution." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments portraying a sample of the distribution." ; >;
+        < "Number 1, number 2, ... are numerical arguments portraying a sample of the distribution." ; >;
     };
 };
  // -=*# Resource for function SKEWP #*=-
@@ -2268,7 +2268,7 @@ StringArray SC_OPCODE_SKEWP+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the skewness of a distribution using the population of a random variable." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments portraying the population." ; >;
+        < "Number 1, number 2, ... are numerical arguments portraying the population." ; >;
     };
 };
  // -=*# Resource for function KURT #*=-
@@ -2278,7 +2278,7 @@ StringArray SC_OPCODE_KURT+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the kurtosis of a distribution." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments, representing a sample of the distribution." ; >;
+        < "Number 1, number 2, ... are numerical arguments, representing a sample of the distribution." ; >;
     };
 };
  // -=*# Resource for function GEOMEAN #*=-
@@ -2288,7 +2288,7 @@ StringArray SC_OPCODE_GEO_MEAN+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the geometric mean of a sample." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a sample." ; >;
     };
 };
  // -=*# Resource for function HARMEAN #*=-
@@ -2298,7 +2298,7 @@ StringArray SC_OPCODE_HAR_MEAN+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the harmonic mean of a sample." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a sample." ; >;
     };
 };
  // -=*# Resource for function MODE #*=-
@@ -2308,7 +2308,7 @@ StringArray SC_OPCODE_MODAL_VALUE+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the most common value in a sample." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a sample." ; >;
     };
 };
  // -=*# Resource for function MODE.SNGL #*=-
@@ -2318,7 +2318,7 @@ StringArray SC_OPCODE_MODAL_VALUE_MS+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the most common value in a sample." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a sample." ; >;
     };
 };
  // -=*# Resource for function MODE.MULT #*=-
@@ -2338,7 +2338,7 @@ StringArray SC_OPCODE_MEDIAN+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the median of a given sample." ; >;
         < "number " ; >;
-        < "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample." ; >;
+        < "Number 1, number 2, ... are numerical arguments which portray a sample." ; >;
     };
 };
  // -=*# Resource for function PERCENTILE #*=-
