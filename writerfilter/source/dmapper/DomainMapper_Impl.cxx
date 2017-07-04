@@ -1732,10 +1732,20 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         // Redlines for the footnote anchor
         CheckRedline( xFootnote->getAnchor( ) );
 
-        // Word has a leading tab on footnotes, but we don't implement space
-        // between the footnote number and text using a tab, so just ignore
-        // that for now.
-        m_bIgnoreNextTab = true;
+        // Word has a leading tab on footnotes, but we may implement space
+        // between the footnote number and text using a paragraph margin, not a
+        // tab (Writer default). So ignore that in case there is a margin set.
+        uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier( GetTextDocument(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies = xStylesSupplier->getStyleFamilies();
+        uno::Reference<container::XNameContainer> xStyles;
+        xStyleFamilies->getByName("ParagraphStyles") >>= xStyles;
+        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("Footnote"), uno::UNO_QUERY);
+        if (xStyle.is())
+        {
+            sal_Int32 nMargin = 0;
+            xStyle->getPropertyValue("ParaLeftMargin") >>= nMargin;
+            m_bIgnoreNextTab = nMargin > 0;
+        }
     }
     catch( const uno::Exception& e )
     {
