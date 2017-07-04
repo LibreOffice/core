@@ -55,13 +55,13 @@ class GlobalEditData
 private:
     css::uno::Reference< css::linguistic2::XLanguageGuessing >  xLanguageGuesser;
     std::weak_ptr<DefItems> m_xDefItems;
-    rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
+    std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
 public:
     std::shared_ptr<DefItems> GetDefItems();
 
-    rtl::Reference<SvxForbiddenCharactersTable> const & GetForbiddenCharsTable();
-    void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
+    std::shared_ptr<SvxForbiddenCharactersTable> const & GetForbiddenCharsTable();
+    void            SetForbiddenCharsTable(std::shared_ptr<SvxForbiddenCharactersTable> const & xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
     css::uno::Reference< css::linguistic2::XLanguageGuessing > const & GetLanguageGuesser();
 };
 

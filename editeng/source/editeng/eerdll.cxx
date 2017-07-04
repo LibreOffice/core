@@ -176,12 +176,10 @@ std::shared_ptr<DefItems> GlobalEditData::GetDefItems()
     return xDefItems;
 }
 
-rtl::Reference<SvxForbiddenCharactersTable> const & GlobalEditData::GetForbiddenCharsTable()
+std::shared_ptr<SvxForbiddenCharactersTable> const & GlobalEditData::GetForbiddenCharsTable()
 {
-    if ( !xForbiddenCharsTable.is() )
-    {
-        xForbiddenCharsTable = new SvxForbiddenCharactersTable( ::comphelper::getProcessComponentContext() );
-    }
+    if (!xForbiddenCharsTable)
+        xForbiddenCharsTable.reset(new SvxForbiddenCharactersTable(::comphelper::getProcessComponentContext()));
     return xForbiddenCharsTable;
 }
 

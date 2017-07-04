@@ -398,9 +398,9 @@ Reference< XSpellChecker1 > Outliner::GetSpeller()
     return pEditEngine->GetSpeller();
 }
 
-void Outliner::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars )
+void Outliner::SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars)
 {
-    EditEngine::SetForbiddenCharsTable( xForbiddenChars );
+    EditEngine::SetForbiddenCharsTable(xForbiddenChars);
 }
 
 void Outliner::SetHyphenator( Reference< XHyphenator >& xHyph )

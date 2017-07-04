@@ -625,12 +625,12 @@ void ScDocument::SetImportingXML( bool bVal )
     SetLoadingMedium(bVal);
 }
 
-const rtl::Reference<SvxForbiddenCharactersTable>& ScDocument::GetForbiddenCharacters()
+const std::shared_ptr<SvxForbiddenCharactersTable>& ScDocument::GetForbiddenCharacters()
 {
     return xForbiddenCharacters;
 }
 
-void ScDocument::SetForbiddenCharacters(const rtl::Reference<SvxForbiddenCharactersTable>& rNew)
+void ScDocument::SetForbiddenCharacters(const std::shared_ptr<SvxForbiddenCharactersTable>& rNew)
 {
     xForbiddenCharacters = rNew;
     if ( pEditEngine )
