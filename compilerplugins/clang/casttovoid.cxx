@@ -390,8 +390,21 @@ private:
     }
 
     bool containsPreprocessingConditionalInclusion(SourceRange range) {
+        auto const begin = compiler.getSourceManager().getExpansionLoc(
+            range.getBegin());
+        auto const end = compiler.getSourceManager().getExpansionLoc(
+            range.getEnd());
+        assert(begin.isFileID() && end.isFileID());
+        if (!(begin == end
+              || compiler.getSourceManager().isBeforeInTranslationUnit(
+                  begin, end)))
+        {
+            // Conservatively assume "yes" if lexing fails (e.g., due to
+            // macros):
+            return true;
+        }
         auto hash = false;
-        for (auto loc = range.getBegin();;) {
+        for (auto loc = begin;;) {
             Token tok;
             if (Lexer::getRawToken(
                     loc, tok, compiler.getSourceManager(),
@@ -487,7 +500,7 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("casttovoid", false);
+static loplugin::Plugin::Registration<Visitor> reg("casttovoid");
 
 }
 
