@@ -184,13 +184,15 @@ namespace
         ::comphelper::UStringMixEqual m_aEqualFunctor;
 
         OViewSetter(const Sequence< OUString>& _rViews,bool _bCase) : m_aViews(_rViews),m_aEqualFunctor(_bCase){}
-        OTableTreeListBox::TNames::value_type operator() (const OUString& lhs)
+        OTableTreeListBox::TNames::value_type operator() (const OUString& name)
         {
             OTableTreeListBox::TNames::value_type aRet;
-            aRet.first = lhs;
+            aRet.first = name;
             const OUString* pIter = m_aViews.getConstArray();
             const OUString* pEnd = m_aViews.getConstArray() + m_aViews.getLength();
-            aRet.second = std::any_of(pIter,pEnd,std::bind2nd(m_aEqualFunctor,lhs));
+            aRet.second = std::any_of(pIter, pEnd,
+                                      [this, &name](const OUString& lhs)
+                                      { return m_aEqualFunctor(lhs, name); } );
 
             return aRet;
         }
