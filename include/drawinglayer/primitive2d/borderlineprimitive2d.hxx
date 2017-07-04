@@ -28,7 +28,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
-
+namespace editeng { typedef sal_Int16 SvxBorderStyle; }
 
 namespace drawinglayer
 {
@@ -66,32 +66,29 @@ namespace drawinglayer
             basegfx::BColor                                 maRGBColorGap;
             bool                                            mbHasGapColor;
 
-            short                                           mnStyle;
-
+            editeng::SvxBorderStyle                         mnStyle;
             double                                          mfPatternScale;
 
+            // for view dependent decomposition in the case with distance (gap),
+            // remember the last used concrete mfDistance, see get2DDecomposition
+            // implementation
+            double                                          mfDiscreteDistance;
+
             /// local helpers
-            double getWidth(
-                    const geometry::ViewInformation2D& rViewInformation) const;
-
-            bool isSolidLine() const
-            {
-                return mnStyle == css::table::BorderLineStyle::SOLID;
-            }
-
             bool isInsideUsed() const
             {
                 return !basegfx::fTools::equalZero(mfLeftWidth);
+            }
+
+            bool isDistanceUsed() const
+            {
+                return !basegfx::fTools::equalZero(mfDistance);
             }
 
             bool isOutsideUsed() const
             {
                 return !basegfx::fTools::equalZero(mfRightWidth);
             }
-
-        protected:
-            virtual basegfx::B2DPolyPolygon getClipPolygon(
-                    const geometry::ViewInformation2D& rViewInformation) const;
 
             /// create local decomposition
             virtual Primitive2DContainer create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
@@ -131,11 +128,15 @@ namespace drawinglayer
             bool hasGapColor( ) const { return mbHasGapColor; }
             short getStyle () const { return mnStyle; }
             double getPatternScale() const { return mfPatternScale; }
-            /// Same as create2DDecomposition(), but can do pixel correction if requested.
-            Primitive2DContainer createDecomposition(const geometry::ViewInformation2D& rViewInformation, bool bPixelCorrection) const;
+
+            /// helper to decide if AntiAliasing should be used
+            bool isHorizontalOrVertical(const geometry::ViewInformation2D& rViewInformation) const;
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+            /// Override standard getDecomposition to be view-dependent here
+            virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
