@@ -1596,8 +1596,6 @@ void ImpEditEngine::Convert( EditView* pEditView,
     else if ( CreateEPaM( aEditDoc.GetStartPaM() ) == pConvInfo->aConvStart )
         bIsStart = true;
 
-    bImpConvertFirstCall = true;    // next ImpConvert call is the very first in this conversion turn
-
     TextConvWrapper aWrp( Application::GetDefDialogParent(),
                           ::comphelper::getProcessComponentContext(),
                           LanguageTag::convertToLocale( nSrcLang ),

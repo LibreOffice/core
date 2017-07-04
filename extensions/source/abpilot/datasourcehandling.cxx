@@ -298,12 +298,10 @@ namespace abp
         ::utl::SharedUNOComponent< XConnection >
                                                 xConnection;
         StringBag                               aTables;            // the cached table names
-        OUString                         sName;
-        bool                                bTablesUpToDate;    // table name cache up-to-date?
+        OUString                                sName;
 
         explicit ODataSourceImpl(const Reference< XComponentContext >& _rxORB)
             : xORB(_rxORB)
-            , bTablesUpToDate(false)
         {
         }
 
@@ -317,7 +315,6 @@ namespace abp
         ,xConnection( _rSource.xConnection )
         ,aTables( _rSource.aTables )
         ,sName( _rSource.sName )
-        ,bTablesUpToDate( _rSource.bTablesUpToDate )
     {
     }
 
@@ -518,7 +515,6 @@ namespace abp
         }
 
         // now the table cache is up-to-date
-        m_pImpl->bTablesUpToDate = true;
         return m_pImpl->aTables;
     }
 
@@ -607,7 +603,6 @@ namespace abp
         // success
         m_pImpl->xConnection.reset( xConnection );
         m_pImpl->aTables.clear();
-        m_pImpl->bTablesUpToDate = false;
 
         return true;
     }
@@ -617,7 +612,6 @@ namespace abp
     {
         m_pImpl->xConnection.clear();
         m_pImpl->aTables.clear();
-        m_pImpl->bTablesUpToDate = false;
     }
 
 

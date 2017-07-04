@@ -495,7 +495,6 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
     {
         HtmlImportInfo aImportInfo(HtmlImportState::NextToken, this, mpEditEngine->CreateESelection(aCurSel));
         aImportInfo.nToken = nToken;
-        aImportInfo.nTokenValue = (short)nTokenValue;
         if ( nToken == HtmlTokenId::TEXTTOKEN )
             aImportInfo.aText = aToken;
         else if (nToken == HtmlTokenId::STYLE_OFF)

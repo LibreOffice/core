@@ -28,7 +28,6 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
     bAutoCorrect =
     bCapitalStartSentence =
     bCapitalStartWord =
-    bChkFontAttr =
     bChgUserColl =
     bChgEnumNum =
     bAddNonBrkSpace =
@@ -39,8 +38,7 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
     bAFormatDelSpacesAtSttEnd =
     bAFormatDelSpacesBetweenLines =
     bAFormatByInpDelSpacesAtSttEnd =
-    bAFormatByInpDelSpacesBetweenLines =
-    bDummy = true;
+    bAFormatByInpDelSpacesBetweenLines = true;
 
     bReplaceStyles =
     bDelEmptyNode =
@@ -57,9 +55,6 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
     bAutoCompleteWords =
     bAutoCmpltCollectWords =
     bAutoCmpltKeepList = true;
-
-    bDummy6 = bDummy7 = bDummy8 =
-         false;
 
     nRightMargin = 50;      // default 50%
     nAutoCmpltExpandKey = KEY_RETURN;
@@ -86,7 +81,6 @@ SvxSwAutoFormatFlags& SvxSwAutoFormatFlags::operator=( const SvxSwAutoFormatFlag
     bAutoCorrect = rAFFlags.bAutoCorrect;
     bCapitalStartSentence = rAFFlags.bCapitalStartSentence;
     bCapitalStartWord = rAFFlags.bCapitalStartWord;
-    bChkFontAttr = rAFFlags.bChkFontAttr;
 
     bChgUserColl = rAFFlags.bChgUserColl;
     bChgEnumNum = rAFFlags.bChgEnumNum;
@@ -106,12 +100,6 @@ SvxSwAutoFormatFlags& SvxSwAutoFormatFlags::operator=( const SvxSwAutoFormatFlag
     bAFormatDelSpacesBetweenLines = rAFFlags.bAFormatDelSpacesBetweenLines;
     bAFormatByInpDelSpacesAtSttEnd = rAFFlags.bAFormatByInpDelSpacesAtSttEnd;
     bAFormatByInpDelSpacesBetweenLines = rAFFlags.bAFormatByInpDelSpacesBetweenLines;
-
-    bDummy = rAFFlags.bDummy;
-
-    bDummy6 = rAFFlags.bDummy6;
-    bDummy7 = rAFFlags.bDummy7;
-    bDummy8 = rAFFlags.bDummy8;
 
     bWithRedlining = rAFFlags.bWithRedlining;
 

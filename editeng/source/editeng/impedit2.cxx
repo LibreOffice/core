@@ -105,7 +105,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bUseAutoColor(true),
     bForceAutoColor(false),
     bCallParaInsertedOrDeleted(false),
-    bImpConvertFirstCall(false),
     bFirstWordCapitalization(true),
     mbLastTryMerge(false),
     mbReplaceLeadingSingleQuotationMark(true)
@@ -724,7 +723,6 @@ void ImpEditEngine::TextModified()
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_TEXTMODIFIED );
-        aNotify.pEditEngine = GetEditEnginePtr();
         CallNotify( aNotify );
     }
 }
@@ -2194,7 +2192,6 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_PARAGRAPHSMOVED );
-        aNotify.pEditEngine = GetEditEnginePtr();
         aNotify.nParagraph = nNewPos;
         aNotify.nParam1 = aOldPositions.Min();
         aNotify.nParam2 = aOldPositions.Max();
@@ -4421,7 +4418,6 @@ void ImpEditEngine::EnterBlockNotifications()
         // external, non-queued events to be captured as well from
         // client side
         EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_START );
-        aNotify.pEditEngine = GetEditEnginePtr();
         GetNotifyHdl().Call( aNotify );
     }
 
@@ -4445,7 +4441,6 @@ void ImpEditEngine::LeaveBlockNotifications()
         }
 
         EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_END );
-        aNotify.pEditEngine = GetEditEnginePtr();
         GetNotifyHdl().Call( aNotify );
     }
 }

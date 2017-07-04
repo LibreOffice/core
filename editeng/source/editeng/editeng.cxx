@@ -1002,7 +1002,6 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_INPUT_START );
-        aNotify.pEditEngine = this;
         pImpEditEngine->CallNotify( aNotify );
     }
 
@@ -1403,7 +1402,6 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_INPUT_END );
-        aNotify.pEditEngine = this;
         pImpEditEngine->CallNotify( aNotify );
     }
 
@@ -2423,10 +2421,6 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
         DBG_ASSERT( pParaPortion && pLine, "GetParagraphInfos - Paragraph out of range" );
         if ( pParaPortion && pLine )
         {
-            aInfos.nParaHeight = (sal_uInt16)pParaPortion->GetHeight();
-            aInfos.nLines = pParaPortion->GetLines().Count();
-            aInfos.nFirstLineStartX = pLine->GetStartPosX();
-            aInfos.nFirstLineOffset = pParaPortion->GetFirstLineOffset();
             aInfos.nFirstLineHeight = pLine->GetHeight();
             aInfos.nFirstLineTextHeight = pLine->GetTxtHeight();
             aInfos.nFirstLineMaxAscent = pLine->GetMaxAscent();
@@ -2471,7 +2465,6 @@ void EditEngine::ParagraphInserted( sal_Int32 nPara )
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_PARAGRAPHINSERTED );
-        aNotify.pEditEngine = this;
         aNotify.nParagraph = nPara;
         pImpEditEngine->CallNotify( aNotify );
     }
@@ -2483,7 +2476,6 @@ void EditEngine::ParagraphDeleted( sal_Int32 nPara )
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_PARAGRAPHREMOVED );
-        aNotify.pEditEngine = this;
         aNotify.nParagraph = nPara;
         pImpEditEngine->CallNotify( aNotify );
     }
@@ -2506,7 +2498,6 @@ void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_TextHeightChanged );
-        aNotify.pEditEngine = this;
         aNotify.nParagraph = nPara;
         pImpEditEngine->CallNotify( aNotify );
     }

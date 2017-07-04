@@ -173,8 +173,6 @@ namespace pcr
         :OFormattedNumericControl_Base( PropertyControlType::Unknown, pParent, nWinStyle )
     {
         getTypedControlWindow()->TreatAsNumber(true);
-
-        m_nLastDecimalDigits = getTypedControlWindow()->GetDecimalDigits();
     }
 
 
@@ -225,24 +223,6 @@ namespace pcr
             DBG_ASSERT( pEntry, "OFormattedNumericControl::SetFormatDescription: invalid format key!" );
             if ( pEntry )
             {
-                switch (pEntry->GetType() & ~css::util::NumberFormat::DEFINED)
-                {
-                    case css::util::NumberFormat::NUMBER:
-                    case css::util::NumberFormat::CURRENCY:
-                    case css::util::NumberFormat::SCIENTIFIC:
-                    case css::util::NumberFormat::FRACTION:
-                    case css::util::NumberFormat::PERCENT:
-                        m_nLastDecimalDigits = getTypedControlWindow()->GetDecimalDigits();
-                        break;
-                    case css::util::NumberFormat::DATETIME:
-                    case css::util::NumberFormat::DATE:
-                    case css::util::NumberFormat::TIME:
-                        m_nLastDecimalDigits = 7;
-                        break;
-                    default:
-                        m_nLastDecimalDigits = 0;
-                        break;
-                }
                 bFallback = false;
             }
 
@@ -253,7 +233,6 @@ namespace pcr
             getTypedControlWindow()->TreatAsNumber(false);
             getTypedControlWindow()->SetFormatter(nullptr);
             getTypedControlWindow()->SetText("");
-            m_nLastDecimalDigits = 0;
         }
     }
 
