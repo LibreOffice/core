@@ -3551,7 +3551,7 @@ void ScInterpreter::ScGetPivotData()
 {
     sal_uInt8 nParamCount = GetByte();
 
-    if (!MustHaveParamCount(nParamCount, 2, 30) || (nParamCount % 2) == 1)
+    if (!MustHaveParamCountMin(nParamCount, 2) || (nParamCount % 2) == 1)
     {
         PushError(FormulaError::NoRef);
         return;
