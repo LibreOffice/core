@@ -1,0 +1,9 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Michael Stahl <mstahl@redhat.com>
+Code-Review+2: Rene Engelhard <rene@debian.org>
+Verified+1: Rene Engelhard <rene@debian.org>
+Submitted-by: Rene Engelhard <rene@debian.org>
+Submitted-at: Tue, 04 Jul 2017 19:23:18 +0200
+Reviewed-on: https://gerrit.libreoffice.org/39274
+Project: core
+Branch: refs/heads/libreoffice-5-4
