@@ -1290,7 +1290,7 @@ void ScInterpreter::ScNPV()
 {
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     short nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, 2, 31 ) )
+    if ( MustHaveParamCountMin( nParamCount, 2) )
     {
         double nVal = 0.0;
         // We turn the stack upside down!
