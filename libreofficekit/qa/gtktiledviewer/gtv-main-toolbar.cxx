@@ -9,6 +9,7 @@
 
 #include <gtk/gtk.h>
 
+#include <gtv-application-window.hxx>
 #include <gtv-main-toolbar.hxx>
 
 struct _GtvMainToolbar
@@ -36,7 +37,16 @@ getPrivate(GtvMainToolbar* toolbar)
 static void
 btn_clicked(GtkWidget* pWidget, gpointer)
 {
-    g_info("btn clicked");
+    GApplication* app = g_application_get_default();
+    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
+
+    GtkToolButton* pItem = GTK_TOOL_BUTTON(pWidget);
+    const gchar* unoCmd = gtk_tool_button_get_label(pItem);
+    LOKDocView* lokdocview = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
+    if (lokdocview)
+    {
+        lok_doc_view_post_command(lokdocview, unoCmd, nullptr, false);
+    }
 }
 
 static void
@@ -52,6 +62,9 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
 
     priv->btn_save = GTK_WIDGET(gtk_builder_get_object(builder, "btn_save"));
     priv->btn_bold = GTK_WIDGET(gtk_builder_get_object(builder, "btn_bold"));
+
+    gtk_builder_add_callback_symbol(builder, "btn_clicked", G_CALLBACK(btn_clicked));
+    gtk_builder_connect_signals(builder, nullptr);
 
     gtk_widget_show_all(GTK_WIDGET(toolbar));
 }

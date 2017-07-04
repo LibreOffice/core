@@ -12,6 +12,9 @@
 
 #include <gtk/gtk.h>
 
+#include <LibreOfficeKit/LibreOfficeKitGtk.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 #include <string>
 
 struct GtvRenderingArgs
@@ -36,6 +39,8 @@ GtvApplicationWindow* gtv_application_window_new(GtkApplication* application);
 void gtv_application_window_load_document(GtvApplicationWindow* application,
                                           const GtvRenderingArgs* aArgs,
                                           const std::string& aDocPath);
+
+LOKDocView* gtv_application_window_get_lokdocview(GtvApplicationWindow* application);
 
 G_END_DECLS
 

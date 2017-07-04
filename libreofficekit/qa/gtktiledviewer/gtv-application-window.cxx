@@ -125,6 +125,18 @@ gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res
         gtk_main_quit();
         return;
     }
+
+    lok_doc_view_set_edit(pDocView, true);
+}
+
+LOKDocView*
+gtv_application_window_get_lokdocview(GtvApplicationWindow* window)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    if (priv->lokdocview)
+        return LOK_DOC_VIEW(priv->lokdocview);
+
+    return nullptr;
 }
 
 void

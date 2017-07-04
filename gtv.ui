@@ -94,6 +94,7 @@
       <object class="GtkToggleToolButton" id="btn_bold">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="label" translatable="yes">.uno:Bold</property>
         <property name="use_underline">True</property>
         <property name="stock_id">gtk-bold</property>
         <signal name="toggled" handler="btn_clicked" swapped="no"/>
