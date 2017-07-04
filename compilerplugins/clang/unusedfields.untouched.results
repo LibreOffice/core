@@ -78,7 +78,7 @@ include/comphelper/MasterPropertySet.hxx:38
     comphelper::SlaveData mxSlave css::uno::Reference<css::beans::XPropertySet>
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
-include/editeng/unotext.hxx:606
+include/editeng/unotext.hxx:608
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
@@ -92,6 +92,8 @@ include/svtools/genericunodialog.hxx:170
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:159
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
+include/svx/fmsrcimp.hxx:162
+    FmSearchEngine m_xFormatSupplier css::uno::Reference<css::util::XNumberFormatsSupplier>
 include/vcl/uitest/uiobject.hxx:241
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:173
@@ -132,7 +134,7 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
 sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1335
+sd/source/ui/view/DocumentRenderer.cxx:1323
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1233
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -188,13 +190,5 @@ vcl/source/gdi/pdfwriter_impl.cxx:5804
     (anonymous namespace)::(anonymous) failInfo SECItem
 vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
-vcl/unx/generic/dtrans/X11_clipboard.hxx:45
-    x11::X11Clipboard m_xSelectionManager css::uno::Reference<css::lang::XInitialization>
-vcl/unx/generic/dtrans/X11_dndcontext.hxx:40
-    x11::DropTargetDropContext m_xManagerRef css::uno::Reference<XInterface>
-vcl/unx/generic/dtrans/X11_dndcontext.hxx:56
-    x11::DropTargetDragContext m_xManagerRef css::uno::Reference<XInterface>
-vcl/unx/generic/dtrans/X11_dndcontext.hxx:71
-    x11::DragSourceContext m_xManagerRef css::uno::Reference<XInterface>
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink

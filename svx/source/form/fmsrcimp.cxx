@@ -273,7 +273,6 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< css::container::XI
     // build the FieldInfo for that
     FieldInfo fiCurrent;
     fiCurrent.xContents.set(xCurrentField, UNO_QUERY);
-    fiCurrent.nFormatKey = ::comphelper::getINT32(xProperties->getPropertyValue(FM_PROP_FORMATKEY));
 
     // and memorize
     m_arrUsedFields.insert(m_arrUsedFields.end(), fiCurrent);

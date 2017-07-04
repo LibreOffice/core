@@ -158,9 +158,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
     // Since the iterator could have more columns, as managed here (in this field listbox),
     // a mapping of this css::form keys on the indices of the respective columns is kept in the iterator
 
-    // the formatter
-    css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xFormatSupplier;
-
     CharClass               m_aCharacterClassficator;
     CollatorWrapper         m_aStringCompare;
 
@@ -168,7 +165,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
     struct FieldInfo
     {
         css::uno::Reference< css::sdb::XColumn >          xContents;
-        sal_uInt32              nFormatKey;
     };
 
     typedef std::vector<FieldInfo> FieldCollection;
