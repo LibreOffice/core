@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_12359a45",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-04T14:12:27Z",
+      "side": 1,
+      "message": "this seems a tad incomplete?",
+      "revId": "eb31d1c9490bcc865e7489613b3a4d5833e5b505",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_323a9637",
+        "filename": "xmlsecurity/Library_xsec_xmlsec.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-04T14:12:27Z",
+      "side": 1,
+      "message": "ah, that stuff is still here.\n\nwell i guess it should work but needs more cleanup on master.",
+      "revId": "eb31d1c9490bcc865e7489613b3a4d5833e5b505",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
