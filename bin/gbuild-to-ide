@@ -291,6 +291,11 @@ class testVS2013Ide(IdeIntegrationGenerator):
                         f.write('\t\t{%(guid)s} = {%(guid)s}\n' % {'guid': lib_guid})
                     f.write('\tEndProjectSection\n')
                 f.write('EndProject\n')
+            f.write('Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B9292527-A979-4D13-A598-C75A33222174}"\n')
+            f.write('\tProjectSection(SolutionItems) = preProject\n')
+            f.write('\t\tsolenv/vs/LibreOffice.natvis = solenv/vs/LibreOffice.natvis\n')
+            f.write('\tEndProjectSection\n')
+            f.write('EndProject\n')
             f.write('Global\n')
             platform = 'Win32'
             f.write('\tGlobalSection(SolutionConfigurationPlatforms) = preSolution\n')
@@ -893,6 +898,11 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                         f.write('\t\t{%(guid)s} = {%(guid)s}\n' % {'guid': lib_guid})
                     f.write('\tEndProjectSection\n')
                 f.write('EndProject\n')
+            f.write('Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B9292527-A979-4D13-A598-C75A33222174}"\n')
+            f.write('\tProjectSection(SolutionItems) = preProject\n')
+            f.write('\t\tsolenv/vs/LibreOffice.natvis = solenv/vs/LibreOffice.natvis\n')
+            f.write('\tEndProjectSection\n')
+            f.write('EndProject\n')
             f.write('Global\n')
             platform = 'Win32'
             f.write('\tGlobalSection(SolutionConfigurationPlatforms) = preSolution\n')
