@@ -506,7 +506,7 @@ bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
     SupportedFeatures::const_iterator aFeaturePos = std::find_if(
         m_aSupportedFeatures.begin(),
         m_aSupportedFeatures.end(),
-        std::bind2nd( CompareFeatureById(), _nId )
+        CompareFeatureById(_nId)
     );
 
     return ( m_aSupportedFeatures.end() != aFeaturePos && !aFeaturePos->first.isEmpty());
@@ -539,7 +539,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
             SupportedFeatures::const_iterator aFeaturePos = std::find_if(
                 m_aSupportedFeatures.begin(),
                 m_aSupportedFeatures.end(),
-                std::bind2nd( CompareFeatureById(), aNextFeature.nId )
+                CompareFeatureById( aNextFeature.nId )
             );
 
 #if OSL_DEBUG_LEVEL > 0
@@ -575,7 +575,7 @@ void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Referen
         SupportedFeatures::const_iterator aFeaturePos = std::find_if(
             m_aSupportedFeatures.begin(),
             m_aSupportedFeatures.end(),
-            std::bind2nd( CompareFeatureById(), _nId )
+            CompareFeatureById( _nId )
         );
         OSL_ENSURE( aFeaturePos != m_aSupportedFeatures.end(), "OGenericUnoController::ImplInvalidateFeature: invalidating an unsupported feature is suspicious, at least!" );
     }
@@ -760,7 +760,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     m_aFeaturesToInvalidate.erase(
         std::remove_if(   m_aFeaturesToInvalidate.begin(),
                             m_aFeaturesToInvalidate.end(),
-                            std::bind2nd(FindFeatureListener(),aListener))
+                            FindFeatureListener(aListener))
         ,m_aFeaturesToInvalidate.end());
 }
 
@@ -899,7 +899,7 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
         SupportedFeatures::const_iterator aIter = std::find_if(
             m_aSupportedFeatures.begin(),
             m_aSupportedFeatures.end(),
-            std::bind2nd( CompareFeatureById(), _nId )
+            CompareFeatureById( _nId )
         );
 
         if ( m_aSupportedFeatures.end() != aIter && !aIter->first.isEmpty() )
