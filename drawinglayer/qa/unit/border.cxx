@@ -17,6 +17,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <rtl/ref.hxx>
@@ -70,17 +71,15 @@ void DrawinglayerBorderTest::testDoubleDecompositionSolid()
     // Make sure it results in two borders as it's a double one.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), aContainer.size());
 
-    // Get the inside line.
-    auto pInside = dynamic_cast<const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D*>(aContainer[0].get());
+    // Get the inside line, now a PolygonStrokePrimitive2D
+    auto pInside = dynamic_cast<const drawinglayer::primitive2d::PolygonStrokePrimitive2D*>(aContainer[0].get());
     CPPUNIT_ASSERT(pInside);
 
     // Make sure the inside line's height is fLeftWidth.
-    const basegfx::B2DPolyPolygon& rPolyPolygon = pInside->getB2DPolyPolygon();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(1), rPolyPolygon.count());
-    const basegfx::B2DPolygon& rPolygon = rPolyPolygon.getB2DPolygon(0);
-    const basegfx::B2DRange& rRange = rPolygon.getB2DRange();
+    const double fLineWidthFromDecompose = pInside->getLineAttribute().getWidth();
+
     // This was 2.47, i.e. the width of the inner line was 1 unit (in the bugdoc's case: 1 pixel) wider than expected.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(fLeftWidth, rRange.getHeight(), basegfx::fTools::getSmallValue());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fLeftWidth, fLineWidthFromDecompose, basegfx::fTools::getSmallValue());
 }
 
 void DrawinglayerBorderTest::testDoublePixelProcessing()
@@ -100,7 +99,7 @@ void DrawinglayerBorderTest::testDoublePixelProcessing()
     basegfx::B2DPoint aEnd(100, 20);
     double const fLeftWidth = 1.47;
     double const fDistance = 1.47;
-    double fRightWidth = 1.47;
+    double const fRightWidth = 1.47;
     double const fExtendLeftStart = 0;
     double const fExtendLeftEnd = 0;
     double const fExtendRightStart = 0;
@@ -117,31 +116,33 @@ void DrawinglayerBorderTest::testDoublePixelProcessing()
     // Process the primitives.
     pProcessor->process(aPrimitives);
 
-    // Now assert the height of the outer (second) border polygon.
+    // Double line now gets decomposed in Metafile to painting four lines
+    // with width == 0 in a cross pattern due to real line width being between
+    // 1.0 and 2.0. Count created lines
     aMetaFile.Stop();
     aMetaFile.WindStart();
-    bool bFirst = true;
-    sal_Int32 nHeight = 0;
+    sal_uInt32 nPolyLineActionCount = 0;
+
     for (std::size_t nAction = 0; nAction < aMetaFile.GetActionSize(); ++nAction)
     {
         MetaAction* pAction = aMetaFile.GetAction(nAction);
-        if (pAction->GetType() == MetaActionType::POLYPOLYGON)
-        {
-            if (bFirst)
-            {
-                bFirst = false;
-                continue;
-            }
 
-            auto pMPPAction = static_cast<MetaPolyPolygonAction*>(pAction);
-            const tools::PolyPolygon& rPolyPolygon = pMPPAction->GetPolyPolygon();
-            nHeight = rPolyPolygon.GetBoundRect().getHeight();
+        if (MetaActionType::POLYLINE == pAction->GetType())
+        {
+            auto pMPLAction = static_cast<MetaPolyLineAction*>(pAction);
+
+            if (0 == pMPLAction->GetLineInfo().GetWidth() && LineStyle::Solid == pMPLAction->GetLineInfo().GetStyle())
+            {
+                nPolyLineActionCount++;
+            }
         }
     }
-    sal_Int32 nExpectedHeight = std::round(fRightWidth);
-    // This was 2, and should be 1: if the logical requested width is 1.47,
-    // then that must be 1 px on the screen, not 2.
-    CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);
+
+    // Check if all eight (2x four) simple lines with width == 0 and
+    // solid were created
+    const sal_uInt32 nExpectedNumPolyLineActions = 8;
+
+    CPPUNIT_ASSERT_EQUAL(nExpectedNumPolyLineActions, nPolyLineActionCount);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DrawinglayerBorderTest);

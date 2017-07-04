@@ -331,7 +331,7 @@ public:
     /** Draws the part of the specified range, that is inside the clipping range.
         @param pForceColor
             If not NULL, only this color will be used to draw all frame borders. */
-    void                DrawRange( drawinglayer::processor2d::BaseProcessor2D* rDev,
+    void                DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                             size_t nFirstCol, size_t nFirstRow,
                             size_t nLastCol, size_t nLastRow,
                             const Color* pForceColor ) const;
@@ -344,7 +344,10 @@ public:
                             size_t nLastCol, size_t nLastRow ) const;
 
     /** Draws the part of the array, that is inside the clipping range. */
-    void                DrawArray( OutputDevice& rDev ) const;
+    void                DrawArray(OutputDevice& rDev) const;
+
+    /** Draws the part of the array, that is inside the clipping range. */
+    void                DrawArray(drawinglayer::processor2d::BaseProcessor2D& rProcessor) const;
 
 
 private:

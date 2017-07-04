@@ -33,7 +33,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
-#include <drawinglayer/primitive2d/clippedborderlineprimitive2d.hxx>
 
 
 using namespace ::com::sun::star;
@@ -1349,9 +1348,34 @@ bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
 
 // Drawing functions
 
+// get offset to center of line in question
+double lcl_getCenterOfLineOffset(const Style& rBorder, bool bLeftEdge)
+{
+    const bool bPrimUsed(!basegfx::fTools::equalZero(rBorder.Prim())); // left
+    const bool bDistUsed(!basegfx::fTools::equalZero(rBorder.Dist())); // distance
+    const bool bSecnUsed(!basegfx::fTools::equalZero(rBorder.Secn())); // right
 
-double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOpposite,
-                      long nAngleSide, long nAngleOpposite )
+    if (bDistUsed || bSecnUsed)
+    {
+        // double line, get center by adding half ditance and half line width.
+        // bLeftEdge defines which line to use
+        return (rBorder.Dist() + (bLeftEdge ? rBorder.Prim() : rBorder.Secn())) * 0.5;
+    }
+    else if (bPrimUsed)
+    {
+        // single line, get center
+        return rBorder.Prim() * 0.5;
+    }
+
+    // no line width at all, stay on unit vector
+    return 0.0;
+}
+
+double lcl_GetExtent(
+    const Style& rBorder, const Style& rSide, const Style& rOpposite,
+    long nAngleSide, long nAngleOpposite,
+    bool bLeftEdge,     // left or right of rBorder
+    bool bOtherLeft )   // left or right of rSide/rOpposite
 {
     Style aOtherBorder = rSide;
     long nOtherAngle = nAngleSide;
@@ -1370,7 +1394,8 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
 
     // Let's assume the border we are drawing is horizontal and compute all the angles / distances from this
     basegfx::B2DVector aBaseVector( 1.0, 0.0 );
-    basegfx::B2DPoint aBasePoint( 0.0, static_cast<double>( rBorder.GetWidth() / 2 ) );
+    // added support to get the distances to the centers of the line, *not* the outre edge
+    basegfx::B2DPoint aBasePoint(0.0, lcl_getCenterOfLineOffset(rBorder, bLeftEdge));
 
     basegfx::B2DHomMatrix aRotation;
     aRotation.rotate( double( nOtherAngle ) * M_PI / 18000.0 );
@@ -1378,7 +1403,8 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
     basegfx::B2DVector aOtherVector = aRotation * aBaseVector;
     // Compute a line shifted by half the width of the other border
     basegfx::B2DVector aPerpendicular = basegfx::getNormalizedPerpendicular( aOtherVector );
-    basegfx::B2DPoint aOtherPoint = basegfx::B2DPoint() + aPerpendicular * aOtherBorder.GetWidth() / 2;
+    // added support to get the distances to the centers of the line, *not* the outre edge
+    basegfx::B2DPoint aOtherPoint = basegfx::B2DPoint() + aPerpendicular * lcl_getCenterOfLineOffset(aOtherBorder, bOtherLeft);
 
     // Find the cut between the two lines
     double nCut = 0.0;
@@ -1389,67 +1415,32 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
     return nCut;
 }
 
-basegfx::B2DPoint lcl_PointToB2DPoint( const Point& rPoint )
-{
-    return basegfx::B2DPoint(rPoint.getX(), rPoint.getY());
-}
-
-drawinglayer::primitive2d::Primitive2DContainer CreateClippedBorderPrimitives (
-        const Point& rStart, const Point& rEnd, const Style& rBorder,
-        const tools::Rectangle& rClipRect )
-{
-    drawinglayer::primitive2d::Primitive2DContainer aSequence( 1 );
-    basegfx::B2DPolygon aPolygon;
-    aPolygon.append( lcl_PointToB2DPoint( rClipRect.TopLeft( ) ) );
-    aPolygon.append( lcl_PointToB2DPoint( rClipRect.TopRight( ) ) );
-    aPolygon.append( lcl_PointToB2DPoint( rClipRect.BottomRight( ) ) );
-    aPolygon.append( lcl_PointToB2DPoint( rClipRect.BottomLeft( ) ) );
-    aPolygon.setClosed( true );
-
-    aSequence[0] = new drawinglayer::primitive2d::ClippedBorderLinePrimitive2D(
-        lcl_PointToB2DPoint( rStart ),
-        lcl_PointToB2DPoint( rEnd ),
-        rBorder.Prim(),
-        rBorder.Dist(),
-        rBorder.Secn(),
-        aPolygon,
-        rBorder.GetColorSecn().getBColor(),
-        rBorder.GetColorPrim().getBColor(),
-        rBorder.GetColorGap().getBColor(),
-        rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale() );
-
-    return aSequence;
-}
-
-drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimitives(
+drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
         const DiagStyle& /*rLFromTR*/, const Style& rLFromT, const Style& /*rLFromL*/, const Style& rLFromB, const DiagStyle& /*rLFromBR*/,
         const DiagStyle& /*rRFromTL*/, const Style& rRFromT, const Style& /*rRFromR*/, const Style& rRFromB, const DiagStyle& /*rRFromBL*/,
         const Color* /*pForceColor*/, long nRotateT, long nRotateB )
 {
-    drawinglayer::primitive2d::Primitive2DContainer aSequence( 1 );
-
     basegfx::B2DPoint aStart( rLPos.getX(), rLPos.getY() );
     basegfx::B2DPoint aEnd( rRPos.getX(), rRPos.getY() );
 
-    aSequence[0] = new drawinglayer::primitive2d::BorderLinePrimitive2D(
-        aStart, aEnd,
-        rBorder.Prim(),
-        rBorder.Dist(),
-        rBorder.Secn(),
-        lcl_GetExtent( rBorder, rLFromT, rLFromB, nRotateT, - nRotateB ),
-        lcl_GetExtent( rBorder, rRFromT, rRFromB, 18000 - nRotateT, nRotateB - 18000 ),
-        lcl_GetExtent( rBorder, rLFromB, rLFromT, nRotateB, - nRotateT ),
-        lcl_GetExtent( rBorder, rRFromB, rRFromT, 18000 - nRotateB, nRotateT - 18000 ),
-        rBorder.GetColorSecn().getBColor(),
-        rBorder.GetColorPrim().getBColor(),
-        rBorder.GetColorGap().getBColor(),
-        rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale() );
-
-    return aSequence;
+    return drawinglayer::primitive2d::Primitive2DReference(
+        new drawinglayer::primitive2d::BorderLinePrimitive2D(
+            aStart, aEnd,
+            rBorder.Prim(),
+            rBorder.Dist(),
+            rBorder.Secn(),
+            lcl_GetExtent( rBorder, rLFromT, rLFromB, nRotateT, - nRotateB, true, false ),                  // top-left, so left for rBorder and right for left outer
+            lcl_GetExtent( rBorder, rRFromT, rRFromB, 18000 - nRotateT, nRotateB - 18000, true, true ),     // top-right
+            lcl_GetExtent( rBorder, rLFromB, rLFromT, nRotateB, - nRotateT, false, false ),                 // bottom-left
+            lcl_GetExtent( rBorder, rRFromB, rRFromT, 18000 - nRotateB, nRotateT - 18000, false, true ),    // bottom-right
+            rBorder.GetColorSecn().getBColor(),
+            rBorder.GetColorPrim().getBColor(),
+            rBorder.GetColorGap().getBColor(),
+            rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale()));
 }
 
-drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimitives(
+drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
         const Style& rLFromT, const Style& rLFromL, const Style& rLFromB,
         const Style& rRFromT, const Style& rRFromR, const Style& rRFromB,

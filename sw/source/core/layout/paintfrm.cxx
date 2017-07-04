@@ -2747,33 +2747,37 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
 
             if (bHori)
             {
-                mrTabFrame.ProcessPrimitives( svx::frame::CreateBorderPrimitives(
-                    aPaintStart,
-                    aPaintEnd,
-                    aStyles[ 0 ],   // current style
-                    aStyles[ 1 ],   // aLFromT
-                    aStyles[ 2 ],   // aLFromL
-                    aStyles[ 3 ],   // aLFromB
-                    aStyles[ 4 ],   // aRFromT
-                    aStyles[ 5 ],   // aRFromR
-                    aStyles[ 6 ],   // aRFromB
-                    pTmpColor)
-                );
+                drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+                aSequence.append(
+                    svx::frame::CreateBorderPrimitives(
+                        aPaintStart,
+                        aPaintEnd,
+                        aStyles[ 0 ],   // current style
+                        aStyles[ 1 ],   // aLFromT
+                        aStyles[ 2 ],   // aLFromL
+                        aStyles[ 3 ],   // aLFromB
+                        aStyles[ 4 ],   // aRFromT
+                        aStyles[ 5 ],   // aRFromR
+                        aStyles[ 6 ],   // aRFromB
+                        pTmpColor));
+                mrTabFrame.ProcessPrimitives(aSequence);
             }
             else
             {
-                mrTabFrame.ProcessPrimitives( svx::frame::CreateBorderPrimitives(
-                    aPaintEnd,
-                    aPaintStart,
-                    aStyles[ 0 ],   // current style
-                    aStyles[ 4 ],   // aBFromL
-                    aStyles[ 5 ],   // aBFromB
-                    aStyles[ 6 ],   // aBFromR
-                    aStyles[ 1 ],   // aTFromL
-                    aStyles[ 2 ],   // aTFromT
-                    aStyles[ 3 ],   // aTFromR
-                    pTmpColor)
-                );
+                drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+                aSequence.append(
+                    svx::frame::CreateBorderPrimitives(
+                        aPaintEnd,
+                        aPaintStart,
+                        aStyles[ 0 ],   // current style
+                        aStyles[ 4 ],   // aBFromL
+                        aStyles[ 5 ],   // aBFromB
+                        aStyles[ 6 ],   // aBFromR
+                        aStyles[ 1 ],   // aTFromL
+                        aStyles[ 2 ],   // aTFromT
+                        aStyles[ 3 ],   // aTFromR
+                        pTmpColor));
+                mrTabFrame.ProcessPrimitives(aSequence);
             }
         }
 
