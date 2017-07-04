@@ -815,7 +815,10 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             {
                 OUString aToken = maTypeModel.maAdjustments.getToken(0, ',', nIndex);
                 drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue;
-                aAdjustmentValue.Value <<= aToken.toInt32();
+                if (aToken.isEmpty())
+                    aAdjustmentValue.State = css::beans::PropertyState::PropertyState_DEFAULT_VALUE;
+                else
+                    aAdjustmentValue.Value <<= aToken.toInt32();
                 aAdjustmentValues.push_back(aAdjustmentValue);
             } while (nIndex >= 0);
 
