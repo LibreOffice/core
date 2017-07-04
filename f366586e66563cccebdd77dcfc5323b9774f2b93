@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_52f8027d",
+        "filename": "sw/source/uibase/uiview/uivwimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-04T13:58:40Z",
+      "side": 1,
+      "message": "this vector will grow forever? maybe this function could also test the existing elements and remove dead ones?",
+      "revId": "f366586e66563cccebdd77dcfc5323b9774f2b93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
