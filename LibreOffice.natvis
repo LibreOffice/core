@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="rtl::OUString">
+    <DisplayString>{*pData}</DisplayString>
+    <StringView>*pData,su</StringView>
+  </Type>
+  <Type Name="rtl::OString">
+    <DisplayString>{*pData}</DisplayString>
+    <StringView>*pData,s</StringView>
+  </Type>
+  <Type Name="_rtl_uString">
+    <DisplayString Condition="length == 0">empty</DisplayString>
+    <DisplayString>{buffer,su}</DisplayString>
+    <StringView>buffer,su</StringView>
+  </Type>
+  <Type Name="_rtl_String">
+    <DisplayString Condition="length == 0">empty</DisplayString>
+    <DisplayString>{buffer,s}</DisplayString>
+    <StringView>buffer,s</StringView>
+  </Type>
+  <Type Name="com::sun::star::uno::Any">
+    <!--
+    typelib_TypeClass_VOID = 0,
+    typelib_TypeClass_ANY = 14,
+    typelib_TypeClass_TYPEDEF = 16,
+    typelib_TypeClass_STRUCT = 17,
+    typelib_TypeClass_UNION = 18,/** Deprecated, UNOIDL does not have a union concept.*/
+    typelib_TypeClass_EXCEPTION = 19,
+    typelib_TypeClass_ARRAY = 21,/** Deprecated, UNOIDL does not have an array concept.*/
+    typelib_TypeClass_SERVICE = 23,/** (not implemented) */
+    typelib_TypeClass_MODULE = 24,/** (not implemented) */
+    typelib_TypeClass_INTERFACE_METHOD = 25,
+    typelib_TypeClass_INTERFACE_ATTRIBUTE = 26,
+    typelib_TypeClass_UNKNOWN = 27,
+    typelib_TypeClass_PROPERTY = 28,
+    typelib_TypeClass_CONSTANT = 29,
+    typelib_TypeClass_CONSTANTS = 30,
+    typelib_TypeClass_SINGLETON = 31,
+    -->
+    <DisplayString Condition="pType->eTypeClass == 1">{pType->eTypeClass,en}: {*((wchar_t*)pData),c}</DisplayString><!-- typelib_TypeClass_CHAR -->
+    <DisplayString Condition="pType->eTypeClass == 2">{pType->eTypeClass,en}: {*((bool*)pData),d}</DisplayString><!-- typelib_TypeClass_BOOLEAN -->
+    <DisplayString Condition="pType->eTypeClass == 3">{pType->eTypeClass,en}: {*((unsigned char*)pData),d}</DisplayString><!-- typelib_TypeClass_BYTE -->
+    <DisplayString Condition="pType->eTypeClass == 4">{pType->eTypeClass,en}: {(*((short*)pData) &amp; 0xFFFF),d}</DisplayString><!-- typelib_TypeClass_SHORT -->
+    <DisplayString Condition="pType->eTypeClass == 5">{pType->eTypeClass,en}: {(*((unsigned short*)pData) &amp; 0xFFFF),d}</DisplayString><!-- typelib_TypeClass_UNSIGNED_SHORT -->
+    <DisplayString Condition="pType->eTypeClass == 6">{pType->eTypeClass,en}: {*((int*)pData),d}</DisplayString><!-- typelib_TypeClass_LONG -->
+    <DisplayString Condition="pType->eTypeClass == 7">{pType->eTypeClass,en}: {*((unsigned int*)pData),d}</DisplayString><!-- typelib_TypeClass_UNSIGNED_LONG -->
+    <DisplayString Condition="pType->eTypeClass == 8">{pType->eTypeClass,en}: {*((__int64*)pData),d}</DisplayString><!-- typelib_TypeClass_HYPER -->
+    <DisplayString Condition="pType->eTypeClass == 9">{pType->eTypeClass,en}: {*((unsigned __int64*)pData),d}</DisplayString><!-- typelib_TypeClass_UNSIGNED_HYPER -->
+    <DisplayString Condition="pType->eTypeClass == 10">{pType->eTypeClass,en}: {*((float*)pData)}</DisplayString><!-- typelib_TypeClass_FLOAT -->
+    <DisplayString Condition="pType->eTypeClass == 11">{pType->eTypeClass,en}: {*((double*)pData)}</DisplayString><!-- typelib_TypeClass_DOUBLE -->
+    <DisplayString Condition="pType->eTypeClass == 12">{pType->eTypeClass,en}: {*((rtl::OUString*)pData)}</DisplayString><!-- typelib_TypeClass_STRING -->
+    <DisplayString Condition="pType->eTypeClass == 13">{pType->eTypeClass,en}: {*((com::sun::star::uno::Type*)pData)}</DisplayString><!-- typelib_TypeClass_TYPE -->
+    <DisplayString Condition="pType->eTypeClass == 15">{pType->eTypeClass,en}: {*((sal_Int32*)pData),d}</DisplayString><!-- typelib_TypeClass_ENUM -->
+    <DisplayString Condition="pType->eTypeClass == 20">{pType->eTypeClass,en}: {*((uno_Sequence **)pData)}</DisplayString><!-- typelib_TypeClass_SEQUENCE -->
+    <DisplayString Condition="pType->eTypeClass == 22">{pType->eTypeClass,en}: {*((com::sun::star::uno::BaseReference *)pData)}</DisplayString><!-- typelib_TypeClass_INTERFACE -->
+    <DisplayString>{pType->eTypeClass,en}</DisplayString>
+    <Expand>
+      <Item Name="Data" Condition="pType->eTypeClass == 22">*((com::sun::star::uno::BaseReference *)pData)</Item>
+      <Item Name="Data" Condition="pType->eTypeClass != 22">pData</Item>
+    </Expand>
+  </Type>
+  <Type Name="basegfx::internal::ImplMatLine&lt;3&gt;">
+    <DisplayString>{mfValue[0]}, {mfValue[1]}, {mfValue[2]}</DisplayString>
+  </Type>
+  <Type Name="basegfx::internal::ImplHomMatrixTemplate&lt;3&gt;">
+    <DisplayString>{{{maLine[0]}}}, {{{maLine[1]}}}, {mpLine}</DisplayString>
+  </Type>
+  <Type Name="o3tl::cow_wrapper&lt;basegfx::Impl2DHomMatrix,o3tl::UnsafeRefCountingPolicy&gt;::impl_t">
+    <DisplayString>{m_value}</DisplayString>
+  </Type>
+  <Type Name="o3tl::cow_wrapper&lt;basegfx::Impl2DHomMatrix,o3tl::UnsafeRefCountingPolicy&gt;">
+    <DisplayString>{m_pimpl}</DisplayString>
+  </Type>
+  <Type Name="basegfx::B2DHomMatrix">
+    <DisplayString>{mpImpl}</DisplayString>
+  </Type>
+  <Type Name="Point">
+    <DisplayString>X:{nA}, Y:{nB}</DisplayString>
+  </Type>
+  <Type Name="Size">
+    <DisplayString>Width:{nA}, Height:{nB}</DisplayString>
+  </Type>
+  <Type Name="Range">
+    <DisplayString>Min:{nA}, Max:{nB}</DisplayString>
+  </Type>
+  <Type Name="Selection">
+    <DisplayString>Min:{nA}, Max:{nB}</DisplayString>
+  </Type>
+  <Type Name="Pair">
+    <DisplayString>A:{nA}, B:{nB}</DisplayString>
+  </Type>
+  <Type Name="SwRect">
+    <DisplayString>{m_Point}, {m_Size}</DisplayString>
+  </Type>
+  <Type Name="com::sun::star::uno::Sequence&lt;*&gt;">
+    <DisplayString Condition="_pSequence->nElements == 0">empty</DisplayString>
+    <DisplayString>Sequence of {_pSequence->nElements} {"$T1",sb}</DisplayString>
+    <Expand>
+      <Item Name="[size]">_pSequence->nElements</Item>
+      <ArrayItems>
+        <Size>_pSequence->nElements</Size>
+        <ValuePointer>reinterpret_cast&lt; const $T1 * &gt;( _pSequence->elements )</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="SwNodes">
+    <DisplayString>{{{m_nSize} nodes}}</DisplayString>
+    <Expand>
+      <Item Name="[Count]">m_nSize</Item>
+
+      <CustomListItems>
+        <Variable Name="idx" InitialValue="0"/>
+        <Variable Name="blockIx" InitialValue="0"/>
+        <Variable Name="p" InitialValue="m_vpInf[ 0 ]"/>
+
+        <Size>m_nSize</Size>
+        <Loop>
+          <Break Condition="idx &gt;= m_nSize"/>
+
+          <If Condition="p-&gt;nStart &gt; idx || p-&gt;nEnd &lt; idx">
+            <Exec>blockIx = 0</Exec>
+            <Loop>
+              <Break Condition="blockIx &gt;= m_vpInf._Mypair._Myval2._Mylast - m_vpInf._Mypair._Myval2._Myfirst"/>
+              <Break Condition="p-&gt;nStart &lt;= idx &amp;&amp; p-&gt;nEnd &gt;= idx"/>
+              <Exec>blockIx++</Exec>
+              <Exec>p = m_vpInf[ blockIx ]</Exec>
+            </Loop>
+          </If>
+          <Item>*static_cast&lt;SwNodePtr&gt;(p->mvData[ idx - p->nStart ])</Item>
+          <Exec>idx++</Exec>
+        </Loop>
+
+      </CustomListItems>
+    </Expand>
+  </Type>
+  <Type Name="SwNode">
+    <DisplayString>{{SwNode}}</DisplayString>
+  </Type>
+  <Type Name="SwEndNode">
+    <DisplayString>{{SwEndNode}}</DisplayString>
+  </Type>
+  <Type Name="SwStartNode">
+    <DisplayString Condition="m_eStartNodeType	== 1">{{SwTableBoxStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType	== 2">{{SwFlyStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType	== 3">{{SwFootnoteStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType	== 4">{{SwHeaderStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType	== 5">{{SwFooterStartNode}}</DisplayString>
+    <DisplayString>{{SwStartNode}}</DisplayString>
+  </Type>
+  <Type Name="SwTextNode">
+    <DisplayString>{{SwTextNode: {m_Text}}}</DisplayString>
+  </Type>
+</AutoVisualizer>
