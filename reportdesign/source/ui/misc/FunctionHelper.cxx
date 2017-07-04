@@ -219,7 +219,8 @@ sal_uInt32 FunctionDescription::getVarArgsStart() const
     // stability, ie. old code using the old VAR_ARGS and PAIRED_VAR_ARGS
     // values must still be handled. It is *not* sufficient to simply change
     // the values here.
-    static_assert(nVarArgs30 == VAR_ARGS && nPairedVarArgs60 == PAIRED_VAR_ARGS);
+    static_assert(nVarArgs30 == VAR_ARGS && nPairedVarArgs60 == PAIRED_VAR_ARGS,
+            "VAR_ARGS or PAIRED_VAR_ARGS has unexpected value");
     if (nLen >= nPairedVarArgs60)
         nLen -= nPairedVarArgs60;
     else if (nLen >= nVarArgs30)
