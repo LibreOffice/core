@@ -564,6 +564,11 @@ static bool lcl_IsSpecialCharacter(sal_Unicode nChar)
     case CH_TXTATR_INWORD:
     case CH_TXTATR_TAB:
     case CH_TXTATR_NEWLINE:
+    case CH_TXT_ATR_INPUTFIELDSTART:
+    case CH_TXT_ATR_INPUTFIELDEND:
+    case CH_TXT_ATR_FORMELEMENT:
+    case CH_TXT_ATR_FIELDSTART:
+    case CH_TXT_ATR_FIELDEND:
         return true;
 
     default:
@@ -598,6 +603,16 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
                 aResult = SwRewriter::GetPlaceHolder(UndoArg2);
                 break;
 
+            case CH_TXT_ATR_INPUTFIELDSTART:
+            case CH_TXT_ATR_INPUTFIELDEND:
+            case CH_TXT_ATR_FORMELEMENT:
+            case CH_TXT_ATR_FIELDSTART:
+            case CH_TXT_ATR_FIELDEND:
+                break; // nothing?
+
+            default:
+                assert(!"unexpected special character");
+                break;
             }
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1,
