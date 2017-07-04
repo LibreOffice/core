@@ -21,9 +21,9 @@
 #define INCLUDED_SW_INC_IDOCUMENTSETTINGACCESS_HXX
 
 #include <tools/solar.h>
-#include <rtl/ref.hxx>
 #include <fldupde.hxx>
 #include <i18nlangtag/lang.h>
+#include <memory>
 
 class SvxForbiddenCharactersTable;
 namespace com { namespace sun { namespace star { namespace i18n { struct ForbiddenCharacters; } } } }
@@ -155,14 +155,14 @@ enum class DocumentSettingId
        @returns
        the forbidden characters table.
     */
-    virtual rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() = 0;
+    virtual std::shared_ptr<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() = 0;
 
     /** Get the forbidden character table.
 
        @returns
        the forbidden characters table.
     */
-    virtual const rtl::Reference<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const = 0;
+    virtual const std::shared_ptr<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const = 0;
 
     /** Get the current link update mode.
 

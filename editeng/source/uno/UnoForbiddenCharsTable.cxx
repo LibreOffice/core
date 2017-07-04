@@ -32,8 +32,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using namespace ::cppu;
 
-SvxUnoForbiddenCharsTable::SvxUnoForbiddenCharsTable(::rtl::Reference<SvxForbiddenCharactersTable> const & xForbiddenChars) :
-    mxForbiddenChars( xForbiddenChars )
+SvxUnoForbiddenCharsTable::SvxUnoForbiddenCharsTable(std::shared_ptr<SvxForbiddenCharactersTable> const & xForbiddenChars)
+    : mxForbiddenChars(xForbiddenChars)
 {
 }
 
@@ -49,7 +49,7 @@ ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const lan
 {
     SolarMutexGuard aGuard;
 
-    if(!mxForbiddenChars.is())
+    if (!mxForbiddenChars)
         throw RuntimeException();
 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
@@ -64,7 +64,7 @@ sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const lang::Locale& 
 {
     SolarMutexGuard aGuard;
 
-    if(!mxForbiddenChars.is())
+    if (!mxForbiddenChars)
         return false;
 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
@@ -77,7 +77,7 @@ void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const lang::Locale& rLoca
 {
     SolarMutexGuard aGuard;
 
-    if(!mxForbiddenChars.is())
+    if (!mxForbiddenChars)
         throw RuntimeException();
 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
@@ -90,7 +90,7 @@ void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const lang::Locale& r
 {
     SolarMutexGuard aGuard;
 
-    if(!mxForbiddenChars.is())
+    if (!mxForbiddenChars)
         throw RuntimeException();
 
     const LanguageType eLang = LanguageTag::convertToLanguageType( rLocale );
@@ -104,7 +104,7 @@ Sequence< lang::Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
 {
     SolarMutexGuard aGuard;
 
-    const sal_Int32 nCount = mxForbiddenChars.is() ? mxForbiddenChars->GetMap().size() : 0;
+    const sal_Int32 nCount = mxForbiddenChars ? mxForbiddenChars->GetMap().size() : 0;
 
     Sequence< lang::Locale > aLocales( nCount );
     if( nCount )

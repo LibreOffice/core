@@ -34,7 +34,7 @@ namespace uno {
     class XComponentContext;
 }}}}
 
-class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable : public salhelper::SimpleReferenceObject
+class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable
 {
 public:
     typedef std::map<LanguageType, css::i18n::ForbiddenCharacters> Map;

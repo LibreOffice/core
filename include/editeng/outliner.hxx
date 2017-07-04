@@ -912,7 +912,7 @@ public:
                     GetSpeller();
     void            SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator >& xHyph );
 
-    static void     SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars );
+    static void     SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars);
 
     // Deprecated
     void            SetDefaultLanguage( LanguageType eLang );

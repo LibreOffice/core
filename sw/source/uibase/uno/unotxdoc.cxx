@@ -4285,7 +4285,7 @@ void SwXDocumentPropertyHelper::Invalidate()
     xMarkerTable = nullptr;
     xDrawDefaults = nullptr;
     m_pDoc = nullptr;
-    SvxUnoForbiddenCharsTable::mxForbiddenChars.clear();
+    SvxUnoForbiddenCharsTable::mxForbiddenChars.reset();
 }
 
 void SwXDocumentPropertyHelper::onChange()
