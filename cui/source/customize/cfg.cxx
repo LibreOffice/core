@@ -5128,10 +5128,8 @@ uno::Reference< graphic::XGraphic> SvxIconSelectorDialog::GetSelectedIcon()
     return result;
 }
 
-IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox, void )
+IMPL_LINK_NOARG( SvxIconSelectorDialog, SelectHdl, ToolBox *, void )
 {
-    (void)pToolBox;
-
     ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
 
     for (ToolBox::ImplToolItems::size_type n = 0; n < nCount; ++n )

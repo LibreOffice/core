@@ -3293,9 +3293,8 @@ void SvxColorListBox::ShowPreview(const NamedColor &rColor)
     SetText(rColor.second);
 }
 
-IMPL_LINK(SvxColorListBox, MenuActivateHdl, MenuButton *, pBtn, void)
+IMPL_LINK_NOARG(SvxColorListBox, MenuActivateHdl, MenuButton *, void)
 {
-    (void)pBtn;
     if (!m_xColorWindow || m_xColorWindow->isDisposed())
         createColorWindow();
 }

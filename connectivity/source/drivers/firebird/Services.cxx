@@ -80,9 +80,8 @@ struct ProviderRequest
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL firebird_sdbc_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
-                    void* pRegistryKey)
+                    void*)
 {
-    (void) pRegistryKey;
     void* pRet = nullptr;
     if (pServiceManager)
     {

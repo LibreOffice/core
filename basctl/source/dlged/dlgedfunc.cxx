@@ -27,9 +27,8 @@
 namespace basctl
 {
 
-IMPL_LINK( DlgEdFunc, ScrollTimeout, Timer *, pTimer, void )
+IMPL_LINK_NOARG( DlgEdFunc, ScrollTimeout, Timer *, void )
 {
-    (void)pTimer;
     vcl::Window& rWindow = rParent.GetWindow();
     Point aPos = rWindow.ScreenToOutputPixel( rWindow.GetPointerPosPixel() );
     aPos = rWindow.PixelToLogic( aPos );

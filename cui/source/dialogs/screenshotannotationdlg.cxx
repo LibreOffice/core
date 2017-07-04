@@ -312,10 +312,8 @@ ScreenshotAnnotationDlg_Impl::~ScreenshotAnnotationDlg_Impl()
     mpVirtualBufferDevice.disposeAndClear();
 }
 
-IMPL_LINK(ScreenshotAnnotationDlg_Impl, saveButtonHandler, Button*, pButton, void)
+IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, Button*, void)
 {
-    (void)pButton;
-
     // 'save screenshot...' pressed, offer to save maParentDialogBitmap
     // as PNG image, use *.id file name as screenshot file name offering
     OString aDerivedFileName;

@@ -2396,9 +2396,8 @@ void GtkSalFrame::SetParent( SalFrame* pNewParent )
                                      );
 }
 
-bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
+bool GtkSalFrame::SetPluginParent( SystemParentData* )
 {
-    (void)pSysParent;
     //FIXME: no SetPluginParent impl. for gtk3
     return false;
 }

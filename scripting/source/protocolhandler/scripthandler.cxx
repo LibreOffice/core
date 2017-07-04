@@ -475,10 +475,8 @@ extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL protocolhandler_component_getFactory( const sal_Char * pImplementationName ,
                                          void * pServiceManager ,
-                                         void * pRegistryKey )
+                                         void * )
     {
-        (void)pRegistryKey;
-
         // Set default return value for this operation - if it failed.
         void * pReturn = nullptr ;
 
