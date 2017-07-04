@@ -1490,7 +1490,7 @@ void FormulaCompiler::Factor()
                 }
                 else
                     SetError( FormulaError::PairExpected);
-                sal_uInt8 nSepCount = 0;
+                sal_uInt32 nSepCount = 0;
                 const sal_uInt16 nSepPos = maArrIterator.GetIndex() - 1;    // separator position, if any
                 if( !bNoParam )
                 {
@@ -1500,6 +1500,8 @@ void FormulaCompiler::Factor()
                         NextToken();
                         CheckSetForceArrayParameter( mpToken, nSepCount);
                         nSepCount++;
+                        if (nSepCount > FORMULA_MAXPARAMS)
+                            SetError( FormulaError::CodeOverflow);
                         eOp = Expression();
                     }
                 }
@@ -1597,7 +1599,7 @@ void FormulaCompiler::Factor()
             }
             else
                 SetError( FormulaError::PairExpected);
-            sal_uInt8 nSepCount = 0;
+            sal_uInt32 nSepCount = 0;
             if( !bNoParam )
             {
                 nSepCount++;
@@ -1606,6 +1608,8 @@ void FormulaCompiler::Factor()
                     NextToken();
                     CheckSetForceArrayParameter( mpToken, nSepCount);
                     nSepCount++;
+                    if (nSepCount > FORMULA_MAXPARAMS)
+                        SetError( FormulaError::CodeOverflow);
                     eOp = Expression();
                 }
             }

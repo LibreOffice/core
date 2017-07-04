@@ -40,6 +40,7 @@
 
 #define FORMULA_MAXJUMPCOUNT    32  /* maximum number of jumps (ocChoose) */
 #define FORMULA_MAXTOKENS     8192  /* maximum number of tokens in formula */
+#define FORMULA_MAXPARAMS      255  /* maximum number of parameters per function (byte) */
 
 
 namespace com { namespace sun { namespace star {
