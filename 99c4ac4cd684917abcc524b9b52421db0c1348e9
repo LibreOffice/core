@@ -34,6 +34,24 @@
       "revId": "99c4ac4cd684917abcc524b9b52421db0c1348e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_b2c12631",
+        "filename": "extensions/source/activex/SOActiveX.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-07-04T13:15:53Z",
+      "side": 1,
+      "message": "Indeed.\n\n\"nSrc\n[in] The int, BYTE, short, long, LONGLONG, ULONGLONG, unsigned short, unsigned long, or unsigned int used to initialize the CComVariant object. The type of the CComVariant object will be VT_I4, VT_UI1, VT_I2, VT_I4, VT_I8, VT_UI8, VT_UI2, VT_UI4, or VT_UI4, respectively.\"\n\nSo both int and long will set the type to VT_I4.  My bad.",
+      "parentUuid": "3a461143_d2a072a8",
+      "revId": "99c4ac4cd684917abcc524b9b52421db0c1348e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
