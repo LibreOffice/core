@@ -2103,6 +2103,10 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
         const OUString* pColNames = aColNames.getConstArray();
         OUString aString;
 
+        // add the "record number" variable, as SwCalc::VarLook would.
+        rCalc.VarChange( GetAppCharClass().lowercase(
+            SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD) ), GetSelectedRecordId() );
+
         for( int nCol = 0; nCol < aColNames.getLength(); nCol++ )
         {
             // get the column type
@@ -2128,7 +2132,8 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
                 if( bValidValue )
                 {
                     SwSbxValue aValue;
-                    aValue.PutString( aString );
+                    aValue.PutDouble( aNumber );
+                    aValue.SetDBvalue( true );
                     SAL_INFO( "sw.ui", "'" << pColNames[nCol] << "': " << aNumber << " / " << aString );
                     rCalc.VarChange( pColNames[nCol], aValue );
                 }
@@ -2137,6 +2142,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
             {
                 SwSbxValue aValue;
                 aValue.PutString( aString );
+                aValue.SetDBvalue( true );
                 SAL_INFO( "sw.ui", "'" << pColNames[nCol] << "': " << aString );
                 rCalc.VarChange( pColNames[nCol], aValue );
             }
