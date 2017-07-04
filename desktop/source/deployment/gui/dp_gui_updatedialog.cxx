@@ -494,7 +494,6 @@ UpdateDialog::UpdateDialog(
     m_thread(
         new UpdateDialog::Thread(
             context, *this, vExtensionList)),
-    m_nLastID(1),
     m_bModified( false )
     // TODO: check!
 //    ,
@@ -725,8 +724,6 @@ void UpdateDialog::addEnabledUpdate( OUString const & name,
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_enabledUpdates.size() );
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( ENABLED_UPDATE, nIndex, name );
 
-    m_nLastID += 1;
-
     m_enabledUpdates.push_back( data );
     m_ListboxEntries.push_back( pEntry );
 
@@ -750,8 +747,6 @@ void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate & data )
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_disabledUpdates.size() );
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( DISABLED_UPDATE, nIndex, data.name );
 
-    m_nLastID += 1;
-
     m_disabledUpdates.push_back( data );
     m_ListboxEntries.push_back( pEntry );
 
@@ -764,8 +759,6 @@ void UpdateDialog::addSpecificError( UpdateDialog::SpecificError & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_specificErrors.size() );
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( SPECIFIC_ERROR, nIndex, data.name );
-
-    m_nLastID += 1;
 
     m_specificErrors.push_back( data );
     m_ListboxEntries.push_back( pEntry );

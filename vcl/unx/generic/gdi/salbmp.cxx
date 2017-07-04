@@ -691,7 +691,7 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
             XDestroyImage( pImage );
 
             if( mpCache )
-                mpCache->ImplAdd( const_cast<X11SalBitmap*>(this), mpDDB->ImplGetMemSize() );
+                mpCache->ImplAdd( const_cast<X11SalBitmap*>(this) );
         }
     }
 
@@ -1078,10 +1078,9 @@ void ImplSalDDB::ImplDraw(
 struct ImplBmpObj
 {
     X11SalBitmap*   mpBmp;
-    sal_uLong       mnMemSize;
 
-                ImplBmpObj( X11SalBitmap* pBmp, sal_uLong nMemSize ) :
-                    mpBmp( pBmp ), mnMemSize( nMemSize ) {}
+                ImplBmpObj( X11SalBitmap* pBmp ) :
+                    mpBmp( pBmp ) {}
 };
 
 ImplSalBitmapCache::ImplSalBitmapCache()
@@ -1093,7 +1092,7 @@ ImplSalBitmapCache::~ImplSalBitmapCache()
     ImplClear();
 }
 
-void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize )
+void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp )
 {
     ImplBmpObj* pObj = nullptr;
     bool        bFound = false;
@@ -1108,12 +1107,8 @@ void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp, sal_uLong nMemSize )
             bFound = true;
     }
 
-    if( bFound )
-    {
-        pObj->mnMemSize = nMemSize;
-    }
-    else
-        maBmpList.push_back( new ImplBmpObj( pBmp, nMemSize ) );
+    if( !bFound )
+        maBmpList.push_back( new ImplBmpObj( pBmp ) );
 }
 
 void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )
