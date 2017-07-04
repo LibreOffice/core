@@ -34,6 +34,7 @@
 #include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <formula/funcvarargs.h>
 
 #include <memory>
 #include <numeric>

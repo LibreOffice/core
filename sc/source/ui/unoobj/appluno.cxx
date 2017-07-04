@@ -21,6 +21,7 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
+#include <formula/funcvarargs.h>
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfxmodelfactory.hxx>

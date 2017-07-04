@@ -25,12 +25,11 @@
 #include "parawin.hxx"
 #include "formula/formdata.hxx"
 #include "formula/IFunctionDescription.hxx"
+#include <formula/funcvarargs.h>
 #include "ModuleHelper.hxx"
 #include "ForResId.hrc"
 #include "bitmaps.hlst"
 
-#define VAR_ARGS 30
-#define PAIRED_VAR_ARGS (VAR_ARGS + VAR_ARGS)
 namespace formula
 {
 

@@ -54,6 +54,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/string.hxx>
 #include <formula/formulahelper.hxx>
+#include <formula/funcvarargs.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <o3tl/make_unique.hxx>

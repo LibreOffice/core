@@ -32,8 +32,8 @@
 // the documentation thingy
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <rtl/strbuf.hxx>
+#include <formula/funcvarargs.h>
 #include "compiler.hxx"
-#include "sc.hrc"
 #endif
 
 using namespace formula;
