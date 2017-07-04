@@ -561,16 +561,6 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_bNoClose = bValue;
                     }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_CONTEXTACTIVE )
-                    {
-                        if ( aWindowState[n].Value >>= bValue )
-                            rElementData.m_bContextActive = bValue;
-                    }
-                    else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_SOFTCLOSE )
-                    {
-                        if ( aWindowState[n].Value >>= bValue )
-                            rElementData.m_bSoftClose = bValue;
-                    }
                 }
             }
 

@@ -46,7 +46,6 @@ static Sequence< sal_Int8 > const & impl_getStaticIdentifier()
 RootActionTriggerContainer::RootActionTriggerContainer( const Menu* pMenu, const OUString* pMenuIdentifier ) :
     PropertySetContainer()
     ,   m_bContainerCreated( false )
-    ,   m_bInContainerCreation( false )
     ,   m_pMenu( pMenu )
     ,   m_pMenuIdentifier( pMenuIdentifier )
 {
@@ -244,12 +243,10 @@ Sequence< sal_Int8 > SAL_CALL RootActionTriggerContainer::getImplementationId()
 void RootActionTriggerContainer::FillContainer()
 {
     m_bContainerCreated = true;
-    m_bInContainerCreation = true;
     Reference<XIndexContainer> xXIndexContainer( static_cast<OWeakObject *>(this), UNO_QUERY );
     ActionTriggerHelper::FillActionTriggerContainerFromMenu(
         xXIndexContainer,
         m_pMenu );
-    m_bInContainerCreation = false;
 }
 OUString RootActionTriggerContainer::getName()
 {

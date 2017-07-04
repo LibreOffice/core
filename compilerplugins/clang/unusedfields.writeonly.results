@@ -722,28 +722,18 @@ formula/source/ui/dlg/formula.cxx:150
     formula::FormulaDlg_Impl m_pBinaryOpCodesEnd const sheet::FormulaOpCodeMapEntry *
 formula/source/ui/dlg/parawin.hxx:85
     formula::ParaWin bRefMode _Bool
-framework/inc/classes/rootactiontriggercontainer.hxx:96
-    framework::RootActionTriggerContainer m_bInContainerCreation _Bool
 framework/inc/dispatch/oxt_handler.hxx:92
     framework::Oxt_Handler m_xSelfHold css::uno::Reference<css::uno::XInterface>
-framework/inc/helper/statusindicatorfactory.hxx:72
-    framework::IndicatorInfo m_nRange sal_Int32
 framework/inc/services/layoutmanager.hxx:262
     framework::LayoutManager m_bGlobalSettings _Bool
 framework/inc/services/layoutmanager.hxx:276
     framework::LayoutManager m_pGlobalSettings class framework::GlobalSettings *
-framework/inc/uielement/uielement.hxx:100
-    framework::UIElement m_bContextActive _Bool
-framework/inc/uielement/uielement.hxx:102
-    framework::UIElement m_bSoftClose _Bool
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:281
     framework::ToolbarLayoutManager m_pGlobalSettings class framework::GlobalSettings *
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:285
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
 framework/source/services/frame.cxx:420
     (anonymous namespace)::Frame m_pWindowCommandDispatch class framework::WindowCommandDispatch *
-framework/source/uiconfiguration/moduleuiconfigurationmanager.cxx:184
-    (anonymous namespace)::ModuleUIConfigurationManager::UIElementType bDefaultLayer _Bool
 hwpfilter/source/drawdef.h:69
     BAREHWPDOProperty line_pstyle int
 hwpfilter/source/drawdef.h:70

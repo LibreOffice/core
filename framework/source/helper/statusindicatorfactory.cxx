@@ -124,7 +124,7 @@ void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatus
     IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
     if (pItem != m_aStack.end())
         m_aStack.erase(pItem);
-    IndicatorInfo aInfo(xChild, sText, nRange);
+    IndicatorInfo aInfo(xChild, sText);
     m_aStack.push_back (aInfo                );
 
     m_xActiveChild = xChild;
