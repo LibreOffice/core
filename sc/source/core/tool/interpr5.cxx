@@ -1691,7 +1691,7 @@ public:
 void ScInterpreter::ScSumProduct()
 {
     short nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 1, 30 ) )
+    if ( !MustHaveParamCountMin( nParamCount, 1) )
         return;
 
     // XXX NOTE: Excel returns #VALUE! for reference list and 0 (why?) for
