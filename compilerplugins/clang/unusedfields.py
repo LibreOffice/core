@@ -105,7 +105,7 @@ for d in definitionSet:
 
 writeonlySet = set()
 for d in definitionSet:
-    clazz = d[0] + " " + d[1]
+    parentClazz = d[0];
     if d in readFromSet:
         continue
     srcLoc = definitionToSourceLocationMap[d];
@@ -131,8 +131,21 @@ for d in definitionSet:
     # ignore the import/export data model stuff
     if srcLoc.startswith("sc/source/filter/inc/") and "Model" in fieldType:
         continue
+    if srcLoc.startswith("sc/source/filter/inc/") and (parentClazz.startswith("Xcl") or parentClazz.startswith("oox::xls::")):
+        continue
+    # implement some kind of registration of errors
+    if fieldType == "class SfxErrorHandler *":
+        continue
+    # mutex locking
+    if "Guard" in fieldType:
+        continue
+    # these are just all model classes
+    if (srcLoc.startswith("oox/") or srcLoc.startswith("lotuswordpro/")
+        or srcLoc.startswith("include/oox/") or srcLoc.startswith("include/filter/")
+        or srcLoc.startswith("hwpfilter/") or srcLoc.startswith("filter/")):
+        continue
 
-    writeonlySet.add((clazz + " " + definitionToTypeMap[d], srcLoc))
+    writeonlySet.add((d[0] + " " + d[1] + " " + definitionToTypeMap[d], srcLoc))
 
 
 canBePrivateSet = set()

@@ -64,18 +64,12 @@ canvas/source/opengl/ogl_spritedevicehelper.hxx:126
     oglcanvas::SpriteDeviceHelper mpDevice css::rendering::XGraphicDevice *
 canvas/source/vcl/canvasbitmap.hxx:117
     vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
-canvas/source/vcl/impltools.hxx:117
-    vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
 chart2/inc/ChartModel.hxx:482
     chart::ChartModel mnStart sal_Int32
 chart2/inc/ChartModel.hxx:483
     chart::ChartModel mnEnd sal_Int32
-chart2/source/controller/inc/RangeSelectionListener.hxx:62
-    chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
 chart2/source/controller/main/ElementSelector.hxx:37
     chart::ListBoxEntryData nHierarchyDepth sal_Int32
-chart2/source/inc/LifeTime.hxx:198
-    apphelper::LifeTimeGuard m_guard osl::ClearableMutexGuard
 chart2/source/view/charttypes/PieChart.hxx:129
     chart::PieChart::PieLabelInfo fValue double
 chart2/source/view/inc/GL3DRenderer.hxx:54
@@ -112,18 +106,8 @@ connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
 connectivity/source/drivers/evoab2/EApi.h:126
     (anonymous) ext char *
-connectivity/source/drivers/evoab2/NPreparedStatement.hxx:51
-    connectivity::evoab::OEvoabPreparedStatement::Parameter aValue css::uno::Any
-connectivity/source/drivers/evoab2/NPreparedStatement.hxx:52
-    connectivity::evoab::OEvoabPreparedStatement::Parameter nDataType sal_Int32
-connectivity/source/drivers/evoab2/NPreparedStatement.hxx:60
-    connectivity::evoab::OEvoabPreparedStatement m_aParameters std::vector<Parameter>
-connectivity/source/drivers/evoab2/NResultSet.hxx:91
-    connectivity::evoab::OEvoabResultSet m_aStatement css::uno::WeakReferenceHelper
 connectivity/source/drivers/evoab2/NStatement.hxx:58
     connectivity::evoab::FieldSort bAscending _Bool
-connectivity/source/drivers/evoab2/NTable.hxx:34
-    connectivity::evoab::OEvoabTable m_xMetaData css::uno::Reference<css::sdbc::XDatabaseMetaData>
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 connectivity/source/drivers/mork/MorkParser.hxx:133
@@ -248,18 +232,16 @@ cui/source/inc/cuihyperdlg.hxx:67
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 dbaccess/source/core/dataaccess/documentdefinition.cxx:289
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
-dbaccess/source/sdbtools/connection/connectiondependent.hxx:116
-    sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
 dbaccess/source/sdbtools/connection/connectiontools.hxx:48
     sdbtools::ConnectionTools m_aModuleClient class sdbtools::SdbtClient
 dbaccess/source/sdbtools/connection/objectnames.hxx:44
     sdbtools::ObjectNames m_aModuleClient class sdbtools::SdbtClient
 dbaccess/source/sdbtools/connection/tablename.cxx:56
     sdbtools::TableName_Impl m_aModuleClient class sdbtools::SdbtClient
-dbaccess/source/ui/misc/dbaundomanager.cxx:137
-    dbaui::UndoManagerMethodGuard m_aGuard ::osl::ResettableMutexGuard
 desktop/qa/desktop_lib/test_desktop_lib.cxx:174
     DesktopLOKTest m_bModified _Bool
+desktop/source/deployment/gui/dp_gui_updatedialog.hxx:203
+    dp_gui::UpdateDialog m_nLastID sal_uInt16
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:120
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/unx/source/splashx.c:369
@@ -700,432 +682,24 @@ framework/source/layoutmanager/toolbarlayoutmanager.hxx:285
     framework::ToolbarLayoutManager m_bGlobalSettings _Bool
 framework/source/services/frame.cxx:420
     (anonymous namespace)::Frame m_pWindowCommandDispatch class framework::WindowCommandDispatch *
-hwpfilter/source/drawdef.h:69
-    BAREHWPDOProperty line_pstyle int
-hwpfilter/source/drawdef.h:70
-    BAREHWPDOProperty line_hstyle int
-hwpfilter/source/drawdef.h:71
-    BAREHWPDOProperty line_tstyle int
-hwpfilter/source/drawdef.h:72
-    BAREHWPDOProperty line_color unsigned int
-hwpfilter/source/drawdef.h:73
-    BAREHWPDOProperty line_width hunit
-hwpfilter/source/drawdef.h:74
-    BAREHWPDOProperty fill_color unsigned int
-hwpfilter/source/drawdef.h:75
-    BAREHWPDOProperty pattern_type uint
-hwpfilter/source/drawdef.h:76
-    BAREHWPDOProperty pattern_color unsigned int
-hwpfilter/source/drawdef.h:77
-    BAREHWPDOProperty hmargin hunit
-hwpfilter/source/drawdef.h:78
-    BAREHWPDOProperty vmargin hunit
-hwpfilter/source/drawdef.h:79
-    BAREHWPDOProperty flag uint
-hwpfilter/source/drawdef.h:87
-    GradationProperty fromcolor int
-hwpfilter/source/drawdef.h:88
-    GradationProperty tocolor int
-hwpfilter/source/drawdef.h:89
-    GradationProperty gstyle int
-hwpfilter/source/drawdef.h:90
-    GradationProperty angle int
-hwpfilter/source/drawdef.h:91
-    GradationProperty center_x int
-hwpfilter/source/drawdef.h:92
-    GradationProperty center_y int
-hwpfilter/source/drawdef.h:93
-    GradationProperty nstep int
-hwpfilter/source/drawdef.h:101
-    BitmapProperty offset1 ZZPoint
-hwpfilter/source/drawdef.h:102
-    BitmapProperty offset2 ZZPoint
-hwpfilter/source/drawdef.h:103
-    BitmapProperty szPatternFile char [261]
-hwpfilter/source/drawdef.h:104
-    BitmapProperty pictype char
-hwpfilter/source/drawdef.h:112
-    RotationProperty rot_originx int
-hwpfilter/source/drawdef.h:113
-    RotationProperty rot_originy int
-hwpfilter/source/drawdef.h:114
-    RotationProperty parall ZZParall
-hwpfilter/source/drawdef.h:130
-    HWPDOProperty hmargin hunit
-hwpfilter/source/drawdef.h:131
-    HWPDOProperty vmargin hunit
-hwpfilter/source/drawdef.h:151
-    HWPDOProperty contrast int
-hwpfilter/source/drawdef.h:152
-    HWPDOProperty greyscale int
-hwpfilter/source/drawdef.h:158
-    HWPDOProperty offset1 ZZPoint
-hwpfilter/source/drawdef.h:159
-    HWPDOProperty offset2 ZZPoint
-hwpfilter/source/drawdef.h:209
-    HWPDrawingObject offset ZZPoint
-hwpfilter/source/drawdef.h:218
-    HWPDrawingObject vrect ZZRect
-hwpfilter/source/hbox.h:84
-    FieldCode reserved1 char *
-hwpfilter/source/hbox.h:86
-    FieldCode reserved2 char *
-hwpfilter/source/hbox.h:87
-    FieldCode str1 hchar *
-hwpfilter/source/hbox.h:131
-    DateFormat format hchar [40]
-hwpfilter/source/hbox.h:167
-    Tab width hunit
-hwpfilter/source/hbox.h:168
-    Tab leader unsigned short
-hwpfilter/source/hbox.h:197
-    CellLine key unsigned char
-hwpfilter/source/hbox.h:198
-    CellLine top unsigned char
-hwpfilter/source/hbox.h:199
-    CellLine bottom unsigned char
-hwpfilter/source/hbox.h:200
-    CellLine left unsigned char
-hwpfilter/source/hbox.h:201
-    CellLine right unsigned char
-hwpfilter/source/hbox.h:202
-    CellLine color short
-hwpfilter/source/hbox.h:203
-    CellLine shade unsigned char
-hwpfilter/source/hbox.h:329
-    TxtBox reserved hchar [2]
-hwpfilter/source/hbox.h:333
-    TxtBox cap_len short
-hwpfilter/source/hbox.h:334
-    TxtBox next_box short
-hwpfilter/source/hbox.h:535
-    PicDefFile path char [256]
-hwpfilter/source/hbox.h:536
-    PicDefFile img void *
-hwpfilter/source/hbox.h:537
-    PicDefFile skipfind _Bool
-hwpfilter/source/hbox.h:553
-    PicDefOle embname char [16]
-hwpfilter/source/hbox.h:554
-    PicDefOle hwpole void *
-hwpfilter/source/hbox.h:564
-    PicDefDraw vrect ZZRect
-hwpfilter/source/hbox.h:565
-    PicDefDraw mbrcnt int
-hwpfilter/source/hbox.h:578
-    (anonymous) picfile struct PicDefFile
-hwpfilter/source/hbox.h:580
-    (anonymous) picole struct PicDefOle
-hwpfilter/source/hbox.h:596
-    Picture reserved hchar [2]
-hwpfilter/source/hbox.h:620
-    Picture skip hunit [2]
-hwpfilter/source/hbox.h:624
-    Picture scale hunit [2]
-hwpfilter/source/hbox.h:648
-    Line reserved hchar [2]
-hwpfilter/source/hbox.h:667
-    Hidden reserved hchar [2]
-hwpfilter/source/hbox.h:670
-    Hidden info unsigned char [8]
-hwpfilter/source/hbox.h:684
-    HeaderFooter reserved hchar [2]
-hwpfilter/source/hbox.h:687
-    HeaderFooter info unsigned char [8]
-hwpfilter/source/hbox.h:693
-    HeaderFooter linenumber unsigned char
-hwpfilter/source/hbox.h:714
-    Footnote reserved hchar [2]
-hwpfilter/source/hbox.h:717
-    Footnote info unsigned char [8]
-hwpfilter/source/hbox.h:729
-    Footnote width hunit
-hwpfilter/source/hbox.h:849
-    Compose compose hchar [3]
-hwpfilter/source/hgzip.h:43
-    gz_stream _inputstream class HStream *
-hwpfilter/source/hinfo.h:73
-    PaperBackInfo luminance int
-hwpfilter/source/hinfo.h:74
-    PaperBackInfo contrast int
-hwpfilter/source/hinfo.h:75
-    PaperBackInfo effect char
-hwpfilter/source/hinfo.h:80
-    PaperBackInfo range int
-hwpfilter/source/hinfo.h:185
-    HWPInfo spfnfn hunit
-hwpfilter/source/hinfo.h:234
-    CharShape reserved unsigned char [4]
-hwpfilter/source/hinfo.h:285
-    ParaShape reserved unsigned char [2]
-hwpfilter/source/hpara.h:61
-    LineInfo pos unsigned short
-hwpfilter/source/hpara.h:62
-    LineInfo space_width hunit
-hwpfilter/source/hpara.h:63
-    LineInfo height hunit
-hwpfilter/source/hpara.h:65
-    LineInfo sx hunit
-hwpfilter/source/hpara.h:66
-    LineInfo psx hunit
-hwpfilter/source/hpara.h:69
-    LineInfo height_sp hunit
-hwpfilter/source/hpara.h:70
-    LineInfo softbreak unsigned short
-hwpfilter/source/hpara.h:94
-    HWPPara scflag unsigned char
-hwpfilter/source/htags.h:31
-    EmPicture type char [16]
-hwpfilter/source/htags.h:46
-    HyperText macro char [325]
-hwpfilter/source/htags.h:48
-    HyperText reserve char [3]
-hwpfilter/source/hwpfile.h:260
-    HWPFile version int
-hwpfilter/source/hwpfile.h:262
-    HWPFile encrypted _Bool
-hwpfilter/source/hwpfile.h:264
-    HWPFile info_block_len int
-hwpfilter/source/lexer.cxx:141
-    yy_buffer_state yy_at_bol int
 include/basic/basmgr.hxx:52
     BasicError nReason enum BasicErrorReason
 include/basic/sbxvar.hxx:67
     SbxValues::(anonymous) pData void *
-include/comphelper/componentbase.hxx:130
-    comphelper::ComponentMethodGuard m_aMutexGuard ::osl::ResettableMutexGuard
 include/comphelper/MasterPropertySet.hxx:38
     comphelper::SlaveData mxSlave css::uno::Reference<css::beans::XPropertySet>
 include/connectivity/OSubComponent.hxx:54
     connectivity::OSubComponent m_xParent css::uno::Reference<css::uno::XInterface>
-include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
-    drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/editeng/adjustitem.hxx:39
     SvxAdjustItem bLeft _Bool
-include/editeng/unotext.hxx:606
+include/editeng/unotext.hxx:608
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
-include/filter/msfilter/dffpropset.hxx:35
-    DffPropFlags bBlip _Bool
-include/filter/msfilter/dffrecordheader.hxx:34
-    DffRecordHeader nImpVerInst sal_uInt16
-include/filter/msfilter/mscodec.hxx:446
-    msfilter::EncryptionStandardHeader sizeExtra sal_uInt32
-include/filter/msfilter/mscodec.hxx:450
-    msfilter::EncryptionStandardHeader providedType sal_uInt32
-include/filter/msfilter/mscodec.hxx:451
-    msfilter::EncryptionStandardHeader reserved1 sal_uInt32
-include/filter/msfilter/mscodec.hxx:452
-    msfilter::EncryptionStandardHeader reserved2 sal_uInt32
-include/filter/msfilter/mstoolbar.hxx:121
-    TBCExtraInfo wstrHelpFile class WString
-include/filter/msfilter/mstoolbar.hxx:122
-    TBCExtraInfo idHelpContext sal_Int32
-include/filter/msfilter/mstoolbar.hxx:123
-    TBCExtraInfo wstrTag class WString
-include/filter/msfilter/mstoolbar.hxx:125
-    TBCExtraInfo wstrParam class WString
-include/filter/msfilter/mstoolbar.hxx:126
-    TBCExtraInfo tbcu sal_Int8
-include/filter/msfilter/mstoolbar.hxx:127
-    TBCExtraInfo tbmg sal_Int8
-include/filter/msfilter/mstoolbar.hxx:144
-    TBCGeneralInfo descriptionText class WString
-include/filter/msfilter/mstoolbar.hxx:161
-    TBCBitMap cbDIB sal_Int32
-include/filter/msfilter/mstoolbar.hxx:191
-    TBCCDData cwstrMRU sal_Int16
-include/filter/msfilter/mstoolbar.hxx:192
-    TBCCDData iSel sal_Int16
-include/filter/msfilter/mstoolbar.hxx:193
-    TBCCDData cLines sal_Int16
-include/filter/msfilter/mstoolbar.hxx:194
-    TBCCDData dxWidth sal_Int16
-include/filter/msfilter/mstoolbar.hxx:195
-    TBCCDData wstrEdit class WString
-include/filter/msfilter/mstoolbar.hxx:260
-    TBCHeader bSignature sal_Int8
-include/filter/msfilter/mstoolbar.hxx:261
-    TBCHeader bVersion sal_Int8
-include/filter/msfilter/mstoolbar.hxx:266
-    TBCHeader bPriority sal_uInt8
-include/filter/msfilter/mstoolbar.hxx:304
-    TB bSignature sal_uInt8
-include/filter/msfilter/mstoolbar.hxx:305
-    TB bVersion sal_uInt8
-include/filter/msfilter/mstoolbar.hxx:307
-    TB ltbid sal_Int32
-include/filter/msfilter/mstoolbar.hxx:309
-    TB cRowsDefault sal_uInt16
-include/filter/msfilter/mstoolbar.hxx:328
-    SRECT left sal_Int16
-include/filter/msfilter/mstoolbar.hxx:329
-    SRECT top sal_Int16
-include/filter/msfilter/mstoolbar.hxx:330
-    SRECT right sal_Int16
-include/filter/msfilter/mstoolbar.hxx:331
-    SRECT bottom sal_Int16
-include/filter/msfilter/mstoolbar.hxx:341
-    TBVisualData tbds sal_Int8
-include/filter/msfilter/mstoolbar.hxx:342
-    TBVisualData tbv sal_Int8
-include/filter/msfilter/mstoolbar.hxx:343
-    TBVisualData tbdsDock sal_Int8
-include/filter/msfilter/mstoolbar.hxx:344
-    TBVisualData iRow sal_Int8
-include/filter/msfilter/mstoolbar.hxx:346
-    TBVisualData rcDock class SRECT
-include/filter/msfilter/mstoolbar.hxx:347
-    TBVisualData rcFloat class SRECT
-include/filter/msfilter/svdfppt.hxx:79
-    PptCurrentUserAtom nMagic sal_uInt32
-include/filter/msfilter/svdfppt.hxx:81
-    PptCurrentUserAtom nDocFileVersion sal_uInt16
-include/filter/msfilter/svdfppt.hxx:82
-    PptCurrentUserAtom nMajorVersion sal_uInt8
-include/filter/msfilter/svdfppt.hxx:83
-    PptCurrentUserAtom nMinorVersion sal_uInt8
-include/filter/msfilter/svdfppt.hxx:109
-    SdHyperlinkEntry nPrivate1 sal_Int32
-include/filter/msfilter/svdfppt.hxx:110
-    SdHyperlinkEntry nPrivate2 sal_Int32
-include/filter/msfilter/svdfppt.hxx:111
-    SdHyperlinkEntry nPrivate3 sal_Int32
-include/filter/msfilter/svdfppt.hxx:112
-    SdHyperlinkEntry nInfo sal_Int32
-include/filter/msfilter/svdfppt.hxx:125
-    PptInteractiveInfoAtom nOleVerb sal_uInt8
-include/filter/msfilter/svdfppt.hxx:127
-    PptInteractiveInfoAtom nFlags sal_uInt8
-include/filter/msfilter/svdfppt.hxx:131
-    PptInteractiveInfoAtom nUnknown1 sal_uInt8
-include/filter/msfilter/svdfppt.hxx:132
-    PptInteractiveInfoAtom nUnknown2 sal_uInt8
-include/filter/msfilter/svdfppt.hxx:133
-    PptInteractiveInfoAtom nUnknown3 sal_uInt8
-include/filter/msfilter/svdfppt.hxx:191
-    PptDocumentAtom n1stPageNumber sal_uInt16
-include/filter/msfilter/svdfppt.hxx:192
-    PptDocumentAtom eSlidesPageFormat enum PptPageFormat
-include/filter/msfilter/svdfppt.hxx:193
-    PptDocumentAtom bEmbeddedTrueType _Bool
-include/filter/msfilter/svdfppt.hxx:195
-    PptDocumentAtom bRightToLeft _Bool
-include/filter/msfilter/svdfppt.hxx:196
-    PptDocumentAtom bShowComments _Bool
-include/filter/msfilter/svdfppt.hxx:237
-    PptSlidePersistAtom nFlags sal_uInt32
-include/filter/msfilter/svdfppt.hxx:238
-    PptSlidePersistAtom nNumberTexts sal_uInt32
-include/filter/msfilter/svdfppt.hxx:251
-    PptNotesAtom nSlideId sal_uInt32
-include/filter/msfilter/svdfppt.hxx:252
-    PptNotesAtom nFlags sal_uInt16
-include/filter/msfilter/svdfppt.hxx:275
-    PptFontEntityAtom lfClipPrecision sal_uInt8
-include/filter/msfilter/svdfppt.hxx:276
-    PptFontEntityAtom lfQuality sal_uInt8
-include/filter/msfilter/svdfppt.hxx:281
-    PptFontEntityAtom bAvailable _Bool
-include/filter/msfilter/svdfppt.hxx:290
-    PptUserEditAtom nLastSlideID sal_Int32
-include/filter/msfilter/svdfppt.hxx:291
-    PptUserEditAtom nVersion sal_uInt32
-include/filter/msfilter/svdfppt.hxx:316
-    PptOEPlaceholderAtom nPlaceholderSize sal_uInt8
-include/filter/msfilter/svdfppt.hxx:334
-    PptSlidePersistEntry aNotesAtom struct PptNotesAtom
-include/filter/msfilter/svdfppt.hxx:348
-    PptSlidePersistEntry bBObjIsTemporary _Bool
-include/filter/msfilter/svdfppt.hxx:678
-    PPTExtParaLevel mpfPP10Ext sal_uInt32
-include/filter/msfilter/svdfppt.hxx:680
-    PPTExtParaLevel mcfPP10Ext sal_uInt32
-include/filter/msfilter/svdfppt.hxx:706
-    PPTExtParaProv bGraphics _Bool
-include/filter/msfilter/svdfppt.hxx:863
-    ImplPPTParaPropSet nDontKnow1 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:864
-    ImplPPTParaPropSet nDontKnow2 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:865
-    ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
-include/filter/msfilter/svdfppt.hxx:883
-    PPTParaPropSet mnOriginalTextPos sal_uInt32
-include/filter/msfilter/svdfppt.hxx:900
-    ImplPPTCharPropSet mnANSITypeface sal_uInt16
-include/filter/msfilter/svdfppt.hxx:1011
-    StyleTextProp9 mpfPP10Ext sal_uInt32
-include/filter/msfilter/svdfppt.hxx:1013
-    StyleTextProp9 mncfPP10Ext sal_uInt32
-include/filter/msfilter/svdfppt.hxx:1015
-    StyleTextProp9 mnPP10Ext sal_uInt32
-include/filter/msfilter/svdfppt.hxx:1016
-    StyleTextProp9 mfBidi sal_uInt16
-include/filter/msfilter/svdfppt.hxx:1183
-    ImplPPTTextObj mnShapeId sal_uInt32
-include/filter/msfilter/svdfppt.hxx:1184
-    ImplPPTTextObj mnShapeMaster sal_uInt32
 include/LibreOfficeKit/LibreOfficeKit.h:98
     _LibreOfficeKitDocumentClass nSize size_t
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
-include/oox/drawingml/drawingmltypes.hxx:148
-    oox::drawingml::IndexRange end sal_Int32
-include/oox/dump/oledumper.hxx:133
-    oox::dump::OlePropertyStreamObject meTextEnc rtl_TextEncoding
-include/oox/export/vmlexport.hxx:87
-    oox::vml::VMLExport m_pNdTopLeft const class Point *
-include/oox/ole/axbinaryreader.hxx:238
-    oox::ole::AxBinaryPropertyReader maDummyPicData oox::StreamDataSequence
-include/oox/ole/axbinaryreader.hxx:239
-    oox::ole::AxBinaryPropertyReader maDummyString class rtl::OUString
-include/oox/ole/axbinaryreader.hxx:240
-    oox::ole::AxBinaryPropertyReader maDummyArrayString oox::ole::AxArrayString
-include/oox/ole/axcontrol.hxx:471
-    oox::ole::ComCtlProgressBarModel mnVertical sal_uInt16
-include/oox/ole/axcontrol.hxx:472
-    oox::ole::ComCtlProgressBarModel mnSmooth sal_uInt16
-include/oox/ole/axcontrol.hxx:603
-    oox::ole::AxTabStripModel mnTabData sal_uInt32
-include/oox/ole/axcontrol.hxx:604
-    oox::ole::AxTabStripModel mnVariousPropertyBits sal_uInt32
-include/oox/ole/axcontrol.hxx:606
-    oox::ole::AxTabStripModel maTabNames std::vector< ::rtl::OUString>
-include/oox/ole/axcontrol.hxx:826
-    oox::ole::AxContainerModelBase mnBorderColor sal_uInt32
-include/oox/ole/axcontrol.hxx:827
-    oox::ole::AxContainerModelBase mnBorderStyle sal_Int32
-include/oox/ole/axcontrol.hxx:829
-    oox::ole::AxContainerModelBase mnCycleType sal_Int32
-include/oox/ole/axcontrol.hxx:830
-    oox::ole::AxContainerModelBase mnSpecialEffect sal_Int32
-include/oox/ole/axcontrol.hxx:831
-    oox::ole::AxContainerModelBase mnPicAlign sal_Int32
-include/oox/ole/axcontrol.hxx:832
-    oox::ole::AxContainerModelBase mnPicSizeMode sal_Int32
-include/oox/ole/axcontrol.hxx:833
-    oox::ole::AxContainerModelBase mbPicTiling _Bool
-include/oox/ole/oleobjecthelper.hxx:50
-    oox::ole::OleObjectInfo mbAutoUpdate _Bool
-include/oox/ole/vbacontrol.hxx:100
-    oox::ole::VbaSiteModel mnHelpContextId sal_Int32
-include/oox/ole/vbacontrol.hxx:105
-    oox::ole::VbaSiteModel mnGroupId sal_uInt16
-include/oox/ole/vbamodule.hxx:98
-    oox::ole::VbaModule mbReadOnly _Bool
-include/oox/ole/vbamodule.hxx:99
-    oox::ole::VbaModule mbPrivate _Bool
-include/oox/ppt/pptshape.hxx:51
-    oox::ppt::PPTShape mbReferenced _Bool
-include/oox/ppt/soundactioncontext.hxx:48
-    oox::ppt::SoundActionContext mbLoopSound _Bool
-include/oox/ppt/soundactioncontext.hxx:49
-    oox::ppt::SoundActionContext mbStopSound _Bool
-include/oox/vml/vmldrawing.hxx:67
-    oox::vml::OleObjectInfo mbAutoLoad _Bool
-include/oox/vml/vmlshape.hxx:185
-    oox::vml::ClientData mbVisible _Bool
 include/opencl/openclwrapper.hxx:36
     opencl::KernelEnv mpkProgram cl_program
 include/opencl/openclwrapper.hxx:52
@@ -1140,14 +714,16 @@ include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
-include/svtools/genericunodialog.hxx:170
-    svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:159
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/bmpmask.hxx:129
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/float3d.hxx:176
     Svx3DWin pControllerItem class Svx3DCtrlItem *
+include/svx/fmsrcimp.hxx:162
+    FmSearchEngine m_xFormatSupplier css::uno::Reference<css::util::XNumberFormatsSupplier>
+include/svx/fmsrcimp.hxx:171
+    FmSearchEngine::FieldInfo nFormatKey sal_uInt32
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
 include/svx/srchdlg.hxx:231
@@ -1176,852 +752,6 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
-lotuswordpro/source/filter/bento.hxx:189
-    OpenStormBento::LtcUtBenValueStream cpValue class OpenStormBento::CBenValue *
-lotuswordpro/source/filter/bento.hxx:325
-    OpenStormBento::CBenValueSegment cpValue class OpenStormBento::CBenValue *
-lotuswordpro/source/filter/clone.hxx:23
-    detail::has_clone::(anonymous) a char [2]
-lotuswordpro/source/filter/localtime.hxx:67
-    LtTm tm_wday long
-lotuswordpro/source/filter/lwp9reader.hxx:75
-    Lwp9Reader m_pObjMgr class LwpObjectFactory *
-lotuswordpro/source/filter/lwpatomholder.hxx:72
-    LwpAtomHolder m_nAssocAtom sal_Int32
-lotuswordpro/source/filter/lwpbasetype.hxx:90
-    LwpPanoseNumber m_nFamilyType sal_uInt8
-lotuswordpro/source/filter/lwpbasetype.hxx:91
-    LwpPanoseNumber m_nSerifStyle sal_uInt8
-lotuswordpro/source/filter/lwpbasetype.hxx:92
-    LwpPanoseNumber m_nWeight sal_uInt8
-lotuswordpro/source/filter/lwpbasetype.hxx:93
-    LwpPanoseNumber m_nProportion sal_uInt8
-lotuswordpro/source/filter/lwpbasetype.hxx:94
-    LwpPanoseNumber m_nContrast sal_uInt8
-lotuswordpro/source/filter/lwpbasetype.hxx:95
-    LwpPanoseNumber m_nStrokeVariation sal_uInt8
-lotuswordpro/source/filter/lwpbasetype.hxx:96
-    LwpPanoseNumber m_nArmStyle sal_uInt8
-lotuswordpro/source/filter/lwpbasetype.hxx:97
-    LwpPanoseNumber m_nLetterform sal_uInt8
-lotuswordpro/source/filter/lwpbasetype.hxx:98
-    LwpPanoseNumber m_nMidline sal_uInt8
-lotuswordpro/source/filter/lwpbasetype.hxx:99
-    LwpPanoseNumber m_nXHeight sal_uInt8
-lotuswordpro/source/filter/lwpborderstuff.hxx:92
-    LwpBorderStuff m_nValid sal_uInt16
-lotuswordpro/source/filter/lwpborderstuff.hxx:99
-    LwpBorderStuff m_nGroupIndent sal_Int32
-lotuswordpro/source/filter/lwpbulletstylemgr.hxx:95
-    LwpBulletStyleMgr m_pFoundry class LwpFoundry *
-lotuswordpro/source/filter/lwpbulletstylemgr.hxx:97
-    LwpBulletStyleMgr m_bIsBulletSkipped _Bool
-lotuswordpro/source/filter/lwpcelllayout.hxx:124
-    LwpCellLayout cLayDiagonalLine class LwpObjectID
-lotuswordpro/source/filter/lwpcelllayout.hxx:133
-    LwpCellLayout cType enum LwpCellLayout::LeaderDotType
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:92
-    LwpTextStyle m_nFontID sal_uInt32
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:94
-    LwpTextStyle m_nCSFlags sal_uInt16
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:95
-    LwpTextStyle m_nUseCount sal_uInt32
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:97
-    LwpTextStyle m_aDescription class LwpAtomHolder
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:98
-    LwpTextStyle m_aLangOverride class LwpTextLanguageOverride
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:99
-    LwpTextStyle m_aTxtAttrOverride class LwpTextAttributeOverride
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:101
-    LwpTextStyle m_aCharacterBorderOverride class LwpCharacterBorderOverride
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:102
-    LwpTextStyle m_aAmikakeOverride class LwpAmikakeOverride
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:104
-    LwpTextStyle m_CharacterBorder class LwpObjectID
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:105
-    LwpTextStyle m_Amikake class LwpObjectID
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:106
-    LwpTextStyle m_FaceStyle class LwpObjectID
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:108
-    LwpTextStyle m_SizeStyle class LwpObjectID
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:109
-    LwpTextStyle m_AttributeStyle class LwpObjectID
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:110
-    LwpTextStyle m_FontStyle class LwpObjectID
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:111
-    LwpTextStyle m_CharacterBorderStyle class LwpObjectID
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:112
-    LwpTextStyle m_AmikakeStyle class LwpObjectID
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:114
-    LwpTextStyle m_nStyleDefinition sal_uInt32
-lotuswordpro/source/filter/lwpcharacterstyle.hxx:116
-    LwpTextStyle m_nKey sal_uInt16
-lotuswordpro/source/filter/lwpcharborderoverride.hxx:86
-    LwpCharacterBorderOverride m_pBorderStuff class LwpBorderStuff *
-lotuswordpro/source/filter/lwpcharborderoverride.hxx:87
-    LwpCharacterBorderOverride m_pMargins class LwpMargins *
-lotuswordpro/source/filter/lwpcharborderoverride.hxx:88
-    LwpCharacterBorderOverride m_nAboveWidth sal_Int32
-lotuswordpro/source/filter/lwpcharborderoverride.hxx:89
-    LwpCharacterBorderOverride m_nBelowWidth sal_Int32
-lotuswordpro/source/filter/lwpcontent.hxx:82
-    LwpContent m_PreviousEnumerated class LwpObjectID
-lotuswordpro/source/filter/lwpdivinfo.hxx:95
-    LwpDivInfo m_LayoutID class LwpObjectID
-lotuswordpro/source/filter/lwpdivinfo.hxx:97
-    LwpDivInfo m_ExternalName class LwpAtomHolder
-lotuswordpro/source/filter/lwpdivinfo.hxx:98
-    LwpDivInfo m_ExternalType class LwpAtomHolder
-lotuswordpro/source/filter/lwpdivinfo.hxx:103
-    LwpDivInfo m_nPageNoStyle sal_uInt16
-lotuswordpro/source/filter/lwpdivinfo.hxx:104
-    LwpDivInfo m_TabColor class LwpColor
-lotuswordpro/source/filter/lwpdivopts.hxx:77
-    LwpHyphenOptions m_nFlags sal_uInt16
-lotuswordpro/source/filter/lwpdivopts.hxx:78
-    LwpHyphenOptions m_nZoneBefore sal_uInt16
-lotuswordpro/source/filter/lwpdivopts.hxx:79
-    LwpHyphenOptions m_nZoneAfter sal_uInt16
-lotuswordpro/source/filter/lwpdivopts.hxx:80
-    LwpHyphenOptions m_nMaxLines sal_uInt16
-lotuswordpro/source/filter/lwpdivopts.hxx:112
-    LwpDivisionOptions m_HyphOpts class LwpHyphenOptions
-lotuswordpro/source/filter/lwpdivopts.hxx:113
-    LwpDivisionOptions m_nOptionFlag sal_uInt16
-lotuswordpro/source/filter/lwpdivopts.hxx:114
-    LwpDivisionOptions m_Lang class LwpTextLanguage
-lotuswordpro/source/filter/lwpdoc.hxx:86
-    LwpDocument m_pOwnedFoundry class LwpFoundry *
-lotuswordpro/source/filter/lwpdoc.hxx:91
-    LwpDocument m_nFlags sal_uInt16
-lotuswordpro/source/filter/lwpdoc.hxx:107
-    LwpDocument m_DivOpts class LwpObjectID
-lotuswordpro/source/filter/lwpdoc.hxx:111
-    LwpDocument m_Epoch class LwpAtomHolder
-lotuswordpro/source/filter/lwpdoc.hxx:115
-    LwpDocument m_STXInfo class LwpObjectID
-lotuswordpro/source/filter/lwpdoc.hxx:230
-    LwpDocSock m_Doc class LwpObjectID
-lotuswordpro/source/filter/lwpdocdata.hxx:67
-    LwpDocOptions nOptionFlag sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:68
-    LwpDocOptions encrypt1password class LwpAtomHolder
-lotuswordpro/source/filter/lwpdocdata.hxx:69
-    LwpDocOptions encrypt2password class LwpAtomHolder
-lotuswordpro/source/filter/lwpdocdata.hxx:70
-    LwpDocOptions characterSet class LwpAtomHolder
-lotuswordpro/source/filter/lwpdocdata.hxx:71
-    LwpDocOptions grammerSet class LwpAtomHolder
-lotuswordpro/source/filter/lwpdocdata.hxx:72
-    LwpDocOptions nMarginMarks sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:73
-    LwpDocOptions nMarginMarksLocation sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:74
-    LwpDocOptions nMarginMarksChar sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:84
-    LwpDocInfo cpVerDocInfo class LwpObjectID
-lotuswordpro/source/filter/lwpdocdata.hxx:90
-    LwpDocControl cGreeting class LwpAtomHolder
-lotuswordpro/source/filter/lwpdocdata.hxx:91
-    LwpDocControl nFlags sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:92
-    LwpDocControl nDocControlProtection sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:95
-    LwpDocControl nFileProtection sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:98
-    LwpDocControl nAutoVersioning sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:99
-    LwpDocControl cDocControlOnlyEditor class LwpAtomHolder
-lotuswordpro/source/filter/lwpdocdata.hxx:100
-    LwpDocControl nEditorVerification sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:104
-    LwpFontDescriptionOverrideBase cOverrideBits sal_uInt8
-lotuswordpro/source/filter/lwpdocdata.hxx:105
-    LwpFontDescriptionOverrideBase cApplyBits sal_uInt8
-lotuswordpro/source/filter/lwpdocdata.hxx:106
-    LwpFontDescriptionOverrideBase cPointSize sal_Int32
-lotuswordpro/source/filter/lwpdocdata.hxx:107
-    LwpFontDescriptionOverrideBase cOverstrike sal_uInt8
-lotuswordpro/source/filter/lwpdocdata.hxx:108
-    LwpFontDescriptionOverrideBase cTightness sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:111
-    LwpFontDescriptionOverrideBase cColor class LwpColor
-lotuswordpro/source/filter/lwpdocdata.hxx:112
-    LwpFontDescriptionOverrideBase cBackgroundColor class LwpColor
-lotuswordpro/source/filter/lwpdocdata.hxx:116
-    LwpFontAttributeOverride cAttrBits sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:117
-    LwpFontAttributeOverride cAttrOverrideBits sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:118
-    LwpFontAttributeOverride cAttrApplyBits sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:119
-    LwpFontAttributeOverride cAttrOverrideBits2 sal_uInt8
-lotuswordpro/source/filter/lwpdocdata.hxx:120
-    LwpFontAttributeOverride cAttrApplyBits2 sal_uInt8
-lotuswordpro/source/filter/lwpdocdata.hxx:121
-    LwpFontAttributeOverride cCase sal_uInt8
-lotuswordpro/source/filter/lwpdocdata.hxx:122
-    LwpFontAttributeOverride cUnder sal_uInt8
-lotuswordpro/source/filter/lwpdocdata.hxx:126
-    LwpFontDescriptionOverride cFontAttributeOverride struct LwpFontAttributeOverride
-lotuswordpro/source/filter/lwpdocdata.hxx:127
-    LwpFontDescriptionOverride cFontDescriptionOverrideBase struct LwpFontDescriptionOverrideBase
-lotuswordpro/source/filter/lwpdocdata.hxx:128
-    LwpFontDescriptionOverride cFaceName class LwpAtomHolder
-lotuswordpro/source/filter/lwpdocdata.hxx:129
-    LwpFontDescriptionOverride cAltFaceName class LwpAtomHolder
-lotuswordpro/source/filter/lwpdocdata.hxx:133
-    LwpOverrideOg cValues sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:134
-    LwpOverrideOg cOverride sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:135
-    LwpOverrideOg cApply sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:139
-    LwpTextAttributeOverrideOg cOverride struct LwpOverrideOg
-lotuswordpro/source/filter/lwpdocdata.hxx:140
-    LwpTextAttributeOverrideOg cHideLevels sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:141
-    LwpTextAttributeOverrideOg cBaselineOffset sal_Int32
-lotuswordpro/source/filter/lwpdocdata.hxx:146
-    LwpEditorAttr cInitials class LwpAtomHolder
-lotuswordpro/source/filter/lwpdocdata.hxx:149
-    LwpEditorAttr cInsFontOver struct LwpFontDescriptionOverride
-lotuswordpro/source/filter/lwpdocdata.hxx:150
-    LwpEditorAttr cDelFontOver struct LwpFontDescriptionOverride
-lotuswordpro/source/filter/lwpdocdata.hxx:151
-    LwpEditorAttr nAbilities sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:152
-    LwpEditorAttr nLocks sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:153
-    LwpEditorAttr nSuggestions sal_uInt16
-lotuswordpro/source/filter/lwpdocdata.hxx:154
-    LwpEditorAttr cDelTextAttr struct LwpTextAttributeOverrideOg
-lotuswordpro/source/filter/lwpdocdata.hxx:163
-    LwpDocData m_DocOptions struct LwpDocOptions
-lotuswordpro/source/filter/lwpdrawobj.hxx:294
-    LwpDrawTextBox m_aVector struct SdwPoint
-lotuswordpro/source/filter/lwpfilehdr.hxx:68
-    LwpFileHeader m_nAppRevision sal_uInt16
-lotuswordpro/source/filter/lwpfilehdr.hxx:69
-    LwpFileHeader m_nAppReleaseNo sal_uInt16
-lotuswordpro/source/filter/lwpfilehdr.hxx:70
-    LwpFileHeader m_nRequiredAppRevision sal_uInt16
-lotuswordpro/source/filter/lwpfilehdr.hxx:71
-    LwpFileHeader m_nRequiredFileRevision sal_uInt16
-lotuswordpro/source/filter/lwpfont.hxx:128
-    LwpFontNameEntry m_nApplyBits sal_uInt8
-lotuswordpro/source/filter/lwpfont.hxx:130
-    LwpFontNameEntry m_nOverstrike sal_uInt16
-lotuswordpro/source/filter/lwpfont.hxx:131
-    LwpFontNameEntry m_nTightness sal_uInt16
-lotuswordpro/source/filter/lwpfont.hxx:193
-    LwpFontAttrEntry m_nAttrApplyBits sal_uInt16
-lotuswordpro/source/filter/lwpfont.hxx:195
-    LwpFontAttrEntry m_nAttrApplyBits2 sal_uInt8
-lotuswordpro/source/filter/lwpfootnote.hxx:248
-    LwpFootnoteOptions m_EndnoteDivisionNumbering class LwpFootnoteNumberOptions
-lotuswordpro/source/filter/lwpfootnote.hxx:249
-    LwpFootnoteOptions m_EndnoteDivisionGroupNumbering class LwpFootnoteNumberOptions
-lotuswordpro/source/filter/lwpfootnote.hxx:252
-    LwpFootnoteOptions m_FootnoteContinuedSeparator class LwpFootnoteSeparatorOptions
-lotuswordpro/source/filter/lwpfoundry.hxx:93
-    LwpObjectManager m_Division class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:128
-    LwpContentManager m_EnumTail class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:129
-    LwpContentManager m_OleObjCount class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:132
-    LwpContentManager m_GrapTail class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:133
-    LwpContentManager m_OleHead class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:134
-    LwpContentManager m_OleTail class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:149
-    LwpPieceManager m_GeometryPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:150
-    LwpPieceManager m_ScalePieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:151
-    LwpPieceManager m_MarginsPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:152
-    LwpPieceManager m_ColumnsPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:153
-    LwpPieceManager m_BorderStuffPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:154
-    LwpPieceManager m_GutterStuffPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:155
-    LwpPieceManager m_BackgroundStuffPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:156
-    LwpPieceManager m_JoinStuffPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:157
-    LwpPieceManager m_ShadowPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:158
-    LwpPieceManager m_NumericsPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:159
-    LwpPieceManager m_RelativityPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:160
-    LwpPieceManager m_AlignmentPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:161
-    LwpPieceManager m_IndentPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:162
-    LwpPieceManager m_ParaBorderPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:163
-    LwpPieceManager m_SpacingPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:164
-    LwpPieceManager m_BreaksPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:165
-    LwpPieceManager m_NumberingPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:166
-    LwpPieceManager m_TabPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:167
-    LwpPieceManager m_CharacterBorderPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:168
-    LwpPieceManager m_AmikakePieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:170
-    LwpPieceManager m_ParaBackgroundPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:171
-    LwpPieceManager m_ExternalBorderStuffPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:172
-    LwpPieceManager m_ExternalJoinStuffPieceList class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:207
-    LwpFoundry m_ObjMgr class LwpObjectManager
-lotuswordpro/source/filter/lwpfoundry.hxx:208
-    LwpFoundry m_MarkerHead class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:209
-    LwpFoundry m_FootnoteMgr class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:217
-    LwpFoundry m_DefaultClickStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:220
-    LwpFoundry m_TableStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:222
-    LwpFoundry m_DftFrameStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:223
-    LwpFoundry m_DftPageStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:224
-    LwpFoundry m_DftTableStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:225
-    LwpFoundry m_DftCellStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:226
-    LwpFoundry m_DftColumnStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:227
-    LwpFoundry m_DftLeftColumnStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:228
-    LwpFoundry m_DftRighColumnStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:231
-    LwpFoundry m_DdeLinkHead class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:232
-    LwpFoundry m_DirtBagHead class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:233
-    LwpFoundry m_NamedOutlineSeqHead class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:234
-    LwpFoundry m_EnumLayoutHead class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:235
-    LwpFoundry m_EnumLayoutTail class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:237
-    LwpFoundry m_NamedObjects class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:238
-    LwpFoundry m_nLastClickHere sal_uInt32
-lotuswordpro/source/filter/lwpfoundry.hxx:240
-    LwpFoundry m_SmartTextMgr class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:246
-    LwpFoundry m_DftDropCapStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:247
-    LwpFoundry m_DftHeaderStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:249
-    LwpFoundry m_DftFooterStyle class LwpObjectID
-lotuswordpro/source/filter/lwpfoundry.hxx:284
-    LwpStyleManager m_pFoundry class LwpFoundry *
-lotuswordpro/source/filter/lwpframelayout.hxx:224
-    LwpRubyLayout m_nStateFlag sal_uInt16
-lotuswordpro/source/filter/lwpframelayout.hxx:225
-    LwpRubyLayout m_nXOffset sal_Int32
-lotuswordpro/source/filter/lwpframelayout.hxx:226
-    LwpRubyLayout m_nYOffset sal_Int32
-lotuswordpro/source/filter/lwpfrib.hxx:75
-    ModifierInfo Language class LwpTextLanguageOverride
-lotuswordpro/source/filter/lwpfrib.hxx:79
-    ModifierInfo HasLangOverride _Bool
-lotuswordpro/source/filter/lwpfribmark.hxx:81
-    LwpFribCHBlock m_nType sal_uInt8
-lotuswordpro/source/filter/lwpfribmark.hxx:151
-    LwpFribRubyMarker m_nType sal_uInt8
-lotuswordpro/source/filter/lwpfribtext.hxx:107
-    LwpFribParaNumber m_nLevel sal_uInt16
-lotuswordpro/source/filter/lwpfribtext.hxx:169
-    LwpFribDocVar m_aName class LwpAtomHolder
-lotuswordpro/source/filter/lwpfribtext.hxx:204
-    LwpFribPageNumber m_nStartNum sal_uInt16
-lotuswordpro/source/filter/lwpfribtext.hxx:205
-    LwpFribPageNumber m_nStartOnPage sal_uInt16
-lotuswordpro/source/filter/lwpfribtext.hxx:206
-    LwpFribPageNumber m_nFlag sal_uInt16
-lotuswordpro/source/filter/lwpgrfobj.hxx:74
-    ImageProcessingData nEdgeEnchancement sal_uInt8
-lotuswordpro/source/filter/lwpgrfobj.hxx:75
-    ImageProcessingData nSmoothing sal_uInt8
-lotuswordpro/source/filter/lwpgrfobj.hxx:76
-    ImageProcessingData bAutoContrast _Bool
-lotuswordpro/source/filter/lwpgrfobj.hxx:77
-    ImageProcessingData bInvertImage _Bool
-lotuswordpro/source/filter/lwpgrfobj.hxx:99
-    LwpGraphicObject m_nCachedBaseLine sal_Int32
-lotuswordpro/source/filter/lwpgrfobj.hxx:102
-    LwpGraphicObject m_bCompressed sal_Int16
-lotuswordpro/source/filter/lwplayout.hxx:234
-    LwpVirtualLayout m_nEditorID sal_uInt16
-lotuswordpro/source/filter/lwplayout.hxx:235
-    LwpVirtualLayout m_NextEnumerated class LwpObjectID
-lotuswordpro/source/filter/lwplayout.hxx:236
-    LwpVirtualLayout m_PreviousEnumerated class LwpObjectID
-lotuswordpro/source/filter/lwplayout.hxx:313
-    LwpLayoutStyle m_nStyleDefinition sal_uInt32
-lotuswordpro/source/filter/lwplayout.hxx:315
-    LwpLayoutStyle m_nKey sal_uInt16
-lotuswordpro/source/filter/lwplayout.hxx:325
-    LwpLayoutMisc m_nGridDistance sal_Int32
-lotuswordpro/source/filter/lwplayout.hxx:326
-    LwpLayoutMisc m_nGridType sal_uInt16
-lotuswordpro/source/filter/lwplayout.hxx:327
-    LwpLayoutMisc m_aContentStyle class LwpAtomHolder
-lotuswordpro/source/filter/lwplayout.hxx:404
-    LwpMiddleLayout m_aStyleStuff class LwpLayoutStyle
-lotuswordpro/source/filter/lwplayout.hxx:405
-    LwpMiddleLayout m_aMiscStuff class LwpLayoutMisc
-lotuswordpro/source/filter/lwplayout.hxx:411
-    LwpMiddleLayout m_LayExtBorderStuff class LwpObjectID
-lotuswordpro/source/filter/lwplayout.hxx:434
-    LwpLayout m_LayJoinStuff class LwpObjectID
-lotuswordpro/source/filter/lwplayout.hxx:436
-    LwpLayout m_LayExtJoinStuff class LwpObjectID
-lotuswordpro/source/filter/lwplayout.hxx:501
-    LwpPlacableLayout m_Script class LwpAtomHolder
-lotuswordpro/source/filter/lwplaypiece.hxx:78
-    LwpRotor m_nRotation sal_Int16
-lotuswordpro/source/filter/lwplaypiece.hxx:99
-    LwpLayoutGeometry m_ContainerRotor class LwpRotor
-lotuswordpro/source/filter/lwplaypiece.hxx:127
-    LwpLayoutScale m_nContentRotation sal_uInt16
-lotuswordpro/source/filter/lwplaypiece.hxx:146
-    LwpLayoutMargins m_ExtraMargins class LwpMargins
-lotuswordpro/source/filter/lwplaypiece.hxx:186
-    LwpExternalBorder m_LeftName class LwpAtomHolder
-lotuswordpro/source/filter/lwplaypiece.hxx:187
-    LwpExternalBorder m_TopName class LwpAtomHolder
-lotuswordpro/source/filter/lwplaypiece.hxx:188
-    LwpExternalBorder m_RightName class LwpAtomHolder
-lotuswordpro/source/filter/lwplaypiece.hxx:189
-    LwpExternalBorder m_BottomName class LwpAtomHolder
-lotuswordpro/source/filter/lwplaypiece.hxx:201
-    LwpLayoutExternalBorder m_ExtranalBorder class LwpExternalBorder
-lotuswordpro/source/filter/lwplaypiece.hxx:257
-    LwpJoinStuff m_nPercentage sal_uInt16
-lotuswordpro/source/filter/lwplaypiece.hxx:258
-    LwpJoinStuff m_nCorners sal_uInt16
-lotuswordpro/source/filter/lwplaypiece.hxx:259
-    LwpJoinStuff m_nWidth sal_Int32
-lotuswordpro/source/filter/lwplaypiece.hxx:260
-    LwpJoinStuff m_nHeight sal_Int32
-lotuswordpro/source/filter/lwplaypiece.hxx:292
-    LwpJoinStuff m_nScaling sal_uInt16
-lotuswordpro/source/filter/lwplaypiece.hxx:293
-    LwpJoinStuff m_Color class LwpColor
-lotuswordpro/source/filter/lwplaypiece.hxx:304
-    LwpLayoutJoins m_JoinStuff class LwpJoinStuff
-lotuswordpro/source/filter/lwplaypiece.hxx:358
-    LwpLayoutRelativityGuts m_nRelFromWhere sal_uInt8
-lotuswordpro/source/filter/lwplaypiece.hxx:360
-    LwpLayoutRelativityGuts m_nTether sal_uInt8
-lotuswordpro/source/filter/lwplaypiece.hxx:361
-    LwpLayoutRelativityGuts m_nTetherWhere sal_uInt8
-lotuswordpro/source/filter/lwplaypiece.hxx:362
-    LwpLayoutRelativityGuts m_nFlags sal_uInt8
-lotuswordpro/source/filter/lwplnopts.hxx:79
-    LwpLineNumberOptions m_nSpacing sal_uInt32
-lotuswordpro/source/filter/lwpmarker.hxx:82
-    LwpMarker m_nFlag sal_uInt16
-lotuswordpro/source/filter/lwpmarker.hxx:83
-    LwpMarker m_nPageNumber sal_uInt16
-lotuswordpro/source/filter/lwpmarker.hxx:84
-    LwpMarker m_nNeedUpdate sal_uInt16
-lotuswordpro/source/filter/lwpmarker.hxx:85
-    LwpMarker m_objLayout class LwpObjectID
-lotuswordpro/source/filter/lwpmarker.hxx:86
-    LwpMarker m_objMarkerList class LwpObjectID
-lotuswordpro/source/filter/lwpmarker.hxx:87
-    LwpMarker m_objContent class LwpObjectID
-lotuswordpro/source/filter/lwpmarker.hxx:97
-    LwpFribRange m_StartPara class LwpObjectID
-lotuswordpro/source/filter/lwpmarker.hxx:98
-    LwpFribRange m_EndPara class LwpObjectID
-lotuswordpro/source/filter/lwpmarker.hxx:107
-    LwpStoryMarker m_Range class LwpFribRange
-lotuswordpro/source/filter/lwpmarker.hxx:108
-    LwpStoryMarker m_nFlag sal_uInt16
-lotuswordpro/source/filter/lwpmarker.hxx:160
-    LwpCHBlkMarker m_nTab sal_uInt32
-lotuswordpro/source/filter/lwpmarker.hxx:164
-    LwpCHBlkMarker m_Mirror class LwpAtomHolder
-lotuswordpro/source/filter/lwpmarker.hxx:182
-    LwpBookMark m_nFlag sal_uInt16
-lotuswordpro/source/filter/lwpmarker.hxx:235
-    LwpFieldMark m_objFormulaStory class LwpObjectID
-lotuswordpro/source/filter/lwpmarker.hxx:236
-    LwpFieldMark m_objResultContent class LwpObjectID
-lotuswordpro/source/filter/lwpmarker.hxx:260
-    LwpRubyMarker m_objLayout class LwpObjectID
-lotuswordpro/source/filter/lwpobjid.hxx:85
-    LwpObjectID m_bIsCompressed _Bool
-lotuswordpro/source/filter/lwpoleobject.hxx:76
-    tagAFID_CACHE LinkedFileSize unsigned long
-lotuswordpro/source/filter/lwpoleobject.hxx:77
-    tagAFID_CACHE LinkedFileTime unsigned long
-lotuswordpro/source/filter/lwpoleobject.hxx:105
-    LwpGraphicOleObject m_pPrevObj class LwpObjectID
-lotuswordpro/source/filter/lwpoleobject.hxx:106
-    LwpGraphicOleObject m_pNextObj class LwpObjectID
-lotuswordpro/source/filter/lwpoleobject.hxx:125
-    LwpOleObject cPersistentFlags sal_uInt16
-lotuswordpro/source/filter/lwpoverride.hxx:122
-    LwpTextLanguageOverride m_nLanguage sal_uInt16
-lotuswordpro/source/filter/lwpoverride.hxx:149
-    LwpTextAttributeOverride m_nBaseLineOffset sal_uInt32
-lotuswordpro/source/filter/lwpoverride.hxx:173
-    LwpKinsokuOptsOverride m_nLevels sal_uInt16
-lotuswordpro/source/filter/lwpoverride.hxx:316
-    LwpAlignmentOverride m_nPosition sal_uInt32
-lotuswordpro/source/filter/lwpoverride.hxx:317
-    LwpAlignmentOverride m_nAlignChar sal_uInt16
-lotuswordpro/source/filter/lwpoverride.hxx:498
-    LwpAmikakeOverride m_nType sal_uInt16
-lotuswordpro/source/filter/lwppagehint.hxx:75
-    LwpSLVListHead m_ListHead class LwpObjectID
-lotuswordpro/source/filter/lwppagehint.hxx:84
-    LwpContentHintHead m_ListHead class LwpSLVListHead
-lotuswordpro/source/filter/lwppagehint.hxx:93
-    LwpFootnoteSeenHead m_ListHead class LwpSLVListHead
-lotuswordpro/source/filter/lwppagehint.hxx:109
-    LwpPageHint m_ContentHints class LwpContentHintHead
-lotuswordpro/source/filter/lwppagehint.hxx:110
-    LwpPageHint m_nLastFootnoteSeen sal_uInt16
-lotuswordpro/source/filter/lwppagehint.hxx:111
-    LwpPageHint m_nLastFootnoteProcessed sal_uInt16
-lotuswordpro/source/filter/lwppagehint.hxx:112
-    LwpPageHint m_nFlags sal_uInt16
-lotuswordpro/source/filter/lwppagehint.hxx:114
-    LwpPageHint m_nNumberStyle sal_uInt16
-lotuswordpro/source/filter/lwppagehint.hxx:115
-    LwpPageHint m_BeforeText class LwpAtomHolder
-lotuswordpro/source/filter/lwppagehint.hxx:116
-    LwpPageHint m_AfterText class LwpAtomHolder
-lotuswordpro/source/filter/lwppagehint.hxx:117
-    LwpPageHint m_nNumberFlags sal_uInt8
-lotuswordpro/source/filter/lwppagehint.hxx:118
-    LwpPageHint m_nRenderedPageNumber sal_uInt16
-lotuswordpro/source/filter/lwppagehint.hxx:119
-    LwpPageHint m_CurrentSection class LwpObjectID
-lotuswordpro/source/filter/lwppagehint.hxx:120
-    LwpPageHint m_nCurrentSectionPage sal_uInt16
-lotuswordpro/source/filter/lwppagehint.hxx:121
-    LwpPageHint m_FootnoteSeen class LwpFootnoteSeenHead
-lotuswordpro/source/filter/lwppagelayout.hxx:95
-    LwpPageLayout m_PrinterBinName class LwpAtomHolder
-lotuswordpro/source/filter/lwppagelayout.hxx:96
-    LwpPageLayout m_nPrinterBin sal_uInt16
-lotuswordpro/source/filter/lwppagelayout.hxx:97
-    LwpPageLayout m_nBdroffset sal_Int32
-lotuswordpro/source/filter/lwppagelayout.hxx:98
-    LwpPageLayout m_PaperName class LwpAtomHolder
-lotuswordpro/source/filter/lwppagelayout.hxx:131
-    LwpHeaderLayout m_nBorderOffset sal_Int32
-lotuswordpro/source/filter/lwppagelayout.hxx:156
-    LwpFooterLayout m_nBorderOffset sal_Int32
-lotuswordpro/source/filter/lwppara.hxx:95
-    LwpNotifyListPersistent m_Head class LwpObjectID
-lotuswordpro/source/filter/lwppara.hxx:104
-    LwpForked3NotifyList m_PersistentList class LwpNotifyListPersistent
-lotuswordpro/source/filter/lwppara.hxx:197
-    LwpPara m_Hint class LwpPoint
-lotuswordpro/source/filter/lwpparastyle.hxx:116
-    LwpParaStyle m_KinsokuOptsOverride class LwpKinsokuOptsOverride
-lotuswordpro/source/filter/lwprowlayout.hxx:89
-    LwpRowLayout cLeaderDotCount sal_uInt8
-lotuswordpro/source/filter/lwprowlayout.hxx:90
-    LwpRowLayout cLeaderDotY sal_Int32
-lotuswordpro/source/filter/lwprowlayout.hxx:91
-    LwpRowLayout cRowFlags sal_uInt8
-lotuswordpro/source/filter/lwprowlayout.hxx:125
-    LwpRowHeadingLayout cRowLayout class LwpObjectID
-lotuswordpro/source/filter/lwpsection.hxx:100
-    LwpSection m_Flags sal_uInt16
-lotuswordpro/source/filter/lwpsection.hxx:102
-    LwpSection m_Color class LwpColor
-lotuswordpro/source/filter/lwpsection.hxx:130
-    LwpIndexSection m_TextMarker class LwpAtomHolder
-lotuswordpro/source/filter/lwpsection.hxx:131
-    LwpIndexSection m_ParentName class LwpAtomHolder
-lotuswordpro/source/filter/lwpsection.hxx:132
-    LwpIndexSection m_DivisionName class LwpAtomHolder
-lotuswordpro/source/filter/lwpsection.hxx:133
-    LwpIndexSection m_SectionName class LwpAtomHolder
-lotuswordpro/source/filter/lwpsection.hxx:134
-    LwpIndexSection m_nForm sal_uInt16
-lotuswordpro/source/filter/lwpsilverbullet.hxx:132
-    LwpSilverBullet m_nFlags sal_uInt16
-lotuswordpro/source/filter/lwpsilverbullet.hxx:135
-    LwpSilverBullet m_nUseCount sal_uInt32
-lotuswordpro/source/filter/lwpsortopt.hxx:73
-    LwpSortKey m_nField sal_uInt16
-lotuswordpro/source/filter/lwpsortopt.hxx:74
-    LwpSortKey m_nFlag sal_uInt16
-lotuswordpro/source/filter/lwpsortopt.hxx:75
-    LwpSortKey m_nWord sal_uInt16
-lotuswordpro/source/filter/lwpsortopt.hxx:91
-    LwpSortOption m_nCount sal_uInt16
-lotuswordpro/source/filter/lwpsortopt.hxx:92
-    LwpSortOption m_nFlags sal_uInt16
-lotuswordpro/source/filter/lwpsortopt.hxx:93
-    LwpSortOption m_nText sal_uInt8
-lotuswordpro/source/filter/lwpstory.hxx:78
-    LwpStory m_FirstParaStyle class LwpObjectID
-lotuswordpro/source/filter/lwptable.hxx:103
-    LwpForkedNotifyList m_PersistentList class LwpNotifyListPersistent
-lotuswordpro/source/filter/lwptable.hxx:129
-    LwpTable m_CPNotifyList class LwpForkedNotifyList
-lotuswordpro/source/filter/lwptable.hxx:134
-    LwpTable m_nDefaultAutoGrowRowHeight sal_Int32
-lotuswordpro/source/filter/lwptable.hxx:170
-    LwpParallelColumns cDefaultLeftColumnStyle class LwpObjectID
-lotuswordpro/source/filter/lwptable.hxx:171
-    LwpParallelColumns cDefaultRightColumnStyle class LwpObjectID
-lotuswordpro/source/filter/lwptabrack.hxx:107
-    LwpTab m_nRelativeType sal_uInt8
-lotuswordpro/source/filter/lwptblcell.hxx:113
-    LwpRowList cParent class LwpObjectID
-lotuswordpro/source/filter/lwptblcell.hxx:188
-    LwpFolder cParent class LwpObjectID
-lotuswordpro/source/filter/lwptblcell.hxx:189
-    LwpFolder cqTable class LwpObjectID
-lotuswordpro/source/filter/lwptblcell.hxx:206
-    LwpDependent cFormulaInfo class LwpObjectID
-lotuswordpro/source/filter/lwptblcell.hxx:207
-    LwpDependent cReferenceOffset sal_uInt16
-lotuswordpro/source/filter/lwptblcell.hxx:216
-    LwpDependent cFlags sal_uInt8
-lotuswordpro/source/filter/lwptoc.hxx:121
-    LwpTocSuperLayout m_TextMarker class LwpAtomHolder
-lotuswordpro/source/filter/lwptoc.hxx:122
-    LwpTocSuperLayout m_ParentName class LwpAtomHolder
-lotuswordpro/source/filter/lwptoc.hxx:123
-    LwpTocSuperLayout m_DivisionName class LwpAtomHolder
-lotuswordpro/source/filter/lwptoc.hxx:124
-    LwpTocSuperLayout m_SectionName class LwpAtomHolder
-lotuswordpro/source/filter/lwptoc.hxx:125
-    LwpTocSuperLayout m_nFrom sal_uInt16
-lotuswordpro/source/filter/lwptoc.hxx:127
-    LwpTocSuperLayout m_DestName class LwpAtomHolder [9]
-lotuswordpro/source/filter/lwptoc.hxx:128
-    LwpTocSuperLayout m_DestPGName class LwpAtomHolder [9]
-lotuswordpro/source/filter/lwpuidoc.hxx:94
-    LwpAutoRunMacroOptions m_OpenName class LwpAtomHolder
-lotuswordpro/source/filter/lwpuidoc.hxx:95
-    LwpAutoRunMacroOptions m_CloseName class LwpAtomHolder
-lotuswordpro/source/filter/lwpuidoc.hxx:96
-    LwpAutoRunMacroOptions m_NewName class LwpAtomHolder
-lotuswordpro/source/filter/lwpuidoc.hxx:97
-    LwpAutoRunMacroOptions m_OptionFlag sal_uInt16
-lotuswordpro/source/filter/lwpuidoc.hxx:113
-    LwpMergeOptions m_RecordFile class LwpAtomHolder
-lotuswordpro/source/filter/lwpuidoc.hxx:114
-    LwpMergeOptions m_DescriptionFile class LwpAtomHolder
-lotuswordpro/source/filter/lwpuidoc.hxx:115
-    LwpMergeOptions m_Filter class LwpAtomHolder
-lotuswordpro/source/filter/lwpuidoc.hxx:117
-    LwpMergeOptions m_nLastActionFlag sal_uInt16
-lotuswordpro/source/filter/lwpuidoc.hxx:131
-    LwpUIDocument m_ARMacroOpts class LwpAutoRunMacroOptions
-lotuswordpro/source/filter/lwpuidoc.hxx:132
-    LwpUIDocument m_MergedOpts class LwpMergeOptions
-lotuswordpro/source/filter/lwpuidoc.hxx:133
-    LwpUIDocument m_SheetFullPath class LwpAtomHolder
-lotuswordpro/source/filter/lwpuidoc.hxx:134
-    LwpUIDocument m_nFlags sal_uInt16
-lotuswordpro/source/filter/lwpuidoc.hxx:135
-    LwpUIDocument m_InitialSaveAsType class LwpAtomHolder
-oox/inc/drawingml/chart/axismodel.hxx:42
-    oox::drawingml::chart::AxisDispUnitsModel mfCustomUnit double
-oox/inc/drawingml/chart/axismodel.hxx:72
-    oox::drawingml::chart::AxisModel mnCrossAxisId sal_Int32
-oox/inc/drawingml/chart/axismodel.hxx:73
-    oox::drawingml::chart::AxisModel mnCrossBetween sal_Int32
-oox/inc/drawingml/chart/axismodel.hxx:75
-    oox::drawingml::chart::AxisModel mnLabelAlign sal_Int32
-oox/inc/drawingml/chart/axismodel.hxx:76
-    oox::drawingml::chart::AxisModel mnLabelOffset sal_Int32
-oox/inc/drawingml/chart/axismodel.hxx:84
-    oox::drawingml::chart::AxisModel mnTickMarkSkip sal_Int32
-oox/inc/drawingml/chart/axismodel.hxx:88
-    oox::drawingml::chart::AxisModel mbNoMultiLevel _Bool
-oox/inc/drawingml/chart/chartspacemodel.hxx:57
-    oox::drawingml::chart::ChartSpaceModel mbShowLabelsOverMax _Bool
-oox/inc/drawingml/chart/plotareamodel.hxx:37
-    oox::drawingml::chart::View3DModel mnDepthPercent sal_Int32
-oox/inc/drawingml/chart/seriesmodel.hxx:72
-    oox::drawingml::chart::DataLabelsModel mbShowLeaderLines _Bool
-oox/inc/drawingml/chart/seriesmodel.hxx:80
-    oox::drawingml::chart::PictureOptionsModel mfStackUnit double
-oox/inc/drawingml/chart/seriesmodel.hxx:82
-    oox::drawingml::chart::PictureOptionsModel mbApplyToFront _Bool
-oox/inc/drawingml/chart/seriesmodel.hxx:83
-    oox::drawingml::chart::PictureOptionsModel mbApplyToSides _Bool
-oox/inc/drawingml/chart/seriesmodel.hxx:84
-    oox::drawingml::chart::PictureOptionsModel mbApplyToEnd _Bool
-oox/inc/drawingml/chart/seriesmodel.hxx:107
-    oox::drawingml::chart::ErrorBarModel mbNoEndCap _Bool
-oox/inc/drawingml/chart/seriesmodel.hxx:164
-    oox::drawingml::chart::DataPointModel mbInvertNeg _Bool
-oox/inc/drawingml/chart/seriesmodel.hxx:202
-    oox::drawingml::chart::SeriesModel mnOrder sal_Int32
-oox/inc/drawingml/chart/seriesmodel.hxx:203
-    oox::drawingml::chart::SeriesModel mbBubble3d _Bool
-oox/inc/drawingml/chart/seriesmodel.hxx:204
-    oox::drawingml::chart::SeriesModel mbInvertNeg _Bool
-oox/inc/drawingml/chart/titlemodel.hxx:53
-    oox::drawingml::chart::TitleModel mbOverlay _Bool
-oox/inc/drawingml/chart/titlemodel.hxx:70
-    oox::drawingml::chart::LegendModel mbOverlay _Bool
-oox/inc/drawingml/chart/typegroupmodel.hxx:35
-    oox::drawingml::chart::UpDownBarsModel mnGapWidth sal_Int32
-oox/inc/drawingml/chart/typegroupmodel.hxx:56
-    oox::drawingml::chart::TypeGroupModel mfSplitPos double
-oox/inc/drawingml/chart/typegroupmodel.hxx:58
-    oox::drawingml::chart::TypeGroupModel mnBubbleScale sal_Int32
-oox/inc/drawingml/chart/typegroupmodel.hxx:60
-    oox::drawingml::chart::TypeGroupModel mnGapDepth sal_Int32
-oox/inc/drawingml/chart/typegroupmodel.hxx:63
-    oox::drawingml::chart::TypeGroupModel mnHoleSize sal_Int32
-oox/inc/drawingml/chart/typegroupmodel.hxx:64
-    oox::drawingml::chart::TypeGroupModel mnOfPieType sal_Int32
-oox/inc/drawingml/chart/typegroupmodel.hxx:67
-    oox::drawingml::chart::TypeGroupModel mnScatterStyle sal_Int32
-oox/inc/drawingml/chart/typegroupmodel.hxx:68
-    oox::drawingml::chart::TypeGroupModel mnSecondPieSize sal_Int32
-oox/inc/drawingml/chart/typegroupmodel.hxx:70
-    oox::drawingml::chart::TypeGroupModel mnSizeRepresents sal_Int32
-oox/inc/drawingml/chart/typegroupmodel.hxx:71
-    oox::drawingml::chart::TypeGroupModel mnSplitType sal_Int32
-oox/inc/drawingml/chart/typegroupmodel.hxx:73
-    oox::drawingml::chart::TypeGroupModel mbBubble3d _Bool
-oox/inc/drawingml/chart/typegroupmodel.hxx:74
-    oox::drawingml::chart::TypeGroupModel mbShowMarker _Bool
-oox/inc/drawingml/chart/typegroupmodel.hxx:75
-    oox::drawingml::chart::TypeGroupModel mbShowNegBubbles _Bool
-oox/inc/drawingml/chart/typegroupmodel.hxx:76
-    oox::drawingml::chart::TypeGroupModel mbSmooth _Bool
-oox/inc/drawingml/chart/typegroupmodel.hxx:78
-    oox::drawingml::chart::TypeGroupModel mbWireframe _Bool
-oox/inc/drawingml/customshapeproperties.hxx:88
-    oox::drawingml::Path2D extrusionOk _Bool
-oox/inc/drawingml/table/tablecell.hxx:107
-    oox::drawingml::table::TableCell mbAnchorCtr _Bool
-oox/inc/drawingml/table/tablecell.hxx:108
-    oox::drawingml::table::TableCell mnHorzOverflowToken sal_Int32
-oox/inc/drawingml/textfont.hxx:65
-    oox::drawingml::TextFont mnCharset sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:118
-    oox::drawingml::dgm::Point mnMaxChildren sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:119
-    oox::drawingml::dgm::Point mnPreferredChildren sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:120
-    oox::drawingml::dgm::Point mnDirection sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:121
-    oox::drawingml::dgm::Point mnHierarchyBranch sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:122
-    oox::drawingml::dgm::Point mnResizeHandles sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:123
-    oox::drawingml::dgm::Point mnCustomAngle sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:124
-    oox::drawingml::dgm::Point mnPercentageNeighbourWidth sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:125
-    oox::drawingml::dgm::Point mnPercentageNeighbourHeight sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:126
-    oox::drawingml::dgm::Point mnPercentageOwnWidth sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:127
-    oox::drawingml::dgm::Point mnPercentageOwnHeight sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:128
-    oox::drawingml::dgm::Point mnIncludeAngleScale sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:129
-    oox::drawingml::dgm::Point mnRadiusScale sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:130
-    oox::drawingml::dgm::Point mnWidthScale sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:131
-    oox::drawingml::dgm::Point mnHeightScale sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:132
-    oox::drawingml::dgm::Point mnWidthOverride sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:133
-    oox::drawingml::dgm::Point mnHeightOverride sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:134
-    oox::drawingml::dgm::Point mnLayoutStyleCount sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:135
-    oox::drawingml::dgm::Point mnLayoutStyleIndex sal_Int32
-oox/source/drawingml/diagram/diagram.hxx:137
-    oox::drawingml::dgm::Point mbOrgChartEnabled _Bool
-oox/source/drawingml/diagram/diagram.hxx:138
-    oox::drawingml::dgm::Point mbBulletEnabled _Bool
-oox/source/drawingml/diagram/diagram.hxx:139
-    oox::drawingml::dgm::Point mbCoherent3DOffset _Bool
-oox/source/drawingml/diagram/diagram.hxx:140
-    oox::drawingml::dgm::Point mbCustomHorizontalFlip _Bool
-oox/source/drawingml/diagram/diagram.hxx:141
-    oox::drawingml::dgm::Point mbCustomVerticalFlip _Bool
-oox/source/drawingml/diagram/diagram.hxx:142
-    oox::drawingml::dgm::Point mbCustomText _Bool
-oox/source/drawingml/diagram/diagram.hxx:143
-    oox::drawingml::dgm::Point mbIsPlaceholder _Bool
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:46
-    oox::drawingml::IteratorAttr mnAxis sal_Int32
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:48
-    oox::drawingml::IteratorAttr mbHideLastTrans _Bool
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:50
-    oox::drawingml::IteratorAttr mnSt sal_Int32
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:133
-    oox::drawingml::ConstraintAtom mnFor sal_Int32
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:135
-    oox::drawingml::ConstraintAtom mnPointType sal_Int32
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:136
-    oox::drawingml::ConstraintAtom mnType sal_Int32
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:137
-    oox::drawingml::ConstraintAtom mnRefFor sal_Int32
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:139
-    oox::drawingml::ConstraintAtom mnRefType sal_Int32
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:140
-    oox::drawingml::ConstraintAtom mnRefPointType sal_Int32
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:141
-    oox::drawingml::ConstraintAtom mfFactor double
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:142
-    oox::drawingml::ConstraintAtom mfValue double
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:143
-    oox::drawingml::ConstraintAtom mnOperator sal_Int32
-oox/source/drawingml/diagram/diagramlayoutatoms.hxx:255
-    oox::drawingml::LayoutNode mnChildOrder sal_Int32
-oox/source/drawingml/diagram/layoutnodecontext.cxx:84
-    oox::drawingml::AlgorithmContext mnRevision sal_Int32
-oox/source/ppt/buildlistcontext.hxx:41
-    oox::ppt::BuildListContext mbBuildAsOne _Bool
-oox/source/ppt/commonbehaviorcontext.hxx:34
-    oox::ppt::Attribute type enum oox::ppt::MS_AttributeNames
-oox/source/ppt/timenodelistcontext.cxx:157
-    oox::ppt::MediaNodeContext mbIsNarration _Bool
-oox/source/ppt/timenodelistcontext.cxx:158
-    oox::ppt::MediaNodeContext mbFullScrn _Bool
-oox/source/ppt/timenodelistcontext.cxx:363
-    oox::ppt::SequenceTimeNodeContext mbConcurrent _Bool
-oox/source/ppt/timenodelistcontext.cxx:589
-    oox::ppt::AnimContext mnValueType sal_Int32
-oox/source/ppt/timenodelistcontext.cxx:670
-    oox::ppt::AnimScaleContext mbZoomContents _Bool
-oox/source/ppt/timenodelistcontext.cxx:811
-    oox::ppt::AnimMotionContext mnPathEditMode sal_Int32
-oox/source/ppt/timenodelistcontext.cxx:812
-    oox::ppt::AnimMotionContext mnAngle sal_Int32
 opencl/source/openclwrapper.cxx:302
     opencl::(anonymous namespace)::OpenCLEnv mpOclCmdQueue cl_command_queue [1]
 package/source/zipapi/MemoryByteGrabber.hxx:29
@@ -2088,52 +818,24 @@ sal/textenc/tcvtutf7.cxx:396
     ImplUTF7FromUCContextData mnBitBuffer sal_uInt32
 sal/textenc/tcvtutf7.cxx:397
     ImplUTF7FromUCContextData mnBufferBits sal_uInt32
-sc/inc/AccessibleFilterMenu.hxx:146
-    ScAccessibleFilterMenu mbEnabled _Bool
-sc/inc/AccessibleFilterMenuItem.hxx:95
-    ScAccessibleFilterMenuItem mbEnabled _Bool
-sc/inc/colcontainer.hxx:35
-    ScColContainer pDocument class ScDocument *
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pODFF const char *
 sc/inc/compiler.hxx:260
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:262
     ScCompiler::AddInMap pUpper const char *
-sc/inc/compiler.hxx:284
-    ScCompiler nMaxTab SCTAB
-sc/inc/dociter.hxx:168
-    ScDBQueryDataIterator::DataAccessMatrix mnCols SCCOL
-sc/inc/dociter.hxx:425
-    ScHorizontalCellIterator pNextRows SCROW *
-sc/inc/dociter.hxx:426
-    ScHorizontalCellIterator pNextIndices SCSIZE *
-sc/inc/dpoutput.hxx:79
-    ScDPOutput mbHasDataLayout _Bool
-sc/inc/fillinfo.hxx:160
-    CellInfo bMarked _Bool
-sc/inc/fillinfo.hxx:188
-    RowInfo bEmptyText _Bool
 sc/inc/formulalogger.hxx:42
     sc::FormulaLogger maMessages std::vector<OUString>
-sc/inc/hints.hxx:81
-    ScLinkRefreshedHint nDdeMode sal_uInt8
 sc/inc/pivot.hxx:74
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:77
     ScDPLabelData mbIsValue _Bool
-sc/inc/scmod.hxx:99
-    ScModule pErrorHdl class SfxErrorHandler *
-sc/inc/viewuno.hxx:169
-    ScTabViewObj mbPendingSelectionChanged _Bool
 sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
 sc/source/core/data/cellvalues.cxx:25
     sc::(anonymous namespace)::BlockPos mnEnd size_t
 sc/source/core/data/column4.cxx:1291
     (anonymous namespace)::StartListeningFormulaCellsHandler mnStartRow SCROW
-sc/source/core/data/column4.cxx:1292
-    (anonymous namespace)::StartListeningFormulaCellsHandler mnEndRow SCROW
 sc/source/core/data/document.cxx:1257
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1258
@@ -2168,477 +870,25 @@ sc/source/filter/excel/xltoolbar.hxx:79
     CTBS ictbView sal_uInt16
 sc/source/filter/excel/xltools.cxx:102
      smD union sal_math_Double
-sc/source/filter/inc/addressconverter.hxx:489
-    oox::xls::AddressConverter::ControlCharacters mcThisWorkbook sal_Unicode
-sc/source/filter/inc/addressconverter.hxx:490
-    oox::xls::AddressConverter::ControlCharacters mcExternal sal_Unicode
-sc/source/filter/inc/addressconverter.hxx:491
-    oox::xls::AddressConverter::ControlCharacters mcThisSheet sal_Unicode
-sc/source/filter/inc/addressconverter.hxx:492
-    oox::xls::AddressConverter::ControlCharacters mcInternal sal_Unicode
-sc/source/filter/inc/addressconverter.hxx:493
-    oox::xls::AddressConverter::ControlCharacters mcSameSheet sal_Unicode
-sc/source/filter/inc/addressconverter.hxx:506
-    oox::xls::AddressConverter mbColOverflow _Bool
-sc/source/filter/inc/addressconverter.hxx:507
-    oox::xls::AddressConverter mbRowOverflow _Bool
-sc/source/filter/inc/addressconverter.hxx:508
-    oox::xls::AddressConverter mbTabOverflow _Bool
-sc/source/filter/inc/autofilterbuffer.hxx:87
-    oox::xls::DiscreteFilter mnCalendarType sal_Int32
-sc/source/filter/inc/autofilterbuffer.hxx:180
-    oox::xls::FilterColumn mbHiddenButton _Bool
-sc/source/filter/inc/autofilterbuffer.hxx:181
-    oox::xls::FilterColumn mbShowButton _Bool
-sc/source/filter/inc/colrowst.hxx:83
-    XclImpColRowSettings mbHasDefHeight _Bool
-sc/source/filter/inc/commentsbuffer.hxx:34
-    oox::xls::CommentModel mnAuthorId sal_Int32
-sc/source/filter/inc/commentsbuffer.hxx:35
-    oox::xls::CommentModel mbAutoFill _Bool
-sc/source/filter/inc/commentsbuffer.hxx:37
-    oox::xls::CommentModel mbColHidden _Bool
-sc/source/filter/inc/commentsbuffer.hxx:39
-    oox::xls::CommentModel mbRowHidden _Bool
-sc/source/filter/inc/condformatbuffer.hxx:58
-    oox::xls::CondFormatRuleModel mbStopIfTrue _Bool
-sc/source/filter/inc/condformatbuffer.hxx:188
-    oox::xls::CondFormatModel mbPivot _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:49
-    oox::xls::WebPrModel mnHtmlFormat sal_Int32
-sc/source/filter/inc/connectionsbuffer.hxx:51
-    oox::xls::WebPrModel mbSourceData _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:52
-    oox::xls::WebPrModel mbParsePre _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:53
-    oox::xls::WebPrModel mbConsecutive _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:54
-    oox::xls::WebPrModel mbFirstRow _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:55
-    oox::xls::WebPrModel mbXl97Created _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:56
-    oox::xls::WebPrModel mbTextDates _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:57
-    oox::xls::WebPrModel mbXl2000Refreshed _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:76
-    oox::xls::ConnectionModel mnReconnectMethod sal_Int32
-sc/source/filter/inc/connectionsbuffer.hxx:77
-    oox::xls::ConnectionModel mnCredentials sal_Int32
-sc/source/filter/inc/connectionsbuffer.hxx:79
-    oox::xls::ConnectionModel mbKeepAlive _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:80
-    oox::xls::ConnectionModel mbNew _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:81
-    oox::xls::ConnectionModel mbDeleted _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:82
-    oox::xls::ConnectionModel mbOnlyUseConnFile _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:83
-    oox::xls::ConnectionModel mbBackground _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:84
-    oox::xls::ConnectionModel mbRefreshOnLoad _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:85
-    oox::xls::ConnectionModel mbSaveData _Bool
-sc/source/filter/inc/connectionsbuffer.hxx:86
-    oox::xls::ConnectionModel mbSavePassword _Bool
-sc/source/filter/inc/defnamesbuffer.hxx:55
-    oox::xls::DefinedNameModel mnFuncGroupId sal_Int32
-sc/source/filter/inc/defnamesbuffer.hxx:59
-    oox::xls::DefinedNameModel mbHidden _Bool
-sc/source/filter/inc/drawingbase.hxx:59
-    oox::xls::AnchorClientDataModel mbLocksWithSheet _Bool
-sc/source/filter/inc/drawingbase.hxx:60
-    oox::xls::AnchorClientDataModel mbPrintsWithSheet _Bool
-sc/source/filter/inc/eeparser.hxx:109
-    ScEEParser nHtmlLastToken enum HtmlTokenId
-sc/source/filter/inc/exp_op.hxx:39
-    ExportTyp pD class ScDocument *
-sc/source/filter/inc/exp_op.hxx:40
-    ExportTyp eTargetCharset rtl_TextEncoding
-sc/source/filter/inc/exp_op.hxx:59
+sc/source/filter/inc/exp_op.hxx:52
     ExportBiff5 pExcRoot struct RootData *
-sc/source/filter/inc/externallinkbuffer.hxx:45
-    oox::xls::ExternalNameModel mbNotify _Bool
-sc/source/filter/inc/externallinkbuffer.hxx:46
-    oox::xls::ExternalNameModel mbPreferPic _Bool
-sc/source/filter/inc/externallinkbuffer.hxx:47
-    oox::xls::ExternalNameModel mbStdDocName _Bool
-sc/source/filter/inc/externallinkbuffer.hxx:49
-    oox::xls::ExternalNameModel mbIconified _Bool
-sc/source/filter/inc/formulabase.hxx:491
-    oox::xls::FunctionInfo mnRetClass sal_uInt8
-sc/source/filter/inc/formulabase.hxx:494
-    oox::xls::FunctionInfo mbVolatile _Bool
-sc/source/filter/inc/formulabase.hxx:497
-    oox::xls::FunctionInfo mbMacroFunc _Bool
-sc/source/filter/inc/formulabase.hxx:498
-    oox::xls::FunctionInfo mbVarParam _Bool
-sc/source/filter/inc/htmlexp.hxx:124
-    ScHTMLExport bTableDataWidth _Bool
 sc/source/filter/inc/imp_op.hxx:88
     ImportExcel::LastFormula mpCell class ScFormulaCell *
-sc/source/filter/inc/lotattr.hxx:97
-    LotAttrCache pBlack class SvxColorItem *
 sc/source/filter/inc/orcusinterface.hxx:352
     ScOrcusStyles::xf mnStyleXf size_t
 sc/source/filter/inc/orcusinterface.hxx:370
     ScOrcusStyles::cell_style mnBuiltInId size_t
-sc/source/filter/inc/pagesettings.hxx:54
-    oox::xls::PageSettingsModel mnCopies sal_Int32
-sc/source/filter/inc/pagesettings.hxx:59
-    oox::xls::PageSettingsModel mnHorPrintRes sal_Int32
-sc/source/filter/inc/pagesettings.hxx:60
-    oox::xls::PageSettingsModel mnVerPrintRes sal_Int32
-sc/source/filter/inc/pagesettings.hxx:64
-    oox::xls::PageSettingsModel mnPrintErrors sal_Int32
-sc/source/filter/inc/pagesettings.hxx:66
-    oox::xls::PageSettingsModel mbUseFirstHF _Bool
-sc/source/filter/inc/pagesettings.hxx:69
-    oox::xls::PageSettingsModel mbBlackWhite _Bool
-sc/source/filter/inc/pagesettings.hxx:70
-    oox::xls::PageSettingsModel mbDraftQuality _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:129
-    oox::xls::PCFieldModel mnNumFmtId sal_Int32
-sc/source/filter/inc/pivotcachebuffer.hxx:130
-    oox::xls::PCFieldModel mnSqlType sal_Int32
-sc/source/filter/inc/pivotcachebuffer.hxx:131
-    oox::xls::PCFieldModel mnHierarchy sal_Int32
-sc/source/filter/inc/pivotcachebuffer.hxx:132
-    oox::xls::PCFieldModel mnLevel sal_Int32
-sc/source/filter/inc/pivotcachebuffer.hxx:135
-    oox::xls::PCFieldModel mbServerField _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:136
-    oox::xls::PCFieldModel mbUniqueList _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:137
-    oox::xls::PCFieldModel mbMemberPropField _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:144
-    oox::xls::PCSharedItemsModel mbHasSemiMixed _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:145
-    oox::xls::PCSharedItemsModel mbHasNonDate _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:148
-    oox::xls::PCSharedItemsModel mbHasBlank _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:149
-    oox::xls::PCSharedItemsModel mbHasMixed _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:151
-    oox::xls::PCSharedItemsModel mbIsInteger _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:152
-    oox::xls::PCSharedItemsModel mbHasLongText _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:309
-    oox::xls::PCDefinitionModel mfRefreshedDate double
-sc/source/filter/inc/pivotcachebuffer.hxx:310
-    oox::xls::PCDefinitionModel mnRecords sal_Int32
-sc/source/filter/inc/pivotcachebuffer.hxx:311
-    oox::xls::PCDefinitionModel mnMissItemsLimit sal_Int32
-sc/source/filter/inc/pivotcachebuffer.hxx:312
-    oox::xls::PCDefinitionModel mbInvalid _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:313
-    oox::xls::PCDefinitionModel mbSaveData _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:314
-    oox::xls::PCDefinitionModel mbRefreshOnLoad _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:315
-    oox::xls::PCDefinitionModel mbOptimizeMemory _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:316
-    oox::xls::PCDefinitionModel mbEnableRefresh _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:317
-    oox::xls::PCDefinitionModel mbBackgroundQuery _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:318
-    oox::xls::PCDefinitionModel mbUpgradeOnRefresh _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:319
-    oox::xls::PCDefinitionModel mbTupleCache _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:320
-    oox::xls::PCDefinitionModel mbSupportSubquery _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:321
-    oox::xls::PCDefinitionModel mbSupportDrill _Bool
-sc/source/filter/inc/pivotcachebuffer.hxx:329
-    oox::xls::PCSourceModel mnConnectionId sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:55
-    oox::xls::PTFieldModel mnNumFmtId sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:78
-    oox::xls::PTFieldModel mbInsertPageBreak _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:106
-    oox::xls::PTDataFieldModel mnNumFmtId sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:191
-    oox::xls::PTFilterModel mnMemPropField sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:193
-    oox::xls::PTFilterModel mnEvalOrder sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:194
-    oox::xls::PTFilterModel mnId sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:196
-    oox::xls::PTFilterModel mnMeasureHier sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:239
-    oox::xls::PTDefinitionModel mnDataPosition sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:240
-    oox::xls::PTDefinitionModel mnPageWrap sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:241
-    oox::xls::PTDefinitionModel mnIndent sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:242
-    oox::xls::PTDefinitionModel mnChartFormat sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:243
-    oox::xls::PTDefinitionModel mbDataOnRows _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:244
-    oox::xls::PTDefinitionModel mbShowError _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:245
-    oox::xls::PTDefinitionModel mbShowMissing _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:246
-    oox::xls::PTDefinitionModel mbShowItems _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:247
-    oox::xls::PTDefinitionModel mbDisableFieldList _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:248
-    oox::xls::PTDefinitionModel mbShowCalcMembers _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:249
-    oox::xls::PTDefinitionModel mbVisualTotals _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:250
-    oox::xls::PTDefinitionModel mbShowDrill _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:251
-    oox::xls::PTDefinitionModel mbPrintDrill _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:253
-    oox::xls::PTDefinitionModel mbPreserveFormatting _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:254
-    oox::xls::PTDefinitionModel mbUseAutoFormat _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:255
-    oox::xls::PTDefinitionModel mbPageOverThenDown _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:256
-    oox::xls::PTDefinitionModel mbSubtotalHiddenItems _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:259
-    oox::xls::PTDefinitionModel mbFieldPrintTitles _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:260
-    oox::xls::PTDefinitionModel mbItemPrintTitles _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:261
-    oox::xls::PTDefinitionModel mbMergeItem _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:262
-    oox::xls::PTDefinitionModel mbShowEmptyRow _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:263
-    oox::xls::PTDefinitionModel mbShowEmptyCol _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:264
-    oox::xls::PTDefinitionModel mbShowHeaders _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:265
-    oox::xls::PTDefinitionModel mbFieldListSortAsc _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:266
-    oox::xls::PTDefinitionModel mbCustomListSort _Bool
-sc/source/filter/inc/pivottablebuffer.hxx:274
-    oox::xls::PTLocationModel mnFirstHeaderRow sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:275
-    oox::xls::PTLocationModel mnFirstDataRow sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:276
-    oox::xls::PTLocationModel mnFirstDataCol sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:277
-    oox::xls::PTLocationModel mnRowPageCount sal_Int32
-sc/source/filter/inc/pivottablebuffer.hxx:278
-    oox::xls::PTLocationModel mnColPageCount sal_Int32
-sc/source/filter/inc/querytablebuffer.hxx:33
-    oox::xls::QueryTableModel mnGrowShrinkType sal_Int32
-sc/source/filter/inc/querytablebuffer.hxx:34
-    oox::xls::QueryTableModel mbHeaders _Bool
-sc/source/filter/inc/querytablebuffer.hxx:35
-    oox::xls::QueryTableModel mbRowNumbers _Bool
-sc/source/filter/inc/querytablebuffer.hxx:36
-    oox::xls::QueryTableModel mbDisableRefresh _Bool
-sc/source/filter/inc/querytablebuffer.hxx:37
-    oox::xls::QueryTableModel mbBackground _Bool
-sc/source/filter/inc/querytablebuffer.hxx:38
-    oox::xls::QueryTableModel mbFirstBackground _Bool
-sc/source/filter/inc/querytablebuffer.hxx:39
-    oox::xls::QueryTableModel mbRefreshOnLoad _Bool
-sc/source/filter/inc/querytablebuffer.hxx:40
-    oox::xls::QueryTableModel mbFillFormulas _Bool
-sc/source/filter/inc/querytablebuffer.hxx:41
-    oox::xls::QueryTableModel mbRemoveDataOnSave _Bool
-sc/source/filter/inc/querytablebuffer.hxx:42
-    oox::xls::QueryTableModel mbDisableEdit _Bool
-sc/source/filter/inc/querytablebuffer.hxx:43
-    oox::xls::QueryTableModel mbPreserveFormat _Bool
-sc/source/filter/inc/querytablebuffer.hxx:44
-    oox::xls::QueryTableModel mbAdjustColWidth _Bool
-sc/source/filter/inc/querytablebuffer.hxx:45
-    oox::xls::QueryTableModel mbIntermediate _Bool
-sc/source/filter/inc/richstring.hxx:121
-    oox::xls::PhoneticDataModel mnFontId sal_Int32
-sc/source/filter/inc/richstring.hxx:122
-    oox::xls::PhoneticDataModel mnType sal_Int32
-sc/source/filter/inc/richstring.hxx:123
-    oox::xls::PhoneticDataModel mnAlignment sal_Int32
-sc/source/filter/inc/richstring.hxx:163
-    oox::xls::RichStringPhonetic mnBasePos sal_Int32
-sc/source/filter/inc/richstring.hxx:164
-    oox::xls::RichStringPhonetic mnBaseEnd sal_Int32
 sc/source/filter/inc/root.hxx:95
     LOTUS_ROOT eActType enum Lotus123Typ
 sc/source/filter/inc/root.hxx:96
     LOTUS_ROOT aActRange class ScRange
-sc/source/filter/inc/scenariobuffer.hxx:34
-    oox::xls::ScenarioCellModel mnNumFmtId sal_Int32
-sc/source/filter/inc/scenariobuffer.hxx:46
-    oox::xls::ScenarioModel mbHidden _Bool
-sc/source/filter/inc/scenariobuffer.hxx:80
-    oox::xls::SheetScenariosModel mnCurrent sal_Int32
-sc/source/filter/inc/sheetdatabuffer.hxx:43
-    oox::xls::CellModel mbShowPhonetic _Bool
-sc/source/filter/inc/sheetdatacontext.hxx:61
-    oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/filter/inc/stylesbuffer.hxx:167
-    oox::xls::ApiFontUsedFlags mbSchemeUsed _Bool
-sc/source/filter/inc/stylesbuffer.hxx:275
-    oox::xls::AlignmentModel mbJustLastLine _Bool
-sc/source/filter/inc/stylesbuffer.hxx:487
-    oox::xls::GradientFillModel mnType sal_Int32
-sc/source/filter/inc/stylesbuffer.hxx:488
-    oox::xls::GradientFillModel mfAngle double
-sc/source/filter/inc/stylesbuffer.hxx:489
-    oox::xls::GradientFillModel mfLeft double
-sc/source/filter/inc/stylesbuffer.hxx:490
-    oox::xls::GradientFillModel mfRight double
-sc/source/filter/inc/stylesbuffer.hxx:491
-    oox::xls::GradientFillModel mfTop double
-sc/source/filter/inc/stylesbuffer.hxx:492
-    oox::xls::GradientFillModel mfBottom double
-sc/source/filter/inc/stylesbuffer.hxx:640
-    oox::xls::Xf meRotationRef sal_Int32
-sc/source/filter/inc/stylesbuffer.hxx:693
-    oox::xls::CellStyleModel mbHidden _Bool
-sc/source/filter/inc/stylesbuffer.hxx:774
-    oox::xls::AutoFormatModel mnAutoFormatId sal_Int32
-sc/source/filter/inc/stylesbuffer.hxx:775
-    oox::xls::AutoFormatModel mbApplyNumFmt _Bool
-sc/source/filter/inc/stylesbuffer.hxx:776
-    oox::xls::AutoFormatModel mbApplyFont _Bool
-sc/source/filter/inc/stylesbuffer.hxx:777
-    oox::xls::AutoFormatModel mbApplyAlignment _Bool
-sc/source/filter/inc/stylesbuffer.hxx:778
-    oox::xls::AutoFormatModel mbApplyBorder _Bool
-sc/source/filter/inc/stylesbuffer.hxx:779
-    oox::xls::AutoFormatModel mbApplyFill _Bool
-sc/source/filter/inc/stylesbuffer.hxx:780
-    oox::xls::AutoFormatModel mbApplyProtection _Bool
-sc/source/filter/inc/tablebuffer.hxx:36
-    oox::xls::TableModel mnType sal_Int32
-sc/source/filter/inc/tablecolumnsbuffer.hxx:47
-    oox::xls::TableColumn mnId sal_Int32
-sc/source/filter/inc/tablecolumnsbuffer.hxx:48
-    oox::xls::TableColumn mnDataDxfId sal_Int32
-sc/source/filter/inc/tokstack.hxx:88
-    TokenPool pP_Err sal_uInt16 *
-sc/source/filter/inc/tokstack.hxx:90
-    TokenPool nP_ErrAkt sal_uInt16
-sc/source/filter/inc/viewsettings.hxx:35
-    oox::xls::PaneSelectionModel mnActiveCellId sal_Int32
-sc/source/filter/inc/viewsettings.hxx:49
-    oox::xls::SheetViewModel mnWorkbookViewId sal_Int32
-sc/source/filter/inc/viewsettings.hxx:58
-    oox::xls::SheetViewModel mnPageLayoutZoom sal_Int32
-sc/source/filter/inc/viewsettings.hxx:67
-    oox::xls::SheetViewModel mbZoomToFit _Bool
-sc/source/filter/inc/viewsettings.hxx:128
-    oox::xls::WorkbookViewModel mnWinX sal_Int32
-sc/source/filter/inc/viewsettings.hxx:129
-    oox::xls::WorkbookViewModel mnWinY sal_Int32
-sc/source/filter/inc/viewsettings.hxx:130
-    oox::xls::WorkbookViewModel mnWinWidth sal_Int32
-sc/source/filter/inc/viewsettings.hxx:131
-    oox::xls::WorkbookViewModel mnWinHeight sal_Int32
-sc/source/filter/inc/viewsettings.hxx:133
-    oox::xls::WorkbookViewModel mnFirstVisSheet sal_Int32
-sc/source/filter/inc/viewsettings.hxx:135
-    oox::xls::WorkbookViewModel mnVisibility sal_Int32
-sc/source/filter/inc/viewsettings.hxx:139
-    oox::xls::WorkbookViewModel mbMinimized _Bool
-sc/source/filter/inc/workbooksettings.hxx:45
-    oox::xls::WorkbookSettingsModel mnUpdateLinksMode sal_Int32
-sc/source/filter/inc/workbooksettings.hxx:46
-    oox::xls::WorkbookSettingsModel mnDefaultThemeVer sal_Int32
-sc/source/filter/inc/workbooksettings.hxx:49
-    oox::xls::WorkbookSettingsModel mbSaveExtLinkValues _Bool
-sc/source/filter/inc/workbooksettings.hxx:61
-    oox::xls::CalcSettingsModel mnCalcId sal_Int32
-sc/source/filter/inc/workbooksettings.hxx:62
-    oox::xls::CalcSettingsModel mnRefMode sal_Int32
-sc/source/filter/inc/workbooksettings.hxx:65
-    oox::xls::CalcSettingsModel mnProcCount sal_Int32
-sc/source/filter/inc/workbooksettings.hxx:66
-    oox::xls::CalcSettingsModel mbCalcOnSave _Bool
-sc/source/filter/inc/workbooksettings.hxx:67
-    oox::xls::CalcSettingsModel mbCalcCompleted _Bool
-sc/source/filter/inc/workbooksettings.hxx:70
-    oox::xls::CalcSettingsModel mbConcurrent _Bool
-sc/source/filter/inc/worksheetbuffer.hxx:38
-    oox::xls::SheetInfoModel mnSheetId sal_Int32
-sc/source/filter/inc/worksheethelper.hxx:77
-    oox::xls::ColumnModel mbShowPhonetic _Bool
-sc/source/filter/inc/worksheethelper.hxx:97
-    oox::xls::RowModel mbShowPhonetic _Bool
-sc/source/filter/inc/worksheethelper.hxx:100
-    oox::xls::RowModel mbThickTop _Bool
-sc/source/filter/inc/worksheethelper.hxx:101
-    oox::xls::RowModel mbThickBottom _Bool
-sc/source/filter/inc/worksheethelper.hxx:115
-    oox::xls::PageBreakModel mnMin sal_Int32
-sc/source/filter/inc/worksheethelper.hxx:116
-    oox::xls::PageBreakModel mnMax sal_Int32
-sc/source/filter/inc/worksheetsettings.hxx:35
-    oox::xls::SheetSettingsModel mbFilterMode _Bool
-sc/source/filter/inc/worksheetsettings.hxx:36
-    oox::xls::SheetSettingsModel mbApplyStyles _Bool
-sc/source/filter/inc/worksheetsettings.hxx:37
-    oox::xls::SheetSettingsModel mbSummaryBelow _Bool
-sc/source/filter/inc/worksheetsettings.hxx:38
-    oox::xls::SheetSettingsModel mbSummaryRight _Bool
-sc/source/filter/inc/XclImpChangeTrack.hxx:36
-    XclImpChTrRecHeader nSize sal_uInt32
-sc/source/filter/inc/xeformula.hxx:34
-    XclExpRefLogEntry mpLastTab const class XclExpString *
-sc/source/filter/inc/xichart.hxx:368
-    XclImpChFrame maData struct XclChFrame
-sc/source/filter/inc/xichart.hxx:827
-    XclImpChSeries maData struct XclChSeries
-sc/source/filter/inc/xichart.hxx:945
-    XclImpChDropBar mnBarDist sal_uInt16
-sc/source/filter/inc/xiescher.hxx:206
-    XclImpDrawObjBase mbSimpleMacro _Bool
-sc/source/filter/inc/xiescher.hxx:632
-    XclImpGroupBoxObj mnGroupBoxFlags sal_uInt16
-sc/source/filter/inc/xiescher.hxx:675
-    XclImpEditObj mnListBoxObjId sal_uInt16
-sc/source/filter/inc/xiescher.hxx:698
-    XclImpTbxObjScrollableBase mnThumbWidth sal_uInt16
-sc/source/filter/inc/xiescher.hxx:699
-    XclImpTbxObjScrollableBase mnScrollFlags sal_uInt16
-sc/source/filter/inc/xiescher.hxx:752
-    XclImpTbxObjListBase mnEditObjId sal_uInt16
-sc/source/filter/inc/xiescher.hxx:806
-    XclImpDropDownObj mnLeft sal_uInt16
-sc/source/filter/inc/xiescher.hxx:807
-    XclImpDropDownObj mnTop sal_uInt16
-sc/source/filter/inc/xiescher.hxx:808
-    XclImpDropDownObj mnRight sal_uInt16
-sc/source/filter/inc/xiescher.hxx:809
-    XclImpDropDownObj mnBottom sal_uInt16
-sc/source/filter/inc/xiescher.hxx:812
-    XclImpDropDownObj mnMinWidth sal_uInt16
-sc/source/filter/inc/xiname.hxx:42
-    XclImpName::TokenStrmData mnStrmPos std::size_t
-sc/source/filter/inc/xistyle.hxx:475
-    XclImpStyle mbHidden _Bool
-sc/source/filter/inc/xlescher.hxx:394
-    XclObjTextData mnShortcutEA sal_uInt16
-sc/source/filter/inc/xlpivot.hxx:621
-    XclPTFieldExtInfo mnNumFmt sal_uInt16
-sc/source/filter/inc/xlview.hxx:92
-    XclDocViewData mnWinX sal_uInt16
-sc/source/filter/inc/xlview.hxx:93
-    XclDocViewData mnWinY sal_uInt16
-sc/source/filter/inc/xlview.hxx:94
-    XclDocViewData mnWinWidth sal_uInt16
-sc/source/filter/inc/xlview.hxx:95
-    XclDocViewData mnWinHeight sal_uInt16
-sc/source/filter/inc/xlview.hxx:98
-    XclDocViewData mnFirstVisXclTab sal_uInt16
-sc/source/filter/inc/xlview.hxx:99
-    XclDocViewData mnXclSelectCnt sal_uInt16
-sc/source/filter/lotus/lotfilter.hxx:47
-    LotusContext pAttrUnprot class ScProtectionAttr *
+sc/source/filter/inc/tokstack.hxx:144
+    TokenPool pP_Err TokenPoolPool<sal_uInt16, 8>
 sc/source/filter/oox/biffhelper.cxx:41
     oox::xls::(anonymous namespace)::DecodedDouble maStruct union sal_math_Double
-sc/source/filter/xml/xmldpimp.hxx:305
+sc/source/filter/xml/xmldpimp.hxx:302
     ScXMLDataPilotFieldContext mbHasHiddenMember _Bool
-sc/source/filter/xml/xmldrani.hxx:79
+sc/source/filter/xml/xmldrani.hxx:76
     ScXMLDatabaseRangeContext bIsSelection _Bool
 sc/source/filter/xml/xmlexternaltabi.hxx:118
     ScXMLExternalRefCellContext mnCellType sal_Int16
@@ -2652,10 +902,6 @@ sc/source/ui/inc/preview.hxx:47
     ScPreview nTabPage long
 sc/source/ui/inc/tabvwsh.hxx:128
     ScTabViewShell pPivotSource class ScArea *
-sc/source/ui/vba/vbafont.hxx:36
-    ScVbaFont mPalette class ScVbaPalette
-sd/inc/sdmod.hxx:131
-    SdModule mpErrorHdl class SfxErrorHandler *
 sd/source/filter/eppt/eppt.hxx:176
     PPTWriter mnTxId sal_uInt32
 sd/source/filter/ppt/ppt97animations.hxx:41
@@ -2682,7 +928,7 @@ sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1335
+sd/source/ui/view/DocumentRenderer.cxx:1323
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1233
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -2696,29 +942,19 @@ sd/source/ui/view/ViewShellBase.cxx:195
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sfx2/source/doc/doctempl.cxx:118
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
-sfx2/source/doc/docundomanager.cxx:198
-    sfx2::UndoManagerGuard m_guard class SfxModelGuard
 sfx2/source/inc/appdata.hxx:76
     SfxAppData_Impl pDocTopics SfxDdeDocTopics_Impl *
 sfx2/source/inc/appdata.hxx:77
     SfxAppData_Impl pTriggerTopic class SfxDdeTriggerTopic_Impl *
 sfx2/source/inc/appdata.hxx:78
     SfxAppData_Impl pDdeService2 class DdeService *
-sfx2/source/inc/appdata.hxx:90
-    SfxAppData_Impl m_pToolsErrorHdl class SfxErrorHandler *
-sfx2/source/inc/appdata.hxx:91
-    SfxAppData_Impl m_pSoErrorHdl class SfxErrorHandler *
-sfx2/source/inc/appdata.hxx:93
-    SfxAppData_Impl m_pSbxErrorHdl class SfxErrorHandler *
-sfx2/source/inc/docundomanager.hxx:92
-    SfxModelGuard m_aGuard class SolarMutexResettableGuard
 sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
-soltools/cpp/cpp.h:144
+soltools/cpp/cpp.h:143
     macroValidator pMacro Nlist *
 starmath/inc/view.hxx:163
     SmCmdBoxWindow aController class SmEditController
@@ -2760,13 +996,11 @@ svx/source/table/tablertfimporter.cxx:53
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
 sw/inc/shellio.hxx:147
     SwReader aFileName class rtl::OUString
-sw/inc/swmodule.hxx:93
-    SwModule m_pErrorHandler class SfxErrorHandler *
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
 sw/source/core/frmedt/fetab.cxx:90
     TableWait m_pWait const std::unique_ptr<SwWait>
-sw/source/core/inc/swfont.hxx:994
+sw/source/core/inc/swfont.hxx:980
     SvStatistics nGetStretchTextSize sal_uInt16
 sw/source/core/layout/dbg_lay.cxx:164
     SwImplEnterLeave nAction enum DbgAction
@@ -2788,10 +1022,6 @@ sw/source/filter/inc/rtf.hxx:31
     RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo3/sw/source/filter/inc/rtf.hxx:27:9)
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
-sw/source/uibase/inc/unodispatch.hxx:46
-    SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
-toolkit/source/awt/stylesettings.cxx:90
-    toolkit::StyleMethodGuard m_aGuard class SolarMutexGuard
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -2894,6 +1124,8 @@ vcl/unx/generic/app/wmadaptor.cxx:1270
     _mwmhints input_mode long
 vcl/unx/generic/app/wmadaptor.cxx:1271
     _mwmhints status unsigned long
+vcl/unx/generic/gdi/salbmp.cxx:1081
+    ImplBmpObj mnMemSize sal_uLong
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink
 vcl/unx/gtk/a11y/atkwrapper.hxx:45

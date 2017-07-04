@@ -200,7 +200,6 @@ private:
     rtl::Reference< UpdateDialog::Thread > m_thread;
     css::uno::Reference< css::deployment::XExtensionManager > m_xExtensionManager;
 
-    sal_uInt16  m_nLastID;
     bool    m_bModified;
 };
 
