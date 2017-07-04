@@ -1293,11 +1293,8 @@ void ScInterpreter::ScNPV()
     if ( MustHaveParamCount( nParamCount, 2, 31 ) )
     {
         double nVal = 0.0;
-        //We turn the stack upside down!
-        const FormulaToken* pTemp[ 31 ];
-        for( short i = 0; i < nParamCount; i++ )
-            pTemp[ i ] = pStack[ sp - i - 1 ];
-        memcpy( &pStack[ sp - nParamCount ], pTemp, nParamCount * sizeof( FormulaToken* ) );
+        // We turn the stack upside down!
+        ReverseStack( nParamCount);
         if (nGlobalError == FormulaError::NONE)
         {
             double  nCount = 1.0;
