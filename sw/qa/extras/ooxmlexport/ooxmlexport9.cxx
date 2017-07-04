@@ -605,6 +605,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf100075, "tdf100075.docx")
     CPPUNIT_ASSERT(getProperty<sal_Int32>(xFrame1, "Height") > getProperty<sal_Int32>(xFrame2, "Height"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
+{
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    // This failed, tab between the footnote number and the footnote content
+    // was lost on import.
+    CPPUNIT_ASSERT(xTextRange->getString().endsWith("\tfootnote"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
