@@ -102,10 +102,11 @@ enum SwCalcError
 class SwSbxValue : public SbxValue
 {
     bool bVoid;
+    bool bDBvalue;
 public:
     // always default to a number. otherwise it will become a SbxEMPTY
-    SwSbxValue( long n = 0 ) : bVoid(false)  { PutLong( n ); }
-    SwSbxValue( const double& rD ) : bVoid(false) { PutDouble( rD ); }
+    SwSbxValue( long n = 0 ) : bVoid(false), bDBvalue(false)  { PutLong( n ); }
+    SwSbxValue( const double& rD ) : bVoid(false), bDBvalue(false) { PutDouble( rD ); }
 
     bool GetBool() const;
     double GetDouble() const;
@@ -113,6 +114,9 @@ public:
 
     bool IsVoidValue() {return bVoid;}
     void SetVoidValue(bool bSet) {bVoid = bSet;}
+
+    bool IsDBvalue() {return bDBvalue;}
+    void SetDBvalue(bool bSet) {bDBvalue = bSet;}
 };
 
 // Calculate HashTables for VarTable und Operations
