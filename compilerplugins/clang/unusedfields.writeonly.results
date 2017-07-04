@@ -712,16 +712,6 @@ filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:71
     XMLFilterListBox m_aEnsureResMgr class EnsureResMgr
 filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:130
     XMLFilterSettingsDialog maEnsureResMgr class EnsureResMgr
-formula/source/ui/dlg/ControlHelper.hxx:35
-    formula::EditBox bMouseFlag _Bool
-formula/source/ui/dlg/formula.cxx:143
-    formula::FormulaDlg_Impl m_pSpecialOpCodesEnd const sheet::FormulaOpCodeMapEntry *
-formula/source/ui/dlg/formula.cxx:148
-    formula::FormulaDlg_Impl m_pUnaryOpCodesEnd const sheet::FormulaOpCodeMapEntry *
-formula/source/ui/dlg/formula.cxx:150
-    formula::FormulaDlg_Impl m_pBinaryOpCodesEnd const sheet::FormulaOpCodeMapEntry *
-formula/source/ui/dlg/parawin.hxx:85
-    formula::ParaWin bRefMode _Bool
 framework/inc/dispatch/oxt_handler.hxx:92
     framework::Oxt_Handler m_xSelfHold css::uno::Reference<css::uno::XInterface>
 framework/inc/services/layoutmanager.hxx:262
@@ -1126,8 +1116,6 @@ include/filter/msfilter/svdfppt.hxx:1183
     ImplPPTTextObj mnShapeId sal_uInt32
 include/filter/msfilter/svdfppt.hxx:1184
     ImplPPTTextObj mnShapeMaster sal_uInt32
-include/formula/formdata.hxx:62
-    formula::FormEditData pParent class formula::FormEditData *
 include/LibreOfficeKit/LibreOfficeKit.h:98
     _LibreOfficeKitDocumentClass nSize size_t
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33

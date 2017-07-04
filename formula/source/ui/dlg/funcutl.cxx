@@ -287,8 +287,7 @@ IMPL_LINK( ArgInput, EdModifyHdl, Edit&, rEdit, void )
 // class EditBox
 
 EditBox::EditBox( vcl::Window* pParent, WinBits nBits )
-        :Control(pParent,nBits),
-        bMouseFlag(false)
+        :Control(pParent,nBits)
 {
     WinBits nStyle=GetStyle();
     SetStyle( nStyle| WB_DIALOGCONTROL);
@@ -368,7 +367,6 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
 
         if(nSwitch==MouseNotifyEvent::MOUSEBUTTONDOWN || nSwitch==MouseNotifyEvent::MOUSEBUTTONUP)
         {
-            bMouseFlag=true;
             Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ), nullptr, true );
         }
     }
