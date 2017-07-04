@@ -22,6 +22,9 @@
     reportdesign/source/ui/misc/FunctionHelper.cxx
     FunctionDescription::getVarArgsStart() has to provide some backward
     compatibility for implicit API stability.
+    The new VAR_ARGS value must be significantly greater than the old
+    PAIRED_VAR_ARGS (2*VAR_ARGS) value, in fact greater than any used number of
+    fixed parameters followed by optional paired parameters.
 
     @NOTE: also
     reportbuilder/java/org/libreoffice/report/pentaho/StarFunctionDescription.java

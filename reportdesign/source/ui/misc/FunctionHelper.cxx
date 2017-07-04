@@ -20,6 +20,7 @@
 #include "FunctionHelper.hxx"
 
 #include <osl/diagnose.h>
+#include <formula/funcvarargs.h>
 
 
 namespace rptui
@@ -211,13 +212,18 @@ sal_uInt32 FunctionDescription::getVarArgsStart() const
     // Don't use defines/constants that could change in future, parameter count
     // could be part of an implicit stable API.
     // offapi/com/sun/star/report/meta/XFunctionDescription.idl doesn't tell.
-    const sal_uInt32 nVarArgs = 30;         // ugly hard coded VAR_ARGS of formula::ParaWin
-    const sal_uInt32 nPairedVarArgs = 60;   // ugly hard coded PAIRED_VAR_ARGS of formula::ParaWin
+    const sal_uInt32 nVarArgs30 = 30;         // ugly hard coded VAR_ARGS of formula::ParaWin
+    const sal_uInt32 nPairedVarArgs60 = 60;   // ugly hard coded PAIRED_VAR_ARGS of formula::ParaWin
     sal_uInt32 nLen = m_aParameter.getLength();
-    if (nLen >= nPairedVarArgs)
-        nLen -= nPairedVarArgs;
-    else if (nLen >= nVarArgs)
-        nLen -= nVarArgs;
+    // If the value of VAR_ARGS changes then adapt *and* maintain implicit API
+    // stability, ie. old code using the old VAR_ARGS and PAIRED_VAR_ARGS
+    // values must still be handled. It is *not* sufficient to simply change
+    // the values here.
+    static_assert(nVarArgs30 == VAR_ARGS && nPairedVarArgs60 == PAIRED_VAR_ARGS);
+    if (nLen >= nPairedVarArgs60)
+        nLen -= nPairedVarArgs60;
+    else if (nLen >= nVarArgs30)
+        nLen -= nVarArgs30;
     return nLen ? nLen - 1 : 0;
 }
 
