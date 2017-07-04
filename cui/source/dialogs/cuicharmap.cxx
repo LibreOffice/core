@@ -51,9 +51,8 @@ using namespace css;
 
 // class SvxCharacterMap =================================================
 
-SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxItemSet* pSet )
+SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
     : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
-    , bOne( bOne_ )
     , pSubsetMap( nullptr )
     , mxContext(comphelper::getProcessComponentContext())
 {
@@ -90,10 +89,6 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     get( m_pRecentCharView[13], "viewchar14" );
     get( m_pRecentCharView[14], "viewchar15" );
     get( m_pRecentCharView[15], "viewchar16" );
-
-    const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSet, FN_PARAM_1, false);
-    if ( pItem )
-        bOne = pItem->GetValue();
 
     init();
 

@@ -81,11 +81,9 @@ const sal_uInt16 TYPE_BIT       = 31;
 
         sal_Int16       nSearchType;    // if it is possible to search for type
 
-        bool        bCurrency       : 1,    // currency
+        bool            bCurrency       : 1,    // currency
                         bAutoIncrement  : 1,    // if automatic incrementing field
-                        bNullable       : 1,    // if field can be NULL
-                        bCaseSensitive  : 1,    // if type is case sensitive
-                        bUnsigned       : 1;    // if type is unsigned
+                        bNullable       : 1;    // if field can be NULL
 
         OTypeInfo()
                 :nPrecision(0)
@@ -97,8 +95,6 @@ const sal_uInt16 TYPE_BIT       = 31;
                 ,bCurrency(false)
                 ,bAutoIncrement(false)
                 ,bNullable(true)
-                ,bCaseSensitive(false)
-                ,bUnsigned(false)
         {}
         const OUString& getDBName() const { return aTypeName; }
 

@@ -242,14 +242,10 @@ cppuhelper/source/access_control.cxx:80
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:81
     cppu::(anonymous namespace)::permission m_str2 rtl_uString *
-cui/source/inc/cuicharmap.hxx:83
-    SvxCharacterMap bOne _Bool
 cui/source/inc/cuihyperdlg.hxx:47
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
 cui/source/inc/cuihyperdlg.hxx:67
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
-cui/source/inc/scriptdlg.hxx:115
-    SFEntry nType sal_uInt8
 dbaccess/source/core/dataaccess/documentdefinition.cxx:289
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
 dbaccess/source/sdbtools/connection/connectiondependent.hxx:116
@@ -260,24 +256,10 @@ dbaccess/source/sdbtools/connection/objectnames.hxx:44
     sdbtools::ObjectNames m_aModuleClient class sdbtools::SdbtClient
 dbaccess/source/sdbtools/connection/tablename.cxx:56
     sdbtools::TableName_Impl m_aModuleClient class sdbtools::SdbtClient
-dbaccess/source/ui/inc/TypeInfo.hxx:87
-    dbaui::OTypeInfo bCaseSensitive _Bool
-dbaccess/source/ui/inc/TypeInfo.hxx:88
-    dbaui::OTypeInfo bUnsigned _Bool
 dbaccess/source/ui/misc/dbaundomanager.cxx:137
     dbaui::UndoManagerMethodGuard m_aGuard ::osl::ResettableMutexGuard
-dbaccess/source/ui/querydesign/QTableConnectionData.hxx:35
-    dbaui::OQueryTableConnectionData m_eFromType enum dbaui::ETableFieldType
-dbaccess/source/ui/querydesign/QTableConnectionData.hxx:36
-    dbaui::OQueryTableConnectionData m_eDestType enum dbaui::ETableFieldType
 desktop/qa/desktop_lib/test_desktop_lib.cxx:174
     DesktopLOKTest m_bModified _Bool
-desktop/source/deployment/gui/dp_gui_updatedata.hxx:74
-    dp_gui::UpdateData m_nID sal_uInt16
-desktop/source/deployment/gui/dp_gui_updatedialog.cxx:152
-    dp_gui::UpdateDialog::DisabledUpdate m_nID sal_uInt16
-desktop/source/deployment/gui/dp_gui_updatedialog.cxx:158
-    dp_gui::UpdateDialog::SpecificError m_nID sal_uInt16
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:120
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/unx/source/splashx.c:369
@@ -906,8 +888,6 @@ hwpfilter/source/hwpfile.h:264
     HWPFile info_block_len int
 hwpfilter/source/lexer.cxx:141
     yy_buffer_state yy_at_bol int
-idl/inc/database.hxx:103
-    SvIdlDataBase aIFaceName class rtl::OString
 include/basic/basmgr.hxx:52
     BasicError nReason enum BasicErrorReason
 include/basic/sbxvar.hxx:67

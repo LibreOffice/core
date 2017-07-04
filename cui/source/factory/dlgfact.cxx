@@ -1232,7 +1232,7 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Wind
             pDlg = VclPtr<SfxMacroAssignDlg>::Create( pParent, _rxDocumentFrame, rAttr );
             break;
         case RID_SVXDLG_CHARMAP :
-            pDlg = VclPtr<SvxCharacterMap>::Create( pParent, true, &rAttr );
+            pDlg = VclPtr<SvxCharacterMap>::Create( pParent, &rAttr );
             break;
         default:
             break;
