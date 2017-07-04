@@ -33,15 +33,6 @@ class XMLOFF_DLLPUBLIC XMLTextStyleContext : public XMLPropStyleContext
     OUString             m_sDropCapTextStyleName;
     OUString             m_sMasterPageName;
     OUString             m_sDataStyleName; // for grid columns only
-    const OUString       sIsAutoUpdate;
-    const OUString       sCategory;
-    const OUString       sNumberingStyleName;
-    const OUString       sOutlineLevel;
-
-public:
-    const OUString       sDropCapCharStyleName;
-private:
-    const OUString       sPageDescName;
 
     sal_Int8    m_nOutlineLevel;
 
