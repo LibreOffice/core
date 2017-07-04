@@ -32,9 +32,6 @@ namespace dbaui
         EJoinType       m_eJoinType;
         bool            m_bNatural;
 
-        ETableFieldType m_eFromType;
-        ETableFieldType m_eDestType;
-
     protected:
         // for creation and duplication of lines of own type
         virtual OConnectionLineDataRef CreateLineDataObj() override;
@@ -60,8 +57,6 @@ namespace dbaui
 
         sal_Int32       GetFieldIndex(EConnectionSide nWhich) const { return nWhich==JTCS_TO ? m_nDestEntryIndex : m_nFromEntryIndex; }
         void            SetFieldIndex(EConnectionSide nWhich, sal_Int32 nVal) { if (nWhich==JTCS_TO) m_nDestEntryIndex=nVal; else m_nFromEntryIndex=nVal; }
-
-        void            SetFieldType(EConnectionSide nWhich, ETableFieldType eType) { if (nWhich==JTCS_TO) m_eDestType=eType; else m_eFromType=eType; }
 
         void            InitFromDrag(const OTableFieldDescRef& rDragLeft, const OTableFieldDescRef& rDragRight);
 

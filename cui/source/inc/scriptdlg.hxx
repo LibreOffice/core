@@ -112,15 +112,13 @@ public:
 class SFEntry final
 {
 private:
-    sal_uInt8       nType;
     bool            loaded;
-        css::uno::Reference< css::script::browse::XBrowseNode > nodes;
-        css::uno::Reference< css::frame::XModel > model;
+    css::uno::Reference< css::script::browse::XBrowseNode > nodes;
+    css::uno::Reference< css::frame::XModel > model;
 public:
-                    SFEntry( sal_uInt8 nT,
-                            const css::uno::Reference< css::script::browse::XBrowseNode >& entryNodes ,
-                            const css::uno::Reference< css::frame::XModel >& entryModel) { nType = nT; nodes = entryNodes; loaded=false; model = entryModel; }
-                    SFEntry( const SFEntry& r ) { nType = r.nType; nodes = r.nodes; loaded = r.loaded; }
+                    SFEntry( const css::uno::Reference< css::script::browse::XBrowseNode >& entryNodes ,
+                             const css::uno::Reference< css::frame::XModel >& entryModel) { nodes = entryNodes; loaded=false; model = entryModel; }
+                    SFEntry( const SFEntry& r ) { nodes = r.nodes; loaded = r.loaded; }
     const css::uno::Reference< css::script::browse::XBrowseNode >& GetNode() { return nodes ;}
     const css::uno::Reference< css::frame::XModel >& GetModel() { return model ;};
     bool            isLoaded() const                    { return loaded; }

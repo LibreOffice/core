@@ -80,7 +80,6 @@ private:
     VclPtr<Edit>           m_pDecimalCodeText;
     VclPtr<SvxCharView>    m_pRecentCharView[16];
     vcl::Font       aFont;
-    bool            bOne;
     const SubsetMap* pSubsetMap;
 
     std::deque<OUString> maRecentCharList;
@@ -106,7 +105,7 @@ private:
     void selectCharByCode(Radix radix);
 
 public:
-                    SvxCharacterMap( vcl::Window* pParent, bool bOne=true, const SfxItemSet* pSet=nullptr );
+                    SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet=nullptr );
     virtual         ~SvxCharacterMap() override;
     virtual short Execute() override;
     virtual void    dispose() override;

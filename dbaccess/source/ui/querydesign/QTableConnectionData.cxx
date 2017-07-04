@@ -29,8 +29,6 @@ OQueryTableConnectionData::OQueryTableConnectionData()
     , m_nDestEntryIndex(0)
     , m_eJoinType (INNER_JOIN)
     , m_bNatural(false)
-    , m_eFromType(TAB_NORMAL_FIELD)
-    , m_eDestType(TAB_NORMAL_FIELD)
 {
 }
 
@@ -40,10 +38,7 @@ OQueryTableConnectionData::OQueryTableConnectionData( const OQueryTableConnectio
     , m_nDestEntryIndex(rConnData.m_nDestEntryIndex)
     , m_eJoinType(rConnData.m_eJoinType)
     , m_bNatural(rConnData.m_bNatural)
-    , m_eFromType(rConnData.m_eFromType)
-    , m_eDestType(rConnData.m_eDestType)
 {
-
 }
 
 OQueryTableConnectionData::OQueryTableConnectionData(const TTableWindowData::value_type& _pReferencingTable,
@@ -53,8 +48,6 @@ OQueryTableConnectionData::OQueryTableConnectionData(const TTableWindowData::val
     , m_nDestEntryIndex(0)
     , m_eJoinType (INNER_JOIN)
     , m_bNatural(false)
-    , m_eFromType(TAB_NORMAL_FIELD)
-    , m_eDestType(TAB_NORMAL_FIELD)
 {
 }
 
@@ -84,8 +77,6 @@ OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTabl
     m_nFromEntryIndex = rConnData.m_nFromEntryIndex;
     m_nDestEntryIndex = rConnData.m_nDestEntryIndex;
 
-    m_eFromType = rConnData.m_eFromType;
-    m_eDestType = rConnData.m_eDestType;
     m_eJoinType = rConnData.m_eJoinType;
     m_bNatural  = rConnData.m_bNatural;
 
@@ -110,9 +101,6 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
     // set members
     SetFieldIndex(JTCS_FROM, rDragLeft->GetFieldIndex());
     SetFieldIndex(JTCS_TO, rDragRight->GetFieldIndex());
-
-    SetFieldType(JTCS_FROM, rDragLeft->GetFieldType());
-    SetFieldType(JTCS_TO, rDragRight->GetFieldType());
 
     AppendConnLine(rDragLeft->GetField(), rDragRight->GetField());
 }

@@ -86,7 +86,6 @@ protected:
     void WriteReset()
     {
         aUsedTypes.clear();
-        aIFaceName.clear();
     }
 public:
     OUString sSlotMapFile;
@@ -100,7 +99,6 @@ public:
 
     // list of used types while writing
     SvRefMemberList<SvMetaType *>    aUsedTypes;
-    OString                          aIFaceName;
 
     void                    StartNewFile( const OUString& rName );
     void                    SetExportFile( const OUString& rName )

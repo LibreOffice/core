@@ -149,20 +149,18 @@ struct UpdateDialog::DisabledUpdate {
     uno::Sequence< OUString > unsatisfiedDependencies;
     // We also want to show release notes and publisher for disabled updates
     css::uno::Reference< css::xml::dom::XNode > aUpdateInfo;
-    sal_uInt16                m_nID;
 };
 
 struct UpdateDialog::SpecificError {
     OUString name;
     OUString message;
-    sal_uInt16 m_nID;
 };
 
 
 struct UpdateDialog::IgnoredUpdate {
     OUString sExtensionID;
     OUString sVersion;
-    bool          bRemoved;
+    bool     bRemoved;
 
     IgnoredUpdate( const OUString &rExtensionID, const OUString &rVersion );
 };
@@ -727,7 +725,6 @@ void UpdateDialog::addEnabledUpdate( OUString const & name,
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_enabledUpdates.size() );
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( ENABLED_UPDATE, nIndex, name );
 
-    data.m_nID = m_nLastID;
     m_nLastID += 1;
 
     m_enabledUpdates.push_back( data );
@@ -753,7 +750,6 @@ void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate & data )
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_disabledUpdates.size() );
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( DISABLED_UPDATE, nIndex, data.name );
 
-    data.m_nID = m_nLastID;
     m_nLastID += 1;
 
     m_disabledUpdates.push_back( data );
@@ -769,7 +765,6 @@ void UpdateDialog::addSpecificError( UpdateDialog::SpecificError & data )
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_specificErrors.size() );
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( SPECIFIC_ERROR, nIndex, data.name );
 
-    data.m_nID = m_nLastID;
     m_nLastID += 1;
 
     m_specificErrors.push_back( data );
