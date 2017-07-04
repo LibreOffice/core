@@ -1246,8 +1246,6 @@ include/xmloff/shapeimport.hxx:181
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
-l10ntools/inc/xmlparse.hxx:207
-    XMLElement m_nPos int
 lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
@@ -1922,8 +1920,6 @@ lotuswordpro/source/filter/lwpuidoc.hxx:134
     LwpUIDocument m_nFlags sal_uInt16
 lotuswordpro/source/filter/lwpuidoc.hxx:135
     LwpUIDocument m_InitialSaveAsType class LwpAtomHolder
-mysqlc/source/mysqlc_connection.hxx:74
-    connectivity::mysqlc::ConnectionSettings quoteIdentifier rtl::OUString
 oox/inc/drawingml/chart/axismodel.hxx:42
     oox::drawingml::chart::AxisDispUnitsModel mfCustomUnit double
 oox/inc/drawingml/chart/axismodel.hxx:72
@@ -2120,10 +2116,6 @@ registry/source/reflread.cxx:867
     MethodList m_pCP class ConstantPool *
 reportdesign/source/ui/inc/ReportWindow.hxx:54
     rptui::OReportWindow m_pObjFac ::std::unique_ptr<DlgEdFactory>
-rsc/inc/rscall.h:85
-    SUBINFO_STRUCT nPos sal_uInt32
-rsc/inc/rscall.h:86
-    SUBINFO_STRUCT pClass class RscTop *
 rsc/inc/rscdef.hxx:55
     RscExpType cUnused _Bool
 rsc/inc/rsctools.hxx:108

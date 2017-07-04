@@ -155,7 +155,7 @@ public:
     virtual ~XMLFile() override;
 
     void Print( XMLNode *pCur, sal_uInt16 nLevel = 0 );
-    void SearchL10NElements( XMLChildNode *pCur, int pos = 0 );
+    void SearchL10NElements( XMLChildNode *pCur );
     void Extract();
 
     XMLHashMap* GetStrings(){ return m_pXMLStrings.get(); }
@@ -204,7 +204,6 @@ private:
     std::unique_ptr<XMLAttributeList> m_pAttributes;
     OString m_sId;
     OString m_sLanguageId;
-    int m_nPos;
 
 protected:
     void Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement) const;
@@ -237,7 +236,6 @@ public:
 
     void SetId              ( OString const & sTheId )      { m_sId = sTheId; }
     void SetLanguageId      ( OString const & sLangId )     { m_sLanguageId = sLangId; }
-    void SetPos             ( int nPos )                    { m_nPos = nPos; }
 };
 
 /** Holds character data

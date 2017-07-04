@@ -71,7 +71,6 @@ namespace connectivity
             rtl_TextEncoding encoding;
             std::unique_ptr<sql::Connection> cppConnection;
             rtl::OUString schema;
-            rtl::OUString quoteIdentifier;
             rtl::OUString connectionURL;
             bool readOnly;
         };
