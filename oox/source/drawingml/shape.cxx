@@ -128,6 +128,7 @@ Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
     setDefaults(bDefaultHeight);
 }
 
+
 Shape::Shape( const ShapePtr& pSourceShape )
 : maChildren()
 , mpTextBody(pSourceShape->mpTextBody)

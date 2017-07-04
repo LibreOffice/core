@@ -533,9 +533,9 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         // Now we have a potential border and a largest segment. Use those.
 
                         aGradient.Style = bSymmetric ? awt::GradientStyle_AXIAL : awt::GradientStyle_LINEAR;
-                        sal_Int32 nDmlAngle = maGradientProps.moShadeAngle.get( 0 ) - nShapeRotation;
+                        sal_Int32 nDmlAngle = maGradientProps.moShadeAngle.get( 0 ) + nShapeRotation;
                         // convert DrawingML angle (in 1/60000 degrees) to API angle (in 1/10 degrees)
-                        aGradient.Angle = static_cast< sal_Int16 >( (4500 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
+                        aGradient.Angle = static_cast< sal_Int16 >( (8100 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
                         Color aStartColor, aEndColor;
                         if( bSymmetric )
                         {
