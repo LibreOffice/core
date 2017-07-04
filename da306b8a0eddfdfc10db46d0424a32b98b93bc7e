@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_329e1657",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2217,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-07-04T12:30:02Z",
+      "side": 1,
+      "message": "OK, it works but the next tab is now put in its place. Working on it.",
+      "parentUuid": "3a461143_a762cad6",
+      "revId": "da306b8a0eddfdfc10db46d0424a32b98b93bc7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_e1492290",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 15
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "ah sorry I didn\u0027t see that this is checked above:\n\nif ( mpTabCtrlData-\u003emaItemList.empty() )\n        return false;",
       "parentUuid": "3a461143_6489c0ca",
+      "revId": "da306b8a0eddfdfc10db46d0424a32b98b93bc7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_52a3a29e",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-07-04T12:30:02Z",
+      "side": 1,
+      "message": "OK :)",
+      "parentUuid": "3a461143_8765cee2",
       "revId": "da306b8a0eddfdfc10db46d0424a32b98b93bc7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
