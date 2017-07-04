@@ -68,9 +68,6 @@ struct IndicatorInfo
         /** @short  the last set text for this indicator */
         OUString m_sText;
 
-        /** @short  the max range for this indicator. */
-        sal_Int32 m_nRange;
-
         /** @short  the last set value for this indicator */
         sal_Int32 m_nValue;
 
@@ -89,12 +86,10 @@ struct IndicatorInfo
                     the max range for this indicator.
          */
         IndicatorInfo(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator,
-                      const OUString&                                    sText     ,
-                            sal_Int32                                           nRange    )
+                      const OUString&                                    sText    )
         {
             m_xIndicator = xIndicator;
             m_sText      = sText;
-            m_nRange     = nRange;
             m_nValue     = 0;
         }
 

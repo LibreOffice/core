@@ -176,12 +176,10 @@ private:
     {
         UIElementType() : bModified( false ),
                           bLoaded( false ),
-                          bDefaultLayer( false ),
                           nElementType( css::ui::UIElementType::UNKNOWN ) {}
 
         bool                                                              bModified;
         bool                                                              bLoaded;
-        bool                                                              bDefaultLayer;
         sal_Int16                                                         nElementType;
         UIElementDataHashMap                                              aElementsHashMap;
         css::uno::Reference< css::embed::XStorage > xStorage;
@@ -812,7 +810,6 @@ void ModuleUIConfigurationManager::impl_Initialize()
             m_aUIElements[LAYER_USERDEFINED][i].nElementType = i;
             m_aUIElements[LAYER_USERDEFINED][i].bModified = false;
             m_aUIElements[LAYER_USERDEFINED][i].xStorage = xElementTypeStorage;
-            m_aUIElements[LAYER_USERDEFINED][i].bDefaultLayer = false;
         }
     }
 
@@ -838,7 +835,6 @@ void ModuleUIConfigurationManager::impl_Initialize()
             m_aUIElements[LAYER_DEFAULT][i].nElementType = i;
             m_aUIElements[LAYER_DEFAULT][i].bModified = false;
             m_aUIElements[LAYER_DEFAULT][i].xStorage = xElementTypeStorage;
-            m_aUIElements[LAYER_DEFAULT][i].bDefaultLayer = true;
         }
     }
 }

@@ -93,7 +93,6 @@ class FWE_DLLPUBLIC RootActionTriggerContainer :  public PropertySetContainer,
         void FillContainer();
 
         bool            m_bContainerCreated;
-        bool            m_bInContainerCreation;
         VclPtr<const Menu>  m_pMenu;
         const OUString* m_pMenuIdentifier;
 };
