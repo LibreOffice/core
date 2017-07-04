@@ -3047,6 +3047,11 @@ void SwAccessibleMap::FireEvents()
         osl::MutexGuard aGuard( maEventMutex );
         if( mpEvents )
         {
+            if (mpEvents->IsFiring())
+            {
+                return; // prevent recursive FireEvents()
+            }
+
             mpEvents->SetFiring();
             mpEvents->MoveMissingXAccToEnd();
             for( auto const& aEvent : *mpEvents )
