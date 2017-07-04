@@ -33,6 +33,24 @@
       "revId": "eb31d1c9490bcc865e7489613b3a4d5833e5b505",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f2164ea6",
+        "filename": "xmlsecurity/Library_xsec_xmlsec.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-04T14:31:25Z",
+      "side": 1,
+      "message": "I actually tried to move this stuff to RepositoryExternal.mk and I got make errors which I could not parse. (I don\u0027t have the patch at hand anymore, but if interested, I can try again.) So yes, if you could move this out of xmlsecurity/ on master, that would be nice. :-)",
+      "parentUuid": "3a461143_323a9637",
+      "revId": "eb31d1c9490bcc865e7489613b3a4d5833e5b505",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
