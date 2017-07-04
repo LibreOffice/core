@@ -144,7 +144,6 @@ namespace connectivity
             SQLRETURN                                   m_nCurrentFetchState;
             bool                                    m_bWasNull;
             bool                                    m_bEOF;                 // after last record
-            bool                                    m_bInserting;
             bool                                    m_bRowInserted;
             bool                                    m_bRowDeleted;
             bool                                    m_bUseFetchScroll;

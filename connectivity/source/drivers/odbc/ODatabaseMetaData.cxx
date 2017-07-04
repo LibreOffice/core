@@ -41,7 +41,6 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
                         ,m_aConnectionHandle(_pHandle)
                         ,m_pConnection(_pCon)
                         ,m_bUseCatalog(true)
-                        ,m_bOdbc3(true)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
     if(!m_pConnection->isCatalogUsed())
@@ -50,8 +49,6 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
         try
         {
             m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
-            OUString sVersion = getDriverVersion();
-            m_bOdbc3        =  sVersion != "02.50" && sVersion != "02.00";
         }
         catch(SQLException& )
         { // doesn't matter here

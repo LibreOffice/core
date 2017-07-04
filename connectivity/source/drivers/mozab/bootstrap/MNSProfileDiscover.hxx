@@ -48,11 +48,10 @@ namespace connectivity
         {
         public:
             ProfileStruct();
-            ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName, const OUString &aProfilePath);
+            ProfileStruct(const OUString& aProfileName, const OUString &aProfilePath);
             const OUString& getProfileName() const { return profileName;}
             const OUString& getProfilePath() const;
         private:
-            MozillaProductType product;
             OUString profileName;
             OUString profilePath;
         };

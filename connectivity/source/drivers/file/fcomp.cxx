@@ -47,7 +47,6 @@ using namespace com::sun::star;
 OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)//,OCursor& rCurs)
                      : m_pAnalyzer(pAnalyzer)
                      , m_nParamCounter(0)
-                     , m_bORCondition(false)
 {
 }
 
@@ -154,7 +153,6 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
         if (SQL_ISTOKEN(pPredicateNode->getChild(1),OR))                // OR-Operator
         {
             m_aCodeList.push_back(new OOp_OR);
-            m_bORCondition = true;
         }
         else if (SQL_ISTOKEN(pPredicateNode->getChild(1),AND))      // AND-Operator
             m_aCodeList.push_back(new OOp_AND);

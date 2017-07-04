@@ -113,7 +113,6 @@ namespace connectivity
             sal_Int32                               m_nRowCountResult;
             sal_Int32                               m_nColumnCount;
             bool                                m_bWasNull;
-            bool                                m_bEOF;                 // after last record
             bool                                m_bInserted;            // true when moveToInsertRow was called
                                                                             // set to false when cursor moved or cancel
             bool                                m_bRowUpdated;

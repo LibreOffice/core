@@ -37,8 +37,7 @@ namespace connectivity
         {
             SQLHANDLE       m_aConnectionHandle;
             OConnection*    m_pConnection;
-            bool        m_bUseCatalog;
-            bool        m_bOdbc3;
+            bool            m_bUseCatalog;
 
             // cached database information
             virtual OUString    impl_getIdentifierQuoteString_throw(  ) override;

@@ -229,7 +229,6 @@ protected:
             sal_Int32                m_nParamIndex;
             bool                 m_bIsAlwaysFalseQuery;
             ::rtl::Reference<OKeySet>     m_pKeySet;
-            sal_Int32                     m_nUpdatedRow;    //updated row
             TriState                      m_bIsReadOnly;
             void resetParameters() { m_nParamIndex = 0; }
 
