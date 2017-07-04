@@ -60,13 +60,12 @@ namespace connectivity
             css::uno::Reference< css::ucb::XDynamicResultSet >    m_xDir; // directory
             css::uno::Reference< css::ucb::XContent>              m_xContent;
 
-            bool                    m_bClosed;
             bool                    m_bAutoCommit;
             bool                    m_bReadOnly;
             bool                    m_bShowDeleted;
             bool                    m_bCaseSensitiveExtension;
             bool                    m_bCheckSQL92;
-            bool                        m_bDefaultTextEncoding;
+            bool                    m_bDefaultTextEncoding;
 
 
             void throwUrlNotValid(const OUString & _rsUrl,const OUString & _rsMessage);

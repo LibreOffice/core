@@ -58,7 +58,6 @@ typedef connectivity::OMetaConnection OConnection_BASE;
 OConnection::OConnection(OFileDriver*   _pDriver)
     : OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
     , m_pDriver(_pDriver)
-    , m_bClosed(false)
     , m_bAutoCommit(false)
     , m_bReadOnly(false)
     , m_bShowDeleted(false)
@@ -369,9 +368,8 @@ void OConnection::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     OConnection_BASE::disposing();
 
-    m_bClosed   = true;
-m_xDir.clear();
-m_xContent.clear();
+    m_xDir.clear();
+    m_xContent.clear();
     m_xCatalog  = WeakReference< XTablesSupplier>();
 
     dispose_ChildImpl();

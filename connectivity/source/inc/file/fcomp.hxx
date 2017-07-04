@@ -43,7 +43,6 @@ namespace connectivity
             OSQLAnalyzer*                           m_pAnalyzer;
             css::uno::Reference< css::container::XNameAccess> m_xIndexes;
             sal_Int32                               m_nParamCounter;
-            bool                                    m_bORCondition;
         public:
             OPredicateCompiler(OSQLAnalyzer* pAnalyzer);
 
