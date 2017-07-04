@@ -23,6 +23,7 @@
 #include <vector>
 #include <algorithm>
 #include <vcl/outdev.hxx>
+#include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 
 namespace svx {
 namespace frame {
@@ -907,23 +908,52 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                     size_t _nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
 
                     const Style aTlbrStyle = GetCellStyleTLBR( _nFirstCol, _nFirstRow );
-                    if ( aTlbrStyle.GetWidth( ) )
-                        pProcessor->process( CreateClippedBorderPrimitives(
-                                    aRect.TopLeft(), aRect.BottomRight(),
-                                    aTlbrStyle, aRect ) );
+                    if (aTlbrStyle.GetWidth())
+                    {
+                        drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+                        aSequence.append(
+                            new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                                basegfx::B2DPoint(aRect.Left(), aRect.Top()),
+                                basegfx::B2DPoint(aRect.Right(), aRect.Bottom()),
+                                aTlbrStyle.Prim(),
+                                aTlbrStyle.Dist(),
+                                aTlbrStyle.Secn(),
+                                0.0, 0.0, 0.0, 0.0,
+                                aTlbrStyle.GetColorSecn().getBColor(),
+                                aTlbrStyle.GetColorPrim().getBColor(),
+                                aTlbrStyle.GetColorGap().getBColor(),
+                                aTlbrStyle.UseGapColor(),
+                                aTlbrStyle.Type(),
+                                aTlbrStyle.PatternScale()));
+                        pProcessor->process(aSequence);
+                    }
 
                     const Style aBltrStyle = GetCellStyleBLTR( _nFirstCol, _nFirstRow );
-                    if ( aBltrStyle.GetWidth( ) )
-                        pProcessor->process( CreateClippedBorderPrimitives(
-                                    aRect.BottomLeft(), aRect.TopRight(),
-                                    aBltrStyle, aRect ) );
+                    if (aBltrStyle.GetWidth())
+                    {
+                        drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+                        aSequence.append(
+                            new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                                basegfx::B2DPoint(aRect.Left(), aRect.Bottom()),
+                                basegfx::B2DPoint(aRect.Right(), aRect.Top()),
+                                aBltrStyle.Prim(),
+                                aBltrStyle.Dist(),
+                                aBltrStyle.Secn(),
+                                0.0, 0.0, 0.0, 0.0,
+                                aBltrStyle.GetColorSecn().getBColor(),
+                                aBltrStyle.GetColorPrim().getBColor(),
+                                aBltrStyle.GetColorGap().getBColor(),
+                                aBltrStyle.UseGapColor(),
+                                aBltrStyle.Type(),
+                                aBltrStyle.PatternScale()));
+                        pProcessor->process(aSequence);
+                    }
                 }
             }
         }
     }
 
     // *** horizontal frame borders ***
-
     for( nRow = nFirstRow; nRow <= nLastRow + 1; ++nRow )
     {
         double fAngle = mxImpl->GetHorDiagAngle( nFirstCol, nRow );
@@ -970,10 +1000,16 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
             {
                 // draw previous frame border
                 Point aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.Y() );
-                if( pStart->Prim() && (aStartPos.X() <= aEndPos.X()) )
-                   pProcessor->process( CreateBorderPrimitives( aStartPos, aEndPos, *pStart,
-                        aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
-                        aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor ) );
+                if (pStart->Prim() && (aStartPos.X() <= aEndPos.X()))
+                {
+                    drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+                    aSequence.append(
+                        CreateBorderPrimitives(
+                            aStartPos, aEndPos, *pStart,
+                            aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
+                            aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor));
+                    pProcessor->process(aSequence);
+                }
 
                 // re-init "*Start***" variables
                 aStartPos = aEndPos;
@@ -995,10 +1031,16 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
 
         // draw last frame border
         Point aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.Y() );
-        if( pStart->Prim() && (aStartPos.X() <= aEndPos.X()) )
-            pProcessor->process( CreateBorderPrimitives( aStartPos, aEndPos, *pStart,
-                aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
-                aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor ) );
+        if (pStart->Prim() && (aStartPos.X() <= aEndPos.X()))
+        {
+            drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+            aSequence.append(
+                CreateBorderPrimitives(
+                    aStartPos, aEndPos, *pStart,
+                    aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
+                    aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor));
+            pProcessor->process(aSequence);
+        }
     }
 
     // *** vertical frame borders ***
@@ -1048,10 +1090,16 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
             {
                 // draw previous frame border
                 Point aEndPos( aStartPos.X(), mxImpl->GetRowPosition( nRow ) );
-                if( pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()) )
-                    pProcessor->process( CreateBorderPrimitives( aEndPos, aStartPos, *pStart,
-                        aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
-                        aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor ) );
+                if (pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()))
+                {
+                    drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+                    aSequence.append(
+                        CreateBorderPrimitives(
+                            aEndPos, aStartPos, *pStart,
+                            aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
+                            aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor));
+                    pProcessor->process(aSequence);
+                }
 
                 // re-init "*Start***" variables
                 aStartPos = aEndPos;
@@ -1073,10 +1121,15 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
 
         // draw last frame border
         Point aEndPos( aStartPos.X(), mxImpl->GetRowPosition( nRow ) );
-        if( pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()) )
-            pProcessor->process( CreateBorderPrimitives( aEndPos, aStartPos, *pStart,
-                aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
-                aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor ) );
+        if (pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()))
+        {
+            drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+            aSequence.append(
+                CreateBorderPrimitives(aEndPos, aStartPos, *pStart,
+                    aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
+                    aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor));
+            pProcessor->process(aSequence);
+        }
     }
 }
 

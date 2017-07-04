@@ -33,7 +33,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
-#include <drawinglayer/primitive2d/clippedborderlineprimitive2d.hxx>
 
 
 using namespace ::com::sun::star;
@@ -1389,67 +1388,32 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
     return nCut;
 }
 
-basegfx::B2DPoint lcl_PointToB2DPoint( const Point& rPoint )
-{
-    return basegfx::B2DPoint(rPoint.getX(), rPoint.getY());
-}
-
-drawinglayer::primitive2d::Primitive2DContainer CreateClippedBorderPrimitives (
-        const Point& rStart, const Point& rEnd, const Style& rBorder,
-        const tools::Rectangle& rClipRect )
-{
-    drawinglayer::primitive2d::Primitive2DContainer aSequence( 1 );
-    basegfx::B2DPolygon aPolygon;
-    aPolygon.append( lcl_PointToB2DPoint( rClipRect.TopLeft( ) ) );
-    aPolygon.append( lcl_PointToB2DPoint( rClipRect.TopRight( ) ) );
-    aPolygon.append( lcl_PointToB2DPoint( rClipRect.BottomRight( ) ) );
-    aPolygon.append( lcl_PointToB2DPoint( rClipRect.BottomLeft( ) ) );
-    aPolygon.setClosed( true );
-
-    aSequence[0] = new drawinglayer::primitive2d::ClippedBorderLinePrimitive2D(
-        lcl_PointToB2DPoint( rStart ),
-        lcl_PointToB2DPoint( rEnd ),
-        rBorder.Prim(),
-        rBorder.Dist(),
-        rBorder.Secn(),
-        aPolygon,
-        rBorder.GetColorSecn().getBColor(),
-        rBorder.GetColorPrim().getBColor(),
-        rBorder.GetColorGap().getBColor(),
-        rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale() );
-
-    return aSequence;
-}
-
-drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimitives(
+drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
         const DiagStyle& /*rLFromTR*/, const Style& rLFromT, const Style& /*rLFromL*/, const Style& rLFromB, const DiagStyle& /*rLFromBR*/,
         const DiagStyle& /*rRFromTL*/, const Style& rRFromT, const Style& /*rRFromR*/, const Style& rRFromB, const DiagStyle& /*rRFromBL*/,
         const Color* /*pForceColor*/, long nRotateT, long nRotateB )
 {
-    drawinglayer::primitive2d::Primitive2DContainer aSequence( 1 );
-
     basegfx::B2DPoint aStart( rLPos.getX(), rLPos.getY() );
     basegfx::B2DPoint aEnd( rRPos.getX(), rRPos.getY() );
 
-    aSequence[0] = new drawinglayer::primitive2d::BorderLinePrimitive2D(
-        aStart, aEnd,
-        rBorder.Prim(),
-        rBorder.Dist(),
-        rBorder.Secn(),
-        lcl_GetExtent( rBorder, rLFromT, rLFromB, nRotateT, - nRotateB ),
-        lcl_GetExtent( rBorder, rRFromT, rRFromB, 18000 - nRotateT, nRotateB - 18000 ),
-        lcl_GetExtent( rBorder, rLFromB, rLFromT, nRotateB, - nRotateT ),
-        lcl_GetExtent( rBorder, rRFromB, rRFromT, 18000 - nRotateB, nRotateT - 18000 ),
-        rBorder.GetColorSecn().getBColor(),
-        rBorder.GetColorPrim().getBColor(),
-        rBorder.GetColorGap().getBColor(),
-        rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale() );
-
-    return aSequence;
+    return drawinglayer::primitive2d::Primitive2DReference(
+        new drawinglayer::primitive2d::BorderLinePrimitive2D(
+            aStart, aEnd,
+            rBorder.Prim(),
+            rBorder.Dist(),
+            rBorder.Secn(),
+            lcl_GetExtent( rBorder, rLFromT, rLFromB, nRotateT, - nRotateB ),
+            lcl_GetExtent( rBorder, rRFromT, rRFromB, 18000 - nRotateT, nRotateB - 18000 ),
+            lcl_GetExtent( rBorder, rLFromB, rLFromT, nRotateB, - nRotateT ),
+            lcl_GetExtent( rBorder, rRFromB, rRFromT, 18000 - nRotateB, nRotateT - 18000 ),
+            rBorder.GetColorSecn().getBColor(),
+            rBorder.GetColorPrim().getBColor(),
+            rBorder.GetColorGap().getBColor(),
+            rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale()));
 }
 
-drawinglayer::primitive2d::Primitive2DContainer CreateBorderPrimitives(
+drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
         const Style& rLFromT, const Style& rLFromL, const Style& rLFromB,
         const Style& rRFromT, const Style& rRFromR, const Style& rRFromB,
