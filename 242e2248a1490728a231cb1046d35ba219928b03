@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_526d6231",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3561,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-04T14:49:20Z",
+      "side": 1,
+      "message": "nitpick: this variable isn\u0027t really necessary",
+      "revId": "242e2248a1490728a231cb1046d35ba219928b03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
