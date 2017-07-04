@@ -36,7 +36,7 @@ namespace dp_gui {
 struct UpdateData
 {
     explicit UpdateData( css::uno::Reference< css::deployment::XPackage > const & aExt):
-        bIsShared(false), aInstalledPackage(aExt), aUpdateSource(nullptr), m_nID(0) {};
+        bIsShared(false), aInstalledPackage(aExt), aUpdateSource(nullptr) {};
 
     //When entries added to the listbox then there can be one for the user update and one
     //for the shared update. However, both list entries will contain the same UpdateData.
@@ -67,11 +67,7 @@ struct UpdateData
     //The locale extension which is used as update for the user or shared repository.
     //If set then the data for the online update (aUpdateInfo, sLocalURL, sWebsiteURL)
     //are to be ignored.
-    css::uno::Reference< css::deployment::XPackage >
-    aUpdateSource;
-
-    // ID to find this entry in the update listbox
-    sal_uInt16  m_nID;
+    css::uno::Reference< css::deployment::XPackage >  aUpdateSource;
 };
 }
 

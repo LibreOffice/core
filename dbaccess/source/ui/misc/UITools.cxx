@@ -479,13 +479,13 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
             pInfo->bNullable        = (sal_Int32)aValue == ColumnValue::NULLABLE;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bCaseSensitive   = (bool)aValue;
+            // bCaseSensitive
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nSearchType      = aValue;
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            pInfo->bUnsigned        = (bool)aValue;
+            // bUnsigned
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->bCurrency        = (bool)aValue;

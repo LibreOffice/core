@@ -2075,7 +2075,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
 {
-    VclPtrInstance< SvxCharacterMap > pMap( this, true );
+    VclPtrInstance< SvxCharacterMap > pMap( this );
 
     sal_uInt16 nMask = 1;
     const vcl::Font* pFmtFont = nullptr;

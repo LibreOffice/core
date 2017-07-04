@@ -60,39 +60,6 @@ using namespace ::com::sun::star::accessibility;
 
 namespace
 {
-    bool isColumnInKeyType(const Reference<XIndexAccess>& _rxKeys,const OUString& _rColumnName,sal_Int32 _nKeyType)
-    {
-        bool bReturn = false;
-        if(_rxKeys.is())
-        {
-            Reference<XColumnsSupplier> xColumnsSupplier;
-            // search the one and only primary key
-            const sal_Int32 nCount = _rxKeys->getCount();
-            for(sal_Int32 i=0;i< nCount;++i)
-            {
-                Reference<XPropertySet> xProp(_rxKeys->getByIndex(i),UNO_QUERY);
-                if(xProp.is())
-                {
-                    sal_Int32 nKeyType = 0;
-                    xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                    if(_nKeyType == nKeyType)
-                    {
-                        xColumnsSupplier.set(xProp,UNO_QUERY);
-                        if(xColumnsSupplier.is())
-                        {
-                            Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
-                            if(xColumns.is() && xColumns->hasByName(_rColumnName))
-                            {
-                                bReturn = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return bReturn;
-    }
     /** appends a new TabAdd Undo action at controller
         @param  _pView          the view which we use
         @param  _pUndoAction    the undo action which should be added
@@ -183,10 +150,7 @@ namespace
                 continue;
             }
 
-            pNewConnData->SetFieldType(JTCS_FROM,TAB_NORMAL_FIELD);
-
             xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN) >>= sRelatedColumn;
-            pNewConnData->SetFieldType(JTCS_TO,isColumnInKeyType(xReferencedKeys,sRelatedColumn,KeyType::PRIMARY) ? TAB_PRIMARY_FIELD : TAB_NORMAL_FIELD);
 
             {
                 Sequence< sal_Int16> aFind(::comphelper::findValue(_rSource.GetOriginalColumns()->getElementNames(),*pIter,true));
@@ -609,9 +573,6 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
         // ... and set them
         pNewConnectionData->SetFieldIndex(JTCS_FROM, nSourceFieldIndex);
         pNewConnectionData->SetFieldIndex(JTCS_TO, nDestFieldIndex);
-
-        pNewConnectionData->SetFieldType(JTCS_FROM, eSourceFieldType);
-        pNewConnectionData->SetFieldType(JTCS_TO, eDestFieldType);
 
         pNewConnectionData->AppendConnLine( aSourceFieldName,aDestFieldName );
 
