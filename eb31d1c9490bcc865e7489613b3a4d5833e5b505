@@ -51,6 +51,24 @@
       "revId": "eb31d1c9490bcc865e7489613b3a4d5833e5b505",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_3211b6ad",
+        "filename": "xmlsecurity/Library_xsec_xmlsec.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-04T14:35:16Z",
+      "side": 1,
+      "message": "okay i\u0027ll try one of these days.\n\nalthough there isn\u0027t a 2nd user of xmlsec anyway so maybe it\u0027s not so urgent after all.",
+      "parentUuid": "3a461143_f2164ea6",
+      "revId": "eb31d1c9490bcc865e7489613b3a4d5833e5b505",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
