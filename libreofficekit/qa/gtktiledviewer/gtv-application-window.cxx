@@ -9,7 +9,11 @@
 
 #include <gtk/gtk.h>
 
+#include <LibreOfficeKit/LibreOfficeKitGtk.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 #include <gtv-application-window.hxx>
+#include <gtv-main-toolbar.hxx>
 
 struct _GtvApplicationWindow
 {
@@ -19,16 +23,11 @@ struct _GtvApplicationWindow
 struct GtvApplicationWindowPrivate
 {
     GtkWidget* container;
-    GtkWidget* toolbar1;
-    GtkWidget* toolbar2;
-    GtkWidget* btn_saveas;
-    GtkWidget* btn_copy;
-    GtkWidget* btn_paste;
-    GtkWidget* btn_bold;
-    GtkWidget* btn_italics;
-    GtkWidget* btn_underline;
-    GtkWidget* statusbar;
+    GtkWidget* toolbarcontainer;
+
     GtkWidget* scrolledwindow;
+    GtkWidget* lokdocview;
+    GtkWidget* statusbar;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(GtvApplicationWindow, gtv_application_window, GTK_TYPE_APPLICATION_WINDOW);
@@ -47,16 +46,24 @@ gtv_application_window_init(GtvApplicationWindow* win)
 
     // This is the parent GtkBox holding everything
     priv->container = GTK_WIDGET(gtk_builder_get_object(builder, "container"));
-    // 1st row toolbar
-    priv->toolbar1 = GTK_WIDGET(gtk_builder_get_object(builder, "toolbar1"));
-    // 2nd row toolbar
-    priv->toolbar2 = GTK_WIDGET(gtk_builder_get_object(builder, "toolbar2"));
+    // Toolbar container
+    priv->toolbarcontainer = gtv_main_toolbar_new();
+
+    // Attach to the toolbar to main window
+    gtk_box_pack_start(GTK_BOX(priv->container), priv->toolbarcontainer, false, false, false);
+    gtk_box_reorder_child(GTK_BOX(priv->container), priv->toolbarcontainer, 0);
+
     // scrolled window containing the main drawing area
     priv->scrolledwindow = GTK_WIDGET(gtk_builder_get_object(builder, "scrolledwindow"));
+    // give life to lokdocview
+    priv->lokdocview = lok_doc_view_new_from_user_profile(pLOPath, pUserProfile, nullptr, nullptr);
+
     // statusbar
     priv->statusbar = GTK_WIDGET(gtk_builder_get_object(builder, "statusbar"));
 
     gtk_container_add(GTK_CONTAINER(win), priv->container);
+
+    g_object_unref(builder);
 }
 
 static void

@@ -26,18 +26,29 @@ gtv_application_activate(GApplication* application)
     gtk_window_present(GTK_WINDOW(win));
 }
 
-//gtv_application_open(GApplication* /*win*/, GFile** /*file*/, gint, const gchar*)
+gtv_application_open(GApplication* win, GFile** file, gint, const gchar*)
+{
+
+}
 
 static void
-gtv_application_init(GtvApplication*)
+gtv_application_init(GtvApplication* app)
 {
-    // TODO
+    static const GOptionEntry commandLineOptions[] =
+    {
+        { "version", 'v', G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, nullptr, "Show LOkit version", nullptr },
+        { "lo-path", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, nullptr, "Manda", nullptr }
+    };
+
+    g_application_add_main_option_entries(G_APPLICATION(app), commandLineOptions);
 }
 
 static void
 gtv_application_class_init(GtvApplicationClass* klass)
 {
     G_APPLICATION_CLASS(klass)->activate = gtv_application_activate;
+    G_APPLICATION_CLASS(klass)-> = gtv_application_activate;
+
 }
 
 GtvApplication* gtv_application_new()
