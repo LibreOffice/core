@@ -75,6 +75,7 @@ XBufferedThreadedStream::~XBufferedThreadedStream()
 void XBufferedThreadedStream::produce()
 {
     Buffer pProducedBuffer;
+    sal_Int32 nReadSize = 0;
     std::unique_lock<std::mutex> aGuard( maBufferProtector );
     do
     {
@@ -85,16 +86,26 @@ void XBufferedThreadedStream::produce()
         }
 
         aGuard.unlock();
-        mxSrcStream->readBytes( pProducedBuffer, nBufferSize );
+        nReadSize = mxSrcStream->readBytes( pProducedBuffer, nBufferSize );
+        sal_Int32 nAvailableSize = mxSrcStream->available();
 
         aGuard.lock();
+        if( nAvailableSize == SAL_MAX_INT32 )
+            mnStreamSize += nReadSize;
+        else
+        {
+            sal_Int32 nDifference = nAvailableSize - (SAL_MAX_INT32 - nReadSize);
+            if ( nDifference > 0 )
+                mnStreamSize += nDifference;
+        }
+
         maPendingBuffers.push( pProducedBuffer );
         maBufferConsumeResume.notify_one();
 
         if (!mbTerminateThread)
             maBufferProduceResume.wait( aGuard, [&]{return canProduce(); } );
 
-    } while( !mbTerminateThread && hasBytes() );
+    } while( !mbTerminateThread && nReadSize > 0 );
 }
 
 /**
@@ -131,9 +142,21 @@ const Buffer& XBufferedThreadedStream::getNextBlock()
     return maInUseBuffer;
 }
 
+size_t XBufferedThreadedStream::remainingSize()
+{
+    std::lock_guard<std::mutex> aGuard( maBufferProtector );
+    return mnStreamSize - mnPos;
+}
+
+bool XBufferedThreadedStream::hasBytes()
+{
+    std::lock_guard<std::mutex> aGuard( maBufferProtector );
+    return mnPos < mnStreamSize;
+}
+
 void XBufferedThreadedStream::setTerminateThread()
 {
-    std::unique_lock<std::mutex> aGuard( maBufferProtector );
+    std::lock_guard<std::mutex> aGuard( maBufferProtector );
     mbTerminateThread = true;
     maBufferProduceResume.notify_one();
     maBufferConsumeResume.notify_one();
@@ -144,7 +167,7 @@ sal_Int32 SAL_CALL XBufferedThreadedStream::readBytes( Sequence< sal_Int8 >& rDa
     if( !hasBytes() )
         return 0;
 
-    const sal_Int32 nAvailableSize = std::min<sal_Int32>( nBytesToRead, remainingSize() );
+    const sal_Int32 nAvailableSize = std::min< size_t >( nBytesToRead, remainingSize() );
     rData.realloc( nAvailableSize );
     sal_Int32 i = 0, nPendingBytes = nAvailableSize;
 
