@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_f262ceac",
+        "filename": "extensions/source/activex/SOActiveX.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-07-04T10:28:48Z",
+      "side": 1,
+      "message": "are you sure?  CComVariant has overloaded ctors for (among others) int and long, which behave differently according to \u003chttps://msdn.microsoft.com/en-us/library/ac97df2h.aspx#ccomvariant__ccomvariant\u003e",
+      "revId": "99c4ac4cd684917abcc524b9b52421db0c1348e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
