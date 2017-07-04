@@ -71,21 +71,6 @@ struct MediaItem::Impl
         , m_eZoom( css::media::ZoomLevel_NOT_AVAILABLE )
     {
     }
-    Impl(Impl const& rOther)
-        : m_URL( rOther.m_URL )
-        , m_TempFileURL( rOther.m_TempFileURL )
-        , m_Referer( rOther.m_Referer )
-        , m_sMimeType( rOther.m_sMimeType )
-        , m_nMaskSet( rOther.m_nMaskSet )
-        , m_eState( rOther.m_eState )
-        , m_fTime( rOther.m_fTime )
-        , m_fDuration( rOther.m_fDuration )
-        , m_nVolumeDB( rOther.m_nVolumeDB )
-        , m_bLoop( rOther.m_bLoop )
-        , m_bMute( rOther.m_bMute )
-        , m_eZoom( rOther.m_eZoom )
-    {
-    }
 };
 
 
