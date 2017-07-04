@@ -1866,11 +1866,6 @@ void XclExpSupbookBuffer::StoreCell( sal_uInt16 nFileId, const OUString& rTabNam
         nSupbookId = Append(xSupbook);
     }
 
-    //TODO: remove?
-    ScExternalRefCache::TokenRef pToken = pRefMgr->getSingleRefToken(nFileId, rTabName, rCell, nullptr, nullptr);
-    if (!pToken.get())
-        return;
-
     sal_uInt16 nSheetId = xSupbook->GetTabIndex(rTabName);
     if (nSheetId == EXC_NOTAB)
         // specified table name not found in this SUPBOOK.
@@ -1907,7 +1902,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
 
     // If this is a multi-table range, get token for each table.
     using namespace ::formula;
-    SCTAB aMatrixListSize = 0; //TODO: remove?
+    SCTAB aMatrixListSize = 0;
 
     // This is a new'ed instance, so we must manage its life cycle here.
     ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, rTabName, rRange, nullptr);
