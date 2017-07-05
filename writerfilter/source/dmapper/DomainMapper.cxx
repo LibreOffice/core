@@ -3818,49 +3818,68 @@ void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t 
 
 void DomainMapper::lcl_substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t ref)
 {
-    m_pImpl->appendTableManager( );
+    m_pImpl->substream(rName, ref);
+}
+
+void DomainMapper_Impl::substream(Id rName,
+         ::writerfilter::Reference<Stream>::Pointer_t ref)
+{
+#ifndef NDEBUG
+    size_t contextSize(m_aContextStack.size());
+    size_t propSize[NUMBER_OF_CONTEXTS];
+    for (int i = 0; i < NUMBER_OF_CONTEXTS; ++i) {
+        propSize[i] = m_aPropertyStacks[i].size();
+    }
+#endif
+
+    //finalize any waiting frames before starting alternate streams
+    CheckUnregisteredFrameConversion();
+    ExecuteFrameConversion();
+
+    appendTableManager( );
     // Appending a TableManager resets its TableHandler, so we need to append
     // that as well, or tables won't be imported properly in headers/footers.
-    m_pImpl->appendTableHandler( );
-    m_pImpl->getTableManager().startLevel();
+    appendTableHandler( );
+    getTableManager().startLevel();
 
     //import of page header/footer
+    //Ensure that only one header/footer per section is pushed
 
     switch( rName )
     {
     case NS_rtf::LN_headerl:
 
-        m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_LEFT);
+        PushPageHeader(SectionPropertyMap::PAGE_LEFT);
         break;
     case NS_rtf::LN_headerr:
 
-        m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
+        PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
         break;
     case NS_rtf::LN_headerf:
 
-        m_pImpl->PushPageHeader(SectionPropertyMap::PAGE_FIRST);
+        PushPageHeader(SectionPropertyMap::PAGE_FIRST);
         break;
     case NS_rtf::LN_footerl:
 
-        m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_LEFT);
+        PushPageFooter(SectionPropertyMap::PAGE_LEFT);
         break;
     case NS_rtf::LN_footerr:
 
-        m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
+        PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
         break;
     case NS_rtf::LN_footerf:
 
-        m_pImpl->PushPageFooter(SectionPropertyMap::PAGE_FIRST);
+        PushPageFooter(SectionPropertyMap::PAGE_FIRST);
         break;
     case NS_rtf::LN_footnote:
     case NS_rtf::LN_endnote:
-        m_pImpl->PushFootOrEndnote( NS_rtf::LN_footnote == rName );
+        PushFootOrEndnote( NS_rtf::LN_footnote == rName );
     break;
     case NS_rtf::LN_annotation :
-        m_pImpl->PushAnnotation();
+        PushAnnotation();
     break;
     }
-    ref->resolve(*this);
+    ref->resolve(m_rDMapper);
     switch( rName )
     {
     case NS_rtf::LN_headerl:
@@ -3869,19 +3888,19 @@ void DomainMapper::lcl_substream(Id rName, ::writerfilter::Reference<Stream>::Po
     case NS_rtf::LN_footerl:
     case NS_rtf::LN_footerr:
     case NS_rtf::LN_footerf:
-        m_pImpl->PopPageHeaderFooter();
+        PopPageHeaderFooter();
     break;
     case NS_rtf::LN_footnote:
     case NS_rtf::LN_endnote:
-        m_pImpl->PopFootOrEndnote();
+        PopFootOrEndnote();
     break;
     case NS_rtf::LN_annotation :
-        m_pImpl->PopAnnotation();
+        PopAnnotation();
     break;
     }
 
-    m_pImpl->getTableManager().endLevel();
-    m_pImpl->popTableManager( );
+    getTableManager().endLevel();
+    popTableManager( );
 }
 
 void DomainMapper::lcl_info(const string & /*info_*/)

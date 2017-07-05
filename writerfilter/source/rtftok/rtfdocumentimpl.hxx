@@ -608,6 +608,14 @@ namespace writerfilter {
                 int m_nCellxMax;
                 /// ID of the next \listlevel picture.
                 int m_nListPictureId;
+
+                /// Flags for ensuring that only one header and footer is added per section
+                bool m_hasLHeader;
+                bool m_hasRHeader;
+                bool m_hasFHeader;
+                bool m_hasLFooter;
+                bool m_hasRFooter;
+                bool m_hasFFooter;
         };
     } // namespace rtftok
 } // namespace writerfilter

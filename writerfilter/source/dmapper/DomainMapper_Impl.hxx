@@ -37,6 +37,7 @@
 #endif
 #include <dmapper/DomainMapper.hxx>
 #include <DomainMapperTableManager.hxx>
+#include <DomainMapperTableHandler.hxx>
 #include <PropertyMap.hxx>
 #include <FontTable.hxx>
 #include <NumberingManager.hxx>
@@ -711,6 +712,8 @@ public:
 
     /// If we're importing into a new document, or just pasting to an existing one.
     bool IsNewDoc();
+
+    void substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t ref);
 
     /// If we're inside <w:rPr>, inside <w:style w:type="table">
     bool m_bInTableStyleRunProps;

@@ -268,7 +268,13 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bHadPicture(false),
     m_bHadSect(false),
     m_nCellxMax(0),
-    m_nListPictureId(0)
+    m_nListPictureId(0),
+    m_hasLHeader(false),
+    m_hasRHeader(false),
+    m_hasFHeader(false),
+    m_hasLFooter(false),
+    m_hasRFooter(false),
+    m_hasFFooter(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
@@ -557,8 +563,18 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     Mapper().props(pProperties);
     Mapper().endParagraphGroup();
+
+    // End section
     if (!m_pSuperstream)
+    {
+        m_hasLHeader = false;
+        m_hasRHeader = false;
+        m_hasFHeader = false;
+        m_hasLFooter = false;
+        m_hasRFooter = false;
+        m_hasFFooter = false;
         Mapper().endSectionGroup();
+    }
     if (!bFinal)
     {
         Mapper().startSectionGroup();
@@ -1371,17 +1387,69 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 sal_uInt32 nPos = m_nGroupStartPos - 1;
                 switch (nKeyword)
                 {
-                    case RTF_HEADER: nId = NS_rtf::LN_headerr; break;
-                    case RTF_FOOTER: nId = NS_rtf::LN_footerr; break;
-                    case RTF_HEADERL: nId = NS_rtf::LN_headerl; break;
-                    case RTF_HEADERR: nId = NS_rtf::LN_headerr; break;
-                    case RTF_HEADERF: nId = NS_rtf::LN_headerf; break;
-                    case RTF_FOOTERL: nId = NS_rtf::LN_footerl; break;
-                    case RTF_FOOTERR: nId = NS_rtf::LN_footerr; break;
-                    case RTF_FOOTERF: nId = NS_rtf::LN_footerf; break;
+                    case RTF_HEADER:
+                        if (!m_hasRHeader)
+                        {
+                            nId = NS_rtf::LN_headerr;
+                            m_hasRHeader = true;
+                        }
+                    break;
+                    case RTF_FOOTER:
+                        if (!m_hasRFooter)
+                        {
+                            nId = NS_rtf::LN_footerr;
+                            m_hasRFooter = true;
+                        }
+                    break;
+                    case RTF_HEADERL:
+
+                        if (!m_hasLHeader)
+                        {
+                            nId = NS_rtf::LN_headerl;
+                            m_hasLHeader = true;
+                        }
+                    break;
+                    case RTF_HEADERR:
+                        if (!m_hasRHeader)
+                        {
+                            nId = NS_rtf::LN_headerr;
+                            m_hasRHeader = true;
+                        }
+                    break;
+                    case RTF_HEADERF:
+                        if (!m_hasFHeader)
+                        {
+                            nId = NS_rtf::LN_headerf;
+                            m_hasFHeader = true;
+                        }
+                    break;
+                    case RTF_FOOTERL:
+                        if (!m_hasLFooter)
+                        {
+                            nId = NS_rtf::LN_footerl;
+                            m_hasLFooter = true;
+                        }
+                    break;
+                    case RTF_FOOTERR:
+                        if (!m_hasRFooter)
+                        {
+                            nId = NS_rtf::LN_footerr;
+                            m_hasRFooter = true;
+                        }
+                    break;
+                    case RTF_FOOTERF:
+                        if (!m_hasFFooter)
+                        {
+                            nId = NS_rtf::LN_footerf;
+                            m_hasFFooter = true;
+                        }
+                    break;
                     default: break;
                 }
-                m_nHeaderFooterPositions.push(make_pair(nId, nPos));
+
+                if (nId != 0 )
+                   m_nHeaderFooterPositions.push(make_pair(nId, nPos));
+
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
             break;
