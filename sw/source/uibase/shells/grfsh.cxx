@@ -131,25 +131,18 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
         case SID_SAVE_GRAPHIC:
         {
+            short nState = RET_NO;
+
             GraphicAttr aGraphicAttr;
             const GraphicObject* pGraphicObj = rSh.GetGraphicObj();
             if (pGraphicObj)
             {
                 rSh.GetGraphicAttr(aGraphicAttr);
-            }
-
-            short nState = RET_CANCEL;
-            if (aGraphicAttr != GraphicAttr()) // the image has been modified
-            {
-                vcl::Window* pWin = GetView().GetWindow();
-                if (pWin)
+                if (aGraphicAttr != GraphicAttr()) // the image has been modified
                 {
-                    nState = GraphicHelper::HasToSaveTransformedImage(pWin);
+                    vcl::Window* pWin = GetView().GetWindow();
+                    nState = pWin ? GraphicHelper::HasToSaveTransformedImage(pWin) : RET_CANCEL;
                 }
-            }
-            else
-            {
-                nState = RET_NO;
             }
 
             if (nState == RET_YES)
@@ -162,8 +155,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
             else if (nState == RET_NO)
             {
-                const Graphic *pGraphic;
-                if(nullptr != (pGraphic = rSh.GetGraphic()))
+                const Graphic *pGraphic = rSh.GetGraphic();
+                if (pGraphic)
                 {
                     OUString sGrfNm;
                     OUString sFilterNm;
