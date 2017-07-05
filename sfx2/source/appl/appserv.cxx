@@ -361,7 +361,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 return;
             }
 
-            // aus verschachtelten Requests nach 100ms nochmal probieren
+            // try from nested requests again after 100ms
             if( Application::GetDispatchLevel() > 1 )
             {
                 /* Don't save the request for closing the application and try it later

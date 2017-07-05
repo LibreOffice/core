@@ -170,24 +170,24 @@ public class DocumentProperties
 
         System.out.println("Checking meta-data import...");
 
-        assertEquals("Author", "Karl-Heinz Mustermann", xDP.getAuthor());
+        assertEquals("Author", "John Smith Jr.", xDP.getAuthor());
         assertEquals(
             "Generator",
             "StarOffice/8$Solaris_x86 OpenOffice.org_project/680m232$Build-9227",
             xDP.getGenerator());
         assertEquals("CreationDate", 2007, xDP.getCreationDate().Year);
         assertEquals("Title", "Urgent Memo", xDP.getTitle());
-        assertEquals("Subject", "Wichtige Mitteilung", xDP.getSubject());
+        assertEquals("Subject", "Important Message", xDP.getSubject());
         assertEquals(
             "Description",
             "Modern internal company memorandum in full-blocked style",
             xDP.getDescription());
         assertEquals(
-            "ModifiedBy", "Karl-Heinz Mustermann", xDP.getModifiedBy());
+            "ModifiedBy", "John Smith Jr.", xDP.getModifiedBy());
         assertEquals(
             "ModificationDate", 10, xDP.getModificationDate().Month);
         assertEquals(
-            "PrintedBy", "Karl-Heinz Mustermann", xDP.getPrintedBy());
+            "PrintedBy", "John Smith Jr.", xDP.getPrintedBy());
         assertEquals("PrintDate", 29, xDP.getPrintDate().Day);
         assertEquals("TemplateName", "Modern Memo", xDP.getTemplateName());
         assertTrue("TemplateURL",
@@ -202,7 +202,7 @@ public class DocumentProperties
 
         String[] kws = xDP.getKeywords();
         assertTrue("Keywords", fromArray(kws).containsAll(
-                fromArray(new Object[] { "Asien", "Memo", "Reis" })));
+                fromArray(new Object[] { "Asia", "Memo", "Rice" })));
 
         NamedValue[] ds = xDP.getDocumentStatistics();
         assertTrue("DocumentStatistics:WordCount", containsNV(ds,
@@ -213,11 +213,11 @@ public class DocumentProperties
         XPropertyContainer udpc = xDP.getUserDefinedProperties();
         XPropertySet udps = UnoRuntime.queryInterface( XPropertySet.class, udpc );
         assertEquals(
-            "UserDefined 1", "Dies ist ein wichtiger Hinweis",
-            udps.getPropertyValue("Hinweis"));
+            "UserDefined 1", "This is an important note",
+            udps.getPropertyValue("Note"));
         assertEquals(
-            "UserDefined 2", "Kann Spuren von N\u00FCssen enthalten",
-            udps.getPropertyValue("Warnung"));
+            "UserDefined 2", "May contain traces of nuts",
+            udps.getPropertyValue("Warning"));
 
         System.out.println("...done");
 
@@ -240,13 +240,13 @@ public class DocumentProperties
         xDP.setCreationDate(dt);
         assertEquals(
             "setCreationDate", dt.Year, xDP.getCreationDate().Year);
-        str = "El t'itulo";
+        str = "The title";
         xDP.setTitle(str);
         assertEquals("setTitle", str, xDP.getTitle());
-        str = "Ein verkommenes Subjekt";
+        str = "A degenerate subject";
         xDP.setSubject(str);
         assertEquals("setSubject", str, xDP.getSubject());
-        str = "Este descripci'on no es importante";
+        str = "This description is not important";
         xDP.setDescription(str);
         assertEquals("setDescription", str, xDP.getDescription());
         l.Language = "en";
