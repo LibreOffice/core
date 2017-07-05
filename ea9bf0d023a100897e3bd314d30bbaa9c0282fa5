@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_4dca2751",
+        "filename": "dbaccess/source/ui/control/tabletree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-05T09:30:01Z",
+      "side": 1,
+      "message": "this is now calling m_aEqualFunctor with the arguments swapped. (which prob doesn\u0027t make a different in this specific case, but still)",
+      "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6dc7e345",
+        "filename": "dbaccess/source/ui/dlg/adtabdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-05T09:30:01Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_8dc40f41",
+        "filename": "dbaccess/source/ui/inc/WCopyTable.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-05T09:30:01Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_4dd147fb",
+        "filename": "dbaccess/source/ui/misc/UITools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-05T09:30:01Z",
+      "side": 1,
+      "message": "huh? why not just inline it?",
+      "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6dce035c",
+        "filename": "dbaccess/source/ui/misc/UITools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1046,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-05T09:30:01Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
