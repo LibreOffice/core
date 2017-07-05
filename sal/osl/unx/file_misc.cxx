@@ -345,13 +345,13 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
     return osl_File_E_None;
 }
 
-oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirectoryItem* pItem )
+oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirectoryItem* pItem)
 {
     rtl_uString* ustrSystemPath = nullptr;
-    oslFileError osl_error      = osl_File_E_INVAL;
+    oslFileError osl_error = osl_File_E_INVAL;
 
-    OSL_ASSERT((nullptr != ustrFileURL) && (nullptr != pItem));
-    if ((ustrFileURL == nullptr) || (ustrFileURL->length == 0) || (pItem == nullptr))
+    OSL_ASSERT((ustrFileURL) && (pItem));
+    if ((!ustrFileURL) || (ustrFileURL->length == 0) || (!pItem))
         return osl_File_E_INVAL;
 
     osl_error = osl_getSystemPathFromFileURL_Ex(ustrFileURL, &ustrSystemPath);
