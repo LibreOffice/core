@@ -32,6 +32,7 @@
 
 #include <malloc.h>
 #include <tchar.h>
+#include <cassert>
 
 // Allocate n number of t's on the stack return a pointer to it in p
 #define STACK_ALLOC(p, t, n) __try {(p) = static_cast<t*>(_alloca((n)*sizeof(t)));} \
@@ -116,7 +117,7 @@ static bool osl_win32_CreateFile_impl_(
     DWORD  flags = FILE_ATTRIBUTE_NORMAL;
     HANDLE hFile;
 
-    OSL_ASSERT(p_handle);
+    assert(p_handle);
 
     if (b_delete_on_close)
         flags |= FILE_FLAG_DELETE_ON_CLOSE;
