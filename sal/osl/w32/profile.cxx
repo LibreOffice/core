@@ -351,7 +351,7 @@ static bool writeProfileImpl(osl_TFile* pFile)
 
     if ( bRet == 0 || BytesWritten == 0 )
     {
-        OSL_ENSURE(bRet,"WriteFile failed!!!");
+        SAL_WARN_IF(!bRet, "sal.osl", "WriteFile failed");
         SAL_WARN("sal.osl", "write failed " << strerror(errno));
 
         return false;
