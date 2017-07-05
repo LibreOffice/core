@@ -201,18 +201,18 @@ static void setupDocView(LOKDocView* pDocView)
 #if GLIB_CHECK_VERSION(2,40,0)
     g_assert_nonnull(pDocView);
 #endif
-    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), nullptr);
-    g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), nullptr);
-    g_signal_connect(pDocView, "command-result", G_CALLBACK(signalCommandResult), nullptr);
-    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), nullptr);
-    g_signal_connect(pDocView, "search-result-count", G_CALLBACK(signalSearchResultCount), nullptr);
-    g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), nullptr);
-    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), nullptr);
-    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), nullptr);
-    g_signal_connect(pDocView, "address-changed", G_CALLBACK(addressChanged), nullptr);
-    g_signal_connect(pDocView, "formula-changed", G_CALLBACK(formulaChanged), nullptr);
-    g_signal_connect(pDocView, "password-required", G_CALLBACK(passwordRequired), nullptr);
-    g_signal_connect(pDocView, "comment", G_CALLBACK(commentCallback), nullptr);
+    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(lokdocview_signalEdit), nullptr);
+    g_signal_connect(pDocView, "command-changed", G_CALLBACK(lokdocview_signalCommand), nullptr);
+    g_signal_connect(pDocView, "command-result", G_CALLBACK(lokdocview_signalCommandResult), nullptr);
+    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(lokdocview_signalSearch), nullptr);
+    g_signal_connect(pDocView, "search-result-count", G_CALLBACK(lokdocview_signalSearchResultCount), nullptr);
+    g_signal_connect(pDocView, "part-changed", G_CALLBACK(lokdocview_signalPart), nullptr);
+    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(lokdocview_signalHyperlink), nullptr);
+    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(lokdocview_cursorChanged), nullptr);
+    g_signal_connect(pDocView, "address-changed", G_CALLBACK(lokdocview_addressChanged), nullptr);
+    g_signal_connect(pDocView, "formula-changed", G_CALLBACK(lokdocview_formulaChanged), nullptr);
+    g_signal_connect(pDocView, "password-required", G_CALLBACK(lokdocview_passwordRequired), nullptr);
+    g_signal_connect(pDocView, "comment", G_CALLBACK(lokdocview_commentCallback), nullptr);
 }
 
 void
