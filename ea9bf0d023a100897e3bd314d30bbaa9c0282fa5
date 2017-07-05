@@ -124,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_4d25c7c0",
+        "filename": "dbaccess/source/ui/misc/UITools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-05T11:52:09Z",
+      "side": 1,
+      "message": "ah, I see, thanks for explaining. that\u0027s fine then (assuming that jenkins is happy with C++14 stuff)",
+      "parentUuid": "3a461143_0d5adf83",
+      "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_6dce035c",
         "filename": "dbaccess/source/ui/misc/UITools.cxx",
         "patchSetId": 1
