@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_cd629716",
+        "filename": "sal/osl/unx/readwrite_helper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-05T11:32:27Z",
+      "side": 1,
+      "message": "It should probably read \"unsigned to signed\" instead. Because the idea is to check the implicit cast on the line 19, I think.\n\n(Scope creep for this Gerrit change, I know. :) )",
+      "range": {
+        "startLine": 22,
+        "startChar": 42,
+        "endLine": 22,
+        "endChar": 63
+      },
+      "revId": "970000ac05aeb8fc3ed50edba566010aaf839384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_2d723be6",
+        "filename": "sal/osl/unx/readwrite_helper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-05T11:32:27Z",
+      "side": 1,
+      "message": "This would always be true: datasize is unsigned and therefore always \u003e\u003d0, so that this equals to assert(true). Right?\n\nIt would probably need to be assert(nToWrite \u003e\u003d 0), since nToWrite is signed.\n\nOn a second thought, it might be better to just replicate the original cast on line 19:\nassert((sal_Int32)dataSize \u003d\u003d nToWrite)\n\nBecause that\u0027s what counts. And it would account for any possibility of nToWrite staying \u003e\u003d0, while still not being the same after the cast.",
+      "range": {
+        "startLine": 23,
+        "startChar": 11,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "970000ac05aeb8fc3ed50edba566010aaf839384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_4d7787d4",
+        "filename": "sal/osl/unx/readwrite_helper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-05T11:32:27Z",
+      "side": 1,
+      "message": "similar to line 22 above",
+      "range": {
+        "startLine": 47,
+        "startChar": 42,
+        "endLine": 47,
+        "endChar": 63
+      },
+      "revId": "970000ac05aeb8fc3ed50edba566010aaf839384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6d7443cf",
+        "filename": "sal/osl/unx/readwrite_helper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-05T11:32:27Z",
+      "side": 1,
+      "message": "similar to line 23 above",
+      "range": {
+        "startLine": 48,
+        "startChar": 11,
+        "endLine": 48,
+        "endChar": 16
+      },
+      "revId": "970000ac05aeb8fc3ed50edba566010aaf839384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
