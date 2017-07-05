@@ -258,7 +258,7 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell* pDocShell, s
     {
         rStrm.ReadBytes(aGuid, 16);
 
-        if( (memcmp(aGuid, aGuidFileMoniker, 16) == 0) )
+        if( memcmp(aGuid, aGuidFileMoniker, 16) == 0 )
         {
             rStrm.ReadUInt16( nLevel );
             xShortName.reset(new OUString(read_uInt32_lenPrefixed_uInt8s_ToOUString(rStrm, GetCharSetFromLanguage())));
@@ -278,7 +278,7 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell* pDocShell, s
             else
                 lclGetAbsPath( *xShortName, nLevel, pDocShell);
         }
-        else if( (memcmp(aGuid, aGuidUrlMoniker, 16) == 0) )
+        else if( memcmp(aGuid, aGuidUrlMoniker, 16) == 0 )
         {
             sal_uInt32 nStrLen(0);
             rStrm.ReadUInt32( nStrLen );
@@ -4462,7 +4462,7 @@ void wwSectionManager::InsertSegments()
                  (aIter->GetPageHeight() == aNext->GetPageHeight()) &&
                  (aIter->IsLandScape() == aNext->IsLandScape()));
 
-            if (((aNext != aEnd && aNext->IsContinuous() && bThisAndNextAreCompatible) || bProtected))
+            if ((aNext != aEnd && aNext->IsContinuous() && bThisAndNextAreCompatible) || bProtected)
             {
                 bIgnoreCols = true;
                 if ((aIter->NoCols() > 1) || bProtected)

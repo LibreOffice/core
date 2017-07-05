@@ -1643,8 +1643,9 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.clear();
                                 newline--;
                             }
-                            else if ((nPart == 2) || ((((nPart == 1) &&
-                                    (nVariation == 0)) || (nVariation == 1))))
+                            else if ((nPart == 2) ||
+                                     ((nPart == 1) && (nVariation == 0)) ||
+                                     (nVariation == 1))
                             {
                                 sPush+=rRet;
                                 rRet = sPush;
@@ -2703,7 +2704,7 @@ bool MathType::HandleTemplate(int nLevel, sal_uInt8 &rSelector,
     {
         OSL_ENSURE(nOption < 2,"Option out of range");
     }
-    else if (/*(rSelector >= 0) &&*/ (rSelector <=12))
+    else if (rSelector <= 12)
     {
         OSL_ENSURE(nOption < 3,"Option out of range");
     }

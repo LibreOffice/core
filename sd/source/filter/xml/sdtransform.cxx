@@ -274,7 +274,7 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, SfxStyleS
 
 bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt16 nWhich, bool& rState )
 {
-    if( (rSet.GetItemState( nWhich ) == SfxItemState::SET) )
+    if( rSet.GetItemState( nWhich ) == SfxItemState::SET )
     {
         const SvXMLAttrContainerItem& rAttr = *rSet.GetItem<SvXMLAttrContainerItem>( nWhich );
 
@@ -320,7 +320,7 @@ bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet )
 
 bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet, sal_uInt16 nWhich )
 {
-    if( (rSet.GetItemState( nWhich ) == SfxItemState::SET) )
+    if( rSet.GetItemState( nWhich ) == SfxItemState::SET )
     {
         const SvXMLAttrContainerItem& rAttr = *rSet.GetItem<SvXMLAttrContainerItem>( nWhich );
 

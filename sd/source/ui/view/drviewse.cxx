@@ -1482,7 +1482,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
         if( pMarkedObj ) try
         {
             // change first marked object
-            if( (SdrInventor::FmForm == pMarkedObj->GetObjInventor() && pMarkedObj->GetObjIdentifier() == OBJ_FM_BUTTON) )
+            if( SdrInventor::FmForm == pMarkedObj->GetObjInventor() && pMarkedObj->GetObjIdentifier() == OBJ_FM_BUTTON )
             {
                 bNewObj = false;
 

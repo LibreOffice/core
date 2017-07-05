@@ -356,7 +356,7 @@ lcl_extractHelpTextsOrIds(
     if (!(rEntry.Value >>= rHelpStrings))
     {
         OUString aHelpString;
-        if ((rEntry.Value >>= aHelpString))
+        if (rEntry.Value >>= aHelpString)
         {
             rHelpStrings.realloc(1);
             *rHelpStrings.getArray() = aHelpString;

@@ -1009,7 +1009,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
             ( !(nFrameStyle & ~SalFrameStyleFlags::CLOSEABLE) &&
             ( mpWindowImpl->mbFloatWin || ((GetType() == WindowType::BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) ) ) ||
             // 2. borderwindows of floaters with ownerdraw decoration
-            ( ((GetType() == WindowType::BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow && (nStyle & WB_OWNERDRAWDECORATION) ) ) )
+            ((GetType() == WindowType::BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow && (nStyle & WB_OWNERDRAWDECORATION) ) )
         {
             nFrameStyle = SalFrameStyleFlags::FLOAT;
             if( nStyle & WB_OWNERDRAWDECORATION )

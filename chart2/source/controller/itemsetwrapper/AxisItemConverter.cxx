@@ -475,8 +475,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
     switch( nWhichId )
     {
         case SCHATTR_AXIS_AUTO_MAX:
-            if( (static_cast< const SfxBoolItem & >(
-                     rItemSet.Get( nWhichId )).GetValue() ))
+            if( static_cast< const SfxBoolItem & >(rItemSet.Get( nWhichId )).GetValue() )
             {
                 aScale.Maximum.clear();
                 bSetScale = true;
@@ -500,8 +499,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             break;
 
         case SCHATTR_AXIS_AUTO_MIN:
-            if( (static_cast< const SfxBoolItem & >(
-                     rItemSet.Get( nWhichId )).GetValue() ))
+            if( static_cast< const SfxBoolItem & >(rItemSet.Get( nWhichId )).GetValue() )
             {
                 aScale.Minimum.clear();
                 bSetScale = true;
@@ -528,8 +526,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         {
             bool bWasLogarithm = AxisHelper::isLogarithmic( aScale.Scaling );
 
-            if( (static_cast< const SfxBoolItem & >(
-                     rItemSet.Get( nWhichId )).GetValue() ))
+            if( static_cast< const SfxBoolItem & >(rItemSet.Get( nWhichId )).GetValue() )
             {
                 // logarithm is true
                 if( ! bWasLogarithm )
@@ -673,7 +670,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             break;
 
         case SCHATTR_AXIS_AUTO_TIME_RESOLUTION:
-            if( (static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue() ))
+            if( static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue() )
             {
                 aScale.TimeIncrement.TimeResolution.clear();
                 bSetScale = true;
@@ -695,8 +692,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_AUTO_ORIGIN:
         {
-            if( (static_cast< const SfxBoolItem & >(
-                     rItemSet.Get( nWhichId )).GetValue() ))
+            if( static_cast< const SfxBoolItem & >(rItemSet.Get( nWhichId )).GetValue() )
             {
                 aScale.Origin.clear();
                 bSetScale = true;

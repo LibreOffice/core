@@ -1833,7 +1833,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
         // Or if at the very beginning ( StartPos 0 ) followed by a tab...
         if ( ( pNode->GetCharAttribs().HasBoundingAttrib( nStartPos ) ) ||
              ( nStartPos && ( pNode->GetText()[ nStartPos - 1 ] == '\t' ) ) ||
-             ( ( !nStartPos && ( nNewChars < pNode->GetText().getLength() ) && pNode->GetText()[ nNewChars ] == '\t' ) ) )
+             ( !nStartPos && ( nNewChars < pNode->GetText().getLength() ) && pNode->GetText()[ nNewChars ] == '\t' ) )
         {
             std::size_t nNewPortionPos = 0;
             if ( nStartPos )

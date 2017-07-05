@@ -783,7 +783,7 @@ void SvxNumRule::SetLevel( sal_uInt16 i, const SvxNumberFormat& rNumFmt, bool bI
 {
     DBG_ASSERT(i < SVX_MAX_NUM, "Wrong Level" );
 
-    if( (i < SVX_MAX_NUM) )
+    if( i < SVX_MAX_NUM )
     {
         bool bReplace = !aFmtsSet[i];
         if (!bReplace)

@@ -112,14 +112,14 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< css::uno::Any > & a
     if (len > 1) {
         OUString arg1;
         css::uno::Reference< css::rdf::XURI > xURI;
-        if ((aArguments[1] >>= arg1)) {
+        if (aArguments[1] >>= arg1) {
             if (!arg1.isEmpty()) {
                 m_Language = arg1;
             } else {
                 throw css::lang::IllegalArgumentException(
                     "CLiteral::initialize: argument is not valid language", *this, 1);
             }
-        } else if ((aArguments[1] >>= xURI)) {
+        } else if (aArguments[1] >>= xURI) {
             if (xURI.is()) {
                 m_xDatatype = xURI;
             } else {

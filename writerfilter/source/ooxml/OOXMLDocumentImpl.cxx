@@ -760,7 +760,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                     customTarget = aPair.Second;
                 }
             }
-            if(( bFound || bHeaderFooterFound))
+            if( bFound || bHeaderFooterFound)
             {
                 if(bFound)
                 {

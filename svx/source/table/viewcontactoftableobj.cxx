@@ -255,11 +255,11 @@ namespace drawinglayer
             if(!rLineSide.isEmpty())
             {
                 // reduce to inner edge of associated matching line
-                nExtend = -((getBorderLineWidth(rLineSide) / 2.0));
+                nExtend = -(getBorderLineWidth(rLineSide) / 2.0);
             }
             else
             {
-                nExtend = ((getBorderLineWidth(rLineOpposite) / 2.0));
+                nExtend = (getBorderLineWidth(rLineOpposite) / 2.0);
             }
 
             return nExtend;

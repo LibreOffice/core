@@ -2158,8 +2158,9 @@ void FormController::setControlLock(const Reference< XControl > & xControl)
     // a. if the entire record is locked
     // b. if the associated field is locked
     Reference< XBoundControl >  xBound(xControl, UNO_QUERY);
-    if (xBound.is() && (( (bLocked && bLocked != bool(xBound->getLock())) ||
-                         !bLocked)))    // always uncheck individual fields when unlocking
+    if (xBound.is() &&
+        ( (bLocked && bLocked != bool(xBound->getLock())) ||
+          !bLocked))    // always uncheck individual fields when unlocking
     {
         // there is a data source
         Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);

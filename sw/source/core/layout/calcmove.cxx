@@ -51,7 +51,7 @@
 /// Return value tells whether the Frame should be moved.
 bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool & )
 {
-    if ( (SwFlowFrame::IsMoveBwdJump() || !IsPrevObjMove()))
+    if ( SwFlowFrame::IsMoveBwdJump() || !IsPrevObjMove() )
     {
         // Floating back a frm uses a bit of time unfortunately.
         // The most common case is the following: The Frame wants to float to

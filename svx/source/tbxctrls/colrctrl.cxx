@@ -457,8 +457,8 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
     if( nScrollWidth > 0 )
     {
         // calculate columns with scroll bar
-        nCols = (sal_uInt16) ( ( ( (float) rNewSize.Width() - (float) nScrollWidth ) )
-                            / (float) aItemSize.Width() + 0.5 );
+        nCols = (sal_uInt16) ( ( (float) rNewSize.Width() - (float) nScrollWidth )
+                               / (float) aItemSize.Width() + 0.5 );
     }
     if( nCols <= 1 )
         nCols = 2;
@@ -497,7 +497,7 @@ void SvxColorDockingWindow::GetFocus()
 bool SvxColorDockingWindow::EventNotify( NotifyEvent& rNEvt )
 {
     bool bRet = false;
-    if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
         sal_uInt16   nKeyCode = aKeyEvt.GetKeyCode().GetCode();

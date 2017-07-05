@@ -1195,7 +1195,7 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
                 }
                 if( cellExists(rCurrentPos) )
                 {
-                    if(  ( !(bIsCovered) || isEmptyOrNote(rXMLImport.GetDocument(), rCurrentPos) )  )
+                    if(  !bIsCovered || isEmptyOrNote(rXMLImport.GetDocument(), rCurrentPos)  )
                     {
                         switch (nCellType)
                         {

@@ -66,14 +66,13 @@ ErrCode ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
         {
             ScEEParseEntry* pE = maList.back();
             if (    // Completely empty
-                (  (  pE->aSel.nStartPara == pE->aSel.nEndPara
+                (  pE->aSel.nStartPara == pE->aSel.nEndPara
                    && pE->aSel.nStartPos  == pE->aSel.nEndPos
-                   )
+                )
                 ||  // Empty paragraph
-                   (  pE->aSel.nStartPara + 1 == pE->aSel.nEndPara
+                (  pE->aSel.nStartPara + 1 == pE->aSel.nEndPara
                    && pE->aSel.nStartPos      == pEdit->GetTextLen( pE->aSel.nStartPara )
                    && pE->aSel.nEndPos        == 0
-                   )
                 )
                )
             {   // Don't take over the last paragraph

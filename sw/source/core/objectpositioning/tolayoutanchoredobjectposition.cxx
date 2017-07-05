@@ -71,11 +71,11 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         // bottom, if its wrap mode is 'through' and its anchor frame has fixed
         // size. Otherwise, it's positioned top.
         sal_Int16 eVertOrient = aVert.GetVertOrient();
-        if ( ( bFlyAtFly &&
-               ( eVertOrient == text::VertOrientation::CENTER ||
-                 eVertOrient == text::VertOrientation::BOTTOM ) &&
+        if ( bFlyAtFly &&
+             ( eVertOrient == text::VertOrientation::CENTER ||
+               eVertOrient == text::VertOrientation::BOTTOM ) &&
              css::text::WrapTextMode_THROUGH != rFrameFormat.GetSurround().GetSurround() &&
-             !GetAnchorFrame().HasFixSize() ) )
+             !GetAnchorFrame().HasFixSize() )
         {
             eVertOrient = text::VertOrientation::TOP;
         }

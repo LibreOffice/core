@@ -980,11 +980,10 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
     long nOnePixel = pOutWin->PixelToLogic( Size( 1, 0 ) ).Width();
 
-    if ( /* pEditEngine->pImpEditEngine->GetStatus().AutoPageSize() || */
-         ( ( aEditCursor.Top() + nOnePixel >= GetVisDocTop() ) &&
+    if ( ( aEditCursor.Top() + nOnePixel >= GetVisDocTop() ) &&
          ( aEditCursor.Bottom() - nOnePixel <= GetVisDocBottom() ) &&
          ( aEditCursor.Left() + nOnePixel >= GetVisDocLeft() ) &&
-         ( aEditCursor.Right() - nOnePixel <= GetVisDocRight() ) ) )
+         ( aEditCursor.Right() - nOnePixel <= GetVisDocRight() ) )
     {
         tools::Rectangle aCursorRect = GetWindowPos( aEditCursor );
         GetCursor()->SetPos( aCursorRect.TopLeft() );

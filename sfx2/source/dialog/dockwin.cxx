@@ -969,7 +969,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     // detect floating mode
     // toggeling mode will not execute code in handlers, because pImpl->bConstructed is not set yet
     bool bFloatMode = IsFloatingMode();
-    if ( bFloatMode != ((GetAlignment() == SfxChildAlignment::NOALIGNMENT)) )
+    if ( bFloatMode != (GetAlignment() == SfxChildAlignment::NOALIGNMENT) )
     {
         bFloatMode = !bFloatMode;
         SetFloatingMode( bFloatMode );

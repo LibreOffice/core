@@ -307,7 +307,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         // 6168: Avoid that the rest of a FieldPortion gets the attributes of the
         // next portion with SeekAndChgBefore():
-        if( ( bRest && pPor->InFieldGrp() && !pPor->GetLen() ) )
+        if( bRest && pPor->InFieldGrp() && !pPor->GetLen() )
             SeekAndChgBefore( GetInfo() );
         else if ( pPor->IsQuoVadisPortion() )
         {

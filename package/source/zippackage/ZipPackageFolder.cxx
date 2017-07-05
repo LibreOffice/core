@@ -173,7 +173,7 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::
     {
         uno::Reference < XUnoTunnel > xRef;
         aElement >>= xRef;
-        if ( (  aElement >>= xRef ) )
+        if ( aElement >>= xRef )
         {
             sal_Int64 nTest;
             ZipPackageEntry *pEntry;

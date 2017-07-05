@@ -358,7 +358,7 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
         nFontType = pFontEntry->nFontType;
         aFontDescriptor.Name = OUString::createFromAscii( reinterpret_cast<char*>(pFontEntry->pFontName) );
     }
-    aFontDescriptor.Height = ( sal_Int16 )( ( mpCGM->pElement->nCharacterHeight * 1.50 ) );
+    aFontDescriptor.Height = sal_Int16( mpCGM->pElement->nCharacterHeight * 1.50 );
     if ( nFontType & 1 )
         aFontDescriptor.Slant = awt::FontSlant_ITALIC;
     if ( nFontType & 2 )

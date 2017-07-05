@@ -762,8 +762,8 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
 
     if (!bTest || rFormatExtension.startsWith("PDF"))
     {
-        if ((sFirstBytes[0] == '%' && sFirstBytes[1] == 'P' && sFirstBytes[2] == 'D' &&
-             sFirstBytes[3] == 'F' && sFirstBytes[4] == '-'))
+        if (sFirstBytes[0] == '%' && sFirstBytes[1] == 'P' && sFirstBytes[2] == 'D' &&
+            sFirstBytes[3] == 'F' && sFirstBytes[4] == '-')
         {
             rFormatExtension = "PDF";
             return true;

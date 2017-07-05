@@ -718,7 +718,7 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
     sal_Int16 arg(0);
     OUString arg0;
     OUString arg1;
-    if ((aArguments[0] >>= arg)) {
+    if (aArguments[0] >>= arg) {
         // integer argument: constant from rdf::URIs
         if (len != 1) {
             throw css::lang::IllegalArgumentException(

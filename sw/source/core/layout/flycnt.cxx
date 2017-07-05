@@ -985,7 +985,7 @@ static const SwContentFrame * lcl_FindCnt( const Point &rPt, const SwContentFram
                 nOldNew = nNew;
         }
     }
-    if ( (pRet->Frame().Top() > rPt.Y()) )
+    if ( pRet->Frame().Top() > rPt.Y() )
         return pNearest;
     else
         return pRet;

@@ -580,7 +580,7 @@ bool UpcasePossible(UCHAR c)
 
 UCHAR Upcase(UCHAR c)
 {
-    if ((c>=(UCHAR)'a' && c<=(UCHAR)'z')) c=(c-(UCHAR)'a')+(UCHAR)'A';
+    if (c>=(UCHAR)'a' && c<=(UCHAR)'z') c=(c-(UCHAR)'a')+(UCHAR)'A';
     else if ( c == 0xe4 ) c = 0xc4;
     else if ( c == 0xf6 ) c = 0xd6;
     else if ( c == 0xfc ) c = 0xdc;

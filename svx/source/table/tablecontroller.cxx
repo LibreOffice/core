@@ -1126,22 +1126,22 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
 
     const SfxPoolItem *pPoolItem=nullptr;
 
-    if( (SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEFIRSTROWSTYLE, false,&pPoolItem)) )
+    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEFIRSTROWSTYLE, false,&pPoolItem) )
         aSettings.mbUseFirstRow = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
-    if( (SfxItemState::SET == pArgs->GetItemState(ID_VAL_USELASTROWSTYLE, false,&pPoolItem)) )
+    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USELASTROWSTYLE, false,&pPoolItem) )
         aSettings.mbUseLastRow = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
-    if( (SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEBANDINGROWSTYLE, false,&pPoolItem)) )
+    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEBANDINGROWSTYLE, false,&pPoolItem) )
         aSettings.mbUseRowBanding = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
-    if( (SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEFIRSTCOLUMNSTYLE, false,&pPoolItem)) )
+    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEFIRSTCOLUMNSTYLE, false,&pPoolItem) )
         aSettings.mbUseFirstColumn = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
-    if( (SfxItemState::SET == pArgs->GetItemState(ID_VAL_USELASTCOLUMNSTYLE, false,&pPoolItem)) )
+    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USELASTCOLUMNSTYLE, false,&pPoolItem) )
         aSettings.mbUseLastColumn = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
-    if( (SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEBANDINGCOLUMNSTYLE, false,&pPoolItem)) )
+    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEBANDINGCOLUMNSTYLE, false,&pPoolItem) )
         aSettings.mbUseColumnBanding = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
 
     if( aSettings == pTableObj->getTableStyleSettings() )

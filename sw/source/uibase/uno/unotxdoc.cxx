@@ -1163,7 +1163,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             if ( rProp.Name == UNO_NAME_FILE_NAME )
             {
                 OUString sFileURL;
-                if ( (rProp.Value >>= sFileURL ) )
+                if ( rProp.Value >>= sFileURL )
                 {
                     // Convert the File URL into a system dependent path, as the SalPrinter expects
                     OUString sSystemPath;

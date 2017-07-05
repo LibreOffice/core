@@ -1651,7 +1651,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
 
     if (aRect.IsInside(rPnt))
     {
-        if ((!bCheckIfMarkable || IsObjMarkable(pObj,pPV)))
+        if (!bCheckIfMarkable || IsObjMarkable(pObj,pPV))
         {
             SdrObjList* pOL=pObj->GetSubList();
 

@@ -269,9 +269,9 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             {
                 const GraphicType eType( mpGraphic ? mpGraphic->GetType() : meType );
 
-                *pValues <<= ( ( eType == GraphicType::Bitmap ? graphic::GraphicType::PIXEL :
+                *pValues <<= ( eType == GraphicType::Bitmap ? graphic::GraphicType::PIXEL :
                                 ( eType == GraphicType::GdiMetafile ? graphic::GraphicType::VECTOR :
-                                graphic::GraphicType::EMPTY ) ) );
+                                graphic::GraphicType::EMPTY ) );
             }
             break;
 

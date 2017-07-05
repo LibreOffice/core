@@ -453,7 +453,7 @@ void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
 {
     // avoid pseudo MouseMoves
     Point aNewPos = OutputToScreenPixel( rEvt.GetPosPixel() );
-    if ( ( aNewPos == aLastMousePos ) )
+    if ( aNewPos == aLastMousePos )
         return;
     aLastMousePos = aNewPos;
 

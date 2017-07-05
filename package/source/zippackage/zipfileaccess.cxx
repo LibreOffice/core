@@ -198,11 +198,11 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
         }
     };
 
-    if ( ( aArguments[0] >>= aParamURL ) )
+    if ( aArguments[0] >>= aParamURL )
     {
         openInputStream();
     }
-    else if ( (aArguments[0] >>= xStream ) )
+    else if ( aArguments[0] >>= xStream )
     {
         // a writable stream can implement both XStream & XInputStream
         m_xContentStream = xStream->getInputStream();

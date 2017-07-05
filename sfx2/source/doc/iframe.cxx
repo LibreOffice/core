@@ -282,7 +282,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, cons
     case WID_FRAME_IS_AUTO_BORDER:
     {
         bool bIsAutoBorder;
-        if ( (aAny >>= bIsAutoBorder) )
+        if ( aAny >>= bIsAutoBorder )
         {
             bool bBorder = maFrmDescr.IsFrameBorderOn();
             maFrmDescr.ResetBorder();

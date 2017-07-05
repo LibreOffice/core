@@ -1148,7 +1148,7 @@ void FuSelection::SelectionHasChanged()
 
     FuDraw::SelectionHasChanged();
 
-    if ((mpView->Is3DRotationCreationActive() && !bSuppressChangesOfSelection))
+    if (mpView->Is3DRotationCreationActive() && !bSuppressChangesOfSelection)
     {
         // Switch rotation body -> selection
         mpView->ResetCreationActive();

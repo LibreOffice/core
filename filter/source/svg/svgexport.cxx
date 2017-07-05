@@ -1994,11 +1994,11 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPag
                                         if( nType == MetaActionType::COMMENT )
                                         {
                                             const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
-                                            if( ( pA->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_BEGIN") ) )
+                                            if( pA->GetComment().equalsIgnoreAsciiCase("XTEXT_PAINTSHAPE_BEGIN") )
                                             {
                                                 bIsTextShapeStarted = true;
                                             }
-                                            else if( ( pA->GetComment().equalsIgnoreAsciiCase( "XTEXT_PAINTSHAPE_END" ) ) )
+                                            else if( pA->GetComment().equalsIgnoreAsciiCase( "XTEXT_PAINTSHAPE_END" ) )
                                             {
                                                 bIsTextShapeStarted = false;
                                             }

@@ -89,7 +89,7 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
     {
         if( '@' == **(ppArgv +i) ){ // when @, then response file
             if( nullptr == (fFile = fopen( (*(ppArgv +i)) +1, "r" )) )
-                return( (*(ppArgv +i)) );
+                return *(ppArgv +i);
             nItems = fread( &szBuffer[ 0 ], 1, sizeof( char ), fFile );
             while( nItems )
             {

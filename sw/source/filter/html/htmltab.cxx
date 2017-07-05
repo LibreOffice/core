@@ -1890,8 +1890,8 @@ void HTMLTable::SetBorders()
     {
         (*m_pRows)[m_nRows-1]->bBottomBorder = true;
     }
-    if( (HTMLTableFrame::RHS==m_eFrame || HTMLTableFrame::VSides==m_eFrame ||
-                      HTMLTableFrame::Box==m_eFrame) )
+    if( HTMLTableFrame::RHS==m_eFrame || HTMLTableFrame::VSides==m_eFrame ||
+                      HTMLTableFrame::Box==m_eFrame )
         m_bRightBorder = true;
     if( HTMLTableFrame::LHS==m_eFrame || HTMLTableFrame::VSides==m_eFrame || HTMLTableFrame::Box==m_eFrame )
     {
@@ -2224,11 +2224,14 @@ void HTMLTable::CloseTable()
         HTMLTableRow *const pPrevRow = (*m_pRows)[m_nCurrentRow-1].get();
         HTMLTableCell *pCell;
         for( i=0; i<m_nCols; i++ )
-            if( ( (pCell=(pPrevRow->GetCell(i))), (pCell->GetRowSpan()) > 1 ) )
+        {
+            pCell = pPrevRow->GetCell(i);
+            if( pCell->GetRowSpan() > 1 )
             {
                 FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents() );
                 ProtectRowSpan(m_nCurrentRow, i, (*m_pRows)[m_nCurrentRow]->GetCell(i)->GetRowSpan());
             }
+        }
         for( i=m_nRows-1; i>=m_nCurrentRow; i-- )
             m_pRows->erase(m_pRows->begin() + i);
         m_nRows = m_nCurrentRow;
