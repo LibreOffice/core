@@ -12,24 +12,25 @@
 #include <osl/diagnose.h>
 #include <system.hxx>
 
+#include <cassert>
+
 bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
 {
     sal_Int32 nToWrite = dataSize;
     unsigned char* dataToWrite = static_cast<unsigned char *>(data);
 
-    // Check for overflow as we convert a signed to an unsigned.
-    OSL_ASSERT(dataSize == (sal_uInt32)nToWrite);
-    while ( nToWrite ) {
+    while (nToWrite)
+    {
         sal_Int32 nWritten = write(fd, dataToWrite, nToWrite);
-        if ( nWritten < 0 ) {
+        if (nWritten < 0)
+        {
             if ( errno == EINTR )
                 continue;
 
             return false;
-
         }
 
-        OSL_ASSERT(nWritten > 0);
+        assert(nWritten > 0);
         nToWrite -= nWritten;
         dataToWrite += nWritten;
     }
@@ -37,14 +38,13 @@ bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
     return true;
 }
 
-bool safeRead( int fd, void* buffer, sal_uInt32 count )
+bool safeRead(int fd, void* buffer, sal_uInt32 count)
 {
     sal_Int32 nToRead = count;
     unsigned char* bufferForReading = static_cast<unsigned char *>(buffer);
 
-    // Check for overflow as we convert a signed to an unsigned.
-    OSL_ASSERT(count == (sal_uInt32)nToRead);
-    while ( nToRead ) {
+    while (nToRead)
+    {
         sal_Int32 nRead = read(fd, bufferForReading, nToRead);
         if ( nRead < 0 ) {
             // We were interrupted before reading, retry.
@@ -56,7 +56,7 @@ bool safeRead( int fd, void* buffer, sal_uInt32 count )
 
         // If we reach the EOF, we consider this a partial transfer and thus
         // an error.
-        if ( nRead == 0 )
+        if (nRead == 0)
             return false;
 
         nToRead -= nRead;
