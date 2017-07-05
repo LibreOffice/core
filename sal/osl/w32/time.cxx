@@ -40,7 +40,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
     static HMODULE hModule = nullptr;
     static GetSystemTimePreciseAsFileTime_PROC pGetSystemTimePreciseAsFileTime = nullptr;
 
-    OSL_ASSERT(pTimeVal != nullptr);
+    assert(pTimeVal);
 
     if ( !hModule )
     {
