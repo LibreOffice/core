@@ -520,8 +520,8 @@ static oslFileError create_dir_recursively_(
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
 {
-    OSL_PRECOND((rtl_ustr_getLength(dir_path) > 0) && ((dir_path + (rtl_ustr_getLength(dir_path) - 1)) != (dir_path + rtl_ustr_lastIndexOfChar(dir_path, '/'))),
-    "Path must not end with a slash");
+    SAL_WARN_IF(!((rtl_ustr_getLength(dir_path) > 0) && ((dir_path + (rtl_ustr_getLength(dir_path) - 1)) != (dir_path + rtl_ustr_lastIndexOfChar(dir_path, '/')))),
+    "sal.osl", "Path must not end with a slash");
 
     int native_err = create_dir_with_callback(
         dir_path, aDirectoryCreationCallbackFunc, pData);

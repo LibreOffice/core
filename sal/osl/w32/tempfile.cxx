@@ -77,9 +77,9 @@ static oslFileError osl_setup_createTempFile_impl_(
 {
     oslFileError osl_error;
 
-    OSL_PRECOND(((pHandle != nullptr) || (ppustrTempFileURL != nullptr)), "Invalid parameter!");
+    assert(pHandle || ppustrTempFileURL);
 
-    if ((pHandle == nullptr) && (ppustrTempFileURL == nullptr))
+    if (!pHandle && !ppustrTempFileURL)
     {
         osl_error = osl_File_E_INVAL;
     }
