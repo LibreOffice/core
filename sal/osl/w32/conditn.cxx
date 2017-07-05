@@ -60,7 +60,7 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 {
-    OSL_ASSERT(Condition);
+    assert(Condition);
 
     return SetEvent(reinterpret_cast<HANDLE>(Condition)) != FALSE;
 }
@@ -70,7 +70,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 {
-    OSL_ASSERT(Condition);
+    assert(Condition);
 
     return ResetEvent(reinterpret_cast<HANDLE>(Condition)) != FALSE;
 }
@@ -83,7 +83,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
 {
     DWORD timeout;
 
-    OSL_ASSERT(Condition);
+    assert(Condition);
 
     if (pTimeout)
         timeout = pTimeout->Seconds * 1000 + pTimeout->Nanosec / 1000000L;
@@ -126,7 +126,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
 {
-    OSL_ASSERT(Condition);
+    assert(Condition);
 
     return WaitForSingleObject(reinterpret_cast<HANDLE>(Condition), 0) == WAIT_OBJECT_0;
 }
