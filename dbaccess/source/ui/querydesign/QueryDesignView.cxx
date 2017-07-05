@@ -3076,13 +3076,10 @@ void OQueryDesignView::initByFieldDescriptions( const Sequence< PropertyValue >&
     m_pSelectionBox->SetReadOnly( rController.isReadOnly() );
     m_pSelectionBox->Fill();
 
-    for (   const PropertyValue* field = i_rFieldDescriptions.getConstArray();
-            field != i_rFieldDescriptions.getConstArray() + i_rFieldDescriptions.getLength();
-            ++field
-        )
+    for ( auto const & field : i_rFieldDescriptions )
     {
         ::rtl::Reference< OTableFieldDesc > pField( new OTableFieldDesc() );
-        pField->Load( *field, true );
+        pField->Load( field, true );
         InsertField( pField, false );
     }
 

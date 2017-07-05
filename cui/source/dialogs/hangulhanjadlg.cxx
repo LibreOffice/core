@@ -639,10 +639,8 @@ namespace svx
     void HangulHanjaConversionDialog::FillSuggestions( const css::uno::Sequence< OUString >& _rSuggestions )
     {
         m_pSuggestions->Clear();
-        const OUString* pSuggestions = _rSuggestions.getConstArray();
-        const OUString* pSuggestionsEnd = _rSuggestions.getConstArray() + _rSuggestions.getLength();
-        while ( pSuggestions != pSuggestionsEnd )
-            m_pSuggestions->InsertEntry( *pSuggestions++ );
+        for ( auto const & suggestion : _rSuggestions )
+            m_pSuggestions->InsertEntry( suggestion );
 
         // select the first suggestion, and fill in the suggestion edit field
         OUString sFirstSuggestion;

@@ -409,11 +409,9 @@ void aqua_init_systray()
             SvtDynamicMenuOptions aOpt;
             css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > aNewMenu = aOpt.GetMenu( EDynamicMenuType::NewMenu );
 
-            const css::uno::Sequence< css::beans::PropertyValue >* pNewMenu = aNewMenu.getConstArray();
-            const css::uno::Sequence< css::beans::PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();
-            for ( ; pNewMenu != pNewMenuEnd; ++pNewMenu )
+            for ( auto const & newMenuProp : aNewMenu )
             {
-                comphelper::SequenceAsHashMap aEntryItems( *pNewMenu );
+                comphelper::SequenceAsHashMap aEntryItems( newMenuProp );
                 rtl::OUString sURL( aEntryItems.getUnpackedValueOrDefault( "URL", rtl::OUString() ) );
                 if ( sURL.getLength() )
                     aFileNewAppsAvailable.insert( sURL );

@@ -151,8 +151,8 @@ void OTableFieldDesc::Load( const css::beans::PropertyValue& i_rSettings, const 
         const Sequence< PropertyValue > aCriteria( aFieldDesc.getOrDefault( "Criteria", Sequence< PropertyValue >() ) );
         m_aCriteria.resize( aCriteria.getLength() );
         std::transform(
-            aCriteria.getConstArray(),
-            aCriteria.getConstArray() + aCriteria.getLength(),
+            aCriteria.begin(),
+            aCriteria.end(),
             m_aCriteria.begin(),
             SelectPropertyValueAsString()
         );

@@ -711,8 +711,8 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
     {
         aColumns.resize( aRowSetColumnNames.getLength() );
         std::transform(
-            aRowSetColumnNames.getConstArray(),
-            aRowSetColumnNames.getConstArray() + aRowSetColumnNames.getLength(),
+            aRowSetColumnNames.begin(),
+            aRowSetColumnNames.end(),
             aColumns.begin(),
             CreateColumnDescription()
        );

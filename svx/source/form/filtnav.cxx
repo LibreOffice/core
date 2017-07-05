@@ -569,17 +569,14 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
             OUString aTitle(SvxResId(RID_STR_FILTER_FILTER_FOR));
 
             Sequence< Sequence< OUString > > aExpressions = xFilterController->getPredicateExpressions();
-            for (   const Sequence< OUString >* pConjunctionTerm = aExpressions.getConstArray();
-                    pConjunctionTerm != aExpressions.getConstArray() + aExpressions.getLength();
-                    ++pConjunctionTerm
-                )
+            for ( auto const & conjunctionTerm : aExpressions )
             {
                 // we always display one row, even if there's no term to be displayed
                 FmFilterItems* pFilterItems = new FmFilterItems( pFormItem, aTitle );
                 Insert( pFormItem->GetChildren().end(), pFilterItems );
 
-                const Sequence< OUString >& rDisjunction( *pConjunctionTerm );
-                for (   const OUString* pDisjunctiveTerm = rDisjunction.getConstArray();
+                const Sequence< OUString >& rDisjunction( conjunctionTerm );
+                for (  const OUString* pDisjunctiveTerm = rDisjunction.getConstArray();
                         pDisjunctiveTerm != rDisjunction.getConstArray() + rDisjunction.getLength();
                         ++pDisjunctiveTerm
                     )

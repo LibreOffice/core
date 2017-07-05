@@ -92,8 +92,8 @@ namespace bib
                 aControls = xControlCont->getControls();
 
             std::for_each(
-                aControls.getConstArray(),
-                aControls.getConstArray() + aControls.getLength(),
+                aControls.begin(),
+                aControls.end(),
                 ControlModeSwitch( _bDesign )
             );
         }

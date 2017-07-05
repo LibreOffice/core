@@ -333,11 +333,9 @@ namespace dlgprov
             else
             {
                 Sequence< OUString > aOpenDocsTdocURLs( MiscUtils::allOpenTDocUrls( m_xContext ) );
-                const OUString* pTdocURL = aOpenDocsTdocURLs.getConstArray();
-                const OUString* pTdocURLEnd = aOpenDocsTdocURLs.getConstArray() + aOpenDocsTdocURLs.getLength();
-                for ( ; pTdocURL != pTdocURLEnd; ++pTdocURL )
+                for ( auto const & tdocURL : aOpenDocsTdocURLs )
                 {
-                    Reference< frame::XModel > xModel( MiscUtils::tDocUrlToModel( *pTdocURL ) );
+                    Reference< frame::XModel > xModel( MiscUtils::tDocUrlToModel( tdocURL ) );
                     OSL_ENSURE( xModel.is(), "DialogProviderImpl::createDialogModel: invalid document model!" );
                     if ( !xModel.is() )
                         continue;

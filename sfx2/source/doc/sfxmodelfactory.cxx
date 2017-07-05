@@ -158,8 +158,8 @@ namespace sfx2
         Sequence< Any > aStrippedArguments( _rArguments.getLength() );
         Any* pStrippedArgs = aStrippedArguments.getArray();
         Any* pStrippedArgsEnd = ::std::remove_copy_if(
-            _rArguments.getConstArray(),
-            _rArguments.getConstArray() + _rArguments.getLength(),
+            _rArguments.begin(),
+            _rArguments.end(),
             pStrippedArgs,
             IsSpecialArgument()
         );

@@ -2014,22 +2014,16 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             {
                 // remove
                 const Sequence< OUString > aRemoveNames( xSourceLibrariesStor->getElementNames() );
-                for ( const OUString* pRemoveName = aRemoveNames.getConstArray();
-                      pRemoveName != aRemoveNames.getConstArray() + aRemoveNames.getLength();
-                      ++pRemoveName
-                    )
+                for ( auto const & removeName : aRemoveNames )
                 {
-                    xSourceLibrariesStor->removeElement( *pRemoveName );
+                    xSourceLibrariesStor->removeElement( removeName );
                 }
 
                 // copy
                 const Sequence< OUString > aCopyNames( xTargetLibrariesStor->getElementNames() );
-                for ( const OUString* pCopyName = aCopyNames.getConstArray();
-                      pCopyName != aCopyNames.getConstArray() + aCopyNames.getLength();
-                      ++pCopyName
-                    )
+                for ( auto const & copyName : aCopyNames )
                 {
-                    xTargetLibrariesStor->copyElementTo( *pCopyName, xSourceLibrariesStor, *pCopyName );
+                    xTargetLibrariesStor->copyElementTo( copyName, xSourceLibrariesStor, copyName );
                 }
             }
 

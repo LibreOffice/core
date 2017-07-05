@@ -189,13 +189,11 @@ template <typename T, T base> T lcl_round(T value)
 
 bool GeometryHandler::impl_isDataField(const OUString& _sName) const
 {
-    const OUString* pEnd = m_aFieldNames.getConstArray() + m_aFieldNames.getLength();
-    bool bIsField = ( ::std::find( m_aFieldNames.getConstArray(), pEnd, _sName ) != pEnd );
+    bool bIsField = ( ::std::find( m_aFieldNames.begin(), m_aFieldNames.end(), _sName ) != m_aFieldNames.end() );
 
     if ( !bIsField )
     {
-        pEnd = m_aParamNames.getConstArray() + m_aParamNames.getLength();
-        bIsField = ( ::std::find( m_aParamNames.getConstArray(), pEnd, _sName ) != pEnd );
+        bIsField = ( ::std::find( m_aParamNames.begin(), m_aParamNames.end(), _sName ) != m_aParamNames.end() );
     }
     return bIsField;
 }

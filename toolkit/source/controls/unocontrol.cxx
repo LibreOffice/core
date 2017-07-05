@@ -454,11 +454,8 @@ void UnoControl::ImplLockPropertyChangeNotification( const OUString& rPropertyNa
 
 void UnoControl::ImplLockPropertyChangeNotifications( const Sequence< OUString >& rPropertyNames, bool bLock )
 {
-    for (   const OUString* pPropertyName = rPropertyNames.getConstArray();
-            pPropertyName != rPropertyNames.getConstArray() + rPropertyNames.getLength();
-            ++pPropertyName
-        )
-        ImplLockPropertyChangeNotification( *pPropertyName, bLock );
+    for ( auto const & propertyName : rPropertyNames )
+        ImplLockPropertyChangeNotification( propertyName, bLock );
 }
 
 void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents )

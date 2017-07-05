@@ -401,17 +401,15 @@ void ODatabaseContext::setTransientProperties(const OUString& _sURL, ODatabaseMo
         OUString sAuthFailedPassword;
         Reference< XPropertySet > xDSProps( _rDataSourceModel.getOrCreateDataSource(), UNO_QUERY_THROW );
         const Sequence< PropertyValue >& rSessionPersistentProps = m_aDatasourceProperties[_sURL];
-        const PropertyValue* pProp = rSessionPersistentProps.getConstArray();
-        const PropertyValue* pPropsEnd = rSessionPersistentProps.getConstArray() + rSessionPersistentProps.getLength();
-        for ( ; pProp != pPropsEnd; ++pProp )
+        for ( auto const & prop : rSessionPersistentProps )
         {
-            if ( pProp->Name == "AuthFailedPassword" )
+            if ( prop.Name == "AuthFailedPassword" )
             {
-                OSL_VERIFY( pProp->Value >>= sAuthFailedPassword );
+                OSL_VERIFY( prop.Value >>= sAuthFailedPassword );
             }
             else
             {
-                xDSProps->setPropertyValue( pProp->Name, pProp->Value );
+                xDSProps->setPropertyValue( prop.Name, prop.Value );
             }
         }
 

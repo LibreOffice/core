@@ -150,12 +150,9 @@ namespace dbaccess
     ::utl::OConfigurationNode DatabaseRegistrations::impl_getNodeForName_nothrow( const OUString& _rName )
     {
         Sequence< OUString > aNames( m_aConfigurationRoot.getNodeNames() );
-        for (   const OUString* pName = aNames.getConstArray();
-                pName != aNames.getConstArray() + aNames.getLength();
-                ++pName
-            )
+        for ( auto const & nodeName : aNames )
         {
-            ::utl::OConfigurationNode aNodeForName = m_aConfigurationRoot.openNode( *pName );
+            ::utl::OConfigurationNode aNodeForName = m_aConfigurationRoot.openNode( nodeName );
 
             OUString sTestName;
             OSL_VERIFY( aNodeForName.getNodeValue( getNameNodeName() ) >>= sTestName );
@@ -244,13 +241,11 @@ namespace dbaccess
         Sequence< OUString > aDisplayNames( aProgrammaticNames.getLength() );
         OUString* pDisplayName = aDisplayNames.getArray();
 
-        for (   const OUString* pName = aProgrammaticNames.getConstArray();
-                pName != aProgrammaticNames.getConstArray() + aProgrammaticNames.getLength();
-                ++pName, ++pDisplayName
-            )
+        for ( auto const & name : aProgrammaticNames )
         {
-            ::utl::OConfigurationNode aRegistrationNode = m_aConfigurationRoot.openNode( *pName );
+            ::utl::OConfigurationNode aRegistrationNode = m_aConfigurationRoot.openNode( name );
             OSL_VERIFY( aRegistrationNode.getNodeValue( getNameNodeName() ) >>= *pDisplayName );
+            ++pDisplayName;
         }
 
         return aDisplayNames;

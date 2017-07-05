@@ -1034,15 +1034,15 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
         _xDatasource->getPropertyValue(PROPERTY_INFO) >>= aInfo;
 
         // search the right propertyvalue
-        const PropertyValue* pValue =std::find_if(aInfo.getConstArray(),
-                                                    aInfo.getConstArray() + aInfo.getLength(),
+        const PropertyValue* pValue = std::find_if(aInfo.begin(),
+                                                    aInfo.end(),
                                                     std::bind2nd(TPropertyValueEqualFunctor(),PROPERTY_AUTOINCREMENTCREATION));
-        if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
+        if ( pValue && pValue != aInfo.end() )
             pValue->Value >>= _rsAutoIncrementValue;
-        pValue =std::find_if(aInfo.getConstArray(),
-                                                    aInfo.getConstArray() + aInfo.getLength(),
-                                                    std::bind2nd(TPropertyValueEqualFunctor(),OUString("IsAutoRetrievingEnabled") ));
-        if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
+        pValue = std::find_if(aInfo.begin(),
+                              aInfo.end(),
+                              std::bind2nd(TPropertyValueEqualFunctor(),OUString("IsAutoRetrievingEnabled") ));
+        if ( pValue && pValue != aInfo.end() )
             pValue->Value >>= _rAutoIncrementValueEnabled;
     }
 }

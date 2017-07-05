@@ -157,9 +157,7 @@ namespace cppcanvas
                 return tools::createTextLinesPolyPolygon(
                     0.0,
                     // extract character cell furthest to the right
-                    *(std::max_element(
-                          rOffsets.getConstArray(),
-                          rOffsets.getConstArray() + rOffsets.getLength() )),
+                    *(std::max_element( rOffsets.begin(), rOffsets.end() )),
                     rTextLineInfo );
             }
 

@@ -775,18 +775,15 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
 
         Reference< XNameContainer > xModelSettings = document::NamedPropertyValues::create( comphelper::getProcessComponentContext() );
 
-        for (   const OUString* pModelName = aModelNames.getConstArray();
-                pModelName != aModelNames.getConstArray() + aModelNames.getLength();
-                ++pModelName
-            )
+        for ( auto const & modelName : aModelNames )
         {
-            Reference< XPropertySet > xModelProps( _rXForms->getByName( *pModelName ), UNO_QUERY_THROW );
+            Reference< XPropertySet > xModelProps( _rXForms->getByName( modelName ), UNO_QUERY_THROW );
 
             Sequence< PropertyValue > aModelSettings( 1 );
             aModelSettings[0].Name = "ExternalData";
             aModelSettings[0].Value = xModelProps->getPropertyValue( aModelSettings[0].Name );
 
-            xModelSettings->insertByName( *pModelName, makeAny( aModelSettings ) );
+            xModelSettings->insertByName( modelName, makeAny( aModelSettings ) );
         }
 
         if ( xModelSettings->hasElements() )

@@ -2366,12 +2366,9 @@ bool OBoundControlModel::impl_approveValueBinding_nolock( const Reference< XValu
         // < SYNCHRONIZED
     }
 
-    for (   const Type* pType = aTypeCandidates.getConstArray();
-            pType != aTypeCandidates.getConstArray() + aTypeCandidates.getLength();
-            ++pType
-        )
+    for ( auto const & type : aTypeCandidates )
     {
-        if ( _rxBinding->supportsType( *pType ) )
+        if ( _rxBinding->supportsType( type ) )
             return true;
     }
     return false;
@@ -2598,14 +2595,11 @@ void OBoundControlModel::calculateExternalValueType()
     if ( !m_xExternalBinding.is() )
         return;
     Sequence< Type > aTypeCandidates( getSupportedBindingTypes() );
-    for (   const Type* pTypeCandidate = aTypeCandidates.getConstArray();
-            pTypeCandidate != aTypeCandidates.getConstArray() + aTypeCandidates.getLength();
-            ++pTypeCandidate
-        )
+    for ( auto const & typeCandidate : aTypeCandidates )
     {
-        if ( m_xExternalBinding->supportsType( *pTypeCandidate ) )
+        if ( m_xExternalBinding->supportsType( typeCandidate ) )
         {
-            m_aExternalValueType = *pTypeCandidate;
+            m_aExternalValueType = typeCandidate;
             break;
         }
     }

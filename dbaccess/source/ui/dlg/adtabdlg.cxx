@@ -286,10 +286,8 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
         }
         Sequence< OUString > aQueryNames = xQueries->getElementNames();
 
-        const OUString* pQuery = aQueryNames.getConstArray();
-        const OUString* pQueryEnd = aQueryNames.getConstArray() + aQueryNames.getLength();
-        while ( pQuery != pQueryEnd )
-            m_rQueryList.InsertEntry( *pQuery++ );
+        for ( auto const & name : aQueryNames )
+            m_rQueryList.InsertEntry( name );
     }
     catch( const Exception& )
     {

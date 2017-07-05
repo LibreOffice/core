@@ -507,8 +507,8 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
     Sequence< OUString > eventNames = nameReplace->getElementNames();
     std::set< OUString > aEventNamesCache;
     std::copy(
-        eventNames.getConstArray(),
-        eventNames.getConstArray() + eventNames.getLength(),
+        eventNames.begin(),
+        eventNames.end(),
         std::insert_iterator< std::set< OUString > >( aEventNamesCache, aEventNamesCache.end() )
     );
 

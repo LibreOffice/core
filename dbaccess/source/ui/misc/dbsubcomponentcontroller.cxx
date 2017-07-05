@@ -228,8 +228,8 @@ namespace dbaui
         {
             Sequence< Type > aStrippedTypes( aTypes.getLength() - 1 );
             std::remove_copy_if(
-                aTypes.getConstArray(),
-                aTypes.getConstArray() + aTypes.getLength(),
+                aTypes.begin(),
+                aTypes.end(),
                 aStrippedTypes.getArray(),
                 std::bind2nd( std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
             );

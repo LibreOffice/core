@@ -675,8 +675,8 @@ namespace dbmm
 
         std::set< OUString > aNames;
         std::copy(
-            aElementNames.getConstArray(),
-            aElementNames.getConstArray() + aElementNames.getLength(),
+            aElementNames.begin(),
+            aElementNames.end(),
             std::insert_iterator< std::set< OUString > >( aNames, aNames.end() )
         );
         return aNames;
@@ -971,13 +971,10 @@ namespace dbmm
                                            OUString( _rContainerLoc +  "/" ) );
 
             Sequence< OUString > aElementNames( _rxContainer->getElementNames() );
-            for (   const OUString* elementName = aElementNames.getConstArray();
-                    elementName != aElementNames.getConstArray() + aElementNames.getLength();
-                    ++elementName
-                )
+            for ( auto const & elementName : aElementNames )
             {
-                Any aElement( _rxContainer->getByName( *elementName ) );
-                OUString sElementName( sHierarhicalBase + *elementName );
+                Any aElement( _rxContainer->getByName( elementName ) );
+                OUString sElementName( sHierarhicalBase + elementName );
 
                 Reference< XNameAccess > xSubContainer( aElement, UNO_QUERY );
                 if ( xSubContainer.is() )
@@ -1439,12 +1436,9 @@ namespace dbmm
                     Reference< XNameContainer > xTargetLib( xTargetLibraries->createLibrary( sNewLibName ), UNO_QUERY_THROW );
 
                     Sequence< OUString > aLibElementNames( xSourceLib->getElementNames() );
-                    for (   const OUString* pSourceElementName = aLibElementNames.getConstArray();
-                            pSourceElementName != aLibElementNames.getConstArray() + aLibElementNames.getLength();
-                            ++pSourceElementName
-                        )
+                    for ( auto const & sourceElementName : aLibElementNames )
                     {
-                        Any aElement = xSourceLib->getByName( *pSourceElementName );
+                        Any aElement = xSourceLib->getByName( sourceElementName );
                         OSL_ENSURE( aElement.hasValue(),
                             "MigrationEngine_Impl::impl_migrateContainerLibraries_nothrow: invalid (empty) lib element!" );
 
@@ -1452,10 +1446,10 @@ namespace dbmm
                         if ( _eScriptType == eDialog )
                         {
                             impl_adjustDialogEvents_nothrow( aElement, lcl_getSubDocumentDescription( _rDocument ),
-                                *pSourceLibName, *pSourceElementName );
+                                *pSourceLibName, sourceElementName );
                         }
 
-                        xTargetLib->insertByName( *pSourceElementName, aElement );
+                        xTargetLib->insertByName( sourceElementName, aElement );
                     }
 
                     // transfer the read-only flag
@@ -1640,12 +1634,9 @@ namespace dbmm
             Sequence< OUString > aEventNames = xEvents->getElementNames();
 
             Any aEvent;
-            for (   const OUString* eventName = aEventNames.getConstArray();
-                    eventName != aEventNames.getConstArray() + aEventNames.getLength();
-                    ++eventName
-                )
+            for ( auto const & eventName : aEventNames )
             {
-                aEvent = xEvents->getByName( *eventName );
+                aEvent = xEvents->getByName( eventName );
                 if ( !aEvent.hasValue() )
                     continue;
 
@@ -1654,7 +1645,7 @@ namespace dbmm
                     continue;
 
                 // put back
-                xEvents->replaceByName( *eventName, aEvent );
+                xEvents->replaceByName( eventName, aEvent );
             }
         }
         catch( const Exception& )

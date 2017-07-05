@@ -865,16 +865,14 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
     Reference< XControl > xReturn;
 
     // loop through all the controls
-    const Reference< XControl >* pControls = _rControls.getConstArray();
-    const Reference< XControl >* pControlsEnd = _rControls.getConstArray() + _rControls.getLength();
-    for ( ; pControls != pControlsEnd; ++pControls )
+    for ( auto const & control : _rControls )
     {
-        if ( !pControls->is() )
+        if ( !control.is() )
             continue;
 
-        if ( FmXFormView::isFocusable( *pControls ) )
+        if ( FmXFormView::isFocusable( control ) )
         {
-            xReturn = *pControls;
+            xReturn = control;
             break;
         }
     }

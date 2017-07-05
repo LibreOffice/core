@@ -87,8 +87,8 @@ namespace comphelper
            && (_rArguments[2] >>= AutomaticAddition))
         {
             std::copy(
-                aTypes.getConstArray(),
-                aTypes.getConstArray() + aTypes.getLength(),
+                aTypes.begin(),
+                aTypes.end(),
                 std::insert_iterator< TypeBag >( m_aAllowedTypes, m_aAllowedTypes.begin() )
             );
             m_bAutoAddProperties = AutomaticAddition;
@@ -98,8 +98,8 @@ namespace comphelper
 
             if ( aArguments.get_ensureType( "AllowedTypes", aTypes ) )
                 std::copy(
-                    aTypes.getConstArray(),
-                    aTypes.getConstArray() + aTypes.getLength(),
+                    aTypes.begin(),
+                    aTypes.end(),
                     std::insert_iterator< TypeBag >( m_aAllowedTypes, m_aAllowedTypes.begin() )
                 );
 
@@ -388,8 +388,8 @@ namespace comphelper
         // their names
         Sequence< OUString > aNames( aProperties.getLength() );
         std::transform(
-            aProperties.getConstArray(),
-            aProperties.getConstArray() + aProperties.getLength(),
+            aProperties.begin(),
+            aProperties.end(),
             aNames.getArray(),
             TransformPropertyToName< Property >()
         );
@@ -437,16 +437,16 @@ namespace comphelper
         // sort (the XMultiPropertySet interface requires this)
         Sequence< PropertyValue > aProperties( _rProps );
         std::sort(
-            aProperties.getArray(),
-            aProperties.getArray() + aProperties.getLength(),
+            aProperties.begin(),
+            aProperties.end(),
             ComparePropertyValueByName()
         );
 
         // a sequence of names
         Sequence< OUString > aNames( aProperties.getLength() );
         std::transform(
-            aProperties.getConstArray(),
-            aProperties.getConstArray() + aProperties.getLength(),
+            aProperties.begin(),
+            aProperties.end(),
             aNames.getArray(),
             TransformPropertyToName< PropertyValue >()
         );
@@ -490,8 +490,8 @@ namespace comphelper
             // a sequence of values
             Sequence< Any > aValues( aProperties.getLength() );
             std::transform(
-                aProperties.getConstArray(),
-                aProperties.getConstArray() + aProperties.getLength(),
+                aProperties.begin(),
+                aProperties.end(),
                 aValues.getArray(),
                 ExtractPropertyValue()
             );

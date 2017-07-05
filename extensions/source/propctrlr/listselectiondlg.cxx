@@ -124,10 +124,8 @@ namespace pcr
     void ListSelectionDialog::fillEntryList( const Sequence< OUString >& _rListEntries )
     {
         m_pEntries->Clear();
-        const OUString* _pListEntries = _rListEntries.getConstArray();
-        const OUString* _pListEntriesEnd = _rListEntries.getConstArray() + _rListEntries.getLength();
-        for ( ; _pListEntries < _pListEntriesEnd; ++_pListEntries )
-            m_pEntries->InsertEntry( *_pListEntries );
+        for ( auto const & entry : _rListEntries )
+            m_pEntries->InsertEntry( entry );
     }
 
 
@@ -143,10 +141,8 @@ namespace pcr
     void ListSelectionDialog::selectEntries( const Sequence< sal_Int16 >& /* [in ] */ _rSelection )
     {
         m_pEntries->SetNoSelection();
-        const sal_Int16* pSelection = _rSelection.getConstArray();
-        const sal_Int16* pSelectionEnd = _rSelection.getConstArray() + _rSelection.getLength();
-        for ( ; pSelection != pSelectionEnd; ++pSelection )
-            m_pEntries->SelectEntryPos( *pSelection );
+        for ( auto const & selection : _rSelection )
+            m_pEntries->SelectEntryPos( selection );
     }
 
 

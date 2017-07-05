@@ -637,8 +637,8 @@ bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp, const OUSt
         {
             Sequence< PropertyValue > aInfo;
             xProp->getPropertyValue("Info") >>= aInfo;
-            const PropertyValue* pValue =std::find_if(aInfo.getConstArray(),
-                                                aInfo.getConstArray() + aInfo.getLength(),
+            const PropertyValue* pValue =std::find_if(aInfo.begin(),
+                                                aInfo.end(),
                                                 std::bind2nd(TPropertyValueEqualFunctor(),_sProperty));
             if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
                 pValue->Value >>= bEnabled;

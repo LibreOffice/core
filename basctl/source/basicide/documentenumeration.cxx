@@ -107,17 +107,14 @@ namespace basctl { namespace docs {
             // ensure we don't encounter some models multiple times
             std::set< Reference< XModel >, ::comphelper::OInterfaceCompare< XModel > > aEncounteredModels;
 
-            for (   const Reference< XFrame >* pFrame = _rFrames.getConstArray();
-                    pFrame != _rFrames.getConstArray() + _rFrames.getLength();
-                    ++pFrame
-                )
+            for ( auto const & rFrame : _rFrames )
             {
                 try
                 {
-                    OSL_ENSURE( pFrame->is(), "lcl_getDocuments_nothrow: illegal frame!" );
-                    if ( !pFrame->is() )
+                    OSL_ENSURE( rFrame.is(), "lcl_getDocuments_nothrow: illegal frame!" );
+                    if ( !rFrame.is() )
                         continue;
-                    Reference< XController > xController( (*pFrame)->getController() );
+                    Reference< XController > xController( rFrame->getController() );
                     if ( !xController.is() )
                         continue;
 

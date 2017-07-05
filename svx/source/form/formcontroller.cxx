@@ -3558,16 +3558,14 @@ Reference< XControl > FormController::locateControl( const Reference< XControlMo
     try
     {
         Sequence< Reference< XControl > > aControls( getControls() );
-        const Reference< XControl >* pControls = aControls.getConstArray();
-        const Reference< XControl >* pControlsEnd = aControls.getConstArray() + aControls.getLength();
 
-        for ( ; pControls != pControlsEnd; ++pControls )
+        for ( auto const & control : aControls )
         {
-            OSL_ENSURE( pControls->is(), "FormController::locateControl: NULL-control?" );
-            if ( pControls->is() )
+            OSL_ENSURE( control.is(), "FormController::locateControl: NULL-control?" );
+            if ( control.is() )
             {
-                if ( ( *pControls)->getModel() == _rxModel )
-                    return *pControls;
+                if ( control->getModel() == _rxModel )
+                    return control;
             }
         }
         OSL_FAIL( "FormController::locateControl: did not find a control for this model!" );

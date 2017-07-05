@@ -553,8 +553,8 @@ namespace cairocanvas
                                                      renderState);
 
         // fill integer offsets
-        std::transform( inputOffsets.getConstArray(),
-                          inputOffsets.getConstArray()+inputOffsets.getLength(),
+        std::transform( inputOffsets.begin(),
+                          inputOffsets.end(),
                           outputOffsets,
                           OffsetTransformer( aMatrix ) );
     }

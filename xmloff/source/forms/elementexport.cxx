@@ -440,16 +440,13 @@ namespace xmloff
     void OControlExport::exportGenericHandlerAttributes()
     {
         const Sequence< Property > aProperties = m_xPropertyInfo->getProperties();
-        for (   const Property* prop = aProperties.getConstArray();
-                prop != aProperties.getConstArray() + aProperties.getLength();
-                ++prop
-            )
+        for ( auto const & prop : aProperties )
         {
             try
             {
                 // see if this property can already be handled with an IPropertyHandler (which, on the long
                 // term, should be the case for most, if not all, properties)
-                const PropertyDescription* propDescription = metadata::getPropertyDescription( prop->Name );
+                const PropertyDescription* propDescription = metadata::getPropertyDescription( prop.Name );
                 if ( propDescription == nullptr )
                     continue;
 
@@ -466,15 +463,15 @@ namespace xmloff
                 if ( propDescription->propertyGroup == NO_GROUP )
                 {
                     // that's a property which has a direct mapping to an attribute
-                    if ( !shouldExportProperty( prop->Name ) )
+                    if ( !shouldExportProperty( prop.Name ) )
                         // TODO: in the future, we surely need a more sophisticated approach to this, involving the property
                         // handler, or the property description
                     {
-                        exportedProperty( prop->Name );
+                        exportedProperty( prop.Name );
                         continue;
                     }
 
-                    const Any propValue = m_xProps->getPropertyValue( prop->Name );
+                    const Any propValue = m_xProps->getPropertyValue( prop.Name );
                     attributeValue = handler->getAttributeValue( propValue );
                 }
                 else
@@ -508,7 +505,7 @@ namespace xmloff
                     attributeValue
                 );
 
-                exportedProperty( prop->Name );
+                exportedProperty( prop.Name );
             }
             catch( const Exception& )
             {

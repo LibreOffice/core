@@ -161,10 +161,8 @@ namespace calc
 
         // look up in our sequence
         Sequence< Type > aSupportedTypes( getSupportedValueTypes() );
-        const Type* pTypes = aSupportedTypes.getConstArray();
-        const Type* pTypesEnd = aSupportedTypes.getConstArray() + aSupportedTypes.getLength();
-        while ( pTypes != pTypesEnd )
-            if ( aType.equals( *pTypes++ ) )
+        for ( auto const & i : aSupportedTypes )
+            if ( aType == i )
                 return true;
 
         return false;

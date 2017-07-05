@@ -474,8 +474,8 @@ namespace ucb { namespace ucp { namespace ext
             // translate the property request
             Sequence< OUString > aPropertyNames( i_rProperties.getLength() );
             ::std::transform(
-                i_rProperties.getConstArray(),
-                i_rProperties.getConstArray() + i_rProperties.getLength(),
+                i_rProperties.begin(),
+                i_rProperties.end(),
                 aPropertyNames.getArray(),
                 SelectPropertyName()
             );

@@ -246,13 +246,11 @@ namespace dbp
 
     namespace
     {
-        void    lcl_fillEntries( ListBox& _rListBox, const Sequence< OUString >& _rNames, const Image& _rImage, sal_Int32 _nCommandType )
+        void lcl_fillEntries( ListBox& _rListBox, const Sequence< OUString >& _rNames, const Image& _rImage, sal_Int32 _nCommandType )
         {
-            const OUString* pNames = _rNames.getConstArray();
-            const OUString* pNamesEnd = _rNames.getConstArray() + _rNames.getLength();
-            while ( pNames != pNamesEnd )
+            for ( auto const & name : _rNames )
             {
-                const sal_Int32 nPos = _rListBox.InsertEntry( *pNames++, _rImage );
+                const sal_Int32 nPos = _rListBox.InsertEntry( name, _rImage );
                 _rListBox.SetEntryData( nPos, reinterpret_cast< void* >( _nCommandType ) );
             }
         }

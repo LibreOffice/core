@@ -1075,8 +1075,8 @@ void SlideShowImpl::displaySlide(
 
     bool bSkipAllMainSequenceEffects (false);
     bool bSkipSlideTransition (false);
-    std::for_each( rProperties.getConstArray(),
-                   rProperties.getConstArray() + rProperties.getLength(),
+    std::for_each( rProperties.begin(),
+                   rProperties.end(),
         PrefetchPropertiesFunc(this, bSkipAllMainSequenceEffects, bSkipSlideTransition) );
 
     OSL_ENSURE( !maViewContainer.empty(), "### no views!" );

@@ -92,13 +92,10 @@ namespace dbaui
         {
             ::connectivity::DriversConfig aDriverConfig( ::comphelper::getProcessComponentContext() );
             const uno::Sequence< OUString > aPatterns = aDriverConfig.getURLs();
-            for (   const OUString* pattern = aPatterns.getConstArray();
-                    pattern != aPatterns.getConstArray() + aPatterns.getLength();
-                    ++pattern
-                )
+            for ( auto const & pattern : aPatterns )
             {
                 FeatureSet aCurrentSet;
-                const ::comphelper::NamedValueCollection aCurrentFeatures( aDriverConfig.getFeatures( *pattern ).getNamedValues() );
+                const ::comphelper::NamedValueCollection aCurrentFeatures( aDriverConfig.getFeatures( pattern ).getNamedValues() );
 
                 const FeatureMapping* pFeatureMapping = lcl_getFeatureMappings();
                 while ( pFeatureMapping->pAsciiFeatureName )
@@ -108,7 +105,7 @@ namespace dbaui
                     ++pFeatureMapping;
                 }
 
-                s_aFeatureSets[ *pattern ] = aCurrentSet;
+                s_aFeatureSets[ pattern ] = aCurrentSet;
             }
         }
 

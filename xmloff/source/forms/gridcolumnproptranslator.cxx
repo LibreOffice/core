@@ -51,11 +51,9 @@ namespace xmloff
 
         sal_Int32 findStringElement( const Sequence< OUString >& _rNames, const OUString& _rName )
         {
-            const OUString* pStart = _rNames.getConstArray();
-            const OUString* pEnd = _rNames.getConstArray() + _rNames.getLength();
-            const OUString* pPos = ::std::find( pStart, pEnd, _rName );
-            if ( pPos != pEnd )
-                return pPos - pStart;
+            const OUString* pPos = ::std::find( _rNames.begin(), _rNames.end(), _rName );
+            if ( pPos != _rNames.end() )
+                return pPos - _rNames.begin();
             return -1;
         }
 

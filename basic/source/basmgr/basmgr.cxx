@@ -1432,31 +1432,27 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out
         uno::Reference< script::XLibraryContainerPassword > xPassword( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
 
         uno::Sequence< OUString > aNames( xScripts->getElementNames() );
-        const OUString* pNames = aNames.getConstArray();
-        const OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
-        for ( ; pNames != pNamesEnd; ++pNames )
+        for ( auto const & scriptElementName : aNames )
         {
-            if( !xPassword->isLibraryPasswordProtected( *pNames ) )
+            if( !xPassword->isLibraryPasswordProtected( scriptElementName ) )
                 continue;
 
-            StarBASIC* pBasicLib = GetLib( *pNames );
+            StarBASIC* pBasicLib = GetLib( scriptElementName );
             if ( !pBasicLib )
                 continue;
 
-            uno::Reference< container::XNameAccess > xScriptLibrary( xScripts->getByName( *pNames ), uno::UNO_QUERY_THROW );
+            uno::Reference< container::XNameAccess > xScriptLibrary( xScripts->getByName( scriptElementName ), uno::UNO_QUERY_THROW );
             uno::Sequence< OUString > aElementNames( xScriptLibrary->getElementNames() );
             sal_Int32 nLen = aElementNames.getLength();
 
             std::vector< OUString > aBigModules( nLen );
             sal_Int32 nBigModules = 0;
 
-            const OUString* pElementNames = aElementNames.getConstArray();
-            const OUString* pElementNamesEnd = aElementNames.getConstArray() + aElementNames.getLength();
-            for ( ; pElementNames != pElementNamesEnd; ++pElementNames )
+            for ( auto const & libraryElementName : aElementNames )
             {
-                SbModule* pMod = pBasicLib->FindModule( *pElementNames );
+                SbModule* pMod = pBasicLib->FindModule( libraryElementName );
                 if ( pMod && pMod->ExceedsLegacyModuleSize() )
-                    aBigModules[ nBigModules++ ] = *pElementNames;
+                    aBigModules[ nBigModules++ ] = libraryElementName;
             }
 
             if ( nBigModules )
