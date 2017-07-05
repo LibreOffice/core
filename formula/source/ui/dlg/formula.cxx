@@ -547,7 +547,10 @@ bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult, 
     {
         // Only calculate the value when there isn't any more keyboard input:
 
-        if ( !Application::AnyInput( VclInputFlags::KEYBOARD ) )
+        // Make this debuggable by assigning to a variable that can be changed
+        // from within the debugger.
+        bool bInput = Application::AnyInput( VclInputFlags::KEYBOARD );
+        if ( !bInput )
         {
             bResult = m_pHelper->calculateValue( rStrExp, rStrResult, bForceMatrixFormula || m_pBtnMatrix->IsChecked());
         }
