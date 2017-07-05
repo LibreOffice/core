@@ -215,7 +215,7 @@ void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
         for( n = 0; n < len; n++ )
         {
             /* Check ASCII range */
-            OSL_ENSURE( (*str & 0x80) == 0, "Found ASCII char > 127");
+            SAL_WARN_IF((*str & 0x80) != 0, "sal.rtl", "Found ASCII char > 127");
 
             pBuf[offset + n] = (sal_Unicode)*(str++);
         }

@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <assert.h>
-#include <string.h>
-
-#include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <osl/interlck.h>
 
 #include <rtl/byteseq.h>
 #include <rtl/alloc.h>
+
+#include <cassert>
+#include <string.h>
 
 /* static data to be referenced by all empty strings
  * the refCount is predefined to 1 and must never become 0 !
@@ -42,7 +42,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
     sal_Sequence * pSequence, * pNew;
     sal_Int32 nElements;
 
-    OSL_ENSURE( ppSequence, "### null ptr!" );
+    SAL_WARN_IF(!ppSequence, "sal.rtl", "### null ptr!");
     pSequence = *ppSequence;
 
     if (pSequence->nRefCount > 1)
