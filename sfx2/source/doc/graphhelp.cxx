@@ -78,7 +78,6 @@ SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDI
 // static
 void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 {
-    (void)pGDIMeta;  // unused
     void* pResult = nullptr;
 
 #ifdef _WIN32
@@ -103,6 +102,8 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
                 pResult = GetEnhMetaFileA( aWinFile.getStr() );
         }
     }
+#else
+    (void)pGDIMeta;  // unused
 #endif
 
     return pResult;
@@ -112,8 +113,6 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 // static
 void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, const Size& aMetaSize )
 {
-    (void)pGDIMeta;  // unused
-    (void)aMetaSize; // unused
     void* pResult = nullptr;
 
 #ifdef _WIN32
@@ -168,6 +167,9 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
             }
         }
     }
+#else
+    (void)pGDIMeta;  // unused
+    (void)aMetaSize; // unused
 #endif
 
 
