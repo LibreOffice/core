@@ -48,7 +48,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     oslFileError    nError;
 
     SAL_INFO( "sal.osl", "osl_loadModule: " << OUString(strModuleName->buffer, wcslen(SAL_W(strModuleName->buffer))) );
-    OSL_ASSERT(strModuleName);
+    assert(strModuleName);
 
     nError = osl_getSystemPathFromFileURL(strModuleName, &Module);
 
@@ -100,7 +100,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 )
     oslModule ret = nullptr;
 
     SAL_INFO( "sal.osl", "osl_loadModule: " << pModuleName );
-    OSL_ASSERT(pModuleName);
+    assert(pModuleName);
 
     h = LoadLibrary(pModuleName);
     if (h == nullptr)
@@ -172,8 +172,8 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
     rtl_String *symbolName = nullptr;
     oslGenericFunction address;
 
-    OSL_ASSERT(Module);
-    OSL_ASSERT(strSymbolName);
+    assert(Module);
+    assert(strSymbolName);
 
     rtl_uString2String(
         &symbolName,
@@ -318,7 +318,7 @@ static bool SAL_CALL osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustr
                     rtl_uString *ustrSysPath = nullptr;
 
                     rtl_string2UString( &ustrSysPath, ModuleInfo.LoadedImageName, strlen(ModuleInfo.LoadedImageName), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
-                    OSL_ASSERT(ustrSysPath != nullptr);
+                    assert(ustrSysPath);
                     osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
                     rtl_uString_release( ustrSysPath );
                 }
