@@ -801,7 +801,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
                     break;
 
                 default:
-                    OSL_FAIL( "Unexpected long path format!" );
+                    SAL_WARN("sal.file", "Unexpected long path format!" );
                     rtl_uString_newReplace( &strTempPath, strPath, '\\', '/' );
                     break;
             }
