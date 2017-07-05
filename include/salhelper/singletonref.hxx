@@ -103,7 +103,8 @@ class SingletonRef
             if (m_nRef == 1)
                 m_pInstance = new SingletonClass();
 
-            OSL_ENSURE(m_nRef>0 && m_pInstance, "Race? Ref count of singleton >0, but instance is NULL!");
+            SAL_WARN_IF(!(m_nRef>0 && m_pInstance),
+                        "salhelper", "Race? Ref count of singleton >0, but instance is NULL!");
             // <- GLOBAL SAFE
         }
 
