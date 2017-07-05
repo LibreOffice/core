@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_18b69b8a",
+        "filename": "sfx2/qa/complex/sfx2/DocumentProperties.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-05T21:05:10Z",
+      "side": 0,
+      "message": "i think all of these translations are going to cause test failures because these (admittedly ridiculous) strings are here to verify that some file is imported correctly.",
+      "revId": "14f562b109042ebde90261f93952b4c730e1427d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
