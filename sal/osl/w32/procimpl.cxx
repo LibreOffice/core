@@ -69,9 +69,9 @@ namespace /* private */
     {
         bool operator() (const rtl::OUString& lhs, const rtl::OUString& rhs) const
         {
-            OSL_ENSURE((lhs.indexOf(NAME_VALUE_SEPARATOR) > -1) &&
-                        (rhs.indexOf(NAME_VALUE_SEPARATOR) > -1),
-                        "Malformed environment variable");
+            SAL_WARN_IF(!((lhs.indexOf(NAME_VALUE_SEPARATOR) > -1) &&
+                          (rhs.indexOf(NAME_VALUE_SEPARATOR) > -1)),
+                        "sal.osl", "Malformed environment variable");
 
             // Windows compares environment variables uppercase
             // so we do it, too
