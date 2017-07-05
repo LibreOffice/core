@@ -140,4 +140,119 @@ void createView(GtkWidget*, gpointer /*pItem*/)
     gtv_application_window_create_view_from_window(GTV_APPLICATION_WINDOW(window));
 }
 
+static void removeUnoParam(GtkWidget* pWidget, gpointer userdata)
+{
+    GtkWidget* pParamAreaBox = GTK_WIDGET(userdata);
+    GtkWidget* pParamContainer = gtk_widget_get_parent(pWidget);
+
+    gtk_container_remove(GTK_CONTAINER(pParamAreaBox), pParamContainer);
+}
+
+static void addMoreUnoParam(GtkWidget* /*pWidget*/, gpointer userdata)
+{
+    GtkWidget* pUnoParamAreaBox = GTK_WIDGET(userdata);
+
+    GtkWidget* pParamContainer = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start(GTK_BOX(pUnoParamAreaBox), pParamContainer, TRUE, TRUE, 2);
+
+    GtkWidget* pTypeEntry = gtk_entry_new();
+    gtk_box_pack_start(GTK_BOX(pParamContainer), pTypeEntry, TRUE, TRUE, 2);
+#if GTK_CHECK_VERSION(3,2,0)
+    gtk_entry_set_placeholder_text(GTK_ENTRY(pTypeEntry), "Param type (Eg. boolean, string etc.)");
+#endif
+
+    GtkWidget* pNameEntry = gtk_entry_new();
+    gtk_box_pack_start(GTK_BOX(pParamContainer), pNameEntry, TRUE, TRUE, 2);
+#if GTK_CHECK_VERSION(3,2,0)
+    gtk_entry_set_placeholder_text(GTK_ENTRY(pNameEntry), "Param name");
+#endif
+
+    GtkWidget* pValueEntry = gtk_entry_new();
+    gtk_box_pack_start(GTK_BOX(pParamContainer), pValueEntry, TRUE, TRUE, 2);
+#if GTK_CHECK_VERSION(3,2,0)
+    gtk_entry_set_placeholder_text(GTK_ENTRY(pValueEntry), "Param value");
+#endif
+
+    GtkWidget* pRemoveButton = gtk_button_new_from_icon_name("list-remove-symbolic", GTK_ICON_SIZE_BUTTON);
+    g_signal_connect(pRemoveButton, "clicked", G_CALLBACK(removeUnoParam), pUnoParamAreaBox);
+    gtk_box_pack_start(GTK_BOX(pParamContainer), pRemoveButton, TRUE, TRUE, 2);
+
+    gtk_widget_show_all(pUnoParamAreaBox);
+}
+
+static void iterateUnoParams(GtkWidget* pWidget, gpointer userdata)
+{
+    boost::property_tree::ptree *pTree = static_cast<boost::property_tree::ptree*>(userdata);
+
+    GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pWidget));
+    GList* pIt;
+    guint i = 0;
+    const gchar* unoParam[3];
+    for (pIt = pChildren, i = 0; pIt != nullptr && i < 3; pIt = pIt->next, i++)
+    {
+        unoParam[i] = gtk_entry_get_text(GTK_ENTRY(pIt->data));
+    }
+
+    pTree->put(boost::property_tree::ptree::path_type(g_strconcat(unoParam[1], "/", "type", nullptr), '/'), unoParam[0]);
+    pTree->put(boost::property_tree::ptree::path_type(g_strconcat(unoParam[1], "/", "value", nullptr), '/'), unoParam[2]);
+}
+
+void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
+{
+    GApplication* app = g_application_get_default();
+    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
+    LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
+
+    GtkWidget* pUnoCmdDialog = gtk_dialog_new_with_buttons ("Execute UNO command",
+                                                            GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+                                                            GTK_DIALOG_MODAL,
+                                                            "Execute",
+                                                            GTK_RESPONSE_OK,
+                                                            nullptr);
+    g_object_set(G_OBJECT(pUnoCmdDialog), "resizable", FALSE, nullptr);
+    GtkWidget* pDialogMessageArea = gtk_dialog_get_content_area (GTK_DIALOG (pUnoCmdDialog));
+    GtkWidget* pUnoCmdAreaBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pUnoCmdAreaBox, TRUE, TRUE, 2);
+
+    GtkWidget* pUnoCmdLabel = gtk_label_new("Enter UNO command");
+    gtk_box_pack_start(GTK_BOX(pUnoCmdAreaBox), pUnoCmdLabel, TRUE, TRUE, 2);
+
+    GtkWidget* pUnoCmdEntry = gtk_entry_new ();
+    gtk_box_pack_start(GTK_BOX(pUnoCmdAreaBox), pUnoCmdEntry, TRUE, TRUE, 2);
+#if GTK_CHECK_VERSION(3,2,0)
+    gtk_entry_set_placeholder_text(GTK_ENTRY(pUnoCmdEntry), "UNO command (Eg. Bold, Italic etc.)");
+#endif
+    GtkWidget* pUnoParamAreaBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pUnoParamAreaBox, TRUE, TRUE, 2);
+
+    GtkWidget* pAddMoreButton = gtk_button_new_with_label("Add UNO parameter");
+    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pAddMoreButton, TRUE, TRUE, 2);
+    g_signal_connect(G_OBJECT(pAddMoreButton), "clicked", G_CALLBACK(addMoreUnoParam), pUnoParamAreaBox);
+
+    gtk_widget_show_all(pUnoCmdDialog);
+
+    gint res = gtk_dialog_run (GTK_DIALOG(pUnoCmdDialog));
+    switch (res)
+    {
+    case GTK_RESPONSE_OK:
+    {
+        const gchar* sUnoCmd = g_strconcat(".uno:", gtk_entry_get_text(GTK_ENTRY(pUnoCmdEntry)), nullptr);
+
+        boost::property_tree::ptree aTree;
+        gtk_container_foreach(GTK_CONTAINER(pUnoParamAreaBox), iterateUnoParams, &aTree);
+
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        std::string aArguments = aStream.str();
+
+        g_info("Generated UNO command: %s %s", sUnoCmd, aArguments.c_str());
+
+        lok_doc_view_post_command(pDocView, sUnoCmd, (aArguments.empty() ? nullptr : aArguments.c_str()), false);
+    }
+        break;
+    }
+
+    gtk_widget_destroy(pUnoCmdDialog);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
