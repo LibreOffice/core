@@ -3558,8 +3558,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
 
             pUndo = new SwUndoRedlineDelete( rPam, SwUndoId::DELETE );
             const SwRewriter aRewriter = pUndo->GetRewriter();
-            const SwRewriter* const pRewriter = &aRewriter;
-            m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::DELETE, pRewriter );
+            m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::DELETE, &aRewriter );
             m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
 
