@@ -9,7 +9,9 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xsheetannotation.hxx>
+#include <test/sheet/xsheetannotationshapesupplier.hxx>
 
+#include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -24,9 +26,9 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 5
+#define NUMBER_OF_TESTS 6
 
-class ScAnnontationObj : public CalcUnoApiTest, public apitest::XSheetAnnotation
+class ScAnnontationObj : public CalcUnoApiTest, public apitest::XSheetAnnotation, public apitest::XSheetAnnotationShapeSupplier
 {
 public:
     ScAnnontationObj();
@@ -38,11 +40,17 @@ public:
     virtual uno::Reference< sheet::XSheetAnnotation> getAnnotation(table::CellAddress&) override;
 
     CPPUNIT_TEST_SUITE(ScAnnontationObj);
+
+    // XSheetAnnotation
     CPPUNIT_TEST(testGetPosition);
     CPPUNIT_TEST(testGetAuthor);
     CPPUNIT_TEST(testGetDate);
     CPPUNIT_TEST(testGetIsVisible);
     CPPUNIT_TEST(testSetIsVisible);
+
+    // XSheetAnnotationShapeSupplier
+    CPPUNIT_TEST(testGetAnnotationShape);
+
     CPPUNIT_TEST_SUITE_END();
 private:
 
