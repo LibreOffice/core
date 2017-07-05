@@ -613,16 +613,16 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
-    uno::Reference<io::XInputStream> xSrcStream = new XUnbufferedStream(
+    rtl::Reference< XUnbufferedStream > xSrcStream = new XUnbufferedStream(
         m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode);
 
     uno::Reference<io::XInputStream> xBufStream;
     static const sal_Int32 nThreadingThreshold = 10000;
 
     if( xSrcStream->available() > nThreadingThreshold )
-        xBufStream = new XBufferedThreadedStream(xSrcStream);
+        xBufStream = new XBufferedThreadedStream(xSrcStream.get(), xSrcStream->getSize());
     else
-        xBufStream = new XBufferedStream(xSrcStream);
+        xBufStream = new XBufferedStream(xSrcStream.get());
 
     return xBufStream;
 }
