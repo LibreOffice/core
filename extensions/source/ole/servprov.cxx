@@ -623,8 +623,7 @@ OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
         a >>= m_bridgeSupplier;
     }
 
-    bool ret = provideInstance( m_smgr, const_cast<GUID*>(&OID_ServiceManager) );
-    (void)ret;
+    (void) provideInstance( m_smgr, const_cast<GUID*>(&OID_ServiceManager) );
 }
 
 OleServer_Impl::~OleServer_Impl()
