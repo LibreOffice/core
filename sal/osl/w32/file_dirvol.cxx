@@ -952,7 +952,7 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory Directory)
             }
             break;
         default:
-            OSL_FAIL( "Invalid directory type" );
+            SAL_WARN("sal.file", "Invalid directory type");
             break;
         }
 
