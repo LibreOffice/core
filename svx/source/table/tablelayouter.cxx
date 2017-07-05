@@ -118,7 +118,7 @@ bool TableLayouter::getCellArea( const CellRef& xCell, const CellPos& rPos, base
             const basegfx::B2ITuple aCellSize( getCellSize( xCell, rPos ) );
             const bool bRTL = (mxTable->getSdrTableObj()->GetWritingMode() == WritingMode_RL_TB);
 
-            if( (rPos.mnCol < ((sal_Int32)maColumns.size()) && (rPos.mnRow < ((sal_Int32)maRows.size()) ) ) )
+            if( (rPos.mnCol < ((sal_Int32)maColumns.size())) && (rPos.mnRow < ((sal_Int32)maRows.size()) ) )
             {
                 const sal_Int32 y = maRows[rPos.mnRow].mnPos;
 

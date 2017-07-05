@@ -230,8 +230,8 @@ bool ImpXMLAutoLayoutInfo::IsCreateNecessary(sal_uInt16 nTyp)
 
 bool ImpXMLAutoLayoutInfo::operator==(const ImpXMLAutoLayoutInfo& rInfo) const
 {
-    return ((mnType == rInfo.mnType
-        && mpPageMasterInfo == rInfo.mpPageMasterInfo));
+    return mnType == rInfo.mnType
+           && mpPageMasterInfo == rInfo.mpPageMasterInfo;
 }
 
 ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterInfo* pInf)

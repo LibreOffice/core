@@ -1412,7 +1412,7 @@ void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )
             uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
             uno::Any rValue = xBitmap->getByName( sFillBitmapName );
             OUString sBitmapURL;
-            if( (rValue >>= sBitmapURL) )
+            if( rValue >>= sBitmapURL )
             {
                 WriteBlipFill( xPropSet, sBitmapURL, XML_a, true, true );
             }
@@ -1438,7 +1438,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
         {
             uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
             uno::Any rValue = xGradient->getByName( sFillGradientName );
-            if( (rValue >>= aGradient) )
+            if( rValue >>= aGradient )
             {
                 mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
                 WriteGradientFill( aGradient );

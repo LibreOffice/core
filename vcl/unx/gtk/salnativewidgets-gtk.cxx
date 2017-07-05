@@ -974,7 +974,7 @@ bool GtkSalGraphics::DoDrawNativeControl(
     {
         return NWPaintGTKEditBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
-    else if ( ((nType==ControlType::MultilineEditbox) && ((nPart==ControlPart::Entire) || (nPart==ControlPart::HasBackgroundTexture)) ) )
+    else if ( (nType==ControlType::MultilineEditbox) && ((nPart==ControlPart::Entire) || (nPart==ControlPart::HasBackgroundTexture)) )
     {
         return NWPaintGTKEditBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
@@ -1201,8 +1201,8 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                                                  child->style->font_desc,
                                                  pango_context_get_language( context ) );
 
-            arrow_size = ( PANGO_PIXELS( pango_font_metrics_get_ascent( metrics ) +
-                                         pango_font_metrics_get_descent( metrics ) ));
+            arrow_size = PANGO_PIXELS( pango_font_metrics_get_ascent( metrics ) +
+                                       pango_font_metrics_get_descent( metrics ) );
 
             pango_font_metrics_unref( metrics );
 
@@ -1215,7 +1215,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
             returnVal = true;
         }
     }
-    if( (nType == ControlType::Radiobutton || nType == ControlType::Checkbox) )
+    if( nType == ControlType::Radiobutton || nType == ControlType::Checkbox )
     {
         NWEnsureGTKRadio( m_nXScreen );
         NWEnsureGTKCheck( m_nXScreen );

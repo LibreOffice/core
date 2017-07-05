@@ -1135,7 +1135,7 @@ XclImpDecrypterRef lclReadFilepass8_Strong(XclImpStream& rStream)
     sal_uInt32 nHeaderSize = rStream.ReaduInt32();
     sal_uInt32 actualHeaderSize = sizeof(info.header);
 
-    if( (nHeaderSize < actualHeaderSize) )
+    if( nHeaderSize < actualHeaderSize )
         return xDecr;
 
     info.header.flags = rStream.ReaduInt32();

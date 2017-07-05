@@ -3759,7 +3759,7 @@ void SelectionManager::shutdown() throw()
 sal_Bool SelectionManager::handleEvent(const Any& event)
 {
     Sequence< sal_Int8 > aSeq;
-    if( (event >>= aSeq) )
+    if( event >>= aSeq )
     {
         XEvent* pEvent = reinterpret_cast<XEvent*>(aSeq.getArray());
         Time nTimestamp = CurrentTime;

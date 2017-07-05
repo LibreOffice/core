@@ -1755,7 +1755,9 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     if (xDataSource.is())
                     {
                         sal_Int32 nType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMAND_TYPE));
-                        aReturn.bEnabled = aReturn.bEnabled && ((::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)) || (nType == css::sdb::CommandType::QUERY)));
+                        aReturn.bEnabled = aReturn.bEnabled &&
+                                           ( ::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)) ||
+                                             (nType == css::sdb::CommandType::QUERY) );
                     }
                 }
                 catch(DisposedException&)

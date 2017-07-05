@@ -205,7 +205,7 @@ void LwpGraphicObject::Read()
 
 void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 {
-    if ((m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w'))
+    if (m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w')
     {
         std::vector< rtl::Reference<XFFrame> >::iterator iter;
         for (iter = m_vXFDrawObjects.begin(); iter != m_vXFDrawObjects.end(); ++iter)
@@ -239,7 +239,7 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 
         pCont->Add(pImage);
     }
-    else if((m_sServerContextFormat[1]=='t'&&m_sServerContextFormat[2]=='e'&&m_sServerContextFormat[3]=='x'))
+    else if(m_sServerContextFormat[1]=='t'&&m_sServerContextFormat[2]=='e'&&m_sServerContextFormat[3]=='x')
     {
         XFConvertEquation(pCont);
     }
@@ -603,7 +603,7 @@ void LwpGraphicObject::CreateGrafObject()
                         fBottom = fB;
                     }
                 };
-                LwpRect aFrameRect(-fOffsetX, (fDisFrameWidth-fOffsetX), (-fOffsetY), ((fDisFrameHeight-fOffsetY)));
+                LwpRect aFrameRect(-fOffsetX, (fDisFrameWidth-fOffsetX), (-fOffsetY), (fDisFrameHeight-fOffsetY));
                 LwpRect aImageRect(0, fSclGrafWidth, 0, fSclGrafHeight);
                 LwpRect aCropRect;
 

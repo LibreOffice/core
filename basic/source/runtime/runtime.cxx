@@ -1144,7 +1144,7 @@ void SbiRuntime::PushForEach()
         // XEnumerationAccess?
         Any aAny = pUnoObj->getUnoAny();
         Reference< XEnumerationAccess > xEnumerationAccess;
-        if( (aAny >>= xEnumerationAccess) )
+        if( aAny >>= xEnumerationAccess )
         {
             p->xEnumeration = xEnumerationAccess->createEnumeration();
             p->eForType = ForType::EachXEnumeration;

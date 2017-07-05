@@ -45,7 +45,7 @@ bool XMLPercentOrMeasurePropertyHandler::importXML(
     Any& rValue,
     const SvXMLUnitConverter& rUnitConverter ) const
 {
-    if( (rStrImpValue.indexOf( '%' ) != -1))
+    if( rStrImpValue.indexOf( '%' ) != -1 )
         return false;
 
     sal_Int32 nValue;

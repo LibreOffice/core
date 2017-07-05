@@ -1219,7 +1219,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         if ( !( aValue >>= aNewKey ) )
         {
             OUString sTempString;
-            if ( ( aValue >>= sTempString ) )
+            if ( aValue >>= sTempString )
             {
                 sal_Int32 nPathLength = sTempString.getLength();
                 Sequence < sal_Int8 > aSequence ( nPathLength );

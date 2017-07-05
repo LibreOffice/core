@@ -1203,7 +1203,7 @@ void Sc10Import::LoadPatternCollection()
                     rItemSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
 
                 sal_Int16 Margin = std::max( ( sal_uInt16 ) 20, ( sal_uInt16 ) ( EJustify * 20 ) );
-                if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
+                if( ( OJustify & ojBottomTop ) == ojBottomTop )
                     rItemSet.Put( SvxMarginItem( 20, Margin, 20, Margin, ATTR_MARGIN ) );
                 else
                     rItemSet.Put( SvxMarginItem( Margin, 20, Margin, 20, ATTR_MARGIN ) );

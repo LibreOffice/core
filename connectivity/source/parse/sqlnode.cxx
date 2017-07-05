@@ -2008,7 +2008,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
         pPart2->replace(pNot, pNotNot);
         delete pNot;
     }
-    else if(bNegate && (SQL_ISRULE(pSearchCondition,like_predicate)))
+    else if(bNegate && SQL_ISRULE(pSearchCondition,like_predicate))
     {
         OSQLParseNode* pNot = pSearchCondition->getChild( 1 )->getChild( 0 );
         OSQLParseNode* pNotNot = nullptr;

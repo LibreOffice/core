@@ -944,8 +944,8 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         for (sal_Int16 nNext = cssi::NumberFormatIndex::NUMBER_START;
                 nNext < cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES; ++nNext)
         {
-            sal_Int16 nHere = ::std::min( ((aIter != aFormatIndexSet.end() ? *aIter :
-                    cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES)),
+            sal_Int16 nHere = ::std::min( (aIter != aFormatIndexSet.end() ? *aIter :
+                    cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES),
                     cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES);
             if (aIter != aFormatIndexSet.end()) ++aIter;
             for ( ; nNext < nHere; ++nNext)

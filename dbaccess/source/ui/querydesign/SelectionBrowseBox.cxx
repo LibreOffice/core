@@ -1678,7 +1678,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo )
     if (aIter == rFields.end())
     {
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, false, false );
-        if ( (pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy()) ) // the GroupBy is inherited from rInfo
+        if ( pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy() ) // the GroupBy is inherited from rInfo
             pTmp->SetGroupBy(false);
     }
 }

@@ -214,7 +214,7 @@ namespace dbaui
         long nRow = GetCurRow();
         sal_uInt16 nCol = GetCurColumnId();
 
-        bool bRet = !((     ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1)))
+        bool bRet = !(      ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1))
                         ||  (!bForward && (nCol == SOURCE_COLUMN)   && (nRow == 0)));
 
         return bRet && EditBrowseBox::IsTabAllowed(bForward);

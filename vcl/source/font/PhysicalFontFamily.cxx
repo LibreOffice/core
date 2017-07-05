@@ -72,7 +72,7 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
             return ImplFontAttrs::CJK|ImplFontAttrs::CJK_KR;
 
         // chinese
-        if ( ((ch >= 0x3400) && (ch <= 0x9FFF)) )
+        if ( (ch >= 0x3400) && (ch <= 0x9FFF) )
             return ImplFontAttrs::CJK|ImplFontAttrs::CJK_TC|ImplFontAttrs::CJK_SC;
 
         // cjk

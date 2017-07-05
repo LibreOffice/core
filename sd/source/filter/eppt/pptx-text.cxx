@@ -116,7 +116,7 @@ PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRang
         if ( nFieldType )
         {
             mpFieldEntry = new FieldEntry( nFieldType, 0, mnTextSize );
-            if ( ( nFieldType >> 28 == 4 ) )
+            if ( nFieldType >> 28 == 4 )
             {
                 mpFieldEntry->aRepresentation = aString;
                 mpFieldEntry->aFieldUrl = aURL;

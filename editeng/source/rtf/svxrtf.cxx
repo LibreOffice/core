@@ -279,9 +279,8 @@ INSINGLECHAR:
             break;
         default:
             {
-                if( /*( '{' == GetStackPtr( -1 )->nTokenId ) ||*/
-                    ( RTF_IGNOREFLAG == GetStackPtr( -1 )->nTokenId &&
-                      '{' == GetStackPtr( -2 )->nTokenId ) )
+                if( RTF_IGNOREFLAG == GetStackPtr( -1 )->nTokenId &&
+                      '{' == GetStackPtr( -2 )->nTokenId )
                     SkipGroup();
             }
             break;
@@ -890,10 +889,9 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 bCrsrBack = nNd != pInsPos->GetNodeIdx();
             }
 
-            if( ( pOld->pSttNd->GetIdx() < pInsPos->GetNodeIdx() ||
+            if( pOld->pSttNd->GetIdx() < pInsPos->GetNodeIdx() ||
                 ( pOld->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
-                pOld->nSttCnt <= pInsPos->GetCntIdx() ))
-                )
+                  pOld->nSttCnt <= pInsPos->GetCntIdx() ) )
             {
                 if( !bCrsrBack )
                 {

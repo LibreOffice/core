@@ -697,7 +697,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     pAcc.reset();
                     if ( nSye && nSxe &&
                         ( ( nSx + nSxe ) <= aBmp.GetSizePixel().Width() ) &&
-                            ( ( nSy + nSye <= aBmp.GetSizePixel().Height() ) ) )
+                        ( ( nSy + nSye ) <= aBmp.GetSizePixel().Height() ) )
                     {
                         tools::Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
                         aBmp.Crop( aCropRect );
@@ -748,7 +748,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     // test if it is sensible to crop
                     if ( nSye && nSxe &&
                         ( ( nSx + nSxe ) <= aBmp.GetSizePixel().Width() ) &&
-                            ( ( nSy + nSye <= aBmp.GetSizePixel().Height() ) ) )
+                        ( ( nSy + nSye ) <= aBmp.GetSizePixel().Height() ) )
                     {
                         tools::Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
                         aBmp.Crop( aCropRect );

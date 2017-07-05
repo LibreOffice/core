@@ -552,7 +552,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         for( int ind = 0; ind < aArguments.getLength(); ind++ )
         {
             OUString aParamUrl;
-            if ( ( aArguments[ind] >>= aParamUrl ))
+            if ( aArguments[ind] >>= aParamUrl )
             {
                 m_eMode = e_IMode_URL;
                 try
@@ -615,17 +615,17 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     bHaveZipFile = false;
                 }
             }
-            else if ( ( aArguments[ind] >>= m_xStream ) )
+            else if ( aArguments[ind] >>= m_xStream )
             {
                 // a writable stream can implement both XStream & XInputStream
                 m_eMode = e_IMode_XStream;
                 m_xContentStream = m_xStream->getInputStream();
             }
-            else if ( ( aArguments[ind] >>= m_xContentStream ) )
+            else if ( aArguments[ind] >>= m_xContentStream )
             {
                 m_eMode = e_IMode_XInputStream;
             }
-            else if ( ( aArguments[ind] >>= aNamedValue ) )
+            else if ( aArguments[ind] >>= aNamedValue )
             {
                 if ( aNamedValue.Name == "RepairPackage" )
                     aNamedValue.Value >>= m_bForceRecovery;
