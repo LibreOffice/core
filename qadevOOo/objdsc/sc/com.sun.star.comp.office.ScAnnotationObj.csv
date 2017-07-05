@@ -7,7 +7,6 @@
 "ScAnnotationObj";"com::sun::star::text::XTextRange";"getEnd()"
 "ScAnnotationObj";"com::sun::star::text::XTextRange";"getString()"
 "ScAnnotationObj";"com::sun::star::text::XTextRange";"setString()"
-"ScAnnotationObj";"com::sun::star::sheet::XSheetAnnotationShapeSupplier#optional";"getAnnotationShape()"
 "ScAnnotationObj";"com::sun::star::sheet::XSheetAnnotation";"getPosition()"
 "ScAnnotationObj";"com::sun::star::sheet::XSheetAnnotation";"getAuthor()"
 "ScAnnotationObj";"com::sun::star::sheet::XSheetAnnotation";"getDate()"
