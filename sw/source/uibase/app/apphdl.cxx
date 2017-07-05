@@ -940,9 +940,9 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, Con
         {
             if(pViewShell->GetWindow())
             {
-                if((dynamic_cast< const SwView *>( pViewShell ) !=  nullptr ||
-                    dynamic_cast< const SwPagePreview *>( pViewShell ) !=  nullptr ||
-                    dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr))
+                if(dynamic_cast< const SwView *>( pViewShell ) !=  nullptr ||
+                   dynamic_cast< const SwPagePreview *>( pViewShell ) !=  nullptr ||
+                   dynamic_cast< const SwSrcView *>( pViewShell ) !=  nullptr)
                 {
                     if(bAccessibility)
                     {

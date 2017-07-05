@@ -2832,8 +2832,8 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
 {
     if ( XML_NAMESPACE_OFFICE == nPrefix )
     {
-        if ( (IsXMLToken(rLocalName, XML_DOCUMENT) ||
-              IsXMLToken(rLocalName, XML_DOCUMENT_META)))
+        if ( IsXMLToken(rLocalName, XML_DOCUMENT) ||
+             IsXMLToken(rLocalName, XML_DOCUMENT_META) )
         {
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);

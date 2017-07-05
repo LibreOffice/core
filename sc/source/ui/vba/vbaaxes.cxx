@@ -69,7 +69,7 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
         throw uno::RuntimeException("Object failure, can't access chart implementation"  );
 
     uno::Reference< beans::XPropertySet > xAxisPropertySet;
-    if (((nType == xlCategory) || (nType == xlSeriesAxis) || (nType == xlValue)))
+    if ((nType == xlCategory) || (nType == xlSeriesAxis) || (nType == xlValue))
     {
         if ((nAxisGroup != xlPrimary) && (nAxisGroup != xlSecondary))
             DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED);

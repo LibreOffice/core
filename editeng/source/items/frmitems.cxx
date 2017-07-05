@@ -1800,7 +1800,7 @@ SvxBoxItem::LineToSvxLine(const css::table::BorderLine2& rLine, SvxBorderLine& r
         rSvxLine.SetWidth( bConvert? convertMm100ToTwip( rLine.LineWidth ) : rLine.LineWidth );
         // fdo#46112: double does not necessarily mean symmetric
         // for backwards compatibility
-        bGuessWidth = ((SvxBorderLineStyle::DOUBLE == nStyle || SvxBorderLineStyle::DOUBLE_THIN == nStyle)) &&
+        bGuessWidth = (SvxBorderLineStyle::DOUBLE == nStyle || SvxBorderLineStyle::DOUBLE_THIN == nStyle) &&
             (rLine.InnerLineWidth > 0) && (rLine.OuterLineWidth > 0);
     }
 

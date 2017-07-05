@@ -396,8 +396,8 @@ void VclBox::setAllocation(const Size &rAllocation)
     long nHomogeneousDimension = 0, nExtraSpace = 0;
     if (m_bHomogeneous)
     {
-        nHomogeneousDimension = ((nAllocPrimaryDimension -
-            (nVisibleChildren - 1) * m_nSpacing)) / nVisibleChildren;
+        nHomogeneousDimension = (nAllocPrimaryDimension -
+            (nVisibleChildren - 1) * m_nSpacing) / nVisibleChildren;
     }
     else if (nExpandChildren)
     {

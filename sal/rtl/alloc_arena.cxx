@@ -1045,7 +1045,7 @@ SAL_CALL rtl_arena_free (
                 prev = segment->m_sprev;
 
                 /* entire span free when prev is a span, and next is either a span or a list head */
-                if (((prev->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN)) &&
+                if ((prev->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN) &&
                     ((next->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN)  ||
                      (next->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD))    )
                 {

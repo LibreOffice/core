@@ -67,7 +67,7 @@ namespace canvas
         for( sal_Int32 i=0; i<rArgs.getLength(); ++i )
         {
             beans::PropertyValue aProp;
-            if( (rArgs[i] >>= aProp) )
+            if( rArgs[i] >>= aProp )
             {
                 if ( aProp.Name == "Colors" )
                 {

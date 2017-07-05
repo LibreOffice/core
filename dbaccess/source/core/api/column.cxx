@@ -320,9 +320,12 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  )
     }
     else
     {
-        nSize = ((m_pTable && m_pTable->isNew()) ? 0 :
-                    ((m_bDropColumn ?
-                        (m_bAddColumn ? 0 : 1) : (m_bAddColumn ? 1 : 2))));
+        if (m_pTable && m_pTable->isNew())
+            nSize = 0;
+        else if (m_bDropColumn)
+            nSize = m_bAddColumn ? 0 : 1;
+        else
+            nSize = m_bAddColumn ? 1 : 2;
         bDropFound      = (m_pTable && m_pTable->isNew()) || m_bDropColumn;
         bAppendFound    = (m_pTable && m_pTable->isNew()) || m_bAddColumn;
     }

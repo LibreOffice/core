@@ -546,8 +546,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             SvxZoomEnableFlags nZoomValues = SvxZoomEnableFlags::ALL;
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
-            if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
-                // || ( mpDrawView->GetMarkedObjectList().GetMarkCount() == 0 ) )
+            if( pPageView && pPageView->GetObjList()->GetObjCount() == 0 )
             {
                 nZoomValues &= ~SvxZoomEnableFlags::OPTIMAL;
             }

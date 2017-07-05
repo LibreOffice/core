@@ -182,7 +182,7 @@ bool XMLFile2UTFConverter::isEncodingRecognizable( const Sequence< sal_Int8 > &s
         bCheckIfFirstClosingBracketExsists = true;
     }
     else if( ('<' == pSource[0] || '<' == pSource[2] ) &&
-             ( ('?' == pSource[4] || '?' == pSource[6] ) ) )
+             ('?' == pSource[4] || '?' == pSource[6] ) )
     {
         // check for utf-16
         bCheckIfFirstClosingBracketExsists = true;

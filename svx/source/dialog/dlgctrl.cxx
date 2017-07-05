@@ -888,7 +888,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
         switch(nCode)
         {
             case KEY_LEFT:
-                if((aFocusPosition.getX() >= 1))
+                if(aFocusPosition.getX() >= 1)
                 {
                     aFocusPosition.setX( aFocusPosition.getX() - 1 );
                     Invalidate(aRepaintRect);
@@ -904,7 +904,7 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
                 }
                 break;
             case KEY_UP:
-                if((aFocusPosition.getY() >= 1))
+                if(aFocusPosition.getY() >= 1)
                 {
                     aFocusPosition.setY( aFocusPosition.getY() - 1 );
                     Invalidate(aRepaintRect);

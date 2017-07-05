@@ -420,7 +420,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 aDispatches.push_back( DispatchHolder( aURL, xDispatcher ));
             }
         }
-        else if ( ( aName.startsWith( "service:" ) ) )
+        else if ( aName.startsWith( "service:" ) )
         {
             // TODO: the dispatch has to be done for loadComponentFromURL as well. Please ask AS for more details.
             URL             aURL ;

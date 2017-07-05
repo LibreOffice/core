@@ -1401,7 +1401,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
             }
             else
                 m_nHiddenBlock |= nOr;
-            if((pCntType->GetType() == ContentTypeId::OUTLINE))
+            if(pCntType->GetType() == ContentTypeId::OUTLINE)
             {
                 std::map< void*, bool > aCurrOutLineNodeMap;
 

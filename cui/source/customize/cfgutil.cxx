@@ -576,8 +576,8 @@ void SfxConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                 OUString uiName = theChild->getName();
                 if ( bIsRootNode )
                 {
-                    if (  ! ((theChild->getName().equals( user )  || theChild->getName().equals( share ) ||
-                        theChild->getName().equals( currentDocTitle ) ) ) )
+                    if (  ! (theChild->getName().equals( user )  || theChild->getName().equals( share ) ||
+                             theChild->getName().equals( currentDocTitle ) ) )
                     {
                         bDisplay=false;
                     }

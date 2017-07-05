@@ -70,7 +70,7 @@ void PackageUri::init() const
         m_aScheme.clear();
 
         // URI must match at least: <sheme>://<non_empty_url_to_file>
-        if ( ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 ) )
+        if ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 )
         {
             // error, but remember that we did a init().
             m_aPath = "/";

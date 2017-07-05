@@ -1287,7 +1287,7 @@ bool ORowSetCache::insertRow(std::vector< Any >& o_aBookmarks)
         {
             moveToBookmark(aBookmark);
             // update the cached values
-            ORowSetValueVector::Vector& rCurrentRow = ((*m_aMatrixIter))->get();
+            ORowSetValueVector::Vector& rCurrentRow = (*m_aMatrixIter)->get();
             ORowSetMatrix::const_iterator aIter = m_pMatrix->begin();
             for(;aIter != m_pMatrix->end();++aIter)
             {
@@ -1343,7 +1343,7 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,std::vector< 
     if ( moveToBookmark(aBookmark) )
     {
         // update the cached values
-        ORowSetValueVector::Vector& rCurrentRow = ((*m_aMatrixIter))->get();
+        ORowSetValueVector::Vector& rCurrentRow = (*m_aMatrixIter)->get();
         ORowSetMatrix::const_iterator aIter = m_pMatrix->begin();
         for(;aIter != m_pMatrix->end();++aIter)
         {

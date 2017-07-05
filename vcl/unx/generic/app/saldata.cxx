@@ -743,7 +743,7 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         CheckTimeout();
 
     // handle wakeup events.
-    if ((nFound > 0) && (FD_ISSET(m_pTimeoutFDS[0], &ReadFDS)))
+    if ((nFound > 0) && FD_ISSET(m_pTimeoutFDS[0], &ReadFDS))
     {
         int buffer;
         while (read (m_pTimeoutFDS[0], &buffer, sizeof(buffer)) > 0)

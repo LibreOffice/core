@@ -151,10 +151,10 @@ namespace dbtools
 
     static bool implIsLeapYear(sal_Int32 _nYear)
     {
-        return  (   (   ((_nYear % 4) == 0)
-                    &&  ((_nYear % 100) != 0)
-                    )
+        return  (    ((_nYear % 4) == 0)
+                 &&  ((_nYear % 100) != 0)
                 )
+
                 ||  ((_nYear % 400) == 0)
                 ;
     }

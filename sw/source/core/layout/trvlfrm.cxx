@@ -664,10 +664,10 @@ static const SwContentFrame * lcl_MissProtectedFrames( const SwContentFrame *pCn
             while ( pCell && !pCell->IsCellFrame() )
                 pCell = pCell->GetUpper();
             if ( !pCell ||
-                    (( ( bInReadOnly || !pCell->GetFormat()->GetProtect().IsContentProtected() ) &&
+                    ( ( bInReadOnly || !pCell->GetFormat()->GetProtect().IsContentProtected() ) &&
                       ( !bMissHeadline || !lcl_IsInRepeatedHeadline( pCell ) ) &&
                       ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) &&
-                       !pCell->IsCoveredCell()) ) )
+                        !pCell->IsCoveredCell() ) )
                 bProtect = false;
             else
                 pCnt = (*fnNxtPrv)( pCnt );

@@ -101,8 +101,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare )( const IMPL_RTL_STRCODE* pStr1,
     else
     {
         sal_Int32 nRet;
-        while ( ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr1)))-
-                         ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr2)))) == 0) &&
+        while ( ((nRet = ((sal_Int32)IMPL_RTL_USTRCODE(*pStr1))-
+                         ((sal_Int32)IMPL_RTL_USTRCODE(*pStr2))) == 0) &&
                 *pStr2 )
         {
             pStr1++;
@@ -148,8 +148,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
         while( (--nCount >= 0) && (*++pStr1 == *++pStr2) ) ;
 
         if( nCount >= 0 )
-            nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))
-                 - ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )));
+            nRet = ((sal_Int32)IMPL_RTL_USTRCODE( *pStr1 ))
+                 - ((sal_Int32)IMPL_RTL_USTRCODE( *pStr2 ));
 
         return nRet;
     }
@@ -193,8 +193,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_R
         while ( (nShortenedLength > 0) &&
                 (pStr1 < pStr1End) && (pStr2 < pStr2End) )
         {
-            nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
-                   ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )));
+            nRet = ((sal_Int32)IMPL_RTL_USTRCODE( *pStr1 ))-
+                   ((sal_Int32)IMPL_RTL_USTRCODE( *pStr2 ));
             if ( nRet )
                 return nRet;
 
@@ -227,8 +227,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( reverseCompare_WithLength )( const IMPL_RTL
     {
         pStr1Run--;
         pStr2Run--;
-        nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1Run )))-
-               ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2Run )));
+        nRet = ((sal_Int32)IMPL_RTL_USTRCODE( *pStr1Run ))-
+               ((sal_Int32)IMPL_RTL_USTRCODE( *pStr2Run ));
         if ( nRet )
             return nRet;
     }

@@ -336,7 +336,7 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
         //centered: change both sides equally
         else if(m_pCenterBtn->IsChecked())
         {
-            if((nLeft != nRight))
+            if(nLeft != nRight)
             {
                 nDiff += nLeft + nRight;
                 nLeft = nDiff/2;

@@ -111,7 +111,7 @@ SwCallLink::~SwCallLink()
 
     const SwDoc *pDoc=rShell.GetDoc();
     const SwContentNode *pNode = nullptr;
-    if ( ( pDoc != nullptr && nNode < pDoc->GetNodes( ).Count( ) ) )
+    if ( pDoc && nNode < pDoc->GetNodes( ).Count( ) )
     {
         pNode = pDoc->GetNodes()[nNode]->GetContentNode();
     }

@@ -584,11 +584,11 @@ void ODesignView::alignMarkedObjects(ControlModification _nControlModification,b
 
 bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
 {
-    if ( (m_pPropWin && m_pPropWin->HasChildPathFocus()) )
+    if ( m_pPropWin && m_pPropWin->HasChildPathFocus() )
         return false;
-    if ( (m_pAddField && m_pAddField->HasChildPathFocus()) )
+    if ( m_pAddField && m_pAddField->HasChildPathFocus() )
         return false;
-    if ( (m_pReportExplorer && m_pReportExplorer->HasChildPathFocus()) )
+    if ( m_pReportExplorer && m_pReportExplorer->HasChildPathFocus() )
         return false;
     return m_aScrollWindow->handleKeyEvent(_rEvent);
 }

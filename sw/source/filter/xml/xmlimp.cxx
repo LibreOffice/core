@@ -613,7 +613,7 @@ void SwXMLImport::startDocument()
             GetTextImport()->SetCursor( xTextCursor );
     }
 
-    if( (!(getImportFlags() & (SvXMLImportFlags::CONTENT|SvXMLImportFlags::MASTERSTYLES))))
+    if( !(getImportFlags() & (SvXMLImportFlags::CONTENT|SvXMLImportFlags::MASTERSTYLES)) )
         return;
 
     if( !pTextCursor  )
@@ -848,7 +848,7 @@ void SwXMLImport::endDocument()
     // SJ: #i49801# -> now permitting repaints
     if ( pDoc )
     {
-        if( (getImportFlags() == SvXMLImportFlags::ALL ) )
+        if( getImportFlags() == SvXMLImportFlags::ALL )
         {
             // Notify math objects. If we are in the package filter this will
             // be done by the filter object itself

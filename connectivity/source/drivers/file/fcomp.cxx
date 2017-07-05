@@ -143,7 +143,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
     {
         execute(pPredicateNode->getChild(1));
     }
-    else if ((SQL_ISRULE(pPredicateNode,search_condition) || (SQL_ISRULE(pPredicateNode,boolean_term)))
+    else if ((SQL_ISRULE(pPredicateNode,search_condition) || SQL_ISRULE(pPredicateNode,boolean_term))
                             &&          // AND/OR-linkage:
                             pPredicateNode->count() == 3)
     {

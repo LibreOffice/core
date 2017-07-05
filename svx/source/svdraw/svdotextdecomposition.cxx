@@ -762,7 +762,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     const bool bTopToBottom(pOutlinerParaObject->IsTopToBottom());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
-    if((rSdrAutofitTextPrimitive.getWordWrap() || IsTextFrame()))
+    if(rSdrAutofitTextPrimitive.getWordWrap() || IsTextFrame())
     {
         rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
     }

@@ -139,7 +139,7 @@ namespace slideshow
                            const ::basegfx::B2DVector&  rSlideBounds )
         {
             // try to extract numeric value (double, or smaller POD, like float or int)
-            if( (rSourceAny >>= o_rValue) )
+            if( rSourceAny >>= o_rValue)
             {
                 // succeeded
                 return true;
@@ -174,7 +174,7 @@ namespace slideshow
                            const ::basegfx::B2DVector&      /*rSlideBounds*/ )
         {
             // try to extract numeric value (int, or smaller POD, like byte)
-            if( (rSourceAny >>= o_rValue) )
+            if( rSourceAny >>= o_rValue)
             {
                 // succeeded
                 return true;
@@ -182,7 +182,7 @@ namespace slideshow
 
             // okay, no plain int. Maybe one of the domain-specific enums?
             drawing::FillStyle eFillStyle;
-            if( (rSourceAny >>= eFillStyle) )
+            if( rSourceAny >>= eFillStyle )
             {
                 o_rValue = sal::static_int_cast<sal_Int16>(eFillStyle);
 
@@ -191,7 +191,7 @@ namespace slideshow
             }
 
             drawing::LineStyle eLineStyle;
-            if( (rSourceAny >>= eLineStyle) )
+            if( rSourceAny >>= eLineStyle )
             {
                 o_rValue = sal::static_int_cast<sal_Int16>(eLineStyle);
 
@@ -200,7 +200,7 @@ namespace slideshow
             }
 
             awt::FontSlant eFontSlant;
-            if( (rSourceAny >>= eFontSlant) )
+            if( rSourceAny >>= eFontSlant )
             {
                 o_rValue = sal::static_int_cast<sal_Int16>(eFontSlant);
 
@@ -242,7 +242,7 @@ namespace slideshow
             // try to extract numeric value (double, or smaller POD, like float or int)
             {
                 double nTmp = 0;
-                if( (rSourceAny >>= nTmp) )
+                if( rSourceAny >>= nTmp )
                 {
                     sal_uInt32 aIntColor( static_cast< sal_uInt32 >(nTmp) );
 
@@ -257,7 +257,7 @@ namespace slideshow
             // try double sequence
             {
                 uno::Sequence< double > aTmp;
-                if( (rSourceAny >>= aTmp) )
+                if( rSourceAny >>= aTmp )
                 {
                     ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for RGB color value" );
@@ -272,7 +272,7 @@ namespace slideshow
             // try sal_Int32 sequence
             {
                 uno::Sequence< sal_Int32 > aTmp;
-                if( (rSourceAny >>= aTmp) )
+                if( rSourceAny >>= aTmp )
                 {
                     ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for RGB color value" );
@@ -292,7 +292,7 @@ namespace slideshow
             // try sal_Int8 sequence
             {
                 uno::Sequence< sal_Int8 > aTmp;
-                if( (rSourceAny >>= aTmp) )
+                if( rSourceAny >>= aTmp )
                 {
                     ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for RGB color value" );
@@ -324,7 +324,7 @@ namespace slideshow
             // try double sequence
             {
                 uno::Sequence< double > aTmp;
-                if( (rSourceAny >>= aTmp) )
+                if( rSourceAny >>= aTmp )
                 {
                     ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for HSL color value" );
@@ -339,7 +339,7 @@ namespace slideshow
             // try sal_Int8 sequence
             {
                 uno::Sequence< sal_Int8 > aTmp;
-                if( (rSourceAny >>= aTmp) )
+                if( rSourceAny >>= aTmp )
                 {
                     ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for HSL color value" );
@@ -375,7 +375,7 @@ namespace slideshow
         {
             bool bTmp;
             // try to extract bool value
-            if( (rSourceAny >>= bTmp) )
+            if( rSourceAny >>= bTmp )
             {
                 o_rValue = bTmp;
 

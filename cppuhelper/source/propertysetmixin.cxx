@@ -949,8 +949,8 @@ void PropertySetMixinImpl::dispose() {
 
 css::uno::Any PropertySetMixinImpl::queryInterface(css::uno::Type const & type)
 {
-    if (((m_impl->implements & IMPLEMENTS_PROPERTY_SET) != 0
-         && type == css::beans::XPropertySet::static_type()))
+    if ((m_impl->implements & IMPLEMENTS_PROPERTY_SET) != 0
+         && type == css::beans::XPropertySet::static_type())
     {
         css::uno::Reference< css::uno::XInterface > ifc(
             static_cast< css::beans::XPropertySet * >(this));

@@ -762,8 +762,8 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                         // There is no dispatch mechanism for the special window list menu items,
                         // because they are handled directly through XFrame->activate!!!
                         // Don't update dispatches for special file menu items.
-                        if ( !(( pMenuItemHandler->nItemId >= START_ITEMID_WINDOWLIST &&
-                                 pMenuItemHandler->nItemId < END_ITEMID_WINDOWLIST )))
+                        if ( !( pMenuItemHandler->nItemId >= START_ITEMID_WINDOWLIST &&
+                                pMenuItemHandler->nItemId < END_ITEMID_WINDOWLIST ) )
                         {
                             Reference< XDispatch > xMenuItemDispatch;
 

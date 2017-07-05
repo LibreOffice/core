@@ -6193,10 +6193,9 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
              && (
                     ( eShapeType == mso_sptTextSimple )
                  || ( eShapeType == mso_sptTextBox    )
-                 || (    (    ( eShapeType == mso_sptRectangle      )
-                           || ( eShapeType == mso_sptRoundRectangle )
-                         )
-                ) ) )
+                 || ( eShapeType == mso_sptRectangle  )
+                 || ( eShapeType == mso_sptRoundRectangle )
+                ) )
         {
             aInfo.bReplaceByFly = true;
         }

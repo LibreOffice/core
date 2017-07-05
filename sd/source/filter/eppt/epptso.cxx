@@ -911,20 +911,15 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 nPropertyFlags |= nCharAttr & 0x217;    // not all attributes ar inherited
             else
             {
-                if ( /* ( rPortion.mnCharAttrHard & 1 ) || */
-                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Bold, nCharAttr ) ) )
+                if ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Bold, nCharAttr ) )
                     nPropertyFlags |= 1;
-                if ( /* ( rPortion.mnCharAttrHard & 2 ) || */
-                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Italic, nCharAttr ) ) )
+                if ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Italic, nCharAttr ) )
                     nPropertyFlags |= 2;
-                if ( /* ( rPortion.mnCharAttrHard & 4 ) || */
-                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Underline, nCharAttr ) ) )
+                if ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Underline, nCharAttr ) )
                     nPropertyFlags |= 4;
-                if ( /* ( rPortion.mnCharAttrHard & 0x10 ) || */
-                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Shadow, nCharAttr ) ) )
+                if ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Shadow, nCharAttr ) )
                     nPropertyFlags |= 0x10;
-                if ( /* ( rPortion.mnCharAttrHard & 0x200 ) || */
-                    ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Embossed, nCharAttr ) ) )
+                if ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Embossed, nCharAttr ) )
                     nPropertyFlags |= 512;
             }
             if ( rTextObj.HasExtendedBullets() )
@@ -1292,7 +1287,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 
                     sal_uInt32 nWidth = 1;
                     if ( nTabs )
-                        nWidth += (sal_Int32)( ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 + nTextOfs ) / nDefaultTabSize ) );
+                        nWidth += (sal_Int32)( ( pTabStop[ nTabs - 1 ].Position / 4.40972 + nTextOfs ) / nDefaultTabSize );
                     nWidth *= nDefaultTabSize;
                     for ( i = 0; i < nDefaultTabs; i++, nWidth += nDefaultTabSize )
                         pRuleOut->WriteUInt32( nWidth );
@@ -1867,10 +1862,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     css::awt::Size  aSize( mXShape->getSize() );
                     css::awt::Point aStart, aEnd, aCenter;
                     ::tools::Rectangle aRect( Point( aPoint.X, aPoint.Y ), Size( aSize.Width, aSize.Height ) );
-                    aStart.X = (sal_Int32)( ( cos( nStartAngle * F_PI18000 ) * 100.0 ) );
-                    aStart.Y = - (sal_Int32)( ( sin( nStartAngle * F_PI18000 ) * 100.0 ) );
-                    aEnd.X = (sal_Int32)( ( cos( nEndAngle * F_PI18000 ) * 100.0 ) );
-                    aEnd.Y = - (sal_Int32)( ( sin( nEndAngle * F_PI18000 ) * 100.0 ) );
+                    aStart.X =   (sal_Int32) ( cos( nStartAngle * F_PI18000 ) * 100.0 );
+                    aStart.Y = - (sal_Int32) ( sin( nStartAngle * F_PI18000 ) * 100.0 );
+                    aEnd.X =   (sal_Int32) ( cos( nEndAngle * F_PI18000 ) * 100.0 );
+                    aEnd.Y = - (sal_Int32) ( sin( nEndAngle * F_PI18000 ) * 100.0 ) ;
                     aCenter.X = aPoint.X + ( aSize.Width / 2 );
                     aCenter.Y = aPoint.Y + ( aSize.Height / 2 );
                     aStart.X += aCenter.X;

@@ -288,14 +288,14 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         OSQLParseNode* pLHS = parseTree->getChild( 0 );
         OSQLParseNode* pRHS = parseTree->getChild( 2 );
 
-        if  (   (   !( SQL_ISRULE( pLHS, column_ref ) )         // on the LHS, we accept a column or a constant int value
+        if  (   (   ! SQL_ISRULE( pLHS, column_ref )         // on the LHS, we accept a column or a constant int value
                 &&  ( pLHS->getNodeType() != SQLNodeType::IntNum )
                 )
             ||  (   ( pRHS->getNodeType() != SQLNodeType::String )  // on the RHS, certain literals are acceptable
                 &&  ( pRHS->getNodeType() != SQLNodeType::IntNum )
                 &&  ( pRHS->getNodeType() != SQLNodeType::ApproxNum )
-                &&  !( SQL_ISTOKEN( pRHS, TRUE ) )
-                &&  !( SQL_ISTOKEN( pRHS, FALSE ) )
+                &&  ! SQL_ISTOKEN( pRHS, TRUE )
+                &&  ! SQL_ISTOKEN( pRHS, FALSE )
                 )
             ||  (   ( pLHS->getNodeType() == SQLNodeType::IntNum )  // an int on LHS requires an int on RHS
                 &&  ( pRHS->getNodeType() != SQLNodeType::IntNum )
@@ -386,7 +386,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
             // We currently can't handle a 'NOT LIKE' when there are '%'
             m_pConnection->throwGenericSQLException(STR_QUERY_NOT_LIKE_TOO_COMPLEX,*this);
         }
-        else if( (aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) ) )
+        else if( aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) )
         {   // One occurrence of '%'  matches...
             if ( aMatchString.startsWith(OUStringLiteral1(WILDCARD)) )
                 pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );

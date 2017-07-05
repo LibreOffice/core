@@ -175,7 +175,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
                 rSubIncrements.realloc( 1 );
 
             double fStepHelp = 0;
-            if( (rOuterValue >>= fStepHelp) )
+            if( rOuterValue >>= fStepHelp )
             {
                 double fStepMain = 0;
                 if( AxisHelper::isLogarithmic(aScaleData.Scaling) )
@@ -265,7 +265,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         case SCALE_PROP_AXIS_TYPE:
         {
             sal_Int32 nType = 0;
-            if( (rOuterValue >>= nType) )
+            if( rOuterValue >>= nType )
             {
                 if( nType == css::chart::ChartAxisType::AUTOMATIC )
                 {
