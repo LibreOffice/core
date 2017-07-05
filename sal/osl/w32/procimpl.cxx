@@ -94,7 +94,7 @@ namespace /* private */
 
         void operator() (const rtl::OUString& string)
         {
-            OSL_ASSERT(string.getLength());
+            SAL_WARN_IF(string.getLength() == 0, "sal.osl", "string length is zero");
 
             // always include the terminating '\0'
             if (string.getLength())
@@ -144,7 +144,7 @@ namespace /* private */
         sal_uInt32 env_vars_count,
         /*in|out*/ string_container_t* merged_env)
     {
-        OSL_ASSERT(env_vars && env_vars_count > 0 && merged_env);
+        assert(env_vars && env_vars_count > 0 && merged_env);
 
         read_environment(merged_env);
 
@@ -198,7 +198,7 @@ namespace /* private */
         {
             rtl::OUString envv = *iter;
 
-            OSL_ASSERT(envv.getLength());
+            SAL_WARN_IF(envv.getLength() == 0, "sal.osl", "Empty environment variable");
 
             sal_uInt32 n = envv.getLength() + 1; // copy the final '\0', too
             memcpy(&environment[pos], envv.getStr(), n * sizeof(sal_Unicode));
@@ -366,7 +366,7 @@ namespace /* private */
         rtl::OUString comspec;
         osl_getEnvironment(ENV_COMSPEC.pData, &comspec.pData);
 
-        OSL_ASSERT(comspec.getLength());
+        SAL_WARN_IF(comspec.getLength() == 0, "sal.osl", "COMSPEC is empty");
 
         /* check if comspec path contains blanks and quote it if any */
         if (comspec.indexOf(' ') != -1)
