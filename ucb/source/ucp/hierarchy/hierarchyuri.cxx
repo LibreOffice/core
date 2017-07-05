@@ -49,7 +49,7 @@ void HierarchyUri::init() const
         m_aName.clear();
 
         // URI must match at least: <sheme>:
-        if ( ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 ) )
+        if ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 )
         {
             // error, but remember that we did a init().
             m_aPath = "/";
