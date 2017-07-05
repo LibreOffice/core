@@ -12,13 +12,15 @@
 #include <osl/diagnose.h>
 #include <system.hxx>
 
+#include <cassert>
+
 bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
 {
     sal_Int32 nToWrite = dataSize;
     unsigned char* dataToWrite = static_cast<unsigned char *>(data);
 
     // Check for overflow as we convert a signed to an unsigned.
-    OSL_ASSERT(dataSize == (sal_uInt32)nToWrite);
+    assert(dataSize == (sal_uInt32)nToWrite);
     while ( nToWrite ) {
         sal_Int32 nWritten = write(fd, dataToWrite, nToWrite);
         if ( nWritten < 0 ) {
@@ -29,7 +31,7 @@ bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
 
         }
 
-        OSL_ASSERT(nWritten > 0);
+        assert(nWritten > 0);
         nToWrite -= nWritten;
         dataToWrite += nWritten;
     }
@@ -43,7 +45,7 @@ bool safeRead( int fd, void* buffer, sal_uInt32 count )
     unsigned char* bufferForReading = static_cast<unsigned char *>(buffer);
 
     // Check for overflow as we convert a signed to an unsigned.
-    OSL_ASSERT(count == (sal_uInt32)nToRead);
+    assert(count == (sal_uInt32)nToRead);
     while ( nToRead ) {
         sal_Int32 nRead = read(fd, bufferForReading, nToRead);
         if ( nRead < 0 ) {
