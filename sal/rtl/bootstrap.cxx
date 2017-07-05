@@ -216,7 +216,7 @@ static void getExecutableDirectory_Impl (rtl_uString ** ppDirURL)
     osl_getExecutableFile(&(fileName.pData));
 
     sal_Int32 nDirEnd = fileName.lastIndexOf('/');
-    OSL_ENSURE(nDirEnd >= 0, "Cannot locate executable directory");
+    SAL_WARN_IF(nDirEnd < 0, "sal.rtl", "Cannot locate executable directory");
 
     rtl_uString_newFromStr_WithLength(ppDirURL,fileName.getStr(),nDirEnd);
 }
