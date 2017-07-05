@@ -1846,12 +1846,6 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 
 #else
     (void) pBuffer;
-    (void) nCanvasWidth;
-    (void) nCanvasHeight;
-    (void) nTilePosX;
-    (void) nTilePosY;
-    (void) nTileWidth;
-    (void) nTileHeight;
 #endif
 }
 
