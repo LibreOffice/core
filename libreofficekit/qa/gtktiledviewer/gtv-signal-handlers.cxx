@@ -325,4 +325,110 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
     gtv_application_window_set_zoom_label(GTV_APPLICATION_WINDOW(window), aZoom);
 }
 
+void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    GApplication* app = g_application_get_default();
+    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
+    LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
+
+    // Get the data.
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
+    char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
+    if (!pValues)
+        return;
+
+    std::stringstream aInfo;
+    aInfo << "lok::Document::getCommandValues('.uno:AcceptTrackedChanges') returned '" << pValues << "'" << std::endl;
+    g_info("%s", aInfo.str().c_str());
+    std::stringstream aStream(pValues);
+    free(pValues);
+    assert(!aStream.str().empty());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    // Create the dialog.
+    GtkWidget* pDialog = gtk_dialog_new_with_buttons("Manage Changes",
+                                                     GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+                                                     GTK_DIALOG_MODAL,
+                                                     "Accept",
+                                                     GTK_RESPONSE_YES,
+                                                     "Reject",
+                                                     GTK_RESPONSE_NO,
+                                                     "Jump",
+                                                     GTK_RESPONSE_APPLY,
+                                                     nullptr);
+    gtk_window_set_default_size(GTK_WINDOW(pDialog), 800, 600);
+    GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG (pDialog));
+    GtkWidget* pScrolledWindow = gtk_scrolled_window_new(nullptr, nullptr);
+
+    // Build the table.
+    GtkTreeStore* pTreeStore = gtk_tree_store_new(6, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    for (const auto& rValue : aTree.get_child("redlines"))
+    {
+        GtkTreeIter aTreeIter;
+        gtk_tree_store_append(pTreeStore, &aTreeIter, nullptr);
+        gtk_tree_store_set(pTreeStore, &aTreeIter,
+                           0, rValue.second.get<int>("index"),
+                           1, rValue.second.get<std::string>("author").c_str(),
+                           2, rValue.second.get<std::string>("type").c_str(),
+                           3, rValue.second.get<std::string>("comment").c_str(),
+                           4, rValue.second.get<std::string>("description").c_str(),
+                           5, rValue.second.get<std::string>("dateTime").c_str(),
+                           -1);
+    }
+    GtkWidget* pTreeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(pTreeStore));
+    std::vector<std::string> aColumns = {"Index", "Author", "Type", "Comment", "Description", "Timestamp"};
+    for (size_t nColumn = 0; nColumn < aColumns.size(); ++nColumn)
+    {
+        GtkCellRenderer* pRenderer = gtk_cell_renderer_text_new();
+        GtkTreeViewColumn* pColumn = gtk_tree_view_column_new_with_attributes(aColumns[nColumn].c_str(),
+                                                                              pRenderer,
+                                                                              "text", nColumn,
+                                                                              nullptr);
+        gtk_tree_view_append_column(GTK_TREE_VIEW(pTreeView), pColumn);
+    }
+    gtk_container_add(GTK_CONTAINER(pScrolledWindow), pTreeView);
+    gtk_box_pack_start(GTK_BOX(pContentArea), pScrolledWindow, TRUE, TRUE, 2);
+
+    // Show the dialog.
+    gtk_widget_show_all(pDialog);
+    gint res = gtk_dialog_run(GTK_DIALOG(pDialog));
+
+    // Dispatch the matching command, if necessary.
+    if (res == GTK_RESPONSE_YES || res == GTK_RESPONSE_NO || res == GTK_RESPONSE_APPLY)
+    {
+        GtkTreeSelection* pSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(pTreeView));
+        GtkTreeIter aTreeIter;
+        GtkTreeModel* pTreeModel;
+        if (gtk_tree_selection_get_selected(pSelection, &pTreeModel, &aTreeIter))
+        {
+            gint nIndex = 0;
+            // 0: index
+            gtk_tree_model_get(pTreeModel, &aTreeIter, 0, &nIndex, -1);
+            std::string aCommand;
+            if (res == GTK_RESPONSE_YES)
+                aCommand = ".uno:AcceptTrackedChange";
+            else if (res == GTK_RESPONSE_NO)
+                aCommand = ".uno:RejectTrackedChange";
+            else
+                // Just select the given redline, don't accept or reject it.
+                aCommand = ".uno:NextTrackedChange";
+            // Without the '.uno:' prefix.
+            std::string aKey = aCommand.substr(strlen(".uno:"));
+
+            // Post the command.
+            boost::property_tree::ptree aCommandTree;
+            aCommandTree.put(boost::property_tree::ptree::path_type(aKey + "/type", '/'), "unsigned short");
+            aCommandTree.put(boost::property_tree::ptree::path_type(aKey + "/value", '/'), nIndex);
+
+            aStream.str(std::string());
+            boost::property_tree::write_json(aStream, aCommandTree);
+            std::string aArguments = aStream.str();
+            lok_doc_view_post_command(pDocView, aCommand.c_str(), aArguments.c_str(), false);
+        }
+    }
+
+    gtk_widget_destroy(pDialog);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
