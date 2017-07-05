@@ -11,6 +11,17 @@ Work around -fsanitize=bool and -fsanitize=nonnull-attribute
              {}
  
              //! Constructor
+--- boost/circular_buffer/base.hpp
++++ boost/circular_buffer/base.hpp
+@@ -2355,7 +2355,7 @@
+     //! Add <code>n</code> to the pointer.
+     template <class Pointer>
+     Pointer add(Pointer p, difference_type n) const {
+-        return p + (n < (m_end - p) ? n : n - capacity());
++        return p + (n < (m_end - p) ? n : difference_type(n - capacity()));
+     }
+ 
+     //! Subtract <code>n</code> from the pointer.
 --- boost/circular_buffer/debug.hpp
 +++ boost/circular_buffer/debug.hpp
 @@ -34,7 +34,7 @@
