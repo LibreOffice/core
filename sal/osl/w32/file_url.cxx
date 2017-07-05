@@ -777,7 +777,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
             {
                 case PATHTYPE_ABSOLUTE_UNC:
                     nIgnore = SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX_UNC ) - 1;
-                    OSL_ENSURE( nIgnore == 8, "Unexpected long path UNC prefix!" );
+                    SAL_WARN_IF(nIgnore != 8, "sal.file", "Unexpected long path UNC prefix!" );
 
                     /* generate the normal UNC path */
                     nLength = rtl_uString_getLength( strPath );
@@ -790,7 +790,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
 
                 case PATHTYPE_ABSOLUTE_LOCAL:
                     nIgnore = SAL_N_ELEMENTS( WSTR_LONG_PATH_PREFIX ) - 1;
-                    OSL_ENSURE( nIgnore == 4, "Unexpected long path prefix!" );
+                    SAL_WARN_IF(nIgnore != 4, "sal.file", "Unexpected long path prefix!" );
 
                     /* generate the normal path */
                     nLength = rtl_uString_getLength( strPath );
@@ -955,14 +955,16 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
     if ( ustrBaseURL && ustrBaseURL->length )
     {
         eError = osl_getSystemPathFromFileURL_( ustrBaseURL, &ustrBaseSysPath, false );
-        OSL_ENSURE( osl_File_E_None == eError, "osl_getAbsoluteFileURL called with relative or invalid base URL" );
+        SAL_WARN_IF(eError != osl_File_E_None,
+                "sal.file", "osl_getAbsoluteFileURL called with relative or invalid base URL");
 
         eError = osl_getSystemPathFromFileURL_( ustrRelativeURL, &ustrRelSysPath, true );
     }
     else
     {
         eError = osl_getSystemPathFromFileURL_( ustrRelativeURL, &ustrRelSysPath, false );
-        OSL_ENSURE( osl_File_E_None == eError, "osl_getAbsoluteFileURL called with empty base URL and/or invalid relative URL" );
+        SAL_WARN_IF(eError != osl_File_E_None,
+                "sal.file", "osl_getAbsoluteFileURL called with empty base URL and/or invalid relative URL");
     }
 
     if ( !eError )
