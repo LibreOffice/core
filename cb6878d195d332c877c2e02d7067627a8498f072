@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "3a461143_d89a53c5",
+        "filename": "editeng/source/xml/xmltxtimp.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-05T13:43:21Z",
+      "side": 1,
+      "message": "i think that before ConnectParagraphs the ParaAttribsToCharAttribs needs to be called on the paragraph that will be deleted.\n\nat least i can\u0027t find where it would be called *by* ConnectParagraphs.\n\nbut maybe i\u0027m wrong, maybe you can find evidence of this being handled...",
+      "revId": "cb6878d195d332c877c2e02d7067627a8498f072",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_b81ae76c",
         "filename": "editeng/source/xml/xmltxtimp.cxx",
         "patchSetId": 23
