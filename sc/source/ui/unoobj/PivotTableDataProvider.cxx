@@ -460,11 +460,8 @@ void PivotTableDataProvider::collectPivotTableData()
                             {
                                 if (!bHasContinueFlag)
                                 {
-                                    double fValue = rMember.Value;
-                                    if (rtl::math::isNan(fValue))
-                                        pItem.reset(new ValueAndFormat(rMember.Caption));
-                                    else
-                                        pItem.reset(new ValueAndFormat(fValue, nNumberFormat));
+                                    // Chart2 does not use number format for labels, so use the display string.
+                                    pItem.reset(new ValueAndFormat(rMember.Caption));
                                 }
 
                                 if (bFound)
