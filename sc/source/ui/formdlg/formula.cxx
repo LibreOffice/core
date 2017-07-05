@@ -338,13 +338,16 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
     {
         SvNumberFormatter& aFormatter = *(m_pDoc->GetFormatTable());
         Color* pColor;
-        if ( pFCell->IsValue() )
+        if (pFCell->IsMatrix())
+        {
+            rStrResult = pFCell->GetString().getString();
+        }
+        else if (pFCell->IsValue())
         {
             double n = pFCell->GetValue();
             sal_uLong nFormat = aFormatter.GetStandardFormat( n, 0,
                             pFCell->GetFormatType(), ScGlobal::eLnge );
-            aFormatter.GetOutputString( n, nFormat,
-                                        rStrResult, &pColor );
+            aFormatter.GetOutputString( n, nFormat, rStrResult, &pColor );
         }
         else
         {
@@ -352,6 +355,11 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
                             pFCell->GetFormatType(), ScGlobal::eLnge);
             aFormatter.GetOutputString( pFCell->GetString().getString(), nFormat,
                                         rStrResult, &pColor );
+            // Indicate it's a string, so a number string doesn't look numeric.
+            // Escape embedded quotation marks first by doubling them, as
+            // usual. Actually the result can be copy-pasted from the result
+            // box as literal into a formula expression.
+            rStrResult = "\"" + rStrResult.replaceAll( "\"", "\"\"") + "\"";
         }
 
         ScRange aTestRange;
