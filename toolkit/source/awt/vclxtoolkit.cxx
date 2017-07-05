@@ -1821,8 +1821,8 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
                 i, css::uno::UNO_QUERY);
             try
             {
-                if ((bPressed ? xHandler->keyPressed(aAwtEvent)
-                      : xHandler->keyReleased(aAwtEvent)))
+                if (bPressed ? xHandler->keyPressed(aAwtEvent)
+                             : xHandler->keyReleased(aAwtEvent))
                     return true;
             }
             catch (const css::uno::RuntimeException & rEx)

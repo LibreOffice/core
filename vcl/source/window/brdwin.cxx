@@ -1583,13 +1583,13 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
     mbSmallOutBorder    = false;
     if ( nTypeStyle & BorderWindowStyle::Frame )
     {
-        if( (nStyle & WB_SYSTEMCHILDWINDOW) )
+        if( nStyle & WB_SYSTEMCHILDWINDOW )
         {
             mpWindowImpl->mbOverlapWin  = true;
             mpWindowImpl->mbFrame       = true;
             mbFrameBorder               = false;
         }
-        else if( (nStyle & (WB_OWNERDRAWDECORATION | WB_POPUP)) )
+        else if( nStyle & (WB_OWNERDRAWDECORATION | WB_POPUP) )
         {
             mpWindowImpl->mbOverlapWin  = true;
             mpWindowImpl->mbFrame       = true;

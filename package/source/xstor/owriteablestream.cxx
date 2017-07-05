@@ -483,7 +483,7 @@ void OWriteStream_Impl::DisposeWrappers()
         for ( InputStreamsList_Impl::iterator pStreamIter = m_aInputStreamsList.begin();
               pStreamIter != m_aInputStreamsList.end(); ++pStreamIter )
         {
-            if ( (*pStreamIter) )
+            if ( *pStreamIter )
             {
                 (*pStreamIter)->InternalDispose();
                 (*pStreamIter) = nullptr;

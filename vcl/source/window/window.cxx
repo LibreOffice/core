@@ -962,7 +962,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
          && (nStyle & (WB_BORDER | WB_SYSTEMCHILDWINDOW) ) )
     {
         BorderWindowStyle nBorderTypeStyle = BorderWindowStyle::NONE;
-        if( (nStyle & WB_SYSTEMCHILDWINDOW) )
+        if( nStyle & WB_SYSTEMCHILDWINDOW )
         {
             // handle WB_SYSTEMCHILDWINDOW
             // these should be analogous to a top level frame; meaning they
@@ -1985,9 +1985,9 @@ void Window::SetExtendedStyle( WinBits nExtendedStyle )
         if( pWindow->mpWindowImpl->mbFrame )
         {
             SalExtStyle nExt = 0;
-            if( (nExtendedStyle & WB_EXT_DOCUMENT) )
+            if( nExtendedStyle & WB_EXT_DOCUMENT )
                 nExt |= SAL_FRAME_EXT_STYLE_DOCUMENT;
-            if( (nExtendedStyle & WB_EXT_DOCMODIFIED) )
+            if( nExtendedStyle & WB_EXT_DOCMODIFIED )
                 nExt |= SAL_FRAME_EXT_STYLE_DOCMODIFIED;
 
             pWindow->ImplGetFrame()->SetExtendedFrameStyle( nExt );

@@ -97,11 +97,11 @@ static GDBusConnection* pSessionBus = nullptr;
 static sal_uInt16 GetKeyModCode( guint state )
 {
     sal_uInt16 nCode = 0;
-    if( (state & GDK_SHIFT_MASK) )
+    if( state & GDK_SHIFT_MASK )
         nCode |= KEY_SHIFT;
-    if( (state & GDK_CONTROL_MASK) )
+    if( state & GDK_CONTROL_MASK )
         nCode |= KEY_MOD1;
-    if( (state & GDK_MOD1_MASK) )
+    if( state & GDK_MOD1_MASK )
         nCode |= KEY_MOD2;
 
     // Map Meta/Super keys to MOD3 modifier on all Unix systems
@@ -114,11 +114,11 @@ static sal_uInt16 GetKeyModCode( guint state )
 static sal_uInt16 GetMouseModCode( guint state )
 {
     sal_uInt16 nCode = GetKeyModCode( state );
-    if( (state & GDK_BUTTON1_MASK) )
+    if( state & GDK_BUTTON1_MASK )
         nCode |= MOUSE_LEFT;
-    if( (state & GDK_BUTTON2_MASK) )
+    if( state & GDK_BUTTON2_MASK )
         nCode |= MOUSE_MIDDLE;
-    if( (state & GDK_BUTTON3_MASK) )
+    if( state & GDK_BUTTON3_MASK )
         nCode |= MOUSE_RIGHT;
 
     return nCode;
@@ -1852,7 +1852,7 @@ bool GtkSalFrame::GetWindowState( SalFrameState* pState )
     pState->mnState = WindowStateState::Normal;
     pState->mnMask  = WindowStateMask::State;
     // rollup ? gtk 2.2 does not seem to support the shaded state
-    if( (m_nState & GDK_WINDOW_STATE_ICONIFIED) )
+    if( m_nState & GDK_WINDOW_STATE_ICONIFIED )
         pState->mnState |= WindowStateState::Minimized;
     if( m_nState & GDK_WINDOW_STATE_MAXIMIZED )
     {

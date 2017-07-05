@@ -239,7 +239,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     if ( xInputStream.is() )
     {
         // if xInputStream is set the storage should be open from it
-        if ( ( nStorageMode & embed::ElementModes::WRITE ) )
+        if ( nStorageMode & embed::ElementModes::WRITE )
               throw uno::Exception(); // TODO: access denied
 
         uno::Reference< io::XSeekable > xSeekable( xInputStream, uno::UNO_QUERY );

@@ -199,7 +199,7 @@ XSECXMLSEC_DLLPUBLIC int xmlRegisterStreamInputCallbacks(
 
 XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks()
 {
-    if( ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
+    if( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) {
         //Clear the uri-stream binding
         m_xUriBinding.clear() ;
 

@@ -393,7 +393,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
             if ( !xResult.is() )
                 throw io::IOException();
 
-            if ( ( nOpenMode & embed::ElementModes::TRUNCATE ) )
+            if ( nOpenMode & embed::ElementModes::TRUNCATE )
             {
                 uno::Reference< io::XTruncate > xTrunc( xResult->getOutputStream(), uno::UNO_QUERY_THROW );
                 xTrunc->truncate();
@@ -495,7 +495,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
                     MakeFolderNoUI( aFolderURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ); // TODO: not atomic :(
             }
         }
-        else if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )
+        else if ( nStorageMode & embed::ElementModes::TRUNCATE )
             throw io::IOException(); // TODO: access denied
 
         if ( !bFolderExists )
@@ -1235,7 +1235,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
             if ( !xResult.is() )
                 throw io::IOException();
 
-            if ( ( nOpenMode & embed::ElementModes::TRUNCATE ) )
+            if ( nOpenMode & embed::ElementModes::TRUNCATE )
             {
                 uno::Reference< io::XTruncate > xTrunc( xResult->getOutputStream(), uno::UNO_QUERY_THROW );
                 xTrunc->truncate();

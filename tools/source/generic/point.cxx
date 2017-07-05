@@ -30,7 +30,7 @@ void Point::RotateAround( long& rX, long& rY,
 
     if ( (nOrientation >= 0) && !(nOrientation % 900) )
     {
-        if ( (nOrientation >= 3600) )
+        if ( nOrientation >= 3600 )
             nOrientation %= 3600;
 
         if ( nOrientation )

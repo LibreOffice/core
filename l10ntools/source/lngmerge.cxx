@@ -220,7 +220,7 @@ bool LngParser::Merge(
                     sSearch += sLang;
                     sSearch += ";";
 
-                    if (( sLanguagesDone.indexOf( sSearch ) != -1 )) {
+                    if ( sLanguagesDone.indexOf( sSearch ) != -1 ) {
                         LngLineList::iterator it = pLines->begin();
                         std::advance( it, nPos );
                         pLines->erase( it );

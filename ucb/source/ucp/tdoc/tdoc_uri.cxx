@@ -43,7 +43,7 @@ void Uri::init() const
         m_eState = INVALID;
 
         // Check for proper length: must be at least length of <sheme>:/
-        if ( ( m_aUri.getLength() < TDOC_URL_SCHEME_LENGTH + 2 ) )
+        if ( m_aUri.getLength() < TDOC_URL_SCHEME_LENGTH + 2 )
         {
             // Invalid length (to short).
             return;

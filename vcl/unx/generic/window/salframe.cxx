@@ -626,7 +626,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                     pFrame->GetShellWindow() );
                 if( pWMHints )
                 {
-                    if( (pWMHints->flags & WindowGroupHint) )
+                    if( pWMHints->flags & WindowGroupHint )
                     {
                         Hints.flags |= WindowGroupHint;
                         Hints.window_group = pWMHints->window_group;
@@ -2543,7 +2543,7 @@ static sal_uInt16 sal_GetCode( int state )
 
     // Map Meta/Super modifier to MOD3 on all Unix systems
     // except Mac OS X
-    if( (state & Mod3Mask) )
+    if( state & Mod3Mask )
         nCode |= KEY_MOD3;
 
     return nCode;

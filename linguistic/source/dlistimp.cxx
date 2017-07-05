@@ -181,11 +181,11 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
                 | DictionaryListEventFlags::ACTIVATE_NEG_DIC :
             DictionaryListEventFlags::DEACTIVATE_POS_DIC
                 | DictionaryListEventFlags::ACTIVATE_POS_DIC;
-    if ((rDicEvent.nEvent & DictionaryEventFlags::ACTIVATE_DIC))
+    if (rDicEvent.nEvent & DictionaryEventFlags::ACTIVATE_DIC)
         nCondensedEvt |= eDicType == DictionaryType_NEGATIVE ?
             DictionaryListEventFlags::ACTIVATE_NEG_DIC :
             DictionaryListEventFlags::ACTIVATE_POS_DIC;
-    if ((rDicEvent.nEvent & DictionaryEventFlags::DEACTIVATE_DIC))
+    if (rDicEvent.nEvent & DictionaryEventFlags::DEACTIVATE_DIC)
         nCondensedEvt |= eDicType == DictionaryType_NEGATIVE ?
             DictionaryListEventFlags::DEACTIVATE_NEG_DIC :
             DictionaryListEventFlags::DEACTIVATE_POS_DIC;

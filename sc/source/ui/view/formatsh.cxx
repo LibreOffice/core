@@ -1050,7 +1050,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
         }
         break;
         case SID_NUMBER_SCIENTIFIC:
-            if ((nType & css::util::NumberFormat::SCIENTIFIC))
+            if (nType & css::util::NumberFormat::SCIENTIFIC)
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
             else
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::SCIENTIFIC );
@@ -1059,7 +1059,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             rReq.Done();
             break;
         case SID_NUMBER_DATE:
-            if ((nType & css::util::NumberFormat::DATE))
+            if (nType & css::util::NumberFormat::DATE)
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
             else
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::DATE );
@@ -1068,7 +1068,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             rReq.Done();
             break;
         case SID_NUMBER_TIME:
-            if ((nType & css::util::NumberFormat::TIME))
+            if (nType & css::util::NumberFormat::TIME)
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
             else
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::TIME );
@@ -1109,7 +1109,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             }
             else
             {
-                if ( ( nType & css::util::NumberFormat::CURRENCY ) )
+                if ( nType & css::util::NumberFormat::CURRENCY )
                     pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
                 else
                     pTabViewShell->SetNumberFormat( css::util::NumberFormat::CURRENCY );
@@ -1118,7 +1118,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             rReq.Done();
             break;
         case SID_NUMBER_PERCENT:
-            if ((nType & css::util::NumberFormat::PERCENT))
+            if (nType & css::util::NumberFormat::PERCENT)
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
             else
                 pTabViewShell->SetNumberFormat( css::util::NumberFormat::PERCENT );

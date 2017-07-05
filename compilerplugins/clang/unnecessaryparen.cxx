@@ -31,6 +31,13 @@ public:
 
     virtual void run() override
     {
+        StringRef fn( compiler.getSourceManager().getFileEntryForID(
+                          compiler.getSourceManager().getMainFileID())->getName() );
+        // fixing this makes the source in the .y files look horrible
+        if (loplugin::hasPathnamePrefix(fn, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx"))
+             return;
+        if (loplugin::hasPathnamePrefix(fn, WORKDIR "/YaccTarget/idlc/source/parser.cxx"))
+             return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
@@ -45,7 +52,7 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
     if (parenExpr->getLocStart().isMacroID())
         return true;
 
-    auto subParenExpr = dyn_cast<ParenExpr>(parenExpr->getSubExpr());
+    auto subParenExpr = dyn_cast<ParenExpr>(parenExpr->getSubExpr()->IgnoreImpCasts());
     if (subParenExpr) {
         if (subParenExpr->getLocStart().isMacroID())
             return true;
@@ -62,7 +69,7 @@ bool UnnecessaryParen::VisitIfStmt(const IfStmt* ifStmt)
     if (ignoreLocation(ifStmt))
         return true;
 
-    if (auto parenExpr = dyn_cast<ParenExpr>(ifStmt->getCond())) {
+    if (auto parenExpr = dyn_cast<ParenExpr>(ifStmt->getCond()->IgnoreImpCasts())) {
         if (parenExpr->getLocStart().isMacroID())
             return true;
         // assignments need extra parentheses or they generate a compiler warning

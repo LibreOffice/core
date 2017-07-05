@@ -3176,7 +3176,7 @@ void CheckBox::ImplCheck()
     meState = eNewState;
 
     VclPtr<vcl::Window> xWindow = this;
-    if( (GetStyle() & WB_EARLYTOGGLE) )
+    if( GetStyle() & WB_EARLYTOGGLE )
         Toggle();
     Invalidate();
     Update();
