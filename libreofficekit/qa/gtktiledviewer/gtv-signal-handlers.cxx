@@ -255,4 +255,15 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
     gtk_widget_destroy(pUnoCmdDialog);
 }
 
+void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    GApplication* app = g_application_get_default();
+    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
+    LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
+
+    bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pButton));
+    if (bool(lok_doc_view_get_edit(pDocView)) != bActive)
+        lok_doc_view_set_edit(pDocView, bActive);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
