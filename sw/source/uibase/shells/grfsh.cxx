@@ -132,11 +132,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         case SID_SAVE_GRAPHIC:
         {
             GraphicAttr aGraphicAttr;
-            const GraphicObject* pGraphicObj = rSh.GetGraphicObj();
-            if (pGraphicObj)
-            {
-                rSh.GetGraphicAttr(aGraphicAttr);
-            }
+            rSh.GetGraphicAttr(aGraphicAttr);
 
             short nState = RET_CANCEL;
             if (aGraphicAttr != GraphicAttr()) // the image has been modified
@@ -154,11 +150,15 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             if (nState == RET_YES)
             {
-                Graphic aGraphic = pGraphicObj->GetTransformedGraphic(pGraphicObj->GetPrefSize(), pGraphicObj->GetPrefMapMode(), aGraphicAttr);
-                OUString sGrfNm;
-                OUString sFilterNm;
-                rSh.GetGrfNms( &sGrfNm, &sFilterNm );
-                GraphicHelper::ExportGraphic( aGraphic, sGrfNm );
+                const GraphicObject* pGraphicObj = rSh.GetGraphicObj();
+                if (pGraphicObj)
+                {
+                    Graphic aGraphic = pGraphicObj->GetTransformedGraphic(pGraphicObj->GetPrefSize(), pGraphicObj->GetPrefMapMode(), aGraphicAttr);
+                    OUString sGrfNm;
+                    OUString sFilterNm;
+                    rSh.GetGrfNms( &sGrfNm, &sFilterNm );
+                    GraphicHelper::ExportGraphic( aGraphic, sGrfNm );
+                }
             }
             else if (nState == RET_NO)
             {
