@@ -19,9 +19,9 @@
 
 #include <sal/config.h>
 
-#include "osl/file.h"
+#include <sal/log.hxx>
 
-#include "osl/diagnose.h"
+#include "osl/file.h"
 #include "osl/thread.h"
 #include "rtl/alloc.h"
 
@@ -71,6 +71,8 @@
 #include <sys/mount.h>
 #define HAVE_STATFS_H
 
+#include <cassert>
+
 #endif /* HAVE_STATFS_H */
 
 /************************************************************************
@@ -97,8 +99,9 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
     char path[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrDirectoryURL );
-    OSL_ASSERT( pInfo );
+    SAL_WARN_IF((!ustrDirectoryURL) || (ustrDirectoryURL->length == 0),
+                "sal.file", "Invalid directory URL");
+    SAL_WARN_IF(!pInfo, "sal.file", "pInfo is nullptr");
 
     /* convert directory url to system path */
     eRet = FileURLToPath( path, PATH_MAX, ustrDirectoryURL );
@@ -284,7 +287,8 @@ static oslFileError osl_psz_getVolumeInformation (
                 rtl_str_getLength(OSL_detail_STATFS_TYPENAME(sfs)),
                 osl_getThreadTextEncoding(),
                 OUSTRING_TO_OSTRING_CVTFLAGS);
-            OSL_ASSERT(pInfo->ustrFileSystemName != nullptr);
+
+            assert(pInfo->ustrFileSystemName);
 
             pInfo->uValidFields |= osl_VolumeInfo_Mask_FileSystemName;
         }
