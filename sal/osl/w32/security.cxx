@@ -484,7 +484,8 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
 
                 if ( !GetSpecialFolder( &ustrFile, CSIDL_APPDATA) )
                 {
-                    OSL_VERIFY(GetWindowsDirectoryW(SAL_W(sFile), _MAX_DIR) > 0);
+                    SAL_WARN_IF(GetWindowsDirectoryW(SAL_W(sFile), _MAX_DIR) == 0,
+                            "sal.osl", "cannot retrieve path of Windows directory");
 
                     rtl_uString_newFromStr( &ustrFile, sFile);
                 }

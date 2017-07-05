@@ -173,16 +173,14 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
     osl_TProfileImpl* pProfile;
     rtl_uString       *FileName=nullptr;
 
-    OSL_VERIFY(strProfileName);
+    assert(strProfileName);
 
-    if (rtl_uString_getLength(strProfileName) == 0 )
-    {
-        OSL_VERIFY(osl_getProfileName(nullptr, nullptr, &FileName));
-    }
-    else
-    {
+    SAL_WARN_IF((rtl_uString_getLength(strProfileName) == 0) &&
+                !(osl_getProfileName(nullptr, nullptr, &FileName)),
+                "sal.osl", "invalid profile name");
+
+    if (rtl_uString_getLength(strProfileName) > 0)
         rtl_uString_assign(&FileName, strProfileName);
-    }
 
     osl_getSystemPathFromFileURL(FileName, &FileName);
 
@@ -1601,7 +1599,7 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
     pProfile->m_NoLines    = 0;
     pProfile->m_NoSections = 0;
 
-    OSL_VERIFY(rewindFile(pFile, false));
+    SAL_WARN_IF(rewindFile(pFile, false), "sal.osl", "cannot rewind file");
 
     while (getLine(pFile, Line, sizeof(Line)))
     {
@@ -1657,12 +1655,15 @@ static bool storeProfile(osl_TProfileImpl* pProfile, bool bCleanup)
                 return false;
             }
 
-            OSL_VERIFY(rewindFile(pTmpFile, true));
+            SAL_WARN_IF(rewindFile(pTmpFile, true), "sal.osl", "cannot rewind file");
 
+#if OSL_DEBUG_LEVEL > 0
             for (i = 0; i < pProfile->m_NoLines; i++)
             {
-                OSL_VERIFY(putLine(pTmpFile, pProfile->m_Lines[i]));
+                SAL_WARN_IF(putLine(pTmpFile, pProfile->m_Lines[i]),
+                            "sal.osl", "Cannot write line " << i << " to temp profile");
             }
+#endif
 
             if ( ! writeProfileImpl(pTmpFile) )
             {

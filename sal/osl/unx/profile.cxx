@@ -725,7 +725,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile,
 
     if ( !pTmpProfile->m_bIsValid )
     {
-        SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid"); 
+        SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid");
 
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
@@ -807,7 +807,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile,
 
     if ( !pTmpProfile->m_bIsValid )
     {
-        SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid"); 
+        SAL_WARN_IF(!pTmpProfile->m_bIsValid, "sal.osl", "!pTmpProfile->m_bIsValid");
         pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
 
         return 0;
@@ -1540,7 +1540,8 @@ static bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
     pProfile->m_NoLines    = 0;
     pProfile->m_NoSections = 0;
 
-    OSL_VERIFY(OslProfile_rewindFile(pFile, false));
+    SAL_WARN_IF(OslProfile_rewindFile(pFile, false),
+                "sal.osl", "cannot rewind file");
 
     while ( ( pLine=OslProfile_getLine(pFile) ) != nullptr )
     {
@@ -1608,13 +1609,16 @@ static bool storeProfile(osl_TProfileImpl* pProfile, bool bCleanup)
                 return false;
             }
 
-            OSL_VERIFY(OslProfile_rewindFile(pTmpFile, true));
+            SAL_WARN_IF(OslProfile_rewindFile(pTmpFile, true),
+                        "sal.osl", "cannot rewind file");
 
+#if OSL_DEBUG_LEVEL > 0
             for ( i = 0 ; i < pProfile->m_NoLines ; i++ )
             {
-                OSL_VERIFY(OslProfile_putLine(pTmpFile, pProfile->m_Lines[i]));
+                SAL_WARN_IF(OslProfile_putLine(pTmpFile, pProfile->m_Lines[i]),
+                        "sal.osl", "cannot write line " << i << " to temp profile");
             }
-
+#endif
             if ( ! writeProfileImpl(pTmpFile) )
             {
                 if ( pTmpFile->m_pWriteBuf != nullptr )
