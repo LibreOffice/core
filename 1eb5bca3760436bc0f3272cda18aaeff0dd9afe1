@@ -70,6 +70,30 @@
       "revId": "1eb5bca3760436bc0f3272cda18aaeff0dd9afe1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_180cdb93",
+        "filename": "sal/osl/unx/file_stat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-05T18:55:05Z",
+      "side": 1,
+      "message": "Gerrit might be on vacation (summer in the northern hemisphere), together with Jenkins it seems. :)",
+      "parentUuid": "3a461143_58f8237d",
+      "range": {
+        "startLine": 192,
+        "startChar": 20,
+        "endLine": 192,
+        "endChar": 21
+      },
+      "revId": "1eb5bca3760436bc0f3272cda18aaeff0dd9afe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
