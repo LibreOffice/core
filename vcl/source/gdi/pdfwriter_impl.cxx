@@ -61,6 +61,7 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
+#include <svl/cryptosign.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -7140,7 +7141,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
 
 bool PDFWriterImpl::finalizeSignature()
 {
-
     if (!m_aContext.SignCertificate.is())
         return false;
 
@@ -7244,31 +7244,26 @@ bool PDFWriterImpl::finalizeSignature()
         return false;
     }
 
-    OStringBuffer cms_hexbuffer;
-    PDFWriter::PDFSignContext aSignContext(cms_hexbuffer);
-    aSignContext.m_pDerEncoded = n_derArray;
-    aSignContext.m_nDerEncoded = n_derLength;
-    aSignContext.m_pByteRange1 = buffer1.get();
-    aSignContext.m_nByteRange1 = bytesRead1;
-    aSignContext.m_pByteRange2 = buffer2.get();
-    aSignContext.m_nByteRange2 = bytesRead2;
-    aSignContext.m_aSignTSA = m_aContext.SignTSA;
-    aSignContext.m_aSignPassword = m_aContext.SignPassword;
-    if (!PDFWriter::Sign(aSignContext))
+    OStringBuffer aCMSHexBuffer;
+    svl::crypto::Signing aSigning(m_aContext.SignCertificate);
+    aSigning.AddDataRange(buffer1.get(), bytesRead1);
+    aSigning.AddDataRange(buffer2.get(), bytesRead2);
+    aSigning.SetSignTSA(m_aContext.SignTSA);
+    aSigning.SetSignPassword(m_aContext.SignPassword);
+    if (!aSigning.Sign(aCMSHexBuffer))
     {
         SAL_WARN("vcl.pdfwriter", "PDFWriter::Sign() failed");
         return false;
     }
 
-    assert(cms_hexbuffer.getLength() <= MAX_SIGNATURE_CONTENT_LENGTH);
+    assert(aCMSHexBuffer.getLength() <= MAX_SIGNATURE_CONTENT_LENGTH);
 
     // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
     nWritten = 0;
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset)) );
-    m_aFile.write(cms_hexbuffer.getStr(), cms_hexbuffer.getLength(), nWritten);
+    m_aFile.write(aCMSHexBuffer.getStr(), aCMSHexBuffer.getLength(), nWritten);
 
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
-
     return true;
 #endif
 }
