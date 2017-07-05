@@ -40,7 +40,7 @@ oslMutex SAL_CALL osl_createMutex(void)
 
     pMutexImpl = static_cast<CRITICAL_SECTION *>(calloc(sizeof(CRITICAL_SECTION), 1));
 
-    OSL_ASSERT(pMutexImpl); /* alloc successful? */
+    assert(pMutexImpl); /* alloc successful? */
 
     InitializeCriticalSection(pMutexImpl);
 
@@ -68,7 +68,7 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
 
-    OSL_ASSERT(Mutex);
+    assert(Mutex);
 
     EnterCriticalSection(pMutexImpl);
 
@@ -82,7 +82,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
 
-    OSL_ASSERT(Mutex);
+    assert(Mutex);
 
     return TryEnterCriticalSection(pMutexImpl) != FALSE;
 }
@@ -94,7 +94,7 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
 
-    OSL_ASSERT(Mutex);
+    assert(Mutex);
 
     LeaveCriticalSection(pMutexImpl);
 
