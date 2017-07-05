@@ -49,10 +49,8 @@ oslCondition SAL_CALL osl_createCondition(void)
 /*****************************************************************************/
 void SAL_CALL osl_destroyCondition(oslCondition Condition)
 {
-    if(Condition)
-    {
-        OSL_VERIFY(CloseHandle(Condition));
-    }
+    if (Condition)
+        CloseHandle(Condition);
 }
 
 /*****************************************************************************/
