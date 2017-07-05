@@ -57,25 +57,25 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
 
     h = LoadLibraryW(reinterpret_cast<LPCWSTR>(Module->buffer));
 
-    if (h == nullptr)
+    if (!h)
         h = LoadLibraryExW(reinterpret_cast<LPCWSTR>(Module->buffer), nullptr,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
 
-    //In case of long path names (\\?\c:\...) try to shorten the filename.
-    //LoadLibrary cannot handle file names which exceed 260 letters.
-    //In case the path is to long, the function will fail. However, the error
-    //code can be different. For example, it returned  ERROR_FILENAME_EXCED_RANGE
-    //on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
-    if (h == nullptr && Module->length > 260)
+    // In case of long path names (\\?\c:\...) try to shorten the filename.
+    // LoadLibrary cannot handle file names which exceed 260 letters.
+    // In case the path is to long, the function will fail. However, the error
+    // code can be different. For example, it returned  ERROR_FILENAME_EXCED_RANGE
+    // on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
+    if (!h && Module->length > 260)
     {
         std::vector<WCHAR> vec(Module->length + 1);
         DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
                                       reinterpret_cast<LPWSTR>(&vec[0]), Module->length + 1);
-        if (len )
+        if (len)
         {
             h = LoadLibraryW(reinterpret_cast<LPWSTR>(&vec[0]));
 
-            if (h == nullptr)
+            if (!h)
                 h = LoadLibraryExW(reinterpret_cast<LPWSTR>(&vec[0]), nullptr,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
         }
@@ -103,9 +103,8 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 )
     OSL_ASSERT(pModuleName);
 
     h = LoadLibrary(pModuleName);
-    if (h == nullptr)
-        h = LoadLibraryEx(pModuleName, nullptr,
-                                  LOAD_WITH_ALTERED_SEARCH_PATH);
+    if (!h)
+        h = LoadLibraryEx(pModuleName, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
 
     ret = static_cast<oslModule>(h);
     SetErrorMode(errorMode);
@@ -323,7 +322,9 @@ static bool SAL_CALL osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustr
                     rtl_uString_release( ustrSysPath );
                 }
                 else
+                {
                     bSuccess = false;
+                }
             }
 
             lpfnSymCleanup( GetCurrentProcess() );

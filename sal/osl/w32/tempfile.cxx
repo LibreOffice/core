@@ -78,7 +78,7 @@ static oslFileError osl_setup_createTempFile_impl_(
 
     OSL_PRECOND(((pHandle != nullptr) || (ppustrTempFileURL != nullptr)), "Invalid parameter!");
 
-    if ((pHandle == nullptr) && (ppustrTempFileURL == nullptr))
+    if (!pHandle && !ppustrTempFileURL)
     {
         osl_error = osl_File_E_INVAL;
     }
@@ -87,7 +87,7 @@ static oslFileError osl_setup_createTempFile_impl_(
         osl_error = osl_setup_base_directory_impl_(
             pustrDirectoryURL, ppustr_base_dir);
 
-        *b_delete_on_close = (ppustrTempFileURL == nullptr);
+        *b_delete_on_close = (!ppustrTempFileURL);
     }
 
     return osl_error;
@@ -152,9 +152,11 @@ static oslFileError osl_createTempFile_impl_(
 
         /*  if file could not be opened try again */
 
-        if ((osl_File_E_None != osl_error) || (nullptr == pHandle) ||
+        if ((osl_error != osl_File_E_None) || !pHandle ||
             osl_win32_CreateFile_impl_(tmp_name, b_delete_on_close, pHandle))
+        {
             break;
+        }
 
     } while(true); // try until success
 

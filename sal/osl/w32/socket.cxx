@@ -538,12 +538,12 @@ oslHostAddr SAL_CALL osl_createHostAddr (
     oslHostAddr pAddr;
     rtl_uString     *cn= nullptr;
 
-    if ((strHostname == nullptr)  || (strHostname->length == 0) || (pSocketAddr == nullptr))
+    if (!strHostname  || strHostname->length == 0 || !pSocketAddr)
         return nullptr;
 
     rtl_uString_newFromString( &cn, strHostname);
 
-    if ( ! pSocketAddr )
+    if (!pSocketAddr)
     {
         rtl_uString_release(cn);
         return nullptr;
@@ -551,7 +551,7 @@ oslHostAddr SAL_CALL osl_createHostAddr (
 
     pAddr= static_cast<oslHostAddr>(rtl_allocateMemory (sizeof (struct oslHostAddrImpl)));
 
-    if (pAddr == nullptr)
+    if (!pAddr)
     {
         rtl_uString_release(cn);
         return nullptr;
@@ -568,13 +568,13 @@ oslHostAddr SAL_CALL osl_createHostAddr (
 /*****************************************************************************/
 oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
 {
-    if ((strHostname == nullptr) || (strHostname->length == 0))
+    if (!strHostname || strHostname->length == 0)
         return nullptr;
 
     PADDRINFOW pAddrInfo = nullptr;
     int ret = GetAddrInfoW(
                 SAL_W(strHostname->buffer), nullptr, nullptr, & pAddrInfo);
-    if (0 == ret)
+    if (ret == 0)
     {
         oslHostAddr pRet = nullptr;
         for (PADDRINFOW pIter = pAddrInfo; pIter; pIter = pIter->ai_next)
@@ -605,7 +605,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
 /*****************************************************************************/
 oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr pAddr)
 {
-    if (pAddr == nullptr)
+    if (!pAddr)
         return nullptr;
 
     if (pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
@@ -705,10 +705,10 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
         if (gethostname(Host, sizeof(Host)) == 0)
         {
             /* check if we have an FQDN */
-            if (strchr(Host, '.') == nullptr)
+            if (!strchr(Host, '.'))
             {
                 oslHostAddr pAddr;
-                rtl_uString     *hostName= nullptr;
+                rtl_uString *hostName= nullptr;
 
                 rtl_string2UString(
                     &hostName, Host, strlen(Host),
@@ -783,7 +783,7 @@ sal_Int32 SAL_CALL osl_getServicePort (
     rtl_string_release( str_Servicename );
     rtl_string_release( str_Protocol );
 
-    if (ps != nullptr)
+    if (ps)
         return ntohs(ps->s_port);
 
     return OSL_INVALID_PORT;
@@ -830,7 +830,7 @@ sal_Bool SAL_CALL osl_setInetPortOfSocketAddr (
     oslSocketAddr pAddr,
     sal_Int32     Port)
 {
-    if (pAddr == nullptr)
+    if (!pAddr)
         return false;
 
     struct sockaddr_in* pSystemInetAddr= reinterpret_cast<struct sockaddr_in*>(&pAddr->m_sockaddr);
@@ -870,7 +870,7 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr (
     oslSocketAddr   pAddr,
     rtl_uString   **strDottedInetAddr)
 {
-    if (pAddr == nullptr)
+    if (!pAddr)
         return osl_Socket_Error;
 
     struct sockaddr_in *pSystemInetAddr = reinterpret_cast<struct sockaddr_in*>(&pAddr->m_sockaddr);
@@ -904,7 +904,7 @@ oslSocket SAL_CALL osl_createSocket (
     /* alloc memory */
     oslSocket pSocket = osl_createSocketImpl_(0);
 
-    if (pSocket == nullptr)
+    if (!pSocket)
         return nullptr;
 
     /* create socket */
@@ -920,7 +920,7 @@ oslSocket SAL_CALL osl_createSocket (
     }
     else
     {
-        pSocket->m_Flags            = 0;
+        pSocket->m_Flags = 0;
     }
 
     return pSocket;
@@ -946,7 +946,7 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 void SAL_CALL osl_closeSocket(oslSocket pSocket)
 {
     /* socket already invalid */
-    if(pSocket==nullptr)
+    if (!pSocket)
         return;
 
     /* close */
@@ -964,9 +964,9 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 {
     struct sockaddr Addr;
-    int             AddrLen;
+    int AddrLen;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return nullptr;
 
     AddrLen= sizeof(struct sockaddr);
@@ -986,7 +986,7 @@ oslSocketAddr SAL_CALL osl_getPeerAddrOfSocket(oslSocket pSocket)
     struct sockaddr Addr;
     int             AddrLen;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return nullptr;
 
     AddrLen= sizeof(struct sockaddr);
@@ -1005,7 +1005,7 @@ sal_Bool SAL_CALL osl_bindAddrToSocket ( oslSocket pSocket, oslSocketAddr pAddr)
 {
     OSL_ASSERT( pAddr );
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return false;
 
     return (bind(pSocket->m_Socket,
@@ -1022,13 +1022,13 @@ oslSocketResult SAL_CALL osl_connectSocketTo (
     const TimeValue* pTimeout)
 {
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return osl_Socket_Error;
 
-    if (pAddr == nullptr) /* EDESTADDRREQ */
+    if (!pAddr) /* EDESTADDRREQ */
         return osl_Socket_Error;
 
-    if (pTimeout == nullptr)
+    if (!pTimeout)
     {
         if(connect(pSocket->m_Socket,
                    &(pAddr->m_sockaddr),
@@ -1152,7 +1152,7 @@ sal_Bool SAL_CALL osl_listenOnSocket (
     oslSocket  pSocket,
     sal_Int32  MaxPendingConnections)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return false;
 
     return (listen(pSocket->m_Socket,
@@ -1168,11 +1168,11 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket (
     oslSocket      pSocket,
     oslSocketAddr* ppAddr)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return nullptr;
 
-    SOCKET          Connection;
-    if(ppAddr)
+    SOCKET Connection;
+    if (ppAddr)
     {
         if( *ppAddr )
         {
@@ -1220,7 +1220,7 @@ sal_Int32 SAL_CALL osl_receiveSocket (
     sal_uInt32       BytesToRead,
     oslSocketMsgFlag Flag)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return osl_Socket_Error;
 
     return recv(pSocket->m_Socket,
@@ -1247,7 +1247,7 @@ sal_Int32 SAL_CALL osl_receiveFromSocket (
         pSystemSockAddr = &(SenderAddr->m_sockaddr);
     }
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return osl_Socket_Error;
 
     return recvfrom(pSocket->m_Socket,
@@ -1267,7 +1267,7 @@ sal_Int32 SAL_CALL osl_sendSocket (
     sal_uInt32       BytesToSend,
     oslSocketMsgFlag Flag)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return osl_Socket_Error;
 
     return send(pSocket->m_Socket,
@@ -1286,7 +1286,7 @@ sal_Int32 SAL_CALL osl_sendToSocket (
     sal_uInt32       BytesToSend,
     oslSocketMsgFlag Flag)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return osl_Socket_Error;
 
     /* ReceiverAddr might be 0 when used on a connected socket. */
@@ -1301,7 +1301,7 @@ sal_Int32 SAL_CALL osl_sendToSocket (
                   BytesToSend,
                   MSG_FLAG_TO_NATIVE(Flag),
                   pSystemSockAddr,
-                  pSystemSockAddr == nullptr ? 0 : sizeof(struct sockaddr));
+                  !pSystemSockAddr ? 0 : sizeof(struct sockaddr));
 }
 
 /*****************************************************************************/
@@ -1379,7 +1379,7 @@ sal_Bool SAL_CALL osl_isReceiveReady (
     fd_set         fds;
     struct timeval tv;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return false;
 
     FD_ZERO(&fds);
@@ -1408,7 +1408,7 @@ sal_Bool SAL_CALL osl_isSendReady (
     fd_set         fds;
     struct timeval tv;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return false;
 
     FD_ZERO(&fds);
@@ -1437,7 +1437,7 @@ sal_Bool SAL_CALL osl_isExceptionPending (
     fd_set         fds;
     struct timeval tv;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return false;
 
     FD_ZERO(&fds);
@@ -1463,7 +1463,7 @@ sal_Bool SAL_CALL osl_shutdownSocket (
     oslSocket          pSocket,
     oslSocketDirection Direction)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return false;
 
     return (shutdown(pSocket->m_Socket, DIRECTION_TO_NATIVE(Direction))==0);
@@ -1479,7 +1479,7 @@ sal_Int32 SAL_CALL osl_getSocketOption (
     void*                pBuffer,
     sal_uInt32           BufferLen)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return osl_Socket_Error;
 
     int len = BufferLen;
@@ -1505,7 +1505,7 @@ sal_Bool SAL_CALL osl_setSocketOption (
     void*                pBuffer,
     sal_uInt32           BufferLen)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return false;
 
     return(setsockopt(pSocket->m_Socket,
@@ -1522,7 +1522,7 @@ sal_Bool SAL_CALL osl_enableNonBlockingMode ( oslSocket pSocket, sal_Bool  On)
 {
     unsigned long  Param= On ? 1 : 0;
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return false;
 
     pSocket->m_Flags = Param ?
@@ -1538,7 +1538,7 @@ sal_Bool SAL_CALL osl_enableNonBlockingMode ( oslSocket pSocket, sal_Bool  On)
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket pSocket)
 {
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return false;
 
     return (pSocket->m_Flags & OSL_SOCKET_FLAGS_NONBLOCKING) != 0;
@@ -1552,7 +1552,7 @@ oslSocketType SAL_CALL osl_getSocketType(oslSocket pSocket)
     int            Type=0;
     int            TypeSize= sizeof(Type);
 
-    if (pSocket == nullptr) /* ENOTSOCK */
+    if (!pSocket) /* ENOTSOCK */
         return osl_Socket_TypeInvalid;
 
     if(getsockopt(pSocket->m_Socket,

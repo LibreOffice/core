@@ -78,7 +78,7 @@ pair_search (const char *key, const Pair *base, unsigned int member )
     unsigned int upper = member;
 
     /* check for validity of input */
-    if ( (key == nullptr) || (base == nullptr) || (member == 0) )
+    if (!key || !base || (member == 0) )
         return nullptr;
 
     /* binary search */
@@ -175,7 +175,7 @@ static char * compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
 
 static rtl_Locale * parse_locale( const char * locale )
 {
-    assert(locale != nullptr);
+    assert(locale);
 
     if (*locale == '\0' || std::strcmp(locale, "C") == 0
         || std::strcmp(locale, "POSIX") == 0)
@@ -571,7 +571,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     char *codeset      = nullptr;
 
     /* default to process locale if pLocale == NULL */
-    if( pLocale == nullptr )
+    if (!pLocale)
         osl_getProcessLocale( &pLocale );
 
     /* convert rtl_Locale to locale string */
@@ -595,7 +595,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         // call nl_langinfo)
 #endif
 
-    if ( codeset != nullptr )
+    if (codeset)
     {
         /* get codeset into mt save memory */
         strncpy( codeset_buf, codeset, sizeof(codeset_buf) );
@@ -606,16 +606,14 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     freelocale(ctype_locale);
 
     /* search the codeset in our language list */
-    if ( codeset != nullptr )
-    {
+    if (codeset)
         language = pair_search (codeset, nl_language_list, SAL_N_ELEMENTS( nl_language_list ) );
-    }
 
     OSL_ASSERT( language && ( RTL_TEXTENCODING_DONTKNOW != language->value ) );
 
     /* a matching item in our list provides a mapping from codeset to
      * rtl-codeset */
-    if ( language != nullptr )
+    if (language)
         return language->value;
 
     return RTL_TEXTENCODING_DONTKNOW;
@@ -628,13 +626,14 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 void imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
     char const * locale = getenv("LC_ALL");
-    if (locale == nullptr || *locale == '\0') {
+    if (!locale || *locale == '\0')
+    {
         locale = getenv("LC_CTYPE");
-        if (locale == nullptr || *locale == '\0') {
+        if (!locale || *locale == '\0')
+        {
             locale = getenv("LANG");
-            if (locale == nullptr || *locale == '\0') {
+            if (!locale || *locale == '\0')
                 locale = "C";
-            }
         }
     }
     *ppLocale = parse_locale(locale);
@@ -791,7 +790,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
     /* a matching item in our list provides a mapping from codeset to
      * rtl-codeset */
-    if ( language != nullptr )
+    if (language)
         return language->value;
 
     return RTL_TEXTENCODING_DONTKNOW;

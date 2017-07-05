@@ -54,7 +54,7 @@ namespace
         CFPropertyListRef pref = CFPreferencesCopyAppValue(CFSTR("AppleLanguages"), kCFPreferencesCurrentApplication);
         CFPropertyListGuard proplGuard(pref);
 
-        if (pref == nullptr) // return fallback value 'en_US'
+        if (!pref) // return fallback value 'en_US'
              return CFStringCreateWithCString(kCFAllocatorDefault, "en_US", kCFStringEncodingASCII);
 
         CFStringRef sref = (CFGetTypeID(pref) == CFArrayGetTypeID()) ? static_cast<CFStringRef>(CFArrayGetValueAtIndex(static_cast<CFArrayRef>(pref), 0)) : static_cast<CFStringRef>(pref);

@@ -45,10 +45,8 @@ oslMutex SAL_CALL osl_createMutex()
 
     SAL_WARN_IF(!pMutex, "sal.osl.mutex", "null pMutex");
 
-    if ( pMutex == nullptr )
-    {
+    if (!pMutex)
         return nullptr;
-    }
 
     pthread_mutexattr_init(&aMutexAttr);
 

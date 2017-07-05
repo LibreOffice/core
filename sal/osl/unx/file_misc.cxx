@@ -79,12 +79,13 @@ DirectoryItem_Impl::DirectoryItem_Impl(
       m_ustrFilePath (ustrFilePath),
       m_DType        (DType)
 {
-    if (m_ustrFilePath != nullptr)
+    if (m_ustrFilePath)
         rtl_uString_acquire(m_ustrFilePath);
 }
+
 DirectoryItem_Impl::~DirectoryItem_Impl()
 {
-    if (m_ustrFilePath != nullptr)
+    if (m_ustrFilePath)
         rtl_uString_release(m_ustrFilePath);
 }
 
@@ -143,13 +144,13 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 
     char path[PATH_MAX];
 
-    if ((ustrDirectoryURL == nullptr) || (ustrDirectoryURL->length == 0) || (pDirectory == nullptr))
+    if (!ustrDirectoryURL || (ustrDirectoryURL->length == 0) || !pDirectory)
         return osl_File_E_INVAL;
 
     /* convert file URL to system path */
     eRet = osl_getSystemPathFromFileURL_Ex(ustrDirectoryURL, &ustrSystemPath);
 
-    if( eRet != osl_File_E_None )
+    if (eRet != osl_File_E_None)
         return eRet;
 
     osl_systemPathRemoveSeparator(ustrSystemPath);
@@ -231,7 +232,7 @@ oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
 
     OSL_ASSERT( Directory );
 
-    if( pDirImpl == nullptr )
+    if (!pDirImpl)
         return osl_File_E_INVAL;
 
 #ifdef ANDROID
@@ -266,11 +267,14 @@ static struct dirent* osl_readdir_impl_(DIR* pdir, bool bFilterLocalAndParentDir
 {
     struct dirent* pdirent;
 
-    while ((pdirent = readdir(pdir)) != nullptr)
+    while ((pdirent = readdir(pdir)))
     {
         if (bFilterLocalAndParentDir &&
             ((strcmp(pdirent->d_name, ".") == 0) || (strcmp(pdirent->d_name, "..") == 0)))
+        {
             continue;
+        }
+
         break;
     }
 
@@ -287,7 +291,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     OSL_ASSERT(Directory);
     OSL_ASSERT(pItem);
 
-    if ((Directory == nullptr) || (pItem == nullptr))
+    if (!Directory || !pItem)
         return osl_File_E_INVAL;
 
 #ifdef ANDROID
@@ -301,7 +305,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
         pEntry = osl_readdir_impl_(pDirImpl->pDirStruct, true);
     }
 
-    if (pEntry == nullptr)
+    if (!pEntry)
         return osl_File_E_NOENT;
 
 #if defined(MACOSX)
@@ -328,11 +332,12 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     rtl_uString_release( ustrFileName );
 
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(*pItem);
-    if (pImpl != nullptr)
+    if (pImpl)
     {
         pImpl->release();
         pImpl = nullptr;
     }
+
 #ifdef _DIRENT_HAVE_D_TYPE
     pImpl = new DirectoryItem_Impl(ustrFilePath, pEntry->d_type);
 #else
@@ -350,7 +355,7 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
     oslFileError osl_error      = osl_File_E_INVAL;
 
     OSL_ASSERT((nullptr != ustrFileURL) && (nullptr != pItem));
-    if ((ustrFileURL == nullptr) || (ustrFileURL->length == 0) || (pItem == nullptr))
+    if (!ustrFileURL || (ustrFileURL->length == 0) || !pItem)
         return osl_File_E_INVAL;
 
     osl_error = osl_getSystemPathFromFileURL_Ex(ustrFileURL, &ustrSystemPath);
@@ -375,7 +380,7 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
 oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
-    if (pImpl == nullptr)
+    if (!pImpl)
         return osl_File_E_INVAL;
 
     pImpl->acquire();
@@ -385,7 +390,7 @@ oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
 oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
-    if (pImpl == nullptr)
+    if (!pImpl)
         return osl_File_E_INVAL;
 
     pImpl->release();
@@ -545,15 +550,15 @@ static oslFileError create_dir_recursively_(
 }
 
 oslFileError SAL_CALL osl_createDirectoryPath(
-    rtl_uString* aDirectoryUrl,
+    rtl_uString* pDirectoryUrl,
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
 {
-    if (aDirectoryUrl == nullptr)
+    if (!pDirectoryUrl)
         return osl_File_E_INVAL;
 
     rtl::OUString sys_path;
-    oslFileError osl_error = osl_getSystemPathFromFileURL_Ex(aDirectoryUrl, &sys_path.pData);
+    oslFileError osl_error = osl_getSystemPathFromFileURL_Ex(pDirectoryUrl, &sys_path.pData);
 
     if (osl_error != osl_File_E_None)
         return osl_error;

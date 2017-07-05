@@ -114,10 +114,10 @@ static bool getModulePathFromAddress(void * address, rtl_String ** path) {
 
 oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMode)
 {
-    oslModule pModule=nullptr;
+    oslModule pModule = nullptr;
     rtl_uString* ustrTmp = nullptr;
 
-    SAL_WARN_IF(ustrModuleName == nullptr, "sal.osl", "string is not valid");
+    SAL_WARN_IF(!ustrModuleName, "sal.osl", "string is not valid");
 
     /* ensure ustrTmp hold valid string */
     if (osl_getSystemPathFromFileURL(ustrModuleName, &ustrTmp) != osl_File_E_None)
@@ -156,8 +156,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
             ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
         void* pLib = dlopen(pModuleName, rtld_mode);
 
-        SAL_INFO_IF(
-            pLib == nullptr, "sal.osl",
+        SAL_INFO_IF(!pLib, "sal.osl",
             "dlopen(" << pModuleName << ", " << rtld_mode << "): "
                 << dlerror());
 #endif
@@ -235,13 +234,13 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 
 namespace {
 
-void * getSymbol(oslModule module, char const * symbol) {
-    assert(symbol != nullptr);
+void * getSymbol(oslModule module, char const * symbol)
+{
+    assert(symbol);
     // We do want to use dlsym() also in the DISABLE_DYNLOADING case
     // just to look up symbols in the static executable, I think:
     void * p = dlsym(module, symbol);
-    SAL_INFO_IF(
-        p == nullptr, "sal.osl",
+    SAL_INFO_IF(!p, "sal.osl",
         "dlsym(" << module << ", " << symbol << "): " << dlerror());
     return p;
 }
@@ -317,8 +316,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
                                osl_getThreadTextEncoding(),
                                OSTRING_TO_OUSTRING_CVTFLAGS);
 
-            SAL_WARN_IF(
-                *ppLibraryUrl == nullptr, "sal.osl", "rtl_string2UString failed");
+            SAL_WARN_IF(!*ppLibraryUrl, "sal.osl", "rtl_string2UString failed");
             osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
             osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
 

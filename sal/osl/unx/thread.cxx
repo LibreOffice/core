@@ -343,16 +343,17 @@ oslThread osl_createSuspendedThread (
 
 void SAL_CALL osl_destroyThread(oslThread Thread)
 {
-    if (Thread != nullptr) {
+    if (Thread)
+    {
         Thread_Impl * impl = static_cast<Thread_Impl *>(Thread);
         bool active;
         pthread_mutex_lock(&impl->m_Lock);
         active = (impl->m_Flags & THREADIMPL_FLAGS_ACTIVE) != 0;
         impl->m_Flags |= THREADIMPL_FLAGS_DESTROYED;
         pthread_mutex_unlock(&impl->m_Lock);
-        if (!active) {
+
+        if (!active)
             osl_thread_destruct_Impl(&impl);
-        }
     }
 }
 
@@ -573,7 +574,7 @@ static sal_uInt16 lookupThreadId (pthread_t hThread)
     pthread_mutex_lock(&HashLock);
 
         pEntry = HashTable[HASHID(hThread)];
-        while (pEntry != nullptr)
+        while (pEntry)
         {
             if (pthread_equal(pEntry->Handle, hThread))
             {
@@ -596,7 +597,7 @@ static sal_uInt16 insertThreadId (pthread_t hThread)
 
     pEntry = HashTable[HASHID(hThread)];
 
-    while (pEntry != nullptr)
+    while (pEntry)
     {
         if (pthread_equal(pEntry->Handle, hThread))
             break;
@@ -605,7 +606,7 @@ static sal_uInt16 insertThreadId (pthread_t hThread)
         pEntry = pEntry->Next;
     }
 
-    if (pEntry == nullptr)
+    if (!pEntry)
     {
         pEntry = static_cast<HashEntry*>(calloc(sizeof(HashEntry), 1));
 
@@ -629,14 +630,14 @@ static sal_uInt16 insertThreadId (pthread_t hThread)
     return pEntry->Ident;
 }
 
-static void removeThreadId (pthread_t hThread)
+static void removeThreadId(pthread_t hThread)
 {
     HashEntry *pEntry, *pRemove = nullptr;
 
     pthread_mutex_lock(&HashLock);
 
     pEntry = HashTable[HASHID(hThread)];
-    while (pEntry != nullptr)
+    while (pEntry)
     {
         if (pthread_equal(pEntry->Handle, hThread))
             break;
@@ -645,7 +646,7 @@ static void removeThreadId (pthread_t hThread)
         pEntry = pEntry->Next;
     }
 
-    if (pEntry != nullptr)
+    if (pEntry)
     {
         if (pRemove)
             pRemove->Next = pEntry->Next;

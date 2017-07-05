@@ -42,10 +42,8 @@ oslCondition SAL_CALL osl_createCondition()
 
     pCond = static_cast<oslConditionImpl*>(malloc(sizeof(oslConditionImpl)));
 
-    if ( pCond == nullptr )
-    {
+    if (!pCond)
         return nullptr;
-    }
 
     pCond->m_State = false;
 

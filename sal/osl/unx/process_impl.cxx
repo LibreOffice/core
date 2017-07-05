@@ -57,7 +57,7 @@ oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
     {
         /* Determine absolute path. */
         char abspath[PATH_MAX];
-        if (realpath (buffer, abspath) != nullptr)
+        if (realpath(buffer, abspath))
         {
             /* Convert from utf8 to unicode. */
             rtl_uString * pAbsPath = nullptr;
@@ -102,14 +102,11 @@ oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
     /* Determine address of "main()" function. */
     void * addr = dlsym (RTLD_DEFAULT, "main");
 #endif
-    if (addr != nullptr)
+    if (addr)
     {
         /* Determine module URL. */
         if (osl_getModuleURLFromAddress (addr, ppFileURL))
-        {
-            /* Success. */
-            result = osl_Process_E_None;
-        }
+            result = osl_Process_E_None; /* success */
     }
 
     return result;
@@ -202,7 +199,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
     if (g_command_args.m_nCount == 0)
     {
         rtl_uString** ppArgs = static_cast<rtl_uString**>(rtl_allocateZeroMemory (argc * sizeof(rtl_uString*)));
-        if (ppArgs != nullptr)
+        if (ppArgs)
         {
             rtl_TextEncoding encoding = osl_getThreadTextEncoding();
             for (int i = 0; i < argc; i++)
@@ -212,7 +209,8 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
                     argv[i], rtl_str_getLength (argv[i]), encoding,
                     OSTRING_TO_OUSTRING_CVTFLAGS);
             }
-            if (ppArgs[0] != nullptr)
+
+            if (ppArgs[0])
             {
 #if !defined(ANDROID) && !defined(IOS) // No use searching PATH on Android or iOS
                 /* see @ osl_getExecutableFile(). */
@@ -265,10 +263,11 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
         &pstr_env_var,
         rtl_uString_getStr(pustrEnvVar), rtl_uString_getLength(pustrEnvVar), encoding,
         OUSTRING_TO_OSTRING_CVTFLAGS);
-    if (pstr_env_var != nullptr)
+
+    if (pstr_env_var)
     {
         const char* p_env_var = getenv (rtl_string_getStr (pstr_env_var));
-        if (p_env_var != nullptr)
+        if (p_env_var)
         {
             rtl_string2UString(
                 ppustrValue,
@@ -307,7 +306,7 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
         rtl_uString_getStr(pustrValue), rtl_uString_getLength(pustrValue), encoding,
         OUSTRING_TO_OSTRING_CVTFLAGS);
 
-    if (pstr_env_var != nullptr && pstr_val != nullptr)
+    if (pstr_env_var && pstr_val)
     {
 #if defined (__sun)
         rtl_String * pBuffer = NULL;
@@ -334,7 +333,7 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
     if (pstr_val)
         rtl_string_release(pstr_val);
 
-    if (pstr_env_var != nullptr)
+    if (pstr_env_var)
         rtl_string_release(pstr_env_var);
 
     return result;
@@ -397,7 +396,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
 
     OSL_PRECOND(ppustrWorkingDir, "osl_getProcessWorkingDir(): Invalid parameter");
 
-    if (getcwd (buffer, sizeof(buffer)) != nullptr)
+    if (getcwd (buffer, sizeof(buffer)))
     {
         rtl_uString* ustrTmp = nullptr;
 
@@ -405,7 +404,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
             &ustrTmp,
             buffer, strlen(buffer), osl_getThreadTextEncoding(),
             OSTRING_TO_OUSTRING_CVTFLAGS);
-        if (ustrTmp != nullptr)
+        if (ustrTmp)
         {
             if (osl_getFileURLFromSystemPath (ustrTmp, ppustrWorkingDir) == osl_File_E_None)
                 result = osl_Process_E_None;
@@ -445,8 +444,9 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
     {
         pthread_mutex_lock(&(g_process_locale.m_mutex));
 
-        if (g_process_locale.m_pLocale == nullptr)
+        if (!g_process_locale.m_pLocale)
             imp_getProcessLocale (&(g_process_locale.m_pLocale));
+
         *ppLocale = g_process_locale.m_pLocale;
         result = osl_Process_E_None;
 

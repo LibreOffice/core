@@ -101,7 +101,7 @@ namespace {
 oslFileError getSystemPathFromFileUrl(
     OUString const & url, OUString * path, bool resolveHome)
 {
-    assert(path != nullptr);
+    assert(path);
     // For compatibility with assumptions in other parts of the code base,
     // assume that anything starting with a slash is a system path instead of a
     // (relative) file URL (except if it starts with two slashes, in which case
@@ -289,7 +289,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         sal_Int32 nDeleted = 0;
 
         /* if pTmp is not already allocated, copy ustrSystemPath for modification */
-        if( pTmp == nullptr )
+        if (!pTmp)
             rtl_uString_newFromString( &pTmp, ustrSystemPath );
 
         /* adapt index to pTmp */
@@ -308,7 +308,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         pTmp->length -= nDeleted;
     }
 
-    if( pTmp == nullptr )
+    if (!pTmp)
         rtl_uString_assign( &pTmp, ustrSystemPath );
 
     /* file URLs must be URI encoded */

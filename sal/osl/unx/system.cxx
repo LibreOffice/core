@@ -78,12 +78,13 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 
         naliases = naddr_list = naliasesdata = 0;
 
-        for ( p = res->h_aliases; *p != nullptr; p++) {
+        for (p = res->h_aliases; *p; p++)
+        {
             naliases++;
             naliasesdata += strlen(*p)+1;
         }
 
-        for ( p = res->h_addr_list; *p != nullptr; p++)
+        for ( p = res->h_addr_list; *p; p++)
             naddr_list++;
 
         if ( nname
@@ -99,26 +100,31 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 
             parray = reinterpret_cast<char**>(buffer);
             result->h_aliases = parray;
-            data = buffer + (naliases+1)*sizeof(char*);
-            for ( p = res->h_aliases; *p != nullptr; p++) {
+            data = buffer + (naliases+1) * sizeof(char*);
+
+            for ( p = res->h_aliases; *p; p++)
+            {
                 int n = strlen(*p)+1;
                 *parray++ = data;
                 memcpy(data, *p, n);
                 data += n;
             }
+
             *parray = nullptr;
             buffer = data;
             parray = reinterpret_cast<char**>(buffer);
             result->h_addr_list = parray;
-            data = buffer + (naddr_list+1)*sizeof(char*);
-            for ( p = res->h_addr_list; *p != nullptr; p++) {
+            data = buffer + (naddr_list+1) * sizeof(char*);
+
+            for ( p = res->h_addr_list; *p; p++)
+            {
                 *parray++ = data;
                 memcpy(data, *p, res->h_length);
                 data += res->h_length;
             }
-            *parray = nullptr;
 
-               res = result;
+            *parray = nullptr;
+            res = result;
         }
         else
         {
@@ -181,28 +187,26 @@ int macxp_resolveAlias(char *path, int buflen)
       cfbookmark = CFURLCreateBookmarkDataFromFile( nullptr, cfurl, &cferror );
       CFRelease( cfurl );
 
-      if ( cfbookmark == nullptr )
+      if (!cfbookmark)
       {
-          if(cferror)
-          {
-              CFRelease( cferror );
-          }
+          if (cferror)
+              CFRelease(cferror);
       }
       else
       {
           Boolean isStale;
           cfurl = CFURLCreateByResolvingBookmarkData( nullptr, cfbookmark, kCFBookmarkResolutionWithoutUIMask,
                                                       nullptr, nullptr, &isStale, &cferror );
-          CFRelease( cfbookmark );
-          if ( cfurl == nullptr )
+          CFRelease(cfbookmark);
+          if (!cfurl)
           {
               CFRelease( cferror );
           }
           else
           {
               cfpath = CFURLCopyFileSystemPath( cfurl, kCFURLPOSIXPathStyle );
-              CFRelease( cfurl );
-              if ( cfpath != nullptr )
+              CFRelease(cfurl);
+              if (cfpath)
               {
                   char tmpPath[ PATH_MAX ];
                   if ( CFStringGetCString( cfpath, tmpPath, PATH_MAX, kCFStringEncodingUTF8 ) )
