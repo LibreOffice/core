@@ -431,4 +431,114 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
     gtk_widget_destroy(pDialog);
 }
 
+void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    GApplication* app = g_application_get_default();
+    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
+    LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
+
+    // Get the data.
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
+    // Show it in linear time, so first redo in reverse order, then undo.
+    std::vector<std::string> aTypes = {".uno:Redo", ".uno:Undo"};
+    std::vector<boost::property_tree::ptree> aTrees;
+    for (size_t nType = 0; nType < aTypes.size(); ++nType)
+    {
+        const std::string& rType = aTypes[nType];
+        char* pValues = pDocument->pClass->getCommandValues(pDocument, rType.c_str());
+        std::stringstream aInfo;
+        aInfo << "lok::Document::getCommandValues('" << rType << "') returned '" << pValues << "'" << std::endl;
+        g_info("%s", aInfo.str().c_str());
+        std::stringstream aStream(pValues);
+        free(pValues);
+        assert(!aStream.str().empty());
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        aTrees.push_back(aTree);
+    }
+
+    // Create the dialog.
+    GtkWidget* pDialog = gtk_dialog_new_with_buttons("Repair document",
+                                                     GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+                                                     GTK_DIALOG_MODAL,
+                                                     "Jump to state",
+                                                     GTK_RESPONSE_OK,
+                                                     nullptr);
+    gtk_window_set_default_size(GTK_WINDOW(pDialog), 800, 600);
+    GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG (pDialog));
+    GtkWidget* pScrolledWindow = gtk_scrolled_window_new(nullptr, nullptr);
+
+    // Build the table.
+    GtkTreeStore* pTreeStore = gtk_tree_store_new(5, G_TYPE_STRING, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    for (size_t nTree = 0; nTree < aTrees.size(); ++nTree)
+    {
+        const auto& rTree = aTrees[nTree];
+        for (const auto& rValue : rTree.get_child("actions"))
+        {
+            GtkTreeIter aTreeIter;
+            gtk_tree_store_append(pTreeStore, &aTreeIter, nullptr);
+            gtk_tree_store_set(pTreeStore, &aTreeIter,
+                               0, aTypes[nTree].c_str(),
+                               1, rValue.second.get<int>("index"),
+                               2, rValue.second.get<std::string>("comment").c_str(),
+                               3, rValue.second.get<std::string>("viewId").c_str(),
+                               4, rValue.second.get<std::string>("dateTime").c_str(),
+                               -1);
+        }
+    }
+    GtkWidget* pTreeView = gtk_tree_view_new_with_model(GTK_TREE_MODEL(pTreeStore));
+    std::vector<std::string> aColumns = {"Type", "Index", "Comment", "View ID", "Timestamp"};
+    for (size_t nColumn = 0; nColumn < aColumns.size(); ++nColumn)
+    {
+        GtkCellRenderer* pRenderer = gtk_cell_renderer_text_new();
+        GtkTreeViewColumn* pColumn = gtk_tree_view_column_new_with_attributes(aColumns[nColumn].c_str(),
+                                                                              pRenderer,
+                                                                              "text", nColumn,
+                                                                              nullptr);
+        gtk_tree_view_append_column(GTK_TREE_VIEW(pTreeView), pColumn);
+    }
+    gtk_container_add(GTK_CONTAINER(pScrolledWindow), pTreeView);
+    gtk_box_pack_start(GTK_BOX(pContentArea), pScrolledWindow, TRUE, TRUE, 2);
+
+    // Show the dialog.
+    gtk_widget_show_all(pDialog);
+    gint res = gtk_dialog_run(GTK_DIALOG(pDialog));
+
+    // Dispatch the matching command, if necessary.
+    if (res == GTK_RESPONSE_OK)
+    {
+        GtkTreeSelection* pSelection = gtk_tree_view_get_selection(GTK_TREE_VIEW(pTreeView));
+        GtkTreeIter aTreeIter;
+        GtkTreeModel* pTreeModel;
+        if (gtk_tree_selection_get_selected(pSelection, &pTreeModel, &aTreeIter))
+        {
+            gchar* pType = nullptr;
+            gint nIndex = 0;
+            // 0: type, 1: index
+            gtk_tree_model_get(pTreeModel, &aTreeIter, 0, &pType, 1, &nIndex, -1);
+            // '.uno:Undo' or '.uno:Redo'
+            const std::string aType(pType);
+            // Without the '.uno:' prefix.
+            std::string aKey = aType.substr(strlen(".uno:"));
+            g_free(pType);
+
+            // Post the command.
+            boost::property_tree::ptree aTree;
+            aTree.put(boost::property_tree::ptree::path_type(aKey + "/type", '/'), "unsigned short");
+            aTree.put(boost::property_tree::ptree::path_type(aKey + "/value", '/'), nIndex + 1);
+
+            // Without this, we could only undo our own commands.
+            aTree.put(boost::property_tree::ptree::path_type("Repair/type", '/'), "boolean");
+            aTree.put(boost::property_tree::ptree::path_type("Repair/value", '/'), true);
+
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            std::string aArguments = aStream.str();
+            lok_doc_view_post_command(pDocView, aType.c_str(), aArguments.c_str(), false);
+        }
+    }
+
+    gtk_widget_destroy(pDialog);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
