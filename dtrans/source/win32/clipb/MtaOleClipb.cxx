@@ -288,7 +288,6 @@ CMtaOleClipboard::~CMtaOleClipboard( )
     sal_uInt32 dwResult = WaitForSingleObject(
         m_hClipboardChangedNotifierThread, MAX_WAIT_SHUTDOWN );
 
-    (void) dwResult;
     OSL_ENSURE( dwResult == WAIT_OBJECT_0, "clipboard notifier thread could not terminate" );
 
     if ( nullptr != m_hClipboardChangedNotifierThread )
