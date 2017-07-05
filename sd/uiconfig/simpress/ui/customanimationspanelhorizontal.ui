@@ -311,7 +311,6 @@
               <object class="GtkSpinButton" id="delay_value:0.0sec">
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="text" translatable="yes">0.0</property>
                 <property name="digits">1</property>
               </object>
               <packing>
