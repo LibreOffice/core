@@ -39,6 +39,7 @@
 #include "odbc/ODatabaseMetaData.hxx"
 #include "odbc/odbcbasedllapi.hxx"
 #include <connectivity/StdTypeDefs.hxx>
+#include <memory>
 
 namespace connectivity
 {
@@ -72,7 +73,7 @@ namespace connectivity
             css::uno::WeakReferenceHelper               m_aStatement;
             css::uno::Reference< css::sdbc::XResultSetMetaData>
                                                         m_xMetaData;
-            SQLUSMALLINT*                               m_pRowStatusArray;
+            std::unique_ptr<SQLUSMALLINT[]>             m_pRowStatusArray;
             rtl::Reference<OConnection>                 m_pConnection;
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;

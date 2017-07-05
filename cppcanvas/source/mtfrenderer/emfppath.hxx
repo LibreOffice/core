@@ -20,6 +20,8 @@
 #ifndef INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_EMFPPATH_HXX
 #define INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_EMFPPATH_HXX
 
+#include <memory>
+
 namespace cppcanvas
 {
     namespace internal
@@ -28,8 +30,8 @@ namespace cppcanvas
         {
             ::basegfx::B2DPolyPolygon    aPolygon;
             sal_Int32                    nPoints;
-            float*                       pPoints;
-            sal_uInt8*                   pPointTypes;
+            std::unique_ptr<float[]>     pPoints;
+            std::unique_ptr<sal_uInt8[]> pPointTypes;
 
             EMFPPath(sal_Int32 _nPoints, bool bLines = false);
 

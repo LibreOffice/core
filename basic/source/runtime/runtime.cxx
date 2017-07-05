@@ -1122,9 +1122,9 @@ void SbiRuntime::PushForEach()
         p->refEnd = reinterpret_cast<SbxVariable*>(pArray);
 
         short nDims = pArray->GetDims();
-        p->pArrayLowerBounds = new sal_Int32[nDims];
-        p->pArrayUpperBounds = new sal_Int32[nDims];
-        p->pArrayCurIndices  = new sal_Int32[nDims];
+        p->pArrayLowerBounds.reset( new sal_Int32[nDims] );
+        p->pArrayUpperBounds.reset( new sal_Int32[nDims] );
+        p->pArrayCurIndices.reset( new sal_Int32[nDims] );
         sal_Int32 lBound, uBound;
         for( short i = 0 ; i < nDims ; i++ )
         {
@@ -2985,7 +2985,7 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
                     bEndLoop = true;
                     break;
                 }
-                SbxVariable* pVal = pArray->Get32( p->pArrayCurIndices );
+                SbxVariable* pVal = pArray->Get32( p->pArrayCurIndices.get() );
                 *(p->refVar) = *pVal;
 
                 bool bFoundNext = false;
@@ -3002,8 +3002,7 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
                 }
                 if( !bFoundNext )
                 {
-                    delete[] p->pArrayCurIndices;
-                    p->pArrayCurIndices = nullptr;
+                    p->pArrayCurIndices.reset();
                 }
             }
             break;

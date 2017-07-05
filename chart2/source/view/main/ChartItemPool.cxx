@@ -177,7 +177,7 @@ ChartItemPool::ChartItemPool():
     pItemInfos[SCHATTR_SYMBOL_SIZE - SCHATTR_START]._nSID  = SID_ATTR_SYMBOLSIZE;
 
     SetDefaults(ppPoolDefaults);
-    SetItemInfos(pItemInfos);
+    SetItemInfos(pItemInfos.get());
 }
 
 ChartItemPool::ChartItemPool(const ChartItemPool& rPool):
@@ -190,8 +190,6 @@ ChartItemPool::~ChartItemPool()
     Delete();
     // release and delete static pool default items
     ReleaseDefaults(true);
-
-    delete[] pItemInfos;
 }
 
 SfxItemPool* ChartItemPool::Clone() const

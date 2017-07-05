@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_AXES_TICKMARKS_EQUIDISTANT_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_AXES_TICKMARKS_EQUIDISTANT_HXX
 
-#include <memory>
 #include "Tickmarks.hxx"
+#include <memory>
 
 namespace chart
 {
@@ -80,10 +80,13 @@ private: //member
     const ExplicitIncrementData& m_rIncrement;
     sal_Int32   m_nMaxDepth;
     sal_Int32   m_nTickCount;
-    sal_Int32*  m_pnPositions; //current positions in the different sequences
-    sal_Int32*  m_pnPreParentCount; //the tickmarks do not start with a major tick always,
+    std::unique_ptr<sal_Int32[]>
+                m_pnPositions; //current positions in the different sequences
+    std::unique_ptr<sal_Int32[]>
+                m_pnPreParentCount; //the tickmarks do not start with a major tick always,
                                     //the PreParentCount states for each depth how many subtickmarks are available in front of the first parent tickmark
-    bool*       m_pbIntervalFinished;
+    std::unique_ptr<bool[]>
+                m_pbIntervalFinished;
     sal_Int32   m_nCurrentDepth;
     sal_Int32   m_nCurrentPos;
     double      m_fCurrentValue;

@@ -21,13 +21,14 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>
+#include <memory>
 
 namespace chart
 {
 class ChartItemPool : public SfxItemPool
 {
 private:
-    SfxItemInfo*    pItemInfos;
+    std::unique_ptr<SfxItemInfo[]>  pItemInfos;
 
 public:
     ChartItemPool();
