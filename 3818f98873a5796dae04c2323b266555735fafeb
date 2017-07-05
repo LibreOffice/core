@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_f862afac",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-05T15:24:23Z",
+      "side": 1,
+      "message": "missed negation",
+      "range": {
+        "startLine": 114,
+        "startChar": 16,
+        "endLine": 114,
+        "endChar": 36
+      },
+      "revId": "3818f98873a5796dae04c2323b266555735fafeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
