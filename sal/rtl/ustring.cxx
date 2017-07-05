@@ -291,7 +291,7 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompare_WithLength( const sal_Unicode
 
     if ( *pStr2 )
     {
-        OSL_ENSURE( pStr1 == pStr1End, "pStr1 == pStr1End failed" );
+        SAL_WARN_IF(pStr1 != pStr1End, "sal.rtl", "pStr1 == pStr1End failed");
         // first is a substring of the second string => less (negative value)
         nRet = -1;
     }

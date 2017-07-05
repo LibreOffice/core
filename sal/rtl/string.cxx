@@ -233,8 +233,8 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                 do
                 {
                     /* Check ASCII range */
-                    OSL_ENSURE( *pSource <= 127,
-                                "rtl_uString2String() - UTF8 test is encoding is wrong" );
+                    SAL_WARN_IF(*pSource > 127,
+                                "sal.rtl", "rtl_uString2String() - UTF8 test is encoding is wrong");
 
                     *pBuffer = (sal_Char)(unsigned char)*pSource;
                     pBuffer++;
