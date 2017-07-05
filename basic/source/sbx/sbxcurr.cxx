@@ -110,7 +110,7 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
     if ( *p == '-'  || *p == '+' )
         sNormalisedNumString.append( *p );
 
-    while ( ( *p >= '0' && *p <= '9' ) )
+    while ( *p >= '0' && *p <= '9' )
     {
         sNormalisedNumString.append( *p++ );
         // #TODO in vba mode set runtime error when a space ( or other )

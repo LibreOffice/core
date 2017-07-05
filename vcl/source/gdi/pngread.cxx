@@ -902,7 +902,7 @@ void PNGReaderImpl::ImplReadIDAT()
         mpZCodec.SetBreak( mnChunkLen );
         SvMemoryStream aIStrm( &(*maDataIter), mnChunkLen, StreamMode::READ );
 
-        while ( ( mpZCodec.GetBreak() ) )
+        while ( mpZCodec.GetBreak() )
         {
             // get bytes needed to fill the current scanline
             sal_Int32 nToRead = mnScansize - (mpScanCurrent - mpInflateInBuf);

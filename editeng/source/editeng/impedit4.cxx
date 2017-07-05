@@ -2285,7 +2285,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
 
             EditPaM aPaM( pNode, nInvStart );
             EditSelection aSel( aPaM, aPaM );
-            while ( ( aSel.Max().GetNode() == pNode ) /* && !bStop */ )
+            while ( aSel.Max().GetNode() == pNode )
             {
                 if ( ( static_cast<size_t>(aSel.Min().GetIndex()) > nInvEnd )
                         || ( ( aSel.Max().GetNode() == pLastNode ) && ( aSel.Max().GetIndex() >= pLastNode->Len() ) ) )

@@ -2799,7 +2799,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             if( !(bIsSearchUsed && bUsed ))
             {
                 const sal_uInt16 nId = pColl->GetPoolFormatId();
-                switch ( (nSMask & ~SFXSTYLEBIT_USED) )
+                switch ( nSMask & ~SFXSTYLEBIT_USED )
                 {
                 case SFXSTYLEBIT_USERDEF:
                     if(!IsPoolUserFormat(nId)) continue;

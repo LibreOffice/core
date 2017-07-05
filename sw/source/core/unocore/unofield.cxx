@@ -215,7 +215,7 @@ static SwServiceType lcl_GetServiceForField( const SwField& rField )
     case SwFieldIds::DocInfo:
         {
             const sal_uInt16 nSubType = rField.GetSubType();
-            switch( (nSubType & 0xff))
+            switch( nSubType & 0xff )
             {
             case DI_CHANGE:
                 nSrvId = ((nSubType&0x300) == DI_SUB_AUTHOR)

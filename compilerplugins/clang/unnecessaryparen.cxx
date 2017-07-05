@@ -38,11 +38,22 @@ public:
              return;
         if (loplugin::hasPathnamePrefix(fn, WORKDIR "/YaccTarget/idlc/source/parser.cxx"))
              return;
+        // TODO yuck, comma operator at work
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/writerfilter/source/rtftok/rtftokenizer.cxx"))
+             return;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/html/htmltab.cxx"))
+             return;
+
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
     bool VisitParenExpr(const ParenExpr *);
     bool VisitIfStmt(const IfStmt *);
+    bool VisitDoStmt(const DoStmt *);
+    bool VisitWhileStmt(const WhileStmt *);
+    bool VisitSwitchStmt(const SwitchStmt *);
+private:
+    void VisitSomeStmt(const Stmt *parent, const Expr* cond, StringRef stmtName);
 };
 
 bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
@@ -66,22 +77,49 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
 
 bool UnnecessaryParen::VisitIfStmt(const IfStmt* ifStmt)
 {
-    if (ignoreLocation(ifStmt))
-        return true;
+    VisitSomeStmt(ifStmt, ifStmt->getCond(), "if");
+    return true;
+}
 
-    if (auto parenExpr = dyn_cast<ParenExpr>(ifStmt->getCond()->IgnoreImpCasts())) {
+bool UnnecessaryParen::VisitDoStmt(const DoStmt* doStmt)
+{
+    VisitSomeStmt(doStmt, doStmt->getCond(), "do");
+    return true;
+}
+
+bool UnnecessaryParen::VisitWhileStmt(const WhileStmt* whileStmt)
+{
+    VisitSomeStmt(whileStmt, whileStmt->getCond(), "while");
+    return true;
+}
+
+bool UnnecessaryParen::VisitSwitchStmt(const SwitchStmt* switchStmt)
+{
+    VisitSomeStmt(switchStmt, switchStmt->getCond(), "switch");
+    return true;
+}
+
+void UnnecessaryParen::VisitSomeStmt(const Stmt *parent, const Expr* cond, StringRef stmtName)
+{
+    if (ignoreLocation(parent))
+        return;
+    if (parent->getLocStart().isMacroID())
+        return;
+
+    auto parenExpr = dyn_cast<ParenExpr>(cond->IgnoreImpCasts());
+    if (parenExpr) {
         if (parenExpr->getLocStart().isMacroID())
-            return true;
+            return;
         // assignments need extra parentheses or they generate a compiler warning
         auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
         if (binaryOp && binaryOp->getOpcode() == BO_Assign)
-            return true;
+            return;
         report(
-            DiagnosticsEngine::Warning, "parentheses immediately inside if",
-            ifStmt->getLocStart())
-            << ifStmt->getSourceRange();
+            DiagnosticsEngine::Warning, "parentheses immediately inside %0 statement",
+            parenExpr->getLocStart())
+            << stmtName
+            << parenExpr->getSourceRange();
     }
-    return true;
 }
 
 loplugin::Plugin::Registration< UnnecessaryParen > X("unnecessaryparen", true);
