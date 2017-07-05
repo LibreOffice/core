@@ -256,8 +256,8 @@ namespace sfx2
             _rFilterClassification.openNode( "GlobalFilters/Classes" );
         Sequence< OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
         ::std::for_each(
-            aFilterClasses.getConstArray(),
-            aFilterClasses.getConstArray() + aFilterClasses.getLength(),
+            aFilterClasses.begin(),
+            aFilterClasses.end(),
             ReadGlobalFilter( aFilterClassesNode, aClassReferrer )
         );
     }
@@ -299,8 +299,8 @@ namespace sfx2
         Sequence< OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
 
         ::std::for_each(
-            aFilterClasses.getConstArray(),
-            aFilterClasses.getConstArray() + aFilterClasses.getLength(),
+            aFilterClasses.begin(),
+            aFilterClasses.end(),
             ReadLocalFilter( aFilterClassesNode, _rLocalClasses )
         );
     }
@@ -387,8 +387,8 @@ namespace sfx2
             // and for all the sub filters of the class, remember the class
             // (respectively the position of the class it the group)
             ::std::for_each(
-                _rClass.aSubFilters.getConstArray(),
-                _rClass.aSubFilters.getConstArray() + _rClass.aSubFilters.getLength(),
+                _rClass.aSubFilters.begin(),
+                _rClass.aSubFilters.end(),
                 ReferToFilterEntry( m_rClassReferrer, aClassEntryPos )
             );
         }

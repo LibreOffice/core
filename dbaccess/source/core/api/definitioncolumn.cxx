@@ -474,12 +474,9 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
 
     if ( !m_bIsDescriptor )
     {
-        for (   Property* prop = aDescriptor.getArray();
-                prop != aDescriptor.getArray() + aDescriptor.getLength();
-                ++prop
-            )
+        for ( auto & prop : aDescriptor )
         {
-            prop->Attributes |= PropertyAttribute::READONLY;
+            prop.Attributes |= PropertyAttribute::READONLY;
         }
     }
 

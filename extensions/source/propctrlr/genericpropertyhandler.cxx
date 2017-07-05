@@ -469,12 +469,9 @@ namespace pcr
                     aProperties = xPSI->getProperties();
                 DBG_ASSERT( aProperties.getLength(), "GenericPropertyHandler::getSupportedProperties: no properties!" );
 
-                for ( const Property* pProperties = aProperties.getConstArray();
-                      pProperties != aProperties.getConstArray() + aProperties.getLength();
-                      ++pProperties
-                    )
+                for ( auto const & property : aProperties )
                 {
-                    switch ( pProperties->Type.getTypeClass() )
+                    switch ( property.Type.getTypeClass() )
                     {
                     case TypeClass_BOOLEAN:
                     case TypeClass_BYTE:
@@ -493,7 +490,7 @@ namespace pcr
 
                     case TypeClass_SEQUENCE:
                     {
-                        TypeClass eElementTypeClass = ::comphelper::getSequenceElementType( pProperties->Type ).getTypeClass();
+                        TypeClass eElementTypeClass = ::comphelper::getSequenceElementType( property.Type ).getTypeClass();
                         if  (   ( eElementTypeClass != TypeClass_STRING )
                             &&  ( eElementTypeClass != TypeClass_BYTE )
                             &&  ( eElementTypeClass != TypeClass_SHORT )
@@ -511,7 +508,7 @@ namespace pcr
                         continue;
                     }
 
-                    m_aProperties.insert( PropertyMap::value_type( pProperties->Name, *pProperties ) );
+                    m_aProperties.insert( PropertyMap::value_type( property.Name, property ) );
                 }
             }
             catch( const Exception& )

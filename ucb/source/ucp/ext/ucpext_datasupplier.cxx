@@ -126,18 +126,15 @@ namespace ucb { namespace ucp { namespace ext
             case E_ROOT:
             {
                 Sequence< Sequence< OUString > > aExtensionInfo( xPackageInfo->getExtensionList() );
-                for (   const Sequence< OUString >* pExtInfo = aExtensionInfo.getConstArray();
-                        pExtInfo != aExtensionInfo.getConstArray() + aExtensionInfo.getLength();
-                        ++pExtInfo
-                    )
+                for ( auto const & extInfo : aExtensionInfo )
                 {
-                    if ( pExtInfo->getLength() <= 0 )
+                    if ( extInfo.getLength() <= 0 )
                     {
                         SAL_WARN( "ucb.ucp.ext", "illegal extension info" );
                         continue;
                     }
 
-                    const OUString& rLocalId = (*pExtInfo)[0];
+                    const OUString& rLocalId = extInfo[0];
                     ResultListEntry aEntry;
                     aEntry.sId = ContentProvider::getRootURL() + Content::encodeIdentifier( rLocalId ) + "/";
                     m_pImpl->m_aResults.push_back( aEntry );

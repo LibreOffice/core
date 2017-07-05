@@ -157,8 +157,8 @@
             sal_Int32 nOldSize = aTypes.getLength();
             aTypes.realloc( nOldSize + aAggTypes.getLength() );
             ::std::copy(
-                aAggTypes.getConstArray(),
-                aAggTypes.getConstArray() + aAggTypes.getLength(),
+                aAggTypes.begin(),
+                aAggTypes.end(),
                 aTypes.getArray() + nOldSize
             );
         }
@@ -531,8 +531,8 @@
         IntArrayArray::value_type& rDuplicateIds = AmbiguousPropertyIds::get()[ _nId ];
         // for this, sort the aggregate properties
         ::std::sort(
-            aAggregateProps.getArray(),
-            aAggregateProps.getArray() + aAggregateProps.getLength(),
+            aAggregateProps.begin(),
+            aAggregateProps.end(),
             PropertyNameLess()
         );
         const Property* pAggProps = aAggregateProps.getConstArray();

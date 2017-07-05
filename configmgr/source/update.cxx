@@ -51,9 +51,7 @@ namespace {
 std::set< OUString > seqToSet(
     css::uno::Sequence< OUString > const & sequence)
 {
-    return std::set< OUString >(
-        sequence.getConstArray(),
-        sequence.getConstArray() + sequence.getLength());
+    return std::set< OUString >( sequence.begin(), sequence.end() );
 }
 
 class Service:

@@ -250,11 +250,9 @@ namespace dbaccess
                 Reference< XDatabaseDocumentUI > xDatabaseUI( *ctrl, UNO_QUERY_THROW );
                 Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
 
-                const Reference< XComponent >* component = aComponents.getConstArray();
-                const Reference< XComponent >* componentEnd = aComponents.getConstArray() + aComponents.getLength();
-                for ( ; component != componentEnd; ++component )
+                for ( auto const & component : aComponents )
                 {
-                    SubComponentRecovery aComponentRecovery( m_pData->aContext, xDatabaseUI, *component );
+                    SubComponentRecovery aComponentRecovery( m_pData->aContext, xDatabaseUI, component );
                     aComponentRecovery.saveToRecoveryStorage( xRecoveryStorage, aMapCompDescs );
                 }
             }

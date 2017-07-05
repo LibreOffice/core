@@ -398,8 +398,8 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
     );
 
     std::sort(
-        aProps.getArray(),
-        aProps.getArray() + aProps.getLength(),
+        aProps.begin(),
+        aProps.end(),
         ::comphelper::PropertyCompareByName()
     );
 

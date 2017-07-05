@@ -211,16 +211,14 @@ void OContainerMediator::notifyElementCreated( const OUString& _sName, const Ref
         // collect the to-be-monitored properties
         Reference< XPropertySetInfo > xPSI( _xDest->getPropertySetInfo(), UNO_QUERY_THROW );
         Sequence< Property > aProperties( xPSI->getProperties() );
-        const Property* property = aProperties.getConstArray();
-        const Property* propertyEnd = aProperties.getConstArray() + aProperties.getLength();
-        for ( ; property != propertyEnd; ++property )
+        for ( auto const & property : aProperties )
         {
-            if ( ( property->Attributes & PropertyAttribute::READONLY ) != 0 )
+            if ( ( property.Attributes & PropertyAttribute::READONLY ) != 0 )
                 continue;
-            if ( ( property->Attributes & PropertyAttribute::BOUND ) == 0 )
+            if ( ( property.Attributes & PropertyAttribute::BOUND ) == 0 )
                 continue;
 
-            aPropertyList.push_back( property->Name );
+            aPropertyList.push_back( property.Name );
         }
     }
     catch( const Exception& )

@@ -1375,8 +1375,8 @@ OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& 
 {
     std::set< OUString > aUsedNames;
     std::copy(
-        _rNames.getConstArray(),
-        _rNames.getConstArray() + _rNames.getLength(),
+        _rNames.begin(),
+        _rNames.end(),
         std::insert_iterator< std::set< OUString > >( aUsedNames, aUsedNames.end() )
     );
 

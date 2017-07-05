@@ -607,14 +607,9 @@ namespace svt
                     static_cast< ListBox* >( _pControl )->Clear();
 
                     // add the new ones
-                    const OUString* pItems       = aItems.getConstArray();
-                    const OUString* pItemsEnd    = aItems.getConstArray() + aItems.getLength();
-                    for (   const OUString* pItem = pItems;
-                            pItem != pItemsEnd;
-                            ++pItem
-                        )
+                    for ( auto const & item : aItems )
                     {
-                        static_cast< ListBox* >( _pControl )->InsertEntry( *pItem );
+                        static_cast< ListBox* >( _pControl )->InsertEntry( item );
                     }
 
                 }

@@ -546,8 +546,8 @@ namespace
     {
         Sequence< uno::Type > aStrippedTypes( io_rTypes.getLength() - 1 );
         ::std::remove_copy_if(
-            io_rTypes.getConstArray(),
-            io_rTypes.getConstArray() + io_rTypes.getLength(),
+            io_rTypes.begin(),
+            io_rTypes.end(),
             aStrippedTypes.getArray(),
             [&i_rTypeToStrip](const uno::Type& aType) { return aType == i_rTypeToStrip; }
         );

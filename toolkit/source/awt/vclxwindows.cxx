@@ -1556,9 +1556,7 @@ void VCLXListBox::addItems( const css::uno::Sequence< OUString>& aItems, sal_Int
     if ( pBox )
     {
         sal_uInt16 nP = nPos;
-        const OUString* pItems = aItems.getConstArray();
-        const OUString* pItemsEnd = aItems.getConstArray() + aItems.getLength();
-        while ( pItems != pItemsEnd )
+        for ( auto const & item : aItems )
         {
             if ( nP == 0xFFFF )
             {
@@ -1567,7 +1565,7 @@ void VCLXListBox::addItems( const css::uno::Sequence< OUString>& aItems, sal_Int
                 break;
             }
 
-            pBox->InsertEntry( *pItems++, nP++ );
+            pBox->InsertEntry( item, nP++ );
         }
     }
 }

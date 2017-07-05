@@ -322,8 +322,8 @@ namespace frm
             // copy to member
             ValueList().swap(m_aListSourceValues);
             ::std::copy(
-                aListSource.getConstArray(),
-                aListSource.getConstArray() + aListSource.getLength(),
+                aListSource.begin(),
+                aListSource.end(),
                 ::std::insert_iterator< ValueList >( m_aListSourceValues, m_aListSourceValues.end() )
             );
 
@@ -467,21 +467,19 @@ namespace frm
         // #i27024#
         const Any* pSelectSequenceValue = nullptr;
 
-        const OUString* pStartPos = _rPropertyNames.getConstArray();
-        const OUString* pEndPos   = _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
         const OUString* pSelectedItemsPos = ::std::find_if(
-            pStartPos, pEndPos,
+            _rPropertyNames.begin(), _rPropertyNames.end(),
              ::std::bind2nd( ::std::equal_to< OUString >(), PROPERTY_SELECT_SEQ )
         );
         const OUString* pStringItemListPos = ::std::find_if(
-            pStartPos, pEndPos,
+            _rPropertyNames.begin(), _rPropertyNames.end(),
              ::std::bind2nd( ::std::equal_to< OUString >(), PROPERTY_STRINGITEMLIST )
         );
-        if ( ( pSelectedItemsPos != pEndPos ) && ( pStringItemListPos != pEndPos ) )
+        if ( ( pSelectedItemsPos != _rPropertyNames.end() ) && ( pStringItemListPos != _rPropertyNames.end() ) )
         {
             // both properties are present
             // -> remember the value for the select sequence
-            pSelectSequenceValue = _rValues.getConstArray() + ( pSelectedItemsPos - pStartPos );
+            pSelectSequenceValue = _rValues.getConstArray() + ( pSelectedItemsPos - _rPropertyNames.begin() );
         }
 
         OBoundControlModel::setPropertyValues( _rPropertyNames, _rValues );
@@ -974,8 +972,8 @@ namespace frm
                     {
                         css::uno::Sequence<OUString> seqNames = xFieldNames->getElementNames();
                         ::std::copy(
-                            seqNames.getConstArray(),
-                            seqNames.getConstArray() + seqNames.getLength(),
+                            seqNames.begin(),
+                            seqNames.end(),
                             ::std::insert_iterator< ValueList >( aDisplayList, aDisplayList.end() )
                         );
                         if(*aBoundColumn == -1)
@@ -1229,14 +1227,12 @@ namespace frm
 
 #if HAVE_FEATURE_DBCONNECTIVITY
         sal_Int16 *pIndex = aSelectionIndicies.getArray();
-        const Any *pValue = i_aValues.getConstArray();
-        const Any * const pValueEnd = i_aValues.getConstArray() + i_aValues.getLength();
-        for (;pValue < pValueEnd; ++pValue)
+        for ( auto const & value : i_aValues)
         {
-            if ( pValue->hasValue() )
+            if ( value.hasValue() )
             {
                 ORowSetValue v;
-                v.fill(*pValue);
+                v.fill(value);
                 v.setTypeKind( m_nConvertedBoundValuesType );
                 ValueList::const_iterator curValuePos = ::std::find( aValues.begin(), aValues.end(), v );
                 if ( curValuePos != aValues.end() )
@@ -1401,8 +1397,8 @@ namespace frm
             OSL_VERIFY( _rExternalValue >>= aSelectIndexesPure );
             aSelectIndexes.realloc( aSelectIndexesPure.getLength() );
             ::std::copy(
-                aSelectIndexesPure.getConstArray(),
-                aSelectIndexesPure.getConstArray() + aSelectIndexesPure.getLength(),
+                aSelectIndexesPure.begin(),
+                aSelectIndexesPure.end(),
                 aSelectIndexes.getArray()
             );
         }
@@ -1535,8 +1531,8 @@ namespace frm
         {
             Sequence< OUString > aSelectedEntriesTexts( _rSelectSequence.getLength() );
             ::std::transform(
-                _rSelectSequence.getConstArray(),
-                _rSelectSequence.getConstArray() + _rSelectSequence.getLength(),
+                _rSelectSequence.begin(),
+                _rSelectSequence.end(),
                 aSelectedEntriesTexts.getArray(),
                 ExtractStringFromSequence_Safe( _rStringList )
             );
@@ -1582,8 +1578,8 @@ namespace frm
         {
             Sequence< Any > aSelectedEntriesValues( _rSelectSequence.getLength() );
             ::std::transform(
-                _rSelectSequence.getConstArray(),
-                _rSelectSequence.getConstArray() + _rSelectSequence.getLength(),
+                _rSelectSequence.begin(),
+                _rSelectSequence.end(),
                 aSelectedEntriesValues.getArray(),
                 ExtractAnyFromValueList_Safe( _rStringList )
             );
@@ -1616,8 +1612,8 @@ namespace frm
             // expects int's
             Sequence< sal_Int32 > aTransformed( aSelectSequence.getLength() );
             ::std::copy(
-                aSelectSequence.getConstArray(),
-                aSelectSequence.getConstArray() + aSelectSequence.getLength(),
+                aSelectSequence.begin(),
+                aSelectSequence.end(),
                 aTransformed.getArray()
             );
             aReturn <<= aTransformed;

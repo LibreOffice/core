@@ -894,18 +894,15 @@ void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
     try
     {
         const Sequence< Reference< XGridColumn > > columns = xColumnModel->getColumns();
-        for (   const Reference< XGridColumn >* colRef = columns.getConstArray();
-                colRef != columns.getConstArray() + columns.getLength();
-                ++colRef
-            )
+        for ( auto const & colRef : columns )
         {
-            if ( !colRef->is() )
+            if ( !colRef.is() )
             {
                 SAL_WARN( "svtools.uno", "illegal column!" );
                 continue;
             }
 
-            m_xTableModel->appendColumn( *colRef );
+            m_xTableModel->appendColumn( colRef );
         }
     }
     catch( const Exception& )

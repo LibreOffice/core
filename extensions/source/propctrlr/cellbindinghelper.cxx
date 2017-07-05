@@ -382,8 +382,8 @@ namespace pcr
                 aAvailableServices = xDocumentFactory->getAvailableServiceNames( );
 
             const OUString* pFound = std::find_if(
-                aAvailableServices.getConstArray(),
-                aAvailableServices.getConstArray() + aAvailableServices.getLength(),
+                aAvailableServices.begin(),
+                aAvailableServices.end(),
                 StringCompare( _rService )
             );
             if ( pFound - aAvailableServices.getConstArray() < aAvailableServices.getLength() )

@@ -245,8 +245,8 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  )
         aTypes = Sequence< Type >(
             pStripTo,
             std::remove_copy_if(
-                aTypes.getConstArray(),
-                aTypes.getConstArray() + aTypes.getLength(),
+                aTypes.begin(),
+                aTypes.end(),
                 pStripTo,
                 std::bind2nd( std::equal_to< Type >(), cppu::UnoType<XEmbeddedScripts>::get() )
             ) - pStripTo
@@ -256,8 +256,8 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  )
         aTypes = Sequence< Type >(
             pStripTo,
             std::remove_copy_if(
-                aTypes.getConstArray(),
-                aTypes.getConstArray() + aTypes.getLength(),
+                aTypes.begin(),
+                aTypes.end(),
                 pStripTo,
                 std::bind2nd( std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
             ) - pStripTo
@@ -594,13 +594,11 @@ namespace
         Reference< css::sdb::application::XDatabaseDocumentUI > xDatabaseUI( i_rController, UNO_QUERY_THROW );
 
         Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
-        const Reference< XComponent >* component = aComponents.getConstArray();
-        const Reference< XComponent >* componentsEnd = aComponents.getConstArray() + aComponents.getLength();
 
         bool isAnyModified = false;
-        for ( ; component != componentsEnd; ++component )
+        for ( auto const & xComponent : aComponents )
         {
-            Reference< XModifiable > xModify( *component, UNO_QUERY );
+            Reference< XModifiable > xModify( xComponent, UNO_QUERY );
             if ( xModify.is() )
             {
                 isAnyModified = xModify->isModified();

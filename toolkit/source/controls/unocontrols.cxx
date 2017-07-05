@@ -2250,8 +2250,8 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
 
             ::std::vector< ListItem > aItems( aStringItemList.getLength() );
             ::std::transform(
-                aStringItemList.getConstArray(),
-                aStringItemList.getConstArray() + aStringItemList.getLength(),
+                aStringItemList.begin(),
+                aStringItemList.end(),
                 aItems.begin(),
                 CreateListItem()
             );
@@ -2456,8 +2456,8 @@ void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< OUString >& 
 
     o_rStringItems.resize( size_t( aStringItemList.getLength() ) );
     ::std::copy(
-        aStringItemList.getConstArray(),
-        aStringItemList.getConstArray() + aStringItemList.getLength(),
+        aStringItemList.begin(),
+        aStringItemList.end(),
         o_rStringItems.begin()
     );
 }
@@ -3087,8 +3087,8 @@ void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int
 
         ::std::vector< ListItem > aItems( aStringItemList.getLength() );
         ::std::transform(
-            aStringItemList.getConstArray(),
-            aStringItemList.getConstArray() + aStringItemList.getLength(),
+            aStringItemList.begin(),
+            aStringItemList.end(),
             aItems.begin(),
             CreateListItem()
         );

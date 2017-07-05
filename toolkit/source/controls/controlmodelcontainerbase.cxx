@@ -670,18 +670,16 @@ void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Refer
     SolarMutexGuard aGuard;
 
     // set the tab indexes according to the order of models in the sequence
-    const Reference< XControlModel >* pControls = _rControls.getConstArray( );
-    const Reference< XControlModel >* pControlsEnd = _rControls.getConstArray( ) + _rControls.getLength();
 
     sal_Int16 nTabIndex = 1;
 
-    for ( ; pControls != pControlsEnd; ++pControls )
+    for ( auto const & control : _rControls )
     {
         // look up the control in our own structure. This is to prevent invalid arguments
         UnoControlModelHolderList::const_iterator aPos =
             ::std::find_if(
                 maModels.begin(), maModels.end(),
-                CompareControlModel( *pControls )
+                CompareControlModel( control )
             );
         if ( maModels.end() != aPos )
         {

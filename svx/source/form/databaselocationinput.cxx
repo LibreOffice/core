@@ -94,12 +94,9 @@ namespace svx
 
         // forward the allowed extensions to the input control
         OUStringBuffer aExtensionList;
-        for (   const OUString* pExtension = m_aFilterExtensions.getConstArray();
-                pExtension != m_aFilterExtensions.getConstArray() + m_aFilterExtensions.getLength();
-                ++pExtension
-            )
+        for ( auto const & extension : m_aFilterExtensions )
         {
-            aExtensionList.append( *pExtension );
+            aExtensionList.append( extension );
             aExtensionList.append( ';' );
         }
         m_rLocationInput.SetFilter( aExtensionList.makeStringAndClear() );

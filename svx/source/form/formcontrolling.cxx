@@ -388,8 +388,8 @@ namespace svx
 
         ::std::vector< sal_Int32 > aFeatures( Features.getLength() );
         ::std::transform(
-            Features.getConstArray(),
-            Features.getConstArray() + Features.getLength(),
+            Features.begin(),
+            Features.end(),
             aFeatures.begin(),
             FormFeatureToSlotId()
         );

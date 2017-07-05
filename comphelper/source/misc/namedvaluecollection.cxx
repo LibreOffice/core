@@ -192,21 +192,19 @@ namespace comphelper
         PropertyValue aPropertyValue;
         NamedValue aNamedValue;
 
-        const Any* pArgument = _rArguments.getConstArray();
-        const Any* pArgumentEnd = _rArguments.getConstArray() + _rArguments.getLength();
-        for ( ; pArgument != pArgumentEnd; ++pArgument )
+        for ( auto const & argument : _rArguments )
         {
-            if ( *pArgument >>= aPropertyValue )
+            if ( argument >>= aPropertyValue )
                 m_pImpl->aValues[ aPropertyValue.Name ] = aPropertyValue.Value;
-            else if ( *pArgument >>= aNamedValue )
+            else if ( argument >>= aNamedValue )
                 m_pImpl->aValues[ aNamedValue.Name ] = aNamedValue.Value;
             else
             {
                 SAL_WARN_IF(
-                    pArgument->hasValue(), "comphelper",
+                    argument.hasValue(), "comphelper",
                     ("NamedValueCollection::impl_assign: encountered a value"
                      " type which I cannot handle: "
-                     + pArgument->getValueTypeName()));
+                     + argument.getValueTypeName()));
             }
         }
     }
@@ -219,10 +217,8 @@ namespace comphelper
             m_pImpl->aValues.swap( aEmpty );
         }
 
-        const PropertyValue* pArgument = _rArguments.getConstArray();
-        const PropertyValue* pArgumentEnd = _rArguments.getConstArray() + _rArguments.getLength();
-        for ( ; pArgument != pArgumentEnd; ++pArgument )
-            m_pImpl->aValues[ pArgument->Name ] = pArgument->Value;
+        for ( auto const & argument : _rArguments )
+            m_pImpl->aValues[ argument.Name ] = argument.Value;
     }
 
 
@@ -233,10 +229,8 @@ namespace comphelper
             m_pImpl->aValues.swap( aEmpty );
         }
 
-        const NamedValue* pArgument = _rArguments.getConstArray();
-        const NamedValue* pArgumentEnd = _rArguments.getConstArray() + _rArguments.getLength();
-        for ( ; pArgument != pArgumentEnd; ++pArgument )
-            m_pImpl->aValues[ pArgument->Name ] = pArgument->Value;
+        for ( auto const & argument : _rArguments )
+            m_pImpl->aValues[ argument.Name ] = argument.Value;
     }
 
 

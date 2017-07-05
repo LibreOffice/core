@@ -366,15 +366,12 @@ Reference< css::container::XNameAccess > OResultSet::getColumns()
             const Sequence< OUString > aNames( xColNames->getElementNames() );
             SAL_WARN_IF( aNames.getLength() != nColCount, "dbaccess",
                 "OResultSet::getColumns: invalid column count!" );
-            for (   const OUString* pName = aNames.getConstArray();
-                    pName != aNames.getConstArray() + aNames.getLength();
-                    ++pName
-                )
+            for (  auto const & name : aNames )
             {
-                Reference< XPropertySet > xColProps( xColNames->getByName( *pName ), UNO_QUERY_THROW );
+                Reference< XPropertySet > xColProps( xColNames->getByName( name ), UNO_QUERY_THROW );
                 OUString sName;
                 OSL_VERIFY( xColProps->getPropertyValue( PROPERTY_NAME ) >>= sName );
-                SAL_WARN_IF( sName != *pName, "dbaccess", "OResultSet::getColumns: invalid column name!" );
+                SAL_WARN_IF( sName != name, "dbaccess", "OResultSet::getColumns: invalid column name!" );
             }
 
         }

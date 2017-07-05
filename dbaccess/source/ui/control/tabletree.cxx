@@ -188,9 +188,7 @@ namespace
         {
             OTableTreeListBox::TNames::value_type aRet;
             aRet.first = name;
-            const OUString* pIter = m_aViews.getConstArray();
-            const OUString* pEnd = m_aViews.getConstArray() + m_aViews.getLength();
-            aRet.second = std::any_of(pIter, pEnd,
+            aRet.second = std::any_of(m_aViews.begin(), m_aViews.end(),
                                       [this, &name](const OUString& lhs)
                                       { return m_aEqualFunctor(lhs, name); } );
 
@@ -208,12 +206,10 @@ void OTableTreeListBox::UpdateTableList(
 {
     TNames aTables;
     aTables.resize(_rTables.getLength());
-    const OUString* pIter = _rTables.getConstArray();
-    const OUString* pEnd = _rTables.getConstArray() + _rTables.getLength();
     try
     {
         Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
-        std::transform( pIter, pEnd,
+        std::transform( _rTables.begin(), _rTables.end(),
             aTables.begin(), OViewSetter( _rViews, xMeta->supportsMixedCaseQuotedIdentifiers() ) );
     }
     catch(Exception&)

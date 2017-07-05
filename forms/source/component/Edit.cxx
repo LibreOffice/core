@@ -424,35 +424,29 @@ namespace
             }
 
             Sequence< Property > aSourceProps( xSourceInfo->getProperties() );
-            const Property* pSourceProps = aSourceProps.getConstArray();
-            const Property* pSourcePropsEnd = aSourceProps.getConstArray() + aSourceProps.getLength();
-            while ( pSourceProps != pSourcePropsEnd )
+            for ( auto const & sourceprop : aSourceProps )
             {
-                if ( !xDestInfo->hasPropertyByName( pSourceProps->Name ) )
+                if ( !xDestInfo->hasPropertyByName( sourceprop.Name ) )
                 {
-                    ++pSourceProps;
                     continue;
                 }
 
-                Property aDestProp( xDestInfo->getPropertyByName( pSourceProps->Name ) );
+                Property aDestProp( xDestInfo->getPropertyByName( sourceprop.Name ) );
                 if ( 0 != ( aDestProp.Attributes & PropertyAttribute::READONLY ) )
                 {
-                    ++pSourceProps;
                     continue;
                 }
 
                 try
                 {
-                    _rxDest->setPropertyValue( pSourceProps->Name, _rxSource->getPropertyValue( pSourceProps->Name ) );
+                    _rxDest->setPropertyValue( sourceprop.Name, _rxSource->getPropertyValue( sourceprop.Name ) );
                 }
                 catch(const IllegalArgumentException& e)
                 {
                     SAL_WARN( "forms.component", "could not transfer the property named '"
-                                << pSourceProps->Name
+                                << sourceprop.Name
                                 << "'. " << e.Message );
                 }
-
-                ++pSourceProps;
             }
         }
         catch( const Exception& )

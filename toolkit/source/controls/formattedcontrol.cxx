@@ -307,15 +307,12 @@ namespace toolkit
     {
         bool bSettingValue = false;
         bool bSettingText = false;
-        for (   const OUString* pPropertyNames = _rPropertyNames.getConstArray();
-                pPropertyNames != _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
-                ++pPropertyNames
-            )
+        for ( auto const & propertyName : _rPropertyNames )
         {
-            if ( BASEPROPERTY_EFFECTIVE_VALUE == GetPropertyId( *pPropertyNames ) )
+            if ( BASEPROPERTY_EFFECTIVE_VALUE == GetPropertyId( propertyName ) )
                 bSettingValue = true;
 
-            if ( BASEPROPERTY_TEXT == GetPropertyId( *pPropertyNames ) )
+            if ( BASEPROPERTY_TEXT == GetPropertyId( propertyName ) )
                 bSettingText = true;
         }
 

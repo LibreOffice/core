@@ -633,17 +633,14 @@ namespace
         if ( nSetPropertyMethodID == nullptr )
             return false;
 
-        for (   const NamedValue* pSystemProp = _rSystemProperties.getConstArray();
-                pSystemProp != _rSystemProperties.getConstArray() + _rSystemProperties.getLength();
-                ++pSystemProp
-            )
+        for ( auto const & systemProp : _rSystemProperties )
         {
             OUString sValue;
-            OSL_VERIFY( pSystemProp->Value >>= sValue );
+            OSL_VERIFY( systemProp.Value >>= sValue );
 
-            _rLogger.log( LogLevel::FINER, STR_LOG_SETTING_SYSTEM_PROPERTY, pSystemProp->Name, sValue );
+            _rLogger.log( LogLevel::FINER, STR_LOG_SETTING_SYSTEM_PROPERTY, systemProp.Name, sValue );
 
-            LocalRef< jstring > jName( _rEnv, convertwchar_tToJavaString( &_rEnv, pSystemProp->Name ) );
+            LocalRef< jstring > jName( _rEnv, convertwchar_tToJavaString( &_rEnv, systemProp.Name ) );
             LocalRef< jstring > jValue( _rEnv, convertwchar_tToJavaString( &_rEnv, sValue ) );
 
             _rEnv.CallStaticObjectMethod( systemClass.get(), nSetPropertyMethodID, jName.get(), jValue.get() );

@@ -772,12 +772,9 @@ void OConnection::impl_checkTableQueryNames_nothrow()
         Reference< XNameAccess > xQueries( getQueries() );
         Sequence< OUString > aQueryNames( xQueries->getElementNames() );
 
-        for (   const OUString* pQueryName = aQueryNames.getConstArray();
-                pQueryName != aQueryNames.getConstArray() + aQueryNames.getLength();
-                ++pQueryName
-            )
+        for ( auto const & queryName : aQueryNames )
         {
-            if ( aSortedTableNames.find( *pQueryName ) != aSortedTableNames.end() )
+            if ( aSortedTableNames.find( queryName ) != aSortedTableNames.end() )
             {
                 OUString sConflictWarning( DBA_RES( RID_STR_CONFLICTING_NAMES ) );
                 m_aWarnings.appendWarning( sConflictWarning, "01SB0", *this );

@@ -271,7 +271,7 @@ namespace pcr
             throw VetoException();
 
         m_bBindingIntrospectee = true;
-        impl_rebindToInspectee_nothrow( InterfaceArray( _rObjects.getConstArray(), _rObjects.getConstArray() + _rObjects.getLength() ) );
+        impl_rebindToInspectee_nothrow( InterfaceArray( _rObjects.begin(), _rObjects.end() ) );
         m_bBindingIntrospectee = false;
 
     }
@@ -1455,14 +1455,11 @@ namespace pcr
         if ( m_xModel.is() )
             aHandlerFactories = m_xModel->getHandlerFactories();
 
-        const Any* pHandlerFactory = aHandlerFactories.getConstArray();
-        const Any* pHandlerFactoryEnd = aHandlerFactories.getConstArray() + aHandlerFactories.getLength();
-
-        while ( pHandlerFactory != pHandlerFactoryEnd )
+        for ( auto const & handlerFactory : aHandlerFactories )
         {
             if ( _rObjects.size() == 1 )
             {   // we're inspecting only one object -> one handler
-                Reference< XPropertyHandler > xHandler( lcl_createHandler( m_xContext, *pHandlerFactory ) );
+                Reference< XPropertyHandler > xHandler( lcl_createHandler( m_xContext, handlerFactory ) );
                 if ( xHandler.is() )
                 {
                     xHandler->inspect( _rObjects[0] );
@@ -1480,7 +1477,7 @@ namespace pcr
 
                 for ( ; pObject != pObjectEnd; ++pObject )
                 {
-                    *pHandler = lcl_createHandler( m_xContext, *pHandlerFactory );
+                    *pHandler = lcl_createHandler( m_xContext, handlerFactory );
                     if ( pHandler->is() )
                     {
                         (*pHandler)->inspect( *pObject );
@@ -1493,8 +1490,6 @@ namespace pcr
                 if ( !aSingleHandlers.empty() )
                     _rHandlers.push_back( new PropertyComposer( aSingleHandlers ) );
             }
-
-            ++pHandlerFactory;
         }
 
         // note that the handlers will not be used by our caller, if they indicate that there are no

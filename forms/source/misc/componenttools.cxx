@@ -60,8 +60,8 @@ namespace frm
     void TypeBag::addTypes( const TypeSequence& _rTypes )
     {
         ::std::copy(
-            _rTypes.getConstArray(),
-            _rTypes.getConstArray() + _rTypes.getLength(),
+            _rTypes.begin(),
+            _rTypes.end(),
             ::std::insert_iterator< TypeSet >( m_aTypes, m_aTypes.begin() )
         );
     }

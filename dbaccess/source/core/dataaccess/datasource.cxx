@@ -759,11 +759,9 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 if (!(rValue >>= aValues))
                     throw IllegalArgumentException();
 
-                const PropertyValue* valueEnd = aValues.getConstArray() + aValues.getLength();
-                const PropertyValue* checkName = aValues.getConstArray();
-                for ( ;checkName != valueEnd; ++checkName )
+                for ( auto const & checkName : aValues )
                 {
-                    if ( checkName->Name.isEmpty() )
+                    if ( checkName.Name.isEmpty() )
                         throw IllegalArgumentException();
                 }
 
@@ -773,7 +771,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 {
                     const PropertyValue* pInfoIter = aSettings.getConstArray();
                     const PropertyValue* checkValue = aValues.getConstArray();
-                    for ( ;!bModified && checkValue != valueEnd ; ++checkValue,++pInfoIter)
+                    for ( ;!bModified && checkValue != aValues.end() ; ++checkValue,++pInfoIter)
                     {
                         bModified = checkValue->Name != pInfoIter->Name;
                         if ( !bModified )
@@ -824,8 +822,8 @@ namespace
         typedef std::set< OUString >   StringSet;
         StringSet aToBeSetPropertyNames;
         std::transform(
-            _rAllNewPropertyValues.getConstArray(),
-            _rAllNewPropertyValues.getConstArray() + _rAllNewPropertyValues.getLength(),
+            _rAllNewPropertyValues.begin(),
+            _rAllNewPropertyValues.end(),
             std::insert_iterator< StringSet >( aToBeSetPropertyNames, aToBeSetPropertyNames.end() ),
             SelectPropertyName()
         );
@@ -839,19 +837,17 @@ namespace
             Reference< XPropertyState > xPropertyState( _rxPropertyBag, UNO_QUERY_THROW );
 
             // loop through them, and reset resp. default properties which are not to be set
-            const Property* pExistentProperty( aAllExistentProperties.getConstArray() );
-            const Property* pExistentPropertyEnd( aAllExistentProperties.getConstArray() + aAllExistentProperties.getLength() );
-            for ( ; pExistentProperty != pExistentPropertyEnd; ++pExistentProperty )
+            for ( auto const & existentProperty : aAllExistentProperties )
             {
-                if ( aToBeSetPropertyNames.find( pExistentProperty->Name ) != aToBeSetPropertyNames.end() )
+                if ( aToBeSetPropertyNames.find( existentProperty.Name ) != aToBeSetPropertyNames.end() )
                     continue;
 
                 // this property is not to be set, but currently exists in the bag.
                 // -> Remove it, or reset it to the default.
-                if ( ( pExistentProperty->Attributes & PropertyAttribute::REMOVABLE ) != 0 )
-                    _rxPropertyBag->removeProperty( pExistentProperty->Name );
+                if ( ( existentProperty.Attributes & PropertyAttribute::REMOVABLE ) != 0 )
+                    _rxPropertyBag->removeProperty( existentProperty.Name );
                 else
-                    xPropertyState->setPropertyToDefault( pExistentProperty->Name );
+                    xPropertyState->setPropertyToDefault( existentProperty.Name );
             }
 
             // finally, set the new property values
@@ -944,12 +940,9 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                     Reference< XPropertySetInfo > xPST( xSettingsAsProps->getPropertySetInfo(), UNO_QUERY_THROW );
                     Sequence< Property > aSettings( xPST->getProperties() );
                     std::map< OUString, sal_Int32 > aPropertyAttributes;
-                    for (   const Property* pSettings = aSettings.getConstArray();
-                            pSettings != aSettings.getConstArray() + aSettings.getLength();
-                            ++pSettings
-                        )
+                    for ( auto const & setting : aSettings )
                     {
-                        aPropertyAttributes[ pSettings->Name ] = pSettings->Attributes;
+                        aPropertyAttributes[ setting.Name ] = setting.Attributes;
                     }
 
                     // get all current settings with their values
@@ -959,8 +952,8 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                     // criteria survive
                     Sequence< PropertyValue > aNonDefaultOrUserDefined( aValues.getLength() );
                     const PropertyValue* pCopyEnd = std::remove_copy_if(
-                        aValues.getConstArray(),
-                        aValues.getConstArray() + aValues.getLength(),
+                        aValues.begin(),
+                        aValues.end(),
                         aNonDefaultOrUserDefined.getArray(),
                         IsDefaultAndNotRemoveable( aPropertyAttributes )
                     );

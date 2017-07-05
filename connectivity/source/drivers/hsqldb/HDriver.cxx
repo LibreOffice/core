@@ -149,13 +149,10 @@ namespace connectivity
 
             OUStringBuffer aPermittedMethods;
             Sequence< OUString > aNodeNames( aConfig.getNodeNames() );
-            for (   const OUString* pNodeNames = aNodeNames.getConstArray();
-                    pNodeNames != aNodeNames.getConstArray() + aNodeNames.getLength();
-                    ++pNodeNames
-                )
+            for ( auto const & nodeName : aNodeNames )
             {
                 OUString sPermittedMethod;
-                OSL_VERIFY( aConfig.getNodeValue( *pNodeNames ) >>= sPermittedMethod );
+                OSL_VERIFY( aConfig.getNodeValue( nodeName ) >>= sPermittedMethod );
 
                 if ( !aPermittedMethods.isEmpty() )
                     aPermittedMethods.append( ';' );

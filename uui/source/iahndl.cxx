@@ -352,25 +352,21 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
 
     // loop through all registered implementations
     const Sequence< OUString > aRegisteredHandlers( aConfigRoot.getNodeNames() );
-    const OUString* pHandlerName = aRegisteredHandlers.getConstArray();
-    const OUString* pHandlersEnd = aRegisteredHandlers.getConstArray() + aRegisteredHandlers.getLength();
-    for ( ; pHandlerName != pHandlersEnd; ++pHandlerName )
+    for ( auto const & handlerName : aRegisteredHandlers )
     {
-        const ::utl::OConfigurationNode aHandlerNode( aConfigRoot.openNode( *pHandlerName ) );
+        const ::utl::OConfigurationNode aHandlerNode( aConfigRoot.openNode( handlerName ) );
         const ::utl::OConfigurationNode aTypesNode( aHandlerNode.openNode( "HandledRequestTypes" ) );
 
         // loop through all the types which the current handler is registered for
         const Sequence< OUString > aHandledTypes( aTypesNode.getNodeNames() );
-        const OUString* pType = aHandledTypes.getConstArray();
-        const OUString* pTypesEnd = aHandledTypes.getConstArray() + aHandledTypes.getLength();
-        for ( ; pType != pTypesEnd; ++pType )
+        for ( auto const & type : aHandledTypes )
         {
             // the UNO type is the node name
-            ::utl::OConfigurationNode aType( aTypesNode.openNode( *pType ) );
+            ::utl::OConfigurationNode aType( aTypesNode.openNode( type ) );
             // and there's a child denoting how the responsibility propagates
             OUString sPropagation;
             OSL_VERIFY( aType.getNodeValue( "Propagation" ) >>= sPropagation );
-            if ( lcl_matchesRequest( aRequest, *pType, sPropagation ) )
+            if ( lcl_matchesRequest( aRequest, type, sPropagation ) )
             {
                 // retrieve the service/implementation name of the handler
                 OUString sServiceName;

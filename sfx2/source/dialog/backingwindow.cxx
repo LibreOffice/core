@@ -208,11 +208,9 @@ void BackingWindow::initControls()
     Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( EDynamicMenuType::NewMenu );
     const OUString sURLKey( "URL"  );
 
-    const Sequence< PropertyValue >* pNewMenu = aNewMenu.getConstArray();
-    const Sequence< PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();
-    for ( ; pNewMenu != pNewMenuEnd; ++pNewMenu )
+    for ( auto const & newMenuProp : aNewMenu )
     {
-        comphelper::SequenceAsHashMap aEntryItems( *pNewMenu );
+        comphelper::SequenceAsHashMap aEntryItems( newMenuProp );
         OUString sURL( aEntryItems.getUnpackedValueOrDefault( sURLKey, OUString() ) );
         if ( !sURL.isEmpty() )
             aFileNewAppsAvailable.insert( sURL );

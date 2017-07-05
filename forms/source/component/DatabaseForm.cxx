@@ -320,12 +320,9 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
             Reference< XPropertySetInfo > xDestPSI( getPropertySetInfo(), UNO_QUERY_THROW );
 
             Sequence< Property > aSourceProperties( xSourcePSI->getProperties() );
-            for (   const Property* pSourceProperty = aSourceProperties.getConstArray();
-                    pSourceProperty != aSourceProperties.getConstArray() + aSourceProperties.getLength();
-                    ++pSourceProperty
-                )
+            for ( auto const & sourceProperty : aSourceProperties )
             {
-                if ( xDestPSI->hasPropertyByName( pSourceProperty->Name ) )
+                if ( xDestPSI->hasPropertyByName( sourceProperty.Name ) )
                     continue;
 
                 // the initial value passed to XPropertyContainer is also used as default, usually. So, try
@@ -333,14 +330,14 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
                 Any aInitialValue;
                 if ( xSourcePropState.is() )
                 {
-                    aInitialValue = xSourcePropState->getPropertyDefault( pSourceProperty->Name );
+                    aInitialValue = xSourcePropState->getPropertyDefault( sourceProperty.Name );
                 }
                 else
                 {
-                    aInitialValue = xSourceProps->getPropertyValue( pSourceProperty->Name );
+                    aInitialValue = xSourceProps->getPropertyValue( sourceProperty.Name );
                 }
-                addProperty( pSourceProperty->Name, pSourceProperty->Attributes, aInitialValue );
-                setPropertyValue( pSourceProperty->Name, xSourceProps->getPropertyValue( pSourceProperty->Name ) );
+                addProperty( sourceProperty.Name, sourceProperty.Attributes, aInitialValue );
+                setPropertyValue( sourceProperty.Name, xSourceProps->getPropertyValue( sourceProperty.Name ) );
             }
         }
         catch(const RuntimeException&)
