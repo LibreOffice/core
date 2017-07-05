@@ -2360,11 +2360,9 @@ ErrCode GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilt
         aURL.SetSmartURL( rPath );
     }
 
-    SvStream* pStream = nullptr;
+    std::unique_ptr<SvStream> pStream;
     if ( INetProtocol::File != aURL.GetProtocol() )
-    {
-        pStream = ::utl::UcbStreamHelper::CreateStream( rPath, StreamMode::READ );
-    }
+        pStream.reset(::utl::UcbStreamHelper::CreateStream( rPath, StreamMode::READ ));
 
     ErrCode nRes = ERRCODE_NONE;
     if ( !pStream )
