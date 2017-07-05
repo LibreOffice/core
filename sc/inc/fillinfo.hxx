@@ -115,6 +115,7 @@ struct CellInfo
         , nWidth(0)
         , nRotateDir(ScRotateDir::NONE)
         , bEmptyCellText(false)
+        , bMerged(false)
         , bHOverlapped(false)
         , bVOverlapped(false)
         , bAutoFilter(false)
