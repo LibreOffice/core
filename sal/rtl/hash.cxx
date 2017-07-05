@@ -22,6 +22,8 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 
+#include <cassert>
+
 struct StringHashTableImpl {
     sal_uInt32    nEntries;
     sal_uInt32    nSize;
@@ -112,13 +114,13 @@ rtl_str_hash_insert_nonequal (StringHashTable   *pHash,
 }
 
 static void
-rtl_str_hash_resize (sal_uInt32        nNewSize)
+rtl_str_hash_resize (sal_uInt32 nNewSize)
 {
     sal_uInt32 i;
     StringHashTable *pNewHash;
     StringHashTable *pHash = getHashTable();
 
-    OSL_ASSERT (nNewSize > pHash->nEntries);
+    assert(nNewSize > pHash->nEntries);
 
     pNewHash = rtl_str_hash_new (nNewSize);
 
@@ -205,7 +207,7 @@ rtl_str_hash_remove (rtl_uString       *pString)
         if (n >= pHash->nSize)
             n = 0;
     }
-    OSL_ASSERT (pHash->pData[n] != nullptr);
+    assert(pHash->pData[n]);
     if (pHash->pData[n] == nullptr)
         return;
 
