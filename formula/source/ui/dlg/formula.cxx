@@ -655,14 +655,16 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
                     {
                         pEntry=_pTree->InsertEntry(aResult,pParent,STRUCT_ERROR,0,_pToken);
                     }
-
-                    else if ( eOp<ocAdd || eOp>ocNegSub ) // not ideal coding
+                    else if (!((SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP) ||
+                                (SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)))
                     {
+                        // Not a binary or unary operator.
                         bCalcSubformula = true;
                         pEntry=_pTree->InsertEntry(aResult,pParent,STRUCT_FOLDER,0,_pToken);
                     }
                     else
                     {
+                        /* TODO: question remains, why not sub calculate operators? */
                         pEntry=_pTree->InsertEntry(aResult,pParent,STRUCT_FOLDER,0,_pToken);
                     }
                 }
