@@ -260,7 +260,7 @@ static void ChildStatusProc(void *pData)
 
         if (pid > 0)
         {
-            while (((i = read(channel[0], &status, sizeof(status))) < 0))
+            while ((i = read(channel[0], &status, sizeof(status))) < 0)
             {
                 if (errno != EINTR)
                     break;

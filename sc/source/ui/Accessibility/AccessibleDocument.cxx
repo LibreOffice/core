@@ -969,7 +969,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     SortedShapes::iterator aDataItr(maZOrderedShapes.begin());
     SortedShapes::const_iterator aDataEndItr(maZOrderedShapes.end());
     SortedShapes::const_iterator aFocusedItr = aDataEndItr;
-    while((aDataItr != aDataEndItr))
+    while(aDataItr != aDataEndItr)
     {
         if (*aDataItr) // is it really a shape or only the sheet
         {

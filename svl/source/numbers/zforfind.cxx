@@ -1472,14 +1472,14 @@ DateOrder ImpSvNumberInputScan::GetDateOrder()
         switch ((nOrder & 0xff00) >> 8)
         {
         case 'Y':
-            switch ((nOrder & 0xff))
+            switch (nOrder & 0xff)
             {
             case 'M':
                 return DateOrder::YMD;
             }
             break;
         case 'M':
-            switch ((nOrder & 0xff))
+            switch (nOrder & 0xff)
             {
             case 'Y':
                 return DateOrder::DMY;
@@ -1488,7 +1488,7 @@ DateOrder ImpSvNumberInputScan::GetDateOrder()
             }
             break;
         case 'D':
-            switch ((nOrder & 0xff))
+            switch (nOrder & 0xff)
             {
             case 'Y':
                 return DateOrder::MDY;
@@ -1498,7 +1498,7 @@ DateOrder ImpSvNumberInputScan::GetDateOrder()
             break;
         default:
         case 0:
-            switch ((nOrder & 0xff))
+            switch (nOrder & 0xff)
             {
             case 'Y':
                 return DateOrder::YMD;
