@@ -45,6 +45,7 @@
 #include <sys/mman.h>
 
 #include <algorithm>
+#include <cassert>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
@@ -226,10 +227,9 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 
 oslFileError SAL_CALL osl_closeDirectory(oslDirectory pDirectory)
 {
+    SAL_WARN_IF(!pDirectory, "sal.file", "pDirectory is nullptr");
     oslDirectoryImpl* pDirImpl = static_cast<oslDirectoryImpl*>(pDirectory);
     oslFileError err = osl_File_E_None;
-
-    OSL_ASSERT(pDirectory);
 
     if (!pDirImpl)
         return osl_File_E_INVAL;
@@ -280,13 +280,13 @@ static struct dirent* osl_readdir_impl_(DIR* pdir, bool bFilterLocalAndParentDir
 oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
         oslDirectoryItem* pItem, SAL_UNUSED_PARAMETER sal_uInt32 /*uHint*/)
 {
+    SAL_WARN_IF(!pDirectory, "sal.file", "pDirectory is nullptr");
+    SAL_WARN_IF(!pItem, "sal.file", "pItem is nullptr");
+
     oslDirectoryImpl* pDirImpl = static_cast<oslDirectoryImpl*>(pDirectory);
     rtl_uString* ustrFileName = nullptr;
     rtl_uString* ustrFilePath = nullptr;
     struct dirent* pEntry;
-
-    OSL_ASSERT(pDirectory);
-    OSL_ASSERT(pItem);
 
     if ((pDirectory == nullptr) || (pItem == nullptr))
         return osl_File_E_INVAL;
@@ -321,7 +321,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
     /* convert file name to unicode */
     rtl_string2UString(&ustrFileName, pEntry->d_name, strlen(pEntry->d_name),
                        osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
-    OSL_ASSERT(ustrFileName);
+    assert(ustrFileName);
 
 #endif
 
@@ -347,10 +347,12 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
 
 oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirectoryItem* pItem)
 {
+    SAL_WARN_IF((!ustrFileURL) || (ustrFileURL->length == 0), "sal.file", "Invalid file URL");
+    SAL_WARN_IF(!pItem, "sal.file", "pItem is nullptr");
+
     rtl_uString* ustrSystemPath = nullptr;
     oslFileError osl_error = osl_File_E_INVAL;
 
-    OSL_ASSERT((ustrFileURL) && (pItem));
     if ((!ustrFileURL) || (ustrFileURL->length == 0) || (!pItem))
         return osl_File_E_INVAL;
 
@@ -405,7 +407,8 @@ oslFileError osl_createDirectoryWithFlags(
     char path[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrDirectoryURL );
+    SAL_WARN_IF((!ustrDirectoryURL) || (ustrDirectoryURL->length == 0),
+                "sal.file", "Invalid directory URL");
 
     /* convert directory url to system path */
     eRet = FileURLToPath( path, PATH_MAX, ustrDirectoryURL );
@@ -425,7 +428,8 @@ oslFileError SAL_CALL osl_removeDirectory( rtl_uString* ustrDirectoryURL )
     char path[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrDirectoryURL );
+    SAL_WARN_IF((!ustrDirectoryURL) || (ustrDirectoryURL->length == 0),
+                "sal.file", "Invalid directory URL");
 
     /* convert directory url to system path */
     eRet = FileURLToPath( path, PATH_MAX, ustrDirectoryURL );
@@ -582,8 +586,8 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     char destPath[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrFileURL );
-    OSL_ASSERT( ustrDestURL );
+    SAL_WARN_IF((!ustrFileURL) || (ustrFileURL->length == 0), "sal.file", "Invalid source file URL");
+    SAL_WARN_IF((!ustrDestURL) || (ustrDestURL->length == 0), "sal.file", "Invalid destination file URL");
 
     /* convert source url to system path */
     eRet = FileURLToPath( srcPath, PATH_MAX, ustrFileURL );
@@ -609,8 +613,8 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
     char destPath[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrFileURL );
-    OSL_ASSERT( ustrDestURL );
+    SAL_WARN_IF((!ustrFileURL) || (ustrFileURL->length == 0), "sal.file", "Invalid source file URL");
+    SAL_WARN_IF((!ustrDestURL) || (ustrDestURL->length == 0), "sal.file", "Invalid destination file URL");
 
     /* convert source url to system path */
     eRet = FileURLToPath( srcPath, PATH_MAX, ustrFileURL );
@@ -635,7 +639,7 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* ustrFileURL )
     char path[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrFileURL );
+    SAL_WARN_IF((!ustrFileURL) || (ustrFileURL->length == 0), "sal.file", "Invalid file URL");
 
     /* convert file url to system path */
     eRet = FileURLToPath( path, PATH_MAX, ustrFileURL );
