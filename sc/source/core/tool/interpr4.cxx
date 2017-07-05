@@ -4419,6 +4419,7 @@ StackVar ScInterpreter::Interpret()
                 case ocRightB           : ScRightB();                   break;
                 case ocLeftB            : ScLeftB();                    break;
                 case ocMidB             : ScMidB();                     break;
+                case ocReplaceB         : ScReplaceB();                 break;
                 case ocUnicode          : ScUnicode();                  break;
                 case ocUnichar          : ScUnichar();                  break;
                 case ocBitAnd           : ScBitAnd();                   break;

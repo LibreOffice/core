@@ -2635,6 +2635,7 @@ void Test::testFunctionLists()
         "NUMBERVALUE",
         "PROPER",
         "REPLACE",
+        "REPLACEB",
         "REPT",
         "RIGHT",
         "RIGHTB",
