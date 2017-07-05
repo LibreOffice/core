@@ -48,6 +48,8 @@ void gtv_application_window_set_zoom_label(GtvApplicationWindow* window, const s
 
 void getVisibleAreaTwips(GtvApplicationWindow* pWindow, GdkRectangle* pArea);
 
+void gtv_application_window_toggle_findbar(GtvApplicationWindow* window);
+
 G_END_DECLS
 
 #endif /* GTV_APPLICATION_WINDOW_H */

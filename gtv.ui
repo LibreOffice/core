@@ -111,7 +111,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkToolbar" id="find_toolbar">
+      <object class="GtkToolbar" id="findtoolbar">
         <property name="can_focus">False</property>
         <property name="toolbar_style">both-horiz</property>
         <child>
@@ -341,7 +341,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkToolButton" id="btn_find">
+      <object class="GtkToggleToolButton" id="btn_find">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Find</property>

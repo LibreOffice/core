@@ -541,4 +541,12 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
     gtk_widget_destroy(pDialog);
 }
 
+void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    GApplication* app = g_application_get_default();
+    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
+
+    gtv_application_window_toggle_findbar(GTV_APPLICATION_WINDOW(window));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

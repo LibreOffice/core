@@ -35,6 +35,8 @@ struct GtvApplicationWindowPrivate
     GtkWidget* statusbar;
     GtkWidget* zoomlabel;
 
+    GtkWidget* findtoolbar;
+
     // Rendering args; options with which lokdocview was rendered in this window
     GtvRenderingArgs* m_pRenderingArgs;
 };
@@ -67,8 +69,9 @@ gtv_application_window_init(GtvApplicationWindow* win)
 
     // statusbar
     priv->statusbar = GTK_WIDGET(gtk_builder_get_object(builder, "statusbar"));
-    // Need to access it from outside to set the zoom level
     priv->zoomlabel = GTK_WIDGET(gtk_builder_get_object(builder, "zoomlabel"));
+
+    priv->findtoolbar = GTK_WIDGET(gtk_builder_get_object(builder, "findtoolbar"));
 
     gtk_container_add(GTK_CONTAINER(win), priv->container);
 
@@ -146,6 +149,20 @@ void getVisibleAreaTwips(GtvApplicationWindow* pWindow, GdkRectangle* pArea)
                                                gtk_adjustment_get_page_size(pHAdjustment));
     pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(priv->lokdocview),
                                                gtk_adjustment_get_page_size(pVAdjustment));
+}
+
+void gtv_application_window_toggle_findbar(GtvApplicationWindow* window)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    if (gtk_widget_get_visible(priv->findtoolbar))
+    {
+        gtk_widget_hide(priv->findtoolbar);
+    }
+    else
+    {
+        gtk_widget_show_all(priv->findtoolbar);
+        gtk_widget_grab_focus(priv->findtoolbar);
+    }
 }
 
 LOKDocView*
