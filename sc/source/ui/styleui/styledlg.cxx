@@ -57,6 +57,7 @@ ScStyleDlg::ScStyleDlg( vcl::Window*             pParent,
     , m_nBackgroundId(0)
     , m_nPageId(0)
     , m_nHeaderId(0)
+    , m_nFooterId(0)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
