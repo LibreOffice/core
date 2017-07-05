@@ -224,33 +224,33 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
     return oslTranslateFileError(OSL_FET_ERROR, errno);
 }
 
-oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
+oslFileError SAL_CALL osl_closeDirectory(oslDirectory pDirectory)
 {
-    oslDirectoryImpl* pDirImpl = static_cast<oslDirectoryImpl*>(Directory);
+    oslDirectoryImpl* pDirImpl = static_cast<oslDirectoryImpl*>(pDirectory);
     oslFileError err = osl_File_E_None;
 
-    OSL_ASSERT( Directory );
+    OSL_ASSERT(pDirectory);
 
-    if( pDirImpl == nullptr )
+    if (!pDirImpl)
         return osl_File_E_INVAL;
 
 #ifdef ANDROID
-    if( pDirImpl->eKind == oslDirectoryImpl::KIND_ASSETS )
+    if (pDirImpl->eKind == oslDirectoryImpl::KIND_ASSETS)
     {
-        if (lo_apk_closedir( pDirImpl->pApkDirStruct ))
+        if (lo_apk_closedir(pDirImpl->pApkDirStruct))
             err = osl_File_E_IO;
     }
     else
 #endif
     {
-        if( closedir( pDirImpl->pDirStruct ) )
+        if (closedir( pDirImpl->pDirStruct))
             err = oslTranslateFileError(OSL_FET_ERROR, errno);
     }
 
     /* cleanup members */
-    rtl_uString_release( pDirImpl->ustrPath );
+    rtl_uString_release(pDirImpl->ustrPath);
 
-    rtl_freeMemory( pDirImpl );
+    rtl_freeMemory(pDirImpl);
 
     return err;
 }
