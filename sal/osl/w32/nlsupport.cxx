@@ -217,7 +217,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     WCHAR ctryCode[ELP_COUNTRY_FIELD_LENGTH];
     LCID  localeId;
 
-    OSL_ASSERT( ppLocale );
+    assert(ppLocale);
 
     /* get the LCID to retrieve information from */
     localeId = GetUserDefaultLCID();
