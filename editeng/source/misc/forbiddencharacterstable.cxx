@@ -25,9 +25,14 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+SvxForbiddenCharactersTable::SvxForbiddenCharactersTable(const css::uno::Reference< css::uno::XComponentContext >& rxContext)
+    : m_xContext(rxContext)
 {
-    m_xContext = rxContext;
+}
+
+std::shared_ptr<SvxForbiddenCharactersTable> SvxForbiddenCharactersTable::makeForbiddenCharactersTable(const css::uno::Reference< css::uno::XComponentContext>& rxContext)
+{
+    return std::shared_ptr<SvxForbiddenCharactersTable>(new SvxForbiddenCharactersTable(rxContext));
 }
 
 const css::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( LanguageType nLanguage, bool bGetDefault )
