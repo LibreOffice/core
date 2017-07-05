@@ -40,6 +40,7 @@
 #include <list>
 #include <algorithm>
 #include <unordered_map>
+#include <cassert>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
@@ -69,7 +70,7 @@ bool isPathnameUrl(rtl::OUString const & url) {
 }
 
 bool resolvePathnameUrl(rtl::OUString * url) {
-    OSL_ASSERT(url !=  nullptr);
+    assert(url);
     if (!isPathnameUrl(*url) ||
         (osl::FileBase::getFileURLFromSystemPath(
             url->copy(RTL_CONSTASCII_LENGTH(VND_SUN_STAR_PATHNAME)), *url) ==
@@ -133,7 +134,7 @@ bool find(
     NameValueList const & list, rtl::OUString const & key,
     rtl::OUString * value)
 {
-    OSL_ASSERT(value != nullptr);
+    assert(value);
     for (NameValueList::const_iterator i(list.begin()); i != list.end(); ++i) {
         if (i->sName == key) {
             *value = i->sValue;
@@ -151,7 +152,7 @@ namespace {
 static bool getFromCommandLineArgs(
     rtl::OUString const & key, rtl::OUString * value )
 {
-    OSL_ASSERT(value != nullptr);
+    assert(value);
     static NameValueList *pNameValueList = nullptr;
     if( ! pNameValueList )
     {
@@ -644,7 +645,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
             ::std::pair< bootstrap_map::t::iterator, bool > insertion(
                 p_bootstrap_map->insert(
                     bootstrap_map::t::value_type( iniName, that ) ) );
-            OSL_ASSERT( insertion.second );
+            assert(insertion.second);
         }
         else
         {
@@ -673,8 +674,8 @@ void SAL_CALL rtl_bootstrap_args_close (
 
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
     bootstrap_map::t* p_bootstrap_map = bootstrap_map::get();
-    OSL_ASSERT(
-        p_bootstrap_map->find( that->_iniName )->second == that );
+    SAL_WARN_IF(p_bootstrap_map->find( that->_iniName )->second == that,
+            "sal.rtl", "ini mapped to itself");
     --that->_nRefCount;
     if (that->_nRefCount == 0)
     {
@@ -682,9 +683,7 @@ void SAL_CALL rtl_bootstrap_args_close (
         if (p_bootstrap_map->size() > nLeaking)
         {
             ::std::size_t erased = p_bootstrap_map->erase( that->_iniName );
-            if (erased != 1) {
-                OSL_ASSERT( false );
-            }
+            assert(erased == 1);
             delete that;
         }
         bootstrap_map::release();
@@ -797,7 +796,7 @@ void SAL_CALL rtl_bootstrap_expandMacros(rtl_uString ** macro)
 
 void rtl_bootstrap_encode( rtl_uString const * value, rtl_uString ** encoded )
 {
-    OSL_ASSERT(value != nullptr);
+    assert(value);
     rtl::OUStringBuffer b;
     for (sal_Int32 i = 0; i < value->length; ++i) {
         sal_Unicode c = value->buffer[i];
@@ -819,8 +818,7 @@ int hex(sal_Unicode c) {
 }
 
 sal_Unicode read(rtl::OUString const & text, sal_Int32 * pos, bool * escaped) {
-    OSL_ASSERT(
-        pos != nullptr && *pos >= 0 && *pos < text.getLength() && escaped != nullptr);
+    assert(pos && *pos >= 0 && *pos < text.getLength() && escaped);
     sal_Unicode c = text[(*pos)++];
     if (c == '\\') {
         int n1, n2, n3, n4;
