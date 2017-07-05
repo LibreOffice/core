@@ -360,7 +360,8 @@ static const XclFunctionInfo saFuncTable_5[] =
     { ocGetDateDif,         351,    3,  3,  V, { VR }, 0, nullptr },
     { ocNoName,             352,    1,  1,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, nullptr },    // DATESTRING
     { ocNoName,             353,    2,  2,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, nullptr },    // NUMBERSTRING
-    { ocRoman,              354,    1,  2,  V, { VR }, 0, nullptr }
+    { ocRoman,              354,    1,  2,  V, { VR }, 0, nullptr },
+    { ocReplaceB,           494,    4,  4,  V, { VR }, 0, nullptr }
 };
 
 /** Functions new in BIFF8. Unsupported functions: PHONETIC. */

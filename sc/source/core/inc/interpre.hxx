@@ -949,6 +949,7 @@ void ScLenB();
 void ScRightB();
 void ScLeftB();
 void ScMidB();
+void ScReplaceB();
 
 void ScFilterXML();
 void ScWebservice();

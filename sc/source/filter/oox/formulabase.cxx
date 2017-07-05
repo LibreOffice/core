@@ -620,6 +620,7 @@ static const FunctionData saFuncTableBiff5[] =
     { nullptr,                        "DATESTRING",           352,    352,    1,  1,  V, { VR }, FuncFlags::IMPORTONLY },   // not supported in Calc, missing in OOXML spec
     { nullptr,                        "NUMBERSTRING",         353,    353,    2,  2,  V, { VR }, FuncFlags::IMPORTONLY },   // not supported in Calc, missing in OOXML spec
     { "ROMAN",                  "ROMAN",                354,    354,    1,  2,  V, { VR }, FuncFlags::NONE },
+    { "REPLACEB",               "REPLACEB",             494,    494,    4,  4,  V, { VR }, FuncFlags::NONE },
 
     // *** EuroTool add-in ***
     { "EUROCONVERT",            "EUROCONVERT",          NOID,   NOID,   3,  5,  V, { VR }, FuncFlags::EUROTOOL },

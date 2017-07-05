@@ -8741,6 +8741,28 @@ void ScInterpreter::ScMidB()
     }
 }
 
+void ScInterpreter::ScReplaceB()
+{
+    if ( MustHaveParamCount( GetByte(), 4 ) )
+    {
+        OUString aNewStr = GetString().getString();
+        double fCount    = GetStringPositionArgument();
+        double fPos      = GetStringPositionArgument();
+        OUString aOldStr = GetString().getString();
+        if ( fPos < 1.0 || fCount < 0.0 )
+            PushIllegalArgument();
+        else
+        {
+            // REPLACEB(aOldStr;fPos;fCount;aNewStr) is the same as
+            // LEFTB(aOldStr;fPos-1) & aNewStr & RIGHT(aOldStr;LENB(aOldStr)-(fPos - 1)-fCount)
+            OUString aStr1 = lcl_LeftB( aOldStr, fPos - 1 );
+            OUString aStr3 = lcl_RightB( aOldStr, getLengthB( aOldStr ) - fPos - fCount + 1);
+
+            PushString( aStr1 + aNewStr + aStr3 );
+        }
+    }
+}
+
 void ScInterpreter::ScRight()
 {
     sal_uInt8 nParamCount = GetByte();
