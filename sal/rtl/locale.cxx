@@ -24,6 +24,8 @@
 
 #include "rtllifecycle.h"
 
+#include <cassert>
+
 static const sal_Int32 RTL_HASHTABLE_SIZE[] =
 {
     7, 31, 127, 251, 509, 1021, 2039, 4093
@@ -200,8 +202,8 @@ extern "C" sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal
  */
 void rtl_locale_init()
 {
-  OSL_ASSERT(g_pLocaleTable == nullptr);
-  rtl_hashtable_init(&g_pLocaleTable, 1);
+    assert(!g_pLocaleTable);
+    rtl_hashtable_init(&g_pLocaleTable, 1);
 }
 
 /*************************************************************************
@@ -209,11 +211,11 @@ void rtl_locale_init()
  */
 void rtl_locale_fini()
 {
-  if (g_pLocaleTable != nullptr)
-  {
-    rtl_hashtable_destroy (g_pLocaleTable);
-    g_pLocaleTable = nullptr;
-  }
+    if (g_pLocaleTable != nullptr)
+    {
+        rtl_hashtable_destroy (g_pLocaleTable);
+        g_pLocaleTable = nullptr;
+    }
 }
 
 /*************************************************************************
