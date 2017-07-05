@@ -36,9 +36,8 @@ namespace {
  * Beware of the implicit trailing '\0' when using this with string constants.
 */
 template<typename T, size_t N>
-size_t ArrayLength(T (&aArr)[N])
+size_t ArrayLength(T (&)[N])
 {
-    (void) aArr;
     return N;
 }
 
