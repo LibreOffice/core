@@ -44,6 +44,10 @@ LOKDocView* gtv_application_window_get_lokdocview(GtvApplicationWindow* applicat
 
 void gtv_application_window_create_view_from_window(GtvApplicationWindow* window);
 
+void gtv_application_window_set_zoom_label(GtvApplicationWindow* window, const std::string& aZoom);
+
+void getVisibleAreaTwips(GtvApplicationWindow* pWindow, GdkRectangle* pArea);
+
 G_END_DECLS
 
 #endif /* GTV_APPLICATION_WINDOW_H */

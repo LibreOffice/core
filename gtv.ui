@@ -67,17 +67,42 @@
       </packing>
     </child>
     <child>
-      <object class="GtkStatusbar">
+      <object class="GtkStatusbar" id="statusbar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_left">10</property>
-        <property name="margin_right">10</property>
         <property name="margin_start">10</property>
         <property name="margin_end">10</property>
-        <property name="margin_top">6</property>
         <property name="margin_bottom">6</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
+        <child>
+          <object class="GtkLabel" id="zoomlabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">22</property>
+            <property name="label" translatable="yes">100%</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="redlinelabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">22</property>
+            <property name="label" translatable="yes">Current redline: </property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>

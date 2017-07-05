@@ -12,6 +12,8 @@
 #include <gtv-application-window.hxx>
 #include <gtv-helpers.hxx>
 
+#include <sal/types.h>
+
 #include <map>
 #include <vector>
 
@@ -266,8 +268,9 @@ void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
         lok_doc_view_set_edit(pDocView, bActive);
 }
 
-static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
+void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 {
+    static const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
     GApplication* app = g_application_get_default();
     GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
     LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
@@ -314,12 +317,12 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
         {
             lok_doc_view_set_zoom( LOK_DOC_VIEW(pDocView), fZoom );
             GdkRectangle aVisibleArea;
-            getVisibleAreaTwips(pDocView, &aVisibleArea);
+            getVisibleAreaTwips(GTV_APPLICATION_WINDOW(window), &aVisibleArea);
             lok_doc_view_set_visible_area(LOK_DOC_VIEW(pDocView), &aVisibleArea);
         }
     }
-    std::string aZoom = std::string("Zoom: ") + std::to_string(int(fZoom * 100)) + std::string("%");
-    gtk_label_set_text(GTK_LABEL(rWindow.m_pZoomLabel), aZoom.c_str());
+    const std::string aZoom = std::string("Zoom: ") + std::to_string(int(fZoom * 100)) + std::string("%");
+    gtv_application_window_set_zoom_label(GTV_APPLICATION_WINDOW(window), aZoom);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

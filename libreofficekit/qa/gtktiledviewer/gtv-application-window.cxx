@@ -22,8 +22,6 @@
 struct _GtvApplicationWindow
 {
     GtkApplicationWindow parent_instance;
-
-    GtkWidget* zoomlabel;
 };
 
 struct GtvApplicationWindowPrivate
@@ -33,7 +31,9 @@ struct GtvApplicationWindowPrivate
 
     GtkWidget* scrolledwindow;
     GtkWidget* lokdocview;
+
     GtkWidget* statusbar;
+    GtkWidget* zoomlabel;
 
     // Rendering args; options with which lokdocview was rendered in this window
     GtvRenderingArgs* m_pRenderingArgs;
@@ -67,6 +67,8 @@ gtv_application_window_init(GtvApplicationWindow* win)
 
     // statusbar
     priv->statusbar = GTK_WIDGET(gtk_builder_get_object(builder, "statusbar"));
+    // Need to access it from outside to set the zoom level
+    priv->zoomlabel = GTK_WIDGET(gtk_builder_get_object(builder, "zoomlabel"));
 
     gtk_container_add(GTK_CONTAINER(win), priv->container);
 
@@ -121,6 +123,29 @@ gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res
     }
 
     lok_doc_view_set_edit(pDocView, true);
+}
+
+void gtv_application_window_set_zoom_label(GtvApplicationWindow* window, const std::string& aZoom)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    gtk_label_set_text(GTK_LABEL(priv->zoomlabel), aZoom.c_str());
+}
+
+/// Get the visible area of the scrolled window
+void getVisibleAreaTwips(GtvApplicationWindow* pWindow, GdkRectangle* pArea)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(pWindow);
+    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(priv->scrolledwindow));
+    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(priv->scrolledwindow));
+
+    pArea->x      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(priv->lokdocview),
+                                               gtk_adjustment_get_value(pHAdjustment));
+    pArea->y      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(priv->lokdocview),
+                                               gtk_adjustment_get_value(pVAdjustment));
+    pArea->width  = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(priv->lokdocview),
+                                               gtk_adjustment_get_page_size(pHAdjustment));
+    pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(priv->lokdocview),
+                                               gtk_adjustment_get_page_size(pVAdjustment));
 }
 
 LOKDocView*

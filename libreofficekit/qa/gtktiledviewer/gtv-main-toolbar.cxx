@@ -57,12 +57,12 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     gtk_builder_add_callback_symbol(builder, "createView", G_CALLBACK(createView));
     gtk_builder_add_callback_symbol(builder, "unoCommandDebugger", G_CALLBACK(unoCommandDebugger));
     gtk_builder_add_callback_symbol(builder, "toggleEditing", G_CALLBACK(toggleEditing));
-    gtk_builder_add_callback_symbol(builder, "changePartMode", G_CALLBACK(changePartMode));
-    gtk_builder_add_callback_symbol(builder, "changePart", G_CALLBACK(changePart));
+//    gtk_builder_add_callback_symbol(builder, "changePartMode", G_CALLBACK(changePartMode));
+//    gtk_builder_add_callback_symbol(builder, "changePart", G_CALLBACK(changePart));
     gtk_builder_add_callback_symbol(builder, "changeZoom", G_CALLBACK(changeZoom));
-    gtk_builder_add_callback_symbol(builder, "toggleFindbar", G_CALLBACK(toggleFindbar));
-    gtk_builder_add_callback_symbol(builder, "documentRedline", G_CALLBACK(documentRedline));
-    gtk_builder_add_callback_symbol(builder, "documentRepair", G_CALLBACK(documentRepair));
+//    gtk_builder_add_callback_symbol(builder, "toggleFindbar", G_CALLBACK(toggleFindbar));
+//    gtk_builder_add_callback_symbol(builder, "documentRedline", G_CALLBACK(documentRedline));
+//    gtk_builder_add_callback_symbol(builder, "documentRepair", G_CALLBACK(documentRepair));
 
     gtk_builder_connect_signals(builder, nullptr);
 
