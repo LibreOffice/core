@@ -189,7 +189,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
                                sal_uInt16 nAspect )
 {
     tools::Rectangle aVisArea  = GetVisArea( nAspect );
-    // MapUnit des Ziels
+    // MapUnit of the target
     MapMode aMapMode( GetMapUnit() );
     aMapMode.SetScaleX( rScaleX );
     aMapMode.SetScaleY( rScaleY );
