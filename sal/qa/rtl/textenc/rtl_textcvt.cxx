@@ -328,28 +328,28 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                         &nInfo, &nCvtBytes);
                 }
                 if (nChars == 1 && nInfo == 0) {
-                    OSL_ASSERT(nCvtBytes == nLen);
+                    assert(nCvtBytes == nLen);
                     aUnicode[nSize++] = aUC[0];
                 } else if (nChars == 2 && nInfo == 0) {
-                    OSL_ASSERT(nCvtBytes == nLen);
+                    assert(nCvtBytes == nLen);
                     aUnicode[nSize++] = aUC[0];
                     aUnicode[nSize++] = aUC[1];
                 } else {
-                    OSL_ASSERT(
+                    assert(
                         (nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0
                         && nChars == 0 && nInfo != 0);
                     aUnicode[nSize++] = sBuffer[0];
                     i -= nLen - 1;
                 }
             } else if (nChars == 1 && nInfo == 0) {
-                OSL_ASSERT(nCvtBytes == 1);
+                assert(nCvtBytes == 1);
                 aUnicode[nSize++] = aUC[0];
             } else if (nChars == 2 && nInfo == 0) {
-                OSL_ASSERT(nCvtBytes == 1);
+                assert(nCvtBytes == 1);
                 aUnicode[nSize++] = aUC[0];
                 aUnicode[nSize++] = aUC[1];
             } else {
-                OSL_ASSERT(nChars == 0 && nInfo != 0);
+                assert(nChars == 0 && nInfo != 0);
                 aUnicode[nSize++] = c1;
             }
         }
@@ -2789,7 +2789,7 @@ void Test::testMime() {
     };
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         if (data[i].mime == nullptr) {
-            OSL_ASSERT(data[i].reverse);
+            assert(data[i].reverse);
             CPPUNIT_ASSERT_EQUAL(
                 static_cast< char const * >(nullptr),
                 rtl_getMimeCharsetFromTextEncoding(data[i].encoding));
@@ -2888,7 +2888,7 @@ void Test::testWindows() {
         { 57002, RTL_TEXTENCODING_ISCII_DEVANAGARI, true }
     };
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
-        OSL_ASSERT(data[i].codePage != 0 || data[i].reverse);
+        assert(data[i].codePage != 0 || data[i].reverse);
         if (data[i].codePage != 0) {
             CPPUNIT_ASSERT_EQUAL(
                 data[i].encoding,
