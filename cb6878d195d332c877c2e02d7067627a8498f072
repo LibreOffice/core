@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_186e9bc9",
+        "filename": "editeng/source/xml/xmltxtimp.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-05T13:17:47Z",
+      "side": 1,
+      "message": "one thing i find confusing is that if rSel is not a point but a range; i think that that shouldn\u0027t be possible, so please add a assert(!rSel.HasRange()) here",
+      "revId": "cb6878d195d332c877c2e02d7067627a8498f072",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_b81ae76c",
+        "filename": "editeng/source/xml/xmltxtimp.cxx",
+        "patchSetId": 23
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-05T13:17:47Z",
+      "side": 1,
+      "message": "i don\u0027t get how this works, say i\u0027ve got 10 paragraphs to start with, insert in paragraph 10, then this will connect paragraph 19 and 20, which only exist if at least 10 paragraphs are inserted?",
+      "revId": "cb6878d195d332c877c2e02d7067627a8498f072",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
