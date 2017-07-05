@@ -227,7 +227,7 @@ enum class XRefEntryType
     FREE,
     /// xref "n" or xref stream "1".
     NOT_COMPRESSED,
-    /// xref stream "2.
+    /// xref stream "2".
     COMPRESSED
 };
 
