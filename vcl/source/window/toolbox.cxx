@@ -1933,8 +1933,8 @@ void lcl_hideDoubleSeparators( ToolBox::ImplToolItems& rItems )
                 ToolBox::ImplToolItems::iterator temp_it;
                 for ( temp_it = it+1; temp_it != rItems.end(); ++temp_it )
                 {
-                    if ( ((temp_it->meType == ToolBoxItemType::BUTTON) &&
-                          temp_it->mbVisible) )
+                    if ( (temp_it->meType == ToolBoxItemType::BUTTON) &&
+                         temp_it->mbVisible )
                     {
                         it->mbVisible = true;
                         break;

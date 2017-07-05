@@ -639,8 +639,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                 }
                 break;
             case SwNodeType::Section:
-                if( ( static_cast<SwSectionNode*>(pNd)->GetSection().IsProtect() ||
-                    static_cast<SwSectionNode*>(pNd)->GetSection().IsHidden() ) )
+                if( static_cast<SwSectionNode*>(pNd)->GetSection().IsProtect() ||
+                    static_cast<SwSectionNode*>(pNd)->GetSection().IsHidden() )
                     nCurrNd = pNd->EndOfSectionIndex();
                 break;
             case SwNodeType::End:

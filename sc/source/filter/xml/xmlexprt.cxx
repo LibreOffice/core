@@ -4931,7 +4931,7 @@ void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uIn
         if( nullptr != (pItem = pPool->GetItem2( nAttrib, i ) ) )
         {
             const SvXMLAttrContainerItem *pUnknown(static_cast<const SvXMLAttrContainerItem *>(pItem));
-            if( (pUnknown->GetAttrCount() > 0) )
+            if( pUnknown->GetAttrCount() > 0 )
             {
                 sal_uInt16 nIdx(pUnknown->GetFirstNamespaceIndex());
                 while( USHRT_MAX != nIdx )

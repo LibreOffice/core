@@ -1635,7 +1635,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
         }
     }
 
-    bool bLargeIconMode = WB_ICON == ( nWinBits & (VIEWMODE_MASK) );
+    bool bLargeIconMode = WB_ICON == ( nWinBits & VIEWMODE_MASK );
     sal_uInt16 nBmpPaintFlags = PAINTFLAG_VER_CENTERED;
     if (bLargeIconMode)
         nBmpPaintFlags |= PAINTFLAG_HOR_CENTERED;
@@ -1772,7 +1772,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcBmpRect( SvxIconChoiceCtrlEntry* pE
         aBound.SetPos( *pPos );
     Point aPos( aBound.TopLeft() );
 
-    switch( nWinBits & (VIEWMODE_MASK) )
+    switch( nWinBits & VIEWMODE_MASK )
     {
         case WB_ICON:
         {
@@ -1816,7 +1816,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* p
     long nBoundWidth = aBound.GetWidth();
     long nBoundHeight = aBound.GetHeight();
 
-    switch( nWinBits & (VIEWMODE_MASK) )
+    switch( nWinBits & VIEWMODE_MASK )
     {
         case WB_ICON:
             aPos.Y() += aImageSize.Height();
@@ -1857,7 +1857,7 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingWidth() const
     long nStringWidth = GetItemSize( IcnViewFieldType::Text ).Width();
     long nWidth = 0;
 
-    switch( nWinBits & (VIEWMODE_MASK) )
+    switch( nWinBits & VIEWMODE_MASK )
     {
         case WB_ICON:
             nWidth = std::max( nStringWidth, aImageSize.Width() );
@@ -1878,7 +1878,7 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingHeight() const
     long nStringHeight = GetItemSize(IcnViewFieldType::Text).Height();
     long nHeight = 0;
 
-    switch( nWinBits & (VIEWMODE_MASK) )
+    switch( nWinBits & VIEWMODE_MASK )
     {
         case WB_ICON:
             nHeight = aImageSize.Height();

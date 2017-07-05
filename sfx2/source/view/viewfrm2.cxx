@@ -233,7 +233,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
                 // Document only needs to be queried, if no other View present.
                 bool bClosed = false;
-                if ( ( bOther || pDocSh->PrepareClose( true/*bUI*/ ) ) )
+                if ( bOther || pDocSh->PrepareClose( true/*bUI*/ ) )
                 {
                     if ( !bOther )
                         pDocSh->SetModified( false );

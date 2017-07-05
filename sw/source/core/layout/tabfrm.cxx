@@ -3304,7 +3304,7 @@ SwContentFrame *SwTabFrame::FindLastContent()
 bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool &rReformat )
 {
     rReformat = false;
-    if ( (SwFlowFrame::IsMoveBwdJump() || !IsPrevObjMove()) )
+    if ( SwFlowFrame::IsMoveBwdJump() || !IsPrevObjMove() )
     {
         //Floating back Frame's is quite time consuming unfortunately.
         //Most often the location where the Frame wants to float to has the same

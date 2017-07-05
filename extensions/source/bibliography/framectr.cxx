@@ -330,7 +330,7 @@ bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
 {
     sal_Int32 nPriv = 0;
     _rxCursorSet->getPropertyValue("Privileges") >>= nPriv;
-    return ((_rxCursorSet.is() && (nPriv & sdbcx::Privilege::INSERT) != 0));
+    return _rxCursorSet.is() && (nPriv & sdbcx::Privilege::INSERT) != 0;
 }
 
 bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::XFormController>& xController)

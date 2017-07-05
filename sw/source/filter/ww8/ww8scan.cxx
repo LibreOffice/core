@@ -1107,7 +1107,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                 if( nSprmId )
                 {
                     // move Sprm Id and Sprm Param to internal mini storage:
-                    aShortSprm[0] = (sal_uInt8)( ( nSprmId & 0x00ff)      );
+                    aShortSprm[0] = (sal_uInt8)  ( nSprmId & 0x00ff)       ;
                     aShortSprm[1] = (sal_uInt8)( ( nSprmId & 0xff00) >> 8 );
                     aShortSprm[2] = (sal_uInt8)( nPrm >> 8 );
 

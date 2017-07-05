@@ -1028,7 +1028,7 @@ void SbaXDataBrowserController::disposing(const EventObject& Source)
         removeModelListeners(getControlModel());
 
     // the form's model ?
-    if ((getRowSet() == Source.Source))
+    if (getRowSet() == Source.Source)
         disposingFormModel(Source);
 
     // from a single column model ?

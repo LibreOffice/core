@@ -3224,7 +3224,7 @@ bool SwpHints::TryInsertHint(
         // multiple times
         // FME 2007-11-08 #i82989# in NOHINTADJUST mode, we want to insert
         // character attributes directly
-        if ( ( RES_TXTATR_CHARFMT  == nWhich && !bNoHintAdjustMode ) )
+        if ( RES_TXTATR_CHARFMT  == nWhich && !bNoHintAdjustMode )
         {
             BuildPortions( rNode, *pHint, nMode );
         }

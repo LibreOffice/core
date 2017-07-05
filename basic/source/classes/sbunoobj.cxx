@@ -643,7 +643,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             {
                 ArrayWrapper aWrap;
                 NativeObjectWrapper aNativeObjectWrapper;
-                if ( (aValue >>= aWrap) )
+                if ( aValue >>= aWrap )
                 {
                     SbxDimArray* pArray = nullptr;
                     Sequence< sal_Int32 > indices;
@@ -662,10 +662,10 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                         pVar->PutEmpty();
                     break;
                 }
-                else if ( (aValue >>= aNativeObjectWrapper) )
+                else if ( aValue >>= aNativeObjectWrapper )
                 {
                     sal_uInt32 nIndex = 0;
-                    if( (aNativeObjectWrapper.ObjectId >>= nIndex) )
+                    if( aNativeObjectWrapper.ObjectId >>= nIndex )
                     {
                         SbxObject* pObj = lcl_getNativeObject( nIndex );
                         pVar->PutObject( pObj );
@@ -680,7 +680,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                     if( pInst && pInst->IsCompatibility() )
                     {
                         oleautomation::Date aDate;
-                        if( (aValue >>= aDate) )
+                        if( aValue >>= aDate )
                         {
                             pVar->PutDate( aDate.Value );
                             break;
@@ -688,7 +688,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                         else
                         {
                             oleautomation::Decimal aDecimal;
-                            if( (aValue >>= aDecimal) )
+                            if( aValue >>= aDecimal )
                             {
                                 pVar->PutDecimal( aDecimal );
                                 break;
@@ -696,7 +696,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                             else
                             {
                                 oleautomation::Currency aCurrency;
-                                if( (aValue >>= aCurrency) )
+                                if( aValue >>= aCurrency )
                                 {
                                     pVar->PutCurrency( aCurrency.Value );
                                     break;

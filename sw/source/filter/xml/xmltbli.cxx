@@ -1913,9 +1913,11 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                 SwXMLTableRow_Impl *pStartRow = (*m_pRows)[nStartRow].get();
                 const SwXMLTableCell_Impl *pCell;
                 for( i=nLeftCol; i<nRightCol; i++ )
-                    if( ( pCell=pStartRow->GetCell(i),
-                          pCell->GetRowSpan() > nMaxRowSpan ) )
+                {
+                    pCell = pStartRow->GetCell(i);
+                    if( pCell->GetRowSpan() > nMaxRowSpan )
                         nMaxRowSpan = pCell->GetRowSpan();
+                }
 
                 nStartRow += nMaxRowSpan;
                 if( nStartRow<nBottomRow )
@@ -2332,7 +2334,8 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
         const SwXMLTableCell_Impl *pCell;
         for( sal_uLong i = 0; i < m_aColumnWidths.size(); ++i )
         {
-            if( ( pCell=pPrevRow->GetCell(i), pCell->GetRowSpan() > 1UL ) )
+            pCell = pPrevRow->GetCell(i);
+            if( pCell->GetRowSpan() > 1 )
             {
                 FixRowSpan( m_nCurRow-1UL, i, 1UL );
             }

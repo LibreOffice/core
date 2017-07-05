@@ -425,7 +425,7 @@ namespace svx
                     ,sConnectionResource
                     ,nObjectType
                     ,sObjectName,xConnection
-                    ,!((CommandType::QUERY == nObjectType))
+                    ,CommandType::QUERY != nObjectType
                     ,sCompleteStatement);
     }
 

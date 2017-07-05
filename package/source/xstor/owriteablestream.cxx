@@ -165,7 +165,7 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
         bool bHasMember = false;
         uno::Sequence< sal_Int8 > aMember1;
         sal_Int32 nMember1 = 0;
-        if ( ( aSequence1[nInd].Value >>= aMember1 ) )
+        if ( aSequence1[nInd].Value >>= aMember1 )
         {
             for ( sal_Int32 nInd2 = 0; nInd2 < aSequence2.getLength(); nInd2++ )
             {
@@ -179,7 +179,7 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
                 }
             }
         }
-        else if ( ( aSequence1[nInd].Value >>= nMember1 ) )
+        else if ( aSequence1[nInd].Value >>= nMember1 )
         {
             for ( sal_Int32 nInd2 = 0; nInd2 < aSequence2.getLength(); nInd2++ )
             {

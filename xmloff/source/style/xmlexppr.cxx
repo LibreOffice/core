@@ -365,7 +365,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
 
                 for( i = 0; i < nCount; ++i, ++pStates )
                 {
-                    if( (*pStates == PropertyState_DIRECT_VALUE)/* || (bDefault && (*pStates == PropertyState_DEFAULT_VALUE))*/ )
+                    if( *pStates == PropertyState_DIRECT_VALUE )
                         nValueCount++;
                 }
 
@@ -385,7 +385,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     i = 0;
                     while( i < nValueCount )
                     {
-                        if( (*pStates == PropertyState_DIRECT_VALUE)/* || (bDefault && (*pStates == PropertyState_DEFAULT_VALUE))*/ )
+                        if( *pStates == PropertyState_DIRECT_VALUE )
                         {
                             *pAPINames++ = aItr->GetApiName();
                             aPropIters.push_back( aItr );

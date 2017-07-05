@@ -590,7 +590,7 @@ void SAL_CALL SwXTextView::setRubyList(
             }
             else if(pProperties[nProp].Name == UNO_NAME_RUBY_CHAR_STYLE_NAME)
             {
-                if((pProperties[nProp].Value >>= sTmp))
+                if(pProperties[nProp].Value >>= sTmp)
                 {
                     OUString sName;
                     SwStyleNameMapper::FillUIName(sTmp, sName, SwGetPoolIdFromName::ChrFmt, true );
@@ -605,7 +605,7 @@ void SAL_CALL SwXTextView::setRubyList(
             else if(pProperties[nProp].Name == UNO_NAME_RUBY_ADJUST)
             {
                 sal_Int16 nTmp = 0;
-                if((pProperties[nProp].Value >>= nTmp))
+                if(pProperties[nProp].Value >>= nTmp)
                     pEntry->GetRubyAttr().SetAdjustment((css::text::RubyAdjust)nTmp);
             }
             else if(pProperties[nProp].Name == UNO_NAME_RUBY_IS_ABOVE)

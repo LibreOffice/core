@@ -1464,7 +1464,7 @@ void GL3DBarChart::processAutoFly(sal_uInt32 nId, sal_uInt32 nColor)
     sal_uInt32 nPreColor = maBarColorMap[nId];
     maBarColorMap[nId] = nColor;
     //if has manul event, just record the color and process manul event first
-    if ((maRenderEvent != EVENT_NONE))
+    if (maRenderEvent != EVENT_NONE)
     {
         return;
     }

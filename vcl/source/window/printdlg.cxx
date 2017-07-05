@@ -919,7 +919,7 @@ void PrintDialog::setupOptionalUI()
                 if( ! (rEntry.Value >>= aHelpTexts) )
                 {
                     OUString aHelpText;
-                    if( (rEntry.Value >>= aHelpText) )
+                    if( rEntry.Value >>= aHelpText )
                     {
                         aHelpTexts.realloc( 1 );
                         *aHelpTexts.getArray() = aHelpText;
@@ -931,7 +931,7 @@ void PrintDialog::setupOptionalUI()
                 if( ! (rEntry.Value >>= aHelpIds ) )
                 {
                     OUString aHelpId;
-                    if( (rEntry.Value >>= aHelpId) )
+                    if( rEntry.Value >>= aHelpId )
                     {
                         aHelpIds.realloc( 1 );
                         *aHelpIds.getArray() = aHelpId;

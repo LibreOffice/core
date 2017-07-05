@@ -285,9 +285,9 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
     sal_Unicode cChar = aFmt.GetBulletChar();
     for(sal_uInt16 i = nFromIndex; i < DEFAULT_BULLET_TYPES; i++)
     {
-        if ( (cChar == pActualBullets[i]->cBulletChar||
-            (cChar == 9830 && 57356 == pActualBullets[i]->cBulletChar) ||
-            (cChar == 9632 && 57354 == pActualBullets[i]->cBulletChar)))
+        if ( (cChar == pActualBullets[i]->cBulletChar) ||
+             (cChar == 9830 && 57356 == pActualBullets[i]->cBulletChar) ||
+             (cChar == 9632 && 57354 == pActualBullets[i]->cBulletChar)   )
         {
             return i+1;
         }

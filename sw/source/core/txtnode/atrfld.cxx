@@ -187,10 +187,12 @@ void SwFormatField::ClearTextField()
 bool SwFormatField::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( ( mpField && static_cast<const SwFormatField&>(rAttr).GetField()
-               && mpField->GetTyp() == static_cast<const SwFormatField&>(rAttr).GetField()->GetTyp()
-               && mpField->GetFormat() == static_cast<const SwFormatField&>(rAttr).GetField()->GetFormat() ) )
-             || ( !mpField && !static_cast<const SwFormatField&>(rAttr).GetField() );
+    return ( mpField
+             && static_cast<const SwFormatField&>(rAttr).GetField()
+             && mpField->GetTyp() == static_cast<const SwFormatField&>(rAttr).GetField()->GetTyp()
+             && mpField->GetFormat() == static_cast<const SwFormatField&>(rAttr).GetField()->GetFormat() )
+           ||
+           ( !mpField && !static_cast<const SwFormatField&>(rAttr).GetField() );
 }
 
 SfxPoolItem* SwFormatField::Clone( SfxItemPool* ) const

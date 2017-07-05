@@ -413,7 +413,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:
                 {
                     rProperty.maValue >>= nValue;
-                    if((( nValue & chart::ChartDataCaption::VALUE ) == chart::ChartDataCaption::VALUE ))
+                    if( ( nValue & chart::ChartDataCaption::VALUE ) == chart::ChartDataCaption::VALUE )
                     {
                         if( ( nValue & chart::ChartDataCaption::PERCENT ) == chart::ChartDataCaption::PERCENT )
                         {

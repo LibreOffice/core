@@ -146,7 +146,7 @@ struct ScShapeDataLess
         {
             uno::Any aPropAny = xProps->getPropertyValue(msLayerId);
             sal_Int16 nLayerID = 0;
-            if( (aPropAny >>= nLayerID) )
+            if( aPropAny >>= nLayerID )
             {
                 if (SdrLayerID(nLayerID) == SC_LAYER_BACK)
                     bResult = true;
@@ -1557,7 +1557,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if (mpChildrenShapes)
                 mpChildrenShapes->SetDrawBroadcaster();
         }
-        else if ((rHint.GetId() == SfxHintId::ScAccEnterEditMode)) // this event comes only on creating edit field of a cell
+        else if (rHint.GetId() == SfxHintId::ScAccEnterEditMode) // this event comes only on creating edit field of a cell
         {
             if (mpViewShell->GetViewData().GetEditActivePart() == meSplitPos)
             {

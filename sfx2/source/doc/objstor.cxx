@@ -800,13 +800,13 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 if ( xProps->hasPropertyByName( aAuthor ) )
                 {
                     aAny = aContent.getPropertyValue( aAuthor );
-                    if ( ( aAny >>= aValue ) )
+                    if ( aAny >>= aValue )
                         xDocProps->setAuthor(aValue);
                 }
                 if ( xProps->hasPropertyByName( aKeywords ) )
                 {
                     aAny = aContent.getPropertyValue( aKeywords );
-                    if ( ( aAny >>= aValue ) )
+                    if ( aAny >>= aValue )
                         xDocProps->setKeywords(
                           ::comphelper::string::convertCommaSeparated(aValue));
 ;
@@ -814,7 +814,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 if ( xProps->hasPropertyByName( aSubject ) )
                 {
                     aAny = aContent.getPropertyValue( aSubject );
-                    if ( ( aAny >>= aValue ) ) {
+                    if ( aAny >>= aValue ) {
                         xDocProps->setSubject(aValue);
                     }
                 }

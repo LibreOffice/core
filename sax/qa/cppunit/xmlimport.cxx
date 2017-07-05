@@ -287,7 +287,7 @@ const OString DummyTokenHandler::namespacePrefixes[] = { "", "w", "Player" };
 Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
 {
     OString aUtf8Token;
-    if ( ( ( nToken & 0xffff0000 ) != 0 ) ) //namespace
+    if ( ( nToken & 0xffff0000 ) != 0 ) //namespace
     {
         sal_uInt32 nNamespaceToken = ( nToken >> 16 ) - 1;
         if ( nNamespaceToken < SAL_N_ELEMENTS(namespacePrefixes) )

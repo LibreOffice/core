@@ -115,7 +115,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             if(pSdrOle2Obj)
             {
                 if (pSdrOle2Obj->GetObjRef().is() &&
-                    ((pSdrOle2Obj->GetObjRef()->getStatus( pSdrOle2Obj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) ) )
+                    (pSdrOle2Obj->GetObjRef()->getStatus( pSdrOle2Obj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) )
                     rSet.DisableItem(SID_ORIGINAL_SIZE);
             }
 

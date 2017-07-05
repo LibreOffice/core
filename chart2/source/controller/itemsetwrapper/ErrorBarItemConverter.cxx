@@ -258,8 +258,8 @@ bool ErrorBarItemConverter::ApplySpecialItem(
             bool bShowPos(false), bShowNeg(false);
             lcl_getErrorIndicatorValues( xErrorBarProp, bShowPos, bShowNeg );
 
-            if( ( bShowPos != bNewIndPos ||
-                  bShowNeg != bNewIndNeg ))
+            if( bShowPos != bNewIndPos ||
+                bShowNeg != bNewIndNeg )
             {
                 xErrorBarProp->setPropertyValue( "ShowPositiveError" , uno::Any( bNewIndPos ));
                 xErrorBarProp->setPropertyValue( "ShowNegativeError" , uno::Any( bNewIndNeg ));

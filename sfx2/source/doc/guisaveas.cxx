@@ -224,7 +224,7 @@ public:
         catch( const uno::Exception& )
         {}
 
-        if ( ( bReadOnly && !m_bReadOnlySupported ) )
+        if ( bReadOnly && !m_bReadOnlySupported )
             throw uno::RuntimeException(); // the user could provide the data, so it must be stored
     }
 

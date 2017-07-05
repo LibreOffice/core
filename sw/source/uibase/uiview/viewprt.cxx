@@ -219,7 +219,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             }
             else if( rReq.GetSlot() == SID_PRINTDOCDIRECT && ! bSilent )
             {
-                if( ( pSh->IsSelection() || pSh->IsFrameSelected() || pSh->IsObjSelected() ) )
+                if( pSh->IsSelection() || pSh->IsFrameSelected() || pSh->IsObjSelected() )
                 {
                     short nBtn = ScopedVclPtrInstance<SvxPrtQryBox>(&GetEditWin())->Execute();
                     if( RET_CANCEL == nBtn )

@@ -1013,10 +1013,9 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
     // #i55919# SdrHintKind::ObjectChange is only interesting if it's for this object
 
     const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
-    if (!pSdrHint || ( /* (pSdrHint->GetKind() != SdrHintKind::ObjectRemoved)  && */
-        (pSdrHint->GetKind() != SdrHintKind::ModelCleared) &&
-        // #110094#-9 (pSdrHint->GetKind() != HINT_OBJLISTCLEAR) &&
-        ((pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != mpObj.get() ))))
+    if (!pSdrHint ||
+        ((pSdrHint->GetKind() != SdrHintKind::ModelCleared) &&
+         (pSdrHint->GetKind() != SdrHintKind::ObjectChange || pSdrHint->GetObject() != mpObj.get() )))
         return;
 
     uno::Reference< uno::XInterface > xSelf( mpObj->getWeakUnoShape() );

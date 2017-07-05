@@ -165,7 +165,7 @@ void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if ((dynamic_cast<const SmViewShell *>(pViewShell) != nullptr))
+        if (dynamic_cast<const SmViewShell *>(pViewShell) != nullptr)
         {
             SmViewShell *pSmView = static_cast<SmViewShell *>(pViewShell);
             pSmView->GetGraphicWindow().ApplyColorConfigValues( rColorCfg );
