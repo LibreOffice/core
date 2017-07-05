@@ -201,7 +201,6 @@ FileHandle_Impl::Allocator::~Allocator()
 void FileHandle_Impl::Allocator::allocate(sal_uInt8 **ppBuffer, size_t *pnSize)
 {
     SAL_WARN_IF((!ppBuffer) || (!pnSize), "sal.osl", "FileHandle_Impl::Allocator::allocate(): contract violation");
-    assert(ppBuffer && pnSize);
     if ((ppBuffer) && (pnSize))
     {
         *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
