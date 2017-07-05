@@ -125,7 +125,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
 void SAL_CALL rtl_byte_sequence_acquire( sal_Sequence *pSequence )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT( pSequence );
+    assert(pSequence);
     osl_atomic_increment( &(pSequence->nRefCount) );
 }
 
@@ -144,7 +144,7 @@ void SAL_CALL rtl_byte_sequence_release( sal_Sequence *pSequence )
 void SAL_CALL rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32 nLength )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT( ppSequence );
+    assert(ppSequence);
     if( *ppSequence )
     {
         rtl_byte_sequence_release( *ppSequence );
@@ -171,7 +171,7 @@ void SAL_CALL rtl_byte_sequence_construct( sal_Sequence **ppSequence , sal_Int32
 void SAL_CALL rtl_byte_sequence_constructNoDefault( sal_Sequence **ppSequence , sal_Int32 nLength )
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT( ppSequence );
+    assert(ppSequence);
     if( *ppSequence )
     {
         rtl_byte_sequence_release( *ppSequence );
