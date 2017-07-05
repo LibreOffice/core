@@ -277,21 +277,22 @@ static struct dirent* osl_readdir_impl_(DIR* pdir, bool bFilterLocalAndParentDir
     return pdirent;
 }
 
-oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirectoryItem* pItem, SAL_UNUSED_PARAMETER sal_uInt32 /*uHint*/)
+oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
+        oslDirectoryItem* pItem, SAL_UNUSED_PARAMETER sal_uInt32 /*uHint*/)
 {
-    oslDirectoryImpl* pDirImpl     = static_cast<oslDirectoryImpl*>(Directory);
-    rtl_uString*      ustrFileName = nullptr;
-    rtl_uString*      ustrFilePath = nullptr;
-    struct dirent*    pEntry;
+    oslDirectoryImpl* pDirImpl = static_cast<oslDirectoryImpl*>(pDirectory);
+    rtl_uString* ustrFileName = nullptr;
+    rtl_uString* ustrFilePath = nullptr;
+    struct dirent* pEntry;
 
-    OSL_ASSERT(Directory);
+    OSL_ASSERT(pDirectory);
     OSL_ASSERT(pItem);
 
-    if ((Directory == nullptr) || (pItem == nullptr))
+    if ((pDirectory == nullptr) || (pItem == nullptr))
         return osl_File_E_INVAL;
 
 #ifdef ANDROID
-    if( pDirImpl->eKind == oslDirectoryImpl::KIND_ASSETS )
+    if(pDirImpl->eKind == oslDirectoryImpl::KIND_ASSETS)
     {
         pEntry = lo_apk_readdir(pDirImpl->pApkDirStruct);
     }
@@ -301,34 +302,34 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
         pEntry = osl_readdir_impl_(pDirImpl->pDirStruct, true);
     }
 
-    if (pEntry == nullptr)
+    if (!pEntry)
         return osl_File_E_NOENT;
 
 #if defined(MACOSX)
 
     // convert decomposed filename to precomposed unicode
     char composed_name[BUFSIZ];
-    CFMutableStringRef strRef = CFStringCreateMutable (nullptr, 0 );
-    CFStringAppendCString( strRef, pEntry->d_name, kCFStringEncodingUTF8 );  //UTF8 is default on Mac OSX
-    CFStringNormalize( strRef, kCFStringNormalizationFormC );
-    CFStringGetCString( strRef, composed_name, BUFSIZ, kCFStringEncodingUTF8 );
-    CFRelease( strRef );
-    rtl_string2UString( &ustrFileName, composed_name, strlen( composed_name),
-    osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+    CFMutableStringRef strRef = CFStringCreateMutable(nullptr, 0 );
+    CFStringAppendCString(strRef, pEntry->d_name, kCFStringEncodingUTF8);  // UTF8 is default on Mac OSX
+    CFStringNormalize(strRef, kCFStringNormalizationFormC);
+    CFStringGetCString(strRef, composed_name, BUFSIZ, kCFStringEncodingUTF8);
+    CFRelease(strRef);
+    rtl_string2UString(&ustrFileName, composed_name, strlen(composed_name),
+                       osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
 
 #else  // not MACOSX
     /* convert file name to unicode */
-    rtl_string2UString( &ustrFileName, pEntry->d_name, strlen( pEntry->d_name ),
-        osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
-    OSL_ASSERT(ustrFileName != nullptr);
+    rtl_string2UString(&ustrFileName, pEntry->d_name, strlen(pEntry->d_name),
+                       osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
+    OSL_ASSERT(ustrFileName);
 
 #endif
 
     osl_systemPathMakeAbsolutePath(pDirImpl->ustrPath, ustrFileName, &ustrFilePath);
-    rtl_uString_release( ustrFileName );
+    rtl_uString_release(ustrFileName);
 
-    DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(*pItem);
-    if (pImpl != nullptr)
+    DirectoryItem_Impl* pImpl = static_cast< DirectoryItem_Impl* >(*pItem);
+    if (pImpl)
     {
         pImpl->release();
         pImpl = nullptr;
@@ -339,7 +340,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     pImpl = new DirectoryItem_Impl(ustrFilePath);
 #endif /* _DIRENT_HAVE_D_TYPE */
     *pItem = pImpl;
-    rtl_uString_release( ustrFilePath );
+    rtl_uString_release(ustrFilePath);
 
     return osl_File_E_None;
 }
