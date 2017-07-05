@@ -42,6 +42,8 @@ void gtv_application_window_load_document(GtvApplicationWindow* application,
 
 LOKDocView* gtv_application_window_get_lokdocview(GtvApplicationWindow* application);
 
+void gtv_application_window_create_view_from_window(GtvApplicationWindow* window);
+
 G_END_DECLS
 
 #endif /* GTV_APPLICATION_WINDOW_H */

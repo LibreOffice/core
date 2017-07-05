@@ -54,6 +54,16 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     gtk_builder_add_callback_symbol(builder, "btn_clicked", G_CALLBACK(btn_clicked));
     gtk_builder_add_callback_symbol(builder, "doCopy", G_CALLBACK(doCopy));
     gtk_builder_add_callback_symbol(builder, "doPaste", G_CALLBACK(doPaste));
+    gtk_builder_add_callback_symbol(builder, "createView", G_CALLBACK(createView));
+//    gtk_builder_add_callback_symbol(builder, "unoCommandDebugger", G_CALLBACK(unoCommandDebugger));
+//    gtk_builder_add_callback_symbol(builder, "toggleEditing", G_CALLBACK(toggleEditing));
+//    gtk_builder_add_callback_symbol(builder, "changePartMode", G_CALLBACK(changePartMode));
+//    gtk_builder_add_callback_symbol(builder, "changePart", G_CALLBACK(changePart));
+//    gtk_builder_add_callback_symbol(builder, "changeZoom", G_CALLBACK(changeZoom));
+//    gtk_builder_add_callback_symbol(builder, "toggleFindbar", G_CALLBACK(toggleFindbar));
+//    gtk_builder_add_callback_symbol(builder, "documentRedline", G_CALLBACK(documentRedline));
+//    gtk_builder_add_callback_symbol(builder, "documentRepair", G_CALLBACK(documentRepair));
+
     gtk_builder_connect_signals(builder, nullptr);
 
     gtk_widget_show_all(GTK_WIDGET(toolbar));

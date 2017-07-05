@@ -18,6 +18,24 @@ void doCopy(GtkWidget* pButton, gpointer /*pItem*/);
 
 void doPaste(GtkWidget* pButton, gpointer /*pItem*/);
 
+void createView(GtkWidget* pButton, gpointer /*pItem*/);
+
+void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */);
+
+void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/);
+
+void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ );
+
+void changePart( GtkWidget* pSelector, gpointer /*pItem*/ );
+
+void changeZoom( GtkWidget* pButton, gpointer /* pItem */ );
+
+void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/);
+
+void documentRedline(GtkWidget* pButton, gpointer /*pItem*/);
+
+void documentRepair(GtkWidget* pButton, gpointer /*pItem*/);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

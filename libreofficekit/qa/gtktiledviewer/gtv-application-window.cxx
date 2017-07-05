@@ -14,8 +14,8 @@
 
 #include <gtv-application-window.hxx>
 #include <gtv-main-toolbar.hxx>
+#include <gtv-helpers.hxx>
 
-#include <pwd.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
 
@@ -95,14 +95,6 @@ gtv_application_window_class_init(GtvApplicationWindowClass* klass)
     G_OBJECT_CLASS(klass)->dispose = gtv_application_window_dispose;
 }
 
-/// Generate an author string for multiple views.
-static std::string getNextAuthor()
-{
-    static int nCounter = 0;
-    struct passwd* pPasswd = getpwuid(getuid());
-    return std::string(pPasswd->pw_gecos) + " #" + std::to_string(++nCounter);
-}
-
 static void
 gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res, gpointer /*userdata*/)
 {
@@ -139,6 +131,45 @@ gtv_application_window_get_lokdocview(GtvApplicationWindow* window)
     return nullptr;
 }
 
+static const std::string
+createRenderingArgsJSON(const GtvRenderingArgs* pRenderingArgs)
+{
+    boost::property_tree::ptree aTree;
+    if (pRenderingArgs->m_bHidePageShadow)
+    {
+        aTree.put(boost::property_tree::ptree::path_type(".uno:ShowBorderShadow/type", '/'), "boolean");
+        aTree.put(boost::property_tree::ptree::path_type(".uno:ShowBorderShadow/value", '/'), false);
+    }
+    if (pRenderingArgs->m_bHideWhiteSpace)
+    {
+        aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/type", '/'), "boolean");
+        aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/value", '/'), true);
+    }
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/type", '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), getNextAuthor());
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    return aStream.str();
+}
+
+void
+gtv_application_window_create_view_from_window(GtvApplicationWindow* window)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    GApplication* app = g_application_get_default();
+
+    GtvApplicationWindow* newWindow = GTV_APPLICATION_WINDOW(gtv_application_window_new(GTK_APPLICATION(app)));
+    const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
+    GtvApplicationWindowPrivate* newPriv = getPrivate(newWindow);
+    newPriv->lokdocview = lok_doc_view_new_from_widget(LOK_DOC_VIEW(priv->lokdocview), aArguments.c_str());
+
+    gboolean bTiledAnnotations;
+    g_object_get(G_OBJECT(priv->lokdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
+    gtk_container_add(GTK_CONTAINER(newPriv->scrolledwindow), newPriv->lokdocview);
+    gtk_widget_show_all(newPriv->scrolledwindow);
+    gtk_window_present(GTK_WINDOW(newWindow));
+}
+
 void
 gtv_application_window_load_document(GtvApplicationWindow* window,
                                      const GtvRenderingArgs* aArgs,
@@ -160,22 +191,7 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
                  nullptr);
 
     // Create argument JSON
-    boost::property_tree::ptree aTree;
-    if (priv->m_pRenderingArgs->m_bHidePageShadow)
-    {
-        aTree.put(boost::property_tree::ptree::path_type(".uno:ShowBorderShadow/type", '/'), "boolean");
-        aTree.put(boost::property_tree::ptree::path_type(".uno:ShowBorderShadow/value", '/'), false);
-    }
-    if (priv->m_pRenderingArgs->m_bHideWhiteSpace)
-    {
-        aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/type", '/'), "boolean");
-        aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/value", '/'), true);
-    }
-    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/type", '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), getNextAuthor());
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-    std::string aArguments = aStream.str();
+    const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
     lok_doc_view_open_document(LOK_DOC_VIEW(priv->lokdocview), aDocPath.c_str(),
                                aArguments.c_str(), nullptr,
                                gtv_application_open_document_callback, priv->lokdocview);

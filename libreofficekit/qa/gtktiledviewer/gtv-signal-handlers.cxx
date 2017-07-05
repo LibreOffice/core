@@ -132,4 +132,12 @@ void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
         lok_doc_view_paste(pLOKDocView, "text/plain;charset=utf-8", pText, strlen(pText));
 }
 
+void createView(GtkWidget*, gpointer /*pItem*/)
+{
+    GApplication* app = g_application_get_default();
+    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
+
+    gtv_application_window_create_view_from_window(GTV_APPLICATION_WINDOW(window));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
