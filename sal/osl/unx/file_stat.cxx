@@ -189,9 +189,11 @@ namespace
             return osl_File_E_INVAL;
 
         file_path = rtl::OUString(pImpl->m_ustrFilePath);
-        OSL_ASSERT(!file_path.isEmpty());
         if (file_path.isEmpty())
+        {
+            SAL_WARN("sal.file", "Empty file path");
             return osl_File_E_INVAL;
+        }
 
         pStat->uValidFields = 0;
         return osl_File_E_None;
@@ -300,7 +302,7 @@ oslFileError SAL_CALL osl_setFileAttributes( rtl_uString* ustrFileURL, sal_uInt6
     char path[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrFileURL );
+    SAL_WARN_IF(!ustrFileURL, "sal.file", "Invalid file URL");
 
     /* convert file url to system path */
     eRet = FileURLToPath( path, PATH_MAX, ustrFileURL );
@@ -404,7 +406,7 @@ oslFileError SAL_CALL osl_setFileTime (
     char path[PATH_MAX];
     oslFileError eRet;
 
-    OSL_ASSERT( ustrFileURL );
+    SAL_WARN_IF(!ustrFileURL, "sal.file", "Invalid file URL");
 
     /* convert file url to system path */
     eRet = FileURLToPath( path, PATH_MAX, ustrFileURL );

@@ -1238,7 +1238,7 @@ public:
     */
     RC sync() const
     {
-        OSL_PRECOND(_pData, "File::sync(): File not open");
+        SAL_WARN_IF(!_pData, "sal.file", "File::sync(): File not open");
         return static_cast< RC >(osl_syncFile(_pData));
     }
 
