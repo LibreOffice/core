@@ -35,10 +35,10 @@ class SmartTagHandler
 
 public:
     SmartTagHandler(css::uno::Reference<css::uno::XComponentContext> xComponentContext, const css::uno::Reference<css::text::XTextDocument>& xTextDocument);
-    virtual ~SmartTagHandler() override;
+    ~SmartTagHandler() override;
 
-    virtual void lcl_attribute(Id Name, Value& val) override;
-    virtual void lcl_sprm(Sprm& sprm) override;
+    void lcl_attribute(Id Name, Value& val) override;
+    void lcl_sprm(Sprm& sprm) override;
 
     void setURI(const OUString& rURI);
     void setElement(const OUString& rElement);

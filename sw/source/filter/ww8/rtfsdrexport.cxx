@@ -570,14 +570,14 @@ sal_Int32 RtfSdrExport::StartShape()
                 lcl_AppendSP(m_rAttrOutput.RunText(), "gtextUNICODE",
                              msfilter::rtfutil::OutString(rEditObj.GetText(0), m_rExport.m_eCurrentEncoding));
 
-                const SvxFontItem* pFontFamily = static_cast<const SvxFontItem*>(rItemSet.GetItem(SID_ATTR_CHAR_FONT));
+                auto pFontFamily = static_cast<const SvxFontItem*>(rItemSet.GetItem(SID_ATTR_CHAR_FONT));
                 if (pFontFamily)
                 {
                     lcl_AppendSP(m_rAttrOutput.RunText(), "gtextFont",
                                  msfilter::rtfutil::OutString(pFontFamily->GetFamilyName(), m_rExport.m_eCurrentEncoding));
                 }
 
-                const SvxFontHeightItem* pFontHeight = static_cast<const SvxFontHeightItem*>(rItemSet.GetItem(SID_ATTR_CHAR_FONTHEIGHT));
+                auto pFontHeight = static_cast<const SvxFontHeightItem*>(rItemSet.GetItem(SID_ATTR_CHAR_FONTHEIGHT));
                 if (pFontHeight)
                 {
                     long nFontHeight = TransformMetric(pFontHeight->GetHeight(), FUNIT_TWIP, FUNIT_POINT);
