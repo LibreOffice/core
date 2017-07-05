@@ -1032,23 +1032,21 @@ public:
     // Outline - promote / demote.
     bool OutlineUpDown( const SwPaM& rPam, short nOffset );
 
-    // Ountline - move up / move down.
+    /// Outline - move up / move down.
     bool MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type nOffset);
 
     bool GotoOutline( SwPosition& rPos, const OUString& rName ) const;
 
-    /** Accept changes of outline styles for OUtlineRule.
-     re-use unused 3rd parameter
-     Optional parameter <bResetIndentAttrs> - default value false:
+    /** Accept changes of outline styles for OutlineRule.
+     @param bResetIndentAttrs Optional parameter - default value false:
       If <bResetIndentAttrs> equals true, the indent attributes "before text"
       and "first line indent" are additionally reset at the provided PaM, if
       the list style makes use of the new list level attributes.
-     Parameters <bCreateNewList> and <sContinuedListId>:
-      <bCreateNewList> indicates, if a new list is created by applying the given list style.
-      If <bCreateNewList> equals false, <sContinuedListId> may contain the
-      list Id of a list, which has to be continued by applying the given list style
+     @param bCreateNewList indicates if a new list is created by applying the given list style.
+     @param sContinuedListId If bCreateNewList is false, may contain the
+      list Id of a list which has to be continued by applying the given list style
 
-     Returns the set ListId if bSetItem is true */
+     @return the set ListId if bSetItem is true */
     OUString SetNumRule( const SwPaM&,
                      const SwNumRule&,
                      bool bCreateNewList,
@@ -1604,7 +1602,6 @@ public:
 
     /**
      * Dumps the entire nodes structure to the given destination (file nodes.xml in the current directory by default)
-     * @since 3.5
      */
     void dumpAsXml(struct _xmlTextWriter* = nullptr) const;
 
