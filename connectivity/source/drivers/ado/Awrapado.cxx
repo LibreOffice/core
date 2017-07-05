@@ -513,8 +513,7 @@ void WpADOField::get_Value(OLEVariant& aValVar) const
 {
     assert(pInterface);
     aValVar.setEmpty();
-    bool bOk = SUCCEEDED(pInterface->get_Value(&aValVar));
-    (void)bOk;
+    pInterface->get_Value(&aValVar);
 }
 
 OLEVariant WpADOField::get_Value() const
@@ -1038,15 +1037,13 @@ void WpADOColumn::put_Name(const OUString& _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
-    bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
-    (void)bErg;
+    pInterface->put_Name(bstr.asBSTR());
 }
 void WpADOColumn::put_RelatedColumn(const OUString& _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
-    bool bErg = SUCCEEDED(pInterface->put_RelatedColumn(bstr.asBSTR()));
-    (void)bErg;
+    pInterface->put_RelatedColumn(bstr.asBSTR());
 }
 
 DataTypeEnum WpADOColumn::get_Type() const
@@ -1149,8 +1146,7 @@ void WpADOKey::put_Name(const OUString& _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
-    bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
-    (void)bErg;
+    pInterface->put_Name(bstr.asBSTR());
 }
 
 KeyTypeEnum WpADOKey::get_Type() const
@@ -1179,8 +1175,7 @@ void WpADOKey::put_RelatedTable(const OUString& _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
-    bool bErg = SUCCEEDED(pInterface->put_RelatedTable(bstr.asBSTR()));
-    (void)bErg;
+    pInterface->put_RelatedTable(bstr.asBSTR());
 }
 
 RuleEnum WpADOKey::get_DeleteRule() const
@@ -1233,8 +1228,7 @@ void WpADOIndex::put_Name(const OUString& _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
-    bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
-    (void)bErg;
+    pInterface->put_Name(bstr.asBSTR());
 }
 
 bool WpADOIndex::get_Clustered() const
@@ -1355,8 +1349,7 @@ void WpADOTable::put_Name(const OUString& _rName)
 {
     assert(pInterface);
     OLEString bstr(_rName);
-    bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
-    (void)bErg;
+    pInterface->put_Name(bstr.asBSTR());
 }
 
 OUString WpADOTable::get_Type() const
@@ -1447,8 +1440,7 @@ OUString WpADOGroup::get_Name() const
 void WpADOGroup::put_Name(const OUString& _rName)
 {
     OLEString bstr(_rName);
-    bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
-    (void)bErg;
+    pInterface->put_Name(bstr.asBSTR());
 }
 
 RightsEnum WpADOGroup::GetPermissions(
@@ -1492,8 +1484,7 @@ OUString WpADOUser::get_Name() const
 void WpADOUser::put_Name(const OUString& _rName)
 {
     OLEString bstr(_rName);
-    bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
-    (void)bErg;
+    pInterface->put_Name(bstr.asBSTR());
 }
 
 bool WpADOUser::ChangePassword(const OUString& _rPwd,const OUString& _rNewPwd)
@@ -1543,9 +1534,7 @@ WpBase::WpBase(IDispatch* pInt)
 {
     if (pIUnknown)
     {
-        ULONG nCount = pIUnknown->AddRef();
-        (void)nCount;
-        //  OSL_ENSURE(nCount == 1,"Count is greater than 1");
+        pIUnknown->AddRef();
     }
 }
 

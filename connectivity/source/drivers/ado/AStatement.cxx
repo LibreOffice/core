@@ -724,11 +724,10 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
                 break;
         }
     }
-    catch( const Exception& e )
+    catch( const Exception& )
     {
         bModified = true;   // will ensure that the property is set
         OSL_FAIL( "OStatement_Base::convertFastPropertyValue: caught something strange!" );
-        (void)e;
     }
     return bModified;
 }

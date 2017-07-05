@@ -197,16 +197,6 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
         if(pParam)
         {
             m_pParameters->Append(pParam);
-#if OSL_DEBUG_LEVEL > 0
-            pParam = nullptr;
-            m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
-            WpADOParameter aParam(pParam);
-            if(pParam)
-            {
-                DataTypeEnum eType = aParam.GetADOType();
-                (void)eType;
-            }
-#endif
         }
     }
     else

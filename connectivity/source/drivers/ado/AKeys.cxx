@@ -66,13 +66,7 @@ sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XProper
     OLEVariant vOptional;
     vOptional.setNoArg();
 
-#if OSL_DEBUG_LEVEL > 0
-    KeyTypeEnum eKey =
-#endif
-        OAdoKey::Map2KeyRule(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
-#if OSL_DEBUG_LEVEL > 0
-    (void)eKey;
-#endif
+    OAdoKey::Map2KeyRule(getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
 
     WpADOKey aKey = pKey->getImpl();
     OUString sName = aKey.get_Name();
