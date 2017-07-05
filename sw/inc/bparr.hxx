@@ -61,7 +61,11 @@ struct BlockInfo final
     sal_uLong    nStart, nEnd;         ///< start- and end index
     sal_uInt16   nElem;                ///< number of elements
 
-    BlockInfo(BigPtrArray* b) : pBigArr(b) {}
+    BlockInfo(BigPtrArray* b)
+        : pBigArr(b)
+        , nElem(0)
+    {
+    }
 };
 
 class SW_DLLPUBLIC BigPtrArray

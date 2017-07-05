@@ -165,7 +165,6 @@ BlockInfo* BigPtrArray::InsBlock( sal_uInt16 pos )
         p->nStart = p->nEnd = 0;
 
     p->nEnd--;  // no elements
-    p->nElem = 0;
     return p;
 }
 
