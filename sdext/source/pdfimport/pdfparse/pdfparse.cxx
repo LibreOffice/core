@@ -243,7 +243,7 @@ public:
                                 >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
                                 >> ch_p('.')
                                 >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
-                                >> *((~ch_p('\r') & ~ch_p('\n')))
+                                >> *(~ch_p('\r') & ~ch_p('\n'))
                                 >> eol_p
                              ])[boost::bind(&PDFGrammar::haveFile,pSelf, _1, _2)]
                           >> *( comment | object | ( xref >> trailer ) );
