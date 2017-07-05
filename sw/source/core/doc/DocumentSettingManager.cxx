@@ -432,7 +432,7 @@ void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ LanguageType nL
                                    /*[in]*/ const css::i18n::ForbiddenCharacters& rFChars )
 {
     if (!mxForbiddenCharsTable)
-        mxForbiddenCharsTable.reset(new SvxForbiddenCharactersTable(::comphelper::getProcessComponentContext()));
+        mxForbiddenCharsTable = SvxForbiddenCharactersTable::makeForbiddenCharactersTable(::comphelper::getProcessComponentContext());
     mxForbiddenCharsTable->SetForbiddenCharacters( nLang, rFChars );
 
     SdrModel *pDrawModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
@@ -457,7 +457,7 @@ void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ LanguageType nL
 std::shared_ptr<SvxForbiddenCharactersTable>& sw::DocumentSettingManager::getForbiddenCharacterTable()
 {
     if (!mxForbiddenCharsTable)
-        mxForbiddenCharsTable.reset(new SvxForbiddenCharactersTable(::comphelper::getProcessComponentContext()));
+        mxForbiddenCharsTable = SvxForbiddenCharactersTable::makeForbiddenCharactersTable(::comphelper::getProcessComponentContext());
     return mxForbiddenCharsTable;
 }
 
