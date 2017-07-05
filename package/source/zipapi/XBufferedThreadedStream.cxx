@@ -50,10 +50,11 @@ private:
 }
 
 XBufferedThreadedStream::XBufferedThreadedStream(
-                    const Reference<XInputStream>& xSrcStream )
+                    const Reference<XInputStream>& xSrcStream,
+                    sal_Int64 nStreamSize)
 : mxSrcStream( xSrcStream )
 , mnPos(0)
-, mnStreamSize( xSrcStream->available() )
+, mnStreamSize( nStreamSize )
 , mnOffset( 0 )
 , mxUnzippingThread( new UnzippingThread(*this) )
 , mbTerminateThread( false )
