@@ -41,10 +41,9 @@ const rtl::OUString SLASH     ("/");
 
 void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
 {
-    OSL_PRECOND(ppustrPath && (nullptr != *ppustrPath),
-                "osl_systemPathEnsureSeparator: Invalid parameter");
+    assert(ppustrPath && *ppustrPath);
 
-     rtl::OUString path(*ppustrPath);
+    rtl::OUString path(*ppustrPath);
     sal_Int32     i = std::max<sal_Int32>(path.lastIndexOf(BACKSLASH), path.lastIndexOf(SLASH));
 
     if (i < (path.getLength()-1))
