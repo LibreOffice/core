@@ -7140,7 +7140,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
 
 bool PDFWriterImpl::finalizeSignature()
 {
-
     if (!m_aContext.SignCertificate.is())
         return false;
 

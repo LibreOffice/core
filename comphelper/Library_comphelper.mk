@@ -37,6 +37,8 @@ $(eval $(call gb_Library_add_defs,comphelper,\
 ))
 
 $(eval $(call gb_Library_use_externals,comphelper,\
+	$(if $(filter LINUX MACOSX %BSD SOLARIS,$(OS)), \
+		curl) \
     boost_headers \
     icuuc \
     icu_headers \
@@ -45,8 +47,9 @@ $(eval $(call gb_Library_use_externals,comphelper,\
 
 ifeq ($(TLS),NSS)
 $(eval $(call gb_Library_use_externals,comphelper,\
-       plc4 \
-       nss3 \
+	$(if $(filter-out IOS WNT,$(OS)), \
+		nss3 \
+		plc4) \
 ))
 else
 ifeq ($(TLS),OPENSSL)
@@ -62,8 +65,26 @@ $(eval $(call gb_Library_use_libraries,comphelper,\
     cppuhelper \
     sal \
     salhelper \
+    tl \
     ucbhelper \
-	i18nlangtag \
+    i18nlangtag \
+))
+
+$(eval $(call gb_Library_use_system_win32_libs,comphelper,\
+	advapi32 \
+	crypt32 \
+	gdi32 \
+	gdiplus \
+	imm32 \
+	mpr \
+	ole32 \
+	shell32 \
+	usp10 \
+	uuid \
+	version \
+	winspool \
+	setupapi \
+	shlwapi \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,comphelper))
@@ -79,6 +100,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/container/enumerablemap \
     comphelper/source/container/enumhelper \
     comphelper/source/container/namecontainer \
+    comphelper/source/crypto/cryptosign \
     comphelper/source/eventattachermgr/eventattachermgr \
     comphelper/source/misc/accessiblecomponenthelper \
     comphelper/source/misc/accessiblecontexthelper \
