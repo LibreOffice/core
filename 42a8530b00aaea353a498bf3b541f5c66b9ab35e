@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_4de78712",
+        "filename": "sal/osl/unx/file_misc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-07-05T08:08:50Z",
+      "side": 1,
+      "message": "nitpick mode: do we need these extra parenthesis?",
+      "range": {
+        "startLine": 353,
+        "startChar": 15,
+        "endLine": 353,
+        "endChar": 39
+      },
+      "revId": "42a8530b00aaea353a498bf3b541f5c66b9ab35e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
