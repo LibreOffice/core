@@ -45,6 +45,7 @@
 #include "system.hxx"
 #endif
 
+#include <cassert>
 #include <string.h>
 
 namespace {
@@ -199,20 +200,20 @@ static rtl_Locale * parse_locale( const char * locale )
 
     /* convert language code to unicode */
     rtl_string2UString( &pLanguage, locale, offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-    OSL_ASSERT(pLanguage != nullptr);
+    assert(pLanguage);
 
     /* convert country code to unicode */
     if( len >= offset+3 && locale[offset] == '_' )
     {
         rtl_string2UString( &pCountry, locale + offset + 1, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-        OSL_ASSERT(pCountry != nullptr);
+        assert(pCountry);
         offset += 3;
     }
 
     /* convert variant code to unicode - do not rely on "." as delimiter */
     if( len > offset ) {
         rtl_string2UString( &pVariant, locale + offset, len - offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
-        OSL_ASSERT(pVariant != nullptr);
+        assert(pVariant);
     }
 
     ret =  rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : u"", pVariant ? pVariant->buffer : u"" );
@@ -611,7 +612,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         language = pair_search (codeset, nl_language_list, SAL_N_ELEMENTS( nl_language_list ) );
     }
 
-    OSL_ASSERT( language && ( RTL_TEXTENCODING_DONTKNOW != language->value ) );
+    SAL_WARN_IF(!language || (language->value == RTL_TEXTENCODING_DONTKNOW));
 
     /* a matching item in our list provides a mapping from codeset to
      * rtl-codeset */
