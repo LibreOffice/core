@@ -396,7 +396,7 @@ inline void doubleToString(typename T::String ** pResult,
     {
         pBuf = static_cast< typename T::Char * >(
             rtl_allocateMemory(nBuf * sizeof (typename T::Char)));
-        OSL_ENSURE(pBuf != nullptr, "Out of memory");
+        SAL_WARN_IF(!pBuf, "sal.rtl", "Out of memory");
     }
     else
         pBuf = aBuf;
