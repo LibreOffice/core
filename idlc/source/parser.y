@@ -622,7 +622,7 @@ interface_dcl :
          * Push it on the scope stack
          */
         idlc()->scopes()->push(pInterface);
-        delete($1);
+        delete $1;
     }
     '{'
     {
@@ -2140,7 +2140,7 @@ at_least_one_scoped_name :
             pScopedNames->push_back(*$1);
             $$ = pScopedNames;
         }
-        delete($1);
+        delete $1;
     }
     ;
 
@@ -2163,7 +2163,7 @@ scoped_names :
             pNames->push_back(*$4);
             $$ = pNames;
         }
-        delete($4);
+        delete $4;
     }
     | /* EMPTY */
     {
