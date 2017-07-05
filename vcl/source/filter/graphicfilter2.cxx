@@ -587,12 +587,10 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                     if ( cByte )
                     {
                         if ( nXRes )
-                            aLogSize.Width() = ( aPixSize.Width() * 100000 ) /
-                                               nTemp32;
+                            aLogSize.Width() = (aPixSize.Width() * 100000) / nXRes;
 
                         if ( nYRes )
-                            aLogSize.Height() = ( aPixSize.Height() * 100000 ) /
-                                                nTemp32;
+                            aLogSize.Height() = (aPixSize.Height() * 100000) / nYRes;
                     }
                 }
             }
