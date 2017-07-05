@@ -59,6 +59,7 @@
 #include "cfg.hxx"
 #include "SvxMenuConfigPage.hxx"
 #include "SvxToolbarConfigPage.hxx"
+#include "SvxConfigPageHelper.hxx"
 #include "eventdlg.hxx"
 #include <dialmgr.hxx>
 
@@ -216,7 +217,7 @@ SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet
     , m_nToolbarsPageId(0)
     , m_nEventsPageId(0)
 {
-    killmelater::InitImageType();
+    SvxConfigPageHelper::InitImageType();
 
     m_nMenusPageId = AddTabPage("menus", CreateSvxMenuConfigPage, nullptr);
     m_nContextMenusPageId = AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
@@ -242,7 +243,7 @@ void SvxConfigDialog::SetFrame(const css::uno::Reference< css::frame::XFrame >& 
 {
     m_xFrame = xFrame;
 
-    if (!killmelater::showKeyConfigTabPage( xFrame ))
+    if (!SvxConfigPageHelper::showKeyConfigTabPage( xFrame ))
         RemoveTabPage(m_nKeyboardPageId);
 }
 
@@ -329,7 +330,7 @@ Image SaveInData::GetImage( const OUString& rCommandURL )
     Image aImage;
 
     uno::Reference< graphic::XGraphic > xGraphic =
-        killmelater::GetGraphic( m_xImgMgr, rCommandURL );
+        SvxConfigPageHelper::GetGraphic( m_xImgMgr, rCommandURL );
 
     if ( xGraphic.is() )
     {
@@ -337,7 +338,7 @@ Image SaveInData::GetImage( const OUString& rCommandURL )
     }
     else if ( xDefaultImgMgr != nullptr && (*xDefaultImgMgr).is() )
     {
-        xGraphic = killmelater::GetGraphic( (*xDefaultImgMgr), rCommandURL );
+        xGraphic = SvxConfigPageHelper::GetGraphic( (*xDefaultImgMgr), rCommandURL );
 
         if ( xGraphic.is() )
         {
@@ -469,7 +470,7 @@ bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
 
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
-        bool bItem = killmelater::GetMenuItemData( xMenuSettings, nIndex,
+        bool bItem = SvxConfigPageHelper::GetMenuItemData( xMenuSettings, nIndex,
             aCommandURL, aLabel, nType, xSubMenu );
 
         if ( bItem )
@@ -547,7 +548,7 @@ bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
                         pEntry->SetMain();
                     }
 
-                    subMenuTitle += killmelater::stripHotKey( aLabel );
+                    subMenuTitle += SvxConfigPageHelper::stripHotKey( aLabel );
 
                     LoadSubMenus( xSubMenu, subMenuTitle, pEntry, bContextMenu );
                 }
@@ -628,7 +629,7 @@ void MenuSaveInData::Apply(
         SvxConfigEntry* pEntryData = *iter;
 
         uno::Sequence< beans::PropertyValue > aPropValueSeq =
-            killmelater::ConvertSvxConfigEntry( pEntryData );
+            SvxConfigPageHelper::ConvertSvxConfigEntry( pEntryData );
 
         uno::Reference< container::XIndexContainer > xSubMenuBar(
             rFactory->createInstanceWithContext( xContext ),
@@ -661,7 +662,7 @@ void SaveInData::ApplyMenu(
         if ( pEntry->IsPopup() )
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                killmelater::ConvertSvxConfigEntry( pEntry );
+                SvxConfigPageHelper::ConvertSvxConfigEntry( pEntry );
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
                 rFactory->createInstanceWithContext( xContext ),
@@ -686,7 +687,7 @@ void SaveInData::ApplyMenu(
         else
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                killmelater::ConvertSvxConfigEntry( pEntry );
+                SvxConfigPageHelper::ConvertSvxConfigEntry( pEntry );
             rMenuBar->insertByIndex(
                 rMenuBar->getCount(), uno::Any( aPropValueSeq ));
         }
@@ -856,7 +857,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
                 LoadSubMenus( xPopupMenu, aUIMenuName, pEntry, true );
             }
         }
-        std::sort( m_pRootEntry->GetEntries()->begin(), m_pRootEntry->GetEntries()->end(), killmelater::EntrySort );
+        std::sort( m_pRootEntry->GetEntries()->begin(), m_pRootEntry->GetEntries()->end(), SvxConfigPageHelper::EntrySort );
     }
     return m_pRootEntry->GetEntries();
 }
@@ -890,7 +891,7 @@ bool ContextMenuSaveInData::Apply()
     SvxEntries* pEntries = GetEntries();
     for ( const auto& pEntry : *pEntries )
     {
-        if ( pEntry->IsModified() || killmelater::SvxConfigEntryModified( pEntry ) )
+        if ( pEntry->IsModified() || SvxConfigPageHelper::SvxConfigEntryModified( pEntry ) )
         {
             css::uno::Reference< css::container::XIndexContainer > xIndexContainer( GetConfigManager()->createSettings(), css::uno::UNO_QUERY );
             css::uno::Reference< css::lang::XSingleComponentFactory > xFactory( xIndexContainer, css::uno::UNO_QUERY );
@@ -1242,7 +1243,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         // replace %MODULENAME in the label with the correct module name
         uno::Reference< css::frame::XModuleManager2 > xModuleManager(
             css::frame::ModuleManager::create( xContext ));
-        OUString aModuleName = killmelater::GetUIModuleName( aModuleId, xModuleManager );
+        OUString aModuleName = SvxConfigPageHelper::GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = m_pTopLevel->get_label();
         OUString aSearchString("%MODULENAME" );
@@ -1531,13 +1532,13 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
         for ( ; iter != end; ++iter )
         {
             SvxConfigEntry* pEntryData = *iter;
-            const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( killmelater::stripHotKey( pEntryData->GetName() ) );
+            const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( SvxConfigPageHelper::stripHotKey( pEntryData->GetName() ) );
             m_pTopLevelListBox->SetEntryData( nPos, pEntryData );
 
             if ( pEntryData == pToSelect )
                 nSelectionPos = nPos;
 
-            AddSubMenusToUI( killmelater::stripHotKey( pEntryData->GetName() ), pEntryData );
+            AddSubMenusToUI( SvxConfigPageHelper::stripHotKey( pEntryData->GetName() ), pEntryData );
         }
     }
 #ifdef DBG_UTIL
@@ -1568,7 +1569,7 @@ void SvxConfigPage::AddSubMenusToUI(
 
         if ( pEntryData->IsPopup() )
         {
-            OUString subMenuTitle = rBaseTitle + aMenuSeparatorStr + killmelater::stripHotKey( pEntryData->GetName() );
+            OUString subMenuTitle = rBaseTitle + aMenuSeparatorStr + SvxConfigPageHelper::stripHotKey( pEntryData->GetName() );
 
             const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( subMenuTitle );
             m_pTopLevelListBox->SetEntryData( nPos, pEntryData );
@@ -1731,7 +1732,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     }
     else
     {
-        OUString aName = killmelater::stripHotKey( pNewEntryData->GetName() );
+        OUString aName = SvxConfigPageHelper::stripHotKey( pNewEntryData->GetName() );
 
         Image aImage = GetSaveInData()->GetImage(
             pNewEntryData->GetCommand());
@@ -1826,7 +1827,7 @@ bool SvxConfigPage::MoveEntryData(
     if ( pSourceData != nullptr && pTargetData != nullptr )
     {
         // remove the source entry from our list
-        killmelater::RemoveEntry( pEntries, pSourceData );
+        SvxConfigPageHelper::RemoveEntry( pEntries, pSourceData );
 
         SvxEntries::iterator iter = pEntries->begin();
         SvxEntries::const_iterator end = pEntries->end();
@@ -1845,8 +1846,6 @@ bool SvxConfigPage::MoveEntryData(
 
     return false;
 }
-
-// SvxMenuConfigPage was here
 
 SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     vcl::Window* pParent, SvxEntries* entries,
@@ -1872,7 +1871,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         {
             SvxConfigEntry* pEntry = *iter;
             SvTreeListEntry* pLBEntry =
-                m_pMenuListBox->InsertEntry( killmelater::stripHotKey( pEntry->GetName() ) );
+                m_pMenuListBox->InsertEntry( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
             pLBEntry->SetUserData( pEntry );
             mpEntries->push_back( pEntry );
 
@@ -1889,8 +1888,8 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         // Generate custom name for new menu
         OUString prefix = CuiResId( RID_SVXSTR_NEW_MENU );
 
-        OUString newname = killmelater::generateCustomName( prefix, entries );
-        OUString newurl = killmelater::generateCustomMenuURL( mpEntries );
+        OUString newname = SvxConfigPageHelper::generateCustomName( prefix, entries );
+        OUString newurl = SvxConfigPageHelper::generateCustomMenuURL( mpEntries );
 
         SvxConfigEntry* pNewEntryData =
             new SvxConfigEntry( newname, newurl, true );
@@ -1899,7 +1898,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         pNewEntryData->SetMain();
 
         pNewMenuEntry =
-            m_pMenuListBox->InsertEntry( killmelater::stripHotKey( pNewEntryData->GetName() ) );
+            m_pMenuListBox->InsertEntry( SvxConfigPageHelper::stripHotKey( pNewEntryData->GetName() ) );
         m_pMenuListBox->Select( pNewMenuEntry );
 
         pNewMenuEntry->SetUserData( pNewEntryData );
@@ -2099,8 +2098,6 @@ bool SvxConfigEntry::IsRenamable()
 {
     return !IsMain() || IsUserDefined();
 }
-
-//SvxToolbarConfigPage class was here (first part)
 
 ToolbarSaveInData::ToolbarSaveInData(
     const uno::Reference < css::ui::XUIConfigurationManager >& xCfgMgr,
@@ -2480,7 +2477,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
             }
         }
 
-        std::sort( GetEntries()->begin(), GetEntries()->end(), killmelater::EntrySort );
+        std::sort( GetEntries()->begin(), GetEntries()->end(), SvxConfigPageHelper::EntrySort );
     }
 
     return pRootEntry->GetEntries();
@@ -2586,7 +2583,7 @@ void ToolbarSaveInData::ApplyToolbar(
         if ( pEntry->IsPopup() )
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                killmelater::ConvertToolbarEntry( pEntry );
+                SvxConfigPageHelper::ConvertToolbarEntry( pEntry );
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
                 rFactory->createInstanceWithContext( xContext ),
@@ -2609,7 +2606,7 @@ void ToolbarSaveInData::ApplyToolbar(
         else
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
-                killmelater::ConvertToolbarEntry( pEntry );
+                SvxConfigPageHelper::ConvertToolbarEntry( pEntry );
 
             rToolbarBar->insertByIndex(
                 rToolbarBar->getCount(), uno::Any( aPropValueSeq ));
@@ -2717,7 +2714,7 @@ void ToolbarSaveInData::RemoveToolbar( SvxConfigEntry* pToolbar )
     {
         OUString url = pToolbar->GetCommand();
         GetConfigManager()->removeSettings( url );
-        killmelater::RemoveEntry( GetEntries(), pToolbar );
+        SvxConfigPageHelper::RemoveEntry( GetEntries(), pToolbar );
         delete pToolbar;
 
         PersistChanges( GetConfigManager() );
@@ -2783,7 +2780,7 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
 
             try
             {
-                GetImageManager()->removeImages( killmelater::GetImageType(), aURLSeq );
+                GetImageManager()->removeImages( SvxConfigPageHelper::GetImageType(), aURLSeq );
             }
             catch ( uno::Exception& )
             {
@@ -2814,7 +2811,7 @@ void ToolbarSaveInData::LoadToolbar(
 
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
-        bool bItem = killmelater::GetToolbarItemData( xToolbarSettings, nIndex, aCommandURL,
+        bool bItem = SvxConfigPageHelper::GetToolbarItemData( xToolbarSettings, nIndex, aCommandURL,
             aLabel, nType, bIsVisible, nStyle );
 
         if ( bItem )
@@ -2876,9 +2873,6 @@ void ToolbarSaveInData::LoadToolbar(
     }
 }
 
-//SvxToolbarConfigPage class was here (second part)
-//SvxToolbarEntriesListBox class was here
-
 SvxNewToolbarDialog::SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& rName)
     : ModalDialog(pWindow, "NewToolbarDialog", "cui/ui/newtoolbardialog.ui")
 {
@@ -2933,14 +2927,14 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     pTbSymbol->SetPageScroll( true );
 
     m_nExpectedSize = 16;
-    if (killmelater::GetImageType() & css::ui::ImageType::SIZE_LARGE)
+    if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_LARGE)
         m_nExpectedSize = 26;
-    else if (killmelater::GetImageType() & css::ui::ImageType::SIZE_32)
+    else if (SvxConfigPageHelper::GetImageType() & css::ui::ImageType::SIZE_32)
         m_nExpectedSize = 32;
 
     if ( m_nExpectedSize != 16 )
     {
-        pFtNote->SetText( killmelater::replaceSixteen( pFtNote->GetText(), m_nExpectedSize ) );
+        pFtNote->SetText( SvxConfigPageHelper::replaceSixteen( pFtNote->GetText(), m_nExpectedSize ) );
     }
 
     uno::Reference< uno::XComponentContext > xComponentContext =
@@ -2999,7 +2993,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     uno::Sequence< OUString > names;
     if ( m_xImportedImageManager.is() )
     {
-        names = m_xImportedImageManager->getAllImageNames( killmelater::GetImageType() );
+        names = m_xImportedImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
         for ( sal_Int32 n = 0; n < names.getLength(); ++n )
             aImageInfo1.insert( ImageInfo::value_type( names[n], false ));
     }
@@ -3009,7 +3003,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     while ( pConstIter != aImageInfo1.end() )
     {
         name[ 0 ] = pConstIter->first;
-        uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( killmelater::GetImageType(), name );
+        uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
         if ( graphics.getLength() > 0 )
         {
             Image img = Image( graphics[ 0 ] );
@@ -3029,12 +3023,12 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
 
     if ( m_xParentImageManager.is() )
     {
-        names = m_xParentImageManager->getAllImageNames( killmelater::GetImageType() );
+        names = m_xParentImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
         for ( sal_Int32 n = 0; n < names.getLength(); ++n )
             aImageInfo.insert( ImageInfo::value_type( names[n], false ));
     }
 
-    names = m_xImageManager->getAllImageNames( killmelater::GetImageType() );
+    names = m_xImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
     for ( sal_Int32 n = 0; n < names.getLength(); ++n )
     {
         ImageInfo::iterator pIter = aImageInfo.find( names[n] );
@@ -3054,9 +3048,9 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
         try
         {
             if ( pConstIter->second )
-                graphics = m_xImageManager->getImages( killmelater::GetImageType(), name );
+                graphics = m_xImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
             else
-                graphics = m_xParentImageManager->getImages( killmelater::GetImageType(), name );
+                graphics = m_xParentImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
         }
         catch ( uno::Exception& )
         {
@@ -3162,7 +3156,7 @@ IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox, void )
     pTbSymbol->CheckItem( nId );
 
     OUString aSelImageText = pTbSymbol->GetItemText( nId );
-    if ( m_xImportedImageManager->hasImage( killmelater::GetImageType(), aSelImageText ) )
+    if ( m_xImportedImageManager->hasImage( SvxConfigPageHelper::GetImageType(), aSelImageText ) )
     {
         pBtnDelete->Enable();
     }
@@ -3214,7 +3208,7 @@ IMPL_LINK_NOARG( SvxIconSelectorDialog, DeleteHdl, Button *, void )
                 OUString aSelImageText = pTbSymbol->GetItemText( nId );
                 uno::Sequence< OUString > URLs { aSelImageText };
                 pTbSymbol->RemoveItem( pTbSymbol->GetItemPos( nId ) );
-                m_xImportedImageManager->removeImages( killmelater::GetImageType(), URLs );
+                m_xImportedImageManager->removeImages( SvxConfigPageHelper::GetImageType(), URLs );
                 uno::Reference< css::ui::XUIConfigurationPersistence >
                     xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
                 if ( xConfigPersistence.is() && xConfigPersistence->isModified() )
@@ -3287,7 +3281,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
                 URLs[0] = aURL;
                 aImportGraph[ 0 ] = xGraphic;
-                m_xImportedImageManager->replaceImages( killmelater::GetImageType(), URLs, aImportGraph );
+                m_xImportedImageManager->replaceImages( SvxConfigPageHelper::GetImageType(), URLs, aImportGraph );
                 xConfigPer->store();
 
                 bResult = true;
@@ -3317,7 +3311,7 @@ void SvxIconSelectorDialog::ImportGraphics(
 
     if ( rPaths.getLength() == 1 )
     {
-        if ( m_xImportedImageManager->hasImage( killmelater::GetImageType(), rPaths[0] ) )
+        if ( m_xImportedImageManager->hasImage( SvxConfigPageHelper::GetImageType(), rPaths[0] ) )
         {
             aIndex = rPaths[0].lastIndexOf( '/' );
             aIconName = rPaths[0].copy( aIndex+1 );
@@ -3345,7 +3339,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         for ( sal_Int32 i = 1; i < rPaths.getLength(); ++i )
         {
             OUString aPath = aSourcePath + rPaths[i];
-            if ( m_xImportedImageManager->hasImage( killmelater::GetImageType(), aPath ) )
+            if ( m_xImportedImageManager->hasImage( SvxConfigPageHelper::GetImageType(), aPath ) )
             {
                 aIndex = rPaths[i].lastIndexOf( '/' );
                 aIconName = rPaths[i].copy( aIndex+1 );
@@ -3451,7 +3445,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                     uno::Sequence<OUString> aImportURL { aURL };
                     uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
                     aImportGraph[ 0 ] = xGraphic;
-                    m_xImportedImageManager->insertImages( killmelater::GetImageType(), aImportURL, aImportGraph );
+                    m_xImportedImageManager->insertImages( SvxConfigPageHelper::GetImageType(), aImportURL, aImportGraph );
                     uno::Reference< css::ui::XUIConfigurationPersistence >
                     xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
 
