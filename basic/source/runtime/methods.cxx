@@ -922,7 +922,7 @@ void SbRtl_InStrRev(StarBASIC *, SbxArray & rPar, bool)
         if ( nArgCount >= 3 )
         {
             nStartPos = rPar.Get(3)->GetLong();
-            if( (nStartPos <= 0 && nStartPos != -1))
+            if( nStartPos <= 0 && nStartPos != -1 )
             {
                 StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
                 nStartPos = -1;

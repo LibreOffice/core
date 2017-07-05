@@ -1417,7 +1417,7 @@ bool BrowseBox::GoToRow( long nRow, bool bRowColMove, bool bKeepSelection )
         return false;
 
     // not allowed?
-    if ( ( !bRowColMove && !IsCursorMoveAllowed( nRow, nCurColId ) ) )
+    if ( !bRowColMove && !IsCursorMoveAllowed( nRow, nCurColId ) )
         return false;
 
     if ( pDataWin->bNoScrollBack && nRow < nTopRow )

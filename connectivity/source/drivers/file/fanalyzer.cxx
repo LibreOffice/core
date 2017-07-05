@@ -83,7 +83,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
                     pCompiler->execute( pColumnRef );
                     m_aSelectionEvaluations.push_back( TPredicates(pCompiler,pInterpreter) );
                 }
-                else if ( ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 ) )
+                else if ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 )
                 {
                     m_pConnection->throwGenericSQLException(STR_QUERY_COMPLEX_COUNT,nullptr);
                 }

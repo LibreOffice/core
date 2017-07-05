@@ -40,7 +40,7 @@ void SwClient::CheckRegistration( const SfxPoolItem* pOld )
 {
     DBG_TESTSOLARMUTEX();
     // this method only handles notification about dying SwModify objects
-    if( (!pOld || pOld->Which() != RES_OBJECTDYING) )
+    if( !pOld || pOld->Which() != RES_OBJECTDYING )
         return;
 
     const SwPtrMsgPoolItem* pDead = static_cast<const SwPtrMsgPoolItem*>(pOld);

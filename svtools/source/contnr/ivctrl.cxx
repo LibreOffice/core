@@ -349,10 +349,10 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
             WallpaperStyle eStyle = aBackground.GetStyle();
             Color aBack( aBackground.GetColor());
             Color aTrans( COL_TRANSPARENT );
-            if( aBack == aTrans  && (
+            if( aBack == aTrans &&
                 (!aBackground.IsBitmap() ||
-                    aBackground.GetBitmap().IsTransparent() ||
-                    (eStyle != WallpaperStyle::Tile && eStyle != WallpaperStyle::Scale))))
+                 aBackground.GetBitmap().IsTransparent() ||
+                 (eStyle != WallpaperStyle::Tile && eStyle != WallpaperStyle::Scale)) )
             {
                 aBackground.SetColor( rStyleSettings.GetFieldColor() );
             }

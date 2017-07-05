@@ -335,7 +335,7 @@ OUString ODataInputStream::readUTF()
                 char2 = (sal_uInt8)readByte();
                 char3 = (sal_uInt8)readByte();
 
-                if( (((char2 & 0xC0) != 0x80) || ((char3 & 0xC0) != 0x80)) ) {
+                if( ((char2 & 0xC0) != 0x80) || ((char3 & 0xC0) != 0x80) ) {
                     throw WrongFormatException( );
                 }
                 pStr[nStrLen++] = (sal_Unicode(c & 0x0F) << 12) |
@@ -1155,7 +1155,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
 
     // Read the length of the object
     sal_Int32 nObjLen = readLong();
-    if( ( 0 == nId && 0 != nObjLen ) )
+    if( 0 == nId && 0 != nObjLen )
     {
         throw WrongFormatException();
     }

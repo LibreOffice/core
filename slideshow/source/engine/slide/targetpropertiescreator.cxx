@@ -278,7 +278,7 @@ namespace internal
                             {
                                 // try to extract string
                                 OUString aString;
-                                if( (aAny >>= aString) )
+                                if( aAny >>= aString )
                                 {
                                     // we also take the strings "true" and "false",
                                     // as well as "on" and "off" here

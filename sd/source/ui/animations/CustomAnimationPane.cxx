@@ -1529,7 +1529,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
             sal_Int32 nGroupId = pEffect->getGroupId();
             CustomAnimationTextGroupPtr pTextGroup;
-            if( (nGroupId != -1) )
+            if( nGroupId != -1 )
             {
                 // use existing group
                 pTextGroup = pEffectSequence->findGroup( nGroupId );

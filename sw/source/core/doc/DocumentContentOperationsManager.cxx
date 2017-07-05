@@ -891,10 +891,10 @@ namespace
             {
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
                 if( !pEndCnt || !pSttCnt ||
-                    !( (( &rSttNd.GetNode() == pFootnoteNd &&
+                    !  (( &rSttNd.GetNode() == pFootnoteNd &&
                         pSttCnt->GetIndex() > nFootnoteSttIdx ) ||
-                       ( &rEndNd.GetNode() == pFootnoteNd &&
-                        nFootnoteSttIdx >= pEndCnt->GetIndex() )) ))
+                        ( &rEndNd.GetNode() == pFootnoteNd &&
+                        nFootnoteSttIdx >= pEndCnt->GetIndex() )) )
                 {
                     if( bDelFootnote )
                     {

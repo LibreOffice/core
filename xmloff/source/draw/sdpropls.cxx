@@ -1684,7 +1684,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 }
                 break;
             case CTF_PAGE_TRANSITION_FADECOLOR:
-                if( (!(mrExport.getExportFlags() & SvXMLExportFlags::OASIS)) )
+                if( !(mrExport.getExportFlags() & SvXMLExportFlags::OASIS) )
                     (*property).mnIndex = -1;
                 else
                     pTransitionFadeColor = property;

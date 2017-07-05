@@ -100,7 +100,7 @@ void SAL_CALL SwVbaColumns::Select(  )
 uno::Any SAL_CALL SwVbaColumns::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ )
 {
     sal_Int32 nIndex = 0;
-    if( ( Index1 >>= nIndex ) )
+    if( Index1 >>= nIndex )
     {
         if( nIndex <= 0 || nIndex > getCount() )
         {

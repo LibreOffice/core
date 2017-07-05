@@ -55,7 +55,7 @@ SwVbaListGalleries::SwVbaListGalleries( const uno::Reference< XHelperInterface >
 uno::Any SAL_CALL SwVbaListGalleries::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ )
 {
     sal_Int32 nIndex = 0;
-    if( ( Index1 >>= nIndex ) )
+    if( Index1 >>= nIndex )
     {
         if( nIndex == word::WdListGalleryType::wdBulletGallery
             || nIndex == word::WdListGalleryType::wdNumberGallery

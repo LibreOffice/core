@@ -3966,7 +3966,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                         // don't set the focus into the IME status window
                         // since this will lead to a parent loss of focus, close status,
                         // reget focus, open status, .... flicker loop
-                        if ( (vcl::I18NStatus::get().getStatusFrame() != this) )
+                        if ( vcl::I18NStatus::get().getStatusFrame() != this )
                             bSetFocus = true;
                     }
 

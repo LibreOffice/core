@@ -152,7 +152,7 @@ void SAL_CALL LimitBoxController::statusChanged(
             {
                 m_pLimitBox->Enable();
                 sal_Int64 nLimit = 0;
-                if ( (rEvent.State >>= nLimit) )
+                if ( rEvent.State >>= nLimit )
                 {
                     m_pLimitBox->SetValue( nLimit );
                 }

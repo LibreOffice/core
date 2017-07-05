@@ -110,7 +110,7 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
             double fRed = 255.0-1.5*sqrt((double)(nX*nX+nY*nY));
             if( fRed < 0.0 )
                 fRed = 0.0;
-            double fGreen = 255.0-1.5*sqrt((double)(((255-nX)*(255-nX)+nY*nY)));
+            double fGreen = 255.0-1.5*sqrt((double)((255-nX)*(255-nX)+nY*nY));
             if( fGreen < 0.0 )
                 fGreen = 0.0;
             double fBlue = 255.0-1.5*sqrt((double)((128-nX)*(128-nX)+(255-nY)*(255-nY)));

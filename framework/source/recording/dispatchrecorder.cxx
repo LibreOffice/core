@@ -259,7 +259,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUS
     {
         // character variables are recorded as strings, back conversion must be handled in client code
         aArgumentBuffer.append("\"");
-        if ( (*nVal == '\"') )
+        if ( *nVal == '\"' )
             // encode \" to \"\"
             aArgumentBuffer.append(*nVal);
         aArgumentBuffer.append(*nVal);

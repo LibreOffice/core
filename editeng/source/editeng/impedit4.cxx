@@ -1857,7 +1857,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         {
             if ( aCurSel.Max().GetNode() == pLastNode )
             {
-                if ( ( aCurSel.Max().GetIndex() >= pLastNode->Len() ) )
+                if ( aCurSel.Max().GetIndex() >= pLastNode->Len() )
                     break;
             }
         }
@@ -2363,7 +2363,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                 EditPaM aLastEnd( aSel.Max() );
                 aSel = WordRight( aSel.Max(), i18n::WordType::DICTIONARY_WORD );
                 if ( bChanged && ( aSel.Min().GetNode() == pNode ) &&
-                        ( ( aSel.Min().GetIndex()-aLastEnd.GetIndex() > 1 ) ) )
+                        ( aSel.Min().GetIndex()-aLastEnd.GetIndex() > 1 ) )
                 {
                     // If two words are separated by more than one blank, it
                     // can happen that when splitting a Wrongs the start of

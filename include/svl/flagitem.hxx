@@ -50,7 +50,7 @@ public:
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
                                  nVal = nNewVal;
                              }
-            bool             GetFlag( sal_uInt8 nFlag ) const { return ( (nVal & ( 1<<nFlag))); }
+            bool             GetFlag( sal_uInt8 nFlag ) const { return (nVal & ( 1<<nFlag)); }
 };
 
 #endif

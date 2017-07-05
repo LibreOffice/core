@@ -211,7 +211,7 @@ static double lcl_Round2DecPlaces( double nVal )
 {
     nVal  = (nVal * (double)100);
     long tmp = static_cast<long>(nVal);
-    if ( ( ( nVal - tmp ) >= 0.5 ) )
+    if ( ( nVal - tmp ) >= 0.5 )
         ++tmp;
     nVal = tmp;
     nVal = nVal/100;
@@ -4476,7 +4476,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
     // Use the normal uno api, sometimes e.g. when you want to use ALL as the filter
     // we can't use refresh as the uno interface doesn't have a concept of ALL
     // in this case we just call the core calc functionality -
-    if ( ( Field >>= nField )  )
+    if ( Field >>= nField )
     {
         bool bAll = false;
         bool bAcceptCriteria2 = true;

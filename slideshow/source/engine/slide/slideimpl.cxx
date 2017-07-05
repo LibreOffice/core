@@ -865,7 +865,7 @@ void SlideImpl::applyShapeAttributes(
             // not a shape target. Maybe a ParagraphTarget?
             presentation::ParagraphTarget aParaTarget;
 
-            if( (aProps[i].Target >>= aParaTarget) )
+            if( aProps[i].Target >>= aParaTarget )
             {
                 // yep, ParagraphTarget found - extract shape
                 // and index

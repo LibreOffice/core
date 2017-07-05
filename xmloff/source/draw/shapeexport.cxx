@@ -404,7 +404,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         std::vector< XMLPropertyState > aPropStates;
 
         sal_Int32 nCount = 0;
-        if( (!bIsEmptyPresObj || (aShapeInfo.meShapeType != XmlShapeTypePresPageShape)) )
+        if( !bIsEmptyPresObj || (aShapeInfo.meShapeType != XmlShapeTypePresPageShape) )
         {
             aPropStates = GetPropertySetMapper()->Filter( xPropSet );
 

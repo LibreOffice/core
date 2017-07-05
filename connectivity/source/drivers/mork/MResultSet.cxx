@@ -717,7 +717,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         analyseWhereClause( parseTree->getChild( 1 ), *subExpression );
         queryExpression.addExpression( subExpression );
     }
-    else if ((SQL_ISRULE(parseTree,search_condition) || (SQL_ISRULE(parseTree,boolean_term)))
+    else if ((SQL_ISRULE(parseTree,search_condition) || SQL_ISRULE(parseTree,boolean_term))
              && parseTree->count() == 3)                   // Handle AND/OR
     {
         // TODO - Need to take care or AND, for now match is always OR
@@ -778,7 +778,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     {
         OSL_ENSURE(parseTree->count() == 2, "Error parsing LIKE predicate");
 
-        if ( !(SQL_ISRULE(parseTree->getChild(0), column_ref)) )
+        if ( !SQL_ISRULE(parseTree->getChild(0), column_ref) )
         {
             m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_INVALID_LIKE_COLUMN, *this );
         }

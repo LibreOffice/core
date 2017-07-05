@@ -1063,7 +1063,7 @@ readDurationComponent(const OUString & rString,
     sal_Int32 & io_rnPos, sal_Int32 & io_rnTemp, bool & io_rbTimePart,
     sal_Int32 & o_rnTarget, const sal_Unicode c)
 {
-    if ((io_rnPos < rString.getLength()))
+    if (io_rnPos < rString.getLength())
     {
         if (c == rString[io_rnPos])
         {

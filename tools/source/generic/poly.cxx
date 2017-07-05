@@ -1506,11 +1506,7 @@ tools::Polygon& Polygon::operator=( tools::Polygon&& rPoly )
 
 bool Polygon::operator==( const tools::Polygon& rPoly ) const
 {
-
-    if ( (rPoly.mpImplPolygon == mpImplPolygon) )
-        return true;
-    else
-        return false;
+    return rPoly.mpImplPolygon == mpImplPolygon;
 }
 
 bool Polygon::IsEqual( const tools::Polygon& rPoly ) const

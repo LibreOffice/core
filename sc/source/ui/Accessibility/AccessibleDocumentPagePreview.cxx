@@ -1435,7 +1435,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
         {
             xAccessible = GetNotesChildren()->GetChild(nIndex - aCount.nBackShapes - aCount.nHeaders);
         }
-        else if ( (nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs + aCount.nFooters) )
+        else if ( nIndex < aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs + aCount.nFooters )
         {
             if ( !mpFooter.is() )
             {

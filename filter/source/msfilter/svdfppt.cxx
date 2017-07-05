@@ -808,7 +808,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         {
             // try to load some ppt text
             PPTTextObj aTextObj( rSt, static_cast<SdrPowerPointImport&>(*this), rPersistEntry, &rObjData );
-            if ( ( aTextObj.Count() || aTextObj.GetOEPlaceHolderAtom() ) )
+            if ( aTextObj.Count() || aTextObj.GetOEPlaceHolderAtom() )
             {
                 bool bVerticalText = false;
                 // and if the text object is not empty, it must be applied to pRet, the object we

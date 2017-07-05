@@ -847,7 +847,7 @@ bool StgDataStrm::SetSize( sal_Int32 nBytes )
 
     nBytes = ( ( nBytes + m_nIncr - 1 ) / m_nIncr ) * m_nIncr;
     sal_Int32 nOldSz = m_nSize;
-    if( ( nOldSz != nBytes ) )
+    if( nOldSz != nBytes )
     {
         if( !StgStrm::SetSize( nBytes ) )
             return false;

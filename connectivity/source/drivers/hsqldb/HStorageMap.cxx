@@ -291,7 +291,7 @@ namespace connectivity
                             {
                                 OUString sStrippedName = removeOldURLPrefix(sOrgName);
 
-                                if ( ((_nMode & ElementModes::WRITE) != ElementModes::WRITE ) )
+                                if ( (_nMode & ElementModes::WRITE) != ElementModes::WRITE )
                                 {
                                     bool bIsStream = true;
                                     try

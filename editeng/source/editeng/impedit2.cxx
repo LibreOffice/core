@@ -4133,7 +4133,7 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
                 pPortion->nFirstLineOffset = nUpper;
             }
 
-            if ( ( nPortion != (GetParaPortions().Count()-1) ) )
+            if ( nPortion != (GetParaPortions().Count()-1) )
             {
                 pPortion->nHeight += GetYValue( rULItem.GetLower() );   // not in the last
             }

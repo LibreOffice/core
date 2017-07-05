@@ -526,10 +526,8 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
     even pages, something we cannot do. So we will put it on top of all
     pages, that way the pages are at least the right size.
     */
-    if (
-         (!mrReader.m_bVer67 && mrReader.m_pWDop->iGutterPos &&
+    if (!mrReader.m_bVer67 && mrReader.m_pWDop->iGutterPos &&
          rSection.maSep.fRTLGutter)
-       )
     {
         nWWUp += rSection.maSep.dzaGutter;
     }

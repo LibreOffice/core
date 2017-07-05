@@ -186,7 +186,7 @@ ErrCode CheckPasswd_Impl
 {
     ErrCode nRet = ERRCODE_NONE;
 
-    if( ( !pFile->GetFilter() || pFile->IsStorage() ) )
+    if( !pFile->GetFilter() || pFile->IsStorage() )
     {
         uno::Reference< embed::XStorage > xStorage = pFile->GetStorage();
         if( xStorage.is() )

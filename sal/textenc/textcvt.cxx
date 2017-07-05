@@ -73,7 +73,7 @@ static sal_Size ImplUnicodeToDummy( const sal_Unicode* pSrcBuf, sal_Size nSrcCha
     char*               pEndDestBuf;
     const sal_Unicode*      pEndSrcBuf;
 
-    if ( ((nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK) == RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR) )
+    if ( (nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK) == RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR )
     {
         *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR |
                   RTL_UNICODETOTEXT_INFO_UNDEFINED;

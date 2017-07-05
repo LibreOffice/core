@@ -702,7 +702,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
          *  outside the interval [32(=ASCII' ');126(=ASCII'~')]
          *  should be escaped hexadecimal
          */
-        if( (aStr[i] >= 32 && aStr[i] <= 126 ) )
+        if( aStr[i] >= 32 && aStr[i] <= 126 )
             aBuffer.append( aStr[i] );
         else
         {
