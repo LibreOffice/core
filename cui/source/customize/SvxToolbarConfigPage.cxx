@@ -59,6 +59,7 @@
 #include "acccfg.hxx"
 #include "cfg.hxx"
 #include "SvxToolbarConfigPage.hxx"
+#include "SvxConfigPageHelper.hxx"
 #include "eventdlg.hxx"
 #include <dialmgr.hxx>
 
@@ -281,7 +282,7 @@ void SvxToolbarConfigPage::DeleteSelectedContent()
         SvxConfigEntry* pToolbar = GetTopLevelSelection();
 
         // remove entry from the list for this toolbar
-        killmelater::RemoveEntry( pToolbar->GetEntries(), pEntry );
+        SvxConfigPageHelper::RemoveEntry( pToolbar->GetEntries(), pEntry );
 
         // remove toolbar entry from UI
         m_pContentsListBox->GetModel()->Remove( pActEntry );
@@ -347,7 +348,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, void )
     }
     else if (sCommand == "modtoolrename")
     {
-        OUString aNewName( killmelater::stripHotKey( pToolbar->GetName() ) );
+        OUString aNewName( SvxConfigPageHelper::stripHotKey( pToolbar->GetName() ) );
         OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
@@ -386,7 +387,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
         SvxConfigEntry* pEntry =
             static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
-        OUString aNewName( killmelater::stripHotKey( pEntry->GetName() ) );
+        OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
@@ -433,7 +434,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
         {
             pEntry->SetName( aSystemName );
             m_pContentsListBox->SetEntryText(
-                pActEntry, killmelater::stripHotKey( aSystemName ) );
+                pActEntry, SvxConfigPageHelper::stripHotKey( aSystemName ) );
             bNeedsApply = true;
         }
 
@@ -442,7 +443,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
         try
         {
             GetSaveInData()->GetImageManager()->removeImages(
-                killmelater::GetImageType(), aURLSeq );
+                SvxConfigPageHelper::GetImageType(), aURLSeq );
 
             // reset backup in entry
             pEntry->SetBackupGraphic(
@@ -508,7 +509,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
                 if ( !pEntry->GetBackupGraphic().is() )
                 {
                     css::uno::Reference< css::graphic::XGraphic > backup;
-                    backup = killmelater::GetGraphic(
+                    backup = SvxConfigPageHelper::GetGraphic(
                         GetSaveInData()->GetImageManager(), aURLSeq[ 0 ] );
 
                     if ( backup.is() )
@@ -521,7 +522,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
                 try
                 {
                     GetSaveInData()->GetImageManager()->replaceImages(
-                        killmelater::GetImageType(), aURLSeq, aGraphicSeq );
+                        SvxConfigPageHelper::GetImageType(), aURLSeq, aGraphicSeq );
 
                     m_pContentsListBox->GetModel()->Remove( pActEntry );
                     SvTreeListEntry* pNewLBEntry =
@@ -574,7 +575,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
         try
         {
             GetSaveInData()->GetImageManager()->replaceImages(
-                killmelater::GetImageType(), aURLSeq, aGraphicSeq );
+                SvxConfigPageHelper::GetImageType(), aURLSeq, aGraphicSeq );
 
             m_pContentsListBox->GetModel()->Remove( pActEntry );
 
@@ -704,7 +705,7 @@ short SvxToolbarConfigPage::QueryReset()
     OUString saveInName = m_pSaveInListBox->GetEntry(
         m_pSaveInListBox->GetSelectEntryPos() );
 
-    OUString label = killmelater::replaceSaveInName( msg, saveInName );
+    OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
 
     ScopedVclPtrInstance< QueryBox > qbox( this, WB_YES_NO, label );
 
@@ -828,10 +829,10 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
     OUString prefix = CuiResId( RID_SVXSTR_NEW_TOOLBAR );
 
     OUString aNewName =
-        killmelater::generateCustomName( prefix, GetSaveInData()->GetEntries() );
+        SvxConfigPageHelper::generateCustomName( prefix, GetSaveInData()->GetEntries() );
 
     OUString aNewURL =
-        killmelater::generateCustomURL( GetSaveInData()->GetEntries() );
+        SvxConfigPageHelper::generateCustomURL( GetSaveInData()->GetEntries() );
 
     VclPtrInstance< SvxNewToolbarDialog > pNameDialog( nullptr, aNewName );
 

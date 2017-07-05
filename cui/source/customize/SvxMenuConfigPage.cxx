@@ -59,6 +59,7 @@
 #include "acccfg.hxx"
 #include "cfg.hxx"
 #include "SvxMenuConfigPage.hxx"
+#include "SvxConfigPageHelper.hxx"
 #include "eventdlg.hxx"
 #include <dialmgr.hxx>
 
@@ -252,7 +253,7 @@ void SvxMenuConfigPage::DeleteSelectedTopLevel()
     SvxEntries* pParentEntries =
         FindParentForChild( GetSaveInData()->GetEntries(), pMenuData );
 
-    killmelater::RemoveEntry( pParentEntries, pMenuData );
+    SvxConfigPageHelper::RemoveEntry( pParentEntries, pMenuData );
     delete pMenuData;
 
     ReloadTopLevelListBox();
@@ -274,7 +275,7 @@ void SvxMenuConfigPage::DeleteSelectedContent()
         SvxConfigEntry* pMenu = GetTopLevelSelection();
 
         // remove menu entry from the list for this menu
-        killmelater::RemoveEntry( pMenu->GetEntries(), pMenuEntry );
+        SvxConfigPageHelper::RemoveEntry( pMenu->GetEntries(), pMenuEntry );
 
         // remove menu entry from UI
         m_pContentsListBox->GetModel()->Remove( pActEntry );
@@ -300,7 +301,7 @@ short SvxMenuConfigPage::QueryReset()
     OUString saveInName = m_pSaveInListBox->GetEntry(
         m_pSaveInListBox->GetSelectEntryPos() );
 
-    OUString label = killmelater::replaceSaveInName( msg, saveInName );
+    OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
 
     ScopedVclPtrInstance<QueryBox> qbox( this, WB_YES_NO, label );
 
@@ -350,7 +351,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-        OUString aNewName( killmelater::stripHotKey( pMenuData->GetName() ) );
+        OUString aNewName( SvxConfigPageHelper::stripHotKey( pMenuData->GetName() ) );
         OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
@@ -394,7 +395,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
         SvxConfigEntry* pEntry =
             static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
-        OUString aNewName( killmelater::stripHotKey( pEntry->GetName() ) );
+        OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
         OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
