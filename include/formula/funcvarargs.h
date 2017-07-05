@@ -32,7 +32,7 @@
     functionDescription.isInfiniteParameterCount() which though looks like it
     could be easily adapted.
  */
-#define VAR_ARGS            30
+#define VAR_ARGS            255
 
 /** Used to indicate a variable number of paired parameters for the Function Wizard.
 

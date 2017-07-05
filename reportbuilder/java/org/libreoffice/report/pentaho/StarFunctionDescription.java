@@ -153,7 +153,7 @@ public final class StarFunctionDescription extends WeakBase
         if (infinite)
         {
             // Identical value as VAR_ARGS from formula/funcvarargs.h
-            count = 30;
+            count = 255;
         }
         final FunctionArgument[] args = new FunctionArgument[count];
         for (int i = 0; i < args.length; i++)
