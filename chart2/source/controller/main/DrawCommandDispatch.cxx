@@ -25,6 +25,7 @@
 #include "macros.hxx"
 
 #include <com/sun/star/frame/CommandGroup.hpp>
+#include <comphelper/stl_types.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/adjustitem.hxx>
@@ -51,19 +52,6 @@ using namespace ::com::sun::star::frame;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-namespace
-{
-
-    // comparing two PropertyValue instances
-    struct PropertyValueCompare : public std::binary_function< beans::PropertyValue, OUString, bool >
-    {
-        bool operator() ( const beans::PropertyValue& rPropValue, const OUString& rName ) const
-        {
-            return rPropValue.Name.equals( rName );
-        }
-    };
-
-} // anonymous namespace
 
 namespace chart
 {
@@ -372,8 +360,9 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
                 const OUString sKeyModifier( "KeyModifier" );
                 const beans::PropertyValue* pIter = rArgs.getConstArray();
                 const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
-                const beans::PropertyValue* pKeyModifier = std::find_if(
-                    pIter, pEnd, std::bind2nd( PropertyValueCompare(), std::cref( sKeyModifier ) ) );
+                const beans::PropertyValue* pKeyModifier = std::find_if(pIter, pEnd,
+                                                                [&sKeyModifier](const beans::PropertyValue& lhs)
+                                                                {return comphelper::TPropertyValueEqualFunctor()(lhs, sKeyModifier);} );
                 sal_Int16 nKeyModifier = 0;
                 if ( pKeyModifier != pEnd && pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
                 {
