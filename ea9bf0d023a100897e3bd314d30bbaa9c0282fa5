@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_0dd1ffcd",
+        "filename": "dbaccess/source/ui/control/tabletree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-07-05T10:44:07Z",
+      "side": 1,
+      "message": "\u0027lhs\u0027 variable name lead to this fail.",
+      "parentUuid": "3a461143_4dca2751",
+      "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_6dc7e345",
         "filename": "dbaccess/source/ui/dlg/adtabdlg.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-07-05T09:30:01Z",
       "side": 1,
       "message": "ditto",
+      "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_adf9cb4f",
+        "filename": "dbaccess/source/ui/dlg/adtabdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-07-05T10:44:07Z",
+      "side": 1,
+      "message": "sorry brain fart. it was delusional to assume performance would be better when the strings to iterate over are on rhs.",
+      "parentUuid": "3a461143_6dc7e345",
       "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -64,6 +100,24 @@
       "writtenOn": "2017-07-05T09:30:01Z",
       "side": 1,
       "message": "huh? why not just inline it?",
+      "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_0d5adf83",
+        "filename": "dbaccess/source/ui/misc/UITools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-07-05T10:44:07Z",
+      "side": 1,
+      "message": "to avoid constructing a TPropertyValueEqualFunctor and an OUString (and allocate memory) in every call of the lambda.\n\nbut as it\u0027s not performance critical here and C++14 is not available, I\u0027ll inline both.",
+      "parentUuid": "3a461143_4dd147fb",
       "revId": "ea9bf0d023a100897e3bd314d30bbaa9c0282fa5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
