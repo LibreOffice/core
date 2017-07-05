@@ -187,7 +187,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
             OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR), "GetTabPageRangesFunc fail!");
             AddTabPage("tabs", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
 
-            AddTabPage("outline", SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges);
+            m_nOutlineId = AddTabPage("outline", SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges);
             AddTabPage("dropcaps", SwDropCapsPage::Create, SwDropCapsPage::GetRanges );
 
             // add Area and Transparence TabPages
