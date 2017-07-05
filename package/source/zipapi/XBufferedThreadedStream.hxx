@@ -23,8 +23,8 @@ class XBufferedThreadedStream : public cppu::WeakImplHelper< css::io::XInputStre
 {
 private:
     const css::uno::Reference<XInputStream> mxSrcStream;
-    size_t mnPos;                                           /// position in stream
-    size_t mnStreamSize;                                    /// available size of stream
+    sal_Int64 mnPos;                                           /// position in stream
+    sal_Int64 mnStreamSize;                                    /// available size of stream
 
     Buffer maInUseBuffer;                                   /// Buffer block in use
     int mnOffset;                                           /// position in maInUseBuffer
@@ -59,7 +59,8 @@ private:
 
 public:
     XBufferedThreadedStream(
-                  const css::uno::Reference<XInputStream>& xSrcStream );
+                  const css::uno::Reference<XInputStream>& xSrcStream,
+                  sal_Int64 nStreamSize /* cf. sal_Int32 available(); */ );
 
     virtual ~XBufferedThreadedStream() override;
 
