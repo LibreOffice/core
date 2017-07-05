@@ -108,7 +108,7 @@ public:
     : m_pBuffer( static_cast<T*>( rtl_allocateMemory( nCharNum * sizeof( T ) ) ) )
     , m_nCharNum( nCharNum )
     {
-        OSL_ENSURE( m_pBuffer, "Can not allocate the buffer!" );
+        SAL_WARN_IF(!m_pBuffer, "sal.file", "Cannot allocate the buffer" );
     }
 
     ~LongPathBuffer()

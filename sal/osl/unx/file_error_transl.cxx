@@ -19,13 +19,14 @@
 
 #include <errno.h>
 #include "file_error_transl.hxx"
-#include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 oslFileError oslTranslateFileError(bool bIsError, int Errno)
 {
     oslFileError osl_error = osl_File_E_invalidError;
 
-    OSL_ENSURE((bIsError && (0 != Errno)) || (!bIsError && (0 == Errno)), "oslTranslateFileError strange input combination!");
+    SAL_WARN_IF(!(bIsError && (Errno != 0)) || (!bIsError && (Errno == 0)),
+            "sal.file", "oslTranslateFileError strange input combination!");
 
     /* Have a look at file_error_transl.hxx for
        the reason that we do this here */

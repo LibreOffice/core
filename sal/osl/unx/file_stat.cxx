@@ -262,7 +262,8 @@ static oslFileError osl_psz_setFileAttributes( const sal_Char* pszFilePath, sal_
     oslFileError osl_error = osl_File_E_None;
     mode_t       nNewMode  = 0;
 
-     OSL_ENSURE(!(osl_File_Attribute_Hidden & uAttributes), "osl_File_Attribute_Hidden doesn't work under Unix");
+     SAL_WARN_IF(osl_File_Attribute_Hidden & uAttributes,
+                 "sal.file", "osl_File_Attribute_Hidden doesn't work under Unix");
 
     if (uAttributes & osl_File_Attribute_OwnRead)
         nNewMode |= S_IRUSR;
