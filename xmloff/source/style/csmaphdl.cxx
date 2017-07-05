@@ -48,7 +48,7 @@ bool XMLCaseMapPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValu
     sal_uInt16 nVal;
     bool bRet = SvXMLUnitConverter::convertEnum(
         nVal, rStrImpValue, pXML_Casemap_Enum );
-    if( ( bRet ) )
+    if( bRet )
         rValue <<= nVal;
 
     return bRet;

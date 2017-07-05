@@ -309,7 +309,7 @@ void XFFont::ToXml(IXFStream *pStrm)
     if( (m_nFlag & XFFONT_FLAG_UNDERLINE) && m_eUnderline )
     {
         pAttrList->AddAttribute("style:text-underline", GetUnderlineName(m_eUnderline) );
-        if( (m_nFlag & XFFONT_FLAG_UNDERLINECOLOR) )
+        if( m_nFlag & XFFONT_FLAG_UNDERLINECOLOR )
         {
             pAttrList->AddAttribute( "style:text-underline-color", m_aUnderlineColor.ToString() );
         }
@@ -392,12 +392,12 @@ void XFFont::ToXml(IXFStream *pStrm)
     }
 
     //Color:
-    if( (m_nFlag & XFFONT_FLAG_COLOR) )
+    if( m_nFlag & XFFONT_FLAG_COLOR )
     {
         pAttrList->AddAttribute( "fo:color", m_aColor.ToString() );
     }
 
-    if( (m_nFlag & XFFONT_FLAG_BGCOLOR) )
+    if( m_nFlag & XFFONT_FLAG_BGCOLOR )
     {
         if (m_bTransparent)
             pAttrList->AddAttribute( "style:text-background-color", "transparent");

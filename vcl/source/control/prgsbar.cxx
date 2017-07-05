@@ -77,7 +77,7 @@ void ProgressBar::ImplInitSettings( bool bFont,
         if( !IsControlBackground() &&
             IsNativeControlSupported( ControlType::Progress, ControlPart::Entire ) )
         {
-            if( (GetStyle() & WB_BORDER) )
+            if( GetStyle() & WB_BORDER )
                 SetBorderStyle( WindowBorderStyle::REMOVEBORDER );
             EnableChildTransparentMode();
             SetPaintTransparent( true );

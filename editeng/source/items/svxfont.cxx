@@ -255,7 +255,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
         while( nPos < nTxtLen )
         {
             sal_uInt32  nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
-            if ( ( nCharacterType & css::i18n::KCharacterType::UPPER ) )
+            if ( nCharacterType & css::i18n::KCharacterType::UPPER )
                 break;
             if ( aCharString == " " )
                 break;

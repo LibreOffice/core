@@ -100,7 +100,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     ImplInitSettings( true );
 
-    if( (nStyle & WB_DROPDOWN) )
+    if( nStyle & WB_DROPDOWN )
     {
         mpTabCtrlData->mpListBox = VclPtr<ListBox>::Create( this, WB_DROPDOWN );
         mpTabCtrlData->mpListBox->SetPosSizePixel( Point( 0, 0 ), Size( 200, 20 ) );
@@ -628,7 +628,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
 
     if ( pPage )
     {
-        if (  ( GetStyle() & WB_NOBORDER ) )
+        if ( GetStyle() & WB_NOBORDER )
         {
             tools::Rectangle aRectNoTab(Point(0, 0), GetSizePixel());
             pPage->SetPosSizePixel( aRectNoTab.TopLeft(), aRectNoTab.GetSize() );
@@ -680,7 +680,7 @@ bool TabControl::ImplPosCurTabPage()
     ImplTabItem* pItem = ImplGetItem( GetCurPageId() );
     if ( pItem && pItem->mpTabPage )
     {
-        if (  ( GetStyle() & WB_NOBORDER ) )
+        if (  GetStyle() & WB_NOBORDER )
         {
             tools::Rectangle aRectNoTab(Point(0, 0), GetSizePixel());
             pItem->mpTabPage->SetPosSizePixel( aRectNoTab.TopLeft(), aRectNoTab.GetSize() );

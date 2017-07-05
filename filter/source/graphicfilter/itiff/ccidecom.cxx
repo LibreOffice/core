@@ -835,7 +835,7 @@ sal_uInt8 CCIDecompressor::ReadBlackOrWhite()
         nInputBitsBufSize=8;
     }
     nInputBitsBufSize--;
-    if ( ((nInputBitsBuf>>nInputBitsBufSize)&0x0001) ) return 0xff;
+    if ( (nInputBitsBuf>>nInputBitsBufSize) & 0x0001 ) return 0xff;
     else return 0x00;
 }
 

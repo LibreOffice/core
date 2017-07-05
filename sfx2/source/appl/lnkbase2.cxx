@@ -387,7 +387,7 @@ void SvBaseLink::GetRealObject_( bool bConnect)
             xObj = sfx2::LinkManager::CreateObj( this );
         }
     }
-    else if( (OBJECT_CLIENT_SO & nObjType) )
+    else if( OBJECT_CLIENT_SO & nObjType )
         xObj = sfx2::LinkManager::CreateObj( this );
 
     if( bConnect && ( !xObj.is() || !xObj->Connect( this ) ) )

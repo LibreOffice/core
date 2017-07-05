@@ -2408,7 +2408,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
                 // and since there is no AntiImpl nobody should be notified about it
                 pElement->m_xStorage->m_nStorageMode = nStorageMode | embed::ElementModes::READ;
 
-                if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )
+                if ( nStorageMode & embed::ElementModes::TRUNCATE )
                 {
                     for ( SotElementList_Impl::iterator pElementIter = pElement->m_xStorage->m_aChildrenList.begin();
                            pElementIter != pElement->m_xStorage->m_aChildrenList.end(); )

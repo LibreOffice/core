@@ -1656,7 +1656,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
     }
     else
     {
-        if( ( bWriteField ) )
+        if( bWriteField )
         {
             OString sUUID(GetUUID());
             mpFS->startElementNS( XML_a, XML_fld,

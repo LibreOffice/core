@@ -729,11 +729,11 @@ KeyIndicatorState SalDisplay::GetIndicatorState() const
     KeyIndicatorState nState = KeyIndicatorState::NONE;
     XkbGetIndicatorState(pDisp_, XkbUseCoreKbd, &_state);
 
-    if ((_state & 0x00000001))
+    if (_state & 0x00000001)
         nState |= KeyIndicatorState::CAPSLOCK;
-    if ((_state & 0x00000002))
+    if (_state & 0x00000002)
         nState |= KeyIndicatorState::NUMLOCK;
-    if ((_state & 0x00000004))
+    if (_state & 0x00000004)
         nState |= KeyIndicatorState::SCROLLLOCK;
 
     return nState;

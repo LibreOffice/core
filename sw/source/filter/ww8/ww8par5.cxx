@@ -999,7 +999,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
                 else
                     return aF.nLen;
             case eF_ResT::TAGIGN:
-                if(  ( m_nFieldTagBad[nI] & nMask ) ) // Flag: Tag bad
+                if ( m_nFieldTagBad[nI] & nMask ) // Flag: Tag bad
                     return Read_F_Tag( &aF );       // Tag it
                 return aF.nLen;                 // or ignore
             case eF_ResT::READ_FSPA:

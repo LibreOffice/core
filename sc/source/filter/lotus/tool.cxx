@@ -142,7 +142,7 @@ double Snum32ToDouble( sal_uInt32 nValue )
         fValue *= pow((double)10, temp);
     }
 
-    if ((nValue & 0x00000020))
+    if (nValue & 0x00000020)
         fValue = -fValue;
     return fValue;
 }

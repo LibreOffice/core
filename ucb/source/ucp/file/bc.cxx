@@ -915,7 +915,7 @@ BaseContent::open(
 {
     Reference< XDynamicResultSet > retValue( nullptr );
 
-    if( ( m_nState & Deleted ) )
+    if( m_nState & Deleted )
     {
         m_pMyShell->installError( nMyCommandIdentifier,
                                   TASKHANDLING_DELETED_STATE_IN_OPEN_COMMAND );

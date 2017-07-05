@@ -230,7 +230,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     rMinDigits = 0;
     rListData = nullptr;
     rCmd = FILL_SIMPLE;
-    if ( (nScFillModeMouseModifier & KEY_MOD1) )
+    if ( nScFillModeMouseModifier & KEY_MOD1 )
         return ;        // Ctrl-key: Copy
 
     SCCOL nAddX;
@@ -1339,7 +1339,7 @@ void ScTable::FillAutoSimple(
 {
     SCCOLROW nSource = nISrcStart;
     double nDelta;
-    if ( (nScFillModeMouseModifier & KEY_MOD1) )
+    if ( nScFillModeMouseModifier & KEY_MOD1 )
         nDelta = 0.0;
     else if ( bPositive )
         nDelta = 1.0;

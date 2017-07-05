@@ -1343,7 +1343,7 @@ void SdrOle2Obj::SetObjRef( const css::uno::Reference < css::embed::XEmbeddedObj
     {
         mpImpl->mxGraphic.reset();
 
-        if ( (mpImpl->mxObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
+        if ( mpImpl->mxObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE )
             SetResizeProtect(true);
 
         // For math objects, set closed state to transparent

@@ -543,7 +543,7 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
 
     *ppThis = rtl_uString_ImplAlloc( nLen );
     OSL_ASSERT(*ppThis != nullptr);
-    if ( (*ppThis) )
+    if ( *ppThis )
     {
         sal_Unicode* pBuffer = (*ppThis)->buffer;
         do

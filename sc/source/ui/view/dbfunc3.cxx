@@ -1458,7 +1458,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                         nErrorId = STR_INVALIDNAME;
                  }
             }
-            else if ((aPosData.Flags & MemberResultFlags::GRANDTOTAL))
+            else if (aPosData.Flags & MemberResultFlags::GRANDTOTAL)
             {
                 aData.SetGrandTotalName(rString);
                 bChange = true;
@@ -1472,7 +1472,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                     // data dimension
                     do
                     {
-                        if ((aPosData.Flags & MemberResultFlags::SUBTOTAL))
+                        if (aPosData.Flags & MemberResultFlags::SUBTOTAL)
                             break;
 
                         ScDPSaveDimension* pDim = aData.GetDimensionByName(aPosData.MemberName);
@@ -1513,7 +1513,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                         if (!pMem)
                             break;
 
-                        if ((aPosData.Flags & MemberResultFlags::SUBTOTAL))
+                        if (aPosData.Flags & MemberResultFlags::SUBTOTAL)
                         {
                             // Change subtotal only when the table has one data dimension.
                             if (aData.GetDataDimensionCount() > 1)

@@ -400,7 +400,7 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, const double* x, const double* y,
     sal_uInt16  error;
 
     if (n<2) return 1;
-    if ( (MargCond & ~3) ) return 2;
+    if ( MargCond & ~3 ) return 2;
     a.reset(new double[n+1]);
     h.reset(new double[n+1]);
     for (i=0;i<n;i++) {

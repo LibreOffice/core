@@ -469,7 +469,7 @@ TBCGeneralInfo::Print( FILE* fp )
 void
 TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std::vector< beans::PropertyValue >& sControlData )
 {
-    if ( ( bFlags & 0x5 ) )
+    if ( bFlags & 0x5 )
     {
         beans::PropertyValue aProp;
         // probably access to the header would be a better test than seeing if there is an action, e.g.

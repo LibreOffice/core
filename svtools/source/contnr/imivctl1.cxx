@@ -239,7 +239,7 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
         eSelectionMode = SelectionMode::NONE;
     if( !(nWinStyle & (WB_ALIGN_TOP | WB_ALIGN_LEFT)))
         nWinBits |= WB_ALIGN_LEFT;
-    if( (nWinStyle & WB_DETAILS))
+    if( nWinStyle & WB_DETAILS )
     {
         if (!m_pColumns)
             SetColumn( 0, SvxIconChoiceCtrlColumnInfo() );
