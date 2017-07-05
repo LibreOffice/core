@@ -142,16 +142,16 @@ static oslFileError osl_setup_base_directory_impl_(
  * validate input parameter, setup variables
  ****************************************************************/
 
- static oslFileError osl_setup_createTempFile_impl_(
-     rtl_uString*   pustrDirectoryURL,
+static oslFileError osl_setup_createTempFile_impl_(
+    rtl_uString*   pustrDirectoryURL,
     oslFileHandle* pHandle,
     rtl_uString**  ppustrTempFileURL,
     rtl_uString**  ppustr_base_dir,
     bool*      b_delete_on_close)
- {
-     oslFileError osl_error;
+{
+    oslFileError osl_error;
 
-    OSL_PRECOND(((nullptr != pHandle) || (nullptr != ppustrTempFileURL)), "Invalid parameter!");
+    assert(pHandle || ppustrTempFileURL);
 
     if ((pHandle == nullptr) && (ppustrTempFileURL == nullptr))
     {
@@ -166,7 +166,7 @@ static oslFileError osl_setup_base_directory_impl_(
     }
 
     return osl_error;
- }
+}
 
 /*****************************************************************
  * Create a unique file in the specified directory and return
@@ -187,9 +187,9 @@ static oslFileError osl_create_temp_file_impl_(
     sal_Int32           offset_file_name;
     const sal_Unicode*  puchr;
 
-    OSL_PRECOND(pustr_base_directory, "Invalid Parameter");
-    OSL_PRECOND(file_handle, "Invalid Parameter");
-    OSL_PRECOND(ppustr_temp_file_name, "Invalid Parameter");
+    assert(pustr_base_directory);
+    assert(file_handle);
+    assert(ppustr_temp_file_name);
 
     len_base_dir = rtl_uString_getLength(pustr_base_directory);
 

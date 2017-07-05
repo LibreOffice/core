@@ -132,8 +132,8 @@ namespace /* private */
 
     void parse_UNC_path(const sal_Unicode* path, UNCComponents* puncc)
     {
-        OSL_PRECOND(is_UNC_path(path), "Precondition violated: No UNC path");
-        OSL_PRECOND(rtl_ustr_indexOfChar(path, SLASH) == -1, "Path must not contain slashes");
+        SAL_WARN_IF(!is_UNC_path(path), "sal.file", "Precondition violated: No UNC path");
+        SAL_WARN_IF(rtl_ustr_indexOfChar(path, SLASH) != -1, "sal.file", "Path must not contain slashes");
 
         const sal_Unicode* pend = path + rtl_ustr_getLength(path);
         const sal_Unicode* ppos = path + 2;
@@ -609,18 +609,17 @@ static DWORD create_dir_with_callback(
     return GetLastError();
 }
 
+/**  Cut off the last part of the given path to get the parent only,
+    e.g. 'c:\dir\subdir' -> 'c:\dir' or '\\share\sub\dir' -> '\\share\sub'
+
+    @return The position where the path has been cut off (this is the
+            position of the last backslash). If there are no more parents 0
+            will be returned, e.g. 'c:\' or '\\Share' have no more parents
+ */
 static int path_make_parent(sal_Unicode* path)
 {
-    /*  Cut off the last part of the given path to
-    get the parent only, e.g. 'c:\dir\subdir' ->
-    'c:\dir' or '\\share\sub\dir' -> '\\share\sub'
-    @return The position where the path has been cut
-    off (this is the position of the last backslash).
-    If there are no more parents 0 will be returned,
-    e.g. 'c:\' or '\\Share' have no more parents */
-
-    OSL_PRECOND(rtl_ustr_indexOfChar(path, SLASH) == -1, "Path must not contain slashes");
-    OSL_PRECOND(has_path_parent(path), "Path must have a parent");
+    SAL_WARN_IF(rtl_ustr_indexOfChar(path, SLASH) != -1, "sal.file", "Path must not contain slashes");
+    SAL_WARN_IF(!has_path_parent(path), "sal.file", "Path must have a parent");
 
     sal_Unicode* pos_last_backslash = path + rtl_ustr_lastIndexOfChar(path, BACKSLASH);
     *pos_last_backslash = 0;
@@ -632,9 +631,9 @@ static DWORD create_dir_recursively_(
     oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
     void* pData)
 {
-    OSL_PRECOND(
-        rtl_ustr_lastIndexOfChar_WithLength(dir_path->buffer, dir_path->length, BACKSLASH) != dir_path->length,
-        "Path must not end with a backslash");
+    SAL_WARN_IF(
+        rtl_ustr_lastIndexOfChar_WithLength(dir_path->buffer, dir_path->length, BACKSLASH) == dir_path->length,
+        "sal.file", "Path must not end with a backslash");
 
     DWORD w32_error = create_dir_with_callback(
         dir_path, aDirectoryCreationCallbackFunc, pData);
@@ -1389,12 +1388,12 @@ static oslFileError get_filesystem_attributes(
 
 static bool path_get_parent(rtl::OUString& path)
 {
-    OSL_PRECOND(path.lastIndexOf(SLASH) == -1, "Path must not have slashes");
+    SAL_WARN_IF(path.lastIndexOf(SLASH) != -1, "sal.file", "Path must not have slashes");
 
     if (!has_path_parent(path))
     {
         sal_Int32 i = path.lastIndexOf(BACKSLASH);
-        if (-1 < i)
+        if (i > -1)
         {
             path = rtl::OUString(path.getStr(), i);
             return true;
