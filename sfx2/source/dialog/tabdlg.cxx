@@ -1045,7 +1045,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 
     DBG_ASSERT( m_pImpl->aData.size(), "no Pages registered" );
 
-    // Tab Page schon da?
+    // Tab Page already there?
     VclPtr<SfxTabPage> pTabPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
     Data_Impl* pDataObject = Find( m_pImpl->aData, nId );
 

@@ -528,7 +528,7 @@ Sub ShowOptionsDlg
     REM show the dialog
     gOptionsDialog.execute()
 
-       &apos; jetzt läuft der Dialog, bis ein Button gedrückt wird
+       &apos; now the dialog will run until a button is pressed
 
        Select Case (gDlgState)
            case cDlgOk
