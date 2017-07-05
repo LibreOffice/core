@@ -179,7 +179,7 @@ std::shared_ptr<DefItems> GlobalEditData::GetDefItems()
 std::shared_ptr<SvxForbiddenCharactersTable> const & GlobalEditData::GetForbiddenCharsTable()
 {
     if (!xForbiddenCharsTable)
-        xForbiddenCharsTable.reset(new SvxForbiddenCharactersTable(::comphelper::getProcessComponentContext()));
+        xForbiddenCharsTable = SvxForbiddenCharactersTable::makeForbiddenCharactersTable(::comphelper::getProcessComponentContext());
     return xForbiddenCharsTable;
 }
 

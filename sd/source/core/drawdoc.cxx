@@ -260,7 +260,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         if( xHyphenator.is() )
             rOutliner.SetHyphenator( xHyphenator );
 
-        SetForbiddenCharsTable(std::make_shared<SvxForbiddenCharactersTable>(::comphelper::getProcessComponentContext()));
+        SetForbiddenCharsTable(SvxForbiddenCharactersTable::makeForbiddenCharactersTable(::comphelper::getProcessComponentContext()));
     }
     catch(...)
     {

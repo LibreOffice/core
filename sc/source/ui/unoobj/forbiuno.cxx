@@ -35,7 +35,7 @@ static std::shared_ptr<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell
         {
             //  create an empty SvxForbiddenCharactersTable for SvxUnoForbiddenCharsTable,
             //  so changes can be stored.
-            xRet.reset(new SvxForbiddenCharactersTable(comphelper::getProcessComponentContext()));
+            xRet = SvxForbiddenCharactersTable::makeForbiddenCharactersTable(comphelper::getProcessComponentContext());
             rDoc.SetForbiddenCharacters( xRet );
         }
     }

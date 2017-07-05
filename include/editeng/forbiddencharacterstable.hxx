@@ -26,6 +26,7 @@
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <map>
+#include <memory>
 
 namespace com {
 namespace sun {
@@ -41,9 +42,10 @@ public:
 private:
     Map                                                maMap;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    SvxForbiddenCharactersTable(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
 public:
-    SvxForbiddenCharactersTable( const css::uno::Reference< css::uno::XComponentContext >& rxContext);
+    static std::shared_ptr<SvxForbiddenCharactersTable> makeForbiddenCharactersTable(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
     Map&    GetMap() { return maMap; }
     const css::i18n::ForbiddenCharacters* GetForbiddenCharacters( LanguageType nLanguage, bool bGetDefault );

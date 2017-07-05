@@ -128,7 +128,7 @@ void ScDocShell::InitItems()
             if (aLocales.getLength())
             {
                 std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenTable(
-                        new SvxForbiddenCharactersTable(comphelper::getProcessComponentContext()));
+                    SvxForbiddenCharactersTable::makeForbiddenCharactersTable(comphelper::getProcessComponentContext()));
 
                 const lang::Locale* pLocales = aLocales.getConstArray();
                 for (sal_Int32 i = 0; i < aLocales.getLength(); i++)
