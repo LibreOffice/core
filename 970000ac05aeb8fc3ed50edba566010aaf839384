@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "3a461143_8d2fafa0",
+        "filename": "sal/osl/unx/readwrite_helper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-05T12:10:01Z",
+      "side": 1,
+      "message": "Sorry, please ignore all starting with \"On a second thought\", for being an obvious nonsense: It would just repeat the casting issue if there is any.",
+      "parentUuid": "3a461143_2d723be6",
+      "range": {
+        "startLine": 23,
+        "startChar": 11,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "970000ac05aeb8fc3ed50edba566010aaf839384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_4d7787d4",
         "filename": "sal/osl/unx/readwrite_helper.cxx",
         "patchSetId": 2
