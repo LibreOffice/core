@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_2daa3bd5",
+        "filename": "sal/osl/unx/file_url.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-05T05:08:13Z",
+      "side": 1,
+      "message": "This one looks suspicious. Are you absolutely sure that there is never a case where the previous call is going to fail?",
+      "revId": "a5913740a6419876fb9a9d303db76941991c6d89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
