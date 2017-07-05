@@ -37,6 +37,8 @@ $(eval $(call gb_Library_add_defs,comphelper,\
 ))
 
 $(eval $(call gb_Library_use_externals,comphelper,\
+	$(if $(filter LINUX MACOSX %BSD SOLARIS,$(OS)), \
+		curl) \
     boost_headers \
     icuuc \
     icu_headers \
@@ -79,6 +81,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/container/enumerablemap \
     comphelper/source/container/enumhelper \
     comphelper/source/container/namecontainer \
+    comphelper/source/crypto/cryptosign \
     comphelper/source/eventattachermgr/eventattachermgr \
     comphelper/source/misc/accessiblecomponenthelper \
     comphelper/source/misc/accessiblecontexthelper \
