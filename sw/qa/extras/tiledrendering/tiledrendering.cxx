@@ -1740,8 +1740,9 @@ void checkUndoRepairStates(SwXTextDocument* pXTextDocument, SwView* pView1, SwVi
     // second view, undo conflict
     pView2->GetState(aItemSet2);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
-    CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item * >(aItemSet2.GetItem(SID_UNDO)));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(aItemSet2.GetItem(SID_UNDO))->GetValue());
+    const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aItemSet2.GetItem(SID_UNDO));
+    CPPUNIT_ASSERT(pUInt32Item);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
 };
 
 }
