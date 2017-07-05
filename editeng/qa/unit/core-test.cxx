@@ -85,6 +85,8 @@ public:
 
     void testSectionAttributes();
 
+    void testLargeParaCopyPaste();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
@@ -100,6 +102,7 @@ public:
     CPPUNIT_TEST(testParaBoldItalicCopyPaste);
     CPPUNIT_TEST(testParaStartCopyPaste);
     CPPUNIT_TEST(testSectionAttributes);
+    CPPUNIT_TEST(testLargeParaCopyPaste);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1629,6 +1632,79 @@ void Test::testSectionAttributes()
                 whiches.insert(nWhich).second);
         }
     }
+}
+
+void Test::testLargeParaCopyPaste()
+{
+    // Create EditEngine's instance
+    EditEngine aEditEngine( mpItemPool );
+
+    // Get EditDoc for current EditEngine's instance
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+
+    // Initially no text should be there
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Insert initial text
+    OUString aFirstPara = "This is first paragraph";
+    OUString aSecondPara = "This is second paragraph";
+    OUString aThirdPara = "This is third paragraph";
+    OUString aFourthPara = "This is fourth paragraph";
+    OUString aFifthPara = "This is fifth paragraph";
+    OUString aSixthPara = "This is sixth paragraph";
+    //Positions Ref:       ........*8.............
+    OUString aSeventhPara = "This is seventh paragraph";
+    OUString aEighthPara = "This is eighth paragraph";
+    //Positions Ref:        .............*13
+    OUString aNinthPara = "This is ninth paragraph";
+    OUString aTenthPara = "This is tenth paragraph";
+    OUString aText = aFirstPara + "\n" + aSecondPara + "\n" + aThirdPara + "\n" +
+        aFourthPara + "\n" + aFifthPara + "\n" + aSixthPara + "\n" + aSeventhPara + "\n" +
+        aEighthPara + "\n" + aNinthPara + "\n" + aTenthPara;
+    sal_Int32 aTextLen = aFirstPara.getLength() + aSecondPara.getLength() + aThirdPara.getLength() +
+        aFourthPara.getLength() + aFifthPara.getLength() + aSixthPara.getLength() +
+        aSeventhPara.getLength() + aEighthPara.getLength() + aNinthPara.getLength() + aTenthPara.getLength();
+    aEditEngine.SetText( aText );
+    OUString aCopyText = "sixth paragraphThis is seventh paragraphThis is eighth";
+    sal_Int32 aCopyTextLen = aCopyText.getLength();
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
+    CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
+    CPPUNIT_ASSERT_EQUAL( aFourthPara, rDoc.GetParaAsString(sal_Int32(3)) );
+    CPPUNIT_ASSERT_EQUAL( aFifthPara, rDoc.GetParaAsString(sal_Int32(4)) );
+    CPPUNIT_ASSERT_EQUAL( aSixthPara, rDoc.GetParaAsString(sal_Int32(5)) );
+    CPPUNIT_ASSERT_EQUAL( aSeventhPara, rDoc.GetParaAsString(sal_Int32(6)) );
+    CPPUNIT_ASSERT_EQUAL( aEighthPara, rDoc.GetParaAsString(sal_Int32(7)) );
+    CPPUNIT_ASSERT_EQUAL( aNinthPara, rDoc.GetParaAsString(sal_Int32(8)) );
+    CPPUNIT_ASSERT_EQUAL( aTenthPara, rDoc.GetParaAsString(sal_Int32(9)) );
+
+    // Copy initial text using legacy format
+    uno::Reference< datatransfer::XTransferable > xData = aEditEngine.CreateTransferable( ESelection(5,8,7,14) );
+
+    // Paste text at the end of 4th Para
+    ContentNode* pLastNode = rDoc.GetObject(3);
+    aEditEngine.InsertText( xData, OUString(), EditPaM( pLastNode, pLastNode->Len() ), true );
+
+    // Assert changes
+    OUString aFourthParaAfterCopyPaste = aFourthPara + "sixth paragraph";
+    OUString aSixthParaAfterCopyPaste = "This is eighth";
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aCopyTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aFirstPara, rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( aSecondPara, rDoc.GetParaAsString(sal_Int32(1)) );
+    CPPUNIT_ASSERT_EQUAL( aThirdPara, rDoc.GetParaAsString(sal_Int32(2)) );
+    CPPUNIT_ASSERT_EQUAL( aFourthParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(3)) );
+    CPPUNIT_ASSERT_EQUAL( aSeventhPara, rDoc.GetParaAsString(sal_Int32(4)) );
+    CPPUNIT_ASSERT_EQUAL( aSixthParaAfterCopyPaste, rDoc.GetParaAsString(sal_Int32(5)) );
+    CPPUNIT_ASSERT_EQUAL( aFifthPara, rDoc.GetParaAsString(sal_Int32(6)) );
+    CPPUNIT_ASSERT_EQUAL( aSixthPara, rDoc.GetParaAsString(sal_Int32(7)) );
+    CPPUNIT_ASSERT_EQUAL( aSeventhPara, rDoc.GetParaAsString(sal_Int32(8)) );
+    CPPUNIT_ASSERT_EQUAL( aEighthPara, rDoc.GetParaAsString(sal_Int32(9)) );
+    CPPUNIT_ASSERT_EQUAL( aNinthPara, rDoc.GetParaAsString(sal_Int32(10)) );
+    CPPUNIT_ASSERT_EQUAL( aTenthPara, rDoc.GetParaAsString(sal_Int32(11)) );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
