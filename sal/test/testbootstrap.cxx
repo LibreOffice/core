@@ -95,18 +95,18 @@ int main( int argc, char *argv[] )
 
     // test the default case
     name = "no_one_has_set_this_name";
-      OSL_ASSERT( ! bootstrap.getFrom( name, value ) );
+      assert( ! bootstrap.getFrom( name, value ) );
     result = result && !bootstrap.getFrom( name, value );
 
     myDefault = "1";
     OUString myDefault2 = "2";
 
     bootstrap.getFrom( name, value, myDefault );
-      OSL_ASSERT( value == myDefault );
+      assert( value == myDefault );
     result = result && (value == myDefault);
 
     bootstrap.getFrom( name, value, myDefault2 );
-      OSL_ASSERT( value == myDefault2 );
+      assert( value == myDefault2 );
     result = result && (value == myDefault2);
 
     return result;
