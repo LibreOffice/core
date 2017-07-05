@@ -47,7 +47,7 @@ const sal_Unicode pKeyNA[]      = { 'N', 'A', 0 };
 const sal_Unicode pKeyV[]       = { 'V', 0 };
 const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
 
-ErrCode ScFormatFilterPlugin::ScImportDif(SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
+ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                         const rtl_TextEncoding eVon )
 {
     DifParser   aDifParser( rIn, *pDoc, eVon );

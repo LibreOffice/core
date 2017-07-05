@@ -123,7 +123,7 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSty
     return eRet;
 }
 
-ErrCode ScFormatFilterPlugin::ScImportQuattroPro(SvStream *pStream, ScDocument *pDoc)
+ErrCode ScFormatFilterPluginImpl::ScImportQuattroPro(SvStream *pStream, ScDocument *pDoc)
 {
     ScQProReader aReader(pStream);
     ErrCode eRet = aReader.import( pDoc );

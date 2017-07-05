@@ -28,7 +28,7 @@
 #include "filtopt.hxx"
 #include "ftools.hxx"
 
-ErrCode ScFormatFilterPlugin::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
+ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
     ScFilterOptions aFilterOpt;
     bool bWithWK3 = aFilterOpt.GetWK3Flag();

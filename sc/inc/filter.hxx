@@ -56,42 +56,39 @@ class ScEEAbsImport {
 };
 
 class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
-    // The member functions must be virtual for now even though this class has no derived classes,
-    // because of how this thing works.
   public:
-    ScFormatFilterPlugin() {};
-
     // various import filters
-    virtual ErrCode ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc );
-    virtual ErrCode ScImportQuattroPro(SvStream* pStream, ScDocument *pDoc);
-    virtual ErrCode ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT );
+    virtual ErrCode ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc ) = 0;
+    virtual ErrCode ScImportQuattroPro(SvStream* pStream, ScDocument *pDoc) = 0;
+    virtual ErrCode ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) = 0;
         // eFormat == EIF_AUTO  -> matching filter is used automatically
         // eFormat == EIF_BIFF5 -> only Biff5 stream is read successfully (in an Excel97 doc, too)
         // eFormat == EIF_BIFF8 -> only Biff8 stream is read successfully (only in Excel97 docs)
         // eFormat == EIF_BIFF_LE4 -> only non storage files _might_ be read successfully
-    virtual ErrCode ScImportStarCalc10( SvStream&, ScDocument* );
+    virtual ErrCode ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
     virtual ErrCode ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
-                                 const rtl_TextEncoding eSrc );
-    virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange );
+                 const rtl_TextEncoding eSrc ) = 0;
+    virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
     virtual ErrCode ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor,
-                                  bool bCalcWidthHeight, SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true );
+                                   bool bCalcWidthHeight, SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) = 0;
 
     // various import helpers
-    virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );
-    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange );
-    virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName );
+    virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) = 0;
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) = 0;
+    virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) = 0;
 
     // various export filters
-    virtual ErrCode ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest );
-    virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest );
-    virtual void ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest );
+    virtual ErrCode ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) = 0;
+    virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest ) = 0;
+    virtual void ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) = 0;
     virtual void ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,
-                       const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions );
-    virtual void ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest );
+                  const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions ) = 0;
+    virtual void ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) = 0;
 
-    virtual ScOrcusFilters* GetOrcusFilters();
+    virtual ScOrcusFilters* GetOrcusFilters() = 0;
 
-    virtual ~ScFormatFilterPlugin() {}
+protected:
+    ~ScFormatFilterPlugin() {}
 };
 
 // scfilt plugin symbol

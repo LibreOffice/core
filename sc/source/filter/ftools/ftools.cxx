@@ -349,7 +349,10 @@ bool ScfTools::GetHTMLNameFromName( const OUString& rSource, OUString& rName )
     return !rName.isEmpty();
 }
 
-ScOrcusFilters* ScFormatFilterPlugin::GetOrcusFilters()
+ScFormatFilterPluginImpl::ScFormatFilterPluginImpl() {}
+ScFormatFilterPluginImpl::~ScFormatFilterPluginImpl() {}
+
+ScOrcusFilters* ScFormatFilterPluginImpl::GetOrcusFilters()
 {
     static ScOrcusFiltersImpl aImpl;
     return &aImpl;
@@ -357,7 +360,7 @@ ScOrcusFilters* ScFormatFilterPlugin::GetOrcusFilters()
 
 ScFormatFilterPlugin * SAL_CALL ScFilterCreate()
 {
-    return new ScFormatFilterPlugin();
+    return new ScFormatFilterPluginImpl();
 }
 
 // implementation class inside the filters

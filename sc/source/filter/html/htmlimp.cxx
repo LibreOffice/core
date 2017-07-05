@@ -42,7 +42,7 @@
 #include "ftools.hxx"
 #include "tokenarray.hxx"
 
-ErrCode ScFormatFilterPlugin::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc,
+ErrCode ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc,
         ScRange& rRange, double nOutputFactor, bool bCalcWidthHeight, SvNumberFormatter* pFormatter,
         bool bConvertDate )
 {
@@ -54,7 +54,7 @@ ErrCode ScFormatFilterPlugin::ScImportHTML( SvStream &rStream, const OUString& r
     return nErr;
 }
 
-ScEEAbsImport *ScFormatFilterPlugin::CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange )
+ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange )
 {
     return new ScHTMLImport( pDocP, rBaseURL, rRange, true/*bCalcWidthHeight*/ );
 }
@@ -191,7 +191,7 @@ void ScHTMLImport::WriteToDocument(
     }
 }
 
-OUString ScFormatFilterPlugin::GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName )
+OUString ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName )
 {
     return ScHTMLImport::GetHTMLRangeNameList( pDoc, rOrigName );
 }

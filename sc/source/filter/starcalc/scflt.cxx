@@ -2400,7 +2400,7 @@ void Sc10Import::LoadObjects()
     }
 }
 
-ErrCode ScFormatFilterPlugin::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
+ErrCode ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
 {
     rStream.Seek( 0UL );
     Sc10Import  aImport( rStream, pDocument );

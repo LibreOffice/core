@@ -257,6 +257,42 @@ typedef ::std::vector< sal_Int32 >                  ScfInt32Vec;
 typedef ::std::vector< sal_uInt32 >                 ScfUInt32Vec;
 typedef ::std::vector< OUString >            ScfStringVec;
 
+class ScFormatFilterPluginImpl : public ScFormatFilterPlugin
+{
+public:
+    ScFormatFilterPluginImpl();
+    virtual ~ScFormatFilterPluginImpl();
+    // various import filters
+    virtual ErrCode ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc ) override;
+    virtual ErrCode ScImportQuattroPro(SvStream* pStream, ScDocument *pDoc) override;
+    virtual ErrCode ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override;
+        // eFormat == EIF_AUTO  -> matching filter is used automatically
+        // eFormat == EIF_BIFF5 -> only Biff5 stream leads to success (even in an Excel97 doc)
+        // eFormat == EIF_BIFF8 -> only Biff8 stream leads to success (only in Excel97 docs)
+        // eFormat == EIF_BIFF_LE4 -> only non-storage files _could_ lead to success
+    virtual ErrCode ScImportStarCalc10( SvStream&, ScDocument* ) override;
+    virtual ErrCode ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
+                 const rtl_TextEncoding eSrc ) override;
+    virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) override;
+    virtual ErrCode ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange,
+                                   double nOutputFactor, bool bCalcWidthHeight,
+                                   SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) override;
+
+    virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) override;
+    virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) override;
+    virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) override;
+
+    // various export filters
+    virtual ErrCode ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) override;
+    virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest ) override;
+    virtual void ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) override;
+    virtual void ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,
+                  const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions ) override;
+    virtual void ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) override;
+
+    virtual ScOrcusFilters* GetOrcusFilters() override;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

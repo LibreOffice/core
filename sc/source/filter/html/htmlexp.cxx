@@ -125,7 +125,7 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
 
 #define GLOBSTR(id) ScGlobal::GetRscString( id )
 
-void ScFormatFilterPlugin::ScExportHTML( SvStream& rStrm, const OUString& rBaseURL, ScDocument* pDoc,
+void ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const OUString& rBaseURL, ScDocument* pDoc,
         const ScRange& rRange, const rtl_TextEncoding /*eNach*/, bool bAll,
         const OUString& rStreamPath, OUString& rNonConvertibleChars, const OUString& rFilterOptions )
 {
