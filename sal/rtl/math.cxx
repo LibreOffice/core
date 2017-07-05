@@ -940,7 +940,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
                                enum rtl_math_RoundingMode eMode)
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT(nDecPlaces >= -20 && nDecPlaces <= 20);
+    assert(nDecPlaces >= -20 && nDecPlaces <= 20);
 
     if ( fValue == 0.0  )
         return fValue;
@@ -1040,7 +1040,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
             }
         break;
         default:
-            OSL_ASSERT(false);
+            assert(false);
         break;
     }
 
