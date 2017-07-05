@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_180f7be2",
+        "filename": "sal/osl/unx/file_misc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-05T15:41:26Z",
+      "side": 1,
+      "message": "keeping OSL_ASSERT this time?",
+      "range": {
+        "startLine": 353,
+        "startChar": 4,
+        "endLine": 353,
+        "endChar": 14
+      },
+      "revId": "b9e47336581fc6248b72d81ce2c3edafaf012507",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
