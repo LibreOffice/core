@@ -26,16 +26,16 @@ class TablePositionHandler
     OUString m_aYSpec;
     OUString m_aHorzAnchor;
     OUString m_aXSpec;
-    sal_Int32 m_nY;
-    sal_Int32 m_nX;
-    sal_Int32 m_nLeftFromText;
-    sal_Int32 m_nRightFromText;
-    sal_Int32 m_nTopFromText;
-    sal_Int32 m_nBottomFromText;
+    sal_Int32 m_nY = 0;
+    sal_Int32 m_nX = 0;
+    sal_Int32 m_nLeftFromText = 0;
+    sal_Int32 m_nRightFromText = 0;
+    sal_Int32 m_nTopFromText = 0;
+    sal_Int32 m_nBottomFromText = 0;
 
     // Properties
-    virtual void lcl_attribute(Id Name, Value& val) override;
-    virtual void lcl_sprm(Sprm& sprm) override;
+    void lcl_attribute(Id Name, Value& val) override;
+    void lcl_sprm(Sprm& sprm) override;
 
 public:
     sal_Int32 getY()
@@ -81,7 +81,7 @@ public:
     }
 
     TablePositionHandler();
-    virtual ~TablePositionHandler() override;
+    ~TablePositionHandler() override;
 
     /** Compute the UNO properties for the frame containing the table based
         on the received tokens.
