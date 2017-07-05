@@ -1,5 +1,6 @@
 package org.libreoffice.overlay;
 
+import android.graphics.RectF;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 
 public class CalcHeadersController {
     private static final String LOGTAG = CalcHeadersController.class.getSimpleName();
-    private static final float DPI_1X_ZOOM = 96f; // Calc uses a fixed zoom a 1x which is 96 dpi
 
     private final CalcHeadersView mCalcRowHeadersView;
     private final CalcHeadersView mCalcColumnHeadersView;
@@ -64,12 +64,12 @@ public class CalcHeadersController {
             JSONArray rowResult = collectiveResult.getJSONArray("rows");
             for (int i = 0; i < rowResult.length(); i++) {
                 headerInfo.rowLabels.add(rowResult.getJSONObject(i).getString("text"));
-                headerInfo.rowDimens.add(twipToPixel(rowResult.getJSONObject(i).getLong("size"), DPI_1X_ZOOM));
+                headerInfo.rowDimens.add(twipToPixel(rowResult.getJSONObject(i).getLong("size"), LOKitShell.getDpi(mContext)));
             }
             JSONArray columnResult = collectiveResult.getJSONArray("columns");
             for (int i = 0; i < columnResult.length(); i++) {
                 headerInfo.columnLabels.add(columnResult.getJSONObject(i).getString("text"));
-                headerInfo.columnDimens.add(twipToPixel(columnResult.getJSONObject(i).getLong("size"), DPI_1X_ZOOM));
+                headerInfo.columnDimens.add(twipToPixel(columnResult.getJSONObject(i).getLong("size"), LOKitShell.getDpi(mContext)));
             }
             return headerInfo;
         } catch (JSONException e) {
@@ -82,12 +82,17 @@ public class CalcHeadersController {
         return input / 1440.0f * dpi;
     }
 
+    public void showHeaderSelection(RectF cellCursorRect) {
+        mCalcRowHeadersView.setHeaderSelection(cellCursorRect);
+        mCalcColumnHeadersView.setHeaderSelection(cellCursorRect);
+        showHeaders();
+    }
+
     private class HeaderInfo {
         ArrayList<String> rowLabels;
         ArrayList<Float> rowDimens;
         ArrayList<String> columnLabels;
         ArrayList<Float> columnDimens;
-
         private HeaderInfo() {
             rowLabels = new ArrayList<String>();
             rowDimens = new ArrayList<Float>();
