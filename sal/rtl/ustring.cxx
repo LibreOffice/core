@@ -155,7 +155,7 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(sal_Unicode * pStr, float f)
         RTL_USTR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
         0, true);
     nLen = pResult->length;
-    OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFFLOAT);
+    assert(nLen < RTL_USTR_MAX_VALUEOFFLOAT);
     memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
     rtl_uString_release(pResult);
     return nLen;
@@ -172,7 +172,7 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfDouble(sal_Unicode * pStr, double d)
         RTL_USTR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
         0, true);
     nLen = pResult->length;
-    OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFDOUBLE);
+    assert(nLen < RTL_USTR_MAX_VALUEOFDOUBLE);
     memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
     rtl_uString_release(pResult);
     return nLen;
@@ -542,7 +542,7 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
         rtl_uString_release( *ppThis );
 
     *ppThis = rtl_uString_ImplAlloc( nLen );
-    OSL_ASSERT(*ppThis != nullptr);
+    assert(*ppThis);
     if ( (*ppThis) )
     {
         sal_Unicode* pBuffer = (*ppThis)->buffer;
@@ -577,7 +577,7 @@ void SAL_CALL rtl_uString_newFromCodePoints(
     }
     n = codePointCount;
     for (i = 0; i < codePointCount; ++i) {
-        OSL_ASSERT(rtl::isUnicodeCodePoint(codePoints[i]));
+        SAL_WARN_IF(rtl::isUnicodeCodePoint(codePoints[i]), "sal.rtl", "invalid codepoint");
         if (codePoints[i] >= 0x10000) {
             ++n;
         }
