@@ -43,13 +43,13 @@ using namespace store;
 
 storeError ILockBytes::initialize (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize)
 {
-    OSL_PRECOND((STORE_MINIMUM_PAGESIZE <= nPageSize) && (nPageSize <= STORE_MAXIMUM_PAGESIZE), "invalid PageSize");
+    SAL_WARN_IF(nPageSize < STORE_MINIMUM_PAGESIZE || nPageSize > STORE_MAXIMUM_PAGESIZE, "store", "invalid PageSize");
     return initialize_Impl (rxAllocator, nPageSize);
 }
 
 storeError ILockBytes::readPageAt (std::shared_ptr<PageData> & rPage, sal_uInt32 nOffset)
 {
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::ILockBytes::readPageAt(): invalid Offset");
+    SAL_WARN_IF(nOffset == STORE_PAGE_NULL, "store", "store::ILockBytes::readPageAt(): invalid Offset");
     if (nOffset == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
@@ -60,16 +60,16 @@ storeError ILockBytes::writePageAt (std::shared_ptr<PageData> const & rPage, sal
 {
     // [SECURITY:ValInput]
     PageData const * pagedata = rPage.get();
-    OSL_PRECOND(!(pagedata == nullptr), "store::ILockBytes::writePageAt(): invalid Page");
+    SAL_WARN_IF(!pagedata, "store", "store::ILockBytes::writePageAt(): invalid Page");
     if (pagedata == nullptr)
         return store_E_InvalidParameter;
 
     sal_uInt32 const offset = pagedata->location();
-    OSL_PRECOND(!(nOffset != offset), "store::ILockBytes::writePageAt(): inconsistent Offset");
+    SAL_WARN_IF(nOffset != offset, "store", "store::ILockBytes::writePageAt(): inconsistent Offset");
     if (nOffset != offset)
         return store_E_InvalidParameter;
 
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::ILockBytes::writePageAt(): invalid Offset");
+    SAL_WARN_IF(nOffset == STORE_PAGE_NULL, "store", "store::ILockBytes::writePageAt(): invalid Offset");
     if (nOffset == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
@@ -87,7 +87,7 @@ storeError ILockBytes::readAt (sal_uInt32 nOffset, void * pBuffer, sal_uInt32 nB
     if (!(dst_lo < dst_hi))
         return (dst_lo > dst_hi) ? store_E_InvalidParameter : store_E_None;
 
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::ILockBytes::readAt(): invalid Offset");
+    SAL_WARN_IF(nOffset == STORE_PAGE_NULL, "store", "store::ILockBytes::readAt(): invalid Offset");
     if (nOffset == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
@@ -109,7 +109,7 @@ storeError ILockBytes::writeAt (sal_uInt32 nOffset, void const * pBuffer, sal_uI
     if (!(src_lo < src_hi))
         return (src_lo > src_hi) ? store_E_InvalidParameter : store_E_None;
 
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::ILockBytes::writeAt(): invalid Offset");
+    SAL_WARN_IF(nOffset == STORE_PAGE_NULL, "store", "store::ILockBytes::writeAt(): invalid Offset");
     if (nOffset == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
@@ -209,7 +209,7 @@ struct FileHandle
             nFlags |= osl_File_OpenFlag_Read;
             break;
         default:
-            OSL_PRECOND(false, "store::FileHandle: unknown storeAccessMode");
+            SAL_WARN("store", "store::FileHandle: unknown storeAccessMode");
         }
         return nFlags;
     }
@@ -381,7 +381,7 @@ storeError FileLockBytes::readPageAt_Impl (std::shared_ptr<PageData> & rPage, sa
 storeError FileLockBytes::writePageAt_Impl (std::shared_ptr<PageData> const & rPage, sal_uInt32 nOffset)
 {
     PageData const * pagedata = rPage.get();
-    OSL_PRECOND(pagedata != nullptr, "contract violation");
+    SAL_WARN_IF(!pagedata, "store", "contract violation");
     return writeAt_Impl (nOffset, pagedata, pagedata->size());
 }
 
@@ -406,7 +406,7 @@ storeError FileLockBytes::writeAt_Impl (sal_uInt32 nOffset, void const * pBuffer
         return store_E_CantWrite;
 
     sal_uInt64 const uSize = nOffset + nBytes;
-    OSL_PRECOND(uSize < SAL_MAX_UINT32, "store::ILockBytes::writeAt() contract violation");
+    SAL_WARN_IF(uSize >= SAL_MAX_UINT32, "store", "store::ILockBytes::writeAt() contract violation");
     if (uSize > m_nSize)
         m_nSize = sal::static_int_cast<sal_uInt32>(uSize);
     return store_E_None;
@@ -559,7 +559,7 @@ MappedLockBytes::~MappedLockBytes()
 
 void MappedLockBytes::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 {
-    OSL_PRECOND((ppPage != nullptr) && (pnSize != nullptr), "contract violation");
+    SAL_WARN_IF((!ppPage || !pnSize), "store", "contract violation");
     if ((ppPage != nullptr) && (pnSize != nullptr))
     {
         *ppPage = nullptr;
@@ -569,7 +569,7 @@ void MappedLockBytes::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 
 void MappedLockBytes::deallocate_Impl (void * pPage)
 {
-    OSL_PRECOND((m_pData <= pPage) && (pPage < m_pData + m_nSize), "contract violation");
+    SAL_WARN_IF((pPage < m_pData) || (pPage >= m_pData + m_nSize), "store", "contract violation");
 }
 
 storeError MappedLockBytes::initialize_Impl (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize)
@@ -724,7 +724,7 @@ storeError MemoryLockBytes::readPageAt_Impl (std::shared_ptr<PageData> & rPage, 
 storeError MemoryLockBytes::writePageAt_Impl (std::shared_ptr<PageData> const & rPage, sal_uInt32 nOffset)
 {
     PageData const * pagedata = rPage.get();
-    OSL_PRECOND(!(pagedata == nullptr), "contract violation");
+    SAL_WARN_IF(!pagedata, "store", "contract violation");
     return writeAt_Impl (nOffset, pagedata, pagedata->size());
 }
 
@@ -745,7 +745,7 @@ storeError MemoryLockBytes::readAt_Impl (sal_uInt32 nOffset, void * pBuffer, sal
 storeError MemoryLockBytes::writeAt_Impl (sal_uInt32 nOffset, const void * pBuffer, sal_uInt32 nBytes)
 {
     sal_uInt64 const dst_size = nOffset + nBytes;
-    OSL_PRECOND(dst_size < SAL_MAX_UINT32, "store::ILockBytes::writeAt() contract violation");
+    SAL_WARN_IF(dst_size >= SAL_MAX_UINT32, "store", "store::ILockBytes::writeAt() contract violation");
     if (dst_size > m_nSize)
     {
         storeError eErrCode = setSize_Impl (sal::static_int_cast<sal_uInt32>(dst_size));

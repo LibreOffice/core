@@ -20,6 +20,7 @@
 #include "storbase.hxx"
 
 #include "sal/types.h"
+#include "sal/log.hxx"
 #include "rtl/alloc.h"
 #include "rtl/ref.hxx"
 #include "osl/diagnose.h"
@@ -99,7 +100,7 @@ PageData::Allocator_Impl::~Allocator_Impl()
 
 void PageData::Allocator_Impl::allocate_Impl (void ** ppPage, sal_uInt16 * pnSize)
 {
-    OSL_PRECOND((ppPage != nullptr) && (pnSize != nullptr), "contract violation");
+    SAL_WARN_IF(!ppPage || !pnSize, "store", "contract violation");
     if ((ppPage != nullptr) && (pnSize != nullptr))
     {
         *ppPage = rtl_cache_alloc(m_page_cache);
@@ -109,7 +110,7 @@ void PageData::Allocator_Impl::allocate_Impl (void ** ppPage, sal_uInt16 * pnSiz
 
 void PageData::Allocator_Impl::deallocate_Impl (void * pPage)
 {
-    OSL_PRECOND(pPage != nullptr, "contract violation");
+    SAL_WARN_IF(!pPage, "store", "contract violation");
     rtl_cache_free(m_page_cache, pPage);
 }
 

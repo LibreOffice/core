@@ -26,6 +26,7 @@
 
 #include "sal/types.h"
 #include "sal/macros.h"
+#include "sal/log.hxx"
 #include "rtl/string.h"
 
 #include "store/types.h"
@@ -728,13 +729,13 @@ private:
     page & PAGE()
     {
         page * pImpl = static_cast<page*>(m_xPage.get());
-        OSL_PRECOND(pImpl != nullptr, "OStoreDirectoryPageObject::PAGE(): Null pointer");
+        SAL_WARN_IF(!pImpl, "store", "OStoreDirectoryPageObject::PAGE(): Null pointer");
         return (*pImpl);
     }
     page const & PAGE() const
     {
         page const * pImpl = static_cast<page const *>(m_xPage.get());
-        OSL_PRECOND(pImpl != nullptr, "OStoreDirectoryPageObject::PAGE(): Null pointer");
+        SAL_WARN_IF(!pImpl, "store", "OStoreDirectoryPageObject::PAGE(): Null pointer");
         return (*pImpl);
     }
 

@@ -277,7 +277,7 @@ storeError SuperBlockPage::unusedHead (OStorePageBIOS & rBIOS, PageData & rPageH
 storeError SuperBlockPage::unusedPop (OStorePageBIOS & rBIOS, PageData const & rPageHead)
 {
     sal_uInt32 const nAddr = rPageHead.m_aUnused.location();
-    OSL_PRECOND(nAddr != STORE_PAGE_NULL, "store::SuperBlock::unusedPop(): page not free");
+    SAL_WARN_IF(nAddr == STORE_PAGE_NULL, "store", "store::SuperBlock::unusedPop(): page not free");
     if (nAddr == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
@@ -497,7 +497,7 @@ OStorePageBIOS::AceCache::create (sal_uInt32 addr)
   if (ace != nullptr)
   {
     // verify invariant state.
-    OSL_ASSERT((ace->m_next == ace) && (ace->m_prev == ace));
+    assert(ace->m_next == ace && ace->m_prev == ace);
 
     // initialize.
     ace->m_addr = addr;
@@ -666,7 +666,7 @@ void OStorePageBIOS::cleanup_Impl()
             m_ace_head.m_used -= ace->m_used;
             AceCache::get().destroy (ace);
         }
-        OSL_ENSURE(m_ace_head.m_used == 0, "store::PageBIOS::cleanup_Impl(): logic error");
+        SAL_WARN_IF(m_ace_head.m_used != 0, "store", "store::PageBIOS::cleanup_Impl(): logic error");
     }
 
     // Release SuperBlock page.

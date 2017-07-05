@@ -303,8 +303,8 @@ storeError OStoreBTreeNodeObject::remove (
  */
 void OStoreBTreeRootObject::testInvariant (char const * message)
 {
-    OSL_PRECOND(m_xPage.get() != nullptr, "OStoreBTreeRootObject::testInvariant(): Null pointer");
-    SAL_WARN_IF( (m_xPage->location() - m_xPage->size()) != 0, "store", message);
+    SAL_WARN_IF(!m_xPage.get(), "store", "OStoreBTreeRootObject::testInvariant(): Null pointer");
+    SAL_WARN_IF((m_xPage->location() - m_xPage->size()) != 0, "store", message);
 }
 
 /*

@@ -284,7 +284,7 @@ Entry * PageCache::lookup_Impl (Entry * entry, sal_uInt32 nOffset)
 
 storeError PageCache::lookupPageAt (std::shared_ptr<PageData> & rxPage, sal_uInt32 nOffset)
 {
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::lookupPageAt(): invalid Offset");
+    SAL_WARN_IF(nOffset == STORE_PAGE_NULL, "store", "store::PageCache::lookupPageAt(): invalid Offset");
     if (nOffset == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
@@ -309,16 +309,16 @@ storeError PageCache::insertPageAt (std::shared_ptr<PageData> const & rxPage, sa
 {
     // [SECURITY:ValInput]
     PageData const * pagedata = rxPage.get();
-    OSL_PRECOND(!(pagedata == nullptr), "store::PageCache::insertPageAt(): invalid Page");
+    SAL_WARN_IF(!pagedata, "store", "store::PageCache::insertPageAt(): invalid Page");
     if (pagedata == nullptr)
         return store_E_InvalidParameter;
 
     sal_uInt32 const offset = pagedata->location();
-    OSL_PRECOND(!(nOffset != offset), "store::PageCache::insertPageAt(): inconsistent Offset");
+    SAL_WARN_IF(nOffset != offset, "store", "store::PageCache::insertPageAt(): inconsistent Offset");
     if (nOffset != offset)
         return store_E_InvalidParameter;
 
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::insertPageAt(): invalid Offset");
+    SAL_WARN_IF(nOffset == STORE_PAGE_NULL, "store", "store::PageCache::insertPageAt(): invalid Offset");
     if (nOffset == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
@@ -341,16 +341,16 @@ storeError PageCache::updatePageAt (std::shared_ptr<PageData> const & rxPage, sa
 {
     // [SECURITY:ValInput]
     PageData const * pagedata = rxPage.get();
-    OSL_PRECOND(!(pagedata == nullptr), "store::PageCache::updatePageAt(): invalid Page");
+    SAL_WARN_IF(!pagedata, "store", "store::PageCache::updatePageAt(): invalid Page");
     if (pagedata == nullptr)
         return store_E_InvalidParameter;
 
     sal_uInt32 const offset = pagedata->location();
-    OSL_PRECOND(!(nOffset != offset), "store::PageCache::updatePageAt(): inconsistent Offset");
+    SAL_WARN_IF(nOffset != offset, "store", "store::PageCache::updatePageAt(): inconsistent Offset");
     if (nOffset != offset)
         return store_E_InvalidParameter;
 
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::updatePageAt(): invalid Offset");
+    SAL_WARN_IF(nOffset == STORE_PAGE_NULL, "store", "store::PageCache::updatePageAt(): invalid Offset");
     if (nOffset == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
@@ -369,7 +369,7 @@ storeError PageCache::updatePageAt (std::shared_ptr<PageData> const & rxPage, sa
 
 storeError PageCache::removePageAt (sal_uInt32 nOffset)
 {
-    OSL_PRECOND(!(nOffset == STORE_PAGE_NULL), "store::PageCache::removePageAt(): invalid Offset");
+    SAL_WARN_IF(nOffset == STORE_PAGE_NULL, "store", "store::PageCache::removePageAt(): invalid Offset");
     if (nOffset == STORE_PAGE_NULL)
         return store_E_CantSeek;
 
