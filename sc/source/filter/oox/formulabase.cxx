@@ -389,7 +389,7 @@ static const FunctionData saFuncTableBiff3[] =
     { "DOLLAR",                 "USDOLLAR",             204,    204,    1,  2,  V, { VR }, FuncFlags::IMPORTONLY },
     { nullptr/*"FIND"*/,              "FINDB",                205,    205,    2,  3,  V, { VR }, FuncFlags::NONE },
     { nullptr/*"SEARCH"*/,            "SEARCHB",              206,    206,    2,  3,  V, { VR }, FuncFlags::NONE },
-    { nullptr/*"REPLACE"*/,           "REPLACEB",             207,    207,    4,  4,  V, { VR }, FuncFlags::NONE },
+    { "REPLACEB",               "REPLACEB",             207,    207,    4,  4,  V, { VR }, FuncFlags::NONE },
     { "LEFTB",                  "LEFTB",                208,    208,    1,  2,  V, { VR }, FuncFlags::NONE },
     { "RIGHTB",                 "RIGHTB",               209,    209,    1,  2,  V, { VR }, FuncFlags::NONE },
     { "MIDB",                   "MIDB",                 210,    210,    3,  3,  V, { VR }, FuncFlags::NONE },

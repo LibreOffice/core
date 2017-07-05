@@ -4856,5 +4856,20 @@ StringArray SC_OPCODE_ROUNDSIG+RID_SC_FUNC_DESCRIPTIONS_START
         < "The number of significant digits to which value is to be rounded." ; >;
     };
 };
+StringArray SC_OPCODE_REPLACEB+RID_SC_FUNC_DESCRIPTIONS_START
+{
+    ItemList [ en-US ] =
+    {
+        < "Replaces characters within a text string with a different text string, with DBCS." ; >;
+        < "Text" ; >;
+        < "The text in which some characters are to be replaced." ; >;
+        < "position" ; >;
+        < "The character position from which text is to be replaced." ; >;
+        < "length" ; >;
+        < "The number of characters to be replaced." ; >;
+        < "new text" ; >;
+        < "The text to be inserted." ; >;
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
