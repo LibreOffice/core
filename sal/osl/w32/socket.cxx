@@ -1067,8 +1067,8 @@ oslSocketResult SAL_CALL osl_connectSocketTo (
 
         /* set socket temporarily to non-blocking */
         Param= 1;
-        OSL_VERIFY(ioctlsocket(
-            pSocket->m_Socket, FIONBIO, &Param) != OSL_SOCKET_ERROR);
+        SAL_WARN_IF(ioctlsocket(pSocket->m_Socket, FIONBIO, &Param) == OSL_SOCKET_ERROR,
+                    "sal.osl", "ioctlsocket() failed");
 
         /* initiate connect */
         if (connect(pSocket->m_Socket,
