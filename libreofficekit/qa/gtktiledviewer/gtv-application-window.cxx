@@ -196,6 +196,25 @@ createRenderingArgsJSON(const GtvRenderingArgs* pRenderingArgs)
     return aStream.str();
 }
 
+static void setupDocView(LOKDocView* pDocView)
+{
+#if GLIB_CHECK_VERSION(2,40,0)
+    g_assert_nonnull(pDocView);
+#endif
+    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), nullptr);
+    g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), nullptr);
+    g_signal_connect(pDocView, "command-result", G_CALLBACK(signalCommandResult), nullptr);
+    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), nullptr);
+    g_signal_connect(pDocView, "search-result-count", G_CALLBACK(signalSearchResultCount), nullptr);
+    g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), nullptr);
+    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), nullptr);
+    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), nullptr);
+    g_signal_connect(pDocView, "address-changed", G_CALLBACK(addressChanged), nullptr);
+    g_signal_connect(pDocView, "formula-changed", G_CALLBACK(formulaChanged), nullptr);
+    g_signal_connect(pDocView, "password-required", G_CALLBACK(passwordRequired), nullptr);
+    g_signal_connect(pDocView, "comment", G_CALLBACK(commentCallback), nullptr);
+}
+
 void
 gtv_application_window_create_view_from_window(GtvApplicationWindow* window)
 {
@@ -206,6 +225,7 @@ gtv_application_window_create_view_from_window(GtvApplicationWindow* window)
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
     GtvApplicationWindowPrivate* newPriv = getPrivate(newWindow);
     newPriv->lokdocview = lok_doc_view_new_from_widget(LOK_DOC_VIEW(priv->lokdocview), aArguments.c_str());
+    setupDocView(newPriv->lokdocview);
 
     gboolean bTiledAnnotations;
     g_object_get(G_OBJECT(priv->lokdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
@@ -233,6 +253,7 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
                  "doc-password-to-modify", TRUE,
                  "tiled-annotations", priv->m_pRenderingArgs->m_bEnableTiledAnnotations,
                  nullptr);
+    setupDocView(priv->lokdocview);
 
     // Create argument JSON
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
