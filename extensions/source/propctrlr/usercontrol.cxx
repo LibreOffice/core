@@ -256,7 +256,7 @@ namespace pcr
     void SAL_CALL OFileUrlControl::setValue( const Any& _rValue )
     {
         OUString sURL;
-        if ( ( _rValue >>= sURL ) )
+        if (  _rValue >>= sURL )
         {
             if ( sURL.startsWith( "vnd.sun.star.GraphicObject:" ) )
                 getTypedControlWindow()->DisplayURL( getTypedControlWindow()->GetPlaceHolder() );

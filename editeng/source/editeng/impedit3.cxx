@@ -3471,7 +3471,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     if ( nOrientation || ( !IsVertical() && ( ( aTmpPos.X() + nTxtWidth ) >= nFirstVisXPos ) )
                                             || ( IsVertical() && ( ( aTmpPos.Y() + nTxtWidth ) >= nFirstVisYPos ) ) )
                                     {
-                                        if ( nEsc && ( ( aTmpFont.GetUnderline() != LINESTYLE_NONE ) ) )
+                                        if ( nEsc && ( aTmpFont.GetUnderline() != LINESTYLE_NONE ) )
                                         {
                                             // Paint the high/low without underline,
                                             // Display the Underline on the

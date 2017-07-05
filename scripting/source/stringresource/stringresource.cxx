@@ -2004,7 +2004,7 @@ void implWriteCharToBuffer( OUStringBuffer& aBuf, sal_Unicode cu, bool bKey )
     }
     // ISO/IEC 8859-1 range according to:
     // http://en.wikipedia.org/wiki/ISO/IEC_8859-1
-    else if( (cu >= 0x20 && cu <= 0x7e) )
+    else if( cu >= 0x20 && cu <= 0x7e )
     //TODO: Check why (cu >= 0xa0 && cu <= 0xFF)
     //is encoded in sample properties files
     //else if( (cu >= 0x20 && cu <= 0x7e) ||

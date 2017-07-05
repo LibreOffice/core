@@ -1607,7 +1607,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
             }
         }
         // unfortunately nothing found
-        if( (bNext? (aBestPos.getX() == LONG_MAX) : (aBestPos.getX() == 0)) )
+        if( bNext ? (aBestPos.getX() == LONG_MAX) : (aBestPos.getX() == 0) )
             pBest = pTop;
     }
 

@@ -1613,7 +1613,7 @@ static std::vector< CommentStrip > getComment( const OUString& rQuery )
             {
                 if ((pCopy[i]=='-' && pCopy[i+1]=='-') || (pCopy[i]=='/' && pCopy[i+1]=='/'))
                     bComment = true;
-                else if ((pCopy[i]=='/' && pCopy[i+1]=='*'))
+                else if (pCopy[i]=='/' && pCopy[i+1]=='*')
                     bComment2 = true;
             }
         }

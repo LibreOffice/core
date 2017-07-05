@@ -92,8 +92,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
             if( dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr )
             {
                 SdrPageView* pPageView = mpView->GetSdrPageView();
-                if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
-                    // || ( mpView->GetMarkedObjectList().GetMarkCount() == 0 ) )
+                if( pPageView && pPageView->GetObjList()->GetObjCount() == 0 )
                 {
                     nZoomValues &= ~SvxZoomEnableFlags::OPTIMAL;
                 }

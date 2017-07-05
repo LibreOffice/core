@@ -2269,7 +2269,7 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     XclImpCheckBoxObj::DoProcessControl( rPropSet );
     // TODO: grouping
     XclImpOptionButtonObj* pTbxObj = dynamic_cast< XclImpOptionButtonObj* >( GetObjectManager().GetSheetDrawing( GetTab() ).FindDrawObj( mnNextInGroup ).get() );
-    if ( ( pTbxObj && pTbxObj->mnFirstInGroup ) )
+    if ( pTbxObj && pTbxObj->mnFirstInGroup )
     {
         // Group has terminated
         // traverse each RadioButton in group and

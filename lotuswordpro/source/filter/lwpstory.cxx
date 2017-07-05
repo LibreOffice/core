@@ -332,10 +332,10 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
         rtl::Reference<LwpVirtualLayout> xFrameLayout(dynamic_cast<LwpVirtualLayout*>(xLayout->GetChildHead().obj().get()));
         while (xFrameLayout.is())
         {
-            if((xFrameLayout->IsAnchorPage()
-                &&(xFrameLayout->IsFrame()
-                      || xFrameLayout->IsSuperTable()
-                      || xFrameLayout->IsGroupHead())))
+            if( xFrameLayout->IsAnchorPage()
+                && (xFrameLayout->IsFrame()
+                    || xFrameLayout->IsSuperTable()
+                    || xFrameLayout->IsGroupHead()) )
             {
                 xFrameLayout->DoXFConvert(pCont);
             }

@@ -888,8 +888,8 @@ const OGLFormat* OGLTransitionerImpl::chooseFormats()
     uno::Reference<rendering::XIntegerBitmapColorSpace> xIntColorSpace(
         maSlideBitmapLayout.ColorSpace);
 
-    if( (xIntColorSpace->getType() == rendering::ColorSpaceType::RGB ||
-         xIntColorSpace->getType() == rendering::ColorSpaceType::SRGB) )
+    if( xIntColorSpace->getType() == rendering::ColorSpaceType::RGB ||
+        xIntColorSpace->getType() == rendering::ColorSpaceType::SRGB )
     {
         /* table for canvas->OGL format mapping. outer index is number
            of color components (0:3, 1:4), then comes bits per pixel

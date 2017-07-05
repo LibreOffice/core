@@ -1000,7 +1000,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if ( !pAny && pDefCustomShape )
     {
         sal_Int32 nXRef = pDefCustomShape->nXRef;
-        if ( ( nXRef != DEFAULT_MINIMUM_SIGNED_COMPARE ) )
+        if ( nXRef != DEFAULT_MINIMUM_SIGNED_COMPARE )
         {
             aPropVal.Name = sStretchX;
             aPropVal.Value <<= nXRef;
@@ -1014,7 +1014,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if ( !pAny && pDefCustomShape )
     {
         sal_Int32 nYRef = pDefCustomShape->nYRef;
-        if ( ( nYRef != DEFAULT_MINIMUM_SIGNED_COMPARE ) )
+        if ( nYRef != DEFAULT_MINIMUM_SIGNED_COMPARE )
         {
             aPropVal.Name = sStretchY;
             aPropVal.Value <<= nYRef;

@@ -2410,9 +2410,7 @@ so run here: save the parent's SwFrame not the accessible object parent,
                     bIsTextParent =true;
                 }
             }
-//          bool bIsVisibleChildrenOnly =aFrameOrObj.IsVisibleChildrenOnly() ;
-//          bool bIsBoundAsChar =aFrameOrObj.IsBoundAsChar() ;//bIsVisibleChildrenOnly && bIsBoundAsChar &&
-            if((bIsValidFrame || bIsTextParent) )
+            if( bIsValidFrame || bIsTextParent )
             {
                 if( GetShell()->ActionPend() )
                 {

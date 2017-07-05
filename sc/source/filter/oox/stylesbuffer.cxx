@@ -1379,10 +1379,10 @@ ApiBorderData::ApiBorderData() :
 bool ApiBorderData::hasAnyOuterBorder() const
 {
     return
-        ( ( lcl_isBorder( maTop ) &&  maTop.OuterLineWidth > 0 ) ) ||
-        ( ( lcl_isBorder( maBottom ) && maBottom.OuterLineWidth > 0 ) ) ||
-        ( ( lcl_isBorder( maLeft ) && maLeft.OuterLineWidth > 0 ) ) ||
-        ( ( lcl_isBorder( maRight ) && maRight.OuterLineWidth > 0 ) );
+        ( lcl_isBorder( maTop )    &&  maTop.OuterLineWidth > 0   ) ||
+        ( lcl_isBorder( maBottom ) && maBottom.OuterLineWidth > 0 ) ||
+        ( lcl_isBorder( maLeft )   && maLeft.OuterLineWidth > 0   ) ||
+        ( lcl_isBorder( maRight )  && maRight.OuterLineWidth > 0  );
 }
 
 namespace {

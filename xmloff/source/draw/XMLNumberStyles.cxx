@@ -612,12 +612,12 @@ void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, bool bLong, bo
     const SdXMLDataStyleNumber* pStyleMember = aSdXMLDataStyleNumbers;
     for( sal_uInt8 nIndex = 0; pStyleMember->meNumberStyle != XML_TOKEN_INVALID; nIndex++, pStyleMember++ )
     {
-        if( (IsXMLToken(rNumberStyle, pStyleMember->meNumberStyle) &&
+        if( IsXMLToken(rNumberStyle, pStyleMember->meNumberStyle) &&
             (pStyleMember->mbLong == bLong) &&
             (pStyleMember->mbTextual == bTextual) &&
             (pStyleMember->mbDecimal02 == bDecimal02) &&
             ( ( (pStyleMember->mpText == nullptr) && (rText.isEmpty()) ) ||
-              ( pStyleMember->mpText && (rText.equalsAscii( pStyleMember->mpText ) ) ) ) ) )
+              ( pStyleMember->mpText && (rText.equalsAscii( pStyleMember->mpText ) ) ) ) )
         {
             mnElements[mnIndex++] = nIndex + 1;
             return;

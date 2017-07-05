@@ -2431,7 +2431,7 @@ void Ruler::SetNullOffset( long nPos )
 
 void Ruler::SetLeftFrameMargin( long nPos )
 {
-    if ( (mpData->nLeftFrameMargin != nPos) )
+    if ( mpData->nLeftFrameMargin != nPos )
     {
         mpData->nLeftFrameMargin  = nPos;
         ImplUpdate();
@@ -2440,7 +2440,7 @@ void Ruler::SetLeftFrameMargin( long nPos )
 
 void Ruler::SetRightFrameMargin( long nPos )
 {
-    if ( (mpData->nRightFrameMargin != nPos) )
+    if ( mpData->nRightFrameMargin != nPos )
     {
         mpData->nRightFrameMargin  = nPos;
         ImplUpdate();

@@ -353,7 +353,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
     OUString sRange(   "-"  );
     OUString sFileName;
 
-    if (( nFrom || nTo ) )
+    if ( nFrom || nTo )
     {
         if ( nFrom )
             sRange = ( OUString::number( nFrom ) + sRange );

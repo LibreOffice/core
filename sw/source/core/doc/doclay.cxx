@@ -307,7 +307,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection( RndStdIds eAnchorType,
             ( pFrameFormat && SfxItemState::SET == pFrameFormat->GetItemState(
                 RES_ANCHOR, true, reinterpret_cast<const SfxPoolItem**>(&pAnch) )) )
         {
-            if ( (RndStdIds::FLY_AT_PAGE != pAnch->GetAnchorId()) )
+            if ( RndStdIds::FLY_AT_PAGE != pAnch->GetAnchorId() )
             {
                 pAnchorPos = pAnch->GetContentAnchor();
             }

@@ -1175,7 +1175,7 @@ Lbl_OpIsDouble:
                     // result is always a Date, if '-' the result is only
                     // a Date if one of lhs or rhs ( but not both ) is already
                     // a Date
-                    if( ( GetType() == SbxDATE || rOp.GetType() == SbxDATE ) )
+                    if( GetType() == SbxDATE || rOp.GetType() == SbxDATE )
                     {
                         if( eOp == SbxPLUS  || ( ( eOp == SbxMINUS ) &&  ( GetType() != rOp.GetType() ) ) )
                             aL.eType = SbxDATE;

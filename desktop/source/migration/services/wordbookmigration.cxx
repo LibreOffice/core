@@ -117,7 +117,7 @@ bool IsUserWordbook( const OUString& rFile )
         static std::size_t nVerOOo7Len = sal::static_int_cast< std::size_t >(strlen( pVerOOo7 ));
         sal_Char pMagicHeader[MAX_HEADER_LENGTH];
         pMagicHeader[ nVerOOo7Len ] = '\0';
-        if ((pStream->ReadBytes(static_cast<void *>(pMagicHeader), nVerOOo7Len) == nVerOOo7Len))
+        if (pStream->ReadBytes(static_cast<void *>(pMagicHeader), nVerOOo7Len) == nVerOOo7Len)
         {
             if ( !strcmp(pMagicHeader, pVerOOo7) )
                 bRet = true;

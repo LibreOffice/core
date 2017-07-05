@@ -41,7 +41,7 @@ ScVbaCondition< Ifc... >::retrieveAPIOperator( const uno::Any& _aOperator)
 {
     sheet::ConditionOperator aRetAPIOperator = sheet::ConditionOperator_NONE;
     sal_Int32 nOperator = 0;
-    if ( (_aOperator >>= nOperator ) )
+    if ( _aOperator >>= nOperator )
     {
         switch(nOperator)
         {
@@ -96,7 +96,7 @@ void
 ScVbaCondition< Ifc... >::setFormula1( const uno::Any& _aFormula1)
 {
     OUString sFormula;
-    if ( (_aFormula1 >>= sFormula ))
+    if ( _aFormula1 >>= sFormula )
     {
         mxSheetCondition->setFormula1( sFormula );
         table::CellRangeAddress aCellRangeAddress = mxAddressable->getRangeAddress();

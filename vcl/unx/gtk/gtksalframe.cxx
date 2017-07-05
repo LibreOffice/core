@@ -1245,7 +1245,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
     if( bDecoHandling )
     {
         gtk_window_set_resizable( GTK_WINDOW(m_pWindow), bool(nStyle & SalFrameStyleFlags::SIZEABLE) );
-        if( ( (nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION)) ) )
+        if( nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION) )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, false );
     }
 }

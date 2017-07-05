@@ -3677,8 +3677,8 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
         // In headings the current heading sets the font height
         // and not BASEFONT.
         sal_uInt16 nPoolId = GetCurrFormatColl()->GetPoolFormatId();
-        if( (nPoolId>=RES_POOLCOLL_HEADLINE1 &&
-             nPoolId<=RES_POOLCOLL_HEADLINE6) )
+        if( nPoolId>=RES_POOLCOLL_HEADLINE1 &&
+            nPoolId<=RES_POOLCOLL_HEADLINE6 )
         {
             // If the font height in the heading wasn't changed yet,
             // then take the one from the style.

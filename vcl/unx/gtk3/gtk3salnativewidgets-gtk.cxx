@@ -2632,8 +2632,8 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     }
     else if( nType == ControlType::MenuPopup)
     {
-        if (((nPart == ControlPart::MenuItemCheckMark) ||
-              (nPart == ControlPart::MenuItemRadioMark) ))
+        if ((nPart == ControlPart::MenuItemCheckMark) ||
+            (nPart == ControlPart::MenuItemRadioMark) )
         {
             indicator_size = 0;
 

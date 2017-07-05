@@ -93,7 +93,7 @@ namespace dbaccess
         const Type* pEnd = pIter + aTypes.getLength();
         for(;pIter != pEnd ;++pIter)
         {
-            if( (*pIter != aAlterType || m_xViewAccess.is()) )
+            if( *pIter != aAlterType || m_xViewAccess.is() )
                 aOwnTypes.push_back(*pIter);
         }
 

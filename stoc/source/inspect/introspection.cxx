@@ -1924,44 +1924,44 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                                   INDEXCONTAINER |
                                                   ENUMERATION );
                             pAccess->mbElementAccess = true;
-                        } else if ((className
-                                    == "com.sun.star.container.XNameContainer"))
+                        } else if (className
+                                    == "com.sun.star.container.XNameContainer")
                         {
                             rMethodConcept_i |= NAMECONTAINER;
                             pAccess->mbNameContainer = true;
                             pAccess->mbNameReplace = true;
                             pAccess->mbNameAccess = true;
                             pAccess->mbElementAccess = true;
-                        } else if ((className
-                                    == "com.sun.star.container.XNameReplace"))
+                        } else if (className
+                                    == "com.sun.star.container.XNameReplace")
                         {
                             rMethodConcept_i |= NAMECONTAINER;
                             pAccess->mbNameReplace = true;
                             pAccess->mbNameAccess = true;
                             pAccess->mbElementAccess = true;
-                        } else if ((className
-                                    == "com.sun.star.container.XNameAccess"))
+                        } else if (className
+                                    == "com.sun.star.container.XNameAccess")
                         {
                             rMethodConcept_i |= NAMECONTAINER;
                             pAccess->mbNameAccess = true;
                             pAccess->mbElementAccess = true;
-                        } else if ((className
-                                    == "com.sun.star.container.XIndexContainer"))
+                        } else if (className
+                                    == "com.sun.star.container.XIndexContainer")
                         {
                             rMethodConcept_i |= INDEXCONTAINER;
                             pAccess->mbIndexContainer = true;
                             pAccess->mbIndexReplace = true;
                             pAccess->mbIndexAccess = true;
                             pAccess->mbElementAccess = true;
-                        } else if ((className
-                                    == "com.sun.star.container.XIndexReplace"))
+                        } else if (className
+                                    == "com.sun.star.container.XIndexReplace")
                         {
                             rMethodConcept_i |= INDEXCONTAINER;
                             pAccess->mbIndexReplace = true;
                             pAccess->mbIndexAccess = true;
                             pAccess->mbElementAccess = true;
-                        } else if ((className
-                                    == "com.sun.star.container.XIndexAccess"))
+                        } else if (className
+                                    == "com.sun.star.container.XIndexAccess")
                         {
                             rMethodConcept_i |= INDEXCONTAINER;
                             pAccess->mbIndexAccess = true;

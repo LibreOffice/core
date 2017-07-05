@@ -1175,17 +1175,17 @@ catch(const Exception&)
 
 bool canInsert(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::INSERT) != 0));
+    return (_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::INSERT) != 0);
 }
 
 bool canUpdate(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::UPDATE) != 0));
+    return (_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::UPDATE) != 0);
 }
 
 bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
 {
-    return ((_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::DELETE) != 0));
+    return (_rxCursorSet.is() && (getINT32(_rxCursorSet->getPropertyValue("Privileges")) & Privilege::DELETE) != 0);
 }
 
 Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)

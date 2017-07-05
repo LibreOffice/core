@@ -123,7 +123,7 @@ bool isCompatible(SvStream& rInStream)
     if (nRead < 8)
         return false;
 
-    if ((aFirstBytes[0] != '%' || aFirstBytes[1] != 'P' || aFirstBytes[2] != 'D' || aFirstBytes[3] != 'F' || aFirstBytes[4] != '-'))
+    if (aFirstBytes[0] != '%' || aFirstBytes[1] != 'P' || aFirstBytes[2] != 'D' || aFirstBytes[3] != 'F' || aFirstBytes[4] != '-')
         return false;
 
     sal_Int32 nMajor = OString(aFirstBytes[5]).toInt32();

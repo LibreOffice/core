@@ -218,7 +218,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         {
             SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(rMarkList.GetMark( 0 )->GetMarkedSdrObj());
             if (pOleObj->GetObjRef().is() &&
-                ((pOleObj->GetObjRef()->getStatus( pOleObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) ) )
+                (pOleObj->GetObjRef()->getStatus( pOleObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) )
                 //TODO/LATER: why different slots in Draw and Calc?
                 rSet.DisableItem(SID_ORIGINALSIZE);
         }

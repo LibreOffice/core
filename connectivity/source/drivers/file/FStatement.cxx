@@ -365,7 +365,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
     m_aOrderbyColumnNumber.push_back((aFind - aSelectColumns->get().begin()) + 1);
 
     // Ascending or Descending?
-    m_aOrderbyAscending.push_back((SQL_ISTOKEN(pAscendingDescending,DESC)) ? TAscendingOrder::DESC : TAscendingOrder::ASC);
+    m_aOrderbyAscending.push_back(SQL_ISTOKEN(pAscendingDescending,DESC) ? TAscendingOrder::DESC : TAscendingOrder::ASC);
 }
 
 void OStatement_Base::construct(const OUString& sql)

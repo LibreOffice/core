@@ -1271,7 +1271,7 @@ bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
 
     // Some quick tests: Some may rely on the package structure!
     sal_Int32 nLen = rURL.getLength();
-    if( (nLen > 0 && '/' == rURL[0]) )
+    if( nLen > 0 && '/' == rURL[0] )
         // RFC2396 net_path or abs_path
         return false;
     else if( nLen > 1 && '.' == rURL[0] )

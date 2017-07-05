@@ -1662,7 +1662,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
             XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName)));
         if (pStyle)
         {
-            if ((pStyle->PrivateGetKey() > -1))     // don't reset pStyle's bRemoveAfterUse flag
+            if (pStyle->PrivateGetKey() > -1)     // don't reset pStyle's bRemoveAfterUse flag
                 AddCondition(i);
         }
     }

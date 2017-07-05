@@ -1063,7 +1063,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if (-1 != sFileName.indexOf('#'))
         return nRet;
 
-    if ((m_sContentFileName.isEmpty() || m_sContentFileName != sFileName))
+    if (m_sContentFileName.isEmpty() || m_sContentFileName != sFileName)
     {
         nRet = rEvt.mnAction;
         sFileName = comphelper::string::stripEnd(sFileName, 0);

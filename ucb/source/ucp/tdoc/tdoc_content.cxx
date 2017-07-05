@@ -1852,7 +1852,7 @@ void Content::transfer(
 
     // Does source URI scheme match? Only vnd.sun.star.tdoc is supported.
 
-    if ( ( rInfo.SourceURL.getLength() < TDOC_URL_SCHEME_LENGTH + 2 ) )
+    if ( rInfo.SourceURL.getLength() < TDOC_URL_SCHEME_LENGTH + 2 )
     {
         // Invalid length (to short).
         ucbhelper::cancelCommandExecution(
