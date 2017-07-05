@@ -68,9 +68,8 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
         throw RuntimeException();
 
     osl_atomic_increment( &m_refCount );
-    m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
+    m_pRowStatusArray.reset( new SQLUSMALLINT[1] ); // the default value
     osl_atomic_decrement( &m_refCount );
-    //  allocBuffer();
 }
 
 
@@ -82,7 +81,6 @@ ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
         osl_atomic_increment( &m_refCount );
         dispose();
     }
-    delete [] m_pRowStatusArray;
 }
 
 void ODatabaseMetaDataResultSet::disposing()

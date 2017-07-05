@@ -104,8 +104,8 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     osl_atomic_increment( &m_refCount );
     try
     {
-        m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
-        setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, m_pRowStatusArray);
+        m_pRowStatusArray.reset( new SQLUSMALLINT[1] ); // the default value
+        setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, m_pRowStatusArray.get());
     }
     catch(const Exception&)
     { // we don't want our result destroy here
@@ -117,7 +117,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
         SQLUINTEGER nValueLen = m_pStatement->getCursorProperties(nCurType,false);
         if( (nValueLen & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS ||
             (nValueLen & SQL_CA2_CRC_EXACT) != SQL_CA2_CRC_EXACT)
-            m_pSkipDeletedSet = new OSkipDeletedSet(this);
+            m_pSkipDeletedSet.reset( new OSkipDeletedSet(this) );
     }
     catch(const Exception&)
     { // we don't want our result destroy here
@@ -164,8 +164,6 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
 
 OResultSet::~OResultSet()
 {
-    delete [] m_pRowStatusArray;
-    delete m_pSkipDeletedSet;
 }
 
 void OResultSet::construct()
@@ -1389,10 +1387,8 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
     if ( _par0 > 0 )
     {
         setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE, _par0);
-        delete [] m_pRowStatusArray;
-
-        m_pRowStatusArray = new SQLUSMALLINT[_par0];
-        setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, m_pRowStatusArray);
+        m_pRowStatusArray.reset( new SQLUSMALLINT[_par0] );
+        setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, m_pRowStatusArray.get());
     }
 }
 

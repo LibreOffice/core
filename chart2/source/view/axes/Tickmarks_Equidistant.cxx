@@ -450,10 +450,10 @@ void EquidistantTickIter::initIter( sal_Int32 nMaxDepth )
     if(!m_nTickCount)
         return;
 
-    m_pnPositions      = new sal_Int32[m_nMaxDepth+1];
+    m_pnPositions.reset( new sal_Int32[m_nMaxDepth+1] );
 
-    m_pnPreParentCount = new sal_Int32[m_nMaxDepth+1];
-    m_pbIntervalFinished = new bool[m_nMaxDepth+1];
+    m_pnPreParentCount.reset( new sal_Int32[m_nMaxDepth+1] );
+    m_pbIntervalFinished.reset( new bool[m_nMaxDepth+1] );
     m_pnPreParentCount[0] = 0;
     m_pbIntervalFinished[0] = false;
     double fParentValue = getTickValue(0,0);
@@ -482,9 +482,6 @@ void EquidistantTickIter::initIter( sal_Int32 nMaxDepth )
 
 EquidistantTickIter::~EquidistantTickIter()
 {
-    delete[] m_pnPositions;
-    delete[] m_pnPreParentCount;
-    delete[] m_pbIntervalFinished;
 }
 
 sal_Int32 EquidistantTickIter::getStartDepth() const

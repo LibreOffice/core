@@ -50,17 +50,13 @@ namespace cppcanvas
             if( _nPoints<0 || sal_uInt32(_nPoints)>SAL_MAX_INT32/(2*sizeof(float)) )
                 _nPoints = SAL_MAX_INT32/(2*sizeof(float));
             nPoints = _nPoints;
-            pPoints = new float [nPoints*2];
+            pPoints.reset( new float [nPoints*2] );
             if (!bLines)
-                pPointTypes = new sal_uInt8 [_nPoints];
-            else
-                pPointTypes = nullptr;
+                pPointTypes.reset( new sal_uInt8 [_nPoints] );
         }
 
         EMFPPath::~EMFPPath ()
         {
-            delete [] pPoints;
-            delete [] pPointTypes;
         }
 
         // TODO: remove rR argument when debug code is no longer needed

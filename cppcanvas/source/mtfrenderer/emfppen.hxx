@@ -21,6 +21,7 @@
 #define INCLUDED_CPPCANVAS_SOURCE_MTFRENDERER_EMFPPEN_HXX
 
 #include <emfpbrush.hxx>
+#include <vector>
 
 namespace cppcanvas
 {
@@ -47,11 +48,9 @@ namespace cppcanvas
             sal_Int32 dashStyle;
             sal_Int32 dashCap;
             float dashOffset;
-            sal_Int32 dashPatternLen;
-            float *dashPattern;
+            std::vector<float> dashPattern;
             sal_Int32 alignment;
-            sal_Int32 compoundArrayLen;
-            float *compoundArray;
+            std::vector<float> compoundArray;
             sal_Int32 customStartCapLen;
             EMFPCustomLineCap *customStartCap;
             sal_Int32 customEndCapLen;

@@ -65,26 +65,19 @@ struct SbiForStack {                // for/next stack:
     // For each support
     ForType             eForType;
     sal_Int32           nCurCollectionIndex;
-    sal_Int32*          pArrayCurIndices;
-    sal_Int32*          pArrayLowerBounds;
-    sal_Int32*          pArrayUpperBounds;
+    std::unique_ptr<sal_Int32[]>
+                        pArrayCurIndices;
+    std::unique_ptr<sal_Int32[]>
+                        pArrayLowerBounds;
+    std::unique_ptr<sal_Int32[]>
+                        pArrayUpperBounds;
     css::uno::Reference< css::container::XEnumeration > xEnumeration;
 
     SbiForStack()
         : pNext(nullptr)
         , eForType(ForType::To)
         , nCurCollectionIndex(0)
-        , pArrayCurIndices(nullptr)
-        , pArrayLowerBounds(nullptr)
-        , pArrayUpperBounds(nullptr)
     {}
-
-    ~SbiForStack()
-    {
-        delete[] pArrayCurIndices;
-        delete[] pArrayLowerBounds;
-        delete[] pArrayUpperBounds;
-    }
 };
 
 #define MAXRECURSION 500

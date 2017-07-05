@@ -40,6 +40,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/FValue.hxx>
 #include "TSkipDeletedSet.hxx"
+#include <memory>
 
 namespace connectivity
 {
@@ -130,14 +131,14 @@ namespace connectivity
             // Else, we read and cache all columns whose number is <= a requested column.
             // m_aRow[colNumber].getBound() says if it contains an up-to-date value or not.
             TDataRow                                    m_aRow;
-            bool                                    m_bFetchDataInOrder;
+            bool                                        m_bFetchDataInOrder;
             SQLHANDLE                                   m_aStatementHandle;
             SQLHANDLE                                   m_aConnectionHandle;
             OStatement_Base*                            m_pStatement;
-            OSkipDeletedSet*                            m_pSkipDeletedSet;
+            std::unique_ptr<OSkipDeletedSet>            m_pSkipDeletedSet;
             css::uno::Reference< css::uno::XInterface>    m_xStatement;
             css::uno::Reference< css::sdbc::XResultSetMetaData>        m_xMetaData;
-            SQLUSMALLINT*                               m_pRowStatusArray;
+            std::unique_ptr<SQLUSMALLINT[]>             m_pRowStatusArray;
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
             mutable sal_uInt32                          m_nUseBookmarks;
