@@ -266,4 +266,60 @@ void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
         lok_doc_view_set_edit(pDocView, bActive);
 }
 
+static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
+{
+    GApplication* app = g_application_get_default();
+    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
+    LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
+
+    const char *sName = gtk_tool_button_get_icon_name( GTK_TOOL_BUTTON(pButton) );
+
+    float fZoom = 0;
+    float fCurrentZoom = 0;
+
+    if ( pDocView )
+    {
+        fCurrentZoom = lok_doc_view_get_zoom( LOK_DOC_VIEW(pDocView) );
+    }
+
+    if ( strcmp(sName, "zoom-in-symbolic") == 0)
+    {
+        for ( unsigned int i = 0; i < SAL_N_ELEMENTS( fZooms ); i++ )
+        {
+            if ( fCurrentZoom < fZooms[i] )
+            {
+                fZoom = fZooms[i];
+                break;
+            }
+        }
+    }
+    else if ( strcmp(sName, "zoom-original-symbolic") == 0)
+    {
+        fZoom = 1;
+    }
+    else if ( strcmp(sName, "zoom-out-symbolic") == 0)
+    {
+        for ( unsigned int i = 0; i < SAL_N_ELEMENTS( fZooms ); i++ )
+        {
+            if ( fCurrentZoom > fZooms[i] )
+            {
+                fZoom = fZooms[i];
+            }
+        }
+    }
+
+    if ( fZoom != 0 )
+    {
+        if ( pDocView )
+        {
+            lok_doc_view_set_zoom( LOK_DOC_VIEW(pDocView), fZoom );
+            GdkRectangle aVisibleArea;
+            getVisibleAreaTwips(pDocView, &aVisibleArea);
+            lok_doc_view_set_visible_area(LOK_DOC_VIEW(pDocView), &aVisibleArea);
+        }
+    }
+    std::string aZoom = std::string("Zoom: ") + std::to_string(int(fZoom * 100)) + std::string("%");
+    gtk_label_set_text(GTK_LABEL(rWindow.m_pZoomLabel), aZoom.c_str());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,6 +22,8 @@
 struct _GtvApplicationWindow
 {
     GtkApplicationWindow parent_instance;
+
+    GtkWidget* zoomlabel;
 };
 
 struct GtvApplicationWindowPrivate
