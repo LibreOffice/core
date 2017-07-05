@@ -540,7 +540,7 @@ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
     if ( bValidEncoded )
     {
         rtl_string2UString( pstrDecodedURL, pBuffer, rtl_str_getLength(pBuffer), RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS );
-        OSL_ASSERT(*pstrDecodedURL != nullptr);
+        assert(*pstrDecodedURL);
     }
 
     rtl_freeMemory( pBuffer );
@@ -845,7 +845,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
 
         /* Provide URL via unicode string */
         rtl_string2UString( pstrURL, rtl_string_getStr(strEncodedURL), rtl_string_getLength(strEncodedURL), RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
-        OSL_ASSERT(*pstrURL != nullptr);
+        assert(*pstrURL);
         rtl_string_release( strEncodedURL );
     }
 

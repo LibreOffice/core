@@ -111,7 +111,7 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
     }
 
     // this process must have the right: 'act as a part of operatingsystem'
-    OSL_ASSERT(LookupPrivilegeValue(nullptr, SE_TCB_NAME, &luid));
+    SAL_WARN_IF(!LookupPrivilegeValue(nullptr, SE_TCB_NAME, &luid), "sal.osl", "Not enough process rights");
     (void) luid;
 
     if (LogonUserW(SAL_W(strUser), strDomain ? SAL_W(strDomain) : L"", SAL_W(rtl_uString_getStr(strPasswd)),
@@ -476,12 +476,8 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
         }
         else
         {
-            if (pSecImpl->m_hToken)
-            {
-                /* not implemented */
-                OSL_ASSERT(false);
-            }
-            else
+            assert(!pSecImpl->m_hToken);
+            if (!pSecImpl->m_hToken)
             {
                 rtl_uString *ustrFile = nullptr;
                 sal_Unicode sFile[_MAX_PATH];
@@ -650,7 +646,7 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
             if (pSHGetSpecialFolderPathA(GetActiveWindow(), PathA, nFolder, TRUE))
             {
                 rtl_string2UString( strPath, PathA, (sal_Int32) strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
-                OSL_ASSERT(*strPath != nullptr);
+                assert(*strPath);
                 bRet = true;
             }
         }
@@ -720,14 +716,14 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                 if (SUCCEEDED(hr))
                 {
                     if (pSHGetPathFromIDListW && pSHGetPathFromIDListW(pidl, SAL_W(PathW)))
-                       {
+                    {
                         /* if directory does not exist, create it */
                         if (_waccess(SAL_W(PathW), 0) < 0)
                             CreateDirectoryW(SAL_W(PathW), nullptr);
 
                         rtl_uString_newFromStr( strPath, PathW);
                         bRet = true;
-                       }
+                    }
                     else if (pSHGetPathFromIDListA && pSHGetPathFromIDListA(pidl, PathA))
                     {
                         /* if directory does not exist, create it */
@@ -735,14 +731,14 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                             CreateDirectoryA(PathA, nullptr);
 
                         rtl_string2UString( strPath, PathA, (sal_Int32) strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
-                        OSL_ASSERT(*strPath != nullptr);
+                        assert(*strPath);
                         bRet = true;
                     }
-                   }
+                }
 
-                   if (SUCCEEDED(pSHGetMalloc(&pMalloc)))
+                if (SUCCEEDED(pSHGetMalloc(&pMalloc)))
                 {
-                       pMalloc->Free(pidl);
+                    pMalloc->Free(pidl);
                     pMalloc->Release();
                 }
             }
