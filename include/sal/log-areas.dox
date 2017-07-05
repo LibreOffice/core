@@ -24,6 +24,7 @@ certain functionality.
 @li @c sal.debug - SAL debugging functionality
 @li @c sal.file
 @li @c sal.osl - SAL OSL library
+@li @c sal.osl.thread
 @li @c sal.osl.condition
 @li @c sal.osl.mutex
 @li @c sal.osl.pipe
