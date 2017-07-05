@@ -156,7 +156,7 @@ void BigPtrArray::UpdIndex( sal_uInt16 pos )
 */
 BlockInfo* BigPtrArray::InsBlock( sal_uInt16 pos )
 {
-    BlockInfo* p = new BlockInfo(this);
+    BlockInfo* p = new BlockInfo;
     m_vpInf.insert( m_vpInf.begin() + pos, p );
 
     if( pos )
@@ -166,6 +166,7 @@ BlockInfo* BigPtrArray::InsBlock( sal_uInt16 pos )
 
     p->nEnd--;  // no elements
     p->nElem = 0;
+    p->pBigArr = this;
     return p;
 }
 

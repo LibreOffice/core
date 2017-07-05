@@ -54,14 +54,11 @@ public:
 
 struct BlockInfo final
 {
-    BigPtrArray* const
-                 pBigArr;              ///< in this array the block is located
+    BigPtrArray* pBigArr;              ///< in this array the block is located
     std::array<BigPtrEntry*, MAXENTRY>
                  mvData;               ///< data block
     sal_uLong    nStart, nEnd;         ///< start- and end index
     sal_uInt16   nElem;                ///< number of elements
-
-    BlockInfo(BigPtrArray* b) : pBigArr(b) {}
 };
 
 class SW_DLLPUBLIC BigPtrArray
