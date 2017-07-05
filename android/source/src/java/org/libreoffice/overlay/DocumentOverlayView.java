@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.libreoffice.LibreOfficeMainActivity;
+import org.libreoffice.canvas.CalcSelectionBox;
 import org.libreoffice.canvas.Cursor;
 import org.libreoffice.canvas.GraphicSelection;
 import org.libreoffice.canvas.PageNumberRect;
@@ -68,6 +69,9 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     private boolean mPageNumberAvailable = false;
     private int previousIndex = 0; // previous page number, used to compare with the current
     private CalcHeadersController mCalcHeadersController;
+
+    private CalcSelectionBox mCalcSelectionBox;
+    private boolean mCalcSelectionBoxDragging;
 
     public DocumentOverlayView(Context context) {
         super(context);
@@ -168,6 +172,11 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
             mScaledSelections.add(scaledSelection);
         }
 
+        if (mCalcSelectionBox != null) {
+            rect = convertToScreen(mCalcSelectionBox.mDocumentPosition, x, y, zoom);
+            mCalcSelectionBox.reposition(rect);
+        }
+
         RectF scaledGraphicSelection = convertToScreen(mGraphicSelection.mRectangle, x, y, zoom);
         mGraphicSelection.reposition(scaledGraphicSelection);
         invalidate();
@@ -214,6 +223,10 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
             for (RectF selection : mScaledSelections) {
                 canvas.drawRect(selection, mSelectionPaint);
             }
+        }
+
+        if (mCalcSelectionBox != null) {
+            mCalcSelectionBox.draw(canvas);
         }
 
         mGraphicSelection.draw(canvas);
@@ -368,6 +381,12 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
                         mHandleMiddle.dragStart(point);
                         mDragHandle = mHandleMiddle;
                         return true;
+                    } else if (mCalcSelectionBox != null &&
+                            mCalcSelectionBox.contains(point.x, point.y) &&
+                            !mHandleStart.isVisible()) {
+                        mCalcSelectionBox.dragStart(point);
+                        mCalcSelectionBoxDragging = true;
+                        return true;
                     }
                 }
             }
@@ -380,6 +399,9 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
                 } else if (mDragHandle != null) {
                     mDragHandle.dragEnd(point);
                     mDragHandle = null;
+                } else if (mCalcSelectionBoxDragging) {
+                    mCalcSelectionBox.dragEnd(point);
+                    mCalcSelectionBoxDragging = false;
                 }
             }
             case MotionEvent.ACTION_MOVE: {
@@ -389,6 +411,8 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
                     return true;
                 } else if (mDragHandle != null) {
                     mDragHandle.dragging(point);
+                } else if (mCalcSelectionBoxDragging) {
+                    mCalcSelectionBox.dragging(point);
                 }
             }
         }
@@ -457,6 +481,29 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
 
     public void setCalcHeadersController(CalcHeadersController calcHeadersController) {
         mCalcHeadersController = calcHeadersController;
+        mCalcSelectionBox = new CalcSelectionBox((LibreOfficeMainActivity) getContext());
+    }
+
+    public void showCellSelection(RectF cellCursorRect) {
+        if (mCalcHeadersController == null || mCalcSelectionBox == null) return;
+        if (RectUtils.fuzzyEquals(mCalcSelectionBox.mDocumentPosition, cellCursorRect)) {
+            return;
+        }
+
+        // show selection on main GL view (i.e. in the document)
+        RectUtils.assign(mCalcSelectionBox.mDocumentPosition, cellCursorRect);
+        mCalcSelectionBox.setVisible(true);
+
+        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
+        repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
+
+        // show selection on headers
+        showHeaderSelection(cellCursorRect);
+    }
+
+    public void showHeaderSelection(RectF rect) {
+        if (mCalcHeadersController == null) return;
+        mCalcHeadersController.showHeaderSelection(rect);
     }
 }
 

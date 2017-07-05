@@ -242,6 +242,22 @@ public class DocumentOverlay {
         mDocumentOverlayView.setCalcHeadersController(calcHeadersController);
     }
 
+    public void showCellSelection(final RectF cellCursorRect) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mDocumentOverlayView.showCellSelection(cellCursorRect);
+            }
+        });
+    }
+
+    public void showHeaderSelection(final RectF cellCursorRect) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mDocumentOverlayView.showHeaderSelection(cellCursorRect);
+            }
+        });
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
