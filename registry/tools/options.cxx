@@ -20,6 +20,7 @@
 #include "options.hxx"
 
 #include "osl/diagnose.h"
+#include "sal/log.hxx"
 
 #include <stdio.h>
 #include <string.h>
@@ -40,7 +41,9 @@ Options::~Options()
 bool Options::checkArgument(std::vector< std::string> & rArgs, char const * arg, size_t len)
 {
     bool result = ((arg != nullptr) && (len > 0));
-    OSL_PRECOND(result, "registry::tools::Options::checkArgument(): invalid arguments");
+
+    SAL_WARN_IF(!result, "registry", "registry::tools::Options::checkArgument(): invalid arguments");
+
     if (result)
     {
         switch (arg[0])

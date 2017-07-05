@@ -332,7 +332,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
             memcpy(pBuffer+VALUE_HEADEROFFSET, value, size);
             break;
         default:
-            OSL_ASSERT(false);
+            assert(false);
             break;
     }
 
@@ -1032,7 +1032,7 @@ OStoreDirectory ORegKey::getStoreDir()
 }
 
 OUString ORegKey::getFullPath(OUString const & path) const {
-    OSL_ASSERT(!m_name.isEmpty() && !path.isEmpty());
+    SAL_WARN_IF(m_name.isEmpty() || path.isEmpty(), "store", "invalid path");
     OUStringBuffer b(m_name);
     if (!b.isEmpty() && b[b.getLength() - 1] == '/') {
         if (path[0] == '/') {
