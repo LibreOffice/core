@@ -93,10 +93,8 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
 /*****************************************************************************/
 /* osl_loadModuleAscii */
 /*****************************************************************************/
-oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode )
+oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 )
 {
-    (void) nRtldMode; /* avoid warnings */
-
     HMODULE h;
     UINT errorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
     oslModule ret = nullptr;
