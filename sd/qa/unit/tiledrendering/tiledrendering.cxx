@@ -1196,8 +1196,9 @@ void SdTiledRenderingTest::testUndoLimiting()
         SfxRequest aReq2(SID_UNDO, SfxCallMode::SLOT, pXImpressDocument->GetDocShell()->GetDoc()->GetPool());
         aReq2.AppendItem(SfxUInt16Item(SID_UNDO, 1));
         pViewShell2->ExecuteSlot(aReq2);
-        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(aReq2.GetReturnValue()));
-        CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(aReq2.GetReturnValue())->GetValue());
+        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aReq2.GetReturnValue());
+        CPPUNIT_ASSERT(pUInt32Item);
+        CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
     }
 
     // Now check view1 can undo action
@@ -1800,8 +1801,9 @@ void SdTiledRenderingTest::testDisableUndoRepair()
         pView1->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem1);
         pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem2);
         CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item* >(pItem1.get()));
-        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(pItem2.get()));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(pItem2.get())->GetValue());
+        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(pItem2.get());
+        CPPUNIT_ASSERT(pUInt32Item);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
     }
 
     // Insert a character in the second view.
@@ -1818,8 +1820,9 @@ void SdTiledRenderingTest::testDisableUndoRepair()
         pView1->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem1);
         pView2->GetViewFrame()->GetBindings().QueryState(SID_UNDO, pItem2);
         CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item* >(pItem2.get()));
-        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(pItem1.get()));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(pItem1.get())->GetValue());
+        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(pItem1.get());
+        CPPUNIT_ASSERT(pUInt32Item);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
     }
 }
 
