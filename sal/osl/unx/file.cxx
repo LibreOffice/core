@@ -217,13 +217,13 @@ void FileHandle_Impl::Allocator::deallocate(sal_uInt8 * pBuffer)
 FileHandle_Impl::Guard::Guard(pthread_mutex_t * pMutex)
     : m_mutex(pMutex)
 {
-    assert(m_mutex != nullptr);
-    (void) pthread_mutex_lock(m_mutex); // ignoring EINVAL ...
+    assert(m_mutex);
+    (void) pthread_mutex_lock(m_mutex); // ignoring EINVAL if a null mutex is passed ...
 }
 
 FileHandle_Impl::Guard::~Guard()
 {
-    assert(m_mutex != nullptr);
+    assert(m_mutex);
     (void) pthread_mutex_unlock(m_mutex);
 }
 
@@ -725,7 +725,7 @@ oslFileError FileHandle_Impl::writeSequence_Impl(
         *pnOffset += nBytes;
     }
 
-    return (*ppSequence != nullptr) ? osl_File_E_None : osl_File_E_NOMEM;
+    return (*ppSequence) ? osl_File_E_None : osl_File_E_NOMEM;
 }
 
 oslFileError FileHandle_Impl::syncFile()
