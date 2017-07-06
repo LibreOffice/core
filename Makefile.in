@@ -9,7 +9,7 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck screenshot
 
-.PHONY : all check-if-root bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install distro-pack-install-strip docs download etags fetch findunusedcode get-submodules id install install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : all check-if-root bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install distro-pack-install-strip docs download etags fetch get-submodules id install install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 MAKECMDGOALS?=all
 build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
@@ -394,9 +394,6 @@ etags:
 
 docs:
 	@$(SRCDIR)/solenv/bin/mkdocs.sh $(SRCDIR)/docs $(SRCDIR)/solenv/inc/doxygen.cfg
-
-findunusedcode:
-	@$(SRCDIR)/bin/findunusedcode $(SRCDIR) $(MAKE)
 
 findunusedheaders:
 	$(SRCDIR)/bin/find-unusedheaders.py
