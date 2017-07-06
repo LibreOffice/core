@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_e5e2079f",
+        "filename": "connectivity/source/commontools/dbtools2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-06T19:58:46Z",
+      "side": 1,
+      "message": "please don\u0027t revert my begin()/end() changes",
+      "revId": "ec9364c42df35998627064be5f03e4939c0ce499",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
