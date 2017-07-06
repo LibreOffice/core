@@ -79,34 +79,32 @@ const char* toOOXMLAxisType( sheet::DataPilotFieldOrientation eOrient )
     return "";
 }
 
-const char* toOOXMLSubtotalType( sheet::GeneralFunction eFunc )
+const char* toOOXMLSubtotalType(ScGeneralFunction eFunc)
 {
     switch (eFunc)
     {
-        case sheet::GeneralFunction_SUM:
+        case ScGeneralFunction::SUM:
             return "sum";
-        case sheet::GeneralFunction_COUNT:
+        case ScGeneralFunction::COUNT:
             return "count";
-        case sheet::GeneralFunction_AVERAGE:
+        case ScGeneralFunction::AVERAGE:
             return "average";
-        case sheet::GeneralFunction_MAX:
+        case ScGeneralFunction::MAX:
             return "max";
-        case sheet::GeneralFunction_MIN:
+        case ScGeneralFunction::MIN:
             return "min";
-        case sheet::GeneralFunction_PRODUCT:
+        case ScGeneralFunction::PRODUCT:
             return "product";
-        case sheet::GeneralFunction_COUNTNUMS:
+        case ScGeneralFunction::COUNTNUMS:
             return "countNums";
-        case sheet::GeneralFunction_STDEV:
+        case ScGeneralFunction::STDEV:
             return "stdDev";
-        case sheet::GeneralFunction_STDEVP:
+        case ScGeneralFunction::STDEVP:
             return "stdDevp";
-        case sheet::GeneralFunction_VAR:
+        case ScGeneralFunction::VAR:
             return "var";
-        case sheet::GeneralFunction_VARP:
+        case ScGeneralFunction::VARP:
             return "varp";
-        case sheet::GeneralFunction_NONE:
-        case sheet::GeneralFunction_AUTO:
         default:
             ;
     }
@@ -800,7 +798,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
             rStrm.WriteAttributes(XML_fld, OString::number(nDimIdx).getStr(), FSEND);
 
-            sheet::GeneralFunction eFunc = static_cast<sheet::GeneralFunction>(rDim.GetFunction());
+            ScGeneralFunction eFunc = rDim.GetFunction();
             const char* pSubtotal = toOOXMLSubtotalType(eFunc);
             if (pSubtotal)
                 rStrm.WriteAttributes(XML_subtotal, pSubtotal, FSEND);
