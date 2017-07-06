@@ -368,9 +368,9 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
         }
         while( false );
     }
-    catch( const uno::Exception& )
+    catch( const uno::Exception& e )
     {
-        OSL_FAIL("exception during xml export");
+        SAL_WARN("editeng", "exception during xml export: " << e.Message);
     }
 }
 
