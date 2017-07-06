@@ -631,6 +631,16 @@ DECLARE_OOXMLEXPORT_TEST(test77219, "test77219.docx")
     assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "behindDoc", "1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of the paragraph", false, bool(getProperty<bool>(getShape(1), "Opaque")));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf77219_foregroundShape, "tdf77219_foregroundShape.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of the paragraph", true, bool(getProperty<bool>(getShape(1), "Opaque")));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
 {
     // Document contains a flowChartMultidocument preset shape, our date for that shape wasn't correct.
