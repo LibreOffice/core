@@ -1194,7 +1194,7 @@ private:
     WW8PostProcessAttrsInfo * m_pPostProcessAttrsInfo;
 
     WW8Fib* m_pWwFib;
-    WW8Fonts* m_pFonts;
+    std::unique_ptr<WW8Fonts> m_xFonts;
     WW8Dop* m_pWDop;
     WW8ListManager* m_pLstManager;
     WW8ScannerBase* m_pSBase;

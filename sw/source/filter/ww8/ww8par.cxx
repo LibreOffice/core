@@ -4142,7 +4142,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pPrevNumRule(nullptr)
     , m_pPostProcessAttrsInfo(nullptr)
     , m_pWwFib(nullptr)
-    , m_pFonts(nullptr)
     , m_pWDop(nullptr)
     , m_pLstManager(nullptr)
     , m_pSBase(nullptr)
@@ -4947,7 +4946,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     ::StartProgress(STR_STATSTR_W4WREAD, 0, 100, m_pDocShell);
 
     // read Font Table
-    m_pFonts = new WW8Fonts( *m_pTableStream, *m_pWwFib );
+    m_xFonts.reset(new WW8Fonts(*m_pTableStream, *m_pWwFib));
 
     // Document Properties
     m_pWDop = new WW8Dop( *m_pTableStream, m_pWwFib->m_nFib, m_pWwFib->m_fcDop,
@@ -5248,7 +5247,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     m_xHdFt.reset();
     DELETEZ( m_pSBase );
     delete m_pWDop;
-    DELETEZ( m_pFonts );
+    m_xFonts.reset();
     delete m_pAtnNames;
     m_xSprmParser.reset();
     ::EndProgress(m_pDocShell);

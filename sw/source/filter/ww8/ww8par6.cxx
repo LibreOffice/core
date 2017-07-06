@@ -3531,7 +3531,7 @@ bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
         FAMILY_SCRIPT, FAMILY_DECORATIVE, FAMILY_DONTKNOW, FAMILY_DONTKNOW
     };
 
-    const WW8_FFN* pF = m_pFonts->GetFont( nFCode );  // Info for it
+    const WW8_FFN* pF = m_xFonts->GetFont( nFCode );  // Info for it
     if( !pF )                                   // font number unknown ?
         return false;                           // then ignore
 

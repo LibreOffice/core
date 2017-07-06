@@ -2273,7 +2273,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
     {
         //set Wingdings font
         sal_uInt16 i = 0;
-        for ( ; i < m_pFonts->GetMax(); i++ )
+        for ( ; i < m_xFonts->GetMax(); i++ )
         {
             FontFamily eFamily;
             OUString aFontName;
@@ -2286,7 +2286,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
             }
         }
 
-        if ( i < m_pFonts->GetMax() )
+        if ( i < m_xFonts->GetMax() )
         {
 
             SetNewFontAttr( i, true, RES_CHRATR_FONT );

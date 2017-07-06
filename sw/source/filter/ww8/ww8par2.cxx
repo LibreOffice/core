@@ -730,7 +730,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, WW8_ANLV const &rAV,
     bool bInsert = false;                       // Default
     rtl_TextEncoding eCharSet = m_eStructCharSet;
 
-    const WW8_FFN* pF = m_pFonts->GetFont(SVBT16ToShort(rAV.ftc)); // FontInfo
+    const WW8_FFN* pF = m_xFonts->GetFont(SVBT16ToShort(rAV.ftc)); // FontInfo
     bool bListSymbol = pF && ( pF->chs == 2 );      // Symbol/WingDings/...
 
     OUString sText;
