@@ -37,10 +37,12 @@
 #include <xmloff/xmlstyle.hxx>
 #include "editsource.hxx"
 #include "editxml.hxx"
+#include <editdoc.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/unotext.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/unoipset.hxx>
+#include <cassert>
 
 using namespace com::sun::star;
 using namespace com::sun::star::document;
@@ -148,9 +150,17 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
     };
     static SvxItemPropertySet aSvxXMLTextImportComponentPropertySet( SvxXMLTextImportComponentPropertyMap, EditEngine::GetGlobalItemPool() );
 
+     assert(!rSel.HasRange());
+    //get the initial para count before paste
+    sal_uInt32 initialParaCount = rEditEngine.GetEditDoc().Count();
+    //insert para breaks before inserting the copied text
+    rEditEngine.InsertParaBreak( rEditEngine.CreateSelection( rSel ).Max() );
+    rEditEngine.InsertParaBreak( rEditEngine.CreateSelection( rSel ).Max() );
+
+    ESelection aSel(rSel.nStartPara+1, 0, rSel.nEndPara+1, 0);
     uno::Reference<text::XText > xParent;
     SvxUnoText* pUnoText = new SvxUnoText( &aEditSource, &aSvxXMLTextImportComponentPropertySet, xParent );
-    pUnoText->SetSelection( rSel );
+    pUnoText->SetSelection( aSel );
     uno::Reference<text::XText > xText( pUnoText );
 
     try
@@ -206,6 +216,17 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
             xParser->parseStream( aParserInput );
         }
         while(false);
+
+        //remove the extra para breaks
+        EditDoc& pDoc = rEditEngine.GetEditDoc();
+        rEditEngine.ParaAttribsToCharAttribs( pDoc.GetObject( rSel.nEndPara ) );
+        rEditEngine.ConnectParagraphs( pDoc.GetObject( rSel.nEndPara ),
+            pDoc.GetObject( rSel.nEndPara + 1 ), true );
+        rEditEngine.ParaAttribsToCharAttribs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara - 2 ) );
+        rEditEngine.ConnectParagraphs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara - 2 ),
+            pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara -1 ), true );
+        rEditEngine.ConnectParagraphs( pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara - 2 ),
+            pDoc.GetObject( pDoc.Count() - initialParaCount + aSel.nEndPara -1 ), true );
     }
     catch( const uno::Exception& )
     {
