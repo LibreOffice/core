@@ -4124,7 +4124,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pDataStream(nullptr)
     , m_rDoc(rD)
     , m_pPaM(nullptr)
-    , m_pReffingStck(nullptr)
     , m_aSectionManager(*this)
     , m_aExtraneousParas(rD)
     , m_aInsertedTables(rD)
@@ -4910,7 +4909,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
         variables instead.
     */
     m_xReffedStck.reset(new SwWW8ReferencedFltEndStack(&m_rDoc, m_nFieldFlags));
-    m_pReffingStck = new SwWW8FltRefStack(&m_rDoc, m_nFieldFlags);
+    m_xReffingStck.reset(new SwWW8FltRefStack(&m_rDoc, m_nFieldFlags));
 
     m_xAnchorStck.reset(new SwWW8FltAnchorStack(&m_rDoc, m_nFieldFlags));
 
