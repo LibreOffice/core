@@ -2220,7 +2220,7 @@ bool SwWW8ImplReader::isValid_HdFt_CP(WW8_CP nHeaderCP) const
 bool SwWW8ImplReader::HasOwnHeaderFooter(sal_uInt8 nWhichItems, sal_uInt8 grpfIhdt,
     int nSect)
 {
-    if (m_pHdFt)
+    if (m_xHdFt)
     {
         WW8_CP nStart, nLen;
         sal_uInt8 nNumber = 5;
@@ -2231,10 +2231,10 @@ bool SwWW8ImplReader::HasOwnHeaderFooter(sal_uInt8 nWhichItems, sal_uInt8 grpfIh
             {
                 bool bOk = true;
                 if( m_bVer67 )
-                    bOk = ( m_pHdFt->GetTextPos(grpfIhdt, nI, nStart, nLen ) && nStart >= 0 && nLen >= 2 );
+                    bOk = ( m_xHdFt->GetTextPos(grpfIhdt, nI, nStart, nLen ) && nStart >= 0 && nLen >= 2 );
                 else
                 {
-                    m_pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), nStart, nLen);
+                    m_xHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), nStart, nLen);
                     bOk = ( 2 <= nLen ) && isValid_HdFt_CP(nStart);
                 }
 
@@ -2252,7 +2252,7 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
     sal_uInt8 grpfIhdt = rSection.maSep.grpfIhdt;
     SwPageDesc *pPD = rSection.mpPage;
 
-    if( m_pHdFt )
+    if( m_xHdFt )
     {
         WW8_CP nStart, nLen;
         sal_uInt8 nNumber = 5;
@@ -2266,10 +2266,10 @@ void SwWW8ImplReader::Read_HdFt(int nSect, const SwPageDesc *pPrev,
             {
                 bool bOk = true;
                 if( m_bVer67 )
-                    bOk = ( m_pHdFt->GetTextPos(grpfIhdt, nI, nStart, nLen ) && nLen >= 2 );
+                    bOk = ( m_xHdFt->GetTextPos(grpfIhdt, nI, nStart, nLen ) && nLen >= 2 );
                 else
                 {
-                    m_pHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), nStart, nLen);
+                    m_xHdFt->GetTextPosExact( static_cast< short >(nNumber + (nSect+1)*6), nStart, nLen);
                     bOk = ( 2 <= nLen ) && isValid_HdFt_CP(nStart);
                 }
 
@@ -2366,8 +2366,8 @@ void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
 
     // Header/Footer - Update Index
     // So that the index is still valid later on
-    if (mrReader.m_pHdFt)
-        mrReader.m_pHdFt->UpdateIndex(rSection.maSep.grpfIhdt);
+    if (mrReader.m_xHdFt)
+        mrReader.m_xHdFt->UpdateIndex(rSection.maSep.grpfIhdt);
 
 }
 
@@ -4148,12 +4148,10 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pSBase(nullptr)
     , m_aTextNodesHavingFirstLineOfstSet()
     , m_aTextNodesHavingLeftIndentSet()
-    , m_pStyles(nullptr)
     , m_pAktColl(nullptr)
     , m_pAktItemSet(nullptr)
     , m_pDfltTextFormatColl(nullptr)
     , m_pStandardFormatColl(nullptr)
-    , m_pHdFt(nullptr)
     , m_pTableDesc(nullptr)
     , m_pDrawModel(nullptr)
     , m_pDrawPg(nullptr)
@@ -4999,8 +4997,8 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
             BEFORE the import of the lists !!
     */
     ::SetProgressState(m_nProgress, m_pDocShell);    // Update
-    m_pStyles = new WW8RStyle( *m_pWwFib, this );     // Styles
-    m_pStyles->Import();
+    m_xStyles.reset(new WW8RStyle(*m_pWwFib, this)); // Styles
+    m_xStyles->Import();
 
     /*
         In the end: (also see WW8PAR3.CXX)
@@ -5009,7 +5007,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
         AFTER we imported the Styles and AFTER we imported the Lists!
     */
     ::SetProgressState(m_nProgress, m_pDocShell); // Update
-    m_pStyles->PostProcessStyles();
+    m_xStyles->PostProcessStyles();
 
     if (!m_vColl.empty())
         SetOutlineStyles();
@@ -5056,7 +5054,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     }
 
     if( m_pWwFib->m_lcbPlcfhdd )
-        m_pHdFt = new WW8PLCF_HdFt( m_pTableStream, *m_pWwFib, *m_pWDop );
+        m_xHdFt.reset(new WW8PLCF_HdFt(m_pTableStream, *m_pWwFib, *m_pWDop));
 
     if (!m_bNewDoc)
     {
@@ -5241,13 +5239,13 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     m_vColl.clear();
 
-    DELETEZ( m_pStyles );
+    m_xStyles.reset();
 
     if( m_pFormImpl )
         DeleteFormImpl();
     GrafikDtor();
     DELETEZ( m_pMSDffManager );
-    DELETEZ( m_pHdFt );
+    m_xHdFt.reset();
     DELETEZ( m_pSBase );
     delete m_pWDop;
     DELETEZ( m_pFonts );
