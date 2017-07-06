@@ -53,6 +53,29 @@
     },
     {
       "key": {
+        "uuid": "3a461143_e548475e",
+        "filename": "sfx2/qa/complex/sfx2/DocumentProperties.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-07-06T12:51:57Z",
+      "side": 1,
+      "message": "The test strings in this file shouldn\u0027t be translated/modified, because doing that may cause related Java tests (which are currently disabled on all Jenkins builds) to fail. Please refer to the comments to https://gerrit.libreoffice.org/39609 for information. (I had tried to translate it there, too.)",
+      "range": {
+        "startLine": 220,
+        "startChar": 35,
+        "endLine": 220,
+        "endChar": 42
+      },
+      "revId": "5358c15956b6dd5794461da19887768922e78fca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_c74b56af",
         "filename": "sw/source/core/table/swnewtable.cxx",
         "patchSetId": 1
