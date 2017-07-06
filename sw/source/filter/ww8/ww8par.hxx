@@ -580,7 +580,7 @@ private:
     SwPosition maTmpPos;
     std::deque<bool> maOldApos;
     std::deque<WW8FieldEntry> maOldFieldStack;
-    SwWW8FltControlStack* mpOldStck;
+    std::unique_ptr<SwWW8FltControlStack> mxOldStck;
     std::unique_ptr<SwWW8FltAnchorStack> mxOldAnchorStck;
     std::unique_ptr<sw::util::RedlineStack> mxOldRedlines;
     std::shared_ptr<WW8PLCFMan> mxOldPlcxMan;
@@ -1081,7 +1081,7 @@ private:
     std::shared_ptr<SwUnoCursor> mpCursor;
     SwPaM* m_pPaM;
 
-    SwWW8FltControlStack* m_pCtrlStck;    // stack for the attributes
+    std::unique_ptr<SwWW8FltControlStack> m_xCtrlStck;    // stack for the attributes
 
     /*
     This stack is for redlines, because their sequence of discovery can
@@ -1376,7 +1376,10 @@ private:
                            SwPageDesc* pNewPageDesc, sal_uInt8 nCode );
 
     void DeleteStack(SwFltControlStack* prStck);
-    void DeleteCtrlStack()    { DeleteStack( m_pCtrlStck  ); m_pCtrlStck   = nullptr; }
+    void DeleteCtrlStack()
+    {
+        DeleteStack(m_xCtrlStck.release());
+    }
     void DeleteRefStacks()
     {
         DeleteStack(m_xReffedStck.release());
@@ -1632,7 +1635,7 @@ private:
     void ChkToggleAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask )
     {
         if( nOldStyle81Mask != nNewStyle81Mask &&
-            m_pCtrlStck->GetToggleAttrFlags() )
+            m_xCtrlStck->GetToggleAttrFlags() )
             ChkToggleAttr_( nOldStyle81Mask, nNewStyle81Mask );
     }
 
@@ -1641,7 +1644,7 @@ private:
     void ChkToggleBiDiAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask )
     {
         if( nOldStyle81Mask != nNewStyle81Mask &&
-            m_pCtrlStck->GetToggleBiDiAttrFlags() )
+            m_xCtrlStck->GetToggleBiDiAttrFlags() )
             ChkToggleBiDiAttr_( nOldStyle81Mask, nNewStyle81Mask );
     }
 

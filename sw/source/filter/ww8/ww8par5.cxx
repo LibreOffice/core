@@ -577,13 +577,13 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             case 37: //REF
                 if (m_bLoadingTOXCache && !m_bLoadingTOXHyperlink)
                 {
-                    m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(),RES_TXTATR_INETFMT);
+                    m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(),RES_TXTATR_INETFMT);
                 }
                 break;
             case 88:
                 if (m_bLoadingTOXHyperlink)
                     m_bLoadingTOXHyperlink = false;
-                m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_INETFMT);
+                m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_INETFMT);
                 break;
             case 36:
             case 68:
@@ -1898,9 +1898,9 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, OUString& rStr )
         m_rDoc.getIDocumentContentOperations().InsertString(*m_pPaM, OUString(cChar));
 
         if (nSize > 0)
-            m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_CHRATR_FONTSIZE);
+            m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_CHRATR_FONTSIZE);
         if (!aName.isEmpty())
-            m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_CHRATR_FONT);
+            m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_CHRATR_FONT);
     }
     else
     {
@@ -2155,7 +2155,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
                 SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, SwGetPoolIdFromName::ChrFmt );
             aURL.SetVisitedFormatAndId( sLinkStyle, nPoolId);
             aURL.SetINetFormatAndId( sLinkStyle, nPoolId );
-            m_pCtrlStck->NewAttr( *m_pPaM->GetPoint(), aURL );
+            m_xCtrlStck->NewAttr( *m_pPaM->GetPoint(), aURL );
         }
         return eF_ResT::TEXT;
     }
@@ -2291,7 +2291,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
 
             SetNewFontAttr( i, true, RES_CHRATR_FONT );
             m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_FONT );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_FONT );
             ResetCharSetVars();
         }
     }
@@ -2748,7 +2748,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
 
         NewAttr(aRuby);
         m_rDoc.getIDocumentContentOperations().InsertString( *m_pPaM, sText );
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_TXTATR_CJK_RUBY );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_TXTATR_CJK_RUBY );
     }
 }
 
@@ -3516,7 +3516,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
     //EndExtSprm in conjunction with the maFieldStack. If there are flyfrms
     //between the start and begin, their hyperlinks will be set at that time
     //as well.
-    m_pCtrlStck->NewAttr( *m_pPaM->GetPoint(), aURL );
+    m_xCtrlStck->NewAttr( *m_pPaM->GetPoint(), aURL );
     return eF_ResT::TEXT;
 }
 
