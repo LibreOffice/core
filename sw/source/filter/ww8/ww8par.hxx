@@ -1195,7 +1195,7 @@ private:
 
     WW8Fib* m_pWwFib;
     std::unique_ptr<WW8Fonts> m_xFonts;
-    WW8Dop* m_pWDop;
+    std::unique_ptr<WW8Dop> m_xWDop;
     WW8ListManager* m_pLstManager;
     WW8ScannerBase* m_pSBase;
     std::shared_ptr<WW8PLCFMan> m_xPlcxMan;

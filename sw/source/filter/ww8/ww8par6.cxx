@@ -385,7 +385,7 @@ void wwSectionManager::SetLeftRight(wwSection &rSection)
     */
     if (rSection.maSep.fRTLGutter)
         nWWRi += nWWGu;
-    else if (!mrReader.m_pWDop->iGutterPos)
+    else if (!mrReader.m_xWDop->iGutterPos)
         nWWLe += nWWGu;
 
     // Left / Right
@@ -526,7 +526,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection,
     even pages, something we cannot do. So we will put it on top of all
     pages, that way the pages are at least the right size.
     */
-    if (!mrReader.m_bVer67 && mrReader.m_pWDop->iGutterPos &&
+    if (!mrReader.m_bVer67 && mrReader.m_xWDop->iGutterPos &&
          rSection.maSep.fRTLGutter)
     {
         nWWUp += rSection.maSep.dzaGutter;
@@ -651,9 +651,9 @@ SwSectionFormat *wwSectionManager::InsertSection(
     aSet.Put(SvxFrameDirectionItem(
         bRTLPgn ? SvxFrameDirection::Horizontal_RL_TB : SvxFrameDirection::Horizontal_LR_TB, RES_FRAMEDIR));
 
-    if (2 == mrReader.m_pWDop->fpc)
+    if (2 == mrReader.m_xWDop->fpc)
         aSet.Put( SwFormatFootnoteAtTextEnd(FTNEND_ATTXTEND));
-    if (0 == mrReader.m_pWDop->epc)
+    if (0 == mrReader.m_xWDop->epc)
         aSet.Put( SwFormatEndAtTextEnd(FTNEND_ATTXTEND));
 
     aSection.SetProtectFlag(SectionIsProtected(rSection));
@@ -1025,7 +1025,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
     // #i31806# but only swap if 2page in 1sheet is enabled.
     // it's not clear if dmOrientPage is the correct member to
     // decide on this.
-    if(mrReader.m_pWDop->doptypography.f2on1 &&
+    if(mrReader.m_xWDop->doptypography.f2on1 &&
             aNewSection.maSep.dmOrientPage == 2)
         std::swap(aNewSection.maSep.dxaLeft, aNewSection.maSep.dxaRight);
 
@@ -1155,7 +1155,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
         // but aNewSection.HasTitlePage() will be false.
         // Likewise for first page footer.
 
-        if (mrReader.m_pWDop->fFacingPages)
+        if (mrReader.m_xWDop->fFacingPages)
             aNewSection.maSep.grpfIhdt |= WW8_HEADER_EVEN | WW8_FOOTER_EVEN;
 
         //See if we have a header or footer for each enabled possibility
@@ -4248,7 +4248,7 @@ void SwWW8ImplReader::Read_ParaAutoBefore(sal_uInt16, const sal_uInt8 *pData, sh
     if (*pData)
     {
         SvxULSpaceItem aUL(*static_cast<const SvxULSpaceItem*>(GetFormatAttr(RES_UL_SPACE)));
-        aUL.SetUpper(GetParagraphAutoSpace(m_pWDop->fDontUseHTMLAutoSpacing));
+        aUL.SetUpper(GetParagraphAutoSpace(m_xWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
         if (m_pAktColl && m_nAktColl < m_vColl.size())
             m_vColl[m_nAktColl].m_bParaAutoBefore = true;
@@ -4275,7 +4275,7 @@ void SwWW8ImplReader::Read_ParaAutoAfter(sal_uInt16, const sal_uInt8 *pData, sho
     if (*pData)
     {
         SvxULSpaceItem aUL(*static_cast<const SvxULSpaceItem*>(GetFormatAttr(RES_UL_SPACE)));
-        aUL.SetLower(GetParagraphAutoSpace(m_pWDop->fDontUseHTMLAutoSpacing));
+        aUL.SetLower(GetParagraphAutoSpace(m_xWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
         if (m_pAktColl && m_nAktColl < m_vColl.size())
             m_vColl[m_nAktColl].m_bParaAutoAfter = true;

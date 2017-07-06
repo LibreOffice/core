@@ -2999,7 +2999,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
             // spacing set to 0
             if (
                  m_pIo->m_bParaAutoBefore && m_pIo->m_bFirstPara &&
-                 !m_pIo->m_pWDop->fDontUseHTMLAutoSpacing
+                 !m_pIo->m_xWDop->fDontUseHTMLAutoSpacing
                )
             {
                 m_pIo->SetUpperSpacing(*m_pIo->m_pPaM, 0);
@@ -3007,7 +3007,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
             // The last paragraph in a cell with lower autospacing has lower
             // spacing set to 0
-            if (m_pIo->m_bParaAutoAfter && !m_pIo->m_pWDop->fDontUseHTMLAutoSpacing)
+            if (m_pIo->m_bParaAutoAfter && !m_pIo->m_xWDop->fDontUseHTMLAutoSpacing)
                 m_pIo->SetLowerSpacing(*m_pIo->m_pPaM, 0);
 
             ParkPaM();
@@ -3027,11 +3027,11 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
         m_pAktWWCell = &m_pActBand->pTCs[ nWwCol ];
 
        // The first paragraph in a cell with upper autospacing has upper spacing set to 0
-        if(m_pIo->m_bParaAutoBefore && m_pIo->m_bFirstPara && !m_pIo->m_pWDop->fDontUseHTMLAutoSpacing)
+        if(m_pIo->m_bParaAutoBefore && m_pIo->m_bFirstPara && !m_pIo->m_xWDop->fDontUseHTMLAutoSpacing)
             m_pIo->SetUpperSpacing(*m_pIo->m_pPaM, 0);
 
         // The last paragraph in a cell with lower autospacing has lower spacing set to 0
-        if(m_pIo->m_bParaAutoAfter && !m_pIo->m_pWDop->fDontUseHTMLAutoSpacing)
+        if(m_pIo->m_bParaAutoAfter && !m_pIo->m_xWDop->fDontUseHTMLAutoSpacing)
             m_pIo->SetLowerSpacing(*m_pIo->m_pPaM, 0);
 
         //We need to set the pPaM on the first cell, invalid
@@ -4620,7 +4620,7 @@ void WW8RStyle::Import()
     // set Hyphenation flag on BASIC para-style
     if (pIo->m_bNewDoc && pIo->m_pStandardFormatColl)
     {
-        if (pIo->m_pWDop->fAutoHyphen
+        if (pIo->m_xWDop->fAutoHyphen
             && SfxItemState::SET != pIo->m_pStandardFormatColl->GetItemState(
                                             RES_PARATR_HYPHENZONE, false) )
         {
