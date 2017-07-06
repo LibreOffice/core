@@ -1102,7 +1102,7 @@ private:
     text/textboxes/tables etc... They are things that reference other things
     e.g. NoteRef and Ref, they are processed after pReffedStck
     */
-    SwWW8FltRefStack *m_pReffingStck;
+    std::unique_ptr<SwWW8FltRefStack> m_xReffingStck;
 
     /*
     For graphics anchors. Determines the graphics whose anchors are in the
@@ -1383,8 +1383,7 @@ private:
     void DeleteRefStacks()
     {
         DeleteStack(m_xReffedStck.release());
-        DeleteStack( m_pReffingStck );
-        m_pReffingStck = nullptr;
+        DeleteStack(m_xReffingStck.release());
     }
     void DeleteAnchorStack()
     {
