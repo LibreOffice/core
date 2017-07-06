@@ -1156,7 +1156,7 @@ private:
     /*
     Knows how to split a series of bytes into sprms and their arguments
     */
-    wwSprmParser *m_pSprmParser;
+    std::unique_ptr<wwSprmParser> m_xSprmParser;
 
     /*
     Creates unique names to give to graphics

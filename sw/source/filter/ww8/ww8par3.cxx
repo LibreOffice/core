@@ -2081,7 +2081,7 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
             if ( (68 == aRes.nSprmId) || (0x6A03 == aRes.nSprmId) )
             {
                 Read_PicLoc( aRes.nSprmId, aRes.pMemPos +
-                    m_pSprmParser->DistanceToData(aRes.nSprmId), 4);
+                    m_xSprmParser->DistanceToData(aRes.nSprmId), 4);
                 break;
             }
         }

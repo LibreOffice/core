@@ -605,7 +605,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                 if ( (68 == aRes.nSprmId) || (0x6A03 == aRes.nSprmId) )
                 {
                     Read_PicLoc(aRes.nSprmId, aRes.pMemPos +
-                        m_pSprmParser->DistanceToData(aRes.nSprmId), 4);
+                        m_xSprmParser->DistanceToData(aRes.nSprmId), 4);
                      // Ok, that's what we were looking for.  Now let's get
                      // out of here!
                     break;
@@ -1030,8 +1030,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         WW8PLCFx_Cp_FKP* pChp = m_xPlcxMan->GetChpPLCF();
                         WW8PLCFxDesc aDesc;
                         pChp->GetSprms( &aDesc );
-                        WW8SprmIter aSprmIter(aDesc.pMemPos, aDesc.nSprmsLen,
-                            *m_pSprmParser);
+                        WW8SprmIter aSprmIter(aDesc.pMemPos, aDesc.nSprmsLen, *m_xSprmParser);
 
                         for( int nLoop = 0; nLoop < 2; ++nLoop )
                         {
