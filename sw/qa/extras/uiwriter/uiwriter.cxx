@@ -256,6 +256,7 @@ public:
     void testTdf107976();
     void testTdf108524();
     void testTableInSection();
+    void testLinesInSectionInTable();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -399,6 +400,7 @@ public:
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf108524);
     CPPUNIT_TEST(testTableInSection);
+    CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4952,6 +4954,22 @@ void SwUiWriterTest::testTdf58604()
 void SwUiWriterTest::testTdf108524()
 {
     createDoc("tdf108524.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // In total we expect two cells containing a section.
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/section", 1);
+    // This was 0, section wasn't split, instead it was only on the first page
+    // and it was cut off.
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
+}
+
+void SwUiWriterTest::testLinesInSectionInTable()
+{
+    // This is similar to testTdf108524(), but the page boundary now is not in
+    // the middle of a multi-line paragraph: the section only contains oneliner
+    // paragraphs instead.
+    createDoc("lines-in-section-in-table.odt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
     // In total we expect two cells containing a section.
     assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
