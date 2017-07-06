@@ -1895,11 +1895,25 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
         }
 
         aSet.Put( aWrap );
-        aSet.Put(SvxOpaqueItem(RES_OPAQUE, nSlot != FN_FRAME_WRAPTHRU_TRANSP));
+
+        bool bOpaque = nSlot != FN_FRAME_WRAPTHRU_TRANSP;
+        // use FRAME_WRAPTHRU_TRANSP as a toggle for transparency
+        if( !bOpaque )
+        {
+            if( bObj )
+                bOpaque = !rSh.GetLayerId();
+            else
+            {
+                const SvxOpaqueItem aOpaque( static_cast<const SvxOpaqueItem&>(aSet.Get(RES_OPAQUE)) );
+                bOpaque = !aOpaque.GetValue();
+            }
+        }
+        aSet.Put(SvxOpaqueItem(RES_OPAQUE, bOpaque ));
+
         if(bObj)
         {
             rSh.SetObjAttr(aSet);
-            if (nSlot != FN_FRAME_WRAPTHRU_TRANSP)
+            if ( bOpaque )
                 rSh.SelectionToHeaven();
             else
                 rSh.SelectionToHell();
