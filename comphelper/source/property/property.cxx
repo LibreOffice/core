@@ -149,7 +149,7 @@ void RemoveProperty(Sequence<Property>& _rProps, const OUString& _rPropName)
     Property aNameProp(_rPropName, 0, Type(), 0);
     const Property* pResult = std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
 
-    if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == _rPropName) )
+    if ( pResult != _rProps.end() && pResult->Name == _rPropName )
     {
         OSL_ENSURE(pResult->Name.equals(_rPropName), "::RemoveProperty Properties not sorted");
         removeElementAt(_rProps, pResult - pProperties);
@@ -166,7 +166,7 @@ void ModifyPropertyAttributes(Sequence<Property>& seqProps, const OUString& sPro
     Property aNameProp(sPropName, 0, Type(), 0);
     Property* pResult = std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
 
-    if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == sPropName) )
+    if ( (pResult != seqProps.end()) && (pResult->Name == sPropName) )
     {
         pResult->Attributes |= nAddAttrib;
         pResult->Attributes &= ~nRemoveAttrib;

@@ -386,7 +386,7 @@ namespace pcr
                 aAvailableServices.end(),
                 StringCompare( _rService )
             );
-            if ( pFound - aAvailableServices.getConstArray() < aAvailableServices.getLength() )
+            if ( pFound != aAvailableServices.end() )
             {
                 bYesItIs = true;
             }

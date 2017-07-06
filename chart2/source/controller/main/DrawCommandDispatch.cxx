@@ -363,7 +363,7 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
                                                                 [&sKeyModifier](const beans::PropertyValue& lhs)
                                                                 {return lhs.Name == sKeyModifier;} );
                 sal_Int16 nKeyModifier = 0;
-                if ( pKeyModifier != pEnd && pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
+                if ( pKeyModifier != pEnd && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
                 {
                     if ( eDrawMode == CHARTDRAW_INSERT )
                     {

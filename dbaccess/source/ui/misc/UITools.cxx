@@ -1038,13 +1038,13 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
                                             [](const PropertyValue& lhs)
                                             {return TPropertyValueEqualFunctor()(lhs, PROPERTY_AUTOINCREMENTCREATION);} );
 
-        if ( pValue && pValue != aInfo.end() )
+        if ( pValue != aInfo.end() )
             pValue->Value >>= _rsAutoIncrementValue;
         pValue =std::find_if(aInfo.begin(), aInfo.end(),
                              [](const PropertyValue& lhs)
                              {return TPropertyValueEqualFunctor()(lhs, "IsAutoRetrievingEnabled");} );
 
-        if ( pValue && pValue != aInfo.end() )
+        if ( pValue != aInfo.end() )
             pValue->Value >>= _rAutoIncrementValueEnabled;
     }
 }

@@ -1294,11 +1294,13 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     bool bNeedSequenceMapping = false;
     for (sal_Int32 i = 0;  i < nNumDS_LDS;  ++i)
     {
-        sal_Int32 *pIt = std::find( pSortedMapping, pSortedMapping + nNumDS_LDS,
+        sal_Int32 *pIt = std::find( aSortedMapping.begin(), aSortedMapping.end(),
                                     pSequenceMapping[i] );
-        OSL_ENSURE( pIt, "index not found" );
-        if (!pIt)
+        if (pIt != aSortedMapping.end())
+        {
+            SAL_WARN("sw.uno", "index not found");
             return aResult; // failed -> return empty property sequence
+        }
         pSequenceMapping[i] = pIt - pSortedMapping;
 
         if (i != pSequenceMapping[i])
