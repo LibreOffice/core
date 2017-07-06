@@ -2,6 +2,4 @@
 "ScAnnotationsObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScAnnotationsObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScAnnotationsObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScAnnotationsObj";"com::sun::star::sheet::XSheetAnnotations";"insertNew()"
-"ScAnnotationsObj";"com::sun::star::sheet::XSheetAnnotations";"removeByIndex()"
 "ScAnnotationsObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
