@@ -637,5 +637,13 @@ DECLARE_ODFIMPORT_TEST(testTdf96113, "tdf96113.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(getShape(1), "BackColor"));
 }
 
+DECLARE_ODFIMPORT_TEST(testI61225, "i61225.sxw")
+{
+    // Part of ooo61225-1.sxw from crashtesting.
+
+    // This never returned.
+    calcLayout();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
