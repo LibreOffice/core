@@ -590,7 +590,7 @@ namespace
     }
 
     /// Checks if pFrame is in a table, which itself is in a section.
-    bool IsInTableInSection(SwFrame* pFrame)
+    bool IsInTableInSection(const SwFrame* pFrame)
     {
         if (!pFrame->IsInTab())
             return false;
@@ -2160,8 +2160,8 @@ bool SwSectionFrame::MoveAllowed( const SwFrame* pFrame) const
         return false;
     // Now it has to be examined whether there is a layout sheet wherein
     // a section Follow can be created
-    if( IsInTab() || ( !IsInDocBody() && FindFooterOrHeader() ) )
-        return false; // It doesn't work in tables/headers/footers
+    if( IsInTableInSection(this) || ( !IsInDocBody() && FindFooterOrHeader() ) )
+        return false; // It doesn't work in table-in-sections/headers/footers
     if( IsInFly() ) // In column based or chained frames
         return nullptr != const_cast<SwFrame*>(static_cast<SwFrame const *>(GetUpper()))->GetNextLeaf( MAKEPAGE_NONE );
     return true;
