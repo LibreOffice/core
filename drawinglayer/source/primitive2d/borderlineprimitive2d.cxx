@@ -42,282 +42,138 @@ T round(T x)
 }
 #endif
 
-namespace drawinglayer {
-
-namespace {
-
-void moveLine(basegfx::B2DPolygon& rPoly, double fGap, const basegfx::B2DVector& rVector)
+namespace drawinglayer
 {
-    if (basegfx::fTools::equalZero(rVector.getX()))
-    {
-        basegfx::B2DHomMatrix aMat(1, 0, fGap, 0, 1, 0);
-        rPoly.transform(aMat);
-    }
-    else if (basegfx::fTools::equalZero(rVector.getY()))
-    {
-        basegfx::B2DHomMatrix aMat(1, 0, 0, 0, 1, fGap);
-        rPoly.transform(aMat);
-    }
-}
-
-primitive2d::Primitive2DReference makeHairLinePrimitive(
-    const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd, const basegfx::B2DVector& rVector,
-    const basegfx::BColor& rColor, double fGap)
-{
-    basegfx::B2DPolygon aPolygon;
-    aPolygon.append(rStart);
-    aPolygon.append(rEnd);
-    moveLine(aPolygon, fGap, rVector);
-
-    return primitive2d::Primitive2DReference(new primitive2d::PolygonHairlinePrimitive2D(aPolygon, rColor));
-}
-
-primitive2d::Primitive2DReference makeSolidLinePrimitive(
-    const basegfx::B2DPolyPolygon& rClipRegion, const basegfx::B2DPoint& rStart, const basegfx::B2DPoint& rEnd,
-    const basegfx::B2DVector& rVector, const basegfx::BColor& rColor, double fLineWidth, double fGap)
-{
-    const basegfx::B2DVector aPerpendicular = basegfx::getPerpendicular(rVector);
-    const basegfx::B2DVector aLineWidthOffset = (fLineWidth * 0.5) * aPerpendicular;
-
-    basegfx::B2DPolygon aPolygon;
-    aPolygon.append(rStart + aLineWidthOffset);
-    aPolygon.append(rEnd + aLineWidthOffset);
-    aPolygon.append(rEnd - aLineWidthOffset);
-    aPolygon.append(rStart - aLineWidthOffset);
-    aPolygon.setClosed(true);
-
-    moveLine(aPolygon, fGap, rVector);
-
-    basegfx::B2DPolyPolygon aClipped =
-        basegfx::tools::clipPolygonOnPolyPolygon(aPolygon, rClipRegion, true, false);
-
-    if (aClipped.count())
-        aPolygon = aClipped.getB2DPolygon(0);
-
-    return primitive2d::Primitive2DReference(
-        new primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPolygon), rColor));
-}
-
-}
-
-    // fdo#49438: heuristic pseudo hack
-    static bool lcl_UseHairline(double const fW,
-            basegfx::B2DPoint const& rStart, basegfx::B2DPoint const& rEnd,
-            geometry::ViewInformation2D const& rViewInformation)
-    {
-        basegfx::B2DTuple scale;
-        basegfx::B2DTuple translation;
-        double fRotation;
-        double fShear;
-        rViewInformation.getObjectToViewTransformation().decompose(
-                scale, translation, fRotation, fShear);
-        double const fScale(
-            (rEnd.getX() - rStart.getX() > rEnd.getY() - rStart.getY())
-                ? scale.getY() : scale.getX());
-        return (fW * fScale < 0.51);
-    }
-
-    static double lcl_GetCorrectedWidth(double const fW,
-            basegfx::B2DPoint const& rStart, basegfx::B2DPoint const& rEnd,
-            geometry::ViewInformation2D const& rViewInformation)
-    {
-        return (lcl_UseHairline(fW, rStart, rEnd, rViewInformation)) ? 0.0 : fW;
-    }
-
     namespace primitive2d
     {
-        double BorderLinePrimitive2D::getWidth(
-            geometry::ViewInformation2D const& rViewInformation) const
+        // helper to add a centered, maybe stroked line primitive to rContainer
+        void addPolygonStrokePrimitive2D(
+            Primitive2DContainer& rContainer,
+            const basegfx::B2DPoint& rStart,
+            const basegfx::B2DPoint& rEnd,
+            const basegfx::BColor& rColor,
+            double fWidth,
+            SvxBorderLineStyle aStyle,
+            double fPatternScale)
         {
-            return lcl_GetCorrectedWidth(mfLeftWidth, getStart(), getEnd(),
-                        rViewInformation)
-                 + lcl_GetCorrectedWidth(mfDistance, getStart(), getEnd(),
-                         rViewInformation)
-                 + lcl_GetCorrectedWidth(mfRightWidth, getStart(), getEnd(),
-                         rViewInformation);
+            basegfx::B2DPolygon aPolygon;
+
+            aPolygon.append(rStart);
+            aPolygon.append(rEnd);
+
+            const attribute::LineAttribute aLineAttribute(rColor, fWidth);
+            static double fPatScFact(1.0); // 10.0 multiply, see old code
+            const std::vector<double> aDashing(svtools::GetLineDashing(aStyle, fPatternScale * fPatScFact));
+
+            if (aDashing.empty())
+            {
+                rContainer.push_back(
+                    new PolygonStrokePrimitive2D(
+                        aPolygon,
+                        aLineAttribute));
+            }
+            else
+            {
+                const attribute::StrokeAttribute aStrokeAttribute(aDashing);
+
+                rContainer.push_back(
+                    new PolygonStrokePrimitive2D(
+                        aPolygon,
+                        aLineAttribute,
+                        aStrokeAttribute));
+            }
         }
 
-        basegfx::B2DPolyPolygon BorderLinePrimitive2D::getClipPolygon(
-            geometry::ViewInformation2D const& rViewInformation) const
+        void BorderLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            basegfx::B2DPolygon clipPolygon;
-
-            // Get the vectors
-            basegfx::B2DVector aVector( getEnd() - getStart() );
-            aVector.normalize();
-            const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
-
-            // Get the points
-            const double fWidth(getWidth(rViewInformation));
-            const basegfx::B2DVector aLeftOff(
-                    aPerpendicular * (-0.5 * std::max(fWidth, 1.0)));
-            const basegfx::B2DVector aRightOff(
-                    aPerpendicular * (0.5 * std::max(fWidth, 1.0)));
-
-            const basegfx::B2DVector aSLVector( aLeftOff - ( getExtendLeftStart() * aVector ) );
-            clipPolygon.append( basegfx::B2DPoint( getStart() + aSLVector * 2.0 ) );
-
-            clipPolygon.append( getStart( ) );
-
-            const basegfx::B2DVector aSRVector( aRightOff - ( getExtendRightStart() * aVector ) );
-            clipPolygon.append( basegfx::B2DPoint( getStart() + aSRVector * 2.0 ) );
-
-            const basegfx::B2DVector aERVector( aRightOff + ( getExtendRightEnd() * aVector ) );
-            clipPolygon.append( basegfx::B2DPoint( getEnd() + aERVector * 2.0 ) );
-
-            clipPolygon.append( getEnd( ) );
-
-            const basegfx::B2DVector aELVector( aLeftOff + ( getExtendLeftEnd() * aVector ) );
-            clipPolygon.append( basegfx::B2DPoint( getEnd() + aELVector * 2.0 ) );
-
-            clipPolygon.setClosed( true );
-
-            return basegfx::B2DPolyPolygon( clipPolygon );
-        }
-
-        void BorderLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const
-        {
-            createDecomposition(rContainer, rViewInformation, false);
-        }
-
-        void BorderLinePrimitive2D::createDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation, bool bPixelCorrection) const
-        {
-            if(!getStart().equal(getEnd()) && ( isInsideUsed() || isOutsideUsed() ) )
+            if (!getStart().equal(getEnd()) && (isInsideUsed() || isOutsideUsed()))
             {
                 // get data and vectors
                 basegfx::B2DVector aVector(getEnd() - getStart());
                 aVector.normalize();
                 const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
 
-                const basegfx::B2DPolyPolygon& aClipRegion =
-                    getClipPolygon(rViewInformation);
-
-                if(isOutsideUsed() && isInsideUsed())
+                if (isOutsideUsed() && isInsideUsed())
                 {
-                    const double fExt = getWidth(rViewInformation);  // Extend a lot: it'll be clipped later.
-                    const basegfx::B2DPoint aTmpStart(getStart() - (fExt * aVector));
-                    const basegfx::B2DPoint aTmpEnd(getEnd() + (fExt * aVector));
-
-                    double fLeftWidth = getLeftWidth();
-                    bool bLeftHairline = lcl_UseHairline(fLeftWidth, getStart(), getEnd(), rViewInformation);
-                    if (bLeftHairline)
-                        fLeftWidth = 0.0;
-
-                    double fRightWidth = getRightWidth();
-                    bool bRightHairline = lcl_UseHairline(fRightWidth, getStart(), getEnd(), rViewInformation);
-                    if (bRightHairline)
-                        fRightWidth = 0.0;
-
-                    // "inside" line
-
-                    if (bLeftHairline)
-                        rContainer.push_back(makeHairLinePrimitive(
-                            getStart(), getEnd(), aVector, getRGBColorLeft(), 0.0));
-                    else
+                    // double line with gap. Use mfDiscreteDistance (see get2DDecomposition) as distance.
+                    // That value is prepared to be at least one pixel (discrete unit) so that the
+                    // decomposition is view-dependent in this cases
+                    if (isInsideUsed())
                     {
-                        double fWidth = bPixelCorrection ? std::round(fLeftWidth) : fLeftWidth;
-                        rContainer.push_back(makeSolidLinePrimitive(
-                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorLeft(), fWidth, -fLeftWidth/2.0));
+                        // inside line (left). Create stroke primitive centered on line width
+                        const double fDeltaY((mfDiscreteDistance + getLeftWidth()) * 0.5);
+                        const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
+                        const basegfx::B2DPoint aStart(getStart() - (aVector * getExtendLeftStart()) - aDeltaY);
+                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * getExtendLeftEnd()) - aDeltaY);
+
+                        addPolygonStrokePrimitive2D(
+                            rContainer,
+                            aStart,
+                            aEnd,
+                            getRGBColorLeft(),
+                            getLeftWidth(),
+                            getStyle(),
+                            getPatternScale());
                     }
 
-                    // "outside" line
-
-                    if (bRightHairline)
-                        rContainer.push_back(makeHairLinePrimitive(
-                            getStart(), getEnd(), aVector, getRGBColorRight(), fLeftWidth+mfDistance));
-                    else
+                    if (hasGapColor() && isDistanceUsed())
                     {
-                        double fWidth = bPixelCorrection ? std::round(fRightWidth) : fRightWidth;
-                        rContainer.push_back(makeSolidLinePrimitive(
-                            aClipRegion, aTmpStart, aTmpEnd, aVector, getRGBColorRight(), fWidth, mfDistance+fRightWidth/2.0));
+                        // gap (if visible, found no practicval usage).
+                        // Create stroke primitive on vector with given color
+                        addPolygonStrokePrimitive2D(
+                            rContainer,
+                            getStart(),
+                            getEnd(),
+                            getRGBColorGap(),
+                            mfDiscreteDistance,
+                            getStyle(),
+                            getPatternScale());
+                    }
+
+                    if (isOutsideUsed())
+                    {
+                        // outside line (right). Create stroke primitive centered on line width
+                        const double fDeltaY((mfDiscreteDistance + getRightWidth()) * 0.5);
+                        const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
+                        const basegfx::B2DPoint aStart(getStart() - (aVector * getExtendRightStart()) + aDeltaY);
+                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * getExtendRightEnd()) + aDeltaY);
+
+                        addPolygonStrokePrimitive2D(
+                            rContainer,
+                            aStart,
+                            aEnd,
+                            getRGBColorRight(),
+                            getRightWidth(),
+                            getStyle(),
+                            getPatternScale());
                     }
                 }
-                else
+                else if(isInsideUsed())
                 {
-                    // single line, create geometry
-                    basegfx::B2DPolygon aPolygon;
-                    const double fExt = getWidth(rViewInformation);  // Extend a lot: it'll be clipped after
-                    const basegfx::B2DPoint aTmpStart(getStart() - (fExt * aVector));
-                    const basegfx::B2DPoint aTmpEnd(getEnd() + (fExt * aVector));
-
-                    // Get which is the line to show
-                    bool bIsSolidline = mnStyle == SvxBorderLineStyle::SOLID;
-                    double nWidth = getLeftWidth();
-                    basegfx::BColor aColor = getRGBColorLeft();
-                    if ( basegfx::fTools::equal( 0.0, mfLeftWidth ) )
-                    {
-                        nWidth = getRightWidth();
-                        aColor = getRGBColorRight();
-                    }
-                    bool const bIsHairline = lcl_UseHairline(
-                            nWidth, getStart(), getEnd(), rViewInformation);
-                    nWidth = lcl_GetCorrectedWidth(nWidth,
-                                getStart(), getEnd(), rViewInformation);
-
-                    if(bIsHairline && bIsSolidline)
-                    {
-                        // create hairline primitive
-                        aPolygon.append( getStart() );
-                        aPolygon.append( getEnd() );
-
-                        rContainer.push_back(new PolygonHairlinePrimitive2D(
-                            aPolygon,
-                            aColor));
-                    }
-                    else
-                    {
-                        // create filled polygon primitive
-                        const basegfx::B2DVector aLineWidthOffset(((nWidth + 1) * 0.5) * aPerpendicular);
-
-                        aPolygon.append( aTmpStart );
-                        aPolygon.append( aTmpEnd );
-
-                        basegfx::B2DPolyPolygon aDashed =
-                            svtools::ApplyLineDashing(aPolygon, getStyle(), mfPatternScale*10.0);
-
-                        for (sal_uInt32 i = 0; i < aDashed.count(); i++ )
-                        {
-                            basegfx::B2DPolygon aDash = aDashed.getB2DPolygon( i );
-                            basegfx::B2DPoint aDashStart = aDash.getB2DPoint( 0 );
-                            basegfx::B2DPoint aDashEnd = aDash.getB2DPoint( aDash.count() - 1 );
-
-                            basegfx::B2DPolygon aDashPolygon;
-                            aDashPolygon.append( aDashStart + aLineWidthOffset );
-                            aDashPolygon.append( aDashEnd + aLineWidthOffset );
-                            aDashPolygon.append( aDashEnd - aLineWidthOffset );
-                            aDashPolygon.append( aDashStart - aLineWidthOffset );
-                            aDashPolygon.setClosed( true );
-
-                            basegfx::B2DPolyPolygon aClipped = basegfx::tools::clipPolygonOnPolyPolygon(
-                                aDashPolygon, aClipRegion, true, false );
-
-                            if ( aClipped.count() )
-                                aDashed.setB2DPolygon( i, aClipped.getB2DPolygon( 0 ) );
-                        }
-
-                        sal_uInt32 n = aDashed.count();
-                        for (sal_uInt32 i = 0; i < n; ++i)
-                        {
-                            basegfx::B2DPolygon aDash = aDashed.getB2DPolygon(i);
-                            if (bIsHairline)
-                            {
-                                // Convert a rectangular polygon into a line.
-                                basegfx::B2DPolygon aDash2;
-                                basegfx::B2DRange aRange = aDash.getB2DRange();
-                                aDash2.append(basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY()));
-                                aDash2.append(basegfx::B2DPoint(aRange.getMaxX(), aRange.getMinY()));
-                                rContainer.push_back(
-                                    new PolygonHairlinePrimitive2D(aDash2, aColor));
-                            }
-                            else
-                            {
-                                rContainer.push_back(
-                                    new PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aDash), aColor));
-                            }
-                        }
-                    }
+                    // single line, only inside values used, no vertical offsets
+                    addPolygonStrokePrimitive2D(
+                        rContainer,
+                        getStart(),
+                        getEnd(),
+                        getRGBColorLeft(),
+                        getLeftWidth(),
+                        getStyle(),
+                        getPatternScale());
                 }
             }
+        }
+
+        bool BorderLinePrimitive2D::isHorizontalOrVertical(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            if (!getStart().equal(getEnd()))
+            {
+                const basegfx::B2DHomMatrix& rOTVT = rViewInformation.getObjectToViewTransformation();
+                const basegfx::B2DVector aVector(rOTVT * getEnd() - rOTVT * getStart());
+
+                return basegfx::fTools::equalZero(aVector.getX()) || basegfx::fTools::equalZero(aVector.getY());
+            }
+
+            return false;
         }
 
         BorderLinePrimitive2D::BorderLinePrimitive2D(
@@ -351,7 +207,8 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
             maRGBColorGap(rRGBColorGap),
             mbHasGapColor(bHasGapColor),
             mnStyle(nStyle),
-            mfPatternScale(fPatternScale)
+            mfPatternScale(fPatternScale),
+            mfDiscreteDistance(0.0)
         {
         }
 
@@ -379,6 +236,42 @@ primitive2d::Primitive2DReference makeSolidLinePrimitive(
             }
 
             return false;
+        }
+
+        void BorderLinePrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const
+        {
+            ::osl::MutexGuard aGuard(m_aMutex);
+
+            if (!getStart().equal(getEnd()) && isOutsideUsed() && isInsideUsed())
+            {
+                // Double line with gap. In this case, we want to be view-dependent.
+                // Get the current DiscreteUnit, look at X and Y and use the maximum
+                const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                const double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
+
+                // When discrete unit is bigger than distance (distance is less than one pixel),
+                // force distance to one pixel. Or expressed different, do not let the distance
+                // get smaller than one pixel. This is done for screen rendering and compatibility.
+                // This can also be done using DiscreteMetricDependentPrimitive2D as base class
+                // for this class, but specialization is better here for later buffering (only
+                // do this when 'double line with gap')
+                const double fNewDiscreteDistance(std::max(fDiscreteUnit, getDistance()));
+
+                if (fNewDiscreteDistance != mfDiscreteDistance)
+                {
+                    if (!getBuffered2DDecomposition().empty())
+                    {
+                        // conditions of last local decomposition have changed, delete
+                        const_cast< BorderLinePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DContainer());
+                    }
+
+                    // remember value for usage in create2DDecomposition
+                    const_cast< BorderLinePrimitive2D* >(this)->mfDiscreteDistance = fNewDiscreteDistance;
+                }
+            }
+
+            // call base implementation
+            BufferedDecompositionPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 
         // provide unique ID

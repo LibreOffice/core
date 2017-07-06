@@ -1348,9 +1348,34 @@ bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
 
 // Drawing functions
 
+// get offset to center of line in question
+double lcl_getCenterOfLineOffset(const Style& rBorder, bool bLeftEdge)
+{
+    const bool bPrimUsed(!basegfx::fTools::equalZero(rBorder.Prim())); // left
+    const bool bDistUsed(!basegfx::fTools::equalZero(rBorder.Dist())); // distance
+    const bool bSecnUsed(!basegfx::fTools::equalZero(rBorder.Secn())); // right
 
-double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOpposite,
-                      long nAngleSide, long nAngleOpposite )
+    if (bDistUsed || bSecnUsed)
+    {
+        // double line, get center by adding half ditance and half line width.
+        // bLeftEdge defines which line to use
+        return (rBorder.Dist() + (bLeftEdge ? rBorder.Prim() : rBorder.Secn())) * 0.5;
+    }
+    else if (bPrimUsed)
+    {
+        // single line, get center
+        return rBorder.Prim() * 0.5;
+    }
+
+    // no line width at all, stay on unit vector
+    return 0.0;
+}
+
+double lcl_GetExtent(
+    const Style& rBorder, const Style& rSide, const Style& rOpposite,
+    long nAngleSide, long nAngleOpposite,
+    bool bLeftEdge,     // left or right of rBorder
+    bool bOtherLeft )   // left or right of rSide/rOpposite
 {
     Style aOtherBorder = rSide;
     long nOtherAngle = nAngleSide;
@@ -1369,7 +1394,8 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
 
     // Let's assume the border we are drawing is horizontal and compute all the angles / distances from this
     basegfx::B2DVector aBaseVector( 1.0, 0.0 );
-    basegfx::B2DPoint aBasePoint( 0.0, static_cast<double>( rBorder.GetWidth() / 2 ) );
+    // added support to get the distances to the centers of the line, *not* the outre edge
+    basegfx::B2DPoint aBasePoint(0.0, lcl_getCenterOfLineOffset(rBorder, bLeftEdge));
 
     basegfx::B2DHomMatrix aRotation;
     aRotation.rotate( double( nOtherAngle ) * M_PI / 18000.0 );
@@ -1377,7 +1403,8 @@ double lcl_GetExtent( const Style& rBorder, const Style& rSide, const Style& rOp
     basegfx::B2DVector aOtherVector = aRotation * aBaseVector;
     // Compute a line shifted by half the width of the other border
     basegfx::B2DVector aPerpendicular = basegfx::getNormalizedPerpendicular( aOtherVector );
-    basegfx::B2DPoint aOtherPoint = basegfx::B2DPoint() + aPerpendicular * aOtherBorder.GetWidth() / 2;
+    // added support to get the distances to the centers of the line, *not* the outre edge
+    basegfx::B2DPoint aOtherPoint = basegfx::B2DPoint() + aPerpendicular * lcl_getCenterOfLineOffset(aOtherBorder, bOtherLeft);
 
     // Find the cut between the two lines
     double nCut = 0.0;
@@ -1403,10 +1430,10 @@ drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimitives(
             rBorder.Prim(),
             rBorder.Dist(),
             rBorder.Secn(),
-            lcl_GetExtent( rBorder, rLFromT, rLFromB, nRotateT, - nRotateB ),
-            lcl_GetExtent( rBorder, rRFromT, rRFromB, 18000 - nRotateT, nRotateB - 18000 ),
-            lcl_GetExtent( rBorder, rLFromB, rLFromT, nRotateB, - nRotateT ),
-            lcl_GetExtent( rBorder, rRFromB, rRFromT, 18000 - nRotateB, nRotateT - 18000 ),
+            lcl_GetExtent( rBorder, rLFromT, rLFromB, nRotateT, - nRotateB, true, false ),                  // top-left, so left for rBorder and right for left outer
+            lcl_GetExtent( rBorder, rRFromT, rRFromB, 18000 - nRotateT, nRotateB - 18000, true, true ),     // top-right
+            lcl_GetExtent( rBorder, rLFromB, rLFromT, nRotateB, - nRotateT, false, false ),                 // bottom-left
+            lcl_GetExtent( rBorder, rRFromB, rRFromT, 18000 - nRotateB, nRotateT - 18000, false, true ),    // bottom-right
             rBorder.GetColorSecn().getBColor(),
             rBorder.GetColorPrim().getBColor(),
             rBorder.GetColorGap().getBColor(),

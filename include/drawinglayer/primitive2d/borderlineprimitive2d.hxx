@@ -66,26 +66,28 @@ namespace drawinglayer
             bool                                            mbHasGapColor;
 
             SvxBorderLineStyle                              mnStyle;
-
             double                                          mfPatternScale;
 
-            /// local helpers
-            double getWidth(
-                    const geometry::ViewInformation2D& rViewInformation) const;
+            // for view dependent decomposition in the case with distance (gap),
+            // remember the last used concrete mfDistance, see get2DDecomposition
+            // implementation
+            double                                          mfDiscreteDistance;
 
+            /// local helpers
             bool isInsideUsed() const
             {
                 return !basegfx::fTools::equalZero(mfLeftWidth);
+            }
+
+            bool isDistanceUsed() const
+            {
+                return !basegfx::fTools::equalZero(mfDistance);
             }
 
             bool isOutsideUsed() const
             {
                 return !basegfx::fTools::equalZero(mfRightWidth);
             }
-
-        protected:
-            virtual basegfx::B2DPolyPolygon getClipPolygon(
-                    const geometry::ViewInformation2D& rViewInformation) const;
 
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
@@ -125,11 +127,15 @@ namespace drawinglayer
             bool hasGapColor( ) const { return mbHasGapColor; }
             SvxBorderLineStyle getStyle () const { return mnStyle; }
             double getPatternScale() const { return mfPatternScale; }
-            /// Same as create2DDecomposition(), but can do pixel correction if requested.
-            void createDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation, bool bPixelCorrection) const;
+
+            /// helper to decide if AntiAliasing should be used
+            bool isHorizontalOrVertical(const geometry::ViewInformation2D& rViewInformation) const;
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
+
+            /// Override standard getDecomposition to be view-dependent here
+            virtual void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const override;
 
             /// provide unique ID
             DeclPrimitive2DIDBlock()
