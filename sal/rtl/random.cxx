@@ -312,12 +312,12 @@ rtlRandomError SAL_CALL rtl_random_addBytes (
     RandomPool_Impl *pImpl   = static_cast<RandomPool_Impl *>(Pool);
     const sal_uInt8 *pBuffer = static_cast<const sal_uInt8 *>(Buffer);
 
-    if ((pImpl == nullptr) || (pBuffer == nullptr))
+    if (!pImpl || !pBuffer)
         return rtl_Random_E_Argument;
-    if(pImpl->m_hDigest)
-    {
+
+    if (pImpl->m_hDigest)
         seedPool (pImpl, pBuffer, Bytes);
-    }
+
     return rtl_Random_E_None;
 }
 
@@ -330,19 +330,17 @@ rtlRandomError SAL_CALL rtl_random_getBytes (
     RandomPool_Impl *pImpl   = static_cast<RandomPool_Impl *>(Pool);
     sal_uInt8       *pBuffer = static_cast<sal_uInt8 *>(Buffer);
 
-    if ((pImpl == nullptr) || (pBuffer == nullptr))
+    if (!pImpl || !pBuffer)
         return rtl_Random_E_Argument;
 
-    if(pImpl->m_hDigest || !osl_get_system_random_data(static_cast<char*>(Buffer), Bytes))
+    if (pImpl->m_hDigest || !osl_get_system_random_data(static_cast<char*>(Buffer), Bytes))
     {
-        if(!pImpl->m_hDigest)
+        if (!pImpl->m_hDigest)
         {
-            if (!initPool (pImpl))
-            {
+            if (!initPool(pImpl))
                 return rtl_Random_E_Unknown;
-            }
         }
-        readPool (pImpl, pBuffer, Bytes);
+        readPool(pImpl, pBuffer, Bytes);
     }
     return rtl_Random_E_None;
 }

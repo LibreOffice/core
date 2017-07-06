@@ -95,7 +95,7 @@ struct StringTraits
                                    sal_Int32 * pOffset, sal_Char const * pChars,
                                    sal_Int32 nLen)
     {
-        assert(pChars != nullptr);
+        assert(pChars);
         rtl_stringbuffer_insert(pBuffer, pCapacity, *pOffset, pChars, nLen);
         *pOffset += nLen;
     }
@@ -104,7 +104,7 @@ struct StringTraits
                                    sal_Int32 * pOffset, sal_Char const * pStr,
                                    sal_Int32 nLen)
     {
-        assert(pStr != nullptr);
+        assert(pStr);
         rtl_stringbuffer_insert(pBuffer, pCapacity, *pOffset, pStr, nLen);
         *pOffset += nLen;
     }
@@ -132,7 +132,7 @@ struct UStringTraits
                                    sal_Int32 * pCapacity, sal_Int32 * pOffset,
                                    sal_Unicode const * pChars, sal_Int32 nLen)
     {
-        assert(pChars != nullptr);
+        assert(pChars);
         rtl_uStringbuffer_insert(pBuffer, pCapacity, *pOffset, pChars, nLen);
         *pOffset += nLen;
     }
@@ -193,7 +193,7 @@ inline void doubleToString(typename T::String ** pResult,
     {
         // #i112652# XMLSchema-2
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("NaN");
-        if (pResultCapacity == nullptr)
+        if (!pResultCapacity)
         {
             pResultCapacity = &nCapacity;
             T::createBuffer(pResult, pResultCapacity);
@@ -210,7 +210,7 @@ inline void doubleToString(typename T::String ** pResult,
     {
         // #i112652# XMLSchema-2
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-INF");
-        if (pResultCapacity == nullptr)
+        if (!pResultCapacity)
         {
             pResultCapacity = &nCapacity;
             T::createBuffer(pResult, pResultCapacity);
@@ -298,7 +298,7 @@ inline void doubleToString(typename T::String ** pResult,
                     *p++ = '0';
             }
 
-            if (pResultCapacity == nullptr)
+            if (!pResultCapacity)
                 T::createString(pResult, pBuf, p - pBuf);
             else
                 T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf, p - pBuf);
@@ -396,7 +396,7 @@ inline void doubleToString(typename T::String ** pResult,
     {
         pBuf = static_cast< typename T::Char * >(
             rtl_allocateMemory(nBuf * sizeof (typename T::Char)));
-        OSL_ENSURE(pBuf != nullptr, "Out of memory");
+        OSL_ENSURE(pBuf, "Out of memory");
     }
     else
         pBuf = aBuf;
@@ -601,7 +601,7 @@ inline void doubleToString(typename T::String ** pResult,
             nExp % 10 + static_cast< typename T::Char >('0') );
     }
 
-    if (pResultCapacity == nullptr)
+    if (!pResultCapacity)
         T::createString(pResult, pBuf, p - pBuf);
     else
         T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf,
@@ -765,10 +765,12 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 {
                     // No digit at all, only separator(s) without integer or
                     // fraction part. Bail out. No number. No error.
-                    if (pStatus != nullptr)
+                    if (pStatus)
                         *pStatus = eStatus;
-                    if (pParsedEnd != nullptr)
+
+                    if (pParsedEnd)
                         *pParsedEnd = pBegin;
+
                     return fVal;
                 }
                 nValExp = 0;    // no digit other than 0 after decimal point
@@ -898,9 +900,10 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
     if ( bSign )
         fVal = -fVal;
 
-    if (pStatus != nullptr)
+    if (pStatus)
         *pStatus = eStatus;
-    if (pParsedEnd != nullptr)
+
+    if (pParsedEnd)
         *pParsedEnd = p == p0 ? pBegin : p;
 
     return fVal;

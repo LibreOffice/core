@@ -95,15 +95,18 @@ extern "C" void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
     {
         osl::MutexGuard g(osl::Mutex::getGlobalMutex());
         static rtlRandomPool pool = nullptr;
-        if (pool == nullptr) {
+        if (!pool)
+        {
             pool = rtl_random_createPool();
-            if (pool == nullptr) {
+            if (!pool)
+            {
                 abort();
                     // only possible way to signal failure here (rtl_createUuid
                     // being part of a fixed C API)
             }
         }
-        if (rtl_random_getBytes(pool, pTargetUUID, 16) != rtl_Random_E_None) {
+        if (rtl_random_getBytes(pool, pTargetUUID, 16) != rtl_Random_E_None)
+        {
             abort();
                 // only possible way to signal failure here (rtl_createUuid
                 // being part of a fixed C API)

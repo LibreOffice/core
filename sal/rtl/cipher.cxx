@@ -153,9 +153,10 @@ rtlCipherError SAL_CALL rtl_cipher_init (
     const sal_uInt8 *pArgData, sal_Size nArgLen) SAL_THROW_EXTERN_C()
 {
     Cipher_Impl *pImpl = static_cast<Cipher_Impl*>(Cipher);
-    if (pImpl == nullptr)
+    if (!pImpl)
         return rtl_Cipher_E_Argument;
-    if (pImpl->m_init == nullptr)
+
+    if (!pImpl->m_init)
         return rtl_Cipher_E_Unknown;
 
     return (pImpl->m_init)(
@@ -171,9 +172,10 @@ rtlCipherError SAL_CALL rtl_cipher_encode (
     sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     Cipher_Impl *pImpl = static_cast<Cipher_Impl*>(Cipher);
-    if (pImpl == nullptr)
+    if (!pImpl)
         return rtl_Cipher_E_Argument;
-    if (pImpl->m_encode == nullptr)
+
+    if (!pImpl->m_encode)
         return rtl_Cipher_E_Unknown;
 
     return (pImpl->m_encode)(Cipher, pData, nDatLen, pBuffer, nBufLen);
@@ -188,9 +190,10 @@ rtlCipherError SAL_CALL rtl_cipher_decode (
     sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     Cipher_Impl *pImpl = static_cast<Cipher_Impl*>(Cipher);
-    if (pImpl == nullptr)
+    if (!pImpl)
         return rtl_Cipher_E_Argument;
-    if (pImpl->m_decode == nullptr)
+
+    if (!pImpl->m_decode)
         return rtl_Cipher_E_Unknown;
 
     return (pImpl->m_decode)(Cipher, pData, nDatLen, pBuffer, nBufLen);
@@ -740,7 +743,7 @@ static rtlCipherError BF_update (
     sal_uInt8          *pBuffer, sal_Size nBufLen)
 {
     /* Check arguments. */
-    if ((pData == nullptr) || (pBuffer == nullptr))
+    if (!pData || !pBuffer)
         return rtl_Cipher_E_Argument;
 
     if (!((0 < nDatLen) && (nDatLen <= nBufLen)))
@@ -1050,7 +1053,7 @@ rtlCipherError SAL_CALL rtl_cipher_initBF (
 {
     CipherBF_Impl *pImpl = static_cast<CipherBF_Impl*>(Cipher);
 
-    if ((pImpl == nullptr) || (pKeyData == nullptr))
+    if (!pImpl || !pKeyData)
         return rtl_Cipher_E_Argument;
 
     if (!(pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmBF))
@@ -1075,7 +1078,7 @@ rtlCipherError SAL_CALL rtl_cipher_encodeBF (
     sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     CipherBF_Impl *pImpl = static_cast<CipherBF_Impl*>(Cipher);
-    if (pImpl == nullptr)
+    if (!pImpl)
         return rtl_Cipher_E_Argument;
 
     if (!(pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmBF))
@@ -1083,6 +1086,7 @@ rtlCipherError SAL_CALL rtl_cipher_encodeBF (
 
     if (pImpl->m_cipher.m_direction == rtl_Cipher_DirectionInvalid)
         return rtl_Cipher_E_Direction;
+
     if (pImpl->m_cipher.m_direction == rtl_Cipher_DirectionDecode)
         return rtl_Cipher_E_Direction;
 
@@ -1101,7 +1105,7 @@ rtlCipherError SAL_CALL rtl_cipher_decodeBF (
     sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     CipherBF_Impl *pImpl = static_cast<CipherBF_Impl*>(Cipher);
-    if (pImpl == nullptr)
+    if (!pImpl)
         return rtl_Cipher_E_Argument;
 
     if (!(pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmBF))
@@ -1215,7 +1219,7 @@ static rtlCipherError rtl_cipherARCFOUR_update_Impl (
     sal_Size               k;
 
     /* Check arguments. */
-    if ((pData == nullptr) || (pBuffer == nullptr))
+    if (!pData || !pBuffer)
         return rtl_Cipher_E_Argument;
 
     if (!((0 < nDatLen) && (nDatLen <= nBufLen)))
@@ -1292,7 +1296,7 @@ rtlCipherError SAL_CALL rtl_cipher_initARCFOUR (
 {
     CipherARCFOUR_Impl *pImpl = static_cast<CipherARCFOUR_Impl*>(Cipher);
 
-    if ((pImpl == nullptr) || (pKeyData == nullptr))
+    if (!pImpl || !pKeyData)
         return rtl_Cipher_E_Argument;
 
     if (!(pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmARCFOUR))
@@ -1315,7 +1319,7 @@ rtlCipherError SAL_CALL rtl_cipher_encodeARCFOUR (
     sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     CipherARCFOUR_Impl *pImpl = static_cast<CipherARCFOUR_Impl*>(Cipher);
-    if (pImpl == nullptr)
+    if (!pImpl)
         return rtl_Cipher_E_Argument;
 
     if (!(pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmARCFOUR))
@@ -1338,7 +1342,7 @@ rtlCipherError SAL_CALL rtl_cipher_decodeARCFOUR (
     sal_uInt8  *pBuffer, sal_Size nBufLen) SAL_THROW_EXTERN_C()
 {
     CipherARCFOUR_Impl *pImpl = static_cast<CipherARCFOUR_Impl*>(Cipher);
-    if (pImpl == nullptr)
+    if (!pImpl)
         return rtl_Cipher_E_Argument;
 
     if (!(pImpl->m_cipher.m_algorithm == rtl_Cipher_AlgorithmARCFOUR))

@@ -106,12 +106,12 @@ try_alloc:
         else
             addr = static_cast<char*>(rtl_arena_alloc (gp_alloc_arena, &size));
 
-        if (addr != nullptr)
+        if (addr)
         {
             reinterpret_cast<sal_Size*>(addr)[0] = size;
             p = addr + RTL_MEMALIGN;
         }
-        else if (gp_alloc_arena == nullptr)
+        else if (!gp_alloc_arena)
         {
             ensureMemorySingleton();
             if (gp_alloc_arena)
@@ -128,7 +128,7 @@ try_alloc:
 
 void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
 {
-    if (p != nullptr)
+    if (p)
     {
         char *   addr = static_cast<char*>(p) - RTL_MEMALIGN;
         sal_Size size = reinterpret_cast<sal_Size*>(addr)[0];
@@ -146,13 +146,13 @@ void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXT
 {
     if (n > 0)
     {
-        if (p != nullptr)
+        if (p)
         {
             void *   p_old = p;
             sal_Size n_old = reinterpret_cast<sal_Size*>( static_cast<char*>(p) - RTL_MEMALIGN  )[0] - RTL_MEMALIGN;
 
             p = rtl_allocateMemory (n);
-            if (p != nullptr)
+            if (p)
             {
                 memcpy (p, p_old, (n < n_old) ? n : n_old);
                 rtl_freeMemory (p_old);
@@ -163,7 +163,7 @@ void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXT
             p = rtl_allocateMemory (n);
         }
     }
-    else if (p != nullptr)
+    else if (p)
     {
         rtl_freeMemory (p);
         p = nullptr;
@@ -184,7 +184,7 @@ void rtl_memory_init()
 #if !defined(FORCE_SYSALLOC)
     {
         /* global memory arena */
-        assert(gp_alloc_arena == nullptr);
+        assert(!gp_alloc_arena);
 
         gp_alloc_arena = rtl_arena_create (
             "rtl_alloc_arena",
@@ -195,7 +195,7 @@ void rtl_memory_init()
             rtl_arena_free,
             0         /* flags */
         );
-        assert(gp_alloc_arena != nullptr);
+        assert(gp_alloc_arena);
     }
     {
         sal_Size size;
@@ -236,7 +236,7 @@ void rtl_memory_fini()
     /* cleanup g_alloc_caches */
     for (i = 0, n = RTL_MEMORY_CACHED_SIZES; i < n; i++)
     {
-        if (g_alloc_caches[i] != nullptr)
+        if (g_alloc_caches[i])
         {
             rtl_cache_destroy (g_alloc_caches[i]);
             g_alloc_caches[i] = nullptr;
@@ -244,7 +244,7 @@ void rtl_memory_fini()
     }
 
     /* cleanup gp_alloc_arena */
-    if (gp_alloc_arena != nullptr)
+    if (gp_alloc_arena)
     {
         rtl_arena_destroy (gp_alloc_arena);
         gp_alloc_arena = nullptr;
@@ -357,7 +357,7 @@ void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
 void * SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
 {
     void * p = rtl_allocateMemory (n);
-    if (p != nullptr)
+    if (p)
         memset (p, 0, n);
     return p;
 }
@@ -366,7 +366,7 @@ void * SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
 
 void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
-    if (p != nullptr)
+    if (p)
     {
         rtl_secureZeroMemory (p, n);
         rtl_freeMemory (p);
