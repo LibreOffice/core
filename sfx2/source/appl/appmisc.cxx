@@ -147,14 +147,16 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     // transform into [0,0,width,width*aspect] std dimensions
 
     basegfx::B2DRange aRange(aSvgData.getRange());
-    const double fAspectRatio(aRange.getWidth()/aRange.getHeight());
+    const double fAspectRatio(
+        aRange.getHeight() == 0.0 ? 1.0 : aRange.getWidth()/aRange.getHeight());
     basegfx::B2DHomMatrix aTransform(
         basegfx::tools::createTranslateB2DHomMatrix(
             -aRange.getMinX(),
             -aRange.getMinY()));
     aTransform.scale(
-        nWidth / aRange.getWidth(),
-        nWidth / fAspectRatio / aRange.getHeight());
+        aRange.getWidth() == 0.0 ? 1.0 : nWidth / aRange.getWidth(),
+        (aRange.getHeight() == 0.0
+         ? 1.0 : nWidth / fAspectRatio / aRange.getHeight()));
     const drawinglayer::primitive2d::Primitive2DReference xTransformRef(
         new drawinglayer::primitive2d::TransformPrimitive2D(
             aTransform,
