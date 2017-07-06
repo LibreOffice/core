@@ -472,19 +472,17 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     rLineInfo.Clear();
     if ( !rStr.isEmpty() && (nWidth > 0) )
     {
-        css::uno::Reference < css::i18n::XBreakIterator > xBI;
-        // get service provider
-        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-
-        bool bHyphenate = (nStyle & DrawTextFlags::WordBreakHyphenation)
-            == DrawTextFlags::WordBreakHyphenation;
+        const bool bHyphenate = (nStyle & DrawTextFlags::WordBreakHyphenation) == DrawTextFlags::WordBreakHyphenation;
         css::uno::Reference< css::linguistic2::XHyphenator > xHyph;
-        if ( bHyphenate )
+        if (bHyphenate)
         {
-            css::uno::Reference< css::linguistic2::XLinguServiceManager2> xLinguMgr = css::linguistic2::LinguServiceManager::create(xContext);
+            // get service provider
+            css::uno::Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+            css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr = css::linguistic2::LinguServiceManager::create(xContext);
             xHyph = xLinguMgr->getHyphenator();
         }
 
+        css::uno::Reference<css::i18n::XBreakIterator> xBI;
         sal_Int32 nPos = 0;
         sal_Int32 nLen = rStr.getLength();
         while ( nPos < nLen )
