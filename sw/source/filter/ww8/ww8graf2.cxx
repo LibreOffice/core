@@ -273,7 +273,7 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, Graphic*& rpGraphic,
     if (!bOk || pSt->GetError() || !aWMF.GetActionSize())
         return false;
 
-    if (m_pWwFib->m_envr != 1) // !MAC as creator
+    if (m_xWwFib->m_envr != 1) // !MAC as creator
     {
         rpGraphic = new Graphic( aWMF );
         return true;

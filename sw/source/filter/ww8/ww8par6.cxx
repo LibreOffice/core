@@ -839,7 +839,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
         aLastSection = maSegments.back();
 
     //Here
-    sal_uInt16 nLIdx = ( ( (sal_uInt16)mrReader.m_pWwFib->m_lid & 0xff ) == 0x9 ) ? 1 : 0;
+    sal_uInt16 nLIdx = ( ( (sal_uInt16)mrReader.m_xWwFib->m_lid & 0xff ) == 0x9 ) ? 1 : 0;
 
     //BEGIN read section values
     wwSection aNewSection(*mrReader.m_pPaM->GetPoint());
@@ -1652,7 +1652,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
     do{             // block for quick exit
         if( nSp45 != 0 /* || nSp28 != 0 */ )
             break;                      // bGrafApo only automatic for height
-        if( pIo->m_pWwFib->m_fComplex )
+        if( pIo->m_xWwFib->m_fComplex )
             break;                      // (*pPap)++ does not work for FastSave
                                         // -> for FastSave, no test for graphics APO
         SvStream* pIoStrm = pIo->m_pStrm;
@@ -2853,7 +2853,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
         RES_CHRATR_CTL_WEIGHT,      RES_CHRATR_CTL_POSTURE
     };
 
-    ww::WordVersion eVersion = m_pWwFib->GetFIBVersion();
+    ww::WordVersion eVersion = m_xWwFib->GetFIBVersion();
 
     sal_uInt8 nI;
     // the attribute number for "double strike-through" breaks rank
@@ -3018,7 +3018,7 @@ pattern which has significance for those types of properties.
 void SwWW8ImplReader::Read_AmbiguousSPRM(sal_uInt16 nId, const sal_uInt8* pData,
     short nLen)
 {
-    if (m_pWwFib->m_wIdent >= 0xa697 && m_pWwFib->m_wIdent <= 0xa699)
+    if (m_xWwFib->m_wIdent >= 0xa697 && m_xWwFib->m_wIdent <= 0xa699)
     {
         Read_FontCode(nId, pData, nLen);
     }
@@ -3038,7 +3038,7 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
     };
 
     sal_uInt8 nI;
-    ww::WordVersion eVersion = m_pWwFib->GetFIBVersion();
+    ww::WordVersion eVersion = m_xWwFib->GetFIBVersion();
     if (eVersion <= ww::eWW2)
         nI = static_cast< sal_uInt8 >(nId - 80);
     else if (eVersion < ww::eWW8)
@@ -3126,7 +3126,7 @@ void SwWW8ImplReader::SetToggleBiDiAttr(sal_uInt8 nAttrId, bool bOn)
 
 void SwWW8ImplReader::SetToggleAttr(sal_uInt8 nAttrId, bool bOn)
 {
-    ww::WordVersion eVersion = m_pWwFib->GetFIBVersion();
+    ww::WordVersion eVersion = m_xWwFib->GetFIBVersion();
 
     switch (nAttrId)
     {
@@ -3313,7 +3313,7 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
 
 void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    ww::WordVersion eVersion = m_pWwFib->GetFIBVersion();
+    ww::WordVersion eVersion = m_xWwFib->GetFIBVersion();
 
     if (nLen < (eVersion <= ww::eWW2 ? 1 : 2))
     {
@@ -3732,7 +3732,7 @@ void SwWW8ImplReader::Read_FontCode( sal_uInt16 nId, const sal_uInt8* pData, sho
                 return ;
         }
 
-        ww::WordVersion eVersion = m_pWwFib->GetFIBVersion();
+        ww::WordVersion eVersion = m_xWwFib->GetFIBVersion();
 
         if (nLen < 2) // end of attribute
         {
@@ -3774,7 +3774,7 @@ void SwWW8ImplReader::Read_FontSize( sal_uInt16 nId, const sal_uInt8* pData, sho
             return ;
     }
 
-    ww::WordVersion eVersion = m_pWwFib->GetFIBVersion();
+    ww::WordVersion eVersion = m_xWwFib->GetFIBVersion();
 
     if (nLen < (eVersion <= ww::eWW2 ? 1 : 2))          // end of attribute
     {
@@ -4169,7 +4169,7 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
     if (m_bStyNormal && m_bWWBugNormal)
         return;
 
-    ww::WordVersion eVersion = m_pWwFib->GetFIBVersion();
+    ww::WordVersion eVersion = m_xWwFib->GetFIBVersion();
 
     if (nLen < (eVersion <= ww::eWW2 ? 3 : 4))
     {
@@ -6298,7 +6298,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
 
 const SprmReadInfo& SwWW8ImplReader::GetSprmReadInfo(sal_uInt16 nId) const
 {
-    ww::WordVersion eVersion = m_pWwFib->GetFIBVersion();
+    ww::WordVersion eVersion = m_xWwFib->GetFIBVersion();
     const wwSprmDispatcher *pDispatcher;
     if (eVersion <= ww::eWW2)
         pDispatcher = GetWW2SprmDispatcher();

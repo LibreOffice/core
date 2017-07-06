@@ -35,9 +35,10 @@
 #include "ww8par.hxx"
 #include "ww8par2.hxx"
 
-WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion,
-    SotStorage *pStg)
-    : pGlossary(nullptr), rStrm(refStrm), xStg(pStg), nStrings(0)
+WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion, SotStorage *pStg)
+    : rStrm(refStrm)
+    , xStg(pStg)
+    , nStrings(0)
 {
     refStrm->SetEndian(SvStreamEndian::LITTLE);
     WW8Fib aWwFib(*refStrm, nVersion);
@@ -50,7 +51,7 @@ WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVer
         if (xTableStream.is() && ERRCODE_NONE == xTableStream->GetError())
         {
             xTableStream->SetEndian(SvStreamEndian::LITTLE);
-            pGlossary.reset( new WW8GlossaryFib(*refStrm, nVersion, aWwFib) );
+            xGlossary.reset(new WW8GlossaryFib(*refStrm, nVersion, aWwFib));
         }
     }
 }
@@ -191,17 +192,17 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 {
     bool bRet=false;
-    if (pGlossary && pGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries())
+    if (xGlossary && xGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries())
     {
         //read the names of the autotext entries
         std::vector<OUString> aStrings;
         std::vector<ww::bytes> aData;
 
         rtl_TextEncoding eStructCharSet =
-            WW8Fib::GetFIBCharset(pGlossary->m_chseTables, pGlossary->m_lid);
+            WW8Fib::GetFIBCharset(xGlossary->m_chseTables, xGlossary->m_lid);
 
-        WW8ReadSTTBF(true, *xTableStream, pGlossary->m_fcSttbfglsy,
-            pGlossary->m_lcbSttbfglsy, 0, eStructCharSet, aStrings, &aData );
+        WW8ReadSTTBF(true, *xTableStream, xGlossary->m_fcSttbfglsy,
+            xGlossary->m_lcbSttbfglsy, 0, eStructCharSet, aStrings, &aData );
 
         rStrm->Seek(0);
 
@@ -223,7 +224,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
                 aPamo.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(),
                     0);
                 std::unique_ptr<SwWW8ImplReader> xRdr(new SwWW8ImplReader(
-                    pGlossary->m_nVersion, xStg.get(), rStrm.get(), *pD, rBlocks.GetBaseURL(),
+                    xGlossary->m_nVersion, xStg.get(), rStrm.get(), *pD, rBlocks.GetBaseURL(),
                     true, false, *aPamo.GetPoint()));
                 xRdr->LoadDoc(this);
                 bRet = MakeEntries(pD, rBlocks, bSaveRelFile, aStrings, aData);

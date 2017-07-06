@@ -1193,7 +1193,7 @@ private:
 
     WW8PostProcessAttrsInfo * m_pPostProcessAttrsInfo;
 
-    WW8Fib* m_pWwFib;
+    std::shared_ptr<WW8Fib> m_xWwFib;
     std::unique_ptr<WW8Fonts> m_xFonts;
     std::unique_ptr<WW8Dop> m_xWDop;
     std::unique_ptr<WW8ListManager> m_xLstManager;
@@ -1852,7 +1852,7 @@ public:     // really private, but can only be done public
     /// Seek to the end of the table with pPap, returns true on success.
     bool SearchTableEnd(WW8PLCFx_Cp_FKP* pPap) const;
 
-    const WW8Fib& GetFib() const    { return *m_pWwFib; }
+    const WW8Fib& GetFib() const    { return *m_xWwFib; }
     SwDoc& GetDoc() const           { return m_rDoc; }
     sal_uInt16 GetNAktColl()  const     { return m_nAktColl; }
     void SetNAktColl( sal_uInt16 nColl ) { m_nAktColl = nColl;    }
