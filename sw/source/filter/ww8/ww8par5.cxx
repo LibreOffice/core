@@ -134,7 +134,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 
     if (pB->GetIsEnd())
     {
-        m_pReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_BOOKMARK, true,
+        m_xReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_BOOKMARK, true,
             pB->GetHandle(), (eB & BOOK_FIELD)!=0);
         return 0;
     }
@@ -229,7 +229,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     }
 
     const OUString sOrigName = BookmarkToWriter(*pName);
-    m_pReffedStck->NewAttr( aStart,
+    m_xReffedStck->NewAttr( aStart,
                           SwFltBookmark( EnsureTOCBookmarkName( sOrigName ), aVal, pB->GetHandle(), IsTOCBookmarkName( sOrigName ) ));
     return 0;
 }
@@ -239,9 +239,9 @@ long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
     if (WW8PLCFx_AtnBook* pAtnBook = m_xPlcxMan->GetAtnBook())
     {
         if (pAtnBook->getIsEnd())
-            m_pReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_ANNOTATIONMARK, true, pAtnBook->getHandle());
+            m_xReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_ANNOTATIONMARK, true, pAtnBook->getHandle());
         else
-            m_pReffedStck->NewAttr(*m_pPaM->GetPoint(), CntUInt16Item(RES_FLTR_ANNOTATIONMARK, pAtnBook->getHandle()));
+            m_xReffedStck->NewAttr(*m_pPaM->GetPoint(), CntUInt16Item(RES_FLTR_ANNOTATIONMARK, pAtnBook->getHandle()));
     }
     return 0;
 }
@@ -251,13 +251,13 @@ long SwWW8ImplReader::Read_FactoidBook(WW8PLCFManResult*)
     if (WW8PLCFx_FactoidBook* pFactoidBook = m_xPlcxMan->GetFactoidBook())
     {
         if (pFactoidBook->getIsEnd())
-            m_pReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_RDFMARK, true, pFactoidBook->getHandle());
+            m_xReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_RDFMARK, true, pFactoidBook->getHandle());
         else
         {
             SwFltRDFMark aMark;
             aMark.SetHandle(pFactoidBook->getHandle());
             GetSmartTagInfo(aMark);
-            m_pReffedStck->NewAttr(*m_pPaM->GetPoint(), aMark);
+            m_xReffedStck->NewAttr(*m_pPaM->GetPoint(), aMark);
         }
     }
     return 0;
@@ -1253,7 +1253,7 @@ long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
         sName = "WWSetBkmk" + OUString::number(nNo);
         nNo += m_xPlcxMan->GetBook()->GetIMax();
     }
-    m_pReffedStck->NewAttr(*m_pPaM->GetPoint(),
+    m_xReffedStck->NewAttr(*m_pPaM->GetPoint(),
         SwFltBookmark( BookmarkToWriter(sName), rData, nNo ));
     m_pReffingStck->aFieldVarNames[rOrigName] = sName;
     return nNo;
@@ -1359,7 +1359,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
 
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
 
-    m_pReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
+    m_xReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
     return eF_ResT::OK;
 }
 
@@ -1970,7 +1970,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, OUString& rStr )
 
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
 
-    m_pReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
+    m_xReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_BOOKMARK, true, nNo);
 
     return eF_ResT::OK;
 }
@@ -2033,7 +2033,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
     {
         sBkmName = EnsureTOCBookmarkName(sBkmName);
         // track <sBookmarkName> as referenced TOC bookmark.
-        m_pReffedStck->aReferencedTOCBookmarks.insert( sBkmName );
+        m_xReffedStck->aReferencedTOCBookmarks.insert( sBkmName );
     }
 
     SwGetRefField aField(
@@ -2141,7 +2141,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
             {
                 sBookmarkName = EnsureTOCBookmarkName(sName);
                 // track <sBookmarkName> as referenced TOC bookmark.
-                m_pReffedStck->aReferencedTOCBookmarks.insert( sBookmarkName );
+                m_xReffedStck->aReferencedTOCBookmarks.insert( sBookmarkName );
             }
             else
             {
@@ -2167,7 +2167,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
     {
         sPageRefBookmarkName = EnsureTOCBookmarkName(sName);
         // track <sPageRefBookmarkName> as referenced TOC bookmark.
-        m_pReffedStck->aReferencedTOCBookmarks.insert( sPageRefBookmarkName );
+        m_xReffedStck->aReferencedTOCBookmarks.insert( sPageRefBookmarkName );
     }
     else
     {
@@ -3378,7 +3378,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
         aFltTOX.SetHadPageDescItem(true);
 
     // Set start in stack
-    m_pReffedStck->NewAttr( *pPos, aFltTOX );
+    m_xReffedStck->NewAttr( *pPos, aFltTOX );
 
     m_rDoc.InsertTableOf(*m_pPaM->GetPoint(), *aFltTOX.GetBase());
 
@@ -3410,7 +3410,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
     }
 
     // Set end in stack
-    m_pReffedStck->SetAttr( *pPos, RES_FLTR_TOX );
+    m_xReffedStck->SetAttr( *pPos, RES_FLTR_TOX );
 
     if (!m_aApos.back()) //a para end in apo doesn't count
         m_bWasParaEnd = true;
@@ -3471,7 +3471,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
                     {
                         sMark = EnsureTOCBookmarkName(sMark);
                         // track <sMark> as referenced TOC bookmark.
-                        m_pReffedStck->aReferencedTOCBookmarks.insert( sMark );
+                        m_xReffedStck->aReferencedTOCBookmarks.insert( sMark );
                     }
 
                     if (m_bLoadingTOXCache)

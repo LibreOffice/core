@@ -2149,7 +2149,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     m_rDoc.getIDocumentContentOperations().InsertPoolItem(aEnd, SwFormatField(aPostIt));
     m_pCtrlStck->SetAttr(*aEnd.GetPoint(), RES_CHRATR_HIDDEN);
     // If this is a range, make sure that it ends after the just inserted character, not before it.
-    m_pReffedStck->MoveAttrs(*aEnd.GetPoint());
+    m_xReffedStck->MoveAttrs(*aEnd.GetPoint());
 
     return 0;
 }
@@ -4125,7 +4125,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_rDoc(rD)
     , m_pPaM(nullptr)
     , m_pCtrlStck(nullptr)
-    , m_pReffedStck(nullptr)
     , m_pReffingStck(nullptr)
     , m_pAnchorStck(nullptr)
     , m_aSectionManager(*this)
@@ -4912,7 +4911,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
         RefFieldStck: Keeps track of bookmarks which may be inserted as
         variables instead.
     */
-    m_pReffedStck = new SwWW8ReferencedFltEndStack(&m_rDoc, m_nFieldFlags);
+    m_xReffedStck.reset(new SwWW8ReferencedFltEndStack(&m_rDoc, m_nFieldFlags));
     m_pReffingStck = new SwWW8FltRefStack(&m_rDoc, m_nFieldFlags);
 
     m_pAnchorStck = new SwWW8FltAnchorStack(&m_rDoc, m_nFieldFlags);

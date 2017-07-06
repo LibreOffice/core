@@ -1094,7 +1094,7 @@ private:
     They get inserted at the end of the document, it is the same stack for
     headers/footers/main text/textboxes/tables etc...
     */
-    SwWW8ReferencedFltEndStack *m_pReffedStck;
+    std::unique_ptr<SwWW8ReferencedFltEndStack> m_xReffedStck;
 
     /*
     This stack is for fields whose true conversion cannot be determined until
@@ -1379,8 +1379,7 @@ private:
     void DeleteCtrlStack()    { DeleteStack( m_pCtrlStck  ); m_pCtrlStck   = nullptr; }
     void DeleteRefStacks()
     {
-        DeleteStack( m_pReffedStck );
-        m_pReffedStck = nullptr;
+        DeleteStack(m_xReffedStck.release());
         DeleteStack( m_pReffingStck );
         m_pReffingStck = nullptr;
     }
