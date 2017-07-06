@@ -23,6 +23,8 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
+#include <cassert>
+
 using std::vector;
 using std::find;
 
@@ -385,7 +387,8 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
     }
 
 #ifdef DBG_UTIL
-    SAL_WARN_IF(!IsSane(false) || !_rDestNode.IsSane(true), "sw.core", "insanity");
+    IsSane(false);
+    _rDestNode.IsSane(true);
 #endif
 }
 
@@ -433,7 +436,8 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
    OSL_ENSURE(mChildren.empty(), "MoveChildren failed!");
 
 #ifdef DBG_UTIL
-    OSL_ENSURE(IsSane(false) && pDest->IsSane(false), "insanity!");
+    IsSane(false);
+    pDest->IsSane(false);
 #endif
 }
 
@@ -585,7 +589,7 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
     }
 
 #ifdef DBG_UTIL
-    SAL_WARN_IF(!IsSane(false), "sw.core", "insanity");
+    IsSane(false);
 #endif
 }
 
@@ -678,7 +682,7 @@ void SwNumberTreeNode::RemoveMe()
             pSavedParent->ClearObsoletePhantoms();
 
 #ifdef DBG_UTIL
-        SAL_WARN_IF(!IsSane(false), "sw.core", "insanity");
+        IsSane(false);
 #endif
     }
 }
@@ -857,34 +861,22 @@ SwNumberTreeNode::GetChildCount() const
 }
 
 #ifdef DBG_UTIL
-bool SwNumberTreeNode::IsSane(bool bRecursive) const
+void SwNumberTreeNode::IsSane(bool bRecursive) const
 {
     vector<const SwNumberTreeNode*> aParents;
 
     return IsSane(bRecursive, aParents);
 }
 
-bool SwNumberTreeNode::IsSane(bool bRecursive,
+void SwNumberTreeNode::IsSane(bool bRecursive,
                               vector<const SwNumberTreeNode *> rParents)
     const
 {
-    bool bResult = true;
-
     tSwNumberTreeChildren::const_iterator aIt;
 
-    if (find(rParents.begin(), rParents.end(), this) != rParents.end())
-    {
-        OSL_FAIL(" I'm my own ancestor!");
+    assert(find(rParents.begin(), rParents.end(), this) == rParents.end());
 
-        bResult = false;
-    }
-
-    if (! rParents.empty() && rParents.back() != mpParent)
-    {
-        OSL_FAIL(" I'm a bastard!");
-
-        bResult = false;
-    }
+    assert(rParents.empty() || rParents.back() == mpParent);
 
     rParents.push_back(this);
 
@@ -895,49 +887,33 @@ bool SwNumberTreeNode::IsSane(bool bRecursive,
         {
             if ((*aIt)->IsPhantom())
             {
-                if ((*aIt)->HasOnlyPhantoms())
-                {
-                    bResult = false;
-                }
+                SAL_WARN_IF((*aIt)->HasOnlyPhantoms(), "sw.core",
+                        "HasOnlyPhantoms: is this an error?");
 
-                if (! bFirst)
-                {
-                    OSL_FAIL(" found phantom not at first position.");
-
-                    bResult = false;
-                }
+                assert(bFirst && "found phantom not at first position.");
             }
 
-            if ((*aIt)->mpParent != (SwNumberTreeNode *) this)
-            {
-                OSL_FAIL("found a bastard");
-
-                bResult = false;
-            }
+            assert((*aIt)->mpParent == this);
 
             if (mpParent)
             {
-                if  (!(*aIt)->IsPhantom() && (*aIt)->LessThan(*this))
-                {
-                    OSL_FAIL(" found child less than me");
-
-                    bResult = false;
-                }
+                assert((*aIt)->IsPhantom() || !(*aIt)->LessThan(*this));
             }
         }
         else
         {
-            OSL_FAIL("found child that is NULL");
-            bResult = false;
+            assert(!"found child that is NULL");
         }
 
-    if (bRecursive)
-      bResult = (*aIt)->IsSane(bRecursive, rParents) && bResult;
+        if (bRecursive)
+        {
+            (*aIt)->IsSane(bRecursive, rParents);
+        }
+
+        bFirst = false;
     }
 
     rParents.pop_back();
-
-    return bResult;
 }
 #endif // DBG_UTIL
 

@@ -346,7 +346,7 @@ public:
        @retval true   the structure of this node is sane
        @retval false  else
      */
-    bool IsSane(bool bRecursive) const;
+    void IsSane(bool bRecursive) const;
 #endif // DBG_UTIL
 
 protected:
@@ -391,15 +391,12 @@ protected:
     virtual void PostRemove() = 0;
 
 #ifdef DBG_UTIL
-    /**
-       Sanity check with loop detection.
+    /** Sanity check with loop detection.
 
        @param bRecursive   descend to children
        @param rParents     vector for recording path
-
-       @retval true     this node is sane
-       @retval false    else     */
-    virtual bool IsSane
+     */
+    virtual void IsSane
     (bool bRecursive, std::vector<const SwNumberTreeNode *> rParents) const;
 #endif // DBG_UTIL
 
