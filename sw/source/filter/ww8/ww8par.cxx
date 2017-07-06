@@ -4134,7 +4134,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_aExtraneousParas(rD)
     , m_aInsertedTables(rD)
     , m_aSectionNameGenerator(rD, "WW")
-    , m_pSprmParser(nullptr)
     , m_aGrfNameGenerator(bNewDoc, OUString('G'))
     , m_aParaStyleMapper(rD)
     , m_aCharStyleMapper(rD)
@@ -4933,7 +4932,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     RedlineFlags eMode = RedlineFlags::ShowInsert;
 
-    m_pSprmParser = new wwSprmParser(*m_pWwFib);
+    m_xSprmParser.reset(new wwSprmParser(*m_pWwFib));
 
     // Set handy helper variables
     m_bVer6  = (6 == m_pWwFib->m_nVersion);
@@ -5255,7 +5254,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     delete m_pWDop;
     DELETEZ( m_pFonts );
     delete m_pAtnNames;
-    delete m_pSprmParser;
+    m_xSprmParser.reset();
     ::EndProgress(m_pDocShell);
 
     m_pDataStream = nullptr;
