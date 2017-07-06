@@ -312,7 +312,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
 void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nLen)
 {
     if (nLen < 1)
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FRAMEDIR);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FRAMEDIR);
     else
     {
         SvxFrameDirection eDir =
@@ -746,7 +746,7 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
             }
             aLN.SetStartValue(1 + rSection.maSep.lnnMin);
             NewAttr(aLN);
-            m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LINENUMBER);
+            m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LINENUMBER);
         }
         m_bNoLnNumYet = false;
     }
@@ -2190,9 +2190,9 @@ void WW8DupProperties::Insert(const SwPosition &rPos)
 
 void SwWW8ImplReader::MoveInsideFly(const SwFrameFormat *pFlyFormat)
 {
-    WW8DupProperties aDup(m_rDoc,m_pCtrlStck);
+    WW8DupProperties aDup(m_rDoc, m_xCtrlStck.get());
 
-    m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), 0, false);
+    m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), 0, false);
 
     // set Pam in FlyFrame
     const SwFormatContent& rContent = pFlyFormat->GetContent();
@@ -2211,8 +2211,8 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrameFormat *pFlyFormat,
         return nRetWidth;
     // Close all attributes, because otherwise attributes can appear
     // that extend out of Flys
-    WW8DupProperties aDup(m_rDoc,m_pCtrlStck);
-    m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), 0, false);
+    WW8DupProperties aDup(m_rDoc, m_xCtrlStck.get());
+    m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), 0, false);
 
     /*
     #i1291
@@ -2433,7 +2433,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
         rPam.GetPoint()->nNode = aPref;
         rPam.GetPoint()->nContent.Assign(pNode, pNode->GetText().getLength());
         if (bStealAttr)
-            m_pCtrlStck->StealAttr(rPam.GetPoint()->nNode);
+            m_xCtrlStck->StealAttr(rPam.GetPoint()->nNode);
 
         pNode->JoinNext();
 
@@ -2648,7 +2648,7 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
         }
         else
         {
-            m_pCtrlStck->NewAttr(*m_pPaM->GetPoint(), rAttr);
+            m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(), rAttr);
             // #i103711#
             if ( bFirstLineOfStSet )
             {
@@ -2684,7 +2684,7 @@ const SfxPoolItem* SwWW8ImplReader::GetFormatAttr( sal_uInt16 nWhich )
     }
     else if (m_xPlcxMan && m_xPlcxMan->GetDoingDrawTextBox())
     {
-        pRet = m_pCtrlStck->GetStackAttr(*m_pPaM->GetPoint(), nWhich);
+        pRet = m_xCtrlStck->GetStackAttr(*m_pPaM->GetPoint(), nWhich);
         if (!pRet)
         {
             if (m_nAktColl < m_vColl.size() && m_vColl[m_nAktColl].m_pFormat &&
@@ -2699,7 +2699,7 @@ const SfxPoolItem* SwWW8ImplReader::GetFormatAttr( sal_uInt16 nWhich )
             pRet = &m_rDoc.GetAttrPool().GetDefaultItem(nWhich);
     }
     else
-        pRet = m_pCtrlStck->GetFormatAttr(*m_pPaM->GetPoint(), nWhich);
+        pRet = m_xCtrlStck->GetFormatAttr(*m_pPaM->GetPoint(), nWhich);
     return pRet;
 }
 
@@ -2760,7 +2760,7 @@ void SwWW8ImplReader::Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLe
 {
     if (nLen < 0)
     {
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_PARATR_OUTLINELEVEL);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_PARATR_OUTLINELEVEL);
         return;
     }
 
@@ -2791,7 +2791,7 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
         {
             //otherwise disable after we print the char
             if (m_xPlcxMan && m_xPlcxMan->GetDoingDrawTextBox())
-                m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_FONT );
+                m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_FONT );
             m_bSymbol = false;
         }
         else
@@ -2880,14 +2880,14 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
             {
                 // reset the CTL Weight and Posture, because they are the same as their
                 // western equivalents in ww6
-                m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), nEndIds[ nWestern + nEastern + nI ] );
+                m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nEndIds[ nWestern + nEastern + nI ] );
             }
             // reset the CJK Weight and Posture, because they are the same as their
             // western equivalents in word
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), nEndIds[ nWestern + nI ] );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nEndIds[ nWestern + nI ] );
         }
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), nEndIds[ nI ] );
-        m_pCtrlStck->SetToggleAttr(nI, false);
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nEndIds[ nI ] );
+        m_xCtrlStck->SetToggleAttr(nI, false);
         return;
     }
     // value: 0 = off, 1 = on, 128 = like style, 129 contrary to style
@@ -2929,7 +2929,7 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
             if (pSI && pSI->m_n81Flags & nMask)       // and in StyleDef at ?
                 bOn = !bOn;                 // then invert
             // remember on stack that this is a toggle-attribute
-            m_pCtrlStck->SetToggleAttr(nI, true);
+            m_xCtrlStck->SetToggleAttr(nI, true);
         }
     }
 
@@ -2941,7 +2941,7 @@ void SwWW8ImplReader::Read_Bidi(sal_uInt16, const sal_uInt8* pData, short nLen)
     if (nLen < 1)  //Property end
     {
         m_bBidi = false;
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(),RES_CHRATR_BIDIRTL);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(),RES_CHRATR_BIDIRTL);
     }
     else    //Property start
     {
@@ -3054,8 +3054,8 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
 
     if (nLen < 1)
     {
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(),nEndIds[nI]);
-        m_pCtrlStck->SetToggleBiDiAttr(nI, false);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(),nEndIds[nI]);
+        m_xCtrlStck->SetToggleBiDiAttr(nI, false);
         return;
     }
     bool bOn = *pData & 1;
@@ -3092,7 +3092,7 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
             if (pSI && pSI->m_n81BiDiFlags & nMask) // and in StyleDef at ?
                 bOn = !bOn;                     // then invert
             // remember on stack that this is a toggle-attribute
-            m_pCtrlStck->SetToggleBiDiAttr(nI, true);
+            m_xCtrlStck->SetToggleBiDiAttr(nI, true);
         }
     }
 
@@ -3189,7 +3189,7 @@ void SwWW8ImplReader::SetToggleAttr(sal_uInt8 nAttrId, bool bOn)
 void SwWW8ImplReader::ChkToggleAttr_( sal_uInt16 nOldStyle81Mask,
                                         sal_uInt16 nNewStyle81Mask )
 {
-    sal_uInt16 i = 1, nToggleAttrFlags = m_pCtrlStck->GetToggleAttrFlags();
+    sal_uInt16 i = 1, nToggleAttrFlags = m_xCtrlStck->GetToggleAttrFlags();
     for (sal_uInt8 n = 0; n < 7; ++n, i <<= 1)
     {
         if (
@@ -3205,7 +3205,7 @@ void SwWW8ImplReader::ChkToggleAttr_( sal_uInt16 nOldStyle81Mask,
 void SwWW8ImplReader::ChkToggleBiDiAttr_( sal_uInt16 nOldStyle81Mask,
                                         sal_uInt16 nNewStyle81Mask )
 {
-    sal_uInt16 i = 1, nToggleAttrFlags = m_pCtrlStck->GetToggleBiDiAttrFlags();
+    sal_uInt16 i = 1, nToggleAttrFlags = m_xCtrlStck->GetToggleBiDiAttrFlags();
     for (sal_uInt8 n = 0; n < 7; ++n, i <<= 1)
     {
         if (
@@ -3222,7 +3222,7 @@ void SwWW8ImplReader::Read_SubSuper( sal_uInt16, const sal_uInt8* pData, short n
 {
     if (nLen < 1)
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_ESCAPEMENT );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_ESCAPEMENT );
         return;
     }
 
@@ -3290,11 +3290,11 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
     */
     bool bIsGraphicPlacementHack = false;
     sal_uInt16 nPos;
-    if (m_pCtrlStck->GetFormatStackAttr(RES_CHRATR_ESCAPEMENT, &nPos))
+    if (m_xCtrlStck->GetFormatStackAttr(RES_CHRATR_ESCAPEMENT, &nPos))
     {
         SwPaM aRegion(*m_pPaM->GetPoint());
 
-        SwFltPosition aMkPos((*m_pCtrlStck)[nPos].m_aMkPos);
+        SwFltPosition aMkPos((*m_xCtrlStck)[nPos].m_aMkPos);
         SwFltPosition aPtPos(*m_pPaM->GetPoint());
 
         SwFrameFormat *pFlyFormat = nullptr;
@@ -3303,7 +3303,7 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
              nullptr != (pFlyFormat = ContainsSingleInlineGraphic(aRegion))
            )
         {
-            m_pCtrlStck->DeleteAndDestroy(nPos);
+            m_xCtrlStck->DeleteAndDestroy(nPos);
             pFlyFormat->SetFormatAttr(SwFormatVertOrient(0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::CHAR));
             bIsGraphicPlacementHack = true;
         }
@@ -3318,7 +3318,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
     if (nLen < (eVersion <= ww::eWW2 ? 1 : 2))
     {
         if (!ConvertSubToGraphicPlacement())
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_ESCAPEMENT );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_ESCAPEMENT );
         return;
     }
 
@@ -3378,8 +3378,8 @@ void SwWW8ImplReader::Read_Underline( sal_uInt16, const sal_uInt8* pData, short 
     // if necessary, mix up stack and exit!
     if (nLen < 1)
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_UNDERLINE );
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_WORDLINEMODE );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_UNDERLINE );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_WORDLINEMODE );
     }
     else
     {
@@ -3402,8 +3402,8 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
 {
     if (nLen < 0) // close the tag
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_TWO_LINES );
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_ROTATE );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_TWO_LINES );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_ROTATE );
     }
     else if( pData && 6 == nLen )
     {
@@ -3440,7 +3440,7 @@ void SwWW8ImplReader::Read_TextColor( sal_uInt16, const sal_uInt8* pData, short 
         return;
 
     if (nLen < 1)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_COLOR );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_COLOR );
     else
     {
         sal_uInt8 b = *pData;            // parameter: 0 = Auto, 1..16 colors
@@ -3457,7 +3457,7 @@ void SwWW8ImplReader::Read_TextColor( sal_uInt16, const sal_uInt8* pData, short 
 void SwWW8ImplReader::Read_TextForeColor(sal_uInt16, const sal_uInt8* pData, short nLen)
 {
     if (nLen < 4)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_COLOR );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_COLOR );
     else
     {
         Color aColor(msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)));
@@ -3510,7 +3510,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
         }
         else
         {
-            SvxUnderlineItem* pUnderlineAttr = const_cast<SvxUnderlineItem*>(static_cast<const SvxUnderlineItem*>(m_pCtrlStck->GetOpenStackAttr( *m_pPaM->GetPoint(), RES_CHRATR_UNDERLINE )));
+            SvxUnderlineItem* pUnderlineAttr = const_cast<SvxUnderlineItem*>(static_cast<const SvxUnderlineItem*>(m_xCtrlStck->GetOpenStackAttr( *m_pPaM->GetPoint(), RES_CHRATR_UNDERLINE )));
             if (pUnderlineAttr && nLen >= 4)
                 pUnderlineAttr->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32( pData ))));
         }
@@ -3698,7 +3698,7 @@ void SwWW8ImplReader::openFont(sal_uInt16 nFCode, sal_uInt16 nId)
 
 void SwWW8ImplReader::closeFont(sal_uInt16 nId)
 {
-    m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
+    m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
     if (nId == RES_CHRATR_CJK_FONT)
         ResetCJKCharSetVars();
     else
@@ -3778,11 +3778,11 @@ void SwWW8ImplReader::Read_FontSize( sal_uInt16 nId, const sal_uInt8* pData, sho
 
     if (nLen < (eVersion <= ww::eWW2 ? 1 : 2))          // end of attribute
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId  );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId  );
         if (eVersion <= ww::eWW6) // reset additionally the CTL size
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CTL_FONTSIZE );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CTL_FONTSIZE );
         if (RES_CHRATR_FONTSIZE == nId)  // reset additionally the CJK size
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CJK_FONTSIZE );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CJK_FONTSIZE );
     }
     else
     {
@@ -3855,7 +3855,7 @@ void SwWW8ImplReader::Read_Language( sal_uInt16 nId, const sal_uInt8* pData, sho
     }
 
     if (nLen < 2)                  // end of attribute
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
     else
     {
         sal_uInt16 nLang = SVBT16ToShort( pData );  // Language-Id
@@ -3870,7 +3870,7 @@ void SwWW8ImplReader::Read_CColl( sal_uInt16, const sal_uInt8* pData, short nLen
 {
     if (nLen < 2)    // end of attribute
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_TXTATR_CHARFMT );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_TXTATR_CHARFMT );
         m_nCharFormat = -1;
         return;
     }
@@ -3900,7 +3900,7 @@ void SwWW8ImplReader::Read_Kern( sal_uInt16, const sal_uInt8* pData, short nLen 
 {
     if (nLen < 2)  // end of attribute
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_KERNING );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_KERNING );
         return;
     }
     sal_Int16 nKern = SVBT16ToShort( pData );    // Kerning in Twips
@@ -3911,7 +3911,7 @@ void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* pData, short n
 {
     if (nLen < 2) // end of attribute
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_AUTOKERN );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_AUTOKERN );
         return;
     }
     sal_Int16 nAutoKern = SVBT16ToShort( pData );    // Kerning in Twips
@@ -3926,7 +3926,7 @@ void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, shor
 
     if (nLen < 2)
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
     }
     else
     {
@@ -3948,7 +3948,7 @@ void SwWW8ImplReader::Read_TextBackColor(sal_uInt16, const sal_uInt8* pData, sho
 {
     if (nLen <= 0)
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
     }
     else
     {
@@ -3970,7 +3970,7 @@ void SwWW8ImplReader::Read_CharHighlight(sal_uInt16, const sal_uInt8* pData, sho
 {
     if (nLen < 1)
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_HIGHLIGHT );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_HIGHLIGHT );
     }
     else
     {
@@ -3988,7 +3988,7 @@ void SwWW8ImplReader::Read_NoLineNumb(sal_uInt16 , const sal_uInt8* pData, short
 {
     if (nLen < 0)  // end of attribute
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_LINENUMBER );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_LINENUMBER );
         return;
     }
     SwFormatLineNumber aLN;
@@ -4020,7 +4020,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
 {
     if (nLen < 2)  // end of attribute
     {
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LR_SPACE);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LR_SPACE);
         return;
     }
 
@@ -4173,9 +4173,9 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
 
     if (nLen < (eVersion <= ww::eWW2 ? 3 : 4))
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_LINESPACING );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_LINESPACING );
         if( !( m_nIniFlags & WW8FL_NO_IMPLPASP ) )
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_UL_SPACE );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_UL_SPACE );
         return;
     }
 
@@ -4241,7 +4241,7 @@ void SwWW8ImplReader::Read_ParaAutoBefore(sal_uInt16, const sal_uInt8 *pData, sh
 {
     if (nLen < 1)
     {
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_UL_SPACE);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_UL_SPACE);
         return;
     }
 
@@ -4268,7 +4268,7 @@ void SwWW8ImplReader::Read_ParaAutoAfter(sal_uInt16, const sal_uInt8 *pData, sho
 {
     if (nLen < 1)
     {
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_UL_SPACE);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_UL_SPACE);
         return;
     }
 
@@ -4308,7 +4308,7 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
     if (nLen < 2)
     {
         // end of attribute
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_UL_SPACE );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_UL_SPACE );
         return;
     }
     short nPara = SVBT16ToShort( pData );
@@ -4340,7 +4340,7 @@ void SwWW8ImplReader::Read_ParaContextualSpacing( sal_uInt16, const sal_uInt8* p
 {
     if (nLen < 1)
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_UL_SPACE );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_UL_SPACE );
         return;
     }
     SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(GetFormatAttr( RES_UL_SPACE )));
@@ -4358,7 +4358,7 @@ void SwWW8ImplReader::Read_IdctHint( sal_uInt16, const sal_uInt8* pData, short n
     // when this value is 2, text properties bias towards complex properties.
     if (nLen < 1)  //Property end
     {
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(),RES_CHRATR_IDCTHINT);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(),RES_CHRATR_IDCTHINT);
     }
     else    //Property start
     {
@@ -4370,7 +4370,7 @@ void SwWW8ImplReader::Read_Justify( sal_uInt16, const sal_uInt8* pData, short nL
 {
     if (nLen < 1)
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_ADJUST );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_ADJUST );
         return;
     }
 
@@ -4424,7 +4424,7 @@ void SwWW8ImplReader::Read_RTLJustify( sal_uInt16, const sal_uInt8* pData, short
 {
     if (nLen < 1)
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_ADJUST );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_ADJUST );
         return;
     }
 
@@ -4482,7 +4482,7 @@ void SwWW8ImplReader::Read_BoolItem( sal_uInt16 nId, const sal_uInt8* pData, sho
     }
 
     if (nLen < 1)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), nId );
     else
     {
         SfxBoolItem* pI = static_cast<SfxBoolItem*>(GetDfltAttr( nId )->Clone());
@@ -4495,7 +4495,7 @@ void SwWW8ImplReader::Read_BoolItem( sal_uInt16 nId, const sal_uInt8* pData, sho
 void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     if (nLen < 1)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_EMPHASIS_MARK );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_EMPHASIS_MARK );
     else
     {
         LanguageType nLang;
@@ -4553,7 +4553,7 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
 void SwWW8ImplReader::Read_ScaleWidth( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     if (nLen < 2)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_SCALEW );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_SCALEW );
     else
     {
         sal_uInt16 nVal = SVBT16ToShort( pData );
@@ -4567,7 +4567,7 @@ void SwWW8ImplReader::Read_ScaleWidth( sal_uInt16, const sal_uInt8* pData, short
 void SwWW8ImplReader::Read_Relief( sal_uInt16 nId, const sal_uInt8* pData, short nLen )
 {
     if (nLen < 1)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_RELIEF );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_RELIEF );
     else
     {
         if( *pData )
@@ -4594,7 +4594,7 @@ void SwWW8ImplReader::Read_Relief( sal_uInt16 nId, const sal_uInt8* pData, short
 void SwWW8ImplReader::Read_TextAnim(sal_uInt16 /*nId*/, const sal_uInt8* pData, short nLen)
 {
     if (nLen < 1)
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_CHRATR_BLINK);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_CHRATR_BLINK);
     else
     {
         if (*pData)
@@ -4755,7 +4755,7 @@ void SwWW8ImplReader::Read_Shade( sal_uInt16, const sal_uInt8* pData, short nLen
     if (nLen < 2)
     {
         // end of attribute
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BACKGROUND );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BACKGROUND );
     }
     else
     {
@@ -4772,7 +4772,7 @@ void SwWW8ImplReader::Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, sho
     if (nLen <= 0)
     {
         // end of attribute
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BACKGROUND );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BACKGROUND );
     }
     else
     {
@@ -4831,8 +4831,8 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
     {
         if( m_bHasBorder )
         {
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BOX );
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_SHADOW );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BOX );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_SHADOW );
             m_bHasBorder = false;
         }
     }
@@ -4905,8 +4905,8 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
 
     if (nLen < 0)
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_BOX );
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_SHADOW );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_BOX );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_SHADOW );
     }
     else
     {
@@ -4944,7 +4944,7 @@ void SwWW8ImplReader::Read_Hyphenation( sal_uInt16, const sal_uInt8* pData, shor
 {
     // set Hyphenation flag
     if (nLen < 1)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_HYPHENZONE );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_HYPHENZONE );
     else
     {
         SvxHyphenZoneItem aAttr(
@@ -4967,8 +4967,8 @@ void SwWW8ImplReader::Read_WidowControl( sal_uInt16, const sal_uInt8* pData, sho
 {
     if (nLen < 1)
     {
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_WIDOWS );
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_ORPHANS );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_WIDOWS );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_ORPHANS );
     }
     else
     {
@@ -4986,7 +4986,7 @@ void SwWW8ImplReader::Read_WidowControl( sal_uInt16, const sal_uInt8* pData, sho
 void SwWW8ImplReader::Read_UsePgsuSettings(sal_uInt16,const sal_uInt8* pData,short nLen)
 {
     if (nLen < 1)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_SNAPTOGRID);
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_SNAPTOGRID);
     else
     {
         if(m_nInTable)
@@ -4999,7 +4999,7 @@ void SwWW8ImplReader::Read_UsePgsuSettings(sal_uInt16,const sal_uInt8* pData,sho
 void SwWW8ImplReader::Read_AlignFont( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     if (nLen < 2)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_VERTALIGN);
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_VERTALIGN);
     else
     {
         sal_uInt16 nVal = SVBT16ToShort( pData );
@@ -5033,7 +5033,7 @@ void SwWW8ImplReader::Read_AlignFont( sal_uInt16, const sal_uInt8* pData, short 
 void SwWW8ImplReader::Read_KeepLines( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     if (nLen < 1)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_SPLIT );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_SPLIT );
     else
         NewAttr( SvxFormatSplitItem( ( *pData & 1 ) == 0, RES_PARATR_SPLIT ) );
 }
@@ -5041,7 +5041,7 @@ void SwWW8ImplReader::Read_KeepLines( sal_uInt16, const sal_uInt8* pData, short 
 void SwWW8ImplReader::Read_KeepParas( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     if (nLen < 1)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_KEEP );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_KEEP );
     else
         NewAttr( SvxFormatKeepItem( ( *pData & 1 ) != 0 , RES_KEEP) );
 }
@@ -5049,7 +5049,7 @@ void SwWW8ImplReader::Read_KeepParas( sal_uInt16, const sal_uInt8* pData, short 
 void SwWW8ImplReader::Read_BreakBefore( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     if (nLen < 1)
-        m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BREAK );
+        m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_BREAK );
     else
         NewAttr( SvxFormatBreakItem(
                 ( *pData & 1 ) ? SvxBreak::PageBefore : SvxBreak::NONE, RES_BREAK ) );

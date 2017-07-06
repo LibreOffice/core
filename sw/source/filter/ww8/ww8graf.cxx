@@ -586,7 +586,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
     std::deque<Chunk> aChunks;
 
     // Here store stack location
-    size_t nCurrentCount = m_pCtrlStck->size();
+    size_t nCurrentCount = m_xCtrlStck->size();
     while (nStart < nEndCp)
     {
         // nStart is the beginning of the attributes for this range, and
@@ -645,13 +645,13 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
             {
                 if (bStartAttr)
                 {
-                    size_t nCount = m_pCtrlStck->size();
+                    size_t nCount = m_xCtrlStck->size();
                     if (m_aFieldStack.empty() && Read_Field(&aRes))
                     {
                         OUString sURL;
-                        for (size_t nI = m_pCtrlStck->size(); nI > nCount; --nI)
+                        for (size_t nI = m_xCtrlStck->size(); nI > nCount; --nI)
                         {
-                            const SfxPoolItem *pItem = ((*m_pCtrlStck)[nI-1]).pAttr.get();
+                            const SfxPoolItem *pItem = ((*m_xCtrlStck)[nI-1]).pAttr.get();
                             sal_uInt16 nWhich = pItem->Which();
                             if (nWhich == RES_TXTATR_INETFMT)
                             {
@@ -659,7 +659,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                                     static_cast<const SwFormatINetFormat *>(pItem);
                                 sURL = pURL->GetValue();
                             }
-                            m_pCtrlStck->DeleteAndDestroy(nI-1);
+                            m_xCtrlStck->DeleteAndDestroy(nI-1);
                         }
                         aChunks.push_back(Chunk(nStart, sURL));
                     }
@@ -683,11 +683,11 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
             // Here read current properties and convert them into pS
             // and put those attrs into the draw box if they can be converted
             // to draw attributes
-            if (m_pCtrlStck->size() - nCurrentCount)
+            if (m_xCtrlStck->size() - nCurrentCount)
             {
-                for (size_t i = nCurrentCount; i < m_pCtrlStck->size(); ++i)
+                for (size_t i = nCurrentCount; i < m_xCtrlStck->size(); ++i)
                 {
-                    const SfxPoolItem *pItem = ((*m_pCtrlStck)[i]).pAttr.get();
+                    const SfxPoolItem *pItem = ((*m_xCtrlStck)[i]).pAttr.get();
                     sal_uInt16 nWhich = pItem->Which();
                     if( nWhich < RES_FLTRATTR_BEGIN ||
                         nWhich >= RES_FLTRATTR_END )
@@ -724,8 +724,8 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
 
     // pop off as far as recorded location just in case there were some left
     // unclosed
-    for (size_t nI = m_pCtrlStck->size(); nI > nCurrentCount; --nI)
-        m_pCtrlStck->DeleteAndDestroy(nI-1);
+    for (size_t nI = m_xCtrlStck->size(); nI > nCurrentCount; --nI)
+        m_xCtrlStck->DeleteAndDestroy(nI-1);
 
     typedef std::deque<Chunk>::iterator myIter;
     myIter aEnd = aChunks.end();

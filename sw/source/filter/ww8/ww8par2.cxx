@@ -1092,7 +1092,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
 
     sNumRule = pNumRule ? pNumRule->GetName() : OUString();
     // set NumRules via stack
-    m_pCtrlStck->NewAttr(*m_pPaM->GetPoint(),
+    m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(),
         SfxStringItem(RES_FLTR_NUMRULE, sNumRule));
 
     m_aANLDRules.SetNumRule(pNumRule, m_nWwNumType);
@@ -1174,11 +1174,11 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
     {
         SwPosition aTmpPos(*m_pPaM->GetPoint());
         m_pPaM->Move(fnMoveBackward, GoInContent);
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);
         *m_pPaM->GetPoint() = aTmpPos;
     }
     else
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);
 
     m_aANLDRules.mpNumberingNumRule = nullptr;
     /*
@@ -2489,7 +2489,7 @@ void WW8TabDesc::CreateSwTable()
         // set font size to 1 point to minimize y-growth of Hd/Ft
         SvxFontHeightItem aSz(20, 100, RES_CHRATR_FONTSIZE);
         m_pIo->NewAttr( aSz );
-        m_pIo->m_pCtrlStck->SetAttr(*pPoint, RES_CHRATR_FONTSIZE);
+        m_pIo->m_xCtrlStck->SetAttr(*pPoint, RES_CHRATR_FONTSIZE);
     }
 
     if (bInsNode)
@@ -2625,8 +2625,8 @@ void WW8TabDesc::UseSwTable()
     // insert extra cells if needed and something like this
     AdjustNewBand();
 
-    WW8DupProperties aDup(m_pIo->m_rDoc,m_pIo->m_pCtrlStck);
-    m_pIo->m_pCtrlStck->SetAttr(*m_pIo->m_pPaM->GetPoint(), 0, false);
+    WW8DupProperties aDup(m_pIo->m_rDoc, m_pIo->m_xCtrlStck.get());
+    m_pIo->m_xCtrlStck->SetAttr(*m_pIo->m_pPaM->GetPoint(), 0, false);
 
     // now set the correct PaM and prepare first merger group if any
     SetPamInCell(m_nAktCol, true);
@@ -2819,8 +2819,8 @@ void WW8TabDesc::FinishSwTable()
     m_pIo->m_xRedlineStack->closeall(*m_pIo->m_pPaM->GetPoint());
     m_pIo->m_xRedlineStack = std::move(mxOldRedlineStack);
 
-    WW8DupProperties aDup(m_pIo->m_rDoc,m_pIo->m_pCtrlStck);
-    m_pIo->m_pCtrlStck->SetAttr( *m_pIo->m_pPaM->GetPoint(), 0, false);
+    WW8DupProperties aDup(m_pIo->m_rDoc,m_pIo->m_xCtrlStck.get());
+    m_pIo->m_xCtrlStck->SetAttr( *m_pIo->m_pPaM->GetPoint(), 0, false);
 
     MoveOutsideTable();
     delete m_pTmpPos;
@@ -2960,7 +2960,7 @@ void WW8TabDesc::StartMiserableHackForUnsupportedDirection(short nWwCol)
     OSL_ENSURE(m_pActBand, "Impossible");
     if (m_pActBand && m_pActBand->maDirections[nWwCol] == 3)
     {
-        m_pIo->m_pCtrlStck->NewAttr(*m_pIo->m_pPaM->GetPoint(),
+        m_pIo->m_xCtrlStck->NewAttr(*m_pIo->m_pPaM->GetPoint(),
             SvxCharRotateItem(900, false, RES_CHRATR_ROTATE));
     }
 }
@@ -2969,7 +2969,7 @@ void WW8TabDesc::EndMiserableHackForUnsupportedDirection(short nWwCol)
 {
     OSL_ENSURE(m_pActBand, "Impossible");
     if (m_pActBand && m_pActBand->maDirections[nWwCol] == 3)
-        m_pIo->m_pCtrlStck->SetAttr(*m_pIo->m_pPaM->GetPoint(), RES_CHRATR_ROTATE);
+        m_pIo->m_xCtrlStck->SetAttr(*m_pIo->m_pPaM->GetPoint(), RES_CHRATR_ROTATE);
 }
 
 void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
@@ -3070,9 +3070,9 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 
                 const sal_Int32 nEnd = pGridPos->nContent.GetIndex();
                 pGridPos->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), 0);
-                m_pIo->m_pCtrlStck->NewAttr(*pGridPos, aGridItem);
+                m_pIo->m_xCtrlStck->NewAttr(*pGridPos, aGridItem);
                 pGridPos->nContent.Assign(m_pIo->m_pPaM->GetContentNode(), nEnd);
-                m_pIo->m_pCtrlStck->SetAttr(*pGridPos, RES_PARATR_SNAPTOGRID);
+                m_pIo->m_xCtrlStck->SetAttr(*pGridPos, RES_PARATR_SNAPTOGRID);
             }
         }
 

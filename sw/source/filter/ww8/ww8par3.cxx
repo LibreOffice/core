@@ -1881,8 +1881,8 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
 
                 if (const SvxLRSpaceItem *pLR = aListIndent.GetItem<SvxLRSpaceItem>(RES_LR_SPACE))
                 {
-                    m_pCtrlStck->NewAttr(*m_pPaM->GetPoint(), *pLR);
-                    m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LR_SPACE);
+                    m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(), *pLR);
+                    m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LR_SPACE);
                 }
             }
         }

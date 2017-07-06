@@ -550,24 +550,24 @@ void SwMSDffManager::EnableFallbackStream()
 
 sal_uInt16 SwWW8ImplReader::GetToggleAttrFlags() const
 {
-    return m_pCtrlStck ? m_pCtrlStck->GetToggleAttrFlags() : 0;
+    return m_xCtrlStck ? m_xCtrlStck->GetToggleAttrFlags() : 0;
 }
 
 sal_uInt16 SwWW8ImplReader::GetToggleBiDiAttrFlags() const
 {
-    return m_pCtrlStck ? m_pCtrlStck->GetToggleBiDiAttrFlags() : 0;
+    return m_xCtrlStck ? m_xCtrlStck->GetToggleBiDiAttrFlags() : 0;
 }
 
 void SwWW8ImplReader::SetToggleAttrFlags(sal_uInt16 nFlags)
 {
-    if (m_pCtrlStck)
-        m_pCtrlStck->SetToggleAttrFlags(nFlags);
+    if (m_xCtrlStck)
+        m_xCtrlStck->SetToggleAttrFlags(nFlags);
 }
 
 void SwWW8ImplReader::SetToggleBiDiAttrFlags(sal_uInt16 nFlags)
 {
-    if (m_pCtrlStck)
-        m_pCtrlStck->SetToggleBiDiAttrFlags(nFlags);
+    if (m_xCtrlStck)
+        m_xCtrlStck->SetToggleBiDiAttrFlags(nFlags);
 }
 
 SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
@@ -1627,7 +1627,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 {
     if (nLen < 0)
     {
-        m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_PARATR_TABSTOP);
+        m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_PARATR_TABSTOP);
         return;
     }
 
@@ -1964,7 +1964,7 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
  */
 WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     maTmpPos(*pRdr->m_pPaM->GetPoint()),
-    mpOldStck(pRdr->m_pCtrlStck),
+    mxOldStck(std::move(pRdr->m_xCtrlStck)),
     mxOldAnchorStck(std::move(pRdr->m_xAnchorStck)),
     mxOldRedlines(std::move(pRdr->m_xRedlineStack)),
     mxOldPlcxMan(pRdr->m_xPlcxMan),
@@ -1998,8 +1998,8 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     pRdr->m_pTableDesc = nullptr;
     pRdr->m_nAktColl = 0;
 
-    pRdr->m_pCtrlStck = new SwWW8FltControlStack(&pRdr->m_rDoc, pRdr->m_nFieldFlags,
-        *pRdr);
+    pRdr->m_xCtrlStck.reset(new SwWW8FltControlStack(&pRdr->m_rDoc, pRdr->m_nFieldFlags,
+        *pRdr));
 
     pRdr->m_xRedlineStack.reset(new sw::util::RedlineStack(pRdr->m_rDoc));
 
@@ -2044,7 +2044,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 
     // Close all attributes as attributes could be created that extend the Fly
     pRdr->DeleteCtrlStack();
-    pRdr->m_pCtrlStck = mpOldStck;
+    pRdr->m_xCtrlStck = std::move(mxOldStck);
 
     pRdr->m_xRedlineStack->closeall(*pRdr->m_pPaM->GetPoint());
     pRdr->m_xRedlineStack = std::move(mxOldRedlines);
@@ -2145,9 +2145,9 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     aPostIt.SetTextObject(pOutliner);
 
     SwPaM aEnd(*m_pPaM->End(), *m_pPaM->End());
-    m_pCtrlStck->NewAttr(*aEnd.GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
+    m_xCtrlStck->NewAttr(*aEnd.GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));
     m_rDoc.getIDocumentContentOperations().InsertPoolItem(aEnd, SwFormatField(aPostIt));
-    m_pCtrlStck->SetAttr(*aEnd.GetPoint(), RES_CHRATR_HIDDEN);
+    m_xCtrlStck->SetAttr(*aEnd.GetPoint(), RES_CHRATR_HIDDEN);
     // If this is a range, make sure that it ends after the just inserted character, not before it.
     m_xReffedStck->MoveAttrs(*aEnd.GetPoint());
 
@@ -2448,7 +2448,7 @@ bool SwWW8ImplReader::SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper )
         bool bRet = false;
         const SwPosition* pSpacingPos = rMyPam.GetPoint();
 
-        const SvxULSpaceItem* pULSpaceItem = static_cast<const SvxULSpaceItem*>(m_pCtrlStck->GetFormatAttr(*pSpacingPos, RES_UL_SPACE));
+        const SvxULSpaceItem* pULSpaceItem = static_cast<const SvxULSpaceItem*>(m_xCtrlStck->GetFormatAttr(*pSpacingPos, RES_UL_SPACE));
 
         if(pULSpaceItem != nullptr)
         {
@@ -2461,9 +2461,9 @@ bool SwWW8ImplReader::SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper )
 
             const sal_Int32 nEnd = pSpacingPos->nContent.GetIndex();
             rMyPam.GetPoint()->nContent.Assign(rMyPam.GetContentNode(), 0);
-            m_pCtrlStck->NewAttr(*pSpacingPos, aUL);
+            m_xCtrlStck->NewAttr(*pSpacingPos, aUL);
             rMyPam.GetPoint()->nContent.Assign(rMyPam.GetContentNode(), nEnd);
-            m_pCtrlStck->SetAttr(*pSpacingPos, RES_UL_SPACE);
+            m_xCtrlStck->SetAttr(*pSpacingPos, RES_UL_SPACE);
             bRet = true;
         }
         return bRet;
@@ -2791,9 +2791,9 @@ void SwWW8ImplReader::PostProcessAttrs()
         {
             do
             {
-                m_pCtrlStck->NewAttr(*m_pPostProcessAttrsInfo->mPaM.GetPoint(),
+                m_xCtrlStck->NewAttr(*m_pPostProcessAttrsInfo->mPaM.GetPoint(),
                                    *pItem);
-                m_pCtrlStck->SetAttr(*m_pPostProcessAttrsInfo->mPaM.GetMark(),
+                m_xCtrlStck->SetAttr(*m_pPostProcessAttrsInfo->mPaM.GetMark(),
                                    pItem->Which());
             }
             while (!aIter.IsAtEnd() && nullptr != (pItem = aIter.NextItem()));
@@ -3298,11 +3298,11 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
                     if (aForced[i])
                     {
                         pOverriddenItems[i] =
-                            static_cast<const SvxFontItem*>(m_pCtrlStck->GetStackAttr(*m_pPaM->GetPoint(), aIds[i]));
+                            static_cast<const SvxFontItem*>(m_xCtrlStck->GetStackAttr(*m_pPaM->GetPoint(), aIds[i]));
 
                         SvxFontItem aForceFont(*pSourceFont);
                         aForceFont.SetWhich(aIds[i]);
-                        m_pCtrlStck->NewAttr(*m_pPaM->GetPoint(), aForceFont);
+                        m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(), aForceFont);
                     }
                 }
             }
@@ -3314,9 +3314,9 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
         {
             if (aForced[i])
             {
-                m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), aIds[i]);
+                m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), aIds[i]);
                 if (pOverriddenItems[i])
-                    m_pCtrlStck->NewAttr(*m_pPaM->GetPoint(), *(pOverriddenItems[i]));
+                    m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(), *(pOverriddenItems[i]));
             }
         }
 
@@ -3390,9 +3390,9 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
             {
                 m_rDoc.getIDocumentContentOperations().InsertString( *m_pPaM, OUString(m_cSymbol) );
             }
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_FONT );
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CJK_FONT );
-            m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CTL_FONT );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_FONT );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CJK_FONT );
+            m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_CTL_FONT );
         }
         m_pStrm->SeekRel(nRequested);
         rPos = nEnd; // Ignore until attribute end
@@ -3431,7 +3431,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
         }
 
         m_bPgSecBreak = true;
-        m_pCtrlStck->KillUnlockedAttrs(*m_pPaM->GetPoint());
+        m_xCtrlStck->KillUnlockedAttrs(*m_pPaM->GetPoint());
         /*
         If it's a 0x0c without a paragraph end before it, act like a
         paragraph end, but nevertheless, numbering (and perhaps other
@@ -3792,7 +3792,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
 
     // Find next Attr position (and Skip attributes of field contents if needed)
     if (nSkipChars && !m_bIgnoreText)
-        m_pCtrlStck->MarkAllAttrsOld();
+        m_xCtrlStck->MarkAllAttrsOld();
     bool bOldIgnoreText = m_bIgnoreText;
     m_bIgnoreText = true;
     sal_uInt16 nOldColl = m_nAktColl;
@@ -3827,7 +3827,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
     m_bIgnoreText    = bOldIgnoreText;
     if( nSkipChars )
     {
-        m_pCtrlStck->KillUnlockedAttrs( *m_pPaM->GetPoint() );
+        m_xCtrlStck->KillUnlockedAttrs( *m_pPaM->GetPoint() );
         if( nOldColl != m_xPlcxMan->GetColl() )
             ProcessAktCollChange(aRes, nullptr, false);
     }
@@ -3995,7 +3995,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             // Need to reset the font size and text position for the dropcap
             {
                 SwPaM aTmp(*pEndNd, 0, *pEndNd, nDropCapLen+1);
-                m_pCtrlStck->Delete(aTmp);
+                m_xCtrlStck->Delete(aTmp);
             }
 
             // Get the default document dropcap which we can use as our template
@@ -4015,8 +4015,8 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
                 aDrop.SetCharFormat(pNewSwCharFormat);
 
             SwPosition aStart(*pEndNd);
-            m_pCtrlStck->NewAttr(aStart, aDrop);
-            m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_PARATR_DROP);
+            m_xCtrlStck->NewAttr(aStart, aDrop);
+            m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_PARATR_DROP);
             pPreviousNode = nullptr;
         }
         else if (m_bDropCap)
@@ -4124,7 +4124,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pDataStream(nullptr)
     , m_rDoc(rD)
     , m_pPaM(nullptr)
-    , m_pCtrlStck(nullptr)
     , m_pReffingStck(nullptr)
     , m_aSectionManager(*this)
     , m_aExtraneousParas(rD)
@@ -4902,7 +4901,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     m_pPaM = mpCursor.get();
 
-    m_pCtrlStck = new SwWW8FltControlStack( &m_rDoc, m_nFieldFlags, *this );
+    m_xCtrlStck.reset(new SwWW8FltControlStack(&m_rDoc, m_nFieldFlags, *this));
 
     m_xRedlineStack.reset(new sw::util::RedlineStack(m_rDoc));
 
