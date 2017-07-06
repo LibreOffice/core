@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/settings.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 
 #include <svx/dialogs.hrc>
 #include "bitmaps.hlst"
@@ -671,7 +672,36 @@ void FrameSelectorImpl::DrawAllFrameBorders()
             maArray.SetCellStyleDiag( nCol, nRow, maTLBR.GetUIStyle(), maBLTR.GetUIStyle() );
 
     // Let the helper array draw itself
-    maArray.DrawArray( *mpVirDev.get() );
+    static bool bUsePrimitives(true);
+
+    if (bUsePrimitives)
+    {
+        // This is used in the dialog/control for 'Border' attributes. When using
+        // the original paint below instead of primitives, the advantage currently
+        // is the correct visualization of diagonal line(s) including overlaying,
+        // but the rest is bad. Since the edit views use primitives and the preview
+        // should be 'real' I opt for also changing this to primitives. I will
+        // keep the old solution and add a switch (above) based on a static bool so
+        // that interested people may test this out in the debugger.
+        // This is one more hint to enhance the primitive visualization further to
+        // support diagonals better - that's the way to go.
+        const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
+            drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+                *mpVirDev.get(),
+                aNewViewInformation2D));
+
+        if (pProcessor2D)
+        {
+            maArray.DrawArray(*pProcessor2D.get());
+            pProcessor2D.reset();
+        }
+    }
+    else
+    {
+        // original paint
+        maArray.DrawArray(*mpVirDev.get());
+    }
 }
 
 void FrameSelectorImpl::DrawVirtualDevice()

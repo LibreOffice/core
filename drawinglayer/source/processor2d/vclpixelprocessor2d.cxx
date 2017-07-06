@@ -919,7 +919,10 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D:
                 {
                     // process recursively, but switch off AntiAliasing for
-                    // horizontal/vertical lines (*not* diagonal lines)
+                    // horizontal/vertical lines (*not* diagonal lines).
+                    // Checked using AntialiasingFlags::PixelSnapHairline instead,
+                    // but with AntiAliasing on the display really is too 'ghosty' when
+                    // using fine stroking. Correct, but 'ghosty'.
                     const drawinglayer::primitive2d::BorderLinePrimitive2D& rBorder =
                         static_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D&>(rCandidate);
 

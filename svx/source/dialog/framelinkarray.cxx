@@ -879,7 +879,7 @@ void Array::MirrorSelfX()
 }
 
 // drawing
-void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
+void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
         size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
         const Color* pForceColor ) const
 {
@@ -925,7 +925,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                                 aTlbrStyle.UseGapColor(),
                                 aTlbrStyle.Type(),
                                 aTlbrStyle.PatternScale()));
-                        pProcessor->process(aSequence);
+                        rProcessor.process(aSequence);
                     }
 
                     const Style aBltrStyle = GetCellStyleBLTR( _nFirstCol, _nFirstRow );
@@ -946,7 +946,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                                 aBltrStyle.UseGapColor(),
                                 aBltrStyle.Type(),
                                 aBltrStyle.PatternScale()));
-                        pProcessor->process(aSequence);
+                        rProcessor.process(aSequence);
                     }
                 }
             }
@@ -1008,7 +1008,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                             aStartPos, aEndPos, *pStart,
                             aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
                             aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor));
-                    pProcessor->process(aSequence);
+                    rProcessor.process(aSequence);
                 }
 
                 // re-init "*Start***" variables
@@ -1039,7 +1039,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                     aStartPos, aEndPos, *pStart,
                     aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
                     aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor));
-            pProcessor->process(aSequence);
+            rProcessor.process(aSequence);
         }
     }
 
@@ -1098,7 +1098,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                             aEndPos, aStartPos, *pStart,
                             aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
                             aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor));
-                    pProcessor->process(aSequence);
+                    rProcessor.process(aSequence);
                 }
 
                 // re-init "*Start***" variables
@@ -1128,7 +1128,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                 CreateBorderPrimitives(aEndPos, aStartPos, *pStart,
                     aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
                     aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor));
-            pProcessor->process(aSequence);
+            rProcessor.process(aSequence);
         }
     }
 }
@@ -1342,6 +1342,12 @@ void Array::DrawArray( OutputDevice& rDev ) const
 {
     if( mxImpl->mnWidth && mxImpl->mnHeight )
         DrawRange( rDev, 0, 0, mxImpl->mnWidth - 1, mxImpl->mnHeight - 1 );
+}
+
+void Array::DrawArray(drawinglayer::processor2d::BaseProcessor2D& rProcessor) const
+{
+    if (mxImpl->mnWidth && mxImpl->mnHeight)
+        DrawRange(rProcessor, 0, 0, mxImpl->mnWidth - 1, mxImpl->mnHeight - 1, nullptr);
 }
 
 

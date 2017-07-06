@@ -1458,7 +1458,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
         {
             size_t nRow2 = nRow1;
             while( (nRow2 + 1 <= nLastRow) && pRowInfo[ nRow2 + 1 ].bChanged ) ++nRow2;
-            rArray.DrawRange( pProcessor.get(), nFirstCol, nRow1, nLastCol, nRow2, pForceColor );
+            rArray.DrawRange( *pProcessor.get(), nFirstCol, nRow1, nLastCol, nRow2, pForceColor );
             nRow1 = nRow2 + 1;
         }
     }
