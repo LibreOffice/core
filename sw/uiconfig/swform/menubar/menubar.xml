@@ -285,7 +285,7 @@
           <menu:menuitem menu:id=".uno:WrapOn"/>
           <menu:menuitem menu:id=".uno:WrapIdeal"/>
           <menu:menuitem menu:id=".uno:WrapThrough"/>
-          <menu:menuitem menu:id=".uno:WrapThroughTransparent"/>
+          <menu:menuitem menu:id=".uno:WrapThroughTransparencyToggle"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:WrapContour"/>
           <menu:menuitem menu:id=".uno:ContourDialog"/>

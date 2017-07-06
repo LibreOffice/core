@@ -22,7 +22,7 @@
       <menu:menuitem menu:id=".uno:WrapRight"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:WrapThrough"/>
-      <menu:menuitem menu:id=".uno:WrapThroughTransparent"/>
+      <menu:menuitem menu:id=".uno:WrapThroughTransparencyToggle"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:WrapContour"/>
       <menu:menuitem menu:id=".uno:ContourDialog"/>

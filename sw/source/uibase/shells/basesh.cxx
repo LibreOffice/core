@@ -1149,6 +1149,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_FRAME_WRAP_IDEAL:
         case FN_FRAME_WRAPTHRU:
         case FN_FRAME_WRAPTHRU_TRANSP:
+        case FN_FRAME_WRAPTHRU_TOGGLE:
         case FN_FRAME_WRAP_CONTOUR:
         case FN_WRAP_ANCHOR_ONLY:
         case FN_FRAME_WRAP_LEFT:
@@ -1646,6 +1647,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_FRAME_WRAP_IDEAL:
             case FN_FRAME_WRAPTHRU:
             case FN_FRAME_WRAPTHRU_TRANSP:
+            case FN_FRAME_WRAPTHRU_TOGGLE:
             case FN_FRAME_WRAP_CONTOUR:
             case FN_WRAP_ANCHOR_ONLY:
             case FN_FRAME_WRAP_LEFT:
@@ -1708,6 +1710,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                 bSet = nSurround == css::text::WrapTextMode_THROUGH && bOpaque;
                         break;
                         case FN_FRAME_WRAPTHRU_TRANSP:
+                        case FN_FRAME_WRAPTHRU_TOGGLE:
                             bDisable |= bHtmlMode;
                             if(bObj)
                                 bSet = nSurround == css::text::WrapTextMode_THROUGH && !rSh.GetLayerId();
@@ -1864,6 +1867,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                 aWrap.SetContour(!aWrap.IsContour());
                 break;
             case FN_FRAME_WRAPTHRU_TRANSP:
+            case FN_FRAME_WRAPTHRU_TOGGLE:
                 if (aWrap.IsContour())
                     aWrap.SetContour(false);
                 SAL_FALLTHROUGH;
@@ -1895,11 +1899,24 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
         }
 
         aSet.Put( aWrap );
-        aSet.Put(SvxOpaqueItem(RES_OPAQUE, nSlot != FN_FRAME_WRAPTHRU_TRANSP));
+
+        bool bOpaque = nSlot != FN_FRAME_WRAPTHRU_TRANSP && nSlot != FN_FRAME_WRAPTHRU_TOGGLE;
+        if( nSlot == FN_FRAME_WRAPTHRU_TOGGLE )
+        {
+            if( bObj )
+                bOpaque = !rSh.GetLayerId();
+            else
+            {
+                const SvxOpaqueItem aOpaque( static_cast<const SvxOpaqueItem&>(aSet.Get(RES_OPAQUE)) );
+                bOpaque = !aOpaque.GetValue();
+            }
+        }
+        aSet.Put(SvxOpaqueItem(RES_OPAQUE, bOpaque ));
+
         if(bObj)
         {
             rSh.SetObjAttr(aSet);
-            if (nSlot != FN_FRAME_WRAPTHRU_TRANSP)
+            if ( bOpaque )
                 rSh.SelectionToHeaven();
             else
                 rSh.SelectionToHell();

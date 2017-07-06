@@ -6395,6 +6395,23 @@ SfxVoidItem WrapThroughTransparent FN_FRAME_WRAPTHRU_TRANSP
     GroupId = GID_FRAME;
 ]
 
+SfxVoidItem WrapThroughTransparencyToggle FN_FRAME_WRAPTHRU_TOGGLE
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FRAME;
+]
+
 SfxVoidItem InsertText FN_INSERT_STRING
 (SfxStringItem Text FN_INSERT_STRING)
 [

@@ -2078,6 +2078,11 @@
           <value xml:lang="en-US">In ~Background</value>
         </prop>
       </node>
+      <node oor:name=".uno:WrapThroughTransparencyToggle" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">In ~Background</value>
+        </prop>
+      </node>
       <node oor:name=".uno:GoToStartOfPrevColumn" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">To Begin of Previous Column</value>
