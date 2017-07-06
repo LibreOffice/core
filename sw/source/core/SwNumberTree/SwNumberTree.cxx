@@ -21,6 +21,7 @@
 #include <functional>
 #include <SwNumberTree.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using std::vector;
 using std::find;
@@ -383,9 +384,8 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
         }
     }
 
-#ifdef __SW_NUMBER_TREE_SANITY_CHECK
-    if (! IsSane(false) || ! IsSane(&_rDestNode))
-        clog << __FUNCTION__ << "insanity!" << endl;
+#ifdef DBG_UTIL
+    SAL_WARN_IF(!IsSane(false) || !_rDestNode.IsSane(true), "sw.core", "insanity");
 #endif
 }
 
@@ -432,7 +432,7 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
 
    OSL_ENSURE(mChildren.empty(), "MoveChildren failed!");
 
-#ifdef __SW_NUMBER_TREE_SANITY_CHECK
+#ifdef DBG_UTIL
     OSL_ENSURE(IsSane(false) && pDest->IsSane(false), "insanity!");
 #endif
 }
@@ -584,9 +584,8 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
         }
     }
 
-#ifdef __SW_NUMBER_TREE_SANITY_CHECK
-    if (! IsSane(false))
-        clog << __FUNCTION__ << ": insanity!" << endl;
+#ifdef DBG_UTIL
+    SAL_WARN_IF(!IsSane(false), "sw.core", "insanity");
 #endif
 }
 
@@ -678,9 +677,8 @@ void SwNumberTreeNode::RemoveMe()
         if (pSavedParent)
             pSavedParent->ClearObsoletePhantoms();
 
-#ifdef __SW_NUMBER_TREE_SANITY_CHECK
-        if (! IsSane(false))
-            clog << __FUNCTION__ << ": insanity!" << endl;
+#ifdef DBG_UTIL
+        SAL_WARN_IF(!IsSane(false), "sw.core", "insanity");
 #endif
     }
 }
@@ -858,7 +856,7 @@ SwNumberTreeNode::GetChildCount() const
     return mChildren.size();
 }
 
-#ifdef __SW_NUMBER_TREE_SANITY_CHECK
+#ifdef DBG_UTIL
 bool SwNumberTreeNode::IsSane(bool bRecursive) const
 {
     vector<const SwNumberTreeNode*> aParents;
@@ -941,7 +939,7 @@ bool SwNumberTreeNode::IsSane(bool bRecursive,
 
     return bResult;
 }
-#endif // __SW_NUMBER_TREE_SANITY_CHECK
+#endif // DBG_UTIL
 
 SwNumberTreeNode::tSwNumberTreeChildren::const_iterator
 SwNumberTreeNode::GetIterator(const SwNumberTreeNode * pChild) const

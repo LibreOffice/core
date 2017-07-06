@@ -337,7 +337,7 @@ public:
     */
     const SwNumberTreeNode* GetPrecedingNodeOf( const SwNumberTreeNode& rNode ) const;
 
-#ifdef __SW_NUMBER_TREE_SANITY_CHECK
+#ifdef DBG_UTIL
     /**
        Sanity check.
 
@@ -347,7 +347,7 @@ public:
        @retval false  else
      */
     bool IsSane(bool bRecursive) const;
-#endif // __SW_NUMBER_TREE_SANITY_CHECK
+#endif // DBG_UTIL
 
 protected:
     /**
@@ -390,7 +390,7 @@ protected:
     // method called after this tree node has been removed from the list tree
     virtual void PostRemove() = 0;
 
-#ifdef __SW_NUMBER_TREE_SANITY_CHECK
+#ifdef DBG_UTIL
     /**
        Sanity check with loop detection.
 
@@ -401,7 +401,7 @@ protected:
        @retval false    else     */
     virtual bool IsSane
     (bool bRecursive, std::vector<const SwNumberTreeNode *> rParents) const;
-#endif // __SW_NUMBER_TREE_SANITY_CHECK
+#endif // DBG_UTIL
 
     /**
        the parent node
