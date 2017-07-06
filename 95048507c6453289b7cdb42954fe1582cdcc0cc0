@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_b3c12831",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8757,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-06T09:29:53Z",
+      "side": 1,
+      "message": "This looks like it needs some checking first whether the arguments fPos and fPos+fCount are actually within the string, ie. \u003c getLengthB(aOldStr), and if not PushIllegalArgument()",
+      "revId": "95048507c6453289b7cdb42954fe1582cdcc0cc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_733c2030",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-06T09:29:53Z",
+      "side": 1,
+      "message": "This should go into saFuncTable_2[] instead, before ocLeftB, using the same Excel function number 207 as in sc/source/filter/oox/formulabase.cxx saFuncTableBiff3[].\n\nNot sure if BIFF2 or BIFF3 is actually correct, but it isn\u0027t that important.",
+      "revId": "95048507c6453289b7cdb42954fe1582cdcc0cc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_533f2425",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-06T09:29:53Z",
+      "side": 1,
+      "message": "This is wrong, the numbers used here are the Excel function numbers, not our opcodes.\n\nActually REPLACEB is already in saFuncTableBiff3[] and needs just a \"REPLACEB\" instead of the nullptr in the ODFF name field.",
+      "revId": "95048507c6453289b7cdb42954fe1582cdcc0cc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
