@@ -541,7 +541,7 @@ GtkPrintDialog::impl_initCustomTab()
             pCurParent = pCurTabPage;
             aCustomTabs.push_back(std::make_pair(pCurTabPage, aText));
         }
-        else if (aCtrlType == "Subgroup" && (pCurParent /*|| bOnJobPageValue*/))
+        else if (aCtrlType == "Subgroup")
         {
             bIgnoreSubgroup = bIgnore;
             if (bIgnore)

@@ -1343,7 +1343,7 @@ void PowerPointExport::WriteAnimationNode( const FSHelperPtr& pFS, const Referen
     }
 
     if( pMethod ) {
-        (this->*(pMethod))( pFS, rXNode, xmlNodeType, bMainSeqChild );
+        (this->*pMethod)( pFS, rXNode, xmlNodeType, bMainSeqChild );
         return;
     }
 

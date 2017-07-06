@@ -513,7 +513,7 @@ void SAL_CALL ChartModel::load(
                 Sequence< uno::Any > aStorageArgs( 2 );
                 aStorageArgs[0] <<= aMDHelper.Stream;
                 // todo: check if stream is read-only
-                aStorageArgs[1] <<= (embed::ElementModes::READ); //WRITE | embed::ElementModes::NOCREATE);
+                aStorageArgs[1] <<= embed::ElementModes::READ; //WRITE | embed::ElementModes::NOCREATE);
 
                 xStorage.set( xStorageFact->createInstanceWithArguments( aStorageArgs ),
                     uno::UNO_QUERY_THROW );
@@ -524,7 +524,7 @@ void SAL_CALL ChartModel::load(
                 // convert XInputStream to XStorage via the storage factory
                 Sequence< uno::Any > aStorageArgs( 2 );
                 aStorageArgs[0] <<= aMDHelper.InputStream;
-                aStorageArgs[1] <<= (embed::ElementModes::READ);
+                aStorageArgs[1] <<= embed::ElementModes::READ;
 
                 xStorage.set( xStorageFact->createInstanceWithArguments( aStorageArgs ),
                     uno::UNO_QUERY_THROW );

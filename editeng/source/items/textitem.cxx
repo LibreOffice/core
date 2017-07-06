@@ -884,7 +884,7 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, M
             short nTemp = (short)nProp;
             nDiff = nTemp * 20;
             if(!bCoreInTwip)
-                nDiff = (short)convertTwipToMm100((long)(nDiff));
+                nDiff = (short)convertTwipToMm100((long)nDiff);
         }
         break;
         case MapUnit::Map100thMM:

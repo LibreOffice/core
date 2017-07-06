@@ -101,7 +101,7 @@ static double data (RandomData_Impl *pImpl)
               ((double)(pImpl->m_nY) / 30269.0) +
               ((double)(pImpl->m_nZ) / 30307.0)   );
 
-    random -= ((double)((sal_uInt32)(random)));
+    random -= ((double)((sal_uInt32)random));
     return random;
 }
 

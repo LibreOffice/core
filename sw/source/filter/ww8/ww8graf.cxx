@@ -2759,7 +2759,7 @@ SwFrameFormat *SwWW8ImplReader::AddAutoAnchor(SwFrameFormat *pFormat)
      *
      * Leave to later and set the correct location then.
      */
-    if ((pFormat) && (pFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR))
+    if (pFormat && (pFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR))
     {
         m_xAnchorStck->AddAnchor(*m_pPaM->GetPoint(), pFormat);
     }

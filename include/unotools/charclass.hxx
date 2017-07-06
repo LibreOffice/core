@@ -101,7 +101,7 @@ public:
     static bool isNumericType( sal_Int32 nType )
     {
         return ((nType & nCharClassNumericType) != 0) &&
-            ((nType & ~(nCharClassNumericTypeMask)) == 0);
+            ((nType & ~nCharClassNumericTypeMask) == 0);
     }
 
     /// whether type is pure alphanumeric or not, e.g. return of getStringType
@@ -117,7 +117,7 @@ public:
     static bool isLetterType( sal_Int32 nType )
     {
         return ((nType & nCharClassLetterType) != 0) &&
-            ((nType & ~(nCharClassLetterTypeMask)) == 0);
+            ((nType & ~nCharClassLetterTypeMask) == 0);
     }
 
     /// whether type is pure letternumeric or not, e.g. return of getStringType

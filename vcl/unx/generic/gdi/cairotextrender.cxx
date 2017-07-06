@@ -160,7 +160,7 @@ namespace
 
     double toRadian(int nDegree10th)
     {
-        return (3600 - (nDegree10th)) * M_PI / 1800.0;
+        return (3600 - nDegree10th) * M_PI / 1800.0;
     }
 }
 

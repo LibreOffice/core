@@ -1194,7 +1194,7 @@ LocaleDataImpl::getBreakIteratorRules( const Locale& rLocale  )
         sal_Int16 LCBreakIteratorRuleCount = 0;
         sal_Unicode **LCBreakIteratorRulesArray = func(LCBreakIteratorRuleCount);
         Sequence< OUString > seq(LCBreakIteratorRuleCount);
-        for(int i = 0; i < (LCBreakIteratorRuleCount); i++) {
+        for(int i = 0; i < LCBreakIteratorRuleCount; i++) {
             OUString  elem(LCBreakIteratorRulesArray[i]);
             seq[i] = elem;
         }
@@ -1216,7 +1216,7 @@ LocaleDataImpl::getReservedWord( const Locale& rLocale  )
         sal_Int16 LCReservedWordsCount = 0;
         sal_Unicode **LCReservedWordsArray = func(LCReservedWordsCount);
         Sequence< OUString > seq(LCReservedWordsCount);
-        for(int i = 0; i < (LCReservedWordsCount); i++) {
+        for(int i = 0; i < LCReservedWordsCount; i++) {
             OUString  elem(LCReservedWordsArray[i]);
             seq[i] = elem;
         }

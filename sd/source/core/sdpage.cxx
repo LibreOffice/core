@@ -2268,7 +2268,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
             pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
         }
 
-            ( /*(SdrGrafObj*)*/ pObj)->AdjustToMaxRect(rRect);
+            pObj->AdjustToMaxRect(rRect);
 
         pObj->SetUserCall(this);
 

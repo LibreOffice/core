@@ -267,12 +267,12 @@ namespace basegfx
 
             for(a = nLoopVerInit; a < nLoopVerLimit; a++)
             {
-                const double fVer(fVerStart + ((double)(a) * fVerDiffPerStep));
+                const double fVer(fVerStart + ((double)a * fVerDiffPerStep));
                 B3DPolygon aNew;
 
                 for(b = 0; b < nLoopHorLimit; b++)
                 {
-                    const double fHor(fHorStart + ((double)(b) * fHorDiffPerStep));
+                    const double fHor(fHorStart + ((double)b * fHorDiffPerStep));
                     aNew.append(getPointFromCartesian(fHor, fVer));
                 }
 
@@ -283,7 +283,7 @@ namespace basegfx
             // create vertical half-rings
             for(a = 0; a < nLoopHorLimit; a++)
             {
-                const double fHor(fHorStart + ((double)(a) * fHorDiffPerStep));
+                const double fHor(fHorStart + ((double)a * fHorDiffPerStep));
                 B3DPolygon aNew;
 
                 if(bVerFromTop)
@@ -293,7 +293,7 @@ namespace basegfx
 
                 for(b = nLoopVerInit; b < nLoopVerLimit; b++)
                 {
-                    const double fVer(fVerStart + ((double)(b) * fVerDiffPerStep));
+                    const double fVer(fVerStart + ((double)b * fVerDiffPerStep));
                     aNew.append(getPointFromCartesian(fHor, fVer));
                 }
 

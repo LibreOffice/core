@@ -428,7 +428,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     pPage->SetLayoutName(pExample->GetLayoutName());
 
     // insert (page)
-    mrDoc.InsertPage(pPage, (sal_uInt16)(nTarget) * 2 + 1);
+    mrDoc.InsertPage(pPage, (sal_uInt16)nTarget * 2 + 1);
     if( isRecordingUndo() )
         AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pPage));
 
@@ -467,7 +467,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     pNotesPage->SetPageKind(PageKind::Notes);
 
     // insert (notes page)
-    mrDoc.InsertPage(pNotesPage, (sal_uInt16)(nTarget) * 2 + 2);
+    mrDoc.InsertPage(pNotesPage, (sal_uInt16)nTarget * 2 + 2);
     if( isRecordingUndo() )
         AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
@@ -1631,7 +1631,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
             const float fImageRatio  = (float)aImageSize.Height() / (float)aImageSize.Width();
             aImageSize.Width() = (long)( fImageRatio * fImageHeight );
         }
-        aImageSize.Height() = (long)( fImageHeight );
+        aImageSize.Height() = (long)fImageHeight;
 
         Point aImagePos( pInfo->mrStartPos );
         aImagePos.X() += aOutSize.Width() - aImageSize.Width() - aOffset.Width() ;

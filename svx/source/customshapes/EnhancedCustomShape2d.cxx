@@ -375,7 +375,7 @@ void EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( OUString
     }
     else
     {
-        rParameter += OUString::number( ( nPara ) );
+        rParameter += OUString::number( nPara );
     }
 }
 
@@ -1815,8 +1815,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
 
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt + 1 < nCoordSize ); i++ )
                     {
-                        GetParameter ( fWR, seqCoordinates[ (sal_uInt16)( rSrcPt ) ].First, true, false );
-                        GetParameter ( fHR, seqCoordinates[ (sal_uInt16)( rSrcPt ) ].Second, false, true );
+                        GetParameter ( fWR, seqCoordinates[ (sal_uInt16)rSrcPt ].First, true, false );
+                        GetParameter ( fHR, seqCoordinates[ (sal_uInt16)rSrcPt ].Second, false, true );
 
                         GetParameter ( fStartAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1) ].First, false, false );
                         GetParameter ( fSwingAngle, seqCoordinates[ (sal_uInt16)( rSrcPt + 1 ) ].Second, false, false );

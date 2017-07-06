@@ -690,10 +690,10 @@ void BarChart::createShapes()
                                 double fHeight = fCompleteHeight-fLowerYValue;
                                 if(!bPositive)
                                     fHeight = fCompleteHeight-fUpperYValue;
-                                fLogicBarWidth = fLogicBaseWidth*fHeight/(fCompleteHeight);
+                                fLogicBarWidth = fLogicBaseWidth*fHeight/fCompleteHeight;
                                 if(fLogicBarWidth<=0.0)
                                     fLogicBarWidth=fLogicBaseWidth;
-                                fLogicBarDepth = fLogicBarDepth*fHeight/(fCompleteHeight);
+                                fLogicBarDepth = fLogicBarDepth*fHeight/fCompleteHeight;
                                 if(fLogicBarDepth<=0.0)
                                     fLogicBarDepth*=-1.0;
                             }
@@ -833,7 +833,7 @@ void BarChart::createShapes()
                             {
                                 if( lcl_hasGeometry3DVariableWidth(nGeometry3D) && fCompleteHeight!=0.0 )
                                 {
-                                    double fOuterBarDepth = fLogicBarDepth * (fTopHeight)/(fabs(fCompleteHeight));
+                                    double fOuterBarDepth = fLogicBarDepth * fTopHeight/(fabs(fCompleteHeight));
                                     fLowerBarDepth = (fBaseValue < fUpperYValue) ? fabs(fLogicBarDepth) : fabs(fOuterBarDepth);
                                     fUpperBarDepth = (fBaseValue < fUpperYValue) ? fabs(fOuterBarDepth) : fabs(fLogicBarDepth);
                                 }

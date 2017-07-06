@@ -800,7 +800,7 @@ void ScUndoCut::DoChange( const bool bUndo )
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
+    if ( !( pViewShell && pViewShell->AdjustBlockHeight() ) )
 /*A*/   pDocShell->PostPaint( aExtendedRange, PaintPartFlags::Grid, nExtFlags );
 
     if ( !bUndo )                               //   draw redo after updating row heights
@@ -1787,7 +1787,7 @@ void ScUndoSelectionStyle::DoChange( const bool bUndo )
     pDocShell->UpdatePaintExt( nExtFlags, aWorkRange );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
+    if ( !( pViewShell && pViewShell->AdjustBlockHeight() ) )
 /*A*/   pDocShell->PostPaint( aWorkRange, PaintPartFlags::Grid | PaintPartFlags::Extras, nExtFlags );
 
     ShowTable( aWorkRange.aStart.Tab() );

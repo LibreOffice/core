@@ -2016,7 +2016,7 @@ void SwBorderAttrs::CalcJoinedWithPrev( const SwFrame& _rFrame,
              pPrevFrame->GetAttrSet()->GetParaConnectBorder().GetValue()
            )
         {
-            m_bJoinedWithPrev = JoinWithCmp( _rFrame, *(pPrevFrame) );
+            m_bJoinedWithPrev = JoinWithCmp( _rFrame, *pPrevFrame );
         }
     }
 
@@ -2048,7 +2048,7 @@ void SwBorderAttrs::CalcJoinedWithNext( const SwFrame& _rFrame )
              _rFrame.GetAttrSet()->GetParaConnectBorder().GetValue()
            )
         {
-            m_bJoinedWithNext = JoinWithCmp( _rFrame, *(pNextFrame) );
+            m_bJoinedWithNext = JoinWithCmp( _rFrame, *pNextFrame );
         }
     }
 

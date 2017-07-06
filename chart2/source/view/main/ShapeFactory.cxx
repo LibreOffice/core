@@ -271,7 +271,7 @@ uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeig
     double r1= 0.0, r2 = fRadius;
     if(bTopless)
         // #i63212# fHeight may be negative, fTopHeight is always positive -> use fabs(fHeight)
-        r1 = fRadius * (fTopHeight)/(fabs(fHeight)+fTopHeight);
+        r1 = fRadius * fTopHeight/(fabs(fHeight)+fTopHeight);
 
     nVerticalSegmentCount=1;
     drawing::PolyPolygonShape3D aPP;
@@ -478,7 +478,7 @@ uno::Reference<drawing::XShape>
     aBottomP3.PositionZ += fDepth;
     aBottomP4.PositionZ += fDepth;
 
-    const double fTopFactor = (fTopHeight)/(fabs(fHeight)+fTopHeight);
+    const double fTopFactor = fTopHeight/(fabs(fHeight)+fTopHeight);
     drawing::Position3D aTopP1( rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ - fDepth*fTopFactor/2.0  );
     if(bRotateZ)
     {

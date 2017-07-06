@@ -1482,7 +1482,7 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
     else if (rKey == "resizable")
     {
         WinBits nBits = GetStyle();
-        nBits &= ~(WB_SIZEABLE);
+        nBits &= ~WB_SIZEABLE;
         if (toBool(rValue))
             nBits |= WB_SIZEABLE;
         SetStyle(nBits);
@@ -1534,7 +1534,7 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
     else if (rKey == "wrap")
     {
         WinBits nBits = GetStyle();
-        nBits &= ~(WB_WORDBREAK);
+        nBits &= ~WB_WORDBREAK;
         if (toBool(rValue))
             nBits |= WB_WORDBREAK;
         SetStyle(nBits);

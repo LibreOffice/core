@@ -178,8 +178,8 @@ void SfxPickListImpl::AddDocumentToPickList( SfxObjectShell* pDocSh )
 
     if ( aURL.GetProtocol() == INetProtocol::File )
         Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
-                                                                 (pFilter) ? pFilter->GetMimeType() : OUString(),
-                                                                 (pFilter) ? pFilter->GetServiceName() : OUString() );
+                                                                 pFilter ? pFilter->GetMimeType() : OUString(),
+                                                                 pFilter ? pFilter->GetServiceName() : OUString() );
 }
 
 SfxPickList::SfxPickList(sal_uInt32 nAllowedMenuSize)

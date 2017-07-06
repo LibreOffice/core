@@ -619,7 +619,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
                nPage = 1;
             if( nPage > nLastPage )
                nPage = nLastPage;
-            xPageCursor->jumpToPage( ( sal_Int16 )( nPage ) );
+            xPageCursor->jumpToPage( ( sal_Int16 )nPage );
             break;
         }
         case word::WdGoToItem::wdGoToSection:
@@ -647,7 +647,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
                }
             }
             if( nPage != 0 )
-                xPageCursor->jumpToPage( ( sal_Int16 )( nPage ) );
+                xPageCursor->jumpToPage( ( sal_Int16 )nPage );
             else
                 throw uno::RuntimeException("Not implemented" );
             break;

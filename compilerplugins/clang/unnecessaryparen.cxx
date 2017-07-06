@@ -56,15 +56,49 @@ public:
     bool VisitWhileStmt(const WhileStmt *);
     bool VisitSwitchStmt(const SwitchStmt *);
     bool VisitCallExpr(const CallExpr *);
+    bool TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr *);
+    bool TraverseCaseStmt(CaseStmt *);
+    bool TraverseConditionalOperator(ConditionalOperator *);
 private:
     void VisitSomeStmt(const Stmt *parent, const Expr* cond, StringRef stmtName);
+    Expr* insideCaseStmt = nullptr;
+    Expr* insideConditionalOperator = nullptr;
 };
+
+bool UnnecessaryParen::TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr *)
+{
+    // for some reason, the parentheses in an expression like "sizeof(x)" actually show up
+    // in the AST, so just ignore that part of the AST
+    return true;
+}
+
+bool UnnecessaryParen::TraverseCaseStmt(CaseStmt * caseStmt)
+{
+    auto old = insideCaseStmt;
+    insideCaseStmt = caseStmt->getLHS()->IgnoreImpCasts();
+    bool ret = RecursiveASTVisitor::TraverseCaseStmt(caseStmt);
+    insideCaseStmt = old;
+    return ret;
+}
+
+bool UnnecessaryParen::TraverseConditionalOperator(ConditionalOperator * conditionalOperator)
+{
+    auto old = insideConditionalOperator;
+    insideConditionalOperator = conditionalOperator->getCond()->IgnoreImpCasts();
+    bool ret = RecursiveASTVisitor::TraverseConditionalOperator(conditionalOperator);
+    insideConditionalOperator = old;
+    return ret;
+}
 
 bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
 {
     if (ignoreLocation(parenExpr))
         return true;
     if (parenExpr->getLocStart().isMacroID())
+        return true;
+    if (insideCaseStmt && parenExpr == insideCaseStmt)
+        return true;
+    if (insideConditionalOperator && parenExpr == insideConditionalOperator)
         return true;
 
     auto subParenExpr = dyn_cast<ParenExpr>(parenExpr->getSubExpr()->IgnoreImpCasts());
@@ -73,6 +107,24 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
             return true;
         report(
             DiagnosticsEngine::Warning, "parentheses around parentheses",
+            parenExpr->getLocStart())
+            << parenExpr->getSourceRange();
+    }
+
+    auto declRefExpr = dyn_cast<DeclRefExpr>(parenExpr->getSubExpr()->IgnoreImpCasts());
+    if (declRefExpr) {
+        if (declRefExpr->getLocStart().isMacroID())
+            return true;
+
+        // hack for BAD_CAST macro
+        SourceManager& SM = compiler.getSourceManager();
+        const char *p1 = SM.getCharacterData( declRefExpr->getLocStart().getLocWithOffset(-10) );
+        const char *p2 = SM.getCharacterData( declRefExpr->getLocStart() );
+        if ( std::string(p1, p2 - p1).find("BAD_CAST") != std::string::npos )
+            return true;
+
+        report(
+            DiagnosticsEngine::Warning, "unnecessary parentheses around identifier",
             parenExpr->getLocStart())
             << parenExpr->getSourceRange();
     }

@@ -728,9 +728,9 @@ IMPL_LINK(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, v
     {
         TemplateSearchViewItem *pSrchItem = static_cast<TemplateSearchViewItem*>(pItem);
 
-        if (!mpLocalView->removeTemplate((pSrchItem)->mnAssocId, pSrchItem->mnRegionId))
+        if (!mpLocalView->removeTemplate(pSrchItem->mnAssocId, pSrchItem->mnRegionId))
         {
-            aDeletedTemplate = (pSrchItem)->maTitle;
+            aDeletedTemplate = pSrchItem->maTitle;
         }
     }
     else
@@ -738,9 +738,9 @@ IMPL_LINK(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, v
         TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
         sal_uInt16 nRegionItemId = mpLocalView->getRegionId(pViewItem->mnRegionId);
 
-        if (!mpLocalView->removeTemplate((pViewItem)->mnDocId + 1, nRegionItemId))//mnId w.r.t. region is mnDocId + 1;
+        if (!mpLocalView->removeTemplate(pViewItem->mnDocId + 1, nRegionItemId))//mnId w.r.t. region is mnDocId + 1;
         {
-            aDeletedTemplate = (pItem)->maTitle;
+            aDeletedTemplate = pItem->maTitle;
         }
     }
 

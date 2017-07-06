@@ -257,7 +257,7 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
 {
     //if rScheme is empty or unknown the default behaviour is like it where HTTP
     bool bFTP = rScheme.startsWith(sFTPScheme);
-    bool bInternet = !(bFTP);
+    bool bInternet = !bFTP;
 
     //update protocol button selection:
     m_pRbtLinktypFTP->Check(bFTP);

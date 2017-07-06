@@ -4027,7 +4027,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     }
     p = refParams->Get( i );
 
-    if( p->GetType() == SbxERROR && ( i ) )
+    if( p->GetType() == SbxERROR && i )
     {
         // if there's a parameter missing, it can be OPTIONAL
         bool bOpt = false;

@@ -859,13 +859,13 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
     SvtSecurityOptions aSecOpt;
     bool bCtrlClickHappened = (nScClickMouseModifier & KEY_MOD1);
     bool bCtrlClickSecOption = aSecOpt.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
-    if( bCtrlClickHappened && !( bCtrlClickSecOption ) )
+    if( bCtrlClickHappened && ! bCtrlClickSecOption )
     {
         // return since ctrl+click happened when the
         // ctrl+click security option was disabled, link should not open
         return;
     }
-    else if( !( bCtrlClickHappened ) && bCtrlClickSecOption )
+    else if( ! bCtrlClickHappened && bCtrlClickSecOption )
     {
         // ctrl+click did not happen; only click happened maybe with some
         // other key combo. and security option is set, so return

@@ -377,7 +377,7 @@ void SwDoubleLinePortion::SetBrackets( const SwDoubleLinePortion& rDouble )
 void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxWidth )
 {
     nMaxWidth -= rInf.X();
-    SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
+    std::unique_ptr<SwFont> pTmpFnt( new SwFont( *rInf.GetFont() ) );
     pTmpFnt->SetProportion( 100 );
     pBracket->nAscent = 0;
     pBracket->nHeight = 0;
@@ -387,7 +387,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
         SwFontScript nActualScr = pTmpFnt->GetActual();
         if( SW_SCRIPTS > pBracket->nPreScript )
             pTmpFnt->SetActual( pBracket->nPreScript );
-        SwFontSave aSave( rInf, pTmpFnt );
+        SwFontSave aSave( rInf, pTmpFnt.get() );
         SwPosSize aSize = rInf.GetTextSize( aStr );
         pBracket->nAscent = rInf.GetAscent();
         pBracket->nHeight = aSize.Height();
@@ -411,7 +411,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
         OUString aStr( pBracket->cPost );
         if( SW_SCRIPTS > pBracket->nPostScript )
             pTmpFnt->SetActual( pBracket->nPostScript );
-        SwFontSave aSave( rInf, pTmpFnt );
+        SwFontSave aSave( rInf, pTmpFnt.get() );
         SwPosSize aSize = rInf.GetTextSize( aStr );
         const sal_uInt16 nTmpAsc = rInf.GetAscent();
         if( nTmpAsc > pBracket->nAscent )
@@ -435,7 +435,6 @@ void SwDoubleLinePortion::FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxW
     else
         pBracket->nPostWidth = 0;
     nMaxWidth += rInf.X();
-    delete(pTmpFnt);
 }
 
 // calculates the number of blanks in each line and
@@ -2232,7 +2231,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
         }
         return pTmp;
     }
-    delete (pCreate);
+    delete pCreate;
     return pRest;
 }
 

@@ -146,7 +146,7 @@ bool SelectionEngine::SelMouseButtonDown( const MouseEvent& rMEvt )
             if ( (nFlags & SelectionEngineFlags::DRG_ENAB) && bSelAtPoint )
             {
                 nFlags |= SelectionEngineFlags::WAIT_UPEVT;
-                nFlags &= ~(SelectionEngineFlags::IN_SEL);
+                nFlags &= ~SelectionEngineFlags::IN_SEL;
                 pWin->ReleaseMouse();
                 return true;  // wait for STARTDRAG-Command-Event
             }

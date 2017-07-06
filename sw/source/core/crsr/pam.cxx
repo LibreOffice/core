@@ -702,7 +702,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
             if( !bRet && pDoc->GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM ) )
             {
                 // Form protection case
-                bRet = ( pA == nullptr ) || ( pB == nullptr ) || ( bAtStartA ) || ( bAtStartB );
+                bRet = ( pA == nullptr ) || ( pB == nullptr ) || bAtStartA || bAtStartB;
             }
         }
     }

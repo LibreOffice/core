@@ -212,7 +212,7 @@ void ResizeFrameCols(SwFormatCol& rCol,
         lcl_Scale(nNewWishWidth, nScale);
         lcl_Scale(nWishDiff, nScale);
     }
-    rCol.SetWishWidth( (sal_uInt16) (nNewWishWidth) );
+    rCol.SetWishWidth( (sal_uInt16)nNewWishWidth );
 
     if( nLeftDelta >= 2 || nLeftDelta <= -2)
         rArr.front().SetWishWidth(rArr.front().GetWishWidth() + (sal_uInt16)nWishDiff);

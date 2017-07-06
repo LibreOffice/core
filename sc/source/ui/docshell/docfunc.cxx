@@ -2875,7 +2875,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         positions (e.g. if source and destination range overlaps).*/
 
     rDoc.CopyFromClip(
-        aPasteDest, aDestMark, InsertDeleteFlags::ALL & ~(InsertDeleteFlags::OBJECTS),
+        aPasteDest, aDestMark, InsertDeleteFlags::ALL & ~InsertDeleteFlags::OBJECTS,
         pUndoDoc, pClipDoc.get(), true, false, bIncludeFiltered);
 
     // skipped rows and merged cells don't mix

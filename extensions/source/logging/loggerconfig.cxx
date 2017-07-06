@@ -187,7 +187,7 @@ namespace logging
                     pSetting->Value = xServiceSettingsNode->getByName( *pSettingNames );
 
                     if ( _pSettingTranslation )
-                        (_pSettingTranslation)( _rxLogger, pSetting->Name, pSetting->Value );
+                        _pSettingTranslation( _rxLogger, pSetting->Name, pSetting->Value );
                 }
             }
 

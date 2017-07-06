@@ -29,7 +29,7 @@ namespace comphelper {
 template<typename T> T *
 newArray_null(size_t const n) throw()
 {
-    if (((::std::numeric_limits<size_t>::max)() / sizeof(T)) <= n) {
+    if ((::std::numeric_limits<size_t>::max() / sizeof(T)) <= n) {
         return 0;
     }
     return new (::std::nothrow) T[n];

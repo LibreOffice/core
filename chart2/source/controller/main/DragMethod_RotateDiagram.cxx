@@ -196,7 +196,7 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
     else
     {
         ThreeDHelper::adaptRadAnglesForRightAngledAxes( fResultX, fResultY );
-        aCurrentTransform.shearXY(fResultY,-(fResultX));
+        aCurrentTransform.shearXY(fResultY,-fResultX);
     }
 
     if(m_aWireframePolyPolygon.count() && m_pScene)

@@ -1512,7 +1512,7 @@ void OSelectionBrowseBox::InsertColumn(const OTableFieldDescRef& pEntry, sal_uIn
         ColumnMoved(pEntry->GetColumnId(),false);
     }
 
-    if ( pEntry->GetFunctionType() & (FKT_AGGREGATE) )
+    if ( pEntry->GetFunctionType() & FKT_AGGREGATE )
     {
         OUString sFunctionName = pEntry->GetFunction();
         if ( GetFunctionName(sal_uInt32(-1),sFunctionName) )

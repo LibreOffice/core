@@ -597,7 +597,7 @@ void grindFunc( OutputDevice&                       rTarget,
     fprintf( stdout,
              "Duration: %d ms (%d repetitions)\tOperation: %s\tSetup: %s\n",
              (int)(osl_getGlobalTimer() - nStartTime),
-             (int)(nTurns),
+             (int)nTurns,
              iter->first,
              pMsg );
 }

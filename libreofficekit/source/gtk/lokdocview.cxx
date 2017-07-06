@@ -1679,7 +1679,7 @@ static const GdkRGBA& getDarkColor(int nViewId, LOKDocViewPrivate& priv)
         {
             const std::string& rName = rValue.second.get<std::string>("name");
             guint32 nColor = rValue.second.get<guint32>("color");
-            GdkRGBA aColor{((double)((guint8)((nColor)>>16)))/255, ((double)((guint8)(((guint16)(nColor)) >> 8)))/255, ((double)((guint8)(nColor)))/255, 0};
+            GdkRGBA aColor{((double)((guint8)(nColor>>16)))/255, ((double)((guint8)(((guint16)nColor) >> 8)))/255, ((double)((guint8)nColor))/255, 0};
             auto itAuthorViews = g_aAuthorViews.find(rName);
             if (itAuthorViews != g_aAuthorViews.end())
                 aColorMap[itAuthorViews->second] = aColor;

@@ -1213,7 +1213,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                                             aMtfMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
                                             aPaintVDev->SetMapMode( aMtfMap );
                                         }
-                                        else if( ( MetaActionType::PUSH == nType ) || ( MetaActionType::POP ) == nType )
+                                        else if( ( MetaActionType::PUSH == nType ) || MetaActionType::POP == nType )
                                         {
                                             pCurrAct->Execute( aMapVDev.get() );
                                             pCurrAct->Execute( aPaintVDev.get() );

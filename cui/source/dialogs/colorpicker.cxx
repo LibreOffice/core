@@ -1177,7 +1177,7 @@ IMPL_LINK_NOARG(ColorPickerDialog, ColorFieldControlModifydl, ColorFieldControl&
         break;
     }
 
-    update_color(UpdateFlags::All & ~(UpdateFlags::ColorChooser));
+    update_color(UpdateFlags::All & ~UpdateFlags::ColorChooser);
 }
 
 IMPL_LINK_NOARG(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderControl&, void)
@@ -1205,7 +1205,7 @@ IMPL_LINK_NOARG(ColorPickerDialog, ColorSliderControlModifyHdl, ColorSliderContr
         break;
     }
 
-    update_color(UpdateFlags::All & ~(UpdateFlags::ColorSlider));
+    update_color(UpdateFlags::All & ~UpdateFlags::ColorSlider);
 }
 
 IMPL_LINK(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
@@ -1215,52 +1215,52 @@ IMPL_LINK(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
     if (&rEdit == mpMFRed)
     {
         setColorComponent( ColorComponent::Red, ((double)mpMFRed->GetValue()) / 255.0 );
-        n = UpdateFlags::All & ~(UpdateFlags::RGB);
+        n = UpdateFlags::All & ~UpdateFlags::RGB;
     }
     else if (&rEdit == mpMFGreen)
     {
         setColorComponent( ColorComponent::Green, ((double)mpMFGreen->GetValue()) / 255.0 );
-        n = UpdateFlags::All & ~(UpdateFlags::RGB);
+        n = UpdateFlags::All & ~UpdateFlags::RGB;
     }
     else if (&rEdit == mpMFBlue)
     {
         setColorComponent( ColorComponent::Blue, ((double)mpMFBlue->GetValue()) / 255.0 );
-        n = UpdateFlags::All & ~(UpdateFlags::RGB);
+        n = UpdateFlags::All & ~UpdateFlags::RGB;
     }
     else if (&rEdit == mpMFHue)
     {
         setColorComponent( ColorComponent::Hue, (double)mpMFHue->GetValue() );
-        n = UpdateFlags::All & ~(UpdateFlags::HSB);
+        n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
     else if (&rEdit == mpMFSaturation)
     {
         setColorComponent( ColorComponent::Saturation, ((double)mpMFSaturation->GetValue()) / 100.0 );
-        n = UpdateFlags::All & ~(UpdateFlags::HSB);
+        n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
     else if (&rEdit == mpMFBrightness)
     {
         setColorComponent( ColorComponent::Brightness, ((double)mpMFBrightness->GetValue()) / 100.0 );
-        n = UpdateFlags::All & ~(UpdateFlags::HSB);
+        n = UpdateFlags::All & ~UpdateFlags::HSB;
     }
     else if (&rEdit == mpMFCyan)
     {
         setColorComponent( ColorComponent::Cyan, ((double)mpMFCyan->GetValue()) / 100.0 );
-        n = UpdateFlags::All & ~(UpdateFlags::CMYK);
+        n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == mpMFMagenta)
     {
         setColorComponent( ColorComponent::Magenta, ((double)mpMFMagenta->GetValue()) / 100.0 );
-        n = UpdateFlags::All & ~(UpdateFlags::CMYK);
+        n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == mpMFYellow)
     {
         setColorComponent( ColorComponent::Yellow, ((double)mpMFYellow->GetValue()) / 100.0 );
-        n = UpdateFlags::All & ~(UpdateFlags::CMYK);
+        n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == mpMFKey)
     {
         setColorComponent( ColorComponent::Key, ((double)mpMFKey->GetValue()) / 100.0 );
-        n = UpdateFlags::All & ~(UpdateFlags::CMYK);
+        n = UpdateFlags::All & ~UpdateFlags::CMYK;
     }
     else if (&rEdit == mpEDHex)
     {
@@ -1278,7 +1278,7 @@ IMPL_LINK(ColorPickerDialog, ColorModifyEditHdl, Edit&, rEdit, void)
 
                 RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
                 RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
-                n = UpdateFlags::All & ~(UpdateFlags::Hex);
+                n = UpdateFlags::All & ~UpdateFlags::Hex;
             }
         }
     }

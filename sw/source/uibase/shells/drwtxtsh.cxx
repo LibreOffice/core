@@ -114,7 +114,7 @@ void SwDrawTextShell::Init()
         nCtrl |= EEControlBits::ONLINESPELLING|EEControlBits::ALLOWBIGOBJS;
     }
     else
-        nCtrl &= ~(EEControlBits::ONLINESPELLING);
+        nCtrl &= ~EEControlBits::ONLINESPELLING;
 
     pOutliner->SetControlWord(nCtrl);
     pOLV->ShowCursor();

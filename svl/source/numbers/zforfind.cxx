@@ -480,7 +480,7 @@ bool ImpSvNumberInputScan::StringContainsWord( const OUString& rWhat,
         if ((nType & (KCharacterType::UPPER | KCharacterType::LOWER | KCharacterType::DIGIT)) != 0)
             return false;   // Alpha or numeric is not word gap.
 
-        if ((nType & (KCharacterType::LETTER)) != 0)
+        if (nType & KCharacterType::LETTER)
             return true;    // Letter other than alpha is new word. (Is it?)
 
         return true;        // Catch all remaining as gap until we know better.

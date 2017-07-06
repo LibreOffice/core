@@ -1196,7 +1196,7 @@ SmNode *SmParser::DoSubSup(TG nActiveGroup, SmNode *pGivenNode)
         else
             pSNode.reset(DoTerm(true));
 
-        aSubNodes[nIndex] = (pENode) ? pENode.release() : pSNode.release();
+        aSubNodes[nIndex] = pENode ? pENode.release() : pSNode.release();
     }
 
     pNode->SetSubNodes(aSubNodes);

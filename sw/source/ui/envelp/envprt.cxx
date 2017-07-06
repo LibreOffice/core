@@ -171,7 +171,7 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
         }
     }
 
-    rItem.eAlign          = (SwEnvAlign) (nOrient);
+    rItem.eAlign          = (SwEnvAlign)nOrient;
     rItem.bPrintFromAbove = m_pTopButton->IsChecked();
     rItem.lShiftRight     = static_cast< sal_Int32 >(GetFieldVal(*m_pRightField));
     rItem.lShiftDown      = static_cast< sal_Int32 >(GetFieldVal(*m_pDownField ));

@@ -401,10 +401,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     else if (bTerminateApp)
         bSuccess = implts_terminateApplication();
 
-    if (
-        ( ! bSuccess             ) &&
-        (   bControllerSuspended )
-       )
+    if ( ! bSuccess &&  bControllerSuspended )
     {
         css::uno::Reference< css::frame::XController > xController = xCloseFrame->getController();
         if (xController.is())
@@ -596,10 +593,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
             //     a simple XWindow using the toolkit only .-(
             SolarMutexGuard aSolarLock;
             VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if (
-                (pWindow                  ) &&
-                (pWindow->IsSystemWindow())
-               )
+            if ( pWindow && pWindow->IsSystemWindow() )
                 return xTarget;
         }
 

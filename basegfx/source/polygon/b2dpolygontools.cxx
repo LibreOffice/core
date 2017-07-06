@@ -573,7 +573,7 @@ namespace basegfx
                     {
                         // if fDistance >= fLength decrement with multiple of fLength
                         sal_uInt32 nCount(sal_uInt32(fDistance / fLength));
-                        fDistance -= (double)(nCount) * fLength;
+                        fDistance -= (double)nCount * fLength;
                     }
                     else
                     {
@@ -2444,10 +2444,10 @@ namespace basegfx
                 const double fRelativeY((rCandidate.getY() - rOriginal.getMinY()) / rOriginal.getHeight());
                 const double fOneMinusRelativeX(1.0 - fRelativeX);
                 const double fOneMinusRelativeY(1.0 - fRelativeY);
-                const double fNewX((fOneMinusRelativeY) * ((fOneMinusRelativeX) * rTopLeft.getX() + fRelativeX * rTopRight.getX()) +
-                    fRelativeY * ((fOneMinusRelativeX) * rBottomLeft.getX() + fRelativeX * rBottomRight.getX()));
-                const double fNewY((fOneMinusRelativeX) * ((fOneMinusRelativeY) * rTopLeft.getY() + fRelativeY * rBottomLeft.getY()) +
-                    fRelativeX * ((fOneMinusRelativeY) * rTopRight.getY() + fRelativeY * rBottomRight.getY()));
+                const double fNewX(fOneMinusRelativeY * (fOneMinusRelativeX * rTopLeft.getX() + fRelativeX * rTopRight.getX()) +
+                    fRelativeY * (fOneMinusRelativeX * rBottomLeft.getX() + fRelativeX * rBottomRight.getX()));
+                const double fNewY(fOneMinusRelativeX * (fOneMinusRelativeY * rTopLeft.getY() + fRelativeY * rBottomLeft.getY()) +
+                    fRelativeX * (fOneMinusRelativeY * rTopRight.getY() + fRelativeY * rBottomRight.getY()));
 
                 return B2DPoint(fNewX, fNewY);
             }

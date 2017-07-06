@@ -428,8 +428,8 @@ void SwLabFormatPage::ChangeMinMax()
     m_pWidthField->SetMin(nMinSize, FUNIT_CM);
     m_pHeightField->SetMin(nMinSize, FUNIT_CM);
 
-    m_pWidthField->SetMax((long) 100 * (lHDist), FUNIT_TWIP);
-    m_pHeightField->SetMax((long) 100 * (lVDist), FUNIT_TWIP);
+    m_pWidthField->SetMax((long) 100 * lHDist, FUNIT_TWIP);
+    m_pHeightField->SetMax((long) 100 * lVDist, FUNIT_TWIP);
 
     m_pLeftField->SetMax((long) 100 * (lMax - nCols * lHDist), FUNIT_TWIP);
     m_pUpperField->SetMax((long) 100 * (lMax - nRows * lVDist), FUNIT_TWIP);

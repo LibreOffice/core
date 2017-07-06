@@ -177,7 +177,7 @@ bool SwObjPosOscillationControl::OscillationDetected()
               aObjPosIter != maObjPositions.end();
               ++aObjPosIter )
         {
-            if ( *(pNewObjPos) == *(*aObjPosIter) )
+            if ( *pNewObjPos == *(*aObjPosIter) )
             {
                 // position already occurred -> oscillation
                 bOscillationDetected = true;

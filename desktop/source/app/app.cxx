@@ -2174,8 +2174,8 @@ void Desktop::OpenClients()
 
         if ( !bDisableRecovery &&
             (
-                ( bExistsRecoveryData ) || // => crash with files    => recovery
-                ( bCrashed            )    // => crash without files => error report
+                bExistsRecoveryData || // => crash with files    => recovery
+                bCrashed               // => crash without files => error report
             )
            )
         {

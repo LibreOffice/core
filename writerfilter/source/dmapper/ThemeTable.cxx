@@ -217,7 +217,7 @@ const OUString ThemeTable::getFontNameForTheme(const Id id) const
     {
          std::map<sal_uInt32, OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_latin);
              if (Iter != tmpThemeFontMap.end())
-                  return (Iter)->second;
+                  return Iter->second;
              return OUString();
         }
     case NS_ooxml::LN_Value_ST_Theme_majorBidi:
@@ -225,7 +225,7 @@ const OUString ThemeTable::getFontNameForTheme(const Id id) const
         {
              std::map<sal_uInt32, OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_cs);
              if (Iter != tmpThemeFontMap.end())
-                 return (Iter)->second;
+                 return Iter->second;
              return OUString();
         }
     case NS_ooxml::LN_Value_ST_Theme_majorEastAsia:
@@ -233,7 +233,7 @@ const OUString ThemeTable::getFontNameForTheme(const Id id) const
         {
              std::map<sal_uInt32, OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_ea);
              if (Iter != tmpThemeFontMap.end())
-                 return (Iter)->second;
+                 return Iter->second;
              return OUString();
         }
     default:

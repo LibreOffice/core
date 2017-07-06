@@ -374,7 +374,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
         {
             const sal_uInt16 nOtherWhich( pOther->Which() );
             const sal_Int32 nOtherStart( pOther->GetStart() );
-            const sal_Int32 nOtherEnd  ( *(pOther)->GetEnd()   );
+            const sal_Int32 nOtherEnd  ( *pOther->GetEnd()   );
             if (isOverlap(nNewStart, nNewEnd, nOtherStart, nOtherEnd ))
             {
                 switch (splitPolicy(nNewWhich, nOtherWhich))
@@ -1517,9 +1517,9 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
 
                         sal_Int32* const pEnd(pAttr->GetEnd());
                         assert(pEnd != nullptr);
-                        if (m_Text[ *(pEnd) - 1 ] != CH_TXT_ATR_INPUTFIELDEND)
+                        if (m_Text[ *pEnd - 1 ] != CH_TXT_ATR_INPUTFIELDEND)
                         {
-                            SwIndex aIdx( this, *(pEnd) );
+                            SwIndex aIdx( this, *pEnd );
                             InsertText( OUString(CH_TXT_ATR_INPUTFIELDEND), aIdx, nInsertFlags );
                             bInputFieldEndCharInserted = true;
                             *pEnd = *pEnd + 1;

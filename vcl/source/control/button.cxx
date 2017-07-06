@@ -1671,7 +1671,7 @@ bool PushButton::set_property(const OString &rKey, const OUString &rValue)
     if (rKey == "has-default")
     {
         WinBits nBits = GetStyle();
-        nBits &= ~(WB_DEFBUTTON);
+        nBits &= ~WB_DEFBUTTON;
         if (toBool(rValue))
             nBits |= WB_DEFBUTTON;
         SetStyle(nBits);

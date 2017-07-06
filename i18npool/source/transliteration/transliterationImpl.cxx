@@ -281,7 +281,7 @@ TransliterationImpl::getAvailableModules( const Locale& rLocale, sal_Int16 sType
         }
     }
     r.realloc(n);
-    return (r);
+    return r;
 }
 
 

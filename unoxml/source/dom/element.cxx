@@ -241,7 +241,7 @@ namespace DOM
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         std::shared_ptr<xmlChar const> const pValue(
             xmlGetProp(m_aNodePtr, reinterpret_cast<xmlChar const *>(o1.getStr())), xmlFree);
-        OUString const ret( (pValue)
+        OUString const ret( pValue
             ?   OUString(reinterpret_cast<sal_Char const*>(pValue.get()),
                         strlen(reinterpret_cast<char const*>(pValue.get())),
                         RTL_TEXTENCODING_UTF8)

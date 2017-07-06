@@ -78,12 +78,12 @@ namespace
         const sal_Int32 nCntIdx)
     {
         for(int nb = 0; nb < 2; ++nb)
-            if(&((pPam)->GetBound(bool(nb)).nNode.GetNode()) == pOldNode)
+            if(&(pPam->GetBound(bool(nb)).nNode.GetNode()) == pOldNode)
             {
-                (pPam)->GetBound(bool(nb)).nNode = rNewPos.nNode;
-                (pPam)->GetBound(bool(nb)).nContent.Assign(
+                pPam->GetBound(bool(nb)).nNode = rNewPos.nNode;
+                pPam->GetBound(bool(nb)).nContent.Assign(
                     const_cast<SwIndexReg*>(rNewPos.nContent.GetIdxReg()),
-                    nCntIdx + (pPam)->GetBound(bool(nb)).nContent.GetIndex());
+                    nCntIdx + pPam->GetBound(bool(nb)).nContent.GetIndex());
             }
     }
 }

@@ -2058,12 +2058,12 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScChangeTrackMsgInfo )
 
 const SCROW ScChangeTrack::nContentRowsPerSlot = InitContentRowsPerSlot();
 const SCSIZE ScChangeTrack::nContentSlots =
-    (MAXROWCOUNT) / InitContentRowsPerSlot() + 2;
+    MAXROWCOUNT / InitContentRowsPerSlot() + 2;
 
 SCROW ScChangeTrack::InitContentRowsPerSlot()
 {
     const SCSIZE nMaxSlots = 0xffe0 / sizeof( ScChangeActionContent* ) - 2;
-    SCROW nRowsPerSlot = (MAXROWCOUNT) / nMaxSlots;
+    SCROW nRowsPerSlot = MAXROWCOUNT / nMaxSlots;
     if ( nRowsPerSlot * nMaxSlots < sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
         ++nRowsPerSlot;
     return nRowsPerSlot;

@@ -705,7 +705,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
             if ( sTargetFrameName == "_beamer" )
             {
                 SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
-                if ( eSearchFlags & ( frame::FrameSearchFlag::CREATE ))
+                if ( eSearchFlags & frame::FrameSearchFlag::CREATE )
                     pFrame->SetChildWindow( SID_BROWSER, true );
                 SfxChildWindow* pChildWin = pFrame->GetChildWindow( SID_BROWSER );
                 Reference < frame::XFrame > xFrame;

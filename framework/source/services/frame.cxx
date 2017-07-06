@@ -1528,10 +1528,7 @@ sal_Bool SAL_CALL Frame::setComponent(const css::uno::Reference< css::awt::XWind
 
     // A new component window doesn't know anything about current active/focus states.
     // Set this information on it!
-    if (
-        (bHadFocus            ) &&
-        (xComponentWindow.is())
-       )
+    if ( bHadFocus && xComponentWindow.is() )
     {
         xComponentWindow->setFocus();
     }

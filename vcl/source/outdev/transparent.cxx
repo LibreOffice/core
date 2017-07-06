@@ -677,7 +677,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
         return;
 
     if( ( rTransparenceGradient.GetStartColor() == aBlack && rTransparenceGradient.GetEndColor() == aBlack ) ||
-        ( mnDrawMode & ( DrawModeFlags::NoTransparency ) ) )
+        ( mnDrawMode & DrawModeFlags::NoTransparency ) )
     {
         const_cast<GDIMetaFile&>(rMtf).WindStart();
         const_cast<GDIMetaFile&>(rMtf).Play( this, rPos, rSize );

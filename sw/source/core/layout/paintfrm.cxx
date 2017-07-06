@@ -3992,7 +3992,7 @@ bool SwFlyFrame::IsBackgroundTransparent() const
                 {
                     const GraphicObject *pTmpGrf =
                             pBackgrdBrush->GetGraphicObject();
-                    if ( (pTmpGrf) &&
+                    if ( pTmpGrf &&
                          (pTmpGrf->GetAttr().GetTransparency() != 0)
                        )
                     {
@@ -5510,8 +5510,8 @@ void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
         {
             const SwFrame* pDirRefFrame = IsCellFrame() ? FindTabFrame() : this;
             SwRectFnSet aRectFnSet(pDirRefFrame);
-            ::lcl_PaintLeftRightLine ( true, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp);
-            ::lcl_PaintLeftRightLine ( false, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp);
+            ::lcl_PaintLeftRightLine ( true, *(this), *pPage, aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp);
+            ::lcl_PaintLeftRightLine ( false, *(this), *pPage, aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp);
             if ( !IsContentFrame() || rAttrs.GetTopLine( *(this) ) )
             {
                 // -
@@ -5522,11 +5522,11 @@ void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
                     SwBorderAttrAccess aAccess( SwFrame::GetCache(),
                                                 pCellFrameForTopBorderAttrs );
                     const SwBorderAttrs &rTopAttrs = *aAccess.Get();
-                    ::lcl_PaintTopBottomLine( true, *(this), *(pPage), aRect, rRect, rTopAttrs, aRectFnSet.FnRect(), gProp);
+                    ::lcl_PaintTopBottomLine( true, *(this), *pPage, aRect, rRect, rTopAttrs, aRectFnSet.FnRect(), gProp);
                 }
                 else
                 {
-                    ::lcl_PaintTopBottomLine( true, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp );
+                    ::lcl_PaintTopBottomLine( true, *(this), *pPage, aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp );
                 }
             }
             if ( !IsContentFrame() || rAttrs.GetBottomLine( *(this) ) )
@@ -5539,11 +5539,11 @@ void SwFrame::PaintBorder( const SwRect& rRect, const SwPageFrame *pPage,
                     SwBorderAttrAccess aAccess( SwFrame::GetCache(),
                                                 pCellFrameForBottomBorderAttrs );
                     const SwBorderAttrs &rBottomAttrs = *aAccess.Get();
-                    ::lcl_PaintTopBottomLine(false, *(this), *(pPage), aRect, rRect, rBottomAttrs, aRectFnSet.FnRect(), gProp);
+                    ::lcl_PaintTopBottomLine(false, *(this), *pPage, aRect, rRect, rBottomAttrs, aRectFnSet.FnRect(), gProp);
                 }
                 else
                 {
-                    ::lcl_PaintTopBottomLine(false, *(this), *(pPage), aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp);
+                    ::lcl_PaintTopBottomLine(false, *(this), *pPage, aRect, rRect, rAttrs, aRectFnSet.FnRect(), gProp);
                 }
             }
         }

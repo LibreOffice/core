@@ -355,7 +355,7 @@ void SwXTextPortion::GetPropertyValue(
             default:
                 beans::PropertyState eTemp;
                 bool bDone = SwUnoCursorHelper::getCursorPropertyValue(
-                                    rEntry, *pUnoCursor, &(rVal), eTemp );
+                                    rEntry, *pUnoCursor, &rVal, eTemp );
                 if(!bDone)
                 {
                     if(!pSet)

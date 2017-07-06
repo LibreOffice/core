@@ -848,7 +848,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
                 // #94144# allow Minimize again, should be masked out when read from configuration
                 // 91625 - ignore Minimize
                 if ( !(nValidMask&WindowStateMask::Minimized) )
-                    aState.mnState &= ~(WindowStateState::Minimized);
+                    aState.mnState &= ~WindowStateState::Minimized;
                 rData.SetState( aState.mnState );
             }
             rData.SetMask( nValidMask );

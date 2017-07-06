@@ -275,7 +275,7 @@ sal_Size ImplUTF7ToUnicode( SAL_UNUSED_PARAMETER const void*, void* pContext,
             while ( (pDestBuf < pEndDestBuf) && (nBufferBits >= 16) )
             {
                 nBitBufferTemp = nBitBuffer >> (32-16);
-                *pDestBuf = (sal_Unicode)((nBitBufferTemp) & 0xFFFF);
+                *pDestBuf = (sal_Unicode)(nBitBufferTemp & 0xFFFF);
                 pDestBuf++;
                 nBitBuffer <<= 16;
                 nBufferBits -= 16;

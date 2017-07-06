@@ -79,7 +79,7 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString&
     DBG_ASSERT( nSlotId == GetId(), "id mismatch" );
     get(m_pListBox, "treeview");
     WinBits nBits(m_pListBox->GetStyle());
-    nBits &= ~(WB_SIMPLEMODE);
+    nBits &= ~WB_SIMPLEMODE;
     m_pListBox->SetStyle(nBits);
     Size aSize(LogicToPixel(Size(100, 85), MapUnit::MapAppFont));
     m_pListBox->set_width_request(aSize.Width());

@@ -406,7 +406,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 {
                     // convert from 100th degrees to degrees (double)
                     rProperty.maValue >>= nValue;
-                    double fVal = (double)(nValue) / 100.0;
+                    double fVal = (double)nValue / 100.0;
                     ::sax::Converter::convertDouble( sValueBuffer, fVal );
                 }
                 break;

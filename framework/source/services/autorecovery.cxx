@@ -1154,10 +1154,7 @@ void CacheLockGuard::lock(bool bLockForAddRemoveVectorItems)
     // operation. On the other side a crash reasoned by an invalid stl iterator
     // will have the same effect .-)
 
-    if (
-        (m_rCacheLock > 0            ) &&
-        (bLockForAddRemoveVectorItems)
-       )
+    if ( (m_rCacheLock > 0) && bLockForAddRemoveVectorItems )
     {
         OSL_FAIL("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.");
         throw css::uno::RuntimeException(
@@ -1483,10 +1480,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     m_eJob = E_NO_JOB;
-    if (
-        (bAllowAutoSaveReactivation) &&
-        (bWasAutoSaveActive        )
-       )
+    if ( bAllowAutoSaveReactivation && bWasAutoSaveActive )
     {
         m_eJob |= AutoRecovery::E_AUTO_SAVE;
 

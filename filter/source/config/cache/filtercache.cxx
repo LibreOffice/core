@@ -971,12 +971,10 @@ void FilterCache::impl_validateAndOptimize()
 
     if (
         (
-            (bSomeTypesShouldExist) &&
-            (m_lTypes.empty())
+            bSomeTypesShouldExist && m_lTypes.empty()
         ) ||
         (
-            (bAllFiltersShouldExist) &&
-            (m_lFilters.empty())
+            bAllFiltersShouldExist && m_lFilters.empty()
         )
        )
     {

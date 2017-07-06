@@ -2210,7 +2210,7 @@ void ScInterpreter::ScCell()
             }
             else if( aInfoType == "ADDRESS" )
             {   // address formatted as [['FILENAME'#]$TABLE.]$COL$ROW
-                ScRefFlags nFlags = (aCellPos.Tab() == aPos.Tab()) ? (ScRefFlags::ADDR_ABS) : (ScRefFlags::ADDR_ABS_3D);
+                ScRefFlags nFlags = (aCellPos.Tab() == aPos.Tab()) ? ScRefFlags::ADDR_ABS : ScRefFlags::ADDR_ABS_3D;
                 OUString aStr(aCellPos.Format(nFlags, pDok, pDok->GetAddressConvention()));
                 PushString(aStr);
             }
@@ -8795,7 +8795,7 @@ void ScInterpreter::ScSearch()
             if (!bBool)
                 PushNoValue();
             else
-                PushDouble((double)(nPos) + 1);
+                PushDouble((double)nPos + 1);
         }
     }
 }

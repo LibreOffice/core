@@ -1286,10 +1286,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // They will be used as "last chance" if there is no visible frame pointing to the same model.
             // Safe the result but continue with current loop might be looking for other visible frames.
             bool bIsHidden = lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false);
-            if (
-                (   bIsHidden       ) &&
-                ( ! xHiddenTask.is())
-               )
+            if ( bIsHidden && ! xHiddenTask.is() )
             {
                 xHiddenTask = xTask;
                 xTask.clear ();

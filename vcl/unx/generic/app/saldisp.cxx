@@ -2506,7 +2506,7 @@ Pixel SalVisual::GetTCPixel( SalColor nSalColor ) const
     Pixel b = (Pixel)SALCOLOR_BLUE( nSalColor );
 
     if( SALCOLORREVERSE == eRGBMode_ )
-        return (b << 16) | (g << 8) | (r);
+        return (b << 16) | (g << 8) | r;
 
     if( otherSalRGB != eRGBMode_ ) // 8+8+8=24
         return (r << nRedShift_) | (g << nGreenShift_) | (b << nBlueShift_);

@@ -379,7 +379,7 @@ sal_uInt32 CGM::ImplGetBitmapColor( bool bDirect )
     else
     {
         sal_uInt32 nIndex = ImplGetUI( pElement->nColorIndexPrecision );
-        nTmp = pElement->aColorTable[ (sal_uInt8)( nIndex ) ] ;
+        nTmp = pElement->aColorTable[ (sal_uInt8)nIndex ] ;
     }
     return nTmp;
 }

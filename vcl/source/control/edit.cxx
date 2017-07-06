@@ -204,7 +204,7 @@ bool Edit::set_property(const OString &rKey, const OUString &rValue)
     else if (rKey == "visibility")
     {
         WinBits nBits = GetStyle();
-        nBits &= ~(WB_PASSWORD);
+        nBits &= ~WB_PASSWORD;
         if (!toBool(rValue))
             nBits |= WB_PASSWORD;
         SetStyle(nBits);

@@ -2044,7 +2044,7 @@ bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColorSpac
     {
         rA = (sal_uInt8)( nColor >> 16 );
         rB = (sal_uInt8)( nColor >> 8 );
-        rC = (sal_uInt8)( nColor );
+        rC = (sal_uInt8) nColor;
     }
     else if ( rAny >>= aHSL )   // HSL
     {

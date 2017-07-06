@@ -1822,7 +1822,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
                     "<SwTextNode::CopyText(..)> - RES_TXTATR_INPUTFIELD without EndIndex!" );
             if ( nAttrStartIdx < nTextStartIdx
                  || ( pEndIdx != nullptr
-                      && *(pEndIdx) > nEnd ) )
+                      && *pEndIdx > nEnd ) )
             {
                 continue;
             }

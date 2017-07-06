@@ -271,10 +271,7 @@ sal_Bool SAL_CALL Desktop::terminate()
     bool bTerminate = false;
     try
     {
-        if(
-            ( bAskQuickStart      ) &&
-            ( xQuickLauncher.is() )
-          )
+        if( bAskQuickStart && xQuickLauncher.is() )
         {
             xQuickLauncher->queryTermination( aEvent );
             lCalledTerminationListener.push_back( xQuickLauncher );
@@ -334,10 +331,7 @@ sal_Bool SAL_CALL Desktop::terminate()
             Scheduler::ProcessEventsToIdle();
         }
 
-        if(
-            ( bAskQuickStart      ) &&
-            ( xQuickLauncher.is() )
-          )
+        if( bAskQuickStart && xQuickLauncher.is() )
         {
             xQuickLauncher->notifyTermination( aEvent );
         }
@@ -1724,10 +1718,7 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
             // Use it in case it was allowed from outside only.
             bool                                       bSuspended = false;
             css::uno::Reference< css::frame::XController > xController( xFrame->getController(), css::uno::UNO_QUERY );
-            if (
-                ( bAllowUI         ) &&
-                ( xController.is() )
-               )
+            if ( bAllowUI && xController.is() )
             {
                 bSuspended = xController->suspend( true );
                 if ( ! bSuspended )
@@ -1760,10 +1751,7 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
                     // It can happen that XController.suspend() returned true ... but a registered close listener
                     // throwed these veto exception. Then the controller has to be reactivated. Otherwise
                     // these document doesn't work any more.
-                    if (
-                        (bSuspended      ) &&
-                        (xController.is())
-                       )
+                    if ( bSuspended && xController.is())
                         xController->suspend(false);
                 }
 

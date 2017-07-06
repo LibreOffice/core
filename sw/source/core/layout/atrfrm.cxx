@@ -3174,7 +3174,7 @@ bool SwFlyFrameFormat::IsBackgroundTransparent() const
     else
     {
         const GraphicObject *pTmpGrf = aBackground.GetGraphicObject();
-        if ( (pTmpGrf) &&
+        if ( pTmpGrf &&
              (pTmpGrf->GetAttr().GetTransparency() != 0)
            )
         {

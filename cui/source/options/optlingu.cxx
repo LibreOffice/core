@@ -386,7 +386,7 @@ void OptionsUserData::SetNumericValue( sal_uInt8 nNumVal )
     if (HasNumericValue()  &&  (GetNumericValue() != nNumVal))
     {
         nVal &= 0xffffff00;
-        nVal |= (nNumVal);
+        nVal |= nNumVal;
         nVal |= (sal_uLong)1 << 11; // mark as modified
     }
 }

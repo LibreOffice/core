@@ -54,10 +54,7 @@ static bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
         // a simple XWindow using the toolkit only .-(
         SolarMutexGuard aSolarGuard;
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-        if (
-            (pWindow                  ) &&
-            (pWindow->IsSystemWindow())
-           )
+        if ( pWindow && pWindow->IsSystemWindow() )
             return true;
     }
 

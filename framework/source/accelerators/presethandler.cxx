@@ -365,7 +365,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     // b) inside user layer we can (SOFT mode!) but sometimes we should not (HARD mode!)
     //    create new empty structures. We should preferr using of any existing structure.
     sal_Int32 eShareMode = (css::embed::ElementModes::READ      | css::embed::ElementModes::NOCREATE);
-    sal_Int32 eUserMode  = (css::embed::ElementModes::READWRITE                                     );
+    sal_Int32 eUserMode  = css::embed::ElementModes::READWRITE;
 
     OUStringBuffer sRelPathBuf(1024);
     OUString       sRelPathShare;

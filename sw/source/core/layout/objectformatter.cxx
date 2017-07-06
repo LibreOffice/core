@@ -206,11 +206,11 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
 
     OSL_ENSURE( _pAnchorFrame || _rAnchoredObj.GetAnchorFrame(),
             "<SwObjectFormatter::FormatObj(..)> - missing anchor frame" );
-    SwFrame& rAnchorFrame = _pAnchorFrame ? *(_pAnchorFrame) : *(_rAnchoredObj.AnchorFrame());
+    SwFrame& rAnchorFrame = _pAnchorFrame ? *_pAnchorFrame : *(_rAnchoredObj.AnchorFrame());
 
     OSL_ENSURE( _pPageFrame || rAnchorFrame.FindPageFrame(),
             "<SwObjectFormatter::FormatObj(..)> - missing page frame" );
-    const SwPageFrame& rPageFrame = _pPageFrame ? *(_pPageFrame) : *(rAnchorFrame.FindPageFrame());
+    const SwPageFrame& rPageFrame = _pPageFrame ? *_pPageFrame : *(rAnchorFrame.FindPageFrame());
 
     // create corresponding object formatter
     SwObjectFormatter* pObjFormatter =

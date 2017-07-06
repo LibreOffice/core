@@ -2307,9 +2307,9 @@ static tools::Rectangle NWGetEditBoxPixmapRect(SalX11Screen nScreen,
 
     if ( !interiorFocus )
     {
-        pixmapRect.Move( -(focusWidth), -(focusWidth) );
-        pixmapRect.SetSize( Size( pixmapRect.GetWidth() + (2*(focusWidth)),
-                                  pixmapRect.GetHeight() + (2*(focusWidth)) ) );
+        pixmapRect.Move( -focusWidth, -focusWidth );
+        pixmapRect.SetSize( Size( pixmapRect.GetWidth() + (2*focusWidth),
+                                  pixmapRect.GetHeight() + (2*focusWidth) ) );
     }
 
     return pixmapRect;

@@ -1238,8 +1238,8 @@ void InterfaceType::dumpMethods(FileStream & out)
                 bool isConst;
                 bool isRef;
                 if (j->direction
-                    == (unoidl::InterfaceTypeEntity::Method::Parameter::
-                        DIRECTION_IN)) {
+                    == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+                {
                     isConst = passByReference(j->type);
                     isRef = isConst;
                 } else {
@@ -1510,13 +1510,11 @@ void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index)
                     << m << "].pTypeName = sParamType" << m << ".pData;\n"
                     << indent() << "aParameters[" << m << "].bIn = "
                     << ((param.direction
-                         == (unoidl::InterfaceTypeEntity::Method::Parameter::
-                             DIRECTION_OUT))
+                         == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT)
                         ? "sal_False" : "sal_True")
                     << ";\n" << indent() << "aParameters[" << m << "].bOut = "
                     << ((param.direction
-                         == (unoidl::InterfaceTypeEntity::Method::Parameter::
-                             DIRECTION_IN))
+                         == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
                         ? "sal_False" : "sal_True")
                     << ";\n";
                 ++m;

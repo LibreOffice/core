@@ -163,7 +163,7 @@ void OConnection::construct(const rtl::OUString& url, const Sequence< PropertyVa
             connProps["userName"] = sql::ConnectPropertyVal(user_str);
             connProps["password"] = sql::ConnectPropertyVal(pass_str);
             connProps["schema"] = sql::ConnectPropertyVal(schema_str);
-            connProps["port"] = sql::ConnectPropertyVal((int)(nPort));
+            connProps["port"] = sql::ConnectPropertyVal((int)nPort);
             if (unixSocketPassed) {
                 sql::SQLString socket_str = rtl::OUStringToOString(sUnixSocket, m_settings.encoding).getStr();
                 connProps["socket"] = socket_str;

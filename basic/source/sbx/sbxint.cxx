@@ -96,7 +96,7 @@ start:
                     SbxBase::SetError( ERRCODE_SBX_OVERFLOW ); nRes = SbxMININT;
                 }
                 else
-                    nRes = (sal_Int16) (tstVal);
+                    nRes = (sal_Int16) tstVal;
                 break;
             }
         case SbxSALINT64:

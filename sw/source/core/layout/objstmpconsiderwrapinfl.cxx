@@ -36,7 +36,7 @@ void SwObjsMarkedAsTmpConsiderWrapInfluence::Insert( SwAnchoredObject& _rAnchore
     std::vector< SwAnchoredObject* >::const_iterator aIter = maObjsTmpConsiderWrapInfl.begin();
     for ( ; aIter != maObjsTmpConsiderWrapInfl.end(); ++aIter )
     {
-        const SwAnchoredObject* pAnchoredObj = *(aIter);
+        const SwAnchoredObject* pAnchoredObj = *aIter;
         if ( pAnchoredObj == &_rAnchoredObj )
         {
             bAlreadyInserted = true;

@@ -1171,7 +1171,7 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbScroll          = (nStyle & WB_SCROLL) != 0;
     mnWinStyle        = nStyle;
 
-    DockingWindow::ImplInit( pParent, nStyle & ~(WB_BORDER) );
+    DockingWindow::ImplInit( pParent, nStyle & ~WB_BORDER );
 
     // dockingwindow's ImplInit removes some bits, so restore them here to allow keyboard handling for toolbars
     ImplGetWindowImpl()->mnStyle |= WB_TABSTOP|WB_NODIALOGCONTROL; // always set WB_TABSTOP for ToolBars

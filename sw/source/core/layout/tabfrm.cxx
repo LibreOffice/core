@@ -3383,7 +3383,7 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool, bool &rReformat
             if ( pFirstRow && pFirstRow->IsInFollowFlowRow() &&
                  SwLayouter::DoesRowContainMovedFwdFrame(
                                             *(pFirstRow->GetFormat()->GetDoc()),
-                                            *(pFirstRow) ) )
+                                            *pFirstRow ) )
             {
                 return false;
             }

@@ -171,8 +171,8 @@ ScTabView::~ScTabView()
                     ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
                     for (int k = 0; k < 4; ++k)
                     {
-                        if (rOtherViewData.HasEditView((ScSplitPos)(k)))
-                            pThisViewShell->RemoveWindowFromForeignEditView(pOtherViewShell, (ScSplitPos)(k));
+                        if (rOtherViewData.HasEditView((ScSplitPos)k))
+                            pThisViewShell->RemoveWindowFromForeignEditView(pOtherViewShell, (ScSplitPos)k);
                     }
                 };
 

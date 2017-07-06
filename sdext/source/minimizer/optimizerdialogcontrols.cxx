@@ -491,7 +491,7 @@ void OptimizerDialog::UpdateControlStatesPage2()
         aResolutionText = OUString::number( nImageResolution );
 
     setControlProperty( "RadioButton0Pg1", "State", Any( (sal_Int16)( !bJPEGCompression ) ) );
-    setControlProperty( "RadioButton1Pg1", "State", Any( (sal_Int16)( bJPEGCompression ) ) );
+    setControlProperty( "RadioButton1Pg1", "State", Any( (sal_Int16) bJPEGCompression ) );
     setControlProperty( "FixedText1Pg1", "Enabled", Any( bJPEGCompression ) );
     setControlProperty( "FormattedField0Pg1", "Enabled", Any( bJPEGCompression ) );
     setControlProperty( "FormattedField0Pg1", "EffectiveValue", Any( (double)nJPEGQuality ) );
@@ -593,7 +593,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     else
     {
         setControlProperty( "RadioButton0Pg4", "State", Any( (sal_Int16)( !bSaveAs ) ) );
-        setControlProperty( "RadioButton1Pg4", "State", Any( (sal_Int16)( bSaveAs ) ) );
+        setControlProperty( "RadioButton1Pg4", "State", Any( (sal_Int16) bSaveAs ) );
     }
     setControlProperty( "ComboBox0Pg4", "Enabled", Any( false ) );
 

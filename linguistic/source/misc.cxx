@@ -607,7 +607,7 @@ bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageTyp
 CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
 {
         sal_Int32 tlen = aTerm.getLength();
-        if ((pCC) && (tlen))
+        if (pCC && tlen)
         {
             sal_Int32 nc = 0;
             for (sal_Int32 tindex = 0; tindex < tlen; ++tindex)

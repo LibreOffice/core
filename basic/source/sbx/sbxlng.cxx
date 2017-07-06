@@ -76,7 +76,7 @@ start:
         case SbxCURRENCY:
         {
             sal_Int64  tstVal = p->nInt64 / CURRENCY_FACTOR;
-            nRes = (sal_Int32) (tstVal);
+            nRes = (sal_Int32) tstVal;
             if( tstVal < SbxMINLNG || SbxMAXLNG < tstVal )  SbxBase::SetError( ERRCODE_SBX_OVERFLOW );
             if( SbxMAXLNG < tstVal ) nRes = SbxMAXLNG;
             if( tstVal < SbxMINLNG ) nRes = SbxMINLNG;

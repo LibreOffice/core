@@ -328,7 +328,7 @@ void TableValueSet::Resize()
 
         if( !m_bModal )
         {
-            WinBits nStyle = GetStyle() & ~(WB_VSCROLL);
+            WinBits nStyle = GetStyle() & ~WB_VSCROLL;
             if( nRowCount > nVisibleRowCount )
             {
                 nStyle |= WB_VSCROLL;
@@ -758,7 +758,7 @@ void TableDesignWidget::FillDesignPreviewControl()
         sal_Int32 nRows = (nCount+2)/3;
         m_pValueSet->SetColCount(nCols);
         m_pValueSet->SetLineCount(nRows);
-        WinBits nStyle = m_pValueSet->GetStyle() & ~(WB_VSCROLL);
+        WinBits nStyle = m_pValueSet->GetStyle() & ~WB_VSCROLL;
         m_pValueSet->SetStyle(nStyle);
         Size aSize(m_pValueSet->GetOptimalSize());
         aSize.Width() += (10 * nCols);

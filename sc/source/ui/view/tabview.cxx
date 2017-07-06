@@ -2370,7 +2370,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         if (pModelObj)
             aOldSize = pModelObj->getDocumentSize();
 
-        aViewData.SetMaxTiledRow(std::min(std::max(nEndRow, aViewData.GetMaxTiledRow()) + nVisibleRows, (long)(MAXTILEDROW)));
+        aViewData.SetMaxTiledRow(std::min(std::max(nEndRow, aViewData.GetMaxTiledRow()) + nVisibleRows, (long)MAXTILEDROW));
 
         Size aNewSize(0, 0);
         if (pModelObj)
@@ -2497,7 +2497,7 @@ OUString ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle)
         if (pModelObj)
             aOldSize = pModelObj->getDocumentSize();
 
-        aViewData.SetMaxTiledCol(std::min(std::max(nEndCol, aViewData.GetMaxTiledCol()) + nVisibleCols, (long)(MAXCOL)));
+        aViewData.SetMaxTiledCol(std::min(std::max(nEndCol, aViewData.GetMaxTiledCol()) + nVisibleCols, (long)MAXCOL));
 
         Size aNewSize(0, 0);
         if (pModelObj)

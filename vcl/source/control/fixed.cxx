@@ -400,7 +400,7 @@ bool FixedText::set_property(const OString &rKey, const OUString &rValue)
     else if (rKey == "ellipsize")
     {
         WinBits nBits = GetStyle();
-        nBits &= ~(WB_PATHELLIPSIS);
+        nBits &= ~WB_PATHELLIPSIS;
         if (rValue != "none")
         {
             SAL_WARN_IF(rValue != "end", "vcl.layout", "Only endellipsis support for now");

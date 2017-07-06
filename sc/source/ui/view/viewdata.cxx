@@ -1505,7 +1505,7 @@ void ScViewData::ResetEditView()
         {
             if (bEditActive[i])
             {
-                lcl_LOKRemoveWindow(GetViewShell(), (ScSplitPos)(i));
+                lcl_LOKRemoveWindow(GetViewShell(), (ScSplitPos)i);
                 pEngine = pEditView[i]->GetEditEngine();
                 pEngine->RemoveView(pEditView[i]);
                 pEditView[i]->SetOutputArea( tools::Rectangle() );

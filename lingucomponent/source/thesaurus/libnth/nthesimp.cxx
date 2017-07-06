@@ -563,7 +563,7 @@ OUString SAL_CALL Thesaurus::makeUpperCase(const OUString& aTerm, CharClass * pC
 OUString SAL_CALL Thesaurus::makeInitCap(const OUString& aTerm, CharClass * pCC)
 {
     sal_Int32 tlen = aTerm.getLength();
-    if ((pCC) && (tlen))
+    if (pCC && tlen)
     {
         OUString bTemp = aTerm.copy(0,1);
         if (tlen > 1)
