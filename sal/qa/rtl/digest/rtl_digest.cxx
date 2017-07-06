@@ -199,7 +199,7 @@ public:
             OString aSum2 = getDigest(aMsg2, rtl_Digest_AlgorithmMD5);
 
             CPPUNIT_ASSERT_MESSAGE("md5sum must have a length", aSum1.getLength() == 32 && aSum2.getLength() == 32 );
-            CPPUNIT_ASSERT_MESSAGE("source is the same, dest must be also the same", aSum1.equals(aSum2));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("source is the same, dest must be also the same", aSum1, aSum2);
         }
 
         {
@@ -210,7 +210,7 @@ public:
             OString aSum2 = getDigest(aMsg2, rtl_Digest_AlgorithmMD5);
 
             CPPUNIT_ASSERT_MESSAGE("md5sum must have a length", aSum1.getLength() == 32 && aSum2.getLength() == 32 );
-            CPPUNIT_ASSERT_MESSAGE("differ only in one char", !aSum1.equals(aSum2));
+            CPPUNIT_ASSERT_MESSAGE("differ only in one char", aSum1 != aSum2);
         }
     }
 

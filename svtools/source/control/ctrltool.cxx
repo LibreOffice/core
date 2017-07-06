@@ -839,7 +839,7 @@ long FontSizeNames::Name2Size( const OUString& rName ) const
 
         // linear search is sufficient for this rare case
         for( long i = mnElem; --i >= 0; )
-            if ( aName.equals(mpArray[i].mszUtf8Name) )
+            if ( aName == mpArray[i].mszUtf8Name )
                 return mpArray[i].mnSize;
     }
 

@@ -277,7 +277,7 @@ handleCertificateValidationRequest_(
     {
         uno::Reference< security::XCertificateExtension >element = extensions[i];
         OString aId ( reinterpret_cast<const char *>(element->getExtensionId().getConstArray()), element->getExtensionId().getLength());
-        if (aId.equals(OID_SUBJECT_ALTERNATIVE_NAME))
+        if (aId == OID_SUBJECT_ALTERNATIVE_NAME)
         {
            sanExtension = uno::Reference<security::XSanExtension>(element, uno::UNO_QUERY);
            break;

@@ -259,8 +259,8 @@ void PrinterInfoManager::initialize()
                     {
                         m_aGlobalDefaults.m_aContext.
                         setValue( pKey,
-                        aValue.equals("*nil") ? nullptr : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
-                        true );
+                                  aValue == "*nil" ? nullptr : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
+                                  true );
                     }
                 }
             }
@@ -388,7 +388,7 @@ void PrinterInfoManager::initialize()
 
                 // override the settings in m_aGlobalDefaults if keys exist
                 aValue = aConfig.ReadKey( "DefaultPrinter" );
-                if (!aValue.equals("0") && !aValue.equalsIgnoreAsciiCase("false"))
+                if (aValue != "0" && !aValue.equalsIgnoreAsciiCase("false"))
                     aDefaultPrinter = aPrinterName;
 
                 aValue = aConfig.ReadKey( "Location" );
@@ -443,8 +443,8 @@ void PrinterInfoManager::initialize()
                         {
                             aPrinter.m_aInfo.m_aContext.
                             setValue( pKey,
-                            aValue.equals("*nil") ? nullptr : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
-                            true );
+                                      aValue == "*nil" ? nullptr : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
+                                      true );
                         }
                     }
                 }

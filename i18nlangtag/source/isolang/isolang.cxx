@@ -1464,11 +1464,11 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
         for (const IsoLangGLIBCModifiersEntry* pGLIBCModifiersEntry = aImplIsoLangGLIBCModifiersEntries;
                 pGLIBCModifiersEntry->mnLang != LANGUAGE_DONTKNOW; ++pGLIBCModifiersEntry)
         {                         // avoid embedded \0 warning
-            if (aLowerLang.equals( static_cast< const char* >( pGLIBCModifiersEntry->maLanguage )) &&
-                 aAtString.equals( static_cast< const char* >( pGLIBCModifiersEntry->maAtString )))
+            if (aLowerLang == static_cast< const char* >( pGLIBCModifiersEntry->maLanguage ) &&
+                aAtString == static_cast< const char* >( pGLIBCModifiersEntry->maAtString ))
             {
                 if (aUpperCountry.isEmpty() ||
-                        aUpperCountry.equals( static_cast< const char* >( pGLIBCModifiersEntry->maCountry )))
+                    aUpperCountry == static_cast< const char* >( pGLIBCModifiersEntry->maCountry ))
                 {
                     return pGLIBCModifiersEntry->mnLang;
                 }

@@ -110,8 +110,8 @@ void RemoteServer::execute()
         BufferedStreamSocket *pSocket = new BufferedStreamSocket( aSocket);
         OString aLine;
         if ( pSocket->readLine( aLine)
-            && aLine.equals( "LO_SERVER_CLIENT_PAIR" ) &&
-            pSocket->readLine( aLine ) )
+            && aLine == "LO_SERVER_CLIENT_PAIR"
+            && pSocket->readLine( aLine ) )
         {
             OString aName( aLine );
 

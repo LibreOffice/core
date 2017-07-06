@@ -596,7 +596,7 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
         // /java/javaInfo/@vendorUpdate != javaSelection/updated (javavendors.xml)
         OString sUpdated = jfw::getElementUpdated();
 
-        if (!sUpdated.equals(settings.getJavaInfoAttrVendorUpdate()))
+        if (sUpdated != settings.getJavaInfoAttrVendorUpdate())
         {
             ppInfo->reset();
             return JFW_E_INVALID_SETTINGS;

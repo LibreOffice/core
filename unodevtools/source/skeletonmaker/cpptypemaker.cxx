@@ -353,7 +353,7 @@ void printSetPropertyMixinBody(
             OString s(fieldtype.getToken(0, '<', nPos));
             OString t = s.copy(s.lastIndexOf('/')+1);
 
-            if (t.equals("Optional")) {
+            if (t == "Optional") {
                 optional=true;
                 if (single) {
                     single=false;
@@ -429,7 +429,7 @@ void printMethods(std::ostream & o,
 
     static OString sd("_");
     bool body = !delegate.isEmpty();
-    bool defaultbody = delegate.equals(sd);
+    bool defaultbody = delegate == sd;
 
     if (body && propertyhelper.getLength() > 1) {
         if (name == "com.sun.star.beans.XPropertySet") {

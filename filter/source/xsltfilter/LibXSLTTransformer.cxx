@@ -496,31 +496,31 @@ namespace XSLT
                 // ignore non-string parameters
                 continue;
             }
-            if (nameUTF8.equals("StylesheetURL"))
+            if (nameUTF8 == "StylesheetURL")
             {
                 m_styleSheetURL = valueUTF8;
             }
-            else if (nameUTF8.equals("SourceURL"))
+            else if (nameUTF8 == "SourceURL")
             {
                 m_parameters.insert(pair<const char*, OString> (
                         PARAM_SOURCE_URL, valueUTF8));
             }
-            else if (nameUTF8.equals("SourceBaseURL"))
+            else if (nameUTF8 == "SourceBaseURL")
             {
                 m_parameters.insert(pair<const char*, OString> (
                         PARAM_SOURCE_BASE_URL, valueUTF8));
             }
-            else if (nameUTF8.equals("TargetURL"))
+            else if (nameUTF8 == "TargetURL")
             {
                 m_parameters.insert(pair<const char*, OString> (
                         PARAM_TARGET_URL, valueUTF8));
             }
-            else if (nameUTF8.equals("TargetBaseURL"))
+            else if (nameUTF8 == "TargetBaseURL")
             {
                 m_parameters.insert(pair<const char*, OString> (
                         PARAM_TARGET_BASE_URL, valueUTF8));
             }
-            else if (nameUTF8.equals("DoctypePublic"))
+            else if (nameUTF8 == "DoctypePublic")
             {
                 m_parameters.insert(pair<const char*, OString> (
                         PARAM_DOCTYPE_PUBLIC, valueUTF8));

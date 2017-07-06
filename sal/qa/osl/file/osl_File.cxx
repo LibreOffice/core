@@ -365,7 +365,7 @@ inline bool checkDirectory(const OUString& str, oslCheckMode nCheckMode)
 inline OString outputError(const OString & returnVal, const OString & rightVal, const sal_Char * msg = "")
 {
     OString aString;
-    if (returnVal.equals(rightVal))
+    if (returnVal == rightVal)
         return aString;
 
     aString += msg;
@@ -707,7 +707,7 @@ namespace osl_FileBase
 
         if (!_sAssumeResultStr.isEmpty())
         {
-            bool bStrAreEqual = _sAssumeResultStr.equals(sStr);
+            bool bStrAreEqual = _sAssumeResultStr == sStr;
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Assumption is wrong",
                                     _nAssumeError, nError);
             CPPUNIT_ASSERT_MESSAGE("Assumption is wrong",

@@ -367,7 +367,7 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
         bool bIn = false;
         for( size_t n = 0; n < rList.size(); n++ )
         {
-            if (rList[n]->equals(aMethodName))
+            if (*rList[n] == aMethodName)
             {
                 bIn = true;
                 break;
@@ -392,7 +392,7 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
         bool bIn = false;
         for ( size_t n=0; n < rList.size(); n++ )
         {
-            if (rList[n]->equals(aMethodName))
+            if (*rList[n] == aMethodName)
             {
                 bIn = true;
                 break;

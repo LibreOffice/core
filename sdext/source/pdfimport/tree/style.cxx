@@ -215,7 +215,7 @@ void StyleContainer::emit( EmitContext&        rContext,
     {
         if( ! it->second.IsSubStyle )
         {
-            if( it->second.Name.equals( "style:master-page" ) )
+            if( it->second.Name == "style:master-page" )
                 aMasterPageSection.push_back( it->first );
             else if( getStyleName( it->first ) == "standard" )
                 aOfficeStyleSection.push_back( it->first );

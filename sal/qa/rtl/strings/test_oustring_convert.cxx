@@ -79,7 +79,7 @@ void testConvertToString(TestConvertToString const & rTest)
 
     if (bSuccess)
     {
-        if (rTest.pStrict == nullptr || !aStrict.equals(rTest.pStrict))
+        if (rTest.pStrict == nullptr || aStrict != rTest.pStrict)
         {
             rtl::OStringBuffer aMessage(aPrefix);
             aMessage.append("strict = \"");
@@ -90,7 +90,7 @@ void testConvertToString(TestConvertToString const & rTest)
     }
     else
     {
-        if (!aStrict.equals(rtl::OString(RTL_CONSTASCII_STRINGPARAM("12345"))))
+        if (aStrict != rtl::OString(RTL_CONSTASCII_STRINGPARAM("12345")))
         {
             rtl::OStringBuffer aMessage(aPrefix);
             aMessage.append("modified output");
@@ -103,7 +103,7 @@ void testConvertToString(TestConvertToString const & rTest)
             CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
         }
     }
-    if (!aRelaxed.equals(rTest.pRelaxed))
+    if (aRelaxed != rTest.pRelaxed)
     {
         rtl::OStringBuffer aMessage(aPrefix);
         aMessage.append("relaxed = \"");

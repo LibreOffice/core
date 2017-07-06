@@ -62,7 +62,7 @@ OString SvStringHashTable::GetNearString( const OString& rName ) const
     for( auto const & rPair : maInt2EntryMap )
     {
         SvStringHashEntry * pE = rPair.second.get();
-        if( pE->GetName().equalsIgnoreAsciiCase( rName ) && !pE->GetName().equals( rName ) )
+        if( pE->GetName().equalsIgnoreAsciiCase( rName ) && pE->GetName() != rName  )
             return pE->GetName();
     }
     return OString();

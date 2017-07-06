@@ -260,7 +260,7 @@ SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
 SvMetaType * SvIdlDataBase::FindType( const OString& rName )
 {
     for( SvRefMemberList<SvMetaType *>::const_iterator it = aTypeList.begin(); it != aTypeList.end(); ++it )
-        if( rName.equals((*it)->GetName()) )
+        if( rName == (*it)->GetName() )
             return *it;
     return nullptr;
 }
@@ -275,7 +275,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
         OString aName = rTok.GetString();
         for( const auto& aType : GetTypeList() )
         {
-            if( aType->GetName().equals(aName) )
+            if( aType->GetName() == aName )
             {
                 return aType;
             }
@@ -309,7 +309,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 for( sal_uLong i = 0; i < aSlotList.size(); i++ )
                 {
                     SvMetaSlot * pSlot = aSlotList[i];
-                    if( pSlot->GetSlotId().getString().equals(rTok.GetString()) )
+                    if( pSlot->GetSlotId().getString() == rTok.GetString() )
                         return pSlot;
                 }
             }

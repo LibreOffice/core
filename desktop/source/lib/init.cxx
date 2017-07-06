@@ -2874,7 +2874,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
         {
             const FontMetric& rFontMetric = pList->GetFontName(i);
             const OUString& aFontName = rFontMetric.GetFamilyName();
-            if (!aSearchedFontName.equals(aFontName.toUtf8().getStr()))
+            if (aSearchedFontName != aFontName.toUtf8())
                 continue;
 
             if (aText.isEmpty())

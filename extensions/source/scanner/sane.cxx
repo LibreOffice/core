@@ -296,7 +296,7 @@ bool Sane::Open( const char* name )
         OString aDevice( name );
         for( int i = 0; i < nDevices; i++ )
         {
-            if( aDevice.equals( ppDevices[i]->name ) )
+            if( aDevice == ppDevices[i]->name )
             {
                 mnDevice = i;
                 break;
@@ -335,7 +335,7 @@ int Sane::GetOptionByName( const char* rName )
     OString aOption( rName );
     for( i = 0; i < mnOptions; i++ )
     {
-        if( mppOptions[i]->name && aOption.equals( mppOptions[i]->name ) )
+        if( mppOptions[i]->name && aOption == mppOptions[i]->name )
             return i;
     }
     return -1;
