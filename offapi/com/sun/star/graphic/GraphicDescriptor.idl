@@ -79,6 +79,8 @@ published service GraphicDescriptor
             <li>image/x-wmf</li>
             <li>image/x-sgv</li>
             <li>image/x-emf</li>
+            <li>image/svg+xml</li>
+            <li>application/pdf</li>
             <li>image/x-vclgraphic</li>
         </ul>
 
