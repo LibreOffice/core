@@ -2022,6 +2022,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
                         pZOrderHelper->addItem(xShapePropertySet, zOrder);
                         checkZOrderStatus = true;
+
                     }
                     if(checkBtLrStatus && checkZOrderStatus)
                         break;
@@ -2067,7 +2068,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         aGrabBag[i].Value >>= zOrder;
                         xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
                         pZOrderHelper->addItem(xShapePropertySet, zOrder);
-                        xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::makeAny( false ) );
+                        xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::makeAny( zOrder >= 0 ) );
                         checkZOrderStatus = true;
                     }
                     else if ( aGrabBag[i].Name == "TxbxHasLink" )
