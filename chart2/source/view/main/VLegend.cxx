@@ -268,10 +268,15 @@ awt::Size lcl_placeLegendEntries(
     const Reference< drawing::XShapes > & xTarget,
     const Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const awt::Size& rRemainingSpace,
-    sal_Int32 nYStartPosition)
+    sal_Int32 nYStartPosition,
+    const awt::Size& rPageSize,
+    bool bIsPivotChart)
 {
     bool bIsCustomSize = (eExpansion == css::chart::ChartLegendExpansion_CUSTOM);
     awt::Size aResultingLegendSize(0,0);
+    // For Pivot charts set the *minimum* legend size as a function of page size.
+    if ( bIsPivotChart )
+        aResultingLegendSize = awt::Size((rPageSize.Width * 13) / 80, (rPageSize.Height * 31) / 90);
     if( bIsCustomSize )
         aResultingLegendSize = awt::Size(rRemainingSpace.Width, rRemainingSpace.Height + nYStartPosition);
 
@@ -570,13 +575,13 @@ awt::Size lcl_placeLegendEntries(
     if( !bIsCustomSize )
     {
         if( bSymbolsLeftSide )
-            aResultingLegendSize.Width  = nCurrentXPos + nXPadding;
+            aResultingLegendSize.Width  = std::max( aResultingLegendSize.Width, nCurrentXPos + nXPadding );
         else
         {
             sal_Int32 nLegendWidth = -(nCurrentXPos-nXPadding);
-            aResultingLegendSize.Width  = nLegendWidth;
+            aResultingLegendSize.Width  = std::max( aResultingLegendSize.Width, nLegendWidth );
         }
-        aResultingLegendSize.Height = nMaxYPos + nYPadding;
+        aResultingLegendSize.Height = std::max( aResultingLegendSize.Height, nMaxYPos + nYPadding );
     }
 
     if( !bSymbolsLeftSide )
@@ -948,7 +953,10 @@ void VLegend::createShapes(
 
             bool bSymbolsLeftSide = lcl_shouldSymbolsBePlacedOnTheLeftSide( xLegendProp, m_nDefaultWritingMode );
 
-            if (!aViewEntries.empty())
+            uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider( mrModel.getDataProvider(), uno::UNO_QUERY );
+            bool bIsPivotChart = xPivotTableDataProvider.is();
+
+            if ( !aViewEntries.empty() || bIsPivotChart )
             {
                 // create buttons
                 long nUsedButtonHeight = 0;
@@ -967,7 +975,7 @@ void VLegend::createShapes(
                 // place the legend entries
                 aLegendSize = lcl_placeLegendEntries(aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize,
                                                      aMaxSymbolExtent, aTextProperties, xLegendContainer,
-                                                     m_xShapeFactory, aLegendSize, nUsedButtonHeight);
+                                                     m_xShapeFactory, aLegendSize, nUsedButtonHeight, rPageSize, bIsPivotChart);
 
                 uno::Reference<beans::XPropertySet> xModelPage(mrModel.getPageBackground());
 
