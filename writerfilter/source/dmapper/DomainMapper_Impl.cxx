@@ -2576,8 +2576,6 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
         xPropertySet->setPropertyValue(
             getPropertyName(PROP_NUMBER_FORMAT),
             uno::makeAny( nKey ));
-        xPropertySet->getPropertyValue(
-            getPropertyName(PROP_NUMBER_FORMAT ) ) >>= nKey;
     }
     catch(const uno::Exception&)
     {
