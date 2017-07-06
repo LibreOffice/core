@@ -1147,9 +1147,9 @@ SAL_CALL rtl_machdep_alloc (
 #endif
 
 #if defined(SAL_UNX)
-    addr = mmap (nullptr, (size_t)(size), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+    addr = mmap (nullptr, (size_t)size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 #elif defined(SAL_W32)
-    addr = VirtualAlloc (nullptr, (SIZE_T)(size), MEM_COMMIT, PAGE_READWRITE);
+    addr = VirtualAlloc (nullptr, (SIZE_T)size, MEM_COMMIT, PAGE_READWRITE);
 #endif /* (SAL_UNX || SAL_W32) */
 
     if (addr != MAP_FAILED)

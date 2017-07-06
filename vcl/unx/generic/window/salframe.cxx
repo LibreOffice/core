@@ -3364,7 +3364,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
             {
                 FloatWinPopupFlags nMode = pSVData->maWinData.mpFirstFloat->GetPopupModeFlags();
                 pSVData->maWinData.mpFirstFloat->SetPopupModeFlags(
-                                        nMode & ~(FloatWinPopupFlags::NoAppFocusClose));
+                                        nMode & ~FloatWinPopupFlags::NoAppFocusClose);
             }
             return nRet;
         }

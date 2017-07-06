@@ -101,7 +101,7 @@ double convLength( const OUString& sValue, const State& rState, char dir )
         //  Begin grammar
         (
             //parse font-size keywords (ie: xx-large, medium )
-            ( +(alpha_p) >> !(str_p("-") >> +alpha_p) )[assign_a(sVal)]
+            ( +alpha_p >> !(str_p("-") >> +alpha_p) )[assign_a(sVal)]
                 >> str_p("")[assign_a(eUnit,SVG_LENGTH_FONT_SIZE)] |
             //take the first part and ignore the units
             ( +(anychar_p -

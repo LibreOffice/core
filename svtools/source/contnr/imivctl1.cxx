@@ -384,7 +384,7 @@ void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool b
         }
         else
         {
-            nEntryFlags &= ~( SvxIconViewFlags::SELECTED);
+            nEntryFlags &= ~SvxIconViewFlags::SELECTED;
             pEntry->AssignFlags( nEntryFlags );
             nSelectionCount--;
             CallSelectHandler();

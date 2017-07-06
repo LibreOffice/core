@@ -71,7 +71,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
     else
     {
         datatransfer::UnsupportedFlavorException aException;
-        throw( aException );
+        throw aException;
     }
 
     return aAny;

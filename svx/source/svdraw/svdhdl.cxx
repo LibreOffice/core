@@ -2338,7 +2338,7 @@ BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
         default: break;
     }
 
-    tools::Rectangle aSourceRect( Point( nX * (nPixelSize) + nOffset,  nY * (nPixelSize)), Size(nPixelSize, nPixelSize) );
+    tools::Rectangle aSourceRect( Point( nX * nPixelSize + nOffset,  nY * nPixelSize), Size(nPixelSize, nPixelSize) );
 
     BitmapEx aRetval(rBitmap);
     aRetval.Crop(aSourceRect);

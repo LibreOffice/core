@@ -219,7 +219,7 @@ static ScRefFlags lcl_NextFlags( ScRefFlags nOld )
 {
     const ScRefFlags Mask_ABS = (ScRefFlags::COL_ABS | ScRefFlags::ROW_ABS | ScRefFlags::TAB_ABS);
     ScRefFlags nNew = nOld & Mask_ABS;
-    nNew = ScRefFlags( (std::underlying_type<ScRefFlags>::type)(nNew) - 1 ) & Mask_ABS; // weiterzaehlen
+    nNew = ScRefFlags( (std::underlying_type<ScRefFlags>::type)nNew - 1 ) & Mask_ABS; // weiterzaehlen
 
     if (!(nOld & ScRefFlags::TAB_3D))
         nNew &= ~ScRefFlags::TAB_ABS; // not 3D -> never absolute!

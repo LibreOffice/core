@@ -2492,7 +2492,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                     pDataSet->Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
                             nOldFormat = rDoc.GetFormatTable()->
                                     GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
-                            rAny <<= (sal_Int32)( nOldFormat );
+                            rAny <<= (sal_Int32)nOldFormat;
                         }
                         break;
                     case ATTR_INDENT:
@@ -8647,7 +8647,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
             sal_uInt16 nWidth = rDoc.GetOriginalWidth( nCol, nTab );
             //  property is 1/100mm, column width is twips
             nWidth = (sal_uInt16) TwipsToHMM(nWidth);
-            rAny <<= (sal_Int32)( nWidth );
+            rAny <<= (sal_Int32)nWidth;
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
@@ -8793,7 +8793,7 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
             sal_uInt16 nHeight = rDoc.GetOriginalHeight( nRow, nTab );
             //  property is 1/100mm, row height is twips
             nHeight = (sal_uInt16) TwipsToHMM(nHeight);
-            rAny <<= (sal_Int32)( nHeight );
+            rAny <<= (sal_Int32)nHeight;
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {

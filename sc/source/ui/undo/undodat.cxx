@@ -1883,7 +1883,7 @@ void ScUndoDataForm::DoChange( const bool bUndo )
             nPaint |= PaintPartFlags::Left;
             aDrawRange.aEnd.SetRow(MAXROW);
         }
-/*A*/   if ((pViewShell) && pViewShell->AdjustBlockHeight(false))
+/*A*/   if (pViewShell && pViewShell->AdjustBlockHeight(false))
         {
             aDrawRange.aStart.SetCol(0);
             aDrawRange.aStart.SetRow(0);

@@ -1193,7 +1193,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                 // provided by the anchored object, use parameter <pOldBoundRect>.
                 const tools::Rectangle& aOldObjRect = pAnchoredDrawObj->GetLastObjRect()
                                                ? *(pAnchoredDrawObj->GetLastObjRect())
-                                               : *(pOldBoundRect);
+                                               : *pOldBoundRect;
                 // #i79400#
                 // always invalidate object rectangle inclusive spaces
                 pAnchoredDrawObj->InvalidateObjRectWithSpaces();

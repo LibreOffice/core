@@ -354,7 +354,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     {
         if(aBitmapWidth == 1)
         {
-            fRevScaleX = 1.0 / (double)( aUnrotatedWidth );
+            fRevScaleX = 1.0 / (double) aUnrotatedWidth;
             for ( long x = 0; x < aUnrotatedWidth ; x++)
             {
                 pMapIX[x] = 0;
@@ -364,7 +364,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
         }
         else
         {
-            fRevScaleX = (double) aBitmapWidth / (double)( aUnrotatedWidth);
+            fRevScaleX = (double) aBitmapWidth / (double)aUnrotatedWidth;
             fTmp = (double)aBitmapWidth / 2.0;
 
             pMapIX[ 0 ] = (long)fTmp;
@@ -393,7 +393,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
     {
         if(aBitmapHeight == 1)
         {
-            fRevScaleY = 1.0 / (double)( aUnrotatedHeight);
+            fRevScaleY = 1.0 / (double)aUnrotatedHeight;
             for (long y = 0; y < aUnrotatedHeight; ++y)
             {
                 pMapIY[y] = 0;
@@ -403,7 +403,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
         }
         else
         {
-            fRevScaleY = (double) aBitmapHeight / (double)( aUnrotatedHeight);
+            fRevScaleY = (double) aBitmapHeight / (double)aUnrotatedHeight;
             fTmp = (double)aBitmapHeight / 2.0;
 
             pMapIY[ 0 ] = (long)fTmp;

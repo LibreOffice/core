@@ -188,7 +188,7 @@ static sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset)
 #define Int32FromMOTA(a) (a)
 #else
 static sal_uInt16 Int16FromMOTA(sal_uInt16 a) {
-  return (sal_uInt16) (((sal_uInt8)((a) >> 8)) | ((sal_uInt8)(a) << 8));
+  return (sal_uInt16) (((sal_uInt8)(a >> 8)) | ((sal_uInt8)a << 8));
 }
 static sal_uInt32 Int32FromMOTA(sal_uInt32 a) {
   return ((a>>24)&0xFF) | (((a>>8)&0xFF00) | ((a&0xFF00)<<8) | ((a&0xFF)<<24));

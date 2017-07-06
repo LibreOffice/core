@@ -592,7 +592,7 @@ SvxNumRule::SvxNumRule( SvxNumRuleFlags nFeatures,
             }
             else
             {
-                aFmts[i]->SetAbsLSpace( DEF_DRAW_LSPACE * (i) );
+                aFmts[i]->SetAbsLSpace( DEF_DRAW_LSPACE * i );
             }
         }
         else

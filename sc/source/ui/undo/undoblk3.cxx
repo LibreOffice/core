@@ -168,7 +168,7 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if ( !( (pViewShell) && pViewShell->AdjustRowHeight(
+    if ( !( pViewShell && pViewShell->AdjustRowHeight(
                                 aRange.aStart.Row(), aRange.aEnd.Row() ) ) )
 /*A*/   pDocShell->PostPaint( aRange, PaintPartFlags::Grid | PaintPartFlags::Extras, nExtFlags );
 
@@ -418,7 +418,7 @@ void ScUndoSelectionAttr::DoChange( const bool bUndo )
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
+    if ( !( pViewShell && pViewShell->AdjustBlockHeight() ) )
 /*A*/   pDocShell->PostPaint( aEffRange, PaintPartFlags::Grid | PaintPartFlags::Extras, nExtFlags );
 
     ShowTable( aRange );

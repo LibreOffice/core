@@ -832,7 +832,7 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
 {
     numBytesRead = 0;
 
-    if (numBytes == 0 || numBytes > (std::numeric_limits<unsigned long>::max)()/2)
+    if (numBytes == 0 || numBytes > std::numeric_limits<unsigned long>::max()/2)
         return nullptr;
 
     if (mpImpl->mpReadBuffer)

@@ -1084,7 +1084,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         RuntimeException aException;
         aException.Message = "createPeer: no model!";
         aException.Context = static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this));
-        throw( aException );
+        throw aException;
     }
 
     if( !getPeer().is() )

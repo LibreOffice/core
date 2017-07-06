@@ -1776,7 +1776,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     {
         SCROW nEnd = static_cast<SCROW>(pColData->Row);
         nValue1 = pColData->Value;
-        if ((nStart <= nEnd) && (nValue1))
+        if ((nStart <= nEnd) && nValue1)
         {
             ScPatternAttr aScPattern(pDoc->GetPool());
             if ((nValue1 & atBold) == atBold)
@@ -1800,7 +1800,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     {
         SCROW nEnd = static_cast<SCROW>(pColData->Row);
         nValue1 = pColData->Value;
-        if ((nStart <= nEnd) && (nValue1))
+        if ((nStart <= nEnd) && nValue1)
         {
             ScPatternAttr aScPattern(pDoc->GetPool());
             sal_uInt16 HorJustify = (nValue1 & 0x000F);
@@ -2072,7 +2072,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     {
         SCROW nEnd = static_cast<SCROW>(pColData->Row);
         nValue1 = pColData->Value;
-        if ((nStart <= nEnd) && (nValue1))
+        if ((nStart <= nEnd) && nValue1)
         {
             sal_uLong  nKey    = 0;
             sal_uInt16 nFormat = (nValue1 & 0x00FF);

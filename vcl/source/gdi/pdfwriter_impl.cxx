@@ -10380,7 +10380,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     */
 
     aLine.append( "/Length " );
-    aLine.append( (sal_Int32)(nSize) );
+    aLine.append( (sal_Int32)nSize );
     aLine.append( "\n" );
     if( bFlateFilter )
         aLine.append( "/Filter/FlateDecode\n" );
@@ -13519,7 +13519,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
     // if control is a hidden signature, do not convert coordinates since we
     // need /Rect [ 0 0 0 0 ]
-    if ( ! ( ( rControl.getType() == PDFWriter::Signature ) && ( sigHidden ) ) )
+    if ( ! ( ( rControl.getType() == PDFWriter::Signature ) && sigHidden ) )
     {
         // convert to default user space now, since the mapmode may change
         // note: create default appearances before m_aRect gets transformed

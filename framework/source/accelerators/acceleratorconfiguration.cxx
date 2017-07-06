@@ -458,10 +458,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(bool bWriteAcces
 
     //create copy of our readonly-cache, if write access is forced ... but
     //not still possible!
-    if (
-        (bWriteAccessRequested) &&
-        (!m_pWriteCache       )
-       )
+    if ( bWriteAccessRequested && !m_pWriteCache )
     {
         m_pWriteCache = new AcceleratorCache(m_aReadCache);
     }
@@ -730,7 +727,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
         if (pPreferredKey != lKeys.end ())
         {
             css::uno::Any& rAny = lPreferredOnes[i];
-            rAny <<= *(pPreferredKey);
+            rAny <<= *pPreferredKey;
         }
     }
 
@@ -1333,10 +1330,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(bool bPreferred,
     {
         //create copy of our readonly-cache, if write access is forced ... but
         //not still possible!
-        if (
-            (bWriteAccessRequested) &&
-            (!m_pPrimaryWriteCache       )
-            )
+        if ( bWriteAccessRequested && !m_pPrimaryWriteCache )
         {
             m_pPrimaryWriteCache = new AcceleratorCache(m_aPrimaryReadCache);
         }
@@ -1353,10 +1347,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(bool bPreferred,
     {
         //create copy of our readonly-cache, if write access is forced ... but
         //not still possible!
-        if (
-            (bWriteAccessRequested) &&
-            (!m_pSecondaryWriteCache       )
-            )
+        if ( bWriteAccessRequested && !m_pSecondaryWriteCache )
         {
             m_pSecondaryWriteCache = new AcceleratorCache(m_aSecondaryReadCache);
         }

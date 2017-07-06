@@ -294,7 +294,7 @@ int dooptions(int argc, char** argv)
         cerror( "Too many file arguments.  Usage: cpp [input [output]]",
                 NULLST);
     }
-    return (j);                     /* Return new argc              */
+    return j;                     /* Return new argc              */
 }
 
 int readoptions(char* filename, char*** pfargv)
@@ -358,7 +358,7 @@ int readoptions(char* filename, char*** pfargv)
     fclose(fp);
     back=dooptions(fargc+1,pfa);
 
-    return (back);
+    return back;
 }
 
 /*

@@ -1937,11 +1937,9 @@ void handleInterfaceType(
             for (const unoidl::InterfaceTypeEntity::Method::Parameter& param : method.parameters)
             {
                 bool in = param.direction
-                    != (unoidl::InterfaceTypeEntity::Method::Parameter::
-                        DIRECTION_OUT);
+                    != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_OUT;
                 bool out = param.direction
-                    != (unoidl::InterfaceTypeEntity::Method::Parameter::
-                        DIRECTION_IN);
+                    != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN;
                 PolymorphicUnoType polymorphicUnoType;
                 SpecialType specialType = desc.addParameter(
                     param.type, out, true, &polymorphicUnoType);

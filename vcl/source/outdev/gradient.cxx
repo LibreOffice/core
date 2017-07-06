@@ -555,7 +555,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
         aPoly.Rotate( aCenter, nAngle );
 
         // adapt colour accordingly
-        const long nStepIndex = ( ( xPolyPoly ) ? i : ( i + 1 ) );
+        const long nStepIndex = ( xPolyPoly ? i : ( i + 1 ) );
         nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
         nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
@@ -883,7 +883,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
         aPoly.Rotate( aCenter, nAngle );
 
         // adapt colour accordingly
-        const long nStepIndex = ( ( xPolyPoly ) ? i : ( i + 1 ) );
+        const long nStepIndex = ( xPolyPoly ? i : ( i + 1 ) );
         nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
         nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );

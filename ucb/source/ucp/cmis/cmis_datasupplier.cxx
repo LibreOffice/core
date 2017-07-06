@@ -62,7 +62,7 @@ namespace cmis
         {
             ResultListEntry* back = maResults.back( );
             maResults.pop_back( );
-            delete( back );
+            delete back;
         }
     }
 

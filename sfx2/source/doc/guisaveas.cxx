@@ -812,10 +812,8 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     // get the filename by dialog ...
     // create the file dialog
     sal_Int16  aDialogMode = bAllowOptions
-        ? (css::ui::dialogs::TemplateDescription::
-           FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS)
-        : (css::ui::dialogs::TemplateDescription::
-           FILESAVE_AUTOEXTENSION_PASSWORD);
+        ? css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS
+        : css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
     FileDialogFlags aDialogFlags = FileDialogFlags::NONE;
 
     if( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )

@@ -137,12 +137,10 @@ void checkAttributes(rtl::Reference< TypeManager > const & manager,
                         (unoidl::AccumulationBasedServiceEntity::Property::
                          Attributes(
                              ((i->bound
-                               ? (unoidl::AccumulationBasedServiceEntity::
-                                  Property::ATTRIBUTE_BOUND)
+                               ? unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_BOUND
                                : 0)
                               | (i->readOnly
-                                 ? (unoidl::AccumulationBasedServiceEntity::
-                                    Property::ATTRIBUTE_READ_ONLY)
+                                 ? unoidl::AccumulationBasedServiceEntity::Property::ATTRIBUTE_READ_ONLY
                                  : 0)))),
                         std::vector< OUString >());
                 }

@@ -285,13 +285,13 @@ void DropTargetHelper::ImplEndDrag()
 
 sal_Int8 DropTargetHelper::AcceptDrop( const AcceptDropEvent& )
 {
-    return( DNDConstants::ACTION_NONE );
+    return DNDConstants::ACTION_NONE;
 }
 
 
 sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& )
 {
-    return( DNDConstants::ACTION_NONE );
+    return DNDConstants::ACTION_NONE;
 }
 
 

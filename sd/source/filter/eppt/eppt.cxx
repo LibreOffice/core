@@ -230,8 +230,8 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
 
     bool bNeedsSSSlideInfoAtom = !bVisible
                                 || ( mnDiaMode == 2 )
-                                || ( bIsSound )
-                                || ( bStopSound )
+                                || bIsSound
+                                || bStopSound
                                 || ( eFe != css::presentation::FadeEffect_NONE );
     if ( bNeedsSSSlideInfoAtom )
     {

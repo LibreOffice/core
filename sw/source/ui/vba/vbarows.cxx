@@ -197,7 +197,7 @@ void SAL_CALL SwVbaRows::Delete(  )
 void SAL_CALL SwVbaRows::SetLeftIndent( float LeftIndent, ::sal_Int32 RulerStyle )
 {
     uno::Reference< word::XColumns > xColumns( new SwVbaColumns( getParent(), mxContext, mxTextTable, mxTextTable->getColumns() ) );
-    sal_Int32 nIndent = (sal_Int32)( LeftIndent );
+    sal_Int32 nIndent = (sal_Int32) LeftIndent;
     switch( RulerStyle )
     {
         case word::WdRulerStyle::wdAdjustFirstColumn:

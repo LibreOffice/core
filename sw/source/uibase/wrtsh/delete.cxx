@@ -243,7 +243,7 @@ long SwWrtShell::DelRight()
 
     const SwTableNode * pWasInTableNd = nullptr;
 
-    switch( nSelection & ~(SelectionType::Ornament) )
+    switch( nSelection & ~SelectionType::Ornament )
     {
     case SelectionType::PostIt:
     case SelectionType::Text:

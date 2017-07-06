@@ -689,7 +689,7 @@ void RotationPropertyBox::setValue( const Any& rValue, const OUString& )
     {
         double fValue = 0.0;
         rValue >>= fValue;
-        long nValue = (long)(fValue);
+        long nValue = (long)fValue;
         mpMetric->SetValue( nValue );
         updateMenu();
     }
@@ -1651,7 +1651,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
         }
         else
         {
-            mpCBXDuration->SetValue( (fDuration)*100.0 );
+            mpCBXDuration->SetValue( fDuration*100.0 );
         }
     }
 

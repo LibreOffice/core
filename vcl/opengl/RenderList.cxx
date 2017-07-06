@@ -334,7 +334,7 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
 
             for (sal_uInt32 i = 0; i <= nPoints; ++i)
             {
-                index1 = (i)     % nPoints;
+                index1 =  i      % nPoints;
                 index2 = (i + 1) % nPoints;
 
                 x1 = aPolygon.getB2DPoint(index1).getX();

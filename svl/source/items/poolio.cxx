@@ -524,7 +524,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         {
             OSL_FAIL( "SFX_ITEMPOOL_TAG_STARTPOOL_5" ); /*! s.u. */
             /*! Set error code and evaluate! */
-            (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR);
+            rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
             pImpl->bStreaming = false;
             return rStream;
         }
@@ -550,7 +550,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
         {
             OSL_FAIL( "SFX_ITEMPOOL_TAG_TRICK4OLD" ); /*! s.u. */
             /*! Set error code and evaluate! */
-            (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR);
+            rStream.SetError(SVSTREAM_FILEFORMAT_ERROR);
             pImpl->bStreaming = false;
             return rStream;
         }

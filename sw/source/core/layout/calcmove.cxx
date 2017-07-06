@@ -1945,7 +1945,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                                  0;
 
                 nUpper += bCommonBorder ?
-                          rAttrs.GetBottomLine( *(pFrame) ) :
+                          rAttrs.GetBottomLine( *pFrame ) :
                           rAttrs.CalcBottomLine();
 
             }

@@ -681,7 +681,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
             bOpenString=true;
             nTextStart = rRet.getLength();
         }
-        else if ((nRecord != CHAR) && (bOpenString))
+        else if ((nRecord != CHAR) && bOpenString)
         {
             bOpenString=false;
             if ((rRet.getLength() - nTextStart) > 1)
@@ -2889,7 +2889,7 @@ bool MathType::HandleChar(sal_Int32 &rTextStart, int &rSetSize, int nLevel,
         nPostSup = nPostlSup = 0;
         int nOriglen=rRet.getLength()-rTextStart;
         rRet += " {";  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
-        if ((!bSilent) && ((nOriglen) > 1))
+        if ((!bSilent) && (nOriglen > 1))
             rRet += "\"";
         bRet = HandleRecords( nLevel+1, nSelector, nVariation );
         if (!bSilent)

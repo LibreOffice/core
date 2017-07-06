@@ -416,7 +416,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     {
         sal_uInt32 nSOColor = *( o3tl::doAccess<sal_uInt32>(mAny) );
         mnCharColor = nSOColor & 0xff00ff00;                            // green and hibyte
-        mnCharColor |= (sal_uInt8)( nSOColor ) << 16;                   // red and blue is switched
+        mnCharColor |= (sal_uInt8)  nSOColor << 16;                   // red and blue is switched
         mnCharColor |= (sal_uInt8)( nSOColor >> 16 );
     }
     meCharColor = ePropState;
@@ -864,7 +864,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                     {
                         sal_uInt32 nSOColor = *o3tl::doAccess<sal_uInt32>(pPropValue[i].Value);
                         nBulletColor = nSOColor & 0xff00ff00;                       // green and hibyte
-                        nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              // red
+                        nBulletColor |= (sal_uInt8)  nSOColor << 16;              // red
                         nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // blue
                     }
                     else if ( aPropName == "BulletRelSize" )

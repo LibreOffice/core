@@ -865,7 +865,7 @@ namespace pcr
             case PROPERTY_ID_TABSTOP:
                 // BORDER and TABSTOP are normalized (see impl_normalizePropertyValue_nothrow)
                 // to not allow VOID values
-                pProperty->Attributes &= ~( PropertyAttribute::MAYBEVOID );
+                pProperty->Attributes &= ~PropertyAttribute::MAYBEVOID;
                 break;
 
             case PROPERTY_ID_LISTSOURCE:

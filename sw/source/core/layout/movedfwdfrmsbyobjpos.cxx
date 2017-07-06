@@ -71,7 +71,7 @@ bool SwMovedFwdFramesByObjPos::DoesRowContainMovedFwdFrame( const SwRowFrame& _r
     NodeMapIter aIter = maMovedFwdFrames.begin();
     for ( ; aIter != maMovedFwdFrames.end(); ++aIter )
     {
-        const NodeMapEntry& rEntry = *(aIter);
+        const NodeMapEntry& rEntry = *aIter;
         if ( rEntry.second >= nPageNumOfRow )
         {
             SwIterator<SwTextFrame,SwTextNode> aFrameIter( *rEntry.first );

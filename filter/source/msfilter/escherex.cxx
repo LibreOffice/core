@@ -321,7 +321,7 @@ sal_uInt32 EscherPropertyContainer::ImplGetColor( const sal_uInt32 nSOColor, boo
     if ( bSwap )
     {
         sal_uInt32 nColor = nSOColor & 0xff00;      // green
-        nColor |= (sal_uInt8)( nSOColor ) << 16;    // red
+        nColor |= (sal_uInt8)  nSOColor << 16;    // red
         nColor |= (sal_uInt8)( nSOColor >> 16 );    // blue
         return nColor;
     }
@@ -1942,9 +1942,9 @@ bool EscherPropertyContainer::CreatePolygonProperties(
             sal_uInt8* pSegmentBuf = new sal_uInt8[ nSegmentBufSize ];
 
             sal_uInt8* pPtr = pVerticesBuf;
-            *pPtr++ = (sal_uInt8)( nTotalPoints );                    // Little endian
+            *pPtr++ = (sal_uInt8)  nTotalPoints;                    // Little endian
             *pPtr++ = (sal_uInt8)( nTotalPoints >> 8 );
-            *pPtr++ = (sal_uInt8)( nTotalPoints );
+            *pPtr++ = (sal_uInt8)  nTotalPoints;
             *pPtr++ = (sal_uInt8)( nTotalPoints >> 8 );
             *pPtr++ = (sal_uInt8)0xf0;
             *pPtr++ = (sal_uInt8)0xff;
@@ -5313,7 +5313,7 @@ void EscherEx::Commit( EscherPropertyContainer& rProps, const tools::Rectangle& 
 sal_uInt32 EscherEx::GetColor( const sal_uInt32 nSOColor )
 {
     sal_uInt32 nColor = nSOColor & 0xff00;          // Green
-    nColor |= (sal_uInt8)( nSOColor ) << 16;        // Red
+    nColor |= (sal_uInt8)  nSOColor << 16;        // Red
     nColor |= (sal_uInt8)( nSOColor >> 16 );        // Blue
     return nColor;
 }

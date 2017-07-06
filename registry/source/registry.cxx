@@ -185,7 +185,7 @@ static RegError REGISTRY_CALLTYPE closeRegistry(RegHandle hReg)
         RegError ret = RegError::NO_ERROR;
         if (pReg->release() == 0)
         {
-            delete(pReg);
+            delete pReg;
             hReg = nullptr;
         }
         else
@@ -217,7 +217,7 @@ static RegError REGISTRY_CALLTYPE destroyRegistry(RegHandle hReg,
         {
             if (!registryName->length)
             {
-                delete(pReg);
+                delete pReg;
                 hReg = nullptr;
             }
         }
@@ -383,7 +383,7 @@ RegError REGISTRY_CALLTYPE reg_closeRegistry(RegHandle hRegistry)
     if (hRegistry)
     {
         ORegistry* pReg = static_cast<ORegistry*>(hRegistry);
-        delete(pReg);
+        delete pReg;
         return RegError::NO_ERROR;
     } else
     {

@@ -42,7 +42,7 @@ inline void _defaultConstructStruct(
         defaultConstructStruct( pMem, pTypeDescr->pBaseTypeDescription );
     }
 
-    typelib_TypeDescriptionReference ** ppTypeRefs = (pTypeDescr)->ppTypeRefs;
+    typelib_TypeDescriptionReference ** ppTypeRefs = pTypeDescr->ppTypeRefs;
     sal_Int32 * pMemberOffsets = pTypeDescr->pMemberOffsets;
     sal_Int32 nDescr = pTypeDescr->nMembers;
 

@@ -374,7 +374,7 @@ namespace pcr
 
                 if ( ( nThumbPos + nVisibleSize + 1 ) < (long)( nLastSelPos + 3 ) )
                     GetVScroll()->DoScrollAction(ScrollType::LineDown);
-                else if((nThumbPos+nVisibleSize+1) >= (nFirstVisible))
+                else if((nThumbPos+nVisibleSize+1) >= nFirstVisible)
                     GetVScroll()->DoScrollAction(ScrollType::LineUp);
             }
         }

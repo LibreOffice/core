@@ -341,7 +341,7 @@ void SwUnoCursorHelper::SetCursorAttr(SwPaM & rPam,
         for(SwPaM& rCurrent : rPam.GetRingContainer())
         {
             if (rCurrent.HasMark() &&
-                ( (bTableMode) ||
+                ( bTableMode ||
                   (*rCurrent.GetPoint() != *rCurrent.GetMark()) ))
             {
                 pDoc->getIDocumentContentOperations().InsertItemSet(rCurrent, rSet, nFlags);

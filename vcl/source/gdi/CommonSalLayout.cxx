@@ -45,7 +45,7 @@ static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pU
     pTagName[0] = (char)(nTableTag >> 24);
     pTagName[1] = (char)(nTableTag >> 16);
     pTagName[2] = (char)(nTableTag >>  8);
-    pTagName[3] = (char)(nTableTag);
+    pTagName[3] = (char)nTableTag;
     pTagName[4] = 0;
 
     sal_uLong nLength = 0;

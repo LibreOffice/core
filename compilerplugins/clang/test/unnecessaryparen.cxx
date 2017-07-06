@@ -9,6 +9,8 @@
 
 bool foo(int);
 
+enum class EFoo { Bar };
+
 int main()
 {
     int x = 1;
@@ -17,6 +19,19 @@ int main()
     if ((foo(1))) foo(2); // expected-error {{parentheses immediately inside if statement [loplugin:unnecessaryparen]}}
 
     foo((1)); // expected-error {{parentheses immediately inside single-arg call [loplugin:unnecessaryparen]}}
+
+    int y = (x); // expected-error {{unnecessary parentheses around identifier [loplugin:unnecessaryparen]}}
+    (void)y;
+
+    // lots of our code uses this style, which I'm loathe to bulk-fix as yet
+    EFoo foo = EFoo::Bar;
+    switch (foo) {
+        case (EFoo::Bar): break;
+    }
+
+    // lots of our code uses this style, which I'm loathe to bulk-fix as yet
+    int z = (y) ? 1 : 0;
+    (void)z;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

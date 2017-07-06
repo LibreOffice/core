@@ -103,10 +103,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     aLock.clear();
     // <- SAFE
 
-    if (
-        (bHandleIt    ) &&
-        (xHandler.is())
-       )
+    if ( bHandleIt && xHandler.is() )
     {
         xHandler->handle(xRequest);
     }
@@ -158,10 +155,7 @@ sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const c
     aLock.clear();
     // <- SAFE
 
-    if (
-        (bHandleIt    ) &&
-        (xHandler.is())
-       )
+    if ( bHandleIt && xHandler.is() )
     {
         return xHandler->handleInteractionRequest(xRequest);
     }

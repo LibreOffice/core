@@ -675,7 +675,7 @@ void CustomAnimationPane::updateControls()
 
         if( bHasSpeed )
         {
-            mpCBXDuration->SetValue( (fDuration)*100.0 );
+            mpCBXDuration->SetValue( fDuration*100.0 );
         }
 
         mpPBPropertyMore->Enable();
@@ -1826,7 +1826,7 @@ void CustomAnimationPane::onAdd()
         pDescriptor = *static_cast< CustomAnimationPresetPtr* >( pEntryData );
 
     const double fDuration = pDescriptor->getDuration();
-    mpCBXDuration->SetValue( (fDuration)*100.0 );
+    mpCBXDuration->SetValue( fDuration*100.0 );
     bool bHasSpeed = pDescriptor->getDuration() > 0.001;
     mpCBXDuration->Enable( bHasSpeed );
     mpFTDuration->Enable( bHasSpeed );

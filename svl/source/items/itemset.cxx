@@ -946,7 +946,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
             break;
         }
         if( n & 1 )
-            nSize += ( *(pWh1) - *(pWh1-1) ) + 1;
+            nSize += ( *pWh1 - *(pWh1-1) ) + 1;
     }
     bool bEqual = *pWh1 == *pWh2; // Also check for 0
 
@@ -1012,7 +1012,7 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
             break;
         }
         if( n & 1 )
-            nSize += ( *(pWh1) - *(pWh1-1) ) + 1;
+            nSize += ( *pWh1 - *(pWh1-1) ) + 1;
     }
     bool bEqual = *pWh1 == *pWh2; // Also test for 0
 
@@ -1222,7 +1222,7 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet )
             break;
         }
         if( n & 1 )
-            nSize += ( *(pWh1) - *(pWh1-1) ) + 1;
+            nSize += ( *pWh1 - *(pWh1-1) ) + 1;
     }
     bool bEqual = *pWh1 == *pWh2; // Also check for 0
 
@@ -1315,7 +1315,7 @@ sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
     {
         n = ( *(pPtr+1) - *pPtr ) + 1;
         if( nPos < n )
-            return *(pPtr)+nPos;
+            return *pPtr + nPos;
         nPos = nPos - n;
         pPtr += 2;
     }

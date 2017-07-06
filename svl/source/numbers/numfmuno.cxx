@@ -705,12 +705,12 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
         else if (aPropertyName == PROPERTYNAME_DECIMALS)
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-            aRet <<= (sal_Int16)( nDecimals );
+            aRet <<= (sal_Int16) nDecimals;
         }
         else if (aPropertyName == PROPERTYNAME_LEADING)
         {
             pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-            aRet <<= (sal_Int16)( nLeading );
+            aRet <<= (sal_Int16) nLeading;
         }
         else if (aPropertyName == PROPERTYNAME_NEGRED)
         {

@@ -1717,7 +1717,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
             }
             if (nOptions & SdrSearchOptions::BEFOREMARK)
             {
-                if ((pMarkList)!=nullptr)
+                if (pMarkList!=nullptr)
                 {
                     if ((*pMarkList).FindObject(pObj)!=SAL_MAX_SIZE)
                     {

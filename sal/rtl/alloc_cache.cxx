@@ -893,7 +893,7 @@ rtl_cache_activate (
         QUEUE_INSERT_TAIL_NAMED(&(g_cache_list.m_cache_head), cache, cache_);
         RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
     }
-    return (cache);
+    return cache;
 }
 
 /** rtl_cache_deactivate()
@@ -1165,7 +1165,7 @@ SAL_CALL rtl_cache_alloc (
                 cache->m_cpu_stats.m_alloc += 1;
                 RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
 
-                return (obj);
+                return obj;
             }
 
             prev = cache->m_cpu_prev;
@@ -1205,7 +1205,7 @@ SAL_CALL rtl_cache_alloc (
             obj = nullptr;
         }
     }
-    return (obj);
+    return obj;
 }
 
 /** rtl_cache_free()
@@ -1326,7 +1326,7 @@ rtl_cache_wsupdate_wait (unsigned int seconds)
         timespec wakeup;
 
         gettimeofday(&now, nullptr);
-        wakeup.tv_sec  = now.tv_sec + (seconds);
+        wakeup.tv_sec  = now.tv_sec + seconds;
         wakeup.tv_nsec = now.tv_usec * 1000;
 
         (void) pthread_cond_timedwait (

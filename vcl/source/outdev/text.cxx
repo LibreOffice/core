@@ -1731,8 +1731,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         {
             std::unique_ptr<long[]> const pCaretXArray(new long[2 * aStr.getLength()]);
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
-            long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
-            long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
+            long lc_x1 = pCaretXArray[2*nMnemonicPos];
+            long lc_x2 = pCaretXArray[2*nMnemonicPos+1];
             nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
 
             Point aTempPos = rTargetDevice.LogicToPixel( aPos );

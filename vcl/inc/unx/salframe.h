@@ -195,7 +195,7 @@ public:
 #endif
     bool                    IsOverrideRedirect() const;
     bool                    IsChildWindow() const { return bool(nStyle_ & (SalFrameStyleFlags::PLUG|SalFrameStyleFlags::SYSTEMCHILD)); }
-    bool                    IsSysChildWindow() const { return bool(nStyle_ & (SalFrameStyleFlags::SYSTEMCHILD)); }
+    bool                    IsSysChildWindow() const { return bool(nStyle_ & SalFrameStyleFlags::SYSTEMCHILD); }
     bool                    IsFloatGrabWindow() const;
     SalI18N_InputContext* getInputContext() const { return mpInputContext; }
     bool                    isMapped() const { return bMapped_; }

@@ -858,7 +858,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
     }
 
-    return (bFound);
+    return bFound;
 }
 
 // If object is marked return true else return false.

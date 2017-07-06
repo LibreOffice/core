@@ -203,7 +203,7 @@ void TemplateLocalView::showRegion(TemplateContainerItem *pItem)
     mnCurRegionId = pItem->mnRegionId+1;
     maCurRegionName = pItem->maTitle;
 
-    insertItems((pItem)->maTemplates);
+    insertItems(pItem->maTemplates);
 
     maOpenRegionHdl.Call(nullptr);
 }

@@ -2058,8 +2058,8 @@ void SfxObjectShell::AddToRecentlyUsedList()
     {
         std::shared_ptr<const SfxFilter> pOrgFilter = pMedium->GetOrigFilter();
         Application::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
-                                              (pOrgFilter) ? pOrgFilter->GetMimeType() : OUString(),
-                                              (pOrgFilter) ? pOrgFilter->GetServiceName() : OUString() );
+                                              pOrgFilter ? pOrgFilter->GetMimeType() : OUString(),
+                                              pOrgFilter ? pOrgFilter->GetServiceName() : OUString() );
     }
 }
 

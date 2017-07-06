@@ -1596,7 +1596,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
         // write reference string including length+1
         sal_uInt32 nStrLen( pLinkStr->getLength() + 1 );
         SwWW8Writer::WriteLong( rStrm, nStrLen );
-        SwWW8Writer::WriteString16( rStrm, *(pLinkStr), false );
+        SwWW8Writer::WriteString16( rStrm, *pLinkStr, false );
         // write additional two NULL Bytes
         SwWW8Writer::WriteLong( rStrm, 0 );
         // write length of hyperlink data

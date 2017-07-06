@@ -101,7 +101,7 @@ namespace basegfx
                                 aCurrentEntry->incrementRasterConversionLineEntry3D(nStep, *this);
                             }
 
-                            aCurrentLine.push_back(&(*(aCurrentEntry)));
+                            aCurrentLine.push_back(&(*aCurrentEntry));
                         }
                     }
 

@@ -1816,7 +1816,7 @@ bool MSWordExportBase::GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt,
     {
         IMark* pMark = ( pMarkAccess->getAllMarksBegin() + i )->get();
 
-        if ( IDocumentMarkAccess::GetType( *(pMark) ) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK )
+        if ( IDocumentMarkAccess::GetType( *pMark ) == IDocumentMarkAccess::MarkType::ANNOTATIONMARK )
         {
             continue;
         }
@@ -2792,7 +2792,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             // Check if these attributes are for the last character in the paragraph
             // - which means the paragraph marker. If a paragraph has 7 characters,
             // then properties on character 8 are for the paragraph marker
-            if( (endPos) && (startPos == *endPos ) && (*endPos == rNode.GetText().getLength()) )
+            if( endPos && (startPos == *endPos ) && (*endPos == rNode.GetText().getLength()) )
             {
                 SAL_INFO( "sw.ww8", startPos << "startPos == endPos" << *endPos);
                 sal_uInt16 nWhich = pHt->GetAttr().Which();

@@ -215,7 +215,7 @@ void DataEditor::notifySystemWindow(
     if ( pParent && pParent->IsSystemWindow())
     {
         SystemWindow* pSystemWindow = static_cast< SystemWindow* >( pParent );
-        rMemFunc( pSystemWindow->GetTaskPaneList(),( pToRegister ));
+        rMemFunc( pSystemWindow->GetTaskPaneList(), pToRegister );
     }
 }
 

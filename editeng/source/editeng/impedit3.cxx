@@ -4338,7 +4338,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
     ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
 
     // We always use the left position for DrawText()
-    nLayoutMode &= ~(ComplexTextLayoutFlags::BiDiRtl);
+    nLayoutMode &= ~ComplexTextLayoutFlags::BiDiRtl;
 
     if ( !bCTL && !bR2L)
     {

@@ -598,7 +598,7 @@ void Window::ImplCallPaint(const vcl::Region* pRegion, ImplPaintFlags nPaintFlag
         return;
     }
 
-    nPaintFlags = mpWindowImpl->mnPaintFlags & ~(ImplPaintFlags::Paint);
+    nPaintFlags = mpWindowImpl->mnPaintFlags & ~ImplPaintFlags::Paint;
 
     PaintHelper aHelper(this, nPaintFlags);
 

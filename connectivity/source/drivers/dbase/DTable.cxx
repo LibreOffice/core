@@ -183,7 +183,7 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,css::util::DateTi
         double d_s = _nJulianTime / 1000.0;
         double d_m = d_s / 60.0;
         double d_h  = d_m / 60.0;
-        _rDateTime.Hours = (sal_uInt16) (d_h);
+        _rDateTime.Hours = (sal_uInt16) d_h;
         _rDateTime.Minutes = (sal_uInt16) d_m;
         _rDateTime.Seconds = static_cast<sal_uInt16>(( d_m - (double) _rDateTime.Minutes ) * 60.0);
     }
@@ -871,7 +871,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                 if ( m_aScales[i-1] )
                     d = (nValue / pow(10.0,(int)m_aScales[i-1]));
                 else
-                    d = (double)(nValue);
+                    d = (double)nValue;
             }
             else
             {
@@ -1857,7 +1857,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                             if ( m_aScales[i] )
                                 nValue = (sal_Int64)(d * pow(10.0,(int)m_aScales[i]));
                             else
-                                nValue = (sal_Int64)(d);
+                                nValue = (sal_Int64)d;
                             if (static_cast<size_t>(nLen) > sizeof(nValue))
                                 return false;
                             memcpy(pData,&nValue,nLen);

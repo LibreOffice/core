@@ -390,8 +390,8 @@ void SAL_CALL OApplicationController::disposing()
                     // add to recent document list
                     if ( aURL.GetProtocol() == INetProtocol::File )
                         Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
-                                                              (pFilter) ? pFilter->GetMimeType() : OUString(),
-                                                              (pFilter) ? pFilter->GetServiceName() : OUString() );
+                                                              pFilter ? pFilter->GetMimeType() : OUString(),
+                                                              pFilter ? pFilter->GetServiceName() : OUString() );
                 }
             }
 

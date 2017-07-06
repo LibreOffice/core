@@ -1071,7 +1071,7 @@ double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, doub
     double          t;
 
     for( t = 1.0 ; t < fNumOfCoups ; t++ )
-        fDur += ( t + nDiff ) * ( fCoup ) / pow( fYield, t + nDiff );
+        fDur += ( t + nDiff ) * fCoup / pow( fYield, t + nDiff );
 
     fDur += ( fNumOfCoups + nDiff ) * ( fCoup + f100 ) / pow( fYield, fNumOfCoups + nDiff );
 

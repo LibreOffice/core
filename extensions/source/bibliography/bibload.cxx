@@ -349,9 +349,9 @@ Reference< XNameAccess > const & BibliographyLoader::GetDataColumns() const
         xResultSetProps->setPropertyValue("CommandType", aCommandType);
         Any aTableName; aTableName <<= aBibDesc.sTableOrQuery;
         xResultSetProps->setPropertyValue("Command", aTableName);
-        Any aResultSetType; aResultSetType <<= (sal_Int32)(ResultSetType::SCROLL_INSENSITIVE);
+        Any aResultSetType; aResultSetType <<= (sal_Int32)ResultSetType::SCROLL_INSENSITIVE;
         xResultSetProps->setPropertyValue("ResultSetType", aResultSetType);
-        Any aResultSetCurrency; aResultSetCurrency <<= (sal_Int32)(ResultSetConcurrency::UPDATABLE);
+        Any aResultSetCurrency; aResultSetCurrency <<= (sal_Int32)ResultSetConcurrency::UPDATABLE;
         xResultSetProps->setPropertyValue("ResultSetConcurrency", aResultSetCurrency);
 
         bool bSuccess = false;

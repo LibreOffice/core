@@ -470,7 +470,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
         for ( size_t i = 0; i < nCount; ++i )
         {
             OUString* pFile = pFiles->at( i );
-            pRet[i] = *( pFile );
+            pRet[i] = *pFile;
             delete pFile;
         }
         pFiles->clear();

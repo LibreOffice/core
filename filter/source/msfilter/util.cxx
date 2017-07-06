@@ -48,7 +48,7 @@ sal_uInt32 BGRToRGB(sal_uInt32 nColor)
 {
     sal_uInt8
         r(static_cast<sal_uInt8>(nColor&0xFF)),
-        g(static_cast<sal_uInt8>(((nColor)>>8)&0xFF)),
+        g(static_cast<sal_uInt8>((nColor>>8)&0xFF)),
         b(static_cast<sal_uInt8>((nColor>>16)&0xFF)),
         t(static_cast<sal_uInt8>((nColor>>24)&0xFF));
     nColor = (t<<24) + (r<<16) + (g<<8) + b;

@@ -587,7 +587,7 @@ void SwPagePreviewLayout::CalcPreviewPages()
             PreviewPage* pPreviewPage = new PreviewPage;
             Point aCurrAccOffset = aCurrPaintOffset -
                            Point( (mnPaintStartCol-nCurrCol) * mnColWidth, 0 );
-            CalcPreviewDataForPage( *(pPage), aCurrAccOffset, pPreviewPage );
+            CalcPreviewDataForPage( *pPage, aCurrAccOffset, pPreviewPage );
             pPreviewPage->bVisible = false;
             maPreviewPages.push_back( pPreviewPage );
             // continue with next page and next column
@@ -614,7 +614,7 @@ void SwPagePreviewLayout::CalcPreviewPages()
 
             // calculate data of visible page
             PreviewPage* pPreviewPage = new PreviewPage;
-            CalcPreviewDataForPage( *(pPage), aCurrPaintOffset, pPreviewPage );
+            CalcPreviewDataForPage( *pPage, aCurrPaintOffset, pPreviewPage );
             pPreviewPage->bVisible = true;
             maPreviewPages.push_back( pPreviewPage );
         }
@@ -622,7 +622,7 @@ void SwPagePreviewLayout::CalcPreviewPages()
         {
             // calculate data of unvisible page needed for accessibility
             PreviewPage* pPreviewPage = new PreviewPage;
-            CalcPreviewDataForPage( *(pPage), aCurrPaintOffset, pPreviewPage );
+            CalcPreviewDataForPage( *pPage, aCurrPaintOffset, pPreviewPage );
             pPreviewPage->bVisible = false;
             maPreviewPages.push_back( pPreviewPage );
         }

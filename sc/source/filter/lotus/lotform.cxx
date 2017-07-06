@@ -426,8 +426,8 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
             return;
         }
 
-        eType = ( pIndexToType )( nOc );
-        eOc = ( pIndexToToken)( nOc );
+        eType = pIndexToType( nOc );
+        eOc   = pIndexToToken( nOc );
         if( eOc == ocNoName )
             pExtName = GetAddInName( nOc );
 

@@ -757,7 +757,7 @@ void DocxSdrExport::endDMLAnchorInline(const SwFrameFormat* pFrameFormat)
 void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat& rFrameFormat,const Point& rNdTopLeft)
 {
     bool bSwapInPage = false;
-    if (!(sdrObj)->GetPage())
+    if (!sdrObj->GetPage())
     {
         if (SdrModel* pModel = m_pImpl->m_rExport.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         {
@@ -775,7 +775,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
 
     const SwFormatHoriOrient& rHoriOri = rFrameFormat.GetHoriOrient();
     const SwFormatVertOrient& rVertOri = rFrameFormat.GetVertOrient();
-    m_pImpl->m_rExport.VMLExporter().AddSdrObject(*(sdrObj),
+    m_pImpl->m_rExport.VMLExporter().AddSdrObject(*sdrObj,
             rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
             rHoriOri.GetRelationOrient(),
             rVertOri.GetRelationOrient(), (&rNdTopLeft), true);

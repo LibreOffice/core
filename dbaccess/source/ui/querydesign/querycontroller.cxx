@@ -1400,7 +1400,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
     bool bNew = false;
     try
     {
-        bNew = ( _bSaveAs )
+        bNew =  _bSaveAs
             || ( !xElements->hasByName( m_sName ) );
 
         Reference<XPropertySet> xQuery;

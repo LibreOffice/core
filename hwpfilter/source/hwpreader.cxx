@@ -4056,8 +4056,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                          rotate += PI;
 
                      for( i = 0 ; i < 3 ; i++){
-                         r_pt[i].x = (int)(pt[i].x * cos(-(rotate)) - pt[i].y * sin(-(rotate)));
-                         r_pt[i].y = (int)(pt[i].y * cos(-(rotate)) + pt[i].x * sin(-(rotate)));
+                         r_pt[i].x = (int)(pt[i].x * cos(-rotate) - pt[i].y * sin(-rotate));
+                         r_pt[i].y = (int)(pt[i].y * cos(-rotate) + pt[i].x * sin(-rotate));
                      }
 
                      /* 4 - Calculation of reflex angle */
@@ -4358,7 +4358,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                     if ((drawobj->u.freeform.npt > 2) &&
                         (static_cast<size_t>(drawobj->u.freeform.npt) <
-                         ((::std::numeric_limits<int>::max)() / sizeof(double))))
+                         (::std::numeric_limits<int>::max() / sizeof(double))))
                     {
                               int n, i;
                               n = drawobj->u.freeform.npt;

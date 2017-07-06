@@ -406,7 +406,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         rSh.SetRowsToRepeat( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
 
     if( SfxItemState::SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, false, &pItem))
-        rSh.SetBoxAlign(static_cast<const SfxUInt16Item*>((pItem))->GetValue());
+        rSh.SetBoxAlign(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
         rSh.SetTableName( *pFormat, static_cast<const SfxStringItem*>(pItem)->GetValue() );

@@ -297,9 +297,9 @@ void ODatabaseExport::insertValueIntoColumn()
         if(pField)
         {
             sal_Int32 nNewPos = m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos;
-            OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumns.size()),"m_vColumns: Illegal index for vector");
+            OSL_ENSURE(nNewPos < static_cast<sal_Int32>(m_vColumns.size()),"m_vColumns: Illegal index for vector");
 
-            if ( (nNewPos) < static_cast<sal_Int32>(m_vColumns.size() ) )
+            if ( nNewPos < static_cast<sal_Int32>(m_vColumns.size() ) )
             {
                 sal_Int32 nPos = m_vColumns[nNewPos].first;
                 if ( nPos != COLUMN_POSITION_NOT_FOUND )
@@ -556,7 +556,7 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
         Reference< XNumberFormats >         xFormats = xSupplier->getNumberFormats();
         TColumnVector::const_iterator aIter = _pList->begin();
         TColumnVector::const_iterator aEnd = _pList->end();
-        for(sal_Int32 i= 0;aIter != aEnd && (i) < static_cast<sal_Int32>(m_vNumberFormat.size()) && (i) < static_cast<sal_Int32>(m_vColumnSize.size()) ;++aIter,++i)
+        for(sal_Int32 i= 0;aIter != aEnd && i < static_cast<sal_Int32>(m_vNumberFormat.size()) && i < static_cast<sal_Int32>(m_vColumnSize.size()) ;++aIter,++i)
         {
             sal_Int32 nDataType;
             sal_Int32 nLength(0),nScale(0);
@@ -761,8 +761,8 @@ void ODatabaseExport::adjustFormat()
     if ( !m_sTextToken.isEmpty() )
     {
         sal_Int32 nNewPos = m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos;
-        OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
-        if ( (nNewPos) < static_cast<sal_Int32>(m_vColumns.size()) )
+        OSL_ENSURE(nNewPos < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
+        if ( nNewPos < static_cast<sal_Int32>(m_vColumns.size()) )
         {
             sal_Int32 nColPos = m_vColumns[nNewPos].first;
             if( nColPos != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND))

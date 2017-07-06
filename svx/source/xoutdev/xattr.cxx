@@ -937,7 +937,7 @@ bool XLineDashItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 return false;
 
             XDash aXDash = GetDashValue();
-            aXDash.SetDashStyle((css::drawing::DashStyle)((sal_uInt16)(nVal)));
+            aXDash.SetDashStyle((css::drawing::DashStyle)((sal_uInt16)nVal));
 
             if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
                 aXDash.SetDots(1);

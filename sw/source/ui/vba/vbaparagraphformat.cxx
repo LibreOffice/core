@@ -346,7 +346,7 @@ style::LineSpacing SwVbaParagraphFormat::getOOoLineSpacing( float _lineSpace, sa
             aLineSpacing.Mode = style::LineSpacingMode::PROP;
             aLineSpacing.Height = PERCENT150;
         }
-        else if( _lineSpace == ( sal_Int16 )( ( CHARACTER_INDENT_FACTOR ) * 2 ) )
+        else if( _lineSpace == ( sal_Int16 )( CHARACTER_INDENT_FACTOR * 2 ) )
         {
             aLineSpacing.Mode = style::LineSpacingMode::PROP;
             aLineSpacing.Height = PERCENT200;

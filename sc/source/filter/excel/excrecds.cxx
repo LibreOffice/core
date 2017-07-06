@@ -766,7 +766,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
             {
                 if( fVal < 0 )      fVal = 0;
                 if( fVal >= 501 )   fVal = 500;
-                nFlags |= (nNewFlags | (sal_uInt16)(fVal) << 7);
+                nFlags |= (nNewFlags | (sal_uInt16)fVal << 7);
             }
             // normal condition
             else
