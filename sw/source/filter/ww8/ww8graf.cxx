@@ -572,9 +572,9 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
      paragraph mark as part of the paragraph text.
     */
     WW8ReaderSave aSave(this);
-    m_pPlcxMan = new WW8PLCFMan(m_pSBase, eType, nStartCp, true);
+    m_xPlcxMan.reset(new WW8PLCFMan(m_pSBase, eType, nStartCp, true));
 
-    WW8_CP nStart = m_pPlcxMan->Where();
+    WW8_CP nStart = m_xPlcxMan->Where();
     WW8_CP nNext, nStartReplace=0;
 
     bool bDoingSymbol = false;
@@ -596,8 +596,8 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
             nTextStart = nStartCp;
 
         // get position of next SPRM
-        bool bStartAttr = m_pPlcxMan->Get(&aRes);
-        m_nAktColl = m_pPlcxMan->GetColl();
+        bool bStartAttr = m_xPlcxMan->Get(&aRes);
+        m_nAktColl = m_xPlcxMan->GetColl();
         if (aRes.nSprmId)
         {
             if( bONLYnPicLocFc )
@@ -672,8 +672,8 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
             }
         }
 
-        m_pPlcxMan->advance();
-        nNext = m_pPlcxMan->Where();
+        m_xPlcxMan->advance();
+        nNext = m_xPlcxMan->Where();
 
         const WW8_CP nEnd = ( nNext < nEndCp ) ? nNext : nEndCp;
         if (!bONLYnPicLocFc && nNext != nStart && nEnd >= nStartCp)
@@ -766,7 +766,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
     sal_uInt16 nTxBxS, sal_uInt16 nSequence)
 {
     // grab the TextBox-PLCF quickly
-    WW8PLCFspecial* pT = m_pPlcxMan ? m_pPlcxMan->GetTxbx() : nullptr;
+    WW8PLCFspecial* pT = m_xPlcxMan ? m_xPlcxMan->GetTxbx() : nullptr;
     if( !pT )
     {
         OSL_ENSURE( false, "+where's the text graphic (1)?" );
@@ -816,7 +816,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
             long nMinStartCp = rStartCp;
             long nMaxEndCp   = rEndCp;
             // quickly grab the TextBox-Break-Deskriptor-PLCF
-            pT = m_pPlcxMan->GetTxbxBkd();
+            pT = m_xPlcxMan->GetTxbxBkd();
             if (!pT) // It can occur on occasion, Caolan
                 return false;
 
@@ -987,7 +987,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     SwFrameFormat* pFlyFormat = nullptr;
     sal_uLong nOld = m_pStrm->Tell();
 
-    ManTypes eType = m_pPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX;
+    ManTypes eType = m_xPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX;
 
     rbEraseTextObj = false;
 
@@ -1027,7 +1027,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         m_bEmbeddObj = true;
 
                         // 1st look for OLE- or Graph-Indicator Sprms
-                        WW8PLCFx_Cp_FKP* pChp = m_pPlcxMan->GetChpPLCF();
+                        WW8PLCFx_Cp_FKP* pChp = m_xPlcxMan->GetChpPLCF();
                         WW8PLCFxDesc aDesc;
                         pChp->GetSprms( &aDesc );
                         WW8SprmIter aSprmIter(aDesc.pMemPos, aDesc.nSprmsLen,
@@ -2442,11 +2442,11 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     ::SetProgressState(m_nProgress, m_pDocShell);     // Update
 
     m_nDrawCpO = 0;
-    m_bDrawCpOValid = m_pWwFib->GetBaseCp(m_pPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX, &m_nDrawCpO);
+    m_bDrawCpOValid = m_pWwFib->GetBaseCp(m_xPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX, &m_nDrawCpO);
 
     GrafikCtor();
 
-    WW8PLCFspecial* pPF = m_pPlcxMan->GetFdoa();
+    WW8PLCFspecial* pPF = m_xPlcxMan->GetFdoa();
     if( !pPF )
     {
         OSL_ENSURE( false, "Where is the graphic (1) ?" );
@@ -2947,7 +2947,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             // read in the text
             m_bTxbxFlySection = true;
             bool bJoined = ReadText(nStartCp, (nEndCp-nStartCp),
-                MAN_MAINTEXT == m_pPlcxMan->GetManType() ?
+                MAN_MAINTEXT == m_xPlcxMan->GetManType() ?
                         MAN_TXBX : MAN_TXBX_HDFT);
 
             m_pWWZOrder->OutsideEscher();

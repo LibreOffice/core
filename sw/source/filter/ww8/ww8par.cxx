@@ -1173,7 +1173,7 @@ SwFltStackEntry* SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt1
     // Doing a textbox, and using the control stack only as a temporary
     // collection point for properties which will are not to be set into
     // the real document
-    if (rReader.m_pPlcxMan && rReader.m_pPlcxMan->GetDoingDrawTextBox())
+    if (rReader.m_xPlcxMan && rReader.m_xPlcxMan->GetDoingDrawTextBox())
     {
         size_t nCnt = size();
         for (size_t i=0; i < nCnt; ++i)
@@ -1967,7 +1967,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     mpOldStck(pRdr->m_pCtrlStck),
     mpOldAnchorStck(pRdr->m_pAnchorStck),
     mpOldRedlines(pRdr->m_pRedlineStack),
-    mpOldPlcxMan(pRdr->m_pPlcxMan),
+    mxOldPlcxMan(pRdr->m_xPlcxMan),
     mpWFlyPara(pRdr->m_xWFlyPara.release()),
     mpSFlyPara(pRdr->m_xSFlyPara.release()),
     mpPreviousNumPaM(pRdr->m_pPreviousNumPaM),
@@ -2007,13 +2007,13 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
 
     // Save the attribute manager: we need this as the newly created PLCFx Manager
     // access the same FKPs as the old one and their Start-End position changes.
-    if (pRdr->m_pPlcxMan)
-        pRdr->m_pPlcxMan->SaveAllPLCFx(maPLCFxSave);
+    if (pRdr->m_xPlcxMan)
+        pRdr->m_xPlcxMan->SaveAllPLCFx(maPLCFxSave);
 
     if (nStartCp != -1)
     {
-        pRdr->m_pPlcxMan = new WW8PLCFMan(pRdr->m_pSBase,
-            mpOldPlcxMan->GetManType(), nStartCp);
+        pRdr->m_xPlcxMan.reset(new WW8PLCFMan(pRdr->m_pSBase,
+            mxOldPlcxMan->GetManType(), nStartCp));
     }
 
     maOldApos.push_back(false);
@@ -2055,13 +2055,10 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 
     *pRdr->m_pPaM->GetPoint() = maTmpPos;
 
-    if (mpOldPlcxMan != pRdr->m_pPlcxMan)
-    {
-        delete pRdr->m_pPlcxMan;
-        pRdr->m_pPlcxMan = mpOldPlcxMan;
-    }
-    if (pRdr->m_pPlcxMan)
-        pRdr->m_pPlcxMan->RestoreAllPLCFx(maPLCFxSave);
+    if (mxOldPlcxMan != pRdr->m_xPlcxMan)
+        pRdr->m_xPlcxMan = mxOldPlcxMan;
+    if (pRdr->m_xPlcxMan)
+        pRdr->m_xPlcxMan->RestoreAllPLCFx(maPLCFxSave);
     pRdr->m_aApos.swap(maOldApos);
     pRdr->m_aFieldStack.swap(maOldFieldStack);
 }
@@ -2085,7 +2082,7 @@ void SwWW8ImplReader::Read_HdFtFootnoteText( const SwNodeIndex* pSttIdx,
  */
 long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 {
-    WW8PLCFx_SubDoc* pSD = m_pPlcxMan->GetAtn();
+    WW8PLCFx_SubDoc* pSD = m_xPlcxMan->GetAtn();
     if (!pSD)
         return 0;
 
@@ -2129,7 +2126,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     sal_uInt32 nDateTime = 0;
 
-    if (sal_uInt8 * pExtended = m_pPlcxMan->GetExtendedAtrds()) // Word < 2002 has no date data for comments
+    if (sal_uInt8 * pExtended = m_xPlcxMan->GetExtendedAtrds()) // Word < 2002 has no date data for comments
     {
         sal_uLong nIndex = pSD->GetIdx() & 0xFFFF; // Index is (stupidly) multiplexed for WW8PLCFx_SubDocs
         if (m_pWwFib->m_lcbAtrdExtra/18 > nIndex)
@@ -2522,7 +2519,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     OSL_ENSURE(m_nInTable >= 0,"nInTable < 0!");
 
     // TabRowEnd
-    bool bTableRowEnd = (m_pPlcxMan->HasParaSprm(m_bVer67 ? 25 : 0x2417).pSprm != nullptr);
+    bool bTableRowEnd = (m_xPlcxMan->HasParaSprm(m_bVer67 ? 25 : 0x2417).pSprm != nullptr);
 
 // Unfortunately, for every paragraph we need to check first whether
 // they contain a sprm 29 (0x261B), which starts an APO.
@@ -2553,12 +2550,12 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     sal_uInt8 nCellLevel = 0;
 
     if (m_bVer67)
-        nCellLevel = int(nullptr != m_pPlcxMan->HasParaSprm(24).pSprm);
+        nCellLevel = int(nullptr != m_xPlcxMan->HasParaSprm(24).pSprm);
     else
     {
-        nCellLevel = int(nullptr != m_pPlcxMan->HasParaSprm(0x2416).pSprm);
+        nCellLevel = int(nullptr != m_xPlcxMan->HasParaSprm(0x2416).pSprm);
         if (!nCellLevel)
-            nCellLevel = int(nullptr != m_pPlcxMan->HasParaSprm(0x244B).pSprm);
+            nCellLevel = int(nullptr != m_xPlcxMan->HasParaSprm(0x244B).pSprm);
     }
     do
     {
@@ -2567,12 +2564,12 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
         if(nCellLevel && !m_bVer67)
         {
             WW8PLCFxSave1 aSave;
-            m_pPlcxMan->GetPap()->Save( aSave );
+            m_xPlcxMan->GetPap()->Save( aSave );
             rbReSync = true;
-            WW8PLCFx_Cp_FKP* pPap = m_pPlcxMan->GetPapPLCF();
+            WW8PLCFx_Cp_FKP* pPap = m_xPlcxMan->GetPapPLCF();
             WW8_CP nMyStartCp=nStartCp;
 
-            SprmResult aLevel = m_pPlcxMan->HasParaSprm(0x6649);
+            SprmResult aLevel = m_xPlcxMan->HasParaSprm(0x6649);
             if (aLevel.pSprm && aLevel.nRemainingData >= 1)
                 nCellLevel = *aLevel.pSprm;
 
@@ -2610,7 +2607,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
                     // be a multi-page one if necessary.
                     pTabPos->bNoFly = true;
             }
-            m_pPlcxMan->GetPap()->Restore( aSave );
+            m_xPlcxMan->GetPap()->Restore( aSave );
         }
 
         // Then look if we are in an Apo
@@ -2631,7 +2628,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
         //  Test for Anl (Numbering) and process all events in the right order
         if( m_bAnl && !bTableRowEnd )
         {
-            SprmResult aSprm13 = m_pPlcxMan->HasParaSprm(13);
+            SprmResult aSprm13 = m_xPlcxMan->HasParaSprm(13);
             const sal_uInt8* pSprm13 = aSprm13.pSprm;
             if (pSprm13 && aSprm13.nRemainingData >= 1)
             {   // Still Anl left?
@@ -2674,7 +2671,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
         if (bStartTab)
         {
             WW8PLCFxSave1 aSave;
-            m_pPlcxMan->GetPap()->Save( aSave );
+            m_xPlcxMan->GetPap()->Save( aSave );
 
            // Numbering for cell borders causes a crash -> no Anls in Tables
            if (m_bAnl)
@@ -2694,7 +2691,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
                 // We need an ReSync after StartTable
                 // (actually only if the Apo extends past a FKP border)
                 rbReSync = true;
-                m_pPlcxMan->GetPap()->Restore( aSave );
+                m_xPlcxMan->GetPap()->Restore( aSave );
             }
         }
     } while (!m_bFootnoteEdn && (m_nInTable < nCellLevel));
@@ -3510,7 +3507,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0x7:
             {
                 bNewParaEnd = true;
-                WW8PLCFxDesc* pPap = m_pPlcxMan->GetPap();
+                WW8PLCFxDesc* pPap = m_xPlcxMan->GetPap();
                 //The last paragraph of each cell is terminated by a special
                 //paragraph mark called a cell mark. Following the cell mark
                 //that ends the last cell of a table row, the table row is
@@ -3635,7 +3632,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 set. I also think btw that the third byte of the 4 byte
                 value is the level of the cell
                 */
-                WW8PLCFspecial* pTest = m_pPlcxMan->GetMagicTables();
+                WW8PLCFspecial* pTest = m_xPlcxMan->GetMagicTables();
                 if (pTest && pTest->SeekPosExact(nPosCp+1+nCpOfs) &&
                     pTest->Where() == nPosCp+1+nCpOfs)
                 {
@@ -3687,7 +3684,7 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     bool* pStartAttr, bool bCallProcessSpecial)
 {
     sal_uInt16 nOldColl = m_nAktColl;
-    m_nAktColl = m_pPlcxMan->GetColl();
+    m_nAktColl = m_xPlcxMan->GetColl();
 
     // Invalid Style-Id
     if (m_nAktColl >= m_vColl.size() || !m_vColl[m_nAktColl].m_pFormat || !m_vColl[m_nAktColl].m_bColl)
@@ -3710,9 +3707,9 @@ void SwWW8ImplReader::ProcessAktCollChange(WW8PLCFManResult& rRes,
     {
         bool bReSync;
         // Frame/Table/Autonumbering List Level
-        bTabRowEnd = ProcessSpecial(bReSync, rRes.nAktCp+m_pPlcxMan->GetCpOfs());
+        bTabRowEnd = ProcessSpecial(bReSync, rRes.nAktCp + m_xPlcxMan->GetCpOfs());
         if( bReSync )
-            *pStartAttr = m_pPlcxMan->Get( &rRes ); // Get Attribut-Pos again
+            *pStartAttr = m_xPlcxMan->Get( &rRes ); // Get Attribut-Pos again
     }
 
     if (!bTabRowEnd && StyleExists(m_nAktColl))
@@ -3730,7 +3727,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
     WW8PLCFManResult aRes;
 
     OSL_ENSURE(m_pPaM->GetNode().GetTextNode(), "Missing txtnode");
-    bool bStartAttr = m_pPlcxMan->Get(&aRes); // Get Attribute position again
+    bool bStartAttr = m_xPlcxMan->Get(&aRes); // Get Attribute position again
     aRes.nAktCp = rTextPos;                  // Current Cp position
 
     bool bNewSection = (aRes.nFlags & MAN_MASK_NEW_SEP) && !m_bIgnoreText;
@@ -3790,7 +3787,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
         }
     }
 
-    sal_Int32 nRequestedPos = m_pSBase->WW8Cp2Fc(m_pPlcxMan->GetCpOfs() + rTextPos, &m_bIsUnicode);
+    sal_Int32 nRequestedPos = m_pSBase->WW8Cp2Fc(m_xPlcxMan->GetCpOfs() + rTextPos, &m_bIsUnicode);
     bool bValidPos = checkSeek(*m_pStrm, nRequestedPos);
     SAL_WARN_IF(!bValidPos, "sw.ww8", "Document claimed to have text at an invalid position, skip attributes for region");
 
@@ -3805,8 +3802,8 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
     do
     {
         if( bDoPlcxManPlusPLus )
-            m_pPlcxMan->advance();
-        nNext = bValidPos ? m_pPlcxMan->Where() : nTextEnd;
+            m_xPlcxMan->advance();
+        nNext = bValidPos ? m_xPlcxMan->Where() : nTextEnd;
 
         if (m_pPostProcessAttrsInfo &&
             m_pPostProcessAttrsInfo->mnCpStart == nNext)
@@ -3832,7 +3829,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
     if( nSkipChars )
     {
         m_pCtrlStck->KillUnlockedAttrs( *m_pPaM->GetPoint() );
-        if( nOldColl != m_pPlcxMan->GetColl() )
+        if( nOldColl != m_xPlcxMan->GetColl() )
             ProcessAktCollChange(aRes, nullptr, false);
     }
 
@@ -3906,7 +3903,7 @@ void SwWW8ImplReader::CloseAttrEnds()
     // If there are any unclosed sprms then copy them to
     // another stack and close the ones that must be closed
     std::stack<sal_uInt16> aStack;
-    m_pPlcxMan->TransferOpenSprms(aStack);
+    m_xPlcxMan->TransferOpenSprms(aStack);
 
     while (!aStack.empty())
     {
@@ -3934,10 +3931,10 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
     m_bSpec = false;
     m_bPgSecBreak = false;
 
-    m_pPlcxMan = new WW8PLCFMan( m_pSBase, nType, nStartCp );
-    long nCpOfs = m_pPlcxMan->GetCpOfs(); // Offset for Header/Footer, Footnote
+    m_xPlcxMan.reset(new WW8PLCFMan(m_pSBase, nType, nStartCp));
+    long nCpOfs = m_xPlcxMan->GetCpOfs(); // Offset for Header/Footer, Footnote
 
-    WW8_CP nNext = m_pPlcxMan->Where();
+    WW8_CP nNext = m_xPlcxMan->Where();
     SwTextNode* pPreviousNode = nullptr;
     sal_uInt8 nDropLines = 0;
     SwCharFormat* pNewSwCharFormat = nullptr;
@@ -4030,16 +4027,16 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
             SprmResult aDCS;
             if (m_bVer67)
-                aDCS = m_pPlcxMan->GetPapPLCF()->HasSprm(46);
+                aDCS = m_xPlcxMan->GetPapPLCF()->HasSprm(46);
             else
-                aDCS = m_pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
+                aDCS = m_xPlcxMan->GetPapPLCF()->HasSprm(0x442C);
 
             if (aDCS.pSprm && aDCS.nRemainingData >= 1)
                 nDropLines = (*aDCS.pSprm) >> 3;
             else    // There is no Drop Cap Specifier hence no dropcap
                 pPreviousNode = nullptr;
 
-            SprmResult aDistance = m_pPlcxMan->GetPapPLCF()->HasSprm(0x842F);
+            SprmResult aDistance = m_xPlcxMan->GetPapPLCF()->HasSprm(0x842F);
             if (aDistance.pSprm && aDistance.nRemainingData >= 2)
                 nDistance = SVBT16ToShort(aDistance.pSprm);
             else
@@ -4087,8 +4084,8 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             // if it is there.
             WW8PLCFxDesc aTemp;
             aTemp.nStartPos = aTemp.nEndPos = WW8_CP_MAX;
-            if (m_pPlcxMan->GetSepPLCF())
-                m_pPlcxMan->GetSepPLCF()->GetSprms(&aTemp);
+            if (m_xPlcxMan->GetSepPLCF())
+                m_xPlcxMan->GetSepPLCF()->GetSprms(&aTemp);
             if ((aTemp.nStartPos != l) && (aTemp.nEndPos != l))
             {
                 // #i39251# - insert text node for page break, if no one inserted.
@@ -4115,8 +4112,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
     CloseAttrEnds();
 
-    delete m_pPlcxMan;
-    m_pPlcxMan = nullptr;
+    m_xPlcxMan.reset();
     return bJoined;
 }
 
@@ -4153,7 +4149,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pWDop(nullptr)
     , m_pLstManager(nullptr)
     , m_pSBase(nullptr)
-    , m_pPlcxMan(nullptr)
     , m_aTextNodesHavingFirstLineOfstSet()
     , m_aTextNodesHavingLeftIndentSet()
     , m_pStyles(nullptr)
@@ -6382,11 +6377,11 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
             {
                 WW8PLCFxSaveAll aSave;
                 memset( &aSave, 0, sizeof( aSave ) );
-                rReader.m_pPlcxMan->SaveAllPLCFx( aSave );
+                rReader.m_xPlcxMan->SaveAllPLCFx( aSave );
 
                 nStartCp += rReader.m_nDrawCpO;
                 nEndCp   += rReader.m_nDrawCpO;
-                WW8PLCFx_Cp_FKP* pChp = rReader.m_pPlcxMan->GetChpPLCF();
+                WW8PLCFx_Cp_FKP* pChp = rReader.m_xPlcxMan->GetChpPLCF();
                 wwSprmParser aSprmParser(*rReader.m_pWwFib);
                 while (nStartCp <= nEndCp && !nPictureId)
                 {
@@ -6421,7 +6416,7 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
                     nStartCp = aDesc.nEndPos;
                 }
 
-                rReader.m_pPlcxMan->RestoreAllPLCFx( aSave );
+                rReader.m_xPlcxMan->RestoreAllPLCFx( aSave );
             }
         }
         rReader.m_pStrm->Seek( nOldPos );

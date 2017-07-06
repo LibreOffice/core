@@ -795,7 +795,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
     if (mrReader.m_nInTable || mrReader.m_bTxbxFlySection || mrReader.InLocalApo())
         return;
 
-    WW8PLCFx_SEPX* pSep = mrReader.m_pPlcxMan->GetSepPLCF();
+    WW8PLCFx_SEPX* pSep = mrReader.m_xPlcxMan->GetSepPLCF();
     OSL_ENSURE(pSep, "impossible!");
     if (!pSep)
         return;
@@ -816,7 +816,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     // M.M. Create a linked section if the WkbPLCF
     // has an entry for one at this cp
-    WW8PLCFspecial* pWkb = mrReader.m_pPlcxMan->GetWkbPLCF();
+    WW8PLCFspecial* pWkb = mrReader.m_xPlcxMan->GetWkbPLCF();
     if (pWkb && pWkb->SeekPosExact(nTextPos) &&
             pWkb->Where() == nTextPos)
     {
@@ -1644,8 +1644,8 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
 
 void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
 {
-    WW8PLCFMan* pPlcxMan = pIo->m_pPlcxMan;
-    WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
+    std::shared_ptr<WW8PLCFMan> xPlcxMan = pIo->m_xPlcxMan;
+    WW8PLCFx_Cp_FKP* pPap = xPlcxMan->GetPapPLCF();
 
     Read(nOrigSp29, pPap);    // read Apo parameter
 
@@ -1658,7 +1658,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
         SvStream* pIoStrm = pIo->m_pStrm;
         sal_uLong nPos = pIoStrm->Tell();
         WW8PLCFxSave1 aSave;
-        pPlcxMan->GetPap()->Save( aSave );
+        xPlcxMan->GetPap()->Save( aSave );
         bGrafApo = false;
 
         do{             // block for quick exit
@@ -1702,7 +1702,7 @@ void WW8FlyPara::ReadFull(sal_uInt8 nOrigSp29, SwWW8ImplReader* pIo)
         }
         while( false );                             // block for quick exit
 
-        pPlcxMan->GetPap()->Restore( aSave );
+        xPlcxMan->GetPap()->Restore( aSave );
         pIoStrm->Seek( nPos );
     }while( false );                                    // block for quick exit
 }
@@ -1787,7 +1787,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
 
     eSurround = ( rWW.nSp37 > 1 ) ? css::text::WrapTextMode_DYNAMIC : css::text::WrapTextMode_NONE;
     //#i119466 mapping "Around" wrap setting to "Parallel" for table
-    const bool bIsTable = rIo.m_pPlcxMan->HasParaSprm(0x2416).pSprm;
+    const bool bIsTable = rIo.m_xPlcxMan->HasParaSprm(0x2416).pSprm;
     if (bIsTable && rWW.nSp37 == 2)
         eSurround = css::text::WrapTextMode_PARALLEL;
 
@@ -2309,14 +2309,14 @@ bool SwWW8ImplReader::IsDropCap()
     // Find the DCS (Drop Cap Specifier) for the paragraph
     // if does not exist or if the first three bits are 0
     // then there is no dropcap on the paragraph
-    WW8PLCFx_Cp_FKP *pPap = m_pPlcxMan ? m_pPlcxMan->GetPapPLCF() : nullptr;
+    WW8PLCFx_Cp_FKP *pPap = m_xPlcxMan ? m_xPlcxMan->GetPapPLCF() : nullptr;
     if (pPap)
     {
         SprmResult aDCS;
         if (m_bVer67)
             aDCS = pPap->HasSprm(46);
         else
-            aDCS = m_pPlcxMan->GetPapPLCF()->HasSprm(0x442C);
+            aDCS = m_xPlcxMan->GetPapPLCF()->HasSprm(0x442C);
         if (aDCS.pSprm && aDCS.nRemainingData >= 2)
         {
             /*
@@ -2621,7 +2621,7 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
     WW8FlyPara aF(m_bVer67, rApo.mpStyleApo);
     // WWPara for current para
     if (rApo.HasFrame())
-        aF.Read(rApo.m_nSprm29, m_pPlcxMan->GetPapPLCF());
+        aF.Read(rApo.m_nSprm29, m_xPlcxMan->GetPapPLCF());
     aF.ApplyTabPos(pTabPos);
 
     return aF == *m_xWFlyPara;
@@ -2682,7 +2682,7 @@ const SfxPoolItem* SwWW8ImplReader::GetFormatAttr( sal_uInt16 nWhich )
         if (!pRet)
             pRet = &m_rDoc.GetAttrPool().GetDefaultItem(nWhich);
     }
-    else if (m_pPlcxMan && m_pPlcxMan->GetDoingDrawTextBox())
+    else if (m_xPlcxMan && m_xPlcxMan->GetDoingDrawTextBox())
     {
         pRet = m_pCtrlStck->GetStackAttr(*m_pPaM->GetPoint(), nWhich);
         if (!pRet)
@@ -2790,7 +2790,7 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
         if (nLen < (m_bVer67 ? 3 : 4))
         {
             //otherwise disable after we print the char
-            if (m_pPlcxMan && m_pPlcxMan->GetDoingDrawTextBox())
+            if (m_xPlcxMan && m_xPlcxMan->GetDoingDrawTextBox())
                 m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_FONT );
             m_bSymbol = false;
         }
@@ -2893,10 +2893,10 @@ void SwWW8ImplReader::Read_BoldUsw( sal_uInt16 nId, const sal_uInt8* pData, shor
     // value: 0 = off, 1 = on, 128 = like style, 129 contrary to style
     bool bOn = *pData & 1;
     SwWW8StyInf* pSI = GetStyle(m_nAktColl);
-    if (m_pPlcxMan && eVersion > ww::eWW2)
+    if (m_xPlcxMan && eVersion > ww::eWW2)
     {
         SprmResult aCharIstd =
-            m_pPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? 80 : 0x4A30);
+            m_xPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? 80 : 0x4A30);
         if (aCharIstd.pSprm && aCharIstd.nRemainingData >= 2)
             pSI = GetStyle(SVBT16ToShort(aCharIstd.pSprm));
     }
@@ -3060,10 +3060,10 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8* pData,
     }
     bool bOn = *pData & 1;
     SwWW8StyInf* pSI = GetStyle(m_nAktColl);
-    if (m_pPlcxMan)
+    if (m_xPlcxMan)
     {
         SprmResult aCharIstd =
-            m_pPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? 80 : 0x4A30);
+            m_xPlcxMan->GetChpPLCF()->HasSprm(m_bVer67 ? 80 : 0x4A30);
         if (aCharIstd.pSprm && aCharIstd.nRemainingData >= 2)
             pSI = GetStyle(SVBT16ToShort(aCharIstd.pSprm));
     }
@@ -3436,7 +3436,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
 void SwWW8ImplReader::Read_TextColor( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     //Has newer colour variant, ignore this old variant
-    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::sprmCCv).pSprm)
+    if (!m_bVer67 && m_xPlcxMan && m_xPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::sprmCCv).pSprm)
         return;
 
     if (nLen < 1)
@@ -3921,7 +3921,7 @@ void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* pData, short n
 void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     //Has newer colour variant, ignore this old variant
-    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetChpPLCF()->HasSprm(0xCA71).pSprm)
+    if (!m_bVer67 && m_xPlcxMan && m_xPlcxMan->GetChpPLCF()->HasSprm(0xCA71).pSprm)
         return;
 
     if (nLen < 2)
@@ -4111,9 +4111,9 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             been removed then we will factor the original list applied hanging
             into our calculation.
             */
-            if (m_pPlcxMan && m_nAktColl < m_vColl.size() && m_vColl[m_nAktColl].m_bHasBrokenWW6List)
+            if (m_xPlcxMan && m_nAktColl < m_vColl.size() && m_vColl[m_nAktColl].m_bHasBrokenWW6List)
             {
-                SprmResult aIsZeroed = m_pPlcxMan->GetPapPLCF()->HasSprm(0x460B);
+                SprmResult aIsZeroed = m_xPlcxMan->GetPapPLCF()->HasSprm(0x460B);
                 if (aIsZeroed.pSprm && aIsZeroed.nRemainingData >= 1 && *aIsZeroed.pSprm == 0)
                 {
                     const SvxLRSpaceItem &rLR =
@@ -4131,7 +4131,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                 {
                     if ( const SwNumFormat *pNumFormat = GetNumFormatFromTextNode(*pNode) )
                     {
-                        if (!lcl_HasExplicitLeft(m_pPlcxMan, m_bVer67))
+                        if (!lcl_HasExplicitLeft(m_xPlcxMan.get(), m_bVer67))
                         {
                             aLR.SetTextLeft(pNumFormat->GetIndentAt());
 
@@ -4406,8 +4406,8 @@ bool SwWW8ImplReader::IsRightToLeft()
 {
     bool bRTL = false;
     SprmResult aDir;
-    if (m_pPlcxMan)
-        aDir = m_pPlcxMan->GetPapPLCF()->HasSprm(0x2441);
+    if (m_xPlcxMan)
+        aDir = m_xPlcxMan->GetPapPLCF()->HasSprm(0x2441);
     if (aDir.pSprm && aDir.nRemainingData >= 1)
         bRTL = *aDir.pSprm != 0;
     else
@@ -4504,8 +4504,8 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
         //Only the cjk language setting seems to matter to word, the western
         //one is ignored
         SprmResult aLang;
-        if (m_pPlcxMan)
-            aLang = m_pPlcxMan->GetChpPLCF()->HasSprm(0x486E);
+        if (m_xPlcxMan)
+            aLang = m_xPlcxMan->GetChpPLCF()->HasSprm(0x486E);
 
         if (aLang.pSprm && aLang.nRemainingData >= 2)
             nLang = LanguageType(SVBT16ToShort(aLang.pSprm));
@@ -4749,7 +4749,7 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
 
 void SwWW8ImplReader::Read_Shade( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetPapPLCF()->HasSprm(0xC64D).pSprm)
+    if (!m_bVer67 && m_xPlcxMan && m_xPlcxMan->GetPapPLCF()->HasSprm(0xC64D).pSprm)
         return;
 
     if (nLen < 2)
@@ -4849,7 +4849,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
         if( m_pAktColl )
             nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, nullptr, m_pStyles);
         else
-            nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, m_pPlcxMan ? m_pPlcxMan->GetPapPLCF() : nullptr);
+            nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, m_xPlcxMan ? m_xPlcxMan->GetPapPLCF() : nullptr);
 
         if( nBorder )                                   // Border
         {
