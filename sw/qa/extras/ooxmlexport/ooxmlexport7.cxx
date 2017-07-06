@@ -641,6 +641,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77219_foregroundShape, "tdf77219_foregroundShape
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in front of the paragraph", true, bool(getProperty<bool>(getShape(1), "Opaque")));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf108973_backgroundTextbox, "tdf108973_backgroundTextbox.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in front of the paragraph", false, bool(getProperty<bool>(getShape(1), "Opaque")));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf108973_foregroundTextbox, "tdf108973_foregroundTextbox.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox is in front of the paragraph", true, bool(getProperty<bool>(getShape(1), "Opaque")));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
 {
     // Document contains a flowChartMultidocument preset shape, our date for that shape wasn't correct.
