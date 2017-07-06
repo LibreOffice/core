@@ -142,20 +142,49 @@
     </Expand>
   </Type>
   <Type Name="SwNode">
-    <DisplayString>{{SwNode}}</DisplayString>
+    <DisplayString>{{SwNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+    <Expand>
+      <Item Name="Nodes">static_cast&lt; SwNodes* &gt;(m_pBlock->pBigArr)</Item>
+    </Expand>
   </Type>
   <Type Name="SwEndNode">
-    <DisplayString>{{SwEndNode}}</DisplayString>
+    <DisplayString>{{SwEndNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
   </Type>
   <Type Name="SwStartNode">
-    <DisplayString Condition="m_eStartNodeType	== 1">{{SwTableBoxStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType	== 2">{{SwFlyStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType	== 3">{{SwFootnoteStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType	== 4">{{SwHeaderStartNode}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType	== 5">{{SwFooterStartNode}}</DisplayString>
-    <DisplayString>{{SwStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 1">{{SwTableBoxStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 2">{{SwFlyStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 3">{{SwFootnoteStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 4">{{SwHeaderStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 5">{{SwFooterStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+    <DisplayString>{{SwStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+  </Type>
+  <Type Name="SwContentNode">
+    <DisplayString>{{SwContentNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
   </Type>
   <Type Name="SwTextNode">
-    <DisplayString>{{SwTextNode: {m_Text}}}</DisplayString>
+    <DisplayString>{{SwTextNode {m_pBlock->nStart + m_nOffset}: {m_Text}}}</DisplayString>
+  </Type>
+  <Type Name="SwNodeIndex">
+    <DisplayString>{{{*m_pNode}}}</DisplayString>
+  </Type>
+  <Type Name="SwIndex">
+    <DisplayString>{{{m_nIndex}}}</DisplayString>
+  </Type>
+  <Type Name="SwPosition">
+    <DisplayString>{{Node: {nNode} Content: {nContent}}}</DisplayString>
+  </Type>
+  <Type Name="SwPaM">
+    <DisplayString>{{Point: {*m_pPoint} Mark: {*m_pMark}}}</DisplayString>
+  </Type>
+  <Type Name="SwFrameFormats">
+    <DisplayString Condition="m_Array.node_count == 0">empty</DisplayString>
+    <DisplayString>Size: {m_Array.node_count}</DisplayString>
+    <Expand>
+      <Item Name="[size]">m_Array.node_count</Item>
+      <IndexListItems>
+        <Size>m_Array.node_count</Size>
+        <ValueNode>**(SwFrameFormat**)((char*)(m_PosIndex.ptrs.spc.data_[$i]) - 0x10)</ValueNode>
+      </IndexListItems>
+    </Expand>
   </Type>
 </AutoVisualizer>
