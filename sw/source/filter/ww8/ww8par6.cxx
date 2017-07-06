@@ -2388,7 +2388,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
 
         if (RndStdIds::FLY_AS_CHAR != m_xSFlyPara->eAnchor && m_xSFlyPara->pFlyFormat)
         {
-            m_pAnchorStck->AddAnchor(*m_pPaM->GetPoint(), m_xSFlyPara->pFlyFormat);
+            m_xAnchorStck->AddAnchor(*m_pPaM->GetPoint(), m_xSFlyPara->pFlyFormat);
         }
 
         // remember Pos in body text
@@ -2397,8 +2397,8 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         //remove fltanchors, otherwise they will be closed inside the
         //frame, which makes no sense, restore them after the frame is
         //closed
-        m_xSFlyPara->xOldAnchorStck.reset(m_pAnchorStck);
-        m_pAnchorStck = new SwWW8FltAnchorStack(&m_rDoc, m_nFieldFlags);
+        m_xSFlyPara->xOldAnchorStck = std::move(m_xAnchorStck);
+        m_xAnchorStck.reset(new SwWW8FltAnchorStack(&m_rDoc, m_nFieldFlags));
 
         if (m_xSFlyPara->pFlyFormat)
             MoveInsideFly(m_xSFlyPara->pFlyFormat);
@@ -2547,7 +2547,7 @@ void SwWW8ImplReader::StopApo()
             m_xSFlyPara->pFlyFormat->SetFormatAttr(SvxBrushItem(aBg, RES_BACKGROUND));
 
         DeleteAnchorStack();
-        m_pAnchorStck = m_xSFlyPara->xOldAnchorStck.release();
+        m_xAnchorStck = std::move(m_xSFlyPara->xOldAnchorStck);
 
         // When inserting a graphic into the fly frame using the auto
         // function, the extension of the SW-fly has to be set

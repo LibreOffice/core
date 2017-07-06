@@ -2761,7 +2761,7 @@ SwFrameFormat *SwWW8ImplReader::AddAutoAnchor(SwFrameFormat *pFormat)
      */
     if ((pFormat) && (pFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR))
     {
-        m_pAnchorStck->AddAnchor(*m_pPaM->GetPoint(), pFormat);
+        m_xAnchorStck->AddAnchor(*m_pPaM->GetPoint(), pFormat);
     }
     return pFormat;
 }
