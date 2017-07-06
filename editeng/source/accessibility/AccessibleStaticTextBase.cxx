@@ -64,14 +64,17 @@ namespace accessibility
 {
     typedef std::vector< beans::PropertyValue > PropertyValueVector;
 
-    class PropertyValueEqualFunctor : public std::binary_function< beans::PropertyValue, beans::PropertyValue, bool >
+    class PropertyValueEqualFunctor
     {
+        const beans::PropertyValue& m_rPValue;
+
     public:
-        PropertyValueEqualFunctor()
+        explicit PropertyValueEqualFunctor(const beans::PropertyValue& rPValue)
+            : m_rPValue(rPValue)
         {}
-        bool operator() ( const beans::PropertyValue& lhs, const beans::PropertyValue& rhs ) const
+        bool operator() ( const beans::PropertyValue& rhs ) const
         {
-            return ( lhs.Name == rhs.Name && lhs.Value == rhs.Value );
+            return ( m_rPValue.Name == rhs.Name && m_rPValue.Value == rhs.Value );
         }
     };
     sal_Unicode const cNewLine(0x0a);
@@ -915,7 +918,7 @@ namespace accessibility
             {
                 const beans::PropertyValue* pItr = aSeq.getConstArray();
                 const beans::PropertyValue* pEnd  = pItr + aSeq.getLength();
-                const beans::PropertyValue* pFind = std::find_if( pItr, pEnd, std::bind2nd( PropertyValueEqualFunctor(), std::cref( *aItr ) ) );
+                const beans::PropertyValue* pFind = std::find_if( pItr, pEnd, PropertyValueEqualFunctor(*aItr) );
                 if ( pFind != pEnd )
                 {
                     aIntersectionVec.push_back( *pFind );
@@ -953,7 +956,7 @@ namespace accessibility
         {
             const beans::PropertyValue* pItr = aIntersectionSeq.getConstArray();
             const beans::PropertyValue* pEnd  = pItr + aIntersectionSeq.getLength();
-            bool bNone = std::none_of( pItr, pEnd, std::bind2nd( PropertyValueEqualFunctor(), std::cref( pDefAttr[i] ) ) );
+            bool bNone = std::none_of( pItr, pEnd, PropertyValueEqualFunctor( pDefAttr[i] ) );
             if ( bNone && pDefAttr[i].Handle != 0)
             {
                 aDiffVec.push_back( pDefAttr[i] );
