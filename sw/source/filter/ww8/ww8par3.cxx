@@ -220,7 +220,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
 {
     WW8FormulaListBox aFormula(*this);
 
-    if (pF->nLCode && rStr.getLength() >= pF->nLCode && rStr[pF->nLCode-1] == 0x01)
+    if (pF->nLCode > 0 && rStr.getLength() >= pF->nLCode && rStr[pF->nLCode-1] == 0x01)
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_DROPDOWN);
 
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
