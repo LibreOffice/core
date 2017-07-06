@@ -18,6 +18,11 @@ void call_value(OUString);
 void call_const_ref(OUString const &);
 void call_ref(OUString &);
 
+template<typename T> void f() {
+    int i = sizeof (T) + 1; // expected-error {{var used only once, should be inlined or declared const [loplugin:oncevar]}}
+    call_value(i); // expected-note {{used here [loplugin:oncevar]}}
+}
+
 int main() {
 /* TODO
     int i;
