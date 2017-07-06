@@ -800,5 +800,13 @@ DECLARE_ODFIMPORT_TEST(testTdf100033_2, "tdf100033_2.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 
+DECLARE_ODFIMPORT_TEST(testI61225, "i61225.sxw")
+{
+    // Part of ooo61225-1.sxw from crashtesting.
+
+    // This never returned.
+    calcLayout();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
