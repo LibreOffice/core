@@ -5850,7 +5850,7 @@ void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
         unsigned long nDrawingContainerId = 1;
         do
         {
-            if (nPos != rStCtrl.Seek(nPos))
+            if (!checkSeek(rStCtrl, nPos))
                 break;
 
             bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) && ( DFF_msofbtDgContainer == nFbt );
