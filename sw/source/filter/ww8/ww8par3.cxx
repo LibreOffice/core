@@ -1908,8 +1908,8 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
     {
         // the actual level is finished, what should we do ?
         m_nListLevel = WW8ListManager::nMaxLevel;
-        if (m_pStyles && !m_bVer67)
-            m_pStyles->nWwNumLevel = 0;
+        if (m_xStyles && !m_bVer67)
+            m_xStyles->nWwNumLevel = 0;
     }
     else
     {
@@ -1920,7 +1920,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
         // the Streamdata is zero based
         m_nListLevel = *pData;
 
-        if (m_pStyles && !m_bVer67)
+        if (m_xStyles && !m_bVer67)
         {
             /*
             if this is the case, then if the numbering is actually stored in
@@ -1928,7 +1928,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
             to set the ww6 list level information which we will need when we
             reach the true ww6 list def.  So set it now
             */
-            m_pStyles->nWwNumLevel = m_nListLevel;
+            m_xStyles->nWwNumLevel = m_nListLevel;
         }
 
         if (WW8ListManager::nMaxLevel <= m_nListLevel )

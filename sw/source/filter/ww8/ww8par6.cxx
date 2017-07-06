@@ -269,7 +269,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
 
     //Get the size of word's default styles font
     sal_uInt32 nCharWidth=240;
-    for (sal_uInt16 nI = 0; nI < m_pStyles->GetCount(); ++nI)
+    for (sal_uInt16 nI = 0; nI < m_xStyles->GetCount(); ++nI)
     {
         if (m_vColl[nI].m_bValid && m_vColl[nI].m_pFormat &&
             m_vColl[nI].IsWW8BuiltInDefaultStyle())
@@ -1144,7 +1144,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     if (eVer <= ww::eWW7)
         aNewSection.maSep.grpfIhdt = ReadBSprm(pSep, eVer <= ww::eWW2 ? 128 : 153, 0);
-    else if (mrReader.m_pHdFt)
+    else if (mrReader.m_xHdFt)
     {
         aNewSection.maSep.grpfIhdt = WW8_HEADER_ODD | WW8_FOOTER_ODD
             | WW8_HEADER_FIRST | WW8_FOOTER_FIRST;
@@ -1165,7 +1165,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
             if (aNewSection.maSep.grpfIhdt & nMask)
             {
                 WW8_CP nStart, nLen;
-                mrReader.m_pHdFt->GetTextPosExact( static_cast< short >(nI + ( maSegments.size() + 1) * 6), nStart, nLen);
+                mrReader.m_xHdFt->GetTextPosExact( static_cast< short >(nI + ( maSegments.size() + 1) * 6), nStart, nLen);
                 //No header or footer, inherit pervious one, or set to zero
                 //if no previous one
                 if (!nLen)
@@ -3449,8 +3449,8 @@ void SwWW8ImplReader::Read_TextColor( sal_uInt16, const sal_uInt8* pData, short 
             b = 0;
 
         NewAttr( SvxColorItem(Color(GetCol(b)), RES_CHRATR_COLOR));
-        if (m_pAktColl && m_pStyles)
-            m_pStyles->bTextColChanged = true;
+        if (m_pAktColl && m_xStyles)
+            m_xStyles->bTextColChanged = true;
     }
 }
 
@@ -3462,8 +3462,8 @@ void SwWW8ImplReader::Read_TextForeColor(sal_uInt16, const sal_uInt8* pData, sho
     {
         Color aColor(msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)));
         NewAttr(SvxColorItem(aColor, RES_CHRATR_COLOR));
-        if (m_pAktColl && m_pStyles)
-            m_pStyles->bTextColChanged = true;
+        if (m_pAktColl && m_xStyles)
+            m_xStyles->bTextColChanged = true;
     }
 }
 
@@ -3684,15 +3684,15 @@ void SwWW8ImplReader::ResetCJKCharSetVars()
 
 void SwWW8ImplReader::openFont(sal_uInt16 nFCode, sal_uInt16 nId)
 {
-    if (SetNewFontAttr(nFCode, true, nId) && m_pAktColl && m_pStyles)
+    if (SetNewFontAttr(nFCode, true, nId) && m_pAktColl && m_xStyles)
     {
         // remember for simulating default font
         if (RES_CHRATR_CJK_FONT == nId)
-            m_pStyles->bCJKFontChanged = true;
+            m_xStyles->bCJKFontChanged = true;
         else if (RES_CHRATR_CTL_FONT == nId)
-            m_pStyles->bCTLFontChanged = true;
+            m_xStyles->bCTLFontChanged = true;
         else
-            m_pStyles->bFontChanged = true;
+            m_xStyles->bFontChanged = true;
     }
 }
 
@@ -3802,16 +3802,16 @@ void SwWW8ImplReader::Read_FontSize( sal_uInt16 nId, const sal_uInt8* pData, sho
             aSz.SetWhich( RES_CHRATR_CTL_FONTSIZE );
             NewAttr( aSz );
         }
-        if (m_pAktColl && m_pStyles)            // Style-Def ?
+        if (m_pAktColl && m_xStyles)            // Style-Def ?
         {
             // remember for simulating default font size
             if (nId == RES_CHRATR_CTL_FONTSIZE)
-                m_pStyles->bFCTLSizeChanged = true;
+                m_xStyles->bFCTLSizeChanged = true;
             else
             {
-                m_pStyles->bFSizeChanged = true;
+                m_xStyles->bFSizeChanged = true;
                 if (eVersion <= ww::eWW6)
-                    m_pStyles->bFCTLSizeChanged= true;
+                    m_xStyles->bFCTLSizeChanged= true;
             }
         }
     }
@@ -4847,7 +4847,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
         sal_uInt8 nBorder;
 
         if( m_pAktColl )
-            nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, nullptr, m_pStyles);
+            nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, nullptr, m_xStyles.get());
         else
             nBorder = ::lcl_ReadBorders(m_bVer67, aBrcs, m_xPlcxMan ? m_xPlcxMan->GetPapPLCF() : nullptr);
 
@@ -4977,8 +4977,8 @@ void SwWW8ImplReader::Read_WidowControl( sal_uInt16, const sal_uInt8* pData, sho
         NewAttr( SvxWidowsItem( nL, RES_PARATR_WIDOWS ) );     // Off -> nLines = 0
         NewAttr( SvxOrphansItem( nL, RES_PARATR_ORPHANS ) );
 
-        if( m_pAktColl && m_pStyles )           // Style-Def ?
-            m_pStyles->bWidowsChanged = true; // save for simulation
+        if( m_pAktColl && m_xStyles )           // Style-Def ?
+            m_xStyles->bWidowsChanged = true; // save for simulation
                                             // Default-Widows
     }
 }
@@ -5062,7 +5062,7 @@ void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
         SwWW8StyInf& rSI = m_vColl[m_nAktColl];
         if (!rSI.m_xWWFly)
             rSI.m_xWWFly.reset(new WW8FlyPara(m_bVer67));
-        rSI.m_xWWFly->Read(*pData, m_pStyles);
+        rSI.m_xWWFly->Read(*pData, m_xStyles.get());
         if (rSI.m_xWWFly->IsEmpty())
         {
             m_vColl[m_nAktColl].m_xWWFly.reset();

@@ -1204,7 +1204,7 @@ private:
     std::set<const SwNode*> m_aTextNodesHavingFirstLineOfstSet; // #i103711#
     std::set<const SwNode*> m_aTextNodesHavingLeftIndentSet; // #i105414#
 
-    WW8RStyle* m_pStyles;     // pointer to the style reading class
+    std::unique_ptr<WW8RStyle> m_xStyles;     // pointer to the style reading class
     SwFormat* m_pAktColl;        // collection to be created now
                             // ( always 0 outside of a Style-Def )
     SfxItemSet* m_pAktItemSet;// character attributes to be read in now
@@ -1213,7 +1213,7 @@ private:
     const SwTextFormatColl* m_pDfltTextFormatColl;    // Default
     SwFormat* m_pStandardFormatColl;// "Standard"
 
-    WW8PLCF_HdFt* m_pHdFt;        // pointer to Header / Footer - scanner class
+    std::unique_ptr<WW8PLCF_HdFt> m_xHdFt;        // pointer to Header / Footer - scanner class
 
     std::unique_ptr<WW8FlyPara> m_xWFlyPara;      // WW-parameter
     std::unique_ptr<WW8SwFlyPara> m_xSFlyPara;    // Sw parameters created from previous

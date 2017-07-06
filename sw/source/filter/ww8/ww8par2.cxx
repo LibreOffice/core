@@ -850,8 +850,8 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 
 
 SwNumRule* SwWW8ImplReader::GetStyRule()
 {
-    if( m_pStyles->pStyRule )         // Bullet-Style already present
-        return m_pStyles->pStyRule;
+    if( m_xStyles->pStyRule )         // Bullet-Style already present
+        return m_xStyles->pStyRule;
 
     const OUString aBaseName("WW8StyleNum");
     const OUString aName( m_rDoc.GetUniqueNumRuleName( &aBaseName, false) );
@@ -859,11 +859,11 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     // #i86652#
     sal_uInt16 nRul = m_rDoc.MakeNumRule( aName, nullptr, false,
                                     SvxNumberFormat::LABEL_ALIGNMENT );
-    m_pStyles->pStyRule = m_rDoc.GetNumRuleTable()[nRul];
+    m_xStyles->pStyRule = m_rDoc.GetNumRuleTable()[nRul];
     // Auto == false-> Nummerierungsvorlage
-    m_pStyles->pStyRule->SetAutoRule(false);
+    m_xStyles->pStyRule->SetAutoRule(false);
 
-    return m_pStyles->pStyRule;
+    return m_xStyles->pStyRule;
 }
 
 // Sprm 13
@@ -898,7 +898,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
             else if( *pData == 10 || *pData == 11 )
             {
                 // remember type, the rest happens at Sprm 12
-                m_pStyles->nWwNumLevel = *pData;
+                m_xStyles->nWwNumLevel = *pData;
             }
         }
     }
@@ -945,7 +945,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
 
         // Missing Levels need not be replenished
         m_rDoc.SetOutlineNumRule( aNR );
-    }else if( m_pStyles->nWwNumLevel == 10 || m_pStyles->nWwNumLevel == 11 ){
+    }else if( m_xStyles->nWwNumLevel == 10 || m_xStyles->nWwNumLevel == 11 ){
         SwNumRule* pNR = GetStyRule();
         SetAnld(pNR, reinterpret_cast<WW8_ANLD const *>(pData), 0, false);
         m_pAktColl->SetFormatAttr( SwNumRuleItem( pNR->GetName() ) );
@@ -3668,7 +3668,7 @@ sal_uInt16 SwWW8ImplReader::StyleUsingLFO( sal_uInt16 nLFOIndex ) const
     sal_uInt16 nRes = USHRT_MAX;
     if( !m_vColl.empty() )
     {
-        for(sal_uInt16 nI = 0; nI < m_pStyles->GetCount(); nI++ )
+        for(sal_uInt16 nI = 0; nI < m_xStyles->GetCount(); nI++ )
             if(    m_vColl[ nI ].m_bValid
                 && (nLFOIndex == m_vColl[ nI ].m_nLFOIndex) )
                 nRes = nI;
@@ -3681,7 +3681,7 @@ const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
     SwFormat* pRet = nullptr;
     if( !m_vColl.empty() )
     {
-        for(sal_uInt16 nI = 0; nI < m_pStyles->GetCount(); nI++ )
+        for(sal_uInt16 nI = 0; nI < m_xStyles->GetCount(); nI++ )
             if(    m_vColl[ nI ].m_bValid
                 && (rName.equals( m_vColl[ nI ].GetOrgWWName())) )
             {
