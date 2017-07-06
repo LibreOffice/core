@@ -31,7 +31,7 @@ import java.util.Iterator;
 public class MultiTypeInterfaceContainer
 {
 
-    private Map map= new HashMap();
+    private Map<Object,InterfaceContainer> map= new HashMap<Object,InterfaceContainer>();
 
     /** Creates a new instance of MultiTypeInterfaceContainer */
     public MultiTypeInterfaceContainer()
@@ -50,13 +50,12 @@ public class MultiTypeInterfaceContainer
         if ( (size=map.size()) > 0)
         {
             Type [] arTypes= new Type[size];
-            Iterator it= map.keySet().iterator();
 
             int countTypes= 0;
-            while (it.hasNext())
+            for (Map.Entry<Object,InterfaceContainer> entry : map.entrySet())
             {
-                Object key= it.next();
-                InterfaceContainer cont= (InterfaceContainer) map.get(key);
+                Object key= entry.getKey();
+                InterfaceContainer cont= entry.getValue();
                 if (cont != null && cont.size() > 0)
                 {
                     if (key == null)
@@ -64,7 +63,7 @@ public class MultiTypeInterfaceContainer
                     else if (key instanceof Type)
                         arTypes[countTypes++]= (Type) key;
                     else if (key instanceof Class)
-                        arTypes[countTypes++]= new Type((Class) key);
+                        arTypes[countTypes++]= new Type((Class<?>) key);
                     else
                         arTypes[countTypes++]= new Type(key.getClass());
                 }
@@ -86,23 +85,7 @@ public class MultiTypeInterfaceContainer
     /** param key can be null */
     synchronized public InterfaceContainer getContainer(Object key)
     {
-        InterfaceContainer retVal= null;
-        Iterator it= map.keySet().iterator();
-        while (it.hasNext())
-        {
-            Object obj= it.next();
-            if (obj == null && key == null)
-            {
-                retVal= (InterfaceContainer) map.get(null);
-                break;
-            }
-            else if( obj != null && obj.equals(key))
-            {
-                retVal= (InterfaceContainer) map.get(obj);
-                break;
-            }
-        }
-        return retVal;
+        return map.get(key);
     }
 
 
@@ -114,7 +97,7 @@ public class MultiTypeInterfaceContainer
         // Type a= new Type(XInterface.class);
         // Type b= new Type(XInterface.class);
         // Although a != b , the map interprets both as being the same.
-        InterfaceContainer cont= (InterfaceContainer) map.get(ckey);
+        InterfaceContainer cont= map.get(ckey);
         if (cont != null)
         {
             cont.add(iface);
@@ -132,7 +115,7 @@ public class MultiTypeInterfaceContainer
     synchronized public int removeInterface(Object key, Object iface)
     {
         int retVal= 0;
-        InterfaceContainer cont= (InterfaceContainer) map.get(key);
+        InterfaceContainer cont= map.get(key);
         if (cont != null)
         {
             cont.remove(iface);
@@ -143,19 +126,19 @@ public class MultiTypeInterfaceContainer
 
     public void disposeAndClear(EventObject evt)
     {
-        Iterator it= null;
+        Iterator<InterfaceContainer> it= null;
         synchronized(this)
         {
             it= map.values().iterator();
         }
         while (it.hasNext() )
-            ((InterfaceContainer) it.next()).disposeAndClear(evt);
+            it.next().disposeAndClear(evt);
     }
 
     synchronized public void clear()
     {
-        Iterator it= map.values().iterator();
+        Iterator<InterfaceContainer> it= map.values().iterator();
         while (it.hasNext())
-            ((InterfaceContainer) it.next()).clear();
+            it.next().clear();
     }
 }
