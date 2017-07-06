@@ -422,7 +422,7 @@ void ODbaseIndex::createINFEntry()
         for (sal_uInt16 i = 0; i < aInfFile.GetKeyCount(); i++)
         {
             aKeyName = aInfFile.GetKeyName(i);
-            if (bCase ? aKeyName.equals(aNewEntry) : aKeyName.equalsIgnoreAsciiCase(aNewEntry))
+            if (bCase ? aKeyName == aNewEntry : aKeyName.equalsIgnoreAsciiCase(aNewEntry))
             {
                 aNewEntry.clear();
                 break;

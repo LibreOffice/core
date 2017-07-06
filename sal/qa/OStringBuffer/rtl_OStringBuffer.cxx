@@ -73,7 +73,7 @@ namespace rtl_OStringBuffer
             sal_Int32 nLenStrBuftmp = aStrBuftmp.getLength();
 
             rtl::OString sStr(aStrBuftmp.getStr());
-            bool res = aStrtmp.equals( sStr );
+            bool res = aStrtmp == sStr;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -14248,7 +14248,7 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( input );
 
-            bool bRes = expVal.equals( aStrBuf.getStr() );
+            bool bRes = expVal == aStrBuf.getStr();
             CPPUNIT_ASSERT_MESSAGE
             (
                 "input Int64 -9223372036854775808 and return OStringBuffer[0]+(-9223372036854775808)",

@@ -331,21 +331,21 @@ wrapper::ItemConverter* createItemConverter(
 
 OUString lcl_getTitleCIDForCommand( const OString& rDispatchCommand, const uno::Reference< frame::XModel > & xChartModel )
 {
-    if( rDispatchCommand.equals("AllTitles"))
+    if( rDispatchCommand == "AllTitles")
         return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_TITLE, "ALLELEMENTS" );
 
     TitleHelper::eTitleType nTitleType( TitleHelper::MAIN_TITLE );
-    if( rDispatchCommand.equals("SubTitle") )
+    if( rDispatchCommand == "SubTitle" )
         nTitleType = TitleHelper::SUB_TITLE;
-    else if( rDispatchCommand.equals("XTitle") )
+    else if( rDispatchCommand == "XTitle" )
         nTitleType = TitleHelper::X_AXIS_TITLE;
-    else if( rDispatchCommand.equals("YTitle") )
+    else if( rDispatchCommand == "YTitle" )
         nTitleType = TitleHelper::Y_AXIS_TITLE;
-    else if( rDispatchCommand.equals("ZTitle") )
+    else if( rDispatchCommand == "ZTitle" )
         nTitleType = TitleHelper::Z_AXIS_TITLE;
-    else if( rDispatchCommand.equals("SecondaryXTitle") )
+    else if( rDispatchCommand == "SecondaryXTitle" )
         nTitleType = TitleHelper::SECONDARY_X_AXIS_TITLE;
-    else if( rDispatchCommand.equals("SecondaryYTitle") )
+    else if( rDispatchCommand == "SecondaryYTitle" )
         nTitleType = TitleHelper::SECONDARY_Y_AXIS_TITLE;
 
     uno::Reference< XTitle > xTitle( TitleHelper::getTitle( nTitleType, xChartModel ) );
@@ -354,28 +354,28 @@ OUString lcl_getTitleCIDForCommand( const OString& rDispatchCommand, const uno::
 
 OUString lcl_getAxisCIDForCommand( const OString& rDispatchCommand, const uno::Reference< frame::XModel >& xChartModel )
 {
-    if( rDispatchCommand.equals("DiagramAxisAll"))
+    if( rDispatchCommand == "DiagramAxisAll")
         return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_AXIS, "ALLELEMENTS" );
 
     sal_Int32   nDimensionIndex=0;
     bool        bMainAxis=true;
-    if( rDispatchCommand.equals("DiagramAxisX"))
+    if( rDispatchCommand == "DiagramAxisX")
     {
         nDimensionIndex=0; bMainAxis=true;
     }
-    else if( rDispatchCommand.equals("DiagramAxisY"))
+    else if( rDispatchCommand == "DiagramAxisY")
     {
         nDimensionIndex=1; bMainAxis=true;
     }
-    else if( rDispatchCommand.equals("DiagramAxisZ"))
+    else if( rDispatchCommand == "DiagramAxisZ")
     {
         nDimensionIndex=2; bMainAxis=true;
     }
-    else if( rDispatchCommand.equals("DiagramAxisA"))
+    else if( rDispatchCommand == "DiagramAxisA")
     {
         nDimensionIndex=0; bMainAxis=false;
     }
-    else if( rDispatchCommand.equals("DiagramAxisB"))
+    else if( rDispatchCommand == "DiagramAxisB")
     {
         nDimensionIndex=1; bMainAxis=false;
     }
@@ -389,7 +389,7 @@ OUString lcl_getGridCIDForCommand( const OString& rDispatchCommand, const uno::R
 {
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
 
-    if( rDispatchCommand.equals("DiagramGridAll"))
+    if( rDispatchCommand == "DiagramGridAll")
         return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_GRID, "ALLELEMENTS" );
 
     sal_Int32   nDimensionIndex=0;
@@ -397,27 +397,27 @@ OUString lcl_getGridCIDForCommand( const OString& rDispatchCommand, const uno::R
 
     //x and y is swapped in the commands
 
-    if( rDispatchCommand.equals("DiagramGridYMain"))
+    if( rDispatchCommand == "DiagramGridYMain")
     {
         nDimensionIndex=0; bMainGrid=true;
     }
-    else if( rDispatchCommand.equals("DiagramGridXMain"))
+    else if( rDispatchCommand == "DiagramGridXMain")
     {
         nDimensionIndex=1; bMainGrid=true;
     }
-    else if( rDispatchCommand.equals("DiagramGridZMain"))
+    else if( rDispatchCommand == "DiagramGridZMain")
     {
         nDimensionIndex=2; bMainGrid=true;
     }
-    else if( rDispatchCommand.equals("DiagramGridYHelp"))
+    else if( rDispatchCommand == "DiagramGridYHelp")
     {
         nDimensionIndex=0; bMainGrid=false;
     }
-    else if( rDispatchCommand.equals("DiagramGridXHelp"))
+    else if( rDispatchCommand == "DiagramGridXHelp")
     {
         nDimensionIndex=1; bMainGrid=false;
     }
-    else if( rDispatchCommand.equals("DiagramGridZHelp"))
+    else if( rDispatchCommand == "DiagramGridZHelp")
     {
         nDimensionIndex=2; bMainGrid=false;
     }
@@ -448,65 +448,65 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
     uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt( xSeries, uno::UNO_QUERY );
 
     //legend
-    if( rDispatchCommand.equals("Legend") || rDispatchCommand.equals("FormatLegend") )
+    if( rDispatchCommand == "Legend" || rDispatchCommand == "FormatLegend" )
     {
         eObjectType = OBJECTTYPE_LEGEND;
         //@todo set particular aParticleID if we have more than one legend
     }
     //wall floor area
-    else if( rDispatchCommand.equals("DiagramWall") || rDispatchCommand.equals("FormatWall") )
+    else if( rDispatchCommand == "DiagramWall" || rDispatchCommand == "FormatWall" )
     {
         //OBJECTTYPE_DIAGRAM;
         eObjectType = OBJECTTYPE_DIAGRAM_WALL;
         //@todo set particular aParticleID if we have more than one diagram
     }
-    else if( rDispatchCommand.equals("DiagramFloor") || rDispatchCommand.equals("FormatFloor") )
+    else if( rDispatchCommand == "DiagramFloor" || rDispatchCommand == "FormatFloor" )
     {
         eObjectType = OBJECTTYPE_DIAGRAM_FLOOR;
         //@todo set particular aParticleID if we have more than one diagram
     }
-    else if( rDispatchCommand.equals("DiagramArea") || rDispatchCommand.equals("FormatChartArea") )
+    else if( rDispatchCommand == "DiagramArea" || rDispatchCommand == "FormatChartArea" )
     {
         eObjectType = OBJECTTYPE_PAGE;
     }
     //title
-    else if( rDispatchCommand.equals("MainTitle")
-        || rDispatchCommand.equals("SubTitle")
-        || rDispatchCommand.equals("XTitle")
-        || rDispatchCommand.equals("YTitle")
-        || rDispatchCommand.equals("ZTitle")
-        || rDispatchCommand.equals("SecondaryXTitle")
-        || rDispatchCommand.equals("SecondaryYTitle")
-        || rDispatchCommand.equals("AllTitles")
+    else if( rDispatchCommand == "MainTitle"
+        || rDispatchCommand == "SubTitle"
+        || rDispatchCommand == "XTitle"
+        || rDispatchCommand == "YTitle"
+        || rDispatchCommand == "ZTitle"
+        || rDispatchCommand == "SecondaryXTitle"
+        || rDispatchCommand == "SecondaryYTitle"
+        || rDispatchCommand == "AllTitles"
         )
     {
         return lcl_getTitleCIDForCommand( rDispatchCommand, xChartModel );
     }
     //axis
-    else if( rDispatchCommand.equals("DiagramAxisX")
-        || rDispatchCommand.equals("DiagramAxisY")
-        || rDispatchCommand.equals("DiagramAxisZ")
-        || rDispatchCommand.equals("DiagramAxisA")
-        || rDispatchCommand.equals("DiagramAxisB")
-        || rDispatchCommand.equals("DiagramAxisAll")
+    else if( rDispatchCommand == "DiagramAxisX"
+        || rDispatchCommand == "DiagramAxisY"
+        || rDispatchCommand == "DiagramAxisZ"
+        || rDispatchCommand == "DiagramAxisA"
+        || rDispatchCommand == "DiagramAxisB"
+        || rDispatchCommand == "DiagramAxisAll"
         )
     {
         return lcl_getAxisCIDForCommand( rDispatchCommand, xChartModel );
     }
     //grid
-    else if( rDispatchCommand.equals("DiagramGridYMain")
-        || rDispatchCommand.equals("DiagramGridXMain")
-        || rDispatchCommand.equals("DiagramGridZMain")
-        || rDispatchCommand.equals("DiagramGridYHelp")
-        || rDispatchCommand.equals("DiagramGridXHelp")
-        || rDispatchCommand.equals("DiagramGridZHelp")
-        || rDispatchCommand.equals("DiagramGridAll")
+    else if( rDispatchCommand == "DiagramGridYMain"
+        || rDispatchCommand == "DiagramGridXMain"
+        || rDispatchCommand == "DiagramGridZMain"
+        || rDispatchCommand == "DiagramGridYHelp"
+        || rDispatchCommand == "DiagramGridXHelp"
+        || rDispatchCommand == "DiagramGridZHelp"
+        || rDispatchCommand == "DiagramGridAll"
         )
     {
         return lcl_getGridCIDForCommand( rDispatchCommand, xChartModel );
     }
     //data series
-    else if( rDispatchCommand.equals("FormatDataSeries") )
+    else if( rDispatchCommand == "FormatDataSeries" )
     {
         if( eSelectedType == OBJECTTYPE_DATA_SERIES )
             return rSelectedCID;
@@ -515,12 +515,12 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
                 OBJECTTYPE_DATA_SERIES, ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ) );
     }
     //data point
-    else if( rDispatchCommand.equals("FormatDataPoint") )
+    else if( rDispatchCommand == "FormatDataPoint" )
     {
         return rSelectedCID;
     }
     //data labels
-    else if( rDispatchCommand.equals("FormatDataLabels") )
+    else if( rDispatchCommand == "FormatDataLabels" )
     {
         if( eSelectedType == OBJECTTYPE_DATA_LABELS )
             return rSelectedCID;
@@ -529,7 +529,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
                 OBJECTTYPE_DATA_LABELS, OUString(), rSelectedCID );
     }
     //data labels
-    else if( rDispatchCommand.equals("FormatDataLabel") )
+    else if( rDispatchCommand == "FormatDataLabel" )
     {
         if( eSelectedType == OBJECTTYPE_DATA_LABEL )
             return rSelectedCID;
@@ -549,7 +549,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
         }
     }
     //mean value line
-    else if( rDispatchCommand.equals("FormatMeanValue") )
+    else if( rDispatchCommand == "FormatMeanValue" )
     {
         if( eSelectedType == OBJECTTYPE_DATA_AVERAGE_LINE )
             return rSelectedCID;
@@ -560,7 +560,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
                         RegressionCurveHelper::getMeanValueLine( xRegCurveCnt ) ), true );
     }
     //trend line
-    else if( rDispatchCommand.equals("FormatTrendline") )
+    else if( rDispatchCommand == "FormatTrendline" )
     {
         if( eSelectedType == OBJECTTYPE_DATA_CURVE )
             return rSelectedCID;
@@ -571,7 +571,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
                         RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) ), false );
     }
     //trend line equation
-    else if( rDispatchCommand.equals("FormatTrendlineEquation") )
+    else if( rDispatchCommand == "FormatTrendlineEquation" )
     {
         if( eSelectedType == OBJECTTYPE_DATA_CURVE_EQUATION )
             return rSelectedCID;
@@ -582,17 +582,17 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
                         RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) ) );
     }
     // y error bars
-    else if( rDispatchCommand.equals("FormatXErrorBars") )
+    else if( rDispatchCommand == "FormatXErrorBars" )
     {
         return lcl_getErrorCIDForCommand(OBJECTTYPE_DATA_ERRORS_X, eSelectedType, rSelectedCID );
     }
     // y error bars
-    else if( rDispatchCommand.equals("FormatYErrorBars") )
+    else if( rDispatchCommand == "FormatYErrorBars" )
     {
         return lcl_getErrorCIDForCommand(OBJECTTYPE_DATA_ERRORS_Y, eSelectedType, rSelectedCID );
     }
     // axis
-    else if( rDispatchCommand.equals("FormatAxis") )
+    else if( rDispatchCommand == "FormatAxis" )
     {
         if( eSelectedType == OBJECTTYPE_AXIS )
             return rSelectedCID;
@@ -603,7 +603,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
         }
     }
     // major grid
-    else if( rDispatchCommand.equals("FormatMajorGrid") )
+    else if( rDispatchCommand == "FormatMajorGrid" )
     {
         if( eSelectedType == OBJECTTYPE_GRID )
             return rSelectedCID;
@@ -615,7 +615,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
 
     }
     // minor grid
-    else if( rDispatchCommand.equals("FormatMinorGrid") )
+    else if( rDispatchCommand == "FormatMinorGrid" )
     {
         if( eSelectedType == OBJECTTYPE_SUBGRID )
             return rSelectedCID;
@@ -626,13 +626,13 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
         }
     }
     // title
-    else if( rDispatchCommand.equals("FormatTitle") )
+    else if( rDispatchCommand == "FormatTitle" )
     {
         if( eSelectedType == OBJECTTYPE_TITLE )
             return rSelectedCID;
     }
     // stock loss
-    else if( rDispatchCommand.equals("FormatStockLoss") )
+    else if( rDispatchCommand == "FormatStockLoss" )
     {
         if( eSelectedType == OBJECTTYPE_DATA_STOCK_LOSS )
             return rSelectedCID;
@@ -640,7 +640,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
             return ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DATA_STOCK_LOSS, OUString());
     }
     // stock gain
-    else if( rDispatchCommand.equals("FormatStockGain") )
+    else if( rDispatchCommand == "FormatStockGain" )
     {
         if( eSelectedType == OBJECTTYPE_DATA_STOCK_GAIN )
             return rSelectedCID;

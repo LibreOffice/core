@@ -552,7 +552,7 @@ void PDFDict::eraseValue( const OString& rName )
     for( unsigned int i = 0; i < nEle; i++ )
     {
         PDFName* pName = dynamic_cast<PDFName*>(m_aSubElements[i]);
-        if( pName && pName->m_aName.equals( rName ) )
+        if( pName && pName->m_aName == rName )
         {
             for( unsigned int j = i+1; j < nEle; j++ )
             {

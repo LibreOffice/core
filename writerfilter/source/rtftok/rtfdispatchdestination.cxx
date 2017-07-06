@@ -285,7 +285,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 }
                 Strm().Seek(nCurrent);
                 OString aKeyword = aBuf.makeStringAndClear();
-                if (aKeyword.equals("\\ftnalt"))
+                if (aKeyword == "\\ftnalt")
                     nId = NS_ooxml::LN_endnote;
 
                 if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)

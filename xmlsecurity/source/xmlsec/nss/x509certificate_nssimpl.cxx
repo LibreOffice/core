@@ -207,7 +207,7 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
             unsigned char* objid = reinterpret_cast<unsigned char *>(const_cast<char *>(objID.getStr()));
             unsigned int objidlen = objID.getLength();
 
-            if (objID.equals("2.5.29.17"))
+            if (objID == "2.5.29.17")
             {
                 SanExtensionImpl* pExtn = new SanExtensionImpl;
                 pExtn->setCertExtn(value, vlen, objid, objidlen, crit);
@@ -252,7 +252,7 @@ css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certifi
                 unsigned char* objid = (*extns)->id.data;
                 unsigned int objidlen = (*extns)->id.len;
 
-                if ( objId.equals("OID.2.5.29.17") )
+                if ( objId == "OID.2.5.29.17" )
                 {
                     rtl::Reference<SanExtensionImpl> xSanImpl(
                         new SanExtensionImpl);

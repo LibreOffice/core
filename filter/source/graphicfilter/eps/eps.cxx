@@ -1225,7 +1225,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     if( pGradAction )
                         ImplWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), rVDev );
                 }
-                else if ( pA->GetComment().equals("XPATHFILL_SEQ_END") )
+                else if ( pA->GetComment() == "XPATHFILL_SEQ_END" )
                 {
                     if ( aFillPath.Count() )
                     {
@@ -1242,7 +1242,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         bool        bSkipSequence = false;
                         OString sSeqEnd;
 
-                        if( pA->GetComment().equals( "XPATHSTROKE_SEQ_BEGIN" ) )
+                        if( pA->GetComment() == "XPATHSTROKE_SEQ_BEGIN" )
                         {
                             sSeqEnd = "XPATHSTROKE_SEQ_END";
                             SvtGraphicStroke aStroke;
@@ -1277,7 +1277,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 ImplPolyLine( aPath );
                             }
                         }
-                        else if (pA->GetComment().equals("XPATHFILL_SEQ_BEGIN"))
+                        else if (pA->GetComment() == "XPATHFILL_SEQ_BEGIN")
                         {
                             sSeqEnd = "XPATHFILL_SEQ_END";
                             SvtGraphicFill aFill;
@@ -1348,7 +1348,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                             break;
                                             case MetaActionType::COMMENT :
                                             {
-                                                if (static_cast<const MetaCommentAction*>(pAction)->GetComment().equals("XPATHFILL_SEQ_END"))
+                                                if (static_cast<const MetaCommentAction*>(pAction)->GetComment() == "XPATHFILL_SEQ_END")
                                                     bOk = false;
                                             }
                                             break;
@@ -1391,7 +1391,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 if ( pMA->GetType() == MetaActionType::COMMENT )
                                 {
                                     OString sComment( static_cast<MetaCommentAction*>(pMA)->GetComment() );
-                                    if ( sComment.equals( sSeqEnd ) )
+                                    if ( sComment == sSeqEnd )
                                         break;
                                 }
                             }

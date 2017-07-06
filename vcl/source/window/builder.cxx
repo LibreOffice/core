@@ -1860,7 +1860,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
 {
     VclPtr<vcl::Window> pCurrentChild;
 
-    if (m_pParent && !isConsideredGtkPseudo(m_pParent) && !m_sID.isEmpty() && rID.equals(m_sID))
+    if (m_pParent && !isConsideredGtkPseudo(m_pParent) && !m_sID.isEmpty() && rID == m_sID)
     {
         pCurrentChild = m_pParent;
 
@@ -2105,7 +2105,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
         }
     }
 
-    if (sType.equals("tab"))
+    if (sType == "tab")
     {
         handleTabChild(pParent, reader);
         return;
@@ -2145,7 +2145,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                         // We want to sort labels before contents of frames
                         // for keyboard traversal, especially if there
                         // are multiple widgets using the same mnemonic
-                        if (sType.equals("label"))
+                        if (sType == "label")
                         {
                             if (VclFrame *pFrameParent = dynamic_cast<VclFrame*>(pParent))
                                 pFrameParent->designate_label(pCurrentChild);
@@ -3309,7 +3309,7 @@ vcl::Window *VclBuilder::get_by_name(const OString& sID)
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
-        if (aI->m_sID.equals(sID))
+        if (aI->m_sID == sID)
             return aI->m_pWindow;
     }
 
@@ -3321,7 +3321,7 @@ PopupMenu *VclBuilder::get_menu(const OString& sID)
     for (std::vector<MenuAndId>::iterator aI = m_aMenus.begin(),
          aEnd = m_aMenus.end(); aI != aEnd; ++aI)
     {
-        if (aI->m_sID.equals(sID))
+        if (aI->m_sID == sID)
             return aI->m_pMenu;
     }
 
@@ -3349,7 +3349,7 @@ void VclBuilder::set_response(const OString& sID, short nResponse)
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
-        if (aI->m_sID.equals(sID))
+        if (aI->m_sID == sID)
         {
             aI->m_nResponseId = nResponse;
             return;
@@ -3365,7 +3365,7 @@ void VclBuilder::delete_by_name(const OString& sID)
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
-        if (aI->m_sID.equals(sID))
+        if (aI->m_sID == sID)
         {
             aI->m_pWindow.disposeAndClear();
             m_aChildren.erase(aI);

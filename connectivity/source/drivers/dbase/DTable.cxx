@@ -670,7 +670,7 @@ void ODbaseTable::refreshIndexes()
             // Refences the key an index-file?
             aKeyName = aInfFile.GetKeyName( nKey );
             //...if yes, add the index list of the table
-            if (aKeyName.copy(0,3).equals("NDX"))
+            if (aKeyName.startsWith("NDX"))
             {
                 OString aIndexName = aInfFile.ReadKey(aKeyName);
                 aURL.setName(OStringToOUString(aIndexName, m_eEncoding));

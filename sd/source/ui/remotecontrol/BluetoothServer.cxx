@@ -887,13 +887,13 @@ DBusHandlerResult ProfileMessageFunction
 {
     SAL_INFO("sdremote.bluetooth", "ProfileMessageFunction||" << dbus_message_get_interface(pMessage) << "||" <<  dbus_message_get_member(pMessage));
 
-    if (OString(dbus_message_get_interface(pMessage)).equals("org.bluez.Profile1"))
+    if (OString(dbus_message_get_interface(pMessage)) == "org.bluez.Profile1")
     {
-        if (OString(dbus_message_get_member(pMessage)).equals("Release"))
+        if (OString(dbus_message_get_member(pMessage)) == "Release")
         {
             return DBUS_HANDLER_RESULT_HANDLED;
         }
-        else if (OString(dbus_message_get_member(pMessage)).equals("NewConnection"))
+        else if (OString(dbus_message_get_member(pMessage)) == "NewConnection")
         {
             if (!dbus_message_has_signature(pMessage, "oha{sv}"))
             {
@@ -944,7 +944,7 @@ DBusHandlerResult ProfileMessageFunction
                 return DBUS_HANDLER_RESULT_HANDLED;
             }
         }
-        else if (OString(dbus_message_get_member(pMessage)).equals("RequestDisconnection"))
+        else if (OString(dbus_message_get_member(pMessage)) == "RequestDisconnection")
         {
             return DBUS_HANDLER_RESULT_HANDLED;
         }

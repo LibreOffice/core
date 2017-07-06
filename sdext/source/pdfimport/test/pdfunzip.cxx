@@ -331,7 +331,7 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
         PDFName* pName = dynamic_cast<PDFName*>(map_it->second);
         if( ! pName )
             continue;
-        if( ! pName->m_aName.equals( "FontDescriptor" ) )
+        if( pName->m_aName != "FontDescriptor" )
             continue;
 
         // the font name will be helpful, also there must be one in

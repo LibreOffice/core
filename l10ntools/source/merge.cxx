@@ -311,7 +311,7 @@ MergeDataFile::MergeDataFile(
                 bFirstLang, bCaseSensitive );
 
             if( bFirstLang && bWithQtz &&
-                !sEnableReleaseBuild.equals("TRUE") )
+                sEnableReleaseBuild != "TRUE" )
             {
                 aLanguageSet.insert("qtz");
                 InsertEntry(

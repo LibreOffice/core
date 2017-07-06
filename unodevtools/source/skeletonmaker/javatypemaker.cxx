@@ -351,7 +351,7 @@ void printSetPropertyMixinBody(
             buffer.append(')');
             OString t = buffer.makeStringAndClear();
 
-            if ( t.equals("((Optional)") ) {
+            if ( t == "((Optional)" ) {
                 optional=true;
                 if (single) {
                     single=false;
@@ -441,7 +441,7 @@ void printMethods(std::ostream & o,
 
     static OString sd("_");
     bool body = !delegate.isEmpty();
-    bool defaultbody = delegate.equals(sd);
+    bool defaultbody = delegate == sd;
 
     generated.add(u2b(name));
     rtl::Reference< unoidl::Entity > ent;

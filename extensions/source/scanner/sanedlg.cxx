@@ -1320,7 +1320,7 @@ bool SaneDlg::LoadState()
 
     aConfig.SetGroup( "SANE" );
     OString aString = aConfig.ReadKey( "SO_LastSaneDevice" );
-    for( i = 0; i < Sane::CountDevices() && !aString.equals(OUStringToOString(Sane::GetName(i), osl_getThreadTextEncoding())); i++ ) ;
+    for( i = 0; i < Sane::CountDevices() && aString != OUStringToOString(Sane::GetName(i), osl_getThreadTextEncoding()); i++ ) ;
     if( i == Sane::CountDevices() )
         return false;
 

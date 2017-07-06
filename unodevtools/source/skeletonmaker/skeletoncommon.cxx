@@ -63,7 +63,7 @@ bool getOutputStream(ProgramOptions const & options,
                      OString & tmpSourceFileName)
 {
     bool bStandardout = false;
-    if ( options.outputpath.equals("stdout") )
+    if ( options.outputpath == "stdout" )
     {
         bStandardout = true;
         *ppOutputStream = &std::cout;

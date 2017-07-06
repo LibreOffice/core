@@ -81,17 +81,17 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     {
     }
 
-    if ( aCommand[0].equals( "transition_next" ) )
+    if ( aCommand[0] ==  "transition_next" )
     {
         if ( xSlideShowController.is() )
             xSlideShowController->gotoNextEffect();
     }
-    else if ( aCommand[0].equals( "transition_previous" ) )
+    else if ( aCommand[0] == "transition_previous" )
     {
         if ( xSlideShowController.is() )
             xSlideShowController->gotoPreviousEffect();
     }
-    else if ( aCommand[0].equals( "goto_slide" ) )
+    else if ( aCommand[0] == "goto_slide" )
     {
         // FIXME: if 0 returned, then not a valid number
         sal_Int32 aSlide = aCommand[1].toInt32();
@@ -101,17 +101,17 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
             xSlideShowController->gotoSlideIndex( aSlide );
         }
     }
-    else if ( aCommand[0].equals( "presentation_start" ) )
+    else if ( aCommand[0] == "presentation_start" )
     {
         if ( xPresentation.is() )
             xPresentation->start();
     }
-    else if ( aCommand[0].equals( "presentation_stop" ) )
+    else if ( aCommand[0] == "presentation_stop" )
     {
         if ( xPresentation.is() )
             xPresentation->end();
     }
-    else if ( aCommand[0].equals( "presentation_blank_screen" ) )
+    else if ( aCommand[0] == "presentation_blank_screen" )
     {
         if ( aCommand.size() > 1 )
         {
@@ -123,7 +123,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
             xSlideShowController->blankScreen( 0 ); // Default is black
         }
     }
-    else if (aCommand[0].equals( "pointer_started" ))
+    else if (aCommand[0] == "pointer_started" )
     {
         // std::cerr << "pointer_started" << std::endl;
         float x = aCommand[1].toFloat();
@@ -164,7 +164,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
 
         SAL_INFO( "sdremote", "Pointer started, we display the pointer on screen" );
     }
-    else if (aCommand[0].equals( "pointer_dismissed" ))
+    else if (aCommand[0] == "pointer_dismissed" )
     {
         SolarMutexGuard aSolarGuard;
         if (xSlideShow.is()) try
@@ -183,7 +183,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
 
         SAL_INFO( "sdremote", "Pointer dismissed, we hide the pointer on screen" );
     }
-    else if (aCommand[0].equals( "pointer_coordination" ))
+    else if (aCommand[0] == "pointer_coordination" )
     {
         float x = aCommand[1].toFloat();
         float y = aCommand[2].toFloat();
@@ -206,7 +206,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
                 "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
         }
     }
-    else if ( aCommand[0].equals( "presentation_resume" ) )
+    else if ( aCommand[0] == "presentation_resume" )
     {
         if ( xSlideShowController.is() )
         {
