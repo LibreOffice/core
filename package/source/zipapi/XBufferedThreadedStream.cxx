@@ -145,7 +145,7 @@ sal_Int32 SAL_CALL XBufferedThreadedStream::readBytes( Sequence< sal_Int8 >& rDa
     if( !hasBytes() )
         return 0;
 
-    const sal_Int32 nAvailableSize = std::min<sal_Int32>( nBytesToRead, remainingSize() );
+    const sal_Int32 nAvailableSize = static_cast< sal_Int32 > ( std::min< sal_Int64 >( nBytesToRead, remainingSize() ) );
     rData.realloc( nAvailableSize );
     sal_Int32 i = 0, nPendingBytes = nAvailableSize;
 
@@ -188,7 +188,7 @@ sal_Int32 SAL_CALL XBufferedThreadedStream::available()
     if( !hasBytes() )
         return 0;
 
-    return remainingSize();
+    return static_cast< sal_Int32 > ( std::min< sal_Int64 >( SAL_MAX_INT32, remainingSize() ) );
 }
 
 void SAL_CALL XBufferedThreadedStream::closeInput()
