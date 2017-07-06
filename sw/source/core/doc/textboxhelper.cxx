@@ -514,6 +514,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
                 break;
             }
             break;
+        case RES_OPAQUE:
+            aPropertyName = UNO_NAME_OPAQUE;
+            break;
         }
 
         if (!aPropertyName.isEmpty())
