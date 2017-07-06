@@ -581,7 +581,7 @@ private:
     std::deque<bool> maOldApos;
     std::deque<WW8FieldEntry> maOldFieldStack;
     SwWW8FltControlStack* mpOldStck;
-    SwWW8FltAnchorStack* mpOldAnchorStck;
+    std::unique_ptr<SwWW8FltAnchorStack> mxOldAnchorStck;
     std::unique_ptr<sw::util::RedlineStack> mxOldRedlines;
     std::shared_ptr<WW8PLCFMan> mxOldPlcxMan;
     WW8FlyPara* mpWFlyPara;
@@ -1110,7 +1110,7 @@ private:
     anchored to character before a character to be anchored to has been
     inserted. Is emptied at the end of each paragraph.
     */
-    SwWW8FltAnchorStack* m_pAnchorStck;
+    std::unique_ptr<SwWW8FltAnchorStack> m_xAnchorStck;
 
     /*
     A stack of fields identifiers to keep track of any open fields that need
@@ -1383,7 +1383,10 @@ private:
         DeleteStack( m_pReffingStck );
         m_pReffingStck = nullptr;
     }
-    void DeleteAnchorStack()  { DeleteStack( m_pAnchorStck ); m_pAnchorStck = nullptr; }
+    void DeleteAnchorStack()
+    {
+        DeleteStack(m_xAnchorStck.release());
+    }
     void emulateMSWordAddTextToParagraph(const OUString& rAddString);
     void simpleAddTextToParagraph(const OUString& rAddString);
     bool HandlePageBreakChar();

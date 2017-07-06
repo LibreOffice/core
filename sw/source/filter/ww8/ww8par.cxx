@@ -1965,7 +1965,7 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
 WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     maTmpPos(*pRdr->m_pPaM->GetPoint()),
     mpOldStck(pRdr->m_pCtrlStck),
-    mpOldAnchorStck(pRdr->m_pAnchorStck),
+    mxOldAnchorStck(std::move(pRdr->m_xAnchorStck)),
     mxOldRedlines(std::move(pRdr->m_xRedlineStack)),
     mxOldPlcxMan(pRdr->m_xPlcxMan),
     mpWFlyPara(pRdr->m_xWFlyPara.release()),
@@ -2003,7 +2003,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
 
     pRdr->m_xRedlineStack.reset(new sw::util::RedlineStack(pRdr->m_rDoc));
 
-    pRdr->m_pAnchorStck = new SwWW8FltAnchorStack(&pRdr->m_rDoc, pRdr->m_nFieldFlags);
+    pRdr->m_xAnchorStck.reset(new SwWW8FltAnchorStack(&pRdr->m_rDoc, pRdr->m_nFieldFlags));
 
     // Save the attribute manager: we need this as the newly created PLCFx Manager
     // access the same FKPs as the old one and their Start-End position changes.
@@ -2050,7 +2050,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->m_xRedlineStack = std::move(mxOldRedlines);
 
     pRdr->DeleteAnchorStack();
-    pRdr->m_pAnchorStck = mpOldAnchorStck;
+    pRdr->m_xAnchorStck = std::move(mxOldAnchorStck);
 
     *pRdr->m_pPaM->GetPoint() = maTmpPos;
 
@@ -2440,7 +2440,7 @@ void SwWW8ImplReader::AppendTextNode(SwPosition& rPos)
     m_rDoc.getIDocumentContentOperations().AppendTextNode(rPos);
 
     // We can flush all anchored graphics at the end of a paragraph.
-    m_pAnchorStck->Flush();
+    m_xAnchorStck->Flush();
 }
 
 bool SwWW8ImplReader::SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper )
@@ -4091,7 +4091,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
                 // #i43118# - refine condition: the anchor
                 // control stack has to have entries, otherwise it's not needed
                 // to insert a text node.
-                if (!bStartLine && !m_pAnchorStck->empty())
+                if (!bStartLine && !m_xAnchorStck->empty())
                 {
                     AppendTextNode(*m_pPaM->GetPoint());
                 }
@@ -4126,7 +4126,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pPaM(nullptr)
     , m_pCtrlStck(nullptr)
     , m_pReffingStck(nullptr)
-    , m_pAnchorStck(nullptr)
     , m_aSectionManager(*this)
     , m_aExtraneousParas(rD)
     , m_aInsertedTables(rD)
@@ -4914,7 +4913,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     m_xReffedStck.reset(new SwWW8ReferencedFltEndStack(&m_rDoc, m_nFieldFlags));
     m_pReffingStck = new SwWW8FltRefStack(&m_rDoc, m_nFieldFlags);
 
-    m_pAnchorStck = new SwWW8FltAnchorStack(&m_rDoc, m_nFieldFlags);
+    m_xAnchorStck.reset(new SwWW8FltAnchorStack(&m_rDoc, m_nFieldFlags));
 
     size_t nPageDescOffset = m_rDoc.GetPageDescCnt();
 
