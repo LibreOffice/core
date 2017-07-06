@@ -21,6 +21,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <rtl/ustring.hxx>
@@ -36,11 +37,9 @@ using namespace ::com::sun::star::ucb;
 namespace utl
 {
 
-typedef ::std::vector< OUString* > StringList_Impl;
-
 css::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUString& rFolder, bool bFolder )
 {
-    StringList_Impl* pFiles = nullptr;
+    std::vector< OUString > vFiles;
     try
     {
         ::ucbhelper::Content aCnt(
@@ -63,16 +62,11 @@ css::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUStri
 
         if ( xResultSet.is() )
         {
-            pFiles = new StringList_Impl;
             Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
             try
             {
                 while ( xResultSet->next() )
-                {
-                    OUString aId = xContentAccess->queryContentIdentifierString();
-                    OUString* pFile = new OUString( aId );
-                    pFiles->push_back( pFile );
-                }
+                    vFiles.push_back( xContentAccess->queryContentIdentifierString() );
             }
             catch( css::ucb::CommandAbortedException& )
             {
@@ -86,22 +80,7 @@ css::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUStri
     {
     }
 
-    if ( pFiles )
-    {
-        size_t nCount = pFiles->size();
-        Sequence < OUString > aRet( nCount );
-        OUString* pRet = aRet.getArray();
-        for ( size_t i = 0; i < nCount; ++i )
-        {
-            OUString* pFile = (*pFiles)[ i ];
-            pRet[i] = *( pFile );
-            delete pFile;
-        }
-        delete pFiles;
-        return aRet;
-    }
-    else
-        return Sequence < OUString > ();
+    return comphelper::containerToSequence(vFiles);
 }
 
 void removeTree(OUString const & url) {
