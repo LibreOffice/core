@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_5372c47d",
+        "filename": "chart2/source/controller/main/DrawCommandDispatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-06T06:28:10Z",
+      "side": 1,
+      "message": "is this really better than\n  lhs.Name \u003d\u003d sKeyModifier\n?",
+      "revId": "16e4f088b0611f417ed11d3018bd5efe119e66ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
