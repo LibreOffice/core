@@ -1288,20 +1288,15 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     // build value for 'SequenceMapping'
 
     uno::Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
-    sal_Int32 *pSortedMapping = aSortedMapping.getArray();
-    std::sort( pSortedMapping, pSortedMapping + aSortedMapping.getLength() );
-    OSL_ENSURE( aSortedMapping.getLength() == nNumDS_LDS, "unexpected size of sequence" );
+    std::sort( aSortedMapping.begin(), aSortedMapping.end() );
     bool bNeedSequenceMapping = false;
-    for (sal_Int32 i = 0;  i < nNumDS_LDS;  ++i)
+    for (sal_Int32 i = 0;  i < aSequenceMapping.getLength();  ++i)
     {
-        sal_Int32 *pIt = std::find( pSortedMapping, pSortedMapping + nNumDS_LDS,
-                                    pSequenceMapping[i] );
-        OSL_ENSURE( pIt, "index not found" );
-        if (!pIt)
-            return aResult; // failed -> return empty property sequence
-        pSequenceMapping[i] = pIt - pSortedMapping;
+        auto it = std::find( aSortedMapping.begin(), aSortedMapping.end(),
+                             aSequenceMapping[i] );
+        aSequenceMapping[i] = std::distance(aSortedMapping.begin(), it);
 
-        if (i != pSequenceMapping[i])
+        if (i != aSequenceMapping[i])
             bNeedSequenceMapping = true;
     }
 

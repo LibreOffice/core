@@ -205,7 +205,6 @@ OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAcc
     uno::Sequence<OUString> aNames = xNames->getElementNames();
     OUString* pElement = std::find_if(aNames.begin(), aNames.end(), CheckForChartName(rDir));
 
-    CPPUNIT_ASSERT(pElement);
     CPPUNIT_ASSERT(pElement != aNames.end());
     return *pElement;
 }
