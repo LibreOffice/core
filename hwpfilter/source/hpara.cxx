@@ -88,7 +88,6 @@ HWPPara::~HWPPara()
 
 bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 {
-    unsigned char same_cshape;
     int ii;
     scflag = flag;
 // Paragraph Information
@@ -146,6 +145,7 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
             cshapep[ii].reset(new CharShape);
             memset(cshapep[ii].get(), 0, sizeof(CharShape));
 
+            unsigned char same_cshape(0);
             hwpf.Read1b(&same_cshape, 1);
             if (!same_cshape)
             {
