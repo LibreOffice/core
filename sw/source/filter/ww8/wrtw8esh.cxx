@@ -760,8 +760,10 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
 
                     // We have to export original size with padding
                     const SfxItemSet& rSet = pObj->GetMergedItemSet();
-                    const SdrMetricItem* pItem = static_cast<const SdrMetricItem*>(rSet.GetItem(SDRATTR_TEXT_UPPERDIST));
-                    aRect.SetSize(Size(aRect.GetWidth(), aRect.GetHeight() + pItem->GetValue()));
+                    long nHeight = aRect.GetHeight();
+                    if (const SdrMetricItem* pItem = static_cast<const SdrMetricItem*>(rSet.GetItem(SDRATTR_TEXT_UPPERDIST)))
+                        nHeight += pItem->GetValue();
+                    aRect.SetSize(Size(aRect.GetWidth(), nHeight));
                 }
             }
 
