@@ -471,7 +471,7 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
 {
     // there *must* be a SprmCIbstRMark[Del] and a SprmCDttmRMark[Del]
     // pointing to the very same char position as our SprmCFRMark[Del]
-    if (!m_pPlcxMan)
+    if (!m_xPlcxMan)
         return;
     const sal_uInt8* pSprmCIbstRMark;
     const sal_uInt8* pSprmCDttmRMark;
@@ -490,18 +490,18 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
         bool bIns = (nsRedlineType_t::REDLINE_INSERT == eType);
         if( m_bVer67 )
         {
-            m_pPlcxMan->HasCharSprm(69, aResult);
+            m_xPlcxMan->HasCharSprm(69, aResult);
             pSprmCIbstRMark = (aResult.empty() || aResult.back().nRemainingData < 2) ? nullptr : aResult.back().pSprm;
             aResult.clear();
-            m_pPlcxMan->HasCharSprm(70, aResult);
+            m_xPlcxMan->HasCharSprm(70, aResult);
             pSprmCDttmRMark = (aResult.empty() || aResult.back().nRemainingData < 4) ? nullptr : aResult.back().pSprm;
         }
         else
         {
-            m_pPlcxMan->HasCharSprm( bIns ? 0x4804 : 0x4863, aResult);
+            m_xPlcxMan->HasCharSprm( bIns ? 0x4804 : 0x4863, aResult);
             pSprmCIbstRMark = (aResult.empty() || aResult.back().nRemainingData < 2) ? nullptr : aResult.back().pSprm;
             aResult.clear();
-            m_pPlcxMan->HasCharSprm( bIns ? 0x6805 : NS_sprm::sprmCDttmRMarkDel, aResult);
+            m_xPlcxMan->HasCharSprm( bIns ? 0x6805 : NS_sprm::sprmCDttmRMarkDel, aResult);
             pSprmCDttmRMark = (aResult.empty() || aResult.back().nRemainingData < 4) ? nullptr : aResult.back().pSprm;
         }
     }

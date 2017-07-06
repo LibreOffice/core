@@ -583,7 +583,7 @@ private:
     SwWW8FltControlStack* mpOldStck;
     SwWW8FltAnchorStack* mpOldAnchorStck;
     sw::util::RedlineStack *mpOldRedlines;
-    WW8PLCFMan* mpOldPlcxMan;
+    std::shared_ptr<WW8PLCFMan> mxOldPlcxMan;
     WW8FlyPara* mpWFlyPara;
     WW8SwFlyPara* mpSFlyPara;
     SwPaM* mpPreviousNumPaM;
@@ -1198,7 +1198,7 @@ private:
     WW8Dop* m_pWDop;
     WW8ListManager* m_pLstManager;
     WW8ScannerBase* m_pSBase;
-    WW8PLCFMan* m_pPlcxMan;
+    std::shared_ptr<WW8PLCFMan> m_xPlcxMan;
     std::map<short, OUString> m_aLinkStringMap;
 
     std::set<const SwNode*> m_aTextNodesHavingFirstLineOfstSet; // #i103711#

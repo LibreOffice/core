@@ -355,8 +355,8 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
 
         SwPosition aTmpPos( *m_pPaM->GetPoint() );    // remember old cursor position
         WW8PLCFxSaveAll aSave;
-        m_pPlcxMan->SaveAllPLCFx( aSave );
-        WW8PLCFMan* pOldPlcxMan = m_pPlcxMan;
+        m_xPlcxMan->SaveAllPLCFx( aSave );
+        std::shared_ptr<WW8PLCFMan> xOldPlcxMan = m_xPlcxMan;
 
         const SwNodeIndex* pSttIdx = static_cast<SwTextFootnote*>(pFN)->GetStartNode();
         OSL_ENSURE(pSttIdx, "Problems creating footnote text");
@@ -406,8 +406,8 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
 
         *m_pPaM->GetPoint() = aTmpPos;        // restore Cursor
 
-        m_pPlcxMan = pOldPlcxMan;             // Restore attributes
-        m_pPlcxMan->RestoreAllPLCFx( aSave );
+        m_xPlcxMan = xOldPlcxMan;             // Restore attributes
+        m_xPlcxMan->RestoreAllPLCFx( aSave );
     }
 
     if (bFtEdOk)
@@ -434,14 +434,14 @@ long SwWW8ImplReader::Read_Footnote(WW8PLCFManResult* pRes)
     if (eEDN == pRes->nSprmId)
     {
         aDesc.meType = MAN_EDN;
-        if (m_pPlcxMan->GetEdn())
-            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_pPlcxMan->GetEdn()->GetData());
+        if (m_xPlcxMan->GetEdn())
+            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_xPlcxMan->GetEdn()->GetData());
     }
     else
     {
         aDesc.meType = MAN_FTN;
-        if (m_pPlcxMan->GetFootnote())
-            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_pPlcxMan->GetFootnote()->GetData());
+        if (m_xPlcxMan->GetFootnote())
+            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_xPlcxMan->GetFootnote()->GetData());
     }
 
     aDesc.mnStartCp = pRes->nCp2OrIdx;
@@ -554,7 +554,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     ApoTestResults aRet;
     // Frame in Style Definition (word appears to ignore them if inside an
     // text autoshape)
-    sal_uInt16 const nStyle(m_pPlcxMan->GetColl());
+    sal_uInt16 const nStyle(m_xPlcxMan->GetColl());
     if (!m_bTxbxFlySection && nStyle < m_vColl.size())
         aRet.mpStyleApo = StyleExists(nStyle) ? m_vColl[nStyle].m_xWWFly.get() : nullptr;
 
@@ -577,8 +577,8 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     to see if we are still in that frame.
     */
 
-    aRet.m_bHasSprm37 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 37 : 0x2423).pSprm != nullptr;
-    SprmResult aSrpm29 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 29 : 0x261B);
+    aRet.m_bHasSprm37 = m_xPlcxMan->HasParaSprm(m_bVer67 ? 37 : 0x2423).pSprm != nullptr;
+    SprmResult aSrpm29 = m_xPlcxMan->HasParaSprm(m_bVer67 ? 29 : 0x261B);
     const sal_uInt8 *pSrpm29 = aSrpm29.pSprm;
     aRet.m_bHasSprm29 = pSrpm29 != nullptr;
     aRet.m_nSprm29 = (pSrpm29 && aSrpm29.nRemainingData >= 1) ? *pSrpm29 : 0;
@@ -1054,7 +1054,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
             else
             {
                 // this is ROW numbering ?
-                aS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
+                aS12 = m_xPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
                 if (aS12.pSprm && aS12.nRemainingData >= sal_Int32(sizeof(WW8_ANLD)) && 0 != reinterpret_cast<WW8_ANLD const *>(aS12.pSprm)->fNumberAcross)
                     sNumRule.clear();
             }
@@ -1082,7 +1082,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         if (m_pTableDesc)
         {
             if (!aS12.pSprm)
-                aS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
+                aS12 = m_xPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
             if (!aS12.pSprm || aS12.nRemainingData < sal_Int32(sizeof(WW8_ANLD)) || !reinterpret_cast<WW8_ANLD const *>(aS12.pSprm)->fNumberAcross)
                 m_pTableDesc->SetNumRuleName(pNumRule->GetName());
         }
@@ -1117,7 +1117,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
         {
             // not defined yet
             // sprmAnld o. 0
-            SprmResult aS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld);
+            SprmResult aS12 = m_xPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld);
             if (aS12.nRemainingData >= sal_Int32(sizeof(WW8_ANLD)))
                 SetAnld(pNumRule, reinterpret_cast<WW8_ANLD const *>(aS12.pSprm), m_nSwNumLevel, false);
         }
@@ -1142,7 +1142,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
             else                                // no Olst -> use Anld
             {
                 // sprmAnld
-                SprmResult aS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld);
+                SprmResult aS12 = m_xPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld);
                 if (aS12.nRemainingData >= sal_Int32(sizeof(WW8_ANLD)))
                     SetAnld(pNumRule, reinterpret_cast<WW8_ANLD const *>(aS12.pSprm), m_nSwNumLevel, false);
             }
@@ -1872,9 +1872,9 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     WW8_TablePos aTabPos;
 
     WW8PLCFxSave1 aSave;
-    m_pIo->m_pPlcxMan->GetPap()->Save( aSave );
+    m_pIo->m_xPlcxMan->GetPap()->Save( aSave );
 
-    WW8PLCFx_Cp_FKP* pPap = m_pIo->m_pPlcxMan->GetPapPLCF();
+    WW8PLCFx_Cp_FKP* pPap = m_pIo->m_xPlcxMan->GetPapPLCF();
 
     m_eOri = text::HoriOrientation::LEFT;
 
@@ -2113,8 +2113,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
 
         // PlcxMan currently points too far ahead so we need to bring
         // it back to where we are trying to make a table
-        m_pIo->m_pPlcxMan->GetPap()->nOrigStartPos = aRes.nStartPos;
-        m_pIo->m_pPlcxMan->GetPap()->nCpOfs = aRes.nCpOfs;
+        m_pIo->m_xPlcxMan->GetPap()->nOrigStartPos = aRes.nStartPos;
+        m_pIo->m_xPlcxMan->GetPap()->nCpOfs = aRes.nCpOfs;
         if (!(pPap->SeekPos(aRes.nStartPos)))
         {
             aRes.nEndPos = WW8_CP_MAX;
@@ -2166,7 +2166,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     }
     delete pNewBand;
 
-    m_pIo->m_pPlcxMan->GetPap()->Restore( aSave );
+    m_pIo->m_xPlcxMan->GetPap()->Restore( aSave );
 }
 
 WW8TabDesc::~WW8TabDesc()
@@ -3490,15 +3490,15 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
         WW8_TablePos* pNestedTabPos( nullptr );
         WW8_TablePos aNestedTabPos;
         WW8PLCFxSave1 aSave;
-        m_pPlcxMan->GetPap()->Save( aSave );
-        WW8PLCFx_Cp_FKP* pPap = m_pPlcxMan->GetPapPLCF();
+        m_xPlcxMan->GetPap()->Save( aSave );
+        WW8PLCFx_Cp_FKP* pPap = m_xPlcxMan->GetPapPLCF();
         WW8_CP nMyStartCp = nStartCp;
         if ( SearchRowEnd( pPap, nMyStartCp, m_nInTable ) &&
              ParseTabPos( &aNestedTabPos, pPap ) )
         {
             pNestedTabPos = &aNestedTabPos;
         }
-        m_pPlcxMan->GetPap()->Restore( aSave );
+        m_xPlcxMan->GetPap()->Restore( aSave );
         if ( pNestedTabPos )
         {
             ApoTestResults aApo = TestApo( m_nInTable + 1, false, pNestedTabPos );

@@ -124,7 +124,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
     }
     else
     {
-        WW8PLCFx_Book* pB = m_pPlcxMan->GetBook();
+        WW8PLCFx_Book* pB = m_xPlcxMan->GetBook();
         OUString aBookmarkName;
         if (pB!=nullptr) {
             WW8_CP currentCP=pF->nSCode;
@@ -176,7 +176,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
     }
 
     OUString aBookmarkName;
-    WW8PLCFx_Book* pB = m_pPlcxMan->GetBook();
+    WW8PLCFx_Book* pB = m_xPlcxMan->GetBook();
     if (pB!=nullptr) {
         WW8_CP currentCP=pF->nSCode;
         WW8_CP currentLen=pF->nLen;
@@ -248,7 +248,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
     {
         // TODO: review me
         OUString aBookmarkName;
-        WW8PLCFx_Book* pB = m_pPlcxMan->GetBook();
+        WW8PLCFx_Book* pB = m_xPlcxMan->GetBook();
         if (pB!=nullptr)
         {
             WW8_CP currentCP=pF->nSCode;
@@ -1901,7 +1901,7 @@ void SwWW8ImplReader::RegisterNumFormat(sal_uInt16 nActLFO, sal_uInt8 nActLevel)
 void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
     short nLen)
 {
-    if (m_pPlcxMan && m_pPlcxMan->GetDoingDrawTextBox())
+    if (m_xPlcxMan && m_xPlcxMan->GetDoingDrawTextBox())
         return;
 
     if( nLen < 0 )
@@ -1949,7 +1949,7 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
 void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
     short nLen)
 {
-    if (m_pPlcxMan && m_pPlcxMan->GetDoingDrawTextBox())
+    if (m_xPlcxMan && m_xPlcxMan->GetDoingDrawTextBox())
         return;
 
     if( nLen < 0 )
@@ -2042,7 +2042,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                         m_nListLevel = WW8ListManager::nMaxLevel;
                     }
                 }
-                else if (m_pPlcxMan && m_pPlcxMan->HasParaSprm(NS_sprm::LN_PAnld).pSprm)
+                else if (m_xPlcxMan && m_xPlcxMan->HasParaSprm(NS_sprm::LN_PAnld).pSprm)
                 {
                     /*
                      #i8114# Horrific backwards compatible ww7- lists in ww8+
@@ -2071,10 +2071,10 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
     WW8ReaderSave aSave(this,nStart);
 
     WW8PLCFManResult aRes;
-    nStart = m_pPlcxMan->Where();
+    nStart = m_xPlcxMan->Where();
     while(nStart <= nEndCp)
     {
-        if ( m_pPlcxMan->Get(&aRes)
+        if ( m_xPlcxMan->Get(&aRes)
             && aRes.pMemPos && aRes.nSprmId )
         {
             //only interested in sprms which would set nPicLocFc
@@ -2085,8 +2085,8 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
                 break;
             }
         }
-        m_pPlcxMan->advance();
-        nStart = m_pPlcxMan->Where();
+        m_xPlcxMan->advance();
+        nStart = m_xPlcxMan->Where();
     }
     sal_uLong nOffset = m_nPicLocFc;
     aSave.Restore(this);

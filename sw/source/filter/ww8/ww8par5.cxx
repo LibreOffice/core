@@ -121,7 +121,7 @@ namespace
 long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 {
     // should also work via pRes.nCo2OrIdx
-    WW8PLCFx_Book* pB = m_pPlcxMan->GetBook();
+    WW8PLCFx_Book* pB = m_xPlcxMan->GetBook();
     if( !pB )
     {
         OSL_ENSURE( pB, "WW8PLCFx_Book - Pointer does not exist" );
@@ -236,7 +236,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 
 long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
 {
-    if (WW8PLCFx_AtnBook* pAtnBook = m_pPlcxMan->GetAtnBook())
+    if (WW8PLCFx_AtnBook* pAtnBook = m_xPlcxMan->GetAtnBook())
     {
         if (pAtnBook->getIsEnd())
             m_pReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_ANNOTATIONMARK, true, pAtnBook->getHandle());
@@ -248,7 +248,7 @@ long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
 
 long SwWW8ImplReader::Read_FactoidBook(WW8PLCFManResult*)
 {
-    if (WW8PLCFx_FactoidBook* pFactoidBook = m_pPlcxMan->GetFactoidBook())
+    if (WW8PLCFx_FactoidBook* pFactoidBook = m_xPlcxMan->GetFactoidBook())
     {
         if (pFactoidBook->getIsEnd())
             m_pReffedStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_RDFMARK, true, pFactoidBook->getHandle());
@@ -434,9 +434,9 @@ short SwWW8ImplReader::GetTimeDatePara(OUString& rStr, sal_uInt32& rFormat,
     LanguageType &rLang, int nWhichDefault, bool bHijri)
 {
     bool bRTL = false;
-    if (m_pPlcxMan && !m_bVer67)
+    if (m_xPlcxMan && !m_bVer67)
     {
-        SprmResult aResult = m_pPlcxMan->HasCharSprm(0x85A);
+        SprmResult aResult = m_xPlcxMan->HasCharSprm(0x85A);
         if (aResult.pSprm && aResult.nRemainingData >= 1 && *aResult.pSprm)
             bRTL = true;
     }
@@ -506,7 +506,7 @@ void SwWW8ImplReader::UpdateFields()
 sal_uInt16 SwWW8ImplReader::End_Field()
 {
     sal_uInt16 nRet = 0;
-    WW8PLCFx_FLD* pF = m_pPlcxMan->GetField();
+    WW8PLCFx_FLD* pF = m_xPlcxMan->GetField();
     OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer not available");
     WW8_CP nCP = 0;
     if (!pF || !pF->EndPosIsFieldEnd(nCP))
@@ -838,7 +838,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     };
     OSL_ENSURE( SAL_N_ELEMENTS( aWW8FieldTab ) == eMax+1, "FeldFunc-Table not right" );
 
-    WW8PLCFx_FLD* pF = m_pPlcxMan->GetField();
+    WW8PLCFx_FLD* pF = m_xPlcxMan->GetField();
     OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer not available");
 
     if (!pF || !pF->StartPosIsFieldStart())
@@ -894,7 +894,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     }
 
     //Only one type of field (hyperlink) in drawing textboxes exists
-    if (aF.nId != 88 && m_pPlcxMan->GetDoingDrawTextBox())
+    if (aF.nId != 88 && m_xPlcxMan->GetDoingDrawTextBox())
         return aF.nLen;
 
     bool bHasHandler = aWW8FieldTab[aF.nId] != nullptr;
@@ -904,7 +904,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         bHasHandler = false;
         sal_uInt64 nOldPos = m_pStrm->Tell();
         OUString aStr;
-        aF.nLCode = m_pSBase->WW8ReadString(*m_pStrm, aStr, m_pPlcxMan->GetCpOfs() + aF.nSCode, aF.nLCode, m_eTextCharSet);
+        aF.nLCode = m_pSBase->WW8ReadString(*m_pStrm, aStr, m_xPlcxMan->GetCpOfs() + aF.nSCode, aF.nLCode, m_eTextCharSet);
         m_pStrm->Seek(nOldPos);
 
         WW8ReadFieldParams aReadParam(aStr);
@@ -933,7 +933,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 
         long nOldPos = m_pStrm->Tell();
         OUString aStr;
-        aF.nLCode = m_pSBase->WW8ReadString( *m_pStrm, aStr, m_pPlcxMan->GetCpOfs()+
+        aF.nLCode = m_pSBase->WW8ReadString( *m_pStrm, aStr, m_xPlcxMan->GetCpOfs()+
             aF.nSCode, aF.nLCode, m_eTextCharSet );
         m_pStrm->Seek( nOldPos );
 
@@ -967,12 +967,12 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         if ( aF.nId == 6 && aF.bCodeNest )
         {
             // TODO Extract the whole code string using the nested codes
-            aF.nLCode = m_pSBase->WW8ReadString( *m_pStrm, aStr, m_pPlcxMan->GetCpOfs() +
+            aF.nLCode = m_pSBase->WW8ReadString( *m_pStrm, aStr, m_xPlcxMan->GetCpOfs() +
                 aF.nSCode, aF.nSRes - aF.nSCode - 1, m_eTextCharSet );
         }
         else
         {
-            aF.nLCode = m_pSBase->WW8ReadString( *m_pStrm, aStr, m_pPlcxMan->GetCpOfs()+
+            aF.nLCode = m_pSBase->WW8ReadString( *m_pStrm, aStr, m_xPlcxMan->GetCpOfs()+
                 aF.nSCode, aF.nLCode, m_eTextCharSet );
         }
 
@@ -1118,7 +1118,7 @@ long SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
                                             // max. 4 times as big
     OUString sFText;
     m_pSBase->WW8ReadString( *m_pStrm, sFText,
-                                m_pPlcxMan->GetCpOfs() + nStart, nL, m_eStructCharSet);
+                                m_xPlcxMan->GetCpOfs() + nStart, nL, m_eStructCharSet);
 
     OUString aTagText;
     MakeTagString( aTagText, sFText );
@@ -1181,7 +1181,7 @@ OUString SwWW8ImplReader::GetFieldResult( WW8FieldDesc* pF )
                                             // max. 4 times as big
 
     OUString sRes;
-    m_pSBase->WW8ReadString( *m_pStrm, sRes, m_pPlcxMan->GetCpOfs() + nStart,
+    m_pSBase->WW8ReadString( *m_pStrm, sRes, m_xPlcxMan->GetCpOfs() + nStart,
                                 nL, m_eStructCharSet );
 
     m_pStrm->Seek( nOldPos );
@@ -1232,26 +1232,26 @@ the appropriate set/ask field.
 long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     OUString &rOrigName, const OUString &rData)
 {
-    OSL_ENSURE(m_pPlcxMan,"No pPlcxMan");
+    OSL_ENSURE(m_xPlcxMan.get(), "No pPlcxMan");
     long nNo;
     /*
     If there was no bookmark associated with this set field, then we create a
     pseudo one and insert it in the document.
     */
     sal_uInt16 nIndex;
-    m_pPlcxMan->GetBook()->MapName(rOrigName);
-    OUString sName = m_pPlcxMan->GetBook()->GetBookmark(
+    m_xPlcxMan->GetBook()->MapName(rOrigName);
+    OUString sName = m_xPlcxMan->GetBook()->GetBookmark(
         pF->nSCode, pF->nSCode + pF->nLen, nIndex);
     if (!sName.isEmpty())
     {
-        m_pPlcxMan->GetBook()->SetStatus(nIndex, BOOK_IGNORE);
+        m_xPlcxMan->GetBook()->SetStatus(nIndex, BOOK_IGNORE);
         nNo = nIndex;
     }
     else
     {
         nNo = m_pReffingStck->aFieldVarNames.size()+1;
         sName = "WWSetBkmk" + OUString::number(nNo);
-        nNo += m_pPlcxMan->GetBook()->GetIMax();
+        nNo += m_xPlcxMan->GetBook()->GetIMax();
     }
     m_pReffedStck->NewAttr(*m_pPaM->GetPoint(),
         SwFltBookmark( BookmarkToWriter(sName), rData, nNo ));
@@ -1295,8 +1295,8 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pField,
 OUString SwWW8ImplReader::GetMappedBookmark(const OUString &rOrigName)
 {
     OUString sName(BookmarkToWriter(rOrigName));
-    OSL_ENSURE(m_pPlcxMan,"no pPlcxMan");
-    m_pPlcxMan->GetBook()->MapName(sName);
+    OSL_ENSURE(m_xPlcxMan.get(), "no pPlcxMan");
+    m_xPlcxMan->GetBook()->MapName(sName);
 
     //See if there has been a variable set with this name, if so get
     //the pseudo bookmark name that was set with it.
@@ -2259,7 +2259,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
     {
 
         m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
-        WW8_CP nOldCp = m_pPlcxMan->Where();
+        WW8_CP nOldCp = m_xPlcxMan->Where();
         WW8_CP nCp = nOldCp + nOffset;
 
         SwPaM aPaM(*m_pPaM, m_pPaM);
@@ -2514,7 +2514,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc* pF, OUString& rStr )
     aField.SetFieldCode( rStr );
 
     OUString aResult;
-    m_pSBase->WW8ReadString( *m_pStrm, aResult, m_pPlcxMan->GetCpOfs()+
+    m_pSBase->WW8ReadString( *m_pStrm, aResult, m_xPlcxMan->GetCpOfs()+
                            pF->nSRes, pF->nLRes, m_eTextCharSet );
 
     aResult = aResult.replace( '\xb', '\n' );
@@ -3610,7 +3610,7 @@ void SwWW8ImplReader::ImportTox( int nFieldId, const OUString& aStr )
 void SwWW8ImplReader::Read_FieldVanish( sal_uInt16, const sal_uInt8*, short nLen )
 {
     //Meaningless in a style
-    if (m_pAktColl || !m_pPlcxMan)
+    if (m_pAktColl || !m_xPlcxMan)
         return;
 
     const int nChunk = 64;  //number of characters to read at one time
@@ -3634,7 +3634,7 @@ void SwWW8ImplReader::Read_FieldVanish( sal_uInt16, const sal_uInt8*, short nLen
     m_bIgnoreText = true;
     long nOldPos = m_pStrm->Tell();
 
-    WW8_CP nStartCp = m_pPlcxMan->Where() + m_pPlcxMan->GetCpOfs();
+    WW8_CP nStartCp = m_xPlcxMan->Where() + m_xPlcxMan->GetCpOfs();
 
     OUString sFieldName;
     sal_Int32 nFieldLen = m_pSBase->WW8ReadString( *m_pStrm, sFieldName, nStartCp,
