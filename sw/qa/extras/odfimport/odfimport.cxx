@@ -867,5 +867,13 @@ DECLARE_ODFIMPORT_TEST(testTdf115079, "tdf115079.odt")
     // This document caused segfault when layouting
 }
 
+DECLARE_ODFIMPORT_TEST(testI61225, "i61225.sxw")
+{
+    // Part of ooo61225-1.sxw from crashtesting.
+
+    // This never returned.
+    calcLayout();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

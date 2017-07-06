@@ -1256,10 +1256,15 @@ void SwFrame::InvalidateNextPrtArea()
 ///     but not if it sits in a table which itself sits in a section.
 static bool lcl_IsInSectionDirectly( const SwFrame *pUp )
 {
+    bool bSeenColumn = false;
+
     while( pUp )
     {
-        if( pUp->IsSctFrame() )
-            return true;
+        if( pUp->IsColumnFrame() )
+            bSeenColumn = true;
+        else if( pUp->IsSctFrame() )
+            // Allow move of frame in case our only column is not growable.
+            return bSeenColumn || !static_cast<const SwSectionFrame*>(pUp)->Growable();
         else if( pUp->IsTabFrame() )
             return false;
         pUp = pUp->GetUpper();
