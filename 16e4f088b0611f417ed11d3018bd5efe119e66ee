@@ -16,6 +16,24 @@
       "revId": "16e4f088b0611f417ed11d3018bd5efe119e66ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f3d73021",
+        "filename": "chart2/source/controller/main/DrawCommandDispatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-07-06T07:33:41Z",
+      "side": 1,
+      "message": "guess the point of functor was to have it in one place in case lookup needs to change (i.e. case insensitive, compare value type too or property keys change to enum or int).\nChances for such a chance a nil.\n\nAs you noted, it\u0027s not really helpful. I\u0027ll implement your suggestion.",
+      "parentUuid": "3a461143_5372c47d",
+      "revId": "16e4f088b0611f417ed11d3018bd5efe119e66ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
