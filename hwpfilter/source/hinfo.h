@@ -23,6 +23,7 @@
 #include "hwplib.h"
 #include "string.h"
 
+#include <memory>
 #include <vector>
 
 #define CHAIN_MAX_PATH  40
@@ -282,11 +283,10 @@ struct ParaShape
     unsigned char outline;
     unsigned char outline_continue;
     unsigned char reserved[2];
-    CharShape *cshape;
-     unsigned char pagebreak;
+    std::shared_ptr<CharShape> cshape;
+    unsigned char pagebreak;
 
     void  Read(HWPFile &);
-//  virtual ~ParaShape();
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HINFO_H
 

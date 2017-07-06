@@ -111,7 +111,7 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     if (nch && !reuse_shape)
     {
         pshape->Read(hwpf);
-        pshape->cshape = cshape.get();
+        pshape->cshape = cshape;
         pshape->pagebreak = etcflag;
     }
 
