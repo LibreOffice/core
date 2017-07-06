@@ -213,6 +213,7 @@ public:
     void testTdf77014();
 #endif
     void testTdf92648();
+    void testTdf103978_backgroundTextShape();
     void testTdf96515();
     void testTdf96943();
     void testTdf96536();
@@ -358,6 +359,7 @@ public:
     CPPUNIT_TEST(testTdf77014);
 #endif
     CPPUNIT_TEST(testTdf92648);
+    CPPUNIT_TEST(testTdf103978_backgroundTextShape);
     CPPUNIT_TEST(testTdf96515);
     CPPUNIT_TEST(testTdf96943);
     CPPUNIT_TEST(testTdf96536);
@@ -4004,6 +4006,25 @@ void SwUiWriterTest::testTdf92648()
     }
     // and we have had five of them.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nCount);
+}
+
+void SwUiWriterTest::testTdf103978_backgroundTextShape()
+{
+    SwDoc* pDoc = createDoc("tdf103978_backgroundTextShape.docx");
+
+    // there is only one shape. It has an attached textbox
+    bool bShapeIsOpaque = getProperty<bool>(getShape(1), "Opaque");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape is in the foreground", false, bShapeIsOpaque );
+    sal_Int32 nCount = 0;
+    for (const SwFrameFormat* pFormat : *pDoc->GetSpzFrameFormats())
+    {
+        if (!SwTextBoxHelper::isTextBox(pFormat, RES_FLYFRMFMT))
+            continue;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Textbox syncs the shape's transparency", bShapeIsOpaque, pFormat->GetOpaque().GetValue() );
+        ++nCount;
+    }
+    //ensure that we don't skip the for loop without an error
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of TextBoxes", sal_Int32(1), nCount);
 }
 
 void SwUiWriterTest::testTdf96515()
