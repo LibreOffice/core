@@ -572,7 +572,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
      paragraph mark as part of the paragraph text.
     */
     WW8ReaderSave aSave(this);
-    m_xPlcxMan.reset(new WW8PLCFMan(m_pSBase, eType, nStartCp, true));
+    m_xPlcxMan.reset(new WW8PLCFMan(m_xSBase.get(), eType, nStartCp, true));
 
     WW8_CP nStart = m_xPlcxMan->Where();
     WW8_CP nNext, nStartReplace=0;
@@ -870,7 +870,7 @@ sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStar
     else if (nStartCp < nEndCp)
     {
         // read the text: can be split into multiple pieces
-        const sal_Int32 nLen = m_pSBase->WW8ReadString(*m_pStrm, rString,
+        const sal_Int32 nLen = m_xSBase->WW8ReadString(*m_pStrm, rString,
             nStartCp + nOffset, nEndCp - nStartCp, GetCurrentCharSet());
         OSL_ENSURE(nLen, "+where's the text graphic (8)?");
         if (nLen>0)
