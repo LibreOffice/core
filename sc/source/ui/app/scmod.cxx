@@ -676,7 +676,11 @@ ScDocument* ScModule::GetClipDoc()
     // called from document
     ScTransferObj* pObj = ScTransferObj::GetOwnClipboard( nullptr );
     if (pObj)
-        return pObj->GetDocument();
+    {
+        ScDocument* pDoc = pObj->GetDocument();
+        assert((!pDoc || pDoc->IsClipboard()) && "Document is not clipboard, how can that be?");
+        return pDoc;
+    }
 
     return nullptr;
 }
