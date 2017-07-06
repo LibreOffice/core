@@ -955,6 +955,12 @@
             <value xml:lang="es">.uno:Italic</value>
           </prop>
         </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
+          </prop>
+        </node>
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -1673,6 +1679,12 @@
             <value xml:lang="es">.uno:Italic</value>
           </prop>
         </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
+          </prop>
+        </node>
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2359,6 +2371,12 @@
             <value xml:lang="es">.uno:Italic</value>
           </prop>
         </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
+          </prop>
+        </node>
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2973,6 +2991,12 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="es">.uno:Italic</value>
+          </prop>
+        </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
           </prop>
         </node>
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
@@ -3765,6 +3789,12 @@
             <value xml:lang="es">.uno:Italic</value>
           </prop>
         </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
+          </prop>
+        </node>
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -4545,6 +4575,12 @@
             <value xml:lang="es">.uno:Italic</value>
           </prop>
         </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
+          </prop>
+        </node>
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -5311,6 +5347,12 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="es">.uno:Italic</value>
+          </prop>
+        </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
           </prop>
         </node>
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
@@ -6106,6 +6148,12 @@
             <value xml:lang="es">.uno:Italic</value>
           </prop>
         </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
+          </prop>
+        </node>
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -6898,6 +6946,12 @@
             <value xml:lang="es">.uno:Italic</value>
           </prop>
         </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
+          </prop>
+        </node>
         <node oor:name="K_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -7444,6 +7498,12 @@
             <value xml:lang="es">.uno:Italic</value>
           </prop>
         </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
+          </prop>
+        </node>
         <node oor:name="N_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -7542,6 +7602,12 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="es">.uno:Italic</value>
+          </prop>
+        </node>
+        <node oor:name="K_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="es">.uno:HyperlinkDialog</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
