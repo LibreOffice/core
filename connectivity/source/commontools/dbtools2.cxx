@@ -641,7 +641,7 @@ bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp, const OUSt
                                                 aInfo.end(),
                                                 [&_sProperty](const PropertyValue& lhs)
                                                 { return lhs.Name == _sProperty; });
-            if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
+            if ( pValue != aInfo.end() )
                 pValue->Value >>= bEnabled;
         }
     }

@@ -962,8 +962,8 @@ try
             Property* pResult = std::lower_bound(
                 pNewProps, pNewProps + nNewLen, pOldProps[i], ::comphelper::PropertyCompareByName());
 
-            if (    pResult
-                && ( pResult != pNewProps + nNewLen && pResult->Name == pOldProps[i].Name )
+            if (   ( pResult != aNewProperties.end() )
+                && ( pResult->Name == pOldProps[i].Name )
                 && ( (pResult->Attributes & PropertyAttribute::READONLY) == 0 )
                 && ( pResult->Type.equals(pOldProps[i].Type)) )
             {   // Attributes match and the property is not read-only
