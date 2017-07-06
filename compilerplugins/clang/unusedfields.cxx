@@ -495,7 +495,7 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
     }
 }
 
-loplugin::Plugin::Registration< UnusedFields > X("unusedfields", true);
+loplugin::Plugin::Registration< UnusedFields > X("unusedfields", false);
 
 }
 

@@ -104,7 +104,6 @@ struct MultiDataCellState
 
     SCCOL mnCol1; //< first non-empty column
     SCROW mnRow1; //< first non-empty row
-    SCTAB mnTab1; //< first non-empty sheet
 
     MultiDataCellState();
     MultiDataCellState( StateType eState );
