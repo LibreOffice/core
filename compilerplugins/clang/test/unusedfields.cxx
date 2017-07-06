@@ -8,6 +8,7 @@
  */
 
 #include <vector>
+#include <ostream>
 
 struct Foo
 // expected-error@-1 {{read m_foo1 [loplugin:unusedfields]}}
@@ -33,6 +34,7 @@ struct Bar
     std::vector<int> m_bar6;
     int m_bar7[5];
     int m_bar8;
+    int m_barstream;
 
     // check that we see reads of fields like m_foo1 when referred to via constructor initializer
     Bar(Foo const & foo) : m_bar1(foo.m_foo1) {}
@@ -72,6 +74,13 @@ struct Bar
         char tmp[5];
         return tmp[m_bar8];
     }
+};
+
+// check that we __dont__ see a read of m_barstream
+std::ostream& operator<<(std::ostream& s, Bar const & bar)
+{
+    s << bar.m_barstream;
+    return s;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

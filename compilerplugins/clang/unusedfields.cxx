@@ -82,11 +82,13 @@ public:
     bool VisitDeclRefExpr( const DeclRefExpr* );
     bool TraverseCXXConstructorDecl( CXXConstructorDecl* );
     bool TraverseCXXMethodDecl( CXXMethodDecl* );
+    bool TraverseFunctionDecl( FunctionDecl* );
 private:
     MyFieldInfo niceName(const FieldDecl*);
     void checkTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr);
     void checkWriteOnly(const FieldDecl* fieldDecl, const Expr* memberExpr);
     RecordDecl * insideMoveOrCopyDeclParent;
+    RecordDecl * insideStreamOutputOperator;
 };
 
 void UnusedFields::run()
@@ -201,9 +203,11 @@ bool startswith(const std::string& rStr, const char* pSubStr)
 
 bool UnusedFields::TraverseCXXConstructorDecl(CXXConstructorDecl* cxxConstructorDecl)
 {
-    if (!ignoreLocation(cxxConstructorDecl)
-        && cxxConstructorDecl->isCopyOrMoveConstructor())
-        insideMoveOrCopyDeclParent = cxxConstructorDecl->getParent();
+    if (!ignoreLocation(cxxConstructorDecl) && cxxConstructorDecl->isThisDeclarationADefinition())
+    {
+        if (cxxConstructorDecl->isCopyOrMoveConstructor())
+            insideMoveOrCopyDeclParent = cxxConstructorDecl->getParent();
+    }
     bool ret = RecursiveASTVisitor::TraverseCXXConstructorDecl(cxxConstructorDecl);
     insideMoveOrCopyDeclParent = nullptr;
     return ret;
@@ -211,11 +215,29 @@ bool UnusedFields::TraverseCXXConstructorDecl(CXXConstructorDecl* cxxConstructor
 
 bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
 {
-    if (!ignoreLocation(cxxMethodDecl)
-        && (cxxMethodDecl->isCopyAssignmentOperator() || cxxMethodDecl->isMoveAssignmentOperator()))
-        insideMoveOrCopyDeclParent = cxxMethodDecl->getParent();
+    if (!ignoreLocation(cxxMethodDecl) && cxxMethodDecl->isThisDeclarationADefinition())
+    {
+        if (cxxMethodDecl->isCopyAssignmentOperator() || cxxMethodDecl->isMoveAssignmentOperator())
+            insideMoveOrCopyDeclParent = cxxMethodDecl->getParent();
+    }
     bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(cxxMethodDecl);
     insideMoveOrCopyDeclParent = nullptr;
+    return ret;
+}
+
+bool UnusedFields::TraverseFunctionDecl(FunctionDecl* functionDecl)
+{
+    if (functionDecl->getLocation().isValid() && !ignoreLocation(functionDecl) && functionDecl->isThisDeclarationADefinition())
+    {
+        if (functionDecl->getOverloadedOperator() == OO_LessLess
+            && functionDecl->getNumParams() == 2)
+        {
+            QualType qt = functionDecl->getParamDecl(1)->getType();
+            insideStreamOutputOperator = qt.getNonReferenceType().getUnqualifiedType()->getAsCXXRecordDecl();
+        }
+    }
+    bool ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
+    insideStreamOutputOperator = nullptr;
     return ret;
 }
 
@@ -244,11 +266,15 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
 
 void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* memberExpr)
 {
-    // we don't care about reads from a field when inside the copy/move constructor/operator= for that field
-    if (insideMoveOrCopyDeclParent)
+    if (insideMoveOrCopyDeclParent || insideStreamOutputOperator)
     {
         RecordDecl const * cxxRecordDecl1 = fieldDecl->getParent();
+        // we don't care about reads from a field when inside the copy/move constructor/operator= for that field
         if (cxxRecordDecl1 && (cxxRecordDecl1 == insideMoveOrCopyDeclParent))
+            return;
+        // we don't care about reads when the field is being used in an output operator, this is normally
+        // debug stuff
+        if (cxxRecordDecl1 && (cxxRecordDecl1 == insideStreamOutputOperator))
             return;
     }
 
@@ -469,7 +495,7 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
     }
 }
 
-loplugin::Plugin::Registration< UnusedFields > X("unusedfields", false);
+loplugin::Plugin::Registration< UnusedFields > X("unusedfields", true);
 
 }
 
