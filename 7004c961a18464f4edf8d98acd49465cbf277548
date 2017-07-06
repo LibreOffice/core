@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_732260bb",
+        "filename": "sw/source/filter/ww8/ww8par3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-06T11:39:15Z",
+      "side": 1,
+      "message": "apparently nLCode is WW8_CP is sal_Int32 is signed so this should check that its \u003e\u003d 0 too",
+      "revId": "7004c961a18464f4edf8d98acd49465cbf277548",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
