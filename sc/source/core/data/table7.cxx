@@ -39,14 +39,13 @@ sc::MultiDataCellState ScTable::HasMultipleDataCells( SCCOL nCol1, SCROW nRow1, 
     if (aCol.empty())
         return sc::MultiDataCellState(sc::MultiDataCellState::Empty);
 
-    auto setFirstCell = []( sc::MultiDataCellState& rRet, SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
+    auto setFirstCell = []( sc::MultiDataCellState& rRet, SCCOL nCurCol, SCROW nCurRow )
     {
         if (rRet.mnCol1 < 0)
         {
             // First cell not yet set.  Set it.
             rRet.mnCol1 = nCurCol;
             rRet.mnRow1 = nCurRow;
-            rRet.mnTab1 = nCurTab;
         }
     };
 
@@ -61,7 +60,7 @@ sc::MultiDataCellState ScTable::HasMultipleDataCells( SCCOL nCol1, SCROW nRow1, 
         {
             case sc::MultiDataCellState::HasOneCell:
             {
-                setFirstCell(aRet, nCol, nFirstDataRow, nTab);
+                setFirstCell(aRet, nCol, nFirstDataRow);
 
                 if (bHasOne)
                 {
@@ -74,7 +73,7 @@ sc::MultiDataCellState ScTable::HasMultipleDataCells( SCCOL nCol1, SCROW nRow1, 
             }
             case sc::MultiDataCellState::HasMultipleCells:
             {
-                setFirstCell(aRet, nCol, nFirstDataRow, nTab);
+                setFirstCell(aRet, nCol, nFirstDataRow);
 
                 aRet.meState = sc::MultiDataCellState::HasMultipleCells;
                 return aRet;

@@ -140,7 +140,6 @@ void Test::testMultipleDataCellsInRange()
     CPPUNIT_ASSERT_EQUAL(sc::MultiDataCellState::HasOneCell, aState.meState);
     CPPUNIT_ASSERT_EQUAL(SCCOL(1), aState.mnCol1);
     CPPUNIT_ASSERT_EQUAL(SCROW(2), aState.mnRow1);
-    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aState.mnTab1);
 
     // Set another numeric value to B4.
     m_pDoc->SetValue(ScAddress(1,3,0), 2.0);
@@ -149,7 +148,6 @@ void Test::testMultipleDataCellsInRange()
     CPPUNIT_ASSERT_EQUAL(sc::MultiDataCellState::HasMultipleCells, aState.meState);
     CPPUNIT_ASSERT_EQUAL(SCCOL(1), aState.mnCol1);
     CPPUNIT_ASSERT_EQUAL(SCROW(2), aState.mnRow1);
-    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aState.mnTab1);
 
     // Set the query range to B4:B5.  Now it should only report one cell, with
     // B4 being the first non-empty cell.
@@ -159,7 +157,6 @@ void Test::testMultipleDataCellsInRange()
     CPPUNIT_ASSERT_EQUAL(sc::MultiDataCellState::HasOneCell, aState.meState);
     CPPUNIT_ASSERT_EQUAL(SCCOL(1), aState.mnCol1);
     CPPUNIT_ASSERT_EQUAL(SCROW(3), aState.mnRow1);
-    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aState.mnTab1);
 
     // Set the query range to A1:C3.  The first non-empty cell should be B3.
     aRange = ScRange(0,0,0,2,2,0);
@@ -167,7 +164,6 @@ void Test::testMultipleDataCellsInRange()
     CPPUNIT_ASSERT_EQUAL(sc::MultiDataCellState::HasOneCell, aState.meState);
     CPPUNIT_ASSERT_EQUAL(SCCOL(1), aState.mnCol1);
     CPPUNIT_ASSERT_EQUAL(SCROW(2), aState.mnRow1);
-    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aState.mnTab1);
 
     // Set string cells to D4 and F5, and query D3:F5.  D4 should be the first
     // non-empty cell.
@@ -178,7 +174,6 @@ void Test::testMultipleDataCellsInRange()
     CPPUNIT_ASSERT_EQUAL(sc::MultiDataCellState::HasMultipleCells, aState.meState);
     CPPUNIT_ASSERT_EQUAL(SCCOL(3), aState.mnCol1);
     CPPUNIT_ASSERT_EQUAL(SCROW(3), aState.mnRow1);
-    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aState.mnTab1);
 
     // TODO : add more test cases as needed.
 
