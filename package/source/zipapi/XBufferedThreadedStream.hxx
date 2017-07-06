@@ -44,7 +44,7 @@ private:
     static const size_t nBufferSize = 32 * 1024;
 
     const Buffer& getNextBlock();
-    size_t remainingSize() const { return mnStreamSize - mnPos; }
+    sal_Int64 remainingSize() const { return mnStreamSize - mnPos; }
     bool hasBytes() const { return mnPos < mnStreamSize; }
 
     bool canProduce() const

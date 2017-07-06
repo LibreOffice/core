@@ -310,7 +310,7 @@ void SAL_CALL XUnbufferedStream::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL XUnbufferedStream::available(  )
 {
     //available size must include the prepended header in case of wrapped raw stream
-    return static_cast < sal_Int32 > ( mnZipSize + mnHeaderToRead - mnMyCurrent );
+    return static_cast< sal_Int32 > ( std::min< sal_Int64 >( SAL_MAX_INT32, (mnZipSize + mnHeaderToRead - mnMyCurrent) ) );
 }
 
 void SAL_CALL XUnbufferedStream::closeInput(  )
