@@ -892,22 +892,16 @@ bool SwCursorShell::DocPtInsideInputField( const Point& rDocPt ) const
 sal_Int32 SwCursorShell::StartOfInputFieldAtPos( const SwPosition& rPos )
 {
     const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, true ));
-    if ( pTextInputField == nullptr )
-    {
-        OSL_ENSURE( false, "<SwEditShell::StartOfInputFieldAtPos(..)> - no Input Field at given position" );
-        return 0;
-    }
+    assert(pTextInputField != nullptr
+        && "<SwEditShell::StartOfInputFieldAtPos(..)> - no Input Field at given position");
     return pTextInputField->GetStart();
 }
 
 sal_Int32 SwCursorShell::EndOfInputFieldAtPos( const SwPosition& rPos )
 {
     const SwTextInputField* pTextInputField = dynamic_cast<const SwTextInputField*>(GetTextFieldAtPos( &rPos, true ));
-    if ( pTextInputField == nullptr )
-    {
-        OSL_ENSURE( false, "<SwEditShell::EndOfInputFieldAtPos(..)> - no Input Field at given position" );
-        return 0;
-    }
+    assert(pTextInputField != nullptr
+        && "<SwEditShell::EndOfInputFieldAtPos(..)> - no Input Field at given position");
     return *(pTextInputField->End());
 }
 

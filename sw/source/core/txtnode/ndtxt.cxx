@@ -1818,7 +1818,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         // Input Fields are only copied, if completely covered by copied text
         if ( nWhich == RES_TXTATR_INPUTFIELD )
         {
-            OSL_ENSURE( pEndIdx != nullptr,
+            assert(pEndIdx != nullptr &&
                     "<SwTextNode::CopyText(..)> - RES_TXTATR_INPUTFIELD without EndIndex!" );
             if ( nAttrStartIdx < nTextStartIdx
                  || ( pEndIdx != nullptr

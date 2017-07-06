@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 
 #include <memory>
+#include <cassert>
 
 class SwPaM;
 class SwTextNode;
@@ -52,7 +53,7 @@ public:
     }
     SwTextNode& GetTextNode() const
     {
-        OSL_ENSURE( m_pTextNode, "SwTextField:: where is my TextNode?" );
+        assert(m_pTextNode);
         return *m_pTextNode;
     }
     void ChgTextNode( SwTextNode* pNew )

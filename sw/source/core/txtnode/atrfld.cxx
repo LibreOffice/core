@@ -568,7 +568,7 @@ void SwTextInputField::UpdateFieldContent()
     if ( IsFieldInDoc()
          && GetStart() != (*End()) )
     {
-        OSL_ENSURE( (*End()) - GetStart() >= 2,
+        assert( (*End()) - GetStart() >= 2 &&
                 "<SwTextInputField::UpdateFieldContent()> - Are CH_TXT_ATR_INPUTFIELDSTART and/or CH_TXT_ATR_INPUTFIELDEND missing?" );
         // skip CH_TXT_ATR_INPUTFIELDSTART character
         const sal_Int32 nIdx = GetStart() + 1;
@@ -577,26 +577,19 @@ void SwTextInputField::UpdateFieldContent()
         const OUString aNewFieldContent = GetTextNode().GetExpandText( nIdx, nLen );
 
         const SwInputField* pInputField = dynamic_cast<const SwInputField*>(GetFormatField().GetField());
-        OSL_ENSURE( pInputField != nullptr,
-                "<SwTextInputField::GetContent()> - Missing <SwInputField> instance!" );
-        if ( pInputField != nullptr )
-        {
-            const_cast<SwInputField*>(pInputField)->applyFieldContent( aNewFieldContent );
-            // trigger update of fields for scenarios in which the Input Field's content is part of e.g. a table formula
-            GetTextNode().GetDoc()->getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty(true);
-        }
+        assert(pInputField != nullptr);
+        const_cast<SwInputField*>(pInputField)->applyFieldContent( aNewFieldContent );
+        // trigger update of fields for scenarios in which the Input Field's content is part of e.g. a table formula
+        GetTextNode().GetDoc()->getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty(true);
     }
 }
 
 void SwTextInputField::UpdateTextNodeContent( const OUString& rNewContent )
 {
-    if ( !IsFieldInDoc() )
-    {
-        OSL_ENSURE( false, "<SwTextInputField::UpdateTextNodeContent(..)> - misusage as Input Field is not in document content." );
-        return;
-    }
+    assert(IsFieldInDoc() &&
+        "<SwTextInputField::UpdateTextNodeContent(..)> - misusage as Input Field is not in document content.");
 
-    OSL_ENSURE( (*End()) - GetStart() >= 2,
+    assert( (*End()) - GetStart() >= 2 &&
             "<SwTextInputField::UpdateTextNodeContent(..)> - Are CH_TXT_ATR_INPUTFIELDSTART and/or CH_TXT_ATR_INPUTFIELDEND missing?" );
     // skip CH_TXT_ATR_INPUTFIELDSTART character
     const sal_Int32 nIdx = GetStart() + 1;

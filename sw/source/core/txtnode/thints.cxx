@@ -1497,12 +1497,9 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                         InsertText( aContent, aIdx, nInsertFlags );
 
                         sal_Int32* const pEnd(pAttr->GetEnd());
-                        OSL_ENSURE( pEnd != nullptr, "<SwTextNode::InsertHint(..)> - missing end of RES_TXTATR_INPUTFIELD!" );
-                        if ( pEnd != nullptr )
-                        {
-                            *pEnd = *pEnd + aContent.getLength();
-                            nEnd = *pEnd;
-                        }
+                        assert(pEnd != nullptr);
+                        *pEnd = *pEnd + aContent.getLength();
+                        nEnd = *pEnd;
                     }
                     else
                     {
@@ -1513,18 +1510,14 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                             InsertText( OUString(CH_TXT_ATR_INPUTFIELDSTART), aIdx, nInsertFlags );
                             bInputFieldStartCharInserted = true;
                             sal_Int32* const pEnd(pAttr->GetEnd());
-                            OSL_ENSURE( pEnd != nullptr, "<SwTextNode::InsertHint(..)> - missing end of RES_TXTATR_INPUTFIELD!" );
-                            if ( pEnd != nullptr )
-                            {
-                                *pEnd = *pEnd + 1;
-                                nEnd = *pEnd;
-                            }
+                            assert(pEnd != nullptr);
+                            *pEnd = *pEnd + 1;
+                            nEnd = *pEnd;
                         }
 
                         sal_Int32* const pEnd(pAttr->GetEnd());
-                        OSL_ENSURE( pEnd != nullptr, "<SwTextNode::InsertHint(..)> - missing end of RES_TXTATR_INPUTFIELD!" );
-                        if ( pEnd != nullptr
-                             && m_Text[ *(pEnd) - 1 ] != CH_TXT_ATR_INPUTFIELDEND )
+                        assert(pEnd != nullptr);
+                        if (m_Text[ *(pEnd) - 1 ] != CH_TXT_ATR_INPUTFIELDEND)
                         {
                             SwIndex aIdx( this, *(pEnd) );
                             InsertText( OUString(CH_TXT_ATR_INPUTFIELDEND), aIdx, nInsertFlags );
@@ -1637,7 +1630,7 @@ void SwTextNode::DeleteAttribute( SwTextAttr * const pAttr )
     else if ( pAttr->HasContent() )
     {
         const SwIndex aIdx( this, pAttr->GetStart() );
-        OSL_ENSURE( pAttr->End() != nullptr, "<SwTextNode::DeleteAttribute(..)> - missing End() at <SwTextAttr> instance which has content" );
+        assert(pAttr->End() != nullptr);
         EraseText( aIdx, *pAttr->End() - pAttr->GetStart() );
     }
     else
