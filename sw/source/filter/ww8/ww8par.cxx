@@ -4068,7 +4068,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             if ((nCrCount++ & 0x40) == 0 && nType == MAN_MAINTEXT)
             {
                 m_nProgress = (sal_uInt16)( l * 100 / nTextLen );
-                ::SetProgressState(m_nProgress, m_pDocShell); // Update
+                m_xProgress->Update(m_nProgress); // Update
             }
         }
 
@@ -4848,6 +4848,22 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
     }
 }
 
+ImportProgress::ImportProgress(SwDocShell *pDocShell)
+    : m_pDocShell(pDocShell)
+{
+    ::StartProgress(STR_STATSTR_W4WREAD, 0, 100, m_pDocShell);
+}
+
+void ImportProgress::Update(sal_uInt16 nProgress)
+{
+    ::SetProgressState(nProgress, m_pDocShell);    // Update
+}
+
+ImportProgress::~ImportProgress()
+{
+    ::EndProgress(m_pDocShell);
+}
+
 ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 {
     m_rDoc.SetDocumentType( SwDoc::DOCTYPE_MSWORD );
@@ -4936,7 +4952,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     if (!m_bNewDoc)
         aSttNdIdx = m_pPaM->GetPoint()->nNode;
 
-    ::StartProgress(STR_STATSTR_W4WREAD, 0, 100, m_pDocShell);
+    m_xProgress.reset(new ImportProgress(m_pDocShell));
 
     // read Font Table
     m_xFonts.reset(new WW8Fonts(*m_pTableStream, *m_xWwFib));
@@ -4980,7 +4996,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     ReadDocVars(); // import document variables as meta information.
 
-    ::SetProgressState(m_nProgress, m_pDocShell);    // Update
+    m_xProgress->Update(m_nProgress);    // Update
 
     m_xLstManager.reset(new WW8ListManager(*m_pTableStream, *this));
 
@@ -4988,7 +5004,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
         first (1) import all styles (see WW8PAR2.CXX)
             BEFORE the import of the lists !!
     */
-    ::SetProgressState(m_nProgress, m_pDocShell);    // Update
+    m_xProgress->Update(m_nProgress);    // Update
     m_xStyles.reset(new WW8RStyle(*m_xWwFib, this)); // Styles
     m_xStyles->Import();
 
@@ -4998,7 +5014,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
         Go through all Styles and attach respective List Format
         AFTER we imported the Styles and AFTER we imported the Lists!
     */
-    ::SetProgressState(m_nProgress, m_pDocShell); // Update
+    m_xProgress->Update(m_nProgress); // Update
     m_xStyles->PostProcessStyles();
 
     if (!m_vColl.empty())
@@ -5073,7 +5089,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
                        m_rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex() < nNd );
     }
 
-    ::SetProgressState(m_nProgress, m_pDocShell); // Update
+    m_xProgress->Update(m_nProgress); // Update
 
     // loop for each glossary entry and add dummy section node
     if (pGloss)
@@ -5155,7 +5171,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
         m_bOnLoadingMain = false;
     }
 
-    ::SetProgressState(m_nProgress, m_pDocShell); // Update
+    m_xProgress->Update(m_nProgress); // Update
 
     if (m_pDrawPg && m_pMSDffManager && m_pMSDffManager->GetShapeOrders())
     {
@@ -5243,7 +5259,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     m_xFonts.reset();
     delete m_pAtnNames;
     m_xSprmParser.reset();
-    ::EndProgress(m_pDocShell);
+    m_xProgress.reset();
 
     m_pDataStream = nullptr;
     m_pTableStream = nullptr;
