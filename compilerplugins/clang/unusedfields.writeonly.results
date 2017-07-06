@@ -6,10 +6,6 @@ basctl/source/inc/bastype2.hxx:180
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/dlged.hxx:121
     basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory>
-basic/qa/cppunit/test_scanner.cxx:26
-    (anonymous namespace)::Symbol line sal_uInt16
-basic/qa/cppunit/test_scanner.cxx:27
-    (anonymous namespace)::Symbol col1 sal_uInt16
 basic/source/runtime/dllmgr.hxx:48
     SbiDllMgr impl_ std::unique_ptr<Impl>
 bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:56
@@ -118,26 +114,24 @@ connectivity/source/inc/dbase/DTable.hxx:86
     connectivity::dbase::ODbaseTable::DBFColumn db_adr sal_uInt32
 connectivity/source/inc/OTypeInfo.hxx:31
     connectivity::OTypeInfo aTypeName class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:35
+connectivity/source/inc/OTypeInfo.hxx:32
     connectivity::OTypeInfo aLocalTypeName class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:37
+connectivity/source/inc/OTypeInfo.hxx:34
     connectivity::OTypeInfo nPrecision sal_Int32
-connectivity/source/inc/OTypeInfo.hxx:39
+connectivity/source/inc/OTypeInfo.hxx:36
     connectivity::OTypeInfo nMaximumScale sal_Int16
 cppcanvas/source/mtfrenderer/emfpbrush.hxx:102
     cppcanvas::internal::EMFPBrush wrapMode sal_Int32
-cppcanvas/source/mtfrenderer/emfppen.hxx:41
+cppcanvas/source/mtfrenderer/emfppen.hxx:42
     cppcanvas::internal::EMFPPen pen_transformation struct cppcanvas::internal::XForm
-cppcanvas/source/mtfrenderer/emfppen.hxx:46
+cppcanvas/source/mtfrenderer/emfppen.hxx:47
     cppcanvas::internal::EMFPPen mitterLimit float
-cppcanvas/source/mtfrenderer/emfppen.hxx:48
-    cppcanvas::internal::EMFPPen dashCap sal_Int32
 cppcanvas/source/mtfrenderer/emfppen.hxx:49
+    cppcanvas::internal::EMFPPen dashCap sal_Int32
+cppcanvas/source/mtfrenderer/emfppen.hxx:50
     cppcanvas::internal::EMFPPen dashOffset float
 cppcanvas/source/mtfrenderer/emfppen.hxx:52
     cppcanvas::internal::EMFPPen alignment sal_Int32
-cppcanvas/source/mtfrenderer/emfppen.hxx:54
-    cppcanvas::internal::EMFPPen compoundArray float *
 cppu/source/threadpool/threadpool.cxx:377
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:61
@@ -202,10 +196,6 @@ dbaccess/source/sdbtools/connection/objectnames.hxx:44
     sdbtools::ObjectNames m_aModuleClient class sdbtools::SdbtClient
 dbaccess/source/sdbtools/connection/tablename.cxx:56
     sdbtools::TableName_Impl m_aModuleClient class sdbtools::SdbtClient
-desktop/qa/desktop_lib/test_desktop_lib.cxx:174
-    DesktopLOKTest m_bModified _Bool
-desktop/source/deployment/gui/dp_gui_updatedialog.hxx:203
-    dp_gui::UpdateDialog m_nLastID sal_uInt16
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:120
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/unx/source/splashx.c:369
@@ -234,406 +224,6 @@ extensions/source/scanner/scanner.hxx:46
     ScannerManager maProtector osl::Mutex
 extensions/source/scanner/scanner.hxx:47
     ScannerManager mpData void *
-filter/source/flash/swfexporter.hxx:49
-    swf::ShapeInfo mnWidth sal_Int32
-filter/source/flash/swfexporter.hxx:50
-    swf::ShapeInfo mnHeight sal_Int32
-filter/source/graphic/GraphicExportDialog.hxx:50
-    GraphicExportDialog meFieldUnit enum FieldUnit
-filter/source/graphicfilter/eps/eps.cxx:114
-    PSWriter nBoundingX2 double
-filter/source/graphicfilter/eps/eps.cxx:138
-    PSWriter nNextChrSetId sal_uInt8
-filter/source/graphicfilter/icgm/bitmap.hxx:47
-    CGMBitmapDescriptor mnCompressionMode sal_uInt32
-filter/source/graphicfilter/icgm/bundles.hxx:74
-    MarkerBundle eMarkerType enum MarkerType
-filter/source/graphicfilter/icgm/bundles.hxx:75
-    MarkerBundle nMarkerSize double
-filter/source/graphicfilter/icgm/bundles.hxx:108
-    TextBundle eTextPrecision enum TextPrecision
-filter/source/graphicfilter/icgm/bundles.hxx:109
-    TextBundle nCharacterExpansion double
-filter/source/graphicfilter/icgm/bundles.hxx:110
-    TextBundle nCharacterSpacing double
-filter/source/graphicfilter/icgm/bundles.hxx:129
-    FillBundle nFillPatternIndex long
-filter/source/graphicfilter/icgm/cgm.hxx:61
-    CGM mbMetaFile _Bool
-filter/source/graphicfilter/icgm/cgm.hxx:64
-    CGM mbPictureBody _Bool
-filter/source/graphicfilter/icgm/chart.hxx:33
-    TextEntry nTypeOfText sal_uInt16
-filter/source/graphicfilter/icgm/chart.hxx:34
-    TextEntry nRowOrLineNum sal_uInt16
-filter/source/graphicfilter/icgm/chart.hxx:35
-    TextEntry nColumnNum sal_uInt16
-filter/source/graphicfilter/icgm/chart.hxx:36
-    TextEntry nZoneSize sal_uInt16
-filter/source/graphicfilter/icgm/chart.hxx:37
-    TextEntry nLineType sal_uInt16
-filter/source/graphicfilter/icgm/chart.hxx:38
-    TextEntry nAttributes sal_uInt16
-filter/source/graphicfilter/icgm/chart.hxx:44
-    DataNode nBoxX1 sal_Int16
-filter/source/graphicfilter/icgm/chart.hxx:45
-    DataNode nBoxY1 sal_Int16
-filter/source/graphicfilter/icgm/chart.hxx:46
-    DataNode nBoxX2 sal_Int16
-filter/source/graphicfilter/icgm/chart.hxx:47
-    DataNode nBoxY2 sal_Int16
-filter/source/graphicfilter/icgm/chart.hxx:67
-    CGMChart mnCurrentFileType sal_Int8
-filter/source/graphicfilter/icgm/elements.hxx:35
-    CGMElements nMetaFileVersion long
-filter/source/graphicfilter/icgm/elements.hxx:44
-    CGMElements eScalingMode enum ScalingMode
-filter/source/graphicfilter/icgm/elements.hxx:45
-    CGMElements nScalingFactor double
-filter/source/graphicfilter/icgm/elements.hxx:52
-    CGMElements aVDCExtentMaximum struct FloatRect
-filter/source/graphicfilter/icgm/elements.hxx:57
-    CGMElements eDeviceViewPortMapH enum DeviceViewPortMapH
-filter/source/graphicfilter/icgm/elements.hxx:58
-    CGMElements eDeviceViewPortMapV enum DeviceViewPortMapV
-filter/source/graphicfilter/icgm/elements.hxx:61
-    CGMElements nMitreLimit double
-filter/source/graphicfilter/icgm/elements.hxx:63
-    CGMElements eClipIndicator enum ClipIndicator
-filter/source/graphicfilter/icgm/elements.hxx:83
-    CGMElements eLineCapType enum LineCapType
-filter/source/graphicfilter/icgm/elements.hxx:84
-    CGMElements eLineJoinType enum LineJoinType
-filter/source/graphicfilter/icgm/elements.hxx:103
-    CGMElements nUnderlineColor sal_uInt32
-filter/source/graphicfilter/icgm/elements.hxx:104
-    CGMElements eTextPath enum TextPath
-filter/source/graphicfilter/icgm/elements.hxx:107
-    CGMElements nTextAlignmentHCont double
-filter/source/graphicfilter/icgm/elements.hxx:108
-    CGMElements nTextAlignmentVCont double
-filter/source/graphicfilter/icgm/elements.hxx:109
-    CGMElements nCharacterSetIndex long
-filter/source/graphicfilter/icgm/elements.hxx:110
-    CGMElements nAlternateCharacterSetIndex long
-filter/source/graphicfilter/icgm/elements.hxx:111
-    CGMElements eCharacterCodingA enum CharacterCodingA
-filter/source/graphicfilter/icgm/elements.hxx:127
-    CGMElements bSegmentCount _Bool
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:43
-    DXF2GDIMetaFile nMaxPercent sal_uLong
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:44
-    DXF2GDIMetaFile nLastPercent sal_uLong
-filter/source/graphicfilter/idxf/dxf2mtf.hxx:45
-    DXF2GDIMetaFile nMainEntitiesCount sal_uLong
-filter/source/graphicfilter/idxf/dxfblkrd.hxx:39
-    DXFBlock nFlags long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:66
-    DXFBasicEntity fElevation double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:194
-    DXFTextEntity fOblAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:196
-    DXFTextEntity nGenFlags long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:197
-    DXFTextEntity nHorzJust long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:198
-    DXFTextEntity nVertJust long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:199
-    DXFTextEntity aAlign class DXFVector
-filter/source/graphicfilter/idxf/dxfentrd.hxx:212
-    DXFShapeEntity aP0 class DXFVector
-filter/source/graphicfilter/idxf/dxfentrd.hxx:213
-    DXFShapeEntity fSize double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:215
-    DXFShapeEntity fRotAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:216
-    DXFShapeEntity fXScale double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:217
-    DXFShapeEntity fOblAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:230
-    DXFInsertEntity nAttrFlag long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:237
-    DXFInsertEntity nColCount long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:238
-    DXFInsertEntity nRowCount long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:239
-    DXFInsertEntity fColSpace double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:240
-    DXFInsertEntity fRowSpace double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:253
-    DXFAttDefEntity aP0 class DXFVector
-filter/source/graphicfilter/idxf/dxfentrd.hxx:254
-    DXFAttDefEntity fHeight double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:258
-    DXFAttDefEntity nAttrFlags long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:259
-    DXFAttDefEntity nFieldLen long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:260
-    DXFAttDefEntity fRotAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:261
-    DXFAttDefEntity fXScale double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:262
-    DXFAttDefEntity fOblAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:264
-    DXFAttDefEntity nGenFlags long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:265
-    DXFAttDefEntity nHorzJust long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:266
-    DXFAttDefEntity nVertJust long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:267
-    DXFAttDefEntity aAlign class DXFVector
-filter/source/graphicfilter/idxf/dxfentrd.hxx:285
-    DXFAttribEntity nFieldLen long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:288
-    DXFAttribEntity fOblAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:290
-    DXFAttribEntity nGenFlags long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:291
-    DXFAttribEntity nHorzJust long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:292
-    DXFAttribEntity nVertJust long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:293
-    DXFAttribEntity aAlign class DXFVector
-filter/source/graphicfilter/idxf/dxfentrd.hxx:306
-    DXFPolyLineEntity fElevation double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:308
-    DXFPolyLineEntity fSWidth double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:309
-    DXFPolyLineEntity fEWidth double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:310
-    DXFPolyLineEntity nMeshMCount long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:311
-    DXFPolyLineEntity nMeshNCount long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:312
-    DXFPolyLineEntity nMDensity long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:313
-    DXFPolyLineEntity nNDensity long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:314
-    DXFPolyLineEntity nCSSType long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:331
-    DXFLWPolyLineEntity fConstantWidth double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:332
-    DXFLWPolyLineEntity fStartWidth double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:333
-    DXFLWPolyLineEntity fEndWidth double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:367
-    DXFEdgeTypeCircularArc aCenter class DXFVector
-filter/source/graphicfilter/idxf/dxfentrd.hxx:368
-    DXFEdgeTypeCircularArc fRadius double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:369
-    DXFEdgeTypeCircularArc fStartAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:370
-    DXFEdgeTypeCircularArc fEndAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:371
-    DXFEdgeTypeCircularArc nIsCounterClockwiseFlag sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:378
-    DXFEdgeTypeEllipticalArc aCenter class DXFVector
-filter/source/graphicfilter/idxf/dxfentrd.hxx:379
-    DXFEdgeTypeEllipticalArc aEndPoint class DXFVector
-filter/source/graphicfilter/idxf/dxfentrd.hxx:380
-    DXFEdgeTypeEllipticalArc fLength double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:381
-    DXFEdgeTypeEllipticalArc fStartAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:382
-    DXFEdgeTypeEllipticalArc fEndAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:383
-    DXFEdgeTypeEllipticalArc nIsCounterClockwiseFlag sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:391
-    DXFEdgeTypeSpline nDegree sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:392
-    DXFEdgeTypeSpline nRational sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:393
-    DXFEdgeTypeSpline nPeriodic sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:394
-    DXFEdgeTypeSpline nKnotCount sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:395
-    DXFEdgeTypeSpline nControlCount sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:404
-    DXFBoundaryPathData nHasBulgeFlag sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:405
-    DXFBoundaryPathData nIsClosedFlag sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:407
-    DXFBoundaryPathData fBulge double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:408
-    DXFBoundaryPathData nSourceBoundaryObjects sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:409
-    DXFBoundaryPathData nEdgeCount sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:430
-    DXFHatchEntity nFlags sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:431
-    DXFHatchEntity nAssociativityFlag sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:433
-    DXFHatchEntity nHatchStyle sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:434
-    DXFHatchEntity nHatchPatternType sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:435
-    DXFHatchEntity fHatchPatternAngle double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:436
-    DXFHatchEntity fHatchPatternScale double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:437
-    DXFHatchEntity nHatchDoubleFlag sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:438
-    DXFHatchEntity nHatchPatternDefinitionLines sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:439
-    DXFHatchEntity fPixelSize double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:440
-    DXFHatchEntity nNumberOfSeedPoints sal_Int32
-filter/source/graphicfilter/idxf/dxfentrd.hxx:456
-    DXFVertexEntity fSWidth double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:457
-    DXFVertexEntity fEWidth double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:458
-    DXFVertexEntity fBulge double
-filter/source/graphicfilter/idxf/dxfentrd.hxx:459
-    DXFVertexEntity nFlags long
-filter/source/graphicfilter/idxf/dxfentrd.hxx:460
-    DXFVertexEntity fCFTDir double
-filter/source/graphicfilter/idxf/dxfgrprd.hxx:74
-    DXFGroupReader nFileSize sal_uLong
-filter/source/graphicfilter/idxf/dxftblrd.hxx:39
-    DXFLType nFlags long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:42
-    DXFLType fPatternLength double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:60
-    DXFLayer nFlags long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:79
-    DXFStyle nFlags long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:80
-    DXFStyle fHeight double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:81
-    DXFStyle fWidthFak double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:82
-    DXFStyle fOblAngle double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:83
-    DXFStyle nTextGenFlags long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:84
-    DXFStyle fLastHeightUsed double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:103
-    DXFVPort nFlags long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:104
-    DXFVPort fMinX double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:105
-    DXFVPort fMinY double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:106
-    DXFVPort fMaxX double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:107
-    DXFVPort fMaxY double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:110
-    DXFVPort fSnapBaseX double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:111
-    DXFVPort fSnapBaseY double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:112
-    DXFVPort fSnapSapcingX double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:113
-    DXFVPort fSnapSpacingY double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:114
-    DXFVPort fGridX double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:115
-    DXFVPort fGridY double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:120
-    DXFVPort fLensLength double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:121
-    DXFVPort fFrontClipPlane double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:122
-    DXFVPort fBackClipPlane double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:123
-    DXFVPort fTwistAngle double
-filter/source/graphicfilter/idxf/dxftblrd.hxx:124
-    DXFVPort nStatus long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:125
-    DXFVPort nID long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:126
-    DXFVPort nMode long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:127
-    DXFVPort nCircleZoomPercent long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:128
-    DXFVPort nFastZoom long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:129
-    DXFVPort nUCSICON long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:130
-    DXFVPort nSnap long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:131
-    DXFVPort nGrid long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:132
-    DXFVPort nSnapStyle long
-filter/source/graphicfilter/idxf/dxftblrd.hxx:133
-    DXFVPort nSnapIsopair long
-filter/source/graphicfilter/ios2met/ios2met.cxx:223
-    OSArea eBgMix enum RasterOp
-filter/source/graphicfilter/ipict/ipict.cxx:74
-    PictReaderInternal::Pattern penStyle enum PenStyle
-filter/source/graphicfilter/ipict/ipict.cxx:75
-    PictReaderInternal::Pattern brushStyle enum BrushStyle
-filter/source/graphicfilter/ipsd/ipsd.cxx:44
-    (anonymous) nPad1 sal_uInt32
-filter/source/graphicfilter/ipsd/ipsd.cxx:45
-    (anonymous) nPad2 sal_uInt16
-filter/source/graphicfilter/itga/itga.cxx:33
-    TGAFileHeader nColorMapFirstEntryIndex sal_uInt16
-filter/source/graphicfilter/itga/itga.cxx:36
-    TGAFileHeader nColorMapXOrigin sal_uInt16
-filter/source/graphicfilter/itga/itga.cxx:37
-    TGAFileHeader nColorMapYOrigin sal_uInt16
-filter/source/graphicfilter/itga/itga.cxx:49
-    TGAFileFooter nDeveloperDirectoryOffset sal_uInt32
-filter/source/graphicfilter/itga/itga.cxx:51
-    TGAFileFooter nPadByte sal_uInt8
-filter/source/graphicfilter/itga/itga.cxx:52
-    TGAFileFooter nStringTerminator sal_uInt8
-filter/source/graphicfilter/itga/itga.cxx:60
-    TGAExtension sAuthorName char [41]
-filter/source/graphicfilter/itga/itga.cxx:61
-    TGAExtension sAuthorComment char [324]
-filter/source/graphicfilter/itga/itga.cxx:62
-    TGAExtension sDateTimeStamp char [12]
-filter/source/graphicfilter/itga/itga.cxx:63
-    TGAExtension sJobNameID char [41]
-filter/source/graphicfilter/itga/itga.cxx:64
-    TGAExtension sSoftwareID char [41]
-filter/source/graphicfilter/itga/itga.cxx:65
-    TGAExtension nSoftwareVersionNumber sal_uInt16
-filter/source/graphicfilter/itga/itga.cxx:66
-    TGAExtension nSoftwareVersionLetter sal_uInt8
-filter/source/graphicfilter/itga/itga.cxx:67
-    TGAExtension nKeyColor sal_uInt32
-filter/source/graphicfilter/itga/itga.cxx:68
-    TGAExtension nPixelAspectRatioNumerator sal_uInt16
-filter/source/graphicfilter/itga/itga.cxx:69
-    TGAExtension nPixelAspectRatioDeNumerator sal_uInt16
-filter/source/graphicfilter/itga/itga.cxx:70
-    TGAExtension nGammaValueNumerator sal_uInt16
-filter/source/graphicfilter/itga/itga.cxx:71
-    TGAExtension nGammaValueDeNumerator sal_uInt16
-filter/source/graphicfilter/itga/itga.cxx:72
-    TGAExtension nColorCorrectionOffset sal_uInt32
-filter/source/graphicfilter/itga/itga.cxx:73
-    TGAExtension nPostageStampOffset sal_uInt32
-filter/source/graphicfilter/itga/itga.cxx:74
-    TGAExtension nScanLineOffset sal_uInt32
-filter/source/graphicfilter/itga/itga.cxx:75
-    TGAExtension nAttributesType sal_uInt8
-filter/source/graphicfilter/itga/itga.cxx:92
-    TGAReader mnTGAVersion sal_uLong
-filter/source/graphicfilter/itiff/itiff.cxx:77
-    TIFFReader nCellWidth sal_uInt32
-filter/source/graphicfilter/itiff/itiff.cxx:78
-    TIFFReader nCellLength sal_uInt32
-filter/source/msfilter/eschesdo.hxx:116
-    ImplEESdrWriter mbIsTitlePossible _Bool
-filter/source/svg/svgwriter.hxx:332
-    SVGActionWriter mbClipAttrChanged _Bool
-filter/source/t602/t602filter.hxx:142
-    T602ImportFilter::T602ImportFilter::format602struct tb sal_Int16
-filter/source/t602/t602filter.hxx:144
-    T602ImportFilter::T602ImportFilter::format602struct pn sal_Int16
-filter/source/t602/t602filter.hxx:146
-    T602ImportFilter::T602ImportFilter::format602struct lm sal_Int16
-filter/source/t602/t602filter.hxx:147
-    T602ImportFilter::T602ImportFilter::format602struct rm sal_Int16
-filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:71
-    XMLFilterListBox m_aEnsureResMgr class EnsureResMgr
-filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:130
-    XMLFilterSettingsDialog maEnsureResMgr class EnsureResMgr
 framework/inc/dispatch/oxt_handler.hxx:92
     framework::Oxt_Handler m_xSelfHold css::uno::Reference<css::uno::XInterface>
 framework/inc/services/layoutmanager.hxx:262
@@ -684,16 +274,16 @@ include/svx/bmpmask.hxx:129
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
 include/svx/float3d.hxx:176
     Svx3DWin pControllerItem class Svx3DCtrlItem *
-include/svx/fmsrcimp.hxx:162
-    FmSearchEngine m_xFormatSupplier css::uno::Reference<css::util::XNumberFormatsSupplier>
-include/svx/fmsrcimp.hxx:171
-    FmSearchEngine::FieldInfo nFormatKey sal_uInt32
 include/svx/imapdlg.hxx:118
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
 include/svx/srchdlg.hxx:231
     SvxSearchDialog pSearchController class SvxSearchController *
 include/svx/srchdlg.hxx:232
     SvxSearchDialog pOptionsController class SvxSearchController *
+include/unotest/macros_test.hxx:21
+    TestMacroInfo sFileBaseName class rtl::OUString
+include/unotest/macros_test.hxx:22
+    TestMacroInfo sMacroUrl class rtl::OUString
 include/vcl/menu.hxx:462
     MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/salnativewidgets.hxx:415
@@ -794,8 +384,8 @@ sc/inc/pivot.hxx:74
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:77
     ScDPLabelData mbIsValue _Bool
-sc/qa/unit/ucalc_column.cxx:103
-    aInputs aName const char *
+sc/inc/types.hxx:107
+    sc::MultiDataCellState mnTab1 SCTAB
 sc/source/core/data/cellvalues.cxx:25
     sc::(anonymous namespace)::BlockPos mnEnd size_t
 sc/source/core/data/column4.cxx:1291
@@ -920,6 +510,8 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
 soltools/cpp/cpp.h:143
     macroValidator pMacro Nlist *
+starmath/inc/error.hxx:48
+    SmErrorDesc m_eType enum SmParseError
 starmath/inc/view.hxx:163
     SmCmdBoxWindow aController class SmEditController
 starmath/inc/view.hxx:224
@@ -1088,8 +680,6 @@ vcl/unx/generic/app/wmadaptor.cxx:1270
     _mwmhints input_mode long
 vcl/unx/generic/app/wmadaptor.cxx:1271
     _mwmhints status unsigned long
-vcl/unx/generic/gdi/salbmp.cxx:1081
-    ImplBmpObj mnMemSize sal_uLong
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink
 vcl/unx/gtk/a11y/atkwrapper.hxx:45
@@ -1106,3 +696,5 @@ vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
 writerfilter/source/dmapper/PropertyMap.hxx:185
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
+xmlsecurity/inc/sigstruct.hxx:110
+    SignatureInformation nDigestID sal_Int32

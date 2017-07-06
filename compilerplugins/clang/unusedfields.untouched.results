@@ -25,33 +25,11 @@ connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
 connectivity/source/inc/OTypeInfo.hxx:31
     connectivity::OTypeInfo aTypeName class rtl::OUString
 connectivity/source/inc/OTypeInfo.hxx:32
-    connectivity::OTypeInfo aLiteralPrefix class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:33
-    connectivity::OTypeInfo aLiteralSuffix class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:34
-    connectivity::OTypeInfo aCreateParams class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:35
     connectivity::OTypeInfo aLocalTypeName class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:37
+connectivity/source/inc/OTypeInfo.hxx:34
     connectivity::OTypeInfo nPrecision sal_Int32
-connectivity/source/inc/OTypeInfo.hxx:39
+connectivity/source/inc/OTypeInfo.hxx:36
     connectivity::OTypeInfo nMaximumScale sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:40
-    connectivity::OTypeInfo nMinimumScale sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:43
-    connectivity::OTypeInfo nSearchType sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:44
-    connectivity::OTypeInfo nNumPrecRadix sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:46
-    connectivity::OTypeInfo bCurrency _Bool
-connectivity/source/inc/OTypeInfo.hxx:47
-    connectivity::OTypeInfo bAutoIncrement _Bool
-connectivity/source/inc/OTypeInfo.hxx:48
-    connectivity::OTypeInfo bNullable _Bool
-connectivity/source/inc/OTypeInfo.hxx:49
-    connectivity::OTypeInfo bCaseSensitive _Bool
-connectivity/source/inc/OTypeInfo.hxx:50
-    connectivity::OTypeInfo bUnsigned _Bool
 cppu/source/threadpool/threadpool.cxx:377
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:61
@@ -92,8 +70,10 @@ include/svtools/genericunodialog.hxx:170
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:159
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
-include/svx/fmsrcimp.hxx:162
-    FmSearchEngine m_xFormatSupplier css::uno::Reference<css::util::XNumberFormatsSupplier>
+include/unotest/macros_test.hxx:21
+    TestMacroInfo sFileBaseName class rtl::OUString
+include/unotest/macros_test.hxx:22
+    TestMacroInfo sMacroUrl class rtl::OUString
 include/vcl/uitest/uiobject.hxx:241
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:173
@@ -122,8 +102,6 @@ sal/osl/unx/thread.cxx:115
     osl_thread_global_st m_priority struct osl_thread_priority_st
 sc/inc/formulalogger.hxx:42
     sc::FormulaLogger maMessages std::vector<OUString>
-sc/qa/unit/ucalc_column.cxx:103
-    aInputs aName const char *
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
 sc/source/ui/inc/dataprovider.hxx:46
