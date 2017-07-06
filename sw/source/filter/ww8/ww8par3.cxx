@@ -1739,7 +1739,7 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
                 {
                     std::vector<sal_uInt8> aParaSprms;
                     SwNumRule *pNmRule =
-                        m_pLstManager->GetNumRuleForActivation(nActLFO,
+                        m_xLstManager->GetNumRuleForActivation(nActLFO,
                             nActLevel, aParaSprms);
                     if (pNmRule)
                         UseListIndent(rStyleInf, pNmRule->Get(nActLevel));
@@ -1772,7 +1772,7 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
            )
         {
             std::vector<sal_uInt8> aParaSprms;
-            pNmRule = m_pLstManager->GetNumRuleForActivation(nLFO, nLevel,
+            pNmRule = m_xLstManager->GetNumRuleForActivation(nLFO, nLevel,
                 aParaSprms);
 
             if (pNmRule != nullptr)
@@ -1805,7 +1805,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
     // and only sets the Level. It does not check if there is a NumRule
     // attached to the STYLE !!!
 
-    if (m_pLstManager) // are all list declarations read?
+    if (m_xLstManager) // are all list declarations read?
     {
         SwTextNode* pTextNd = m_pPaM->GetNode().GetTextNode();
         OSL_ENSURE(pTextNd, "No Text-Node at PaM-Position");
@@ -1814,7 +1814,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
 
         std::vector<sal_uInt8> aParaSprms;
         const SwNumRule* pRule = bSetAttr ?
-            m_pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
+            m_xLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
                 aParaSprms, pTextNd) : nullptr;
 
         if (pRule != nullptr || !bSetAttr)

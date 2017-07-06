@@ -4142,7 +4142,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pPrevNumRule(nullptr)
     , m_pPostProcessAttrsInfo(nullptr)
     , m_pWwFib(nullptr)
-    , m_pLstManager(nullptr)
     , m_aTextNodesHavingFirstLineOfstSet()
     , m_aTextNodesHavingLeftIndentSet()
     , m_pAktColl(nullptr)
@@ -4987,7 +4986,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     ::SetProgressState(m_nProgress, m_pDocShell);    // Update
 
-    m_pLstManager = new WW8ListManager( *m_pTableStream, *this );
+    m_xLstManager.reset(new WW8ListManager(*m_pTableStream, *this));
 
     /*
         first (1) import all styles (see WW8PAR2.CXX)
@@ -5297,10 +5296,10 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
                         }
                     }
                     // update graphic bullet information
-                    size_t nCount = m_pLstManager->GetWW8LSTInfoNum();
+                    size_t nCount = m_xLstManager->GetWW8LSTInfoNum();
                     for (size_t i = 0; i < nCount; ++i)
                     {
-                        SwNumRule* pRule = m_pLstManager->GetNumRule(i);
+                        SwNumRule* pRule = m_xLstManager->GetNumRule(i);
                         for (sal_uInt16 j = 0; j < MAXLEVEL; ++j)
                         {
                             SwNumFormat aNumFormat(pRule->Get(j));
@@ -5338,7 +5337,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
                 }
             }
         }
-        DELETEZ( m_pLstManager );
+        m_xLstManager.reset();
     }
 
     SAL_WARN_IF(m_pTableEndPaM, "sw.ww8", "document ended without table ending");
