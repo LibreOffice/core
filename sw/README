@@ -140,3 +140,60 @@ There are multiple model classes involved for fields:
   Its life-cycle is determined by UNO clients outside of sw; it will get
   disposed when the SwFormatField dies.
 
+=== Lists ===
+
+- SwNumFormat (subclass of SvxNumFormat) determines the formatting of a single
+  numbering level.
+
+- SwNumRule (NOT a subclass of SvxNumRule) is a *list style*, containing one
+  SwNumFormat per list level.
+  SwNumRule::maTextNodeList is the list of SwTextNode that have this list style
+  applied.
+
+- SwNumberTreeNode is a base class that represents an abstract node in a
+  hierarchical tree of numbered nodes.
+
+- SwNodeNum is the subclass of SwNumberTreeNode that connects it with an
+  actual SwTextNode and also with a SwNumRule;
+  SwTextNode::mpNodeNum points back in the other direction
+
+- SwList represents a list, which is (mostly) a vector of SwNodeNum trees,
+  one per SwNodes top-level section (why that?).
+
+- IDocumentListsAccess, sw::DocumentListsManager owns all SwList instances,
+  and maintains mappings:
+  + from list-id to SwList
+  + from list style name to SwList (the "default" SwList for that list style)
+
+- IDocumentListItems, sw::DocumentListItemsManager contains a set of all
+  SwNodeNum instances, ordered by SwNode index
+
+- the special Outline numbering rule: SwDoc::mpOutlineRule
+
+- IDocumentOutlineNodes, sw::DocumentOutlineNodesManager maintain
+  a list (which is actually stored in SwNodes::m_pOutlineNodes) of SwTextNodes
+  that either have the Outline numrule applied,
+  or have the RES_PARATR_OUTLINELEVEL item set (note that in the latter case,
+  the SwTextNode does not have a SwNodeNum and is not associated with the
+  SwDoc::mpOutlineRule).
+
+- SwTextNodes and paragraph styles have items/properties:
+  + RES_PARATR_OUTLINELEVEL/"OutlineLevel" to specify an outline level without
+    necessarily having the outline SwNumRule assigned
+  + RES_PARATR_NUMRULE/"NumberingStyleName" the list style to apply; may be
+    empty "" which means no list style (to override inherited value)
+  Only SwTextNode has these items:
+  + RES_PARATR_LIST_ID/"ListId"
+    determines the SwList to which the node is added
+  + RES_PARATR_LIST_LEVEL/"NumberingLevel"
+    the level at which the SwTextNode will appear in the list
+  + RES_PARATR_LIST_ISRESTART/"ParaIsNumberingRestart"
+    restart numbering sequence at this SwTextNode
+  + RES_PARATR_LIST_RESTARTVALUE/"NumberingStartValue"
+    restart numbering sequence at this SwTextNode with this value
+  + RES_PARATR_LIST_ISCOUNTED/"NumberingIsNumber"
+    determines if the node is actually counted in the numbering sequence;
+    these are different from "phantoms" because there's still a SwTextNode.
+
+Note that there is no UNO service to represent a list.
+
