@@ -398,7 +398,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
                 if (rText.getLength() > 1 && rText[1] == 0x09)
                     ++m_pPaM->GetMark()->nContent;
                 ++m_pPaM->GetMark()->nContent;
-                m_pReffingStck->Delete(*m_pPaM);
+                m_xReffingStck->Delete(*m_pPaM);
                 m_rDoc.getIDocumentContentOperations().DeleteRange( *m_pPaM );
                 m_pPaM->DeleteMark();
             }

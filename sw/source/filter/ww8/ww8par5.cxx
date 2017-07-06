@@ -1249,13 +1249,13 @@ long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     }
     else
     {
-        nNo = m_pReffingStck->aFieldVarNames.size()+1;
+        nNo = m_xReffingStck->aFieldVarNames.size()+1;
         sName = "WWSetBkmk" + OUString::number(nNo);
         nNo += m_xPlcxMan->GetBook()->GetIMax();
     }
     m_xReffedStck->NewAttr(*m_pPaM->GetPoint(),
         SwFltBookmark( BookmarkToWriter(sName), rData, nNo ));
-    m_pReffingStck->aFieldVarNames[rOrigName] = sName;
+    m_xReffingStck->aFieldVarNames[rOrigName] = sName;
     return nNo;
 }
 
@@ -1301,9 +1301,9 @@ OUString SwWW8ImplReader::GetMappedBookmark(const OUString &rOrigName)
     //See if there has been a variable set with this name, if so get
     //the pseudo bookmark name that was set with it.
     std::map<OUString, OUString, SwWW8::ltstr>::const_iterator aResult =
-            m_pReffingStck->aFieldVarNames.find(sName);
+            m_xReffingStck->aFieldVarNames.find(sName);
 
-    return (aResult == m_pReffingStck->aFieldVarNames.end())
+    return (aResult == m_xReffingStck->aFieldVarNames.end())
         ? sName : (*aResult).second;
 }
 
@@ -2048,8 +2048,8 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
         must store it until the end of the document to see if it was,
         in which case we'll turn it into a show variable
         */
-        m_pReffingStck->NewAttr( *m_pPaM->GetPoint(), SwFormatField(aField) );
-        m_pReffingStck->SetAttr( *m_pPaM->GetPoint(), RES_TXTATR_FIELD);
+        m_xReffingStck->NewAttr( *m_pPaM->GetPoint(), SwFormatField(aField) );
+        m_xReffingStck->SetAttr( *m_pPaM->GetPoint(), RES_TXTATR_FIELD);
     }
     else
     {
@@ -2095,15 +2095,15 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, OUString& rStr )
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(
         m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), aBkmName, REF_FOOTNOTE, 0,
         REF_ONLYNUMBER );
-    m_pReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField));
-    m_pReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
+    m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField));
+    m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
     if (bAboveBelow)
     {
         SwGetRefField aField2( static_cast<SwGetRefFieldType*>(
             m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),aBkmName, REF_FOOTNOTE, 0,
             REF_UPDOWN );
-        m_pReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField2));
-        m_pReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
+        m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField2));
+        m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
     }
     return eF_ResT::OK;
 }
