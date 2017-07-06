@@ -1966,7 +1966,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     maTmpPos(*pRdr->m_pPaM->GetPoint()),
     mpOldStck(pRdr->m_pCtrlStck),
     mpOldAnchorStck(pRdr->m_pAnchorStck),
-    mpOldRedlines(pRdr->m_pRedlineStack),
+    mxOldRedlines(std::move(pRdr->m_xRedlineStack)),
     mxOldPlcxMan(pRdr->m_xPlcxMan),
     mpWFlyPara(pRdr->m_xWFlyPara.release()),
     mpSFlyPara(pRdr->m_xSFlyPara.release()),
@@ -2001,7 +2001,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     pRdr->m_pCtrlStck = new SwWW8FltControlStack(&pRdr->m_rDoc, pRdr->m_nFieldFlags,
         *pRdr);
 
-    pRdr->m_pRedlineStack = new sw::util::RedlineStack(pRdr->m_rDoc);
+    pRdr->m_xRedlineStack.reset(new sw::util::RedlineStack(pRdr->m_rDoc));
 
     pRdr->m_pAnchorStck = new SwWW8FltAnchorStack(&pRdr->m_rDoc, pRdr->m_nFieldFlags);
 
@@ -2046,9 +2046,8 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->DeleteCtrlStack();
     pRdr->m_pCtrlStck = mpOldStck;
 
-    pRdr->m_pRedlineStack->closeall(*pRdr->m_pPaM->GetPoint());
-    delete pRdr->m_pRedlineStack;
-    pRdr->m_pRedlineStack = mpOldRedlines;
+    pRdr->m_xRedlineStack->closeall(*pRdr->m_pPaM->GetPoint());
+    pRdr->m_xRedlineStack = std::move(mxOldRedlines);
 
     pRdr->DeleteAnchorStack();
     pRdr->m_pAnchorStck = mpOldAnchorStck;
@@ -4126,7 +4125,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_rDoc(rD)
     , m_pPaM(nullptr)
     , m_pCtrlStck(nullptr)
-    , m_pRedlineStack(nullptr)
     , m_pReffedStck(nullptr)
     , m_pReffingStck(nullptr)
     , m_pAnchorStck(nullptr)
@@ -4914,7 +4912,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     m_pCtrlStck = new SwWW8FltControlStack( &m_rDoc, m_nFieldFlags, *this );
 
-    m_pRedlineStack = new sw::util::RedlineStack(m_rDoc);
+    m_xRedlineStack.reset(new sw::util::RedlineStack(m_rDoc));
 
     /*
         RefFieldStck: Keeps track of bookmarks which may be inserted as
@@ -5261,8 +5259,8 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     m_pTableStream = nullptr;
 
     DeleteCtrlStack();
-    m_pRedlineStack->closeall(*m_pPaM->GetPoint());
-    delete m_pRedlineStack;
+    m_xRedlineStack->closeall(*m_pPaM->GetPoint());
+    m_xRedlineStack.reset();
     DeleteAnchorStack();
     DeleteRefStacks();
 

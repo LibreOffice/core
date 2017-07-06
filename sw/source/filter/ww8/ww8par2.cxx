@@ -142,7 +142,7 @@ WW8TabBandDesc::~WW8TabBandDesc()
 class WW8TabDesc
 {
     std::vector<OUString> m_aNumRuleNames;
-    sw::util::RedlineStack *mpOldRedlineStack;
+    std::unique_ptr<sw::util::RedlineStack> mxOldRedlineStack;
 
     SwWW8ImplReader* m_pIo;
 
@@ -234,7 +234,7 @@ public:
     OUString GetNumRuleName() const;
     void SetNumRuleName( const OUString& rName );
 
-    sw::util::RedlineStack* getOldRedlineStack(){ return mpOldRedlineStack; }
+    sw::util::RedlineStack* getOldRedlineStack() { return mxOldRedlineStack.get(); }
 };
 
 void sw::util::RedlineStack::close( const SwPosition& rPos,
@@ -1828,7 +1828,6 @@ wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
 }
 
 WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
-    mpOldRedlineStack(nullptr),
     m_pIo(pIoClass),
     m_pFirstBand(nullptr),
     m_pActBand(nullptr),
@@ -2604,8 +2603,8 @@ void WW8TabDesc::CreateSwTable()
         }
     }
 
-    mpOldRedlineStack = m_pIo->m_pRedlineStack;
-    m_pIo->m_pRedlineStack = new sw::util::RedlineStack(m_pIo->m_rDoc);
+    mxOldRedlineStack = std::move(m_pIo->m_xRedlineStack);
+    m_pIo->m_xRedlineStack.reset(new sw::util::RedlineStack(m_pIo->m_rDoc));
 }
 
 void WW8TabDesc::UseSwTable()
@@ -2817,10 +2816,8 @@ void WW8TabDesc::MoveOutsideTable()
 
 void WW8TabDesc::FinishSwTable()
 {
-    m_pIo->m_pRedlineStack->closeall(*m_pIo->m_pPaM->GetPoint());
-    delete m_pIo->m_pRedlineStack;
-    m_pIo->m_pRedlineStack = mpOldRedlineStack;
-    mpOldRedlineStack = nullptr;
+    m_pIo->m_xRedlineStack->closeall(*m_pIo->m_pPaM->GetPoint());
+    m_pIo->m_xRedlineStack = std::move(mxOldRedlineStack);
 
     WW8DupProperties aDup(m_pIo->m_rDoc,m_pIo->m_pCtrlStck);
     m_pIo->m_pCtrlStck->SetAttr( *m_pIo->m_pPaM->GetPoint(), 0, false);
