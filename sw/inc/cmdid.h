@@ -370,7 +370,8 @@
 #define FN_FORMULA_APPLY            (FN_FORMAT + 158)  /* apply formula */
 #define FN_TABLE_UNSET_READ_ONLY    (FN_FORMAT + 159)  /* undo cell protection for table */
 
-#define FN_FRAME_WRAP_IDEAL         (FN_FORMAT + 163)  /* frame ideal wrapping */
+#define FN_FRAME_WRAP_IDEAL         (FN_FORMAT + 162)  /* frame ideal wrapping */
+#define FN_FRAME_WRAPTHRU_TOGGLE    (FN_FORMAT + 163)  /* toggle frame transparent wrapping */
 #define FN_FRAME_WRAPTHRU_TRANSP    (FN_FORMAT + 164)  /* frame transparent wrapping */
 
 #define FN_FRAME_ALIGN_VERT_ROW_TOP     (FN_FORMAT + 165)  /* */

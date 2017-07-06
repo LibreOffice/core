@@ -486,6 +486,14 @@ interface BaseTextSelection
         Export = FALSE;
     ]
 
+    FN_FRAME_WRAPTHRU_TOGGLE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+        Export = FALSE;
+    ]
+
     FN_FRAME_WRAP_CONTOUR // status()
     [
         ExecMethod = Execute ;
