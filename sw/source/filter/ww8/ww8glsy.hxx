@@ -60,15 +60,17 @@ class WW8Glossary
 public:
     WW8Glossary( tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion, SotStorage *pStg);
     bool Load( SwTextBlocks &rBlocks, bool bSaveRelFile );
-    WW8GlossaryFib *GetFib()        {
-        return pGlossary.get();
+    std::shared_ptr<WW8GlossaryFib>& GetFib()
+    {
+        return xGlossary;
     }
-    sal_uInt16 GetNoStrings() const     {
+    sal_uInt16 GetNoStrings() const
+    {
         return nStrings;
     }
 
 private:
-    std::unique_ptr<WW8GlossaryFib> pGlossary;
+    std::shared_ptr<WW8GlossaryFib> xGlossary;
     tools::SvRef<SotStorageStream> xTableStream;
     tools::SvRef<SotStorageStream> &rStrm;
     tools::SvRef<SotStorage> xStg;

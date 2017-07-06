@@ -4363,7 +4363,7 @@ void WW8RStyle::ImportOldFormatStyles()
     }
 
     rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(
-        pIo->m_pWwFib->m_chseTables, pIo->m_pWwFib->m_lid);
+        pIo->m_xWwFib->m_chseTables, pIo->m_xWwFib->m_lid);
 
     sal_uInt16 cstcStd(0);
     rSt.ReadUInt16( cstcStd );
@@ -4578,7 +4578,7 @@ void WW8RStyle::Import()
     if( pIo->m_nIniFlags & WW8FL_NO_STYLES )
         return;
 
-    if (pIo->m_pWwFib->GetFIBVersion() <= ww::eWW2)
+    if (pIo->m_xWwFib->GetFIBVersion() <= ww::eWW2)
         ImportOldFormatStyles();
     else
         ImportNewFormatStyles();

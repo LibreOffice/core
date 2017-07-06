@@ -862,7 +862,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
 sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStartCp, long nEndCp, ManTypes eType)
 {
     WW8_CP nOffset = 0;
-    m_pWwFib->GetBaseCp(eType, &nOffset); //TODO: check return value
+    m_xWwFib->GetBaseCp(eType, &nOffset); //TODO: check return value
 
     OSL_ENSURE(nStartCp <= nEndCp, "+where's the graphic text (7)?");
     if (nStartCp == nEndCp)
@@ -2391,7 +2391,7 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTable
 
     if ( m_bVer8 )
     {
-        const sal_uInt16 nWWVersion = m_pWwFib->m_nProduct & 0xE000;
+        const sal_uInt16 nWWVersion = m_xWwFib->m_nProduct & 0xE000;
         switch ( nWWVersion )
         {
             case 0x0000: // version 8 aka Microsoft Word 97
@@ -2441,7 +2441,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     ::SetProgressState(m_nProgress, m_pDocShell);     // Update
 
     m_nDrawCpO = 0;
-    m_bDrawCpOValid = m_pWwFib->GetBaseCp(m_xPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX, &m_nDrawCpO);
+    m_bDrawCpOValid = m_xWwFib->GetBaseCp(m_xPlcxMan->GetManType() == MAN_HDFT ? MAN_TXBX_HDFT : MAN_TXBX, &m_nDrawCpO);
 
     GrafikCtor();
 
