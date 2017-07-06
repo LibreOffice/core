@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
@@ -295,6 +296,14 @@ void VbaEventsHelperBase::ensureVBALibrary()
         uno::Reference< beans::XPropertySet > xModelProps( mxModel, uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameAccess > xBasicLibs( xModelProps->getPropertyValue(
             "BasicLibraries" ), uno::UNO_QUERY_THROW );
+
+        if(!xBasicLibs->hasByName(maLibraryName) )
+        {
+            uno::Reference< script::XLibraryContainer > xLibContainer(
+                    xModelProps->getPropertyValue("BasicLibraries"), uno::UNO_QUERY_THROW);
+            xLibContainer->createLibrary(maLibraryName);
+        }
+
         mxModuleInfos.set( xBasicLibs->getByName( maLibraryName ), uno::UNO_QUERY_THROW );
         // listen to changes in the VBA source code
         uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModuleInfos, uno::UNO_QUERY_THROW );
