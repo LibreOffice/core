@@ -1792,7 +1792,7 @@ void SwWW8ImplReader::ImportDop()
     if (xDocuProps.is())
     {
         DateTime aLastPrinted(
-            msfilter::util::DTTM2DateTime(m_pWDop->dttmLastPrint));
+            msfilter::util::DTTM2DateTime(m_xWDop->dttmLastPrint));
         ::util::DateTime uDT = aLastPrinted.GetUNODateTime();
         xDocuProps->setPrintDate(uDT);
     }
@@ -1801,12 +1801,12 @@ void SwWW8ImplReader::ImportDop()
 
     // #i78951# - remember the unknown compatibility options
     // so as to export them out
-    m_rDoc.getIDocumentSettingAccess().Setn32DummyCompatibilityOptions1( m_pWDop->GetCompatibilityOptions());
-    m_rDoc.getIDocumentSettingAccess().Setn32DummyCompatibilityOptions2( m_pWDop->GetCompatibilityOptions2());
+    m_rDoc.getIDocumentSettingAccess().Setn32DummyCompatibilityOptions1(m_xWDop->GetCompatibilityOptions());
+    m_rDoc.getIDocumentSettingAccess().Setn32DummyCompatibilityOptions2(m_xWDop->GetCompatibilityOptions2());
 
     // The distance between two paragraphs is the sum of the bottom distance of
     // the first paragraph and the top distance of the second one
-    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PARA_SPACE_MAX, m_pWDop->fDontUseHTMLAutoSpacing);
+    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PARA_SPACE_MAX, m_xWDop->fDontUseHTMLAutoSpacing);
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES, true );
     // move tabs on alignment
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::TAB_COMPAT, true);
@@ -1814,7 +1814,7 @@ void SwWW8ImplReader::ImportDop()
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::TABS_RELATIVE_TO_INDENT, false);
 
     // Import Default Tabs
-    long nDefTabSiz = m_pWDop->dxaTab;
+    long nDefTabSiz = m_xWDop->dxaTab;
     if( nDefTabSiz < 56 )
         nDefTabSiz = 709;
 
@@ -1825,18 +1825,18 @@ void SwWW8ImplReader::ImportDop()
     m_rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
 
     // Import zoom factor
-    if (m_pWDop->wScaleSaved)
+    if (m_xWDop->wScaleSaved)
     {
         //Import zoom type
         sal_Int16 nZoomType;
-        switch (m_pWDop->zkSaved) {
+        switch (m_xWDop->zkSaved) {
             case 1:  nZoomType = sal_Int16(SvxZoomType::WHOLEPAGE); break;
             case 2:  nZoomType = sal_Int16(SvxZoomType::PAGEWIDTH); break;
             case 3:  nZoomType = sal_Int16(SvxZoomType::OPTIMAL);   break;
             default: nZoomType = sal_Int16(SvxZoomType::PERCENT);   break;
         }
         uno::Sequence<beans::PropertyValue> aViewProps( comphelper::InitPropertySequence({
-                { "ZoomFactor", uno::Any(sal_Int16(m_pWDop->wScaleSaved)) },
+                { "ZoomFactor", uno::Any(sal_Int16(m_xWDop->wScaleSaved)) },
                 { "VisibleBottom", uno::Any(sal_Int32(0)) },
                 { "ZoomType", uno::Any(nZoomType) }
             }));
@@ -1849,13 +1849,13 @@ void SwWW8ImplReader::ImportDop()
         xViewDataSupplier->setViewData(xIndexAccess);
     }
 
-    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_VIRTUAL_DEVICE, !m_pWDop->fUsePrinterMetrics);
+    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_VIRTUAL_DEVICE, !m_xWDop->fUsePrinterMetrics);
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::USE_HIRES_VIRTUAL_DEVICE, true);
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::ADD_FLY_OFFSETS, true );
-    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::ADD_EXT_LEADING, !m_pWDop->fNoLeading);
+    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::ADD_EXT_LEADING, !m_xWDop->fNoLeading);
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::OLD_NUMBERING, false);
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING, false); // #i47448#
-    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, !m_pWDop->fExpShRtn); // #i49277#, #i56856#
+    m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, !m_xWDop->fExpShRtn); // #i49277#, #i56856#
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT, false);  // #i53199#
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::OLD_LINE_SPACING, false);
 
@@ -1890,7 +1890,7 @@ void SwWW8ImplReader::ImportDop()
 
     // Import magic doptypography information, if its there
     if (m_pWwFib->m_nFib > 105)
-        ImportDopTypography(m_pWDop->doptypography);
+        ImportDopTypography(m_xWDop->doptypography);
 
     // disable form design mode to be able to use imported controls directly
     // #i31239# always disable form design mode, not only in protected docs
@@ -1914,12 +1914,12 @@ void SwWW8ImplReader::ImportDop()
     }
 
     // Still allow editing of form fields.
-    if (!m_pWDop->fProtEnabled)
-        m_pDocShell->SetModifyPasswordHash(m_pWDop->lKeyProtDoc);
+    if (!m_xWDop->fProtEnabled)
+        m_pDocShell->SetModifyPasswordHash(m_xWDop->lKeyProtDoc);
 
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
     if (rOpt.IsUseEnhancedFields())
-        m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_FORM, m_pWDop->fProtEnabled );
+        m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_FORM, m_xWDop->fProtEnabled );
 }
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
@@ -2381,7 +2381,7 @@ void SwWW8ImplReader::AppendTextNode(SwPosition& rPos)
         pRule = sw::util::GetNumRuleFromTextNode(*pText);
 
     if (
-         pRule && !m_pWDop->fDontUseHTMLAutoSpacing &&
+         pRule && !m_xWDop->fDontUseHTMLAutoSpacing &&
          (m_bParaAutoBefore || m_bParaAutoAfter)
        )
     {
@@ -2397,7 +2397,7 @@ void SwWW8ImplReader::AppendTextNode(SwPosition& rPos)
         // If the previous numbering rule was different we need
         // to insert a space after the previous paragraph
         if((pRule != m_pPrevNumRule) && m_pPreviousNumPaM)
-            SetLowerSpacing(*m_pPreviousNumPaM, GetParagraphAutoSpace(m_pWDop->fDontUseHTMLAutoSpacing));
+            SetLowerSpacing(*m_pPreviousNumPaM, GetParagraphAutoSpace(m_xWDop->fDontUseHTMLAutoSpacing));
 
         // cache current paragraph
         if(m_pPreviousNumPaM)
@@ -2413,7 +2413,7 @@ void SwWW8ImplReader::AppendTextNode(SwPosition& rPos)
     {
         // If the previous paragraph has numbering but the current one does not
         // we need to add a space after the previous paragraph
-        SetLowerSpacing(*m_pPreviousNumPaM, GetParagraphAutoSpace(m_pWDop->fDontUseHTMLAutoSpacing));
+        SetLowerSpacing(*m_pPreviousNumPaM, GetParagraphAutoSpace(m_xWDop->fDontUseHTMLAutoSpacing));
         delete m_pPreviousNumPaM;
         m_pPreviousNumPaM = nullptr;
         m_pPrevNumRule = nullptr;
@@ -2432,7 +2432,7 @@ void SwWW8ImplReader::AppendTextNode(SwPosition& rPos)
     // If this is the first paragraph in the document and
     // Auto-spacing before paragraph is set,
     // set the upper spacing value to 0
-    if(m_bParaAutoBefore && m_bFirstPara && !m_pWDop->fDontUseHTMLAutoSpacing)
+    if(m_bParaAutoBefore && m_bFirstPara && !m_xWDop->fDontUseHTMLAutoSpacing)
         SetUpperSpacing(*m_pPaM, 0);
 
     m_bFirstPara = false;
@@ -4142,7 +4142,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pPrevNumRule(nullptr)
     , m_pPostProcessAttrsInfo(nullptr)
     , m_pWwFib(nullptr)
-    , m_pWDop(nullptr)
     , m_pLstManager(nullptr)
     , m_pSBase(nullptr)
     , m_aTextNodesHavingFirstLineOfstSet()
@@ -4266,10 +4265,10 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
 
     SwFrameFormat &rFormat = rPage.GetMaster();
 
-    if(mrReader.m_pWDop->fUseBackGroundInAllmodes) // #i56806# Make sure mrReader is initialized
+    if(mrReader.m_xWDop->fUseBackGroundInAllmodes) // #i56806# Make sure mrReader is initialized
         mrReader.GrafikCtor();
 
-    if (mrReader.m_pWDop->fUseBackGroundInAllmodes && mrReader.m_pMSDffManager)
+    if (mrReader.m_xWDop->fUseBackGroundInAllmodes && mrReader.m_pMSDffManager)
     {
         tools::Rectangle aRect(0, 0, 100, 100); // A dummy, we don't care about the size
         SvxMSDffImportData aData(aRect);
@@ -4305,12 +4304,12 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
 
 void wwSectionManager::SetUseOn(wwSection &rSection)
 {
-    bool bMirror = mrReader.m_pWDop->fMirrorMargins ||
-        mrReader.m_pWDop->doptypography.f2on1;
+    bool bMirror = mrReader.m_xWDop->fMirrorMargins ||
+        mrReader.m_xWDop->doptypography.f2on1;
 
     UseOnPage eUseBase = bMirror ? UseOnPage::Mirror : UseOnPage::All;
     UseOnPage eUse = eUseBase;
-    if (!mrReader.m_pWDop->fFacingPages)
+    if (!mrReader.m_xWDop->fFacingPages)
         eUse |= UseOnPage::HeaderShare | UseOnPage::FooterShare;
     if (!rSection.HasTitlePage())
         eUse |= UseOnPage::FirstShare;
@@ -4427,7 +4426,7 @@ void wwSectionManager::InsertSegments()
             || aIter->maSep.dxaLeft != aPrev->maSep.dxaLeft || aIter->maSep.dxaRight != aPrev->maSep.dxaRight )
             bInsertPageDesc = true;
         bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disables this...
-        if (bUseEnhFields && mrReader.m_pWDop->fProtEnabled && aIter->IsNotProtected())
+        if (bUseEnhFields && mrReader.m_xWDop->fProtEnabled && aIter->IsNotProtected())
         {
             // here we have the special case that the whole document is protected, with the exception of this section.
             // I want to address this when I do the section rework, so for the moment we disable the overall protection then...
@@ -4580,7 +4579,7 @@ void wwSectionManager::InsertSegments()
             if (pRet)
             {
                 // Set the columns to be UnBalanced if that compatibility option is set
-                if (mrReader.m_pWDop->fNoColumnBalance)
+                if (mrReader.m_xWDop->fNoColumnBalance)
                     pRet->SetFormatAttr(SwFormatNoBalancedColumns(true));
                 else
                 {
@@ -4949,8 +4948,8 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     m_xFonts.reset(new WW8Fonts(*m_pTableStream, *m_pWwFib));
 
     // Document Properties
-    m_pWDop = new WW8Dop( *m_pTableStream, m_pWwFib->m_nFib, m_pWwFib->m_fcDop,
-        m_pWwFib->m_lcbDop );
+    m_xWDop.reset(new WW8Dop(*m_pTableStream, m_pWwFib->m_nFib, m_pWwFib->m_fcDop,
+        m_pWwFib->m_lcbDop));
 
     if (m_bNewDoc)
         ImportDop();
@@ -5034,26 +5033,26 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
         aInfo = m_rDoc.GetFootnoteInfo(); // Copy-Ctor private
 
         aInfo.ePos = FTNPOS_PAGE;
-        aInfo.eNum = eNumA[m_pWDop->rncFootnote];
-        sal_uInt16 nfcFootnoteRef = m_pWDop->nfcFootnoteRef & 0xF;
+        aInfo.eNum = eNumA[m_xWDop->rncFootnote];
+        sal_uInt16 nfcFootnoteRef = m_xWDop->nfcFootnoteRef & 0xF;
         aInfo.aFormat.SetNumberingType( eNumTA[nfcFootnoteRef] );
-        if( m_pWDop->nFootnote )
-            aInfo.nFootnoteOffset = m_pWDop->nFootnote - 1;
+        if( m_xWDop->nFootnote )
+            aInfo.nFootnoteOffset = m_xWDop->nFootnote - 1;
         m_rDoc.SetFootnoteInfo( aInfo );
     }
     if( m_pSBase->AreThereEndnotes() )
     {
         SwEndNoteInfo aInfo;
         aInfo = m_rDoc.GetEndNoteInfo(); // Same as for Footnote
-        sal_uInt16 nfcEdnRef = m_pWDop->nfcEdnRef & 0xF;
+        sal_uInt16 nfcEdnRef = m_xWDop->nfcEdnRef & 0xF;
         aInfo.aFormat.SetNumberingType( eNumTA[nfcEdnRef] );
-        if( m_pWDop->nEdn )
-            aInfo.nFootnoteOffset = m_pWDop->nEdn - 1;
+        if( m_xWDop->nEdn )
+            aInfo.nFootnoteOffset = m_xWDop->nEdn - 1;
         m_rDoc.SetEndNoteInfo( aInfo );
     }
 
     if( m_pWwFib->m_lcbPlcfhdd )
-        m_xHdFt.reset(new WW8PLCF_HdFt(m_pTableStream, *m_pWwFib, *m_pWDop));
+        m_xHdFt.reset(new WW8PLCF_HdFt(m_pTableStream, *m_pWwFib, *m_xWDop));
 
     if (!m_bNewDoc)
     {
@@ -5227,9 +5226,9 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     if (m_bNewDoc)
     {
-        if( m_pWDop->fRevMarking )
+        if( m_xWDop->fRevMarking )
             eMode |= RedlineFlags::On;
-        if( m_pWDop->fRMView )
+        if( m_xWDop->fRMView )
             eMode |= RedlineFlags::ShowDelete;
     }
 
@@ -5246,7 +5245,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     DELETEZ( m_pMSDffManager );
     m_xHdFt.reset();
     DELETEZ( m_pSBase );
-    delete m_pWDop;
+    m_xWDop.reset();
     m_xFonts.reset();
     delete m_pAtnNames;
     m_xSprmParser.reset();
