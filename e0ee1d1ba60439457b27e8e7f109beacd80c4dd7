@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_0574739a",
+        "filename": "hwpfilter/source/hwpfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-06T12:47:29Z",
+      "side": 1,
+      "message": "i\u0027d be more happy if we abort the import here instead of continuing with an invalid file",
+      "revId": "e0ee1d1ba60439457b27e8e7f109beacd80c4dd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
