@@ -582,7 +582,7 @@ private:
     std::deque<WW8FieldEntry> maOldFieldStack;
     SwWW8FltControlStack* mpOldStck;
     SwWW8FltAnchorStack* mpOldAnchorStck;
-    sw::util::RedlineStack *mpOldRedlines;
+    std::unique_ptr<sw::util::RedlineStack> mxOldRedlines;
     std::shared_ptr<WW8PLCFMan> mxOldPlcxMan;
     WW8FlyPara* mpWFlyPara;
     WW8SwFlyPara* mpSFlyPara;
@@ -1087,7 +1087,7 @@ private:
     This stack is for redlines, because their sequence of discovery can
     be out of order of their order of insertion into the document.
     */
-    sw::util::RedlineStack *m_pRedlineStack;
+    std::unique_ptr<sw::util::RedlineStack> m_xRedlineStack;
 
     /*
     This stack is for fields that get referenced later, e.g. BookMarks and TOX.

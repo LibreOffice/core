@@ -2644,7 +2644,7 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
         }
         else if (rAttr.Which() == RES_FLTR_REDLINE)
         {
-            m_pRedlineStack->open(*m_pPaM->GetPoint(), rAttr);
+            m_xRedlineStack->open(*m_pPaM->GetPoint(), rAttr);
         }
         else
         {
