@@ -2012,7 +2012,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
 
     if (nStartCp != -1)
     {
-        pRdr->m_xPlcxMan.reset(new WW8PLCFMan(pRdr->m_pSBase,
+        pRdr->m_xPlcxMan.reset(new WW8PLCFMan(pRdr->m_xSBase.get(),
             mxOldPlcxMan->GetManType(), nStartCp));
     }
 
@@ -2586,7 +2586,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
                 // Table is considered to be imported into a fly frame and we
                 // know where the end of the table is.
                 bool bIsUnicode;
-                WW8_FC nFc = m_pSBase->WW8Cp2Fc(pPap->Where(), &bIsUnicode);
+                WW8_FC nFc = m_xSBase->WW8Cp2Fc(pPap->Where(), &bIsUnicode);
                 sal_uInt64 nPos = m_pStrm->Tell();
                 m_pStrm->Seek(nFc);
                 sal_uInt16 nUChar = 0;
@@ -2931,7 +2931,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     if (nRequestedStrLen <= 0)
         return true;
 
-    sal_Int32 nRequestedPos = m_pSBase->WW8Cp2Fc(nCpOfs+rPos, &m_bIsUnicode);
+    sal_Int32 nRequestedPos = m_xSBase->WW8Cp2Fc(nCpOfs+rPos, &m_bIsUnicode);
     bool bValidPos = checkSeek(*m_pStrm, nRequestedPos);
     OSL_ENSURE(bValidPos, "Document claimed to have more text than available");
     if (!bValidPos)
@@ -3459,7 +3459,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     // Reset Unicode flag and correct FilePos if needed.
     // Note: Seek is not expensive, as we're checking inline whether or not
     // the correct FilePos has already been reached.
-    std::size_t nRequestedPos = m_pSBase->WW8Cp2Fc(nCpOfs+nPosCp, &m_bIsUnicode);
+    std::size_t nRequestedPos = m_xSBase->WW8Cp2Fc(nCpOfs+nPosCp, &m_bIsUnicode);
     if (!checkSeek(*m_pStrm, nRequestedPos))
         return false;
 
@@ -3786,7 +3786,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
         }
     }
 
-    sal_Int32 nRequestedPos = m_pSBase->WW8Cp2Fc(m_xPlcxMan->GetCpOfs() + rTextPos, &m_bIsUnicode);
+    sal_Int32 nRequestedPos = m_xSBase->WW8Cp2Fc(m_xPlcxMan->GetCpOfs() + rTextPos, &m_bIsUnicode);
     bool bValidPos = checkSeek(*m_pStrm, nRequestedPos);
     SAL_WARN_IF(!bValidPos, "sw.ww8", "Document claimed to have text at an invalid position, skip attributes for region");
 
@@ -3930,7 +3930,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
     m_bSpec = false;
     m_bPgSecBreak = false;
 
-    m_xPlcxMan.reset(new WW8PLCFMan(m_pSBase, nType, nStartCp));
+    m_xPlcxMan.reset(new WW8PLCFMan(m_xSBase.get(), nType, nStartCp));
     long nCpOfs = m_xPlcxMan->GetCpOfs(); // Offset for Header/Footer, Footnote
 
     WW8_CP nNext = m_xPlcxMan->Where();
@@ -3938,7 +3938,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
     sal_uInt8 nDropLines = 0;
     SwCharFormat* pNewSwCharFormat = nullptr;
     const SwCharFormat* pFormat = nullptr;
-    m_pStrm->Seek( m_pSBase->WW8Cp2Fc( nStartCp + nCpOfs, &m_bIsUnicode ) );
+    m_pStrm->Seek(m_xSBase->WW8Cp2Fc(nStartCp + nCpOfs, &m_bIsUnicode));
 
     WW8_CP l = nStartCp;
     const WW8_CP nMaxPossible = WW8_CP_MAX-nStartCp;
@@ -4143,7 +4143,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pPostProcessAttrsInfo(nullptr)
     , m_pWwFib(nullptr)
     , m_pLstManager(nullptr)
-    , m_pSBase(nullptr)
     , m_aTextNodesHavingFirstLineOfstSet()
     , m_aTextNodesHavingLeftIndentSet()
     , m_pAktColl(nullptr)
@@ -5010,7 +5009,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     if (!m_vColl.empty())
         SetOutlineStyles();
 
-    m_pSBase = new WW8ScannerBase(m_pStrm,m_pTableStream,m_pDataStream,m_pWwFib);
+    m_xSBase.reset(new WW8ScannerBase(m_pStrm,m_pTableStream,m_pDataStream,m_pWwFib));
 
     static const SvxNumType eNumTA[16] =
     {
@@ -5022,7 +5021,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
         SVX_NUM_ARABIC, SVX_NUM_ARABIC
     };
 
-    if (m_pSBase->AreThereFootnotes())
+    if (m_xSBase->AreThereFootnotes())
     {
         static const SwFootnoteNum eNumA[4] =
         {
@@ -5040,7 +5039,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
             aInfo.nFootnoteOffset = m_xWDop->nFootnote - 1;
         m_rDoc.SetFootnoteInfo( aInfo );
     }
-    if( m_pSBase->AreThereEndnotes() )
+    if (m_xSBase->AreThereEndnotes())
     {
         SwEndNoteInfo aInfo;
         aInfo = m_rDoc.GetEndNoteInfo(); // Same as for Footnote
@@ -5244,7 +5243,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     GrafikDtor();
     DELETEZ( m_pMSDffManager );
     m_xHdFt.reset();
-    DELETEZ( m_pSBase );
+    m_xSBase.reset();
     m_xWDop.reset();
     m_xFonts.reset();
     delete m_pAtnNames;
