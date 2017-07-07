@@ -23,15 +23,15 @@
 
 String STR_LOCKFAILED_TITLE
 {
-    Text = "Document Could Not Be Locked";
+    Text [ en-US ] = "Document Could Not Be Locked";
 };
 String STR_LOCKFAILED_MSG
 {
-    Text = "The lock file could not be created for exclusive access by %PRODUCTNAME, due to missing permission to create a lock file on that file location or lack of free disk space.";
+    Text [ en-US ] = "The lock file could not be created for exclusive access by %PRODUCTNAME, due to missing permission to create a lock file on that file location or lack of free disk space.";
 };
 String STR_LOCKFAILED_OPENREADONLY_BTN
 {
-    Text = "Open ~Read-Only";
+    Text [ en-US ] = "Open ~Read-Only";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
