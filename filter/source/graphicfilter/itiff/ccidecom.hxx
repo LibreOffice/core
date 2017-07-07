@@ -22,6 +22,8 @@
 
 #include <sal/types.h>
 #include <tools/solar.h>
+#include <array>
+#include <memory>
 
 #define CCI_OPTION_2D               1       // 2D compression (instead of 1D)
 #define CCI_OPTION_EOL              2       // There are EOL-Codes at the end of each line.
@@ -98,7 +100,7 @@ private:
 
     bool bStatus;
 
-    sal_uInt8* pByteSwap;
+    std::unique_ptr<sal_uInt8[]> pByteSwap;
 
     SvStream * pIStream;
 
@@ -110,15 +112,15 @@ private:
 
     bool bFirstEOL;
 
-    CCILookUpTableEntry * pWhiteLookUp;
-    CCILookUpTableEntry * pBlackLookUp;
-    CCILookUpTableEntry * p2DModeLookUp;
-    CCILookUpTableEntry * pUncompLookUp;
+    std::array<CCILookUpTableEntry, 1<<13> pWhiteLookUp;
+    std::array<CCILookUpTableEntry, 1<<13> pBlackLookUp;
+    std::array<CCILookUpTableEntry, 1<<10> p2DModeLookUp;
+    std::array<CCILookUpTableEntry, 1<<11> pUncompLookUp;
 
     sal_uLong nInputBitsBuf;
     sal_uInt16 nInputBitsBufSize;
 
-    sal_uInt8 * pLastLine;
+    std::unique_ptr<sal_uInt8[]> pLastLine;
     sal_uLong nLastLineSize;
 };
 
