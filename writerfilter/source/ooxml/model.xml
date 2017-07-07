@@ -14178,6 +14178,11 @@
         <attribute name="rsidRDefault">
           <data type="string"/>
         </attribute>
+        <!-- tdf#108714 : allow <w:br> at paragraph level (despite this is illegal according to ECMA-376-1:2016) - bug-to-bug compatibility with Word -->
+        <element name="br">
+          <ref name="CT_Br_OutOfOrder"/>
+        </element>
+        <!-- end tdf#108714 -->
       </define>
       <define name="ST_TblWidth">
         <choice>
