@@ -33,6 +33,8 @@
 #include "cgm.hxx"
 #include <chart.hxx>
 #include <tools/poly.hxx>
+#include <array>
+#include <memory>
 
 class CGM;
 class CGMBitmapDescriptor;
@@ -43,12 +45,14 @@ class CGMImpressOutAct
 
     sal_uInt32                  mnGroupActCount;        // grouping
     sal_uInt32                  mnGroupLevel;
-    sal_uInt32*                 mpGroupLevel;
+    std::array<sal_uInt32, CGM_OUTACT_MAX_GROUP_LEVEL>
+                                mpGroupLevel;
 
     std::vector<PolyFlags>      maFlags;
     std::vector<Point>          maPoints;
     tools::PolyPolygon          maPolyPolygon;
-    css::awt::Gradient*         mpGradient;
+    std::unique_ptr<css::awt::Gradient>
+                                mpGradient;
 
     CGM*                        mpCGM;
 

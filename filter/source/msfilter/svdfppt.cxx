@@ -520,7 +520,6 @@ PptSlidePersistEntry::~PptSlidePersistEntry()
     delete pStyleSheet;
     delete pHeaderFooterEntry;
     delete pSolverContainer;
-    delete[] pPresentationObjects;
 };
 
 SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const OUString& rBaseURL ) :
@@ -997,8 +996,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 {
                     if ( !rPersistEntry.pPresentationObjects )
                     {
-                        rPersistEntry.pPresentationObjects = new sal_uInt32[ PPT_STYLESHEETENTRYS ];
-                        memset( rPersistEntry.pPresentationObjects, 0, PPT_STYLESHEETENTRYS * 4 );
+                        rPersistEntry.pPresentationObjects.reset( new sal_uInt32[ PPT_STYLESHEETENTRYS ] );
+                        memset( rPersistEntry.pPresentationObjects.get(), 0, PPT_STYLESHEETENTRYS * 4 );
                     }
                     if ( !rPersistEntry.pPresentationObjects[ (int)nDestinationInstance ] )
                         rPersistEntry.pPresentationObjects[ (int)nDestinationInstance ] = rObjData.rSpHd.GetRecBegFilePos();
@@ -1355,12 +1354,12 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                                                         // we are reading this block later, so we do not have access yet)
 
         if ( bOk && ( nPersistPtrAnz < ( SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) -1 ) )
-            pPersistPtr = new (std::nothrow) sal_uInt32[ nPersistPtrAnz + 1 ];
+            pPersistPtr.reset( new (std::nothrow) sal_uInt32[ nPersistPtrAnz + 1 ] );
         if ( !pPersistPtr )
             bOk = false;
         if ( bOk )
         {
-            memset( pPersistPtr, 0x00, (nPersistPtrAnz+1) * sizeof(sal_uInt32) );
+            memset( pPersistPtr.get(), 0x00, (nPersistPtrAnz+1) * sizeof(sal_uInt32) );
 
             // SJ: new search mechanism from bottom to top (Issue 21122)
             PptUserEditAtom aCurrentEditAtom( aUserEditAtom );
@@ -1654,7 +1653,6 @@ SdrPowerPointImport::~SdrPowerPointImport()
     delete m_pMasterPages;
     delete m_pSlidePages;
     delete m_pNotePages;
-    delete[] pPersistPtr;
 }
 
 bool PPTConvertOCXControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc,
