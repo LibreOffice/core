@@ -13,33 +13,16 @@
 #include <memory>
 #include <vector>
 
+#include <rtl/strbuf.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/hash.hxx>
-#include <vcl/pdfwriter.hxx>
-#include <com/sun/star/security/XCertificate.hpp>
+#include "com/sun/star/uno/Reference.hxx"
 
-#if HAVE_FEATURE_NSS && !defined(_WIN32)
-// NSS headers for PDF signing
-#include "nss.h"
-#include "cert.h"
-#include "hasht.h"
-#include "secerr.h"
-#include "sechash.h"
-#include "cms.h"
-#include "cmst.h"
-
-// We use curl for RFC3161 time stamp requests
-#include <curl/curl.h>
-#endif
-
-#ifdef _WIN32
-// WinCrypt headers for PDF signing
-// Note: this uses Windows 7 APIs and requires the relevant data types
-#include <prewin.h>
-#include <wincrypt.h>
-#include <postwin.h>
-#include <comphelper/windowserrorstring.hxx>
-#endif
+namespace com {
+namespace sun {
+namespace star {
+namespace security {
+    class XCertificate; }
+}}}
 
 namespace comphelper {
 
@@ -63,6 +46,9 @@ public:
     {
         m_dataBlocks.emplace_back(pData, size);
     }
+
+    void SetSignTSA(const OUString& tsa) { m_aSignTSA = tsa; }
+    void SetSignPassword(const OUString& password) { m_aSignPassword = password;; }
 
     /// Signs one or more data blocks (as a single, contiguous, array).
     /// Returns the signature (in PKCS#7 format) as string (hex).
