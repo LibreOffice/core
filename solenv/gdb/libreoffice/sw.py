@@ -246,7 +246,7 @@ class BigPtrArrayPrinter(object):
                 raise StopIteration()
 
             name = str(self.pos)
-            node = self.block['pData'][self.pos - self.block['nStart']]
+            node = self.block['mvData']['_M_elems'][self.pos - self.block['nStart']]
             value =  self._node_value(node)
             if self.pos == self.block['nEnd']:
                 self._next_block()
