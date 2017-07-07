@@ -51,6 +51,7 @@
 #include "xestring.hxx"
 #include "conditio.hxx"
 
+#include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <o3tl/make_unique.hxx>
@@ -1110,7 +1111,7 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
     if (maDxfData.eWeight)
     {
         rStyleSheet->singleElement(XML_b,
-                XML_val, XclXmlUtils::ToPsz10(maDxfData.eWeight.get() != WEIGHT_NORMAL),
+                XML_val, ToPsz10(maDxfData.eWeight.get() != WEIGHT_NORMAL),
                 FSEND);
     }
 
@@ -1118,7 +1119,7 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
     {
         bool bItalic = (maDxfData.eItalic.get() == ITALIC_OBLIQUE) || (maDxfData.eItalic.get() == ITALIC_NORMAL);
         rStyleSheet->singleElement(XML_i,
-                XML_val, XclXmlUtils::ToPsz10(bItalic),
+                XML_val, ToPsz10(bItalic),
                 FSEND);
     }
 
@@ -1130,21 +1131,21 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
             (maDxfData.eStrike.get() == STRIKEOUT_X);
 
         rStyleSheet->singleElement(XML_strike,
-                XML_val, XclXmlUtils::ToPsz10(bStrikeout),
+                XML_val, ToPsz10(bStrikeout),
                 FSEND);
     }
 
     if (maDxfData.bOutline)
     {
         rStyleSheet->singleElement(XML_outline,
-                XML_val, XclXmlUtils::ToPsz10(maDxfData.bOutline.get()),
+                XML_val, ToPsz10(maDxfData.bOutline.get()),
                 FSEND);
     }
 
     if (maDxfData.bShadow)
     {
         rStyleSheet->singleElement(XML_shadow,
-                XML_val, XclXmlUtils::ToPsz10(maDxfData.bShadow.get()),
+                XML_val, ToPsz10(maDxfData.bShadow.get()),
                 FSEND);
     }
 
@@ -1462,8 +1463,8 @@ void XclExpCellProt::FillToXF3( sal_uInt16& rnProt ) const
 void XclExpCellProt::SaveXml( XclExpXmlStream& rStrm ) const
 {
     rStrm.GetCurrentStream()->singleElement( XML_protection,
-            XML_locked,     XclXmlUtils::ToPsz( mbLocked ),
-            XML_hidden,     XclXmlUtils::ToPsz( mbHidden ),
+            XML_locked,     ToPsz( mbLocked ),
+            XML_hidden,     ToPsz( mbHidden ),
             FSEND );
 }
 
@@ -1618,11 +1619,11 @@ void XclExpCellAlign::SaveXml( XclExpXmlStream& rStrm ) const
             XML_horizontal,         ToHorizontalAlignment( mnHorAlign ),
             XML_vertical,           ToVerticalAlignment( mnVerAlign ),
             XML_textRotation,       OString::number(  mnRotation ).getStr(),
-            XML_wrapText,           XclXmlUtils::ToPsz( mbLineBreak ),
+            XML_wrapText,           ToPsz( mbLineBreak ),
             XML_indent,             OString::number(  mnIndent ).getStr(),
             // OOXTODO: XML_relativeIndent,     mnIndent?
             // OOXTODO: XML_justifyLastLine,
-            XML_shrinkToFit,        XclXmlUtils::ToPsz( mbShrink ),
+            XML_shrinkToFit,        ToPsz( mbShrink ),
             XML_readingOrder, mnTextDir == EXC_XF_TEXTDIR_CONTEXT ? nullptr : OString::number(  mnTextDir ).getStr(),
             FSEND );
 }
@@ -1881,8 +1882,8 @@ void XclExpCellBorder::SaveXml( XclExpXmlStream& rStrm ) const
     XclExpPalette& rPalette = rStrm.GetRoot().GetPalette();
 
     rStyleSheet->startElement( XML_border,
-            XML_diagonalUp,     XclXmlUtils::ToPsz( mbDiagBLtoTR ),
-            XML_diagonalDown,   XclXmlUtils::ToPsz( mbDiagTLtoBR ),
+            XML_diagonalUp,     ToPsz( mbDiagBLtoTR ),
+            XML_diagonalDown,   ToPsz( mbDiagTLtoBR ),
             // OOXTODO: XML_outline,
             FSEND );
     lcl_WriteBorder( rStrm, XML_left,       mnLeftLine,     rPalette.GetColor( mnLeftColor ) );
@@ -2234,11 +2235,11 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_quotePrefix,
             // OOXTODO: XML_pivotButton,
             // OOXTODO: XML_applyNumberFormat,  ;
-            XML_applyFont,          XclXmlUtils::ToPsz( mbFontUsed ),
+            XML_applyFont,          ToPsz( mbFontUsed ),
             // OOXTODO: XML_applyFill,
-            XML_applyBorder,        XclXmlUtils::ToPsz( mbBorderUsed ),
-            XML_applyAlignment,     XclXmlUtils::ToPsz( mbAlignUsed ),
-            XML_applyProtection,    XclXmlUtils::ToPsz( mbProtUsed ),
+            XML_applyBorder,        ToPsz( mbBorderUsed ),
+            XML_applyAlignment,     ToPsz( mbAlignUsed ),
+            XML_applyProtection,    ToPsz( mbProtUsed ),
             FSEND );
     if( mbAlignUsed )
         maAlignment.SaveXml( rStrm );
@@ -2349,7 +2350,7 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
                                              XML_builtinId, OString::number( std::min( static_cast<sal_Int32>( CELL_STYLE_MAX_BUILTIN_ID - 1 ), static_cast <sal_Int32>( mnStyleId ) ) ).getStr(),
             // OOXTODO: XML_iLevel,
             // OOXTODO: XML_hidden,
-            XML_customBuiltin,  XclXmlUtils::ToPsz( ! IsBuiltIn() ),
+            XML_customBuiltin,  ToPsz( ! IsBuiltIn() ),
             FSEND );
     // OOXTODO: XML_extLst
 }

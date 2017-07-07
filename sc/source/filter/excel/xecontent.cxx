@@ -45,6 +45,7 @@
 #include "xestyle.hxx"
 #include "xename.hxx"
 #include <rtl/uuid.h>
+#include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
 
@@ -1764,7 +1765,7 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_dataValidation,
-            XML_allowBlank,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_IGNOREBLANK ) ),
+            XML_allowBlank,         ToPsz( ::get_flag( mnFlags, EXC_DV_IGNOREBLANK ) ),
             XML_error,              XESTRING_TO_PSZ( maErrorText ),
             // OOXTODO: XML_errorStyle,
             XML_errorTitle,         XESTRING_TO_PSZ( maErrorTitle ),
@@ -1773,9 +1774,9 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
             XML_prompt,             XESTRING_TO_PSZ( maPromptText ),
             XML_promptTitle,        XESTRING_TO_PSZ( maPromptTitle ),
             // showDropDown should have been showNoDropDown - check oox/xlsx import for details
-            XML_showDropDown,       XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN ) ),
-            XML_showErrorMessage,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWERROR ) ),
-            XML_showInputMessage,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWPROMPT ) ),
+            XML_showDropDown,       ToPsz( ::get_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN ) ),
+            XML_showErrorMessage,   ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWERROR ) ),
+            XML_showInputMessage,   ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWPROMPT ) ),
             XML_sqref,              XclXmlUtils::ToOString( maScRanges ).getStr(),
             XML_type,               lcl_GetValidationType( mnFlags ),
             FSEND );

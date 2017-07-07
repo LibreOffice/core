@@ -23,6 +23,7 @@
 #include "viewopti.hxx"
 #include "xelink.hxx"
 #include "xestyle.hxx"
+#include <oox/export/utils.hxx>
 
 using namespace ::oox;
 
@@ -50,9 +51,9 @@ void XclExpWindow1::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->singleElement( XML_workbookView,
             // OOXTODO: XML_visibility, // ST_visibilty
             // OOXTODO: XML_minimized,  // bool
-            XML_showHorizontalScroll,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_HOR_SCROLLBAR ) ),
-            XML_showVerticalScroll,     XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_VER_SCROLLBAR ) ),
-            XML_showSheetTabs,          XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_TABBAR ) ),
+            XML_showHorizontalScroll,   ToPsz( ::get_flag( mnFlags, EXC_WIN1_HOR_SCROLLBAR ) ),
+            XML_showVerticalScroll,     ToPsz( ::get_flag( mnFlags, EXC_WIN1_VER_SCROLLBAR ) ),
+            XML_showSheetTabs,          ToPsz( ::get_flag( mnFlags, EXC_WIN1_TABBAR ) ),
             XML_xWindow,                "0",
             XML_yWindow,                "0",
             XML_windowWidth,            OString::number( 0x4000 ).getStr(),
@@ -418,14 +419,14 @@ void XclExpTabViewSettings::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->startElement( XML_sheetViews, FSEND );
     rWorksheet->startElement( XML_sheetView,
             // OOXTODO: XML_windowProtection,
-            XML_showFormulas,               XclXmlUtils::ToPsz( maData.mbShowFormulas ),
-            XML_showGridLines,              XclXmlUtils::ToPsz( maData.mbShowGrid ),
-            XML_showRowColHeaders,          XclXmlUtils::ToPsz( maData.mbShowHeadings ),
-            XML_showZeros,                  XclXmlUtils::ToPsz( maData.mbShowZeros ),
-            XML_rightToLeft,                XclXmlUtils::ToPsz( maData.mbMirrored ),
-            XML_tabSelected,                XclXmlUtils::ToPsz( maData.mbSelected ),
+            XML_showFormulas,               ToPsz( maData.mbShowFormulas ),
+            XML_showGridLines,              ToPsz( maData.mbShowGrid ),
+            XML_showRowColHeaders,          ToPsz( maData.mbShowHeadings ),
+            XML_showZeros,                  ToPsz( maData.mbShowZeros ),
+            XML_rightToLeft,                ToPsz( maData.mbMirrored ),
+            XML_tabSelected,                ToPsz( maData.mbSelected ),
             // OOXTODO: XML_showRuler,
-            XML_showOutlineSymbols,         XclXmlUtils::ToPsz( maData.mbShowOutline ),
+            XML_showOutlineSymbols,         ToPsz( maData.mbShowOutline ),
             XML_defaultGridColor,           mnGridColorId == XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT ) ? "true" : "false",
             // OOXTODO: XML_showWhiteSpace,
             XML_view,                       maData.mbPageMode ? "pageBreakPreview" : "normal",  // OOXTODO: pageLayout

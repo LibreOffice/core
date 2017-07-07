@@ -67,6 +67,7 @@
 #include "stlpool.hxx"
 #include "editutil.hxx"
 #include <formula/errorcodes.hxx>
+#include <oox/export/utils.hxx>
 #include "queryentry.hxx"
 #include "queryparam.hxx"
 
@@ -302,14 +303,14 @@ void Exc1904::SaveXml( XclExpXmlStream& rStrm )
     if( bISOIEC )
     {
         rStrm.WriteAttributes(
-            XML_dateCompatibility, XclXmlUtils::ToPsz( bDateCompatibility ),
+            XML_dateCompatibility, ToPsz( bDateCompatibility ),
             FSEND );
     }
 
     if( !bISOIEC || bDateCompatibility )
     {
         rStrm.WriteAttributes(
-            XML_date1904, XclXmlUtils::ToPsz( bVal ),
+            XML_date1904, ToPsz( bVal ),
             FSEND );
     }
 }
@@ -416,7 +417,7 @@ void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_transitionEntry,
             // OOXTODO: XML_published,
             // OOXTODO: XML_codeName,
-            XML_filterMode, mpManager ? XclXmlUtils::ToPsz( mpManager->HasFilterMode( mnScTab ) ) : nullptr,
+            XML_filterMode, mpManager ? ToPsz( mpManager->HasFilterMode( mnScTab ) ) : nullptr,
             // OOXTODO: XML_enableFormatConditionsCalculation,
             FSEND );
 
@@ -430,7 +431,7 @@ void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->singleElement(XML_pageSetUpPr,
             // OOXTODO: XML_autoPageBreaks,
-        XML_fitToPage,  XclXmlUtils::ToPsz(mbFitToPage), FSEND);
+        XML_fitToPage,  ToPsz(mbFitToPage), FSEND);
 
     rWorksheet->endElement( XML_sheetPr );
 }
@@ -445,7 +446,7 @@ XclExpWindowProtection::XclExpWindowProtection(bool bValue) :
 void XclExpWindowProtection::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.WriteAttributes(
-            XML_lockWindows, XclXmlUtils::ToPsz( GetBool() ),
+            XML_lockWindows, ToPsz( GetBool() ),
             FSEND );
 }
 
@@ -479,23 +480,23 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
         }
         sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
         rWorksheet->singleElement( XML_sheetProtection,
-            XML_sheet,  XclXmlUtils::ToPsz( true ),
+            XML_sheet,  ToPsz( true ),
             XML_password, sHash.isEmpty()? nullptr : sHash.getStr(),
-            XML_objects, pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) ? nullptr : XclXmlUtils::ToPsz( true ),
-            XML_scenarios, pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) ? nullptr : XclXmlUtils::ToPsz( true ),
-            XML_formatCells, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_CELLS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_formatColumns, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_COLUMNS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_formatRows, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_ROWS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_insertColumns, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_COLUMNS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_insertRows, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_ROWS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_insertHyperlinks, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_HYPERLINKS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_deleteColumns, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_COLUMNS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_deleteRows, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_ROWS ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_selectLockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_LOCKED_CELLS ) ? nullptr : XclXmlUtils::ToPsz( true ),
-            XML_sort, pTabProtect->isOptionEnabled( ScTableProtection::SORT ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_autoFilter, pTabProtect->isOptionEnabled( ScTableProtection::AUTOFILTER ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_pivotTables, pTabProtect->isOptionEnabled( ScTableProtection::PIVOT_TABLES ) ? XclXmlUtils::ToPsz( false ) : nullptr,
-            XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? nullptr : XclXmlUtils::ToPsz( true ),
+            XML_objects, pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) ? nullptr : ToPsz( true ),
+            XML_scenarios, pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) ? nullptr : ToPsz( true ),
+            XML_formatCells, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_CELLS ) ? ToPsz( false ) : nullptr,
+            XML_formatColumns, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_COLUMNS ) ? ToPsz( false ) : nullptr,
+            XML_formatRows, pTabProtect->isOptionEnabled( ScTableProtection::FORMAT_ROWS ) ? ToPsz( false ) : nullptr,
+            XML_insertColumns, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_COLUMNS ) ? ToPsz( false ) : nullptr,
+            XML_insertRows, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_ROWS ) ? ToPsz( false ) : nullptr,
+            XML_insertHyperlinks, pTabProtect->isOptionEnabled( ScTableProtection::INSERT_HYPERLINKS ) ? ToPsz( false ) : nullptr,
+            XML_deleteColumns, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_COLUMNS ) ? ToPsz( false ) : nullptr,
+            XML_deleteRows, pTabProtect->isOptionEnabled( ScTableProtection::DELETE_ROWS ) ? ToPsz( false ) : nullptr,
+            XML_selectLockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_LOCKED_CELLS ) ? nullptr : ToPsz( true ),
+            XML_sort, pTabProtect->isOptionEnabled( ScTableProtection::SORT ) ? ToPsz( false ) : nullptr,
+            XML_autoFilter, pTabProtect->isOptionEnabled( ScTableProtection::AUTOFILTER ) ? ToPsz( false ) : nullptr,
+            XML_pivotTables, pTabProtect->isOptionEnabled( ScTableProtection::PIVOT_TABLES ) ? ToPsz( false ) : nullptr,
+            XML_selectUnlockedCells, pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ) ? nullptr : ToPsz( true ),
             FSEND );
 
         const ::std::vector<ScEnhancedProtection>& rProts( pTabProtect->getEnhancedProtection());
@@ -838,15 +839,15 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             if( HasTop10() )
             {
                 rWorksheet->singleElement( XML_top10,
-                        XML_top,        XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10TOP ) ),
-                        XML_percent,    XclXmlUtils::ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10PERC ) ),
+                        XML_top,        ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10TOP ) ),
+                        XML_percent,    ToPsz( get_flag( nFlags, EXC_AFFLAG_TOP10PERC ) ),
                         XML_val,        OString::number(  (nFlags >> 7 ) ).getStr(),
                         // OOXTODO: XML_filterVal,
                         FSEND );
             }
 
             rWorksheet->startElement( XML_customFilters,
-                    XML_and,    XclXmlUtils::ToPsz( (nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND ),
+                    XML_and,    ToPsz( (nFlags & EXC_AFFLAG_ANDORMASK) == EXC_AFFLAG_AND ),
                     FSEND );
             aCond[ 0 ].SaveXml( rStrm );
             aCond[ 1 ].SaveXml( rStrm );

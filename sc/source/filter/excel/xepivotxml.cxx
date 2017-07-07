@@ -259,12 +259,12 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         }
         else
         {
-            pAttList->add(XML_containsMixedTypes, XclXmlUtils::ToPsz10(aDPTypes.size() > 1));
-            pAttList->add(XML_containsSemiMixedTypes, XclXmlUtils::ToPsz10(aDPTypes.size() > 1));
-            pAttList->add(XML_containsString, XclXmlUtils::ToPsz10(aDPTypes.find(ScDPItemData::String) != aDPTypeEnd));
+            pAttList->add(XML_containsMixedTypes, ToPsz10(aDPTypes.size() > 1));
+            pAttList->add(XML_containsSemiMixedTypes, ToPsz10(aDPTypes.size() > 1));
+            pAttList->add(XML_containsString, ToPsz10(aDPTypes.find(ScDPItemData::String) != aDPTypeEnd));
             if (aDPTypes.find(ScDPItemData::Value) != aDPTypeEnd)
             {
-                pAttList->add(XML_containsNumber, XclXmlUtils::ToPsz10(true));
+                pAttList->add(XML_containsNumber, ToPsz10(true));
                 pAttList->add(XML_minValue, OString::number(fMin));
                 pAttList->add(XML_maxValue, OString::number(fMax));
             }
@@ -568,18 +568,18 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
         XML_name, XclXmlUtils::ToOString(rDPObj.GetName()).getStr(),
         XML_cacheId, OString::number(nCacheId).getStr(),
-        XML_applyNumberFormats, BS(false),
-        XML_applyBorderFormats, BS(false),
-        XML_applyFontFormats, BS(false),
-        XML_applyPatternFormats, BS(false),
-        XML_applyAlignmentFormats, BS(false),
-        XML_applyWidthHeightFormats, BS(false),
+        XML_applyNumberFormats, ToPsz10(false),
+        XML_applyBorderFormats, ToPsz10(false),
+        XML_applyFontFormats, ToPsz10(false),
+        XML_applyPatternFormats, ToPsz10(false),
+        XML_applyAlignmentFormats, ToPsz10(false),
+        XML_applyWidthHeightFormats, ToPsz10(false),
         XML_dataCaption, "Values",
-        XML_useAutoFormatting, BS(false),
-        XML_itemPrintTitles, BS(true),
-        XML_indent, BS(false),
-        XML_outline, BS(true),
-        XML_outlineData, BS(true),
+        XML_useAutoFormatting, ToPsz10(false),
+        XML_itemPrintTitles, ToPsz10(true),
+        XML_indent, ToPsz10(false),
+        XML_outline, ToPsz10(true),
+        XML_outlineData, ToPsz10(true),
         FSEND);
 
     // NB: Excel's range does not include page field area (if any).
@@ -628,7 +628,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         if (!pDim)
         {
             pPivotStrm->singleElement(XML_pivotField,
-                XML_showAll, BS(false),
+                XML_showAll, ToPsz10(false),
                 FSEND);
             continue;
         }
@@ -638,7 +638,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         if (eOrient == sheet::DataPilotFieldOrientation_HIDDEN)
         {
             pPivotStrm->singleElement(XML_pivotField,
-                XML_showAll, BS(false),
+                XML_showAll, ToPsz10(false),
                 FSEND);
             continue;
         }
@@ -646,8 +646,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         if (eOrient == sheet::DataPilotFieldOrientation_DATA)
         {
             pPivotStrm->singleElement(XML_pivotField,
-                XML_dataField, BS(true),
-                XML_showAll, BS(false),
+                XML_dataField, ToPsz10(true),
+                XML_showAll, ToPsz10(false),
                 FSEND);
 
             continue;
@@ -675,7 +675,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
         auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
         pAttList->add(XML_axis, toOOXMLAxisType(eOrient));
-        pAttList->add(XML_showAll, BS(false));
+        pAttList->add(XML_showAll, ToPsz10(false));
 
         long nSubTotalCount = pDim->GetSubTotalsCount();
         std::vector<OString> aSubtotalSequence;
@@ -685,7 +685,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             aSubtotalSequence.push_back(GetSubtotalFuncName(eFunc));
             sal_Int32 nAttToken = GetSubtotalAttrToken(eFunc);
             if (!pAttList->hasAttribute(nAttToken))
-                pAttList->add(nAttToken, BS(true));
+                pAttList->add(nAttToken, ToPsz10(true));
         }
 
         sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);

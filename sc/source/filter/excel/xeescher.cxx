@@ -1316,11 +1316,11 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
         rComments->startElement( FSNS( XML_mc, XML_AlternateContent ), FSEND );
         rComments->startElement( FSNS( XML_mc, XML_Choice ), XML_Requires, "v2", FSEND );
         rComments->startElement( XML_commentPr,
-                XML_autoFill,       XclXmlUtils::ToPsz( mbAutoFill ),
-                XML_autoScale,      XclXmlUtils::ToPsz( mbAutoScale ),
-                XML_colHidden,      XclXmlUtils::ToPsz( mbColHidden ),
-                XML_locked,         XclXmlUtils::ToPsz( mbLocked ),
-                XML_rowHidden,      XclXmlUtils::ToPsz( mbRowHidden ),
+                XML_autoFill,       ToPsz( mbAutoFill ),
+                XML_autoScale,      ToPsz( mbAutoScale ),
+                XML_colHidden,      ToPsz( mbColHidden ),
+                XML_locked,         ToPsz( mbLocked ),
+                XML_rowHidden,      ToPsz( mbRowHidden ),
                 XML_textHAlign,     ToHorizAlign( meTHA ),
                 XML_textVAlign,     ToVertAlign( meTVA ) ,
                 FSEND );

@@ -29,7 +29,26 @@ inline OString I64S_(sal_Int64 x) { return OString::number(x); }
 #define I32S(x) I32S_(x).getStr()
 #define I64S(x) I64S_(x).getStr()
 #define IS(x) OString::number( x ).getStr()
-inline const char* BS(bool x) { return x ? "1" : "0"; }
+
+/**
+ * @return const char* literal "true" for true value, or literal "false"
+ *         for false value.
+ */
+static inline const char* ToPsz(bool b)
+{
+    return b ? "true" : "false";
+}
+
+/**
+ * @return literal "1" for true value, or literal "0" for false value.
+ */
+static inline const char* ToPsz10(bool b)
+{
+    // xlsx seems to use "1" or "0" for boolean values.  I wonder it ever uses
+    // the "true" "false" variant.
+    return b ? "1" : "0";
+}
+
 #define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 
 static inline sal_Int64 PPTtoEMU( sal_Int32 nPPT )

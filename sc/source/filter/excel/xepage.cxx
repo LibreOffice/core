@@ -27,6 +27,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <oox/export/utils.hxx>
 #include "document.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
@@ -105,11 +106,11 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     // tdf#48767 if XML_usePrinterDefaults field is exist, then XML_orientation is always "portrait" in MS Excel
     // To resolve that import issue, if XML_usePrinterDefaults has default value (false) then XML_usePrinterDefaults is not added.
     if ( !mrData.mbValid )
-        pAttrList->add( XML_usePrinterDefaults, XclXmlUtils::ToPsz( !mrData.mbValid ) );
-    pAttrList->add( XML_blackAndWhite,      XclXmlUtils::ToPsz( mrData.mbBlackWhite ) );
-    pAttrList->add( XML_draft,              XclXmlUtils::ToPsz( mrData.mbDraftQuality ) );
+        pAttrList->add( XML_usePrinterDefaults, ToPsz( !mrData.mbValid ) );
+    pAttrList->add( XML_blackAndWhite,      ToPsz( mrData.mbBlackWhite ) );
+    pAttrList->add( XML_draft,              ToPsz( mrData.mbDraftQuality ) );
     pAttrList->add( XML_cellComments,       mrData.mbPrintNotes ? "atEnd" : "none" );         // OOXTODO: "asDisplayed"?
-    pAttrList->add( XML_useFirstPageNumber, XclXmlUtils::ToPsz( mrData.mbManualStart ) );
+    pAttrList->add( XML_useFirstPageNumber, ToPsz( mrData.mbManualStart ) );
     // OOXTODO: XML_errors, // == displayed|blank|dash|NA
     pAttrList->add( XML_horizontalDpi,      OString::number(  mrData.mnHorPrintRes ).getStr() );
     pAttrList->add( XML_verticalDpi,        OString::number(  mrData.mnVerPrintRes ).getStr() );

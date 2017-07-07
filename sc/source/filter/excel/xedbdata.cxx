@@ -186,9 +186,9 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         XML_name, XclXmlUtils::ToOString( rData.GetName()).getStr(),
         XML_displayName, XclXmlUtils::ToOString( rData.GetName()).getStr(),
         XML_ref, XclXmlUtils::ToOString(aRange),
-        XML_headerRowCount, BS(rData.HasHeader()),
-        XML_totalsRowCount, BS(rData.HasTotals()),
-        XML_totalsRowShown, BS(rData.HasTotals()),  // we don't support that but if there are totals they are shown
+        XML_headerRowCount, ToPsz10(rData.HasHeader()),
+        XML_totalsRowCount, ToPsz10(rData.HasTotals()),
+        XML_totalsRowShown, ToPsz10(rData.HasTotals()),  // we don't support that but if there are totals they are shown
         // OOXTODO: XML_comment, ...,
         // OOXTODO: XML_connectionId, ...,
         // OOXTODO: XML_dataCellStyle, ...,
