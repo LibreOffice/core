@@ -221,6 +221,9 @@ protected:
     void startAction();
     void endAction();
 
+    // 2.10 of XML 1.0 specification
+    virtual bool IsPreserveSpace() const;
+
     const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() { return m_xContext;}
 
     bool inPositionV;
@@ -253,8 +256,13 @@ public:
 
     void handleHyperlink();
 
+protected:
+    virtual bool IsPreserveSpace() const override;
+
 private:
     mutable OOXMLPropertySet::Pointer_t mpPropertySetAttrs;
+    bool mbPreserveSpace    : 1;
+    bool mbPreserveSpaceSet : 1;
 };
 
 class OOXMLFastContextHandlerProperties : public OOXMLFastContextHandler
