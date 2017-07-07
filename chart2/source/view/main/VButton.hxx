@@ -29,6 +29,7 @@ private:
     css::awt::Size m_aSize;
     bool m_bShowArrow;
     sal_Int32 m_nArrowColor;
+    sal_Int32 m_nBGColor;
 
     css::uno::Reference<css::drawing::XShape>
         createTriangle(css::awt::Size aSize);
@@ -48,6 +49,10 @@ public:
     void setArrowColor(sal_Int32 nArrowColor)
     {
         m_nArrowColor = nArrowColor;
+    }
+    void setBGColor(sal_Int32 nBGColor)
+    {
+        m_nBGColor = nBGColor;
     }
     void setLabel(OUString const & rLabel)
     {
