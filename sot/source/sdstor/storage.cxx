@@ -291,7 +291,7 @@ void SotStorage::CreateStorage( bool bForceUCBStorage, StreamMode nMode )
     if( !m_aName.isEmpty() )
     {
         // named storage
-        if( ( ( nMode & ERASEMASK ) == ERASEMASK ) )
+        if( ( nMode & ERASEMASK ) == ERASEMASK )
             ::utl::UCBContentHelper::Kill( m_aName );
 
         INetURLObject aObj( m_aName );
