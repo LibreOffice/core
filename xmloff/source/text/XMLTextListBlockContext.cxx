@@ -125,6 +125,9 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         }
     }
 
+    // Remember this list block.
+    mrTxtImport.GetTextListHelper().PushListContext( this );
+
     mxNumRules = XMLTextListsHelper::MakeNumRule(GetImport(), mxNumRules,
         sParentListStyleName, msListStyleName,
         mnLevel, &mbRestartNumbering, &mbSetDefaults );
@@ -224,9 +227,6 @@ XMLTextListBlockContext::XMLTextListBlockContext(
                 sListStyleDefaultListId );
         }
     }
-
-    // Remember this list block.
-    mrTxtImport.GetTextListHelper().PushListContext( this );
 }
 
 XMLTextListBlockContext::~XMLTextListBlockContext()
