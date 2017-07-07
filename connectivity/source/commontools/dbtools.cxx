@@ -2033,7 +2033,11 @@ namespace dbase
     {
         switch (nType)
         {
+        // dBaseIII header doesn't contain language driver ID
+        // See http://dbase.free.fr/tlcharge/structure%20tables.pdf
         case dBaseIII:
+        case dBaseIIIMemo:
+            break;
         case dBaseIV:
         case dBaseV:
         case VisualFoxPro:
@@ -2041,7 +2045,6 @@ namespace dbase
         case dBaseFS:
         case dBaseFSMemo:
         case dBaseIVMemoSQL:
-        case dBaseIIIMemo:
         case FoxProMemo:
         {
             if (nCodepage != 0x00)
