@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_28306656",
+        "filename": "solenv/bin/mkonedoc.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-07T11:14:43Z",
+      "side": 1,
+      "message": "here the separators is the first \"/\" and the 3rd \"/\" so this will replace \"s@DOXYGEN_OUTPUT\" with \"module.tags@@\"",
+      "revId": "54f1d6247f8e6f1adcb94ca180e72383851f622c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

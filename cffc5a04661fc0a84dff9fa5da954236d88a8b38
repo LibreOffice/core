@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_082baaec",
+        "filename": "solenv/bin/mkonedoc.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-07T11:14:43Z",
+      "side": 0,
+      "message": "here the \"@\" is a separator for the parts of the sed substitution command so it will replace \"$DOXYGEN_OUTPUT/$module.tags\" (after expanding the varaibles with \"\"",
+      "revId": "cffc5a04661fc0a84dff9fa5da954236d88a8b38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
