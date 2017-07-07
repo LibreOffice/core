@@ -1518,7 +1518,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
             SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_HEADER_DECL, true, true);
-            Characters((*aIter));
+            Characters(*aIter);
         }
     }
 
@@ -1535,7 +1535,7 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
             SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_FOOTER_DECL, false, false);
-            Characters((*aIter));
+            Characters(*aIter);
         }
     }
 

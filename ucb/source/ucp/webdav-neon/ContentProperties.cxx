@@ -119,7 +119,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
 
     while ( it != end )
     {
-        addProperty( (*it) );
+        addProperty( *it );
         ++it;
     }
 
@@ -588,7 +588,7 @@ void CachableContentProperties::addProperties(
     while ( it != end )
     {
         if ( isCachable( (*it).Name, (*it).IsCaseSensitive ) )
-            m_aProps.addProperty( (*it) );
+            m_aProps.addProperty( *it );
 
         ++it;
      }

@@ -220,8 +220,8 @@ ERRTYPE RscClass::SetVariable( Atom nVarName,
     }
     else
     {
-        pVarTypeList = static_cast<VARTYPE_STRUCT *>(rtl_allocateMemory( ((nEntries +1)
-                                                               * sizeof( VARTYPE_STRUCT )) ));
+        pVarTypeList = static_cast<VARTYPE_STRUCT *>(rtl_allocateMemory( (nEntries + 1)
+                                                               * sizeof( VARTYPE_STRUCT ) ));
     }
     pVarTypeList[ nEntries ].nVarName       = nVarName;
     pVarTypeList[ nEntries ].nMask          = nMask;

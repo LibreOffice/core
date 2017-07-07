@@ -232,7 +232,7 @@ bool SvxChartOptions::RetrieveOptions()
         // set color values
         for( sal_Int32 i=0; i < nCount; i++ )
         {
-            aCol.SetColor( (static_cast< ColorData >(aColorSeq[ i ] )));
+            aCol.SetColor( static_cast< ColorData >(aColorSeq[ i ]) );
 
             aName = aPrefix + OUString::number(i + 1) + aPostfix;
 

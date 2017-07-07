@@ -739,7 +739,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         if ( nPropertyFlags & 0xf )
             rOut.WriteInt16( nBulletFlags );
         if ( nPropertyFlags & 0x80 )
-            rOut.WriteUInt16( ( pPara->cBulletId ) );
+            rOut.WriteUInt16( pPara->cBulletId );
         if ( nPropertyFlags & 0x10 )
             rOut.WriteUInt16( nFontId );
         if ( nPropertyFlags & 0x40 )
@@ -760,17 +760,17 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             rOut.WriteUInt32( nBulletColor );
         }
         if ( nPropertyFlags & 0x00000800 )
-            rOut.WriteUInt16( ( pPara->mnTextAdjust ) );
+            rOut.WriteUInt16( pPara->mnTextAdjust );
         if ( nPropertyFlags & 0x00001000 )
-            rOut.WriteUInt16( ( nLineSpacing ) );
+            rOut.WriteUInt16( nLineSpacing );
         if ( nPropertyFlags & 0x00002000 )
-            rOut.WriteUInt16( ( pPara->mnLineSpacingTop ) );
+            rOut.WriteUInt16( pPara->mnLineSpacingTop );
         if ( nPropertyFlags & 0x00004000 )
-            rOut.WriteUInt16( ( pPara->mnLineSpacingBottom ) );
+            rOut.WriteUInt16( pPara->mnLineSpacingBottom );
         if ( nPropertyFlags & 0x100 )
-            rOut.WriteUInt16( (pPara->nTextOfs) );
+            rOut.WriteUInt16( pPara->nTextOfs );
         if (  nPropertyFlags & 0x400 )
-            rOut.WriteUInt16( (pPara->nBulletOfs) );
+            rOut.WriteUInt16( pPara->nBulletOfs );
         if ( nPropertyFlags & 0x000e0000 )
         {
             sal_uInt16 nAsianSettings = 0;
@@ -949,13 +949,13 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 .WriteUInt32( nPropertyFlags );          //PropertyFlags
 
             if ( nPropertyFlags & 0xffff )
-                rOut.WriteUInt16( ( nCharAttr ) );
+                rOut.WriteUInt16( nCharAttr );
             if ( nPropertyFlags & 0x00010000 )
                 rOut.WriteUInt16( rPortion.mnFont );
             if ( nPropertyFlags & 0x00200000 )
                 rOut.WriteUInt16( rPortion.mnAsianOrComplexFont );
             if ( nPropertyFlags & 0x00020000 )
-                rOut.WriteUInt16( ( rPortion.mnCharHeight ) );
+                rOut.WriteUInt16( rPortion.mnCharHeight );
             if ( nPropertyFlags & 0x00040000 )
                 rOut.WriteUInt32( nCharColor );
             if ( nPropertyFlags & 0x00080000 )
@@ -1100,7 +1100,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         {
                             rOut.WriteUInt32( EPP_DateTimeMCAtom << 16 ).WriteUInt32( 8 )
                                 .WriteUInt32( pFieldEntry->nFieldStartPos )             // TxtOffset to TxtField;
-                                .WriteUChar( ( pFieldEntry->nFieldType & 0xff ) )       // Type
+                                .WriteUChar( pFieldEntry->nFieldType & 0xff )       // Type
                                 .WriteUChar( 0 ).WriteUInt16( 0 );                      // PadBytes
                         }
                         break;

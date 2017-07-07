@@ -1118,7 +1118,7 @@ void SmShowSymbolSetWindow::Paint(vcl::RenderContext& rRenderContext, const tool
     // set MapUnit for which 'nLen' has been calculated
     rRenderContext.SetMapMode(MapMode(MapUnit::MapPixel));
 
-    sal_uInt16 v = sal::static_int_cast< sal_uInt16 >((m_pVScrollBar->GetThumbPos() * nColumns));
+    sal_uInt16 v = sal::static_int_cast< sal_uInt16 >(m_pVScrollBar->GetThumbPos() * nColumns);
     size_t nSymbols = aSymbolSet.size();
 
     Color aTxtColor(rRenderContext.GetTextColor());

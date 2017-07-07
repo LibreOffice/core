@@ -128,10 +128,10 @@ data2string(void *data,
         result.append(OUString::number((*static_cast<const sal_uInt64*>(data)), 16));
         break;
     case typelib_TypeClass_FLOAT:
-        result.append(OUString::number((*static_cast<const float*>(data))));
+        result.append(OUString::number(*static_cast<const float*>(data)));
         break;
     case typelib_TypeClass_DOUBLE:
-        result.append(OUString::number((*static_cast<const double*>(data))));
+        result.append(OUString::number(*static_cast<const double*>(data)));
         break;
     case typelib_TypeClass_CHAR:
         result.append("U+");

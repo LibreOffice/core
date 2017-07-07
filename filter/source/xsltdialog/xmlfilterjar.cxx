@@ -279,7 +279,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
                     {
                         if( copyFiles( xIfc, (*aIter) ) )
                         {
-                            rFilters.push_back( (*aIter) );
+                            rFilters.push_back( *aIter );
                         }
                         else
                         {

@@ -1841,7 +1841,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
 {
     DBG_ASSERT( xSpeller.is(), "No spell checker set!" );
 
-    ContentNode* pLastNode = aEditDoc.GetObject( (aEditDoc.Count()-1) );
+    ContentNode* pLastNode = aEditDoc.GetObject( aEditDoc.Count()-1 );
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     aCurSel.Min() = aCurSel.Max();
 

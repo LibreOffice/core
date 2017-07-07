@@ -2419,8 +2419,8 @@ bool HtmlExport::CreateNavBarFrames()
         // first page
         aButton = SdResId(STR_HTMLEXP_FIRSTPAGE);
         if(mnButtonThema != -1)
-            aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
-                                  BTN_FIRST_0:BTN_FIRST_1)), aButton);
+            aButton = CreateImage(GetButtonName(nFile == 0 || mnSdPageCount == 1 ? BTN_FIRST_0 : BTN_FIRST_1),
+                                  aButton);
 
         if(nFile != 0 && mnSdPageCount > 1)
             aButton = CreateLink("JavaScript:parent.NavigateAbs(0)", aButton);
@@ -2431,8 +2431,9 @@ bool HtmlExport::CreateNavBarFrames()
         // to the previous page
         aButton = SdResId(STR_PUBLISH_BACK);
         if(mnButtonThema != -1)
-            aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
-                                    BTN_PREV_0:BTN_PREV_1)), aButton);
+            aButton = CreateImage(GetButtonName(nFile == 0 || mnSdPageCount == 1?
+                                    BTN_PREV_0:BTN_PREV_1),
+                                  aButton);
 
         if(nFile != 0 && mnSdPageCount > 1)
             aButton = CreateLink("JavaScript:parent.NavigateRel(-1)", aButton);
@@ -2443,8 +2444,9 @@ bool HtmlExport::CreateNavBarFrames()
         // to the next page
         aButton = SdResId(STR_PUBLISH_NEXT);
         if(mnButtonThema != -1)
-            aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
-                                    BTN_NEXT_0:BTN_NEXT_1)), aButton);
+            aButton = CreateImage(GetButtonName(nFile ==2 || mnSdPageCount == 1?
+                                    BTN_NEXT_0:BTN_NEXT_1),
+                                  aButton);
 
         if(nFile != 2 && mnSdPageCount > 1)
             aButton = CreateLink("JavaScript:parent.NavigateRel(1)", aButton);
@@ -2455,8 +2457,9 @@ bool HtmlExport::CreateNavBarFrames()
         // to the last page
         aButton = SdResId(STR_HTMLEXP_LASTPAGE);
         if(mnButtonThema != -1)
-            aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
-                                  BTN_LAST_0:BTN_LAST_1)), aButton);
+            aButton = CreateImage(GetButtonName(nFile ==2 || mnSdPageCount == 1?
+                                      BTN_LAST_0:BTN_LAST_1),
+                                  aButton);
 
         if(nFile != 2 && mnSdPageCount > 1)
         {

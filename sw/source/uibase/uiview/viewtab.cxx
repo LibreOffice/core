@@ -1365,8 +1365,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             else if( nFrameType & FrameTypeFlags::DRAWOBJ)
             {
                 const SwRect &rRect = rSh.GetObjRect();
-                aLongUL.SetUpper((rRect.Top() - rPageRect.Top()));
-                aLongUL.SetLower((rPageRect.Bottom() - rRect.Bottom()));
+                aLongUL.SetUpper(rRect.Top() - rPageRect.Top());
+                aLongUL.SetLower(rPageRect.Bottom() - rRect.Bottom());
             }
             else if(bBrowse)
             {

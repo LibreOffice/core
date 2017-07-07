@@ -423,7 +423,7 @@ static hchar s_hh2ks(hchar hh)
         return 0x2020;
     if (hh >= HCA_TG)
     {
-        return sal::static_int_cast<hchar>((tblhhtg_ks[hh - HCA_TG]));
+        return sal::static_int_cast<hchar>(tblhhtg_ks[hh - HCA_TG]);
     }
     hh -= HCA_KSS;
     idx = hh / 0x60 + 161;
@@ -444,7 +444,7 @@ static hchar s_hh2kssm(hchar hh)
     if ((idx < 0x34 || idx >= 0x38) && idx != 0x1F)
         return 0;
     if (hh >= HCA_TG)
-        return sal::static_int_cast<hchar>((hhtg_tg[hh - HCA_TG]));
+        return sal::static_int_cast<hchar>(hhtg_tg[hh - HCA_TG]);
     if (idx == 0x1F)
         hh = hh - 0x1F00 + 0x360;
     else

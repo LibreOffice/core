@@ -388,7 +388,7 @@ long GetAngle(const Point& rPnt)
         if (rPnt.Y()>0) a=-9000;
         else a=9000;
     } else {
-        a=svx::Round((atan2((double)-rPnt.Y(),(double)rPnt.X())/nPi180));
+        a=svx::Round(atan2((double)-rPnt.Y(),(double)rPnt.X())/nPi180);
     }
     return a;
 }

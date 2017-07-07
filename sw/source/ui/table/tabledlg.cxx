@@ -770,8 +770,8 @@ SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSe
     SetExchangeSupport();
 
     const SfxPoolItem* pItem;
-    Init((SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
-        && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON));
+    Init(SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
+         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 }
 
 SwTableColumnPage::~SwTableColumnPage()

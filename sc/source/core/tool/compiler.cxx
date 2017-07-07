@@ -1772,9 +1772,9 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
         mbCloseBrackets( true ),
         mbRewind( false )
 {
-    SetGrammar( ((eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
+    SetGrammar( (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
                 pDocument->GetGrammar() :
-                eGrammar) );
+                eGrammar );
 }
 
 ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos ) :
@@ -1812,9 +1812,9 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         mbCloseBrackets( true ),
         mbRewind( false )
 {
-    SetGrammar( ((eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
+    SetGrammar( (eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
                 (pDocument ? pDocument->GetGrammar() : formula::FormulaGrammar::GRAM_DEFAULT) :
-                eGrammar));
+                eGrammar );
 }
 
 ScCompiler::~ScCompiler()

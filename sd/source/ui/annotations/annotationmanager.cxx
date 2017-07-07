@@ -680,7 +680,7 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
             AnnotationVector aAnnotations( pPage->getAnnotations() );
             for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
             {
-                pPage->removeAnnotation( (*iter) );
+                pPage->removeAnnotation( *iter );
             }
         }
     }

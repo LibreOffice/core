@@ -847,7 +847,7 @@ FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo
     aDFA.SetItalic( rInfo.m_eItalic );
     aDFA.SetWidthType( rInfo.m_eWidth );
     aDFA.SetPitch( rInfo.m_ePitch );
-    aDFA.SetSymbolFlag( (rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL) );
+    aDFA.SetSymbolFlag( rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL );
     aDFA.SetQuality(512);
 
     // add font family name aliases

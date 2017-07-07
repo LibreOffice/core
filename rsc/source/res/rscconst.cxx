@@ -44,7 +44,7 @@ void RscEnum::SetConstant( Atom nVarName, sal_Int32 lValue )
         pVarArray = static_cast<VarEle *>(rtl_reallocateMemory( static_cast<void *>(pVarArray),
                                                      ((nEntries +1) * sizeof( VarEle )) ));
     else
-        pVarArray = static_cast<VarEle *>(rtl_allocateMemory( ((nEntries +1) * sizeof( VarEle )) ));
+        pVarArray = static_cast<VarEle *>(rtl_allocateMemory( (nEntries +1) * sizeof( VarEle ) ));
     pVarArray[ nEntries ].nId     = nVarName;
     pVarArray[ nEntries ].lValue  = lValue;
     nEntries++;

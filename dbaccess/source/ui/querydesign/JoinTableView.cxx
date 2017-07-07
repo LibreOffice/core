@@ -838,7 +838,7 @@ void OJoinTableView::MouseButtonUp( const MouseEvent& rEvt )
 
                 // Double-click
                 if( rEvt.GetClicks() == 2 )
-                    ConnDoubleClicked( (*aIter) );
+                    ConnDoubleClicked( *aIter );
 
                 break;
             }

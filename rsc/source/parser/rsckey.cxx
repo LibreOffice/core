@@ -72,8 +72,7 @@ Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, sal_IntPtr nValue )
                  ((nEntries +1) * sizeof( KEY_STRUCT )) ));
     else
         pTable = static_cast<KEY_STRUCT *>(
-                 rtl_allocateMemory( ((nEntries +1)
-                                 * sizeof( KEY_STRUCT )) ));
+                 rtl_allocateMemory( (nEntries + 1) * sizeof( KEY_STRUCT ) ) );
 
     pTable[ nEntries ].nName  = nName;
     pTable[ nEntries ].nTyp   = nTyp;

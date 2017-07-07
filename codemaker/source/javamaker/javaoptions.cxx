@@ -41,7 +41,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
 
         OString name(av[0]);
         sal_Int32 index = name.lastIndexOf(SEPARATOR);
-        m_program = name.copy((index > 0 ? index+1 : 0));
+        m_program = name.copy(index > 0 ? index+1 : 0);
 
         if (ac < 2)
         {

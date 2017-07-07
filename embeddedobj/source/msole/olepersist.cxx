@@ -1305,7 +1305,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     if ( m_bWaitSaveCompleted )
     {
         if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
-            saveCompleted( ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) ) );
+            saveCompleted( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) );
         else
             throw embed::WrongStateException(
                         "The object waits for saveCompleted() call!",

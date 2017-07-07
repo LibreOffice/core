@@ -1245,7 +1245,7 @@ void OStorage_Impl::Revert()
           pDeletedIter != m_aDeletedList.end();
           ++pDeletedIter )
     {
-        m_aChildrenList.push_back( (*pDeletedIter) );
+        m_aChildrenList.push_back( *pDeletedIter );
 
         ClearElement( *pDeletedIter );
 

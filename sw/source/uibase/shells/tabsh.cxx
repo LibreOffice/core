@@ -1061,10 +1061,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_MODE_FIX_PROP  :
         case FN_TABLE_MODE_VARIABLE  :
         {
-            rSh.SetTableChgMode( ( FN_TABLE_MODE_FIX == nSlot ? TableChgMode::FixedWidthChangeAbs
+            rSh.SetTableChgMode( FN_TABLE_MODE_FIX == nSlot
+                                    ? TableChgMode::FixedWidthChangeAbs
                                     : FN_TABLE_MODE_FIX_PROP == nSlot
                                         ? TableChgMode::FixedWidthChangeProp
-                                        : TableChgMode::VarWidthChangeAbs ) );
+                                        : TableChgMode::VarWidthChangeAbs );
 
             SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
             static sal_uInt16 aInva[] =

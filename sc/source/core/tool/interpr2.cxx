@@ -1884,7 +1884,7 @@ void ScInterpreter::ScPDuration()
         if ( fFuture <= 0.0 || fPresent <= 0.0 || fInterest <= 0.0 )
             PushIllegalArgument();
         else
-            PushDouble( ( log( fFuture / fPresent ) / rtl::math::log1p( fInterest ) ) );
+            PushDouble( log( fFuture / fPresent ) / rtl::math::log1p( fInterest ) );
     }
 }
 

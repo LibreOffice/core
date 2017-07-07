@@ -42,9 +42,9 @@ BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)
                 aBColor.setRed(fHue);
 
                 aBColor = basegfx::tools::hsl2rgb(aBColor);
-                aColor.SetRed(((aBColor.getRed()   * 255.0) + 0.5));
-                aColor.SetGreen(((aBColor.getGreen() * 255.0) + 0.5));
-                aColor.SetBlue(((aBColor.getBlue()  * 255.0) + 0.5));
+                aColor.SetRed((aBColor.getRed()   * 255.0) + 0.5);
+                aColor.SetGreen((aBColor.getGreen() * 255.0) + 0.5);
+                aColor.SetBlue((aBColor.getBlue()  * 255.0) + 0.5);
 
                 pWrite->SetPixel(nY, nX, aColor);
             }

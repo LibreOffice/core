@@ -15,6 +15,8 @@ int main()
     x = ((2)); // expected-error {{parentheses around parentheses [loplugin:unnecessaryparen]}}
 
     if ((foo(1))) foo(2); // expected-error {{parentheses immediately inside if statement [loplugin:unnecessaryparen]}}
+
+    foo((1)); // expected-error {{parentheses immediately inside single-arg call [loplugin:unnecessaryparen]}}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

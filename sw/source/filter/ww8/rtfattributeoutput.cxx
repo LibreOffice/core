@@ -1275,7 +1275,7 @@ void RtfAttributeOutput::SectionPageBorders(const SwFrameFormat* pFormat, const 
 
 void RtfAttributeOutput::SectionBiDi(bool bBiDi)
 {
-    m_rExport.Strm().WriteCharPtr((bBiDi ? OOO_STRING_SVTOOLS_RTF_RTLSECT : OOO_STRING_SVTOOLS_RTF_LTRSECT));
+    m_rExport.Strm().WriteCharPtr(bBiDi ? OOO_STRING_SVTOOLS_RTF_RTLSECT : OOO_STRING_SVTOOLS_RTF_LTRSECT);
 }
 
 void RtfAttributeOutput::SectionPageNumbering(sal_uInt16 nNumType, const ::boost::optional<sal_uInt16>& oPageRestartNumber)

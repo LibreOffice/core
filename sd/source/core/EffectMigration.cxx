@@ -1136,7 +1136,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
         std::vector< EffectSequence::iterator >::iterator aEnd( aEffectVector[nCurrentPos].end() );
         while( aIter != aEnd )
         {
-            aEffects.push_back( (*(*aIter)) );
+            aEffects.push_back( *(*aIter) );
             rSequence.erase( (*aIter++) );
         }
 
@@ -1150,7 +1150,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
         {
             while( aTempIter != aTempEnd )
             {
-                rSequence.push_back( (*aTempIter++) );
+                rSequence.push_back( *aTempIter++ );
             }
         }
         else

@@ -189,7 +189,7 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterCo
                 mnBitsPerPixel =
                     mnBitsPerPixel <= 1 ? 1 : mnBitsPerPixel <= 4 ? 4 : mnBitsPerPixel <= 8 ? 8 : 24;
 
-                if ( ImplWriteHeader( ( aAnimation.Count() > 0 ) ) )
+                if ( ImplWriteHeader( aAnimation.Count() > 0 ) )
                 {
                     Size aDestMapSize( 300, 300 );
                     const MapMode aMapMode( aBmp.GetPrefMapMode() );

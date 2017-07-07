@@ -287,7 +287,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
             aSet.Put(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
-            FieldUnit eMetric = ::GetDfltMetric((0 != (nHtmlMode&HTMLMODE_ON)));
+            FieldUnit eMetric = ::GetDfltMetric(0 != (nHtmlMode&HTMLMODE_ON));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
 
             const SwRect* pRect = &rSh.GetAnyCurRect(CurRectType::Page);
