@@ -396,7 +396,7 @@ void ContentProperties::addProperty( const OUString & rName,
                                      const css::uno::Any & rValue,
                                      bool bIsCaseSensitive )
 {
-    if ( rName.equals( DAVProperties::CREATIONDATE ) )
+    if ( rName == DAVProperties::CREATIONDATE )
     {
         // Map DAV:creationdate to UCP:DateCreated
         OUString aValue;
@@ -413,7 +413,7 @@ void ContentProperties::addProperty( const OUString & rName,
     //  else if ( rName.equals( DAVProperties::GETCONTENTLANGUAGE ) )
     //  {
     //  }
-    else if ( rName.equals( DAVProperties::GETCONTENTLENGTH ) )
+    else if ( rName == DAVProperties::GETCONTENTLENGTH )
     {
         // Map DAV:getcontentlength to UCP:Size
         OUString aValue;
@@ -434,7 +434,7 @@ void ContentProperties::addProperty( const OUString & rName,
         (*m_xProps)[ OUString("Size") ]
             = PropertyValue( uno::makeAny( aValue.toInt64() ), true );
     }
-    else if ( rName.equals( DAVProperties::GETCONTENTTYPE ) )
+    else if ( rName == DAVProperties::GETCONTENTTYPE )
     {
         // Map DAV:getcontenttype to UCP:MediaType (1:1)
         (*m_xProps)[ OUString("MediaType") ]
@@ -452,7 +452,7 @@ void ContentProperties::addProperty( const OUString & rName,
     //  else if ( rName.equals( DAVProperties::GETETAG ) )
     //  {
     //  }
-    else if ( rName.equals( DAVProperties::GETLASTMODIFIED ) )
+    else if ( rName == DAVProperties::GETLASTMODIFIED )
     {
         // Map the DAV:getlastmodified entity header to UCP:DateModified
         OUString aValue;
@@ -480,7 +480,7 @@ void ContentProperties::addProperty( const OUString & rName,
     //  else if ( rName.equals( DAVProperties::LOCKDISCOVERY ) )
     //  {
     //  }
-    else if ( rName.equals( DAVProperties::RESOURCETYPE ) )
+    else if ( rName == DAVProperties::RESOURCETYPE )
     {
         OUString aValue;
         rValue >>= aValue;
@@ -539,7 +539,7 @@ namespace
         {
             if ( isCaseSensitive )
             {
-                if ( rName.equals( rNonCachableProp ) )
+                if ( rName == rNonCachableProp )
                     return false;
             }
             else

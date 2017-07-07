@@ -1759,7 +1759,7 @@ bool NeonSession::removeExpiredLocktoken( const OUString & inURL,
 
         while ( it != end )
         {
-            if ( (*it).Name.equals( DAVProperties::LOCKDISCOVERY ) )
+            if ( (*it).Name == DAVProperties::LOCKDISCOVERY )
             {
                 uno::Sequence< ucb::Lock > aLocks;
                 if ( !( (*it).Value >>= aLocks ) )

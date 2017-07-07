@@ -86,8 +86,8 @@ static bool lcl_Equals( const i18nutil::SearchOptions2& rSO1, const i18nutil::Se
         rSO1.WildcardEscapeCharacter == rSO2.WildcardEscapeCharacter &&
         rSO1.algorithmType == rSO2.algorithmType &&
         rSO1.searchFlag == rSO2.searchFlag &&
-        rSO1.searchString.equals(rSO2.searchString) &&
-        rSO1.replaceString.equals(rSO2.replaceString) &&
+        rSO1.searchString == rSO2.searchString &&
+        rSO1.replaceString == rSO2.replaceString &&
         rSO1.changedChars == rSO2.changedChars &&
         rSO1.deletedChars == rSO2.deletedChars &&
         rSO1.insertedChars == rSO2.insertedChars &&

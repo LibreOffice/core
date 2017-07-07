@@ -632,7 +632,7 @@ sal_Int32 ExtendedAttributes::getIndexByQName( OUString const & rQName )
 {
     for ( sal_Int32 nPos = m_nAttributes; nPos--; )
     {
-        if (m_pQNames[ nPos ].equals( rQName ))
+        if (m_pQNames[ nPos ] == rQName)
         {
             return nPos;
         }

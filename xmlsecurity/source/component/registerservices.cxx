@@ -38,7 +38,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xmlsecurity_component_getFactory( const sal_
     //Decryptor
     OUString implName = OUString::createFromAscii( pImplName );
 
-    if ( pServiceManager && implName.equals( DocumentDigitalSignatures::GetImplementationName() ) )
+    if ( pServiceManager && implName == DocumentDigitalSignatures::GetImplementationName() )
     {
         // DocumentDigitalSignatures
         xFactory = cppu::createSingleComponentFactory(
@@ -46,7 +46,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xmlsecurity_component_getFactory( const sal_
             OUString::createFromAscii( pImplName ),
             DocumentDigitalSignatures::GetSupportedServiceNames() );
     }
-    else if ( pServiceManager && implName.equals( CertificateContainer::impl_getStaticImplementationName() ))
+    else if ( pServiceManager && implName == CertificateContainer::impl_getStaticImplementationName() )
     {
         // CertificateContainer
         xFactory = cppu::createOneInstanceFactory(

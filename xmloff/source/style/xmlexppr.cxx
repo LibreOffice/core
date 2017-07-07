@@ -238,7 +238,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
             while ( aCurrent != aEnd )
             {
                 // equal to next element?
-                if ( aOld->GetApiName().equals( aCurrent->GetApiName() ) )
+                if ( aOld->GetApiName() == aCurrent->GetApiName() )
                 {
                     // if equal: merge index lists
                     aOld->GetIndexes().merge( aCurrent->GetIndexes() );

@@ -375,7 +375,7 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
                 const SvXMLNamespaceMap & rNsMap(mrExport.GetNamespaceMap());
                 for (sal_uInt16 key = rNsMap.GetFirstKey();
                      key != USHRT_MAX; key = rNsMap.GetNextKey(key)) {
-                    if (name.equals(rNsMap.GetAttrNameByKey(key))) {
+                    if (name == rNsMap.GetAttrNameByKey(key)) {
                         found = true;
                         break;
                     }
@@ -401,7 +401,7 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
             const sal_Int16 nCount = i_xAttribs->getLength();
             for (sal_Int16 i = 0; i < nCount; ++i) {
                 const OUString name(i_xAttribs->getNameByIndex(i));
-                if (ns.equals(name)) {
+                if (ns == name) {
                     found = true;
                     break;
                 }

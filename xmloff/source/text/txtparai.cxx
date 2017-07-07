@@ -278,7 +278,7 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
         {
             XMLHint_Impl *const pHint = rHints.GetHints()[nPos].get();
             if ( pHint->IsReference() &&
-                 sName.equals( static_cast<XMLReferenceHint_Impl *>(pHint)->GetRefName()) )
+                 sName == static_cast<XMLReferenceHint_Impl *>(pHint)->GetRefName() )
             {
                 // set end and stop searching
                 pHint->SetEnd(GetImport().GetTextImport()->
@@ -1102,8 +1102,7 @@ void XMLIndexMarkImportContext_Impl::StartElement(
                 {
                     XMLHint_Impl *const pHint = m_rHints.GetHints()[nPos].get();
                     if ( pHint->IsIndexMark() &&
-                         sID.equals(
-                             static_cast<XMLIndexMarkHint_Impl *>(pHint)->GetID()) )
+                         sID == static_cast<XMLIndexMarkHint_Impl *>(pHint)->GetID() )
                     {
                         // set end and stop searching
                         pHint->SetEnd(xPos);

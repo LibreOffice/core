@@ -314,7 +314,7 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
                     {
                         const OUString& rKey = pKeys[ n ];
                         if ( rKey.startsWith( aOldKeyWithSlash )
-                             || rKey.equals( aOldKeyWithoutSlash ) )
+                             || rKey == aOldKeyWithoutSlash )
                         {
                             OUString aNewKey
                                 = rKey.replaceAt(
@@ -396,7 +396,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
                     {
                         const OUString& rKey = pKeys[ n ];
                         if ( rKey.startsWith(aSrcKeyWithSlash )
-                             || rKey.equals( aSrcKeyWithoutSlash ) )
+                             || rKey == aSrcKeyWithoutSlash )
                         {
                             OUString aNewKey
                                 = rKey.replaceAt(
@@ -530,7 +530,7 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
                     {
                         const OUString& rCurrKey = pKeys[ n ];
                         if ( rCurrKey.startsWith(aKeyWithSlash )
-                             || rCurrKey.equals( aKeyWithoutSlash ) )
+                             || rCurrKey == aKeyWithoutSlash )
                         {
                             if ( !removeAdditionalPropertySet(
                                      rCurrKey, false ) )

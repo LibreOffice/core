@@ -38,7 +38,7 @@ void XNamedRange::testGetContent()
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange("initial1");
 
     OUString const aExpectedContent("$Sheet1.$B$1");
-    CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 on GetContent", xNamedRange->getContent().equals(aExpectedContent));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 on GetContent", xNamedRange->getContent(), aExpectedContent);
 }
 
 void XNamedRange::testSetContent()
@@ -50,19 +50,18 @@ void XNamedRange::testSetContent()
     // test a cell
     aExpectedContent = "D1";
     xNamedRange->setContent(aExpectedContent);
-    CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a cell", xNamedRange->getContent().equals(aExpectedContent));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 after SetContent a cell", xNamedRange->getContent(), aExpectedContent);
 
     // test a cellrange
     aExpectedContent = "D1:D10";
     xNamedRange->setContent(aExpectedContent);
-    CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a cellrange", xNamedRange->getContent().equals(aExpectedContent));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 after SetContent a cellrange", xNamedRange->getContent(), aExpectedContent);
 
     // test a formula
     aExpectedContent = "=D10";
     xNamedRange->setContent(aExpectedContent);
     aExpectedContent = "D10";
-    CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a formula", xNamedRange->getContent().equals(aExpectedContent));
-
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong expected content for initial1 after SetContent a formula", xNamedRange->getContent(), aExpectedContent);
 }
 
 void XNamedRange::testGetType()

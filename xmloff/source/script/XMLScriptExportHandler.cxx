@@ -56,7 +56,7 @@ void XMLScriptExportHandler::Export(
     sal_Int32 nCount = rValues.getLength();
     for(sal_Int32 i = 0; i < nCount; i++)
     {
-        if (sURL.equals(rValues[i].Name))
+        if (sURL == rValues[i].Name)
         {
             OUString sTmp;
             rValues[i].Value >>= sTmp;
