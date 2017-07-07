@@ -191,6 +191,8 @@ void OLEHandler::importStream(const uno::Reference<uno::XComponentContext>& xCom
     OUString aFilterService;
     if (m_sProgId == "Word.Document.12")
         aFilterService = "com.sun.star.comp.Writer.WriterFilter";
+    else if (m_sProgId == "Excel.Sheet.12")
+        aFilterService = "com.sun.star.comp.oox.xls.ExcelFilter";
     else if (m_sProgId == "Equation.3")
         aFilterService = "com.sun.star.comp.Math.MathTypeFilter";
     else
@@ -232,6 +234,11 @@ OUString OLEHandler::getCLSID(const uno::Reference<uno::XComponentContext>& xCom
     {
         if (officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get(xComponentContext))
             aRet = "8BC6B165-B1B2-4EDD-aa47-dae2ee689dd6";
+    }
+    else if (m_sProgId == "Excel.Sheet.12")
+    {
+        if (officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::get(xComponentContext))
+            aRet = "47BBB4CB-CE4C-4E80-A591-42D9AE74950F";
     }
     else if (m_sProgId == "Equation.3")
     {
