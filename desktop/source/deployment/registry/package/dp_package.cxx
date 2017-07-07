@@ -256,7 +256,7 @@ public:
     explicit XPackage_eq(const OUString & s) : m_URL(s) {}
     bool operator() (const Reference<deployment::XPackage> & p) const
     {
-        return m_URL.equals(p->getURL());
+        return m_URL == p->getURL();
     }
 };
 

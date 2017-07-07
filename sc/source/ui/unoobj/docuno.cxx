@@ -4267,7 +4267,7 @@ bool ScScenariosObj::GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex
         SCTAB nCount = (SCTAB)getCount();
         for (SCTAB i=0; i<nCount; i++)
             if (rDoc.GetName( nTab+i+1, aTabName ))
-                if (aTabName.equals(rName))
+                if (aTabName == rName)
                 {
                     rIndex = i;
                     return true;

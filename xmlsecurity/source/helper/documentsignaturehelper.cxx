@@ -112,8 +112,8 @@ void ImplFillElementList(
             if ( rxStore->isStreamElement( pNames[n] ) )
             {
                 //Exclude documentsignatures.xml!
-                if (pNames[n].equals(
-                    DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()))
+                if (pNames[n] ==
+                    DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName())
                     continue;
                 OUString aFullName( rRootStorageName + sEncName );
                 rList.push_back(aFullName);
@@ -459,7 +459,7 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
                         sElementListURI, rtl_UriCharClassPchar,
                         rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
                 }
-                if (sElementListURI.equals(sReferenceURI))
+                if (sElementListURI == sReferenceURI)
                 {
                     nRealCount++;
                     break;
@@ -508,7 +508,7 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
             //Decode the uri segment, so that %20 becomes ' ', etc.
             OUString sDecUri = ::rtl::Uri::decode(
                 *i, rtl_UriDecodeWithCharset,  RTL_TEXTENCODING_UTF8);
-            if (!sDecUri.equals(*j))
+            if (sDecUri != *j)
             {
                 retVal = false;
                 break;

@@ -80,7 +80,7 @@ void LwpPropListElement::Read()
 
 bool LwpPropListElement::IsNamed(const OUString& name)
 {
-    return name.equals(m_Name.str());
+    return name == m_Name.str();
 }
 
 OUString LwpPropList::GetNamedProperty(const OUString& name)

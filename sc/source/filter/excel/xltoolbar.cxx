@@ -390,7 +390,7 @@ ScCTB* ScCTBWrapper::GetCustomizationData( const OUString& sTBName )
     ScCTB* pCTB = nullptr;
     for ( std::vector< ScCTB >::iterator it = rCTB.begin(); it != rCTB.end(); ++it )
     {
-        if ( it->GetName().equals( sTBName ) )
+        if ( it->GetName() == sTBName )
         {
             pCTB = &(*it);
             break;

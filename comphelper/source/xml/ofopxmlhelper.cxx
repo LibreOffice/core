@@ -441,7 +441,7 @@ void SAL_CALL OFOPXMLHelper_Impl::endElement( const OUString& aName )
         if ( nLength <= 0 )
             throw css::xml::sax::SAXException(); // TODO: no other end elements expected!
 
-        if ( !m_aElementsSeq[nLength-1].equals( aName ) )
+        if ( m_aElementsSeq[nLength-1] != aName )
             throw css::xml::sax::SAXException(); // TODO: unexpected element ended
 
         m_aElementsSeq.resize( nLength - 1 );

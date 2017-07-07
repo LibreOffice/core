@@ -1339,7 +1339,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
 #ifdef DBG_UTIL
                 OUString sName;
                 xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
-                OSL_ENSURE(sName.equals(pFinalValues->Name), "SbaXDataBrowserController::approveParameter: suspicious value names!");
+                OSL_ENSURE(sName == pFinalValues->Name, "SbaXDataBrowserController::approveParameter: suspicious value names!");
 #endif
                 try { xParam->setPropertyValue(PROPERTY_VALUE, pFinalValues->Value); }
                 catch(Exception&)
@@ -1781,7 +1781,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(bool bFilter)
     }
 
     OUString sNewHaving = xParser->getHavingClause();
-    if ( sOldVal.equals(sNewVal) && (!bFilter || sOldHaving.equals(sNewHaving)) )
+    if ( sOldVal == sNewVal && (!bFilter || sOldHaving == sNewHaving) )
         // nothing to be done
         return;
 

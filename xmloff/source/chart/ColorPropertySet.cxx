@@ -63,14 +63,14 @@ Sequence< Property > SAL_CALL lcl_ColorPropertySetInfo::getProperties()
 
 Property SAL_CALL lcl_ColorPropertySetInfo::getPropertyByName( const OUString& aName )
 {
-    if( aName.equals( m_aColorPropName ))
+    if( aName == m_aColorPropName )
         return m_aColorProp;
     throw UnknownPropertyException( m_aColorPropName, static_cast< uno::XWeak * >( this ));
 }
 
 sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& Name )
 {
-    return Name.equals( m_aColorPropName );
+    return Name == m_aColorPropName;
 }
 
 } // anonymous namespace
@@ -144,13 +144,13 @@ Sequence< PropertyState > SAL_CALL ColorPropertySet::getPropertyStates( const Se
 
 void SAL_CALL ColorPropertySet::setPropertyToDefault( const OUString& PropertyName )
 {
-    if( PropertyName.equals( m_aColorPropName ))
+    if( PropertyName == m_aColorPropName )
         m_nColor = m_nDefaultColor;
 }
 
 uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
 {
-    if( aPropertyName.equals( m_aColorPropName ))
+    if( aPropertyName == m_aColorPropName )
         return uno::makeAny( m_nDefaultColor );
     return uno::Any();
 }

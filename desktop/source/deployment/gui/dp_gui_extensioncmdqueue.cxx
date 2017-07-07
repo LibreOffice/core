@@ -420,8 +420,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             break;
         }
         OSL_ASSERT( verExc.Deployed.is() );
-        bool bEqualNames = verExc.NewDisplayName.equals(
-            verExc.Deployed->getDisplayName());
+        bool bEqualNames = verExc.NewDisplayName ==
+            verExc.Deployed->getDisplayName();
         {
             SolarMutexGuard guard;
             ScopedVclPtrInstance<MessageDialog> box(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr,

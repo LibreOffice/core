@@ -720,7 +720,7 @@ namespace pcr
             OUString sSelection;
             _rValue >>= sSelection;
 
-            if ( !sSelection.equals( getTypedControlWindow()->GetSelectEntry() ) )
+            if ( sSelection != getTypedControlWindow()->GetSelectEntry() )
                 getTypedControlWindow()->SelectEntry( sSelection );
 
             if ( !getTypedControlWindow()->IsEntrySelected( sSelection ) )

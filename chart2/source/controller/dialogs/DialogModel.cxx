@@ -220,7 +220,7 @@ struct lcl_RolesWithRangeAppend : public
                             tContainerType::value_type(
                                 aRole, xSeq->getSourceRangeRepresentation()));
                         // label
-                        if( aRole.equals( m_aRoleForLabelSeq ))
+                        if( aRole == m_aRoleForLabelSeq )
                         {
                             Reference< data::XDataSequence > xLabelSeq( xVal->getLabel());
                             if( xLabelSeq.is())
@@ -317,12 +317,12 @@ Reference< XDataSeries > lcl_CreateNewSeries(
 
             for(nI=0; nI<aRoles.getLength(); ++nI)
             {
-                if( aRoles[nI].equals( lcl_aLabelRole ))
+                if( aRoles[nI] == lcl_aLabelRole )
                     continue;
                 Reference< data::XDataSequence > xSeq( ::chart::DataSourceHelper::createCachedDataSequence() );
                 lcl_SetSequenceRole( xSeq, aRoles[nI] );
                 // assert that aRoleOfSeqForSeriesLabel is part of the mandatory roles
-                if( aRoles[nI].equals( aRoleOfSeqForSeriesLabel ))
+                if( aRoles[nI] == aRoleOfSeqForSeriesLabel )
                 {
                     Reference< data::XDataSequence > xLabel( ::chart::DataSourceHelper::createCachedDataSequence( aLabel ));
                     lcl_SetSequenceRole( xLabel, lcl_aLabelRole );
@@ -334,7 +334,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
 
             for(nI=0; nI<aOptRoles.getLength(); ++nI)
             {
-                if( aOptRoles[nI].equals( lcl_aLabelRole ))
+                if( aOptRoles[nI] == lcl_aLabelRole )
                     continue;
                 Reference< data::XDataSequence > xSeq( ::chart::DataSourceHelper::createCachedDataSequence());
                 lcl_SetSequenceRole( xSeq, aOptRoles[nI] );

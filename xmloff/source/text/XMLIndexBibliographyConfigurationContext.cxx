@@ -227,7 +227,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
         sal_Int32 nServiceCount(aServices.getLength());
         while (i < nServiceCount && !bFound)
         {
-            if (aServices[i].equals(sFieldMaster_Bibliography))
+            if (aServices[i] == sFieldMaster_Bibliography)
             // here we should use a method which compares in reverse order if available
                 bFound = true;
             else

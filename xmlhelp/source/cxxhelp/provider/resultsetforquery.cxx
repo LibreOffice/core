@@ -229,7 +229,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                                 for( int j = 0 ; j < nCount ; ++j )
                                 {
                                     HitItem& rFindItem = aIndexFolderResultVector[ j ];
-                                    if( rFindItem.m_aURL.equals( aItemCopy.m_aURL ) )
+                                    if( rFindItem.m_aURL == aItemCopy.m_aURL )
                                     {
                                         rFindItem.m_fScore += aItemCopy.m_fScore;
                                         break;

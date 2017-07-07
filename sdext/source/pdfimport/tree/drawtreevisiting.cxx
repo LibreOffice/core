@@ -132,7 +132,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     for(int i=0; i< elem.Text.getLength(); i++)
     {
         OUString strToken=  str.copy(i,1) ;
-        if( strSpace.equals(strToken) || strNbSpace.equals(strToken))
+        if( strSpace == strToken || strNbSpace == strToken )
         {
             aProps[ "text:c" ] = "1";
             m_rEmitContext.rEmitter.beginTag( "text:s", aProps );
@@ -140,7 +140,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
         }
         else
         {
-            if( tabSpace.equals(strToken) )
+            if( tabSpace == strToken )
             {
                 m_rEmitContext.rEmitter.beginTag( "text:tab", aProps );
                 m_rEmitContext.rEmitter.endTag( "text:tab");

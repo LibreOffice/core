@@ -499,7 +499,7 @@ SdPage* DocumentHelper::ProvideMasterPage (
     for (sal_uInt16 nIndex=0,nCount=rTargetDocument.GetMasterPageCount(); nIndex<nCount; ++nIndex)
     {
         SdPage* pCandidate = static_cast<SdPage*>(rTargetDocument.GetMasterPage(nIndex));
-        if (pCandidate && sMasterPageLayoutName.equals(pCandidate->GetLayoutName()))
+        if (pCandidate && sMasterPageLayoutName == pCandidate->GetLayoutName())
         {
             // The requested master page does already exist in the
             // target document, return it.

@@ -141,11 +141,11 @@ bool DocumentSignatureManager::isXML(const OUString& rURI)
         {
             const beans::PropertyValue& prop = entry[j];
 
-            if (prop.Name.equals(sPropFullPath))
+            if (prop.Name == sPropFullPath)
                 prop.Value >>= sPath;
-            else if (prop.Name.equals(sPropMediaType))
+            else if (prop.Name == sPropMediaType)
                 prop.Value >>= sMediaType;
-            else if (prop.Name.equals(sPropDigest))
+            else if (prop.Name == sPropDigest)
                 bEncrypted = true;
         }
         if (DocumentSignatureHelper::equalsReferenceUriManifestPath(rURI, sPath))

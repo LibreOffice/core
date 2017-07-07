@@ -46,10 +46,10 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
 
 bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
 {
-    return ( aFileName.equals(rCompare.GetFile()) &&
-             aFilterName.equals(rCompare.GetFilter()) &&
-             aOptions.equals(rCompare.GetOptions()) &&
-             aSourceArea.equals(rCompare.GetSource()) &&
+    return ( aFileName == rCompare.GetFile() &&
+             aFilterName == rCompare.GetFilter() &&
+             aOptions == rCompare.GetOptions() &&
+             aSourceArea == rCompare.GetSource() &&
              nRefresh == rCompare.GetRefreshDelay() );
 }
 

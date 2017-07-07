@@ -996,14 +996,14 @@ ScVbaWorksheet::getControlShape( const OUString& sName )
         uno::Any aUnoObj =  xIndexAccess->getByIndex( index );
          // It seems there are some drawing objects that can not query into Control shapes?
         uno::Reference< drawing::XControlShape > xControlShape( aUnoObj, uno::UNO_QUERY );
-         if( xControlShape.is() )
-         {
-             uno::Reference< container::XNamed > xNamed( xControlShape->getControl(), uno::UNO_QUERY_THROW );
-        if( sName.equals( xNamed->getName() ))
+        if( xControlShape.is() )
         {
-            return aUnoObj;
+            uno::Reference< container::XNamed > xNamed( xControlShape->getControl(), uno::UNO_QUERY_THROW );
+            if( sName == xNamed->getName() )
+            {
+                return aUnoObj;
+            }
         }
-         }
     }
     return uno::Any();
 }

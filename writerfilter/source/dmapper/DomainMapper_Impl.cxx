@@ -2671,7 +2671,7 @@ void DomainMapper_Impl::ChainTextFrames()
             //if no mso-next-textbox, we are done.
             //if it points to itself, we are done.
             if( !msoIter->second.s_mso_next_textbox.isEmpty()
-                && !msoIter->second.s_mso_next_textbox.equals(msoIter->first) )
+                && msoIter->second.s_mso_next_textbox != msoIter->first )
             {
                 ChainMap::iterator nextFinder=aTextFramesForChainingHelper.find(msoIter->second.s_mso_next_textbox);
                 if( nextFinder != aTextFramesForChainingHelper.end() )

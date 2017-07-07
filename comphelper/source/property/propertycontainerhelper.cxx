@@ -56,7 +56,7 @@ namespace
 
         bool operator() (const PropertyDescription& x ) const
         {
-            return x.aProperty.Name.equals(m_rCompare);
+            return x.aProperty.Name == m_rCompare;
         }
     };
 }

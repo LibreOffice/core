@@ -1875,7 +1875,7 @@ void Outliner::ImplCalcBulletText( sal_Int32 nPara, bool bRecalcLevel, bool bRec
             aBulletText += pFmt->GetSuffix();
         }
 
-        if (!pPara->GetText().equals(aBulletText))
+        if (pPara->GetText() != aBulletText)
             pPara->SetText( aBulletText );
 
         pPara->nFlags &= (~ParaFlag::SETBULLETTEXT);

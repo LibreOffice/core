@@ -39,7 +39,7 @@ public:
     FindByName(const OUString& rName, bool bUpper) : mrName(rName), mbUpper(bUpper) {}
     bool operator() (const ScUserListData::SubStr& r) const
     {
-        return mbUpper ? r.maUpper.equals(mrName) : r.maReal.equals(mrName);
+        return mbUpper ? r.maUpper == mrName : r.maReal == mrName;
     }
 };
 

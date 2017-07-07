@@ -316,7 +316,7 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
                         if ( rKey.compareTo(
                                  aOldKeyWithSlash,
                                  aOldKeyWithSlash.getLength() ) == 0
-                             || rKey.equals( aOldKeyWithoutSlash ) )
+                             || rKey == aOldKeyWithoutSlash )
                         {
                             OUString aNewKey
                                 = rKey.replaceAt(
@@ -400,7 +400,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
                         if ( rKey.compareTo(
                                  aSrcKeyWithSlash,
                                  aSrcKeyWithSlash.getLength() ) == 0
-                             || rKey.equals( aSrcKeyWithoutSlash ) )
+                             || rKey == aSrcKeyWithoutSlash )
                         {
                             OUString aNewKey
                                 = rKey.replaceAt(
@@ -536,7 +536,7 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
                         if ( rCurrKey.compareTo(
                                  aKeyWithSlash,
                                  aKeyWithSlash.getLength() ) == 0
-                             || rCurrKey.equals( aKeyWithoutSlash ) )
+                             || rCurrKey == aKeyWithoutSlash )
                         {
                             if ( !removeAdditionalPropertySet(
                                      rCurrKey, false ) )

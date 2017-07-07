@@ -780,7 +780,7 @@ void delete_all_singleton_entries(
                 ::std::list< OUString >::const_iterator const iEnd( impl_names.end() );
                 for ( ; iPos != iEnd; ++iPos )
                 {
-                    if (iPos->equals( registered_implname ))
+                    if (*iPos == registered_implname)
                     {
                         registered_implnames[ n ] = p[ nNewLength -1 ];
                         --nNewLength;
@@ -893,7 +893,7 @@ bool is_supported_service(
     OUString const & service_name,
     Reference< reflection::XServiceTypeDescription > const & xService_td )
 {
-    if (xService_td->getName().equals( service_name ))
+    if (xService_td->getName() == service_name)
         return true;
     Sequence< Reference< reflection::XServiceTypeDescription > > seq(
         xService_td->getMandatoryServices() );
@@ -936,7 +936,7 @@ void insert_singletons(
                 try
                 {
                     OUString existing_name( xKey2->getStringValue() );
-                    if (! existing_name.equals( service_name ))
+                    if ( existing_name != service_name )
                     {
                         Reference< container::XHierarchicalNameAccess > xTDMgr;
                         OUString the_tdmgr =
@@ -1005,7 +1005,7 @@ void insert_singletons(
             OUString const * pImplnames = implnames.getConstArray();
             while (nPos_implnames--)
             {
-                if (implname.equals( pImplnames[ nPos_implnames ] ))
+                if (implname == pImplnames[ nPos_implnames ])
                     break;
             }
             if (nPos_implnames < 0)

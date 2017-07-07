@@ -311,7 +311,7 @@ void SAL_CALL UpdateHandler::actionPerformed( awt::ActionEvent const & rEvent )
     DialogControls eButton = BUTTON_COUNT;
     for ( int i = 0; i < BUTTON_COUNT; i++ )
     {
-        if ( rEvent.ActionCommand.equals( msButtonIDs[i] ) )
+        if ( rEvent.ActionCommand == msButtonIDs[i] )
         {
             eButton = (DialogControls) i;
             break;

@@ -107,7 +107,7 @@ VbaGlobalsBase::init(  const uno::Sequence< beans::PropertyValue >& aInitArgs )
     for ( sal_Int32 nIndex = 0; nIndex < nLen; ++nIndex )
     {
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY_THROW );
-        if ( aInitArgs[ nIndex ].Name.equals( msApplication ) )
+        if ( aInitArgs[ nIndex ].Name == msApplication )
         {
             xNameContainer->replaceByName( msApplication, aInitArgs[ nIndex ].Value );
             uno::Reference< XHelperInterface > xParent( aInitArgs[ nIndex ].Value, uno::UNO_QUERY );
@@ -163,7 +163,7 @@ VbaGlobalsBase::hasServiceName( const OUString& serviceName )
     sal_Int32 nLen = sServiceNames.getLength();
     for ( sal_Int32 index = 0; index < nLen; ++index )
     {
-        if ( sServiceNames[ index ].equals( serviceName ) )
+        if ( sServiceNames[ index ] == serviceName )
             return true;
     }
     return false;

@@ -128,7 +128,7 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
     for( i = 0; i < nCount; i++ )
     {
         const XPropertyEntry* pEntry = get(i);
-        if (pEntry && aInternalName.equals(pEntry->GetName()))
+        if (pEntry && aInternalName == pEntry->GetName())
         {
             mpList->Remove(i);
             return;
@@ -150,7 +150,7 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
     for( i = 0; i < nCount; i++ )
     {
         const XPropertyEntry* pEntry = get(i);
-        if (pEntry && aInternalName.equals(pEntry->GetName()))
+        if (pEntry && aInternalName == pEntry->GetName())
         {
             std::unique_ptr<XPropertyEntry> pNewEntry(createEntry(aInternalName, aElement));
             if (!pNewEntry)
@@ -177,7 +177,7 @@ uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
     {
         const XPropertyEntry* pEntry = get(i);
 
-        if (pEntry && aInternalName.equals(pEntry->GetName()))
+        if (pEntry && aInternalName == pEntry->GetName())
             return getAny( pEntry );
     }
 
@@ -214,7 +214,7 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
     for( i = 0; i < nCount; i++ )
     {
         const XPropertyEntry* pEntry = get(i);
-        if (pEntry && aInternalName.equals(pEntry->GetName()))
+        if (pEntry && aInternalName == pEntry->GetName())
             return true;
     }
 

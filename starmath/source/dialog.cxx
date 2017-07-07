@@ -1944,7 +1944,7 @@ void SmSymDefineDialog::UpdateButtons()
         //! (Font-, Style- and SymbolSet name comparison is not case sensitive)
         bool bEqual = pOrigSymbol
                     && aTmpSymbolSetName.equalsIgnoreAsciiCase(pOldSymbolSetName->GetText())
-                    && aTmpSymbolName.equals(pOrigSymbol->GetName())
+                    && aTmpSymbolName == pOrigSymbol->GetName()
                     && pFonts->GetSelectEntry().equalsIgnoreAsciiCase(
                             pOrigSymbol->GetFace().GetFamilyName())
                     && pStyles->GetText().equalsIgnoreAsciiCase(

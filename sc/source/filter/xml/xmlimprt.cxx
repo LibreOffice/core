@@ -2778,7 +2778,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString
                     OUString sTemp;
                     if ( xNumberPropertySet->getPropertyValue(SC_CURRENCYSYMBOL) >>= sTemp)
                     {
-                        if (sCurrentCurrency.equals(sTemp))
+                        if (sCurrentCurrency == sTemp)
                             return true;
                         // A release that saved an unknown currency may have
                         // saved the currency symbol of the number format
@@ -2787,7 +2787,7 @@ bool ScXMLImport::IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString
                         // sCurrentCurrency is the ISO code obtained through
                         // XMLNumberFormatAttributesExportHelper::GetCellType()
                         // and sBankSymbol is the currency symbol.
-                        if (sCurrentCurrency.getLength() == 3 && sBankSymbol.equals(sTemp))
+                        if (sCurrentCurrency.getLength() == 3 && sBankSymbol == sTemp)
                             return true;
                         // #i61657# This may be a legacy currency symbol that changed in the meantime.
                         if (SvNumberFormatter::GetLegacyOnlyCurrencyEntry( sCurrentCurrency, sBankSymbol) != nullptr)
@@ -2866,7 +2866,7 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
                         }
                         else if (!rCurrency.isEmpty() && !sCurrentCurrency.isEmpty())
                         {
-                            if (!sCurrentCurrency.equals(rCurrency))
+                            if (sCurrentCurrency != rCurrency)
                                 if (!IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
                                     rProperties->setPropertyValue( sNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
                         }
@@ -2881,7 +2881,7 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
         else
         {
             if ((nCellType == util::NumberFormat::CURRENCY) && !rCurrency.isEmpty() && !sCurrentCurrency.isEmpty() &&
-                !sCurrentCurrency.equals(rCurrency) && !IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
+                sCurrentCurrency != rCurrency && !IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
                 rProperties->setPropertyValue( sNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
         }
     }
@@ -2987,9 +2987,9 @@ void ScXMLImport::SetStyleToRange(const ScRange& rRange, const OUString* pStyleN
             sPrevCurrency.clear();
     }
     else if ((nCellType != nPrevCellType) ||
-        ((pStyleName && !pStyleName->equals(sPrevStyleName)) ||
+        ((pStyleName && *pStyleName != sPrevStyleName) ||
         (!pStyleName && !sPrevStyleName.isEmpty())) ||
-        ((pCurrency && !pCurrency->equals(sPrevCurrency)) ||
+        ((pCurrency && *pCurrency != sPrevCurrency) ||
         (!pCurrency && !sPrevCurrency.isEmpty())))
     {
         SetStyleToRanges();

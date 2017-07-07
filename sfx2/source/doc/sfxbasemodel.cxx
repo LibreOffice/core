@@ -1001,7 +1001,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs()
              sal_Int32 nOldInd = 0;
             while ( nOldInd < nOldLength )
             {
-                if ( m_pData->m_seqArguments[nOrg].Name.equals( seqArgsOld[nOldInd].Name ) )
+                if ( m_pData->m_seqArguments[nOrg].Name == seqArgsOld[nOldInd].Name )
                     break;
                 nOldInd++;
             }
@@ -2857,7 +2857,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             if ( pMedium )
             {
                 std::shared_ptr<const SfxFilter> pFilter = pMedium->GetFilter();
-                if ( pFilter && aFilterName.equals( pFilter->GetFilterName() ) )
+                if ( pFilter && aFilterName == pFilter->GetFilterName() )
                 {
                     // #i119366# - If the former file saving with password, do not trying in StoreSelf anyway...
                     bool bFormerPassword = false;

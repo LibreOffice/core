@@ -133,7 +133,7 @@ namespace osl_Security
             aMessage.append(", bRes: ");
             aMessage.append(bRes);
 
-            CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), strUserID.equals(strID) );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), strUserID, strID );
             CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), bRes );
         }
 

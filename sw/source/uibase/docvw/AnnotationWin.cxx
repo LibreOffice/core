@@ -202,7 +202,7 @@ void SwAnnotationWin::SetPostItText()
     //point .e.g. fdo#33599
     mpField = static_cast<SwPostItField*>(mpFormatField->GetField());
     OUString sNewText = mpField->GetPar2();
-    bool bTextUnchanged = sNewText.equals(mpOutliner->GetEditEngine().GetText());
+    bool bTextUnchanged = sNewText == mpOutliner->GetEditEngine().GetText();
     ESelection aOrigSelection(GetOutlinerView()->GetEditView().GetSelection());
 
     // get text from SwPostItField and insert into our textview

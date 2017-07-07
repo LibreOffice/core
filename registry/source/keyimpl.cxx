@@ -1011,7 +1011,7 @@ OStoreDirectory ORegKey::getStoreDir()
     OUString        relativName;
     storeAccessMode accessMode = storeAccessMode::ReadWrite;
 
-    if ( m_name.equals(m_pRegistry->ROOT) )
+    if ( m_name == m_pRegistry->ROOT )
     {
         fullPath.clear();
         relativName.clear();

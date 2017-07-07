@@ -207,7 +207,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     for ( size_t i = nCount; i; )
     {
         SwFieldType* pFieldType = pMgr->GetFieldType(SwFieldIds::Unknown, --i);
-        if( pFieldType->GetName().equals(m_pCategoryBox->GetText()) )
+        if( pFieldType->GetName() == m_pCategoryBox->GetText() )
         {
             nSelFormat = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFieldType)->GetSeqFormat();
             break;

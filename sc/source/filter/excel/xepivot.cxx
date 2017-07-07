@@ -920,7 +920,7 @@ void XclExpPTItem::SetPropertiesFromMember( const ScDPSaveMember& rSaveMem )
 
     // visible name
     const OUString* pVisName = rSaveMem.GetLayoutName();
-    if (pVisName && !pVisName->equals(GetItemName()))
+    if (pVisName && *pVisName != GetItemName())
         maItemInfo.SetVisName(*pVisName);
 }
 
@@ -1003,7 +1003,7 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 
     // visible name
     const OUString* pLayoutName = rSaveDim.GetLayoutName();
-    if (pLayoutName && !pLayoutName->equals(GetFieldName()))
+    if (pLayoutName && *pLayoutName != GetFieldName())
         maFieldInfo.SetVisName(*pLayoutName);
 
     const OUString* pSubtotalName = rSaveDim.GetSubtotalName();

@@ -753,7 +753,7 @@ static bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScD
             pAction->GetDescription(aActionDesc, pDoc, true);
             OUString aADesc;
             pA->GetDescription(aADesc, pSearchDoc, true);
-            if (aActionDesc.equals(aADesc))
+            if (aActionDesc == aADesc)
             {
                 OSL_FAIL( "lcl_FindAction(): found equal action!" );
                 return true;

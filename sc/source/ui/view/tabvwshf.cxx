@@ -481,7 +481,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             {
                                 pScSh->GetTitle();
 
-                                if (aDocName.equals(pScSh->GetTitle()))
+                                if (aDocName == pScSh->GetTitle())
                                 {
                                     nDoc = i;
                                     ScDocument& rDestDoc = pScSh->GetDocument();

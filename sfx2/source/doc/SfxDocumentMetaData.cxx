@@ -656,7 +656,7 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
                         c.is();
                         c = c->getNextSibling()) {
                     if (c->getNodeType() == css::xml::dom::NodeType_TEXT_NODE) {
-                        if (!c->getNodeValue().equals(i_rValue)) {
+                        if (c->getNodeValue() != i_rValue) {
                             c->setNodeValue(i_rValue);
                             return true;
                         } else {
@@ -753,7 +753,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
                     css::uno::Reference<css::xml::dom::XNode> xNode(vec.at(i));
                     if (xNode.is()) {
                         OUString val = getNodeText(xNode);
-                        if (!val.equals(i_rValue[i])) {
+                        if (val != i_rValue[i]) {
                             isEqual = false;
                             break;
                         }

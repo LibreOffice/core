@@ -48,7 +48,7 @@ bool OStringListItem::operator==(const SfxPoolItem& _rItem) const
     const OUString* pCompareStrings = pCompare->m_aList.getConstArray();
 
     for (sal_Int32 i=0; i<m_aList.getLength(); ++i, ++pMyStrings, ++pCompareStrings)
-        if (!pMyStrings->equals(*pCompareStrings))
+        if (*pMyStrings != *pCompareStrings)
             return false;
 
     return true;

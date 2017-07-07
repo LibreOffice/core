@@ -32,7 +32,7 @@ css::uno::Sequence<sal_Int16> findValue(const css::uno::Sequence< OUString >& _r
         const OUString* pTArray = _rList.getConstArray();
         for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
         {
-            if( pTArray->equals(_rValue) )
+            if( *pTArray == _rValue )
             {
                 nPos = i;
                 break;
@@ -60,7 +60,7 @@ css::uno::Sequence<sal_Int16> findValue(const css::uno::Sequence< OUString >& _r
         const OUString* pTArray = _rList.getConstArray();
         for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
         {
-            if( pTArray->equals(_rValue) )
+            if( *pTArray == _rValue )
             {
                 *pReturn = (sal_Int16)i;
                 ++pReturn;

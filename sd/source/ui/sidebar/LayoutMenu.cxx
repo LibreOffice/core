@@ -519,16 +519,16 @@ void LayoutMenu::Fill()
     {}
 
     const snewfoil_value_info* pInfo = nullptr;
-    if (sCenterPaneViewName.equals(framework::FrameworkHelper::msNotesViewURL))
+    if (sCenterPaneViewName == framework::FrameworkHelper::msNotesViewURL)
     {
         pInfo = notes;
     }
-    else if (sCenterPaneViewName.equals(framework::FrameworkHelper::msHandoutViewURL))
+    else if (sCenterPaneViewName == framework::FrameworkHelper::msHandoutViewURL)
     {
         pInfo = handout;
     }
-    else if (sCenterPaneViewName.equals(framework::FrameworkHelper::msImpressViewURL)
-        || sCenterPaneViewName.equals(framework::FrameworkHelper::msSlideSorterURL))
+    else if (sCenterPaneViewName == framework::FrameworkHelper::msImpressViewURL
+        || sCenterPaneViewName == framework::FrameworkHelper::msSlideSorterURL)
     {
         pInfo = standard;
     }

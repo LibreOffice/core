@@ -97,7 +97,7 @@ ScVbaComboBox::getListIndex()
         sal_Int32 nLen = sItems.getLength();
         for ( sal_Int32 index = 0; !sText.isEmpty() && index < nLen; ++index )
         {
-            if ( sItems[ index ].equals( sText ) )
+            if ( sItems[ index ] == sText )
             {
                 SAL_INFO("vbahelper", "getListIndex returning " << index );
                 return uno::makeAny( index );

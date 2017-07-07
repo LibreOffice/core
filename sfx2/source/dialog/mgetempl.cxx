@@ -527,7 +527,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
         else
             m_pBaseLb->SelectEntry( aParent );
 
-        if ( SfxResId(STR_STANDARD).equals(aName) )
+        if ( SfxResId(STR_STANDARD) == aName )
         {
             // the default template can not be linked
             m_pBaseFt->Disable();
@@ -640,7 +640,7 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
     {
         OUString aParentEntry( m_pBaseLb->GetSelectEntry() );
 
-        if ( SfxResId(STR_NONE).equals(aParentEntry) || aParentEntry == pStyle->GetName() )
+        if ( SfxResId(STR_NONE) == aParentEntry || aParentEntry == pStyle->GetName() )
             aParentEntry.clear();
 
         if ( pStyle->GetParent() != aParentEntry )

@@ -4171,7 +4171,7 @@ OUString WW8PLCFx_Book::GetUniqueBookmarkName(const OUString &rSuggestedName)
     size_t i = 0;
     while (i < aBookNames.size())
     {
-        if (aRet.equals(aBookNames[i]))
+        if (aRet == aBookNames[i])
         {
             sal_Int32 len = aRet.getLength();
             sal_Int32 p = len - 1;

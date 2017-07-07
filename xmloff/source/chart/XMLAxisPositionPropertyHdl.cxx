@@ -46,7 +46,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
 {
     bool bResult = false;
 
-    if( rStrImpValue.equals( GetXMLToken(XML_START) ) )
+    if( rStrImpValue == GetXMLToken(XML_START) )
     {
         if( !m_bCrossingValue )
         {
@@ -54,7 +54,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
             bResult = true;
         }
     }
-    else if( rStrImpValue.equals( GetXMLToken(XML_END) ) )
+    else if( rStrImpValue == GetXMLToken(XML_END) )
     {
         if( !m_bCrossingValue )
         {
@@ -62,7 +62,7 @@ bool XMLAxisPositionPropertyHdl::importXML( const OUString& rStrImpValue,
             bResult = true;
         }
     }
-    else if( rStrImpValue.equals( GetXMLToken(XML_0) ) )
+    else if( rStrImpValue == GetXMLToken(XML_0) )
     {
         if( !m_bCrossingValue )
         {

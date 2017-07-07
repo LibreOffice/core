@@ -579,7 +579,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         {
             // This is an original member name.  Use it as-is.
             OUString aName = itr->aName;
-            if (aName.equals(ScGlobal::GetRscString(STR_EMPTYDATA)))
+            if (aName == ScGlobal::GetRscString(STR_EMPTYDATA))
                 // Translate the special empty name into an empty string.
                 aName.clear();
 

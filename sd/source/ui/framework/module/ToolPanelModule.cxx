@@ -79,7 +79,7 @@ void ToolPanelModule::SaveResourceState()
 void SAL_CALL ToolPanelModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    if (!rEvent.Type.equals(FrameworkHelper::msResourceActivationEvent))
+    if (rEvent.Type != FrameworkHelper::msResourceActivationEvent)
         ResourceManager::notifyConfigurationChange(rEvent);
 }
 

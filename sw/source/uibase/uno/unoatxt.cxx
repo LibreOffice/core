@@ -600,7 +600,7 @@ void SwXAutoTextGroup::setPropertyValue(
             aValue >>= sNewTitle;
             if(sNewTitle.isEmpty())
                 throw lang::IllegalArgumentException();
-            bool bChanged = !sNewTitle.equals(pGlosGroup->GetName());
+            bool bChanged = sNewTitle != pGlosGroup->GetName();
             pGlosGroup->SetName(sNewTitle);
             if(bChanged && HasGlossaryList())
                 GetGlossaryList()->ClearGroups();

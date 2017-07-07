@@ -234,7 +234,7 @@ void OCommonEmbeddedObject::LinkInit_Impl(
     {
         ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
         OUString aExportFilterName = aHelper.GetExportFilterFromImportFilter( m_aLinkFilterName );
-        m_bReadOnly = !( aExportFilterName.equals( m_aLinkFilterName ) );
+        m_bReadOnly = aExportFilterName != m_aLinkFilterName;
     }
 
     m_aDocMediaDescriptor = GetValuableArgs_Impl( aMediaDescr, false );

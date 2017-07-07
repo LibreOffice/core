@@ -87,7 +87,7 @@ public:
     bool operator()(const ScExternalRefCache::TableName& rTabNameSet) const
     {
         // Ok, I'm doing case insensitive search here.
-        return rTabNameSet.maUpperName.equals(maSearchName);
+        return rTabNameSet.maUpperName == maSearchName;
     }
 
 private:
@@ -104,7 +104,7 @@ public:
 
     bool operator()(const ScExternalRefManager::SrcFileData& rSrcData) const
     {
-        return rSrcData.maFileName.equals(mrMatchName);
+        return rSrcData.maFileName == mrMatchName;
     }
 
 private:
@@ -1483,7 +1483,7 @@ void ScExternalRefLink::Closed()
     if (!pCurFile)
         return ERROR_GENERAL;
 
-    if (pCurFile->equals(aFile))
+    if (*pCurFile == aFile)
     {
         // Refresh the current source document.
         if (!pMgr->refreshSrcDocument(mnFileId))
@@ -2690,7 +2690,7 @@ OUString ScExternalRefManager::getOwnDocumentName() const
 
 bool ScExternalRefManager::isOwnDocument(const OUString& rFile) const
 {
-    return getOwnDocumentName().equals(rFile);
+    return getOwnDocumentName() == rFile;
 }
 
 void ScExternalRefManager::convertToAbsName(OUString& rFile) const
@@ -2985,7 +2985,7 @@ void ScExternalRefManager::switchSrcFile(sal_uInt16 nFileId, const OUString& rNe
     maSrcFiles[nFileId].maFileName = rNewFile;
     maSrcFiles[nFileId].maRelativeName.clear();
     maSrcFiles[nFileId].maRealFileName.clear();
-    if (!maSrcFiles[nFileId].maFilterName.equals(rNewFilter))
+    if (maSrcFiles[nFileId].maFilterName != rNewFilter)
     {
         // Filter type has changed.
         maSrcFiles[nFileId].maFilterName = rNewFilter;

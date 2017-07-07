@@ -1195,12 +1195,12 @@ bool ScAcceptChgDlg::InsertAcceptedORejected(SvTreeListEntry* pParent)
     ScChangeActionState eState = SC_CAS_VIRGIN;
     OUString aString = pTheView->GetEntryText(pParent);
     OUString a2String = aString.copy(0, aStrAllAccepted.getLength());
-    if (a2String.equals(aStrAllAccepted))
+    if (a2String == aStrAllAccepted)
         eState=SC_CAS_ACCEPTED;
     else
     {
         a2String = aString.copy(0, aStrAllRejected.getLength());
-        if (a2String.equals(aStrAllRejected))
+        if (a2String == aStrAllRejected)
             eState=SC_CAS_REJECTED;
     }
 

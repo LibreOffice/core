@@ -693,7 +693,7 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
         if (rPath.bIsSinglePath)
         {
             SAL_WARN_IF(lOld.size()>1, "fwk", "PathSettings::impl_mergeOldUserPaths(): Single path has more than one path value inside old configuration (Common.xcu)!");
-            if (! rPath.sWritePath.equals(sOld))
+            if ( rPath.sWritePath != sOld )
                rPath.sWritePath = sOld;
         }
         else
@@ -701,7 +701,7 @@ void PathSettings::impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
             if (
                 (  std::find(rPath.lInternalPaths.begin(), rPath.lInternalPaths.end(), sOld) == rPath.lInternalPaths.end()) &&
                 (  std::find(rPath.lUserPaths.begin(), rPath.lUserPaths.end(), sOld)     == rPath.lUserPaths.end()    ) &&
-                (! rPath.sWritePath.equals(sOld)                                     )
+                (  rPath.sWritePath != sOld                                     )
                )
                rPath.lUserPaths.push_back(sOld);
         }
@@ -840,16 +840,16 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUSt
     {
         const css::beans::Property& rProp = m_lPropDesc[i];
 
-        if (rProp.Name.equals(sPath))
+        if (rProp.Name == sPath)
             lIDs[IDGROUP_OLDSTYLE] = rProp.Handle;
         else
-        if (rProp.Name.equals(sInternalProp))
+        if (rProp.Name == sInternalProp)
             lIDs[IDGROUP_INTERNAL_PATHS] = rProp.Handle;
         else
-        if (rProp.Name.equals(sUserProp))
+        if (rProp.Name == sUserProp)
             lIDs[IDGROUP_USER_PATHS] = rProp.Handle;
         else
-        if (rProp.Name.equals(sWriteProp))
+        if (rProp.Name == sWriteProp)
             lIDs[IDGROUP_WRITE_PATH] = rProp.Handle;
     }
 

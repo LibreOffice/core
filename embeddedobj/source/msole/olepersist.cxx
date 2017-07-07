@@ -744,7 +744,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
                                               const uno::Reference< io::XStream >& xNewObjectStream,
                                               const OUString& aNewName )
 {
-    if ( xNewParentStorage == m_xParentStorage && aNewName.equals( m_aEntryName ) )
+    if ( xNewParentStorage == m_xParentStorage && aNewName == m_aEntryName )
     {
         SAL_WARN_IF( xNewObjectStream != m_xObjectStream, "embeddedobj.ole", "The streams must be the same!" );
         return;
@@ -769,7 +769,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
 void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
                                               const OUString& aNewName )
 {
-    if ( xNewParentStorage == m_xParentStorage && aNewName.equals( m_aEntryName ) )
+    if ( xNewParentStorage == m_xParentStorage && aNewName == m_aEntryName )
         return;
 
     sal_Int32 nStreamMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
@@ -1305,7 +1305,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     if ( m_bWaitSaveCompleted )
     {
         if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
-            saveCompleted( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) );
+            saveCompleted( m_xParentStorage != xStorage || m_aEntryName != sEntName );
         else
             throw embed::WrongStateException(
                         "The object waits for saveCompleted() call!",

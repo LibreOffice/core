@@ -326,27 +326,27 @@ Reference<XResource> PresenterViewFactory::CreateView(
     {
         const OUString sResourceURL (rxViewId->getResourceURL());
 
-        if (sResourceURL.equals(msCurrentSlidePreviewViewURL))
+        if (sResourceURL == msCurrentSlidePreviewViewURL)
         {
             xView = CreateSlideShowView(rxViewId);
         }
-        else if (sResourceURL.equals(msNotesViewURL))
+        else if (sResourceURL == msNotesViewURL)
         {
             xView = CreateNotesView(rxViewId);
         }
-        else if (sResourceURL.equals(msNextSlidePreviewViewURL))
+        else if (sResourceURL == msNextSlidePreviewViewURL)
         {
             xView = CreateSlidePreviewView(rxViewId, rxAnchorPane);
         }
-        else if (sResourceURL.equals(msToolBarViewURL))
+        else if (sResourceURL == msToolBarViewURL)
         {
             xView = CreateToolBarView(rxViewId);
         }
-        else if (sResourceURL.equals(msSlideSorterURL))
+        else if (sResourceURL == msSlideSorterURL)
         {
             xView = CreateSlideSorterView(rxViewId);
         }
-        else if (sResourceURL.equals(msHelpViewURL))
+        else if (sResourceURL == msHelpViewURL)
         {
             xView = CreateHelpView(rxViewId);
         }

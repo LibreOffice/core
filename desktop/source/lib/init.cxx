@@ -2383,7 +2383,7 @@ static char* getFontSubset (const OString& aFontName)
         sal_uInt16 nItFont = 0;
         for (; nItFont < nFontCount; ++nItFont)
         {
-            if (aFoundFont.equals(pList->GetFontName(nItFont).GetFamilyName()))
+            if (aFoundFont == pList->GetFontName(nItFont).GetFamilyName())
             {
                 break;
             }

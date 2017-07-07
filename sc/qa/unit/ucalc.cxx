@@ -2155,9 +2155,9 @@ void Test::testStreamValid()
     m_pDoc->SetString(0, 0, 0, a1);
     m_pDoc->SetString(0, 1, 0, a2);
     test = m_pDoc->GetString(0, 0, 0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet1.A1", test.equals(a1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected value in Sheet1.A1", test, a1);
     test = m_pDoc->GetString(0, 1, 0);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet1.A2", test.equals(a2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected value in Sheet1.A2", test, a2);
 
     // Put formulas into Sheet2 to Sheet4 to reference values from Sheet1.
     m_pDoc->SetString(0, 0, 1, "=Sheet1.A1");
@@ -2166,13 +2166,13 @@ void Test::testStreamValid()
     m_pDoc->SetString(0, 0, 3, "=Sheet1.A2");
 
     test = m_pDoc->GetString(0, 0, 1);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet2.A1", test.equals(a1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected value in Sheet2.A1", test, a1);
     test = m_pDoc->GetString(0, 1, 1);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet2.A2", test.equals(a2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected value in Sheet2.A2", test, a2);
     test = m_pDoc->GetString(0, 0, 2);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet3.A1", test.equals(a1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected value in Sheet3.A1", test, a1);
     test = m_pDoc->GetString(0, 0, 3);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected value in Sheet3.A1", test.equals(a2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected value in Sheet3.A1", test, a2);
 
     // Set all sheet streams valid after all the initial cell values are in
     // place. In reality we need to have real XML streams stored in order to
@@ -2190,9 +2190,9 @@ void Test::testStreamValid()
     // A2 downward but cell A1 remains unmoved.
     m_pDoc->InsertRow(0, 0, MAXCOL, 0, 1, 2);
     test = m_pDoc->GetString(0, 0, 0);
-    CPPUNIT_ASSERT_MESSAGE("Cell A1 should not have moved.", test.equals(a1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell A1 should not have moved.", test, a1);
     test = m_pDoc->GetString(0, 3, 0);
-    CPPUNIT_ASSERT_MESSAGE("the old cell A2 should now be at A4.", test.equals(a2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the old cell A2 should now be at A4.", test, a2);
     ScRefCellValue aCell;
     aCell.assign(*m_pDoc, ScAddress(0,1,0));
     CPPUNIT_ASSERT_MESSAGE("Cell A2 should be empty.", aCell.isEmpty());
@@ -2890,7 +2890,7 @@ void Test::testToggleRefFlag()
         ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_OOO);
 
         // Original
-        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equals(aFinder.GetText()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Does not equal the original text.", aFormula, aFinder.GetText());
 
         // column relative / row relative -> column absolute / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
@@ -2921,7 +2921,7 @@ void Test::testToggleRefFlag()
         ScRefFinder aFinder(aFormula, aPos, m_pDoc, formula::FormulaGrammar::CONV_XL_R1C1);
 
         // Original
-        CPPUNIT_ASSERT_MESSAGE("Does not equal the original text.", aFormula.equals(aFinder.GetText()));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Does not equal the original text.", aFormula, aFinder.GetText());
 
         // column absolute / row absolute -> column relative / row absolute
         aFinder.ToggleRel(0, aFormula.getLength());
@@ -6582,7 +6582,7 @@ ScDocShell* Test::findLoadedDocShellByName(const OUString& rName)
         if (pMedium)
         {
             OUString aName = pMedium->GetName();
-            if (aName.equals(rName))
+            if (aName == rName)
                 return pShell;
         }
         pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, checkSfxObjectShell<ScDocShell>, false));

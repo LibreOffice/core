@@ -910,7 +910,7 @@ bool ToolBarManager::Implementation::CheckPlugInMode (const OUString& rsName) co
     }
     while (false);
 
-    if (rsName.equals(msViewerToolBar))
+    if (rsName == msViewerToolBar)
         bValid = bIsPlugInMode;
     else
         bValid = ! bIsPlugInMode;

@@ -133,7 +133,7 @@ std::shared_ptr<DeckDescriptor> ResourceManager::ImplGetDeckDescriptor(const OUS
 
         if (rDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
             continue;
-        if (rDeck->msId.equals(rsDeckId))
+        if (rDeck->msId == rsDeckId)
             return rDeck;
     }
     return nullptr;
@@ -151,7 +151,7 @@ std::shared_ptr<PanelDescriptor> ResourceManager::ImplGetPanelDescriptor(const O
     {
         const std::shared_ptr<PanelDescriptor>& rPanel = *iPanel;
 
-        if (rPanel->msId.equals(rsPanelId))
+        if (rPanel->msId == rsPanelId)
             return rPanel;
     }
     return nullptr;
@@ -221,7 +221,7 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
         const PanelDescriptor& rPanelDescriptor (*rPanel);
         if (rPanelDescriptor.mbExperimental && !maMiscOptions.IsExperimentalMode())
             continue;
-        if ( ! rPanelDescriptor.msDeckId.equals(sDeckId))
+        if ( rPanelDescriptor.msDeckId != sDeckId )
             continue;
 
         const ContextList::Entry* pEntry = rPanelDescriptor.maContextList.GetMatch(rContext);
@@ -470,7 +470,7 @@ void ResourceManager::ReadContextList (
         vcl::EnumContext::Application eApplication (vcl::EnumContext::GetApplicationEnum(sApplicationName));
 
         if (eApplication == vcl::EnumContext::Application::NONE
-            && !sApplicationName.equals(vcl::EnumContext::GetApplicationName(vcl::EnumContext::Application::NONE)))
+            && sApplicationName != vcl::EnumContext::GetApplicationName(vcl::EnumContext::Application::NONE))
         {
             // Handle some special names: abbreviations that make
             // context descriptions more readable.
@@ -636,7 +636,7 @@ void ResourceManager::StorePanelExpansionState (
     {
         const std::shared_ptr<PanelDescriptor>& rPanel = *iPanel;
 
-        if (rPanel->msId.equals(rsPanelId))
+        if (rPanel->msId == rsPanelId)
         {
             ContextList::Entry* pEntry(rPanel->maContextList.GetMatch(rContext));
             if (pEntry != nullptr)

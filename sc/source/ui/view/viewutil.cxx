@@ -153,10 +153,10 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
         {
             // GetUser() at ChangeTrack is the current user
             ScChangeTrack* pTrack = rDocument.GetChangeTrack();
-            if ( !pTrack || rAction.GetUser().equals(pTrack->GetUser()) )
+            if ( !pTrack || rAction.GetUser() == pTrack->GetUser() )
                 return false;
         }
-        else if ( !rAction.GetUser().equals(rSettings.GetTheAuthorToShow()) )
+        else if ( rAction.GetUser() != rSettings.GetTheAuthorToShow() )
             return false;
     }
 

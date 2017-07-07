@@ -738,7 +738,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                                 {
                                     const OUString aDocName( aBookmark.copy( 0, nIndex ) );
 
-                                    if (mpDocSh->GetMedium()->GetName() == aDocName || aDocName.equals(mpDocSh->GetName()))
+                                    if (mpDocSh->GetMedium()->GetName() == aDocName || aDocName == mpDocSh->GetName())
                                     {
                                         // internal jump, only use the part after and including '#'
                                         eClickAction = presentation::ClickAction_BOOKMARK;
@@ -897,7 +897,7 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
             }
         }
 
-        bListIdentical = pIter->equals(aNewName);
+        bListIdentical = *pIter == aNewName;
 
         rExchangeList.push_back(aNewName);
     }

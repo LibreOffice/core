@@ -1062,7 +1062,7 @@ void SlideTransitionPane::updateVariants( size_t nPresetOffset )
         size_t nFirstItem = 0, nItem = 1;
         for( const auto& aIt: rPresetList )
         {
-            if( aIt->getSetId().equals( (*pFound)->getSetId() ) )
+            if( aIt->getSetId() == (*pFound)->getSetId() )
             {
                 if (!nFirstItem)
                     nFirstItem = nItem;

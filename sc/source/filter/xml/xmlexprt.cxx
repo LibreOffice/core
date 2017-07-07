@@ -3898,7 +3898,7 @@ void ScXMLExport::WriteTableSource()
                             {
                                 OUString sNewLink;
                                 if (xLinkProps->getPropertyValue(SC_UNONAME_LINKURL) >>= sNewLink)
-                                    bFound = sLink.equals(sNewLink);
+                                    bFound = sLink == sNewLink;
                             }
                         }
                         if (bFound && xLinkProps.is())

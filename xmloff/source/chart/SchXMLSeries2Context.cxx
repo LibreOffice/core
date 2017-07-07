@@ -322,7 +322,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                     sal_Int32 nNumOfAxes = mrAxes.size();
                     for( sal_Int32 nCurrent = 0; nCurrent < nNumOfAxes; nCurrent++ )
                     {
-                        if( aValue.equals( mrAxes[ nCurrent ].aName ) &&
+                        if( aValue == mrAxes[ nCurrent ].aName &&
                             mrAxes[ nCurrent ].eDimension == SCH_XML_AXIS_Y )
                         {
                             mpAttachedAxis = &( mrAxes[ nCurrent ] );
@@ -384,7 +384,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
             }
         }
         if( ! mrGlobalChartTypeUsedBySeries )
-            mrGlobalChartTypeUsedBySeries = (maSeriesChartTypeName.equals( maGlobalChartTypeName ));
+            mrGlobalChartTypeUsedBySeries = (maSeriesChartTypeName == maGlobalChartTypeName);
         sal_Int32 const nCoordinateSystemIndex = 0;//so far we can only import one coordinate system
         m_xSeries.set(
             SchXMLImportHelper::GetNewDataSeries( mxNewDoc, nCoordinateSystemIndex, maSeriesChartTypeName, ! mrGlobalChartTypeUsedBySeries ));
@@ -811,7 +811,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
 
                 if( !(iStyle->msStyleName).isEmpty())
                 {
-                    if( ! rCurrStyleName.equals( iStyle->msStyleName ))
+                    if( rCurrStyleName != iStyle->msStyleName )
                     {
                         rCurrStyleName = iStyle->msStyleName;
                         rpStyle = pStylesCtxt->FindStyleChildContext(
@@ -975,7 +975,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
 
                 if( !(iStyle->msStyleName).isEmpty())
                 {
-                    if( ! rCurrStyleName.equals( iStyle->msStyleName ))
+                    if( rCurrStyleName != iStyle->msStyleName )
                     {
                         rCurrStyleName = iStyle->msStyleName;
                         rpStyle = pStylesCtxt->FindStyleChildContext(
@@ -1058,7 +1058,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 if( bIsDonutChart )
                 {
                     //set special series styles for donut charts first
-                    if( !rCurrStyleName.equals( iStyle->msSeriesStyleNameForDonuts ) )
+                    if( rCurrStyleName != iStyle->msSeriesStyleNameForDonuts )
                     {
                         rCurrStyleName = iStyle->msSeriesStyleNameForDonuts;
                         rpStyle = pStylesCtxt->FindStyleChildContext(
@@ -1083,7 +1083,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 {
                 }
 
-                if( !rCurrStyleName.equals( iStyle->msStyleName ) )
+                if( rCurrStyleName != iStyle->msStyleName )
                 {
                     rCurrStyleName = iStyle->msStyleName;
                     rpStyle = pStylesCtxt->FindStyleChildContext(

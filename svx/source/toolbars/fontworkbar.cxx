@@ -154,7 +154,7 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
                 {
                     if ( !aFontWorkShapeType.isEmpty() )
                     {
-                        if ( !aFontWorkShapeType.equals( aType ) )  // different FontWorkShapeTypes selected ?
+                        if ( aFontWorkShapeType != aType )  // different FontWorkShapeTypes selected ?
                         {
                             aFontWorkShapeType.clear();
                             break;
