@@ -59,10 +59,6 @@ DXFPalette::DXFPalette()
     short i,j,nHue,nNSat,nVal,nC[3],nmax,nmed,nmin;
     sal_uInt8 nV;
 
-    pRed  =new sal_uInt8[256];
-    pGreen=new sal_uInt8[256];
-    pBlue =new sal_uInt8[256];
-
     // colors 0 - 9 (normal colors)
     SetColor(0, 0x00, 0x00, 0x00); // actually never being used
     SetColor(1, 0xff, 0x00, 0x00);
@@ -114,9 +110,6 @@ DXFPalette::DXFPalette()
 
 DXFPalette::~DXFPalette()
 {
-    delete[] pBlue;
-    delete[] pGreen;
-    delete[] pRed;
 }
 
 
