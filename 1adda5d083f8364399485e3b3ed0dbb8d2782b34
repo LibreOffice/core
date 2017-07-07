@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_a86a9618",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-07T12:19:24Z",
+      "side": 1,
+      "message": "Ah, and I assume the size was correct earlier already; makes sense.",
+      "parentUuid": "3a461143_08880a22",
+      "revId": "1adda5d083f8364399485e3b3ed0dbb8d2782b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_08bacae1",
         "filename": "writerfilter/source/dmapper/OLEHandler.cxx",
         "patchSetId": 11
