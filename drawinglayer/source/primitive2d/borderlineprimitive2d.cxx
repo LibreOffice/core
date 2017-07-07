@@ -62,7 +62,7 @@ namespace drawinglayer
             aPolygon.append(rEnd);
 
             const attribute::LineAttribute aLineAttribute(rColor, fWidth);
-            static double fPatScFact(1.0); // 10.0 multiply, see old code
+            static double fPatScFact(10.0); // 10.0 multiply, see old code
             const std::vector<double> aDashing(svtools::GetLineDashing(aStyle, fPatternScale * fPatScFact));
 
             if (aDashing.empty())

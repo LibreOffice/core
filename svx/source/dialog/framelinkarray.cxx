@@ -1005,9 +1005,20 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                     drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
                     aSequence.append(
                         CreateBorderPrimitives(
-                            aStartPos, aEndPos, *pStart,
-                            aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
-                            aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor));
+                            aStartPos,
+                            aEndPos,
+                            *pStart,
+                            aStartLFromTR,
+                            *pStartLFromT,
+                            *pStartLFromL,
+                            *pStartLFromB,
+                            aStartLFromBR,
+                            aEndRFromTL,
+                            *pEndRFromT,
+                            *pEndRFromR,
+                            *pEndRFromB,
+                            aEndRFromBL,
+                            pForceColor));
                     rProcessor.process(aSequence);
                 }
 
@@ -1036,9 +1047,20 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
             drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
             aSequence.append(
                 CreateBorderPrimitives(
-                    aStartPos, aEndPos, *pStart,
-                    aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
-                    aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor));
+                    aStartPos,
+                    aEndPos,
+                    *pStart,
+                    aStartLFromTR,
+                    *pStartLFromT,
+                    *pStartLFromL,
+                    *pStartLFromB,
+                    aStartLFromBR,
+                    aEndRFromTL,
+                    *pEndRFromT,
+                    *pEndRFromR,
+                    *pEndRFromB,
+                    aEndRFromBL,
+                    pForceColor));
             rProcessor.process(aSequence);
         }
     }
@@ -1095,9 +1117,28 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                     drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
                     aSequence.append(
                         CreateBorderPrimitives(
-                            aEndPos, aStartPos, *pStart,
-                            aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
-                            aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor));
+                            // This replaces DrawVerFrameBorder which went from top to bottom. To be able to use
+                            // the same method as for horizontal (CreateBorderPrimitives), the given borders
+                            // have to be rearranged. Best is to look at the explanations of parameters in
+                            // framelink.hxx and the former calls to DrawVerFrameBorder and it's parameters.
+                            // In principle, the order of the five TFrom and BFrom has to be
+                            // inverted to get the same orientation. Before, EndPos and StartPos were changed
+                            // which avoids the reordering, but also leads to inverted line patters for vertical
+                            // lines
+                            aStartPos,
+                            aEndPos,
+                            *pStart,
+                            aStartTFromBR,
+                            *pStartTFromR,
+                            *pStartTFromT,
+                            *pStartTFromL,
+                            aStartTFromBL,
+                            aEndBFromTR,
+                            *pEndBFromR,
+                            *pEndBFromB,
+                            *pEndBFromL,
+                            aEndBFromTL,
+                            pForceColor));
                     rProcessor.process(aSequence);
                 }
 
@@ -1125,9 +1166,22 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
         {
             drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
             aSequence.append(
-                CreateBorderPrimitives(aEndPos, aStartPos, *pStart,
-                    aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
-                    aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor));
+                CreateBorderPrimitives(
+                    // also reordered, see call to CreateBorderPrimitives above
+                    aStartPos,
+                    aEndPos,
+                    *pStart,
+                    aStartTFromBR,
+                    *pStartTFromR,
+                    *pStartTFromT,
+                    *pStartTFromL,
+                    aStartTFromBL,
+                    aEndBFromTR,
+                    *pEndBFromR,
+                    *pEndBFromB,
+                    *pEndBFromL,
+                    aEndBFromTL,
+                    pForceColor));
             rProcessor.process(aSequence);
         }
     }
