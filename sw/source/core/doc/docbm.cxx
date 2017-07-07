@@ -918,15 +918,9 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
                 {
                     IDocumentMarkAccess::iterator_t ppAnnotationMark = lcl_FindMark(m_vAnnotationMarks, *ppMark);
-                    if ( ppAnnotationMark != m_vAnnotationMarks.end() )
-                    {
-                        m_vAnnotationMarks.erase(ppAnnotationMark);
-                    }
-                    else
-                    {
-                        assert(false &&
-                            "<MarkManager::deleteMark(..)> - Annotation Mark not found in Annotation Mark container.");
-                    }
+                    assert(ppAnnotationMark != m_vAnnotationMarks.end() &&
+                        "<MarkManager::deleteMark(..)> - Annotation Mark not found in Annotation Mark container.");
+                    m_vAnnotationMarks.erase(ppAnnotationMark);
                 }
                 break;
 

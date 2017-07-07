@@ -297,15 +297,12 @@ namespace
             if ( rStartPos.nNode == nOwnNode )
             {
                 const SwFormatField* pAnnotationFormatField = pAnnotationMark->GetAnnotationFormatField();
-                OSL_ENSURE( pAnnotationFormatField != nullptr, "<lcl_FillAnnotationStartArray(..)> - annotation fmt fld instance missing!" );
-                if ( pAnnotationFormatField != nullptr )
-                {
-                    rAnnotationStartArr.insert(
-                        std::make_shared<SwAnnotationStartPortion_Impl>(
-                                SwXTextField::CreateXTextField(&rDoc,
-                                    pAnnotationFormatField),
-                                rStartPos));
-                }
+                assert(pAnnotationFormatField != nullptr);
+                rAnnotationStartArr.insert(
+                    std::make_shared<SwAnnotationStartPortion_Impl>(
+                            SwXTextField::CreateXTextField(&rDoc,
+                                pAnnotationFormatField),
+                            rStartPos));
             }
         }
     }

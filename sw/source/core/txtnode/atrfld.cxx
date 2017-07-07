@@ -618,18 +618,10 @@ SwTextAnnotationField::~SwTextAnnotationField()
 ::sw::mark::IMark* SwTextAnnotationField::GetAnnotationMark() const
 {
     const SwPostItField* pPostItField = dynamic_cast<const SwPostItField*>(GetFormatField().GetField());
-    OSL_ENSURE( pPostItField != nullptr, "<SwTextAnnotationField::GetAnnotationMark()> - field missing" );
-    if ( pPostItField == nullptr )
-    {
-        return nullptr;
-    }
+    assert(pPostItField != nullptr);
 
     SwDoc* pDoc = static_cast<const SwPostItFieldType*>(pPostItField->GetTyp())->GetDoc();
-    OSL_ENSURE( pDoc != nullptr, "<SwTextAnnotationField::GetAnnotationMark()> - missing document" );
-    if ( pDoc == nullptr )
-    {
-        return nullptr;
-    }
+    assert(pDoc != nullptr);
 
     IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t pMark = pMarksAccess->findAnnotationMark( pPostItField->GetName() );
