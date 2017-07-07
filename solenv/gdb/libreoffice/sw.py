@@ -194,10 +194,10 @@ class BigPtrArrayPrinter(object):
     class _iterator(six.Iterator):
 
         def __init__(self, array):
-            self.blocks = array['m_vpInf']['_M_impl']['_M_start']
+            self.blocks = array['m_ppInf']
             self.count = array['m_nSize']
             self.pos = 0
-            self.block_count = array['m_vpInf']['_M_impl']['_M_finish'] - array['m_vpInf']['_M_impl']['_M_start']
+            self.block_count = array['m_nBlock']
             self.block_pos = 0
             self.block = None
             self.indent = ""
@@ -246,7 +246,7 @@ class BigPtrArrayPrinter(object):
                 raise StopIteration()
 
             name = str(self.pos)
-            node = self.block['mvData']['_M_elems'][self.pos - self.block['nStart']]
+            node = self.block['pData'][self.pos - self.block['nStart']]
             value =  self._node_value(node)
             if self.pos == self.block['nEnd']:
                 self._next_block()
