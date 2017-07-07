@@ -838,21 +838,6 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.ReadBytes(aBuffer2.get(), nBufferSize2);
 
     OStringBuffer aCMSHexBuffer;
-/*
-    vcl::PDFWriter::PDFSignContext aSignContext(aCMSHexBuffer);
-    aSignContext.m_pDerEncoded = aDerEncoded.getArray();
-    aSignContext.m_nDerEncoded = aDerEncoded.getLength();
-    aSignContext.m_pByteRange1 = aBuffer1.get();
-    aSignContext.m_nByteRange1 = nBufferSize1;
-    aSignContext.m_pByteRange2 = aBuffer2.get();
-    aSignContext.m_nByteRange2 = nBufferSize2;
-    if (!vcl::PDFWriter::Sign(aSignContext))
-    {
-        SAL_WARN("vcl.filter", "PDFDocument::Sign: PDFWriter::Sign() failed");
-        return false;
-    }
-
-*/
     comphelper::crypto::Signing aSigning(xCertificate);
     aSigning.AddDataRange(aBuffer1.get(), nBufferSize1);
     aSigning.AddDataRange(aBuffer2.get(), nBufferSize2);
