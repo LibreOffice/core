@@ -62,6 +62,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::cppu;
 
+namespace {
 
 void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Reference< frame::XModel >& xModel )
 {
@@ -399,6 +400,8 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
         }
     }
     return aDlgLib;
+}
+
 }
 
 void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
