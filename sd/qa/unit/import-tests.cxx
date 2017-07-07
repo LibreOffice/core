@@ -141,6 +141,7 @@ public:
     void testTdf104015();
     void testTdf104201();
     void testTdf104445();
+    void testTdf108925();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -200,6 +201,7 @@ public:
     CPPUNIT_TEST(testTdf104015);
     CPPUNIT_TEST(testTdf104201);
     CPPUNIT_TEST(testTdf104445);
+    CPPUNIT_TEST(testTdf108925);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1767,6 +1769,23 @@ void SdImportTest::testTdf104445()
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(635), rProp.Value.get<sal_Int32>());
         }
     }
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf108925()
+{
+    // Test document contains bulleting with too small bullet size (1%) which breaks the lower constraint
+    // So it should be converted to the lowest allowed value (25%).
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf108925.odp"), ODP);
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+
+    const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
+    CPPUNIT_ASSERT(pNumFmt);
+    CPPUNIT_ASSERT_EQUAL(pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize(), sal_uInt16(25));
+
     xDocShRef->DoClose();
 }
 
