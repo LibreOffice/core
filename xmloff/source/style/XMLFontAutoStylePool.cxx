@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <functionnal>
 #include <o3tl/sorted_vector.hxx>
 #include <tools/fontenum.hxx>
 #include <xmloff/xmlnmspe.hxx>
