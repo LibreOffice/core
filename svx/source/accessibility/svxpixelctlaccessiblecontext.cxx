@@ -355,7 +355,7 @@ void SAL_CALL SvxPixelCtlAccessible::addAccessibleEventListener( const uno::Refe
     {
         ::osl::MutexGuard   aGuard( m_aMutex );
         if (!mnClientId)
-                mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
+            mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
         comphelper::AccessibleEventNotifier::addEventListener( mnClientId, xListener );
     }
 }
@@ -365,7 +365,8 @@ void SAL_CALL SvxPixelCtlAccessible::removeAccessibleEventListener( const uno::R
     if (xListener.is())
     {
         ::osl::MutexGuard   aGuard( m_aMutex );
-
+        if (!mnClientId)
+            return;
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
         if ( !nListenerCount )
         {
