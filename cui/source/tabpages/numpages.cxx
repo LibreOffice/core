@@ -1113,6 +1113,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
 
     get(m_pBulRelSizeFT, "relsizeft");
     get(m_pBulRelSizeMF, "relsize");
+    m_pBulRelSizeMF->SetMin(SVX_NUM_REL_SIZE_MIN);
 
     get(m_pAllLevelFT, "sublevelsft");
     get(m_pAllLevelNF, "sublevels");

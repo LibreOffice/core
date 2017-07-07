@@ -34,6 +34,7 @@
 #include <editeng/editengdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
+#include <algorithm>
 
 class SvxBrushItem;
 namespace vcl { class Font; }
@@ -48,6 +49,8 @@ namespace com{namespace sun{ namespace star{
 
 #define SVX_NO_NUM              200 // Marker for no numbering
 #define SVX_NO_NUMLEVEL         0x20
+#define SVX_NUM_REL_SIZE_MIN    25 // Lower limit for numbering relative size
+
 
 #define LINK_TOKEN  0x80 //indicate linked bitmaps - for use in dialog only
 class EDITENG_DLLPUBLIC SvxNumberType
@@ -168,7 +171,7 @@ public:
     const vcl::Font* GetBulletFont() const {return pBulletFont;}
     void            SetBulletChar(sal_Unicode cSet){cBullet = cSet;}
     sal_Unicode     GetBulletChar()const {return cBullet;}
-    void            SetBulletRelSize(sal_uInt16 nSet) {nBulletRelSize = nSet;}
+    void            SetBulletRelSize(sal_uInt16 nSet) {nBulletRelSize = std::max(nSet,sal_uInt16(SVX_NUM_REL_SIZE_MIN));}
     sal_uInt16      GetBulletRelSize() const { return nBulletRelSize;}
     void            SetBulletColor(Color nSet){nBulletColor = nSet;}
     const Color&    GetBulletColor()const {return nBulletColor;}
