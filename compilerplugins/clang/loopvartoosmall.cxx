@@ -149,7 +149,16 @@ void LoopVarTooSmall::checkSubExpr(Expr const * expr, bool positive) {
         return;
     unsigned qt2BitWidth;
     llvm::APSInt aIntResult;
-    if (binOpRHS->EvaluateAsInt(aIntResult, compiler.getASTContext())) {
+    // Work around missing Clang 3.9 fix <https://reviews.llvm.org/rL271762>
+    // "Sema: do not attempt to sizeof a dependent type", causing Clang 3.8 to
+    // crash during EvaluateAsInt() on expressions of the form
+    //
+    //   sizeof (T)
+    //
+    // with dependent type T:
+    if (!binOpRHS->isValueDependent()
+        && binOpRHS->EvaluateAsInt(aIntResult, compiler.getASTContext()))
+    {
         if (less && aIntResult.isStrictlyPositive()) {
             --aIntResult;
         }

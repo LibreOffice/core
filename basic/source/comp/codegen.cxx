@@ -22,6 +22,7 @@
 #include "image.hxx"
 #include "codegen.hxx"
 #include "parser.hxx"
+#include <cstddef>
 #include <limits>
 #include <algorithm>
 #include <osl/diagnose.h>
@@ -408,9 +409,8 @@ private:
     const sal_uInt8* m_pCode;
     static T readParam( sal_uInt8 const *& pCode )
     {
-        short nBytes = sizeof( T );
         T nOp1=0;
-        for ( int i=0; i<nBytes; ++i )
+        for ( std::size_t i=0; i<sizeof( T ); ++i )
             nOp1 |= *pCode++ << ( i * 8);
         return nOp1;
     }
