@@ -25,7 +25,7 @@ class LockCorruptQueryBox : public MessBox
 {
 public:
     LockCorruptQueryBox( Window* pParent, ResMgr* pResMgr );
-    virtual ~LockCorruptQueryBox() override;
+    virtual ~LockCorruptQueryBox() SAL_OVERRIDE;
 };
 
 #endif
