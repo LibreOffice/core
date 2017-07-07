@@ -160,6 +160,7 @@ public:
     void testTdf105150PPT();
     void testTdf100926();
     void testTdf89064();
+    void testTdf108925();
 
     bool checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -228,6 +229,7 @@ public:
     CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testPatternImport);
     CPPUNIT_TEST(testTdf89064);
+    CPPUNIT_TEST(testTdf108925);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2183,6 +2185,23 @@ void SdImportTest::testTdf89064()
     uno::Reference< presentation::XPresentationPage > xPage (getPage(0, xDocShRef), uno::UNO_QUERY_THROW);
     uno::Reference< drawing::XDrawPage > xNotesPage (xPage->getNotesPage(), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xNotesPage->getCount());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf108925()
+{
+    // Test document contains bulleting with too small bullet size (1%) which breaks the lower constraint
+    // So it should be converted to the lowest allowed value (25%).
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/tdf108925.odp"), ODP);
+    const SdrPage *pPage = GetPage(1, xDocShRef);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+
+    const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET));
+    CPPUNIT_ASSERT(pNumFmt);
+    CPPUNIT_ASSERT_EQUAL(pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize(), sal_uInt16(25));
 
     xDocShRef->DoClose();
 }
