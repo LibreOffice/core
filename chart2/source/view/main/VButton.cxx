@@ -33,6 +33,7 @@ VButton::VButton()
     , m_xShape(nullptr)
     , m_bShowArrow(true)
     , m_nArrowColor(0x00000000)
+    , m_nBGColor(0x00E6E6E6)
 {
 }
 
@@ -109,7 +110,7 @@ void VButton::createShapes(const uno::Reference<beans::XPropertySet>& xTextProp)
 
     tPropertyNameValueMap aTextValueMap;
     aTextValueMap["CharHeight"] <<= 10.0f;
-    aTextValueMap["FillColor"] <<= sal_Int32(0xe6e6e6);
+    aTextValueMap["FillColor"] <<= m_nBGColor;
     aTextValueMap["FillStyle"] <<= drawing::FillStyle_SOLID;
     aTextValueMap["LineColor"] <<= sal_Int32(0xcccccc);
     aTextValueMap["LineStyle"] <<= drawing::LineStyle_SOLID;
