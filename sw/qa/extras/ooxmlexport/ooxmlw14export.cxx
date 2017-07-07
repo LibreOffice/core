@@ -306,113 +306,113 @@ DECLARE_OOXMLEXPORT_TEST(Test_TextEffects_Groupshapes, "TextEffects_Groupshapes.
     if (!pXmlDoc)
         return;
 
-    std::string sPathToWGP = "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp";
+    OString sPathToWGP = "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp";
 
-    assertXPath(pXmlDoc, (sPathToWGP + "/wps:wsp").c_str(), 2);
+    assertXPath(pXmlDoc, sPathToWGP + "/wps:wsp", 2);
 
-    std::string sPathToShapeRunProperties = sPathToWGP + "/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr";
+    OString sPathToShapeRunProperties = sPathToWGP + "/wps:wsp[2]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr";
 
     // Glow
-    std::string sPathGlow = sPathToShapeRunProperties + "/w14:glow";
-    assertXPath(pXmlDoc, (sPathGlow).c_str(), 1);
-    assertXPath(pXmlDoc, (sPathGlow).c_str(), "rad", "127000");
-    assertXPath(pXmlDoc, (sPathGlow+"/w14:srgbClr").c_str(), "val", "00B050");
-    assertXPath(pXmlDoc, (sPathGlow+"/w14:srgbClr/w14:alpha").c_str(), "val", "60000");
+    OString sPathGlow = sPathToShapeRunProperties + "/w14:glow";
+    assertXPath(pXmlDoc, sPathGlow, 1);
+    assertXPath(pXmlDoc, sPathGlow, "rad", "127000");
+    assertXPath(pXmlDoc, sPathGlow+"/w14:srgbClr", "val", "00B050");
+    assertXPath(pXmlDoc, sPathGlow+"/w14:srgbClr/w14:alpha", "val", "60000");
 
     // Shadow
-    std::string sPathShadow = sPathToShapeRunProperties + "/w14:shadow";
-    assertXPath(pXmlDoc, (sPathShadow).c_str(), 1);
-    assertXPath(pXmlDoc, (sPathShadow).c_str(), "blurRad", "127000");
-    assertXPath(pXmlDoc, (sPathShadow).c_str(), "dist", "787400");
-    assertXPath(pXmlDoc, (sPathShadow).c_str(), "dir", "12720000");
-    assertXPath(pXmlDoc, (sPathShadow).c_str(), "sx", "70000");
-    assertXPath(pXmlDoc, (sPathShadow).c_str(), "sy", "70000");
-    assertXPath(pXmlDoc, (sPathShadow).c_str(), "kx", "0");
-    assertXPath(pXmlDoc, (sPathShadow).c_str(), "ky", "0");
-    assertXPath(pXmlDoc, (sPathShadow).c_str(), "algn", "l");
-    assertXPath(pXmlDoc, (sPathShadow+"/w14:srgbClr").c_str(), "val", "92D050");
-    assertXPath(pXmlDoc, (sPathShadow+"/w14:srgbClr/w14:alpha").c_str(), "val", "40000");
+    OString sPathShadow = sPathToShapeRunProperties + "/w14:shadow";
+    assertXPath(pXmlDoc, sPathShadow, 1);
+    assertXPath(pXmlDoc, sPathShadow, "blurRad", "127000");
+    assertXPath(pXmlDoc, sPathShadow, "dist", "787400");
+    assertXPath(pXmlDoc, sPathShadow, "dir", "12720000");
+    assertXPath(pXmlDoc, sPathShadow, "sx", "70000");
+    assertXPath(pXmlDoc, sPathShadow, "sy", "70000");
+    assertXPath(pXmlDoc, sPathShadow, "kx", "0");
+    assertXPath(pXmlDoc, sPathShadow, "ky", "0");
+    assertXPath(pXmlDoc, sPathShadow, "algn", "l");
+    assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr", "val", "92D050");
+    assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr/w14:alpha", "val", "40000");
 
     // Reflection
-    std::string sPathReflection = sPathToShapeRunProperties + "/w14:reflection";
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), 1);
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "blurRad", "139700");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "stA", "47000");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "stPos", "0");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "endA", "0");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "endPos", "85000");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "dist", "63500");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "dir", "5400000");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "fadeDir", "5400000");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "sx", "100000");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "sy", "-100000");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "kx", "0");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "ky", "0");
-    assertXPath(pXmlDoc, (sPathReflection).c_str(), "algn", "bl");
+    OString sPathReflection = sPathToShapeRunProperties + "/w14:reflection";
+    assertXPath(pXmlDoc, sPathReflection, 1);
+    assertXPath(pXmlDoc, sPathReflection, "blurRad", "139700");
+    assertXPath(pXmlDoc, sPathReflection, "stA", "47000");
+    assertXPath(pXmlDoc, sPathReflection, "stPos", "0");
+    assertXPath(pXmlDoc, sPathReflection, "endA", "0");
+    assertXPath(pXmlDoc, sPathReflection, "endPos", "85000");
+    assertXPath(pXmlDoc, sPathReflection, "dist", "63500");
+    assertXPath(pXmlDoc, sPathReflection, "dir", "5400000");
+    assertXPath(pXmlDoc, sPathReflection, "fadeDir", "5400000");
+    assertXPath(pXmlDoc, sPathReflection, "sx", "100000");
+    assertXPath(pXmlDoc, sPathReflection, "sy", "-100000");
+    assertXPath(pXmlDoc, sPathReflection, "kx", "0");
+    assertXPath(pXmlDoc, sPathReflection, "ky", "0");
+    assertXPath(pXmlDoc, sPathReflection, "algn", "bl");
 
     // TextOutline
-    std::string sPathTextOutline = sPathToShapeRunProperties + "/w14:textOutline";
-    assertXPath(pXmlDoc, (sPathTextOutline).c_str(), 1);
-    assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "w", "25400");
-    assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "cap", "rnd");
-    assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "cmpd", "sng");
-    assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "algn", "ctr");
-    assertXPath(pXmlDoc, (sPathTextOutline+"/w14:solidFill/w14:schemeClr").c_str(), "val", "accent2");
-    assertXPath(pXmlDoc, (sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha").c_str(), "val", "40000");
-    assertXPath(pXmlDoc, (sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod").c_str(), "val", "75000");
-    assertXPath(pXmlDoc, (sPathTextOutline+"/w14:prstDash").c_str(), "val", "solid");
-    assertXPath(pXmlDoc, (sPathTextOutline+"/w14:round").c_str(), 1);
+    OString sPathTextOutline = sPathToShapeRunProperties + "/w14:textOutline";
+    assertXPath(pXmlDoc, sPathTextOutline, 1);
+    assertXPath(pXmlDoc, sPathTextOutline, "w", "25400");
+    assertXPath(pXmlDoc, sPathTextOutline, "cap", "rnd");
+    assertXPath(pXmlDoc, sPathTextOutline, "cmpd", "sng");
+    assertXPath(pXmlDoc, sPathTextOutline, "algn", "ctr");
+    assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr", "val", "accent2");
+    assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha", "val", "40000");
+    assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod", "val", "75000");
+    assertXPath(pXmlDoc, sPathTextOutline+"/w14:prstDash", "val", "solid");
+    assertXPath(pXmlDoc, sPathTextOutline+"/w14:round", 1);
 
     // TextFill
-    std::string sPathTextFill = sPathToShapeRunProperties + "/w14:textFill";
-    assertXPath(pXmlDoc, (sPathTextFill).c_str(), 1);
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]").c_str(), "pos", "0");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr").c_str(), "val", "accent4");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]").c_str(), "pos", "41000");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr").c_str(), "val", "accent6");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod").c_str(), "val", "60000");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff").c_str(), "val", "40000");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]").c_str(), "pos", "87000");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr").c_str(), "val", "accent5");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod").c_str(), "val", "60000");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumOff").c_str(), "val", "40000");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:lin").c_str(), "ang", "5400000");
-    assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:lin").c_str(), "scaled", "0");
+    OString sPathTextFill = sPathToShapeRunProperties + "/w14:textFill";
+    assertXPath(pXmlDoc, sPathTextFill, 1);
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]", "pos", "0");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr", "val", "accent4");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]", "pos", "41000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr", "val", "accent6");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod", "val", "60000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff", "val", "40000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]", "pos", "87000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr", "val", "accent5");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod", "val", "60000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumOff", "val", "40000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:lin", "ang", "5400000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:lin", "scaled", "0");
 
     // Props3D
-    std::string sPathProps3D = sPathToShapeRunProperties + "/w14:props3d";
-    assertXPath(pXmlDoc, (sPathProps3D).c_str(), 1);
-    assertXPath(pXmlDoc, (sPathProps3D).c_str(), "extrusionH", "63500");
-    assertXPath(pXmlDoc, (sPathProps3D).c_str(), "contourW", "12700");
-    assertXPath(pXmlDoc, (sPathProps3D).c_str(), "prstMaterial", "warmMatte");
-    assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelT").c_str(), "w", "38100");
-    assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelT").c_str(), "h", "38100");
-    assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelT").c_str(), "prst", "circle");
-    assertXPath(pXmlDoc, (sPathProps3D+"/w14:extrusionClr/w14:schemeClr").c_str(), "val", "accent2");
-    assertXPath(pXmlDoc, (sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod").c_str(), "val", "60000");
-    assertXPath(pXmlDoc, (sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff").c_str(), "val", "40000");
-    assertXPath(pXmlDoc, (sPathProps3D+"/w14:contourClr/w14:schemeClr").c_str(), "val", "accent4");
-    assertXPath(pXmlDoc, (sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod").c_str(), "val", "75000");
+    OString sPathProps3D = sPathToShapeRunProperties + "/w14:props3d";
+    assertXPath(pXmlDoc, sPathProps3D, 1);
+    assertXPath(pXmlDoc, sPathProps3D, "extrusionH", "63500");
+    assertXPath(pXmlDoc, sPathProps3D, "contourW", "12700");
+    assertXPath(pXmlDoc, sPathProps3D, "prstMaterial", "warmMatte");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "w", "38100");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "h", "38100");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "prst", "circle");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr", "val", "accent2");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod", "val", "60000");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff", "val", "40000");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr", "val", "accent4");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod", "val", "75000");
 
     // Ligatures
-    std::string sPathLigatures = sPathToShapeRunProperties + "/w14:ligatures";
-    assertXPath(pXmlDoc, (sPathLigatures).c_str(), 1);
-    assertXPath(pXmlDoc, (sPathLigatures).c_str(), "val", "standard");
+    OString sPathLigatures = sPathToShapeRunProperties + "/w14:ligatures";
+    assertXPath(pXmlDoc, sPathLigatures, 1);
+    assertXPath(pXmlDoc, sPathLigatures, "val", "standard");
 
     // NumForm
-    std::string sPathNumForm = sPathToShapeRunProperties + "/w14:numForm";
-    assertXPath(pXmlDoc, (sPathNumForm).c_str(), 1);
-    assertXPath(pXmlDoc, (sPathNumForm).c_str(), "val", "oldStyle");
+    OString sPathNumForm = sPathToShapeRunProperties + "/w14:numForm";
+    assertXPath(pXmlDoc, sPathNumForm, 1);
+    assertXPath(pXmlDoc, sPathNumForm, "val", "oldStyle");
 
     // NumSpacing
-    std::string sPathNumSpacing = sPathToShapeRunProperties + "/w14:numSpacing";
-    assertXPath(pXmlDoc, (sPathNumSpacing).c_str(), 1);
-    assertXPath(pXmlDoc, (sPathNumSpacing).c_str(), "val", "tabular");
+    OString sPathNumSpacing = sPathToShapeRunProperties + "/w14:numSpacing";
+    assertXPath(pXmlDoc, sPathNumSpacing, 1);
+    assertXPath(pXmlDoc, sPathNumSpacing, "val", "tabular");
 
     // StylisticSets
-    std::string sPathStylisticSets = sPathToShapeRunProperties + "/w14:stylisticSets";
-    assertXPath(pXmlDoc, (sPathStylisticSets).c_str(), 1);
-    assertXPath(pXmlDoc, (sPathStylisticSets+"/w14:styleSet").c_str(), "id", "1");
+    OString sPathStylisticSets = sPathToShapeRunProperties + "/w14:stylisticSets";
+    assertXPath(pXmlDoc, sPathStylisticSets, 1);
+    assertXPath(pXmlDoc, sPathStylisticSets+"/w14:styleSet", "id", "1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(Test_TextEffects_InStyleXml, "TextEffects_InStyle.docx")
@@ -421,226 +421,226 @@ DECLARE_OOXMLEXPORT_TEST(Test_TextEffects_InStyleXml, "TextEffects_InStyle.docx"
     if (!pXmlDoc)
         return;
 
-    std::string sPathToCharacterStyle = "/w:styles/w:style[3]";
+    OString sPathToCharacterStyle = "/w:styles/w:style[3]";
 
-    assertXPath(pXmlDoc, (sPathToCharacterStyle).c_str(), "type", "character");
-    assertXPath(pXmlDoc, (sPathToCharacterStyle).c_str(), "styleId", "TextEffectsStyleChar");
-    assertXPath(pXmlDoc, (sPathToCharacterStyle).c_str(), "customStyle", "1");
+    assertXPath(pXmlDoc, sPathToCharacterStyle, "type", "character");
+    assertXPath(pXmlDoc, sPathToCharacterStyle, "styleId", "TextEffectsStyleChar");
+    assertXPath(pXmlDoc, sPathToCharacterStyle, "customStyle", "1");
 
     {
-        std::string sPathToRun = sPathToCharacterStyle + "/w:rPr";
+        OString sPathToRun = sPathToCharacterStyle + "/w:rPr";
 
         // Glow
-        std::string sPathGlow = sPathToRun + "/w14:glow";
-        assertXPath(pXmlDoc, (sPathGlow).c_str(), "rad", "63500");
-        assertXPath(pXmlDoc, (sPathGlow+"/w14:schemeClr").c_str(), "val", "accent2");
-        assertXPath(pXmlDoc, (sPathGlow+"/w14:schemeClr/w14:alpha").c_str(), "val", "60000");
-        assertXPath(pXmlDoc, (sPathGlow+"/w14:schemeClr/w14:satMod").c_str(), "val", "175000");
+        OString sPathGlow = sPathToRun + "/w14:glow";
+        assertXPath(pXmlDoc, sPathGlow, "rad", "63500");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr", "val", "accent2");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:alpha", "val", "60000");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:satMod", "val", "175000");
 
         // Shadow
-        std::string sPathShadow = sPathToRun + "/w14:shadow";
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "blurRad", "50800");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "dist", "38100");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "dir", "16200000");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "sx", "100000");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "sy", "100000");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "kx", "0");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "ky", "0");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "algn", "b");
-        assertXPath(pXmlDoc, (sPathShadow+"/w14:srgbClr").c_str(), "val", "000000");
-        assertXPath(pXmlDoc, (sPathShadow+"/w14:srgbClr/w14:alpha").c_str(), "val", "60000");
+        OString sPathShadow = sPathToRun + "/w14:shadow";
+        assertXPath(pXmlDoc, sPathShadow, "blurRad", "50800");
+        assertXPath(pXmlDoc, sPathShadow, "dist", "38100");
+        assertXPath(pXmlDoc, sPathShadow, "dir", "16200000");
+        assertXPath(pXmlDoc, sPathShadow, "sx", "100000");
+        assertXPath(pXmlDoc, sPathShadow, "sy", "100000");
+        assertXPath(pXmlDoc, sPathShadow, "kx", "0");
+        assertXPath(pXmlDoc, sPathShadow, "ky", "0");
+        assertXPath(pXmlDoc, sPathShadow, "algn", "b");
+        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr", "val", "000000");
+        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr/w14:alpha", "val", "60000");
 
         // Reflection
-        std::string sPathReflection = sPathToRun + "/w14:reflection";
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "blurRad", "6350");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "stA", "50000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "stPos", "0");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "endA", "300");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "endPos", "50000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "dist", "29997");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "dir", "5400000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "fadeDir", "5400000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "sx", "100000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "sy", "-100000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "kx", "0");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "ky", "0");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "algn", "bl");
+        OString sPathReflection = sPathToRun + "/w14:reflection";
+        assertXPath(pXmlDoc, sPathReflection, "blurRad", "6350");
+        assertXPath(pXmlDoc, sPathReflection, "stA", "50000");
+        assertXPath(pXmlDoc, sPathReflection, "stPos", "0");
+        assertXPath(pXmlDoc, sPathReflection, "endA", "300");
+        assertXPath(pXmlDoc, sPathReflection, "endPos", "50000");
+        assertXPath(pXmlDoc, sPathReflection, "dist", "29997");
+        assertXPath(pXmlDoc, sPathReflection, "dir", "5400000");
+        assertXPath(pXmlDoc, sPathReflection, "fadeDir", "5400000");
+        assertXPath(pXmlDoc, sPathReflection, "sx", "100000");
+        assertXPath(pXmlDoc, sPathReflection, "sy", "-100000");
+        assertXPath(pXmlDoc, sPathReflection, "kx", "0");
+        assertXPath(pXmlDoc, sPathReflection, "ky", "0");
+        assertXPath(pXmlDoc, sPathReflection, "algn", "bl");
 
         // TextOutline
-        std::string sPathTextOutline = sPathToRun + "/w14:textOutline";
-        assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "w", "25400");
-        assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "cap", "rnd");
-        assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "cmpd", "sng");
-        assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "algn", "ctr");
-        assertXPath(pXmlDoc, (sPathTextOutline+"/w14:solidFill/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha").c_str(), "val", "40000");
-        assertXPath(pXmlDoc, (sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod").c_str(), "val", "75000");
-        assertXPath(pXmlDoc, (sPathTextOutline+"/w14:prstDash").c_str(), "val", "solid");
-        assertXPath(pXmlDoc, (sPathTextOutline+"/w14:bevel").c_str(), 1);
+        OString sPathTextOutline = sPathToRun + "/w14:textOutline";
+        assertXPath(pXmlDoc, sPathTextOutline, "w", "25400");
+        assertXPath(pXmlDoc, sPathTextOutline, "cap", "rnd");
+        assertXPath(pXmlDoc, sPathTextOutline, "cmpd", "sng");
+        assertXPath(pXmlDoc, sPathTextOutline, "algn", "ctr");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha", "val", "40000");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod", "val", "75000");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:prstDash", "val", "solid");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:bevel", 1);
 
         // TextFill
-        std::string sPathTextFill = sPathToRun + "/w14:textFill";
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]").c_str(), "pos", "0");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:alpha").c_str(), "val", "10000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumMod").c_str(), "val", "40000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumOff").c_str(), "val", "60000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]").c_str(), "pos", "46000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod").c_str(), "val", "95000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff").c_str(), "val", "5000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]").c_str(), "pos", "100000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod").c_str(), "val", "60000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:path").c_str(), "path", "circle");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect").c_str(), "b", "-30000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect").c_str(), "r", "50000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect").c_str(), "t", "130000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect").c_str(), "l", "50000");
+        OString sPathTextFill = sPathToRun + "/w14:textFill";
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]", "pos", "0");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:alpha", "val", "10000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumMod", "val", "40000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumOff", "val", "60000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]", "pos", "46000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod", "val", "95000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff", "val", "5000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]", "pos", "100000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod", "val", "60000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path", "path", "circle");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "b", "-30000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "r", "50000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "t", "130000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "l", "50000");
 
         // Props3D
-        std::string sPathProps3D = sPathToRun + "/w14:props3d";
-        assertXPath(pXmlDoc, (sPathProps3D).c_str(), "extrusionH", "57150");
-        assertXPath(pXmlDoc, (sPathProps3D).c_str(), "contourW", "12700");
-        assertXPath(pXmlDoc, (sPathProps3D).c_str(), "prstMaterial", "metal");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelT").c_str(), "w", "38100");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelT").c_str(), "h", "38100");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelT").c_str(), "prst", "angle");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelB").c_str(), "w", "69850");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelB").c_str(), "h", "69850");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelB").c_str(), "prst", "divot");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:extrusionClr/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod").c_str(), "val", "20000");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff").c_str(), "val", "80000");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:contourClr/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod").c_str(), "val", "75000");
+        OString sPathProps3D = sPathToRun + "/w14:props3d";
+        assertXPath(pXmlDoc, sPathProps3D, "extrusionH", "57150");
+        assertXPath(pXmlDoc, sPathProps3D, "contourW", "12700");
+        assertXPath(pXmlDoc, sPathProps3D, "prstMaterial", "metal");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "w", "38100");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "h", "38100");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "prst", "angle");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "w", "69850");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "h", "69850");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "prst", "divot");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod", "val", "20000");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff", "val", "80000");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod", "val", "75000");
 
         // Ligatures
-        std::string sPathLigatures = sPathToRun + "/w14:ligatures";
-        assertXPath(pXmlDoc, (sPathLigatures).c_str(), "val", "standard");
+        OString sPathLigatures = sPathToRun + "/w14:ligatures";
+        assertXPath(pXmlDoc, sPathLigatures, "val", "standard");
 
         // NumForm
-        std::string sPathNumForm = sPathToRun + "/w14:numForm";
-        assertXPath(pXmlDoc, (sPathNumForm).c_str(), "val", "lining");
+        OString sPathNumForm = sPathToRun + "/w14:numForm";
+        assertXPath(pXmlDoc, sPathNumForm, "val", "lining");
 
         // NumSpacing
-        std::string sPathNumSpacing = sPathToRun + "/w14:numSpacing";
-        assertXPath(pXmlDoc, (sPathNumSpacing).c_str(), "val", "proportional");
+        OString sPathNumSpacing = sPathToRun + "/w14:numSpacing";
+        assertXPath(pXmlDoc, sPathNumSpacing, "val", "proportional");
 
         // StylisticSets
-        std::string sPathStylisticSets = sPathToRun + "/w14:stylisticSets";
-        assertXPath(pXmlDoc, (sPathStylisticSets+"/w14:styleSet").c_str(), "id", "1");
+        OString sPathStylisticSets = sPathToRun + "/w14:stylisticSets";
+        assertXPath(pXmlDoc, sPathStylisticSets+"/w14:styleSet", "id", "1");
     }
 
-    std::string sPathToParagraphStyle = "/w:styles/w:style[9]";
+    OString sPathToParagraphStyle = "/w:styles/w:style[9]";
 
-    assertXPath(pXmlDoc, (sPathToParagraphStyle).c_str(), "type", "paragraph");
-    assertXPath(pXmlDoc, (sPathToParagraphStyle).c_str(), "styleId", "TextEffectsStyle");
-    assertXPath(pXmlDoc, (sPathToParagraphStyle).c_str(), "customStyle", "1");
+    assertXPath(pXmlDoc, sPathToParagraphStyle, "type", "paragraph");
+    assertXPath(pXmlDoc, sPathToParagraphStyle, "styleId", "TextEffectsStyle");
+    assertXPath(pXmlDoc, sPathToParagraphStyle, "customStyle", "1");
 
     {
-        std::string sPathToRun = sPathToParagraphStyle + "/w:rPr";
+        OString sPathToRun = sPathToParagraphStyle + "/w:rPr";
 
         // Glow
-        std::string sPathGlow = sPathToRun + "/w14:glow";
-        assertXPath(pXmlDoc, (sPathGlow).c_str(), "rad", "63500");
-        assertXPath(pXmlDoc, (sPathGlow+"/w14:schemeClr").c_str(), "val", "accent2");
-        assertXPath(pXmlDoc, (sPathGlow+"/w14:schemeClr/w14:alpha").c_str(), "val", "60000");
-        assertXPath(pXmlDoc, (sPathGlow+"/w14:schemeClr/w14:satMod").c_str(), "val", "175000");
+        OString sPathGlow = sPathToRun + "/w14:glow";
+        assertXPath(pXmlDoc, sPathGlow, "rad", "63500");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr", "val", "accent2");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:alpha", "val", "60000");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:satMod", "val", "175000");
 
         // Shadow
-        std::string sPathShadow = sPathToRun + "/w14:shadow";
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "blurRad", "50800");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "dist", "38100");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "dir", "16200000");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "sx", "100000");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "sy", "100000");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "kx", "0");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "ky", "0");
-        assertXPath(pXmlDoc, (sPathShadow).c_str(), "algn", "b");
-        assertXPath(pXmlDoc, (sPathShadow+"/w14:srgbClr").c_str(), "val", "000000");
-        assertXPath(pXmlDoc, (sPathShadow+"/w14:srgbClr/w14:alpha").c_str(), "val", "60000");
+        OString sPathShadow = sPathToRun + "/w14:shadow";
+        assertXPath(pXmlDoc, sPathShadow, "blurRad", "50800");
+        assertXPath(pXmlDoc, sPathShadow, "dist", "38100");
+        assertXPath(pXmlDoc, sPathShadow, "dir", "16200000");
+        assertXPath(pXmlDoc, sPathShadow, "sx", "100000");
+        assertXPath(pXmlDoc, sPathShadow, "sy", "100000");
+        assertXPath(pXmlDoc, sPathShadow, "kx", "0");
+        assertXPath(pXmlDoc, sPathShadow, "ky", "0");
+        assertXPath(pXmlDoc, sPathShadow, "algn", "b");
+        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr", "val", "000000");
+        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr/w14:alpha", "val", "60000");
 
         // Reflection
-        std::string sPathReflection = sPathToRun + "/w14:reflection";
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "blurRad", "6350");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "stA", "50000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "stPos", "0");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "endA", "300");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "endPos", "50000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "dist", "29997");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "dir", "5400000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "fadeDir", "5400000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "sx", "100000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "sy", "-100000");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "kx", "0");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "ky", "0");
-        assertXPath(pXmlDoc, (sPathReflection).c_str(), "algn", "bl");
+        OString sPathReflection = sPathToRun + "/w14:reflection";
+        assertXPath(pXmlDoc, sPathReflection, "blurRad", "6350");
+        assertXPath(pXmlDoc, sPathReflection, "stA", "50000");
+        assertXPath(pXmlDoc, sPathReflection, "stPos", "0");
+        assertXPath(pXmlDoc, sPathReflection, "endA", "300");
+        assertXPath(pXmlDoc, sPathReflection, "endPos", "50000");
+        assertXPath(pXmlDoc, sPathReflection, "dist", "29997");
+        assertXPath(pXmlDoc, sPathReflection, "dir", "5400000");
+        assertXPath(pXmlDoc, sPathReflection, "fadeDir", "5400000");
+        assertXPath(pXmlDoc, sPathReflection, "sx", "100000");
+        assertXPath(pXmlDoc, sPathReflection, "sy", "-100000");
+        assertXPath(pXmlDoc, sPathReflection, "kx", "0");
+        assertXPath(pXmlDoc, sPathReflection, "ky", "0");
+        assertXPath(pXmlDoc, sPathReflection, "algn", "bl");
 
         // TextOutline
-        std::string sPathTextOutline = sPathToRun + "/w14:textOutline";
-        assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "w", "25400");
-        assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "cap", "rnd");
-        assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "cmpd", "sng");
-        assertXPath(pXmlDoc, (sPathTextOutline).c_str(), "algn", "ctr");
-        assertXPath(pXmlDoc, (sPathTextOutline+"/w14:solidFill/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha").c_str(), "val", "40000");
-        assertXPath(pXmlDoc, (sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod").c_str(), "val", "75000");
-        assertXPath(pXmlDoc, (sPathTextOutline+"/w14:prstDash").c_str(), "val", "solid");
-        assertXPath(pXmlDoc, (sPathTextOutline+"/w14:bevel").c_str(), 1);
+        OString sPathTextOutline = sPathToRun + "/w14:textOutline";
+        assertXPath(pXmlDoc, sPathTextOutline, "w", "25400");
+        assertXPath(pXmlDoc, sPathTextOutline, "cap", "rnd");
+        assertXPath(pXmlDoc, sPathTextOutline, "cmpd", "sng");
+        assertXPath(pXmlDoc, sPathTextOutline, "algn", "ctr");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha", "val", "40000");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod", "val", "75000");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:prstDash", "val", "solid");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:bevel", 1);
 
         // TextFill
-        std::string sPathTextFill = sPathToRun + "/w14:textFill";
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]").c_str(), "pos", "0");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:alpha").c_str(), "val", "10000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumMod").c_str(), "val", "40000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumOff").c_str(), "val", "60000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]").c_str(), "pos", "46000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod").c_str(), "val", "95000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff").c_str(), "val", "5000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]").c_str(), "pos", "100000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod").c_str(), "val", "60000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:path").c_str(), "path", "circle");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect").c_str(), "b", "-30000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect").c_str(), "r", "50000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect").c_str(), "t", "130000");
-        assertXPath(pXmlDoc, (sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect").c_str(), "l", "50000");
+        OString sPathTextFill = sPathToRun + "/w14:textFill";
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]", "pos", "0");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:alpha", "val", "10000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumMod", "val", "40000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumOff", "val", "60000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]", "pos", "46000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod", "val", "95000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff", "val", "5000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]", "pos", "100000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod", "val", "60000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path", "path", "circle");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "b", "-30000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "r", "50000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "t", "130000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "l", "50000");
 
         // Props3D
-        std::string sPathProps3D = sPathToRun + "/w14:props3d";
-        assertXPath(pXmlDoc, (sPathProps3D).c_str(), "extrusionH", "57150");
-        assertXPath(pXmlDoc, (sPathProps3D).c_str(), "contourW", "12700");
-        assertXPath(pXmlDoc, (sPathProps3D).c_str(), "prstMaterial", "metal");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelT").c_str(), "w", "38100");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelT").c_str(), "h", "38100");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelT").c_str(), "prst", "angle");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelB").c_str(), "w", "69850");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelB").c_str(), "h", "69850");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:bevelB").c_str(), "prst", "divot");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:extrusionClr/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod").c_str(), "val", "20000");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff").c_str(), "val", "80000");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:contourClr/w14:schemeClr").c_str(), "val", "accent1");
-        assertXPath(pXmlDoc, (sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod").c_str(), "val", "75000");
+        OString sPathProps3D = sPathToRun + "/w14:props3d";
+        assertXPath(pXmlDoc, sPathProps3D, "extrusionH", "57150");
+        assertXPath(pXmlDoc, sPathProps3D, "contourW", "12700");
+        assertXPath(pXmlDoc, sPathProps3D, "prstMaterial", "metal");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "w", "38100");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "h", "38100");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "prst", "angle");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "w", "69850");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "h", "69850");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "prst", "divot");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod", "val", "20000");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff", "val", "80000");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr", "val", "accent1");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod", "val", "75000");
 
         // Ligatures
-        std::string sPathLigatures = sPathToRun + "/w14:ligatures";
-        assertXPath(pXmlDoc, (sPathLigatures).c_str(), "val", "standard");
+        OString sPathLigatures = sPathToRun + "/w14:ligatures";
+        assertXPath(pXmlDoc, sPathLigatures, "val", "standard");
 
         // NumForm
-        std::string sPathNumForm = sPathToRun + "/w14:numForm";
-        assertXPath(pXmlDoc, (sPathNumForm).c_str(), "val", "lining");
+        OString sPathNumForm = sPathToRun + "/w14:numForm";
+        assertXPath(pXmlDoc, sPathNumForm, "val", "lining");
 
         // NumSpacing
-        std::string sPathNumSpacing = sPathToRun + "/w14:numSpacing";
-        assertXPath(pXmlDoc, (sPathNumSpacing).c_str(), "val", "proportional");
+        OString sPathNumSpacing = sPathToRun + "/w14:numSpacing";
+        assertXPath(pXmlDoc, sPathNumSpacing, "val", "proportional");
 
         // StylisticSets
-        std::string sPathStylisticSets = sPathToRun + "/w14:stylisticSets";
-        assertXPath(pXmlDoc, (sPathStylisticSets+"/w14:styleSet").c_str(), "id", "1");
+        OString sPathStylisticSets = sPathToRun + "/w14:stylisticSets";
+        assertXPath(pXmlDoc, sPathStylisticSets+"/w14:styleSet", "id", "1");
     }
 }
 
