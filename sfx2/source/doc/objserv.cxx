@@ -1035,7 +1035,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             }
             case SID_SIGNATURE:
             {
-                SfxViewFrame *pFrame = SfxViewFrame::Current();
+                SfxViewFrame *pFrame = SfxViewFrame::GetFirst(this);
                 if ( pFrame )
                 {
                     SignatureState eState = GetDocumentSignatureState();
