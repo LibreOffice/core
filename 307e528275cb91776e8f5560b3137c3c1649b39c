@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_a8c1b682",
+        "filename": "include/o3tl/sorted_vector.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-07T08:05:33Z",
+      "side": 0,
+      "message": "This was a used include std::less is also in functional. Dennis will fix this particular case, but perhaps audit the whole patch if there are other headers where functional is removed but std::less is present (all those places still want functional).",
+      "revId": "307e528275cb91776e8f5560b3137c3c1649b39c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
