@@ -214,17 +214,17 @@ void OOXMLParserState::setTableProperties(const OOXMLPropertySet::Pointer_t& pPr
 // tdf#108714
 void OOXMLParserState::resolvePostponedBreak(Stream & rStream)
 {
-    if (mpPostponedBreak)
+    for (const auto & rBreak: mvPostponedBreaks)
     {
         OOXMLBreakHandler aBreakHandler(rStream);
-        mpPostponedBreak->resolve(aBreakHandler);
-        mpPostponedBreak.reset();
+        rBreak->resolve(aBreakHandler);
     }
+    mvPostponedBreaks.clear();
 }
 
 void OOXMLParserState::setPostponedBreak(const OOXMLPropertySet::Pointer_t & pProps)
 {
-    mpPostponedBreak = pProps;
+    mvPostponedBreaks.push_back(pProps);
 }
 
 void OOXMLParserState::startTable()

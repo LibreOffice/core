@@ -1453,8 +1453,10 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
 
     // A table with immediately following break
+    // Line breaks in block and paragraph levels must be taken into account
+    // Several successive out-of-place w:br's must produce required amount of breaks
     uno::Reference<text::XTextContent> table = getParagraphOrTable(5);
-    getCell(table, "A1", "Paragraph 5 in table");
+    getCell(table, "A1", "\n\n\n\nParagraph 5 in table");
     breakType = getProperty<style::BreakType>(table, "BreakType");
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE, breakType);
 
