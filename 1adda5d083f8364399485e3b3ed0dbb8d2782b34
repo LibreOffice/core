@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_c8f1a2cf",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-07T09:12:12Z",
+      "side": 1,
+      "message": "Any reason this is Windows-only? Perhaps it is worth a comment to document what is that.",
+      "revId": "1adda5d083f8364399485e3b3ed0dbb8d2782b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_08bacae1",
+        "filename": "writerfilter/source/dmapper/OLEHandler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-07T09:12:12Z",
+      "side": 1,
+      "message": "I don\u0027t think this is necessary.",
+      "revId": "1adda5d083f8364399485e3b3ed0dbb8d2782b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
