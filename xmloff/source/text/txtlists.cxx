@@ -451,7 +451,7 @@ XMLTextListsHelper::MakeNumRule(
 
         xNumRules =
             SvxXMLListStyleContext::CreateNumRule( i_rImport.GetModel() );
-        assert(xNumRules.is());
+        SAL_INFO_IF(xNumRules.is(), "xmloff.core", "cannot create numrules");
         if ( !xNumRules.is() )
             return xNumRules;
 
