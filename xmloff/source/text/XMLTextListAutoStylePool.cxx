@@ -18,6 +18,7 @@
  */
 
 #include <vector>
+#include <functional>
 
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
