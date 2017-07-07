@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_48ddb241",
+        "filename": "include/comphelper/accessiblecontexthelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-07T09:05:47Z",
+      "side": 1,
+      "message": "this seems wrong, the base is :osl::ClearableMutexGuard",
+      "revId": "41486a004e1bea25d656a5552c73528bfbc0fd2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
