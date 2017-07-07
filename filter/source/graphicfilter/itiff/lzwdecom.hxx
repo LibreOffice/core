@@ -22,6 +22,9 @@
 
 #include <sal/types.h>
 #include <tools/solar.h>
+#include <array>
+
+#define MAX_TABLE_SIZE 4096
 
 struct LZWTableEntry {
     sal_uInt16 nPrevCode;
@@ -52,14 +55,14 @@ private:
 
     SvStream * pIStream;
 
-    LZWTableEntry * pTable;
+    std::array<LZWTableEntry, MAX_TABLE_SIZE> pTable;
     sal_uInt16 nTableSize;
 
     bool bEOIFound, bInvert, bFirst;
 
     sal_uInt16 nOldCode;
 
-    sal_uInt8 * pOutBuf;
+    std::array<sal_uInt8, MAX_TABLE_SIZE> pOutBuf;
     sal_uInt8 * pOutBufData;
     sal_uInt16 nOutBufDataLen;
 

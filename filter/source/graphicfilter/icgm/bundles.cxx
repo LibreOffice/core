@@ -90,8 +90,6 @@ FontEntry::FontEntry() :
 
 FontEntry::~FontEntry()
 {
-    delete [] pFontName;
-    delete[] pCharSetValue;
 }
 
 CGMFList::CGMFList() :
@@ -119,15 +117,15 @@ CGMFList& CGMFList::operator=( const CGMFList& rSource )
         FontEntry* pCFontEntry = new FontEntry;
         if ( pPtr->pFontName )
         {
-            sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pFontName) ) + 1;
-            pCFontEntry->pFontName = new sal_Int8[ nSize ];
-            memcpy( pCFontEntry->pFontName, pPtr->pFontName, nSize );
+            sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pFontName.get()) ) + 1;
+            pCFontEntry->pFontName.reset( new sal_Int8[ nSize ] );
+            memcpy( pCFontEntry->pFontName.get(), pPtr->pFontName.get(), nSize );
         }
         if ( pPtr->pCharSetValue )
         {
-            sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pCharSetValue) ) + 1;
-            pCFontEntry->pCharSetValue = new sal_Int8[ nSize ];
-            memcpy( pCFontEntry->pCharSetValue, pPtr->pCharSetValue, nSize );
+            sal_uInt32 nSize = strlen( reinterpret_cast<char*>(pPtr->pCharSetValue.get()) ) + 1;
+            pCFontEntry->pCharSetValue.reset( new sal_Int8[ nSize ] );
+            memcpy( pCFontEntry->pCharSetValue.get(), pPtr->pCharSetValue.get(), nSize );
         }
         pCFontEntry->eCharSetType = pPtr->eCharSetType;
         pCFontEntry->nFontType = pPtr->nFontType;
@@ -218,9 +216,9 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
         }
         nSize -= nToCopyOfs;
     }
-    pFontEntry->pFontName = new sal_Int8[ nSize + 1 ];
+    pFontEntry->pFontName.reset( new sal_Int8[ nSize + 1 ] );
     pFontEntry->pFontName[ nSize ] = 0;
-    memcpy( pFontEntry->pFontName, pBuf.get(), nSize );
+    memcpy( pFontEntry->pFontName.get(), pBuf.get(), nSize );
 }
 
 
@@ -239,9 +237,9 @@ void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_
     }
     nCharSetCount++;
     pFontEntry->eCharSetType = eCharSetType;
-    pFontEntry->pCharSetValue = new sal_Int8[ nSize + 1 ];
+    pFontEntry->pCharSetValue.reset( new sal_Int8[ nSize + 1 ] );
     pFontEntry->pCharSetValue[ nSize ] = 0;
-    memcpy( pFontEntry->pCharSetValue, pSource , nSize );
+    memcpy( pFontEntry->pCharSetValue.get(), pSource, nSize );
 }
 
 

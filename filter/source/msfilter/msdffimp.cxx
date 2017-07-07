@@ -6528,25 +6528,25 @@ bool SvxMSDffManager::ReadCommonRecordHeader(SvStream& rSt,
 }
 
 bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen,
-                                          char*& rpBuff, sal_uInt32& rBuffLen )
+                                          std::unique_ptr<char[]>& rpBuff, sal_uInt32& rBuffLen )
 {
     if( nDatLen )
     {
         rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_uInt64>(nDatLen));
-        rpBuff = new char[rBuffLen];
-        rBuffLen = rStData.ReadBytes(rpBuff, rBuffLen);
+        rpBuff.reset( new char[rBuffLen] );
+        rBuffLen = rStData.ReadBytes(rpBuff.get(), rBuffLen);
     }
     return true;
 }
 
 bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
-                                        char*& rpBuff, sal_uInt32& rBuffLen )
+                                        std::unique_ptr<char[]>& rpBuff, sal_uInt32& rBuffLen )
 {
     if( nDatLen )
     {
         rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_uInt64>(nDatLen));
-        rpBuff = new char[rBuffLen];
-        rBuffLen = rStData.ReadBytes(rpBuff, rBuffLen);
+        rpBuff.reset( new char[rBuffLen] );
+        rBuffLen = rStData.ReadBytes(rpBuff.get(), rBuffLen);
     }
     return true;
 }
@@ -7371,9 +7371,9 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
     nClientAnchorLen = rCopy.nClientAnchorLen;
     if( rCopy.nClientAnchorLen )
     {
-        pClientAnchorBuffer = new char[ nClientAnchorLen ];
-        memcpy( pClientAnchorBuffer,
-                rCopy.pClientAnchorBuffer,
+        pClientAnchorBuffer.reset( new char[ nClientAnchorLen ] );
+        memcpy( pClientAnchorBuffer.get(),
+                rCopy.pClientAnchorBuffer.get(),
                 nClientAnchorLen );
     }
     else
@@ -7382,9 +7382,9 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
     nClientDataLen = rCopy.nClientDataLen;
     if( rCopy.nClientDataLen )
     {
-        pClientDataBuffer = new char[ nClientDataLen ];
-        memcpy( pClientDataBuffer,
-                rCopy.pClientDataBuffer,
+        pClientDataBuffer.reset( new char[ nClientDataLen ] );
+        memcpy( pClientDataBuffer.get(),
+                rCopy.pClientDataBuffer.get(),
                 nClientDataLen );
     }
     else
@@ -7398,8 +7398,6 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
 
 SvxMSDffImportRec::~SvxMSDffImportRec()
 {
-    delete[] pClientAnchorBuffer;
-    delete[] pClientDataBuffer;
     delete pWrapPolygon;
     delete pXRelTo;
     delete pYRelTo;

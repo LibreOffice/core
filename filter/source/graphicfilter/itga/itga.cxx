@@ -20,6 +20,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <memory>
 
 class FilterConfigItem;
 
@@ -85,12 +86,13 @@ private:
     TGAFileHeader*      mpFileHeader;
     TGAFileFooter*      mpFileFooter;
     TGAExtension*       mpExtension;
-    sal_uInt32*             mpColorMap;
+    std::unique_ptr<sal_uInt32[]>
+                        mpColorMap;
 
     bool                mbStatus;
 
-    sal_uLong               mnTGAVersion;       // Enhanced TGA is defined as Version 2.0
-    sal_uInt16              mnDestBitDepth;
+    sal_uLong           mnTGAVersion;       // Enhanced TGA is defined as Version 2.0
+    sal_uInt16          mnDestBitDepth;
     bool                mbIndexing;         // sal_True if source contains indexing color values
     bool                mbEncoding;         // sal_True if source is compressed
 
@@ -123,7 +125,6 @@ TGAReader::TGAReader(SvStream &rTGA)
 
 TGAReader::~TGAReader()
 {
-    delete[] mpColorMap;
     delete mpFileHeader;
     delete mpExtension;
     delete mpFileFooter;
@@ -720,7 +721,7 @@ bool TGAReader::ImplReadPalette()
             mpFileHeader->nColorMapLength = 256;
             mpFileHeader->nColorMapEntrySize = 0x3f;    // patch for the following switch routine
         }
-        mpColorMap = new sal_uInt32[ nColors ];     // we will always index dwords
+        mpColorMap.reset( new sal_uInt32[ nColors ] );     // we will always index dwords
 
         switch( mpFileHeader->nColorMapEntrySize )
         {
