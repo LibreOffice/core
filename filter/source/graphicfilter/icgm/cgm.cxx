@@ -60,7 +60,6 @@ CGM::CGM(uno::Reference< frame::XModel > const & rModel)
     , mpEndValidSource(nullptr)
     , mnParaSize(0)
     , mnActCount(0)
-    , mpBuf(nullptr)
     , mnEscape(0)
     , mnElementClass(0)
     , mnElementID(0)
@@ -89,7 +88,6 @@ CGM::~CGM()
     delete mpOutAct;
     delete pCopyOfE;
     delete pElement;
-    delete [] mpBuf;
 };
 
 sal_uInt32 CGM::GetBackGroundColor()
@@ -680,10 +678,10 @@ void CGM::ImplDefaultReplacement()
 bool CGM::Write( SvStream& rIStm )
 {
     if ( !mpBuf )
-        mpBuf = new sal_uInt8[ 0xffff ];
+        mpBuf.reset( new sal_uInt8[ 0xffff ] );
 
     mnParaSize = 0;
-    mpSource = mpBuf;
+    mpSource = mpBuf.get();
     if (rIStm.ReadBytes(mpSource, 2) != 2)
         return false;
     mpEndValidSource = mpSource + 2;

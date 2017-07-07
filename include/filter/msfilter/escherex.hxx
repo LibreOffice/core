@@ -559,10 +559,8 @@ class MSFILTER_DLLPUBLIC EscherGraphicProvider
 {
     EscherGraphicProviderFlags
                             mnFlags;
-    EscherBlibEntry**       mpBlibEntrys;
-    sal_uInt32              mnBlibBufSize;
-    sal_uInt32              mnBlibEntrys;
-
+    std::vector<std::unique_ptr<EscherBlibEntry>>
+                            mvBlibEntrys;
     OUString                maBaseURI;
 
 protected:
@@ -581,7 +579,7 @@ public:
                     const GraphicAttr* pGrafikAttr = nullptr,
                     const bool ooxmlExport = false
                 );
-    bool        HasGraphics() const { return mnBlibEntrys != 0; };
+    bool        HasGraphics() const { return !mvBlibEntrys.empty(); };
 
     void        SetNewBlipStreamOffset( sal_Int32 nOffset );
 
@@ -592,6 +590,8 @@ public:
 
     EscherGraphicProvider( EscherGraphicProviderFlags nFlags  = EscherGraphicProviderFlags::NONE );
     virtual ~EscherGraphicProvider();
+    EscherGraphicProvider& operator=( EscherGraphicProvider const & ) = delete; // MSVC2015 workaround
+    EscherGraphicProvider( EscherGraphicProvider const & ) = delete; // MSVC2015 workaround
 };
 
 struct EscherShapeListEntry;
@@ -649,12 +649,11 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
     SvStream*               pPicOutStrm;
     tools::Rectangle*              pShapeBoundRect;
 
-    sal_uInt32              nSortCount;
-    sal_uInt32              nSortBufSize;
     sal_uInt32              nCountCount;
     sal_uInt32              nCountSize;
 
-    EscherPropSortStruct*   pSortStruct;
+    std::vector<EscherPropSortStruct>
+                            pSortStruct;
 
     bool                    bHasComplexData;
 

@@ -211,9 +211,11 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
 
     SdrObject*      pObj;
     tools::Polygon* pWrapPolygon;
-    char*           pClientAnchorBuffer;
+    std::unique_ptr<char[]>
+                    pClientAnchorBuffer;
     sal_uInt32      nClientAnchorLen;
-    char*           pClientDataBuffer;
+    std::unique_ptr<char[]>
+                    pClientDataBuffer;
     sal_uInt32      nClientDataLen;
     sal_uInt32      nXAlign;
     sal_uInt32      *pXRelTo;
@@ -483,14 +485,14 @@ protected:
 // the following methods need to be overridden for Excel imports
     static bool ProcessClientAnchor( SvStream& rStData,
                                           sal_uInt32 nDatLen,
-                                          char*& rpBuff,
+                                          std::unique_ptr<char[]>& rpBuff,
                                           sal_uInt32& rBuffLen );
     virtual void ProcessClientAnchor2( SvStream& rStData,
                                        DffRecordHeader& rHd,
                                        void* pData, DffObjData& );
     static bool ProcessClientData( SvStream& rStData,
                                         sal_uInt32 nDatLen,
-                                        char*& rpBuff,
+                                        std::unique_ptr<char[]>& rpBuff,
                                         sal_uInt32& rBuffLen );
     virtual SdrObject* ProcessObj( SvStream& rSt,
                                    DffObjData& rData,
