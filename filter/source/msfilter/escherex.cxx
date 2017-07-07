@@ -147,13 +147,12 @@ EscherPropertyContainer::EscherPropertyContainer(
     pGraphicProvider(pGraphProv),
     pPicOutStrm(pPiOutStrm),
     pShapeBoundRect(pBoundRect),
-    nSortCount(0),
-    nSortBufSize(64),
     nCountCount(0),
     nCountSize(0),
-    pSortStruct(new EscherPropSortStruct[nSortBufSize]),
     bHasComplexData(false)
-{}
+{
+    pSortStruct.reserve(64);
+}
 
 EscherPropertyContainer::EscherPropertyContainer()
     : EscherPropertyContainer(nullptr, nullptr, nullptr)
@@ -170,10 +169,10 @@ EscherPropertyContainer::~EscherPropertyContainer()
 {
     if ( bHasComplexData )
     {
+        size_t nSortCount = pSortStruct.size();
         while ( nSortCount-- )
             delete[] pSortStruct[ nSortCount ].pBuf;
     }
-    delete[] pSortStruct;
 };
 
 void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_uInt32 nPropValue, bool bBlib )
@@ -203,8 +202,7 @@ void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, bool bBlib, sal_uInt32
     if ( pProp )
         nPropID |= 0x8000;      // fComplex = sal_True;
 
-    sal_uInt32 i;
-    for( i = 0; i < nSortCount; i++ )
+    for( size_t i = 0; i < pSortStruct.size(); i++ )
     {
         if ( ( pSortStruct[ i ].nPropId &~0xc000 ) == ( nPropID &~0xc000 ) )    // check, whether the Property only gets replaced
         {
@@ -224,21 +222,11 @@ void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, bool bBlib, sal_uInt32
     }
     nCountCount++;
     nCountSize += 6;
-    if ( nSortCount == nSortBufSize )                                           // increase buffer
-    {
-        nSortBufSize <<= 1;
-        EscherPropSortStruct* pTemp = new EscherPropSortStruct[ nSortBufSize ];
-        for( i = 0; i < nSortCount; i++ )
-        {
-            pTemp[ i ] = pSortStruct[ i ];
-        }
-        delete[] pSortStruct;
-        pSortStruct = pTemp;
-    }
-    pSortStruct[ nSortCount ].nPropId = nPropID;                                // insert property
-    pSortStruct[ nSortCount ].pBuf = pProp;
-    pSortStruct[ nSortCount ].nPropSize = nPropSize;
-    pSortStruct[ nSortCount++ ].nPropValue = nPropValue;
+    pSortStruct.push_back({});
+    pSortStruct.back().nPropId = nPropID;                                // insert property
+    pSortStruct.back().pBuf = pProp;
+    pSortStruct.back().nPropSize = nPropSize;
+    pSortStruct.back().nPropValue = nPropValue;
 
     if ( pProp )
     {
@@ -261,7 +249,7 @@ bool EscherPropertyContainer::GetOpt( sal_uInt16 nPropId, sal_uInt32& rPropValue
 
 bool EscherPropertyContainer::GetOpt( sal_uInt16 nPropId, EscherPropSortStruct& rPropValue ) const
 {
-    for( sal_uInt32 i = 0; i < nSortCount; i++ )
+    for( size_t i = 0; i < pSortStruct.size(); i++ )
     {
         if ( ( pSortStruct[ i ].nPropId &~0xc000 ) == ( nPropId &~0xc000 ) )
         {
@@ -276,7 +264,7 @@ EscherProperties EscherPropertyContainer::GetOpts() const
 {
     EscherProperties aVector;
 
-    for ( sal_uInt32 i = 0; i < nSortCount; ++i )
+    for ( size_t i = 0; i < pSortStruct.size(); ++i )
         aVector.push_back( pSortStruct[ i ] );
 
     return aVector;
@@ -298,12 +286,11 @@ extern "C" int SAL_CALL EscherPropSortFunc( const void* p1, const void* p2 )
 void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uInt16 nRecType )
 {
     rSt.WriteUInt16( ( nCountCount << 4 ) | ( nVersion & 0xf ) ).WriteUInt16( nRecType ).WriteUInt32( nCountSize );
-    if ( nSortCount )
+    if ( !pSortStruct.empty() )
     {
-        qsort( pSortStruct, nSortCount, sizeof( EscherPropSortStruct ), EscherPropSortFunc );
-        sal_uInt32 i;
+        qsort( pSortStruct.data(), pSortStruct.size(), sizeof( EscherPropSortStruct ), EscherPropSortFunc );
 
-        for ( i = 0; i < nSortCount; i++ )
+        for ( size_t i = 0; i < pSortStruct.size(); i++ )
         {
             sal_uInt32 nPropValue = pSortStruct[ i ].nPropValue;
             sal_uInt16 nPropId = pSortStruct[ i ].nPropId;
@@ -313,7 +300,7 @@ void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uI
         }
         if ( bHasComplexData )
         {
-            for ( i = 0; i < nSortCount; i++ )
+            for ( size_t i = 0; i < pSortStruct.size(); i++ )
             {
                 if ( pSortStruct[ i ].pBuf )
                     rSt.WriteBytes(pSortStruct[i].pBuf, pSortStruct[i].nPropSize);
@@ -4056,52 +4043,35 @@ bool EscherBlibEntry::operator==( const EscherBlibEntry& rEscherBlibEntry ) cons
 }
 
 EscherGraphicProvider::EscherGraphicProvider( EscherGraphicProviderFlags nFlags ) :
-    mnFlags         ( nFlags ),
-    mpBlibEntrys    ( nullptr ),
-    mnBlibBufSize   ( 0 ),
-    mnBlibEntrys    ( 0 )
+    mnFlags         ( nFlags )
 {
 }
 
 EscherGraphicProvider::~EscherGraphicProvider()
 {
-    for ( sal_uInt32 i = 0; i < mnBlibEntrys; delete mpBlibEntrys[ i++ ] ) ;
-    delete[] mpBlibEntrys;
 }
 
 void EscherGraphicProvider::SetNewBlipStreamOffset( sal_Int32 nOffset )
 {
-    for( sal_uInt32 i = 0; i < mnBlibEntrys; i++ )
+    for( size_t i = 0; i < mvBlibEntrys.size(); i++ )
     {
-        EscherBlibEntry* pBlibEntry = mpBlibEntrys[ i ];
-        pBlibEntry->mnPictureOffset += nOffset;
+        mvBlibEntrys[ i ]->mnPictureOffset += nOffset;
     }
 }
 
 sal_uInt32 EscherGraphicProvider::ImplInsertBlib( EscherBlibEntry* p_EscherBlibEntry )
 {
-    if ( mnBlibBufSize == mnBlibEntrys )
-    {
-        mnBlibBufSize += 64;
-        EscherBlibEntry** pTemp = new EscherBlibEntry*[ mnBlibBufSize ];
-        for ( sal_uInt32 i = 0; i < mnBlibEntrys; i++ )
-        {
-            pTemp[ i ] = mpBlibEntrys[ i ];
-        }
-        delete[] mpBlibEntrys;
-        mpBlibEntrys = pTemp;
-    }
-    mpBlibEntrys[ mnBlibEntrys++ ] = p_EscherBlibEntry;
-    return mnBlibEntrys;
+    mvBlibEntrys.push_back( std::unique_ptr<EscherBlibEntry>(p_EscherBlibEntry) );
+    return mvBlibEntrys.size();
 }
 
 sal_uInt32 EscherGraphicProvider::GetBlibStoreContainerSize( SvStream* pMergePicStreamBSE ) const
 {
-    sal_uInt32 nSize = 44 * mnBlibEntrys + 8;
+    sal_uInt32 nSize = 44 * mvBlibEntrys.size() + 8;
     if ( pMergePicStreamBSE )
     {
-        for ( sal_uInt32 i = 0; i < mnBlibEntrys; i++ )
-            nSize += mpBlibEntrys[ i ]->mnSize + mpBlibEntrys[ i ]->mnSizeExtra;
+        for ( size_t i = 0; i < mvBlibEntrys.size(); i++ )
+            nSize += mvBlibEntrys[ i ]->mnSize + mvBlibEntrys[ i ]->mnSizeExtra;
     }
     return nSize;
 }
@@ -4109,9 +4079,9 @@ sal_uInt32 EscherGraphicProvider::GetBlibStoreContainerSize( SvStream* pMergePic
 void EscherGraphicProvider::WriteBlibStoreEntry(SvStream& rSt,
     sal_uInt32 nBlipId, sal_uInt32 nResize)
 {
-    if (nBlipId > mnBlibEntrys || nBlipId == 0)
+    if (nBlipId > mvBlibEntrys.size() || nBlipId == 0)
         return;
-    mpBlibEntrys[nBlipId-1]->WriteBlibEntry(rSt, true/*bWritePictureOffSet*/, nResize);
+    mvBlibEntrys[nBlipId-1]->WriteBlibEntry(rSt, true/*bWritePictureOffSet*/, nResize);
 }
 
 void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pMergePicStreamBSE )
@@ -4124,13 +4094,13 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
 
         if ( pMergePicStreamBSE )
         {
-            sal_uInt32 i, nBlipSize, nOldPos = pMergePicStreamBSE->Tell();
+            sal_uInt32 nBlipSize, nOldPos = pMergePicStreamBSE->Tell();
             const sal_uInt32 nBuf = 0x40000;    // 256KB buffer
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nBuf ]);
 
-            for ( i = 0; i < mnBlibEntrys; i++ )
+            for ( size_t i = 0; i < mvBlibEntrys.size(); i++ )
             {
-                EscherBlibEntry* pBlibEntry = mpBlibEntrys[ i ];
+                EscherBlibEntry* pBlibEntry = mvBlibEntrys[ i ].get();
 
                 ESCHER_BlibType nBlibType = pBlibEntry->meBlibType;
                 nBlipSize = pBlibEntry->mnSize + pBlibEntry->mnSizeExtra;
@@ -4165,18 +4135,18 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
         }
         else
         {
-            for ( sal_uInt32 i = 0; i < mnBlibEntrys; i++ )
-                mpBlibEntrys[ i ]->WriteBlibEntry( rSt, true );
+            for ( size_t i = 0; i < mvBlibEntrys.size(); i++ )
+                mvBlibEntrys[ i ]->WriteBlibEntry( rSt, true );
         }
     }
 }
 
 bool EscherGraphicProvider::GetPrefSize( const sal_uInt32 nBlibId, Size& rPrefSize, MapMode& rPrefMapMode )
 {
-    bool bInRange = nBlibId && ( ( nBlibId - 1 ) < mnBlibEntrys );
+    bool bInRange = nBlibId && ( ( nBlibId - 1 ) < mvBlibEntrys.size() );
     if ( bInRange )
     {
-        EscherBlibEntry* pEntry = mpBlibEntrys[ nBlibId - 1 ];
+        EscherBlibEntry* pEntry = mvBlibEntrys[ nBlibId - 1 ].get();
         rPrefSize = pEntry->maPrefSize;
         rPrefMapMode = pEntry->maPrefMapMode;
     }
@@ -4193,11 +4163,11 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
     std::unique_ptr<EscherBlibEntry> p_EscherBlibEntry( new EscherBlibEntry( rPicOutStrm.Tell(), *xGraphicObject, rId, pGraphicAttr ) );
     if ( !p_EscherBlibEntry->IsEmpty() )
     {
-        for ( sal_uInt32 i = 0; i < mnBlibEntrys; i++ )
+        for ( size_t i = 0; i < mvBlibEntrys.size(); i++ )
         {
-            if ( *( mpBlibEntrys[ i ] ) == *p_EscherBlibEntry )
+            if ( *( mvBlibEntrys[ i ] ) == *p_EscherBlibEntry )
             {
-                mpBlibEntrys[ i ]->mnRefCount++;
+                mvBlibEntrys[ i ]->mnRefCount++;
                 return i + 1;
             }
         }
@@ -4317,7 +4287,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
             if ( mnFlags & EscherGraphicProviderFlags::UseInstances )
             {
-                rPicOutStrm.WriteUInt32( 0x7f90000 | (sal_uInt16)( mnBlibEntrys << 4 ) )
+                rPicOutStrm.WriteUInt32( 0x7f90000 | (sal_uInt16)( mvBlibEntrys.size() << 4 ) )
                            .WriteUInt32( 0 );
                 nAtomSize = rPicOutStrm.Tell();
                  if ( eBlibType == PNG )

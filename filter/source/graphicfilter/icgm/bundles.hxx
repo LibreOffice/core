@@ -24,6 +24,7 @@
 #include "cgmtypes.hxx"
 #include <vcl/salbtype.hxx>
 #include <vector>
+#include <memory>
 
 
 class Bundle
@@ -142,9 +143,11 @@ public:
 class FontEntry
 {
 public:
-    sal_Int8*           pFontName;
+    std::unique_ptr<sal_Int8[]>
+                        pFontName;
     CharSetType         eCharSetType;
-    sal_Int8*           pCharSetValue;
+    std::unique_ptr<sal_Int8[]>
+                        pCharSetValue;
     sal_uInt32          nFontType;          // bit 0 = 1 -> Italic,
                                             // bit 1 = 1 -> Bold
 

@@ -59,7 +59,6 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
     mpCGM = &rCGM;
     mnCurrentPage = 0;
     mnGroupActCount = mnGroupLevel = 0;
-    mpGroupLevel = new sal_uInt32[CGM_OUTACT_MAX_GROUP_LEVEL] ();
 
     mpGradient = nullptr;
 
@@ -88,8 +87,6 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
 
 CGMImpressOutAct::~CGMImpressOutAct()
 {
-    delete[] mpGroupLevel;
-    delete mpGradient;
 }
 
 bool CGMImpressOutAct::ImplInitPage()
@@ -356,7 +353,7 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
     if ( pFontEntry )
     {
         nFontType = pFontEntry->nFontType;
-        aFontDescriptor.Name = OUString::createFromAscii( reinterpret_cast<char*>(pFontEntry->pFontName) );
+        aFontDescriptor.Name = OUString::createFromAscii( reinterpret_cast<char*>(pFontEntry->pFontName.get()) );
     }
     aFontDescriptor.Height = sal_Int16( mpCGM->pElement->nCharacterHeight * 1.50 );
     if ( nFontType & 1 )
@@ -956,7 +953,7 @@ void CGMImpressOutAct::RegPolyLine( tools::Polygon& rPolygon, bool bReverse )
 void CGMImpressOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs )
 {
     if ( !mpGradient )
-        mpGradient = new awt::Gradient;
+        mpGradient.reset( new awt::Gradient );
     mpGradient->XOffset = ( (sal_uInt16)nHorzOfs & 0x7f );
     mpGradient->YOffset = ( (sal_uInt16)nVertOfs & 0x7f );
 }
@@ -964,14 +961,14 @@ void CGMImpressOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs )
 void CGMImpressOutAct::SetGradientAngle( long nAngle )
 {
     if ( !mpGradient )
-        mpGradient = new awt::Gradient;
+        mpGradient.reset( new awt::Gradient );
     mpGradient->Angle = sal::static_int_cast< sal_Int16 >(nAngle);
 }
 
 void CGMImpressOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo )
 {
     if ( !mpGradient )
-        mpGradient = new awt::Gradient;
+        mpGradient.reset( new awt::Gradient );
     mpGradient->StartColor = nColorFrom;
     mpGradient->EndColor = nColorTo;
 }
@@ -979,7 +976,7 @@ void CGMImpressOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 
 void CGMImpressOutAct::SetGradientStyle( sal_uInt32 nStyle )
 {
     if ( !mpGradient )
-        mpGradient = new awt::Gradient;
+        mpGradient.reset( new awt::Gradient );
     switch ( nStyle )
     {
         case 0xff :

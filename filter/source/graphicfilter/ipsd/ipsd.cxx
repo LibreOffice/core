@@ -56,7 +56,8 @@ class PSDReader {
 private:
 
     SvStream& m_rPSD;           // the PSD file to be read in
-    PSDFileHeader*      mpFileHeader;
+    std::unique_ptr<PSDFileHeader>
+                        mpFileHeader;
 
     sal_uInt32          mnXResFixed;
     sal_uInt32          mnYResFixed;
@@ -69,16 +70,16 @@ private:
     BitmapReadAccess*   mpReadAcc;
     BitmapWriteAccess*  mpWriteAcc;
     BitmapWriteAccess*  mpMaskWriteAcc;
-    sal_uInt16              mnDestBitDepth;
+    sal_uInt16          mnDestBitDepth;
     bool                mbCompression;  // RLE decoding
-    sal_uInt8*              mpPalette;
+    std::unique_ptr<sal_uInt8[]>
+                        mpPalette;
 
     bool                ImplReadBody();
     bool                ImplReadHeader();
 
 public:
     explicit PSDReader(SvStream &rStream);
-    ~PSDReader();
     bool ReadPSD(Graphic & rGraphic);
 };
 
@@ -98,12 +99,6 @@ PSDReader::PSDReader(SvStream &rStream)
     , mbCompression(false)
     , mpPalette(nullptr)
 {
-}
-
-PSDReader::~PSDReader()
-{
-    delete[] mpPalette;
-    delete mpFileHeader;
 }
 
 bool PSDReader::ReadPSD(Graphic & rGraphic )
@@ -171,7 +166,7 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
 
 bool PSDReader::ImplReadHeader()
 {
-    mpFileHeader = new PSDFileHeader;
+    mpFileHeader.reset( new PSDFileHeader );
 
     m_rPSD.ReadUInt32( mpFileHeader->nSignature ).ReadUInt16( mpFileHeader->nVersion ).ReadUInt32( mpFileHeader->nPad1 ).        ReadUInt16( mpFileHeader->nPad2 ).ReadUInt16( mpFileHeader->nChannels ).ReadUInt32( mpFileHeader->nRows ).            ReadUInt32( mpFileHeader->nColumns ).ReadUInt16( mpFileHeader->nDepth ).ReadUInt16( mpFileHeader->nMode );
 
@@ -236,8 +231,8 @@ bool PSDReader::ImplReadHeader()
         {
             if ( nColorLength != 768 )      // we need the color map
                 return false;
-            mpPalette = new sal_uInt8[ 768 ];
-            m_rPSD.ReadBytes(mpPalette, 768);
+            mpPalette.reset( new sal_uInt8[ 768 ] );
+            m_rPSD.ReadBytes(mpPalette.get(), 768);
         }
         break;
 
@@ -249,7 +244,7 @@ bool PSDReader::ImplReadHeader()
         {
             if ( nColorLength )
                 return false;
-            mpPalette = new sal_uInt8[ 768 ];
+            mpPalette.reset( new sal_uInt8[ 768 ] );
             for ( sal_uInt16 i = 0; i < 256; i++ )
             {
                 mpPalette[ i ] = mpPalette[ i + 256 ] = mpPalette[ i + 512 ] = (sal_uInt8)i;

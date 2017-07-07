@@ -81,8 +81,9 @@ class CGM
         sal_uInt8*              mpEndValidSource; // end position in source buffer of last valid data
         sal_uInt32              mnParaSize;     // actual parameter size which has been done so far
         sal_uInt32              mnActCount;     // increased by each action
-        sal_uInt8*              mpBuf;          // source stream operation -> then this is allocated for
-                                            //                            the temp input buffer
+        std::unique_ptr<sal_uInt8[]>
+                                mpBuf;          // source stream operation -> then this is allocated for
+                                                //                            the temp input buffer
 
         sal_uInt32              mnEscape;
         sal_uInt32              mnElementClass;
