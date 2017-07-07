@@ -2,6 +2,7 @@ package org.libreoffice.overlay;
 
 import android.graphics.RectF;
 import android.util.Log;
+import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +35,12 @@ public class CalcHeadersController {
             mCalcColumnHeadersView.initialize(layerView, false);
         }
         LOKitShell.sendEvent(new LOEvent(LOEvent.UPDATE_CALC_HEADERS));
+        context.findViewById(R.id.calc_header_top_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:SelectAll"));
+            }
+        });
     }
 
     public void setHeaders(String headers) {
@@ -86,6 +93,16 @@ public class CalcHeadersController {
         mCalcRowHeadersView.setHeaderSelection(cellCursorRect);
         mCalcColumnHeadersView.setHeaderSelection(cellCursorRect);
         showHeaders();
+    }
+
+    public void setPendingRowOrColumnSelectionToShowUp(boolean b) {
+        mCalcRowHeadersView.setPendingRowOrColumnSelectionToShowUp(b);
+        mCalcColumnHeadersView.setPendingRowOrColumnSelectionToShowUp(b);
+    }
+
+    public boolean pendingRowOrColumnSelectionToShowUp() {
+        return mCalcColumnHeadersView.pendingRowOrColumnSelectionToShowUp()
+                || mCalcRowHeadersView.pendingRowOrColumnSelectionToShowUp();
     }
 
     private class HeaderInfo {
