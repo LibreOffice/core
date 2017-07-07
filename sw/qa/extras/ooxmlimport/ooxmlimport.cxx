@@ -1372,6 +1372,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108714, "tdf108714.docx")
     CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, breakType);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf108995, "xml_space.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    // We need to take xml:space attribute into account
+    uno::Reference< text::XTextRange > paragraph = getParagraph(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("\tA\t\tline  with\txml:space=\"preserve\" \n"
+                                  "A  line  without xml:space"),
+                         paragraph->getString());
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
