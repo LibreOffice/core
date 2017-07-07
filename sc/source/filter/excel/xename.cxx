@@ -31,6 +31,7 @@
 #include "excrecds.hxx"
 
 #include <formula/grammar.hxx>
+#include <oox/export/utils.hxx>
 
 using namespace ::oox;
 
@@ -300,16 +301,16 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_comment, "",
             // OOXTODO: XML_customMenu, "",
             // OOXTODO: XML_description, "",
-            XML_function, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
+            XML_function, ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
             // OOXTODO: XML_functionGroupId, "",
             // OOXTODO: XML_help, "",
-            XML_hidden, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
+            XML_hidden, ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
             XML_localSheetId, mnScTab == SCTAB_GLOBAL ? nullptr : OString::number( mnScTab ).getStr(),
             XML_name, XclXmlUtils::ToOString( maOrigName ).getStr(),
             // OOXTODO: XML_publishToServer, "",
             // OOXTODO: XML_shortcutKey, "",
             // OOXTODO: XML_statusBar, "",
-            XML_vbProcedure, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
+            XML_vbProcedure, ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
             // OOXTODO: XML_workbookParameter, "",
             // OOXTODO: XML_xlm, "",
             FSEND );

@@ -37,6 +37,7 @@
 #include <formula/errorcodes.hxx>
 #include <thread>
 #include <comphelper/threadpool.hxx>
+#include <oox/export/utils.hxx>
 
 #if defined(ANDROID)
 namespace std
@@ -994,7 +995,7 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                         aMatScRange.aStart.Row() == static_cast<SCROW>(GetXclPos().mnRow))
                 {
                     rWorksheet->startElement( XML_f,
-                            XML_aca, XclXmlUtils::ToPsz( (mxTokArr && mxTokArr->IsVolatile()) ||
+                            XML_aca, ToPsz( (mxTokArr && mxTokArr->IsVolatile()) ||
                                 (mxAddRec && mxAddRec->IsVolatile())),
                             XML_t, mxAddRec ? "array" : nullptr,
                             XML_ref, !sFmlaCellRange.isEmpty()? sFmlaCellRange.getStr() : nullptr,
@@ -1019,7 +1020,7 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
         if (!bTagStarted)
         {
             rWorksheet->startElement( XML_f,
-                    XML_aca, XclXmlUtils::ToPsz( (mxTokArr && mxTokArr->IsVolatile()) ||
+                    XML_aca, ToPsz( (mxTokArr && mxTokArr->IsVolatile()) ||
                         (mxAddRec && mxAddRec->IsVolatile()) ),
                     FSEND );
         }
@@ -1695,9 +1696,9 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
     const double nTruncatedExcelColumnWidth = std::trunc( nExcelColumnWidth * 100.0 + 0.5 ) / 100.0;
     rStrm.GetCurrentStream()->singleElement( XML_col,
             // OOXTODO: XML_bestFit,
-            XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ),
-            XML_customWidth,    XclXmlUtils::ToPsz( mbCustomWidth ),
-            XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
+            XML_collapsed,      ToPsz( ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ),
+            XML_customWidth,    ToPsz( mbCustomWidth ),
+            XML_hidden,         ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
             XML_outlineLevel,   OString::number( mnOutlineLevel ).getStr(),
             XML_max,            OString::number( nLastXclCol + 1 ).getStr(),
             XML_min,            OString::number( mnFirstXclCol + 1 ).getStr(),
@@ -2125,12 +2126,12 @@ void XclExpRow::SaveXml( XclExpXmlStream& rStrm )
                 XML_r,              OString::number(  (mnCurrentRow++) ).getStr(),
                 // OOXTODO: XML_spans,          optional
                 XML_s,              haveFormat ? lcl_GetStyleId( rStrm, mnXFIndex ).getStr() : nullptr,
-                XML_customFormat,   XclXmlUtils::ToPsz( haveFormat ),
+                XML_customFormat,   ToPsz( haveFormat ),
                 XML_ht,             OString::number( (double) mnHeight / 20.0 ).getStr(),
-                XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_HIDDEN ) ),
-                XML_customHeight,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_UNSYNCED ) ),
+                XML_hidden,         ToPsz( ::get_flag( mnFlags, EXC_ROW_HIDDEN ) ),
+                XML_customHeight,   ToPsz( ::get_flag( mnFlags, EXC_ROW_UNSYNCED ) ),
                 XML_outlineLevel,   OString::number(  mnOutlineLevel ).getStr(),
-                XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_COLLAPSED ) ),
+                XML_collapsed,      ToPsz( ::get_flag( mnFlags, EXC_ROW_COLLAPSED ) ),
                 // OOXTODO: XML_thickTop,       bool
                 // OOXTODO: XML_thickBot,       bool
                 // OOXTODO: XML_ph,             bool
@@ -2712,7 +2713,7 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
         // OOXTODO: XML_thickTop
         // OOXTODO: XML_thickBottom
         XML_defaultRowHeight, OString::number( static_cast< double> ( rDefData.mnHeight ) / 20.0 ).getStr(),
-        XML_zeroHeight, XclXmlUtils::ToPsz( rDefData.IsHidden() ),
+        XML_zeroHeight, ToPsz( rDefData.IsHidden() ),
         XML_outlineLevelRow, OString::number( maRowBfr.GetHighestOutlineLevel() ).getStr(),
         XML_outlineLevelCol, OString::number( maColInfoBfr.GetHighestOutlineLevel() ).getStr(),
         FSEND );

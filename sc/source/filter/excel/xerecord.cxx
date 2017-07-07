@@ -20,6 +20,7 @@
 #include "xerecord.hxx"
 #include "xeroot.hxx"
 
+#include <oox/export/utils.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::oox;
@@ -174,7 +175,7 @@ void XclExpBoolRecord::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.WriteAttributes(
             // HACK: HIDEOBJ (excdoc.cxx) should be its own object to handle XML_showObjects
-            mnAttribute, mnAttribute == XML_showObjects ? "all" : XclXmlUtils::ToPsz( mbValue ),
+            mnAttribute, mnAttribute == XML_showObjects ? "all" : ToPsz( mbValue ),
             FSEND );
 }
 

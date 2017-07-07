@@ -888,7 +888,7 @@ void ChartExport::exportChart( const Reference< css::chart::XChartDocument >& xC
     bool bIncludeHiddenCells = false;
     aPlotVisOnly >>= bIncludeHiddenCells;
     pFS->singleElement( FSNS( XML_c, XML_plotVisOnly ),
-            XML_val, BS(!bIncludeHiddenCells),
+            XML_val, ToPsz10(!bIncludeHiddenCells),
             FSEND );
 
     exportMissingValueTreatment(Reference<beans::XPropertySet>(mxDiagram, uno::UNO_QUERY));
@@ -3030,11 +3030,11 @@ void writeLabelProperties(
         }
     }
 
-    pFS->singleElement(FSNS(XML_c, XML_showLegendKey), XML_val, BS(aLabel.ShowLegendSymbol), FSEND);
-    pFS->singleElement(FSNS(XML_c, XML_showVal), XML_val, BS(aLabel.ShowNumber), FSEND);
-    pFS->singleElement(FSNS(XML_c, XML_showCatName), XML_val, BS(aLabel.ShowCategoryName), FSEND);
-    pFS->singleElement(FSNS(XML_c, XML_showSerName), XML_val, BS(false), FSEND);
-    pFS->singleElement(FSNS(XML_c, XML_showPercent), XML_val, BS(aLabel.ShowNumberInPercent), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showLegendKey), XML_val, ToPsz10(aLabel.ShowLegendSymbol), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showVal), XML_val, ToPsz10(aLabel.ShowNumber), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showCatName), XML_val, ToPsz10(aLabel.ShowCategoryName), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showSerName), XML_val, ToPsz10(false), FSEND);
+    pFS->singleElement(FSNS(XML_c, XML_showPercent), XML_val, ToPsz10(aLabel.ShowNumberInPercent), FSEND);
 }
 
 }
