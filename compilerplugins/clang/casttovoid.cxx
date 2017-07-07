@@ -195,13 +195,38 @@ public:
         }
         unsigned firstArg = 0;
         if (auto const cmce = dyn_cast<CXXMemberCallExpr>(expr)) {
-            recordConsumption(cmce->getImplicitObjectArgument());
+            if (auto const e1 = cmce->getMethodDecl()) {
+                if (e1->isConst() || e1->isStatic()) {
+                    recordConsumption(cmce->getImplicitObjectArgument());
+                }
+            } else if (auto const e2 = dyn_cast<BinaryOperator>(
+                           cmce->getCallee()->IgnoreParenImpCasts()))
+            {
+                switch (e2->getOpcode()) {
+                case BO_PtrMemD:
+                case BO_PtrMemI:
+                    if (e2->getRHS()->getType()->getAs<MemberPointerType>()
+                        ->getPointeeType()->getAs<FunctionProtoType>()
+                        ->isConst())
+                    {
+                        recordConsumption(e2->getLHS());
+                    }
+                    break;
+                default:
+                    break;
+                }
+            }
         } else if (isa<CXXOperatorCallExpr>(expr)) {
-            auto const dc = expr->getDirectCallee();
-            if (dc != nullptr && isa<CXXMethodDecl>(dc)) {
-                assert(expr->getNumArgs() != 0);
-                recordConsumption(expr->getArg(0));
-                firstArg = 1;
+            if (auto const cmd = dyn_cast_or_null<CXXMethodDecl>(
+                    expr->getDirectCallee()))
+            {
+                if (!cmd->isStatic()) {
+                    assert(expr->getNumArgs() != 0);
+                    if (cmd->isConst()) {
+                        recordConsumption(expr->getArg(0));
+                    }
+                    firstArg = 1;
+                }
             }
         }
         auto fun = expr->getDirectCallee();
