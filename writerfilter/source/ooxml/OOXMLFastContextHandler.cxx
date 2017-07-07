@@ -601,6 +601,12 @@ void OOXMLFastContextHandler::text(const OUString & sText)
         // tdf#108806: CRLFs in XML were converted to \n before this point.
         // These must be converted to spaces before further processing.
         OUString sNormalizedText = sText.replaceAll("\n", " ");
+        // tdf#108995: by default, leading and trailing white space is ignored;
+        // tabs are converted to spaces
+        if (!IsPreserveSpace())
+        {
+            sNormalizedText = sNormalizedText.trim().replaceAll("\t", " ");
+        }
         mpStream->utext(reinterpret_cast < const sal_uInt8 * >
                         (sNormalizedText.getStr()),
                         sNormalizedText.getLength());
@@ -863,6 +869,15 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
     }
 }
 
+bool OOXMLFastContextHandler::IsPreserveSpace() const
+{
+    // xml:space attribute applies to all elements within the content of the element where it is specified,
+    // unless overridden with another instance of the xml:space attribute
+    if (mpParent)
+        return mpParent->IsPreserveSpace();
+    return false; // default value
+}
+
 /*
   class OOXMLFastContextHandlerStream
  */
@@ -870,7 +885,9 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
 OOXMLFastContextHandlerStream::OOXMLFastContextHandlerStream
 (OOXMLFastContextHandler * pContext)
 : OOXMLFastContextHandler(pContext),
-  mpPropertySetAttrs(new OOXMLPropertySet)
+  mpPropertySetAttrs(new OOXMLPropertySet),
+  mbPreserveSpace(false),
+  mbPreserveSpaceSet(false)
 {
 }
 
@@ -881,7 +898,14 @@ OOXMLFastContextHandlerStream::~OOXMLFastContextHandlerStream()
 void OOXMLFastContextHandlerStream::newProperty(Id nId,
                                                 const OOXMLValue::Pointer_t& pVal)
 {
-    if (nId != 0x0)
+    if (nId == NS_ooxml::LN_CT_Text_space)
+    {
+        // Set <xml:space> value early, to allow
+        // child contexts use it when dealing with strings
+        mbPreserveSpace = pVal->getString() == "preserve";
+        mbPreserveSpaceSet = true;
+    }
+    else if (nId != 0x0)
     {
         OOXMLProperty::Pointer_t pProperty(new OOXMLProperty(nId, pVal, OOXMLProperty::ATTRIBUTE));
 
@@ -911,6 +935,15 @@ void OOXMLFastContextHandlerStream::handleHyperlink()
     OOXMLHyperlinkHandler aHyperlinkHandler(this);
     getPropertySetAttrs()->resolve(aHyperlinkHandler);
     aHyperlinkHandler.writetext();
+}
+
+bool OOXMLFastContextHandlerStream::IsPreserveSpace() const
+{
+    // xml:space attribute applies to all elements within the content of the element where it is specified,
+    // unless overridden with another instance of the xml:space attribute
+    if (mbPreserveSpaceSet)
+        return mbPreserveSpace;
+    return OOXMLFastContextHandler::IsPreserveSpace();
 }
 
 /*
