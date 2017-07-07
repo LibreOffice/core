@@ -285,7 +285,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
     pVDev->EnableMapMode( false );
 
     // setup mask VDev (alpha VDev is currently rather slow)
-    ScopedVclPtrInstance< VirtualDevice > pVDevMask;
+    ScopedVclPtrInstance<VirtualDevice> pVDevMask(DeviceFormat::BITMASK);
     pVDevMask->SetOutputSizePixel( aAnimSize );
     pVDevMask->EnableMapMode( false );
 
