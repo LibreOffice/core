@@ -17,6 +17,7 @@ import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 
 public class CalcSelectionBox extends CommonCanvasElement {
     private static final long MINIMUM_HANDLE_UPDATE_TIME = 50 * 1000000;
+    private static final float CIRCLE_HANDLE_RADIUS = 8f;
 
     public RectF mDocumentPosition;
 
@@ -85,11 +86,26 @@ public class CalcSelectionBox extends CommonCanvasElement {
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawRect(mScreenPosition, mPaint);
-        canvas.drawCircle(mScreenPosition.left, mScreenPosition.top, 4f, mCirclePaint);
-        canvas.drawCircle(mScreenPosition.right, mScreenPosition.bottom, 4f, mCirclePaint);
+        canvas.drawCircle(mScreenPosition.left, mScreenPosition.top, CIRCLE_HANDLE_RADIUS, mCirclePaint);
+        canvas.drawCircle(mScreenPosition.right, mScreenPosition.bottom, CIRCLE_HANDLE_RADIUS, mCirclePaint);
     }
 
     public void reposition(RectF rect) {
         mScreenPosition = rect;
+    }
+
+    @Override
+    public boolean contains(float x, float y) {
+        // test if in range of the box or the circular handles
+        boolean inRange =  new RectF(mScreenPosition.left - CIRCLE_HANDLE_RADIUS,
+                mScreenPosition.top - CIRCLE_HANDLE_RADIUS,
+                mScreenPosition.left + CIRCLE_HANDLE_RADIUS,
+                mScreenPosition.top + CIRCLE_HANDLE_RADIUS).contains(x, y)
+                || new RectF(mScreenPosition.right - CIRCLE_HANDLE_RADIUS,
+                mScreenPosition.bottom - CIRCLE_HANDLE_RADIUS,
+                mScreenPosition.right + CIRCLE_HANDLE_RADIUS,
+                mScreenPosition.bottom + CIRCLE_HANDLE_RADIUS).contains(x, y)
+                || onHitTest(x, y);
+        return inRange && isVisible();
     }
 }

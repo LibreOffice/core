@@ -483,6 +483,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     }
 
     public void showCellSelection(RectF cellCursorRect) {
+        if (mCalcSelectionBox == null) return;
         if (RectUtils.fuzzyEquals(mCalcSelectionBox.mDocumentPosition, cellCursorRect)) {
             return;
         }
@@ -495,7 +496,11 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
 
         // show selection on headers
-        showHeaderSelection(cellCursorRect);
+        if (!mCalcHeadersController.pendingRowOrColumnSelectionToShowUp()) {
+            showHeaderSelection(cellCursorRect);
+        } else {
+            mCalcHeadersController.setPendingRowOrColumnSelectionToShowUp(false);
+        }
     }
 
     public void showHeaderSelection(RectF rect) {
