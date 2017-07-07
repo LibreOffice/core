@@ -8,11 +8,16 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.libreoffice.LOEvent;
+import org.libreoffice.LOKitShell;
 import org.libreoffice.canvas.CalcHeaderCell;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.LayerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CalcHeadersView extends View implements View.OnTouchListener {
     private static final String LOGTAG = CalcHeadersView.class.getSimpleName();
@@ -23,6 +28,8 @@ public class CalcHeadersView extends View implements View.OnTouchListener {
     private ArrayList<String> mLabels;
     private ArrayList<Float> mDimens;
     private RectF mCellCursorRect;
+    private PointF pointOfTouch;
+    private boolean mPendingRowOrColumnSelectionToShowUp;
 
     public CalcHeadersView(Context context) {
         super(context);
@@ -98,9 +105,78 @@ public class CalcHeadersView extends View implements View.OnTouchListener {
         }
     }
 
+    /**
+     * Handle the triggered touch event.
+     */
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public boolean onTouch(View view, MotionEvent event) {
+        PointF point = new PointF(event.getX(), event.getY());
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                pointOfTouch = point;
+                return true;
+            case MotionEvent.ACTION_UP:
+                if (pointOfTouch != null) {
+                    highlightRowOrColumn();
+                }
+        }
         return false;
+    }
+
+    /**
+     * Handle a single tap event on a header cell.
+     * Selects whole row/column.
+     */
+    private void highlightRowOrColumn() {
+        int searchedIndex, index;
+        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
+        float zoom = metrics.getZoomFactor();
+        PointF origin = metrics.getOrigin();
+        if (mIsRow) {
+            searchedIndex = Collections.binarySearch(mDimens, (pointOfTouch.y+origin.y)/zoom);
+        } else {
+            searchedIndex = Collections.binarySearch(mDimens, (pointOfTouch.x+origin.x)/zoom);
+        }
+        // converting searched index to real index on headers
+        if (searchedIndex < 0) {
+            index = - searchedIndex - 2;
+        } else {
+            index = searchedIndex;
+        }
+        try {
+            JSONObject rootJson = new JSONObject();
+            addProperty(rootJson, "Modifier", "unsigned short", "0");
+            if (mIsRow) {
+                addProperty(rootJson, "Row", "unsigned short", String.valueOf(index));
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:SelectRow", rootJson.toString()));
+            } else {
+                addProperty(rootJson, "Col", "unsigned short", String.valueOf(index));
+                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:SelectColumn", rootJson.toString()));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // At this point, InvalidationHandler.java will have received two callbacks.
+        // One is for text selection (first) and the other for cell selection (second).
+        // The second will override the first on headers which is not wanted.
+        // setPendingRowOrColumnSelectionToShowUp(true) will skip the second call.
+        setPendingRowOrColumnSelectionToShowUp(true);
+        pointOfTouch = null;
+    }
+
+    public void setPendingRowOrColumnSelectionToShowUp(boolean b) {
+        mPendingRowOrColumnSelectionToShowUp = b;
+    }
+
+    public boolean pendingRowOrColumnSelectionToShowUp() {
+        return mPendingRowOrColumnSelectionToShowUp;
+    }
+
+    private void addProperty(JSONObject json, String parentValue, String type, String value) throws JSONException {
+        JSONObject child = new JSONObject();
+        child.put("type", type);
+        child.put("value", value);
+        json.put(parentValue, child);
     }
 
     public void setHeaders(ArrayList<String> labels, ArrayList<Float> dimens) {
