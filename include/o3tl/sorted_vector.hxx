@@ -12,6 +12,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <functional>
 
 namespace o3tl
 {
