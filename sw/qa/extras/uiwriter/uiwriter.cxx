@@ -256,6 +256,7 @@ public:
     void testTdf107976();
     void testTdf108524();
     void testTableInSection();
+    void testTableInNestedSection();
     void testLinesInSectionInTable();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
@@ -400,6 +401,7 @@ public:
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf108524);
     CPPUNIT_TEST(testTableInSection);
+    CPPUNIT_TEST(testTableInNestedSection);
     CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST_SUITE_END();
 
@@ -4991,6 +4993,17 @@ void SwUiWriterTest::testTableInSection()
     // Assert that on both pages the section contains 2 cells.
     assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell", 2);
     assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell", 2);
+}
+
+void SwUiWriterTest::testTableInNestedSection()
+{
+    // The document has a nested section, containing a table that spans over 2 pages.
+    // This crashed the layout.
+    createDoc("rhbz739252-3.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Make sure the table is inside a section and spans over 2 pages.
+    assertXPath(pXmlDoc, "//page[1]//section/tab", 1);
+    assertXPath(pXmlDoc, "//page[2]//section/tab", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
