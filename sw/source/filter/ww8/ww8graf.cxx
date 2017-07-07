@@ -1210,7 +1210,7 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
     aP1.X() += (sal_Int16)SVBT16ToShort( pHd->dxa );
     aP1.Y() += (sal_Int16)SVBT16ToShort( pHd->dya );
 
-    SdrObject* pObj = new SdrRectObj( OBJ_TEXT, tools::Rectangle( aP0, aP1 ) );
+    SdrRectObj* pObj = new SdrRectObj( OBJ_TEXT, tools::Rectangle( aP0, aP1 ) );
     pObj->SetModel( m_pDrawModel );
     pObj->NbcSetSnapRect(tools::Rectangle(aP0, aP1));
     Size aSize( (sal_Int16)SVBT16ToShort( pHd->dxa ) ,
@@ -1218,7 +1218,7 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 
     long nStartCpFly,nEndCpFly;
     bool bContainsGraphics;
-    InsertTxbxText(dynamic_cast<SdrTextObj*>(pObj), &aSize, 0, 0, 0, nullptr, false,
+    InsertTxbxText(pObj, &aSize, 0, 0, 0, nullptr, false,
         bDummy,nullptr,&nStartCpFly,&nEndCpFly,&bContainsGraphics);
 
     SetStdAttr( rSet, aTextB.aLnt, aTextB.aShd );
