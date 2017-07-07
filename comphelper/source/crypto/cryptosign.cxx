@@ -11,6 +11,31 @@
 
 #include <rtl/character.hxx>
 #include <comphelper/random.hxx>
+#include <comphelper/hash.hxx>
+#include <com/sun/star/security/XCertificate.hpp>
+
+#if HAVE_FEATURE_NSS && !defined(_WIN32)
+// NSS headers for PDF signing
+#include "nss.h"
+#include "cert.h"
+#include "hasht.h"
+#include "secerr.h"
+#include "sechash.h"
+#include "cms.h"
+#include "cmst.h"
+
+// We use curl for RFC3161 time stamp requests
+#include <curl/curl.h>
+#endif
+
+#ifdef _WIN32
+// WinCrypt headers for PDF signing
+// Note: this uses Windows 7 APIs and requires the relevant data types
+#include <prewin.h>
+#include <wincrypt.h>
+#include <postwin.h>
+#include <comphelper/windowserrorstring.hxx>
+#endif
 
 #if HAVE_FEATURE_NSS
 // Is this length truly the maximum possible, or just a number that
