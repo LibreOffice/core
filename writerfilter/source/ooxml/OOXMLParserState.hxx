@@ -59,7 +59,7 @@ class OOXMLParserState final
     bool savedInCharacterGroup;
     bool savedLastParagraphInSection;
     std::vector<SavedAlternateState> maSavedAlternateStates;
-    OOXMLPropertySet::Pointer_t mpPostponedBreak;
+    std::vector<OOXMLPropertySet::Pointer_t> mvPostponedBreaks;
 
 public:
     typedef std::shared_ptr<OOXMLParserState> Pointer_t;
