@@ -1067,19 +1067,16 @@ void OleComponent::ExecuteVerb( sal_Int32 nVerbID )
 
     if ( FAILED( hr ) )
         throw io::IOException(); // TODO
-
-    // TODO/LATER: the real names should be used here
-    m_pNativeImpl->m_pOleObject->SetHostNames( L"app name", L"untitled" );
 }
 
 
 void OleComponent::SetHostName( const OUString&,
-                                const OUString& )
+                                const OUString& aEmbDocName )
 {
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    // TODO: use aContName and aEmbDocName in m_pNativeImpl->m_pOleObject->SetHostNames()
+    m_pNativeImpl->m_pOleObject->SetHostNames( L"app name", reinterpret_cast<const wchar_t*>( aEmbDocName.getStr() ) );
 }
 
 
