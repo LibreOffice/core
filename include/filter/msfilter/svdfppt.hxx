@@ -342,7 +342,8 @@ struct PptSlidePersistEntry
     sal_uInt32          nSlidePersistEndOffset;
     sal_uInt32          nBackgroundOffset;      // fileoffset
     sal_uInt32          nDrawingDgId;           // valid, if not -1
-    sal_uInt32*         pPresentationObjects;   // if valid, this is a pointer to an array that includes the offsets to the presentation objects
+    std::unique_ptr<sal_uInt32[]>
+                        pPresentationObjects;   // if valid, this is a pointer to an array that includes the offsets to the presentation objects
                                                 // on this masterpage for each instance (0 - 8);
     SdrObject*          pBObj;
     bool                bBObjIsTemporary;
@@ -538,7 +539,8 @@ protected:
     PptUserEditAtom         aUserEditAtom;
     PptColorSchemeAtom      aPageColors;
     ::std::vector< SdHyperlinkEntry* > aHyperList;
-    sal_uInt32*             pPersistPtr;
+    std::unique_ptr<sal_uInt32[]>
+                            pPersistPtr;
     sal_uInt32              nPersistPtrAnz;
 
     const PPTStyleSheet*    pPPTStyleSheet; // this is the current stylesheet;

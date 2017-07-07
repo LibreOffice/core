@@ -20,6 +20,7 @@
 
 #include <tools/stream.hxx>
 #include "giflzwc.hxx"
+#include <array>
 
 
 class GIFImageDataOutputStream
@@ -30,7 +31,8 @@ private:
     inline void FlushBitsBufsFullBytes();
 
     SvStream&   rStream;
-    sal_uInt8*      pBlockBuf;
+    std::array<sal_uInt8, 255>
+                    pBlockBuf;
     sal_uInt8       nBlockBufSize;
     sal_uLong       nBitsBuf;
     sal_uInt16      nBitsBufSize;
@@ -71,7 +73,6 @@ inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nC
 GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 nLZWDataSize ) :
         rStream(rGIF)
 {
-    pBlockBuf = new sal_uInt8[ 255 ];
     nBlockBufSize = 0;
     nBitsBufSize = 0;
     nBitsBuf = 0;
@@ -85,7 +86,6 @@ GIFImageDataOutputStream::~GIFImageDataOutputStream()
     FlushBitsBufsFullBytes();
     FlushBlockBuf();
     rStream.WriteUChar( 0 );
-    delete[] pBlockBuf;
 }
 
 
@@ -94,7 +94,7 @@ void GIFImageDataOutputStream::FlushBlockBuf()
     if( nBlockBufSize )
     {
         rStream.WriteUChar( nBlockBufSize );
-        rStream.WriteBytes(pBlockBuf, nBlockBufSize);
+        rStream.WriteBytes(pBlockBuf.data(), nBlockBufSize);
         nBlockBufSize = 0;
     }
 }

@@ -23,8 +23,6 @@
 #include <algorithm>
 #include <set>
 
-#define MAX_TABLE_SIZE 4096
-
 LZWDecompressor::LZWDecompressor()
     : pIStream(nullptr)
     , nTableSize(0)
@@ -37,11 +35,7 @@ LZWDecompressor::LZWDecompressor()
     , nInputBitsBuf(0)
     , nInputBitsBufSize(0)
 {
-    sal_uInt16 i;
-
-    pTable=new LZWTableEntry[MAX_TABLE_SIZE];
-    pOutBuf=new sal_uInt8[MAX_TABLE_SIZE];
-    for (i=0; i<MAX_TABLE_SIZE; i++)
+    for (sal_uInt16 i=0; i<MAX_TABLE_SIZE; i++)
     {
         pTable[i].nPrevCode=0;
         pTable[i].nDataCount=1;
@@ -52,8 +46,6 @@ LZWDecompressor::LZWDecompressor()
 
 LZWDecompressor::~LZWDecompressor()
 {
-    delete[] pOutBuf;
-    delete[] pTable;
 }
 
 
@@ -214,7 +206,7 @@ void LZWDecompressor::DecompressSome()
     nOldCode=nCode;
 
     nOutBufDataLen=pTable[nCode].nDataCount;
-    pOutBufData=pOutBuf+nOutBufDataLen;
+    pOutBufData=pOutBuf.data()+nOutBufDataLen;
     for (i=0; i<nOutBufDataLen; i++)
     {
         *(--pOutBufData)=pTable[nCode].nData;
