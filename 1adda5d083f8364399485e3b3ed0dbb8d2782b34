@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_08880a22",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-07-07T10:07:32Z",
+      "side": 1,
+      "message": "Jenkins failed with different cheksums for each OS. It is caused by emf icon file handling (different default fonts on each platform?). I compared generated icon on Windows and Linux, font is slightly different.\n\nI will add comment.",
+      "parentUuid": "3a461143_c8f1a2cf",
+      "revId": "1adda5d083f8364399485e3b3ed0dbb8d2782b34",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_08bacae1",
         "filename": "writerfilter/source/dmapper/OLEHandler.cxx",
         "patchSetId": 11
