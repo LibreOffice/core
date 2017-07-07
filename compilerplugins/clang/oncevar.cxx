@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cassert>
 #include <string>
 #include <iostream>
 #include <unordered_map>
@@ -15,6 +16,7 @@
 #include "plugin.hxx"
 #include "check.hxx"
 #include "clang/AST/CXXInheritance.h"
+#include "clang/AST/StmtVisitor.h"
 
 // Original idea from tml.
 // Look for variables that are (a) initialised from zero or one constants. (b) only used in one spot.
@@ -26,6 +28,43 @@ namespace
 bool startsWith(const std::string& rStr, const char* pSubStr) {
     return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
 }
+
+class ConstantValueDependentExpressionVisitor:
+    public ConstStmtVisitor<ConstantValueDependentExpressionVisitor, bool>
+{
+    ASTContext const & context_;
+
+public:
+    ConstantValueDependentExpressionVisitor(ASTContext const & context):
+        context_(context) {}
+
+    bool Visit(Stmt const * stmt) {
+        assert(isa<Expr>(stmt));
+        auto const expr = cast<Expr>(stmt);
+        if (!expr->isValueDependent()) {
+            return expr->isEvaluatable(context_);
+        }
+        return ConstStmtVisitor::Visit(stmt);
+    }
+
+    bool VisitParenExpr(ParenExpr const * expr)
+    { return Visit(expr->getSubExpr()); }
+
+    bool VisitCastExpr(CastExpr const * expr) {
+        return Visit(expr->getSubExpr());
+    }
+
+    bool VisitUnaryOperator(UnaryOperator const * expr)
+    { return Visit(expr->getSubExpr()); }
+
+    bool VisitBinaryOperator(BinaryOperator const * expr) {
+        return Visit(expr->getLHS()) && Visit(expr->getRHS());
+    }
+
+    bool VisitUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr const *) {
+        return true;
+    }
+};
 
 class OnceVar:
     public RecursiveASTVisitor<OnceVar>, public loplugin::Plugin
@@ -99,6 +138,11 @@ private:
     std::unordered_set<VarDecl const *> maVarDeclToIgnoreSet;
     std::unordered_map<VarDecl const *, int> maVarUsesMap;
     std::unordered_map<VarDecl const *, SourceRange> maVarUseSourceRangeMap;
+
+    bool isConstantValueDependentExpression(Expr const * expr) {
+        return ConstantValueDependentExpressionVisitor(compiler.getASTContext())
+            .Visit(expr);
+    }
 };
 
 bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
@@ -164,21 +208,10 @@ bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
     }
     if (!foundStringLiteral) {
         auto const init = varDecl->getInit();
-#if CLANG_VERSION < 30900
-        // Work around missing Clang 3.9 fix <https://reviews.llvm.org/rL271762>
-        // "Sema: do not attempt to sizeof a dependent type" (while an
-        // initializer expression of the form
-        //
-        //   sizeof (T)
-        //
-        // with dependent type T /is/ constant, keep consistent here with the
-        // (arguably broken) behavior of isConstantInitializer returning false
-        // in Clang >= 3.9):
-        if (init->isValueDependent()) {
-            return true;
-        }
-#endif
-        if (!init->isConstantInitializer(compiler.getASTContext(), false/*ForRef*/))
+        if (!(init->isValueDependent()
+              ? isConstantValueDependentExpression(init)
+              : init->isConstantInitializer(
+                  compiler.getASTContext(), false/*ForRef*/)))
         {
             return true;
         }
