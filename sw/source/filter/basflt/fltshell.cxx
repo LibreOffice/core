@@ -57,6 +57,8 @@
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
 #include <fldbas.hxx>
+#include <docufld.hxx>
+#include <txtfld.hxx>
 #include <charatr.hxx>
 #include <swtable.hxx>
 #include <tox.hxx>
@@ -632,7 +634,30 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     case RES_FLTR_ANNOTATIONMARK:
         {
             if (MakeBookRegionOrPoint(rEntry, pDoc, aRegion, true))
-                pDoc->getIDocumentMarkAccess()->makeAnnotationMark(aRegion, OUString());
+            {
+                SwTextNode const*const pTextNode(
+                        aRegion.End()->nNode.GetNode().GetTextNode());
+                assert(pTextNode);
+                SwTextField const*const pField(pTextNode->GetFieldTextAttrAt(
+                        aRegion.End()->nContent.GetIndex() - 1, true));
+                if (pField)
+                {
+                    SwPostItField const*const pPostIt(
+                        dynamic_cast<SwPostItField const*>(pField->GetFormatField().GetField()));
+                    if (pPostIt)
+                    {
+                        pDoc->getIDocumentMarkAccess()->makeAnnotationMark(aRegion, OUString());
+                    }
+                    else
+                    {
+                        SAL_WARN("sw", "RES_FLTR_ANNOTATIONMARK: unexpected field");
+                    }
+                }
+                else
+                {
+                    SAL_WARN("sw", "RES_FLTR_ANNOTATIONMARK: missing field");
+                }
+            }
             else
                 SAL_WARN("sw", "failed to make book region or point");
         }
