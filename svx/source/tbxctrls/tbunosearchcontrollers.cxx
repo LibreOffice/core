@@ -367,7 +367,7 @@ void SearchToolbarControllersManager::registryController( const css::uno::Refere
         sal_Int32 nSize = pIt->second.size();
         for (sal_Int32 i=0; i<nSize; ++i)
         {
-            if (pIt->second[i].Name.equals(sCommandURL))
+            if (pIt->second[i].Name == sCommandURL)
                 return;
         }
 
@@ -384,7 +384,7 @@ void SearchToolbarControllersManager::freeController( const css::uno::Reference<
     {
         for (SearchToolbarControllersVec::iterator pItCtrl=pIt->second.begin(); pItCtrl!=pIt->second.end(); ++pItCtrl)
         {
-            if (pItCtrl->Name.equals(sCommandURL))
+            if (pItCtrl->Name == sCommandURL)
             {
                 pIt->second.erase(pItCtrl);
                 break;
@@ -405,7 +405,7 @@ css::uno::Reference< css::frame::XStatusListener > SearchToolbarControllersManag
     {
         for (SearchToolbarControllersVec::iterator pItCtrl =pIt->second.begin(); pItCtrl != pIt->second.end(); ++pItCtrl)
         {
-            if (pItCtrl->Name.equals(sCommandURL))
+            if (pItCtrl->Name == sCommandURL)
             {
                 pItCtrl->Value >>= xStatusListener;
                 break;

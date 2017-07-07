@@ -464,8 +464,7 @@ namespace osl_FileBase
 
         if (nError == osl::FileBase::E_None)
         {
-            bool bStrAreEqual = _suAssumeResultStr.equals(suResultURL);
-            CPPUNIT_ASSERT_MESSAGE("Assumption is wrong: ResultURL is not equal to expected URL ", bStrAreEqual);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Assumption is wrong: ResultURL is not equal to expected URL ", _suAssumeResultStr, suResultURL);
         }
     }
 

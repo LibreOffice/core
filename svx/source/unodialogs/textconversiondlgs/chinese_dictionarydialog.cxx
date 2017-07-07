@@ -213,7 +213,7 @@ DictionaryEntry* DictionaryList::getTermEntry( const OUString& rTerm ) const
     for( sal_Int32 nN=GetRowCount(); nN--; )
     {
         DictionaryEntry* pE = getEntryOnPos( nN );
-        if( pE && rTerm.equals( pE->m_aTerm ) )
+        if( pE && rTerm == pE->m_aTerm )
             return pE;
     }
     return nullptr;
@@ -257,7 +257,7 @@ sal_uIntPtr DictionaryList::deleteEntries( const OUString& rTerm )
     for( sal_Int32 nN=GetRowCount(); nN--; )
     {
         DictionaryEntry* pCurEntry = getEntryOnPos( nN );
-        if( rTerm.equals( pCurEntry->m_aTerm ) )
+        if( rTerm == pCurEntry->m_aTerm )
         {
             nPos = nN;
             SvTreeListEntry* pCurLBEntry = GetEntryOnPos( nN );
@@ -697,7 +697,7 @@ void ChineseDictionaryDialog::updateButtons()
     {
         DictionaryEntry* pFirstSelectedEntry = getActiveDictionary().getFirstSelectedEntry();
         bModify = !bAdd && getActiveDictionary().GetSelectedRowCount()==1
-                        && pFirstSelectedEntry && pFirstSelectedEntry->m_aTerm.equals( m_pED_Term->GetText() );
+                        && pFirstSelectedEntry && pFirstSelectedEntry->m_aTerm == m_pED_Term->GetText();
         if( bModify && isEditFieldsContentEqualsSelectedListContent() )
             bModify = false;
     }

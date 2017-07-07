@@ -129,7 +129,7 @@ namespace comphelper
         for (sal_Int32 i=0, j=0; i<nPropCount && j<nLen; ++i, ++pProps)
         {
             // get the values only for valid properties
-            if (pProps->Name.equals(*pNames))
+            if (pProps->Name == *pNames)
             {
                 *pValues = getPropertyState(*pNames);
                 ++pValues;

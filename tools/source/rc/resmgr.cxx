@@ -371,7 +371,7 @@ InternalResMgr* ResMgrContainer::getNextFallback( InternalResMgr* pMgr )
     LanguageTag aLocale( ((aFallbacks.size() > 1) ? aFallbacks[1] : OUString( "en-US")));
     InternalResMgr* pNext = getResMgr( pMgr->aPrefix, aLocale, pMgr->bSingular );
     // prevent recursion
-    if( pNext == pMgr || ( pNext && pNext->aResName.equals( pMgr->aResName ) ) )
+    if( pNext == pMgr || ( pNext && pNext->aResName == pMgr->aResName ) )
     {
         if( pNext->bSingular )
             delete pNext;

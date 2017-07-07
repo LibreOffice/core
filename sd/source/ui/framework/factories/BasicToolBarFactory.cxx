@@ -126,7 +126,7 @@ Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
 
     Reference<XResource> xToolBar;
 
-    if (rxToolBarId->getResourceURL().equals(FrameworkHelper::msViewTabBarURL))
+    if (rxToolBarId->getResourceURL() == FrameworkHelper::msViewTabBarURL)
     {
         xToolBar = new ViewTabBar(rxToolBarId, mxController);
     }

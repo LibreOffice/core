@@ -351,7 +351,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
             if ( aSeq[nInd1][nInd2].First == "Id" )
             {
-                if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
+                if ( aSeq[nInd1][nInd2].Second == sID )
                     return aSeq[nInd1];
                 break;
             }
@@ -381,7 +381,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
             if ( aSeq[nInd1][nInd2].First == "Type" )
             {
-                if ( aSeq[nInd1][nInd2].Second.equals( sType ) )
+                if ( aSeq[nInd1][nInd2].Second == sType )
                 {
                     aResult.realloc( nEntriesNum );
                     aResult[nEntriesNum-1] = aSeq[nInd1];
@@ -510,7 +510,7 @@ void SAL_CALL OInputCompStream::setPropertyValue( const OUString& aPropertyName,
     // all the provided properties are accessible
     for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
     {
-        if ( m_aProperties[aInd].Name.equals( aPropertyName ) )
+        if ( m_aProperties[aInd].Name == aPropertyName )
         {
             throw beans::PropertyVetoException(); // TODO
         }
@@ -541,7 +541,7 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
     // all the provided properties are accessible
     for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
     {
-        if ( m_aProperties[aInd].Name.equals( aPropertyName ) )
+        if ( m_aProperties[aInd].Name == aPropertyName )
         {
             return m_aProperties[aInd].Value;
         }

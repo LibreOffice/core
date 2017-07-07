@@ -3604,8 +3604,8 @@ bool ScDPCollection::GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDime
             if (pDesc == nullptr || pRefDesc == nullptr)
                 continue;
 
-            if (pDesc->aDBName.equals(pRefDesc->aDBName) &&
-                pDesc->aObject.equals(pRefDesc->aObject) &&
+            if (pDesc->aDBName == pRefDesc->aDBName &&
+                pDesc->aObject == pRefDesc->aObject &&
                 pDesc->GetCommandType() == pRefDesc->GetCommandType())
             {
                 *pGroups = rRefObj.GetSaveData()->GetExistingDimensionData();
@@ -3970,7 +3970,7 @@ void ScDPCollection::GetAllTables(
         if (!pDesc)
             continue;
 
-        if (!pDesc->aDBName.equals(rDBName) || !pDesc->aObject.equals(rCommand) || pDesc->GetCommandType() != nSdbType)
+        if (pDesc->aDBName != rDBName || pDesc->aObject != rCommand || pDesc->GetCommandType() != nSdbType)
             // Different database source.
             continue;
 
@@ -3985,7 +3985,7 @@ bool operator<(const ScDPCollection::DBType& left, const ScDPCollection::DBType&
     if (left.mnSdbType != right.mnSdbType)
         return left.mnSdbType < right.mnSdbType;
 
-    if (!left.maDBName.equals(right.maDBName))
+    if (left.maDBName != right.maDBName)
         return left.maDBName < right.maDBName;
 
     return left.maCommand < right.maCommand;

@@ -376,15 +376,15 @@ void XMLRedlineImportHelper::Add(
 
     // ad 1)
     RedlineType_t eType;
-    if (rType.equals(sInsertion))
+    if (rType == sInsertion)
     {
         eType = nsRedlineType_t::REDLINE_INSERT;
     }
-    else if (rType.equals(sDeletion))
+    else if (rType == sDeletion)
     {
         eType = nsRedlineType_t::REDLINE_DELETE;
     }
-    else if (rType.equals(sFormatChange))
+    else if (rType == sFormatChange)
     {
         eType = nsRedlineType_t::REDLINE_FORMAT;
     }

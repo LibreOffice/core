@@ -906,7 +906,7 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
                     OUString aIdentifier = rtl::Uri::encode( aUnencodedIdentifier,
                         rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8 );
 
-                    if( !aIdentifierInPath.equals( aIdentifier ) )
+                    if( aIdentifierInPath != aIdentifier )
                     {
                         // path does not start with extension identifier -> ignore
                         bSuccess = false;
@@ -1188,7 +1188,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
                 const Reference< deployment::XPackage > xSubPkg = pSeq[ iPkg ];
                 const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xSubPkg->getPackageType();
                 OUString aMediaType = xPackageTypeInfo->getMediaType();
-                if( aMediaType.equals( aHelpMediaType ) )
+                if( aMediaType == aHelpMediaType )
                 {
                     xHelpPackage = xSubPkg;
                     o_xParentPackageBundle = xPackage;
@@ -1200,7 +1200,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
         {
             const Reference< deployment::XPackageTypeInfo > xPackageTypeInfo = xPackage->getPackageType();
             OUString aMediaType = xPackageTypeInfo->getMediaType();
-            if( aMediaType.equals( aHelpMediaType ) )
+            if( aMediaType == aHelpMediaType )
                 xHelpPackage = xPackage;
         }
     }

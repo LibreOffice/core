@@ -3912,7 +3912,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
 #ifdef DBG_UTIL
                     OUString sName;
                     xParam->getPropertyValue(FM_PROP_NAME) >>= sName;
-                    DBG_ASSERT(sName.equals(pFinalValues->Name), "FormController::approveParameter: suspicious value names!");
+                    DBG_ASSERT(sName == pFinalValues->Name, "FormController::approveParameter: suspicious value names!");
 #endif
                     try { xParam->setPropertyValue(FM_PROP_VALUE, pFinalValues->Value); }
                     catch(Exception&)

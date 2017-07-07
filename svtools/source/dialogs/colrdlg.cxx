@@ -87,7 +87,7 @@ short SvColorDialog::Execute()
             props = xPropertyAccess->getPropertyValues();
             for( sal_Int32 n = 0; n < props.getLength(); n++ )
             {
-                if( props[n].Name.equals( sColor ) )
+                if( props[n].Name == sColor )
                 {
                     sal_Int32 nColor = 0;
                     if( props[n].Value >>= nColor )

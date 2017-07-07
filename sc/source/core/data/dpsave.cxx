@@ -822,7 +822,7 @@ bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
     {
         if (!r.mpGrandTotalName)
             return false;
-        if (!mpGrandTotalName->equals(*r.mpGrandTotalName))
+        if (*mpGrandTotalName != *r.mpGrandTotalName)
             return false;
     }
     else if (r.mpGrandTotalName)

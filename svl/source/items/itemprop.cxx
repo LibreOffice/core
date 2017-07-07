@@ -38,7 +38,7 @@ struct equalOUString
 {
   bool operator()(const OUString& r1, const OUString&  r2) const
   {
-    return r1.equals( r2 );
+    return r1 == r2;
   }
 };
 

@@ -408,7 +408,7 @@ void SfxDocTplService_Impl::init_Impl()
         OUString aPropValue;
         if ( getProperty( maRootContent, aTemplVersPropName, aValue )
           && ( aValue >>= aPropValue )
-          && aPropValue.equals( aTemplVers ) )
+          && aPropValue == aTemplVers )
         {
             bIsInitialized = true;
         }
@@ -1236,7 +1236,7 @@ bool SfxDocTplService_Impl::UpdateUINamesForTemplateDir_Impl( const OUString& aU
 
     // it is possible that the name is used already, but it should be checked before
     for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-        if ( aUINames[nInd].First.equals( aNewFolderName ) )
+        if ( aUINames[nInd].First == aNewFolderName )
             return false;
 
     aUINames.resize( ++nLen );
@@ -1257,7 +1257,7 @@ bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUString& a
 
     bool bChanged = false;
     for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-        if ( aUINames[nInd].Second.equals( aOldGroupName ) )
+        if ( aUINames[nInd].Second == aOldGroupName )
         {
             aUINames[nInd].Second = aNewGroupName;
             bChanged = true;
@@ -1283,7 +1283,7 @@ void SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aU
 
     bool bChanged = false;
     for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-        if ( aUINames[nInd].Second.equals( aGroupName ) )
+        if ( aUINames[nInd].Second == aGroupName )
             bChanged = true;
         else
         {
@@ -1907,7 +1907,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
         return false;
 
     INetURLObject   aSourceObj( rSourceURL );
-    if ( rTemplateName.equals( aTitle ) )
+    if ( rTemplateName == aTitle )
     {
         // addTemplate will sometimes be called just to add an entry in the
         // hierarchy; the target URL and the source URL will be the same in
@@ -1977,14 +1977,14 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
 
 
     // either the document has title and it is the same as requested, or we have to set it
-    bool bCorrectTitle = ( bDocHasTitle && aTitle.equals( rTemplateName ) );
+    bool bCorrectTitle = ( bDocHasTitle && aTitle == rTemplateName );
     if ( !bCorrectTitle )
     {
         if ( !bDocHasTitle )
         {
             INetURLObject aNewTmpObj( aNewTemplateTargetObj );
             aNewTmpObj.CutExtension();
-            bCorrectTitle = ( aNewTmpObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ).equals( rTemplateName ) );
+            bCorrectTitle = ( aNewTmpObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ) == rTemplateName );
         }
 
         if ( !bCorrectTitle )
@@ -2519,7 +2519,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
                 {
                     OUString aUITitle;
                     for (beans::StringPair & rUIName : aUINames)
-                        if ( rUIName.First.equals( aTitle ) )
+                        if ( rUIName.First == aTitle )
                         {
                             aUITitle = rUIName.Second;
                             break;

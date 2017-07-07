@@ -348,7 +348,7 @@ bool DataSupplier::getData()
 
         while ( it != end )
         {
-            if ( (*it).equals( DAVProperties::RESOURCETYPE ) )
+            if ( (*it) == DAVProperties::RESOURCETYPE )
                 break;
 
             ++it;

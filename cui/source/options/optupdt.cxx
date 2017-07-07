@@ -253,7 +253,7 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
     m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
 
     if( ( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(m_pDestPath->GetText(), aURL) ) &&
-        ( ! aURL.equals( sValue ) ) )
+        ( aURL != sValue ) )
     {
         m_xUpdateAccess->replaceByName( "DownloadDestination", uno::Any( aURL ) );
         bModified = true;

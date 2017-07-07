@@ -273,7 +273,7 @@ const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
     for(std::unique_ptr<Mapping> & i : *pMappingsArr)
     {
         Mapping& rMapping = *i.get();
-        bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
+        bool bURLEqual = rDesc.sDataSource == rMapping.sURL;
         if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
             return &rMapping;
     }
@@ -285,7 +285,7 @@ void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapp
     for(size_t i = 0; i < pMappingsArr->size(); i++)
     {
         Mapping& rMapping = *(*pMappingsArr)[i].get();
-        bool bURLEqual = rDesc.sDataSource.equals(rMapping.sURL);
+        bool bURLEqual = rDesc.sDataSource == rMapping.sURL;
         if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
         {
             pMappingsArr->erase(pMappingsArr->begin()+i);

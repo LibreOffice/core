@@ -2708,7 +2708,7 @@ void XMLTextImportHelper::ConnectFrameChains(
     {
         for(std::vector<OUString>::iterator i = m_xImpl->m_xPrevFrmNames->begin(), j = m_xImpl->m_xNextFrmNames->begin(); i != m_xImpl->m_xPrevFrmNames->end() && j != m_xImpl->m_xNextFrmNames->end(); ++i, ++j)
         {
-            if((*j).equals(rFrmName))
+            if((*j) == rFrmName)
             {
                 // The previous frame must exist, because it existing than
                 // inserting the entry

@@ -1249,11 +1249,11 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                                 if (!bHandleSysLocked)
                                 {
                                     LockFileEntry aOwnData = svt::LockFileCommon::GenerateOwnEntry();
-                                    bOwnLock = aOwnData[LockFileComponent::SYSUSERNAME].equals(aData[LockFileComponent::SYSUSERNAME]);
+                                    bOwnLock = aOwnData[LockFileComponent::SYSUSERNAME] == aData[LockFileComponent::SYSUSERNAME];
 
                                     if (bOwnLock
-                                        && aOwnData[LockFileComponent::LOCALHOST].equals(aData[LockFileComponent::LOCALHOST])
-                                        && aOwnData[LockFileComponent::USERURL].equals(aData[LockFileComponent::USERURL]))
+                                        && aOwnData[LockFileComponent::LOCALHOST] == aData[LockFileComponent::LOCALHOST]
+                                        && aOwnData[LockFileComponent::USERURL] == aData[LockFileComponent::USERURL])
                                     {
                                         // this is own lock from the same installation, it could remain because of crash
                                         bResult = true;

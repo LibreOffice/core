@@ -3564,7 +3564,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
             if (pDocSh && pDocSh->HasName())
                 aThisName = pDocSh->GetMedium()->GetName();
 
-            if ( !rData.aLinkDoc.equals(aThisName) )
+            if ( rData.aLinkDoc != aThisName )
                 nRet = rEvt.mnAction;
         }
         else if (!rData.aJumpTarget.isEmpty())
@@ -4203,7 +4203,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if (pDocSh && pDocSh->HasName())
             aThisName = pDocSh->GetMedium()->GetName();
 
-        if ( rData.aLinkDoc.equals(aThisName) )              // error - no link within a document
+        if ( rData.aLinkDoc == aThisName )              // error - no link within a document
             bOk = false;
         else
         {

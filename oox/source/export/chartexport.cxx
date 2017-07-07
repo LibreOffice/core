@@ -143,7 +143,7 @@ public:
 
         return ( xProp.is() &&
                  (xProp->getPropertyValue( "Role" ) >>= aRole ) &&
-                 m_aRole.equals( aRole ));
+                 m_aRole == aRole );
     }
 
 private:
@@ -2008,7 +2008,7 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                         if( xSeqProp.is())
                             xSeqProp->getPropertyValue("Role") >>= aRole;
                         // "main" sequence
-                        if( aRole.equals( aLabelRole ))
+                        if( aRole == aLabelRole )
                         {
                             xValuesSeq.set( xTempValueSeq );
                             xLabelSeq.set( aSeqCnt[nSeqIdx]->getLabel());

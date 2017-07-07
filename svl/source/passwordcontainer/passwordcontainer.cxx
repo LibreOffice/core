@@ -548,7 +548,7 @@ OUString PasswordContainer::EncodePasswords(const vector< OUString >& lines, con
 void PasswordContainer::UpdateVector( const OUString& aURL, list< NamePassRecord >& toUpdate, NamePassRecord& aRecord, bool writeFile )
 {
     for( list< NamePassRecord >::iterator aNPIter = toUpdate.begin(); aNPIter != toUpdate.end(); ++aNPIter )
-        if( aNPIter->GetUserName().equals( aRecord.GetUserName() ) )
+        if( aNPIter->GetUserName() == aRecord.GetUserName() )
         {
             if( aRecord.HasPasswords( MEMORY_RECORD ) )
                 aNPIter->SetMemPasswords( aRecord.GetMemPasswords() );
@@ -689,7 +689,7 @@ Sequence< UserRecord > PasswordContainer::FindUsr( const list< NamePassRecord >&
          aNPIter != userlist.end();
          ++aNPIter, ++nInd )
     {
-        if( aNPIter->GetUserName().equals( aName ) )
+        if( aNPIter->GetUserName() == aName )
         {
             Sequence< UserRecord > aResult(1);
             bool bTryToDecode = true;
@@ -853,7 +853,7 @@ OUString const & PasswordContainer::GetMasterPassword( const Reference< XInterac
                     else
                     {
                         vector< OUString > aRM( DecodePasswords( aEncodedMP, aPass ) );
-                        if( aRM.empty() || !aPass.equals( aRM[0] ) )
+                        if( aRM.empty() || aPass != aRM[0] )
                         {
                             bAskAgain = true;
                             aRMode = PasswordRequestMode_PASSWORD_REENTER;
@@ -896,7 +896,7 @@ void SAL_CALL PasswordContainer::remove( const OUString& aURL, const OUString& a
         if( aIter != m_aContainer.end() )
         {
             for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
-                if( aNPIter->GetUserName().equals( aName ) )
+                if( aNPIter->GetUserName() == aName )
                 {
                     if( aNPIter->HasPasswords( PERSISTENT_RECORD ) && m_pStorageFile )
                         m_pStorageFile->remove( aURL, aName ); // remove record ( aURL, aName )
@@ -936,7 +936,7 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& aURL, const O
         if( aIter != m_aContainer.end() )
         {
             for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); ++aNPIter )
-                if( aNPIter->GetUserName().equals( aName ) )
+                if( aNPIter->GetUserName() == aName )
                 {
                     if( aNPIter->HasPasswords( PERSISTENT_RECORD ) )
                     {
@@ -1060,7 +1060,7 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
 
                 do {
                     aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
-                    bResult = ( !aPass.isEmpty() && aPass.equals( m_aMasterPasswd ) );
+                    bResult = ( !aPass.isEmpty() && aPass == m_aMasterPasswd );
                     aRMode = PasswordRequestMode_PASSWORD_REENTER; // further questions with error notification
                 } while( !bResult && !aPass.isEmpty() );
             }

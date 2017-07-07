@@ -315,7 +315,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     {
         const rtl::Reference<VendorBase>& cur = *i;
 
-        if (!sVendor.equals(cur->getVendor()))
+        if (sVendor != cur->getVendor())
             continue;
 
         javaPluginError err = checkJavaVersionRequirements(
@@ -362,7 +362,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         return javaPluginError::NoJre;
 
     //Check if the detected JRE matches the version requirements
-    if (!sVendor.equals(aVendorInfo->getVendor()))
+    if (sVendor != aVendorInfo->getVendor())
         return javaPluginError::NoJre;
     javaPluginError errorcode = checkJavaVersionRequirements(
             aVendorInfo, sMinVersion, sMaxVersion, arExcludeList);
@@ -394,7 +394,7 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
         const OUString& vendor = vendorInfo->first;
         jfw::VersionInfo versionInfo = vendorInfo->second;
 
-        if (vendor.equals(infoJavaHome[0]->getVendor()))
+        if (vendor == infoJavaHome[0]->getVendor())
         {
             javaPluginError errorcode = checkJavaVersionRequirements(
                 infoJavaHome[0],
@@ -436,7 +436,7 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
             const OUString& vendor = vendorInfo->first;
             jfw::VersionInfo const & versionInfo = vendorInfo->second;
 
-            if (vendor.equals(currentInfo->getVendor()))
+            if (vendor == currentInfo->getVendor())
             {
                 javaPluginError errorcode = checkJavaVersionRequirements(
                     currentInfo,

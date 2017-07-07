@@ -58,7 +58,7 @@ public:
     UStringMixEqual(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
     bool operator() (const OUString& lhs, const OUString& rhs) const
     {
-        return m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs );
+        return m_bCaseSensitive ? lhs == rhs : lhs.equalsIgnoreAsciiCase( rhs );
     }
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };

@@ -1695,7 +1695,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
                     // This workaround is not nice, but I see no other way to handle it, since there are
                     // ODF1.2 documents without version in manifest.xml
                     if ( !aStorVersion.isEmpty() )
-                        bResult = aODFVersion.equals( aStorVersion );
+                        bResult = aODFVersion == aStorVersion;
                     else
                         xStorProps->setPropertyValue( "Version",
                                                       uno::makeAny( aODFVersion ) );

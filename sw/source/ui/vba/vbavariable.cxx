@@ -68,7 +68,7 @@ SwVbaVariable::getIndex()
     const uno::Sequence< beans::PropertyValue > props = mxUserDefined->getPropertyValues();
     for (sal_Int32 i = 0; i < props.getLength(); ++i)
     {
-        if( maVariableName.equals( props[i].Name ) )
+        if( maVariableName == props[i].Name )
             return i+1;
     }
 

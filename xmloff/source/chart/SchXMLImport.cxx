@@ -70,7 +70,7 @@ public:
     bool operator () ( const Reference< chart2::XChartType > & xChartType ) const
     {
         return (xChartType.is() &&
-                xChartType->getChartType().equals( m_aChartTypeName ));
+                xChartType->getChartType() == m_aChartTypeName );
     }
 
 private:

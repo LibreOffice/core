@@ -58,13 +58,13 @@ namespace Stringtest
                 rtl::OString sStr("h\xE4llo", strlen("h\xE4llo"));
                 rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
 
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suString.equals(suStr_UriDecodeToIuri));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Strings must be equal", suString, suStr_UriDecodeToIuri);
 
                 // ustring --> ustring (UTF8)
                 rtl::OUString suStr2 = rtl::Uri::encode(suStr_UriDecodeToIuri, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
                 showContent(suStr2);
 
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suStr2.equals(suStrUTF8));
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Strings must be equal", suStr2, suStrUTF8);
                 // suStr should be equal to suStr2
             }
 

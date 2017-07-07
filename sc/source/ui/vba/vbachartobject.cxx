@@ -62,7 +62,7 @@ ScVbaChartObject::setShape()
                 uno::Reference< beans::XPropertySet > xShapePropertySet(xShape, uno::UNO_QUERY_THROW );
                 OUString sName;
                 xShapePropertySet->getPropertyValue(PERSIST_NAME ) >>=sName;
-                if ( sName.equals(sPersistName))
+                if ( sName == sPersistName )
                 {
                     xNamedShape.set( xShape, uno::UNO_QUERY_THROW );
                     return xShape;

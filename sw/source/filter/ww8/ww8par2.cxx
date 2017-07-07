@@ -3683,7 +3683,7 @@ const SwFormat* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
     {
         for(sal_uInt16 nI = 0; nI < m_xStyles->GetCount(); nI++ )
             if(    m_vColl[ nI ].m_bValid
-                && (rName.equals( m_vColl[ nI ].GetOrgWWName())) )
+                && (rName == m_vColl[ nI ].GetOrgWWName()) )
             {
                 pRet = m_vColl[ nI ].m_pFormat;
                 break;

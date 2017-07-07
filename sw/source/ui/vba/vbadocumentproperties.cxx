@@ -323,7 +323,7 @@ public:
             bool bFound = false;
             for ( sal_Int32 index = 0; index < nLen && !bFound ; ++index )
             {
-                if ( rPropName.equals( stats[ index ].Name ) )
+                if ( rPropName == stats[ index ].Name )
                 {
                     aReturn = stats[ index ].Value;
                     bFound = true;
@@ -343,7 +343,7 @@ public:
         sal_Int32 nLen = stats.getLength();
         for ( sal_Int32 index = 0; index < nLen; ++index )
         {
-            if ( rPropName.equals( stats[ index ].Name ) )
+            if ( rPropName == stats[ index ].Name )
             {
                 stats[ index ].Value = aValue;
                 m_xDocProps->setDocumentStatistics(stats);

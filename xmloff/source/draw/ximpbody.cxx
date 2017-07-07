@@ -168,7 +168,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                     {
                         OUString sMasterPageName = xMasterNamed->getName();
 
-                        if(!sMasterPageName.isEmpty() && sMasterPageName.equals(sDisplayName))
+                        if(!sMasterPageName.isEmpty() && sMasterPageName == sDisplayName)
                         {
                             xDrawPage->setMasterPage(xMasterPage);
                             bDone = true;

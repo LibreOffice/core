@@ -71,7 +71,7 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
                                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                           const css::uno::Reference<css::frame::XController>& rxController)
 {
-    if (!rsCommandName.equals(msMoreOptionsCommand))
+    if (rsCommandName != msMoreOptionsCommand)
     {
         if (msMoreOptionsCommand.getLength() > 0)
             maToolBox->RemoveItem(maToolBox->GetItemPos(mnMenuItemIndex));

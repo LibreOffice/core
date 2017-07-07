@@ -1344,7 +1344,7 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
     SwTOXBase & rTOXBase = m_pImpl->m_pProps->GetTOXBase();
     SwTOXType const*const pTOXType = rTOXBase.GetTOXType();
     if ((TOX_USER == pTOXType->GetType()) &&
-        !m_pImpl->m_pProps->GetTypeName().equals(pTOXType->GetTypeName()))
+        m_pImpl->m_pProps->GetTypeName() != pTOXType->GetTypeName())
     {
         lcl_ReAssignTOXType(pDoc, rTOXBase, m_pImpl->m_pProps->GetTypeName());
     }

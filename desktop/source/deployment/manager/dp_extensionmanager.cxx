@@ -244,7 +244,7 @@ void ExtensionManager::addExtensionsToMap(
     int index = 0;
     for (;citNames != m_repositoryNames.end(); ++citNames, ++index)
     {
-        if (citNames->equals(repository))
+        if (*citNames == repository)
             break;
     }
 

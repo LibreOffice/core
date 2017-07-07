@@ -503,7 +503,7 @@ SvTreeListEntry* TreeListBox::ImpFindEntry( SvTreeListEntry* pParent, const OUSt
     SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
-        if (  rText.equals(GetEntryText( pEntry )) )
+        if (  rText == GetEntryText( pEntry ) )
             return pEntry;
 
         pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
@@ -622,7 +622,7 @@ SvTreeListEntry* TreeListBox::FindEntry( SvTreeListEntry* pParent, const OUStrin
     {
         Entry* pBasicEntry = static_cast<Entry*>(pEntry->GetUserData());
         assert(pBasicEntry && "FindEntry: no Entry ?!");
-        if ( ( pBasicEntry->GetType() == eType  ) && ( rText.equals(GetEntryText( pEntry )) ) )
+        if ( ( pBasicEntry->GetType() == eType  ) && ( rText == GetEntryText( pEntry ) ) )
             return pEntry;
 
         pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );

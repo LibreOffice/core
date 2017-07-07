@@ -258,7 +258,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
         }
 
         // only if range is valid
-        if( m_aLastValidRangeString.equals(m_pED_Range->GetText()))
+        if( m_aLastValidRangeString == m_pED_Range->GetText())
         {
             m_rDialogModel.setTemplate( m_xCurrentChartTypeTemplate );
             aArguments.realloc( aArguments.getLength() + 1 );

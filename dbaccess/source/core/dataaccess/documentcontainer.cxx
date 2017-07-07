@@ -730,7 +730,7 @@ void SAL_CALL ODocumentContainer::rename( const OUString& newName )
     try
     {
         osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
-        if ( newName.equals( m_pImpl->m_aProps.aTitle ) )
+        if ( newName == m_pImpl->m_aProps.aTitle )
             return;
 
         sal_Int32 nHandle = PROPERTY_ID_NAME;

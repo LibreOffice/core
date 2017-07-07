@@ -1594,7 +1594,7 @@ void SvxSearchDialog::Remember_Impl( const OUString &rStr, bool _bSearch )
     // ignore identical strings
     for (std::vector<OUString>::const_iterator i = pArr->begin(); i != pArr->end(); ++i)
     {
-        if ((*i).equals(rStr))
+        if ((*i) == rStr)
             return;
     }
 

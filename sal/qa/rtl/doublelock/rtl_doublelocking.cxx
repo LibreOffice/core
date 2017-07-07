@@ -111,7 +111,7 @@ protected:
             while(schedule())
             {
                 rtl::OUString aStr = Gregorian::get();
-                if (aStr.equals(m_sConstStr))
+                if (aStr == m_sConstStr)
                 {
                     m_nOK++;
                 }

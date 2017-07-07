@@ -135,7 +135,7 @@ void Panel::SetExpanded (const bool bIsExpanded)
 
 bool Panel::HasIdPredicate (const OUString& rsId) const
 {
-    return msPanelId.equals(rsId);
+    return msPanelId == rsId;
 }
 
 void Panel::Resize()

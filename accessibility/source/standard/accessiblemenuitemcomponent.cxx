@@ -170,7 +170,7 @@ void OAccessibleMenuItemComponent::SetItemPos( sal_uInt16 nItemPos )
 
 void OAccessibleMenuItemComponent::SetAccessibleName( const OUString& sAccessibleName )
 {
-    if ( !m_sAccessibleName.equals( sAccessibleName ) )
+    if ( m_sAccessibleName != sAccessibleName )
     {
         Any aOldValue, aNewValue;
         aOldValue <<= m_sAccessibleName;

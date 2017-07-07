@@ -324,7 +324,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
             typedef vector< pair < OUString, OUString > >::const_iterator CIT;
             for (CIT idn = vecAttrValueOfDN.begin(); idn != vecAttrValueOfDN.end(); ++idn)
             {
-                if (idn->first.equals(sPartId))
+                if (idn->first == sPartId)
                 {
                     retVal = idn->second;
                     break;

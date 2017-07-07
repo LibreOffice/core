@@ -1362,7 +1362,7 @@ void RTFDocumentImpl::text(OUString& rString)
     if (bRet)
         return;
 
-    if (!m_aIgnoreFirst.isEmpty() && m_aIgnoreFirst.equals(rString))
+    if (!m_aIgnoreFirst.isEmpty() && m_aIgnoreFirst == rString)
     {
         m_aIgnoreFirst.clear();
         return;

@@ -133,10 +133,10 @@ void ManifestImport::doEncryptionData(StringHashMap &rConvertedAttribs)
     nDerivedKeySize = 0;
     OUString aString = rConvertedAttribs[sChecksumTypeAttribute];
     if ( !bIgnoreEncryptData ) {
-        if ( aString.equals( sSHA1_1k_Name ) || aString.equals( sSHA1_1k_URL ) ) {
+        if ( aString == sSHA1_1k_Name || aString == sSHA1_1k_URL ) {
             aSequence[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
             aSequence[PKG_MNFST_DIGESTALG].Value <<= xml::crypto::DigestID::SHA1_1K;
-        } else if ( aString.equals( sSHA256_1k_URL ) ) {
+        } else if ( aString == sSHA256_1k_URL ) {
             aSequence[PKG_MNFST_DIGESTALG].Name = sDigestAlgProperty;
             aSequence[PKG_MNFST_DIGESTALG].Value <<= xml::crypto::DigestID::SHA256_1K;
         } else
@@ -156,20 +156,20 @@ void ManifestImport::doAlgorithm(StringHashMap &rConvertedAttribs)
 {
     if ( !bIgnoreEncryptData ) {
         OUString aString = rConvertedAttribs[sAlgorithmNameAttribute];
-        if ( aString.equals( sBlowfish_Name ) || aString.equals( sBlowfish_URL ) ) {
+        if ( aString == sBlowfish_Name || aString == sBlowfish_URL ) {
             aSequence[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
             aSequence[PKG_MNFST_ENCALG].Value <<= xml::crypto::CipherID::BLOWFISH_CFB_8;
-        } else if ( aString.equals( sAES256_URL ) ) {
+        } else if ( aString == sAES256_URL ) {
             aSequence[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
             aSequence[PKG_MNFST_ENCALG].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
             OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 32, "Unexpected derived key length!" );
             nDerivedKeySize = 32;
-        } else if ( aString.equals( sAES192_URL ) ) {
+        } else if ( aString == sAES192_URL ) {
             aSequence[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
             aSequence[PKG_MNFST_ENCALG].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
             OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 24, "Unexpected derived key length!" );
             nDerivedKeySize = 24;
-        } else if ( aString.equals( sAES128_URL ) ) {
+        } else if ( aString == sAES128_URL ) {
             aSequence[PKG_MNFST_ENCALG].Name = sEncryptionAlgProperty;
             aSequence[PKG_MNFST_ENCALG].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
             OSL_ENSURE( !nDerivedKeySize || nDerivedKeySize == 16, "Unexpected derived key length!" );
@@ -191,7 +191,7 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
 {
     if ( !bIgnoreEncryptData ) {
         OUString aString = rConvertedAttribs[sKeyDerivationNameAttribute];
-        if ( aString.equals( sPBKDF2_Name ) || aString.equals( sPBKDF2_URL ) ) {
+        if ( aString == sPBKDF2_Name || aString == sPBKDF2_URL ) {
             aString = rConvertedAttribs[sSaltAttribute];
             uno::Sequence < sal_Int8 > aDecodeBuffer;
             ::sax::Converter::decodeBase64(aDecodeBuffer, aString);
@@ -222,10 +222,10 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
 void ManifestImport::doStartKeyAlg(StringHashMap &rConvertedAttribs)
 {
     OUString aString = rConvertedAttribs[sStartKeyAlgNameAttribute];
-    if (aString.equals(sSHA256_URL) || aString.equals(sSHA256_URL_ODF12)) {
+    if (aString == sSHA256_URL || aString == sSHA256_URL_ODF12) {
         aSequence[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
         aSequence[PKG_MNFST_STARTALG].Value <<= xml::crypto::DigestID::SHA256;
-    } else if ( aString.equals( sSHA1_Name ) || aString.equals( sSHA1_URL ) ) {
+    } else if ( aString == sSHA1_Name || aString == sSHA1_URL ) {
         aSequence[PKG_MNFST_STARTALG].Name = sStartKeyAlgProperty;
         aSequence[PKG_MNFST_STARTALG].Value <<= xml::crypto::DigestID::SHA1;
     } else
@@ -260,7 +260,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
 
         if (!aIter->m_bValid)
             aStack.back().m_bValid = false;
-        else if (aConvertedName.equals(sEncryptionDataElement))   //manifest:encryption-data
+        else if (aConvertedName == sEncryptionDataElement)   //manifest:encryption-data
             doEncryptionData(aConvertedAttribs);
         else
             aStack.back().m_bValid = false;
@@ -272,11 +272,11 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
 
         if (!aIter->m_bValid)
             aStack.back().m_bValid = false;
-        else if (aConvertedName.equals(sAlgorithmElement))   //manifest:algorithm,
+        else if (aConvertedName == sAlgorithmElement)   //manifest:algorithm,
             doAlgorithm(aConvertedAttribs);
-        else if (aConvertedName.equals(sKeyDerivationElement)) //manifest:key-derivation,
+        else if (aConvertedName == sKeyDerivationElement) //manifest:key-derivation,
             doKeyDerivation(aConvertedAttribs);
-        else if (aConvertedName.equals(sStartKeyAlgElement))   //manifest:start-key-generation
+        else if (aConvertedName == sStartKeyAlgElement)   //manifest:start-key-generation
             doStartKeyAlg(aConvertedAttribs);
         else
             aStack.back().m_bValid = false;
@@ -299,8 +299,8 @@ bool isEmpty(const css::beans::PropertyValue &rProp)
 void SAL_CALL ManifestImport::endElement( const OUString& aName )
 {
     OUString aConvertedName = ConvertName( aName );
-    if ( !aStack.empty() && aStack.rbegin()->m_aConvertedName.equals( aConvertedName ) ) {
-        if ( aConvertedName.equals( sFileEntryElement ) && aStack.back().m_bValid ) {
+    if ( !aStack.empty() && aStack.rbegin()->m_aConvertedName == aConvertedName ) {
+        if ( aConvertedName == sFileEntryElement && aStack.back().m_bValid ) {
             css::beans::PropertyValue aEmpty;
             aSequence.erase(std::remove_if(aSequence.begin(), aSequence.end(),
                                            isEmpty), aSequence.end());

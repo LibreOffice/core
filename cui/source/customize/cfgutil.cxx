@@ -576,18 +576,18 @@ void SfxConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                 OUString uiName = theChild->getName();
                 if ( bIsRootNode )
                 {
-                    if (  ! (theChild->getName().equals( user )  || theChild->getName().equals( share ) ||
-                             theChild->getName().equals( currentDocTitle ) ) )
+                    if (  ! (theChild->getName() == user  || theChild->getName() == share ||
+                             theChild->getName() == currentDocTitle ) )
                     {
                         bDisplay=false;
                     }
                     else
                     {
-                        if ( uiName.equals( user ) )
+                        if ( uiName == user )
                         {
                             uiName = xImp->m_sMyMacros;
                         }
-                        else if ( uiName.equals( share ) )
+                        else if ( uiName == share )
                         {
                             uiName = xImp->m_sProdMacros;
                         }
@@ -816,7 +816,7 @@ SfxConfigGroupListBox::getDocumentModel( Reference< XComponentContext > const & 
         {
             OUString sTdocUrl =
                 ::comphelper::DocumentInfo::getDocumentTitle( model );
-            if( sTdocUrl.equals( docName ) )
+            if( sTdocUrl == docName )
             {
                 xModel = model;
                 break;

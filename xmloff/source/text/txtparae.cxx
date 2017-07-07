@@ -2156,12 +2156,12 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             OUString sType;
             xPropSet->getPropertyValue(sTextPortionType) >>= sType;
 
-            if( sType.equals(sText))
+            if( sType == sText)
             {
                 exportTextRange( xTxtRange, bAutoStyles,
                                  rPrevCharIsSpace, openFieldMark);
             }
-            else if( sType.equals(sTextField))
+            else if( sType == sTextField)
             {
                 exportTextField(xTxtRange, bAutoStyles, bIsProgress, &rPrevCharIsSpace);
             }
@@ -2182,7 +2182,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE, XML_ANNOTATION_END, false, false );
                 }
             }
-            else if( sType.equals( sFrame ) )
+            else if( sType == sFrame )
             {
                 Reference < XEnumeration> xContentEnum;
                 Reference < XContentEnumerationAccess > xCEA( xTxtRange,
@@ -2199,36 +2199,36 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                                                      &xPropSet  );
 
             }
-            else if (sType.equals(sFootnote))
+            else if (sType == sFootnote)
             {
                 exportTextFootnote(xPropSet,
                                    xTxtRange->getString(),
                                    bAutoStyles, bIsProgress );
             }
-            else if (sType.equals(sBookmark))
+            else if (sType == sBookmark)
             {
                 exportTextMark(xPropSet,
                                sBookmark,
                                lcl_XmlBookmarkElements,
                                bAutoStyles);
             }
-            else if (sType.equals(sReferenceMark))
+            else if (sType == sReferenceMark)
             {
                 exportTextMark(xPropSet,
                                sReferenceMark,
                                lcl_XmlReferenceElements,
                                bAutoStyles);
             }
-            else if (sType.equals(sDocumentIndexMark))
+            else if (sType == sDocumentIndexMark)
             {
                 pIndexMarkExport->ExportIndexMark(xPropSet, bAutoStyles);
             }
-            else if (sType.equals(sRedline))
+            else if (sType == sRedline)
             {
                 if (nullptr != pRedlineExport)
                     pRedlineExport->ExportChange(xPropSet, bAutoStyles);
             }
-            else if (sType.equals(sRuby))
+            else if (sType == sRuby)
             {
                 exportRuby(xPropSet, bAutoStyles);
             }
@@ -2236,7 +2236,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             {
                 exportMeta(xPropSet, bAutoStyles, bIsProgress, rPrevCharIsSpace);
             }
-            else if (sType.equals(sTextFieldStart))
+            else if (sType == sTextFieldStart)
             {
                 Reference< css::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
 
@@ -2303,7 +2303,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     }
                 }
             }
-            else if (sType.equals(sTextFieldEnd))
+            else if (sType == sTextFieldEnd)
             {
                 if (!bAutoStyles)
                 {
@@ -2341,7 +2341,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     }
                 }
             }
-            else if (sType.equals(sTextFieldStartEnd))
+            else if (sType == sTextFieldStartEnd)
             {
                 if (!bAutoStyles)
                 {
@@ -2377,7 +2377,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     }
                 }
             }
-            else if (sType.equals(sSoftPageBreak))
+            else if (sType == sSoftPageBreak)
             {
                 exportSoftPageBreak();
             }

@@ -386,7 +386,7 @@ bool TreeListBox::IsValidEntry( SvTreeListEntry* pEntry )
         {
             bIsValid = aDocument.isAlive()
                 && (aDocument.isApplication()
-                    || GetRootEntryName(aDocument, eLocation).equals(GetEntryText(pEntry)));
+                    || GetRootEntryName(aDocument, eLocation) == GetEntryText(pEntry));
         }
         break;
         case OBJ_TYPE_LIBRARY:

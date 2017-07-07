@@ -126,7 +126,7 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
     while( aIter != aEnd )
     {
         const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( mnWhich ) ));
-        if (sName.equals(pItem->GetName()))
+        if (sName == pItem->GetName())
         {
             maItemSetVector.erase( aIter );
             return;
@@ -151,7 +151,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     while( aIter != aEnd )
     {
         const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( mnWhich ) ));
-        if (aName.equals(pItem->GetName()))
+        if (aName == pItem->GetName())
         {
             NameOrIndex* pNewItem = createItem();
             pNewItem->SetName(aName);
@@ -172,7 +172,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
         NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate)));
-        if (pItem && aName.equals(pItem->GetName()))
+        if (pItem && aName == pItem->GetName())
         {
             pItem->PutValue( aElement, mnMemberId );
             bFound = true;
@@ -208,7 +208,7 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
         {
             const NameOrIndex *pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
 
-            if (isValid(pItem) && aName.equals(pItem->GetName()))
+            if (isValid(pItem) && aName == pItem->GetName())
             {
                 pItem->QueryValue( aAny, mnMemberId );
                 return aAny;
@@ -258,7 +258,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
         const NameOrIndex *pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
-        if (isValid(pItem) && aName.equals(pItem->GetName()))
+        if (isValid(pItem) && aName == pItem->GetName())
             return true;
     }
 

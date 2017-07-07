@@ -227,7 +227,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl, Button*, void)
             {
                 aFormatName = pDlg->GetInputString();
 
-                if ( !aFormatName.isEmpty() && !aFormatName.equals(aStrStandard) && pFormat->find(aFormatName) == pFormat->end() )
+                if ( !aFormatName.isEmpty() && aFormatName != aStrStandard && pFormat->find(aFormatName) == pFormat->end() )
                 {
                     ScAutoFormatData* pNewData
                         = new ScAutoFormatData( *pSelFmtData );
@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl, Button*, void)
                 for (; it != itEnd; ++it)
                 {
                     aEntry = it->second->GetName();
-                    if (aFormatName.equals(aEntry))
+                    if (aFormatName == aEntry)
                         break;
                 }
                 if (it == itEnd)

@@ -116,7 +116,7 @@ namespace offapp
                     aLookup != aSettings.end();
                     ++aLookup
                 )
-                if (sThisDriverName.equals(aLookup->sName))
+                if (sThisDriverName == aLookup->sName)
                     break;
 
             if (aLookup == aSettings.end())

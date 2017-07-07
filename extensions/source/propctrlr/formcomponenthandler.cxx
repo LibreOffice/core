@@ -551,7 +551,7 @@ namespace pcr
             OUString sControlValue;
             OSL_VERIFY( _rControlValue >>= sControlValue );
             // Don't convert a placeholder
-            if ( nPropId == PROPERTY_ID_IMAGE_URL && sControlValue.equals( PcrRes(RID_EMBED_IMAGE_PLACEHOLDER) ) )
+            if ( nPropId == PROPERTY_ID_IMAGE_URL && sControlValue == PcrRes(RID_EMBED_IMAGE_PLACEHOLDER) )
                 aPropertyValue <<= sControlValue;
             else
             {

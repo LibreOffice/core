@@ -119,7 +119,7 @@ namespace comphelper
                 OSL_ENSURE( pAllProperties->Name.compareTo( (pAllProperties + 1)->Name ) < 0,
                     "OPropertyStateContainer::getPropertyStates: all-properties not sorted!" );
 #endif
-            if ( pAllProperties->Name.equals( *pLookup ) )
+            if ( pAllProperties->Name == *pLookup )
             {
                 *pStates++ = getPropertyState( *pLookup );
                 ++pLookup;

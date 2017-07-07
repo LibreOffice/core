@@ -166,7 +166,7 @@ inline bool _equalSequence(
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
         {
-            if (! (static_cast<OUString *>(pDestElements) +nPos)->equals( static_cast<const ::rtl::OUString *>(pSourceElements)[nPos] ))
+            if ( static_cast<OUString *>(pDestElements)[nPos] != static_cast<const ::rtl::OUString *>(pSourceElements)[nPos] )
                 return false;
         }
         return true;
@@ -522,8 +522,8 @@ inline bool _equalData(
         }
     case typelib_TypeClass_STRING:
         return eSourceTypeClass == typelib_TypeClass_STRING
-            && (static_cast<OUString *>(pDest))->equals(
-                *static_cast<OUString const *>(pSource) );
+            && *static_cast<OUString *>(pDest) ==
+                *static_cast<OUString const *>(pSource);
     case typelib_TypeClass_TYPE:
         return eSourceTypeClass == typelib_TypeClass_TYPE
             && _type_equals(

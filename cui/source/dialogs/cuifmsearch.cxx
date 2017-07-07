@@ -262,7 +262,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     // control characters, as can be the case with memo fields), I use
     // an empty OUString.
     OUString sRealSetText = m_pcmbSearchText->GetText();
-    if (!sRealSetText.equals(sInitialText))
+    if (sRealSetText != sInitialText)
         m_pcmbSearchText->SetText(OUString());
     LINK(this, FmSearchDialog, OnSearchTextModified).Call(*m_pcmbSearchText);
 

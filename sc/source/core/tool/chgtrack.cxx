@@ -2650,7 +2650,7 @@ void ScChangeTrack::AppendContent(
     aNewCell.assign(*pDoc, rPos);
     ScChangeActionContent::GetStringOfCell(aNewValue, aNewCell, pDoc, rPos);
 
-    if (!aOldValue.equals(aNewValue) || IsMatrixFormulaRangeDifferent(rOldCell, aNewCell))
+    if (aOldValue != aNewValue || IsMatrixFormulaRangeDifferent(rOldCell, aNewCell))
     {   // Only track real changes
         ScRange aRange( rPos );
         ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
@@ -2673,7 +2673,7 @@ void ScChangeTrack::AppendContent( const ScAddress& rPos,
     aNewCell.assign(*pDoc, rPos);
     ScChangeActionContent::GetStringOfCell(aNewValue, aNewCell, pDoc, rPos);
 
-    if (!aOldValue.equals(aNewValue) || IsMatrixFormulaRangeDifferent(aOldCell, aNewCell))
+    if (aOldValue != aNewValue || IsMatrixFormulaRangeDifferent(aOldCell, aNewCell))
     {   // Only track real changes
         ScRange aRange( rPos );
         ScChangeActionContent* pAct = new ScChangeActionContent( aRange );

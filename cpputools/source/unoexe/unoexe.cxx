@@ -103,7 +103,7 @@ static bool readOption( OUString * pValue, const sal_Char * pOpt,
         ++(*pnIndex);
 
         rtl_getAppCommandArg(*pnIndex, &pValue->pData);
-        if (*pnIndex >= rtl_getAppCommandArgCount() || pValue->copy(1).equals(dash))
+        if (*pnIndex >= rtl_getAppCommandArgCount() || pValue->copy(1) == dash)
         {
             throw RuntimeException( "incomplete option \"-" + aOpt + "\" given!" );
         }
@@ -130,7 +130,7 @@ static bool readOption( bool * pbOpt, const sal_Char * pOpt,
 {
     OUString aOpt = OUString::createFromAscii(pOpt);
 
-    if(aArg.startsWith("--") && aOpt.equals(aArg.copy(2)))
+    if(aArg.startsWith("--") && aOpt == aArg.copy(2))
     {
         ++(*pnIndex);
         *pbOpt = true;

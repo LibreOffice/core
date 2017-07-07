@@ -163,7 +163,7 @@ void Table::rename( const OUString& newName )
     }
     OUString fullNewName = concatQualified( newSchemaName, newTableName );
 
-    if( extractStringProperty( this, st.TYPE ).equals( st.VIEW ) && m_pSettings->views.is() )
+    if( extractStringProperty( this, st.TYPE ) == st.VIEW && m_pSettings->views.is() )
     {
         // maintain view list (really strange API !)
         Any a = m_pSettings->pViewsImpl->getByName( fullOldName );
@@ -177,7 +177,7 @@ void Table::rename( const OUString& newName )
     }
     else
     {
-        if( ! newSchemaName.equals(schema) )
+        if( newSchemaName != schema )
         {
             // try new schema name first
             try
@@ -201,7 +201,7 @@ void Table::rename( const OUString& newName )
             }
 
         }
-        if( ! newTableName.equals( oldName ) ) // might also be just the change of a schema name
+        if( newTableName != oldName ) // might also be just the change of a schema name
         {
             OUStringBuffer buf(128);
             buf.append( "ALTER TABLE" );

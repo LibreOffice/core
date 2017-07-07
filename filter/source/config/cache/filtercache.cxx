@@ -502,7 +502,7 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
                 if (
                     (aDirectValue >>= sDefaultFrameLoader) &&
                     (!sDefaultFrameLoader.isEmpty()      ) &&
-                    (sItem.equals(sDefaultFrameLoader)   )
+                    (sItem == sDefaultFrameLoader   )
                    )
                 {
                     rItem[PROPNAME_FINALIZED] <<= true;
@@ -1017,7 +1017,7 @@ void FilterCache::impl_validateAndOptimize()
 
         OUString sInternalTypeNameCheck;
         aType[PROPNAME_NAME] >>= sInternalTypeNameCheck;
-        if (!sInternalTypeNameCheck.equals(sType))
+        if (sInternalTypeNameCheck != sType)
         {
             sLog.append("Warning\t:\t" "The type \"" + sType + "\" does support the property \"Name\" correctly.\n");
             ++nWarnings;
@@ -1149,7 +1149,7 @@ void FilterCache::impl_validateAndOptimize()
 
             OUString sInternalFilterNameCheck;
             aPrefFilter[PROPNAME_NAME] >>= sInternalFilterNameCheck;
-            if (!sInternalFilterNameCheck.equals(sPrefFilter))
+            if (sInternalFilterNameCheck !=  sPrefFilter)
             {
                 sLog.append("Warning\t:\t" "The filter \"" + sPrefFilter +
                             "\" does support the property \"Name\" correctly.\n");
@@ -1188,7 +1188,7 @@ void FilterCache::impl_validateAndOptimize()
         // types, which are not referenced by any other loader.
         // So we can avoid our code against the complexity of a diff!
         OUString sLoader = pIt->first;
-        if (sLoader.equals(sDefaultFrameLoader))
+        if (sLoader == sDefaultFrameLoader)
             continue;
 
         CacheItem&     rLoader   = pIt->second;

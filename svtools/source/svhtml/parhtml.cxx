@@ -825,7 +825,7 @@ HtmlTokenId HTMLParser::GetNextRawToken()
                             bDone = bOffState &&
                             ( bReadScript
                                 ? aTok == OOO_STRING_SVTOOLS_HTML_script
-                                : aTok.equals(aEndToken) );
+                                : aTok == aEndToken );
                         }
                     }
                     if( bReadComment && '>'==nNextCh && aTok.endsWith( "--" ) )
