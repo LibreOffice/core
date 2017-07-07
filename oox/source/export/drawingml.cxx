@@ -2006,7 +2006,7 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
                                XML_marL, nParaLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nParaLeftMargin ) ) : nullptr,
                                XML_indent, nParaFirstLineIndent ? I32S( oox::drawingml::convertHmmToEmu( nParaFirstLineIndent ) ) : nullptr,
                                XML_algn, GetAlignment( nAlignment ),
-                               XML_rtl, bRtl ? BS(bRtl) : nullptr,
+                               XML_rtl, bRtl ? ToPsz10(bRtl) : nullptr,
                                FSEND );
         else
             mpFS->startElementNS( XML_a, XML_pPr,
@@ -2014,7 +2014,7 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
                                XML_marL, nLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nLeftMargin ) ) : nullptr,
                                XML_indent, nLineIndentation ? I32S( oox::drawingml::convertHmmToEmu( nLineIndentation ) ) : nullptr,
                                XML_algn, GetAlignment( nAlignment ),
-                               XML_rtl, bRtl ? BS(bRtl) : nullptr,
+                               XML_rtl, bRtl ? ToPsz10(bRtl) : nullptr,
                                FSEND );
 
 

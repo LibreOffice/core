@@ -15,6 +15,7 @@
 #include "xecontent.hxx"
 #include "tokenarray.hxx"
 
+#include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 
 using namespace ::oox;
@@ -203,7 +204,7 @@ void XclExpExtDataBar::SaveXml( XclExpXmlStream& rStrm )
                                 XML_minLength, OString::number(mnMinLength).getStr(),
                                 XML_maxLength, OString::number(mnMaxLength).getStr(),
                                 XML_axisPosition, getAxisPosition(meAxisPosition),
-                                XML_gradient, XclXmlUtils::ToPsz(mbGradient),
+                                XML_gradient, ToPsz(mbGradient),
                                 FSEND );
 
     mpLowerLimit->SaveXml( rStrm );
@@ -242,9 +243,9 @@ void XclExpExtIconSet::SaveXml(XclExpXmlStream& rStrm)
 
     rWorksheet->startElementNS(XML_x14, XML_iconSet,
             XML_iconSet, mpIconSetName,
-            XML_custom, mbCustom ? XclXmlUtils::ToPsz10(mbCustom) : nullptr,
-            XML_reverse, XclXmlUtils::ToPsz10(mbReverse),
-            XML_showValue, XclXmlUtils::ToPsz10(mbShowValue),
+            XML_custom, mbCustom ? ToPsz10(mbCustom) : nullptr,
+            XML_reverse, ToPsz10(mbReverse),
+            XML_showValue, ToPsz10(mbShowValue),
             FSEND);
 
     maCfvos.SaveXml(rStrm);

@@ -819,18 +819,6 @@ OUString XclXmlUtils::ToOUString( const XclExpString& s )
     return ToOUString( s.GetUnicodeBuffer() );
 }
 
-const char* XclXmlUtils::ToPsz( bool b )
-{
-    return b ? "true" : "false";
-}
-
-const char* XclXmlUtils::ToPsz10( bool b )
-{
-    // xlsx seems to use "1" or "0" for boolean values.  I wonder it ever uses
-    // the "true" "false" variant.
-    return b ? "1" : "0";
-}
-
 sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int32 nValue )
 {
     pStream->startElement( nElement, FSEND );
@@ -899,13 +887,13 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     const char* pUnderline = lcl_GetUnderlineStyle( rFontData.GetScUnderline(), bHaveUnderline );
     const char* pVertAlign = lcl_ToVerticalAlignmentRun( rFontData.GetScEscapement(), bHaveVertAlign );
 
-    lcl_WriteValue( pStream, XML_b,          rFontData.mnWeight > 400 ? XclXmlUtils::ToPsz( rFontData.mnWeight > 400 ) : nullptr );
-    lcl_WriteValue( pStream, XML_i,          rFontData.mbItalic ? XclXmlUtils::ToPsz( rFontData.mbItalic ) : nullptr );
-    lcl_WriteValue( pStream, XML_strike,     rFontData.mbStrikeout ? XclXmlUtils::ToPsz( rFontData.mbStrikeout ) : nullptr );
+    lcl_WriteValue( pStream, XML_b,          rFontData.mnWeight > 400 ? ToPsz( rFontData.mnWeight > 400 ) : nullptr );
+    lcl_WriteValue( pStream, XML_i,          rFontData.mbItalic ? ToPsz( rFontData.mbItalic ) : nullptr );
+    lcl_WriteValue( pStream, XML_strike,     rFontData.mbStrikeout ? ToPsz( rFontData.mbStrikeout ) : nullptr );
     // OOXTODO: lcl_WriteValue( rStream, XML_condense, );    // mac compatibility setting
     // OOXTODO: lcl_WriteValue( rStream, XML_extend, );      // compatibility setting
-    lcl_WriteValue( pStream, XML_outline,    rFontData.mbOutline ? XclXmlUtils::ToPsz( rFontData.mbOutline ) : nullptr );
-    lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : nullptr );
+    lcl_WriteValue( pStream, XML_outline,    rFontData.mbOutline ? ToPsz( rFontData.mbOutline ) : nullptr );
+    lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow ? ToPsz( rFontData.mbShadow ) : nullptr );
     lcl_WriteValue( pStream, XML_u,          bHaveUnderline ? pUnderline : nullptr );
     lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : nullptr );
     lcl_WriteValue( pStream, XML_sz,         OString::number( rFontData.mnHeight / 20.0 ).getStr() );  // Twips->Pt

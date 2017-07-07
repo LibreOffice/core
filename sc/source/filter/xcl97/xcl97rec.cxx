@@ -1455,7 +1455,7 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_scenario,
             XML_name,       XclXmlUtils::ToOString( sName ).getStr(),
-            XML_locked,     XclXmlUtils::ToPsz( bProtected ),
+            XML_locked,     ToPsz( bProtected ),
             // OOXTODO: XML_hidden,
             XML_count,      OString::number(  aCells.size() ).getStr(),
             XML_user,       XESTRING_TO_PSZ( sUserName ),
@@ -1692,7 +1692,7 @@ std::size_t XclIteration::GetLen() const
 void XclIteration::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.WriteAttributes(
-            XML_iterate, XclXmlUtils::ToPsz( nIter == 1 ),
+            XML_iterate, ToPsz( nIter == 1 ),
             FSEND );
 }
 
