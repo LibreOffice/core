@@ -978,13 +978,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99090_pgbrkAfterTable, "tdf99090_pgbrkAfterTable
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
 }
 
-#if 0
 DECLARE_OOXMLEXPORT_TEST(testTdf96750_landscapeFollow, "tdf96750_landscapeFollow.docx")
 {
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
 }
-#endif
 
 DECLARE_OOXMLEXPORT_TEST(testTdf86926_A3, "tdf86926_A3.docx")
 {
