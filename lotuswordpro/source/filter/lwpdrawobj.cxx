@@ -987,9 +987,9 @@ void LwpDrawTextBox::SetFontStyle(rtl::Reference<XFFont> const & pFont, SdwTextB
     //size
     pFont->SetFontSize(pRec->nTextSize/20);
     // bold
-    pFont->SetBold(((pRec->nTextAttrs & TA_BOLD) != 0));
+    pFont->SetBold((pRec->nTextAttrs & TA_BOLD) != 0);
     // italic
-    pFont->SetItalic(((pRec->nTextAttrs & TA_ITALIC) != 0));
+    pFont->SetItalic((pRec->nTextAttrs & TA_ITALIC) != 0);
     // strike-through
     if (pRec->nTextAttrs & TA_STRIKETHRU)
     {

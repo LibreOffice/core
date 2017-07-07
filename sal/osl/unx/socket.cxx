@@ -1306,7 +1306,7 @@ oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
         int nErrno = errno;
         SAL_WARN( "sal.osl", "socket creation failed: (" << nErrno << ") " << strerror(nErrno) );
 
-        destroySocketImpl((pSocket));
+        destroySocketImpl(pSocket);
         pSocket= nullptr;
     }
     else

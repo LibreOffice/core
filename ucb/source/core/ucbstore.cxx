@@ -2000,7 +2000,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
 
             while ( it != end )
             {
-                notifyPropertyChangeEvent( (*it) );
+                notifyPropertyChangeEvent( *it );
                 ++it;
             }
         }

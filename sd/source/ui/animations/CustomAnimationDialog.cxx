@@ -153,7 +153,7 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
 
             while( aIter != aEnd )
             {
-                sal_Int32 nPos = mpControl->InsertEntry( rPresets.getUINameForProperty( (*aIter) ) );
+                sal_Int32 nPos = mpControl->InsertEntry( rPresets.getUINameForProperty( *aIter ) );
                 if( (*aIter) == aPropertyValue )
                     mpControl->SelectEntryPos( nPos );
                 maPropertyValues[nPos] = (*aIter++);

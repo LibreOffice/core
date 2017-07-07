@@ -137,7 +137,7 @@ namespace slideshow
                         //(*aIter)->getCanvas()->clear();
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
-                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( *aIter ) );
                         ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
 
                         const ::basegfx::B2DHomMatrix   aViewTransform( (*aIter)->getTransformation() );
@@ -339,7 +339,7 @@ namespace slideshow
                     {
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
-                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( *aIter ) );
                         ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
 
                         ::basegfx::B2DHomMatrix     aViewTransform( (*aIter)->getTransformation() );

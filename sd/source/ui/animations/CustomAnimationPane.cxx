@@ -723,7 +723,7 @@ void CustomAnimationPane::updateControls()
             {
                 ++aIter;
             }
-            while( (aIter != mpMainSequence->getEnd()) && !(mpCustomAnimationList->isExpanded((*aIter)) ) );
+            while( (aIter != mpMainSequence->getEnd()) && !(mpCustomAnimationList->isExpanded(*aIter) ) );
 
             if( aIter == mpMainSequence->getEnd() )
                 bEnableDown = false;

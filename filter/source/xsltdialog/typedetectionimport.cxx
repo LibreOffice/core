@@ -72,7 +72,7 @@ void TypeDetectionImporter::fillFilterVector(  XMLFilterVector& rFilters )
     NodeVector::iterator aIter = maFilterNodes.begin();
     while( aIter != maFilterNodes.end() )
     {
-        filter_info_impl* pFilter = createFilterForNode( (*aIter) );
+        filter_info_impl* pFilter = createFilterForNode( *aIter );
         if( pFilter )
             rFilters.push_back( pFilter );
 

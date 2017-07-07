@@ -5109,9 +5109,9 @@ namespace {
 void wrapAddress( ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow )
 {
     if (rPos.Col() > nMaxCol)
-        rPos.SetCol((rPos.Col() % (nMaxCol+1)));
+        rPos.SetCol(rPos.Col() % (nMaxCol+1));
     if (rPos.Row() > nMaxRow)
-        rPos.SetRow((rPos.Row() % (nMaxRow+1)));
+        rPos.SetRow(rPos.Row() % (nMaxRow+1));
 }
 
 template<typename T> void wrapRange( T& n1, T& n2, T nMax )

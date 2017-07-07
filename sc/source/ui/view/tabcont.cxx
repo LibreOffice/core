@@ -321,9 +321,9 @@ void ScTabControl::UpdateInputContext()
     WinBits nStyle = GetStyle();
     if (pDoc->GetDocumentShell()->IsReadOnly())
         // no insert sheet tab for readonly doc.
-        SetStyle((nStyle & ~WB_INSERTTAB));
+        SetStyle(nStyle & ~WB_INSERTTAB);
     else
-        SetStyle((nStyle | WB_INSERTTAB));
+        SetStyle(nStyle | WB_INSERTTAB);
 }
 
 void ScTabControl::UpdateStatus()

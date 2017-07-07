@@ -167,7 +167,7 @@ sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table)
     }
 
     rtl_freeMemory((*table)->Table);
-    rtl_freeMemory((*table));
+    rtl_freeMemory(*table);
     (*table) = pNewTable;
 
     return true;

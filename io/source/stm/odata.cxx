@@ -668,7 +668,7 @@ void ODataOutputStream::writeUTF(const OUString& Value)
         writeLong( nUTFLen );
     }
     else {
-        writeShort( ((sal_uInt16)nUTFLen) );
+        writeShort( (sal_uInt16)nUTFLen );
     }
     for( i = 0 ; i < nStrLen ; i++ )
     {

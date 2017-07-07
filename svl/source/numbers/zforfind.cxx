@@ -1326,7 +1326,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
 bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_Int32 & rPos, bool & rSignedYear )
 {
     // If not initialized yet start with first number, if any.
-    if (!IsAcceptedDatePattern( (nAnzNums ? nNums[0] : 0)))
+    if (!IsAcceptedDatePattern( nAnzNums ? nNums[0] : 0 ))
     {
         return false;
     }
@@ -1384,7 +1384,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
 sal_uInt16 ImpSvNumberInputScan::GetDatePatternNumbers()
 {
     // If not initialized yet start with first number, if any.
-    if (!IsAcceptedDatePattern( (nAnzNums ? nNums[0] : 0)))
+    if (!IsAcceptedDatePattern( nAnzNums ? nNums[0] : 0 ))
     {
         return 0;
     }
@@ -1419,7 +1419,7 @@ bool ImpSvNumberInputScan::IsDatePatternNumberOfType( sal_uInt16 nNumber, sal_Un
 sal_uInt32 ImpSvNumberInputScan::GetDatePatternOrder()
 {
     // If not initialized yet start with first number, if any.
-    if (!IsAcceptedDatePattern( (nAnzNums ? nNums[0] : 0)))
+    if (!IsAcceptedDatePattern( nAnzNums ? nNums[0] : 0 ))
     {
         return 0;
     }

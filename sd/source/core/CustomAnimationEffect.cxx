@@ -2574,7 +2574,7 @@ void EffectSequenceHelper::setAnimateForm( const CustomAnimationTextGroupPtr& pT
         // first insert if we have to
         if( bAnimateForm )
         {
-            EffectSequence::iterator aInsertIter( find( (*aIter) ) );
+            EffectSequence::iterator aInsertIter( find( *aIter ) );
 
             CustomAnimationEffectPtr pEffect;
             if( (aEffects.size() == 1) && ((*aIter)->getTarget().getValueType() != ::cppu::UnoType<ParagraphTarget>::get() ) )
@@ -2721,8 +2721,8 @@ void EffectSequenceHelper::setTextReverse( const CustomAnimationTextGroupPtr& pT
 
         if( aIter != aEnd )
         {
-            pTextGroup->addEffect( (*aIter ) );
-            EffectSequence::iterator aInsertIter( find( (*aIter++) ) );
+            pTextGroup->addEffect( *aIter );
+            EffectSequence::iterator aInsertIter( find( *aIter++ ) );
             while( aIter != aEnd )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter++) );

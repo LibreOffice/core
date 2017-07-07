@@ -33,11 +33,14 @@ public:
     {
         StringRef fn( compiler.getSourceManager().getFileEntryForID(
                           compiler.getSourceManager().getMainFileID())->getName() );
-        // fixing this makes the source in the .y files look horrible
+        // fixing this, makes the source in the .y files look horrible
         if (loplugin::hasPathnamePrefix(fn, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx"))
              return;
         if (loplugin::hasPathnamePrefix(fn, WORKDIR "/YaccTarget/idlc/source/parser.cxx"))
              return;
+        if (loplugin::hasPathnamePrefix(fn, WORKDIR "/YaccTarget/rsc/source/parser/rscyacc.cxx"))
+             return;
+
         // TODO yuck, comma operator at work
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/writerfilter/source/rtftok/rtftokenizer.cxx"))
              return;
@@ -52,6 +55,7 @@ public:
     bool VisitDoStmt(const DoStmt *);
     bool VisitWhileStmt(const WhileStmt *);
     bool VisitSwitchStmt(const SwitchStmt *);
+    bool VisitCallExpr(const CallExpr *);
 private:
     void VisitSomeStmt(const Stmt *parent, const Expr* cond, StringRef stmtName);
 };
@@ -120,6 +124,31 @@ void UnnecessaryParen::VisitSomeStmt(const Stmt *parent, const Expr* cond, Strin
             << stmtName
             << parenExpr->getSourceRange();
     }
+}
+
+bool UnnecessaryParen::VisitCallExpr(const CallExpr* callExpr)
+{
+    if (ignoreLocation(callExpr))
+        return true;
+    if (callExpr->getLocStart().isMacroID())
+        return true;
+    if (callExpr->getNumArgs() != 1 || isa<CXXOperatorCallExpr>(callExpr))
+        return true;
+
+    auto parenExpr = dyn_cast<ParenExpr>(callExpr->getArg(0)->IgnoreImpCasts());
+    if (parenExpr) {
+        if (parenExpr->getLocStart().isMacroID())
+            return true;
+        // assignments need extra parentheses or they generate a compiler warning
+        auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
+        if (binaryOp && binaryOp->getOpcode() == BO_Assign)
+            return true;
+        report(
+            DiagnosticsEngine::Warning, "parentheses immediately inside single-arg call",
+            parenExpr->getLocStart())
+            << parenExpr->getSourceRange();
+    }
+    return true;
 }
 
 loplugin::Plugin::Registration< UnnecessaryParen > X("unnecessaryparen", true);

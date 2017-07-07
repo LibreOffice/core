@@ -659,7 +659,7 @@ void WMFWriter::WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly)
     }
     WriteRecordHeader(0,W_META_POLYPOLYGON);
     pWMF->WriteUInt16( nCount );
-    for (i=0; i<nCount; i++) pWMF->WriteUInt16( (aSimplePolyPoly.GetObject(i).GetSize()) );
+    for (i=0; i<nCount; i++) pWMF->WriteUInt16( aSimplePolyPoly.GetObject(i).GetSize() );
     for (i=0; i<nCount; i++) {
         pPoly=&(aSimplePolyPoly.GetObject(i));
         nSize=pPoly->GetSize();

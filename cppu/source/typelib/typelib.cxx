@@ -249,7 +249,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
         TypeDescriptionList_Impl::const_iterator aIt = pCache->begin();
         while( aIt != pCache->end() )
         {
-            typelib_typedescription_release( (*aIt) );
+            typelib_typedescription_release( *aIt );
             ++aIt;
         }
         delete pCache;
@@ -1853,7 +1853,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
 {
     if( *ppRet )
     {
-        typelib_typedescription_release( (*ppRet) );
+        typelib_typedescription_release( *ppRet );
         *ppRet = nullptr;
     }
 

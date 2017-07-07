@@ -522,7 +522,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
                 }
                 else if(!bRTL && nEdge>0)
                 {
-                    Reference< XPropertySet > xColSet( xCols->getByIndex( (nEdge-1) ), UNO_QUERY_THROW );
+                    Reference< XPropertySet > xColSet( xCols->getByIndex( nEdge-1 ), UNO_QUERY_THROW );
                     xColSet->setPropertyValue( sSize, Any( nWidth ) );
                 }
                 /* To prevent the table resizing on edge dragging */

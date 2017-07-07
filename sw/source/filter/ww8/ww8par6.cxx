@@ -1042,11 +1042,11 @@ void wwSectionManager::CreateSep(const long nTextPos)
 
     if (eVer >= ww::eWW6)
     {
-        aRes = pSep->HasSprm((eVer <= ww::eWW7 ? 132 : 0x3001));
+        aRes = pSep->HasSprm(eVer <= ww::eWW7 ? 132 : 0x3001);
         if (aRes.pSprm && aRes.nRemainingData >= 1)
             aNewSection.maSep.iHeadingPgn = *aRes.pSprm;
 
-        aRes = pSep->HasSprm((eVer <= ww::eWW7 ? 131 : 0x3000));
+        aRes = pSep->HasSprm(eVer <= ww::eWW7 ? 131 : 0x3000);
         if (aRes.pSprm && aRes.nRemainingData >= 1)
             aNewSection.maSep.cnsPgn = *aRes.pSprm;
     }
@@ -1817,7 +1817,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     {
         bAutoWidth = true;
         nWidth = nNetWidth =
-            msword_cast<sal_Int16>((nPgWidth ? nPgWidth : 2268)); // 4 cm
+            msword_cast<sal_Int16>(nPgWidth ? nPgWidth : 2268); // 4 cm
     }
     if( nWidth <= MINFLY )
         nWidth = nNetWidth = MINFLY;              // minimum width

@@ -1139,7 +1139,7 @@ void SAL_CALL OResultSet::executeQuery()
 #endif
                     for ( sal_Int32 nRow = 1; nRow <= m_aQueryHelper.getResultCount(); nRow++ ) {
 
-                        OKeyValue* pKeyValue = OKeyValue::createKeyValue((nRow));
+                        OKeyValue* pKeyValue = OKeyValue::createKeyValue(nRow);
 
                         std::vector<sal_Int32>::const_iterator aIter = m_aOrderbyColumnNumber.begin();
                         for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)

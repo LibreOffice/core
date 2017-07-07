@@ -1991,7 +1991,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
             for (sal_uInt16 n = 0; n < MAXLEVEL; ++n)
             {
-                aFormat.SetBulletChar( ( (n & 1) ? 0x25a1 : 0x2611 ) );
+                aFormat.SetBulletChar( (n & 1) ? 0x25a1 : 0x2611 );
 
                 if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {

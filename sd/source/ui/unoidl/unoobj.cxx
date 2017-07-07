@@ -439,7 +439,7 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const c
         SdrObject* pObj = mpShape->GetSdrObject();
         if( pObj )
         {
-            SdAnimationInfo* pInfo = GetAnimationInfo((pEntry->nWID <= WID_THAT_NEED_ANIMINFO));
+            SdAnimationInfo* pInfo = GetAnimationInfo(pEntry->nWID <= WID_THAT_NEED_ANIMINFO);
 
             switch(pEntry->nWID)
             {

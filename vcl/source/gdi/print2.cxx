@@ -1100,7 +1100,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
         {
             // simply add this action (above, we inserted the actions
             // starting at index 0 up to and including nLastBgAction)
-            rOutMtf.AddAction( ( aCurrAct->first->Duplicate(), aCurrAct->first ) );
+            aCurrAct->first->Duplicate();
+            rOutMtf.AddAction( aCurrAct->first );
         }
 
         //  STAGE 3.2: Generate banded bitmaps for special regions
@@ -1312,7 +1313,8 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 else
                 {
                     // simply add this action
-                    rOutMtf.AddAction( ( pCurrAct->Duplicate(), pCurrAct ) );
+                    pCurrAct->Duplicate();
+                    rOutMtf.AddAction( pCurrAct );
                 }
 
                 pCurrAct->Execute(aMapModeVDev.get());
