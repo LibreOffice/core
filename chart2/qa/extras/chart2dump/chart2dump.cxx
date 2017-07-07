@@ -1119,6 +1119,50 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
     }
 }
 
+DECLARE_DUMP_TEST( PivotChartDataButtonTest, Chart2DumpTest, false )
+{
+    const OUString aTestFile = "pivotchart_data_button.ods";
+
+    setTestFileName( aTestFile );
+    load( getTestFileDirName(), getTestFileName() );
+
+    // Check that we have pivot chart in the document
+    uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet( 1, mxComponent );
+    uno::Reference<container::XIndexAccess> xIndexAccess( xTablePivotCharts, UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(1), xIndexAccess->getCount() );
+
+    // Get the pivot chart document so we ca access its data
+    uno::Reference<chart2::XChartDocument> xChartDoc;
+    xChartDoc.set( getPivotChartDocFromSheet( xTablePivotCharts, 0 ) );
+    CPPUNIT_ASSERT( xChartDoc.is() );
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier( xChartDoc, uno::UNO_QUERY );
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShapes> xShapes( xDrawPage->getByIndex(0), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xShapes.is() );
+
+    // Get the shape that represents the "Data" button.
+    uno::Reference<drawing::XShape> xButton = getShapeByName( xShapes, "FieldButton.Row.8",
+                                                              []( const uno::Reference<drawing::XShape>& xShapeNode )
+                                                              {
+                                                                  return xShapeNode->getShapeType() == "com.sun.star.drawing.TextShape";
+                                                              } );
+    CPPUNIT_ASSERT_MESSAGE( OString( "Cannot find Data button shape" ).getStr(), xButton.is() );
+
+    // Make sure that there is no arrow shape with the Data button
+    uno::Reference<drawing::XShape> xArrow = getShapeByName( xShapes, "FieldButton.Row.8",
+                                                             []( const uno::Reference<drawing::XShape>& xShapeNode )
+                                                             {
+                                                                 return xShapeNode->getShapeType() == "com.sun.star.drawing.PolyPolygonShape";
+                                                             } );
+    CPPUNIT_ASSERT_MESSAGE( OString( "Arrow shape should not be present for the Data button" ).getStr(), !xArrow.is() );
+
+    // Assert the background color of the Data button
+    util::Color aButtonFillColor = 0;
+    uno::Reference<beans::XPropertySet> xPropSet( xButton, UNO_QUERY_THROW );
+    xPropSet->getPropertyValue( UNO_NAME_FILLCOLOR ) >>= aButtonFillColor;
+    CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL( static_cast<sal_Int32>( aButtonFillColor ) );
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
