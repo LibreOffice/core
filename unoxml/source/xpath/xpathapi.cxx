@@ -108,7 +108,7 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        if ((m_nsmap.find(aPrefix))->second.equals(aURI)) {
+        if ((m_nsmap.find(aPrefix))->second == aURI) {
             m_nsmap.erase(aPrefix);
         }
     }

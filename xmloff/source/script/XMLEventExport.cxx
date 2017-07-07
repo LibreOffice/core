@@ -204,7 +204,7 @@ void XMLEventExport::ExportEvent(
 
     for(sal_Int32 nVal = 0; nVal < nValues; nVal++)
     {
-        if (sEventType.equals(pValues[nVal].Name))
+        if (sEventType == pValues[nVal].Name)
         {
             // found! Now find handler and delegate
             OUString sType;

@@ -950,7 +950,7 @@ void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
     if ( !pData )
         return;
 
-    if ( !rStr.equals( pData->aText ) )
+    if ( rStr != pData->aText )
     {
         pData->aText = rStr;
         ImplSetMenuItemData( pData );

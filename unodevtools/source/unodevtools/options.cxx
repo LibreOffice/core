@@ -45,7 +45,7 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
 
         rtl_getAppCommandArg(*pnIndex, &pValue->pData);
         if (*pnIndex >= rtl_getAppCommandArgCount() ||
-            pValue->copy(1).equals(dash))
+            pValue->copy(1) == dash)
         {
             throw CannotDumpException(
                 "incomplete option \"-" + aOpt + "\" given!");

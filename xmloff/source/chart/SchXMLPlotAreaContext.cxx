@@ -248,11 +248,11 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 break;
             case XML_TOK_PA_DS_HAS_LABELS:
                 {
-                    if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH )))
+                    if( aValue == ::xmloff::token::GetXMLToken( ::xmloff::token::XML_BOTH ))
                         mrColHasLabels = mrRowHasLabels = true;
-                    else if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW )))
+                    else if( aValue == ::xmloff::token::GetXMLToken( ::xmloff::token::XML_ROW ))
                         mrRowHasLabels = true;
-                    else if( aValue.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_COLUMN )))
+                    else if( aValue == ::xmloff::token::GetXMLToken( ::xmloff::token::XML_COLUMN ))
                         mrColHasLabels = true;
                 }
                 break;

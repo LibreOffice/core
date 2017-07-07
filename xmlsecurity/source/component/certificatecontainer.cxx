@@ -35,7 +35,7 @@ CertificateContainer::searchMap( const OUString & url, const OUString & certific
 
     while( p != _certMap.end() )
     {
-        ret = (*p).second.equals(certificate_name);
+        ret = (*p).second == certificate_name;
         if( ret )
                     break;
         ++p;

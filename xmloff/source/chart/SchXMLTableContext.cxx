@@ -473,7 +473,7 @@ void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAt
             IsXMLToken( aLocalName, XML_VISIBILITY ) )
         {
             OUString aVisibility = xAttrList->getValueByIndex( i );
-            bHidden = aVisibility.equals( GetXMLToken( XML_COLLAPSE ) );
+            bHidden = aVisibility == GetXMLToken( XML_COLLAPSE );
         }
     }
 
@@ -1039,7 +1039,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                                 {
                                     aRange = xValues->getSourceRangeRepresentation();
                                     sal_Int32 nIndex = aRange.toInt32();
-                                    if( nIndex!=0 || !aRange.equals(lcl_aCategoriesRange) )
+                                    if( nIndex!=0 || aRange != lcl_aCategoriesRange )
                                         aUsageMap[nIndex] = true;
                                 }
                                 Reference< chart2::data::XDataSequence > xLabel( xLabeledSequence->getLabel() );

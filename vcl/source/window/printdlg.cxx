@@ -748,7 +748,7 @@ void PrintDialog::readFromSettings()
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
         sal_uInt16 nPageId = mpTabCtrl->GetPageId( i );
-        if( aValue.equals( mpTabCtrl->GetPageText( nPageId ) ) )
+        if( aValue == mpTabCtrl->GetPageText( nPageId ) )
         {
             mpTabCtrl->SelectTabPage( nPageId );
             break;

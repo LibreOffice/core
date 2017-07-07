@@ -54,9 +54,9 @@ namespace psp
             bool operator()(const css::lang::Locale& i_rLeft,
                             const css::lang::Locale& i_rRight) const
             {
-                return i_rLeft.Language.equals( i_rRight.Language ) &&
-                i_rLeft.Country.equals( i_rRight.Country ) &&
-                i_rLeft.Variant.equals( i_rRight.Variant );
+                return i_rLeft.Language == i_rRight.Language &&
+                    i_rLeft.Country == i_rRight.Country &&
+                    i_rLeft.Variant == i_rRight.Variant;
             }
         };
 

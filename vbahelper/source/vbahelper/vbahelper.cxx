@@ -534,8 +534,7 @@ ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, co
     {
         // I wonder why comparing lexicographically is done
         // when it's a match is whats interesting?
-        //if (SearchList[i].compareTo(SearchString) == 0)
-        if ( SearchList[i].equals( SearchString ) )
+        if ( SearchList[i] == SearchString )
         {
             retvalue = i;
             break;
@@ -752,7 +751,7 @@ uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, c
 {
     for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
     {
-        if ( aProp[i].Name.equals(aName) )
+        if ( aProp[i].Name == aName )
         {
             return aProp[i].Value;
         }
@@ -764,7 +763,7 @@ bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUStr
 {
     for ( sal_Int32 i = 0; i < aProp.getLength(); i++ )
     {
-        if ( aProp[i].Name.equals(aName) )
+        if ( aProp[i].Name == aName )
         {
             aProp[i].Value = aValue;
             return true;

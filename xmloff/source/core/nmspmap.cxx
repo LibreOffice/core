@@ -462,7 +462,7 @@ bool SvXMLNamespaceMap::NormalizeW3URI( OUString& rName )
     {
         const OUString& sURISuffix = GetXMLToken( XML_URI_XFORMS_SUFFIX );
         sal_Int32 nCompareFrom = rName.getLength() - sURISuffix.getLength();
-        if( rName.copy( nCompareFrom ).equals( sURISuffix ) )
+        if( rName.copy( nCompareFrom ) == sURISuffix )
         {
             // found W3 prefix, and xforms suffix
             rName = GetXMLToken( XML_N_XFORMS_1_0 );
