@@ -88,7 +88,7 @@ void SlideSorterModule::SaveResourceState()
 void SAL_CALL SlideSorterModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    if (rEvent.Type.equals(FrameworkHelper::msResourceActivationEvent))
+    if (rEvent.Type == FrameworkHelper::msResourceActivationEvent)
     {
         if (rEvent.ResourceId->compareTo(mxViewTabBarId) == 0)
         {
@@ -96,11 +96,11 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
             // become active.
             UpdateViewTabBar(Reference<XTabBar>(rEvent.ResourceObject,UNO_QUERY));
         }
-        else if (rEvent.ResourceId->getResourceTypePrefix().equals(
-            FrameworkHelper::msViewURLPrefix)
-            && rEvent.ResourceId->isBoundTo(
-                FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
-                AnchorBindingMode_DIRECT))
+        else if (rEvent.ResourceId->getResourceTypePrefix() ==
+                     FrameworkHelper::msViewURLPrefix
+                 && rEvent.ResourceId->isBoundTo(
+                        FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
+                        AnchorBindingMode_DIRECT))
         {
             // Update the view tab bar because the view in the center pane
             // has changed.

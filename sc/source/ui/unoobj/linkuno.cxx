@@ -118,7 +118,7 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
             if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
             {
                 ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
-                if ( pTabLink->GetFileName().equals(aFileName) )
+                if ( pTabLink->GetFileName() == aFileName )
                     return pTabLink;
             }
         }

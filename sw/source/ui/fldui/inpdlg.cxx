@@ -137,21 +137,21 @@ void SwFieldInputDlg::Apply()
     {
         if(pUsrType)
         {
-            if( !aTmp.equals(pUsrType->GetContent()) )
+            if( aTmp != pUsrType->GetContent() )
             {
                 pUsrType->SetContent(aTmp);
                 pUsrType->UpdateFields();
                 bModified = true;
             }
         }
-        else if( !aTmp.equals(pInpField->GetPar1()) )
+        else if( aTmp != pInpField->GetPar1() )
         {
             pInpField->SetPar1(aTmp);
             rSh.SwEditShell::UpdateFields(*pInpField);
             bModified = true;
         }
     }
-    else if( !aTmp.equals(pSetField->GetPar2()) )
+    else if( aTmp != pSetField->GetPar2())
     {
         pSetField->SetPar2(aTmp);
         rSh.SwEditShell::UpdateFields(*pSetField);

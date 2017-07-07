@@ -1126,7 +1126,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 if (!rOtherDoc.IsScenario(nTemp))
                 {
                     rOtherDoc.GetName( nTemp, aOtherName );
-                    if ( aThisName.equals(aOtherName) )
+                    if ( aThisName == aOtherName )
                         nOtherTab = nTemp;
                 }
         }

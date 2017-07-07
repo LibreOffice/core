@@ -152,7 +152,7 @@ static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const OUStrin
     {
         const ScAutoFormatData *const pEntry = it->second.get();
         const OUString& aEntryName = pEntry->GetName();
-        if ( aEntryName.equals(rName) )
+        if ( aEntryName == rName )
         {
             size_t nPos = std::distance(itBeg, it);
             rOutIndex = nPos;

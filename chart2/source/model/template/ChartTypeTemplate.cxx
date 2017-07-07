@@ -346,7 +346,7 @@ sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
                         return false;
 
                     // match chart type
-                    bResult = bResult && aChartTypeSeq[nCTIdx]->getChartType().equals( aChartTypeToMatch );
+                    bResult = bResult && aChartTypeSeq[nCTIdx]->getChartType() == aChartTypeToMatch;
                     bool bFound=false;
                     bool bAmbiguous=false;
                     // match stacking mode
@@ -561,7 +561,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     {
         bool bOk = true;
         for( sal_Int32 i=0; bOk && i<aCoordinateSystems.getLength(); ++i )
-            bOk = bOk && ( xCooSys->getCoordinateSystemType().equals( aCoordinateSystems[i]->getCoordinateSystemType()) &&
+            bOk = bOk && ( xCooSys->getCoordinateSystemType() == aCoordinateSystems[i]->getCoordinateSystemType() &&
                            (xCooSys->getDimension() == aCoordinateSystems[i]->getDimension()) );
         // coordinate systems are ok
         if( bOk )
@@ -871,7 +871,7 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem(
     for( nN=0; nN<rOldChartTypesSeq.getLength();++nN)
     {
         Reference< XChartType > xOldType( rOldChartTypesSeq[nN] );
-        if( xOldType.is() && xOldType->getChartType().equals( aNewChartType ) )
+        if( xOldType.is() && xOldType->getChartType() == aNewChartType )
         {
             xSource.set( Reference< beans::XPropertySet >(xOldType, uno::UNO_QUERY ) );
             if( xSource.is() )

@@ -165,10 +165,10 @@ void ScMoveTableDlg::CheckNewTabName()
     const sal_Int32 nLast = pLbTable->GetEntryCount();
     for ( sal_Int32 i=0; i<nLast && !bFound; ++i )
     {
-        if ( aNewName.equals(pLbTable->GetEntry(i)) )
+        if ( aNewName == pLbTable->GetEntry(i) )
         {
             // Only for move within same document the same name is allowed.
-            if (!bMoveInCurrentDoc || !maDefaultName.equals( pEdTabName->GetText()))
+            if (!bMoveInCurrentDoc || maDefaultName != pEdTabName->GetText())
                 bFound = true;
         }
     }
@@ -282,7 +282,7 @@ IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl, Button*, void)
     {
         // Return an empty string, when the new name is the same as the
         // original name.
-        if (maDefaultName.equals(pEdTabName->GetText()))
+        if (maDefaultName == pEdTabName->GetText())
             pEdTabName->SetText(OUString());
     }
 

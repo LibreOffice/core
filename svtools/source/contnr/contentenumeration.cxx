@@ -345,7 +345,7 @@ namespace svt
 
         for (int i = 0; i < m_rBlackList.getLength() ; i++)
         {
-            if ( entryName.equals(  m_rBlackList[i] ) )
+            if ( entryName == m_rBlackList[i] )
                 return true;
         }
 

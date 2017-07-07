@@ -92,7 +92,7 @@ void SAL_CALL ShellStackGuard::disposing()
 void SAL_CALL ShellStackGuard::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    if (rEvent.Type.equals(FrameworkHelper::msConfigurationUpdateStartEvent))
+    if (rEvent.Type == FrameworkHelper::msConfigurationUpdateStartEvent)
     {
         if (mpUpdateLock.get() == nullptr && IsPrinting())
         {

@@ -1357,7 +1357,7 @@ ImpXMLEXPPageMasterInfo* SdXMLExport::ImpGetPageMasterInfoByName(const OUString&
         {
             if(pInfo)
             {
-                if(!pInfo->GetMasterPageName().isEmpty() && rName.equals(pInfo->GetMasterPageName()))
+                if(!pInfo->GetMasterPageName().isEmpty() && rName == pInfo->GetMasterPageName())
                 {
                     return pInfo;
                 }

@@ -3684,11 +3684,11 @@ void SwUiWriterTest::testUnicodeNotationToggle()
     lcl_dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
     sExpectedString = "u+";
     sDocString = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
-    CPPUNIT_ASSERT( sDocString.equals(sExpectedString) );
+    CPPUNIT_ASSERT_EQUAL( sDocString, sExpectedString );
 
     lcl_dispatchCommand(mxComponent, ".uno:UnicodeNotationToggle", aPropertyValues);
     sDocString = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
-    CPPUNIT_ASSERT( sDocString.equals(sOriginalDocString) );
+    CPPUNIT_ASSERT_EQUAL( sDocString, sOriginalDocString );
 }
 
 void SwUiWriterTest::testTdf34957()

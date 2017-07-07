@@ -330,7 +330,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                     m_aCachedImplementations.begin(),
                     aEnd,
                     [&serviceName](CachePair const& cp)
-                    { return serviceName.equals(cp.first); }
+                    { return serviceName == cp.first; }
                     )) != aEnd) {
         Reference<XInterface> xCanvas( use( aMatch->second, args, xContext ) );
         if(xCanvas.is())
@@ -344,7 +344,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                     m_aAvailableImplementations.begin(),
                     aAvailEnd,
                     [&serviceName](AvailPair const& ap)
-                    { return serviceName.equals(ap.first); }
+                    { return serviceName == ap.first; }
                     )) == aAvailEnd ) {
         return Reference<XInterface>();
     }
@@ -355,7 +355,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                     m_aAAImplementations.begin(),
                     aAAEnd,
                     [&serviceName](AvailPair const& ap)
-                    { return serviceName.equals(ap.first); }
+                    { return serviceName == ap.first; }
                     )) == aAAEnd) {
         return Reference<XInterface>();
     }
@@ -366,7 +366,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                     m_aAcceleratedImplementations.begin(),
                     aAccelEnd,
                     [&serviceName](AvailPair const& ap)
-                    { return serviceName.equals(ap.first); }
+                    { return serviceName == ap.first; }
                     )) == aAccelEnd ) {
         return Reference<XInterface>();
     }
@@ -397,7 +397,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
             std::any_of(pFirstAccelImpl,
                          pEndAccelImpl,
                          [&aCurrName](OUString const& src)
-                         { return aCurrName.equals(src.trim()); }
+                         { return aCurrName == src.trim(); }
                 ));
 
         // check whether given canvas service is listed in the
@@ -406,7 +406,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
             std::any_of(pFirstAAImpl,
                          pEndAAImpl,
                          [&aCurrName](OUString const& src)
-                         { return aCurrName.equals(src.trim()); }
+                         { return aCurrName == src.trim(); }
                 ));
 
         // try to instantiate canvas *only* if either accel and AA

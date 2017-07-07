@@ -190,11 +190,11 @@ void SfxObjectShell::UpdateDocInfoForSave()
         if ( !IsUseUserData() )
         {
             // remove all data pointing to the current user
-            if (xDocProps->getAuthor().equals(aUserName)) {
+            if (xDocProps->getAuthor() == aUserName) {
                 xDocProps->setAuthor( OUString() );
             }
             xDocProps->setModifiedBy( OUString() );
-            if (xDocProps->getPrintedBy().equals(aUserName)) {
+            if (xDocProps->getPrintedBy() == aUserName) {
                 xDocProps->setPrintedBy( OUString() );
             }
         }

@@ -39,7 +39,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL t602filter_component_getFactory(
     void * pRet = nullptr;
 
     OUString implName = OUString::createFromAscii( pImplName );
-    if ( pServiceManager && implName.equals(T602ImportFilter_getImplementationName()) )
+    if ( pServiceManager && implName == T602ImportFilter_getImplementationName() )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             static_cast< XMultiServiceFactory * >( pServiceManager ),
@@ -52,7 +52,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL t602filter_component_getFactory(
             pRet = xFactory.get();
         }
     }
-    else if ( pServiceManager && implName.equals(T602ImportFilterDialog_getImplementationName()) )
+    else if ( pServiceManager && implName == T602ImportFilterDialog_getImplementationName() )
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             static_cast< XMultiServiceFactory * >( pServiceManager ),

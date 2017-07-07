@@ -91,7 +91,7 @@ void VCLXAccessibleStatusBarItem::SetShowing( bool bShowing )
 
 void VCLXAccessibleStatusBarItem::SetItemName( const OUString& sItemName )
 {
-    if ( !m_sItemName.equals( sItemName ) )
+    if ( m_sItemName != sItemName )
     {
         Any aOldValue, aNewValue;
         aOldValue <<= m_sItemName;

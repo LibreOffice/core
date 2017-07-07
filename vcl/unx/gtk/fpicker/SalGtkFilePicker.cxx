@@ -1726,7 +1726,7 @@ void SalGtkFilePicker::SetCurFilter( const OUString& rFilter )
         OUString sFilterName( filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8 );
 
         OUString aShrunkName = shrinkFilterName( rFilter );
-        if( aShrunkName.equals( sFilterName) )
+        if( aShrunkName == sFilterName )
         {
             SAL_INFO( "vcl.gtk", "actually setting " << filtername );
             gtk_file_chooser_set_filter( GTK_FILE_CHOOSER( m_pDialog ), pFilter );

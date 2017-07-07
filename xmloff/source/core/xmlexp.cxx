@@ -2384,7 +2384,7 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
             const OUString streamName = mpImpl->mStreamName;
             if ( !streamName.isEmpty() )
             {
-                if ( streamName.equals(mdref.First) )
+                if ( streamName == mdref.First )
                 {
                     AddAttribute( XML_NAMESPACE_XML, XML_ID, mdref.Second );
                 }

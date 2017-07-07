@@ -631,7 +631,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                     OUString sControlSourceProperty;
                     aControlSourceProperty >>= sControlSourceProperty;
 
-                    aNewEntry.bIsValueProperty = (sControlSourceProperty.equals(evt.PropertyName));
+                    aNewEntry.bIsValueProperty = (sControlSourceProperty == evt.PropertyName);
                 }
             }
             catch(const Exception&)

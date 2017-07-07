@@ -577,9 +577,9 @@ OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUStr
     }
 
     if (number || num >= 0) {
-        if (!aLocale.Language.equals(rLocale.Language) ||
-                !aLocale.Country.equals(rLocale.Country) ||
-                !aLocale.Variant.equals(rLocale.Variant)) {
+        if (aLocale.Language != rLocale.Language ||
+                aLocale.Country != rLocale.Country ||
+                aLocale.Variant != rLocale.Variant) {
             LocaleDataItem item = LocaleDataImpl::get()->getLocaleItem( rLocale );
             aLocale = rLocale;
             DecimalChar[NumberChar_HalfWidth]=item.decimalSeparator.toChar();

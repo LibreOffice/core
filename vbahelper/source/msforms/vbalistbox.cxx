@@ -83,7 +83,7 @@ ScVbaListBox::setValue( const uno::Any& _value )
     sal_Int16 i = 0;
     for( i = 0; i < nLength; i++ )
     {
-        if( sList[i].equals( sValue ) )
+        if( sList[i] == sValue )
         {
             nValue = i;
             break;

@@ -623,10 +623,10 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
         switch(rAttrTokenMap.Get(nPrefix,aLocalName))
         {
             case XML_TOK_FONTWEIGHT:
-                nIsBold = sal_Int8(sValue.equals(GetXMLToken(XML_BOLD)));
+                nIsBold = sal_Int8(sValue == GetXMLToken(XML_BOLD));
                 break;
             case XML_TOK_FONTSTYLE:
-                nIsItalic = sal_Int8(sValue.equals(GetXMLToken(XML_ITALIC)));
+                nIsItalic = sal_Int8(sValue == GetXMLToken(XML_ITALIC));
                 break;
             case XML_TOK_FONTSIZE:
                 ::sax::Converter::convertDouble(nFontSize, sValue);
@@ -1464,8 +1464,7 @@ void SmXMLOperatorContext_Impl::StartElement(const uno::Reference<
         switch(rAttrTokenMap.Get(nPrefix,aLocalName))
         {
             case XML_TOK_STRETCHY:
-                bIsStretchy = sValue.equals(
-                    GetXMLToken(XML_TRUE));
+                bIsStretchy = sValue == GetXMLToken(XML_TRUE);
                 break;
             default:
                 break;

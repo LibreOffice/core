@@ -740,7 +740,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
         const OUString aDefType = aDefFiltPropsHM.getUnpackedValueOrDefault( "Type", OUString() );
         const OUString aDefExtension = GetRecommendedExtension( aDefType );
 
-        if ( !aPreusedFilterName.equals( aFilterName ) && !aUIName.equals( aDefUIName ) )
+        if ( aPreusedFilterName != aFilterName && aUIName != aDefUIName )
         {
             if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefExtension,
                                                             (bool)( nDefFiltFlags & SfxFilterFlags::ALIEN ) ) )
@@ -992,13 +992,13 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     const OUString sFilterOptionsString(aFilterOptionsString);
     const OUString sFilterDataString(aFilterDataString);
 
-    if ( aFilterName.equals( aFilterFromMediaDescr ) )
+    if ( aFilterName == aFilterFromMediaDescr )
     {
         // preserve current settings if any
         // if there no current settings and the name is the same
         // as old filter name use old filter settings
 
-        if ( aFilterFromMediaDescr.equals( aOldFilterName ) )
+        if ( aFilterFromMediaDescr == aOldFilterName )
         {
             ::comphelper::SequenceAsHashMap::const_iterator aIter =
                                         GetDocProps().find( sFilterOptionsString );
@@ -1017,7 +1017,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         GetMediaDescr().erase( sFilterDataString );
         GetMediaDescr().erase( sFilterOptionsString );
 
-        if ( aFilterName.equals( aOldFilterName ) )
+        if ( aFilterName == aOldFilterName )
         {
             // merge filter option of the document filter
 
@@ -1498,7 +1498,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
     {
         // the target file name is provided so check if new filter options
         // are provided or old options can be used
-        if ( aFilterFromMediaDescr.equals( aOldFilterName ) )
+        if ( aFilterFromMediaDescr == aOldFilterName )
         {
             ::comphelper::SequenceAsHashMap::const_iterator aIter =
                                             aModelData.GetDocProps().find( sFilterOptionsString );

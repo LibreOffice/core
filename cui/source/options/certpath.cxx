@@ -194,7 +194,7 @@ void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath
     {
         OUString* pCertPath = static_cast<OUString*>(pEntry->GetUserData());
         //already exists, just select the original one
-        if (pCertPath->equals(rPath))
+        if (*pCertPath == rPath)
         {
             m_pCertPathList->SetCheckButtonState(pEntry, SvButtonState::Checked);
             HandleCheckEntry(pEntry);

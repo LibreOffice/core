@@ -146,7 +146,7 @@ bool HostDetailsContainer::setUrl( const INetURLObject& rUrl )
 
 bool HostDetailsContainer::verifyScheme( const OUString& sScheme )
 {
-    return sScheme.equals( m_sScheme + "://" );
+    return sScheme == ( m_sScheme + "://" );
 }
 
 DavDetailsContainer::DavDetailsContainer( VclBuilderContainer* pBuilder ) :

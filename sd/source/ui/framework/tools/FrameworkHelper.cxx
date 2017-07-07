@@ -620,7 +620,7 @@ void FrameworkHelper::HandleModeChangeSlot (
             || nSlotId == SID_HANDOUT_MASTER_MODE)
             eEMode = EditMode::MasterPage;
         // Ensure we have the expected view shell
-        if (!(xView.is() && xView->getResourceId()->getResourceURL().equals(sRequestedView)))
+        if (!(xView.is() && xView->getResourceId()->getResourceURL() == sRequestedView))
 
         {
             const auto xId = CreateResourceId(sRequestedView, msCenterPaneURL);
@@ -901,7 +901,7 @@ void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
 void SAL_CALL CallbackCaller::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    if (rEvent.Type.equals(msEventType) && maFilter(rEvent))
+    if (rEvent.Type == msEventType && maFilter(rEvent))
     {
         maCallback(true);
         if (mxConfigurationController.is())

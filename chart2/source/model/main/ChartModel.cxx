@@ -1104,7 +1104,7 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 
 sal_Bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
 {
-    return aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast);
+    return aFlavor.MimeType == lcl_aGDIMetaFileMIMETypeHighContrast;
 }
 
 namespace

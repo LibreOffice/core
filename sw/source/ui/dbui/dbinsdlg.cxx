@@ -1678,7 +1678,7 @@ void SwInsertDBColAutoPilot::Load()
         pDataSourceProps[0] >>= sSource;
         pDataSourceProps[1] >>= sCommand;
         pDataSourceProps[2] >>= nCommandType;
-        if(sSource.equals(aDBData.sDataSource) && sCommand.equals(aDBData.sCommand))
+        if(sSource == aDBData.sDataSource && sCommand == aDBData.sCommand)
         {
             std::unique_ptr<DB_ColumnConfigData> pNewData(new DB_ColumnConfigData);
             pNewData->sSource = sSource;

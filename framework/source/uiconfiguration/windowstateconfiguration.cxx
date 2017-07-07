@@ -982,7 +982,7 @@ void ConfigurationAccess_WindowState::impl_fillStructFromSequence( WindowStateIn
     {
         for ( sal_Int32 j = 0; j < nCompareCount; j++ )
         {
-            if ( rSeq[i].Name.equals( m_aPropArray[j] ))
+            if ( rSeq[i].Name == m_aPropArray[j] )
             {
                 switch ( j )
                 {

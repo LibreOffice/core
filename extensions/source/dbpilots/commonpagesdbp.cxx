@@ -148,7 +148,7 @@ namespace dbp
             // search the entry of the given type with the given name
             for ( sal_Int32 nLookup = 0; nLookup < m_pTable->GetEntryCount(); ++nLookup )
             {
-                if (sCommand.equals(m_pTable->GetEntry(nLookup)))
+                if (sCommand == m_pTable->GetEntry(nLookup))
                 {
                     if ( reinterpret_cast< sal_IntPtr >( m_pTable->GetEntryData( nLookup ) ) == nCommandType )
                     {

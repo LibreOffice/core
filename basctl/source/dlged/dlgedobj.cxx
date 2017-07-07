@@ -452,7 +452,7 @@ void SAL_CALL DlgEdObj::NameChange( const  css::beans::PropertyChangeEvent& evt 
     OUString aNewName;
     evt.NewValue >>= aNewName;
 
-    if ( !aNewName.equals(aOldName) )
+    if ( aNewName != aOldName )
     {
         Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), UNO_QUERY);
         if ( xNameAcc.is() && xNameAcc->hasByName(aOldName) )

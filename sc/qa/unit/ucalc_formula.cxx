@@ -5725,7 +5725,7 @@ void Test::testExternalRef()
     m_pDoc->InsertTab(0, "Test Sheet");
     m_pDoc->SetString(0, 0, 0, "='file:///extdata.fake'#Data1.A1");
     OUString test = m_pDoc->GetString(0, 0, 0);
-    CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(name));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value is different from the original", test, name);
 
     // After the initial access to the external document, the external ref
     // manager should create sheet cache entries for *all* sheets from that
@@ -5736,13 +5736,13 @@ void Test::testExternalRef()
     vector<OUString> aTabNames;
     pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
     CPPUNIT_ASSERT_MESSAGE("There should be at least 3 sheets.", aTabNames.size() >= 3);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[0].equals(aExtSh1Name));
-    CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[1].equals(aExtSh2Name));
-    CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[2].equals(aExtSh3Name));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected sheet name.", aTabNames[0], aExtSh1Name);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected sheet name.", aTabNames[1], aExtSh2Name);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected sheet name.", aTabNames[2], aExtSh3Name);
 
     m_pDoc->SetString(1, 0, 0, "='file:///extdata.fake'#Data1.B1");
     test = m_pDoc->GetString(1, 0, 0);
-    CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(value));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value is different from the original", test, value);
 
     m_pDoc->SetString(0, 1, 0, "='file:///extdata.fake'#Data1.A2");
     m_pDoc->SetString(0, 2, 0, "='file:///extdata.fake'#Data1.A3");
@@ -5957,7 +5957,7 @@ void Test::testExternalRefFunctions()
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aExtDocName);
     const OUString* pFileName = pRefMgr->getExternalFileName(nFileId);
     CPPUNIT_ASSERT_MESSAGE("file name registration has somehow failed.",
-                           pFileName && pFileName->equals(aExtDocName));
+                           pFileName && *pFileName == aExtDocName);
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 

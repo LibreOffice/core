@@ -254,7 +254,7 @@ void PackageManagerImpl::initActivationLayer(
                                                   data.size());
                             OUString sData = OStringToOUString(
                                 osData, RTL_TEXTENCODING_UTF8);
-                            if (!sData.equals(aUserName))
+                            if (sData != aUserName)
                                 continue;
                         }
                     }
@@ -1244,8 +1244,8 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                            "must have an identifier and a version");
                 if (infoset.hasDescription() &&
                     infoset.getIdentifier() &&
-                    (! i->first.equals(*(infoset.getIdentifier()))
-                     || ! i->second.version.equals(infoset.getVersion())))
+                    ( i->first != *(infoset.getIdentifier())
+                      || i->second.version != infoset.getVersion()))
                 {
                     bRemoved = true;
                 }
@@ -1491,7 +1491,7 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
     {
         if (!extension.is())
             return 0;
-        if (!m_context.equals(extension->getRepositoryName()))
+        if (m_context != extension->getRepositoryName())
             throw lang::IllegalArgumentException(
                 "PackageManagerImpl::checkPrerequisites: extension is not from this repository.",
                 nullptr, 0);

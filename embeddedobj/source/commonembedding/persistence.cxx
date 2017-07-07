@@ -244,7 +244,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
                                                   const uno::Reference< embed::XStorage >& xNewObjectStorage,
                                                   const OUString& aNewName )
 {
-    if ( xNewParentStorage == m_xParentStorage && aNewName.equals( m_aEntryName ) )
+    if ( xNewParentStorage == m_xParentStorage && aNewName == m_aEntryName )
     {
         SAL_WARN_IF( xNewObjectStorage != m_xObjectStorage, "embeddedobj.common", "The storage must be the same!" );
         return;
@@ -278,7 +278,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
 void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
                                                   const OUString& aNewName )
 {
-    if ( xNewParentStorage == m_xParentStorage && aNewName.equals( m_aEntryName ) )
+    if ( xNewParentStorage == m_xParentStorage && aNewName == m_aEntryName )
         return;
 
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
@@ -956,7 +956,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
         {
             // saveCompleted is expected, handle it accordingly
-            if ( m_xNewParentStorage == xStorage && m_aNewEntryName.equals( sEntName ) )
+            if ( m_xNewParentStorage == xStorage && m_aNewEntryName == sEntName )
             {
                 saveCompleted( true );
                 return;
@@ -964,7 +964,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
 
             // if a completely different entry is provided, switch first back to the old persistence in saveCompleted
             // and then switch to the target persistence
-            bool bSwitchFurther = ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) );
+            bool bSwitchFurther = ( m_xParentStorage != xStorage || m_aEntryName != sEntName );
             saveCompleted( false );
             if ( !bSwitchFurther )
                 return;
@@ -1697,7 +1697,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
             }
         }
 
-        if ( !aOldLinkFilter.equals( m_aLinkFilterName ) )
+        if ( aOldLinkFilter != m_aLinkFilterName )
         {
             uno::Sequence< beans::NamedValue > aObject = aHelper.GetObjectPropsByFilter( m_aLinkFilterName );
 
@@ -1806,7 +1806,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
 
     m_bReadOnly = false;
 
-    if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
+    if ( m_xParentStorage != xStorage || m_aEntryName != sEntName )
         SwitchOwnPersistence( xStorage, sEntName );
 
     // for linked object it means that it becomes embedded object

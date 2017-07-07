@@ -468,7 +468,7 @@ void SidebarController::UpdateConfigurations()
         {
             if (iDeck->mbIsEnabled)
             {
-                if (iDeck->msId.equals(msCurrentDeckId))
+                if (iDeck->msId == msCurrentDeckId)
                 {
                     sNewDeckId = msCurrentDeckId;
                     break;
@@ -542,7 +542,7 @@ void SidebarController::SwitchToDefaultDeck()
 void SidebarController::SwitchToDeck (
     const ::rtl::OUString& rsDeckId)
 {
-    if ( ! msCurrentDeckId.equals(rsDeckId)
+    if (  msCurrentDeckId != rsDeckId
         || ! mbIsDeckOpen
         || mnRequestedForceFlags!=SwitchFlag_NoForce)
     {
@@ -662,7 +662,7 @@ void SidebarController::SwitchToDeck (
     const bool bForceNewPanels ((mnRequestedForceFlags&SwitchFlag_ForceNewPanels)!=0);
     mnRequestedForceFlags = SwitchFlag_NoForce;
 
-    if ( ! msCurrentDeckId.equals(rDeckDescriptor.msId)
+    if (   7msCurrentDeckId != rDeckDescriptor.msId
         || bForceNewDeck)
     {
         if (mpCurrentDeck)

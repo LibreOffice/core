@@ -605,7 +605,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
 Sequence< CalendarItem2 > &LocaleDataImpl::getCalendarItemByName(const OUString& name,
         const Locale& rLocale, const Sequence< Calendar2 >& calendarsSeq, sal_Int16 item)
 {
-    if (!ref_name.equals(name)) {
+    if (ref_name != name) {
         OUString aLocStr, id;
         sal_Int32 nLastUnder = name.lastIndexOf( cUnder);
         SAL_WARN_IF( nLastUnder < 1, "i18npool",
@@ -625,7 +625,7 @@ Sequence< CalendarItem2 > &LocaleDataImpl::getCalendarItemByName(const OUString&
         }
         sal_Int32 index;
         for (index = 0; index < cals.getLength(); index++) {
-            if (id.equals(cals[index].Name)) {
+            if (id == cals[index].Name) {
                 ref_cal = cals[index];
                 break;
             }
@@ -903,7 +903,7 @@ LocaleDataImpl::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUStrin
         sal_Int16 collatorCount = 0;
         sal_Unicode **collatorArray = func(collatorCount);
         for(sal_Int16 i = 0; i < collatorCount; i++)
-            if (algorithm.equals(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO]))
+            if (algorithm == collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_ALGO])
                 return OUString(collatorArray[i * COLLATOR_ELEMENTS + COLLATOR_OFFSET_RULE]);
     }
     return OUString();
@@ -1038,7 +1038,7 @@ LocaleDataImpl::getIndexArrayForAlgorithm(const Locale& rLocale, const OUString&
     sal_Unicode **indexArray = getIndexArray(rLocale, indexCount);
     if ( indexArray ) {
         for(sal_Int16 i = 0; i < indexCount; i++) {
-            if (algorithm.equals(indexArray[i*5]))
+            if (algorithm == indexArray[i*5])
                 return indexArray+i*5;
         }
     }

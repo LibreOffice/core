@@ -59,7 +59,7 @@ sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps,
 
     while ( nPos == -1 && i < nLen )
     {
-        if ( aProps[i].Name.equals( sName ) )
+        if ( aProps[i].Name == sName )
             nPos = i;
         else
             i++;
@@ -347,13 +347,13 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
     sal_Int32 nLen = aParaProps.getLength( );
     for ( sal_Int32 i = 0; i < nLen; i++ )
     {
-        if ( !hasFirstLineIndent && aParaProps[i].Name.equals( sParaIndent ) )
+        if ( !hasFirstLineIndent && aParaProps[i].Name == sParaIndent )
         {
             aProps.realloc( aProps.getLength() + 1 );
             aProps[aProps.getLength( ) - 1] = aParaProps[i];
             aProps[aProps.getLength( ) - 1].Name = sFirstLineIndent;
         }
-        else if ( !hasIndentAt && aParaProps[i].Name.equals( sParaLeftMargin ) )
+        else if ( !hasIndentAt && aParaProps[i].Name == sParaLeftMargin )
         {
             aProps.realloc( aProps.getLength() + 1 );
             aProps[aProps.getLength( ) - 1] = aParaProps[i];

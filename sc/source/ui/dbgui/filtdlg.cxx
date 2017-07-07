@@ -581,7 +581,7 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     const ScTypedStrData& rHdrEntry = m_EntryLists[nColumn]->maList[nPos];
 
     const OUString& aHdrStr = rHdrEntry.GetString();
-    bool bWasThere = aHdrStr.equals(pValList->GetEntry(nListPos));
+    bool bWasThere = aHdrStr == pValList->GetEntry(nListPos);
     bool bInclude = !pBtnHeader->IsChecked();
 
     if (bInclude)           // Include entry
@@ -1043,7 +1043,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, Edit&, rEd, void )
         nQE=i+nOffset;
     }
 
-    if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
+    if ( aStrEmpty == aStrVal || aStrNotEmpty == aStrVal )
     {
         pLbCond->SelectEntry(OUString('='));
         pLbCond->Disable();
@@ -1064,12 +1064,12 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, Edit&, rEd, void )
     if ( rEntry.bDoQuery || maRefreshExceptQuery[nQE] )
     {
         bool bByEmptyOrNotByEmpty = false;
-        if ( aStrEmpty.equals(aStrVal) )
+        if ( aStrEmpty == aStrVal )
         {
             bByEmptyOrNotByEmpty = true;
             rEntry.SetQueryByEmpty();
         }
-        else if ( aStrNotEmpty.equals(aStrVal) )
+        else if ( aStrNotEmpty == aStrVal )
         {
             bByEmptyOrNotByEmpty = true;
             rEntry.SetQueryByNonEmpty();

@@ -897,7 +897,7 @@ bool ObjectIdentifier::areSiblings( const OUString& rCID1, const OUString& rCID2
         if( !aParent1.isEmpty() )
         {
             OUString aParent2( ObjectIdentifier::getFullParentParticle( rCID2 ) );
-            bRet=aParent1.equals(aParent2);
+            bRet=aParent1 == aParent2;
         }
         //legend entries are special:
         if(!bRet)
@@ -912,7 +912,7 @@ bool ObjectIdentifier::areSiblings( const OUString& rCID1, const OUString& rCID2
 
 bool ObjectIdentifier::areIdenticalObjects( const OUString& rCID1, const OUString& rCID2 )
 {
-    if( rCID1.equals( rCID2 ) )
+    if( rCID1 == rCID2 )
         return true;
     //draggable pie or donut segments need special treatment, as their CIDs do change with offset
     {
@@ -922,7 +922,7 @@ bool ObjectIdentifier::areIdenticalObjects( const OUString& rCID1, const OUStrin
 
         OUString aID1( ObjectIdentifier::getObjectID( rCID1 ) );
         OUString aID2( ObjectIdentifier::getObjectID( rCID2 ) );
-        if( !aID1.isEmpty() &&  aID1.equals( aID2 ) )
+        if( !aID1.isEmpty() &&  aID1 == aID2 )
             return true;
         }
     return false;
@@ -1467,7 +1467,7 @@ TitleHelper::eTitleType ObjectIdentifier::getTitleTypeForCID( const OUString& rC
     tTitleMap::const_iterator aIt( rMap.begin() );
     for( ;aIt != rMap.end(); ++aIt )
     {
-        if( aParentParticle.equals( (*aIt).second ) )
+        if( aParentParticle == (*aIt).second )
         {
             eRet = (*aIt).first;
             break;

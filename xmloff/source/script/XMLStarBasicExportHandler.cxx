@@ -60,7 +60,7 @@ void XMLStarBasicExportHandler::Export(
     sal_Int32 nCount = rValues.getLength();
     for(sal_Int32 i = 0; i < nCount; i++)
     {
-        if (sLibrary.equals(rValues[i].Name))
+        if (sLibrary == rValues[i].Name)
         {
             OUString sTmp;
             rValues[i].Value >>= sTmp;
@@ -69,7 +69,7 @@ void XMLStarBasicExportHandler::Export(
                  sTmp.equalsIgnoreAsciiCase(sStarOffice) ) ? XML_APPLICATION
                                                            : XML_DOCUMENT );
         }
-        else if (sMacroName.equals(rValues[i].Name))
+        else if (sMacroName == rValues[i].Name)
         {
             rValues[i].Value >>= sName;
         }

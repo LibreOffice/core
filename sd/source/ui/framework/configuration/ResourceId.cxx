@@ -433,8 +433,8 @@ bool ResourceId::IsBoundToAnchor (
         sal_uInt32 nCount = paAnchorURLs->getLength();
         while (nOffset < nCount)
         {
-            if ( ! maResourceURLs[nLocalAnchorURLCount - nOffset].equals(
-                (*paAnchorURLs)[nCount - 1 - nOffset]))
+            if ( maResourceURLs[nLocalAnchorURLCount - nOffset] !=
+                (*paAnchorURLs)[nCount - 1 - nOffset] )
             {
                 return false;
             }
@@ -443,7 +443,7 @@ bool ResourceId::IsBoundToAnchor (
     }
     if (bHasFirstAnchorURL)
     {
-        if ( ! psFirstAnchorURL->equals(maResourceURLs[nLocalAnchorURLCount - nOffset]))
+        if ( *psFirstAnchorURL != maResourceURLs[nLocalAnchorURLCount - nOffset] )
             return false;
     }
 
@@ -468,8 +468,8 @@ bool ResourceId::IsBoundToAnchor (
     // id and the given anchor.
     for (sal_uInt32 nOffset=0; nOffset<nAnchorURLCount; ++nOffset)
     {
-        if ( ! maResourceURLs[nLocalAnchorURLCount - nOffset].equals(
-            rAnchorURLs[nAnchorURLCount - 1 - nOffset]))
+        if ( maResourceURLs[nLocalAnchorURLCount - nOffset] !=
+            rAnchorURLs[nAnchorURLCount - 1 - nOffset] )
         {
             return false;
         }

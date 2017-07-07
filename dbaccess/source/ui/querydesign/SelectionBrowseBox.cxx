@@ -1036,7 +1036,7 @@ bool OSelectionBrowseBox::SaveModified()
                     OUString sFunctionName        = m_pFunctionCell->GetEntry(nPos);
                     OUString sGroupFunctionName   = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1, ';');
                     bool bGroupBy = false;
-                    if ( sGroupFunctionName.equals(sFunctionName) ) // check if the function name is GROUP
+                    if ( sGroupFunctionName == sFunctionName ) // check if the function name is GROUP
                     {
                         bGroupBy = true;
 
@@ -1428,7 +1428,7 @@ void OSelectionBrowseBox::DeleteFields(const OUString& rAliasName)
         for(sal_uInt16 nPos=sal::static_int_cast< sal_uInt16 >(getFields().size());aIter != getFields().rend();++aIter,--nPos)
         {
             pEntry = *aIter;
-            if ( pEntry->GetAlias().equals( rAliasName ) )
+            if ( pEntry->GetAlias() == rAliasName )
             {
                 RemoveField( GetColumnId( nPos ) );
                 break;

@@ -2623,7 +2623,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
             for ( i = 0; i < nCount; i++ )
             {
                 const beans::PropertyValue& rProp = aGeoPropSeq[ i ];
-                if ( rProp.Name.equals( sViewBox ) )
+                if ( rProp.Name == sViewBox )
                 {
                     if ( !bIsDefaultObject )
                     {
@@ -2637,7 +2637,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         }
                     }
                 }
-                else if ( rProp.Name.equals( sTextRotateAngle ) )
+                else if ( rProp.Name == sTextRotateAngle )
                 {
                     double f = 0;
                     if ( rProp.Value >>= f )
@@ -2653,7 +2653,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             AddOpt( DFF_Prop_cdirFont, mso_cdir270 );
                     }
                 }
-                else if ( rProp.Name.equals( sExtrusion ) )
+                else if ( rProp.Name == sExtrusion )
                 {
                     uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
                     if ( rProp.Value >>= aExtrusionPropSeq )
@@ -2694,7 +2694,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             const OUString sExtrusionOrigin                ( "Origin"  );
                             const OUString sExtrusionColor                 ( "Color"  );
 
-                            if ( rrProp.Name.equals( sExtrusion ) )
+                            if ( rrProp.Name == sExtrusion )
                             {
                                 bool bExtrusionOn;
                                 if ( rrProp.Value >>= bExtrusionOn )
@@ -2706,13 +2706,13 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nLightFaceFlags &=~8;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionBrightness ) )
+                            else if ( rrProp.Name == sExtrusionBrightness )
                             {
                                 double fExtrusionBrightness = 0;
                                 if ( rrProp.Value >>= fExtrusionBrightness )
                                     AddOpt( DFF_Prop_c3DAmbientIntensity, (sal_Int32)( fExtrusionBrightness * 655.36 ) );
                             }
-                            else if ( rrProp.Name.equals( sExtrusionDepth ) )
+                            else if ( rrProp.Name == sExtrusionDepth )
                             {
                                 double fDepth = 0;
                                 double fFraction = 0;
@@ -2732,19 +2732,19 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     }
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionDiffusion ) )
+                            else if ( rrProp.Name == sExtrusionDiffusion )
                             {
                                 double fExtrusionDiffusion = 0;
                                 if ( rrProp.Value >>= fExtrusionDiffusion )
                                     AddOpt( DFF_Prop_c3DDiffuseAmt, (sal_Int32)( fExtrusionDiffusion * 655.36 ) );
                             }
-                            else if ( rrProp.Name.equals( sExtrusionNumberOfLineSegments ) )
+                            else if ( rrProp.Name == sExtrusionNumberOfLineSegments )
                             {
                                 sal_Int32 nExtrusionNumberOfLineSegments = 0;
                                 if ( rrProp.Value >>= nExtrusionNumberOfLineSegments )
                                     AddOpt( DFF_Prop_c3DTolerance, nExtrusionNumberOfLineSegments );
                             }
-                            else if ( rrProp.Name.equals( sExtrusionLightFace ) )
+                            else if ( rrProp.Name == sExtrusionLightFace )
                             {
                                 bool bExtrusionLightFace;
                                 if ( rrProp.Value >>= bExtrusionLightFace )
@@ -2756,7 +2756,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nLightFaceFlags &=~1;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionFirstLightHarsh ) )
+                            else if ( rrProp.Name == sExtrusionFirstLightHarsh )
                             {
                                 bool bExtrusionFirstLightHarsh;
                                 if ( rrProp.Value >>= bExtrusionFirstLightHarsh )
@@ -2768,7 +2768,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nFillHarshFlags &=~2;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionSecondLightHarsh ) )
+                            else if ( rrProp.Name == sExtrusionSecondLightHarsh )
                             {
                                 bool bExtrusionSecondLightHarsh;
                                 if ( rrProp.Value >>= bExtrusionSecondLightHarsh )
@@ -2780,19 +2780,19 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nFillHarshFlags &=~1;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionFirstLightLevel ) )
+                            else if ( rrProp.Name == sExtrusionFirstLightLevel )
                             {
                                 double fExtrusionFirstLightLevel = 0;
                                 if ( rrProp.Value >>= fExtrusionFirstLightLevel )
                                     AddOpt( DFF_Prop_c3DKeyIntensity, (sal_Int32)( fExtrusionFirstLightLevel * 655.36 ) );
                             }
-                            else if ( rrProp.Name.equals( sExtrusionSecondLightLevel ) )
+                            else if ( rrProp.Name == sExtrusionSecondLightLevel )
                             {
                                 double fExtrusionSecondLightLevel = 0;
                                 if ( rrProp.Value >>= fExtrusionSecondLightLevel )
                                     AddOpt( DFF_Prop_c3DFillIntensity, (sal_Int32)( fExtrusionSecondLightLevel * 655.36 ) );
                             }
-                            else if ( rrProp.Name.equals( sExtrusionFirstLightDirection ) )
+                            else if ( rrProp.Name == sExtrusionFirstLightDirection )
                             {
                                 drawing::Direction3D aExtrusionFirstLightDirection;
                                 if ( rrProp.Value >>= aExtrusionFirstLightDirection )
@@ -2802,7 +2802,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     AddOpt( DFF_Prop_c3DKeyZ, (sal_Int32)aExtrusionFirstLightDirection.DirectionZ  );
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionSecondLightDirection ) )
+                            else if ( rrProp.Name == sExtrusionSecondLightDirection )
                             {
                                 drawing::Direction3D aExtrusionSecondLightPosition;
                                 if ( rrProp.Value >>= aExtrusionSecondLightPosition )
@@ -2812,7 +2812,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     AddOpt( DFF_Prop_c3DFillZ, (sal_Int32)aExtrusionSecondLightPosition.DirectionZ  );
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionMetal ) )
+                            else if ( rrProp.Name == sExtrusionMetal )
                             {
                                 bool bExtrusionMetal;
                                 if ( rrProp.Value >>= bExtrusionMetal )
@@ -2824,7 +2824,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nLightFaceFlags &=~4;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionShadeMode ) )
+                            else if ( rrProp.Name == sExtrusionShadeMode )
                             {
                                 drawing::ShadeMode eExtrusionShadeMode;
                                 if ( rrProp.Value >>= eExtrusionShadeMode )
@@ -2847,7 +2847,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     AddOpt( DFF_Prop_c3DRenderMode, nRenderMode );
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionRotateAngle ) )
+                            else if ( rrProp.Name == sExtrusionRotateAngle )
                             {
                                 double fExtrusionAngleX = 0;
                                 double fExtrusionAngleY = 0;
@@ -2860,7 +2860,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     AddOpt( DFF_Prop_c3DYRotationAngle, (sal_Int32)fExtrusionAngleY );
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionRotationCenter ) )
+                            else if ( rrProp.Name == sExtrusionRotationCenter )
                             {
                                 drawing::Direction3D aExtrusionRotationCenter;
                                 if ( rrProp.Value >>= aExtrusionRotationCenter )
@@ -2871,13 +2871,13 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     nFillHarshFlags &=~8; // don't use AutoRotationCenter;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionShininess ) )
+                            else if ( rrProp.Name == sExtrusionShininess )
                             {
                                 double fExtrusionShininess = 0;
                                 if ( rrProp.Value >>= fExtrusionShininess )
                                     AddOpt( DFF_Prop_c3DShininess, (sal_Int32)( fExtrusionShininess * 655.36 ) );
                             }
-                            else if ( rrProp.Name.equals( sExtrusionSkew ) )
+                            else if ( rrProp.Name == sExtrusionSkew )
                             {
                                 double fSkewAmount = 0;
                                 double fSkewAngle = 0;
@@ -2888,13 +2888,13 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     AddOpt( DFF_Prop_c3DSkewAngle, (sal_Int32)( fSkewAngle * 65536 ) );
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionSpecularity ) )
+                            else if ( rrProp.Name == sExtrusionSpecularity )
                             {
                                 double fExtrusionSpecularity = 0;
                                 if ( rrProp.Value >>= fExtrusionSpecularity )
                                     AddOpt( DFF_Prop_c3DSpecularAmt, (sal_Int32)( fExtrusionSpecularity * 1333 ) );
                             }
-                            else if ( rrProp.Name.equals( sExtrusionProjectionMode ) )
+                            else if ( rrProp.Name == sExtrusionProjectionMode )
                             {
                                 drawing::ProjectionMode eExtrusionProjectionMode;
                                 if ( rrProp.Value >>= eExtrusionProjectionMode )
@@ -2906,7 +2906,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nFillHarshFlags &=~4;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionViewPoint ) )
+                            else if ( rrProp.Name == sExtrusionViewPoint )
                             {
                                 drawing::Position3D aExtrusionViewPoint;
                                 if ( rrProp.Value >>= aExtrusionViewPoint )
@@ -2919,7 +2919,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     AddOpt( DFF_Prop_c3DZViewpoint, (sal_Int32)aExtrusionViewPoint.PositionZ  );
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionOrigin ) )
+                            else if ( rrProp.Name == sExtrusionOrigin )
                             {
                                 double fExtrusionOriginX = 0;
                                 double fExtrusionOriginY = 0;
@@ -2930,7 +2930,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     AddOpt( DFF_Prop_c3DOriginY, (sal_Int32)( fExtrusionOriginY * 65536 ) );
                                 }
                             }
-                            else if ( rrProp.Name.equals( sExtrusionColor ) )
+                            else if ( rrProp.Name == sExtrusionColor )
                             {
                                 bool bExtrusionColor;
                                 if ( rrProp.Value >>= bExtrusionColor )
@@ -2957,7 +2957,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             AddOpt( DFF_Prop_fc3DFillHarsh, nFillHarshFlags );
                     }
                 }
-                else if ( rProp.Name.equals( sEquations ) )
+                else if ( rProp.Name == sEquations )
                 {
                     if ( !bIsDefaultObject )
                     {
@@ -2992,7 +2992,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         }
                     }
                 }
-                else if ( rProp.Name.equals( sPath ) )
+                else if ( rProp.Name == sPath )
                 {
                     uno::Sequence< beans::PropertyValue > aPathPropSeq;
                     if ( rProp.Value >>= aPathPropSeq )
@@ -3017,7 +3017,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             const OUString sPathStretchY                       ( "StretchY"  );
                             const OUString sPathTextFrames                     ( "TextFrames"  );
 
-                            if ( rrProp.Name.equals( sPathExtrusionAllowed ) )
+                            if ( rrProp.Name == sPathExtrusionAllowed )
                             {
                                 bool bExtrusionAllowed;
                                 if ( rrProp.Value >>= bExtrusionAllowed )
@@ -3029,7 +3029,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nPathFlags &=~16;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sPathConcentricGradientFillAllowed ) )
+                            else if ( rrProp.Name == sPathConcentricGradientFillAllowed )
                             {
                                 bool bConcentricGradientFillAllowed;
                                 if ( rrProp.Value >>= bConcentricGradientFillAllowed )
@@ -3041,7 +3041,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nPathFlags &=~2;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sPathTextPathAllowed ) )
+                            else if ( rrProp.Name == sPathTextPathAllowed )
                             {
                                 bool bTextPathAllowed;
                                 if ( rrProp.Value >>= bTextPathAllowed )
@@ -3053,7 +3053,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nPathFlags &=~4;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sPathCoordinates ) )
+                            else if ( rrProp.Name == sPathCoordinates )
                             {
                                 if ( !bIsDefaultObject )
                                 {
@@ -3061,7 +3061,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     bPathCoordinatesProp = true;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sPathGluePoints ) )
+                            else if ( rrProp.Name == sPathGluePoints )
                             {
                                 if ( !bIsDefaultObject )
                                 {
@@ -3097,13 +3097,13 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     }
                                 }
                             }
-                            else if ( rrProp.Name.equals( sPathGluePointType ) )
+                            else if ( rrProp.Name == sPathGluePointType )
                             {
                                 sal_Int16 nGluePointType = sal_Int16();
                                 if ( rrProp.Value >>= nGluePointType )
                                     AddOpt( DFF_Prop_connectorType, (sal_uInt16)nGluePointType );
                             }
-                            else if ( rrProp.Name.equals( sPathSegments ) )
+                            else if ( rrProp.Name == sPathSegments )
                             {
                                 if ( !bIsDefaultObject )
                                 {
@@ -3225,7 +3225,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     }
                                 }
                             }
-                            else if ( rrProp.Name.equals( sPathStretchX ) )
+                            else if ( rrProp.Name == sPathStretchX )
                             {
                                 if ( !bIsDefaultObject )
                                 {
@@ -3234,7 +3234,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         AddOpt( DFF_Prop_stretchPointX, nStretchX );
                                 }
                             }
-                            else if ( rrProp.Name.equals( sPathStretchY ) )
+                            else if ( rrProp.Name == sPathStretchY )
                             {
                                 if ( !bIsDefaultObject )
                                 {
@@ -3243,7 +3243,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         AddOpt( DFF_Prop_stretchPointY, nStretchY );
                                 }
                             }
-                            else if ( rrProp.Name.equals( sPathTextFrames ) )
+                            else if ( rrProp.Name == sPathTextFrames )
                             {
                                 if ( !bIsDefaultObject )
                                 {
@@ -3288,7 +3288,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             AddOpt( DFF_Prop_fFillOK, nPathFlags );
                     }
                 }
-                else if ( rProp.Name.equals( sTextPath ) )
+                else if ( rProp.Name == sTextPath )
                 {
                     uno::Sequence< beans::PropertyValue > aTextPathPropSeq;
                     if ( rProp.Value >>= aTextPathPropSeq )
@@ -3306,7 +3306,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             const OUString sTextPathScaleX     ( "ScaleX"  );
                             const OUString sSameLetterHeights  ( "SameLetterHeights"  );
 
-                            if ( rrProp.Name.equals( sTextPath ) )
+                            if ( rrProp.Name == sTextPath )
                             {
                                 bool bTextPathOn;
                                 if ( rrProp.Value >>= bTextPathOn )
@@ -3325,7 +3325,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nTextPathFlags &=~0x4000;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sTextPathMode ) )
+                            else if ( rrProp.Name == sTextPathMode )
                             {
                                 css::drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
                                 if ( rrProp.Value >>= eTextPathMode )
@@ -3338,7 +3338,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nTextPathFlags |= 0x500;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sTextPathScaleX ) )
+                            else if ( rrProp.Name == sTextPathScaleX )
                             {
                                 bool bTextPathScaleX;
                                 if ( rrProp.Value >>= bTextPathScaleX )
@@ -3350,7 +3350,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nTextPathFlags &=~0x40;
                                 }
                             }
-                            else if ( rrProp.Name.equals( sSameLetterHeights ) )
+                            else if ( rrProp.Name == sSameLetterHeights )
                             {
                                 bool bSameLetterHeights;
                                 if ( rrProp.Value >>= bSameLetterHeights )
@@ -3490,7 +3490,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             AddOpt( DFF_Prop_gtextFStrikethrough, nTextPathFlags );
                     }
                 }
-                else if ( rProp.Name.equals( sHandles ) )
+                else if ( rProp.Name == sHandles )
                 {
                     if ( !bIsDefaultObject )
                     {
@@ -3534,7 +3534,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         const OUString sRangeYMinimum      ( "RangeYMinimum"  );
                                         const OUString sRangeYMaximum      ( "RangeYMaximum"  );
 
-                                        if ( rPropVal.Name.equals( sPosition ) )
+                                        if ( rPropVal.Name == sPosition )
                                         {
                                             css::drawing::EnhancedCustomShapeParameterPair aPosition;
                                             if ( rPropVal.Value >>= aPosition )
@@ -3543,7 +3543,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 GetValueForEnhancedCustomShapeHandleParameter( nYPosition, aPosition.Second );
                                             }
                                         }
-                                        else if ( rPropVal.Name.equals( sMirroredX ) )
+                                        else if ( rPropVal.Name == sMirroredX )
                                         {
                                             bool bMirroredX;
                                             if ( rPropVal.Value >>= bMirroredX )
@@ -3552,7 +3552,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                     nFlags |= 1;
                                             }
                                         }
-                                        else if ( rPropVal.Name.equals( sMirroredY ) )
+                                        else if ( rPropVal.Name == sMirroredY )
                                         {
                                             bool bMirroredY;
                                             if ( rPropVal.Value >>= bMirroredY )
@@ -3561,7 +3561,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                     nFlags |= 2;
                                             }
                                         }
-                                        else if ( rPropVal.Name.equals( sSwitched ) )
+                                        else if ( rPropVal.Name == sSwitched )
                                         {
                                             bool bSwitched;
                                             if ( rPropVal.Value >>= bSwitched )
@@ -3570,7 +3570,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                     nFlags |= 4;
                                             }
                                         }
-                                        else if ( rPropVal.Name.equals( sPolar ) )
+                                        else if ( rPropVal.Name == sPolar )
                                         {
                                             css::drawing::EnhancedCustomShapeParameterPair aPolar;
                                             if ( rPropVal.Value >>= aPolar )
@@ -3582,7 +3582,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 nFlags |= 8;
                                             }
                                         }
-                                        else if ( rPropVal.Name.equals( sRadiusRangeMinimum ) )
+                                        else if ( rPropVal.Name == sRadiusRangeMinimum )
                                         {
                                             nYRangeMin = (sal_Int32)0xff4c0000; // the range of angles seems to be a not
                                             nYRangeMax = (sal_Int32)0x00b40000; // used feature, so we are defaulting this
@@ -3595,7 +3595,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 nFlags |= 0x2000;
                                             }
                                         }
-                                        else if ( rPropVal.Name.equals( sRadiusRangeMaximum ) )
+                                        else if ( rPropVal.Name == sRadiusRangeMaximum )
                                         {
                                             nYRangeMin = (sal_Int32)0xff4c0000; // the range of angles seems to be a not
                                             nYRangeMax = (sal_Int32)0x00b40000; // used feature, so we are defaulting this
@@ -3608,7 +3608,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 nFlags |= 0x2000;
                                             }
                                         }
-                                        else if ( rPropVal.Name.equals( sRangeXMinimum ) )
+                                        else if ( rPropVal.Name == sRangeXMinimum )
                                         {
                                             css::drawing::EnhancedCustomShapeParameter aXRangeMinimum;
                                             if ( rPropVal.Value >>= aXRangeMinimum )
@@ -3618,7 +3618,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 nFlags |= 0x20;
                                             }
                                         }
-                                        else if ( rPropVal.Name.equals( sRangeXMaximum ) )
+                                        else if ( rPropVal.Name == sRangeXMaximum )
                                         {
                                             css::drawing::EnhancedCustomShapeParameter aXRangeMaximum;
                                             if ( rPropVal.Value >>= aXRangeMaximum )
@@ -3628,7 +3628,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 nFlags |= 0x20;
                                             }
                                         }
-                                        else if ( rPropVal.Name.equals( sRangeYMinimum ) )
+                                        else if ( rPropVal.Name == sRangeYMinimum )
                                         {
                                             css::drawing::EnhancedCustomShapeParameter aYRangeMinimum;
                                             if ( rPropVal.Value >>= aYRangeMinimum )
@@ -3638,7 +3638,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 nFlags |= 0x20;
                                             }
                                         }
-                                        else if ( rPropVal.Name.equals( sRangeYMaximum ) )
+                                        else if ( rPropVal.Name == sRangeYMaximum )
                                         {
                                             css::drawing::EnhancedCustomShapeParameter aYRangeMaximum;
                                             if ( rPropVal.Value >>= aYRangeMaximum )
@@ -3674,7 +3674,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         }
                     }
                 }
-                else if ( rProp.Name.equals( sAdjustmentValues ) )
+                else if ( rProp.Name == sAdjustmentValues )
                 {
                     // it is required, that the information which handle is polar has already be read,
                     // so we are able to change the polar value to a fixed float

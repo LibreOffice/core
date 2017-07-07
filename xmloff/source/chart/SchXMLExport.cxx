@@ -289,7 +289,7 @@ public:
 
         return ( xProp.is() &&
                  (xProp->getPropertyValue( "Role" ) >>= aRole ) &&
-                 m_aRole.equals( aRole ));
+                 m_aRole == aRole );
     }
 
 private:
@@ -939,7 +939,7 @@ bool lcl_exportDomainForThisSequence( const Reference< chart2::data::XDataSequen
         OUString aRange( lcl_ConvertRange( rValues->getSourceRangeRepresentation(), xNewDoc ) );
 
         //work around error in OOo 2.0 (problems with multiple series having a domain element)
-        if( rFirstRangeForThisDomainIndex.isEmpty() || !aRange.equals(rFirstRangeForThisDomainIndex) )
+        if( rFirstRangeForThisDomainIndex.isEmpty() || aRange != rFirstRangeForThisDomainIndex )
         {
             rExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, aRange);
             SvXMLElementExport aDomain( rExport, XML_NAMESPACE_CHART, XML_DOMAIN, true, true );
@@ -2601,7 +2601,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 if( xSeqProp.is())
                                     xSeqProp->getPropertyValue("Role") >>= aRole;
                                 // "main" sequence
-                                if( aRole.equals( aLabelRole ))
+                                if( aRole == aLabelRole )
                                 {
                                     xValuesSeq.set( xTempValueSeq );
                                     xLabelSeq.set( aSeqCnt[nSeqIdx]->getLabel());

@@ -467,7 +467,7 @@ IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn, void )
             //if it's not the 'no suggestions' entry
             if(sWrong == sCurrentErrorText &&
                     m_pSuggestionLB->IsEnabled() && m_pSuggestionLB->GetSelectEntryCount() > 0 &&
-                    !m_sNoSuggestionsST.equals(m_pSuggestionLB->GetSelectEntry()))
+                    m_sNoSuggestionsST != m_pSuggestionLB->GetSelectEntry())
             {
                 sCurrentErrorText = m_pSuggestionLB->GetSelectEntry();
             }
@@ -538,7 +538,7 @@ OUString SpellDialog::getReplacementString() const
 
     if(m_pSuggestionLB->IsEnabled() &&
             m_pSuggestionLB->GetSelectEntryCount()>0 &&
-            !m_sNoSuggestionsST.equals(m_pSuggestionLB->GetSelectEntry()))
+            m_sNoSuggestionsST != m_pSuggestionLB->GetSelectEntry())
         sReplacement = m_pSuggestionLB->GetSelectEntry();
 
     return getDotReplacementString(sOrigString, sReplacement);
@@ -711,7 +711,7 @@ void SpellDialog::Impl_Restore(bool bUseSavedSentence)
 
 IMPL_LINK_NOARG(SpellDialog, IgnoreHdl, Button*, void)
 {
-    if (m_sResumeST.equals(m_pIgnorePB->GetText()))
+    if (m_sResumeST == m_pIgnorePB->GetText())
     {
         Impl_Restore(false);
     }
@@ -1727,7 +1727,7 @@ void SentenceEditWindow_Impl::RestoreCurrentError()
     if( pAttrib )
     {
         const SpellErrorDescription& rDesc = pAttrib->GetErrorDescription();
-        if( !rDesc.sErrorText.equals( GetErrorText() ) )
+        if( rDesc.sErrorText != GetErrorText() )
             ChangeMarkedWord(rDesc.sErrorText, LanguageTag::convertToLanguageType( rDesc.aLocale ));
     }
 }

@@ -319,7 +319,7 @@ ScVbaWindow::getCaption()
             //  name == title + extension ( .csv, ,odt, .xls )
             //  etc. then also use the name
 
-            if ( !sTitle.equals( sName ) )
+            if ( sTitle != sName )
             {
                 // starts with title
                 if ( sName.startsWith( sTitle ) )

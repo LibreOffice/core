@@ -147,7 +147,7 @@ ScVbaOLEObjects::getItemByStringIndex( const OUString& sIndex )
             uno::Reference< drawing::XControlShape > xControlShape( aUnoObj, uno::UNO_QUERY_THROW );
             uno::Reference< awt::XControlModel > xControlModel( xControlShape->getControl() );
             uno::Reference< container::XNamed > xNamed( xControlModel, uno::UNO_QUERY_THROW );
-            if( sIndex.equals( xNamed->getName() ))
+            if( sIndex == xNamed->getName() )
             {
                 return createCollectionObject( aUnoObj );
             }

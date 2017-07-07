@@ -222,7 +222,7 @@ LanguageType SvtLanguageTableImpl::GetType( const OUString& rStr ) const
 
     for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
-        if (ResStringArray::GetString( i ).equals(rStr))
+        if (ResStringArray::GetString( i ) == rStr)
         {
             eType = LanguageType( GetValue( i ) );
             break;

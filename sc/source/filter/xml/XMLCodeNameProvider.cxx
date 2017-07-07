@@ -66,7 +66,7 @@ sal_Bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
     OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
-        if( mpDoc->GetName( i, sSheetName ) && sSheetName.equals(aName) )
+        if( mpDoc->GetName( i, sSheetName ) && sSheetName == aName )
         {
             mpDoc->GetCodeName( i, sCodeName );
             return !sCodeName.isEmpty();
@@ -93,7 +93,7 @@ uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
     OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
-        if( mpDoc->GetName( i, sSheetName ) && sSheetName.equals(aName) )
+        if( mpDoc->GetName( i, sSheetName ) && sSheetName == aName )
         {
             mpDoc->GetCodeName( i, sCodeName );
             aProps[0].Value <<= sCodeName;

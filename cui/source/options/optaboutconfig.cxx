@@ -303,8 +303,8 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             SvTreeListEntries::iterator it = std::find_if(m_modifiedPrefBoxEntries.begin(), m_modifiedPrefBoxEntries.end(),
               [&sPath, &sPropertyName](std::unique_ptr<SvTreeListEntry> const& pEntry) -> bool
               {
-                  return static_cast<UserData*>(pEntry->GetUserData())->sPropertyPath.equals(sPath)
-                      && static_cast<SvLBoxString&>(pEntry->GetItem(2)).GetText().equals(sPropertyName);
+                  return static_cast<UserData*>(pEntry->GetUserData())->sPropertyPath == sPath
+                      && static_cast<SvLBoxString&>(pEntry->GetItem(2)).GetText() == sPropertyName;
               }
             );
 
@@ -771,8 +771,8 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                 SvTreeListEntries::iterator it = std::find_if(m_prefBoxEntries.begin(), m_prefBoxEntries.end(),
                   [&pUserData, &sPropertyName](std::unique_ptr<SvTreeListEntry> const& rpEntry) -> bool
                   {
-                      return static_cast<UserData*>(rpEntry->GetUserData())->sPropertyPath.equals(pUserData->sPropertyPath)
-                          && static_cast<SvLBoxString&>(rpEntry->GetItem(2)).GetText().equals(sPropertyName);
+                      return static_cast<UserData*>(rpEntry->GetUserData())->sPropertyPath == pUserData->sPropertyPath
+                          && static_cast<SvLBoxString&>(rpEntry->GetItem(2)).GetText() == sPropertyName;
                   }
                 );
                 if (it != m_prefBoxEntries.end())
@@ -783,8 +783,8 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                                 m_modifiedPrefBoxEntries.begin(), m_modifiedPrefBoxEntries.end(),
                                 [&pUserData, &sPropertyName](std::unique_ptr<SvTreeListEntry> const& rpEntry) -> bool
                                 {
-                                    return static_cast<UserData*>(rpEntry->GetUserData())->sPropertyPath.equals(pUserData->sPropertyPath)
-                                        && static_cast<SvLBoxString&>(rpEntry->GetItem(2)).GetText().equals(sPropertyName);
+                                    return static_cast<UserData*>(rpEntry->GetUserData())->sPropertyPath == pUserData->sPropertyPath
+                                        && static_cast<SvLBoxString&>(rpEntry->GetItem(2)).GetText() == sPropertyName;
                                 }
                     );
 

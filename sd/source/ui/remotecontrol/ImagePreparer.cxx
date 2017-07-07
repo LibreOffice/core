@@ -230,7 +230,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
             uno::Reference<lang::XServiceName> xServiceName (
                 xIndexAccess->getByIndex(nIndex), UNO_QUERY);
             if (xServiceName.is()
-                && xServiceName->getServiceName().equals(sNotesShapeName))
+                && xServiceName->getServiceName() == sNotesShapeName)
             {
                 uno::Reference<text::XTextRange> xText (xServiceName, UNO_QUERY);
                 if (xText.is())
@@ -246,7 +246,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
                 if (xShapeDescriptor.is())
                 {
                     OUString sType (xShapeDescriptor->getShapeType());
-                    if (sType.equals(sNotesShapeName) || sType.equals(sTextShapeName))
+                    if (sType == sNotesShapeName || sType == sTextShapeName)
                     {
                         uno::Reference<text::XTextRange> xText (
                             xIndexAccess->getByIndex(nIndex), UNO_QUERY);

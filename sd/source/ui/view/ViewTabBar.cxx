@@ -235,7 +235,7 @@ vcl::Window* ViewTabBar::GetAnchorWindow(
 void SAL_CALL  ViewTabBar::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    if (rEvent.Type.equals(FrameworkHelper::msResourceActivationEvent)
+    if (rEvent.Type == FrameworkHelper::msResourceActivationEvent
         && rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix)
         && rEvent.ResourceId->isBoundTo(mxViewTabBarId->getAnchor(), AnchorBindingMode_DIRECT))
     {

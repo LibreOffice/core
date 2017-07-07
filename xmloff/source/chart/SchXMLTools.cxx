@@ -546,7 +546,7 @@ uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropSty
         if( nIdx == -1 )
             continue;
         OUString aPropName = rMapper->GetEntryAPIName( nIdx );
-        if(rPropertyName.equals(aPropName))
+        if(rPropertyName == aPropName)
             return aPropIter->maValue;
     }
     return aRet;

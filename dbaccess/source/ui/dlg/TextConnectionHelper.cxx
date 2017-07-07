@@ -425,7 +425,7 @@ namespace dbaui
             OUString  sTVal(
                 static_cast< sal_Unicode >( rList.getToken( (i+1), nTok ).toInt32() ));
 
-            if( sTVal.equals(rVal) )
+            if( sTVal == rVal )
             {
                 rBox.SetText( rList.getToken( i, nTok ) );
                 break;

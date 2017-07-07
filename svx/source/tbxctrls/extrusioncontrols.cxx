@@ -435,7 +435,7 @@ void ExtrusionDepthWindow::statusChanged(
     const css::frame::FeatureStateEvent& Event
 )
 {
-    if( Event.FeatureURL.Main.equals( msExtrusionDepth ) )
+    if( Event.FeatureURL.Main == msExtrusionDepth )
     {
         if( !Event.IsEnabled )
         {
@@ -448,7 +448,7 @@ void ExtrusionDepthWindow::statusChanged(
                 implSetDepth( fValue );
         }
     }
-    else if( Event.FeatureURL.Main.equals( msMetricUnit ) )
+    else if( Event.FeatureURL.Main == msMetricUnit )
     {
         if( Event.IsEnabled )
         {

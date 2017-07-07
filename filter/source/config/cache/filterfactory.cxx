@@ -312,7 +312,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
             if (
                 (!sDocumentService.isEmpty()                   ) &&
                 (sDocumentService != QUERY_CONSTVALUE_ALL      ) &&
-                (!sCheckValue.equals(sDocumentService)         )
+                (sCheckValue != sDocumentService         )
             )
             {
                 continue; // ignore filter -> try next one!

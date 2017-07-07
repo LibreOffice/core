@@ -337,24 +337,24 @@ namespace svt
                 OUString const sTypeName( i_valueType.getTypeName() );
                 TypeClass const eTypeClass = i_valueType.getTypeClass();
 
-                if ( sTypeName.equals( ::cppu::UnoType< DateTime >::get().getTypeName() ) )
+                if ( sTypeName == ::cppu::UnoType< DateTime >::get().getTypeName() )
                 {
                     o_formatter.reset( new DateTimeNormalization( io_data.xNumberFormatter ) );
                 }
-                else if ( sTypeName.equals( ::cppu::UnoType< css::util::Date >::get().getTypeName() ) )
+                else if ( sTypeName == ::cppu::UnoType< css::util::Date >::get().getTypeName() )
                 {
                     o_formatter.reset( new DateNormalization( io_data.xNumberFormatter ) );
                 }
-                else if ( sTypeName.equals( ::cppu::UnoType< css::util::Time >::get().getTypeName() ) )
+                else if ( sTypeName == ::cppu::UnoType< css::util::Time >::get().getTypeName() )
                 {
                     o_formatter.reset( new TimeNormalization( io_data.xNumberFormatter ) );
                 }
-                else if ( sTypeName.equals( ::cppu::UnoType< sal_Bool >::get().getTypeName() ) )
+                else if ( sTypeName == ::cppu::UnoType< sal_Bool >::get().getTypeName() )
                 {
                     o_formatter.reset( new BooleanNormalization( io_data.xNumberFormatter ) );
                 }
-                else if (   sTypeName.equals( ::cppu::UnoType< double >::get().getTypeName() )
-                        ||  sTypeName.equals( ::cppu::UnoType< float >::get().getTypeName() )
+                else if (   sTypeName == ::cppu::UnoType< double >::get().getTypeName()
+                        ||  sTypeName == ::cppu::UnoType< float >::get().getTypeName()
                         )
                 {
                     o_formatter.reset( new DoubleNormalization( io_data.xNumberFormatter ) );
