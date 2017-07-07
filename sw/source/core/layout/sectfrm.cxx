@@ -1515,9 +1515,10 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
     SwLayoutFrame *pLayLeaf;
 
     SwLayoutFrame* pCellLeaf = nullptr;
-    if (IsInTab())
+    if (IsInTab() && !IsInTableInSection(this))
     {
-        // We are in a table, see if there is a follow cell frame created already.
+        // We are in a table (which is itself not in a section), see if there
+        // is a follow cell frame created already.
         pCellLeaf = GetNextCellLeaf();
         if (!pCellLeaf)
         {
