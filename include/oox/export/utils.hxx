@@ -29,7 +29,7 @@ inline OString I64S_(sal_Int64 x) { return OString::number(x); }
 #define I32S(x) I32S_(x).getStr()
 #define I64S(x) I64S_(x).getStr()
 #define IS(x) OString::number( x ).getStr()
-#define BS(x) (x ? "1":"0")
+inline const char* BS(bool x) { return x ? "1" : "0"; }
 #define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 
 static inline sal_Int64 PPTtoEMU( sal_Int32 nPPT )
