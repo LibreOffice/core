@@ -139,9 +139,9 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  )
     Sequence< Type > aOldTypes = OStatement_BASE::getTypes();
     if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() )
     {
-        std::remove(aOldTypes.begin(), aOldTypes.end(),
-                    cppu::UnoType<XGeneratedResultSet>::get());
-        aOldTypes.realloc(aOldTypes.getLength() - 1);
+        auto newEnd = std::remove(aOldTypes.begin(), aOldTypes.end(),
+                                  cppu::UnoType<XGeneratedResultSet>::get());
+        aOldTypes.realloc(std::distance(aOldTypes.begin(), newEnd));
     }
 
     return ::comphelper::concatSequences(aTypes.getTypes(),aOldTypes);
