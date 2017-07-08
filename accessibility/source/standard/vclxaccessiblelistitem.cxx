@@ -506,7 +506,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getText()
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return OCommonAccessibleText::getText();
+    return implGetText();
 }
 
 OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )

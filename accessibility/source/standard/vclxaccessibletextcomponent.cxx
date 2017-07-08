@@ -311,7 +311,7 @@ OUString VCLXAccessibleTextComponent::getText()
 {
     OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::getText();
+    return implGetText();
 }
 
 
