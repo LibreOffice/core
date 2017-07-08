@@ -282,12 +282,6 @@ namespace comphelper
     }
 
 
-    OUString OCommonAccessibleText::getText()
-    {
-        return implGetText();
-    }
-
-
     OUString OCommonAccessibleText::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {
         OUString sText( implGetText() );
@@ -816,7 +810,7 @@ namespace comphelper
     {
         OExternalLockGuard aGuard( this );
 
-        return OCommonAccessibleText::getText();
+        return implGetText();
     }
 
 

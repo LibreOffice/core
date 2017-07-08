@@ -378,7 +378,7 @@ sal_Bool SAL_CALL Paragraph::setSelection(::sal_Int32 nStartIndex,
 OUString SAL_CALL Paragraph::getText()
 {
     checkDisposed();
-    return OCommonAccessibleText::getText();
+    return implGetText();
 }
 
 // virtual

@@ -323,7 +323,7 @@ OUString VCLXAccessibleMenuItem::getText()
 {
     OExternalLockGuard aGuard( this );
 
-    return OCommonAccessibleText::getText();
+    return implGetText();
 }
 
 

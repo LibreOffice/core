@@ -76,8 +76,6 @@ namespace comphelper
         sal_Int32 SAL_CALL getSelectionStart();
         /// @throws css::uno::RuntimeException
         sal_Int32 SAL_CALL getSelectionEnd();
-        /// @throws css::uno::RuntimeException
-        OUString SAL_CALL getText();
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::uno::RuntimeException
         OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex );
