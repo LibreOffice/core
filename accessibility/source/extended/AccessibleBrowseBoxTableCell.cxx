@@ -280,7 +280,7 @@ namespace accessibility
     {
         SolarMethodGuard aGuard(getMutex());
 
-        return OCommonAccessibleText::getText(  );
+        return implGetText(  );
     }
     OUString SAL_CALL AccessibleBrowseBoxTableCell::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {

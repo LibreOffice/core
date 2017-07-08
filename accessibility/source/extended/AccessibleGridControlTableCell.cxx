@@ -287,7 +287,7 @@ namespace accessibility
     {
         SolarMutexGuard aSolarGuard;
 
-        return OCommonAccessibleText::getText(  );
+        return implGetText(  );
     }
     OUString SAL_CALL AccessibleGridControlTableCell::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {

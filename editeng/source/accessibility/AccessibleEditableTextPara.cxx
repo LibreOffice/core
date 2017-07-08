@@ -600,7 +600,7 @@ namespace accessibility
 
     void AccessibleEditableTextPara::TextChanged()
     {
-        OUString aCurrentString( OCommonAccessibleText::getText() );
+        OUString aCurrentString( implGetText() );
         uno::Any aDeleted;
         uno::Any aInserted;
         if( OCommonAccessibleText::implInitTextChangedEvent( maLastTextString, aCurrentString,
@@ -1453,7 +1453,7 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getText: paragraph index value overflow");
 
-        return OCommonAccessibleText::getText();
+        return implGetText();
     }
 
     OUString SAL_CALL AccessibleEditableTextPara::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
