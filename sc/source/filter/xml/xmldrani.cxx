@@ -133,39 +133,39 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                 break;
                 case XML_ELEMENT( TABLE, XML_IS_SELECTION ):
                 {
-                    bIsSelection = IsXMLToken( aIter.toCString(), XML_TRUE );
+                    bIsSelection = IsXMLToken( aIter, XML_TRUE );
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_ON_UPDATE_KEEP_STYLES ):
                 {
-                    bKeepFormats = IsXMLToken( aIter.toCString(), XML_TRUE );
+                    bKeepFormats = IsXMLToken( aIter, XML_TRUE );
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_ON_UPDATE_KEEP_SIZE ):
                 {
-                    bMoveCells = !IsXMLToken( aIter.toCString(), XML_TRUE );
+                    bMoveCells = !IsXMLToken( aIter, XML_TRUE );
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_HAS_PERSISTENT_DATA ):
                 {
-                    bStripData = !IsXMLToken( aIter.toCString(), XML_TRUE );
+                    bStripData = !IsXMLToken( aIter, XML_TRUE );
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_ORIENTATION ):
                 {
-                    bByRow = !IsXMLToken( aIter.toCString(), XML_COLUMN );
+                    bByRow = !IsXMLToken( aIter, XML_COLUMN );
                     mpQueryParam->bByRow = bByRow;
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_CONTAINS_HEADER ):
                 {
-                    bHasHeader = IsXMLToken( aIter.toCString(), XML_TRUE );
+                    bHasHeader = IsXMLToken( aIter, XML_TRUE );
                     mpQueryParam->bHasHeader = bHasHeader;
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_DISPLAY_FILTER_BUTTONS ):
                 {
-                    bAutoFilter = IsXMLToken( aIter.toCString(), XML_TRUE );
+                    bAutoFilter = IsXMLToken( aIter, XML_TRUE );
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):

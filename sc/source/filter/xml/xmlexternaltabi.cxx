@@ -315,7 +315,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
                 {
                     if ( !it.isEmpty() )
                     {
-                        mfCellValue = IsXMLToken( it.toCString(), XML_TRUE ) ? 1.0 : 0.0;
+                        mfCellValue = IsXMLToken( it, XML_TRUE ) ? 1.0 : 0.0;
                         mbIsNumeric = true;
                         mbIsEmpty = false;
                     }
