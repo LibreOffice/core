@@ -230,11 +230,9 @@ std::vector< Reference< chart2::data::XLabeledDataSequence > >
                                const OUString& aRole, bool bMatchPrefix /* = false */ )
 {
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVec;
-    std::remove_copy_if( aDataSequences.begin(), aDataSequences.end(),
+    std::copy_if( aDataSequences.begin(), aDataSequences.end(),
                            std::back_inserter( aResultVec ),
-                           [&aRole, bMatchPrefix](const Reference< chart2::data::XLabeledDataSequence > & xSeq)
-                           {return !(lcl_MatchesRole(aRole, bMatchPrefix).operator()(xSeq));});
-                            //TODO replace lambda with std::not_fn(lcl_MatchesRole(aRole, bMatchPrefix) in C++17
+                           lcl_MatchesRole(aRole, bMatchPrefix) );
     return aResultVec;
 }
 
