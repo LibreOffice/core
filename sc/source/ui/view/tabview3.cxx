@@ -2289,7 +2289,23 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             Point aStart = aViewData.GetScrPos( nCol1, nRow1, (ScSplitPos) i );
             Point aEnd   = aViewData.GetScrPos( nCol2+1, nRow2+1, (ScSplitPos) i );
             if ( eMode == SC_UPDATE_ALL )
-                aEnd.X() = bLayoutRTL ? 0 : (bIsTiledRendering ? aEnd.X() : pGridWin[i]->GetOutputSizePixel().Width());
+            {
+                if (bIsTiledRendering)
+                {
+                    // When a cell content is deleted we have no clue about
+                    // the width of the embedded text.
+                    // Anyway, clients will ask only for tiles that overlaps
+                    // the visible area.
+                    // Remember that wsd expects int and that aEnd.X() is
+                    // in pixels and will be converted in twips, before performing
+                    // the lok callback, so we need to avoid that an overflow occurs.
+                    aEnd.X() = bLayoutRTL ? 0 : std::numeric_limits<int>::max() / 1000;
+                }
+                else
+                {
+                    aEnd.X() = bLayoutRTL ? 0 : pGridWin[i]->GetOutputSizePixel().Width();
+                }
+            }
             aEnd.X() -= nLayoutSign;
             aEnd.Y() -= 1;
 
