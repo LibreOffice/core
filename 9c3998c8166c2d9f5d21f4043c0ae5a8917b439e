@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_1e876062",
+        "filename": "filter/source/msfilter/escherex.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-07-09T17:43:40Z",
+      "side": 1,
+      "message": "nice, removing these home-grown reallocations.\n\nshould be possible to push the struct in one go, with:\n\n pSortStruct.push_back({pProp, nPropSize, nPropValue, nPropID});",
+      "range": {
+        "startLine": 225,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 47
+      },
+      "revId": "9c3998c8166c2d9f5d21f4043c0ae5a8917b439e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
