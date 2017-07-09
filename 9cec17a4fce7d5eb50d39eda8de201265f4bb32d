@@ -16,6 +16,24 @@
       "revId": "9cec17a4fce7d5eb50d39eda8de201265f4bb32d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_bb581e58",
+        "filename": "accessibility/source/standard/vclxaccessibleedit.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2017-07-09T10:56:43Z",
+      "side": 1,
+      "message": "Markus think there is a risk if pMultiLineEdit is null, on the previous patch.",
+      "parentUuid": "3a461143_5b49fa8a",
+      "revId": "9cec17a4fce7d5eb50d39eda8de201265f4bb32d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
