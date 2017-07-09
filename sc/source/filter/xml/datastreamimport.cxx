@@ -49,10 +49,10 @@ ScXMLDataStreamContext::ScXMLDataStreamContext(
                 }
                 break;
                 case XML_ELEMENT( CALC_EXT, XML_EMPTY_LINE_REFRESH ):
-                    mbRefreshOnEmpty = IsXMLToken( aIter.toCString(), XML_TRUE );
+                    mbRefreshOnEmpty = IsXMLToken( aIter, XML_TRUE );
                 break;
                 case XML_ELEMENT( CALC_EXT, XML_INSERTION_POSITION ):
-                    meInsertPos = IsXMLToken( aIter.toCString(), XML_TOP ) ?
+                    meInsertPos = IsXMLToken( aIter, XML_TOP ) ?
                         sc::ImportPostProcessData::DataStream::InsertTop :
                         sc::ImportPostProcessData::DataStream::InsertBottom;
                 break;

@@ -254,9 +254,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 {
                     if (!it.isEmpty())
                     {
-                        if ( IsXMLToken( it.toCString(), XML_TRUE ) )
+                        if ( IsXMLToken( it, XML_TRUE ) )
                             fValue = 1.0;
-                        else if ( IsXMLToken( it.toCString(), XML_FALSE ) )
+                        else if ( IsXMLToken( it, XML_FALSE ) )
                             fValue = 0.0;
                         else
                             ::sax::Converter::convertDouble(fValue, it.toString() );

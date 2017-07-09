@@ -58,19 +58,19 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             switch( aIter.getToken() )
             {
             case XML_ELEMENT( TABLE, XML_CASE_SENSITIVE ):
-                if( IsXMLToken( aIter.toCString(), XML_FALSE ) )
+                if( IsXMLToken( aIter, XML_FALSE ) )
                     bIgnoreCase = true;
                 break;
             case XML_ELEMENT( TABLE, XML_PRECISION_AS_SHOWN ):
-                if( IsXMLToken( aIter.toCString(), XML_TRUE ) )
+                if( IsXMLToken( aIter, XML_TRUE ) )
                     bCalcAsShown = true;
                 break;
             case XML_ELEMENT( TABLE, XML_SEARCH_CRITERIA_MUST_APPLY_TO_WHOLE_CELL ):
-                if( IsXMLToken( aIter.toCString(), XML_FALSE ) )
+                if( IsXMLToken( aIter, XML_FALSE ) )
                     bMatchWholeCell = false;
                 break;
             case XML_ELEMENT( TABLE, XML_AUTOMATIC_FIND_LABELS ):
-                if( IsXMLToken( aIter.toCString(), XML_FALSE ) )
+                if( IsXMLToken( aIter, XML_FALSE ) )
                     bLookUpLabels = false;
                 break;
             case XML_ELEMENT( TABLE, XML_NULL_YEAR ):
@@ -80,11 +80,11 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
                 break;
             case XML_ELEMENT( TABLE, XML_USE_REGULAR_EXPRESSIONS ):
                 // Overwrite only the default (regex true) value, not wildcard.
-                if( eSearchType == utl::SearchParam::SearchType::Regexp && IsXMLToken( aIter.toCString(), XML_FALSE ) )
+                if( eSearchType == utl::SearchParam::SearchType::Regexp && IsXMLToken( aIter, XML_FALSE ) )
                     eSearchType = utl::SearchParam::SearchType::Normal;
                 break;
             case XML_ELEMENT( TABLE, XML_USE_WILDCARDS ):
-                if( IsXMLToken( aIter.toCString(), XML_TRUE ) )
+                if( IsXMLToken( aIter, XML_TRUE ) )
                     eSearchType = utl::SearchParam::SearchType::Wildcard;
                 break;
             }

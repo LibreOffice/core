@@ -233,7 +233,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
                 sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
             auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_DISPLAY ) ) );
             if( aIter != pAttribList->end() )
-                bGroupDisplay = IsXMLToken( aIter.toCString(), XML_TRUE );
+                bGroupDisplay = IsXMLToken( aIter, XML_TRUE );
         }
     }
 }
