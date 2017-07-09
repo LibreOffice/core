@@ -28,6 +28,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/postitem.hxx>
@@ -979,6 +980,9 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     const SvxUnderlineItem& rUnderlineItem = static_cast<const SvxUnderlineItem&>(
         pAttr->GetItem( ATTR_FONT_UNDERLINE, pCondItemSet ) );
 
+    const SvxCrossedOutItem& rCrossedOutItem = static_cast<const SvxCrossedOutItem&>(
+        pAttr->GetItem( ATTR_FONT_CROSSEDOUT, pCondItemSet ) );
+
     const SvxColorItem& rColorItem = static_cast<const SvxColorItem&>( pAttr->GetItem(
             ATTR_FONT_COLOR, pCondItemSet ) );
 
@@ -997,10 +1001,11 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     else
         aBgColor = rBrushItem.GetColor();
 
-    bool bBold          = ( WEIGHT_BOLD     <= rWeightItem.GetWeight() );
-    bool bItalic        = ( ITALIC_NONE     != rPostureItem.GetPosture() );
-    bool bUnderline     = ( LINESTYLE_NONE  != rUnderlineItem.GetLineStyle() );
-    bool bSetFontColor  = ( COL_AUTO        != rColorItem.GetValue().GetColor() );  // default is AUTO now
+    bool bBold          = ( WEIGHT_BOLD      <= rWeightItem.GetWeight() );
+    bool bItalic        = ( ITALIC_NONE      != rPostureItem.GetPosture() );
+    bool bUnderline     = ( LINESTYLE_NONE   != rUnderlineItem.GetLineStyle() );
+    bool bCrossedOut    = ( STRIKEOUT_SINGLE <= rCrossedOutItem.GetStrikeout() );
+    bool bSetFontColor  = ( COL_AUTO         != rColorItem.GetValue().GetColor() );  // default is AUTO now
     bool bSetFontName   = ( aHTMLStyle.aFontFamilyName  != rFontItem.GetFamilyName() );
     sal_uInt16 nSetFontSizeNumber = 0;
     sal_uInt32 nFontHeight = rFontHeightItem.GetHeight();
@@ -1102,6 +1107,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
     if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );
     if ( bUnderline )   TAG_ON( OOO_STRING_SVTOOLS_HTML_underline );
+    if ( bCrossedOut )  TAG_ON( OOO_STRING_SVTOOLS_HTML_strikethrough );
 
     if ( bSetFont )
     {
@@ -1199,6 +1205,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         WriteGraphEntry( pGraphEntry );
 
     if ( bSetFont )     TAG_OFF( OOO_STRING_SVTOOLS_HTML_font );
+    if ( bCrossedOut )  TAG_OFF( OOO_STRING_SVTOOLS_HTML_strikethrough );
     if ( bUnderline )   TAG_OFF( OOO_STRING_SVTOOLS_HTML_underline );
     if ( bItalic )      TAG_OFF( OOO_STRING_SVTOOLS_HTML_italic );
     if ( bBold )        TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
