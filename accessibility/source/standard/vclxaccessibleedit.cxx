@@ -444,12 +444,6 @@ sal_Bool VCLXAccessibleEdit::setSelection( sal_Int32 nStartIndex, sal_Int32 nEnd
 }
 
 
-OUString VCLXAccessibleEdit::getText(  )
-{
-    return VCLXAccessibleTextComponent::getText();
-}
-
-
 OUString VCLXAccessibleEdit::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     return VCLXAccessibleTextComponent::getTextRange( nStartIndex, nEndIndex );

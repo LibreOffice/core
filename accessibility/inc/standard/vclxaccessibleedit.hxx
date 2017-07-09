@@ -36,6 +36,8 @@ typedef ::cppu::ImplHelper2<
 
 class VCLXAccessibleEdit final : public VCLXAccessibleTextComponent,
                                  public VCLXAccessibleEdit_BASE
+
+
 {
     friend class VCLXAccessibleBox;
 
@@ -86,8 +88,8 @@ public:
     virtual OUString SAL_CALL getSelectedText(  ) override;
     virtual sal_Int32 SAL_CALL getSelectionStart(  ) override;
     virtual sal_Int32 SAL_CALL getSelectionEnd(  ) override;
+    using VCLXAccessibleTextComponent::getText;
     virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-    virtual OUString SAL_CALL getText(  ) override;
     virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
     virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
