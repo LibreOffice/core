@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_5b49fa8a",
+        "filename": "accessibility/source/standard/vclxaccessibleedit.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-09T10:49:44Z",
+      "side": 1,
+      "message": "original code looked fine to me, can\u0027t see how it could cause a problem",
+      "revId": "9cec17a4fce7d5eb50d39eda8de201265f4bb32d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
