@@ -302,6 +302,5 @@
 #include <unotools/readwritemutexguard.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <sigstruct.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
