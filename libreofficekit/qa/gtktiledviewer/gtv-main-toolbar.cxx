@@ -27,9 +27,6 @@ struct GtvMainToolbarPrivate
 {
     GtkWidget* toolbar1;
     GtkWidget* toolbar2;
-
-    GtkWidget* btn_save;
-    GtkWidget* btn_bold;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(GtvMainToolbar, gtv_main_toolbar, GTK_TYPE_BOX);
