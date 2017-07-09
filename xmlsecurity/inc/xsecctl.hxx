@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_HELPER_XSECCTL_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_HELPER_XSECCTL_HXX
 
-#include <sigstruct.hxx>
+#include <svl/sigstruct.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>

@@ -19,7 +19,7 @@
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
-#include <sigstruct.hxx>
+#include <svl/sigstruct.hxx>
 
 /// Handles signatures of a PDF file.
 class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
