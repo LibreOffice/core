@@ -65,7 +65,7 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
                     sUseLabel = aIter.toString();
                 break;
                 case XML_ELEMENT( TABLE, XML_LINK_TO_SOURCE_DATA ):
-                    bLinkToSource = IsXMLToken( aIter.toCString(), XML_TRUE );
+                    bLinkToSource = IsXMLToken( aIter, XML_TRUE );
                 break;
             }
         }

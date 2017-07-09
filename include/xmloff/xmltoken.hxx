@@ -24,6 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <sax/fastattribs.hxx>
 
 /**
  * Handling of tokens in XML:
@@ -3301,6 +3302,10 @@ namespace xmloff { namespace token {
 
     XMLOFF_DLLPUBLIC bool IsXMLToken(
         const char* pCString,
+        enum XMLTokenEnum eToken );
+
+    XMLOFF_DLLPUBLIC bool IsXMLToken(
+        const sax_fastparser::FastAttributeList::FastAttributeIter& aIter,
         enum XMLTokenEnum eToken );
 } }
 
