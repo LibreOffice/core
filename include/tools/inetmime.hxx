@@ -159,7 +159,7 @@ public:
           token "/" token *(";" token "=" (token / quoted-string))
 
         with intervening linear white space and comments (cf. RFCs 822, 2045).
-        The RFC 2231 extension are supported.  The encoding of rMediaType
+        The RFC 2231 extension is supported.  The encoding of rMediaType
         should be US-ASCII, but any Unicode values in the range U+0080..U+FFFF
         are interpreted 'as appropriate.'
 
