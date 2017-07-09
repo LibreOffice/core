@@ -80,7 +80,7 @@ void osl_destroyPipeImpl(oslPipe pPipe)
 {
     if (pPipe)
     {
-        if (pPipe->m_NamedObject != INVALID_HANDLE_VALUE && pPipe->m_NamedObject)
+        if (pPipe->m_NamedObject)
             CloseHandle(pPipe->m_NamedObject);
 
         if (pPipe->m_Security)
