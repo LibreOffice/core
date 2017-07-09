@@ -28,7 +28,7 @@
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <sigstruct.hxx>
+#include <svl/sigstruct.hxx>
 
 
 namespace com {

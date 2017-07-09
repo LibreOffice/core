@@ -14,8 +14,12 @@
 #include <vector>
 
 #include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
+
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <svl/svldllapi.h>
-#include "com/sun/star/uno/Reference.hxx"
+#include <svl/sigstruct.hxx>
 
 namespace com {
 namespace sun {
@@ -23,6 +27,8 @@ namespace star {
 namespace security {
     class XCertificate; }
 }}}
+
+class SvStream;
 
 namespace svl {
 
@@ -53,6 +59,13 @@ public:
     /// Signs one or more data blocks (as a single, contiguous, array).
     /// Returns the signature (in PKCS#7 format) as string (hex).
     bool Sign(OStringBuffer& rCMSHexBuffer);
+
+    /// Verify and get Signature Information given a signature and stream.
+    static bool Verify(SvStream& rStream,
+                       const std::vector<std::pair<size_t, size_t>>& aByteRanges,
+                       const bool bNonDetached,
+                       const std::vector<unsigned char>& aSignature,
+                       SignatureInformation& rInformation);
 
 private:
     /// The certificate to use for signing.
