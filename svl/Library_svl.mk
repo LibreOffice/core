@@ -95,6 +95,25 @@ $(eval $(call gb_Library_use_system_win32_libs,svl,\
     shlwapi \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_defs,svl,\
+    -DSVL_CRYPTO_MSCRYPTO \
+))
+$(eval $(call gb_Library_use_system_win32_libs,svl,\
+    crypt32 \
+))
+else
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Library_add_defs,svl,\
+    -DSVL_CRYPTO_NSS \
+))
+$(eval $(call gb_Library_use_externals,svl,\
+    nss3 \
+    plc4 \
+))
+endif # BUILD_TYPE=DESKTOP
+endif
+
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/config/asiancfg \
     svl/source/config/cjkoptions \
