@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_7b8956ca",
+        "filename": "accessibility/source/standard/vclxaccessibleedit.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-09T03:30:22Z",
+      "side": 1,
+      "message": "This one can introduce a race condition. E.g. pMultiLineEdit \u003d\u003d nullptr will destroy the lock before the new one from VCLXAcccessibleTextComponent::getTextAtIndex is taken.",
+      "range": {
+        "startLine": 463,
+        "startChar": 4,
+        "endLine": 463,
+        "endChar": 5
+      },
+      "revId": "a758956bb5fce66d1590109f3ce5593ac25967d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
