@@ -15,7 +15,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <sigstruct.hxx>
+#include <svl/sigstruct.hxx>
 
 /// Writes a single OOXML digital signature.
 class OOXMLSecExporter
