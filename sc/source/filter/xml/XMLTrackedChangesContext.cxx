@@ -395,7 +395,7 @@ ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
     if( xAttrList.is() )
     {
         sax_fastparser::FastAttributeList *pAttribList =
-            static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
         auto aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_PROTECTION_KEY ) ) );
         if( aIter != pAttribList->end() )

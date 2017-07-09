@@ -93,7 +93,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
         return;
 
     sax_fastparser::FastAttributeList *pAttribList =
-        static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+        sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
     for( auto &it : *pAttribList )
     {
