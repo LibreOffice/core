@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_fb9466e9",
+        "filename": "sw/source/core/crsr/findtxt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-07-09T03:12:09Z",
+      "side": 1,
+      "message": "const bool bRemoveCommentAnchors \u003d rSearchOpt.searchString.indexOf( CH_TXTATR_INWORD \u003d\u003d -1;",
+      "range": {
+        "startLine": 497,
+        "startChar": 33,
+        "endLine": 497,
+        "endChar": 37
+      },
+      "revId": "547c6ef8073cf508cc4d4feb832d63975af8d8db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
