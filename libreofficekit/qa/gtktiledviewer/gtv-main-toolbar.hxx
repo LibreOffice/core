@@ -19,6 +19,15 @@ G_DECLARE_FINAL_TYPE(GtvMainToolbar, gtv_main_toolbar, GTV, MAIN_TOOLBAR, GtkBox
 
 GtkWidget* gtv_main_toolbar_new();
 
+GtkContainer* gtv_main_toolbar_get_first_toolbar(GtvMainToolbar* toolbar);
+
+GtkContainer* gtv_main_toolbar_get_second_toolbar(GtvMainToolbar* toolbar);
+
+void gtv_main_toolbar_set_sensitive_internal(GtvMainToolbar* toolbar, GtkToolItem* pItem, bool isSensitive);
+
+/// Use internal sensitivity map to set actual widget's sensitivness
+void gtv_main_toolbar_set_edit(GtvMainToolbar* toolbar, gboolean bEdit);
+
 G_END_DECLS
 
 #endif /* GTV_MAIN_TOOLBAR_H */

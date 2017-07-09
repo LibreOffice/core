@@ -23,18 +23,18 @@
 void btn_clicked(GtkWidget* pWidget, gpointer)
 {
     GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_application_get_active_window(GTK_APPLICATION(app)));
 
     GtkToolButton* pItem = GTK_TOOL_BUTTON(pWidget);
     const gchar* label = gtk_tool_button_get_label(pItem);
-    if (g_str_has_prefix(label, ".uno:"))
+    if (gtv_application_window_get_toolbar_broadcast(window) && g_str_has_prefix(label, ".uno:"))
     {
         std::string aArguments;
         if (g_strcmp0(label, ".uno:InsertAnnotation") == 0)
         {
             std::map<std::string, std::string> aEntries;
             aEntries["Text"] = "";
-            userPromptDialog(window, "Insert Comment", aEntries);
+            userPromptDialog(GTK_WINDOW(window), "Insert Comment", aEntries);
 
             boost::property_tree::ptree aTree;
             aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
@@ -46,7 +46,7 @@ void btn_clicked(GtkWidget* pWidget, gpointer)
         }
 
         bool bNotify = g_strcmp0(label, ".uno:Save") == 0;
-        LOKDocView* lokdocview = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
+        LOKDocView* lokdocview = gtv_application_window_get_lokdocview(window);
         if (lokdocview)
             lok_doc_view_post_command(lokdocview, label, aArguments.c_str(), bNotify);
     }

@@ -15,6 +15,8 @@
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <gtv-main-toolbar.hxx>
+
 #include <string>
 
 struct GtvRenderingArgs
@@ -49,6 +51,16 @@ void gtv_application_window_set_zoom_label(GtvApplicationWindow* window, const s
 void getVisibleAreaTwips(GtvApplicationWindow* pWindow, GdkRectangle* pArea);
 
 void gtv_application_window_toggle_findbar(GtvApplicationWindow* window);
+
+GtkToolItem* gtv_application_window_find_tool_by_unocommand(GtvApplicationWindow* window, const std::string& unoCmd);
+
+void gtv_application_window_set_redline_label(GtvApplicationWindow* window, const std::string& redlineLabel);
+
+GtvMainToolbar* gtv_application_window_get_main_toolbar(GtvApplicationWindow* window);
+
+void gtv_application_window_set_toolbar_broadcast(GtvApplicationWindow* window, bool broadcast);
+
+gboolean gtv_application_window_get_toolbar_broadcast(GtvApplicationWindow* window);
 
 G_END_DECLS
 

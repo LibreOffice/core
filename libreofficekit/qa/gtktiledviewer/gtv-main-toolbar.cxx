@@ -23,25 +23,48 @@ struct _GtvMainToolbar
     GtkBox parent;
 };
 
-struct GtvMainToolbarPrivate
+struct GtvMainToolbarPrivateImpl
 {
     GtkWidget* toolbar1;
     GtkWidget* toolbar2;
+
+    /// Sensitivity (enabled or disabled) for each tool item, ignoring edit state
+    std::map<GtkToolItem*, bool> m_aToolItemSensitivities;
+
+    GtvMainToolbarPrivateImpl() :
+        toolbar1(nullptr),
+        toolbar2(nullptr)
+        { }
+
+    ~GtvMainToolbarPrivateImpl()
+        { }
+};
+
+struct GtvMainToolbarPrivate
+{
+    GtvMainToolbarPrivateImpl* m_pImpl;
+
+    GtvMainToolbarPrivateImpl* operator->()
+    {
+        return m_pImpl;
+    }
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(GtvMainToolbar, gtv_main_toolbar, GTK_TYPE_BOX);
 
-static GtvMainToolbarPrivate*
+static GtvMainToolbarPrivate&
 getPrivate(GtvMainToolbar* toolbar)
 {
-    return static_cast<GtvMainToolbarPrivate*>(gtv_main_toolbar_get_instance_private(toolbar));
+    return *static_cast<GtvMainToolbarPrivate*>(gtv_main_toolbar_get_instance_private(toolbar));
 }
 
 static void
 gtv_main_toolbar_init(GtvMainToolbar* toolbar)
 {
+    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    priv.m_pImpl = new GtvMainToolbarPrivateImpl();
+
     GtkBuilder* builder = gtk_builder_new_from_file("gtv.ui");
-    GtvMainToolbarPrivate* priv = getPrivate(toolbar);
 
     priv->toolbar1 = GTK_WIDGET(gtk_builder_get_object(builder, "toolbar1"));
     gtk_box_pack_start(GTK_BOX(toolbar), priv->toolbar1, false, false, false);
@@ -67,13 +90,71 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
 }
 
 static void
-gtv_main_toolbar_class_init(GtvMainToolbarClass*)
+gtv_main_toolbar_finalize(GObject* object)
+{
+    GtvMainToolbarPrivate& priv = getPrivate(GTV_MAIN_TOOLBAR(object));
+
+    delete priv.m_pImpl;
+    priv.m_pImpl = nullptr;
+
+    G_OBJECT_CLASS (gtv_main_toolbar_parent_class)->finalize (object);
+}
+
+static void
+gtv_main_toolbar_class_init(GtvMainToolbarClass* klass)
 {
     // TODO: Use templates to bind objects maybe ?
     // But that requires compiling the .ui file into C source requiring
     // glib-compile-resources (another dependency) as I can't find any gtk
     // method to set the template from the .ui file directly; can only be set
     // from gresource
+    G_OBJECT_CLASS(klass)->finalize = gtv_main_toolbar_finalize;
+}
+
+GtkContainer*
+gtv_main_toolbar_get_first_toolbar(GtvMainToolbar* toolbar)
+{
+    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    return GTK_CONTAINER(priv->toolbar1);
+}
+
+GtkContainer*
+gtv_main_toolbar_get_second_toolbar(GtvMainToolbar* toolbar)
+{
+    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    return GTK_CONTAINER(priv->toolbar2);
+}
+
+void
+gtv_main_toolbar_set_sensitive_internal(GtvMainToolbar* toolbar, GtkToolItem* pItem, bool isSensitive)
+{
+    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    priv->m_aToolItemSensitivities[pItem] = isSensitive;
+}
+
+void
+gtv_main_toolbar_set_edit(GtvMainToolbar* toolbar, gboolean bEdit)
+{
+    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    GList* pList = gtk_container_get_children(GTK_CONTAINER(priv->toolbar1));
+    for (GList* l = pList; l != nullptr; l = l->next)
+    {
+        if (GTK_IS_TOOL_BUTTON(l->data))
+        {
+            GtkToolButton* pButton = GTK_TOOL_BUTTON(l->data);
+            const gchar* pIconName = gtk_tool_button_get_icon_name(pButton);
+            if (g_strcmp0(pIconName, "zoom-in-symbolic") != 0 &&
+                g_strcmp0(pIconName, "zoom-original-symbolic") != 0 &&
+                g_strcmp0(pIconName, "zoom-out-symbolic") != 0 &&
+                g_strcmp0(pIconName, "insert-text-symbolic") != 0 &&
+                g_strcmp0(pIconName, "view-continuous-symbolic") != 0 &&
+                g_strcmp0(pIconName, "document-properties") != 0 &&
+                g_strcmp0(pIconName, "system-run") != 0)
+            {
+                gtk_widget_set_sensitive(GTK_WIDGET(pButton), bEdit);
+            }
+        }
+    }
 }
 
 GtkWidget*

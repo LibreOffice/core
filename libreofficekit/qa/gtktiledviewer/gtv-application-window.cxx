@@ -15,6 +15,7 @@
 #include <gtv-application-window.hxx>
 #include <gtv-main-toolbar.hxx>
 #include <gtv-helpers.hxx>
+#include <gtv-lokdocview-signal-handlers.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
@@ -34,8 +35,11 @@ struct GtvApplicationWindowPrivate
 
     GtkWidget* statusbar;
     GtkWidget* zoomlabel;
+    GtkWidget* redlinelabel;
 
     GtkWidget* findtoolbar;
+
+    gboolean toolbarBroadcast;
 
     // Rendering args; options with which lokdocview was rendered in this window
     GtvRenderingArgs* m_pRenderingArgs;
@@ -69,9 +73,11 @@ gtv_application_window_init(GtvApplicationWindow* win)
 
     // statusbar
     priv->statusbar = GTK_WIDGET(gtk_builder_get_object(builder, "statusbar"));
+    priv->redlinelabel = GTK_WIDGET(gtk_builder_get_object(builder, "redlinelabel"));
     priv->zoomlabel = GTK_WIDGET(gtk_builder_get_object(builder, "zoomlabel"));
 
     priv->findtoolbar = GTK_WIDGET(gtk_builder_get_object(builder, "findtoolbar"));
+    priv->toolbarBroadcast = false;
 
     gtk_container_add(GTK_CONTAINER(win), priv->container);
 
@@ -165,6 +171,46 @@ void gtv_application_window_toggle_findbar(GtvApplicationWindow* window)
     }
 }
 
+GtkToolItem* gtv_application_window_find_tool_by_unocommand(GtvApplicationWindow* window, const std::string& unoCmd)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    GtkToolItem* result = nullptr;
+
+    // Find in the first toolbar
+    GtkContainer* pToolbar1 = gtv_main_toolbar_get_first_toolbar(GTV_MAIN_TOOLBAR(priv->toolbarcontainer));
+    GList* pList = gtk_container_get_children(pToolbar1);
+    for (GList* l = pList; l != nullptr; l = l->next)
+    {
+        if (GTK_IS_TOOL_BUTTON(l->data))
+        {
+            GtkToolButton* pButton = GTK_TOOL_BUTTON(l->data);
+            const gchar* pLabel = gtk_tool_button_get_label(pButton);
+            if (g_strcmp0(unoCmd.c_str(), pLabel) == 0)
+            {
+                result = GTK_TOOL_ITEM(pButton);
+            }
+        }
+    }
+
+    // Look in second toolbar if not found
+    GtkContainer* pToolbar2 = gtv_main_toolbar_get_second_toolbar(GTV_MAIN_TOOLBAR(priv->toolbarcontainer));
+    pList = gtk_container_get_children(pToolbar2);
+    for (GList* l = pList; result == nullptr && l != nullptr; l = l->next)
+    {
+        if (GTK_IS_TOOL_BUTTON(l->data))
+        {
+            GtkToolButton* pButton = GTK_TOOL_BUTTON(l->data);
+            const gchar* pLabel = gtk_tool_button_get_label(pButton);
+            if (g_strcmp0(unoCmd.c_str(), pLabel) == 0)
+            {
+                result = GTK_TOOL_ITEM(pButton);
+            }
+        }
+    }
+
+    return result;
+}
+
 LOKDocView*
 gtv_application_window_get_lokdocview(GtvApplicationWindow* window)
 {
@@ -203,7 +249,7 @@ static void setupDocView(LOKDocView* pDocView)
 #endif
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(lokdocview_signalEdit), nullptr);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(lokdocview_signalCommand), nullptr);
-    g_signal_connect(pDocView, "command-result", G_CALLBACK(lokdocview_signalCommandResult), nullptr);
+/*    g_signal_connect(pDocView, "command-result", G_CALLBACK(lokdocview_signalCommandResult), nullptr);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(lokdocview_signalSearch), nullptr);
     g_signal_connect(pDocView, "search-result-count", G_CALLBACK(lokdocview_signalSearchResultCount), nullptr);
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(lokdocview_signalPart), nullptr);
@@ -213,6 +259,7 @@ static void setupDocView(LOKDocView* pDocView)
     g_signal_connect(pDocView, "formula-changed", G_CALLBACK(lokdocview_formulaChanged), nullptr);
     g_signal_connect(pDocView, "password-required", G_CALLBACK(lokdocview_passwordRequired), nullptr);
     g_signal_connect(pDocView, "comment", G_CALLBACK(lokdocview_commentCallback), nullptr);
+*/
 }
 
 void
@@ -225,7 +272,7 @@ gtv_application_window_create_view_from_window(GtvApplicationWindow* window)
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
     GtvApplicationWindowPrivate* newPriv = getPrivate(newWindow);
     newPriv->lokdocview = lok_doc_view_new_from_widget(LOK_DOC_VIEW(priv->lokdocview), aArguments.c_str());
-    setupDocView(newPriv->lokdocview);
+    setupDocView(LOK_DOC_VIEW(newPriv->lokdocview));
 
     gboolean bTiledAnnotations;
     g_object_get(G_OBJECT(priv->lokdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
@@ -253,7 +300,7 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
                  "doc-password-to-modify", TRUE,
                  "tiled-annotations", priv->m_pRenderingArgs->m_bEnableTiledAnnotations,
                  nullptr);
-    setupDocView(priv->lokdocview);
+    setupDocView(LOK_DOC_VIEW(priv->lokdocview));
 
     // Create argument JSON
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
@@ -262,6 +309,34 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
                                gtv_application_open_document_callback, priv->lokdocview);
 
     gtk_widget_show_all(GTK_WIDGET(priv->scrolledwindow));
+}
+
+void
+gtv_application_window_set_redline_label(GtvApplicationWindow* window, const std::string& redlineLabel)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    gtk_label_set_text(GTK_LABEL(priv->redlinelabel), redlineLabel.c_str());
+}
+
+GtvMainToolbar*
+gtv_application_window_get_main_toolbar(GtvApplicationWindow* window)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    return GTV_MAIN_TOOLBAR(priv->toolbarcontainer);
+}
+
+void
+gtv_application_window_set_toolbar_broadcast(GtvApplicationWindow* window, bool broadcast)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    priv->toolbarBroadcast = broadcast;
+}
+
+gboolean
+gtv_application_window_get_toolbar_broadcast(GtvApplicationWindow* window)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    return priv->toolbarBroadcast;
 }
 
 GtvApplicationWindow*
