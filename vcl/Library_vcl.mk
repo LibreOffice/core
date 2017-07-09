@@ -694,6 +694,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/gdi/salprn \
     vcl/win/gdi/salvd \
     vcl/win/gdi/winlayout \
+    vcl/win/gdi/DWriteTextRenderer \
     vcl/win/window/salframe \
     vcl/win/window/keynames \
     vcl/win/window/salmenu \
