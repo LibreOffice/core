@@ -199,15 +199,15 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     }
     else
     {
-        BOOL fPipeAvailable;
+        BOOL bPipeAvailable;
 
         do
         {
             /* free instance should be available first */
-            fPipeAvailable = WaitNamedPipeW(SAL_W(path->buffer), NMPWAIT_WAIT_FOREVER);
+            bPipeAvailable = WaitNamedPipeW(SAL_W(path->buffer), NMPWAIT_WAIT_FOREVER);
 
             /* first try to open system pipe */
-            if (fPipeAvailable)
+            if (bPipeAvailable)
             {
                 pPipe->m_File = CreateFileW(
                     SAL_W(path->buffer),
@@ -231,7 +231,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                     // Pipe instance maybe caught by another client -> try again
                 }
             }
-        } while (fPipeAvailable);
+        } while (bPipeAvailable);
     }
 
     /* if we reach here something went wrong */
