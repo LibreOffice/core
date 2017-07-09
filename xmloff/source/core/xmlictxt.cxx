@@ -94,7 +94,7 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
     if ( Attribs.is() )
     {
         sax_fastparser::FastAttributeList *pAttribList =
-            static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
+            sax_fastparser::FastAttributeList::castToFastAttributeList( Attribs );
 
         for( auto &it : *pAttribList )
         {
