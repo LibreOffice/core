@@ -791,7 +791,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     if ( Attribs.is() )
     {
         sax_fastparser::FastAttributeList *pAttribList =
-            static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
+            sax_fastparser::FastAttributeList::castToFastAttributeList( Attribs );
         auto &aIter( pAttribList->find( XML_ELEMENT( OFFICE, XML_VERSION ) ) );
         if( aIter != pAttribList->end() )
         {

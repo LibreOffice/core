@@ -116,8 +116,7 @@ sax_fastparser::FastAttributeList *AttributeList::getAttribList() const
 {
     if( mpAttribList == nullptr )
     {
-        assert( dynamic_cast< sax_fastparser::FastAttributeList *>( mxAttribs.get() ) != nullptr );
-        mpAttribList = static_cast< sax_fastparser::FastAttributeList *>( mxAttribs.get() );
+        mpAttribList = sax_fastparser::FastAttributeList::castToFastAttributeList( mxAttribs );
     }
     return mpAttribList;
 }
