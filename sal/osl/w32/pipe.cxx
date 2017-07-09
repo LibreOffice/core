@@ -67,7 +67,7 @@ oslPipe osl_createPipeImpl(void)
     pPipe->m_Reference = 0;
     pPipe->m_Name = nullptr;
     pPipe->m_File = INVALID_HANDLE_VALUE;
-    pPipe->m_NamedObject = INVALID_HANDLE_VALUE;
+    pPipe->m_NamedObject = nullptr;
 
     pPipe->m_ReadEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
     pPipe->m_WriteEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
@@ -193,7 +193,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
             else
             {
                 CloseHandle(pPipe->m_NamedObject);
-                pPipe->m_NamedObject = INVALID_HANDLE_VALUE;
+                pPipe->m_NamedObject = nullptr;
             }
         }
     }
