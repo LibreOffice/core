@@ -44,9 +44,8 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
     if (pFactory.get() == nullptr)
         return;
 
-    assert( dynamic_cast< sax_fastparser::FastAttributeList *>( Attribs.get() ) != nullptr );
-    sax_fastparser::FastAttributeList *pAttribs;
-    pAttribs = static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
+    sax_fastparser::FastAttributeList *pAttribs =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( Attribs );
 
     const AttributeInfo *pAttr = pFactory->getAttributeInfoArray(nDefine);
     if (!pAttr)

@@ -52,7 +52,8 @@ ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
 
     if( xAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
         for( auto &it : *pAttribList )
         {
@@ -167,7 +168,8 @@ ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
     const SvXMLTokenMap& rAttrTokenMap = mrScImport.GetTableRowAttrTokenMap();
     if ( xAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
         for( auto &it : *pAttribList )
         {
@@ -246,7 +248,8 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
     const SvXMLTokenMap& rTokenMap = rImport.GetTableRowCellAttrTokenMap();
     if( xAttrList.is() )
     {
-        sax_fastparser::FastAttributeList *pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
         for( auto &it : *pAttribList )
         {

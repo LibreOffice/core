@@ -54,7 +54,7 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
     if ( xAttrList.is() )
     {
         sax_fastparser::FastAttributeList *pAttribList =
-            static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
         for( auto &it : *pAttribList )
         {
@@ -230,7 +230,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
         if ( xAttrList.is() )
         {
             sax_fastparser::FastAttributeList *pAttribList =
-                static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+                sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
             auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_DISPLAY ) ) );
             if( aIter != pAttribList->end() )
                 bGroupDisplay = IsXMLToken( aIter.toCString(), XML_TRUE );

@@ -230,6 +230,12 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  )
     return aSeq;
 }
 
+FastAttributeList* FastAttributeList::castToFastAttributeList( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+{
+    assert( dynamic_cast <FastAttributeList *> ( xAttrList.get() ) != nullptr );
+    return ( static_cast <FastAttributeList *> ( xAttrList.get() ) );
+}
+
 const FastAttributeList::FastAttributeIter FastAttributeList::find( sal_Int32 nToken ) const
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)

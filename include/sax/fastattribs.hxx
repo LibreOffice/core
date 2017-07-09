@@ -102,6 +102,8 @@ public:
     virtual css::uno::Sequence< css::xml::Attribute > SAL_CALL getUnknownAttributes(  ) override;
     virtual css::uno::Sequence< css::xml::FastAttribute > SAL_CALL getFastAttributes() override;
 
+    static FastAttributeList* castToFastAttributeList( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+
     /// Use for fast iteration and conversion of attributes
     class FastAttributeIter {
         const FastAttributeList &mrList;

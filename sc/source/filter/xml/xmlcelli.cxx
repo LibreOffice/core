@@ -160,7 +160,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     if( xAttrList.is() )
     {
         sax_fastparser::FastAttributeList *pAttribList =
-            static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
         for( auto &it : *pAttribList )
         {
