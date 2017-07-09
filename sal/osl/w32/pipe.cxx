@@ -108,7 +108,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     rtl_uString* temp = nullptr;
     oslPipe pPipe;
 
-    PSECURITY_ATTRIBUTES  pSecAttr = nullptr;
+    PSECURITY_ATTRIBUTES pSecAttr = nullptr;
 
     rtl_uString_newFromAscii(&path, PIPESYSTEM);
     rtl_uString_newFromAscii(&name, PIPEPREFIX);
@@ -150,7 +150,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     rtl_uString_newConcat(&name, temp, strPipeName);
 
     /* alloc memory */
-    pPipe= osl_createPipeImpl();
+    pPipe = osl_createPipeImpl();
     osl_atomic_increment(&(pPipe->m_Reference));
 
     /* build system pipe name */
@@ -161,11 +161,11 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
     if (Options & osl_Pipe_CREATE)
     {
-        SetLastError( ERROR_SUCCESS );
+        SetLastError(ERROR_SUCCESS);
 
         pPipe->m_NamedObject = CreateMutexW(nullptr, FALSE, SAL_W(name->buffer));
 
-        if (pPipe->m_NamedObject != INVALID_HANDLE_VALUE && pPipe->m_NamedObject)
+        if (pPipe->m_NamedObject)
         {
             if (GetLastError() != ERROR_ALREADY_EXISTS)
             {
@@ -199,7 +199,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     }
     else
     {
-        BOOL    fPipeAvailable;
+        BOOL fPipeAvailable;
 
         do
         {
@@ -231,7 +231,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                     // Pipe instance maybe caught by another client -> try again
                 }
             }
-        } while ( fPipeAvailable );
+        } while (fPipeAvailable);
     }
 
     /* if we reach here something went wrong */
@@ -370,15 +370,17 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
         DWORD lastError = GetLastError();
 
         if (lastError == ERROR_MORE_DATA)
+        {
             nBytes = BytesToRead;
-          else
-          {
-              if (lastError == ERROR_PIPE_NOT_CONNECTED)
+        }
+        else
+        {
+            if (lastError == ERROR_PIPE_NOT_CONNECTED)
                 nBytes = 0;
             else
                 nBytes = (DWORD) -1;
 
-             pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
+            pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
         }
     }
 
@@ -400,9 +402,9 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 
     if (!WriteFile(pPipe->m_File, pBuffer, BytesToSend, &nBytes, &os) &&
         ((GetLastError() != ERROR_IO_PENDING) ||
-          ! GetOverlappedResult(pPipe->m_File, &os, &nBytes, TRUE)))
+          !GetOverlappedResult(pPipe->m_File, &os, &nBytes, TRUE)))
     {
-          if (GetLastError() == ERROR_PIPE_NOT_CONNECTED)
+        if (GetLastError() == ERROR_PIPE_NOT_CONNECTED)
             nBytes = 0;
         else
             nBytes = (DWORD) -1;
