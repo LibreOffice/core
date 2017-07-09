@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <rtl/ustring.hxx>
-#include "sigstruct.hxx"
+#include <svl/sigstruct.hxx>
 #include "xmlsecurity/xmlsecuritydllapi.h"
 
 #include <vector>

@@ -23,7 +23,7 @@
 
 #include <xmlsecurity/pdfio/pdfdocument.hxx>
 
-#include <sigstruct.hxx>
+#include <svl/sigstruct.hxx>
 
 using namespace com::sun::star;
 
