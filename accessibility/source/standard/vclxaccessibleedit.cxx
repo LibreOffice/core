@@ -458,10 +458,10 @@ OUString VCLXAccessibleEdit::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEnd
 
 css::accessibility::TextSegment VCLXAccessibleEdit::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
+    OExternalLockGuard aGuard( this );
     // Override general text component behavior: MultiLineEdit can have more text portions
     if ( aTextType == AccessibleTextType::ATTRIBUTE_RUN )
     {
-        OExternalLockGuard aGuard( this );
         VclPtr<VclMultiLineEdit> pMulitLineEdit = GetAsDynamic< VclMultiLineEdit >();
         if ( pMulitLineEdit )
         {
