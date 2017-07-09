@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include <sigstruct.hxx>
+#include <svl/sigstruct.hxx>
 #include <xmlsignaturehelper.hxx>
 #include <pdfsignaturehelper.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>

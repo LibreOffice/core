@@ -25,7 +25,7 @@
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <sigstruct.hxx>
+#include <svl/sigstruct.hxx>
 #include <xsecctl.hxx>
 #include <xmlsecurity/xmlsecuritydllapi.h>
 
