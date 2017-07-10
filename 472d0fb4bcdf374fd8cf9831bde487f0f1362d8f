@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_1e092096",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-10T11:21:20Z",
+      "side": 1,
+      "message": "Um.. yes, but keep the 207 instead of 494 ;-)\nI\u0027ll correct this in an amended commit.",
+      "revId": "472d0fb4bcdf374fd8cf9831bde487f0f1362d8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
