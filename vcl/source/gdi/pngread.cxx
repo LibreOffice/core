@@ -85,9 +85,12 @@ private:
     BitmapWriteAccess*         mpMaskAcc;
 
     ZCodec              mpZCodec;
-    sal_uInt8*          mpInflateInBuf; // as big as the size of a scanline + alphachannel + 1
-    sal_uInt8*          mpScanPrior;    // pointer to the latest scanline
-    sal_uInt8*          mpTransTab;     // for transparency in images with palette colortype
+    std::unique_ptr<sal_uInt8[]>
+                        mpInflateInBuf; // as big as the size of a scanline + alphachannel + 1
+    std::unique_ptr<sal_uInt8[]>
+                        mpScanPrior;    // pointer to the latest scanline
+    std::unique_ptr<sal_uInt8[]>
+                        mpTransTab;     // for transparency in images with palette colortype
     sal_uInt8*          mpScanCurrent;  // pointer into the current scanline
     sal_uInt8*          mpColorTable;
     std::size_t         mnStreamSize;   // estimate of PNG file size
@@ -133,8 +136,10 @@ private:
     sal_Int32           mnAllocSizeScanlineAlpha;
 #endif
     // the temporary Scanline (and alpha) for direct scanline copy to Bitmap
-    sal_uInt8*          mpScanline;
-    sal_uInt8*          mpScanlineAlpha;
+    std::unique_ptr<sal_uInt8[]>
+                        mpScanline;
+    std::unique_ptr<sal_uInt8[]>
+                        mpScanlineAlpha;
 
     bool                ReadNextChunk();
     void                ReadRemainingChunks();
@@ -244,13 +249,6 @@ PNGReaderImpl::~PNGReaderImpl()
 
     if( mpColorTable != mpDefaultColorTable )
         delete[] mpColorTable;
-
-    delete[] mpTransTab;
-    delete[] mpInflateInBuf;
-    delete[] mpScanPrior;
-
-    delete[] mpScanline;
-    delete[] mpScanlineAlpha;
 }
 
 bool PNGReaderImpl::ReadNextChunk()
@@ -652,9 +650,9 @@ bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     }
 
     // TODO: switch between both scanlines instead of copying
-    mpInflateInBuf = new (std::nothrow) sal_uInt8[ mnScansize ];
-    mpScanCurrent = mpInflateInBuf;
-    mpScanPrior = new (std::nothrow) sal_uInt8[ mnScansize ];
+    mpInflateInBuf.reset( new (std::nothrow) sal_uInt8[ mnScansize ] );
+    mpScanCurrent = mpInflateInBuf.get();
+    mpScanPrior.reset( new (std::nothrow) sal_uInt8[ mnScansize ] );
 
     if ( !mpInflateInBuf || !mpScanPrior )
         return false;
@@ -736,8 +734,8 @@ bool PNGReaderImpl::ImplReadTransparent()
             {
                 if ( mnChunkLen == 2 )
                 {
-                    mpTransTab = new sal_uInt8[ 256 ];
-                    memset( mpTransTab, 0xff, 256);
+                    mpTransTab.reset( new sal_uInt8[ 256 ] );
+                    memset( mpTransTab.get(), 0xff, 256);
                     // color type 0 and 4 is always greyscale,
                     // so the return value can be used as index
                     sal_uInt8 nIndex = ImplScaleColor();
@@ -764,11 +762,11 @@ bool PNGReaderImpl::ImplReadTransparent()
                 if ( mnChunkLen <= 256 )
                 {
                     mbTransparent = true;
-                    mpTransTab = new sal_uInt8 [ 256 ];
-                    memset( mpTransTab, 0xff, 256 );
+                    mpTransTab.reset( new sal_uInt8 [ 256 ] );
+                    memset( mpTransTab.get(), 0xff, 256 );
                     if (mnChunkLen > 0)
                     {
-                        memcpy( mpTransTab, &(*maDataIter), mnChunkLen );
+                        memcpy( mpTransTab.get(), &(*maDataIter), mnChunkLen );
                         maDataIter += mnChunkLen;
                         // need alpha transparency if not on/off masking
                         for( int i = 0; i < mnChunkLen; ++i )
@@ -905,7 +903,7 @@ void PNGReaderImpl::ImplReadIDAT()
         while ( mpZCodec.GetBreak() )
         {
             // get bytes needed to fill the current scanline
-            sal_Int32 nToRead = mnScansize - (mpScanCurrent - mpInflateInBuf);
+            sal_Int32 nToRead = mnScansize - (mpScanCurrent - mpInflateInBuf.get());
             sal_Int32 nRead = mpZCodec.ReadAsynchron( aIStrm, mpScanCurrent, nToRead );
             if ( nRead < 0 )
             {
@@ -919,7 +917,7 @@ void PNGReaderImpl::ImplReadIDAT()
             }
             else  // this scanline is Finished
             {
-                mpScanCurrent = mpInflateInBuf;
+                mpScanCurrent = mpInflateInBuf.get();
                 ImplApplyFilter();
 
                 ImplDrawScanline( mnXStart, mnXAdd );
@@ -1001,7 +999,7 @@ bool PNGReaderImpl::ImplPreparePass()
     mnScansize = ( mnScansize*mnPngDepth + 7 ) >> 3;
 
     ++mnScansize; // scan size also needs room for the filtertype byte
-    memset( mpScanPrior, 0, mnScansize );
+    memset( mpScanPrior.get(), 0, mnScansize );
 
     return true;
 }
@@ -1012,9 +1010,9 @@ bool PNGReaderImpl::ImplPreparePass()
 void PNGReaderImpl::ImplApplyFilter()
 {
     OSL_ASSERT( mnScansize >= mnBPP + 1 );
-    const sal_uInt8* const pScanEnd = mpInflateInBuf + mnScansize;
+    const sal_uInt8* const pScanEnd = mpInflateInBuf.get() + mnScansize;
 
-    sal_uInt8 nFilterType = *mpInflateInBuf; // the filter type may change each scanline
+    sal_uInt8 nFilterType = mpInflateInBuf[0]; // the filter type may change each scanline
     switch ( nFilterType )
     {
         default: // unknown Scanline Filter Type
@@ -1024,7 +1022,7 @@ void PNGReaderImpl::ImplApplyFilter()
 
         case 1: // Scanline Filter Type "Sub"
         {
-            sal_uInt8* p1 = mpInflateInBuf + 1;
+            sal_uInt8* p1 = mpInflateInBuf.get() + 1;
             const sal_uInt8* p2 = p1;
             p1 += mnBPP;
 
@@ -1039,8 +1037,8 @@ void PNGReaderImpl::ImplApplyFilter()
 
         case 2: // Scanline Filter Type "Up"
         {
-            sal_uInt8* p1 = mpInflateInBuf + 1;
-            const sal_uInt8* p2 = mpScanPrior + 1;
+            sal_uInt8* p1 = mpInflateInBuf.get() + 1;
+            const sal_uInt8* p2 = mpScanPrior.get() + 1;
 
             // use pixels from prior line
             while( p1 < pScanEnd )
@@ -1053,8 +1051,8 @@ void PNGReaderImpl::ImplApplyFilter()
 
         case 3: // Scanline Filter Type "Average"
         {
-            sal_uInt8* p1 = mpInflateInBuf + 1;
-            const sal_uInt8* p2 = mpScanPrior + 1;
+            sal_uInt8* p1 = mpInflateInBuf.get() + 1;
+            const sal_uInt8* p2 = mpScanPrior.get() + 1;
             const sal_uInt8* p3 = p1;
 
             // use one pixel from prior line
@@ -1072,8 +1070,8 @@ void PNGReaderImpl::ImplApplyFilter()
 
         case 4: // Scanline Filter Type "PathPredictor"
         {
-            sal_uInt8* p1 = mpInflateInBuf + 1;
-            const sal_uInt8* p2 = mpScanPrior + 1;
+            sal_uInt8* p1 = mpInflateInBuf.get() + 1;
+            const sal_uInt8* p2 = mpScanPrior.get() + 1;
             const sal_uInt8* p3 = p1;
             const sal_uInt8* p4 = p2;
 
@@ -1114,7 +1112,7 @@ void PNGReaderImpl::ImplApplyFilter()
         break;
     }
 
-    memcpy( mpScanPrior, mpInflateInBuf, mnScansize );
+    memcpy( mpScanPrior.get(), mpInflateInBuf.get(), mnScansize );
 }
 
 namespace
@@ -1163,7 +1161,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     // => TODO; also do this for nX here instead of in the ImplSet*Pixel() methods
     const sal_uInt32 nY = mnYpos >> mnPreviewShift;
 
-    sal_uInt8* pTmp = mpInflateInBuf + 1;
+    sal_uInt8* pTmp = mpInflateInBuf.get() + 1;
     if ( mxAcc->HasPalette() ) // alphachannel is not allowed by pictures including palette entries
     {
         switch ( mxAcc->GetBitCount() )
@@ -1378,7 +1376,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 #if OSL_DEBUG_LEVEL > 0
                         mnAllocSizeScanline = maOrigSize.Width() * 3;
 #endif
-                        mpScanline = new sal_uInt8[maOrigSize.Width() * 3];
+                        mpScanline.reset( new sal_uInt8[maOrigSize.Width() * 3] );
                     }
 
                     if(!mpScanlineAlpha)
@@ -1386,7 +1384,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 #if OSL_DEBUG_LEVEL > 0
                         mnAllocSizeScanlineAlpha = maOrigSize.Width();
 #endif
-                        mpScanlineAlpha = new sal_uInt8[maOrigSize.Width()];
+                        mpScanlineAlpha.reset( new sal_uInt8[maOrigSize.Width()] );
                     }
                 }
 
@@ -1398,8 +1396,8 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 3, "Allocated Scanline too small (!)");
                     OSL_ENSURE(mnAllocSizeScanlineAlpha >= maOrigSize.Width(), "Allocated ScanlineAlpha too small (!)");
 #endif
-                    sal_uInt8* pScanline(mpScanline);
-                    sal_uInt8* pScanlineAlpha(mpScanlineAlpha);
+                    sal_uInt8* pScanline(mpScanline.get());
+                    sal_uInt8* pScanlineAlpha(mpScanlineAlpha.get());
 
                     for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 4)
                     {
@@ -1423,8 +1421,8 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 
                     // copy scanlines directly to bitmaps for content and alpha; use the formats which
                     // are able to copy directly to BitmapBuffer
-                    mxAcc->CopyScanline(nY, mpScanline, ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
-                    mpMaskAcc->CopyScanline(nY, mpScanlineAlpha, ScanlineFormat::N8BitPal, maOrigSize.Width());
+                    mxAcc->CopyScanline(nY, mpScanline.get(), ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
+                    mpMaskAcc->CopyScanline(nY, mpScanlineAlpha.get(), ScanlineFormat::N8BitPal, maOrigSize.Width());
                 }
                 else
                 {
@@ -1523,7 +1521,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 #if OSL_DEBUG_LEVEL > 0
                 mnAllocSizeScanline = maOrigSize.Width() * 3;
 #endif
-                mpScanline = new sal_uInt8[maOrigSize.Width() * 3];
+                mpScanline.reset( new sal_uInt8[maOrigSize.Width() * 3] );
             }
 
             if ( mnPngDepth == 8 )   // maybe the source has 16 bit per sample
@@ -1534,7 +1532,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 #if OSL_DEBUG_LEVEL > 0
                     OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 3, "Allocated Scanline too small (!)");
 #endif
-                    sal_uInt8* pScanline(mpScanline);
+                    sal_uInt8* pScanline(mpScanline.get());
 
                     for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)
                     {
@@ -1555,7 +1553,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 
                     // copy scanline directly to bitmap for content; use the format which is able to
                     // copy directly to BitmapBuffer
-                    mxAcc->CopyScanline(nY, mpScanline, ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
+                    mxAcc->CopyScanline(nY, mpScanline.get(), ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
                 }
                 else
                 {

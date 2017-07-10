@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <array>
 #include <memory>
 #include "psputil.hxx"
 
@@ -273,7 +274,8 @@ private:
         sal_uInt16      mnValue;        // pixelvalue
     };
 
-    LZWCTreeNode*   mpTable;    // LZW compression data
+    std::array<LZWCTreeNode, 4096>
+                    mpTable;    // LZW compression data
     LZWCTreeNode*   mpPrefix;   // the compression is as same as the TIFF compression
     sal_uInt16      mnDataSize;
     sal_uInt16      mnClearCode;
@@ -306,8 +308,6 @@ LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
     mnOffset    = 32;   // free bits in dwShift
     mdwShift    = 0;
 
-    mpTable = new LZWCTreeNode[ 4096 ];
-
     for (sal_uInt32 i = 0; i < 4096; i++)
     {
         mpTable[i].mpBrother    = nullptr;
@@ -327,8 +327,6 @@ LZWEncoder::~LZWEncoder()
         WriteBits (mpPrefix->mnCode, mnCodeSize);
 
     WriteBits (mnEOICode, mnCodeSize);
-
-    delete[] mpTable;
 }
 
 void
@@ -355,7 +353,7 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
 
     if (!mpPrefix)
     {
-        mpPrefix = mpTable + nByte;
+        mpPrefix = mpTable.data() + nByte;
     }
     else
     {
@@ -389,14 +387,14 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
                 if(mnTableSize == (sal_uInt16)((1 << mnCodeSize) - 1))
                     mnCodeSize++;
 
-                p = mpTable + (mnTableSize++);
+                p = mpTable.data() + (mnTableSize++);
                 p->mpBrother = mpPrefix->mpFirstChild;
                 mpPrefix->mpFirstChild = p;
                 p->mnValue = nV;
                 p->mpFirstChild = nullptr;
             }
 
-            mpPrefix = mpTable + nV;
+            mpPrefix = mpTable.data() + nV;
         }
     }
 }
