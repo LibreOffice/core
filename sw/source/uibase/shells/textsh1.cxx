@@ -22,6 +22,7 @@
 #include <hintids.hxx>
 #include <cmdid.h>
 #include <helpid.h>
+#include <comphelper/lok.hxx>
 
 #include <i18nutil/unicode.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -97,6 +98,10 @@
 #include <IDocumentStatistics.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <unotools/lingucfg.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -119,6 +124,9 @@
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace com::sun::star::style;
 using namespace svx::sidebar;
 
 void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
@@ -1271,7 +1279,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         bool bOn = true;
         if( SfxItemState::SET == pArgs->GetItemState(FN_PARAM_1, false, &pItem))
             bOn = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        rWrtSh.ChangeHeaderOrFooter(sStyleName, FN_INSERT_PAGEHEADER == nSlot, bOn, !rReq.IsAPI());
+        rWrtSh.ChangeHeaderOrFooter(sStyleName, FN_INSERT_PAGEHEADER == nSlot, bOn, !comphelper::LibreOfficeKit::isActive() && !rReq.IsAPI());
         rReq.Done();
     }
     break;
@@ -1615,6 +1623,32 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case FN_INSERT_PAGEHEADER:
         case FN_INSERT_PAGEFOOTER:
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                bool bState = false;
+                bool bIsPhysical = false;
+                uno::Reference< XStyleFamiliesSupplier > xSupplier(GetView().GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+                if (xSupplier.is())
+                {
+                    uno::Reference< XNameContainer > xContainer;
+                    uno::Reference< XNameAccess > xFamilies = xSupplier->getStyleFamilies();
+                    if (xFamilies->getByName("PageStyles") >>= xContainer)
+                    {
+                        uno::Sequence< OUString > aSeqNames = xContainer->getElementNames();
+                        for (sal_Int32 itNames = 0; itNames < aSeqNames.getLength(); itNames++)
+                        {
+                            uno::Reference< XPropertySet > xPropSet(xContainer->getByName(aSeqNames[itNames]), uno::UNO_QUERY);
+                            if (xPropSet.is() && (xPropSet->getPropertyValue("IsPhysical") >>= bIsPhysical) && bIsPhysical)
+                            {
+                                if ((xPropSet->getPropertyValue(OUString(nWhich == FN_INSERT_PAGEHEADER ? "HeaderIsOn" : "FooterIsOn")) >>= bState) && bState)
+                                    break;
+                            }
+                        }
+                    }
+                }
+                rSet.Put(SfxBoolItem(nWhich, bState));
+            }
+            else
             {
                 rSet.Put( SfxObjectShellItem( nWhich, GetView().GetDocShell() ));
             }
