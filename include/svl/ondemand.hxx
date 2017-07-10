@@ -129,28 +129,29 @@ public:
     const   LocaleDataWrapper&  operator*() const   { return *get(); }
 };
 
-/** Load a calendar only if it's needed.
+/** Load a calendar only if it's needed. Keep calendar for "en" locale
+    separately, as there can be alternation between locale dependent and
+    locale independent formats.
     SvNumberformatter uses it upon switching locales.
+
     @ATTENTION If the default ctor is used the init() method MUST be called
     before accessing the calendar.
  */
 class OnDemandCalendarWrapper
 {
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
+            css::lang::Locale  aEnglishLocale;
             css::lang::Locale  aLocale;
-    mutable CalendarWrapper*    pPtr;
-    mutable bool                bValid;
-            bool                bInitialized;
+    mutable css::lang::Locale  aLastAnyLocale;
+            std::unique_ptr<CalendarWrapper> pEnglishPtr;
+    mutable std::unique_ptr<CalendarWrapper> pAnyPtr;
 
 public:
                                 OnDemandCalendarWrapper()
-                                    : pPtr(nullptr)
-                                    , bValid(false)
-                                    , bInitialized(false)
-                                    {}
-                                ~OnDemandCalendarWrapper()
                                     {
-                                        delete pPtr;
+                                        LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
+                                        aEnglishLocale = aEnglishLanguageTag.getLocale();
+                                        aLastAnyLocale = aEnglishLocale;
                                     }
 
             void                init(
@@ -160,28 +161,37 @@ public:
                                     {
                                         m_xContext = rxContext;
                                         changeLocale( rLocale );
-                                        if ( pPtr )
-                                        {
-                                            delete pPtr;
-                                            pPtr = nullptr;
-                                        }
-                                        bInitialized = true;
+                                        pEnglishPtr.reset(new CalendarWrapper( m_xContext ));
+                                        pEnglishPtr->loadDefaultCalendar( aEnglishLocale );
+                                        pAnyPtr.reset();
                                     }
 
             void                changeLocale( const css::lang::Locale& rLocale )
                                     {
-                                        bValid = false;
                                         aLocale = rLocale;
                                     }
 
             CalendarWrapper*    get() const
                                     {
-                                        if ( !bValid )
+                                        CalendarWrapper* pPtr;
+                                        if ( aLocale == aEnglishLocale )
                                         {
-                                            if ( !pPtr )
-                                                pPtr = new CalendarWrapper( m_xContext );
-                                            pPtr->loadDefaultCalendar( aLocale );
-                                            bValid = true;
+                                            pPtr = pEnglishPtr.get();
+                                        }
+                                        else
+                                        {
+                                            if ( !pAnyPtr )
+                                            {
+                                                pAnyPtr.reset(new CalendarWrapper( m_xContext ));
+                                                pAnyPtr->loadDefaultCalendar(aLocale);
+                                                aLastAnyLocale = aLocale;
+                                            }
+                                            else if ( aLocale != aLastAnyLocale )
+                                            {
+                                                pAnyPtr->loadDefaultCalendar( aLocale );
+                                                aLastAnyLocale = aLocale;
+                                            }
+                                            pPtr = pAnyPtr.get();
                                         }
                                         return pPtr;
                                     }
