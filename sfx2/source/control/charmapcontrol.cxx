@@ -43,18 +43,40 @@ SfxCharmapCtrl::SfxCharmapCtrl(sal_uInt16 nId, const css::uno::Reference< css::f
     get( m_pRecentCharView[13], "viewchar14" );
     get( m_pRecentCharView[14], "viewchar15" );
     get( m_pRecentCharView[15], "viewchar16" );
+
+    get( m_pFavCharView[0], "favchar1" );
+    get( m_pFavCharView[1], "favchar2" );
+    get( m_pFavCharView[2], "favchar3" );
+    get( m_pFavCharView[3], "favchar4" );
+    get( m_pFavCharView[4], "favchar5" );
+    get( m_pFavCharView[5], "favchar6" );
+    get( m_pFavCharView[6], "favchar7" );
+    get( m_pFavCharView[7], "favchar8" );
+    get( m_pFavCharView[8], "favchar9" );
+    get( m_pFavCharView[9], "favchar10" );
+    get( m_pFavCharView[10], "favchar11" );
+    get( m_pFavCharView[11], "favchar12" );
+    get( m_pFavCharView[12], "favchar13" );
+    get( m_pFavCharView[13], "favchar14" );
+    get( m_pFavCharView[14], "favchar15" );
+    get( m_pFavCharView[15], "favchar16" );
+
     get( maDlgBtn, "specialchardlg");
 
     for(int i = 0; i < 16; i++)
     {
-        m_pRecentCharView[i]->setMouseClickHdl(LINK(this,SfxCharmapCtrl, RecentClickHdl));
+        m_pRecentCharView[i]->setMouseClickHdl(LINK(this,SfxCharmapCtrl, CharClickHdl));
         m_pRecentCharView[i]->SetLoseFocusHdl(LINK(this,SfxCharmapCtrl, LoseFocusHdl));
+        m_pFavCharView[i]->setMouseClickHdl(LINK(this,SfxCharmapCtrl, CharClickHdl));
+        m_pFavCharView[i]->SetLoseFocusHdl(LINK(this,SfxCharmapCtrl, LoseFocusHdl));
     }
 
     maDlgBtn->SetClickHdl(LINK(this, SfxCharmapCtrl, OpenDlgHdl));
 
     getRecentCharacterList();
     updateRecentCharControl();
+    getFavCharacterList();
+    updateFavCharControl();
 }
 
 SfxCharmapCtrl::~SfxCharmapCtrl()
@@ -76,6 +98,46 @@ void SfxCharmapCtrl::dispose()
 }
 
 
+void SfxCharmapCtrl::getFavCharacterList()
+{
+    //retrieve recent character list
+    css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavCharacters::FavCharacterList::get() );
+    for (int i = 0; i < rFavCharList.getLength(); ++i)
+    {
+        maFavCharList.push_back(rFavCharList[i]);
+    }
+
+    //retrieve recent character font list
+    css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavCharacters::FavCharacterFontList::get() );
+    for (int i = 0; i < rFavCharFontList.getLength(); ++i)
+    {
+        maFavCharFontList.push_back(rFavCharFontList[i]);
+    }
+}
+
+
+void SfxCharmapCtrl::updateFavCharControl()
+{
+    int i = 0;
+    for ( std::deque< OUString >::iterator it = maFavCharList.begin(), it2 = maFavCharFontList.begin();
+        it != maFavCharList.end() || it2 != maFavCharFontList.end();
+        ++it, ++it2, i++)
+    {
+        m_pFavCharView[i]->SetText(*it);
+        vcl::Font rFont = m_pFavCharView[i]->GetControlFont();
+        rFont.SetFamilyName( *it2 );
+        m_pFavCharView[i]->SetFont(rFont);
+        m_pFavCharView[i]->Show();
+    }
+
+    for(; i < 16 ; i++)
+    {
+        m_pFavCharView[i]->SetText(OUString());
+        m_pFavCharView[i]->Hide();
+    }
+}
+
+
 void SfxCharmapCtrl::getRecentCharacterList()
 {
     //retrieve recent character list
@@ -92,6 +154,7 @@ void SfxCharmapCtrl::getRecentCharacterList()
         maRecentCharFontList.push_back(rRecentCharFontList[i]);
     }
 }
+
 
 void SfxCharmapCtrl::updateRecentCharControl()
 {
@@ -164,7 +227,7 @@ IMPL_STATIC_LINK(SfxCharmapCtrl, LoseFocusHdl, Control&, pItem, void)
 }
 
 
-IMPL_LINK(SfxCharmapCtrl, RecentClickHdl, SvxCharView*, rView, void)
+IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView*, rView, void)
 {
     rView->GrabFocus();
     rView->Invalidate();
