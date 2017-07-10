@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_d91a526e",
+        "filename": "sax/source/tools/fastattribs.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2017-07-10T13:53:20Z",
+      "side": 1,
+      "message": "I would put this method as in-line in a header - simply because a fn\u0027 call is expensive; and this -should- ultimately compile down to nothing at all \u003d) [ or perhaps a simple this pointer adjustment ]",
+      "revId": "5f3d6d10e31994f2d3330780d112ab6244ccb5da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
