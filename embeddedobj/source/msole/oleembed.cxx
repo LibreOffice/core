@@ -247,7 +247,7 @@ OUString OleEmbeddedObject::MoveToTemporarySubstream()
 }
 
 
-bool OleEmbeddedObject::TryToConvertToOOo()
+bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& xStream )
 {
     bool bResult = false;
 
@@ -263,9 +263,9 @@ bool OleEmbeddedObject::TryToConvertToOOo()
         changeState( embed::EmbedStates::LOADED );
 
         // the stream must be seekable
-        uno::Reference< io::XSeekable > xSeekable( m_xObjectStream, uno::UNO_QUERY_THROW );
+        uno::Reference< io::XSeekable > xSeekable( xStream, uno::UNO_QUERY_THROW );
         xSeekable->seek( 0 );
-        m_aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xFactory, OUString(), m_xObjectStream->getInputStream() );
+        m_aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xFactory, OUString(), xStream->getInputStream() );
 
         // use the solution only for OOXML format currently
         if ( !m_aFilterName.isEmpty()
@@ -313,7 +313,7 @@ bool OleEmbeddedObject::TryToConvertToOOo()
                 aArgs[3].Name = "URL";
                 aArgs[3].Value <<= OUString( "private:stream" );
                 aArgs[4].Name = "InputStream";
-                aArgs[4].Value <<= m_xObjectStream->getInputStream();
+                aArgs[4].Value <<= xStream->getInputStream();
 
                 xSeekable->seek( 0 );
                 xLoadable->load( aArgs );
@@ -664,7 +664,6 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
 
 namespace
 {
-#ifndef _WIN32
     bool lcl_CopyStream(const uno::Reference<io::XInputStream>& xIn, const uno::Reference<io::XOutputStream>& xOut, sal_Int32 nMaxCopy = SAL_MAX_INT32)
     {
         if (nMaxCopy == 0)
@@ -686,18 +685,11 @@ namespace
         } while (nRead == nChunkSize && nTotalRead <= nMaxCopy);
         return nTotalRead != 0;
     }
-#endif
 
-    //Dump the objects content to a tempfile, just the "CONTENTS" stream if
-    //there is one for non-compound documents, otherwise the whole content.
-    //On success a file is returned which must be removed by the caller
-    OUString lcl_ExtractObject(const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
-        const css::uno::Reference< css::io::XStream >& xObjectStream)
+    uno::Reference < io::XStream > lcl_GetExtractedStream( OUString& rUrl,
+        const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+        const css::uno::Reference< css::io::XStream >& xObjectStream )
     {
-        OUString sUrl;
-
-        // the solution is only active for Unix systems
-#ifndef _WIN32
         uno::Reference <beans::XPropertySet> xNativeTempFile(
             io::TempFile::create(comphelper::getComponentContext(xFactory)),
             uno::UNO_QUERY_THROW);
@@ -796,25 +788,47 @@ namespace
             xNativeTempFile->setPropertyValue("RemoveFile",
                 uno::makeAny(false));
             uno::Any aUrl = xNativeTempFile->getPropertyValue("Uri");
-            aUrl >>= sUrl;
+            aUrl >>= rUrl;
 
             xNativeTempFile.clear();
 
             uno::Reference < ucb::XSimpleFileAccess3 > xSimpleFileAccess(
                     ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
 
-            xSimpleFileAccess->setReadOnly(sUrl, true);
+            xSimpleFileAccess->setReadOnly(rUrl, true);
         }
         else
         {
             xNativeTempFile->setPropertyValue("RemoveFile",
                 uno::makeAny(true));
         }
+
+        return xStream;
+    }
+
+    //Dump the objects content to a tempfile, just the "CONTENTS" stream if
+    //there is one for non-compound documents, otherwise the whole content.
+    //On success a file is returned which must be removed by the caller
+    OUString lcl_ExtractObject(const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+        const css::uno::Reference< css::io::XStream >& xObjectStream)
+    {
+        OUString sUrl;
+
+        // the solution is only active for Unix systems
+#ifndef _WIN32
+        lcl_GetExtractedStream(sUrl, xFactory, xObjectStream);
 #else
         (void) xFactory;
         (void) xObjectStream;
 #endif
         return sUrl;
+    }
+
+    uno::Reference < io::XStream > lcl_ExtractObjectStream( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+        const css::uno::Reference< css::io::XStream >& xObjectStream )
+    {
+        OUString sUrl;
+        return lcl_GetExtractedStream( sUrl, xFactory, xObjectStream );
     }
 }
 
@@ -830,6 +844,9 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
+        // open content in the window not in-place
+        nVerbID = embed::EmbedVerbs::MS_OLEVERB_OPEN;
+
         // the object was converted to OOo embedded object, the current implementation is now only a wrapper
         xWrappedObject->doVerb( nVerbID );
         return;
@@ -902,7 +919,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             if ( !m_bTriedConversion )
             {
                 m_bTriedConversion = true;
-                if ( TryToConvertToOOo() )
+                if ( TryToConvertToOOo( m_xObjectStream ) )
                 {
                     changeState( embed::EmbedStates::UI_ACTIVE );
                     return;
@@ -927,6 +944,18 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 {
                     SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::doVerb: "
                         "-9 fallback path: exception caught: " << e.Message);
+                }
+            }
+
+            // it may be the OLE Storage, try to extract stream
+            if ( !m_pOwnView && m_xObjectStream.is() && m_aFilterName == "Text" )
+            {
+                uno::Reference< io::XStream > xStream = lcl_ExtractObjectStream( m_xFactory, m_xObjectStream );
+
+                if ( TryToConvertToOOo( xStream ) )
+                {
+                    changeState( embed::EmbedStates::ACTIVE );
+                    return;
                 }
             }
 
