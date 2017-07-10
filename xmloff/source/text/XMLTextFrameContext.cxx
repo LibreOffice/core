@@ -988,7 +988,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                 const sal_Int32 nRotateLen(aRotate.getLength());
                 sal_Int32 nLen = sValue.getLength();
                 if( nLen >= nRotateLen+3 &&
-                    0 == sValue.compareTo( aRotate, nRotateLen ) &&
+                    sValue.startsWith(aRotate) &&
                     '(' == sValue[nRotateLen] &&
                     ')' == sValue[nLen-1] )
                 {

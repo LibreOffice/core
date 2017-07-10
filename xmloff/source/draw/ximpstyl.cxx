@@ -1261,7 +1261,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                 if( nPrefLen )
                 {
                     sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( '-' ) + 1;
-                    if( (nPrefLen != nStylePrefLen) ||  (aStyleName.compareTo( rPrefix, nPrefLen ) != 0) )
+                    if( (nPrefLen != nStylePrefLen) || !aStyleName.startsWith(rPrefix) )
                         continue;
 
                     aStyleName = aStyleName.copy( nPrefLen );
@@ -1357,7 +1357,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
             if( nPrefLen )
             {
                 sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( '-' ) + 1;
-                if( (nPrefLen != nStylePrefLen) ||  (aStyleName.compareTo( rPrefix, nPrefLen ) != 0) )
+                if( (nPrefLen != nStylePrefLen) || !aStyleName.startsWith( rPrefix ) )
                     continue;
 
                 aStyleName = aStyleName.copy( nPrefLen );
@@ -1371,7 +1371,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                 if( nPrefLen )
                 {
                     sal_Int32 nStylePrefLen = sParentStyleDisplayName.lastIndexOf( '-' ) + 1;
-                    if( (nPrefLen != nStylePrefLen) || (sParentStyleDisplayName.compareTo( rPrefix, nPrefLen ) != 0) )
+                    if( (nPrefLen != nStylePrefLen) || !sParentStyleDisplayName.startsWith( rPrefix ) )
                         continue;
 
                     sParentStyleDisplayName = sParentStyleDisplayName.copy( nPrefLen );

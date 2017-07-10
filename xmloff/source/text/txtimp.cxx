@@ -2597,7 +2597,7 @@ bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
         o_rpRDFaAttributes = std::get<2>(rEntry);
         m_xImpl->m_BookmarkStartRanges.erase(sName);
         auto it(m_xImpl->m_BookmarkVector.begin());
-        while (it != m_xImpl->m_BookmarkVector.end() && it->compareTo(sName)!=0)
+        while (it != m_xImpl->m_BookmarkVector.end() && *it != sName)
         {
             ++it;
         }

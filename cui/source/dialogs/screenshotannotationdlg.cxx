@@ -364,7 +364,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, Button*, void)
                 INetURLObject aConfirmedURL(aConfirmedName);
                 OUString aCurrentExtension(aConfirmedURL.getExtension());
 
-                if (!aCurrentExtension.isEmpty() && 0 != aCurrentExtension.compareTo("png"))
+                if (!aCurrentExtension.isEmpty() && aCurrentExtension != "png")
                 {
                     aConfirmedURL.removeExtension();
                     aCurrentExtension.clear();

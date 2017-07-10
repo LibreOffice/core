@@ -744,7 +744,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 aCurrentMode = comphelper::getString( aAppNode.getNodeValue( "Active" ) );
 
-                if ( aCurrentMode.compareTo( aNewName ) == 0 )
+                if ( aCurrentMode == aNewName )
                 {
                     bDone = true;
                     break;
@@ -821,7 +821,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                         OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
 
-                        if ( aCommandArg.compareTo( aNewName ) == 0 )
+                        if ( aCommandArg == aNewName )
                         {
                             aMandatoryToolbars = aModeNode.getNodeValue( "Toolbars" ).get< uno::Sequence<OUString> >();
                             aUserToolbars = aModeNode.getNodeValue( "UserToolbars" ).get< uno::Sequence<OUString> >();
@@ -881,17 +881,17 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                             sfx2::sidebar::SidebarController::GetSidebarControllerForFrame( xFrame );
                     if ( pSidebar )
                     {
-                        if ( aSidebarMode.compareTo( "Arrow" ) == 0 )
+                        if ( aSidebarMode == "Arrow" )
                         {
                             pSidebar->FadeOut();
                         }
-                        else if ( aSidebarMode.compareTo( "Tabs" ) == 0 )
+                        else if ( aSidebarMode == "Tabs" )
                         {
                             pSidebar->FadeIn();
                             pSidebar->RequestOpenDeck();
                             pSidebar->RequestCloseDeck();
                         }
-                        else if ( aSidebarMode.compareTo( "Opened" ) == 0 )
+                        else if ( aSidebarMode == "Opened" )
                         {
                             pSidebar->FadeIn();
                             pSidebar->RequestOpenDeck();
@@ -917,7 +917,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                             OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
 
-                            if ( aCommandArg.compareTo( aCurrentMode ) == 0 )
+                            if ( aCommandArg == aCurrentMode )
                             {
                                 aModeNode.setNodeValue( "UserToolbars", makeAny( aBackup ) );
                                 break;

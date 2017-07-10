@@ -180,8 +180,6 @@ class ScXMLChangeTrackingImportHelper
     ScDocument*         pDoc;
     ScChangeTrack*      pTrack;
     ScMyBaseAction*     pCurrentAction;
-    OUString            sIDPrefix;
-    sal_uInt32          nPrefixLength;
     sal_Int16           nMultiSpanned;
     sal_Int16           nMultiSpannedSlaveCount;
 
@@ -202,7 +200,7 @@ public:
     void SetProtection(const css::uno::Sequence<sal_Int8>& rProtect) { aProtect = rProtect; }
     void StartChangeAction(const ScChangeActionType nActionType);
 
-    sal_uInt32 GetIDFromString(const OUString& sID);
+    static sal_uInt32 GetIDFromString(const OUString& sID);
 
     void SetActionNumber(const sal_uInt32 nActionNumber) { pCurrentAction->nActionNumber = nActionNumber; }
     void SetActionState(const ScChangeActionState nActionState) { pCurrentAction->nActionState = nActionState; }

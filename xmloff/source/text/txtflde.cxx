@@ -390,7 +390,7 @@ enum FieldIdEnum XMLTextFieldExport::GetFieldID(
         // search for TextField service name
         while( nCount2-- )
         {
-            if( 0 == pNames2->compareTo(sPresentationServicePrefix, sPresentationServicePrefix.getLength()))
+            if( pNames2->startsWith(sPresentationServicePrefix) )
             {
                 // TextField found => postfix is field type!
                 sFieldName = pNames2->copy(sPresentationServicePrefix.getLength());
