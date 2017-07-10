@@ -635,16 +635,11 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 if( xNamespaceMap.is() )
                 {
                     Sequence< OUString > aPrefixes( xNamespaceMap->getElementNames() );
-
-                    OUString* pPrefix = aPrefixes.getArray();
-                    const sal_Int32 nCount = aPrefixes.getLength();
-                    sal_Int32 nIndex;
-                    OUString aURL;
-
-                    for( nIndex = 0; nIndex < nCount; ++nIndex, ++pPrefix )
+                    for( OUString const & prefix : aPrefixes )
                     {
-                        if( xNamespaceMap->getByName( *pPrefix ) >>= aURL )
-                            GetNamespaceMap_().Add( *pPrefix, aURL );
+                        OUString aURL;
+                        if( xNamespaceMap->getByName( prefix ) >>= aURL )
+                            GetNamespaceMap_().Add( prefix, aURL );
                     }
                 }
             }

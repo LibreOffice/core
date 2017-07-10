@@ -1664,18 +1664,15 @@ namespace dbmm
         Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
         Sequence< OUString > aEventNames( xEvents->getElementNames() );
 
-        const OUString* eventName = aEventNames.getArray();
-        const OUString* eventNamesEnd = eventName + aEventNames.getLength();
-
         ScriptEventDescriptor aScriptEvent;
-        for ( ; eventName != eventNamesEnd; ++eventName )
+        for ( OUString const & eventName : aEventNames )
         {
-            OSL_VERIFY( xEvents->getByName( *eventName ) >>= aScriptEvent );
+            OSL_VERIFY( xEvents->getByName( eventName ) >>= aScriptEvent );
 
             if ( !impl_adjustScriptLibrary_nothrow( aScriptEvent ) )
                 continue;
 
-            xEvents->replaceByName( *eventName, makeAny( aScriptEvent ) );
+            xEvents->replaceByName( eventName, makeAny( aScriptEvent ) );
         }
     }
 
@@ -1731,12 +1728,9 @@ namespace dbmm
             Sequence< ScriptEventDescriptor > aEvents( aComponent.getEvents() );
 
             bool bChangedComponentEvents = false;
-            for (   ScriptEventDescriptor* scriptEvent = aEvents.getArray();
-                    scriptEvent != aEvents.getArray() + aEvents.getLength();
-                    ++scriptEvent
-                )
+            for ( ScriptEventDescriptor & scriptEvent : aEvents )
             {
-                if ( !impl_adjustScriptLibrary_nothrow( *scriptEvent ) )
+                if ( !impl_adjustScriptLibrary_nothrow( scriptEvent ) )
                     continue;
 
                 bChangedComponentEvents = true;

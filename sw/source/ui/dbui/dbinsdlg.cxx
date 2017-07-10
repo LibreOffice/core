@@ -1550,14 +1550,13 @@ void SwInsertDBColAutoPilot::Notify( const css::uno::Sequence< OUString >&  ) {}
 void SwInsertDBColAutoPilot::ImplCommit()
 {
     Sequence <OUString> aNames = GetNodeNames(OUString());
-    const OUString* pNames = aNames.getArray();
     //remove entries that contain this data source + table at first
-    for(sal_Int32 nNode = 0; nNode < aNames.getLength(); nNode++)
+    for(OUString const & nodeName : aNames)
     {
         Sequence<OUString> aSourceNames(2);
         OUString* pSourceNames = aSourceNames.getArray();
-        pSourceNames[0] = pNames[nNode] + "/DataSource";
-        pSourceNames[1] = pNames[nNode] + "/Command";
+        pSourceNames[0] = nodeName + "/DataSource";
+        pSourceNames[1] = nodeName + "/Command";
         Sequence<Any> aSourceProperties = GetProperties(aSourceNames);
         const Any* pSourceProps = aSourceProperties.getArray();
         OUString sSource, sCommand;
@@ -1565,7 +1564,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
         pSourceProps[1] >>= sCommand;
         if(sSource==aDBData.sDataSource && sCommand==aDBData.sCommand)
         {
-            Sequence<OUString> aElements { pNames[nNode] };
+            Sequence<OUString> aElements { nodeName };
             ClearNodeElements(OUString(), aElements);
         }
     }
@@ -1663,13 +1662,12 @@ void SwInsertDBColAutoPilot::ImplCommit()
 
 void SwInsertDBColAutoPilot::Load()
 {
-    Sequence <OUString> aNames = GetNodeNames(OUString());
-    const OUString* pNames = aNames.getArray();
+    Sequence<OUString> aNames = GetNodeNames(OUString());
     SvNumberFormatter& rNFormatr = *pView->GetWrtShell().GetNumberFormatter();
-    for(sal_Int32 nNode = 0; nNode < aNames.getLength(); nNode++)
+    for(OUString const & nodeName : aNames)
     {
         //search for entries with the appropriate data source and table
-        Sequence<OUString> aSourceNames = lcl_createSourceNames(pNames[nNode]);
+        Sequence<OUString> aSourceNames = lcl_createSourceNames(nodeName);
 
         Sequence< Any> aDataSourceProps = GetProperties(aSourceNames);
         const Any* pDataSourceProps = aDataSourceProps.getConstArray();
@@ -1697,7 +1695,7 @@ void SwInsertDBColAutoPilot::Load()
             if(pDataSourceProps[10].hasValue())
                  pNewData->bIsEmptyHeadln = *o3tl::doAccess<bool>(pDataSourceProps[10]);
 
-            const OUString sSubNodeName(pNames[nNode] + "/ColumnSet/");
+            const OUString sSubNodeName(nodeName + "/ColumnSet/");
             Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
             const OUString* pSubNames = aSubNames.getConstArray();
             for(sal_Int32 nSub = 0; nSub < aSubNames.getLength(); nSub++)

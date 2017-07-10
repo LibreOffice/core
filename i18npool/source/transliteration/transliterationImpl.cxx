@@ -304,10 +304,8 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
             tmpStr = bodyCascade[0]->transliterate(tmpStr, 0, nCount, offset);
             if ( startPos )
             {
-                sal_Int32 * pArr = offset.getArray();
-                nCount = offset.getLength();
-                for (sal_Int32 j = 0; j < nCount; j++)
-                    pArr[j] += startPos;
+                for (sal_Int32 & j : offset)
+                    j += startPos;
             }
             return tmpStr;
         }
@@ -319,7 +317,7 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
         for (sal_Int32 j = 0; j < nCount; j++)
             pArr[j] = startPos + j;
 
-        sal_Int16 from = 0, to = 1, tmp;
+        sal_Int16 from = 0, to = 1;
         Sequence<sal_Int32> off[2];
 
         off[to] = offset;
@@ -330,7 +328,7 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
             nCount = tmpStr.getLength();
 
             assert(off[from].getLength() == nCount);
-            tmp = from; from = to; to = tmp;
+            std::swap(from, to);
             // tdf#89665: don't use operator[] to write - too slow!
             // interestingly gcc 4.9 -Os won't even inline the const operator[]
             sal_Int32 const*const pFrom(off[from].getConstArray());
@@ -366,10 +364,8 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
             tmpStr = bodyCascade[0]->folding(tmpStr, 0, nCount, offset);
             if ( startPos )
             {
-                sal_Int32 * pArr = offset.getArray();
-                nCount = offset.getLength();
-                for (sal_Int32 j = 0; j < nCount; j++)
-                    pArr[j] += startPos;
+                for (sal_Int32 & j : offset)
+                    j += startPos;
             }
             return tmpStr;
         }

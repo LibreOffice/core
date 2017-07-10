@@ -220,18 +220,16 @@ void ODBTable::construct()
     describeProperties(aProps);
     if(!_nId)
     {
-        Property* pIter = aProps.getArray();
-        Property* pEnd  = pIter + aProps.getLength();
-        for(;pIter != pEnd;++pIter)
+        for(Property & prop : aProps)
         {
-            if (pIter->Name == PROPERTY_CATALOGNAME)
-                pIter->Attributes = PropertyAttribute::READONLY;
-            else if (pIter->Name == PROPERTY_SCHEMANAME)
-                pIter->Attributes = PropertyAttribute::READONLY;
-            else if (pIter->Name == PROPERTY_DESCRIPTION)
-                pIter->Attributes = PropertyAttribute::READONLY;
-            else if (pIter->Name == PROPERTY_NAME)
-                pIter->Attributes = PropertyAttribute::READONLY;
+            if (prop.Name == PROPERTY_CATALOGNAME)
+                prop.Attributes = PropertyAttribute::READONLY;
+            else if (prop.Name == PROPERTY_SCHEMANAME)
+                prop.Attributes = PropertyAttribute::READONLY;
+            else if (prop.Name == PROPERTY_DESCRIPTION)
+                prop.Attributes = PropertyAttribute::READONLY;
+            else if (prop.Name == PROPERTY_NAME)
+                prop.Attributes = PropertyAttribute::READONLY;
         }
     }
 

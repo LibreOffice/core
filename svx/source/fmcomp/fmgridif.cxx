@@ -2682,9 +2682,8 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
         // let an css::util::URL-transformer normalize the URLs
         Reference< css::util::XURLTransformer >  xTransformer(
             util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
-        pSupported = aSupported.getArray();
-        for (sal_Int32 i=0; i<aSupported.getLength(); ++i)
-            xTransformer->parseStrict(pSupported[i]);
+        for (css::util::URL & rURL : aSupported)
+            xTransformer->parseStrict(rURL);
     }
 
     return aSupported;

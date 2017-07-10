@@ -166,21 +166,15 @@ void SAL_CALL BaseContainerControl::dispose()
 
     // remove controls
     Sequence< Reference< XControl > >   seqCtrls    =   getControls();
-    Reference< XControl > *             pCtrls      =   seqCtrls.getArray();
-    sal_uInt32                          nCtrls      =   seqCtrls.getLength();
-    size_t                              nMaxCount   =   maControlInfoList.size();
-    size_t                              nCount      =   0;
 
-    for ( nCount = 0; nCount < nMaxCount; ++nCount )
-    {
-        delete maControlInfoList[ nCount ];
-    }
+    for ( auto & i : maControlInfoList )
+        delete i;
     maControlInfoList.clear();
 
-    for ( nCount = 0; nCount < nCtrls; ++nCount )
+    for ( Reference< XControl > const & control : seqCtrls )
     {
-        pCtrls [ nCount ] -> removeEventListener    ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
-        pCtrls [ nCount ] -> dispose                (       );
+        control->removeEventListener    ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) );
+        control->dispose                (       );
     }
 
     // call baseclass
