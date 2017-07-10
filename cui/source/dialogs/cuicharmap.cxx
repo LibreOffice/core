@@ -70,6 +70,7 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
     m_pSubsetLB->set_width_request(m_pSubsetLB->get_preferred_size().Width());
     get(m_pHexCodeText, "hexvalue");
     get(m_pDecimalCodeText, "decimalvalue");
+    get(m_pFavouritesCB, "favcb");
     //lock the size request of this widget to the width of the original .ui string
     m_pHexCodeText->set_width_request(m_pHexCodeText->get_preferred_size().Width());
 
@@ -136,6 +137,8 @@ short SvxCharacterMap::Execute()
         // using the new UCS4 constructor
         OUString aOUStr( &cChar, 1 );
         m_pShowChar->SetText(aOUStr);
+
+        m_pFavouritesCB->Check(isFavChar(aOUStr, m_pShowChar->GetFont().GetFamilyName()));
         m_pOKBtn->Enable();
     }
 
@@ -159,6 +162,10 @@ void SvxCharacterMap::dispose()
 
     maRecentCharList.clear();
     maRecentCharFontList.clear();
+    maFavCharList.clear();
+    maFavCharFontList.clear();
+
+    m_pFavouritesCB.clear();
 
     SfxModalDialog::dispose();
 }
@@ -167,6 +174,7 @@ void SvxCharacterMap::dispose()
 void SvxCharacterMap::SetChar( sal_UCS4 c )
 {
     m_pShowSet->SelectCharacter( c );
+    m_pFavouritesCB->Check(isFavChar(OUString(&c, 1), aFont.GetFamilyName()));
 }
 
 
@@ -199,6 +207,25 @@ void SvxCharacterMap::getRecentCharacterList()
         maRecentCharFontList.push_back(rRecentCharFontList[i]);
     }
 }
+
+
+void SvxCharacterMap::getFavCharacterList()
+{
+    //retrieve recent character list
+    css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavCharacters::FavCharacterList::get() );
+    for (int i = 0; i < rFavCharList.getLength(); ++i)
+    {
+        maFavCharList.push_back(rFavCharList[i]);
+    }
+
+    //retrieve recent character font list
+    css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavCharacters::FavCharacterFontList::get() );
+    for (int i = 0; i < rFavCharFontList.getLength(); ++i)
+    {
+        maFavCharFontList.push_back(rFavCharFontList[i]);
+    }
+}
+
 
 void SvxCharacterMap::updateRecentCharControl()
 {
@@ -265,6 +292,81 @@ void SvxCharacterMap::updateRecentCharacterList(const OUString& sTitle, const OU
 }
 
 
+void SvxCharacterMap::updateFavCharacterList(const OUString& sTitle, const OUString& rFont)
+{
+    auto itChar = std::find_if(maFavCharList.begin(),
+         maFavCharList.end(),
+         [sTitle] (const OUString & a) { return a == sTitle; });
+
+    auto itChar2 = std::find_if(maFavCharFontList.begin(),
+         maFavCharFontList.end(),
+         [rFont] (const OUString & a) { return a == rFont; });
+
+    // if Fav char to be added is already in list, remove it
+    if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
+    {
+        maFavCharList.erase( itChar );
+        maFavCharFontList.erase( itChar2);
+    }
+
+    if (maFavCharList.size() == 16)
+    {
+        maFavCharList.pop_back();
+        maFavCharFontList.pop_back();
+    }
+
+    maFavCharList.push_front(sTitle);
+    maFavCharFontList.push_front(rFont);
+
+    css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
+    css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
+
+    for (size_t i = 0; i < maFavCharList.size(); ++i)
+    {
+        aFavCharList[i] = maFavCharList[i];
+        aFavCharFontList[i] = maFavCharFontList[i];
+    }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    officecfg::Office::Common::FavCharacters::FavCharacterList::set(aFavCharList, batch);
+    officecfg::Office::Common::FavCharacters::FavCharacterFontList::set(aFavCharFontList, batch);
+    batch->commit();
+}
+
+
+void SvxCharacterMap::deleteFavCharacterFromList(const OUString& sTitle, const OUString& rFont)
+{
+    auto itChar = std::find_if(maFavCharList.begin(),
+         maFavCharList.end(),
+         [sTitle] (const OUString & a) { return a == sTitle; });
+
+    auto itChar2 = std::find_if(maFavCharFontList.begin(),
+         maFavCharFontList.end(),
+         [rFont] (const OUString & a) { return a == rFont; });
+
+    // if Fav char to be added is already in list, remove it
+    if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
+    {
+        maFavCharList.erase( itChar );
+        maFavCharFontList.erase( itChar2);
+    }
+
+    css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
+    css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
+
+    for (size_t i = 0; i < maFavCharList.size(); ++i)
+    {
+        aFavCharList[i] = maFavCharList[i];
+        aFavCharFontList[i] = maFavCharFontList[i];
+    }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    officecfg::Office::Common::FavCharacters::FavCharacterList::set(aFavCharList, batch);
+    officecfg::Office::Common::FavCharacters::FavCharacterFontList::set(aFavCharFontList, batch);
+    batch->commit();
+}
+
+
 void SvxCharacterMap::init()
 {
     aFont = GetFont();
@@ -321,6 +423,7 @@ void SvxCharacterMap::init()
     m_pShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
     m_pDecimalCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, DecimalCodeChangeHdl ) );
     m_pHexCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, HexCodeChangeHdl ) );
+    m_pFavouritesCB->SetClickHdl( LINK(this, SvxCharacterMap, FavSelectHdl));
 
     if( SvxShowCharSet::getSelectedChar() == ' ')
     {
@@ -332,17 +435,38 @@ void SvxCharacterMap::init()
         // using the new UCS4 constructor
         OUString aOUStr( &cChar, 1 );
         m_pShowChar->SetText(aOUStr);
+
+        m_pFavouritesCB->Check(isFavChar(aOUStr, aDefStr));
         m_pOKBtn->Enable();
     }
 
     getRecentCharacterList();
     updateRecentCharControl();
 
+    getFavCharacterList();
+
     for(int i = 0; i < 16; i++)
     {
         m_pRecentCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, RecentClickHdl));
         m_pRecentCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
     }
+}
+
+bool SvxCharacterMap::isFavChar(const OUString& sTitle, const OUString& rFont)
+{
+    auto itChar = std::find_if(maFavCharList.begin(),
+         maFavCharList.end(),
+         [sTitle] (const OUString & a) { return a == sTitle; });
+
+    auto itChar2 = std::find_if(maFavCharFontList.begin(),
+         maFavCharFontList.end(),
+         [rFont] (const OUString & a) { return a == rFont; });
+
+    // if Fav char to be added is already in list, remove it
+    if( itChar != maFavCharList.end() &&  itChar2 != maFavCharFontList.end() )
+        return true;
+    else
+        return false;
 }
 
 
@@ -462,6 +586,8 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
     {
         sal_UCS4 cFirst = pSubset->GetRangeMin();
         m_pShowSet->SelectCharacter( cFirst );
+
+        m_pFavouritesCB->Check(isFavChar(OUString(&cFirst, 1), aFont.GetFamilyName()));
     }
     m_pSubsetLB->SelectEntryPos( nPos );
 }
@@ -471,6 +597,8 @@ IMPL_LINK(SvxCharacterMap, RecentClickHdl, SvxCharView*, rView, void)
     m_pShowChar->SetText( rView->GetText() );
     m_pShowChar->SetFont(rView->GetFont());
     m_pShowChar->Update();
+
+    m_pFavouritesCB->Check(isFavChar(rView->GetText(), rView->GetFont().GetFamilyName()));//BUG
     rView->GrabFocus();
 
     // Get the hexadecimal code
@@ -498,6 +626,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
     sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
     // using the new UCS4 constructor
     OUString aOUStr( &cChar, 1 );
+    m_pFavouritesCB->Check(isFavChar(aOUStr, aFont.GetFamilyName()));
     insertCharToDoc(aOUStr);
 }
 
@@ -518,6 +647,13 @@ IMPL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, Control&, pItem, void)
     pItem.Invalidate();
 }
 
+IMPL_LINK_NOARG(SvxCharacterMap, FavSelectHdl, Button*, void)
+{
+    if(m_pFavouritesCB->IsChecked())
+        updateFavCharacterList(m_pShowChar->GetText(), m_pShowChar->GetFont().GetFamilyName());
+    else
+        deleteFavCharacterFromList(m_pShowChar->GetText(), m_pShowChar->GetFont().GetFamilyName());
+}
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
 {
@@ -525,6 +661,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
     OUString aHexText;
     OUString aDecimalText;
     sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+    m_pFavouritesCB->Check(isFavChar(OUString(&cChar, 1), aFont.GetFamilyName()));
     bool bSelect = (cChar > 0);
 
     // show char sample
@@ -547,6 +684,8 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         m_pShowChar->SetText( aText );
         m_pShowChar->SetFont( aFont );
         m_pShowChar->Update();
+
+        m_pFavouritesCB->Check(isFavChar(aText, aFont.GetFamilyName()));
     }
 
     // show char codes
@@ -607,6 +746,8 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
     if( pSubsetMap )
     {
         sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+
+        m_pFavouritesCB->Check(isFavChar(OUString(&cChar, 1), aFont.GetFamilyName()));
         const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
         if( pSubset )
             m_pSubsetLB->SelectEntry( pSubset->GetName() );

@@ -3493,6 +3493,23 @@
         <value/>
       </prop>
     </group>
+    <group oor:name="FavCharacters">
+      <info>
+        <desc>Contains Fav characters</desc>
+      </info>
+      <prop oor:name="FavCharacterList" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of Fav characters</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="FavCharacterFontList" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of Fav character font</desc>
+        </info>
+        <value/>
+      </prop>
+    </group>
     <group oor:name="Help">
       <info>
         <desc>Contains settings that specify the common help settings.</desc>
