@@ -1,0 +1,7 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+2: Muhammet Kara <muhammet.kara@pardus.org.tr>
+Submitted-by: Muhammet Kara <muhammet.kara@pardus.org.tr>
+Submitted-at: Mon, 10 Jul 2017 10:41:38 +0200
+Reviewed-on: https://gerrit.libreoffice.org/39617
+Project: core
+Branch: refs/heads/feature/gsoc17-revamp-customize-dialog
