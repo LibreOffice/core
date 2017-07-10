@@ -86,7 +86,8 @@ public:
     sal_Int32       GetFunctionPos(sal_Int32 nPos);
     void            ClearAllParas();
 
-    void            MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, const FormulaToken* _pToken, long Count );
+    void            MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, const FormulaToken* pFuncToken,
+                              const FormulaToken* _pToken, long Count );
     void            fillTree(StructPage* _pTree);
     void            UpdateTokenArray( const OUString& rStrExp);
     OUString        RepairFormula(const OUString& aFormula);
@@ -621,7 +622,8 @@ bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStru
 }
 
 
-void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, const FormulaToken* _pToken, long Count )
+void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, const FormulaToken* pFuncToken,
+        const FormulaToken* _pToken, long Count )
 {
     if ( _pToken != nullptr && Count > 0 )
     {
@@ -672,7 +674,7 @@ void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, co
                     }
                 }
 
-                MakeTree( _pTree, pEntry, m_pTokenArrayIterator->PrevRPN(), nParas);
+                MakeTree( _pTree, pEntry, _pToken, m_pTokenArrayIterator->PrevRPN(), nParas);
 
                 if (bCalcSubformula)
                 {
@@ -698,8 +700,8 @@ void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, co
                 }
 
                 --Count;
-                m_pTokenArrayIterator->NextRPN();
-                MakeTree( _pTree, pParent, m_pTokenArrayIterator->PrevRPN(), Count);
+                m_pTokenArrayIterator->NextRPN();   /* TODO: what's this to be? ThisRPN()? */
+                MakeTree( _pTree, pParent, _pToken, m_pTokenArrayIterator->PrevRPN(), Count);
             }
             else
             {
@@ -714,6 +716,7 @@ void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, co
                     /* TODO: this should depend on parameter classification, if
                      * a scalar value is expected matrix should not be forced.
                      * */
+                    (void)pFuncToken;
                     bool bForceMatrix = (!m_pBtnMatrix->IsChecked() &&
                             (_pToken->GetType() == svDoubleRef || _pToken->GetType() == svExternalDoubleRef));
                     OUString aCellResult;
@@ -728,7 +731,7 @@ void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, co
                     _pTree->InsertEntry( aResult, pParent, STRUCT_END, 0, _pToken);
                 }
                 --Count;
-                MakeTree( _pTree, pParent, m_pTokenArrayIterator->PrevRPN(), Count);
+                MakeTree( _pTree, pParent, _pToken, m_pTokenArrayIterator->PrevRPN(), Count);
             }
         }
         catch (const uno::Exception&)
@@ -745,7 +748,7 @@ void FormulaDlg_Impl::fillTree(StructPage* _pTree)
 
     if ( pToken != nullptr)
     {
-        MakeTree( _pTree, nullptr, pToken, 1);
+        MakeTree( _pTree, nullptr, nullptr, pToken, 1);
         bMakingTree = false;
     }
 }
