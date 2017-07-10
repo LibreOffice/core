@@ -423,14 +423,12 @@ void UnoControlContainer::dispose(  )
 
 
     uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
-    uno::Reference< awt::XControl >* pCtrls = aCtrls.getArray();
-    uno::Reference< awt::XControl >* pCtrlsEnd = pCtrls + aCtrls.getLength();
 
-    for( ; pCtrls < pCtrlsEnd; ++pCtrls )
+    for( uno::Reference< awt::XControl > const & control : aCtrls )
     {
-        removingControl( *pCtrls );
+        removingControl( control );
         // Delete control
-        (*pCtrls)->dispose();
+        control->dispose();
     }
 
 

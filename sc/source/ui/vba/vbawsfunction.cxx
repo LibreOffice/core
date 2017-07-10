@@ -84,55 +84,53 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
     uno::Sequence< uno::Any > aParamTemp( Params );
     if( aParamTemp.hasElements() )
     {
-        uno::Any* pArray = aParamTemp.getArray();
-        uno::Any* pArrayEnd = pArray + aParamTemp.getLength();
-        for( ; pArray < pArrayEnd; ++pArray )
+        for( uno::Any & rArray : aParamTemp )
         {
-            switch( pArray->getValueType().getTypeClass()  )
+            switch( rArray.getValueType().getTypeClass()  )
             {
                 case uno::TypeClass_BOOLEAN:
-                    lclConvertBooleanToDouble( *pArray );
+                    lclConvertBooleanToDouble( rArray );
                     break;
                 case uno::TypeClass_INTERFACE:
                 {
-                    uno::Reference< excel::XRange > myRange( *pArray, uno::UNO_QUERY );
+                    uno::Reference< excel::XRange > myRange( rArray, uno::UNO_QUERY );
                     if( myRange.is() )
-                        *pArray = myRange->getCellRange();
+                        rArray = myRange->getCellRange();
                 }
                     break;
                 case uno::TypeClass_SEQUENCE:
                 {
                     // the sheet.FunctionAccess service doesn't deal with Sequences, only Sequences of Sequence
-                    uno::Type aType = pArray->getValueType();
+                    uno::Type aType = rArray.getValueType();
                     if ( aType.equals( cppu::UnoType<uno::Sequence<sal_Int16>>::get() ) )
                     {
                         uno::Sequence< uno::Sequence< sal_Int16 > >  aTmp(1);
-                        (*pArray) >>= aTmp[ 0 ];
-                        (*pArray) <<= aTmp;
+                        rArray >>= aTmp[ 0 ];
+                        rArray <<= aTmp;
                     }
                     else if ( aType.equals( cppu::UnoType<uno::Sequence<sal_Int32>>::get() ) )
                     {
                         uno::Sequence< uno::Sequence< sal_Int32 > > aTmp(1);
-                        (*pArray) >>= aTmp[ 0 ];
-                        (*pArray) <<= aTmp;
+                        rArray >>= aTmp[ 0 ];
+                        rArray <<= aTmp;
                     }
                     else if ( aType.equals( cppu::UnoType<uno::Sequence<double>>::get() ) )
                     {
                         uno::Sequence< uno::Sequence< double > > aTmp(1);
-                        (*pArray) >>= aTmp[ 0 ];
-                        (*pArray) <<= aTmp;
+                        rArray >>= aTmp[ 0 ];
+                        rArray <<= aTmp;
                     }
                     else if ( aType.equals( cppu::UnoType<uno::Sequence<OUString>>::get() ) )
                     {
                         uno::Sequence< uno::Sequence< OUString > > aTmp(1);
-                        (*pArray) >>= aTmp[ 0 ];
-                        (*pArray) <<= aTmp;
+                        rArray >>= aTmp[ 0 ];
+                        rArray <<= aTmp;
                     }
                     else if ( aType.equals( cppu::UnoType<uno::Sequence<uno::Any>>::get() ) )
                     {
                         uno::Sequence< uno::Sequence<uno::Any > > aTmp(1);
-                        (*pArray) >>= aTmp[ 0 ];
-                        (*pArray) <<= aTmp;
+                        rArray >>= aTmp[ 0 ];
+                        rArray <<= aTmp;
                     }
                 }
                     break;

@@ -398,12 +398,8 @@ void OInterfaceContainer::transformEvents()
 
             if ( aChildEvents.getLength() )
             {
-                // the "iterators" for the events for this child
-                ScriptEventDescriptor* pChildEvents     =                       aChildEvents.getArray();
-                ScriptEventDescriptor* pChildEventsEnd  =   pChildEvents    +   aChildEvents.getLength();
-
                 // do the transformation
-                ::std::for_each( pChildEvents, pChildEventsEnd, TransformEventTo52Format() );
+                ::std::for_each( aChildEvents.begin(), aChildEvents.end(), TransformEventTo52Format() );
 
                 // revoke the script events
                 m_xEventAttacher->revokeScriptEvents( i );

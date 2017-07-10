@@ -527,11 +527,8 @@ void ScChartObj::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno:
                 if ( rValue >>= aCellRanges )
                 {
                     ScRangeListRef rRangeList = new ScRangeList();
-                    const table::CellRangeAddress* pCellRanges = aCellRanges.getArray();
-                    sal_Int32 nCount = aCellRanges.getLength();
-                    for ( sal_Int32 i = 0; i < nCount; ++i )
+                    for ( table::CellRangeAddress const & aCellRange : aCellRanges )
                     {
-                        table::CellRangeAddress aCellRange = pCellRanges[ i ];
                         ScRange aRange;
                         ScUnoConversion::FillScRange( aRange, aCellRange );
                         rRangeList->Append( aRange );

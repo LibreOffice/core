@@ -2113,15 +2113,14 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
                     nIndex = pCellStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX, bIsAutoStyle);
 
                 uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
-                table::CellRangeAddress* pAddresses(aAddresses.getArray());
                 bool bGetMerge(true);
-                for (sal_Int32 i = 0; i < aAddresses.getLength(); ++i, ++pAddresses)
+                for (table::CellRangeAddress const & address : aAddresses)
                 {
-                    pSharedData->SetLastColumn(nTable, pAddresses->EndColumn);
-                    pSharedData->SetLastRow(nTable, pAddresses->EndRow);
-                    pCellStyles->AddRangeStyleName(*pAddresses, nIndex, bIsAutoStyle, nValidationIndex, nNumberFormat);
+                    pSharedData->SetLastColumn(nTable, address.EndColumn);
+                    pSharedData->SetLastRow(nTable, address.EndRow);
+                    pCellStyles->AddRangeStyleName(address, nIndex, bIsAutoStyle, nValidationIndex, nNumberFormat);
                     if (bGetMerge)
-                        bGetMerge = GetMerged(pAddresses, xTable);
+                        bGetMerge = GetMerged(&address, xTable);
                 }
             }
         }
@@ -2137,17 +2136,16 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
             if ( !pOldName )
             {
                 uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
-                table::CellRangeAddress* pAddresses(aAddresses.getArray());
                 bool bGetMerge(true);
-                for (sal_Int32 i = 0; i < aAddresses.getLength(); ++i, ++pAddresses)
+                for (table::CellRangeAddress const & address : aAddresses)
                 {
                     if (bGetMerge)
-                        bGetMerge = GetMerged(pAddresses, xTable);
-                    pCellStyles->AddRangeStyleName(*pAddresses, nIndex, false, nValidationIndex, nNumberFormat);
+                        bGetMerge = GetMerged(&address, xTable);
+                    pCellStyles->AddRangeStyleName(address, nIndex, false, nValidationIndex, nNumberFormat);
                     if( sStyleName != "Default" || nValidationIndex != -1 )
                     {
-                        pSharedData->SetLastColumn(nTable, pAddresses->EndColumn);
-                        pSharedData->SetLastRow(nTable, pAddresses->EndRow);
+                        pSharedData->SetLastColumn(nTable, address.EndColumn);
+                        pSharedData->SetLastRow(nTable, address.EndRow);
                     }
                 }
             }

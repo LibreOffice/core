@@ -388,15 +388,11 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
     try
     {
         Sequence< OUString > aFilterNames( mxFilterContainer->getElementNames() );
-        OUString* pFilterName = aFilterNames.getArray();
-
-        const sal_Int32 nCount = aFilterNames.getLength();
-        sal_Int32 nFilter;
 
         Sequence< PropertyValue > aValues;
-        for( nFilter = 0; (nFilter < nCount); nFilter++, pFilterName++ )
+        for( OUString const & filterName : aFilterNames)
         {
-            Any aAny( mxFilterContainer->getByName( *pFilterName ) );
+            Any aAny( mxFilterContainer->getByName( filterName ) );
             if( !(aAny >>= aValues) )
                 continue;
 
@@ -1042,28 +1038,24 @@ void XMLFilterSettingsDialog::initFilterList()
     if( mxFilterContainer.is() )
     {
         Sequence< OUString > aFilterNames( mxFilterContainer->getElementNames() );
-        OUString* pFilterName = aFilterNames.getArray();
-
-        const sal_Int32 nCount = aFilterNames.getLength();
-        sal_Int32 nFilter;
 
         Sequence< PropertyValue > aValues;
 
         std::unique_ptr<filter_info_impl> pTempFilter( new filter_info_impl );
         Sequence< OUString > aUserData;
 
-        for( nFilter = 0; nFilter < nCount; nFilter++, pFilterName++ )
+        for( OUString const & filterName : aFilterNames )
         {
             aUserData.realloc(0);
 
             try
             {
-                Any aAny( mxFilterContainer->getByName( *pFilterName ) );
+                Any aAny( mxFilterContainer->getByName( filterName ) );
                 if( !(aAny >>= aValues) )
                     continue;
 
                 OUString aFilterService;
-                pTempFilter->maFilterName = *pFilterName;
+                pTempFilter->maFilterName = filterName;
 
                 const sal_Int32 nValueCount( aValues.getLength() );
                 PropertyValue* pValues = aValues.getArray();
