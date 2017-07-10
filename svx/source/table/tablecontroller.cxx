@@ -1567,15 +1567,19 @@ SvxTableController::TblAction SvxTableController::getKeyboardAction(const KeyEve
 
         if( !bMod1 && bMod2 )
         {
-            if( (nCode == awt::Key::UP) || (nCode == awt::Key::NUM8) )
+            if(bTextEdit || mbCellSelectionMode)
             {
-                nAction = TblAction::GotoLeftCell;
+                if( (nCode == awt::Key::UP) || (nCode == awt::Key::NUM8) )
+                {
+                    nAction = TblAction::GotoLeftCell;
+                    break;
+                }
+                else if( (nCode == awt::Key::DOWN) || (nCode == awt::Key::NUM2) )
+                {
+                    nAction = TblAction::GotoRightCell;
+                    break;
+                }
             }
-            else if( (nCode == awt::Key::DOWN) || (nCode == awt::Key::NUM2) )
-            {
-                nAction = TblAction::GotoRightCell;
-            }
-            break;
         }
 
         bool bTextMove = false;
