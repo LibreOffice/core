@@ -259,6 +259,11 @@ public:
      */
     bool NeedsTableRefTransformation() const;
 
+    /** If a parameter nParam (0-based) is to be forced to array for OpCode
+        eOp, i.e. classified as ParamClass::ForceArray or
+        ParamClass::ReferenceOrForceArray type. */
+    virtual formula::ParamClass GetForceArrayParameter( const FormulaToken* pToken, sal_uInt16 nParam ) const;
+
     static void UpdateSeparatorsNative( const OUString& rSep, const OUString& rArrayColSep, const OUString& rArrayRowSep );
     static void ResetNativeSymbols();
     static void SetNativeSymbols( const OpCodeMapPtr& xMap );
@@ -294,11 +299,6 @@ protected:
     virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name
-
-    /** If a parameter nParam (0-based) is to be forced to array for OpCode
-        eOp, i.e. classified as ParamClass::ForceArray or
-        ParamClass::ReferenceOrForceArray type. */
-    virtual formula::ParamClass GetForceArrayParameter( const FormulaToken* pToken, sal_uInt16 nParam ) const;
 
     void AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError nError ) const;
 
