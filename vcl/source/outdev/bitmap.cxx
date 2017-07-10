@@ -1465,8 +1465,8 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
                     const long nMapX = pMapX[ nX ];
                     aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB.get(), pAlphaW.get(), nResAlpha );
 
-                    pB->SetPixel( nY, nX, aDstCol );
-                    pAlphaW->SetPixel( nY, nX, Color(255L-nResAlpha, 255L-nResAlpha, 255L-nResAlpha) );
+                    pB->SetPixel(nY, nX, pB->GetBestMatchingColor(aDstCol));
+                    pAlphaW->SetPixel(nY, nX, pB->GetBestMatchingColor(Color(255L-nResAlpha, 255L-nResAlpha, 255L-nResAlpha)));
                 }
             }
         }
