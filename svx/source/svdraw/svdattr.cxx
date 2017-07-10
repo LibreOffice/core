@@ -339,7 +339,7 @@ SdrItemPool::SdrItemPool(
 
     // it's my own creation level, set Defaults and ItemInfos
     SetDefaults(mpLocalPoolDefaults);
-    SetItemInfos(mpLocalItemInfos);
+    SetItemInfos(mpLocalItemInfos.get());
 }
 
 // copy ctor, so that static defaults are cloned

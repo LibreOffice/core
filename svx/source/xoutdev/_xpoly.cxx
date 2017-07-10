@@ -62,13 +62,12 @@ ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
     // copy
     nPoints = rImpXPoly.nPoints;
     memcpy( pPointAry, rImpXPoly.pPointAry, nSize*sizeof( Point ) );
-    memcpy( pFlagAry, rImpXPoly.pFlagAry, nSize );
+    memcpy( pFlagAry.get(), rImpXPoly.pFlagAry.get(), nSize );
 }
 
 ImpXPolygon::~ImpXPolygon()
 {
     delete[] reinterpret_cast<char*>(pPointAry);
-    delete[] pFlagAry;
     if ( bDeleteOldPoints )
     {
         delete[] reinterpret_cast<char*>(pOldPointAry);
@@ -80,8 +79,8 @@ bool ImpXPolygon::operator==(const ImpXPolygon& rImpXPoly) const
 {
     return nPoints==rImpXPoly.nPoints &&
            (nPoints==0 ||
-            (memcmp(pPointAry,rImpXPoly.pPointAry,nPoints*sizeof(Point))==0 &&
-             memcmp(pFlagAry,rImpXPoly.pFlagAry,nPoints)==0));
+            (memcmp(pPointAry, rImpXPoly.pPointAry, nPoints*sizeof(Point))==0 &&
+             memcmp(pFlagAry.get(), rImpXPoly.pFlagAry.get(), nPoints)==0));
 }
 
 /** Change polygon size
@@ -97,7 +96,7 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
     if( nNewSize == nSize )
         return;
 
-    PolyFlags*  pOldFlagAry  = pFlagAry;
+    PolyFlags*  pOldFlagAry  = pFlagAry.get();
     sal_uInt16  nOldSize     = nSize;
 
     CheckPointDelete();
@@ -116,8 +115,8 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
     memset( pPointAry, 0, nSize*sizeof( Point ) );
 
     // create flag array
-    pFlagAry = new PolyFlags[ nSize ];
-    memset( pFlagAry, 0, nSize );
+    pFlagAry.reset( new PolyFlags[ nSize ] );
+    memset( pFlagAry.get(), 0, nSize );
 
     // copy if needed
     if( nOldSize )
@@ -125,12 +124,12 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
         if( nOldSize < nSize )
         {
             memcpy( pPointAry, pOldPointAry, nOldSize*sizeof( Point ) );
-            memcpy( pFlagAry,  pOldFlagAry, nOldSize );
+            memcpy( pFlagAry.get(),  pOldFlagAry, nOldSize );
         }
         else
         {
             memcpy( pPointAry, pOldPointAry, nSize*sizeof( Point ) );
-            memcpy( pFlagAry, pOldFlagAry, nSize );
+            memcpy( pFlagAry.get(), pOldFlagAry, nSize );
 
             // adjust number of valid points
             if( nPoints > nSize )
@@ -383,7 +382,7 @@ void XPolygon::Insert( sal_uInt16 nPos, const XPolygon& rXPoly )
             rXPoly.pImpXPolygon->pPointAry,
             nPoints*sizeof( Point ) );
     memcpy( &(pImpXPolygon->pFlagAry[nPos]),
-            rXPoly.pImpXPolygon->pFlagAry,
+            rXPoly.pImpXPolygon->pFlagAry.get(),
             nPoints );
 }
 
@@ -835,7 +834,7 @@ basegfx::B2DPolygon XPolygon::getB2DPolygon() const
     // #i74631# use tools Polygon class for conversion to not have the code doubled
     // here. This needs one more conversion but avoids different convertors in
     // the long run
-    const tools::Polygon aSource(GetPointCount(), pImpXPolygon->pPointAry, pImpXPolygon->pFlagAry);
+    const tools::Polygon aSource(GetPointCount(), pImpXPolygon->pPointAry, pImpXPolygon->pFlagAry.get());
 
     return aSource.getB2DPolygon();
 }

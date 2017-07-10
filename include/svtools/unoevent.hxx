@@ -24,6 +24,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <vector>
+#include <memory>
 
 class SvxMacroTableDtor;
 class SvxMacroItem;
@@ -202,13 +204,15 @@ protected:
 class SVT_DLLPUBLIC SvDetachedEventDescriptor : public SvBaseEventDescriptor
 {
     // the macros; aMacros[i] is the value for aSupportedMacroItemIDs[i]
-    SvxMacro** aMacros;
+    std::vector<std::unique_ptr<SvxMacro>> aMacros;
 
     const OUString sImplName;
 
 public:
 
-     SvDetachedEventDescriptor(const SvEventDescription* pSupportedMacroItems);
+    SvDetachedEventDescriptor(const SvEventDescription* pSupportedMacroItems);
+    SvDetachedEventDescriptor& operator=( SvDetachedEventDescriptor const & ) = delete; // MSVC2015 workaround
+    SvDetachedEventDescriptor( SvDetachedEventDescriptor const & ) = delete; // MSVC2015 workaround
 
     virtual ~SvDetachedEventDescriptor() override;
 

@@ -23,6 +23,7 @@
 #include <svl/itempool.hxx>
 #include <svx/xdef.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 
 /*************************************************************************
 |*
@@ -33,8 +34,8 @@
 class SVX_DLLPUBLIC XOutdevItemPool : public SfxItemPool
 {
 protected:
-    std::vector<SfxPoolItem*>* mpLocalPoolDefaults;
-    SfxItemInfo*               mpLocalItemInfos;
+    std::vector<SfxPoolItem*>*     mpLocalPoolDefaults;
+    std::unique_ptr<SfxItemInfo[]> mpLocalItemInfos;
 
 public:
     XOutdevItemPool( SfxItemPool* pMaster, bool bLoadRefCounts = true);
