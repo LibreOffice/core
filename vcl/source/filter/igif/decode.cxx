@@ -38,31 +38,27 @@ GIFLZWDecompressor::GIFLZWDecompressor(sal_uInt8 cDataSize)
     , nBlockBufSize(0)
     , nBlockBufPos(0)
 {
-    pOutBuf = new sal_uInt8[ 4096 ];
-
     nClearCode = 1 << nDataSize;
     nEOICode = nClearCode + 1;
     nTableSize = nEOICode + 1;
     nCodeSize = nDataSize + 1;
     nOldCode = 0xffff;
-    pOutBufData = pOutBuf + 4096;
+    pOutBufData = pOutBuf.data() + 4096;
 
-    pTable = new GIFLZWTableEntry[ 4098 ];
+    pTable.reset( new GIFLZWTableEntry[ 4098 ] );
 
     for (sal_uInt16 i = 0; i < nTableSize; ++i)
     {
         pTable[i].pPrev = nullptr;
-        pTable[i].pFirst = pTable + i;
+        pTable[i].pFirst = pTable.get() + i;
         pTable[i].nData = (sal_uInt8) i;
     }
 
-    memset(pTable + nTableSize, 0, sizeof(GIFLZWTableEntry) * (4098 - nTableSize));
+    memset(pTable.get() + nTableSize, 0, sizeof(GIFLZWTableEntry) * (4098 - nTableSize));
 }
 
 GIFLZWDecompressor::~GIFLZWDecompressor()
 {
-    delete[] pOutBuf;
-    delete[] pTable;
 }
 
 Scanline GIFLZWDecompressor::DecompressBlock( sal_uInt8* pSrc, sal_uInt8 cBufSize,
@@ -113,8 +109,8 @@ bool GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirst
 {
     if( nTableSize < 4096 )
     {
-        GIFLZWTableEntry* pE = pTable + nTableSize;
-        pE->pPrev = pTable + nPrevCode;
+        GIFLZWTableEntry* pE = pTable.get() + nTableSize;
+        pE->pPrev = pTable.get() + nPrevCode;
         pE->pFirst = pE->pPrev->pFirst;
         GIFLZWTableEntry *pEntry = pTable[nCodeFirstData].pFirst;
         if (!pEntry)
@@ -196,10 +192,10 @@ bool GIFLZWDecompressor::ProcessOneCode()
             return false;
 
         // write character(/-sequence) of code nCode in the output buffer:
-        GIFLZWTableEntry* pE = pTable + nCode;
+        GIFLZWTableEntry* pE = pTable.get() + nCode;
         do
         {
-            if (pOutBufData == pOutBuf) //can't go back past start
+            if (pOutBufData == pOutBuf.data()) //can't go back past start
                 return false;
             nOutBufDataLen++;
             *(--pOutBufData) = pE->nData;
