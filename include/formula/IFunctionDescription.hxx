@@ -42,6 +42,7 @@ namespace formula
     class IFunctionDescription;
     class FormEditData;
     class FormulaTokenArray;
+    class FormulaCompiler;
 
     class SAL_NO_VTABLE IFunctionManager
     {
@@ -132,6 +133,8 @@ namespace formula
 
         virtual FormEditData* getFormEditData() const = 0;
         virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult, bool bMatrixFormula) = 0;
+
+        virtual std::shared_ptr<FormulaCompiler> getCompiler() const = 0;
 
         virtual void switchBack() = 0;
 

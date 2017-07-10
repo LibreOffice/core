@@ -373,6 +373,13 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
     return true;
 }
 
+std::shared_ptr<formula::FormulaCompiler> ScFormulaDlg::getCompiler() const
+{
+    if (!m_xCompiler)
+        m_xCompiler.reset( new ScCompiler( m_pDoc, m_CursorPos, m_pDoc->GetGrammar()));
+    return m_xCompiler;
+}
+
 //  virtual methods of ScAnyRefDlg:
 void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {

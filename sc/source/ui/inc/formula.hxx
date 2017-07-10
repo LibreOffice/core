@@ -47,8 +47,9 @@ class ScFormulaDlg : public formula::FormulaDlg,
     css::uno::Reference< css::sheet::XFormulaParser>          m_xParser;
     css::uno::Reference< css::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
 
-    ScDocument*  m_pDoc;
-    ScAddress    m_CursorPos;
+            ScDocument*                 m_pDoc;
+            ScAddress                   m_CursorPos;
+    mutable std::shared_ptr<ScCompiler> m_xCompiler;
 
 public:
                     ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
@@ -60,6 +61,7 @@ public:
     virtual void notifyChange() override;
     virtual void fill() override;
     virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult, bool bMatrixFormula) override;
+    virtual std::shared_ptr<formula::FormulaCompiler> getCompiler() const;
     virtual void doClose(bool _bOk) override;
     virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc) override;
     virtual void showReference(const OUString& _sFormula) override;

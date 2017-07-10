@@ -74,6 +74,7 @@ public:
     virtual void notifyChange() override;
     virtual void fill() override;
     virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult, bool bMatrixFormula) override;
+    virtual std::shared_ptr<formula::FormulaCompiler> getCompiler() const;
     virtual void doClose(bool _bOk) override;
     virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc) override;
     virtual void showReference(const OUString& _sFormula) override;

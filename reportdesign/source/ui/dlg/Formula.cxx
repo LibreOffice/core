@@ -112,6 +112,12 @@ bool FormulaDialog::calculateValue( const OUString& rStrExp, OUString& rStrResul
     rStrResult = rStrExp;
     return false;
 }
+
+std::shared_ptr<formula::FormulaCompiler> FormulaDialog::getCompiler() const
+{
+    return nullptr;
+}
+
 void FormulaDialog::doClose(bool _bOk)
 {
     EndDialog(_bOk ? RET_OK : RET_CANCEL);
