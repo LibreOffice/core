@@ -571,8 +571,11 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             // Decide type string.
             if (maSignatureManager.mxStore.is())
             {
+                // OpenPGP
+                if (!rInfo.ouGpgCertificate.isEmpty())
+                    aType = "OpenPGP";
                 // XML based: XAdES or not.
-                if (!rInfo.ouCertDigest.isEmpty())
+                else if (!rInfo.ouCertDigest.isEmpty())
                     aType = "XAdES";
                 else
                     aType = "XML-DSig";
