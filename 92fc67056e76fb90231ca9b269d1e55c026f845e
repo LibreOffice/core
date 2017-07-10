@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_3efedc6b",
+        "filename": "include/salhelper/singletonref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-10T10:28:09Z",
+      "side": 1,
+      "message": "that would be a bug, so this should be an assert",
+      "revId": "92fc67056e76fb90231ca9b269d1e55c026f845e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
