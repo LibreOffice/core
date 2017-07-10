@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <array>
 #include <list>
 #include <memory>
 
@@ -81,14 +82,14 @@ struct DateCode;
 struct FieldCode : public HBox
 {
     uchar type[2];                    /* 2/0 - Formula, 3/0-document summary, 3/1 Personal Information, 3/2-creation date, 4/0-pressing mold */
-    char *reserved1;
+    std::array<char, 4> reserved1;
     unsigned short location_info;     /* 0 - End code, 1 - start code */
-    char *reserved2;
-    hchar *str1;
-    hchar *str2;
-    hchar *str3;
+    std::array<char, 22> reserved2;
+    std::unique_ptr<hchar[]> str1;
+    std::unique_ptr<hchar[]> str2;
+    std::unique_ptr<hchar[]> str3;
 
-    DateCode *m_pDate;
+    std::unique_ptr<DateCode> m_pDate;
 
     FieldCode();
     virtual ~FieldCode() override;
@@ -357,7 +358,7 @@ struct TxtBox: public FBox
  */
     short     protect;                            //1=size lock
 
-    Cell      *cell;
+    std::unique_ptr<Cell[]> cell;
     Table *m_pTable;
 /**
  * Paragraph list
@@ -629,7 +630,7 @@ struct Picture: public FBox
 /**
  * It's for the Drawing object
  */
-    unsigned char *follow;                        /* When the type of image is drawing, gives additional information. */
+    std::unique_ptr<unsigned char[]> follow;                        /* When the type of image is drawing, gives additional information. */
 
     bool ishyper;
 
