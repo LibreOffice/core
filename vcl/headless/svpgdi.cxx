@@ -171,16 +171,16 @@ namespace
                 // the alpha values need to be inverted for Cairo
                 // so big stupid copy and invert here
                 const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
-                pAlphaBits = new unsigned char[nImageSize];
-                memcpy(pAlphaBits, pMaskBuf->mpBits, nImageSize);
+                pAlphaBits.reset( new unsigned char[nImageSize] );
+                memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
 
                 // TODO: make upper layers use standard alpha
-                sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits);
+                sal_uInt32* pLDst = reinterpret_cast<sal_uInt32*>(pAlphaBits.get());
                 for( int i = nImageSize/sizeof(sal_uInt32); --i >= 0; ++pLDst )
                     *pLDst = ~*pLDst;
-                assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits+nImageSize);
+                assert(reinterpret_cast<unsigned char*>(pLDst) == pAlphaBits.get()+nImageSize);
 
-                mask = cairo_image_surface_create_for_data(pAlphaBits,
+                mask = cairo_image_surface_create_for_data(pAlphaBits.get(),
                                                 CAIRO_FORMAT_A8,
                                                 pMaskBuf->mnWidth, pMaskBuf->mnHeight,
                                                 pMaskBuf->mnScanlineSize);
@@ -190,15 +190,15 @@ namespace
                 // the alpha values need to be inverted for Cairo
                 // so big stupid copy and invert here
                 const int nImageSize = pMaskBuf->mnHeight * pMaskBuf->mnScanlineSize;
-                pAlphaBits = new unsigned char[nImageSize];
-                memcpy(pAlphaBits, pMaskBuf->mpBits, nImageSize);
+                pAlphaBits.reset( new unsigned char[nImageSize] );
+                memcpy(pAlphaBits.get(), pMaskBuf->mpBits, nImageSize);
 
                 // TODO: make upper layers use standard alpha
-                unsigned char* pDst = pAlphaBits;
+                unsigned char* pDst = pAlphaBits.get();
                 for (int i = nImageSize; --i >= 0; ++pDst)
                     *pDst = ~*pDst;
 
-                mask = cairo_image_surface_create_for_data(pAlphaBits,
+                mask = cairo_image_surface_create_for_data(pAlphaBits.get(),
                                                 CAIRO_FORMAT_A1,
                                                 pMaskBuf->mnWidth, pMaskBuf->mnHeight,
                                                 pMaskBuf->mnScanlineSize);
@@ -207,7 +207,6 @@ namespace
         ~MaskHelper()
         {
             cairo_surface_destroy(mask);
-            delete[] pAlphaBits;
         }
         cairo_surface_t* getMask()
         {
@@ -215,7 +214,7 @@ namespace
         }
     private:
         cairo_surface_t *mask;
-        unsigned char* pAlphaBits;
+        std::unique_ptr<unsigned char[]> pAlphaBits;
 
         MaskHelper(const MaskHelper&) = delete;
         MaskHelper& operator=(const MaskHelper&) = delete;

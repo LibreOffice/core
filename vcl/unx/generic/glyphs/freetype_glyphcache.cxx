@@ -752,7 +752,6 @@ class PolyArgs
 {
 public:
                 PolyArgs( tools::PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints );
-                ~PolyArgs();
 
     void        AddPoint( long nX, long nY, PolyFlags);
     void        ClosePolygon();
@@ -763,8 +762,10 @@ public:
 private:
     tools::PolyPolygon& mrPolyPoly;
 
-    Point*          mpPointAry;
-    PolyFlags*      mpFlagAry;
+    std::unique_ptr<Point[]>
+                    mpPointAry;
+    std::unique_ptr<PolyFlags[]>
+                    mpFlagAry;
 
     FT_Vector       maPosition;
     sal_uInt16      mnMaxPoints;
@@ -783,15 +784,9 @@ PolyArgs::PolyArgs( tools::PolyPolygon& rPolyPoly, sal_uInt16 nMaxPoints )
     mnPoly(0),
     bHasOffline(false)
 {
-    mpPointAry  = new Point[ mnMaxPoints ];
-    mpFlagAry   = new PolyFlags [ mnMaxPoints ];
+    mpPointAry.reset( new Point[ mnMaxPoints ] );
+    mpFlagAry.reset( new PolyFlags [ mnMaxPoints ] );
     maPosition.x = maPosition.y = 0;
-}
-
-PolyArgs::~PolyArgs()
-{
-    delete[] mpFlagAry;
-    delete[] mpPointAry;
 }
 
 void PolyArgs::AddPoint( long nX, long nY, PolyFlags aFlag )
@@ -820,7 +815,7 @@ void PolyArgs::ClosePolygon()
     SAL_WARN_IF( (mpFlagAry[0]!=PolyFlags::Normal), "vcl", "FTGlyphOutline: PolyFinishFE failed!" );
     SAL_WARN_IF( (mpFlagAry[mnPoints]!=PolyFlags::Normal), "vcl", "FTGlyphOutline: PolyFinishFS failed!" );
 
-    tools::Polygon aPoly( mnPoints, mpPointAry, (bHasOffline ? mpFlagAry : nullptr) );
+    tools::Polygon aPoly( mnPoints, mpPointAry.get(), (bHasOffline ? mpFlagAry.get() : nullptr) );
 
     // #i35928#
     // This may be a invalid polygons, e.g. the last point is a control point.
