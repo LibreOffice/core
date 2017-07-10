@@ -137,16 +137,23 @@ public:
 class OnDemandCalendarWrapper
 {
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
+            css::lang::Locale  aEnglishLocale;
             css::lang::Locale  aLocale;
-    mutable std::unique_ptr<CalendarWrapper>
-                                pPtr;
+    mutable css::lang::Locale  aLastAnyLocale;
+            std::unique_ptr<CalendarWrapper> pEnglishPtr;
+    mutable std::unique_ptr<CalendarWrapper> pAnyPtr;
+    mutable CalendarWrapper*                 pPtr;
     mutable bool                bValid;
 
 public:
                                 OnDemandCalendarWrapper()
                                     : pPtr(nullptr)
                                     , bValid(false)
-                                    {}
+                                    {
+                                        LanguageTag aEnglishLanguageTag(LANGUAGE_ENGLISH_US);
+                                        aEnglishLocale = aEnglishLanguageTag.getLocale();
+                                        aLastAnyLocale = aEnglishLocale;
+                                    }
 
             void                init(
                                     const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -155,7 +162,10 @@ public:
                                     {
                                         m_xContext = rxContext;
                                         changeLocale( rLocale );
-                                        pPtr.reset();
+                                        pEnglishPtr.reset(new CalendarWrapper( m_xContext ));
+                                        pEnglishPtr->loadDefaultCalendar( aEnglishLocale );
+                                        pAnyPtr.reset();
+                                        pPtr = nullptr;
                                     }
 
             void                changeLocale( const css::lang::Locale& rLocale )
@@ -168,12 +178,28 @@ public:
                                     {
                                         if ( !bValid )
                                         {
-                                            if ( !pPtr )
-                                                pPtr.reset(new CalendarWrapper( m_xContext ));
-                                            pPtr->loadDefaultCalendar( aLocale );
+                                            if ( aLocale == aEnglishLocale )
+                                            {
+                                                pPtr = pEnglishPtr.get();
+                                            }
+                                            else
+                                            {
+                                                if ( !pAnyPtr )
+                                                {
+                                                    pAnyPtr.reset(new CalendarWrapper( m_xContext ));
+                                                    pAnyPtr->loadDefaultCalendar(aLocale);
+                                                    aLastAnyLocale = aLocale;
+                                                }
+                                                else if ( aLocale != aLastAnyLocale )
+                                                {
+                                                    pAnyPtr->loadDefaultCalendar( aLocale );
+                                                    aLastAnyLocale = aLocale;
+                                                }
+                                                pPtr = pAnyPtr.get();
+                                            }
                                             bValid = true;
                                         }
-                                        return pPtr.get();
+                                        return pPtr;
                                     }
 
 };
