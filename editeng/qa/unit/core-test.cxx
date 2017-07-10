@@ -344,9 +344,7 @@ private:
 //before the two letters
 void Test::testAutocorrect()
 {
-    OUString sShareAutocorrFile;
-    OUString sUserAutocorrFile;
-    SvxAutoCorrect aAutoCorrect(sShareAutocorrFile, sUserAutocorrFile);
+   SvxAutoCorrect aAutoCorrect((OUString()), (OUString()));
 
     {
         OUString sInput("TEst-TEst");

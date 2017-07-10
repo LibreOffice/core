@@ -285,8 +285,6 @@ OUString searchLinkTargetForImpl(const Reference < XRegistryKey >& xRootKey,
                                         const OUString& implName)
     // throw ( InvalidRegistryException, RuntimeException )
 {
-    OUString ret;
-
 //      try
 //      {
         const StringPool & pool = spool();
@@ -318,7 +316,7 @@ OUString searchLinkTargetForImpl(const Reference < XRegistryKey >& xRootKey,
 //      {
 //      }
 
-    return ret;
+    return OUString();
 }
 
 

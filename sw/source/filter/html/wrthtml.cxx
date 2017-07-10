@@ -1044,8 +1044,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         if( m_bCfgOutStyles )
         {
-            OUString dummy;
-            OutCSS1_BodyTagStyleOpt( *this, rItemSet, dummy );
+            OutCSS1_BodyTagStyleOpt( *this, rItemSet, OUString() );
         }
         // append events
         if( pDoc->GetDocShell() )   // only with DocShell BASIC is possible

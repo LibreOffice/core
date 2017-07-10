@@ -533,7 +533,6 @@ void SdDrawDocument::CreateDefaultCellStyles()
 {
     SdStyleSheetPool*       pSSPool = static_cast< SdStyleSheetPool* >(GetStyleSheetPool());
     SfxStyleSheetBase*      pSheet = nullptr;
-    OUString                aHelpFile;
 
     Reference< XNameContainer > xTableFamily( pSSPool->getByName( "table" ), UNO_QUERY );
 
@@ -542,7 +541,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     OUString aDefaultCellStyleName( "default" );
 
     pSheet = &(pSSPool->Make(aDefaultCellStyleName, SD_STYLE_FAMILY_CELL, SFXSTYLEBIT_AUTO));
-    pSheet->SetHelpId( aHelpFile, HID_SD_CELL_STYLE_DEFAULT );
+    pSheet->SetHelpId( OUString(), HID_SD_CELL_STYLE_DEFAULT );
     SfxItemSet& rISet = pSheet->GetItemSet();
 
     Color    aNullCol(RGB_Color(COL_BLACK));

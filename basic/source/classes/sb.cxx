@@ -849,8 +849,7 @@ void SbClassData::clear()
 
 SbClassFactory::SbClassFactory()
 {
-    OUString aDummyName;
-    xClassModules = new SbxObject( aDummyName );
+    xClassModules = new SbxObject( OUString() );
 }
 
 SbClassFactory::~SbClassFactory()

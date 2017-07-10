@@ -705,7 +705,6 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
 
         std::vector< std::pair< OUString ,Reference< XModel > > >::const_iterator componentIter = aComponents.begin();
         std::vector< std::pair< OUString ,Reference< XModel > > >::const_iterator componentEnd = aComponents.end();
-        OUString aDocTypeString;
         SfxMailModel aSendMail;
         SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_OK;
         for (; componentIter != componentEnd && SfxMailModel::SEND_MAIL_OK == eResult; ++componentIter)
@@ -715,7 +714,7 @@ void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eO
                 Reference< XModel > xModel(componentIter->second,UNO_QUERY);
 
                 // Send document as e-Mail using stored/default type
-                eResult = aSendMail.AttachDocument(aDocTypeString,xModel,componentIter->first);
+                eResult = aSendMail.AttachDocument(OUString(),xModel,componentIter->first);
                 ::comphelper::disposeComponent(xModel);
             }
             catch(const Exception&)

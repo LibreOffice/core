@@ -606,8 +606,7 @@ SbiExprNode* SbiExpression::Unary()
             pParser->Next();
             SbiExprNode* pObjNode = Operand( true/*bUsedForTypeOf*/ );
             pParser->TestToken( IS );
-            OUString aDummy;
-            SbiSymDef* pTypeDef = new SbiSymDef( aDummy );
+            SbiSymDef* pTypeDef = new SbiSymDef( OUString() );
             pParser->TypeDecl( *pTypeDef, true );
             pNd = new SbiExprNode( pObjNode, pTypeDef->GetTypeId() );
             break;
@@ -615,8 +614,7 @@ SbiExprNode* SbiExpression::Unary()
         case NEW:
         {
             pParser->Next();
-            OUString aStr;
-            SbiSymDef* pTypeDef = new SbiSymDef( aStr );
+            SbiSymDef* pTypeDef = new SbiSymDef( OUString() );
             pParser->TypeDecl( *pTypeDef, true );
             pNd = new SbiExprNode( pTypeDef->GetTypeId() );
             break;

@@ -2544,10 +2544,9 @@ bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     if ( pSalvageItem )
     {
         const SfxStringItem* pFilterItem = SfxItemSet::GetItem<SfxStringItem>(GetMedium()->GetItemSet(), SID_FILTER_NAME, false);
-        OUString aFilterName;
         std::shared_ptr<const SfxFilter> pFilter;
         if ( pFilterItem )
-            pFilter = SfxFilterMatcher( GetFactory().GetFactoryName() ).GetFilter4FilterName( aFilterName );
+            pFilter = SfxFilterMatcher( GetFactory().GetFactoryName() ).GetFilter4FilterName( OUString() );
 
         SfxMedium *pMed = new SfxMedium(
             pSalvageItem->GetValue(), StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE | StreamMode::TRUNC, pFilter );

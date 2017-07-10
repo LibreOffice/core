@@ -761,9 +761,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton, void )
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(pCurEntry);
         ScriptDocument aDocument( aDesc.GetDocument() );
         OUString aLibName( aDesc.GetLibName() );
-        OUString aModName;
         createModImpl( static_cast<vcl::Window*>( this ), aDocument,
-            *m_pBasicBox, aLibName, aModName, true );
+            *m_pBasicBox, aLibName, OUString(), true );
     }
     else if (pButton == m_pOrganizeButton)
     {

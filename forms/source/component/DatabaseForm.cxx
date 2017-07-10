@@ -868,7 +868,6 @@ void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
     rList.clear();
     // Iterate over Components
     Reference<XPropertySet> xComponentSet;
-    OUString aPrefix;
 
     // we know already how many objects should be appended,
     // so why not allocate the space for them
@@ -876,7 +875,7 @@ void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
     for( sal_Int32 nIndex=0; nIndex < getCount(); nIndex++ )
     {
         getByIndex( nIndex ) >>= xComponentSet;
-        AppendComponent(rList, xComponentSet, aPrefix, rxSubmitButton, MouseEvt);
+        AppendComponent(rList, xComponentSet, OUString(), rxSubmitButton, MouseEvt);
     }
 }
 

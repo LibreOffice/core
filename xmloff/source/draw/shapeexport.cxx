@@ -2332,8 +2332,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
             }
             else
             {
-                OUString aStr;
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, OUString() );
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );

@@ -777,8 +777,10 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
                 aPropStates.erase( aSecondDel );
             aPropStates.erase( aFirstDel );
         }
-        OUString sParent; // AutoStyles should not have parents!
-        sName = GetAutoStylePool().Find( XML_STYLE_FAMILY_TEXT_TEXT, sParent, aPropStates );
+        sName = GetAutoStylePool().Find(
+            XML_STYLE_FAMILY_TEXT_TEXT,
+            OUString(), // AutoStyles should not have parents!
+            aPropStates );
         rbHasAutoStyle = true;
     }
 

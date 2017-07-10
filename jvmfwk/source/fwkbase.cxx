@@ -436,10 +436,9 @@ JFW_MODE getMode()
 OUString getApplicationClassPath()
 {
     OSL_ASSERT(getMode() == JFW_MODE_APPLICATION);
-    OUString retVal;
     OUString sParams = BootParams::getClasspathUrls();
     if (sParams.isEmpty())
-        return retVal;
+        return OUString();
 
     OUStringBuffer buf;
     sal_Int32 index = 0;

@@ -1054,11 +1054,10 @@ void LocalizationMgr::copyResourceForDroppedDialog( const Reference< container::
         return;
 
     // Dialog as control
-    OUString aDummyName;
     Any aDialogCtrl;
     aDialogCtrl <<= xDialogModel;
     implHandleControlResourceProperties( aDialogCtrl, aDialogName,
-        aDummyName, xStringResourceManager, xSourceStringResolver, MOVE_RESOURCES );
+        OUString(), xStringResourceManager, xSourceStringResolver, MOVE_RESOURCES );
 
     // Handle all controls
     Sequence< OUString > aNames = xDialogModel->getElementNames();

@@ -421,8 +421,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             using namespace svtools;
             css::uno::Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
             const css::uno::Sequence< OUString > vPackages{ "libreoffice-base" };
-            OUString sInteraction;
-            xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
+            xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, OUString());
             SolarMutexGuard aGuard;
             executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_MAILMERGE_INSTALL);
         }

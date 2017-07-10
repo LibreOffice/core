@@ -217,8 +217,7 @@ sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString&, const css:
 
 OUString SAL_CALL SvxSimpleUnoModel::getURL(  )
 {
-    OUString aStr;
-    return aStr;
+    return OUString();
 }
 
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL SvxSimpleUnoModel::getArgs(  )

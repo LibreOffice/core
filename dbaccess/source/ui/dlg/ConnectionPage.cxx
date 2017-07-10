@@ -194,8 +194,7 @@ namespace dbaui
                 {
                     OUString sText = m_pFT_Connection->GetText();
                     sText = sText.replaceAll("%test",m_pTestConnection->GetText());
-                    OUString sTemp;
-                    sText = sText.replaceAll("~",sTemp);
+                    sText = sText.replaceAll("~","");
                     m_pFT_Connection->SetText(sText);
                 }
                 m_pConnectionURL->Hide();

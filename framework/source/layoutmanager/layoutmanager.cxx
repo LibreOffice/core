@@ -1137,11 +1137,10 @@ void LayoutManager::implts_setInplaceMenuBar( const Reference< XIndexAccess >& x
 
         if ( m_xFrame.is() && m_xContainerWindow.is() )
         {
-            OUString aModuleIdentifier;
             Reference< XDispatchProvider > xDispatchProvider;
 
             VclPtr<MenuBar> pMenuBar = VclPtr<MenuBar>::Create();
-            m_xInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, true );
+            m_xInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, OUString(), pMenuBar, true );
             m_xInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );

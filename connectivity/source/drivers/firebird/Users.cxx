@@ -63,8 +63,7 @@ ObjectType Users::appendObject(const OUString& rName,
                                 const uno::Reference< XPropertySet >&)
 {
     // TODO: set sSql as appropriate
-    OUString sSql;
-    m_xMetaData->getConnection()->createStatement()->execute(sSql);
+    m_xMetaData->getConnection()->createStatement()->execute(OUString());
 
     return createObject(rName);
 }

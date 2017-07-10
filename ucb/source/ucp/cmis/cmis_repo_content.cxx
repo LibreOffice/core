@@ -309,13 +309,11 @@ namespace cmis
 
     OUString RepoContent::getParentURL( )
     {
-        OUString sRet;
-
         SAL_INFO( "ucb.ucp.cmis", "RepoContent::getParentURL()" );
 
         // TODO Implement me
 
-        return sRet;
+        return OUString();
     }
 
     XTYPEPROVIDER_COMMON_IMPL( RepoContent );

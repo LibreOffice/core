@@ -1094,7 +1094,6 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             {
                 aLibName = pSrcShell->GetBasicManager()->GetName();
             }
-            OUString sCodeName;
             OUString sSource;
             uno::Reference< script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
             uno::Reference< container::XNameContainer > xLib;
@@ -1112,7 +1111,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 xLib->getByName( sSrcCodeName ) >>= sRTLSource;
                 sSource = sRTLSource;
             }
-            VBA_InsertModule( *this, nDestPos, sCodeName, sSource );
+            VBA_InsertModule( *this, nDestPos, OUString(), sSource );
         }
     }
 

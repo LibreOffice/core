@@ -14,6 +14,14 @@
 
 namespace loplugin {
 
+TypeCheck TypeCheck::NonConst() const {
+    return !type_.isNull() && !type_.isConstQualified()
+        ? *this : TypeCheck();
+        // returning TypeCheck(type_.getUnqualifiedType()) instead of *this
+        // may look tempting, but could remove sugar we might be interested in
+        // checking for
+}
+
 TypeCheck TypeCheck::NonConstVolatile() const {
     return
         (!type_.isNull() && !type_.isConstQualified()

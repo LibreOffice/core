@@ -404,11 +404,10 @@ ScCondFormatEntry* ScXMLMapContext::CreateConditionEntry()
     }
 
     ScConditionMode eMode = ScConditionEntry::GetModeFromApi(aParseResult.meOperator);
-    OUString aNmsp1, aNmsp2;
     ScDocument* pDoc = GetScImport().GetDocument();
 
     ScCondFormatEntry* pEntry =  new ScCondFormatEntry(eMode, aParseResult.maOperand1, aParseResult.maOperand2, pDoc, ScAddress(), msApplyStyle,
-                                                    aNmsp1, aNmsp2, eGrammar, eGrammar);
+                                                    OUString(), OUString(), eGrammar, eGrammar);
 
     pEntry->SetSrcString(msBaseCell);
     return pEntry;

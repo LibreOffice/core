@@ -283,8 +283,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl, Button*, void)
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl, Button*, void)
 {
-    OUString sNewName,sNewLocation;
-    openLinkDialog(sNewName,sNewLocation);
+    openLinkDialog(OUString(),OUString());
 }
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathBoxDoubleClickHdl, SvTreeListBox*, bool)

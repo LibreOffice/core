@@ -590,8 +590,7 @@ void SbiParser::Set()
     if( eTok == NEW )
     {
         Next();
-        OUString aStr;
-        SbiSymDef* pTypeDef = new SbiSymDef( aStr );
+        SbiSymDef* pTypeDef = new SbiSymDef( OUString() );
         TypeDecl( *pTypeDef, true );
 
         aLvalue.Gen();

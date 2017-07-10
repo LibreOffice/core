@@ -1694,8 +1694,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     {
                         svt::EmbeddedObjectRef &rObj = pOleNode->GetOLEObj().GetObject();
 
-                        OUString aMediaType;
-                        rObj.SetGraphic( aGraphic, aMediaType );
+                        rObj.SetGraphic( aGraphic, OUString() );
                     }
                 }
             }

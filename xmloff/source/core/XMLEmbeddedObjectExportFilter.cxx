@@ -133,8 +133,7 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::initialize(
 // XServiceInfo
 OUString SAL_CALL XMLEmbeddedObjectExportFilter::getImplementationName()
 {
-    OUString aStr;
-    return aStr;
+    return OUString();
 }
 
 sal_Bool SAL_CALL XMLEmbeddedObjectExportFilter::supportsService( const OUString& ServiceName )

@@ -619,8 +619,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             aClassAny <<= xClass;
 
             // instantiate SbUnoObject
-            OUString aName;
-            SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aClassAny );
+            SbUnoObject* pSbUnoObject = new SbUnoObject( OUString(), aClassAny );
             SbxObjectRef xWrapper = static_cast<SbxObject*>(pSbUnoObject);
 
             // If the object is invalid deliver null
@@ -707,8 +706,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                 }
             }
             // instantiate a SbUnoObject
-            OUString aName;
-            SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aValue );
+            SbUnoObject* pSbUnoObject = new SbUnoObject( OUString(), aValue );
             //If this is called externally e.g. from the scripting
             //framework then there is no 'active' runtime the default property will not be set up
             //only a vba object will have XDefaultProp set anyway so... this

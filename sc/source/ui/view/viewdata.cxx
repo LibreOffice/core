@@ -2944,12 +2944,11 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             sal_Int64 nColor = 0;
             if (rSettings[i].Value >>= nColor)
             {
-                OUString aColorName;
                 Color aColor(static_cast<sal_uInt32>(nColor));
                 // #i47435# set automatic grid color explicitly
                 if( aColor.GetColor() == COL_AUTO )
                     aColor.SetColor( SC_STD_GRIDCOLOR );
-                pOptions->SetGridColor(aColor, aColorName);
+                pOptions->SetGridColor(aColor, OUString());
             }
         }
         else if ( sName == SC_UNO_SHOWPAGEBR )

@@ -970,8 +970,7 @@ ScVbaChart::getStockUpDownValue(sal_Int32 _nUpDown, sal_Int32 _nNotUpDown)
     }
     catch (const uno::Exception&)
     {
-        OUString aTemp;    // temporary needed for g++ 3.3.5
-        script::BasicErrorException( aTemp, uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
+        script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
     }
     return _nNotUpDown;
 }
@@ -988,8 +987,7 @@ ScVbaChart::hasMarkers()
     }
     catch (const uno::Exception&)
     {
-        OUString aTemp;    // temporary needed for g++ 3.3.5
-        script::BasicErrorException( aTemp, uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
+        script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
     }
     return bHasMarkers;
 }

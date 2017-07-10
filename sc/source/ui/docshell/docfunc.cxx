@@ -3125,8 +3125,7 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
         // Only insert vba modules if vba mode ( and not currently importing XML )
         if( bInsertDocModule )
         {
-            OUString sSource, sCodeName;
-            VBA_InsertModule( rDoc, nTab, sCodeName, sSource );
+            VBA_InsertModule( rDoc, nTab, OUString(), OUString() );
         }
         rDocShell.Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab ) );
 

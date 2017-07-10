@@ -1957,11 +1957,10 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
 
         SharePooledResources(pSrcDoc);
 
-        OUString aString;
         for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
             {
-                ScTable* pTable = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
+                ScTable* pTable = new ScTable(this, nTab, OUString(), bColInfo, bRowInfo);
                 if (nTab < static_cast<SCTAB>(maTabs.size()))
                     maTabs[nTab] = pTable;
                 else
@@ -1998,12 +1997,11 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
     if (pSrcDoc->pShell->GetMedium())
         maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
 
-    OUString aString;
     if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
         maTabs.resize(nTab2 + 1, nullptr);
     for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
     {
-        ScTable* pTable = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
+        ScTable* pTable = new ScTable(this, nTab, OUString(), bColInfo, bRowInfo);
         maTabs[nTab] = pTable;
     }
 }
@@ -2016,7 +2014,6 @@ void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, bool bColInfo, bool bRowI
         return;
     }
 
-    OUString aString;
     if (nTab2 >= static_cast<SCTAB>(maTabs.size()))
     {
         maTabs.resize(nTab2+1,nullptr);
@@ -2025,7 +2022,7 @@ void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, bool bColInfo, bool bRowI
     for (SCTAB nTab = nTab1; nTab <= nTab2; nTab++)
         if (!maTabs[nTab])
         {
-            maTabs[nTab] = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
+            maTabs[nTab] = new ScTable(this, nTab, OUString(), bColInfo, bRowInfo);
         }
 }
 

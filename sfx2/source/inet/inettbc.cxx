@@ -78,7 +78,6 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
 {
     OUString aName;
     OUString aFilter;
-    OUString aOptions;
 
     INetURLObject aObj( rName );
     if ( aObj.GetProtocol() == INetProtocol::NotValid )
@@ -112,7 +111,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
             {
                 aArgs.realloc( 4 );
                 aArgs[2].Name = "FilterOptions";
-                aArgs[2].Value <<= aOptions;
+                aArgs[2].Value <<= OUString();
                 aArgs[3].Name = "FilterName";
                 aArgs[3].Value <<= aFilter;
             }

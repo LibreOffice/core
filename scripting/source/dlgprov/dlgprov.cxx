@@ -92,14 +92,13 @@ namespace dlgprov
         aInetObj.removeSegment();
         OUString aDlgLocation = aInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         css::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-        OUString aComment;
 
         Sequence<Any> aArgs( 6 );
         aArgs[0] <<= aDlgLocation;
         aArgs[1] <<= true; // bReadOnly
         aArgs[2] <<= aLocale;
         aArgs[3] <<= aDlgName;
-        aArgs[4] <<= aComment;
+        aArgs[4] <<= OUString();
 
         Reference< task::XInteractionHandler > xDummyHandler;
         aArgs[5] <<= xDummyHandler;

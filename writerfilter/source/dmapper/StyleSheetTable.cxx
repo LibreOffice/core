@@ -302,7 +302,6 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper,
 
 OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rPropValues )
 {
-    OUString sRet;
     ListCharStylePropertyVector_t::const_iterator aListVectorIter = m_aListCharStylePropertyVector.begin();
     while( aListVectorIter != m_aListCharStylePropertyVector.end() )
     {
@@ -341,7 +340,7 @@ OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rP
         }
         ++aListVectorIter;
     }
-    return sRet;
+    return OUString();
 }
 
 void StyleSheetTable_Impl::AppendLatentStyleProperty(const OUString& aName, Value& rValue)

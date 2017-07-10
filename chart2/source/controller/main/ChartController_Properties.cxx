@@ -440,7 +440,6 @@ OUString lcl_getErrorCIDForCommand( const ObjectType eDispatchType, const Object
 OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno::Reference< XChartDocument > & xChartDocument, const OUString& rSelectedCID )
 {
     ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
-    OUString aParticleID;
 
     uno::Reference< frame::XModel > xChartModel( xChartDocument, uno::UNO_QUERY );
     const ObjectType eSelectedType = ObjectIdentifier::getObjectType( rSelectedCID );
@@ -649,7 +648,8 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
     }
 
     return ObjectIdentifier::createClassifiedIdentifier(
-        eObjectType, aParticleID );
+        eObjectType,
+        OUString() ); // aParticleID
 }
 
 }

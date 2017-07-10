@@ -276,8 +276,7 @@ std::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme()
         "/org.openoffice.Office.PresenterScreen/",
         PresenterConfigurationAccess::READ_ONLY);
 
-    OUString sThemeName;
-    return aReadContext.ReadTheme(aConfiguration, sThemeName);
+    return aReadContext.ReadTheme(aConfiguration, OUString());
 }
 
 bool PresenterTheme::HasCanvas() const

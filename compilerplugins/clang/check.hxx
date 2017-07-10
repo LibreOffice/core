@@ -37,6 +37,8 @@ public:
 
     explicit operator bool() const { return !type_.isNull(); }
 
+    TypeCheck NonConst() const;
+
     TypeCheck NonConstVolatile() const;
 
     TypeCheck Const() const;

@@ -291,9 +291,8 @@ void PropertyMap::dumpXml() const
                     rPropPair.second.getValue() >>= aFloat;
                     TagLogger::getInstance().attribute( "floatValue", aFloat );
 
-                    OUString aStr;
                     rPropPair.second.getValue() >>= auInt;
-                    TagLogger::getInstance().attribute( "stringValue", aStr );
+                    TagLogger::getInstance().attribute( "stringValue", OUString() );
                 }
                 catch ( ... )
                 {

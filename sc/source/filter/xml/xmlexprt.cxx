@@ -2358,9 +2358,8 @@ void ScXMLExport::ExportAutoStyles_()
                     if (xTableProperties.is())
                     {
                         std::vector<XMLPropertyState> aPropStates(xTableStylesExportPropertySetMapper->Filter(xTableProperties));
-                        OUString sParent;
                         OUString sName( aTableIter->maName );
-                        GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TABLE_TABLE, sParent, aPropStates);
+                        GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TABLE_TABLE, OUString(), aPropStates);
                         GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TABLE_TABLE, sName);
                     }
                 }
@@ -2396,18 +2395,16 @@ void ScXMLExport::ExportAutoStyles_()
                             if ( !aNoteIter->maStyleName.isEmpty() )
                             {
                                 std::vector<XMLPropertyState> aPropStates(xShapeMapper->Filter(xShapeProperties));
-                                OUString sParent;
                                 OUString sName( aNoteIter->maStyleName );
-                                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_SD_GRAPHICS_ID, sParent, aPropStates);
+                                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_SD_GRAPHICS_ID, OUString(), aPropStates);
                                 GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_SD_GRAPHICS_ID, sName);
                             }
                             if ( !aNoteIter->maTextStyle.isEmpty() )
                             {
                                 std::vector<XMLPropertyState> aPropStates(
                                     GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter(xShapeProperties));
-                                OUString sParent;
                                 OUString sName( aNoteIter->maTextStyle );
-                                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, sParent, aPropStates);
+                                GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, OUString(), aPropStates);
                                 GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_PARAGRAPH, sName);
                             }
                         }
@@ -2441,9 +2438,8 @@ void ScXMLExport::ExportAutoStyles_()
                         if ( xParaProp.is() )
                         {
                             std::vector<XMLPropertyState> aPropStates(xParaPropMapper->Filter(xParaProp));
-                            OUString sParent;
                             OUString sName( aNoteParaIter->maName );
-                            GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, sParent, aPropStates);
+                            GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_PARAGRAPH, OUString(), aPropStates);
                             GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_PARAGRAPH, sName);
                         }
                     }
@@ -2478,9 +2474,8 @@ void ScXMLExport::ExportAutoStyles_()
                             pCursor->SetSelection( aNoteTextIter->maSelection );
 
                             std::vector<XMLPropertyState> aPropStates(xTextPropMapper->Filter(xCursorProp));
-                            OUString sParent;
                             OUString sName( aNoteTextIter->maName );
-                            GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_TEXT, sParent, aPropStates);
+                            GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
                             GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_TEXT, sName);
                         }
                     }
@@ -2512,9 +2507,8 @@ void ScXMLExport::ExportAutoStyles_()
                         pCursor->SetSelection( aTextIter->maSelection );
 
                         std::vector<XMLPropertyState> aPropStates(xTextPropMapper->Filter(xCursorProp));
-                        OUString sParent;
                         OUString sName( aTextIter->maName );
-                        GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_TEXT, sParent, aPropStates);
+                        GetAutoStylePool()->AddNamed(sName, XML_STYLE_FAMILY_TEXT_TEXT, OUString(), aPropStates);
                         GetAutoStylePool()->RegisterName(XML_STYLE_FAMILY_TEXT_TEXT, sName);
                     }
                 }
@@ -2546,9 +2540,8 @@ void ScXMLExport::ExportAutoStyles_()
                 std::vector<XMLPropertyState> aPropStates(xTableStylesExportPropertySetMapper->Filter(xTableProperties));
                 if(!aPropStates.empty())
                 {
-                    OUString sParent;
                     OUString sName;
-                    GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_TABLE, sParent, aPropStates);
+                    GetAutoStylePool()->Add(sName, XML_STYLE_FAMILY_TABLE_TABLE, OUString(), aPropStates);
                     aTableStyles.push_back(sName);
                 }
             }

@@ -185,8 +185,7 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
 
     if ( mxStatusIndicator.is() )
     {
-        OUString aMsg;
-        mxStatusIndicator->start( aMsg, 100 );
+        mxStatusIndicator->start( OUString(), 100 );
     }
 
     Bitmap aGraphicBmp( rGraphic.GetBitmap() );

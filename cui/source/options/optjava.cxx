@@ -693,8 +693,7 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
 
 void SvxJavaOptionsPage::FillUserData()
 {
-    OUString aUserData;
-    SetUserData( aUserData );
+    SetUserData( OUString() );
 }
 
 // class SvxJavaParameterDlg ---------------------------------------------

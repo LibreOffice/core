@@ -1772,7 +1772,6 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame, Menu* pAddonMenu, b
     m_bIsBookmarkMenu   = true;
     m_bShowMenuImages   = true;
 
-    OUString aModuleIdentifier;
     m_xPopupMenuControllerFactory = frame::thePopupMenuControllerFactory::get(
         ::comphelper::getProcessComponentContext());
 
@@ -1790,7 +1789,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame, Menu* pAddonMenu, b
         {
             Reference< XDispatchProvider > xDispatchProvider;
             MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,
-                                                                  xDispatchProvider, aModuleIdentifier, pPopupMenu,
+                                                                  xDispatchProvider, OUString(), pPopupMenu,
                                                                   false );
 
             Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );

@@ -247,7 +247,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
             if(action == THROWAUTHENTICATIONREQUEST)
             {
                 // try to get a continuation first
-                OUString aRealm,aPassword,aAccount;
+                OUString aPassword,aAccount;
                 m_pFCP->forHost(m_aFTPURL.host(),
                                 m_aFTPURL.port(),
                                 m_aFTPURL.username(),
@@ -258,7 +258,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                         m_aFTPURL.ident(false, false),
                         m_aFTPURL.host(),      // ServerName
                         ucbhelper::SimpleAuthenticationRequest::ENTITY_NA,
-                        aRealm,
+                        OUString(),
                         ucbhelper::SimpleAuthenticationRequest
                         ::ENTITY_FIXED,
                         m_aFTPURL.username(),

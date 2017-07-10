@@ -195,8 +195,6 @@ WindowAlign ImplConvertAlignment( ui::DockingArea aAlignment )
 
 OUString getElementTypeFromResourceURL( const OUString& aResourceURL )
 {
-    OUString aType;
-
     OUString aUIResourceURL( UIRESOURCE_URL );
     if ( aResourceURL.startsWith( aUIResourceURL ) )
     {
@@ -207,7 +205,7 @@ OUString getElementTypeFromResourceURL( const OUString& aResourceURL )
         return aPathPart.getToken( 0, '/', nIndex );
     }
 
-    return aType;
+    return OUString();
 }
 
 void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUString& aElementName )

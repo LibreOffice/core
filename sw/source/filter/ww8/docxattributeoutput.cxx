@@ -1464,7 +1464,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     if ( rInfos.eType == ww::eFORMDROPDOWN )
     {
         uno::Sequence< OUString> vListEntries;
-        OUString sName, sHelp, sToolTip, sSelected;
+        OUString sName, sSelected;
 
         FieldMarkParamsHelper params( rFieldmark );
         params.extractParam( ODF_FORMDROPDOWN_LISTENTRY, vListEntries );
@@ -1477,7 +1477,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
                 sSelected = vListEntries[ nSelectedIndex ];
         }
 
-        GetExport().DoComboBox( sName, sHelp, sToolTip, sSelected, vListEntries );
+        GetExport().DoComboBox( sName, OUString(), OUString(), sSelected, vListEntries );
     }
     else if ( rInfos.eType == ww::eFORMCHECKBOX )
     {
@@ -6845,8 +6845,7 @@ void DocxAttributeOutput::SetField( const SwField& rField, ww::eField eType, con
 void DocxAttributeOutput::WriteExpand( const SwField* pField )
 {
     // Will be written in the next End Run
-    OUString sCmd;
-    m_rExport.OutputField( pField, ww::eUNKNOWN, sCmd );
+    m_rExport.OutputField( pField, ww::eUNKNOWN, OUString() );
 }
 
 void DocxAttributeOutput::WriteField_Impl( const SwField* pField, ww::eField eType, const OUString& rFieldCmd, FieldFlags nMode )

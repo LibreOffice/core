@@ -572,10 +572,8 @@ void Test::testBinVerInUnary()
 
 void Test::testBinHorInSubSup()
 {
-    OUString sInput;
-
     // set up a blank formula
-    SmNode* pTree = SmParser().Parse(sInput);
+    SmNode* pTree = SmParser().Parse(OUString());
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef.get());

@@ -656,9 +656,8 @@ DECLARE_ODFIMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt")
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
-    OUString aParaText;
     uno::Reference<linguistic2::XSpellAlternatives> xAlt;
-    SwSpellPopup aPopup(pWrtShell, xAlt, aParaText);
+    SwSpellPopup aPopup(pWrtShell, xAlt, OUString());
     Menu& rMenu = aPopup.GetMenu();
     // Make sure that if we show the spellcheck popup menu (for the current
     // document, which contains redlines), then the last two entries will be
