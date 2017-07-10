@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_59e2e204",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-10T20:20:24Z",
+      "side": 1,
+      "message": "Why adding this, this is no longer true, am I correct?",
+      "revId": "cdd5c22dd4ad900e574a58da2a0a71587e87dd61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
