@@ -724,12 +724,16 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         sal_uInt16 nSelected = (sal_uInt16) reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() );
         const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[ nSelected ];
         uno::Reference<security::XCertificate> xCert = getCertificate(rInfo);
-        uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = getSecurityEnvironmentForCertificate(xCert);
 
         if ( xCert.is() )
         {
+            uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = getSecurityEnvironmentForCertificate(xCert);
             ScopedVclPtrInstance<CertificateViewer> aViewer(this, xSecEnv, xCert, false);
             aViewer->Execute();
+        }
+        else
+        {
+            ScopedVclPtrInstance<InfoBox>(nullptr, XsResId(STR_XMLSECDLG_NO_CERT_FOUND))->Execute();
         }
     }
 }
