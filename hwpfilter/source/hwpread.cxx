@@ -71,9 +71,9 @@ bool FieldCode::Read(HWPFile & hwpf)
     hwpf.Read4b(&size, 1);
     hwpf.Read2b(&dummy, 1);
     hwpf.Read1b(&type, 2);
-    hwpf.Read4b(reserved1, 1);
+    hwpf.Read4b(reserved1.data(), 1);
     hwpf.Read2b(&location_info, 1);
-    hwpf.Read1b(reserved2, 22);
+    hwpf.Read1b(reserved2.data(), 22);
     hwpf.Read4b(&len1, 1);
     hwpf.Read4b(&len2, 1);
     hwpf.Read4b(&len3, 1);
@@ -83,17 +83,17 @@ bool FieldCode::Read(HWPFile & hwpf)
     uint const len2_ = ((len2 > 1024) ? 1024 : len2) / sizeof(hchar);
     uint const len3_ = ((len3 > 1024) ? 1024 : len3) / sizeof(hchar);
 
-    str1 = new hchar[len1_ ? len1_ : 1];
-    str2 = new hchar[len2_ ? len2_ : 1];
-    str3 = new hchar[len3_ ? len3_ : 1];
+    str1.reset( new hchar[len1_ ? len1_ : 1] );
+    str2.reset( new hchar[len2_ ? len2_ : 1] );
+    str3.reset( new hchar[len3_ ? len3_ : 1] );
 
-    hwpf.Read2b(str1, len1_);
+    hwpf.Read2b(str1.get(), len1_);
     hwpf.SkipBlock(len1 - (len1_ * sizeof(hchar)));
     str1[len1_ ? (len1_ - 1) : 0] = 0;
-    hwpf.Read2b(str2, len2_);
+    hwpf.Read2b(str2.get(), len2_);
     hwpf.SkipBlock(len2 - (len2_ * sizeof(hchar)));
     str2[len2_ ? (len2_ - 1) : 0] = 0;
-    hwpf.Read2b(str3, len3_);
+    hwpf.Read2b(str3.get(), len3_);
     hwpf.SkipBlock(len3 - (len3_ * sizeof(hchar)));
     str3[len3_ ? (len3_ - 1) : 0] = 0;
 
@@ -107,7 +107,7 @@ bool FieldCode::Read(HWPFile & hwpf)
                 pDate->format[i] = str3[i];
           }
           hwpf.AddDateFormat(pDate);
-          m_pDate = pDate;
+          m_pDate.reset( pDate );
      }
 
     return true;
@@ -285,7 +285,7 @@ bool TxtBox::Read(HWPFile & hwpf)
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 
-    cell = ::comphelper::newArray_null<Cell>(ncell);
+    cell.reset( ::comphelper::newArray_null<Cell>(ncell) );
     if (!cell) {
         return hwpf.SetState(HWP_InvalidFileFormat);
     }
@@ -431,12 +431,12 @@ bool Picture::Read(HWPFile & hwpf)
 
     if (follow_block_size != 0)
     {
-        follow = new unsigned char[follow_block_size];
+        follow.reset( new unsigned char[follow_block_size] );
 
-        hwpf.Read1b(follow, follow_block_size);
+        hwpf.Read1b(follow.get(), follow_block_size);
         if (pictype == PICTYPE_DRAW)
         {
-            hmem = new HMemIODev(reinterpret_cast<char *>(follow), follow_block_size);
+            hmem = new HMemIODev(reinterpret_cast<char *>(follow.get()), follow_block_size);
             LoadDrawingObjectBlock(this);
             style.cell = picinfo.picdraw.hdo;
             delete hmem;

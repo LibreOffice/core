@@ -86,23 +86,11 @@ SkipData::~SkipData()
 FieldCode::FieldCode()
     : HBox(CH_FIELD)
     , location_info(0)
-    , str1(nullptr)
-    , str2(nullptr)
-    , str3(nullptr)
-    , m_pDate(nullptr)
 {
-    reserved1 = new char[4];
-    reserved2 = new char[22];
 }
 
 FieldCode::~FieldCode()
 {
-    delete[] str1;
-    delete[] str2;
-    delete[] str3;
-    delete[] reserved1;
-    delete[] reserved2;
-    delete m_pDate;
 }
 
 // book mark(6)
@@ -359,8 +347,6 @@ TxtBox::TxtBox()
 
 TxtBox::~TxtBox()
 {
-    delete[] cell;
-
     for (auto& entry : plists)
     {
         std::list < HWPPara* >::iterator it = entry.begin();
@@ -398,7 +384,6 @@ Picture::Picture()
 
 Picture::~Picture()
 {
-    delete[]follow;
     if( pictype == PICTYPE_DRAW && picinfo.picdraw.hdo )
         delete static_cast<HWPDrawingObject *>(picinfo.picdraw.hdo);
 
