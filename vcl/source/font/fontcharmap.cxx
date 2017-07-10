@@ -38,11 +38,12 @@ static const sal_UCS4 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
 
 ImplFontCharMap::~ImplFontCharMap()
 {
-    if( isDefaultMap() )
-        return;
-    delete[] mpRangeCodes;
-    delete[] mpStartGlyphs;
-    delete[] mpGlyphIds;
+    if( !isDefaultMap() )
+    {
+        delete[] mpRangeCodes;
+        delete[] mpStartGlyphs;
+        delete[] mpGlyphIds;
+    }
 }
 
 ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )

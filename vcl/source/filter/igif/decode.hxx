@@ -21,13 +21,17 @@
 #define INCLUDED_VCL_SOURCE_FILTER_IGIF_DECODE_HXX
 
 #include <vcl/bitmapaccess.hxx>
+#include <array>
+#include <memory>
 
 struct GIFLZWTableEntry;
 
 class GIFLZWDecompressor
 {
-    GIFLZWTableEntry*       pTable;
-    sal_uInt8*              pOutBuf;
+    std::unique_ptr<GIFLZWTableEntry[]>
+                            pTable;
+    std::array<sal_uInt8, 4096>
+                            pOutBuf;
     sal_uInt8*              pOutBufData;
     sal_uInt8*              pBlockBuf;
     sal_uLong               nInputBitsBuf;
