@@ -1748,7 +1748,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:ParagraphDialog"),
         OUString(".uno:OutlineBullet"),
         OUString(".uno:InsertIndexesEntry"),
-        OUString(".uno:DocumentRepair")
+        OUString(".uno:DocumentRepair"),
+        OUString(".uno:InsertPageHeader"),
+        OUString(".uno:InsertPageFooter")
     };
 
     util::URL aCommandURL;
