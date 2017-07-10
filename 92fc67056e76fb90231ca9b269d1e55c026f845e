@@ -16,6 +16,23 @@
       "revId": "92fc67056e76fb90231ca9b269d1e55c026f845e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_5e03a873",
+        "filename": "include/salhelper/singletonref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-10T10:28:26Z",
+      "side": 1,
+      "message": "also the message is misleading since if the assertion fails we don\u0027t know if m_nRef is \u003e 0; best to just omit the message",
+      "revId": "92fc67056e76fb90231ca9b269d1e55c026f845e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
