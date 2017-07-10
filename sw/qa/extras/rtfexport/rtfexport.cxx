@@ -439,6 +439,19 @@ DECLARE_RTFEXPORT_TEST(testFdo53604, "fdo53604.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf108949, "tdf108949_footnoteCharFormat.odt")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph Numbering style", OUString(), getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
+
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+
+    uno::Reference<text::XText> xFootnoteText;
+    xFootnotes->getByIndex(0) >>= xFootnoteText;
+    // This was green (0x00A800), the character property of the footnote character, not the footnote text
+    //CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xFootnoteText),1), "CharColor"));
+}
+
 DECLARE_RTFEXPORT_TEST(testFdo52286, "fdo52286.odt")
 {
     // The problem was that font size wasn't reduced in sub/super script.
