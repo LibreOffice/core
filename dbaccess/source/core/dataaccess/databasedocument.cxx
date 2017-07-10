@@ -82,7 +82,6 @@
 #include <osl/diagnose.h>
 #include <vcl/errcode.hxx>
 
-#include <functional>
 #include <list>
 
 #include <svtools/grfmgr.hxx>
@@ -238,30 +237,11 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  )
     // allowed to contain macros, too.
     if ( !m_bAllowDocumentScripting )
     {
-        Sequence< Type > aStrippedTypes( aTypes.getLength() );
-        Type* pStripTo( aStrippedTypes.getArray() );
-
-        // strip XEmbeddedScripts, and immediately re-assign to aTypes
-        aTypes = Sequence< Type >(
-            pStripTo,
-            std::remove_copy_if(
-                aTypes.begin(),
-                aTypes.end(),
-                pStripTo,
-                std::bind2nd( std::equal_to< Type >(), cppu::UnoType<XEmbeddedScripts>::get() )
-            ) - pStripTo
-        );
-
-        // strip XScriptInvocationContext, and immediately re-assign to aTypes
-        aTypes = Sequence< Type >(
-            pStripTo,
-            std::remove_copy_if(
-                aTypes.begin(),
-                aTypes.end(),
-                pStripTo,
-                std::bind2nd( std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
-            ) - pStripTo
-        );
+        auto newEnd = std::remove_if( aTypes.begin(), aTypes.end(),
+                                      [](const Type& t)
+                                      { return t == cppu::UnoType<XEmbeddedScripts>::get() ||
+                                               t == cppu::UnoType<XScriptInvocationContext>::get();} );
+        aTypes.realloc( std::distance(aTypes.begin(), newEnd) );
     }
 
     return aTypes;
