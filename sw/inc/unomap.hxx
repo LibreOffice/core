@@ -322,44 +322,46 @@
 
 class SwUnoPropertyMapProvider
 {
-    SfxItemPropertyMapEntry const * m_aMapEntriesArr[PROPERTY_MAP_END];
+    o3tl::array_view<SfxItemPropertyMapEntry const>
+                                    m_aMapEntriesArr[PROPERTY_MAP_END];
     SfxItemPropertySet*             m_aPropertySetArr[PROPERTY_MAP_END];
 
 public:
     SwUnoPropertyMapProvider();
     ~SwUnoPropertyMapProvider();
 
-    const SfxItemPropertyMapEntry*  GetPropertyMapEntries(sal_uInt16 PropertyId);
+    o3tl::array_view<SfxItemPropertyMapEntry const>
+                                    GetPropertyMapEntries(sal_uInt16 PropertyId);
     const SfxItemPropertySet*       GetPropertySet( sal_uInt16 PropertyId );
 
 private:
-    static const SfxItemPropertyMapEntry*  GetTextCursorPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetAccessibilityTextAttrPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetParagraphPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetAutoParaStylePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetCharStylePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetAutoCharStylePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetParaStylePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetConditionalParaStylePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetFrameStylePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetPageStylePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetTablePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetRangePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetSectionPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetFramePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetGraphicPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetEmbeddedPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetIndexMarkPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetContentMarkPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetUserMarkPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetTextTableCursorPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetBookmarkPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetParagraphExtensionsPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetTextPortionExtensionPropertyMap();
-    static const SfxItemPropertyMapEntry*  GetFootnotePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetRedlinePropertyMap();
-    static const SfxItemPropertyMapEntry*  GetRedlinePortionPropertyMap();
-    static       SfxItemPropertyMapEntry*  GetTextDefaultPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetTextCursorPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetAccessibilityTextAttrPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetParagraphPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetAutoParaStylePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetCharStylePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetAutoCharStylePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetParaStylePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetConditionalParaStylePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetFrameStylePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetPageStylePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetTablePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetRangePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetSectionPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetFramePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetGraphicPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetEmbeddedPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetIndexMarkPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetContentMarkPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetUserMarkPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetTextTableCursorPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetBookmarkPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetParagraphExtensionsPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetTextPortionExtensionPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetFootnotePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetRedlinePropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry const>  GetRedlinePortionPropertyMap();
+    static o3tl::array_view<SfxItemPropertyMapEntry>  GetTextDefaultPropertyMap();
 };
 
 extern SwUnoPropertyMapProvider aSwMapProvider;

@@ -58,7 +58,7 @@ using namespace com::sun::star;
 
 //  everything without Which-ID, map only for PropertySetInfo
 
-static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
+static o3tl::array_view<SfxItemPropertyMapEntry const>  lcl_GetSettingsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSettingsPropertyMap_Impl[] =
     {
@@ -80,7 +80,6 @@ static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
         {OUString(SC_UNONAME_PRMETRICS),0,  cppu::UnoType<bool>::get(),              0, 0},
         {OUString(SC_UNONAME_USETABCOL),0,  cppu::UnoType<bool>::get(),              0, 0},
         {OUString(SC_UNONAME_REPLWARN), 0,  cppu::UnoType<bool>::get(),              0, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aSettingsPropertyMap_Impl;
 }

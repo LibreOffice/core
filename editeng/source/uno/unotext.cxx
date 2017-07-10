@@ -77,7 +77,7 @@ const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet()
     return &aTextCursorSvxPropertySet;
 }
 
-const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap()
+o3tl::array_view<SfxItemPropertyMapEntry const> ImplGetSvxTextPortionPropertyMap()
 {
     // Propertymap for an Outliner Text
     static const SfxItemPropertyMapEntry aSvxTextPortionPropertyMap[] =
@@ -90,7 +90,6 @@ const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap()
         { OUString("TextPortionType"),               WID_PORTIONTYPE,    ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
         { OUString("TextUserDefinedAttributes"),         EE_CHAR_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aSvxTextPortionPropertyMap;
 }
@@ -106,7 +105,7 @@ const SfxItemPropertySet* ImplGetSvxTextPortionSfxPropertySet()
     return &aSvxTextPortionSfxPropertySet;
 }
 
-const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
+o3tl::array_view<SfxItemPropertyMapEntry const> ImplGetSvxUnoOutlinerTextCursorPropertyMap()
 {
     // Propertymap for an Outliner Text
     static const SfxItemPropertyMapEntry aSvxUnoOutlinerTextCursorPropertyMap[] =
@@ -117,7 +116,6 @@ const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
         SVX_UNOEDIT_PARA_PROPERTIES,
         { OUString("TextUserDefinedAttributes"),         EE_CHAR_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     return aSvxUnoOutlinerTextCursorPropertyMap;
