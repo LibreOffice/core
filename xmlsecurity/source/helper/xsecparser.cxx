@@ -37,6 +37,7 @@ XSecParser::XSecParser(XMLSignatureHelper& rXMLSignatureHelper,
     , m_bInX509Certificate(false)
     , m_bInGpgCertificate(false)
     , m_bInGpgKeyID(false)
+    , m_bInGpgOwner(false)
     , m_bInCertDigest(false)
     , m_bInEncapsulatedX509Certificate(false)
     , m_bInSigningTime(false)
@@ -74,6 +75,7 @@ void SAL_CALL XSecParser::startDocument(  )
     m_bInX509Certificate = false;
     m_bInGpgCertificate = false;
     m_bInGpgKeyID = false;
+    m_bInGpgOwner = false;
     m_bInSignatureValue = false;
     m_bInDigestValue = false;
     m_bInDate = false;
@@ -193,6 +195,11 @@ void SAL_CALL XSecParser::startElement(
         {
             m_ouGpgCertificate.clear();
             m_bInGpgCertificate = true;
+        }
+        else if (aName == "PGPOwner")
+        {
+            m_ouGpgOwner.clear();
+            m_bInGpgOwner = true;
         }
         else if (aName == "SignatureValue")
         {
@@ -317,6 +324,11 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_pXSecController->setGpgCertificate( m_ouGpgCertificate );
             m_bInGpgCertificate = false;
         }
+        else if (aName == "PGPOwner")
+        {
+            m_pXSecController->setGpgOwner( m_ouGpgOwner );
+            m_bInGpgOwner = false;
+        }
         else if (aName == "xd:CertDigest")
         {
             m_pXSecController->setCertDigest( m_ouCertDigest );
@@ -387,6 +399,10 @@ void SAL_CALL XSecParser::characters( const OUString& aChars )
     else if (m_bInGpgKeyID)
     {
         m_ouGpgKeyID += aChars;
+    }
+    else if (m_bInGpgOwner)
+    {
+        m_ouGpgOwner += aChars;
     }
     else if (m_bInSignatureValue)
     {
