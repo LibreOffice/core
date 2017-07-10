@@ -44,37 +44,20 @@
 
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
 {
-    mpLines = new ImplTextLineInfo*[MULTITEXTLINEINFO_RESIZE];
-    mnLines = 0;
-    mnSize  = MULTITEXTLINEINFO_RESIZE;
 }
 
 ImplMultiTextLineInfo::~ImplMultiTextLineInfo()
 {
-    for( sal_Int32 i = 0; i < mnLines; i++ )
-        delete mpLines[i];
-    delete [] mpLines;
 }
 
 void ImplMultiTextLineInfo::AddLine( ImplTextLineInfo* pLine )
 {
-    if ( mnSize == mnLines )
-    {
-        mnSize += MULTITEXTLINEINFO_RESIZE;
-        ImplTextLineInfo** pNewLines = new ImplTextLineInfo*[mnSize];
-        memcpy( pNewLines, mpLines, mnLines*sizeof(ImplTextLineInfo*) );
-        mpLines = pNewLines;
-    }
-
-    mpLines[mnLines] = pLine;
-    mnLines++;
+    mvLines.push_back(std::unique_ptr<ImplTextLineInfo>(pLine));
 }
 
 void ImplMultiTextLineInfo::Clear()
 {
-    for( sal_Int32 i = 0; i < mnLines; i++ )
-        delete mpLines[i];
-    mnLines = 0;
+    mvLines.clear();
 }
 
 void OutputDevice::ImplInitTextColor()
