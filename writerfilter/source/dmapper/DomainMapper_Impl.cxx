@@ -1721,7 +1721,13 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
             uno::UNO_QUERY_THROW );
         uno::Reference< text::XFootnote > xFootnote( xFootnoteText, uno::UNO_QUERY_THROW );
         pTopContext->SetFootnote( xFootnote );
-        uno::Sequence< beans::PropertyValue > aFontProperties = pTopContext->GetPropertyValues();
+        uno::Sequence< beans::PropertyValue > aFontProperties;
+
+        //tdf#108949 <LO6.0: RTF had incorrectly exported the paragraph/character properties relating to footnotes.
+        //Since this will have affected a LOT of old documents, during import explicitly exclude this known dangerous situation
+        if( !(IsRTFImport() && pTopContext == GetTopContextOfType(CONTEXT_PARAGRAPH)) )
+            aFontProperties = pTopContext->GetPropertyValues();
+
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ),
                     xFootnoteText->createTextCursorByRange(xFootnoteText->getStart())));

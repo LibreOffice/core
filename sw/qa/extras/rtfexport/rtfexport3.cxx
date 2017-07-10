@@ -24,7 +24,7 @@ public:
 
 DECLARE_RTFEXPORT_TEST(testTdf108949, "tdf108949_footnoteCharFormat.odt")
 {
-    //CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph Numbering style", OUString(), getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph Numbering style", OUString(), getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
 
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
