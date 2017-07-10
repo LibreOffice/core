@@ -40,13 +40,19 @@ public:
 
 private:
     VclPtr<SvxCharView>    m_pRecentCharView[16];
+    VclPtr<SvxCharView>    m_pFavCharView[16];
     std::deque<OUString>   maRecentCharList;
     std::deque<OUString>   maRecentCharFontList;
+    std::deque<OUString>   maFavCharList;
+    std::deque<OUString>   maFavCharFontList;
     VclPtr<Button>         maDlgBtn;
 
-    DECL_LINK(RecentClickHdl, SvxCharView*, void);
+    DECL_LINK(CharClickHdl, SvxCharView*, void);
     DECL_STATIC_LINK(SfxCharmapCtrl, LoseFocusHdl, Control&, void);
     DECL_LINK(OpenDlgHdl, Button*, void);
+
+    void            getFavCharacterList();
+    void            updateFavCharControl();
 
     void            getRecentCharacterList(); //gets both recent char and recent char font list
     void            updateRecentCharacterList(const OUString& rChar, const OUString& rFont);

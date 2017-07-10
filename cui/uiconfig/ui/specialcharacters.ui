@@ -2,7 +2,8 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <requires lib="" version="3.0"/>
+  <!-- interface-local-resource-path /home/akki/libreoffice/extras/source/glade -->
   <object class="GtkDialog" id="SpecialCharactersDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -177,12 +178,14 @@
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">center</property>
                     <property name="row_spacing">3</property>
+                    <property name="column_spacing">6</property>
+                    <property name="row_homogeneous">True</property>
                     <child>
                       <object class="GtkLabel" id="hexlabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Hexadecimal:</property>
                       </object>
@@ -192,23 +195,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="grid5">
+                      <object class="GtkBox" id="box4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="column_spacing">3</property>
-                        <child>
-                          <object class="GtkEntry" id="hexvalue">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="halign">center</property>
-                            <property name="width_chars">8</property>
-                            <property name="text">A2</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
                         <child>
                           <object class="GtkLabel" id="hexulabel">
                             <property name="visible">True</property>
@@ -220,14 +209,28 @@
                             <property name="lines">1</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="hexvalue">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="width_chars">8</property>
+                            <property name="text">A2</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -239,7 +242,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -250,8 +253,22 @@
                         <property name="text">162</property>
                       </object>
                       <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="favbtn">
+                        <property name="label" translatable="yes">Add to Favorites</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">center</property>
+                      </object>
+                      <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
+                        <property name="top_attach">2</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                   </object>
@@ -493,6 +510,221 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">2</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">4</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkLabel" id="symboltext2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">Favorite Characters:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="grid6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar1">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar2">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar4">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar3">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar5">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">4</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar6">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">5</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar7">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">6</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar8">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">7</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar16">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">15</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar15">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">14</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar14">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">13</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar13">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">12</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar12">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">11</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar11">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">10</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar10">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">9</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="cuilo-SvxCharView" id="favchar9">
+                        <property name="width_request">35</property>
+                        <property name="height_request">35</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">8</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
                 <property name="width">2</property>
               </packing>
             </child>
