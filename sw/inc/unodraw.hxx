@@ -134,7 +134,8 @@ class SwXShape : public SwXShapeBaseClass,
     css::uno::Reference< css::drawing::XShape > mxShape;
 
     const SfxItemPropertySet*           m_pPropSet;
-    const SfxItemPropertyMapEntry*      m_pPropertyMapEntries;
+    const o3tl::array_view<const SfxItemPropertyMapEntry>
+                                        m_pPropertyMapEntries;
 
     SwShapeDescriptor_Impl*     pImpl;
 

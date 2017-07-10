@@ -83,12 +83,12 @@ public:
 
 class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
-    SfxItemPropertyMapEntry const * aMapArr[SVXMAP_END];
+    o3tl::array_view<SfxItemPropertyMapEntry> aMapArr[SVXMAP_END];
     SvxItemPropertySet* aSetArr[SVXMAP_END];
 public:
     SvxUnoPropertyMapProvider();
     ~SvxUnoPropertyMapProvider();
-    const SfxItemPropertyMapEntry* GetMap(sal_uInt16 nPropertyId);
+    o3tl::array_view<SfxItemPropertyMapEntry> GetMap(sal_uInt16 nPropertyId);
     const SvxItemPropertySet* GetPropertySet(sal_uInt16 nPropertyId, SfxItemPool& rPool);
 };
 

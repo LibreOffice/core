@@ -40,8 +40,8 @@ struct SvxIDPropertyCombine
 };
 
 
-SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, SfxItemPool& rItemPool )
-:   m_aPropertyMap( pMap ),
+SvxItemPropertySet::SvxItemPropertySet( o3tl::array_view<SfxItemPropertyMapEntry const> aMap, SfxItemPool& rItemPool )
+:   m_aPropertyMap( aMap ),
     mrItemPool( rItemPool )
 {
 }

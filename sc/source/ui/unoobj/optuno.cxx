@@ -28,7 +28,7 @@
 
 using namespace com::sun::star;
 
-const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
+o3tl::array_view<SfxItemPropertyMapEntry const> ScDocOptionsHelper::GetPropertyMap()
 {
     static const SfxItemPropertyMapEntry aMap[] =
     {
@@ -45,7 +45,6 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
         {OUString(SC_UNO_STANDARDDEC),  PROP_UNO_STANDARDDEC ,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         {OUString(SC_UNO_REGEXENABLED), PROP_UNO_REGEXENABLED,  cppu::UnoType<bool>::get(),          0, 0},
         {OUString(SC_UNO_WILDCARDSENABLED), PROP_UNO_WILDCARDSENABLED, cppu::UnoType<bool>::get(),  0, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aMap;
 }
