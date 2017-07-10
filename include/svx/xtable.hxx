@@ -43,13 +43,6 @@
 #include <limits>
 #include <memory>
 
-class Color;
-class Bitmap;
-class VirtualDevice;
-
-// standard reference string
-extern sal_Unicode pszStandard[]; // "standard"
-
 // function to convert in real RGB_Colours;
 // it can't be compared with enum COL_NAME
 SVX_DLLPUBLIC Color RGB_Color( ColorData nColorName );
