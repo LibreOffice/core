@@ -513,13 +513,13 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     if ( eValType == SvxNumberValueType::String )
         pNumFmtShell =SvxNumberFormatShell::Create(
                                 pNumItem->GetNumberFormatter(),
-                                (pValFmtAttr) ? nInitFormat : 0L,
+                                (pValFmtAttr) ? nInitFormat : 0,
                                 eValType,
                                 aValString );
     else
         pNumFmtShell =SvxNumberFormatShell::Create(
                                 pNumItem->GetNumberFormatter(),
-                                (pValFmtAttr) ? nInitFormat : 0L,
+                                (pValFmtAttr) ? nInitFormat : 0,
                                 eValType,
                                 nValDouble,
                                 &aValString );

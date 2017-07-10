@@ -423,7 +423,7 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, Edit&, rField, void )
         long nLRBorders = lcl_GetValue(*m_pLeftMF, eUnit)
                          +lcl_GetValue(*m_pRightMF, eUnit);
         m_pWidthMF->SetValue( m_pWidthMF->Normalize(
-            ((aOrigSize.Width() - nLRBorders) * static_cast<MetricField&>(rField).GetValue())/100L),
+            ((aOrigSize.Width() - nLRBorders) * static_cast<MetricField&>(rField).GetValue())/100),
             eUnit);
     }
     else
@@ -431,7 +431,7 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, Edit&, rField, void )
         long nULBorders = lcl_GetValue(*m_pTopMF, eUnit)
                          +lcl_GetValue(*m_pBottomMF, eUnit);
         m_pHeightMF->SetValue( m_pHeightMF->Normalize(
-            ((aOrigSize.Height() - nULBorders ) * static_cast<MetricField&>(rField).GetValue())/100L) ,
+            ((aOrigSize.Height() - nULBorders ) * static_cast<MetricField&>(rField).GetValue())/100) ,
             eUnit );
     }
 }
@@ -457,7 +457,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, Edit&, rField, void )
                   lcl_GetValue(*m_pRightMF, eUnit) );
         if(!nWidth)
             nWidth++;
-        sal_uInt16 nZoom = (sal_uInt16)( aSize.Width() * 100L / nWidth);
+        sal_uInt16 nZoom = (sal_uInt16)( aSize.Width() * 100 / nWidth);
         m_pWidthZoomMF->SetValue(nZoom);
     }
     else
@@ -467,7 +467,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, Edit&, rField, void )
                   lcl_GetValue(*m_pBottomMF, eUnit));
         if(!nHeight)
             nHeight++;
-        sal_uInt16 nZoom = (sal_uInt16)( aSize.Height() * 100L/ nHeight);
+        sal_uInt16 nZoom = (sal_uInt16)( aSize.Height() * 100 / nHeight);
         m_pHeightZoomMF->SetValue(nZoom);
     }
 }
@@ -599,10 +599,10 @@ void SvxGrfCropPage::CalcZoom()
     sal_uInt16 nZoom = 0;
     long nDen;
     if( (nDen = aOrigSize.Width() - nLRBorders) > 0)
-        nZoom = (sal_uInt16)((( nWidth  * 1000L / nDen )+5)/10);
+        nZoom = (sal_uInt16)((( nWidth  * 1000 / nDen )+5)/10);
     m_pWidthZoomMF->SetValue(nZoom);
     if( (nDen = aOrigSize.Height() - nULBorders) > 0)
-        nZoom = (sal_uInt16)((( nHeight * 1000L / nDen )+5)/10);
+        nZoom = (sal_uInt16)((( nHeight * 1000 / nDen )+5)/10);
     else
         nZoom = 0;
     m_pHeightZoomMF->SetValue(nZoom);

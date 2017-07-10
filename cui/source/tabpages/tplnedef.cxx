@@ -393,15 +393,15 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangePreviewHdl_Impl, Edit&, void)
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl, Edit&, void)
 {
-    if( m_pNumFldNumber1->GetValue() == 0L )
+    if( m_pNumFldNumber1->GetValue() == 0 )
     {
-        m_pNumFldNumber2->SetMin( 1L );
-        m_pNumFldNumber2->SetFirst( 1L );
+        m_pNumFldNumber2->SetMin( 1 );
+        m_pNumFldNumber2->SetFirst( 1 );
     }
     else
     {
-        m_pNumFldNumber2->SetMin( 0L );
-        m_pNumFldNumber2->SetFirst( 0L );
+        m_pNumFldNumber2->SetMin( 0 );
+        m_pNumFldNumber2->SetFirst( 0 );
     }
 
     ChangePreviewHdl_Impl( *m_pMtrLength1 );
@@ -410,15 +410,15 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl, Edit&, void)
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl, Edit&, void)
 {
-    if( m_pNumFldNumber2->GetValue() == 0L )
+    if( m_pNumFldNumber2->GetValue() == 0 )
     {
-        m_pNumFldNumber1->SetMin( 1L );
-        m_pNumFldNumber1->SetFirst( 1L );
+        m_pNumFldNumber1->SetMin( 1 );
+        m_pNumFldNumber1->SetFirst( 1 );
     }
     else
     {
-        m_pNumFldNumber1->SetMin( 0L );
-        m_pNumFldNumber1->SetFirst( 0L );
+        m_pNumFldNumber1->SetMin( 0 );
+        m_pNumFldNumber1->SetFirst( 0 );
     }
 
     ChangePreviewHdl_Impl( *m_pMtrLength1 );
