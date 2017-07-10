@@ -51,4 +51,9 @@ String STR_XMLSECDLG_NO_CERT_MANAGER
     Text [ en-US ] = "Could not find any certificate manager.";
 };
 
+String STR_XMLSECDLG_NO_CERT_FOUND
+{
+    Text [ en-US ] = "Could not find the certificate.";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
