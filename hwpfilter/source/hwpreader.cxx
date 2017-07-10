@@ -541,7 +541,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                         if( (fd = open( filename , O_CREAT | O_WRONLY , 0666)) >= 0 )
 #endif
                         {
-                            size_t nWritten = write(fd, emp->data, emp->size);
+                            size_t nWritten = write(fd, emp->data.get(), emp->size);
                             OSL_VERIFY(nWritten == emp->size);
                             close(fd);
                         }
@@ -2961,7 +2961,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 firstspace = 1;
                      if( hbox->type[0] == 4 && hbox->type[1] == 0 )
                      {
-                         field = hbox->str3;
+                         field = hbox->str3.get();
                      }
                      else{
                          makeFieldCode(str, hbox);
@@ -3152,92 +3152,92 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
 /* Document Summary */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
-        if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "title")
+        if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "title")
         {
             rstartEl( "text:title", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:title" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "subject")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "subject")
         {
             rstartEl( "text:subject", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:subject" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "author")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "author")
         {
             rstartEl( "text:author-name", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:author-name" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "keywords")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "keywords")
         {
             rstartEl( "text:keywords", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:keywords" );
         }
     }
 /* Personal Information */
     else if( hbox->type[0] == 3 && hbox->type[1] == 1 )
     {
-        if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "User")
+        if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "User")
         {
             rstartEl( "text:sender-lastname", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:sender-lastname" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "Company")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Company")
         {
             rstartEl( "text:sender-company", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:sender-company" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "Position")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Position")
         {
             rstartEl( "text:sender-title", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:sender-title" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "Division")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Division")
         {
             rstartEl( "text:sender-position", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:sender-position" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "Fax")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Fax")
         {
             rstartEl( "text:sender-fax", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:sender-fax" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "Pager")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Pager")
         {
             rstartEl( "text:phone-private", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:phone-private" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "E-mail")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "E-mail")
         {
             rstartEl( "text:sender-email", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:sender-email" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "Zipcode(office)")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Zipcode(office)")
         {
             rstartEl( "text:sender-postal-code", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:sender-postal-code" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "Phone(office)")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Phone(office)")
         {
             rstartEl( "text:sender-phone-work", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:sender-phone-work" );
         }
-        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3))) == "Address(office)")
+        else if (OUString(reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))) == "Address(office)")
         {
             rstartEl( "text:sender-street", mxList.get() );
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:sender-street" );
         }
 
@@ -3249,7 +3249,7 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
                      ascii(Int2Str(hbox->m_pDate->key, "N%d", buf)));
             rstartEl( "text:creation-date", mxList.get() );
             mxList->clear();
-            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2)) );
+            rchars( reinterpret_cast<sal_Unicode const *>(hconv(hbox->str2.get())) );
             rendEl( "text:creation-date" );
      }
 }
@@ -3833,10 +3833,10 @@ void HwpReader::makePicture(Picture * hbox)
 #else
                 if( hbox->follow[4] != 0 )
                     padd("xlink:href", sXML_CDATA,
-                        reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow + 4)).c_str())).c_str())));
+                        reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.get() + 4)).c_str())).c_str())));
                 else
                     padd("xlink:href", sXML_CDATA,
-                        reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow + 5)).c_str())).c_str())));
+                        reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.get() + 5)).c_str())).c_str())));
 #endif
                 rstartEl("draw:a", mxList.get());
                 mxList->clear();
@@ -3911,7 +3911,7 @@ void HwpReader::makePicture(Picture * hbox)
                          EmPicture *emp = hwpfile.GetEmPicture(hbox);
                          if( emp )
                          {
-                             std::shared_ptr<char> pStr(base64_encode_string( emp->data, emp->size ), Free<char>());
+                             std::shared_ptr<char> pStr(base64_encode_string( emp->data.get(), emp->size ), Free<char>());
                              rchars(ascii(pStr.get()));
                          }
                      }

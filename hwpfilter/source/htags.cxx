@@ -47,17 +47,14 @@ void HyperText::Read(HWPFile & hwpf)
 EmPicture::EmPicture(size_t tsize)
     : size(tsize >= 32 ? tsize - 32 : 0)
 {
-    if (size == 0)
-        data = nullptr;
-    else
-        data = new uchar[size];
+    if (size != 0)
+        data.reset( new uchar[size] );
 }
 #ifdef _WIN32
 #define unlink _unlink
 #endif
 EmPicture::~EmPicture()
 {
-    delete[] data;
 };
 
 bool EmPicture::Read(HWPFile & hwpf)
@@ -69,7 +66,7 @@ bool EmPicture::Read(HWPFile & hwpf)
     name[0] = 'H';
     name[1] = 'W';
     name[2] = 'P';
-    return hwpf.ReadBlock(data, size) != 0;
+    return hwpf.ReadBlock(data.get(), size) != 0;
 }
 
 
@@ -81,7 +78,7 @@ OlePicture::OlePicture(int tsize)
     if (size <= 0)
         return;
 #ifndef _WIN32
-     pis = new char[size];
+     pis.reset( new char[size] );
 #endif
 };
 
@@ -90,8 +87,6 @@ OlePicture::~OlePicture()
 #ifdef _WIN32
      if( pis )
           pis->Release();
-#else
-     delete[] pis;
 #endif
 };
 
@@ -135,7 +130,7 @@ void OlePicture::Read(HWPFile & hwpf)
     }
     unlink(tname);
 #else
-    if (pis == nullptr || hwpf.ReadBlock(pis, size) == 0)
+    if (pis == nullptr || hwpf.ReadBlock(pis.get(), size) == 0)
         return;
 #endif
 }
