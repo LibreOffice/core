@@ -1393,7 +1393,6 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bDateNoDefault( false )
 {
     LanguageTagODF aLanguageTagODF;
-    OUString sNatNumAttrScript, sNatNumAttrRfcLanguageTag;
     css::i18n::NativeNumberXmlAttributes aNatNumAttr;
     bool bAttrBool(false);
 
@@ -1470,8 +1469,8 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
         if ( pFormatter )
         {
-            LanguageTag aLanguageTag( sNatNumAttrRfcLanguageTag, aNatNumAttr.Locale.Language,
-                    sNatNumAttrScript, aNatNumAttr.Locale.Country);
+            LanguageTag aLanguageTag( OUString(), aNatNumAttr.Locale.Language,
+                    OUString(), aNatNumAttr.Locale.Country);
             aNatNumAttr.Locale = aLanguageTag.getLocale( false);
 
             sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );

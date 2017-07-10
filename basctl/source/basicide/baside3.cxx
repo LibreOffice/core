@@ -1155,9 +1155,8 @@ EntryDescriptor DialogWindow::CreateEntryDescriptor()
 {
     ScriptDocument aDocument( GetDocument() );
     OUString aLibName( GetLibName() );
-    OUString aLibSubName;
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
-    return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, GetName(), OBJ_TYPE_DIALOG );
+    return EntryDescriptor( aDocument, eLocation, aLibName, OUString(), GetName(), OBJ_TYPE_DIALOG );
 }
 
 void DialogWindow::SetReadOnly (bool bReadOnly)

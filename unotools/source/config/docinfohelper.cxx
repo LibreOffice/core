@@ -70,8 +70,7 @@ OUString DocInfoHelper::GetGeneratorString()
     // and ':' replaced by '-'
     {
         aResult.append( "LibreOffice_project/" );
-        OUString aDefault;
-        OUString aBuildId( Bootstrap::getBuildIdData( aDefault ) );
+        OUString aBuildId( Bootstrap::getBuildIdData( OUString() ) );
         for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )
         {
             sal_Unicode c = aBuildId[i];

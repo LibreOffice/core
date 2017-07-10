@@ -435,8 +435,7 @@ void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
     {
         for ( int i=0; i<4 && i<nArgs; i++ )
         {
-            OUString aString;
-            aArgInput[i].SetArgVal(aString);
+            aArgInput[i].SetArgVal(OUString());
             aArgInput[i].GetArgEdPtr()->Init(
                 (i==0)               ? nullptr : aArgInput[i-1].GetArgEdPtr(),
                 (i==3 || i==nArgs-1) ? nullptr : aArgInput[i+1].GetArgEdPtr(),

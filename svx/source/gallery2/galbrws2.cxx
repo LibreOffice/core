@@ -1031,7 +1031,7 @@ void GalleryBrowser2::DispatchAdd(
         return;
 
     sal_Int8 nType = 0;
-    OUString aFileURL, aFilterName;
+    OUString aFilterName;
     css::uno::Reference< css::lang::XComponent > xDrawing;
     css::uno::Reference< css::graphic::XGraphic > xGraphic;
 
@@ -1067,7 +1067,7 @@ void GalleryBrowser2::DispatchAdd(
     aSeq[0].Name = SVXGALLERYITEM_TYPE;
     aSeq[0].Value <<= nType;
     aSeq[1].Name = SVXGALLERYITEM_URL;
-    aSeq[1].Value <<= aFileURL;
+    aSeq[1].Value <<= OUString();
     aSeq[2].Name = SVXGALLERYITEM_FILTER;
     aSeq[2].Value <<= aFilterName;
     aSeq[3].Name = SVXGALLERYITEM_DRAWING;

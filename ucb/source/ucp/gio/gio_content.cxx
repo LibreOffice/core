@@ -151,7 +151,6 @@ uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterfac
     g_error_free(pError);
 
     OUString sName;
-    OUString sHost;
 
     uno::Sequence< uno::Any > aArgs( 1 );
     aArgs[ 0 ] <<= sName;
@@ -259,7 +258,7 @@ uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterfac
             break;
         case G_IO_ERROR_HOST_NOT_FOUND:
             { ucb::InteractiveNetworkResolveNameException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, sHost);
+                task::InteractionClassification_ERROR, OUString());
               EXCEPT(aExcept);}
             break;
         default:

@@ -1255,7 +1255,6 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             _pContent = static_cast<SwGlblDocContent*>(pLast->GetUserData());
             bMove = true;
         }
-        OUString sFilePassword;
         sal_uLong nEntryCount = GetEntryCount();
         const OUString* pFileNames = _rFiles.getConstArray();
         SwWrtShell& rSh = GetParentWindow()->GetCreateView()->GetWrtShell();
@@ -1319,7 +1318,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
 
             aSectionData.SetLinkFileName(sFileName);
             aSectionData.SetType(FILE_LINK_SECTION);
-            aSectionData.SetLinkFilePassword( sFilePassword );
+            aSectionData.SetLinkFilePassword( OUString() );
 
             rSh.InsertGlobalDocContent( *pAnchorContent, aSectionData );
         }

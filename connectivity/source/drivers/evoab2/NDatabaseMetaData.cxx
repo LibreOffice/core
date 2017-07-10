@@ -441,8 +441,7 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsNonNullableColumns(  )
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getCatalogTerm(  )
 {
-    OUString aVal;
-    return aVal;
+    return OUString();
 }
 
 OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
@@ -453,8 +452,7 @@ OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getExtraNameCharacters(  )
 {
-    OUString aVal;
-    return aVal;
+    return OUString();
 }
 
 sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsDifferentTableCorrelationNames(  )
@@ -795,14 +793,12 @@ OUString SAL_CALL OEvoabDatabaseMetaData::getURL(  )
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getUserName(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getDriverName(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getDriverVersion()
@@ -817,20 +813,17 @@ OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductVersion(  )
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductName(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getProcedureTerm(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getSchemaTerm(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getDriverMajorVersion(  )
@@ -850,14 +843,12 @@ sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getDriverMinorVersion(  )
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getSQLKeywords(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getSearchStringEscape(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL OEvoabDatabaseMetaData::getStringFunctions(  )

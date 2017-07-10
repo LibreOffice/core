@@ -484,8 +484,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
         for(sal_uInt32 nHeader = 0; nHeader < nCount; ++nHeader)
             m_pCSVData->aDBColumnHeaders.push_back( rAddressHeader.GetString(nHeader));
         std::vector<OUString> aNewData;
-        OUString sTemp;
-        aNewData.insert(aNewData.begin(), nCount, sTemp);
+        aNewData.insert(aNewData.begin(), nCount, OUString());
         m_pCSVData->aDBData.push_back(aNewData);
     }
     //now fill the address control
@@ -522,8 +521,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, NewHdl_Impl, Button*, void)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     std::vector<OUString> aNewData;
-    OUString sTemp;
-    aNewData.insert(aNewData.begin(), m_pCSVData->aDBColumnHeaders.size(), sTemp);
+    aNewData.insert(aNewData.begin(), m_pCSVData->aDBColumnHeaders.size(), OUString());
     m_pCSVData->aDBData.insert(m_pCSVData->aDBData.begin() + ++nCurrent, aNewData);
     m_pSetNoNF->SetMax(m_pCSVData->aDBData.size());
     //the NumericField start at 1
@@ -545,8 +543,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl, Button*, void)
     else
     {
         // if only one set is available then clear the data
-        OUString sTemp;
-        m_pCSVData->aDBData[0].assign(m_pCSVData->aDBData[0].size(), sTemp);
+        m_pCSVData->aDBData[0].assign(m_pCSVData->aDBData[0].size(), OUString());
         m_pDeletePB->Enable(false);
     }
     m_pAddressControl->SetCurrentDataSet(nCurrent);

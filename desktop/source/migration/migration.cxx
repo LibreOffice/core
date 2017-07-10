@@ -260,8 +260,7 @@ bool MigrationImpl::doMigration()
             if (i.bHasMenubar) {
                 uno::Reference< container::XIndexContainer > xOldVersionMenuSettings(xOldCfgManager->getSettings(sMenubarResourceURL, true), uno::UNO_QUERY);
                 uno::Reference< container::XIndexContainer > xNewVersionMenuSettings = aNewVersionUIInfo.getNewMenubarSettings(i.sModuleShortName);
-                OUString sParent;
-                compareOldAndNewConfig(sParent, xOldVersionMenuSettings, xNewVersionMenuSettings, sMenubarResourceURL);
+                compareOldAndNewConfig(OUString(), xOldVersionMenuSettings, xNewVersionMenuSettings, sMenubarResourceURL);
                 mergeOldToNewVersion(xCfgManager, xNewVersionMenuSettings, sModuleIdentifier, sMenubarResourceURL);
             }
 
@@ -273,8 +272,7 @@ bool MigrationImpl::doMigration()
 
                     uno::Reference< container::XIndexContainer > xOldVersionToolbarSettings(xOldCfgManager->getSettings(sToolbarResourceURL, true), uno::UNO_QUERY);
                     uno::Reference< container::XIndexContainer > xNewVersionToolbarSettings = aNewVersionUIInfo.getNewToolbarSettings(i.sModuleShortName, sToolbarName);
-                    OUString sParent;
-                    compareOldAndNewConfig(sParent, xOldVersionToolbarSettings, xNewVersionToolbarSettings, sToolbarResourceURL);
+                    compareOldAndNewConfig(OUString(), xOldVersionToolbarSettings, xNewVersionToolbarSettings, sToolbarResourceURL);
                     mergeOldToNewVersion(xCfgManager, xNewVersionToolbarSettings, sModuleIdentifier, sToolbarResourceURL);
                 }
             }

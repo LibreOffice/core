@@ -681,8 +681,7 @@ bool OSQLParseTreeIterator::traverseTableNames(OSQLTables& _rTables)
 
     if ( pTableName )
     {
-        OUString sTableRange;
-        traverseOneTableName( _rTables, pTableName, sTableRange );
+        traverseOneTableName( _rTables, pTableName, OUString() );
     }
 
     return !hasErrors();

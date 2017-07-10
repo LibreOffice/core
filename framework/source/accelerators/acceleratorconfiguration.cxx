@@ -969,10 +969,9 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
 
         if ( sGlobalModules == CFG_ENTRY_GLOBAL )
         {
-            OUString sModule;
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
             if ( !sKey.isEmpty() && !sPath.isEmpty() )
-                reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
+                reloadChanged(sPrimarySecondary, sGlobalModules, OUString(), sKey);
         }
         else if ( sGlobalModules == CFG_ENTRY_MODULES )
         {

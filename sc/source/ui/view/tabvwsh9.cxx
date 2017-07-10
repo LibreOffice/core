@@ -76,8 +76,7 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
         Graphic aGraphic( pGalleryItem->GetGraphic() );
         Point   aPos     = GetInsertPos();
 
-        OUString aPath, aFilter;
-        PasteGraphic( aPos, aGraphic, aPath, aFilter );
+        PasteGraphic( aPos, aGraphic, OUString(), OUString() );
     }
     else if ( nType == css::gallery::GalleryItemType::MEDIA )
     {

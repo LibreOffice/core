@@ -288,8 +288,7 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, 
     if( bMustDelete )
         delete pFontList;
 
-    OUString aPresetId;
-    setValue( rValue, aPresetId );
+    setValue( rValue, OUString() );
 }
 
 IMPL_LINK_NOARG(FontPropertyBox, ControlSelectHdl, ComboBox&, void)
@@ -443,8 +442,7 @@ CharHeightPropertyBox::CharHeightPropertyBox(sal_Int32 nControlType, vcl::Window
     mpControl->SetModifyHdl( LINK( this, CharHeightPropertyBox, EditModifyHdl ) );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX );
 
-    OUString aPresetId;
-    setValue( rValue, aPresetId );
+    setValue( rValue, OUString() );
 }
 
 CharHeightPropertyBox::~CharHeightPropertyBox()
@@ -532,8 +530,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::W
     Link<Edit&,void> aLink( LINK( this, TransparencyPropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( aLink );
 
-    OUString aPresetId;
-    setValue( rValue, aPresetId  );
+    setValue( rValue, OUString()  );
 }
 
 TransparencyPropertyBox::~TransparencyPropertyBox()
@@ -628,8 +625,7 @@ RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* p
     Link<Edit&,void> aLink( LINK( this, RotationPropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( aLink );
 
-    OUString aPresetId;
-    setValue( rValue, aPresetId );
+    setValue( rValue, OUString() );
 }
 
 RotationPropertyBox::~RotationPropertyBox()
@@ -748,8 +744,7 @@ ScalePropertyBox::ScalePropertyBox(sal_Int32 nControlType, vcl::Window* pParent,
     Link<Edit&,void> aLink( LINK( this, ScalePropertyBox, implModifyHdl ) );
     mpControl->SetModifyHdl( aLink );
 
-    OUString aPresetId;
-    setValue( rValue, aPresetId );
+    setValue( rValue, OUString() );
 }
 
 ScalePropertyBox::~ScalePropertyBox()
@@ -907,8 +902,7 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window*
     mpControl->SetMenuSelectHdl( LINK( this, FontStylePropertyBox, implMenuSelectHdl ));
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX );
 
-    OUString aPresetId;
-    setValue( rValue, aPresetId );
+    setValue( rValue, OUString() );
 }
 
 FontStylePropertyBox::~FontStylePropertyBox()

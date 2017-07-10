@@ -135,9 +135,8 @@ SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString&,
 
 Any SAL_CALL SfxScriptLibraryContainer::createEmptyLibraryElement()
 {
-    OUString aMod;
     Any aRetAny;
-    aRetAny <<= aMod;
+    aRetAny <<= OUString();
     return aRetAny;
 }
 
@@ -553,9 +552,8 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
                                                           const uno::Reference< embed::XStorage >& xStorage,
                                                           const css::uno::Reference< css::task::XInteractionHandler >& xHandler )
 {
-    OUString aDummyLocation;
     Reference< XSimpleFileAccess3 > xDummySFA;
-    return implStorePasswordLibrary( pLib, aName, xStorage, aDummyLocation, xDummySFA, xHandler );
+    return implStorePasswordLibrary( pLib, aName, xStorage, OUString(), xDummySFA, xHandler );
 }
 
 bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,

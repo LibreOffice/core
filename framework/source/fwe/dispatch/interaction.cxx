@@ -105,9 +105,8 @@ private:
 
 RequestFilterSelect_Impl::RequestFilterSelect_Impl( const OUString& sURL )
 {
-    OUString temp;
     css::uno::Reference< css::uno::XInterface > temp2;
-    css::document::NoSuchFilterRequest aFilterRequest( temp                             ,
+    css::document::NoSuchFilterRequest aFilterRequest( OUString(),
                                                        temp2                            ,
                                                        sURL                                          );
     m_aRequest <<= aFilterRequest;

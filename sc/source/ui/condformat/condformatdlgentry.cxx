@@ -607,8 +607,7 @@ ScFormatEntry* ScFormulaFrmtEntry::createFormulaEntry() const
     if(aFormula.isEmpty())
         return nullptr;
 
-    OUString aExpr2;
-    ScFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT, aFormula, aExpr2, mpDoc, maPos, maLbStyle->GetSelectEntry());
+    ScFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT, aFormula, OUString(), mpDoc, maPos, maLbStyle->GetSelectEntry());
     return pEntry;
 }
 

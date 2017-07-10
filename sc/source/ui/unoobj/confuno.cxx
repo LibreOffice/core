@@ -151,9 +151,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             sal_Int64 nColor = 0;
             if (aValue >>= nColor)
             {
-                OUString aColorName;
                 Color aColor(static_cast<sal_uInt32>(nColor));
-                aViewOpt.SetGridColor(aColor, aColorName);
+                aViewOpt.SetGridColor(aColor, OUString());
             }
         }
         else if ( aPropertyName == SC_UNO_SHOWPAGEBR )

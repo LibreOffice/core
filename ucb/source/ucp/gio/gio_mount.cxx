@@ -81,7 +81,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
         return;
     }
 
-    OUString aHostName, aDomain, aUserName, aPassword;
+    OUString aDomain, aUserName, aPassword;
 
     ucbhelper::SimpleAuthenticationRequest::EntityType eUserName =
         (flags & G_ASK_PASSWORD_NEED_USERNAME)
@@ -118,7 +118,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
         aDomain = OUString(default_domain, strlen(default_domain), RTL_TEXTENCODING_UTF8);
 
     rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
-        = new ucbhelper::SimpleAuthenticationRequest (OUString() /* FIXME: provide URL here */, aHostName, eDomain, aDomain, eUserName, aUserName, ePassword, aPassword);
+        = new ucbhelper::SimpleAuthenticationRequest (OUString() /* FIXME: provide URL here */, OUString(), eDomain, aDomain, eUserName, aUserName, ePassword, aPassword);
 
     xIH->handle( xRequest.get() );
 

@@ -940,7 +940,6 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
                 SCTAB nTabToUse = nDestTab;
                 if ( nDestTab == SC_TAB_APPEND )
                     nTabToUse = aDocument.GetMaxTableNumber() - 1;
-                OUString sCodeName;
                 OUString sSource;
                 try
                 {
@@ -958,7 +957,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
                 catch ( const css::uno::Exception& )
                 {
                 }
-                VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
+                VBA_InsertModule( aDocument, nTabToUse, OUString(), sSource );
             }
         }
         Broadcast( ScTablesHint( SC_TAB_COPIED, nSrcTab, nDestTab ) );

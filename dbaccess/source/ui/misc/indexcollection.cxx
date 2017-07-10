@@ -310,8 +310,7 @@ namespace dbaui
     Indexes::iterator OIndexCollection::insert(const OUString& _rName)
     {
         OSL_ENSURE(end() == find(_rName), "OIndexCollection::insert: invalid new name!");
-        OUString tmpName;
-        OIndex aNewIndex(tmpName);  // the empty string indicates the index is a new one
+        OIndex aNewIndex((OUString()));  // the empty string indicates the index is a new one
         aNewIndex.sName = _rName;
         m_aIndexes.push_back(aNewIndex);
         return m_aIndexes.end() - 1;    // the last element is the new one ...

@@ -199,8 +199,7 @@ namespace
                 using namespace svtools;
                 Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
                 Sequence< OUString > vPackages { "libreoffice-base" };
-                OUString sInteraction;
-                xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
+                xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, OUString());
                 // Ill be back (hopefully)!
                 SolarMutexGuard aGuard;
                 executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, RESTART_REASON_BIBLIOGRAPHY_INSTALL);

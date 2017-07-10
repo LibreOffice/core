@@ -4257,8 +4257,7 @@ bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommand
         // if HEAD is successful, set element found,
         rResAccess->HEAD( aHeaderNames, aResource, xEnv );
         rDAVOptions.setHttpResponseStatusCode( 0 );
-        OUString aNoText;
-        rDAVOptions.setHttpResponseStatusText( aNoText );
+        rDAVOptions.setHttpResponseStatusText( OUString() );
         return true;
     }
     catch ( DAVException const & e )
@@ -4311,8 +4310,7 @@ bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommand
     }
     // set SC_NOT_IMPLEMENTED since at a minimum GET must be implemented in a basic Web server
     rDAVOptions.setHttpResponseStatusCode( SC_NOT_IMPLEMENTED );
-    OUString HttpResponseStatusText;
-    rDAVOptions.setHttpResponseStatusText( HttpResponseStatusText );
+    rDAVOptions.setHttpResponseStatusText( OUString() );
     return false;
 }
 

@@ -112,10 +112,9 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, Button*, pButton, voi
             //add the new column
             m_pNewData->aDBColumnHeaders.insert(m_pNewData->aDBColumnHeaders.begin() + nPos, sNew);
             //add a new entry into all data arrays
-            OUString sTemp;
             std::vector< std::vector< OUString > >::iterator aDataIter;
             for( aDataIter = m_pNewData->aDBData.begin(); aDataIter != m_pNewData->aDBData.end(); ++aDataIter)
-                aDataIter->insert(aDataIter->begin() + nPos, sTemp);
+                aDataIter->insert(aDataIter->begin() + nPos, OUString());
 
         }
 

@@ -387,7 +387,6 @@ namespace pcr
                                             + aDot
                                             + _rPropertyName;
                         sal_Int32 i;
-                        OUString aDummyStr;
                         for ( i = 0; i < nNewCount; ++i )
                         {
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
@@ -395,7 +394,7 @@ namespace pcr
                             aPureIdStr += aIdStrBase;
                             pNewPureIds[i] = aPureIdStr;
                             // Force usage of next Unique Id
-                            xStringResourceManager->setString( aPureIdStr, aDummyStr );
+                            xStringResourceManager->setString( aPureIdStr, OUString() );
                         }
 
                         // Move strings to new Ids for all locales

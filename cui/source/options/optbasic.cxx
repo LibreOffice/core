@@ -145,8 +145,7 @@ VclPtr<SfxTabPage> SvxBasicIDEOptionsPage::Create( vcl::Window* pParent, const S
 
 void SvxBasicIDEOptionsPage::FillUserData()
 {
-    OUString aUserData;
-    SetUserData( aUserData );
+    SetUserData( OUString() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -588,7 +588,6 @@ void SvxIMapDlg::SetActiveTool( sal_uInt16 nId )
 
 IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow&, rWnd, void )
 {
-    OUString            aStr;
     const NotifyInfo&   rInfo = rWnd.GetInfo();
 
     if ( rInfo.bNewObj )
@@ -611,7 +610,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow&, rWnd, void )
         m_pTbxIMapDlg1->EnableItem( mnActiveId, false );
         m_pTbxIMapDlg1->EnableItem( mnMacroId, false );
         m_pTbxIMapDlg1->EnableItem( mnPropertyId, false );
-        m_pStbStatus->SetItemText( 1, aStr );
+        m_pStbStatus->SetItemText( 1, OUString() );
 
         m_pFtURL->Disable();
         m_pURLBox->Disable();

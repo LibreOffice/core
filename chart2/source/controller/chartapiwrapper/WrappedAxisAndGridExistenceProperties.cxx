@@ -260,8 +260,7 @@ void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue
 
     if( bNewValue )
     {
-        OUString aTitleText;
-        TitleHelper::createTitle(  m_eTitleType, aTitleText
+        TitleHelper::createTitle(  m_eTitleType, OUString()
             , m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
     }
     else

@@ -921,8 +921,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     // Link is already initialised in createLibraryLink()
                     if( !pImplLib->mbInitialised && (!bStorage || xLibraryStor.is()) )
                     {
-                        OUString aIndexFileName;
-                        bool bLoaded = implLoadLibraryIndexFile( pImplLib, rLib, xLibraryStor, aIndexFileName );
+                        bool bLoaded = implLoadLibraryIndexFile( pImplLib, rLib, xLibraryStor, OUString() );
                         SAL_WARN_IF(
                             bLoaded && aLibName != rLib.aName, "basic",
                             ("Different library names in library container and"
@@ -1370,10 +1369,9 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                                             const OUString& aName,
                                             const uno::Reference< embed::XStorage >& xStorage )
 {
-    OUString aDummyLocation;
     Reference< XSimpleFileAccess3 > xDummySFA;
     Reference< XInteractionHandler > xDummyHandler;
-    implStoreLibrary( pLib, aName, xStorage, aDummyLocation, xDummySFA, xDummyHandler );
+    implStoreLibrary( pLib, aName, xStorage, OUString(), xDummySFA, xDummyHandler );
 }
 
 // New variant for library export
@@ -1524,9 +1522,8 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                                                      const ::xmlscript::LibDescriptor& rLib,
                                                      const uno::Reference< embed::XStorage >& xStorage )
 {
-    OUString aDummyLocation;
     Reference< XSimpleFileAccess3 > xDummySFA;
-    implStoreLibraryIndexFile( pLib, rLib, xStorage, aDummyLocation, xDummySFA );
+    implStoreLibraryIndexFile( pLib, rLib, xStorage, OUString(), xDummySFA );
 }
 
 // New variant for library export
@@ -2199,10 +2196,9 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     pNewLib->maUnexpandedStorageURL = aUnexpandedStorageURL;
     pNewLib->maOriginalStorageURL = StorageURL;
 
-    OUString aInitFileName;
     uno::Reference< embed::XStorage > xDummyStor;
     ::xmlscript::LibDescriptor aLibDesc;
-    implLoadLibraryIndexFile( pNewLib, aLibDesc, xDummyStor, aInitFileName );
+    implLoadLibraryIndexFile( pNewLib, aLibDesc, xDummyStor, OUString() );
     implImportLibDescriptor( pNewLib, aLibDesc );
 
     Reference< XNameAccess > xRet = static_cast< XNameAccess* >( pNewLib );

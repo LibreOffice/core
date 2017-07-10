@@ -1215,8 +1215,7 @@ void XMLIndexMarkImportContext_Impl::GetServiceName(
         default:
         {
             SAL_WARN("xmloff.text", "unknown index mark type!");
-            OUString sTmp;
-            sServiceName = sTmp;
+            sServiceName = OUString();
             break;
         }
     }

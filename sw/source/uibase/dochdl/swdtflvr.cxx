@@ -1860,11 +1860,10 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 // it is important to have an icon, let an empty graphic be used
                 // if no other graphic is provided
                 // TODO/LATER: in future a default bitmap could be used
-                OUString aMimeType;
                 MapMode aMapMode( MapUnit::Map100thMM );
                 aGraphic.SetPrefSize( Size( 2500, 2500 ) );
                 aGraphic.SetPrefMapMode( aMapMode );
-                xObjRef.SetGraphic( aGraphic, aMimeType );
+                xObjRef.SetGraphic( aGraphic, OUString() );
             }
 
             //set size. This is a hack because of handing over, size should be
