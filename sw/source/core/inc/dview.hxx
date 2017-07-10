@@ -30,8 +30,8 @@ class SdrUndoManager;
 
 class SwDrawView : public FmFormView
 {
-    Point           aAnchorPoint;       // anchor position
-    SwViewShellImp      &rImp;               // a view is always part of a shell
+    Point           m_aAnchorPoint;       // anchor position
+    SwViewShellImp      &m_rImp;               // a view is always part of a shell
 
     const SwFrame *CalcAnchor();
 
@@ -96,8 +96,8 @@ public:
     virtual void MakeVisible( const tools::Rectangle&, vcl::Window &rWin ) override;
     virtual void CheckPossibilities() override;
 
-    const SwViewShellImp &Imp() const { return rImp; }
-          SwViewShellImp &Imp()       { return rImp; }
+    const SwViewShellImp &Imp() const { return m_rImp; }
+          SwViewShellImp &Imp()       { return m_rImp; }
 
     // anchor and Xor for dragging
     void ShowDragAnchor();

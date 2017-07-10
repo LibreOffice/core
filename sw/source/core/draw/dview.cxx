@@ -95,7 +95,7 @@ static const SwFrame *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
 
 SwDrawView::SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
     FmFormView( static_cast<FmFormModel*>(pMd), pOutDev ),
-    rImp( rI )
+    m_rImp( rI )
 {
     SetPageVisible( false );
     SetBordVisible( false );
@@ -223,7 +223,7 @@ void SwDrawView::AddCustomHdl()
     if(nullptr == (pAnch = CalcAnchor()))
         return;
 
-    Point aPos(aAnchorPoint);
+    Point aPos(m_aAnchorPoint);
 
     if ( RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId() )
     {
@@ -368,13 +368,13 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                 if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
                 {
                     const SwFlyFrame *pTmpFlyFrame = static_cast<SwFlyFrame*>(pAnchoredObj);
-                    rImp.DisposeAccessibleFrame( pTmpFlyFrame );
-                    rImp.AddAccessibleFrame( pTmpFlyFrame );
+                    m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
+                    m_rImp.AddAccessibleFrame( pTmpFlyFrame );
                 }
                 else
                 {
-                    rImp.DisposeAccessibleObj(pAnchoredObj->GetDrawObj(), true);
-                    rImp.AddAccessibleObj( pAnchoredObj->GetDrawObj() );
+                    m_rImp.DisposeAccessibleObj(pAnchoredObj->GetDrawObj(), true);
+                    m_rImp.AddAccessibleObj( pAnchoredObj->GetDrawObj() );
                 }
             }
             aAnchoredObjs.pop_back();
@@ -404,13 +404,13 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                     if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
                     {
                         const SwFlyFrame *pTmpFlyFrame = static_cast<SwFlyFrame*>(pAnchoredObj);
-                        rImp.DisposeAccessibleFrame( pTmpFlyFrame );
-                        rImp.AddAccessibleFrame( pTmpFlyFrame );
+                        m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
+                        m_rImp.AddAccessibleFrame( pTmpFlyFrame );
                     }
                     else
                     {
-                        rImp.DisposeAccessibleObj(pAnchoredObj->GetDrawObj(), true);
-                        rImp.AddAccessibleObj( pAnchoredObj->GetDrawObj() );
+                        m_rImp.DisposeAccessibleObj(pAnchoredObj->GetDrawObj(), true);
+                        m_rImp.AddAccessibleObj( pAnchoredObj->GetDrawObj() );
                     }
                 }
                 aAnchoredObjs.pop_back();
@@ -582,8 +582,8 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
         const SwFlyFrame* pFlyFrame = static_cast<SwFlyFrame*>(pMovedAnchoredObj);
 
         // adjustments for accessibility API
-        rImp.DisposeAccessibleFrame( pFlyFrame );
-        rImp.AddAccessibleFrame( pFlyFrame );
+        m_rImp.DisposeAccessibleFrame( pFlyFrame );
+        m_rImp.AddAccessibleFrame( pFlyFrame );
 
         const sal_uInt32 nChildNewPos = bMovedForward ? nNewPos : nNewPos+1;
         size_t i = bMovedForward ? nOldPos : nObjCount-1;
@@ -614,13 +614,13 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
                 {
                     const SwFlyFrame *pTmpFlyFrame =
                         static_cast<SwVirtFlyDrawObj*>(pTmpObj)->GetFlyFrame();
-                    rImp.DisposeAccessibleFrame( pTmpFlyFrame );
-                    rImp.AddAccessibleFrame( pTmpFlyFrame );
+                    m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
+                    m_rImp.AddAccessibleFrame( pTmpFlyFrame );
                 }
                 else
                 {
-                    rImp.DisposeAccessibleObj(pTmpObj, true);
-                    rImp.AddAccessibleObj( pTmpObj );
+                    m_rImp.DisposeAccessibleObj(pTmpObj, true);
+                    m_rImp.AddAccessibleObj( pTmpObj );
                 }
             }
             else
@@ -638,8 +638,8 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
     else
     {
         // adjustments for accessibility API
-        rImp.DisposeAccessibleObj(pObj, true);
-        rImp.AddAccessibleObj( pObj );
+        m_rImp.DisposeAccessibleObj(pObj, true);
+        m_rImp.AddAccessibleObj( pObj );
     }
 
     MoveRepeatedObjs( *pMovedAnchoredObj, aMovedChildObjs );
@@ -736,7 +736,7 @@ const SwFrame* SwDrawView::CalcAnchor()
         }
     }
     if( pAnch && !pAnch->IsProtected() )
-        aAnchorPoint = pAnch->GetFrameAnchorPos( ::HasWrap( pObj ) );
+        m_aAnchorPoint = pAnch->GetFrameAnchorPos( ::HasWrap( pObj ) );
     else
         pAnch = nullptr;
     return pAnch;
@@ -751,7 +751,7 @@ void SwDrawView::ShowDragAnchor()
     if(pHdl)
     {
         CalcAnchor();
-        pHdl->SetPos(aAnchorPoint);
+        pHdl->SetPos(m_aAnchorPoint);
     }
 }
 
@@ -796,8 +796,8 @@ void SwDrawView::ModelHasChanged()
 
 void SwDrawView::MakeVisible( const tools::Rectangle &rRect, vcl::Window & )
 {
-    OSL_ENSURE( rImp.GetShell()->GetWin(), "MakeVisible, unknown Window");
-    rImp.GetShell()->MakeVisible( SwRect( rRect ) );
+    OSL_ENSURE( m_rImp.GetShell()->GetWin(), "MakeVisible, unknown Window");
+    m_rImp.GetShell()->MakeVisible( SwRect( rRect ) );
 }
 
 void SwDrawView::CheckPossibilities()
@@ -920,7 +920,7 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 
 SfxViewShell* SwDrawView::GetSfxViewShell() const
 {
-    return rImp.GetShell()->GetSfxViewShell();
+    return m_rImp.GetShell()->GetSfxViewShell();
 }
 
 void SwDrawView::DeleteMarked()
@@ -932,7 +932,7 @@ void SwDrawView::DeleteMarked()
     pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
     // replace marked <SwDrawVirtObj>-objects by its reference objects.
     {
-        SdrPageView* pDrawPageView = rImp.GetPageView();
+        SdrPageView* pDrawPageView = m_rImp.GetPageView();
         if ( pDrawPageView )
         {
             SdrMarkView* pMarkView = &(pDrawPageView->GetView());
