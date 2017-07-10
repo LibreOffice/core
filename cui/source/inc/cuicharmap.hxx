@@ -78,12 +78,18 @@ private:
     VclPtr<SvxShowText>    m_pShowChar;
     VclPtr<Edit>           m_pHexCodeText;
     VclPtr<Edit>           m_pDecimalCodeText;
+    VclPtr<Button>         m_pFavouritesBtn;
     VclPtr<SvxCharView>    m_pRecentCharView[16];
+    VclPtr<SvxCharView>    m_pFavCharView[16];
+
     vcl::Font       aFont;
     const SubsetMap* pSubsetMap;
 
     std::deque<OUString> maRecentCharList;
     std::deque<OUString> maRecentCharFontList;
+
+    std::deque<OUString> maFavCharList;
+    std::deque<OUString> maFavCharFontList;
 
     uno::Reference< uno::XComponentContext > mxContext;
 
@@ -97,9 +103,10 @@ private:
     DECL_LINK(CharPreSelectHdl, SvxShowCharSet*, void);
     DECL_LINK(DecimalCodeChangeHdl, Edit&, void);
     DECL_LINK(HexCodeChangeHdl, Edit&, void);
-    DECL_LINK(RecentClickHdl, SvxCharView*, void);
+    DECL_LINK(CharClickHdl, SvxCharView*, void);
     DECL_LINK(InsertClickHdl, Button*, void);
     DECL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, Control&, void);
+    DECL_LINK(FavSelectHdl, Button*, void);
 
     static void fillAllSubsets(ListBox &rListBox);
     void selectCharByCode(Radix radix);
@@ -121,8 +128,16 @@ public:
     void            getRecentCharacterList(); //gets both recent char and recent char font list
     void            updateRecentCharacterList(const OUString& rChar, const OUString& rFont);
 
+    void            getFavCharacterList(); //gets both Fav char and Fav char font list
+    void            updateFavCharacterList(const OUString& rChar, const OUString& rFont);
+    void            deleteFavCharacterFromList(const OUString& rChar, const OUString& rFont);
+    bool            isFavChar(const OUString& sTitle, const OUString& rFont);
+
     void            updateRecentCharControl();
     void            insertCharToDoc(const OUString& sChar);
+
+    void            updateFavCharControl();
+    void            setFavButtonState(const OUString& sTitle, const OUString& rFont);
 };
 
 #endif
