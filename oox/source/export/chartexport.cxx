@@ -687,7 +687,6 @@ void ChartExport::ExportContent_()
                         Any aAny;
                         try
                         {
-                            OUString sChartAddress;
                             aAny = xProp->getPropertyValue("ChartRangeAddress");
                             aAny >>= msChartAddress;
                             //maExportHelper.SetChartRangeAddress( sChartAddress );
@@ -695,7 +694,7 @@ void ChartExport::ExportContent_()
                             //maExportHelper.SetTableNumberList( sTableNumberList );
 
                             // do not include own table if there are external addresses
-                            bIncludeTable = sChartAddress.isEmpty();
+                            bIncludeTable = true;
                         }
                         catch( beans::UnknownPropertyException & )
                         {
