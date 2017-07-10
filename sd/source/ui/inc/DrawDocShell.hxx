@@ -150,7 +150,7 @@ public:
      */
     bool                    CheckPageName(vcl::Window* pWin, OUString& rName );
 
-    void                    SetSlotFilter(bool bEnable = false, o3tl::array_view<sal_uInt16> pSIDs = o3tl::array_view<sal_uInt16>()) { mbFilterEnable = bEnable; mpFilterSIDs = pSIDs; }
+    void                    SetSlotFilter(bool bEnable = false, o3tl::array_view<sal_uInt16 const> pSIDs = o3tl::array_view<sal_uInt16 const>()) { mbFilterEnable = bEnable; mpFilterSIDs = pSIDs; }
     void                    ApplySlotFilter() const;
 
     SfxStyleFamily          GetStyleFamily() const { return mnStyleFamily; }
@@ -216,7 +216,7 @@ protected:
     rtl::Reference<FuPoor> mxDocShellFunction;
     DocumentType            meDocType;
     SfxStyleFamily          mnStyleFamily;
-    o3tl::array_view<sal_uInt16>
+    o3tl::array_view<sal_uInt16 const>
                             mpFilterSIDs;
     bool                    mbFilterEnable;
     bool                    mbSdDataObj;

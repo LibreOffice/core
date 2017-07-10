@@ -65,7 +65,7 @@ using namespace ::com::sun::star;
 
 //  AutoFormat map only for PropertySetInfo without Which-IDs
 
-static const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
+static o3tl::array_view<SfxItemPropertyMapEntry const>  lcl_GetAutoFormatMap()
 {
     static const SfxItemPropertyMapEntry aAutoFormatMap_Impl[] =
     {
@@ -75,7 +75,6 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
         { OUString(SC_UNONAME_INCJUST),  0,  cppu::UnoType<bool>::get(),    0, 0 },
         { OUString(SC_UNONAME_INCNUM),   0,  cppu::UnoType<bool>::get(),    0, 0 },
         { OUString(SC_UNONAME_INCWIDTH), 0,  cppu::UnoType<bool>::get(),    0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aAutoFormatMap_Impl;
 }
@@ -83,7 +82,7 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
 //! number format (String/Language) ??? (in XNumberFormat only ReadOnly)
 //! table::TableBorder ??!?
 
-static const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
+static o3tl::array_view<SfxItemPropertyMapEntry const>  lcl_GetAutoFieldMap()
 {
     static const SfxItemPropertyMapEntry aAutoFieldMap_Impl[] =
     {
@@ -134,7 +133,6 @@ static const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
         {OUString(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,       ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,       ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
         {OUString(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, ::cppu::UnoType<sal_Int32>::get(),   0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aAutoFieldMap_Impl;
 }

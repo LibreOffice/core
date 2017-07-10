@@ -2031,26 +2031,24 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
 
     tAccParaPropValMap aSupplementalAttrSeq;
     {
-        const SfxItemPropertyMapEntry* pPropMap(
-                aSwMapProvider.GetPropertyMapEntries( PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE ) );
-        while ( !pPropMap->aName.isEmpty() )
+        auto pPropMap =
+                aSwMapProvider.GetPropertyMapEntries( PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE );
+        for ( auto const & entry : pPropMap )
         {
-            const SfxPoolItem* pItem = pSet->GetItem( pPropMap->nWID );
+            const SfxPoolItem* pItem = pSet->GetItem( entry.nWID );
             if ( pItem )
             {
                 uno::Any aVal;
-                pItem->QueryValue( aVal, pPropMap->nMemberId );
+                pItem->QueryValue( aVal, entry.nMemberId );
 
                 PropertyValue rPropVal;
-                rPropVal.Name = pPropMap->aName;
+                rPropVal.Name = entry.aName;
                 rPropVal.Value = aVal;
                 rPropVal.Handle = -1;
                 rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
 
                 aSupplementalAttrSeq[rPropVal.Name] = rPropVal;
             }
-
-            ++pPropMap;
         }
     }
 
