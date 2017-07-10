@@ -1071,9 +1071,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
     if (m_aTextAppendStack.empty())
         return;
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
-    uno::Reference< text::XTextAppend >  xTextAppend;
-    if (!m_aTextAppendStack.empty())
-        xTextAppend = rAppendContext.xTextAppend;
+    uno::Reference< text::XTextAppend > xTextAppend(rAppendContext.xTextAppend);
 
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().attribute("isTextAppend", sal_uInt32(xTextAppend.is()));
