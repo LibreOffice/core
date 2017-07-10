@@ -112,7 +112,6 @@ AnalysisAddIn::~AnalysisAddIn()
 {
     delete pResMgr;
     delete pCDL;
-    delete[] pFactDoubles;
     delete pFD;
     delete[] pDefLocales;
 }
@@ -136,7 +135,7 @@ double AnalysisAddIn::FactDouble( sal_Int32 nNum )
 
     if( !pFactDoubles )
     {
-        pFactDoubles = new double[ MAXFACTDOUBLE + 1 ];
+        pFactDoubles.reset( new double[ MAXFACTDOUBLE + 1 ] );
 
         pFactDoubles[ 0 ] = 1.0;    // by default
 
