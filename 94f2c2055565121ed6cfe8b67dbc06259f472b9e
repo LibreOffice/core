@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_1e63e0b2",
+        "filename": "cui/source/customize/SvxConfigPageHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-07-10T06:50:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a461143_88723a7b",
+      "revId": "94f2c2055565121ed6cfe8b67dbc06259f472b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_a86ff690",
         "filename": "cui/source/customize/SvxConfigPageHelper.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-07-07T08:52:57Z",
       "side": 1,
       "message": "Same here, OUString::replaceFirst, or maybe even ::replaceAll\n\nOr since this is a single char, maybe OUString::replaceWould work too",
+      "revId": "94f2c2055565121ed6cfe8b67dbc06259f472b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_3e589cfa",
+        "filename": "cui/source/customize/SvxConfigPageHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-07-10T06:50:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a461143_a86ff690",
       "revId": "94f2c2055565121ed6cfe8b67dbc06259f472b9e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_1e0a00d3",
+        "filename": "cui/source/customize/SvxConfigPageHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-07-10T06:50:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a461143_e869fe8c",
+      "revId": "94f2c2055565121ed6cfe8b67dbc06259f472b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_280a26d3",
         "filename": "cui/source/customize/SvxConfigPageHelper.cxx",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2017-07-07T08:52:57Z",
       "side": 1,
       "message": "OUString::replaceFirst or ::replaceAll",
+      "revId": "94f2c2055565121ed6cfe8b67dbc06259f472b9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_7ef944c8",
+        "filename": "cui/source/customize/SvxConfigPageHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-07-10T06:50:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a461143_280a26d3",
       "revId": "94f2c2055565121ed6cfe8b67dbc06259f472b9e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
