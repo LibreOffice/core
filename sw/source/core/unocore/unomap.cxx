@@ -99,10 +99,10 @@ using namespace ::com::sun::star::beans;
                     { OUString(UNO_NAME_IS_FIELD_USED),      FIELD_PROP_IS_FIELD_USED,      cppu::UnoType<float>::get(), PropertyAttribute::READONLY, 0},\
                     { OUString(UNO_NAME_IS_FIELD_DISPLAYED), FIELD_PROP_IS_FIELD_DISPLAYED, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::READONLY, 0},\
 
-const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
+o3tl::array_view<SfxItemPropertyMapEntry const> SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
     OSL_ENSURE(nPropertyId < PROPERTY_MAP_END, "Id ?" );
-    if( !m_aMapEntriesArr[ nPropertyId ] )
+    if( m_aMapEntriesArr[ nPropertyId ].empty() )
     {
         switch(nPropertyId)
         {
@@ -142,7 +142,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 {
                     { OUString(UNO_NAME_RUBY_ADJUST), RES_TXTATR_CJK_RUBY,  cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID,          MID_RUBY_ADJUST },
                     { OUString(UNO_NAME_RUBY_IS_ABOVE), RES_TXTATR_CJK_RUBY,    cppu::UnoType<bool>::get(),  PropertyAttribute::MAYBEVOID,     MID_RUBY_ABOVE },
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aAutoRubyStyleMap;
             }
@@ -176,7 +175,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_DISPLAY_NAME), FN_UNO_DISPLAY_NAME, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
                     { OUString(UNO_NAME_HIDDEN), FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(UNO_NAME_STYLE_INTEROP_GRAB_BAG), FN_UNO_STYLE_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aNumStyleMap;
             }
@@ -214,7 +212,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_ROW_SPAN),     FN_UNO_CELL_ROW_SPAN, cppu::UnoType<sal_Int32>::get(),  0, 0 },
                     { OUString(UNO_NAME_CELL_INTEROP_GRAB_BAG), RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0 },
                     REDLINE_NODE_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aCellMap_Impl;
             }
@@ -244,7 +241,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_SEARCH_SIMILARITY_REMOVE), WID_SIMILARITY_REMOVE,   cppu::UnoType<sal_Int16>::get()  ,     PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_SEARCH_STYLES), WID_STYLES,             cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_SEARCH_WORDS), WID_WORDS,               cppu::UnoType<bool>::get()  ,       PROPERTY_NONE,     0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aSearchPropertyMap_Impl;
             }
@@ -322,7 +318,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_CHAIN_NEXT_NAME), RES_CHAIN,                cppu::UnoType<OUString>::get(),            PropertyAttribute::MAYBEVOID ,MID_CHAIN_NEXTNAME},
                     { OUString(UNO_NAME_CHAIN_PREV_NAME), RES_CHAIN,                cppu::UnoType<OUString>::get(),            PropertyAttribute::MAYBEVOID ,MID_CHAIN_PREVNAME},
                     { OUString(UNO_NAME_CHAIN_NAME),      RES_CHAIN,                cppu::UnoType<OUString>::get(),            PropertyAttribute::MAYBEVOID ,MID_CHAIN_NAME    },
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aShapeMap_Impl;
             }
@@ -375,7 +370,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_LOCALE),            WID_IDX_LOCALE,         cppu::UnoType<css::lang::Locale>::get(), PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_SORT_ALGORITHM),    WID_IDX_SORT_ALGORITHM,  cppu::UnoType<OUString>::get(), PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_INDEX_ENTRY_TYPE), WID_INDEX_ENTRY_TYPE, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTOXIndexMap_Impl;
             }
@@ -417,7 +411,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_PARA_STYLELEVEL10),     WID_PARA_LEV10,     cppu::UnoType<OUString>::get()  , 0,     0},
                     { OUString(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(UNO_NAME_DOCUMENT_INDEX_MARKS), WID_INDEX_MARKS, cppu::UnoType< cppu::UnoSequenceType<css::text::XDocumentIndexMark> >::get(),           PropertyAttribute::READONLY ,0       },
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTOXContentMap_Impl;
             }
@@ -463,7 +456,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_DOCUMENT_INDEX_MARKS), WID_INDEX_MARKS, cppu::UnoType< cppu::UnoSequenceType<css::text::XDocumentIndexMark> >::get(),           PropertyAttribute::READONLY ,0       },
                     { OUString(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(UNO_NAME_USER_INDEX_NAME), WID_USER_IDX_NAME,    cppu::UnoType<OUString>::get()  ,      PROPERTY_NONE,     0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTOXUserMap_Impl;
             }
@@ -488,7 +480,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_PARA_STYLEHEADING),     WID_PARA_HEAD,  cppu::UnoType<OUString>::get()  , 0,     0},
                     { OUString(UNO_NAME_PARA_STYLELEVEL1),  WID_PARA_LEV1,  cppu::UnoType<OUString>::get()  , 0,     0},
                     { OUString(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTOXTablesMap_Impl;
             }
@@ -516,7 +507,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_PARA_STYLEHEADING),     WID_PARA_HEAD,  cppu::UnoType<OUString>::get()  , 0,     0},
                     { OUString(UNO_NAME_PARA_STYLELEVEL1),  WID_PARA_LEV1,  cppu::UnoType<OUString>::get()  , 0,     0},
                     { OUString(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTOXObjectsMap_Impl;
             }
@@ -542,7 +532,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_PARA_STYLEHEADING),     WID_PARA_HEAD,  cppu::UnoType<OUString>::get()  , 0,     0},
                     { OUString(UNO_NAME_PARA_STYLELEVEL1),  WID_PARA_LEV1,  cppu::UnoType<OUString>::get()  , 0,     0},
                     { OUString(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTOXIllustrationsMap_Impl;
             }
@@ -563,7 +552,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_WIDTH_TYPE), RES_FRM_SIZE,          cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE,   MID_FRMSIZE_WIDTH_TYPE },
                     { OUString(UNO_NAME_IS_SPLIT_ALLOWED), RES_ROW_SPLIT,       cppu::UnoType<bool>::get()  , PropertyAttribute::MAYBEVOID, 0},
                     { OUString(UNO_NAME_ROW_INTEROP_GRAB_BAG), RES_FRMATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0 },
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
 
                 m_aMapEntriesArr[nPropertyId] = aTableRowPropertyMap_Impl;
@@ -601,7 +589,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_LEVEL_FORMAT), WID_LEVEL_FORMAT                        ,  cppu::UnoType<css::container::XIndexReplace>::get()  , PROPERTY_NONE,0},
                     { OUString(UNO_NAME_LOCALE),            WID_IDX_LOCALE,         cppu::UnoType<css::lang::Locale>::get(), PROPERTY_NONE,     0},
                     { OUString(UNO_NAME_SORT_ALGORITHM),    WID_IDX_SORT_ALGORITHM,  cppu::UnoType<OUString>::get(), PROPERTY_NONE,     0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aBibliographyMap_Impl;
             }
@@ -650,7 +637,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_BUILDID), WID_DOC_BUILDID, cppu::UnoType<OUString>::get(), 0, 0},
                     { OUString(UNO_NAME_DOC_INTEROP_GRAB_BAG), WID_DOC_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0 },
                     { OUString(UNO_NAME_DEFAULT_PAGE_MODE),  WID_DOC_DEFAULT_PAGE_MODE,  cppu::UnoType<bool>::get(), PROPERTY_NONE,  0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDocMap_Impl;
             }
@@ -661,7 +647,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 {
                     { OUString(UNO_LINK_DISPLAY_BITMAP), 0,     cppu::UnoType<css::awt::XBitmap>::get(), PropertyAttribute::READONLY, 0xff},
                     { OUString(UNO_LINK_DISPLAY_NAME), 0,   cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0xff},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aLinkTargetMap_Impl;
             }
@@ -672,7 +657,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 {
                     { OUString(UNO_NAME_FILE_PATH), WID_GROUP_PATH,     cppu::UnoType<OUString>::get(),    PROPERTY_NONE,   PropertyAttribute::READONLY},
                     { OUString(UNO_NAME_TITLE), WID_GROUP_TITLE, cppu::UnoType<OUString>::get(),   PROPERTY_NONE,   0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aAutoTextGroupMap_Impl;
             }
@@ -699,7 +683,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT), WID_TXTCOL_LINE_ALIGN, cppu::UnoType<css::style::VerticalAlignment>::get(),PROPERTY_NONE,   0},
                     {OUString(UNO_NAME_SEPARATOR_LINE_IS_ON), WID_TXTCOL_LINE_IS_ON, cppu::UnoType<bool>::get(),PROPERTY_NONE,  0},
                     {OUString(UNO_NAME_SEPARATOR_LINE_STYLE), WID_TXTCOL_LINE_STYLE, cppu::UnoType<sal_Int8>::get(),PROPERTY_NONE, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTextColumns_Impl;
             }
@@ -711,14 +694,13 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             break;
             case PROPERTY_MAP_TEXT_DEFAULT :
             {
-                SfxItemPropertyMapEntry* aTextDefaultMap_Impl = GetTextDefaultPropertyMap();
+                o3tl::array_view<SfxItemPropertyMapEntry> aTextDefaultMap_Impl = GetTextDefaultPropertyMap();
                 m_aMapEntriesArr[nPropertyId] = aTextDefaultMap_Impl;
-                for( SfxItemPropertyMapEntry * pMap = aTextDefaultMap_Impl;
-                     !pMap->aName.isEmpty(); ++pMap )
+                for( auto & entry : aTextDefaultMap_Impl )
                 {
                     // OUString(UNO_NAME_PAGE_DESC_NAME) should keep its MAYBEVOID flag
-                    if (!(RES_PAGEDESC == pMap->nWID && MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId))
-                        pMap->nFlags &= ~PropertyAttribute::MAYBEVOID;
+                    if (!(RES_PAGEDESC == entry.nWID && MID_PAGEDESC_PAGEDESCNAME == entry.nMemberId))
+                        entry.nFlags &= ~PropertyAttribute::MAYBEVOID;
                 }
             }
             break;
@@ -738,7 +720,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_IS_FIXED_LANGUAGE), FIELD_PROP_BOOL4, cppu::UnoType<bool>::get(), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDateTimeFieldPropMap;
             }
@@ -752,7 +733,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_NUMBER_FORMAT),  FIELD_PROP_FORMAT,  cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_IS_FIXED_LANGUAGE), FIELD_PROP_BOOL4, cppu::UnoType<bool>::get(), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
 
                 m_aMapEntriesArr[nPropertyId] = aUserFieldPropMap;
@@ -778,7 +758,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_VARIABLE_NAME),  FIELD_PROP_PAR1,    cppu::UnoType<OUString>::get(),   PropertyAttribute::READONLY, 0},
                     {OUString(UNO_NAME_IS_FIXED_LANGUAGE), FIELD_PROP_BOOL4, cppu::UnoType<bool>::get(), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aSetExpFieldPropMap;
             }
@@ -796,7 +775,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_VARIABLE_SUBTYPE),   FIELD_PROP_USHORT1, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_IS_FIXED_LANGUAGE), FIELD_PROP_BOOL4, cppu::UnoType<bool>::get(), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aGetExpFieldPropMap;
             }
@@ -809,7 +787,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL2, cppu::UnoType<bool>::get(),       PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aFileNameFieldPropMap;
             }
@@ -823,7 +800,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, cppu::UnoType<css::text::PageNumberType>::get(), PROPERTY_NONE,  0},
                     {OUString(UNO_NAME_USERTEXT),           FIELD_PROP_PAR1,    cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aPageNumFieldPropMap;
             }
@@ -837,7 +813,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL2, cppu::UnoType<bool>::get(),       PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_FULL_NAME),FIELD_PROP_BOOL1, cppu::UnoType<bool>::get(),     PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aAuthorFieldPropMap;
             }
@@ -849,7 +824,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_CHAPTER_FORMAT),FIELD_PROP_USHORT1,  cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_LEVEL),FIELD_PROP_BYTE1,         cppu::UnoType<sal_Int8>::get(),    PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aChapterFieldPropMap;
             }
@@ -864,7 +838,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_SEQUENCE_NUMBER),    FIELD_PROP_SHORT1,  cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_SOURCE_NAME),        FIELD_PROP_PAR1,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aGetRefFieldPropMap;
             }
@@ -879,7 +852,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_TRUE_CONTENT) ,  FIELD_PROP_PAR2, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aConditionedTextFieldPropMap;
             }
@@ -893,7 +865,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_IS_HIDDEN) ,     FIELD_PROP_BOOL1, cppu::UnoType<bool>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR4, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aHiddenTextFieldPropMap;
             }
@@ -910,7 +881,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_DATE),    FIELD_PROP_DATE,   cppu::UnoType<css::util::Date>::get(),    PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_TEXT_RANGE), FIELD_PROP_TEXT, cppu::UnoType<css::uno::XInterface>::get(),  PropertyAttribute::READONLY,    0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aAnnotationFieldPropMap;
             }
@@ -924,7 +894,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_HELP),       FIELD_PROP_PAR3, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_TOOLTIP),        FIELD_PROP_PAR4, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aInputFieldPropMap;
             }
@@ -938,7 +907,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_MACRO_LIBRARY),FIELD_PROP_PAR3, cppu::UnoType<OUString>::get(),PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_SCRIPT_URL),FIELD_PROP_PAR4, cppu::UnoType<OUString>::get(),PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aMacroFieldPropMap;
             }
@@ -948,7 +916,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 static SfxItemPropertyMapEntry const aDDEFieldPropMap            [] =
                 {
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDDEFieldPropMap;
             }
@@ -963,7 +930,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_HELP), FIELD_PROP_PAR3, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_TOOLTIP), FIELD_PROP_PAR4, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDropDownMap;
             }
@@ -975,7 +941,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_CONDITION),FIELD_PROP_PAR1, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_IS_HIDDEN) ,  FIELD_PROP_BOOL1, cppu::UnoType<bool>::get(),   PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aHiddenParaFieldPropMap;
             }
@@ -988,7 +953,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_INFO_FORMAT),    FIELD_PROP_USHORT2, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_INFO_TYPE),  FIELD_PROP_USHORT1, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDocInfoFieldPropMap;
             }
@@ -999,7 +963,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 {
                     {OUString(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTmplNameFieldPropMap;
             }
@@ -1013,7 +976,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_IS_FIXED),           FIELD_PROP_BOOL1,   cppu::UnoType<bool>::get(),     PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_USER_DATA_TYPE), FIELD_PROP_USHORT1, cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId]= aUsrExtFieldPropMap;
             }
@@ -1025,7 +987,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_OFFSET),     FIELD_PROP_USHORT1, cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE,  0},
                     {OUString(UNO_NAME_ON),     FIELD_PROP_BOOL1,   cppu::UnoType<bool>::get(),     PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aRefPgSetFieldPropMap;
             }
@@ -1037,7 +998,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR1, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT1, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aRefPgGetFieldPropMap;
             }
@@ -1050,7 +1010,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_PLACEHOLDER),        FIELD_PROP_PAR2, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_PLACEHOLDER_TYPE), FIELD_PROP_USHORT1, cppu::UnoType<sal_Int16>::get(),     PROPERTY_NONE,  0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aJumpEdtFieldPropMap;
             }
@@ -1063,7 +1022,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_SCRIPT_TYPE),    FIELD_PROP_PAR1, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_URL_CONTENT),    FIELD_PROP_BOOL1, cppu::UnoType<bool>::get(),       PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aScriptFieldPropMap;
             }
@@ -1082,7 +1040,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_DATA_BASE_URL) ,  FIELD_PROP_PAR1, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, cppu::UnoType<sal_Int32>::get(),   PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDBNextSetFieldPropMap;
             }
@@ -1102,7 +1059,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, cppu::UnoType<sal_Int32>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_SET_NUMBER), FIELD_PROP_FORMAT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE,  0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDBNumSetFieldPropMap;
             }
@@ -1123,7 +1079,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_SET_NUMBER), FIELD_PROP_FORMAT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE,  0},
                     {OUString(UNO_NAME_IS_VISIBLE),       FIELD_PROP_BOOL2,   cppu::UnoType<bool>::get(),    PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDBSetNumFieldPropMap;
             }
@@ -1139,7 +1094,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_NUMBER_FORMAT),      FIELD_PROP_FORMAT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_IS_VISIBLE),       FIELD_PROP_BOOL2,   cppu::UnoType<bool>::get(),    PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDBFieldPropMap;
             }
@@ -1158,7 +1112,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, cppu::UnoType<sal_Int32>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_IS_VISIBLE),       FIELD_PROP_BOOL2,   cppu::UnoType<bool>::get(),    PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDBNameFieldPropMap;
             }
@@ -1170,7 +1123,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT2, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,    0},
                 //  {OUString(UNO_NAME_STATISTIC_TYPE_ID),FIELD_PROP_USHORT1, cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE,  0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDocstatFieldPropMap;
             }
@@ -1183,7 +1135,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   cppu::UnoType<bool>::get()  , PROPERTY_NONE,0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDocInfoAuthorPropMap;
             }
@@ -1198,7 +1149,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   cppu::UnoType<bool>::get()  , PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_IS_FIXED_LANGUAGE), FIELD_PROP_BOOL4, cppu::UnoType<bool>::get(), PROPERTY_NONE,    0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDocInfoDateTimePropMap;
             }
@@ -1213,7 +1163,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   cppu::UnoType<bool>::get()  , PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_IS_FIXED_LANGUAGE), FIELD_PROP_BOOL4, cppu::UnoType<bool>::get(), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDocInfoEditTimePropMap;
             }
@@ -1226,7 +1175,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   cppu::UnoType<bool>::get()  , PROPERTY_NONE,0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDocInfoStringContentPropMap;
             }
@@ -1241,7 +1189,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_IS_FIXED_LANGUAGE), FIELD_PROP_BOOL4, cppu::UnoType<bool>::get(), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDocInfoCustomPropMap;
             }
@@ -1254,7 +1201,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_REVISION),   FIELD_PROP_USHORT1, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   cppu::UnoType<bool>::get()  , PROPERTY_NONE,0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDocInfoRevisionPropMap;
             }
@@ -1265,7 +1211,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 {
                     {OUString(UNO_NAME_CONTENT), FIELD_PROP_PAR1, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aCombinedCharactersPropMap;
             }
@@ -1279,7 +1224,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL1,  cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTableFormulaPropMap;
             }
@@ -1289,7 +1233,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 static SfxItemPropertyMapEntry const aEmptyPropMap           [] =
                 {
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aEmptyPropMap;
             }
@@ -1304,7 +1247,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_VALUE),          FIELD_PROP_DOUBLE,  cppu::UnoType<double>::get(), PROPERTY_NONE,   0},
                     {OUString(UNO_NAME_CONTENT),            FIELD_PROP_PAR2,    cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aUserFieldTypePropMap;
             }
@@ -1321,7 +1263,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_NAME),               FIELD_PROP_PAR1,  cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
                     {OUString(UNO_NAME_CONTENT),            FIELD_PROP_PAR5,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDDEFieldTypePropMap;
             }
@@ -1336,7 +1277,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_NUMBERING_SEPARATOR), FIELD_PROP_PAR2,   cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_SUB_TYPE),           FIELD_PROP_SUBTYPE, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,    0},
                     {OUString(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR3,    cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aSetExpFieldTypePropMap;
             }
@@ -1357,7 +1297,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_DATA_BASE_URL) ,   FIELD_PROP_PAR1, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_DATA_COMMAND_TYPE), FIELD_PROP_SHORT1, cppu::UnoType<sal_Int32>::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_DEPENDENT_TEXT_FIELDS),  FIELD_PROP_PROP_SEQ,    cppu::UnoType< cppu::UnoSequenceType<css::text::XDependentTextField> >::get(), PropertyAttribute::READONLY, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aDBFieldTypePropMap;
             }
@@ -1369,7 +1308,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  cppu::UnoType< cppu::UnoSequenceType<css::text::XDependentTextField> >::get(), PropertyAttribute::READONLY, 0},
                     {OUString(UNO_NAME_NAME),               0,  cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_INSTANCE_NAME),      0,  cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aStandardFieldMasterMap;
             }
@@ -1380,7 +1318,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 {
                     {OUString(UNO_NAME_FIELDS)    , FIELD_PROP_PROP_SEQ, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aBibliographyFieldMap;
             }
@@ -1397,7 +1334,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_SORT_ALGORITHM),    FIELD_PROP_PAR3,  cppu::UnoType<OUString>::get(), PROPERTY_NONE,     0},
                     {OUString(UNO_NAME_SORT_KEYS) , FIELD_PROP_PROP_SEQ, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValues> >::get(),   PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_INSTANCE_NAME),      FIELD_PROP_PAR4,    cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aBibliographyFieldMasterMap;
             }
@@ -1407,7 +1343,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 static SfxItemPropertyMapEntry const aTextMap[] =
                 {
                     REDLINE_NODE_PROPERTIES
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTextMap;
             }
@@ -1447,7 +1382,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_BLIND_COPIES_TO),       WID_BLIND_COPIES_TO,        cppu::UnoType< cppu::UnoSequenceType<OUString> >::get(),       PROPERTY_NONE, 0},
                     { OUString(UNO_NAME_IN_SERVER_PASSWORD),     WID_IN_SERVER_PASSWORD,     cppu::UnoType<OUString>::get(),    PROPERTY_NONE, 0},
                     { OUString(UNO_NAME_OUT_SERVER_PASSWORD),    WID_OUT_SERVER_PASSWORD,    cppu::UnoType<OUString>::get(),    PROPERTY_NONE, 0},
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aMailMergeMap;
             }
@@ -1460,7 +1394,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {OUString(UNO_NAME_LINE_COUNT),             WID_LINE_COUNT,             cppu::UnoType<sal_Int32>::get(),   PropertyAttribute::READONLY, 0},
                     {OUString(UNO_NAME_IS_CONSTANT_SPELLCHECK), WID_IS_CONSTANT_SPELLCHECK, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     {OUString(UNO_NAME_IS_HIDE_SPELL_MARKS),    WID_IS_HIDE_SPELL_MARKS,    cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},  // deprecated #i91949
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = pTextViewMap;
             }
@@ -1470,7 +1403,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 static SfxItemPropertyMapEntry const aChart2DataSequenceMap[] =
                 {
                     {OUString(UNO_NAME_ROLE), 0, cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0 },
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aChart2DataSequenceMap;
             }
@@ -1483,7 +1415,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                         cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, 0 },
                     { OUString(UNO_NAME_IS_FIXED_LANGUAGE), 0,
                         cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aMetaFieldMap;
             }
@@ -1496,7 +1427,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_TABLE_FIRST_ROW_START_COLUMN), 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
                     { OUString(UNO_NAME_TABLE_LAST_ROW_END_COLUMN),    0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
                     { OUString(UNO_NAME_TABLE_LAST_ROW_START_COLUMN),  0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aTableStyleMap;
             }
@@ -1568,7 +1498,6 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_CHAR_FONT_FAMILY_COMPLEX),      RES_CHRATR_CTL_FONT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY              },
                     { OUString(UNO_NAME_CHAR_FONT_CHAR_SET_COMPLEX),    RES_CHRATR_CTL_FONT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET            },
                     { OUString(UNO_NAME_CHAR_FONT_PITCH_COMPLEX),       RES_CHRATR_CTL_FONT,        cppu::UnoType<sal_Int16>::get(),        PropertyAttribute::MAYBEVOID, MID_FONT_PITCH               },
-                    { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aCellStyleMap;
             }

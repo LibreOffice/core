@@ -60,7 +60,7 @@ using namespace com::sun::star;
 
 // All without a Which-ID, Map only for PropertySetInfo
 
-static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
+static o3tl::array_view<SfxItemPropertyMapEntry const> lcl_GetNumberFormatPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
     {
@@ -77,12 +77,11 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
         {OUString(PROPERTYNAME_THOUS),    0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {OUString(PROPERTYNAME_USERDEF),  0, cppu::UnoType<bool>::get(),         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
         {OUString(PROPERTYNAME_CURRABB),  0, cppu::UnoType<OUString>::get(),    beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aNumberFormatPropertyMap_Impl;
 }
 
-static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
+static o3tl::array_view<SfxItemPropertyMapEntry const> lcl_GetNumberSettingsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
     {
@@ -90,7 +89,6 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
         {OUString(PROPERTYNAME_NULLDATE), 0, cppu::UnoType<util::Date>::get(),  beans::PropertyAttribute::BOUND, 0},
         {OUString(PROPERTYNAME_STDDEC),   0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND, 0},
         {OUString(PROPERTYNAME_TWODIGIT), 0, cppu::UnoType<sal_Int16>::get(),   beans::PropertyAttribute::BOUND, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aNumberSettingsPropertyMap_Impl;
 }

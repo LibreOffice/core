@@ -26,14 +26,13 @@ namespace sc
 
 SC_SIMPLE_SERVICE_INFO( PivotTableDataSequence, "PivotTableDataSequence", "com.sun.star.chart2.data.DataSequence")
 
-const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
+o3tl::array_view<SfxItemPropertyMapEntry const> lcl_GetDataSequencePropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {
         { OUString(SC_UNONAME_HIDDENVALUES), 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(), 0, 0 },
         { OUString(SC_UNONAME_ROLE), 0, cppu::UnoType<css::chart2::data::DataSequenceRole>::get(), 0, 0 },
-        { OUString(SC_UNONAME_INCLUDEHIDDENCELLS), 0, cppu::UnoType<bool>::get(), 0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
+        { OUString(SC_UNONAME_INCLUDEHIDDENCELLS), 0, cppu::UnoType<bool>::get(), 0, 0 }
     };
     return aDataSequencePropertyMap_Impl;
 }

@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
+static o3tl::array_view<SfxItemPropertyMapEntry const>  lcl_GetDocDefaultsMap()
 {
     static const SfxItemPropertyMapEntry aDocDefaultsMap_Impl[] =
     {
@@ -62,7 +62,6 @@ static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
         {OUString(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE, cppu::UnoType<lang::Locale>::get(), 0, MID_LANG_LOCALE },
         {OUString(SC_UNO_STANDARDDEC),              0,      cppu::UnoType<sal_Int16>::get(),        0, 0 },
         {OUString(SC_UNO_TABSTOPDIS),               0,      cppu::UnoType<sal_Int32>::get(),        0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aDocDefaultsMap_Impl;
 }
