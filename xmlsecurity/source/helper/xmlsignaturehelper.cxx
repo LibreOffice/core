@@ -125,12 +125,14 @@ void XMLSignatureHelper::AddEncapsulatedX509Certificate(const OUString& ouEncaps
 
 void XMLSignatureHelper::SetGpgCertificate(sal_Int32 nSecurityId,
                                            const OUString& ouGpgCertDigest,
-                                           const OUString& ouGpgCert)
+                                           const OUString& ouGpgCert,
+                                           const OUString& ouGpgOwner)
 {
     mpXSecController->setGpgCertificate(
         nSecurityId,
         ouGpgCertDigest,
-        ouGpgCert);
+        ouGpgCert,
+        ouGpgOwner);
 }
 
 void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const ::Date& rDate, const tools::Time& rTime )

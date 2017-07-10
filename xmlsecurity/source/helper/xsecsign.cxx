@@ -242,7 +242,8 @@ void XSecController::setX509Certificate(
 void XSecController::setGpgCertificate(
         sal_Int32 nSecurityId,
         const OUString& ouCertDigest,
-        const OUString& ouCert)
+        const OUString& ouCert,
+        const OUString& ouOwner)
 {
     int index = findSignatureInfor( nSecurityId );
 
@@ -250,6 +251,7 @@ void XSecController::setGpgCertificate(
     {
         InternalSignatureInformation isi(nSecurityId, nullptr);
         isi.signatureInfor.ouGpgCertificate = ouCert;
+        isi.signatureInfor.ouGpgOwner = ouOwner;
         isi.signatureInfor.ouCertDigest = ouCertDigest;
         m_vInternalSignatureInformations.push_back( isi );
     }
@@ -258,6 +260,7 @@ void XSecController::setGpgCertificate(
         SignatureInformation &si
             = m_vInternalSignatureInformations[index].signatureInfor;
         si.ouGpgCertificate = ouCert;
+        si.ouGpgOwner = ouOwner;
         si.ouCertDigest = ouCertDigest;
     }
 }
