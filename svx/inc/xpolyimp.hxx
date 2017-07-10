@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_INC_XPOLYIMP_HXX
 
 #include <svx/xpoly.hxx>
+#include <memory>
 #include <vector>
 
 class Point;
@@ -29,7 +30,8 @@ class ImpXPolygon
 {
 public:
     Point*              pPointAry;
-    PolyFlags*          pFlagAry;
+    std::unique_ptr<PolyFlags[]>
+                        pFlagAry;
     Point*              pOldPointAry;
     bool                bDeleteOldPoints;
     sal_uInt16          nSize;

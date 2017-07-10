@@ -39,6 +39,7 @@
 #include <svx/svdtrans.hxx>
 
 #include "rlrcitem.hxx"
+#include <memory>
 
 #ifndef RULER_TAB_RTL
 #define RULER_TAB_RTL           ((sal_uInt16)0x0010)
@@ -115,8 +116,8 @@ void     RulerDebugWindow::AddDebugText(const sal_Char* pDescription, const OUSt
 #endif
 
 struct SvxRuler_Impl {
-    sal_uInt16 *pPercBuf;
-    sal_uInt16 *pBlockBuf;
+    std::unique_ptr<sal_uInt16[]> pPercBuf;
+    std::unique_ptr<sal_uInt16[]> pBlockBuf;
     sal_uInt16 nPercSize;
     long   nTotalDist;
     long   lOldWinPos;
@@ -152,7 +153,7 @@ struct SvxRuler_Impl {
     ~SvxRuler_Impl()
     {
         nPercSize = 0; nTotalDist = 0;
-        delete[] pPercBuf; delete[] pBlockBuf; pPercBuf = nullptr;
+        pPercBuf = nullptr;
         delete pTextRTLItem;
     }
     void SetPercSize(sal_uInt16 nSize);
@@ -183,14 +184,13 @@ void SvxRuler_Impl::SetPercSize(sal_uInt16 nSize)
 {
     if(nSize > nPercSize)
     {
-        delete[] pPercBuf;
-        delete[] pBlockBuf;
-        pPercBuf = new sal_uInt16[nPercSize = nSize];
-        pBlockBuf = new sal_uInt16[nPercSize = nSize];
+        nPercSize = nSize;
+        pPercBuf.reset( new sal_uInt16[nPercSize] );
+        pBlockBuf.reset( new sal_uInt16[nPercSize] );
     }
     size_t nSize2 = sizeof(sal_uInt16) * nPercSize;
-    memset(pPercBuf, 0, nSize2);
-    memset(pBlockBuf, 0, nSize2);
+    memset(pPercBuf.get(), 0, nSize2);
+    memset(pBlockBuf.get(), 0, nSize2);
 }
 
 // Constructor of the ruler

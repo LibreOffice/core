@@ -23,31 +23,13 @@ using ::com::sun::star::container::XIndexAccess;
 
 GroupTable::GroupTable()
     : mnIndex(0)
-    , mnCurrentGroupEntry(0)
-    , mnMaxGroupEntry(0)
     , mnGroupsClosed(0)
-    , mpGroupEntry(nullptr)
+    , mvGroupEntry(32)
 {
-    ImplResizeGroupTable( 32 );
 }
 
 GroupTable::~GroupTable()
 {
-    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; delete mpGroupEntry[ i++ ] ) ;
-    delete[] mpGroupEntry;
-}
-
-void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
-{
-    if ( nEntrys > mnMaxGroupEntry )
-    {
-        mnMaxGroupEntry         = nEntrys;
-        GroupEntry** pTemp = new GroupEntry*[ nEntrys ];
-        for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++ )
-            pTemp[ i ] = mpGroupEntry[ i ];
-        delete[] mpGroupEntry;
-        mpGroupEntry = pTemp;
-    }
 }
 
 bool GroupTable::EnterGroup( css::uno::Reference< css::container::XIndexAccess >& rXIndexAccessRef )
@@ -55,16 +37,12 @@ bool GroupTable::EnterGroup( css::uno::Reference< css::container::XIndexAccess >
     bool bRet = false;
     if ( rXIndexAccessRef.is() )
     {
-        GroupEntry* pNewGroup = new GroupEntry( rXIndexAccessRef );
+        std::unique_ptr<GroupEntry> pNewGroup( new GroupEntry( rXIndexAccessRef ) );
         if ( pNewGroup->mnCount )
         {
-            if ( mnMaxGroupEntry == mnCurrentGroupEntry )
-                ImplResizeGroupTable( mnMaxGroupEntry + 8 );
-            mpGroupEntry[ mnCurrentGroupEntry++ ] = pNewGroup;
+            mvGroupEntry.push_back( std::move(pNewGroup) );
             bRet = true;
         }
-        else
-            delete pNewGroup;
     }
     return bRet;
 }
@@ -78,28 +56,27 @@ sal_uInt32 GroupTable::GetGroupsClosed()
 
 void GroupTable::ClearGroupTable()
 {
-    for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++, delete mpGroupEntry[ i ] ) ;
-    mnCurrentGroupEntry = 0;
+    mvGroupEntry.clear();
 }
 
 void GroupTable::ResetGroupTable( sal_uInt32 nCount )
 {
     ClearGroupTable();
-    mpGroupEntry[ mnCurrentGroupEntry++ ] = new GroupEntry( nCount );
+    mvGroupEntry.push_back( std::unique_ptr<GroupEntry>(new GroupEntry( nCount )) );
 }
 
 bool GroupTable::GetNextGroupEntry()
 {
-    while ( mnCurrentGroupEntry )
+    while ( !mvGroupEntry.empty() )
     {
-        mnIndex = mpGroupEntry[ mnCurrentGroupEntry - 1 ]->mnCurrentPos++;
+        mnIndex = mvGroupEntry.back()->mnCurrentPos++;
 
-        if ( mpGroupEntry[ mnCurrentGroupEntry - 1 ]->mnCount > mnIndex )
+        if ( mvGroupEntry.back()->mnCount > mnIndex )
             return true;
 
-        delete ( mpGroupEntry[ --mnCurrentGroupEntry ] );
+        mvGroupEntry.pop_back();
 
-        if ( mnCurrentGroupEntry )
+        if ( !mvGroupEntry.empty() )
             mnGroupsClosed++;
     }
     return false;
