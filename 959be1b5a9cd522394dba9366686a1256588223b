@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_39b436f1",
+        "filename": "sw/inc/cmdid.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-07-10T21:28:14Z",
+      "side": 1,
+      "message": "I moved the numbers around so that the functions would be adjacent to each other. I hope that doesn\u0027t have any awkward side-effects. (I\u0027m not a UI guy, so don\u0027t touch this stuff much.)",
+      "range": {
+        "startLine": 373,
+        "startChar": 37,
+        "endLine": 373,
+        "endChar": 52
+      },
+      "revId": "959be1b5a9cd522394dba9366686a1256588223b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_79cebe84",
+        "filename": "sw/sdi/swriter.sdi",
+        "patchSetId": 3
+      },
+      "lineNbr": 6404,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-07-10T21:28:14Z",
+      "side": 1,
+      "message": "It would be nice to have all of these documented in the file. I have no idea what any of these items do, and there are no clues pointing me in the right direction.\nToggle looks interesting, but likely irrelevant.",
+      "range": {
+        "startLine": 6404,
+        "startChar": 4,
+        "endLine": 6404,
+        "endChar": 19
+      },
+      "revId": "959be1b5a9cd522394dba9366686a1256588223b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
