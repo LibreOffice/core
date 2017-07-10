@@ -279,7 +279,7 @@ protected:
     void MoveListeners();
     css::uno::Reference< css::embed::XStorage > CreateTemporarySubstorage( OUString& o_aStorageName );
     OUString MoveToTemporarySubstream();
-    bool TryToConvertToOOo();
+    bool TryToConvertToOOo( const css::uno::Reference< css::io::XStream >& xStream );
 
 public:
     // in case a new object must be created the class ID must be specified
