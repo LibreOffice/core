@@ -831,14 +831,12 @@ namespace pcr
         PropertyId nPropId( 0 );
         OUString sDisplayName;
 
-        Property* pProperty = aAllProperties.getArray();
-        Property* pPropertiesEnd = pProperty + aAllProperties.getLength();
-        for ( ; pProperty != pPropertiesEnd; ++pProperty )
+        for ( Property & rProperty : aAllProperties )
         {
-            nPropId = m_pInfoService->getPropertyId( pProperty->Name );
+            nPropId = m_pInfoService->getPropertyId( rProperty.Name );
             if ( nPropId == -1 )
                 continue;
-            pProperty->Handle = nPropId;
+            rProperty.Handle = nPropId;
 
             sDisplayName = m_pInfoService->getPropertyTranslation( nPropId );
             if ( sDisplayName.isEmpty() )
@@ -856,7 +854,7 @@ namespace pcr
                 continue;
 
             // some generic sanity checks
-            if ( impl_shouldExcludeProperty_nothrow( *pProperty ) )
+            if ( impl_shouldExcludeProperty_nothrow( rProperty ) )
                 continue;
 
             switch ( nPropId )
@@ -865,7 +863,7 @@ namespace pcr
             case PROPERTY_ID_TABSTOP:
                 // BORDER and TABSTOP are normalized (see impl_normalizePropertyValue_nothrow)
                 // to not allow VOID values
-                pProperty->Attributes &= ~PropertyAttribute::MAYBEVOID;
+                rProperty.Attributes &= ~PropertyAttribute::MAYBEVOID;
                 break;
 
             case PROPERTY_ID_LISTSOURCE:
@@ -881,7 +879,7 @@ namespace pcr
                 break;
             }   // switch ( nPropId )
 
-            aProperties.push_back( *pProperty );
+            aProperties.push_back( rProperty );
         }
 
         if ( aProperties.empty() )

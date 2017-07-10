@@ -576,9 +576,7 @@ namespace
 
         if (bFound)
         {
-            Sequence< OUString > aNames(1);
-            OUString &rNodeName = aNames.getArray()[0];
-            rNodeName = rLastFoundList + "/" + rCfgLocaleStr;
+            Sequence< OUString > aNames { rLastFoundList + "/" + rCfgLocaleStr };
             Sequence< Any > aValues( rCfg.GetProperties( aNames ) );
             if (aValues.getLength())
             {
@@ -604,12 +602,10 @@ namespace
         OUString *pRes = aRes.getArray();
         sal_Int32 nCnt = 0;
 
-        sal_Int32 nEntries = rCfgSvcs.getLength();
-        const OUString *pEntry = rCfgSvcs.getConstArray();
-        for (sal_Int32 i = 0;  i < nEntries;  ++i)
+        for (OUString const & entry : rCfgSvcs)
         {
-            if (!pEntry[i].isEmpty() && lcl_FindEntry( pEntry[i], rAvailSvcs ))
-                pRes[ nCnt++ ] = pEntry[i];
+            if (!entry.isEmpty() && lcl_FindEntry( entry, rAvailSvcs ))
+                pRes[ nCnt++ ] = entry;
         }
 
         aRes.realloc( nCnt );
@@ -1244,13 +1240,10 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
     sal_Int32 nLen = aNames.getLength();
 
     // append path prefix need for 'GetProperties' call below
-    OUString aPrefix( aNode );
-    aPrefix += "/";
-    for (int i = 0;  i < nLen;  ++i)
+    OUString aPrefix = aNode + "/";
+    for (OUString & name : aNames)
     {
-        OUString aTmp( aPrefix );
-        aTmp += pNames[i];
-        pNames[i] = aTmp;
+        name = aPrefix + name;
     }
 
     uno::Sequence< uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
@@ -1282,13 +1275,10 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
     sal_Int32 nLen = aNames.getLength();
 
     // append path prefix need for 'GetProperties' call below
-    OUString aPrefix( aNode );
-    aPrefix += "/";
-    for (int i = 0;  i < nLen;  ++i)
+    OUString aPrefix = aNode  + "/";
+    for (OUString & name : aNames)
     {
-        OUString aTmp( aPrefix );
-        aTmp += pNames[i];
-        pNames[i] = aTmp;
+        name = aPrefix + name;
     }
 
     uno::Sequence< uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
@@ -1324,13 +1314,10 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
     sal_Int32 nLen = aNames.getLength();
 
     // append path prefix need for 'GetProperties' call below
-    OUString aPrefix( aNode );
-    aPrefix += "/";
-    for (int i = 0;  i < nLen;  ++i)
+    OUString aPrefix = aNode + "/";
+    for (OUString & name : aNames)
     {
-        OUString aTmp( aPrefix );
-        aTmp += pNames[i];
-        pNames[i] = aTmp;
+        name = aPrefix + name;
     }
 
     uno::Sequence< uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
@@ -1366,13 +1353,10 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
     sal_Int32 nLen = aNames.getLength();
 
     // append path prefix need for 'GetProperties' call below
-    OUString aPrefix( aNode );
-    aPrefix += "/";
-    for (int i = 0;  i < nLen;  ++i)
+    OUString aPrefix = aNode + "/";
+    for (OUString & name : aNames)
     {
-        OUString aTmp( aPrefix );
-        aTmp += pNames[i];
-        pNames[i] = aTmp;
+        name = aPrefix + name;
     }
 
     uno::Sequence< uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );

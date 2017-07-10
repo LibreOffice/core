@@ -766,9 +766,8 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
 
                 // Full qualified names like "IMPLEMENTATIONS/TEST/UNO/SERVICES/com.sun.star..."
                 Sequence<OUString> seqKeys = xKey->getKeyNames();
-                OUString* pKeys = seqKeys.getArray();
-                for( sal_Int32 i = 0; i < seqKeys.getLength(); i++ )
-                    pKeys[i] = pKeys[i].copy(nPrefixLen);
+                for( OUString & key : seqKeys )
+                    key = key.copy(nPrefixLen);
 
                 aServiceNames = seqKeys;
             }

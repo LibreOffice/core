@@ -845,25 +845,24 @@ bool PPTWriter::ImplCreateDocument()
                     if ( aXCont.is() )
                     {
                         css::uno::Sequence< OUString> aNameSeq( aXCont->getElementNames() );
-                        const OUString* pUString = aNameSeq.getArray();
-                        sal_uInt32 nCount = aNameSeq.getLength();
-                        if ( nCount )
+                        if ( aNameSeq.getLength() )
                         {
                             mpPptEscherEx->OpenContainer( EPP_NamedShows );
                             sal_uInt32 nCustomShowIndex = 0;
-                            for( i = 0; i < nCount; i++ )        // number of custom shows
+                            for( OUString const & customShowName : aNameSeq )
                             {
-                                if ( !pUString[ i ].isEmpty() )
+                                if ( !customShowName.isEmpty() )
                                 {
                                     mpPptEscherEx->OpenContainer( EPP_NamedShow, nCustomShowIndex++ );
 
-                                    sal_uInt32 nNamedShowLen = pUString[ i ].getLength();
+                                    sal_uInt32 nNamedShowLen = customShowName.getLength();
                                     if ( nNamedShowLen > 31 )
                                         nNamedShowLen = 31;
                                     mpPptEscherEx->AddAtom( nNamedShowLen << 1, EPP_CString );
-                                    const sal_Unicode* pCustomShowName = pUString[ i ].getStr();
-                                    for ( sal_uInt32 k = 0; k < nNamedShowLen; mpStrm->WriteUInt16( pCustomShowName[ k++ ] ) ) ;
-                                    mAny = aXCont->getByName( pUString[ i ] );
+                                    const sal_Unicode* pCustomShowName = customShowName.getStr();
+                                    for ( sal_uInt32 k = 0; k < nNamedShowLen; ++k )
+                                        mpStrm->WriteUInt16( pCustomShowName[ k ] );
+                                    mAny = aXCont->getByName( customShowName );
                                     css::uno::Reference< css::container::XIndexContainer > aXIC;
                                     if ( mAny >>= aXIC )
                                     {

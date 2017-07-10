@@ -315,13 +315,12 @@ void XMLFilterTestDialog::onExportBrowse()
         if( xFilterContainer.is() && xTypeDetection.is() )
         {
             Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );
-            OUString* pFilterName = aFilterNames.getArray();
 
-            for( sal_Int32 nFilter = 0; nFilter < aFilterNames.getLength(); nFilter++, pFilterName++ )
+            for( OUString const & filterName : aFilterNames )
             {
                 Sequence< PropertyValue > aValues;
 
-                Any aAny( xFilterContainer->getByName( *pFilterName ) );
+                Any aAny( xFilterContainer->getByName( filterName ) );
                 if( !(aAny >>= aValues) )
                     continue;
 

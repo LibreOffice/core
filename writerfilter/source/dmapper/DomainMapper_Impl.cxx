@@ -170,11 +170,9 @@ typedef std::unordered_map<OUString, FieldConversion, OUStringHash> FieldConvers
 
 uno::Any FloatingTableInfo::getPropertyValue(const OUString &propertyName)
 {
-
-    beans::PropertyValue* pFrameProperties = m_aFrameProperties.getArray();
-    for( int i = 0 ; i < m_aFrameProperties.getLength(); i++ )
-        if( pFrameProperties[i].Name == propertyName )
-            return pFrameProperties[i].Value ;
+    for( beans::PropertyValue const & propVal : m_aFrameProperties )
+        if( propVal.Name == propertyName )
+            return propVal.Value ;
     return uno::Any() ;
 }
 

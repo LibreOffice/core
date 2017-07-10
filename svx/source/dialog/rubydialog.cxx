@@ -436,13 +436,12 @@ void SvxRubyDialog::GetRubyText()
             DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" );
             SetModified(true);
             Sequence<PropertyValue>& rProps = aRubyValues.getArray()[i / 2 + nTempLastPos];
-            PropertyValue* pProps = rProps.getArray();
-            for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+            for (PropertyValue & propVal : rProps)
             {
-                if (pProps[nProp].Name == cRubyBaseText)
-                    pProps[nProp].Value <<= aEditArr[i]->GetText();
-                else if (pProps[nProp].Name == cRubyText)
-                    pProps[nProp].Value <<= aEditArr[i + 1]->GetText();
+                if (propVal.Name == cRubyBaseText)
+                    propVal.Value <<= aEditArr[i]->GetText();
+                else if (propVal.Name == cRubyText)
+                    propVal.Value <<= aEditArr[i + 1]->GetText();
             }
         }
     }
@@ -597,14 +596,12 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
     AssertOneEntry();
     sal_Int16 nAdjust = rBox.GetSelectEntryPos();
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
-    for (sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
+    for (PropertyValues & rProps : aRubyValues)
     {
-        Sequence<PropertyValue> &rProps = aRubyValues.getArray()[nRuby];
-        PropertyValue* pProps = rProps.getArray();
-        for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+        for (PropertyValue & propVal : rProps)
         {
-            if (pProps[nProp].Name == cRubyAdjust)
-                pProps[nProp].Value <<= nAdjust;
+            if (propVal.Name == cRubyAdjust)
+                propVal.Value <<= nAdjust;
         }
         SetModified(true);
     }
@@ -616,14 +613,12 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
     AssertOneEntry();
     bool bAbove = !rBox.GetSelectEntryPos();
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
-    for (sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
+    for (PropertyValues & rProps : aRubyValues)
     {
-        Sequence<PropertyValue> &rProps = aRubyValues.getArray()[nRuby];
-        PropertyValue* pProps = rProps.getArray();
-        for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+        for (PropertyValue & propVal : rProps)
         {
-            if (pProps[nProp].Name == cRubyIsAbove)
-                pProps[nProp].Value <<= bAbove;
+            if (propVal.Name == cRubyIsAbove)
+                propVal.Value <<= bAbove;
         }
         SetModified(true);
     }
@@ -637,15 +632,13 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl, ListBox&, void)
     if (LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
         sStyleName = *static_cast<OUString*>(m_pCharStyleLB->GetSelectEntryData());
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
-    for (sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
+    for (PropertyValues & rProps : aRubyValues)
     {
-        Sequence<PropertyValue> &rProps = aRubyValues.getArray()[nRuby];
-        PropertyValue* pProps = rProps.getArray();
-        for (sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+        for (PropertyValue & propVal : rProps)
         {
-            if (pProps[nProp].Name == cRubyCharStyleName)
+            if (propVal.Name == cRubyCharStyleName)
             {
-                pProps[nProp].Value <<= sStyleName;
+                propVal.Value <<= sStyleName;
             }
         }
         SetModified(true);

@@ -45,13 +45,11 @@ void PageCollector::CollectCustomShowPages( const css::uno::Reference< css::fram
         {
             // creating a list of every page that is used within our customshow
             Sequence< OUString> aNameSeq( aXCont->getElementNames() );
-            const OUString* pUString = aNameSeq.getArray();
-            sal_Int32 i, nCount = aNameSeq.getLength();
-            for ( i = 0; i < nCount; i++ )
+            for ( OUString const & i :aNameSeq )
             {
-                if ( pUString[ i ] == rCustomShowName )
+                if ( i == rCustomShowName )
                 {
-                    Reference< container::XIndexContainer > aXIC( aXCont->getByName( pUString[ i ] ), UNO_QUERY_THROW );
+                    Reference< container::XIndexContainer > aXIC( aXCont->getByName( i ), UNO_QUERY_THROW );
                     sal_Int32 j, nSlideCount = aXIC->getCount();
                     for ( j = 0; j < nSlideCount; j++ )
                     {

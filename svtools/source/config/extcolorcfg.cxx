@@ -132,11 +132,9 @@ public:
 uno::Sequence< OUString> ExtendedColorConfig_Impl::GetPropertyNames(const OUString& rScheme)
 {
     uno::Sequence< OUString> aNames(GetNodeNames(rScheme));
-    OUString* pIter = aNames.getArray();
-    OUString* pEnd    = pIter + aNames.getLength();
-    for(;pIter != pEnd;++pIter)
+    for(OUString & i : aNames)
     {
-        *pIter = rScheme + "/" + *pIter;
+        i = rScheme + "/" + i;
     }
     return aNames;
 }
@@ -221,10 +219,8 @@ void ExtendedColorConfig_Impl::EnableBroadcast()
 
 void lcl_addString(uno::Sequence < OUString >& _rSeq,const OUString& _sAdd)
 {
-    OUString* pIter = _rSeq.getArray();
-    OUString* pEnd  = pIter + _rSeq.getLength();
-    for(;pIter != pEnd;++pIter)
-        *pIter += _sAdd;
+    for(OUString & i : _rSeq)
+        i += _sAdd;
 }
 
 void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
@@ -237,23 +233,20 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
     TDisplayNames aDisplayNameMap;
     uno::Sequence < OUString > aComponentNames = GetPropertyNames("EntryNames");
     OUString sDisplayName("/DisplayName");
-    OUString* pIter = aComponentNames.getArray();
-    OUString* pEnd  = pIter + aComponentNames.getLength();
-    for(sal_Int32 i = 0;pIter != pEnd;++pIter,++i)
+    for(OUString & componentName : aComponentNames)
     {
         uno::Sequence < OUString > aComponentDisplayNames(1);
-        aComponentDisplayNames[0] = *pIter
-                                  + sDisplayName;
+        aComponentDisplayNames[0] = componentName + sDisplayName;
         uno::Sequence< uno::Any > aComponentDisplayNamesValue = GetProperties( aComponentDisplayNames );
         OUString sComponentDisplayName;
         if ( aComponentDisplayNamesValue.getLength() && (aComponentDisplayNamesValue[0] >>= sComponentDisplayName) )
         {
             sal_Int32 nIndex = 0;
-            m_aComponentDisplayNames.insert(TDisplayNames::value_type(pIter->getToken(1,'/',nIndex),sComponentDisplayName));
+            m_aComponentDisplayNames.insert(TDisplayNames::value_type(componentName.getToken(1,'/',nIndex),sComponentDisplayName));
         }
 
-        *pIter += "/Entries";
-        uno::Sequence < OUString > aDisplayNames = GetPropertyNames(*pIter);
+        componentName += "/Entries";
+        uno::Sequence < OUString > aDisplayNames = GetPropertyNames(componentName);
         lcl_addString(aDisplayNames,sDisplayName);
 
         uno::Sequence< uno::Any > aDisplayNamesValue = GetProperties( aDisplayNames );
@@ -315,15 +308,12 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
 void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < OUString >& _rComponents,const TDisplayNames& _rDisplayNames)
 {
     const OUString sColorEntries("/Entries");
-    OUString* pIter = _rComponents.getArray();
-    OUString* pEnd  = pIter + _rComponents.getLength();
-    for(;pIter != pEnd;++pIter)
+    for(OUString const & component : _rComponents)
     {
-        OUString sComponentName = pIter->copy(pIter->lastIndexOf('/')+1);
+        OUString sComponentName = component.copy(component.lastIndexOf('/')+1);
         if ( m_aConfigValues.find(sComponentName) == m_aConfigValues.end() )
         {
-            OUString sEntry = *pIter
-                            + sColorEntries;
+            OUString sEntry = component + sColorEntries;
 
             uno::Sequence < OUString > aColorNames = GetPropertyNames(sEntry);
             uno::Sequence < OUString > aDefaultColorNames = aColorNames;

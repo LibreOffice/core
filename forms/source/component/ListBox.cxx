@@ -1425,18 +1425,15 @@ namespace frm
             ::std::set< sal_Int16 > aSelectionSet;
 
             // find the selection entries in our item list
-            const OUString* pSelectEntries = aSelectEntries.getArray();
-            const OUString* pSelectEntriesEnd = pSelectEntries + aSelectEntries.getLength();
-            while ( pSelectEntries != pSelectEntriesEnd )
+            for ( OUString const & selectEntry : aSelectEntries )
             {
                 int idx = 0;
                 for(const OUString& s : getStringItemList())
                 {
-                    if (s==*pSelectEntries)
+                    if (s==selectEntry)
                         aSelectionSet.insert(idx);
                     ++idx;
                 }
-                ++pSelectEntries;
             }
 
             // copy the indexes to the sequence

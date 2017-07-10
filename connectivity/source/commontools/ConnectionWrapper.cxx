@@ -202,32 +202,26 @@ void OConnectionWrapper::createUniqueId( const OUString& _rURL
     if ( !_rPassword.isEmpty() )
         rtl_digest_update(aDigest,_rPassword.getStr(),_rPassword.getLength()*sizeof(sal_Unicode));
     // now we need to sort the properties
-    PropertyValue* pBegin = _rInfo.getArray();
-    PropertyValue* pEnd   = pBegin + _rInfo.getLength();
-    std::sort(pBegin,pEnd,TPropertyValueLessFunctor());
+    std::sort(_rInfo.begin(),_rInfo.end(),TPropertyValueLessFunctor());
 
-    pBegin = _rInfo.getArray();
-    pEnd   = pBegin + _rInfo.getLength();
-    for (; pBegin != pEnd; ++pBegin)
+    for (PropertyValue const & prop : _rInfo)
     {
         // we only include strings an integer values
         OUString sValue;
-        if ( pBegin->Value >>= sValue )
+        if ( prop.Value >>= sValue )
             ;
         else
         {
             sal_Int32 nValue = 0;
-            if ( pBegin->Value >>= nValue )
+            if ( prop.Value >>= nValue )
                 sValue = OUString::number(nValue);
             else
             {
                 Sequence< OUString> aSeq;
-                if ( pBegin->Value >>= aSeq )
+                if ( prop.Value >>= aSeq )
                 {
-                    const OUString* pSBegin = aSeq.getConstArray();
-                    const OUString* pSEnd   = pSBegin + aSeq.getLength();
-                    for(;pSBegin != pSEnd;++pSBegin)
-                        rtl_digest_update(aDigest,pSBegin->getStr(),pSBegin->getLength()*sizeof(sal_Unicode));
+                    for(OUString const & s : aSeq)
+                        rtl_digest_update(aDigest,s.getStr(),s.getLength()*sizeof(sal_Unicode));
                 }
             }
         }

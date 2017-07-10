@@ -2838,11 +2838,10 @@ Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlMod
         Reference< XControlContainer> xControlContainer( getControlContainerForView(), UNO_SET_THROW );
 
         Sequence< Reference< XControl > > seqControls( xControlContainer->getControls() );
-        const Reference< XControl >* pControls = seqControls.getArray();
         // ... that I can then search
-        for (sal_Int32 i=0; i<seqControls.getLength(); ++i)
+        for (Reference< XControl > const & control : seqControls)
         {
-            xControl.set( pControls[i], UNO_SET_THROW );
+            xControl.set( control, UNO_SET_THROW );
             Reference< XControlModel > xCurrentModel( xControl->getModel() );
             if ( xCurrentModel == i_rxModel )
                 break;

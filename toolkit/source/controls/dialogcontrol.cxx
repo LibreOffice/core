@@ -211,12 +211,10 @@ UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rMode
     Reference<XNameContainer > xNameCont( new SimpleNamedThingContainer< XControlModel > );
 
     uno::Sequence< OUString > sNames = xSrcNameCont->getElementNames();
-    OUString* pName = sNames.getArray();
-    OUString* pNamesEnd = pName + sNames.getLength();
-    for ( ; pName != pNamesEnd; ++pName )
+    for ( OUString const & name : sNames )
     {
-        if ( xSrcNameCont->hasByName( *pName ) )
-            xNameCont->insertByName( *pName, xSrcNameCont->getByName( *pName ) );
+        if ( xSrcNameCont->hasByName( name ) )
+            xNameCont->insertByName( name, xSrcNameCont->getByName( name ) );
     }
     setFastPropertyValue_NoBroadcast( BASEPROPERTY_USERFORMCONTAINEES, makeAny( xNameCont ) );
 }

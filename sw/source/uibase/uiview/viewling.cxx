@@ -850,12 +850,8 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
         {
             Sequence< OUString > vListEntries;
             pListEntries->second >>= vListEntries;
-            for( OUString* pCurrent = vListEntries.getArray();
-                pCurrent != vListEntries.getArray() + vListEntries.getLength();
-                ++pCurrent)
-            {
-                aListBox->InsertEntry(*pCurrent);
-            }
+            for( OUString const & i : vListEntries)
+                aListBox->InsertEntry(i);
         }
 
         // Select the current one
