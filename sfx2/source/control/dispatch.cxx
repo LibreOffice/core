@@ -139,7 +139,7 @@ struct SfxDispatcher_Impl
 
     SfxSlotFilterState   nFilterEnabling; // 1==filter enabled slots,
                                           // 2==ReadOnlyDoc overturned
-    o3tl::array_view<sal_uInt16>
+    o3tl::array_view<sal_uInt16 const>
                          pFilterSIDs;   // sorted Array of SIDs
     SfxDisableFlags      nDisableFlags;
     bool                 bFlushed;
@@ -1614,7 +1614,7 @@ void SfxDispatcher::FlushImpl()
         pDisp->SetSlotFilter();
 */
 void SfxDispatcher::SetSlotFilter(SfxSlotFilterState nEnable,
-        o3tl::array_view<sal_uInt16> pSIDs)
+        o3tl::array_view<sal_uInt16 const> pSIDs)
 {
 #ifdef DBG_UTIL
     // Check Array

@@ -37,7 +37,7 @@ using namespace com::sun::star;
 
 //  SfxItemPropertyMapEntry only for GetPropertySetInfo
 
-static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
+static o3tl::array_view<SfxItemPropertyMapEntry const> lcl_GetSearchPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {
@@ -54,7 +54,6 @@ static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
         {OUString(SC_UNO_SRCHSTYLES),   0,      cppu::UnoType<bool>::get(),       0, 0},
         {OUString(SC_UNO_SRCHTYPE),     0,      cppu::UnoType<sal_Int16>::get(), 0, 0}, // enum TableSearch is gone
         {OUString(SC_UNO_SRCHWORDS),    0,      cppu::UnoType<bool>::get(),       0, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aSearchPropertyMap_Impl;
 }

@@ -69,8 +69,8 @@ SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
 {
 }
 
-SvxOle2Shape::SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ()
-: SvxShapeText( pObject, pPropertyMap, pPropertySet  )
+SvxOle2Shape::SvxOle2Shape( SdrObject* pObject, o3tl::array_view<SfxItemPropertyMapEntry const> const & rPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ()
+: SvxShapeText( pObject, rPropertyMap, pPropertySet  )
 {
 }
 
