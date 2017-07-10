@@ -171,11 +171,9 @@ ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper() :
     pDoc(nullptr),
     pTrack(nullptr),
     pCurrentAction(nullptr),
-    sIDPrefix(SC_CHANGE_ID_PREFIX),
     nMultiSpanned(0),
     nMultiSpannedSlaveCount(0)
 {
-    nPrefixLength = sIDPrefix.getLength();
 }
 
 ScXMLChangeTrackingImportHelper::~ScXMLChangeTrackingImportHelper()
@@ -226,12 +224,11 @@ void ScXMLChangeTrackingImportHelper::StartChangeAction(const ScChangeActionType
 sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const OUString& sID)
 {
     sal_uInt32 nResult(0);
-    sal_uInt32 nLength(sID.getLength());
-    if (nLength)
+    if (!sID.isEmpty())
     {
-        if (sID.compareTo(sIDPrefix, nPrefixLength) == 0)
+        if (sID.startsWith(SC_CHANGE_ID_PREFIX))
         {
-            OUString sValue(sID.copy(nPrefixLength, nLength - nPrefixLength));
+            OUString sValue(sID.copy(strlen(SC_CHANGE_ID_PREFIX)));
             sal_Int32 nValue;
             ::sax::Converter::convertNumber(nValue, sValue);
             OSL_ENSURE(nValue > 0, "wrong change action ID");

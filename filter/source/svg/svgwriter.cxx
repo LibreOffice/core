@@ -1146,7 +1146,7 @@ bool SVGTextWriter::nextTextPortion()
                                 sFieldName = pNames->copy( sServicePrefix.getLength() );
                                 break;
                             }
-                            else if( 0 == pNames->compareTo( sPresentationServicePrefix, sPresentationServicePrefix.getLength() ) )
+                            else if( pNames->startsWith( sPresentationServicePrefix ) )
                             {
                                 // TextField found => postfix is field type!
                                 sFieldName = pNames->copy( sPresentationServicePrefix.getLength() );

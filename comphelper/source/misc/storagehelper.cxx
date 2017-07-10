@@ -446,16 +446,13 @@ bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSeg
 
     if ( !aSegment.isEmpty() && nPathLen >= nSegLen )
     {
-        OUString aEndSegment = "/"
-                             + aSegment;
-
-        OUString aInternalSegment = aEndSegment
-                                  + "/";
+        OUString aEndSegment = "/" + aSegment;
+        OUString aInternalSegment = aEndSegment + "/";
 
         if ( aPath.indexOf( aInternalSegment ) >= 0 )
             bResult = true;
 
-        if ( !bResult && !aPath.compareTo( aSegment, nSegLen ) )
+        if ( !bResult && aPath.startsWith( aSegment ) )
         {
             if ( nPathLen == nSegLen || aPath[nSegLen] == '/' )
                 bResult = true;

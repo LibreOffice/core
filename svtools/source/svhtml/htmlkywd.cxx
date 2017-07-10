@@ -200,7 +200,7 @@ HtmlTokenId GetHTMLToken( const OUString& rName )
 
     HtmlTokenId nRet = HtmlTokenId::NONE;
 
-    if( !rName.compareTo( OOO_STRING_SVTOOLS_HTML_comment, 3  ) )
+    if( rName.startsWith( OOO_STRING_SVTOOLS_HTML_comment ))
         return HtmlTokenId::COMMENT;
 
     void* pFound;

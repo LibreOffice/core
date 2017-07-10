@@ -853,7 +853,7 @@ void AssignmentPersistentData::ImplCommit()
         for (;pTableNames != pEnd; ++pTableNames)
         {
             m_pTable->InsertEntry(*pTableNames);
-            if (0 == pTableNames->compareTo(sOldTable))
+            if (*pTableNames == sOldTable)
                 bKnowOldTable = true;
         }
 

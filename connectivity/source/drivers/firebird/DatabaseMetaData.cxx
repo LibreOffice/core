@@ -1513,9 +1513,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
 
         // deferrability is currently not supported, but may be supported in the future.
         /*
-        aCurrentRow[14] = (xRow->getString(5).compareTo(OUString("NO") == 0 ?
+        aCurrentRow[14] = (xRow->getString(5) == "NO" ?
                           new ORowSetValueDecorator(Deferrability::NONE)
-                        : (xRow->getString(6).compareTo(OUString("NO") == 0 ?
+                        : (xRow->getString(6) == "NO" ?
                             new ORowSetValueDecorator(Deferrability::INITIALLY_IMMEDIATE)
                           : new ORowSetValueDecorator(Deferrability::INITIALLY_DEFERRED));
         */

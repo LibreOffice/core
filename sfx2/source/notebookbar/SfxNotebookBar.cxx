@@ -145,7 +145,7 @@ static const utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Referenc
 
         OUString aCommandArg = comphelper::getString( aImplNode.getNodeValue( "File" ) );
 
-        if ( aCommandArg.compareTo( aActive ) == 0 )
+        if ( aCommandArg == aActive )
         {
             return aImplNode;
         }
@@ -222,7 +222,7 @@ bool SfxNotebookBar::IsActive()
 
         OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
 
-        if ( aCommandArg.compareTo( aActive ) == 0 )
+        if ( aCommandArg == aActive )
         {
             return comphelper::getBOOL( aModeNode.getNodeValue( "HasNotebookbar" ) );
         }
@@ -288,7 +288,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             // delete ".ui"
             sNewFile = sNewFile.copy( 0, sNewFile.getLength() - 3 );
 
-            bChangedFile = ( sNewFile.compareTo( sCurrentFile ) != 0 );
+            bChangedFile = sNewFile != sCurrentFile;
         }
 
         if ( ( !sFile.isEmpty() && bChangedFile ) || !pNotebookBar || !pNotebookBar->IsVisible() )

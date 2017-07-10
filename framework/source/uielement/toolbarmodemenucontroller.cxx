@@ -283,7 +283,7 @@ void SAL_CALL ToolbarModeMenuController::itemActivated( const css::awt::MenuEven
     OUString aMode = comphelper::getString( aModesNode.getNodeValue( "Active" ) );
 
     for ( int i = 0; i < m_xPopupMenu->getItemCount(); ++i )
-        m_xPopupMenu->checkItem( i+1, (aMode.compareTo( m_xPopupMenu->getCommand( i+1 ) ) == 0) );
+        m_xPopupMenu->checkItem( i+1, aMode == m_xPopupMenu->getCommand( i+1 ) );
 }
 
 // XPopupMenuController

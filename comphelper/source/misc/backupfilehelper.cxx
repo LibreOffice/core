@@ -452,14 +452,14 @@ namespace
 
         bool isSameExtension(const ExtensionInfoEntry& rComp) const
         {
-            return (maRepository == rComp.maRepository && 0 == maName.compareTo(rComp.maName));
+            return (maRepository == rComp.maRepository && maName == rComp.maName);
         }
 
         bool operator<(const ExtensionInfoEntry& rComp) const
         {
             if (maRepository == rComp.maRepository)
             {
-                if (0 == maName.compareTo(rComp.maName))
+                if (maName == rComp.maName)
                 {
                     return mbEnabled < rComp.mbEnabled;
                 }

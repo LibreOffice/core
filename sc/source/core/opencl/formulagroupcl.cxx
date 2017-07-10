@@ -3419,202 +3419,200 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         ft->Children[i], new OpIf, nResultSize));
                 break;
             case ocExternal:
-                if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getEffect")))
+                if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getEffect")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpEffective, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getCumipmt")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCumipmt")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCumipmt, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getNominal")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getNominal")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpNominal, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getCumprinc")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCumprinc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCumprinc, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getXnpv")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getXnpv")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpXNPV, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getPricemat")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getPricemat")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpPriceMat, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getReceived")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getReceived")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpReceived, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getTbilleq")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getTbilleq")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpTbilleq, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getTbillprice")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getTbillprice")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpTbillprice, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getTbillyield")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getTbillyield")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpTbillyield, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getFvschedule")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getFvschedule")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpFvschedule, nResultSize));
                 }
-                /*else if ( !(pChild->GetExternal().compareTo(OUString(
-                    "com.sun.star.sheet.addin.Analysis.getYield"))))
+                /*else if ( pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getYield")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpYield));
                 }*/
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getYielddisc")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getYielddisc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpYielddisc, nResultSize));
                 }
-                else    if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getYieldmat")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getYieldmat")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpYieldmat, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getAccrintm")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAccrintm")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpAccrintm, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getCoupdaybs")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCoupdaybs")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCoupdaybs, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getDollarde")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getDollarde")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDollarde, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getDollarfr")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getDollarfr")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDollarfr, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getCoupdays")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCoupdays")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCoupdays, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getCoupdaysnc")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCoupdaysnc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCoupdaysnc, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getDisc")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getDisc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDISC, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getIntrate")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getIntrate")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpINTRATE, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getPrice")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getPrice")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                             ft->Children[i], new OpPrice, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getCoupnum")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCoupnum")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpCoupnum, nResultSize));
                 }
-                /*else if ( !(pChild->GetExternal().compareTo(OUString(
-                   "com.sun.star.sheet.addin.Analysis.getDuration"))))
+                /*else if pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getDuration"))
                 {
                     mvSubArguments.push_back(
                         SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDuration_ADD));
                 }*/
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getAmordegrc")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAmordegrc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpAmordegrc, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getAmorlinc")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAmorlinc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpAmorlinc, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getMduration")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getMduration")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpMDuration, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getXirr")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getXirr")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpXirr, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getOddlprice")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getOddlprice")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                             ft->Children[i], new OpOddlprice, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getOddlyield")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getOddlyield")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpOddlyield, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getPricedisc")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getPricedisc")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                             ft->Children[i], new OpPriceDisc, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getCouppcd")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCouppcd")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpCouppcd, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getCoupncd")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getCoupncd")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpCoupncd, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getAccrint")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getAccrint")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpAccrint, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getSqrtpi")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getSqrtpi")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpSqrtPi, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getConvert")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getConvert")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpConvert, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getIseven")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getIseven")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpIsEven, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getIsodd")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getIsodd")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpIsOdd, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getMround")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getMround")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpMROUND, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getQuotient")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getQuotient")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpQuotient, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getSeriessum")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getSeriessum")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpSeriesSum, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getBesselj")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getBesselj")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpBesselj, nResultSize));
                 }
-                else if (!(pChild->GetExternal().compareTo("com.sun.star.sheet.addin.Analysis.getGestep")))
+                else if (pChild->GetExternal() == "com.sun.star.sheet.addin.Analysis.getGestep")
                 {
                     mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpGestep, nResultSize));

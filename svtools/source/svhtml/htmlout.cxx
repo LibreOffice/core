@@ -980,10 +980,9 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
 
 bool HTMLOutFuncs::PrivateURLToInternalImg( OUString& rURL )
 {
-    if( rURL.getLength() > 14 &&
-        rURL.compareTo( OOO_STRING_SVTOOLS_HTML_private_image, 14 ) == 0 )
+    if( rURL.startsWith(OOO_STRING_SVTOOLS_HTML_private_image) )
     {
-        rURL = rURL.copy( 14 );
+        rURL = rURL.copy( strlen(OOO_STRING_SVTOOLS_HTML_private_image) );
         return true;
     }
 

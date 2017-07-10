@@ -630,7 +630,7 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (IsXMLToken(aLocalName, XML_ID))
-                nID = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
         }
     }
 }
@@ -692,7 +692,7 @@ ScXMLDependenceContext::ScXMLDependenceContext(  ScXMLImport& rImport,
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (IsXMLToken(aLocalName, XML_ID))
-                nID = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
         }
     }
     pChangeTrackingImportHelper->AddDependence(nID);
@@ -764,7 +764,7 @@ ScXMLChangeDeletionContext::ScXMLChangeDeletionContext(  ScXMLImport& rImport,
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (IsXMLToken(aLocalName, XML_ID))
-                nID = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
         }
     }
     pChangeTrackingImportHelper->AddDeleted(nID);
@@ -1124,7 +1124,7 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (IsXMLToken(aLocalName, XML_ID))
-                nID = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
         }
     }
 }
@@ -1176,7 +1176,7 @@ ScXMLContentChangeContext::ScXMLContentChangeContext(  ScXMLImport& rImport,
         {
             if (IsXMLToken(aLocalName, XML_ID))
             {
-                nActionNumber = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
             else if (IsXMLToken(aLocalName, XML_ACCEPTANCE_STATE))
             {
@@ -1187,7 +1187,7 @@ ScXMLContentChangeContext::ScXMLContentChangeContext(  ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_REJECTING_CHANGE_ID))
             {
-                nRejectingNumber = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
         }
     }
@@ -1267,7 +1267,7 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
         {
             if (IsXMLToken(aLocalName, XML_ID))
             {
-                nActionNumber = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
             else if (IsXMLToken(aLocalName, XML_ACCEPTANCE_STATE))
             {
@@ -1278,7 +1278,7 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_REJECTING_CHANGE_ID))
             {
-                nRejectingNumber = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
             else if (IsXMLToken(aLocalName, XML_TYPE))
             {
@@ -1361,7 +1361,7 @@ ScXMLInsertionCutOffContext::ScXMLInsertionCutOffContext( ScXMLImport& rImport,
         {
             if (IsXMLToken(aLocalName, XML_ID))
             {
-                nID = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
             else if (IsXMLToken(aLocalName, XML_POSITION))
             {
@@ -1409,7 +1409,7 @@ ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
         {
             if (IsXMLToken(aLocalName, XML_ID))
             {
-                nID = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
             else if (IsXMLToken(aLocalName, XML_POSITION))
             {
@@ -1506,7 +1506,7 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
         {
             if (IsXMLToken(aLocalName, XML_ID))
             {
-                nActionNumber = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
             else if (IsXMLToken(aLocalName, XML_ACCEPTANCE_STATE))
             {
@@ -1517,7 +1517,7 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_REJECTING_CHANGE_ID))
             {
-                nRejectingNumber = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
             else if (IsXMLToken(aLocalName, XML_TYPE))
             {
@@ -1613,7 +1613,7 @@ ScXMLMovementContext::ScXMLMovementContext( ScXMLImport& rImport,
         {
             if (IsXMLToken(aLocalName, XML_ID))
             {
-                nActionNumber = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
             else if (IsXMLToken(aLocalName, XML_ACCEPTANCE_STATE))
             {
@@ -1624,7 +1624,7 @@ ScXMLMovementContext::ScXMLMovementContext( ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_REJECTING_CHANGE_ID))
             {
-                nRejectingNumber = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
         }
     }
@@ -1694,7 +1694,7 @@ ScXMLRejectionContext::ScXMLRejectionContext( ScXMLImport& rImport,
         {
             if (IsXMLToken(aLocalName, XML_ID))
             {
-                nActionNumber = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
             else if (IsXMLToken(aLocalName, XML_ACCEPTANCE_STATE))
             {
@@ -1705,7 +1705,7 @@ ScXMLRejectionContext::ScXMLRejectionContext( ScXMLImport& rImport,
             }
             else if (IsXMLToken(aLocalName, XML_REJECTING_CHANGE_ID))
             {
-                nRejectingNumber = pChangeTrackingImportHelper->GetIDFromString(sValue);
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
             }
         }
     }

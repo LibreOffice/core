@@ -226,13 +226,10 @@ IMPL_LINK( PlaceEditDialog, OKHdl, Button*, /*pBtn*/, void)
     if ( m_xCurrentDetails.get() )
     {
         OUString sUrl = m_xCurrentDetails->getUrl().GetHost( INetURLObject::DecodeMechanism::WithCharset );
-        OUString sGDriveHost( GDRIVE_BASE_URL );
-        OUString sAlfrescoHost( ALFRESCO_CLOUD_BASE_URL );
-        OUString sOneDriveHost( ONEDRIVE_BASE_URL );
 
-        if ( sUrl.compareTo( sGDriveHost, sGDriveHost.getLength() ) == 0
-           || sUrl.compareTo( sAlfrescoHost, sAlfrescoHost.getLength() ) == 0
-           || sUrl.compareTo( sOneDriveHost, sOneDriveHost.getLength() ) == 0 )
+        if ( sUrl.startsWith( GDRIVE_BASE_URL )
+           || sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL )
+           || sUrl.startsWith( ONEDRIVE_BASE_URL ) )
         {
             m_pBTRepoRefresh->Click();
 
