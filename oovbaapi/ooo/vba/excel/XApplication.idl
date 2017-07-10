@@ -83,6 +83,7 @@ interface XApplication
     any Range( [in] any Cell1, [in] any Cell2 );
     any Names( [in] any Index );
     void GoTo( [in] any Reference, [in] any Scroll );
+    any FileDialog( [in] any DialogType );
 
     void wait( [in] double time );
     void Calculate() raises(com::sun::star::script::BasicErrorException);

@@ -85,6 +85,7 @@ public:
     virtual css::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() override;
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() override;
     virtual css::uno::Any SAL_CALL International( sal_Int32 Index ) override;
+    virtual css::uno::Any SAL_CALL FileDialog( const css::uno::Any& DialogType ) override;
     virtual css::uno::Any SAL_CALL Workbooks( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL Worksheets( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL WorksheetFunction( ) override;

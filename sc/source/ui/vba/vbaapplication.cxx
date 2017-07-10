@@ -313,6 +313,14 @@ ScVbaApplication::International( sal_Int32 /*Index*/ )
 }
 
 uno::Any SAL_CALL
+ScVbaApplication::FileDialog( const uno::Any& /*DialogType*/ )
+{
+    // TODO implement
+    uno::Any aRet;
+    return aRet;
+}
+
+uno::Any SAL_CALL
 ScVbaApplication::Workbooks( const uno::Any& aIndex )
 {
     uno::Reference< XCollection > xWorkBooks( new ScVbaWorkbooks( this, mxContext ) );
