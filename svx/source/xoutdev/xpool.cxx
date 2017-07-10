@@ -161,7 +161,7 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster, bool bLoadRefCounts)
     if(XATTR_START == GetFirstWhich() && XATTR_END == GetLastWhich())
     {
         SetDefaults(mpLocalPoolDefaults);
-        SetItemInfos(mpLocalItemInfos);
+        SetItemInfos(mpLocalItemInfos.get());
     }
 }
 
@@ -183,8 +183,6 @@ XOutdevItemPool::~XOutdevItemPool()
     Delete();
     // release and delete static pool default items
     ReleaseDefaults(true);
-
-    delete[] mpLocalItemInfos;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

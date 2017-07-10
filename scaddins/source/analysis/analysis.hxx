@@ -35,6 +35,8 @@
 #include "analysisdefs.hxx"
 #include "analysishelper.hxx"
 
+#include <memory>
+
 namespace sca { namespace analysis {
     class ConvertDataList;
 } }
@@ -55,7 +57,7 @@ private:
     css::lang::Locale           aFuncLoc;
     css::lang::Locale*          pDefLocales;
     sca::analysis::FuncDataList* pFD;
-    double*                     pFactDoubles;
+    std::unique_ptr<double[]>   pFactDoubles;
     sca::analysis::ConvertDataList* pCDL;
     ResMgr*                     pResMgr;
 

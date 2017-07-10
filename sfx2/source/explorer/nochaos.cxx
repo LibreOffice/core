@@ -22,8 +22,9 @@
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
-#include <nochaos.hxx>
 #include <sfx2/sfxuno.hxx>
+#include <nochaos.hxx>
+#include <memory>
 
 
 #define WID_CHAOS_START 500
@@ -37,7 +38,7 @@ class CntStaticPoolDefaults_Impl
 {
     static const sal_uInt32  m_nItems = 1;
     std::vector<SfxPoolItem*>* m_pDefaults;
-    SfxItemInfo*  m_pItemInfos;
+    std::unique_ptr<SfxItemInfo[]>  m_pItemInfos;
 
 private:
     inline void Insert( SfxPoolItem* pItem );
@@ -49,7 +50,7 @@ public:
     CntStaticPoolDefaults_Impl& operator=(const CntStaticPoolDefaults_Impl&) = delete;
 
     std::vector<SfxPoolItem*>*  GetDefaults() const  { return m_pDefaults; }
-    const SfxItemInfo*          GetItemInfos() const { return m_pItemInfos; }
+    const SfxItemInfo*          GetItemInfos() const { return m_pItemInfos.get(); }
 };
 
 
@@ -174,7 +175,6 @@ CntStaticPoolDefaults_Impl::~CntStaticPoolDefaults_Impl()
         delete (*m_pDefaults)[ n ];
 
     delete m_pDefaults;
-    delete [] m_pItemInfos;
 }
 
 
@@ -182,7 +182,7 @@ CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl()
 : m_pDefaults( new std::vector<SfxPoolItem*>( m_nItems, nullptr ) ),
   m_pItemInfos( new SfxItemInfo  [ m_nItems ] )
 {
-    memset( m_pItemInfos, 0, sizeof( SfxItemInfo ) * m_nItems );
+    memset( m_pItemInfos.get(), 0, sizeof( SfxItemInfo ) * m_nItems );
     Insert( new SfxStringItem( WID_CHAOS_START, OUString() ) );
 }
 
