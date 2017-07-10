@@ -1770,7 +1770,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:FontDialog"),
         OUString(".uno:ParagraphDialog"),
         OUString(".uno:OutlineBullet"),
-        OUString(".uno:InsertIndexesEntry")
+        OUString(".uno:InsertIndexesEntry"),
+        OUString(".uno:InsertPageHeader"),
+        OUString(".uno:InsertPageFooter")
     };
 
     util::URL aCommandURL;
