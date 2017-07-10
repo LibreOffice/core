@@ -309,6 +309,7 @@ private:
     void setDigestValue( sal_Int32 nDigestID, OUString& ouDigestValue );
     void setGpgKeyID( OUString& ouKeyID );
     void setGpgCertificate( OUString& ouGpgCert );
+    void setGpgOwner( OUString& ouGpgOwner );
 
     void setDate( OUString& ouDate );
     void setDescription(const OUString& rDescription);
@@ -388,7 +389,8 @@ public:
     void setGpgCertificate(
         sal_Int32 nSecurityId,
         const OUString& ouCertDigest,
-        const OUString& ouCert);
+        const OUString& ouCert,
+        const OUString& ouOwner);
 
     void setDate(
         sal_Int32 nSecurityId,
