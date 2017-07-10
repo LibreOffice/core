@@ -39,6 +39,7 @@ private:
 public:
     SvxHlinkDlgWrapper( vcl::Window*pParent, sal_uInt16 nId,
                         SfxBindings* pBindings, SfxChildWinInfo* pInfo );
+    virtual ~SvxHlinkDlgWrapper() override;
 
     SFX_DECL_CHILDWINDOW_WITHID(SvxHlinkDlgWrapper);
     virtual bool    QueryClose() override;
