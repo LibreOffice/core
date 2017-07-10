@@ -55,13 +55,12 @@ const OUString constIdCategories("categories");
 const OUString constIdLabel("label");
 const OUString constIdData("data");
 
-const SfxItemPropertyMapEntry* lcl_GetDataProviderPropertyMap()
+o3tl::array_view<SfxItemPropertyMapEntry const> lcl_GetDataProviderPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataProviderPropertyMap_Impl[] =
     {
         { OUString(SC_UNONAME_INCLUDEHIDDENCELLS), 0, cppu::UnoType<bool>::get(), 0, 0 },
         { OUString(SC_UNONAME_USE_INTERNAL_DATA_PROVIDER), 0, cppu::UnoType<bool>::get(), 0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aDataProviderPropertyMap_Impl;
 }

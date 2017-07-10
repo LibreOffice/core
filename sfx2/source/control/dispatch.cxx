@@ -1614,7 +1614,7 @@ void SfxDispatcher::FlushImpl()
         pDisp->SetSlotFilter();
 */
 void SfxDispatcher::SetSlotFilter(SfxSlotFilterState nEnable,
-        o3tl::array_view<sal_uInt16> pSIDs)
+        o3tl::array_view<sal_uInt16 const> pSIDs)
 {
 #ifdef DBG_UTIL
     // Check Array

@@ -41,7 +41,7 @@ class EDITENG_DLLPUBLIC SvxItemPropertySet
     SfxItemPool&                    mrItemPool;
 
 public:
-    SvxItemPropertySet( const SfxItemPropertyMapEntry *pMap, SfxItemPool& rPool );
+    SvxItemPropertySet( o3tl::array_view<const SfxItemPropertyMapEntry> aMap, SfxItemPool& rPool );
     ~SvxItemPropertySet();
 
     // Methods, which work directly with the ItemSet

@@ -62,14 +62,11 @@ SfxItemPropertyMap_Impl::SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl*
     m_aPropSeq = pSource->m_aPropSeq;
 }
 
-SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries ) :
+SfxItemPropertyMap::SfxItemPropertyMap( o3tl::array_view<SfxItemPropertyMapEntry const> aEntries ) :
     m_pImpl( new SfxItemPropertyMap_Impl )
 {
-    while( !pEntries->aName.isEmpty() )
-    {
-        (*m_pImpl) [ pEntries->aName ] = pEntries;
-        ++pEntries;
-    }
+    for( auto const & entry : aEntries )
+        (*m_pImpl) [ entry.aName ] = &entry;
 }
 
 SfxItemPropertyMap::SfxItemPropertyMap( const SfxItemPropertyMap& rSource ) :
@@ -311,10 +308,10 @@ SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap )
     m_pImpl->m_pOwnMap = new SfxItemPropertyMap( rMap );
 }
 
-SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries )
+SfxItemPropertySetInfo::SfxItemPropertySetInfo(o3tl::array_view<SfxItemPropertyMapEntry const> aEntries )
     : m_pImpl( new SfxItemPropertySetInfo_Impl )
 {
-    m_pImpl->m_pOwnMap = new SfxItemPropertyMap( pEntries );
+    m_pImpl->m_pOwnMap = new SfxItemPropertyMap( aEntries );
 }
 
 Sequence< Property > SAL_CALL SfxItemPropertySetInfo::getProperties(  )
@@ -337,9 +334,9 @@ sal_Bool SAL_CALL SfxItemPropertySetInfo::hasPropertyByName( const OUString& rNa
     return m_pImpl->m_pOwnMap->hasPropertyByName( rName );
 }
 
-SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( const SfxItemPropertyMapEntry *pMap,
+SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( o3tl::array_view<SfxItemPropertyMapEntry const> aEntries,
                                                       const Sequence<Property>& rPropSeq )
-    : aExtMap( pMap )
+    : aExtMap( aEntries )
 {
     aExtMap.mergeProperties( rPropSeq );
 }

@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/array_view.hxx>
 #include <svl/itemset.hxx>
 #include <svl/svldllapi.h>
 #include <vector>
@@ -90,7 +91,7 @@ class SVL_DLLPUBLIC SfxItemPropertyMap
 {
     std::unique_ptr<SfxItemPropertyMap_Impl> m_pImpl;
 public:
-    SfxItemPropertyMap( const SfxItemPropertyMapEntry* pEntries );
+    SfxItemPropertyMap( o3tl::array_view<const SfxItemPropertyMapEntry> rEntries );
     SfxItemPropertyMap( const SfxItemPropertyMap& rSource );
     ~SfxItemPropertyMap();
 
@@ -112,8 +113,8 @@ class SVL_DLLPUBLIC SfxItemPropertySet final
     mutable css::uno::Reference<css::beans::XPropertySetInfo> m_xInfo;
 
 public:
-                            SfxItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
-                                m_aMap(pMap) {}
+                            SfxItemPropertySet( o3tl::array_view<const SfxItemPropertyMapEntry> rEntries ) :
+                                m_aMap(rEntries) {}
                             ~SfxItemPropertySet();
 
     /// @throws css::uno::RuntimeException
@@ -161,7 +162,7 @@ class SVL_DLLPUBLIC SfxItemPropertySetInfo : public cppu::WeakImplHelper<css::be
 
 public:
     SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap );
-    SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pEntries );
+    SfxItemPropertySetInfo(o3tl::array_view<const SfxItemPropertyMapEntry> rEntries );
     virtual ~SfxItemPropertySetInfo() override;
 
     virtual css::uno::Sequence< css::beans::Property > SAL_CALL
@@ -180,7 +181,7 @@ class SVL_DLLPUBLIC SfxExtItemPropertySetInfo: public cppu::WeakImplHelper<css::
     SfxItemPropertyMap aExtMap;
 public:
                             SfxExtItemPropertySetInfo(
-                                const SfxItemPropertyMapEntry *pMap,
+                                o3tl::array_view<const SfxItemPropertyMapEntry> rEntries,
                                 const css::uno::Sequence<css::beans::Property>& rPropSeq );
                             virtual ~SfxExtItemPropertySetInfo() override;
 

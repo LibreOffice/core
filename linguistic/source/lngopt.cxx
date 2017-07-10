@@ -136,7 +136,7 @@ OUString LinguOptions::GetName( sal_Int32 nWID )
 
 
 //! map must be sorted by first entry in alphabetical increasing order.
-static const SfxItemPropertyMapEntry* lcl_GetLinguProps()
+static o3tl::array_view<SfxItemPropertyMapEntry const> lcl_GetLinguProps()
 {
     static const SfxItemPropertyMapEntry aLinguProps[] =
     {
@@ -180,7 +180,6 @@ static const SfxItemPropertyMapEntry* lcl_GetLinguProps()
                 cppu::UnoType<bool>::get(),            0, 0 },
         { OUString(UPN_IS_WRAP_REVERSE),            UPH_IS_WRAP_REVERSE,
                 cppu::UnoType<bool>::get(),            0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aLinguProps;
 }
