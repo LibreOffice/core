@@ -294,6 +294,17 @@ void XSecController::setGpgCertificate( OUString& ouGpgCert )
     isi.signatureInfor.ouGpgCertificate = ouGpgCert;
 }
 
+void XSecController::setGpgOwner( OUString& ouGpgOwner )
+{
+    if (m_vInternalSignatureInformations.empty())
+    {
+        SAL_INFO("xmlsecurity.helper","XSecController::setGpgOwner: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
+    isi.signatureInfor.ouGpgOwner = ouGpgOwner;
+}
+
 void XSecController::setDate( OUString& ouDate )
 {
     if (m_vInternalSignatureInformations.empty())
