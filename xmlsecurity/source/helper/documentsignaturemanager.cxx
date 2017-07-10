@@ -291,7 +291,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         else
             SAL_WARN("xmlsecurity.helper", "XCertificate implementation without an xmlsecurity::Certificate one");
 
-        maSignatureHelper.SetGpgCertificate(nSecurityId, aKeyId, aStrBuffer.makeStringAndClear());
+        maSignatureHelper.SetGpgCertificate(nSecurityId, aKeyId, aStrBuffer.makeStringAndClear(), xCert->getIssuerName());
     }
     else
     {
