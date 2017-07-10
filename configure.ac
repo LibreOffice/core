@@ -381,16 +381,16 @@ if test -n "$with_android_ndk"; then
     fi
     case $ANDROID_NDK_VERSION in
     r9*|r10*)
-        AC_MSG_ERROR([Bulding for Android is only supported with NDK versions above 15.0.*])
+        AC_MSG_ERROR([Bulding for Android is only supported with NDK versions above 15.x*])
         ;;
     11.1.*|12.1.*|13.1.*|14.1.*)
-        AC_MSG_ERROR([Bulding for Android is only supported with NDK versions above 15.0.*])
+        AC_MSG_ERROR([Bulding for Android is only supported with NDK versions above 15.x.*])
         ;;
-    15.0.*)
+    15.0.*|15.1.*)
         ;;
     *)
-        AC_MSG_WARN([Untested android NDK version $ANDROID_NDK_VERSION, only version 15.0.* have been used successfully. Proceed at your own risk.])
-        add_warning "Untested android NDK version $ANDROID_NDK_VERSION, only version 15.0.* have been used successfully. Proceed at your own risk."
+        AC_MSG_WARN([Untested android NDK version $ANDROID_NDK_VERSION, only version 15.0.* and 15.1.* have been used successfully. Proceed at your own risk.])
+        add_warning "Untested android NDK version $ANDROID_NDK_VERSION, only version 15.0.* and 15.1.* have been used successfully. Proceed at your own risk."
         ;;
     esac
 
