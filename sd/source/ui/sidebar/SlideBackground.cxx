@@ -168,13 +168,15 @@ SlideBackground::SlideBackground(
     get(m_pTopMarginEdit, "top");
     get(m_pBottomMarginEdit, "bottom");
 
-    const SfxPoolItem* pItem;
-    const SvxSizeItem* pSize = nullptr;
     if ( SfxViewFrame::Current() )
     {
+        const SfxPoolItem* pItem = nullptr;
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
-        pSize = static_cast<const SvxSizeItem*>( pItem );
-        m_aPageSize = pSize->GetSize();
+        if (pItem)
+        {
+            const SvxSizeItem* pSize = static_cast<const SvxSizeItem*>( pItem );
+            m_aPageSize = pSize->GetSize();
+        }
     }
     SetFieldUnit( *m_pTopMarginEdit, meFieldUnit );
     SetFieldUnit( *m_pBottomMarginEdit, meFieldUnit );
