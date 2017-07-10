@@ -226,15 +226,11 @@ namespace dbaui
         Sequence< Type > aTypes( DBSubComponentController_Base::getTypes() );
         if ( !m_pImpl->documentHasScriptSupport() )
         {
-            Sequence< Type > aStrippedTypes( aTypes.getLength() - 1 );
-            std::remove_copy_if(
-                aTypes.begin(),
-                aTypes.end(),
-                aStrippedTypes.getArray(),
-                std::bind2nd( std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
-            );
-            aTypes = aStrippedTypes;
-        }
+            auto newEnd = std::remove_if( aTypes.begin(), aTypes.end(),
+                                          [](const Type& type)
+                                          { return type == cppu::UnoType<XScriptInvocationContext>::get(); } );
+            aTypes.realloc( std::distance(aTypes.begin(), newEnd) );
+       }
         return aTypes;
     }
 
