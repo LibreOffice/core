@@ -53,7 +53,7 @@ public:
                         const Image& rEntryImg,
                         SvTreeListEntry* pParent,
                         sal_uLong nPos,
-                        IFormulaToken* pToken );
+                        const IFormulaToken* pToken );
 
     void            SetActiveFlag(bool bFlag);
     bool            GetActiveFlag() { return bActiveFlag;}
@@ -72,7 +72,7 @@ private:
     Image           maImgEnd;
     Image           maImgError;
 
-    IFormulaToken*  pSelectedToken;
+    const IFormulaToken* pSelectedToken;
 
     DECL_LINK( SelectHdl, SvTreeListBox*, void );
 
@@ -80,7 +80,7 @@ private:
 
 protected:
 
-    IFormulaToken*      GetFunctionEntry(SvTreeListEntry* pEntry);
+    const IFormulaToken* GetFunctionEntry(SvTreeListEntry* pEntry);
 
 public:
 
@@ -90,7 +90,7 @@ public:
 
     void            ClearStruct();
     SvTreeListEntry* InsertEntry(const OUString& rText, SvTreeListEntry* pParent,
-                                sal_uInt16 nFlag,sal_uLong nPos,IFormulaToken* pScToken);
+                                sal_uInt16 nFlag, sal_uLong nPos, const IFormulaToken* pScToken);
 
     OUString        GetEntryText(SvTreeListEntry* pEntry) const;
 

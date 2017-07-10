@@ -86,7 +86,7 @@ public:
     sal_Int32       GetFunctionPos(sal_Int32 nPos);
     void            ClearAllParas();
 
-    void            MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count);
+    void            MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, const FormulaToken* _pToken, long Count );
     void            fillTree(StructPage* _pTree);
     void            UpdateTokenArray( const OUString& rStrExp);
     OUString        RepairFormula(const OUString& aFormula);
@@ -145,7 +145,7 @@ public:
     mutable const sheet::FormulaOpCodeMapEntry*             m_pFunctionOpCodesEnd;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aUnaryOpCodes;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aBinaryOpCodes;
-    ::std::map<FormulaToken*,sheet::FormulaToken>           m_aTokenMap;
+    ::std::map<const FormulaToken*,sheet::FormulaToken>     m_aTokenMap;
     IFormulaEditorHelper*                                   m_pHelper;
     VclPtr<Dialog>          m_pParent;
     VclPtr<TabControl>      m_pTabCtrl;
@@ -619,7 +619,7 @@ bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStru
 }
 
 
-void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count)
+void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, const FormulaToken* _pToken, long Count )
 {
     if( _pToken != nullptr && Count > 0 )
     {
@@ -627,9 +627,9 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
         OpCode eOp = _pToken->GetOpCode();
 
         // #i101512# for output, the original token is needed
-        FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
+        const FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
         uno::Sequence<sheet::FormulaToken> aArgs(1);
-        ::std::map<FormulaToken*,sheet::FormulaToken>::const_iterator itr = m_aTokenMap.find(pOrigToken);
+        ::std::map<const FormulaToken*,sheet::FormulaToken>::const_iterator itr = m_aTokenMap.find(pOrigToken);
         if (itr == m_aTokenMap.end())
             return;
 
