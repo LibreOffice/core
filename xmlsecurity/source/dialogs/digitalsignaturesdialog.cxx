@@ -532,7 +532,6 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[n];
             uno::Reference< css::security::XCertificate > xCert = getCertificate(rInfo);
 
-            // TODO - should use pgpdata from info provider?
             OUString aSubject;
             OUString aIssuer;
             OUString aDateTimeStr;
@@ -559,28 +558,34 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
                 aSubject = XmlSec::GetContentPart( xCert->getSubjectName() );
                 aIssuer = XmlSec::GetContentPart( xCert->getIssuerName() );
-                // String with date and time information (#i20172#)
-                aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
-                aDescription = rInfo.ouDescription;
-
-                // Decide type string.
-                if (maSignatureManager.mxStore.is())
-                {
-                    // XML based: XAdES or not.
-                    if (!rInfo.ouCertDigest.isEmpty())
-                        aType = "XAdES";
-                    else
-                        aType = "XML-DSig";
-                }
-                else
-                {
-                    // Assume PDF: PAdES or not.
-                    if (rInfo.bHasSigningCertificate)
-                        aType = "PAdES";
-                    else
-                        aType = "PDF";
-                }
             }
+            else if (!rInfo.ouGpgCertificate.isEmpty())
+            {
+                // In case we don't have the gpg key locally, get some data from the document
+                aIssuer = rInfo.ouGpgOwner;
+            }
+
+            aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
+            aDescription = rInfo.ouDescription;
+
+            // Decide type string.
+            if (maSignatureManager.mxStore.is())
+            {
+                // XML based: XAdES or not.
+                if (!rInfo.ouCertDigest.isEmpty())
+                    aType = "XAdES";
+                else
+                    aType = "XML-DSig";
+            }
+            else
+            {
+                // Assume PDF: PAdES or not.
+                if (rInfo.bHasSigningCertificate)
+                    aType = "PAdES";
+                else
+                    aType = "PDF";
+            }
+
             bSigValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
             if ( bSigValid )

@@ -747,6 +747,13 @@ void XSecController::exportSignature(
                         xDocumentHandler->characters( signatureInfo.ouGpgCertificate );
                         xDocumentHandler->endElement( "PGPKeyPacket" );
                     }
+
+                    /* Write PGPOwner element */
+                    xDocumentHandler->startElement(
+                        "PGPOwner",
+                        cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                    xDocumentHandler->characters( signatureInfo.ouGpgOwner );
+                    xDocumentHandler->endElement( "PGPOwner" );
                 }
                 xDocumentHandler->endElement( "PGPData" );
             }

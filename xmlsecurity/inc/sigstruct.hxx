@@ -77,6 +77,7 @@ struct SignatureInformation
 
     OUString ouGpgKeyID;
     OUString ouGpgCertificate;
+    OUString ouGpgOwner;
 
     OUString ouSignatureValue;
     css::util::DateTime stDateTime;
