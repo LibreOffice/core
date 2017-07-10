@@ -85,9 +85,8 @@ void SbaXPropertiesChangeMultiplexer::propertiesChange(const css::uno::Sequence<
     // forwards _all_ changes to _all_ listeners
 
     css::uno::Sequence< css::beans::PropertyChangeEvent> aMulti(aEvts);
-    css::beans::PropertyChangeEvent* pMulti = aMulti.getArray();
-    for (sal_Int32 i=0; i<aMulti.getLength(); ++i, ++pMulti)
-        pMulti->Source = &m_rParent;
+    for (css::beans::PropertyChangeEvent & rEvent : aMulti)
+        rEvent.Source = &m_rParent;
 
     ::comphelper::OInterfaceIteratorHelper2 aIt(*this);
     while (aIt.hasMoreElements())

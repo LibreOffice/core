@@ -309,17 +309,14 @@ typedef uno::Reference< beans::XPropertySet > lcl_tSubGridType;
 void lcl_CloneSubGrids(
     const uno::Sequence< lcl_tSubGridType > & rSource, uno::Sequence< lcl_tSubGridType > & rDestination )
 {
-    const lcl_tSubGridType * pBegin = rSource.getConstArray();
-    const lcl_tSubGridType * pEnd = pBegin + rSource.getLength();
-
     rDestination.realloc( rSource.getLength());
     lcl_tSubGridType * pDestBegin = rDestination.getArray();
     lcl_tSubGridType * pDestEnd   = pDestBegin + rDestination.getLength();
     lcl_tSubGridType * pDestIt    = pDestBegin;
 
-    for( const lcl_tSubGridType * pIt = pBegin; pIt != pEnd; ++pIt )
+    for( Reference< beans::XPropertySet > const & i : rSource )
     {
-        Reference< beans::XPropertySet > xSubGrid( *pIt );
+        Reference< beans::XPropertySet > xSubGrid( i );
         if( xSubGrid.is())
         {
             Reference< util::XCloneable > xCloneable( xSubGrid, uno::UNO_QUERY );

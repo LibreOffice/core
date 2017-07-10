@@ -778,12 +778,10 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         else
             aValues = svx::OMultiColumnTransferable::extractDescriptor(aDropped);
 
-        beans::PropertyValue* pIter = aValues.getArray();
-        beans::PropertyValue* pEnd  = pIter + aValues.getLength();
-        for(;pIter != pEnd; ++pIter)
+        for(beans::PropertyValue & propVal : aValues)
         {
             uno::Sequence<beans::PropertyValue> aCurrent;
-            pIter->Value >>= aCurrent;
+            propVal.Value >>= aCurrent;
             sal_Int32 nLength = aCurrent.getLength();
             if ( nLength )
             {
@@ -796,7 +794,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
                 aCurrent[nLength].Name = "Section";
                 aCurrent[nLength++].Value <<= getSection();
-                pIter->Value <<= aCurrent;
+                propVal.Value <<= aCurrent;
             }
         }
 

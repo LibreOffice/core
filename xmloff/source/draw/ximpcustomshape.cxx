@@ -1250,14 +1250,11 @@ void XMLEnhancedCustomShapeContext::EndElement()
             }
             ++aPathIter;
         }
-        std::vector< beans::PropertyValues >::iterator aHandleIter = maHandles.begin();
-        std::vector< beans::PropertyValues >::iterator aHandleEnd  = maHandles.end();
-        while ( aHandleIter != aHandleEnd )
+        for ( css::beans::PropertyValues const & aHandle : maHandles )
         {
-            beans::PropertyValue* pValues = aHandleIter->getArray();
-            for ( i = 0; i < aHandleIter->getLength(); i++ )
+            for ( beans::PropertyValue const & propValue : aHandle )
             {
-                switch( EASGet( pValues->Name ) )
+                switch( EASGet( propValue.Name ) )
                 {
                     case EAS_RangeYMinimum :
                     case EAS_RangeYMaximum :
@@ -1267,7 +1264,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     case EAS_RadiusRangeMaximum :
                     {
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameter>(
-                            pValues->Value)), pH.get() );
+                            propValue.Value)), pH.get() );
                     }
                     break;
 
@@ -1275,17 +1272,15 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     case EAS_Polar :
                     {
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameterPair>(
-                            pValues->Value)).First), pH.get() );
+                            propValue.Value)).First), pH.get() );
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameterPair>(
-                            pValues->Value)).Second), pH.get() );
+                            propValue.Value)).Second), pH.get() );
                     }
                     break;
                     default:
                         break;
                 }
-                pValues++;
             }
-            ++aHandleIter;
         }
     }
 

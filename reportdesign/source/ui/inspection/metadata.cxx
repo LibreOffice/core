@@ -287,15 +287,13 @@ namespace rptui
                 ,PROPERTY_VERTICALALIGN
         };
 
-        beans::Property* pPropsIter = aProps.getArray();
-        beans::Property* pPropsEnd = pPropsIter + aProps.getLength();
-        for (; pPropsIter != pPropsEnd; ++pPropsIter)
+        for (beans::Property const & prop : aProps)
         {
             size_t nPos = 0;
-            for (; nPos < SAL_N_ELEMENTS(pExcludeProperties) && pExcludeProperties[nPos] != pPropsIter->Name; ++nPos )
+            for (; nPos < SAL_N_ELEMENTS(pExcludeProperties) && pExcludeProperties[nPos] != prop.Name; ++nPos )
                 ;
             if ( nPos == SAL_N_ELEMENTS(pExcludeProperties) )
-                _rExcludeProperties.push_back(*pPropsIter);
+                _rExcludeProperties.push_back(prop);
         }
     }
 

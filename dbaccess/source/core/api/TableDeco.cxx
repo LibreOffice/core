@@ -315,22 +315,20 @@ void ODBTableDecorator::construct()
     Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
 
     Sequence< Property > aTableProps = xInfo->getProperties();
-    Property* pIter = aTableProps.getArray();
-    Property* pEnd = pIter + aTableProps.getLength();
-    for (;pIter != pEnd ; ++pIter)
+    for (Property & prop : aTableProps)
     {
-        if (pIter->Name == PROPERTY_CATALOGNAME)
-            pIter->Handle = PROPERTY_ID_CATALOGNAME;
-        else if (pIter->Name == PROPERTY_SCHEMANAME)
-            pIter->Handle = PROPERTY_ID_SCHEMANAME;
-        else if (pIter->Name == PROPERTY_NAME)
-            pIter->Handle = PROPERTY_ID_NAME;
-        else if (pIter->Name == PROPERTY_DESCRIPTION)
-            pIter->Handle = PROPERTY_ID_DESCRIPTION;
-        else if (pIter->Name == PROPERTY_TYPE)
-            pIter->Handle = PROPERTY_ID_TYPE;
-        else if (pIter->Name == PROPERTY_PRIVILEGES)
-            pIter->Handle = PROPERTY_ID_PRIVILEGES;
+        if (prop.Name == PROPERTY_CATALOGNAME)
+            prop.Handle = PROPERTY_ID_CATALOGNAME;
+        else if (prop.Name == PROPERTY_SCHEMANAME)
+            prop.Handle = PROPERTY_ID_SCHEMANAME;
+        else if (prop.Name == PROPERTY_NAME)
+            prop.Handle = PROPERTY_ID_NAME;
+        else if (prop.Name == PROPERTY_DESCRIPTION)
+            prop.Handle = PROPERTY_ID_DESCRIPTION;
+        else if (prop.Name == PROPERTY_TYPE)
+            prop.Handle = PROPERTY_ID_TYPE;
+        else if (prop.Name == PROPERTY_PRIVILEGES)
+            prop.Handle = PROPERTY_ID_PRIVILEGES;
     }
 
     describeProperties(aTableProps);
