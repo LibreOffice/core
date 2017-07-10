@@ -980,14 +980,12 @@ namespace svxform
 #endif // (OSL_DEBUG_LEVEL > 0)
                 Reference< XPropertySetInfo >  xPropInfo( xCurrent->getPropertySetInfo());
                 Sequence< Property> seqAllCurrentProps = xPropInfo->getProperties();
-                Property* pAllCurrentProps = seqAllCurrentProps.getArray();
-                for (sal_Int32 j=0; j<seqAllCurrentProps.getLength(); ++j)
+                for (Property const & currentProp : seqAllCurrentProps)
                 {
-                    OUString sCurrentProp = pAllCurrentProps[j].Name;
-                    if (((pAllCurrentProps[j].Attributes & PropertyAttribute::READONLY) == 0) && (sCurrentProp != FM_PROP_NAME))
+                    if (((currentProp.Attributes & PropertyAttribute::READONLY) == 0) && (currentProp.Name != FM_PROP_NAME))
                     {   // (read-only attribs aren't set, ditto name,
                         // NewControl defined it uniquely
-                        xNewPropSet->setPropertyValue(sCurrentProp, xCurrent->getPropertyValue(sCurrentProp));
+                        xNewPropSet->setPropertyValue(currentProp.Name, xCurrent->getPropertyValue(currentProp.Name));
                     }
                 }
 

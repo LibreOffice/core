@@ -187,12 +187,9 @@ namespace sd
             Sequence< NamedValue > aUserData( xNode->getUserData() );
             if( aUserData.hasElements() )
             {
-                NamedValue* pValue = aUserData.getArray();
-                const sal_Int32 nLength = aUserData.getLength();
-                sal_Int32 nElement;
-                for( nElement = 0; nElement < nLength; nElement++, pValue++ )
+                for( NamedValue & namedValue : aUserData )
                 {
-                    pValue->Value = transformValue( pValue->Value );
+                    namedValue.Value = transformValue( namedValue.Value );
                 }
 
                 xNode->setUserData( aUserData );

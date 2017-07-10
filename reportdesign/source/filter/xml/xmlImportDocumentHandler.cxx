@@ -272,13 +272,11 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
                 break;
             }
         }
-        beans::PropertyValue* pArgIter = m_aArguments.getArray();
-        beans::PropertyValue* pArgEnd  = pArgIter + m_aArguments.getLength();
-        for(;pArgIter != pArgEnd;++pArgIter)
+        for(beans::PropertyValue & propVal : m_aArguments)
         {
-            if ( pArgIter->Name == "HasCategories" )
+            if ( propVal.Name == "HasCategories" )
             {
-                pArgIter->Value <<= bHasCategories;
+                propVal.Value <<= bHasCategories;
                 break;
             }
         }

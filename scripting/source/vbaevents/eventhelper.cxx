@@ -407,19 +407,18 @@ Sequence< ScriptEventDescriptor >
 ScriptEventHelper::createEvents( const OUString& sCodeName )
 {
     Sequence< OUString > aControlListeners = getEventListeners();
-    OUString* pSrc = aControlListeners.getArray();
     sal_Int32 nLength = aControlListeners.getLength();
 
     Sequence< ScriptEventDescriptor > aDest( nLength );
     sal_Int32 nEvts = 0;
-    for ( sal_Int32 i = 0; i< nLength; ++i, ++pSrc )
+    for ( OUString const & i : aControlListeners)
     {
         // from getListeners eventName is of form
         // "com.sun.star.awt.XActionListener::actionPerformed"
         // we need to strip "com.sun.star.awt." from that for form
         // controls
         ScriptEventDescriptor evtDesc;
-        if ( eventMethodToDescriptor( *pSrc, evtDesc, sCodeName ) )
+        if ( eventMethodToDescriptor( i, evtDesc, sCodeName ) )
         {
             sal_Int32 dIndex = nEvts;
             ++nEvts;
