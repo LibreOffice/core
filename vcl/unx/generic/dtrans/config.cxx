@@ -75,10 +75,9 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "found %" SAL_PRIdINT32 " properties for %s\n", aValues.getLength(), SELECTION_PROPERTY );
 #endif
-    Any* pValue = aValues.getArray();
-    for( int i = 0; i < aValues.getLength(); i++, pValue++ )
+    for( Any const & value : aValues )
     {
-        if( auto pLine = o3tl::tryAccess<OUString>(*pValue) )
+        if( auto pLine = o3tl::tryAccess<OUString>(value) )
         {
             if( !pLine->isEmpty() )
             {
@@ -94,7 +93,7 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
 #if OSL_DEBUG_LEVEL > 1
         else
             fprintf( stderr, "found SelectionTimeout of type \"%s\"\n",
-                     OUStringToOString( pValue->getValueType().getTypeName(), osl_getThreadTextEncoding() ).getStr() );
+                     OUStringToOString( value.getValueType().getTypeName(), osl_getThreadTextEncoding() ).getStr() );
 #endif
     }
 }

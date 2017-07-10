@@ -530,17 +530,16 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
     // step over all job entries ... check her time stamps ... and put only job names to the
     // destination list, which represent an enabled job.
     css::uno::Sequence< OUString > lAllJobs = xJobList->getElementNames();
-    OUString* pAllJobs = lAllJobs.getArray();
     sal_Int32 c = lAllJobs.getLength();
 
     std::vector< OUString > lEnabledJobs(c);
     sal_Int32 d = 0;
 
-    for (sal_Int32 s=0; s<c; ++s)
+    for (OUString const & jobName : lAllJobs)
     {
         css::uno::Reference< css::beans::XPropertySet > xJob;
         if (
-            !(xJobList->getByName(pAllJobs[s]) >>= xJob) ||
+            !(xJobList->getByName(jobName) >>= xJob) ||
             !(xJob.is()     )
            )
         {
@@ -556,7 +555,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
         if (!isEnabled(sAdminTime, sUserTime))
             continue;
 
-        lEnabledJobs[d] = pAllJobs[s];
+        lEnabledJobs[d] = jobName;
         ++d;
     }
     lEnabledJobs.resize(d);

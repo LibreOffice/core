@@ -54,31 +54,29 @@ void lcl_DumpTableColumnSeparators(const uno::Any & rTableColumnSeparators)
 }
 
 #ifdef DEBUG_WRITERFILTER
-void lcl_DumpPropertyValues(beans::PropertyValues & rValues)
+void lcl_DumpPropertyValues(beans::PropertyValues const & rValues)
 {
     TagLogger::getInstance().startElement("propertyValues");
 
-    beans::PropertyValue * pValues = rValues.getArray();
-
-    for (sal_Int32 n = 0; n < rValues.getLength(); ++n)
+    for (beans::PropertyValue const & propVal : rValues)
     {
         TagLogger::getInstance().startElement("propertyValue");
 
-        TagLogger::getInstance().attribute("name", pValues[n].Name);
+        TagLogger::getInstance().attribute("name", propVal.Name);
 
         try
         {
             sal_Int32 aInt = 0;
-            pValues[n].Value >>= aInt;
+            propVal.Value >>= aInt;
             TagLogger::getInstance().attribute("value", aInt);
         }
         catch (...)
         {
         }
 
-        if ( pValues[n].Name == "TableColumnSeparators" )
+        if ( propVal.Name == "TableColumnSeparators" )
         {
-            lcl_DumpTableColumnSeparators(pValues[n].Value);
+            lcl_DumpTableColumnSeparators(propVal.Value);
         }
 
         TagLogger::getInstance().endElement();
@@ -86,15 +84,13 @@ void lcl_DumpPropertyValues(beans::PropertyValues & rValues)
     TagLogger::getInstance().endElement();
 }
 
-void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> & rPropValSeq)
+void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> const & rPropValSeq)
 {
     TagLogger::getInstance().startElement("PropertyValueSeq");
 
-    beans::PropertyValues * pValues = rPropValSeq.getArray();
-
-    for (sal_Int32 n = 0; n < rPropValSeq.getLength(); ++n)
+    for (auto const & propVal : rPropValSeq)
     {
-        lcl_DumpPropertyValues(pValues[n]);
+        lcl_DumpPropertyValues(propVal);
     }
 
     TagLogger::getInstance().endElement();

@@ -1265,8 +1265,6 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
 
         if ( aAllreadyCopiedObjects.getLength() )
         {
-            beans::NamedValue* pIter = aAllreadyCopiedObjects.getArray();
-            const beans::NamedValue* pEnd = pIter + aAllreadyCopiedObjects.getLength();
             try
             {
                 uno::Reference<report::XReportDefinition> xReportDefinition = getView()->getReportView()->getController().getReportDefinition();
@@ -1280,10 +1278,10 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
                     aNewPos.Y() = 0;
 
                 Point aPrevious;
-                for (; pIter != pEnd; ++pIter)
+                for (beans::NamedValue const & namedVal : aAllreadyCopiedObjects)
                 {
                     uno::Sequence< uno::Reference<report::XReportComponent> > aClones;
-                    pIter->Value >>= aClones;
+                    namedVal.Value >>= aClones;
                     uno::Reference<report::XReportComponent>* pColIter = aClones.getArray();
                     const uno::Reference<report::XReportComponent>* pColEnd = pColIter + aClones.getLength();
 
