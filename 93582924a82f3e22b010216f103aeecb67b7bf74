@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_d9b6d23c",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-10T15:41:59Z",
+      "side": 1,
+      "message": "At least this comment line should be removed as well. However I did not look at the code to check if the right fix would not be to get all the code here working again.",
+      "revId": "93582924a82f3e22b010216f103aeecb67b7bf74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
