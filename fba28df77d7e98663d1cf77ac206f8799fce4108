@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_3e0c1c94",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 20
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-10T11:01:27Z",
+      "side": 1,
+      "message": "according to my debugging, pItem is uninitialised here, so obviously QueryState is not returning anything useful when run inside a unit test",
+      "revId": "fba28df77d7e98663d1cf77ac206f8799fce4108",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
