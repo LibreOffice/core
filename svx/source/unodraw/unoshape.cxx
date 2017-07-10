@@ -188,12 +188,12 @@ SvxShape::SvxShape( SdrObject* pObject )
 }
 
 
-SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet )
+SvxShape::SvxShape( SdrObject* pObject, o3tl::array_view<SfxItemPropertyMapEntry> const & rEntries, const SvxItemPropertySet* pPropertySet )
 :   maSize(100,100)
 ,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
 ,   mbIsMultiPropertyCall(false)
 ,   mpPropSet(pPropertySet)
-,   maPropMapEntries(pEntries)
+,   maPropMapEntries(rEntries)
 ,   mpObj(pObject)
 ,   mpModel(nullptr)
 ,   mnLockCount(0)
@@ -3840,8 +3840,8 @@ SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
 }
 
 
-SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ()
-: SvxShape( pObject, pPropertyMap, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
+SvxShapeText::SvxShapeText( SdrObject* pObject, o3tl::array_view<SfxItemPropertyMapEntry> const & rPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ()
+: SvxShape( pObject, rPropertyMap, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
         SetEditSource( new SvxTextEditSource( pObject, nullptr ) );

@@ -160,7 +160,7 @@ public:
     void                Lock( bool bLock );
     bool                IsLocked() const;
     void                SetSlotFilter( SfxSlotFilterState nEnable = SfxSlotFilterState::DISABLED,
-                                       o3tl::array_view<sal_uInt16> pSIDs = o3tl::array_view<sal_uInt16>());
+                                       o3tl::array_view<sal_uInt16 const> pSIDs = o3tl::array_view<sal_uInt16 const>());
 
     void                HideUI( bool bHide = true );
     ToolbarId           GetObjectBarId( sal_uInt16 nPos ) const;

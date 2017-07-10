@@ -670,9 +670,9 @@ public:
 };
 
 EDITENG_DLLPUBLIC const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet();
-EDITENG_DLLPUBLIC const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap();
+EDITENG_DLLPUBLIC o3tl::array_view<SfxItemPropertyMapEntry const> ImplGetSvxUnoOutlinerTextCursorPropertyMap();
 EDITENG_DLLPUBLIC const SvxItemPropertySet* ImplGetSvxTextPortionSvxPropertySet();
-EDITENG_DLLPUBLIC const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap();
+EDITENG_DLLPUBLIC o3tl::array_view<SfxItemPropertyMapEntry const> ImplGetSvxTextPortionPropertyMap();
 
 #endif
 
