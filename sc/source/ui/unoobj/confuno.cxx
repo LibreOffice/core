@@ -47,7 +47,7 @@ using namespace com::sun::star;
 
 #define SCSAVEVERSION                           "SaveVersionOnClose"
 
-static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
+static o3tl::array_view<SfxItemPropertyMapEntry const>  lcl_GetConfigPropertyMap()
 {
     static const SfxItemPropertyMapEntry aConfigPropertyMap_Impl[] =
     {
@@ -83,7 +83,6 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {OUString(SC_UNO_MODIFYPASSWORDINFO), 0,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),              0, 0},
         {OUString(SC_UNO_EMBED_FONTS), 0,  cppu::UnoType<bool>::get(),              0, 0},
         {OUString(SC_UNO_SYNTAXSTRINGREF), 0,  cppu::UnoType<sal_Int16>::get(),     0, 0},
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aConfigPropertyMap_Impl;
 }

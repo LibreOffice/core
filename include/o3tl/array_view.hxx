@@ -27,8 +27,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-// A barebones approximation of C++17(?) <array_view>, haven't bothered with more than single-dimensional arrays
-
 #if HAVE_CXX14_CONSTEXPR
 #define CONSTEXPR constexpr
 #else
@@ -42,6 +40,9 @@ namespace o3tl {
 #pragma warning(disable: 4814) // in C++14 'constexpr' will not imply 'const'
 #endif
 
+/** A barebones approximation of C++17(?) <array_view>.
+  Haven't bothered with more than single-dimensional arrays.
+*/
 template<typename T>
 class array_view {
 public:
@@ -51,9 +52,9 @@ public:
     using reference = value_type &;
     using const_reference = value_type const &;
     using const_iterator = const_pointer;
-    using iterator = const_iterator;
+    using iterator = pointer;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-    using reverse_iterator = const_reverse_iterator;
+    using reverse_iterator = std::reverse_iterator<iterator>;
     using size_type = std::size_t;
     using difference_type = std::ptrdiff_t;
 
@@ -62,9 +63,9 @@ public:
     constexpr array_view() noexcept : data_(nullptr), size_(0) {}
 
     template<size_type N>
-    CONSTEXPR array_view (T const (&a)[N]) noexcept : data_(a), size_(N) {}
+    CONSTEXPR array_view (T (&a)[N]) noexcept : data_(a), size_(N) {}
 
-    CONSTEXPR array_view (T const *a, size_type len) noexcept
+    CONSTEXPR array_view (T *a, size_type len) noexcept
         : data_(a), size_(len)
     {
 #if HAVE_CXX14_CONSTEXPR
@@ -73,18 +74,30 @@ public:
 #endif
     }
 
-    constexpr bool            empty() const noexcept { return size_ == 0; }
+    /// Convert array_view<T> to array_view<T const>, so we can do:
+    ///   array_view<T> a;
+    ///   array_view<T const> b = a;
+    ///
+    /// This particular style of enable_if is used because VS2015 has limited support for expression SFINAE.
+    ///
+    template<class P = array_view<value_type const>, typename V = std::enable_if_t<!std::is_same<P, value_type>::value>>
+    operator P() const
+    {
+        return array_view<value_type const>(data_, size_);
+    }
 
-    constexpr const_iterator begin() const noexcept { return data_; }
-    constexpr const_iterator end() const noexcept { return begin() + size(); }
+    constexpr bool empty() const noexcept { return size_ == 0; }
+
+    constexpr iterator begin() const noexcept { return data_; }
+    constexpr iterator end() const noexcept { return begin() + size(); }
 
     constexpr const_iterator cbegin() const noexcept { return begin(); }
     constexpr const_iterator cend() const noexcept { return end(); }
 
-    constexpr const_reverse_iterator rbegin() const noexcept
-    { return const_reverse_iterator(end()); }
-    constexpr const_reverse_iterator rend() const noexcept
-    { return const_reverse_iterator(begin()); }
+    reverse_iterator rbegin() const noexcept
+    { return reverse_iterator(end()); }
+    reverse_iterator rend() const noexcept
+    { return reverse_iterator(begin()); }
 
     constexpr const_reverse_iterator crbegin() const noexcept
     { return rbegin(); }
@@ -103,7 +116,7 @@ public:
         return npos - 1;
     }
 
-    constexpr const_reference operator [](size_type pos) const {
+    constexpr reference operator [](size_type pos) const {
 #if HAVE_CXX14_CONSTEXPR
         assert(pos < size());
 #endif
@@ -111,37 +124,42 @@ public:
     }
 
     CONSTEXPR
-    const_reference at(size_type pos) const {
+    reference at(size_type pos) const {
         if (pos >= size()) {
             throw std::out_of_range("o3tl::array_view::at");
         }
         return operator [](pos);
     }
 
-    constexpr const_reference front() const {
+    constexpr reference front() const {
 #if HAVE_CXX14_CONSTEXPR
         assert(!empty());
 #endif
         return operator [](0);
     }
 
-    constexpr const_reference back() const {
+    constexpr reference back() const {
 #if HAVE_CXX14_CONSTEXPR
         assert(!empty());
 #endif
         return operator [](size() - 1);
     }
 
-    constexpr const_pointer data() const noexcept { return data_; }
+    constexpr pointer data() const noexcept { return data_; }
 
     CONSTEXPR void swap(array_view & s) noexcept {
         std::swap(data_, s.data_);
         std::swap(size_, s.size_);
     }
 
+    /// so we can use it in associative containers
+    constexpr bool operator<(array_view const & other) const noexcept {
+        return data_ < other.data_ && size_ < other.size_;
+    }
+
 private:
-    const_pointer data_;
-    size_type     size_;
+    pointer    data_;
+    size_type  size_;
 };
 
 

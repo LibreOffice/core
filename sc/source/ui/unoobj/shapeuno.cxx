@@ -48,7 +48,7 @@
 
 using namespace ::com::sun::star;
 
-static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
+static o3tl::array_view<SfxItemPropertyMapEntry const> lcl_GetShapeMap()
 {
     static const SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
@@ -60,7 +60,6 @@ static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
         // #i66550 HLINK_FOR_SHAPES
         {OUString(SC_UNONAME_HYPERLINK), 0, cppu::UnoType<OUString>::get(), 0, 0 },
         {OUString(SC_UNONAME_URL), 0, cppu::UnoType<OUString>::get(), 0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aShapeMap_Impl;
 }

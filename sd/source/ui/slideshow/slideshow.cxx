@@ -93,7 +93,7 @@ namespace {
     };
 }
 
-const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
+const o3tl::array_view<SfxItemPropertyMapEntry const> ImplGetPresentationPropertyMap()
 {
     // NOTE: First member must be sorted
     static const SfxItemPropertyMapEntry aPresentationPropertyMap_Impl[] =
@@ -113,7 +113,6 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
         { OUString("Pause"),                    ATTR_PRESENT_PAUSE_TIMEOUT,     ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
         { OUString("StartWithNavigator"),       ATTR_PRESENT_NAVIGATOR,         cppu::UnoType<bool>::get(),                0, 0 },
         { OUString("UsePen"),                   ATTR_PRESENT_PEN,               cppu::UnoType<bool>::get(),                0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
     return aPresentationPropertyMap_Impl;

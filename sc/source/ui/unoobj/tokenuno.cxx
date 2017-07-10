@@ -45,7 +45,7 @@
 using namespace ::formula;
 using namespace ::com::sun::star;
 
-static const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
+static o3tl::array_view<SfxItemPropertyMapEntry const> lcl_GetFormulaParserMap()
 {
     static const SfxItemPropertyMapEntry aFormulaParserMap_Impl[] =
     {
@@ -54,7 +54,6 @@ static const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
         {OUString(SC_UNO_IGNORELEADING),        0,  cppu::UnoType<bool>::get(),                   0, 0 },
         {OUString(SC_UNO_FORMULACONVENTION),    0,  cppu::UnoType<decltype(sheet::AddressConvention::UNSPECIFIED)>::get(), 0, 0 },
         {OUString(SC_UNO_OPCODEMAP),            0,  cppu::UnoType<uno::Sequence< sheet::FormulaOpCodeMapEntry >>::get(), 0, 0 },
-        { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aFormulaParserMap_Impl;
 }

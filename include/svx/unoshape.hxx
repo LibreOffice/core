@@ -135,7 +135,7 @@ protected:
     friend class SdXShape;
 
     const SvxItemPropertySet* mpPropSet;
-    const SfxItemPropertyMapEntry* maPropMapEntries;
+    o3tl::array_view<SfxItemPropertyMapEntry> const maPropMapEntries;
 
     ::tools::WeakReference< SdrObject > mpObj;
     SdrModel* mpModel;
@@ -159,7 +159,7 @@ protected:
     /** used from the XActionLockable interface */
     sal_uInt16 mnLockCount;
 
-    const SfxItemPropertyMapEntry* getPropertyMapEntries() const { return maPropMapEntries; }
+    o3tl::array_view<SfxItemPropertyMapEntry> const & getPropertyMapEntries() const { return maPropMapEntries; }
 
     void updateShapeKind();
     void endSetPropertyValues();
@@ -186,7 +186,7 @@ public:
     /// @throws css::uno::RuntimeException
     SvxShape( SdrObject* pObj );
     /// @throws css::uno::RuntimeException
-    SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet );
+    SvxShape( SdrObject* pObject, o3tl::array_view<SfxItemPropertyMapEntry> const & rEntries, const SvxItemPropertySet* pPropertySet );
     /// @throws css::uno::RuntimeException
     SvxShape();
     virtual ~SvxShape() throw () override;
@@ -364,7 +364,7 @@ protected:
 
 public:
     SvxShapeText( SdrObject* pObj ) throw ();
-    SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
+    SvxShapeText( SdrObject* pObject, o3tl::array_view<SfxItemPropertyMapEntry> const & rPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
     virtual ~SvxShapeText() throw () override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
@@ -587,7 +587,7 @@ protected:
     const SvGlobalName GetClassName_Impl(OUString& rHexCLSID);
 public:
     SvxOle2Shape( SdrObject* pObj ) throw();
-    SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
+    SvxOle2Shape( SdrObject* pObject, o3tl::array_view<SfxItemPropertyMapEntry> const & rPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
     virtual ~SvxOle2Shape() throw() override;
 
     bool createObject( const SvGlobalName &aClassName );
