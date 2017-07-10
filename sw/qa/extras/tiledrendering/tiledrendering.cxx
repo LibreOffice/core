@@ -34,6 +34,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/dispatch.hxx>
 #include <redline.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <vcl/scheduler.hxx>
@@ -96,6 +97,8 @@ public:
     void testDisableUndoRepair();
     void testAllTrackedChanges();
     void testDocumentRepair();
+    void testPageHeader();
+    void testPageFooter();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -143,7 +146,8 @@ public:
     CPPUNIT_TEST(testDisableUndoRepair);
     CPPUNIT_TEST(testAllTrackedChanges);
     CPPUNIT_TEST(testDocumentRepair);
-
+    CPPUNIT_TEST(testPageHeader);
+    CPPUNIT_TEST(testPageFooter);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1933,6 +1937,75 @@ void SwTiledRenderingTest::testDocumentRepair()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+namespace {
+
+void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, sal_uInt16 nWhich, bool bValue)
+{
+    const SfxPoolItem* pState = nullptr;
+    pViewShell->GetDispatcher()->QueryState(nWhich, pState);
+    CPPUNIT_ASSERT(dynamic_cast< const SfxBoolItem * >(pState));
+    CPPUNIT_ASSERT_EQUAL(bValue, dynamic_cast< const SfxBoolItem * >(pState)->GetValue());
+};
+
+}
+
+void SwTiledRenderingTest::testPageHeader()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    createDoc("dummy.fodt");
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    // Check Page Header State
+    checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEHEADER, false);
+    // Insert Page Header
+    {
+        SfxBoolItem aItem(FN_PARAM_1, true);
+        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEHEADER, SfxCallMode::SYNCHRON, {&aItem});
+    }
+    // Check Page Header State
+    checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEHEADER, true);
+
+    // Remove Page Header
+    {
+        SfxBoolItem aItem(FN_PARAM_1, false);
+        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEHEADER, SfxCallMode::SYNCHRON, {&aItem});
+    }
+    // Check Page Header State
+    checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEHEADER, false);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testPageFooter()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    createDoc("dummy.fodt");
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    // Check Page Footer State
+    checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEFOOTER, false);
+    // Insert Page Footer
+    {
+        SfxBoolItem aItem(FN_PARAM_1, true);
+        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEFOOTER, SfxCallMode::SYNCHRON, {&aItem});
+    }
+    // Check Page Footer State
+    checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEFOOTER, true);
+
+    // Remove Page Footer
+    {
+        SfxBoolItem aItem(FN_PARAM_1, false);
+        pViewShell->GetDispatcher()->ExecuteList(FN_INSERT_PAGEFOOTER, SfxCallMode::SYNCHRON, {&aItem});
+    }
+    // Check Footer State
+    checkPageHeaderOrFooter(pViewShell, FN_INSERT_PAGEFOOTER, false);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
 

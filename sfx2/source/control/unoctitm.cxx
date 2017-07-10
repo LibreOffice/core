@@ -1019,7 +1019,9 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         aEvent.FeatureURL.Path == "AlignLeft" ||
         aEvent.FeatureURL.Path == "AlignHorizontalCenter" ||
         aEvent.FeatureURL.Path == "AlignRight" ||
-        aEvent.FeatureURL.Path == "DocumentRepair")
+        aEvent.FeatureURL.Path == "DocumentRepair" ||
+        aEvent.FeatureURL.Path == "InsertPageHeader" ||
+        aEvent.FeatureURL.Path == "InsertPageFooter")
     {
         bool bTemp = false;
         aEvent.State >>= bTemp;
