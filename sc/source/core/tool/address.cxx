@@ -892,9 +892,15 @@ static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
 static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
                                                  ScAddress* pAddr,
                                                  ScRefFlags* nFlags,
-                                                 const OUString* pErrRef )
+                                                 const OUString* pErrRef,
+                                                 bool bDoubleRefEnd = false )
 {
     SCCOL nCol;
+    // Excel 2013 supports 16,384 columns.
+    const SCCOL nExtraMaxCol = ( 1 << 14 ) - 1;
+    // If the current address is last part of a range, use nExtraMaxCol as the hard-limit on columns
+    // and after parsing, trim to MAXCOL
+    SCCOL nMaxColHardLimit = ( bDoubleRefEnd ) ? nExtraMaxCol : MAXCOL;
 
     if( *p == '$' )
     {
@@ -914,10 +920,14 @@ static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
         return nullptr;
 
     nCol = sal::static_int_cast<SCCOL>( rtl::toAsciiUpperCase( *p++ ) - 'A' );
-    while (nCol <= MAXCOL && rtl::isAsciiAlpha(*p))
+    while (nCol <= nMaxColHardLimit && rtl::isAsciiAlpha(*p))
         nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + rtl::toAsciiUpperCase( *p++ ) - 'A' );
-    if( nCol > MAXCOL || rtl::isAsciiAlpha( *p ) )
+    if( nCol > nMaxColHardLimit || rtl::isAsciiAlpha( *p ) )
         return nullptr;
+
+    // trim nCol to MAXCOL for the case when nMaxColHardLimit != MAXCOL
+    if ( bDoubleRefEnd && nCol > MAXCOL )
+        nCol = MAXCOL;
 
     *nFlags |= ScRefFlags::COL_VALID;
     pAddr->SetCol( nCol );
@@ -1083,7 +1093,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
 
     p = tmp2;
     p = lcl_eatWhiteSpace( p+1 );   // after ':'
-    tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2, pErrRef);
+    tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2, pErrRef, true );
     if( !tmp1 && aEndTabName.isEmpty() )     // Probably the aEndTabName was specified after the first range
     {
         p = lcl_XL_ParseSheetRef( p, aEndTabName, false, nullptr, pErrRef);
