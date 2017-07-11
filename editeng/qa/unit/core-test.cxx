@@ -33,6 +33,7 @@
 #include <com/sun/star/text/textfield/Type.hpp>
 
 #include <memory>
+#include <editeng/outliner.hxx>
 
 using namespace com::sun::star;
 
@@ -86,6 +87,10 @@ public:
     void testSectionAttributes();
 
     void testLargeParaCopyPaste();
+
+    DECL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, void )
+ {
+ }
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testConstruction);
@@ -422,8 +427,49 @@ void Test::testAutocorrect()
 
 }
 
+ 
+IMPL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, pInfo, void ){
+     if (!pInfo)
+          return;
+  
+      const SvxFieldItem& rField = pInfo->GetField();
+      const SvxFieldData* pField = rField.GetField();
+  
+      if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
+      {
+          // URLField
+          OUString aURL = pURLField->GetURL();
+  
+          switch ( pURLField->GetFormat() )
+          {
+              case SVXURLFORMAT_APPDEFAULT: //TODO: Settable in the App?
+              case SVXURLFORMAT_REPR:
+              {
+                  pInfo->SetRepresentation( pURLField->GetRepresentation() );
+              }
+              break;
+  
+              case SVXURLFORMAT_URL:
+              {
+                  pInfo->SetRepresentation( aURL );
+              }
+              break;
+          }
+ 
+          svtools::ColorConfigEntry eEntry =
+              INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
+          pInfo->SetTextColor( GetColorConfig().GetColorValue(eEntry).nColor );
+      }
+      else
+      {
+          OSL_FAIL("Unknown Field");
+          pInfo->SetRepresentation(OUString('?'));
+      }
+}
+
 void Test::testHyperlinkCopyPaste()
 {
+    //LINK( Test, nullptr, CalcFieldValueHdl );
     // Create EditEngine's instance
     EditEngine aEditEngine( mpItemPool );
 
@@ -504,21 +550,13 @@ void Test::testHyperlinkCopyPaste()
     // Assert Changes ACP, ACP: after Copy/Paste
 
     // Check the fields count
-    // TODO: Fix copy/paste of hyperlinks: currently hyperlinks are not copied properly, there is some bug
-    // For now we expect the following
-    CPPUNIT_ASSERT_EQUAL( sal_uInt16(2), aEditEngine.GetFieldCount(0) );
-    // After having a fix - we expect the following as a replacement of above
-    // CPPUNIT_ASSERT_EQUAL( sal_uInt16(3), aEditEngine.GetFieldCount(0) );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(3), aEditEngine.GetFieldCount(0) );
 
     // Check the updated text length
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 10 + 2 + 1), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + 10 + 2), rDoc.GetTextLen() );
 
     // Check the updated text contents
-    // TODO: Fix copy/paste of hyperlinks: currently hyperlinks are not copied properly, there is some bug
-    // For now we expect the following
-    CPPUNIT_ASSERT_EQUAL( OUString("sampletextfor testing featurefieldsfor\001testing"), rDoc.GetParaAsString(sal_Int32(0)) );
-    // After having a fix - we expect the following as a replacement of above
-    // CPPUNIT_ASSERT_EQUAL( OUString("sampletextfor testing featurefieldsfor testing"), rDoc.GetParaAsString(sal_Int32(0)) );
+    CPPUNIT_ASSERT_EQUAL( OUString("sampletextfor testing featurefieldsfortesting"), rDoc.GetParaAsString(sal_Int32(0)) );
 
     // Check the Fields and their values
 
@@ -539,13 +577,13 @@ void Test::testHyperlinkCopyPaste()
     CPPUNIT_ASSERT_EQUAL( aRepres2, pACPURLField2->GetRepresentation() )    ;
 
     // Field 3
+    EFieldInfo aACPURLFieldInfo3 = aEditEngine.GetFieldInfo( sal_Int32(0), sal_uInt16(2) );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(38), aACPURLFieldInfo3.aPosition.nIndex );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo3.pFieldItem->Which() );
+    SvxURLField* pACPURLField3 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aACPURLFieldInfo3.pFieldItem->GetField()) );
+    CPPUNIT_ASSERT_EQUAL( aURL1, pACPURLField3->GetURL() );
     // TODO: Fix copy/paste of hyperlinks: currently hyperlinks are not copied properly, there is some bug
     // After having a fix we expect the following
-    //EFieldInfo aACPURLFieldInfo3 = aEditEngine.GetFieldInfo( sal_Int32(0), sal_uInt16(2) );
-    //CPPUNIT_ASSERT_EQUAL( sal_Int32(38), aACPURLFieldInfo3.aPosition.nIndex );
-    //CPPUNIT_ASSERT_EQUAL( sal_uInt16(EE_FEATURE_FIELD), aACPURLFieldInfo3.pFieldItem->Which() );
-    //SvxURLField* pACPURLField3 = dynamic_cast<SvxURLField*> ( const_cast<SvxFieldData*> (aACPURLFieldInfo3.pFieldItem->GetField()) );
-    //CPPUNIT_ASSERT_EQUAL( aURL1, pACPURLField3->GetURL() );
     //CPPUNIT_ASSERT_EQUAL( aRepres1, pACPURLField3->GetRepresentation() );
 }
 
