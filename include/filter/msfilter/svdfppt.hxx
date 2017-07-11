@@ -284,6 +284,29 @@ struct PptFontEntityAtom
 };
 
 class PptFontCollection;
+enum class PptViewTypeEnum : sal_uInt16
+{
+    NONE = 0,
+    Slide = 1,
+    SlideMaster = 2,
+    Notes = 3,
+    Handout = 4,
+    NotesMaster = 5,
+    OutlineMaster = 6,
+    Outline = 7,
+    SlideSorter = 8,
+    VisualBasic = 9,
+    TitleMaster = 10,
+    SlideShow = 11,
+    SlideShowFullScreen = 12,
+    NotesText = 13,
+    PrintPreview = 14,
+    Thumbnails = 15,
+    MasterThumbnails = 16,
+    PodiumSlideView = 17,
+    PodiumNotesView = 18,
+};
+
 struct PptUserEditAtom
 {
     DffRecordHeader     aHd;
@@ -293,7 +316,7 @@ struct PptUserEditAtom
     sal_uInt32          nOffsetPersistDirectory; // Offset to PersistPtrs for this file version.
     sal_uInt32          nDocumentRef;
     sal_uInt32          nMaxPersistWritten;      // total number of Persist entries up to this point
-    sal_Int16           eLastViewType;           // enum view type
+    PptViewTypeEnum     eLastViewType;           // enum view type
 
 public:
     PptUserEditAtom()
@@ -303,7 +326,7 @@ public:
         , nOffsetPersistDirectory( 0 )
         , nDocumentRef( 0 )
         , nMaxPersistWritten( 0 )
-        , eLastViewType( 0 )
+        , eLastViewType( PptViewTypeEnum::NONE )
         {}
 
     friend SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom );
