@@ -185,6 +185,9 @@ static bool isSPRMChildrenExpected(Id nId)
     case NS_ooxml::LN_CT_PBdr_bottom:
     case NS_ooxml::LN_CT_PBdr_right:
         // Expected children are NS_ooxml::LN_CT_Border_*.
+        SAL_FALLTHROUGH;
+    case NS_ooxml::LN_CT_PrBase_shd:
+        // Expected children are NS_ooxml::LN_CT_Shd_*.
         return true;
 
     default:
