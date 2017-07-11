@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_8f931ca3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001644
+      },
+      "writtenOn": "2017-07-11T21:51:17Z",
+      "side": 1,
+      "message": "I made a bug report with more information.",
+      "revId": "a2fb585f0cfaf2d99d89c438d511f9696bf6feb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_af90d896",
+        "filename": "sd/qa/unit/import-tests.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001644
+      },
+      "writtenOn": "2017-07-11T21:51:17Z",
+      "side": 1,
+      "message": "I added a testcase to test the default value of rotWithShape.",
+      "revId": "a2fb585f0cfaf2d99d89c438d511f9696bf6feb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
