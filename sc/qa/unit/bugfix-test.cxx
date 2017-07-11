@@ -36,6 +36,7 @@ public:
     void testTdf103960();
     void testRhbz1390776();
     void testTdf104310();
+    void testTdf109061();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf64229);
@@ -50,6 +51,7 @@ public:
     CPPUNIT_TEST(testTdf103960);
     CPPUNIT_TEST(testRhbz1390776);
     CPPUNIT_TEST(testTdf104310);
+    CPPUNIT_TEST(testTdf109061);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -280,6 +282,19 @@ void ScFiltersTest::testTdf104310()
 
         xDocSh->DoClose();
     }
+}
+
+void ScFiltersTest::testTdf109061()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf109061.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    xDocSh->DoHardRecalc();
+
+    // Sheet 1 Cell B4 was a #NAME? (value = 0) before the fix
+    CPPUNIT_ASSERT_EQUAL(6.0, rDoc.GetValue(ScAddress(1, 3, 0)));
+
+    xDocSh->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()

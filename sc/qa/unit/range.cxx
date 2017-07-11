@@ -65,9 +65,11 @@ public:
 
     CPPUNIT_TEST_SUITE(ScRangeTest);
     CPPUNIT_TEST(testRangeParsing);
+    CPPUNIT_TEST(testRangeParsingOOX);
     CPPUNIT_TEST_SUITE_END();
 
     void testRangeParsing();
+    void testRangeParsingOOX();
 
 private:
     ScDocShellRef m_xDocShRef;
@@ -78,6 +80,18 @@ void ScRangeTest::testRangeParsing()
     ScRange aRange;
     ScDocument& rDoc = m_xDocShRef->GetDocument();
     ScRefFlags nRes = aRange.Parse(":1", &rDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
+}
+
+void ScRangeTest::testRangeParsingOOX()
+{
+    ScRange aRange;
+    ScDocument& rDoc = m_xDocShRef->GetDocument();
+    ScRefFlags nRes = aRange.Parse("A2:BZZ2", &rDoc, formula::FormulaGrammar::CONV_XL_OOX);
+    CPPUNIT_ASSERT_MESSAGE("Should truncate parse.", (nRes & ScRefFlags::VALID));
+    CPPUNIT_ASSERT_MESSAGE("Range end col must be MAXCOL", aRange.aEnd.Col() == MAXCOL);
+
+    nRes = aRange.Parse("BZZ2:CZZ2", &rDoc, formula::FormulaGrammar::CONV_XL_OOX);
     CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", !(nRes & ScRefFlags::VALID));
 }
 
