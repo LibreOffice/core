@@ -78,15 +78,6 @@ RASReader::RASReader(SvStream &rRAS)
 {
 }
 
-namespace
-{
-    bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
-    {
-        const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
-        return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
-    }
-}
-
 bool RASReader::ReadRAS(Graphic & rGraphic)
 {
     sal_uInt32 nMagicNumber;
