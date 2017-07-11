@@ -82,7 +82,7 @@ public class PresentationActivity extends AppCompatActivity {
         // set up presentation_gesture_view
         mGestureView = findViewById(R.id.presentation_gesture_view);
         final GestureDetectorCompat gestureDetector =
-                new GestureDetectorCompat(this, new presentationGestureViewListener());
+                new GestureDetectorCompat(this, new PresentationGestureViewListener());
         mGestureView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -94,7 +94,7 @@ public class PresentationActivity extends AppCompatActivity {
         mWebView.loadUrl(filePath);
     }
 
-    private class presentationGestureViewListener extends GestureDetector.SimpleOnGestureListener {
+    private class PresentationGestureViewListener extends GestureDetector.SimpleOnGestureListener {
         private static final int SWIPE_VELOCITY_THRESHOLD = 100;
         private static final int SCROLL_THRESHOLD = 10; // if scrollCounter is larger than this, a page switch is triggered
         private int scrollCounter = 0; // a counter for measuring scrolling distance
