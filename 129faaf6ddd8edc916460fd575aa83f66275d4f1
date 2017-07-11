@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_993c4a31",
+        "filename": "writerfilter/source/ooxml/OOXMLDocumentImpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-11T07:25:44Z",
+      "side": 1,
+      "message": "These two lines are not necessary?",
+      "revId": "129faaf6ddd8edc916460fd575aa83f66275d4f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
