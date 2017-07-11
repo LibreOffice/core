@@ -1065,7 +1065,11 @@ bool SectionPropertyMap::FloatingTableConversion( DomainMapper_Impl& rDM_Impl, F
     // If the table is wider than the text area, then don't create a fly
     // for the table: no wrapping will be performed anyway, but multi-page
     // tables will be broken.
-    if ( nTableWidth < nTextAreaWidth )
+    // It seems Word has a limit here, so that in case the table width is quite
+    // close to the text area width, then it won't perform a wrapping, even in
+    // case the content (e.g. an empty paragraph) would fit. The magic constant
+    // here represents this limit.
+    if ( (nTableWidth + 469) < nTextAreaWidth )
         return true;
 
     // If the position is relative to the edge of the page, then we always
