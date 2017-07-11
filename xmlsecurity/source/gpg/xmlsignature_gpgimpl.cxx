@@ -363,9 +363,7 @@ SAL_CALL XMLSignature_GpgImpl::validate(
             data_signature, data_text);
 
         // TODO: needs some more error handling, needs checking _all_ signatures
-        if( verify_res.isNull() ||
-            verify_res.numSignatures() == 0 ||
-            verify_res.signature(0).validity() < GpgME::Signature::Full )
+        if( verify_res.isNull() || verify_res.numSignatures() == 0 )
         {
             // let's try again, but this time import the public key payload
             // (avoiding that in a first cut for being a bit speedier)
@@ -414,9 +412,7 @@ SAL_CALL XMLSignature_GpgImpl::validate(
             verify_res=rCtx.verifyDetachedSignature(data_signature, data_text);
 
             // TODO: needs some more error handling, needs checking _all_ signatures
-            if( verify_res.isNull() ||
-                verify_res.numSignatures() == 0 ||
-                verify_res.signature(0).validity() < GpgME::Signature::Full )
+            if( verify_res.isNull() || verify_res.numSignatures() == 0 )
             {
                 clearErrorRecorder();
                 xmlFree(pSignatureValue);
