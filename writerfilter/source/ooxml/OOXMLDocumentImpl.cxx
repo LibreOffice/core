@@ -65,6 +65,7 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, con
     , m_rBaseURL(utl::MediaDescriptor(rDescriptor).getUnpackedValueOrDefault("DocumentBaseURL", OUString()))
     , maMediaDescriptor(rDescriptor)
 {
+    pushShapeContext();
 }
 
 OOXMLDocumentImpl::~OOXMLDocumentImpl()
@@ -903,12 +904,27 @@ const uno::Sequence<beans::PropertyValue>& OOXMLDocumentImpl::getMediaDescriptor
 
 void OOXMLDocumentImpl::setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext )
 {
-    mxShapeContext = xContext;
+    if (!maShapeContexts.empty())
+        maShapeContexts.top() = xContext;
 }
 
 uno::Reference<xml::sax::XFastShapeContextHandler> OOXMLDocumentImpl::getShapeContext( )
 {
-    return mxShapeContext;
+    if (!maShapeContexts.empty())
+        return maShapeContexts.top();
+    else
+        return uno::Reference<xml::sax::XFastShapeContextHandler>();
+}
+
+void OOXMLDocumentImpl::pushShapeContext()
+{
+    maShapeContexts.push(uno::Reference<xml::sax::XFastShapeContextHandler>());
+}
+
+void OOXMLDocumentImpl::popShapeContext()
+{
+    if (!maShapeContexts.empty())
+        maShapeContexts.pop();
 }
 
 uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getThemeDom( )

@@ -432,6 +432,8 @@ class OOXMLFastContextHandlerShape: public OOXMLFastContextHandlerProperties
 private:
     bool m_bShapeSent;
     bool m_bShapeStarted;
+    /// Is it necessary to pop the stack in the dtor?
+    bool m_bShapeContextPushed;
 
 public:
     explicit OOXMLFastContextHandlerShape(OOXMLFastContextHandler * pContext);
