@@ -305,7 +305,13 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
                 return;
             break;
         }
-        if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
+        if (isa<CXXReinterpretCastExpr>(parent))
+        {
+            // once we see one of these, there is not much useful we can know
+            bPotentiallyReadFrom = true;
+            break;
+        }
+        else if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
 #if CLANG_VERSION >= 40000
              || isa<ArrayInitLoopExpr>(parent)
 #endif
