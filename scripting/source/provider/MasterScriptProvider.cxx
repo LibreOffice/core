@@ -197,8 +197,7 @@ void MasterScriptProvider::createPkgProvider()
     try
     {
         Any location;
-        OUString sPkgCtx =  m_sCtxString.concat( ":uno_packages" );
-        location <<= sPkgCtx;
+        location <<= m_sCtxString + ":uno_packages";
 
         Reference< provider::XScriptProviderFactory > xFac =
             provider::theMasterScriptProviderFactory::get( m_xContext );
@@ -237,10 +236,9 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
 
     if ( !uriRef.is() || !sfUri.is() )
     {
-        OUString errorMsg = "Incorrect format for Script URI: ";
-        errorMsg = errorMsg.concat( scriptURI );
         throw provider::ScriptFrameworkErrorException(
-            errorMsg, Reference< XInterface >(),
+            "Incorrect format for Script URI: " + scriptURI,
+            Reference< XInterface >(),
             scriptURI, "",
             provider::ScriptFrameworkErrorType::UNKNOWN );
     }
@@ -252,10 +250,9 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
          !sfUri->hasParameter( locKey ) ||
          ( sfUri->getName().isEmpty()  ) )
     {
-        OUString errorMsg = "Incorrect format for Script URI: ";
-        errorMsg = errorMsg.concat( scriptURI );
         throw provider::ScriptFrameworkErrorException(
-            errorMsg, Reference< XInterface >(),
+            "Incorrect format for Script URI: " + scriptURI,
+            Reference< XInterface >(),
             scriptURI, "",
             provider::ScriptFrameworkErrorType::UNKNOWN );
     }
@@ -519,9 +516,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
         if ( index == xSProviders.getLength() )
         {
             // No script providers could process the package
-            OUString message = "Failed to register package for ";
-            message = message.concat( aName );
-            throw lang::IllegalArgumentException( message,
+            throw lang::IllegalArgumentException( "Failed to register package for " + aName,
                 Reference < XInterface > (), 2 );
         }
    }
@@ -585,10 +580,8 @@ MasterScriptProvider::removeByName( const OUString& Name )
         if ( index == xSProviders.getLength() )
         {
             // No script providers could process the package
-            OUString message = "Failed to revoke package for ";
-            message = message.concat( Name );
-            throw lang::IllegalArgumentException( message,
-                                                      Reference < XInterface > (), 1 );
+            throw lang::IllegalArgumentException( "Failed to revoke package for " + Name,
+                                                  Reference < XInterface > (), 1 );
         }
 
     }

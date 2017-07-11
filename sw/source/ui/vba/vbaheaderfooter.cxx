@@ -62,7 +62,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange()
     }
     if( mnIndex == word::WdHeaderFooterIndex::wdHeaderFooterEvenPages )
     {
-        sPropsNameText = sPropsNameText.concat( "Left" );
+        sPropsNameText += "Left";
     }
 
     uno::Reference< text::XText > xText( mxPageStyleProps->getPropertyValue( sPropsNameText ), uno::UNO_QUERY_THROW );

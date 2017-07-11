@@ -872,7 +872,7 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const OUString& aCommandURL, cons
             if ( nStyle & pStyle->nBit )
             {
                 if ( !aValue.isEmpty() )
-                    aValue = aValue.concat( "+" );
+                    aValue += "+";
                 aValue += OUString::createFromAscii( pStyle->attrName );
             }
         }

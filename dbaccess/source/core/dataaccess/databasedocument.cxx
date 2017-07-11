@@ -372,8 +372,8 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
             for ( sal_Int32 j=0; j < nDialogs; ++j )
             {
                 Reference < awt::XDialogProvider > xDlgPrv = awt::DialogProvider::createWithModel(rxContext, rxModel);
-                OUString sDialogUrl = "vnd.sun.star.script:";
-                sDialogUrl = sDialogUrl.concat( sLibraries[ i ] ).concat( "." ).concat (  sDialogs[ j ]  ).concat( "?location=document" );
+                OUString sDialogUrl =
+                    "vnd.sun.star.script:" + sLibraries[i] + "." + sDialogs[j] + "?location=document";
 
                 Reference< css::awt::XControl > xDialog( xDlgPrv->createDialog( sDialogUrl ), UNO_QUERY );
                 Reference< XInterface > xModel( xDialog->getModel() );

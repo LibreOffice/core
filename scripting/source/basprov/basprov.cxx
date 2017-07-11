@@ -293,10 +293,9 @@ namespace basprov
 
         if ( !uriRef.is() || !sfUri.is() )
         {
-            OUString errorMsg("BasicProviderImpl::getScript: failed to parse URI: ");
-            errorMsg = errorMsg.concat( scriptURI );
             throw provider::ScriptFrameworkErrorException(
-                errorMsg, Reference< XInterface >(),
+                "BasicProviderImpl::getScript: failed to parse URI: " + scriptURI,
+                Reference< XInterface >(),
                 scriptURI, "Basic",
                 provider::ScriptFrameworkErrorType::MALFORMED_URL );
         }

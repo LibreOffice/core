@@ -302,7 +302,7 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell* pDocShell, s
     if( !xLongName.get() && xShortName.get() )
     {
         xLongName.reset( new OUString );
-        *xLongName = xLongName->concat(*xShortName);
+        *xLongName += *xShortName;
     }
     else if( !xLongName.get() && xTextMark.get() )
         xLongName.reset( new OUString );
@@ -313,8 +313,7 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell* pDocShell, s
         {
             if (xLongName->isEmpty())
                 *xTextMark = xTextMark->replace('!', '.');
-            *xLongName = xLongName->concat("#");
-            *xLongName = xLongName->concat(*xTextMark);
+            *xLongName += "#" + *xTextMark;
         }
         hlStr.hLinkAddr = *xLongName;
     }

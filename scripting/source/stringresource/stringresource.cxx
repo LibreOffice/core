@@ -183,9 +183,7 @@ OUString StringResourceImpl::implResolveString
     }
     if( !bSuccess )
     {
-        OUString errorMsg("StringResourceImpl: No entry for ResourceID: ");
-        errorMsg = errorMsg.concat( ResourceID );
-        throw css::resource::MissingResourceException( errorMsg );
+        throw css::resource::MissingResourceException( "StringResourceImpl: No entry for ResourceID: " + ResourceID );
     }
     return aRetStr;
 }
@@ -413,9 +411,7 @@ void StringResourceImpl::implRemoveId( const OUString& ResourceID, LocaleItem* p
         IdToStringMap::iterator it = rHashMap.find( ResourceID );
         if( it == rHashMap.end() )
         {
-            OUString errorMsg("StringResourceImpl: No entries for ResourceID: ");
-            errorMsg = errorMsg.concat( ResourceID );
-            throw css::resource::MissingResourceException( errorMsg );
+            throw css::resource::MissingResourceException( "StringResourceImpl: No entries for ResourceID: " + ResourceID );
         }
         rHashMap.erase( it );
         pLocaleItem->m_bModified = true;

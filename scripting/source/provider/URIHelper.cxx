@@ -88,8 +88,7 @@ ScriptingFrameworkURIHelper::initialize(
         throw uno::RuntimeException( "ScriptingFrameworkURIHelper error parsing args" );
     }
 
-    SCRIPTS_PART = "/Scripts/";
-    SCRIPTS_PART = SCRIPTS_PART.concat( m_sLanguage.toAsciiLowerCase() );
+    SCRIPTS_PART = "/Scripts/" + m_sLanguage.toAsciiLowerCase();
 
     if ( !initBaseURI() )
     {
