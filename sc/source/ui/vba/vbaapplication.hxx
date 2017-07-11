@@ -21,6 +21,7 @@
 
 #include <ooo/vba/excel/XWorksheetFunction.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
+#include <ooo/vba/excel/XFileDialog.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
@@ -36,6 +37,10 @@ class ScVbaApplication : public ScVbaApplication_BASE
 private:
     // note: member variables moved to struct "ScVbaAppSettings", see cxx file, to be shared by all application instances
     ScVbaAppSettings& mrAppSettings;
+
+    // must be stored in order to get result paths from the same instance
+    css::uno::Reference< ov::excel::XFileDialog > m_xFileDialog;
+    sal_Int32 m_nDialogType;
 
     /// @throws css::uno::RuntimeException
     OUString getOfficePath( const OUString& sPath );
@@ -85,6 +90,7 @@ public:
     virtual css::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() override;
     virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() override;
     virtual css::uno::Any SAL_CALL International( sal_Int32 Index ) override;
+    virtual css::uno::Any SAL_CALL FileDialog( const css::uno::Any& DialogType ) override;
     virtual css::uno::Any SAL_CALL Workbooks( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL Worksheets( const css::uno::Any& aIndex ) override;
     virtual css::uno::Any SAL_CALL WorksheetFunction( ) override;
