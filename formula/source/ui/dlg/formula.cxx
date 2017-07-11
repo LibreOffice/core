@@ -622,7 +622,7 @@ bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStru
 }
 
 
-void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, const FormulaToken* pFuncToken,
+void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, const FormulaToken* /*pFuncToken*/,
         const FormulaToken* _pToken, long Count )
 {
     if ( _pToken != nullptr && Count > 0 )
@@ -716,7 +716,6 @@ void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, co
                     /* TODO: this should depend on parameter classification, if
                      * a scalar value is expected matrix should not be forced.
                      * */
-                    (void)pFuncToken;
                     bool bForceMatrix = (!m_pBtnMatrix->IsChecked() &&
                             (_pToken->GetType() == svDoubleRef || _pToken->GetType() == svExternalDoubleRef));
                     OUString aCellResult;
