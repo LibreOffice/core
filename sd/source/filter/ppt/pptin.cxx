@@ -550,8 +550,8 @@ bool ImplSdPPTImport::Import()
     Size aVisAreaSize;
     switch ( aUserEditAtom.eLastViewType )
     {
-        case 5 :    // notes master
-        case 3 :    // notes
+        case PptViewTypeEnum::Notes:
+        case PptViewTypeEnum::NotesMaster:
             aVisAreaSize = aDocAtom.GetNotesPageSize();
         break;
         default :
@@ -1239,40 +1239,40 @@ bool ImplSdPPTImport::Import()
 
                 switch ( aUserEditAtom.eLastViewType )
                 {
-                    case 7 :    // outliner view
+                    case PptViewTypeEnum::Outline:
                     {
                         SfxItemSet* pSet = mrMed.GetItemSet();
                         if ( pSet )
                             pSet->Put( SfxUInt16Item( SID_VIEW_ID, 3 ) );
                     }
                     break;
-                    case 8 :    // slide sorter
+                    case PptViewTypeEnum::SlideSorter:
                     {
                         SfxItemSet* pSet = mrMed.GetItemSet();
                         if ( pSet )
                             pSet->Put( SfxUInt16Item( SID_VIEW_ID, 2 ) );
                     }
                     break;
-                    case 10 :   // titlemaster
+                    case PptViewTypeEnum::TitleMaster:
                         nSelectedPage = 1;
                         SAL_FALLTHROUGH;
-                    case 2 :    // master
+                    case PptViewTypeEnum::SlideMaster:
                     {
                         ePageKind = PageKind::Standard;
                         eEditMode = EditMode::MasterPage;
                     }
                     break;
-                    case 5 :    // notes master
+                    case PptViewTypeEnum::NotesMaster:
                         eEditMode = EditMode::MasterPage;
                         SAL_FALLTHROUGH;
-                    case 3 :    // notes
+                    case PptViewTypeEnum::Notes:
                         ePageKind = PageKind::Notes;
                     break;
-                    case 4 :    // handout
+                    case PptViewTypeEnum::Handout:
                         ePageKind = PageKind::Handout;
                     break;
                     default :
-                    case 1 :    // normal
+                    case PptViewTypeEnum::Slide:
                     break;
                 }
                 pFrameView->SetPageKind( ePageKind );

@@ -465,6 +465,7 @@ class PptFontCollection : public std::vector<std::unique_ptr<PptFontEntityAtom>>
 
 SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom )
 {
+    sal_Int16 lastViewType = 0;
     ReadDffRecordHeader( rIn, rAtom.aHd );
     rIn
        .ReadInt32( rAtom.nLastSlideID )
@@ -473,7 +474,8 @@ SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom )
        .ReadUInt32( rAtom.nOffsetPersistDirectory )
        .ReadUInt32( rAtom.nDocumentRef )
        .ReadUInt32( rAtom.nMaxPersistWritten )
-       .ReadInt16( rAtom.eLastViewType );
+       .ReadInt16( lastViewType );
+    rAtom.eLastViewType = static_cast<PptViewTypeEnum>(lastViewType);
     rAtom.aHd.SeekToEndOfRecord(rIn);
     return rIn;
 }
