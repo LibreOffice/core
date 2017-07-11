@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_5440e756",
+        "filename": "sc/source/core/tool/address.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-11T17:40:04Z",
+      "side": 1,
+      "message": "Why not use the actual value then one could even grep for..",
+      "revId": "297a3e497e030c61f5554dc55aa85a3b10e9d75a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
