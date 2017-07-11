@@ -48,6 +48,7 @@
 #include "editxml.hxx"
 #include <editeng/unonrule.hxx>
 #include <editeng/unoipset.hxx>
+#include <unomodel.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::container;
@@ -122,45 +123,7 @@ void SvxEditEngineSource::UpdateData()
 {
 }
 
-class SvxSimpleUnoModel : public cppu::WeakAggImplHelper4<
-                                    css::frame::XModel,
-                                    css::ucb::XAnyCompareFactory,
-                                    css::style::XStyleFamiliesSupplier,
-                                    css::lang::XMultiServiceFactory >
-{
-public:
-    SvxSimpleUnoModel();
-
-    // XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
-
-    // XStyleFamiliesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getStyleFamilies(  ) override;
-
-    // XAnyCompareFactory
-    virtual css::uno::Reference< css::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const OUString& PropertyName ) override;
-
-    // XModel
-    virtual sal_Bool SAL_CALL attachResource( const OUString& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual OUString SAL_CALL getURL(  ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs(  ) override;
-    virtual void SAL_CALL connectController( const css::uno::Reference< css::frame::XController >& xController ) override;
-    virtual void SAL_CALL disconnectController( const css::uno::Reference< css::frame::XController >& xController ) override;
-    virtual void SAL_CALL lockControllers(  ) override;
-    virtual void SAL_CALL unlockControllers(  ) override;
-    virtual sal_Bool SAL_CALL hasControllersLocked(  ) override;
-    virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController(  ) override;
-    virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection(  ) override;
-
-    // XComponent
-    virtual void SAL_CALL dispose(  ) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
-
-};
+// class SvxSimpleUnoModel
 
 SvxSimpleUnoModel::SvxSimpleUnoModel()
 {
@@ -179,6 +142,11 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
        )
     {
         return static_cast<cppu::OWeakObject *>(new SvxUnoTextField( text::textfield::Type::DATE ));
+    }
+
+    if( aServiceSpecifier == "com.sun.star.text.TextField.URL" )
+    {
+        return static_cast<cppu::OWeakObject *>(new SvxUnoTextField(text::textfield::Type::URL));
     }
 
     return SvxUnoTextCreateTextField( aServiceSpecifier );
