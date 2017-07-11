@@ -63,17 +63,6 @@ public:
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
 
-class TPropertyValueEqualFunctor
-{
-public:
-    TPropertyValueEqualFunctor()
-    {}
-    bool operator() (const css::beans::PropertyValue& lhs, const OUString& rhs) const
-    {
-        return !!(lhs.Name == rhs);
-    }
-};
-
 /// by-value less functor for std::set<std::unique_ptr<T>>
 template<class T> struct UniquePtrValueLess
 {
