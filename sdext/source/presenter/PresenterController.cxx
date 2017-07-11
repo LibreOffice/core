@@ -382,7 +382,7 @@ void PresenterController::UpdatePaneTitles()
             if (nStartIndex < 0)
             {
                 // Add the remaining part of the string.
-                sResult.append(sTemplate.copy(nIndex, sTemplate.getLength()-nIndex));
+                sResult.append(sTemplate.copy(nIndex));
                 break;
             }
             else

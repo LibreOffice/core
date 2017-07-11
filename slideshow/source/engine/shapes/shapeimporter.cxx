@@ -90,8 +90,7 @@ std::unique_ptr<GraphicObject> importShapeGraphic(uno::Reference<beans::XPropert
 
         // unique ID string found in URL, extract
         // to separate string
-        OUString const aUniqueId(
-            aURL.copy( nIndex, aURL.getLength() - nIndex ) );
+        OUString const aUniqueId( aURL.copy( nIndex ) );
 
         // TODO(T2): Creating a GraphicObject is not
         // thread safe (internally calls VCL, and has

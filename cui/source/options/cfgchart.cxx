@@ -224,7 +224,7 @@ bool SvxChartOptions::RetrieveOptions()
         {
             aPrefix = aResName.copy( 0, nPos );
             sal_Int32 idx = nPos + sizeof( "$(ROW)" ) - 1;
-            aPostfix = aResName.copy( idx, aResName.getLength()-idx );
+            aPostfix = aResName.copy( idx );
         }
         else
             aPrefix = aResName;

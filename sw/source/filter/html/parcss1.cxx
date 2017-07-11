@@ -1127,7 +1127,7 @@ bool CSS1Parser::ParseStyleSheet( const OUString& rIn )
     sal_Unicode c;
     while( !aTmp.isEmpty() &&
            ( ' '==(c=aTmp[0]) || '\t'==c || '\r'==c || '\n'==c ) )
-        aTmp = aTmp.copy( 1, aTmp.getLength() - 1 );
+        aTmp = aTmp.copy( 1 );
 
     while( !aTmp.isEmpty() && ( ' '==(c=aTmp[aTmp.getLength()-1])
            || '\t'==c || '\r'==c || '\n'==c ) )
@@ -1136,7 +1136,7 @@ bool CSS1Parser::ParseStyleSheet( const OUString& rIn )
     // remove SGML comments
     if( aTmp.getLength() >= 4 &&
         aTmp.startsWith( "<!--" ) )
-        aTmp = aTmp.copy( 4, aTmp.getLength() - 4 );
+        aTmp = aTmp.copy( 4 );
 
     if( aTmp.getLength() >=3 &&
         aTmp.endsWith("-->") )

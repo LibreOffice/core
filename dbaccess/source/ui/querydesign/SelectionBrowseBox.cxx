@@ -947,7 +947,7 @@ bool OSelectionBrowseBox::SaveModified()
                         { // special case, we have a table field so we must cut the table name
                             OUString sTableAlias = aFieldName.getToken(0,'.');
                             pEntry->SetAlias(sTableAlias);
-                            OUString sColumnName = aFieldName.copy(sTableAlias.getLength()+1,aFieldName.getLength() - sTableAlias.getLength() -1);
+                            OUString sColumnName = aFieldName.copy(sTableAlias.getLength()+1);
                             Reference<XConnection> xConnection = rController.getConnection();
                             if ( !xConnection.is() )
                                 return false;

@@ -436,19 +436,19 @@ bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
     if (tag == "Now()")
     {
         type = DATETIME_NOW;
-        formula = sFormula.copy(index+1,sFormula.getLength()-index-1);
+        formula = sFormula.copy(index+1);
         return true;
     }
     else if (tag == "CreateDate")
     {
         type = DATETIME_CREATE;
-        formula = sFormula.copy(index+1,sFormula.getLength()-index-1);
+        formula = sFormula.copy(index+1);
         return true;
     }
     else if (tag == "EditDate")
     {
         type = DATETIME_LASTEDIT;
-        formula = sFormula.copy(index+1,sFormula.getLength()-index-1);
+        formula = sFormula.copy(index+1);
         return true;
     }
     else if (tag == "YesterdaysDate" || tag == "TomorrowsDate"
@@ -482,13 +482,13 @@ bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
     OUString tag = sFormula.copy(0,index);
     if (tag == "PageRef")
     {
-        sMarkName = sFormula.copy(index+1,sFormula.getLength()-index-1);
+        sMarkName = sFormula.copy(index+1);
         nType = CROSSREF_PAGE;
         return true;
     }
     else if (tag == "ParaRef")
     {
-        sMarkName = sFormula.copy(index+1,sFormula.getLength()-index-1);
+        sMarkName = sFormula.copy(index+1);
         nType = CROSSREF_PARANUMBER;
         return true;
     }

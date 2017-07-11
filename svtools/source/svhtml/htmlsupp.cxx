@@ -83,7 +83,7 @@ void HTMLParser::RemoveSGMLComment( OUString &rString, bool bFull )
     sal_Unicode c = 0;
     while( !rString.isEmpty() &&
            ( ' '==(c=rString[0]) || '\t'==c || '\r'==c || '\n'==c ) )
-        rString = rString.copy( 1, rString.getLength() - 1 );
+        rString = rString.copy( 1 );
 
     while( !rString.isEmpty() &&
            ( ' '==(c=rString[rString.getLength()-1])
@@ -109,7 +109,7 @@ void HTMLParser::RemoveSGMLComment( OUString &rString, bool bFull )
                 nPos = 3;
         }
         ++nPos;
-        rString = rString.copy( nPos, rString.getLength() - nPos );
+        rString = rString.copy( nPos );
     }
 
     if( rString.endsWith("-->") )

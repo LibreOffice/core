@@ -48,7 +48,7 @@ QueryTokenizer::QueryTokenizer(const OUString& sQuery)
             if (equal > 0)
             {
                 sKey = sToken.copy(0      , equal                       );
-                sVal = sToken.copy(equal+1, sToken.getLength()-(equal+1));
+                sVal = sToken.copy(equal+1);
             }
 
             if (find(sKey) != end())

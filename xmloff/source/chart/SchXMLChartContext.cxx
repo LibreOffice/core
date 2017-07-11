@@ -193,7 +193,7 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const OUString& rStr
     if( nLastPos != 0 &&
         rStr.getLength() > nLastPos )
     {
-        aVec.push_back( rStr.copy( nLastPos, (rStr.getLength() - nLastPos) ).toInt32() );
+        aVec.push_back( rStr.copy( nLastPos ).toInt32() );
     }
 
     const sal_Int32 nVecSize = aVec.size();

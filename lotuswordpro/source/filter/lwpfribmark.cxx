@@ -374,7 +374,7 @@ void LwpFribField::RegisterTimeField(LwpFieldMark* pFieldMark)
 
         OUString tag = sFormula.copy(0,index);
         if (tag == "Now()" || tag == "CreateDate" ||  tag == "EditDate")
-            RegisterDateTimeStyle(sFormula.copy(index+1,sFormula.getLength()-index-1));
+            RegisterDateTimeStyle(sFormula.copy(index+1));
     }
 }
 

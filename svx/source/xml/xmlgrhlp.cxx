@@ -819,7 +819,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& r
     {
         aURL = rURL.copy( 0, nUser );
         nUser++;
-        aUserData = rURL.copy( nUser, rURL.getLength() - nUser );
+        aUserData = rURL.copy( nUser );
     }
     if ( !aUserData.isEmpty() )
     {
@@ -831,7 +831,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& r
             if ( ( n > 0 ) && ( ( n + 1 ) < aToken.getLength() ) )
             {
                 OUString aParam( aToken.copy( 0, n ) );
-                OUString aValue( aToken.copy( n + 1, aToken.getLength() - ( n + 1 ) ) );
+                OUString aValue( aToken.copy( n + 1 ) );
 
                 const OUString sRequestedName( "requestedName" );
                 if ( aParam.match( sRequestedName ) )

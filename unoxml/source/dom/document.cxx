@@ -457,7 +457,7 @@ namespace DOM
         if (i != -1)
         {
             oPrefix = OUStringToOString(qname.copy(0, i), RTL_TEXTENCODING_UTF8);
-            oName = OUStringToOString(qname.copy(i+1, qname.getLength()-i-1), RTL_TEXTENCODING_UTF8);
+            oName = OUStringToOString(qname.copy(i+1), RTL_TEXTENCODING_UTF8);
         }
         else
         {
@@ -548,7 +548,7 @@ namespace DOM
         if ( i != -1) {
             o1 = OUStringToOString(qname.copy(0, i), RTL_TEXTENCODING_UTF8);
             pPrefix = reinterpret_cast<xmlChar const *>(o1.getStr());
-            o2 = OUStringToOString(qname.copy(i+1, qname.getLength()-i-1), RTL_TEXTENCODING_UTF8);
+            o2 = OUStringToOString(qname.copy(i+1), RTL_TEXTENCODING_UTF8);
             pName = reinterpret_cast<xmlChar const *>(o2.getStr());
         } else {
             // default prefix
