@@ -7154,6 +7154,10 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                             rVisArea, rBaseURL));
                     if ( xObj.is() )
                     {
+                        // remember file name to use in the title bar
+                        INetURLObject aURL(rBaseURL);
+                        xObj->setContainerName(aURL.GetLastName(INetURLObject::DecodeMechanism::DECODE_WITH_CHARSET));
+
                         svt::EmbeddedObjectRef aObj( xObj, nAspect );
 
                         // TODO/LATER: need MediaType
@@ -7216,6 +7220,10 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             uno::Reference < embed::XEmbeddedObject > xObj = aCnt.GetEmbeddedObject( aDstStgName );
             if( xObj.is() )
             {
+                // remember file name to use in the title bar
+                INetURLObject aURL( rBaseURL );
+                xObj->setContainerName( aURL.GetLastName( INetURLObject::DecodeMechanism::DECODE_WITH_CHARSET ) );
+
                 // the visual area must be retrieved from the metafile (object doesn't know it so far)
 
                 if ( nAspect != embed::Aspects::MSOLE_ICON )

@@ -19,6 +19,8 @@
 
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/frame/TaskCreator.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -65,6 +67,9 @@
 #include <rtl/process.h>
 #include <vcl/svapp.hxx>
 #include <svtools/embedhlp.hxx>
+#include <tools/resmgr.hxx>
+#include <vcl/settings.hxx>
+#include <sfx2/sfx.hrc>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -971,6 +976,17 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
             ::comphelper::NamedValueCollection aArgs;
             aArgs.put( "Model", m_xComponent );
             aArgs.put( "ReadOnly", m_bReadOnly );
+
+            // set document title to show in the title bar
+            css::uno::Reference< css::frame::XTitle > xModelTitle( xDoc, css::uno::UNO_QUERY );
+            if( xModelTitle.is() )
+            {
+                LanguageTag aLocale( Application::GetSettings().GetUILanguageTag() );
+                ResMgr* pResMgr = ResMgr::SearchCreateResMgr( "sfx", aLocale );
+                OUString nTitle = ResId( STR_EMBEDDED_TITLE, *pResMgr );
+                xModelTitle->setTitle( m_pEmbedObj->getContainerName() + nTitle );
+            }
+
             if ( bInPlace )
                 aArgs.put( "PluginMode", sal_Int16(1) );
             OUString sUrl;
