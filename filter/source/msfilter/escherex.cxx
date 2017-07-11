@@ -1337,7 +1337,7 @@ void EscherPropertyContainer::CreateEmbeddedBitmapProperties(
         nIndex += aVndUrl.getLength();
         if( rBitmapUrl.getLength() > nIndex )
         {
-            OString aUniqueId(OUStringToOString(rBitmapUrl.copy(nIndex, rBitmapUrl.getLength() - nIndex), RTL_TEXTENCODING_UTF8));
+            OString aUniqueId(OUStringToOString(rBitmapUrl.copy(nIndex), RTL_TEXTENCODING_UTF8));
             bool bRetValue = ImplCreateEmbeddedBmp( aUniqueId );
             if( bRetValue )
             {
@@ -1540,7 +1540,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             {
                 nIndex = nIndex + aVndUrl.getLength();
                 if ( aGraphicUrl.getLength() > nIndex  )
-                    aUniqueId = OUStringToOString(aGraphicUrl.copy(nIndex, aGraphicUrl.getLength() - nIndex), RTL_TEXTENCODING_UTF8);
+                    aUniqueId = OUStringToOString(aGraphicUrl.copy(nIndex), RTL_TEXTENCODING_UTF8);
             }
             else
             {

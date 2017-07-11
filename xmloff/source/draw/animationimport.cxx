@@ -411,7 +411,7 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
     {
         ValuePair aPair;
         aPair.First = convertValue( eAttributeName, rValue.copy( 0, nCommaPos ) );
-        aPair.Second = convertValue( eAttributeName, rValue.copy( nCommaPos+1, rValue.getLength() - nCommaPos - 1 ) );
+        aPair.Second = convertValue( eAttributeName, rValue.copy( nCommaPos+1 ) );
         return makeAny( aPair );
     }
     else
@@ -607,7 +607,7 @@ Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const 
             if( nPos >= 0 )
             {
                 pValues->Time = aToken.copy( 0, nPos ).toDouble();
-                pValues->Progress = aToken.copy( nPos+1, aToken.getLength() - nPos - 1 ).toDouble();
+                pValues->Progress = aToken.copy( nPos+1 ).toDouble();
             }
             pValues++;
         }

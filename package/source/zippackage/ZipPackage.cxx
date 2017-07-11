@@ -526,7 +526,7 @@ void ZipPackage::getZipFileContents()
         if ( rName.getLength() -1 != nStreamIndex )
         {
             nStreamIndex++;
-            sTemp = rName.copy( nStreamIndex, rName.getLength() - nStreamIndex );
+            sTemp = rName.copy( nStreamIndex );
             pPkgStream = new ZipPackageStream( *this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
             pPkgStream->SetPackageMember( true );
             pPkgStream->setZipEntryOnLoading( rEntry );
@@ -826,7 +826,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         return makeAny ( uno::Reference < XUnoTunnel > ( pCurrent ) );
     }
 
-    sTemp = aName.copy( nOldIndex, aName.getLength() - nOldIndex );
+    sTemp = aName.copy( nOldIndex );
 
     if ( pCurrent->hasByName ( sTemp ) )
     {
@@ -908,7 +908,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         }
         else
         {
-            sTemp = aName.copy( nOldIndex, aName.getLength() - nOldIndex );
+            sTemp = aName.copy( nOldIndex );
 
             if ( pCurrent->hasByName( sTemp ) )
             {

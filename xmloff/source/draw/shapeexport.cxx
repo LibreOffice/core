@@ -2290,10 +2290,10 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 {
                     bIsEmbeddedImageWithExistingStreamInPackage = true;
 
-                    OUString sRequestedName( aStreamURL.copy( sPackageURL.getLength(), aStreamURL.getLength() - sPackageURL.getLength() ) );
+                    OUString sRequestedName = aStreamURL.copy( sPackageURL.getLength() );
                     sal_Int32 nLastIndex = sRequestedName.lastIndexOf( '/' ) + 1;
                     if ( ( nLastIndex > 0 ) && ( nLastIndex < sRequestedName.getLength() ) )
-                        sRequestedName = sRequestedName.copy( nLastIndex, sRequestedName.getLength() - nLastIndex );
+                        sRequestedName = sRequestedName.copy( nLastIndex );
                     nLastIndex = sRequestedName.lastIndexOf( '.' );
                     if ( nLastIndex >= 0 )
                         sRequestedName = sRequestedName.copy( 0, nLastIndex );

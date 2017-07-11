@@ -48,7 +48,7 @@ namespace dbaui
                     nMatch = i + 1;
                 }
             }
-            _rsCorrected += _sToCheck.copy( nMatch, _sToCheck.getLength() - nMatch );
+            _rsCorrected += _sToCheck.copy( nMatch );
         }
         return bCorrected;
     }

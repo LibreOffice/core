@@ -758,7 +758,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                             }
                             else
                             {
-                                sFormula2 = sFormula.copy( 1, sFormula.getLength() - 1 );
+                                sFormula2 = sFormula.copy( 1 );
                             }
 
                             aNewCell.meType = CELLTYPE_FORMULA;

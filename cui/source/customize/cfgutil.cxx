@@ -115,15 +115,15 @@ bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
 
     OUString sArg = sCmdArgs.copy(0, i);
     if (sArg.startsWith(CMDURL_SPART_ONLY))
-        aStyle.sStyle = sArg.copy(LEN_SPART, sArg.getLength()-LEN_SPART);
+        aStyle.sStyle = sArg.copy(LEN_SPART);
     else if (sArg.startsWith(CMDURL_FPART_ONLY))
-        aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
+        aStyle.sFamily = sArg.copy(LEN_FPART);
 
     sArg = sCmdArgs.copy(i+1, sCmdArgs.getLength()-i-1);
     if (sArg.startsWith(CMDURL_SPART_ONLY))
-        aStyle.sStyle = sArg.copy(LEN_SPART, sArg.getLength()-LEN_SPART);
+        aStyle.sStyle = sArg.copy(LEN_SPART);
     else if (sArg.startsWith(CMDURL_FPART_ONLY))
-        aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
+        aStyle.sFamily = sArg.copy(LEN_FPART);
 
     return !(aStyle.sFamily.isEmpty() || aStyle.sStyle.isEmpty());
 }

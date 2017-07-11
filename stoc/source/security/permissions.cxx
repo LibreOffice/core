@@ -157,7 +157,7 @@ SocketPermission::SocketPermission(
         else // A-B
         {
             m_lowerPort = m_host.copy( colon +1, minus - colon -1 ).toInt32();
-            m_upperPort = m_host.copy( minus +1, m_host.getLength() -minus -1 ).toInt32();
+            m_upperPort = m_host.copy( minus +1 ).toInt32();
         }
         m_host = m_host.copy( 0, colon );
     }

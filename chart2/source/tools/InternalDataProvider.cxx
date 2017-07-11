@@ -1223,7 +1223,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
 {
     const OUString aPivotTableID("PT@");
     if (aXMLRange.startsWith(aPivotTableID))
-        return aXMLRange.copy(aPivotTableID.getLength(), aXMLRange.getLength() - aPivotTableID.getLength());
+        return aXMLRange.copy(aPivotTableID.getLength());
 
     XMLRangeHelper::CellRange aRange( XMLRangeHelper::getCellRangeFromXMLString( aXMLRange ));
     if( aRange.aUpperLeft.bIsEmpty )

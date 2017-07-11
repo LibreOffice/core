@@ -6998,7 +6998,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                         if ( nCount )
                                                         {
                                                             pBefCPS = new PPTCharPropSet( *pSet );
-                                                            pSet->maString = pSet->maString.copy(nCount, pSet->maString.getLength() - nCount);
+                                                            pSet->maString = pSet->maString.copy(nCount);
                                                         }
                                                         sal_uInt32  nIdx = n;
                                                         sal_Int32   nHyperLenLeft = nHyperLen;

@@ -209,7 +209,7 @@ drawing::EnhancedCustomShapeTextFrame lcl_parseEnhancedCustomShapeTextFrame(cons
         }
     }
 
-    OString aToken = rValue.copy(nStart, rValue.getLength() - nStart);
+    OString aToken = rValue.copy(nStart);
     static const char aExpectedPrefix[] = "BottomRight = (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
     if (aToken.startsWith(aExpectedPrefix))
     {

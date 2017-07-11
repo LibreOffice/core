@@ -459,8 +459,8 @@ class CountWithPrefixSort
             // Get order numbers from entry name without prefix.
             // e.g. "m10" => 10
             //      "m5"  => 5
-            sal_Int32 n1 = s1.copy( 1, s1.getLength()-1 ).toInt32();
-            sal_Int32 n2 = s2.copy( 1, s2.getLength()-1 ).toInt32();
+            sal_Int32 n1 = s1.copy( 1 ).toInt32();
+            sal_Int32 n2 = s2.copy( 1 ).toInt32();
             // MUST be in [0,1] ... because it's a difference between
             // insert-positions of given entries in sorted list!
             return( n1<n2 );

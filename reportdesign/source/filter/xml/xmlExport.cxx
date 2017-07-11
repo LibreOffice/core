@@ -1374,7 +1374,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
         OUString sFieldData = _xReportElement->getDataField();
         static const char s_sPageNumber[] = "PageNumber()";
         static const char s_sReportPrefix[] = "rpt:";
-        sFieldData = sFieldData.copy(strlen(s_sReportPrefix), sFieldData.getLength() - strlen(s_sReportPrefix));
+        sFieldData = sFieldData.copy(strlen(s_sReportPrefix));
         sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
         if ( nPageNumberIndex != -1 )
         {

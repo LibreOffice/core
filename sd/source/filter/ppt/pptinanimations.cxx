@@ -1117,7 +1117,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
                     if( nPos >= 0 )
                     {
                         pValues->Time = aToken.copy( 0, nPos ).toDouble();
-                        pValues->Progress = aToken.copy( nPos+1, aToken.getLength() - nPos - 1 ).toDouble();
+                        pValues->Progress = aToken.copy( nPos+1 ).toDouble();
                     }
                     pValues++;
                 }

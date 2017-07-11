@@ -1188,7 +1188,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                     nStartPos = nPos + 1;
                 }
                 while( ( nPos = aStrOut.indexOf( '\n', nStartPos ) ) != -1 );
-                OUString aSingleLine = aStrOut.copy( nStartPos, aStrOut.getLength() - nStartPos );
+                OUString aSingleLine = aStrOut.copy( nStartPos );
                 OUT_STR( aSingleLine );
             }
         }

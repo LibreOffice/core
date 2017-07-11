@@ -46,7 +46,7 @@ const OUString& IndexEntryResource::GetTranslation(const OUString &r_Algorithm)
         aLocaleFreeAlgorithm = r_Algorithm;
     else {
         nIndex += 1;
-        aLocaleFreeAlgorithm = r_Algorithm.copy(nIndex, r_Algorithm.getLength() - nIndex);
+        aLocaleFreeAlgorithm = r_Algorithm.copy(nIndex);
     }
 
     for (size_t i = 0; i < m_aData.size(); ++i)

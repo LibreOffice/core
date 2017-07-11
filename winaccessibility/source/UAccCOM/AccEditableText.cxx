@@ -244,7 +244,7 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
         if(nPos > -1)
         {
             ::rtl::OUString attrName = attr.copy(0, nPos);
-            ::rtl::OUString attrValue = attr.copy(nPos + 1, attr.getLength() - nPos - 1);
+            ::rtl::OUString attrValue = attr.copy(nPos + 1);
             beanSeq[i].Name = attrName;
             get_AnyFromOLECHAR(attrName, attrValue, beanSeq[i].Value);
         }
@@ -444,7 +444,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
                 pos = ouValue.indexOf("Height=", pos);
                 if(pos != -1)
                 {
-                    ouSubValue = ouValue.copy(pos + 7, ouValue.getLength() - pos - 7);
+                    ouSubValue = ouValue.copy(pos + 7);
                     lineSpacing.Height = (sal_Int16)ouSubValue.toInt32();
                 }
                 else
