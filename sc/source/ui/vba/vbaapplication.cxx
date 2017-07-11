@@ -55,6 +55,7 @@
 #include "sc.hrc"
 #include "macromgr.hxx"
 #include "defaultsoptions.hxx"
+#include "vbafiledialog.hxx"
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
@@ -126,7 +127,8 @@ struct ScVbaStaticAppSettings : public ::rtl::Static< ScVbaAppSettings, ScVbaSta
 
 ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),
-    mrAppSettings( ScVbaStaticAppSettings::get() )
+    mrAppSettings( ScVbaStaticAppSettings::get() ),
+    m_nDialogType(0)
 {
 }
 
@@ -310,6 +312,18 @@ ScVbaApplication::International( sal_Int32 /*Index*/ )
     // #TODO flesh out some of the Indices we could handle
     uno::Any aRet;
     return aRet;
+}
+
+uno::Any SAL_CALL
+ScVbaApplication::FileDialog( const uno::Any& DialogType )
+{
+    sal_Int32 nType = 0;
+    DialogType >>= nType;
+
+    m_nDialogType = nType;
+    if( !m_xFileDialog || nType != m_nDialogType )
+        m_xFileDialog = uno::Reference<excel::XFileDialog> ( new ScVbaFileDialog( this, mxContext, nType ));
+    return uno::Any( m_xFileDialog );
 }
 
 uno::Any SAL_CALL
