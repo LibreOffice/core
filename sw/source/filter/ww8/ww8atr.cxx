@@ -4510,9 +4510,9 @@ void WW8AttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
 
 class SwWW8WrTabu
 {
-    sal_uInt8* pDel;            // DelArray
-    sal_uInt8* pAddPos;         // AddPos-Array
-    sal_uInt8* pAddTyp;         // AddTyp-Array
+    std::unique_ptr<sal_uInt8[]> pDel;            // DelArray
+    std::unique_ptr<sal_uInt8[]> pAddPos;         // AddPos-Array
+    std::unique_ptr<sal_uInt8[]> pAddTyp;         // AddTyp-Array
     sal_uInt16 nAdd;            // number of tabs to be added
     sal_uInt16 nDel;            // number of tabs to be deleted
 
@@ -4521,7 +4521,6 @@ class SwWW8WrTabu
 
 public:
     SwWW8WrTabu(sal_uInt16 nDelMax, sal_uInt16 nAddMax);
-    ~SwWW8WrTabu();
 
     void Add(const SvxTabStop &rTS, long nAdjustment);
     void Del(const SvxTabStop &rTS, long nAdjustment);
@@ -4531,16 +4530,10 @@ public:
 SwWW8WrTabu::SwWW8WrTabu(sal_uInt16 nDelMax, sal_uInt16 nAddMax)
     : nAdd(0), nDel(0)
 {
-    pDel = nDelMax ? new sal_uInt8[nDelMax * 2] : nullptr;
-    pAddPos = new sal_uInt8[nAddMax * 2];
-    pAddTyp = new sal_uInt8[nAddMax];
-}
-
-SwWW8WrTabu::~SwWW8WrTabu()
-{
-    delete[] pAddTyp;
-    delete[] pAddPos;
-    delete[] pDel;
+    if (nDelMax)
+        pDel.reset( new sal_uInt8[nDelMax * 2] );
+    pAddPos.reset( new sal_uInt8[nAddMax * 2] );
+    pAddTyp.reset( new sal_uInt8[nAddMax] );
 }
 
 /**
@@ -4550,7 +4543,7 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
 {
     // insert tab position
     ShortToSVBT16(msword_cast<sal_Int16>(rTS.GetTabPos() + nAdjustment),
-        pAddPos + (nAdd * 2));
+        pAddPos.get() + (nAdd * 2));
 
     // insert tab type
     sal_uInt8 nPara = 0;
@@ -4602,7 +4595,7 @@ void SwWW8WrTabu::Del(const SvxTabStop &rTS, long nAdjustment)
 {
     // insert tab position
     ShortToSVBT16(msword_cast<sal_Int16>(rTS.GetTabPos() + nAdjustment),
-        pDel + (nDel * 2));
+        pDel.get() + (nDel * 2));
     ++nDel;
 }
 
@@ -4629,11 +4622,11 @@ void SwWW8WrTabu::PutAll(WW8Export& rWrt)
     rWrt.pO->push_back(msword_cast<sal_uInt8>(nSiz));
     // write DelArr
     rWrt.pO->push_back(msword_cast<sal_uInt8>(nDel));
-    rWrt.OutSprmBytes(pDel, nDel * 2);
+    rWrt.OutSprmBytes(pDel.get(), nDel * 2);
     // write InsArr
     rWrt.pO->push_back(msword_cast<sal_uInt8>(nAdd));
-    rWrt.OutSprmBytes(pAddPos, 2 * nAdd);         // AddPosArray
-    rWrt.OutSprmBytes(pAddTyp, nAdd);             // AddTypArray
+    rWrt.OutSprmBytes(pAddPos.get(), 2 * nAdd);         // AddPosArray
+    rWrt.OutSprmBytes(pAddTyp.get(), nAdd);             // AddTypArray
 }
 
 static void ParaTabStopAdd( WW8Export& rWrt,

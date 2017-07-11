@@ -45,11 +45,9 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <cstddef>
-#include <vector>
-
 #include <list>
-
 #include <memory>
+#include <vector>
 
 using namespace ::com::sun::star;
 
@@ -86,8 +84,8 @@ class CompareData
 protected:
     SwDoc& rDoc;
 private:
-    size_t* pIndex;
-    bool* pChangedFlag;
+    std::unique_ptr<size_t[]> pIndex;
+    std::unique_ptr<bool[]> pChangedFlag;
 
     SwPaM *pInsRing, *pDelRing;
 
@@ -190,13 +188,12 @@ class Hash
             : nNext( 0 ), nHash( 0 ), pLine(nullptr) {}
     };
 
-    sal_uLong* pHashArr;
-    HashData* pDataArr;
+    std::unique_ptr<sal_uLong[]> pHashArr;
+    std::unique_ptr<HashData[]> pDataArr;
     sal_uLong nCount, nPrime;
 
 public:
     explicit Hash( sal_uLong nSize );
-    ~Hash();
 
     void CalcHashValue( CompareData& rData );
 
@@ -208,13 +205,12 @@ class Compare
 public:
     class MovedData
     {
-        sal_uLong* pIndex;
-        sal_uLong* pLineNum;
+        std::unique_ptr<sal_uLong[]> pIndex;
+        std::unique_ptr<sal_uLong[]> pLineNum;
         sal_uLong nCount;
 
     public:
         MovedData( CompareData& rData, const sal_Char* pDiscard );
-        ~MovedData();
 
         sal_uLong GetIndex( sal_uLong n ) const { return pIndex[ n ]; }
         sal_uLong GetLineNum( sal_uLong n ) const { return pLineNum[ n ]; }
@@ -279,14 +275,13 @@ class WordArrayComparator : public ArrayComparator
 {
 private:
     const SwTextNode *pTextNd1, *pTextNd2;
-    int *pPos1, *pPos2;
+    std::unique_ptr<int[]> pPos1, pPos2;
     int nCnt1, nCnt2;       // number of words
 
     static void CalcPositions( int *pPos, const SwTextNode *pTextNd, int &nCnt );
 
 public:
     WordArrayComparator( const SwTextNode *pNode1, const SwTextNode *pNode2 );
-    virtual ~WordArrayComparator() override;
 
     virtual bool Compare( int nIdx1, int nIdx2 ) const override;
     virtual int GetLen1() const override { return nCnt1; }
@@ -353,8 +348,8 @@ class LgstCommonSubseq: public CommonSubseq
 private:
     static const int CUTOFF = 1<<20; // Stop recursion at this value
 
-    int *pL1, *pL2;
-    int *pBuff1, *pBuff2;
+    std::unique_ptr<int[]> pL1, pL2;
+    std::unique_ptr<int[]> pBuff1, pBuff2;
 
     void FindL( int *pL, int nStt1, int nEnd1, int nStt2, int nEnd2  );
     int HirschbergLCS( int *pLcs1, int *pLcs2, int nStt1, int nEnd1,
@@ -362,7 +357,6 @@ private:
 
 public:
     explicit LgstCommonSubseq( ArrayComparator &rComparator );
-    ~LgstCommonSubseq();
 
     int Find( int *pSubseq1, int *pSubseq2 );
 };
@@ -403,17 +397,14 @@ CompareData::~CompareData()
             delete pInsRing->GetNext();
         delete pInsRing;
     }
-
-    delete[] pIndex;
-    delete[] pChangedFlag;
 }
 
 void CompareData::SetIndex( size_t nLine, size_t nIndex )
 {
     if( !pIndex )
     {
-        pIndex = new size_t[ aLines.size() ];
-        memset( pIndex, 0, aLines.size() * sizeof( size_t ) );
+        pIndex.reset( new size_t[ aLines.size() ] );
+        memset( pIndex.get(), 0, aLines.size() * sizeof( size_t ) );
     }
     if( nLine < aLines.size() )
         pIndex[ nLine ] = nIndex;
@@ -423,8 +414,8 @@ void CompareData::SetChanged( size_t nLine, bool bFlag )
 {
     if( !pChangedFlag )
     {
-        pChangedFlag = new bool[ aLines.size() +1 ];
-        memset( pChangedFlag, 0, (aLines.size() +1) * sizeof( bool ) );
+        pChangedFlag.reset( new bool[ aLines.size() +1 ] );
+        memset( pChangedFlag.get(), 0, (aLines.size() +1) * sizeof( bool ) );
     }
     if( nLine < aLines.size() )
         pChangedFlag[ nLine ] = bFlag;
@@ -529,7 +520,7 @@ static const sal_uLong primes[] =
 };
     int i;
 
-    pDataArr = new HashData[ nSize ];
+    pDataArr.reset( new HashData[ nSize ] );
     pDataArr[0].nNext = 0;
     pDataArr[0].nHash = 0;
     pDataArr[0].pLine = nullptr;
@@ -542,14 +533,8 @@ static const sal_uLong primes[] =
             return;
         }
     nPrime = primes[ i ];
-    pHashArr = new sal_uLong[ nPrime ];
-    memset( pHashArr, 0, nPrime * sizeof( sal_uLong ) );
-}
-
-Hash::~Hash()
-{
-    delete[] pHashArr;
-    delete[] pDataArr;
+    pHashArr.reset( new sal_uLong[ nPrime ] );
+    memset( pHashArr.get(), 0, nPrime * sizeof( sal_uLong ) );
 }
 
 void Hash::CalcHashValue( CompareData& rData )
@@ -785,8 +770,8 @@ Compare::MovedData::MovedData( CompareData& rData, const sal_Char* pDiscard )
 
     if( nCount )
     {
-        pIndex = new sal_uLong[ nCount ];
-        pLineNum = new sal_uLong[ nCount ];
+        pIndex.reset( new sal_uLong[ nCount ] );
+        pLineNum.reset( new sal_uLong[ nCount ] );
 
         for( n = 0, nCount = 0; n < nLen; ++n )
             if( !pDiscard[ n ] )
@@ -795,12 +780,6 @@ Compare::MovedData::MovedData( CompareData& rData, const sal_Char* pDiscard )
                 pLineNum[ nCount++ ] = n;
             }
     }
-}
-
-Compare::MovedData::~MovedData()
-{
-    delete [] pIndex;
-    delete [] pLineNum;
 }
 
 /// Find the differing lines
@@ -2249,17 +2228,11 @@ WordArrayComparator::WordArrayComparator( const SwTextNode *pNode1,
                                             const SwTextNode *pNode2 )
     : pTextNd1( pNode1 ), pTextNd2( pNode2 )
 {
-    pPos1 = new int[ pTextNd1->GetText().getLength() + 1 ];
-    pPos2 = new int[ pTextNd2->GetText().getLength() + 1 ];
+    pPos1.reset( new int[ pTextNd1->GetText().getLength() + 1 ] );
+    pPos2.reset( new int[ pTextNd2->GetText().getLength() + 1 ] );
 
-    CalcPositions( pPos1, pTextNd1, nCnt1 );
-    CalcPositions( pPos2, pTextNd2, nCnt2 );
-}
-
-WordArrayComparator::~WordArrayComparator()
-{
-    delete[] pPos1;
-    delete[] pPos2;
+    CalcPositions( pPos1.get(), pTextNd1, nCnt1 );
+    CalcPositions( pPos2.get(), pTextNd2, nCnt2 );
 }
 
 bool WordArrayComparator::Compare( int nIdx1, int nIdx2 ) const
@@ -2444,20 +2417,11 @@ int CommonSubseq::IgnoreIsolatedPieces( int *pLcs1, int *pLcs2, int nLen1,
 LgstCommonSubseq::LgstCommonSubseq( ArrayComparator &rComparator )
     : CommonSubseq( rComparator, CUTOFF )
 {
-    pBuff1 = new int[ rComparator.GetLen2() + 1 ];
-    pBuff2 = new int[ rComparator.GetLen2() + 1 ];
+    pBuff1.reset( new int[ rComparator.GetLen2() + 1 ] );
+    pBuff2.reset( new int[ rComparator.GetLen2() + 1 ] );
 
-    pL1 = new int[ rComparator.GetLen2() + 1 ];
-    pL2 = new int[ rComparator.GetLen2() + 1 ];
-}
-
-LgstCommonSubseq::~LgstCommonSubseq()
-{
-    delete[] pBuff1;
-    delete[] pBuff2;
-
-    delete[] pL1;
-    delete[] pL2;
+    pL1.reset( new int[ rComparator.GetLen2() + 1 ] );
+    pL2.reset( new int[ rComparator.GetLen2() + 1 ] );
 }
 
 void LgstCommonSubseq::FindL( int *pL, int nStt1, int nEnd1,
@@ -2466,8 +2430,8 @@ void LgstCommonSubseq::FindL( int *pL, int nStt1, int nEnd1,
     int nLen1 = nEnd1 ? nEnd1 - nStt1 : rCmp.GetLen1();
     int nLen2 = nEnd2 ? nEnd2 - nStt2 : rCmp.GetLen2();
 
-    int *currL = pBuff1;
-    int *prevL = pBuff2;
+    int *currL = pBuff1.get();
+    int *prevL = pBuff2.get();
 
     // Avoid memory corruption
     if( nLen2 > rCmp.GetLen2() )
@@ -2476,8 +2440,8 @@ void LgstCommonSubseq::FindL( int *pL, int nStt1, int nEnd1,
         return;
     }
 
-    memset( pBuff1, 0, sizeof( *pBuff1 ) * ( nLen2 + 1 ) );
-    memset( pBuff2, 0, sizeof( *pBuff2 ) * ( nLen2 + 1 ) );
+    memset( pBuff1.get(), 0, sizeof( *pBuff1.get() ) * ( nLen2 + 1 ) );
+    memset( pBuff2.get(), 0, sizeof( *pBuff2.get() ) * ( nLen2 + 1 ) );
 
     // Find lcs
     for( int i = 1; i <= nLen1; i++ )
@@ -2515,8 +2479,8 @@ int LgstCommonSubseq::HirschbergLCS( int *pLcs1, int *pLcs2, int nStt1,
 
     int nMid = nLen1/2;
 
-    FindL( pL1, nStt1, nStt1 + nMid, nStt2, nEnd2 );
-    FindL( pL2, nStt1 + nMid, nEnd1, nStt2, nEnd2 );
+    FindL( pL1.get(), nStt1, nStt1 + nMid, nStt2, nEnd2 );
+    FindL( pL2.get(), nStt1 + nMid, nEnd1, nStt2, nEnd2 );
 
     int nMaxPos = 0;
     static int nMaxVal;

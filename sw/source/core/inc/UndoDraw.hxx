@@ -22,6 +22,7 @@
 
 #include <undobj.hxx>
 #include <svx/svdundo.hxx>
+#include <memory>
 
 struct SwUndoGroupObjImpl;
 class SdrMark;
@@ -51,7 +52,7 @@ public:
 
 class SwUndoDrawGroup : public SwUndo
 {
-    SwUndoGroupObjImpl* pObjArr;
+    std::unique_ptr<SwUndoGroupObjImpl[]> pObjArr;
     sal_uInt16 nSize;
     bool bDelFormat;
 
@@ -80,7 +81,7 @@ public:
 //   contact object.
 class SwUndoDrawUnGroup : public SwUndo
 {
-    SwUndoGroupObjImpl* pObjArr;
+    std::unique_ptr<SwUndoGroupObjImpl[]> pObjArr;
     sal_uInt16 nSize;
     bool bDelFormat;
 
@@ -114,7 +115,7 @@ public:
 
 class SwUndoDrawDelete : public SwUndo
 {
-    SwUndoGroupObjImpl* pObjArr;
+    std::unique_ptr<SwUndoGroupObjImpl[]> pObjArr;
     SdrMarkList* pMarkLst;  // MarkList for all selected SdrObjects
     sal_uInt16 nSize;
     bool bDelFormat;
