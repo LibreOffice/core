@@ -95,7 +95,7 @@ private:
     {
         if (maRenderEntries.empty() || doesOverlap(rDrawRectangle))
         {
-            maRenderEntries.resize(maRenderEntries.size() + 1);
+            maRenderEntries.emplace_back();
             maRenderEntries.back().maOverlapTrackingRectangle = rDrawRectangle;
 
             maRectangles.clear();

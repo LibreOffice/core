@@ -1290,7 +1290,7 @@ void AccessibleRelationSet::AddRelation (
     const sal_Int16 nRelationType,
     const Reference<XInterface>& rxObject)
 {
-    maRelations.resize(maRelations.size()+1);
+    maRelations.emplace_back();
     maRelations.back().RelationType = nRelationType;
     maRelations.back().TargetSet.realloc(1);
     maRelations.back().TargetSet[0] = rxObject;

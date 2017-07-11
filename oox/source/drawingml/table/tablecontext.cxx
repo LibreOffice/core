@@ -77,7 +77,7 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
     case A_TOKEN( tr ):                 // CT_TableRow
         {
             std::vector< TableRow >& rvTableRows( mrTableProperties.getTableRows() );
-            rvTableRows.resize( rvTableRows.size() + 1 );
+            rvTableRows.emplace_back();
             return new TableRowContext( *this, rAttribs, rvTableRows.back() );
         }
     }

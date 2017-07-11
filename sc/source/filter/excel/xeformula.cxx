@@ -1900,7 +1900,7 @@ XclExpRefLogEntry* XclExpFmlaCompImpl::GetNewRefLogEntry()
 {
     if( mxData->mpRefLog )
     {
-        mxData->mpRefLog->resize( mxData->mpRefLog->size() + 1 );
+        mxData->mpRefLog->emplace_back();
         return &mxData->mpRefLog->back();
     }
     return nullptr;

@@ -196,8 +196,8 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         aTriangleColor = Color(COL_WHITE).getBColor();
 
-    aSeq.resize(aSeq.size() + 1);
-    aSeq[aSeq.size() - 1].set( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+    aSeq.emplace_back();
+    aSeq.back().set( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aTriangle), aTriangleColor));
 
     drawinglayer::primitive2d::Primitive2DContainer aGhostedSeq(1);

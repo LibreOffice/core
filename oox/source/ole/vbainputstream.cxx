@@ -184,7 +184,7 @@ bool VbaInputStream::updateChunk()
                 // we suspect this will never be called
                 else
                 {
-                    maChunk.resize( maChunk.size() + 1 );
+                    maChunk.emplace_back();
                     maChunk.back() = mpInStrm->readuChar();
                     ++nChunkPos;
                 }
