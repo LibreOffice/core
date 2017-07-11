@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_b993c6f9",
+        "filename": "sal/osl/unx/file_volume.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-11T10:04:19Z",
+      "side": 1,
+      "message": "this can be an assert, since it will eventually crash without a valid pointer",
+      "revId": "c958efa7774b64b59cdda9b35b4c8ebca28d8f42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_39b6f68a",
+        "filename": "sal/osl/unx/file_volume.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-11T10:04:19Z",
+      "side": 1,
+      "message": "this is fine, because if it is nullptr, osl_psz_getVolumeInformation will just return an errorcode",
+      "revId": "c958efa7774b64b59cdda9b35b4c8ebca28d8f42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_19c13ae5",
+        "filename": "sal/osl/unx/file_volume.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-11T10:04:19Z",
+      "side": 1,
+      "message": "as far as I can tell, this method will never return a nullptr in ustrFileSystemName, so this could be either",
+      "revId": "c958efa7774b64b59cdda9b35b4c8ebca28d8f42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
