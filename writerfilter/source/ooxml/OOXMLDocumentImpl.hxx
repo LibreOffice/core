@@ -27,6 +27,7 @@
 #include "OOXMLPropertySet.hxx"
 
 #include <vector>
+#include <stack>
 
 namespace writerfilter {
 namespace ooxml
@@ -43,7 +44,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
     css::uno::Reference<css::xml::dom::XDocument> mxGlossaryDocDom;
     css::uno::Sequence < css::uno::Sequence< css::uno::Any > > mxGlossaryDomList;
-    css::uno::Reference<css::xml::sax::XFastShapeContextHandler> mxShapeContext;
+    /// Stack of shape contexts, 1 element for VML, 1 element / nesting level for drawingML.
+    std::stack< css::uno::Reference<css::xml::sax::XFastShapeContextHandler> > maShapeContexts;
     css::uno::Reference<css::xml::dom::XDocument> mxThemeDom;
     css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomList;
     css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomPropsList;
@@ -128,6 +130,8 @@ public:
     virtual const OUString & getTarget() const override;
     virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) override;
     virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) override;
+    void pushShapeContext() override;
+    void popShapeContext() override;
     virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom() override;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList() override;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomPropsList() override;

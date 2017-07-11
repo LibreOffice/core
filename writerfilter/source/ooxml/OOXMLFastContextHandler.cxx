@@ -1551,29 +1551,14 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
 OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
 (OOXMLFastContextHandler * pContext)
 : OOXMLFastContextHandlerProperties(pContext), m_bShapeSent( false ),
-    m_bShapeStarted(false)
+    m_bShapeStarted(false), m_bShapeContextPushed(false)
 {
-    mrShapeContext.set( getDocument( )->getShapeContext( ) );
-    if ( !mrShapeContext.is( ) )
-    {
-        // Define the shape context for the whole document
-        mrShapeContext = css::xml::sax::FastShapeContextHandler::create(
-            getComponentContext());
-        getDocument()->setShapeContext( mrShapeContext );
-    }
-
-    mrShapeContext->setModel(getDocument()->getModel());
-    uno::Reference<document::XDocumentPropertiesSupplier> xDocSupplier(getDocument()->getModel(), uno::UNO_QUERY_THROW);
-    mrShapeContext->setDocumentProperties(xDocSupplier->getDocumentProperties());
-    mrShapeContext->setDrawPage(getDocument()->getDrawPage());
-    mrShapeContext->setMediaDescriptor(getDocument()->getMediaDescriptor());
-
-    mrShapeContext->setRelationFragmentPath
-        (mpParserState->getTarget());
 }
 
 OOXMLFastContextHandlerShape::~OOXMLFastContextHandlerShape()
 {
+    if (m_bShapeContextPushed)
+        getDocument()->popShapeContext();
 }
 
 void OOXMLFastContextHandlerShape::lcl_startFastElement
@@ -1599,6 +1584,30 @@ void SAL_CALL OOXMLFastContextHandlerShape::startUnknownElement
 
 void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
 {
+    if (nToken == Token_t(NMSP_wps | XML_wsp) || nToken == Token_t(NMSP_dmlPicture | XML_pic))
+    {
+        // drawingML shapes are independent, <wps:bodyPr> is not parsed after
+        // shape contents without pushing/popping the stack.
+        m_bShapeContextPushed = true;
+        getDocument()->pushShapeContext();
+    }
+
+    mrShapeContext.set(getDocument()->getShapeContext());
+    if (!mrShapeContext.is())
+    {
+        // Define the shape context for the whole document
+        mrShapeContext = css::xml::sax::FastShapeContextHandler::create(getComponentContext());
+        getDocument()->setShapeContext(mrShapeContext);
+    }
+
+    mrShapeContext->setModel(getDocument()->getModel());
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocSupplier(getDocument()->getModel(), uno::UNO_QUERY_THROW);
+    mrShapeContext->setDocumentProperties(xDocSupplier->getDocumentProperties());
+    mrShapeContext->setDrawPage(getDocument()->getDrawPage());
+    mrShapeContext->setMediaDescriptor(getDocument()->getMediaDescriptor());
+
+    mrShapeContext->setRelationFragmentPath(mpParserState->getTarget());
+
     OOXMLFastContextHandler::setToken(nToken);
 
     if (mrShapeContext.is())
