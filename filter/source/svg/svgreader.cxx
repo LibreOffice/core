@@ -236,7 +236,7 @@ struct AnnotatingVisitor
                 {
                     const OUString sValue(xNode->getNodeValue());
                     ElementRefMapType::iterator aFound=maGradientIdMap.end();
-                    if ( sValue.copy(0,1) == "#" )
+                    if ( sValue.startsWith("#") )
                         aFound = maGradientIdMap.find(sValue.copy(1));
                     else
                         aFound = maGradientIdMap.find(sValue);
@@ -279,7 +279,7 @@ struct AnnotatingVisitor
                 {
                     const OUString sValue(xNode->getNodeValue());
                     ElementRefMapType::iterator aFound=maGradientIdMap.end();
-                    if ( sValue.copy(0,1) == "#" )
+                    if ( sValue.startsWith("#") )
                         aFound = maGradientIdMap.find(sValue.copy(1));
                     else
                         aFound = maGradientIdMap.find(sValue);
@@ -315,7 +315,7 @@ struct AnnotatingVisitor
                 {
                     OUString sValue(xNode->getNodeValue());
                     ElementRefMapType::iterator aFound=maElementIdMap.end();
-                    if ( sValue.copy(0,1) == "#" )
+                    if ( sValue.startsWith("#") )
                         sValue = sValue.copy(1);
                     aFound = maElementIdMap.find(sValue);
                     bool bFound = aFound != maElementIdMap.end();
@@ -988,7 +988,7 @@ struct AnnotatingVisitor
             case XML_HREF:
             {
                 ElementRefMapType::iterator aFound=maStopIdMap.end();
-                if ( sValue.copy(0,1) == "#" )
+                if ( sValue.startsWith("#") )
                     aFound = maStopIdMap.find(sValue.copy(1));
                 else
                     aFound = maStopIdMap.find(sValue);

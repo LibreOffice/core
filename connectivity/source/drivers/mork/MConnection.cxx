@@ -71,7 +71,7 @@ void OConnection::construct(const OUString& url)
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    OSL_ENSURE( url.copy( 0, nLen ) == "sdbc:address", "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
+    OSL_ENSURE( url.startsWith("sdbc:address:"), "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
 
     OUString aAddrbookURI(url.copy(nLen+1));
     // Get Scheme
