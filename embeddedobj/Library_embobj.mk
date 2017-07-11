@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_libraries,embobj,\
 	svt \
 	vcl \
 	tl \
+	i18nlangtag \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,embobj,\
