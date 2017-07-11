@@ -94,9 +94,16 @@ public class InvalidationHandler implements Document.MessageCallback {
             case Document.CALLBACK_CELL_CURSOR:
                 invalidateCellCursor(payload);
                 break;
+            case Document.CALLBACK_INVALIDATE_HEADER:
+                invalidateHeader();
+                break;
             default:
                 Log.d(LOGTAG, "LOK_CALLBACK uncaught: " + messageID + " : " + payload);
         }
+    }
+
+    private void invalidateHeader() {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.UPDATE_CALC_HEADERS));
     }
 
     private void invalidateCellCursor(String payload) {
@@ -378,6 +385,9 @@ public class InvalidationHandler implements Document.MessageCallback {
                 changeStateTo(OverlayState.TRANSITION);
             }
             mDocumentOverlay.changeSelections(Collections.EMPTY_LIST);
+            if (mContext.isSpreadsheet()) {
+                mDocumentOverlay.showHeaderSelection(null);
+            }
         } else {
             List<RectF> rectangles = convertPayloadToRectangles(payload);
             if (mState != OverlayState.SELECTION) {

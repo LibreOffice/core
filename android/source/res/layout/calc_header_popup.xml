@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/doorhanger_background_dark">
+
+    <Button
+        android:id="@+id/calc_header_popup_insert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/calc_insert_before"/>
+
+    <Button
+        android:id="@+id/calc_header_popup_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/calc_delete"/>
+
+    <Button
+        android:id="@+id/calc_header_popup_hide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/calc_hide"/>
+
+    <Button
+        android:id="@+id/calc_header_popup_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/buttonBarButtonStyle"
+        android:text="@string/calc_show"/>
+
+    <ImageButton
+        android:id="@+id/calc_header_popup_dismiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/buttonBarButtonStyle"
+        android:src="@drawable/ic_undo"
+        android:text="@string/calc_dismiss"/>
+
+</LinearLayout>

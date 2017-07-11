@@ -694,6 +694,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     public void initializeCalcHeaders() {
         mCalcHeadersController = new CalcHeadersController(this, mLayerClient.getView());
+        mCalcHeadersController.setupHeaderPopupView();
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
@@ -710,6 +711,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     public boolean isSpreadsheet() {
         return mIsSpreadsheet;
+    }
+
+    public void setDocumentChanged (boolean changed) {
+        isDocumentChanged = changed;
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {

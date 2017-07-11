@@ -1,8 +1,13 @@
 package org.libreoffice.overlay;
 
+import android.content.Context;
 import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.PopupWindow;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +46,55 @@ public class CalcHeadersController {
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:SelectAll"));
             }
         });
+    }
+
+    public void setupHeaderPopupView() {
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        String[] rowOrColumn = {"Row","Column"};
+        CalcHeadersView[] headersViews= {mCalcRowHeadersView, mCalcColumnHeadersView};
+        for (int i = 0; i < rowOrColumn.length; i++) {
+            final String tempName = rowOrColumn[i];
+            final CalcHeadersView tempView = headersViews[i];
+            View headerPopupView = inflater.inflate(R.layout.calc_header_popup, null);
+            // the following setup code may be simplified
+            headerPopupView.findViewById(R.id.calc_header_popup_insert).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Insert"+tempName+"s"));
+                    tempView.dismissPopupWindow();
+                    mContext.setDocumentChanged(true);
+                }
+            });
+            headerPopupView.findViewById(R.id.calc_header_popup_delete).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Delete"+tempName+"s"));
+                    tempView.dismissPopupWindow();
+                    mContext.setDocumentChanged(true);
+                }
+            });
+            headerPopupView.findViewById(R.id.calc_header_popup_hide).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Hide"+tempName));
+                    tempView.dismissPopupWindow();
+                    mContext.setDocumentChanged(true);
+                }
+            });
+            headerPopupView.findViewById(R.id.calc_header_popup_show).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Show"+tempName));
+                    tempView.dismissPopupWindow();
+                    mContext.setDocumentChanged(true);
+                }
+            });
+            PopupWindow popupWindow = new PopupWindow(headerPopupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            popupWindow.setOutsideTouchable(true);
+            popupWindow.setBackgroundDrawable(new ColorDrawable());
+            popupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
+            tempView.setHeaderPopupWindow(popupWindow);
+        }
     }
 
     public void setHeaders(String headers) {
