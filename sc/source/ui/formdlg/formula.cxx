@@ -380,6 +380,16 @@ std::shared_ptr<formula::FormulaCompiler> ScFormulaDlg::getCompiler() const
     return m_xCompiler;
 }
 
+std::unique_ptr<formula::FormulaCompiler> ScFormulaDlg::createCompiler( formula::FormulaTokenArray& rArray ) const
+{
+    ScCompiler* pCompiler = nullptr;
+    ScTokenArray* pArr = dynamic_cast<ScTokenArray*>(&rArray);
+    assert(pArr);   // violation of contract and not created using convertToTokenArray()?
+    if (pArr)
+        pCompiler = new ScCompiler( m_pDoc, m_CursorPos, *pArr, m_pDoc->GetGrammar());
+    return std::unique_ptr<formula::FormulaCompiler>(pCompiler);
+}
+
 //  virtual methods of ScAnyRefDlg:
 void ScFormulaDlg::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {

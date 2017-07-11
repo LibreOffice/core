@@ -25,6 +25,7 @@
 #include <formula/formdata.hxx>
 #include <formula/funcutl.hxx>
 #include <formula/tokenarray.hxx>
+#include <formula/FormulaCompiler.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <memory>
@@ -116,6 +117,11 @@ bool FormulaDialog::calculateValue( const OUString& rStrExp, OUString& rStrResul
 std::shared_ptr<formula::FormulaCompiler> FormulaDialog::getCompiler() const
 {
     return nullptr;
+}
+
+std::unique_ptr<formula::FormulaCompiler> FormulaDialog::createCompiler( formula::FormulaTokenArray& rArray ) const
+{
+    return std::unique_ptr<formula::FormulaCompiler>(new FormulaCompiler(rArray));
 }
 
 void FormulaDialog::doClose(bool _bOk)

@@ -75,6 +75,7 @@ public:
     virtual void fill() override;
     virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult, bool bMatrixFormula) override;
     virtual std::shared_ptr<formula::FormulaCompiler> getCompiler() const override;
+    virtual std::unique_ptr<formula::FormulaCompiler> createCompiler( formula::FormulaTokenArray& rArray ) const override;
     virtual void doClose(bool _bOk) override;
     virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc) override;
     virtual void showReference(const OUString& _sFormula) override;

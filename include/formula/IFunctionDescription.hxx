@@ -134,7 +134,16 @@ namespace formula
         virtual FormEditData* getFormEditData() const = 0;
         virtual bool calculateValue(const OUString& _sExpression, OUString& _rResult, bool bMatrixFormula) = 0;
 
+        /** Obtain a resident FormulaCompiler instance, created without
+            FormulaTokenArray and reused but being application specific derived.
+         */
         virtual std::shared_ptr<FormulaCompiler> getCompiler() const = 0;
+
+        /** Create an application specific FormulaCompiler instance with
+            FormulaTokenArray. The FormulaTokenArray had to be created using
+            convertToTokenArray().
+         */
+        virtual std::unique_ptr<FormulaCompiler> createCompiler( FormulaTokenArray& rArray ) const = 0;
 
         virtual void switchBack() = 0;
 
