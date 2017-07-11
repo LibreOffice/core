@@ -439,6 +439,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103573, "tdf103573.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally relatively to right page border", text::RelOrientation::PAGE_RIGHT, nValue);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106132, "tdf106132.docx")
+{
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    // This was 250, <wps:bodyPr ... rIns="0" ...> was ignored for an outer shape.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xShape, "TextRightDistance"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testBnc519228OddBreaks, "bnc519228_odd-breaksB.docx")
 {
     // Check that all the normal styles are not set as right-only, those should be only those used after odd page breaks.
