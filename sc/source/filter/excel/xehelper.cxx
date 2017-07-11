@@ -888,13 +888,13 @@ OUString lclEncodeDosUrl(
         OUString aOldUrl = rUrl;
         aBuf.append(EXC_URLSTART_ENCODED);
 
-        if ( aOldUrl.getLength() > 2 && aOldUrl.copy(0,2) == "\\\\" )
+        if ( aOldUrl.getLength() > 2 && aOldUrl.startsWith("\\\\") )
         {
             // UNC
             aBuf.append(EXC_URL_DOSDRIVE).append('@');
             aOldUrl = aOldUrl.copy(2);
         }
-        else if ( aOldUrl.getLength() > 2 && aOldUrl.copy(1,2) == ":\\" )
+        else if ( aOldUrl.getLength() > 2 && aOldUrl.match(":\\", 1) )
         {
             // drive letter
             sal_Unicode cThisDrive = rBase.isEmpty() ? ' ' : rBase[0];
@@ -916,7 +916,7 @@ OUString lclEncodeDosUrl(
         sal_Int32 nPos = -1;
         while((nPos = aOldUrl.indexOf('\\')) != -1)
         {
-            if ( aOldUrl.copy(0,2) == ".." )
+            if ( aOldUrl.startsWith("..") )
                 // parent dir (NOTE: the MS-XLS spec doesn't mention this, and
                 // Excel seems confused by this token).
                 aBuf.append(EXC_URL_PARENTDIR);

@@ -241,7 +241,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     SwFrameFormat *pFrameFormat = nullptr;
     SwOLENode *pOLENd = nullptr;
-    if( rHRef.copy( 0, nPos ) == "vnd.sun.star.ServiceName" )
+    if( rHRef.startsWith("vnd.sun.star.ServiceName:") )
     {
         bool bInsert = false;
         SvGlobalName aClassName;

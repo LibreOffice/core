@@ -301,11 +301,9 @@ TVRead::hasByName( const OUString& aName )
 Any SAL_CALL
 TVRead::getByHierarchicalName( const OUString& aName )
 {
-    sal_Int32 idx;
-
-    if( ( idx = aName.indexOf( '/' ) ) != -1  &&
-        aName.copy( 0,idx ) == "Children" )
-        return Children->getByHierarchicalName( aName.copy( 1 + idx ) );
+    OUString aRest;
+    if( aName.startsWith("Children/", &aRest) )
+        return Children->getByHierarchicalName( aRest );
 
     return getByName( aName );
 }
@@ -313,11 +311,9 @@ TVRead::getByHierarchicalName( const OUString& aName )
 sal_Bool SAL_CALL
 TVRead::hasByHierarchicalName( const OUString& aName )
 {
-    sal_Int32 idx;
-
-    if( ( idx = aName.indexOf( '/' ) ) != -1  &&
-        aName.copy( 0,idx ) == "Children" )
-        return Children->hasByHierarchicalName( aName.copy( 1 + idx ) );
+    OUString aRest;
+    if( aName.startsWith("Children/", &aRest) )
+        return Children->hasByHierarchicalName( aRest );
 
     return hasByName( aName );
 }

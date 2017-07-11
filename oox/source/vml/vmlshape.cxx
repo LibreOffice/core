@@ -987,7 +987,7 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
 {
     // If we have an 'x' in the last part of the path it means it is closed...
     sal_Int32 nPos = maShapeModel.maVmlPath.lastIndexOf(',');
-    if ( nPos != -1 && maShapeModel.maVmlPath.copy(nPos).indexOf('x') != -1 )
+    if ( nPos != -1 && maShapeModel.maVmlPath.indexOf(nPos, 'x') != -1 )
     {
         const_cast<BezierShape*>( this )->setService( "com.sun.star.drawing.ClosedBezierShape" );
     }
