@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_b9dbc61a",
+        "filename": "include/svl/ondemand.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-11T07:10:04Z",
+      "side": 1,
+      "message": "this looks like it no longer needs to be a field, can just be a local variable in the get() method",
+      "revId": "94a2d3ebb06cea8b6be6d7c203606efce31456a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
