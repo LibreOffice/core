@@ -24,15 +24,16 @@
 #include "sdundo.hxx"
 #include "sddllapi.h"
 
+#include <memory>
 #include <vector>
 
 class SD_DLLPUBLIC SdUndoGroup : public SdUndoAction
 {
-    std::vector<SdUndoAction*>  aCtn;
+    std::vector<std::unique_ptr<SdUndoAction>> aCtn;
 public:
                    SdUndoGroup(SdDrawDocument* pSdDrawDocument)
-                              : SdUndoAction(pSdDrawDocument),
-                                aCtn() {}
+                              : SdUndoAction(pSdDrawDocument)
+                              {}
     virtual       ~SdUndoGroup() override;
 
     virtual bool   Merge( SfxUndoAction* pNextAction ) override;

@@ -20,15 +20,7 @@
 #include "sdundogr.hxx"
 
 
-SdUndoGroup::~SdUndoGroup()
-{
-    size_t nLast = aCtn.size();
-    for (size_t nAction = 0; nAction < nLast; nAction++)
-    {
-        delete aCtn[nAction];
-    }
-    aCtn.clear();
-}
+SdUndoGroup::~SdUndoGroup() = default;
 
 bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
 {
@@ -73,7 +65,7 @@ void SdUndoGroup::Redo()
 
 void SdUndoGroup::AddAction(SdUndoAction* pAction)
 {
-    aCtn.push_back(pAction);
+    aCtn.emplace_back(pAction);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
