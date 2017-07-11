@@ -56,7 +56,7 @@ public class CalcHeadersController {
             final String tempName = rowOrColumn[i];
             final CalcHeadersView tempView = headersViews[i];
             View headerPopupView = inflater.inflate(R.layout.calc_header_popup, null);
-            // the following setup code may be simplified to a for loop
+            // the following setup code may be simplified to a for loop or for each loop
             headerPopupView.findViewById(R.id.calc_header_popup_insert).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
