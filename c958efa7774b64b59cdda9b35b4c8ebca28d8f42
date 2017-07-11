@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_995b6a54",
+        "filename": "sal/osl/unx/file_volume.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-07-11T10:27:32Z",
+      "side": 1,
+      "message": "No, it really won\u0027t. FileURLToPath should handle a null ustrDirectoryURL.",
+      "parentUuid": "3a461143_b993c6f9",
+      "revId": "c958efa7774b64b59cdda9b35b4c8ebca28d8f42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_39b6f68a",
         "filename": "sal/osl/unx/file_volume.cxx",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_b9582658",
+        "filename": "sal/osl/unx/file_volume.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-07-11T10:27:32Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "3a461143_39b6f68a",
+      "revId": "c958efa7774b64b59cdda9b35b4c8ebca28d8f42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_19c13ae5",
         "filename": "sal/osl/unx/file_volume.cxx",
         "patchSetId": 3
@@ -47,6 +83,24 @@
       "writtenOn": "2017-07-11T10:04:19Z",
       "side": 1,
       "message": "as far as I can tell, this method will never return a nullptr in ustrFileSystemName, so this could be either",
+      "revId": "c958efa7774b64b59cdda9b35b4c8ebca28d8f42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_19369a03",
+        "filename": "sal/osl/unx/file_volume.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-07-11T10:27:32Z",
+      "side": 1,
+      "message": "I wasn\u0027t aware of that, I was following the lead of the previous author. In that case, it can be removed.",
+      "parentUuid": "3a461143_19c13ae5",
       "revId": "c958efa7774b64b59cdda9b35b4c8ebca28d8f42",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
