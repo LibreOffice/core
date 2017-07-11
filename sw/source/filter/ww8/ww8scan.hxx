@@ -1859,9 +1859,6 @@ void SwapQuotesInField(OUString &rFormat);
 Word2CHPX ReadWord2Chpx(SvStream &rSt, std::size_t nOffset, sal_uInt8 nSize);
 std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx);
 
-bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
-    SAL_WARN_UNUSED_RESULT;
-
 bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
     SAL_WARN_UNUSED_RESULT;
 

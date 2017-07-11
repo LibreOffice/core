@@ -401,15 +401,6 @@ static bool RenderAsBMP(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
         return RenderAsBMPThroughConvert(pBuf, nBytesRead, rGraphic);
 }
 
-namespace
-{
-    bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
-    {
-        const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
-        return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
-    }
-}
-
 // this method adds a replacement action containing the original wmf or tiff replacement,
 // so the original eps can be written when storing to ODF.
 void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 nOrigPos, sal_uInt32 nPSSize,

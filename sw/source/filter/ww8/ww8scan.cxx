@@ -8066,12 +8066,6 @@ SEPr::SEPr() :
     memset(rgdxaColumnWidthSpacing, 0, sizeof(rgdxaColumnWidthSpacing));
 }
 
-bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
-{
-    const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
-    return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
-}
-
 bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
 {
     return (rSt.ReadBytes(pDest, nLength) == static_cast<std::size_t>(nLength));
