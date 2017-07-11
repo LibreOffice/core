@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_5949028b",
+        "filename": "sc/source/ui/vba/vbaapplication.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2017-07-11T10:25:17Z",
+      "side": 1,
+      "message": "There is a segmentation fault here.",
+      "range": {
+        "startLine": 319,
+        "startChar": 4,
+        "endLine": 319,
+        "endChar": 89
+      },
+      "revId": "d2cfe4ec05eec7f4c849e992590b418655da838d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
