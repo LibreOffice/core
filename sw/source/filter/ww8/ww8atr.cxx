@@ -2332,7 +2332,7 @@ void AttributeOutputBase::GetNumberPara( OUString& rStr, const SwField& rField )
             break;
         default:
             OSL_ENSURE(rField.GetFormat() == SVX_NUM_ARABIC,
-                "Unknown numbering type exported as default of Arabic\n");
+                "Unknown numbering type exported as default of Arabic");
             SAL_FALLTHROUGH;
         case SVX_NUM_ARABIC:
             rStr += "\\* ARABIC ";

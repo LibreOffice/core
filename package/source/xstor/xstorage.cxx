@@ -985,7 +985,7 @@ void OStorage_Impl::Commit()
         throw embed::InvalidStorageException( THROW_WHERE );
 
     OSL_ENSURE( m_nStorageMode & embed::ElementModes::WRITE,
-                "Commit of readonly storage, should be detected before!\n" );
+                "Commit of readonly storage, should be detected before!" );
 
     uno::Reference< container::XNameContainer > xNewPackageFolder;
 
@@ -1804,7 +1804,7 @@ OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 
     OSL_ENSURE( ( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) == embed::ElementModes::WRITE ||
                     m_pData->m_bReadOnlyWrap,
-                "The wrapper can not allow writing in case implementation does not!\n" );
+                "The wrapper can not allow writing in case implementation does not!" );
 
     if ( !bReadOnlyWrap )
         m_pImpl->m_pAntiImpl = this;
@@ -1843,7 +1843,7 @@ void SAL_CALL OStorage::InternalDispose( bool bNotifyImpl )
     if ( m_pData->m_bReadOnlyWrap )
     {
         OSL_ENSURE( !m_pData->m_aOpenSubComponentsList.size() || m_pData->m_pSubElDispListener.get(),
-                    "If any subelements are open the listener must exist!\n" );
+                    "If any subelements are open the listener must exist!" );
 
         if (m_pData->m_pSubElDispListener.get())
         {
@@ -2006,7 +2006,7 @@ SotElement_Impl* OStorage::OpenStreamElement_Impl( const OUString& aStreamName, 
     ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
 
     OSL_ENSURE( !m_pData->m_bReadOnlyWrap || ( nOpenMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE,
-                "An element can not be opened for writing in readonly storage!\n" );
+                "An element can not be opened for writing in readonly storage!" );
 
     SotElement_Impl *pElement = m_pImpl->FindElement( aStreamName );
     if ( !pElement )

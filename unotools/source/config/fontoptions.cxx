@@ -181,7 +181,7 @@ void SvtFontOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
             seqValues[nProperty] >>= m_bFontWYSIWYG;
         }
 #if OSL_DEBUG_LEVEL > 0
-        else assert(false && "SvtFontOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n");
+        else assert(false && "Unknown property detected ... I can't handle these!");
 #endif
     }
 }

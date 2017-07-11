@@ -1533,7 +1533,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         OSL_ENSURE( !aOrigStreamName.isEmpty() && !aNewStreamName.isEmpty() && xRelStorage.is(),
-                    "Wrong relation persistence information is provided!\n" );
+                    "Wrong relation persistence information is provided!" );
 
         if ( !xRelStorage.is() || aOrigStreamName.isEmpty() || aNewStreamName.isEmpty() )
             throw uno::RuntimeException();

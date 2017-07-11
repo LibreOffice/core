@@ -1462,8 +1462,7 @@ void BackendImpl::PackageImpl::scanBundle(
         }
         else
         {
-            SAL_WARN(
-                "desktop.deployment", "manifest.xml contains a duplicate entry!\n");
+            SAL_WARN("desktop.deployment", "manifest.xml contains a duplicate entry!");
         }
     }
 

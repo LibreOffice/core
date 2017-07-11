@@ -1103,7 +1103,7 @@ int GetRawData(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt3
         }
     }
 
-    assert(!"Unknown TrueType table.\n");
+    assert(!"Unknown TrueType table.");
     return TTCR_UNKNOWN;
 }
 
@@ -1491,7 +1491,7 @@ extern "C"
                 return;
             }
         }
-        assert(!"Unknown TrueType table.\n");
+        assert(!"Unknown TrueType table.");
     }
 }
 

@@ -217,14 +217,14 @@ bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
                                                         embed::ElementModes::READWRITE );
 
         DBG_ASSERT( xVersion.is(),
-                "The method must throw an exception if the storage can not be opened!\n" );
+                "The method must throw an exception if the storage can not be opened!" );
         if ( !xVersion.is() )
             throw uno::RuntimeException();
 
         uno::Reference< io::XStream > xVerStream = xVersion->openStreamElement(
                                                                 aStreamName,
                                                                 embed::ElementModes::READWRITE );
-        DBG_ASSERT( xVerStream.is(), "The method must throw an exception if the storage can not be opened!\n" );
+        DBG_ASSERT( xVerStream.is(), "The method must throw an exception if the storage can not be opened!" );
         if ( !xVerStream.is() )
             throw uno::RuntimeException();
 
@@ -3315,7 +3315,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
                 if ( xSource->isStorageElement( aSubElements[nInd] ) )
                 {
                     OSL_ENSURE( !xTarget->hasByName( aSubElements[nInd] ),
-                                "The target storage is an output storage, the element should not exist in the target!\n" );
+                                "The target storage is an output storage, the element should not exist in the target!" );
 
                     xSource->copyElementTo( aSubElements[nInd], xTarget, aSubElements[nInd] );
                 }
@@ -3388,7 +3388,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
                         default:
                         {
                             OSL_ENSURE( aSubElements[nInd] == "Configurations2" || nFormat == SotClipboardFormatId::STARBASE_8 || !xTarget->hasByName( aSubElements[nInd] ),
-                                        "The target storage is an output storage, the element should not exist in the target!\n" );
+                                        "The target storage is an output storage, the element should not exist in the target!" );
 
                             if ( !xTarget->hasByName( aSubElements[nInd] ) )
                             {
