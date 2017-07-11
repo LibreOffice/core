@@ -23,6 +23,7 @@
 #include <com/sun/star/script/XInvocation.idl>
 #include <ooo/vba/XHelperInterface.idl>
 #include <ooo/vba/XAssistant.idl>
+#include <ooo/vba/XFileDialog.idl>
 
 module ooo {  module vba {  module excel {
 
@@ -83,6 +84,7 @@ interface XApplication
     any Range( [in] any Cell1, [in] any Cell2 );
     any Names( [in] any Index );
     void GoTo( [in] any Reference, [in] any Scroll );
+    any FileDialog( [in] any DialogType );
 
     void wait( [in] double time );
     void Calculate() raises(com::sun::star::script::BasicErrorException);
