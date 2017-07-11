@@ -221,6 +221,10 @@ public:
     virtual const OUString & getTarget() const = 0;
     virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
     virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) = 0;
+    /// Push context of drawingML shapes, so nested shapes are handled separately.
+    virtual void pushShapeContext() = 0;
+    /// Pop context of a previously pushed drawingML shape.
+    virtual void popShapeContext() = 0;
     virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom( ) = 0;
     virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom( ) = 0;
     virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> > getGlossaryDomList() = 0;
