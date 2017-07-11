@@ -25,6 +25,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <map>
+#include <memory>
 #include <set>
 
 #include <wrtww8.hxx>
@@ -54,7 +55,7 @@ class RtfSdrExport : public EscherEx
     std::map<OString,OString> m_aShapeProps;
 
     /// Remember which shape types we had already written.
-    bool* m_pShapeTypeWritten;
+    std::unique_ptr<bool[]> m_pShapeTypeWritten;
 
 public:
     explicit RtfSdrExport(RtfExport& rExport);

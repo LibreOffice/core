@@ -660,8 +660,8 @@ class WW8PLCFx_SEPX : public WW8PLCFx
 private:
     wwSprmParser maSprmParser;
     SvStream* pStrm;
-    WW8PLCF* pPLCF;
-    sal_uInt8* pSprms;
+    std::unique_ptr<WW8PLCF> pPLCF;
+    std::unique_ptr<sal_uInt8[]> pSprms;
     sal_uInt16 nArrMax;
     sal_uInt16 nSprmSiz;
 
@@ -1052,7 +1052,8 @@ private:
     WW8PLCFspecial*   m_pHdFtTxbxBkd;     // Break-Descriptors for previous
     WW8PLCFspecial*   m_pMagicTables;     // Break-Descriptors for them
     WW8PLCFspecial*   m_pSubdocs;         // subdoc references in master document
-    sal_uInt8*        m_pExtendedAtrds;   // Extended ATRDs
+    std::unique_ptr<sal_uInt8[]>
+                      m_pExtendedAtrds;   // Extended ATRDs
     WW8PLCFx_Book*    m_pBook;            // Bookmarks
     WW8PLCFx_AtnBook* m_pAtnBook;         // Annotationmarks
     /// Smart tag bookmarks.

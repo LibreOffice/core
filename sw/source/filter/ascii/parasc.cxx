@@ -45,15 +45,16 @@
 #include <poolfmt.hxx>
 
 #include <vcl/metric.hxx>
+#include <memory>
 
 #define ASC_BUFFLEN 4096
 
 class SwASCIIParser
 {
     SwDoc* pDoc;
-    SwPaM* pPam;
+    std::unique_ptr<SwPaM> pPam;
     SvStream& rInput;
-    sal_Char* pArr;
+    std::unique_ptr<sal_Char[]> pArr;
     const SwAsciiOptions& rOpt;
     std::unique_ptr<SfxItemSet> pItemSet;
     long nFileSize;
@@ -69,7 +70,6 @@ class SwASCIIParser
 public:
     SwASCIIParser( SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
                             bool bReadNewDoc, const SwAsciiOptions& rOpts );
-    ~SwASCIIParser();
 
     ErrCode CallParser();
 };
@@ -98,8 +98,8 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
     : pDoc(pD), rInput(rIn), rOpt(rOpts), nFileSize(0), nScript(SvtScriptType::NONE)
     , bNewDoc(bReadNewDoc)
 {
-    pPam = new SwPaM( *rCursor.GetPoint() );
-    pArr = new sal_Char [ ASC_BUFFLEN + 2 ];
+    pPam.reset( new SwPaM( *rCursor.GetPoint() ) );
+    pArr.reset( new sal_Char [ ASC_BUFFLEN + 2 ] );
 
     pItemSet = o3tl::make_unique<SfxItemSet>( pDoc->GetAttrPool(),
                 svl::Items<RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
@@ -129,12 +129,6 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
         aFont.SetWhich(RES_CHRATR_CTL_FONT);
         pItemSet->Put( aFont );
     }
-}
-
-SwASCIIParser::~SwASCIIParser()
-{
-    delete pPam;
-    delete [] pArr;
 }
 
 // Calling the parser
@@ -265,10 +259,10 @@ ErrCode SwASCIIParser::ReadChars()
         aEmpty.GetParaFlags() == rOpt.GetParaFlags())
     {
         sal_uLong nLen, nOrig;
-        nOrig = nLen = rInput.ReadBytes(pArr, ASC_BUFFLEN);
+        nOrig = nLen = rInput.ReadBytes(pArr.get(), ASC_BUFFLEN);
         rtl_TextEncoding eCharSet;
         LineEnd eLineEnd;
-        bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode, &eLineEnd);
+        bool bRet = SwIoSystem::IsDetectableText(pArr.get(), nLen, &eCharSet, &bSwapUnicode, &eLineEnd);
         OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must have failed");
         if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
         {
@@ -313,7 +307,7 @@ ErrCode SwASCIIParser::ReadChars()
             // Read a new block
             sal_uLong lGCount;
             if( ERRCODE_NONE != rInput.GetError() || 0 == (lGCount =
-                        rInput.ReadBytes( pArr + nArrOffset,
+                        rInput.ReadBytes( pArr.get() + nArrOffset,
                                      ASC_BUFFLEN - nArrOffset )))
                 break;      // break from the while loop
 
@@ -334,7 +328,7 @@ ErrCode SwASCIIParser::ReadChars()
                 pBuf[nNewLen] = 0;                         // ensure '\0'
 
                 nNewLen = rtl_convertTextToUnicode( hConverter, hContext,
-                                pArr, lGCount, pBuf, nNewLen,
+                                pArr.get(), lGCount, pBuf, nNewLen,
                                 (
                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
                                 RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
@@ -344,19 +338,19 @@ ErrCode SwASCIIParser::ReadChars()
                                 &nInfo,
                                 &nCntBytes );
                 if( 0 != ( nArrOffset = lGCount - nCntBytes ) )
-                    memmove( pArr, pArr + nCntBytes, nArrOffset );
+                    memmove( pArr.get(), pArr.get() + nCntBytes, nArrOffset );
 
                 pStt = pLastStt = aWork.get();
                 pEnd = pStt + nNewLen;
             }
             else
             {
-                pStt = pLastStt = reinterpret_cast<sal_Unicode*>(pArr);
-                pEnd = reinterpret_cast<sal_Unicode*>(pArr + lGCount);
+                pStt = pLastStt = reinterpret_cast<sal_Unicode*>(pArr.get());
+                pEnd = reinterpret_cast<sal_Unicode*>(pArr.get() + lGCount);
 
                 if( bSwapUnicode )
                 {
-                    sal_Char* pF = pArr, *pN = pArr + 1;
+                    sal_Char* pF = pArr.get(), *pN = pArr.get() + 1;
                     for( sal_uLong n = 0; n < lGCount; n += 2, pF += 2, pN += 2 )
                     {
                         sal_Char c = *pF;

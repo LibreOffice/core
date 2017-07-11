@@ -1671,8 +1671,8 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
                 sal_uInt64 const nOldPos = pTableSt->Tell();
                 if (checkSeek(*pTableSt, pWwFib->m_fcAtrdExtra) && (pTableSt->remainingSize() >= pWwFib->m_lcbAtrdExtra))
                 {
-                    m_pExtendedAtrds = new sal_uInt8[pWwFib->m_lcbAtrdExtra];
-                    pWwFib->m_lcbAtrdExtra = pTableSt->ReadBytes(m_pExtendedAtrds, pWwFib->m_lcbAtrdExtra);
+                    m_pExtendedAtrds.reset( new sal_uInt8[pWwFib->m_lcbAtrdExtra] );
+                    pWwFib->m_lcbAtrdExtra = pTableSt->ReadBytes(m_pExtendedAtrds.get(), pWwFib->m_lcbAtrdExtra);
                 }
                 else
                     pWwFib->m_lcbAtrdExtra = 0;
@@ -1737,7 +1737,6 @@ WW8ScannerBase::~WW8ScannerBase()
     delete m_pHdFtTxbxBkd;
     delete m_pMagicTables;
     delete m_pSubdocs;
-    delete [] m_pExtendedAtrds;
 }
 
 // Fields
@@ -3378,18 +3377,15 @@ WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTableSt,
     : WW8PLCFx(rFib, true), maSprmParser(rFib),
     pStrm(pSt), nArrMax(256), nSprmSiz(0)
 {
-    pPLCF =   rFib.m_lcbPlcfsed
-            ? new WW8PLCF(*pTableSt, rFib.m_fcPlcfsed, rFib.m_lcbPlcfsed,
-              GetFIBVersion() <= ww::eWW2 ? 6 : 12, nStartCp)
-            : nullptr;
+    if (rFib.m_lcbPlcfsed)
+        pPLCF.reset( new WW8PLCF(*pTableSt, rFib.m_fcPlcfsed, rFib.m_lcbPlcfsed,
+                                 GetFIBVersion() <= ww::eWW2 ? 6 : 12, nStartCp) );
 
-    pSprms = new sal_uInt8[nArrMax];     // maximum length
+    pSprms.reset( new sal_uInt8[nArrMax] );     // maximum length
 }
 
 WW8PLCFx_SEPX::~WW8PLCFx_SEPX()
 {
-    delete pPLCF;
-    delete[] pSprms;
 }
 
 sal_uInt32 WW8PLCFx_SEPX::GetIdx() const
@@ -3454,14 +3450,13 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
 
             if( nSprmSiz > nArrMax )
             {               // does not fit
-                delete[] pSprms;
                 nArrMax = nSprmSiz;                 // Get more memory
-                pSprms = new sal_uInt8[nArrMax];
+                pSprms.reset( new sal_uInt8[nArrMax] );
             }
-            nSprmSiz = pStrm->ReadBytes(pSprms, nSprmSiz); // read Sprms
+            nSprmSiz = pStrm->ReadBytes(pSprms.get(), nSprmSiz); // read Sprms
 
             p->nSprmsLen = nSprmSiz;
-            p->pMemPos = pSprms;                    // return Position
+            p->pMemPos = pSprms.get();                    // return Position
         }
     }
 }
@@ -3474,7 +3469,7 @@ void WW8PLCFx_SEPX::advance()
 
 SprmResult WW8PLCFx_SEPX::HasSprm(sal_uInt16 nId) const
 {
-    return HasSprm(nId, pSprms, nSprmSiz);
+    return HasSprm(nId, pSprms.get(), nSprmSiz);
 }
 
 SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, const sal_uInt8*  pOtherSprms,
@@ -3497,7 +3492,7 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
 
     bool bFound = false;
 
-    sal_uInt8* pSp = pSprms;
+    sal_uInt8* pSp = pSprms.get();
     sal_uInt16 i=0;
     while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
@@ -3540,7 +3535,7 @@ SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
     if (!pPLCF)
         return SprmResult();
 
-    sal_uInt8* pSp = pSprms;
+    sal_uInt8* pSp = pSprms.get();
 
     sal_uInt16 i=0;
     while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
@@ -4670,7 +4665,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
 
     m_pMagicTables = pBase->m_pMagicTables;
     m_pSubdocs = pBase->m_pSubdocs;
-    m_pExtendedAtrds = pBase->m_pExtendedAtrds;
+    m_pExtendedAtrds = pBase->m_pExtendedAtrds.get();
 
     switch( nType )                 // field initialization
     {
