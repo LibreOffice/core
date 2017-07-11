@@ -134,9 +134,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
             if(!comphelper::isFileUrl(msTemplateName))
             {
                 SvtPathOptions aOptions;
-                OUString PathString = aOptions.SubstituteVariable("$(progurl)");
-                PathString = PathString.concat("/");
-                msTemplateName=PathString.concat(msTemplateName);
+                msTemplateName = aOptions.SubstituteVariable("$(progurl)") + "/" + msTemplateName;
             }
 
             xstyleLoader->loadStylesFromURL(msTemplateName,aValue);

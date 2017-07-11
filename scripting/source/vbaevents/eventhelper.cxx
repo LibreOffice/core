@@ -872,9 +872,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
             sProject = sScriptCode.copy( 0, nIndex );
             sScriptCode = sScriptCode.copy( nIndex + 1 );
         }
-        OUString sMacroLoc = sProject;
-        sMacroLoc = sMacroLoc.concat(  "." );
-        sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( "." );
+        OUString sMacroLoc = sProject + "." + sScriptCode + ".";
 
         for ( ; txInfo != txInfo_end; ++txInfo )
         {

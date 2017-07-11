@@ -94,8 +94,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
                 if ( aPPAct.match( sJump, nIndex + 1 ) )
                 {
                     OUString aDestination( aPPAct.copy( nIndex + 1 + sJump.getLength() ) );
-                    sURL = sURL.concat( "#action?jump=" );
-                    sURL = sURL.concat( aDestination );
+                    sURL += "#action?jump=" + aDestination;
                 }
             }
             else if ( aPPAction.match( sHlinksldjump ) )

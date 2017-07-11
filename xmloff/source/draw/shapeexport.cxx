@@ -2299,8 +2299,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                         sRequestedName = sRequestedName.copy( 0, nLastIndex );
                     if ( !sRequestedName.isEmpty() )
                     {
-                        aResolveURL = aResolveURL.concat( "?requestedName=");
-                        aResolveURL = aResolveURL.concat( sRequestedName );
+                        aResolveURL += "?requestedName=" + sRequestedName;
                     }
                 }
 
@@ -2315,11 +2314,11 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                         aStreamURL = sPackageURL;
                         if ( aStr[0] == '#' )
                         {
-                            aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
+                            aStreamURL += aStr.copy( 1, aStr.getLength() - 1 );
                         }
                         else
                         {
-                            aStreamURL = aStreamURL.concat( aStr );
+                            aStreamURL += aStr;
                         }
 
                         xPropSet->setPropertyValue( "GraphicStreamURL", uno::Any(aStreamURL) );
