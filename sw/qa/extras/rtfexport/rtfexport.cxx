@@ -932,6 +932,13 @@ DECLARE_RTFEXPORT_TEST(testHyphpar, "hyphpar.rtf")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getParagraph(2), "ParaIsHyphenation"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf108955, "tdf108955.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(getParagraph(1), "FillStyle"));
+    // This was 0xffffff, i.e. non-white background was overwritten from the paragraph style.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffff99), getProperty<sal_Int32>(getParagraph(1), "FillColor"));
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf80708, "tdf80708.rtf")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
