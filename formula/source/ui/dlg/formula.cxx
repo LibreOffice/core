@@ -777,11 +777,11 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
         }
     } // if ( pTokens && nLen == m_aTokenList.getLength() )
 
-    FormulaCompiler aCompiler(*m_pTokenArray.get());
+    std::unique_ptr<FormulaCompiler> pCompiler( m_pHelper->createCompiler(*m_pTokenArray.get()));
     // #i101512# Disable special handling of jump commands.
-    aCompiler.EnableJumpCommandReorder(false);
-    aCompiler.EnableStopOnError(false);
-    aCompiler.CompileTokenArray();
+    pCompiler->EnableJumpCommandReorder(false);
+    pCompiler->EnableStopOnError(false);
+    pCompiler->CompileTokenArray();
 }
 
 void FormulaDlg_Impl::FillDialog(bool bFlag)
