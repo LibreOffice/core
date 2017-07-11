@@ -33,21 +33,20 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <memory>
 
 using namespace ::com::sun::star;
 
 class SwSearchProperties_Impl
 {
-    beans::PropertyValue**          pValueArr;
-    sal_uInt32                      nArrLen;
-    const PropertyEntryVector_t     aPropertyEntries;
+    std::unique_ptr<std::unique_ptr<beans::PropertyValue>[]> pValueArr;
+    const PropertyEntryVector_t                              aPropertyEntries;
 
     SwSearchProperties_Impl(const SwSearchProperties_Impl&) = delete;
     SwSearchProperties_Impl& operator=(const SwSearchProperties_Impl&) = delete;
 
 public:
     SwSearchProperties_Impl();
-    ~SwSearchProperties_Impl();
 
     /// @throws beans::UnknownPropertyException
     /// @throws lang::IllegalArgumentException
@@ -60,31 +59,20 @@ public:
 };
 
 SwSearchProperties_Impl::SwSearchProperties_Impl() :
-    nArrLen(0),
-    aPropertyEntries( aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)->getPropertyMap().getPropertyEntries())
+    aPropertyEntries( aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)->getPropertyMap().getPropertyEntries() )
 {
-    nArrLen = aPropertyEntries.size();
-    pValueArr = new beans::PropertyValue*[nArrLen];
-    for(sal_uInt32 i = 0; i < nArrLen; i++)
-        pValueArr[i] = nullptr;
+    size_t nArrLen = aPropertyEntries.size();
+    pValueArr.reset( new std::unique_ptr<beans::PropertyValue>[nArrLen] );
 }
 
-SwSearchProperties_Impl::~SwSearchProperties_Impl()
-{
-    for(sal_uInt32 i = 0; i < nArrLen; i++)
-        delete pValueArr[i];
-    delete[] pValueArr;
-}
-
-void    SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs)
+void SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs)
 {
     const beans::PropertyValue* pProps = aSearchAttribs.getConstArray();
 
     //delete all existing values
-    for(sal_uInt32 i = 0; i < nArrLen; ++i)
+    for(size_t i = 0; i < aPropertyEntries.size(); ++i)
     {
-        delete pValueArr[i];
-        pValueArr[i] = nullptr;
+        pValueArr[i].reset();
     }
 
     const sal_uInt32 nLen = aSearchAttribs.getLength();
@@ -99,22 +87,21 @@ void    SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::Prope
             if( aIt == aPropertyEntries.end() )
                 throw beans::UnknownPropertyException();
         }
-        pValueArr[nIndex] = new beans::PropertyValue(pProps[i]);
+        pValueArr[nIndex].reset( new beans::PropertyValue(pProps[i]) );
     }
 }
 
 const uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperties() const
 {
     sal_uInt32 nPropCount = 0;
-    sal_uInt32 i;
-    for( i = 0; i < nArrLen; i++)
+    for( size_t i = 0; i < aPropertyEntries.size(); i++)
         if(pValueArr[i])
             nPropCount++;
 
     uno::Sequence< beans::PropertyValue > aRet(nPropCount);
     beans::PropertyValue* pProps = aRet.getArray();
     nPropCount = 0;
-    for(i = 0; i < nArrLen; i++)
+    for(size_t i = 0; i < aPropertyEntries.size(); i++)
     {
         if(pValueArr[i])
         {
@@ -176,7 +163,7 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
     *pShadowItem  = nullptr;
 
     PropertyEntryVector_t::const_iterator aIt = aPropertyEntries.begin();
-    for(sal_uInt32 i = 0; i < nArrLen; i++, ++aIt)
+    for(size_t i = 0; i < aPropertyEntries.size(); i++, ++aIt)
     {
         if(pValueArr[i])
         {
@@ -470,9 +457,9 @@ void SwSearchProperties_Impl::FillItemSet(SfxItemSet& rSet, bool bIsValueSearch)
     delete pShadowItem;
 }
 
-bool    SwSearchProperties_Impl::HasAttributes() const
+bool SwSearchProperties_Impl::HasAttributes() const
 {
-    for(sal_uInt32 i = 0; i < nArrLen; i++)
+    for(size_t i = 0; i < aPropertyEntries.size(); i++)
         if(pValueArr[i])
             return true;
     return false;
