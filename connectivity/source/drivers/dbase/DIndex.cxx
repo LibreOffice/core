@@ -463,7 +463,7 @@ bool ODbaseIndex::DropImpl()
     {
         // References the Key to an Index-file?
         aKeyName = aInfFile.GetKeyName( nKey );
-        if (aKeyName.copy(0,3) == "NDX")
+        if (aKeyName.startsWith("NDX"))
         {
             if(sEntry == OStringToOUString(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding()))
             {

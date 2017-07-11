@@ -64,11 +64,11 @@ util::DateTime getDateTimeFromUserProp(const OUString& rString)
     {
         aRet.Year = rString.copy(0, 4).toInt32();
 
-        if (nLen >= 8 && rString.copy(4, 2) == ". ")
+        if (nLen >= 8 && rString.match(4, ". "))
         {
             aRet.Month = rString.copy(6, 2).toInt32();
 
-            if (nLen >= 12 && rString.copy(8, 2) == ". ")
+            if (nLen >= 12 && rString.match(8, ". "))
                 aRet.Day = rString.copy(10, 2).toInt32();
         }
     }

@@ -86,7 +86,7 @@ namespace
         sal_Int32 nIndex = 0;
         while((nIndex=sResult.indexOf("\\n",nIndex))!=-1)
         {
-            if( sResult.copy(nIndex-1,3)!="\\\\n" &&
+            if( !sResult.match(nIndex-1, "\\\\n") &&
                 nIndex!=sResult.getLength()-3)
             {
                sResult = sResult.replaceAt(nIndex,2,"\\n\"\n\"");

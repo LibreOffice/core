@@ -2151,16 +2151,14 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     OUString rCondition = aMyConditions[nIndex].sCondition;
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     sal_uInt32 l_nKey = pData->GetKeyForName( rApplyName );
-    OUString sValue("value()");        //! define constant
-    sal_Int32 nValLen = sValue.getLength();
 
+    OUString sRealCond;
     if ( pFormatter && l_nKey != NUMBERFORMAT_ENTRY_NOT_FOUND &&
-            rCondition.copy( 0, nValLen ) == sValue )
+            rCondition.startsWith("value()", &sRealCond) )
     {
         //! test for valid conditions
         //! test for default conditions
 
-        OUString sRealCond = rCondition.copy( nValLen, rCondition.getLength() - nValLen );
         bool bDefaultCond = false;
 
         //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count

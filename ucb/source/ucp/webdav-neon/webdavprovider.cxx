@@ -142,7 +142,7 @@ ContentProvider::queryContent(
     if ( aURL.getLength() < ( aScheme.getLength() + 3 ) )
         throw ucb::IllegalIdentifierException();
 
-    if ( aURL.copy( aScheme.getLength(), 3 ) != "://" )
+    if ( !aURL.match( aScheme.getLength(), "://") )
         throw ucb::IllegalIdentifierException();
 
     uno::Reference< ucb::XContentIdentifier > xCanonicId;
