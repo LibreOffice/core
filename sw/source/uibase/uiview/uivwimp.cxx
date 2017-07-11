@@ -226,6 +226,16 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
     //prevent removing of the non-referenced SwTransferable
     rTransferable.m_refCount++;
     {
+        // Remove previously added, but no longer existing weak references.
+        for (auto it = mxTransferables.begin(); it != mxTransferables.end();)
+        {
+            uno::Reference<lang::XUnoTunnel> xTunnel(it->get(), uno::UNO_QUERY);
+            if (!xTunnel.is())
+                it = mxTransferables.erase(it);
+            else
+                ++it;
+        }
+
         mxTransferables.push_back(uno::WeakReference<lang::XUnoTunnel>(uno::Reference<lang::XUnoTunnel>(&rTransferable)));
     }
     rTransferable.m_refCount--;
