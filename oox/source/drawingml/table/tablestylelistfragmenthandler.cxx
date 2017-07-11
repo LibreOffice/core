@@ -54,7 +54,7 @@ ContextHandlerRef TableStyleListFragmentHandler::onCreateContext(
             break;
         case A_TOKEN( tblStyle ):       // CT_TableStyle
             std::vector< TableStyle >& rTableStyles = mrTableStyleList.getTableStyles();
-            rTableStyles.resize( rTableStyles.size() + 1 );
+            rTableStyles.emplace_back();
             return new TableStyleContext( *this, rAttribs, rTableStyles.back() );
     }
     return this;

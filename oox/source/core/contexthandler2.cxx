@@ -144,7 +144,7 @@ void ContextHandler2Helper::implEndRecord( sal_Int32 nRecId )
 
 ElementInfo& ContextHandler2Helper::pushElementInfo( sal_Int32 nElement )
 {
-    mxContextStack->resize( mxContextStack->size() + 1 );
+    mxContextStack->emplace_back();
     ElementInfo& rInfo = mxContextStack->back();
     rInfo.mnElement = nElement;
     return rInfo;

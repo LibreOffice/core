@@ -150,7 +150,7 @@ ApiFilterSettings::ApiFilterSettings()
 
 void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, double fValue )
 {
-    maFilterFields.resize( maFilterFields.size() + 1 );
+    maFilterFields.emplace_back();
     TableFilterField3& rFilterField = maFilterFields.back();
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = nOperator;
@@ -161,7 +161,7 @@ void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, double fVal
 
 void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, const OUString& rValue )
 {
-    maFilterFields.resize( maFilterFields.size() + 1 );
+    maFilterFields.emplace_back();
     TableFilterField3& rFilterField = maFilterFields.back();
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = nOperator;
@@ -172,7 +172,7 @@ void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, const OUStr
 
 void ApiFilterSettings::appendField( bool bAnd, const std::vector<OUString>& rValues )
 {
-    maFilterFields.resize( maFilterFields.size() + 1 );
+    maFilterFields.emplace_back();
     TableFilterField3& rFilterField = maFilterFields.back();
     rFilterField.Connection = bAnd ? FilterConnection_AND : FilterConnection_OR;
     rFilterField.Operator = FilterOperator2::EQUAL;

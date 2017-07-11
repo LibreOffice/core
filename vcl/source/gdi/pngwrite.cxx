@@ -656,7 +656,7 @@ void PNGWriterImpl::ImplClearFirstScanline()
 
 void PNGWriterImpl::ImplOpenChunk (sal_uLong nChunkType)
 {
-    maChunkSeq.resize(maChunkSeq.size() + 1);
+    maChunkSeq.emplace_back();
     maChunkSeq.back().nType = nChunkType;
 }
 

@@ -49,7 +49,7 @@ TableRowContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList
     case A_TOKEN( tc ):         // CT_TableCell
         {
             std::vector< TableCell >& rvTableCells = mrTableRow.getTableCells();
-            rvTableCells.resize( rvTableCells.size() + 1 );
+            rvTableCells.emplace_back();
             return new TableCellContext( *this, rAttribs, rvTableCells.back() );
         }
     case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList

@@ -622,7 +622,7 @@ protected:
     void setTestInteractionHandler(const char* pPassword, std::vector<beans::PropertyValue>& rFilterOptions)
     {
         OUString sPassword = OUString::createFromAscii(pPassword);
-        rFilterOptions.resize(rFilterOptions.size() + 1);
+        rFilterOptions.emplace_back();
         xInteractionHandler = rtl::Reference<TestInteractionHandler>(new TestInteractionHandler(sPassword));
         uno::Reference<task::XInteractionHandler2> const xInteraction(xInteractionHandler.get());
         rFilterOptions[0].Name = "InteractionHandler";

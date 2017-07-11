@@ -2920,7 +2920,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
         throw IllegalArgumentException("Invalid element object", static_cast<cppu::OWeakObject*>(this), 0);
 
     // create the new entry if no error has been occurred
-    maGroups.resize( maGroups.size() + 1 );
+    maGroups.emplace_back();
     ScFieldGroup& rGroup = maGroups.back();
     rGroup.maName = rName;
     rGroup.maMembers.swap( aMembers );

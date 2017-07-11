@@ -875,7 +875,7 @@ void ScInterpreter::ScModalValue_Multi()
                 {
                     if ( nCount > nMax )
                         nMax = nCount;
-                    aResultArray.resize( aResultArray.size() + 1 );
+                    aResultArray.emplace_back();
                 }
                 aResultArray[ aResultArray.size() -1  ] = nOldVal;
                 nCount = 1;

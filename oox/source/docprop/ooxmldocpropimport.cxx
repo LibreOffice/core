@@ -91,7 +91,7 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
                 Reference< XInputStream > xInStream = xExtStream->getInputStream();
                 if( xInStream.is() )
                 {
-                    aResult.resize( aResult.size() + 1 );
+                    aResult.emplace_back();
                     aResult.back().sSystemId = rEntry.Second;
                     aResult.back().aInputStream = xExtStream->getInputStream();
                 }

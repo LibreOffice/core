@@ -3832,7 +3832,6 @@ void SwColumnFrame::PaintBreak( ) const
 
                     drawinglayer::primitive2d::Primitive2DContainer aSeq =
                         lcl_CreateDashedIndicatorPrimitive( aStart, aEnd, aLineColor );
-                    aSeq.resize( aSeq.size( ) + 1 );
 
                     // Add the text above
                     OUString aBreakText = SwResId(STR_COLUMN_BREAK);
@@ -3867,7 +3866,7 @@ void SwColumnFrame::PaintBreak( ) const
                                 aFontAttr,
                                 lang::Locale(),
                                 aLineColor );
-                    aSeq[ aSeq.size() - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pText );
+                    aSeq.push_back( drawinglayer::primitive2d::Primitive2DReference( pText ) );
 
                     ProcessPrimitives( aSeq );
                 }

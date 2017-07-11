@@ -5201,7 +5201,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
         auto nEndRecPos = DffPropSet::SanitizeEndPos(rIn, rExtParaHd.GetRecEndFilePos());
         while( ( rIn.GetError() == ERRCODE_NONE ) && ( rIn.Tell() < nEndRecPos ) )
         {
-            aStyleTextProp9.resize( aStyleTextProp9.size() + 1 );
+            aStyleTextProp9.emplace_back();
             aStyleTextProp9.back().Read( rIn );
         }
         rIn.Seek( nMerk );

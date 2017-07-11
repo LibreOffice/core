@@ -351,10 +351,9 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     if (Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         aSignColor = Color(COL_WHITE).getBColor();
 
-    aSeq.resize(aSeq.size() + 1);
-    aSeq[aSeq.size() - 1] = drawinglayer::primitive2d::Primitive2DReference(
+    aSeq.push_back( drawinglayer::primitive2d::Primitive2DReference(
                                     new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
-                                        B2DPolyPolygon(aSign), aSignColor));
+                                        B2DPolyPolygon(aSign), aSignColor)) );
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;

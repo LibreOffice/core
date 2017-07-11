@@ -127,7 +127,7 @@ ApiTokenVector::ApiTokenVector()
 
 Any& ApiTokenVector::append( sal_Int32 nOpCode )
 {
-    mvTokens.resize( mvTokens.size() + 1 );
+    mvTokens.emplace_back();
     mvTokens.back().OpCode = nOpCode;
     return mvTokens.back().Data;
 }

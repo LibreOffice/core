@@ -530,7 +530,7 @@ SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefi
 {
     if ( token::IsXMLToken( _rLocalName, token::XML_LIST_VALUE ) )
     {
-        m_aListValues.resize( m_aListValues.size() + 1 );
+        m_aListValues.emplace_back();
         return new OListValueContext( GetImport(), _nPrefix, _rLocalName, *m_aListValues.rbegin() );
     }
     else

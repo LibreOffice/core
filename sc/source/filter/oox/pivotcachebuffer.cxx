@@ -303,7 +303,7 @@ void PivotCacheItemList::getCacheItemNames( ::std::vector< OUString >& orItemNam
 
 PivotCacheItem& PivotCacheItemList::createItem()
 {
-    maItems.resize( maItems.size() + 1 );
+    maItems.emplace_back();
     return maItems.back();
 }
 

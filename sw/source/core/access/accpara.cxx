@@ -1628,13 +1628,13 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
         _correctValues( nIndex, aValues );
 
-        aValues.resize( aValues.size() + 1 );
+        aValues.emplace_back();
 
         OUString strTypeName = GetFieldTypeNameAtIndex(nIndex);
         if (!strTypeName.isEmpty())
         {
-            aValues.resize( aValues.size() + 1 );
-            PropertyValue& rValueFT = aValues[aValues.size() - 1];
+            aValues.emplace_back();
+            PropertyValue& rValueFT = aValues.back();
             rValueFT.Name = "FieldType";
             rValueFT.Value <<= strTypeName.toAsciiLowerCase();
             rValueFT.Handle = -1;
