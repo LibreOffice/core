@@ -55,6 +55,7 @@
 #include "sc.hrc"
 #include "macromgr.hxx"
 #include "defaultsoptions.hxx"
+#include "vbafiledialog.hxx"
 
 #include <osl/file.hxx>
 #include <rtl/instance.hxx>
@@ -310,6 +311,13 @@ ScVbaApplication::International( sal_Int32 /*Index*/ )
     // #TODO flesh out some of the Indices we could handle
     uno::Any aRet;
     return aRet;
+}
+
+uno::Any SAL_CALL
+ScVbaApplication::FileDialog( const uno::Any& /*DialogType*/ )
+{
+    uno::Reference<excel::XFileDialog> xDialog ( new ScVbaFiledialog( this, mxContext ));
+    return uno::Any( xDialog );
 }
 
 uno::Any SAL_CALL

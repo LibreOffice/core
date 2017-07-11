@@ -233,6 +233,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,ooo/vba/excel,\
 	XDialog \
 	XDialogs \
 	XDrawings \
+	XFileDialog \
+	XFileDialogSelectedItems \
 	XFont \
 	XFormat \
 	XFormatCondition \
