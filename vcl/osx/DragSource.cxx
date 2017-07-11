@@ -220,8 +220,8 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
 {
   MutexGuard guard(m_aMutex);
 
-  assert(listener.is() && "DragSource::startDrag: No XDragSourceListener provided\n");
-  assert(transferable.is() && "DragSource::startDrag: No transferable provided\n");
+  assert(listener.is() && "DragSource::startDrag: No XDragSourceListener provided");
+  assert(transferable.is() && "DragSource::startDrag: No transferable provided");
 
   trigger.Event >>= mMouseEvent;
   m_MouseButton= mMouseEvent.Buttons;

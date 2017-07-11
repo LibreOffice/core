@@ -616,7 +616,7 @@ void SAL_CALL OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 
     OSL_ENSURE( nMode == embed::EmbedUpdateModes::ALWAYS_UPDATE
                     || nMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE,
-                "Unknown update mode!\n" );
+                "Unknown update mode!" );
     m_nUpdateMode = nMode;
 }
 

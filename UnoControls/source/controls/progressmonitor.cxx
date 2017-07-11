@@ -226,7 +226,7 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
 {
     // Safe impossible cases
     // Check valid call of this method.
-    DBG_ASSERT ( impl_debug_checkParameter ( rTopic ), "ProgressMonitor::removeText()\nCall without valid parameters!\n" );
+    DBG_ASSERT ( impl_debug_checkParameter ( rTopic ), "ProgressMonitor::removeText()\nCall without valid parameters!" );
 
     // Search the topic ...
     IMPL_TextlistItem* pSearchItem = impl_searchTopic ( rTopic, bbeforeProgress );

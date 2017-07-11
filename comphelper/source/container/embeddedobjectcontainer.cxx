@@ -395,7 +395,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
         AddEmbeddedObject( xObj, rNewName );
 
         OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
-                    "A freshly create object should be running always!\n" );
+                    "A freshly create object should be running always!" );
     }
     catch (uno::Exception const& e)
     {
@@ -614,7 +614,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
            OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
-                    "A freshly create object should be running always!\n" );
+                    "A freshly create object should be running always!" );
 
         // possible optimization: store later!
         if ( xPersist.is())
@@ -646,7 +646,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
 
            OSL_ENSURE( !xObj.is() || xObj->getCurrentState() != embed::EmbedStates::LOADED,
-                    "A freshly create object should be running always!\n" );
+                    "A freshly create object should be running always!" );
 
         // possible optimization: store later!
         if ( xPersist.is())

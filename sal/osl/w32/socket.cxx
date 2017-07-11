@@ -1116,7 +1116,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo (
             SAL_WARN_IF(
                 !FD_ISSET(pSocket->m_Socket, &fds),
                 "sal.osl",
-                "osl_connectSocketTo(): select returned but socket not set\n");
+                "osl_connectSocketTo(): select returned but socket not set");
 
             Result= osl_Socket_Ok;
 

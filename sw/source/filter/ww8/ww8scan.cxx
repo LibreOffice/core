@@ -6557,7 +6557,7 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
     const sal_uInt16 nMaxPossibleRecords = nRemaining/nMinRecordSize;
 
     OSL_ENSURE(cstd <= nMaxPossibleRecords,
-        "allegedly more styles that available data\n");
+        "allegedly more styles that available data");
     cstd = std::min(cstd, nMaxPossibleRecords);
 }
 

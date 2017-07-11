@@ -403,7 +403,7 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
 
 #if OSL_DEBUG_LEVEL > 0
         default:
-            assert(false && "SvtSecurityOptions_Impl::SetProperty()\nUnknown property!\n");
+            assert(false && "Unknown property!");
 #endif
         }
 }

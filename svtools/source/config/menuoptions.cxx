@@ -279,7 +279,7 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
             if ( seqValues[nProperty] >>= nContextMenuShortcuts )
                 m_eContextMenuShortcuts = static_cast<TriState>(nContextMenuShortcuts);
         }
-        else assert( false && "SvtMenuOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!\n" );
+        else assert( false && "SvtMenuOptions_Impl::Notify()\nUnknown property detected ... I can't handle these!" );
     }
 
     if ( bMenuSettingsChanged )

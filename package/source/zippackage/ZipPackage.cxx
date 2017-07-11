@@ -327,7 +327,7 @@ void ZipPackage::parseManifest()
 
         if ( !bManifestParsed && !m_bForceRecovery )
             throw ZipIOException(
-                THROW_WHERE "Could not parse manifest.xml\n" );
+                THROW_WHERE "Could not parse manifest.xml" );
 
         const OUString sMimetype ("mimetype");
         if ( m_xRootFolder->hasByName( sMimetype ) )
@@ -1039,7 +1039,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
         OUString aPath;
         OUString aType;
         OSL_ENSURE( ( *aIter )[PKG_MNFST_MEDIATYPE].Name == "MediaType" && ( *aIter )[PKG_MNFST_FULLPATH].Name == "FullPath",
-                    "The mediatype sequence format is wrong!\n" );
+                    "The mediatype sequence format is wrong!" );
         ( *aIter )[PKG_MNFST_MEDIATYPE].Value >>= aType;
         if ( !aType.isEmpty() )
         {
