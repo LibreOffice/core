@@ -7202,6 +7202,8 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             uno::Reference < embed::XEmbeddedObject > xObj = aCnt.GetEmbeddedObject( aDstStgName );
             if( xObj.is() )
             {
+                INetURLObject aURL( rBaseURL );
+                xObj->setContainerName( aURL.GetLastName( INetURLObject::DecodeMechanism::WithCharset ) );
                 // the visual area must be retrieved from the metafile (object doesn't know it so far)
 
                 if ( nAspect != embed::Aspects::MSOLE_ICON )
