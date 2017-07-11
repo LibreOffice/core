@@ -565,6 +565,9 @@ bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult, 
 
 void FormulaDlg_Impl::UpdateValues( bool bForceRecalcStruct )
 {
+    /* TODO: this must take array context of the outer
+     * FormulaToken::IsInForceArray() into account. As is, this is just the
+     * currently selected formula text part. */
     OUString aStrResult;
     if ( pFuncDesc &&  CalcValue( pFuncDesc->getFormula( m_aArguments ), aStrResult ) )
         m_pWndResult->SetText( aStrResult );
@@ -693,7 +696,7 @@ void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, co
                     }
 
                     OUString aStr;
-                    if (CalcValue( aFormula, aStr))
+                    if (CalcValue( aFormula, aStr, _pToken->IsInForceArray()))
                         m_pWndResult->SetText( aStr );
                     aStr = m_pWndResult->GetText();
                     pStructPage->GetTlbStruct()->SetEntryText( pEntry, aResult + " = " + aStr);
@@ -712,17 +715,48 @@ void FormulaDlg_Impl::MakeTree( StructPage* _pTree, SvTreeListEntry* pParent, co
                 else if (eOp == ocPush)
                 {
                     // Interpret range reference in matrix context to resolve
-                    // as array elements.
-                    /* TODO: this should depend on parameter classification, if
-                     * a scalar value is expected matrix should not be forced.
-                     * */
-                    (void)pFuncToken;
+                    // as array elements. Depending on parameter classification
+                    // a scalar value (non-array context) is calculated first.
+                    OUString aUnforcedResult;
                     bool bForceMatrix = (!m_pBtnMatrix->IsChecked() &&
                             (_pToken->GetType() == svDoubleRef || _pToken->GetType() == svExternalDoubleRef));
+                    if (bForceMatrix && pFuncToken)
+                    {
+                        formula::ParamClass eParamClass = ParamClass::Reference;
+                        if (pFuncToken->IsInForceArray())
+                            eParamClass = ParamClass::ForceArray;
+                        else
+                        {
+                            std::shared_ptr<FormulaCompiler> pCompiler = m_pHelper->getCompiler();
+                            if (pCompiler)
+                                eParamClass = pCompiler->GetForceArrayParameter( pFuncToken, Count - 1);
+                        }
+                        switch (eParamClass)
+                        {
+                            case ParamClass::Unknown:
+                            case ParamClass::Bounds:
+                            case ParamClass::Value:
+                                if (CalcValue( "=" + aResult, aUnforcedResult, false) && aUnforcedResult != aResult)
+                                    aUnforcedResult += "  ";
+                                else
+                                    aUnforcedResult.clear();
+                            break;
+                            case ParamClass::Reference:
+                            case ParamClass::Array:
+                            case ParamClass::ForceArray:
+                            case ParamClass::ReferenceOrForceArray:
+                                ;   // nothing, only as array/matrix
+                            // no default to get compiler warning
+                        }
+                    }
                     OUString aCellResult;
                     if (CalcValue( "=" + aResult, aCellResult, bForceMatrix) && aCellResult != aResult)
+                    {
                         // Cell is a formula, print subformula.
-                        _pTree->InsertEntry( aResult + " = " + aCellResult, pParent, STRUCT_END, 0, _pToken);
+                        // With scalar values prints "A1:A3 = 2 {1;2;3}"
+                        _pTree->InsertEntry( aResult + " = " + aUnforcedResult + aCellResult,
+                                pParent, STRUCT_END, 0, _pToken);
+                    }
                     else
                         _pTree->InsertEntry( aResult, pParent, STRUCT_END, 0, _pToken);
                 }
