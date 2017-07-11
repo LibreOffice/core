@@ -786,6 +786,7 @@ void FormulaDlg_Impl::fillTree(StructPage* _pTree)
         bMakingTree = false;
     }
 }
+
 void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
 {
     m_aTokenMap.clear();
@@ -993,6 +994,7 @@ void FormulaDlg_Impl::ClearAllParas()
         m_pFtFuncDesc->Show();
     }
 }
+
 OUString FormulaDlg_Impl::RepairFormula(const OUString& aFormula)
 {
     OUString aResult('=');
@@ -1514,6 +1516,7 @@ void FormulaDlg_Impl::UpdateSelection()
     aPair.second = m_pEdRef;
     return aPair;
 }
+
 void FormulaDlg_Impl::RefInputStartAfter()
 {
     m_pRefBtn->SetEndImage();
@@ -1532,6 +1535,7 @@ void FormulaDlg_Impl::RefInputStartAfter()
         m_pParent->SetText( MnemonicGenerator::EraseAllMnemonicChars( aStr ) );
     }
 }
+
 void FormulaDlg_Impl::RefInputDoneAfter( bool bForced )
 {
     m_pRefBtn->SetStartImage();
@@ -1555,10 +1559,12 @@ void FormulaDlg_Impl::RefInputDoneAfter( bool bForced )
         m_pParent->SetText( aTitle1 );
     }
 }
+
 RefEdit* FormulaDlg_Impl::GetCurrRefEdit()
 {
     return m_pEdRef->IsVisible() ? m_pEdRef.get() : pParaWin->GetActiveEdit();
 }
+
 void FormulaDlg_Impl::Update()
 {
     FormEditData* pData = m_pHelper->getFormEditData();
@@ -1573,12 +1579,14 @@ void FormulaDlg_Impl::Update()
         m_pTabCtrl->SetCurPageId(TP_STRUCT);
     m_pBtnMatrix->Check(pData->GetMatrixFlag());
 }
+
 void FormulaDlg_Impl::Update(const OUString& _sExp)
 {
     CalcStruct(_sExp);
     FillDialog();
     FuncSelHdl(*pFuncPage);
 }
+
 void FormulaDlg_Impl::SetMeText(const OUString& _sText)
 {
     FormEditData* pData = m_pHelper->getFormEditData();
@@ -1586,6 +1594,7 @@ void FormulaDlg_Impl::SetMeText(const OUString& _sText)
     pMEdit->SetSelection( pData->GetSelection());
     m_pMEFormula->UpdateOldSel();
 }
+
 FormulaDlgMode FormulaDlg_Impl::SetMeText( const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate)
 {
     FormulaDlgMode eMode = FORMULA_FORMDLG_FORMULA;
@@ -1605,6 +1614,7 @@ FormulaDlgMode FormulaDlg_Impl::SetMeText( const OUString& _sText, sal_Int32 Pri
     } // if ( _bUpdate )
     return eMode;
 }
+
 bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
 {
     pMEdit->GrabFocus();
@@ -1623,6 +1633,7 @@ bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
     m_pTabCtrl->SetCurPageId(TP_STRUCT);
     return bMatrix;
 }
+
 IMPL_LINK_NOARG( FormulaDlg_Impl, StructSelHdl, StructPage&, void)
 {
     bStructUpdate = false;
@@ -1630,6 +1641,7 @@ IMPL_LINK_NOARG( FormulaDlg_Impl, StructSelHdl, StructPage&, void)
         m_pBtnForward->Enable(false); //@New
     bStructUpdate = true;
 }
+
 IMPL_LINK_NOARG( FormulaDlg_Impl, MatrixHdl, Button*, void)
 {
     bUserMatrixFlag = true;
@@ -1892,6 +1904,7 @@ void FormulaDlg::UpdateParaWin( const Selection& _rSelection, const OUString& _s
 {
     m_pImpl->UpdateParaWin( _rSelection, _sRefStr);
 }
+
 bool FormulaDlg::UpdateParaWin(Selection& _rSelection)
 {
     return m_pImpl->UpdateParaWin(_rSelection);
