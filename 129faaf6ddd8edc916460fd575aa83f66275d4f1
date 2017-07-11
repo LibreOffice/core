@@ -16,6 +16,24 @@
       "revId": "129faaf6ddd8edc916460fd575aa83f66275d4f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f43633b3",
+        "filename": "writerfilter/source/ooxml/OOXMLDocumentImpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-07-11T11:34:21Z",
+      "side": 1,
+      "message": "The first two lines is a result of cherry-pick.\nThere were conflict which was need to be resolved.\n\nIs that means that it should be removed?",
+      "parentUuid": "3a461143_993c4a31",
+      "revId": "129faaf6ddd8edc916460fd575aa83f66275d4f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
