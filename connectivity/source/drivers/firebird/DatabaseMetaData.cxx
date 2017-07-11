@@ -1199,7 +1199,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 
         // 9. Decimal digits (scale)
         // fb stores a negative number
-        aCurrentRow[9] = new ORowSetValueDecorator( (sal_Int16) -(aScale) );
+        aCurrentRow[9] = new ORowSetValueDecorator( (sal_Int16) -aScale );
 
         // 11. Nullable
         if (xRow->getShort(11))
