@@ -74,6 +74,8 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 	sc/source/ui/vba/vbadialog \
 	sc/source/ui/vba/vbadialogs \
 	sc/source/ui/vba/vbaeventshelper \
+	sc/source/ui/vba/vbafiledialog \
+	sc/source/ui/vba/vbafiledialogitems \
 	sc/source/ui/vba/vbafont \
 	sc/source/ui/vba/vbaformat \
 	sc/source/ui/vba/vbaformatcondition \
