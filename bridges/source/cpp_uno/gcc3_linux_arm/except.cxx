@@ -157,6 +157,7 @@ namespace CPPU_CURRENT_NAMESPACE
             {
                 pair< t_rtti_map::iterator, bool > insertion(
                     m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
+                (void) insertion;
                 assert(insertion.second && "### inserting new rtti failed?!");
             }
             else
@@ -199,6 +200,7 @@ namespace CPPU_CURRENT_NAMESPACE
 
                     pair< t_rtti_map::iterator, bool > insertion(
                         m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
+                    (void) insertion;
                     assert(insertion.second && "### inserting new generated rtti failed?!");
                 }
                 else // taking already generated rtti
