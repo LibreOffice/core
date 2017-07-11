@@ -29,6 +29,7 @@ $(eval $(call gb_Library_use_libraries,embobj,\
 	svt \
 	vcl \
 	tl \
+	i18nlangtag \
 	$(gb_UWINAPI) \
 ))
 
