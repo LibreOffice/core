@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <o3tl/any.hxx>
@@ -2965,6 +2966,11 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     ::svt::EmbeddedObjectRef xObjRef( xIPObj, m_nDrawAspect);
                     pFormat2 = pDoc->getIDocumentContentOperations().InsertEmbObject(
                             aPam, xObjRef, &aFrameSet );
+
+                    // store main document name to show in the title bar
+                    uno::Reference< frame::XTitle > xModelTitle( pDoc->GetDocShell()->GetModel(), css::uno::UNO_QUERY );
+                    xIPObj->setContainerName( xModelTitle->getTitle() );
+
                     assert(pFormat2 && "Doc->Insert(notxt) failed.");
 
                     pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);

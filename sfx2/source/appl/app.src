@@ -293,6 +293,11 @@ String RID_XMLSEC_DOCUMENTSIGNED
     Text [ en-US ] = " (Signed)" ;
 };
 
+String STR_EMBEDDED_TITLE
+{
+    Text [ en-US ] = " (Embedded document)" ;
+};
+
 String STR_STANDARD
 {
     Text [ en-US ] = "Standard" ;

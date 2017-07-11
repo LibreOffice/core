@@ -357,6 +357,9 @@ bool OleEmbeddedObject::TryToConvertToOOo()
                 nStep = 4;
                 m_xWrappedObject.set( xEmbCreator->createInstanceInitFromEntry( m_xParentStorage, m_aEntryName, uno::Sequence< beans::PropertyValue >(), uno::Sequence< beans::PropertyValue >() ), uno::UNO_QUERY_THROW );
 
+                // remember parent document name to show in the title bar
+                m_xWrappedObject->setContainerName( m_aContainerName );
+
                 bResult = true; // the change is no more revertable
                 try
                 {

@@ -99,7 +99,7 @@
 #define STR_ERRUNOEVENTBINDUNG              (RID_SFX_START+119)
 #define STR_SHARED                          (RID_SFX_START+120)
 #define RID_XMLSEC_DOCUMENTSIGNED           (RID_SFX_START+121)
-// Here is a gap, STR_PASSWORD was removed  RID_SFX_START+122
+#define STR_EMBEDDED_TITLE                  (RID_SFX_START+122)
 #define STR_PASSWD_EMPTY                    (RID_SFX_START+123)
 #define STR_PASSWD_MIN_LEN                  (RID_SFX_START+124)
 #define STR_NONCHECKEDOUT_DOCUMENT          (RID_SFX_START+125)
