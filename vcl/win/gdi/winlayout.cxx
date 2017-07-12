@@ -90,6 +90,9 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     // Fetch the ink boxes and calculate the size of the atlas.
     tools::Rectangle bounds(0, 0, 0, 0);
     auto aInkBoxes = pTxt->GetGlyphInkBoxes(aGlyphIndices.data(), aGlyphIndices.data() + 1);
+    if (aInkBoxes.empty())
+        return false;
+
     for (auto &box : aInkBoxes)
         bounds.Union(box + Point(bounds.Right(), 0));
 
@@ -519,7 +522,8 @@ bool D2DWriteTextOutRenderer::ReleaseFont()
 std::vector<tools::Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t * pGid, uint16_t * pGidEnd) const
 {
     ptrdiff_t nGlyphs = pGidEnd - pGid;
-    if (nGlyphs < 0) return std::vector<tools::Rectangle>();
+    if (nGlyphs < 0)
+        return std::vector<tools::Rectangle>();
 
     DWRITE_FONT_METRICS aFontMetrics;
     mpFontFace->GetMetrics(&aFontMetrics);
