@@ -23,6 +23,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <osl/thread.h>
+#include <config_gio.h>
 
 #include "unx/fontmanager.hxx"
 #include "fontsubset.hxx"
@@ -133,7 +134,7 @@ PrintFontManager::PrintFontManager()
     : m_nNextFontID( 1 )
     , m_nNextDirAtom( 1 )
 {
-#if ENABLE_DBUS
+#if ENABLE_GIO
     m_aFontInstallerTimer.SetInvokeHandler(LINK(this, PrintFontManager, autoInstallFontLangSupport));
     m_aFontInstallerTimer.SetTimeout(5000);
 #endif

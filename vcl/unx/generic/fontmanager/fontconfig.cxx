@@ -31,6 +31,7 @@
 #include <rtl/strbuf.hxx>
 #include <unicode/uchar.h>
 #include <unicode/uscript.h>
+#include <config_gio.h>
 
 using namespace psp;
 
@@ -38,8 +39,8 @@ using namespace psp;
 #include <ft2build.h>
 #include <fontconfig/fcfreetype.h>
 
-#if ENABLE_DBUS
-#include <dbus/dbus-glib.h>
+#if ENABLE_GIO
+#include <gio/gio.h>
 #endif
 
 #include <cstdio>
@@ -860,9 +861,11 @@ namespace
         return OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
     }
 
-#if ENABLE_DBUS
+#if ENABLE_GIO
     guint get_xid_for_dbus()
     {
+        // FIXME: Application::GetActiveTopWindow only returns something sensible if LO currently has the focus
+        // (which is not the case when you are trying to debug this...). It should instead return the last active window.
         const vcl::Window *pTopWindow = Application::IsHeadlessModeEnabled() ? nullptr : Application::GetActiveTopWindow();
         const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : nullptr;
         return pEnvData ? pEnvData->aWindow : 0;
@@ -870,17 +873,21 @@ namespace
 #endif
 }
 
-#if ENABLE_DBUS
+#if ENABLE_GIO
 IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
 {
     guint xid = get_xid_for_dbus();
 
     if (!xid)
+    {
+        SAL_WARN("vcl", "Could not retrieve X Window ID for DBUS");
         return;
+    }
+
 
     GError *error = nullptr;
     /* get the DBUS session connection */
-    DBusGConnection *session_connection = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
+    GDBusConnection *session_connection = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, &error);
     if (error != nullptr)
     {
         g_debug ("DBUS cannot connect : %s", error->message);
@@ -889,40 +896,49 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
     }
 
     /* get the proxy with gnome-session-manager */
-    DBusGProxy *proxy = dbus_g_proxy_new_for_name(session_connection,
-                                       "org.freedesktop.PackageKit",
-                                       "/org/freedesktop/PackageKit",
-                                       "org.freedesktop.PackageKit.Modify");
-    if (proxy == nullptr)
+    GDBusProxy *proxy = g_dbus_proxy_new_sync(session_connection,
+                                              G_DBUS_PROXY_FLAGS_NONE,
+                                              nullptr, // GDBusInterfaceInfo
+                                              "org.freedesktop.PackageKit",
+                                              "/org/freedesktop/PackageKit",
+                                              "org.freedesktop.PackageKit.Modify",
+                                              nullptr, // GCancellable
+                                              &error);
+    if (proxy == nullptr && error != nullptr)
     {
-        g_debug("Could not get DBUS proxy: org.freedesktop.PackageKit");
+        g_debug("Could not get DBUS proxy: org.freedesktop.PackageKit: %s", error->message);
+        g_error_free(error);
         return;
     }
 
-    gchar **fonts = static_cast<gchar**>(g_malloc((m_aCurrentRequests.size() + 1) * sizeof(gchar*)));
-    gchar **font = fonts;
+    GVariantBuilder *builder = g_variant_builder_new (G_VARIANT_TYPE("as")); // 'as'=array of strings
     for (std::vector<OString>::const_iterator aI = m_aCurrentRequests.begin(); aI != m_aCurrentRequests.end(); ++aI)
-        *font++ = const_cast<gchar*>(aI->getStr());
-    *font = nullptr;
-    gboolean res = dbus_g_proxy_call(proxy, "InstallFontconfigResources", &error,
-                 G_TYPE_UINT, xid, /* xid */
-                 G_TYPE_STRV, fonts, /* data */
-                 G_TYPE_STRING, "hide-finished", /* interaction */
-                 G_TYPE_INVALID,
-                 G_TYPE_INVALID);
-    /* check the return value */
-    if (!res)
-       g_debug("InstallFontconfigResources method failed");
+        g_variant_builder_add (builder, "s", aI->getStr());
 
-    /* check the error value */
-    if (error != nullptr)
+    GVariant *res = g_dbus_proxy_call_sync(proxy,
+                                     "InstallFontconfigResources",
+                                     // Create a new variant with the following types:
+                                     //   'u'=guint32 (xid); 'as'=array of strings (builder); 's'=string ("hide-finished")
+                                     // See also https://people.gnome.org/~ryanl/glib-docs/gvariant-format-strings.html
+                                     g_variant_new("(uass)", xid, builder, "hide-finished"),
+                                     G_DBUS_CALL_FLAGS_NONE,
+                                     -1, // Timeout
+                                     nullptr, // GCancellable
+                                     &error);
+
+    if (res == nullptr && error != nullptr)
     {
         g_debug("InstallFontconfigResources problem : %s", error->message);
         g_error_free(error);
     }
+    else
+    {
+        g_variant_unref(res);
+    }
 
-    g_free(fonts);
+    g_variant_builder_unref(builder);
     g_object_unref(G_OBJECT (proxy));
+
     m_aCurrentRequests.clear();
 }
 #endif
@@ -1081,7 +1097,7 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                     }
                 }
                 OUString sStillMissing(pRemainingCodes.get(), nRemainingLen);
-#if ENABLE_DBUS
+#if ENABLE_GIO
                 if (get_xid_for_dbus())
                 {
                     if (sStillMissing == rMissingCodes) //replaced nothing
