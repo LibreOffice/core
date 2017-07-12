@@ -348,7 +348,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sax/tools/converter.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -403,9 +402,7 @@
 #include <tools/globname.hxx>
 #include <tools/link.hxx>
 #include <tools/poly.hxx>
-#include <tools/rcid.h>
 #include <tools/ref.hxx>
-#include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

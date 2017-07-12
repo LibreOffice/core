@@ -19,7 +19,7 @@
 
 #include <helper/accresmgr.hxx>
 
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

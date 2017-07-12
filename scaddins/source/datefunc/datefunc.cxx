@@ -24,7 +24,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <algorithm>
 #include "deffuncname.hxx"
 
@@ -33,11 +33,6 @@ using namespace ::com::sun::star;
 #define ADDIN_SERVICE           "com.sun.star.sheet.AddIn"
 #define MY_SERVICE              "com.sun.star.sheet.addin.DateFunctions"
 #define MY_IMPLNAME             "com.sun.star.sheet.addin.DateFunctionsImpl"
-
-ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
-    ResId( nId, rResMgr )
-{
-}
 
 #define UNIQUE              false   // function name does not exist in Calc
 

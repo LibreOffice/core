@@ -20,7 +20,7 @@
 #include "RptModel.hxx"
 #include "RptPage.hxx"
 #include <dbaccess/dbsubcomponentcontroller.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 

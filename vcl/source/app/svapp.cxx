@@ -683,7 +683,6 @@ void Application::SetSettings( const AllSettings& rSettings )
     {
         InitSettings(pSVData);
         *pSVData->maAppData.mpSettings = rSettings;
-        ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
     }
     else
     {
@@ -693,7 +692,6 @@ void Application::SetSettings( const AllSettings& rSettings )
         {
             pSVData->mbResLocaleSet = false;
         }
-        ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
         *pSVData->maAppData.mpSettings = rSettings;
         AllSettingsFlags nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
         if ( bool(nChangeFlags) )

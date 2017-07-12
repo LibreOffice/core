@@ -20,7 +20,6 @@
 #include <hintids.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svl/itemiter.hxx>
-#include <tools/resid.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <txtftn.hxx>

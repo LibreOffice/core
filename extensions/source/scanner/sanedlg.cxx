@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <tools/config.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>

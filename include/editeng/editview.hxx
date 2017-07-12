@@ -23,7 +23,7 @@
 #include <memory>
 #include <com/sun/star/i18n/WordType.hpp>
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
