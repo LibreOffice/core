@@ -405,15 +405,29 @@ protected:
 
         xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
         xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
-        xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("parsing dump failed", 1, xmlXPathNodeSetGetLength(pXmlNodes));
-        xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-        OUString aRet;
-        if (aAttribute.getLength())
-            aRet = OUString::createFromAscii(reinterpret_cast<char*>(xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr()))));
-        else
-            aRet = OUString::createFromAscii(reinterpret_cast<char*>(xmlNodeGetContent(pXmlNode)));
+        CPPUNIT_ASSERT_MESSAGE("xpath evaluation failed", pXmlXpathObj);
+        xmlChar *pXpathStrResult;
+        if (pXmlXpathObj->type == XPATH_NODESET) {
+            xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("xpath did not match exactly 1 node",
+                1, xmlXPathNodeSetGetLength(pXmlNodes));
+            xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
+            if (aAttribute.getLength())
+                pXpathStrResult = xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr()));
+            else
+                pXpathStrResult = xmlNodeGetContent(pXmlNode);
+        } else {
+            // the xpath expression evaluated to a value, not a node
+            pXpathStrResult = xmlXPathCastToString(pXmlXpathObj);
+            CPPUNIT_ASSERT_MESSAGE("xpath result cannot be cast to string",
+                pXpathStrResult);
+        }
 
+        OUString aRet = OUString(reinterpret_cast<char*>(pXpathStrResult),
+            xmlStrlen(pXpathStrResult), RTL_TEXTENCODING_UTF8);
+        xmlFree(pXpathStrResult);
+        xmlFree(pXmlXpathObj);
+        xmlFree(pXmlXpathCtx);
         xmlFreeDoc(pXmlDoc);
 
         return aRet;
