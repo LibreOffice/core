@@ -21,7 +21,7 @@
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 
 #include <xmloff/i18nmap.hxx>
 #include <xmloff/xmluconv.hxx>

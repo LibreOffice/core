@@ -18,7 +18,6 @@
  */
 
 #include <UndoOverwrite.hxx>
-#include <tools/resid.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/processfactory.hxx>

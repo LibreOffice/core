@@ -21,7 +21,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include "tools/simplerm.hxx"
+#include "tools/resmgr.hxx"
 
 static std::locale* pResLocale = nullptr;
 

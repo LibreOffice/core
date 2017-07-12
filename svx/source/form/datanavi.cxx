@@ -29,9 +29,8 @@
 #include "bitmaps.hlst"
 #include "fpicker/fpicker.hrc"
 #include <svx/svxids.hrc>
-#include <tools/rcid.h>
 #include <tools/diagnose_ex.h>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <svx/xmlexchg.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/miscopt.hxx>

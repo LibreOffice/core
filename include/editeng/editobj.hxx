@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EDITENG_EDITOBJ_HXX
 #define INCLUDED_EDITENG_EDITOBJ_HXX
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>

@@ -27,7 +27,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/editengdllapi.h>

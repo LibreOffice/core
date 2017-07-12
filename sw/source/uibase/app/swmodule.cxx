@@ -24,7 +24,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/ehdl.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/TextCharacterSpacingPopup.hxx>
 #include <svx/TextUnderlinePopup.hxx>

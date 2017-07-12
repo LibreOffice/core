@@ -33,13 +33,6 @@
 #include <com/sun/star/sheet/addin/XDateFunctions.hpp>
 #include <com/sun/star/sheet/addin/XMiscFunctions.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <tools/resid.hxx>
-
-class ScaResId : public ResId
-{
-public:
-    ScaResId(sal_uInt16 nResId, ResMgr& rResMgr);
-};
 
 enum class ScaCategory
 {

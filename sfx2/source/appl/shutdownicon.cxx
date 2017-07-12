@@ -55,7 +55,6 @@
 #include <sfx2/dispatch.hxx>
 #include <comphelper/extract.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/rcid.h>
 #include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>

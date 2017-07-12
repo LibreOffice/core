@@ -18,7 +18,7 @@
  */
 
 #include <osl/file.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/layout.hxx>
 
 #include "strings.hrc"

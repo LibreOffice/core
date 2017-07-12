@@ -21,7 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
 
 #include <config_features.h>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 
 #define AVMEDIA_MANAGER_SERVICE_PREFERRED "com.sun.star.comp.avmedia.Manager_VLC"
 #ifdef _WIN32

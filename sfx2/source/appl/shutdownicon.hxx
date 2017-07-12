@@ -41,7 +41,6 @@ void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray();
 
 }
 
-class ResMgr;
 namespace sfx2
 {
     class FileDialogHelper;

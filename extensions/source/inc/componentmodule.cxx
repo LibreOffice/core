@@ -19,7 +19,7 @@
 
 #include <memory>
 #include "componentmodule.hxx"
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/solar.hrc>

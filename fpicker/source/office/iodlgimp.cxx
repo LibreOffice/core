@@ -20,7 +20,7 @@
 #include "iodlgimp.hxx"
 #include "svtools/headbar.hxx"
 #include <tools/debug.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
@@ -144,7 +144,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
         if ( nCount == 1 )
         {
             // adjust the title of the top level entry (the workspace)
-            std::locale loc = Translate::Create("svl");
+            std::locale loc = Translate::Create("svl", Application::GetSettings().GetUILanguageTag());
             _pMenu->SetItemText(--nItemId, Translate::get(STR_SVT_MIMETYPE_CNT_FSYSBOX, loc));
         }
         --nCount;

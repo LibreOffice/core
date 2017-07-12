@@ -21,7 +21,6 @@
 #include <comphelper/string.hxx>
 #include <o3tl/any.hxx>
 #include <tools/stream.hxx>
-#include <tools/resid.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/paperinf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

@@ -266,7 +266,6 @@
 #include <opengl/texture.hxx>
 #include <opengl/zone.hxx>
 #include <outdata.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <svdata.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
@@ -282,7 +281,6 @@
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
-#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>

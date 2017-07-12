@@ -443,8 +443,6 @@ Reference<XComponentContext> getUNO(
         if (! s_lockfile.check( nullptr ))
         {
             OUString sMsg(DpResId(RID_STR_CONCURRENTINSTANCE));
-            //Create this string before we call DeInitVCL, because this will kill
-            //the ResMgr
             OUString sError(DpResId(RID_STR_UNOPKG_ERROR));
 
             sMsg += "\n" + getLockFilePath();

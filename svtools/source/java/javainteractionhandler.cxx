@@ -18,7 +18,6 @@
  */
 
 #include <svtools/strings.hrc>
-#include <tools/resid.hxx>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
@@ -30,7 +29,6 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/rcid.h>
 #include <jvmfwk/framework.hxx>
 
 #include <svtools/restartdialog.hxx>

@@ -32,14 +32,10 @@
 
 #include <math.h>
 
-#include <tools/resid.hxx>
-
 #include "analysisdefs.hxx"
 
 #include <vector>
 
-
-class ResMgr;
 
 namespace sca { namespace analysis {
 

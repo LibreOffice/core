@@ -31,7 +31,6 @@
 #include <svx/svxdllapi.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <tools/resid.hxx>
 
 class GalleryTheme;
 class SotStorageStream;
