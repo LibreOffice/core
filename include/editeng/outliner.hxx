@@ -33,7 +33,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/link.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <editeng/editengdllapi.h>
 #include <com/sun/star/lang/Locale.hpp>
 

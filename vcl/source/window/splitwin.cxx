@@ -31,7 +31,7 @@
 #include <vcl/splitwin.hxx>
 #include <vcl/settings.hxx>
 
-#include <rsc/rsc-vcl-shared-types.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <svdata.hxx>
 #include <strings.hrc>

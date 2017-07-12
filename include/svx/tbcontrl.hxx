@@ -130,7 +130,7 @@
 
 // ITEMID_... defines in the *.cxx
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svx/strarray.hxx>

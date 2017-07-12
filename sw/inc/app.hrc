@@ -22,7 +22,7 @@
 
 #define NC_(Context, String) (Context "\004" u8##String)
 
-#include <svl/style.hrc>
+#include <svl/style.hxx>
 #include <sfx2/sfx.hrc>
 #include "swstyle.h"
 
