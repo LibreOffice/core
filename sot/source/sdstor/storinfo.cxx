@@ -46,7 +46,7 @@ SotClipboardFormatId ReadClipboardFormat( SvStream & rStm )
     else if( nLen == -1 )
     {
         // Windows clipboard format
-        // SV und Win stimmen ueberein (bis einschl. SotClipboardFormatId::GDIMETAFILE)
+        // SV and Win match (up to and including SotClipboardFormatId::GDIMETAFILE)
         sal_uInt32 nTmp;
         rStm.ReadUInt32( nTmp );
         nFormat = static_cast<SotClipboardFormatId>(nTmp);

@@ -51,15 +51,15 @@ struct SotAction_Impl
 #define FILEGRPDSC_ONLY_URL     1
 
 /*
-    Fuer jedes Ziel existiert in der Tabelle genau ein SotDestinationEntry_Impl.
-    Dieser Eintrag enthaelt u.a. fuer jedes vom Ziel auswertbare Format eine
-    Default-Action. Die Default-Aktionen verweisen fuer jedes Format auf
-    die auszuwertende Tabelle, d.h. sie enthalten nur EXCHG_IN_ACTION_MOVE,
-    EXCHG_IN_ACTION_COPY oder EXCHG_IN_ACTION_LINK. Entsprechend dieser Aktion
-    ist dann aMoveActions, aCopyActions oder aLinkActions auszuwerten.
-    Die Aktionen sind nach Prioritaet sortiert, d.h. je "wichtiger" das
-    Format ist, desto eher erscheint es in der Liste.
-*/
+ *  For each target there is exactly one SotDestinationEntry_Impl in the table.
+ *  This entry contains, among other things, a default action for each format
+ *  that can be evaluated by the target. The default actions refer to the table
+ *  to be evaluated for each format, i.e., they contain only EXCHG_IN_ACTION_MOVE,
+ *  EXCHG_IN_ACTION_COPY, or EXCHG_IN_ACTION_LINK. Corresponding to this action,
+ *  aMoveActions, aCopyActions, or aLinkActions is then evaluated. The actions
+ *  are sorted by priority, i.e., the "more important" is the format, the sooner
+ *  it appears in the list.
+ */
 
 struct SotDestinationEntry_Impl
 {
@@ -73,19 +73,16 @@ struct SotDestinationEntry_Impl
 namespace
 {
 /*
-    Ueber diese Tabelle erfolgt die Zuordnung von Destination, vorhandenen
-    Datenformaten sowie gewuenschter Aktion zu einer Aktion und dem in
-    ihr zu benutzenden Datenformat. Die Tabelle ist nach den Exchange-Zielen
-    (EXCHG_DEST_*) sortiert. Innerhalb des Zieleintrages befinden sich genau
-    vier Tabellen fuer Default-, Move-, Copy- und Linkaktionen. Ueber
-    die Default-Tabelle erfolgt das Mapping zwischen Default-Aktion
-     (DropEvent::IsDefaultAction()) und daraus resultierender wirklicher
-    Aktion. Diese Tabelle enthaelt deshalb nur die Aktionen
-     EXCHG_IN_ACTION_COPY, EXCHG_IN_ACTION_MOVE und EXCHG_IN_ACTION_LINK,
-    die auf die spezielle Tabelle verweisen. Die uebrigen Tabellen
-    koennen beliebige Aktionen enthalten. Jede Tabelle ist nach der
-    Format-Prioritaet sortiert. Eintrag Null hat die hoechste Prioritaet.
-*/
+ *  Via this table, the destination, existing data formats and the desired action
+ *  are assigned to an action and the data format to be used in it. The table is
+ *  sorted by the Exchange destinations (EXCHG_DEST_*). Within the goal entry are
+ *  exactly four tables for default, move, copy and link actions. The mapping
+ *  between default action (DropEvent::IsDefaultAction()) and the resulting real
+ *  action is done via the default table. This table therefore contains only the
+ *  EXCHG_IN_ACTION_COPY, EXCHG_IN_ACTION_MOVE, and EXCHG_IN_ACTION_LINK actions
+ *  that point to the specific table. The other tables can contain any actions.
+ *  Each table is sorted by format priority. Entry zero has the highest priority.
+ */
 
 SotAction_Impl const aEmptyArr[] =
 {
@@ -1489,7 +1486,7 @@ sal_uInt8 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorE
 {
     rFormat = SotClipboardFormatId::STRING;
 
-    //Todo: Binaere Suche einbauen
+    //Todo: incorporate a binary search
     const SotDestinationEntry_Impl* pEntry = aDestinationArray;
     while( static_cast<SotExchangeDest>(0xffff) != pEntry->nDestination )
     {
@@ -1505,24 +1502,23 @@ sal_uInt8 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorE
 
     rFormat = SotClipboardFormatId::NONE;
 
-    /* Behandlung der Default-Action nach folgender Vorgehensweise:
-
-       - Das Ziel wird nach der Default-Action gefragt
-       - Unterstuetzt die Quelle diese Aktion so wird sie uebernommen
-       - Anderenfalls wird aus den von der Quelle zur Verfuegung gestellten
-         Aktionen eine ausgewaehlt, die zu einer moeglichst nicht leeren
-          Ergebnisaktion fuehrt. Hierbei wird in dieser Reihenfolge
-          vorgegangen: Copy -> Link -> Move
-    */
+    /* Handling the default action using the following procedure:
+     *
+     * - The target is asked for the default action
+     * - If the source supports this action, it is taken over
+     * - Otherwise, from the actions made available by the source, one leading
+     *   to a most likely non-empty result action is selected. This is done in
+     *   the following order: Copy -> Link -> Move
+     */
     if( nUserAction == EXCHG_IN_ACTION_DEFAULT )
     {
             nUserAction = GetTransferableAction_Impl(
                 rDataFlavorExVector, pEntry->aDefaultActions,
                 rFormat, nOnlyTestFormat, pxTransferable, pActionFlags );
-            // Unterstuetzt die Quelle die Aktion?
+            // Does the source support the action?
             if( !(nUserAction & nSourceOptions ))
             {
-                // Nein -> Alle Aktionen der Quelle checken
+                // No -> Check all actions of the source
                 rDefaultAction = (EXCHG_IN_ACTION_COPY & nSourceOptions);
                 if( rDefaultAction )
                 {

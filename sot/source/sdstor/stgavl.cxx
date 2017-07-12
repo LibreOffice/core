@@ -351,7 +351,7 @@ bool StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, bool bDel )
         if( bDel )
             delete pDel;
         // Rebalance the tree the hard way
-        // OS 22.09.95: Auf MD's Wunsch auskommentiert wg. Absturz
+        // OS 22.09.95: On MD's request commented out due to crash
 /*      StgAvlNode* pNew = NULL;
         while( *pRoot )
         {

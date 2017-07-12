@@ -285,7 +285,7 @@ bool StgCache::Open( const OUString& rName, StreamMode nMode )
     if( nMode & StreamMode::SHARE_DENYALL )
         nMode = ( ( nMode & ~StreamMode::SHARE_DENYALL ) | StreamMode::SHARE_DENYWRITE );
     SvFileStream* pFileStrm = new SvFileStream( rName, nMode );
-    // SvStream "Feature" Write Open auch erfolgreich, wenns nicht klappt
+    // SvStream "feature" Write Open also successful if it does not work
     bool bAccessDenied = false;
     if( ( nMode & StreamMode::WRITE ) && !pFileStrm->IsWritable() )
     {

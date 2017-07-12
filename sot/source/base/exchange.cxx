@@ -37,12 +37,11 @@ using namespace::com::sun::star::uno;
 using namespace::com::sun::star::datatransfer;
 
 /*
-    In diesen Tabellen stehen alle im Office verwendeten MimeTypes,
-    Format-Bezeichner und Types.
-    Die Tabelle ist nach den Formatstring-Ids sortiert und jede Id
-    ist um genau 1 groesser als ihre Vorgaenger-Id, damit die Id als
-    Tabellenindex benutzt werden kann.
-*/
+ *  These tables contain all MimeTypes, format identifiers, and types used in
+ *  the Office. The table is sorted by the format string ID, and each ID is
+ *  exactly 1 greater than its predecessor ID, so that the ID can be used as a
+ *  table index.
+ */
 struct DataFlavorRepresentation
 {
     const char*            pMimeType;
@@ -251,12 +250,12 @@ static tDataFlavorList& InitFormats_Impl()
 |*
 |*    SotExchange::RegisterFormatName()
 |*
-|*    Beschreibung      CLIP.SDW
+|*    Description       CLIP.SDW
 *************************************************************************/
 SotClipboardFormatId SotExchange::RegisterFormatName( const OUString& rName )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
-    // teste zuerst die Standard - Name
+    // test the default first - name
     for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
         if( rName.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pName ) )
             return i;
@@ -270,7 +269,7 @@ SotClipboardFormatId SotExchange::RegisterFormatName( const OUString& rName )
                      ? SotClipboardFormatId::STARCHART_50
                      : i );
 
-    // dann in der dynamischen Liste
+    // then in the dynamic list
     tDataFlavorList& rL = InitFormats_Impl();
     for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
     {
@@ -292,7 +291,7 @@ SotClipboardFormatId SotExchange::RegisterFormatName( const OUString& rName )
 SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeType )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
-    // teste zuerst die Standard - Name
+    // test the default first - name
     for( SotClipboardFormatId i = SotClipboardFormatId::STRING; i <= SotClipboardFormatId::FILE_LIST;  ++i )
         if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return i;
@@ -301,7 +300,7 @@ SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeT
         if( rMimeType.equalsAscii( pFormatArray_Impl[ static_cast<int>(i) ].pMimeType ) )
             return i;
 
-    // dann in der dynamischen Liste
+    // then in the dynamic list
     tDataFlavorList& rL = InitFormats_Impl();
     for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
     {
@@ -324,7 +323,7 @@ SotClipboardFormatId SotExchange::RegisterFormatMimeType( const OUString& rMimeT
 |*
 |*    SotExchange::RegisterFormatName()
 |*
-|*    Beschreibung      CLIP.SDW
+|*    Description       CLIP.SDW
 *************************************************************************/
 SotClipboardFormatId SotExchange::RegisterFormat( const DataFlavor& rFlavor )
 {
@@ -430,7 +429,7 @@ SotClipboardFormatId SotExchange::GetFormatIdFromMimeType( const OUString& rMime
                      ? SotClipboardFormatId::STARCHART_50
                      : i );
 
-    // dann in der dynamischen Liste
+    // then in the dynamic list
     tDataFlavorList& rL = InitFormats_Impl();
 
     for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
@@ -447,11 +446,11 @@ SotClipboardFormatId SotExchange::GetFormatIdFromMimeType( const OUString& rMime
 |*
 |*    SotExchange::GetFormatName()
 |*
-|*    Beschreibung      CLIP.SDW
+|*    Description       CLIP.SDW
 *************************************************************************/
 SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
 {
-    // teste zuerst die Standard - Name
+    // test the default first - name
     const OUString& rMimeType = rFlavor.MimeType;
 
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
@@ -468,7 +467,7 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
                      ? SotClipboardFormatId::STARCHART_50
                      : i );
 
-    // dann in der dynamischen Liste
+    // then in the dynamic list
     tDataFlavorList& rL = InitFormats_Impl();
     for( tDataFlavorList::size_type i = 0; i < rL.size(); i++ )
     {
@@ -484,7 +483,7 @@ SotClipboardFormatId SotExchange::GetFormat( const DataFlavor& rFlavor )
 |*
 |*    SotExchange::GetFormatName()
 |*
-|*    Beschreibung      CLIP.SDW
+|*    Description       CLIP.SDW
 *************************************************************************/
 OUString SotExchange::GetFormatName( SotClipboardFormatId nFormat )
 {
