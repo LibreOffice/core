@@ -267,9 +267,9 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
         xSeekable->seek( 0 );
         m_aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xFactory, OUString(), xStream->getInputStream() );
 
-        // use the solution only for OOXML format currently
         if ( !m_aFilterName.isEmpty()
-          && ( m_aFilterName == "Calc MS Excel 2007 XML" || m_aFilterName == "Impress MS PowerPoint 2007 XML" || m_aFilterName == "MS Word 2007 XML" ) )
+          && ( m_aFilterName == "Calc MS Excel 2007 XML" || m_aFilterName == "Impress MS PowerPoint 2007 XML" || m_aFilterName == "MS Word 2007 XML"
+              || m_aFilterName == "MS Excel 97 Vorlage/Template" || m_aFilterName == "MS Word 97 Vorlage" ) )
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
                 m_xFactory->createInstance("com.sun.star.document.FilterFactory"),
@@ -921,7 +921,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 m_bTriedConversion = true;
                 if ( TryToConvertToOOo( m_xObjectStream ) )
                 {
-                    changeState( embed::EmbedStates::UI_ACTIVE );
+                    changeState( embed::EmbedStates::ACTIVE );
                     return;
                 }
             }
