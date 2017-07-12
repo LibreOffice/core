@@ -327,7 +327,6 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <pglink.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <sdabstdlg.hxx>
 #include <sdattr.hxx>
 #include <sddll.hxx>

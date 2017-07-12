@@ -121,7 +121,6 @@
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <sfx2/dllapi.h>
 #include <sot/formats.hxx>
 #include <svl/eitem.hxx>

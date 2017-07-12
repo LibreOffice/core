@@ -91,7 +91,6 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/filenotation.hxx>

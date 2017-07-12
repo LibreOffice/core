@@ -27,15 +27,36 @@
 #include <comphelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svl/svldllapi.h>
-#include <rsc/rscsfx.hxx>
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/stylesheetuser.hxx>
 
-#include <svl/style.hrc>
 #include <memory>
+
+// This is used as a flags enum in sw/, but only there,
+// so I don't pull in o3tl::typed_flags here
+enum class SfxStyleFamily {
+    None    = 0x00,
+    Char    = 0x01,
+    Para    = 0x02,
+    Frame   = 0x04,
+    Page    = 0x08,
+    Pseudo  = 0x10,
+    Table   = 0x20,
+    Cell    = 0x40,
+    All     = 0x7fff
+};
+
+#define SFXSTYLEBIT_AUTO        0x0000 ///< automatic: flags from application
+#define SFXSTYLEBIT_HIDDEN      0x0200 ///< hidden styles (search mask)
+#define SFXSTYLEBIT_HIERARCHY   0x1000 ///< hierarchical view - just for dialog
+#define SFXSTYLEBIT_READONLY    0x2000 ///< readonly styles (search mask)
+#define SFXSTYLEBIT_USED        0x4000 ///< used styles (search mask)
+#define SFXSTYLEBIT_USERDEF     0x8000 ///< user defined styles (search mask)
+#define SFXSTYLEBIT_ALL_VISIBLE 0xFDFF ///< all styles
+#define SFXSTYLEBIT_ALL         0xFFFF ///< all styles
 
 class SfxItemSet;
 class SfxItemPool;

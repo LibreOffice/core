@@ -25,7 +25,7 @@
 #include <svx/svdoattr.hxx>
 #include <svx/svdtrans.hxx>
 #include <tools/datetime.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/svdtext.hxx>
 #include <vector>
