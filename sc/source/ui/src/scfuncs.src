@@ -774,7 +774,7 @@ StringArray SC_OPCODE_IRR+RID_SC_FUNC_DESCRIPTIONS_START
     {
         < "Returns the actuarial rate of interest of an investment excluding costs or profits." ; >;
         < "Values" ; >;
-        < "An array or reference to cells whose contents correspond to the payments. " ; >;
+        < "An array or reference to cells whose contents correspond to the payments." ; >;
         < "Guess" ; >;
         < "Guess. An estimated value of the rate of return to be used for the iteration calculation." ; >;
     };
@@ -992,7 +992,7 @@ StringArray SC_OPCODE_CURRENT+RID_SC_FUNC_DESCRIPTIONS_START
 {
     ItemList [ en-US ] =
     {
-        < "Calculates the current value of the formula at the present location. " ; >;
+        < "Calculates the current value of the formula at the present location." ; >;
     };
 };
  // -=*# Resource for function FALSE #*=-
@@ -1622,7 +1622,7 @@ StringArray SC_OPCODE_SUB_TOTAL+RID_SC_FUNC_DESCRIPTIONS_START
         < "Calculates subtotals in a spreadsheet." ; >;
         < "Function" ; >;
         < "Function index. Is an index of the possible functions Total, Max, ..." ; >;
-        < "range " ; >;
+        < "range" ; >;
         < "The cells of the range which are to be taken into account." ; >;
     };
 };
@@ -4048,7 +4048,7 @@ StringArray SC_OPCODE_INDIRECT+RID_SC_FUNC_DESCRIPTIONS_START
     ItemList [ en-US ] =
     {
         < "Returns the contents of a cell that is referenced in text form." ; >;
-        < "ref " ; >;
+        < "ref" ; >;
         < "The cell whose contents are to be evaluated is to be referenced in text form (e.g. \"A1\")." ; >;
         < "A1" ; >;
         < "The reference style: 0 or FALSE means R1C1 style, any other value or omitted means A1 style." ; >;
@@ -4156,9 +4156,9 @@ StringArray SC_OPCODE_HYPERLINK+RID_SC_FUNC_DESCRIPTIONS_START
     ItemList [ en-US ] =
     {
         < "Hyperlink." ; >;
-        < "URL " ; >;
+        < "URL" ; >;
         < "URL"; >;
-        < "CellText " ; >;
+        < "CellText" ; >;
         < "Cell Text"; >;
     };
 };
@@ -4302,7 +4302,7 @@ StringArray SC_OPCODE_SWITCH_MS+RID_SC_FUNC_DESCRIPTIONS_START
         < "Checks 1 or more values and returns a result corresponding to the first value equal to the given expression." ; >;
         < "expression" ; >;
         < "Value that will be compared against value1-valueN." ; >;
-        < "value " ; >;
+        < "value" ; >;
         < "Value that will be compared against expression." ; >;
         < "result" ; >;
         < "Value to return when corresponding value argument matches expression." ; >;
