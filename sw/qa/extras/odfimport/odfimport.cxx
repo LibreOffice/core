@@ -838,5 +838,18 @@ DECLARE_ODFIMPORT_TEST(testTdf109080_style_ns, "tdf109080_style_ns.odt")
         parseDump("/root/page[2]/footer/txt/text()"));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf94882, "tdf94882.odt")
+{
+    // Get the header of the page containing our content
+    // (done this way to skip past any blank page inserted before it
+    //  due to the page number being even)
+    OUString headertext = parseDump(
+        "/root/page[starts-with(body/txt/text(),'The paragraph style on this')]"
+        "/header/txt/text()"
+    );
+    // This header should be the first page header
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header"), headertext);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
