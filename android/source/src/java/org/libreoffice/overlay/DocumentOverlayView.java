@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.libreoffice.LibreOfficeMainActivity;
+import org.libreoffice.canvas.AdjustLengthLine;
 import org.libreoffice.canvas.CalcSelectionBox;
 import org.libreoffice.canvas.Cursor;
 import org.libreoffice.canvas.GraphicSelection;
@@ -72,6 +73,8 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
 
     private CalcSelectionBox mCalcSelectionBox;
     private boolean mCalcSelectionBoxDragging;
+    private AdjustLengthLine mAdjustLengthLine;
+    private boolean mAdjustLengthLineDragging;
 
     public DocumentOverlayView(Context context) {
         super(context);
@@ -234,6 +237,10 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         if (mCalcHeadersController != null) {
             mCalcHeadersController.showHeaders();
         }
+
+        if (mAdjustLengthLine != null) {
+            mAdjustLengthLine.draw(canvas);
+        }
     }
 
     /**
@@ -360,6 +367,10 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
         PointF point = new PointF(event.getX(), event.getY());
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: {
+                if (mAdjustLengthLine != null && !mAdjustLengthLine.contains(point.x, point.y)) {
+                    mAdjustLengthLine.setVisible(false);
+                    invalidate();
+                }
                 if (mGraphicSelection.isVisible()) {
                     // Check if inside graphic selection was hit
                     if (mGraphicSelection.contains(point.x, point.y)) {
@@ -387,6 +398,11 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
                         mCalcSelectionBox.dragStart(point);
                         mCalcSelectionBoxDragging = true;
                         return true;
+                    } else if (mAdjustLengthLine != null &&
+                            mAdjustLengthLine.contains(point.x, point.y)) {
+                        mAdjustLengthLine.dragStart(point);
+                        mAdjustLengthLineDragging = true;
+                        return true;
                     }
                 }
             }
@@ -402,6 +418,10 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
                 } else if (mCalcSelectionBoxDragging) {
                     mCalcSelectionBox.dragEnd(point);
                     mCalcSelectionBoxDragging = false;
+                } else if (mAdjustLengthLineDragging) {
+                    mAdjustLengthLine.dragEnd(point);
+                    mAdjustLengthLineDragging = false;
+                    invalidate();
                 }
             }
             case MotionEvent.ACTION_MOVE: {
@@ -413,6 +433,9 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
                     mDragHandle.dragging(point);
                 } else if (mCalcSelectionBoxDragging) {
                     mCalcSelectionBox.dragging(point);
+                } else if (mAdjustLengthLineDragging) {
+                    mAdjustLengthLine.dragging(point);
+                    invalidate();
                 }
             }
         }
@@ -508,6 +531,15 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     public void showHeaderSelection(RectF rect) {
         if (mCalcHeadersController == null) return;
         mCalcHeadersController.showHeaderSelection(rect);
+    }
+
+    public void showAdjustLengthLine(boolean isRow, final CalcHeadersView view) {
+        mAdjustLengthLine = new AdjustLengthLine((LibreOfficeMainActivity) getContext(), view, isRow, getWidth(), getHeight());
+        ImmutableViewportMetrics metrics = mLayerView.getViewportMetrics();
+        RectF position = convertToScreen(mCalcSelectionBox.mDocumentPosition, metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
+        mAdjustLengthLine.setScreenRect(position);
+        mAdjustLengthLine.setVisible(true);
+        invalidate();
     }
 }
 

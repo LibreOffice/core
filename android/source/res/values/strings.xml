@@ -130,9 +130,26 @@
     <!-- Create New Document Dialog Strings -->
     <string name="create_new_document_title">Enter file name</string>
     <string name="action_create">CREATE</string>
+
+    <!-- Presentation Mode Strings -->
     <string name="action_presentation">Slide show</string>
     <string name="alert_copy_svg_slide_show_to_clipboard">Your Android device doesn\'t support in-app svg slideshow. We copied the slideshow link to clipboard. Please press home button, open a modern web browser, paste in the address bar, and go.</string>
     <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
     <string name="slideshow_action_back">Back</string>
+
+    <!-- Calc Header Menu Strings -->
+    <string name="calc_insert_before">Insert</string>
+    <string name="calc_delete">Delete</string>
+    <string name="calc_hide">Hide</string>
+    <string name="calc_show">Show</string>
+    <string name="calc_optimal_length">Optimal Length</string>
+    <string name="calc_adjust_length">Adjust Length</string>
+    <string name="calc_adjust_height">Adjust Height</string>
+    <string name="calc_adjust_width">Adjust Width</string>
+    <string name="calc_optimal_height">Optimal Height</string>
+    <string name="calc_optimal_width">Optimal Width</string>
+    <string name="calc_optimal_length_confirm">OK</string>
+    <string name="calc_optimal_length_default_text">Enter Extra Length in 100th/mm</string>
+    <string name="calc_alert_double_click_optimal_length">Hint: Double tap on a header sets optimal width/height.</string>
 
 </resources>

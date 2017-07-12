@@ -258,6 +258,14 @@ public class DocumentOverlay {
         });
     }
 
+    public void showAdjustLengthLine(final boolean isRow, final CalcHeadersView view) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                mDocumentOverlayView.showAdjustLengthLine(isRow, view);
+            }
+        });
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
