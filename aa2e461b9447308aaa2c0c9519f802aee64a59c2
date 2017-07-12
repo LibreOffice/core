@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_0a79da93",
+        "filename": "editeng/qa/unit/core-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-12T14:06:12Z",
+      "side": 1,
+      "message": "i\u0027m not sure { } is going to work here - did you try ; instead?",
+      "revId": "aa2e461b9447308aaa2c0c9519f802aee64a59c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6a417e39",
+        "filename": "editeng/qa/unit/core-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-12T14:06:12Z",
+      "side": 1,
+      "message": "i don\u0027t think this is going to work here, we don\u0027t need that in editengine anyway",
+      "revId": "aa2e461b9447308aaa2c0c9519f802aee64a59c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
