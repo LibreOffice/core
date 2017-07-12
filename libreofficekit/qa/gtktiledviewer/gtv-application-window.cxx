@@ -66,6 +66,9 @@ gtv_application_window_init(GtvApplicationWindow* win)
     win->findbarlabel = GTK_WIDGET(gtk_builder_get_object(builder, "findbar_label"));
     priv->toolbarBroadcast = false;
 
+    win->addressbarentry = GTK_WIDGET(gtk_builder_get_object(builder, "addressbar_entry"));
+    win->formulabarentry = GTK_WIDGET(gtk_builder_get_object(builder, "formulabar_entry"));
+
     gtk_container_add(GTK_CONTAINER(win), priv->container);
 
     g_object_unref(builder);
@@ -219,7 +222,7 @@ static void setupDocView(LOKDocView* pDocView)
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(lokdocview_signalEdit), nullptr);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(lokdocview_signalCommand), nullptr);
     g_signal_connect(pDocView, "command-result", G_CALLBACK(lokdocview_signalCommandResult), nullptr);
-/*    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(lokdocview_signalSearch), nullptr);
+    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(lokdocview_signalSearch), nullptr);
     g_signal_connect(pDocView, "search-result-count", G_CALLBACK(lokdocview_signalSearchResultCount), nullptr);
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(lokdocview_signalPart), nullptr);
     g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(lokdocview_signalHyperlink), nullptr);
@@ -227,8 +230,7 @@ static void setupDocView(LOKDocView* pDocView)
     g_signal_connect(pDocView, "address-changed", G_CALLBACK(lokdocview_addressChanged), nullptr);
     g_signal_connect(pDocView, "formula-changed", G_CALLBACK(lokdocview_formulaChanged), nullptr);
     g_signal_connect(pDocView, "password-required", G_CALLBACK(lokdocview_passwordRequired), nullptr);
-    g_signal_connect(pDocView, "comment", G_CALLBACK(lokdocview_commentCallback), nullptr);
-*/
+//    g_signal_connect(pDocView, "comment", G_CALLBACK(lokdocview_commentCallback), nullptr);
 }
 
 void

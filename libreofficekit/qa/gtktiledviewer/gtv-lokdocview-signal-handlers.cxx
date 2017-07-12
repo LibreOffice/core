@@ -168,13 +168,13 @@ void lokdocview_cursorChanged(LOKDocView* pDocView, gint nX, gint nY, gint nWidt
 void lokdocview_addressChanged(LOKDocView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-//    gtk_label_set_text(GTK_LABEL(window->addressbarentry), pPayload);
+    gtk_entry_set_text(GTK_ENTRY(window->addressbarentry), pPayload);
 }
 
 void lokdocview_formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-//    gtk_label_set_text(GTK_LABEL(window->formulabarentry), pPayload);
+    gtk_entry_set_text(GTK_ENTRY(window->formulabarentry), pPayload);
 }
 
 void lokdocview_passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer)
