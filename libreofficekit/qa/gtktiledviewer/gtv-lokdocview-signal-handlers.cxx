@@ -222,15 +222,16 @@ void lokdocview_commentCallback(LOKDocView* pDocView, gchar* pComment, gpointer)
 gboolean lokdocview_configureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pWidget)));
+    printf("configuring");
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
     {
         GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));
-        int rowSizePixel = gtk_adjustment_get_page_size(pVAdjustment);
-        int rowPosPixel = gtk_adjustment_get_value(pVAdjustment);
+        int rowSizePixel = GTV_CALC_HEADER_BAR(window->rowbar)->m_nSizePixel = gtk_adjustment_get_page_size(pVAdjustment);
+        int rowPosPixel = GTV_CALC_HEADER_BAR(window->rowbar)->m_nPositionPixel = gtk_adjustment_get_value(pVAdjustment);
         GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));
-        int colSizePixel = gtk_adjustment_get_page_size(pHAdjustment);
-        int colPosPixel = gtk_adjustment_get_value(pHAdjustment);
+        int colSizePixel = GTV_CALC_HEADER_BAR(window->columnbar)->m_nSizePixel = gtk_adjustment_get_page_size(pHAdjustment);
+        int colPosPixel = GTV_CALC_HEADER_BAR(window->columnbar)->m_nPositionPixel = gtk_adjustment_get_value(pHAdjustment);
 
         std::stringstream aCommand;
         aCommand << ".uno:ViewRowColumnHeaders";
@@ -249,8 +250,8 @@ gboolean lokdocview_configureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
 
-        gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->rowbar), &aTree.get_child("rows"), rowPosPixel);
-        gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->columnbar), &aTree.get_child("columns"), colPosPixel);
+        gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->rowbar), &aTree.get_child("rows"));
+        gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->columnbar), &aTree.get_child("columns"));
 // for corner ?    gtv_calc_header_bar_configure(window->rowbar);
     }
 }

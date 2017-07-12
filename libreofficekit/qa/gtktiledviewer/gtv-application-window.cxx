@@ -15,6 +15,7 @@
 #include <gtv-application-window.hxx>
 #include <gtv-main-toolbar.hxx>
 #include <gtv-helpers.hxx>
+#include <gtv-signal-handlers.hxx>
 #include <gtv-lokdocview-signal-handlers.hxx>
 #include <gtv-calc-header-bar.hxx>
 
@@ -57,18 +58,22 @@ gtv_application_window_init(GtvApplicationWindow* win)
     gtk_box_pack_start(GTK_BOX(priv->container), priv->toolbarcontainer, false, false, false);
     gtk_box_reorder_child(GTK_BOX(priv->container), priv->toolbarcontainer, 0);
 
-
     priv->gridcontainer = GTK_WIDGET(gtk_builder_get_object(builder, "maingrid"));
     // scrolled window containing the main drawing area
     win->scrolledwindow = GTK_WIDGET(gtk_builder_get_object(builder, "scrolledwindow"));
 
+    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(win->scrolledwindow));
+    g_signal_connect(pHAdjustment, "value-changed", G_CALLBACK(docAdjustmentChanged), win);
+    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(win->scrolledwindow));
+    g_signal_connect(pVAdjustment, "value-changed", G_CALLBACK(docAdjustmentChanged), win);
+
     // calc header row bar
     win->cornerarea = gtv_calc_header_bar_new();
-    gtv_calc_header_bar_set_type(GTV_CALC_HEADER_BAR(win->cornerarea), CalcHeaderType::CORNER);
+    gtv_calc_header_bar_set_type_and_width(GTV_CALC_HEADER_BAR(win->cornerarea), CalcHeaderType::CORNER);
     win->rowbar = gtv_calc_header_bar_new();
-    gtv_calc_header_bar_set_type(GTV_CALC_HEADER_BAR(win->rowbar), CalcHeaderType::ROW);
+    gtv_calc_header_bar_set_type_and_width(GTV_CALC_HEADER_BAR(win->rowbar), CalcHeaderType::ROW);
     win->columnbar = gtv_calc_header_bar_new();
-    gtv_calc_header_bar_set_type(GTV_CALC_HEADER_BAR(win->columnbar), CalcHeaderType::COLUMN);
+    gtv_calc_header_bar_set_type_and_width(GTV_CALC_HEADER_BAR(win->columnbar), CalcHeaderType::COLUMN);
 
     // attach row/colum/corner to the container
     gtk_grid_attach(GTK_GRID(priv->gridcontainer), win->cornerarea, 0, 0, 1, 1);

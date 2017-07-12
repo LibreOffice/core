@@ -11,6 +11,7 @@
 
 #include <gtv-application-window.hxx>
 #include <gtv-helpers.hxx>
+#include <gtv-lokdocview-signal-handlers.hxx>
 
 #include <sal/types.h>
 
@@ -520,6 +521,14 @@ void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     gtv_application_window_toggle_findbar(window);
+}
+
+void docAdjustmentChanged(GtkAdjustment*, gpointer pData)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(pData);
+    printf("doc adjust ch : %p", window->lokdocview);
+    if (window->lokdocview)
+        lokdocview_configureEvent(window->lokdocview, nullptr, nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,17 +19,26 @@ G_BEGIN_DECLS
 #define GTV_CALC_HEADER_BAR_TYPE (gtv_calc_header_bar_get_type())
 G_DECLARE_FINAL_TYPE(GtvCalcHeaderBar, gtv_calc_header_bar, GTV, CALC_HEADER_BAR, GtkDrawingArea);
 
+struct _GtvCalcHeaderBar
+{
+    GtkDrawingArea parent;
+    /// Height for row bar, width for column bar.
+    int m_nSizePixel;
+    /// Left/top position for the column/row bar -- initially 0, then may grow due to scrolling.
+    int m_nPositionPixel;
+};
+
 enum CalcHeaderType { ROW, COLUMN, CORNER };
 
 GtkWidget* gtv_calc_header_bar_new();
 
-void gtv_calc_header_bar_configure(GtvCalcHeaderBar* bar, const boost::property_tree::ptree* values, int nPositionPixel);
+void gtv_calc_header_bar_configure(GtvCalcHeaderBar* bar, const boost::property_tree::ptree* values);
 
 int gtv_calc_header_bar_get_pos_pixel(GtvCalcHeaderBar* bar);
 
 int gtv_calc_header_bar_get_size_pixel(GtvCalcHeaderBar* bar);
 
-void gtv_calc_header_bar_set_type(GtvCalcHeaderBar* bar, CalcHeaderType eType);
+void gtv_calc_header_bar_set_type_and_width(GtvCalcHeaderBar* bar, CalcHeaderType eType);
 
 G_END_DECLS
 

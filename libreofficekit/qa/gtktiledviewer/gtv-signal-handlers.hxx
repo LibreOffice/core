@@ -36,6 +36,8 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/);
 
 void documentRepair(GtkWidget* pButton, gpointer /*pItem*/);
 
+void docAdjustmentChanged(GtkAdjustment*, gpointer);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

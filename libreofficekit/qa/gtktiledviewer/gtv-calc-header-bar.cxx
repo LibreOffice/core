@@ -21,11 +21,6 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
 
-struct _GtvCalcHeaderBar
-{
-    GtkDrawingArea parent;
-};
-
 struct GtvCalcHeaderBarPrivateImpl
 {
     /// Stores size and content of a single row header.
@@ -40,10 +35,6 @@ struct GtvCalcHeaderBarPrivateImpl
     };
 
     std::vector<Header> m_aHeaders;
-    /// Height for row bar, width for column bar.
-    int m_nSizePixel;
-    /// Left/top position for the column/row bar -- initially 0, then may grow due to scrolling.
-    int m_nPositionPixel;
     CalcHeaderType m_eType;
 };
 
@@ -97,7 +88,8 @@ void gtv_calc_header_bar_draw_text(cairo_t* pCairo, const GdkRectangle& rRectang
 
 gboolean gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCairo)
 {
-    GtvCalcHeaderBarPrivate& priv = getPrivate(GTV_CALC_HEADER_BAR(pWidget));
+    GtvCalcHeaderBar* self = GTV_CALC_HEADER_BAR(pWidget);
+    GtvCalcHeaderBarPrivate& priv = getPrivate(GTV_CALC_HEADER_BAR(self));
     cairo_set_source_rgb(pCairo, 0, 0, 0);
 
     int nPrevious = 0;
@@ -139,7 +131,7 @@ gboolean gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCairo)
 
         gtv_calc_header_bar_draw_text(pCairo, aRectangle, rHeader.m_aText);
         nPrevious = rHeader.m_nSize;
-        if (rHeader.m_nSize > priv->m_nSizePixel)
+        if (rHeader.m_nSize > self->m_nSizePixel)
             break;
     }
 
@@ -164,19 +156,7 @@ gtv_calc_header_bar_class_init(GtvCalcHeaderBarClass* klass)
     G_OBJECT_CLASS(klass)->finalize = gtv_calc_header_bar_finalize;
 }
 
-int gtv_calc_header_bar_get_pos_pixel(GtvCalcHeaderBar* bar)
-{
-    GtvCalcHeaderBarPrivate& priv = getPrivate(bar);
-    return priv->m_nPositionPixel;
-}
-
-int gtv_calc_header_bar_get_size_pixel(GtvCalcHeaderBar* bar)
-{
-    GtvCalcHeaderBarPrivate& priv = getPrivate(bar);
-    return priv->m_nSizePixel;
-}
-
-void gtv_calc_header_bar_configure(GtvCalcHeaderBar* bar, const boost::property_tree::ptree* values, int nPositionPixel)
+void gtv_calc_header_bar_configure(GtvCalcHeaderBar* bar, const boost::property_tree::ptree* values)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(bar)));
     GtvCalcHeaderBarPrivate& priv = getPrivate(bar);
@@ -189,9 +169,9 @@ void gtv_calc_header_bar_configure(GtvCalcHeaderBar* bar, const boost::property_
         for (boost::property_tree::ptree::value_type& rValue : val)
         {
             int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(window->lokdocview), std::atof(rValue.second.get<std::string>("size").c_str())));
-            if (nSize >= nPositionPixel)
+            if (nSize >= bar->m_nPositionPixel)
             {
-                const int nScrolledSize = nSize - nPositionPixel;
+                const int nScrolledSize = nSize - bar->m_nPositionPixel;
                 GtvCalcHeaderBarPrivateImpl::Header aHeader(nScrolledSize, rValue.second.get<std::string>("text"));
                 priv->m_aHeaders.push_back(aHeader);
             }
@@ -206,11 +186,16 @@ void gtv_calc_header_bar_configure(GtvCalcHeaderBar* bar, const boost::property_
 }
 
 void
-gtv_calc_header_bar_set_type(GtvCalcHeaderBar* bar, CalcHeaderType eType)
+gtv_calc_header_bar_set_type_and_width(GtvCalcHeaderBar* bar, CalcHeaderType eType)
 {
     // TODO: Install type property for this class
     GtvCalcHeaderBarPrivate& priv = getPrivate(bar);
     priv->m_eType = eType;
+
+    if (eType == CalcHeaderType::ROW)
+        gtk_widget_set_size_request(GTK_WIDGET(bar), ROW_HEADER_WIDTH, -1);
+    else if (eType == CalcHeaderType::COLUMN)
+        gtk_widget_set_size_request(GTK_WIDGET(bar), -1, COLUMN_HEADER_HEIGHT);
 }
 
 GtkWidget*
