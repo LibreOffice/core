@@ -2980,7 +2980,28 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
 
                 SwFlyFrameFormat* pFrameFormat = nullptr;
-                pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrameSet, nullptr );
+                pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, m_nDrawAspect, &aFrameSet, nullptr );
+
+                // store main document name to show in the title bar
+                SwOLENode* pNd = nullptr;
+                const SwNodeIndex* pIdx = pFrameFormat->GetContent().GetContentIdx();
+                if( pIdx )
+                {
+                    SwNodeIndex aIdx( *pIdx, 1 );
+                    SwNoTextNode* pNoText = aIdx.GetNode().GetNoTextNode();
+                    pNd = pNoText->GetOLENode();
+                }
+                if( pNd )
+                {
+                    uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
+                    if( xObj.is() )
+                    {
+                        uno::Reference< frame::XTitle > xModelTitle( pDoc->GetDocShell()->GetModel(), css::uno::UNO_QUERY );
+                        if( xModelTitle.is() )
+                            xObj->setContainerName( xModelTitle->getTitle() );
+                    }
+                }
+
                 pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
                 pFrameFormat->Add(this);
                 if(!m_sName.isEmpty())
