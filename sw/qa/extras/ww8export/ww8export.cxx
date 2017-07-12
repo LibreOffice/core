@@ -591,7 +591,12 @@ DECLARE_WW8EXPORT_TEST(testFdo81102, "fdo81102.doc")
 DECLARE_WW8EXPORT_TEST(testBnc787942, "bnc787942.doc")
 {
     // The frame ended up on the second page instead of first.
-    parseDump("/root/page[1]/body/txt[4]/anchored");
+
+    // Ensure that the anchor is on the same page as the text "Zelva Mana"
+    // (Note that this can actually be the second physical page, since the
+    // page number is set to 0 which is even so LO will insert a blank page
+    // before it to make it a left page)
+    parseDump("/root/page[body/txt/text()='Zelva Mana']/body/txt[4]/anchored");
 }
 
 DECLARE_WW8EXPORT_TEST(testLayoutHanging, "fdo68967.doc")
