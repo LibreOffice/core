@@ -1263,8 +1263,12 @@ static bool lcl_IsInSectionDirectly( const SwFrame *pUp )
         if( pUp->IsColumnFrame() )
             bSeenColumn = true;
         else if( pUp->IsSctFrame() )
+        {
+            auto pSection = static_cast<const SwSectionFrame*>(pUp);
             // Allow move of frame in case our only column is not growable.
-            return bSeenColumn || !static_cast<const SwSectionFrame*>(pUp)->Growable();
+            // Also allow if there is a previous section frame (to move back).
+            return bSeenColumn || !pSection->Growable() || pSection->GetPrecede();
+        }
         else if( pUp->IsTabFrame() )
             return false;
         pUp = pUp->GetUpper();
