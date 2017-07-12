@@ -1,0 +1,76 @@
+#!/usr/bin/python
+
+import binascii
+import polib
+from os import listdir, walk, remove
+from os.path import isdir, join
+
+import sys
+
+if len(sys.argv) < 2:
+    print(" Syntax: update-for-gettext path/to/dir/of/languages")
+    sys.exit(2)
+
+langs = [f for f in listdir(sys.argv[1]) if isdir(join(sys.argv[1], f))]
+
+uiline = False
+
+for lang in langs:
+    path = join(sys.argv[1],lang)
+    modules = [f for f in listdir(path) if isdir(join(path, f))]
+    for module in modules:
+        subpath = join(path, module)
+        print >> sys.stderr, "module is", subpath, lang, module
+        messages = None
+        npos = 0
+        for dirpath, dirname, filenames in walk(subpath):
+            for filename in filenames:
+                ipath = join(dirpath, filename)
+                print >> sys.stderr, "file is", ipath
+                po = polib.pofile(ipath)
+                if len(po) != 0:
+                    samplefile = po[0].occurrences[0][0]
+                    if samplefile.endswith(".src") or samplefile.endswith(".ui"):
+                        if npos == 0:
+                            messages = po
+                        else:
+                            for entry in po:
+                                messages.append(entry)
+                        npos = npos + 1
+                        remove(ipath)
+        if npos > 0:
+            middle = 0
+            for entry in messages:
+                if not len(entry.occurrences):
+                    continue
+                location = entry.occurrences[0][0]
+                if location.endswith(".ui"):
+                    uiline = True
+                else:
+                    uiline = False
+                lines = entry.msgctxt.split('\n')
+                if uiline:
+                    widgetid = lines[1]
+                    typeid = lines[2]
+                    entry.msgctxt = location[:-3] + "|" + widgetid
+                    if typeid == "tooltip_text":
+                        entry.msgctxt = entry.msgctxt + "|" + typeid
+                    if entry.msgctxt == 'calloutpage|position' and entry.msgid == 'Middle':
+                        middle = middle + 1
+                        if middle == 2:
+                            entry.msgid = "Center"
+                else:
+                    ctxline = lines[1]
+                    if (ctxline.endswith("+RID_SC_FUNC_DESCRIPTIONS_START")):
+                        ctxline = ctxline[:-len("+RID_SC_FUNC_DESCRIPTIONS_START")]
+                    elif (ctxline.endswith("+RID_GLOBSTR_OFFSET")):
+                        ctxline = ctxline[:-len("+RID_GLOBSTR_OFFSET")]
+                    entry.msgctxt = ctxline
+                comments = entry.comment.split('\n')
+                keyid = entry.msgctxt + '|' + entry.msgid
+                comments[-1] = polib.genKeyId(keyid.encode('utf-8'))
+                entry.comment = "\n".join(comments)
+            if lang != "templates":
+                messages.save(join(subpath, "messages.po"))
+            else:
+                messages.save(join(subpath, "messages.pot"))
