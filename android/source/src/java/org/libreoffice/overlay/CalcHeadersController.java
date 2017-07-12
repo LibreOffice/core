@@ -110,7 +110,6 @@ public class CalcHeadersController {
         ArrayList<Float> rowDimens;
         ArrayList<String> columnLabels;
         ArrayList<Float> columnDimens;
-
         private HeaderInfo() {
             rowLabels = new ArrayList<String>();
             rowDimens = new ArrayList<Float>();
