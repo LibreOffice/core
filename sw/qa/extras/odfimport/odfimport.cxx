@@ -646,5 +646,36 @@ DECLARE_ODFIMPORT_TEST(testTdf96113, "tdf96113.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(getShape(1), "BackColor"));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf109080_loext_ns, "tdf109080_loext_ns.odt")
+{
+    // Test we can import <loext:header-first> and <loext:footer-first>
+
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header"),
+        parseDump("/root/page[1]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header"),
+        parseDump("/root/page[2]/header/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the first page footer"),
+        parseDump("/root/page[1]/footer/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page footer"),
+        parseDump("/root/page[2]/footer/txt/text()"));
+}
+
+DECLARE_ODFIMPORT_TEST(testTdf109080_style_ns, "tdf109080_style_ns.odt")
+{
+    // Test we can import <style:header-first> and <style:footer-first>
+    // (produced by LibreOffice 4.0 - 5.x)
+
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header"),
+        parseDump("/root/page[1]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page header"),
+        parseDump("/root/page[2]/header/txt/text()"));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the first page footer"),
+        parseDump("/root/page[1]/footer/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page footer"),
+        parseDump("/root/page[2]/footer/txt/text()"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
