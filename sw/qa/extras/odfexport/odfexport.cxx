@@ -53,7 +53,6 @@ public:
             "fdo86963.odt",
             "shape-relsize.odt",
             "fdo60769.odt",
-            "first-header-footer.odt",
             "fdo38244.odt"
         };
 
