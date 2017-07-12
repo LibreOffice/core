@@ -537,11 +537,16 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
         mbIsVirtPageNum = false;
     if ( !pDesc )
         pDesc = &pDoc->GetPageDesc( 0 );
+
     const bool bOdd = !oPgNum || 0 != ( oPgNum.get() % 2 );
     const bool bFirst = true;
+    // Even page numbers are supposed to be printed as left pages.  So if a
+    // page number has been explicitly set for this first page, then we must
+    // insert a blank page before it to make it a left page.
+    const bool bInsertEmpty = !bOdd;
 
     // Create a page and put it in the layout
-    SwPageFrame *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, false, nullptr );
+    SwPageFrame *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, bInsertEmpty, false, nullptr );
 
     // Find the first page in the Bodytext section.
     SwLayoutFrame *pLay = pPage->FindBodyCont();

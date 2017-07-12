@@ -1745,8 +1745,17 @@ bool SwFrame::OnFirstPage() const
         const SwPageFrame* pPrevFrame = dynamic_cast<const SwPageFrame*>(pPage->GetPrev());
         if (pPrevFrame)
         {
-            const SwPageDesc* pDesc = pPage->GetPageDesc();
-            bRet = pPrevFrame->GetPageDesc() != pDesc;
+            if (pPrevFrame->IsEmptyPage() && pPrevFrame->GetPhyPageNum()==1)
+            {
+                // This was the first page of the document, but its page number
+                // was set to an even number, so a blank page was automatically
+                // inserted before it to make this be a "left" page.
+                // We still use the first page format of the page style here.
+                bRet = true;
+            } else {
+                const SwPageDesc* pDesc = pPage->GetPageDesc();
+                bRet = pPrevFrame->GetPageDesc() != pDesc;
+            }
         }
         else
             bRet = true;
