@@ -257,7 +257,7 @@ namespace drawinglayer
                 // do this when 'double line with gap')
                 const double fNewDiscreteDistance(std::max(fDiscreteUnit, getDistance()));
 
-                if (fNewDiscreteDistance != mfDiscreteDistance)
+                if (!rtl::math::approxEqual(fNewDiscreteDistance, mfDiscreteDistance))
                 {
                     if (!getBuffered2DDecomposition().empty())
                     {
