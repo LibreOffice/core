@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <memory>
 
 
 namespace com { namespace sun { namespace star {
@@ -65,7 +66,7 @@ class MultiPropertySetHelper
 
     /// an array of indices that maps from pPropertyNames indices to
     /// aPropertySequence indices
-    sal_Int16* pSequenceIndex;
+    std::unique_ptr<sal_Int16[]> pSequenceIndex;
 
     /// the last set of values retrieved by getValues
     css::uno::Sequence< css::uno::Any > aValues;
