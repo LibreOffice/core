@@ -26,6 +26,7 @@ struct GtvApplicationWindowPrivate
     GtkWidget* toolbarcontainer;
 
     gboolean toolbarBroadcast;
+    gboolean partSelectorBroadcast;
 
     // Rendering args; options with which lokdocview was rendered in this window
     GtvRenderingArgs* m_pRenderingArgs;
@@ -65,6 +66,7 @@ gtv_application_window_init(GtvApplicationWindow* win)
     win->findtoolbar = GTK_WIDGET(gtk_builder_get_object(builder, "findtoolbar"));
     win->findbarlabel = GTK_WIDGET(gtk_builder_get_object(builder, "findbar_label"));
     priv->toolbarBroadcast = false;
+    priv->partSelectorBroadcast = false;
 
     win->addressbarentry = GTK_WIDGET(gtk_builder_get_object(builder, "addressbar_entry"));
     win->formulabarentry = GTK_WIDGET(gtk_builder_get_object(builder, "formulabar_entry"));
@@ -98,15 +100,101 @@ gtv_application_window_class_init(GtvApplicationWindowClass* klass)
     G_OBJECT_CLASS(klass)->dispose = gtv_application_window_dispose;
 }
 
+/// Helper function to do some tasks after widget is fully loaded (including
+/// document load)
+static void initWindow(GtvApplicationWindow* window)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+
+    priv->partSelectorBroadcast = false;
+    //populatePartSelector(LOK_DOC_VIEW(rWindow.m_pDocView));
+    priv->partSelectorBroadcast = true;
+
+    //populatePartModeSelector( GTK_COMBO_BOX_TEXT(rWindow.m_pPartModeComboBox) );
+    //populateDialogs(GTK_COMBO_BOX_TEXT(rWindow.m_pDialogComboBox));
+
+    //registerSelectorHandlers(rWindow);
+
+    GList *focusChain = nullptr;
+    focusChain = g_list_append( focusChain, window->lokdocview );
+    gtk_container_set_focus_chain ( GTK_CONTAINER (priv->container), focusChain );
+
+//    gtk_widget_show_all(window-.m_pStatusBar);
+//    gtk_widget_hide(rWindow.m_pProgressBar);
+
+//    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(), TRUE);
+    // TODO: call a main toolbar function after document load to init its
+    // buttons depending on doc type
+
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    if (pDocument)
+    {
+        if (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
+        {
+            // Align to top left corner, so the tiles are in sync with the
+            // row/column bar, even when zooming out enough that not all space is
+            // used.
+            gtk_widget_set_halign(GTK_WIDGET(window->lokdocview), GTK_ALIGN_START);
+            gtk_widget_set_valign(GTK_WIDGET(window->lokdocview), GTK_ALIGN_START);
+
+            // Change cell alignment uno commands for spreadsheet
+            // TODO: Devolve the responsibility to toolbar
+            //lcl_registerToolItem(rWindow, rWindow.m_pLeftpara, ".uno:AlignLeft");
+            //lcl_registerToolItem(rWindow, rWindow.m_pCenterpara, ".uno:AlignHorizontalCenter");
+            //lcl_registerToolItem(rWindow, rWindow.m_pRightpara, ".uno:AlignRight");
+            //gtk_widget_hide(GTK_WIDGET(rWindow.m_pJustifypara));
+            //lcl_registerToolItem(rWindow, rWindow.m_pDeleteComment, ".uno:DeleteNote");
+        }
+        else if (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_PRESENTATION)
+        {
+            // same here
+            //lcl_registerToolItem(rWindow, rWindow.m_pDeleteComment, ".uno:DeleteAnnotation");
+        }
+    }
+
+    /* TODO: Comments sidebar
+    // Fill our comments sidebar
+    gboolean bTiledAnnotations;
+    g_object_get(G_OBJECT(rWindow.m_pDocView), "tiled-annotations", &bTiledAnnotations, nullptr);
+
+    // comments api implemented only for writer, calc as of now
+    if (!bTiledAnnotations && pDocument)
+    {
+        if (!rWindow.m_pCommentsSidebar)
+        {
+            rWindow.m_pCommentsSidebar.reset(new CommentsSidebar);
+            rWindow.m_pCommentsSidebar->m_pCommentsVBox = nullptr;
+            rWindow.m_pCommentsSidebar->m_pScrolledWindow = nullptr;
+            rWindow.m_pCommentsSidebar->m_pMainVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+            gtk_container_add(GTK_CONTAINER(rWindow.m_pMainHBox), rWindow.m_pCommentsSidebar->m_pMainVBox);
+
+            rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton = gtk_button_new_with_label(".uno:ViewAnnotations");
+#if GTK_CHECK_VERSION(3,12,0)
+            // Hack to make sidebar grid wide enough to not need any horizontal scrollbar
+            gtk_widget_set_margin_start(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, 20);
+            gtk_widget_set_margin_end(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, 20);
+#endif
+            gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pMainVBox), rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton);
+            g_signal_connect(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, "clicked", G_CALLBACK(CommentsSidebar::unoViewAnnotations), nullptr);
+
+            gtk_widget_show_all(rWindow.m_pCommentsSidebar->m_pMainVBox);
+
+            gtk_button_clicked(GTK_BUTTON(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton));
+        }
+    }
+    */
+}
+
 static void
 gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res, gpointer /*userdata*/)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (source_object);
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     GError* error = nullptr;
     if (!lok_doc_view_open_document_finish(pDocView, res, &error))
     {
         GtkDialogFlags eFlags = GTK_DIALOG_DESTROY_WITH_PARENT;
-        GtkWidget* pDialog = gtk_message_dialog_new(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+        GtkWidget* pDialog = gtk_message_dialog_new(GTK_WINDOW(window),
                                                     eFlags,
                                                     GTK_MESSAGE_ERROR,
                                                     GTK_BUTTONS_CLOSE,
@@ -122,6 +210,8 @@ gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res
     }
 
     lok_doc_view_set_edit(pDocView, true);
+
+    initWindow(window);
 }
 
 /// Get the visible area of the scrolled window
