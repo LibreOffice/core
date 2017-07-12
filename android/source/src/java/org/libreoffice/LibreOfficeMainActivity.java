@@ -412,7 +412,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 // noinspection ResultOfMethodCallIgnored
                 mTempFile.delete();
             }
-            if (mTempSlideShowFile.exists()) {
+            if (mTempSlideShowFile != null && mTempSlideShowFile.exists()) {
                 // noinspection ResultOfMethodCallIgnored
                 mTempSlideShowFile.delete();
             }
