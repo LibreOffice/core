@@ -24,6 +24,7 @@ void lokdocview_addressChanged(LOKDocView* pDocView, char* pPayload, gpointer);
 void lokdocview_formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer);
 void lokdocview_passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer);
 void lokdocview_commentCallback(LOKDocView* pDocView, gchar* pComment, gpointer);
+gboolean lokdocview_configureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
 
 #endif
 

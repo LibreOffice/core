@@ -51,6 +51,7 @@ $(eval $(call gb_Executable_add_exception_objects,gtktiledviewer,\
     libreofficekit/qa/gtktiledviewer/gtv-signal-handlers \
     libreofficekit/qa/gtktiledviewer/gtv-helpers \
     libreofficekit/qa/gtktiledviewer/gtv-lokdocview-signal-handlers \
+    libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar \
 ))
 
 # vim: set noet sw=4 ts=4:

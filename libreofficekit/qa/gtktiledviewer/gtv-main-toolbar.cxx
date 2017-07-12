@@ -13,6 +13,7 @@
 #include <gtv-main-toolbar.hxx>
 #include <gtv-signal-handlers.hxx>
 #include <gtv-helpers.hxx>
+#include <gtv-calc-header-bar.hxx>
 
 #include <map>
 #include <boost/property_tree/json_parser.hpp>
