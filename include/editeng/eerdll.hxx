@@ -20,8 +20,8 @@
 #ifndef INCLUDED_EDITENG_EERDLL_HXX
 #define INCLUDED_EDITENG_EERDLL_HXX
 
-#include <tools/resid.hxx>
 #include <editeng/editengdllapi.h>
+#include <rtl/ustring.hxx>
 #include <memory>
 
 class GlobalEditData;

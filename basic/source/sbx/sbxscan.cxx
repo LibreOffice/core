@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <vcl/errcode.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 

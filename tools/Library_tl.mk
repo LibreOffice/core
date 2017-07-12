@@ -69,7 +69,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/memtools/unqidx \
     tools/source/misc/cpuid \
     tools/source/misc/extendapplicationenvironment \
-    tools/source/rc/rc \
     tools/source/rc/resmgr \
     tools/source/ref/globname \
     tools/source/ref/pstm \

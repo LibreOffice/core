@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
+#include <osl/diagnose.h>
 #include <tools/resmgr.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/configmgr.hxx>

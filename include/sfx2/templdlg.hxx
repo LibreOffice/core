@@ -23,7 +23,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <vcl/ctrl.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 
 #include <sfx2/dockwin.hxx>
 #include <sfx2/childwin.hxx>

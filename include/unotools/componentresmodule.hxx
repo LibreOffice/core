@@ -21,11 +21,7 @@
 
 #include <comphelper/componentmodule.hxx>
 #include <unotools/unotoolsdllapi.h>
-
-#include <tools/resid.hxx>
-
 #include <osl/getglobalmutex.hxx>
-
 #include <memory>
 
 class LanguageTag;
@@ -53,23 +49,12 @@ namespace utl
         OComponentResourceModule(const OString& _rResFilePrefix, const LanguageTag& rLanguage);
         virtual ~OComponentResourceModule() override;
 
-        /// get the vcl res manager of the module
-        ResMgr* getResManager();
+        /// get the resource locale of the module
         const std::locale& getResLocale();
 
     protected:
         // OModule overridables
         virtual void onLastClient() override;
-    };
-
-    //= ModuleRes
-
-    /** specialized ResId, using the resource manager provided by a given OModule
-    */
-    class UNOTOOLS_DLLPUBLIC ModuleRes : public ::ResId
-    {
-    public:
-        ModuleRes( sal_uInt16 _nId, OComponentResourceModule& _rModule ) : ResId( _nId, *_rModule.getResManager() ) { }
     };
 
     //= defining a concrete module

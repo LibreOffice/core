@@ -21,7 +21,6 @@
 
 #include <cassert>
 
-#include "tools/rcid.h"
 #include <comphelper/string.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

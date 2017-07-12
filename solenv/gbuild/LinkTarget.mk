@@ -978,7 +978,6 @@ gb_BUILD_HELPER_LIBS := basegfx \
 # tools libmerged depends on, so they link against gb_BUILD_HELPER_LIBS
 gb_BUILD_HELPER_TOOLS := $(foreach exe,\
 	cppumaker \
-	rsc \
 	svidl \
 	unoidl-check \
 	unoidl-write \

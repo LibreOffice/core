@@ -20,7 +20,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/status.hxx>

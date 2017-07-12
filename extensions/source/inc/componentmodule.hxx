@@ -26,7 +26,7 @@
 */
 
 #include <osl/mutex.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

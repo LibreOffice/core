@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_INC_SCSTYLES_HRC
 #define INCLUDED_SC_INC_SCSTYLES_HRC
 
-#include <svl/style.hrc>
+#include <svl/style.hxx>
 
 #define NC_(Context, String) (Context "\004" u8##String)
 

@@ -29,7 +29,7 @@
 #include <svtools/strings.hrc>
 #include <svx/svxerr.hxx>
 #include <svx/dialogs.hrc>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 
 #include "ids.hxx"
 #include "ids.hrc"

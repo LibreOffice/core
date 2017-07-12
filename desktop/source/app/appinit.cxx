@@ -45,8 +45,6 @@
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
 
-#include <tools/rcid.h>
-
 #include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbhelper.hxx>

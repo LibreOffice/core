@@ -20,7 +20,6 @@
 #include <svtools/fileview.hxx>
 
 #include <vcl/errinf.hxx>
-#include <tools/resid.hxx>
 
 #include <unotools/viewoptions.hxx>
 

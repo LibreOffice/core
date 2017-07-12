@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLSECURITY_SOURCE_DIALOGS_RESOURCEMANAGER_HXX
 #define INCLUDED_XMLSECURITY_SOURCE_DIALOGS_RESOURCEMANAGER_HXX
 
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <tools/datetime.hxx>
 #include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/util/DateTime.hpp>

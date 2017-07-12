@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/layout.hxx>
 #include "strings.hrc"
 #include "masterpassworddlg.hxx"

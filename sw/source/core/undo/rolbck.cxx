@@ -18,7 +18,6 @@
  */
 
 #include <rolbck.hxx>
-#include <tools/resid.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <hints.hxx>

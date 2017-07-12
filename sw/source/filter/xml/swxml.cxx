@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
