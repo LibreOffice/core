@@ -34,6 +34,41 @@
       "revId": "129faaf6ddd8edc916460fd575aa83f66275d4f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_af4e18bf",
+        "filename": "writerfilter/source/ooxml/OOXMLDocumentImpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-12T09:17:41Z",
+      "side": 1,
+      "message": "I wonder how a proper cherry-pick could had included these lines.. also, I\u0027m missing the \"(cherry picked from commit ...)\" commit message line that is added with git cherry-pick -x and gerrit cherry-pick, so one can easily lookup the original commit.\n\nYes, these two lines should be removed as they don\u0027t belong to the commit.",
+      "parentUuid": "3a461143_f43633b3",
+      "revId": "129faaf6ddd8edc916460fd575aa83f66275d4f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_0fcc8c34",
+        "filename": "writerfilter/source/ooxml/OOXMLDocumentImpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-12T09:17:41Z",
+      "side": 1,
+      "message": "Note that as this is now a member variable it should be prefixed with m... as well, like the surrounding code does. So maEmbedding.",
+      "revId": "129faaf6ddd8edc916460fd575aa83f66275d4f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
