@@ -348,8 +348,6 @@
 #include <i18nutil/paper.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sdattr.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>

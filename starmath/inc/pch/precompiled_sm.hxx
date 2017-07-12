@@ -117,7 +117,6 @@
 #include <node.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <rect.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>

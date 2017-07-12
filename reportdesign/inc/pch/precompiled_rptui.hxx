@@ -378,8 +378,6 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <reportformula.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/linksrc.hxx>
 #include <sot/exchange.hxx>

@@ -22,7 +22,7 @@
 
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleLoader2.hpp>

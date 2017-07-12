@@ -390,8 +390,6 @@
 #include <prtopt.hxx>
 #include <redline.hxx>
 #include <reffld.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>

@@ -40,7 +40,7 @@
 #include <sfx2/sfx.hrc>
 #include "sfx2/strings.hrc"
 
-#include <svl/style.hrc>
+#include <svl/style.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 

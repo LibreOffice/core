@@ -18,7 +18,7 @@
  */
 
 #include <tools/stream.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 
 // due to pSlotPool
 #include "appdata.hxx"

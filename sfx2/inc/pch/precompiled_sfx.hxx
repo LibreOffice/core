@@ -348,7 +348,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sax/tools/converter.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
