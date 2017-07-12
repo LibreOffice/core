@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_4a2be230",
+        "filename": "android/source/src/java/org/libreoffice/LibreOfficeMainActivity.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1001574
+      },
+      "writtenOn": "2017-07-12T16:36:01Z",
+      "side": 1,
+      "message": "You might want to add an isColorPickerOpen boolean field and update it accordingly like isSearchToolbarOpen and isFormattingToolbarOpen.",
+      "revId": "469fb1e6b4022a611374deaed2371c0dfe25f06f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
