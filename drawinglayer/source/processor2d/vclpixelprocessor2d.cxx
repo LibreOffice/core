@@ -70,34 +70,6 @@ T round(T x)
 
 using namespace com::sun::star;
 
-namespace {
-
-basegfx::B2DPolygon makeRectPolygon( double fX, double fY, double fW, double fH )
-{
-    basegfx::B2DPolygon aPoly;
-    aPoly.append(basegfx::B2DPoint(fX, fY));
-    aPoly.append(basegfx::B2DPoint(fX+fW, fY));
-    aPoly.append(basegfx::B2DPoint(fX+fW, fY+fH));
-    aPoly.append(basegfx::B2DPoint(fX, fY+fH));
-    aPoly.setClosed(true);
-    return aPoly;
-}
-
-void drawHairLine(
-    OutputDevice* pOutDev, double fX1, double fY1, double fX2, double fY2,
-    const basegfx::BColor& rColor )
-{
-    basegfx::B2DPolygon aTarget;
-    aTarget.append(basegfx::B2DPoint(fX1, fY1));
-    aTarget.append(basegfx::B2DPoint(fX2, fY2));
-
-    pOutDev->SetFillColor();
-    pOutDev->SetLineColor(Color(rColor));
-    pOutDev->DrawPolyLine(aTarget);
-}
-
-}
-
 namespace drawinglayer
 {
     namespace processor2d
