@@ -86,7 +86,6 @@
 #include <svx/checklbx.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <unotools/configmgr.hxx>
 #include <vcl/button.hxx>

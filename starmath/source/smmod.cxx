@@ -25,7 +25,7 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include <svx/svxids.hrc>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
 #include "smmod.hxx"

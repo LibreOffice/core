@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 #include "sfx2/passwd.hxx"
 #include "svtools/miscopt.hxx"
-#include "tools/simplerm.hxx"
+#include "tools/resmgr.hxx"
 
 #include "comphelper/propertyvalue.hxx"
 #include "comphelper/sequence.hxx"

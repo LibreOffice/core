@@ -24,6 +24,7 @@
 #include "stringarrays.hrc"
 #include "propctrlr.hrc"
 #include <comphelper/extract.hxx>
+#include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <algorithm>
 

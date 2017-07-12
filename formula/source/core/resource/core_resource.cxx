@@ -19,7 +19,7 @@
 
 #include "core_resource.hxx"
 
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>

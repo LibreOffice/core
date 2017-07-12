@@ -34,7 +34,6 @@
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <tools/rcid.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <framework/menuconfiguration.hxx>

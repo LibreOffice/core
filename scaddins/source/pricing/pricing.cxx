@@ -33,8 +33,6 @@
 #include <algorithm>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/rcid.h>
-#include <tools/simplerm.hxx>
 #include <tools/resmgr.hxx>
 
 using namespace ::com::sun::star;

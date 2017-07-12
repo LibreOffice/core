@@ -21,7 +21,6 @@
 #include <unofldmid.h>
 #include <strings.hrc>
 #include <o3tl/any.hxx>
-#include <tools/resid.hxx>
 
 using namespace ::com::sun::star;
 

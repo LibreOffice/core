@@ -30,7 +30,6 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <tools/resid.hxx>
 #include <unotools/configmgr.hxx>
 
 #include "strings.hrc"

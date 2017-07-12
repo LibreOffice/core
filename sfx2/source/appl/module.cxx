@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/rcid.h>
-
 #include <cstdarg>
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>

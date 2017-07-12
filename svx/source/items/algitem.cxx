@@ -19,7 +19,7 @@
 
 #include <svx/svxitems.hrc>
 #include <svx/strings.hrc>
-
+#include <osl/diagnose.h>
 #include <tools/stream.hxx>
 #include <tools/mapunit.hxx>
 #include <com/sun/star/table/BorderLine.hpp>

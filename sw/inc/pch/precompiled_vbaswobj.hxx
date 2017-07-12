@@ -334,7 +334,6 @@
 #include <ooo/vba/XCollection.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <pam.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <sfx2/dllapi.h>
 #include <svl/cenumitm.hxx>
 #include <svl/cintitem.hxx>
@@ -376,7 +375,6 @@
 #include <tools/multisel.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

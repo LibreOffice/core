@@ -27,8 +27,7 @@
 #include "osl/mutex.hxx"
 
 #include <svl/zforlist.hxx>
-#include <tools/rcid.h>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>

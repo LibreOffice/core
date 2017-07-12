@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_TOOLBOX_HXX
 
 #include <vcl/vclstatuslistener.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dockwin.hxx>
 #include <vcl/image.hxx>

@@ -21,8 +21,8 @@
 
 #include <utility>
 
+#include <osl/diagnose.h>
 #include <tools/stream.hxx>
-
 #include <svx/pageitem.hxx>
 #include <editeng/itemtype.hxx>
 #include <svx/unomid.hxx>
