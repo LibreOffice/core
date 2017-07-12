@@ -20,7 +20,8 @@
 #define INCLUDED_SFX2_SFXRESID_HXX
 
 #include <sfx2/dllapi.h>
-#include <tools/resid.hxx>
+#include <rtl/ustring.hxx>
+#include <locale>
 
 struct SFX2_DLLPUBLIC SfxResLocale
 {

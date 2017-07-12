@@ -61,7 +61,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <osl/conditn.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/errinf.hxx>
 #include <osl/thread.hxx>
 #include <tools/diagnose_ex.h>

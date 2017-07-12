@@ -24,7 +24,6 @@ gb_BUILD_TOOLS = \
 		javamaker \
 		makedepend \
 		propex \
-		rsc \
 		saxparser \
 		svidl \
 		treex \

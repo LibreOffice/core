@@ -20,7 +20,7 @@
 #include <config_folders.h>
 
 #include <comphelper/string.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
 #include <vcl/builderfactory.hxx>

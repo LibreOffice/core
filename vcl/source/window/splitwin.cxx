@@ -20,7 +20,6 @@
 #include <string.h>
 
 #include <tools/debug.hxx>
-#include <tools/rcid.h>
 
 #include <vcl/event.hxx>
 #include <vcl/wall.hxx>
@@ -31,7 +30,7 @@
 #include <vcl/splitwin.hxx>
 #include <vcl/settings.hxx>
 
-#include <rsc/rsc-vcl-shared-types.hxx>
+#include <vcl/vclenum.hxx>
 
 #include <svdata.hxx>
 #include <strings.hrc>

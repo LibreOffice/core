@@ -35,7 +35,6 @@
 
 #include <svx/svxids.hrc>
 #include "tbxform.hxx"
-#include <tools/resid.hxx>
 
 #include <svx/dialmgr.hxx>
 #include "tabwin.hxx"

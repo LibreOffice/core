@@ -18,7 +18,6 @@
  */
 
 #include "sb.hxx"
-#include <tools/rcid.h>
 #include <tools/stream.hxx>
 #include <vcl/errinf.hxx>
 #include <comphelper/solarmutex.hxx>

@@ -30,7 +30,7 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 

@@ -5,7 +5,7 @@
 
 #include "writerperfectdllapi.h"
 
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 
 struct WRITERPERFECT_DLLPUBLIC WPFTResLocale
 {

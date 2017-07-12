@@ -24,7 +24,6 @@
 
 // for portion replacement in Special()
 #include "strings.hrc"
-#include <tools/resid.hxx>
 #include "viewopt.hxx"
 
 // for GetWordBoundary(...), GetSentenceBoundary(...):

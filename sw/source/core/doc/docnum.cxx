@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <tools/resid.hxx>
 #include <editeng/lrspitem.hxx>
 #include <ftninfo.hxx>
 #include <ftnidx.hxx>

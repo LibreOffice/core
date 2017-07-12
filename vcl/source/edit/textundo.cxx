@@ -27,7 +27,6 @@
 #include <textdoc.hxx>
 #include <textdat2.hxx>
 #include <svdata.hxx>
-#include <tools/resid.hxx>
 
 namespace
 {

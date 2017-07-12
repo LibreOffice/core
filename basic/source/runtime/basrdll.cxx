@@ -26,7 +26,7 @@
 
 #include <basic/sbstar.hxx>
 #include <basic/basrdll.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include "strings.hrc"
 #include <sbxbase.hxx>
 

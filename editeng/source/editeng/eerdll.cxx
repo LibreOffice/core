@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>

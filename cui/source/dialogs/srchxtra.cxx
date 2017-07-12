@@ -18,7 +18,6 @@
  */
 
 #include "srchxtra.hxx"
-#include <tools/rcid.h>
 #include <vcl/msgbox.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/whiter.hxx>

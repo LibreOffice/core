@@ -34,7 +34,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/digest.h>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/msgbox.hxx>

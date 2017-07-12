@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/headbar.hxx>
 #include <unotools/streamwrap.hxx>
@@ -1209,7 +1209,7 @@ void XMLFilterSettingsDialog::initFilterList()
 
 application_info_impl::application_info_impl( const sal_Char * pDocumentService, const OUString& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter )
 :   maDocumentService( pDocumentService, strlen( pDocumentService ), RTL_TEXTENCODING_ASCII_US ),
-    maDocumentUIName(ResMgr::ExpandVariables(rUINameRes)),
+    maDocumentUIName(Translate::ExpandVariables(rUINameRes)),
     maXMLImporter( mpXMLImporter, strlen( mpXMLImporter ), RTL_TEXTENCODING_ASCII_US ),
     maXMLExporter( mpXMLExporter, strlen( mpXMLExporter ), RTL_TEXTENCODING_ASCII_US )
 {
