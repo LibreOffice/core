@@ -1419,6 +1419,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
     CPPUNIT_ASSERT_MESSAGE("Shape line width does not match", abs(nFirstEnd - nSecondEnd) < 10);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf109053, "tdf109053.docx")
+{
+    // Table was imported into a text frame which led to a one page document
+    // Originally the table takes two pages, so Writer should import it accordingly.
+    CPPUNIT_ASSERT_EQUAL(getPages(), 2);
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
