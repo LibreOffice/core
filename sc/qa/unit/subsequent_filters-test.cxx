@@ -182,7 +182,9 @@ public:
     //test shape import
     void testControlImport();
     void testChartImportODS();
+#if HAVE_MORE_FONTS
     void testChartImportXLS();
+#endif
 
     void testNumberFormatHTML();
     void testNumberFormatCSV();
@@ -1659,6 +1661,7 @@ void ScFiltersTest::testChartImportODS()
     xDocSh->DoClose();
 }
 
+#if HAVE_MORE_FONTS
 void ScFiltersTest::testChartImportXLS()
 {
     ScDocShellRef xDocSh = loadDoc("chartx.", FORMAT_XLS);
@@ -1675,6 +1678,7 @@ void ScFiltersTest::testChartImportXLS()
 
     xDocSh->DoClose();
 }
+#endif
 
 void ScFiltersTest::testNumberFormatHTML()
 {

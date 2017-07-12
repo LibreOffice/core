@@ -3780,6 +3780,7 @@ void SwUiWriterTest::testTdf87922()
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFont.GetColor().GetColor());
 }
 
+#if HAVE_MORE_FONTS
 struct PortionItem
 {
     PortionItem(OUString const & sItemType, sal_Int32 nLength = 0,
@@ -3837,7 +3838,6 @@ class PortionHandler : public SwPortionHandler
     }
 };
 
-#if HAVE_MORE_FONTS
 void SwUiWriterTest::testTdf77014()
 {
     // The problem described in the bug tdf#77014 is that the input

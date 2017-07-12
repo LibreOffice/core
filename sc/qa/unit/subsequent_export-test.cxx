@@ -114,10 +114,14 @@ public:
 
 
     void testCommentExportXLSX();
+#if HAVE_MORE_FONTS
     void testCustomColumnWidthExportXLSX();
+#endif
     void testXfDefaultValuesXLSX();
     void testColumnWidthResaveXLSX();
+#if HAVE_MORE_FONTS
     void testColumnWidthExportFromODStoXLSX();
+#endif
     void testOutlineExportXLSX();
     void testHiddenEmptyRowsXLSX();
     void testAllRowsHiddenXLSX();
@@ -552,6 +556,7 @@ void ScExportTest::testCommentExportXLSX()
 
 }
 
+#if HAVE_MORE_FONTS
 void ScExportTest::testCustomColumnWidthExportXLSX()
 {
     //tdf#100946 FILESAVE Excel on OS X ignored column widths in XLSX last saved by LO
@@ -643,6 +648,7 @@ void ScExportTest::testCustomColumnWidthExportXLSX()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "customFormat", "false");
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "customHeight", "false");
 }
+#endif
 
 void ScExportTest::testXfDefaultValuesXLSX()
 {
@@ -705,7 +711,7 @@ void ScExportTest::testColumnWidthResaveXLSX()
     assertXPath(pSheet, "/x:worksheet/x:cols/x:col", 6);
 }
 
-
+#if HAVE_MORE_FONTS
 void ScExportTest::testColumnWidthExportFromODStoXLSX()
 {
     // tdf#91475 FILESAVE: Column width is not preserved in XLSX / after round trip.
@@ -769,6 +775,7 @@ void ScExportTest::testColumnWidthExportFromODStoXLSX()
 
     xXlsxDocSh->DoClose();
 }
+#endif
 
 void ScExportTest::testOutlineExportXLSX()
 {
