@@ -408,8 +408,6 @@
 #include <rechead.hxx>
 #include <refupdatecontext.hxx>
 #include <rowheightcontext.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sax/tools/converter.hxx>
 #include <scabstdlg.hxx>
 #include <scerrors.hxx>

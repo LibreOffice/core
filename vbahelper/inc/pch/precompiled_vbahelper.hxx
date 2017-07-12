@@ -114,8 +114,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/objsh.hxx>
