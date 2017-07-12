@@ -538,7 +538,7 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
     if ( !pDesc )
         pDesc = &pDoc->GetPageDesc( 0 );
     const bool bOdd = !oPgNum || 0 != ( oPgNum.get() % 2 );
-    bool bFirst = !oPgNum || 1 == oPgNum.get();
+    bool bFirst = true;
 
     // Create a page and put it in the layout
     SwPageFrame *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, false, nullptr );
