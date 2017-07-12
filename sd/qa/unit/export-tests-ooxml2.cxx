@@ -97,6 +97,7 @@ public:
     void testTdf92076();
     void testTdf59046();
     void testTdf105739();
+    void testPageBitmapWithTransparency();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -121,6 +122,7 @@ public:
     CPPUNIT_TEST(testTdf92076);
     CPPUNIT_TEST(testTdf59046);
     CPPUNIT_TEST(testTdf105739);
+    CPPUNIT_TEST(testPageBitmapWithTransparency);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -775,6 +777,31 @@ void SdOOXMLExportTest2::testTdf105739()
     }
 
     xShell->DoClose();
+}
+
+void SdOOXMLExportTest2::testPageBitmapWithTransparency()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/page_transparent_bitmap.pptx"), PPTX );
+
+    xDocShRef = saveAndReload( xDocShRef.get(), ODP );
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "There should be exactly one page", static_cast<sal_Int32>(1), xDoc->getDrawPages()->getCount() );
+
+    uno::Reference< drawing::XDrawPage > xPage( getPage( 0, xDocShRef ) );
+
+    uno::Reference< beans::XPropertySet > xPropSet( xPage, uno::UNO_QUERY );
+    uno::Any aAny = xPropSet->getPropertyValue( "Background" );
+    CPPUNIT_ASSERT_MESSAGE("Slide background is missing", aAny.hasValue());
+
+    uno::Reference< beans::XPropertySet > aXBackgroundPropSet;
+    aAny >>= aXBackgroundPropSet;
+    sal_Int32 nTransparence;
+    aAny = aXBackgroundPropSet->getPropertyValue( "FillTransparence" );
+    aAny >>= nTransparence;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Slide background transparency is wrong", sal_Int32(49), nTransparence);
+
+    xDocShRef->DoClose();
 }
 
 
