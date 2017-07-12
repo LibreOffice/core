@@ -19,6 +19,20 @@
 
 #include <string>
 
+struct _GtvApplicationWindow
+{
+    GtkApplicationWindow parent_instance;
+
+    GtkWidget* scrolledwindow;
+    GtkWidget* lokdocview;
+
+    GtkWidget* statusbar;
+    GtkWidget* zoomlabel;
+    GtkWidget* redlinelabel;
+
+    GtkWidget* findtoolbar;
+};
+
 struct GtvRenderingArgs
 {
     std::string m_aLoPath;
@@ -42,19 +56,13 @@ void gtv_application_window_load_document(GtvApplicationWindow* application,
                                           const GtvRenderingArgs* aArgs,
                                           const std::string& aDocPath);
 
-LOKDocView* gtv_application_window_get_lokdocview(GtvApplicationWindow* application);
-
 void gtv_application_window_create_view_from_window(GtvApplicationWindow* window);
-
-void gtv_application_window_set_zoom_label(GtvApplicationWindow* window, const std::string& aZoom);
 
 void getVisibleAreaTwips(GtvApplicationWindow* pWindow, GdkRectangle* pArea);
 
 void gtv_application_window_toggle_findbar(GtvApplicationWindow* window);
 
 GtkToolItem* gtv_application_window_find_tool_by_unocommand(GtvApplicationWindow* window, const std::string& unoCmd);
-
-void gtv_application_window_set_redline_label(GtvApplicationWindow* window, const std::string& redlineLabel);
 
 GtvMainToolbar* gtv_application_window_get_main_toolbar(GtvApplicationWindow* window);
 

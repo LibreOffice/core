@@ -20,24 +20,10 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
 
-struct _GtvApplicationWindow
-{
-    GtkApplicationWindow parent_instance;
-};
-
 struct GtvApplicationWindowPrivate
 {
     GtkWidget* container;
     GtkWidget* toolbarcontainer;
-
-    GtkWidget* scrolledwindow;
-    GtkWidget* lokdocview;
-
-    GtkWidget* statusbar;
-    GtkWidget* zoomlabel;
-    GtkWidget* redlinelabel;
-
-    GtkWidget* findtoolbar;
 
     gboolean toolbarBroadcast;
 
@@ -69,14 +55,14 @@ gtv_application_window_init(GtvApplicationWindow* win)
     gtk_box_reorder_child(GTK_BOX(priv->container), priv->toolbarcontainer, 0);
 
     // scrolled window containing the main drawing area
-    priv->scrolledwindow = GTK_WIDGET(gtk_builder_get_object(builder, "scrolledwindow"));
+    win->scrolledwindow = GTK_WIDGET(gtk_builder_get_object(builder, "scrolledwindow"));
 
     // statusbar
-    priv->statusbar = GTK_WIDGET(gtk_builder_get_object(builder, "statusbar"));
-    priv->redlinelabel = GTK_WIDGET(gtk_builder_get_object(builder, "redlinelabel"));
-    priv->zoomlabel = GTK_WIDGET(gtk_builder_get_object(builder, "zoomlabel"));
+    win->statusbar = GTK_WIDGET(gtk_builder_get_object(builder, "statusbar"));
+    win->redlinelabel = GTK_WIDGET(gtk_builder_get_object(builder, "redlinelabel"));
+    win->zoomlabel = GTK_WIDGET(gtk_builder_get_object(builder, "zoomlabel"));
 
-    priv->findtoolbar = GTK_WIDGET(gtk_builder_get_object(builder, "findtoolbar"));
+    win->findtoolbar = GTK_WIDGET(gtk_builder_get_object(builder, "findtoolbar"));
     priv->toolbarBroadcast = false;
 
     gtk_container_add(GTK_CONTAINER(win), priv->container);
@@ -134,40 +120,32 @@ gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res
     lok_doc_view_set_edit(pDocView, true);
 }
 
-void gtv_application_window_set_zoom_label(GtvApplicationWindow* window, const std::string& aZoom)
-{
-    GtvApplicationWindowPrivate* priv = getPrivate(window);
-    gtk_label_set_text(GTK_LABEL(priv->zoomlabel), aZoom.c_str());
-}
-
 /// Get the visible area of the scrolled window
 void getVisibleAreaTwips(GtvApplicationWindow* pWindow, GdkRectangle* pArea)
 {
-    GtvApplicationWindowPrivate* priv = getPrivate(pWindow);
-    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(priv->scrolledwindow));
-    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(priv->scrolledwindow));
+    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pWindow->scrolledwindow));
+    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pWindow->scrolledwindow));
 
-    pArea->x      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(priv->lokdocview),
+    pArea->x      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->lokdocview),
                                                gtk_adjustment_get_value(pHAdjustment));
-    pArea->y      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(priv->lokdocview),
+    pArea->y      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->lokdocview),
                                                gtk_adjustment_get_value(pVAdjustment));
-    pArea->width  = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(priv->lokdocview),
+    pArea->width  = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->lokdocview),
                                                gtk_adjustment_get_page_size(pHAdjustment));
-    pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(priv->lokdocview),
+    pArea->height = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pWindow->lokdocview),
                                                gtk_adjustment_get_page_size(pVAdjustment));
 }
 
 void gtv_application_window_toggle_findbar(GtvApplicationWindow* window)
 {
-    GtvApplicationWindowPrivate* priv = getPrivate(window);
-    if (gtk_widget_get_visible(priv->findtoolbar))
+    if (gtk_widget_get_visible(window->findtoolbar))
     {
-        gtk_widget_hide(priv->findtoolbar);
+        gtk_widget_hide(window->findtoolbar);
     }
     else
     {
-        gtk_widget_show_all(priv->findtoolbar);
-        gtk_widget_grab_focus(priv->findtoolbar);
+        gtk_widget_show_all(window->findtoolbar);
+        gtk_widget_grab_focus(window->findtoolbar);
     }
 }
 
@@ -209,16 +187,6 @@ GtkToolItem* gtv_application_window_find_tool_by_unocommand(GtvApplicationWindow
     }
 
     return result;
-}
-
-LOKDocView*
-gtv_application_window_get_lokdocview(GtvApplicationWindow* window)
-{
-    GtvApplicationWindowPrivate* priv = getPrivate(window);
-    if (priv->lokdocview)
-        return LOK_DOC_VIEW(priv->lokdocview);
-
-    return nullptr;
 }
 
 static const std::string
@@ -270,14 +238,13 @@ gtv_application_window_create_view_from_window(GtvApplicationWindow* window)
 
     GtvApplicationWindow* newWindow = GTV_APPLICATION_WINDOW(gtv_application_window_new(GTK_APPLICATION(app)));
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
-    GtvApplicationWindowPrivate* newPriv = getPrivate(newWindow);
-    newPriv->lokdocview = lok_doc_view_new_from_widget(LOK_DOC_VIEW(priv->lokdocview), aArguments.c_str());
-    setupDocView(LOK_DOC_VIEW(newPriv->lokdocview));
+    newWindow->lokdocview = lok_doc_view_new_from_widget(LOK_DOC_VIEW(window->lokdocview), aArguments.c_str());
+    setupDocView(LOK_DOC_VIEW(newWindow->lokdocview));
 
     gboolean bTiledAnnotations;
-    g_object_get(G_OBJECT(priv->lokdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
-    gtk_container_add(GTK_CONTAINER(newPriv->scrolledwindow), newPriv->lokdocview);
-    gtk_widget_show_all(newPriv->scrolledwindow);
+    g_object_get(G_OBJECT(window->lokdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
+    gtk_container_add(GTK_CONTAINER(newWindow->scrolledwindow), newWindow->lokdocview);
+    gtk_widget_show_all(newWindow->scrolledwindow);
     gtk_window_present(GTK_WINDOW(newWindow));
 }
 
@@ -291,31 +258,24 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
     *(priv->m_pRenderingArgs) = *aArgs;
 
     // setup lokdocview
-    priv->lokdocview = lok_doc_view_new_from_user_profile(priv->m_pRenderingArgs->m_aLoPath.c_str(),
-                                                          priv->m_pRenderingArgs->m_aUserProfile.empty() ? nullptr : priv->m_pRenderingArgs->m_aUserProfile.c_str(),
+    window->lokdocview = lok_doc_view_new_from_user_profile(priv->m_pRenderingArgs->m_aLoPath.c_str(),
+                                                            priv->m_pRenderingArgs->m_aUserProfile.empty() ? nullptr : priv->m_pRenderingArgs->m_aUserProfile.c_str(),
                                                           nullptr, nullptr);
-    gtk_container_add(GTK_CONTAINER(priv->scrolledwindow), priv->lokdocview);
-    g_object_set(G_OBJECT(priv->lokdocview),
+    gtk_container_add(GTK_CONTAINER(window->scrolledwindow), window->lokdocview);
+    g_object_set(G_OBJECT(window->lokdocview),
                  "doc-password", TRUE,
                  "doc-password-to-modify", TRUE,
                  "tiled-annotations", priv->m_pRenderingArgs->m_bEnableTiledAnnotations,
                  nullptr);
-    setupDocView(LOK_DOC_VIEW(priv->lokdocview));
+    setupDocView(LOK_DOC_VIEW(window->lokdocview));
 
     // Create argument JSON
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
-    lok_doc_view_open_document(LOK_DOC_VIEW(priv->lokdocview), aDocPath.c_str(),
+    lok_doc_view_open_document(LOK_DOC_VIEW(window->lokdocview), aDocPath.c_str(),
                                aArguments.c_str(), nullptr,
-                               gtv_application_open_document_callback, priv->lokdocview);
+                               gtv_application_open_document_callback, window->lokdocview);
 
-    gtk_widget_show_all(GTK_WIDGET(priv->scrolledwindow));
-}
-
-void
-gtv_application_window_set_redline_label(GtvApplicationWindow* window, const std::string& redlineLabel)
-{
-    GtvApplicationWindowPrivate* priv = getPrivate(window);
-    gtk_label_set_text(GTK_LABEL(priv->redlinelabel), redlineLabel.c_str());
+    gtk_widget_show_all(GTK_WIDGET(window->scrolledwindow));
 }
 
 GtvMainToolbar*

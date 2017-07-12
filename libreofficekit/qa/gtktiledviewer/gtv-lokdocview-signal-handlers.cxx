@@ -18,9 +18,8 @@
 
 void lokdocview_signalEdit(LOKDocView* pDocView, gboolean bWasEdit, gpointer)
 {
-    GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
-    gboolean bEdit = lok_doc_view_get_edit(pDocView);
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+    gboolean bEdit = lok_doc_view_get_edit(LOK_DOC_VIEW(window->lokdocview));
     g_info("signalEdit: %d -> %d", bWasEdit, bEdit);
 
     // Let the main toolbar know, so that it can enable disable the button
@@ -30,9 +29,7 @@ void lokdocview_signalEdit(LOKDocView* pDocView, gboolean bWasEdit, gpointer)
 
 void lokdocview_signalCommand(LOKDocView* pDocView, char* pPayload, gpointer)
 {
-    GApplication* app = g_application_get_default();
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_application_get_active_window(GTK_APPLICATION(app)));
-
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     std::string aPayload(pPayload);
     size_t nPosition = aPayload.find('=');
     if (nPosition != std::string::npos)
@@ -71,7 +68,7 @@ void lokdocview_signalCommand(LOKDocView* pDocView, char* pPayload, gpointer)
                 aText += "none";
             else
                 aText += aValue;
-            gtv_application_window_set_redline_label(window, aText);
+            gtk_label_set_text(GTK_LABEL(window->redlinelabel), aText.c_str());
         }
     }
 }

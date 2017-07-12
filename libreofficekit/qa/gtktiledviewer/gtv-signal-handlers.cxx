@@ -20,12 +20,10 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
 
-void btn_clicked(GtkWidget* pWidget, gpointer)
+void btn_clicked(GtkWidget* pButton, gpointer)
 {
-    GApplication* app = g_application_get_default();
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_application_get_active_window(GTK_APPLICATION(app)));
-
-    GtkToolButton* pItem = GTK_TOOL_BUTTON(pWidget);
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
+    GtkToolButton* pItem = GTK_TOOL_BUTTON(pButton);
     const gchar* label = gtk_tool_button_get_label(pItem);
     if (gtv_application_window_get_toolbar_broadcast(window) && g_str_has_prefix(label, ".uno:"))
     {
@@ -46,20 +44,17 @@ void btn_clicked(GtkWidget* pWidget, gpointer)
         }
 
         bool bNotify = g_strcmp0(label, ".uno:Save") == 0;
-        LOKDocView* lokdocview = gtv_application_window_get_lokdocview(window);
-        if (lokdocview)
-            lok_doc_view_post_command(lokdocview, label, aArguments.c_str(), bNotify);
+        if (window->lokdocview)
+            lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), label, aArguments.c_str(), bNotify);
     }
 }
 
 void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
-    LOKDocView* pLOKDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     char* pUsedFormat = nullptr;
     // TODO: Should check `text-selection` signal before trying to copy
-    char* pSelection = lok_doc_view_copy_selection(pLOKDocView, "text/html", &pUsedFormat);
+    char* pSelection = lok_doc_view_copy_selection(LOK_DOC_VIEW(window->lokdocview), "text/html", &pUsedFormat);
     if (!pSelection)
         return;
 
@@ -76,10 +71,7 @@ void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
 
 void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
-    LOKDocView* pLOKDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
-
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(pButton), GDK_SELECTION_CLIPBOARD);
     GdkAtom* pTargets;
     gint nTargets;
@@ -123,7 +115,7 @@ void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
         }
         gint nLength;
         const guchar* pData = gtk_selection_data_get_data_with_length(pSelectionData, &nLength);
-        bool bSuccess = lok_doc_view_paste(pLOKDocView, aTargetName.c_str(), reinterpret_cast<const char*>(pData), nLength);
+        bool bSuccess = lok_doc_view_paste(LOK_DOC_VIEW(window->lokdocview), aTargetName.c_str(), reinterpret_cast<const char*>(pData), nLength);
         gtk_selection_data_free(pSelectionData);
         if (bSuccess)
             return;
@@ -131,14 +123,12 @@ void doPaste(GtkWidget* pButton, gpointer /*pItem*/)
 
     gchar* pText = gtk_clipboard_wait_for_text(pClipboard);
     if (pText)
-        lok_doc_view_paste(pLOKDocView, "text/plain;charset=utf-8", pText, strlen(pText));
+        lok_doc_view_paste(LOK_DOC_VIEW(window->lokdocview), "text/plain;charset=utf-8", pText, strlen(pText));
 }
 
-void createView(GtkWidget*, gpointer /*pItem*/)
+void createView(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
-
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     gtv_application_window_create_view_from_window(GTV_APPLICATION_WINDOW(window));
 }
 
@@ -201,12 +191,9 @@ static void iterateUnoParams(GtkWidget* pWidget, gpointer userdata)
 
 void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
 {
-    GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
-    LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
-
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     GtkWidget* pUnoCmdDialog = gtk_dialog_new_with_buttons ("Execute UNO command",
-                                                            GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+                                                            GTK_WINDOW (window),
                                                             GTK_DIALOG_MODAL,
                                                             "Execute",
                                                             GTK_RESPONSE_OK,
@@ -249,7 +236,7 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
 
         g_info("Generated UNO command: %s %s", sUnoCmd, aArguments.c_str());
 
-        lok_doc_view_post_command(pDocView, sUnoCmd, (aArguments.empty() ? nullptr : aArguments.c_str()), false);
+        lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), sUnoCmd, (aArguments.empty() ? nullptr : aArguments.c_str()), false);
     }
         break;
     }
@@ -259,30 +246,24 @@ void unoCommandDebugger(GtkWidget* pButton, gpointer /* pItem */)
 
 void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
-    LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
-
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pButton));
-    if (bool(lok_doc_view_get_edit(pDocView)) != bActive)
-        lok_doc_view_set_edit(pDocView, bActive);
+    if (bool(lok_doc_view_get_edit(LOK_DOC_VIEW(window->lokdocview))) != bActive)
+        lok_doc_view_set_edit(LOK_DOC_VIEW(window->lokdocview), bActive);
 }
 
 void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 {
     static const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
-    GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
-    LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
-
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     const char *sName = gtk_tool_button_get_icon_name( GTK_TOOL_BUTTON(pButton) );
 
     float fZoom = 0;
     float fCurrentZoom = 0;
 
-    if ( pDocView )
+    if ( window->lokdocview )
     {
-        fCurrentZoom = lok_doc_view_get_zoom( LOK_DOC_VIEW(pDocView) );
+        fCurrentZoom = lok_doc_view_get_zoom( LOK_DOC_VIEW(window->lokdocview) );
     }
 
     if ( strcmp(sName, "zoom-in-symbolic") == 0)
@@ -313,26 +294,23 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 
     if ( fZoom != 0 )
     {
-        if ( pDocView )
+        if ( window->lokdocview )
         {
-            lok_doc_view_set_zoom( LOK_DOC_VIEW(pDocView), fZoom );
+            lok_doc_view_set_zoom( LOK_DOC_VIEW(window->lokdocview), fZoom );
             GdkRectangle aVisibleArea;
-            getVisibleAreaTwips(GTV_APPLICATION_WINDOW(window), &aVisibleArea);
-            lok_doc_view_set_visible_area(LOK_DOC_VIEW(pDocView), &aVisibleArea);
+            getVisibleAreaTwips(window, &aVisibleArea);
+            lok_doc_view_set_visible_area(LOK_DOC_VIEW(window->lokdocview), &aVisibleArea);
         }
     }
     const std::string aZoom = std::string("Zoom: ") + std::to_string(int(fZoom * 100)) + std::string("%");
-    gtv_application_window_set_zoom_label(GTV_APPLICATION_WINDOW(window), aZoom);
+    gtk_label_set_text(GTK_LABEL(window->zoomlabel), aZoom.c_str());
 }
 
 void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
-    LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
-
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     // Get the data.
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:AcceptTrackedChanges");
     if (!pValues)
         return;
@@ -348,7 +326,7 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
 
     // Create the dialog.
     GtkWidget* pDialog = gtk_dialog_new_with_buttons("Manage Changes",
-                                                     GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+                                                     GTK_WINDOW (window),
                                                      GTK_DIALOG_MODAL,
                                                      "Accept",
                                                      GTK_RESPONSE_YES,
@@ -424,7 +402,7 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
             aStream.str(std::string());
             boost::property_tree::write_json(aStream, aCommandTree);
             std::string aArguments = aStream.str();
-            lok_doc_view_post_command(pDocView, aCommand.c_str(), aArguments.c_str(), false);
+            lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), aCommand.c_str(), aArguments.c_str(), false);
         }
     }
 
@@ -433,12 +411,9 @@ void documentRedline(GtkWidget* pButton, gpointer /*pItem*/)
 
 void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
-    LOKDocView* pDocView = gtv_application_window_get_lokdocview(GTV_APPLICATION_WINDOW(window));
-
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
     // Get the data.
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     // Show it in linear time, so first redo in reverse order, then undo.
     std::vector<std::string> aTypes = {".uno:Redo", ".uno:Undo"};
     std::vector<boost::property_tree::ptree> aTrees;
@@ -459,7 +434,7 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
 
     // Create the dialog.
     GtkWidget* pDialog = gtk_dialog_new_with_buttons("Repair document",
-                                                     GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+                                                     GTK_WINDOW (window),
                                                      GTK_DIALOG_MODAL,
                                                      "Jump to state",
                                                      GTK_RESPONSE_OK,
@@ -534,7 +509,7 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
             std::stringstream aStream;
             boost::property_tree::write_json(aStream, aTree);
             std::string aArguments = aStream.str();
-            lok_doc_view_post_command(pDocView, aType.c_str(), aArguments.c_str(), false);
+            lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), aType.c_str(), aArguments.c_str(), false);
         }
     }
 
@@ -543,10 +518,8 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/)
 
 void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    GApplication* app = g_application_get_default();
-    GtkWindow* window = gtk_application_get_active_window(GTK_APPLICATION(app));
-
-    gtv_application_window_toggle_findbar(GTV_APPLICATION_WINDOW(window));
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
+    gtv_application_window_toggle_findbar(window);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
