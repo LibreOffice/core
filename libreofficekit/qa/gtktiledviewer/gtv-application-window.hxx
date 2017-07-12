@@ -29,6 +29,7 @@ struct _GtvApplicationWindow
     GtkWidget* statusbar;
     GtkWidget* zoomlabel;
     GtkWidget* redlinelabel;
+    GtkWidget* findbarlabel;
 
     GtkWidget* findtoolbar;
 };
@@ -58,7 +59,7 @@ void gtv_application_window_load_document(GtvApplicationWindow* application,
 
 void gtv_application_window_create_view_from_window(GtvApplicationWindow* window);
 
-void getVisibleAreaTwips(GtvApplicationWindow* pWindow, GdkRectangle* pArea);
+void gtv_application_window_get_visible_area(GtvApplicationWindow* pWindow, GdkRectangle* pArea);
 
 void gtv_application_window_toggle_findbar(GtvApplicationWindow* window);
 

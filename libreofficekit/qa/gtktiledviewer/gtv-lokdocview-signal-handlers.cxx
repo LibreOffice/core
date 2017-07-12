@@ -73,15 +73,149 @@ void lokdocview_signalCommand(LOKDocView* pDocView, char* pPayload, gpointer)
     }
 }
 
-void lokdocview_signalCommandResult(LOKDocView*, char*, gpointer);
-void lokdocview_signalSearch(LOKDocView*, char*, gpointer);
-void lokdocview_signalSearchResultCount(LOKDocView*, char*, gpointer);
-void lokdocview_signalPart(LOKDocView*, int, gpointer);
-void lokdocview_signalHyperlink(LOKDocView*, char*, gpointer);
-void lokdocview_cursorChanged(LOKDocView* pDocView, gint nX, gint nY, gint nWidth, gint nHeight, gpointer);
-void lokdocview_addressChanged(LOKDocView* pDocView, char* pPayload, gpointer);
-void lokdocview_formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer);
-void lokdocview_passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer);
+void lokdocview_signalCommandResult(LOKDocView*, char* pPayload, gpointer)
+{
+    fprintf(stderr, "Command finished: %s\n", pPayload);
+}
+
+void lokdocview_signalSearch(LOKDocView* pDocView, char* , gpointer)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+    gtk_label_set_text(GTK_LABEL(window->findbarlabel), "Search key not found");
+}
+
+void lokdocview_signalSearchResultCount(LOKDocView* pDocView, char* pPayload, gpointer)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+    std::stringstream ss;
+    ss << pPayload << " match(es)";
+    gtk_label_set_text(GTK_LABEL(window->findbarlabel), ss.str().c_str());
+}
+
+void lokdocview_signalPart(LOKDocView* pDocView, int, gpointer)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+    //rWindow.m_bPartSelectorBroadcast = false;
+//    gtk_combo_box_set_active(GTK_COMBO_BOX(rWindow.m_pPartSelector), nPart);
+    //  rWindow.m_bPartSelectorBroadcast = true;
+}
+
+void lokdocview_signalHyperlink(LOKDocView* pDocView, char* pPayload, gpointer)
+{
+    GError* pError = nullptr;
+#if GTK_CHECK_VERSION(3,22,0)
+    gtk_show_uri_on_window(
+        GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+        pPayload, GDK_CURRENT_TIME, &pError);
+#else
+    (void) pDocView;
+    gtk_show_uri(nullptr, pPayload, GDK_CURRENT_TIME, &pError);
+#endif
+    if (pError != nullptr)
+    {
+        g_warning("Unable to show URI %s : %s", pPayload, pError->message);
+        g_error_free(pError);
+    }
+}
+
+void lokdocview_cursorChanged(LOKDocView* pDocView, gint nX, gint nY, gint nWidth, gint nHeight, gpointer)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+    GtkAdjustment* vadj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));
+    GtkAdjustment* hadj = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));
+    GdkRectangle visArea;
+    gdouble upper;
+    gint x = -1, y = -1;
+
+    gtv_application_window_get_visible_area(window, &visArea);
+
+    // check vertically
+    if (nY < visArea.y)
+    {
+        y = nY - visArea.height/2;
+        if (y < 0)
+            y = gtk_adjustment_get_lower(vadj);
+    }
+    else if (nY > visArea.y + visArea.height)
+    {
+        y = nY - visArea.height/2;
+        upper = lok_doc_view_pixel_to_twip(pDocView, gtk_adjustment_get_upper(vadj));
+        if (y > upper)
+            y = upper;
+
+    }
+
+    if (nX < visArea.x)
+    {
+        x = nX - visArea.width/2;
+        if (x < 0)
+            x = gtk_adjustment_get_lower(hadj);
+    }
+    else if (nX > visArea.x + visArea.width)
+    {
+        x = nX - visArea.width/2;
+        upper = lok_doc_view_pixel_to_twip(pDocView, gtk_adjustment_get_upper(hadj));
+        if (x > upper)
+            x = upper;
+    }
+
+    if (y!=-1)
+        gtk_adjustment_set_value(vadj, lok_doc_view_twip_to_pixel(pDocView, y));
+    if (x!=-1)
+        gtk_adjustment_set_value(hadj, lok_doc_view_twip_to_pixel(pDocView, x));
+}
+
+void lokdocview_addressChanged(LOKDocView* pDocView, char* pPayload, gpointer)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+//    gtk_label_set_text(GTK_LABEL(window->addressbarentry), pPayload);
+}
+
+void lokdocview_formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+//    gtk_label_set_text(GTK_LABEL(window->formulabarentry), pPayload);
+}
+
+void lokdocview_passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+    GtkWidget* pPasswordDialog = gtk_dialog_new_with_buttons ("Password required",
+                                                              GTK_WINDOW (window),
+                                                              GTK_DIALOG_MODAL,
+                                                              "OK",
+                                                              GTK_RESPONSE_OK,
+                                                              nullptr);
+    g_object_set(G_OBJECT(pPasswordDialog), "resizable", FALSE, nullptr);
+    GtkWidget* pDialogMessageArea = gtk_dialog_get_content_area (GTK_DIALOG (pPasswordDialog));
+    GtkWidget* pPasswordEntry = gtk_entry_new ();
+    gtk_entry_set_visibility (GTK_ENTRY(pPasswordEntry), FALSE);
+    gtk_entry_set_invisible_char (GTK_ENTRY(pPasswordEntry), '*');
+    gtk_box_pack_end(GTK_BOX(pDialogMessageArea), pPasswordEntry, TRUE, TRUE, 2);
+    if (bModify)
+    {
+        GtkWidget* pSecondaryLabel = gtk_label_new ("Document requires password to edit");
+        gtk_box_pack_end(GTK_BOX(pDialogMessageArea), pSecondaryLabel, TRUE, TRUE, 2);
+        gtk_dialog_add_button (GTK_DIALOG (pPasswordDialog), "Open as read-only", GTK_RESPONSE_ACCEPT);
+    }
+    gtk_widget_show_all(pPasswordDialog);
+
+    gint res = gtk_dialog_run (GTK_DIALOG(pPasswordDialog));
+    switch (res)
+    {
+    case GTK_RESPONSE_OK:
+        lok_doc_view_set_document_password (LOK_DOC_VIEW(window->lokdocview), pUrl, gtk_entry_get_text(GTK_ENTRY(pPasswordEntry)));
+        break;
+    case GTK_RESPONSE_ACCEPT:
+        // User accepts to open this document as read-only
+    case GTK_RESPONSE_DELETE_EVENT:
+        lok_doc_view_set_document_password (LOK_DOC_VIEW(window->lokdocview), pUrl, nullptr);
+        break;
+    }
+
+    gtk_widget_destroy(pPasswordDialog);
+}
+
 void lokdocview_commentCallback(LOKDocView* pDocView, gchar* pComment, gpointer);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

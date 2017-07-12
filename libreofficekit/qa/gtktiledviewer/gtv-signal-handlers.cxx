@@ -298,7 +298,7 @@ void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
         {
             lok_doc_view_set_zoom( LOK_DOC_VIEW(window->lokdocview), fZoom );
             GdkRectangle aVisibleArea;
-            getVisibleAreaTwips(window, &aVisibleArea);
+            gtv_application_window_get_visible_area(window, &aVisibleArea);
             lok_doc_view_set_visible_area(LOK_DOC_VIEW(window->lokdocview), &aVisibleArea);
         }
     }

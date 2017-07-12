@@ -63,6 +63,7 @@ gtv_application_window_init(GtvApplicationWindow* win)
     win->zoomlabel = GTK_WIDGET(gtk_builder_get_object(builder, "zoomlabel"));
 
     win->findtoolbar = GTK_WIDGET(gtk_builder_get_object(builder, "findtoolbar"));
+    win->findbarlabel = GTK_WIDGET(gtk_builder_get_object(builder, "findbar_label"));
     priv->toolbarBroadcast = false;
 
     gtk_container_add(GTK_CONTAINER(win), priv->container);
@@ -121,7 +122,7 @@ gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res
 }
 
 /// Get the visible area of the scrolled window
-void getVisibleAreaTwips(GtvApplicationWindow* pWindow, GdkRectangle* pArea)
+void gtv_application_window_get_visible_area(GtvApplicationWindow* pWindow, GdkRectangle* pArea)
 {
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pWindow->scrolledwindow));
     GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pWindow->scrolledwindow));
@@ -217,8 +218,8 @@ static void setupDocView(LOKDocView* pDocView)
 #endif
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(lokdocview_signalEdit), nullptr);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(lokdocview_signalCommand), nullptr);
-/*    g_signal_connect(pDocView, "command-result", G_CALLBACK(lokdocview_signalCommandResult), nullptr);
-    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(lokdocview_signalSearch), nullptr);
+    g_signal_connect(pDocView, "command-result", G_CALLBACK(lokdocview_signalCommandResult), nullptr);
+/*    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(lokdocview_signalSearch), nullptr);
     g_signal_connect(pDocView, "search-result-count", G_CALLBACK(lokdocview_signalSearchResultCount), nullptr);
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(lokdocview_signalPart), nullptr);
     g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(lokdocview_signalHyperlink), nullptr);
