@@ -45,8 +45,8 @@
 // Committing means copying aEntry to aSave. Reverting means to copy aSave
 // to aEntry, delete newly created entries and to reactivate removed entries.
 
-// Problem der Implementation: Keine Hierarchischen commits. Daher nur
-// insgesamt transaktionsorientert oder direkt.
+// Problem of implementation: No hierarchical commits. Therefore only
+// overall transaction-oriented or direct.
 
 StgDirEntry::StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, sal_uInt64 nUnderlyingStreamSize, bool * pbOk ) : StgAvlNode()
 {

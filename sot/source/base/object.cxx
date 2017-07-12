@@ -33,13 +33,12 @@ void SotObject::OwnerLock
 (
     bool bLock      /* true, lock. false, unlock. */
 )
-/*  [Beschreibung]
+/*  [Description]
 
-    Wenn der OwnerLock auf Null dekrementiert, dann wird die Methode
-    DoClose gerufen. Dies geschieht unabh"angig vom Lock. bzw. RefCount.
-    Ist der OwnerLock-Z"ahler != Null, dann wird kein DoClose durch
-    <SotObject::FuzzyLock> gerufen.
-*/
+ *  When the OwnerLock is decremented to zero, the DoClose method is called.
+ *  This happens independently of the lock or RefCount. If the OwnerLock
+ *  counter != zero, no DoClose is called by <SotObject::FuzzyLock>.
+ */
 {
     if( bLock )
     {

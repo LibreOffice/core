@@ -585,10 +585,10 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
         return m_rIo.m_aHdr.GetFATPage( nOff );
     sal_Int32 nMaxPage = m_nSize >> 2;
     nOff = nOff - StgHeader::GetFAT1Size();
-    // Anzahl der Masterpages, durch die wir iterieren muessen
+    // number of master pages that we need to iterate through
     sal_uInt16 nMasterCount =  ( m_nPageSize >> 2 ) - 1;
     sal_uInt16 nBlocks = nOff / nMasterCount;
-    // Offset in letzter Masterpage
+    // offset in the last master page
     nOff = nOff % nMasterCount;
 
     rtl::Reference< StgPage > pOldPage;
@@ -609,7 +609,7 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
                 {
                     for( short k = 0; k < (short)( m_nPageSize >> 2 ); k++ )
                         m_rIo.SetToPage( pMaster, k, STG_FREE );
-                    // Verkettung herstellen
+                    // chaining
                     if( !pOldPage.is() )
                         m_rIo.m_aHdr.SetFATChain( nFAT );
                     else
@@ -618,8 +618,8 @@ sal_Int32 StgFATStrm::GetPage( short nOff, bool bMake, sal_uInt16 *pnMasterAlloc
                         if( !m_rIo.SetSize( nMaxPage ) )
                             return STG_EOF;
                     // mark the page as used
-                    // Platz fuer Masterpage schaffen
-                    if( !pnMasterAlloc ) // Selbst Platz schaffen
+                    // make space for Masterpage
+                    if( !pnMasterAlloc ) // create space oneself
                     {
                         if( !Pos2Page( nFAT << 2 ) )
                             return STG_EOF;
@@ -665,10 +665,10 @@ bool StgFATStrm::SetPage( short nOff, sal_Int32 nNewPage )
     else
     {
         nOff = nOff - StgHeader::GetFAT1Size();
-        // Anzahl der Masterpages, durch die wir iterieren muessen
+        // number of master pages that we need to iterate through
         sal_uInt16 nMasterCount =  ( m_nPageSize >> 2 ) - 1;
         sal_uInt16 nBlocks = nOff / nMasterCount;
-        // Offset in letzter Masterpage
+        // offset in the last master page
         nOff = nOff % nMasterCount;
 
         rtl::Reference< StgPage > pMaster;

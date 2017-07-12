@@ -208,13 +208,13 @@ FatError EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
             return FatError::OutOfBounds;
         pFree[ nCurPage ] = false;
         nCurPage = pFat[ nCurPage ];
-        //Stream zu lang
+        // stream too long
         if( nCurPage != nExpect && nCount == 1 )
             return FatError::WrongLength;
-        //Stream zu kurz
+        // stream too short
         if( nCurPage == nExpect && nCount != 1 && nCount != -1 )
             return FatError::WrongLength;
-        // letzter Block bei Stream ohne Laenge
+        // last block for stream without length
         if( nCurPage == nExpect && nCount == -1 )
             nCount = 1;
         if( nCount != -1 )
@@ -385,10 +385,10 @@ FatError StgIo::ValidateFATs()
             ErrorLink::get().Call( aArg );
             m_bCopied = true;
         }
-//      DBG_ASSERT( nErr == FatError::Ok ,"Storage kaputt");
+//      DBG_ASSERT( nErr == FatError::Ok ,"Storage broken");
         return nErr;
     }
-//  OSL_FAIL("Validiere nicht (kein FileStorage)");
+//  OSL_FAIL("Do not validate (no FileStorage)");
     return FatError::Ok;
 }
 

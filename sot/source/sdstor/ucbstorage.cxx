@@ -151,7 +151,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
     sal_uInt32 nRead = m_pSvStream->ReadBytes(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
-    // Wenn gelesene Zeichen < MaxLength, Sequence anpassen
+    // if read characters < MaxLength, adjust sequence
     if ((sal_Int32)nRead < aData.getLength())
         aData.realloc( nRead );
 
