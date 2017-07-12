@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_8ff5dc84",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-12T07:32:41Z",
+      "side": 1,
+      "message": "But in fact you created both rtfexport2 and rtfexport3, correct? :-)",
+      "revId": "1668ba7e18e5f0cb47564299de05ee29687cea8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
