@@ -851,5 +851,18 @@ DECLARE_ODFIMPORT_TEST(testTdf94882, "tdf94882.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("This is the first page header"), headertext);
 }
 
+DECLARE_ODFIMPORT_TEST(testBlankBeforeFirstPage, "tdf94882.odt")
+{
+    // This document starts on page 50, which is even, so it should have a
+    // blank page inserted before it to make it a left page
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 2 pages output",
+        OUString("2"), parseDump("count(/root/page)")
+    );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("The first page should be blank",
+        OUString("0"), parseDump("count(/root/page[1]/body)")
+    );
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
