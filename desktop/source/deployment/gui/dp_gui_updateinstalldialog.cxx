@@ -24,7 +24,6 @@
 #include <osl/file.hxx>
 #include <osl/conditn.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <tools/resid.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

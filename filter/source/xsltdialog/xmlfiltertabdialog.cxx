@@ -21,7 +21,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/fileurl.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/layout.hxx>
 #include <osl/file.hxx>
 

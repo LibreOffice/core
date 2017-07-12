@@ -29,7 +29,6 @@
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 #include <unotools/pathoptions.hxx>
-#include <tools/resid.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 #include <vcl/builderfactory.hxx>

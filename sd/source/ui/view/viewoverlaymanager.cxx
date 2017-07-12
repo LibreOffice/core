@@ -25,8 +25,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <tools/rcid.h>
-
 #include <vcl/help.hxx>
 #include <vcl/lazydelete.hxx>
 

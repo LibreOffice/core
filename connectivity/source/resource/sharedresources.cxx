@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <osl/diagnose.h>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

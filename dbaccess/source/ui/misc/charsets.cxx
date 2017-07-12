@@ -22,7 +22,6 @@
 #include <osl/diagnose.h>
 #include "strings.hrc"
 #include <rtl/tencinfo.h>
-#include <tools/rcid.h>
 #include "core_resource.hxx"
 
 namespace dbaui

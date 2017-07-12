@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resid.hxx>
 #include <hintids.hxx>
 #include <swtypes.hxx>
 #include <txtatr.hxx>

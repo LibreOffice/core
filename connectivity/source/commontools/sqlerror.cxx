@@ -26,7 +26,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>

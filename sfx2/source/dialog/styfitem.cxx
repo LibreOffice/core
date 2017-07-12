@@ -18,7 +18,7 @@
  */
 
 #include <sfx2/styfitem.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 
 SfxStyleFamilyItem::SfxStyleFamilyItem(SfxStyleFamily nFamily_, const OUString &rName, const Image& rImage, const std::pair<const char*, int>* pStringArray, const std::locale& rResLocale)
     : nFamily(nFamily_)

@@ -1074,10 +1074,6 @@ include/tools/datetime.hxx:43
     void DateTime::DateTime(enum DateTime::DateTimeInitSystem)
     enum DateTime::DateTimeInitSystem 
     0
-include/tools/resid.hxx:54
-    void ResId::ImplInit(unsigned int,class ResMgr &,struct RSHEADER_TYPE *)
-    struct RSHEADER_TYPE * pRes
-    0
 include/tools/stream.hxx:583
     _Bool SvFileStream::LockRange(unsigned long,unsigned long)
     unsigned long nBytes

@@ -4069,15 +4069,15 @@ const char* SC_OPCODE_ROUNDSIG_ARY[] =
 
 const char* SC_OPCODE_REPLACEB_ARY[] =
 {
-    NC("SC_OPCODE_REPLACEB", "Replaces characters within a text string with a different text string, with DBCS."),
-    NC("SC_OPCODE_REPLACEB", "Text"),
-    NC("SC_OPCODE_REPLACEB", "The text in which some characters are to be replaced."),
-    NC("SC_OPCODE_REPLACEB", "position"),
-    NC("SC_OPCODE_REPLACEB", "The character position from which text is to be replaced."),
-    NC("SC_OPCODE_REPLACEB", "length"),
-    NC("SC_OPCODE_REPLACEB", "The number of characters to be replaced."),
-    NC("SC_OPCODE_REPLACEB", "new text"),
-    NC("SC_OPCODE_REPLACEB", "The text to be inserted.")
+    NC_("SC_OPCODE_REPLACEB", "Replaces characters within a text string with a different text string, with DBCS."),
+    NC_("SC_OPCODE_REPLACEB", "Text"),
+    NC_("SC_OPCODE_REPLACEB", "The text in which some characters are to be replaced."),
+    NC_("SC_OPCODE_REPLACEB", "position"),
+    NC_("SC_OPCODE_REPLACEB", "The character position from which text is to be replaced."),
+    NC_("SC_OPCODE_REPLACEB", "length"),
+    NC_("SC_OPCODE_REPLACEB", "The number of characters to be replaced."),
+    NC_("SC_OPCODE_REPLACEB", "new text"),
+    NC_("SC_OPCODE_REPLACEB", "The text to be inserted.")
 };
 
 #endif

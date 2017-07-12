@@ -20,7 +20,6 @@
 #include "dsselect.hxx"
 #include "dbu_dlg.hxx"
 #include <vcl/msgbox.hxx>
-#include <tools/rcid.h>
 
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

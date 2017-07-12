@@ -61,7 +61,7 @@
 #include "com/sun/star/task/InteractionRequestStringResolver.hpp"
 
 #include "strings.hrc"
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

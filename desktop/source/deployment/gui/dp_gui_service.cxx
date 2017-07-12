@@ -175,9 +175,9 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
     } catch ( const css::lang::IllegalArgumentException & ) {
     }
 
-    ResHookProc pProc = ResMgr::GetReadStringHook();
+    ResHookProc pProc = Translate::GetReadStringHook();
     if ( !pProc )
-        ResMgr::SetReadStringHook( ReplaceProductNameHookProc );
+        Translate::SetReadStringHook(ReplaceProductNameHookProc);
 }
 
 // XAsynchronousExecutableDialog
