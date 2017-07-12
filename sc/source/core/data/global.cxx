@@ -37,7 +37,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 #include <sal/macros.h>
-#include <tools/rcid.h>
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>
 #include <stdlib.h>

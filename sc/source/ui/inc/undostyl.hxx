@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_UNDOSTYL_HXX
 
 #include <memory>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include "undobase.hxx"
 
 class ScDocShell;

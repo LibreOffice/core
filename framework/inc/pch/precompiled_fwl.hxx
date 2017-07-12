@@ -305,7 +305,6 @@
 #include <macros/xtypeprovider.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <svl/svldllapi.h>
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <svtools/svtdllapi.h>
@@ -326,7 +325,6 @@
 #include <tools/mapunit.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

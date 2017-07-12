@@ -22,10 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-class SimpleResMgr;
-
 #define TK_RES_STRING(id) ::accessibility::TkResMgr::loadString(id)
-
 
 // TkResMgr
 

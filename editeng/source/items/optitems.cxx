@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resid.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 

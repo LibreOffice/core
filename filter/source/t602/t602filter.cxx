@@ -35,9 +35,10 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/character.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
 
 using namespace ::cppu;

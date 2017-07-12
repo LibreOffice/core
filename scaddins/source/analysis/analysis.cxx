@@ -30,7 +30,6 @@
 #include <sal/macros.h>
 #include <string.h>
 #include <tools/resmgr.hxx>
-#include <tools/simplerm.hxx>
 #include <algorithm>
 #include <cmath>
 

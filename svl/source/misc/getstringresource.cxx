@@ -27,7 +27,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/resmgr.hxx>
-#include <tools/simplerm.hxx>
 
 #include "getstringresource.hxx"
 

@@ -27,7 +27,6 @@
 
 
 namespace vcl { class Window; }
-class ResMgr;
 
 
 class SWFDialog final:

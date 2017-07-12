@@ -34,7 +34,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <ucbhelper/content.hxx>
-#include <tools/rcid.h>
 #include <unotools/configmgr.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>

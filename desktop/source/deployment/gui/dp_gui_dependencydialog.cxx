@@ -24,7 +24,6 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
-#include <tools/resid.hxx>
 #include <vcl/dialog.hxx>
 
 #include "strings.hrc"

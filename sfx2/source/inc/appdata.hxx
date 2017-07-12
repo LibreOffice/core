@@ -48,7 +48,6 @@ class SfxFrame;
 class SfxFrameArr_Impl;
 class SvtSaveOptions;
 class SvtHelpOptions;
-class ResMgr;
 class SfxViewFrame;
 class SfxSlotPool;
 class SfxDispatcher;

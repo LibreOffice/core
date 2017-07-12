@@ -165,8 +165,6 @@ using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
 
-ResMgr* desktop::Desktop::pResMgr = nullptr;
-
 namespace desktop
 {
 
@@ -332,31 +330,6 @@ void DoRestartActionsIfNecessary(bool quickstart) {
     }
 }
 
-}
-
-
-ResMgr* Desktop::GetDesktopResManager()
-{
-    if ( !Desktop::pResMgr )
-    {
-        // Create desktop resource manager and bootstrap process
-        // was successful. Use default way to get language specific message.
-        if ( Application::IsInExecute() )
-            Desktop::pResMgr = ResMgr::CreateResMgr("dkt");
-
-        if ( !Desktop::pResMgr )
-        {
-            // Use VCL to get the correct language specific message as we
-            // are in the bootstrap process and not able to get the installed
-            // language!!
-            OUString aUILocaleString = langselect::getEmergencyLocale();
-            LanguageTag aLanguageTag( aUILocaleString);
-            //! ResMgr may modify the Locale for fallback!
-            Desktop::pResMgr = ResMgr::SearchCreateResMgr( "dkt", aLanguageTag);
-        }
-    }
-
-    return Desktop::pResMgr;
 }
 
 namespace {
@@ -1341,7 +1314,7 @@ int Desktop::Main()
     }
 #endif
 
-    ResMgr::SetReadStringHook( ReplaceStringHookProc );
+    Translate::SetReadStringHook(ReplaceStringHookProc);
 
     // Startup screen
     OpenSplashScreen();
@@ -1734,8 +1707,6 @@ int Desktop::doShutdown()
         pExecGlobals->xGlobalBroadcaster->documentEventOccured(aEvent);
     }
 
-    delete pResMgr;
-    pResMgr = nullptr;
     // Restore old value
     const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
     if ( rCmdLineArgs.IsHeadless() || rCmdLineArgs.IsEventTesting() )
