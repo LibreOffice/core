@@ -56,7 +56,6 @@ MultiPropertySetHelper::~MultiPropertySetHelper()
 {
     pValues = nullptr; // memory 'owned' by aValues
 
-    delete[] pSequenceIndex;
     delete[] pPropertyNames;
 }
 
@@ -67,8 +66,8 @@ void MultiPropertySetHelper::hasProperties(
     SAL_WARN_IF( !rInfo.is(), "xmloff", "I'd really like an XPropertySetInfo here." );
 
     // allocate sequence index
-    if ( nullptr == pSequenceIndex )
-        pSequenceIndex = new sal_Int16[nLength] ;
+    if ( !pSequenceIndex )
+        pSequenceIndex.reset( new sal_Int16[nLength] );
 
     // construct pSequenceIndex
     sal_Int16 nNumberOfProperties = 0;
