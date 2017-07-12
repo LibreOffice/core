@@ -37,7 +37,6 @@
 
 #include <svl/documentlockfile.hxx>
 
-#include <ucbhelper/content.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
@@ -170,14 +169,14 @@ CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent cur
 
 // Skip single newline (be it *NIX LF, MacOS CR, of Win CRLF)
 // Changes the offset, and returns true if moved
-bool SkipNewline(const char* pStr, sal_Int32& rOffset)
+bool SkipNewline(const char* & pStr)
 {
-    if ((pStr[rOffset] != '\r') && (pStr[rOffset] != '\n'))
+    if ((*pStr != '\r') && (*pStr != '\n'))
         return false;
-    if (pStr[rOffset] == '\r')
-        ++rOffset;
-    if (pStr[rOffset] == '\n')
-        ++rOffset;
+    if (*pStr == '\r')
+        ++pStr;
+    if (*pStr == '\n')
+        ++pStr;
     return true;
 }
 
@@ -194,52 +193,43 @@ CommandLineEvent CheckWebQuery(/* in,out */ OUString& arg, CommandLineEvent curE
     try
     {
         OUString sFileURL;
+        // Cannot use translateExternalUris yet, because process service factory is not yet available
         if (osl::FileBase::getFileURLFromSystemPath(arg, sFileURL) != osl::FileBase::RC::E_None)
             return curEvt;
-        css::uno::Reference < css::ucb::XCommandEnvironment > xEnv;
-        ucbhelper::Content aSourceContent(sFileURL, xEnv, comphelper::getProcessComponentContext());
-
-        // the file can be opened readonly, no locking will be done
-        css::uno::Reference< css::io::XInputStream > xInput = aSourceContent.openStream();
-        if (!xInput.is())
-            return curEvt;
+        SvFileStream stream(sFileURL, StreamMode::READ);
 
         const sal_Int32 nBufLen = 32000;
-        css::uno::Sequence< sal_Int8 > aBuffer(nBufLen);
-        sal_Int32 nRead = xInput->readBytes(aBuffer, nBufLen);
+        char sBuffer[nBufLen];
+        size_t nRead = stream.ReadBytes(sBuffer, nBufLen);
         if (nRead < 8) // WEB\n1\n...
             return curEvt;
 
-        const char* sBuf = reinterpret_cast<const char*>(aBuffer.getConstArray());
-        sal_Int32 nOffset = 0;
-        if (strncmp(sBuf+nOffset, "WEB", 3) != 0)
+        const char* pPos = sBuffer;
+        if (strncmp(pPos, "WEB", 3) != 0)
             return curEvt;
-        nOffset += 3;
-        if (!SkipNewline(sBuf, nOffset))
+        pPos += 3;
+        if (!SkipNewline(pPos))
             return curEvt;
-        if (sBuf[nOffset] != '1')
+        if (*pPos != '1')
             return curEvt;
-        ++nOffset;
-        if (!SkipNewline(sBuf, nOffset))
+        ++pPos;
+        if (!SkipNewline(pPos))
             return curEvt;
 
-        rtl::OStringBuffer aResult(nRead);
+        rtl::OStringBuffer aResult(static_cast<unsigned int>(nRead));
         do
         {
-            // xInput->readBytes() can relocate buffer
-            sBuf = reinterpret_cast<const char*>(aBuffer.getConstArray());
-            const char* sPos = sBuf + nOffset;
-            const char* sPos1 = sPos;
-            const char* sEnd = sBuf + nRead;
-            while ((sPos1 < sEnd) && (*sPos1 != '\r') && (*sPos1 != '\n'))
-                ++sPos1;
-            aResult.append(sPos, sPos1 - sPos);
-            if (sPos1 < sEnd) // newline
+            const char* pPos1 = pPos;
+            const char* pEnd = sBuffer + nRead;
+            while ((pPos1 < pEnd) && (*pPos1 != '\r') && (*pPos1 != '\n'))
+                ++pPos1;
+            aResult.append(pPos, pPos1 - pPos);
+            if (pPos1 < pEnd) // newline
                 break;
-            nOffset = 0;
-        } while ((nRead = xInput->readBytes(aBuffer, nBufLen)) > 0);
+            pPos = sBuffer;
+        } while ((nRead = stream.ReadBytes(sBuffer, nBufLen)) > 0);
 
-        xInput->closeInput();
+        stream.Close();
 
         arg = OUString::createFromAscii(aResult.getStr());
         return CommandLineEvent::ForceNew;
