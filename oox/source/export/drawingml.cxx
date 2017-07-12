@@ -976,9 +976,11 @@ OUString DrawingML::WriteBlip( const Reference< XPropertySet >& rXPropSet, const
     }
     sal_Int16 nBright = 0;
     sal_Int32 nContrast = 0;
+    sal_Int32 nTransparence = 0;
 
     GET( nBright, AdjustLuminance );
     GET( nContrast, AdjustContrast );
+    GET( nTransparence, FillTransparence );
 
     mpFS->startElementNS( XML_a, XML_blip,
             FSNS( XML_r, XML_embed), sRelId.toUtf8().getStr(),
@@ -990,6 +992,14 @@ OUString DrawingML::WriteBlip( const Reference< XPropertySet >& rXPropSet, const
                    XML_contrast, nContrast ? I32S( nContrast*1000 ) : nullptr,
                    FSEND );
     }
+
+    if( nTransparence )
+    {
+        sal_Int32 nAlphaMod = (100 - nTransparence ) * PER_PERCENT;
+        mpFS->singleElementNS( XML_a, XML_alphaModFix,
+                               XML_amt, I32S( nAlphaMod), FSEND );
+    }
+
     WriteArtisticEffect( rXPropSet );
 
     mpFS->endElementNS( XML_a, XML_blip );
