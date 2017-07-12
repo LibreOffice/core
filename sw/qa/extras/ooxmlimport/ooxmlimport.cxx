@@ -24,6 +24,8 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -1476,17 +1478,11 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108995, "xml_space.docx")
                          paragraph->getString());
 }
 
-#if defined(_WIN32)
 DECLARE_OOXMLIMPORT_TEST(testTdf108545_embeddedDocxIcon, "tdf108545_embeddedDocxIcon.docx")
 {
-    // Check if document shows an icon for embedded docx document
-    // Due to different fonts used for icon labels on each OS, current checksum is for Windows only
     uno::Reference<document::XEmbeddedObjectSupplier2> xSupplier(getShape(1), uno::UNO_QUERY);
-    uno::Reference<graphic::XGraphic> xGraphic = xSupplier->getReplacementGraphic();
-    Graphic aGraphic(xGraphic);
-    CPPUNIT_ASSERT_EQUAL(BitmapChecksum(SAL_CONST_UINT64(733876873106730813)), aGraphic.GetChecksum());
+    CPPUNIT_ASSERT_EQUAL(embed::Aspects::MSOLE_ICON, xSupplier->getAspect());
 }
-#endif
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
