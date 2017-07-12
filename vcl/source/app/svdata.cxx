@@ -23,7 +23,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/process.h>
 #include <tools/gen.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <uno/current_context.hxx>
 
 #include <vcl/button.hxx>

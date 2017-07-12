@@ -26,7 +26,6 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/msg.hxx>
 #include <sfx2/toolbarids.hxx>
-#include <tools/resid.hxx>
 
 struct SfxInterface_Impl;
 class  SfxConfigItem;

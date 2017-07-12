@@ -29,7 +29,7 @@
 #include <basic/sbdef.hxx>
 #include <svtools/soerr.hxx>
 #include <svtools/strings.hrc>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/intitem.hxx>

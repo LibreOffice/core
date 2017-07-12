@@ -19,7 +19,6 @@
 
 #include <unotools/componentresmodule.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/simplerm.hxx>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 
@@ -35,9 +34,7 @@ namespace utl
     class OComponentResModuleImpl
     {
     private:
-        ResMgr*         m_pResources;
         std::locale     m_aLocale;
-        bool            m_bMgrInitialized;
         bool            m_bLocaleInitialized;
         OString         m_sResFilePrefix;
         LanguageTag     m_aLanguage;
@@ -47,54 +44,16 @@ namespace utl
 
     public:
         explicit OComponentResModuleImpl(const OString& _rResFilePrefix, const LanguageTag& rLanguage)
-            :m_pResources( nullptr )
-            ,m_bMgrInitialized( false )
-            ,m_bLocaleInitialized( false )
-            ,m_sResFilePrefix( _rResFilePrefix )
-            ,m_aLanguage( rLanguage )
+            : m_bLocaleInitialized( false )
+            , m_sResFilePrefix( _rResFilePrefix )
+            , m_aLanguage( rLanguage )
         {
         }
-
-        ~OComponentResModuleImpl()
-        {
-            freeResManager();
-        }
-
-        /** releases our resource manager
-        */
-        void freeResManager();
 
         /** retrieves our resource manager
         */
-        ResMgr* getResManager();
         const std::locale& getResLocale();
     };
-
-    void OComponentResModuleImpl::freeResManager()
-    {
-        delete m_pResources;
-        m_pResources = nullptr;
-        m_bMgrInitialized = false;
-        m_bLocaleInitialized = false;
-    }
-
-    ResMgr* OComponentResModuleImpl::getResManager()
-    {
-        if ( !m_pResources && !m_bMgrInitialized )
-        {
-            // create a manager with a fixed prefix
-            OString aMgrName = m_sResFilePrefix;
-
-            m_pResources = ResMgr::CreateResMgr( aMgrName.getStr() );
-            OSL_ENSURE( m_pResources,
-                    OStringBuffer( "OModuleImpl::getResManager: could not create the resource manager (file name: " )
-                .append(aMgrName)
-                .append(")!").getStr() );
-
-            m_bMgrInitialized = true;
-        }
-        return m_pResources;
-    }
 
     const std::locale& OComponentResModuleImpl::getResLocale()
     {
@@ -117,12 +76,6 @@ namespace utl
     {
     }
 
-    ResMgr* OComponentResourceModule::getResManager()
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        return m_pImpl->getResManager();
-    }
-
     const std::locale& OComponentResourceModule::getResLocale()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -131,7 +84,6 @@ namespace utl
 
     void OComponentResourceModule::onLastClient()
     {
-        m_pImpl->freeResManager();
         BaseClass::onLastClient();
     }
 

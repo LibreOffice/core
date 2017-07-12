@@ -22,7 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
 #include <tools/poly.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>

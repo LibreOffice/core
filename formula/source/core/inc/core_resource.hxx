@@ -22,8 +22,6 @@
 
 #include <rtl/ustring.hxx>
 
-class ResMgr;
-
 namespace formula
 {
 

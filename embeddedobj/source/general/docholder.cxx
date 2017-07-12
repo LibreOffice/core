@@ -67,7 +67,6 @@
 #include <vcl/svapp.hxx>
 #include <svtools/embedhlp.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/simplerm.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/strings.hrc>
 

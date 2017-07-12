@@ -53,7 +53,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	pocheck \
 	propex \
 	regsvrex \
-	rsc \
 	saxparser \
 	sp2bv \
 	svg2odf \

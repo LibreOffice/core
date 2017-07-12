@@ -24,7 +24,7 @@
 #include <sfx2/dllapi.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <vector>
 
 struct SFX2_DLLPUBLIC SfxFilterTupel

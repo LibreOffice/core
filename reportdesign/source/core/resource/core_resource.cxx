@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "core_resource.hxx"
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 
 // ---- needed as long as we have no contexts for components ---
 #include <vcl/svapp.hxx>

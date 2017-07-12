@@ -21,7 +21,7 @@
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>
