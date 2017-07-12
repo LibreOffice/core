@@ -567,20 +567,14 @@ ScChartPositionMap::~ScChartPositionMap()
     {
         delete ppData[nIndex];
     }
-    delete [] ppData;
-
-    SCCOL j;
-    for ( j=0; j < nColCount; j++ )
+    for ( SCCOL j=0; j < nColCount; j++ )
     {
         delete ppColHeader[j];
     }
-    delete [] ppColHeader;
-    SCROW i;
-    for ( i=0; i < nRowCount; i++ )
+    for ( SCROW i=0; i < nRowCount; i++ )
     {
         delete ppRowHeader[i];
     }
-    delete [] ppRowHeader;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

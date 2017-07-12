@@ -22,6 +22,7 @@
 
 #include <deque>
 #include <map>
+#include <memory>
 #include <set>
 #include <stack>
 
@@ -876,14 +877,14 @@ class ScChangeTrack : public utl::ConfigurationListener
     ScChangeAction*     pFirst;
     ScChangeAction*     pLast;
     ScChangeActionContent*  pFirstGeneratedDelContent;
-    ScChangeActionContent** ppContentSlots;
+    std::unique_ptr<ScChangeActionContent*[]> ppContentSlots;
     ScChangeActionMove*     pLastCutMove;
     ScChangeActionLinkEntry*    pLinkInsertCol;
     ScChangeActionLinkEntry*    pLinkInsertRow;
     ScChangeActionLinkEntry*    pLinkInsertTab;
     ScChangeActionLinkEntry*    pLinkMove;
     ScChangeTrackMsgInfo*   pBlockModifyMsg;
-    ScDocument*         pDoc;
+    ScDocument*             pDoc;
     sal_uLong               nActionMax;
     sal_uLong               nGeneratedMin;
     sal_uLong               nMarkLastSaved;
@@ -1003,7 +1004,7 @@ public:
     sal_uLong GetLastSavedActionNumber() const;
     void SetLastSavedActionNumber(sal_uLong nNew);
     ScChangeAction* GetLastSaved() const;
-    ScChangeActionContent** GetContentSlots() const { return ppContentSlots; }
+    ScChangeActionContent** GetContentSlots() const { return ppContentSlots.get(); }
 
     const ScRange&      GetInDeleteRange() const
                             { return aInDeleteRange; }

@@ -2076,8 +2076,8 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
     Init();
     SC_MOD()->GetUserOptions().AddListener(this);
 
-    ppContentSlots = new ScChangeActionContent* [ nContentSlots ];
-    memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
+    ppContentSlots.reset( new ScChangeActionContent* [ nContentSlots ] );
+    memset( ppContentSlots.get(), 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
 ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const std::set<OUString>& aTempUserCollection) :
@@ -2087,15 +2087,14 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const std::set<OUString>& aTemp
 {
     Init();
     SC_MOD()->GetUserOptions().AddListener(this);
-    ppContentSlots = new ScChangeActionContent* [ nContentSlots ];
-    memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
+    ppContentSlots.reset( new ScChangeActionContent* [ nContentSlots ] );
+    memset( ppContentSlots.get(), 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
 ScChangeTrack::~ScChangeTrack()
 {
     SC_MOD()->GetUserOptions().RemoveListener(this);
     DtorClear();
-    delete [] ppContentSlots;
 }
 
 void ScChangeTrack::Init()

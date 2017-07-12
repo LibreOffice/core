@@ -32,6 +32,7 @@
 #include "dpfilteredcache.hxx"
 #include "dptypes.hxx"
 
+#include <memory>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -56,8 +57,10 @@ private:
     OUString                aDataDescription;
 
     // Number format related parameters
-    sal_uInt32*             pColNumFmt;
-    sal_uInt32*             pRowNumFmt;
+    std::unique_ptr<sal_uInt32[]>
+                            pColNumFmt;
+    std::unique_ptr<sal_uInt32[]>
+                            pRowNumFmt;
     long                    nColFmtCount;
     long                    nRowFmtCount;
     sal_uInt32              nSingleNumFmt;

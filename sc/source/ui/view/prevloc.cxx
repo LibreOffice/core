@@ -67,8 +67,6 @@ ScPreviewTableInfo::ScPreviewTableInfo() :
 
 ScPreviewTableInfo::~ScPreviewTableInfo()
 {
-    delete[] pColInfo;
-    delete[] pRowInfo;
 }
 
 void ScPreviewTableInfo::SetTab( SCTAB nNewTab )
@@ -78,15 +76,13 @@ void ScPreviewTableInfo::SetTab( SCTAB nNewTab )
 
 void ScPreviewTableInfo::SetColInfo( SCCOL nCount, ScPreviewColRowInfo* pNewInfo )
 {
-    delete[] pColInfo;
-    pColInfo = pNewInfo;
+    pColInfo.reset(pNewInfo);
     nCols = nCount;
 }
 
 void ScPreviewTableInfo::SetRowInfo( SCROW nCount, ScPreviewColRowInfo* pNewInfo )
 {
-    delete[] pRowInfo;
-    pRowInfo = pNewInfo;
+    pRowInfo.reset(pNewInfo);
     nRows = nCount;
 }
 

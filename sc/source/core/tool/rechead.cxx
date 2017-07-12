@@ -48,9 +48,9 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     {
         sal_uInt32 nSizeTableLen;
         rStream.ReadUInt32( nSizeTableLen );
-        pBuf = new sal_uInt8[nSizeTableLen];
-        rStream.ReadBytes( pBuf, nSizeTableLen );
-        pMemStream = new SvMemoryStream( pBuf, nSizeTableLen, StreamMode::READ );
+        pBuf.reset( new sal_uInt8[nSizeTableLen] );
+        rStream.ReadBytes( pBuf.get(), nSizeTableLen );
+        pMemStream = new SvMemoryStream( pBuf.get(), nSizeTableLen, StreamMode::READ );
     }
 
     nEndPos = rStream.Tell();
@@ -66,7 +66,6 @@ ScMultipleReadHeader::~ScMultipleReadHeader()
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
     }
     delete pMemStream;
-    delete[] pBuf;
 
     rStream.Seek(nEndPos);
 }

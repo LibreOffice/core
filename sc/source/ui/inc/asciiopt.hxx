@@ -38,9 +38,8 @@ private:
     LanguageType eLang;
     bool        bCharSetSystem;
     long        nStartRow;
-    sal_uInt16      nInfoCount;
-    sal_Int32* pColStart;  //! TODO replace with vector
-    sal_uInt8*       pColFormat; //! TODO replace with vector
+    std::vector<sal_Int32> mvColStart;
+    std::vector<sal_uInt8> mvColFormat;
 
 public:
                     ScAsciiOptions();
@@ -61,9 +60,9 @@ public:
     bool                IsDetectSpecialNumber() const { return bDetectSpecialNumber; }
     sal_Unicode         GetTextSep() const      { return cTextSep; }
     bool                IsFixedLen() const      { return bFixedLen; }
-    sal_uInt16          GetInfoCount() const    { return nInfoCount; }
-    const sal_Int32*    GetColStart() const     { return pColStart; }
-    const sal_uInt8*    GetColFormat() const    { return pColFormat; }
+    sal_uInt16          GetInfoCount() const    { return mvColStart.size(); }
+    const sal_Int32*    GetColStart() const     { return mvColStart.data(); }
+    const sal_uInt8*    GetColFormat() const    { return mvColFormat.data(); }
     long                GetStartRow() const     { return nStartRow; }
     LanguageType        GetLanguage() const     { return eLang; }
 
