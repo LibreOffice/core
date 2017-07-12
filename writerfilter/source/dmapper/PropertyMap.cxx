@@ -1062,20 +1062,27 @@ bool SectionPropertyMap::FloatingTableConversion( DomainMapper_Impl& rDM_Impl, F
         }
     }
 
-    // If the table is wider than the text area, then don't create a fly
-    // for the table: no wrapping will be performed anyway, but multi-page
-    // tables will be broken.
     // It seems Word has a limit here, so that in case the table width is quite
     // close to the text area width, then it won't perform a wrapping, even in
     // case the content (e.g. an empty paragraph) would fit. The magic constant
     // here represents this limit.
-    if ( (nTableWidth + 469) < nTextAreaWidth )
+    const sal_Int32 nMagicNumber = 469;
+
+    // If the table's with is smaller than the text area width, text might
+    // be next to the table and so it should behave as a floating table.
+    if ( (nTableWidth + nMagicNumber) < nTextAreaWidth )
         return true;
 
-    // If the position is relative to the edge of the page, then we always
-    // create the fly.
+    // If the position is relative to the edge of the page, then we need to check the whole
+    // page width to see whether text can fit next to the table.
     if ( rInfo.getPropertyValue( "HoriOrientRelation" ) == text::RelOrientation::PAGE_FRAME )
-        return true;
+    {
+        // If the table is wide enough to that no text fits next to it, then don't create a fly
+        // for the table: no wrapping will be performed anyway, but multi-page
+        // tables will be broken.
+        if ((nTableWidth + nMagicNumber) < (nPageWidth - std::min(GetLeftMargin(), GetRightMargin())))
+            return true;
+    }
 
     // If there are columns, always create the fly, otherwise the columns would
     // restrict geometry of the table.
