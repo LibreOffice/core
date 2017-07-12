@@ -18,7 +18,6 @@
  */
 
 
-#include <osl/diagnose.h>
 #include <officecfg/Setup.hxx>
 #include <officecfg/System.hxx>
 #include <sal/config.h>
@@ -348,7 +347,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
 PaperInfo::PaperInfo(Paper eType) : m_eType(eType)
 {
-    OSL_ENSURE( SAL_N_ELEMENTS(aDinTab) == NUM_PAPER_ENTRIES,
+    static_assert( SAL_N_ELEMENTS(aDinTab) == NUM_PAPER_ENTRIES,
             "mismatch between array entries and enum values" );
 
     m_nPaperWidth = aDinTab[m_eType].m_nWidth;
