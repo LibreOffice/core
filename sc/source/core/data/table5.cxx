@@ -1026,8 +1026,8 @@ void ScTable::SyncColRowFlags()
     }
 
     // Hidden flags.
-    lcl_syncFlags(*mpHiddenCols, *mpHiddenRows, pColFlags, pRowFlags, CRFlags::Hidden);
-    lcl_syncFlags(*mpFilteredCols, *mpFilteredRows, pColFlags, pRowFlags, CRFlags::Filtered);
+    lcl_syncFlags(*mpHiddenCols, *mpHiddenRows, pColFlags.get(), pRowFlags, CRFlags::Hidden);
+    lcl_syncFlags(*mpFilteredCols, *mpFilteredRows, pColFlags.get(), pRowFlags, CRFlags::Filtered);
 }
 
 void ScTable::SetPageSize( const Size& rSize )

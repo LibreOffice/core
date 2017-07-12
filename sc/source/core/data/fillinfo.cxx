@@ -364,7 +364,7 @@ void ScDocument::FillInfo(
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
     ScStyleSheetPool* pStlPool = xPoolHelper->GetStylePool();
 
-    RowInfo* pRowInfo = rTabInfo.mpRowInfo;
+    RowInfo* pRowInfo = rTabInfo.mpRowInfo.get();
 
     const SvxBrushItem* pDefBackground =
             static_cast<const SvxBrushItem*>( &pPool->GetDefaultItem( ATTR_BACKGROUND ) );
@@ -1097,14 +1097,13 @@ ScTableInfo::ScTableInfo(const SCSIZE capacity)
     , mnArrCapacity(capacity)
     , mbPageMode(false)
 {
-    memset(mpRowInfo, 0, mnArrCapacity * sizeof(RowInfo));
+    memset(mpRowInfo.get(), 0, mnArrCapacity * sizeof(RowInfo));
 }
 
 ScTableInfo::~ScTableInfo()
 {
     for( SCSIZE nIdx = 0; nIdx < mnArrCapacity; ++nIdx )
         delete [] mpRowInfo[ nIdx ].pCellInfo;
-    delete [] mpRowInfo;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,6 +51,7 @@
 #include "scdllapi.h"
 #include "zforauto.hxx"
 
+#include <array>
 #include <memory>
 #include <map>
 
@@ -261,7 +262,7 @@ private:
     // Writer-specific data
     AutoFormatSwBlob m_swFields;
 
-    ScAutoFormatDataField**     ppDataField;
+    std::array<std::unique_ptr<ScAutoFormatDataField>,16> ppDataField;
 
     SAL_DLLPRIVATE ScAutoFormatDataField&       GetField( sal_uInt16 nIndex );
     SAL_DLLPRIVATE const ScAutoFormatDataField& GetField( sal_uInt16 nIndex ) const;

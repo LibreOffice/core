@@ -36,7 +36,7 @@ class ScMemChart
 {
     SCROW nRowCnt;
     SCCOL nColCnt;
-    double* pData;
+    std::unique_ptr<double[]> pData;
     OUString* pColText;
     OUString* pRowText;
 
