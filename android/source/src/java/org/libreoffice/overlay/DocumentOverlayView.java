@@ -381,7 +381,9 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
                         mHandleMiddle.dragStart(point);
                         mDragHandle = mHandleMiddle;
                         return true;
-                    } else if (mCalcSelectionBox.contains(point.x, point.y) && !mHandleStart.isVisible()) {
+                    } else if (mCalcSelectionBox != null &&
+                            mCalcSelectionBox.contains(point.x, point.y) &&
+                            !mHandleStart.isVisible()) {
                         mCalcSelectionBox.dragStart(point);
                         mCalcSelectionBoxDragging = true;
                         return true;
@@ -483,7 +485,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     }
 
     public void showCellSelection(RectF cellCursorRect) {
-        if (mCalcSelectionBox == null) return;
+        if (mCalcHeadersController == null || mCalcSelectionBox == null) return;
         if (RectUtils.fuzzyEquals(mCalcSelectionBox.mDocumentPosition, cellCursorRect)) {
             return;
         }
@@ -504,6 +506,7 @@ public class DocumentOverlayView extends View implements View.OnTouchListener {
     }
 
     public void showHeaderSelection(RectF rect) {
+        if (mCalcHeadersController == null) return;
         mCalcHeadersController.showHeaderSelection(rect);
     }
 }
