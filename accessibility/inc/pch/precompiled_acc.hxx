@@ -283,7 +283,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <sot/formats.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>

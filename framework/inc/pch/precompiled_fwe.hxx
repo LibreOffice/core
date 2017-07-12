@@ -206,7 +206,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <vcl/errinf.hxx>

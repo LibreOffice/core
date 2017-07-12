@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_KEYCODES_HXX
 #define INCLUDED_VCL_KEYCODES_HXX
 
-#include <rsc/rsc-vcl-shared-types.hxx>
+#include <vcl/vclenum.hxx>
 #undef DELETE
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>

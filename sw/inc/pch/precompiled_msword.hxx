@@ -491,8 +491,6 @@
 #include <paratr.hxx>
 #include <poolfmt.hxx>
 #include <reffld.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>

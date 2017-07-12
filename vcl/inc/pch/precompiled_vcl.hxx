@@ -266,7 +266,6 @@
 #include <opengl/texture.hxx>
 #include <opengl/zone.hxx>
 #include <outdata.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 #include <svdata.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
