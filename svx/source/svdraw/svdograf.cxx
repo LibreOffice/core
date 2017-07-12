@@ -439,8 +439,15 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
             const_cast< SdrGrafObj* >(this)->mpReplacementGraphic = new GraphicObject(rSvgDataPtr->getReplacement());
         }
         else if (pGraphic->GetGraphic().getPdfData().hasElements())
+        {
             // Replacement graphic for bitmap + PDF is just the bitmap.
             const_cast<SdrGrafObj*>(this)->mpReplacementGraphic = new GraphicObject(pGraphic->GetGraphic().GetBitmapEx());
+        }
+        if (mpReplacementGraphic)
+        {
+            mpReplacementGraphic->SetSwapStreamHdl(
+                LINK(const_cast<SdrGrafObj*>(this), SdrGrafObj, ReplacementSwapHdl));
+        }
     }
 
     return mpReplacementGraphic;
@@ -1277,6 +1284,29 @@ void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrink
         aPos.Y() -= aSize.Height() / 2;
         SetLogicRect( tools::Rectangle( aPos, aSize ) );
     }
+}
+
+IMPL_LINK(SdrGrafObj, ReplacementSwapHdl, const GraphicObject*, pO, SvStream*)
+{
+    // replacement image is always swapped
+    if (pO->IsInSwapOut())
+    {
+        SdrSwapGraphicsMode const nSwapMode(pModel->GetSwapGraphicsMode());
+        if (nSwapMode & SdrSwapGraphicsMode::TEMP)
+        {
+            return GRFMGR_AUTOSWAPSTREAM_TEMP;
+        }
+    }
+    else if (pO->IsInSwapIn())
+    {
+        return GRFMGR_AUTOSWAPSTREAM_TEMP;
+    }
+    else
+    {
+        assert(!"why is swap handler being called?");
+    }
+
+    return GRFMGR_AUTOSWAPSTREAM_NONE;
 }
 
 IMPL_LINK( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
