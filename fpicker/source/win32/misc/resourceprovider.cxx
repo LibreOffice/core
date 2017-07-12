@@ -29,7 +29,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include "fpsofficeResMgr.hxx"

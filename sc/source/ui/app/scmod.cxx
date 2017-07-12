@@ -62,7 +62,7 @@
 #include <vcl/waitobj.hxx>
 #include <svx/svxerr.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 
 #include <editeng/unolingu.hxx>
 #include <unotools/lingucfg.hxx>

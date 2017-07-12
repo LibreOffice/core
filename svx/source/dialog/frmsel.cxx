@@ -33,8 +33,6 @@
 #include <svx/strings.hrc>
 #include "bitmaps.hlst"
 
-#include <tools/rcid.h>
-
 using namespace ::com::sun::star;
 using namespace ::editeng;
 

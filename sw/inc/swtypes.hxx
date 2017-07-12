@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_SWTYPES_HXX
 #define INCLUDED_SW_INC_SWTYPES_HXX
 #include <rtl/ustring.hxx>
-#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/mapunit.hxx>
 #include <SwGetPoolIdFromName.hxx>

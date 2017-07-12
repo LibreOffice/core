@@ -22,8 +22,6 @@
 
 #include <vcl/window.hxx>
 
-#include <tools/resid.hxx>
-
 #include <com/sun/star/awt/PosSize.hpp>
 #include <dbaccess/dataview.hxx>
 #include <unotools/eventlisteneradapter.hxx>

@@ -37,7 +37,6 @@
 #define SVG_PROP_POSITIONED_CHARACTERS      "UsePositionedCharacters"
 
 
-class ResMgr;
 namespace vcl { class Window; }
 
 

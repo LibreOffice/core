@@ -20,7 +20,6 @@
 #include "svx/dialcontrol.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <tools/rcid.h>
 #include <cmath>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>

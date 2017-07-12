@@ -24,7 +24,6 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
-#include <tools/rcid.h>
 #include <tools/resmgr.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>
@@ -219,33 +218,7 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
 
 const OUString SgaObject::GetTitle() const
 {
-    OUString aReturnValue( aTitle );
-    if ( !getenv( "GALLERY_SHOW_PRIVATE_TITLE" ) )
-    {
-        if ( comphelper::string::getTokenCount(aReturnValue, ':') == 3 )
-        {
-            OUString    aPrivateInd  ( aReturnValue.getToken( 0, ':' ) );
-            OUString    aResourceName( aReturnValue.getToken( 1, ':' ) );
-            sal_Int32   nResId       ( aReturnValue.getToken( 2, ':' ).toInt32() );
-            if ( aPrivateInd == "private" &&
-                !aResourceName.isEmpty() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
-            {
-                OString aMgrName(OUStringToOString(aResourceName, RTL_TEXTENCODING_UTF8));
-                std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( aMgrName.getStr(),
-                            Application::GetSettings().GetUILanguageTag() ));
-                if ( pResMgr )
-                {
-                    ResId aResId( (sal_uInt16)nResId, *pResMgr );
-                    aResId.SetRT( RSC_STRING );
-                    if ( pResMgr->IsAvailable( aResId ) )
-                    {
-                        aReturnValue = aResId;
-                    }
-                }
-            }
-        }
-    }
-    return aReturnValue;
+    return aTitle;
 }
 
 void SgaObject::SetTitle( const OUString& rTitle )

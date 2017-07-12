@@ -33,7 +33,7 @@
 #include <svx/svxids.hrc>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <tools/simplerm.hxx>
+#include <tools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/make_unique.hxx>
 

@@ -75,7 +75,6 @@ namespace vcl { class Window; }
 struct SfxChildWinFactory;
 struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
-class SimpleResMgr;
 class ModalDialog;
 class SbxArray;
 class SbxValue;
