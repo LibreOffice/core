@@ -259,7 +259,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
     // shadow removal
     // a bit intricate inquiry whether there was something changed,
     // as the items can't be displayed directly on controls
-    sal_Int32 nX = 0L, nY = 0L;
+    sal_Int32 nX = 0, nY = 0;
     sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, m_ePoolUnit );
 
     switch( m_pCtlPosition->GetActualRP() )
@@ -371,21 +371,21 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         sal_Int32 nY = static_cast<const SdrMetricItem&>( rAttrs->Get( SDRATTR_SHADOWYDIST ) ).GetValue();
 
         if( nX != 0 )
-            SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, m_ePoolUnit );
+            SetMetricValue( *m_pMtrDistance, nX < 0 ? -nX : nX, m_ePoolUnit );
         else
-            SetMetricValue( *m_pMtrDistance, nY < 0L ? -nY : nY, m_ePoolUnit );
+            SetMetricValue( *m_pMtrDistance, nY < 0 ? -nY : nY, m_ePoolUnit );
 
         // setting the shadow control
-        if     ( nX <  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RectPoint::LT );
-        else if( nX == 0L && nY <  0L ) m_pCtlPosition->SetActualRP( RectPoint::MT );
-        else if( nX >  0L && nY <  0L ) m_pCtlPosition->SetActualRP( RectPoint::RT );
-        else if( nX <  0L && nY == 0L ) m_pCtlPosition->SetActualRP( RectPoint::LM );
+        if     ( nX <  0 && nY <  0 ) m_pCtlPosition->SetActualRP( RectPoint::LT );
+        else if( nX == 0 && nY <  0 ) m_pCtlPosition->SetActualRP( RectPoint::MT );
+        else if( nX >  0 && nY <  0 ) m_pCtlPosition->SetActualRP( RectPoint::RT );
+        else if( nX <  0 && nY == 0 ) m_pCtlPosition->SetActualRP( RectPoint::LM );
         // there's no center point anymore
-        else if( nX == 0L && nY == 0L ) m_pCtlPosition->SetActualRP( RectPoint::RB );
-        else if( nX >  0L && nY == 0L ) m_pCtlPosition->SetActualRP( RectPoint::RM );
-        else if( nX <  0L && nY >  0L ) m_pCtlPosition->SetActualRP( RectPoint::LB );
-        else if( nX == 0L && nY >  0L ) m_pCtlPosition->SetActualRP( RectPoint::MB );
-        else if( nX >  0L && nY >  0L ) m_pCtlPosition->SetActualRP( RectPoint::RB );
+        else if( nX == 0 && nY == 0 ) m_pCtlPosition->SetActualRP( RectPoint::RB );
+        else if( nX >  0 && nY == 0 ) m_pCtlPosition->SetActualRP( RectPoint::RM );
+        else if( nX <  0 && nY >  0 ) m_pCtlPosition->SetActualRP( RectPoint::LB );
+        else if( nX == 0 && nY >  0 ) m_pCtlPosition->SetActualRP( RectPoint::MB );
+        else if( nX >  0 && nY >  0 ) m_pCtlPosition->SetActualRP( RectPoint::RB );
     }
     else
     {
@@ -398,9 +398,9 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
             sal_Int32 nX = pXDistItem->GetValue();
             sal_Int32 nY = pYDistItem->GetValue();
             if( nX != 0 )
-                SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, m_ePoolUnit );
+                SetMetricValue( *m_pMtrDistance, nX < 0 ? -nX : nX, m_ePoolUnit );
             else
-                SetMetricValue( *m_pMtrDistance, nY < 0L ? -nY : nY, m_ePoolUnit );
+                SetMetricValue( *m_pMtrDistance, nY < 0 ? -nY : nY, m_ePoolUnit );
         }
 
         // Tristate, e. g. multiple objects have been marked of which some have a shadow and some don't.
@@ -479,7 +479,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
     m_rXFSet.Put( XFillTransparenceItem( nVal ) );
 
     // shadow removal
-    sal_Int32 nX = 0L, nY = 0L;
+    sal_Int32 nX = 0, nY = 0;
     sal_Int32 nXY = GetCoreValue( *m_pMtrDistance, m_ePoolUnit );
     switch( m_pCtlPosition->GetActualRP() )
     {

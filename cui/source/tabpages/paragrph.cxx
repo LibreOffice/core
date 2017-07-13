@@ -631,7 +631,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( vcl::Window* pParent,  const Sfx
 
     nAbst           ( MAX_DURCH ),
     nWidth          ( 11905 /*567 * 50*/ ),
-    nMinFixDist(0L),
+    nMinFixDist(0),
 
     bRelativeMode   ( false )
 

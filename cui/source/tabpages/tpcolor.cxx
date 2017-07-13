@@ -702,20 +702,20 @@ void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const sal_uInt16 nK )
 
     lTemp = 255 - ( rColor.GetRed() + nK );
 
-    if( lTemp < 0L )
-        lTemp = 0L;
+    if( lTemp < 0 )
+        lTemp = 0;
     rColor.SetRed( (sal_uInt8)lTemp );
 
     lTemp = 255 - ( rColor.GetGreen() + nK );
 
-    if( lTemp < 0L )
-        lTemp = 0L;
+    if( lTemp < 0 )
+        lTemp = 0;
     rColor.SetGreen( (sal_uInt8)lTemp );
 
     lTemp = 255 - ( rColor.GetBlue() + nK );
 
-    if( lTemp < 0L )
-        lTemp = 0L;
+    if( lTemp < 0 )
+        lTemp = 0;
     rColor.SetBlue( (sal_uInt8)lTemp );
 }
 
