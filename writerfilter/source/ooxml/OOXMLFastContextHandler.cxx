@@ -1540,6 +1540,12 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
     mpParserState->endTable();
 }
 
+// tdf#111550
+void OOXMLFastContextHandlerTextTable::start_P_Tbl()
+{
+    mpParserState->setInParagraphGroup(false);
+}
+
 /*
   class OOXMLFastContextHandlerShape
  */
