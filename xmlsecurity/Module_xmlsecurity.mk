@@ -9,7 +9,9 @@
 
 $(eval $(call gb_Module_Module,xmlsecurity))
 
+ifneq ($(filter-out ANDROID,$(OS)),)
 ifeq ($(ENABLE_NSS),TRUE)
+endif
 #FIXME: ^^^, get nss&libxmlsec building on ios and android
 #chromium has patches to build statically FWIW
 

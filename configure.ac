@@ -513,6 +513,7 @@ if test -n "$with_android_ndk"; then
         ANDROID_APP_ABI=x86
         ANDROIDCFLAGS="-march=atom"
     fi
+    ANDROID_PLATFORM=$ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}
     ANDROIDCFLAGS="$ANDROIDCFLAGS -ffunction-sections -fdata-sections"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
     ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot=$ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}"
@@ -589,7 +590,10 @@ if test -n "$with_android_ndk"; then
     BUILD_TYPE="$BUILD_TYPE OWNCLOUD_ANDROID_LIB"
 fi
 AC_SUBST(ANDROID_NDK_GDBSERVER)
+AC_SUBST(ANDROID_NDK_HOME)
 AC_SUBST(ANDROID_APP_ABI)
+AC_SUBST(ANDROID_BINUTILS_PREBUILT_ROOT)
+AC_SUBST(ANDROID_PLATFORM)
 
 dnl ===================================================================
 dnl --with-android-sdk
@@ -8780,7 +8784,7 @@ AC_SUBST(SYSTEM_OPENLDAP)
 dnl ===================================================================
 dnl Check for system NSS
 dnl ===================================================================
-if test $_os != iOS -a $_os != Android -a "$enable_fuzzers" != "yes"; then
+if test $_os != iOS -a "$enable_fuzzers" != "yes"; then
     libo_CHECK_SYSTEM_MODULE([nss],[NSS],[nss >= 3.9.3 nspr >= 4.8])
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS="TRUE"
