@@ -45,6 +45,8 @@ namespace svgio
             /// link to content. If maXLink is set, the node can be fetched
             // on demand
             OUString               maXLink;
+            /// detect if maXLink causes a loop to ourself during decomposing
+            mutable bool           mbDecomposingSvgNode;
 
         public:
             SvgUseNode(
