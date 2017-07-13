@@ -442,6 +442,9 @@ def factoryChooseAction(actionNode):
     elif actionNode.getAttribute("action") == "handleGridBefore" or actionNode.getAttribute("action") == "handleGridAfter":
         ret.append("    %sif (OOXMLFastContextHandlerTextTableRow* pTextTableRow = dynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler))" % extra_space)
         ret.append("    %s    pTextTableRow->%s();" % (extra_space, actionNode.getAttribute("action")))
+    elif actionNode.getAttribute("action") in ("start_P_Tbl", "end_P_Tbl"):
+        ret.append("    %sif (OOXMLFastContextHandlerTextTable* pTextTable = dynamic_cast<OOXMLFastContextHandlerTextTable*>(pHandler))" % extra_space)
+        ret.append("    %s    pTextTable->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") in ("sendProperty", "handleHyperlink"):
         ret.append("    %sif (OOXMLFastContextHandlerStream* pStream = dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler))" % extra_space)
         ret.append("    %s    pStream->%s();" % (extra_space, actionNode.getAttribute("action")))
