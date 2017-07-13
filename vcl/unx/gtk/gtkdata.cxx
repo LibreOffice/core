@@ -652,6 +652,10 @@ bool GtkData::ErrorTrapPop( bool bIgnoreError )
     return gdk_error_trap_pop () != 0;
 }
 
+#if !GLIB_CHECK_VERSION(2,32,0)
+#define G_SOURCE_REMOVE FALSE
+#endif
+
 extern "C" {
 
     struct SalGtkTimeoutSource {
@@ -732,7 +736,7 @@ extern "C" {
         if( pSVData->maSchedCtx.mpSalTimer )
             pSVData->maSchedCtx.mpSalTimer->CallCallback();
 
-        return TRUE;
+        return G_SOURCE_REMOVE;
     }
 
     static GSourceFuncs sal_gtk_timeout_funcs =
@@ -777,13 +781,13 @@ GtkSalTimer::GtkSalTimer()
 GtkSalTimer::~GtkSalTimer()
 {
     GtkInstance *pInstance = static_cast<GtkInstance *>(GetSalData()->m_pInstance);
-    pInstance->RemoveTimer( this );
+    pInstance->RemoveTimer();
     Stop();
 }
 
 bool GtkSalTimer::Expired()
 {
-    if( !m_pTimeout )
+    if( !m_pTimeout || g_source_is_destroyed( &m_pTimeout->aParent ) )
         return false;
 
     gint nDummy = 0;
@@ -796,6 +800,8 @@ void GtkSalTimer::Start( sal_uLong nMS )
 {
     // glib is not 64bit safe in this regard.
     assert( nMS <= G_MAXINT );
+    if ( nMS > G_MAXINT )
+        nMS = G_MAXINT;
     m_nTimeoutMS = nMS; // for restarting
     Stop(); // FIXME: ideally re-use an existing m_pTimeout
     m_pTimeout = create_sal_gtk_timeout( this );
