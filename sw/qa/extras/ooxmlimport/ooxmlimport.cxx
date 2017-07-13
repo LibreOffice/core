@@ -1348,6 +1348,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108350, "tdf108350.docx")
 }
 
 
+
+DECLARE_OOXMLIMPORT_TEST(testTdf109053, "tdf109053.docx")
+{
+    // Table was imported into a text frame which led to a one page document
+    // Originally the table takes two pages, so Writer should import it accordingly.
+    CPPUNIT_ASSERT_EQUAL(getPages(), 2);
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
