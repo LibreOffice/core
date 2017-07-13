@@ -165,7 +165,6 @@ static void initWindow(GtvApplicationWindow* window)
     // Fill our comments sidebar
     gboolean bTiledAnnotations;
     g_object_get(G_OBJECT(window->lokdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
-    // comments api implemented only for writer, calc as of now
     if (!bTiledAnnotations && pDocument)
     {
         window->commentssidebar = gtv_comments_sidebar_new();
@@ -292,25 +291,32 @@ createRenderingArgsJSON(const GtvRenderingArgs* pRenderingArgs)
     return aStream.str();
 }
 
-static void setupDocView(LOKDocView* pDocView)
+static void setupDocView(GtvApplicationWindow* window)
 {
-#if GLIB_CHECK_VERSION(2,40,0)
-    g_assert_nonnull(pDocView);
-#endif
-    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(LOKDocViewSigHandlers::editChanged), nullptr);
-    g_signal_connect(pDocView, "command-changed", G_CALLBACK(LOKDocViewSigHandlers::commandChanged), nullptr);
-    g_signal_connect(pDocView, "command-result", G_CALLBACK(LOKDocViewSigHandlers::commandResult), nullptr);
-    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(LOKDocViewSigHandlers::searchNotFound), nullptr);
-    g_signal_connect(pDocView, "search-result-count", G_CALLBACK(LOKDocViewSigHandlers::searchResultCount), nullptr);
-    g_signal_connect(pDocView, "part-changed", G_CALLBACK(LOKDocViewSigHandlers::partChanged), nullptr);
-    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(LOKDocViewSigHandlers::hyperlinkClicked), nullptr);
-    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(LOKDocViewSigHandlers::cursorChanged), nullptr);
-    g_signal_connect(pDocView, "address-changed", G_CALLBACK(LOKDocViewSigHandlers::addressChanged), nullptr);
-    g_signal_connect(pDocView, "formula-changed", G_CALLBACK(LOKDocViewSigHandlers::formulaChanged), nullptr);
-    g_signal_connect(pDocView, "password-required", G_CALLBACK(LOKDocViewSigHandlers::passwordRequired), nullptr);
-    g_signal_connect(pDocView, "comment", G_CALLBACK(LOKDocViewSigHandlers::comment), nullptr);
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    g_object_set(G_OBJECT(window->lokdocview),
+                 "doc-password", TRUE,
+                 "doc-password-to-modify", TRUE,
+                 "tiled-annotations", priv->m_pRenderingArgs->m_bEnableTiledAnnotations,
+                 nullptr);
 
-    g_signal_connect(pDocView, "configure-event", G_CALLBACK(LOKDocViewSigHandlers::configureEvent), nullptr);
+#if GLIB_CHECK_VERSION(2,40,0)
+    g_assert_nonnull(window->lokdocview);
+#endif
+    g_signal_connect(window->lokdocview, "edit-changed", G_CALLBACK(LOKDocViewSigHandlers::editChanged), nullptr);
+    g_signal_connect(window->lokdocview, "command-changed", G_CALLBACK(LOKDocViewSigHandlers::commandChanged), nullptr);
+    g_signal_connect(window->lokdocview, "command-result", G_CALLBACK(LOKDocViewSigHandlers::commandResult), nullptr);
+    g_signal_connect(window->lokdocview, "search-not-found", G_CALLBACK(LOKDocViewSigHandlers::searchNotFound), nullptr);
+    g_signal_connect(window->lokdocview, "search-result-count", G_CALLBACK(LOKDocViewSigHandlers::searchResultCount), nullptr);
+    g_signal_connect(window->lokdocview, "part-changed", G_CALLBACK(LOKDocViewSigHandlers::partChanged), nullptr);
+    g_signal_connect(window->lokdocview, "hyperlink-clicked", G_CALLBACK(LOKDocViewSigHandlers::hyperlinkClicked), nullptr);
+    g_signal_connect(window->lokdocview, "cursor-changed", G_CALLBACK(LOKDocViewSigHandlers::cursorChanged), nullptr);
+    g_signal_connect(window->lokdocview, "address-changed", G_CALLBACK(LOKDocViewSigHandlers::addressChanged), nullptr);
+    g_signal_connect(window->lokdocview, "formula-changed", G_CALLBACK(LOKDocViewSigHandlers::formulaChanged), nullptr);
+    g_signal_connect(window->lokdocview, "password-required", G_CALLBACK(LOKDocViewSigHandlers::passwordRequired), nullptr);
+    g_signal_connect(window->lokdocview, "comment", G_CALLBACK(LOKDocViewSigHandlers::comment), nullptr);
+
+    g_signal_connect(window->lokdocview, "configure-event", G_CALLBACK(LOKDocViewSigHandlers::configureEvent), nullptr);
 }
 
 void
@@ -322,10 +328,8 @@ gtv_application_window_create_view_from_window(GtvApplicationWindow* window)
     GtvApplicationWindow* newWindow = GTV_APPLICATION_WINDOW(gtv_application_window_new(GTK_APPLICATION(app)));
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
     newWindow->lokdocview = lok_doc_view_new_from_widget(LOK_DOC_VIEW(window->lokdocview), aArguments.c_str());
-    setupDocView(LOK_DOC_VIEW(newWindow->lokdocview));
+    setupDocView(newWindow);
 
-    gboolean bTiledAnnotations;
-    g_object_get(G_OBJECT(window->lokdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
     gtk_container_add(GTK_CONTAINER(newWindow->scrolledwindow), newWindow->lokdocview);
     gtk_widget_show_all(newWindow->scrolledwindow);
     gtk_window_present(GTK_WINDOW(newWindow));
@@ -347,12 +351,8 @@ gtv_application_window_load_document(GtvApplicationWindow* window,
                                                             priv->m_pRenderingArgs->m_aUserProfile.empty() ? nullptr : priv->m_pRenderingArgs->m_aUserProfile.c_str(),
                                                           nullptr, nullptr);
     gtk_container_add(GTK_CONTAINER(window->scrolledwindow), window->lokdocview);
-    g_object_set(G_OBJECT(window->lokdocview),
-                 "doc-password", TRUE,
-                 "doc-password-to-modify", TRUE,
-                 "tiled-annotations", priv->m_pRenderingArgs->m_bEnableTiledAnnotations,
-                 nullptr);
-    setupDocView(LOK_DOC_VIEW(window->lokdocview));
+
+    setupDocView(window);
 
     // Create argument JSON
     const std::string aArguments = createRenderingArgsJSON(priv->m_pRenderingArgs);
