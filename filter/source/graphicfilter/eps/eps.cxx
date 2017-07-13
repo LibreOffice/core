@@ -311,28 +311,23 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     // try to get the dialog selection
     if ( pFilterConfigItem )
     {
-        std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag() ));
-
-        if( pResMgr )
-        {
 #ifdef UNX // don't put binary tiff preview ahead of postscript code by default on unix as ghostscript is unable to read it
-            mnPreview = pFilterConfigItem->ReadInt32( "Preview", 0 );
+        mnPreview = pFilterConfigItem->ReadInt32( "Preview", 0 );
 #else
-            mnPreview = pFilterConfigItem->ReadInt32( "Preview", 1 );
+        mnPreview = pFilterConfigItem->ReadInt32( "Preview", 1 );
 #endif
-            mnLevel = pFilterConfigItem->ReadInt32( "Version", 2 );
-            if ( mnLevel != 1 )
-                mnLevel = 2;
-            mbGrayScale = pFilterConfigItem->ReadInt32( "ColorFormat", 1 ) == 2;
+        mnLevel = pFilterConfigItem->ReadInt32( "Version", 2 );
+        if ( mnLevel != 1 )
+            mnLevel = 2;
+        mbGrayScale = pFilterConfigItem->ReadInt32( "ColorFormat", 1 ) == 2;
 #ifdef UNX // don't compress by default on unix as ghostscript is unable to read LZW compressed eps
-            mbCompression = pFilterConfigItem->ReadInt32( "CompressionMode", 0 ) != 0;
+        mbCompression = pFilterConfigItem->ReadInt32( "CompressionMode", 0 ) != 0;
 #else
-            mbCompression = pFilterConfigItem->ReadInt32( "CompressionMode", 1 ) == 1;
+        mbCompression = pFilterConfigItem->ReadInt32( "CompressionMode", 1 ) == 1;
 #endif
-            mnTextMode = pFilterConfigItem->ReadInt32( "TextMode", 0 );
-            if ( mnTextMode > 2 )
-                mnTextMode = 0;
-        }
+        mnTextMode = pFilterConfigItem->ReadInt32( "TextMode", 0 );
+        if ( mnTextMode > 2 )
+            mnTextMode = 0;
     }
 
     // compression is not available for Level 1

@@ -26,7 +26,6 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <osl/module.hxx>
-#include <tools/resmgr.hxx>
 #include <sfx2/app.hxx>
 #include "app.hrc"
 #include "shutdownicon.hxx"
@@ -48,7 +47,6 @@
 
 using namespace ::osl;
 
-static ResMgr *pVCLResMgr;
 static GtkStatusIcon* pTrayIcon;
 static GtkWidget *pExitMenuItem = nullptr;
 static GtkWidget *pOpenMenuItem = nullptr;
@@ -329,8 +327,6 @@ void plugin_init_sys_tray()
     aLabel = OUStringToOString (
             pShutdownIcon->GetResString( STR_QUICKSTART_TIP ),
             RTL_TEXTENCODING_UTF8 );
-
-    pVCLResMgr = ResMgr::CreateResMgr("vcl");
 
     pTrayIcon = gtk_status_icon_new_from_icon_name ("libreoffice-startcenter");
 
