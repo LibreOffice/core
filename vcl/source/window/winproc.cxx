@@ -2448,23 +2448,17 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
 
         case SalEvent::Shutdown:
             {
-                static bool bInQueryExit = false;
-                if( !bInQueryExit )
-                {
-                    bInQueryExit = true;
-                    if ( GetpApp()->QueryExit() )
-                    {
-                        // Message-Schleife beenden
-                        Application::Quit();
-                        return false;
-                    }
-                    else
-                    {
-                        bInQueryExit = false;
-                        return true;
-                    }
-                }
-                return false;
+            bool bClosed = true;
+            vcl::Window *pWin = pWindow->ImplGetWindow();
+            if (!pWin->IsDisposed())
+            {
+                // dispatch to correct window type
+                if (pWin->IsSystemWindow())
+                    bClosed = static_cast<SystemWindow*>(pWin)->Close();
+                else if (pWin->IsDockingWindow())
+                    bClosed = static_cast<DockingWindow*>(pWin)->Close();
+            }
+            return !bClosed;
             }
 
         case SalEvent::SettingsChanged:
