@@ -6684,5 +6684,16 @@
         <value>true</value>
       </prop>
     </group>
+    <group oor:name="PackageKit">
+      <info>
+        <desc>Contains settings related to PackageKit (Unix only).</desc>
+      </info>
+      <prop oor:name="EnableFontInstallation" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if missing font installation should be triggered.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
   </component>
 </oor:component-schema>
