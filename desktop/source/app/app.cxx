@@ -1257,8 +1257,7 @@ void Desktop::Exception(ExceptionCategory nCategory)
     Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
     if ( bInException )
     {
-        OUString aDoubleExceptionString;
-        Application::Abort( aDoubleExceptionString );
+        Application::Abort( OUString() );
     }
 
     bInException = true;
@@ -1288,8 +1287,7 @@ void Desktop::Exception(ExceptionCategory nCategory)
     {
         case ExceptionCategory::ResourceNotLoaded:
         {
-            OUString aResExceptionString;
-            Application::Abort( aResExceptionString );
+            Application::Abort( OUString() );
             break;
         }
 
