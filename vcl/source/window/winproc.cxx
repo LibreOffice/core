@@ -1851,18 +1851,26 @@ struct DelayedCloseEvent
     VclPtr<vcl::Window> pWindow;
 };
 
+static bool TryCloseWindow(vcl::Window* pWindow)
+{
+    assert(pWindow);
+    bool bRet = true;
+    if (!pWindow->IsDisposed())
+    {
+        // dispatch to correct window type
+        if (pWindow->IsSystemWindow())
+            bRet = static_cast<SystemWindow*>(pWindow)->Close();
+        else if (pWindow->IsDockingWindow())
+            bRet = static_cast<DockingWindow*>(pWindow)->Close();
+    }
+    return bRet;
+}
+
 static void DelayedCloseEventLink( void* pCEvent, void* )
 {
     DelayedCloseEvent* pEv = static_cast<DelayedCloseEvent*>(pCEvent);
 
-    if( ! pEv->pWindow->IsDisposed() )
-    {
-        // dispatch to correct window type
-        if( pEv->pWindow->IsSystemWindow() )
-            static_cast<SystemWindow*>(pEv->pWindow.get())->Close();
-        else if( pEv->pWindow->IsDockingWindow() )
-            static_cast<DockingWindow*>(pEv->pWindow.get())->Close();
-    }
+    TryCloseWindow(pEv->pWindow.get());
     delete pEv;
 }
 
@@ -2447,25 +2455,8 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             break;
 
         case SalEvent::Shutdown:
-            {
-                static bool bInQueryExit = false;
-                if( !bInQueryExit )
-                {
-                    bInQueryExit = true;
-                    if ( GetpApp()->QueryExit() )
-                    {
-                        // Message-Schleife beenden
-                        Application::Quit();
-                        return false;
-                    }
-                    else
-                    {
-                        bInQueryExit = false;
-                        return true;
-                    }
-                }
-                return false;
-            }
+            bRet = TryCloseWindow(pWindow->ImplGetWindow());
+            break;
 
         case SalEvent::SettingsChanged:
         case SalEvent::PrinterChanged:
