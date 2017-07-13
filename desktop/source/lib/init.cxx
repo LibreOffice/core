@@ -1846,6 +1846,12 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 
 #else
     (void) pBuffer;
+    (void) nCanvasWidth;
+    (void) nCanvasHeight;
+    (void) nTilePosX;
+    (void) nTilePosY;
+    (void) nTileWidth;
+    (void) nTileHeight;
 #endif
 }
 
@@ -2874,7 +2880,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
         {
             const FontMetric& rFontMetric = pList->GetFontName(i);
             const OUString& aFontName = rFontMetric.GetFamilyName();
-            if (aSearchedFontName != aFontName.toUtf8())
+            if (!aSearchedFontName.equals(aFontName.toUtf8().getStr()))
                 continue;
 
             if (aText.isEmpty())

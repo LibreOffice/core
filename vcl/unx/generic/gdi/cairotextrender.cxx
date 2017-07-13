@@ -37,15 +37,8 @@
 #include <cairo.h>
 #include <cairo-ft.h>
 #include "CommonSalLayout.hxx"
-
-#ifdef ANDROID
-namespace std
-{
-double fmax(double x, double y)
-{
-    return ::fmax(x, y);
-}
-}
+#if defined(ANDROID)
+#include <android/compatibility.hxx>
 #endif
 
 namespace {
