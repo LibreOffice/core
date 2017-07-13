@@ -225,7 +225,10 @@ public:
         SalGraphics &rGraphics,
         HDC hDC) override;
 
-    bool BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 0, 0)) {
+    bool BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 1, 1))
+    {
+        if (rRect.GetWidth() == 0 || rRect.GetHeight() == 0)
+            return false;
         RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
         return SUCCEEDED(mpRT->BindDC(hDC, &rc));
     }
