@@ -140,11 +140,8 @@ bool ORowSetImportExport::Read()
         {
             --nRowCount;
             ++nCurrentRow;
-            if(!m_pRowMarker || m_pRowMarker[nRowFilterIndex] == nCurrentRow)
-            {
-                ++nRowFilterIndex;
-                bContinue = insertNewRow();
-            }
+            ++nRowFilterIndex;
+            bContinue = insertNewRow();
         }
     }
     return true;
