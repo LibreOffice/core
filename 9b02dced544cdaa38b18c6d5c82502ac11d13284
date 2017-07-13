@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_70e7ace4",
+        "filename": "sc/source/ui/vba/vbafiledialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-13T13:47:59Z",
+      "side": 1,
+      "message": "This is problematic, ScVbaFileDialog is created with operator new, so at the time m_xItems is initialized its refcount is 0. Then you pass \"this\" as an uno::Reference temporary to ScVbaFileDialogSelectedItems, so by the time that returns, it\u0027ll delete ScVbaFileDialog.\n\nA possible way around this is to instead initialize m_xItems on-demand, when the caller of this ctor already put ScVbaFileDialog into an uno::Reference that increments the refcount.",
+      "revId": "9b02dced544cdaa38b18c6d5c82502ac11d13284",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
