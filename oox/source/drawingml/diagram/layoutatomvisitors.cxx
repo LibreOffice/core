@@ -97,7 +97,9 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
 
     if (rAtom.getExistingShape())
     {
-        rAtom.setupShape(rAtom.getExistingShape(), mrDgm, mnCurrIdx);
+        // reuse existing shape
+        if (rAtom.setupShape(rAtom.getExistingShape(), mrDgm, mnCurrIdx))
+            rAtom.getNodeShapes().push_back(rAtom.getExistingShape());
     }
     else
     {
@@ -117,6 +119,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
             {
                 pCurrParent->addChild(pShape);
                 pCurrParent = pShape;
+                rAtom.getNodeShapes().push_back(pShape);
             }
         }
         else
@@ -135,10 +138,11 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
     // restore parent
     mpParentShape=pPreviousParent;
 
-    // layout shapes - now all child shapes are created
-    ShapeLayoutingVisitor aLayoutingVisitor(pCurrParent,
-                                            rAtom.getName());
-    aLayoutingVisitor.defaultVisit(rAtom);
+    // remove unneeded empty group shapes
+    pCurrParent->getChildren().erase(
+        std::remove_if(pCurrParent->getChildren().begin(), pCurrParent->getChildren().end(),
+            [] (const ShapePtr & aChild) { return aChild->getServiceName() == "com.sun.star.drawing.GroupShape" && aChild->getChildren().empty(); }),
+        pCurrParent->getChildren().end());
 }
 
 void ShapeCreationVisitor::visit(ShapeAtom& /*rAtom*/)
@@ -212,12 +216,16 @@ void ShapeLayoutingVisitor::visit(ConstraintAtom& /*rAtom*/)
 
 void ShapeLayoutingVisitor::visit(AlgAtom& rAtom)
 {
-    rAtom.layoutShape(mpParentShape, maName);
+    if (mbLookForAlg && mpCurrentLayoutNode)
+    {
+        for (const auto& pShape : mpCurrentLayoutNode->getNodeShapes())
+            rAtom.layoutShape(pShape, mpCurrentLayoutNode->getName());
+    }
 }
 
-void ShapeLayoutingVisitor::visit(ForEachAtom& /*rAtom*/)
+void ShapeLayoutingVisitor::visit(ForEachAtom& rAtom)
 {
-    // stop processing
+    defaultVisit(rAtom);
 }
 
 void ShapeLayoutingVisitor::visit(ConditionAtom& rAtom)
@@ -230,9 +238,21 @@ void ShapeLayoutingVisitor::visit(ChooseAtom& rAtom)
     defaultVisit(rAtom);
 }
 
-void ShapeLayoutingVisitor::visit(LayoutNode& /*rAtom*/)
+void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
 {
-    // stop processing - only traverse Condition/Choose atoms
+    if (mbLookForAlg)
+        return;
+
+    LayoutNode* pPreviousLayoutNode = mpCurrentLayoutNode;
+    mpCurrentLayoutNode = &rAtom;
+
+    // process alg atoms first, nested layout nodes afterwards
+    mbLookForAlg = true;
+    defaultVisit(rAtom);
+    mbLookForAlg = false;
+    defaultVisit(rAtom);
+
+    mpCurrentLayoutNode = pPreviousLayoutNode;
 }
 
 void ShapeLayoutingVisitor::visit(ShapeAtom& /*rAtom*/)

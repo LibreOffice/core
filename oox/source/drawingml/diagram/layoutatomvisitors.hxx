@@ -72,9 +72,10 @@ public:
 
 class ShapeLayoutingVisitor : public LayoutAtomVisitor
 {
-    ShapePtr mpParentShape;
-    OUString maName;
+    LayoutNode* mpCurrentLayoutNode;
+    bool mbLookForAlg;
 
+    void defaultVisit(LayoutAtom& rAtom);
     virtual void visit(ConstraintAtom& rAtom) override;
     virtual void visit(AlgAtom& rAtom) override;
     virtual void visit(ForEachAtom& rAtom) override;
@@ -84,13 +85,10 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
     virtual void visit(ShapeAtom& rAtom) override;
 
 public:
-    ShapeLayoutingVisitor(const ShapePtr& rParentShape,
-                          const OUString& rName) :
-        mpParentShape(rParentShape),
-        maName(rName)
+    ShapeLayoutingVisitor() :
+        mpCurrentLayoutNode(nullptr),
+        mbLookForAlg(false)
     {}
-
-    void defaultVisit(LayoutAtom& rAtom);
 };
 
 class ShallowPresNameVisitor : public LayoutAtomVisitor

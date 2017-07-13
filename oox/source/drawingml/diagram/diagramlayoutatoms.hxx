@@ -242,6 +242,8 @@ public:
         { mpExistingShape = pShape; }
     const ShapePtr& getExistingShape() const
         { return mpExistingShape; }
+    std::vector<ShapePtr> & getNodeShapes()
+        { return mpNodeShapes; }
 
     bool setupShape( const ShapePtr& rShape,
                      const Diagram& rDgm,
@@ -252,6 +254,7 @@ private:
     OUString                     msMoveWith;
     OUString                     msStyleLabel;
     ShapePtr                     mpExistingShape;
+    std::vector<ShapePtr>        mpNodeShapes;
     sal_Int32                    mnChildOrder;
 };
 
