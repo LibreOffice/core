@@ -29,6 +29,13 @@ struct GtvMainToolbarPrivateImpl
     GtkWidget* toolbar1;
     GtkWidget* toolbar2;
 
+    GtkWidget* m_pEnableEditing;
+    GtkWidget* m_pLeftpara;
+    GtkWidget* m_pCenterpara;
+    GtkWidget* m_pRightpara;
+    GtkWidget* m_pJustifypara;
+    GtkWidget* m_pDeleteComment;
+
     /// Sensitivity (enabled or disabled) for each tool item, ignoring edit state
     std::map<GtkToolItem*, bool> m_aToolItemSensitivities;
 
@@ -72,6 +79,13 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     priv->toolbar2 = GTK_WIDGET(gtk_builder_get_object(builder, "toolbar2"));
     gtk_box_pack_start(GTK_BOX(toolbar), priv->toolbar2, false, false, false);
 
+    priv->m_pEnableEditing = GTK_WIDGET(gtk_builder_get_object(builder, "btn_editmode"));
+    priv->m_pLeftpara = GTK_WIDGET(gtk_builder_get_object(builder, "btn_justifyleft"));
+    priv->m_pCenterpara = GTK_WIDGET(gtk_builder_get_object(builder, "btn_justifycenter"));
+    priv->m_pRightpara = GTK_WIDGET(gtk_builder_get_object(builder, "btn_justifyright"));
+    priv->m_pJustifypara = GTK_WIDGET(gtk_builder_get_object(builder, "btn_justifyfill"));
+    priv->m_pDeleteComment = GTK_WIDGET(gtk_builder_get_object(builder, "btn_removeannotation"));
+
     gtk_builder_add_callback_symbol(builder, "btn_clicked", G_CALLBACK(btn_clicked));
     gtk_builder_add_callback_symbol(builder, "doCopy", G_CALLBACK(doCopy));
     gtk_builder_add_callback_symbol(builder, "doPaste", G_CALLBACK(doPaste));
@@ -110,6 +124,26 @@ gtv_main_toolbar_class_init(GtvMainToolbarClass* klass)
     // method to set the template from the .ui file directly; can only be set
     // from gresource
     G_OBJECT_CLASS(klass)->finalize = gtv_main_toolbar_finalize;
+}
+
+void
+gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType eDocType, bool bEditMode)
+{
+    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    if (eDocType == LOK_DOCTYPE_SPREADSHEET)
+    {
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pLeftpara), ".uno:AlignLeft");
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pCenterpara), ".uno:AlignHorizontalCenter");
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pRightpara), ".uno:AlignRight");
+        gtk_widget_hide(priv->m_pJustifypara);
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pDeleteComment), ".uno:DeleteNote");
+    }
+    else if (eDocType == LOK_DOCTYPE_PRESENTATION)
+    {
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pDeleteComment), ".uno:DeleteAnnotation");
+    }
+
+    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(priv->m_pEnableEditing), bEditMode);
 }
 
 GtkContainer*
@@ -156,6 +190,28 @@ gtv_main_toolbar_set_edit(GtvMainToolbar* toolbar, gboolean bEdit)
             }
         }
     }
+    g_list_free(pList);
+
+    pList = gtk_container_get_children(GTK_CONTAINER(priv->toolbar2));
+    for (GList* l = pList; l != nullptr; l = l->next)
+    {
+        if (GTK_IS_TOOL_BUTTON(l->data))
+        {
+            GtkToolButton* pButton = GTK_TOOL_BUTTON(l->data);
+            const gchar* pIconName = gtk_tool_button_get_icon_name(pButton);
+            if (g_strcmp0(pIconName, "zoom-in-symbolic") != 0 &&
+                g_strcmp0(pIconName, "zoom-original-symbolic") != 0 &&
+                g_strcmp0(pIconName, "zoom-out-symbolic") != 0 &&
+                g_strcmp0(pIconName, "insert-text-symbolic") != 0 &&
+                g_strcmp0(pIconName, "view-continuous-symbolic") != 0 &&
+                g_strcmp0(pIconName, "document-properties") != 0 &&
+                g_strcmp0(pIconName, "system-run") != 0)
+            {
+                gtk_widget_set_sensitive(GTK_WIDGET(pButton), bEdit);
+            }
+        }
+    }
+    g_list_free(pList);
 }
 
 GtkWidget*

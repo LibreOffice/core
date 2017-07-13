@@ -91,8 +91,8 @@ gtv_application_window_init(GtvApplicationWindow* win)
 
     win->findtoolbar = GTK_WIDGET(gtk_builder_get_object(builder, "findtoolbar"));
     win->findbarlabel = GTK_WIDGET(gtk_builder_get_object(builder, "findbar_label"));
-    priv->toolbarBroadcast = false;
-    priv->partSelectorBroadcast = false;
+    priv->toolbarBroadcast = true;
+    priv->partSelectorBroadcast = true;
 
     win->addressbarentry = GTK_WIDGET(gtk_builder_get_object(builder, "addressbar_entry"));
     win->formulabarentry = GTK_WIDGET(gtk_builder_get_object(builder, "formulabar_entry"));
@@ -145,37 +145,24 @@ static void initWindow(GtvApplicationWindow* window)
     focusChain = g_list_append( focusChain, window->lokdocview );
     gtk_container_set_focus_chain ( GTK_CONTAINER (priv->container), focusChain );
 
-//    gtk_widget_show_all(window-.m_pStatusBar);
-//    gtk_widget_hide(rWindow.m_pProgressBar);
-
-//    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(), TRUE);
-    // TODO: call a main toolbar function after document load to init its
-    // buttons depending on doc type
-
+    // TODO: Implement progressbar in statubar
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     if (pDocument)
     {
-        if (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
+        LibreOfficeKitDocumentType eDocType = static_cast<LibreOfficeKitDocumentType>(pDocument->pClass->getDocumentType(pDocument));
+        if (eDocType == LOK_DOCTYPE_SPREADSHEET)
         {
             // Align to top left corner, so the tiles are in sync with the
             // row/column bar, even when zooming out enough that not all space is
             // used.
             gtk_widget_set_halign(GTK_WIDGET(window->lokdocview), GTK_ALIGN_START);
             gtk_widget_set_valign(GTK_WIDGET(window->lokdocview), GTK_ALIGN_START);
+        }
 
-            // Change cell alignment uno commands for spreadsheet
-            // TODO: Devolve the responsibility to toolbar
-            //lcl_registerToolItem(rWindow, rWindow.m_pLeftpara, ".uno:AlignLeft");
-            //lcl_registerToolItem(rWindow, rWindow.m_pCenterpara, ".uno:AlignHorizontalCenter");
-            //lcl_registerToolItem(rWindow, rWindow.m_pRightpara, ".uno:AlignRight");
-            //gtk_widget_hide(GTK_WIDGET(rWindow.m_pJustifypara));
-            //lcl_registerToolItem(rWindow, rWindow.m_pDeleteComment, ".uno:DeleteNote");
-        }
-        else if (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_PRESENTATION)
-        {
-            // same here
-            //lcl_registerToolItem(rWindow, rWindow.m_pDeleteComment, ".uno:DeleteAnnotation");
-        }
+        // By default make the document editable in a new window
+        lok_doc_view_set_edit(LOK_DOC_VIEW(window->lokdocview), true);
+        // Let toolbar adjust its button accordingly
+        gtv_main_toolbar_doc_loaded(GTV_MAIN_TOOLBAR(priv->toolbarcontainer), eDocType, true /* Edit button state */);
     }
 
     // Fill our comments sidebar
@@ -215,7 +202,6 @@ gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res
         return;
     }
 
-    lok_doc_view_set_edit(pDocView, true);
     initWindow(window);
 }
 
@@ -346,6 +332,8 @@ gtv_application_window_create_view_from_window(GtvApplicationWindow* window)
     gtk_container_add(GTK_CONTAINER(newWindow->scrolledwindow), newWindow->lokdocview);
     gtk_widget_show_all(newWindow->scrolledwindow);
     gtk_window_present(GTK_WINDOW(newWindow));
+
+    initWindow(newWindow);
 }
 
 void

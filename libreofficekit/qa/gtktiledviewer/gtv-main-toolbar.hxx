@@ -12,6 +12,8 @@
 
 #include <gtk/gtk.h>
 
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 G_BEGIN_DECLS
 
 #define GTV_MAIN_TOOLBAR_TYPE (gtv_main_toolbar_get_type())
@@ -27,6 +29,8 @@ void gtv_main_toolbar_set_sensitive_internal(GtvMainToolbar* toolbar, GtkToolIte
 
 /// Use internal sensitivity map to set actual widget's sensitivness
 void gtv_main_toolbar_set_edit(GtvMainToolbar* toolbar, gboolean bEdit);
+
+void gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType eDocType, bool bEditMode);
 
 G_END_DECLS
 
