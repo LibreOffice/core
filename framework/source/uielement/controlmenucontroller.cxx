@@ -178,7 +178,6 @@ ControlMenuController::ControlMenuController(const css::uno::Reference< css::uno
 // private function
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
-    std::unique_ptr<ResMgr> xResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
     for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
         //ident is .uno:Command without .uno:
