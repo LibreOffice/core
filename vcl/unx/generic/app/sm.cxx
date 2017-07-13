@@ -358,7 +358,7 @@ void SessionManagerClient::SaveYourselfProc(
                                                  (interact_style == SmInteractStyleErrors) ? "SmInteractStyleErrors" :
                                                                                              "SmInteractStyleAny"));
     char num[100];
-    snprintf(num, sizeof(num), "_%d_%d", now.Seconds, (now.Nanosec / 1000));
+    snprintf(num, sizeof(num), "_%" SAL_PRIuUINT32 "_%" SAL_PRIuUINT32, now.Seconds, (now.Nanosec / 1001));
     m_aTimeID = OString(num);
 
     BuildSmPropertyList();
