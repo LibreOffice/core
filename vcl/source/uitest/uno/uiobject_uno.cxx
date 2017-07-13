@@ -119,7 +119,7 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
     mReady = false;
     auto aIdle = o3tl::make_unique<Idle>();
     aIdle->SetDebugName("UI Test Idle Handler");
-    aIdle->SetPriority(TaskPriority::DEFAULT);
+    aIdle->SetPriority(TaskPriority::HIGHEST);
 
     std::function<void()> func = [this](){
 
