@@ -26,6 +26,10 @@
 // #i47888# allow for alternative initialization as required for e.g. MacOSX
 bool ImplSVMainHook( int* );
 int ImplSVMain();
+// tdf#109085: Allow correct deinitialization when application must be terminated
+// without returning to calling functions as expected,
+// as in case of WM_QUERYENDSESSION/WM_ENDSESSION messages at system shutdown on Windows
+void ImplSVMainDeinit();
 
 VCL_DLLPUBLIC int SVMain();
 
