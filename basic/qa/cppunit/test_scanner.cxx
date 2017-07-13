@@ -28,6 +28,7 @@ namespace
     OUString text;
     double number;
     SbxDataType type;
+    bool ws;
   };
 
   /**
@@ -46,6 +47,7 @@ namespace
     void testNumbers();
     void testDataType();
     void testHexOctal();
+    void testTdf103104();
 
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(ScannerTest);
@@ -61,6 +63,7 @@ namespace
     CPPUNIT_TEST(testNumbers);
     CPPUNIT_TEST(testDataType);
     CPPUNIT_TEST(testHexOctal);
+    CPPUNIT_TEST(testTdf103104);
 
     // End of test suite definition
     CPPUNIT_TEST_SUITE_END();
@@ -87,6 +90,7 @@ namespace
       symbol.text = scanner.GetSym();
       symbol.number = scanner.GetDbl();
       symbol.type = scanner.GetType();
+      symbol.ws = scanner.WhiteSpace();
       symbols.push_back(symbol);
     }
     errors = scanner.GetErrors();
@@ -848,6 +852,40 @@ namespace
     CPPUNIT_ASSERT_EQUAL(OUString(), symbols[1].text);
     CPPUNIT_ASSERT_EQUAL(SbxDOUBLE, symbols[1].type);
     CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
+  }
+
+  void ScannerTest::testTdf103104()
+  {
+    const OUString source1("asdf _\n asdf");
+    const OUString source2("asdf. _\n asdf");
+    const OUString source3("asdf _\n .asdf");
+
+    std::vector<Symbol> symbols;
+
+    symbols = getSymbols(source1);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), symbols.size());
+    CPPUNIT_ASSERT_EQUAL(asdf, symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(asdf, symbols[1].text);
+    CPPUNIT_ASSERT(symbols[1].ws);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[2].text);
+
+    symbols = getSymbols(source2);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), symbols.size());
+    CPPUNIT_ASSERT_EQUAL(asdf, symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(dot, symbols[1].text);
+    CPPUNIT_ASSERT(!symbols[1].ws);
+    CPPUNIT_ASSERT_EQUAL(asdf, symbols[2].text);
+    CPPUNIT_ASSERT(symbols[2].ws);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[3].text);
+
+    symbols = getSymbols(source3);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), symbols.size());
+    CPPUNIT_ASSERT_EQUAL(asdf, symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(dot, symbols[1].text);
+    CPPUNIT_ASSERT(!symbols[1].ws);
+    CPPUNIT_ASSERT_EQUAL(asdf, symbols[2].text);
+    CPPUNIT_ASSERT(!symbols[2].ws);
+    CPPUNIT_ASSERT_EQUAL(cr, symbols[3].text);
   }
 
   // Put the test suite in the registry
