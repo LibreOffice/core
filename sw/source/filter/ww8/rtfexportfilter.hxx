@@ -61,7 +61,7 @@ public:
 };
 
 OUString RtfExport_getImplementationName();
-css::uno::Sequence<OUString> SAL_CALL RtfExport_getSupportedServiceNames() throw();
+css::uno::Sequence<OUString> SAL_CALL RtfExport_getSupportedServiceNames() noexcept;
 /// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SAL_CALL RtfExport_createInstance(const css::uno::Reference<css::uno::XComponentContext>& xCtx);
 

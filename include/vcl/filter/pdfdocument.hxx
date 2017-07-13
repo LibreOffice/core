@@ -40,7 +40,7 @@ class VCL_DLLPUBLIC PDFElement
 {
 public:
     virtual bool Read(SvStream& rStream) = 0;
-    virtual ~PDFElement() { }
+    virtual ~PDFElement() = default;
 };
 
 /// Indirect object: something with a unique ID.

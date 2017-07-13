@@ -103,7 +103,7 @@ OUString RtfExport_getImplementationName()
     return OUString(IMPL_NAME_RTFEXPORT);
 }
 
-uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames() noexcept
 {
     return uno::Sequence< OUString > { "com.sun.star.document.ExportFilter" };
 }
