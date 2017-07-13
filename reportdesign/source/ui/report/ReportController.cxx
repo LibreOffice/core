@@ -3941,7 +3941,7 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
         const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
         const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter, pEnd,
             [&sKeyModifier] (const beans::PropertyValue& x) -> bool {
-                return x.Name.equals(sKeyModifier);
+                return x.Name == sKeyModifier;
             });
         sal_Int16 nKeyModifier = 0;
         if ( pKeyModifier == pEnd || ((pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1) )
@@ -4040,7 +4040,7 @@ sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode )
     const OUString* pEnd  = pIter + aModes.getLength();
     for(;pIter != pEnd;++pIter)
     {
-        if ( pIter->equals(aMode ) )
+        if ( *pIter == aMode )
             break;
     }
     return pIter != pEnd;

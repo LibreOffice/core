@@ -164,7 +164,7 @@ void CustomShapeProperties::pushToPropSet(
             for ( i = 0; i < nCount; i++ )
             {
                 const OUString sAdjustmentValues("AdjustmentValues");
-                if ( aGeoPropSeq[ i ].Name.equals( sAdjustmentValues ) )
+                if ( aGeoPropSeq[ i ].Name == sAdjustmentValues )
                 {
                     OUString presetTextWarp;
                     if ( aGeoPropSeq[ i ].Value >>= presetTextWarp )
@@ -184,7 +184,7 @@ void CustomShapeProperties::pushToPropSet(
                 for ( i = 0; i < nCount; i++ )
                 {
                     const OUString sAdjustmentValues("AdjustmentValues");
-                    if ( aGeoPropSeq[ i ].Name.equals( sAdjustmentValues ) )
+                    if ( aGeoPropSeq[ i ].Name == sAdjustmentValues )
                     {
                         uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
                         if ( aGeoPropSeq[ i ].Value >>= aAdjustmentSeq )
@@ -216,7 +216,7 @@ void CustomShapeProperties::pushToPropSet(
                             xPropSet->setPropertyValue( sCustomShapeGeometry, Any( aGeoPropSeq ) );
                         }
                     }
-                    else if ( aGeoPropSeq[ i ].Name.equals( sType ) )
+                    else if ( aGeoPropSeq[ i ].Name == sType )
                     {
                         if ( sConnectorShapeType.getLength() > 0 )
                             aGeoPropSeq[ i ].Value <<= sConnectorShapeType;

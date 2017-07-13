@@ -1638,7 +1638,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
-                if (str.equals(ref_name))
+                if (str == ref_name)
                     daysNode = getChildAt(j)->getChildAt(0);
             }
         }
@@ -1671,7 +1671,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
-                if (str.equals(ref_name))
+                if (str == ref_name)
                     monthsNode = getChildAt(j)->getChildAt(1);
             }
         }
@@ -1707,7 +1707,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
-                if (str.equals(ref_name))
+                if (str == ref_name)
                     genitiveMonthsNode = getChildAt(j)->getChildAt(1);
             }
         }
@@ -1744,7 +1744,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
-                if (str.equals(ref_name))
+                if (str == ref_name)
                     partitiveMonthsNode = getChildAt(j)->getChildAt(1);
             }
         }
@@ -1777,7 +1777,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
-                if (str.equals(ref_name))
+                if (str == ref_name)
                     erasNode = getChildAt(j)->getChildAt(2);
             }
         }

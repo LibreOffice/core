@@ -232,7 +232,7 @@ uno::Sequence< sal_Int8 > ZipPackageStream::GetEncryptionKey( bool bUseWinEncodi
             throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
 
         for ( sal_Int32 nInd = 0; nInd < m_aStorageEncryptionKeys.getLength(); nInd++ )
-            if ( m_aStorageEncryptionKeys[nInd].Name.equals( aNameToFind ) )
+            if ( m_aStorageEncryptionKeys[nInd].Name == aNameToFind )
                 m_aStorageEncryptionKeys[nInd].Value >>= aResult;
 
         // empty keys are not allowed here

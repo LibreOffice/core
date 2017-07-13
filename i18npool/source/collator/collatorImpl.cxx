@@ -145,7 +145,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
 {
     for (size_t l = 0; l < lookupTable.size(); l++) {
         cachedItem = lookupTable[l];
-        if (cachedItem->service.equals(serviceName)) {// cross locale sharing
+        if (cachedItem->service == serviceName) {// cross locale sharing
             lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
             return true;
         }

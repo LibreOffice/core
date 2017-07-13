@@ -905,7 +905,7 @@ void PropertyMap::dumpCode( const Reference< XPropertySet >& rXPropSet )
     for (int i=0; i < props.getLength (); i++) {
 
         // ignore Type, it is set elsewhere
-        if (props[i].Name.equals (sType))
+        if (props[i].Name == sType)
             continue;
 
         OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);

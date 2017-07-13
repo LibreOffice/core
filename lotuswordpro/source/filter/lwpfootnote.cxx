@@ -363,7 +363,7 @@ LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
     LwpContent* pContent = nullptr;
 
     while ((pContent = pFoundry->EnumContents(pContent)) != nullptr)
-        if (pContent->IsTable() && (strClassName.equals(pContent->GetClassName())) &&
+        if (pContent->IsTable() && (strClassName == pContent->GetClassName()) &&
             pContent->IsActive() && pContent->GetLayout(nullptr).is())
         {
             // Found it!

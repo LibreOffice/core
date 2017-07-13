@@ -566,7 +566,7 @@ template<>
 inline bool SAL_CALL operator == ( const Any & rAny, const ::rtl::OUString & value )
 {
     return (typelib_TypeClass_STRING == rAny.pType->eTypeClass &&
-            value.equals( * static_cast< const ::rtl::OUString * >( rAny.pData ) ));
+            value == * static_cast< const ::rtl::OUString * >( rAny.pData ) );
 }
 // type
 

@@ -198,7 +198,7 @@ static bool getFromCommandLineArgs(
          ii != pNameValueList->end() ;
          ++ii )
     {
-        if( (*ii).sName.equals(key) )
+        if( (*ii).sName == key )
         {
             *value = (*ii).sValue;
             found = true;
@@ -341,7 +341,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
         dirItem.getFileStatus( status ) == DirectoryItem::E_None)
     {
         base_ini = status.getFileURL();
-        if (! rIniName.equals( base_ini ))
+        if ( rIniName != base_ini )
         {
             _base_ini = static_cast< Bootstrap_Impl * >(
                 rtl_bootstrap_args_open( base_ini.pData ) );
@@ -765,7 +765,7 @@ void SAL_CALL rtl_bootstrap_set (
     NameValueList::iterator iEnd( r_rtl_bootstrap_set_list.end() );
     for ( ; iPos != iEnd; ++iPos )
     {
-        if (iPos->sName.equals( name ))
+        if (iPos->sName == name)
         {
             iPos->sValue = value;
             return;

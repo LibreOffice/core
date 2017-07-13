@@ -661,12 +661,12 @@ void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHandles,
         const Sequence< PropertyValue >& rPropSeq = rHandles[ k ];
         for ( const PropertyValue& rPropVal: rPropSeq )
         {
-            if ( rPropVal.Name.equals( sPosition ) )
+            if ( rPropVal.Name == sPosition )
             {
                 if ( rPropVal.Value >>= aPosition )
                     bPosition = true;
             }
-            else if ( rPropVal.Name.equals( sSwitched ) )
+            else if ( rPropVal.Name == sSwitched )
             {
                 rPropVal.Value >>= bSwitched ;
             }

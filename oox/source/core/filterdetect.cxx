@@ -222,7 +222,7 @@ void FilterDetectDocHandler::parseContentTypesDefault( const AttributeList& rAtt
 
 void FilterDetectDocHandler::parseContentTypesOverride( const AttributeList& rAttribs )
 {
-    if( rAttribs.getString( XML_PartName, OUString() ).equals( maTargetPath ) )
+    if( rAttribs.getString( XML_PartName, OUString() ) == maTargetPath )
         mrFilterName = getFilterNameFromContentType( rAttribs.getString( XML_ContentType, OUString() ), maFileName );
 }
 
