@@ -3828,8 +3828,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                     aAny <<= xRet;
 
                                     // #67173 don't specify a name so that the real class name is entered
-                                    OUString aName;
-                                    SbxObjectRef xWrapper = static_cast<SbxObject*>(new SbUnoObject( aName, aAny ));
+                                    SbxObjectRef xWrapper = static_cast<SbxObject*>(new SbUnoObject( OUString(), aAny ));
                                     pElem->PutObject( xWrapper.get() );
                                 }
                                 else
