@@ -1,0 +1,40 @@
+https://github.com/libexpat/libexpat/issues/52
+
+fixes /usr/include/sys/random.h:37:22: error: expected ')'
+misdetection of random.h feature, already fixed upstream:
+https://github.com/libexpat/libexpat/commit/602e6c78ca750c082b72f8cdf4a38839b312959f
+
+diff -ur expat.org/configure expat/configure
+--- expat.org/configure	2017-07-12 17:04:34.000000000 +0200
++++ expat/configure	2017-07-12 17:05:59.000000000 +0200
+@@ -16341,7 +16341,7 @@
+   }
+ 
+ _ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
++if ac_fn_c_try_link "$LINENO"; then :
+ 
+ 
+ $as_echo "#define HAVE_GETRANDOM 1" >>confdefs.h
+@@ -16386,7 +16386,8 @@
+     conftest$ac_exeext conftest.$ac_ext
+ 
+ fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++rm -f core conftest.err conftest.$ac_objext \
++    conftest$ac_exeext conftest.$ac_ext
+ 
+ 
+ for ac_header in fcntl.h unistd.h
+diff -ur expat.org/configure.ac expat/configure.ac
+--- expat.org/configure.ac	2017-07-12 17:04:34.000000000 +0200
++++ expat/configure.ac	2017-07-12 17:05:31.000000000 +0200
+@@ -130,7 +130,7 @@
+ 
+ 
+ AC_MSG_CHECKING([for getrandom (Linux 3.17+, glibc 2.25+)])
+-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
++AC_LINK_IFELSE([AC_LANG_SOURCE([
+   #include <stdlib.h>  /* for NULL */
+   #include <sys/random.h>
+   int main() {
