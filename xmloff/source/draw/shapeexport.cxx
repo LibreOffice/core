@@ -2313,17 +2313,20 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                     // apply possible changed stream URL to embedded image object
                     if ( bIsEmbeddedImageWithExistingStreamInPackage )
                     {
-                        aStreamURL = sPackageURL;
+                        OUString newStreamURL = sPackageURL;
                         if ( aStr[0] == '#' )
                         {
-                            aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
+                            newStreamURL = newStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
                         }
                         else
                         {
-                            aStreamURL = aStreamURL.concat( aStr );
+                            newStreamURL = newStreamURL.concat( aStr );
                         }
 
-                        xPropSet->setPropertyValue( "GraphicStreamURL", uno::Any(aStreamURL) );
+                        if (newStreamURL != aStreamURL)
+                        {
+                            xPropSet->setPropertyValue("GraphicStreamURL", uno::Any(newStreamURL));
+                        }
                     }
 
                     mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
