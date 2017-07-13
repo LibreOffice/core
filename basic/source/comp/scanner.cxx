@@ -626,7 +626,7 @@ eoln:
     {
         pLine = nullptr;
         bool bRes = NextSym();
-        if( bVBASupportOn && aSym.startsWith(".") )
+        if( aSym.startsWith(".") )
         {
             // object _
             //    .Method
