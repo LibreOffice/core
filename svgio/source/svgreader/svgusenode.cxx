@@ -35,7 +35,8 @@ namespace svgio
             maY(),
             maWidth(),
             maHeight(),
-            maXLink()
+            maXLink(),
+            mbDecomposingSvgNode(false)
         {
         }
 
@@ -143,7 +144,7 @@ namespace svgio
             // try to access link to content
             const SvgNode* pXLink = getDocument().findSvgNodeById(maXLink);
 
-            if(pXLink && Display_none != pXLink->getDisplay())
+            if (pXLink && Display_none != pXLink->getDisplay() && !mbDecomposingSvgNode)
             {
                 // decompose children
                 drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
@@ -151,9 +152,11 @@ namespace svgio
                 // todo: in case mpXLink is a SVGTokenSvg or SVGTokenSymbol the
                 // SVG docs want the getWidth() and getHeight() from this node
                 // to be valid for the subtree.
+                mbDecomposingSvgNode = true;
                 const_cast< SvgNode* >(pXLink)->setAlternativeParent(this);
                 pXLink->decomposeSvgNode(aNewTarget, true);
                 const_cast< SvgNode* >(pXLink)->setAlternativeParent();
+                mbDecomposingSvgNode = false;
 
                 if(!aNewTarget.empty())
                 {
