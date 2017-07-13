@@ -1323,8 +1323,7 @@ void TextEngine::UndoActionStart( sal_uInt16 nId )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        OUString aComment;
-        GetUndoManager().EnterListAction( aComment, OUString(), nId, ViewShellId(-1) );
+        GetUndoManager().EnterListAction( OUString(), OUString(), nId, ViewShellId(-1) );
     }
 }
 
