@@ -38,6 +38,17 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/);
 
 void docAdjustmentChanged(GtkAdjustment*, gpointer);
 
+/// Click handler for the search next button.
+void signalSearchNext(GtkWidget* pButton, gpointer /*pItem*/);
+
+/// Click handler for the search previous button.
+void signalSearchPrev(GtkWidget* pButton, gpointer /*pItem*/);
+
+/// Handles the key-press-event of the search entry widget.
+gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData*/);
+
+void toggleFindAll(GtkWidget* pButton, gpointer /*pItem*/);
+
 void editButtonClicked(GtkWidget*, gpointer);
 
 void replyButtonClicked(GtkWidget*, gpointer);

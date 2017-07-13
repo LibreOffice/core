@@ -36,6 +36,8 @@ struct _GtvApplicationWindow
     GtkWidget* zoomlabel;
     GtkWidget* redlinelabel;
     GtkWidget* findbarlabel;
+    GtkWidget* findbarEntry;
+    GtkWidget* findAll;
 
     GtkWidget* findtoolbar;
 };

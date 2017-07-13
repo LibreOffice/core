@@ -91,6 +91,8 @@ gtv_application_window_init(GtvApplicationWindow* win)
 
     win->findtoolbar = GTK_WIDGET(gtk_builder_get_object(builder, "findtoolbar"));
     win->findbarlabel = GTK_WIDGET(gtk_builder_get_object(builder, "findbar_label"));
+    win->findbarEntry = GTK_WIDGET(gtk_builder_get_object(builder, "findbar_entry"));
+    win->findAll = GTK_WIDGET(gtk_builder_get_object(builder, "findbar_findall"));
     priv->toolbarBroadcast = true;
     priv->partSelectorBroadcast = true;
 

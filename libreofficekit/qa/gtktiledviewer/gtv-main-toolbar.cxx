@@ -101,6 +101,13 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     gtk_builder_add_callback_symbol(builder, "signalAddressbar", G_CALLBACK(signalAddressbar));
     gtk_builder_add_callback_symbol(builder, "signalFormulabar", G_CALLBACK(signalFormulabar));
 
+    // find toolbar
+    // Note: These buttons are not the part of GtvMainToolbar
+    gtk_builder_add_callback_symbol(builder, "signalSearchNext", G_CALLBACK(signalSearchNext));
+    gtk_builder_add_callback_symbol(builder, "signalSearchPrev", G_CALLBACK(signalSearchPrev));
+    gtk_builder_add_callback_symbol(builder, "signalFindbar", G_CALLBACK(signalFindbar));
+    gtk_builder_add_callback_symbol(builder, "toggleFindAll", G_CALLBACK(toggleFindAll));
+
     gtk_builder_connect_signals(builder, nullptr);
 
     gtk_widget_show_all(GTK_WIDGET(toolbar));

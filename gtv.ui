@@ -114,6 +114,7 @@
             <property name="label" translatable="yes">__glade_unnamed_1</property>
             <property name="use_underline">True</property>
             <property name="icon_name">window-close-symbolic</property>
+            <signal name="clicked" handler="toggleFindbar" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -127,7 +128,8 @@
             <child>
               <object class="GtkEntry" id="findbar_entry">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <signal name="key-press-event" handler="signalFindbar" swapped="no"/>
               </object>
             </child>
           </object>
@@ -143,6 +145,7 @@
             <property name="label" translatable="yes">__glade_unnamed_3</property>
             <property name="use_underline">True</property>
             <property name="icon_name">go-down-symbolic</property>
+            <signal name="clicked" handler="signalSearchNext" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -156,6 +159,7 @@
             <property name="label" translatable="yes">toolbutton</property>
             <property name="use_underline">True</property>
             <property name="icon_name">go-up-symbolic</property>
+            <signal name="clicked" handler="signalSearchPrev" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -163,11 +167,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToolButton" id="findbar_findall">
+          <object class="GtkToggleToolButton" id="findbar_findall">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Highlight all</property>
             <property name="use_underline">True</property>
+            <signal name="clicked" handler="toggleFindAll" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>

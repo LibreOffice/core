@@ -530,6 +530,56 @@ void docAdjustmentChanged(GtkAdjustment*, gpointer pData)
         LOKDocViewSigHandlers::configureEvent(window->lokdocview, nullptr, nullptr);
 }
 
+void signalSearchNext(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
+    GtkEntry* pEntry = GTK_ENTRY(window->findbarEntry);
+    const char* pText = gtk_entry_get_text(pEntry);
+    bool findAll = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(window->findAll));
+    lok_doc_view_find_next(LOK_DOC_VIEW(window->lokdocview), pText, findAll);
+}
+
+void signalSearchPrev(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
+    GtkEntry* pEntry = GTK_ENTRY(window->findbarEntry);
+    const char* pText = gtk_entry_get_text(pEntry);
+    bool findAll = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(window->findAll));
+    lok_doc_view_find_prev(LOK_DOC_VIEW(window->lokdocview), pText, findAll);
+}
+
+gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData*/)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pWidget));
+    gtk_label_set_text(GTK_LABEL(window->findbarlabel), "");
+    switch(pEvent->keyval)
+    {
+        case GDK_KEY_Return:
+        {
+            // Search forward.
+            signalSearchNext(pWidget, nullptr);
+            return TRUE;
+        }
+        case GDK_KEY_Escape:
+        {
+            // Hide the findbar.
+            gtk_widget_hide(GTK_WIDGET(window->findtoolbar));
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+void toggleFindAll(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
+    GtkEntry* pEntry = GTK_ENTRY(window->findbarEntry);
+    const char* pText = gtk_entry_get_text(pEntry);
+    bool findAll = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(window->findAll));
+    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(window->findAll), !findAll);
+    lok_doc_view_highlight_all(LOK_DOC_VIEW(window->lokdocview), pText);
+}
+
 void editButtonClicked(GtkWidget* pWidget, gpointer userdata)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pWidget));
