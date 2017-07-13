@@ -911,15 +911,13 @@ void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj
         else
         {
             ODataOutputStream::writeLong( (*aIt).second );
-            OUString aName;
-            ODataOutputStream::writeUTF( aName );
+            ODataOutputStream::writeUTF( OUString() );
         }
     }
     else
     {
         ODataOutputStream::writeLong( 0 );
-        OUString aName;
-        ODataOutputStream::writeUTF( aName );
+        ODataOutputStream::writeUTF( OUString() );
     }
 
     sal_uInt32 nObjLenMark = m_rMarkable->createMark();
