@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_b0dbd4ec",
+        "filename": "svgio/source/svgreader/svgusenode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-13T15:34:45Z",
+      "side": 1,
+      "message": "why set it to true twice? should it reset to false instead?",
+      "revId": "3f486f98bf7e060089b3838864481ee6a1a9c355",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
