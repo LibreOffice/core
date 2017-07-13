@@ -1698,7 +1698,7 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
                     }
                     else
                     {
-                        bResult = sTypeName.equals( rClass );
+                        bResult = sTypeName == rClass;
                     }
                 }
                 break; // finished checking automation object

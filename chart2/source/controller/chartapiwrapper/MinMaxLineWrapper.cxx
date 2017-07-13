@@ -178,7 +178,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
                             xPropSet->setPropertyValue( "Color", rValue );
                         else if( rPropertyName == "LineTransparence" )
                             xPropSet->setPropertyValue( "Transparency", rValue );
-                        else if( rPropertyName.equals( m_aWrappedLineJointProperty.getOuterName() ) )
+                        else if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
                             m_aWrappedLineJointProperty.setPropertyValue( rValue, xPropSet );
                         else
                             xPropSet->setPropertyValue( rPropertyName, rValue );
@@ -221,7 +221,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
             aRet = xPropSet->getPropertyValue( "Color" );
         else if( rPropertyName == "LineTransparence" )
             aRet = xPropSet->getPropertyValue( "Transparency" );
-        else if( rPropertyName.equals( m_aWrappedLineJointProperty.getOuterName() ) )
+        else if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
             aRet = m_aWrappedLineJointProperty.getPropertyValue( xPropSet );
         else
             aRet = xPropSet->getPropertyValue( rPropertyName );
@@ -301,7 +301,7 @@ void SAL_CALL MinMaxLineWrapper::firePropertiesChangeEvent(
 //XPropertyState
 beans::PropertyState SAL_CALL MinMaxLineWrapper::getPropertyState( const OUString& rPropertyName )
 {
-    if( rPropertyName.equals( m_aWrappedLineJointProperty.getOuterName() ) )
+    if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
         return beans::PropertyState_DEFAULT_VALUE;
 
     uno::Any aDefault( this->getPropertyDefault( rPropertyName ) );

@@ -1322,9 +1322,9 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
 
 uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
-    bool bHighContrastMetaFile( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast));
+    bool bHighContrastMetaFile( aFlavor.MimeType == lcl_aGDIMetaFileMIMETypeHighContrast);
     uno::Any aRet;
-    if( ! (bHighContrastMetaFile || aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType)) )
+    if( ! (bHighContrastMetaFile || aFlavor.MimeType == lcl_aGDIMetaFileMIMEType) )
         return aRet;
 
     update();
@@ -1368,8 +1368,8 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
 }
 sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
 {
-    return ( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType) ||
-             aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast) );
+    return ( aFlavor.MimeType == lcl_aGDIMetaFileMIMEType ||
+             aFlavor.MimeType == lcl_aGDIMetaFileMIMETypeHighContrast );
 }
 
 // ____ XUnoTunnel ___
@@ -1480,7 +1480,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                                                 static OUString aChartCLSID = SvGlobalName( SO3_SCH_CLASSID ).GetHexName();
                                                 OUString aCLSID;
                                                 xEmbeddedProps->getPropertyValue( "CLSID" ) >>= aCLSID;
-                                                if( aCLSID.equals(aChartCLSID) )
+                                                if( aCLSID == aChartCLSID )
                                                 {
                                                     uno::Reference< text::XTextContent > xEmbeddedObject( xEmbeddedProps, uno::UNO_QUERY );
                                                     if( xEmbeddedObject.is() )

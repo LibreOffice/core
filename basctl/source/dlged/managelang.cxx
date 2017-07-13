@@ -49,9 +49,9 @@ using namespace ::com::sun::star::uno;
 
 bool localesAreEqual( const Locale& rLocaleLeft, const Locale& rLocaleRight )
 {
-    bool bRet = ( rLocaleLeft.Language.equals( rLocaleRight.Language ) &&
-                  rLocaleLeft.Country.equals( rLocaleRight.Country ) &&
-                  rLocaleLeft.Variant.equals( rLocaleRight.Variant ) );
+    bool bRet = ( rLocaleLeft.Language == rLocaleRight.Language &&
+                  rLocaleLeft.Country == rLocaleRight.Country &&
+                  rLocaleLeft.Variant == rLocaleRight.Variant );
     return bRet;
 }
 

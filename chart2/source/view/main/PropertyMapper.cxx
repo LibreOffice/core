@@ -169,7 +169,7 @@ uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
     sal_Int32 nCount = rPropNames.getLength();
     for( sal_Int32 nN = 0; nN < nCount; nN++ )
     {
-        if(rPropNames[nN].equals(rPropName))
+        if(rPropNames[nN] == rPropName)
             return &rPropValues[nN];
     }
     return nullptr;

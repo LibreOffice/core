@@ -75,7 +75,7 @@ struct lcl_PropNameEquals
     {}
     bool operator() ( const beans::PropertyValue & rProp )
     {
-        return rProp.Name.equals( m_aStr );
+        return rProp.Name == m_aStr;
     }
 private:
     OUString m_aStr;

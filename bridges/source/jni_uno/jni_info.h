@@ -51,7 +51,7 @@ inline bool type_equals(
           OUString::unacquired( &type1->pTypeName );
     OUString const & name2 =
           OUString::unacquired( &type2->pTypeName );
-    return ((type1->eTypeClass == type2->eTypeClass) && name1.equals( name2 ));
+    return ((type1->eTypeClass == type2->eTypeClass) && name1 == name2);
 }
 
 inline bool is_XInterface( typelib_TypeDescriptionReference * type )

@@ -352,14 +352,14 @@ bool DataPointItemConverter::ApplySpecialItem(
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
-                    if( !aOldValue.equals(aNewValue) ||
+                    if( aOldValue != aNewValue ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, "LabelSeparator" , uno::Any( aOldValue ) ) )
                     {
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "LabelSeparator" , uno::Any( aNewValue ) );
                         bChanged = true;
                     }
                 }
-                else if( !aOldValue.equals(aNewValue) )
+                else if( aOldValue != aNewValue )
                 {
                     GetPropertySet()->setPropertyValue( "LabelSeparator" , uno::Any( aNewValue ));
                     bChanged = true;

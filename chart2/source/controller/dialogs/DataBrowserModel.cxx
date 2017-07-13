@@ -110,7 +110,7 @@ bool lcl_SequenceOfSeriesIsShared(
         Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY_THROW );
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeq( xSource->getDataSequences());
         for( sal_Int32 i=0; i<aLSeq.getLength(); ++i )
-            if (aLSeq[i].is() && DataSeriesHelper::getRole(aLSeq[i]).equals(aValuesRole))
+            if (aLSeq[i].is() && DataSeriesHelper::getRole(aLSeq[i]) == aValuesRole)
             {
                 // getValues().is(), because lcl_getRole checked that already
                 bResult = (aValuesRep == aLSeq[i]->getValues()->getSourceRangeRepresentation());
@@ -196,7 +196,7 @@ struct lcl_RolesOfLSeqMatch
 
     bool operator() ( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
     {
-        return DataSeriesHelper::getRole(xLSeq).equals(m_aRole);
+        return DataSeriesHelper::getRole(xLSeq) == m_aRole;
     }
 private:
     OUString m_aRole;
@@ -868,7 +868,7 @@ void DataBrowserModel::updateFromModel()
                             sal_Int32 nSequenceNumberFormatKey = nYAxisNumberFormatKey;
                             OUString aRole = DataSeriesHelper::getRole(aLSeqs[nSeqIdx]);
 
-                            if( aRole.equals( aRoleForDataLabelNumberFormat ) )
+                            if( aRole == aRoleForDataLabelNumberFormat )
                             {
                                 nSequenceNumberFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
                                     Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ), xSeries, -1, xDiagram );

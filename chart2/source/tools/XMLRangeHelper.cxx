@@ -274,7 +274,7 @@ bool lcl_getCellRangeAddressFromXMLString(
         }
         if( bResult &&
             !sTableSecondName.isEmpty() &&
-            ! sTableSecondName.equals( rOutRange.aTableName ))
+            sTableSecondName != rOutRange.aTableName )
             bResult = false;
     }
 
