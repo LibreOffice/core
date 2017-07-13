@@ -112,7 +112,7 @@ gboolean gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCairo)
             cairo_rectangle(pCairo, aRectangle.width, aRectangle.y, 1, aRectangle.height);
             cairo_fill(pCairo);
         }
-        else
+        else if (priv->m_eType == CalcHeaderType::COLUMN)
         {
             aRectangle.x = nPrevious - 1;
             aRectangle.y = 0;
@@ -135,6 +135,17 @@ gboolean gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCairo)
             break;
     }
 
+    if (priv->m_aHeaders.empty() && priv->m_eType == CalcHeaderType::CORNER)
+    {
+        GdkRectangle aRectangle;
+        aRectangle.x = 0;
+        aRectangle.y = 0;
+        aRectangle.width = ROW_HEADER_WIDTH - 1;
+        aRectangle.height = COLUMN_HEADER_HEIGHT - 1;
+        cairo_rectangle(pCairo, aRectangle.x, aRectangle.y, aRectangle.width, aRectangle.height);
+        cairo_stroke(pCairo);
+    }
+
     return FALSE;
 }
 
@@ -147,11 +158,6 @@ gtv_calc_header_bar_draw(GtkWidget* bar, cairo_t* pCairo)
 static void
 gtv_calc_header_bar_class_init(GtvCalcHeaderBarClass* klass)
 {
-    // TODO: Use templates to bind objects maybe ?
-    // But that requires compiling the .ui file into C source requiring
-    // glib-compile-resources (another dependency) as I can't find any gtk
-    // method to set the template from the .ui file directly; can only be set
-    // from gresource
     GTK_WIDGET_CLASS(klass)->draw = gtv_calc_header_bar_draw;
     G_OBJECT_CLASS(klass)->finalize = gtv_calc_header_bar_finalize;
 }
@@ -160,26 +166,28 @@ void gtv_calc_header_bar_configure(GtvCalcHeaderBar* bar, const boost::property_
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(bar)));
     GtvCalcHeaderBarPrivate& priv = getPrivate(bar);
-
-    //gtk_widget_show(rWindow.m_pCornerButton->m_pDrawingArea);
-    boost::property_tree::ptree val = *values;
     priv->m_aHeaders.clear();
-    try
+
+    if (values)
     {
-        for (boost::property_tree::ptree::value_type& rValue : val)
+        boost::property_tree::ptree val = *values;
+        try
         {
-            int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(window->lokdocview), std::atof(rValue.second.get<std::string>("size").c_str())));
-            if (nSize >= bar->m_nPositionPixel)
+            for (boost::property_tree::ptree::value_type& rValue : val)
             {
-                const int nScrolledSize = nSize - bar->m_nPositionPixel;
-                GtvCalcHeaderBarPrivateImpl::Header aHeader(nScrolledSize, rValue.second.get<std::string>("text"));
-                priv->m_aHeaders.push_back(aHeader);
+                int nSize = std::round(lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(window->lokdocview), std::atof(rValue.second.get<std::string>("size").c_str())));
+                if (nSize >= bar->m_nPositionPixel)
+                {
+                    const int nScrolledSize = nSize - bar->m_nPositionPixel;
+                    GtvCalcHeaderBarPrivateImpl::Header aHeader(nScrolledSize, rValue.second.get<std::string>("text"));
+                    priv->m_aHeaders.push_back(aHeader);
+                }
             }
         }
-    }
-    catch (boost::property_tree::ptree_bad_path& rException)
-    {
-        std::cerr << "gtv_calc_header_bar_configure: " << rException.what() << std::endl;
+        catch (boost::property_tree::ptree_bad_path& rException)
+        {
+            std::cerr << "gtv_calc_header_bar_configure: " << rException.what() << std::endl;
+        }
     }
     gtk_widget_show(GTK_WIDGET(bar));
     gtk_widget_queue_draw(GTK_WIDGET(bar));

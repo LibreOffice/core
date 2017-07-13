@@ -252,7 +252,7 @@ gboolean lokdocview_configureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent
 
         gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->rowbar), &aTree.get_child("rows"));
         gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->columnbar), &aTree.get_child("columns"));
-// for corner ?    gtv_calc_header_bar_configure(window->rowbar);
+        gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->cornerarea), nullptr);
     }
 }
 
