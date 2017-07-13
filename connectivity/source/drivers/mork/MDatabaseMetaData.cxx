@@ -262,8 +262,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  )
 
 OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  )
 {
-    OUString aVal;
-    return aVal;
+    return OUString();
 }
 
 OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
@@ -274,8 +273,7 @@ OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  )
 {
-    OUString aVal;
-    return aVal;
+    return OUString();
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  )
@@ -619,14 +617,12 @@ OUString SAL_CALL ODatabaseMetaData::getURL(  )
 
 OUString SAL_CALL ODatabaseMetaData::getUserName(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDriverName(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
@@ -643,20 +639,17 @@ OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  )
 
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSchemaTerm(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion(  )
@@ -676,14 +669,12 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  )
 
 OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  )
