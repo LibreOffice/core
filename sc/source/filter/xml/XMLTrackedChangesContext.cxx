@@ -49,15 +49,15 @@ class ScXMLChangeInfoContext : public ScXMLImportContext
     sal_uInt32                          nParagraphCount;
 
 public:
-    ScXMLChangeInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLChangeInfoContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLBigRangeContext : public ScXMLImportContext
@@ -65,15 +65,12 @@ class ScXMLBigRangeContext : public ScXMLImportContext
     ScBigRange&         rBigRange;
 
 public:
-    ScXMLBigRangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLBigRangeContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScBigRange& rBigRange);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class ScXMLCellContentDeletionContext : public ScXMLImportContext
@@ -94,15 +91,14 @@ class ScXMLCellContentDeletionContext : public ScXMLImportContext
     ScMatrixMode                        nMatrixFlag;
 
 public:
-    ScXMLCellContentDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLCellContentDeletionContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLDependenceContext : public ScXMLImportContext
@@ -110,15 +106,12 @@ class ScXMLDependenceContext : public ScXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
 public:
-    ScXMLDependenceContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLDependenceContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class ScXMLDependingsContext : public ScXMLImportContext
@@ -126,15 +119,12 @@ class ScXMLDependingsContext : public ScXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
 public:
-    ScXMLDependingsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLDependingsContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class ScXMLChangeDeletionContext : public ScXMLImportContext
@@ -142,15 +132,12 @@ class ScXMLChangeDeletionContext : public ScXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
 public:
-    ScXMLChangeDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLChangeDeletionContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class ScXMLDeletionsContext : public ScXMLImportContext
@@ -158,15 +145,12 @@ class ScXMLDeletionsContext : public ScXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
 public:
-    ScXMLDeletionsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLDeletionsContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class ScXMLChangeCellContext;
@@ -213,8 +197,8 @@ class ScXMLChangeCellContext : public ScXMLImportContext
     bool                bFormula;
 
 public:
-    ScXMLChangeCellContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLChangeCellContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScCellValue& rOldCell, OUString& sAddress,
                                       OUString& rFormula, OUString& rFormulaNmsp,
                                       formula::FormulaGrammar::Grammar& rGrammar,
@@ -229,7 +213,7 @@ public:
     bool IsEditCell() { return mpEditTextObj.is(); }
     void SetText(const OUString& sTempText) { sText = sTempText; }
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLPreviousContext : public ScXMLImportContext
@@ -249,15 +233,14 @@ class ScXMLPreviousContext : public ScXMLImportContext
     ScMatrixMode                        nMatrixFlag;
 
 public:
-    ScXMLPreviousContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLPreviousContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLContentChangeContext : public ScXMLImportContext
@@ -266,14 +249,14 @@ class ScXMLContentChangeContext : public ScXMLImportContext
     ScBigRange                          aBigRange;
 
 public:
-    ScXMLContentChangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLContentChangeContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLInsertionContext : public ScXMLImportContext
@@ -281,14 +264,14 @@ class ScXMLInsertionContext : public ScXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
 public:
-    ScXMLInsertionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLInsertionContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLInsertionCutOffContext : public ScXMLImportContext
@@ -341,14 +324,18 @@ class ScXMLDeletionContext : public ScXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
 public:
-    ScXMLDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLDeletionContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-    virtual void EndElement() override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLMovementContext : public ScXMLImportContext
@@ -358,14 +345,14 @@ class ScXMLMovementContext : public ScXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
 public:
-    ScXMLMovementContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLMovementContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLRejectionContext : public ScXMLImportContext
@@ -373,14 +360,14 @@ class ScXMLRejectionContext : public ScXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
 public:
-    ScXMLRejectionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLRejectionContext( ScXMLImport& rImport, sal_Int32 nElement,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const OUString& rLocalName,
-                                                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
@@ -415,71 +402,57 @@ ScXMLTrackedChangesContext::~ScXMLTrackedChangesContext()
     GetScImport().UnlockSolarMutex();
 }
 
-SvXMLImportContext *ScXMLTrackedChangesContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTrackedChangesContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if (nPrefix == XML_NAMESPACE_TABLE)
+    switch (nElement)
     {
-        if (IsXMLToken(rLocalName, XML_CELL_CONTENT_CHANGE))
-        {
-            pContext = new ScXMLContentChangeContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        }
-        else if (IsXMLToken(rLocalName, XML_INSERTION))
-        {
-            pContext = new ScXMLInsertionContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        }
-        else if (IsXMLToken(rLocalName, XML_DELETION))
-        {
-            pContext = new ScXMLDeletionContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        }
-        else if (IsXMLToken(rLocalName, XML_MOVEMENT))
-        {
-            pContext = new ScXMLMovementContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        }
-        else if (IsXMLToken(rLocalName, XML_REJECTION))
-        {
-            pContext = new ScXMLRejectionContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        }
+    case XML_ELEMENT( TABLE, XML_CELL_CONTENT_CHANGE ):
+        pContext = new ScXMLContentChangeContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_INSERTION ):
+        pContext = new ScXMLInsertionContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_DELETION ):
+        pContext = new ScXMLDeletionContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_MOVEMENT ):
+        pContext = new ScXMLMovementContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_REJECTION ):
+        pContext = new ScXMLRejectionContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-ScXMLChangeInfoContext::ScXMLChangeInfoContext(  ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                              const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+ScXMLChangeInfoContext::ScXMLChangeInfoContext( ScXMLImport& rImport,
+                                              sal_Int32 /*nElement*/,
+                                              const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                               ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     aInfo(),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper),
     nParagraphCount(0)
 {
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_OFFICE)
+        for( auto &aIter : *pAttribList )
         {
-            if (IsXMLToken(aLocalName, XML_CHG_AUTHOR))
-            {
-                sAuthorBuffer = sValue;
-            }
-            else if (IsXMLToken(aLocalName, XML_CHG_DATE_TIME))
-            {
-                sDateTimeBuffer = sValue;
-            }
+            sal_Int32 nToken = aIter.getToken();
+            if ( nToken == XML_ELEMENT( OFFICE, XML_CHG_AUTHOR ) )
+                sAuthorBuffer = aIter.toString();
+            else if ( nToken == XML_ELEMENT( OFFICE, XML_CHG_DATE_TIME ) )
+                sDateTimeBuffer = aIter.toString();
         }
     }
 }
@@ -513,7 +486,7 @@ SvXMLImportContext *ScXMLChangeInfoContext::CreateChildContext( sal_uInt16 nPref
     return pContext;
 }
 
-void ScXMLChangeInfoContext::EndElement()
+void SAL_CALL ScXMLChangeInfoContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     aInfo.sUser = sAuthorBuffer.makeStringAndClear();
     ::sax::Converter::parseDateTime(aInfo.aDateTime, nullptr,
@@ -523,11 +496,10 @@ void ScXMLChangeInfoContext::EndElement()
 }
 
 ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScBigRange& rTempBigRange ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                              sal_Int32 /*nElement*/,
+                                              const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+                                              ScBigRange& rTempBigRange ) :
+    ScXMLImportContext( rImport ),
     rBigRange(rTempBigRange)
 {
     bool bColumn(false);
@@ -542,46 +514,49 @@ ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
     sal_Int32 nEndRow(0);
     sal_Int32 nStartTable(0);
     sal_Int32 nEndTable(0);
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        for (auto &aIter : *pAttribList)
         {
-            if (IsXMLToken(aLocalName, XML_COLUMN))
+            switch (aIter.getToken())
             {
-                ::sax::Converter::convertNumber(nColumn, sValue);
+            case XML_ELEMENT( TABLE, XML_COLUMN ):
+                nColumn = aIter.toInt32();
                 bColumn = true;
-            }
-            else if (IsXMLToken(aLocalName, XML_ROW))
-            {
-                ::sax::Converter::convertNumber(nRow, sValue);
+                break;
+            case XML_ELEMENT( TABLE, XML_ROW ):
+                nRow = aIter.toInt32();
                 bRow = true;
-            }
-            else if (IsXMLToken(aLocalName, XML_TABLE))
-            {
-                ::sax::Converter::convertNumber(nTable, sValue);
+                break;
+            case XML_ELEMENT( TABLE, XML_TABLE ):
+                nTable = aIter.toInt32();
                 bTable = true;
+                break;
+            case XML_ELEMENT( TABLE, XML_START_COLUMN ):
+                nStartColumn = aIter.toInt32();
+                break;
+            case XML_ELEMENT( TABLE, XML_END_COLUMN ):
+                nEndColumn = aIter.toInt32();
+                break;
+            case XML_ELEMENT( TABLE, XML_START_ROW ):
+                nStartRow = aIter.toInt32();
+                break;
+            case XML_ELEMENT( TABLE, XML_END_ROW ):
+                nEndRow = aIter.toInt32();
+                break;
+            case XML_ELEMENT( TABLE, XML_START_TABLE ):
+                nStartTable = aIter.toInt32();
+                break;
+            case XML_ELEMENT( TABLE, XML_END_TABLE ):
+                nEndTable = aIter.toInt32();
+                break;
             }
-            else if (IsXMLToken(aLocalName, XML_START_COLUMN))
-                ::sax::Converter::convertNumber(nStartColumn, sValue);
-            else if (IsXMLToken(aLocalName, XML_END_COLUMN))
-                ::sax::Converter::convertNumber(nEndColumn, sValue);
-            else if (IsXMLToken(aLocalName, XML_START_ROW))
-                ::sax::Converter::convertNumber(nStartRow, sValue);
-            else if (IsXMLToken(aLocalName, XML_END_ROW))
-                ::sax::Converter::convertNumber(nEndRow, sValue);
-            else if (IsXMLToken(aLocalName, XML_START_TABLE))
-                ::sax::Converter::convertNumber(nStartTable, sValue);
-            else if (IsXMLToken(aLocalName, XML_END_TABLE))
-                ::sax::Converter::convertNumber(nEndTable, sValue);
         }
     }
+
     if (bColumn)
         nStartColumn = nEndColumn = nColumn;
     if (bRow)
@@ -592,23 +567,17 @@ ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
         nEndColumn, nEndRow, nEndTable);
 }
 
-SvXMLImportContext *ScXMLBigRangeContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLBigRangeContext::createFastChildContext(
+        sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-}
-
-void ScXMLBigRangeContext::EndElement()
-{
+    return new SvXMLImportContext( GetImport() );
 }
 
 ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                              sal_Int32 /*nElement*/,
+                                              const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+                                              ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper) :
+    ScXMLImportContext( rImport ),
     fValue(0.0),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper),
     nID(0),
@@ -618,50 +587,41 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
     nType(css::util::NumberFormat::ALL),
     nMatrixFlag(ScMatrixMode::NONE)
 {
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
-        {
-            if (IsXMLToken(aLocalName, XML_ID))
-                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-        }
+        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
+        if (aIter != pAttribList->end())
+            nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
     }
 }
 
-SvXMLImportContext *ScXMLCellContentDeletionContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellContentDeletionContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if (nPrefix == XML_NAMESPACE_TABLE)
+    switch (nElement)
     {
-        if (IsXMLToken(rLocalName, XML_CHANGE_TRACK_TABLE_CELL))
-        {
-            pContext = new ScXMLChangeCellContext(GetScImport(), nPrefix, rLocalName, xAttrList,
+    case XML_ELEMENT( TABLE, XML_CHANGE_TRACK_TABLE_CELL ):
+        pContext = new ScXMLChangeCellContext(GetScImport(), nElement, xAttrList,
                 maCell, sFormulaAddress, sFormula, sFormulaNmsp, eGrammar, sInputString, fValue, nType, nMatrixFlag, nMatrixCols, nMatrixRows );
-        }
-        else if (IsXMLToken(rLocalName, XML_CELL_ADDRESS))
-        {
-            OSL_ENSURE(!nID, "a action with a ID should not contain a BigRange");
-            pContext = new ScXMLBigRangeContext(GetScImport(), nPrefix, rLocalName, xAttrList, aBigRange);
-        }
+        break;
+    case XML_ELEMENT( TABLE, XML_CELL_ADDRESS ):
+        OSL_ENSURE(!nID, "a action with a ID should not contain a BigRange");
+        pContext = new ScXMLBigRangeContext(GetScImport(), nElement, xAttrList, aBigRange);
+        break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLCellContentDeletionContext::EndElement()
+void SAL_CALL ScXMLCellContentDeletionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScMyCellInfo* pCellInfo(new ScMyCellInfo(maCell, sFormulaAddress, sFormula, eGrammar, sInputString, fValue, nType,
             nMatrixFlag, nMatrixCols, nMatrixRows));
@@ -672,148 +632,114 @@ void ScXMLCellContentDeletionContext::EndElement()
 }
 
 ScXMLDependenceContext::ScXMLDependenceContext(  ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                              sal_Int32 /*nElement*/,
+                                              const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
     sal_uInt32 nID(0);
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
-        {
-            if (IsXMLToken(aLocalName, XML_ID))
-                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-        }
+        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
+        if (aIter != pAttribList->end())
+            nID = ScXMLChangeTrackingImportHelper::GetIDFromString(aIter.toString());
     }
     pChangeTrackingImportHelper->AddDependence(nID);
 }
 
-SvXMLImportContext *ScXMLDependenceContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDependenceContext::createFastChildContext(
+    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-}
-
-void ScXMLDependenceContext::EndElement()
-{
+    return new SvXMLImportContext( GetImport() );
 }
 
 ScXMLDependingsContext::ScXMLDependingsContext(  ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                            const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */,
+                                            sal_Int32 /*nElement*/,
+                                            const uno::Reference<xml::sax::XFastAttributeList>& /* xAttrList */,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
     // here are no attributes
 }
 
-SvXMLImportContext *ScXMLDependingsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDependingsContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if (nPrefix == XML_NAMESPACE_TABLE)
+    // #i80033# read both old (dependence) and new (dependency) elements
+    if (nElement == XML_ELEMENT( TABLE, XML_DEPENDENCE ) ||
+        nElement == XML_ELEMENT( TABLE, XML_DEPENDENCY ))
     {
-        // #i80033# read both old (dependence) and new (dependency) elements
-        if (IsXMLToken(rLocalName, XML_DEPENDENCE) || IsXMLToken(rLocalName, XML_DEPENDENCY))
-            pContext = new ScXMLDependenceContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
+        pContext = new ScXMLDependenceContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLDependingsContext::EndElement()
-{
-}
-
 ScXMLChangeDeletionContext::ScXMLChangeDeletionContext(  ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                              sal_Int32 /*nElement*/,
+                                              const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+                                              ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
+    ScXMLImportContext( rImport ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
     sal_uInt32 nID(0);
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
-        {
-            if (IsXMLToken(aLocalName, XML_ID))
-                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-        }
+        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
+        if (aIter != pAttribList->end())
+            nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
     }
     pChangeTrackingImportHelper->AddDeleted(nID);
 }
 
-SvXMLImportContext *ScXMLChangeDeletionContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLChangeDeletionContext::createFastChildContext(
+        sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-}
-
-void ScXMLChangeDeletionContext::EndElement()
-{
+    return new SvXMLImportContext( GetImport() );
 }
 
 ScXMLDeletionsContext::ScXMLDeletionsContext(  ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                            const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */,
+                                              sal_Int32 /*nElement*/,
+                                            const uno::Reference<xml::sax::XFastAttributeList>& /* xAttrList */,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
     // here are no attributes
 }
 
-SvXMLImportContext *ScXMLDeletionsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDeletionsContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if (nPrefix == XML_NAMESPACE_TABLE)
+    switch (nElement)
     {
-        if (IsXMLToken(rLocalName, XML_CHANGE_DELETION))
-            pContext = new ScXMLChangeDeletionContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        else if (IsXMLToken(rLocalName, XML_CELL_CONTENT_DELETION))
-            pContext = new ScXMLCellContentDeletionContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
+    case XML_ELEMENT( TABLE, XML_CHANGE_DELETION ):
+        pContext = new ScXMLChangeDeletionContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_CELL_CONTENT_DELETION ):
+        pContext = new ScXMLCellContentDeletionContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
-}
-
-void ScXMLDeletionsContext::EndElement()
-{
 }
 
 ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
@@ -898,15 +824,14 @@ void ScXMLChangeTextPContext::EndElement()
 }
 
 ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
-                                                sal_uInt16 nPrfx,
-                                                const OUString& rLName,
-                                                const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                                sal_Int32 /*nElement*/,
+                                                const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                                 ScCellValue& rOldCell, OUString& rAddress,
                                                 OUString& rFormula, OUString& rFormulaNmsp,
                                                 formula::FormulaGrammar::Grammar& rGrammar,
                                                 OUString& rTempInputString, double& fDateTimeValue, sal_uInt16& nType,
                                                 ScMatrixMode& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows )
-    : ScXMLImportContext( rImport, nPrfx, rLName )
+    : ScXMLImportContext( rImport )
     , mrOldCell(rOldCell)
     , rInputString(rTempInputString)
     , rDateTimeValue(fDateTimeValue)
@@ -919,79 +844,66 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
 {
     bool bIsMatrix(false);
     bool bIsCoveredMatrix(false);
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                   sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        for (auto &aIter : *pAttribList)
         {
-            if (IsXMLToken(aLocalName, XML_FORMULA))
+            switch (aIter.getToken())
             {
+            case XML_ELEMENT( TABLE, XML_FORMULA ):
                 bEmpty = false;
-                GetScImport().ExtractFormulaNamespaceGrammar( rFormula, rFormulaNmsp, rGrammar, sValue );
+                GetScImport().ExtractFormulaNamespaceGrammar( rFormula, rFormulaNmsp, rGrammar, aIter.toString() );
                 bFormula = true;
-            }
-            else if (IsXMLToken(aLocalName, XML_CELL_ADDRESS))
-            {
-                rAddress = sValue;
-            }
-            else if (IsXMLToken(aLocalName, XML_MATRIX_COVERED))
-            {
-                bIsCoveredMatrix = IsXMLToken(sValue, XML_TRUE);
-            }
-            else if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_COLUMNS_SPANNED))
-            {
+                break;
+            case XML_ELEMENT( TABLE, XML_CELL_ADDRESS ):
+                rAddress = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_MATRIX_COVERED ):
+                bIsCoveredMatrix = IsXMLToken(aIter, XML_TRUE);
+                break;
+            case XML_ELEMENT( TABLE, XML_NUMBER_MATRIX_COLUMNS_SPANNED ):
                 bIsMatrix = true;
-                ::sax::Converter::convertNumber(nMatrixCols, sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_NUMBER_MATRIX_ROWS_SPANNED))
-            {
+                nMatrixCols = aIter.toInt32();
+                break;
+            case XML_ELEMENT( TABLE, XML_NUMBER_MATRIX_ROWS_SPANNED ):
                 bIsMatrix = true;
-                ::sax::Converter::convertNumber(nMatrixRows, sValue);
-            }
-        }
-        else if (nPrefix == XML_NAMESPACE_OFFICE)
-        {
-            if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
-            {
-                if (IsXMLToken(sValue, XML_FLOAT))
+                nMatrixRows = aIter.toInt32();
+                break;
+            case XML_ELEMENT( OFFICE, XML_VALUE_TYPE ):
+                if (IsXMLToken(aIter, XML_FLOAT))
                     bString = false;
-                else if (IsXMLToken(sValue, XML_DATE))
+                else if (IsXMLToken(aIter, XML_DATE))
                 {
                     rType = css::util::NumberFormat::DATE;
                     bString = false;
                 }
-                else if (IsXMLToken(sValue, XML_TIME))
+                else if (IsXMLToken(aIter, XML_TIME))
                 {
                     rType = css::util::NumberFormat::TIME;
                     bString = false;
                 }
-            }
-            else if (IsXMLToken(aLocalName, XML_VALUE))
-            {
-                ::sax::Converter::convertDouble(fValue, sValue);
+                break;
+            case XML_ELEMENT( OFFICE, XML_VALUE ):
+                ::sax::Converter::convertDouble(fValue, aIter.toString());
                 bEmpty = false;
-            }
-            else if (IsXMLToken(aLocalName, XML_DATE_VALUE))
-            {
+                break;
+            case XML_ELEMENT( OFFICE, XML_DATE_VALUE ):
                 bEmpty = false;
                 if (GetScImport().GetMM100UnitConverter().setNullDate(GetScImport().GetModel()))
-                    GetScImport().GetMM100UnitConverter().convertDateTime(rDateTimeValue, sValue);
+                    GetScImport().GetMM100UnitConverter().convertDateTime(rDateTimeValue, aIter.toString());
                 fValue = rDateTimeValue;
-            }
-            else if (IsXMLToken(aLocalName, XML_TIME_VALUE))
-            {
+                break;
+            case XML_ELEMENT( OFFICE, XML_TIME_VALUE ):
                 bEmpty = false;
-                ::sax::Converter::convertDuration(rDateTimeValue, sValue);
+                ::sax::Converter::convertDuration(rDateTimeValue, aIter.toString());
                 fValue = rDateTimeValue;
             }
         }
     }
+
     if (bIsCoveredMatrix)
         nMatrixFlag = ScMatrixMode::Reference;
     else if (bIsMatrix && nMatrixRows && nMatrixCols)
@@ -1050,7 +962,7 @@ void ScXMLChangeCellContext::CreateTextPContext(bool bIsNewParagraph)
     }
 }
 
-void ScXMLChangeCellContext::EndElement()
+void SAL_CALL ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!bEmpty)
     {
@@ -1098,11 +1010,10 @@ void ScXMLChangeCellContext::EndElement()
 }
 
 ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                              sal_Int32 /*nElement*/,
+                                              const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+                                              ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
+    ScXMLImportContext( rImport ),
     fValue(0.0),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper),
     nID(0),
@@ -1112,82 +1023,69 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
     nType(css::util::NumberFormat::ALL),
     nMatrixFlag(ScMatrixMode::NONE)
 {
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
-        {
-            if (IsXMLToken(aLocalName, XML_ID))
-                nID = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-        }
+        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_ID ) ) );
+        if (aIter != pAttribList->end())
+            nID = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
     }
 }
 
-SvXMLImportContext *ScXMLPreviousContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLPreviousContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if ((nPrefix == XML_NAMESPACE_TABLE) && (IsXMLToken(rLocalName, XML_CHANGE_TRACK_TABLE_CELL)))
-        pContext = new ScXMLChangeCellContext(GetScImport(), nPrefix, rLocalName, xAttrList,
+    if ( nElement == XML_ELEMENT( TABLE, XML_CHANGE_TRACK_TABLE_CELL ) )
+        pContext = new ScXMLChangeCellContext(GetScImport(), nElement, xAttrList,
             maOldCell, sFormulaAddress, sFormula, sFormulaNmsp, eGrammar, sInputString, fValue, nType, nMatrixFlag, nMatrixCols, nMatrixRows);
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLPreviousContext::EndElement()
+void SAL_CALL ScXMLPreviousContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->SetPreviousChange(nID, new ScMyCellInfo(maOldCell, sFormulaAddress, sFormula, eGrammar, sInputString,
         fValue, nType, nMatrixFlag, nMatrixCols, nMatrixRows));
 }
 
 ScXMLContentChangeContext::ScXMLContentChangeContext(  ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                              sal_Int32 /*nElement*/,
+                                              const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+                                              ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
+    ScXMLImportContext( rImport ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
     sal_uInt32 nActionNumber(0);
     sal_uInt32 nRejectingNumber(0);
     ScChangeActionState nActionState(SC_CAS_VIRGIN);
 
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        for (auto &aIter : *pAttribList)
         {
-            if (IsXMLToken(aLocalName, XML_ID))
+            switch (aIter.getToken())
             {
-                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_ACCEPTANCE_STATE))
-            {
-                if (IsXMLToken(sValue, XML_ACCEPTED))
+            case XML_ELEMENT( TABLE, XML_ID ):
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                break;
+            case XML_ELEMENT( TABLE, XML_ACCEPTANCE_STATE ):
+                if (IsXMLToken( aIter, XML_ACCEPTED ))
                     nActionState = SC_CAS_ACCEPTED;
-                else if (IsXMLToken(sValue, XML_REJECTED))
+                else if (IsXMLToken( aIter, XML_REJECTED ))
                     nActionState = SC_CAS_REJECTED;
-            }
-            else if (IsXMLToken(aLocalName, XML_REJECTING_CHANGE_ID))
-            {
-                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
+                break;
+            case XML_ELEMENT( TABLE, XML_REJECTING_CHANGE_ID ):
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
             }
         }
     }
@@ -1198,52 +1096,47 @@ ScXMLContentChangeContext::ScXMLContentChangeContext(  ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetRejectingNumber(nRejectingNumber);
 }
 
-SvXMLImportContext *ScXMLContentChangeContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentChangeContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if ((nPrefix == XML_NAMESPACE_OFFICE) && (IsXMLToken(rLocalName, XML_CHANGE_INFO)))
+    switch (nElement)
     {
-        pContext = new ScXMLChangeInfoContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-    }
-    else if (nPrefix == XML_NAMESPACE_TABLE)
-    {
-        if (IsXMLToken(rLocalName, XML_CELL_ADDRESS))
-        {
-            pContext = new ScXMLBigRangeContext(GetScImport(), nPrefix, rLocalName, xAttrList, aBigRange);
-        }
-        else if (IsXMLToken(rLocalName, XML_DEPENDENCIES))
-        {
-            pContext = new ScXMLDependingsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        }
-        else if (IsXMLToken(rLocalName, XML_DELETIONS))
-            pContext = new ScXMLDeletionsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        else if (IsXMLToken(rLocalName, XML_PREVIOUS))
-        {
-            pContext = new ScXMLPreviousContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        }
+    case XML_ELEMENT( OFFICE, XML_CHANGE_INFO ):
+        pContext = new ScXMLChangeInfoContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_CELL_ADDRESS ):
+        pContext = new ScXMLBigRangeContext(GetScImport(), nElement, xAttrList, aBigRange);
+        break;
+    case XML_ELEMENT( TABLE, XML_DEPENDENCIES ):
+        pContext = new ScXMLDependingsContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_DELETIONS ):
+        pContext = new ScXMLDeletionsContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_PREVIOUS ):
+        pContext = new ScXMLPreviousContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLContentChangeContext::EndElement()
+void SAL_CALL ScXMLContentChangeContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->SetBigRange(aBigRange);
     pChangeTrackingImportHelper->EndChangeAction();
 }
 
 ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                              sal_Int32 /*nElement*/,
+                                              const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+                                              ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
+    ScXMLImportContext( rImport ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
     sal_uInt32 nActionNumber(0);
@@ -1254,50 +1147,42 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
     ScChangeActionState nActionState(SC_CAS_VIRGIN);
     ScChangeActionType nActionType(SC_CAT_INSERT_COLS);
 
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        for (auto &aIter : *pAttribList)
         {
-            if (IsXMLToken(aLocalName, XML_ID))
+            switch (aIter.getToken())
             {
-                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_ACCEPTANCE_STATE))
-            {
-                if (IsXMLToken(sValue, XML_ACCEPTED))
+            case XML_ELEMENT( TABLE, XML_ID ):
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                break;
+            case XML_ELEMENT( TABLE, XML_ACCEPTANCE_STATE ):
+                if (IsXMLToken( aIter, XML_ACCEPTED ))
                     nActionState = SC_CAS_ACCEPTED;
-                else if (IsXMLToken(sValue, XML_REJECTED))
+                else if (IsXMLToken( aIter, XML_REJECTED ))
                     nActionState = SC_CAS_REJECTED;
-            }
-            else if (IsXMLToken(aLocalName, XML_REJECTING_CHANGE_ID))
-            {
-                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_TYPE))
-            {
-                if (IsXMLToken(sValue, XML_ROW))
+                break;
+            case XML_ELEMENT( TABLE, XML_REJECTING_CHANGE_ID ):
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                break;
+            case XML_ELEMENT( TABLE, XML_TYPE ):
+                if (IsXMLToken( aIter, XML_ROW ))
                     nActionType = SC_CAT_INSERT_ROWS;
-                else if (IsXMLToken(sValue, XML_TABLE))
+                else if (IsXMLToken( aIter, XML_TABLE ))
                     nActionType = SC_CAT_INSERT_TABS;
-            }
-            else if (IsXMLToken(aLocalName, XML_POSITION))
-            {
-                ::sax::Converter::convertNumber(nPosition, sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_TABLE))
-            {
-                ::sax::Converter::convertNumber(nTable, sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_COUNT))
-            {
-                ::sax::Converter::convertNumber(nCount, sValue);
+                break;
+            case XML_ELEMENT( TABLE, XML_POSITION ):
+                nPosition = aIter.toInt32();
+                break;
+            case XML_ELEMENT( TABLE, XML_TABLE ):
+                nTable = aIter.toInt32();
+                break;
+            case XML_ELEMENT( TABLE, XML_COUNT ):
+                nCount = aIter.toInt32();;
+                break;
             }
         }
     }
@@ -1309,31 +1194,31 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetPosition(nPosition, nCount, nTable);
 }
 
-SvXMLImportContext *ScXMLInsertionContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLInsertionContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if ((nPrefix == XML_NAMESPACE_OFFICE) && (IsXMLToken(rLocalName, XML_CHANGE_INFO)))
+    switch (nElement)
     {
-        pContext = new ScXMLChangeInfoContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-    }
-    else if (nPrefix == XML_NAMESPACE_TABLE)
-    {
-        if (IsXMLToken(rLocalName, XML_DEPENDENCIES))
-            pContext = new ScXMLDependingsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        else if (IsXMLToken(rLocalName, XML_DELETIONS))
-            pContext = new ScXMLDeletionsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
+    case XML_ELEMENT( OFFICE, XML_CHANGE_INFO ):
+        pContext = new ScXMLChangeInfoContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_DEPENDENCIES ):
+        pContext = new ScXMLDependingsContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_DELETIONS ):
+        pContext = new ScXMLDeletionsContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLInsertionContext::EndElement()
+void SAL_CALL ScXMLInsertionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->EndChangeAction();
 }
@@ -1478,11 +1363,10 @@ void ScXMLCutOffsContext::EndElement()
 }
 
 ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                            sal_Int32 /*nElement*/,
+                                            const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
     sal_uInt32 nActionNumber(0);
@@ -1493,54 +1377,47 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
     ScChangeActionState nActionState(SC_CAS_VIRGIN);
     ScChangeActionType nActionType(SC_CAT_DELETE_COLS);
 
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        for (auto &aIter : *pAttribList)
         {
-            if (IsXMLToken(aLocalName, XML_ID))
+            sal_Int32 nToken = aIter.getToken();
+            switch (nToken)
             {
-                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_ACCEPTANCE_STATE))
-            {
-                if (IsXMLToken(sValue, XML_ACCEPTED))
+            case XML_ELEMENT( TABLE, XML_ID ):
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                break;
+            case XML_ELEMENT( TABLE, XML_ACCEPTANCE_STATE ):
+                if (IsXMLToken( aIter, XML_ACCEPTED ))
                     nActionState = SC_CAS_ACCEPTED;
-                else if (IsXMLToken(sValue, XML_REJECTED))
+                else if (IsXMLToken( aIter, XML_REJECTED ))
                     nActionState = SC_CAS_REJECTED;
-            }
-            else if (IsXMLToken(aLocalName, XML_REJECTING_CHANGE_ID))
-            {
-                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_TYPE))
-            {
-                if (IsXMLToken(sValue, XML_ROW))
+                break;
+            case XML_ELEMENT( TABLE, XML_REJECTING_CHANGE_ID ):
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                break;
+            case XML_ELEMENT( TABLE, XML_TYPE ):
+                if (IsXMLToken( aIter, XML_ROW ))
                 {
                     nActionType = SC_CAT_DELETE_ROWS;
                 }
-                else if (IsXMLToken(aLocalName, XML_TABLE))
+                else if ((nToken & TOKEN_MASK) == XML_TABLE)
                 {
                     nActionType = SC_CAT_DELETE_TABS;
                 }
-            }
-            else if (IsXMLToken(aLocalName, XML_POSITION))
-            {
-                ::sax::Converter::convertNumber(nPosition, sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_TABLE))
-            {
-                ::sax::Converter::convertNumber(nTable, sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_MULTI_DELETION_SPANNED))
-            {
-                ::sax::Converter::convertNumber(nMultiSpanned, sValue);
+                break;
+            case XML_ELEMENT( TABLE, XML_POSITION ):
+                nPosition = aIter.toInt32();
+                break;
+            case XML_ELEMENT( TABLE, XML_TABLE ):
+                nTable = aIter.toInt32();
+                break;
+            case XML_ELEMENT( TABLE, XML_MULTI_DELETION_SPANNED ):
+                nMultiSpanned = aIter.toInt32();
+                break;
             }
         }
     }
@@ -1559,17 +1436,9 @@ SvXMLImportContext *ScXMLDeletionContext::CreateChildContext( sal_uInt16 nPrefix
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if ((nPrefix == XML_NAMESPACE_OFFICE) && (IsXMLToken(rLocalName, XML_CHANGE_INFO)))
+    if (nPrefix == XML_NAMESPACE_TABLE)
     {
-        pContext = new ScXMLChangeInfoContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-    }
-    else if (nPrefix == XML_NAMESPACE_TABLE)
-    {
-        if (IsXMLToken(rLocalName, XML_DEPENDENCIES))
-            pContext = new ScXMLDependingsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        else if (IsXMLToken(rLocalName, XML_DELETIONS))
-            pContext = new ScXMLDeletionsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        else if (IsXMLToken(rLocalName, XML_CUT_OFFS) || rLocalName == "cut_offs")
+        if (IsXMLToken(rLocalName, XML_CUT_OFFS) || rLocalName == "cut_offs")
             pContext = new ScXMLCutOffsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
         else
         {
@@ -1583,48 +1452,67 @@ SvXMLImportContext *ScXMLDeletionContext::CreateChildContext( sal_uInt16 nPrefix
     return pContext;
 }
 
-void ScXMLDeletionContext::EndElement()
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDeletionContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLImportContext *pContext(nullptr);
+
+    switch (nElement)
+    {
+    case XML_ELEMENT( OFFICE, XML_CHANGE_INFO ):
+        pContext = new ScXMLChangeInfoContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_DEPENDENCIES ):
+        pContext = new ScXMLDependingsContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_DELETIONS ):
+        pContext = new ScXMLDeletionsContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    }
+
+    if ( !pContext )
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
+
+void SAL_CALL ScXMLDeletionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->EndChangeAction();
 }
 
 ScXMLMovementContext::ScXMLMovementContext( ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                            sal_Int32 /*nElement*/,
+                                            const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
     sal_uInt32 nActionNumber(0);
     sal_uInt32 nRejectingNumber(0);
     ScChangeActionState nActionState(SC_CAS_VIRGIN);
 
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        for (auto &aIter : *pAttribList)
         {
-            if (IsXMLToken(aLocalName, XML_ID))
+            switch (aIter.getToken())
             {
-                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_ACCEPTANCE_STATE))
-            {
-                if (IsXMLToken(sValue, XML_ACCEPTED))
+            case XML_ELEMENT( TABLE, XML_ID ):
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                break;
+            case XML_ELEMENT( TABLE, XML_ACCEPTANCE_STATE ):
+                if (IsXMLToken( aIter, XML_ACCEPTED ))
                     nActionState = SC_CAS_ACCEPTED;
-                else if (IsXMLToken(sValue, XML_REJECTED))
+                else if (IsXMLToken( aIter, XML_REJECTED ))
                     nActionState = SC_CAS_REJECTED;
-            }
-            else if (IsXMLToken(aLocalName, XML_REJECTING_CHANGE_ID))
-            {
-                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
+                break;
+            case XML_ELEMENT( TABLE, XML_REJECTING_CHANGE_ID ):
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                break;
             }
         }
     }
@@ -1635,77 +1523,74 @@ ScXMLMovementContext::ScXMLMovementContext( ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetRejectingNumber(nRejectingNumber);
 }
 
-SvXMLImportContext *ScXMLMovementContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMovementContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if ((nPrefix == XML_NAMESPACE_OFFICE) && (IsXMLToken(rLocalName, XML_CHANGE_INFO)))
+    switch (nElement)
     {
-        pContext = new ScXMLChangeInfoContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-    }
-    else if (nPrefix == XML_NAMESPACE_TABLE)
-    {
-        if (IsXMLToken(rLocalName, XML_DEPENDENCIES))
-            pContext = new ScXMLDependingsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        else if (IsXMLToken(rLocalName, XML_DELETIONS))
-            pContext = new ScXMLDeletionsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        else if (IsXMLToken(rLocalName, XML_SOURCE_RANGE_ADDRESS))
-            pContext = new ScXMLBigRangeContext(GetScImport(), nPrefix, rLocalName, xAttrList, aSourceRange);
-        else if (IsXMLToken(rLocalName, XML_TARGET_RANGE_ADDRESS))
-            pContext = new ScXMLBigRangeContext(GetScImport(), nPrefix, rLocalName, xAttrList, aTargetRange);
+    case XML_ELEMENT( OFFICE, XML_CHANGE_INFO ):
+        pContext = new ScXMLChangeInfoContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_DEPENDENCIES ):
+        pContext = new ScXMLDependingsContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_DELETIONS ):
+        pContext = new ScXMLDeletionsContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_SOURCE_RANGE_ADDRESS ):
+        pContext = new ScXMLBigRangeContext(GetScImport(), nElement, xAttrList, aSourceRange);
+        break;
+    case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
+        pContext = new ScXMLBigRangeContext(GetScImport(), nElement, xAttrList, aTargetRange);
+        break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLMovementContext::EndElement()
+void SAL_CALL ScXMLMovementContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->SetMoveRanges(aSourceRange, aTargetRange);
     pChangeTrackingImportHelper->EndChangeAction();
 }
 
 ScXMLRejectionContext::ScXMLRejectionContext( ScXMLImport& rImport,
-                                              sal_uInt16 nPrfx,
-                                                   const OUString& rLName,
-                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                              sal_Int32 /*nElement*/,
+                                              const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
+                                              ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
+    ScXMLImportContext( rImport ),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper)
 {
     sal_uInt32 nActionNumber(0);
     sal_uInt32 nRejectingNumber(0);
     ScChangeActionState nActionState(SC_CAS_VIRGIN);
 
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
+        for (auto &aIter : *pAttribList)
         {
-            if (IsXMLToken(aLocalName, XML_ID))
+            switch (aIter.getToken())
             {
-                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
-            }
-            else if (IsXMLToken(aLocalName, XML_ACCEPTANCE_STATE))
-            {
-                if (IsXMLToken(sValue, XML_ACCEPTED))
+            case XML_ELEMENT( TABLE, XML_ID ):
+                nActionNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                break;
+            case XML_ELEMENT( TABLE, XML_ACCEPTANCE_STATE ):
+                if (IsXMLToken( aIter, XML_ACCEPTED ))
                     nActionState = SC_CAS_ACCEPTED;
-                else if (IsXMLToken(sValue, XML_REJECTED))
+                else if (IsXMLToken( aIter, XML_REJECTED ))
                     nActionState = SC_CAS_REJECTED;
-            }
-            else if (IsXMLToken(aLocalName, XML_REJECTING_CHANGE_ID))
-            {
-                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString(sValue);
+                break;
+            case XML_ELEMENT( TABLE, XML_REJECTING_CHANGE_ID ):
+                nRejectingNumber = ScXMLChangeTrackingImportHelper::GetIDFromString( aIter.toString() );
+                break;
             }
         }
     }
@@ -1716,31 +1601,31 @@ ScXMLRejectionContext::ScXMLRejectionContext( ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetRejectingNumber(nRejectingNumber);
 }
 
-SvXMLImportContext *ScXMLRejectionContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLRejectionContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 
-    if ((nPrefix == XML_NAMESPACE_OFFICE) && (IsXMLToken(rLocalName, XML_CHANGE_INFO)))
+    switch (nElement)
     {
-        pContext = new ScXMLChangeInfoContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-    }
-    else if (nPrefix == XML_NAMESPACE_TABLE)
-    {
-        if (IsXMLToken(rLocalName, XML_DEPENDENCIES))
-            pContext = new ScXMLDependingsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        else if (IsXMLToken(rLocalName, XML_DELETIONS))
-            pContext = new ScXMLDeletionsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
+    case XML_ELEMENT( OFFICE, XML_CHANGE_INFO ):
+        pContext = new ScXMLChangeInfoContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_DEPENDENCIES ):
+        pContext = new ScXMLDependingsContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
+    case XML_ELEMENT( TABLE, XML_DELETIONS ):
+        pContext = new ScXMLDeletionsContext(GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+        break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLRejectionContext::EndElement()
+void SAL_CALL ScXMLRejectionContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pChangeTrackingImportHelper->EndChangeAction();
 }
