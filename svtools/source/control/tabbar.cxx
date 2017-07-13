@@ -2243,10 +2243,9 @@ OUString TabBar::GetHelpText(sal_uInt16 nPageId) const
 OString TabBar::GetHelpId(sal_uInt16 nPageId) const
 {
     sal_uInt16 nPos = GetPagePos(nPageId);
-    OString aRet;
     if (nPos != PAGE_NOT_FOUND)
         return mpImpl->mpItemList[nPos]->maHelpId;
-    return aRet;
+    return OString();
 }
 
 bool TabBar::StartDrag(const CommandEvent& rCEvt, vcl::Region& rRegion)
