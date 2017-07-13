@@ -2458,27 +2458,6 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             ImplHandleClose( pWindow );
             break;
 
-        case SalEvent::Shutdown:
-            {
-                static bool bInQueryExit = false;
-                if( !bInQueryExit )
-                {
-                    bInQueryExit = true;
-                    if ( GetpApp()->QueryExit() )
-                    {
-                        // Message-Schleife beenden
-                        Application::Quit();
-                        return false;
-                    }
-                    else
-                    {
-                        bInQueryExit = false;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
         case SalEvent::SettingsChanged:
         case SalEvent::PrinterChanged:
         case SalEvent::DisplayChanged:

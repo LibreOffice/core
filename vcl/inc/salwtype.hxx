@@ -49,7 +49,6 @@ enum class SalEvent {
     GetFocus,
     LoseFocus,
     Close,
-    Shutdown,
     SettingsChanged,
     PrinterChanged,
     DisplayChanged,
