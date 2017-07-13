@@ -81,7 +81,7 @@ public:
         css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());  \
         const OUString* pSupported = aSupported.getConstArray(); \
         for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)    \
-            if (pSupported->equals(_rServiceName))  \
+            if (*pSupported == _rServiceName)  \
                 return true;    \
     \
         return false;   \

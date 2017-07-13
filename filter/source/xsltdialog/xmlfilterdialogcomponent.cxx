@@ -334,7 +334,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsltdlg_component_getFactory(
         Reference< XSingleServiceFactory > xFactory;
 
         OUString implName = OUString::createFromAscii( pImplName );
-        if ( implName.equals(XMLFilterDialogComponent_getImplementationName()) )
+        if ( implName == XMLFilterDialogComponent_getImplementationName() )
         {
             xFactory = createOneInstanceFactory(
                 static_cast< XMultiServiceFactory * >( pServiceManager ),

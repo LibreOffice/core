@@ -685,7 +685,7 @@ bool TypeDetection::impl_getPreselectionForType(
                                         ++pIt                       )
         {
             OUString sCheckExtension(pIt->toAsciiLowerCase());
-            if (sCheckExtension.equals(sExtension))
+            if (sCheckExtension == sExtension)
             {
                 bBreakDetection        = true;
                 bMatchByExtension      = true;

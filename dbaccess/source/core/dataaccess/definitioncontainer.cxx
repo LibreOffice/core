@@ -497,7 +497,7 @@ namespace
             {
                 OUString sCurrentName;
                 OSL_VERIFY( xProps->getPropertyValue( PROPERTY_NAME ) >>= sCurrentName );
-                if ( sCurrentName.equals( _rName ) )
+                if ( sCurrentName == _rName )
                     return true;
             }
         }

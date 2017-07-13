@@ -158,7 +158,7 @@ bool isSubSet(const css::uno::Any& aSubSet,
                 (aSet    >>= v2)
                )
             {
-                bool bIs = (v1.equals(v2));
+                bool bIs = v1 == v2;
                 FILTER_CONFIG_LOG_1_("isSubSet() ... check for string types => return %s\n", bIs ? "TRUE" : "FALSE")
                 return bIs;
             }
@@ -176,10 +176,7 @@ bool isSubSet(const css::uno::Any& aSubSet,
                 (aSet    >>= p2)
                )
             {
-                bool bIs = (
-                                (p1.Name.equals(p2.Name)     ) &&
-                                (isSubSet(p1.Value, p2.Value))
-                               );
+                bool bIs = (p1.Name == p2.Name) && isSubSet(p1.Value, p2.Value);
                 FILTER_CONFIG_LOG_1_("isSubSet() ... check for structured types [PropertyValue] => return %s\n", bIs ? "TRUE" : "FALSE")
                 return bIs;
             }
@@ -192,10 +189,7 @@ bool isSubSet(const css::uno::Any& aSubSet,
                 (aSet    >>= n2)
                )
             {
-                bool bIs = (
-                                (n1.Name.equals(n2.Name)     ) &&
-                                (isSubSet(n1.Value, n2.Value))
-                               );
+                bool bIs = (n1.Name == n2.Name) && isSubSet(n1.Value, n2.Value);
                 FILTER_CONFIG_LOG_1_("isSubSet() ... check for structured types [NamedValue] => return %s\n", bIs ? "TRUE" : "FALSE")
                 return bIs;
             }

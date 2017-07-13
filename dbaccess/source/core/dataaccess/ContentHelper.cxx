@@ -586,7 +586,7 @@ void SAL_CALL OContentHelper::setParent( const Reference< XInterface >& _xParent
 void OContentHelper::impl_rename_throw(const OUString& _sNewName,bool _bNotify )
 {
     osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
-    if ( _sNewName.equals( m_pImpl->m_aProps.aTitle ) )
+    if ( _sNewName == m_pImpl->m_aProps.aTitle )
         return;
     try
     {

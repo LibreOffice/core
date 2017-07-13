@@ -148,16 +148,16 @@ SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
                     sal_Int32 lastSlashIndex = xModel->getURL().lastIndexOf( '/' );
                     if ( lastSlashIndex > -1 )
                     {
-                        bDocNameNoPathMatch = xModel->getURL().copy( lastSlashIndex + 1 ).equals( aURL );
+                        bDocNameNoPathMatch = xModel->getURL().copy( lastSlashIndex + 1 ) == aURL;
                         if ( !bDocNameNoPathMatch )
                         {
                             OUString aTmpName = "'" + xModel->getURL().copy( lastSlashIndex + 1 ) + "'";
-                            bDocNameNoPathMatch = aTmpName.equals( aURL );
+                            bDocNameNoPathMatch = aTmpName == aURL;
                         }
                     }
                 }
 
-                if ( aURL.equals( xModel->getURL() ) || bDocNameNoPathMatch )
+                if ( aURL == xModel->getURL() || bDocNameNoPathMatch )
                 {
                     pFoundShell = pShell;
                     break;

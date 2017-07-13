@@ -943,7 +943,7 @@ std::vector< MigrationModuleInfo > MigrationImpl::dectectUIChangesForAllModules(
                 for (sal_Int32 j=0; j<lToolbars.getLength(); ++j) {
                     OUString sToolbarName = lToolbars[j];
                     if (sToolbarName.getLength()>=nCustomLen &&
-                        sToolbarName.copy(0, nCustomLen).equals(RESOURCEURL_CUSTOM_ELEMENT))
+                        sToolbarName.copy(0, nCustomLen) == RESOURCEURL_CUSTOM_ELEMENT)
                         continue;
 
                     aModuleInfo.sModuleShortName = sModuleShortName;
@@ -1108,7 +1108,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                         }
                     }
 
-                    if (sCmd.equals(it->m_sPrevSibling))
+                    if (sCmd == it->m_sPrevSibling)
                         break;
                 }
 
@@ -1131,7 +1131,7 @@ uno::Reference< ui::XUIConfigurationManager > NewVersionUIInfo::getConfigManager
     uno::Reference< ui::XUIConfigurationManager > xCfgManager;
 
     for ( const css::beans::PropertyValue& rProp : m_lCfgManagerSeq) {
-        if (rProp.Name.equals(sModuleShortName)) {
+        if (rProp.Name == sModuleShortName) {
             rProp.Value >>= xCfgManager;
             break;
         }
@@ -1145,7 +1145,7 @@ uno::Reference< container::XIndexContainer > NewVersionUIInfo::getNewMenubarSett
     uno::Reference< container::XIndexContainer > xNewMenuSettings;
 
     for (sal_Int32 i=0; i<m_lNewVersionMenubarSettingsSeq.getLength(); ++i) {
-        if (m_lNewVersionMenubarSettingsSeq[i].Name.equals(sModuleShortName)) {
+        if (m_lNewVersionMenubarSettingsSeq[i].Name == sModuleShortName) {
             m_lNewVersionMenubarSettingsSeq[i].Value >>= xNewMenuSettings;
             break;
         }
@@ -1159,11 +1159,11 @@ uno::Reference< container::XIndexContainer > NewVersionUIInfo::getNewToolbarSett
     uno::Reference< container::XIndexContainer > xNewToolbarSettings;
 
     for (sal_Int32 i=0; i<m_lNewVersionToolbarSettingsSeq.getLength(); ++i) {
-        if (m_lNewVersionToolbarSettingsSeq[i].Name.equals(sModuleShortName)) {
+        if (m_lNewVersionToolbarSettingsSeq[i].Name == sModuleShortName) {
             uno::Sequence< beans::PropertyValue > lToolbarSettingsSeq;
             m_lNewVersionToolbarSettingsSeq[i].Value >>= lToolbarSettingsSeq;
             for (sal_Int32 j=0; j<lToolbarSettingsSeq.getLength(); ++j) {
-                if (lToolbarSettingsSeq[j].Name.equals(sToolbarName)) {
+                if (lToolbarSettingsSeq[j].Name == sToolbarName) {
                     lToolbarSettingsSeq[j].Value >>= xNewToolbarSettings;
                     break;
                 }

@@ -493,7 +493,7 @@ namespace
     {
         Reference< XDatabaseMetaData > xMetaLHS( _rxLHS->getMetaData(), UNO_QUERY_THROW );
         Reference< XDatabaseMetaData > xMetaRHS( _rxRHS->getMetaData(), UNO_QUERY_THROW );
-        return xMetaLHS->getURL().equals( xMetaRHS->getURL() );
+        return xMetaLHS->getURL() == xMetaRHS->getURL();
     }
 }
 
