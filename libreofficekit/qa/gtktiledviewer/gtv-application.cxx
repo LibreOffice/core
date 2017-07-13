@@ -80,13 +80,6 @@ gtv_application_handle_local_options(GApplication* app, GVariantDict* options)
 {
     gint ret = -1;
 
-    if (g_variant_dict_contains(options, "version"))
-    {
-        // TODO: query lokit for version here
-        g_print("LOKit version:");
-        ret = 1;
-    }
-
     GtvApplicationPrivate* priv = getPrivate(GTV_APPLICATION(app));
     // This is mandatory
     if (g_variant_dict_contains(options, "lo-path"))
@@ -100,7 +93,24 @@ gtv_application_handle_local_options(GApplication* app, GVariantDict* options)
         }
     }
     else
-        ret = 1; // Cannot afford to continue in absense of this param
+    {
+        g_print("--lo-path= is mandatory. Please provide the path to LO installation.\n");
+        return 1; // Cannot afford to continue in absense of this param
+    }
+
+    if (g_variant_dict_contains(options, "version"))
+    {
+        if (!priv->m_pRenderingArgs->m_aLoPath.empty())
+        {
+            // FIXME: Crashes for some reason
+            GtkWidget* pDocView = lok_doc_view_new(priv->m_pRenderingArgs->m_aLoPath.c_str(), nullptr, nullptr);
+            const gchar* versionInfo = lok_doc_view_get_version_info(LOK_DOC_VIEW(pDocView));
+            if (versionInfo)
+                g_print("LOKit version: %s", versionInfo);
+        }
+
+        return 1; // exit anyway
+    }
 
     // Optional args
     if (g_variant_dict_contains(options, "user-profile"))
