@@ -124,6 +124,11 @@ Public Function pName() As String		&apos;	For compatibility with &lt; V0.9.0
 End Function	&apos;	pName (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Property Get ObjectType() As String
+	ObjectType = _PropertyGet(&quot;ObjectType&quot;)
+End Property		&apos;	ObjectType (get)
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Property Get OnApproveCursorMove() As Variant
 	OnApproveCursorMove = _PropertyGet(&quot;OnApproveCursorMove&quot;)
 End Property	&apos;	OnApproveCursorMove (get)
@@ -257,11 +262,6 @@ End Property	&apos;	OnUnloading (get)
 Property Let OnUnloading(ByVal pvValue As Variant)
 	Call _PropertySet(&quot;OnUnloading&quot;, pvValue)
 End Property	&apos;	OnUnloading (set)
-
-REM -----------------------------------------------------------------------------------------------------------------------
-Property Get ObjectType() As String
-	ObjectType = _PropertyGet(&quot;ObjectType&quot;)
-End Property		&apos;	ObjectType (get)
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function OptionGroup(ByVal Optional pvGroupName As Variant) As Variant
@@ -642,7 +642,7 @@ Dim oDatabase As Object, vBookmark As Variant, oObject As Object
 			End With
 			Set _PropertyGet = oObject
 		Case UCase(&quot;RecordSource&quot;)
-			_PropertyGet = DatabaseForm.ActiveCommand
+			_PropertyGet = DatabaseForm.Command
 		Case Else
 			Goto Trace_Error
 	End Select
