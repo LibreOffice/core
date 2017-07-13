@@ -629,15 +629,11 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 {
                     case 0x038F: pImpRec->nXAlign = nUDData; break;
                     case 0x0390:
-                        delete pImpRec->pXRelTo;
-                        pImpRec->pXRelTo = new sal_uInt32;
-                        *(pImpRec->pXRelTo) = nUDData;
+                        pImpRec->nXRelTo = nUDData;
                         break;
                     case 0x0391: pImpRec->nYAlign = nUDData; break;
                     case 0x0392:
-                        delete pImpRec->pYRelTo;
-                        pImpRec->pYRelTo = new sal_uInt32;
-                        *(pImpRec->pYRelTo) = nUDData;
+                        pImpRec->nYRelTo = nUDData;
                         break;
                     case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
                     case 0x0393:
@@ -993,8 +989,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
         if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
         {
-            delete pImpRec->pWrapPolygon;
-            pImpRec->pWrapPolygon = nullptr;
+            pImpRec->pWrapPolygon.reset();
 
             sal_uInt16 nNumElemVert(0), nNumElemMemVert(0), nElemSizeVert(0);
             rSt.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
@@ -1007,7 +1002,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             }
             if (bOk)
             {
-                pImpRec->pWrapPolygon = new tools::Polygon(nNumElemVert);
+                pImpRec->pWrapPolygon.reset( new tools::Polygon(nNumElemVert) );
                 for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
                 {
                     sal_Int32 nX(0), nY(0);

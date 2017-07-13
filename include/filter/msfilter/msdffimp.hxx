@@ -27,6 +27,7 @@
 #include <utility>
 #include <vector>
 
+#include <boost/optional.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/stl_types.hxx>
@@ -210,7 +211,8 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     static const int RELTO_DEFAULT = 2;
 
     SdrObject*      pObj;
-    tools::Polygon* pWrapPolygon;
+    std::unique_ptr<tools::Polygon>
+                    pWrapPolygon;
     std::unique_ptr<char[]>
                     pClientAnchorBuffer;
     sal_uInt32      nClientAnchorLen;
@@ -218,9 +220,9 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
                     pClientDataBuffer;
     sal_uInt32      nClientDataLen;
     sal_uInt32      nXAlign;
-    sal_uInt32      *pXRelTo;
+    boost::optional<sal_uInt32> nXRelTo;
     sal_uInt32      nYAlign;
-    sal_uInt32      *pYRelTo;
+    boost::optional<sal_uInt32> nYRelTo;
     sal_uInt32      nLayoutInTableCell;
     sal_uInt32      nFlags;
     sal_Int32       nDxTextLeft;    ///< distance of text box from surrounding shape

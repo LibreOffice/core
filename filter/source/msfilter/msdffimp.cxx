@@ -5055,15 +5055,11 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 {
                     case 0x038F: pImpRec->nXAlign = nUDData; break;
                     case 0x0390:
-                        delete pImpRec->pXRelTo;
-                        pImpRec->pXRelTo = new sal_uInt32;
-                        *(pImpRec->pXRelTo) = nUDData;
+                        pImpRec->nXRelTo = nUDData;
                         break;
                     case 0x0391: pImpRec->nYAlign = nUDData; break;
                     case 0x0392:
-                        delete pImpRec->pYRelTo;
-                        pImpRec->pYRelTo = new sal_uInt32;
-                        *(pImpRec->pYRelTo) = nUDData;
+                        pImpRec->nYRelTo = nUDData;
                         break;
                     case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
                     case 0x0393:
@@ -5424,8 +5420,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
         if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
         {
-            delete pTextImpRec->pWrapPolygon;
-            pTextImpRec->pWrapPolygon = nullptr;
+            pTextImpRec->pWrapPolygon.reset();
             sal_uInt16 nNumElemVert(0), nNumElemMemVert(0), nElemSizeVert(0);
             rSt.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
             bool bOk = false;
@@ -5435,7 +5430,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             }
             if (bOk)
             {
-                pTextImpRec->pWrapPolygon = new tools::Polygon(nNumElemVert);
+                pTextImpRec->pWrapPolygon.reset(new tools::Polygon(nNumElemVert));
                 for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
                 {
                     sal_Int32 nX(0), nY(0);
@@ -7287,9 +7282,7 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       pClientDataBuffer( nullptr ),
       nClientDataLen(    0 ),
       nXAlign( 0 ), // position n cm from left
-      pXRelTo( nullptr ), //   relative to column
       nYAlign( 0 ), // position n cm below
-      pYRelTo( nullptr ), //   relative to paragraph
       nLayoutInTableCell( 0 ), // element is laid out in table cell
       nFlags( 0 ),
       nDxTextLeft( 144 ),
@@ -7325,9 +7318,9 @@ SvxMSDffImportRec::SvxMSDffImportRec()
 SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
     : pObj( rCopy.pObj ),
       nXAlign( rCopy.nXAlign ),
-      pXRelTo( nullptr ),
+      nXRelTo( rCopy.nXRelTo ),
       nYAlign( rCopy.nYAlign ),
-      pYRelTo( nullptr ),
+      nYRelTo( rCopy.nYRelTo ),
       nLayoutInTableCell( rCopy.nLayoutInTableCell ),
       nFlags( rCopy.nFlags ),
       nDxTextLeft( rCopy.nDxTextLeft    ),
@@ -7349,16 +7342,6 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
       relativeHorizontalWidth( rCopy.relativeHorizontalWidth ),
       isHorizontalRule( rCopy.isHorizontalRule )
 {
-    if (rCopy.pXRelTo)
-    {
-       pXRelTo = new sal_uInt32;
-       *pXRelTo = *(rCopy.pXRelTo);
-    }
-    if (rCopy.pYRelTo)
-    {
-       pYRelTo = new sal_uInt32;
-       *pYRelTo = *(rCopy.pYRelTo);
-    }
     eLineStyle       = rCopy.eLineStyle; // GPF-Bug #66227#
     eLineDashing     = rCopy.eLineDashing;
     bDrawHell        = rCopy.bDrawHell;
@@ -7390,16 +7373,11 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
         pClientDataBuffer = nullptr;
 
     if (rCopy.pWrapPolygon)
-        pWrapPolygon = new tools::Polygon(*rCopy.pWrapPolygon);
-    else
-        pWrapPolygon = nullptr;
+        pWrapPolygon.reset( new tools::Polygon(*rCopy.pWrapPolygon) );
 }
 
 SvxMSDffImportRec::~SvxMSDffImportRec()
 {
-    delete pWrapPolygon;
-    delete pXRelTo;
-    delete pYRelTo;
 }
 
 void SvxMSDffManager::insertShapeId( sal_Int32 nShapeId, SdrObject* pShape )

@@ -1855,9 +1855,9 @@ void SwWW8ImplReader::AdjustLRWrapForWordMargins(
     const SvxMSDffImportRec &rRecord, SvxLRSpaceItem &rLR)
 {
     sal_uInt32 nXRelTo = SvxMSDffImportRec::RELTO_DEFAULT;
-    if ( rRecord.pXRelTo )
+    if ( rRecord.nXRelTo )
     {
-        nXRelTo = *(rRecord.pXRelTo);
+        nXRelTo = rRecord.nXRelTo.get();
     }
 
     // Left adjustments - if horizontally aligned to left of
@@ -1893,9 +1893,9 @@ void SwWW8ImplReader::AdjustULWrapForWordMargins(
     const SvxMSDffImportRec &rRecord, SvxULSpaceItem &rUL)
 {
     sal_uInt32 nYRelTo = SvxMSDffImportRec::RELTO_DEFAULT;
-    if ( rRecord.pYRelTo )
+    if ( rRecord.nYRelTo )
     {
-        nYRelTo = *(rRecord.pYRelTo);
+        nYRelTo = rRecord.nYRelTo.get();
     }
 
     // Top adjustment - remove upper wrapping if aligned to page
@@ -2177,15 +2177,13 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     SvxMSDffImportRec aRecordFromFSPA;
     if (!pRecord)
         pRecord = &aRecordFromFSPA;
-    if (!(pRecord->pXRelTo) && pFSPA)
+    if (!(pRecord->nXRelTo) && pFSPA)
     {
-        pRecord->pXRelTo = new sal_uInt32;
-        *(pRecord->pXRelTo) = pFSPA->nbx;
+        pRecord->nXRelTo = sal_Int32(pFSPA->nbx);
     }
-    if (!(pRecord->pYRelTo) && pFSPA)
+    if (!(pRecord->nYRelTo) && pFSPA)
     {
-        pRecord->pYRelTo = new sal_uInt32;
-        *(pRecord->pYRelTo) = pFSPA->nby;
+        pRecord->nYRelTo = sal_Int32(pFSPA->nby);
     }
 
     // nXAlign - abs. Position, Left,  Centered,  Right,  Inside, Outside
@@ -2208,20 +2206,20 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
         // if X and Y Rel values are on default take it as a hint, that they have not been set
         // by <SwMSDffManager::ProcessObj(..)>
-        const bool bXYRelHaveDefaultValues = *(pRecord->pXRelTo) == 2 && *(pRecord->pYRelTo) == 2;
+        const bool bXYRelHaveDefaultValues = pRecord->nXRelTo.get() == 2 && pRecord->nYRelTo.get() == 2;
         if ( bXYRelHaveDefaultValues
              && m_nInTable > 0
              && !bCurSectionVertical )
         {
-            if ( pFSPA->nby != *(pRecord->pYRelTo) )
+            if ( sal_uInt32(pFSPA->nby) != pRecord->nYRelTo )
             {
-                *(pRecord->pYRelTo) = pFSPA->nby;
+                pRecord->nYRelTo = sal_uInt32(pFSPA->nby);
             }
         }
     }
 
-    sal_uInt32 nXRelTo = (pRecord->pXRelTo && nCntRelTo > *(pRecord->pXRelTo)) ? *(pRecord->pXRelTo) : 1;
-    sal_uInt32 nYRelTo = (pRecord->pYRelTo && nCntRelTo > *(pRecord->pYRelTo)) ? *(pRecord->pYRelTo) : 1;
+    sal_uInt32 nXRelTo = (pRecord->nXRelTo && nCntRelTo > pRecord->nXRelTo) ? pRecord->nXRelTo.get() : 1;
+    sal_uInt32 nYRelTo = (pRecord->nYRelTo && nCntRelTo > pRecord->nYRelTo) ? pRecord->nYRelTo.get() : 1;
 
     RndStdIds eAnchor = IsInlineEscherHack() ? RndStdIds::FLY_AS_CHAR : RndStdIds::FLY_AT_CHAR; // #i43718#
 
