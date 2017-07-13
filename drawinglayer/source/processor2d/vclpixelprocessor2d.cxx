@@ -54,19 +54,9 @@
 #include <vcl/window.hxx>
 #include <svtools/borderhelper.hxx>
 #include <editeng/borderline.hxx>
+#include <android/compatibility.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
-
-#if defined(ANDROID)
-namespace std
-{
-template<typename T>
-T round(T x)
-{
-    return ::round(x);
-}
-}
-#endif
 
 using namespace com::sun::star;
 
