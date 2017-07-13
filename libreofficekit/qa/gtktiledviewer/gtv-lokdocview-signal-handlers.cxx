@@ -253,7 +253,7 @@ void lokdocview_commentCallback(LOKDocView* pDocView, gchar* pComment, gpointer)
     }
     else if (aComment.get<std::string>("action") == "Add" || aComment.get<std::string>("action") == "Modify")
     {
-        GtkWidget* pCommentBox = createCommentBox(aComment);
+        GtkWidget* pCommentBox = GtvHelpers::createCommentBox(aComment);
         if (pSelf != nullptr || pParent != nullptr)
         {
             gtk_grid_insert_next_to(GTK_GRID(pCommentsGrid), pSelf != nullptr ? pSelf : pParent, GTK_POS_BOTTOM);

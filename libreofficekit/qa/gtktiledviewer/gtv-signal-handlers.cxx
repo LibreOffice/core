@@ -33,7 +33,7 @@ void btn_clicked(GtkWidget* pButton, gpointer)
         {
             std::map<std::string, std::string> aEntries;
             aEntries["Text"] = "";
-            userPromptDialog(GTK_WINDOW(window), "Insert Comment", aEntries);
+            GtvHelpers::userPromptDialog(GTK_WINDOW(window), "Insert Comment", aEntries);
 
             boost::property_tree::ptree aTree;
             aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
@@ -64,7 +64,7 @@ void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
     if (aUsedFormat == "text/plain;charset=utf-8")
         gtk_clipboard_set_text(pClipboard, pSelection, -1);
     else
-        clipboardSetHtml(pClipboard, pSelection);
+        GtvHelpers::clipboardSetHtml(pClipboard, pSelection);
 
     free(pSelection);
     free(pUsedFormat);
@@ -537,7 +537,7 @@ void editButtonClicked(GtkWidget* pWidget, gpointer userdata)
     std::map<std::string, std::string> aEntries;
     aEntries["Text"] = "";
 
-    userPromptDialog(GTK_WINDOW(window), "Edit comment", aEntries);
+    GtvHelpers::userPromptDialog(GTK_WINDOW(window), "Edit comment", aEntries);
 
     gchar *commentId = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 
@@ -561,7 +561,7 @@ void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
     std::map<std::string, std::string> aEntries;
     aEntries["Text"] = "";
 
-    userPromptDialog(GTK_WINDOW(window), "Reply comment", aEntries);
+    GtvHelpers::userPromptDialog(GTK_WINDOW(window), "Reply comment", aEntries);
 
     gchar *commentId = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 

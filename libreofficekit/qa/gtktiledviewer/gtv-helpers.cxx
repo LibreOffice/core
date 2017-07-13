@@ -15,8 +15,7 @@
 
 #include <gtv-helpers.hxx>
 
-void
-userPromptDialog(GtkWindow* pWindow, const std::string& aTitle, std::map<std::string, std::string>& aEntries)
+void GtvHelpers::userPromptDialog(GtkWindow* pWindow, const std::string& aTitle, std::map<std::string, std::string>& aEntries)
 {
     GtkWidget* pDialog = gtk_dialog_new_with_buttons (aTitle.c_str(),
                                                       pWindow,
@@ -70,8 +69,7 @@ static void htmlClearFunc(GtkClipboard* /*pClipboard*/, gpointer pData)
     g_free(pData);
 }
 
-void
-clipboardSetHtml(GtkClipboard* pClipboard, const char* pSelection)
+void GtvHelpers::clipboardSetHtml(GtkClipboard* pClipboard, const char* pSelection)
 {
     GtkTargetList* pList = gtk_target_list_new(nullptr, 0);
     GdkAtom aAtom(gdk_atom_intern("text/html", false));
@@ -85,14 +83,14 @@ clipboardSetHtml(GtkClipboard* pClipboard, const char* pSelection)
     gtk_target_list_unref(pList);
 }
 
-std::string getNextAuthor()
+std::string GtvHelpers::getNextAuthor()
 {
     static int nCounter = 0;
     struct passwd* pPasswd = getpwuid(getuid());
     return std::string(pPasswd->pw_gecos) + " #" + std::to_string(++nCounter);
 }
 
-GtkWidget* createCommentBox(const boost::property_tree::ptree& aComment)
+GtkWidget* GtvHelpers::createCommentBox(const boost::property_tree::ptree& aComment)
 {
     GtkWidget* pCommentVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
     gchar *id = g_strndup(aComment.get<std::string>("id").c_str(), 20);

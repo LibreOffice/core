@@ -303,7 +303,7 @@ createRenderingArgsJSON(const GtvRenderingArgs* pRenderingArgs)
         aTree.put(boost::property_tree::ptree::path_type(".uno:HideWhitespace/value", '/'), true);
     }
     aTree.put(boost::property_tree::ptree::path_type(".uno:Author/type", '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), getNextAuthor());
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), GtvHelpers::getNextAuthor());
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     return aStream.str();

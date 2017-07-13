@@ -46,7 +46,7 @@ gtv_comments_sidebar_view_annotations(GtvCommentsSidebar* sidebar)
     {
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
         {
-            GtkWidget* pCommentBox = createCommentBox(rValue.second);
+            GtkWidget* pCommentBox = GtvHelpers::createCommentBox(rValue.second);
             gtk_container_add(GTK_CONTAINER(sidebar->commentsgrid), pCommentBox);
         }
         gtk_widget_show_all(sidebar->scrolledwindow);
