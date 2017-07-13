@@ -31,6 +31,7 @@
 #include <rtl/strbuf.hxx>
 #include <unicode/uchar.h>
 #include <unicode/uscript.h>
+#include <officecfg/Office/Common.hxx>
 
 using namespace psp;
 
@@ -875,6 +876,9 @@ namespace
 #if ENABLE_DBUS
 IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
 {
+    if (!officecfg::Office::Common::PackageKit::EnableFontInstallation::get())
+        return;
+
     guint xid = get_xid_for_dbus();
 
     if (!xid)
@@ -919,6 +923,11 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
     /* check the error value */
     if (error != nullptr)
     {
+        // Disable this method from now on. It's simply not available on some systems
+        // and leads to an error dialog being shown each tim theis is called tdf#104883
+        std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
+        officecfg::Office::Common::PackageKit::EnableFontInstallation::set(false, batch);
+        batch->commit();
         g_debug("InstallFontconfigResources problem : %s", error->message);
         g_error_free(error);
     }
