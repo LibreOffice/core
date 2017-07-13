@@ -24,6 +24,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fontcharmap.hxx>
+#include <android/compatibility.hxx>
 
 #include "unx/printergfx.hxx"
 #include "unx/genpspgraphics.h"
@@ -37,16 +38,6 @@
 #include <cairo.h>
 #include <cairo-ft.h>
 #include "CommonSalLayout.hxx"
-
-#ifdef ANDROID
-namespace std
-{
-double fmax(double x, double y)
-{
-    return ::fmax(x, y);
-}
-}
-#endif
 
 namespace {
 
