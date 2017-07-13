@@ -458,7 +458,10 @@ public:
         const Rectangle* pRectToErase,
         Point* pPos, int* pGetNextGlypInfo) override;
 
-    inline bool BindDC(HDC hDC, Rectangle const & rRect = Rectangle(0, 0, 0, 0)) {
+    inline bool BindDC(HDC hDC, Rectangle const & rRect = Rectangle(0, 0, 1, 1))
+    {
+        if (rRect.GetWidth() == 0 || rRect.GetHeight() == 0)
+            return false;
         RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
         return SUCCEEDED(mpRT->BindDC(hDC, &rc));
     }
