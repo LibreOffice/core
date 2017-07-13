@@ -1227,9 +1227,8 @@ SwTableAutoFormatTable::~SwTableAutoFormatTable()
 SwTableAutoFormatTable::SwTableAutoFormatTable()
     : m_pImpl(new Impl)
 {
-    OUString sNm;
     std::unique_ptr<SwTableAutoFormat> pNew(new SwTableAutoFormat(
-                SwStyleNameMapper::GetUIName(RES_POOLTABSTYLE_DEFAULT, sNm)));
+                SwStyleNameMapper::GetUIName(RES_POOLTABSTYLE_DEFAULT, OUString())));
 
     SwBoxAutoFormat aNew;
 
