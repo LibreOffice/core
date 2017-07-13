@@ -85,6 +85,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svl/undo.hxx>
 #include <unotools/datetime.hxx>
+#include <android/compatibility.hxx>
 
 #include <app.hxx>
 
@@ -101,25 +102,6 @@ using namespace css;
 using namespace vcl;
 using namespace desktop;
 using namespace utl;
-
-#if defined(ANDROID)
-namespace std
-{
-template<typename T>
-std::string to_string(T x)
-{
-    std::ostringstream stream;
-    stream << x;
-    return stream.str();
-}
-
-long stol( const std::string& str, std::size_t* /*pos*/ = 0, int base = 10 )
-{
-    char* end;
-    return strtol(str.c_str(), &end, base);
-}
-}
-#endif
 
 static LibLibreOffice_Impl *gImpl = nullptr;
 static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
