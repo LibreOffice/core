@@ -2026,7 +2026,10 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
             {
                 return false;
             }
-            if ( pUpperFrame->IsColumnFrame() && pUpperFrame->IsInSct() )
+            // If the text frame is a follow-section-in-table, that can move
+            // backward as well.
+            bool bIsFollowSection = pUpperFrame->IsSctFrame() && static_cast<const SwSectionFrame*>(pUpperFrame)->GetPrecede();
+            if ( ( pUpperFrame->IsColumnFrame() && pUpperFrame->IsInSct() ) || bIsFollowSection )
             {
                 break;
             }
