@@ -31,6 +31,7 @@
 #include "file_url.hxx"
 #include "file_error.hxx"
 
+#include <cassert>
 #include <cstdio>
 #include <algorithm>
 #include <limits>
@@ -180,9 +181,9 @@ FileHandle_Impl::Allocator::~Allocator()
 
 void FileHandle_Impl::Allocator::allocate (sal_uInt8 **ppBuffer, SIZE_T * pnSize)
 {
-    SAL_WARN_IF((!ppBuffer) || (!pnSize), "sal.osl", "FileHandle_Impl::Allocator::allocate(): contract violation");
+    assert(ppBuffer != nullptr);
+    assert(pnSize != nullptr);
     *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
-
     *pnSize = m_bufsiz;
 }
 
@@ -195,13 +196,12 @@ void FileHandle_Impl::Allocator::deallocate (sal_uInt8 * pBuffer)
 FileHandle_Impl::Guard::Guard(LPCRITICAL_SECTION pMutex)
     : m_mutex (pMutex)
 {
-    SAL_WARN_IF(!(m_mutex), "sal.osl", "FileHandle_Impl::Guard::Guard(): null pointer.");
+    assert(pMutex != nullptr);
     ::EnterCriticalSection (m_mutex);
 }
 
 FileHandle_Impl::Guard::~Guard()
 {
-    SAL_WARN_IF(!(m_mutex), "sal.osl", "FileHandle_Impl::Guard::~Guard(): null pointer.");
     ::LeaveCriticalSection (m_mutex);
 }
 
