@@ -99,7 +99,7 @@ ScTableLink::~ScTableLink()
     ScDocument& rDoc = pImpl->m_pDocSh->GetDocument();
     SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
-        if (rDoc.IsLinked(nTab) && aFileName.equals(rDoc.GetLinkDoc(nTab)))
+        if (rDoc.IsLinked(nTab) && aFileName == rDoc.GetLinkDoc(nTab))
             rDoc.SetLink( nTab, ScLinkMode::NONE, "", "", "", "", 0 );
 }
 
@@ -163,7 +163,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
         return false;
 
     OUString aNewUrl = ScGlobal::GetAbsDocName(rNewFile, pImpl->m_pDocSh);
-    bool bNewUrlName = !aFileName.equals(aNewUrl);
+    bool bNewUrlName = aFileName != aNewUrl;
 
     std::shared_ptr<const SfxFilter> pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
     if (!pFilter)
@@ -175,7 +175,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     bool bUndo(rDoc.IsUndoEnabled());
 
     //  if new filter has been selected, forget options
-    if (!aFilterName.equals(rNewFilter))
+    if (aFilterName != rNewFilter)
         aOptions.clear();
     if ( pNewOptions )                  // options hard-specfied?
         aOptions = *pNewOptions;
@@ -223,7 +223,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     for (SCTAB nTab=0; nTab<nCount; nTab++)
     {
         ScLinkMode nMode = rDoc.GetLinkMode(nTab);
-        if (nMode != ScLinkMode::NONE && aFileName.equals(rDoc.GetLinkDoc(nTab)))
+        if (nMode != ScLinkMode::NONE && aFileName == rDoc.GetLinkDoc(nTab))
         {
             OUString aTabName = rDoc.GetLinkTab(nTab);
 
@@ -353,8 +353,8 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                 bNotFound = true;
             }
 
-            if ( bNewUrlName || !aFilterName.equals(rNewFilter) ||
-                    !aOptions.equals(aNewOpt) || pNewOptions ||
+            if ( bNewUrlName || aFilterName != rNewFilter ||
+                    aOptions != aNewOpt || pNewOptions ||
                     nNewRefresh != GetRefreshDelay() )
                 rDoc.SetLink( nTab, nMode, aNewUrl, rNewFilter, aNewOpt,
                     aTabName, nNewRefresh );
@@ -365,9 +365,9 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
     if ( bNewUrlName )
         aFileName = aNewUrl;
-    if (!aFilterName.equals(rNewFilter))
+    if (aFilterName != rNewFilter)
         aFilterName = rNewFilter;
-    if (!aOptions.equals(aNewOpt))
+    if (aOptions != aNewOpt)
         aOptions = aNewOpt;
 
     //  clean up
@@ -435,7 +435,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
         if ( pDocSh->HasName() )
         {
             SfxMedium* pMed = pDocSh->GetMedium();
-            if ( pMed->GetName().equals(rFileName) )
+            if ( pMed->GetName() == rFileName )
             {
                 rFilter = pMed->GetFilter()->GetFilterName();
                 rOptions = GetOptions(*pMed);

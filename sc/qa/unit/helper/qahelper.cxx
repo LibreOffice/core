@@ -504,7 +504,7 @@ bool checkOutput(
             if (p)
             {
                 OUString aCheckVal = OUString::createFromAscii(p);
-                bool bEqual = aCheckVal.equals(aVal);
+                bool bEqual = aCheckVal == aVal;
                 if (!bEqual)
                 {
                     std::cout << "Expected: " << aCheckVal << "  Actual: " << aVal << std::endl;

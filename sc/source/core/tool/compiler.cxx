@@ -2709,14 +2709,14 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
         OpCode eOp = iLook->second;
         if (bInArray)
         {
-            if (rName.equals(mxSymbols->getSymbol(ocArrayColSep)))
+            if (rName == mxSymbols->getSymbol(ocArrayColSep))
                 eOp = ocArrayColSep;
-            else if (rName.equals(mxSymbols->getSymbol(ocArrayRowSep)))
+            else if (rName == mxSymbols->getSymbol(ocArrayRowSep))
                 eOp = ocArrayRowSep;
         }
         else if (eOp == ocArrayColSep || eOp == ocArrayRowSep)
         {
-            if (rName.equals(mxSymbols->getSymbol(ocSep)))
+            if (rName == mxSymbols->getSymbol(ocSep))
                 eOp = ocSep;
             else if (rName == ";")
             {

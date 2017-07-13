@@ -503,7 +503,7 @@ public:
     explicit FindByName(const OUString& rName) : mrName(rName) {}
     bool operator() (std::unique_ptr<ScDBData> const& p) const
     {
-        return p->GetName().equals(mrName);
+        return p->GetName() == mrName;
     }
 };
 

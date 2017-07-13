@@ -270,7 +270,7 @@ bool ScDocument::GetTable( const OUString& rName, SCTAB& rTab ) const
     for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
         {
-            if (aUpperName.equals(maTabs[i]->GetUpperName()))
+            if (aUpperName == maTabs[i]->GetUpperName())
             {
                 rTab = i;
                 return true;

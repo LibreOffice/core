@@ -508,7 +508,7 @@ void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDi
 long ScDPGroupTableData::GetDimensionIndex( const OUString& rName )
 {
     for (long i = 0; i < nSourceCount; ++i)                         // nSourceCount excludes data layout
-        if (pSourceData->getDimensionName(i).equals(rName))        //TODO: ignore case?
+        if (pSourceData->getDimensionName(i) == rName)        //TODO: ignore case?
             return i;
     return -1;  // none
 }

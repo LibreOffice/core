@@ -2456,7 +2456,7 @@ void ScViewFunc::InsertTableLink( const OUString& rFile,
             for (SCTAB i=0; i<nCount; i++)
             {
                 rSrcDoc.GetName( i, aTemp );
-                if ( aTemp.equals(rTabName) )
+                if ( aTemp == rTabName )
                     nTab = i;
             }
         }

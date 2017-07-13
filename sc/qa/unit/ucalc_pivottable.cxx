@@ -742,8 +742,8 @@ void Test::testPivotTableNamedSource()
 
     const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
     CPPUNIT_ASSERT_MESSAGE("Sheet source description doesn't exist.", pDesc);
-    CPPUNIT_ASSERT_MESSAGE("Named source range has been altered unexpectedly!",
-                           pDesc->GetRangeName().equals(aRangeName));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Named source range has been altered unexpectedly!",
+                           pDesc->GetRangeName(), aRangeName);
 
     CPPUNIT_ASSERT_MESSAGE("Cache should exist.", pDPs->GetNameCaches().hasCache(aRangeName));
 

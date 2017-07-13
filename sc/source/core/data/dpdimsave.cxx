@@ -176,7 +176,7 @@ OUString ScDPSaveGroupDimension::CreateGroupName(const OUString& rPrefix)
         // look for existing groups
         for ( ScDPSaveGroupItemVec::const_iterator aIter(aGroups.begin());
                                     aIter != aGroups.end() && !bExists; ++aIter )
-            if (aIter->GetGroupName().equals(aGroupName))         //TODO: ignore case
+            if (aIter->GetGroupName() == aGroupName)         //TODO: ignore case
                 bExists = true;
 
         if ( !bExists )
@@ -197,7 +197,7 @@ const ScDPSaveGroupItem* ScDPSaveGroupDimension::GetNamedGroup( const OUString& 
 ScDPSaveGroupItem* ScDPSaveGroupDimension::GetNamedGroupAcc( const OUString& rGroupName )
 {
     for (ScDPSaveGroupItemVec::iterator aIter = aGroups.begin(); aIter != aGroups.end(); ++aIter)
-        if (aIter->GetGroupName().equals(rGroupName))         //TODO: ignore case
+        if (aIter->GetGroupName() == rGroupName)         //TODO: ignore case
             return &*aIter;
 
     return nullptr;        // none found
@@ -232,7 +232,7 @@ void ScDPSaveGroupDimension::RemoveFromGroups( const OUString& rItemName )
 void ScDPSaveGroupDimension::RemoveGroup(const OUString& rGroupName)
 {
     for (ScDPSaveGroupItemVec::iterator aIter = aGroups.begin(); aIter != aGroups.end(); ++aIter)
-        if (aIter->GetGroupName().equals(rGroupName))          //TODO: ignore case
+        if (aIter->GetGroupName() == rGroupName)          //TODO: ignore case
         {
             aGroups.erase( aIter );
             return;                     // don't have to look further

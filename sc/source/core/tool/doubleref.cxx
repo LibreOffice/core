@@ -77,12 +77,12 @@ bool lcl_createStarQuery(
             // For all entries after the first one, check the and/or connector in the first column.
             aCellStr = pQueryRef->getString(0, nRow);
             lcl_uppercase(aCellStr);
-            if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_UND)) )
+            if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_UND) )
             {
                 rEntry.eConnect = SC_AND;
                 bValid = true;
             }
-            else if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_ODER)) )
+            else if ( aCellStr == ScGlobal::GetRscString(STR_TABLE_ODER) )
             {
                 rEntry.eConnect = SC_OR;
                 bValid = true;
@@ -444,7 +444,7 @@ SCCOL ScDBExternalRange::findFieldColumn(const OUString& rStr, FormulaError* pEr
     {
         OUString aUpperVal = mpMatrix->GetString(i, 0).getString();
         lcl_uppercase(aUpperVal);
-        if (aUpper.equals(aUpperVal))
+        if (aUpper == aUpperVal)
             return i;
     }
     return -1;

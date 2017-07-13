@@ -1511,7 +1511,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
             if( pClipDoc->GetName( nSourceTab, aSourceTabName )
                 && pDoc->GetName( nDestTab, aDestTabName ) )
             {
-                if( !aSourceTabName.equals(aDestTabName) &&
+                if( aSourceTabName != aDestTabName &&
                     pDoc->ValidNewTabName(aSourceTabName) )
                 {
                     bRestoreDestTabName = pDoc->RenameTab( nDestTab, aSourceTabName );
@@ -1763,7 +1763,7 @@ inline bool IsNamedObject( SdrObject* pObj, const OUString& rName )
     //  sal_True if rName is the object's Name or PersistName
     //  (used to find a named object)
 
-    return ( pObj->GetName().equals(rName) ||
+    return ( pObj->GetName() == rName ||
             ( pObj->GetObjIdentifier() == OBJ_OLE2 &&
               static_cast<SdrOle2Obj*>(pObj)->GetPersistName() == rName ) );
 }

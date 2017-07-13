@@ -661,7 +661,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
             if (nSrcTab > MAXTAB)           // still searching for the scenario?
             {
                 aDocument.GetName( nEndTab, aCompare );
-                if (aCompare.equals(rName))
+                if (aCompare == rName)
                     nSrcTab = nEndTab;      // found
             }
         }
@@ -762,7 +762,7 @@ void ScDocShell::ModifyScenario( SCTAB nTab, const OUString& rName, const OUStri
     PostPaintGridAll();
     aModificator.SetDocumentModified();
 
-    if (!aOldName.equals(rName))
+    if (aOldName != rName)
         SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScTablesChanged ) );
 
     SfxBindings* pBindings = GetViewBindings();

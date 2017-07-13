@@ -94,7 +94,7 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl, ComboBox&, void)
     if (pSourceShell)
     {
         SfxMedium* pMed = pSourceShell->GetMedium();
-        if ( aEntered.equals(pMed->GetName()) )
+        if ( aEntered == pMed->GetName() )
         {
             //  already loaded - nothing to do
             return;
@@ -206,7 +206,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
         const OUString aWebQFilterName( FILTERNAME_QUERY );
 
         std::shared_ptr<const SfxFilter> pFilter = pMed->GetFilter();
-        if (pFilter && aHTMLFilterName.equals(pFilter->GetFilterName()))
+        if (pFilter && aHTMLFilterName == pFilter->GetFilterName())
         {
             std::shared_ptr<const SfxFilter> pNewFilter =
                 ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( aWebQFilterName );
