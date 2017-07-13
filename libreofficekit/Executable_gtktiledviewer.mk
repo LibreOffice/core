@@ -24,18 +24,15 @@ $(eval $(call gb_Executable_add_cxxflags,gtktiledviewer,\
 
 $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
     $(GTK3_LIBS) \
-))
-
-$(eval $(call gb_Executable_use_libraries,gtktiledviewer,\
-    libreofficekitgtk \
-))
-
-$(eval $(call gb_Executable_add_libs,gtktiledviewer,\
     -lX11 \
     -lXext \
     -lXrender \
     -lSM \
     -lICE \
+))
+
+$(eval $(call gb_Executable_use_libraries,gtktiledviewer,\
+    libreofficekitgtk \
 ))
 
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
