@@ -28,7 +28,7 @@ public:
     virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() = 0;
 
 protected:
-    ~Certificate() throw () {}
+    ~Certificate() noexcept = default;
 };
 
 }

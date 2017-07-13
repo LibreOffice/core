@@ -378,7 +378,7 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
             continue;
         }
         size_t nByteRangeLength = pNumber->GetValue();
-        aByteRanges.push_back(std::make_pair(nByteRangeOffset, nByteRangeLength));
+        aByteRanges.emplace_back(nByteRangeOffset, nByteRangeLength);
     }
 
     // Detect if the byte ranges don't cover everything, but the signature itself.
