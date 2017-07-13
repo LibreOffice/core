@@ -112,7 +112,7 @@ void View::rename( const OUString& newName )
     }
     OUString fullNewName = concatQualified( newSchemaName, newTableName );
 
-    if( ! schema.equals( newSchemaName ) )
+    if( schema != newSchemaName )
     {
         try
         {
@@ -135,7 +135,7 @@ void View::rename( const OUString& newName )
         }
 
     }
-    if( ! oldName.equals( newTableName ) )
+    if( oldName != newTableName )
     {
         OUStringBuffer buf(128);
         buf.append( "ALTER TABLE" );

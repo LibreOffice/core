@@ -1366,7 +1366,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit&, rEdt, void)
     {
         for(std::set<OUString>::iterator i = aFormatText.begin(); i != aFormatText.end(); ++i)
         {
-            if((*i).equals(rShortTxt))
+            if((*i) == rShortTxt)
             {
                 bEnableNew = false;
                 break;
@@ -1380,7 +1380,7 @@ static bool lcl_FindInArray(std::vector<OUString>& rStrings, const OUString& rSt
 {
     for(std::vector<OUString>::iterator i = rStrings.begin(); i != rStrings.end(); ++i)
     {
-        if((*i).equals(rString))
+        if((*i) == rString)
         {
             return true;
         }

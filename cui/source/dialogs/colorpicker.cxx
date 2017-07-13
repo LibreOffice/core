@@ -1468,11 +1468,11 @@ void SAL_CALL ColorPicker::setPropertyValues( const Sequence< PropertyValue >& a
 {
     for( sal_Int32 n = 0; n < aProps.getLength(); n++ )
     {
-        if( aProps[n].Name.equals( msColorKey ) )
+        if( aProps[n].Name == msColorKey )
         {
             aProps[n].Value >>= mnColor;
         }
-        else if( aProps[n].Name.equals( msModeKey ) )
+        else if( aProps[n].Name == msModeKey )
         {
             aProps[n].Value >>= mnMode;
         }

@@ -75,15 +75,15 @@ struct SpellErrorDescription
     bool operator==( const SpellErrorDescription& rDesc ) const
     {
         return bIsGrammarError == rDesc.bIsGrammarError &&
-                sErrorText.equals( rDesc.sErrorText ) &&
-                aLocale.Language.equals( rDesc.aLocale.Language ) &&
-                aLocale.Country.equals( rDesc.aLocale.Country ) &&
-                aLocale.Variant.equals( rDesc.aLocale.Variant ) &&
+                sErrorText == rDesc.sErrorText &&
+                aLocale.Language == rDesc.aLocale.Language &&
+                aLocale.Country == rDesc.aLocale.Country &&
+                aLocale.Variant == rDesc.aLocale.Variant &&
                 aSuggestions == rDesc.aSuggestions &&
                 xGrammarChecker == rDesc.xGrammarChecker &&
-                sDialogTitle.equals( rDesc.sDialogTitle ) &&
-                sExplanation.equals( rDesc.sExplanation ) &&
-                sExplanationURL.equals( rDesc.sExplanationURL ) &&
+                sDialogTitle == rDesc.sDialogTitle &&
+                sExplanation == rDesc.sExplanation &&
+                sExplanationURL == rDesc.sExplanationURL &&
                 sRuleId == rDesc.sRuleId;
     }
 };

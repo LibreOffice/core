@@ -151,7 +151,7 @@ void RemoveProperty(Sequence<Property>& _rProps, const OUString& _rPropName)
 
     if ( pResult != _rProps.end() && pResult->Name == _rPropName )
     {
-        OSL_ENSURE(pResult->Name.equals(_rPropName), "::RemoveProperty Properties not sorted");
+        OSL_ENSURE(pResult->Name == _rPropName, "::RemoveProperty Properties not sorted");
         removeElementAt(_rProps, pResult - pProperties);
     }
 }

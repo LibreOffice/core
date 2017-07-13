@@ -669,7 +669,7 @@ bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectContainer
 {
     bool bResult = false;
 
-    if ( ( &rSrc != this || !aOrigName.equals( aTargetName ) ) && !aOrigName.isEmpty() && !aTargetName.isEmpty() )
+    if ( ( &rSrc != this || aOrigName != aTargetName ) && !aOrigName.isEmpty() && !aTargetName.isEmpty() )
     {
         OUString aMediaType;
         uno::Reference < io::XInputStream > xGrStream = rSrc.GetGraphicStream( aOrigName, &aMediaType );

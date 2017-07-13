@@ -273,7 +273,7 @@ generateCustomName(
     {
         SvxConfigEntry* pEntry = *iter;
 
-        if ( name.equals( pEntry->GetName() ) )
+        if ( name == pEntry->GetName() )
         {
             break;
         }
@@ -311,7 +311,7 @@ generateCustomURL(
     {
         SvxConfigEntry* pEntry = *iter;
 
-        if ( url.equals( pEntry->GetCommand() ) )
+        if ( url == pEntry->GetCommand() )
         {
             break;
         }
@@ -343,7 +343,7 @@ generateCustomMenuURL(
     {
         SvxConfigEntry* pEntry = *iter;
 
-        if ( url.equals( pEntry->GetCommand() ) )
+        if ( url == pEntry->GetCommand() )
         {
             break;
         }
@@ -1894,7 +1894,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
                     } catch(const uno::Exception&)
                         { aCheckId.clear(); }
 
-                    if ( aModuleId.equals( aCheckId ) )
+                    if ( aModuleId == aCheckId )
                     {
                         // try to get the document based ui configuration manager
                         OUString aTitle2;
@@ -3355,7 +3355,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
         OUString aSystemName =
             pSaveInData->GetSystemUIName( pEntry->GetCommand() );
 
-        if ( !pEntry->GetName().equals( aSystemName ) )
+        if ( pEntry->GetName() != aSystemName )
         {
             pEntry->SetName( aSystemName );
             m_pContentsListBox->SetEntryText(
@@ -3550,7 +3550,7 @@ void SvxToolbarConfigPage::Init()
             SvxConfigEntry* pData =
                 static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( i ));
 
-            if ( pData->GetCommand().equals( m_aURLToSelect ) )
+            if ( pData->GetCommand() == m_aURLToSelect )
             {
                 nPos = i;
                 break;
@@ -3980,7 +3980,7 @@ ToolbarSaveInData::HasURL( const OUString& rURL )
     {
         SvxConfigEntry* pEntry = *iter;
 
-        if ( pEntry->GetCommand().equals( rURL ) )
+        if ( pEntry->GetCommand() == rURL )
         {
             return !pEntry->IsParentData();
         }

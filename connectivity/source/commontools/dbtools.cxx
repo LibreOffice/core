@@ -1737,7 +1737,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
             {
                 OUString sName;
                 xParamColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
-                OSL_ENSURE(sName.equals(pFinalValues->Name), "::dbaui::askForParameters: inconsistent parameter names!");
+                OSL_ENSURE(sName == pFinalValues->Name, "::dbaui::askForParameters: inconsistent parameter names!");
 
                 // determine the field type and ...
                 sal_Int32 nParamType = 0;
