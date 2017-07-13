@@ -782,7 +782,7 @@ bool ZipFile::readLOC( ZipEntry &rEntry )
         }
 
         bBroken = rEntry.nPathLen != nPathLen
-                        || !rEntry.sPath.equals( sLOCPath );
+                        || rEntry.sPath != sLOCPath;
     }
     catch(...)
     {

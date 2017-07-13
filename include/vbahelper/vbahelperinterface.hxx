@@ -95,7 +95,7 @@ public:
         const OUString* pStart = sServices.getConstArray();
         const OUString* pEnd = pStart + sServices.getLength();
         for ( ; pStart != pEnd ; ++pStart )
-            if ( (*pStart).equals( ServiceName ) )
+            if ( *pStart == ServiceName )
                 return true;
         return false;
     }

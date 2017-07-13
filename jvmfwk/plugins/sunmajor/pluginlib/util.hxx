@@ -69,7 +69,7 @@ struct InfoFindSame
 
     bool operator () (const rtl::Reference<VendorBase> & aVendorInfo)
     {
-        return aVendorInfo->getHome().equals(sJava);
+        return aVendorInfo->getHome() == sJava;
     }
 };
 

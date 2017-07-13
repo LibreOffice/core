@@ -212,29 +212,29 @@ void ZipPackage::parseManifest()
                             const Any *pSalt = nullptr, *pVector = nullptr, *pCount = nullptr, *pSize = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptionAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
                             for ( sal_Int32 j = 0, nNum = pSequence->getLength(); j < nNum; j++ )
                             {
-                                if ( pValue[j].Name.equals( sPropFullPath ) )
+                                if ( pValue[j].Name == sPropFullPath )
                                     pValue[j].Value >>= sPath;
-                                else if ( pValue[j].Name.equals( sPropVersion ) )
+                                else if ( pValue[j].Name == sPropVersion )
                                     pValue[j].Value >>= sVersion;
-                                else if ( pValue[j].Name.equals( sPropMediaType ) )
+                                else if ( pValue[j].Name == sPropMediaType )
                                     pValue[j].Value >>= sMediaType;
-                                else if ( pValue[j].Name.equals( sPropSalt ) )
+                                else if ( pValue[j].Name == sPropSalt )
                                     pSalt = &( pValue[j].Value );
-                                else if ( pValue[j].Name.equals( sPropInitialisationVector ) )
+                                else if ( pValue[j].Name == sPropInitialisationVector )
                                     pVector = &( pValue[j].Value );
-                                else if ( pValue[j].Name.equals( sPropIterationCount ) )
+                                else if ( pValue[j].Name == sPropIterationCount )
                                     pCount = &( pValue[j].Value );
-                                else if ( pValue[j].Name.equals( sPropSize ) )
+                                else if ( pValue[j].Name == sPropSize )
                                     pSize = &( pValue[j].Value );
-                                else if ( pValue[j].Name.equals( sPropDigest ) )
+                                else if ( pValue[j].Name == sPropDigest )
                                     pDigest = &( pValue[j].Value );
-                                else if ( pValue[j].Name.equals( sPropDigestAlgorithm ) )
+                                else if ( pValue[j].Name == sPropDigestAlgorithm )
                                     pDigestAlg = &( pValue[j].Value );
-                                else if ( pValue[j].Name.equals( sPropEncryptionAlgorithm ) )
+                                else if ( pValue[j].Name == sPropEncryptionAlgorithm )
                                     pEncryptionAlg = &( pValue[j].Value );
-                                else if ( pValue[j].Name.equals( sPropStartKeyAlgorithm ) )
+                                else if ( pValue[j].Name == sPropStartKeyAlgorithm )
                                     pStartKeyAlg = &( pValue[j].Value );
-                                else if ( pValue[j].Name.equals( sPropDerivedKeySize ) )
+                                else if ( pValue[j].Name == sPropDerivedKeySize )
                                     pDerivedKeySize = &( pValue[j].Value );
                             }
 
@@ -366,7 +366,7 @@ void ZipPackage::parseManifest()
             else if ( !m_bForceRecovery )
             {
                 // the mimetype stream should contain the information from manifest.xml
-                if ( !m_xRootFolder->GetMediaType().equals( aPackageMediatype ) )
+                if ( m_xRootFolder->GetMediaType() != aPackageMediatype )
                     throw ZipIOException(
                         THROW_WHERE
                         "mimetype conflicts with manifest.xml, \""
@@ -1556,7 +1556,7 @@ const uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
             throw uno::RuntimeException(THROW_WHERE "No expected key is provided!" );
 
         for ( sal_Int32 nInd = 0; nInd < m_aStorageEncryptionKeys.getLength(); nInd++ )
-            if ( m_aStorageEncryptionKeys[nInd].Name.equals( aNameToFind ) )
+            if ( m_aStorageEncryptionKeys[nInd].Name == aNameToFind )
                 m_aStorageEncryptionKeys[nInd].Value >>= aResult;
 
         // empty keys are not allowed here

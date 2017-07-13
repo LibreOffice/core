@@ -127,14 +127,14 @@ bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
         if ( aPattern[0].isEmpty() )
             return true;
 
-        return aString.equals( aPattern[0] );
+        return aString == aPattern[0];
     }
 
     sal_Int32 nBeginInd = aPattern[0].getLength();
     sal_Int32 nEndInd = aString.getLength() - aPattern[nInd].getLength();
     if ( nEndInd >= nBeginInd
-      && ( nEndInd == aString.getLength() || aString.copy( nEndInd ).equals( aPattern[nInd] ) )
-      && ( nBeginInd == 0 || aString.copy( 0, nBeginInd ).equals( aPattern[0] ) ) )
+      && ( nEndInd == aString.getLength() || aString.copy( nEndInd ) == aPattern[nInd] )
+      && ( nBeginInd == 0 || aString.copy( 0, nBeginInd ) == aPattern[0] ) )
     {
         for ( sal_Int32 nCurInd = aPattern.getLength() - 2; nCurInd > 0; nCurInd-- )
         {

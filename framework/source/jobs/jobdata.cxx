@@ -492,7 +492,7 @@ bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
         if ( nIndex >= 0 && ( nIndex+nModuleIdLen <= nContextLen ))
     {
         OUString sContextModule = m_sContext.copy( nIndex, nModuleIdLen );
-        return sContextModule.equals( rModuleIdent );
+        return sContextModule == rModuleIdent;
     }
     }
 

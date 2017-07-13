@@ -115,22 +115,22 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
     for (it_prop i = props.begin(); i != props.end(); ++i)
     {
-        if(! bVendor && sVendorProperty.equals(i->first))
+        if(! bVendor && sVendorProperty == i->first)
         {
             m_sVendor = i->second;
             bVendor = true;
         }
-        else if (!bVersion && sVersionProperty.equals(i->first))
+        else if (!bVersion && sVersionProperty == i->first)
         {
             m_sVersion = i->second;
             bVersion = true;
         }
-        else if (!bHome && sGNUHomeProperty.equals(i->first))
+        else if (!bHome && sGNUHomeProperty == i->first)
         {
             m_sHome = i->second;
             bHome = true;
         }
-        else if (!bJavaHome && sJavaHomeProperty.equals(i->first))
+        else if (!bJavaHome && sJavaHomeProperty == i->first)
         {
            OUString fileURL;
            if (osl_getFileURLFromSystemPath(i->second.pData,& fileURL.pData) ==
@@ -146,13 +146,13 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
                }
            }
         }
-        else if (!bJavaLibraryPath && sJavaLibraryPathProperty.equals(i->first))
+        else if (!bJavaLibraryPath && sJavaLibraryPathProperty == i->first)
         {
             sal_Int32 nIndex = 0;
             osl_getFileURLFromSystemPath(i->second.getToken(0, ':', nIndex).pData, &sJavaLibraryPath.pData);
             bJavaLibraryPath = true;
         }
-        else if (!bAccess && sAccessProperty.equals(i->first))
+        else if (!bAccess && sAccessProperty == i->first)
         {
             if (!i->second.isEmpty())
             {

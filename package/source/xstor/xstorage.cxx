@@ -339,7 +339,7 @@ OStorage_Impl::~OStorage_Impl()
     OUString aPropertyName = "URL";
     for ( sal_Int32 aInd = 0; aInd < m_xProperties.getLength(); ++aInd )
     {
-        if ( m_xProperties[aInd].Name.equals( aPropertyName ) )
+        if ( m_xProperties[aInd].Name == aPropertyName )
         {
             // the storage is URL based so all the streams are opened by factory and should be closed
             try
@@ -4448,7 +4448,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
         {
             for ( sal_Int32 aInd = 0; aInd < m_pImpl->m_xProperties.getLength(); aInd++ )
             {
-                if ( m_pImpl->m_xProperties[aInd].Name.equals( aPropertyName ) )
+                if ( m_pImpl->m_xProperties[aInd].Name == aPropertyName )
                     return m_pImpl->m_xProperties[aInd].Value;
             }
 
@@ -4638,7 +4638,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  cons
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
             if ( aSeq[nInd1][nInd2].First == "Id" )
             {
-                if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
+                if ( aSeq[nInd1][nInd2].Second == sID )
                     return aSeq[nInd1];
                 break;
             }
@@ -4738,9 +4738,9 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First.equals( aIDTag ) )
+            if ( aSeq[nInd1][nInd2].First == aIDTag )
             {
-                if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
+                if ( aSeq[nInd1][nInd2].Second == sID )
                     nIDInd = nInd1;
 
                 break;
@@ -4763,7 +4763,7 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
               nIndOrig < aEntry.getLength();
               nIndOrig++ )
         {
-            if ( !aEntry[nIndOrig].First.equals( aIDTag ) )
+            if ( aEntry[nIndOrig].First != aIDTag )
                 aSeq[nIDInd][nIndTarget++] = aEntry[nIndOrig];
         }
 
@@ -4795,7 +4795,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
             if ( aSeq[nInd1][nInd2].First == "Id" )
             {
-                if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
+                if ( aSeq[nInd1][nInd2].Second == sID )
                 {
                     sal_Int32 nLength = aSeq.getLength();
                     aSeq[nInd1] = aSeq[nLength-1];
@@ -4835,16 +4835,16 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
 
     for ( sal_Int32 nIndTarget1 = 0; nIndTarget1 < aSeq.getLength(); nIndTarget1++ )
         for ( sal_Int32 nIndTarget2 = 0; nIndTarget2 < aSeq[nIndTarget1].getLength(); nIndTarget2++ )
-            if ( aSeq[nIndTarget1][nIndTarget2].First.equals( aIDTag ) )
+            if ( aSeq[nIndTarget1][nIndTarget2].First == aIDTag )
             {
                 sal_Int32 nIndSourceSame = -1;
 
                 for ( sal_Int32 nIndSource1 = 0; nIndSource1 < aEntries.getLength(); nIndSource1++ )
                     for ( sal_Int32 nIndSource2 = 0; nIndSource2 < aEntries[nIndSource1].getLength(); nIndSource2++ )
                     {
-                        if ( aEntries[nIndSource1][nIndSource2].First.equals( aIDTag ) )
+                        if ( aEntries[nIndSource1][nIndSource2].First == aIDTag )
                         {
-                            if ( aEntries[nIndSource1][nIndSource2].Second.equals( aSeq[nIndTarget1][nIndTarget2].Second ) )
+                            if ( aEntries[nIndSource1][nIndSource2].Second == aSeq[nIndTarget1][nIndTarget2].Second )
                             {
                                 if ( !bReplace )
                                     throw container::ElementExistException( THROW_WHERE );
@@ -4872,7 +4872,7 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
         sal_Int32 nResInd2 = 1;
 
         for ( sal_Int32 nIndSource2 = 0; nIndSource2 < aEntries[nIndSource1].getLength(); nIndSource2++ )
-            if ( aEntries[nIndSource1][nIndSource2].First.equals( aIDTag ) )
+            if ( aEntries[nIndSource1][nIndSource2].First == aIDTag )
             {
                 aResultSeq[nResultInd][0] = aEntries[nIndSource1][nIndSource2];
                 bHasID = true;

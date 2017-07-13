@@ -208,7 +208,7 @@ public:
         for ( ; cachePos != it_end; ++cachePos )
         {
             css::uno::Reference< css::container::XNamed > xName( *cachePos, css::uno::UNO_QUERY_THROW );
-            if ( aName.equals( xName->getName() ) )
+            if ( aName == xName->getName() )
                 break;
         }
         return ( cachePos != it_end );

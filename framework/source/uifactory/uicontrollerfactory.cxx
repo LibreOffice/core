@@ -130,7 +130,7 @@ Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgument
     // module!!
     for ( int i = 0; i < Arguments.getLength(); i++ )
     {
-        if (( Arguments[i] >>= aPropValue ) && ( aPropValue.Name.equals( aPropModuleName )))
+        if (( Arguments[i] >>= aPropValue ) && ( aPropValue.Name == aPropModuleName ))
         {
             aPropValue.Value >>= aPropName;
             break;

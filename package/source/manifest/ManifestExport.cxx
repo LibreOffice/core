@@ -109,15 +109,15 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         const beans::PropertyValue *pValue = pSequence[nInd].getConstArray();
         for (sal_uInt32 j = 0, nNum = pSequence[nInd].getLength(); j < nNum; j++, pValue++)
         {
-            if (pValue->Name.equals (sMediaTypeProperty) )
+            if (pValue->Name == sMediaTypeProperty )
             {
                 pValue->Value >>= aMediaType;
             }
-            else if (pValue->Name.equals (sFullPathProperty) )
+            else if (pValue->Name == sFullPathProperty )
             {
                 pValue->Value >>= aPath;
             }
-            else if (pValue->Name.equals (sVersionProperty) )
+            else if (pValue->Name == sVersionProperty )
             {
                 pValue->Value >>= aVersion;
             }
@@ -201,24 +201,24 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
         const uno::Any *pVector = nullptr, *pSalt = nullptr, *pIterationCount = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
         for (sal_uInt32 j = 0, nNum = pSequence[i].getLength(); j < nNum; j++, pValue++)
         {
-            if (pValue->Name.equals (sMediaTypeProperty) )
+            if (pValue->Name == sMediaTypeProperty )
             {
                 pValue->Value >>= aString;
                 pAttrList->AddAttribute ( sMediaTypeAttribute, sCdataAttribute, aString );
             }
-            else if (pValue->Name.equals (sVersionProperty) )
+            else if (pValue->Name == sVersionProperty )
             {
                 pValue->Value >>= aString;
                 // the version is stored only if it is not empty
                 if ( bAcceptNonemptyVersion && !aString.isEmpty() )
                     pAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aString );
             }
-            else if (pValue->Name.equals (sFullPathProperty) )
+            else if (pValue->Name == sFullPathProperty )
             {
                 pValue->Value >>= aString;
                 pAttrList->AddAttribute ( sFullPathAttribute, sCdataAttribute, aString );
             }
-            else if (pValue->Name.equals (sSizeProperty) )
+            else if (pValue->Name == sSizeProperty )
             {
                 sal_Int64 nSize = 0;
                 pValue->Value >>= nSize;
@@ -226,21 +226,21 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 aBuffer.append ( nSize );
                 pAttrList->AddAttribute ( sSizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
             }
-            else if (pValue->Name.equals (sInitialisationVectorProperty) )
+            else if (pValue->Name == sInitialisationVectorProperty )
                 pVector = &pValue->Value;
-            else if (pValue->Name.equals (sSaltProperty) )
+            else if (pValue->Name == sSaltProperty )
                 pSalt = &pValue->Value;
-            else if (pValue->Name.equals (sIterationCountProperty) )
+            else if (pValue->Name == sIterationCountProperty )
                 pIterationCount = &pValue->Value;
-            else if (pValue->Name.equals ( sDigestProperty ) )
+            else if (pValue->Name == sDigestProperty )
                 pDigest = &pValue->Value;
-            else if (pValue->Name.equals ( sDigestAlgProperty ) )
+            else if (pValue->Name == sDigestAlgProperty )
                 pDigestAlg = &pValue->Value;
-            else if (pValue->Name.equals ( sEncryptionAlgProperty ) )
+            else if (pValue->Name == sEncryptionAlgProperty )
                 pEncryptAlg = &pValue->Value;
-            else if (pValue->Name.equals ( sStartKeyAlgProperty ) )
+            else if (pValue->Name == sStartKeyAlgProperty )
                 pStartKeyAlg = &pValue->Value;
-            else if (pValue->Name.equals ( sDerivedKeySizeProperty ) )
+            else if (pValue->Name == sDerivedKeySizeProperty )
                 pDerivedKeySize = &pValue->Value;
         }
 

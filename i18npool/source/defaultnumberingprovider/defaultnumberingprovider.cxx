@@ -1024,7 +1024,7 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
 sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumberingIdentifier )
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-        if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
+        if(rNumberingIdentifier == makeNumberingIdentifier(i))
             return aSupportedTypes[i].nType;
     throw RuntimeException();
 }
@@ -1032,7 +1032,7 @@ sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumbering
 sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingIdentifier )
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
-        if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
+        if(rNumberingIdentifier == makeNumberingIdentifier(i))
             return true;
     return false;
 }

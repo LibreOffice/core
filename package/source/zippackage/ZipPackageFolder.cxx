@@ -345,7 +345,7 @@ void ZipPackageFolder::saveContents(
         const OUString &rShortName = (*aCI).first;
         const ZipContentInfo &rInfo = *(*aCI).second;
 
-        if ( !bMimeTypeStreamStored || !rShortName.equals( aMimeTypeStreamName ) )
+        if ( !bMimeTypeStreamStored || rShortName != aMimeTypeStreamName )
         {
             if (rInfo.bFolder)
             {

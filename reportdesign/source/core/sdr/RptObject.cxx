@@ -819,7 +819,7 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt )
                 OUString aNewName;
                 evt.NewValue >>= aNewName;
 
-                if ( !aNewName.equals(aOldName) )
+                if ( aNewName != aOldName )
                 {
                     // set old name property
                     OObjectBase::EndListening();

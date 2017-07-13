@@ -775,7 +775,7 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
             sal_Int32 i;
             for (i=0; i<aStringItemList.getLength(); ++i, ++pStringItems)
             {
-                if ( pStringItems->equals( sNewValue ) )
+                if ( *pStringItems == sNewValue )
                     break;
             }
 

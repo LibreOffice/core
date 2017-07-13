@@ -282,7 +282,7 @@ bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
             OUString sHelpBaseURL;
             xModuleConfig->getByName("ooSetupFactoryHelpBaseURL") >>= sHelpBaseURL;
             OUString sHelpURLForModule = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
-            if (sHelpURL.equals(sHelpURLForModule))
+            if (sHelpURL == sHelpURLForModule)
                 return true;
         }
         catch(const css::uno::RuntimeException&)

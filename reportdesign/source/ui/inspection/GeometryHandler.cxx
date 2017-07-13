@@ -922,7 +922,7 @@ beans::Property GeometryHandler::getProperty(const OUString & PropertyName)
     const beans::Property* pEnd  = pIter + aProps.getLength();
     const beans::Property* pFind = ::std::find_if(pIter, pEnd,
             [&PropertyName] (const beans::Property& x) -> bool {
-                return x.Name.equals(PropertyName);
+                return x.Name == PropertyName;
             });
     if ( pFind == pEnd )
         return beans::Property();
@@ -1336,13 +1336,11 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
     const uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
     for (const auto & rIncludeProp : pIncludeProperties)
     {
-        const beans::Property* pIter = aSeq.getConstArray();
-        const beans::Property* pEnd  = pIter + aSeq.getLength();
-        const beans::Property* pFind = ::std::find_if(pIter, pEnd,
+        const beans::Property* pFind = ::std::find_if(aSeq.begin(), aSeq.end(),
             [&rIncludeProp] (const beans::Property& x) -> bool {
-                return x.Name.equals(rIncludeProp);
+                return x.Name == rIncludeProp;
             });
-        if ( pFind != pEnd )
+        if ( pFind != aSeq.end() )
         {
             // special case for controls which contain a data field
             if ( PROPERTY_DATAFIELD == rIncludeProp )

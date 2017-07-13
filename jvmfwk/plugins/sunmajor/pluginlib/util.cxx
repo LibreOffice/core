@@ -1040,7 +1040,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         {
             OUString sNameMap(gVendorMap[c].sVendorName, strlen(gVendorMap[c].sVendorName),
                               RTL_TEXTENCODING_ASCII_US);
-            if (sNameMap.equals(sVendorName))
+            if (sNameMap == sVendorName)
             {
                 ret = createInstance(gVendorMap[c].createFunc, props);
                 break;

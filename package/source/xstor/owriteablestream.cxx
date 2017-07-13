@@ -169,7 +169,7 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
         {
             for ( sal_Int32 nInd2 = 0; nInd2 < aSequence2.getLength(); nInd2++ )
             {
-                if ( aSequence1[nInd].Name.equals( aSequence2[nInd2].Name ) )
+                if ( aSequence1[nInd].Name == aSequence2[nInd2].Name )
                 {
                     bHasMember = true;
 
@@ -183,7 +183,7 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
         {
             for ( sal_Int32 nInd2 = 0; nInd2 < aSequence2.getLength(); nInd2++ )
             {
-                if ( aSequence1[nInd].Name.equals( aSequence2[nInd2].Name ) )
+                if ( aSequence1[nInd].Name == aSequence2[nInd2].Name )
                 {
                     bHasMember = true;
 
@@ -727,13 +727,13 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     OUString aMedTypePropName( "MediaType" );
     for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
     {
-        if ( aProps[nInd].Name.equals( aComprPropName ) )
+        if ( aProps[nInd].Name == aComprPropName )
         {
             bCompressedIsSet = true;
             aProps[nInd].Value >>= bCompressed;
         }
         else if ( ( m_nStorageType == embed::StorageFormats::OFOPXML || m_nStorageType == embed::StorageFormats::PACKAGE )
-               && aProps[nInd].Name.equals( aMedTypePropName ) )
+               && aProps[nInd].Name == aMedTypePropName )
         {
             xPropertySet->setPropertyValue( aProps[nInd].Name, aProps[nInd].Value );
         }
@@ -743,10 +743,10 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
             throw lang::IllegalArgumentException();
 
         // if there are cached properties update them
-        if ( aProps[nInd].Name.equals( aMedTypePropName ) || aProps[nInd].Name.equals( aComprPropName ) )
+        if ( aProps[nInd].Name == aMedTypePropName || aProps[nInd].Name == aComprPropName )
             for ( sal_Int32 nMemInd = 0; nMemInd < m_aProps.getLength(); nMemInd++ )
             {
-                if ( aProps[nInd].Name.equals( m_aProps[nMemInd].Name ) )
+                if ( aProps[nInd].Name == m_aProps[nMemInd].Name )
                     m_aProps[nMemInd].Value = aProps[nInd].Value;
             }
     }
@@ -1547,7 +1547,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
         OUString aNewRelStreamName = aNewStreamName;
         aNewRelStreamName += ".rels";
 
-        bool bRenamed = !aOrigRelStreamName.equals( aNewRelStreamName );
+        bool bRenamed = aOrigRelStreamName != aNewRelStreamName;
         if ( m_nRelInfoStatus == RELINFO_CHANGED
           || m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ
           || m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
@@ -2593,7 +2593,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
             if ( aSeq[nInd1][nInd2].First == "Id" )
             {
-                if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
+                if ( aSeq[nInd1][nInd2].Second == sID )
                     return aSeq[nInd1];
                 break;
             }
@@ -2623,7 +2623,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRe
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
             if ( aSeq[nInd1][nInd2].First == "Type" )
             {
-                if ( aSeq[nInd1][nInd2].Second.equals( sType ) )
+                if ( aSeq[nInd1][nInd2].Second == sType )
                 {
                     aResult.realloc( nEntriesNum );
                     aResult[nEntriesNum-1] = aSeq[nInd1];
@@ -2671,9 +2671,9 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
-            if ( aSeq[nInd1][nInd2].First.equals( aIDTag ) )
+            if ( aSeq[nInd1][nInd2].First == aIDTag )
             {
-                if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
+                if ( aSeq[nInd1][nInd2].Second == sID )
                     nIDInd = nInd1;
 
                 break;
@@ -2696,7 +2696,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
               nIndOrig < aEntry.getLength();
               nIndOrig++ )
         {
-            if ( !aEntry[nIndOrig].First.equals( aIDTag ) )
+            if ( aEntry[nIndOrig].First != aIDTag )
                 aSeq[nIDInd][nIndTarget++] = aEntry[nIndOrig];
         }
 
@@ -2728,7 +2728,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
             if ( aSeq[nInd1][nInd2].First == "Id" )
             {
-                if ( aSeq[nInd1][nInd2].Second.equals( sID ) )
+                if ( aSeq[nInd1][nInd2].Second == sID )
                 {
                     sal_Int32 nLength = aSeq.getLength();
                     aSeq[nInd1] = aSeq[nLength-1];
@@ -2768,16 +2768,16 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
 
     for ( sal_Int32 nIndTarget1 = 0; nIndTarget1 < aSeq.getLength(); nIndTarget1++ )
         for ( sal_Int32 nIndTarget2 = 0; nIndTarget2 < aSeq[nIndTarget1].getLength(); nIndTarget2++ )
-            if ( aSeq[nIndTarget1][nIndTarget2].First.equals( aIDTag ) )
+            if ( aSeq[nIndTarget1][nIndTarget2].First == aIDTag )
             {
                 sal_Int32 nIndSourceSame = -1;
 
                 for ( sal_Int32 nIndSource1 = 0; nIndSource1 < aEntries.getLength(); nIndSource1++ )
                     for ( sal_Int32 nIndSource2 = 0; nIndSource2 < aEntries[nIndSource1].getLength(); nIndSource2++ )
                     {
-                        if ( aEntries[nIndSource1][nIndSource2].First.equals( aIDTag ) )
+                        if ( aEntries[nIndSource1][nIndSource2].First == aIDTag )
                         {
-                            if ( aEntries[nIndSource1][nIndSource2].Second.equals( aSeq[nIndTarget1][nIndTarget2].Second ) )
+                            if ( aEntries[nIndSource1][nIndSource2].Second == aSeq[nIndTarget1][nIndTarget2].Second )
                             {
                                 if ( !bReplace )
                                     throw container::ElementExistException();
@@ -2805,7 +2805,7 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
         sal_Int32 nResInd2 = 1;
 
         for ( sal_Int32 nIndSource2 = 0; nIndSource2 < aEntries[nIndSource1].getLength(); nIndSource2++ )
-            if ( aEntries[nIndSource1][nIndSource2].First.equals( aIDTag ) )
+            if ( aEntries[nIndSource1][nIndSource2].First == aIDTag )
             {
                 aResultSeq[nResultInd][0] = aEntries[nIndSource1][nIndSource2];
                 bHasID = true;
@@ -2866,7 +2866,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     m_pImpl->GetStreamProperties();
     OUString aCompressedString( "Compressed" );
     OUString aMediaTypeString( "MediaType" );
-    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName.equals( aMediaTypeString ) )
+    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName == aMediaTypeString )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
         bool bCompressedValueFromType = true;
@@ -2881,19 +2881,19 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
 
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
-            if ( aPropertyName.equals( m_pImpl->m_aProps[nInd].Name ) )
+            if ( aPropertyName == m_pImpl->m_aProps[nInd].Name )
                 m_pImpl->m_aProps[nInd].Value = aValue;
-            else if ( !m_pImpl->m_bCompressedSetExplicit && aCompressedString.equals( m_pImpl->m_aProps[nInd].Name ) )
+            else if ( !m_pImpl->m_bCompressedSetExplicit && aCompressedString == m_pImpl->m_aProps[nInd].Name )
                 m_pImpl->m_aProps[nInd].Value <<= bCompressedValueFromType;
         }
     }
-    else if ( aPropertyName.equals( aCompressedString ) )
+    else if ( aPropertyName == aCompressedString )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
         m_pImpl->m_bCompressedSetExplicit = true;
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
-            if ( aPropertyName.equals( m_pImpl->m_aProps[nInd].Name ) )
+            if ( aPropertyName == m_pImpl->m_aProps[nInd].Name )
                 m_pImpl->m_aProps[nInd].Value = aValue;
         }
     }
@@ -2922,11 +2922,11 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
         else
             throw lang::IllegalArgumentException(); //TODO
     }
-    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equals( aMediaTypeString ) )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == aMediaTypeString )
     {
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
-            if ( aPropertyName.equals( m_pImpl->m_aProps[nInd].Name ) )
+            if ( aPropertyName == m_pImpl->m_aProps[nInd].Name )
                 m_pImpl->m_aProps[nInd].Value = aValue;
         }
     }
@@ -3005,7 +3005,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
 
         for ( sal_Int32 nInd = 0; nInd < m_pImpl->m_aProps.getLength(); nInd++ )
         {
-            if ( aPropertyName.equals( m_pImpl->m_aProps[nInd].Name ) )
+            if ( aPropertyName == m_pImpl->m_aProps[nInd].Name )
                 return m_pImpl->m_aProps[nInd].Value;
         }
     }

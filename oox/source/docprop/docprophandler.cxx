@@ -247,7 +247,7 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
         bool bFound = false;
         sal_Int32 nLen = aSet.getLength();
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
-            if ( aSet[nInd].Name.equals( aName ) )
+            if ( aSet[nInd].Name == aName )
             {
                 aSet[nInd].Value <<= aChars.toInt32();
                 bFound = true;

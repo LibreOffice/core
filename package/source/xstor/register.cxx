@@ -34,7 +34,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xstor_component_getFactory( const sal_Char 
     OUString aImplName( OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    if ( pServiceManager && aImplName.equals( OStorageFactory::impl_staticGetImplementationName() ) )
+    if ( pServiceManager && aImplName == OStorageFactory::impl_staticGetImplementationName() )
     {
         xFactory= ::cppu::createOneInstanceFactory( static_cast< lang::XMultiServiceFactory*>( pServiceManager ),
                                             OStorageFactory::impl_staticGetImplementationName(),
