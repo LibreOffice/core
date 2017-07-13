@@ -2452,7 +2452,6 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
                 OUString aChildTitle( xRow->getString( 1 ) );
                 const OUString aTargetURL {xContentAccess->queryContentIdentifierString()};
                 OUString aType;
-                OUString aHierURL;
 
                 if ( aChildTitle == "sfx.tlx" || aChildTitle == "groupuinames.xml" )
                     continue;
@@ -2461,7 +2460,7 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
                 if( !getTitleFromURL( aTargetURL, aChildTitle, aType, bDocHasTitle ) )
                     continue;
 
-                pGroup->addEntry( aChildTitle, aTargetURL, aType, aHierURL );
+                pGroup->addEntry( aChildTitle, aTargetURL, aType, OUString() );
             }
         }
         catch ( Exception& ) {}
