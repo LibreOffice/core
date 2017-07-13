@@ -369,7 +369,7 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
 
                     if (    ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
                          && ( xObjectProps->getByName("ObjectDocumentServiceName") >>= aEntryDocName )
-                         && aEntryDocName.equals( sResult ) )
+                         && aEntryDocName == sResult )
                     {
                         _rClassId = comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(aClassIDs[nInd]);
                         break;
@@ -1916,7 +1916,7 @@ void SAL_CALL ODocumentDefinition::rename( const OUString& _rNewName )
     try
     {
         ::osl::ResettableMutexGuard aGuard(m_aMutex);
-        if ( _rNewName.equals( m_pImpl->m_aProps.aTitle ) )
+        if ( _rNewName == m_pImpl->m_aProps.aTitle )
             return;
 
         // document definitions are organized in a hierarchical way, so reject names

@@ -1346,7 +1346,7 @@ namespace pcr
                 // can ignore it
                 OUString sVal;
                 _rValue >>= sVal;
-                if ( sVal.equals( sPlcHolder ) )
+                if ( sVal == sPlcHolder )
                     bIsPlaceHolderValue = true;
             }
             m_sCommittingProperty = rName;

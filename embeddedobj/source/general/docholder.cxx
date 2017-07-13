@@ -114,12 +114,12 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
     for ( nInd = 0; nInd < aSourceProps.getLength(); nInd++ )
     {
         aTargetProps[nInd].Name = aSourceProps[nInd].Name;
-        if ( !aContModuleName.isEmpty() && aTargetProps[nInd].Name.equals( aModuleIdentPropName ) )
+        if ( !aContModuleName.isEmpty() && aTargetProps[nInd].Name == aModuleIdentPropName )
         {
             aTargetProps[nInd].Value <<= aContModuleName;
             bModuleNameSet = true;
         }
-        else if ( aTargetProps[nInd].Name.equals( aDispProvPropName ) )
+        else if ( aTargetProps[nInd].Name == aDispProvPropName )
         {
             aTargetProps[nInd].Value <<= xSourceDisp;
             bDispProvSet = true;

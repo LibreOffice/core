@@ -730,7 +730,7 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
         DispatchTarget& rCurrent = *iterSearch;
         if  (   (rCurrent.xListener == aListener)
             &&  (   bRemoveForAll
-                ||  (rCurrent.aURL.Complete.equals(_rURL.Complete))
+                ||  (rCurrent.aURL.Complete == _rURL.Complete)
                 )
             )
         {
