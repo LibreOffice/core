@@ -31,6 +31,7 @@ struct _GtvApplicationWindow
     GtkWidget* columnbar;
     GtkWidget* cornerarea;
 
+    GtkWidget* commentssidebar;
     GtkWidget* statusbar;
     GtkWidget* zoomlabel;
     GtkWidget* redlinelabel;

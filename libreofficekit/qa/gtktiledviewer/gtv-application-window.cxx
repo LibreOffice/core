@@ -18,6 +18,7 @@
 #include <gtv-signal-handlers.hxx>
 #include <gtv-lokdocview-signal-handlers.hxx>
 #include <gtv-calc-header-bar.hxx>
+#include <gtv-comments-sidebar.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
@@ -27,6 +28,7 @@ struct GtvApplicationWindowPrivate
     GtkWidget* container;
     GtkWidget* gridcontainer;
     GtkWidget* toolbarcontainer;
+    GtkWidget* scrolledwindowcontainer;
 
     gboolean toolbarBroadcast;
     gboolean partSelectorBroadcast;
@@ -61,6 +63,8 @@ gtv_application_window_init(GtvApplicationWindow* win)
     priv->gridcontainer = GTK_WIDGET(gtk_builder_get_object(builder, "maingrid"));
     // scrolled window containing the main drawing area
     win->scrolledwindow = GTK_WIDGET(gtk_builder_get_object(builder, "scrolledwindow"));
+    // scrolledwindow container
+    priv->scrolledwindowcontainer = GTK_WIDGET(gtk_builder_get_object(builder, "scrolledwindowcontainer"));
 
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(win->scrolledwindow));
     g_signal_connect(pHAdjustment, "value-changed", G_CALLBACK(docAdjustmentChanged), win);
@@ -174,37 +178,17 @@ static void initWindow(GtvApplicationWindow* window)
         }
     }
 
-    /* TODO: Comments sidebar
     // Fill our comments sidebar
     gboolean bTiledAnnotations;
-    g_object_get(G_OBJECT(rWindow.m_pDocView), "tiled-annotations", &bTiledAnnotations, nullptr);
-
+    g_object_get(G_OBJECT(window->lokdocview), "tiled-annotations", &bTiledAnnotations, nullptr);
     // comments api implemented only for writer, calc as of now
     if (!bTiledAnnotations && pDocument)
     {
-        if (!rWindow.m_pCommentsSidebar)
-        {
-            rWindow.m_pCommentsSidebar.reset(new CommentsSidebar);
-            rWindow.m_pCommentsSidebar->m_pCommentsVBox = nullptr;
-            rWindow.m_pCommentsSidebar->m_pScrolledWindow = nullptr;
-            rWindow.m_pCommentsSidebar->m_pMainVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-            gtk_container_add(GTK_CONTAINER(rWindow.m_pMainHBox), rWindow.m_pCommentsSidebar->m_pMainVBox);
-
-            rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton = gtk_button_new_with_label(".uno:ViewAnnotations");
-#if GTK_CHECK_VERSION(3,12,0)
-            // Hack to make sidebar grid wide enough to not need any horizontal scrollbar
-            gtk_widget_set_margin_start(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, 20);
-            gtk_widget_set_margin_end(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, 20);
-#endif
-            gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pMainVBox), rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton);
-            g_signal_connect(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, "clicked", G_CALLBACK(CommentsSidebar::unoViewAnnotations), nullptr);
-
-            gtk_widget_show_all(rWindow.m_pCommentsSidebar->m_pMainVBox);
-
-            gtk_button_clicked(GTK_BUTTON(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton));
-        }
+        window->commentssidebar = gtv_comments_sidebar_new();
+        gtk_container_add(GTK_CONTAINER(priv->scrolledwindowcontainer), window->commentssidebar);
+        // fill the comments sidebar
+        gtv_comments_sidebar_view_annotations(GTV_COMMENTS_SIDEBAR(window->commentssidebar));
     }
-    */
 }
 
 static void
@@ -232,8 +216,6 @@ gtv_application_open_document_callback(GObject* source_object, GAsyncResult* res
     }
 
     lok_doc_view_set_edit(pDocView, true);
-
-
     initWindow(window);
 }
 

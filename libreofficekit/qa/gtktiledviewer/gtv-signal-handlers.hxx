@@ -38,6 +38,12 @@ void documentRepair(GtkWidget* pButton, gpointer /*pItem*/);
 
 void docAdjustmentChanged(GtkAdjustment*, gpointer);
 
+void editButtonClicked(GtkWidget*, gpointer);
+
+void replyButtonClicked(GtkWidget*, gpointer);
+
+void deleteCommentButtonClicked(GtkWidget*, gpointer);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

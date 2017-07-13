@@ -531,4 +531,84 @@ void docAdjustmentChanged(GtkAdjustment*, gpointer pData)
         lokdocview_configureEvent(window->lokdocview, nullptr, nullptr);
 }
 
+void editButtonClicked(GtkWidget* pWidget, gpointer userdata)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pWidget));
+    std::map<std::string, std::string> aEntries;
+    aEntries["Text"] = "";
+
+    userPromptDialog(GTK_WINDOW(window), "Edit comment", aEntries);
+
+    gchar *commentId = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
+
+    boost::property_tree::ptree aTree;
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentId));
+
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aArguments = aStream.str();
+
+    lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), ".uno:EditAnnotation", aArguments.c_str(), false);
+}
+
+void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pWidget));
+    std::map<std::string, std::string> aEntries;
+    aEntries["Text"] = "";
+
+    userPromptDialog(GTK_WINDOW(window), "Reply comment", aEntries);
+
+    gchar *commentId = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
+
+    boost::property_tree::ptree aTree;
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentId));
+
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aArguments = aStream.str();
+
+    // Different reply UNO command for impress
+    std::string replyCommand = ".uno:ReplyComment";
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_PRESENTATION)
+        replyCommand = ".uno:ReplyToAnnotation";
+    lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), replyCommand.c_str(), aArguments.c_str(), false);
+}
+
+void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pWidget));
+    gchar *commentid = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
+
+    boost::property_tree::ptree aTree;
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentid));
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aArguments = aStream.str();
+
+    // Different reply UNO command for impress
+    std::string deleteCommand = ".uno:DeleteComment";
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    if (pDocument)
+    {
+        if (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_PRESENTATION)
+            deleteCommand = ".uno:DeleteAnnotation";
+        else if (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
+            deleteCommand = ".uno:DeleteNote";
+    }
+
+    lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), deleteCommand.c_str(), aArguments.c_str(), false);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
