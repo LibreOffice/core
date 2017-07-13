@@ -314,20 +314,20 @@ static void setupDocView(LOKDocView* pDocView)
 #if GLIB_CHECK_VERSION(2,40,0)
     g_assert_nonnull(pDocView);
 #endif
-    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(lokdocview_signalEdit), nullptr);
-    g_signal_connect(pDocView, "command-changed", G_CALLBACK(lokdocview_signalCommand), nullptr);
-    g_signal_connect(pDocView, "command-result", G_CALLBACK(lokdocview_signalCommandResult), nullptr);
-    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(lokdocview_signalSearch), nullptr);
-    g_signal_connect(pDocView, "search-result-count", G_CALLBACK(lokdocview_signalSearchResultCount), nullptr);
-    g_signal_connect(pDocView, "part-changed", G_CALLBACK(lokdocview_signalPart), nullptr);
-    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(lokdocview_signalHyperlink), nullptr);
-    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(lokdocview_cursorChanged), nullptr);
-    g_signal_connect(pDocView, "address-changed", G_CALLBACK(lokdocview_addressChanged), nullptr);
-    g_signal_connect(pDocView, "formula-changed", G_CALLBACK(lokdocview_formulaChanged), nullptr);
-    g_signal_connect(pDocView, "password-required", G_CALLBACK(lokdocview_passwordRequired), nullptr);
-    g_signal_connect(pDocView, "comment", G_CALLBACK(lokdocview_commentCallback), nullptr);
+    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(LOKDocViewSigHandlers::editChanged), nullptr);
+    g_signal_connect(pDocView, "command-changed", G_CALLBACK(LOKDocViewSigHandlers::commandChanged), nullptr);
+    g_signal_connect(pDocView, "command-result", G_CALLBACK(LOKDocViewSigHandlers::commandResult), nullptr);
+    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(LOKDocViewSigHandlers::searchNotFound), nullptr);
+    g_signal_connect(pDocView, "search-result-count", G_CALLBACK(LOKDocViewSigHandlers::searchResultCount), nullptr);
+    g_signal_connect(pDocView, "part-changed", G_CALLBACK(LOKDocViewSigHandlers::partChanged), nullptr);
+    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(LOKDocViewSigHandlers::hyperlinkClicked), nullptr);
+    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(LOKDocViewSigHandlers::cursorChanged), nullptr);
+    g_signal_connect(pDocView, "address-changed", G_CALLBACK(LOKDocViewSigHandlers::addressChanged), nullptr);
+    g_signal_connect(pDocView, "formula-changed", G_CALLBACK(LOKDocViewSigHandlers::formulaChanged), nullptr);
+    g_signal_connect(pDocView, "password-required", G_CALLBACK(LOKDocViewSigHandlers::passwordRequired), nullptr);
+    g_signal_connect(pDocView, "comment", G_CALLBACK(LOKDocViewSigHandlers::comment), nullptr);
 
-    g_signal_connect(pDocView, "configure-event", G_CALLBACK(lokdocview_configureEvent), nullptr);
+    g_signal_connect(pDocView, "configure-event", G_CALLBACK(LOKDocViewSigHandlers::configureEvent), nullptr);
 }
 
 void

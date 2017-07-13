@@ -528,7 +528,7 @@ void docAdjustmentChanged(GtkAdjustment*, gpointer pData)
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(pData);
     printf("doc adjust ch : %p", window->lokdocview);
     if (window->lokdocview)
-        lokdocview_configureEvent(window->lokdocview, nullptr, nullptr);
+        LOKDocViewSigHandlers::configureEvent(window->lokdocview, nullptr, nullptr);
 }
 
 void editButtonClicked(GtkWidget* pWidget, gpointer userdata)

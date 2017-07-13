@@ -14,11 +14,12 @@
 #include <gtv-signal-handlers.hxx>
 #include <gtv-calc-header-bar.hxx>
 #include <gtv-comments-sidebar.hxx>
+#include <gtv-lokdocview-signal-handlers.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
 
-void lokdocview_signalEdit(LOKDocView* pDocView, gboolean bWasEdit, gpointer)
+void LOKDocViewSigHandlers::editChanged(LOKDocView* pDocView, gboolean bWasEdit, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     gboolean bEdit = lok_doc_view_get_edit(LOK_DOC_VIEW(window->lokdocview));
@@ -29,7 +30,7 @@ void lokdocview_signalEdit(LOKDocView* pDocView, gboolean bWasEdit, gpointer)
     gtv_main_toolbar_set_edit(pMainToolbar, bEdit);
 }
 
-void lokdocview_signalCommand(LOKDocView* pDocView, char* pPayload, gpointer)
+void LOKDocViewSigHandlers::commandChanged(LOKDocView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     std::string aPayload(pPayload);
@@ -75,18 +76,18 @@ void lokdocview_signalCommand(LOKDocView* pDocView, char* pPayload, gpointer)
     }
 }
 
-void lokdocview_signalCommandResult(LOKDocView*, char* pPayload, gpointer)
+void LOKDocViewSigHandlers::commandResult(LOKDocView*, char* pPayload, gpointer)
 {
     fprintf(stderr, "Command finished: %s\n", pPayload);
 }
 
-void lokdocview_signalSearch(LOKDocView* pDocView, char* , gpointer)
+void LOKDocViewSigHandlers::searchNotFound(LOKDocView* pDocView, char* , gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     gtk_label_set_text(GTK_LABEL(window->findbarlabel), "Search key not found");
 }
 
-void lokdocview_signalSearchResultCount(LOKDocView* pDocView, char* pPayload, gpointer)
+void LOKDocViewSigHandlers::searchResultCount(LOKDocView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     std::stringstream ss;
@@ -94,7 +95,7 @@ void lokdocview_signalSearchResultCount(LOKDocView* pDocView, char* pPayload, gp
     gtk_label_set_text(GTK_LABEL(window->findbarlabel), ss.str().c_str());
 }
 
-void lokdocview_signalPart(LOKDocView* /*pDocView*/, int, gpointer)
+void LOKDocViewSigHandlers::partChanged(LOKDocView* /*pDocView*/, int, gpointer)
 {
 //    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     //rWindow.m_bPartSelectorBroadcast = false;
@@ -102,7 +103,7 @@ void lokdocview_signalPart(LOKDocView* /*pDocView*/, int, gpointer)
     //  rWindow.m_bPartSelectorBroadcast = true;
 }
 
-void lokdocview_signalHyperlink(LOKDocView* pDocView, char* pPayload, gpointer)
+void LOKDocViewSigHandlers::hyperlinkClicked(LOKDocView* pDocView, char* pPayload, gpointer)
 {
     GError* pError = nullptr;
 #if GTK_CHECK_VERSION(3,22,0)
@@ -120,7 +121,7 @@ void lokdocview_signalHyperlink(LOKDocView* pDocView, char* pPayload, gpointer)
     }
 }
 
-void lokdocview_cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
+void LOKDocViewSigHandlers::cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
                               gint /*nWidth*/, gint /*nHeight*/, gpointer /*pData*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
@@ -168,19 +169,19 @@ void lokdocview_cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
         gtk_adjustment_set_value(hadj, lok_doc_view_twip_to_pixel(pDocView, x));
 }
 
-void lokdocview_addressChanged(LOKDocView* pDocView, char* pPayload, gpointer)
+void LOKDocViewSigHandlers::addressChanged(LOKDocView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     gtk_entry_set_text(GTK_ENTRY(window->addressbarentry), pPayload);
 }
 
-void lokdocview_formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer)
+void LOKDocViewSigHandlers::formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     gtk_entry_set_text(GTK_ENTRY(window->formulabarentry), pPayload);
 }
 
-void lokdocview_passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer)
+void LOKDocViewSigHandlers::passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     GtkWidget* pPasswordDialog = gtk_dialog_new_with_buttons ("Password required",
@@ -219,7 +220,7 @@ void lokdocview_passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bMod
     gtk_widget_destroy(pPasswordDialog);
 }
 
-void lokdocview_commentCallback(LOKDocView* pDocView, gchar* pComment, gpointer)
+void LOKDocViewSigHandlers::comment(LOKDocView* pDocView, gchar* pComment, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
 
@@ -271,7 +272,7 @@ void lokdocview_commentCallback(LOKDocView* pDocView, gchar* pComment, gpointer)
     }
 }
 
-gboolean lokdocview_configureEvent(GtkWidget* pWidget, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
+gboolean LOKDocViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pWidget)));
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));

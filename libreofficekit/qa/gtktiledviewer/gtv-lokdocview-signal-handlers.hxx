@@ -12,19 +12,22 @@
 
 #include <gtk/gtk.h>
 
-void lokdocview_signalEdit(LOKDocView* pDocView, gboolean bWasEdit, gpointer);
-void lokdocview_signalCommand(LOKDocView* pDocView, char* pPayload, gpointer);
-void lokdocview_signalCommandResult(LOKDocView*, char*, gpointer);
-void lokdocview_signalSearch(LOKDocView*, char*, gpointer);
-void lokdocview_signalSearchResultCount(LOKDocView*, char*, gpointer);
-void lokdocview_signalPart(LOKDocView*, int, gpointer);
-void lokdocview_signalHyperlink(LOKDocView*, char*, gpointer);
-void lokdocview_cursorChanged(LOKDocView* pDocView, gint nX, gint nY, gint nWidth, gint nHeight, gpointer);
-void lokdocview_addressChanged(LOKDocView* pDocView, char* pPayload, gpointer);
-void lokdocview_formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer);
-void lokdocview_passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer);
-void lokdocview_commentCallback(LOKDocView* pDocView, gchar* pComment, gpointer);
-gboolean lokdocview_configureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
+namespace LOKDocViewSigHandlers {
+    void editChanged(LOKDocView* pDocView, gboolean bWasEdit, gpointer);
+    void commandChanged(LOKDocView* pDocView, char* pPayload, gpointer);
+    void commandResult(LOKDocView*, char*, gpointer);
+    void searchNotFound(LOKDocView*, char*, gpointer);
+    void searchResultCount(LOKDocView*, char*, gpointer);
+    void partChanged(LOKDocView*, int, gpointer);
+    void hyperlinkClicked(LOKDocView*, char*, gpointer);
+    void cursorChanged(LOKDocView* pDocView, gint nX, gint nY, gint nWidth, gint nHeight, gpointer);
+    void addressChanged(LOKDocView* pDocView, char* pPayload, gpointer);
+    void formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer);
+    void passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer);
+    void comment(LOKDocView* pDocView, gchar* pComment, gpointer);
+
+    gboolean configureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
+}
 
 #endif
 
