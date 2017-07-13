@@ -315,7 +315,7 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         }
         addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
     }
-    if ( aBuf.toString().equals( OUString( mYName + " = ") ) )
+    if ( aBuf.toString() == ( mYName + " = ") )
         aBuf.append( "0" );
 
     return aBuf.makeStringAndClear();

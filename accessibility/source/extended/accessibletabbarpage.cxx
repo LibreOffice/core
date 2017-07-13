@@ -129,7 +129,7 @@ namespace accessibility
 
     void AccessibleTabBarPage::SetPageText( const OUString& sPageText )
     {
-        if ( !m_sPageText.equals( sPageText ) )
+        if ( m_sPageText != sPageText )
         {
             Any aOldValue, aNewValue;
             aOldValue <<= m_sPageText;

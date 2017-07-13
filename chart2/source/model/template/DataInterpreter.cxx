@@ -247,9 +247,9 @@ struct lcl_LabeledSequenceEquals
         bool bHasLabels = xSeqLabels.is();
 
         return ( ( (m_bHasValues == bHasValues) &&
-                   (!bHasValues || m_aValuesRangeRep.equals( xSeqValues->getSourceRangeRepresentation())) ) &&
+                   (!bHasValues || m_aValuesRangeRep == xSeqValues->getSourceRangeRepresentation()) ) &&
                  ( (m_bHasLabels == bHasLabels) &&
-                   (!bHasLabels || m_aLabelRangeRep.equals( xSeqLabels->getSourceRangeRepresentation())) )
+                   (!bHasLabels || m_aLabelRangeRep == xSeqLabels->getSourceRangeRepresentation()) )
             );
     }
 
@@ -344,7 +344,7 @@ uno::Any DataInterpreter::GetProperty(
 {
     for( sal_Int32 i=aArguments.getLength(); i--; )
     {
-        if( aArguments[i].Name.equals( rName ))
+        if( aArguments[i].Name == rName )
             return aArguments[i].Value;
     }
     return uno::Any();

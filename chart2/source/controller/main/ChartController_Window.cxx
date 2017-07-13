@@ -692,7 +692,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         else
         {
             OUString aDragMethodServiceName( ObjectIdentifier::getDragMethodServiceName( m_aSelection.getSelectedCID() ) );
-            if( aDragMethodServiceName.equals( ObjectIdentifier::getPieSegmentDragMethodServiceName() ) )
+            if( aDragMethodServiceName == ObjectIdentifier::getPieSegmentDragMethodServiceName() )
                 pDragMethod = new DragMethod_PieSegment( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel() );
         }
         pDrawViewWrapper->SdrView::BegDragObj(aMPos, nullptr, pHitSelectionHdl, nDrgLog, pDragMethod);
@@ -1345,8 +1345,8 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         // pie segment dragging
         // note: could also be done for data series
         if( eObjectType == OBJECTTYPE_DATA_POINT &&
-            ObjectIdentifier::getDragMethodServiceName( m_aSelection.getSelectedCID() ).equals(
-                ObjectIdentifier::getPieSegmentDragMethodServiceName()))
+            ObjectIdentifier::getDragMethodServiceName( m_aSelection.getSelectedCID() ) ==
+                ObjectIdentifier::getPieSegmentDragMethodServiceName())
         {
             bool bDrag = false;
             bool bDragInside = false;
@@ -1956,7 +1956,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
 
     if( m_pDrawViewWrapper->IsTextEdit() )
     {
-        if( aHitObjectCID.equals(m_aSelection.getSelectedCID()) )
+        if( aHitObjectCID == m_aSelection.getSelectedCID() )
         {
             pChartWindow->SetPointer( Pointer( PointerStyle::Arrow ));
             return;
