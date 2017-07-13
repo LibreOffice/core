@@ -27,20 +27,14 @@
 #include <svtools/borderhelper.hxx>
 #include <editeng/borderline.hxx>
 
+#if defined(ANDROID)
+#include <android/compatibility.hxx>
+#endif
+
 #include <algorithm>
 #include <cmath>
 #include <numeric>
 
-#if defined(ANDROID)
-namespace std
-{
-template<typename T>
-T round(T x)
-{
-    return ::round(x);
-}
-}
-#endif
 
 namespace drawinglayer
 {

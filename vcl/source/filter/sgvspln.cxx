@@ -25,14 +25,7 @@
 #include <cmath>
 
 #if defined(ANDROID)
-namespace std
-{
-template<typename T>
-T copysign(T x, T y)
-{
-    return ::copysign(x, y);
-}
-}
+#include <android/compatibility.hxx>
 #endif
 
 extern "C" {

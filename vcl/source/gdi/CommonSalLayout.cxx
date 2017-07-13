@@ -27,16 +27,8 @@
 #include <limits>
 #include <salgdi.hxx>
 #include <unicode/uchar.h>
-
 #if defined(ANDROID)
-namespace std
-{
-template<typename T>
-T lround(T x)
-{
-    return ::lround(x);
-}
-}
+#include <android/compatibility.hxx>
 #endif
 
 static hb_blob_t* getFontTable(hb_face_t* /*face*/, hb_tag_t nTableTag, void* pUserData)

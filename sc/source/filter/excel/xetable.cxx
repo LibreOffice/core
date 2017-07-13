@@ -40,14 +40,7 @@
 #include <oox/export/utils.hxx>
 
 #if defined(ANDROID)
-namespace std
-{
-template<typename T>
-T trunc(T x)
-{
-    return ::trunc(x);
-}
-}
+#include <android/compatibility.hxx>
 #endif
 
 using namespace ::oox;
