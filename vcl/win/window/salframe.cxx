@@ -5737,6 +5737,8 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         case WM_ENDSESSION:
             if( !wParam )
                 bInQueryEnd = FALSE; // no shutdown: allow query again
+            else
+                ImplHandleCloseMsg( hWnd ); // allow for correct shutdown
             nRet = FALSE;
             rDef = FALSE;
             break;
