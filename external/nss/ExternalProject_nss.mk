@@ -21,6 +21,7 @@ $(call gb_ExternalProject_get_state_target,nss,configure):
 			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 		nspr/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter ANDROID,$(OS)),--build=$(BUILD_PLATFORM) --host="arm-linux-androidebi" --enable-64bit --with-android-ndk=$(ANDROID_NDK_HOME) --with-android-toolchain=$(ANDROID_NDK_GCC_TOOLCHAIN) --with-android-platform=$(ANDROID_PLATFORM)) \
 			$(if $(filter MSC-X86_64,$(COM)-$(CPUNAME)),--enable-64bit) \
 			$(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)),--host=i686-pc-cygwin) \
 	,,nss_configure.log)
@@ -58,6 +59,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 			NMEDIT="$(NM)edit" \
 			CCC="$(CXX)" \
 			$(if $(CROSS_COMPILING),NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
+			$(if $(filter ANDROID,$(OS)),NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=arm-linux-androidebi --enable-64bit --with-android-ndk=$(ANDROID_NDK_HOME) --with-android-toolchain=$(ANDROID_NDK_GCC_TOOLCHAIN) --with-android-platform=$(ANDROID_PLATFORM)") \
 			nss_build_all \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
 		$(if $(filter MACOSX,$(OS)),\

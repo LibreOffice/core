@@ -109,7 +109,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	xmloff/source/transform/xof \
 	xmloff/util/xo \
 	xmlscript/util/xmlscript \
-	$(if $(ENABLE_NSS), \
+	$(if $(filter-out ANDROID,$(OS)), \
 		xmlsecurity/util/xmlsecurity \
 		xmlsecurity/util/xsec_xmlsec$(if $(filter WNT,$(OS)),.windows)) \
 	$(if $(ENABLE_COINMP), \
