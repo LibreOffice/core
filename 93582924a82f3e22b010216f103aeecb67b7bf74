@@ -16,6 +16,24 @@
       "revId": "93582924a82f3e22b010216f103aeecb67b7bf74",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_ea948ee9",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-07-13T06:58:18Z",
+      "side": 1,
+      "message": "The problem is the \"again\", as already the original code in \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003da41687b62b0a6f2b79e44311ddf74c52e844ee36\u003e \"New files from xlsx-shared-oox-chart-export-part1.diff\" is broken the way it is today, and I have no idea what the actual intent of the code is.  I would hope that Bubli as the original committer (that\u0027s you under your maiden name, right?) could shed some light on this.",
+      "parentUuid": "3a461143_d9b6d23c",
+      "revId": "93582924a82f3e22b010216f103aeecb67b7bf74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
