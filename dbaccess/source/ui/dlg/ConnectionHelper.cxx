@@ -417,10 +417,10 @@ namespace dbaui
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
                 // get the two parts: prefix and file URL
-                OUString sTypePrefix, sFileURLDecoded;
+                OUString sFileURLDecoded;
                 sFileURLDecoded = sURL;
 
-                sURL = sTypePrefix;
+                sURL = OUString();
                 if ( !sFileURLDecoded.isEmpty() )
                 {
                     OFileNotation aFileNotation( sFileURLDecoded, OFileNotation::N_SYSTEM );
