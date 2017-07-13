@@ -1588,16 +1588,6 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
             bool bInsertCols = ( eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER);
             bool bInsertRows = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER );
 
-            if (bInsertCols)
-            {
-                OnLOKInsertDeleteColumn(aRange.aStart.Col(), 1);
-            }
-
-            if (bInsertRows)
-            {
-                OnLOKInsertDeleteRow(aRange.aStart.Row(), 1);
-            }
-
             pDocSh->UpdateOle(&GetViewData());
             CellContentChanged();
             ResetAutoSpell();
@@ -1662,16 +1652,6 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
 #endif
         {
             pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, false );
-        }
-
-        if (eCmd == DEL_DELCOLS)
-        {
-            OnLOKInsertDeleteColumn(aRange.aStart.Col(), -1);
-        }
-
-        if (eCmd == DEL_DELROWS)
-        {
-            OnLOKInsertDeleteRow(aRange.aStart.Row(), -1);
         }
 
         pDocSh->UpdateOle(&GetViewData());
