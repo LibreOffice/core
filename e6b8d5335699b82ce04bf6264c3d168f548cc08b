@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_d065c0e1",
+        "filename": "drawinglayer/source/primitive2d/borderlineprimitive2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-13T09:24:25Z",
+      "side": 1,
+      "message": "Could we do the ifdef inside the header? Would save lots of copy\u0026paste.",
+      "revId": "e6b8d5335699b82ce04bf6264c3d168f548cc08b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
