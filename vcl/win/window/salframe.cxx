@@ -4029,18 +4029,6 @@ static void ImplHandleCloseMsg( HWND hWnd )
         }
 }
 
-static long ImplHandleShutDownMsg( HWND hWnd )
-{
-    long nRet = 0;
-    WinSalFrame* pFrame = ProcessOrDeferMessage( hWnd, 0, 0, DeferPolicy::Blocked );
-    if ( pFrame )
-    {
-        nRet = pFrame->CallCallback( SalEvent::Shutdown, nullptr );
-        ImplSalYieldMutexRelease();
-    }
-    return nRet;
-}
-
 static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
                                          WPARAM wParam, LPARAM lParam )
 {
@@ -5447,7 +5435,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 {
     LRESULT     nRet = 0;
     static int  bInWheelMsg = FALSE;
-    static int  bInQueryEnd = FALSE;
 
     // By WM_CRETAE we connect the frame with the window handle
     if ( nMsg == WM_CREATE )
@@ -5690,41 +5677,9 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_QUERYENDSESSION:
-            if( !bInQueryEnd )
-            {
-                // handle queryendsession only once
-                bInQueryEnd = TRUE;
-                nRet = LRESULT(!ImplHandleShutDownMsg( hWnd ));
-                rDef = FALSE;
-
-                // Issue #16314#: ImplHandleShutDownMsg causes a PostMessage in case of allowing shutdown.
-                // This posted message was never processed and cause Windows XP to hang after log off
-                // if there are multiple sessions and the current session wasn't the first one started.
-                // So if shutdown is allowed we assume that a post message was done and retrieve all
-                // messages in the message queue and dispatch them before we return control to the system.
-
-                if ( nRet )
-                {
-                    MSG msg;
-
-                    while( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) )
-                    {
-                        DispatchMessage( &msg );
-                    }
-                }
-            }
-            else
-            {
-                ImplSalYieldMutexAcquireWithWait();
-                ImplSalYieldMutexRelease();
-                rDef = TRUE;
-            }
-            break;
-
         case WM_ENDSESSION:
-            if( !wParam )
-                bInQueryEnd = FALSE; // no shutdown: allow query again
-            nRet = FALSE;
+            // tdf#109085: Process it synchronously in SalComWndProc
+            nRet = SendMessageW(GetSalData()->mpFirstInstance->mhComWnd, nMsg, wParam, lParam);
             rDef = FALSE;
             break;
 
