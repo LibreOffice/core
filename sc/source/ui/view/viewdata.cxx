@@ -1253,10 +1253,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                                 ScEditEngineDefaulter* pNewEngine,
                                 vcl::Window* pWin, SCCOL nNewX, SCROW nNewY )
 {
-    if (comphelper::LibreOfficeKit::isActive()
-        && GetViewShell() != SfxViewShell::Current())
-        return;
-
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTabNo );
     ScHSplitPos eHWhich = WhichH(eWhich);
 
@@ -1292,7 +1288,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     }
 
     // add windows from other views
-    if (comphelper::LibreOfficeKit::isActive())
+    if (!bWasThere && comphelper::LibreOfficeKit::isActive())
     {
         ScTabViewShell* pThisViewShell = GetViewShell();
         SCTAB nThisTabNo = GetTabNo();
