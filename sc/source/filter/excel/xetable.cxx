@@ -38,17 +38,7 @@
 #include <thread>
 #include <comphelper/threadpool.hxx>
 #include <oox/export/utils.hxx>
-
-#if defined(ANDROID)
-namespace std
-{
-template<typename T>
-T trunc(T x)
-{
-    return ::trunc(x);
-}
-}
-#endif
+#include <android/compatibility.hxx>
 
 using namespace ::oox;
 

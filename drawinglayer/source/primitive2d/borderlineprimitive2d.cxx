@@ -26,21 +26,12 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <svtools/borderhelper.hxx>
 #include <editeng/borderline.hxx>
+#include <android/compatibility.hxx>
 
 #include <algorithm>
 #include <cmath>
 #include <numeric>
 
-#if defined(ANDROID)
-namespace std
-{
-template<typename T>
-T round(T x)
-{
-    return ::round(x);
-}
-}
-#endif
 
 namespace drawinglayer
 {
