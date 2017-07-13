@@ -34,17 +34,17 @@ public:
         StringRef fn( compiler.getSourceManager().getFileEntryForID(
                           compiler.getSourceManager().getMainFileID())->getName() );
         // fixing this, makes the source in the .y files look horrible
-        if (loplugin::hasPathnamePrefix(fn, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx"))
+        if (loplugin::isSamePathname(fn, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx"))
              return;
-        if (loplugin::hasPathnamePrefix(fn, WORKDIR "/YaccTarget/idlc/source/parser.cxx"))
+        if (loplugin::isSamePathname(fn, WORKDIR "/YaccTarget/idlc/source/parser.cxx"))
              return;
-        if (loplugin::hasPathnamePrefix(fn, WORKDIR "/YaccTarget/rsc/source/parser/rscyacc.cxx"))
+        if (loplugin::isSamePathname(fn, WORKDIR "/YaccTarget/rsc/source/parser/rscyacc.cxx"))
              return;
 
         // TODO yuck, comma operator at work
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/writerfilter/source/rtftok/rtftokenizer.cxx"))
+        if (loplugin::isSamePathname(fn, SRCDIR "/writerfilter/source/rtftok/rtftokenizer.cxx"))
              return;
-        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/source/filter/html/htmltab.cxx"))
+        if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/filter/html/htmltab.cxx"))
              return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
