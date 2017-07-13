@@ -66,12 +66,12 @@ IMPL_LINK_NOARG( RemoteDialog, CloseClickHdl, Button*, void )
 {
     CloseHdl(*this);
 }
-IMPL_LINK_NOARG( RemoteDialog, CloseHdl, SystemWindow&, void )
+IMPL_LINK_NOARG( RemoteDialog, CloseHdl, SystemWindow&, bool )
 {
 #ifdef ENABLE_SDREMOTE
     RemoteServer::restoreDiscoverable();
 #endif
-    Close();
+    return Close();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

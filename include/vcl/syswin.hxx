@@ -280,8 +280,8 @@ public:
 
     void            SetApplicationID( const OUString &rApplicationID );
 
-    void SetCloseHdl(const Link<SystemWindow&,void>& rLink);
-    const Link<SystemWindow&,void>& GetCloseHdl() const;
+    void SetCloseHdl(const Link<SystemWindow&,bool>& rLink);
+    const Link<SystemWindow&,bool>& GetCloseHdl() const;
 
     SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutIdle.IsActive(); }
 

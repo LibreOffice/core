@@ -54,7 +54,7 @@ public:
                     mpTaskPaneList;
     Size            maMaxOutSize;
     OUString        maRepresentedURL;
-    Link<SystemWindow&,void> maCloseHdl;
+    Link<SystemWindow&,bool> maCloseHdl;
 };
 
 SystemWindow::ImplData::ImplData()
@@ -1024,12 +1024,12 @@ void SystemWindow::SetApplicationID(const OUString &rApplicationID)
     mpWindowImpl->mpFrame->SetApplicationID( rApplicationID );
 }
 
-void SystemWindow::SetCloseHdl(const Link<SystemWindow&,void>& rLink)
+void SystemWindow::SetCloseHdl(const Link<SystemWindow&,bool>& rLink)
 {
     mpImplData->maCloseHdl = rLink;
 }
 
-const Link<SystemWindow&,void>& SystemWindow::GetCloseHdl() const
+const Link<SystemWindow&,bool>& SystemWindow::GetCloseHdl() const
 {
     return mpImplData->maCloseHdl;
 }

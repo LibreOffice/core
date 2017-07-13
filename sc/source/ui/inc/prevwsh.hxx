@@ -56,7 +56,7 @@ class SC_DLLPUBLIC ScPreviewShell: public SfxViewShell
 private:
     void            Construct( vcl::Window* pParent );
     DECL_LINK( ScrollHandler, ScrollBar*, void );
-    DECL_LINK( CloseHdl, SystemWindow&, void);
+    DECL_LINK( CloseHdl, SystemWindow&, bool);
     void            DoScroll( sal_uInt16 nMode );
     void            ExitPreview();
 

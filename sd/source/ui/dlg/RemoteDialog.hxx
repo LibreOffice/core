@@ -29,7 +29,7 @@ private:
     VclPtr<ClientBox>      m_pClientBox;
 
     DECL_LINK( HandleConnectButton, Button*, void );
-    DECL_LINK( CloseHdl, SystemWindow&, void );
+    DECL_LINK( CloseHdl, SystemWindow&, bool );
     DECL_LINK( CloseClickHdl, Button*, void );
 public:
     explicit RemoteDialog( vcl::Window* pWindow );

@@ -1846,6 +1846,21 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
         pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
 }
 
+static bool TryCloseWindow(vcl::Window* pWindow)
+{
+    assert(pWindow);
+    bool bRet = true;
+    if (!pWindow->IsDisposed())
+    {
+        // dispatch to correct window type
+        if (pWindow->IsSystemWindow())
+            bRet = static_cast<SystemWindow*>(pWindow)->Close();
+        else if (pWindow->IsDockingWindow())
+            bRet = static_cast<DockingWindow*>(pWindow)->Close();
+    }
+    return bRet;
+}
+
 struct DelayedCloseEvent
 {
     VclPtr<vcl::Window> pWindow;
@@ -1855,18 +1870,11 @@ static void DelayedCloseEventLink( void* pCEvent, void* )
 {
     DelayedCloseEvent* pEv = static_cast<DelayedCloseEvent*>(pCEvent);
 
-    if( ! pEv->pWindow->IsDisposed() )
-    {
-        // dispatch to correct window type
-        if( pEv->pWindow->IsSystemWindow() )
-            static_cast<SystemWindow*>(pEv->pWindow.get())->Close();
-        else if( pEv->pWindow->IsDockingWindow() )
-            static_cast<DockingWindow*>(pEv->pWindow.get())->Close();
-    }
+    TryCloseWindow(pEv->pWindow.get());
     delete pEv;
 }
 
-void ImplHandleClose( vcl::Window* pWindow )
+bool ImplHandleClose( vcl::Window* pWindow, bool bShutdown = false )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -1895,29 +1903,38 @@ void ImplHandleClose( vcl::Window* pWindow )
     if ( pSVData->maWinData.mpTrackWin )
         pSVData->maWinData.mpTrackWin->EndTracking( TrackingEventFlags::Cancel | TrackingEventFlags::Key );
 
-    if (bWasPopup)
-        return;
+    if (bWasPopup && !bShutdown)
+        return true;
 
     vcl::Window *pWin = pWindow->ImplGetWindow();
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(pWin);
     if (pSysWin)
     {
         // See if the custom close handler is set.
-        const Link<SystemWindow&,void>& rLink = pSysWin->GetCloseHdl();
+        const Link<SystemWindow&,bool>& rLink = pSysWin->GetCloseHdl();
         if (rLink.IsSet())
         {
-            rLink.Call(*pSysWin);
-            return;
+            return rLink.Call(*pSysWin);
         }
     }
 
     // check whether close is allowed
     if ( pWin->IsEnabled() && pWin->IsInputEnabled() && !pWin->IsInModalMode() )
     {
-        DelayedCloseEvent* pEv = new DelayedCloseEvent;
-        pEv->pWindow = pWin;
-        Application::PostUserEvent( Link<void*,void>( pEv, DelayedCloseEventLink ) );
+        if (!bShutdown)
+        {
+            DelayedCloseEvent* pEv = new DelayedCloseEvent;
+            pEv->pWindow = pWin;
+            Application::PostUserEvent(Link<void*, void>(pEv, DelayedCloseEventLink));
+            return true;
+        }
+        else
+        {
+            // Close synchronously; return its result
+            return TryCloseWindow(pWin);
+        }
     }
+    return false;
 }
 
 static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
@@ -2447,25 +2464,8 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             break;
 
         case SalEvent::Shutdown:
-            {
-                static bool bInQueryExit = false;
-                if( !bInQueryExit )
-                {
-                    bInQueryExit = true;
-                    if ( GetpApp()->QueryExit() )
-                    {
-                        // Message-Schleife beenden
-                        Application::Quit();
-                        return false;
-                    }
-                    else
-                    {
-                        bInQueryExit = false;
-                        return true;
-                    }
-                }
-                return false;
-            }
+            bRet = ImplHandleClose( pWindow, true );
+            break;
 
         case SalEvent::SettingsChanged:
         case SalEvent::PrinterChanged:
