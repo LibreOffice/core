@@ -566,10 +566,9 @@ void SAL_CALL TabWindow::windowDeactivated( const css::lang::EventObject& )
 
     sal_Int32 nNextTabID( m_nNextTabID++ );
 
-    OUString aTitle;
     TabControl* pTabControl = impl_GetTabControl( m_xTabControlWindow );
     if ( pTabControl )
-        pTabControl->InsertPage( sal_uInt16( nNextTabID ), aTitle );
+        pTabControl->InsertPage( sal_uInt16( nNextTabID ), OUString() );
     aLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
