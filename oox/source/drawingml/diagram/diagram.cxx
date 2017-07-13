@@ -328,7 +328,11 @@ void Diagram::addTo( const ShapePtr & pParentShape )
         // create Shape hierarchy
         ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
         mpLayout->getNode()->setExistingShape(pParentShape);
-        mpLayout->getNode()->accept( aCreationVisitor );
+        mpLayout->getNode()->accept(aCreationVisitor);
+
+        // layout shapes - now all shapes are created
+        ShapeLayoutingVisitor aLayoutingVisitor;
+        mpLayout->getNode()->accept(aLayoutingVisitor);
     }
     pParentShape->setDiagramDoms( getDomsAsPropertyValues() );
 }

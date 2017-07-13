@@ -246,6 +246,8 @@ public:
         { return mpShapeTemplate; }
     const ShapePtr& getExistingShape() const
         { return mpExistingShape; }
+    std::vector<ShapePtr> & getNodeShapes()
+        { return mpNodeShapes; }
 
     bool setupShape( const ShapePtr& rShape,
                      const Diagram& rDgm,
@@ -257,6 +259,7 @@ private:
     OUString                     msStyleLabel;
     ShapePtr                     mpShapeTemplate;
     ShapePtr                     mpExistingShape;
+    std::vector<ShapePtr>        mpNodeShapes;
     sal_Int32                    mnChildOrder;
 };
 

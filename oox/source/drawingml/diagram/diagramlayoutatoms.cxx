@@ -149,59 +149,13 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
     {
         case XML_composite:
         {
-            if( rShape->getChildren().empty() )
+            // all shapes fill parent
+
+            for (auto & aCurrShape : rShape->getChildren())
             {
-                rShape->setSize(awt::Size(50,50));
-                break;
+                aCurrShape->setSize(rShape->getSize());
+                aCurrShape->setChildSize(rShape->getSize());
             }
-
-            // just put stuff below each other
-            const sal_Int32 nIncX=0;
-            const sal_Int32 nIncY=1;
-
-            std::vector<ShapePtr>::const_iterator aCurrShape=rShape->getChildren().begin();
-            const std::vector<ShapePtr>::const_iterator aLastShape=rShape->getChildren().end();
-
-            // find biggest shape
-            awt::Size aMaxSize;
-            while( aCurrShape != aLastShape )
-            {
-                const awt::Size& sz=(*aCurrShape)->getSize();
-
-                aMaxSize.Width = std::max(
-                    aMaxSize.Width,
-                    sz.Width);
-                aMaxSize.Height = std::max(
-                    aMaxSize.Height,
-                    sz.Height);
-
-                ++aCurrShape;
-            }
-
-            aCurrShape=rShape->getChildren().begin();
-            const awt::Point aStartPos=(*aCurrShape)->getPosition();
-            awt::Point aCurrPos=aStartPos;
-            awt::Size  aTotalSize;
-            aTotalSize.Width = aMaxSize.Width;
-            while( aCurrShape != aLastShape )
-            {
-                const awt::Size& sz=(*aCurrShape)->getSize();
-                (*aCurrShape)->setPosition(aCurrPos);
-                (*aCurrShape)->setSize(
-                    awt::Size(aMaxSize.Width,
-                              sz.Height));
-
-                aTotalSize.Height = std::max(
-                    aTotalSize.Height,
-                    aCurrPos.Y + sz.Height);
-
-                aCurrPos.X += nIncX*sz.Width;
-                aCurrPos.Y += nIncY*sz.Height;
-
-                ++aCurrShape;
-            }
-
-            rShape->setSize(aTotalSize);
             break;
         }
 
@@ -210,11 +164,8 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
         case XML_cycle:
         {
-            if( rShape->getChildren().empty() )
-            {
-                rShape->setSize(awt::Size(50,50));
+            if (rShape->getChildren().empty())
                 break;
-            }
 
             const sal_Int32 nStartAngle=maMap.count(XML_stAng) ? maMap.find(XML_stAng)->second : 0;
             const sal_Int32 nSpanAngle=maMap.count(XML_spanAng) ? maMap.find(XML_spanAng)->second : 360;
@@ -241,27 +192,15 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             // layout shapes
             const sal_Int32 nMaxDim=std::max(aMaxSize.Width,aMaxSize.Height);
-            awt::Size aTotalSize;
             aCurrShape=rShape->getChildren().begin();
             for( sal_Int32 i=0; i<nShapes; ++i, ++aCurrShape )
             {
-                const awt::Size& sz=(*aCurrShape)->getSize();
-
                 const double r=nShapes*nMaxDim/F_2PI * 360.0/nSpanAngle;
                 const awt::Point aCurrPos(
                     r + r*sin( (double(i)*nSpanAngle/nShapes + nStartAngle)*F_PI180 ),
                     r - r*cos( (double(i)*nSpanAngle/nShapes + nStartAngle)*F_PI180 ) );
                 (*aCurrShape)->setPosition(aCurrPos);
-
-                aTotalSize.Width = std::max(
-                    aTotalSize.Width,
-                    aCurrPos.X + sz.Width);
-                aTotalSize.Height = std::max(
-                    aTotalSize.Height,
-                    aCurrPos.Y + sz.Height);
             }
-
-            rShape->setSize(aTotalSize);
             break;
         }
 
@@ -270,87 +209,93 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             break;
 
         case XML_lin:
-        case XML_snake:
         {
-            if( rShape->getChildren().empty() )
-            {
-                rShape->setSize(awt::Size(50,50));
+            // spread childres evenly across one axis, strech across second
+
+            if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
                 break;
-            }
 
-            const sal_Int32 nDir=maMap.count(XML_linDir) ? maMap.find(XML_linDir)->second : XML_fromL;
-            const sal_Int32 nIncX=nDir==XML_fromL ? 1 : (nDir==XML_fromR ? -1 : 0);
-            const sal_Int32 nIncY=nDir==XML_fromT ? 1 : (nDir==XML_fromB ? -1 : 0);
+            const sal_Int32 nDir = maMap.count(XML_linDir) ? maMap.find(XML_linDir)->second : XML_fromL;
+            const sal_Int32 nIncX = nDir==XML_fromL ? 1 : (nDir==XML_fromR ? -1 : 0);
+            const sal_Int32 nIncY = nDir==XML_fromT ? 1 : (nDir==XML_fromB ? -1 : 0);
 
-            std::vector<ShapePtr>::const_iterator aCurrShape=rShape->getChildren().begin();
-            const std::vector<ShapePtr>::const_iterator aLastShape=rShape->getChildren().end();
-            const awt::Point aStartPos=(*aCurrShape)->getPosition();
-            awt::Point aCurrPos=aStartPos;
-            awt::Size  aTotalSize;
-            while( aCurrShape != aLastShape )
+            // TODO: get values from constraints
+            sal_Int32 nCount = rShape->getChildren().size();
+            double fSpace = 0.3;
+
+            awt::Size aChildSize = rShape->getSize();
+            if (nIncX)
+                aChildSize.Width /= (nCount + (nCount-1)*fSpace);
+            if (nIncY)
+                aChildSize.Height /= (nCount + (nCount-1)*fSpace);
+
+            awt::Point aCurrPos = rShape->getChildren().front()->getPosition();
+            for (auto & aCurrShape : rShape->getChildren())
             {
-                const awt::Size& sz=(*aCurrShape)->getSize();
-                (*aCurrShape)->setPosition(aCurrPos);
-
-                aTotalSize.Width = std::max(
-                    aTotalSize.Width,
-                    aCurrPos.X + sz.Width);
-                aTotalSize.Height = std::max(
-                    aTotalSize.Height,
-                    aCurrPos.Y + sz.Height);
-
-                // HACK: the spacing is arbitrary
-                aCurrPos.X += nIncX*(sz.Width+5);
-                aCurrPos.Y += nIncY*(sz.Height+5);
-
-                ++aCurrShape;
+                aCurrShape->setPosition(aCurrPos);
+                aCurrShape->setSize(aChildSize);
+                aCurrShape->setChildSize(aChildSize);
+                aCurrPos.X += nIncX * (aChildSize.Width + fSpace*aChildSize.Width);
+                aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
             }
-
-            rShape->setSize(aTotalSize);
             break;
         }
 
         case XML_pyra:
             break;
 
+        case XML_snake:
+        {
+            // find optimal grid to layout children that have fixed aspect ratio
+
+            if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
+                break;
+
+            // TODO: get values from constraints
+            sal_Int32 nCount = rShape->getChildren().size();
+            double fSpace = 0.3;
+            double fAspectRatio = 0.6;
+
+            sal_Int32 nCol = 1;
+            sal_Int32 nRow = 1;
+            for ( ; nCol<nCount; nCol++)
+            {
+                nRow = (nCount+nCol-1) / nCol;
+                if ((rShape->getSize().Height / nRow) / (rShape->getSize().Width / nCol) >= fAspectRatio)
+                    break;
+            }
+            SAL_INFO("oox.drawingml", "Snake layout grid: " << nCol << "x" << nRow);
+
+            sal_Int32 nWidth = rShape->getSize().Width / (nCol + (nCol-1)*fSpace);
+            const awt::Size aChildSize(nWidth, nWidth * fAspectRatio);
+
+            awt::Point aStartPos = rShape->getChildren().front()->getPosition();
+            awt::Point aCurrPos = aStartPos;
+            sal_Int32 nColIdx = 0;
+
+            for (auto & aCurrShape : rShape->getChildren())
+            {
+                aCurrShape->setPosition(aCurrPos);
+                aCurrShape->setSize(aChildSize);
+                aCurrShape->setChildSize(aChildSize);
+                aCurrPos.X += aChildSize.Width + fSpace*aChildSize.Width;
+                if (++nColIdx == nCol)
+                {
+                    aStartPos.Y += aChildSize.Height + fSpace*aChildSize.Height;
+                    aCurrPos = aStartPos;
+                    nColIdx = 0;
+                }
+            }
+            break;
+        }
+
         case XML_sp:
             // HACK. Handled one level higher. Or rather, planned to
             break;
 
         case XML_tx:
-        {
-            TextBodyPtr pTextBody=rShape->getTextBody();
-            if( !pTextBody ||
-                pTextBody->getParagraphs().empty() ||
-                pTextBody->getParagraphs().front()->getRuns().empty() )
-            {
-                rShape->setSize(awt::Size(5,5));
-                break;
-            }
-
-            // HACK - count chars & paragraphs to come up with *some*
-            // notion of necessary size
-            const sal_Int32 nHackyFontHeight=50;
-            const sal_Int32 nHackyFontWidth=20;
-            awt::Size aTotalSize;
-            for( size_t nPara=0; nPara<pTextBody->getParagraphs().size(); ++nPara )
-            {
-                aTotalSize.Height += nHackyFontHeight;
-
-                sal_Int32 nLocalWidth=0;
-                for( size_t nRun=0; nRun<pTextBody->getParagraphs().at(nPara)->getRuns().size(); ++nRun )
-                    nLocalWidth +=
-                        pTextBody->getParagraphs().at(nPara)->getRuns().at(nRun)->getText().getLength()
-                        * nHackyFontWidth;
-
-                aTotalSize.Width = std::max(
-                    aTotalSize.Width,
-                    nLocalWidth);
-            }
-
-            rShape->setSize(aTotalSize);
+            // TODO: adjust text size to fit shape
             break;
-        }
 
         default:
             break;
@@ -358,9 +303,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
     SAL_INFO(
         "oox.drawingml",
-        "Layouting shape " << rName << ": (" << rShape->getPosition().X << ","
-        << rShape->getPosition().Y << "," << rShape->getSize().Width << ","
-        << rShape->getSize().Height << ")");
+        "Layouting shape " << rName << ", alg type: " << mnType << ", ("
+        << rShape->getPosition().X << "," << rShape->getPosition().Y << ","
+        << rShape->getSize().Width << "," << rShape->getSize().Height << ")");
 }
 
 void LayoutNode::accept( LayoutAtomVisitor& rVisitor )
