@@ -519,8 +519,7 @@ namespace DOM
         Instruction                             the target
         Text             "#text"                content of the text node        null
         */
-        OUString aName;
-        return aName;
+        return OUString();
     }
 
     /**
@@ -538,8 +537,7 @@ namespace DOM
     */
     OUString SAL_CALL CNode::getNodeValue()
     {
-        OUString aValue;
-        return aValue;
+        return OUString();
     }
 
     /**
