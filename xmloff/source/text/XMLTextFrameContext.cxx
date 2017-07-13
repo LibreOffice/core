@@ -762,7 +762,6 @@ void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContex
 
 OUString XMLTextFrameContext::getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const
 {
-    OUString aRetval;
     const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast< const XMLTextFrameContext_Impl* >(&rContext);
 
     if(pXMLTextFrameContext_Impl)
@@ -770,7 +769,7 @@ OUString XMLTextFrameContext::getGraphicURLFromImportContext(const SvXMLImportCo
         return pXMLTextFrameContext_Impl->GetHRef();
     }
 
-    return aRetval;
+    return OUString();
 }
 
 bool XMLTextFrameContext_Impl::CreateIfNotThere()
