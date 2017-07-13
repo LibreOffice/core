@@ -1272,7 +1272,7 @@
              /italic/, -strikeout- and _underline_ -->
         <info>
           <desc>Specifies if text should be formatted in bold or underlined when
-          the corresponding characters are entered (*bold*, /italic/, -strikeout-, 
+          the corresponding characters are entered (*bold*, /italic/, -strikeout-,
           _underline_).</desc>
           <label>Apply bold, italics, strikeout or underline</label>
         </info>
@@ -6697,6 +6697,17 @@
       <prop oor:name="Preview" oor:type="xs:boolean" oor:nillable="false">
         <info>
            <desc>Specifies if the styles and formatting preview is enabled.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
+    <group oor:name="PackageKit">
+      <info>
+        <desc>Contains settings related to PackageKit (Unix only).</desc>
+      </info>
+      <prop oor:name="EnableFontInstallation" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if missing font installation should be triggered.</desc>
         </info>
         <value>true</value>
       </prop>
