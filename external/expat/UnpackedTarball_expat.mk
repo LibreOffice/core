@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,expat,\
 	external/expat/expat-winapi.patch \
 	external/expat/expat-iOS.patch \
 	external/expat/expat-2.2.1.patch \
+	external/expat/expat.getrandom_detection.patch.1 \
 ))
 
 # This is a bit hackish.
