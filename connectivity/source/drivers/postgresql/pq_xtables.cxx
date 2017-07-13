@@ -326,7 +326,7 @@ void Tables::dropByIndex( sal_Int32 index )
     OUString name,schema;
     set->getPropertyValue( st.SCHEMA_NAME ) >>= schema;
     set->getPropertyValue( st.NAME ) >>= name;
-    if( extractStringProperty( set, st.TYPE ).equals( st.VIEW ) && m_pSettings->views.is() )
+    if( extractStringProperty( set, st.TYPE ) == st.VIEW && m_pSettings->views.is() )
     {
         m_pSettings->pViewsImpl->dropByName( concatQualified( schema, name ) );
     }
@@ -334,7 +334,7 @@ void Tables::dropByIndex( sal_Int32 index )
     {
         OUStringBuffer update( 128 );
         update.append( "DROP " );
-        if( extractStringProperty( set, st.TYPE ).equals( st.VIEW ) )
+        if( extractStringProperty( set, st.TYPE ) == st.VIEW )
             update.append( "VIEW " );
         else
             update.append( "TABLE " );

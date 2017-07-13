@@ -194,7 +194,7 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
         // now we should look if the name of the column changed
         OUString sNewColumnName;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_NAME)) >>= sNewColumnName;
-        if ( !sNewColumnName.equals(colName) )
+        if ( sNewColumnName != colName )
         {
             const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 

@@ -187,10 +187,10 @@ static rtl::OUString getPrefix(rtl::OUString const & str1, rtl::OUString const &
         token1 = str1.getToken(0, ':', nIndex1);
         token2 = str2.getToken(0, ':', nIndex2);
 
-        if (token1.equals(token2))
+        if (token1 == token2)
             sim += token1.getLength() + 1;
     }
-    while(nIndex1 == nIndex2 && nIndex1 >= 0 && token1.equals(token2));
+    while(nIndex1 == nIndex2 && nIndex1 >= 0 && token1 == token2);
 
     rtl::OUString result;
 
@@ -258,7 +258,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
 
         // direct mapping possible?
         // uno:bla-->uno:bla:blubb
-        if (from_envPurpose.equals(purpose))
+        if (from_envPurpose == purpose)
         {
             rtl::OUString rest = to_envPurpose.copy(purpose.getLength());
 
@@ -271,7 +271,7 @@ void getCascadeMapping(uno_Mapping     ** ppMapping,
 
             uno_envDcp += rest.copy(0, index);
         }
-        else if (to_envPurpose.equals(purpose))
+        else if (to_envPurpose == purpose)
         {
             rtl::OUString rest = from_envPurpose.copy(purpose.getLength());
 

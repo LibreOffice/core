@@ -992,7 +992,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     {
         uno_Environment * pWeak = iPos->second;
         if (rEnvDcp.isEmpty() ||
-            rEnvDcp.equals( pWeak->pTypeName ))
+            rEnvDcp == pWeak->pTypeName )
         {
             aFounds[nSize] = nullptr;
             (*pWeak->harden)( &aFounds[nSize], pWeak );

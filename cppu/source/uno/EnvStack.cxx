@@ -153,10 +153,10 @@ static rtl::OUString s_getPrefix(rtl::OUString const & str1, rtl::OUString const
         token1 = str1.getToken(0, ':', nIndex1);
         token2 = str2.getToken(0, ':', nIndex2);
 
-        if (token1.equals(token2))
+        if (token1 == token2)
             sim += token1.getLength() + 1;
     }
-    while(nIndex1 == nIndex2 && nIndex1 >= 0 && token1.equals(token2));
+    while(nIndex1 == nIndex2 && nIndex1 >= 0 && token1 == token2);
 
     rtl::OUString result;
 

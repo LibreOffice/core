@@ -192,10 +192,10 @@ void SFTreeListBox::Init( const OUString& language  )
         bool app = false;
         OUString uiName = children[ n ]->getName();
         OUString factoryURL;
-        if ( uiName.equals( userStr ) || uiName.equals( shareStr ) )
+        if ( uiName == userStr || uiName == shareStr )
         {
             app = true;
-            if ( uiName.equals( userStr ) )
+            if ( uiName == userStr )
             {
                 uiName = m_sMyMacros;
             }
@@ -261,7 +261,7 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, OUString&
         if ( model.is() )
         {
             OUString sTdocUrl = ::comphelper::DocumentInfo::getDocumentTitle( model );
-            if( sTdocUrl.equals( docName ) )
+            if( sTdocUrl == docName )
             {
                 xModel = model;
                 break;
@@ -281,7 +281,7 @@ SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNo
         Sequence < Reference< browse::XBrowseNode > > children = rootNode->getChildNodes();
         for ( sal_Int32 n = 0; n < children.getLength(); n++ )
         {
-            if ( children[ n ]->getName().equals( language ) )
+            if ( children[ n ]->getName() == language )
             {
                 langNode = children[ n ];
                 break;

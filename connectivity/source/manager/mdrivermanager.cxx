@@ -229,7 +229,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
 
         bool operator()( const DriverAccess& lhs)
         {
-            return lhs.sImplementationName.equals(m_sImplName);
+            return lhs.sImplementationName == m_sImplName;
         }
     };
 
