@@ -155,7 +155,7 @@ namespace svgio
                 const_cast< SvgNode* >(pXLink)->setAlternativeParent(this);
                 pXLink->decomposeSvgNode(aNewTarget, true);
                 const_cast< SvgNode* >(pXLink)->setAlternativeParent();
-                mbDecomposingSvgNode = true;
+                mbDecomposingSvgNode = false;
 
                 if(!aNewTarget.empty())
                 {
