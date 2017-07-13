@@ -32,7 +32,7 @@ class LetterWizardDialog(WizardDialog):
         
         #set dialog properties...        
         self.setDialogProperties(True, 210, True, 104, 52, 1, 1, 
-            self.resources.resLetterWizardDialog_title, 310)
+            self.resources.resLetterWizardDialog_title, 350)
                 
         self.fontDescriptor5 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
@@ -243,7 +243,7 @@ class LetterWizardDialog(WizardDialog):
                 "Value",
                 PropertyNames.PROPERTY_WIDTH),
             (12, HelpIds.getHelpIdString(HID + 9),
-                "numLogoHeight", 138, 40, True, 2, True, 9, 3, 30), self)
+                "numLogoHeight", 138, 40, True, 2, True, 9, 3, 50), self)
         self.numLogoX = self.insertNumericField(
             "numLogoX",
             LetterWizardDialogConst.NUMLOGOX_TEXT_CHANGED,
@@ -258,7 +258,7 @@ class LetterWizardDialog(WizardDialog):
                 "Value",
                 PropertyNames.PROPERTY_WIDTH),
             (12, HelpIds.getHelpIdString(HID + 10),
-            "numLogoX", 266, 40, True, 2, 10, 0, 30), self)
+            "numLogoX", 286, 40, True, 2, 10, 0, 50), self)
         self.numLogoWidth = self.insertNumericField(
             "numLogoWidth",
             LetterWizardDialogConst.NUMLOGOWIDTH_TEXT_CHANGED,
@@ -273,7 +273,7 @@ class LetterWizardDialog(WizardDialog):
                 "Value",
                 PropertyNames.PROPERTY_WIDTH),
             (12, HelpIds.getHelpIdString(HID + 11),
-                "numLogoWidth", 138, 56, True, 2, 11, 3.8, 30), self)
+                "numLogoWidth", 138, 56, True, 2, 11, 3.8, 50), self)
         self.numLogoY = self.insertNumericField(
             "numLogoY",
             LetterWizardDialogConst.NUMLOGOY_TEXT_CHANGED,
@@ -288,7 +288,7 @@ class LetterWizardDialog(WizardDialog):
                 "Value",
                 PropertyNames.PROPERTY_WIDTH),
             (12, HelpIds.getHelpIdString(HID + 12),
-                "numLogoY", 266, 56, True, 2, 12, -3.4, 30), self)
+                "numLogoY", 286, 56, True, 2, 12, -3.4, 50), self)
         self.chkPaperCompanyAddress = self.insertCheckBox(
             "chkPaperCompanyAddress",
             LetterWizardDialogConst.CHKPAPERCOMPANYADDRESS_ITEM_CHANGED,
@@ -320,7 +320,7 @@ class LetterWizardDialog(WizardDialog):
                 "Value",
                 PropertyNames.PROPERTY_WIDTH),
             (12, HelpIds.getHelpIdString(HID + 14),
-                "numAddressHeight", 138, 96, True, 2, True, 14, 3, 30), self)
+                "numAddressHeight", 138, 96, True, 2, True, 14, 3, 50), self)
         self.numAddressX = self.insertNumericField(
                 "numAddressX",
                 LetterWizardDialogConst.NUMADDRESSX_TEXT_CHANGED,
@@ -335,7 +335,7 @@ class LetterWizardDialog(WizardDialog):
                 "Value",
                 PropertyNames.PROPERTY_WIDTH),
             (12, HelpIds.getHelpIdString(HID + 15),
-                "numAddressX", 266, 96, True, 2, 15, 3.8, 30), self)
+                "numAddressX", 286, 96, True, 2, 15, 3.8, 50), self)
         self.numAddressWidth = self.insertNumericField(
                 "numAddressWidth",
                 LetterWizardDialogConst.NUMADDRESSWIDTH_TEXT_CHANGED,
@@ -350,7 +350,7 @@ class LetterWizardDialog(WizardDialog):
                 "Value",
                 PropertyNames.PROPERTY_WIDTH),
             (12, HelpIds.getHelpIdString(HID + 16),
-                "numAddressWidth", 138, 112, True, 2, 16, 13.8, 30), self)
+                "numAddressWidth", 138, 112, True, 2, 16, 13.8, 50), self)
         self.numAddressY = self.insertNumericField(
                 "numAddressY",
                 LetterWizardDialogConst.NUMADDRESSY_TEXT_CHANGED,
@@ -365,7 +365,7 @@ class LetterWizardDialog(WizardDialog):
                 "Value",
                 PropertyNames.PROPERTY_WIDTH),
             (12, HelpIds.getHelpIdString(HID + 17),
-                "numAddressY", 266, 112, True, 2, 17, -3.4, 30), self)
+                "numAddressY", 286, 112, True, 2, 17, -3.4, 50), self)
         self.chkCompanyReceiver = self.insertCheckBox(
             "chkCompanyReceiver",
             LetterWizardDialogConst.CHKCOMPANYRECEIVER_ITEM_CHANGED,
@@ -411,7 +411,7 @@ class LetterWizardDialog(WizardDialog):
                 "Value",
                 PropertyNames.PROPERTY_WIDTH),
             (12, HelpIds.getHelpIdString(HID + 20),
-                "numFooterHeight", 236, 156, True, 2, 20, 5, 30), self)
+                "numFooterHeight", 236, 156, True, 2, 20, 5, 50), self)
         self.insertLabel("lblLogoHeight",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -444,7 +444,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (2,
-                "FixedLine5", 90, 78, 2, 70, 215))
+                "FixedLine5", 90, 78, 2, 70, 255))
         self.insertFixedLine(
             "FixedLine6",
             (PropertyNames.PROPERTY_HEIGHT,
@@ -455,7 +455,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (2,
-                "FixedLine6", 90, 150, 2, 71, 215))
+                "FixedLine6", 90, 150, 2, 71, 255))
         self.insertLabel("lblFooterHeight",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -477,7 +477,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblLogoX_value,
-                "lblLogoX", 170, 42, 2, 84, 94))
+                "lblLogoX", 190, 42, 2, 84, 94))
         self.insertLabel("lblLogoY",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -488,7 +488,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblLogoY_value,
-                "lblLogoY", 170, 58, 2, 85, 94))
+                "lblLogoY", 190, 58, 2, 85, 94))
         self.insertLabel("lblAddressHeight",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -521,7 +521,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblAddressX_value,
-                "lblAddressX", 170, 98, 2, 88, 94))
+                "lblAddressX", 190, 98, 2, 88, 94))
         self.insertLabel("lblAddressY",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -532,7 +532,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblAddressY_value,
-                "lblAddressY", 170, 114, 2, 89, 94))
+                "lblAddressY", 190, 114, 2, 89, 94))
         self.insertLabel("lblTitle2",
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
