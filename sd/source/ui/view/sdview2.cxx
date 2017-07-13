@@ -698,8 +698,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
             // special insert?
             if( !nRet && mpViewSh )
             {
-                OUString        aTmpString1, aTmpString2;
-                INetBookmark    aINetBookmark( aTmpString1, aTmpString2 );
+                INetBookmark    aINetBookmark( (OUString()), (OUString()) );
 
                 // insert bookmark
                 if( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&

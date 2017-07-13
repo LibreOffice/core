@@ -495,8 +495,6 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         sal_uInt16 nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
         SdPage* pPreviousNotesPage = static_cast<SdPage*>( mpDoc->GetPage( nStandardPageNum - 1 ) );
         sal_uInt16 nNotesPageNum = nStandardPageNum + 1;
-        OUString aStandardPageName;
-        OUString aNotesPageName;
 
         /**************************************************************
         * standard page
@@ -512,7 +510,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
                                     pPreviousStandardPage->GetRgtBorder(),
                                     pPreviousStandardPage->GetLwrBorder() );
         pStandardPage->SetOrientation( pPreviousStandardPage->GetOrientation() );
-        pStandardPage->SetName(aStandardPageName);
+        pStandardPage->SetName(OUString());
 
         // insert page after current page
         mpDoc->InsertPage(pStandardPage, nStandardPageNum);
@@ -547,7 +545,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
                                 pPreviousNotesPage->GetRgtBorder(),
                                 pPreviousNotesPage->GetLwrBorder() );
         pNotesPage->SetOrientation( pPreviousNotesPage->GetOrientation() );
-        pNotesPage->SetName(aNotesPageName);
+        pNotesPage->SetName(OUString());
         pNotesPage->SetPageKind(PageKind::Notes);
 
         // insert page after current page
