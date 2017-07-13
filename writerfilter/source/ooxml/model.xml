@@ -14183,6 +14183,10 @@
           <ref name="CT_Br_OutOfOrder"/>
         </element>
         <!-- end tdf#108714 -->
+        <!-- allow <w:tbl> at paragraph level (despite this is illegal according to ECMA-376-1:2016) - bug-to-bug compatibility with Word -->
+        <element name="tbl">
+          <ref name="CT_P_Tbl"/>
+        </element>
       </define>
       <define name="ST_TblWidth">
         <choice>
@@ -14687,6 +14691,17 @@
         </element>
       </define>
       <define name="CT_Tbl">
+        <ref name="EG_RangeMarkupElements"/>
+        <element name="tblPr">
+          <ref name="CT_TblPr"/>
+        </element>
+        <element name="tblGrid">
+          <ref name="CT_TblGrid"/>
+        </element>
+        <ref name="EG_ContentRowContent"/>
+      </define>
+      <!-- Special element - copy of usual CT_Tbl, but only used as direct child of CT_P -->
+      <define name="CT_P_Tbl">
         <ref name="EG_RangeMarkupElements"/>
         <element name="tblPr">
           <ref name="CT_TblPr"/>
@@ -18426,6 +18441,11 @@
         <element name="tblPrExChange" tokenid="ooxml:CT_TblPrEx_tblPrExChange"/>
     </resource>
     <resource name="CT_Tbl" resource="TextTable"/>
+    <!-- allow <w:tbl> at paragraph level (despite this is illegal according to ECMA-376-1:2016) - bug-to-bug compatibility with Word -->
+    <resource name="CT_P_Tbl" resource="TextTable">
+      <action name="start" action="start_P_Tbl"/>
+      <action name="end" action="end_P_Tbl"/>
+    </resource>
     <resource name="CT_TblLook" resource="Properties">
       <attribute name="firstRow" tokenid="ooxml:CT_TblLook_firstRow"/>
       <attribute name="lastRow" tokenid="ooxml:CT_TblLook_lastRow"/>

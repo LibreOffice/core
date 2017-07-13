@@ -433,6 +433,10 @@ public:
 
     virtual std::string getType() const override { return "TextTable"; }
 
+    // when <w:tbl> appears as direct child of <w:p>, we need to rearrange this paragraph
+    // to merge with the table's first paragraph (that's what Word does in this case)
+    void start_P_Tbl();
+    void end_P_Tbl();
 protected:
     virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
