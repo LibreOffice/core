@@ -411,6 +411,22 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/backendtest/outputdevice/rectangle \
 ))
 
+$(eval $(call gb_Library_add_cxxobjects,vcl,\
+    vcl/source/bitmap/ScanlineTools, $(gb_LinkTarget_EXCEPTIONFLAGS) \
+))
+
+$(eval $(call gb_Library_add_cxxobjects,vcl,\
+    vcl/source/bitmap/ScanlineToolsSSE2, $(gb_LinkTarget_EXCEPTIONFLAGS) $(INTRINSICS_CXXFLAGS)\
+))
+
+$(eval $(call gb_Library_add_cxxobjects,vcl,\
+    vcl/source/bitmap/ScanlineToolsSSSE3, $(gb_LinkTarget_EXCEPTIONFLAGS) $(INTRINSICS_CXXFLAGS)\
+))
+
+$(eval $(call gb_Library_add_cxxobjects,vcl,\
+    vcl/source/bitmap/ScanlineToolsAVX2, $(gb_LinkTarget_EXCEPTIONFLAGS) $(INTRINSICS_CXXFLAGS)\
+))
+
 $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/filter/jpeg/transupp \
 ))
