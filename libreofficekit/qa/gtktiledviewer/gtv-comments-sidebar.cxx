@@ -19,54 +19,8 @@
 
 #include <map>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/optional.hpp>
 
 G_DEFINE_TYPE(GtvCommentsSidebar, gtv_comments_sidebar, GTK_TYPE_BOX);
-
-static GtkWidget*
-gtv_comments_sidebar_create_comment_box(const boost::property_tree::ptree& aComment)
-{
-    GtkWidget* pCommentVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
-    gchar *id = g_strndup(aComment.get<std::string>("id").c_str(), 20);
-    g_object_set_data_full(G_OBJECT(pCommentVBox), "id", id, g_free);
-
-    // Set background if its a reply comment
-    if (aComment.get("parent", -1) > 0)
-    {
-        GtkStyleContext* pStyleContext = gtk_widget_get_style_context(pCommentVBox);
-        GtkCssProvider* pCssProvider = gtk_css_provider_get_default();
-        gtk_style_context_add_class(pStyleContext, "commentbox");
-        gtk_style_context_add_provider(pStyleContext, GTK_STYLE_PROVIDER(pCssProvider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        gtk_css_provider_load_from_data(pCssProvider, ".commentbox {background-color: lightgreen;}", -1, nullptr);
-    }
-
-    GtkWidget* pCommentText = gtk_label_new(aComment.get<std::string>("text").c_str());
-    GtkWidget* pCommentAuthor = gtk_label_new(aComment.get<std::string>("author").c_str());
-    GtkWidget* pCommentDate = gtk_label_new(aComment.get<std::string>("dateTime").c_str());
-    GtkWidget* pControlsHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    GtkWidget* pEditButton = gtk_button_new_with_label("Edit");
-    GtkWidget* pReplyButton = gtk_button_new_with_label("Reply");
-    GtkWidget* pDeleteButton = gtk_button_new_with_label("Delete");
-    g_signal_connect(G_OBJECT(pEditButton), "clicked", G_CALLBACK(editButtonClicked), pCommentVBox);
-    g_signal_connect(G_OBJECT(pReplyButton), "clicked", G_CALLBACK(replyButtonClicked), pCommentVBox);
-    g_signal_connect(G_OBJECT(pDeleteButton), "clicked", G_CALLBACK(deleteCommentButtonClicked), pCommentVBox);
-
-    gtk_container_add(GTK_CONTAINER(pControlsHBox), pEditButton);
-    gtk_container_add(GTK_CONTAINER(pControlsHBox), pReplyButton);
-    gtk_container_add(GTK_CONTAINER(pControlsHBox), pDeleteButton);
-    GtkWidget* pCommentSeparator = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
-
-    gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentText);
-    gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentAuthor);
-    gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentDate);
-    gtk_container_add(GTK_CONTAINER(pCommentVBox), pControlsHBox);
-    gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentSeparator);
-
-    gtk_label_set_line_wrap(GTK_LABEL(pCommentText), TRUE);
-    gtk_label_set_max_width_chars(GTK_LABEL(pCommentText), 35);
-
-    return pCommentVBox;
-}
 
 void
 gtv_comments_sidebar_view_annotations(GtvCommentsSidebar* sidebar)
@@ -92,7 +46,7 @@ gtv_comments_sidebar_view_annotations(GtvCommentsSidebar* sidebar)
     {
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
         {
-            GtkWidget* pCommentBox = gtv_comments_sidebar_create_comment_box(rValue.second);
+            GtkWidget* pCommentBox = createCommentBox(rValue.second);
             gtk_container_add(GTK_CONTAINER(sidebar->commentsgrid), pCommentBox);
         }
         gtk_widget_show_all(sidebar->scrolledwindow);

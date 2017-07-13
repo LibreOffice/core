@@ -13,6 +13,7 @@
 #include <gtv-helpers.hxx>
 #include <gtv-signal-handlers.hxx>
 #include <gtv-calc-header-bar.hxx>
+#include <gtv-comments-sidebar.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
@@ -218,7 +219,57 @@ void lokdocview_passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bMod
     gtk_widget_destroy(pPasswordDialog);
 }
 
-void lokdocview_commentCallback(LOKDocView* pDocView, gchar* pComment, gpointer);
+void lokdocview_commentCallback(LOKDocView* pDocView, gchar* pComment, gpointer)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+
+    std::stringstream aStream(pComment);
+    boost::property_tree::ptree aRoot;
+    boost::property_tree::read_json(aStream, aRoot);
+    boost::property_tree::ptree aComment = aRoot.get_child("comment");
+    GtvCommentsSidebar* sidebar = GTV_COMMENTS_SIDEBAR(window->commentssidebar);
+    GtkWidget* pCommentsGrid = sidebar->commentsgrid;
+    GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pCommentsGrid));
+    GtkWidget* pSelf = nullptr;
+    GtkWidget* pParent = nullptr;
+    for (GList* l = pChildren; l != nullptr; l = l->next)
+    {
+        gchar *id = static_cast<gchar*>(g_object_get_data(G_OBJECT(l->data), "id"));
+
+        if (g_strcmp0(id, aComment.get<std::string>("id").c_str()) == 0)
+            pSelf = GTK_WIDGET(l->data);
+
+        // There is no 'parent' in Remove callbacks
+        if (g_strcmp0(id, aComment.get("parent", std::string("0")).c_str()) == 0)
+            pParent = GTK_WIDGET(l->data);
+    }
+
+    if (aComment.get<std::string>("action") == "Remove")
+    {
+        if (pSelf)
+            gtk_widget_destroy(pSelf);
+        else
+            g_warning("Can't find the comment to remove in the list !!");
+    }
+    else if (aComment.get<std::string>("action") == "Add" || aComment.get<std::string>("action") == "Modify")
+    {
+        GtkWidget* pCommentBox = createCommentBox(aComment);
+        if (pSelf != nullptr || pParent != nullptr)
+        {
+            gtk_grid_insert_next_to(GTK_GRID(pCommentsGrid), pSelf != nullptr ? pSelf : pParent, GTK_POS_BOTTOM);
+            gtk_grid_attach_next_to(GTK_GRID(pCommentsGrid), pCommentBox, pSelf != nullptr ? pSelf : pParent, GTK_POS_BOTTOM, 1, 1);
+        }
+        else
+            gtk_container_add(GTK_CONTAINER(pCommentsGrid), pCommentBox);
+
+        gtk_widget_show_all(pCommentBox);
+
+        // We added the widget already below the existing one, so destroy the
+        // already existing one now
+        if (pSelf)
+            gtk_widget_destroy(pSelf);
+    }
+}
 
 gboolean lokdocview_configureEvent(GtkWidget* pWidget, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
 {

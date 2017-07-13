@@ -325,7 +325,7 @@ static void setupDocView(LOKDocView* pDocView)
     g_signal_connect(pDocView, "address-changed", G_CALLBACK(lokdocview_addressChanged), nullptr);
     g_signal_connect(pDocView, "formula-changed", G_CALLBACK(lokdocview_formulaChanged), nullptr);
     g_signal_connect(pDocView, "password-required", G_CALLBACK(lokdocview_passwordRequired), nullptr);
-//    g_signal_connect(pDocView, "comment", G_CALLBACK(lokdocview_commentCallback), nullptr);
+    g_signal_connect(pDocView, "comment", G_CALLBACK(lokdocview_commentCallback), nullptr);
 
     g_signal_connect(pDocView, "configure-event", G_CALLBACK(lokdocview_configureEvent), nullptr);
 }

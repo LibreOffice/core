@@ -12,8 +12,12 @@
 
 #include <gtk/gtk.h>
 
+#include <gtv-signal-handlers.hxx>
+
 #include <map>
 #include <string>
+
+#include <boost/property_tree/json_parser.hpp>
 
 void userPromptDialog(GtkWindow* pWindow, const std::string& aTitle, std::map<std::string, std::string>& aEntries);
 
@@ -21,6 +25,8 @@ void clipboardSetHtml(GtkClipboard* pClipboard, const char* pSelection);
 
 /// Generate an author string for multiple views.
 std::string getNextAuthor();
+
+GtkWidget* createCommentBox(const boost::property_tree::ptree& aComment);
 
 #endif
 

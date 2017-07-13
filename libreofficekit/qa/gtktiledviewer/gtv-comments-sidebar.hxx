@@ -12,8 +12,6 @@
 
 #include <gtk/gtk.h>
 
-#include <boost/property_tree/json_parser.hpp>
-
 G_BEGIN_DECLS
 
 struct _GtvCommentsSidebar
