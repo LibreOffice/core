@@ -526,7 +526,6 @@ void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/)
 void docAdjustmentChanged(GtkAdjustment*, gpointer pData)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(pData);
-    printf("doc adjust ch : %p", window->lokdocview);
     if (window->lokdocview)
         LOKDocViewSigHandlers::configureEvent(window->lokdocview, nullptr, nullptr);
 }

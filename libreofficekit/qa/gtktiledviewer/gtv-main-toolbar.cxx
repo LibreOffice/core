@@ -85,6 +85,7 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     toolbar->m_pAddressbar = GTK_WIDGET(gtk_builder_get_object(builder, "addressbar_entry"));
     toolbar->m_pFormulabar = GTK_WIDGET(gtk_builder_get_object(builder, "formulabar_entry"));
 
+    // TODO: compile with -rdynamic and get rid of it
     gtk_builder_add_callback_symbol(builder, "btn_clicked", G_CALLBACK(btn_clicked));
     gtk_builder_add_callback_symbol(builder, "doCopy", G_CALLBACK(doCopy));
     gtk_builder_add_callback_symbol(builder, "doPaste", G_CALLBACK(doPaste));
@@ -97,6 +98,8 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     gtk_builder_add_callback_symbol(builder, "toggleFindbar", G_CALLBACK(toggleFindbar));
     gtk_builder_add_callback_symbol(builder, "documentRedline", G_CALLBACK(documentRedline));
     gtk_builder_add_callback_symbol(builder, "documentRepair", G_CALLBACK(documentRepair));
+    gtk_builder_add_callback_symbol(builder, "signalAddressbar", G_CALLBACK(signalAddressbar));
+    gtk_builder_add_callback_symbol(builder, "signalFormulabar", G_CALLBACK(signalFormulabar));
 
     gtk_builder_connect_signals(builder, nullptr);
 
@@ -129,6 +132,8 @@ void
 gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType eDocType, bool bEditMode)
 {
     GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    gtk_widget_set_visible(toolbar->m_pAddressbar, false);
+    gtk_widget_set_visible(toolbar->m_pFormulabar, false);
     if (eDocType == LOK_DOCTYPE_SPREADSHEET)
     {
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pLeftpara), ".uno:AlignLeft");
@@ -136,6 +141,9 @@ gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType 
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pRightpara), ".uno:AlignRight");
         gtk_widget_hide(priv->m_pJustifypara);
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(priv->m_pDeleteComment), ".uno:DeleteNote");
+
+        gtk_widget_set_visible(toolbar->m_pAddressbar, true);
+        gtk_widget_set_visible(toolbar->m_pFormulabar, true);
     }
     else if (eDocType == LOK_DOCTYPE_PRESENTATION)
     {

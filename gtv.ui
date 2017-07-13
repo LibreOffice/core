@@ -34,6 +34,9 @@
                 <property name="position">0</property>
               </packing>
             </child>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -705,7 +708,8 @@
         <child>
           <object class="GtkEntry" id="addressbar_entry">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
+            <signal name="key-press-event" handler="signalAddressbar" swapped="no"/>
           </object>
         </child>
       </object>
@@ -721,7 +725,8 @@
         <child>
           <object class="GtkEntry" id="formulabar_entry">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
+            <signal name="key-press-event" handler="signalFormulabar" swapped="no"/>
           </object>
         </child>
       </object>
