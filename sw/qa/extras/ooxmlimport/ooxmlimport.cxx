@@ -1470,6 +1470,72 @@ DECLARE_OOXMLIMPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf111550, "tdf111550.docx")
+{
+    // The test document has following ill-formed structure:
+    //
+    //    <w:tbl>
+    //        ...
+    //        <w:tr>
+    //            <w:tc>
+    //                <w:p>
+    //                    <w:r>
+    //                        <w:t>[outer:A2]</w:t>
+    //                        <w:br w:type="textWrapping"/>
+    //                    </w:r>
+    //                    <w:tbl>
+    //                        <w:tr>
+    //                            <w:tc>
+    //                                <w:p>
+    //                                    <w:r>
+    //                                        <w:t>[inner:A1]</w:t>
+    //                                    </w:r>
+    //                                </w:p>
+    //                            </w:tc>
+    //                        </w:tr>
+    //                    </w:tbl>
+    //                </w:p>
+    //            </w:tc>
+    //        </w:tr>
+    //    </w:tbl>
+    //
+    // i.e., a <w:tbl> as direct child of <w:p> inside another table.
+    // Word accepts that illegal OOXML, and treats it as equal to
+    //
+    //    <w:tbl>
+    //        ...
+    //        <w:tr>
+    //            <w:tc>
+    //                <w:tbl>
+    //                    <w:tr>
+    //                        <w:tc>
+    //                            <w:p>
+    //                                <w:r>
+    //                                    <w:t>[outer:A2]</w:t>
+    //                                    <w:br w:type="textWrapping"/>
+    //                                </w:r>
+    //                                <w:r>
+    //                                    <w:t>[inner:A1]</w:t>
+    //                                </w:r>
+    //                            </w:p>
+    //                        </w:tc>
+    //                    </w:tr>
+    //                </w:tbl>
+    //            </w:tc>
+    //        </w:tr>
+    //    </w:tbl>
+    //
+    // i.e., moves all contents of the outer paragraph into the inner table's first paragraph.
+
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+
+    uno::Reference<text::XTextContent> outerTable = getParagraphOrTable(1);
+    getCell(outerTable, "A1", "[outer:A1]");
+    uno::Reference<text::XText> cellA2(getCell(outerTable, "A2"), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextContent> innerTable = getParagraphOrTable(1, cellA2);
+    getCell(innerTable, "A1", "[outer:A2]\n[inner:A1]");
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
