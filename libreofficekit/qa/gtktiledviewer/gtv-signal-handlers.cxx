@@ -253,6 +253,32 @@ void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
         lok_doc_view_set_edit(LOK_DOC_VIEW(window->lokdocview), bActive);
 }
 
+void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
+{
+    int nPart = gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) );
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pSelector));
+
+    if (gtv_application_window_get_part_broadcast(window) && window->lokdocview)
+    {
+        lok_doc_view_set_part( LOK_DOC_VIEW(window->lokdocview), nPart );
+        lok_doc_view_reset_view(LOK_DOC_VIEW(window->lokdocview));
+    }
+}
+
+void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
+{
+    // Just convert directly back to the LibreOfficeKitPartMode enum.
+    // I.e. the ordering above should match the enum member ordering.
+    LibreOfficeKitPartMode ePartMode =
+        LibreOfficeKitPartMode( gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) ) );
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pSelector));
+
+    if ( window->lokdocview )
+    {
+        lok_doc_view_set_partmode( LOK_DOC_VIEW(window->lokdocview), ePartMode );
+    }
+}
+
 void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 {
     static const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };

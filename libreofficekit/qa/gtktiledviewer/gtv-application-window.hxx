@@ -79,6 +79,10 @@ void gtv_application_window_set_toolbar_broadcast(GtvApplicationWindow* window, 
 
 gboolean gtv_application_window_get_toolbar_broadcast(GtvApplicationWindow* window);
 
+void gtv_application_window_set_part_broadcast(GtvApplicationWindow* window, bool broadcast);
+
+gboolean gtv_application_window_get_part_broadcast(GtvApplicationWindow* window);
+
 G_END_DECLS
 
 #endif /* GTV_APPLICATION_WINDOW_H */

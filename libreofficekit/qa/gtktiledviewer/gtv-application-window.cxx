@@ -32,6 +32,7 @@ struct GtvApplicationWindowPrivate
 
     gboolean toolbarBroadcast;
     gboolean partSelectorBroadcast;
+    gboolean partModeSelectorBroadcast;
 
     // Rendering args; options with which lokdocview was rendered in this window
     GtvRenderingArgs* m_pRenderingArgs;
@@ -131,11 +132,6 @@ static void initWindow(GtvApplicationWindow* window)
 {
     GtvApplicationWindowPrivate* priv = getPrivate(window);
 
-    priv->partSelectorBroadcast = false;
-    //populatePartSelector(LOK_DOC_VIEW(rWindow.m_pDocView));
-    priv->partSelectorBroadcast = true;
-
-    //populatePartModeSelector( GTK_COMBO_BOX_TEXT(rWindow.m_pPartModeComboBox) );
     //populateDialogs(GTK_COMBO_BOX_TEXT(rWindow.m_pDialogComboBox));
 
     //registerSelectorHandlers(rWindow);
@@ -384,6 +380,34 @@ gtv_application_window_get_toolbar_broadcast(GtvApplicationWindow* window)
 {
     GtvApplicationWindowPrivate* priv = getPrivate(window);
     return priv->toolbarBroadcast;
+}
+
+void
+gtv_application_window_set_part_broadcast(GtvApplicationWindow* window, bool broadcast)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    priv->partSelectorBroadcast = broadcast;
+}
+
+gboolean
+gtv_application_window_get_part_broadcast(GtvApplicationWindow* window)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    return priv->partSelectorBroadcast;
+}
+
+void
+gtv_application_window_set_partmode_broadcast(GtvApplicationWindow* window, bool broadcast)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    priv->partModeSelectorBroadcast = broadcast;
+}
+
+gboolean
+gtv_application_window_get_partmode_broadcast(GtvApplicationWindow* window)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    return priv->partModeSelectorBroadcast;
 }
 
 GtvApplicationWindow*

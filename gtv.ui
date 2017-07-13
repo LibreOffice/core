@@ -427,7 +427,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkComboBoxText" id="combo_partsmodeelector">
+          <object class="GtkComboBoxText" id="combo_partsmodeselector">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="active">0</property>

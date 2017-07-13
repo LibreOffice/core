@@ -30,8 +30,8 @@ struct GtvMainToolbarPrivateImpl
     GtkWidget* m_pRightpara;
     GtkWidget* m_pJustifypara;
     GtkWidget* m_pDeleteComment;
-    GtkWidget* m_pAddressbar;
-    GtkWidget* m_pFormulabar;
+    GtkWidget* m_pPartSelector;
+    GtkWidget* m_pPartModeSelector;
 
     /// Sensitivity (enabled or disabled) for each tool item, ignoring edit state
     std::map<GtkToolItem*, bool> m_aToolItemSensitivities;
@@ -82,6 +82,8 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     priv->m_pRightpara = GTK_WIDGET(gtk_builder_get_object(builder, "btn_justifyright"));
     priv->m_pJustifypara = GTK_WIDGET(gtk_builder_get_object(builder, "btn_justifyfill"));
     priv->m_pDeleteComment = GTK_WIDGET(gtk_builder_get_object(builder, "btn_removeannotation"));
+    priv->m_pPartSelector = GTK_WIDGET(gtk_builder_get_object(builder, "combo_partselector"));
+    priv->m_pPartModeSelector = GTK_WIDGET(gtk_builder_get_object(builder, "combo_partsmodeselector"));
     toolbar->m_pAddressbar = GTK_WIDGET(gtk_builder_get_object(builder, "addressbar_entry"));
     toolbar->m_pFormulabar = GTK_WIDGET(gtk_builder_get_object(builder, "formulabar_entry"));
 
@@ -92,8 +94,8 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     gtk_builder_add_callback_symbol(builder, "createView", G_CALLBACK(createView));
     gtk_builder_add_callback_symbol(builder, "unoCommandDebugger", G_CALLBACK(unoCommandDebugger));
     gtk_builder_add_callback_symbol(builder, "toggleEditing", G_CALLBACK(toggleEditing));
-//    gtk_builder_add_callback_symbol(builder, "changePartMode", G_CALLBACK(changePartMode));
-//    gtk_builder_add_callback_symbol(builder, "changePart", G_CALLBACK(changePart));
+    gtk_builder_add_callback_symbol(builder, "changePartMode", G_CALLBACK(changePartMode));
+    gtk_builder_add_callback_symbol(builder, "changePart", G_CALLBACK(changePart));
     gtk_builder_add_callback_symbol(builder, "changeZoom", G_CALLBACK(changeZoom));
     gtk_builder_add_callback_symbol(builder, "toggleFindbar", G_CALLBACK(toggleFindbar));
     gtk_builder_add_callback_symbol(builder, "documentRedline", G_CALLBACK(documentRedline));
@@ -135,6 +137,38 @@ gtv_main_toolbar_class_init(GtvMainToolbarClass* klass)
     G_OBJECT_CLASS(klass)->finalize = gtv_main_toolbar_finalize;
 }
 
+static void populatePartSelector(GtvMainToolbar* toolbar)
+{
+    GtvMainToolbarPrivate& priv = getPrivate(toolbar);
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(toolbar)));
+    gtv_application_window_set_part_broadcast(window, false);
+    gtk_list_store_clear( GTK_LIST_STORE(
+                              gtk_combo_box_get_model(
+                                  GTK_COMBO_BOX(priv->m_pPartSelector) )) );
+
+    if (!window->lokdocview)
+    {
+        return;
+    }
+
+    const int nMaxLength = 50;
+    char sText[nMaxLength];
+
+    int nParts = lok_doc_view_get_parts(LOK_DOC_VIEW(window->lokdocview));
+    for ( int i = 0; i < nParts; i++ )
+    {
+        char* pName = lok_doc_view_get_part_name(LOK_DOC_VIEW(window->lokdocview), i);
+        assert( pName );
+        snprintf( sText, nMaxLength, "%i (%s)", i+1, pName );
+        free( pName );
+
+        gtk_combo_box_text_append_text( GTK_COMBO_BOX_TEXT(priv->m_pPartSelector), sText );
+    }
+    gtk_combo_box_set_active(GTK_COMBO_BOX(priv->m_pPartSelector), lok_doc_view_get_part(LOK_DOC_VIEW(window->lokdocview)));
+
+    gtv_application_window_set_part_broadcast(window, true);
+}
+
 void
 gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType eDocType, bool bEditMode)
 {
@@ -158,6 +192,9 @@ gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType 
     }
 
     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(priv->m_pEnableEditing), bEditMode);
+
+    // populate combo boxes
+    populatePartSelector(toolbar);
 }
 
 GtkContainer*
