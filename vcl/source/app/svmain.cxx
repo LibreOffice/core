@@ -193,7 +193,16 @@ int ImplSVMain()
         pSVData->maAppData.mbInAppMain = false;
     }
 
-    if( pSVData->mxDisplayConnection.is() )
+    ImplSVMainDeinit();
+
+    return nReturn;
+}
+
+void ImplSVMainDeinit()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if (pSVData->mxDisplayConnection.is())
     {
         pSVData->mxDisplayConnection->terminate();
         pSVData->mxDisplayConnection.clear();
@@ -204,21 +213,19 @@ int ImplSVMain()
     // be some events in the AWT EventQueue, which need the SolarMutex which
     // - on the other hand - is destroyed in DeInitVCL(). So empty the queue
     // here ..
-    if( pSVData->mxAccessBridge.is() )
+    if (pSVData->mxAccessBridge.is())
     {
         {
             SolarMutexReleaser aReleaser;
             pSVData->mxAccessBridge->dispose();
         }
-      pSVData->mxAccessBridge.clear();
+        pSVData->mxAccessBridge.clear();
     }
 
 #if HAVE_FEATURE_OPENGL
     OpenGLWatchdogThread::stop();
 #endif
     DeInitVCL();
-
-    return nReturn;
 }
 
 int SVMain()
