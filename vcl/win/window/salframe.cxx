@@ -5457,7 +5457,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 {
     LRESULT     nRet = 0;
     static int  bInWheelMsg = FALSE;
-    static int  bInQueryEnd = FALSE;
+    static DWORD nFirstQueryEndTick = 0;
 
     // By WM_CRETAE we connect the frame with the window handle
     if ( nMsg == WM_CREATE )
@@ -5703,10 +5703,10 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_QUERYENDSESSION:
-            if( !bInQueryEnd )
+            if( nFirstQueryEndTick == 0 )
             {
-                // handle queryendsession only once
-                bInQueryEnd = TRUE;
+                // Get the tick count of first such query
+                nFirstQueryEndTick = GetTickCount();
                 nRet = LRESULT(!ImplHandleShutDownMsg( hWnd ));
                 rDef = FALSE;
 
@@ -5730,13 +5730,18 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             {
                 ImplSalYieldMutexAcquireWithWait();
                 ImplSalYieldMutexRelease();
-                rDef = TRUE;
+                DWORD nCurrentTicks = GetTickCount();
+                DWORD nTicksElapsed = nCurrentTicks < nFirstQueryEndTick ?
+                    (nCurrentTicks - nFirstQueryEndTick) :
+                    (nCurrentTicks + (0xFFFFFFFF - nFirstQueryEndTick));
+                // Only allow 5 seconds timeout max
+                rDef = (nTicksElapsed > 5000) ? TRUE : FALSE;
             }
             break;
 
         case WM_ENDSESSION:
             if( !wParam )
-                bInQueryEnd = FALSE; // no shutdown: allow query again
+                nFirstQueryEndTick = 0; // no shutdown: allow query again
             nRet = FALSE;
             rDef = FALSE;
             break;
