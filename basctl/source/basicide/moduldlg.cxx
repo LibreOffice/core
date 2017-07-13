@@ -792,9 +792,8 @@ void ObjectPage::NewModule()
 
     if ( GetSelection( aDocument, aLibName ) )
     {
-        OUString aModName;
         createModImpl( static_cast<vcl::Window*>( this ), aDocument,
-                    *m_pBasicBox, aLibName, aModName, true );
+                    *m_pBasicBox, aLibName, OUString(), true );
     }
 }
 
