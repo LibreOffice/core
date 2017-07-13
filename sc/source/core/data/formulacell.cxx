@@ -3191,7 +3191,9 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         aUndoPos = *pUndoCellPos;
     ScAddress aOldPos( aPos );
 
-    if (rCxt.maRange.In(aPos))
+    bool bCellInMoveTarget = rCxt.maRange.In(aPos);
+
+    if ( bCellInMoveTarget )
     {
         // The cell is being moved or copied to a new position. I guess the
         // position has been updated prior to this call?  Determine
@@ -3280,7 +3282,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
          (bValChanged && bHasRelName ) || bOnRefMove)
         bNeedDirty = true;
 
-    if (pUndoDoc && (bValChanged || bRefModified || bOnRefMove))
+    if (pUndoDoc && !bCellInMoveTarget && (bValChanged || bRefModified || bOnRefMove))
         setOldCodeToUndo(pUndoDoc, aUndoPos, pOldCode.get(), eTempGrammar, cMatrixFlag);
 
     bValChanged = false;
