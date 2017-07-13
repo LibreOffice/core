@@ -19,6 +19,14 @@ G_BEGIN_DECLS
 #define GTV_MAIN_TOOLBAR_TYPE (gtv_main_toolbar_get_type())
 G_DECLARE_FINAL_TYPE(GtvMainToolbar, gtv_main_toolbar, GTV, MAIN_TOOLBAR, GtkBox);
 
+struct _GtvMainToolbar
+{
+    GtkBox parent;
+
+    GtkWidget* m_pAddressbar;
+    GtkWidget* m_pFormulabar;
+};
+
 GtkWidget* gtv_main_toolbar_new();
 
 GtkContainer* gtv_main_toolbar_get_first_toolbar(GtvMainToolbar* toolbar);

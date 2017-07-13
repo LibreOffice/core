@@ -611,4 +611,45 @@ void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
     lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), deleteCommand.c_str(), aArguments.c_str(), false);
 }
 
+/// Handles the key-press-event of the address entry widget.
+gboolean signalAddressbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData*/)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pWidget));
+    switch(pEvent->keyval)
+    {
+        case GDK_KEY_Return:
+        {
+            GtkEntry* pEntry = GTK_ENTRY(pWidget);
+            const char* pText = gtk_entry_get_text(pEntry);
+
+            boost::property_tree::ptree aTree;
+            aTree.put(boost::property_tree::ptree::path_type("ToPoint/type", '/'), "string");
+            aTree.put(boost::property_tree::ptree::path_type("ToPoint/value", '/'), pText);
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            std::string aArguments = aStream.str();
+
+            lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), ".uno:GoToCell", aArguments.c_str(), false);
+            gtk_widget_grab_focus(window->lokdocview);
+            return TRUE;
+        }
+        case GDK_KEY_Escape:
+        {
+            std::string aArguments;
+            lok_doc_view_post_command(LOK_DOC_VIEW(window->lokdocview), ".uno:Cancel", aArguments.c_str(), false);
+            gtk_widget_grab_focus(window->lokdocview);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+/// Handles the key-press-event of the formula entry widget.
+gboolean signalFormulabar(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/, gpointer /*pData*/)
+{
+    // for now it just displays the callback
+    // TODO - submit the edited formula
+    return TRUE;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

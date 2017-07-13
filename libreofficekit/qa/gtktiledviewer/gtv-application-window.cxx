@@ -94,9 +94,6 @@ gtv_application_window_init(GtvApplicationWindow* win)
     priv->toolbarBroadcast = true;
     priv->partSelectorBroadcast = true;
 
-    win->addressbarentry = GTK_WIDGET(gtk_builder_get_object(builder, "addressbar_entry"));
-    win->formulabarentry = GTK_WIDGET(gtk_builder_get_object(builder, "formulabar_entry"));
-
     gtk_container_add(GTK_CONTAINER(win), priv->container);
 
     g_object_unref(builder);

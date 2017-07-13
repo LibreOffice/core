@@ -19,11 +19,6 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
 
-struct _GtvMainToolbar
-{
-    GtkBox parent;
-};
-
 struct GtvMainToolbarPrivateImpl
 {
     GtkWidget* toolbar1;
@@ -35,6 +30,8 @@ struct GtvMainToolbarPrivateImpl
     GtkWidget* m_pRightpara;
     GtkWidget* m_pJustifypara;
     GtkWidget* m_pDeleteComment;
+    GtkWidget* m_pAddressbar;
+    GtkWidget* m_pFormulabar;
 
     /// Sensitivity (enabled or disabled) for each tool item, ignoring edit state
     std::map<GtkToolItem*, bool> m_aToolItemSensitivities;
@@ -85,6 +82,8 @@ gtv_main_toolbar_init(GtvMainToolbar* toolbar)
     priv->m_pRightpara = GTK_WIDGET(gtk_builder_get_object(builder, "btn_justifyright"));
     priv->m_pJustifypara = GTK_WIDGET(gtk_builder_get_object(builder, "btn_justifyfill"));
     priv->m_pDeleteComment = GTK_WIDGET(gtk_builder_get_object(builder, "btn_removeannotation"));
+    toolbar->m_pAddressbar = GTK_WIDGET(gtk_builder_get_object(builder, "addressbar_entry"));
+    toolbar->m_pFormulabar = GTK_WIDGET(gtk_builder_get_object(builder, "formulabar_entry"));
 
     gtk_builder_add_callback_symbol(builder, "btn_clicked", G_CALLBACK(btn_clicked));
     gtk_builder_add_callback_symbol(builder, "doCopy", G_CALLBACK(doCopy));

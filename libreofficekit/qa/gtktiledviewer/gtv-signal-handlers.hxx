@@ -44,6 +44,12 @@ void replyButtonClicked(GtkWidget*, gpointer);
 
 void deleteCommentButtonClicked(GtkWidget*, gpointer);
 
+/// Handles the key-press-event of the address bar entry widget.
+gboolean signalAddressbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData*/);
+
+/// Handles the key-press-event of the formula entry widget.
+gboolean signalFormulabar(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/, gpointer /*pData*/);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

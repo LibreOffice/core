@@ -172,13 +172,17 @@ void LOKDocViewSigHandlers::cursorChanged(LOKDocView* pDocView, gint nX, gint nY
 void LOKDocViewSigHandlers::addressChanged(LOKDocView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-    gtk_entry_set_text(GTK_ENTRY(window->addressbarentry), pPayload);
+    GtvMainToolbar* toolbar = gtv_application_window_get_main_toolbar(window);
+    GtkEntry* pAddressbar = GTK_ENTRY(toolbar->m_pAddressbar);
+    gtk_entry_set_text(pAddressbar, pPayload);
 }
 
 void LOKDocViewSigHandlers::formulaChanged(LOKDocView* pDocView, char* pPayload, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-    gtk_entry_set_text(GTK_ENTRY(window->formulabarentry), pPayload);
+    GtvMainToolbar* toolbar = gtv_application_window_get_main_toolbar(window);
+    GtkEntry* pFormulabar = GTK_ENTRY(toolbar->m_pFormulabar);
+    gtk_entry_set_text(pFormulabar, pPayload);
 }
 
 void LOKDocViewSigHandlers::passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bModify, gpointer)
