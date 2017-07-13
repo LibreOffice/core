@@ -165,7 +165,7 @@ bool checkOutput(ScDocument* pDoc, const ScRange& aOutRange, const char* aOutput
             if (p)
             {
                 OUString aCheckVal = OUString::createFromAscii(p);
-                bool bEqual = aCheckVal.equals(aVal);
+                bool bEqual = aCheckVal == aVal;
                 if (!bEqual)
                 {
                     cout << "Expected: " << aCheckVal << "  Actual: " << aVal << endl;

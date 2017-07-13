@@ -347,7 +347,7 @@ sal_Int32 ScDPFunctionDlg::FindBaseItemPos( const OUString& rEntry, sal_Int32 nS
         // translate the displayed field name back to its original field name.
         const OUString& rInName = mpLbBaseItem->GetEntry(nPos);
         const OUString& rName = GetBaseItemName(rInName);
-        if (rName.equals(rEntry))
+        if (rName == rEntry)
         {
             bFound = true;
             break;
@@ -775,7 +775,7 @@ sal_Int32 ScDPSubtotalOptDlg::FindListBoxEntry(
         // translate the displayed field name back to its original field name.
         ScDPName aName = GetFieldName(rLBox.GetEntry(nPos));
         OUString aUnoName = ScDPUtil::createDuplicateDimensionName(aName.maName, aName.mnDupCount);
-        if (aUnoName.equals(rEntry))
+        if (aUnoName == rEntry)
         {
             bFound = true;
             break;

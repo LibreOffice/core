@@ -3314,7 +3314,7 @@ const OUString& sPropName )
 
      sal_Int32 count=0;
     for ( ; count < nItems; ++count, ++pProp )
-        if ( pProp->Name.equals( sPropName ) )
+        if ( pProp->Name == sPropName )
             return count;
     if ( count == nItems )
         throw uno::RuntimeException("Range::Sort unknown sort property" );

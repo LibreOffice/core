@@ -1117,7 +1117,7 @@ SCCOL ScDPCache::GetDimensionIndex(const OUString& sName) const
 {
     for (size_t i = 1; i < maLabelNames.size(); ++i)
     {
-        if (maLabelNames[i].equals(sName))
+        if (maLabelNames[i] == sName)
             return static_cast<SCCOL>(i-1);
     }
     return -1;

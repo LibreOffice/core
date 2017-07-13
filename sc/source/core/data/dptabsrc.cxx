@@ -322,7 +322,7 @@ ScDPDimension* ScDPSource::AddDuplicated(const OUString& rNewName)
     for (long i=0; i<nOldDimCount; i++)
     {
         ScDPDimension* pDim = pDimensions->getByIndex(i);
-        if (pDim && pDim->getName().equals(rNewName))
+        if (pDim && pDim->getName() == rNewName)
         {
             //TODO: test if pDim is a duplicate of source
             return pDim;
@@ -450,7 +450,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
         const OUString& aFieldName = rFilter.FieldName;
         for (long nCol = 0; nCol < nColumnCount; ++nCol)
         {
-            if (aFieldName.equals(pData->getDimensionName(nCol)))
+            if (aFieldName == pData->getDimensionName(nCol))
             {
                 ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nCol );
                 ScDPMembers* pMembers = pDim->GetHierarchiesObject()->getByIndex(0)->
@@ -1411,7 +1411,7 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
             for (long i=0; i<nCount && !pSelectedData; i++)
             {
                 ScDPMember* pMember = pMembers->getByIndex(i);
-                if (aSelectedPage.equals(pMember->GetNameStr( false)))
+                if (aSelectedPage == pMember->GetNameStr(false))
                 {
                     pSelectedData.reset( new ScDPItemData(pMember->FillItemData()) );
                 }
@@ -1947,7 +1947,7 @@ void ScDPLevel::EvaluateSortOrder()
                 long nMeasureCount = pSource->GetDataDimensionCount();
                 for (long nMeasure=0; nMeasure<nMeasureCount; nMeasure++)
                 {
-                    if (pSource->GetDataDimName(nMeasure).equals(aSortInfo.Field))
+                    if (pSource->GetDataDimName(nMeasure) == aSortInfo.Field)
                     {
                         nSortMeasure = nMeasure;
                         break;
@@ -1982,7 +1982,7 @@ void ScDPLevel::EvaluateSortOrder()
         long nMeasureCount = pSource->GetDataDimensionCount();
         for (long nMeasure=0; nMeasure<nMeasureCount; nMeasure++)
         {
-            if (pSource->GetDataDimName(nMeasure).equals(aAutoShowInfo.DataField))
+            if (pSource->GetDataDimName(nMeasure) == aAutoShowInfo.DataField)
             {
                 nAutoMeasure = nMeasure;
                 break;

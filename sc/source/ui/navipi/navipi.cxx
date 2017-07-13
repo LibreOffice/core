@@ -745,7 +745,7 @@ void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
     for (SCTAB i = 0; i<nCount; i++)
     {
         pDoc->GetName(i, aTabName);
-        if (aTabName.equals(rName))
+        if (aTabName == rName)
         {
             // Check if this is a Scenario sheet and if so select the sheet
             // where it belongs to, which is the previous non-Scenario sheet.

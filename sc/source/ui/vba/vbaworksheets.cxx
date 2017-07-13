@@ -118,7 +118,7 @@ public:
         for ( ; cachePos != it_end; ++cachePos )
         {
             uno::Reference< container::XNamed > xName( *cachePos, uno::UNO_QUERY_THROW );
-            if ( aName.equals( xName->getName() ) )
+            if ( aName == xName->getName() )
                 break;
         }
         return ( cachePos != it_end );

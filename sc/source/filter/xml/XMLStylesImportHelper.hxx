@@ -144,7 +144,7 @@ class ScMyStylesImportHelper
     void AddRange();
     static bool IsEqual(const OUString* pFirst, const OUString* pSecond)
     {
-        return ((pFirst && pSecond && pFirst->equals(*pSecond)) ||
+        return ((pFirst && pSecond && *pFirst == *pSecond) ||
                 (!pFirst && !pSecond) ||
                 (!pFirst && pSecond && pSecond->isEmpty()) ||
                 (!pSecond && pFirst && pFirst->isEmpty()));

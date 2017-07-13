@@ -7534,7 +7534,7 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
                 if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
                 {
                     ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
-                    if ( aFileString.equals(pTabLink->GetFileName()) )
+                    if ( aFileString == pTabLink->GetFileName() )
                         pTabLink->Update();                         // include Paint&Undo
 
                     //! The file name should only exists once (?)

@@ -120,7 +120,7 @@ void ScActionColorChanger::Update( const ScChangeAction& rAction )
         nColor = nSetColor;
     else                                    // by author
     {
-        if (!aLastUserName.equals(rAction.GetUser()))
+        if (aLastUserName != rAction.GetUser())
         {
             aLastUserName = rAction.GetUser();
             std::set<OUString>::const_iterator it = rUsers.find(aLastUserName);

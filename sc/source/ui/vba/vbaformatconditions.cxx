@@ -190,7 +190,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
         for (sal_Int32 i = mxSheetConditionalEntries->getCount()-1; i >= 0; i--)
         {
             uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry( mxSheetConditionalEntries->getByIndex(i), uno::UNO_QUERY_THROW );
-            if (xSheetConditionalEntry->getStyleName().equals(sStyleName))
+            if (xSheetConditionalEntry->getStyleName() == sStyleName)
             {
                 xFormatCondition =  new ScVbaFormatCondition(uno::Reference< XHelperInterface >( mxRangeParent, uno::UNO_QUERY_THROW ), mxContext, xSheetConditionalEntry, xStyle, this, mxParentRangePropertySet);
                 notifyRange();
@@ -253,7 +253,7 @@ ScVbaFormatConditions::removeFormatCondition( const OUString& _sStyleName, bool 
         for (sal_Int32 i = 0; i < nElems; i++)
         {
             uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry( mxSheetConditionalEntries->getByIndex(i), uno::UNO_QUERY_THROW );
-            if (_sStyleName.equals(xSheetConditionalEntry->getStyleName()))
+            if (_sStyleName == xSheetConditionalEntry->getStyleName())
             {
                 mxSheetConditionalEntries->removeByIndex(i);
                 if (_bRemoveStyle)

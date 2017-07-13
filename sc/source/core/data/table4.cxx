@@ -936,7 +936,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                             short nFlag = lcl_DecompValueString( aValue, nVal, &nCellDigits );
                             if ( nFlag < 0 )
                             {
-                                if (aValue.equals( ScGlobal::GetOrdinalSuffix( nVal)))
+                                if (aValue == ScGlobal::GetOrdinalSuffix( nVal))
                                     aValue = ScGlobal::GetOrdinalSuffix( nVal + nDelta);
 
                                 aValue = lcl_ValueString( nVal + nDelta, nCellDigits ) + aValue;
@@ -1038,7 +1038,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                 {
                     if ( nHeadNoneTail < 0 )
                     {
-                        if (aValue.equals( ScGlobal::GetOrdinalSuffix( nVal)))
+                        if (aValue == ScGlobal::GetOrdinalSuffix( nVal))
                             aValue = ScGlobal::GetOrdinalSuffix( (sal_Int32)nStart );
 
                         aValue = lcl_ValueString( (sal_Int32)nStart, nMinDigits ) + aValue;
@@ -1407,8 +1407,8 @@ void ScTable::FillAutoSimple(
                                 nHeadNoneTail = lcl_DecompValueString(
                                         aValue, nStringValue, &nCellDigits );
 
-                                bIsOrdinalSuffix = aValue.equals(
-                                        ScGlobal::GetOrdinalSuffix( nStringValue));
+                                bIsOrdinalSuffix = aValue ==
+                                        ScGlobal::GetOrdinalSuffix(nStringValue);
                             }
                             break;
                         default:
@@ -1817,8 +1817,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bool bError = false;
                     bool bOverflow = false;
 
-                    bool bIsOrdinalSuffix = aValue.equals( ScGlobal::GetOrdinalSuffix(
-                                (sal_Int32)nStartVal));
+                    bool bIsOrdinalSuffix = aValue == ScGlobal::GetOrdinalSuffix(
+                                (sal_Int32)nStartVal);
 
                     rInner = nIStart;
                     while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes

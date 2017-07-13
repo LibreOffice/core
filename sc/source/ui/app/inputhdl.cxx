@@ -3630,9 +3630,9 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     else if ( bHadObject )
                         bTxtMod = true;
                     else if ( bTextValid )
-                        bTxtMod = ( !aString.equals(aCurrentText) );
+                        bTxtMod = ( aString != aCurrentText );
                     else
-                        bTxtMod = ( !aString.equals(GetEditText(mpEditEngine.get())) );
+                        bTxtMod = ( aString != GetEditText(mpEditEngine.get()) );
 
                     if ( bTxtMod || bForce )
                     {

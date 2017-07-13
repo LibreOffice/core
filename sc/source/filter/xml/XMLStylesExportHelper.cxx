@@ -745,7 +745,7 @@ bool ScFormatRangeStyles::AddStyleName(OUString* rpString, sal_Int32& rIndex, co
         sal_Int32 i(nCount - 1);
         while ((i >= 0) && (!bFound))
         {
-            if (aStyleNames.at(i)->equals(*rpString))
+            if (*aStyleNames.at(i) == *rpString)
                 bFound = true;
             else
                 i--;
@@ -769,7 +769,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const OUString& rString, cons
     sal_Int32 nPrefixLength(rPrefix.getLength());
     OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
-    if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aAutoStyleNames.size() && aAutoStyleNames.at(nIndex - 1)->equals(rString))
+    if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aAutoStyleNames.size() && *aAutoStyleNames.at(nIndex - 1) == rString)
     {
         bIsAutoStyle = true;
         return nIndex - 1;
@@ -780,7 +780,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const OUString& rString, cons
         bool bFound(false);
         while (!bFound && static_cast<size_t>(i) < aStyleNames.size())
         {
-            if (aStyleNames[i]->equals(rString))
+            if (*aStyleNames[i] == rString)
                 bFound = true;
             else
                 ++i;
@@ -795,7 +795,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const OUString& rString, cons
             i = 0;
             while (!bFound && static_cast<size_t>(i) < aAutoStyleNames.size())
             {
-                if (aAutoStyleNames[i]->equals(rString))
+                if (*aAutoStyleNames[i] == rString)
                     bFound = true;
                 else
                     ++i;
@@ -995,7 +995,7 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const OUString& rString, co
     sal_Int32 nPrefixLength(rPrefix.getLength());
     OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
-    if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aStyleNames.size() && aStyleNames.at(nIndex - 1)->equals(rString))
+    if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aStyleNames.size() && *aStyleNames.at(nIndex - 1) == rString)
         return nIndex - 1;
     else
     {
@@ -1003,7 +1003,7 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const OUString& rString, co
         bool bFound(false);
         while (!bFound && static_cast<size_t>(i) < aStyleNames.size())
         {
-            if (aStyleNames.at(i)->equals(rString))
+            if (*aStyleNames.at(i) == rString)
                 bFound = true;
             else
                 ++i;

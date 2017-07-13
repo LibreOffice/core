@@ -199,7 +199,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
             aCondLbArr [i]->SelectEntryPos( nCondPos );
             UpdateValueList( static_cast<sal_uInt16>(i+1) );
             aValueEdArr[i]->SetText( aValStr );
-            if (aValStr.equals(aStrEmpty) || aValStr.equals(aStrNotEmpty))
+            if (aValStr == aStrEmpty || aValStr == aStrNotEmpty)
                 aCondLbArr[i]->Disable();
         }
         else
@@ -379,12 +379,12 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
              * as constant in nVal in connection with the bQueryByString switch
              * set to false
              */
-            if ( aStrVal.equals(aStrEmpty) )
+            if ( aStrVal == aStrEmpty )
             {
                 OSL_ASSERT(eOp == SC_EQUAL);
                 rEntry.SetQueryByEmpty();
             }
-            else if ( aStrVal.equals(aStrNotEmpty) )
+            else if ( aStrVal == aStrNotEmpty )
             {
                 OSL_ASSERT(eOp == SC_EQUAL);
                 rEntry.SetQueryByNonEmpty();
@@ -547,7 +547,7 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, Edit&, rEd, void )
     // if cond of the special values "empty"/"non-empty" was chosen only the
     // =-operand makes sense:
 
-    if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
+    if ( aStrEmpty == aStrVal || aStrNotEmpty == aStrVal )
     {
         pLb->SelectEntry(OUString('='));
         pLb->Disable();

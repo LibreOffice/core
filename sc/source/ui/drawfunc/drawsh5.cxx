@@ -483,7 +483,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             ScDocShell* pDocSh = pViewData->GetDocShell();
                             pDlg->GetName(aName);
 
-                            if (!aName.equals(pSelected->GetName()))
+                            if (aName != pSelected->GetName())
                             {
                                 // handle name change
                                 const sal_uInt16 nObjType(pSelected->GetObjIdentifier());

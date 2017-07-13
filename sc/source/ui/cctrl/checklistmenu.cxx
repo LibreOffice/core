@@ -1622,7 +1622,7 @@ SvTreeListEntry* ScCheckListBox::FindEntry( SvTreeListEntry* pParent, const OUSt
     SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
-        if (  sNode.equals(GetEntryText( pEntry )) )
+        if ( sNode == GetEntryText( pEntry ) )
             return pEntry;
 
         pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
