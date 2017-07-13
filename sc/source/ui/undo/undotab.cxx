@@ -1018,9 +1018,9 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const OUString& rDocName
 {
     ScDocument& rDoc = pDocShell->GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
-    pTabs     = new SCTAB[nTabCount];
-    pModes    = new ScLinkMode[nTabCount];
-    pTabNames = new OUString[nTabCount];
+    pTabs.reset( new SCTAB[nTabCount] );
+    pModes.reset( new ScLinkMode[nTabCount] );
+    pTabNames.reset( new OUString[nTabCount] );
 
     for (SCTAB i=0; i<nTabCount; i++)
     {
@@ -1050,9 +1050,6 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const OUString& rDocName
 
 ScUndoRemoveLink::~ScUndoRemoveLink()
 {
-    delete pTabs;
-    delete pModes;
-    delete[] pTabNames;
 }
 
 OUString ScUndoRemoveLink::GetComment() const

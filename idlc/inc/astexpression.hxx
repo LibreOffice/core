@@ -103,7 +103,7 @@ public:
 
     // Data Accessors
     AstExprValue* getExprValue()
-        { return m_exprValue; }
+        { return m_exprValue.get(); }
 
     // Evaluation and value coercion
     bool coerce(ExprType type);
@@ -129,7 +129,8 @@ private:
     ExprComb        m_combOperator;
     AstExpression*  m_subExpr1;
     AstExpression*  m_subExpr2;
-    AstExprValue*   m_exprValue;
+    std::unique_ptr<AstExprValue>
+                    m_exprValue;
     OString* m_pSymbolicName;
 };
 

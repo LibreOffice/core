@@ -22,6 +22,7 @@
 
 #include <svgnode.hxx>
 #include <svgstyleattributes.hxx>
+#include <memory>
 
 namespace svgio
 {
@@ -43,8 +44,10 @@ namespace svgio
             SvgNumber               maY;
             SvgNumber               maWidth;
             SvgNumber               maHeight;
-            SvgUnits*               mpPatternUnits;
-            SvgUnits*               mpPatternContentUnits;
+            std::unique_ptr<SvgUnits>
+                                    mpPatternUnits;
+            std::unique_ptr<SvgUnits>
+                                    mpPatternContentUnits;
             basegfx::B2DHomMatrix*  mpaPatternTransform;
 
             /// link to another pattern used as style. If maXLink
@@ -95,11 +98,11 @@ namespace svgio
 
             /// PatternUnits content
             const SvgUnits* getPatternUnits() const;
-            void setPatternUnits(const SvgUnits aPatternUnits) { if(mpPatternUnits) delete mpPatternUnits; mpPatternUnits = nullptr; mpPatternUnits = new SvgUnits(aPatternUnits); }
+            void setPatternUnits(const SvgUnits aPatternUnits) { mpPatternUnits.reset( new SvgUnits(aPatternUnits) ); }
 
             /// PatternContentUnits content
             const SvgUnits* getPatternContentUnits() const;
-            void setPatternContentUnits(const SvgUnits aPatternContentUnits) { if(mpPatternContentUnits) delete mpPatternContentUnits; mpPatternContentUnits = nullptr; mpPatternContentUnits = new SvgUnits(aPatternContentUnits); }
+            void setPatternContentUnits(const SvgUnits aPatternContentUnits) { mpPatternContentUnits.reset( new SvgUnits(aPatternContentUnits) ); }
 
             /// PatternTransform content
             const basegfx::B2DHomMatrix* getPatternTransform() const;

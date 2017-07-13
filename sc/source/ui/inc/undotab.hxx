@@ -296,9 +296,12 @@ private:
     OUString    aOptions;
     sal_uLong   nRefreshDelay;
     sal_uInt16  nCount;
-    SCTAB*      pTabs;
-    ScLinkMode* pModes;
-    OUString*   pTabNames;
+    std::unique_ptr<SCTAB[]>
+                pTabs;
+    std::unique_ptr<ScLinkMode[]>
+                pModes;
+    std::unique_ptr<OUString[]>
+                pTabNames;
 
     void DoChange( bool bLink ) const;
 };

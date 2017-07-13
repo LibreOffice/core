@@ -1140,11 +1140,7 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
     {
         pChild->ImplGetWindowImpl()->mbExtTextInput = true;
         pWinData->mpExtOldText = new OUString;
-        if ( pWinData->mpExtOldAttrAry )
-        {
-            delete [] pWinData->mpExtOldAttrAry;
-            pWinData->mpExtOldAttrAry = nullptr;
-        }
+        pWinData->mpExtOldAttrAry.reset();
         pSVData->maWinData.mpExtTextInputWin = pChild;
         ImplCallCommand( pChild, CommandEventId::StartExtTextInput );
     }
@@ -1190,15 +1186,11 @@ static bool ImplHandleExtTextInput( vcl::Window* pWindow,
                                    nCursorPos, nCursorFlags,
                                    bOnlyCursor );
     *pWinData->mpExtOldText = rText;
-    if ( pWinData->mpExtOldAttrAry )
-    {
-        delete [] pWinData->mpExtOldAttrAry;
-        pWinData->mpExtOldAttrAry = nullptr;
-    }
+    pWinData->mpExtOldAttrAry.reset();
     if ( pTextAttr )
     {
-        pWinData->mpExtOldAttrAry = new ExtTextInputAttr[rText.getLength()];
-        memcpy( pWinData->mpExtOldAttrAry, pTextAttr, rText.getLength()*sizeof( ExtTextInputAttr ) );
+        pWinData->mpExtOldAttrAry.reset( new ExtTextInputAttr[rText.getLength()] );
+        memcpy( pWinData->mpExtOldAttrAry.get(), pTextAttr, rText.getLength()*sizeof( ExtTextInputAttr ) );
     }
     return !ImplCallCommand( pChild, CommandEventId::ExtTextInput, &aData );
 }
@@ -1219,11 +1211,7 @@ static bool ImplHandleEndExtTextInput()
             delete pWinData->mpExtOldText;
             pWinData->mpExtOldText = nullptr;
         }
-        if ( pWinData->mpExtOldAttrAry )
-        {
-            delete [] pWinData->mpExtOldAttrAry;
-            pWinData->mpExtOldAttrAry = nullptr;
-        }
+        pWinData->mpExtOldAttrAry.reset();
         bRet = !ImplCallCommand( pChild, CommandEventId::EndExtTextInput );
     }
 

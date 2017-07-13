@@ -905,8 +905,10 @@ public:
 
 private:
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
-    sal_uInt16*         pWhich;
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;
+    std::unique_ptr<sal_uInt16[]>
+                    pWhich;
 };
 
 class ScUndoRemoveBreaks: public ScSimpleUndo

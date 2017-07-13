@@ -49,7 +49,7 @@ AstExpression::AstExpression(sal_Int32 l)
 {
     fillDefinitionDetails();
 
-    m_exprValue = new AstExprValue;
+    m_exprValue.reset( new AstExprValue );
     m_exprValue->et = ET_long;
     m_exprValue->u.lval = l;
 }
@@ -63,7 +63,7 @@ AstExpression::AstExpression(sal_Int32  l, ExprType et)
 {
     fillDefinitionDetails();
 
-    m_exprValue = new AstExprValue;
+    m_exprValue.reset( new AstExprValue );
     m_exprValue->et = et;
     m_exprValue->u.lval = l;
 }
@@ -77,7 +77,7 @@ AstExpression::AstExpression(sal_Int64  h)
 {
     fillDefinitionDetails();
 
-    m_exprValue = new AstExprValue;
+    m_exprValue.reset( new AstExprValue );
     m_exprValue->et = ET_hyper;
     m_exprValue->u.hval = h;
 }
@@ -91,7 +91,7 @@ AstExpression::AstExpression(sal_uInt64 uh)
 {
     fillDefinitionDetails();
 
-    m_exprValue = new AstExprValue;
+    m_exprValue.reset( new AstExprValue );
     m_exprValue->et = ET_uhyper;
     m_exprValue->u.uhval = uh;
 }
@@ -105,7 +105,7 @@ AstExpression::AstExpression(double d)
 {
     fillDefinitionDetails();
 
-    m_exprValue = new AstExprValue;
+    m_exprValue.reset( new AstExprValue );
     m_exprValue->et = ET_double;
     m_exprValue->u.dval = d;
 }
@@ -122,7 +122,6 @@ AstExpression::AstExpression(OString* scopedName)
 
 AstExpression::~AstExpression()
 {
-    delete m_exprValue;
     delete m_subExpr1;
     delete m_subExpr2;
     delete m_pSymbolicName;
@@ -753,7 +752,7 @@ bool AstExpression::coerce(ExprType t)
         copy = nullptr;
     }
 
-    m_exprValue = copy;
+    m_exprValue.reset( copy );
 
     return m_exprValue != nullptr;
 }
@@ -804,21 +803,21 @@ void AstExpression::evaluate()
         case ExprComb::Mul:
         case ExprComb::Div:
         case ExprComb::Mod:
-            m_exprValue = eval_bin_op().release();
+            m_exprValue = eval_bin_op();
             break;
         case ExprComb::Or:
         case ExprComb::Xor:
         case ExprComb::And:
         case ExprComb::Left:
         case ExprComb::Right:
-            m_exprValue = eval_bit_op().release();
+            m_exprValue = eval_bit_op();
             break;
         case ExprComb::UPlus:
         case ExprComb::UMinus:
-            m_exprValue = eval_un_op().release();
+            m_exprValue = eval_un_op();
             break;
         case ExprComb::Symbol:
-            m_exprValue = eval_symbol();
+            m_exprValue.reset( eval_symbol() );
             break;
         case ExprComb::NONE:
             break;

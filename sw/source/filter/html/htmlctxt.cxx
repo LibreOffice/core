@@ -37,13 +37,17 @@
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 
+#include <memory>
+
 using namespace ::com::sun::star;
 
 class HTMLAttrContext_SaveDoc
 {
     SwHTMLNumRuleInfo aNumRuleInfo; // Numbering for this environment
-    SwPosition  *pPos;              // Jump back to here when leaving context
-    HTMLAttrTable *pAttrTab;        // Valid attributes for the environment,
+    std::unique_ptr<SwPosition>
+                      pPos;         // Jump back to here when leaving context
+    std::unique_ptr<HTMLAttrTable>
+                      pAttrTab;     // Valid attributes for the environment,
                                     // if attributes shouldn't be preserved
 
     size_t nContextStMin;           // Stack lower bound for the environment
@@ -64,11 +68,9 @@ public:
         bFixHeaderDist( false ), bFixFooterDist( false )
     {}
 
-    ~HTMLAttrContext_SaveDoc() { delete pPos; delete pAttrTab; }
-
     // The position is ours, so we need to create and delete it
-    void SetPos( const SwPosition& rPos ) { pPos = new SwPosition(rPos); }
-    const SwPosition *GetPos() const { return pPos; }
+    void SetPos( const SwPosition& rPos ) { pPos.reset( new SwPosition(rPos) ); }
+    const SwPosition *GetPos() const { return pPos.get(); }
 
     // The index isn't ours. So no creation or deletion
     void SetNumInfo( const SwHTMLNumRuleInfo& rInf ) { aNumRuleInfo.Set(rInf); }
@@ -99,10 +101,10 @@ HTMLAttrTable *HTMLAttrContext_SaveDoc::GetAttrTab( bool bCreate )
 {
     if( !pAttrTab && bCreate )
     {
-        pAttrTab = new HTMLAttrTable;
-        memset( pAttrTab, 0, sizeof( HTMLAttrTable ));
+        pAttrTab.reset( new HTMLAttrTable );
+        memset( pAttrTab.get(), 0, sizeof( HTMLAttrTable ));
     }
-    return pAttrTab;
+    return pAttrTab.get();
 }
 
 HTMLAttrContext_SaveDoc *HTMLAttrContext::GetSaveDocContext( bool bCreate )

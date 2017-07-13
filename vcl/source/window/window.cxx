@@ -766,7 +766,6 @@ ImplWinData::ImplWinData() :
 ImplWinData::~ImplWinData()
 {
     delete mpExtOldText;
-    delete mpExtOldAttrAry;
     delete mpCursorRect;
     delete[] mpCompositionCharRects;
     delete mpFocusRect;

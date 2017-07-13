@@ -2042,15 +2042,13 @@ ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& 
     sal_uInt16 nCount = 0;
     while ( pW[nCount] )
         ++nCount;
-    pWhich = new sal_uInt16[nCount+1];
+    pWhich.reset( new sal_uInt16[nCount+1] );
     for (sal_uInt16 i=0; i<=nCount; i++)
         pWhich[i] = pW[i];
 }
 
 ScUndoClearItems::~ScUndoClearItems()
 {
-    delete pUndoDoc;
-    delete pWhich;
 }
 
 OUString ScUndoClearItems::GetComment() const
@@ -2074,7 +2072,7 @@ void ScUndoClearItems::Redo()
     BeginRedo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    rDoc.ClearSelectionItems( pWhich, aMarkData );
+    rDoc.ClearSelectionItems( pWhich.get(), aMarkData );
     pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndRedo();
@@ -2085,7 +2083,7 @@ void ScUndoClearItems::Repeat(SfxRepeatTarget& rTarget)
     if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
     {
         ScViewData& rViewData = static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData();
-        rViewData.GetDocFunc().ClearItems( rViewData.GetMarkData(), pWhich, false );
+        rViewData.GetDocFunc().ClearItems( rViewData.GetMarkData(), pWhich.get(), false );
     }
 }
 

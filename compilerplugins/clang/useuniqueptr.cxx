@@ -37,7 +37,7 @@ public:
     bool VisitCompoundStmt(const CompoundStmt* );
 private:
     void CheckForSingleUnconditionalDelete(const CXXDestructorDecl*, const CompoundStmt* );
-    void CheckForDeleteArrayOfPOD(const CompoundStmt* );
+    void CheckForDeleteOfPOD(const CompoundStmt* );
 };
 
 bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDecl)
@@ -52,7 +52,7 @@ bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDec
         return true;
 
     CheckForSingleUnconditionalDelete(destructorDecl, compoundStmt);
-    CheckForDeleteArrayOfPOD(compoundStmt);
+    CheckForDeleteOfPOD(compoundStmt);
 
     return true;
 }
@@ -195,13 +195,13 @@ bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
     return true;
 }
 
-void UseUniquePtr::CheckForDeleteArrayOfPOD(const CompoundStmt* compoundStmt)
+void UseUniquePtr::CheckForDeleteOfPOD(const CompoundStmt* compoundStmt)
 {
     for (auto i = compoundStmt->body_begin();
               i != compoundStmt->body_end(); ++i)
     {
         auto deleteExpr = dyn_cast<CXXDeleteExpr>(*i);
-        if (!deleteExpr || !deleteExpr->isArrayForm())
+        if (!deleteExpr)
             continue;
 
         const Expr* argExpr = deleteExpr->getArgument();
@@ -221,7 +221,7 @@ void UseUniquePtr::CheckForDeleteArrayOfPOD(const CompoundStmt* compoundStmt)
 
         auto pointerType = dyn_cast<PointerType>(fieldDecl->getType()->getUnqualifiedDesugaredType());
         QualType elementType = pointerType->getPointeeType();
-        if (!elementType.isTrivialType(compiler.getASTContext()))
+        if (!elementType.isPODType(compiler.getASTContext()))
             continue;
 
         StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
@@ -237,7 +237,7 @@ void UseUniquePtr::CheckForDeleteArrayOfPOD(const CompoundStmt* compoundStmt)
 
         report(
             DiagnosticsEngine::Warning,
-            "managing array of trival type %0 manually, rather use std::vector / std::array / std::unique_ptr",
+            "managing POD type %0 manually, rather use std::vector / std::array / std::unique_ptr",
             deleteExpr->getLocStart())
             << elementType
             << deleteExpr->getSourceRange();

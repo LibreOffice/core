@@ -27,6 +27,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <list>
+#include <memory>
 #include <vector>
 #include <set>
 
@@ -84,14 +85,15 @@ bool ImplWindowFrameProc( vcl::Window* pInst, SalEvent nEvent, const void* pEven
 struct ImplWinData
 {
     OUString*           mpExtOldText;
-    ExtTextInputAttr*   mpExtOldAttrAry;
-    tools::Rectangle*          mpCursorRect;
+    std::unique_ptr<ExtTextInputAttr[]>
+                        mpExtOldAttrAry;
+    tools::Rectangle*   mpCursorRect;
     long                mnCursorExtWidth;
     bool                mbVertical;
-    tools::Rectangle*          mpCompositionCharRects;
+    tools::Rectangle*   mpCompositionCharRects;
     long                mnCompositionCharRects;
-    tools::Rectangle*          mpFocusRect;
-    tools::Rectangle*          mpTrackRect;
+    tools::Rectangle*   mpFocusRect;
+    tools::Rectangle*   mpTrackRect;
     ShowTrackFlags      mnTrackFlags;
     sal_uInt16          mnIsTopWindow;
     bool                mbMouseOver;            //< tracks mouse over for native widget paint effect

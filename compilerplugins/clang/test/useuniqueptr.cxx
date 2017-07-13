@@ -7,9 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+struct XXX {
+    ~XXX() {}
+};
 
 class Foo1 {
-    char* m_pbar; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    XXX* m_pbar; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Foo1()
     {
         delete m_pbar; // expected-error {{a destructor with only a single unconditional call to delete on a member, is a sure sign it should be using std::unique_ptr for that field [loplugin:useuniqueptr]}}
@@ -23,8 +26,8 @@ class Foo2 {
     char* m_pbar2; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Foo2()
     {
-        delete[] m_pbar1; // expected-error {{managing array of trival type 'char' manually, rather use std::vector / std::array / std::unique_ptr [loplugin:useuniqueptr]}}
-        delete[] m_pbar2; // expected-error {{managing array of trival type 'char' manually, rather use std::vector / std::array / std::unique_ptr [loplugin:useuniqueptr]}}
+        delete[] m_pbar1; // expected-error {{managing POD type 'char' manually, rather use std::vector / std::array / std::unique_ptr [loplugin:useuniqueptr]}}
+        delete[] m_pbar2; // expected-error {{managing POD type 'char' manually, rather use std::vector / std::array / std::unique_ptr [loplugin:useuniqueptr]}}
     }
 };
 
