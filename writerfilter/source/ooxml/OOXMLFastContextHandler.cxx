@@ -1540,6 +1540,25 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
     mpParserState->endTable();
 }
 
+// tdf#111550
+void OOXMLFastContextHandlerTextTable::start_P_Tbl()
+{
+    // Normally, when one paragraph ends, and another begins,
+    // in OOXMLFactory_wml::endAction handler for <w:p>,
+    // pHandler->endOfParagraph() is called, which (among other things)
+    // calls TableManager::setHandle() to update current cell's starting point.
+    // Then, in OOXMLFactory_wml::startAction for next <w:p>,
+    // pHandler->startParagraphGroup() is called, which ends previous group,
+    // and there, it pushes cells to row in TableManager::endParagraphGroup()
+    // (cells have correct bounds defined by mCurHandle).
+    // When a table is child of a <w:p>, that paragraph doesn't end before nested
+    // paragraph begins. So, pHandler->endOfParagraph() was not (and should not be)
+    // called. But as next paragraph starts, is the previous group is closed, then
+    // cells will have wrong boundings. Here, we know that we *are* in paragraph
+    // group, but it should not be finished.
+    mpParserState->setInParagraphGroup(false);
+}
+
 /*
   class OOXMLFastContextHandlerShape
  */
