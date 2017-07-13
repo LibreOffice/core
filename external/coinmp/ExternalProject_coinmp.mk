@@ -28,6 +28,7 @@ else
 $(call gb_ExternalProject_get_state_target,coinmp,build) :
 	+$(call gb_ExternalProject_run,build,\
 		./configure COIN_SKIP_PROJECTS="Data/Sample" \
+			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(DISABLE_DYNLOADING),--disable-shared) \
 			--disable-bzlib \
