@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_8ad86af1",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 3496,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-07-13T06:14:54Z",
+      "side": 1,
+      "message": "Please write the full name, FavoriteCharacters. As this string can be seen by the user, it should be as clear as possible.",
+      "revId": "fe340ca39eeb3a85389292ed8d923c517782dad6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_aae526a9",
+        "filename": "sfx2/uiconfig/ui/charmapcontrol.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-07-13T06:14:54Z",
+      "side": 1,
+      "message": "I think we use en-US by default (Favorites, not Favourites).",
+      "revId": "fe340ca39eeb3a85389292ed8d923c517782dad6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
