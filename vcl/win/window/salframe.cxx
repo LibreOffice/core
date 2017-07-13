@@ -5720,9 +5720,9 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 {
                     MSG msg;
 
-                    while( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) )
+                    while( PeekMessageW( &msg, nullptr, 0, 0, PM_REMOVE ) )
                     {
-                        DispatchMessage( &msg );
+                        DispatchMessageW( &msg );
                     }
                 }
             }
@@ -5735,10 +5735,13 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 
         case WM_ENDSESSION:
-            if( !wParam )
-                bInQueryEnd = FALSE; // no shutdown: allow query again
             nRet = FALSE;
             rDef = FALSE;
+            if( !wParam )
+                bInQueryEnd = FALSE; // no shutdown: allow query again
+            else
+                // Process it synchronously in SalComWndProc
+                SendMessageW(GetSalData()->mpFirstInstance->mhComWnd, WM_ENDSESSION, wParam, lParam);
             break;
 
         case WM_DISPLAYCHANGE:
