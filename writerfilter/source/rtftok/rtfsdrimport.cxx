@@ -42,19 +42,10 @@
 #include <oox/helper/propertyset.hxx>
 #include <boost/logic/tribool.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <android/compatibility.hxx>
 
 using namespace com::sun::star;
 
-#if defined(ANDROID)
-namespace std
-{
-template<typename T>
-T lround(T x)
-{
-    return ::lround(x);
-}
-}
-#endif
 
 namespace writerfilter
 {
