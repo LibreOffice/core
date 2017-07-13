@@ -93,9 +93,9 @@ void lokdocview_signalSearchResultCount(LOKDocView* pDocView, char* pPayload, gp
     gtk_label_set_text(GTK_LABEL(window->findbarlabel), ss.str().c_str());
 }
 
-void lokdocview_signalPart(LOKDocView* pDocView, int, gpointer)
+void lokdocview_signalPart(LOKDocView* /*pDocView*/, int, gpointer)
 {
-    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+//    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     //rWindow.m_bPartSelectorBroadcast = false;
 //    gtk_combo_box_set_active(GTK_COMBO_BOX(rWindow.m_pPartSelector), nPart);
     //  rWindow.m_bPartSelectorBroadcast = true;
@@ -119,7 +119,8 @@ void lokdocview_signalHyperlink(LOKDocView* pDocView, char* pPayload, gpointer)
     }
 }
 
-void lokdocview_cursorChanged(LOKDocView* pDocView, gint nX, gint nY, gint nWidth, gint nHeight, gpointer)
+void lokdocview_cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
+                              gint /*nWidth*/, gint /*nHeight*/, gpointer /*pData*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
     GtkAdjustment* vadj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(window->scrolledwindow));
@@ -219,10 +220,9 @@ void lokdocview_passwordRequired(LOKDocView* pDocView, char* pUrl, gboolean bMod
 
 void lokdocview_commentCallback(LOKDocView* pDocView, gchar* pComment, gpointer);
 
-gboolean lokdocview_configureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData)
+gboolean lokdocview_configureEvent(GtkWidget* pWidget, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pWidget)));
-    printf("configuring");
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
     {
@@ -254,6 +254,8 @@ gboolean lokdocview_configureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent
         gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->columnbar), &aTree.get_child("columns"));
         gtv_calc_header_bar_configure(GTV_CALC_HEADER_BAR(window->cornerarea), nullptr);
     }
+
+    return TRUE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

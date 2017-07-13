@@ -33,7 +33,7 @@ getPrivate(GtvApplication* app)
 }
 
 static void
-gtv_application_open(GApplication* app, GFile** file, gint nFiles, const gchar* hint)
+gtv_application_open(GApplication* app, GFile** file, gint /*nFiles*/, const gchar* /*hint*/)
 {
     // TODO: add some option to create a new view for existing document
     // For now, this just opens a new document
@@ -55,8 +55,7 @@ gtv_application_init(GtvApplication* app)
         { "enable-tiled-annotations", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, nullptr, "Whether tiled annotations should be enabled", nullptr },
         { "background-color", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, nullptr, "Background color", nullptr },
         { "hide-page-shadow", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, nullptr, "Hide page shadow", nullptr },
-        { "hide-whitespace", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, nullptr, "Hide whitespace", nullptr },
-        { nullptr }
+        { "hide-whitespace", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, nullptr, "Hide whitespace", nullptr }
     };
 
     g_application_add_main_option_entries(G_APPLICATION(app), commandLineOptions);

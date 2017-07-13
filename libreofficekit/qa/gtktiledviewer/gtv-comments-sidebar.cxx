@@ -134,9 +134,8 @@ gtv_comments_sidebar_init(GtvCommentsSidebar* sidebar)
 }
 
 static void
-gtv_comments_sidebar_class_init(GtvCommentsSidebarClass* klass)
+gtv_comments_sidebar_class_init(GtvCommentsSidebarClass* /*klass*/)
 {
-
 }
 
 GtkWidget*

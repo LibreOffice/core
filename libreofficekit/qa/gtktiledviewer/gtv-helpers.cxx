@@ -9,6 +9,8 @@
 
 #include <gtk/gtk.h>
 
+#include <pwd.h>
+
 #include <cstring>
 
 #include <gtv-helpers.hxx>
@@ -81,6 +83,13 @@ clipboardSetHtml(GtkClipboard* pClipboard, const char* pSelection)
 
     gtk_target_table_free(pTargets, nTargets);
     gtk_target_list_unref(pList);
+}
+
+std::string getNextAuthor()
+{
+    static int nCounter = 0;
+    struct passwd* pPasswd = getpwuid(getuid());
+    return std::string(pPasswd->pw_gecos) + " #" + std::to_string(++nCounter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
