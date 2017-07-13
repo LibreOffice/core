@@ -83,9 +83,12 @@ private:
     SvStream&           m_rTGA;
 
     BitmapWriteAccess*  mpAcc;
-    TGAFileHeader*      mpFileHeader;
-    TGAFileFooter*      mpFileFooter;
-    TGAExtension*       mpExtension;
+    std::unique_ptr<TGAFileHeader>
+                        mpFileHeader;
+    std::unique_ptr<TGAFileFooter>
+                        mpFileFooter;
+    std::unique_ptr<TGAExtension>
+                        mpExtension;
     std::unique_ptr<sal_uInt32[]>
                         mpColorMap;
 
@@ -102,7 +105,6 @@ private:
 
 public:
     explicit TGAReader(SvStream &rTGA);
-    ~TGAReader();
     bool                ReadTGA(Graphic &rGraphic);
 };
 
@@ -122,14 +124,6 @@ TGAReader::TGAReader(SvStream &rTGA)
     , mbEncoding(false)
 {
 }
-
-TGAReader::~TGAReader()
-{
-    delete mpFileHeader;
-    delete mpExtension;
-    delete mpFileFooter;
-}
-
 
 bool TGAReader::ReadTGA(Graphic & rGraphic)
 {
@@ -175,7 +169,7 @@ bool TGAReader::ReadTGA(Graphic & rGraphic)
 
 bool TGAReader::ImplReadHeader()
 {
-    mpFileHeader = new TGAFileHeader;
+    mpFileHeader.reset( new TGAFileHeader );
 
     m_rTGA.ReadUChar( mpFileHeader->nImageIDLength ).ReadUChar( mpFileHeader->nColorMapType ).ReadUChar( mpFileHeader->nImageType ).        ReadUInt16( mpFileHeader->nColorMapFirstEntryIndex ).ReadUInt16( mpFileHeader->nColorMapLength ).ReadUChar( mpFileHeader->nColorMapEntrySize ).            ReadUInt16( mpFileHeader->nColorMapXOrigin ).ReadUInt16( mpFileHeader->nColorMapYOrigin ).ReadUInt16( mpFileHeader->nImageWidth ).                ReadUInt16( mpFileHeader->nImageHeight ).ReadUChar( mpFileHeader->nPixelDepth ).ReadUChar( mpFileHeader->nImageDescriptor );
 
@@ -188,8 +182,8 @@ bool TGAReader::ImplReadHeader()
         mbIndexing = true;
 
     // first we want to get the version
-    mpFileFooter = new TGAFileFooter;       // read the TGA-File-Footer to determine whether
-                                            // we got an old TGA format or the new one
+    mpFileFooter.reset( new TGAFileFooter );  // read the TGA-File-Footer to determine whether
+                                              // we got an old TGA format or the new one
 
     sal_uLong nCurStreamPos = m_rTGA.Tell();
     m_rTGA.Seek( STREAM_SEEK_TO_END );
@@ -208,7 +202,7 @@ bool TGAReader::ImplReadHeader()
          mpFileFooter->nSignature[ 2 ] == (('O'<<24)|('N'<<16)|('-'<<8)|'X') &&
          mpFileFooter->nSignature[ 3 ] == (('F'<<24)|('I'<<16)|('L'<<8)|'E') )
     {
-        mpExtension = new TGAExtension;
+        mpExtension.reset( new TGAExtension );
 
         m_rTGA.Seek( mpFileFooter->nExtensionFileOffset );
         m_rTGA.ReadUInt16( mpExtension->nExtensionSize );

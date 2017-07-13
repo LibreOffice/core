@@ -622,8 +622,8 @@ public:
     RTTypeClass         m_typeClass;
     OString             m_typeName;
     sal_uInt16          m_nSuperTypes;
-    OString*            m_superTypeNames;
-    RTUik*              m_pUik;
+    std::unique_ptr<OString[]>
+                        m_superTypeNames;
     OString             m_doku;
     OString             m_fileName;
     sal_uInt16          m_fieldCount;
@@ -671,7 +671,6 @@ TypeWriter::TypeWriter(typereg_Version version,
             RTTypeClass | (published ? RT_TYPE_PUBLISHED : 0)))
      , m_typeName(typeName)
     , m_nSuperTypes(superTypeCount)
-    , m_pUik(nullptr)
     , m_doku(documentation)
     , m_fileName(fileName)
     , m_fieldCount(fieldCount)
@@ -684,10 +683,7 @@ TypeWriter::TypeWriter(typereg_Version version,
 {
     if (m_nSuperTypes > 0)
     {
-        m_superTypeNames = new OString[m_nSuperTypes];
-    } else
-    {
-        m_superTypeNames = nullptr;
+        m_superTypeNames.reset( new OString[m_nSuperTypes] );
     }
 
     if (m_fieldCount)
@@ -702,8 +698,6 @@ TypeWriter::TypeWriter(typereg_Version version,
 
 TypeWriter::~TypeWriter()
 {
-    delete[] m_superTypeNames;
-
     if (m_fieldCount)
         delete[] m_fields;
 
@@ -712,8 +706,6 @@ TypeWriter::~TypeWriter()
 
     if (m_referenceCount)
         delete[] m_references;
-
-    delete m_pUik;
 }
 
 void TypeWriter::setSuperType(sal_uInt16 index, OString const & name)
@@ -736,7 +728,6 @@ void TypeWriter::createBlop()
     CPInfo  root(CP_TAG_INVALID, nullptr);
     sal_uInt16  cpIndexThisName = 0;
     sal_uInt16* cpIndexSuperNames = nullptr;
-    sal_uInt16  cpIndexUik = 0;
     sal_uInt16  cpIndexDoku = 0;
     sal_uInt16  cpIndexFileName = 0;
     CPInfo* pInfo = nullptr;
@@ -771,14 +762,6 @@ void TypeWriter::createBlop()
             pInfo->m_value.aUtf8 = m_superTypeNames[i].getStr();
             cpIndexSuperNames[i] = pInfo->m_index;
         }
-    }
-
-    // create CP entry for uik
-    if (m_pUik != nullptr)
-    {
-        pInfo = new CPInfo(CP_TAG_UIK, pInfo);
-        pInfo->m_value.aUik = m_pUik;
-        cpIndexUik = pInfo->m_index;
     }
 
     // create CP entry for doku
@@ -1064,7 +1047,7 @@ void TypeWriter::createBlop()
     pBuffer += writeUINT16(pBuffer, (sal_uInt16)RT_UNO_IDL);
     pBuffer += writeUINT16(pBuffer, (sal_uInt16)m_typeClass);
     pBuffer += writeUINT16(pBuffer, cpIndexThisName);
-    pBuffer += writeUINT16(pBuffer, cpIndexUik);
+    pBuffer += writeUINT16(pBuffer, 0); // cpIndexUik
     pBuffer += writeUINT16(pBuffer, cpIndexDoku);
     pBuffer += writeUINT16(pBuffer, cpIndexFileName);
 

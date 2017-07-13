@@ -207,7 +207,6 @@ ScModule::~ScModule()
     DELETEZ( pFormEditData );
 
     delete mpDragData;
-    delete mpClipData;
     delete pErrorHdl;
 
     ScGlobal::Clear(); // Also calls ScDocumentPool::DeleteVersionMaps();

@@ -56,8 +56,6 @@ namespace svgio
         {
             delete mpViewBox;
             delete mpaPatternTransform;
-            delete mpPatternUnits;
-            delete mpPatternContentUnits;
         }
 
         const SvgStyleAttributes* SvgPatternNode::getSvgStyleAttributes() const
@@ -402,7 +400,7 @@ namespace svgio
         {
             if(mpPatternUnits)
             {
-                return mpPatternUnits;
+                return mpPatternUnits.get();
             }
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();
@@ -419,7 +417,7 @@ namespace svgio
         {
             if(mpPatternContentUnits)
             {
-                return mpPatternContentUnits;
+                return mpPatternContentUnits.get();
             }
 
             const_cast< SvgPatternNode* >(this)->tryToFindLink();

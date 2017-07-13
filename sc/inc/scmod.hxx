@@ -29,9 +29,10 @@
 #include "shellids.hxx"
 #include <unotools/options.hxx>
 
-#include <map>
-#include <list>
 #include <algorithm>
+#include <list>
+#include <map>
+#include <memory>
 #include <stack>
 
 class KeyEvent;
@@ -78,7 +79,8 @@ class ScModule: public SfxModule, public SfxListener, public utl::ConfigurationL
     Timer               aIdleTimer;
     Idle                aSpellIdle;
     ScDragData*         mpDragData;
-    ScClipData*         mpClipData;
+    std::unique_ptr<ScClipData>
+                        mpClipData;
     ScSelectionTransferObj* pSelTransfer;
     ScMessagePool*      pMessagePool;
     // there is no global InputHandler anymore, each View has it's own
