@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_90bb3872",
+        "filename": "sc/source/filter/dif/difexp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-13T16:05:03Z",
+      "side": 1,
+      "message": "Is there a reason why in this patch set you now changed to SAL_WARN_IF() instead of assert()? Reading the code it looks like it should really assert if aOS is not empty as that would be a programming error in the loop\u0027s conditions, not some data depending state.",
+      "revId": "a8b968b87dad515501926c137fd77dbdc4689213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_d0adc032",
+        "filename": "sc/source/filter/excel/excimp8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-13T16:05:03Z",
+      "side": 1,
+      "message": "Again, why not assert() here? The connection can just be AND or OR, anything else doesn\u0027t make sense and is a programming error.",
+      "revId": "a8b968b87dad515501926c137fd77dbdc4689213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_10a8281f",
+        "filename": "sc/source/filter/xml/XMLExportDatabaseRanges.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-13T16:05:03Z",
+      "side": 1,
+      "message": "assert() instead, if we reach here then rItems can be of size 0 or \u003e1, for 0 the front() below would abort (hopefully) anyway.",
+      "revId": "a8b968b87dad515501926c137fd77dbdc4689213",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
