@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/frame/theDesktop.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -5718,6 +5719,11 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
                 if ( nRet )
                 {
+                    // tdf#:109085 allow for correct shutdown
+                    Reference<frame::XDesktop2> xDesktop = frame::theDesktop::get(comphelper::getProcessComponentContext());
+                    if (xDesktop.is())
+                        xDesktop->terminate();
+//                    Sleep(1000);
                     MSG msg;
 
                     while( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) )
@@ -5737,6 +5743,15 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         case WM_ENDSESSION:
             if( !wParam )
                 bInQueryEnd = FALSE; // no shutdown: allow query again
+            else
+            {
+//                MessageBoxA(hWnd, "WM_ENDSESSION", "Message", 0);
+                MSG msg;
+                while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+                {
+                    DispatchMessage(&msg);
+                }
+            }
             nRet = FALSE;
             rDef = FALSE;
             break;
