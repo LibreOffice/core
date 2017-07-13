@@ -77,7 +77,6 @@ namespace dbaui
         bool                m_bNeedToReInitialize;
 
         ODatabaseExport*    m_pReader;
-        sal_Int32*          m_pRowMarker; // if set, then copy only these rows
         rtl_TextEncoding    m_eDestEnc;
         bool                m_bInInitialize;
         bool                m_bCheckOnly;

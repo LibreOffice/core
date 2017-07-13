@@ -84,7 +84,6 @@ ODatabaseImportExport::ODatabaseImportExport(const svx::ODataAccessDescriptor& _
     ,m_nCommandType(CommandType::TABLE)
     ,m_bNeedToReInitialize(false)
     ,m_pReader(nullptr)
-    ,m_pRowMarker(nullptr)
     ,m_bInInitialize(false)
     ,m_bCheckOnly(false)
 {
@@ -106,7 +105,6 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     ,m_nCommandType(css::sdb::CommandType::TABLE)
     ,m_bNeedToReInitialize(false)
     ,m_pReader(nullptr)
-    ,m_pRowMarker(nullptr)
     ,m_bInInitialize(false)
     ,m_bCheckOnly(false)
 {
@@ -129,7 +127,6 @@ ODatabaseImportExport::~ODatabaseImportExport()
 
     if(m_pReader)
         m_pReader->release();
-    delete m_pRowMarker;
 }
 
 void ODatabaseImportExport::dispose()
@@ -513,64 +510,61 @@ bool ORTFImportExport::Write()
 
 void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk)
 {
-    if(!m_pRowMarker || m_pRowMarker[kk] == k)
+    ++kk;
+    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH );
+    m_pStream->WriteInt32AsString(40);
+    m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+
+    static char const aCell2[] = "\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx";
+
+    for ( sal_Int32 i=1; i<=_nColumnCount; ++i )
     {
-        ++kk;
-        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TROWD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_TRGAPH );
-        m_pStream->WriteInt32AsString(40);
+        m_pStream->WriteCharPtr( aCell2 );
+        m_pStream->WriteInt32AsString(i*CELL_X);
         m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
-
-        static char const aCell2[] = "\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx";
-
-        for ( sal_Int32 i=1; i<=_nColumnCount; ++i )
-        {
-            m_pStream->WriteCharPtr( aCell2 );
-            m_pStream->WriteInt32AsString(i*CELL_X);
-            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
-        }
-
-        const bool bBold            = ( css::awt::FontWeight::BOLD     == m_aFont.Weight );
-        const bool bItalic      = ( css::awt::FontSlant_ITALIC     == m_aFont.Slant );
-        const bool bUnderline       = ( css::awt::FontUnderline::NONE  != m_aFont.Underline );
-        const bool bStrikeout       = ( css::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
-        Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
-
-        m_pStream->WriteChar( '{' );
-        m_pStream->WriteCharPtr( "\\trrh-270\\pard\\intbl" );
-        for ( sal_Int32 i=1; i <= _nColumnCount; ++i )
-        {
-            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
-            m_pStream->WriteChar( '{' );
-            m_pStream->WriteCharPtr( pHorzChar[i-1].getStr() );
-
-            if ( bBold )        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
-            if ( bItalic )      m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
-            if ( bUnderline )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
-            if ( bStrikeout )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STRIKE );
-
-            m_pStream->WriteCharPtr( "\\fs20\\f1\\cf0\\cb1 " );
-
-            try
-            {
-                Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
-                dbtools::FormattedColumnValue aFormatedValue(m_xContext,xRowSet,xColumn);
-                OUString sValue = aFormatedValue.getFormattedValue();
-                if ( !sValue.isEmpty() )
-                    RTFOutFuncs::Out_String(*m_pStream,sValue,m_eDestEnc);
-            }
-            catch (Exception&)
-            {
-                SAL_WARN("dbaccess.ui","RTF WRITE!");
-            }
-
-            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
-            m_pStream->WriteChar( '}' );
-            m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
-            m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL );
-        }
-        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ROW ).WriteCharPtr( SAL_NEWLINE_STRING );
-        m_pStream->WriteChar( '}' );
     }
+
+    const bool bBold            = ( css::awt::FontWeight::BOLD     == m_aFont.Weight );
+    const bool bItalic      = ( css::awt::FontSlant_ITALIC     == m_aFont.Slant );
+    const bool bUnderline       = ( css::awt::FontUnderline::NONE  != m_aFont.Underline );
+    const bool bStrikeout       = ( css::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
+    Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
+
+    m_pStream->WriteChar( '{' );
+    m_pStream->WriteCharPtr( "\\trrh-270\\pard\\intbl" );
+    for ( sal_Int32 i=1; i <= _nColumnCount; ++i )
+    {
+        m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+        m_pStream->WriteChar( '{' );
+        m_pStream->WriteCharPtr( pHorzChar[i-1].getStr() );
+
+        if ( bBold )        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_B );
+        if ( bItalic )      m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_I );
+        if ( bUnderline )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_UL );
+        if ( bStrikeout )   m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_STRIKE );
+
+        m_pStream->WriteCharPtr( "\\fs20\\f1\\cf0\\cb1 " );
+
+        try
+        {
+            Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
+            dbtools::FormattedColumnValue aFormatedValue(m_xContext,xRowSet,xColumn);
+            OUString sValue = aFormatedValue.getFormattedValue();
+            if ( !sValue.isEmpty() )
+                RTFOutFuncs::Out_String(*m_pStream,sValue,m_eDestEnc);
+        }
+        catch (Exception&)
+        {
+            SAL_WARN("dbaccess.ui","RTF WRITE!");
+        }
+
+        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CELL );
+        m_pStream->WriteChar( '}' );
+        m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
+        m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_INTBL );
+    }
+    m_pStream->WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ROW ).WriteCharPtr( SAL_NEWLINE_STRING );
+    m_pStream->WriteChar( '}' );
     ++k;
 }
 
@@ -837,31 +831,28 @@ void OHTMLImportExport::WriteTables()
             IncIndent(1);
             TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
 
-            if(!m_pRowMarker || m_pRowMarker[kk] == j)
+            ++kk;
+            for(sal_Int32 i=1;i<=aNames.getLength();++i)
             {
-                ++kk;
-                for(sal_Int32 i=1;i<=aNames.getLength();++i)
-                {
-                    if(i == aNames.getLength())
-                        IncIndent(-1);
+                if(i == aNames.getLength())
+                    IncIndent(-1);
 
-                    OUString aValue;
-                    try
+                OUString aValue;
+                try
+                {
+                    Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
+                    dbtools::FormattedColumnValue aFormatedValue(m_xContext,xRowSet,xColumn);
+                    OUString sValue = aFormatedValue.getFormattedValue();
+                    if (!sValue.isEmpty())
                     {
-                        Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
-                        dbtools::FormattedColumnValue aFormatedValue(m_xContext,xRowSet,xColumn);
-                        OUString sValue = aFormatedValue.getFormattedValue();
-                        if (!sValue.isEmpty())
-                        {
-                            aValue = sValue;
-                        }
+                        aValue = sValue;
                     }
-                    catch( const Exception& )
-                    {
-                        DBG_UNHANDLED_EXCEPTION();
-                    }
-                    WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,OOO_STRING_SVTOOLS_HTML_tabledata);
                 }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+                WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,OOO_STRING_SVTOOLS_HTML_tabledata);
             }
             ++j;
             TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
