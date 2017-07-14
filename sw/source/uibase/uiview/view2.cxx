@@ -333,7 +333,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     for( size_t i = 0; i < aFormats.size(); ++i )
     {
         pEntries[i] = aFormats[i];
-        if(pEntries[i].equals(sGraphicFormat))
+        if(pEntries[i] == sGraphicFormat)
             nSelect = i;
     }
     try

@@ -311,7 +311,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             if( pExistingOLENd )
             {
                 OUString aExistingName = pExistingOLENd->GetOLEObj().GetCurrentPersistName();
-                if ( aExistingName.equals( aObjName ) )
+                if ( aExistingName == aObjName )
                 {
                     OSL_FAIL( "The document contains duplicate object references, means it is partially broken, please let developers know how this document was generated!" );
 

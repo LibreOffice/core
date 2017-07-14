@@ -427,7 +427,7 @@ SwVbaDocument::getControlShape( const OUString& sName )
         if( xControlShape.is() )
         {
              uno::Reference< container::XNamed > xNamed( xControlShape->getControl(), uno::UNO_QUERY_THROW );
-            if( sName.equals( xNamed->getName() ))
+            if( sName == xNamed->getName() )
             {
                 return aUnoObj;
             }

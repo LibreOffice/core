@@ -1700,7 +1700,7 @@ sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
         uno::Reference< sdbcx::XColumnsSupplier> xColsSupp;
         bool bDisposeConnection = false;
         if(pImpl->pMergeData &&
-            pImpl->pMergeData->sDataSource.equals(rDBName) && pImpl->pMergeData->sCommand.equals(rTableName))
+            pImpl->pMergeData->sDataSource == rDBName && pImpl->pMergeData->sCommand == rTableName)
         {
             xConnection = pImpl->pMergeData->xConnection;
             xSource = SwDBManager::getDataSourceAsParent(xConnection,rDBName);
