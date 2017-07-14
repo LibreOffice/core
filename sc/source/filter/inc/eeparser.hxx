@@ -51,9 +51,12 @@ struct ScEEParseEntry
 {
     SfxItemSet          aItemSet;
     ESelection          aSel;           // Selection in EditEngine
-    OUString*           pValStr;        // HTML possibly SDVAL string
-    OUString*           pNumStr;        // HTML possibly SDNUM string
-    OUString*           pName;          // HTML possibly anchor/RangeName
+    std::unique_ptr<OUString>
+                        pValStr;        // HTML possibly SDVAL string
+    std::unique_ptr<OUString>
+                        pNumStr;        // HTML possibly SDNUM string
+    std::unique_ptr<OUString>
+                        pName;          // HTML possibly anchor/RangeName
     OUString            aAltText;       // HTML IMG ALT Text
     std::vector< std::unique_ptr<ScHTMLImage> > maImageList;       // graphics in this cell
     SCCOL               nCol;           // relative to the beginning of the parse
@@ -85,9 +88,6 @@ struct ScEEParseEntry
 
     ~ScEEParseEntry()
     {
-        delete pValStr;
-        delete pNumStr;
-        delete pName;
         maImageList.clear();
     }
 };

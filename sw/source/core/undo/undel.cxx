@@ -384,7 +384,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
-        m_pSttStr = new OUString( pSttTextNd->GetText().copy(nSttContent, nLen));
+        m_pSttStr.reset( new OUString( pSttTextNd->GetText().copy(nSttContent, nLen)) );
         pSttTextNd->EraseText( pStt->nContent, nLen );
         if( pSttTextNd->GetpSwpHints() )
             pSttTextNd->GetpSwpHints()->DeRegister();
@@ -419,8 +419,8 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
-        m_pEndStr = new OUString( pEndTextNd->GetText().copy( 0,
-                                    pEnd->nContent.GetIndex() ));
+        m_pEndStr.reset( new OUString( pEndTextNd->GetText().copy( 0,
+                                    pEnd->nContent.GetIndex() )) );
         pEndTextNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
         if( pEndTextNd->GetpSwpHints() )
             pEndTextNd->GetpSwpHints()->DeRegister();
@@ -518,8 +518,6 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
 
 SwUndoDelete::~SwUndoDelete()
 {
-    delete m_pSttStr;
-    delete m_pEndStr;
     if( m_pMvStt )        // Delete also the selection from UndoNodes array
     {
         // Insert saves content in IconSection
@@ -706,9 +704,9 @@ SwRewriter SwUndoDelete::GetRewriter() const
         {
             OUString * pStr = nullptr;
             if (m_pSttStr != nullptr)
-                pStr = m_pSttStr;
+                pStr = m_pSttStr.get();
             else if (m_pEndStr != nullptr)
-                pStr = m_pEndStr;
+                pStr = m_pEndStr.get();
 
             if (pStr != nullptr)
             {

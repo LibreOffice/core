@@ -25,6 +25,7 @@
 #include <svgpaint.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <memory>
 #include <vector>
 
 // predefines
@@ -94,10 +95,10 @@ namespace svgio
             SvgNodeVector               maChildren;
 
             /// Id svan value
-            OUString*              mpId;
+            std::unique_ptr<OUString>   mpId;
 
             /// Class svan value
-            OUString*              mpClass;
+            std::unique_ptr<OUString>   mpClass;
 
             /// XmlSpace value
             XmlSpace                    maXmlSpace;
@@ -163,11 +164,11 @@ namespace svgio
             double getCurrentXHeight() const;
 
             /// Id access
-            const OUString* getId() const { return mpId; }
+            const OUString* getId() const { return mpId.get(); }
             void setId(const OUString* pfId);
 
             /// Class access
-            const OUString* getClass() const { return mpClass; }
+            const OUString* getClass() const { return mpClass.get(); }
             void setClass(const OUString* pfClass);
 
             /// XmlSpace access

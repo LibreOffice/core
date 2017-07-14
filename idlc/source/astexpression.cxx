@@ -124,7 +124,6 @@ AstExpression::~AstExpression()
 {
     delete m_subExpr1;
     delete m_subExpr2;
-    delete m_pSymbolicName;
 }
 
 /*

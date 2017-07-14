@@ -23,6 +23,7 @@
 #include <undobj.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/mempool.hxx>
+#include <memory>
 
 class SwRedlineSaveDatas;
 class SwTextNode;
@@ -37,7 +38,7 @@ class SwUndoDelete
     , private SwUndoSaveContent
 {
     SwNodeIndex* m_pMvStt;            // Position of Nodes in UndoNodes-Array
-    OUString *m_pSttStr, *m_pEndStr;
+    std::unique_ptr<OUString> m_pSttStr, m_pEndStr;
     SwRedlineSaveDatas* m_pRedlSaveData;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;

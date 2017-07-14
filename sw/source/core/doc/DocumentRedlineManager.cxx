@@ -2659,15 +2659,11 @@ void DocumentRedlineManager::SetAutoFormatRedlineComment( const OUString* pText,
     m_rDoc.SetAutoFormatRedline( nullptr != pText );
     if( pText )
     {
-        if( !mpAutoFormatRedlnComment )
-            mpAutoFormatRedlnComment = new OUString( *pText );
-        else
-            *mpAutoFormatRedlnComment = *pText;
+        mpAutoFormatRedlnComment.reset( new OUString( *pText ) );
     }
     else
     {
-        delete mpAutoFormatRedlnComment;
-        mpAutoFormatRedlnComment = nullptr;
+        mpAutoFormatRedlnComment.reset();
     }
 
     mnAutoFormatRedlnCommentNo = nSeqNo;
@@ -2697,7 +2693,6 @@ DocumentRedlineManager::~DocumentRedlineManager()
 {
     delete mpRedlineTable; mpRedlineTable = nullptr;
     delete mpExtraRedlineTable; mpExtraRedlineTable = nullptr;
-    delete mpAutoFormatRedlnComment; mpAutoFormatRedlnComment = nullptr;
 }
 
 }

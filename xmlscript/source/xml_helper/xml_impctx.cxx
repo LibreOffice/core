@@ -304,9 +304,9 @@ class ExtendedAttributes :
 {
     sal_Int32 m_nAttributes;
     std::unique_ptr<sal_Int32[]> m_pUids;
-    OUString * m_pLocalNames;
-    OUString * m_pQNames;
-    OUString * m_pValues;
+    std::unique_ptr<OUString[]>  m_pLocalNames;
+    std::unique_ptr<OUString[]>  m_pQNames;
+    std::unique_ptr<OUString[]>  m_pValues;
 
 public:
     inline ExtendedAttributes(
@@ -314,7 +314,6 @@ public:
         sal_Int32 * pUids,
         OUString * pLocalNames, OUString * pQNames,
         Reference< xml::sax::XAttributeList > const & xAttributeList );
-    virtual ~ExtendedAttributes() throw () override;
 
     // XAttributes
     virtual sal_Int32 SAL_CALL getLength() override;
@@ -351,13 +350,6 @@ inline ExtendedAttributes::ExtendedAttributes(
     {
         m_pValues[ nPos ] = xAttributeList->getValueByIndex( nPos );
     }
-}
-
-ExtendedAttributes::~ExtendedAttributes() throw ()
-{
-    delete [] m_pLocalNames;
-    delete [] m_pQNames;
-    delete [] m_pValues;
 }
 
 // XServiceInfo

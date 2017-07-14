@@ -101,7 +101,7 @@ void SwUndoInsert::Init(const SwNodeIndex & rNd)
         SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
-    pUndoText = GetTextFromDoc();
+    pUndoText.reset( GetTextFromDoc() );
 
     bCacheComment = false;
 }
@@ -203,7 +203,6 @@ SwUndoInsert::~SwUndoInsert()
     else     // the inserted text
         delete pText;
     delete pRedlData;
-    delete pUndoText;
 }
 
 void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -290,7 +289,7 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                 pPam->GetPoint()->nNode.GetNode().GetContentNode(), nCnt );
     }
 
-    DELETEZ(pUndoText);
+    pUndoText.reset();
 }
 
 void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -373,7 +372,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    pUndoText = GetTextFromDoc();
+    pUndoText.reset( GetTextFromDoc() );
 }
 
 void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
@@ -462,7 +461,7 @@ SwRewriter SwUndoInsert::GetRewriter() const
     if (pText)
         pStr = pText;
     else if (pUndoText)
-        pStr = pUndoText;
+        pStr = pUndoText.get();
 
     if (pStr)
     {
@@ -796,9 +795,6 @@ SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
 
 SwUndoReRead::~SwUndoReRead()
 {
-    delete pGrf;
-    delete pNm;
-    delete pFltr;
 }
 
 void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
@@ -810,9 +806,9 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
         return ;
 
     // cache the old values
-    Graphic* pOldGrf = pGrf;
-    OUString* pOldNm = pNm;
-    OUString* pOldFltr = pFltr;
+    std::unique_ptr<Graphic> pOldGrf( pGrf ? new Graphic(*pGrf) : nullptr);
+    std::unique_ptr<OUString> pOldNm( pNm ? new OUString(*pNm) : nullptr);
+    std::unique_ptr<OUString> pOldFltr( pFltr ? new OUString(*pFltr) : nullptr);
     MirrorGraph nOldMirr = nMirr;
     // since all of them are cleared/modified by SaveGraphicData:
     SaveGraphicData( *pGrfNd );
@@ -820,13 +816,10 @@ void SwUndoReRead::SetAndSave(::sw::UndoRedoContext & rContext)
     if( pOldNm )
     {
         pGrfNd->ReRead( *pOldNm, pFltr ? *pFltr : OUString() );
-        delete pOldNm;
-        delete pOldFltr;
     }
     else
     {
-        pGrfNd->ReRead( OUString(), OUString(), pOldGrf );
-        delete pOldGrf;
+        pGrfNd->ReRead( OUString(), OUString(), pOldGrf.get() );
     }
 
     if( MirrorGraph::Dont != nOldMirr )
@@ -849,15 +842,16 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
 {
     if( rGrfNd.IsGrfLink() )
     {
-        pNm = new OUString;
-        pFltr = new OUString;
-        rGrfNd.GetFileFilterNms( pNm, pFltr );
-        pGrf = nullptr;
+        pNm.reset( new OUString );
+        pFltr.reset( new OUString );
+        rGrfNd.GetFileFilterNms( pNm.get(), pFltr.get() );
+        pGrf.reset();
     }
     else
     {
-        pGrf = new Graphic( rGrfNd.GetGrf(true) );
-        pNm = pFltr = nullptr;
+        pGrf.reset( new Graphic( rGrfNd.GetGrf(true) ) );
+        pNm.reset();
+        pFltr.reset();
     }
     nMirr = rGrfNd.GetSwAttrSet().GetMirrorGrf().GetValue();
 }

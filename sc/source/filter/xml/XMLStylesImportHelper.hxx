@@ -128,10 +128,14 @@ class ScMyStylesImportHelper
     std::vector<ScMyStylesSet::iterator>  aColDefaultStyles;
     ScMyStylesSet::iterator aRowDefaultStyle;
     ScXMLImport&        rImport;
-    OUString*           pStyleName;
-    OUString*           pPrevStyleName;
-    OUString*           pCurrency;
-    OUString*           pPrevCurrency;
+    std::unique_ptr<OUString>
+                        pStyleName;
+    std::unique_ptr<OUString>
+                        pPrevStyleName;
+    std::unique_ptr<OUString>
+                        pCurrency;
+    std::unique_ptr<OUString>
+                        pPrevCurrency;
     ScRange             aPrevRange;
     sal_Int16           nCellType;
     sal_Int16           nPrevCellType;

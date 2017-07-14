@@ -89,7 +89,6 @@ SpellChecker::~SpellChecker()
        delete[] m_aDicts;
     }
     delete[] m_aDLocs;
-    delete[] m_aDNames;
     if (m_pPropHelper)
     {
         m_pPropHelper->RemoveAsPropListener();
@@ -201,7 +200,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             m_aDicts  = new Hunspell* [m_nNumDict];
             m_aDEncs.reset( new rtl_TextEncoding [m_nNumDict] );
             m_aDLocs  = new Locale [m_nNumDict];
-            m_aDNames = new OUString [m_nNumDict];
+            m_aDNames.reset( new OUString [m_nNumDict] );
             k = 0;
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
             {
@@ -242,8 +241,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             m_aDEncs.reset();
             delete[] m_aDLocs;
             m_aDLocs  = nullptr;
-            delete[] m_aDNames;
-            m_aDNames = nullptr;
+            m_aDNames.reset();
             m_aSuppLocales.realloc(0);
         }
     }

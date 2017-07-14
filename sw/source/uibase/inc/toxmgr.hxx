@@ -23,6 +23,7 @@
 #include "swdllapi.h"
 #include "tox.hxx"
 #include <authfld.hxx>
+#include <memory>
 
 class SwWrtShell;
 class SwForm;
@@ -36,9 +37,12 @@ class SW_DLLPUBLIC SwTOXDescription
     OUString            m_sSequenceName;
     OUString            m_sMainEntryCharStyle;
     OUString            m_sAutoMarkURL;
-    OUString*           m_pTitle;
-    OUString*           m_pTOUName;
-    SwForm*             m_pForm;
+    std::unique_ptr<OUString>
+                        m_pTitle;
+    std::unique_ptr<OUString>
+                        m_pTOUName;
+    std::unique_ptr<SwForm>
+                        m_pForm;
     SwTOXElement        m_nContent;
     SwTOIOptions        m_nIndexOptions;
     SwTOOElements       m_nOLEOptions;
@@ -84,12 +88,6 @@ public:
         m_bIsAuthSequence(false),
         m_bSortByDocument(true)
         {}
-    ~SwTOXDescription()
-        {
-            delete m_pTitle;
-            delete m_pForm;
-            delete m_pTOUName;
-        }
 
     TOXTypes        GetTOXType() const { return m_eTOXType;}
 
@@ -101,14 +99,14 @@ public:
     const OUString& GetAutoMarkURL() const { return m_sAutoMarkURL;}
     void            SetAutoMarkURL(const OUString& rSet) {m_sAutoMarkURL = rSet;}
 
-    void            SetTitle(const OUString& pSet) {delete m_pTitle; m_pTitle = new OUString(pSet);}
-    const OUString* GetTitle() const {return m_pTitle; }
+    void            SetTitle(const OUString& pSet) { m_pTitle.reset( new OUString(pSet) );}
+    const OUString* GetTitle() const {return m_pTitle.get(); }
 
-    void            SetTOUName(const OUString& pSet) {delete m_pTOUName; m_pTOUName = new OUString(pSet);}
-    const OUString* GetTOUName() const {return m_pTOUName; }
+    void            SetTOUName(const OUString& pSet) { m_pTOUName.reset( new OUString(pSet) );}
+    const OUString* GetTOUName() const {return m_pTOUName.get(); }
 
-    void            SetForm(const SwForm& rSet) {delete m_pForm; m_pForm = new SwForm(rSet);}
-    const SwForm*   GetForm() const {return m_pForm;}
+    void            SetForm(const SwForm& rSet) { m_pForm.reset( new SwForm(rSet) );}
+    const SwForm*   GetForm() const {return m_pForm.get();}
 
     void            SetContentOptions(SwTOXElement nSet) { m_nContent = nSet;}
     SwTOXElement    GetContentOptions() const { return m_nContent;}
@@ -176,14 +174,14 @@ class SwTOXMarkDescription
     int         nLevel;
     bool        bMainEntry;
 
-    OUString*   pPrimKey;
-    OUString*   pSecKey;
-    OUString*   pAltStr;
-    OUString*   pTOUName;
+    std::unique_ptr<OUString>  pPrimKey;
+    std::unique_ptr<OUString>  pSecKey;
+    std::unique_ptr<OUString>  pAltStr;
+    std::unique_ptr<OUString>  pTOUName;
 
-    OUString*   pPhoneticReadingOfAltStr;
-    OUString*   pPhoneticReadingOfPrimKey;
-    OUString*   pPhoneticReadingOfSecKey;
+    std::unique_ptr<OUString>  pPhoneticReadingOfAltStr;
+    std::unique_ptr<OUString>  pPhoneticReadingOfPrimKey;
+    std::unique_ptr<OUString>  pPhoneticReadingOfSecKey;
 
     SwTOXMarkDescription(SwTOXMarkDescription&) = delete;
     SwTOXMarkDescription & operator= (SwTOXMarkDescription&) = delete;
@@ -203,16 +201,6 @@ public:
         pPhoneticReadingOfSecKey(nullptr)
         {
         }
-    ~SwTOXMarkDescription()
-    {
-        delete pPrimKey;
-        delete pSecKey;
-        delete pAltStr;
-        delete pTOUName;
-        delete pPhoneticReadingOfAltStr;
-        delete pPhoneticReadingOfPrimKey;
-        delete pPhoneticReadingOfSecKey;
-    }
 
     TOXTypes        GetTOXType()const {return eTOXType;}
 
@@ -223,32 +211,32 @@ public:
     bool            IsMainEntry() const {return bMainEntry;}
 
     void            SetPrimKey(const OUString& rSet)
-                                {delete pPrimKey; pPrimKey = new OUString(rSet);}
-    const OUString* GetPrimKey() const {return pPrimKey;}
+                                { pPrimKey.reset( new OUString(rSet) );}
+    const OUString* GetPrimKey() const {return pPrimKey.get();}
 
     void            SetSecKey(const OUString& rSet)
-                                {delete pSecKey;  pSecKey  = new OUString(rSet);}
-    const OUString* GetSecKey() const { return pSecKey; }
+                                { pSecKey.reset( new OUString(rSet) );}
+    const OUString* GetSecKey() const { return pSecKey.get(); }
 
     void            SetAltStr(const OUString& rSet)
-                                {delete pAltStr;  pAltStr  = new OUString(rSet);}
-    const OUString* GetAltStr() const { return pAltStr; }
+                                { pAltStr.reset( new OUString(rSet) );}
+    const OUString* GetAltStr() const { return pAltStr.get(); }
 
     void            SetTOUName(const OUString& rSet)
-                                {delete pTOUName; pTOUName = new OUString(rSet);}
-    const OUString* GetTOUName() const {return pTOUName;}
+                                { pTOUName.reset( new OUString(rSet) );}
+    const OUString* GetTOUName() const {return pTOUName.get();}
 
     void            SetPhoneticReadingOfAltStr(const OUString& rSet)
-                                {delete pPhoneticReadingOfAltStr;  pPhoneticReadingOfAltStr  = new OUString(rSet);}
-    const OUString* GetPhoneticReadingOfAltStr() const {    return pPhoneticReadingOfAltStr; }
+                                { pPhoneticReadingOfAltStr.reset( new OUString(rSet) );}
+    const OUString* GetPhoneticReadingOfAltStr() const {    return pPhoneticReadingOfAltStr.get(); }
 
     void            SetPhoneticReadingOfPrimKey(const OUString& rSet)
-                                {delete pPhoneticReadingOfPrimKey;  pPhoneticReadingOfPrimKey  = new OUString(rSet);}
-    const OUString* GetPhoneticReadingOfPrimKey() const {   return pPhoneticReadingOfPrimKey; }
+                                { pPhoneticReadingOfPrimKey.reset( new OUString(rSet) );}
+    const OUString* GetPhoneticReadingOfPrimKey() const {   return pPhoneticReadingOfPrimKey.get(); }
 
     void            SetPhoneticReadingOfSecKey(const OUString& rSet)
-                                {delete pPhoneticReadingOfSecKey;  pPhoneticReadingOfSecKey  = new OUString(rSet);}
-    const OUString* GetPhoneticReadingOfSecKey() const {    return pPhoneticReadingOfSecKey; }
+                                { pPhoneticReadingOfSecKey.reset( new OUString(rSet) );}
+    const OUString* GetPhoneticReadingOfSecKey() const {    return pPhoneticReadingOfSecKey.get(); }
 };
 
 class SW_DLLPUBLIC SwTOXMgr

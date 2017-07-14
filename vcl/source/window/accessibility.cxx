@@ -107,8 +107,6 @@ ImplAccessibleInfos::ImplAccessibleInfos()
 
 ImplAccessibleInfos::~ImplAccessibleInfos()
 {
-    delete pAccessibleName;
-    delete pAccessibleDescription;
 }
 
 namespace vcl {
@@ -422,8 +420,7 @@ void Window::SetAccessibleName( const OUString& rName )
 
     OUString oldName = GetAccessibleName();
 
-    delete mpWindowImpl->mpAccessibleInfos->pAccessibleName;
-    mpWindowImpl->mpAccessibleInfos->pAccessibleName = new OUString( rName );
+    mpWindowImpl->mpAccessibleInfos->pAccessibleName.reset( new OUString( rName ) );
 
     CallEventListeners( VclEventId::WindowFrameTitleChanged, &oldName );
 }
@@ -504,8 +501,7 @@ void Window::SetAccessibleDescription( const OUString& rDescription )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
 
     SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->pAccessibleDescription, "vcl", "AccessibleDescription already set!" );
-    delete mpWindowImpl->mpAccessibleInfos->pAccessibleDescription;
-    mpWindowImpl->mpAccessibleInfos->pAccessibleDescription = new OUString( rDescription );
+    mpWindowImpl->mpAccessibleInfos->pAccessibleDescription.reset( new OUString( rDescription ) );
 }
 
 OUString Window::GetAccessibleDescription() const

@@ -84,7 +84,8 @@ bool ImplWindowFrameProc( vcl::Window* pInst, SalEvent nEvent, const void* pEven
 
 struct ImplWinData
 {
-    OUString*           mpExtOldText;
+    std::unique_ptr<OUString>
+                        mpExtOldText;
     std::unique_ptr<ExtTextInputAttr[]>
                         mpExtOldAttrAry;
     tools::Rectangle*   mpCursorRect;
@@ -164,8 +165,10 @@ struct ImplFrameData
 struct ImplAccessibleInfos
 {
     sal_uInt16          nAccessibleRole;
-    OUString*           pAccessibleName;
-    OUString*           pAccessibleDescription;
+    std::unique_ptr<OUString>
+                        pAccessibleName;
+    std::unique_ptr<OUString>
+                        pAccessibleDescription;
     VclPtr<vcl::Window> pLabeledByWindow;
     VclPtr<vcl::Window> pLabelForWindow;
     VclPtr<vcl::Window> pMemberOfWindow;

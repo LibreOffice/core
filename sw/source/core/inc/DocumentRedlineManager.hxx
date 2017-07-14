@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTREDLINEMANAGER_HXX
 
 #include <IDocumentRedlineAccess.hxx>
+#include <memory>
 
 class SwDoc;
 
@@ -131,7 +132,7 @@ private:
     RedlineFlags meRedlineFlags;     //< Current Redline Mode.
     SwRedlineTable        *mpRedlineTable;           //< List of all Ranged Redlines.
     SwExtraRedlineTable   *mpExtraRedlineTable;      //< List of all Extra Redlines.
-    OUString            *mpAutoFormatRedlnComment;  //< Comment for Redlines inserted via AutoFormat.
+    std::unique_ptr<OUString> mpAutoFormatRedlnComment;  //< Comment for Redlines inserted via AutoFormat.
     bool mbIsRedlineMove;    //< true: Redlines are moved into to / out of the section.
     bool mbReadlineChecked;    //< true: if the query was already shown
     sal_uInt16 mnAutoFormatRedlnCommentNo;  /**< SeqNo for conjoining of AutoFormat-Redlines.

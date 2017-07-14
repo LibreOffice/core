@@ -131,7 +131,8 @@ private:
     AstExpression*  m_subExpr2;
     std::unique_ptr<AstExprValue>
                     m_exprValue;
-    OString* m_pSymbolicName;
+    std::unique_ptr<OString>
+                    m_pSymbolicName;
 };
 
 #endif // INCLUDED_IDLC_INC_ASTEXPRESSION_HXX

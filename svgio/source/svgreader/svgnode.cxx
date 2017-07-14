@@ -296,8 +296,6 @@ namespace svgio
                 maChildren.pop_back();
             }
 
-            delete mpId;
-            delete mpClass;
             delete mpLocalCssStyle;
         }
 
@@ -643,13 +641,12 @@ namespace svgio
             if(mpId)
             {
                 mrDocument.removeSvgNodeFromMapper(*mpId);
-                delete mpId;
-                mpId = nullptr;
+                mpId.reset();
             }
 
             if(pfId)
             {
-                mpId = new OUString(*pfId);
+                mpId.reset( new OUString(*pfId) );
                 mrDocument.addSvgNodeToMapper(*mpId, *this);
             }
         }
@@ -659,13 +656,12 @@ namespace svgio
             if(mpClass)
             {
                 mrDocument.removeSvgNodeFromMapper(*mpClass);
-                delete mpClass;
-                mpClass = nullptr;
+                mpClass.reset();
             }
 
             if(pfClass)
             {
-                mpClass = new OUString(*pfClass);
+                mpClass.reset( new OUString(*pfClass) );
                 mrDocument.addSvgNodeToMapper(*mpClass, *this);
             }
         }

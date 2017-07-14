@@ -1012,12 +1012,12 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
             break;
             case HtmlOptionId::SDVAL:
             {
-                pActEntry->pValStr = new OUString( rOption.GetString() );
+                pActEntry->pValStr.reset( new OUString( rOption.GetString() ) );
             }
             break;
             case HtmlOptionId::SDNUM:
             {
-                pActEntry->pNumStr = new OUString( rOption.GetString() );
+                pActEntry->pNumStr.reset( new OUString( rOption.GetString() ) );
             }
             break;
             default: break;
@@ -1453,7 +1453,7 @@ void ScHTMLLayoutParser::AnchorOn( HtmlImportInfo* pInfo )
     for (const auto & rOption : rOptions)
     {
         if( rOption.GetToken() == HtmlOptionId::NAME )
-            pActEntry->pName = new OUString(rOption.GetString());
+            pActEntry->pName.reset( new OUString(rOption.GetString()) );
     }
 }
 
@@ -2160,8 +2160,8 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
 
         ProcessFormatOptions( *mxDataItemSet, rInfo );
         CreateNewEntry( rInfo );
-        mxCurrEntry->pValStr = pValStr.release();
-        mxCurrEntry->pNumStr = pNumStr.release();
+        mxCurrEntry->pValStr.reset( pValStr.release() );
+        mxCurrEntry->pNumStr.reset( pNumStr.release() );
     }
     else
         CreateNewEntry( rInfo );

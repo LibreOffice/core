@@ -31,6 +31,7 @@
 #include <ne_xml.h>
 #include <rtl/ustrbuf.hxx>
 #include "UCBDeadPropertyValue.hxx"
+#include <memory>
 
 using namespace webdav_ucp;
 using namespace com::sun::star;
@@ -38,11 +39,10 @@ using namespace com::sun::star;
 
 struct UCBDeadPropertyValueParseContext
 {
-    OUString * pType;
-    OUString * pValue;
+    std::unique_ptr<OUString> pType;
+    std::unique_ptr<OUString> pValue;
 
-    UCBDeadPropertyValueParseContext() : pType( nullptr ), pValue( nullptr ) {}
-    ~UCBDeadPropertyValueParseContext() { delete pType; delete pValue; }
+    UCBDeadPropertyValueParseContext() {}
 };
 
 static const char aTypeString[] = "string";
@@ -110,16 +110,14 @@ extern "C" int UCBDeadPropertyValue_chardata_callback(
             assert( !pCtx->pType &&
                         "UCBDeadPropertyValue_endelement_callback - "
                         "Type already set!" );
-            pCtx->pType
-                = new OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+            pCtx->pType.reset( new OUString( buf, len, RTL_TEXTENCODING_ASCII_US ) );
             break;
 
         case STATE_VALUE:
             assert( !pCtx->pValue &&
                         "UCBDeadPropertyValue_endelement_callback - "
                         "Value already set!" );
-            pCtx->pValue
-                = new OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+            pCtx->pValue.reset( new OUString( buf, len, RTL_TEXTENCODING_ASCII_US ) );
             break;
     }
     return 0; // zero to continue, non-zero to abort parsing

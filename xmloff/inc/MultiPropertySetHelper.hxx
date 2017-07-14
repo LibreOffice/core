@@ -55,7 +55,7 @@ namespace com { namespace sun { namespace star {
 class MultiPropertySetHelper
 {
     /// names of all properties
-    OUString* pPropertyNames;
+    std::unique_ptr<OUString[]> pPropertyNames;
 
     /// length of pPropertyNames array
     sal_Int16 nLength;

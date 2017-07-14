@@ -46,7 +46,7 @@ MultiPropertySetHelper::MultiPropertySetHelper(
         nLength++;
 
     // allocate array and create strings
-    pPropertyNames = new OUString[nLength];
+    pPropertyNames.reset( new OUString[nLength] );
     for( sal_Int16 i = 0; i < nLength; i++ )
         pPropertyNames[i] = OUString::createFromAscii( pNames[i] );
 }
@@ -55,8 +55,6 @@ MultiPropertySetHelper::MultiPropertySetHelper(
 MultiPropertySetHelper::~MultiPropertySetHelper()
 {
     pValues = nullptr; // memory 'owned' by aValues
-
-    delete[] pPropertyNames;
 }
 
 

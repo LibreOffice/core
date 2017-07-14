@@ -41,7 +41,8 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveContent
 {
     /// start of Content in UndoNodes for Redo
     std::unique_ptr<SwNodeIndex> m_pUndoNodeIndex;
-    OUString *pText, *pUndoText;
+    OUString *pText;
+    std::unique_ptr<OUString> pUndoText;
     SwRedlineData* pRedlData;
     sal_uLong nNode;
     sal_Int32 nContent, nLen;
@@ -135,9 +136,9 @@ private:
 
 class SwUndoReRead : public SwUndo
 {
-    Graphic *pGrf;
-    OUString *pNm;
-    OUString *pFltr;
+    std::unique_ptr<Graphic> pGrf;
+    std::unique_ptr<OUString> pNm;
+    std::unique_ptr<OUString> pFltr;
     sal_uLong nPos;
     MirrorGraph nMirr;
 
