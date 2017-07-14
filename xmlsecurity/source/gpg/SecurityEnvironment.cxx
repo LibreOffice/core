@@ -141,10 +141,24 @@ Reference< XCertificate > SecurityEnvironmentGpg::createCertificateFromAscii( co
     return nullptr;
 }
 
-sal_Int32 SecurityEnvironmentGpg::verifyCertificate( const Reference< XCertificate >& /*aCert*/,
+sal_Int32 SecurityEnvironmentGpg::verifyCertificate( const Reference< XCertificate >& aCert,
                                                   const Sequence< Reference< XCertificate > >&  /*intermediateCerts*/ )
 {
-    return 0;
+    const CertificateImpl* xCert = dynamic_cast<CertificateImpl*>(aCert.get());
+    if (xCert == nullptr) {
+         // Can't find the key locally -> unknown owner
+        return security::CertificateValidity::ISSUER_UNKNOWN;
+    }
+
+    const GpgME::Key* key = xCert->getCertificate();
+    if (key->ownerTrust() == GpgME::Key::OwnerTrust::Marginal ||
+        key->ownerTrust() == GpgME::Key::OwnerTrust::Full ||
+        key->ownerTrust() == GpgME::Key::OwnerTrust::Ultimate)
+    {
+        return security::CertificateValidity::VALID;
+    }
+
+    return security::CertificateValidity::ISSUER_UNTRUSTED;
 }
 
 sal_Int32 SecurityEnvironmentGpg::getCertificateCharacters(
