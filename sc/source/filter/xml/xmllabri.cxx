@@ -22,6 +22,8 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmlimprt.hxx"
 
+#include <o3tl/make_unique.hxx>
+
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
@@ -109,13 +111,10 @@ void ScXMLLabelRangeContext::EndElement()
     //  Label ranges must be stored as strings until all sheets are loaded
     //  (like named expressions).
 
-    ScMyLabelRange* pLabelRange = new ScMyLabelRange;
+    auto pLabelRange = o3tl::make_unique<ScMyLabelRange>(
+                ScMyLabelRange{sLabelRangeStr, sDataRangeStr, bColumnOrientation});
 
-    pLabelRange->sLabelRangeStr = sLabelRangeStr;
-    pLabelRange->sDataRangeStr = sDataRangeStr;
-    pLabelRange->bColumnOrientation = bColumnOrientation;
-
-    GetScImport().AddLabelRange(pLabelRange);
+    GetScImport().AddLabelRange(std::move(pLabelRange));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
