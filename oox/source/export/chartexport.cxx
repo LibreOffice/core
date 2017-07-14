@@ -150,14 +150,6 @@ private:
     OUString m_aRole;
 };
 
-template< typename T >
-    void lcl_SequenceToVectorAppend( const Sequence< T > & rSource, ::std::vector< T > & rDestination )
-{
-    rDestination.reserve( rDestination.size() + rSource.getLength());
-    ::std::copy( rSource.begin(), rSource.end(),
-                 ::std::back_inserter( rDestination ));
-}
-
 Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram )
 {
     Reference< chart2::data::XLabeledDataSequence >  xResult;
@@ -199,41 +191,6 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     return xResult;
 }
 
-Reference< chart2::data::XDataSource > lcl_createDataSource(
-    const std::vector< Reference< chart2::data::XLabeledDataSequence > > & aData )
-{
-    Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-    Reference< chart2::data::XDataSink > xSink(
-        xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.chart2.data.DataSource", xContext ),
-        uno::UNO_QUERY_THROW );
-    if( xSink.is())
-        xSink->setData( comphelper::containerToSequence(aData) );
-
-    return Reference< chart2::data::XDataSource >( xSink, uno::UNO_QUERY );
-}
-
-Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequences( const Reference< chart2::XChartDocument >& xChartDoc )
-{
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aContainer;
-    if( xChartDoc.is() )
-    {
-        Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( SchXMLSeriesHelper::getDataSeriesFromDiagram( xDiagram ));
-        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
-            ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
-        {
-            Reference< chart2::data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
-            if( !xDataSource.is() )
-                continue;
-            uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-            lcl_SequenceToVectorAppend( aDataSequences, aContainer );
-        }
-    }
-
-    return comphelper::containerToSequence(aContainer);
-}
-
 Reference< chart2::data::XLabeledDataSequence >
     lcl_getDataSequenceByRole(
         const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aLabeledSeq,
@@ -252,35 +209,12 @@ Reference< chart2::data::XLabeledDataSequence >
     return aNoResult;
 }
 
-Reference< chart2::data::XDataSource > lcl_pressUsedDataIntoRectangularFormat( const Reference< chart2::XChartDocument >& xChartDoc, bool& rOutSourceHasCategoryLabels )
+bool lcl_hasCategoryLabels( const Reference< chart2::XChartDocument >& xChartDoc )
 {
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aLabeledSeqVector;
-
     //categories are always the first sequence
     Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
     Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xDiagram ) );
-    if( xCategories.is() )
-        aLabeledSeqVector.push_back( xCategories );
-    rOutSourceHasCategoryLabels = xCategories.is();
-
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeriesSeqVector(
-            lcl_getAllSeriesSequences( xChartDoc ) );
-
-    //the first x-values is always the next sequence //todo ... other x-values get lost for old format
-    Reference< chart2::data::XLabeledDataSequence > xXValues(
-        lcl_getDataSequenceByRole( aSeriesSeqVector, "values-x" ) );
-    if( xXValues.is() )
-        aLabeledSeqVector.push_back( xXValues );
-
-    //add all other sequences now without x-values
-    lcl_MatchesRole aHasXValues( "values-x" );
-    for( sal_Int32 nN=0; nN<aSeriesSeqVector.getLength(); nN++ )
-    {
-        if( !aHasXValues( aSeriesSeqVector[nN] ) )
-            aLabeledSeqVector.push_back( aSeriesSeqVector[nN] );
-    }
-
-    return lcl_createDataSource( aLabeledSeqVector );
+    return xCategories.is();
 }
 
 bool lcl_isSeriesAttachedToFirstAxis(
@@ -609,32 +543,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
             OSL_ENSURE( xDataProvider.is(), "No DataProvider" );
             if( xDataProvider.is())
             {
-                Reference< chart2::data::XDataSource > xDataSource( lcl_pressUsedDataIntoRectangularFormat( xChartDoc, mbHasCategoryLabels ));
-                Sequence< beans::PropertyValue > aArgs( xDataProvider->detectArguments( xDataSource ));
-                OUString sCellRange, sBrokenRange;
-                bool bBrokenRangeAvailable = false;
-                for( sal_Int32 i=0; i<aArgs.getLength(); ++i )
-                {
-                    if ( aArgs[i].Name == "CellRangeRepresentation" )
-                        aArgs[i].Value >>= sCellRange;
-                    else if ( aArgs[i].Name == "BrokenCellRangeForExport" )
-                    {
-                        if( aArgs[i].Value >>= sBrokenRange )
-                            bBrokenRangeAvailable = true;
-                    }
-                }
-
-                // #i79009# For Writer we have to export a broken version of the
-                // range, where every row number is noe too large, so that older
-                // version can correctly read those files.
-                msChartAddress = (bBrokenRangeAvailable ? sBrokenRange : sCellRange);
-                if( !msChartAddress.isEmpty() )
-                {
-                    // convert format to XML-conform one
-                    Reference< chart2::data::XRangeXMLConversion > xConversion( xDataProvider, uno::UNO_QUERY );
-                    if( xConversion.is())
-                        msChartAddress = xConversion->convertRangeToXML( msChartAddress );
-                }
+                mbHasCategoryLabels = lcl_hasCategoryLabels( xChartDoc );
             }
         }
         catch( const uno::Exception & ex )
@@ -672,37 +581,6 @@ void ChartExport::ExportContent_()
             if( ! (xDPServiceInfo.is() && xDPServiceInfo->getImplementationName() == "com.sun.star.comp.chart.InternalDataProvider" ))
             {
                 bIncludeTable = false;
-            }
-        }
-        else
-        {
-            Reference< lang::XServiceInfo > xServ( xChartDoc, uno::UNO_QUERY );
-            if( xServ.is())
-            {
-                if( xServ->supportsService("com.sun.star.chart.ChartTableAddressSupplier"))
-                {
-                    Reference< beans::XPropertySet > xProp( xServ, uno::UNO_QUERY );
-                    if( xProp.is())
-                    {
-                        Any aAny;
-                        try
-                        {
-                            OUString sChartAddress;
-                            aAny = xProp->getPropertyValue("ChartRangeAddress");
-                            aAny >>= msChartAddress;
-                            //maExportHelper.SetChartRangeAddress( sChartAddress );
-
-                            //maExportHelper.SetTableNumberList( sTableNumberList );
-
-                            // do not include own table if there are external addresses
-                            bIncludeTable = sChartAddress.isEmpty();
-                        }
-                        catch( beans::UnknownPropertyException & )
-                        {
-                            OSL_FAIL( "Property ChartRangeAddress not supported by ChartDocument" );
-                        }
-                    }
-                }
             }
         }
         exportChartSpace( xChartDoc, bIncludeTable );
