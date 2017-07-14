@@ -37,7 +37,7 @@ struct SwHTMLFootEndNote_Impl
     std::vector<OUString> aNames;
 
     OUString sName;
-    OUString sContent;            // Infos fuer die letzte Fussnote
+    OUString sContent;            // information for the last footnote
     bool bEndNote;
     bool bFixed;
 };
@@ -321,7 +321,7 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
 void SwHTMLWriter::OutFootEndNotes()
 {
     OSL_ENSURE( m_pFootEndNotes,
-            "SwHTMLWriter::OutFootEndNotes(): unnoetiger Aufruf" );
+            "SwHTMLWriter::OutFootEndNotes(): unnecessary call" );
     if( !m_pFootEndNotes )
         return;
 
@@ -540,14 +540,14 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString *pParts,
 
 void SwHTMLWriter::OutFootEndNoteInfo()
 {
-    // Nummerntyp (1 bzw. i)
+    // Number type (1 or i)
     // Offset (0)
-    // Davor
-    // Dahinter
-    // Dok/Seite/Kap (D)
+    // Before it
+    // Behind it
+    // Doc/Page/Chap (D)
     // Position (S)
-    // Folgeseite
-    // Beginn
+    // Next page
+    // Beginning
 
     {
         const SwFootnoteInfo& rInfo = pDoc->GetFootnoteInfo();

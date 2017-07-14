@@ -1487,7 +1487,7 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
         lcl_UnMerge( *this, *rBoxes[*pCurrBox++], nCnt, bSameHeight );
 
     CHECK_TABLE( *this )
-    //Layout updaten
+    // update the layout
     aFndBox.MakeFrames( *this );
 
     return true;
@@ -1545,7 +1545,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 ++nRowIdx;
             if( nRowIdx )
                 lcl_ChangeRowSpan( *this, nCnt, --nRowIdx, true );
-            //Layout update
+            // update the layout
             aFndBox.MakeFrames( *this );
         }
         CHECK_TABLE( *this )
