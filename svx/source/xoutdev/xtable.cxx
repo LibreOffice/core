@@ -166,7 +166,7 @@ long XPropertyList::GetIndex(const OUString& rName) const
     }
 
     for( long i = 0, n = maList.size(); i < n; ++i ) {
-        if (rName.equals(maList[ i ]->GetName())) {
+        if (rName == maList[ i ]->GetName()) {
             return i;
         }
     }

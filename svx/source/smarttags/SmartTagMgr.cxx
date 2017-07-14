@@ -517,7 +517,7 @@ void SmartTagMgr::AssociateActionsWithRecognizers()
                 for ( sal_uInt32 l = 0; l < nSmartTagCountInActionLib; ++l )
                 {
                     const OUString aSmartTagNameInActionLib = xActionLib->getSmartTagName(l);
-                    if ( aSmartTagName.equals( aSmartTagNameInActionLib ) )
+                    if ( aSmartTagName == aSmartTagNameInActionLib )
                     {
                         // found actions and recognizer for same smarttag
                         ActionReference aActionRef( xActionLib, l );
