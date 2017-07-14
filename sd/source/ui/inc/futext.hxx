@@ -69,6 +69,9 @@ public:
 
     static void ChangeFontSize( bool, OutlinerView*, const FontList*, ::sd::View* );
 
+    void InvalidateBindings();
+
+
 protected:
     FuText (ViewShell* pViewSh,
         ::sd::Window* pWin,

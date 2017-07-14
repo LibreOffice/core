@@ -1461,6 +1461,12 @@ void FuText::ChangeFontSize( bool bGrow, OutlinerView* pOLV, const FontList* pFo
     }
 }
 
+void FuText::InvalidateBindings()
+{
+    mpViewShell->GetViewFrame()->GetBindings().Invalidate(SidArray);
+}
+
+
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
