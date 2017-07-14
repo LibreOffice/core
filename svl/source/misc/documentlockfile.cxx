@@ -202,9 +202,9 @@ void DocumentLockFile::RemoveFile()
     LockFileEntry aNewEntry = GenerateOwnEntry();
     LockFileEntry aFileData = GetLockData();
 
-    if ( !aFileData[LockFileComponent::SYSUSERNAME].equals( aNewEntry[LockFileComponent::SYSUSERNAME] )
-      || !aFileData[LockFileComponent::LOCALHOST].equals( aNewEntry[LockFileComponent::LOCALHOST] )
-      || !aFileData[LockFileComponent::USERURL].equals( aNewEntry[LockFileComponent::USERURL] ) )
+    if ( aFileData[LockFileComponent::SYSUSERNAME] != aNewEntry[LockFileComponent::SYSUSERNAME]
+      || aFileData[LockFileComponent::LOCALHOST] != aNewEntry[LockFileComponent::LOCALHOST]
+      || aFileData[LockFileComponent::USERURL] != aNewEntry[LockFileComponent::USERURL] )
         throw io::IOException(); // not the owner, access denied
 
     RemoveFileDirectly();

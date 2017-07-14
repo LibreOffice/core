@@ -54,11 +54,11 @@ sal_Int32 Context::EvaluateMatch (
         bApplicationNameIsAny = false;
     }
 
-    if (rOther.msApplication.equals(msApplication) || bApplicationNameIsAny)
+    if (rOther.msApplication == msApplication || bApplicationNameIsAny)
     {
         // Application name matches.
         const bool bContextNameIsAny (rOther.msContext == AnyContextName);
-        if (rOther.msContext.equals(msContext) || bContextNameIsAny)
+        if (rOther.msContext == msContext || bContextNameIsAny)
         {
             // Context name matches.
             return (bApplicationNameIsAny ? ApplicationWildcardMatch : 0)
@@ -70,14 +70,14 @@ sal_Int32 Context::EvaluateMatch (
 
 bool Context::operator== (const Context& rOther) const
 {
-    return msApplication.equals(rOther.msApplication)
-        && msContext.equals(rOther.msContext);
+    return msApplication == rOther.msApplication
+        && msContext == rOther.msContext;
 }
 
 bool Context::operator!= (const Context& rOther) const
 {
-    return ( ! msApplication.equals(rOther.msApplication))
-        || ( ! msContext.equals(rOther.msContext));
+    return ( msApplication != rOther.msApplication)
+        || ( msContext != rOther.msContext);
 }
 
 } } // end of namespace sfx2::sidebar

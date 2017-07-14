@@ -214,7 +214,7 @@ beans::Property PropertySetInfo_Impl::getPropertyByName( OUString const & name )
     beans::Property const * p = m_properties.getConstArray();
     for ( sal_Int32 nPos = m_properties.getLength(); nPos--; )
     {
-        if (p[ nPos ].Name.equals( name ))
+        if (p[ nPos ].Name == name)
             return p[ nPos ];
     }
     throw beans::UnknownPropertyException(
@@ -226,7 +226,7 @@ sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
     beans::Property const * p = m_properties.getConstArray();
     for ( sal_Int32 nPos = m_properties.getLength(); nPos--; )
     {
-        if (p[ nPos ].Name.equals( name ))
+        if (p[ nPos ].Name == name)
             return true;
     }
     return false;

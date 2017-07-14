@@ -1417,42 +1417,42 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
                     OUString propName= prop.copy( 0, index);
                     OUString propValue= prop.copy( index + 1);
 
-                    if( propName.equals( sFtpProxyHost))
+                    if( propName == sFtpProxyHost)
                     {
                         jstring jsVal= pJNIEnv->NewString( reinterpret_cast<jchar const *>(propValue.getStr()), propValue.getLength());
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpProxyHost, jsVal);
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
                     }
-                    else if( propName.equals( sFtpProxyPort))
+                    else if( propName == sFtpProxyPort)
                     {
                         jstring jsVal= pJNIEnv->NewString( reinterpret_cast<jchar const *>(propValue.getStr()), propValue.getLength());
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpProxyPort, jsVal);
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
                     }
-                    else if( propName.equals( sFtpNonProxyHosts))
+                    else if( propName == sFtpNonProxyHosts)
                     {
                         jstring jsVal= pJNIEnv->NewString( reinterpret_cast<jchar const *>(propValue.getStr()), propValue.getLength());
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsFtpNonProxyHosts, jsVal);
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
                     }
-                    else if( propName.equals( sHttpProxyHost))
+                    else if( propName == sHttpProxyHost)
                     {
                         jstring jsVal= pJNIEnv->NewString( reinterpret_cast<jchar const *>(propValue.getStr()), propValue.getLength());
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsHttpProxyHost, jsVal);
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
                     }
-                    else if( propName.equals( sHttpProxyPort))
+                    else if( propName == sHttpProxyPort)
                     {
                         jstring jsVal= pJNIEnv->NewString( reinterpret_cast<jchar const *>(propValue.getStr()), propValue.getLength());
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);
                         pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsHttpProxyPort, jsVal);
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", nullptr);
                     }
-                    else if( propName.equals( sHttpNonProxyHosts))
+                    else if( propName == sHttpNonProxyHosts)
                     {
                         jstring jsVal= pJNIEnv->NewString( reinterpret_cast<jchar const *>(propValue.getStr()), propValue.getLength());
                         if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:NewString", nullptr);

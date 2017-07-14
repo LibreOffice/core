@@ -2679,7 +2679,8 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
         if ( bMSType )
         {
             // the empty password has 0 as Hash
-            sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), OUString( "com.sun.star.text.TextDocument"  ).equals( pCurrentFilter->GetServiceName() ) );
+            sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(),
+                                                                     pCurrentFilter->GetServiceName() == "com.sun.star.text.TextDocument" );
             if ( nHash )
                 pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( nHash ) ) );
         }

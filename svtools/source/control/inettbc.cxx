@@ -1148,7 +1148,7 @@ OUString SvtURLBox::GetURL()
     // try to get the right case preserving URL from the list of URLs
     for(std::vector<OUString>::iterator i = pImpl->aCompletions.begin(), j = pImpl->aURLs.begin(); i != pImpl->aCompletions.end() && j != pImpl->aURLs.end(); ++i, ++j)
     {
-        if((*i).equals(aText))
+        if((*i) == aText)
             return *j;
     }
 

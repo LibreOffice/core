@@ -67,7 +67,7 @@ const OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportNa
     sal_uInt32 nCount = rExportNames.Count();
     for (sal_uInt32 i = 0;  i < nCount;  ++i)
     {
-        if (rExportNames.GetString(i).equals(rExportName))
+        if (rExportNames.GetString(i) == rExportName)
         {
             aRes = rUiNames.GetString(i);
             break;
@@ -87,7 +87,7 @@ const OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiNa
     sal_uInt32 nCount = rUiNames.Count();
     for (sal_uInt32 i = 0;  i < nCount;  ++i)
     {
-        if (rUiNames.GetString(i).equals(rUiName))
+        if (rUiNames.GetString(i) == rUiName)
         {
             aRes = rExportNames.GetString(i);
             break;
@@ -107,7 +107,7 @@ const OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExpor
     sal_uInt32 nCount = rExportNames.Count();
     for (sal_uInt32 i = 0;  i < nCount;  ++i)
     {
-        if (rExportNames.GetString(i).equals(rExportName))
+        if (rExportNames.GetString(i) == rExportName)
         {
             aRes = rUiNames.GetString(i);
             break;
@@ -127,7 +127,7 @@ const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rU
     sal_uInt32 nCount = rUiNames.Count();
     for (sal_uInt32 i = 0;  i < nCount;  ++i)
     {
-        if (rUiNames.GetString(i).equals(rUiName))
+        if (rUiNames.GetString(i) == rUiName)
         {
             aRes = rExportNames.GetString(i);
             break;
