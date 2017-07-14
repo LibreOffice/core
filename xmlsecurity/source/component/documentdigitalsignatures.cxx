@@ -327,10 +327,36 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             const SignatureInformation& rInfo = aSignInfos[n];
             css::security::DocumentSignatureInformation& rSigInfo = arInfos[n];
 
-            if (!rInfo.ouX509Certificate.isEmpty())
-               rSigInfo.Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
-            if (!rSigInfo.Signer.is())
-                rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+            if (rInfo.ouGpgCertificate.isEmpty()) // X.509
+            {
+                if (!rInfo.ouX509Certificate.isEmpty())
+                    rSigInfo.Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+                if (!rSigInfo.Signer.is())
+                    rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName,
+                                                               xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+
+                // Verify certificate
+                //We have patched our version of libxmlsec, so that it does not verify the certificates. This has two
+                //reasons. First we want two separate status for signature and certificate. Second libxmlsec calls
+                //CERT_VerifyCertificate (Solaris, Linux) falsely, so that it always regards the certificate as valid.
+                //On Windows the checking of the certificate path is buggy. It does name matching (issuer, subject name)
+                //to find the parent certificate. It does not take into account that there can be several certificates
+                //with the same subject name.
+
+                try {
+                    rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(rSigInfo.Signer,
+                                                                            Sequence<Reference<css::security::XCertificate> >());
+                } catch (SecurityException& ) {
+                    OSL_FAIL("Verification of certificate failed");
+                    rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
+                }
+            }
+            else // GPG
+            {
+                rSigInfo.Signer = xGpgSecEnv->getCertificate( rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger("") );
+                rSigInfo.CertificateStatus = xGpgSecEnv->verifyCertificate(rSigInfo.Signer,
+                                                                           Sequence<Reference<css::security::XCertificate> >());
+            }
 
             // Time support again (#i38744#)
             Date aDate( rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year );
@@ -338,34 +364,6 @@ DocumentDigitalSignatures::ImplVerifySignatures(
                         rInfo.stDateTime.Seconds, rInfo.stDateTime.NanoSeconds );
             rSigInfo.SignatureDate = aDate.GetDate();
             rSigInfo.SignatureTime = aTime.GetTime();
-
-            // Verify certificate
-            //We have patched our version of libxmlsec, so that it does not verify the certificates. This has two
-            //reasons. First we want two separate status for signature and certificate. Second libxmlsec calls
-            //CERT_VerifyCertificate (Solaris, Linux) falsely, so that it always regards the certificate as valid.
-            //On Windows the checking of the certificate path is buggy. It does name matching (issuer, subject name)
-            //to find the parent certificate. It does not take into account that there can be several certificates
-            //with the same subject name.
-            if (rSigInfo.Signer.is())
-            {
-                try {
-                    rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(rSigInfo.Signer,
-                        Sequence<Reference<css::security::XCertificate> >());
-                } catch (SecurityException& ) {
-                    OSL_FAIL("Verification of certificate failed");
-                    rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
-                }
-            }
-            else
-            {
-                //We should always be able to get the certificates because it is contained in the document,
-                //unless the document is damaged so that signature xml file could not be parsed.
-                rSigInfo.CertificateStatus =
-                    xGpgSecEnv->verifyCertificate(rSigInfo.Signer,
-                                                  Sequence<Reference<css::security::XCertificate> >());
-                // well - except for gpg signatures ...
-                //rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
-            }
 
             rSigInfo.SignatureIsValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
