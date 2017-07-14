@@ -495,7 +495,7 @@ OUString SwAddressPreview::FillData(
                     nColumn < rDefHeaders.Count() && nColumn < sal_uInt32(aAssignment.getLength());
                                                                                 ++nColumn)
             {
-                if (rDefHeaders.GetString(nColumn).equals(aItem.sText) &&
+                if (rDefHeaders.GetString(nColumn) == aItem.sText &&
                     !pAssignment[nColumn].isEmpty())
                 {
                     sConvertedColumn = pAssignment[nColumn];

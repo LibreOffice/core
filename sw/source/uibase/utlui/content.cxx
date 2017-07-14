@@ -3420,7 +3420,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                 for( size_t i=0; i<nCount; ++i )
                 {
                     SdrObject* pTemp = pPage->GetObj(i);
-                    if (pTemp->GetName().equals(pCnt->GetName()))
+                    if (pTemp->GetName() == pCnt->GetName())
                     {
                         SdrPageView* pPV = pDrawView->GetSdrPageView();
                         if( pPV )

@@ -76,7 +76,7 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFilterOfFormat(const OUString& r
             std::shared_ptr<const SfxFilter> pFilter = aIter.First();
             while ( pFilter )
             {
-                if( pFilter->GetUserData().equals(rFormatNm) )
+                if( pFilter->GetUserData() == rFormatNm )
                     return pFilter;
                 pFilter = aIter.Next();
             }

@@ -970,7 +970,7 @@ sal_Int32 SwXCell::getError()
 {
     SolarMutexGuard aGuard;
     OUString sContent = getString();
-    return sal_Int32(sContent.equals(SwViewShell::GetShellRes()->aCalc_Error));
+    return sal_Int32(sContent == SwViewShell::GetShellRes()->aCalc_Error);
 }
 
 uno::Reference<text::XTextCursor> SwXCell::createTextCursor()

@@ -616,7 +616,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             if( !pOleNode )
                 continue;
             const SwOLEObj& rOObj = pOleNode->GetOLEObj();
-            if( aChartOleObjectName.equals( rOObj.GetCurrentPersistName() ) )
+            if( aChartOleObjectName == rOObj.GetCurrentPersistName() )
             {
                 aChartTableName = pOleNode->GetChartTableName();
                 break;
