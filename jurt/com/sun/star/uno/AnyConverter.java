@@ -357,10 +357,11 @@ public class AnyConverter
      *  @throws com.sun.star.lang.IllegalArgumentException
      *          in case conversion is not possible
      */
-    static public Object toObject(Class clazz, Object object)
+    @SuppressWarnings("unchecked")
+    static public <T> T toObject(Class<T> clazz, Object object)
         throws com.sun.star.lang.IllegalArgumentException
     {
-        return toObject( new Type( clazz ), object );
+        return (T) toObject( new Type( clazz ), object );
     }
 
     /** converts an array or an any containing an array into an array.
