@@ -4987,6 +4987,7 @@ void SwUiWriterTest::testLinesInSectionInTable()
 
 void SwUiWriterTest::testLinesMoveBackwardsInSectionInTable()
 {
+#ifndef MACOSX
     // Assert that paragraph "4" is on page 1 and "5" is on page 2.
     SwDoc* pDoc = createDoc("lines-in-section-in-table.odt");
     xmlDocPtr pXmlDoc = parseLayoutDump();
@@ -5010,6 +5011,7 @@ void SwUiWriterTest::testLinesMoveBackwardsInSectionInTable()
     sal_uInt32 nPage1LastNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]", "txtNodeIndex").toUInt32();
     // This was "3", paragraph "4" was deleted, but "5" was not moved backwards from page 2.
     CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
+#endif
 }
 
 void SwUiWriterTest::testTableInSection()
