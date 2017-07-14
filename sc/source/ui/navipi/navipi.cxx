@@ -397,7 +397,7 @@ void ScNavigatorDlg::UpdateButtons()
     aTbxCmd->CheckItem(nScenarioId, eMode == NAV_LMODE_SCENARIOS);
     aTbxCmd->CheckItem(nZoomId, eMode != NAV_LMODE_NONE);
 
-    //  Umschalten-Button:
+    // the toggle button:
     if (eMode == NAV_LMODE_SCENARIOS || eMode == NAV_LMODE_NONE)
     {
         aTbxCmd->EnableItem(nChangeRootId, false);

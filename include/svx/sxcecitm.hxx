@@ -45,8 +45,8 @@ public:
 
 
 // class SdrCaptionEscIsRelItem
-// sal_True=Linienaustrittsposition relativ
-// sal_False=Linienaustrittsposition absolut
+// sal_True = line escape position is relative
+// sal_False = line escape position is absolute
 
 class SVX_DLLPUBLIC SdrCaptionEscIsRelItem: public SdrYesNoItem {
 public:
@@ -57,7 +57,7 @@ public:
 
 
 // class SdrCaptionEscRelItem
-// Relativer Linienaustritt
+// relative line escape
 //     0 =   0.00% = up resp. left,
 // 10000 = 100.00% = right resp. down
 // only when SdrCaptionEscIsRelItem=TRUE
@@ -71,7 +71,7 @@ public:
 
 
 // class SdrCaptionEscAbsItem
-// Absoluter Linienaustritt
+// absolute line escape
 // 0  = up resp. left,
 // >0 = in direction right resp. down
 // only when SdrCaptionEscIsRelItem=FALSE
