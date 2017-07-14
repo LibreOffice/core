@@ -214,25 +214,7 @@ void SvLBoxString::InitViewData(
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-
-    // fdo#72125: GetTextWidth() can get very expensive; let's just count
-    // an approximate width using a cached value when we have many entries
-    long nTextWidth;
-    if (pView->GetEntryCount() > 100)
-    {
-        static SvTreeListBox *s_pPreviousView = nullptr;
-        static float s_fApproximateCharWidth = 0.0;
-        if (s_pPreviousView != pView)
-        {
-            s_pPreviousView = pView;
-            s_fApproximateCharWidth = pView->approximate_char_width();
-        }
-        nTextWidth = maText.getLength() * s_fApproximateCharWidth;
-    }
-    else
-        nTextWidth = pView->GetTextWidth(maText);
-
-    pViewData->maSize = Size(nTextWidth, pView->GetTextHeight());
+    pViewData->maSize = Size(pView->GetTextWidth(maText), pView->GetTextHeight());
 }
 
 // ***************************************************************
