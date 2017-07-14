@@ -292,7 +292,7 @@ bool MasterPageDescriptor::URLComparator::operator() (
     if (rDescriptor.get() == nullptr)
         return false;
     else
-        return rDescriptor->msURL.equals(msURL);
+        return rDescriptor->msURL == msURL;
 }
 
 // ===== StyleNameComparator ==================================================
@@ -308,7 +308,7 @@ bool MasterPageDescriptor::StyleNameComparator::operator() (
     if (rDescriptor.get() == nullptr)
         return false;
     else
-        return rDescriptor->msStyleName.equals(msStyleName);
+        return rDescriptor->msStyleName == msStyleName;
 }
 
 //===== PageObjectComparator ==================================================
@@ -349,11 +349,11 @@ bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDesc
             mpDescriptor->meOrigin == rDescriptor->meOrigin
             && (
                 (!mpDescriptor->msURL.isEmpty()
-                    && mpDescriptor->msURL.equals(rDescriptor->msURL))
+                    && mpDescriptor->msURL == rDescriptor->msURL)
                 || (!mpDescriptor->msPageName.isEmpty()
-                    && mpDescriptor->msPageName.equals(rDescriptor->msPageName))
+                    && mpDescriptor->msPageName == rDescriptor->msPageName)
                 || (!mpDescriptor->msStyleName.isEmpty()
-                    && mpDescriptor->msStyleName.equals(rDescriptor->msStyleName))
+                    && mpDescriptor->msStyleName == rDescriptor->msStyleName)
                 || (mpDescriptor->mpMasterPage!=nullptr
                     && mpDescriptor->mpMasterPage==rDescriptor->mpMasterPage)
                 || (mpDescriptor->mpPageObjectProvider.get()!=nullptr

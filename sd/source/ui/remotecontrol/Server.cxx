@@ -146,14 +146,14 @@ void RemoteServer::execute()
             bool aFound = false;
             for ( int i = 0; i < aNames.getLength(); i++ )
             {
-                if ( aNames[i].equals( pClient->mName ) )
+                if ( aNames[i] == pClient->mName )
                 {
                     Reference<XNameAccess> xSetItem( xConfig->getByName(aNames[i]), UNO_QUERY );
                     Any axPin(xSetItem->getByName("PIN"));
                     OUString sPin;
                     axPin >>= sPin;
 
-                    if ( sPin.equals( pClient->mPin ) ) {
+                    if ( sPin == pClient->mPin ) {
                         SAL_INFO( "sdremote", "client found on validated list -- connecting" );
                         connectClient( pClient, sPin );
                         aFound = true;
@@ -281,7 +281,7 @@ bool RemoteServer::connectClient( const std::shared_ptr< ClientInfo >& pClient, 
         return false;
     }
 
-    if ( apClient->mPin.equals( aPin ) )
+    if ( apClient->mPin == aPin )
     {
         // Save in settings first
         std::shared_ptr< ConfigurationChanges > aChanges = ConfigurationChanges::create();
@@ -298,7 +298,7 @@ bool RemoteServer::connectClient( const std::shared_ptr< ClientInfo >& pClient, 
             Sequence< OUString > aNames = xConfig->getElementNames();
             for ( int i = 0; i < aNames.getLength(); i++ )
             {
-                if ( aNames[i].equals( apClient->mName ) )
+                if ( aNames[i] == apClient->mName )
                 {
                     xConfig->replaceByName( apClient->mName, makeAny( xChild ) );
                     aSaved = true;

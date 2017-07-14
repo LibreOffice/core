@@ -97,7 +97,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
         {
             pObj = aIter.Next();
 
-            if( ( pObj->GetName().equals(rObjName) ) ||
+            if( ( pObj->GetName() == rObjName ) ||
                 ( SdrInventor::Default == pObj->GetObjInventor() &&
                   OBJ_OLE2 == pObj->GetObjIdentifier() &&
                   rObjName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )
@@ -122,7 +122,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
         {
             pObj = aIter.Next();
 
-            if( ( pObj->GetName().equals(rObjName) ) ||
+            if( ( pObj->GetName() == rObjName ) ||
                 ( SdrInventor::Default == pObj->GetObjInventor() &&
                   OBJ_OLE2 == pObj->GetObjIdentifier() &&
                   rObjName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) )

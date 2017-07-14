@@ -125,8 +125,8 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
             {
                 // A resource directly bound to the center pane has been
                 // requested.
-                if (rEvent.ResourceId->getResourceTypePrefix().equals(
-                    FrameworkHelper::msViewURLPrefix))
+                if (rEvent.ResourceId->getResourceTypePrefix() ==
+                    FrameworkHelper::msViewURLPrefix)
                 {
                     // The requested resource is a view.  Show or hide the
                     // resource managed by this ResourceManager accordingly.
