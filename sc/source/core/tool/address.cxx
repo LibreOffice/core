@@ -2014,6 +2014,7 @@ template<typename T > inline void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCO
         {
             OUString aTabName, aDocName;
             pDoc->GetName(nTab, aTabName);
+            assert( !aTabName.isEmpty() && "empty sheet name");
             // External Reference, same as in ScCompiler::MakeTabStr()
             if( aTabName[0] == '\'' )
             {   // "'Doc'#Tab"
