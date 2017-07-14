@@ -177,7 +177,6 @@ void AboutDialog::StyleControls()
     m_pVersion->SetPaintTransparent(true);
     m_pDescriptionText->SetPaintTransparent(true);
     m_pCopyrightText->SetPaintTransparent(true);
-
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
     const vcl::Font& aLabelFont = rStyleSettings.GetLabelFont();
@@ -190,19 +189,6 @@ void AboutDialog::StyleControls()
     // Description Text
     aLargeFont.SetFontSize(Size(0, aLabelFont.GetFontSize().Height() * 1.3));
     m_pDescriptionText->SetControlFont(aLargeFont);
-
-    // Version Text
-    aLargeFont.SetFontSize(Size(0, aLabelFont.GetFontSize().Height() * 1.2));
-    m_pVersion->SetControlFont(aLargeFont);
-
-    // If not in high-contrast mode, hard-code colors
-    if (!rStyleSettings.GetHighContrastMode())
-    {
-        m_pLogoReplacement->SetControlForeground(Color(51, 51, 51));
-        m_pVersion->SetControlForeground(Color(102, 102, 102));
-        m_pDescriptionText->SetControlForeground(Color(51, 51, 51));
-        m_pCopyrightText->SetControlForeground(Color(102, 102, 102));
-    }
 }
 
 void AboutDialog::SetLogo()
@@ -233,12 +219,6 @@ void AboutDialog::SetLogo()
 void AboutDialog::Resize()
 {
     SfxModalDialog::Resize();
-
-    // Load background image
-    if (isInitialLayout(this) && !(Application::GetSettings().GetStyleSettings().GetHighContrastMode()))
-    {
-        SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, GetSizePixel().Width());
-    }
 }
 
 void AboutDialog::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
