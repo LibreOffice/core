@@ -70,7 +70,7 @@ struct GtvApplicationWindow
 
 struct GtvApplicationWindowClass
 {
-    GtkApplicationWindow parentClass;
+    GtkApplicationWindowClass parentClass;
 };
 
 GType gtv_application_window_get_type               (void) G_GNUC_CONST;

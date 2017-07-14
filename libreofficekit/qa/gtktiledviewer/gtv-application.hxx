@@ -28,7 +28,7 @@ struct GtvApplication
 
 struct GtvApplicationClass
 {
-    GtkApplication parentClass;
+    GtkApplicationClass parentClass;
 };
 
 GType gtv_application_get_type               (void) G_GNUC_CONST;
