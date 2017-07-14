@@ -145,7 +145,8 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce, sal_uInt64 nTime)
         ? SAL_MAX_UINT64 : rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod;
 
     // Only if smaller timeout, to avoid skipping.
-    if (bForce || nProposedTimeout < nCurTimeout)
+    // Force instant wakeup on 0ms, if the previous period was not 0ms
+    if (bForce || nProposedTimeout < nCurTimeout || (!nMS && rSchedCtx.mnTimerPeriod))
     {
         SAL_INFO( "vcl.schedule", "  Starting scheduler system timer (" << nMS << "ms)" );
         rSchedCtx.mnTimerStart = nTime;
