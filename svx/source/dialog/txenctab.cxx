@@ -48,7 +48,7 @@ rtl_TextEncoding SvxTextEncodingTable::GetTextEncoding( const OUString& rStr ) c
 
     for ( sal_uInt32 i = 0; i < nCount; ++i )
     {
-        if (ResStringArray::GetString( i ).equals(rStr))
+        if (ResStringArray::GetString( i ) == rStr)
             return rtl_TextEncoding( GetValue( i ) );
     }
     return RTL_TEXTENCODING_DONTKNOW;

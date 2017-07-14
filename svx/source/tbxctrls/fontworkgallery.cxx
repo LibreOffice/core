@@ -301,7 +301,7 @@ void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
 
 void FontworkAlignmentWindow::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
-    if( Event.FeatureURL.Main.equals( msFontworkAlignment ) )
+    if( Event.FeatureURL.Main == msFontworkAlignment )
     {
         if( !Event.IsEnabled )
         {
@@ -483,7 +483,7 @@ void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( bool bEnabled )
 
 void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
-    if( Event.FeatureURL.Main.equals( msFontworkCharacterSpacing ) )
+    if( Event.FeatureURL.Main == msFontworkCharacterSpacing )
     {
         if( !Event.IsEnabled )
         {
@@ -496,7 +496,7 @@ void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureSta
                 implSetCharacterSpacing( nValue, true );
         }
     }
-    else if( Event.FeatureURL.Main.equals( msFontworkKernCharacterPairs ) )
+    else if( Event.FeatureURL.Main == msFontworkKernCharacterPairs )
     {
         if( !Event.IsEnabled )
         {

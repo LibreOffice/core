@@ -229,7 +229,7 @@ bool FmEntryData::IsEqualWithoutChildren( FmEntryData* pEntryData )
     if( !pEntryData )
         return false;
 
-    if( !aText.equals(pEntryData->GetText()))
+    if( aText != pEntryData->GetText() )
         return false;
 
     if( !pEntryData->GetParent() && pParent )

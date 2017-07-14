@@ -145,8 +145,8 @@ OUString ImpItemListRow::GetItemTypeStr() const
 
 bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
 {
-    return (aName.equals(rEntry.aName)
-        && aValue.equals(rEntry.aValue)
+    return (aName == rEntry.aName
+        && aValue == rEntry.aValue
         && eState==rEntry.eState
         && nWhichId==rEntry.nWhichId
         && bComment==rEntry.bComment
@@ -546,7 +546,7 @@ void SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, std::size_
         ImpItemListRow* pAktEntry=ImpGetEntry(nEntryNum);
         if (*pAktEntry!=rEntry) {
             bool bStateDiff=rEntry.eState!=pAktEntry->eState;
-            bool bValueDiff=!rEntry.aValue.equals(pAktEntry->aValue);
+            bool bValueDiff=rEntry.aValue != pAktEntry->aValue;
             bool bAllDiff = true;
             if (bStateDiff || bValueDiff) {
                 // check whether only state and/or value have changed

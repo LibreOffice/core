@@ -638,7 +638,7 @@ void SdrObject::SetName(const OUString& rStr)
         ImpForcePlusData();
     }
 
-    if(pPlusData && !pPlusData->aObjName.equals(rStr))
+    if(pPlusData && pPlusData->aObjName != rStr)
     {
         // Undo/Redo for setting object's name (#i73249#)
         bool bUndo( false );
@@ -726,7 +726,7 @@ void SdrObject::SetDescription(const OUString& rStr)
         ImpForcePlusData();
     }
 
-    if(pPlusData && !pPlusData->aObjDescription.equals(rStr))
+    if(pPlusData && pPlusData->aObjDescription != rStr)
     {
         // Undo/Redo for setting object's description (#i73249#)
         bool bUndo( false );
