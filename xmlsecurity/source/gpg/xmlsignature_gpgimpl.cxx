@@ -359,12 +359,13 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         if(!xmlSecCheckNodeName(cur, xmlSecNodeSignatureValue, xmlSecDSigNs))
             throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
         xmlChar* pSignatureValue=xmlNodeGetContent(cur);
-        if(xmlSecBase64Decode(pSignatureValue, reinterpret_cast<xmlSecByte*>(pSignatureValue), xmlStrlen(pSignatureValue)) < 0)
+        int nSigSize = xmlSecBase64Decode(pSignatureValue, reinterpret_cast<xmlSecByte*>(pSignatureValue), xmlStrlen(pSignatureValue));
+        if( nSigSize < 0)
             throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
         GpgME::Data data_signature(
             reinterpret_cast<char*>(pSignatureValue),
-            xmlStrlen(pSignatureValue), false);
+            nSigSize, false);
 
         GpgME::VerificationResult verify_res=rCtx.verifyDetachedSignature(
             data_signature, data_text);
