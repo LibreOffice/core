@@ -2145,7 +2145,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
         const sal_Unicode*  p = aStr.getStr();
         aStr = OUString( p, nLen - 2 ) + OUStringLiteral1( p[ nLen - 1 ] );
     }
-    if( aName.equals( aStr ) )
+    if( aName == aStr )
         return 0;
     else
     {

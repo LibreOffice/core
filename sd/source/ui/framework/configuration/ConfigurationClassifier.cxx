@@ -103,7 +103,7 @@ void ConfigurationClassifier::ClassifyResources (
     {
         bool bFound (false);
         for (sal_Int32 j=0; j<nL2 && !bFound; ++j)
-            if (aA1[i]->getResourceURL().equals(aA2[j]->getResourceURL()))
+            if (aA1[i]->getResourceURL() == aA2[j]->getResourceURL())
                 bFound = true;
 
         if (bFound)
@@ -119,7 +119,7 @@ void ConfigurationClassifier::ClassifyResources (
     {
         bool bFound (false);
         for (sal_Int32 i=0; i<nL1 && !bFound; ++i)
-            if (aA2[j]->getResourceURL().equals(aA1[i]->getResourceURL()))
+            if (aA2[j]->getResourceURL() == aA1[i]->getResourceURL())
                 bFound = true;
 
         if ( ! bFound)

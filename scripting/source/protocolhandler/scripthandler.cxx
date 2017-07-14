@@ -490,8 +490,8 @@ extern "C"
             css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
                 static_cast< css::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
 
-            if ( ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName().equals(
-                OUString::createFromAscii( pImplementationName ) ) )
+            if ( ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName().equalsAscii(
+                    pImplementationName ) )
             {
                 xFactory = ::scripting_protocolhandler::ScriptProtocolHandler::impl_createFactory( xServiceManager );
             }

@@ -863,7 +863,7 @@ void PaneStyleContainer::ProcessPaneStyle(
         // Find parent style.
         ::std::vector<SharedPaneStyle>::const_iterator iStyle;
         for (iStyle=mStyles.begin(); iStyle!=mStyles.end(); ++iStyle)
-            if ((*iStyle)->msStyleName.equals(sParentStyleName))
+            if ((*iStyle)->msStyleName == sParentStyleName)
             {
                 pStyle->mpParentStyle = *iStyle;
                 break;
@@ -987,7 +987,7 @@ void ViewStyleContainer::ProcessViewStyle(
         // Find parent style.
         ::std::vector<SharedViewStyle>::const_iterator iStyle;
         for (iStyle=mStyles.begin(); iStyle!=mStyles.end(); ++iStyle)
-            if ((*iStyle)->msStyleName.equals(sParentStyleName))
+            if ((*iStyle)->msStyleName == sParentStyleName)
             {
                 pStyle->mpParentStyle = *iStyle;
                 pStyle->mpFont = (*iStyle)->mpFont;

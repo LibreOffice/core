@@ -71,14 +71,11 @@ private:
         createProvider( ProviderDetails& details );
     bool isInBlackList( const OUString& serviceName )
     {
-        if ( m_sBlackList.getLength() > 0 )
+        for ( sal_Int32 index = 0; index < m_sBlackList.getLength(); index++ )
         {
-            for ( sal_Int32 index = 0; index < m_sBlackList.getLength(); index++ )
+            if ( m_sBlackList[ index ] == serviceName )
             {
-                if ( m_sBlackList[ index ].equals( serviceName ) )
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;

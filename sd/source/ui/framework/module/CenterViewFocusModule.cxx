@@ -105,11 +105,11 @@ void SAL_CALL CenterViewFocusModule::notifyConfigurationChange (
 {
     if (mbValid)
     {
-        if (rEvent.Type.equals(FrameworkHelper::msConfigurationUpdateEndEvent))
+        if (rEvent.Type == FrameworkHelper::msConfigurationUpdateEndEvent)
         {
             HandleNewView(rEvent.Configuration);
         }
-        else if (rEvent.Type.equals(FrameworkHelper::msResourceActivationEvent))
+        else if (rEvent.Type == FrameworkHelper::msResourceActivationEvent)
         {
             if (rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix))
                 mbNewViewCreated = true;

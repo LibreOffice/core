@@ -328,7 +328,7 @@ void SdPage::ConnectLink()
         **********************************************************************/
         ::sd::DrawDocShell* pDocSh = static_cast<SdDrawDocument*>(pModel)->GetDocSh();
 
-        if (!pDocSh || !pDocSh->GetMedium()->GetOrigURL().equals(maFileName))
+        if (!pDocSh || pDocSh->GetMedium()->GetOrigURL() != maFileName)
         {
             // No links to document owned pages!
             mpPageLink = new SdPageLink(this, maFileName, maBookmarkName);

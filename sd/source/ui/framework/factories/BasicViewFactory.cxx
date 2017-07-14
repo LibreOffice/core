@@ -324,7 +324,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
 {
     std::shared_ptr<ViewShell> pViewShell;
     const OUString& rsViewURL (rxViewId->getResourceURL());
-    if (rsViewURL.equals(FrameworkHelper::msImpressViewURL))
+    if (rsViewURL == FrameworkHelper::msImpressViewURL)
     {
         pViewShell.reset(
             new DrawViewShell(
@@ -334,7 +334,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView));
         pViewShell->GetContentWindow()->set_id("impress_win");
     }
-    else if (rsViewURL.equals(FrameworkHelper::msDrawViewURL))
+    else if (rsViewURL == FrameworkHelper::msDrawViewURL)
     {
         pViewShell.reset(
             new GraphicViewShell (
@@ -343,7 +343,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView));
         pViewShell->GetContentWindow()->set_id("draw_win");
     }
-    else if (rsViewURL.equals(FrameworkHelper::msOutlineViewURL))
+    else if (rsViewURL == FrameworkHelper::msOutlineViewURL)
     {
         pViewShell.reset(
             new OutlineViewShell (
@@ -353,7 +353,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView));
         pViewShell->GetContentWindow()->set_id("outline_win");
     }
-    else if (rsViewURL.equals(FrameworkHelper::msNotesViewURL))
+    else if (rsViewURL == FrameworkHelper::msNotesViewURL)
     {
         pViewShell.reset(
             new DrawViewShell(
@@ -363,7 +363,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView));
         pViewShell->GetContentWindow()->set_id("notes_win");
     }
-    else if (rsViewURL.equals(FrameworkHelper::msHandoutViewURL))
+    else if (rsViewURL == FrameworkHelper::msHandoutViewURL)
     {
         pViewShell.reset(
             new DrawViewShell(
@@ -373,7 +373,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView));
         pViewShell->GetContentWindow()->set_id("handout_win");
     }
-    else if (rsViewURL.equals(FrameworkHelper::msPresentationViewURL))
+    else if (rsViewURL == FrameworkHelper::msPresentationViewURL)
     {
         pViewShell.reset(
             new PresentationViewShell(
@@ -382,7 +382,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView));
         pViewShell->GetContentWindow()->set_id("presentation_win");
     }
-    else if (rsViewURL.equals(FrameworkHelper::msSlideSorterURL))
+    else if (rsViewURL == FrameworkHelper::msSlideSorterURL)
     {
         pViewShell = ::sd::slidesorter::SlideSorterViewShell::Create (
             &rFrame,

@@ -39,7 +39,7 @@ extern "C"
         if( pServiceManager )
         {
             Reference< XSingleComponentFactory > xFactory;
-            if( aImplName.equals( PPPOptimizerDialog_getImplementationName() ) )
+            if( aImplName == PPPOptimizerDialog_getImplementationName() )
             {
                 xFactory = createSingleComponentFactory(
                         PPPOptimizerDialog_createInstance,

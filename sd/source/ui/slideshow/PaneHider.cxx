@@ -65,7 +65,7 @@ PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
                 for (sal_Int32 nIndex=0; nIndex<aResources.getLength(); ++nIndex)
                 {
                     Reference<XResourceId> xPaneId (aResources[nIndex]);
-                    if ( ! xPaneId->getResourceURL().equals(FrameworkHelper::msCenterPaneURL))
+                    if ( xPaneId->getResourceURL() != FrameworkHelper::msCenterPaneURL )
                     {
                         mxConfigurationController->requestResourceDeactivation(xPaneId);
                     }

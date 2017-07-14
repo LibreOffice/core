@@ -72,7 +72,7 @@ public:
     */
     bool mbIsReleased;
 
-    bool CompareURL(const OUString& rsPaneURL) const { return msPaneURL.equals(rsPaneURL); }
+    bool CompareURL(const OUString& rsPaneURL) const { return msPaneURL == rsPaneURL; }
     bool ComparePane(const Reference<XResource>& rxPane) const { return mxPane == rxPane; }
 };
 

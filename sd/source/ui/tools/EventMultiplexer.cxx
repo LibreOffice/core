@@ -531,7 +531,7 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
                 }
 
                 // Add selection change listener at slide sorter.
-                if (rEvent.ResourceId->getResourceURL().equals(FrameworkHelper::msSlideSorterURL))
+                if (rEvent.ResourceId->getResourceURL() == FrameworkHelper::msSlideSorterURL)
                 {
                     slidesorter::SlideSorterViewShell* pViewShell
                         = dynamic_cast<slidesorter::SlideSorterViewShell*>(
@@ -557,7 +557,7 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
 
                 // Remove selection change listener from slide sorter.  Add
                 // selection change listener at slide sorter.
-                if (rEvent.ResourceId->getResourceURL().equals(FrameworkHelper::msSlideSorterURL))
+                if (rEvent.ResourceId->getResourceURL() == FrameworkHelper::msSlideSorterURL)
                 {
                     slidesorter::SlideSorterViewShell* pViewShell
                         = dynamic_cast<slidesorter::SlideSorterViewShell*>(
