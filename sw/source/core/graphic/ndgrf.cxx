@@ -401,8 +401,15 @@ const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
             const_cast< SwGrfNode* >(this)->mpReplacementGraphic = new GraphicObject(rSvgDataPtr->getReplacement());
         }
         else if (GetGrfObj().GetGraphic().getPdfData().hasElements())
+        {
             // This returns the bitmap, without the pdf data.
             const_cast<SwGrfNode*>(this)->mpReplacementGraphic = new GraphicObject(GetGrfObj().GetGraphic().GetBitmapEx());
+        }
+        if (mpReplacementGraphic)
+        {
+            mpReplacementGraphic->SetSwapStreamHdl(
+                LINK(const_cast<SwGrfNode*>(this), SwGrfNode, SwapReplacement));
+        }
     }
 
     return mpReplacementGraphic;
@@ -951,6 +958,25 @@ SwContentNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     pGrfNd->SetDescription( GetDescription() );
     pGrfNd->SetContour( HasContour(), HasAutomaticContour() );
     return pGrfNd;
+}
+
+IMPL_LINK(SwGrfNode, SwapReplacement, const GraphicObject*, pGrfObj, SvStream*)
+{
+    // replacement image is always swapped
+    if (pGrfObj->IsInSwapOut())
+    {
+        return GRFMGR_AUTOSWAPSTREAM_TEMP;
+    }
+    else if (pGrfObj->IsInSwapIn())
+    {
+        return GRFMGR_AUTOSWAPSTREAM_TEMP;
+    }
+    else
+    {
+        assert(!"why is swap handler being called?");
+    }
+
+    return GRFMGR_AUTOSWAPSTREAM_NONE;
 }
 
 IMPL_LINK( SwGrfNode, SwapGraphic, const GraphicObject*, pGrfObj, SvStream* )
