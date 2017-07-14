@@ -1760,16 +1760,16 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                         {
                             long nUpperRotate = lcl_getRotate( mpDoc, nTab, nX, nY - 1 );
                             drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
-                            aSequence.append(
-                                svx::frame::CreateBorderPrimitives(
-                                    aPoints[bLayoutRTL?1:0], aPoints[bLayoutRTL?0:1], aTopLine,
-                                    svx::frame::Style(),
-                                    svx::frame::Style(),
-                                    aLeftLine,
-                                    svx::frame::Style(),
-                                    svx::frame::Style(),
-                                    aRightLine,
-                                    pForceColor, nUpperRotate, nAttrRotate ) );
+                            svx::frame::CreateBorderPrimitives(
+                                aSequence,
+                                aPoints[bLayoutRTL?1:0], aPoints[bLayoutRTL?0:1], aTopLine,
+                                svx::frame::Style(),
+                                svx::frame::Style(),
+                                aLeftLine,
+                                svx::frame::Style(),
+                                svx::frame::Style(),
+                                aRightLine,
+                                pForceColor, nUpperRotate, nAttrRotate );
                             pProcessor->process(aSequence);
                         }
 
@@ -1777,16 +1777,16 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                         {
                             long nLowerRotate = lcl_getRotate( mpDoc, nTab, nX, nY + 1 );
                             drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
-                            aSequence.append(
-                                svx::frame::CreateBorderPrimitives(
-                                    aPoints[bLayoutRTL?2:3], aPoints[bLayoutRTL?3:2], aBottomLine,
-                                    aLeftLine,
-                                    svx::frame::Style(),
-                                    svx::frame::Style(),
-                                    aRightLine,
-                                    svx::frame::Style(),
-                                    svx::frame::Style(),
-                                    pForceColor, 18000 - nAttrRotate, 18000 - nLowerRotate ) );
+                            svx::frame::CreateBorderPrimitives(
+                                aSequence,
+                                aPoints[bLayoutRTL?2:3], aPoints[bLayoutRTL?3:2], aBottomLine,
+                                aLeftLine,
+                                svx::frame::Style(),
+                                svx::frame::Style(),
+                                aRightLine,
+                                svx::frame::Style(),
+                                svx::frame::Style(),
+                                pForceColor, 18000 - nAttrRotate, 18000 - nLowerRotate );
                             pProcessor->process(aSequence);
                         }
 
@@ -1795,16 +1795,16 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                         {
                             long nLeftRotate = lcl_getRotate( mpDoc, nTab, nX - 1, nY );
                             drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
-                            aSequence.append(
-                                svx::frame::CreateBorderPrimitives(
-                                    aPoints[0], aPoints[3], aLeftLine,
-                                    aTopLine,
-                                    svx::frame::Style(),
-                                    svx::frame::Style(),
-                                    aBottomLine,
-                                    svx::frame::Style(),
-                                    svx::frame::Style(),
-                                    pForceColor, nAttrRotate, nLeftRotate ) );
+                            svx::frame::CreateBorderPrimitives(
+                                aSequence,
+                                aPoints[0], aPoints[3], aLeftLine,
+                                aTopLine,
+                                svx::frame::Style(),
+                                svx::frame::Style(),
+                                aBottomLine,
+                                svx::frame::Style(),
+                                svx::frame::Style(),
+                                pForceColor, nAttrRotate, nLeftRotate );
                             pProcessor->process(aSequence);
                         }
 
@@ -1812,16 +1812,16 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                         {
                             long nRightRotate = lcl_getRotate( mpDoc, nTab, nX + 1, nY );
                             drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
-                            aSequence.append(
-                                svx::frame::CreateBorderPrimitives(
-                                    aPoints[1], aPoints[2], aRightLine,
-                                    svx::frame::Style(),
-                                    svx::frame::Style(),
-                                    aTopLine,
-                                    svx::frame::Style(),
-                                    svx::frame::Style(),
-                                    aBottomLine,
-                                    pForceColor, 18000 - nRightRotate, 18000 - nAttrRotate ) );
+                            svx::frame::CreateBorderPrimitives(
+                                aSequence,
+                                aPoints[1], aPoints[2], aRightLine,
+                                svx::frame::Style(),
+                                svx::frame::Style(),
+                                aTopLine,
+                                svx::frame::Style(),
+                                svx::frame::Style(),
+                                aBottomLine,
+                                pForceColor, 18000 - nRightRotate, 18000 - nAttrRotate );
                             pProcessor->process(aSequence);
                         }
                     }
