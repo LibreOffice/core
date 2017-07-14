@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_f66c749e",
+        "filename": "xmlsecurity/source/component/documentdigitalsignatures.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-14T15:25:54Z",
+      "side": 1,
+      "message": "This is no longer the case, we use a libxmlsec flag I introduced upstream to disable certificate verification instead. Could you fix this misleading comment on master?",
+      "revId": "8086226aa7f2c6dd0087b1dfd328345ed29ca3be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
