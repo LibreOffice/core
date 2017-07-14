@@ -774,7 +774,7 @@ struct ScMyLabelRange
     bool            bColumnOrientation;
 };
 
-typedef std::list<const ScMyLabelRange*> ScMyLabelRanges;
+typedef std::list< std::unique_ptr<const ScMyLabelRange> > ScMyLabelRanges;
 
 struct ScMyImportValidation
 {
@@ -1103,10 +1103,10 @@ public:
 
     void AddNamedExpression(SCTAB nTab, ScMyNamedExpression* pNamedExp);
 
-    void    AddLabelRange(const ScMyLabelRange* pMyLabelRange) {
+    void AddLabelRange(std::unique_ptr<const ScMyLabelRange> pMyLabelRange) {
         if (!pMyLabelRanges)
             pMyLabelRanges = new ScMyLabelRanges;
-        pMyLabelRanges->push_back(pMyLabelRange); }
+        pMyLabelRanges->push_back(std::move(pMyLabelRange)); }
 
     void AddValidation(const ScMyImportValidation& rValidation) {
         if (!pValidations)
