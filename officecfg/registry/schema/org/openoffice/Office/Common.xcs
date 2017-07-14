@@ -1495,7 +1495,7 @@
             objects.</desc>
             <label>Total Image Cache Size</label>
           </info>
-          <value>200000000</value>
+          <value>400000000</value>
         </prop>
         <prop oor:name="ObjectCacheSize" oor:type="xs:int" oor:nillable="false">
           <info>
