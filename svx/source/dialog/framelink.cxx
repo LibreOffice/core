@@ -1357,7 +1357,7 @@ double lcl_getCenterOfLineOffset(const Style& rBorder, bool bLeftEdge)
 
     if (bDistUsed || bSecnUsed)
     {
-        // double line, get center by adding half ditance and half line width.
+        // double line, get center by adding half distance and half line width.
         // bLeftEdge defines which line to use
         return (rBorder.Dist() + (bLeftEdge ? rBorder.Prim() : rBorder.Secn())) * 0.5;
     }

@@ -88,7 +88,7 @@ gtv_application_handle_local_options(GApplication* app, GVariantDict* options)
     else
     {
         g_print("--lo-path= is mandatory. Please provide the path to LO installation.\n");
-        return 1; // Cannot afford to continue in absense of this param
+        return 1; // Cannot afford to continue in absence of this param
     }
 
     if (g_variant_dict_contains(options, "version"))

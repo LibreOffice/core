@@ -46,7 +46,7 @@ GtkContainer* gtv_main_toolbar_get_second_toolbar(GtvMainToolbar* toolbar);
 
 void gtv_main_toolbar_set_sensitive_internal(GtvMainToolbar* toolbar, GtkToolItem* pItem, bool isSensitive);
 
-/// Use internal sensitivity map to set actual widget's sensitivness
+/// Use internal sensitivity map to set actual widget's sensitiveness
 void gtv_main_toolbar_set_edit(GtvMainToolbar* toolbar, gboolean bEdit);
 
 void gtv_main_toolbar_doc_loaded(GtvMainToolbar* toolbar, LibreOfficeKitDocumentType eDocType, bool bEditMode);

@@ -933,7 +933,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
     if (res == nullptr && error != nullptr)
     {
         // Disable this method from now on. It's simply not available on some systems
-        // and leads to an error dialog being shown each tim theis is called tdf#104883
+        // and leads to an error dialog being shown each time this is called tdf#104883
         std::shared_ptr<comphelper::ConfigurationChanges> batch( comphelper::ConfigurationChanges::create() );
         officecfg::Office::Common::PackageKit::EnableFontInstallation::set(false, batch);
         batch->commit();

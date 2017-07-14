@@ -134,7 +134,7 @@ static void initWindow(GtvApplicationWindow* window)
     focusChain = g_list_append( focusChain, window->lokdocview );
     gtk_container_set_focus_chain ( GTK_CONTAINER (priv->container), focusChain );
 
-    // TODO: Implement progressbar in statubar
+    // TODO: Implement progressbar in statusbar
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
     if (pDocument)
     {
