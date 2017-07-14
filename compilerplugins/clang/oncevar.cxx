@@ -29,6 +29,15 @@ bool startsWith(const std::string& rStr, const char* pSubStr) {
     return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
 }
 
+Expr const * lookThroughInitListExpr(Expr const * expr) {
+    if (auto const ile = dyn_cast<InitListExpr>(expr->IgnoreParenImpCasts())) {
+        if (ile->getNumInits() == 1) {
+            return ile->getInit(0);
+        }
+    }
+    return expr;
+}
+
 class ConstantValueDependentExpressionVisitor:
     public ConstStmtVisitor<ConstantValueDependentExpressionVisitor, bool>
 {
@@ -130,6 +139,107 @@ public:
         }
     }
 
+    bool VisitMemberExpr(MemberExpr const * expr) {
+        // ignore cases like:
+        //     const OUString("xxx") xxx;
+        //     rtl_something(xxx.pData);
+        // where we cannot inline the declaration.
+        if (isa<FieldDecl>(expr->getMemberDecl())) {
+            recordIgnore(expr);
+        }
+        return true;
+    }
+
+    bool VisitUnaryOperator(UnaryOperator const * expr) {
+        // if we take the address of it, or we modify it, ignore it
+        UnaryOperator::Opcode op = expr->getOpcode();
+        if (op == UO_AddrOf || op == UO_PreInc || op == UO_PostInc
+            || op == UO_PreDec || op == UO_PostDec)
+        {
+            recordIgnore(expr->getSubExpr());
+        }
+        return true;
+    }
+
+    bool VisitBinaryOperator(BinaryOperator const * expr) {
+        // if we assign it another value, or modify it, ignore it
+        BinaryOperator::Opcode op = expr->getOpcode();
+        if (op == BO_Assign || op == BO_PtrMemD || op == BO_PtrMemI || op == BO_MulAssign
+            || op == BO_DivAssign || op == BO_RemAssign || op == BO_AddAssign
+            || op == BO_SubAssign || op == BO_ShlAssign || op == BO_ShrAssign
+            || op == BO_AndAssign || op == BO_XorAssign || op == BO_OrAssign)
+        {
+            recordIgnore(expr->getLHS());
+        }
+        return true;
+    }
+
+    bool VisitCallExpr(CallExpr const * expr) {
+        unsigned firstArg = 0;
+        if (auto const cmce = dyn_cast<CXXMemberCallExpr>(expr)) {
+            if (auto const e1 = cmce->getMethodDecl()) {
+                if (!(e1->isConst() || e1->isStatic())) {
+                    recordIgnore(cmce->getImplicitObjectArgument());
+                }
+            } else if (auto const e2 = dyn_cast<BinaryOperator>(
+                           cmce->getCallee()->IgnoreParenImpCasts()))
+            {
+                switch (e2->getOpcode()) {
+                case BO_PtrMemD:
+                case BO_PtrMemI:
+                    if (!e2->getRHS()->getType()->getAs<MemberPointerType>()
+                        ->getPointeeType()->getAs<FunctionProtoType>()
+                        ->isConst())
+                    {
+                        recordIgnore(e2->getLHS());
+                    }
+                    break;
+                default:
+                    break;
+                }
+            }
+        } else if (auto const coce = dyn_cast<CXXOperatorCallExpr>(expr)) {
+            if (auto const cmd = dyn_cast_or_null<CXXMethodDecl>(
+                    coce->getDirectCallee()))
+            {
+                if (!cmd->isStatic()) {
+                    assert(coce->getNumArgs() != 0);
+                    if (!cmd->isConst()) {
+                        recordIgnore(coce->getArg(0));
+                    }
+                    firstArg = 1;
+                }
+            }
+        }
+        // ignore those ones we are passing by reference
+        const FunctionDecl* calleeFunctionDecl = expr->getDirectCallee();
+        if (calleeFunctionDecl) {
+            for (unsigned i = firstArg; i < expr->getNumArgs(); ++i) {
+                if (i < calleeFunctionDecl->getNumParams()) {
+                    QualType qt { calleeFunctionDecl->getParamDecl(i)->getType() };
+                    if (loplugin::TypeCheck(qt).LvalueReference().NonConst()) {
+                        recordIgnore(expr->getArg(i));
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    bool VisitCXXConstructExpr(CXXConstructExpr const * expr) {
+        // ignore those ones we are passing by reference
+        const CXXConstructorDecl* cxxConstructorDecl = expr->getConstructor();
+        for (unsigned i = 0; i < expr->getNumArgs(); ++i) {
+            if (i < cxxConstructorDecl->getNumParams()) {
+                QualType qt { cxxConstructorDecl->getParamDecl(i)->getType() };
+                if (loplugin::TypeCheck(qt).LvalueReference().NonConst()) {
+                    recordIgnore(expr->getArg(i));
+                }
+            }
+        }
+        return true;
+    }
+
     bool VisitDeclRefExpr( const DeclRefExpr* );
     bool VisitVarDecl( const VarDecl* );
 
@@ -143,12 +253,47 @@ private:
         return ConstantValueDependentExpressionVisitor(compiler.getASTContext())
             .Visit(expr);
     }
+
+    void recordIgnore(Expr const * expr) {
+        for (;;) {
+            expr = expr->IgnoreParenImpCasts();
+            if (auto const e = dyn_cast<MemberExpr>(expr)) {
+                if (isa<FieldDecl>(e->getMemberDecl())) {
+                    expr = e->getBase();
+                    continue;
+                }
+            }
+            if (auto const e = dyn_cast<ArraySubscriptExpr>(expr)) {
+                expr = e->getBase();
+                continue;
+            }
+            if (auto const e = dyn_cast<BinaryOperator>(expr)) {
+                if (e->getOpcode() == BO_PtrMemD) {
+                    expr = e->getLHS();
+                    continue;
+                }
+            }
+            break;
+        }
+        auto const dre = dyn_cast<DeclRefExpr>(expr);
+        if (dre == nullptr) {
+            return;
+        }
+        auto const var = dyn_cast<VarDecl>(dre->getDecl());
+        if (var == nullptr) {
+            return;
+        }
+        maVarDeclToIgnoreSet.insert(var);
+    }
 };
 
 bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
 {
     if (ignoreLocation(varDecl)) {
         return true;
+    }
+    if (auto const init = varDecl->getInit()) {
+        recordIgnore(lookThroughInitListExpr(init));
     }
     if (varDecl->isExceptionVariable() || isa<ParmVarDecl>(varDecl)) {
         return true;
@@ -197,7 +342,9 @@ bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
             return true;
         }
     } else if (auto constructExpr = dyn_cast<CXXConstructExpr>(initExpr)) {
-        if (constructExpr->getNumArgs() > 0) {
+        if (constructExpr->getNumArgs() == 0) {
+            foundStringLiteral = true; // i.e., empty string
+        } else {
             auto stringLit2 = dyn_cast<clang::StringLiteral>(constructExpr->getArg(0));
             foundStringLiteral = stringLit2 != nullptr;
             // ignore long literals, helps to make the code more legible
@@ -234,84 +381,6 @@ bool OnceVar::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     const VarDecl * varDecl = dyn_cast<VarDecl>(decl)->getCanonicalDecl();
     // ignore stuff in header files (which should really not be there, but anyhow)
     if (!compiler.getSourceManager().isInMainFile(varDecl->getLocation())) {
-        return true;
-    }
-
-    Stmt const * parent = parentStmt(declRefExpr);
-    // ignore cases like:
-    //     const OUString("xxx") xxx;
-    //     rtl_something(xxx.pData);
-    // and
-    //      foo(&xxx);
-    // where we cannot inline the declaration.
-    auto const tc = loplugin::TypeCheck(varDecl->getType());
-    if (tc.Class("OUString").Namespace("rtl").GlobalNamespace()
-        && parent && (isa<MemberExpr>(parent) || isa<UnaryOperator>(parent)))
-    {
-        maVarDeclToIgnoreSet.insert(varDecl);
-        return true;
-    }
-
-    // if we take the address of it, or we modify it, ignore it
-    if (auto unaryOp = dyn_cast_or_null<UnaryOperator>(parent)) {
-        UnaryOperator::Opcode op = unaryOp->getOpcode();
-        if (op == UO_AddrOf || op == UO_PreInc || op == UO_PostInc
-            || op == UO_PreDec || op == UO_PostDec)
-        {
-            maVarDeclToIgnoreSet.insert(varDecl);
-            return true;
-        }
-    }
-
-    // if we assign it another value, or modify it, ignore it
-    if (auto binaryOp = dyn_cast_or_null<BinaryOperator>(parent)) {
-        if (binaryOp->getLHS() == declRefExpr)
-        {
-            BinaryOperator::Opcode op = binaryOp->getOpcode();
-            if (op == BO_Assign || op == BO_PtrMemD || op == BO_PtrMemI || op == BO_MulAssign
-                || op == BO_DivAssign || op == BO_RemAssign || op == BO_AddAssign
-                || op == BO_SubAssign || op == BO_ShlAssign || op == BO_ShrAssign
-                || op == BO_AndAssign || op == BO_XorAssign || op == BO_OrAssign)
-            {
-                maVarDeclToIgnoreSet.insert(varDecl);
-                return true;
-            }
-        }
-    }
-
-    // ignore those ones we are passing by reference
-    if (auto callExpr = dyn_cast_or_null<CallExpr>(parent)) {
-        const FunctionDecl* calleeFunctionDecl = callExpr->getDirectCallee();
-        if (calleeFunctionDecl) {
-            for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
-                if (callExpr->getArg(i) == declRefExpr) {
-                    if (i < calleeFunctionDecl->getNumParams()) {
-                        QualType qt { calleeFunctionDecl->getParamDecl(i)->getType() };
-                        if (loplugin::TypeCheck(qt).LvalueReference()) {
-                            maVarDeclToIgnoreSet.insert(varDecl);
-                            return true;
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-    }
-    // ignore those ones we are passing by reference
-    if (auto cxxConstructExpr = dyn_cast_or_null<CXXConstructExpr>(parent)) {
-        const CXXConstructorDecl* cxxConstructorDecl = cxxConstructExpr->getConstructor();
-        for (unsigned i = 0; i < cxxConstructExpr->getNumArgs(); ++i) {
-            if (cxxConstructExpr->getArg(i) == declRefExpr) {
-                if (i < cxxConstructorDecl->getNumParams()) {
-                    QualType qt { cxxConstructorDecl->getParamDecl(i)->getType() };
-                    if (loplugin::TypeCheck(qt).LvalueReference()) {
-                        maVarDeclToIgnoreSet.insert(varDecl);
-                        return true;
-                    }
-                }
-                break;
-            }
-        }
         return true;
     }
 
