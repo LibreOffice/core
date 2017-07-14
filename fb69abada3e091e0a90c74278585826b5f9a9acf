@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_d6adb832",
+        "filename": "vcl/unx/generic/fontmanager/fontconfig.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-07-14T23:11:31Z",
+      "side": 1,
+      "message": "Not entirely sure this is the _only_ case that triggers that error, so perhaps lets have it for 5-4 first...",
+      "revId": "fb69abada3e091e0a90c74278585826b5f9a9acf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
