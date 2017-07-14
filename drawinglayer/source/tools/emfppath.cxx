@@ -50,18 +50,14 @@ namespace emfplushelper
         }
 
         nPoints = _nPoints;
-        pPoints = new float [nPoints*2];
+        pPoints.reset( new float [nPoints*2] );
 
         if (!bLines)
-            pPointTypes = new sal_uInt8 [_nPoints];
-        else
-            pPointTypes = nullptr;
+            pPointTypes.reset( new sal_uInt8 [_nPoints] );
     }
 
     EMFPPath::~EMFPPath ()
     {
-        delete [] pPoints;
-        delete [] pPointTypes;
     }
 
     // TODO: remove rR argument when debug code is no longer needed
