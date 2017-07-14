@@ -887,8 +887,6 @@ uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
             xOwnLM->lock();
         }
 
-        SetExtent( embed::Aspects::MSOLE_CONTENT, aSize );
-
         if ( xOwnLM.is() )
             xOwnLM->unlock();
     }
