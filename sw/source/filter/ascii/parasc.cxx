@@ -45,7 +45,6 @@
 #include <poolfmt.hxx>
 
 #include <vcl/metric.hxx>
-#include <memory>
 
 #define ASC_BUFFLEN 4096
 

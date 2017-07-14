@@ -25,7 +25,6 @@
 #include <salinst.hxx>
 #include <comphelper/profilezone.hxx>
 #include <schedulerimpl.hxx>
-#include <svdata.hxx>
 
 namespace {
 
