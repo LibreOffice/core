@@ -3168,7 +3168,6 @@ void ScXMLImport::SetLabelRanges()
                             xRowRanges->addNew( aLabelRange, aDataRange );
                     }
 
-                    delete *aItr;
                     aItr = pMyLabelRanges->erase(aItr);
                 }
             }
