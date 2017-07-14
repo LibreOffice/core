@@ -429,7 +429,8 @@ SVX_DLLPUBLIC bool CheckFrameBorderConnectable(
                     |       \                       /       |
                  rLFromB      \                   /      rRFromB
  */
-SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimitives(
+SVX_DLLPUBLIC void CreateBorderPrimitives(
+    drawinglayer::primitive2d::Primitive2DContainer&    rTarget,        /// target for created primitives
     const Point&        rLPos,          /// Reference point for left end of the processed frame border.
     const Point&        rRPos,          /// Reference point for right end of the processed frame border.
     const Style&        rBorder,        /// Style of the processed frame border.
@@ -451,7 +452,8 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimit
     const long          rRotationB = 9000  /// Angle of the bottom slanted frames in 100th of degree
 );
 
-SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimitives(
+SVX_DLLPUBLIC void CreateBorderPrimitives(
+    drawinglayer::primitive2d::Primitive2DContainer&    rTarget,        /// target for created primitives
     const Point&        rLPos,          /// Reference point for left end of the processed frame border.
     const Point&        rRPos,          /// Reference point for right end of the processed frame border.
     const Style&        rBorder,        /// Style of the processed frame border.
@@ -467,6 +469,34 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimit
     const Color*        pForceColor,    /// If specified, overrides frame border color.
     const long          rRotationT = 9000, /// Angle of the top slanted frame in 100th of degrees
     const long          rRotationB = 9000  /// Angle of the bottom slanted frame in 100th of degrees
+);
+
+/** Draws both diagonal frame borders, regards all connected frame styles.
+
+One or both passed diagonal frame styles may be invisible.
+
+The function preserves all settings of the passed output device.
+*/
+SVX_DLLPUBLIC void CreateDiagFrameBorderPrimitives(
+    drawinglayer::primitive2d::Primitive2DContainer&    rTarget,        /// target for created primitives
+    const basegfx::B2DRange&                            rRange,         /// geometrical definition for both diagonal frame borders.
+
+    const Style&        rTLBR,          /// Style of the processed top-left to bottom-right diagonal frame border.
+    const Style&        rBLTR,          /// Style of the processed bottom-left to top-right diagonal frame border.
+
+    const Style&        rTLFromB,       /// Vertical frame border from bottom to top-left end of rTLBR.
+    const Style&        rTLFromR,       /// Horizontal frame border from right to top-left end of rTLBR.
+    const Style&        rBRFromT,       /// Vertical frame border from top to bottom-right end of rTLBR.
+    const Style&        rBRFromL,       /// Horizontal frame border from left to bottom-right end of rTLBR.
+
+    const Style&        rBLFromT,       /// Vertical frame border from top to bottom-left end of rBLTR.
+    const Style&        rBLFromR,       /// Horizontal frame border from right to bottom-left end of rBLTR.
+    const Style&        rTRFromB,       /// Vertical frame border from bottom to top-right end of rBLTR.
+    const Style&        rTRFromL,       /// Horizontal frame border from left to top-right end of rBLTR.
+
+    const Color*        pForceColor,        /// If specified, overrides frame border color.
+    const long          nRotationT = 9000,  /// Angle of the top slanted frame in 100th of degrees
+    const long          nRotationB = 9000   /// Angle of the bottom slanted frame in 100th of degrees
 );
 
 /** Draws a horizontal frame border, regards all connected frame styles.

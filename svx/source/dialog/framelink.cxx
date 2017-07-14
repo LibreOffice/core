@@ -1415,41 +1415,138 @@ double lcl_GetExtent(
     return nCut;
 }
 
-drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimitives(
-        const Point& rLPos, const Point& rRPos, const Style& rBorder,
-        const DiagStyle& /*rLFromTR*/, const Style& rLFromT, const Style& /*rLFromL*/, const Style& rLFromB, const DiagStyle& /*rLFromBR*/,
-        const DiagStyle& /*rRFromTL*/, const Style& rRFromT, const Style& /*rRFromR*/, const Style& rRFromB, const DiagStyle& /*rRFromBL*/,
-        const Color* /*pForceColor*/, long nRotateT, long nRotateB )
+void CreateBorderPrimitives(
+    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+    const Point& rLPos,
+    const Point& rRPos,
+    const Style& rBorder,
+    const DiagStyle& /*rLFromTR*/,
+    const Style& rLFromT,
+    const Style& /*rLFromL*/,
+    const Style& rLFromB,
+    const DiagStyle& /*rLFromBR*/,
+    const DiagStyle& /*rRFromTL*/,
+    const Style& rRFromT,
+    const Style& /*rRFromR*/,
+    const Style& rRFromB,
+    const DiagStyle& /*rRFromBL*/,
+    const Color* /*pForceColor*/,
+    const long nRotateT,
+    const long nRotateB)
 {
-    basegfx::B2DPoint aStart( rLPos.getX(), rLPos.getY() );
-    basegfx::B2DPoint aEnd( rRPos.getX(), rRPos.getY() );
+    if (rBorder.Prim() || rBorder.Secn())
+    {
+        basegfx::B2DPoint aStart(rLPos.getX(), rLPos.getY());
+        basegfx::B2DPoint aEnd(rRPos.getX(), rRPos.getY());
 
-    return drawinglayer::primitive2d::Primitive2DReference(
-        new drawinglayer::primitive2d::BorderLinePrimitive2D(
-            aStart, aEnd,
-            rBorder.Prim(),
-            rBorder.Dist(),
-            rBorder.Secn(),
-            lcl_GetExtent( rBorder, rLFromT, rLFromB, nRotateT, - nRotateB, true, false ),                  // top-left, so left for rBorder and right for left outer
-            lcl_GetExtent( rBorder, rRFromT, rRFromB, 18000 - nRotateT, nRotateB - 18000, true, true ),     // top-right
-            lcl_GetExtent( rBorder, rLFromB, rLFromT, nRotateB, - nRotateT, false, false ),                 // bottom-left
-            lcl_GetExtent( rBorder, rRFromB, rRFromT, 18000 - nRotateB, nRotateT - 18000, false, true ),    // bottom-right
-            rBorder.GetColorSecn().getBColor(),
-            rBorder.GetColorPrim().getBColor(),
-            rBorder.GetColorGap().getBColor(),
-            rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale()));
+        rTarget.append(
+            drawinglayer::primitive2d::Primitive2DReference(
+                new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                    aStart, aEnd,
+                    rBorder.Prim(),
+                    rBorder.Dist(),
+                    rBorder.Secn(),
+                    lcl_GetExtent(rBorder, rLFromT, rLFromB, nRotateT, -nRotateB, true, false),                  // top-left, so left for rBorder and right for left outer
+                    lcl_GetExtent(rBorder, rRFromT, rRFromB, 18000 - nRotateT, nRotateB - 18000, true, true),     // top-right
+                    lcl_GetExtent(rBorder, rLFromB, rLFromT, nRotateB, -nRotateT, false, false),                 // bottom-left
+                    lcl_GetExtent(rBorder, rRFromB, rRFromT, 18000 - nRotateB, nRotateT - 18000, false, true),    // bottom-right
+                    rBorder.GetColorSecn().getBColor(),
+                    rBorder.GetColorPrim().getBColor(),
+                    rBorder.GetColorGap().getBColor(),
+                    rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale())));
+    }
 }
 
-drawinglayer::primitive2d::Primitive2DReference CreateBorderPrimitives(
-        const Point& rLPos, const Point& rRPos, const Style& rBorder,
-        const Style& rLFromT, const Style& rLFromL, const Style& rLFromB,
-        const Style& rRFromT, const Style& rRFromR, const Style& rRFromB,
-        const Color* pForceColor, long nRotateT, long nRotateB )
+void CreateBorderPrimitives(
+    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+    const Point& rLPos,
+    const Point& rRPos,
+    const Style& rBorder,
+    const Style& rLFromT,
+    const Style& rLFromL,
+    const Style& rLFromB,
+    const Style& rRFromT,
+    const Style& rRFromR,
+    const Style& rRFromB,
+    const Color* pForceColor,
+    const long nRotateT,
+    const long nRotateB)
 {
-    return CreateBorderPrimitives( rLPos, rRPos, rBorder,
-            DiagStyle(), rLFromT, rLFromL, rLFromB, DiagStyle(),
-            DiagStyle(), rRFromT, rRFromR, rRFromB, DiagStyle(),
-            pForceColor, nRotateT, nRotateB );
+    if (rBorder.Prim() || rBorder.Secn())
+    {
+        CreateBorderPrimitives(
+            rTarget,
+            rLPos,
+            rRPos,
+            rBorder,
+            DiagStyle(),
+            rLFromT,
+            rLFromL,
+            rLFromB,
+            DiagStyle(),
+            DiagStyle(),
+            rRFromT,
+            rRFromR,
+            rRFromB,
+            DiagStyle(),
+            pForceColor,
+            nRotateT,
+            nRotateB);
+    }
+}
+
+void CreateDiagFrameBorderPrimitives(
+    drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+    const basegfx::B2DRange& rRange,
+    const Style& rTLBR,
+    const Style& rBLTR,
+    const Style& rTLFromB,
+    const Style& rTLFromR,
+    const Style& rBRFromT,
+    const Style& rBRFromL,
+    const Style& rBLFromT,
+    const Style& rBLFromR,
+    const Style& rTRFromB,
+    const Style& rTRFromL,
+    const Color* /*pForceColor*/,
+    const long /*nRotationT*/,
+    const long /*nRotationB*/)
+{
+    if (rTLBR.Prim())
+    {
+        rTarget.append(
+            new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                rRange.getMinimum(),
+                rRange.getMaximum(),
+                rTLBR.Prim(),
+                rTLBR.Dist(),
+                rTLBR.Secn(),
+                0.0, 0.0, 0.0, 0.0,
+                rTLBR.GetColorSecn().getBColor(),
+                rTLBR.GetColorPrim().getBColor(),
+                rTLBR.GetColorGap().getBColor(),
+                rTLBR.UseGapColor(),
+                rTLBR.Type(),
+                rTLBR.PatternScale()));
+    }
+
+    if (rBLTR.Prim())
+    {
+        rTarget.append(
+            new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                basegfx::B2DPoint(rRange.getMinX(), rRange.getMaxY()),
+                basegfx::B2DPoint(rRange.getMaxX(), rRange.getMinY()),
+                rBLTR.Prim(),
+                rBLTR.Dist(),
+                rBLTR.Secn(),
+                0.0, 0.0, 0.0, 0.0,
+                rBLTR.GetColorSecn().getBColor(),
+                rBLTR.GetColorPrim().getBColor(),
+                rBLTR.GetColorGap().getBColor(),
+                rBLTR.UseGapColor(),
+                rBLTR.Type(),
+                rBLTR.PatternScale()));
+    }
 }
 
 void DrawHorFrameBorder( OutputDevice& rDev,
