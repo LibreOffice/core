@@ -228,7 +228,7 @@ bool SocketPermission::implies( Permission const & perm ) const
         return false;
     if (! demanded.resolveHost())
         return false;
-    return m_ip.equals( demanded.m_ip );
+    return m_ip == demanded.m_ip;
 }
 
 OUString SocketPermission::toString() const
@@ -365,7 +365,7 @@ bool FilePermission::implies( Permission const & perm ) const
     if (m_url.equalsIgnoreAsciiCase( demanded.m_url ))
         return true;
 #else
-    if (m_url.equals( demanded.m_url ))
+    if (m_url == demanded.m_url )
         return true;
 #endif
     if (m_url.getLength() > demanded.m_url.getLength())
@@ -438,7 +438,7 @@ bool RuntimePermission::implies( Permission const & perm ) const
     RuntimePermission const & demanded = static_cast< RuntimePermission const & >( perm );
 
     // check name
-    return m_name.equals( demanded.m_name );
+    return m_name == demanded.m_name;
 }
 
 OUString RuntimePermission::toString() const

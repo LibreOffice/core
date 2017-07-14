@@ -505,7 +505,7 @@ void AccessController::checkAndClearPostPoned()
             OSL_ASSERT( m_singleUser_init );
             for (const auto & p : vec)
             {
-                OSL_ASSERT( m_singleUserId.equals( p.first ) );
+                OSL_ASSERT( m_singleUserId == p.first );
                 m_singleUserPermissions.checkPermission( p.second );
             }
             break;
