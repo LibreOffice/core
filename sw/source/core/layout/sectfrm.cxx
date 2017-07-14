@@ -1726,11 +1726,24 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
     if( bJump )     // Did we skip a blank page?
         SwFlowFrame::SetMoveBwdJump( true );
 
+    SwSectionFrame *pSect = FindSctFrame();
+    if (!pCol && pSect && IsInTab() && !IsInTableInSection(this))
+    {
+        // We don't have a previous section yet, and we're in a
+        // section-in-table.
+        if (SwFlowFrame* pPrecede = pSect->GetPrecede())
+        {
+            // Our section has a precede, work with that.
+            if (pPrecede->GetFrame().IsLayoutFrame())
+                pCol = static_cast<SwLayoutFrame*>(&pPrecede->GetFrame());
+        }
+    }
+
     // Within sections in tables or section in headers/footers there can
     // be only one column change be made, one of the above shortcuts should
     // have applied, also when the section has a pPrev.
     // Now we even consider an empty column...
-    OSL_ENSURE( FindSctFrame(), "GetNextSctLeaf: Missing SectionFrame" );
+    OSL_ENSURE( pSect, "GetNextSctLeaf: Missing SectionFrame" );
     if( ( IsInTab() && !IsTabFrame() ) || FindFooterOrHeader() )
         return pCol;
 
@@ -1738,7 +1751,6 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
     // Precondition, which needs to be hold, is that the <this> frame can be
     // inside a table, but then the found section frame <pSect> is also inside
     // this table.
-    SwSectionFrame *pSect = FindSctFrame();
 
     // #i95698#
     // A table cell containing directly a section does not break - see lcl_FindSectionsInRow(..)
