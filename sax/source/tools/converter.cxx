@@ -33,6 +33,7 @@
 #include <sal/log.hxx>
 #include <osl/time.h>
 #include <osl/diagnose.h>
+#include <comphelper/base64.hxx>
 
 #include <algorithm>
 
@@ -1999,90 +2000,19 @@ void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const
 
 void Converter::encodeBase64(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
 {
-    sal_Int32 i(0);
-    sal_Int32 nBufferLength(aPass.getLength());
-    const sal_Int8* pBuffer = aPass.getConstArray();
-    while (i < nBufferLength)
-    {
-        ThreeByteToFourByte (pBuffer, i, nBufferLength, aStrBuffer);
-        i += 3;
-    }
+    comphelper::Base64::encode(aStrBuffer, aPass);
 }
 
 void Converter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const OUString& sBuffer)
 {
-    sal_Int32 nCharsDecoded = decodeBase64SomeChars( aBuffer, sBuffer );
-    OSL_ENSURE( nCharsDecoded == sBuffer.getLength(), "some bytes left in base64 decoding!" );
+    comphelper::Base64::decode(aBuffer, sBuffer);
 }
 
 sal_Int32 Converter::decodeBase64SomeChars(
         uno::Sequence<sal_Int8>& rOutBuffer,
         const OUString& rInBuffer)
 {
-    sal_Int32 nInBufferLen = rInBuffer.getLength();
-    sal_Int32 nMinOutBufferLen = (nInBufferLen / 4) * 3;
-    if( rOutBuffer.getLength() < nMinOutBufferLen )
-        rOutBuffer.realloc( nMinOutBufferLen );
-
-    const sal_Unicode *pInBuffer = rInBuffer.getStr();
-    sal_Int8 *pOutBuffer = rOutBuffer.getArray();
-    sal_Int8 *pOutBufferStart = pOutBuffer;
-    sal_Int32 nCharsDecoded = 0;
-
-    sal_uInt8 aDecodeBuffer[4];
-    sal_Int32 nBytesToDecode = 0;
-    sal_Int32 nBytesGotFromDecoding = 3;
-    sal_Int32 nInBufferPos= 0;
-    while( nInBufferPos < nInBufferLen )
-    {
-        sal_Unicode cChar = *pInBuffer;
-        if( cChar >= '+' && cChar <= 'z' )
-        {
-            sal_uInt8 nByte = aBase64DecodeTable[cChar-'+'];
-            if( nByte != 255 )
-            {
-                // We have found a valid character!
-                aDecodeBuffer[nBytesToDecode++] = nByte;
-
-                // One '=' character at the end means 2 out bytes
-                // Two '=' characters at the end mean 1 out bytes
-                if( '=' == cChar && nBytesToDecode > 2 )
-                    nBytesGotFromDecoding--;
-                if( 4 == nBytesToDecode )
-                {
-                    // Four characters found, so we may convert now!
-                    sal_uInt32 nOut = (aDecodeBuffer[0] << 18) +
-                                      (aDecodeBuffer[1] << 12) +
-                                      (aDecodeBuffer[2] << 6) +
-                                       aDecodeBuffer[3];
-
-                    *pOutBuffer++  = (sal_Int8)((nOut & 0xff0000) >> 16);
-                    if( nBytesGotFromDecoding > 1 )
-                        *pOutBuffer++  = (sal_Int8)((nOut & 0xff00) >> 8);
-                    if( nBytesGotFromDecoding > 2 )
-                        *pOutBuffer++  = (sal_Int8)(nOut & 0xff);
-                    nCharsDecoded = nInBufferPos + 1;
-                    nBytesToDecode = 0;
-                    nBytesGotFromDecoding = 3;
-                }
-            }
-            else
-            {
-                nCharsDecoded++;
-            }
-        }
-        else
-        {
-            nCharsDecoded++;
-        }
-
-        nInBufferPos++;
-        pInBuffer++;
-    }
-    if( (pOutBuffer - pOutBufferStart) != rOutBuffer.getLength() )
-        rOutBuffer.realloc( pOutBuffer - pOutBufferStart );
-
-    return nCharsDecoded;
+    return comphelper::Base64::decodeSomeChars(rOutBuffer, rInBuffer);
 }
 
 double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
