@@ -199,7 +199,6 @@ public:
 
     vcl::Font               m_aFntBold;
     vcl::Font               m_aFntLight;
-    sal_uInt16              m_nEdFocus;
     bool                    m_bEditFlag;
     const IFunctionDescription* m_pFuncDesc;
     sal_Int32               m_nArgs;
@@ -239,7 +238,6 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     m_aFormulaHelper(_pFunctionMgr),
     m_bIsShutDown   (false),
     m_bMakingTree   (false),
-    m_nEdFocus      (0),
     m_pFuncDesc     (nullptr),
     m_nArgs         (0),
     m_nFuncExpStart (0)
@@ -926,7 +924,6 @@ void FormulaDlg_Impl::FillControls( bool &rbNext, bool &rbPrev)
 
         m_nArgs = m_pFuncDesc->getSuppressedArgumentCount();
         sal_uInt16 nOffset = pData->GetOffset();
-        m_nEdFocus = pData->GetEdFocus();
 
         //  Concatenate the Edit's for Focus-Control
 
@@ -1286,7 +1283,7 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
             return;
 
         sal_uInt16 nArgNo = m_pParaWin->GetActiveLine();
-        m_nEdFocus = nArgNo;
+        sal_uInt16 nEdFocus = nArgNo;
 
         SaveArg(nArgNo);
         UpdateSelection();
@@ -1294,9 +1291,9 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
         sal_Int32 nFormulaStrPos = pData->GetFStart();
 
         OUString aFormula = m_pHelper->getCurrentFormula();
-        sal_Int32 n1 = m_aFormulaHelper.GetArgStart( aFormula, nFormulaStrPos, m_nEdFocus+pData->GetOffset() );
+        sal_Int32 n1 = m_aFormulaHelper.GetArgStart( aFormula, nFormulaStrPos, nEdFocus + pData->GetOffset() );
 
-        pData->SetEdFocus( m_nEdFocus );
+        pData->SetEdFocus( nEdFocus );
         pData->SaveValues();
         pData->SetMode( (sal_uInt16) FORMULA_FORMDLG_FORMULA );
         pData->SetFStart( n1 );
