@@ -9,7 +9,6 @@ protectedAndPublicDefinitionSet = set() # set of tuple(type, name)
 definitionToSourceLocationMap = dict()
 definitionToTypeMap = dict()
 touchedFromInsideSet = set()
-touchedFromConstructorSet = set()
 readFromSet = set()
 sourceLocationSet = set()
 touchedFromOutsideSet = set()
@@ -48,8 +47,6 @@ with io.open("loplugin.unusedfields.log", "rb", buffering=1024*1024) as txt:
             definitionToSourceLocationMap[fieldInfo] = tokens[5]
         elif tokens[0] == "inside:":
             touchedFromInsideSet.add(parseFieldInfo(tokens))
-        elif tokens[0] == "constructor:":
-            touchedFromConstructorSet.add(parseFieldInfo(tokens))
         elif tokens[0] == "outside:":
             touchedFromOutsideSet.add(parseFieldInfo(tokens))
         elif tokens[0] == "read:":

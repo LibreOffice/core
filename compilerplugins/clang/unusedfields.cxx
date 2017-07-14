@@ -60,7 +60,6 @@ bool operator < (const MyFieldInfo &lhs, const MyFieldInfo &rhs)
 
 // try to limit the voluminous output a little
 static std::set<MyFieldInfo> touchedFromInsideSet;
-static std::set<MyFieldInfo> touchedFromConstructorSet;
 static std::set<MyFieldInfo> touchedFromOutsideSet;
 static std::set<MyFieldInfo> readFromSet;
 static std::set<MyFieldInfo> definitionSet;
@@ -102,8 +101,6 @@ void UnusedFields::run()
         std::string output;
         for (const MyFieldInfo & s : touchedFromInsideSet)
             output += "inside:\t" + s.parentClass + "\t" + s.fieldName + "\n";
-        for (const MyFieldInfo & s : touchedFromConstructorSet)
-            output += "constructor:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : touchedFromOutsideSet)
             output += "outside:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : readFromSet)
@@ -489,9 +486,6 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
         // ignore move/copy operator, it's self->self
     } else if (constructorDecl && (constructorDecl->isCopyConstructor() || constructorDecl->isMoveConstructor())) {
         // ignore move/copy constructor, it's self->self
-    } else if (constructorDecl && memberExprParentFunction->getParent() == fieldDecl->getParent()) {
-        // if the field is touched from inside it's parent class constructor
-        touchedFromConstructorSet.insert(fieldInfo);
     } else {
         if (memberExprParentFunction->getParent() == fieldDecl->getParent()) {
             touchedFromInsideSet.insert(fieldInfo);
