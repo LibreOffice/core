@@ -264,7 +264,7 @@ namespace drawinglayer
                 const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
                 aScale = basegfx::absolute(aScale);
 
-                // Get the real size, since polygon ountline and scale
+                // Get the real size, since polygon outline and scale
                 // from the object transformation may vary (e.g. ellipse segments)
                 basegfx::B2DHomMatrix aJustScaleTransform;
                 aJustScaleTransform.set(0, 0, aScale.getX());

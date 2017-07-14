@@ -3795,7 +3795,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
         if ( bHasPaintRegion )
         {
             // call BeginPaint/EndPaint to query the paint rect and use
-            // this infomation in the (deferred) paint
+            // this information in the (deferred) paint
             BeginPaint( hWnd, &aPs );
             CopyRect( &aUpdateRect, &aPs.rcPaint );
         }

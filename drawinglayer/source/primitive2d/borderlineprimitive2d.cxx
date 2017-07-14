@@ -118,7 +118,7 @@ namespace drawinglayer
 
                     if (hasGapColor() && isDistanceUsed())
                     {
-                        // gap (if visible, found no practicval usage).
+                        // gap (if visible, found no practical usage).
                         // Create stroke primitive on vector with given color
                         addPolygonStrokePrimitive2D(
                             rContainer,
