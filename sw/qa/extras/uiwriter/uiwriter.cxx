@@ -259,6 +259,7 @@ public:
     void testTableInSection();
     void testTableInNestedSection();
     void testLinesInSectionInTable();
+    void testLinesMoveBackwardsInSectionInTable();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -404,6 +405,7 @@ public:
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST(testTableInNestedSection);
     CPPUNIT_TEST(testLinesInSectionInTable);
+    CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4981,6 +4983,33 @@ void SwUiWriterTest::testLinesInSectionInTable()
     // This was 0, section wasn't split, instead it was only on the first page
     // and it was cut off.
     assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
+}
+
+void SwUiWriterTest::testLinesMoveBackwardsInSectionInTable()
+{
+    // Assert that paragraph "4" is on page 1 and "5" is on page 2.
+    SwDoc* pDoc = createDoc("lines-in-section-in-table.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 2);
+    sal_uInt32 nPara4Node = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]", "txtNodeIndex").toUInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), pDoc->GetNodes()[nPara4Node]->GetTextNode()->GetText());
+    sal_uInt32 nPara5Node = getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[1]/section/txt[1]", "txtNodeIndex").toUInt32();
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetNodes()[nPara5Node]->GetTextNode()->GetText());
+
+    // Remove paragraph "4".
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    while (pWrtShell->GetCursor()->GetNode().GetIndex() < nPara4Node)
+        pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->EndPara();
+    pWrtShell->Up(/*bSelect=*/true);
+    pWrtShell->DelLeft();
+
+    // Assert that paragraph "5" is now moved back to page 1 and is the last paragraph there.
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    sal_uInt32 nPage1LastNode = getXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell[1]/section/txt[last()]", "txtNodeIndex").toUInt32();
+    // This was "3", paragraph "4" was deleted, but "5" was not moved backwards from page 2.
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), pDoc->GetNodes()[nPage1LastNode]->GetTextNode()->GetText());
 }
 
 void SwUiWriterTest::testTableInSection()
