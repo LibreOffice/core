@@ -71,7 +71,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
     bool ImportGraphic( SvStream& rStrm );
 
     DECL_LINK( SwapGraphic, const GraphicObject*, SvStream* );
-    DECL_LINK( SwapReplacement, const GraphicObject*, SvStream* );
+    DECL_STATIC_LINK( SwGrfNode, SwapReplacement, const GraphicObject*, SvStream* );
 
     /** helper method to determine stream for the embedded graphic.
 

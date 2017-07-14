@@ -960,7 +960,7 @@ SwContentNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     return pGrfNd;
 }
 
-IMPL_LINK(SwGrfNode, SwapReplacement, const GraphicObject*, pGrfObj, SvStream*)
+IMPL_STATIC_LINK(SwGrfNode, SwapReplacement, const GraphicObject*, pGrfObj, SvStream*)
 {
     // replacement image is always swapped
     if (pGrfObj->IsInSwapOut())
