@@ -37,8 +37,8 @@ class ScMemChart
     SCROW nRowCnt;
     SCCOL nColCnt;
     std::unique_ptr<double[]> pData;
-    OUString* pColText;
-    OUString* pRowText;
+    std::unique_ptr<OUString[]> pColText;
+    std::unique_ptr<OUString[]> pRowText;
 
     ScMemChart(const ScMemChart& rMemChart) = delete;
 

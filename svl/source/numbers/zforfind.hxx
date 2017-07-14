@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
+#include <memory>
 
 class Date;
 class SvNumberformat;
@@ -74,14 +75,14 @@ public:
 
 private:
     SvNumberFormatter*  pFormatter;
-    OUString* pUpperMonthText;                  //* Array of month names, uppercase
-    OUString* pUpperAbbrevMonthText;            //* Array of month names, abbreviated, uppercase
-    OUString* pUpperGenitiveMonthText;          //* Array of genitive month names, uppercase
-    OUString* pUpperGenitiveAbbrevMonthText;    //* Array of genitive month names, abbreviated, uppercase
-    OUString* pUpperPartitiveMonthText;         //* Array of partitive month names, uppercase
-    OUString* pUpperPartitiveAbbrevMonthText;   //* Array of partitive month names, abbreviated, uppercase
-    OUString* pUpperDayText;                    //* Array of day of week names, uppercase
-    OUString* pUpperAbbrevDayText;              //* Array of day of week names, abbreviated, uppercase
+    std::unique_ptr<OUString[]> pUpperMonthText;               //* Array of month names, uppercase
+    std::unique_ptr<OUString[]> pUpperAbbrevMonthText;         //* Array of month names, abbreviated, uppercase
+    std::unique_ptr<OUString[]> pUpperGenitiveMonthText;       //* Array of genitive month names, uppercase
+    std::unique_ptr<OUString[]> pUpperGenitiveAbbrevMonthText; //* Array of genitive month names, abbreviated, uppercase
+    std::unique_ptr<OUString[]> pUpperPartitiveMonthText;      //* Array of partitive month names, uppercase
+    std::unique_ptr<OUString[]> pUpperPartitiveAbbrevMonthText;//* Array of partitive month names, abbreviated, uppercase
+    std::unique_ptr<OUString[]> pUpperDayText;                 //* Array of day of week names, uppercase
+    std::unique_ptr<OUString[]> pUpperAbbrevDayText;           //* Array of day of week names, abbreviated, uppercase
     OUString  aUpperCurrSymbol;                 //* Currency symbol, uppercase
     bool    bTextInitialized;                   //* Whether days and months are initialized
     bool    bScanGenitiveMonths;                //* Whether to scan an input for genitive months

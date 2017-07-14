@@ -95,14 +95,6 @@ ImpSvNumberInputScan::~ImpSvNumberInputScan()
 {
     Reset();
     delete pNullDate;
-    delete [] pUpperMonthText;
-    delete [] pUpperAbbrevMonthText;
-    delete [] pUpperGenitiveMonthText;
-    delete [] pUpperGenitiveAbbrevMonthText;
-    delete [] pUpperPartitiveMonthText;
-    delete [] pUpperPartitiveAbbrevMonthText;
-    delete [] pUpperDayText;
-    delete [] pUpperAbbrevDayText;
 }
 
 
@@ -3380,25 +3372,25 @@ void ImpSvNumberInputScan::InitText()
     const CharClass* pChrCls = pFormatter->GetCharClass();
     const CalendarWrapper* pCal = pFormatter->GetCalendar();
 
-    delete [] pUpperMonthText;
-    delete [] pUpperAbbrevMonthText;
+    pUpperMonthText.reset();
+    pUpperAbbrevMonthText.reset();
     css::uno::Sequence< css::i18n::CalendarItem2 > xElems = pCal->getMonths();
     nElems = xElems.getLength();
-    pUpperMonthText = new OUString[nElems];
-    pUpperAbbrevMonthText = new OUString[nElems];
+    pUpperMonthText.reset( new OUString[nElems] );
+    pUpperAbbrevMonthText.reset( new OUString[nElems] );
     for ( j = 0; j < nElems; j++ )
     {
         pUpperMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
         pUpperAbbrevMonthText[j] = pChrCls->uppercase( xElems[j].AbbrevName );
     }
 
-    delete [] pUpperGenitiveMonthText;
-    delete [] pUpperGenitiveAbbrevMonthText;
+    pUpperGenitiveMonthText.reset();
+    pUpperGenitiveAbbrevMonthText.reset();
     xElems = pCal->getGenitiveMonths();
     bScanGenitiveMonths = (nElems != xElems.getLength());
     nElems = xElems.getLength();
-    pUpperGenitiveMonthText = new OUString[nElems];
-    pUpperGenitiveAbbrevMonthText = new OUString[nElems];
+    pUpperGenitiveMonthText.reset( new OUString[nElems] );
+    pUpperGenitiveAbbrevMonthText.reset( new OUString[nElems] );
     for ( j = 0; j < nElems; j++ )
     {
         pUpperGenitiveMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
@@ -3411,13 +3403,13 @@ void ImpSvNumberInputScan::InitText()
         }
     }
 
-    delete [] pUpperPartitiveMonthText;
-    delete [] pUpperPartitiveAbbrevMonthText;
+    pUpperPartitiveMonthText.reset();
+    pUpperPartitiveAbbrevMonthText.reset();
     xElems = pCal->getPartitiveMonths();
     bScanPartitiveMonths = (nElems != xElems.getLength());
     nElems = xElems.getLength();
-    pUpperPartitiveMonthText = new OUString[nElems];
-    pUpperPartitiveAbbrevMonthText = new OUString[nElems];
+    pUpperPartitiveMonthText.reset( new OUString[nElems] );
+    pUpperPartitiveAbbrevMonthText.reset( new OUString[nElems] );
     for ( j = 0; j < nElems; j++ )
     {
         pUpperPartitiveMonthText[j] = pChrCls->uppercase( xElems[j].FullName );
@@ -3430,12 +3422,12 @@ void ImpSvNumberInputScan::InitText()
         }
     }
 
-    delete [] pUpperDayText;
-    delete [] pUpperAbbrevDayText;
+    pUpperDayText.reset();
+    pUpperAbbrevDayText.reset();
     xElems = pCal->getDays();
     nElems = xElems.getLength();
-    pUpperDayText = new OUString[nElems];
-    pUpperAbbrevDayText = new OUString[nElems];
+    pUpperDayText.reset( new OUString[nElems] );
+    pUpperAbbrevDayText.reset( new OUString[nElems] );
     for ( j = 0; j < nElems; j++ )
     {
         pUpperDayText[j] = pChrCls->uppercase( xElems[j].FullName );

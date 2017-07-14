@@ -58,7 +58,7 @@ class SpellChecker :
     Hunspell **                        m_aDicts;
     std::unique_ptr<rtl_TextEncoding[]> m_aDEncs;
     Locale *                           m_aDLocs;
-    OUString *                         m_aDNames;
+    std::unique_ptr<OUString[]>        m_aDNames;
     sal_Int32                          m_nNumDict;
 
     ::comphelper::OInterfaceContainerHelper2       m_aEvtListeners;

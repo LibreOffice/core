@@ -47,14 +47,12 @@ ScMemChart::ScMemChart(SCCOL nCols, SCROW nRows)
 
     memset( pData.get(), 0.0, nColCnt * nRowCnt );
 
-    pColText = new OUString[nColCnt];
-    pRowText = new OUString[nRowCnt];
+    pColText.reset( new OUString[nColCnt] );
+    pRowText.reset( new OUString[nRowCnt] );
 }
 
 ScMemChart::~ScMemChart()
 {
-    delete[] pRowText;
-    delete[] pColText;
 }
 
 ScChartArray::ScChartArray( ScDocument* pDoc, SCTAB nTab,

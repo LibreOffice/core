@@ -89,8 +89,6 @@ OfficeInstallationDirectories::OfficeInstallationDirectories(
 // virtual
 OfficeInstallationDirectories::~OfficeInstallationDirectories()
 {
-    delete m_pOfficeBrandDir;
-    delete m_pUserDir;
 }
 
 
@@ -216,8 +214,8 @@ void OfficeInstallationDirectories::initDirs()
         osl::MutexGuard aGuard( m_aMutex );
         if ( m_pOfficeBrandDir == nullptr )
         {
-            m_pOfficeBrandDir = new OUString;
-            m_pUserDir        = new OUString;
+            m_pOfficeBrandDir.reset( new OUString );
+            m_pUserDir.reset( new OUString );
 
             uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(m_xCtx);
 

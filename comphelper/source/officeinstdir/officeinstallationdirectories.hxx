@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
+#include <memory>
 
 namespace comphelper {
 
@@ -71,8 +72,8 @@ private:
     OUString                                   m_aOfficeBrandDirMacro;
     OUString                                   m_aUserDirMacro;
     css::uno::Reference< css::uno::XComponentContext >    m_xCtx;
-    OUString *                                 m_pOfficeBrandDir;
-    OUString *                                 m_pUserDir;
+    std::unique_ptr<OUString>                  m_pOfficeBrandDir;
+    std::unique_ptr<OUString>                  m_pUserDir;
 };
 
 } // namespace comphelper

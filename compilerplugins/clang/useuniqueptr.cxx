@@ -14,6 +14,7 @@
 #include <fstream>
 #include <set>
 #include "plugin.hxx"
+#include "check.hxx"
 
 /**
   Find destructors that only contain a single call to delete of a field. In which
@@ -221,7 +222,10 @@ void UseUniquePtr::CheckForDeleteOfPOD(const CompoundStmt* compoundStmt)
 
         auto pointerType = dyn_cast<PointerType>(fieldDecl->getType()->getUnqualifiedDesugaredType());
         QualType elementType = pointerType->getPointeeType();
-        if (!elementType.isPODType(compiler.getASTContext()))
+        auto tc = loplugin::TypeCheck(elementType);
+        if (!elementType.isPODType(compiler.getASTContext())
+            && !tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+            && !tc.Class("OString").Namespace("rtl").GlobalNamespace())
             continue;
 
         StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
