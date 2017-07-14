@@ -386,14 +386,14 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
             // If we have no gradient stops that means original gradient were defined by a theme.
             if( aGradientStops.hasElements() )
             {
-                mpFS->startElementNS( XML_a, XML_gradFill, XML_rotWithShape, "0", FSEND );
+                mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
                 WriteGrabBagGradientFill(aGradientStops, aGradient);
                 mpFS->endElementNS( XML_a, XML_gradFill );
             }
         }
         else
         {
-            mpFS->startElementNS( XML_a, XML_gradFill, XML_rotWithShape, "0", FSEND );
+            mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
             WriteGradientFill(aGradient);
             mpFS->endElementNS( XML_a, XML_gradFill );
         }
@@ -1053,7 +1053,7 @@ void DrawingML::WriteBlipFill( const Reference< XPropertySet >& rXPropSet, const
     {
         SAL_INFO("oox.shape", "URL: " << sBitmapURL);
 
-        mpFS->startElementNS( nXmlNamespace , XML_blipFill, XML_rotWithShape, "0", FSEND );
+        mpFS->startElementNS( nXmlNamespace , XML_blipFill, FSEND );
 
         WriteBlip( rXPropSet, sBitmapURL, bRelPathToMedia );
 

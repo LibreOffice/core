@@ -362,8 +362,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     if ( bFlipV )
                         nShapeRotation = -nShapeRotation;
 
-                    // "rotate with shape" set to false -> do not rotate
-                    if ( !maGradientProps.moRotateWithShape.get( true ) )
+                    // "rotate with shape" not set, or set to false -> do not rotate
+                    if ( !maGradientProps.moRotateWithShape.get( false ) )
                         nShapeRotation = 0;
 
                     if( maGradientProps.moGradientPath.has() )
