@@ -91,6 +91,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/anytostring \
     comphelper/source/misc/asyncnotification \
     comphelper/source/misc/backupfilehelper \
+    comphelper/source/misc/base64 \
     comphelper/source/misc/comphelper_module \
     comphelper/source/misc/comphelper_services \
     comphelper/source/misc/componentbase \
