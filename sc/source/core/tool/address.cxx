@@ -2005,7 +2005,7 @@ template<typename T > inline void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCO
         nFlags |= ( ScRefFlags::ROW_VALID | ScRefFlags::COL_VALID | ScRefFlags::TAB_VALID );
     if( pDoc && (nFlags & ScRefFlags::TAB_VALID ) )
     {
-        if ( nTab >= pDoc->GetTableCount() )
+        if ( nTab < 0 || nTab >= pDoc->GetTableCount() )
         {
             lcl_string_append(r, ScGlobal::GetRscString( STR_NOREF_STR ));
             return;
