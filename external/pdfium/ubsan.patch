@@ -1,3 +1,14 @@
+--- core/fxcodec/lbmp/fx_bmp.h
++++ core/fxcodec/lbmp/fx_bmp.h
+@@ -132,7 +132,7 @@
+ class CBmpContext : public CCodec_BmpModule::Context {
+  public:
+   CBmpContext(CCodec_BmpModule* pModule, CCodec_BmpModule::Delegate* pDelegate);
+-  ~CBmpContext() override;
++  ~CBmpContext() override {}
+ 
+   BMPDecompressor m_Bmp;
+   CFX_UnownedPtr<CCodec_BmpModule> const m_pModule;
 --- core/fxge/ge/cfx_facecache.cpp
 +++ core/fxge/ge/cfx_facecache.cpp
 @@ -206,7 +206,8 @@ CFX_GlyphBitmap* CFX_FaceCache::RenderGlyph(const CFX_Font* pFont,
