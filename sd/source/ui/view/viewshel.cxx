@@ -82,6 +82,7 @@
 
 #include "Window.hxx"
 #include "fupoor.hxx"
+#include "futext.hxx"
 
 #include <editeng/numitem.hxx>
 #include <editeng/eeitem.hxx>
@@ -438,6 +439,12 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
                 else
                 {
                     bReturn = true;
+                    if (HasCurrentFunction())
+                    {
+                        FuText* pTextFunction = dynamic_cast<FuText*>(GetCurrentFunction().get());
+                        if(pTextFunction != nullptr)
+                            pTextFunction->InvalidateBindings();
+                    }
                 }
             }
         }
@@ -495,6 +502,15 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
         {
             if(HasCurrentFunction())
                 GetCurrentFunction()->MouseButtonDown(rMEvt);
+        }
+        else
+        {
+            if (HasCurrentFunction())
+            {
+                FuText* pTextFunction = dynamic_cast<FuText*>(GetCurrentFunction().get());
+                if (pTextFunction != nullptr)
+                    pTextFunction->InvalidateBindings();
+            }
         }
     }
 }
@@ -679,6 +695,15 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
         {
             if(HasCurrentFunction())
                 GetCurrentFunction()->MouseButtonUp(rMEvt);
+        }
+        else
+        {
+            if (HasCurrentFunction())
+            {
+                FuText* pTextFunction = dynamic_cast<FuText*>(GetCurrentFunction().get());
+                if (pTextFunction != nullptr)
+                    pTextFunction->InvalidateBindings();
+            }
         }
     }
 
