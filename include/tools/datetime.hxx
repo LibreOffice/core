@@ -106,6 +106,10 @@ public:
 
     void            GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper );
     static DateTime CreateFromWin32FileDateTime( sal_uInt32 rLower, sal_uInt32 rUpper );
+
+    /// Creates DateTime given a unix time, which is the number of seconds
+    /// elapsed since Jan 1st, 1970.
+    static DateTime CreateFromUnixTime( const double fSecondsSinceEpoch );
 };
 
 inline DateTime& DateTime::operator =( const DateTime& rDateTime )
