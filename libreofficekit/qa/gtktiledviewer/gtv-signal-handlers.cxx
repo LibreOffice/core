@@ -12,6 +12,7 @@
 #include <gtv-application-window.hxx>
 #include <gtv-helpers.hxx>
 #include <gtv-lokdocview-signal-handlers.hxx>
+#include <gtv-lok-dialog.hxx>
 
 #include <sal/types.h>
 
@@ -287,6 +288,18 @@ void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
     {
         lok_doc_view_set_partmode( LOK_DOC_VIEW(window->lokdocview), ePartMode );
     }
+}
+
+void openLokDialog( GtkWidget* pSelector, gpointer /*pItem*/ )
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pSelector));
+    gchar* pDialogId = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(pSelector));
+    GtkWidget* pDialog = gtv_lok_dialog_new(LOK_DOC_VIEW(window->lokdocview), pDialogId);
+    g_free(pDialogId);
+
+    gtk_window_set_resizable(GTK_WINDOW(pDialog), false);
+    gtk_widget_show_all(GTK_WIDGET(pDialog));
+    gtk_window_present(GTK_WINDOW(pDialog));
 }
 
 void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
