@@ -281,4 +281,24 @@ DateTime DateTime::CreateFromWin32FileDateTime( sal_uInt32 rLower, sal_uInt32 rU
                 static_cast<sal_uInt64>( nNanos % tools::Time::nanoSecPerSec)));
 }
 
+DateTime DateTime::CreateFromUnixTime(const double fSecondsSinceEpoch)
+{
+    double fValue = fSecondsSinceEpoch / Time::secondPerDay;
+    const sal_Int32 nDays = static_cast <sal_Int32>(::rtl::math::approxFloor(fValue));
+
+    Date aDate (1, 1, 1970);
+    aDate += nDays;
+    SAL_WARN_IF(aDate - Date(1, 1, 1970) != static_cast<sal_Int32>(nDays), "tools.datetime",
+                "DateTime::CreateFromUnixTime - date truncated to max");
+
+    fValue -= nDays;
+
+    const sal_uInt64 nNanos = fValue * tools::Time::nanoSecPerDay;
+    return DateTime( aDate, tools::Time(
+                static_cast<sal_uInt32>((nNanos / tools::Time::nanoSecPerHour)   % sal_uInt64( 24 )),
+                static_cast<sal_uInt32>((nNanos / tools::Time::nanoSecPerMinute) % sal_uInt64( 60 )),
+                static_cast<sal_uInt32>((nNanos / tools::Time::nanoSecPerSec)    % sal_uInt64( 60 )),
+                static_cast<sal_uInt64>( nNanos % tools::Time::nanoSecPerSec)));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
