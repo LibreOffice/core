@@ -43,7 +43,7 @@ class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {
     css::uno::Reference< css::i18n::XCalendar4 >   xC;
 
-            DateTime            aEpochStart;        // 1Jan1970
+    const DateTime aEpochStart;        // 1Jan1970
 
 public:
                                 CalendarWrapper(
