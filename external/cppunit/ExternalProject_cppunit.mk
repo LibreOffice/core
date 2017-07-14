@@ -47,6 +47,7 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 			--disable-doxygen \
 			--disable-html-docs \
 			--disable-latex-docs \
+			--disable-werror \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________NONE) \
 			$(if $(filter WNT,$(OS)),LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
