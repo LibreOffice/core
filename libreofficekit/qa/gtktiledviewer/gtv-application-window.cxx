@@ -31,6 +31,7 @@ struct GtvApplicationWindowPrivate
     GtkWidget* gridcontainer;
     GtkWidget* toolbarcontainer;
     GtkWidget* scrolledwindowcontainer;
+    GtkWidget* lokDialog;
 
     gboolean toolbarBroadcast;
     gboolean partSelectorBroadcast;

@@ -445,6 +445,23 @@
       </packing>
     </child>
     <child>
+      <object class="GtkToolItem" id="dialogselectortoolitem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkComboBoxText" id="combo_dialogselector">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <signal name="changed" handler="openLokDialog" swapped="no"/>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkToggleToolButton" id="btn_editmode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
