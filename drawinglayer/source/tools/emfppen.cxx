@@ -77,11 +77,7 @@ namespace emfplushelper
         , dashStyle(0)
         , dashCap(0)
         , dashOffset(0.0)
-        , dashPatternLen(0)
-        , dashPattern(nullptr)
         , alignment(0)
-        , compoundArrayLen(0)
-        , compoundArray(nullptr)
         , customStartCapLen(0)
         , customStartCap(nullptr)
         , customEndCapLen(0)
@@ -91,8 +87,6 @@ namespace emfplushelper
 
     EMFPPen::~EMFPPen()
     {
-        delete[] dashPattern;
-        delete[] compoundArray;
         delete customStartCap;
         delete customEndCap;
     }
@@ -159,7 +153,7 @@ namespace emfplushelper
                 case EmfPlusLineStyleDot:        nLen = SAL_N_ELEMENTS(dot); pPattern = dot; break;
                 case EmfPlusLineStyleDashDot:    nLen = SAL_N_ELEMENTS(dashdot); pPattern = dashdot; break;
                 case EmfPlusLineStyleDashDotDot: nLen = SAL_N_ELEMENTS(dashdotdot); pPattern = dashdotdot; break;
-                case EmfPlusLineStyleCustom:     nLen = dashPatternLen; pPattern = dashPattern; break;
+                case EmfPlusLineStyleCustom:     nLen = dashPattern.size(); pPattern = dashPattern.data(); break;
             }
 
             if (nLen > 0)
@@ -256,6 +250,8 @@ namespace emfplushelper
         if (penDataFlags & PenDataDashedLine)
         {
             dashStyle = EmfPlusLineStyleCustom;
+            sal_Int32 dashPatternLen;
+
             s.ReadInt32(dashPatternLen);
             SAL_INFO("cppcanvas.emf", "EMF+\t\tdashPatternLen: " << dashPatternLen);
 
@@ -264,17 +260,13 @@ namespace emfplushelper
                 dashPatternLen = SAL_MAX_INT32 / sizeof(float);
             }
 
-            dashPattern = new float[dashPatternLen];
+            dashPattern.resize( dashPatternLen );
 
             for (i = 0; i < dashPatternLen; i++)
             {
                 s.ReadFloat(dashPattern[i]);
                 SAL_INFO("cppcanvas.emf", "EMF+\t\t\tdashPattern[" << i << "]: " << dashPattern[i]);
             }
-        }
-        else
-        {
-            dashPatternLen = 0;
         }
 
         if (penDataFlags & PenDataNonCenter)
@@ -288,6 +280,7 @@ namespace emfplushelper
 
         if (penDataFlags & PenDataCompoundLine)
         {
+            sal_Int32 compoundArrayLen;
             s.ReadInt32(compoundArrayLen);
 
             if (compoundArrayLen<0 || sal_uInt32(compoundArrayLen)>SAL_MAX_INT32 / sizeof(float))
@@ -295,16 +288,12 @@ namespace emfplushelper
                 compoundArrayLen = SAL_MAX_INT32 / sizeof(float);
             }
 
-            compoundArray = new float[compoundArrayLen];
+            compoundArray.resize(compoundArrayLen);
 
             for (i = 0; i < compoundArrayLen; i++)
             {
                 s.ReadFloat(compoundArray[i]);
             }
-        }
-        else
-        {
-            compoundArrayLen = 0;
         }
 
         if (penDataFlags & PenDataCustomStartCap)
