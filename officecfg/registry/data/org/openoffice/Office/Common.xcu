@@ -506,6 +506,13 @@
       </prop>
     </node>
   </node>
+  <node oor:name="Cache">
+    <node oor:name="GraphicManager">
+      <prop oor:name="TotalCacheSize" oor:type="xs:int">
+        <value install:module="32bit">200000000</value>
+      </prop>
+    </node>
+  </node>
   <node oor:name="Path">
     <node oor:name="Current">
       <prop oor:name="Temp" oor:type="xs:string">
