@@ -413,8 +413,8 @@ void TimerTest::testTriggerIdleFromIdle()
     TriggerIdleFromIdle aTest1( &bTriggered1, &aTest2 );
     aTest1.Start();
     Application::Yield();
-    CPPUNIT_ASSERT_MESSAGE("idle triggered", bTriggered1);
-    CPPUNIT_ASSERT_MESSAGE("idle triggered", bTriggered2);
+    CPPUNIT_ASSERT_MESSAGE("idle not triggered", bTriggered1);
+    CPPUNIT_ASSERT_MESSAGE("idle not triggered", bTriggered2);
 }
 
 
