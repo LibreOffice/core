@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_SOURCE_TOOLS_EMFPPATH_HXX
 
 #include <emfphelperdata.hxx>
+#include <memory>
 
 namespace emfplushelper
 {
@@ -28,8 +29,8 @@ namespace emfplushelper
     {
         ::basegfx::B2DPolyPolygon    aPolygon;
         sal_Int32                    nPoints;
-        float*                       pPoints;
-        sal_uInt8*                   pPointTypes;
+        std::unique_ptr<float[]>     pPoints;
+        std::unique_ptr<sal_uInt8[]> pPointTypes;
 
         EMFPPath(sal_Int32 _nPoints, bool bLines = false);
 
