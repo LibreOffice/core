@@ -39,8 +39,8 @@ class KDEXLib : public QObject, public SalXLib
     private:
         bool m_bStartupDone;
         std::unique_ptr<VCLKDEApplication> m_pApplication;
-        char** m_pFreeCmdLineArgs;
-        char** m_pAppCmdLineArgs;
+        std::unique_ptr<char*[]> m_pFreeCmdLineArgs;
+        std::unique_ptr<char*[]> m_pAppCmdLineArgs;
         int m_nFakeCmdLineArgs;
         struct SocketData
             {

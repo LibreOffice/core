@@ -37,6 +37,7 @@
 #include "unx/i18n_im.hxx"
 #include "unx/i18n_xkb.hxx"
 #include "unx/saldata.hxx"
+#include <o3tl/make_unique.hxx>
 #include "osl/process.h"
 
 #include "KDESalDisplay.hxx"
@@ -49,7 +50,7 @@
 
 KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false),
-    m_pFreeCmdLineArgs(nullptr), m_pAppCmdLineArgs(nullptr), m_nFakeCmdLineArgs( 0 ),
+    m_nFakeCmdLineArgs( 0 ),
     m_isGlibEventLoopType(false), m_allowKdeDialogs(false),
     m_timerEventId( -1 ), m_postUserEventId( -1 )
 {
@@ -88,9 +89,6 @@ KDEXLib::~KDEXLib()
     {
         free( m_pFreeCmdLineArgs[i] );
     }
-
-    delete [] m_pFreeCmdLineArgs;
-    delete [] m_pAppCmdLineArgs;
 }
 
 void KDEXLib::Init()
@@ -135,14 +133,14 @@ void KDEXLib::Init()
             osl_getCommandArg( nIdx + 1, &aParam.pData );
             aDisplay = OUStringToOString( aParam, osl_getThreadTextEncoding() );
 
-            m_pFreeCmdLineArgs = new char*[ m_nFakeCmdLineArgs + 2 ];
+            m_pFreeCmdLineArgs = o3tl::make_unique<char*[]>(m_nFakeCmdLineArgs + 2);
             m_pFreeCmdLineArgs[ m_nFakeCmdLineArgs + 0 ] = strdup( "-display" );
             m_pFreeCmdLineArgs[ m_nFakeCmdLineArgs + 1 ] = strdup( aDisplay.getStr() );
             m_nFakeCmdLineArgs += 2;
         }
     }
     if ( !m_pFreeCmdLineArgs )
-        m_pFreeCmdLineArgs = new char*[ m_nFakeCmdLineArgs ];
+        m_pFreeCmdLineArgs = o3tl::make_unique<char*[]>(m_nFakeCmdLineArgs);
 
     osl_getExecutableFile( &aParam.pData );
     osl_getSystemPathFromFileURL( aParam.pData, &aBin.pData );
@@ -153,11 +151,11 @@ void KDEXLib::Init()
     // make a copy of the string list for freeing it since
     // KApplication manipulates the pointers inside the argument vector
     // note: KApplication bad !
-    m_pAppCmdLineArgs = new char*[ m_nFakeCmdLineArgs ];
+    m_pAppCmdLineArgs = o3tl::make_unique<char*[]>(m_nFakeCmdLineArgs);
     for( int i = 0; i < m_nFakeCmdLineArgs; i++ )
         m_pAppCmdLineArgs[i] = m_pFreeCmdLineArgs[i];
 
-    KCmdLineArgs::init( m_nFakeCmdLineArgs, m_pAppCmdLineArgs, kAboutData );
+    KCmdLineArgs::init( m_nFakeCmdLineArgs, m_pAppCmdLineArgs.get(), kAboutData );
 
     // LO does its own session management, so prevent KDE/Qt from interfering
     // (QApplication::disableSessionManagement(false) wouldn't quite do,
