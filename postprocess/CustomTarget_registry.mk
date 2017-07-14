@@ -353,6 +353,11 @@ else
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/Paths-internallibexttextcatdata.xcu
 endif
 
+ifneq ($(filter $(CPUNAME),POWERPC INTEL ARM HPPA GODSON M68K SPARC S390),)
+postprocess_FILES_main += \
+	$(postprocess_MOD)/org/openoffice/Office/Common-32bit.xcu
+endif
+
 postprocess_DEPS_math := main
 postprocess_FILES_math := \
 	$(postprocess_XCS)/Office/UI/MathCommands.xcs \
