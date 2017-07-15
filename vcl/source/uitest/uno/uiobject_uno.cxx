@@ -100,6 +100,7 @@ IMPL_LINK_NOARG(ExecuteWrapper, ExecuteActionHdl, Timer*, void)
         std::unique_lock<std::mutex> lock(mMutex);
         while (!mbSignal)
         {
+            // coverity[blocks] - intentional sleep while mutex held
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
     }
