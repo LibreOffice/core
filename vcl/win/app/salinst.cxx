@@ -580,7 +580,8 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
             bOneEvent = false;
     } while( --nMaxEvents && bOneEvent );
 
-    if ( bWait && ! bWasMsg )
+    // Also check that we don't wait when application already has quit
+    if ( bWait && !bWasMsg && !ImplGetSVData()->maAppData.mbAppQuit )
     {
         if ( GetMessageW( &aMsg, nullptr, 0, 0 ) )
         {
