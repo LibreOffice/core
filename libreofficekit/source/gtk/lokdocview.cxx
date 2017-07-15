@@ -434,6 +434,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED";
     case LOK_CALLBACK_COMMENT:
         return "LOK_CALLBACK_COMMENT";
+    case LOK_CALLBACK_RULER_UPDATE:
+        return "LOK_CALLBACK_RULER_UPDATE";
     }
     g_assert(false);
     return nullptr;
@@ -1423,6 +1425,10 @@ callback (gpointer pData)
     case LOK_CALLBACK_COMMENT:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[COMMENT], 0, pCallback->m_aPayload.c_str());
         break;
+    case LOK_CALLBACK_RULER_UPDATE:
+    {
+        break;
+    }
     default:
         g_assert(false);
         break;
