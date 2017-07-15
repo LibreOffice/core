@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_9981a34d",
+        "filename": "include/rtl/textcvt.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-15T15:29:48Z",
+      "side": 1,
+      "message": "the previous line should include a comment along the lines of \"misspelled, but kept for backwards compat\"",
+      "revId": "9900ce93a81a5e14305218c7c6f992fd5bfa2ee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_b9965f92",
+        "filename": "include/rtl/textcvt.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-15T15:29:48Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "9900ce93a81a5e14305218c7c6f992fd5bfa2ee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_d9932ba2",
+        "filename": "io/source/TextInputStream/TextInputStream.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-15T15:29:48Z",
+      "side": 1,
+      "message": "missed one? maybe you need to do a\n  git grep -w RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL",
+      "revId": "9900ce93a81a5e14305218c7c6f992fd5bfa2ee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
