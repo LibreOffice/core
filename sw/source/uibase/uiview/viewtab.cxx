@@ -52,6 +52,7 @@
 #include "wview.hxx"
 #include "fmtcol.hxx"
 #include "section.hxx"
+#include "swruler.hxx"
 
 #include "ndtxt.hxx"
 #include "pam.hxx"
@@ -799,6 +800,24 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             }
             else
                 rSh.SetAttrItem( aULSpace );
+        }
+        break;
+
+    case SID_RULER_CHANGE_STATE:
+        {
+            const SfxPoolItem *pMargin1, *pMargin2;
+            if ( pReqArgs &&
+                 pReqArgs->GetItemState(SID_RULER_MARGIN1,true,&pMargin1) == SfxItemState::SET )
+            {
+                const OUString ratio = static_cast<const SfxStringItem*>(pMargin1)->GetValue();
+                GetHRuler().SetValues(RulerChangeType::MARGIN1, dynamic_cast<SwCommentRuler&>(GetHRuler()).GetPageWidth() * ratio.toFloat());
+            }
+            else if ( pReqArgs &&
+                 pReqArgs->GetItemState(SID_RULER_MARGIN2,true,&pMargin2) == SfxItemState::SET )
+            {
+                const OUString ratio = static_cast<const SfxStringItem*>(pMargin2)->GetValue();
+                GetHRuler().SetValues(RulerChangeType::MARGIN2, dynamic_cast<SwCommentRuler&>(GetHRuler()).GetPageWidth() * ratio.toFloat());
+            }
         }
         break;
     case SID_RULER_BORDERS_VERTICAL:
