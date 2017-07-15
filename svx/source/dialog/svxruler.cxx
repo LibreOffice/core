@@ -35,6 +35,8 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
+#include <comphelper/lok.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <svx/svdtrans.hxx>
 
@@ -3625,6 +3627,34 @@ long SvxRuler::CalcPropMaxRight(sal_uInt16 nCol) const
 void SvxRuler::SetTabsRelativeToIndent( bool bRel )
 {
     mxRulerImpl->bIsTabsRelativeToIndent = bRel;
+}
+
+void SvxRuler::SetValues(rulerChangeType type, long value)
+{
+    // just enough to see things working, need to add more.
+    if (type == rulerChangeType::margin1)
+    {
+        AdjustMargin1(value);
+    }
+}
+
+const std::string SvxRuler::CreateJsonNotification()
+{
+    boost::property_tree::ptree jsonNotif;
+
+    jsonNotif.put("margin1", GetMargin1());
+    jsonNotif.put("margin2", GetMargin2());
+    jsonNotif.put("leftOffset", GetNullOffset());
+    jsonNotif.put("pageOffset", GetPageOffset());
+    jsonNotif.put("pageWidth", GetnPageWidth());
+
+    RulerUnitData aUnitData = GetCurrentRulerUnit();
+    jsonNotif.put("unit", aUnitData.aUnitStr);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, jsonNotif);
+    std::string aPayload = aStream.str();
+    return aPayload;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

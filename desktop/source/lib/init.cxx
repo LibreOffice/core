@@ -818,6 +818,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_CURSOR_VISIBLE:
             case LOK_CALLBACK_SET_PART:
             case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+            case LOK_CALLBACK_RULER_UPDATE:
             {
                 removeAll([type] (const queue_type::value_type& elem) { return (elem.first == type); });
             }
@@ -1583,7 +1584,9 @@ static void doc_iniUnoCommands ()
         OUString(".uno:TrackChanges"),
         OUString(".uno:ShowTrackedChanges"),
         OUString(".uno:NextTrackedChange"),
-        OUString(".uno:PreviousTrackedChange")
+        OUString(".uno:PreviousTrackedChange"),
+        OUString(".uno:RulerStateChange"),
+        OUString(".uno:RulerState")
     };
 
     util::URL aCommandURL;
@@ -2055,6 +2058,32 @@ static char* getPostItsPos(LibreOfficeKitDocument* pThis)
     }
     OUString aComments = pDoc->getPostItsPos();
     return strdup(aComments.toUtf8().getStr());
+}
+
+static char* getRulerState(LibreOfficeKitDocument* pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return nullptr;
+    }
+    std::string state;
+    state = pDoc->getRulerState();
+    return strdup(state.c_str());
+}
+
+static char* setRuler(LibreOfficeKitDocument* pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return nullptr;
+    }
+    std::string state;
+    state = pDoc->setRuler();
+    return strdup(state.c_str());
 }
 
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
@@ -2663,6 +2692,14 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:ViewAnnotationsPosition")
     {
         return getPostItsPos(pThis);
+    }
+    else if (aCommand == ".uno:RulerState")
+    {
+        return getRulerState(pThis);
+    }
+    else if (aCommand == ".uno:RulerStateChange")
+    {
+        return setRuler(pThis);
     }
     else if (aCommand.startsWith(aViewRowColumnHeaders))
     {

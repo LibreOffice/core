@@ -3220,6 +3220,21 @@ OUString SwXTextDocument::getTrackedChangeAuthors()
     return SW_MOD()->GetRedlineAuthorInfo();
 }
 
+std::string SwXTextDocument::getRulerState()
+{
+    SwView* pView = pDocShell->GetView();
+    std::string state = pView->GetHRuler().CreateJsonNotification();
+    return state;
+}
+
+// Temporary make shift function just to make sure things are working appropriately
+std::string SwXTextDocument::setRuler()
+{
+    SwView* pView = pDocShell->GetView();
+    pView->GetHRuler().SetValues(rulerChangeType::margin1, 200);
+    return getRulerState();
+}
+
 OUString SwXTextDocument::getPostIts()
 {
     SolarMutexGuard aGuard;
