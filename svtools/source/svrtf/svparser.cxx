@@ -304,14 +304,14 @@ sal_uInt32 SvParser<T>::GetNextChar()
                                 RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|
                                 RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
                                 &nInfo, &nCvtBytes);
-                    if( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
+                    if( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) != 0 )
                     {
                         // The conversion wasn't successful because we haven't
                         // read enough characters.
                         if( pImplData->hContext != reinterpret_cast<rtl_TextToUnicodeContext>(1) )
                         {
                             sal_Unicode sCh[2];
-                            while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 )
+                            while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) != 0 )
                             {
                                 rInput.ReadChar( c1 );
                                 bErr = rInput.IsEof() || rInput.GetError();
@@ -338,9 +338,9 @@ sal_uInt32 SvParser<T>::GetNextChar()
                                 }
                                 else if( 0 != nChars || 0 != nInfo )
                                 {
-                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
+                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) == 0,
                                         "source buffer is to small" );
-                                    DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)) == 0,
+                                    DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL)) == 0,
                                          "there is a conversion error" );
                                     DBG_ASSERT( 0 == nChars,
                                        "there is a converted character, but an error" );
@@ -356,7 +356,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
                             sal_Char sBuffer[10];
                             sBuffer[0] = c1;
                             sal_uInt16 nLen = 1;
-                            while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0 &&
+                            while( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) != 0 &&
                                     nLen < 10 )
                             {
                                 rInput.ReadChar( c1 );
@@ -382,9 +382,9 @@ sal_uInt32 SvParser<T>::GetNextChar()
                                 }
                                 else
                                 {
-                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0,
+                                    DBG_ASSERT( (nInfo&RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) == 0,
                                         "source buffer is to small" );
-                                    DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)) == 0,
+                                    DBG_ASSERT( (nInfo&~(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL)) == 0,
                                          "there is a conversion error" );
                                     DBG_ASSERT( 0 == nChars,
                                        "there is a converted character, but an error" );

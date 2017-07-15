@@ -288,13 +288,13 @@ sal_Int32 OTextInputStream::implReadNext()
             nSourceCount += nSrcCvtBytes;
 
             bool bCont = false;
-            if( uiInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL )
+            if( uiInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL )
             {
                 mvBuffer.resize(mvBuffer.size() * 2);
                 bCont = true;
             }
 
-            if( uiInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL )
+            if( uiInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL )
             {
                 // read next byte
                 static Sequence< sal_Int8 > aOneByteSeq( 1 );

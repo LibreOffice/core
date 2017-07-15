@@ -81,8 +81,12 @@ SAL_DLLPUBLIC void SAL_CALL rtl_resetTextToUnicodeContext( rtl_TextToUnicodeConv
 #define RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK                ((sal_uInt32)0x0F00)
 
 #define RTL_TEXTTOUNICODE_INFO_ERROR                        ((sal_uInt32)0x0001)
+// mispelled constant, kept for backwards compatibility
 #define RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL             ((sal_uInt32)0x0002)
+#define RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL            ((sal_uInt32)0x0002)
+// mispelled constant, kept for backwards compatibility
 #define RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL            ((sal_uInt32)0x0004)
+#define RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL           ((sal_uInt32)0x0004)
 #define RTL_TEXTTOUNICODE_INFO_UNDEFINED                    ((sal_uInt32)0x0008)
 #define RTL_TEXTTOUNICODE_INFO_MBUNDEFINED                  ((sal_uInt32)0x0010)
 #define RTL_TEXTTOUNICODE_INFO_INVALID                      ((sal_uInt32)0x0020)
