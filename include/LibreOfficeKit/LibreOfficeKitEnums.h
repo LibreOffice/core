@@ -504,7 +504,24 @@ typedef enum
     /**
      * The text content of the address field in Calc.
      */
-    LOK_CALLBACK_CELL_ADDRESS = 34
+    LOK_CALLBACK_CELL_ADDRESS = 34,
+    /**
+     * The key ruler related properties on change are reported by this.
+     *
+     * The payload format is:
+     *
+     * {
+     *      "margin1": "...",
+     *      "margin2": "...",
+     *      "leftOffset": "...",
+     *      "pageOffset": "...",
+     *      "pageWidth": "...",
+     *      "unit": "..."
+     *  }
+     *
+     * Here all aproperties are same as described in svxruler.
+     */
+    LOK_CALLBACK_RULER_UPDATE = 35
 
 }
 LibreOfficeKitCallbackType;
