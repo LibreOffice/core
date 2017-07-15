@@ -278,6 +278,7 @@ enum
     TEXT_SELECTION,
     PASSWORD_REQUIRED,
     COMMENT,
+    RULER,
 
     LAST_SIGNAL
 };
@@ -433,6 +434,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED";
     case LOK_CALLBACK_COMMENT:
         return "LOK_CALLBACK_COMMENT";
+    case LOK_CALLBACK_RULER_UPDATE:
+        return "LOK_CALLBACK_RULER_UPDATE";
     }
     g_assert(false);
     return nullptr;
@@ -1421,6 +1424,9 @@ callback (gpointer pData)
     }
     case LOK_CALLBACK_COMMENT:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[COMMENT], 0, pCallback->m_aPayload.c_str());
+        break;
+    case LOK_CALLBACK_RULER_UPDATE:
+        g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
         break;
     default:
         g_assert(false);
@@ -3201,6 +3207,16 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      */
     doc_view_signals[COMMENT] =
         g_signal_new("comment",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     nullptr, nullptr,
+                     g_cclosure_marshal_generic,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
+
+    doc_view_signals[RULER] =
+        g_signal_new("ruler",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,

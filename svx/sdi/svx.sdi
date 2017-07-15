@@ -7101,6 +7101,24 @@ SvxProtectItem RulerProtect SID_RULER_PROTECT
     GroupId = SfxGroupId::View;
 ]
 
+SfxVoidItem RulerChangeState SID_RULER_CHANGE_STATE
+(SfxStringItem Margin1 SID_RULER_MARGIN1, SfxStringItem Margin2 SID_RULER_MARGIN1)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
 
 SfxVoidItem SbaExecuteSql SID_FM_EXECUTE
 ()
