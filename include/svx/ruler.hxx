@@ -41,6 +41,12 @@ class SvxObjectItem;
 class SfxBoolItem;
 struct SvxRuler_Impl;
 
+enum class rulerChangeType
+{
+    margin1,
+    margin2
+};
+
 enum class SvxRulerDragFlags
 {
     NONE                       = 0x00,
@@ -237,9 +243,13 @@ protected:
 
     virtual void    Update();
 
+    virtual void    NotifyKit() {};
+
     // calculation of boundary values for object borders
     // values refer to the page
+
     static bool     CalcLimits(long &nMax1, long &nMax2, bool bFirst);
+
     bool IsActLastColumn(
                 bool bForceDontConsiderHidden = false,
                 sal_uInt16 nAct=USHRT_MAX) const;
@@ -276,6 +286,8 @@ public:
 
     //#i24363# tab stops relative to indent
     void SetTabsRelativeToIndent( bool bRel );
+    const std::string     CreateJsonNotification();
+    void SetValues(rulerChangeType type, long value);
 };
 
 #endif

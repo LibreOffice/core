@@ -220,6 +220,16 @@ public:
     {
         return OUString();
     }
+
+    virtual std::string getRulerState()
+    {
+        return getRulerState();
+    }
+
+    virtual std::string setRuler()
+    {
+        return getRulerState();
+    }
 };
 
 } // namespace vcl

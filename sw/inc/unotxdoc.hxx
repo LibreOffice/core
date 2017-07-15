@@ -421,6 +421,9 @@ public:
     OUString getTrackedChanges() override;
     /// @see vcl::ITiledRenderable::getTrackedChangeAuthors().
     OUString getTrackedChangeAuthors() override;
+
+    std::string getRulerState() override;
+    std::string setRuler() override;
     /// @see vcl::ITiledRenderable::getPostIts().
     OUString getPostIts() override;
     // css::tiledrendering::XTiledRenderable

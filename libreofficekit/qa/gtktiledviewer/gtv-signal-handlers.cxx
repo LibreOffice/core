@@ -133,6 +133,24 @@ void createView(GtkWidget* pButton, gpointer /*pItem*/)
     gtv_application_window_create_view_from_window(GTV_APPLICATION_WINDOW(window));
 }
 
+void getRulerState(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    std::string type;
+    type = ".uno:RulerState";
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    pDocument->pClass->getCommandValues(pDocument, type.c_str());
+}
+
+void setRulerState(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    std::string type;
+    type = ".uno:RulerStateChange";
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    pDocument->pClass->getCommandValues(pDocument, type.c_str());
+}
+
 static void removeUnoParam(GtkWidget* pWidget, gpointer userdata)
 {
     GtkWidget* pParamAreaBox = GTK_WIDGET(userdata);
