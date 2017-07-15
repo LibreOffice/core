@@ -117,7 +117,7 @@ sal_Unicode * convertToUnicode(const sal_Char * pBegin,
                         | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
                         | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
                     &nInfo, &nSrcCvtBytes);
-        if (nInfo != RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL)
+        if (nInfo != RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL)
             break;
         delete[] pBuffer;
         rtl_resetTextToUnicodeContext(hConverter, hContext);

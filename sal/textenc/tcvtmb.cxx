@@ -87,7 +87,7 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
             {
                 if ( (nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0 )
                 {
-                    *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
+                    *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL;
                     break;
                 }
                 cConv = 0;
@@ -194,7 +194,7 @@ sal_Size ImplDBCSToUnicode( const void* pData, SAL_UNUSED_PARAMETER void*,
 
         if ( pDestBuf == pEndDestBuf )
         {
-            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
             break;
         }
 
@@ -403,7 +403,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                 /* Source buffer to small */
                 if ( pSrcBuf + 1 == pEndSrcBuf )
                 {
-                    *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
+                    *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL;
                     break;
                 }
 
@@ -427,7 +427,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                     /* Source buffer to small */
                     if (pEndSrcBuf - pSrcBuf < 3)
                     {
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
+                        *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL;
                         break;
                     }
 
@@ -444,7 +444,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
                     /* Source buffer to small */
                     if ( pSrcBuf + 1 == pEndSrcBuf )
                     {
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
+                        *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL;
                         break;
                     }
 
@@ -512,7 +512,7 @@ sal_Size ImplEUCJPToUnicode( const void* pData,
 
         if ( pDestBuf == pEndDestBuf )
         {
-            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
             break;
         }
 

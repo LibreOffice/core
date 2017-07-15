@@ -101,7 +101,7 @@ sal_Size IsciiDevanagariToUnicode::convert(
     {
         if (pDestBufPtr == pDestBufEnd)
         {
-            nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+            nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
             break;
         }
 
@@ -196,7 +196,7 @@ sal_Size IsciiDevanagariToUnicode::convert(
                 break;
             if (eAction == BAD_INPUT_NO_OUTPUT)
             {
-                nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
                 break;
             }
         }

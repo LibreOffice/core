@@ -294,7 +294,7 @@ sal_Int32 OTextInputStream::implReadNext()
                 bCont = true;
             }
 
-            if( uiInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL )
+            if( uiInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL )
             {
                 // read next byte
                 static Sequence< sal_Int8 > aOneByteSeq( 1 );

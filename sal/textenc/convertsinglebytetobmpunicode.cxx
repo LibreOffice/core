@@ -69,7 +69,7 @@ sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
         break;
     no_output:
         --srcBuf;
-        infoFlags |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+        infoFlags |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
         break;
     }
     if (info != nullptr) {
