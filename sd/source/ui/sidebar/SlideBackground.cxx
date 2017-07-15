@@ -733,7 +733,7 @@ void SlideBackground::NotifyItemUpdate(
         {
             const SvxSizeItem* pSizeItem = nullptr;
             if (eState >= SfxItemState::DEFAULT)
-                pSizeItem = dynamic_cast< const SvxSizeItem* >(pState);
+                pSizeItem = dynamic_cast<const SvxSizeItem*>(pState);
             if (pSizeItem)
             {
                 Size aPaperSize = pSizeItem->GetSize();
@@ -748,10 +748,12 @@ void SlideBackground::NotifyItemUpdate(
 
         case SID_ATTR_PAGE:
         {
-            if (eState >= SfxItemState::DEFAULT &&
-                pState && dynamic_cast< const SvxPageItem *>( pState ) !=  nullptr)
+            const SvxPageItem* pPageItem = nullptr;
+            if (eState >= SfxItemState::DEFAULT)
+                pPageItem = dynamic_cast<const SvxPageItem*>(pState);
+            if (pPageItem)
             {
-                mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
+                mpPageItem.reset(static_cast<SvxPageItem*>(pPageItem->Clone()));
                 bool bIsLandscape = mpPageItem->IsLandscape();
                 mpPaperOrientation->SelectEntryPos( bIsLandscape ? 0 : 1 );
             }
@@ -762,8 +764,9 @@ void SlideBackground::NotifyItemUpdate(
         {
             const SvxLongLRSpaceItem* pLRItem = nullptr;
             if (eState >= SfxItemState::DEFAULT)
-            {
                 pLRItem = dynamic_cast<const SvxLongLRSpaceItem*>(pState);
+            if (pLRItem)
+            {
                 m_nPageLeftMargin = pLRItem->GetLeft();
                 m_nPageRightMargin = pLRItem->GetRight();
                 SetFieldUnit(*m_pLeftMarginEdit, meFieldUnit, true);
@@ -778,8 +781,9 @@ void SlideBackground::NotifyItemUpdate(
         {
             const SvxLongULSpaceItem* pULItem = nullptr;
             if (eState >= SfxItemState::DEFAULT)
-            {
                 pULItem = dynamic_cast<const SvxLongULSpaceItem*>(pState);
+            if (pULItem)
+            {
                 m_nPageTopMargin = pULItem->GetUpper();
                 m_nPageBottomMargin = pULItem->GetLower();
                 SetFieldUnit(*m_pTopMarginEdit, meFieldUnit, true);
