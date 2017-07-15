@@ -728,7 +728,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
             if (*ppThis == nullptr) {
                 if (pInfo != nullptr) {
                     *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
-                        RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                        RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
                 }
                 return;
             }
@@ -783,7 +783,7 @@ retry:
                     {
                         if (pInfo != nullptr) {
                             *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
-                                RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                                RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
                         }
                         return;
                     }
@@ -814,7 +814,7 @@ retry:
             if (pTemp == nullptr) {
                 if (pInfo != nullptr) {
                     *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
-                        RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                        RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
                 }
                 return;
             }
@@ -828,7 +828,7 @@ retry:
             /* Shouldn't be the case, but if we get textencoding which
                could results in more unicode characters we have this
                code here. Could be the case for apple encodings */
-            while ( nInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL )
+            while ( nInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL )
             {
                 rtl_freeMemory( pTemp );
                 nNewLen += 8;
@@ -836,7 +836,7 @@ retry:
                 if (pTemp == nullptr) {
                     if (pInfo != nullptr) {
                         *pInfo = RTL_TEXTTOUNICODE_INFO_ERROR |
-                            RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                            RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
                     }
                     return;
                 }

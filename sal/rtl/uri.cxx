@@ -175,7 +175,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                     return nDstSize == 1
                         ? aDst[0] : rtl::combineSurrogates(aDst[0], aDst[1]);
                 }
-                if (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL
+                if (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL
                          && pEnd - p >= 3 && p[0] == cEscapePrefix
                          && (nWeight1 = getHexWeight(p[1])) >= 0
                          && (nWeight2 = getHexWeight(p[2])) >= 0)
@@ -183,7 +183,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                     p += 3;
                     aBuf.append(static_cast< char >(nWeight1 << 4 | nWeight2));
                 }
-                else if (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL
+                else if (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL
                          && p != pEnd && *p <= 0x7F)
                 {
                     aBuf.append(static_cast< char >(*p++));
@@ -191,7 +191,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                 else
                 {
                     assert(
-                        (nInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL)
+                        (nInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL)
                         == 0);
                     break;
                 }
