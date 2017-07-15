@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "osl/mutex.hxx"
 #include "osl/thread.h"
 #include "osl/thread.hxx"
@@ -26,21 +25,6 @@
 #include <cppu/Enterable.hxx>
 #include "cppu/helper/purpenv/Environment.hxx"
 #include "cppu/helper/purpenv/Mapping.hxx"
-
-
-#ifdef debug
-# define LOG_LIFECYCLE_UnsafeBridge
-#endif
-
-#ifdef LOG_LIFECYCLE_UnsafeBridge
-#  include <iostream>
-#  define LOG_LIFECYCLE_UnsafeBridge_emit(x) x
-
-#else
-#  define LOG_LIFECYCLE_UnsafeBridge_emit(x)
-
-#endif
-
 
 class UnsafeBridge : public cppu::Enterable
 {
@@ -66,12 +50,12 @@ UnsafeBridge::UnsafeBridge()
     : m_count   (0),
       m_threadId(0)
 {
-    LOG_LIFECYCLE_UnsafeBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "UnsafeBridge::UnsafeBridge(uno_Environment * pEnv)", this));
+    SAL_INFO("cppu.unsafebridge", "LIFE: UnsafeBridge::UnsafeBridge(uno_Environment * pEnv) -> " << this);
 }
 
 UnsafeBridge::~UnsafeBridge()
 {
-    LOG_LIFECYCLE_UnsafeBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "UnsafeBridge::~UnsafeBridge()", this));
+    SAL_INFO("cppu.unsafebridge", "LIFE: UnsafeBridge::~UnsafeBridge() -> " << this);
 
     SAL_WARN_IF(m_count < 0, "cppu.unsafebridge", "m_count is less than 0");
 }
