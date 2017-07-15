@@ -31,6 +31,8 @@
 #include "sockimpl.hxx"
 #include "secimpl.hxx"
 
+#include <cassert>
+
 #define PIPEDEFAULTPATH     "/tmp"
 #define PIPEALTERNATEPATH   "/var/tmp"
 
@@ -397,11 +399,11 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     int s;
     oslPipe pAcceptedPipe;
 
-    OSL_ASSERT(pPipe);
+    SAL_WARN_IF(!pPipe, "sal.osl.pipe", "invalid pipe");
     if (!pPipe)
         return nullptr;
 
-    OSL_ASSERT(strlen(pPipe->m_Name) > 0);
+    assert(strlen(pPipe->m_Name) > 0);  // you cannot have an empty pipe name
 
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     pPipe->m_bIsAccepting = true;
@@ -430,7 +432,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     /* alloc memory */
     pAcceptedPipe = createPipeImpl();
 
-    OSL_ASSERT(pAcceptedPipe);
+    assert(pAcceptedPipe);  // should never be the case that an oslPipe cannot be initialized
     if (!pAcceptedPipe)
     {
         close(s);
@@ -457,8 +459,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
 {
     int nRet = 0;
 
-    OSL_ASSERT(pPipe);
-
+    SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_receivePipe: invalid pipe");
     if (!pPipe)
     {
         SAL_WARN("sal.osl.pipe", "osl_receivePipe: Invalid socket");
@@ -480,8 +481,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 {
     int nRet=0;
 
-    OSL_ASSERT(pPipe);
-
+    SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_sendPipe: invalid pipe");
     if (!pPipe)
     {
         SAL_WARN("sal.osl.pipe", "osl_sendPipe: Invalid socket");
@@ -508,7 +508,7 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer, sal_Int32 n
     sal_Int32 BytesSend = 0;
     sal_Int32 BytesToSend = n;
 
-    OSL_ASSERT(pPipe);
+    SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_writePipe: invalid pipe"); // osl_sendPipe detects invalid pipe
     while (BytesToSend > 0)
     {
         sal_Int32 RetVal;
@@ -533,7 +533,7 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
     sal_Int32 BytesRead = 0;
     sal_Int32 BytesToRead = n;
 
-    OSL_ASSERT(pPipe);
+    SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_readPipe: invalid pipe"); // osl_receivePipe detects invalid pipe
     while (BytesToRead > 0)
     {
         sal_Int32 RetVal;
