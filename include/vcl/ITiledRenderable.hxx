@@ -13,6 +13,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 #include <tools/gen.hxx>
+#include <svx/ruler.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
@@ -220,8 +221,16 @@ public:
     {
         return OUString();
     }
-};
 
+    virtual std::string getRulerState()
+    {
+        return "test";
+    }
+    virtual std::string setRuler(RulerChangeType, long)
+    {
+        return "test";
+    }
+};
 } // namespace vcl
 
 #endif // INCLUDED_VCL_ITILEDRENDERABLE_HXX

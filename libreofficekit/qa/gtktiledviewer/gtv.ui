@@ -486,6 +486,34 @@
         <property name="homogeneous">True</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkToolButton" id="btn_rulerstate">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">.uno:UpdateRuler</property>
+        <property name="use_underline">True</property>
+        <property name="icon_name">text-x-generic</property>
+        <signal name="clicked" handler="getRulerState" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="btn_rulerstatechange">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">.uno:RulerStateChange</property>
+        <property name="use_underline">True</property>
+        <property name="icon_name">object-flip-horizontal</property>
+        <signal name="clicked" handler="setRulerState" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
   </object>
   <object class="GtkToolbar" id="toolbar2">
     <property name="visible">True</property>
