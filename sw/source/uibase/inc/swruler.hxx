@@ -41,6 +41,7 @@ public:
      * \param rRect ignored
      */
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    const std::string CreateJsonNotification();
 
 protected:
     SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility
@@ -50,6 +51,7 @@ protected:
     int         mnFadeRate;      //< From 0 to 100. 0 means not highlighted.
     ScopedVclPtr<VirtualDevice> maVirDev;      //< VirtualDevice of this window. Just for convenience.
 
+    void NotifyKit();
     /**
      * Callback function to handle a mouse button down event.
      *
