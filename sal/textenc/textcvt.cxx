@@ -50,7 +50,7 @@ static sal_Size ImplDummyToUnicode( const char* pSrcBuf, sal_Size nSrcBytes,
     {
         if ( pDestBuf == pEndDestBuf )
         {
-            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
             break;
         }
 
