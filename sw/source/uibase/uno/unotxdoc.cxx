@@ -3220,6 +3220,12 @@ OUString SwXTextDocument::getTrackedChangeAuthors()
     return SW_MOD()->GetRedlineAuthorInfo();
 }
 
+OUString SwXTextDocument::getRulerState()
+{
+    SwView* pView = pDocShell->GetView();
+    return OUString::fromUtf8((pView->GetHRuler().CreateJsonNotification()).c_str());
+}
+
 OUString SwXTextDocument::getPostIts()
 {
     SolarMutexGuard aGuard;
