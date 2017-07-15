@@ -801,6 +801,26 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 rSh.SetAttrItem( aULSpace );
         }
         break;
+
+    case SID_RULER_CHANGE_STATE:
+        {
+
+            const SfxPoolItem *m1, *m2;
+
+            if ( pReqArgs &&
+                 pReqArgs->GetItemState(SID_RULER_MARGIN1,true,&m1) == SfxItemState::SET )
+            {
+                OUString str = static_cast<const SfxStringItem*>(m1)->GetValue();
+                GetHRuler().SetValues(RulerChangeType::MARGIN1, (long)str.toInt64());
+            }
+            else if ( pReqArgs &&
+                 pReqArgs->GetItemState(SID_RULER_MARGIN2,true,&m2) == SfxItemState::SET )
+            {
+                OUString str = static_cast<const SfxStringItem*>(m2)->GetValue();
+                GetHRuler().SetValues(RulerChangeType::MARGIN2, (long)str.toInt64());
+            }
+        }
+        break;
     case SID_RULER_BORDERS_VERTICAL:
     case SID_RULER_BORDERS:
         if ( pReqArgs )
