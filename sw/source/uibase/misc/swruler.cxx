@@ -24,9 +24,11 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include "strings.hrc"
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <boost/property_tree/json_parser.hpp>
 
 #define CONTROL_BORDER_WIDTH    1
-
 #define CONTROL_LEFT_OFFSET     6
 #define CONTROL_RIGHT_OFFSET    3
 #define CONTROL_TOP_OFFSET      4
@@ -246,12 +248,41 @@ void SwCommentRuler::MouseButtonDown( const MouseEvent& rMEvt )
     Invalidate();
 }
 
+const std::string SwCommentRuler::CreateJsonNotification()
+{
+    boost::property_tree::ptree jsonNotif;
+
+    jsonNotif.put("margin1", convertTwipToMm100(GetMargin1()));
+    jsonNotif.put("margin2", convertTwipToMm100(GetMargin2()));
+    jsonNotif.put("leftOffset", convertTwipToMm100(GetNullOffset()));
+    jsonNotif.put("pageOffset", convertTwipToMm100(GetPageOffset()));
+    jsonNotif.put("pageWidth", convertTwipToMm100(GetPageWidth()));
+
+    RulerUnitData aUnitData = GetCurrentRulerUnit();
+    jsonNotif.put("unit", aUnitData.aUnitStr);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, jsonNotif);
+    std::string aPayload = aStream.str();
+    return aPayload;
+}
+
+void SwCommentRuler::NotifyKit()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    const std::string test = CreateJsonNotification();
+    mpViewShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_RULER_UPDATE, test.c_str());
+}
+
 void SwCommentRuler::Update()
 {
     tools::Rectangle aPreviousControlRect = GetCommentControlRegion();
     SvxRuler::Update();
     if (aPreviousControlRect != GetCommentControlRegion())
         Invalidate();
+    NotifyKit();
 }
 
 void SwCommentRuler::UpdateCommentHelpText()
