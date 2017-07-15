@@ -219,6 +219,10 @@ interface BaseTextEditView
         StateMethod = StateTabWin ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_RULER_CHANGE_STATE
+    [
+        ExecMethod = ExecTabWin ;
+    ]
     SID_RULER_BORDERS // status()
     [
         ExecMethod = ExecTabWin ;

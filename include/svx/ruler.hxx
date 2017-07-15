@@ -41,6 +41,12 @@ class SvxObjectItem;
 class SfxBoolItem;
 struct SvxRuler_Impl;
 
+enum class RulerChangeType
+{
+    MARGIN1,
+    MARGIN2
+};
+
 enum class SvxRulerDragFlags
 {
     NONE                       = 0x00,
@@ -255,7 +261,6 @@ protected:
                 bool bForceDontConsiderHidden = false,
                 sal_uInt16 nAct=USHRT_MAX ) const;
     long CalcPropMaxRight(sal_uInt16 nCol = USHRT_MAX) const;
-    long GetPageWidth() const;
 
 public:
 
@@ -278,6 +283,8 @@ public:
 
     //#i24363# tab stops relative to indent
     void SetTabsRelativeToIndent( bool bRel );
+    void SetValues(RulerChangeType type, long value);
+    long GetPageWidth() const;
 };
 
 #endif

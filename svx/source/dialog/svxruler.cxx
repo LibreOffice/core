@@ -34,6 +34,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
+#include <comphelper/lok.hxx>
 
 #include <svx/svdtrans.hxx>
 
@@ -3628,4 +3629,14 @@ void SvxRuler::SetTabsRelativeToIndent( bool bRel )
     mxRulerImpl->bIsTabsRelativeToIndent = bRel;
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+void SvxRuler::SetValues(RulerChangeType type, long diffValue)
+{
+    if (diffValue == 0)
+        return;
+
+    if (type == RulerChangeType::MARGIN1)
+        AdjustMargin1(diffValue);
+    else if (type == RulerChangeType::MARGIN2)
+        SetMargin2( GetMargin2() - diffValue);
+    ApplyMargins();
+}
