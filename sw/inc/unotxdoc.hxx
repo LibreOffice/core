@@ -64,6 +64,7 @@
 #include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
 #include <svx/fmdmod.hxx>
+#include <svx/ruler.hxx>
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -421,6 +422,9 @@ public:
     OUString getTrackedChanges() override;
     /// @see vcl::ITiledRenderable::getTrackedChangeAuthors().
     OUString getTrackedChangeAuthors() override;
+
+    std::string getRulerState() override;
+    std::string setRuler(RulerChangeType, long) override;
     /// @see vcl::ITiledRenderable::getPostIts().
     OUString getPostIts() override;
     // css::tiledrendering::XTiledRenderable

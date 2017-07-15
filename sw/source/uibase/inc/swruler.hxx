@@ -50,6 +50,7 @@ protected:
     int         mnFadeRate;      //< From 0 to 100. 0 means not highlighted.
     ScopedVclPtr<VirtualDevice> maVirDev;      //< VirtualDevice of this window. Just for convenience.
 
+    virtual void NotifyKit() override;
     /**
      * Callback function to handle a mouse button down event.
      *

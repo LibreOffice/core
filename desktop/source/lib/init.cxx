@@ -64,6 +64,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/ruler.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
 #include <vcl/svapp.hxx>
@@ -818,6 +819,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_CURSOR_VISIBLE:
             case LOK_CALLBACK_SET_PART:
             case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+            case LOK_CALLBACK_RULER_UPDATE:
             {
                 removeAll([type] (const queue_type::value_type& elem) { return (elem.first == type); });
             }
@@ -2057,6 +2059,32 @@ static char* getPostItsPos(LibreOfficeKitDocument* pThis)
     return strdup(aComments.toUtf8().getStr());
 }
 
+static char* getRulerState(LibreOfficeKitDocument* pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return nullptr;
+    }
+    std::string state;
+    state = pDoc->getRulerState();
+    return strdup(state.c_str());
+}
+
+static char* setRuler(LibreOfficeKitDocument* pThis, RulerChangeType type, long diff)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return nullptr;
+    }
+    std::string state;
+    state = pDoc->setRuler(type, diff);
+    return strdup(state.c_str());
+}
+
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
@@ -2631,6 +2659,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     static const OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
     static const OString aCellCursor(".uno:CellCursor");
     static const OString aFontSubset(".uno:FontSubset&name=");
+    static const OString aRulerStateChange(".uno:RulerStateChange");
 
     if (!strcmp(pCommand, ".uno:CharFontName"))
     {
@@ -2663,6 +2692,31 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:ViewAnnotationsPosition")
     {
         return getPostItsPos(pThis);
+    }
+    else if (aCommand == ".uno:RulerState")
+    {
+        return getRulerState(pThis);
+    }
+    else if (aCommand.startsWith(aRulerStateChange))
+    {
+        long diffValue;
+        std::string type;
+        if (aCommand.getLength() > aRulerStateChange.getLength())
+        {
+            OString aArguments = aCommand.copy(aRulerStateChange.getLength());
+
+            boost::property_tree::ptree aTree;
+            std::stringstream aStream(aArguments.getStr());
+            boost::property_tree::read_json(aStream, aTree);
+
+            type = aTree.get("type", "MARGIN1");
+            diffValue = aTree.get<long>("diff", 0);
+        }
+        if (type == "MARGIN1")
+            return setRuler(pThis, RulerChangeType::MARGIN1, diffValue);
+        else
+            return setRuler(pThis, RulerChangeType::MARGIN2, diffValue);
+
     }
     else if (aCommand.startsWith(aViewRowColumnHeaders))
     {

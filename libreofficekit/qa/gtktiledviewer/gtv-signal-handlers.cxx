@@ -133,6 +133,75 @@ void createView(GtkWidget* pButton, gpointer /*pItem*/)
     gtv_application_window_create_view_from_window(GTV_APPLICATION_WINDOW(window));
 }
 
+void getRulerState(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    std::string type;
+    type = ".uno:RulerState";
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    pDocument->pClass->getCommandValues(pDocument, type.c_str());
+}
+
+void setRulerState(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    std::string type;
+    type = ".uno:RulerStateChange";
+
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pButton));
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+    GtkWidget* pRulerDialog = gtk_dialog_new_with_buttons ("Change Margins",
+                                                            GTK_WINDOW (window),
+                                                            GTK_DIALOG_MODAL,
+                                                            "Change",
+                                                            GTK_RESPONSE_OK,
+                                                            nullptr);
+    g_object_set(G_OBJECT(pRulerDialog), "resizable", FALSE, nullptr);
+    GtkWidget* pDialogMessageArea = gtk_dialog_get_content_area (GTK_DIALOG (pRulerDialog));
+    GtkWidget* pDiffBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pDiffBox, TRUE, TRUE, 2);
+
+    GtkWidget* pDiffLabel = gtk_label_new("Enter margin difference");
+    gtk_box_pack_start(GTK_BOX(pDiffBox), pDiffLabel, TRUE, TRUE, 2);
+
+    GtkWidget* pDiffEntry = gtk_entry_new ();
+    gtk_box_pack_start(GTK_BOX(pDiffBox), pDiffEntry, TRUE, TRUE, 2);
+
+    GtkWidget* radio1 = gtk_radio_button_new_with_label_from_widget(NULL, "Margin 1");
+    GtkWidget* radio2 = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio1),
+                                                         "Margin 2");
+
+    gtk_box_pack_start (GTK_BOX (pDiffBox), radio1, TRUE, TRUE, 2);
+    gtk_box_pack_start (GTK_BOX (pDiffBox), radio2, TRUE, TRUE, 2);
+
+    gtk_widget_show_all(pRulerDialog);
+
+    gint res = gtk_dialog_run (GTK_DIALOG(pRulerDialog));
+    switch (res)
+    {
+        case GTK_RESPONSE_OK:
+        {
+            boost::property_tree::ptree aTree;
+
+            const gchar* diffValue = gtk_entry_get_text(GTK_ENTRY(pDiffEntry));
+            aTree.put("diff", diffValue);
+
+            if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(radio1)))
+                aTree.put("type", "MARGIN1");
+            else
+                aTree.put("type", "MARGIN2");
+
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            std::string aArguments = aStream.str();
+
+            g_info("%s", (type + aArguments).c_str());
+            pDocument->pClass->getCommandValues(pDocument, (type + aArguments).c_str());
+        }
+        break;
+    }
+    gtk_widget_destroy(pRulerDialog);
+}
+
 static void removeUnoParam(GtkWidget* pWidget, gpointer userdata)
 {
     GtkWidget* pParamAreaBox = GTK_WIDGET(userdata);
