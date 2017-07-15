@@ -1401,13 +1401,9 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
                 break;
             case XML_ELEMENT( TABLE, XML_TYPE ):
                 if (IsXMLToken( aIter, XML_ROW ))
-                {
                     nActionType = SC_CAT_DELETE_ROWS;
-                }
-                else if ((nToken & TOKEN_MASK) == XML_TABLE)
-                {
+                else if (IsXMLToken( aIter, XML_TABLE ))
                     nActionType = SC_CAT_DELETE_TABS;
-                }
                 break;
             case XML_ELEMENT( TABLE, XML_POSITION ):
                 nPosition = aIter.toInt32();
