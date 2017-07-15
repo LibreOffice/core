@@ -35,7 +35,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "config_dbus.h"
+#include <config_gio.h>
 
 /*
  *  some words on metrics: every length returned by PrintFontManager and
@@ -202,12 +202,12 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     static void addFontconfigDir(const OString& rDirectory);
 
     std::set<OString> m_aPreviousLangSupportRequests;
-#if ENABLE_DBUS
+#if ENABLE_GIO
     std::vector<OString> m_aCurrentRequests;
 #endif
     Timer m_aFontInstallerTimer;
 
-#if ENABLE_DBUS
+#if ENABLE_GIO
     DECL_LINK( autoInstallFontLangSupport, Timer*, void );
 #endif
     PrintFontManager();
