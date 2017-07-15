@@ -703,7 +703,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
             bUnmark = !pViewData->GetMarkData().IsCellMarked( nColNo, nRowNo );
 
         SfxStringItem   aPosItem( SID_CURRENTCELL, aAddr );
-        SfxBoolItem     aUnmarkItem( FN_PARAM_1, bUnmark );     // cancel selektion
+        SfxBoolItem     aUnmarkItem( FN_PARAM_1, bUnmark );     // cancel selection
 
         rBindings.GetDispatcher()->ExecuteList(SID_CURRENTCELL,
                                   SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
