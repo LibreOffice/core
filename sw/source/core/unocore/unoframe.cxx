@@ -1245,17 +1245,16 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
 }
 
 SwXFrame::SwXFrame(SwFrameFormat& rFrameFormat, FlyCntType eSet, const ::SfxItemPropertySet* pSet)
-    : SwClient( &rFrameFormat )
+    : SwClient(&rFrameFormat)
     , m_pImpl(new Impl)
-    ,
-    m_pPropSet(pSet),
-    m_pDoc( nullptr ),
-    eType(eSet),
-    pProps(nullptr),
-    bIsDescriptor(false),
-    m_pCopySource(nullptr)
+    , m_pPropSet(pSet)
+    , m_pDoc(nullptr)
+    , eType(eSet)
+    , pProps(nullptr)
+    , bIsDescriptor(false)
+    , m_pCopySource(nullptr)
+    , m_nDrawAspect(embed::Aspects::MSOLE_CONTENT)
 {
-
 }
 
 SwXFrame::~SwXFrame()
