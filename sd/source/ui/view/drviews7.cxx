@@ -1758,21 +1758,20 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
     SdPage *pPage = getCurrentPage();
     sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    // const size_t nDescId    = rSh->GetCurPageDesc();
-    // const SdPage& rDesc = rSh->GetPageDesc( nDescId );
-    Size maSize = pPage->GetSize();
-    PageKind ePageKind = GetPageKind();
-    const SfxPoolItem*  pPoolItem = nullptr;
-    Size                aNewSize(maSize);
-    sal_Int32               nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
-    bool                bScaleAll = true;
-    Orientation         eOrientation = pPage->GetOrientation();
-    SdPage*             pMasterPage = pPage->IsMasterPage() ? pPage : &static_cast<SdPage&>(pPage->TRG_GetMasterPage());
-    bool                bFullSize = pMasterPage->IsBackgroundFullSize();
-    sal_uInt16          nPaperBin = pPage->GetPaperBin();
 
     if ( pPage && pArgs )
     {
+        Size aSize = pPage->GetSize();
+        PageKind ePageKind = GetPageKind();
+        const SfxPoolItem*  pPoolItem = nullptr;
+        Size                aNewSize(aSize);
+        sal_Int32           nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
+        bool                bScaleAll = true;
+        Orientation         eOrientation = pPage->GetOrientation();
+        SdPage*             pMasterPage = pPage->IsMasterPage() ? pPage : &static_cast<SdPage&>(pPage->TRG_GetMasterPage());
+        bool                bFullSize = pMasterPage->IsBackgroundFullSize();
+        sal_uInt16          nPaperBin = pPage->GetPaperBin();
+
         if ( ( nSlotId >= SID_ATTR_PAGE_COLOR ) && ( nSlotId <= SID_ATTR_PAGE_FILLSTYLE ) )
         {
             SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
