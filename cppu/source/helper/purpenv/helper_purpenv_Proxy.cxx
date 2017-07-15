@@ -25,20 +25,7 @@
 #include "typelib/typedescription.hxx"
 #include "cppu/EnvDcp.hxx"
 
-
-//#define LOG_LIFECYCLE_Proxy
-#ifdef LOG_LIFECYCLE_Proxy
-#  include <iostream>
-#  define LOG_LIFECYCLE_Proxy_emit(x) x
-
-#else
-#  define LOG_LIFECYCLE_Proxy_emit(x)
-
-#endif
-
-
 using namespace com::sun::star;
-
 
 static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
 {
@@ -222,7 +209,7 @@ Proxy::Proxy(uno::Mapping                  const & to_from,
           m_probeFun     (probeFun),
           m_pProbeContext(pProbeContext)
 {
-    LOG_LIFECYCLE_Proxy_emit(fprintf(stderr, "LIFE: %s -> %p\n", "Proxy::Proxy(<>)", this));
+    SAL_INFO("cppu.purpenv", "LIFE: Proxy::Proxy(<>) -> " << (void*)this);
 
     typelib_typedescription_acquire(&m_pTypeDescr->aBase);
     if (!m_pTypeDescr->aBase.bComplete)
@@ -249,7 +236,7 @@ extern "C" { static void s_releaseAndRevoke_v(va_list * pParam)
 
 Proxy::~Proxy()
 {
-    LOG_LIFECYCLE_Proxy_emit(fprintf(stderr, "LIFE: %s -> %p\n", "Proxy::~Proxy()", this));
+    SAL_INFO("cppu.purpenv", "LIFE: Proxy::~Proxy() -> " << (void*)this);
 
     uno_Environment_invoke(m_to.get(), s_releaseAndRevoke_v, m_to.get(), m_pUnoI);
 

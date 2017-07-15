@@ -27,23 +27,7 @@
 #include "uno/dispatcher.h"
 #include "typelib/typedescription.h"
 
-
-#ifdef debug
-# define LOG_LIFECYCLE_cppu_helper_purpenv_Mapping
-#endif
-
-#ifdef LOG_LIFECYCLE_cppu_helper_purpenv_Mapping
-#  include <iostream>
-#  define LOG_LIFECYCLE_cppu_helper_purpenv_Mapping_emit(x) x
-
-#else
-#  define LOG_LIFECYCLE_cppu_helper_purpenv_Mapping_emit(x)
-
-#endif
-
-
 using namespace com::sun::star;
-
 
 class Mapping : public uno_Mapping
 {
@@ -128,7 +112,7 @@ Mapping::Mapping(uno_Environment                 * pFrom,
       m_probeFun(probeFun),
       m_pContext(pProbeContext)
 {
-    LOG_LIFECYCLE_cppu_helper_purpenv_Mapping_emit(fprintf(stderr, "LIFE: %s -> %p\n", "Mapping::Mapping(uno_Environment * pFrom, uno_Environment * pTo)", this));
+    SAL_INFO("cppu.purpenv", "LIFE: Mapping::Mapping(uno_Environment * pFrom, uno_Environment * pTo -> " << (void*)this);
 
     uno_Mapping::acquire      = s_acquire;
     uno_Mapping::release      = s_release;
@@ -137,7 +121,7 @@ Mapping::Mapping(uno_Environment                 * pFrom,
 
 Mapping::~Mapping()
 {
-    LOG_LIFECYCLE_cppu_helper_purpenv_Mapping_emit(fprintf(stderr, "LIFE: %s -> %p\n", "Mapping::~Mapping()", this));
+    SAL_INFO("cppu.purpenv", "LIFE: Mapping:~Mapping() -> " << (void*)this);
 }
 
 
