@@ -319,7 +319,8 @@ void TimerTest::testAutoTimerStop()
     sal_Int32 nTimerCount = 0;
     const sal_Int32 nMaxCount = 5;
     AutoTimerCount aAutoTimer( 0, nTimerCount, nMaxCount );
-    while ( nMaxCount != nTimerCount )
+    // coverity[loop_top] - Application::Yield allows the timer to fire and increment TimerCount
+    while (nMaxCount != nTimerCount)
         Application::Yield();
     CPPUNIT_ASSERT( !aAutoTimer.IsActive() );
     CPPUNIT_ASSERT( !Application::Reschedule() );
