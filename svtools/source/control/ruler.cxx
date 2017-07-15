@@ -2678,6 +2678,11 @@ void Ruler::SetTextRTL(bool bRTL)
 
 }
 
+long Ruler::GetPageWidth() const
+{
+    return mpData->nPageWidth;
+}
+
 long Ruler::GetPageOffset() const
 {
     return mpData->nPageOff;
