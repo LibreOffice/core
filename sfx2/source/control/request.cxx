@@ -447,7 +447,7 @@ void SfxRequest::Done
 
     [Note]
 
-    'Done ()' is not called, for example when a dialoge started by the function
+    'Done ()' is not called, for example when a dialog started by the function
     was canceled by the user or if the execution could not be performed due to
     a wrong context (without use of separate <SfxShell>s). 'Done ()' will be
     launched, when executing the function led to a regular error
