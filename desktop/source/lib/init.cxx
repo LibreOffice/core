@@ -64,6 +64,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/ruler.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
 #include <vcl/svapp.hxx>
@@ -818,6 +819,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
             case LOK_CALLBACK_CURSOR_VISIBLE:
             case LOK_CALLBACK_SET_PART:
             case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
+            case LOK_CALLBACK_RULER_UPDATE:
             {
                 removeAll([type] (const queue_type::value_type& elem) { return (elem.first == type); });
             }
@@ -2057,6 +2059,22 @@ static char* getPostItsPos(LibreOfficeKitDocument* pThis)
     return strdup(aComments.toUtf8().getStr());
 }
 
+static char* getRulerState(LibreOfficeKitDocument* pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return nullptr;
+    }
+
+    OUString state = pDoc->getRulerState();
+    OString oState = OUStringToOString(state, RTL_TEXTENCODING_UTF8);
+    char* pState = static_cast<char*>(malloc(oState.getLength() + 1));
+    strcpy(pState, oState.getStr());
+    return pState;
+}
+
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
@@ -2663,6 +2681,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:ViewAnnotationsPosition")
     {
         return getPostItsPos(pThis);
+    }
+    else if (aCommand == ".uno:RulerState")
+    {
+        return getRulerState(pThis);
     }
     else if (aCommand.startsWith(aViewRowColumnHeaders))
     {
