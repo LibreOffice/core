@@ -28,16 +28,6 @@
 
 #include "cascade_mapping.hxx"
 
-#ifdef LOG_LIFECYLE_MediatorMapping
-#  include <iostream>
-#  define LOG_LIFECYLE_MediatorMapping_emit(x) x
-
-#else
-#  define LOG_LIFECYLE_MediatorMapping_emit(x)
-
-#endif
-
-
 using namespace com::sun::star;
 
 class MediatorMapping : public uno_Mapping
@@ -98,7 +88,7 @@ MediatorMapping::MediatorMapping(uno_Environment * pFrom,
       m_interm  (pInterm),
       m_to      (pTo)
 {
-    LOG_LIFECYLE_MediatorMapping_emit(std::cerr << __FUNCTION__ << std::endl);
+    SAL_INFO("cppu.mapping", __FUNCTION__);
 
     if (!m_from2uno.get() || !m_uno2to.get())
         abort();
@@ -110,19 +100,19 @@ MediatorMapping::MediatorMapping(uno_Environment * pFrom,
 
 MediatorMapping::~MediatorMapping()
 {
-    LOG_LIFECYLE_MediatorMapping_emit(std::cerr << __FUNCTION__ << std::endl);
+    SAL_INFO("cppu.mapping", __FUNCTION__);
 }
 
 void MediatorMapping::acquire()
 {
-    LOG_LIFECYLE_MediatorMapping_emit(std::cerr << __FUNCTION__ << std::endl);
+    SAL_INFO("cppu.mapping", __FUNCTION__);
 
     osl_atomic_increment(&m_refCount);
 }
 
 void MediatorMapping::release()
 {
-    LOG_LIFECYLE_MediatorMapping_emit(std::cerr << __FUNCTION__ << std::endl);
+    SAL_INFO("cppu.mapping", __FUNCTION__);
 
     if (osl_atomic_decrement(&m_refCount) == 0)
     {

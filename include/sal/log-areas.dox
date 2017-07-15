@@ -100,7 +100,10 @@ certain functionality.
 @li @c cppu.log
 @li @c cppu.threadpool
 @li @c cppu.typelib
+@li @c cppu.purpenv
+@li @c cppu.mapping
 @li @c cppu.unsafebridge
+@li @c cppu.affinebridge
 
 @section cppuhelper
 
