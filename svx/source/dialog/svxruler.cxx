@@ -35,6 +35,8 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
+#include <comphelper/lok.hxx>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <svx/svdtrans.hxx>
 
@@ -2581,6 +2583,25 @@ bool SvxRuler::CalcLimits ( long& nMax1,    // minimum value to be set
     nMax1 = LONG_MIN;
     nMax2 = LONG_MAX;
     return false;
+}
+
+const std::string SvxRuler::CreateJsonNotification()
+{
+    boost::property_tree::ptree jsonNotif;
+
+    jsonNotif.put("margin1", GetMargin1());
+    jsonNotif.put("margin2", GetMargin2());
+    jsonNotif.put("leftOffset", GetNullOffset());
+    jsonNotif.put("pageOffset", GetPageOffset());
+    jsonNotif.put("pageWidth", GetnPageWidth());
+
+    RulerUnitData aUnitData = GetCurrentRulerUnit();
+    jsonNotif.put("unit", aUnitData.aUnitStr);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, jsonNotif);
+    std::string aPayload = aStream.str();
+    return aPayload;
 }
 
 void SvxRuler::CalcMinMax()
