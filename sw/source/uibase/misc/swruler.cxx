@@ -24,9 +24,10 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include "strings.hrc"
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #define CONTROL_BORDER_WIDTH    1
-
 #define CONTROL_LEFT_OFFSET     6
 #define CONTROL_RIGHT_OFFSET    3
 #define CONTROL_TOP_OFFSET      4
@@ -246,12 +247,22 @@ void SwCommentRuler::MouseButtonDown( const MouseEvent& rMEvt )
     Invalidate();
 }
 
+void SwCommentRuler::NotifyKit()
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    const std::string test = SvxRuler::CreateJsonNotification();
+    mpViewShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_RULER_UPDATE, test.c_str());
+}
+
 void SwCommentRuler::Update()
 {
     tools::Rectangle aPreviousControlRect = GetCommentControlRegion();
     SvxRuler::Update();
     if (aPreviousControlRect != GetCommentControlRegion())
         Invalidate();
+    NotifyKit();
 }
 
 void SwCommentRuler::UpdateCommentHelpText()
