@@ -27,20 +27,6 @@
 #include "typelib/typedescription.h"
 #include "osl/interlck.h"
 
-#ifdef debug
-# define LOG_LIFECYCLE_cppu_helper_purpenv_Base
-#endif
-
-#ifdef LOG_LIFECYCLE_cppu_helper_purpenv_Base
-#  include <iostream>
-#  define LOG_LIFECYCLE_cppu_helper_purpenv_Base_emit(x) x
-
-#else
-#  define LOG_LIFECYCLE_cppu_helper_purpenv_Base_emit(x)
-
-#endif
-
-
 extern "C" {
 typedef void SAL_CALL EnvFun_P   (uno_Environment *);
 typedef void SAL_CALL EnvFun_PP_P(uno_Environment ** ppHardEnv, uno_Environment *);
@@ -241,7 +227,7 @@ Base::Base(uno_Environment * pEnv, cppu::Enterable * pEnterable)
      m_env_acquireInterface       (pEnv->pExtEnv->acquireInterface),
      m_env_releaseInterface       (pEnv->pExtEnv->releaseInterface)
 {
-    LOG_LIFECYCLE_cppu_helper_purpenv_Base_emit(fprintf(stderr, "LIFE: %s -> %p\n", "cppu::helper::purpenv::Base::Base(uno_Environment * pEnv)", this));
+    SAL_INFO("cppu.purpenv", "LIFE: cppu::helper::purpenv::Base::Base(uno_Environment * pEnv)" << " -> " << (void*)this);
     OSL_ENSURE(
         rtl_ustr_ascii_compare_WithLength(pEnv->pTypeName->buffer, rtl_str_getLength(UNO_LB_UNO), UNO_LB_UNO)
             == 0,
@@ -267,7 +253,7 @@ Base::Base(uno_Environment * pEnv, cppu::Enterable * pEnterable)
 
 Base::~Base()
 {
-    LOG_LIFECYCLE_cppu_helper_purpenv_Base_emit(fprintf(stderr, "LIFE: %s -> %p\n", "cppu::helper::purpenv::Base::~Base()", this));
+    SAL_INFO("cppu.purpenv", "LIFE: cppu::helper::purpenv::Base::~Base()" << " -> " << (void*)this);
 
     m_pEnv->acquire     = m_env_acquire;
     m_pEnv->release     = m_env_release;

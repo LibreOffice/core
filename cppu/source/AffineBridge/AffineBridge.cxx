@@ -28,19 +28,6 @@
 #include "cppu/helper/purpenv/Mapping.hxx"
 
 
-#ifdef debug
-# define LOG_LIFECYCLE_AffineBridge
-#endif
-
-#ifdef LOG_LIFECYCLE_AffineBridge
-#  include <iostream>
-#  define LOG_LIFECYCLE_AffineBridge_emit(x) x
-
-#else
-#  define LOG_LIFECYCLE_AffineBridge_emit(x)
-
-#endif
-
 class InnerThread;
 class OuterThread;
 
@@ -147,12 +134,12 @@ AffineBridge::AffineBridge()
       m_outerThreadId(0),
       m_pOuterThread (nullptr)
 {
-    LOG_LIFECYCLE_AffineBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "AffineBridge::AffineBridge(uno_Environment * pEnv)", this));
+    SAL_INFO("cppu.affinebridge", "LIFE: AffineBridge::AffineBridge(uno_Environment * pEnv)" << " -> " << (void*)this);
 }
 
 AffineBridge::~AffineBridge()
 {
-    LOG_LIFECYCLE_AffineBridge_emit(fprintf(stderr, "LIFE: %s -> %p\n", "AffineBridge::~AffineBridge()", this));
+    SAL_INFO("cppu.affinebridge", "LIFE: AffineBridge::~AffineBridge()" << " -> " << (void*)this);
 
     if (m_pInnerThread && osl::Thread::getCurrentIdentifier() != m_innerThreadId)
     {
