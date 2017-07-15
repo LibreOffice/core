@@ -333,8 +333,6 @@ namespace accessibility
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
-        ensureAlive();
-
         sal_Int32 nCount = 0;
         VclPtr<SvTreeListBox> pSvTreeListBox = getListBox();
         if ( pSvTreeListBox )
@@ -420,7 +418,6 @@ namespace accessibility
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
-        ensureAlive();
         return getListBox()->GetAccessibleDescription();
     }
 
@@ -438,8 +435,6 @@ namespace accessibility
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
-        ensureAlive();
-
         SvTreeListEntry* pEntry = getListBox()->GetEntry( nChildIndex );
         if ( !pEntry )
             throw IndexOutOfBoundsException();
@@ -451,8 +446,6 @@ namespace accessibility
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
-        ensureAlive();
-
         SvTreeListEntry* pEntry = getListBox()->GetEntry( nChildIndex );
         if ( !pEntry )
             throw IndexOutOfBoundsException();
@@ -463,8 +456,6 @@ namespace accessibility
     void SAL_CALL AccessibleListBox::clearAccessibleSelection(  )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
-
-        ensureAlive();
 
         sal_Int32 nCount = getListBox()->GetLevelChildCount( nullptr );
         for ( sal_Int32 i = 0; i < nCount; ++i )
@@ -479,8 +470,6 @@ namespace accessibility
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
-        ensureAlive();
-
         sal_Int32 nCount = getListBox()->GetLevelChildCount( nullptr );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -494,16 +483,12 @@ namespace accessibility
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
-        ensureAlive();
-
         return getListBox()->GetSelectionCount();
     }
 
     Reference< XAccessible > SAL_CALL AccessibleListBox::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
-
-        ensureAlive();
 
         if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount() )
             throw IndexOutOfBoundsException();
@@ -532,8 +517,6 @@ namespace accessibility
     void SAL_CALL AccessibleListBox::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
-
-        ensureAlive();
 
         SvTreeListEntry* pEntry = getListBox()->GetEntry( nSelectedChildIndex );
         if ( !pEntry )
