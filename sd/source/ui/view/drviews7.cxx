@@ -1756,15 +1756,87 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
 void DrawViewShell::SetPageProperties (SfxRequest& rReq)
 {
     SdPage *pPage = getCurrentPage();
+    if (!pPage)
+        return;
     sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet *pArgs = rReq.GetArgs();
+    if (!pArgs)
+        return;
 
-    if ( pPage && pArgs )
+    if ( ( nSlotId >= SID_ATTR_PAGE_COLOR ) && ( nSlotId <= SID_ATTR_PAGE_FILLSTYLE ) )
     {
-        Size aSize = pPage->GetSize();
-        PageKind ePageKind = GetPageKind();
+        SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
+        const SfxItemSet &aPageItemSet = rPageProperties.GetItemSet();
+        SfxItemSet *pTempSet = aPageItemSet.Clone(false, &mpDrawView->GetModel()->GetItemPool());
+
+        rPageProperties.ClearItem(XATTR_FILLSTYLE);
+        rPageProperties.ClearItem(XATTR_FILLGRADIENT);
+        rPageProperties.ClearItem(XATTR_FILLHATCH);
+        rPageProperties.ClearItem(XATTR_FILLBITMAP);
+
+        switch (nSlotId)
+        {
+            case(SID_ATTR_PAGE_FILLSTYLE):
+            {
+                XFillStyleItem aFSItem( static_cast<const XFillStyleItem&>(pArgs->Get( XATTR_FILLSTYLE )) );
+                drawing::FillStyle eXFS = aFSItem.GetValue();
+
+                if ( eXFS == drawing::FillStyle_NONE )
+                     rPageProperties.PutItem( XFillStyleItem( eXFS ) );
+            }
+            break;
+
+            case(SID_ATTR_PAGE_COLOR):
+            {
+                XFillColorItem aColorItem( static_cast<const XFillColorItem&>(pArgs->Get( XATTR_FILLCOLOR )) );
+                rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
+                rPageProperties.PutItem( aColorItem );
+            }
+            break;
+
+            case(SID_ATTR_PAGE_GRADIENT):
+            {
+                XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(pArgs->Get( XATTR_FILLGRADIENT )) );
+
+                // MigrateItemSet guarantees unique gradient names
+                SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
+                aMigrateSet.Put( aGradientItem );
+                SdrModel::MigrateItemSet( &aMigrateSet, pTempSet, mpDrawView->GetModel() );
+
+                rPageProperties.PutItemSet( *pTempSet );
+                rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
+            }
+            break;
+
+            case(SID_ATTR_PAGE_HATCH):
+            {
+                XFillHatchItem aHatchItem( static_cast<const XFillHatchItem&>(pArgs->Get( XATTR_FILLHATCH )) );
+                rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_HATCH ) );
+                rPageProperties.PutItem( aHatchItem );
+            }
+            break;
+
+            case(SID_ATTR_PAGE_BITMAP):
+            {
+                XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem&>(pArgs->Get( XATTR_FILLBITMAP )) );
+                rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_BITMAP ) );
+                rPageProperties.PutItem( aBitmapItem );
+            }
+            break;
+
+            default:
+            break;
+        }
+
+        delete pTempSet;
+
+        rReq.Done();
+    }
+    else
+    {
+        PageKind            ePageKind = GetPageKind();
         const SfxPoolItem*  pPoolItem = nullptr;
-        Size                aNewSize(aSize);
+        Size                aNewSize(pPage->GetSize());
         sal_Int32           nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
         bool                bScaleAll = true;
         Orientation         eOrientation = pPage->GetOrientation();
@@ -1772,116 +1844,43 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
         bool                bFullSize = pMasterPage->IsBackgroundFullSize();
         sal_uInt16          nPaperBin = pPage->GetPaperBin();
 
-        if ( ( nSlotId >= SID_ATTR_PAGE_COLOR ) && ( nSlotId <= SID_ATTR_PAGE_FILLSTYLE ) )
+        switch (nSlotId)
         {
-            SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
-            const SfxItemSet &aPageItemSet = rPageProperties.GetItemSet();
-            SfxItemSet *pTempSet = aPageItemSet.Clone(false, &mpDrawView->GetModel()->GetItemPool());
-
-            rPageProperties.ClearItem(XATTR_FILLSTYLE);
-            rPageProperties.ClearItem(XATTR_FILLGRADIENT);
-            rPageProperties.ClearItem(XATTR_FILLHATCH);
-            rPageProperties.ClearItem(XATTR_FILLBITMAP);
-
-            switch (nSlotId)
-            {
-                case(SID_ATTR_PAGE_FILLSTYLE):
+            case SID_ATTR_PAGE_LRSPACE:
+                if( pArgs->GetItemState(GetPool().GetWhich(SID_ATTR_PAGE_LRSPACE),
+                                        true,&pPoolItem) == SfxItemState::SET )
                 {
-                    XFillStyleItem aFSItem( static_cast<const XFillStyleItem&>(pArgs->Get( XATTR_FILLSTYLE )) );
-                    drawing::FillStyle eXFS = aFSItem.GetValue();
-
-                    if ( eXFS == drawing::FillStyle_NONE )
-                         rPageProperties.PutItem( XFillStyleItem( eXFS ) );
-                }
-                break;
-
-                case(SID_ATTR_PAGE_COLOR):
-                {
-                    XFillColorItem aColorItem( static_cast<const XFillColorItem&>(pArgs->Get( XATTR_FILLCOLOR )) );
-                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
-                    rPageProperties.PutItem( aColorItem );
-                }
-                break;
-
-                case(SID_ATTR_PAGE_GRADIENT):
-                {
-                    XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(pArgs->Get( XATTR_FILLGRADIENT )) );
-
-                    // MigrateItemSet guarantees unique gradient names
-                    SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>{} );
-                    aMigrateSet.Put( aGradientItem );
-                    SdrModel::MigrateItemSet( &aMigrateSet, pTempSet, mpDrawView->GetModel() );
-
-                    rPageProperties.PutItemSet( *pTempSet );
-                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
-                }
-                break;
-
-                case(SID_ATTR_PAGE_HATCH):
-                {
-                    XFillHatchItem aHatchItem( static_cast<const XFillHatchItem&>(pArgs->Get( XATTR_FILLHATCH )) );
-                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_HATCH ) );
-                    rPageProperties.PutItem( aHatchItem );
-                }
-                break;
-
-                case(SID_ATTR_PAGE_BITMAP):
-                {
-                    XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem&>(pArgs->Get( XATTR_FILLBITMAP )) );
-                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_BITMAP ) );
-                    rPageProperties.PutItem( aBitmapItem );
-                }
-                break;
-
-                default:
-                break;
-            }
-
-            delete pTempSet;
-
-            rReq.Done();
-        }
-        else
-        {
-            switch (nSlotId)
-            {
-                case SID_ATTR_PAGE_LRSPACE:
-                    if( pArgs->GetItemState(GetPool().GetWhich(SID_ATTR_PAGE_LRSPACE),
-                                            true,&pPoolItem) == SfxItemState::SET )
+                    nLeft = static_cast<const SvxLongLRSpaceItem*>(pPoolItem)->GetLeft();
+                    nRight = static_cast<const SvxLongLRSpaceItem*>(pPoolItem)->GetRight();
+                    if (nLeft != -1 && nUpper == -1)
                     {
-                        nLeft = static_cast<const SvxLongLRSpaceItem*>(pPoolItem)->GetLeft();
-                        nRight = static_cast<const SvxLongLRSpaceItem*>(pPoolItem)->GetRight();
-                        if (nLeft != -1 && nUpper == -1)
-                        {
-                            nUpper  = pPage->GetUppBorder();
-                            nLower  = pPage->GetLwrBorder();
-                        }
-                        SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
+                        nUpper  = pPage->GetUppBorder();
+                        nLower  = pPage->GetLwrBorder();
                     }
-                    break;
-
-                case SID_ATTR_PAGE_ULSPACE:
-                    if( pArgs->GetItemState(SID_ATTR_PAGE_ULSPACE,
-                                            true,&pPoolItem) == SfxItemState::SET )
-                    {
-                        nUpper = static_cast<const SvxLongULSpaceItem*>(pPoolItem)->GetUpper();
-                        nLower = static_cast<const SvxLongULSpaceItem*>(pPoolItem)->GetLower();
-                        if (nLeft == -1 && nUpper != -1)
-                        {
-                            nLeft   = pPage->GetLftBorder();
-                            nRight  = pPage->GetRgtBorder();
-                        }
-                        SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
-                    }
-                    break;
-
-                default:
+                    SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
+                }
                 break;
-            }
+
+            case SID_ATTR_PAGE_ULSPACE:
+                if( pArgs->GetItemState(SID_ATTR_PAGE_ULSPACE,
+                                        true,&pPoolItem) == SfxItemState::SET )
+                {
+                    nUpper = static_cast<const SvxLongULSpaceItem*>(pPoolItem)->GetUpper();
+                    nLower = static_cast<const SvxLongULSpaceItem*>(pPoolItem)->GetLower();
+                    if (nLeft == -1 && nUpper != -1)
+                    {
+                        nLeft   = pPage->GetLftBorder();
+                        nRight  = pPage->GetRgtBorder();
+                    }
+                    SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
+                }
+                break;
+
+            default:
+            break;
         }
     }
 }
-
 
 void DrawViewShell::GetState (SfxItemSet& rSet)
 {
