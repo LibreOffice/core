@@ -21,6 +21,8 @@ $(eval $(call gb_Library_Library,svl))
 
 $(eval $(call gb_Library_use_externals,svl,\
     boost_headers \
+    $(if $(filter LINUX MACOSX %BSD SOLARIS,$(OS)), \
+        curl) \
     icu_headers \
     icuuc \
     mdds_headers \
@@ -46,6 +48,20 @@ $(eval $(call gb_Library_add_defs,svl,\
     -DSVL_DLLIMPLEMENTATION \
 ))
 
+ifeq ($(TLS),NSS)
+$(eval $(call gb_Library_use_externals,svl,\
+       plc4 \
+       nss3 \
+))
+else
+ifeq ($(TLS),OPENSSL)
+$(eval $(call gb_Library_use_externals,svl,\
+    openssl \
+    openssl_headers \
+))
+endif
+endif
+
 $(eval $(call gb_Library_use_libraries,svl,\
     basegfx \
     comphelper \
@@ -62,12 +78,30 @@ $(eval $(call gb_Library_use_libraries,svl,\
     utl \
 ))
 
+$(eval $(call gb_Library_use_system_win32_libs,svl,\
+    advapi32 \
+    crypt32 \
+    gdi32 \
+    gdiplus \
+    imm32 \
+    mpr \
+    ole32 \
+    shell32 \
+    usp10 \
+    uuid \
+    version \
+    winspool \
+    setupapi \
+    shlwapi \
+))
+
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/config/asiancfg \
     svl/source/config/cjkoptions \
     svl/source/config/ctloptions \
     svl/source/config/itemholder2 \
     svl/source/config/languageoptions \
+    svl/source/crypto/cryptosign \
     svl/source/filepicker/pickerhistory \
     svl/source/filerec/filerec \
     svl/source/items/aeitem \

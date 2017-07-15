@@ -342,6 +342,7 @@ certain functionality.
 @section svl
 
 @li @c svl
+@li @c svl.crypto
 @li @c svl.items
 @li @c svl.numbers
 
