@@ -234,6 +234,12 @@ interface BaseTextEditView
         StateMethod = StateTabWin ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    SID_RULER_CHANGE_STATE // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
     SID_RULER_BORDERS // status()
     [
         ExecMethod = ExecTabWin ;
