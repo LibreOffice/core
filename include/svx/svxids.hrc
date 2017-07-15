@@ -234,6 +234,7 @@
 
 // CAUTION! Range <64 .. 67> used by EditEngine (!)
 
+#define SID_RULER_CHANGE_STATE                          ( SID_SVX_START + 78 )
 #define SID_RULER_NULL_OFFSET                           ( SID_SVX_START + 79 )
 #define SID_RULER_BORDERS                               ( SID_SVX_START + 80 )
 #define SID_RULER_OBJECT                                ( SID_SVX_START + 81 )

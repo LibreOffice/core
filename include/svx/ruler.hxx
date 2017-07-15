@@ -41,6 +41,12 @@ class SvxObjectItem;
 class SfxBoolItem;
 struct SvxRuler_Impl;
 
+enum class RulerChangeType
+{
+    MARGIN1,
+    MARGIN2
+};
+
 enum class SvxRulerDragFlags
 {
     NONE                       = 0x00,
@@ -273,6 +279,11 @@ public:
 
     //#i24363# tab stops relative to indent
     void SetTabsRelativeToIndent( bool bRel );
+    void SetValues(RulerChangeType type, long value);
+    long GetPageWidth()
+    {
+        return Ruler::GetPageWidth();
+    }
 };
 
 #endif
