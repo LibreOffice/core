@@ -128,6 +128,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/saveopt.hxx>
+#include "swruler.hxx"
+
 
 #include <EnhancedPDFExportHelper.hxx>
 #include <numrule.hxx>
@@ -3218,6 +3220,12 @@ OUString SwXTextDocument::getTrackedChanges()
 OUString SwXTextDocument::getTrackedChangeAuthors()
 {
     return SW_MOD()->GetRedlineAuthorInfo();
+}
+
+OUString SwXTextDocument::getRulerState()
+{
+    SwView* pView = pDocShell->GetView();
+    return OUString::fromUtf8((dynamic_cast<SwCommentRuler&>(pView->GetHRuler())).CreateJsonNotification().c_str());
 }
 
 OUString SwXTextDocument::getPostIts()
