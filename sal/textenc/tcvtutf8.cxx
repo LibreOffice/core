@@ -207,17 +207,17 @@ sal_Size ImplConvertUtf8ToUnicode(
 
     no_output:
         --pSrcBufPtr;
-        nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+        nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
         break;
     }
 
     if (nShift >= 0
         && (nInfo & (RTL_TEXTTOUNICODE_INFO_ERROR
-                         | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL))
+                         | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL))
                == 0)
     {
         if ((nFlags & RTL_TEXTTOUNICODE_FLAGS_FLUSH) == 0)
-            nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
+            nInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL;
         else
             switch (sal::detail::textenc::handleBadInputTextToUnicodeConversion(
                         false, true, 0, nFlags, &pDestBufPtr, pDestBufEnd,
@@ -230,7 +230,7 @@ sal_Size ImplConvertUtf8ToUnicode(
                 break;
 
             case sal::detail::textenc::BAD_INPUT_NO_OUTPUT:
-                nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+                nInfo |= RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
                 break;
             }
     }

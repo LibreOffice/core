@@ -42,7 +42,7 @@ sal_Size ImplSymbolToUnicode( SAL_UNUSED_PARAMETER const void*,
     {
         if ( pDestBuf == pEndDestBuf )
         {
-            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+            *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
             break;
         }
 
@@ -136,7 +136,7 @@ sal_Size ImplUpperCharToUnicode( const void* pData,
     pEndSrcBuf  = pSrcBuf+nSrcBytes;
     if ( pDestBuf == pEndDestBuf )
     {
-        *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL;
+        *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
         *pSrcCvtBytes = 0;
         return 0;
     }

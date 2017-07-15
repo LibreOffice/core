@@ -265,7 +265,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                 nOutput += nSize;
                 nInput += nConverted;
                 CPPUNIT_ASSERT_EQUAL((sal_uInt32) 0,
-                                     (nInfo & ~RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL));
+                                     (nInfo & ~RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL));
             }
             CPPUNIT_ASSERT_EQUAL(rTest.m_nUnicodeSize, nOutput);
             CPPUNIT_ASSERT_EQUAL(rTest.m_nTextSize, nInput);
@@ -306,11 +306,11 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                  | (rTest.m_bGlobalSignature ?
                     RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE : 0)),
                 &nInfo, &nCvtBytes);
-            if ((nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0) {
+            if ((nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) != 0) {
                 sal_Char sBuffer[10];
                 sBuffer[0] = c1;
                 sal_uInt16 nLen = 1;
-                while ((nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) != 0
+                while ((nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) != 0
                        && nLen < 10)
                 {
                     if (i == rTest.m_nTextSize) {
@@ -336,7 +336,7 @@ void doComplexCharSetTest(ComplexCharSetTest const & rTest) {
                     aUnicode[nSize++] = aUC[1];
                 } else {
                     OSL_ASSERT(
-                        (nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL) == 0
+                        (nInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL) == 0
                         && nChars == 0 && nInfo != 0);
                     aUnicode[nSize++] = sBuffer[0];
                     i -= nLen - 1;
@@ -426,9 +426,9 @@ void doComplexCharSetCutTest(ComplexCharSetTest const & rTest) {
             &nInfo, &nConverted);
 
         CPPUNIT_ASSERT_EQUAL(rTest.m_nUnicodeSize, nSize);
-        if (nInfo != RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL)
+        if (nInfo != RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL)
         {
-            CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL,
+            CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL,
                                  nInfo);
         }
         CPPUNIT_ASSERT_MESSAGE("nConverted should be less than rTest.m_nTextSize", nConverted < rTest.m_nTextSize);
@@ -2683,7 +2683,7 @@ void Test::testSRCBUFFERTOSMALL() {
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
             &info, &cvt));
-    CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL, info);
+    CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL, info);
     CPPUNIT_ASSERT(cvt <= 1);
     rtl_destroyTextToUnicodeContext(cv, cx);
     rtl_destroyTextToUnicodeConverter(cv);

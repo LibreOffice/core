@@ -420,14 +420,14 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
                                     &nSrcCvtBytes );
         nSourceCount += nSrcCvtBytes;
 
-        if( uiInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL ) {
+        if( uiInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL ) {
             // save necessary bytes for next conversion
             seqUnicode.realloc( seqUnicode.getLength() * 2 );
             continue;
         }
         break;
     }
-    if( uiInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL ) {
+    if( uiInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL ) {
         m_seqSource.realloc( nSourceSize - nSourceCount );
         memcpy( m_seqSource.getArray() , &(pbSource[nSourceCount]) , nSourceSize-nSourceCount );
     }

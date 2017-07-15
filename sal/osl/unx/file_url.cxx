@@ -818,7 +818,7 @@ int TextToUnicode(
         text, text_buffer_size, unic_text, unic_text_buffer_size,
         OSTRING_TO_OUSTRING_CVTFLAGS | RTL_TEXTTOUNICODE_FLAGS_FLUSH, &nInfo, &nSrcChars);
 
-    if (nInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL)
+    if (nInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL)
     {
         errno = EOVERFLOW;
         return 0;
