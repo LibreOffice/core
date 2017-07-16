@@ -169,6 +169,29 @@ void D2DWriteTextOutRenderer::applyTextAntiAliasMode()
     mpRT->SetTextRenderingParams(mpRenderingParameters);
 }
 
+HRESULT D2DWriteTextOutRenderer::CreateRenderTarget()
+{
+    if (mpRT)
+    {
+        mpRT->Release();
+        mpRT = nullptr;
+    }
+    return mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT);
+}
+
+bool D2DWriteTextOutRenderer::Ready() const
+{
+    return mpGdiInterop && mpRT;
+}
+
+bool D2DWriteTextOutRenderer::BindDC(HDC hDC, tools::Rectangle const & rRect)
+{
+    if (rRect.GetWidth() == 0 || rRect.GetHeight() == 0)
+        return false;
+    RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
+    return SUCCEEDED(mpRT->BindDC(hDC, &rc));
+}
+
 bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     SalGraphics &rGraphics,
     HDC hDC)
