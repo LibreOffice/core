@@ -107,6 +107,25 @@ IDWriteRenderingParams* lclSetRenderingMode(IDWriteFactory* pDWriteFactory, DWRI
     return pParameters;
 }
 
+#ifdef SAL_LOG_WARN
+HRESULT checkResult(HRESULT hr, const char* file, size_t line)
+{
+    if (FAILED(hr))
+    {
+        OUString sLocationString = OUString::createFromAscii(file) + ":" + OUString::number(line) + " ";
+        SAL_DETAIL_LOG_STREAM(SAL_DETAIL_ENABLE_LOG_WARN, ::SAL_DETAIL_LOG_LEVEL_WARN,
+                              "vcl.gdi", sLocationString.toUtf8().getStr(),
+                              "HRESULT failed with: " << (int(hr)));
+    }
+    return hr;
+}
+
+#define CHECKHR(funct) checkResult(funct, __FILE__, __LINE__)
+#else
+#define CHECKHR(funct) (funct)
+#endif
+
+
 } // end anonymous namespace
 
 D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
@@ -176,7 +195,7 @@ HRESULT D2DWriteTextOutRenderer::CreateRenderTarget()
         mpRT->Release();
         mpRT = nullptr;
     }
-    return mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT);
+    return CHECKHR(mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT));
 }
 
 bool D2DWriteTextOutRenderer::Ready() const
@@ -189,7 +208,7 @@ bool D2DWriteTextOutRenderer::BindDC(HDC hDC, tools::Rectangle const & rRect)
     if (rRect.GetWidth() == 0 || rRect.GetHeight() == 0)
         return false;
     RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
-    return SUCCEEDED(mpRT->BindDC(hDC, &rc));
+    return SUCCEEDED(CHECKHR(mpRT->BindDC(hDC, &rc)));
 }
 
 bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
@@ -211,7 +230,8 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
 
     ID2D1SolidColorBrush* pBrush = nullptr;
     COLORREF bgrTextColor = GetTextColor(mhDC);
-    succeeded &= SUCCEEDED(mpRT->CreateSolidColorBrush(D2D1::ColorF(GetRValue(bgrTextColor) / 255.0f, GetGValue(bgrTextColor) / 255.0f, GetBValue(bgrTextColor) / 255.0f), &pBrush));
+    D2D1::ColorF aD2DColor(GetRValue(bgrTextColor) / 255.0f, GetGValue(bgrTextColor) / 255.0f, GetBValue(bgrTextColor) / 255.0f);
+    succeeded &= SUCCEEDED(CHECKHR(mpRT->CreateSolidColorBrush(aD2DColor, &pBrush)));
 
     HRESULT hr = S_OK;
     if (succeeded)
@@ -242,7 +262,7 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
             mpRT->DrawGlyphRun(baseline, &glyphs, pBrush);
         }
 
-        hr = mpRT->EndDraw();
+        hr = CHECKHR(mpRT->EndDraw());
     }
 
     if (pBrush)
@@ -298,7 +318,7 @@ std::vector<tools::Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t
     mpFontFace->GetMetrics(&aFontMetrics);
 
     std::vector<DWRITE_GLYPH_METRICS> metrics(nGlyphs);
-    if (!SUCCEEDED(mpFontFace->GetDesignGlyphMetrics(pGid, nGlyphs, metrics.data())))
+    if (!SUCCEEDED(CHECKHR(mpFontFace->GetDesignGlyphMetrics(pGid, nGlyphs, metrics.data()))))
         return std::vector<tools::Rectangle>();
 
     std::vector<tools::Rectangle> aOut(nGlyphs);
@@ -327,7 +347,7 @@ bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** p
     bool succeeded = false;
     try
     {
-        succeeded = SUCCEEDED(mpGdiInterop->CreateFontFaceFromHdc(hDC, ppFontFace));
+        succeeded = SUCCEEDED(CHECKHR(mpGdiInterop->CreateFontFaceFromHdc(hDC, ppFontFace)));
     }
     catch (const std::exception& e)
     {
