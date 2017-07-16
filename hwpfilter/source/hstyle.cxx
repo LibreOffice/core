@@ -108,7 +108,7 @@ void HWPStyle::SetParaShape(int n, ParaShape * pshapep)
         if (pshapep)
             DATA[n].pshape = *pshapep;
         else
-            memset(&DATA[n].pshape, 0, sizeof(ParaShape));
+            DATA[n].pshape = ParaShape();
     }
 }
 
