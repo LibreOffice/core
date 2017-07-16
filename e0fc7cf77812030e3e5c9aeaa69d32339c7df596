@@ -16,6 +16,24 @@
       "revId": "e0fc7cf77812030e3e5c9aeaa69d32339c7df596",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_991443f6",
+        "filename": "include/tools/datetime.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2017-07-16T02:19:36Z",
+      "side": 1,
+      "message": "This is the number of seconds in double, since it is converted from integral microseconds. So it has fractional seconds.",
+      "parentUuid": "3a461143_79f3170b",
+      "revId": "e0fc7cf77812030e3e5c9aeaa69d32339c7df596",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
