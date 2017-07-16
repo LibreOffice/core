@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_99d603c4",
+        "filename": "idlc/source/astexpression.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-07-16T15:48:11Z",
+      "side": 1,
+      "message": "the old non-null value (see line 704) of m_exprValue is released here but not destructed. guess that\u0027s why ASAN does not see a double free.",
+      "range": {
+        "startLine": 756,
+        "startChar": 0,
+        "endLine": 756,
+        "endChar": 23
+      },
+      "revId": "1d365641f84d4bcc68f18d4077b1329674532a20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
