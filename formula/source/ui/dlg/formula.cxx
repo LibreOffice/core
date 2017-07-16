@@ -561,11 +561,29 @@ bool FormulaDlg_Impl::CalcValue( const OUString& rStrExp, OUString& rStrResult, 
 
 void FormulaDlg_Impl::UpdateValues( bool bForceRecalcStruct )
 {
-    /* TODO: this must take array context of the outer
-     * FormulaToken::IsInForceArray() into account. As is, this is just the
-     * currently selected formula text part. */
+    // Take a force-array context into account. RPN creation propagated those
+    // to tokens that are ref-counted so also available in the token array.
+    bool bForceArray = false;
+    // Only necessary if it's not a matrix formula anyway.
+    if (!m_pBtnMatrix->IsChecked())
+    {
+        const sal_Int32 nPos = m_aFuncSel.Min();
+        assert( 0 <= nPos && nPos < m_pHelper->getCurrentFormula().getLength());
+        OUStringBuffer aBuf;
+        std::unique_ptr<FormulaCompiler> pCompiler( m_pHelper->createCompiler( *m_pTokenArray.get()));
+        const FormulaToken* pToken = nullptr;
+        for (pToken = m_pTokenArrayIterator->First(); pToken; pToken = m_pTokenArrayIterator->Next())
+        {
+            pCompiler->CreateStringFromToken( aBuf, pToken);
+            if (nPos < aBuf.getLength())
+                break;
+        }
+        if (pToken && nPos < aBuf.getLength())
+            bForceArray = pToken->IsInForceArray();
+    }
+
     OUString aStrResult;
-    if ( m_pFuncDesc &&  CalcValue( m_pFuncDesc->getFormula( m_aArguments ), aStrResult ) )
+    if (m_pFuncDesc && CalcValue( m_pFuncDesc->getFormula( m_aArguments), aStrResult, bForceArray))
         m_pWndResult->SetText( aStrResult );
 
     if (m_bMakingTree)
