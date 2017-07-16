@@ -32,6 +32,7 @@ SecurityEnvironmentGpg::SecurityEnvironmentGpg()
     m_ctx.reset( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
     if (m_ctx == nullptr)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+    m_ctx->setArmor(false);
 }
 
 SecurityEnvironmentGpg::~SecurityEnvironmentGpg()
