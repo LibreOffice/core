@@ -32,7 +32,7 @@
 #include "servicenames_charttypes.hxx"
 #include "ResId.hxx"
 #include "bitmaps.hlst"
-#include "HelpIds.hrc"
+#include "helpids.h"
 
 #include <vcl/fixed.hxx>
 #include <vcl/image.hxx>

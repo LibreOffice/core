@@ -21,7 +21,6 @@
 #include <basic/codecompletecache.hxx>
 #include <iostream>
 #include <officecfg/Office/BasicIDE.hxx>
-#include <cuires.hrc>
 
 SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet )
 : SfxTabPage(pParent, "OptBasicIDEPage", "cui/ui/optbasicidepage.ui", &rSet)

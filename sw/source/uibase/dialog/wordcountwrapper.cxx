@@ -10,7 +10,6 @@
 #include <swtypes.hxx>
 #include <wordcountdialog.hxx>
 #include <docstat.hxx>
-#include <dialog.hrc>
 #include <cmdid.h>
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwWordCountWrapper, FN_WORDCOUNT_DIALOG)

@@ -105,9 +105,6 @@ using namespace ::com::sun::star;
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
-#include <misc.hrc>
-#include <table.hrc>
-#include <frmui.hrc>
 #include <unomid.h>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
@@ -527,9 +524,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_FORMAT_COLUMN :
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialog creation failed!");
-        ScopedVclPtr<VclAbstractDialog> pColDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN));
-        OSL_ENSURE(pColDlg, "Dialog creation failed!");
+        assert(pFact && "Dialog creation failed!");
+        ScopedVclPtr<VclAbstractDialog> pColDlg(pFact->CreateSwColumnDialog(GetView().GetWindow(), rSh));
+        assert(pColDlg && "Dialog creation failed!");
         pColDlg->Execute();
     }
     break;

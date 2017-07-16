@@ -28,8 +28,6 @@
 #include <inpdlg.hxx>
 #include <fldmgr.hxx>
 
-#include <fldui.hrc>
-
 // edit field-insert
 SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
                               SwField* pField, bool bNextButton )

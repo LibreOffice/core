@@ -28,7 +28,6 @@
 
 #include "strings.hrc"
 #include "strings.hrc"
-#include "prltempl.hrc"
 #include "strings.hxx"
 
 #include "sdresid.hxx"
@@ -141,7 +140,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             if (pFact)
             {
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, mpViewShell->GetActiveWindow(),
-                                                                    TAB_PRES_LAYOUT_TEMPLATE, rStyleSheet, ePO, pStyleSheetPool ));
+                                                                    false, rStyleSheet, ePO, pStyleSheetPool ));
                 if( pDlg->Execute() == RET_OK )
                 {
                     const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();

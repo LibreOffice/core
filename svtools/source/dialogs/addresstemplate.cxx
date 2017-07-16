@@ -20,9 +20,8 @@
 
 #include <memory>
 #include <svtools/addresstemplate.hxx>
-#include "addresstemplate.hrc"
 #include <svtools/strings.hrc>
-#include <svtools/helpid.hrc>
+#include <svtools/helpids.h>
 #include <svtools/svtresid.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/interaction.hxx>

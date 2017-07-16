@@ -22,7 +22,6 @@
 #define INCLUDED_BASIC_SBXDEF_HXX
 
 
-#ifndef __RSC
 #include <vcl/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -124,9 +123,6 @@ enum class SbxNameType {          // Type of the questioned name of a variable
     ShortTypes,     // Name%(A%,B$)
 };
 
-#endif
-
-
 // New error codes per define
 #define ERRCODE_SBX_SYNTAX              ErrCode(1UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_COMPILER)
 #define ERRCODE_SBX_NOTIMP              ErrCode(2UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_NOTSUPPORTED)
@@ -158,8 +154,6 @@ enum class SbxNameType {          // Type of the questioned name of a variable
 #define ERRCODE_SBX_WRONG_ARGS          ErrCode(28UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)       // Invalid number of arguments
 #define ERRCODE_SBX_NOT_A_COLL          ErrCode(29UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Object contains no elements
 #define LAST_SBX_ERROR_ID                        29UL
-
-#ifndef __RSC
 
 // Flag-Bits:
 enum class SbxFlagBits {
@@ -251,8 +245,6 @@ namespace o3tl
 
 // The numeric values of sal_True and FALSE
 enum SbxBOOL { SbxFALSE = 0, SbxTRUE = -1 };
-
-#endif //ifndef __RSC
 
 #endif
 

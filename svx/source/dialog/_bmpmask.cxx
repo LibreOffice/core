@@ -34,7 +34,7 @@
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <memory>
-#include "helpid.hrc"
+#include "helpids.h"
 
 #define OWN_CALLMODE    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD
 

@@ -23,7 +23,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
-#include "misc.hrc"
 #include "strings.hrc"
 
 #define CONTROL_BORDER_WIDTH    1

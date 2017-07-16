@@ -183,10 +183,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "Dialog creation failed!");
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
-                                                        GetView().GetWindow(), &aSet, GetShell()));
-        OSL_ENSURE(pDlg, "Dialog creation failed!");
+        assert(pFact && "Dialog creation failed!");
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxNumBulletTabDialog(GetView().GetWindow(), &aSet, GetShell()));
+        assert(pDlg && "Dialog creation failed!");
         const SfxStringItem* pPageItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
         if ( pPageItem )
             pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );

@@ -116,7 +116,7 @@
 #include <strings.hrc>
 #include <app.hrc>
 #include <fmtclds.hxx>
-#include <helpid.h>
+#include <helpids.h>
 #include <sfx2/templatedlg.hxx>
 #include <dbconfig.hxx>
 #include <dbmgr.hxx>

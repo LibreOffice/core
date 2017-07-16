@@ -32,12 +32,12 @@
 #include "bibresid.hxx"
 #include "datman.hxx"
 #include "bibconfig.hxx"
-#include "bibprop.hrc"
+#include "bibprop.hxx"
 #include "strings.hrc"
 #include "bibmod.hxx"
 #include "bibview.hxx"
 #include "bibtools.hxx"
-#include "bibliography.hrc"
+#include "helpids.h"
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>

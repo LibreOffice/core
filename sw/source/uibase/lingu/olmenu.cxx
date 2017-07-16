@@ -18,17 +18,15 @@
  */
 
 #include "SwRewriter.hxx"
-#include "chrdlg.hrc"
 #include "cmdid.h"
 #include "strings.hrc"
 #include "doc.hxx"
 #include "docsh.hxx"
 #include "edtwin.hxx"
-#include "helpid.h"
+#include "helpids.h"
 #include "hintids.hxx"
 #include "langhelper.hxx"
 #include "ndtxt.hxx"
-#include "olmenu.hrc"
 #include "bitmaps.hlst"
 #include "olmenu.hxx"
 #include "swabstdlg.hxx"

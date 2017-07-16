@@ -23,13 +23,11 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
-#include <sfx2/sfx.hrc>
 #include <tools/helpers.hxx>
 #include <unotools/syslocale.hxx>
 
 #include "sdmod.hxx"
 #include "optsitem.hxx"
-#include "cfgids.hxx"
 #include "FrameView.hxx"
 #include <sdattr.hrc>
 
@@ -76,10 +74,10 @@ bool SdOptionsItem::PutProperties( const Sequence< OUString >& rNames, const Seq
     return ConfigItem::PutProperties( rNames, rValues );
 }
 
-SdOptionsGeneric::SdOptionsGeneric(sal_uInt16 nConfigId, const OUString& rSubTree)
+SdOptionsGeneric::SdOptionsGeneric(bool bImpress, const OUString& rSubTree)
     : maSubTree(rSubTree)
     , mpCfgItem( nullptr)
-    , mnConfigId(nConfigId)
+    , mbImpress(bImpress)
     , mbInit(rSubTree.isEmpty())
     , mbEnableModify(false)
 {
@@ -94,7 +92,7 @@ SdOptionsGeneric& SdOptionsGeneric::operator=(SdOptionsGeneric const & rSource)
 {
     maSubTree = rSource.maSubTree;
     mpCfgItem.reset(rSource.mpCfgItem ? new SdOptionsItem(*rSource.mpCfgItem) : nullptr );
-    mnConfigId = rSource.mnConfigId;
+    mbImpress = rSource.mbImpress;
     mbInit = rSource.mbInit;
     mbEnableModify = rSource.mbEnableModify;
     return *this;
@@ -181,11 +179,11 @@ bool SdOptionsGeneric::isMetricSystem()
 |*
 \************************************************************************/
 
-SdOptionsLayout::SdOptionsLayout(  sal_uInt16 nConfigId, bool bUseConfig ) :
-    SdOptionsGeneric( nConfigId, bUseConfig ?
-                      ( ( SDCFG_DRAW == nConfigId ) ?
-                        OUString( "Office.Draw/Layout" ) :
-                        OUString( "Office.Impress/Layout" ) ) :
+SdOptionsLayout::SdOptionsLayout(bool bImpress, bool bUseConfig) :
+    SdOptionsGeneric( bImpress, bUseConfig ?
+                      ( bImpress ?
+                        OUString( "Office.Impress/Layout" ) :
+                        OUString( "Office.Draw/Layout" ) ) :
                       OUString() ),
     bRuler( true ),
     bMoveOutline( true ),
@@ -340,11 +338,11 @@ void SdOptionsLayoutItem::SetOptions( SdOptions* pOpts ) const
 |*
 \************************************************************************/
 
-SdOptionsContents::SdOptionsContents( sal_uInt16 nConfigId, bool bUseConfig ) :
-    SdOptionsGeneric( nConfigId, bUseConfig ?
-                      ( ( SDCFG_DRAW == nConfigId ) ?
-                        OUString( "Office.Draw/Content" ) :
-                        OUString( "Office.Impress/Content" ) ) :
+SdOptionsContents::SdOptionsContents(bool bImpress, bool bUseConfig) :
+    SdOptionsGeneric( bImpress, bUseConfig ?
+                      ( bImpress ?
+                        OUString( "Office.Impress/Content" ) :
+                        OUString( "Office.Draw/Content" ) ) :
                       OUString() )
 {
     EnableModify( true );
@@ -414,11 +412,11 @@ bool SdOptionsContentsItem::operator==( const SfxPoolItem& rAttr ) const
 |*
 \************************************************************************/
 
-SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, bool bUseConfig ) :
-    SdOptionsGeneric( nConfigId, bUseConfig ?
-                      ( ( SDCFG_DRAW == nConfigId ) ?
-                        OUString( "Office.Draw/Misc" ) :
-                        OUString( "Office.Impress/Misc" ) ) :
+SdOptionsMisc::SdOptionsMisc( bool bImpress, bool bUseConfig ) :
+    SdOptionsGeneric( bImpress, bUseConfig ?
+                      ( bImpress ?
+                        OUString( "Office.Impress/Misc" ) :
+                        OUString( "Office.Draw/Misc" ) ) :
                       OUString() ),
     nDefaultObjectSizeWidth(8000),
     nDefaultObjectSizeHeight(5000),
@@ -426,7 +424,7 @@ SdOptionsMisc::SdOptionsMisc( sal_uInt16 nConfigId, bool bUseConfig ) :
     bMarkedHitMovesAlways( true ),
     bMoveOnlyDragging( false ),
     bCrookNoContortion( false ),
-    bQuickEdit( GetConfigId() != SDCFG_DRAW ),
+    bQuickEdit( IsImpress() ),
     bMasterPageCache( true ),
     bDragWithCopy( false ),
     bPickThrough( true ),
@@ -527,7 +525,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "TabBarVisible"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? SAL_N_ELEMENTS(aPropNames) : 14 );
+    rCount = ( IsImpress() ? SAL_N_ELEMENTS(aPropNames) : 14 );
     ppNames = aPropNames;
 }
 
@@ -550,7 +548,7 @@ bool SdOptionsMisc::ReadData( const Any* pValues )
         SetShowComments(  *o3tl::doAccess<bool>(pValues[ 13 ]) );
 
     // just for Impress
-    if( GetConfigId() == SDCFG_IMPRESS )
+    if (IsImpress())
     {
         if( pValues[14].hasValue() )
             SetStartWithTemplate( *o3tl::doAccess<bool>(pValues[ 14 ]) );
@@ -613,7 +611,7 @@ bool SdOptionsMisc::WriteData( Any* pValues ) const
     pValues[ 13 ] <<= IsShowComments();
 
     // just for Impress
-    if( GetConfigId() == SDCFG_IMPRESS )
+    if (IsImpress())
     {
         pValues[ 14 ] <<= IsStartWithTemplate();
         pValues[ 15 ] <<= IsSummationOfParagraphs();
@@ -760,11 +758,11 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
 |*
 \************************************************************************/
 
-SdOptionsSnap::SdOptionsSnap( sal_uInt16 nConfigId, bool bUseConfig ) :
-    SdOptionsGeneric( nConfigId, bUseConfig ?
-                      ( ( SDCFG_DRAW == nConfigId ) ?
-                        OUString( "Office.Draw/Snap" ) :
-                        OUString( "Office.Impress/Snap" ) ) :
+SdOptionsSnap::SdOptionsSnap( bool bImpress, bool bUseConfig ) :
+    SdOptionsGeneric( bImpress, bUseConfig ?
+                      ( bImpress ?
+                        OUString( "Office.Impress/Snap" ) :
+                        OUString( "Office.Draw/Snap" ) ) :
                       OUString() ),
     bSnapHelplines( true ),
     bSnapBorder( true ),
@@ -925,10 +923,10 @@ void SdOptionsSnapItem::SetOptions( SdOptions* pOpts ) const
 |*
 \************************************************************************/
 
-SdOptionsZoom::SdOptionsZoom( sal_uInt16 nConfigId ) :
-    SdOptionsGeneric( nConfigId, ( SDCFG_DRAW == nConfigId ) ?
-                                 OUString( "Office.Draw/Zoom" ) :
-                                 OUString() ),
+SdOptionsZoom::SdOptionsZoom( bool bImpress ) :
+    SdOptionsGeneric( bImpress, bImpress ?
+                                 OUString() :
+                                 OUString("Office.Draw/Zoom") ),
     nX( 1 ),
     nY( 1 )
 
@@ -944,7 +942,7 @@ void SdOptionsZoom::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "ScaleY"
     };
 
-    rCount = ( GetConfigId() == SDCFG_DRAW ) ? SAL_N_ELEMENTS(aPropNames) : 0;
+    rCount = !IsImpress() ? SAL_N_ELEMENTS(aPropNames) : 0;
     ppNames = aPropNames;
 }
 
@@ -978,11 +976,11 @@ bool SdOptionsZoom::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsGrid::SdOptionsGrid( sal_uInt16 nConfigId ) :
-    SdOptionsGeneric( nConfigId,
-                      ( SDCFG_DRAW == nConfigId ) ?
-                        OUString( "Office.Draw/Grid" ) :
-                        OUString( "Office.Impress/Grid" )
+SdOptionsGrid::SdOptionsGrid(bool bImpress) :
+    SdOptionsGeneric( bImpress,
+                      bImpress ?
+                        OUString( "Office.Impress/Grid" ) :
+                        OUString( "Office.Draw/Grid" )
                     )
 {
     EnableModify( false );
@@ -1135,11 +1133,11 @@ void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
 |*
 \************************************************************************/
 
-SdOptionsPrint::SdOptionsPrint( sal_uInt16 nConfigId, bool bUseConfig ) :
-    SdOptionsGeneric( nConfigId, bUseConfig ?
-                      ( ( SDCFG_DRAW == nConfigId ) ?
-                        OUString( "Office.Draw/Print" ) :
-                        OUString( "Office.Impress/Print" ) ) :
+SdOptionsPrint::SdOptionsPrint( bool bImpress, bool bUseConfig ) :
+    SdOptionsGeneric( bImpress, bUseConfig ?
+                      ( bImpress ?
+                        OUString( "Office.Impress/Print" ) :
+                        OUString( "Office.Draw/Print" ) ) :
                       OUString() ),
     bDraw( true ),
     bNotes( false ),
@@ -1193,7 +1191,7 @@ bool SdOptionsPrint::operator==( const SdOptionsPrint& rOpt ) const
 
 void SdOptionsPrint::GetPropNameArray( const char**& ppNames, sal_uLong& rCount ) const
 {
-    if( GetConfigId() == SDCFG_IMPRESS )
+    if (IsImpress())
     {
         static const char* aImpressPropNames[] =
         {
@@ -1264,7 +1262,7 @@ bool SdOptionsPrint::ReadData( const Any* pValues )
     if( pValues[11].hasValue() ) SetDraw( *o3tl::doAccess<bool>(pValues[ 11 ]) );
 
     // just for impress
-    if( GetConfigId() == SDCFG_IMPRESS )
+    if (IsImpress())
     {
         if( pValues[12].hasValue() ) SetNotes( *o3tl::doAccess<bool>(pValues[ 12 ]) );
         if( pValues[13].hasValue() ) SetHandout( *o3tl::doAccess<bool>(pValues[ 13 ]) );
@@ -1292,7 +1290,7 @@ bool SdOptionsPrint::WriteData( Any* pValues ) const
     pValues[ 11 ] <<= IsDraw();
 
     // just for impress
-    if( GetConfigId() == SDCFG_IMPRESS )
+    if (IsImpress())
     {
         pValues[ 12 ] <<= IsNotes();
         pValues[ 13 ] <<= IsHandout();
@@ -1387,14 +1385,14 @@ void SdOptionsPrintItem::SetOptions( SdOptions* pOpts ) const
 |*
 \************************************************************************/
 
-SdOptions::SdOptions( sal_uInt16 nConfigId ) :
-    SdOptionsLayout( nConfigId, true ),
-    SdOptionsContents( nConfigId, true ),
-    SdOptionsMisc( nConfigId, true ),
-    SdOptionsSnap( nConfigId, true ),
-    SdOptionsZoom( nConfigId ),
-    SdOptionsGrid( nConfigId ),
-    SdOptionsPrint( nConfigId, true )
+SdOptions::SdOptions(bool bImpress) :
+    SdOptionsLayout( bImpress, true ),
+    SdOptionsContents( bImpress, true ),
+    SdOptionsMisc( bImpress, true ),
+    SdOptionsSnap( bImpress, true ),
+    SdOptionsZoom( bImpress ),
+    SdOptionsGrid( bImpress ),
+    SdOptionsPrint( bImpress, true )
 {
 }
 

@@ -24,7 +24,6 @@
 
 #include "global.hxx"
 #include "globstr.hrc"
-#include "cfgids.hxx"
 #include "viewopti.hxx"
 #include "rechead.hxx"
 #include "scresid.hxx"

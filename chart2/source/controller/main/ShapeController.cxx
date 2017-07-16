@@ -18,7 +18,7 @@
  */
 
 #include "ShapeController.hxx"
-#include "ShapeController.hrc"
+#include "ShapeController.h"
 #include "ChartController.hxx"
 #include "ChartWindow.hxx"
 #include "ViewElementListProvider.hxx"

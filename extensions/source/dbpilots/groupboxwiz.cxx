@@ -23,7 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include "optiongrouplayouter.hxx"
-#include "dbpilots.hrc"
+#include "helpids.h"
 #include <comphelper/processfactory.hxx>
 
 #define GBW_STATE_OPTIONLIST        0

@@ -20,10 +20,10 @@
 #include "align.hxx"
 #include "dlgfact.hxx"
 
-#include <sfx2/basedlgs.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/basedlgs.hxx>
+#include <sfx2/pageids.hxx>
 #include <sfx2/request.hxx>
-#include <cuires.hrc>
 #include <svx/dialogs.hrc>
 #include "numfmt.hxx"
 #include "splitcelldlg.hxx"
@@ -808,7 +808,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog( vcl::Wind
     VclPtr<Dialog> pDlg;
     switch ( nResId )
     {
-        case RID_DEFAULTABOUT:
+        case SID_ABOUT:
         {
             pDlg = VclPtr<AboutDialog>::Create(pParent);
             break;

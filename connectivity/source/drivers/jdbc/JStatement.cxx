@@ -36,7 +36,6 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 
-#include "resource/conn_shared_res.hrc"
 #include "strings.hxx"
 
 #include <algorithm>

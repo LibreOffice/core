@@ -65,7 +65,6 @@
 #include <comphelper/storagehelper.hxx>
 
 #include "documentfontsdialog.hxx"
-#include <sfx2/sfx.hrc>
 #include "dinfdlg.hrc"
 #include "sfx2/strings.hrc"
 #include "strings.hxx"

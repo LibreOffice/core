@@ -81,7 +81,6 @@
 #include <swdtflvr.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <wrtsh.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/request.hxx>
 #include <paratr.hxx>

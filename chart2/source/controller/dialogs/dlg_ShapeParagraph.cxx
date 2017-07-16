@@ -19,7 +19,7 @@
 
 #include "dlg_ShapeParagraph.hxx"
 #include "ResId.hxx"
-#include "ResourceIds.hrc"
+#include "TabPageIds.h"
 
 #include <svl/cjkoptions.hxx>
 #include <svl/intitem.hxx>

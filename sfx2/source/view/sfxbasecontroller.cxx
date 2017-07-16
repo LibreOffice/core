@@ -59,7 +59,6 @@
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/sfx.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <workwin.hxx>
 #include <sfx2/objface.hxx>

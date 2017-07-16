@@ -76,8 +76,6 @@
 
 // class SvxErrorHandler -------------------------------------------------
 
-#ifndef __RSC
-
 #include <svtools/ehdl.hxx>
 #include <svx/svxdllapi.h>
 
@@ -90,8 +88,6 @@ public:
 
 SVX_DLLPUBLIC const ErrMsgCode* getRID_SVXERRCODE();
 SVX_DLLPUBLIC const ErrMsgCode* getRID_SVXERRCTX();
-
-#endif
 
 #endif
 

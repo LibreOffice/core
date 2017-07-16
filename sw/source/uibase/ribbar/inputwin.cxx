@@ -22,6 +22,7 @@
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/gen.hxx>
+#include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>
@@ -41,7 +42,7 @@
 #include "frmfmt.hxx"
 #include "cellatr.hxx"
 #include "edtwin.hxx"
-#include "helpid.h"
+#include "helpids.h"
 #include "strings.hrc"
 #include "bitmaps.hlst"
 

@@ -48,7 +48,7 @@
 #include <edtwin.hxx>
 #include <sfx2/app.hxx>
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 
 #include "strings.hrc"
 #include "globals.hrc"

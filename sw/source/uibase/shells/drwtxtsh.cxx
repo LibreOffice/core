@@ -54,7 +54,7 @@
 #include <breakit.hxx>
 
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <globals.hrc>
 #include <strings.hrc>
 
@@ -71,7 +71,6 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include "swabstdlg.hxx"
-#include "misc.hrc"
 #include "IDocumentUndoRedo.hxx"
 #include <memory>
 

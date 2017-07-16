@@ -29,7 +29,6 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <svl/intitem.hxx>
 #include <tools/diagnose_ex.h>

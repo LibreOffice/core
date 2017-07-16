@@ -22,8 +22,6 @@
 #include <swtypes.hxx>
 #include <tblnumfm.hxx>
 
-#include <chrdlg.hrc>
-
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svl/itemset.hxx>

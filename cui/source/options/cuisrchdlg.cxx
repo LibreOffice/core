@@ -33,8 +33,6 @@
 
 #include "cuisrchdlg.hxx"
 
-#include <cuires.hrc>
-
 #include <svl/srchitem.hxx>
 #include <svx/pageitem.hxx>
 #include <dialmgr.hxx>

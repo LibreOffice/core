@@ -31,8 +31,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svtools/miscopt.hxx>
 
-#include <cuires.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <strings.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>

@@ -24,7 +24,6 @@
 #include "strings.hrc"
 #include "frm_resource.hxx"
 #include "GroupManager.hxx"
-#include "property.hrc"
 #include "property.hxx"
 #include "services.hxx"
 

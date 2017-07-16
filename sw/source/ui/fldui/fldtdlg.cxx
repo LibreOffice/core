@@ -39,8 +39,7 @@
 #include <fldtdlg.hxx>
 #include <swmodule.hxx>
 
-#include <helpid.h>
-#include <fldui.hrc>
+#include <helpids.h>
 #include <globals.hrc>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
