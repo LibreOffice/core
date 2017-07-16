@@ -344,16 +344,7 @@ std::vector<tools::Rectangle> D2DWriteTextOutRenderer::GetGlyphInkBoxes(uint16_t
 
 bool D2DWriteTextOutRenderer::GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const
 {
-    bool succeeded = false;
-    try
-    {
-        succeeded = SUCCEEDED(CHECKHR(mpGdiInterop->CreateFontFaceFromHdc(hDC, ppFontFace)));
-    }
-    catch (const std::exception& e)
-    {
-        SAL_WARN("vcl.gdi", "Error in dwrite while creating font face: " << e.what());
-        return false;
-    }
+    bool succeeded = SUCCEEDED(CHECKHR(mpGdiInterop->CreateFontFaceFromHdc(hDC, ppFontFace)));
 
     if (succeeded)
     {
