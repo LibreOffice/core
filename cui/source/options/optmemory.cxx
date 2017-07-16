@@ -55,7 +55,7 @@
 #include "optmemory.hxx"
 #include <svx/ofaitem.hxx>
 #include <cuires.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <dialmgr.hxx>
 #include <limits>
 

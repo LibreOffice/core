@@ -17,13 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "TextUnderlineControl.hxx"
-#include "TextPropertyPanel.hrc"
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/Theme.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/udlnitem.hxx>
 #include <vcl/settings.hxx>
+#include "helpids.h"
 
 namespace svx {
 

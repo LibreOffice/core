@@ -32,7 +32,7 @@
 #include "TableFieldInfo.hxx"
 #include "strings.hrc"
 #include "strings.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "stringconstants.hxx"
 #include "QTableWindow.hxx"

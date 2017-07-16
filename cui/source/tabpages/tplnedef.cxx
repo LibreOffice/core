@@ -28,7 +28,7 @@
 
 #include <cuires.hrc>
 #include <strings.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>

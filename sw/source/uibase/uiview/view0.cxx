@@ -73,7 +73,6 @@ using namespace ::com::sun::star;
 #include <unomid.h>
 #include <memory>
 #include "swabstdlg.hxx"
-#include "misc.hrc"
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {
@@ -602,12 +601,10 @@ void SwView::ExecNumberingOutline(SfxItemPool & rPool)
 {
     SfxItemSet aTmp(rPool, svl::Items<FN_PARAM_1, FN_PARAM_1>{});
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
-                                                GetWindow(), &aTmp, GetWrtShell()));
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
+    assert(pFact && "Dialog creation failed!");
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateOutlineTabDialog(GetWindow(), &aTmp, GetWrtShell()));
+    assert(pDlg && "Dialog creation failed!");
     pDlg->Execute();
-    pDlg.disposeAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,8 +20,8 @@
 #include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 #include <editeng/editids.hrc>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <sc.hrc>
-#include <mid.hrc>
+#include <mid.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

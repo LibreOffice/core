@@ -37,7 +37,7 @@
 #include <svx/sdtaitm.hxx>
 #include <svx/xflclit.hxx>
 #include <tools/globname.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <memory>

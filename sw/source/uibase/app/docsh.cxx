@@ -96,7 +96,7 @@
 #include <fldbas.hxx>
 #include <docary.hxx>
 #include <swerror.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <cmdid.h>
 #include <globals.hrc>
 #include <strings.hrc>

@@ -1,0 +1,151 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef INCLUDED_SVX_SOURCE_INC_FMPROP_HXX
+#define INCLUDED_SVX_SOURCE_INC_FMPROP_HXX
+
+// PropertyIds, which have an assignment to a PropertyName, could continue
+// to be WhichIds in the future -> Itemset
+#define FM_ATTR_START           0
+
+#define FM_ATTR_FILTER          ( FM_ATTR_START + 1 )
+#define FM_ATTR_FORM_OPERATIONS ( FM_ATTR_START + 2 )
+
+#define FM_PROP_NAME                         "Name"
+#define FM_PROP_CLASSID                      "ClassId"
+#define FM_PROP_ALIGN                        "Align"
+#define FM_PROP_ROWCOUNT                     "RowCount"
+#define FM_PROP_ROWCOUNTFINAL                "IsRowCountFinal"
+#define FM_PROP_FETCHSIZE                    "FetchSize"
+#define FM_PROP_VALUE                        "Value"
+#define FM_PROP_VALUEMIN                     "ValueMin"
+#define FM_PROP_VALUEMAX                     "ValueMax"
+#define FM_PROP_VALUESTEP                    "ValueStep"
+#define FM_PROP_TEXT                         "Text"
+#define FM_PROP_LABEL                        "Label"
+#define FM_PROP_NAVIGATION                   "NavigationBarMode"
+#define FM_PROP_CYCLE                        "Cycle"
+#define FM_PROP_CONTROLSOURCE                "DataField"
+#define FM_PROP_ENABLED                      "Enabled"
+#define FM_PROP_SPIN                         "Spin"
+#define FM_PROP_READONLY                     "ReadOnly"
+#define FM_PROP_FILTER                       "Filter"
+#define FM_PROP_AUTOINCREMENT                "IsAutoIncrement"
+#define FM_PROP_WIDTH                        "Width"
+#define FM_PROP_SEARCHABLE                   "IsSearchable"
+#define FM_PROP_MULTILINE                    "MultiLine"
+#define FM_PROP_TARGET_URL                   "TargetURL"
+#define FM_PROP_DEFAULTCONTROL               "DefaultControl"
+#define FM_PROP_MAXTEXTLEN                   "MaxTextLen"
+#define FM_PROP_DATE                         "Date"
+#define FM_PROP_TIME                         "Time"
+#define FM_PROP_STATE                        "State"
+#define FM_PROP_TRISTATE                     "TriState"
+#define FM_PROP_STRINGITEMLIST               "StringItemList"
+#define FM_PROP_DEFAULT_TEXT                 "DefaultText"
+#define FM_PROP_DEFAULTCHECKED               "DefaultState"
+#define FM_PROP_DEFAULT_DATE                 "DefaultDate"
+#define FM_PROP_DEFAULT_TIME                 "DefaultTime"
+#define FM_PROP_DEFAULT_VALUE                "DefaultValue"
+#define FM_PROP_FORMATKEY                    "FormatKey"
+#define FM_PROP_FORMATSSUPPLIER              "FormatsSupplier"
+#define FM_PROP_LISTSOURCETYPE               "ListSourceType"
+#define FM_PROP_LISTSOURCE                   "ListSource"
+#define FM_PROP_SELECT_SEQ                   "SelectedItems"
+#define FM_PROP_VALUE_SEQ                    "ValueItemList"
+#define FM_PROP_DEFAULT_SELECT_SEQ           "DefaultSelection"
+#define FM_PROP_DECIMAL_ACCURACY             "DecimalAccuracy"
+#define FM_PROP_EDITMASK                     "EditMask"
+#define FM_PROP_ISREADONLY                   "IsReadOnly"
+#define FM_PROP_FIELDTYPE                    "Type"
+#define FM_PROP_REFVALUE                     "RefValue"
+#define FM_PROP_STRICTFORMAT                 "StrictFormat"
+#define FM_PROP_DATASOURCE                   "DataSourceName"
+#define FM_PROP_LITERALMASK                  "LiteralMask"
+#define FM_PROP_SHOWTHOUSANDSEP              "ShowThousandsSeparator"
+#define FM_PROP_CURRENCYSYMBOL               "CurrencySymbol"
+#define FM_PROP_DATEFORMAT                   "DateFormat"
+#define FM_PROP_DATEMIN                      "DateMin"
+#define FM_PROP_DATEMAX                      "DateMax"
+#define FM_PROP_DATE_SHOW_CENTURY            "DateShowCentury"
+#define FM_PROP_TIMEFORMAT                   "TimeFormat"
+#define FM_PROP_TIMEMIN                      "TimeMin"
+#define FM_PROP_TIMEMAX                      "TimeMax"
+#define FM_PROP_LINECOUNT                    "LineCount"
+#define FM_PROP_BOUNDCOLUMN                  "BoundColumn"
+#define FM_PROP_HASNAVIGATION                "HasNavigationBar"
+#define FM_PROP_FONT                         "FontDescriptor"
+#define FM_PROP_BACKGROUNDCOLOR              "BackgroundColor"
+#define FM_PROP_TEXTCOLOR                    "TextColor"
+#define FM_PROP_BORDER                       "Border"
+#define FM_PROP_DROPDOWN                     "Dropdown"
+#define FM_PROP_ROWHEIGHT                    "RowHeight"
+#define FM_PROP_HELPTEXT                     "HelpText"
+#define FM_PROP_HELPURL                      "HelpURL"
+#define FM_PROP_RECORDMARKER                 "HasRecordMarker"
+#define FM_PROP_BOUNDFIELD                   "BoundField"
+#define FM_PROP_EFFECTIVE_VALUE              "EffectiveValue"
+#define FM_PROP_EFFECTIVE_DEFAULT            "EffectiveDefault"
+#define FM_PROP_EFFECTIVE_MIN                "EffectiveMin"
+#define FM_PROP_EFFECTIVE_MAX                "EffectiveMax"
+#define FM_PROP_HIDDEN                       "Hidden"
+#define FM_PROP_FILTERPROPOSAL               "UseFilterValueProposal"
+#define FM_PROP_FIELDSOURCE                  "FieldSource"
+#define FM_PROP_TABLENAME                    "TableName"
+#define FM_PROP_CONTROLLABEL                 "LabelControl"
+#define FM_PROP_CURSORCOLOR                  "CursorColor"
+#define FM_PROP_ALWAYSSHOWCURSOR             "AlwaysShowCursor"
+#define FM_PROP_DISPLAYSYNCHRON              "DisplayIsSynchron"
+#define FM_PROP_ISMODIFIED                   "IsModified"
+#define FM_PROP_ISNEW                        "IsNew"
+#define FM_PROP_PRIVILEGES                   "Privileges"
+#define FM_PROP_COMMAND                      "Command"
+#define FM_PROP_COMMANDTYPE                  "CommandType"
+#define FM_PROP_RESULTSET_CONCURRENCY        "ResultSetConcurrency"
+#define FM_PROP_INSERTONLY                   "IgnoreResult"
+#define FM_PROP_RESULTSET_TYPE               "ResultSetType"
+#define FM_PROP_ESCAPE_PROCESSING            "EscapeProcessing"
+#define FM_PROP_APPLYFILTER                  "ApplyFilter"
+#define FM_PROP_ISNULLABLE                   "IsNullable"
+#define FM_PROP_ACTIVECOMMAND                "ActiveCommand"
+#define FM_PROP_ISCURRENCY                   "IsCurrency"
+#define FM_PROP_URL                          "URL"
+#define FM_PROP_ACTIVE_CONNECTION            "ActiveConnection"
+#define FM_PROP_CONTROLSOURCEPROPERTY        "DataFieldProperty"
+#define FM_PROP_REALNAME                     "RealName"
+#define FM_PROP_TEXTLINECOLOR                "TextLineColor"
+#define FM_PROP_FONTEMPHASISMARK             "FontEmphasisMark"
+#define FM_PROP_FONTRELIEF                   "FontRelief"
+#define FM_PROP_ORIENTATION                  "Orientation"
+#define FM_PROP_LINEENDFORMAT                "LineEndFormat"
+#define FM_PROP_VISUALEFFECT                 "VisualEffect"
+#define FM_PROP_BORDERCOLOR                  "BorderColor"
+#define FM_PROP_DYNAMIC_CONTROL_BORDER       "DynamicControlBorder"
+#define FM_PROP_CONTROL_BORDER_COLOR_FOCUS   "ControlBorderColorOnFocus"
+#define FM_PROP_CONTROL_BORDER_COLOR_MOUSE   "ControlBorderColorOnHover"
+#define FM_PROP_CONTROL_BORDER_COLOR_INVALID "ControlBorderColorOnInvalid"
+#define FM_PROP_BUTTON_TYPE                  "ButtonType"
+#define FM_PROP_FORM_OPERATIONS              "FormOperations"
+#define FM_PROP_INPUT_REQUIRED               "InputRequired"
+#define FM_PROP_WRITING_MODE                 "WritingMode"
+#define FM_PROP_MOUSE_WHEEL_BEHAVIOR         "MouseWheelBehavior"
+#define FM_PROP_DESCRIPTION                  "Description"
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

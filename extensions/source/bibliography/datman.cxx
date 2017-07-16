@@ -64,13 +64,13 @@
 #include "bibresid.hxx"
 #include "bibmod.hxx"
 #include "bibview.hxx"
-#include "bibprop.hrc"
+#include "bibprop.hxx"
 #include "toolbar.hxx"
 #include "bibconfig.hxx"
 #include "bibbeam.hxx"
 #include "general.hxx"
 #include "strings.hrc"
-#include "bibliography.hrc"
+#include "helpids.h"
 #include <connectivity/dbtools.hxx>
 #include <memory>
 

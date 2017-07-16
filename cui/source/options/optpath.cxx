@@ -35,7 +35,7 @@
 #include "optpath.hxx"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>

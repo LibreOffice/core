@@ -22,7 +22,7 @@
 #include "fmdocumentclassification.hxx"
 #include "fmobj.hxx"
 #include "fmpgeimp.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "svx/strings.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"

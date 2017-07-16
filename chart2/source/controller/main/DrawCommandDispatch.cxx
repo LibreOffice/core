@@ -18,7 +18,7 @@
  */
 
 #include "DrawCommandDispatch.hxx"
-#include "DrawCommandDispatch.hrc"
+#include "DrawCommandDispatch.h"
 #include "ChartController.hxx"
 #include "DrawViewWrapper.hxx"
 #include "chartview/DrawModelWrapper.hxx"

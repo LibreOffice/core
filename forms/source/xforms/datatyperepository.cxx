@@ -23,7 +23,7 @@
 #include "strings.hrc"
 #include "frm_resource.hxx"
 #include "frm_strings.hxx"
-#include "property.hrc"
+#include "property.hxx"
 
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/util/VetoException.hpp>

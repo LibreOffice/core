@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SVXIDS_HRC
 #define INCLUDED_SVX_SVXIDS_HRC
 
-#include <svl/memberid.hrc>
+#include <svl/memberid.h>
 #include <svl/solar.hrc>
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxsids.hrc>

@@ -18,7 +18,7 @@
  */
 
 #include "AppIconControl.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "core_resource.hxx"
 #include "strings.hrc"
 #include "bitmaps.hlst"

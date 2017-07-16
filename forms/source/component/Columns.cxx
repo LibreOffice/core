@@ -20,7 +20,6 @@
 #include <string.h>
 
 #include "Columns.hxx"
-#include "property.hrc"
 #include "property.hxx"
 #include "componenttools.hxx"
 #include "findpos.hxx"

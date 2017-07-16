@@ -75,6 +75,7 @@
 #include "cursor.hxx"
 #include "accessibility.hxx"
 #include "ElementsDockingWindow.hxx"
+#include "helpids.h"
 #include <cassert>
 #include <memory>
 

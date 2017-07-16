@@ -54,7 +54,7 @@
 
 #include <algorithm>
 #include <cuires.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 
 #include "acccfg.hxx"

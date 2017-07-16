@@ -21,7 +21,7 @@
 #define SC_SCRES_HRC
 
 #include "sc.hrc"
-#include "formula/compiler.hrc"
+#include "formula/compiler.hxx"
 
 #define STR_START               (SC_RESOURCE_START+100)
 

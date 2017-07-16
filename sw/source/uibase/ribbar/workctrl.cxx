@@ -36,14 +36,13 @@
 #include <workctrl.hxx>
 #include <strings.hrc>
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <wrtsh.hxx>
 #include <svl/imageitm.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
 #include "swabstdlg.hxx"
-#include <misc.hrc>
 #include <sfx2/zoomitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>

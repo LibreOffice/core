@@ -24,7 +24,7 @@
 #include <unotools/viewoptions.hxx>
 
 #include <vcl/button.hxx>
-#include <fpicker/fpicker.hrc>
+#include <fpicker/strings.hrc>
 #include <vcl/menubtn.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/vclptr.hxx>

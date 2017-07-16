@@ -21,7 +21,7 @@
 #define INCLUDED_SFX2_SFX_HRC
 
 #include <svl/solar.hrc>
-#include <svl/memberid.hrc>
+#include <svl/memberid.h>
 #include <sfx2/groupid.hxx>
 
 #define RID_GROUPS_SFXOFFSET        SfxGroupId(32700)

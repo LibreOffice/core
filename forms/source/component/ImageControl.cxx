@@ -19,7 +19,6 @@
 
 #include "ImageControl.hxx"
 
-#include "property.hrc"
 #include "strings.hrc"
 #include "frm_resource.hxx"
 #include "services.hxx"

@@ -37,7 +37,7 @@
 #include <svl/zformat.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/transfer.hxx>
-#include <sfx2/dialogs.hrc>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -49,6 +49,7 @@
 #include <svtools/sfxecode.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
 #include <editeng/svxacorr.hxx>
@@ -103,7 +104,7 @@
 
 #include <cmdid.h>
 #include <globals.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <app.hrc>
 #include <strings.hrc>
 #include <globals.hrc>
@@ -122,7 +123,6 @@
 
 #include <sfx2/fcontnr.hxx>
 
-#include "dialog.hrc"
 #include "swabstdlg.hxx"
 #include "watermarkdialog.hxx"
 
@@ -152,7 +152,7 @@ VclPtr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(const SfxItem
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
             pDlg->AddFontTabPage();
-            pDlg->AddTabPage(TP_DOC_STAT, SwResId(STR_DOC_STAT),pFact->GetTabPageCreatorFunc( TP_DOC_STAT ),nullptr);
+            pDlg->AddTabPage(RID_SW_TP_DOC_STAT, SwResId(STR_DOC_STAT), pFact->GetTabPageCreatorFunc(RID_SW_TP_DOC_STAT), nullptr);
         }
     }
     return pDlg;

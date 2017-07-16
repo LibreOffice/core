@@ -18,7 +18,7 @@
  */
 
 #include <svx/svxids.hrc>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>

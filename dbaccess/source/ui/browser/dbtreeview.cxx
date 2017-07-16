@@ -21,7 +21,7 @@
 #include <svtools/treelistbox.hxx>
 #include "dbtreelistbox.hxx"
 #include "dbtreemodel.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 
 namespace dbaui
 {

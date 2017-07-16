@@ -20,14 +20,9 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUIRES_HRC
 #define INCLUDED_CUI_SOURCE_INC_CUIRES_HRC
 
-#include <sfx2/sfx.hrc>
-#include <sfx2/dialogs.hrc>
+#include <svl/solar.hrc>
 
 // Resource-Id's ------------------------------------------------------------
-
-// Gallery
-#define RID_CUI_GALLERY_START               (RID_SVX_START + 360)
-//      RID_CUI_GALLERY_END                 (RID_SVX_START + 410)
 
 // options
 #define RID_SVXPAGE_JSEARCH_OPTIONS         (RID_SVX_START +  840)

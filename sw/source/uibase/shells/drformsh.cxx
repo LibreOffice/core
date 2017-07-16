@@ -39,7 +39,7 @@
 #include "wrtsh.hxx"
 #include "cmdid.h"
 #include "globals.hrc"
-#include "helpid.h"
+#include "helpids.h"
 #include "strings.hrc"
 #include "drwbassh.hxx"
 #include "drformsh.hxx"

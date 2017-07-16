@@ -24,6 +24,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sot/formats.hxx>
+#include <sfx2/sfx.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <svl/macitem.hxx>
 #include <ucbhelper/content.hxx>

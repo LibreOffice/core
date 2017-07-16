@@ -20,9 +20,9 @@
 #include "tp_TitleRotation.hxx"
 
 #include "ResId.hxx"
-#include "ResourceIds.hrc"
+#include "TabPageIds.h"
 #include "chartview/ChartSfxItemIds.hxx"
-#include "HelpIds.hrc"
+#include "helpids.h"
 
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>

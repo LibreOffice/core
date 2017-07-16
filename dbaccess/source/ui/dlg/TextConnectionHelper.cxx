@@ -33,7 +33,7 @@
 #include <svl/intitem.hxx>
 #include "dsitems.hxx"
 #include "dbfindex.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
