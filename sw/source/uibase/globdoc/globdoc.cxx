@@ -26,7 +26,6 @@
 #include "shellio.hxx"
 #include "globdoc.hxx"
 #include "strings.hrc"
-#include "cfgid.h"
 
 // Description: Register all filters
 

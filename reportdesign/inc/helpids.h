@@ -1,0 +1,92 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef RTPUI_REPORTDESIGN_HELPIDS_H
+#define RTPUI_REPORTDESIGN_HELPIDS_H
+
+#define UID_RPT_PROP_FORMULA                    "REPORTDESIGN_UID_RPT_PROP_FORMULA"
+#define UID_RPT_RPT_PROP_DLG_FONT_TYPE          "REPORTDESIGN_UID_RPT_RPT_PROP_DLG_FONT_TYPE"
+#define UID_RPT_RPT_PROP_DLG_AREA               "REPORTDESIGN_UID_RPT_RPT_PROP_DLG_AREA"
+#define UID_RPT_PROP_CHARTTYPE_DLG              "REPORTDESIGN_UID_RPT_PROP_CHARTTYPE_DLG"
+#define UID_RPT_PROP_DLG_LINKFIELDS             "REPORTDESIGN_UID_RPT_PROP_DLG_LINKFIELDS"
+
+#define UID_RPT_RPT_APP_VIEW                          "REPORTDESIGN_UID_RPT_RPT_APP_VIEW"
+#define UID_RPT_REPORTWINDOW                          "REPORTDESIGN_UID_RPT_REPORTWINDOW"
+#define HID_REPORTSECTION                             "REPORTDESIGN_HID_REPORTSECTION"
+#define HID_RPT_HORZ_SCROLLBAR                        "REPORTDESIGN_HID_RPT_HORZ_SCROLLBAR"
+#define HID_RPT_VERT_SCROLLBAR                        "REPORTDESIGN_HID_RPT_VERT_SCROLLBAR"
+#define HID_RPT_FIELDEXPRESSION                       "REPORTDESIGN_HID_RPT_FIELDEXPRESSION"
+#define HID_RPT_POPUP_COLOR                           "REPORTDESIGN_HID_RPT_POPUP_COLOR"
+#define HID_RPT_FIELD_SEL                             "REPORTDESIGN_HID_RPT_FIELD_SEL"
+#define HID_RPT_FIELD_SEL_WIN                         "REPORTDESIGN_HID_RPT_FIELD_SEL_WIN"
+#define HID_RPT_PROPDLG_TAB_GENERAL                   "REPORTDESIGN_HID_RPT_PROPDLG_TAB_GENERAL"
+#define HID_RPT_PROPDLG_TAB_DATA                      "REPORTDESIGN_HID_RPT_PROPDLG_TAB_DATA"
+
+#define HID_RPT_PROP_FORCENEWPAGE                     "REPORTDESIGN_HID_RPT_PROP_FORCENEWPAGE"
+#define HID_RPT_PROP_NEWROWORCOL                      "REPORTDESIGN_HID_RPT_PROP_NEWROWORCOL"
+#define HID_RPT_PROP_KEEPTOGETHER                     "REPORTDESIGN_HID_RPT_PROP_KEEPTOGETHER"
+#define HID_RPT_PROP_CANGROW                          "REPORTDESIGN_HID_RPT_PROP_CANGROW"
+#define HID_RPT_PROP_CANSHRINK                        "REPORTDESIGN_HID_RPT_PROP_CANSHRINK"
+#define HID_RPT_PROP_REPEATSECTION                    "REPORTDESIGN_HID_RPT_PROP_REPEATSECTION"
+#define HID_RPT_PROP_FORMULALIST                      "REPORTDESIGN_HID_RPT_PROP_FORMULALIST"
+#define HID_RPT_PROP_SCOPE                            "REPORTDESIGN_HID_RPT_PROP_SCOPE"
+#define HID_RPT_PROP_TYPE                             "REPORTDESIGN_HID_RPT_PROP_TYPE"
+#define HID_RPT_PROP_MASTERFIELDS                     "REPORTDESIGN_HID_RPT_PROP_MASTERFIELDS"
+#define HID_RPT_PROP_DETAILFIELDS                     "REPORTDESIGN_HID_RPT_PROP_DETAILFIELDS"
+#define HID_RPT_PROP_AREA                             "REPORTDESIGN_HID_RPT_PROP_AREA"
+#define HID_RPT_PROP_MIMETYPE                         "REPORTDESIGN_HID_RPT_PROP_MIMETYPE"
+// free
+// free
+#define HID_RPT_PROP_PRINTREPEATEDVALUES              "REPORTDESIGN_HID_RPT_PROP_PRINTREPEATEDVALUES"
+#define HID_RPT_PROP_CONDITIONALPRINTEXPRESSION       "REPORTDESIGN_HID_RPT_PROP_CONDITIONALPRINTEXPRESSION"
+#define HID_RPT_PROP_VERTICALALIGN                    "REPORTDESIGN_HID_RPT_PROP_VERTICALALIGN"
+#define HID_RPT_PROP_STARTNEWCOLUMN                   "REPORTDESIGN_HID_RPT_PROP_STARTNEWCOLUMN"
+#define HID_RPT_PROP_STARTNEWPAGE                     "REPORTDESIGN_HID_RPT_PROP_STARTNEWPAGE"
+#define HID_RPT_PROP_RESETPAGENUMBER                  "REPORTDESIGN_HID_RPT_PROP_RESETPAGENUMBER"
+#define HID_RPT_PROP_PARAADJUST                       "REPORTDESIGN_HID_RPT_PROP_PARAADJUST"
+#define HID_RPT_PROP_MINHEIGHTNEWPAGE                 "REPORTDESIGN_HID_RPT_PROP_MINHEIGHTNEWPAGE"
+#define HID_RPT_PROP_PRINTWHENGROUPCHANGE             "REPORTDESIGN_HID_RPT_PROP_PRINTWHENGROUPCHANGE"
+#define HID_RPT_PROP_CHARTTYPE                        "REPORTDESIGN_HID_RPT_PROP_CHARTTYPE"
+// free
+// free
+#define HID_RPT_PROP_VISIBLE                          "REPORTDESIGN_HID_RPT_PROP_VISIBLE"
+#define HID_RPT_PROP_GROUPKEEPTOGETHER                "REPORTDESIGN_HID_RPT_PROP_GROUPKEEPTOGETHER"
+#define HID_RPT_PROP_PAGEHEADEROPTION                 "REPORTDESIGN_HID_RPT_PROP_PAGEHEADEROPTION"
+#define HID_RPT_PROP_PAGEFOOTEROPTION                 "REPORTDESIGN_HID_RPT_PROP_PAGEFOOTEROPTION"
+#define HID_RPT_PROP_PREVIEW_COUNT                    "REPORTDESIGN_HID_RPT_PROP_PREVIEW_COUNT"
+#define HID_RPT_PROP_DATAFIELD                        "REPORTDESIGN_HID_RPT_PROP_DATAFIELD"
+#define HID_RPT_PROP_BACKCOLOR                        "REPORTDESIGN_HID_RPT_PROP_BACKCOLOR"
+#define HID_RPT_PROP_RPT_POSITIONX                    "REPORTDESIGN_HID_RPT_PROP_RPT_POSITIONX"
+#define HID_RPT_PROP_RPT_POSITIONY                    "REPORTDESIGN_HID_RPT_PROP_RPT_POSITIONY"
+#define HID_RPT_PROP_RPT_WIDTH                        "REPORTDESIGN_HID_RPT_PROP_RPT_WIDTH"
+#define HID_RPT_PROP_RPT_HEIGHT                       "REPORTDESIGN_HID_RPT_PROP_RPT_HEIGHT"
+#define HID_RPT_START_TITLE                           "REPORTDESIGN_HID_RPT_START_TITLE"
+#define HID_RPT_START_IMAGE                           "REPORTDESIGN_HID_RPT_START_IMAGE"
+#define HID_RPT_PROP_DEEPTRAVERSING                   "REPORTDESIGN_HID_RPT_PROP_DEEPTRAVERSING"
+#define HID_RPT_PROP_PREEVALUATED                     "REPORTDESIGN_HID_RPT_PROP_PREEVALUATED"
+#define HID_REPORT_NAVIGATOR_TREE                     "REPORTDESIGN_HID_REPORT_NAVIGATOR_TREE"
+#define HID_RPT_PROP_FORMULA                          "REPORTDESIGN_HID_RPT_PROP_FORMULA"
+#define HID_RPT_PROP_INITIALFORMULA                   "REPORTDESIGN_HID_RPT_PROP_INITIALFORMULA"
+#define HID_RPT_PROP_RPT_FONT                         "REPORTDESIGN_HID_RPT_PROP_RPT_FONT"
+#define HID_RPT_PROP_PRESERVEIRI                      "REPORTDESIGN_HID_RPT_PROP_PRESERVEIRI"
+#define HID_RPT_PROP_BACKTRANSPARENT                  "REPORTDESIGN_HID_RPT_PROP_BACKTRANSPARENT"
+#define HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT     "REPORTDESIGN_HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT"
+
+#endif //RTPUI_REPORTDESIGN_HELPID_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

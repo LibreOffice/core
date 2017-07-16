@@ -50,7 +50,7 @@
 
 #include <toolkit/awt/vclxdevice.hxx>
 
-#include "helpid.hrc"
+#include "helpids.h"
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

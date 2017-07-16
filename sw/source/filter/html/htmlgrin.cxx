@@ -23,7 +23,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
-#include <sfx2/sfx.hrc>
 #include <i18nlangtag/languagetag.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
@@ -37,6 +36,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/event.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>

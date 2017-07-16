@@ -21,7 +21,6 @@
 #include "FormComponent.hxx"
 #include "strings.hrc"
 #include "frm_resource.hxx"
-#include "property.hrc"
 #include "property.hxx"
 #include "services.hxx"
 

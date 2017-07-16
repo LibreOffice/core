@@ -44,7 +44,7 @@
 #include <fmtruby.hxx>
 #include <breakit.hxx>
 
-#include <olmenu.hrc>
+#include <olmenu.hxx>
 
 #include <unomid.h>
 

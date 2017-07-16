@@ -23,7 +23,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/msgbox.hxx>
 #include <dbui.hrc>
-#include <helpid.h>
+#include <helpids.h>
 
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
         vcl::Window* pParent, const SwCSVData& rOldData)

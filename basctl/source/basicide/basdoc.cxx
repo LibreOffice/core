@@ -44,7 +44,7 @@ SFX_IMPL_SUPERCLASS_INTERFACE(basctl_DocShell, SfxObjectShell)
 
 void basctl_DocShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterStatusBar(SID_BASICIDE_STATUSBAR);
+    GetStaticInterface()->RegisterStatusBar(StatusBarId::BasicIdeStatusBar);
 }
 
 DocShell::DocShell()

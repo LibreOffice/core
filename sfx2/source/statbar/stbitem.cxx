@@ -39,7 +39,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/sfx.hrc>
 
 #include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>

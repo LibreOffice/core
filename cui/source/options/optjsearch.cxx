@@ -19,7 +19,6 @@
 
 #include <unotools/searchopt.hxx>
 #include <i18nutil/transliteration.hxx>
-#include <cuires.hrc>
 #include <dialmgr.hxx>
 #include <optjsearch.hxx>
 

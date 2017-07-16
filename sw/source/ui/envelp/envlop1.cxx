@@ -28,7 +28,7 @@
 
 #include "wrtsh.hxx"
 #include "cmdid.h"
-#include "helpid.h"
+#include "helpids.h"
 #include "envfmt.hxx"
 #include "envlop.hxx"
 #include "envprt.hxx"

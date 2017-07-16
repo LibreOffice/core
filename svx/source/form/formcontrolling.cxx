@@ -22,7 +22,7 @@
 #include "formcontrolling.hxx"
 #include "fmurl.hxx"
 #include "svx/svxids.hrc"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "svx/fmtools.hxx"
 
 #include <com/sun/star/form/runtime/FormOperations.hpp>

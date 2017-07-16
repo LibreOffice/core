@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/ui/theUICategoryDescription.hpp>
 
-#include "helpid.hrc"
+#include "helpids.h"
 #include <basic/sbx.hxx>
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/sbstar.hxx>
@@ -44,7 +44,6 @@
 #include <basic/sbmod.hxx>
 #include <basic/basmgr.hxx>
 #include <tools/urlobj.hxx>
-#include "cuires.hrc"
 #include "strings.hrc"
 #include "bitmaps.hlst"
 #include <sfx2/app.hxx>

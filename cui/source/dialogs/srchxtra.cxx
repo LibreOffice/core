@@ -22,7 +22,6 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/objsh.hxx>
-#include <cuires.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strarray.hxx>

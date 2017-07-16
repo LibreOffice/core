@@ -22,9 +22,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/dialogs.hrc>
-
-#include <cuires.hrc>
-
 #include "cuitabarea.hxx"
 #include "cuitabline.hxx"
 #include "dlgname.hxx"

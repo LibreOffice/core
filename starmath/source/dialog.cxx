@@ -37,7 +37,6 @@
 #include <vcl/wall.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sfx.hrc>
 #include <osl/diagnose.h>
 #include <svx/ucsubset.hxx>
 

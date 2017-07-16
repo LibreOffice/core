@@ -30,9 +30,8 @@
 #include <sfx2/htmlmode.hxx>
 #include <sal/macros.h>
 
-#include <cuires.hrc>
 #include <strings.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "page.hxx"
 #include <svx/pageitem.hxx>
 #include <editeng/brushitem.hxx>

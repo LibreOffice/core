@@ -25,7 +25,7 @@
 #include <tools/stream.hxx>
 
 #include <svl/poolitem.hxx>
-#include <svl/memberid.hrc>
+#include <svl/memberid.h>
 
 
 SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :

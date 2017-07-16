@@ -32,7 +32,6 @@
 #include <swundo.hxx>
 #include <UndoCore.hxx>
 #include <rolbck.hxx>
-#include <undo.hrc>
 #include <editsh.hxx>
 #include <unobaseclass.hxx>
 #include <limits>

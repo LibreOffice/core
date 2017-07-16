@@ -46,7 +46,6 @@
 
 #include <cmdid.h>
 #include <strings.hrc>
-#include <index.hrc>
 #include <globals.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <swuicnttab.hxx>

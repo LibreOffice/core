@@ -46,7 +46,6 @@
 #include <vcl/button.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/strings.hrc>
 #include "rtl/ustrbuf.hxx"
 

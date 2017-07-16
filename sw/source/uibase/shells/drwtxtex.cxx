@@ -95,8 +95,6 @@
 #include <wview.hxx>
 
 #include "swabstdlg.hxx"
-#include "chrdlg.hrc"
-#include "misc.hrc"
 #include <memory>
 
 using namespace ::com::sun::star;

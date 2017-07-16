@@ -30,7 +30,7 @@
 
 #include "hyp.hxx"
 #include "mdiexp.hxx"
-#include "olmenu.hrc"
+#include "olmenu.hxx"
 #include "strings.hrc"
 
 #include <unomid.h>

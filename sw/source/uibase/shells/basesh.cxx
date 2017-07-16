@@ -96,9 +96,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include "swabstdlg.hxx"
-#include "dialog.hrc"
-#include "fldui.hrc"
-#include "table.hrc"
 #include <modcfg.hxx>
 #include <instable.hxx>
 #include <svx/fmshell.hxx>
@@ -2511,7 +2508,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
             ScopedVclPtr<SfxAbstractDialog> pDlg;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
+            assert(pFact && "SwAbstractDialogFactory fail!");
 
             // Table cell(s) selected?
             if ( rSh.IsTableMode() )
@@ -2519,10 +2516,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Get background attributes of the table and put it in the set
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
-                pDlg.disposeAndReset(pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
-                    RC_SWDLG_BACKGROUND ));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
+                pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
+                assert(pDlg && "Dialog creation failed!");
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2537,10 +2532,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
                 rSh.GetFlyFrameAttr( aSet );
 
-                pDlg.disposeAndReset(pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
-                    RC_SWDLG_BACKGROUND ));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
+                pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
+                assert(pDlg && "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetFlyFrameAttr(const_cast<SfxItemSet &>(*pDlg->GetOutputItemSet()) );
@@ -2552,10 +2545,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Set border attributes Umrandungsattribute with the shell quite normal.
                 rSh.GetCurAttr( aSet );
 
-                pDlg.disposeAndReset(pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
-                    RC_SWDLG_BACKGROUND ));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
+                pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
+                assert(pDlg && "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttrSet( *pDlg->GetOutputItemSet() );

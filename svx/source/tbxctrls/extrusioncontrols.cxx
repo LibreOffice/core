@@ -37,7 +37,7 @@
 #include <svx/dialmgr.hxx>
 
 #include "coreservices.hxx"
-#include "helpid.hrc"
+#include "helpids.h"
 #include "extrusioncontrols.hxx"
 #include "extrusiondepthdialog.hxx"
 

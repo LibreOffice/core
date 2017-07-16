@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_INC_SDATTR_HRC
 #define INCLUDED_SD_INC_SDATTR_HRC
 
-#include <sfx2/sfx.hrc>
+#include <svl/solar.hrc>
 
 // Layer attributes
 #define ATTR_LAYER_START        SID_SD_START + 1234

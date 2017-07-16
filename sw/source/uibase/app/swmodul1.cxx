@@ -59,7 +59,7 @@
 #include <cmdid.h>
 #include <app.hrc>
 #include <strings.hrc>
-#include "helpid.h"
+#include "helpids.h"
 #include <IDocumentLayoutAccess.hxx>
 
 #include <unomid.h>

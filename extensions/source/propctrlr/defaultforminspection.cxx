@@ -20,10 +20,11 @@
 #include "defaultforminspection.hxx"
 #include "pcrcommon.hxx"
 #include "pcrservices.hxx"
+#include "helpids.h"
 #include "strings.hrc"
 #include "strings.hrc"
 #include "modulepcr.hxx"
-#include "propctrlr.hrc"
+#include "propctrlr.h"
 #include "formmetadata.hxx"
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>

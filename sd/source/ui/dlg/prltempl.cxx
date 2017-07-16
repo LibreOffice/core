@@ -38,7 +38,6 @@
 #include "strings.hrc"
 #include "sdresid.hxx"
 #include "prltempl.hxx"
-#include "prltempl.hrc"
 #include "bulmaper.hxx"
 #include <svl/intitem.hxx>
 #include <svx/svxgrahicitem.hxx>
@@ -51,7 +50,7 @@
  */
 SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                                 vcl::Window* pParent,
-                                sal_uInt16 nDlgId,
+                                bool bBackground,
                                 SfxStyleSheetBase& rStyleBase,
                                 PresentationObjects _ePO,
                                 SfxStyleSheetBasePool* pSSPool ) :
@@ -191,7 +190,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     if( !aCJKOptions.IsAsianTypographyEnabled() )
         RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
 
-    if (nDlgId == TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND)
+    if (bBackground)
     {
         RemoveTabPage( "RID_SVXPAGE_LINE");
 

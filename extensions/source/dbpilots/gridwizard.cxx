@@ -30,7 +30,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include "dbptools.hxx"
-#include "dbpilots.hrc"
+#include "helpids.h"
 
 #define GW_STATE_DATASOURCE_SELECTION   0
 #define GW_STATE_FIELDSELECTION         1

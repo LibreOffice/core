@@ -19,7 +19,6 @@
 
 #include <dialmgr.hxx>
 #include <svx/svxdlg.hxx>
-#include <cuires.hrc>
 #include <strings.hrc>
 #include "insrc.hxx"
 

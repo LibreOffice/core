@@ -22,11 +22,10 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 
 #include <numpages.hxx>
-#include <numpages.hrc>
 #include <dialmgr.hxx>
 #include <tools/mapunit.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <helpid.hrc>
+#include <helpids.h>
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/layout.hxx>
@@ -69,7 +68,6 @@
 #include <vector>
 #include "sfx2/opengrf.hxx"
 
-#include <cuires.hrc>
 #include <strings.hrc>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>

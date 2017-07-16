@@ -24,7 +24,6 @@
 #include <editeng/unolingu.hxx>
 #include <o3tl/any.hxx>
 #include <dialmgr.hxx>
-#include <cuires.hrc>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/asiancfg.hxx>
 #include <com/sun/star/lang/Locale.hpp>

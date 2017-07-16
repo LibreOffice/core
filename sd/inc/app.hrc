@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_INC_APP_HRC
 #define INCLUDED_SD_INC_APP_HRC
 
-#include <sfx2/sfx.hrc>
+#include <svl/solar.hrc>
 
 // Helper IDs for templates
 #define HID_STANDARD_STYLESHEET_NAME        (HID_SD_START + 70)

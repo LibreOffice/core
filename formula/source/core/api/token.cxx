@@ -31,7 +31,7 @@
 #include "formula/token.hxx"
 #include "formula/tokenarray.hxx"
 #include "formula/FormulaCompiler.hxx"
-#include <formula/compiler.hrc>
+#include <formula/compiler.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <memory>
 

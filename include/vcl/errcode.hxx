@@ -20,13 +20,10 @@
 #ifndef INCLUDED_VCL_ERRCODE_HXX
 #define INCLUDED_VCL_ERRCODE_HXX
 
-#ifndef __RSC
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 #include <ostream>
-#endif
-
 
 /*
 
@@ -62,7 +59,6 @@ Warning           ||   ||      |
 #define ERRCODE_DYNAMIC_MASK             (31UL << ERRCODE_DYNAMIC_SHIFT)
 
 /** we get included in contexts that don't have access to config_typesizes.h or C++11 */
-#ifndef __RSC
 
 class SAL_WARN_UNUSED ErrCode final
 {
@@ -139,10 +135,6 @@ inline std::ostream& operator<<(std::ostream& os, const ErrCode& err)
 {
     os << sal_uInt32(err); return os;
 }
-
-#else
-#define ErrCode(X) (X)
-#endif
 
 #define ERRCODE_AREA_IO                  (0   << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_SV                  (1   << ERRCODE_AREA_SHIFT)
