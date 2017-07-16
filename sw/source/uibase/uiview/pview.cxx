@@ -64,7 +64,7 @@
 #include <usrpref.hxx>
 #include <viewfunc.hxx>
 
-#include <helpid.h>
+#include <helpids.h>
 #include <cmdid.h>
 #include <globals.hrc>
 #include <strings.hrc>

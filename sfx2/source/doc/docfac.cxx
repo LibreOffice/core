@@ -32,7 +32,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/configurationhelper.hxx>
 
-#include <sfx2/sfx.hrc>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewfac.hxx>

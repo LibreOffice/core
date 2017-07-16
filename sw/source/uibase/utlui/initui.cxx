@@ -27,7 +27,7 @@
 #include <fldbas.hxx>
 #include <glosdoc.hxx>
 #include <gloslst.hxx>
-#include <comcore.hrc>
+#include <comcore.hxx>
 #include <strings.hrc>
 #include <utlui.hrc>
 #include <authfld.hxx>

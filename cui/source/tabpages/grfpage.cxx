@@ -30,7 +30,6 @@
 #include <grfpage.hxx>
 #include <svx/grfcrop.hxx>
 #include <rtl/ustring.hxx>
-#include <cuires.hrc>
 #include <tools/fract.hxx>
 #include <svx/dialogs.hrc>
 #include <strings.hrc>

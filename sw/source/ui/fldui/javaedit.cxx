@@ -33,7 +33,6 @@
 #include <uitool.hxx>
 #include <javaedit.hxx>
 
-#include <fldui.hrc>
 #include <globals.hrc>
 #include <strings.hrc>
 

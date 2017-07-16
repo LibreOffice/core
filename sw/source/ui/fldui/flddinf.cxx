@@ -24,15 +24,13 @@
 #include <svl/zformat.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include <helpid.h>
+#include <helpids.h>
 #include <swtypes.hxx>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <fldbas.hxx>
 #include <docufld.hxx>
 #include <wrtsh.hxx>
-
-#include <fldui.hrc>
 
 #include <flddinf.hxx>
 #include <swmodule.hxx>

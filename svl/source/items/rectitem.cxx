@@ -25,7 +25,7 @@
 #include <tools/stream.hxx>
 
 #include <svl/poolitem.hxx>
-#include <svl/memberid.hrc>
+#include <svl/memberid.h>
 
 
 SfxPoolItem* SfxRectangleItem::CreateDefault() { return new SfxRectangleItem; }

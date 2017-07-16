@@ -106,7 +106,6 @@
 #include "dbdata.hxx"
 #include "scextopt.hxx"
 #include "compiler.hxx"
-#include "cfgids.hxx"
 #include "warnpassword.hxx"
 #include "optsolver.hxx"
 #include "sheetdata.hxx"

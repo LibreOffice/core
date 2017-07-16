@@ -158,14 +158,5 @@ namespace gb { namespace types
             /// just a few need to be modified.
             void set_include(List<Path> include);
     };
-    /// A target processing a set of srs files
-    class HasSrs
-    {
-        public:
-            /// Add a SrsTarget to be processed.
-            void add_one_srs(SrsTarget srs);
-            /// Add multiple SrsTarget s to be processed.
-            void add_srs(List<SrsTarget> srs);
-    };
 }};
 /* vim: set filetype=cpp : */

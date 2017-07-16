@@ -23,7 +23,6 @@
 #include <vcl/msgbox.hxx>
 #include <DropDownFieldDialog.hxx>
 #include <flddropdown.hxx>
-#include <fldui.hrc>
 
 #include <memory>
 

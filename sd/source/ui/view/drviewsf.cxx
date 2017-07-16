@@ -52,7 +52,6 @@
 #include "Window.hxx"
 #include "ViewShellBase.hxx"
 #include "FormShellManager.hxx"
-#include "cfgids.hxx"
 #include "anminfo.hxx"
 
 #include <editeng/lspcitem.hxx>

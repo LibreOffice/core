@@ -18,7 +18,7 @@
  */
 
 #include "strings.hrc"
-#include "helpid.hrc"
+#include "helpids.h"
 #include <svtools/controldims.hxx>
 #include <svtools/strings.hrc>
 
@@ -34,7 +34,7 @@
 #include "dp_identifier.hxx"
 #include "dp_descriptioninfoset.hxx"
 
-#include "fpicker/fpicker.hrc"
+#include "fpicker/strings.hrc"
 
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>

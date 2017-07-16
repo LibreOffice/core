@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/string.hxx>
-#include <cuires.hrc>
 #include <dialmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>

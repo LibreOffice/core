@@ -57,7 +57,6 @@
 #include <SwStyleNameMapper.hxx>
 #include "swabstdlg.hxx"
 #include "outline.hxx"
-#include "chrdlg.hrc"
 #include <memory>
 
 const sal_uInt32 nFontInc = 40;      // 2pt
@@ -483,11 +482,9 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                                            HINT_END, HINT_END>{});
                 rSh.GetCurAttr(aSet);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
-                ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
-                    rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), DLG_SWDROPCAPS));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
+                assert(pFact && "SwAbstractDialogFactory fail!");
+                ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwDropCapsDialog(GetView().GetWindow(), aSet));
+                assert(pDlg && "Dialog creation failed!");
                 if (pDlg->Execute() == RET_OK)
                 {
                     rSh.StartAction();

@@ -30,7 +30,7 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include <fpicker/fpicker.hrc>
+#include <fpicker/strings.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/syswin.hxx>

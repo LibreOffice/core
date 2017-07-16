@@ -19,7 +19,7 @@
 module
 StarApplicationFrame
 [
-SlotIdFile( "sfx2/sfx.hrc" )
+SlotIdFile( "sfx2/sfxsids.hrc" )
 ]
 {
     include "sfxitems.sdi"

@@ -35,7 +35,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svl/itempool.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <tools/stream.hxx>
 #include <tools/mapunit.hxx>
 

@@ -22,7 +22,7 @@
 #include "mediamisc.hxx"
 #include <avmedia/mediawindow.hxx>
 #include <avmedia/mediaplayer.hxx>
-#include "helpids.hrc"
+#include "helpids.h"
 #include <tools/time.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>

@@ -32,6 +32,28 @@ class  SfxConfigItem;
 class  SfxModule;
 class  SvStream;
 
+#define SFX_OBJECTBAR_APPLICATION       0
+#define SFX_OBJECTBAR_OBJECT            1
+#define SFX_OBJECTBAR_TOOLS             2
+#define SFX_OBJECTBAR_MACRO             3
+#define SFX_OBJECTBAR_FULLSCREEN        4
+#define SFX_OBJECTBAR_RECORDING         5
+#define SFX_OBJECTBAR_COMMONTASK        6
+#define SFX_OBJECTBAR_OPTIONS           7
+#define SFX_OBJECTBAR_NAVIGATION        12
+#define SFX_OBJECTBAR_MAX               13
+
+enum class StatusBarId : sal_uInt32
+{
+    None = 0,
+    GenericStatusBar = 4,
+    WriterStatusBar = 20013,
+    MathStatusBar = 20816,
+    DrawStatusBar = 23007,
+    CalcStatusBar = 26005,
+    BasicIdeStatusBar = 30805
+};
+
 class SFX2_DLLPUBLIC SfxInterface final
 {
 friend class SfxSlotPool;
@@ -69,7 +91,7 @@ public:
     void                    RegisterObjectBar(sal_uInt16, SfxVisibilityFlags nFlags, ToolbarId eId, SfxShellFeature nFeature);
     void                    RegisterChildWindow(sal_uInt16, bool bContext = false);
     void                    RegisterChildWindow(sal_uInt16, bool bContext, SfxShellFeature nFeature);
-    void                    RegisterStatusBar(sal_uInt32 nResId);
+    void                    RegisterStatusBar(StatusBarId eId);
     ToolbarId               GetObjectBarId(sal_uInt16 nNo) const;
     sal_uInt16              GetObjectBarPos( sal_uInt16 nNo ) const;
     SfxVisibilityFlags      GetObjectBarFlags( sal_uInt16 nNo ) const;
@@ -81,7 +103,7 @@ public:
     sal_uInt16              GetChildWindowCount() const;
     void                    RegisterPopupMenu( const OUString& );
     const OUString&         GetPopupMenuName() const;
-    sal_uInt32              GetStatusBarId() const;
+    StatusBarId             GetStatusBarId() const;
 
     void                    Register( SfxModule* );
 

@@ -68,7 +68,6 @@
 #include <app.hrc>
 #include <strings.hrc>
 #include "swabstdlg.hxx"
-#include <misc.hrc>
 
 #include <IDocumentDeviceAccess.hxx>
 

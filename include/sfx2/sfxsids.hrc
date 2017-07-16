@@ -21,7 +21,7 @@
 
 #include <svl/solar.hrc>
 #include <sfx2/cntids.hrc>
-#include <svl/memberid.hrc>
+#include <svl/memberid.h>
 
 // Please be careful:
 // Changing just one part here doesn't add new

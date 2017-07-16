@@ -10,7 +10,7 @@
 #include "editattributemap.hxx"
 
 #include <editeng/eeitem.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <xmloff/xmlnmspe.hxx>
 
 ScXMLEditAttributeMap::Entry const aEntries[] = {

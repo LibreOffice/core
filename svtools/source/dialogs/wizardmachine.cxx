@@ -18,7 +18,7 @@
  */
 
 #include <svtools/wizardmachine.hxx>
-#include <svtools/helpid.hrc>
+#include <svtools/helpids.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>

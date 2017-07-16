@@ -22,7 +22,6 @@
 #include <o3tl/make_unique.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/whiter.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include <svx/svxids.hrc>
 #include <tools/resmgr.hxx>
@@ -126,7 +125,7 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule)
 
 void SmModule::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterStatusBar(RID_STATUSBAR);
+    GetStaticInterface()->RegisterStatusBar(StatusBarId::MathStatusBar);
 }
 
 SmModule::SmModule(SfxObjectFactory* pObjFact)

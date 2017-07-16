@@ -22,7 +22,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "core_resource.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "dbu_pageids.hxx"
 #include "dbu_dlg.hxx"
 #include "strings.hrc"

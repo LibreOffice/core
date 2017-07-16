@@ -39,7 +39,6 @@
 #include "frmatr.hxx"
 #include "frmmgr.hxx"
 #include "globals.hrc"
-#include "frmui.hrc"
 #include "wrap.hxx"
 
 using namespace ::com::sun::star;

@@ -29,8 +29,6 @@
 #include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
 
-#include "table.hrc"
-
 #include "swabstdlg.hxx"
 #include <swuiexp.hxx>
 #include <memory>

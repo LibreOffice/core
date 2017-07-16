@@ -18,7 +18,6 @@
  */
 
 #include <numberingtypelistbox.hxx>
-#include <misc.hrc>
 #include <cnttab.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>

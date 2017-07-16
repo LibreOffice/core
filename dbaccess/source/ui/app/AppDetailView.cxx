@@ -19,7 +19,7 @@
 
 #include "AppDetailView.hxx"
 #include <osl/diagnose.h>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "AppView.hxx"
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
