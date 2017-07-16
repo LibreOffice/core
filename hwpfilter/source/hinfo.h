@@ -287,6 +287,8 @@ struct ParaShape
     unsigned char pagebreak;
 
     void  Read(HWPFile &);
+
+    ParaShape();
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HINFO_H
 
