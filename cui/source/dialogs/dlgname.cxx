@@ -18,9 +18,6 @@
  */
 
 #include <vcl/msgbox.hxx>
-
-#include <cuires.hrc>
-
 #include "dlgname.hxx"
 #include "defdlgname.hxx"
 #include <dialmgr.hxx>

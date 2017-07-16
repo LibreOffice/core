@@ -37,6 +37,7 @@
 #include <svtools/unoimap.hxx>
 #include <svtools/unoevent.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/event.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <comphelper/extract.hxx>
 #include <cppuhelper/implbase.hxx>

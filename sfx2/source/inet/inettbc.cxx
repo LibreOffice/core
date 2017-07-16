@@ -39,7 +39,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <sfx2/sfx.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>

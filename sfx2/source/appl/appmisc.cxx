@@ -59,7 +59,6 @@
 #include "workwin.hxx"
 #include <sfx2/fcontnr.hxx>
 #include "sfx2/strings.hrc"
-#include <sfx2/sfx.hrc>
 #include "sfx2/strings.hrc"
 #include <sfx2/templdlg.hxx>
 #include <sfx2/module.hxx>
@@ -81,13 +80,11 @@ using namespace ::com::sun::star::container;
 #define SfxApplication
 #include "sfxslots.hxx"
 
-#define SFX_ITEMTYPE_STATBAR             4
-
 SFX_IMPL_INTERFACE(SfxApplication,SfxShell)
 
 void SfxApplication::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterStatusBar(SFX_ITEMTYPE_STATBAR);
+    GetStaticInterface()->RegisterStatusBar(StatusBarId::GenericStatusBar);
 
     GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_0);
     GetStaticInterface()->RegisterChildWindow(SID_DOCKWIN_1);

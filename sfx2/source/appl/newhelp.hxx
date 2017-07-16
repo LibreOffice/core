@@ -38,6 +38,11 @@
 
 #include "srchdlg.hxx"
 
+// context menu ids
+#define MID_OPEN                                1
+#define MID_RENAME                              2
+#define MID_DELETE                              3
+
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
 namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
 namespace com { namespace sun { namespace star { namespace text { class XTextRange; } } } }

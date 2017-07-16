@@ -9,7 +9,6 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <svx/svxdlg.hxx>
-#include <cuires.hrc>
 #include <comphelper/sequence.hxx>
 
 #include "tsaurls.hxx"

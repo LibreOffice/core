@@ -54,7 +54,6 @@
 #include <svl/whiter.hxx>
 
 #include <svx/float3d.hxx>
-#include "float3d.hrc"
 #include "bitmaps.hlst"
 
 using namespace com::sun::star;

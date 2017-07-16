@@ -25,9 +25,9 @@
 #include "datanavi.hxx"
 #include "fmservs.hxx"
 
-#include "fmhelp.hrc"
+#include "helpids.h"
 #include "bitmaps.hlst"
-#include "fpicker/fpicker.hrc"
+#include "fpicker/strings.hrc"
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
 #include <tools/resmgr.hxx>

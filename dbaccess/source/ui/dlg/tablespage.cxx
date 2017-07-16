@@ -42,7 +42,7 @@
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include "sqlmessage.hxx"
 #include <vcl/msgbox.hxx>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "UITools.hxx"
 #include <osl/diagnose.h>
 #include <svtools/imgdef.hxx>

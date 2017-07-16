@@ -26,7 +26,6 @@
 #include "java/tools.hxx"
 #include <connectivity/dbexception.hxx>
 #include <jvmfwk/framework.hxx>
-#include "resource/conn_shared_res.hrc"
 #include "strings.hrc"
 #include "resource/sharedresources.hxx"
 #include <comphelper/processfactory.hxx>

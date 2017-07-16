@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
-#include <fpicker/fpicker.hrc>
+#include <fpicker/strings.hrc>
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>

@@ -29,7 +29,7 @@
 #include <svl/cjkoptions.hxx>
 
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -42,7 +42,6 @@
 #include <poolfmt.hxx>
 
 #include <globals.hrc>
-#include <chrdlg.hrc>
 #include <strings.hrc>
 #include <chrdlgmodes.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

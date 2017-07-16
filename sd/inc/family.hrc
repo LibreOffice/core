@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_INC_FAMILY_HRC
 #define INCLUDED_SD_INC_FAMILY_HRC
 
-#include <sfx2/sfx.hrc>
 #include <svl/style.hxx>
 
 #define NC_(Context, String) (Context "\004" u8##String)

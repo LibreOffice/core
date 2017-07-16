@@ -21,7 +21,7 @@
 #include <svx/strings.hrc>
 #include "fmexpl.hxx"
 
-#include "fmhelp.hrc"
+#include "helpids.h"
 #include <svx/fmglob.hxx>
 #include "fmservs.hxx"
 #include <svx/fmmodel.hxx>
@@ -31,7 +31,7 @@
 
 #include <svx/svxids.hrc>
 
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "bitmaps.hlst"
 #include <svx/dialmgr.hxx>
 #include "svx/svditer.hxx"

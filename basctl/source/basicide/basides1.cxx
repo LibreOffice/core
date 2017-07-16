@@ -19,7 +19,7 @@
 
 #include <memory>
 #include "strings.hrc"
-#include "helpid.hrc"
+#include "helpids.h"
 
 #include "baside2.hxx"
 #include "baside3.hxx"

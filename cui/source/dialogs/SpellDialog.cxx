@@ -44,7 +44,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/builderfactory.hxx>
 #include <osl/file.hxx>
-#include <cuires.hrc>
 #include <editeng/optitems.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/SpellDialogChildWindow.hxx>

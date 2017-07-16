@@ -20,7 +20,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 
-#include <cuires.hrc>
 #include <svx/dialogs.hrc>
 
 #include "textanim.hxx"

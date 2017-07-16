@@ -19,7 +19,7 @@
 
 #include "FieldDescGenWin.hxx"
 #include <osl/diagnose.h>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "TableDesignHelpBar.hxx"
 #include "TableFieldControl.hxx"
 #include "TableDesignView.hxx"

@@ -39,7 +39,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include "svtools/treelistentry.hxx"
 
-#include <cuires.hrc>
 #include <strings.hrc>
 #include "hlmarkwn.hxx"
 #include "hltpbase.hxx"

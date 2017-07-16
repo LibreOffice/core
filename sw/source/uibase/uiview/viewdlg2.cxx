@@ -36,8 +36,6 @@
 
 #include "initui.hxx"
 #include "swabstdlg.hxx"
-#include "frmui.hrc"
-#include "misc.hrc"
 
 #include "strings.hrc"
 

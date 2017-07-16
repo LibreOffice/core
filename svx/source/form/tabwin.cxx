@@ -33,14 +33,14 @@
 #include <com/sun/star/util/XLocalizedAliases.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "fmhelp.hrc"
+#include "helpids.h"
 #include <svx/fmshell.hxx>
 #include "fmshimp.hxx"
 #include <svx/fmpage.hxx>
 
 #include "fmpgeimp.hxx"
 
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 
 #include <svx/dialmgr.hxx>
 #include <svx/svdpagv.hxx>

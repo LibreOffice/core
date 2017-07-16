@@ -45,8 +45,7 @@
 #include "macropg_impl.hxx"
 
 #include <dialmgr.hxx>
-#include <cuires.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "cfgutil.hxx"
 #include "cfg.hxx"
 

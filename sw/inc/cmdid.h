@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_CMDID_H
 #define INCLUDED_SW_INC_CMDID_H
 
-#include <sfx2/sfx.hrc>
+#include <sfx2/sfxsids.hrc>
 #include <unomid.h>
 
 #define FN_FILE                 SID_SW_START

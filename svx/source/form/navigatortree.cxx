@@ -25,7 +25,7 @@
 #include <svx/svdpagv.hxx>
 #include "svx/svditer.hxx"
 
-#include "fmhelp.hrc"
+#include "helpids.h"
 #include "fmexpl.hxx"
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
@@ -33,7 +33,7 @@
 #include "fmpgeimp.hxx"
 #include "fmitems.hxx"
 #include "fmobj.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include <vcl/wrkwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>

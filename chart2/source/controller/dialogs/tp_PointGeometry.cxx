@@ -18,7 +18,7 @@
  */
 
 #include "tp_PointGeometry.hxx"
-#include "ResourceIds.hrc"
+#include "TabPageIds.h"
 #include "res_BarGeometry.hxx"
 #include "ResId.hxx"
 

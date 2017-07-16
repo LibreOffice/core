@@ -42,7 +42,6 @@
 
 #include <globals.hrc>
 #include <strings.hrc>
-#include <misc.hrc>
 #include <memory>
 
 using namespace ::com::sun::star;

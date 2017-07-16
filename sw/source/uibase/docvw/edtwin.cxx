@@ -123,7 +123,7 @@
 #include <pagefrm.hxx>
 #include <HeaderFooterWin.hxx>
 
-#include <helpid.h>
+#include <helpids.h>
 #include <cmdid.h>
 #include <strings.hrc>
 #include <uitool.hxx>

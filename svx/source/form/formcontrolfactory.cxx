@@ -20,7 +20,7 @@
 
 #include "formcontrolfactory.hxx"
 #include "fmcontrollayout.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "svx/strings.hrc"
 #include "fmservs.hxx"
 #include "svx/dialmgr.hxx"

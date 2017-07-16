@@ -23,7 +23,6 @@
 #define NC_(Context, String) (Context "\004" u8##String)
 
 #include <svl/style.hxx>
-#include <sfx2/sfx.hrc>
 #include "swstyle.h"
 
 const std::pair<const char*, int> RID_PARAGRAPHSTYLEFAMILY[] =

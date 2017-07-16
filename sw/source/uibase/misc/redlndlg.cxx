@@ -33,9 +33,8 @@
 #include <swwait.hxx>
 #include <uitool.hxx>
 
-#include <helpid.h>
+#include <helpids.h>
 #include <cmdid.h>
-#include <misc.hrc>
 #include <strings.hrc>
 
 // -> #111827#

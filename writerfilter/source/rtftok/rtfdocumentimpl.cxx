@@ -36,7 +36,6 @@
 #include <comphelper/sequence.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/classificationhelper.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <oox/mathml/import.hxx>
 #include <ooxml/resourceids.hxx>

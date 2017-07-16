@@ -19,7 +19,6 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
-#include <cuires.hrc>
 #include <svx/svddef.hxx>
 #include <svx/sdtditm.hxx>
 #include <svx/sdtagitm.hxx>

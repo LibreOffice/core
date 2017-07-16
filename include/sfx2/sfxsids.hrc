@@ -20,7 +20,7 @@
 #define INCLUDED_SFX2_SFXSIDS_HRC
 
 #include <svl/solar.hrc>
-#include <svl/memberid.hrc>
+#include <svl/memberid.h>
 
 // Please be careful:
 // Changing just one part here doesn't add new

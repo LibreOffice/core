@@ -31,7 +31,7 @@
 #include <com/sun/star/util/XPropertyReplace.hpp>
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <svl/memberid.hrc>
+#include <svl/memberid.h>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace utl;

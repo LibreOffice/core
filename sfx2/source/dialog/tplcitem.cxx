@@ -26,7 +26,6 @@
 #include "tplcitem.hxx"
 #include "templdgi.hxx"
 
-#include <sfx2/sfx.hrc>
 #include "sfx2/strings.hrc"
 
 // Constructor

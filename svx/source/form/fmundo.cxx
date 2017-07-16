@@ -26,7 +26,7 @@
 #include "fmpgeimp.hxx"
 #include "svx/svditer.hxx"
 #include "fmobj.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "svx/strings.hrc"
 #include "svx/fmglob.hxx"
 #include "svx/dialmgr.hxx"
@@ -49,7 +49,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/event.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/property.hxx>
