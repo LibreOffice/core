@@ -50,7 +50,7 @@
 #include "svx/fmtools.hxx"
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "fmundo.hxx"
 #include <svx/dataaccessdescriptor.hxx>
 #include <comphelper/processfactory.hxx>

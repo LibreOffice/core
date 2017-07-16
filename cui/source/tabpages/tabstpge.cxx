@@ -23,7 +23,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include <cuires.hrc>
 #include <editeng/lrspitem.hxx>
 #include "tabstpge.hxx"
 #include <dialmgr.hxx>

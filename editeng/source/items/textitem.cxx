@@ -31,7 +31,6 @@
 #include <editeng/eeitem.hxx>
 #include <svtools/unitconv.hxx>
 
-#include <svl/memberid.hrc>
 #include <editeng/editids.hrc>
 #include <editeng/editrids.hrc>
 #include <vcl/vclenum.hxx>
@@ -62,7 +61,7 @@
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/rsiditem.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/postitem.hxx>

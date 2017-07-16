@@ -53,7 +53,7 @@
 #include <algorithm>
 #include <memory>
 
-#include "helpid.hrc"
+#include "helpids.h"
 #include "bitmaps.hlst"
 
 using ::svtools::ToolbarMenu;

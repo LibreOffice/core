@@ -22,7 +22,6 @@
 #include <vcl/fixed.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <cppuhelper/supportsservice.hxx>

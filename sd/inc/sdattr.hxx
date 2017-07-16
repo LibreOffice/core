@@ -23,7 +23,6 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/sfx.hrc>
 
 #include "sdattr.hrc"
 #include "glob.hxx"

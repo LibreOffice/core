@@ -32,7 +32,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "RelControliFace.hxx"
 #include "strings.hrc"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include <osl/diagnose.h>
 
 #include <list>

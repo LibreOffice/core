@@ -20,16 +20,9 @@
 #include "swdlgfact.hxx"
 #include <svl/style.hxx>
 #include <svx/svxids.hrc>
-#include "dialog.hrc"
-#include "misc.hrc"
-#include "chrdlg.hrc"
-#include "table.hrc"
-#include "frmui.hrc"
 #include "dbui.hrc"
 #include "globals.hrc"
-#include "fldui.hrc"
 #include "strings.hrc"
-#include <index.hrc>
 
 #include <wordcountdialog.hxx>
 #include "abstract.hxx"
@@ -639,34 +632,32 @@ VclPtr<AbstractSwInsertAbstractDlg> SwAbstractDialogFactory_Impl::CreateSwInsert
     return VclPtr<AbstractSwInsertAbstractDlg_Impl>::Create(pDlg);
 }
 
-VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pParent,
-                                                                  const SfxItemSet& rSet,
-                                                                  const css::uno::Reference< css::frame::XFrame >&,
-                                                                  sal_uInt32 nResId
-                                                                )
+VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwAddressAbstractDlg(vcl::Window* pParent,
+                                                                  const SfxItemSet& rSet)
 {
-    VclPtr<SfxModalDialog> pDlg;
-    switch ( nResId )
-    {
-        case RC_DLG_ADDR :
-            pDlg = VclPtr<SwAddrDlg>::Create( pParent, rSet );
-            break;
-        case DLG_SWDROPCAPS :
-            pDlg = VclPtr<SwDropCapsDlg>::Create( pParent, rSet );
-            break;
-        case RC_SWDLG_BACKGROUND :
-            pDlg = VclPtr<SwBackgroundDlg>::Create( pParent, rSet );
-            break;
-        case RC_DLG_SWNUMFMTDLG :
-            pDlg = VclPtr<SwNumFormatDlg>::Create( pParent, rSet );
-            break;
-        default:
-            break;
-    }
+    VclPtr<SfxModalDialog> pDlg = VclPtr<SwAddrDlg>::Create( pParent, rSet );
+    return VclPtr<SwAbstractSfxDialog_Impl>::Create(pDlg);
+}
 
-    if ( pDlg )
-        return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
-    return nullptr;
+VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwDropCapsDialog( vcl::Window* pParent,
+                                                                  const SfxItemSet& rSet)
+{
+    VclPtr<SfxModalDialog> pDlg = VclPtr<SwDropCapsDlg>::Create(pParent, rSet);
+    return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
+}
+
+VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBackgroundDialog( vcl::Window* pParent,
+                                                                  const SfxItemSet& rSet)
+{
+    VclPtr<SfxModalDialog> pDlg = VclPtr<SwBackgroundDlg>::Create( pParent, rSet );
+    return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
+}
+
+VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateNumFormatDialog( vcl::Window* pParent,
+                                                                  const SfxItemSet& rSet)
+{
+    VclPtr<SfxModalDialog> pDlg = VclPtr<SwNumFormatDlg>::Create( pParent, rSet );
+    return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
 }
 
 VclPtr<AbstractSwAsciiFilterDlg> SwAbstractDialogFactory_Impl::CreateSwAsciiFilterDlg( SwDocShell& rDocSh,
@@ -767,30 +758,28 @@ VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwParaDlg ( vcl
     return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateVclAbstractDialog ( vcl::Window *pParent, SwWrtShell &rSh, int nResId )
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwAutoMarkDialog(vcl::Window *pParent, SwWrtShell &rSh)
 {
-    VclPtr<Dialog> pDlg;
-    switch ( nResId )
-    {
-        case DLG_ROW_HEIGHT :
-            pDlg = VclPtr<SwTableHeightDlg>::Create( pParent, rSh);
-            break;
-        case DLG_SORTING :
-            pDlg = VclPtr<SwSortDlg>::Create( pParent, rSh);
-            break;
-        case DLG_COLUMN :
-            pDlg = VclPtr<SwColumnDlg>::Create( pParent, rSh );
-            break;
-        case DLG_EDIT_AUTHMARK :
-            pDlg = VclPtr<SwAuthMarkModalDlg>::Create( pParent, rSh );
-            break;
-        default:
-            break;
-    }
+    VclPtr<Dialog> pDlg = VclPtr<SwAuthMarkModalDlg>::Create( pParent, rSh );
+    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+}
 
-    if ( pDlg.get() )
-        return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
-    return nullptr;
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh)
+{
+    VclPtr<Dialog> pDlg = VclPtr<SwColumnDlg>::Create( pParent, rSh );
+    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+}
+
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableHeightDialog(vcl::Window *pParent, SwWrtShell &rSh)
+{
+    VclPtr<Dialog> pDlg = VclPtr<SwTableHeightDlg>::Create( pParent, rSh);
+    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
+}
+
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwSortingDialog(vcl::Window *pParent, SwWrtShell &rSh)
+{
+    VclPtr<Dialog> pDlg = VclPtr<SwSortDlg>::Create( pParent, rSh);
+    return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
 VclPtr<AbstractSplitTableDialog> SwAbstractDialogFactory_Impl::CreateSplitTableDialog ( vcl::Window *pParent, SwWrtShell &rSh )
@@ -966,27 +955,20 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(vc
     return VclPtr<VclAbstractDialog_Impl>::Create(pDlg);
 }
 
-VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTabDialog( int nResId,
-                                                vcl::Window* pParent,
+VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSvxNumBulletTabDialog(vcl::Window* pParent,
+                                                const SfxItemSet* pSwItemSet,
+                                                SwWrtShell & rWrtSh)
+{
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwSvxNumBulletTabDialog>::Create(pParent, pSwItemSet, rWrtSh);
+    return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
+}
+
+VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateOutlineTabDialog(vcl::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell & rWrtSh )
 {
-    VclPtr<SfxTabDialog> pDlg;
-    switch ( nResId )
-    {
-        case DLG_SVXTEST_NUM_BULLET :
-            pDlg = VclPtr<SwSvxNumBulletTabDialog>::Create( pParent, pSwItemSet, rWrtSh );
-            break;
-        case DLG_TAB_OUTLINE :
-            pDlg = VclPtr<SwOutlineTabDialog>::Create( pParent, pSwItemSet, rWrtSh );
-            break;
-
-        default:
-            break;
-    }
-    if ( pDlg.get() )
-        return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
-    return nullptr;
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwOutlineTabDialog>::Create(pParent, pSwItemSet, rWrtSh);
+    return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
 }
 
 VclPtr<AbstractMultiTOXTabDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXTabDialog(
@@ -1109,7 +1091,7 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
         case RID_SW_TP_OPTTABLE_PAGE:
             pRet = SwTableOptionsTabPage::Create;
             break;
-        case TP_DOC_STAT :
+        case RID_SW_TP_DOC_STAT :
             pRet = SwDocStatPage::Create;
             break;
         case RID_SW_TP_MAILCONFIG:

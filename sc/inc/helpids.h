@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SC_INC_HELPIDS_H
+#define INCLUDED_SC_INC_HELPIDS_H
+
 #include <svx/svxcommands.h>
 
 #define HID_INSWIN_POS                                          "SC_HID_INSWIN_POS"
@@ -584,5 +587,7 @@
 #define HID_FUNC_MAXIFS_MS                                      "SC_HID_FUNC_MAXIFS_MS"
 #define HID_FUNC_ROUNDSIG                                       "SC_HID_FUNC_ROUNDSIG"
 #define HID_FUNC_REPLACEB                                       "SC_HID_FUNC_REPLACEB"
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

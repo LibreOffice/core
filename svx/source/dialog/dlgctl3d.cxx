@@ -34,7 +34,7 @@
 #include <svx/polygn3d.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <algorithm>
 #include <svx/dialmgr.hxx>
 #include <vcl/settings.hxx>

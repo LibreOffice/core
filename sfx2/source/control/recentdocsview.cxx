@@ -21,7 +21,6 @@
 #include <sfx2/recentdocsview.hxx>
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/builderfactory.hxx>

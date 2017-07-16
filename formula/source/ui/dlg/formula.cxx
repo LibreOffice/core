@@ -40,7 +40,6 @@
 #include <unotools/charclass.hxx>
 #include <tools/diagnose_ex.h>
 
-#include "formdlgs.hrc"
 #include "funcpage.hxx"
 #include "formula/formula.hxx"
 #include "formula/IFunctionDescription.hxx"
@@ -63,6 +62,10 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <map>
+
+// For tab page
+#define TP_FUNCTION         1
+#define TP_STRUCT           2
 
 #define TOKEN_OPEN  0
 #define TOKEN_CLOSE 1

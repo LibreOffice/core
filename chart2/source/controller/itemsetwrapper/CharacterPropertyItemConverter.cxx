@@ -22,7 +22,7 @@
 #include "macros.hxx"
 #include "ItemPropertyMap.hxx"
 #include "RelativeSizeHelper.hxx"
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <editeng/eeitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>

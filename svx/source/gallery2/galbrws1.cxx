@@ -26,7 +26,7 @@
 #include <vcl/settings.hxx>
 #include <ucbhelper/content.hxx>
 #include <sfx2/app.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "svx/gallery1.hxx"
 #include "svx/galtheme.hxx"
 #include "svx/galmisc.hxx"

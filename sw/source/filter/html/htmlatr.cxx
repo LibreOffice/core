@@ -22,11 +22,11 @@
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <sfx2/sfx.hrc>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <svl/whiter.hxx>
+#include <sfx2/event.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/formatbreakitem.hxx>

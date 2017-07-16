@@ -59,7 +59,7 @@
 #include <editeng/unoedsrc.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editengdllapi.h>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 
 class SvxItemPropertySet;
 

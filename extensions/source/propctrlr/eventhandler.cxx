@@ -20,7 +20,8 @@
 
 #include "eventhandler.hxx"
 #include "pcrservices.hxx"
-#include "propctrlr.hrc"
+#include "helpids.h"
+#include "propctrlr.h"
 #include "formbrowsertools.hxx"
 #include "strings.hrc"
 #include "formstrings.hxx"

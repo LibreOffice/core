@@ -51,8 +51,6 @@
 #include "uitool.hxx"
 #include "charfmt.hxx"
 
-#include "chrdlg.hrc"
-
 using namespace css;
 using namespace css::uno;
 using namespace css::lang;

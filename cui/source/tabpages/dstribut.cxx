@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/basedlgs.hxx>
-#include <cuires.hrc>
 #include "dstribut.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/svddef.hxx>

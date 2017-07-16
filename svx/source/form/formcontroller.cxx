@@ -24,7 +24,7 @@
 #include "formfeaturedispatcher.hxx"
 #include "fmdocumentclassification.hxx"
 #include "formcontrolling.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/strings.hrc"
 #include "fmservs.hxx"

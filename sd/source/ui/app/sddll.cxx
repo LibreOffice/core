@@ -52,7 +52,6 @@
 #include "PaneChildWindows.hxx"
 #include "sdresid.hxx"
 #include "sdobjfac.hxx"
-#include "cfgids.hxx"
 #include "SpellDialogChildWindow.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "SlideSorterViewShellBase.hxx"

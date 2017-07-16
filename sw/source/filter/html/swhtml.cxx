@@ -25,7 +25,6 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <sfx2/sfx.hrc>
 #include <svx/svxids.hrc>
 #if OSL_DEBUG_LEVEL > 0
 #include <stdlib.h>
@@ -41,6 +40,7 @@
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 

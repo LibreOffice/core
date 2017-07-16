@@ -19,7 +19,6 @@
 
 #include <unotools/securityoptions.hxx>
 #include <dialmgr.hxx>
-#include <cuires.hrc>
 #include "securityoptions.hxx"
 
 namespace

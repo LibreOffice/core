@@ -21,9 +21,9 @@
 
 #include <svx/svxids.hrc>
 #include "sc.hrc"
-#include "mid.hrc"
+#include "mid.h"
 #include "scitems.hxx"
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 
 #include <sfx2/msg.hxx>
 #include <svl/stritem.hxx>

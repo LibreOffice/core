@@ -34,7 +34,7 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/configmgr.hxx>
 #include <sfx2/sfxuno.hxx>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "UITools.hxx"
 #include "core_resource.hxx"
 

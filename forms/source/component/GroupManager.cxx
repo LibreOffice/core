@@ -24,7 +24,7 @@
 #include <osl/diagnose.h>
 #include <tools/solar.h>
 
-#include "property.hrc"
+#include "frm_strings.hxx"
 
 #include <algorithm>
 

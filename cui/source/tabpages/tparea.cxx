@@ -26,7 +26,6 @@
 
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
-#include <cuires.hrc>
 #include <svx/xflbckit.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/xtable.hxx>

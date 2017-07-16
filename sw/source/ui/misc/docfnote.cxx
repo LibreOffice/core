@@ -32,9 +32,7 @@
 #include <uitool.hxx>
 #include <poolfmt.hxx>
 #include <swstyle.h>
-#include <helpid.h>
-#include <misc.hrc>
-#include <frmui.hrc>
+#include <helpids.h>
 #include <SwStyleNameMapper.hxx>
 #include <memory>
 

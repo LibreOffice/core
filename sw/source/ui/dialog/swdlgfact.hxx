@@ -369,14 +369,13 @@ class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 public:
     virtual ~SwAbstractDialogFactory_Impl() {}
 
-    virtual VclPtr<SfxAbstractDialog>              CreateSfxDialog( vcl::Window* pParent,
-                                                             const SfxItemSet& rAttr,
-                                                             const css::uno::Reference< css::frame::XFrame >& _rxFrame,
-                                                             sal_uInt32 nResId
-                                                            ) override;
+    virtual VclPtr<SfxAbstractDialog> CreateNumFormatDialog(vcl::Window* pParent, const SfxItemSet& rAttr) override;
+    virtual VclPtr<SfxAbstractDialog> CreateSwDropCapsDialog(vcl::Window* pParent, const SfxItemSet& rSet) override;
+    virtual VclPtr<SfxAbstractDialog> CreateSwBackgroundDialog(vcl::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<AbstractSwWordCountFloatDlg> CreateSwWordCountDialog(SfxBindings* pBindings,
         SfxChildWindow* pChild, vcl::Window *pParent, SfxChildWinInfo* pInfo) override;
     virtual VclPtr<AbstractSwInsertAbstractDlg> CreateSwInsertAbstractDlg() override;
+    virtual VclPtr<SfxAbstractDialog> CreateSwAddressAbstractDlg(vcl::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<AbstractSwAsciiFilterDlg>  CreateSwAsciiFilterDlg ( SwDocShell& rDocSh,
                                                                 SvStream* pStream ) override;
     virtual VclPtr<VclAbstractDialog> CreateSwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rSh, SfxRequest& rReq ) override;
@@ -406,8 +405,11 @@ public:
                                                     bool bDraw,
                                                     const OString& sDefPage = OString() ) override;
 
+    virtual VclPtr<VclAbstractDialog> CreateSwAutoMarkDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSwSelGlossaryDlg> CreateSwSelGlossaryDlg(const OUString &rShortName) override;
-    virtual VclPtr<VclAbstractDialog> CreateVclAbstractDialog ( vcl::Window * pParent, SwWrtShell &rSh, int nResId ) override;
+    virtual VclPtr<VclAbstractDialog> CreateSwSortingDialog(vcl::Window * pParent, SwWrtShell &rSh) override;
+    virtual VclPtr<VclAbstractDialog> CreateSwTableHeightDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
+    virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh) override;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog ( vcl::Window * pParent, SwWrtShell &rSh ) override;
 
     virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
@@ -460,11 +462,12 @@ public:
     virtual VclPtr<AbstractMailMergeCreateFromDlg>     CreateMailMergeCreateFromDlg(vcl::Window* pParent) override;
     virtual VclPtr<AbstractMailMergeFieldConnectionsDlg> CreateMailMergeFieldConnectionsDlg(vcl::Window* pParent) override;
     virtual VclPtr<VclAbstractDialog>          CreateMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr &rTOXMgr) override;
-    virtual VclPtr<SfxAbstractTabDialog>       CreateSwTabDialog( int nResId,
-                                                vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractTabDialog>       CreateOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* pSwItemSet,
+                                                SwWrtShell &) override;
+    virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(vcl::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) override;
-    virtual VclPtr<AbstractMultiTOXTabDialog>      CreateMultiTOXTabDialog(
+    virtual VclPtr<AbstractMultiTOXTabDialog>  CreateMultiTOXTabDialog(
                                                 vcl::Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX,

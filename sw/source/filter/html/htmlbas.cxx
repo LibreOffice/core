@@ -22,7 +22,6 @@
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/strbuf.hxx>
-#include <sfx2/sfx.hrc>
 #include <basic/sbx.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>

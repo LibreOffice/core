@@ -32,6 +32,15 @@
 
 #include "iconcdlg.hxx"
 
+// hyperlink dialog
+enum HyperLinkPageType
+{
+    INTERNET,
+    MAIL,
+    DOCUMENT,
+    NEWDOCUMENT
+};
+
 /*************************************************************************
 |*
 |* Hyperlink-Dialog

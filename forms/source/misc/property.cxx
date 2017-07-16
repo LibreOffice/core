@@ -20,8 +20,6 @@
 #include "frm_strings.hxx"
 #include "property.hxx"
 
-#include "property.hrc"
-
 namespace frm
 {
 

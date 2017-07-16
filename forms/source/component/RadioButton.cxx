@@ -20,7 +20,6 @@
 #include "RadioButton.hxx"
 #include "GroupManager.hxx"
 #include "property.hxx"
-#include "property.hrc"
 #include "services.hxx"
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>

@@ -48,7 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include "core_resource.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "PropertyForward.hxx"
 

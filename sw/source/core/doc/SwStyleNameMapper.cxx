@@ -22,7 +22,6 @@
 
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
-#include <rcid.hrc>
 
 #ifdef _NEED_TO_DEBUG_MAPPING
 #include <stdlib.h>

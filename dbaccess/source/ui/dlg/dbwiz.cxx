@@ -37,7 +37,7 @@
 #include "ConnectionPage.hxx"
 #include "DriverSettings.hxx"
 #include "DbAdminImpl.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 
 namespace dbaui
 {

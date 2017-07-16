@@ -22,7 +22,7 @@
 #include "res_Titles.hxx"
 #include "res_LegendPosition.hxx"
 #include "ResId.hxx"
-#include "HelpIds.hrc"
+#include "helpids.h"
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"

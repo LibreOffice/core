@@ -19,7 +19,7 @@
 
 
 #include "fmcontrollayout.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>

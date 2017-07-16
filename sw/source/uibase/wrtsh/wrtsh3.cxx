@@ -33,7 +33,6 @@
 #include "view.hxx"
 #include "IMark.hxx"
 #include "doc.hxx"
-#include "wrtsh.hrc"
 
 #include <unomid.h>
 
