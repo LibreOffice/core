@@ -61,15 +61,20 @@ public:
     bool TraverseConditionalOperator(ConditionalOperator *);
 private:
     void VisitSomeStmt(const Stmt *parent, const Expr* cond, StringRef stmtName);
+    Expr* insideSizeof = nullptr;
     Expr* insideCaseStmt = nullptr;
     Expr* insideConditionalOperator = nullptr;
 };
 
-bool UnnecessaryParen::TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr *)
+bool UnnecessaryParen::TraverseUnaryExprOrTypeTraitExpr(UnaryExprOrTypeTraitExpr * expr)
 {
-    // for some reason, the parentheses in an expression like "sizeof(x)" actually show up
-    // in the AST, so just ignore that part of the AST
-    return true;
+    auto old = insideSizeof;
+    if (expr->getKind() == UETT_SizeOf && !expr->isArgumentType()) {
+        insideSizeof = expr->getArgumentExpr()->IgnoreImpCasts();
+    }
+    bool ret = RecursiveASTVisitor::TraverseUnaryExprOrTypeTraitExpr(expr);
+    insideSizeof = old;
+    return ret;
 }
 
 bool UnnecessaryParen::TraverseCaseStmt(CaseStmt * caseStmt)
@@ -95,6 +100,8 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
     if (ignoreLocation(parenExpr))
         return true;
     if (parenExpr->getLocStart().isMacroID())
+        return true;
+    if (insideSizeof && parenExpr == insideSizeof)
         return true;
     if (insideCaseStmt && parenExpr == insideCaseStmt)
         return true;
