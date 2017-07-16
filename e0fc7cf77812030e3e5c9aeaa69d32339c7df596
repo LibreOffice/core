@@ -34,6 +34,24 @@
       "revId": "e0fc7cf77812030e3e5c9aeaa69d32339c7df596",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_39042f7d",
+        "filename": "include/tools/datetime.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-16T09:40:00Z",
+      "side": 1,
+      "message": "ah fair enough. just be warned that round-tripping things through floating-point types can sometimes be icky. there are various edge cases where you are going to loose precision.\n\nYou might be better off with\n  sal_Int64 nSecs, sal_Int16 nMicroSeconds",
+      "parentUuid": "3a461143_991443f6",
+      "revId": "e0fc7cf77812030e3e5c9aeaa69d32339c7df596",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
