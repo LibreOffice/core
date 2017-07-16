@@ -80,7 +80,8 @@ void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
     rBuffer.append( pHexDigits[ nInt & 15 ] );
 }
 
-#ifndef _WIN32
+#if HAVE_FEATURE_NSS && !defined(_WIN32)
+
 char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/, void *arg)
 {
     return PL_strdup(static_cast<char *>(arg));
@@ -694,7 +695,8 @@ NSSCMSMessage *CreateCMSMessage(const PRTime* time,
     return result;
 }
 
-#endif //!_WIN32
+#endif // HAVE_FEATURE_NSS && !_WIN32
+
 } // Anonymous namespace
 
 #ifdef _WIN32
