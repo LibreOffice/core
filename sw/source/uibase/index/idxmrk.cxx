@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <helpid.h>
+#include <helpids.h>
 #include <comphelper/processfactory.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
@@ -35,7 +35,6 @@
 #include <multmrk.hxx>
 #include <swundo.hxx>
 #include <cmdid.h>
-#include <index.hrc>
 #include <swmodule.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>

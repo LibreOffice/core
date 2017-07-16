@@ -19,7 +19,6 @@
 
 #include "optctl.hxx"
 #include <dialmgr.hxx>
-#include <cuires.hrc>
 #include <svl/ctloptions.hxx>
 
 // class SvxCTLOptionsPage -----------------------------------------------------

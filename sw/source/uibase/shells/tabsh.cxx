@@ -72,11 +72,10 @@
 #include <tblsel.hxx>
 
 #include <app.hrc>
-#include <dialog.hrc>
 #include <strings.hrc>
 #include <cmdid.h>
 #include <globals.hrc>
-#include <helpid.h>
+#include <helpids.h>
 #include <unobaseclass.hxx>
 
 #define SwTableShell
@@ -84,7 +83,6 @@
 #include <swslots.hxx>
 
 #include "swabstdlg.hxx"
-#include <table.hrc>
 
 #include <memory>
 
@@ -668,12 +666,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                     sCurText, SID_ATTR_NUMBERFORMAT_INFO ));
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
-                ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( GetView().GetWindow(),aCoreSet,
-                    pView->GetViewFrame()->GetFrame().GetFrameInterface(),
-                    RC_DLG_SWNUMFMTDLG ));
-                OSL_ENSURE(pDlg, "Dialog creation failed!");
+                assert(pFact && "SwAbstractDialogFactory fail!");
+                ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(GetView().GetWindow(), aCoreSet));
+                assert(pDlg && "Dialog creation failed!");
 
                 if (RET_OK == pDlg->Execute())
                 {
@@ -828,10 +823,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_SET_ROW_HEIGHT:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_ROW_HEIGHT ));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
+            assert(pFact && "SwAbstractDialogFactory fail!");
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwTableHeightDialog(GetView().GetWindow(), rSh));
+            assert(pDlg && "Dialog creation failed!");
             pDlg->Execute();
             break;
         }

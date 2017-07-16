@@ -22,7 +22,7 @@
 #include "dbu_dlg.hxx"
 #include "strings.hrc"
 #include <osl/diagnose.h>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 

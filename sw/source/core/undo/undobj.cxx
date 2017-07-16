@@ -37,7 +37,6 @@
 #include <mvsave.hxx>
 #include <redline.hxx>
 #include <crossrefbookmark.hxx>
-#include <undo.hrc>
 #include <strings.hrc>
 #include <docsh.hxx>
 #include <view.hxx>

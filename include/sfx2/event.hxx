@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
-#include <sfx2/sfx.hrc>
 #include <svl/hint.hxx>
 #include <unotools/eventcfg.hxx>
 #include <rtl/ustring.hxx>
@@ -31,8 +30,18 @@
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
 
-class SfxObjectShell;
+#define EVENT_SFX_START              5000
+//      EVENT_SFX_END                9999
 
+#define EVENT_APP_START             20000
+//      EVENT_APP_END               29999
+
+// Events for Controls etc.
+#define SFX_EVENT_MOUSEOVER_OBJECT     ( EVENT_SFX_START + 100 )
+#define SFX_EVENT_MOUSECLICK_OBJECT    ( EVENT_SFX_START + 101 )
+#define SFX_EVENT_MOUSEOUT_OBJECT      ( EVENT_SFX_START + 102 )
+
+class SfxObjectShell;
 
 enum class SfxEventHintId {
     NONE = 0,

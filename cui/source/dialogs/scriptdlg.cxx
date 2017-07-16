@@ -26,7 +26,6 @@
 #include <vcl/builderfactory.hxx>
 #include <o3tl/make_unique.hxx>
 
-#include <cuires.hrc>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include "scriptdlg.hxx"

@@ -28,7 +28,6 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/mnemonic.hxx>
 #include <dialmgr.hxx>
-#include "cuires.hrc"
 #include "strings.hrc"
 #include "personalization.hrc"
 

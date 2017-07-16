@@ -23,7 +23,6 @@
 #include <dialmgr.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/app.hxx>
-#include <cuires.hrc>
 #include <svx/fmsrccfg.hxx>
 #include <svx/fmsrcimp.hxx>
 #include "strings.hrc"

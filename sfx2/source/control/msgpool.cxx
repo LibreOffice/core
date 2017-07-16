@@ -31,7 +31,6 @@
 #include "arrdecl.hxx"
 #include <sfx2/module.hxx>
 
-#include <sfx2/sfx.hrc>
 #include <sfx2/strings.hrc>
 
 SfxSlotPool::SfxSlotPool(SfxSlotPool *pParent)

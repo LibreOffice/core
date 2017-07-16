@@ -18,7 +18,7 @@
  */
 
 #include <sal/macros.h>
-#include "fmhelp.hrc"
+#include "helpids.h"
 #include <svx/gridctrl.hxx>
 #include "gridcell.hxx"
 #include "svx/fmtools.hxx"
@@ -26,7 +26,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>

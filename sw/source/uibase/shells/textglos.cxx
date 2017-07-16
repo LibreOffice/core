@@ -29,7 +29,6 @@
 #include "glosdoc.hxx"
 #include "gloslst.hxx"
 #include "swabstdlg.hxx"
-#include <misc.hrc>
 
 void SwTextShell::ExecGlossary(SfxRequest &rReq)
 {

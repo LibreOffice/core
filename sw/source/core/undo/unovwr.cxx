@@ -33,7 +33,6 @@
 #include <acorrect.hxx>
 #include <docary.hxx>
 #include <strings.hrc>
-#include <undo.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;

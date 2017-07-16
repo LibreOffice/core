@@ -34,7 +34,7 @@
 
 #include <connectivity/dbtools.hxx>
 #include "core_resource.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "strings.hxx"
 #include "ColumnInfo.hxx"

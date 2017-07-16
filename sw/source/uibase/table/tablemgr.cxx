@@ -39,7 +39,6 @@
 #include "frmfmt.hxx"
 #include "instable.hxx"
 #include "swerror.h"
-#include "table.hrc"
 #include "swabstdlg.hxx"
 #include "swcli.hxx"
 #include "docsh.hxx"

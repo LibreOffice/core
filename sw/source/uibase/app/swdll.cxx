@@ -32,7 +32,6 @@
 #include <swtypes.hxx>
 #include <init.hxx>
 #include <dobjfac.hxx>
-#include <cfgid.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <unotools/configmgr.hxx>

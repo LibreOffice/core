@@ -19,7 +19,7 @@
 
 
 #include "updatehdl.hxx"
-#include "update.hrc"
+#include "helpids.h"
 
 #include "osl/diagnose.h"
 #include "osl/thread.hxx"

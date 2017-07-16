@@ -25,7 +25,6 @@
 #include "java/sql/SQLException.hxx"
 #include <osl/thread.h>
 #include "java/LocalRef.hxx"
-#include "resource/conn_shared_res.hrc"
 #include "strings.hxx"
 
 #include <comphelper/logging.hxx>

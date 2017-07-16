@@ -39,7 +39,7 @@
 #include "fmtfsize.hxx"
 #include "swrect.hxx"
 #include "xmlexp.hxx"
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;

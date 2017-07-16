@@ -26,7 +26,7 @@
 #include "xsddatatypes.hxx"
 #include "modulepcr.hxx"
 #include "strings.hrc"
-#include "propctrlr.hrc"
+#include "propctrlr.h"
 #include "newdatatype.hxx"
 #include "xsdvalidationhelper.hxx"
 #include "pcrcommon.hxx"

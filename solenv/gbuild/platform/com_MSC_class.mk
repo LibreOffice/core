@@ -451,27 +451,6 @@ ifeq ($(strip $(CPPUNITTRACE)),TRUE)
 gb_CppunitTest_GDBTRACE := '$(DEVENV)' /debugexe
 endif
 
-# SrsPartTarget class
-
-ifeq ($(gb_FULLDEPS),$(true))
-# FIXME this is used before TargetLocations is read?
-gb_SrsPartTarget__command_target = $(WORKDIR)/LinkTarget/Executable/makedepend.exe
-define gb_SrsPartTarget__command_dep
-$(call gb_Helper_abbreviate_dirs,\
-	$(call gb_Executable_get_target,makedepend) \
-		$(INCLUDE) \
-		$(DEFS) \
-		-D__RSC \
-		$(2) \
-		-o .src \
-		-p $(dir $(call gb_SrsPartTarget_get_target,$(1))) \
-		-f $(call gb_SrsPartTarget_get_dep_target,$(1)))
-endef
-else
-gb_SrsPartTarget__command_target =
-gb_SrsPartTarget__command_dep =
-endif
-
 # WinResTarget class
 
 gb_WinResTarget_POSTFIX :=.res

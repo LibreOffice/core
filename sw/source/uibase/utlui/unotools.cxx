@@ -19,7 +19,6 @@
 
 #include <swtypes.hxx>
 #include <globals.hrc>
-#include <misc.hrc>
 
 #include <strings.hrc>
 #include <unotools.hxx>

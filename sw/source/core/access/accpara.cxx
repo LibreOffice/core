@@ -91,7 +91,6 @@
 #include <reffld.hxx>
 #include <expfld.hxx>
 #include <flddat.hxx>
-#include <fldui.hrc>
 #include "../../uibase/inc/fldmgr.hxx"
 #include "fldbas.hxx"      // SwField
 

@@ -54,7 +54,6 @@
 #include <svx/xpool.hxx>
 #include <svx/dlgutil.hxx>
 #include "cuitabarea.hxx"
-#include <cuires.hrc>
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <comphelper/processfactory.hxx>

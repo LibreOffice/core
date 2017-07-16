@@ -18,7 +18,7 @@
  */
 
 #include "hintids.hxx"
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>

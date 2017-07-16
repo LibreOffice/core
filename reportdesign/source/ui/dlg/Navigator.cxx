@@ -32,7 +32,7 @@
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/report/XImageControl.hpp>
 #include <com/sun/star/report/XShape.hpp>
-#include "helpids.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "rptui_slotid.hrc"
 #include <comphelper/propmultiplex.hxx>

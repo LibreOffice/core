@@ -64,7 +64,7 @@
 #include <svx/strings.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/svxids.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>

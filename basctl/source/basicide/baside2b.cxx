@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include "helpid.hrc"
+#include "helpids.h"
 #include <strings.hrc>
 #include "bitmaps.hlst"
 

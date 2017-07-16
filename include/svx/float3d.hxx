@@ -33,6 +33,29 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/svdmodel.hxx>
 
+// Lower part
+#define CTL_PREVIEW             12
+#define CTL_LIGHT_PREVIEW       13
+
+// Geometry
+
+// Depiction/Appearance
+#define FT_DISTANCE             51
+
+// Lighting
+#define BTN_LIGHT_1             60
+#define BTN_LIGHT_2             61
+#define BTN_LIGHT_3             62
+#define BTN_LIGHT_4             63
+#define BTN_LIGHT_5             64
+#define BTN_LIGHT_6             65
+#define BTN_LIGHT_7             66
+#define BTN_LIGHT_8             67
+#define FT_LIGHTSOURCE          77
+#define LB_AMBIENTLIGHT         78
+#define BTN_AMBIENT_COLOR       79
+#define FT_AMBIENTLIGHT         80
+
 enum class ViewType3D
 {
     Geo = 1,

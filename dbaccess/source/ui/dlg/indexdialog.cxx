@@ -26,7 +26,7 @@
 #include "dbu_dlg.hxx"
 #include "strings.hrc"
 #include "bitmaps.hlst"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "indexfieldscontrol.hxx"
 #include "indexcollection.hxx"
 #include <vcl/layout.hxx>

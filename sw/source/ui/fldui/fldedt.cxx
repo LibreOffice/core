@@ -37,11 +37,9 @@
 #include <fldedt.hxx>
 
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <globals.hrc>
-#include <fldui.hrc>
 #include "swabstdlg.hxx"
-#include "dialog.hrc"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -328,11 +326,9 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, Button*, void)
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aSet,
-        pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
-        RC_DLG_ADDR ));
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
-    if(RET_OK == pDlg->Execute())
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwAddressAbstractDlg(this, aSet));
+    assert(pDlg && "Dialog creation failed!");
+    if (RET_OK == pDlg->Execute())
     {
         pSh->UpdateFields( *pCurField );
     }

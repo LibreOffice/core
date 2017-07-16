@@ -35,10 +35,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svx/svxdlg.hxx>
-#include <helpid.hrc>
+#include <helpids.h>
 #include <dialmgr.hxx>
 #include "optcolor.hxx"
-#include <cuires.hrc>
 #include <strings.hrc>
 #include <svx/dlgutil.hxx>
 

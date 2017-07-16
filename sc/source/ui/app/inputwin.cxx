@@ -58,7 +58,7 @@
 #include "docsh.hxx"
 #include "appoptio.hxx"
 #include "rangenam.hxx"
-#include <formula/compiler.hrc>
+#include <formula/compiler.hxx>
 #include "dbdata.hxx"
 #include "rangeutl.hxx"
 #include "docfunc.hxx"
