@@ -32,7 +32,7 @@
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svx/svdoashp.hxx>
 #include <svx/svdpage.hxx>
 #include <svl/itemiter.hxx>

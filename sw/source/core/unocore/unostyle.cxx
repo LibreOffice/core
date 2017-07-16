@@ -81,7 +81,7 @@
 //
 #include <svx/unobrushitemhelper.hxx>
 #include <editeng/unoipset.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svx/unoshape.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>

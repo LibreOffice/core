@@ -124,7 +124,6 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/msgpool.hxx>
 #include "viewimp.hxx"
 #include <sfx2/sfxbasecontroller.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/progress.hxx>

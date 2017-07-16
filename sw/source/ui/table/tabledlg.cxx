@@ -55,7 +55,6 @@
 
 #include <app.hrc>
 #include <cmdid.h>
-#include <table.hrc>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>

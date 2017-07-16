@@ -21,7 +21,7 @@
 #include "formstrings.hxx"
 #include "formmetadata.hxx"
 #include "pcrservices.hxx"
-#include "propctrlr.hrc"
+#include "propctrlr.h"
 #include "formbrowsertools.hxx"
 #include "eformshelper.hxx"
 #include "handlerhelper.hxx"

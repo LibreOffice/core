@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SVTOOLS_EHDL_HXX
 #define INCLUDED_SVTOOLS_EHDL_HXX
 
-#ifndef __RSC
-
 #include <memory>
 #include <svtools/svtdllapi.h>
 
@@ -71,8 +69,6 @@ private:
     SVT_DLLPRIVATE static void GetClassString(sal_uLong lErrId, OUString &);
     virtual bool          CreateString(const ErrorInfo *, OUString &) const override;
 };
-
-#endif
 
 #endif
 

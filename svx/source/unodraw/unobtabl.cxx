@@ -30,7 +30,7 @@
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
 #include "svx/unofill.hxx"
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 
 using namespace ::com::sun::star;
 using namespace ::cppu;

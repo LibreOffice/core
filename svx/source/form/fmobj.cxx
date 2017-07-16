@@ -18,7 +18,7 @@
  */
 
 #include "fmobj.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "fmvwimp.hxx"
 #include "fmpgeimp.hxx"
 #include "svx/fmview.hxx"

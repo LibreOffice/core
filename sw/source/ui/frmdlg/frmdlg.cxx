@@ -33,7 +33,6 @@
 #include <column.hxx>
 #include <macassgn.hxx>
 
-#include <frmui.hrc>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <svx/svxids.hrc>

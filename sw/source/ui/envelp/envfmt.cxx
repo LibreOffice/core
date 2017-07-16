@@ -47,7 +47,6 @@
 #include <memory>
 
 #include "swabstdlg.hxx"
-#include "chrdlg.hrc"
 #include <swuiexp.hxx>
 
 namespace {

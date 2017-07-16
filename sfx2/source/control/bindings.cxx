@@ -50,7 +50,6 @@
 #include "sfxtypes.hxx"
 #include "workwin.hxx"
 #include <sfx2/unoctitm.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>

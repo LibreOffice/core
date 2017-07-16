@@ -25,7 +25,6 @@
 #include <sfx2/request.hxx>
 #include <dialmgr.hxx>
 #include "cuigrfflt.hxx"
-#include <cuires.hrc>
 #include <svx/dialogs.hrc>
 
 

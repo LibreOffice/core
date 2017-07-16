@@ -38,7 +38,6 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <vcl/lazydelete.hxx>
-#include "imagemgr.hrc"
 #include "bitmaps.hlst"
 #include "strings.hxx"
 

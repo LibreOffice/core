@@ -19,7 +19,6 @@
 
 #include <wrtsh.hxx>
 #include <splittbl.hxx>
-#include <table.hrc>
 #include <tblenum.hxx>
 
 SwSplitTableDlg::SwSplitTableDlg( vcl::Window *pParent, SwWrtShell &rSh )

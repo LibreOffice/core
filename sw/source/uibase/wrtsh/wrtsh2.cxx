@@ -54,9 +54,7 @@
 #include <navipi.hxx>
 #include <txtinet.hxx>
 #include <cmdid.h>
-#include <wrtsh.hrc>
 #include "swabstdlg.hxx"
-#include "fldui.hrc"
 #include <SwRewriter.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>

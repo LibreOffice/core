@@ -105,7 +105,7 @@
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
-#include <sfx2/sfx.hrc>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/safemode.hxx>
 #include <svl/itemset.hxx>

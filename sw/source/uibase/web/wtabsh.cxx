@@ -26,9 +26,8 @@
 #include "cmdid.h"
 #include "globals.hrc"
 #include "uitool.hxx"
-#include "helpid.h"
+#include "helpids.h"
 #include "strings.hrc"
-#include "table.hrc"
 #include "wrtsh.hxx"
 #include "wtabsh.hxx"
 

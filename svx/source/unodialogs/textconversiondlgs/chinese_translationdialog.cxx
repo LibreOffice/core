@@ -24,7 +24,7 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 
 
 namespace textconversiondlgs

@@ -18,7 +18,7 @@
  */
 
 #include "formcontrolfont.hxx"
-#include "property.hrc"
+#include "frm_strings.hxx"
 #include "property.hxx"
 #include <cppuhelper/propshlp.hxx>
 #include <comphelper/property.hxx>

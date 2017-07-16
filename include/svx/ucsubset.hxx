@@ -22,7 +22,6 @@
 
 #include <svx/svxdllapi.h>
 
-#include <svx/ucsubset.hrc>
 #include <vcl/metric.hxx>
 
 #include <list>

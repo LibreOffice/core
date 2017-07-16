@@ -22,7 +22,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <avmedia/mediaplayer.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "galbrws2.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/galtheme.hxx"

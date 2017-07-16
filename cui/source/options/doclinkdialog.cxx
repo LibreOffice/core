@@ -21,7 +21,6 @@
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cuires.hrc>
 #include <strings.hrc>
 #include <svl/filenotation.hxx>
 #include <vcl/layout.hxx>

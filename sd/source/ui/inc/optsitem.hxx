@@ -68,7 +68,7 @@ private:
     OUString                maSubTree;
     std::unique_ptr<SdOptionsItem>
                             mpCfgItem;
-    sal_uInt16              mnConfigId;
+    bool                    mbImpress;
     bool                    mbInit          : 1;
     bool                    mbEnableModify  : 1;
 
@@ -88,13 +88,13 @@ protected:
 
 public:
 
-                            SdOptionsGeneric( sal_uInt16 nConfigId, const OUString& rSubTree );
-                            SdOptionsGeneric( SdOptionsGeneric const & );
+                            SdOptionsGeneric(bool bImpress, const OUString& rSubTree);
+                            SdOptionsGeneric(SdOptionsGeneric const &);
                             virtual ~SdOptionsGeneric();
 
     SdOptionsGeneric&       operator=( SdOptionsGeneric const & );
 
-    sal_uInt16              GetConfigId() const { return mnConfigId; }
+    bool                    IsImpress() const { return mbImpress; }
 
     void                    EnableModify( bool bModify ) { mbEnableModify = bModify; }
 
@@ -122,7 +122,7 @@ protected:
     virtual bool WriteData( css::uno::Any* pValues ) const override;
 
 public:
-            SdOptionsLayout( sal_uInt16 nConfigId, bool bUseConfig );
+            SdOptionsLayout(bool bImpress, bool bUseConfig);
 
     bool    operator==( const SdOptionsLayout& rOpt ) const;
 
@@ -171,7 +171,7 @@ protected:
 
 public:
 
-            SdOptionsContents( sal_uInt16 nConfigId, bool bUseConfig );
+            SdOptionsContents(bool bImpress, bool bUseConfig);
 
     bool    operator==( const SdOptionsContents& rOpt ) const;
 };
@@ -242,7 +242,7 @@ protected:
 
 public:
 
-            SdOptionsMisc( sal_uInt16 nConfigId, bool bUseConfig );
+            SdOptionsMisc(bool bImpress, bool bUseConfig);
 
     bool    operator==( const SdOptionsMisc& rOpt ) const;
 
@@ -362,7 +362,7 @@ protected:
 
 public:
 
-            SdOptionsSnap( sal_uInt16 nConfigId, bool bUseConfig );
+            SdOptionsSnap(bool bImpress, bool bUseConfig);
 
     bool    operator==( const SdOptionsSnap& rOpt ) const;
 
@@ -421,7 +421,7 @@ protected:
 
 public:
 
-    explicit SdOptionsZoom(sal_uInt16 nConfigId);
+    explicit SdOptionsZoom(bool bImpress);
 
     void    GetScale( sal_Int32& rX, sal_Int32& rY ) const { Init(); rX = nX; rY = nY; }
     void    SetScale( sal_Int32 nInX, sal_Int32 nInY ) { if( nX != nInX || nY != nInY ) { OptionsChanged(); nX = nInX; nY = nInY; } }
@@ -437,7 +437,7 @@ protected:
 
 public:
 
-    explicit SdOptionsGrid(sal_uInt16 nConfigId);
+    explicit SdOptionsGrid(bool bImpress);
     virtual ~SdOptionsGrid() override;
 
     void    SetDefaults();
@@ -508,7 +508,7 @@ protected:
 
 public:
 
-            SdOptionsPrint( sal_uInt16 nConfigId, bool bUseConfig );
+            SdOptionsPrint(bool bImpress, bool bUseConfig);
 
     bool    operator==( const SdOptionsPrint& rOpt ) const;
 
@@ -582,7 +582,7 @@ class SdOptions : public SdOptionsLayout, public SdOptionsContents,
 {
 public:
 
-                        explicit SdOptions( sal_uInt16 nConfigId );
+                        explicit SdOptions(bool bImpress);
                         virtual ~SdOptions() override;
 
     void                StoreConfig();

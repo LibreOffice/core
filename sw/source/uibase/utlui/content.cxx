@@ -56,9 +56,8 @@
 #include <unotools.hxx>
 #include <unotxvw.hxx>
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <strings.hrc>
-#include <misc.hrc>
 #include <strings.hrc>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>

@@ -21,7 +21,7 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <hintids.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
@@ -61,7 +61,6 @@
 #include <svx/sdtaitm.hxx>
 #include <sal/macros.h>
 
-#include <frmui.hrc>
 #include <strings.hrc>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

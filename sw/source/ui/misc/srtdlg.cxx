@@ -36,7 +36,6 @@
 #include <view.hxx>
 #include <cmdid.h>
 #include <wrtsh.hxx>
-#include <misc.hrc>
 #include <app.hrc>
 #include <strings.hrc>
 #include <swtable.hxx>

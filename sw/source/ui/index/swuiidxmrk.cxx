@@ -19,7 +19,7 @@
 
 #include "swuiidxmrk.hxx"
 #include <hintids.hxx>
-#include <helpid.h>
+#include <helpids.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -47,7 +47,6 @@
 #include <swundo.hxx>
 #include <cmdid.h>
 #include <app.hrc>
-#include <index.hrc>
 #include <swmodule.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>

@@ -26,7 +26,6 @@
 #include <sfx2/app.hxx>
 #include <dbaccess/IController.hxx>
 #include "UITools.hxx"
-#include <sfx2/sfx.hrc>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>

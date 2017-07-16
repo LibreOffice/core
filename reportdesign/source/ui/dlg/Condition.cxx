@@ -24,7 +24,7 @@
 #include "strings.hrc"
 #include "ReportController.hxx"
 #include "ColorChanger.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include "reportformula.hxx"
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

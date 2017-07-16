@@ -20,7 +20,7 @@
 #include "strings.hrc"
 
 #include "objdlg.hxx"
-#include "helpid.hrc"
+#include "helpids.h"
 
 #include <svl/itemset.hxx>
 #include <vcl/taskpanelist.hxx>

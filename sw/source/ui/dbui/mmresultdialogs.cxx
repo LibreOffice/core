@@ -66,7 +66,7 @@
 #include <swevent.hxx>
 #include <dbui.hxx>
 #include <dbui.hrc>
-#include <helpid.h>
+#include <helpids.h>
 #include <doc.hxx>
 #include <sfx2/app.hxx>
 #include <strings.hrc>

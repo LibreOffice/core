@@ -23,14 +23,11 @@
 #include <globals.hrc>
 #include <strings.hrc>
 #include <chpfld.hxx>
-#include <fldui.hrc>
 #include <flddok.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <svl/zformat.hxx>
-
-#include <index.hrc>
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1

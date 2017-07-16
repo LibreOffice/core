@@ -24,7 +24,7 @@
 
 #include "wrtsh.hxx"
 #include "view.hxx"
-#include "helpid.h"
+#include "helpids.h"
 #include "globals.hrc"
 #include "strings.hrc"
 #include "strings.hrc"

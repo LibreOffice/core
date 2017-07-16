@@ -18,7 +18,7 @@
  */
 
 #include "AppSwapWindow.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "AppView.hxx"
 #include <vcl/svapp.hxx>

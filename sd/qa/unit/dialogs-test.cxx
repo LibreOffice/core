@@ -47,7 +47,6 @@
 #include "strings.hrc"
 #include "sdresid.hxx"
 #include "sdattr.hxx"
-#include "prltempl.hrc"
 
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -475,7 +474,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             pRetval = getSdAbstractDialogFactory()->CreateSdPresLayoutTemplateDlg(
                 getDocShell(),
                 Application::GetDefDialogParent(),
-                TAB_PRES_LAYOUT_TEMPLATE,
+                false,
                 *pStyleSheet,
                 PO_TITLE,
                 pStyleSheetPool);

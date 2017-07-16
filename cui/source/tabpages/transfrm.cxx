@@ -27,7 +27,6 @@
 #include <svx/sderitm.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/transfrmhelper.hxx>
-#include <cuires.hrc>
 #include <editeng/sizeitem.hxx>
 
 #include "transfrm.hxx"

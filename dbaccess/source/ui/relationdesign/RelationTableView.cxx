@@ -33,7 +33,7 @@
 #include "stringconstants.hxx"
 #include <connectivity/dbtools.hxx>
 #include <comphelper/sequence.hxx>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "RelationDesignView.hxx"
 #include "JoinController.hxx"
 #include "TableWindow.hxx"

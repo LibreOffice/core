@@ -18,7 +18,7 @@
  */
 
 #include "scitems.hxx"
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/langitem.hxx>

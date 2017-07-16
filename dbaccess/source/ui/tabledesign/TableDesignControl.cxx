@@ -25,7 +25,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/builder.hxx>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 
 using namespace ::dbaui;
 using namespace ::svt;

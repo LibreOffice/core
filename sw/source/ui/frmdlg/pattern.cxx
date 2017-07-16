@@ -21,7 +21,6 @@
 #include <svx/dialogs.hrc>
 #include "swtypes.hxx"
 #include "pattern.hxx"
-#include "frmui.hrc"
 #include "strings.hrc"
 
 SwBackgroundDlg::SwBackgroundDlg(vcl::Window* pParent, const SfxItemSet& rSet)

@@ -43,7 +43,6 @@
 #include "sfxtypes.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/sfx.hrc>
 #include <sfx2/event.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>

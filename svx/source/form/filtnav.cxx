@@ -20,9 +20,9 @@
 #include <memory>
 #include "filtnav.hxx"
 #include "fmexch.hxx"
-#include "fmhelp.hrc"
+#include "helpids.h"
 #include "fmitems.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include <svx/strings.hrc>
 
 #include <com/sun/star/awt/XControlModel.hpp>

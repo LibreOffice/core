@@ -18,7 +18,6 @@
  */
 #include "FormattedField.hxx"
 #include "services.hxx"
-#include "property.hrc"
 #include "property.hxx"
 #include "frm_resource.hxx"
 #include "strings.hrc"

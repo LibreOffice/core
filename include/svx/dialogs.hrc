@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_DIALOGS_HRC
 
 #include <svx/svxids.hrc>
-#include <sfx2/dialogs.hrc>
+#include <sfx2/sfxsids.hrc>
 
 // factory IDs of tabpages implemented in CUI
 #define RID_SVXPAGE_CHAR_TWOLINES           (RID_SVX_START + 242)
@@ -75,6 +75,7 @@
 #define RID_SW_TP_OPTPRINT_PAGE         (RID_OFA_START + 209)
 #define RID_SW_TP_OPTTABLE_PAGE         (RID_OFA_START + 210)
 #define RID_SW_TP_REDLINE_OPT           (RID_OFA_START + 212)
+#define RID_SW_TP_DOC_STAT              (RID_OFA_START + 252)
 #define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
 #define RID_SW_TP_COMPARISON_OPT        (RID_OFA_START + 257)
 #define RID_SW_TP_HTML_CONTENT_OPT      (RID_OFA_START + 240)

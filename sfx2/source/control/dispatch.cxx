@@ -1312,7 +1312,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
     if ( xImp->bQuiet || xImp->bNoUI || (xImp->pFrame && xImp->pFrame->GetObjectShell()->IsPreview()) )
         return;
 
-    sal_uInt32 nStatBarId=0;
+    StatusBarId eStatBarId = StatusBarId::None;
 
     SfxSlotPool* pSlotPool = &SfxSlotPool::GetSlotPool( GetFrame() );
     sal_uInt16 nTotCount = xImp->aStack.size();
@@ -1407,11 +1407,9 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
 
         if ( bIsMDIApp || bIsIPOwner )
         {
-            sal_uInt32 nId = pIFace ? pIFace->GetStatusBarId() : 0;
-            if ( nId )
-            {
-                nStatBarId = nId;
-            }
+            StatusBarId eId = pIFace ? pIFace->GetStatusBarId() : StatusBarId::None;
+            if (eId != StatusBarId::None)
+                eStatBarId = eId;
         }
     }
 
@@ -1440,10 +1438,10 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
             pActDispatcher = pActDispatcher->xImp->pParent;
         }
 
-        if ( bIsTaskActive && nStatBarId && xImp->pFrame )
+        if (bIsTaskActive && eStatBarId != StatusBarId::None && xImp->pFrame)
         {
             // internal frames also may control statusbar
-            xImp->pFrame->GetFrame().GetWorkWindow_Impl()->SetStatusBar_Impl( nStatBarId );
+            xImp->pFrame->GetFrame().GetWorkWindow_Impl()->SetStatusBar_Impl(eStatBarId);
         }
     }
 }

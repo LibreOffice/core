@@ -19,7 +19,8 @@
 
 #include "browserview.hxx"
 #include "propertyeditor.hxx"
-#include "propctrlr.hrc"
+#include "helpids.h"
+#include "propctrlr.h"
 #include <vcl/tabpage.hxx>
 #include <memory>
 

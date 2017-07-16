@@ -32,6 +32,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/frame.hxx>

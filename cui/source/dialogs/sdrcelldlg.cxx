@@ -19,7 +19,6 @@
 
 #include <svl/cjkoptions.hxx>
 #include <svx/flagsdef.hxx>
-#include "cuires.hrc"
 #include "sdrcelldlg.hxx"
 #include "dialmgr.hxx"
 #include "cuitabarea.hxx"

@@ -31,7 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
 
-#include <helpid.h>
+#include <helpids.h>
 #include <cmdid.h>
 #include <swunohelper.hxx>
 #include <mmresultdialogs.hxx>

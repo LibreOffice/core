@@ -64,7 +64,6 @@
 
 #include "DrawDocShell.hxx"
 #include "FrameView.hxx"
-#include "cfgids.hxx"
 #include "strings.hrc"
 
 #include "PageListWatcher.hxx"

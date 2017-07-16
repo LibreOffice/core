@@ -30,7 +30,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/objsh.hxx>
-#include "cuires.hrc"
 #include <vcl/fixed.hxx>
 #include "headertablistbox.hxx"
 #include "svtools/svlbitm.hxx"

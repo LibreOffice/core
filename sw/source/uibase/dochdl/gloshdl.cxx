@@ -52,7 +52,6 @@
 
 #include <editeng/acorrcfg.hxx>
 #include "swabstdlg.hxx"
-#include <misc.hrc>
 
 #include <IDocumentFieldsAccess.hxx>
 

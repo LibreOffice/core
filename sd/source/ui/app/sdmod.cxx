@@ -52,10 +52,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "strings.hrc"
-
 #include "errhdl.hrc"
-#include "cfgids.hxx"
-
 
 #define SdModule
 #include "sdslots.hxx"
@@ -64,7 +61,7 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule)
 
 void SdModule::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterStatusBar(RID_DRAW_STATUSBAR);
+    GetStaticInterface()->RegisterStatusBar(StatusBarId::DrawStatusBar);
 }
 
 // Ctor
@@ -136,14 +133,14 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
     if (eDocType == DocumentType::Draw)
     {
         if (!pDrawOptions)
-            pDrawOptions = new SdOptions( SDCFG_DRAW );
+            pDrawOptions = new SdOptions(false);
 
         pOptions = pDrawOptions;
     }
     else if (eDocType == DocumentType::Impress)
     {
         if (!pImpressOptions)
-            pImpressOptions = new SdOptions( SDCFG_IMPRESS );
+            pImpressOptions = new SdOptions(true);
 
         pOptions = pImpressOptions;
     }
