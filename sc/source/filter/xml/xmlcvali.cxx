@@ -58,15 +58,17 @@ class ScXMLContentValidationContext : public ScXMLImportContext
 
 public:
 
-    ScXMLContentValidationContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
+    ScXMLContentValidationContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
     void SetHelpMessage(const OUString& sTitle, const OUString& sMessage, const bool bDisplay);
     void SetErrorMessage(const OUString& sTitle, const OUString& sMessage, const OUString& sMessageType, const bool bDisplay);
@@ -84,16 +86,15 @@ class ScXMLHelpMessageContext : public ScXMLImportContext
 
 public:
 
-    ScXMLHelpMessageContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLHelpMessageContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLErrorMessageContext : public ScXMLImportContext
@@ -108,16 +109,15 @@ class ScXMLErrorMessageContext : public ScXMLImportContext
 
 public:
 
-    ScXMLErrorMessageContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLErrorMessageContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLErrorMacroContext : public ScXMLImportContext
@@ -128,15 +128,14 @@ class ScXMLErrorMacroContext : public ScXMLImportContext
 
 public:
 
-    ScXMLErrorMacroContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLErrorMacroContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport,
@@ -151,17 +150,91 @@ ScXMLContentValidationsContext::~ScXMLContentValidationsContext()
 {
 }
 
-SvXMLImportContext *ScXMLContentValidationsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationsContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetContentValidationsElemTokenMap();
+    switch (nElement)
+    {
+        case XML_ELEMENT( TABLE, XML_CONTENT_VALIDATION ):
+            pContext = new ScXMLContentValidationContext( GetScImport(), nElement, xAttrList);
+        break;
+    }
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
+
+ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImport,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) :
+    ScXMLImportContext( rImport ),
+    nShowList(sheet::TableValidationVisibility::UNSORTED),
+    bAllowEmptyCell(true),
+    bDisplayHelp(false),
+    bDisplayError(false)
+{
+    if ( xAttrList.is() )
+    {
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+
+        for (auto &aIter : *pAttribList)
+        {
+            switch (aIter.getToken())
+            {
+            case XML_ELEMENT( TABLE, XML_NAME ):
+                sName = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_CONDITION ):
+                sCondition = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_BASE_CELL_ADDRESS ):
+                sBaseCellAddress = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_ALLOW_EMPTY_CELL ):
+                if (IsXMLToken(aIter, XML_FALSE))
+                    bAllowEmptyCell = false;
+                break;
+            case XML_ELEMENT( TABLE, XML_DISPLAY_LIST ):
+                if (IsXMLToken(aIter, XML_NO))
+                {
+                    nShowList = sheet::TableValidationVisibility::INVISIBLE;
+                }
+                else if (IsXMLToken(aIter, XML_UNSORTED))
+                {
+                    nShowList = sheet::TableValidationVisibility::UNSORTED;
+                }
+                else if (IsXMLToken(aIter, XML_SORT_ASCENDING))
+                {
+                    nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
+                }
+                else if (IsXMLToken(aIter, XML_SORTED_ASCENDING))
+                {
+                    // Read old wrong value, fdo#72548
+                    nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
+                }
+                break;
+            }
+        }
+    }
+}
+
+SvXMLImportContext *ScXMLContentValidationContext::CreateChildContext( sal_uInt16 nPrefix,
+                                            const OUString& rLName,
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttrList*/ )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetContentValidationElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
-        case XML_TOK_CONTENT_VALIDATION:
-            pContext = new ScXMLContentValidationContext( GetScImport(), nPrefix, rLName, xAttrList);
+        case XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS:
+            pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName );
+            xEventContext = pContext;
         break;
     }
 
@@ -171,92 +244,26 @@ SvXMLImportContext *ScXMLContentValidationsContext::CreateChildContext( sal_uInt
     return pContext;
 }
 
-ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
-    nShowList(sheet::TableValidationVisibility::UNSORTED),
-    bAllowEmptyCell(true),
-    bDisplayHelp(false),
-    bDisplayError(false)
-{
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
-    {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
-        {
-            case XML_TOK_CONTENT_VALIDATION_NAME:
-                sName = sValue;
-            break;
-            case XML_TOK_CONTENT_VALIDATION_CONDITION:
-                sCondition = sValue;
-            break;
-            case XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS:
-                sBaseCellAddress = sValue;
-            break;
-            case XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL:
-                if (IsXMLToken(sValue, XML_FALSE))
-                    bAllowEmptyCell = false;
-            break;
-            case XML_TOK_CONTENT_VALIDATION_DISPLAY_LIST:
-            {
-                if (IsXMLToken(sValue, XML_NO))
-                {
-                    nShowList = sheet::TableValidationVisibility::INVISIBLE;
-                }
-                else if (IsXMLToken(sValue, XML_UNSORTED))
-                {
-                    nShowList = sheet::TableValidationVisibility::UNSORTED;
-                }
-                else if (IsXMLToken(sValue, XML_SORT_ASCENDING))
-                {
-                    nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
-                }
-                else if (IsXMLToken(sValue, XML_SORTED_ASCENDING))
-                {
-                    // Read old wrong value, fdo#72548
-                    nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
-                }
-            }
-            break;
-        }
-    }
-}
-
-SvXMLImportContext *ScXMLContentValidationContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetContentValidationElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLName ) )
+    switch (nElement)
     {
-        case XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE:
-            pContext = new ScXMLHelpMessageContext( GetScImport(), nPrefix, rLName, xAttrList, this);
+    case XML_ELEMENT( TABLE, XML_HELP_MESSAGE ):
+        pContext = new ScXMLHelpMessageContext( GetScImport(), nElement, xAttrList, this);
         break;
-        case XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE:
-            pContext = new ScXMLErrorMessageContext( GetScImport(), nPrefix, rLName, xAttrList, this);
+    case XML_ELEMENT( TABLE, XML_ERROR_MESSAGE ):
+        pContext = new ScXMLErrorMessageContext( GetScImport(), nElement, xAttrList, this);
         break;
-        case XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO:
-            pContext = new ScXMLErrorMacroContext( GetScImport(), nPrefix, rLName, xAttrList, this);
-        break;
-        case XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS:
-            pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName );
-            xEventContext = pContext;
+    case XML_ELEMENT( TABLE, XML_ERROR_MACRO ):
+        pContext = new ScXMLErrorMacroContext( GetScImport(), nElement, xAttrList, this);
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -373,7 +380,7 @@ void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidat
     }
 }
 
-void ScXMLContentValidationContext::EndElement()
+void SAL_CALL ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     // #i36650# event-listeners element moved up one level
     if (xEventContext.is())
@@ -436,35 +443,32 @@ void ScXMLContentValidationContext::SetErrorMacro(const bool bExecute)
 }
 
 ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     sTitle(),
     sMessage(),
     nParagraphCount(0),
     bDisplay(false)
 {
     pValidationContext = pTempValidationContext;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationHelpMessageAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_HELP_MESSAGE_ATTR_TITLE:
-                sTitle = sValue;
-            break;
-            case XML_TOK_HELP_MESSAGE_ATTR_DISPLAY:
-                bDisplay = IsXMLToken(sValue, XML_TRUE);
-            break;
+            switch (aIter.getToken())
+            {
+            case XML_ELEMENT( TABLE, XML_TITLE ):
+                sTitle = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_DISPLAY ):
+                bDisplay = IsXMLToken(aIter, XML_TRUE);
+                break;
+            }
         }
     }
 }
@@ -494,17 +498,16 @@ SvXMLImportContext *ScXMLHelpMessageContext::CreateChildContext( sal_uInt16 nPre
     return pContext;
 }
 
-void ScXMLHelpMessageContext::EndElement()
+void SAL_CALL ScXMLHelpMessageContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pValidationContext->SetHelpMessage(sTitle, sMessage.makeStringAndClear(), bDisplay);
 }
 
 ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     sTitle(),
     sMessage(),
     sMessageType(),
@@ -512,27 +515,25 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
     bDisplay(false)
 {
     pValidationContext = pTempValidationContext;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationErrorMessageAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_ERROR_MESSAGE_ATTR_TITLE:
-                sTitle = sValue;
-            break;
-            case XML_TOK_ERROR_MESSAGE_ATTR_MESSAGE_TYPE:
-                sMessageType = sValue;
-            break;
-            case XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY:
-                bDisplay = IsXMLToken(sValue, XML_TRUE);
-            break;
+            switch (aIter.getToken())
+            {
+            case XML_ELEMENT( TABLE, XML_TITLE ):
+                sTitle = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_MESSAGE_TYPE ):
+                sMessageType = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_DISPLAY ):
+                bDisplay = IsXMLToken(aIter, XML_TRUE);
+                break;
+            }
         }
     }
 }
@@ -562,39 +563,36 @@ SvXMLImportContext *ScXMLErrorMessageContext::CreateChildContext( sal_uInt16 nPr
     return pContext;
 }
 
-void ScXMLErrorMessageContext::EndElement()
+void SAL_CALL ScXMLErrorMessageContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pValidationContext->SetErrorMessage(sTitle, sMessage.makeStringAndClear(), sMessageType, bDisplay);
 }
 
 ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     sName(),
     bExecute(false)
 {
     pValidationContext = pTempValidationContext;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationErrorMacroAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_ERROR_MACRO_ATTR_NAME:
-                sName = sValue;
-            break;
-            case XML_TOK_ERROR_MACRO_ATTR_EXECUTE:
-                bExecute = IsXMLToken(sValue, XML_TRUE);
-            break;
+            switch (aIter.getToken())
+            {
+            case XML_ELEMENT( TABLE, XML_NAME ):
+                sName = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_EXECUTE ):
+                bExecute = IsXMLToken(aIter, XML_TRUE);
+                break;
+            }
         }
     }
 }
@@ -615,7 +613,7 @@ SvXMLImportContext *ScXMLErrorMacroContext::CreateChildContext( sal_uInt16 nPref
     return pContext;
 }
 
-void ScXMLErrorMacroContext::EndElement()
+void SAL_CALL ScXMLErrorMacroContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pValidationContext->SetErrorMacro( bExecute );
 }
