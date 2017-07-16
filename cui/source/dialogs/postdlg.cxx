@@ -34,7 +34,7 @@
 #include "postdlg.hxx"
 #include <dialmgr.hxx>
 
-#include "helpid.hrc"
+#include "helpids.h"
 
 // class SvxPostItDialog -------------------------------------------------
 

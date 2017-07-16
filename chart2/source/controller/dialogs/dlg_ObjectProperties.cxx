@@ -19,7 +19,7 @@
 
 #include <svl/zforlist.hxx>
 #include "dlg_ObjectProperties.hxx"
-#include "ResourceIds.hrc"
+#include "TabPageIds.h"
 #include "strings.hrc"
 #include "tp_AxisLabel.hxx"
 #include "tp_DataLabel.hxx"

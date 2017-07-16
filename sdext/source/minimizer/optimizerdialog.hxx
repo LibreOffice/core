@@ -19,7 +19,6 @@
 
 #ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZERDIALOG_HXX
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_OPTIMIZERDIALOG_HXX
-#include "optimizerdialog.hrc"
 #include <vector>
 #include "unodialog.hxx"
 #include "optimizationstats.hxx"
@@ -51,6 +50,11 @@
 #define PAGE_POS_Y      8
 #define PAGE_WIDTH      OD_DIALOG_WIDTH - PAGE_POS_X
 
+#define ITEM_ID_INTRODUCTION            0
+#define ITEM_ID_SLIDES                  1
+#define ITEM_ID_GRAPHIC_OPTIMIZATION    2
+#define ITEM_ID_OLE_OPTIMIZATION        3
+#define ITEM_ID_SUMMARY                 4
 
 class OptimizerDialog : public UnoDialog, public ConfigurationAccess
 {

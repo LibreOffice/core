@@ -23,7 +23,7 @@
 
 #include "iconcdlg.hxx"
 
-#include "helpid.hrc"
+#include "helpids.h"
 #include <cuires.hrc>
 #include <unotools/viewoptions.hxx>
 #include <svtools/apearcfg.hxx>

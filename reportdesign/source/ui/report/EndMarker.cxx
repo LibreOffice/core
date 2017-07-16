@@ -19,7 +19,7 @@
 #include "EndMarker.hxx"
 #include "ColorChanger.hxx"
 #include "SectionWindow.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

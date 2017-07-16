@@ -38,7 +38,7 @@
 #include <ucbhelper/content.hxx>
 #include <swunohelper.hxx>
 #include <svx/xfillit0.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svl/itemset.hxx>
 
 using namespace com::sun::star;

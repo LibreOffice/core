@@ -23,7 +23,7 @@
 #include "RangeSelectionHelper.hxx"
 #include "TabPageNotifiable.hxx"
 #include "macros.hxx"
-#include "HelpIds.hrc"
+#include "helpids.h"
 
 #include <rtl/math.hxx>
 #include <vcl/dialog.hxx>

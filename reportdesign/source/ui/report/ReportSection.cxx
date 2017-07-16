@@ -49,7 +49,7 @@
 #include <toolkit/helper/convert.hxx>
 #include "RptDef.hxx"
 #include "SectionWindow.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "dlgedclip.hxx"
 #include "UndoActions.hxx"

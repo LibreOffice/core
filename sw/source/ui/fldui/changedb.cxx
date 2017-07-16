@@ -38,7 +38,6 @@
 #include <dbfld.hxx>
 #include <changedb.hxx>
 
-#include <fldui.hrc>
 #include <globals.hrc>
 #include <strings.hrc>
 #include "bitmaps.hlst"

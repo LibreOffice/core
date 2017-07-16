@@ -53,7 +53,7 @@
 #include <swabstdlg.hxx>
 
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <globals.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>

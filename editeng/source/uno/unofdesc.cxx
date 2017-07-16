@@ -28,7 +28,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/wrlmitem.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svl/itempool.hxx>
 #include <vcl/unohelp.hxx>
 

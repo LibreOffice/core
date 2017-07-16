@@ -30,8 +30,7 @@
 #include <view.hxx>
 #include <swmodule.hxx>
 
-#include <helpid.h>
-#include <fldui.hrc>
+#include <helpids.h>
 #include <globals.hrc>
 #include "swabstdlg.hxx"
 

@@ -36,6 +36,8 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <unotools/configitem.hxx>
 
+#define FIELD_PAIRS_VISIBLE         5
+#define FIELD_CONTROLS_VISIBLE      2 * FIELD_PAIRS_VISIBLE
 
 namespace svt
 {

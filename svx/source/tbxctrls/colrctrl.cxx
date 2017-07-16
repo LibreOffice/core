@@ -38,7 +38,7 @@
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
 #include "svx/xexch.hxx"
-#include "helpid.hrc"
+#include "helpids.h"
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;

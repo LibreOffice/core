@@ -57,7 +57,7 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/module.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "bitmaps.hlst"
 #include "appdata.hxx"
 #include <sfx2/viewfrm.hxx>

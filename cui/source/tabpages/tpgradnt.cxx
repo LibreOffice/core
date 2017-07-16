@@ -29,7 +29,7 @@
 
 #include <cuires.hrc>
 #include <strings.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <svx/colorbox.hxx>
 #include "svx/xattr.hxx"
 #include <svx/xtable.hxx>

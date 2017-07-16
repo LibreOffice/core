@@ -34,7 +34,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 
 #include <svx/unomid.hxx>
 #include <comphelper/processfactory.hxx>

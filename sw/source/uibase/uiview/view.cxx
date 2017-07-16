@@ -88,7 +88,6 @@
 #include <swdtflvr.hxx>
 #include <strings.hrc>
 #include <strings.hrc>
-#include <frmui.hrc>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <linguistic/lngprops.hxx>

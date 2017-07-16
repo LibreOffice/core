@@ -19,7 +19,7 @@
 
 #include <linkdlg.hxx>
 #include <vcl/svapp.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 
 #include <tools/urlobj.hxx>
 #include <svtools/svmedit.hxx>

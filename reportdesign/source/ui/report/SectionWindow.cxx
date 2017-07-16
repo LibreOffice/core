@@ -26,7 +26,7 @@
 #include "DesignView.hxx"
 #include "strings.hxx"
 #include "core_resource.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "StartMarker.hxx"
 #include "EndMarker.hxx"

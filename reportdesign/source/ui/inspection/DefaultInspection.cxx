@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <strings.hrc>
 #include "core_resource.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>

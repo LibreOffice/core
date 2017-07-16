@@ -20,8 +20,7 @@
 
 #include "controltype.hxx"
 #include "pcrservices.hxx"
-#include "propctrlr.hrc"
-#include "extensio.hrc"
+#include "propctrlr.h"
 #include "fontdialog.hxx"
 #include "formcomponenthandler.hxx"
 #include "formlinkdialog.hxx"

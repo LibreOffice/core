@@ -23,7 +23,7 @@
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "globals.hrc"
-#include "helpid.h"
+#include "helpids.h"
 
 #include <sfx2/styfitem.hxx>
 
@@ -35,7 +35,6 @@
 #include "docstyle.hxx"
 #include "hints.hxx"
 
-#include "chrdlg.hrc"
 #include <vcl/svapp.hxx>
 
 #include "swuiccoll.hxx"

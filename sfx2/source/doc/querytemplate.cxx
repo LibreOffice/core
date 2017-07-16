@@ -21,7 +21,7 @@
 #include "querytemplate.hxx"
 #include <sfx2/sfxresid.hxx>
 #include "sfx2/strings.hrc"
-#include "helpid.hrc"
+#include "helpids.h"
 #include <vcl/svapp.hxx>
 
 namespace sfx2

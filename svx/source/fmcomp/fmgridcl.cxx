@@ -19,7 +19,7 @@
 
 #include "svx/fmgridif.hxx"
 #include "fmitems.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"
 #include "fmurl.hxx"

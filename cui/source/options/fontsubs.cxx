@@ -27,7 +27,7 @@
 #include <svtools/fontsubstconfig.hxx>
 #include "fontsubs.hxx"
 #include <dialmgr.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <cuires.hrc>
 #include <o3tl/make_unique.hxx>
 

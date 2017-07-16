@@ -39,7 +39,7 @@
 #include "ColorChanger.hxx"
 #include "ScrollHelper.hxx"
 
-#include "helpids.hrc"
+#include "helpids.h"
 #include "dlgedfac.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 

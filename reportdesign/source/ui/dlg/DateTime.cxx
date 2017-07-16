@@ -20,7 +20,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "strings.hrc"
 #include "rptui_slotid.hrc"
-#include "helpids.hrc"
+#include "helpids.h"
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <unotools/syslocale.hxx>

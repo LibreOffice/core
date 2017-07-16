@@ -29,7 +29,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <editeng/xmlcnitm.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 
 #include "hintids.hxx"
 #include "unomid.h"
