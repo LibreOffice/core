@@ -109,7 +109,7 @@ Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString
         throw RuntimeException("Base64 decode failed");
 
     m_ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
-    GpgME::Error err = m_ctx->startKeyListing("", true);
+    GpgME::Error err = m_ctx->startKeyListing("", false);
     while (!err) {
         GpgME::Key k = m_ctx->nextKey(err);
         if (err)
