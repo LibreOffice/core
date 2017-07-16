@@ -55,13 +55,7 @@ public:
         SalGraphics &rGraphics,
         HDC hDC) override;
 
-    bool BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 1, 1))
-    {
-        if (rRect.GetWidth() == 0 || rRect.GetHeight() == 0)
-            return false;
-        RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
-        return SUCCEEDED(mpRT->BindDC(hDC, &rc));
-    }
+    bool BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 1, 1));
 
     bool BindFont(HDC hDC) /*override*/;
     bool ReleaseFont() /*override*/;
@@ -71,12 +65,9 @@ public:
     IDWriteFontFace   * GetFontFace() const { return mpFontFace; }
     float               GetEmHeight() const { return mlfEmHeight; }
 
-    HRESULT CreateRenderTarget() {
-        if (mpRT) mpRT->Release(); mpRT = nullptr;
-        return mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT);
-    }
+    HRESULT CreateRenderTarget();
 
-    bool Ready() const { return mpGdiInterop && mpRT; }
+    bool Ready() const;
 
     void applyTextAntiAliasMode();
     void setTextAntiAliasMode(D2DTextAntiAliasMode eMode)
