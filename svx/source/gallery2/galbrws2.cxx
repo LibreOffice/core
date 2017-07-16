@@ -32,7 +32,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <vcl/graphicfilter.hxx>
 #include <editeng/brushitem.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "svx/gallery.hxx"
 #include "svx/svxids.hrc"
 #include "galobj.hxx"

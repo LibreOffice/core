@@ -22,8 +22,7 @@
 
 #include <svl/solar.hrc>
 #include <sfx2/sfxsids.hrc>
-#include <editeng/memberids.hrc>
-#include "helpids.h"
+#include <editeng/memberids.h>
 
 #define SID_NEXTERR                 (SID_SMA_START + 1)
 #define SID_PREVERR                 (SID_SMA_START + 2)

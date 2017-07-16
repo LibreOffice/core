@@ -21,7 +21,7 @@
 
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
-#include "HelpIds.hrc"
+#include "helpids.h"
 #include "ObjectNameProvider.hxx"
 
 #include <svl/eitem.hxx>

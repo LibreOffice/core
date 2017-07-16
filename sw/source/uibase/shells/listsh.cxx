@@ -36,7 +36,7 @@
 #include "wrtsh.hxx"
 #include "swmodule.hxx"
 #include "frmatr.hxx"
-#include "helpid.h"
+#include "helpids.h"
 #include "globals.hrc"
 #include "strings.hrc"
 #include "uinums.hxx"

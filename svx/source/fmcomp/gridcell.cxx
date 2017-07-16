@@ -20,7 +20,7 @@
 
 #include <memory>
 #include <sal/macros.h>
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "svx/strings.hrc"
 #include "svx/fmtools.hxx"
 #include "gridcell.hxx"

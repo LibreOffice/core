@@ -23,7 +23,7 @@
 #include "ItemPropertyMap.hxx"
 #include "PropertyHelper.hxx"
 #include "CommonConverters.hxx"
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflbmtit.hxx>

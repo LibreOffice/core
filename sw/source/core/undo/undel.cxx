@@ -42,7 +42,6 @@
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <strings.hrc>
-#include <undo.hrc>
 #include <vector>
 
 // DELETE

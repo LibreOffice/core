@@ -27,7 +27,7 @@
 
 #include <cuires.hrc>
 #include <strings.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <svx/dialmgr.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>

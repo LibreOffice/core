@@ -80,14 +80,13 @@
 #include <dbui.hrc>
 
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <cfgid.h>
 #include <SwStyleNameMapper.hxx>
 #include <comphelper/uno3.hxx>
 #include "tabsh.hxx"
 #include "swabstdlg.hxx"
 #include "strings.hrc"
-#include "table.hrc"
 #include <unomid.h>
 #include <IDocumentMarkAccess.hxx>
 

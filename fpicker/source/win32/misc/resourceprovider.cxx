@@ -25,7 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include "resourceprovider.hxx"
 #include <osl/mutex.hxx>
-#include <fpicker/fpicker.hrc>
+#include <fpicker/strings.hrc>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

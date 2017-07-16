@@ -29,7 +29,6 @@
 #include <usrpref.hxx>
 
 #include <cmdid.h>
-#include <table.hrc>
 
 IMPL_LINK_NOARG(SwTableWidthDlg, LoseFocusHdl, Edit&, void)
 {

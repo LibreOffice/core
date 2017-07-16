@@ -24,7 +24,7 @@
 #include "connpoolsettings.hxx"
 #include <svl/eitem.hxx>
 #include <cuires.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <strings.hrc>
 #include <dialmgr.hxx>
 

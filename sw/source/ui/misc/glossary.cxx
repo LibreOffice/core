@@ -62,10 +62,9 @@
 #include <shellio.hxx>
 
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <swerror.h>
 #include <globals.hrc>
-#include <misc.hrc>
 #include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
 

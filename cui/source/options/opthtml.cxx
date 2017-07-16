@@ -21,7 +21,7 @@
 #include <svtools/htmlcfg.hxx>
 #include "opthtml.hxx"
 #include <cuires.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <dialmgr.hxx>
 #include <sal/macros.h>
 

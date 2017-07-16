@@ -21,7 +21,7 @@
 #include "QueryTableView.hxx"
 #include "stringconstants.hxx"
 #include <osl/diagnose.h>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "QueryDesignView.hxx"
 #include "browserids.hxx"
 #include "querycontroller.hxx"

@@ -18,7 +18,7 @@
  */
 
 #include "strings.hrc"
-#include "helpid.hrc"
+#include "helpids.h"
 
 #include "accessibledialogwindow.hxx"
 #include "baside3.hxx"

@@ -20,7 +20,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 
-#include "optsave.hrc"
 #include <cuires.hrc>
 
 #include "optsave.hxx"
@@ -36,6 +35,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/docfilt.hxx>
 #include <vcl/fixed.hxx>
 #include <unotools/configitem.hxx>

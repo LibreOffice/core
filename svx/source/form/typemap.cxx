@@ -47,7 +47,7 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #define SFX_TYPEMAP
 #include "svxslots.hxx"
 

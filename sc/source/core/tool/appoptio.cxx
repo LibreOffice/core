@@ -28,7 +28,7 @@
 #include "global.hxx"
 #include "userlist.hxx"
 #include "sc.hrc"
-#include <formula/compiler.hrc>
+#include <formula/compiler.hxx>
 #include "miscuno.hxx"
 #include <memory>
 

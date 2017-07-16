@@ -19,7 +19,7 @@
 
 #include "backingwindow.hxx"
 
-#include <helpid.hrc>
+#include <helpids.h>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

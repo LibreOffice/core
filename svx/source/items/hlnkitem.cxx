@@ -19,7 +19,7 @@
 
 #include <svx/svxids.hrc>
 #include <tools/stream.hxx>
-#include <svl/memberid.hrc>
+#include <svl/memberid.h>
 #include <basic/sbxvar.hxx>
 
 #include "svx/hlnkitem.hxx"

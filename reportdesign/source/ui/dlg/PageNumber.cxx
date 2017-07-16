@@ -21,7 +21,7 @@
 #include "strings.hrc"
 #include "rptui_slotid.hrc"
 #include "RptDef.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 

@@ -32,7 +32,7 @@
 #include <dbmgr.hxx>
 #include "uitool.hxx"
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <envimg.hxx>

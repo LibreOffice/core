@@ -19,7 +19,7 @@
 
 #include "TableDesignView.hxx"
 #include "TableController.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "FieldDescriptions.hxx"
 #include "TEditControl.hxx"
 #include "TableFieldDescWin.hxx"

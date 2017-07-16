@@ -29,7 +29,7 @@
 #include "dsnItem.hxx"
 #include "core_resource.hxx"
 
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "dbu_dlg.hxx"
 #include "strings.hrc"
 

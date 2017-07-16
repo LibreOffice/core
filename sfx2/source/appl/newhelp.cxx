@@ -32,8 +32,7 @@
 #include <svtools/treelistentry.hxx>
 
 #include "sfx2/strings.hrc"
-#include "newhelp.hrc"
-#include "helpid.hrc"
+#include "helpids.h"
 #include "bitmaps.hlst"
 
 #include <rtl/ustrbuf.hxx>

@@ -44,7 +44,7 @@
 #include <swmodule.hxx>
 #include <docsh.hxx>
 #include <srcview.hxx>
-#include <helpid.h>
+#include <helpids.h>
 #include <deque>
 
 namespace

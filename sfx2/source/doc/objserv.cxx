@@ -95,7 +95,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include "helpid.hrc"
+#include "helpids.h"
 
 #include "guisaveas.hxx"
 #include <sfx2/saveastemplatedlg.hxx>

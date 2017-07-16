@@ -30,7 +30,7 @@
 #include <deque>
 #include <float.h>
 #include <functional>
-#include <helpid.h>
+#include <helpids.h>
 #include <limits.h>
 #include <list>
 #include <map>

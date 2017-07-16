@@ -74,7 +74,7 @@
 #include <svx/svxids.hrc>
 
 #include <svl/itempool.hxx>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include <svl/itemset.hxx>
 #include "sbagrid.hrc"
 #include <svl/rngitem.hxx>

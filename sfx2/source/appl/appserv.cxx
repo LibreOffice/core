@@ -115,7 +115,7 @@
 #include "sfxpicklist.hxx"
 #include "imestatuswindow.hxx"
 #include <sfx2/sfxdlg.hxx>
-#include <sfx2/dialogs.hrc>
+#include <sfx2/sfxsids.hrc>
 #include "sorgitm.hxx"
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/zoomitem.hxx>

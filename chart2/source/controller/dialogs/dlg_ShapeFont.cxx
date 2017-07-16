@@ -20,7 +20,7 @@
 #include "dlg_ShapeFont.hxx"
 #include "ViewElementListProvider.hxx"
 #include "ResId.hxx"
-#include "ResourceIds.hrc"
+#include "TabPageIds.h"
 
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>

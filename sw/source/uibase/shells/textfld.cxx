@@ -63,8 +63,6 @@
 #include <sfx2/app.hxx>
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
-#include "dialog.hrc"
-#include <fldui.hrc>
 #include <doc.hxx>
 #include <app.hrc>
 #include <edtwin.hxx>
