@@ -29,12 +29,11 @@
 #include <comphelper/processfactory.hxx>
 #include <svx/svxids.hrc>
 
-#include <cuires.hrc>
 #include <svx/postattr.hxx>
 #include "postdlg.hxx"
 #include <dialmgr.hxx>
 
-#include "helpid.hrc"
+#include "helpids.h"
 
 // class SvxPostItDialog -------------------------------------------------
 

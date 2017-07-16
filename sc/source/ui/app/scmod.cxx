@@ -94,7 +94,6 @@
 #include "globstr.hrc"
 #include "strings.hrc"
 #include "bitmaps.hlst"
-#include "cfgids.hxx"
 #include "inputhdl.hxx"
 #include "inputwin.hxx"
 #include "msgpool.hxx"
@@ -135,7 +134,7 @@ void ScModule::InitInterface_Impl()
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Client | SfxVisibilityFlags::Viewer,
                                             ToolbarId::Objectbar_App);
 
-    GetStaticInterface()->RegisterStatusBar(SCCFG_STATUSBAR);
+    GetStaticInterface()->RegisterStatusBar(StatusBarId::CalcStatusBar);
 }
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :

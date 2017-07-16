@@ -93,7 +93,6 @@
 #include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
 #include <sfx2/event.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
@@ -104,7 +103,7 @@
 #include "helper.hxx"
 #include "sfx2/strings.hrc"
 #include "workwin.hxx"
-#include "helpid.hrc"
+#include "helpids.h"
 #include "sfx2/strings.hrc"
 #include <sfx2/sfxdlg.hxx>
 #include "appbaslib.hxx"

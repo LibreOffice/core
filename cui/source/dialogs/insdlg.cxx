@@ -54,7 +54,6 @@
 #include <svl/ownlist.hxx>
 #include <comphelper/seqstream.hxx>
 
-#include "cuires.hrc"
 #include "strings.hrc"
 
 #include <osl/file.hxx>

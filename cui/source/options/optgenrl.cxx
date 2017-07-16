@@ -26,7 +26,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/settings.hxx>
 
-#include <cuires.hrc>
 #include <unotools/useroptions.hxx>
 #include "cuioptgenrl.hxx"
 #include <dialmgr.hxx>

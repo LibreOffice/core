@@ -38,7 +38,6 @@
 #include <numfmtlb.hxx>
 #include <strings.hrc>
 #include "swabstdlg.hxx"
-#include "dialog.hrc"
 #include <unomid.h>
 #include <sfx2/viewfrm.hxx>
 #include <memory>
@@ -394,12 +393,9 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
         aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aCoreSet,
-            GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
-            RC_DLG_SWNUMFMTDLG ));
-        OSL_ENSURE(pDlg, "Dialog creation failed!");
+        assert(pFact && "SwAbstractDialogFactory fail!");
+        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(this, aCoreSet));
+        assert(pDlg && "Dialog creation failed!");
 
         if (RET_OK == pDlg->Execute())
         {

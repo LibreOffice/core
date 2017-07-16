@@ -19,7 +19,6 @@
 
 #include "screenshotannotationdlg.hxx"
 
-#include "cuires.hrc"
 #include "strings.hrc"
 #include "dialmgr.hxx"
 

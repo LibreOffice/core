@@ -44,7 +44,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include "imapdlg.hrc"
 #include "imapwnd.hxx"
 #include "imapimp.hxx"
 #include "svx/dlgutil.hxx"

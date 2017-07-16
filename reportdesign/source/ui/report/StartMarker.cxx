@@ -24,7 +24,7 @@
 #include "ColorChanger.hxx"
 #include "ReportDefines.hxx"
 #include "SectionWindow.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include <vcl/help.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>

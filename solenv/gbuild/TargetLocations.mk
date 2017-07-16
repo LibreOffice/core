@@ -153,10 +153,6 @@ gb_ScpTarget_get_target = $(WORKDIR)/ScpTarget/$(1).par
 gb_ScpTemplateTarget_get_dir = $(abspath $(WORKDIR)/ScpTemplateTarget/$(dir $(1)))
 gb_ScpTemplateTarget_get_target = $(abspath $(WORKDIR)/ScpTemplateTarget/$(dir $(1))$(subst pack,modules,$(subst module_,all,$(notdir $(1)))).inc)
 gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
-gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
-gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
-gb_SrsTarget_get_headers_target = $(WORKDIR)/SrsTarget/$(1).headers
-gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 gb_ThesaurusIndexTarget_get_target = $(WORKDIR)/ThesaurusIndexTarget/$(basename $(1)).idx
 gb_UIConfig_get_imagelist_target = $(WORKDIR)/UIConfig/$(1).ilst
 gb_UIConfig_get_target = $(WORKDIR)/UIConfig/$(1).done
@@ -277,7 +273,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	ScpTarget \
 	ScpTemplateTarget \
 	SdiTarget \
-	SrsTarget \
 	StaticLibrary \
 	ThesaurusIndexTarget \
 	CppunitTest \
@@ -316,8 +311,6 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	GenCObject \
 	GenCxxObject \
 	SdiTarget \
-	SrsPartTarget \
-	SrsTarget \
 ))
 
 # other getters

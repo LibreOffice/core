@@ -32,7 +32,7 @@
 #include "bibconfig.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
-#include "bibliography.hrc"
+#include "helpids.h"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>

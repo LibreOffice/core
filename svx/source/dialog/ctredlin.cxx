@@ -34,7 +34,7 @@
 #include <svx/dialmgr.hxx>
 #include "svx/strings.hrc"
 #include <svx/ctredlin.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 
 #define WRITER_DATE     2
 #define CALC_DATE       3

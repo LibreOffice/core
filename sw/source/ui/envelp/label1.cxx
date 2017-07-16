@@ -20,6 +20,7 @@
 #include <memory>
 #include <vcl/waitobj.hxx>
 #include <rtl/ustring.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svtools/treelistentry.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <swtypes.hxx>
@@ -32,7 +33,7 @@
 #include <dbmgr.hxx>
 #include "uitool.hxx"
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <envimg.hxx>

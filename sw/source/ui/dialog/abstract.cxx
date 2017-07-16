@@ -20,7 +20,6 @@
 #include "swtypes.hxx"
 #include "hintids.hxx"
 
-#include "dialog.hrc"
 #include "abstract.hxx"
 
 SwInsertAbstractDlg::SwInsertAbstractDlg(vcl::Window* pParent)

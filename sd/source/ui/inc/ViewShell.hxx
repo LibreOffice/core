@@ -28,7 +28,6 @@
 #include <svtools/transfer.hxx>
 #include "glob.hxx"
 #include "pres.hxx"
-#include "cfgids.hxx"
 #include "View.hxx"
 #include "sddllapi.h"
 

@@ -25,8 +25,6 @@
 #include <swdtflvr.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
-#include <wrtsh.hrc>
-#include <sfx2/sfx.hrc>
 
 // Undo ends all modes. If a selection is emerged by the Undo,
 // this must be considered for further action.

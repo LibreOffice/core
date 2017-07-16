@@ -18,7 +18,6 @@
  */
 
 #include <unotools/pathoptions.hxx>
-#include <cuires.hrc>
 #include "optchart.hxx"
 #include <dialmgr.hxx>
 #include <vcl/builderfactory.hxx>

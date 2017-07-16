@@ -38,12 +38,12 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
 
-#include <cuires.hrc>
 #include <dialmgr.hxx>
 #include "cuicharmap.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
 #include "macroass.hxx"
 

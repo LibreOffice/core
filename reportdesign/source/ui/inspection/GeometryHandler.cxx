@@ -102,7 +102,7 @@
 #include <sfx2/docfilt.hxx>
 
 #include "dlgpage.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include <toolkit/helper/convert.hxx>
 #include <o3tl/functional.hxx>
 

@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include "cfgids.hxx"
 #include "docoptio.hxx"
 #include "rechead.hxx"
 #include "scresid.hxx"

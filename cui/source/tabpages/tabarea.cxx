@@ -26,7 +26,6 @@
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>
 
-#include <cuires.hrc>
 #include <svx/xtable.hxx>
 #include "svx/globl3d.hxx"
 #include <svx/svdmodel.hxx>

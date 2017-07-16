@@ -20,7 +20,8 @@
 #include <memory>
 #include "datatypes.hxx"
 #include "resourcehelper.hxx"
-#include "property.hrc"
+#include "frm_strings.hxx"
+#include "property.hxx"
 #include "convert.hxx"
 
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>

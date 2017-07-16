@@ -22,7 +22,7 @@
 #include "fmpgeimp.hxx"
 #include "fmundo.hxx"
 #include "svx/fmtools.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "fmservs.hxx"
 #include "fmobj.hxx"
 #include "formcontrolfactory.hxx"

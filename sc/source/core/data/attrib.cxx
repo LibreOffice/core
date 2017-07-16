@@ -36,7 +36,7 @@
 #include "global.hxx"
 #include "editutil.hxx"
 #include "sc.hrc"
-#include "mid.hrc"
+#include "mid.h"
 #include "globstr.hrc"
 #include "textuno.hxx"
 

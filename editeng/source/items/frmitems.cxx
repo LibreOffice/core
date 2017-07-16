@@ -79,7 +79,7 @@
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/unoprnms.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <editeng/editerr.hxx>
 #include <libxml/xmlwriter.h>
 #include <o3tl/enumrange.hxx>

@@ -102,7 +102,6 @@
 #include "sfxtypes.hxx"
 #include <sfx2/tabdlg.hxx>
 #include "arrdecl.hxx"
-#include <sfx2/sfx.hrc>
 #include "sfx2/strings.hrc"
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxresid.hxx>
@@ -115,7 +114,7 @@
 #include "sfxpicklist.hxx"
 #include "imestatuswindow.hxx"
 #include <sfx2/sfxdlg.hxx>
-#include <sfx2/dialogs.hrc>
+#include <sfx2/sfxsids.hrc>
 #include "sorgitm.hxx"
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/zoomitem.hxx>
@@ -604,7 +603,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, RID_DEFAULTABOUT ));
+                ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( nullptr, SID_ABOUT ));
                 pDlg->Execute();
                 bDone = true;
             }

@@ -30,7 +30,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include "dsitems.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "core_resource.hxx"
 #include <osl/process.h>
 #include <osl/diagnose.h>

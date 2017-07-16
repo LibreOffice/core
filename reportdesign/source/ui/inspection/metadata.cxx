@@ -20,7 +20,7 @@
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <comphelper/extract.hxx>
 #include "core_resource.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "strings.hxx"
 

@@ -48,11 +48,10 @@
 #include <o3tl/make_unique.hxx>
 
 #include "autocdlg.hxx"
-#include "helpid.hrc"
+#include "helpids.h"
 #include <editeng/acorrcfg.hxx>
 #include <editeng/svxacorr.hxx>
 #include "cuicharmap.hxx"
-#include "cuires.hrc"
 #include "strings.hrc"
 #include <editeng/unolingu.hxx>
 #include <dialmgr.hxx>

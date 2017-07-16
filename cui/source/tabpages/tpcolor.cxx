@@ -32,9 +32,8 @@
 #include <svx/ofaitem.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
-#include <cuires.hrc>
 #include <strings.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>

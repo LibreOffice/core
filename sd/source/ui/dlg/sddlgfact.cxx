@@ -381,9 +381,9 @@ VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateRemoteDialog( vcl:
      return VclPtr<SdVclAbstractDialog_Impl>::Create( VclPtr<::sd::RemoteDialog>::Create( pParent ) );
 }
 
-VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, sal_uInt16 nDlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool )
+VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, bool bBackgroundDlg, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool )
 {
-    return VclPtr<SdPresLayoutTemplateDlg_Impl>::Create( VclPtr<SdPresLayoutTemplateDlg>::Create( pDocSh, pParent, nDlgId, rStyleBase, ePO, pSSPool ) );
+    return VclPtr<SdPresLayoutTemplateDlg_Impl>::Create( VclPtr<SdPresLayoutTemplateDlg>::Create( pDocSh, pParent, bBackgroundDlg, rStyleBase, ePO, pSSPool ) );
 }
 
 VclPtr<AbstractSdPresLayoutDlg>  SdAbstractDialogFactory_Impl::CreateSdPresLayoutDlg(  ::sd::DrawDocShell* pDocShell, const SfxItemSet& rInAttrs)

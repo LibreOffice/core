@@ -20,7 +20,7 @@
 #ifndef SC_SC_HRC
 #define SC_SC_HRC
 
-#include <sfx2/sfx.hrc>
+#include <sfx2/sfxsids.hrc>
 #include <svx/svxids.hrc>
 
 #include "svx/svxcommands.h"

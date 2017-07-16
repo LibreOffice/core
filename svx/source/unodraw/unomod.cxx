@@ -35,10 +35,10 @@
 #include <svx/unofill.hxx>
 #include <editeng/unonrule.hxx>
 #include <svtools/unoimap.hxx>
+#include <sfx2/event.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
-#include <sfx2/sfx.hrc>
 #include <svx/unoapi.hxx>
 
 #include <svx/svdmodel.hxx>

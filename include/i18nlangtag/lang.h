@@ -85,9 +85,6 @@
  * comments are used. Do NOT use // C++ style comments. */
 
 /* disable typedef for usage in svtools/source/misc/langtab.src */
-#ifdef __RSC
-#define LanguageType(x) (x)
-#else
 #include <sal/types.h>
 #include <o3tl/strong_int.hxx>
 #include <ostream>
@@ -104,10 +101,7 @@ namespace o3tl
     template<> template<> constexpr strong_int<unsigned short,LanguageTypeTag>::strong_int(short, std::enable_if<std::is_integral<short>::value, int>::type) = delete;
 }
 
-#endif
-
 #define LANGUAGE_MASK_PRIMARY 0x03ff
-
 
 #define LANGUAGE_DONTKNOW                   LanguageType(0x03FF)  /* yes, the mask */
 #define LANGUAGE_NONE                       LanguageType(0x00FF)
