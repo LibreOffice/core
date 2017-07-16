@@ -686,8 +686,6 @@ coerce_value(AstExprValue *ev, ExprType t)
 
 bool AstExpression::coerce(ExprType t)
 {
-    AstExprValue *copy;
-
     /*
      * Is it already of the right type?
      */
@@ -703,56 +701,8 @@ bool AstExpression::coerce(ExprType t)
     if (m_exprValue == nullptr)
         return false;
 
-    /*
-     * Create a copy to contain coercion result
-     */
-    copy = new AstExprValue;
-
-    copy->et = m_exprValue->et;
-    switch (m_exprValue->et)
-    {
-        case ET_short:
-            copy->u.sval = m_exprValue->u.sval;
-            break;
-        case ET_ushort:
-            copy->u.usval = m_exprValue->u.usval;
-            break;
-        case ET_long:
-            copy->u.lval = m_exprValue->u.lval;
-            break;
-        case ET_ulong:
-            copy->u.ulval = m_exprValue->u.ulval;
-            break;
-        case ET_hyper:
-            copy->u.hval = m_exprValue->u.hval;
-            break;
-        case ET_uhyper:
-            copy->u.uhval = m_exprValue->u.uhval;
-            break;
-        case ET_boolean:
-            copy->u.bval = m_exprValue->u.bval;
-            break;
-        case ET_float:
-            copy->u.fval = m_exprValue->u.fval;
-            break;
-        case ET_double:
-            copy->u.dval = m_exprValue->u.dval;
-            break;
-          case ET_byte:
-            copy->u.byval = m_exprValue->u.byval;
-            break;
-        default:
-            OSL_ASSERT(false);
-            break;
-    }
-
-    if (!coerce_value(copy, t))
-    {
-        delete copy;
-        copy = nullptr;
-    }
-
-    m_exprValue.reset( copy );
+    if (!coerce_value(m_exprValue.get(), t))
+        m_exprValue.reset();
 
     return m_exprValue != nullptr;
 }
