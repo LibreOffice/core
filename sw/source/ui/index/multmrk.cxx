@@ -22,8 +22,6 @@
 #include "multmrk.hxx"
 #include "toxmgr.hxx"
 
-#include "index.hrc"
-
 SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr& rTOXMgr)
     : SvxStandardDialog(pParent, "SelectIndexDialog",
         "modules/swriter/ui/selectindexdialog.ui")

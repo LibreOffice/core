@@ -37,7 +37,6 @@
 #include "cnttab.hxx"
 #include "toxmgr.hxx"
 #include "swabstdlg.hxx"
-#include <index.hrc>
 #include <globals.hrc>
 #include <memory>
 
@@ -57,9 +56,9 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         case FN_EDIT_AUTH_ENTRY_DLG :
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialog creation failed!");
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( pMDI, GetShell(), DLG_EDIT_AUTHMARK));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
+            assert(pFact && "Dialog creation failed!");
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwAutoMarkDialog(pMDI, GetShell()));
+            assert(pDlg && "Dialog creation failed!");
             pDlg->Execute();
         }
         break;

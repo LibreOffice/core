@@ -34,7 +34,6 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
-#include <cuires.hrc>
 #include <strings.hrc>
 #include <dialmgr.hxx>
 #include "optopencl.hxx"

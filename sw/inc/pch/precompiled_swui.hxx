@@ -35,7 +35,7 @@
 #include <exception>
 #include <float.h>
 #include <functional>
-#include <helpid.h>
+#include <helpids.h>
 #include <iomanip>
 #include <iostream>
 #include <limits.h>

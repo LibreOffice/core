@@ -25,74 +25,14 @@
 #define OWN_ATTR_VALUE_START                    3900
 #define OWN_ATTR_VALUE_END                      3993
 
-#define RID_SFX_START               260
-//      RID_SFX_END                 9999
-
 #define RID_LIB_START               10000
 #define RID_LIB_END                 19999
 
 #define RID_SVX_START               (RID_LIB_START)
 //      RID_SVX_END                 (RID_LIB_START+499)
 
-// free: 500-2999
-
-#define RID_BASIC_START             (RID_LIB_START+3000)
-//      RID_BASIC_END               (RID_LIB_START+4499)
-
-#define RID_UUI_START               (RID_LIB_START+4500)
-//      RID_UUI_END                 (RID_LIB_START+4599)
-
-// free: 4600-4849
-
-#define RID_BASICIDE_START          (RID_LIB_START+4850)
-//      RID_BASICIDE_END            (RID_LIB_START+4949)
-
-#define RID_SVXITEMS_START          (RID_LIB_START+4950)
-#define RID_SVXITEMS_END            (RID_LIB_START+5599)
-
-// free: 5600-5699
-
-#define RID_EXTENSIONS_START        (RID_LIB_START+5700)
-//      RID_EXTENSIONS_END          (RID_LIB_START+5799)
-
-#define RID_EDIT_START              (RID_LIB_START+5800)
-#define RID_EDIT_END                (RID_LIB_START+6369)
-
-#define RID_FPICKER_START           (RID_LIB_START+6370)
-//      RID_FPICKER_END             (RID_LIB_START+6389)
-
-#define RID_SVTOOLS_START           (RID_LIB_START+6390)
-//      RID_SVTOOLS_END             (RID_LIB_START+6499)
-
-// free: 6500-6799
-
-#define RID_DLG_START               (RID_LIB_START+6800)
-//      RID_DLG_END                 (RID_LIB_START+6899)
-
 #define RID_OFA_START               (RID_LIB_START+6900)
 //      RID_OFA_END                 (RID_LIB_START+7399)
-
-// free: RID_LIB_START+7400 to +7449
-
-#define RID_SVL_START               (RID_LIB_START+7450)
-//      RID_SVL_END                 (RID_LIB_START+7899)
-
-#define RID_FORMS_START             (RID_LIB_START+8000)
-//      RID_FORMS_END               (RID_LIB_START+8999)
-
-#define RID_FORMLAYER_START         (RID_LIB_START+9000)
-//      RID_FORMLAYER_END           (RID_LIB_START+9199)
-
-#define RID_DBACCESS_START          (RID_LIB_START+9200)
-#define RID_DBACCESS_END            (RID_LIB_START+9699)
-
-#define RID_MORE_EXTENSIONS_START   (RID_LIB_START+9700)
-#define RID_MORE_EXTENSIONS_END     (RID_LIB_START+9999)
-
-// free: 10000-10199
-
-#define RID_FILTER_START            (RID_LIB_START+10200)
-//      RID_FILTER_END              (RID_LIB_START+10299)
 
 // do *NOT* add more ranges here, RID_LIB_END is (RID_LIB_START + 10000)
 
@@ -102,58 +42,17 @@
 #define RID_SW_START                            (20000)
 //      RID_SW_END                              (25999)
 
-// free: 26000-26999
-
-#define RID_SD_START                            (27000)
-//      RID_SD_END                              (27999)
-
-#define RID_OBJ_START               (30000)
-//      RID_OBJ_END                 (32767)
-
-#define RID_RPT_START                           (RID_OBJ_START+768)
-//      RID_RPT_END                             (RID_OBJ_START+1000)
-
-#define RID_FORMULA_START                       (RID_OBJ_START+1001)
-//      RID_FORMULA_END                         (RID_OBJ_START+1200)
+// free: 26000-28199
 
 // Help-Ids --------------------------------------------------------------
 
 #define HID_START                   32768
-
-//      HID_VCL_START               (HID_START+100)
-//      HID_VCL_END                 (HID_START+150)
-
-// free: 200-299
-
-//      HID_SFX_START               (HID_START+300)
-//      HID_SFX_END                 (HID_START+999)
-
-#define HID_LIB_START               (HID_START+1000)
-//      HID_LIB_END                 (HID_START+19999)
-
-// free: HID_LIB_START 0-1699
-
-//      HID_OFA_START               (HID_LIB_START+1760)
-#define HID_OFA_END                 (HID_LIB_START+1999)
-
-// free: HID_LIB_START 2000-2050
-
-// free: HID_LIB_START 2070-9999
-
-// free: HID_START 20000-24999
 
 #define HID_SC_START                (HID_START+25000)
 //      HID_SC_END                  (HID_START+26999)
 
 #define HID_SD_START                (HID_START+27000)
 //      HID_SD_END                  (HID_START+27999)
-
-// free: HID_START 28000-29999
-
-//      HID_OBJ_START               (HID_START+30000)
-//      HID_OBJ_END                 (HID_START+32767)
-
-// free: HID_OBJ_START+2281 to HID_OBJ_START+2800
 
 // Slot Ids
 
@@ -176,7 +75,6 @@
 
 #define SID_SMA_START               (SID_OBJ_START + 256)
 //      SID_SMA_END                 (SID_OBJ_START + 511)
-// free: SID_OBJ_START + 512 to SID_OBJ_START + 767
 #define SID_BASICIDE_START          (SID_OBJ_START + 768)
 //      SID_BASICIDE_END            (SID_BASICIDE_START + 255)
 

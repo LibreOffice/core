@@ -18,7 +18,7 @@
  */
 
 #include "scitems.hxx"
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svl/poolitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/unomid.hxx>

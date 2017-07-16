@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include <helpid.h>
+#include <helpids.h>
 #include <swtypes.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
@@ -56,7 +56,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
-#include "dialog.hrc"
 #include <swundo.hxx>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

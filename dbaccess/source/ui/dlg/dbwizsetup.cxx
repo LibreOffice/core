@@ -41,7 +41,7 @@
 #include "propertysetitem.hxx"
 #include <unotools/confignode.hxx>
 #include "DbAdminImpl.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "ConnectionPageSetup.hxx"
 #include "UITools.hxx"
 #include <dbaccess/AsynchronousLink.hxx>

@@ -18,10 +18,10 @@
  */
 #include <sfx2/bindings.hxx>
 #include "TextCharacterSpacingControl.hxx"
-#include "TextPropertyPanel.hrc"
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <unotools/viewoptions.hxx>
+#include <editeng/editids.hrc>
 #include <editeng/kernitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <sfx2/dispatch.hxx>
@@ -29,6 +29,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/lstbox.hxx>
 #include <svl/itempool.hxx>
+#include "helpids.h"
 
 #define SPACING_VERY_TIGHT  -30
 #define SPACING_TIGHT       -15

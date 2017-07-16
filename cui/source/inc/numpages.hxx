@@ -35,6 +35,8 @@
 #include <svtools/ctrlbox.hxx>
 #include <vcl/dialog.hxx>
 
+#define MN_GALLERY_ENTRY 100
+
 class SvxColorListBox;
 class SvxNumRule;
 class SvxBmpNumValueSet;

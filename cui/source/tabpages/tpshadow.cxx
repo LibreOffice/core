@@ -24,7 +24,6 @@
 
 #include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
-#include <cuires.hrc>
 #include <svx/svdattr.hxx>
 #include "svx/drawitem.hxx"
 #include "cuitabarea.hxx"

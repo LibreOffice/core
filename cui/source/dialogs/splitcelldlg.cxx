@@ -22,7 +22,6 @@
 #include <svl/eitem.hxx>
 #include "dialmgr.hxx"
 #include "splitcelldlg.hxx"
-#include "cuires.hrc"
 
 namespace {
     class NoApplyDialog : public SvxStandardDialog

@@ -43,7 +43,7 @@
 struct ScFuncDescCore
 {
     /*
-     * An opcode from include/formula/compiler.hrc
+     * An opcode from include/formula/compiler.hxx
      */
     sal_uInt16 nOpCode;
     /*

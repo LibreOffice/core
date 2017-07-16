@@ -19,10 +19,6 @@
 #ifndef INCLUDED_SFX2_GROUPID_HXX
 #define INCLUDED_SFX2_GROUPID_HXX
 
-#ifdef __RSC
-#define SfxGroupId(x)  (x)
-#else
-
 #include <o3tl/strong_int.hxx>
 #include <sal/types.h>
 #include <functional>
@@ -50,7 +46,41 @@ inline SfxGroupId operator+(SfxGroupId lhs, sal_uInt16 rhs)
 {
     return SfxGroupId((sal_uInt16)lhs + rhs);
 }
-#endif
+
+// group ids
+
+// !! If you add a new group, please change sfxbasecontroller.cxx and
+// !! com.sun.star.frame.CommandGroup accordingly!
+
+#define RID_GROUPS_SFXOFFSET                SfxGroupId(32700)
+#define GID_INTERN                          (RID_GROUPS_SFXOFFSET+ 0)
+#define GID_APPLICATION                     (RID_GROUPS_SFXOFFSET+ 1)
+#define GID_DOCUMENT                        (RID_GROUPS_SFXOFFSET+ 2)
+#define GID_VIEW                            (RID_GROUPS_SFXOFFSET+ 3)
+#define GID_EDIT                            (RID_GROUPS_SFXOFFSET+ 4)
+#define GID_MACRO                           (RID_GROUPS_SFXOFFSET+ 5)
+#define GID_OPTIONS                         (RID_GROUPS_SFXOFFSET+ 6)
+#define GID_MATH                            (RID_GROUPS_SFXOFFSET+ 7)
+#define GID_NAVIGATOR                       (RID_GROUPS_SFXOFFSET+ 8)
+#define GID_INSERT                          (RID_GROUPS_SFXOFFSET+ 9)
+#define GID_FORMAT                          (RID_GROUPS_SFXOFFSET+10)
+#define GID_TEMPLATE                        (RID_GROUPS_SFXOFFSET+11)
+#define GID_TEXT                            (RID_GROUPS_SFXOFFSET+12)
+#define GID_FRAME                           (RID_GROUPS_SFXOFFSET+13)
+#define GID_GRAPHIC                         (RID_GROUPS_SFXOFFSET+14)
+#define GID_TABLE                           (RID_GROUPS_SFXOFFSET+15)
+#define GID_ENUMERATION                     (RID_GROUPS_SFXOFFSET+16)
+#define GID_DATA                            (RID_GROUPS_SFXOFFSET+17)
+#define GID_SPECIAL                         (RID_GROUPS_SFXOFFSET+18)
+#define GID_IMAGE                           (RID_GROUPS_SFXOFFSET+19)
+#define GID_CHART                           (RID_GROUPS_SFXOFFSET+20)
+#define GID_EXPLORER                        (RID_GROUPS_SFXOFFSET+21)
+#define GID_CONNECTOR                       (RID_GROUPS_SFXOFFSET+22)
+#define GID_MODIFY                          (RID_GROUPS_SFXOFFSET+23)
+#define GID_DRAWING                         (RID_GROUPS_SFXOFFSET+24)
+#define GID_CONTROLS                        (RID_GROUPS_SFXOFFSET+25)
+#define GID_NAVIGATION                      (RID_GROUPS_SFXOFFSET+26)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

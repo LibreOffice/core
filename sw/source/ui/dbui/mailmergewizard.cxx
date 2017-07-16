@@ -34,7 +34,7 @@
 #include <vcl/msgbox.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
-#include <helpid.h>
+#include <helpids.h>
 
 using namespace svt;
 using namespace ::com::sun::star;

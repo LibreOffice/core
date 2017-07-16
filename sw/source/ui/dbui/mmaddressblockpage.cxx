@@ -38,7 +38,7 @@
 #include <strings.hrc>
 #include <dbui.hrc>
 #include "mmaddressblockpage.hrc"
-#include <helpid.h>
+#include <helpids.h>
 
 using namespace svt;
 using namespace ::com::sun::star;

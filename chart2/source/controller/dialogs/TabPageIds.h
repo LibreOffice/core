@@ -1,0 +1,44 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TABPAGEIDS_H
+#define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TABPAGEIDS_H
+
+//TabPage Ids:
+#define TP_LEGEND_POS   900
+#define TP_DATA_DESCR   901
+#define TP_ALIGNMENT    902
+#define TP_LAYOUT       907
+#define TP_OPTIONS      908
+#define TP_POLAROPTIONS 909
+#define TP_AXIS_LABEL   920
+#define TP_SCALE        903
+#define TP_AXIS_POSITIONS   904
+
+#define TP_3D_SCENEGEOMETRY     915
+#define TP_3D_SCENEAPPEARANCE   916
+#define TP_3D_SCENEILLUMINATION 917
+
+#define TP_TRENDLINE    918
+#define TP_YERRORBAR    919
+#define TP_XERRORBAR    923
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

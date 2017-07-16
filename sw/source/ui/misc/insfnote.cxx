@@ -30,7 +30,6 @@
 #include <view.hxx>
 #include <basesh.hxx>
 #include <insfnote.hxx>
-#include <misc.hrc>
 #include <globals.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>

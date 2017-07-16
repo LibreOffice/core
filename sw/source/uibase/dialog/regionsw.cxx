@@ -45,7 +45,7 @@
 #include <column.hxx>
 #include <fmtfsize.hxx>
 #include <shellio.hxx>
-#include <helpid.h>
+#include <helpids.h>
 #include <cmdid.h>
 #include <strings.hrc>
 #include <globals.hrc>

@@ -41,10 +41,8 @@
 #include <viewopt.hxx>
 #include <frmmgr.hxx>
 
-#include <misc.hrc>
-#include <frmui.hrc>
 #include <globals.hrc>
-#include <helpid.h>
+#include <helpids.h>
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>

@@ -27,7 +27,7 @@
 #include "sqledit.hxx"
 #include "QueryTextView.hxx"
 #include "querycontainerwindow.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "browserids.hxx"
 #include "querycontroller.hxx"
 #include "undosqledit.hxx"

@@ -76,10 +76,8 @@
 #include <flddat.hxx>
 #include <fldmgr.hxx>
 #include <flddropdown.hxx>
-#include <fldui.hrc>
 #include <strings.hrc>
 #include <tox.hxx>
-#include <misc.hrc>
 #include <cnttab.hxx>
 #include <unotools/useroptions.hxx>
 

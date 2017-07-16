@@ -19,7 +19,6 @@
 
 #include "CheckBox.hxx"
 #include "property.hxx"
-#include "property.hrc"
 #include "services.hxx"
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>

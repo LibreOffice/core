@@ -22,7 +22,6 @@
 
 #define NC_(Context, String) (Context "\004" u8##String)
 
-#include "glob.hrc"
 #include "sderror.hxx"
 
 #define ERR_CODE( class, err )  ErrCode(class | (sal_uInt32(err) - ERROR_SD_BASE))

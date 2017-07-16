@@ -20,6 +20,9 @@
 #ifndef INCLUDED_CUI_INC_TREEOPT_HRC
 #define INCLUDED_CUI_INC_TREEOPT_HRC
 
+#include <sal/types.h>
+#include <sfx2/pageids.hxx>
+
 #define NC_(Context, String) (Context "\004" u8##String)
 
 const std::pair<const char*, sal_uInt16> SID_GENERAL_OPTIONS_RES[] =

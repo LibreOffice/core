@@ -69,13 +69,12 @@
 #include <docstat.hxx>
 #include <IDocumentStatistics.hxx>
 
-#include <helpid.h>
+#include <helpids.h>
 #include <cmdid.h>
 #include <cfgitems.hxx>
 #include <globals.hrc>
 #include <strings.hrc>
 #include "swabstdlg.hxx"
-#include "misc.hrc"
 
 #include <svx/dialogs.hrc>
 

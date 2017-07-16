@@ -16,8 +16,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/infobar.hxx>
+#include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

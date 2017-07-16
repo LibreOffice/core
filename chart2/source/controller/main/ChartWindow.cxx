@@ -19,7 +19,7 @@
 
 #include "ChartWindow.hxx"
 #include "ChartController.hxx"
-#include "HelpIds.hrc"
+#include "helpids.h"
 #include "uiobject.hxx"
 
 #include <vcl/help.hxx>

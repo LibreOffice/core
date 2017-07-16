@@ -21,7 +21,7 @@
 #include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "WCopyTable.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "core_resource.hxx"
 #include "strings.hrc"
 #include "bitmaps.hlst"

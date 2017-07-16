@@ -21,7 +21,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 
-#include "cfgids.hxx"
 #include "inputopt.hxx"
 #include "rechead.hxx"
 #include "scresid.hxx"

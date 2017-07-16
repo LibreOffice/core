@@ -30,6 +30,7 @@
 #include <fontcfg.hxx>
 #include <swmodule.hxx>
 #include <editeng/unolingu.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/printer.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/dlgutil.hxx>
@@ -42,8 +43,6 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
-
-#include <dialog.hrc>
 
 #include <vcl/metric.hxx>
 

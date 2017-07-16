@@ -49,7 +49,7 @@
 #include <eerdll2.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng.hxx>
-#include <helpid.hrc>
+#include <helpids.h>
 #include <i18nlangtag/lang.h>
 #include <vcl/menu.hxx>
 #include <vcl/window.hxx>

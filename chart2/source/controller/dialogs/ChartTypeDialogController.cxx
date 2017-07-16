@@ -19,7 +19,7 @@
 
 #include "ChartTypeDialogController.hxx"
 #include "ResId.hxx"
-#include "HelpIds.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "bitmaps.hlst"
 #include "macros.hxx"

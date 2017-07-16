@@ -61,7 +61,6 @@
 #include "ViewShell.hxx"
 #include "View.hxx"
 #include "ViewShellBase.hxx"
-#include "cfgids.hxx"
 #include "strings.hrc"
 #include "strings.hxx"
 
