@@ -122,7 +122,7 @@ private:
     std::unique_ptr<AstExprValue> eval_bin_op();
     std::unique_ptr<AstExprValue> eval_bit_op();
     std::unique_ptr<AstExprValue> eval_un_op();
-    AstExprValue* eval_symbol();
+    std::unique_ptr<AstExprValue> eval_symbol();
 
     OString  m_fileName;     // fileName defined in
 

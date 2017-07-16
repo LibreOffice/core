@@ -23,6 +23,7 @@
 #include <astscope.hxx>
 #include <errorhandler.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 
 #include <limits.h>
@@ -817,7 +818,7 @@ void AstExpression::evaluate()
             m_exprValue = eval_un_op();
             break;
         case ExprComb::Symbol:
-            m_exprValue.reset( eval_symbol() );
+            m_exprValue = eval_symbol();
             break;
         case ExprComb::NONE:
             break;
@@ -945,7 +946,7 @@ std::unique_ptr<AstExprValue> AstExpression::eval_un_op()
     return retval;
 }
 
-AstExprValue* AstExpression::eval_symbol()
+std::unique_ptr<AstExprValue> AstExpression::eval_symbol()
 {
     AstScope        *pScope = nullptr;
     AstDeclaration  *pDecl;
@@ -996,7 +997,8 @@ AstExprValue* AstExpression::eval_symbol()
      */
     pConst = static_cast< AstConstant* >(pDecl);
     pConst->getConstValue()->evaluate();
-    return pConst->getConstValue()->getExprValue();
+    auto const val = pConst->getConstValue()->getExprValue();
+    return val == nullptr ? nullptr : o3tl::make_unique<AstExprValue>(*val);
 }
 
 OString AstExpression::toString()
