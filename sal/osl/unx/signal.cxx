@@ -476,22 +476,7 @@ void signalHandlerFunction(int signal, siginfo_t * info, void * context)
             Info.Signal == osl_Signal_IntegerDivideByZero ||
             Info.Signal == osl_Signal_FloatDivideByZero) && !is_unset_signal(signal))
     {
-        for (SignalAction & rSignal : Signals)
-        {
-            if (rSignal.Signal == signal)
-            {
-                if (rSignal.siginfo)
-                {
-                    (*reinterpret_cast<Handler2>(rSignal.Handler))(
-                        signal, info, context);
-                }
-                else
-                {
-                    rSignal.Handler(signal);
-                }
-                break;
-            }
-        }
+        callSystemHandler(signal, info, context);
     }
 #endif
 
