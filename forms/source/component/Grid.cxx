@@ -22,7 +22,6 @@
 #include "Columns.hxx"
 #include "findpos.hxx"
 #include "Grid.hxx"
-#include "property.hrc"
 #include "property.hxx"
 #include "services.hxx"
 #include <com/sun/star/form/FormComponentType.hpp>

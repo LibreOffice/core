@@ -63,7 +63,7 @@
 #include <charatr.hxx>
 #include <mdiexp.hxx>
 #include <strings.hrc>
-#include <comcore.hrc>
+#include <comcore.hxx>
 #include <numrule.hxx>
 
 #include <memory>

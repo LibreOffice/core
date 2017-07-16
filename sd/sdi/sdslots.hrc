@@ -19,7 +19,7 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <editeng/editids.hrc>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svx/svxids.hrc>
 #include <app.hrc>
 #include <sdattr.hrc>

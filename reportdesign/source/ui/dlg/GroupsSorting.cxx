@@ -29,7 +29,7 @@
 #include "strings.hrc"
 #include "rptui_slotid.hrc"
 #include "core_resource.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 #include "GroupExchange.hxx"
 #include "UITools.hxx"
 #include "UndoActions.hxx"

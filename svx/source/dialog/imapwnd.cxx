@@ -30,7 +30,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include <imapdlg.hrc>
 #include <imapwnd.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>

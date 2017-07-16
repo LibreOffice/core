@@ -21,7 +21,7 @@
 #include "dbregistersettings.hxx"
 #include "connpooloptions.hxx"
 #include <svl/filenotation.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <svtools/editbrowsebox.hxx>
 #include "svtools/treelistentry.hxx"
 #include <cuires.hrc>

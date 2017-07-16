@@ -32,7 +32,7 @@
 
 #include "Formula.hxx"
 #include "AddField.hxx"
-#include "helpids.hrc"
+#include "helpids.h"
 
 
 namespace rptui

@@ -69,7 +69,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svtools/helpid.hrc>
+#include <svtools/helpids.h>
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <ucbhelper/content.hxx>
@@ -88,7 +88,7 @@
 #include "filtergrouping.hxx"
 #include <sfx2/request.hxx>
 #include "filedlgimpl.hxx"
-#include <helpid.hrc>
+#include <helpids.h>
 #include <sfx2/strings.hrc>
 #include <rtl/strbuf.hxx>
 #include <comphelper/sequence.hxx>

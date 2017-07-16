@@ -36,7 +36,6 @@
 #include <connectivity/dbexception.hxx>
 #include "java/util/Property.hxx"
 #include "java/LocalRef.hxx"
-#include "resource/conn_shared_res.hrc"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <jvmaccess/classpath.hxx>
 #include <comphelper/namedvaluecollection.hxx>

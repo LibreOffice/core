@@ -60,7 +60,7 @@
 #include <editeng/lineitem.hxx>
 #include "sdattr.hxx"
 #include <svx/zoomslideritem.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svx/xftstit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlineit0.hxx>

@@ -26,7 +26,7 @@
 #include "fmpgeimp.hxx"
 #include "svx/svditer.hxx"
 #include "fmobj.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "svx/strings.hrc"
 #include "svx/fmglob.hxx"
 #include "svx/dialmgr.hxx"

@@ -50,7 +50,7 @@
 #include "optinet2.hxx"
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <svx/ofaitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>

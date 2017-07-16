@@ -60,7 +60,6 @@
 
 #include "strings.hrc"
 #include "prlayout.hxx"
-#include "prltempl.hrc"
 #include <svx/xfillit.hxx>
 #include "sdresid.hxx"
 #include "OutlineViewShell.hxx"
@@ -311,40 +310,34 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 else if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                 {
                     OUString aName(pStyleSheet->GetName());
-                    sal_uInt16 nDlgId = 0;
+                    bool bBackground = false;
 
                     if (aName == SdResId(STR_PSEUDOSHEET_TITLE))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_TITLE;
                     }
                     else if (aName == SdResId(STR_PSEUDOSHEET_SUBTITLE))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_SUBTITLE;
                     }
                     else if (aName ==
                              SdResId(STR_PSEUDOSHEET_BACKGROUND))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND;
+                        bBackground = true;
                         ePO    = PO_BACKGROUND;
                     }
                     else if (aName ==
                              SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_BACKGROUNDOBJECTS;
                     }
                     else if (aName ==
                              SdResId(STR_PSEUDOSHEET_NOTES))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_NOTES;
                     }
                     else if(aName.indexOf(SdResId(STR_PSEUDOSHEET_OUTLINE)) != -1)
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
-
                         OUString aOutlineStr(SdResId(STR_PSEUDOSHEET_OUTLINE));
                         // determine number, mind the blank between name and number
                         OUString aNumStr(aName.copy(aOutlineStr.getLength() + 1));
@@ -370,7 +363,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if( !bOldDocInOtherLanguage )
                     {
-                        pPresDlg.disposeAndReset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh,  mpViewShell->GetActiveWindow(), nDlgId, *pStyleSheet, ePO, pSSPool ) : nullptr);
+                        pPresDlg.disposeAndReset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh,  mpViewShell->GetActiveWindow(), bBackground, *pStyleSheet, ePO, pSSPool ) : nullptr);
                     }
                 }
                 else if (eFamily == SD_STYLE_FAMILY_CELL)

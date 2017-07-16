@@ -22,7 +22,7 @@
 #include "TableFieldDescription.hxx"
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "QTableWindow.hxx"
 #include "QTableConnection.hxx"
 #include "QTableConnectionData.hxx"

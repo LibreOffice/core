@@ -79,7 +79,7 @@
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "workwin.hxx"
 #include <ctrlfactoryimpl.hxx>
 

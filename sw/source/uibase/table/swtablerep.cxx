@@ -49,7 +49,6 @@
 #include <SwStyleNameMapper.hxx>
 
 #include <cmdid.h>
-#include <table.hrc>
 #include "swtablerep.hxx"
 #include <memory>
 

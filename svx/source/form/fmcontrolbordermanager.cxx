@@ -20,7 +20,7 @@
 
 #include "fmcontrolbordermanager.hxx"
 
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>

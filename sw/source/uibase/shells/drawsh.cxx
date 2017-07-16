@@ -54,7 +54,7 @@
 #include "wrtsh.hxx"
 #include "cmdid.h"
 #include "globals.hrc"
-#include "helpid.h"
+#include "helpids.h"
 #include "strings.hrc"
 #include "drwbassh.hxx"
 #include "drawsh.hxx"
@@ -63,7 +63,6 @@
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include "swabstdlg.hxx"
-#include "misc.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

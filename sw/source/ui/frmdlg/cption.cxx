@@ -42,7 +42,6 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <comphelper/string.hxx>
 #include "initui.hxx"
-#include <frmui.hrc>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>

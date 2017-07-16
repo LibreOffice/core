@@ -40,7 +40,7 @@
 #include <sfx2/docfile.hxx>
 #include <cuires.hrc>
 #include <com/sun/star/frame/XFrame.hpp>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <svx/hlnkitem.hxx>
 
 #include "hlmarkwn.hxx"

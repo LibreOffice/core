@@ -18,7 +18,7 @@
  */
 
 #include "abspilot.hxx"
-#include "abpilot.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "componentmodule.hxx"
 #include <comphelper/processfactory.hxx>

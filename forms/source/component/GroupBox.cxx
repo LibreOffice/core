@@ -19,7 +19,6 @@
 
 #include "GroupBox.hxx"
 #include "property.hxx"
-#include "property.hrc"
 #include "services.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>

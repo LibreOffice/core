@@ -104,7 +104,7 @@
 #include "helper.hxx"
 #include "sfx2/strings.hrc"
 #include "workwin.hxx"
-#include "helpid.hrc"
+#include "helpids.h"
 #include "sfx2/strings.hrc"
 #include <sfx2/sfxdlg.hxx>
 #include "appbaslib.hxx"

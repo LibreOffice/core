@@ -41,7 +41,7 @@
 #include "frmfmt.hxx"
 #include "cellatr.hxx"
 #include "edtwin.hxx"
-#include "helpid.h"
+#include "helpids.h"
 #include "strings.hrc"
 #include "bitmaps.hlst"
 

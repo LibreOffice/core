@@ -28,7 +28,7 @@
 #include "RptObject.hxx"
 #include "propbrw.hxx"
 #include <toolkit/helper/convert.hxx>
-#include "helpids.hrc"
+#include "helpids.h"
 #include "SectionView.hxx"
 #include "ReportSection.hxx"
 #include "rptui_slotid.hrc"

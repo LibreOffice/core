@@ -84,7 +84,7 @@
 #include <unomid.h>
 #include <cmdid.h>
 #include <unofldmid.h>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <editeng/unoipset.hxx>
 #include <editeng/unoprnms.hxx>
 #include <svx/xdef.hxx>

@@ -19,7 +19,7 @@
 
 #include "browserids.hxx"
 #include "core_resource.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "dbexchange.hxx"
 #include "dbtreelistbox.hxx"
 #include "dbtreemodel.hxx"
