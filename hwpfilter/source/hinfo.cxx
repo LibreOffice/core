@@ -192,28 +192,21 @@ bool HWPSummary::Read(HWPFile & hwpf)
     return (!hwpf.State());
 }
 
-ParaShape::ParaShape():
-    index(0),
-    left_margin(0),
-    right_margin(0),
-    indent(0),
-    lspacing(0),
-    pspacing_prev(0),
-    pspacing_next(0),
-    condense(0),
-    arrange_type(0),
-    shade(0),
-    outline(0),
-    outline_continue(0),
-    pagebreak(0)
+ParaShape::ParaShape()
+    : index(0)
+    , left_margin(0)
+    , right_margin(0)
+    , indent(0)
+    , lspacing(0)
+    , pspacing_prev(0)
+    , pspacing_next(0)
+    , condense(0)
+    , arrange_type(0)
+    , shade(0)
+    , outline(0)
+    , outline_continue(0)
+    , pagebreak(0)
 {
-    coldef.ncols = 0;
-    coldef.separator = 0;
-    coldef.spacing = 0;
-    coldef.columnlen = 0;
-    coldef.columnlen0 = 0;
-    reserved[0] = 0;
-    reserved[1] = 0;
     reserved[0] = 0;
     reserved[1] = 0;
 }
