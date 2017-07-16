@@ -21,7 +21,6 @@
 #define INCLUDED_FORMS_SOURCE_INC_FORMCOMPONENT_HXX
 
 #include "cloneable.hxx"
-#include "property.hrc"
 #include "property.hxx"
 #include "propertybaghelper.hxx"
 #include "resettable.hxx"

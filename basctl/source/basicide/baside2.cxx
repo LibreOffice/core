@@ -25,7 +25,7 @@
 #include "docsignature.hxx"
 #include "officecfg/Office/BasicIDE.hxx"
 
-#include "helpid.hrc"
+#include "helpids.h"
 #include <strings.hrc>
 
 #include <basic/basmgr.hxx>

@@ -83,7 +83,7 @@
 
 #include <svx/fmview.hxx>
 #include <editeng/paperinf.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svx/svxids.hrc>
 #include <svx/svdobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -144,7 +144,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/confignode.hxx>
-#include <helpids.hrc>
+#include <helpids.h>
 
 #include <ReportControllerObserver.hxx>
 

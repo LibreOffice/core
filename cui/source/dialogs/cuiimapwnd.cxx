@@ -28,7 +28,6 @@
 #include <svl/urlbmk.hxx>
 #include <svx/xoutbmp.hxx>
 #include <dialmgr.hxx>
-#include <cuires.hrc>
 #include <cuiimapwnd.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>

@@ -22,7 +22,7 @@
 #include "hintids.hxx"
 #include "globals.hrc"
 #include "strings.hrc"
-#include "helpid.h"
+#include "helpids.h"
 #include <sfx2/objsh.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>

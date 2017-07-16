@@ -21,7 +21,7 @@
 
 #include <hintids.hxx>
 #include <cmdid.h>
-#include <helpid.h>
+#include <helpids.h>
 
 #include <i18nutil/unicode.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -92,8 +92,6 @@
 #include <SwSmartTagMgr.hxx>
 #include <editeng/acorrcfg.hxx>
 #include "swabstdlg.hxx"
-#include "misc.hrc"
-#include "chrdlg.hrc"
 #include <IDocumentStatistics.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <unotools/lingucfg.hxx>
@@ -714,7 +712,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_SORTING_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING ));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSwSortingDialog(GetView().GetWindow(), rWrtSh));
             pDlg->Execute();
             rReq.Done();
         }

@@ -31,11 +31,12 @@
 #include <svl/eitem.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/useroptions.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/request.hxx>
 #include <svx/ruler.hxx>
 #include <svx/srchdlg.hxx>
 #include <editeng/protitem.hxx>
@@ -88,7 +89,6 @@
 #include <swdtflvr.hxx>
 #include <strings.hrc>
 #include <strings.hrc>
-#include <frmui.hrc>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <linguistic/lngprops.hxx>

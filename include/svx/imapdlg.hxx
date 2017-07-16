@@ -32,6 +32,28 @@
 #include <svx/svxdllapi.h>
 #include <vector>
 
+#define TBI_APPLY               1
+#define TBI_OPEN                2
+#define TBI_SAVEAS              3
+
+#define TBI_SELECT              4
+#define TBI_RECT                5
+#define TBI_CIRCLE              6
+#define TBI_POLY                7
+#define TBI_FREEPOLY            8
+
+#define TBI_ACTIVE              16
+#define TBI_MACRO               18
+#define TBI_PROPERTY            19
+
+#define TBI_POLYEDIT            30
+#define TBI_POLYMOVE            31
+#define TBI_POLYINSERT          32
+#define TBI_POLYDELETE          33
+
+#define TBI_UNDO                40
+#define TBI_REDO                41
+
 class ImageMap;
 
 /*************************************************************************

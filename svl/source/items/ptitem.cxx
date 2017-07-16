@@ -26,7 +26,7 @@
 #include <tools/mapunit.hxx>
 
 #include <svl/poolitem.hxx>
-#include <svl/memberid.hrc>
+#include <svl/memberid.h>
 
 using namespace ::com::sun::star;
 

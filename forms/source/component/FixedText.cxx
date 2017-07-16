@@ -19,7 +19,6 @@
 
 #include "FixedText.hxx"
 #include "services.hxx"
-#include "property.hrc"
 #include "property.hxx"
 #include <comphelper/processfactory.hxx>
 

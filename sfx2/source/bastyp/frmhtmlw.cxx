@@ -35,7 +35,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/sfx.hrc>
 #include "sfx2/strings.hrc"
 #include "strings.hxx"
 

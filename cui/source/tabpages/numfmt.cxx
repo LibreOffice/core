@@ -30,7 +30,6 @@
 #include <svx/dialogs.hrc>
 #include <svtools/colorcfg.hxx>
 
-#include <cuires.hrc>
 #include <strings.hrc>
 
 #include <svx/numinf.hxx>

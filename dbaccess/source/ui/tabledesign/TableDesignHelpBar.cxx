@@ -20,7 +20,7 @@
 #include "TableDesignHelpBar.hxx"
 #include <svtools/svmedit.hxx>
 #include <vcl/settings.hxx>
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include <memory>
 using namespace dbaui;
 #define STANDARD_MARGIN                 6

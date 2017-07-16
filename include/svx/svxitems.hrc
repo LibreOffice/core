@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SVX_INC_SVX_ITEMS_HRC
 #define INCLUDED_SVX_INC_SVX_ITEMS_HRC
 
-#include <utility>
-
-#include "svx/svxitems.hrc"
-#include "svx/svxids.hrc"
+#include <sal/types.h>
+#include <svx/svxitems.hrc>
+#include <svx/svxids.hrc>
 #include <editeng/editids.hrc>
+#include <utility>
 
 #define NC_(Context, String) (Context "\004" u8##String)
 

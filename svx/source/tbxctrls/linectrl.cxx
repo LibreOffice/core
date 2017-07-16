@@ -29,7 +29,7 @@
 
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 
 #include "svx/drawitem.hxx"
 #include "svx/xattr.hxx"

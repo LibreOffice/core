@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMULA_OPCODE_HXX
 #define INCLUDED_FORMULA_OPCODE_HXX
 
-#include <formula/compiler.hrc>
+#include <formula/compiler.hxx>
 #include <sal/types.h>
 
 enum OpCode : sal_uInt16

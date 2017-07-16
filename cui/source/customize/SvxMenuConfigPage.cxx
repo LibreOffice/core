@@ -53,9 +53,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
-#include <cuires.hrc>
 #include <strings.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 
 #include "acccfg.hxx"
 #include "cfg.hxx"

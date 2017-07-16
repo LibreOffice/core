@@ -41,7 +41,7 @@
 #include "fmexpl.hxx"
 #include "filtnav.hxx"
 
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "fmPropBrw.hxx"
 #include "datanavi.hxx"
 

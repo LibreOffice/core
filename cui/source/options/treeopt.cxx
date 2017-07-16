@@ -22,10 +22,9 @@
 
 #include <svx/dialogs.hrc>
 
-#include "cuires.hrc"
 #include "strings.hrc"
 #include "treeopt.hrc"
-#include "helpid.hrc"
+#include "helpids.h"
 
 #include "cfgchart.hxx"
 #include "connpoolconfig.hxx"

@@ -24,7 +24,7 @@
 #include "cmdid.h"
 
 #include <svl/globalnameitem.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svl/imageitm.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/rectitem.hxx>

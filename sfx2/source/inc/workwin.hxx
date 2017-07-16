@@ -31,8 +31,8 @@
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <sfx2/sfx.hrc>
 #include <sfx2/childwin.hxx>
+#include <sfx2/objface.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/toolbarids.hxx>
@@ -58,18 +58,16 @@ struct SfxObjectBar_Impl
     {}
 };
 
-
 // This struct makes all relevant Information available of the status bar
 
 struct SfxStatBar_Impl
 {
-    sal_uInt16              nId;
+    StatusBarId eId;
 
     SfxStatBar_Impl() :
-        nId(0)
+        eId(StatusBarId::None)
     {}
 };
-
 
 enum class SfxChildVisibility
 {
@@ -296,7 +294,7 @@ public:
 
     // Methods for StatusBar
     void                    ResetStatusBar_Impl();
-    void                    SetStatusBar_Impl(sal_uInt32 nResId);
+    void                    SetStatusBar_Impl(StatusBarId eResId);
     void                    UpdateStatusBar_Impl();
     css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator();
     css::uno::Reference< css::frame::XFrame > GetFrameInterface();

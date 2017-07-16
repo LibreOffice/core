@@ -111,7 +111,6 @@ using namespace ::com::sun::star;
 #define SwModule
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
-#include <cfgid.h>
 
 #include <strings.hrc>
 
@@ -119,7 +118,7 @@ SFX_IMPL_INTERFACE(SwModule, SfxModule)
 
 void SwModule::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterStatusBar(CFG_STATUSBAR);
+    GetStaticInterface()->RegisterStatusBar(StatusBarId::WriterStatusBar);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION,
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Client | SfxVisibilityFlags::Viewer,

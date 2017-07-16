@@ -26,7 +26,6 @@
 #include <reffld.hxx>
 #include <wrtsh.hxx>
 
-#include <fldui.hrc>
 #include <globals.hrc>
 #include <strings.hrc>
 #include <SwNodeNum.hxx>

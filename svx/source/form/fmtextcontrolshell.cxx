@@ -18,7 +18,7 @@
  */
 
 
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "fmtextcontroldialogs.hxx"
 #include "fmtextcontrolfeature.hxx"
 #include "fmtextcontrolshell.hxx"

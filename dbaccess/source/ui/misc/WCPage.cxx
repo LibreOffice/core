@@ -23,7 +23,7 @@
 #include "WExtendPages.hxx"
 
 #include "defaultobjectnamecheck.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "core_resource.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>

@@ -21,11 +21,10 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/navigat.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 
 SFX_IMPL_DOCKINGWINDOW( SfxNavigatorWrapper , SID_NAVIGATOR );
 

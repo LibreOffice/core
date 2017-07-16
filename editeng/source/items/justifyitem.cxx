@@ -18,7 +18,7 @@
  */
 
 #include "editeng/justifyitem.hxx"
-#include "editeng/memberids.hrc"
+#include "editeng/memberids.h"
 #include "editeng/editrids.hrc"
 #include "editeng/eerdll.hxx"
 

@@ -80,7 +80,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/sfx.hrc>
 #include <svx/fmsearch.hxx>
 #include <svx/svxdlg.hxx>
 #include <tools/diagnose_ex.h>

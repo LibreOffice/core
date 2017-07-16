@@ -45,7 +45,6 @@
 #include "scmod.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
-#include "cfgids.hxx"
 
 #include "docsh.hxx"
 #include "tabvwsh.hxx"

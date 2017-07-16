@@ -20,7 +20,6 @@
 #include "FormComponent.hxx"
 #include "strings.hrc"
 #include "frm_resource.hxx"
-#include "property.hrc"
 #include "services.hxx"
 
 #include <com/sun/star/awt/XTextComponent.hpp>

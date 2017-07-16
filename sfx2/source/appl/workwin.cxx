@@ -21,6 +21,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/docfile.hxx>
+#include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
 #include "workwin.hxx"
@@ -1428,14 +1429,13 @@ void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
 
 void SfxWorkWindow::ResetStatusBar_Impl()
 {
-    aStatBar.nId = 0;
+    aStatBar.eId = StatusBarId::None;
 }
 
-
-void SfxWorkWindow::SetStatusBar_Impl( sal_uInt32 nResId )
+void SfxWorkWindow::SetStatusBar_Impl(StatusBarId eId)
 {
-    if ( nResId && bShowStatusBar && IsVisible_Impl() )
-        aStatBar.nId = sal::static_int_cast<sal_uInt16>(nResId);
+    if (eId != StatusBarId::None && bShowStatusBar && IsVisible_Impl())
+        aStatBar.eId = eId;
 }
 
 void SfxWorkWindow::UpdateStatusBar_Impl()
@@ -1448,8 +1448,8 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
 
     // No status bar, if no ID is required or when in FullScreenView or
     // if disabled
-    if ( aStatBar.nId && IsDockingAllowed() && bInternalDockingAllowed && bShowStatusBar &&
-         !bIsFullScreen )
+    if (aStatBar.eId != StatusBarId::None && IsDockingAllowed() && bInternalDockingAllowed && bShowStatusBar &&
+        !bIsFullScreen)
     {
         // Id has changed, thus create a suitable Statusbarmanager, this takes
         // over the  current status bar;

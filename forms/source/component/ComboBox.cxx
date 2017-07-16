@@ -20,7 +20,6 @@
 
 #include "ComboBox.hxx"
 #include "property.hxx"
-#include "property.hrc"
 #include "services.hxx"
 
 #include "frm_resource.hxx"

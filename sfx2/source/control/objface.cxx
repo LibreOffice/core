@@ -76,12 +76,12 @@ struct SfxInterface_Impl
     SfxObjectUIArr_Impl     aObjectBars;    // registered ObjectBars
     SfxObjectUIArr_Impl     aChildWindows;  // registered ChildWindows
     OUString                aPopupName;     // registered PopupMenu
-    sal_uInt32              nStatBarResId;  // registered StatusBar
+    StatusBarId             eStatBarResId;  // registered StatusBar
     SfxModule*              pModule;
     bool                    bRegistered;
 
     SfxInterface_Impl()
-        : nStatBarResId(0)
+        : eStatBarResId(StatusBarId::None)
         , pModule(nullptr)
         , bRegistered(false)
     {
@@ -382,9 +382,9 @@ void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, SfxShellFe
     pImplData->aChildWindows.push_back(pUI);
 }
 
-void SfxInterface::RegisterStatusBar(sal_uInt32 nResId)
+void SfxInterface::RegisterStatusBar(StatusBarId eId)
 {
-    pImplData->nStatBarResId = nResId;
+    pImplData->eStatBarResId = eId;
 }
 
 sal_uInt32 SfxInterface::GetChildWindowId (sal_uInt16 nNo) const
@@ -440,12 +440,12 @@ const OUString& SfxInterface::GetPopupMenuName() const
     return pImplData->aPopupName;
 }
 
-sal_uInt32 SfxInterface::GetStatusBarId() const
+StatusBarId SfxInterface::GetStatusBarId() const
 {
-    if (pImplData->nStatBarResId == 0 && pGenoType)
+    if (pImplData->eStatBarResId == StatusBarId::None && pGenoType)
         return pGenoType->GetStatusBarId();
     else
-        return pImplData->nStatBarResId;
+        return pImplData->eStatBarResId;
 }
 
 SfxShellFeature SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const

@@ -43,7 +43,7 @@
 #include <swmodule.hxx>
 #include <sal/macros.h>
 
-#include <helpid.h>
+#include <helpids.h>
 #include "globals.hrc"
 #include "swtypes.hxx"
 #include "wrtsh.hxx"
@@ -58,7 +58,6 @@
 #include "colmgr.hxx"
 #include "prcntfld.hxx"
 #include "paratr.hxx"
-#include "frmui.hrc"
 #include "strings.hrc"
 #include <section.hxx>
 #include <docary.hxx>

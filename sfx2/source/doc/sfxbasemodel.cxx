@@ -105,7 +105,6 @@
 #include <eventsupplier.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/strings.hrc>
-#include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include <sfx2/docfac.hxx>

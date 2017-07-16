@@ -25,7 +25,7 @@
 #include "mediamisc.hxx"
 #include "strings.hrc"
 #include "bitmaps.hlst"
-#include "helpids.hrc"
+#include "helpids.h"
 
 #include <algorithm>
 #include <cmath>

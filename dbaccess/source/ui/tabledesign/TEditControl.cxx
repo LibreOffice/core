@@ -30,7 +30,7 @@
 #include "strings.hxx"
 #include "stringconstants.hxx"
 #include "browserids.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include <comphelper/types.hxx>
 #include "FieldDescControl.hxx"
 #include "FieldDescriptions.hxx"

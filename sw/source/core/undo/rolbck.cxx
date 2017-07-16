@@ -53,7 +53,6 @@
 #include <IMark.hxx>
 #include <charfmt.hxx>
 #include <strings.hrc>
-#include <undo.hrc>
 #include <bookmrk.hxx>
 #include <memory>
 

@@ -58,7 +58,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
-#include <rcid.hrc>
 #include <strings.hrc>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

@@ -41,7 +41,7 @@
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "fmservs.hxx"
 #include "svx/fmsrcimp.hxx"
 #include <svx/fmsearch.hxx>

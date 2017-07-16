@@ -25,7 +25,7 @@
 #include <vcl/bitmapex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svl/style.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <svx/strings.hrc>
 #include "svx/xattr.hxx"
 #include <svx/xtable.hxx>

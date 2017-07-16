@@ -34,8 +34,7 @@
 #include <dialmgr.hxx>
 #include "cfgutil.hxx"
 #include "cfg.hxx"
-#include "helpid.hrc"
-#include <cuires.hrc>
+#include "helpids.h"
 #include "headertablistbox.hxx"
 #include "macropg_impl.hxx"
 #include <svx/dialogs.hrc>

@@ -13,7 +13,6 @@
 #include <osl/thread.h>
 #include "svtools/treelistentry.hxx"
 #include <unotools/securityoptions.hxx>
-#include <cuires.hrc>
 #include "certpath.hxx"
 #include "dialmgr.hxx"
 

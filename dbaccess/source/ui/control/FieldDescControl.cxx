@@ -45,7 +45,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "QEnumTypes.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <comphelper/numbers.hxx>
