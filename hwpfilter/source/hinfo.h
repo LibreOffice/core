@@ -242,23 +242,37 @@ struct CharShape
 /**
  * @short Tab properties
  */
-typedef struct
+struct TabSet
 {
     unsigned char type;
     unsigned char dot_continue;
     hunit     position;
-} TabSet;
+    TabSet()
+        : type(0)
+        , dot_continue(0)
+        , position(0)
+    {
+    }
+};
 
 /**
  * @short Column properties
  */
-typedef struct
+struct ColumnDef
 {
     unsigned char ncols;
     unsigned char separator;
     hunit     spacing;
     hunit     columnlen, columnlen0;
-} ColumnDef;
+    ColumnDef()
+        : ncols(0)
+        , separator(0)
+        , spacing(0)
+        , columnlen(0)
+        , columnlen0(0)
+    {
+    }
+};
 
 /**
  * @short Style of paragraph
