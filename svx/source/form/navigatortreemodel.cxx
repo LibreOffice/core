@@ -26,10 +26,10 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 
 #include "fmundo.hxx"
-#include "fmhelp.hrc"
+#include "helpids.h"
 #include "fmexpl.hxx"
 #include "svx/strings.hrc"
 #include "fmshimp.hxx"

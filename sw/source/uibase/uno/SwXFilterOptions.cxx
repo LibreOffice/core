@@ -31,7 +31,6 @@
 #include <unotxdoc.hxx>
 
 #include "swabstdlg.hxx"
-#include "dialog.hrc"
 #include <memory>
 
 using namespace ::com::sun::star;

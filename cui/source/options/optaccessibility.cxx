@@ -19,7 +19,6 @@
 
 #include <optaccessibility.hxx>
 #include <dialmgr.hxx>
-#include <cuires.hrc>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>

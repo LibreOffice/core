@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#ifndef INCLUDED_SD_INC_HELPIDS_H
+#define INCLUDED_SD_INC_HELPIDS_H
+
 #include <svx/svxcommands.h>
 #include "sdcommands.h"
 
@@ -75,5 +79,7 @@
 #define HID_MN_SUB_SPELLING                                     "SD_HID_MN_SUB_SPELLING"
 #define HID_MN_SUB_CONVERT                                      "SD_HID_MN_SUB_CONVERT"
 #define HID_MN_SUB_MIRROR                                       "SD_HID_MN_SUB_MIRROR"
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

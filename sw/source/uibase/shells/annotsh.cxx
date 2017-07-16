@@ -113,8 +113,6 @@
 #include <docsh.hxx>
 #include <svl/undo.hxx>
 #include "swabstdlg.hxx"
-#include "chrdlg.hrc"
-#include "misc.hrc"
 #include <app.hrc>
 
 #include <comphelper/string.hxx>

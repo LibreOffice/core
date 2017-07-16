@@ -102,16 +102,16 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
         aImage = Image(aBitmap);
     }
     aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLINETTP );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, imgVector[0], SvxHyperlinkInternetTp::Create );
+    pEntry = AddTabPage ( HyperLinkPageType::INTERNET, aStrTitle, imgVector[0], SvxHyperlinkInternetTp::Create );
     pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
     aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLMAILTP );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, imgVector[1], SvxHyperlinkMailTp::Create );
+    pEntry = AddTabPage ( HyperLinkPageType::MAIL, aStrTitle, imgVector[1], SvxHyperlinkMailTp::Create );
     pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
     aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLDOCTP );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, imgVector[2], SvxHyperlinkDocTp::Create );
+    pEntry = AddTabPage ( HyperLinkPageType::DOCUMENT, aStrTitle, imgVector[2], SvxHyperlinkDocTp::Create );
     pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
     aStrTitle = CuiResId( RID_SVXSTR_HYPERDLG_HLDOCNTP );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, imgVector[3], SvxHyperlinkNewDocTp::Create );
+    pEntry = AddTabPage ( HyperLinkPageType::NEWDOCUMENT, aStrTitle, imgVector[3], SvxHyperlinkNewDocTp::Create );
     pEntry->SetQuickHelpText( CuiResId( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
 
     // set OK/Cancel - button
@@ -127,25 +127,25 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     SetInputSet (mpItemSet.get());
 
     //loop through the pages and get their max bounds and lock that down
-    ShowPage(RID_SVXPAGE_HYPERLINK_NEWDOCUMENT);
+    ShowPage(HyperLinkPageType::NEWDOCUMENT);
     VclBox *pBox = get_content_area();
     Size aMaxPrefSize(pBox->get_preferred_size());
-    ShowPage(RID_SVXPAGE_HYPERLINK_DOCUMENT);
+    ShowPage(HyperLinkPageType::DOCUMENT);
     Size aSize(pBox->get_preferred_size());
     aMaxPrefSize.Width() = std::max(aMaxPrefSize.Width(), aSize.Width());
     aMaxPrefSize.Height() = std::max(aMaxPrefSize.Height(), aSize.Height());
-    ShowPage(RID_SVXPAGE_HYPERLINK_MAIL);
+    ShowPage(HyperLinkPageType::MAIL);
     aSize = pBox->get_preferred_size();
     aMaxPrefSize.Width() = std::max(aMaxPrefSize.Width(), aSize.Width());
     aMaxPrefSize.Height() = std::max(aMaxPrefSize.Height(), aSize.Height());
-    ShowPage(RID_SVXPAGE_HYPERLINK_INTERNET);
+    ShowPage(HyperLinkPageType::INTERNET);
     aSize = pBox->get_preferred_size();
     aMaxPrefSize.Width() = std::max(aMaxPrefSize.Width(), aSize.Width());
     aMaxPrefSize.Height() = std::max(aMaxPrefSize.Height(), aSize.Height());
     pBox->set_width_request(aMaxPrefSize.Width());
     pBox->set_height_request(aMaxPrefSize.Height());
 
-    SetCurPageId(RID_SVXPAGE_HYPERLINK_INTERNET);
+    SetCurPageId(HyperLinkPageType::INTERNET);
 
     // Init Dialog
     Start();
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickCloseHdl_Impl, Button*, void)
 
 void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 {
-    sal_uInt16 nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
+    sal_uInt16 nPageId = HyperLinkPageType::INTERNET;
 
     OUString aStrURL(pItem->GetURL());
     INetURLObject aURL(aStrURL);
@@ -311,17 +311,17 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
     {
         case INetProtocol::Http :
         case INetProtocol::Ftp :
-            nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
+            nPageId = HyperLinkPageType::INTERNET;
             break;
         case INetProtocol::File :
-            nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
+            nPageId = HyperLinkPageType::DOCUMENT;
             break;
         case INetProtocol::Mailto :
-            nPageId = RID_SVXPAGE_HYPERLINK_MAIL;
+            nPageId = HyperLinkPageType::MAIL;
             break;
         default :
             if (aStrURL.startsWith("#"))
-                nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
+                nPageId = HyperLinkPageType::DOCUMENT;
             else
             {
                 // not valid

@@ -24,10 +24,9 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 
-#include <cuires.hrc>
 #include <strings.hrc>
 #include <bitmaps.hlst>
-#include "helpid.hrc"
+#include "helpids.h"
 
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>

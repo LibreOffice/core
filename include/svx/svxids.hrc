@@ -19,9 +19,8 @@
 #ifndef INCLUDED_SVX_SVXIDS_HRC
 #define INCLUDED_SVX_SVXIDS_HRC
 
-#include <svl/memberid.hrc>
+#include <svl/memberid.h>
 #include <svl/solar.hrc>
-#include <sfx2/sfx.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <editeng/editids.hrc>
 #include <svx/unomid.hxx>
@@ -112,7 +111,6 @@
 #define SID_BASICIDE_ARG_LIBNAME            ( SID_BASICIDE_START + 34 )
 #define SID_BASICIDE_ARG_MODULENAME         ( SID_BASICIDE_START + 35 )
 #define SID_BASICIDE_BRKPNTSCHANGED         ( SID_BASICIDE_START + 36 )
-#define SID_BASICIDE_STATUSBAR              ( SID_BASICIDE_START + 37 )
 #define SID_BASICIDE_STAT_POS               ( SID_BASICIDE_START + 38 )
 #define SID_BASICIDE_STAT_DATE              ( SID_BASICIDE_START + 39 )
 #define SID_BASICIDE_STAT_TITLE             ( SID_BASICIDE_START + 40 )

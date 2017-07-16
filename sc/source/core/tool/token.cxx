@@ -33,7 +33,7 @@
 #include "compiler.hxx"
 #include "interpre.hxx"
 #include <formula/FormulaCompiler.hxx>
-#include <formula/compiler.hrc>
+#include <formula/compiler.hxx>
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
 #include <formulagroup.hxx>

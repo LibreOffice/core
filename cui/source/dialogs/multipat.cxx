@@ -27,7 +27,6 @@
 #include "multipat.hxx"
 #include <dialmgr.hxx>
 
-#include <cuires.hrc>
 #include <strings.hrc>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

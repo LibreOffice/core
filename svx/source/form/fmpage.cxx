@@ -38,7 +38,7 @@
 
 
 #include <svx/fmglob.hxx>
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "fmundo.hxx"
 #include "svx/fmtools.hxx"
 using namespace ::svxform;

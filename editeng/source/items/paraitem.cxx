@@ -27,7 +27,6 @@
 #include <comphelper/types.hxx>
 #include <tools/mapunit.hxx>
 #include <svl/itempool.hxx>
-#include <svl/memberid.hrc>
 #include <editeng/editrids.hrc>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -43,7 +42,7 @@
 #include <editeng/paravertalignitem.hxx>
 #include <editeng/pgrditem.hxx>
 #include <rtl/ustring.hxx>
-#include <editeng/memberids.hrc>
+#include <editeng/memberids.h>
 #include <editeng/editids.hrc>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>

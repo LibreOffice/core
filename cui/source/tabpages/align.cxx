@@ -21,7 +21,6 @@
 
 #include <editeng/svxenum.hxx>
 #include <svx/dialogs.hrc>
-#include <cuires.hrc>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <svx/rotmodit.hxx>

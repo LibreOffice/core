@@ -22,7 +22,7 @@
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarDockingWindow.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "helpid.hrc"
+#include "helpids.h"
 #include <sfx2/dockwin.hxx>
 
 namespace sfx2 { namespace sidebar {

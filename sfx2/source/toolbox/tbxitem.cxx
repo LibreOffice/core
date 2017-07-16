@@ -72,14 +72,13 @@
 #include <sfx2/viewfrm.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/module.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>
-#include "helpid.hrc"
+#include "helpids.h"
 #include "workwin.hxx"
 #include <ctrlfactoryimpl.hxx>
 

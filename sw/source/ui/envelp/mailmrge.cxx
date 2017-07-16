@@ -26,7 +26,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <helpid.h>
+#include <helpids.h>
 #include <view.hxx>
 #include <docsh.hxx>
 #include <IDocumentDeviceAccess.hxx>

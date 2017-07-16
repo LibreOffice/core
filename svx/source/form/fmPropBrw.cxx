@@ -20,8 +20,8 @@
 
 #include <sal/macros.h>
 
-#include "fmhelp.hrc"
-#include "fmprop.hrc"
+#include "helpids.h"
+#include "fmprop.hxx"
 #include "fmPropBrw.hxx"
 #include "svx/strings.hrc"
 #include "fmservs.hxx"

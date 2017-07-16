@@ -21,7 +21,7 @@
 #include "ResId.hxx"
 #include "macros.hxx"
 #include "strings.hrc"
-#include "HelpIds.hrc"
+#include "helpids.h"
 
 #include "tp_ChartType.hxx"
 #include "tp_RangeChooser.hxx"

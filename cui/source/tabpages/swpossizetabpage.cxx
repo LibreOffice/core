@@ -25,7 +25,6 @@
 #include <svx/anchorid.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/swframevalidation.hxx>
-#include <cuires.hrc>
 #include <sfx2/htmlmode.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>

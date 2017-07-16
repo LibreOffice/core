@@ -22,7 +22,6 @@
 #include "frm_resource.hxx"
 #include "InterfaceContainer.hxx"
 #include "componenttools.hxx"
-#include "property.hrc"
 #include "services.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>

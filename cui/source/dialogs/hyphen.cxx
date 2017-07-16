@@ -18,7 +18,6 @@
  */
 
 #include "hyphen.hxx"
-#include "cuires.hrc"
 #include "dialmgr.hxx"
 
 #include <editeng/splwrap.hxx>

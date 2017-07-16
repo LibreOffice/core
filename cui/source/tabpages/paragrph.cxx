@@ -29,7 +29,6 @@
 #include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <editeng/pgrditem.hxx>
-#include <cuires.hrc>
 #include <strings.hrc>
 #include "paragrph.hxx"
 #include <editeng/frmdiritem.hxx>

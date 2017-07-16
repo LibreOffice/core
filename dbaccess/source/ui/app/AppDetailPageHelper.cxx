@@ -51,7 +51,7 @@
 #include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "AppView.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include "strings.hxx"
 #include "callbacks.hxx"

@@ -42,8 +42,8 @@
 #include "svtools/treelistentry.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "fpicker/fpicker.hrc"
-#include "svtools/helpid.hrc"
+#include "fpicker/strings.hrc"
+#include "svtools/helpids.h"
 #include <svtools/strings.hrc>
 #include "strings.hrc"
 #include "bitmaps.hlst"

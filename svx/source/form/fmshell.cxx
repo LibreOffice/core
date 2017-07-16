@@ -21,7 +21,7 @@
 #include <svx/fmshell.hxx>
 #include "svx/fmtools.hxx"
 #include "fmservs.hxx"
-#include "fmprop.hrc"
+#include "fmprop.hxx"
 #include "fmpgeimp.hxx"
 #include "fmitems.hxx"
 #include "fmundo.hxx"

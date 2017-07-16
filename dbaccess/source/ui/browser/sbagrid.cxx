@@ -19,7 +19,7 @@
 
 #include "sbagrid.hrc"
 #include "core_resource.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "uiservices.hxx"
 
 #include <sot/exchange.hxx>

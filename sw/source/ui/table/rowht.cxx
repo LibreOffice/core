@@ -33,7 +33,6 @@
 #include <usrpref.hxx>
 
 #include <cmdid.h>
-#include <table.hrc>
 
 void SwTableHeightDlg::Apply()
 {

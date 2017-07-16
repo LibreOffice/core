@@ -24,7 +24,7 @@
 #include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "WCopyTable.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include "strings.hrc"
 #include <tools/stream.hxx>
 #include <svtools/svparser.hxx>

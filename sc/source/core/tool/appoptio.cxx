@@ -21,14 +21,13 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "cfgids.hxx"
 #include "appoptio.hxx"
 #include "rechead.hxx"
 #include "scresid.hxx"
 #include "global.hxx"
 #include "userlist.hxx"
 #include "sc.hrc"
-#include <formula/compiler.hrc>
+#include <formula/compiler.hxx>
 #include "miscuno.hxx"
 #include <memory>
 

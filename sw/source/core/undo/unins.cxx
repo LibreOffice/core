@@ -55,7 +55,6 @@
 #include <dcontact.hxx>
 
 #include <strings.hrc>
-#include <undo.hrc>
 
 using namespace ::com::sun::star;
 

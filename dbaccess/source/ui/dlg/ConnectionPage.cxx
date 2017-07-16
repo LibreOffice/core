@@ -33,7 +33,7 @@
 #include <svl/intitem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include "dsitems.hxx"
-#include "dbaccess_helpid.hrc"
+#include "helpids.h"
 #include <osl/process.h>
 #include <vcl/msgbox.hxx>
 #include "dbadmin.hxx"

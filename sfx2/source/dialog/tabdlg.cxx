@@ -40,7 +40,7 @@
 #include "uitest/sfx_uiobject.hxx"
 
 #include "sfx2/strings.hrc"
-#include "helpid.hrc"
+#include "helpids.h"
 
 using namespace ::com::sun::star::uno;
 
