@@ -3544,54 +3544,57 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
     OSL_ENSURE( m_rDoc.getIDocumentRedlineAccess().IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );
 
     {
-        SwUndoRedlineDelete* pUndo = nullptr;
+        SwUndo *const pLastUndo( m_rDoc.GetUndoManager().GetLastUndo() );
         RedlineFlags eOld = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
         m_rDoc.GetDocumentRedlineManager().checkRedlining( eOld );
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-
             /* please don't translate -- for cultural reasons this comment is protected
                until the redline implementation is finally fixed some day */
             //JP 06.01.98: MUSS noch optimiert werden!!!
-            m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
-                RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
 
-            pUndo = new SwUndoRedlineDelete( rPam, SwUndoId::DELETE );
-            const SwRewriter aRewriter = pUndo->GetRewriter();
-            m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::DELETE, &aRewriter );
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndo );
+            const SwPosition* pStt = rPam.Start();
+            const SwPosition* pEnd = rPam.End();
+            const SwRedlineTable& rTable = rPam.GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+            SwRedlineTable::size_type n = 0;
+            /* Check whether the delete redline falls inside an existing redline
+               We don't have to add an undo action if the redline lies inside an existing redline.
+               It will be taken care of in DocumentRedlineManager::AppendRedline() that's called below. */
+            for( ; n < rTable.size(); ++n )
+            {
+                SwRangeRedline* pRedl = rTable[ n ];
+                SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRedl->Start(), *pRedl->End() );
+                if ( eCmpPos == SwComparePosition::Inside )
+                    break;
+            }
+
+            if( n == rTable.size() ) // finished search; the redline is not inside another redline
+            {
+                m_rDoc.GetIDocumentUndoRedo().ClearRedo();
+                m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
+                    RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
+
+                bool bMerged(false);
+                if( m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo() )
+                {
+                    SwUndoDelete * const pUndoDel( dynamic_cast< SwUndoDelete* >( pLastUndo ) );
+                    if( pUndoDel )
+                    {
+                        bMerged = pUndoDel->CanGrouping( &m_rDoc, rPam );
+                        // if CanGrouping() returns true it's already merged
+                    }
+                }
+                if( !bMerged )
+                {
+                    m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoDelete( rPam, false, false, true ) );
+                }
+            }
         }
-
         if ( *rPam.GetPoint() != *rPam.GetMark() )
             m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true );
         m_rDoc.getIDocumentState().SetModified();
-
-        if ( pUndo )
-        {
-            m_rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::EMPTY, nullptr );
-            // ??? why the hell is the AppendUndo not below the
-            // CanGrouping, so this hideous cleanup wouldn't be necessary?
-            // bah, this is redlining, probably changing this would break it...
-            if ( m_rDoc.GetIDocumentUndoRedo().DoesGroupUndo() )
-            {
-                SwUndo * const pLastUndo( m_rDoc.GetUndoManager().GetLastUndo() );
-                SwUndoRedlineDelete * const pUndoRedlineDel( dynamic_cast< SwUndoRedlineDelete* >( pLastUndo ) );
-                if ( pUndoRedlineDel )
-                {
-                    bool const bMerged = pUndoRedlineDel->CanGrouping( *pUndo );
-                    if ( bMerged )
-                    {
-                        ::sw::UndoGuard const undoGuard( m_rDoc.GetIDocumentUndoRedo() );
-                        SwUndo const* const pDeleted = m_rDoc.GetUndoManager().RemoveLastUndo();
-                        OSL_ENSURE( pDeleted == pUndo, "DeleteAndJoinWithRedlineImpl: "
-                            "undo removed is not undo inserted?" );
-                        delete pDeleted;
-                    }
-                }
-            }
             //JP 06.01.98: MUSS noch optimiert werden!!!
-            m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
-        }
+        m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
         return true;
     }
 }

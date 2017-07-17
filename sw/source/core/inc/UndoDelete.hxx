@@ -59,6 +59,7 @@ class SwUndoDelete
     bool m_bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
     bool m_bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
     bool m_bFromTableCopy : 1; // TRUE: called by SwUndoTableCpyTable
+    bool m_bFromRedlineDelete : 1; // TRUE: called by SwUndoRedlineDelete
 
     bool SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTextNode* pSttTextNd, SwTextNode* pEndTextNd );
@@ -67,7 +68,8 @@ public:
     SwUndoDelete(
         SwPaM&,
         bool bFullPara = false,
-        bool bCalledByTableCpy = false );
+        bool bCalledByTableCpy = false,
+        bool bCalledByRedlineDelete = false );
     virtual ~SwUndoDelete() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
