@@ -1787,7 +1787,7 @@ STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *_
                             reinterpret_cast<hyper>(&accRelation));
                     wrapper->Release();
                 }
-                (relation)[i] = pRelation;
+                relation[i] = pRelation;
             }
         }
 

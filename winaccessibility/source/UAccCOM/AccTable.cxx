@@ -471,7 +471,7 @@ STDMETHODIMP CAccTable::get_selectedRows(long, long ** rows, long * nRows)
     long count = pSelected.getLength() ;
     *nRows = count;
 
-    *rows = static_cast<long*>(CoTaskMemAlloc((count) * sizeof(long)));
+    *rows = static_cast<long*>(CoTaskMemAlloc(count * sizeof(long)));
     // #CHECK Memory Allocation#
     if(*rows == nullptr)
     {
@@ -510,7 +510,7 @@ STDMETHODIMP CAccTable::get_selectedColumns(long, long ** columns, long * numCol
     long count = pSelected.getLength() ;
     *numColumns = count;
 
-    *columns = static_cast<long*>(CoTaskMemAlloc((count) * sizeof(long)));
+    *columns = static_cast<long*>(CoTaskMemAlloc(count * sizeof(long)));
     // #CHECK Memory Allocation#
     if(*columns == nullptr)
     {
@@ -997,7 +997,7 @@ STDMETHODIMP CAccTable::get_selectedChildren(long, long **children, long *nChild
 
     *nChildren = childCount;
 
-    *children = static_cast<long*>(CoTaskMemAlloc((childCount) * sizeof(long)));
+    *children = static_cast<long*>(CoTaskMemAlloc(childCount * sizeof(long)));
 
     for( long i = 0; i< childCount; i++)
     {
