@@ -114,7 +114,7 @@ Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString
         GpgME::Key k = m_ctx->nextKey(err);
         if (err)
             break;
-        if (!k.isInvalid() && strcmp(k.keyID(), reinterpret_cast<const char*>(strKeyId)) == 0) {
+        if (!k.isInvalid() && strcmp(k.primaryFingerprint(), reinterpret_cast<const char*>(strKeyId)) == 0) {
             xCert = new CertificateImpl();
             xCert->setCertificate(m_ctx.get(), k);
             m_ctx->endKeyListing();
