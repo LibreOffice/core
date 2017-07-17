@@ -30,7 +30,6 @@
 #include "ftools.hxx"
 #include "cellvalue.hxx"
 #include <rtl/strbuf.hxx>
-#include <osl/diagnose.h>
 #include <formula/errorcodes.hxx>
 
 void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
@@ -50,8 +49,8 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
 void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     const ScRange&rRange, const rtl_TextEncoding eCharSet )
 {
-    OSL_ENSURE( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range not sorted!" );
-    OSL_ENSURE( rRange.aStart.Tab() == rRange.aEnd.Tab(),
+    SAL_WARN_IF( rRange.aStart <= rRange.aEnd, "sc", "*ScExportDif(): Range not sorted!" );
+    SAL_WARN_IF( rRange.aStart.Tab() != rRange.aEnd.Tab(), "sc",
         "ScExportDif(): only one table please!" );
 
     const rtl_TextEncoding eStreamCharSet = rOut.GetStreamCharSet();
@@ -104,7 +103,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     aPrgrsBar.SetState( 0 );
 
     // TABLE
-    OSL_ENSURE( pDoc->HasTable( nTab ), "*ScExportDif(): Table not existent!" );
+    SAL_WARN_IF( !pDoc->HasTable( nTab ), "sc", "*ScExportDif(): Table not existent!" );
 
     aOS.append(pKeyTABLE);
     aOS.append("\n0,1\n\"");
@@ -141,14 +140,14 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
 
     for( nRowCnt = rRange.aStart.Row() ; nRowCnt <= nEndRow ; nRowCnt++ )
     {
-        OSL_ASSERT(aOS.getLength() == 0);
+        SAL_WARN_IF( aOS.getLength() != 0, "sc", "String buffer not empty" );
         aOS.append(pSpecDataType_LF);
         aOS.append(pKeyBOT);
         aOS.append('\n');
         rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
         for( nColCnt = rRange.aStart.Col() ; nColCnt <= nEndCol ; nColCnt++ )
         {
-            OSL_ASSERT(aOS.getLength() == 0);
+            SAL_WARN_IF( aOS.getLength() != 0, "sc", "String buffer not empty" );
             bool bWriteStringData = false;
             ScRefCellValue aCell(*pDoc, ScAddress(nColCnt, nRowCnt, nTab));
 
@@ -196,7 +195,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                 // sc/source/ui/docsh.cxx:ScDocShell::AsciiSave()
                 // In fact we should create a common method if this would be
                 // needed just one more time..
-                OSL_ASSERT(aOS.getLength() == 0);
+                SAL_WARN_IF( aOS.getLength() != 0, "sc", "String buffer not empty" );
                 OUString aTmpStr = aString;
                 aOS.append(pStringData);
                 rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear(), eCharSet);
@@ -257,7 +256,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
         aPrgrsBar.SetState( nRowCnt );
     }
 
-    OSL_ASSERT(aOS.getLength() == 0);
+    SAL_WARN_IF( aOS.getLength() != 0, "sc", "String buffer not empty" );
     aOS.append(pSpecDataType_LF);
     aOS.append(pKeyEOD);
     aOS.append('\n');
