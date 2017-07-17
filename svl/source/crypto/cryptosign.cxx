@@ -2282,10 +2282,9 @@ bool Signing::Verify(SvStream& rStream,
     // Not implemented.
     (void)rStream;
     (void)aByteRanges;
-    (void)bNonDetected;
+    (void)bNonDetached;
     (void)aSignature;
     (void)rInformation;
-static_assert(false, "WHAT!!!");
     return false;
 #endif
 }
