@@ -1790,6 +1790,10 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         {
             if (nSeenInIteration > 0)
                 --nSeenInIteration;     // retry when iteration is resumed
+
+            if ( aResult.GetType() == formula::svUnknown )
+                aResult.SetToken( pInterpreter->GetResultToken().get() );
+
             return;
         }
         bRunning = bOldRunning;
