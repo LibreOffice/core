@@ -39,14 +39,14 @@ public:
     void savePackage();
 
     /// @throws css::uno::Exception
-    void addFile( css::uno::Reference< css::uno::XInterface >& xRootFolder,
+    void addFile( css::uno::Reference< css::uno::XInterface > const & xRootFolder,
                   const OUString& rSourceFile );
 
     /// @throws css::uno::Exception
-    css::uno::Reference< css::uno::XInterface > addFolder( css::uno::Reference< css::uno::XInterface >& xRootFolder,
+    css::uno::Reference< css::uno::XInterface > addFolder( css::uno::Reference< css::uno::XInterface > const & xRootFolder,
                                                            const OUString& rName );
 
-    void addFolderWithContent( css::uno::Reference< css::uno::XInterface >& xRootFolder,
+    void addFolderWithContent( css::uno::Reference< css::uno::XInterface > const & xRootFolder,
                                const OUString& rDirURL );
 
     css::uno::Reference< css::uno::XInterface >& getRootFolder();

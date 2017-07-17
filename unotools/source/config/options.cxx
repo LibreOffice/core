@@ -50,7 +50,7 @@ void ConfigurationBroadcaster::AddListener( utl::ConfigurationListener* pListene
     mpList->push_back( pListener );
 }
 
-void ConfigurationBroadcaster::RemoveListener( utl::ConfigurationListener* pListener )
+void ConfigurationBroadcaster::RemoveListener( utl::ConfigurationListener const * pListener )
 {
     if ( mpList ) {
         for ( IMPL_ConfigurationListenerList::iterator it = mpList->begin();

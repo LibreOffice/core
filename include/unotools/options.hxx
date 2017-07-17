@@ -73,7 +73,7 @@ namespace utl {
 
     public:
         void AddListener( utl::ConfigurationListener* pListener );
-        void RemoveListener( utl::ConfigurationListener* pListener );
+        void RemoveListener( utl::ConfigurationListener const * pListener );
 
         // notify listeners; nHint is an implementation detail of the particular class deriving from ConfigurationBroadcaster
         void NotifyListeners( ConfigurationHints nHint );

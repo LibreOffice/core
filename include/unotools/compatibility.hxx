@@ -127,7 +127,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
             return aValue;
         }
 
-        void setValue( const Index rIdx, css::uno::Any& rValue )
+        void setValue( const Index rIdx, css::uno::Any const & rValue )
         {
             if ( static_cast<size_t>(rIdx) < getElementCount() )
             {

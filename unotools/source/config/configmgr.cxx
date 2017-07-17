@@ -145,7 +145,7 @@ utl::ConfigManager & utl::ConfigManager::getConfigManager() {
 }
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
-utl::ConfigManager::acquireTree(utl::ConfigItem & item) {
+utl::ConfigManager::acquireTree(utl::ConfigItem const & item) {
     css::uno::Sequence< css::uno::Any > args(1);
     args[0] <<= css::beans::NamedValue(
         "nodepath",

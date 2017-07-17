@@ -698,7 +698,7 @@ bool ConfigItem::ClearNodeSet(const OUString& rNode)
     return bRet;
 }
 
-bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& rElements)
+bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString > const & rElements)
 {
     ValueCounter_Impl aCounter(m_nInValueChange);
     bool bRet = false;
