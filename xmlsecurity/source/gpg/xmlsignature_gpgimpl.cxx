@@ -366,8 +366,10 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         // TODO: needs some more error handling, needs checking _all_ signatures
         if( verify_res.isNull() || verify_res.numSignatures() == 0 )
         {
-            // let's try again, but this time import the public key payload
-            // (avoiding that in a first cut for being a bit speedier)
+            // let's try again, but this time import the public key
+            // payload (avoiding that in a first cut for being a bit
+            // speedier. also prevents all too easy poisoning/sha1
+            // fingerprint collision attacks)
 
             // walk xml tree to PGPData node - go to children, first is
             // SignedInfo, 2nd is signaturevalue, 3rd is KeyInfo
