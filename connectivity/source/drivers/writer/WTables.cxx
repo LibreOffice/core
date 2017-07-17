@@ -17,15 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "writer/WCatalog.hxx"
 #include "writer/WTables.hxx"
 
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <sal/config.h>
 
-#include <connectivity/sdbcx/VCollection.hxx>
+#include <comphelper/types.hxx>
 
-#include "writer/WConnection.hxx"
+#include <writer/WConnection.hxx>
+#include "file/FCatalog.hxx"
+#include "file/FConnection.hxx"
+#include "writer/WCatalog.hxx"
 
 using namespace ::com::sun::star;
 
@@ -34,27 +35,11 @@ namespace connectivity
 namespace writer
 {
 
-OWriterCatalog::OWriterCatalog(OWriterConnection* pConnection) : file::OFileCatalog(pConnection)
+sdbcx::ObjectType OWriterTables::createObject(const OUString& /*rName*/)
 {
-}
-
-void OWriterCatalog::refreshTables()
-{
-    TStringVector aVector;
-    uno::Sequence<OUString> aTypes;
-    OWriterConnection::ODocHolder aDocHolder(static_cast<OWriterConnection*>(m_pConnection));
-    uno::Reference< sdbc::XResultSet > xResult = m_xMetaData->getTables(uno::Any(), "%", "%", aTypes);
-
-    if (xResult.is())
-    {
-        uno::Reference< sdbc::XRow > xRow(xResult, uno::UNO_QUERY);
-        while (xResult->next())
-            aVector.push_back(xRow->getString(3));
-    }
-    if (m_pTables)
-        m_pTables->reFill(aVector);
-    else
-        m_pTables = new OWriterTables(m_xMetaData, *this, m_aMutex, aVector);
+    sdbcx::ObjectType xRet;
+    SAL_WARN("connectivity.writer", "TODO implement OWriterTables::createObject()");
+    return xRet;
 }
 
 } // namespace writer
