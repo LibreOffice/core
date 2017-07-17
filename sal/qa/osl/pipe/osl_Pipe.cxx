@@ -520,7 +520,7 @@ namespace osl_Pipe
     public:
         bool bRes, bRes1;
 
-        void getError_001( )
+        void getError_openNonExistentPipe( )
             {
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );
                 oslPipeError nError = aPipe.getError( );
@@ -531,7 +531,7 @@ namespace osl_Pipe
                                         nError != osl_Pipe_E_None );
             }
 
-        void getError_002( )
+        void getError_openExistingPipe( )
             {
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 ::osl::Pipe aPipe1( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
@@ -545,8 +545,8 @@ namespace osl_Pipe
             }
 
         CPPUNIT_TEST_SUITE( getError );
-        CPPUNIT_TEST( getError_001 );
-        CPPUNIT_TEST( getError_002 );
+        CPPUNIT_TEST( getError_openNonExistentPipe );
+        CPPUNIT_TEST( getError_openExistingPipe );
         CPPUNIT_TEST_SUITE_END( );
     };
 
