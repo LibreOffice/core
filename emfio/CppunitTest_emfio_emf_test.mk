@@ -9,15 +9,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,emfio_emf))
 
-$(eval $(call gb_CppunitTest_set_componentfile,emfio_emf,emfio/emfio))
-
-$(eval $(call gb_CppunitTest_set_include,emfio_emf,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/emfio/inc \
-))
-
 $(eval $(call gb_CppunitTest_use_externals,emfio_emf,\
-    boost_headers \
     libxml2 \
 ))
 
@@ -27,16 +19,13 @@ $(eval $(call gb_CppunitTest_add_exception_objects,emfio_emf,\
 
 $(eval $(call gb_CppunitTest_use_sdk_api,emfio_emf))
 
-$(eval $(call gb_CppunitTest_use_library_objects,emfio_emf,\
-    emfio \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,emfio_emf,\
     basegfx \
     drawinglayer \
     cppu \
     cppuhelper \
     comphelper \
+    emfio \
     sal \
     svt \
     test \
@@ -52,6 +41,7 @@ $(eval $(call gb_CppunitTest_use_vcl,emfio_emf))
 $(eval $(call gb_CppunitTest_use_components,emfio_emf,\
     configmgr/source/configmgr \
     dtrans/util/mcnttype \
+    emfio/emfio \
     framework/util/fwk \
     i18npool/util/i18npool \
     package/source/xstor/xstor \

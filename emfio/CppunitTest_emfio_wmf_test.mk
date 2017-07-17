@@ -9,8 +9,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,emfio_wmf))
 
-$(eval $(call gb_CppunitTest_set_componentfile,emfio_wmf,emfio/emfio))
-
 $(eval $(call gb_CppunitTest_set_include,emfio_wmf,\
     $$(INCLUDE) \
     -I$(SRCDIR)/emfio/inc \
@@ -28,10 +26,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,emfio_wmf, \
 
 $(eval $(call gb_CppunitTest_use_sdk_api,emfio_wmf))
 
-$(eval $(call gb_CppunitTest_use_library_objects,emfio_wmf, \
-    emfio \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,emfio_wmf,\
     $(call gb_Helper_optional,BREAKPAD, \
                crashreport) \
@@ -40,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,emfio_wmf,\
     cppu \
     cppuhelper \
     comphelper \
+    emfio \
     i18nlangtag \
     i18nutil \
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
