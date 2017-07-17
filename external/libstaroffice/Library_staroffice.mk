@@ -24,7 +24,7 @@ $(eval $(call gb_Library_set_include,staroffice,\
 
 $(eval $(call gb_Library_add_defs,staroffice,\
 	-DBUILD_STOFF \
-	-DDLL_EXPORT \
+	-D_WINDLL \
 	-DNDEBUG \
 	-DSHAREDPTR_STD \
 ))
