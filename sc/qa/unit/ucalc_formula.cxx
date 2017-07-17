@@ -8235,4 +8235,38 @@ void Test::testFuncRefListArraySUBTOTAL()
     m_pDoc->DeleteTab(0);
 }
 
+// Test iterations with circular chain of references.
+void Test::testIterations()
+{
+    ScDocOptions aDocOpts = m_pDoc->GetDocOptions();
+    aDocOpts.SetIter( true );
+    m_pDoc->SetDocOptions( aDocOpts );
+
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetValue( 0, 0, 0, 0.01 );         // A1
+    m_pDoc->SetString( 0, 1, 0, "=A1" );       // A2
+    m_pDoc->SetString( 0, 2, 0, "=COS(A2)" );  // A3
+    m_pDoc->CalcAll();
+
+    // Establish reference cycle for the computation of the fixed point of COS() function
+    m_pDoc->SetString( 0, 0, 0, "=A3" );       // A1
+    m_pDoc->CalcAll();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Cell A3 should not have any formula error", FormulaError::NONE, m_pDoc->GetErrCode( ScAddress( 0, 2, 0) ) );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Iterations to calculate fixed point of cos() failed", 0.7387, m_pDoc->GetValue(0, 2, 0), 1e-4 );
+
+    // Modify the formula
+    m_pDoc->SetString( 0, 2, 0, "=COS(A2)+0.001" );  // A3
+    m_pDoc->CalcAll();
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Cell A3 should not have any formula error after perturbation", FormulaError::NONE, m_pDoc->GetErrCode( ScAddress( 0, 2, 0) ) );
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Iterations to calculate perturbed fixed point of cos() failed", 0.7399, m_pDoc->GetValue(0, 2, 0), 1e-4 );
+
+    m_pDoc->DeleteTab(0);
+
+    aDocOpts.SetIter( false );
+    m_pDoc->SetDocOptions( aDocOpts );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
