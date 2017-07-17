@@ -117,7 +117,7 @@ namespace osl_Pipe
     class ctors : public CppUnit::TestFixture
     {
     public:
-        bool bRes, bRes1;
+        bool bRes, bRes1, bRes2;
 
         void ctors_none( )
             {
@@ -165,47 +165,49 @@ namespace osl_Pipe
                                         bRes );
             }
 
-        /**  tester comment:
-
-        When test the following two constructors, don't know how to test the
-        acquire and no acquire action. possible plans:
-        1.release one handle and check the other( did not success since the
-        other still exist and valid. )
-        2. release one handle twice to see getLastError( )(the getLastError
-        always returns invalidError(LINUX)).
-        */
-
         void ctors_no_acquire( )
             {
                 /// create a pipe.
-                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                osl_acquirePipe(aPipe.getHandle());
+                ::osl::Pipe* pPipe = new ::osl::Pipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 /// constructs a pipe reference without acquiring the handle.
-                ::osl::Pipe aNoAcquirePipe( aPipe.getHandle( ), SAL_NO_ACQUIRE );
+                ::osl::Pipe* pNoAcquirePipe = new ::osl::Pipe( pPipe->getHandle( ), SAL_NO_ACQUIRE );
 
-                bRes = aNoAcquirePipe.is( );
-                ///aPipe.clear( );
-                ///bRes1 = aNoAcquirePipe.is( );
+                StreamPipe aStreamPipe(pPipe->getHandle());
+                delete pNoAcquirePipe;
+                int nRet = aStreamPipe.send("a", 1);
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle, only validation test, do not know how to test no acquire.",
+                if (nRet >= 0)
+                    bRes = false;
+                else
+                    bRes = true;
+
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle, deleted nonacquired pipe but could still send on original pipe!.",
                                         bRes );
             }
 
+
+        /* Note: DO NOT DO THIS - I have very deliberately caused send to FAIL, *on purpose* as this is the
+           only sane way to test noacquire. This is a terrible misuse of no-acquire, but in this case is
+           needed only so we can test to make sure no-acquire is working!
+         */
         void ctors_acquire( )
             {
                 /// create a base pipe.
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                /// constructs two pipes without acquiring the handle on the base pipe.
+                /// constructs two pipes, the second acquires the first pipe's handle.
                 ::osl::Pipe aAcquirePipe( aPipe.getHandle( ) );
                 ::osl::Pipe aAcquirePipe1( nullptr );
 
-                bRes = aAcquirePipe.is( );
-                bRes1 = aAcquirePipe1.is( );
+                bRes = aAcquirePipe.is();
+                bRes1 = aAcquirePipe1.is();
+                bRes2 = aPipe == aAcquirePipe;
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle.only validation test, do not know how to test no acquire.",
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with acquire of handle, original pipe does not exist.",
                                         bRes );
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with no acquire of handle.only validation test, do not know how to test no acquire.",
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with acquire of handle, copied pipe does not exist",
                                         !bRes1 );
+
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: test pipes should have same handle", bRes2);
             }
 
         CPPUNIT_TEST_SUITE( ctors );
