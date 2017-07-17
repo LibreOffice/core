@@ -210,7 +210,7 @@ void ImplSalYieldMutexAcquireWithWait( sal_uLong nCount )
                 osl::Condition::Result res = rCondition.wait();
                 assert(osl::Condition::Result::result_ok == res);
             }
-            while ( 1 );
+            while ( true );
             --nCount;
         }
     }
