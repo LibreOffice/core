@@ -877,6 +877,8 @@ namespace svl {
 
 namespace crypto {
 
+#if defined(SVL_CRYPTO_NSS) || defined(SVL_CRYPTO_MSCRYPTO)
+
 bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 {
     // Create the PKCS#7 object.
@@ -1647,6 +1649,13 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     return true;
 #endif
 }
+#else
+bool Signing::Sign(OStringBuffer&)
+{
+    return false;
+}
+#endif //!SVL_CRYPTO_NSS && !SVL_CRYPTO_MSCRYPTO
+
 
 namespace
 {
