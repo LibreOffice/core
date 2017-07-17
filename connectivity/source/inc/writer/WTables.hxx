@@ -17,18 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "calc/CStatement.hxx"
-#include "calc/CResultSet.hxx"
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLES_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLES_HXX
 
-using namespace connectivity::calc;
-using namespace connectivity::file;
-using namespace com::sun::star::uno;
+#include "file/FTables.hxx"
 
-OResultSet* OCalcStatement::createResultSet()
+namespace connectivity
 {
-    return new OCalcResultSet(this,m_aSQLIterator);
+namespace writer
+{
+typedef file::OTables OWriterTables_BASE;
+
+class OWriterTables : public OWriterTables_BASE
+{
+protected:
+    virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+public:
+    OWriterTables(const css::uno::Reference<css::sdbc::XDatabaseMetaData>& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+                  const TStringVector& _rVector) : OWriterTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
+    {}
+};
+}
 }
 
-IMPLEMENT_SERVICE_INFO(OCalcStatement,"com.sun.star.sdbc.driver.calc.Statement","com.sun.star.sdbc.Statement");
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

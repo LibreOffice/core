@@ -40,12 +40,8 @@ $(eval $(call gb_Library_use_libraries,calc,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,calc,\
-	connectivity/source/drivers/calc/CResultSet \
-	connectivity/source/drivers/calc/CStatement \
-	connectivity/source/drivers/calc/CPreparedStatement \
 	connectivity/source/drivers/calc/CDatabaseMetaData \
 	connectivity/source/drivers/calc/CCatalog \
-	connectivity/source/drivers/calc/CColumns \
 	connectivity/source/drivers/calc/CTable \
 	connectivity/source/drivers/calc/CTables \
 	connectivity/source/drivers/calc/CConnection \

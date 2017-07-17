@@ -34,6 +34,11 @@ String STR_CALC_PATH_OR_FILE
     Text[ en-US ] = "Path to the spreadsheet document";
 };
 
+String STR_WRITER_PATH_OR_FILE
+{
+    Text[ en-US ] = "Path to the Writer document";
+};
+
 String STR_NAME_OF_ODBC_DATASOURCE
 {
     Text[ en-US ] = "Name of the ODBC data source on your system";

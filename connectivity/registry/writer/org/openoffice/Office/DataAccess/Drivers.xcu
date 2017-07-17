@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ -->
+<oor:component-data oor:name="Drivers" oor:package="org.openoffice.Office.DataAccess" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <node oor:name="Installed" install:module="writer">
+    <node oor:name="sdbc:writer:*" oor:op="replace">
+      <prop oor:name="Driver">
+        <value>com.sun.star.comp.sdbc.writer.ODriver</value>
+      </prop>
+      <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
+        <value xml:lang="en-US">Writer Document</value>
+      </prop>
+      <node oor:name="Features">
+        <node oor:name="EscapeDateTime" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+      </node>
+      <node oor:name="MetaData">
+        <node oor:name="SupportsBrowsing" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="FileSystemBased" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
+        <node oor:name="MediaType" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:string">
+            <value>application/vnd.oasis.opendocument.text</value>
+          </prop>
+        </node>
+      </node>
+    </node>
+  </node>
+</oor:component-data>

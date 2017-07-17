@@ -17,18 +17,34 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "calc/CPreparedStatement.hxx"
-#include "calc/CResultSet.hxx"
+#include "writer/WTables.hxx"
 
-using namespace connectivity::calc;
-using namespace connectivity::file;
-using namespace com::sun::star::uno;
+#include <sal/config.h>
 
-OResultSet* OCalcPreparedStatement::createResultSet()
+#include <comphelper/types.hxx>
+
+#include <writer/WConnection.hxx>
+#include "file/FCatalog.hxx"
+#include "file/FConnection.hxx"
+#include "writer/WCatalog.hxx"
+#include "writer/WTable.hxx"
+
+using namespace ::com::sun::star;
+
+namespace connectivity
 {
-    return new OCalcResultSet(this,m_aSQLIterator);
+namespace writer
+{
+
+sdbcx::ObjectType OWriterTables::createObject(const OUString& rName)
+{
+    OWriterTable* pTable = new OWriterTable(this, static_cast<OWriterConnection*>(static_cast<file::OFileCatalog&>(m_rParent).getConnection()), rName, "TABLE");
+    sdbcx::ObjectType xRet = pTable;
+    pTable->construct();
+    return xRet;
 }
 
-IMPLEMENT_SERVICE_INFO(OCalcPreparedStatement,"com.sun.star.sdbc.driver.calc.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
+} // namespace writer
+} // namespace connectivity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

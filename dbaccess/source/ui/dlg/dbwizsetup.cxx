@@ -120,7 +120,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
     , m_sRM_OracleText( ModuleRes( STR_PAGETITLE_ORACLE ) )
     , m_sRM_MySQLText( ModuleRes( STR_PAGETITLE_MYSQL ) )
     , m_sRM_ODBCText( ModuleRes( STR_PAGETITLE_ODBC ) )
-    , m_sRM_SpreadSheetText( ModuleRes( STR_PAGETITLE_SPREADSHEET ) )
+    , m_sRM_DocumentOrSpreadSheetText( ModuleRes( STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET ) )
     , m_sRM_AuthentificationText( ModuleRes( STR_PAGETITLE_AUTHENTIFICATION ) )
     , m_sRM_FinalText( ModuleRes( STR_PAGETITLE_FINAL ) )
     , m_sWorkPath( SvtPathOptions().GetWorkPath() )
@@ -240,8 +240,8 @@ OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
         case PAGE_DBSETUPWIZARD_ODBC:
             sRoadmapItem = m_sRM_ODBCText;
             break;
-        case PAGE_DBSETUPWIZARD_SPREADSHEET:
-            sRoadmapItem = m_sRM_SpreadSheetText;
+        case PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET:
+            sRoadmapItem = m_sRM_DocumentOrSpreadSheetText;
             break;
         case PAGE_DBSETUPWIZARD_AUTHENTIFICATION:
             sRoadmapItem = m_sRM_AuthentificationText;
@@ -520,8 +520,8 @@ VclPtr<TabPage> ODbTypeWizDialogSetup::createPage(WizardState _nState)
             pPage = OLDAPConnectionPageSetup::CreateLDAPTabPage(this,*m_pOutSet);
             break;
 
-        case PAGE_DBSETUPWIZARD_SPREADSHEET:    /// first user defined driver
-            pPage = OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage(this,*m_pOutSet);
+        case PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET:
+            pPage = OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage(this,*m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MSACCESS:
