@@ -216,7 +216,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( ctors_no_acquire );
         CPPUNIT_TEST( ctors_acquire );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class ctors
+    };
 
     /** testing the method:
         inline sal_Bool SAL_CALL is() const;
@@ -259,7 +259,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( is_003 );
         CPPUNIT_TEST( is_004 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class is
+    };
 
     /** testing the methods:
         inline sal_Bool create( const ::rtl::OUString & strName,
@@ -349,7 +349,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( create_named_002 );
         CPPUNIT_TEST( create_named_003 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class create
+    };
 
     /** testing the method:
         inline void SAL_CALL clear();
@@ -373,7 +373,7 @@ namespace osl_Pipe
         CPPUNIT_TEST_SUITE( clear );
         CPPUNIT_TEST( clear_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class clear
+    };
 
     /** testing the methods:
         inline Pipe& SAL_CALL operator= (const Pipe& pipe);
@@ -420,7 +420,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( assign_ref );
         CPPUNIT_TEST( assign_handle );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class assign
+    };
 
     /** testing the method:
         inline sal_Bool SAL_CALL isValid() const;
@@ -470,7 +470,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( isEqual_001 );
         CPPUNIT_TEST( isEqual_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class isEqual
+    };
 
     /** testing the method:
         inline void SAL_CALL close();
@@ -509,7 +509,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( close_001 );
         CPPUNIT_TEST( close_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class close
+    };
 
     /** testing the method:
         inline oslPipeError SAL_CALL accept(StreamPipe& Connection);
@@ -552,7 +552,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( getError_001 );
         CPPUNIT_TEST( getError_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getError
+    };
 
     /** testing the method:
         inline oslPipe SAL_CALL getHandle() const;
@@ -588,7 +588,7 @@ namespace osl_Pipe
         CPPUNIT_TEST( getHandle_001 );
         CPPUNIT_TEST( getHandle_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getHandle
+    };
 
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::is);
@@ -726,7 +726,7 @@ namespace osl_StreamPipe
         CPPUNIT_TEST( ctors_name_option_security );
         CPPUNIT_TEST( ctors_no_acquire );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class ctors
+    };
 
     /** testing the methods:
         inline StreamPipe & SAL_CALL operator=(oslPipe Pipe);
@@ -885,7 +885,7 @@ namespace osl_StreamPipe
         CPPUNIT_TEST( recv_001 );
         CPPUNIT_TEST( recv_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class recv
+    };
 
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::ctors);
 //CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::assign);
