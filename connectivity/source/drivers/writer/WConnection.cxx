@@ -19,6 +19,7 @@
 
 #include "writer/WConnection.hxx"
 #include "writer/WDatabaseMetaData.hxx"
+#include "writer/WCatalog.hxx"
 #include "writer/WDriver.hxx"
 #include "resource/sharedresources.hxx"
 #include "resource/common_res.hrc"
@@ -203,13 +204,15 @@ uno::Reference< sdbc::XDatabaseMetaData > SAL_CALL OWriterConnection::getMetaDat
 }
 
 
-css::uno::Reference< sdbcx::XTablesSupplier > OWriterConnection::createCatalog()
+css::uno::Reference< css::sdbcx::XTablesSupplier > OWriterConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    uno::Reference< sdbcx::XTablesSupplier > xTab = m_xCatalog;
+    uno::Reference< css::sdbcx::XTablesSupplier > xTab = m_xCatalog;
     if (!xTab.is())
     {
-        SAL_WARN("connectivity.writer", "TODO implement OWriterConnection::createCatalog()");
+        OWriterCatalog* pCat = new OWriterCatalog(this);
+        xTab = pCat;
+        m_xCatalog = xTab;
     }
     return xTab;
 }
