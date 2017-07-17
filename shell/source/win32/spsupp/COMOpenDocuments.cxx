@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <cstring>
+#include <vector>
 
 #include "COMOpenDocuments.hpp"
 #include "spsuppServ.hpp"
@@ -62,13 +63,12 @@ HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecur
             0, nullptr);
 
         size_t nBufSize = wcslen(sMsgBuf) + 100;
-        wchar_t* sDisplayBuf = new wchar_t[nBufSize];
-        swprintf(sDisplayBuf, nBufSize, L"Could not start LibreOffice. Error is 0x%08X:\n\n%s", dwError, sMsgBuf);
+        std::vector<wchar_t> sDisplayBuf(nBufSize);
+        swprintf(sDisplayBuf.data(), nBufSize, L"Could not start LibreOffice. Error is 0x%08X:\n\n%s", dwError, sMsgBuf);
         LocalFree(sMsgBuf);
 
         // Report the error to user and return error
-        MessageBoxW(nullptr, sDisplayBuf, nullptr, MB_ICONERROR);
-        delete[](sDisplayBuf);
+        MessageBoxW(nullptr, sDisplayBuf.data(), nullptr, MB_ICONERROR);
         return HRESULT_FROM_WIN32(dwError);
     }
     CloseHandle(pi.hProcess);
