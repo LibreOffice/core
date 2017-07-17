@@ -1263,10 +1263,10 @@ void TYPEREG_CALLTYPE typereg_reader_release(void * hEntry)
     }
 }
 
-typereg_Version TYPEREG_CALLTYPE typereg_reader_getVersion(void * handle) {
+typereg_Version TYPEREG_CALLTYPE typereg_reader_getVersion(void const * handle) {
     if (handle != nullptr) {
         try {
-            return static_cast< TypeRegistryEntry * >(handle)->getVersion();
+            return static_cast< TypeRegistryEntry const * >(handle)->getVersion();
         } catch (BlopObject::BoundsError &) {
             SAL_WARN("registry", "bad data");
         }

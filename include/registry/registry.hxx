@@ -216,7 +216,7 @@ protected:
         @param phKeys points to an array of open keys.
         @param length specifies the length of the array specified by phKeys.
      */
-    inline void setKeyHandles(Registry& registry, RegKeyHandle* phKeys, sal_uInt32 length);
+    inline void setKeyHandles(Registry const & registry, RegKeyHandle* phKeys, sal_uInt32 length);
 
     /// stores the number of open subkeys, the number of elements.
     sal_uInt32      m_length;
@@ -254,7 +254,7 @@ protected:
         @param pKeyNames points to an array of key names.
         @param length specifies the length of the array specified by pKeyNames.
      */
-    inline void setKeyNames(Registry& registry, rtl_uString** pKeyNames, sal_uInt32 length);
+    inline void setKeyNames(Registry const & registry, rtl_uString** pKeyNames, sal_uInt32 length);
 
     /// stores the number of key names, the number of elements.
     sal_uInt32      m_length;
@@ -560,7 +560,7 @@ public:
 protected:
     /** sets the internal registry on which this key should work.
      */
-    inline void setRegistry(Registry& registry);
+    inline void setRegistry(Registry const & registry);
 
     /// @endcond
 
@@ -596,7 +596,7 @@ inline sal_uInt32 RegistryKeyArray::getLength()
     return m_length;
 }
 
-inline void RegistryKeyArray::setKeyHandles(Registry& registry,
+inline void RegistryKeyArray::setKeyHandles(Registry const & registry,
                                             RegKeyHandle* phKeys,
                                             sal_uInt32 length)
 {
@@ -631,7 +631,7 @@ inline sal_uInt32 RegistryKeyNames::getLength()
     return m_length;
 }
 
-inline void RegistryKeyNames::setKeyNames(Registry& registry,
+inline void RegistryKeyNames::setKeyNames(Registry const & registry,
                                           rtl_uString** pKeyNames,
                                           sal_uInt32 length)
 {
@@ -663,7 +663,7 @@ inline RegistryKey::RegistryKey(const RegistryKey& toCopy)
     }
 
 /// @cond INTERNAL
-inline void RegistryKey::setRegistry(Registry& registry)
+inline void RegistryKey::setRegistry(Registry const & registry)
     {
         m_registry = registry;
     }
