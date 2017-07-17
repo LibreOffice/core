@@ -22,6 +22,7 @@ template<typename T> void f() {
     int i = sizeof (T) + 1; // expected-error {{var used only once, should be inlined or declared const [loplugin:oncevar]}}
     call_value(i); // expected-note {{used here [loplugin:oncevar]}}
 }
+template void f<int>(); // needed for clang-cl
 
 int main() {
 /* TODO
