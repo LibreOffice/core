@@ -889,7 +889,10 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 bDelete = true;
                         }
                         else if( SwComparePosition::Inside == eCmpPos || SwComparePosition::Equal == eCmpPos)
+                        {
+                            bMerged = true;
                             bDelete = true;
+                        }
 
                         if( bDelete )
                         {
