@@ -507,10 +507,11 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             i = *itr;
             aPos.SetTab( i );
-            sal_uLong nIndex = (sal_uLong) static_cast<const SfxUInt32Item*>( pDoc->GetAttr(
-                nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
-            if ( pFormatter->GetType( nIndex ) == css::util::NumberFormat::TEXT ||
-                 ( ( rString[0] == '+' || rString[0] == '-' ) && nError != FormulaError::NONE && rString == aFormula ) )
+            const sal_uInt32 nIndex = static_cast<const SfxUInt32Item*>( pDoc->GetAttr(
+                        nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
+            const sal_Int16 nType = pFormatter->GetType( nIndex);
+            if (nType == css::util::NumberFormat::TEXT ||
+                    ((rString[0] == '+' || rString[0] == '-') && nError != FormulaError::NONE && rString == aFormula))
             {
                 if ( pData )
                 {
@@ -529,6 +530,23 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     pCell->SetErrCode( nError );
                     if(pCell->GetCode()->IsHyperLink())
                         pCell->GetCode()->SetHyperLink(false);
+                }
+                if (nType == css::util::NumberFormat::LOGICAL)
+                {
+                    // Reset to General so the actual format can be determined
+                    // after the cell has been interpreted. A sticky boolean
+                    // number format is highly likely unwanted.. see tdf#75650.
+                    // General of same locale as current number format.
+                    const SvNumberformat* pEntry = pFormatter->GetEntry( nIndex);
+                    const LanguageType nLang = (pEntry ? pEntry->GetLanguage() : ScGlobal::eLnge);
+                    const sal_uInt32 nFormat = pFormatter->GetStandardFormat( css::util::NumberFormat::NUMBER, nLang);
+                    ScPatternAttr aPattern( pDoc->GetPool());
+                    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat));
+                    ScMarkData aMark;
+                    aMark.SelectTable( i, true);
+                    aMark.SetMarkArea( ScRange( ScAddress( nCol, nRow, i)));
+                    rFunc.ApplyAttributes( aMark, aPattern, false);
+                    bNumFmtChanged = true;
                 }
                 rFunc.SetFormulaCell(aPos, pCell, true);
             }
