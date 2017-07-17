@@ -883,17 +883,17 @@ UpdateCheck::install()
         OUString aInstallImage(m_aImageName);
         osl::FileBase::getSystemPathFromFileURL(aInstallImage, aInstallImage);
 
-        OUString aParameter;
         sal_Int32 nFlags;
 #if (defined LINUX || defined __sun)
         nFlags = 42;
-        aParameter = getBaseInstallation();
+        OUString aParameter = getBaseInstallation();
         if( !aParameter.isEmpty() )
             osl::FileBase::getSystemPathFromFileURL(aParameter, aParameter);
 
         aParameter += " &";
 #else
         nFlags = c3s::SystemShellExecuteFlags::DEFAULTS;
+        OUString const aParameter;
 #endif
 
         rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get( m_xContext );
