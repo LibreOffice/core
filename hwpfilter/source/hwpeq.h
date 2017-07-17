@@ -22,7 +22,7 @@
 
 #include "mzstring.h"
 
-void eq2latex(MzString &mstr, char *str);
+void eq2latex(MzString &mstr, char const *str);
 
 #endif // INCLUDED_HWPFILTER_SOURCE_HWPEQ_H
 

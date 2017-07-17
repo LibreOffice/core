@@ -212,8 +212,8 @@ class DLLEXPORT HWPFile
         void AddPage(){ m_nCurrentPage++;}
         void AddColumnInfo();
         void SetColumnDef(ColumnDef *coldef);
-        void AddParaShape(std::shared_ptr<ParaShape>&);
-        void AddCharShape(std::shared_ptr<CharShape>&);
+        void AddParaShape(std::shared_ptr<ParaShape> const &);
+        void AddCharShape(std::shared_ptr<CharShape> const &);
         void AddFBoxStyle(FBoxStyle *);
         void AddDateFormat(DateCode *);
         void AddHeaderFooter(HeaderFooter *);
@@ -253,8 +253,8 @@ class DLLEXPORT HWPFile
           void setMaxSettedPage(){ m_nMaxSettedPage = m_nCurrentPage; }
 
     private:
-        int compareCharShape(CharShape *shape);
-        int compareParaShape(ParaShape *shape);
+        int compareCharShape(CharShape const *shape);
+        int compareParaShape(ParaShape const *shape);
 
     public:
         int   version;

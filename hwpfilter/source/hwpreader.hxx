@@ -116,8 +116,8 @@ private:
     void makeChars(hchar_string & rStr);
 
     /* -------- Special Char Parsing --------- */
-    void makeFieldCode(hchar_string & rStr, FieldCode *hbox); //6
-    void makeBookmark(Bookmark *hbox);      //6
+    void makeFieldCode(hchar_string const & rStr, FieldCode const *hbox); //6
+    void makeBookmark(Bookmark const *hbox);      //6
     void makeDateFormat(DateCode *hbox);    //7
     void makeDateCode(DateCode *hbox);      //8
     void makeTab();            //9
@@ -133,7 +133,7 @@ private:
     void makeAutoNum(AutoNum *hbox);
     void makeShowPageNum();
     void makeMailMerge(MailMerge *hbox);
-    void makeOutline(Outline *hbox);
+    void makeOutline(Outline const *hbox);
 
     /* --------- Styles Parsing ------------ */
     void makePageStyle();

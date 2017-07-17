@@ -99,7 +99,7 @@ struct FindScaFuncData
 {
     const OUString& m_rId;
     explicit FindScaFuncData( const OUString& rId ) : m_rId(rId) {}
-    bool operator() ( ScaFuncData& rCandidate ) const { return rCandidate.Is(m_rId); }
+    bool operator() ( ScaFuncData const & rCandidate ) const { return rCandidate.Is(m_rId); }
 };
 
 

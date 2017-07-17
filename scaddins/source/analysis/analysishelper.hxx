@@ -254,7 +254,7 @@ struct FindFuncData
 {
     const OUString& m_rId;
     explicit FindFuncData( const OUString& rId ) : m_rId(rId) {}
-    bool operator() ( FuncData& rCandidate ) const { return rCandidate.Is(m_rId); }
+    bool operator() ( FuncData const & rCandidate ) const { return rCandidate.Is(m_rId); }
 };
 
 class AnalysisResId : public ResId

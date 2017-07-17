@@ -3136,7 +3136,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
 }
 
 
-void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
+void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
 {
 /* Push frame */
     if( hbox->type[0] == 4 && hbox->type[1] == 0 )
@@ -3259,7 +3259,7 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
  * Completed
  * In LibreOffice, refer bookmarks as reference, but hwp doesn't have the sort of feature.
  */
-void HwpReader::makeBookmark(Bookmark * hbox)
+void HwpReader::makeBookmark(Bookmark const * hbox)
 {
     if (hbox->type == 0)
     {
@@ -4768,7 +4768,7 @@ void HwpReader::makeMailMerge(MailMerge * hbox)
 }
 
 
-void HwpReader::makeOutline(Outline * hbox)
+void HwpReader::makeOutline(Outline const * hbox)
 {
     if( hbox->kind == 1 )
         rchars( reinterpret_cast<sal_Unicode const *>(hbox->GetUnicode().c_str()) );

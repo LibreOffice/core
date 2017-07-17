@@ -29,7 +29,7 @@
 #include "hbox.h"
 #include "hutil.h"
 
-void LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
+void LineInfo::Read(HWPFile & hwpf, HWPPara const *pPara)
 {
     if (!hwpf.Read2b(pos))
         return;
