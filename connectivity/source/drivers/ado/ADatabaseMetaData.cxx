@@ -939,8 +939,7 @@ OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  )
 
 OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  )
@@ -951,8 +950,7 @@ OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  )
 
 OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  )
 {
-    OUString aValue;
-    return aValue;
+    return OUString();
 }
 
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  )
