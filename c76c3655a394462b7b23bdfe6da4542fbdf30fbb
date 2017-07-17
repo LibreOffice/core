@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_ffad2789",
+        "filename": "include/unotools/calendarwrapper.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-17T17:06:53Z",
+      "side": 1,
+      "message": "Just a side note nitpick: as this is unrelated to the original problem and not necessary for the change, a separate commit would had been more appropriate.",
+      "revId": "c76c3655a394462b7b23bdfe6da4542fbdf30fbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
