@@ -19,7 +19,8 @@ index 4c9580d..cbf0fc0 100644
  
  /** fall through attributes */
 -#define MWAW_FALLTHROUGH
- #if defined(__clang__)
+-#if defined(__clang__)
++#if defined(__clang__) && defined(__has_cpp_attribute)
 -#  if defined(__has_cpp_attribute) && __has_cpp_attribute(clang::fallthrough)
 -#    undef MWAW_FALLTHROUGH
 +#  if __has_cpp_attribute(clang::fallthrough)
