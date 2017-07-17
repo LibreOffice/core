@@ -253,8 +253,7 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
         SCTAB nTab,
         ScSplitPos eSplitPos)
     :
-    ScAccessibleTableBase (pAccDoc, GetDocument(pViewShell),
-        ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))),
+    ScAccessibleTableBase( pAccDoc, GetDocument(pViewShell), ScRange( 0, 0, nTab, MAXCOL, MAXROW, nTab)),
     mbIsSpreadsheet( true ),
     m_bFormulaMode( false ),
     m_bFormulaLastMode( false ),

@@ -217,8 +217,7 @@ void ScDbNameDlg::Init()
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                   nEndCol,   nEndRow,  nEndTab );
 
-        theCurArea = ScRange( ScAddress( nStartCol, nStartRow, nStartTab ),
-                              ScAddress( nEndCol,   nEndRow,   nEndTab ) );
+        theCurArea = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
 
         theAreaStr = theCurArea.Format(ScRefFlags::RANGE_ABS_3D, pDoc, aAddrDetails);
 

@@ -135,8 +135,7 @@ void ScColRowNameRangesDlg::Init()
         SCTAB nEndTab   = 0;
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                   nEndCol,   nEndRow,  nEndTab );
-        SetColRowData( ScRange( ScAddress( nStartCol, nStartRow, nStartTab ),
-                              ScAddress( nEndCol,   nEndRow,   nEndTab ) ) );
+        SetColRowData( ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab));
     }
     else
     {

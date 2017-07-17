@@ -2189,7 +2189,7 @@ bool ScAccessibleDocument::IsTableSelected() const
         //#103800#; use a copy of MarkData
         ScMarkData aMarkData(mpViewShell->GetViewData().GetMarkData());
         aMarkData.MarkToMulti();
-        if (aMarkData.IsAllMarked(ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))))
+        if (aMarkData.IsAllMarked( ScRange( 0, 0, nTab, MAXCOL, MAXROW, nTab)))
             bResult = true;
     }
     return bResult;
