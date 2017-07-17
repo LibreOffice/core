@@ -25,7 +25,6 @@ $(eval $(call gb_CppunitTest_use_libraries,emfio_emf,\
     cppu \
     cppuhelper \
     comphelper \
-    emfio \
     sal \
     svt \
     test \
