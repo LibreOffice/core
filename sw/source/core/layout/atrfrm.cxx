@@ -1479,20 +1479,20 @@ void SwFormatHoriOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
 // Partially implemented inline in hxx
 SwFormatAnchor::SwFormatAnchor( RndStdIds nRnd, sal_uInt16 nPage )
     : SfxPoolItem( RES_ANCHOR ),
-    nAnchorId( nRnd ),
-    nPageNum( nPage ),
+    m_eAnchorId( nRnd ),
+    m_nPageNumber( nPage ),
     // OD 2004-05-05 #i28701# - get always new increased order number
-    mnOrder( ++mnOrderCounter )
+    m_nOrder( ++m_nOrderCounter )
 {}
 
 SwFormatAnchor::SwFormatAnchor( const SwFormatAnchor &rCpy )
     : SfxPoolItem( RES_ANCHOR )
     , m_pContentAnchor( (rCpy.GetContentAnchor())
             ?  new SwPosition( *rCpy.GetContentAnchor() ) : nullptr )
-    , nAnchorId( rCpy.GetAnchorId() )
-    , nPageNum( rCpy.GetPageNum() )
+    , m_eAnchorId( rCpy.GetAnchorId() )
+    , m_nPageNumber( rCpy.GetPageNum() )
     // OD 2004-05-05 #i28701# - get always new increased order number
-    , mnOrder( ++mnOrderCounter )
+    , m_nOrder( ++m_nOrderCounter )
 {
 }
 
@@ -1505,14 +1505,14 @@ void SwFormatAnchor::SetAnchor( const SwPosition *pPos )
     // anchor only to paragraphs, or start nodes in case of RndStdIds::FLY_AT_FLY
     // also allow table node, this is used when a table is selected and is converted to a frame by the UI
     assert(!pPos
-            || ((RndStdIds::FLY_AT_FLY == nAnchorId) &&
+            || ((RndStdIds::FLY_AT_FLY == m_eAnchorId) &&
                     dynamic_cast<SwStartNode*>(&pPos->nNode.GetNode()))
-            || (RndStdIds::FLY_AT_PARA == nAnchorId && dynamic_cast<SwTableNode*>(&pPos->nNode.GetNode()))
+            || (RndStdIds::FLY_AT_PARA == m_eAnchorId && dynamic_cast<SwTableNode*>(&pPos->nNode.GetNode()))
             || dynamic_cast<SwTextNode*>(&pPos->nNode.GetNode()));
     m_pContentAnchor .reset( (pPos) ? new SwPosition( *pPos ) : nullptr );
     // Flys anchored AT paragraph should not point into the paragraph content
     if (m_pContentAnchor &&
-        ((RndStdIds::FLY_AT_PARA == nAnchorId) || (RndStdIds::FLY_AT_FLY == nAnchorId)))
+        ((RndStdIds::FLY_AT_PARA == m_eAnchorId) || (RndStdIds::FLY_AT_FLY == m_eAnchorId)))
     {
         m_pContentAnchor->nContent.Assign( nullptr, 0 );
     }
@@ -1520,10 +1520,10 @@ void SwFormatAnchor::SetAnchor( const SwPosition *pPos )
 
 SwFormatAnchor& SwFormatAnchor::operator=(const SwFormatAnchor& rAnchor)
 {
-    nAnchorId  = rAnchor.GetAnchorId();
-    nPageNum   = rAnchor.GetPageNum();
+    m_eAnchorId  = rAnchor.GetAnchorId();
+    m_nPageNumber   = rAnchor.GetPageNum();
     // OD 2004-05-05 #i28701# - get always new increased order number
-    mnOrder = ++mnOrderCounter;
+    m_nOrder = ++m_nOrderCounter;
 
     m_pContentAnchor.reset( (rAnchor.GetContentAnchor())
         ? new SwPosition(*(rAnchor.GetContentAnchor()))
@@ -1536,8 +1536,8 @@ bool SwFormatAnchor::operator==( const SfxPoolItem& rAttr ) const
     assert(SfxPoolItem::operator==(rAttr));
     SwFormatAnchor const& rFormatAnchor(static_cast<SwFormatAnchor const&>(rAttr));
     // OD 2004-05-05 #i28701# - Note: <mnOrder> hasn't to be considered.
-    return ( nAnchorId == rFormatAnchor.GetAnchorId() &&
-             nPageNum == rFormatAnchor.GetPageNum()   &&
+    return ( m_eAnchorId == rFormatAnchor.GetAnchorId() &&
+             m_nPageNumber == rFormatAnchor.GetPageNum()   &&
                 // compare anchor: either both do not point into a textnode or
                 // both do (valid m_pContentAnchor) and the positions are equal
              ((m_pContentAnchor.get() == rFormatAnchor.m_pContentAnchor.get()) ||
@@ -1551,7 +1551,7 @@ SfxPoolItem*  SwFormatAnchor::Clone( SfxItemPool* ) const
 }
 
 // OD 2004-05-05 #i28701#
-sal_uInt32 SwFormatAnchor::mnOrderCounter = 0;
+sal_uInt32 SwFormatAnchor::m_nOrderCounter = 0;
 
 // OD 2004-05-05 #i28701#
 
@@ -1590,7 +1590,7 @@ bool SwFormatAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_ANCHOR_ANCHORFRAME:
         {
-            if (m_pContentAnchor && RndStdIds::FLY_AT_FLY == nAnchorId)
+            if (m_pContentAnchor && RndStdIds::FLY_AT_FLY == m_eAnchorId)
             {
                 SwFrameFormat* pFormat = m_pContentAnchor->nNode.GetNode().GetFlyFormat();
                 if(pFormat)
@@ -1686,14 +1686,14 @@ void SwFormatAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
         std::stringstream aContentAnchor;
         aContentAnchor << *m_pContentAnchor;
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pContentAnchor"), BAD_CAST(aContentAnchor.str().c_str()));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_pContentAnchor"), BAD_CAST(aContentAnchor.str().c_str()));
     }
     else
-        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("pContentAnchor"), "%p", m_pContentAnchor.get());
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nAnchorType"), BAD_CAST(OString::number((int)nAnchorId).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nPageNum"), BAD_CAST(OString::number(nPageNum).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nOrder"), BAD_CAST(OString::number(mnOrder).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nOrderCounter"), BAD_CAST(OString::number(mnOrderCounter).getStr()));
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pContentAnchor"), "%p", m_pContentAnchor.get());
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_eAnchorType"), BAD_CAST(OString::number((int)m_eAnchorId).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nPageNumber"), BAD_CAST(OString::number(m_nPageNumber).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nOrder"), BAD_CAST(OString::number(m_nOrder).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nOrderCounter"), BAD_CAST(OString::number(m_nOrderCounter).getStr()));
     OUString aPresentation;
     GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
