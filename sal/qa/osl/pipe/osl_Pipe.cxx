@@ -220,21 +220,21 @@ namespace osl_Pipe
     class is : public CppUnit::TestFixture
     {
     public:
-        void is_001( )
+        void is_defaultCtor( )
             {
                 ::osl::Pipe aPipe;
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test is(), check if the pipe is a valid one.", !aPipe.is( ) );
             }
 
-        void is_002( )
+        void is_createPipe( )
             {
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test is(), a normal pipe creation.", aPipe.is( ) );
             }
 
-        void is_003( )
+        void is_createPipeAndClear( )
             {
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 aPipe.clear( );
@@ -242,7 +242,7 @@ namespace osl_Pipe
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test is(), an invalid case.", !aPipe.is( ) );
             }
 
-        void is_004( )
+        void is_invalidConstructor( )
             {
                 ::osl::Pipe aPipe( nullptr );
 
@@ -250,10 +250,10 @@ namespace osl_Pipe
             }
 
         CPPUNIT_TEST_SUITE( is );
-        CPPUNIT_TEST( is_001 );
-        CPPUNIT_TEST( is_002 );
-        CPPUNIT_TEST( is_003 );
-        CPPUNIT_TEST( is_004 );
+        CPPUNIT_TEST( is_defaultCtor );
+        CPPUNIT_TEST( is_createPipe );
+        CPPUNIT_TEST( is_createPipeAndClear );
+        CPPUNIT_TEST( is_invalidConstructor );
         CPPUNIT_TEST_SUITE_END( );
     }; // class is
 
