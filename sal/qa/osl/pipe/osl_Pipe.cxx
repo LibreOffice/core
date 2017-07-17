@@ -431,7 +431,7 @@ namespace osl_Pipe
     public:
         bool bRes, bRes1;
 
-        void isEqual_001( )
+        void isEqual_compareItself( )
             {
                 ::osl::Pipe aPipe;
                 aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
@@ -442,7 +442,7 @@ namespace osl_Pipe
                                         bRes );
             }
 
-        void isEqual_002( )
+        void isEqual_compareAgainstCopy( )
             {
                 ::osl::Pipe aPipe, aPipe1, aPipe2;
                 aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
@@ -463,8 +463,8 @@ namespace osl_Pipe
             }
 
         CPPUNIT_TEST_SUITE( isEqual );
-        CPPUNIT_TEST( isEqual_001 );
-        CPPUNIT_TEST( isEqual_002 );
+        CPPUNIT_TEST( isEqual_compareItself );
+        CPPUNIT_TEST( isEqual_compareAgainstCopy );
         CPPUNIT_TEST_SUITE_END( );
     };
 
