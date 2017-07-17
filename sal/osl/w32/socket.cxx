@@ -279,7 +279,7 @@ oslSocket osl_createSocketImpl_(SOCKET Socket)
     oslSocket pSockImpl = static_cast<oslSocket>(rtl_allocateZeroMemory( sizeof(struct oslSocketImpl)));
     pSockImpl->m_Socket = Socket;
     pSockImpl->m_nRefCount = 1;
-    return (pSockImpl);
+    return pSockImpl;
 }
 
 void osl_destroySocketImpl_(oslSocketImpl *pImpl)
@@ -748,7 +748,7 @@ oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString* strHostname)
     {
         oslSocketAddr SockAddr = osl_copySocketAddr( pAddr->pSockAddr );
         osl_destroyHostAddr(pAddr);
-        return (SockAddr);
+        return SockAddr;
     }
     return nullptr;
 }

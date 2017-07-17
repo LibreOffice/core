@@ -296,7 +296,7 @@ oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
     if ((buflen = GetModuleFileNameW (nullptr, ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), aBuffer.getBufSizeInSymbols())) > 0)
     {
         rtl_uString * pAbsPath = nullptr;
-        rtl_uString_newFromStr_WithLength (&(pAbsPath), aBuffer, buflen);
+        rtl_uString_newFromStr_WithLength (&pAbsPath, aBuffer, buflen);
         if (pAbsPath)
         {
             /* Convert from path to url. */
