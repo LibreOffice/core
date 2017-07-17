@@ -340,7 +340,7 @@ const SEC_ASN1Template TimeStampReq_Template[] =
     { 0, 0, nullptr, 0 }
 };
 
-size_t AppendToBuffer(char *ptr, size_t size, size_t nmemb, void *userdata)
+size_t AppendToBuffer(char const *ptr, size_t size, size_t nmemb, void *userdata)
 {
     OStringBuffer *pBuffer = static_cast<OStringBuffer*>(userdata);
     pBuffer->append(ptr, size*nmemb);

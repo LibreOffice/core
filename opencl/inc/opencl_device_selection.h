@@ -401,7 +401,7 @@ public:
     }
 };
 
-inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_profile>& pProfile)
+inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_profile> const & pProfile)
 {
     if (pProfile == nullptr)
         return DS_INVALID_PROFILE;
@@ -470,7 +470,7 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
     return DS_SUCCESS;
 }
 
-inline ds_status readProfile(const OUString& rStreamName, std::unique_ptr<ds_profile>& pProfile)
+inline ds_status readProfile(const OUString& rStreamName, std::unique_ptr<ds_profile> const & pProfile)
 {
     ds_status eStatus = DS_SUCCESS;
 

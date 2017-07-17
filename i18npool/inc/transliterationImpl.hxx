@@ -97,7 +97,7 @@ private:
     void clear();
 
     /// @throws css::uno::RuntimeException
-    void loadBody( OUString &implName,
+    void loadBody( OUString const &implName,
         css::uno::Reference< css::i18n::XExtendedTransliteration >& body );
 
     /// @throws css::uno::RuntimeException

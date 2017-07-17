@@ -68,7 +68,7 @@ public:
 
 private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
-    void doTestJapanese(uno::Reference< i18n::XBreakIterator > &xBreak);
+    void doTestJapanese(uno::Reference< i18n::XBreakIterator > const &xBreak);
 };
 
 void TestBreakIterator::testLineBreaking()
@@ -949,7 +949,7 @@ void TestBreakIterator::testKhmer()
 }
 #endif
 
-void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > &xBreak)
+void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > const &xBreak)
 {
     lang::Locale aLocale;
     aLocale.Language = "ja";

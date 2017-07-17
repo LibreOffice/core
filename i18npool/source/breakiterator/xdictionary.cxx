@@ -250,7 +250,7 @@ WordBreakCache::WordBreakCache() :
  * Compare two unicode string,
  */
 
-bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary)
+bool WordBreakCache::equals(const sal_Unicode* str, Boundary const & boundary)
 {
     // Different length, different string.
     if (length != boundary.endPos - boundary.startPos) return false;
@@ -332,7 +332,7 @@ static sal_Int16 JapaneseCharType(sal_Unicode c)
     return KANJA;
 }
 
-WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBoundary)
+WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary const & wordBoundary)
 {
     WordBreakCache& rCache = cache[text[0] & 0x1f];
 
