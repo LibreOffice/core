@@ -96,7 +96,6 @@ private:
     rtl::Reference<XSecController> mpXSecController;
     bool                        mbError;
     bool mbODFPre1_2;
-    bool mbHasGpgSignatures;
     Link<LinkParamNone*,bool>   maStartVerifySignatureHdl;
 
 private:
