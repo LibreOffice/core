@@ -197,8 +197,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
             aClassID = GetRelatedInternalID_Impl( aClassID );
 
             //TODO: retrieve ClassName
-            OUString aClassName;
-            aObjectInfo.Object.set( xEmbCreator->createInstanceInitNew( aClassID, aClassName, xStorage, sEntName, aObjArgs ),
+            aObjectInfo.Object.set( xEmbCreator->createInstanceInitNew( aClassID, OUString(), xStorage, sEntName, aObjArgs ),
                                     uno::UNO_QUERY );
         }
         else
