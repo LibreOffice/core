@@ -77,6 +77,8 @@ void const * DdeData::getData() const
   return nullptr;
 }
 
+struct DdeImp {};
+
 long DdeConnection::GetError()
 {
     return 0L;

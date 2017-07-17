@@ -180,7 +180,7 @@ class SVL_DLLPUBLIC DdeConnection
     std::vector<DdeTransaction*> aTransactions;
     DdeString*      pService;
     DdeString*      pTopic;
-    DdeImp*         pImp;
+    std::unique_ptr<DdeImp> pImp;
 
 public:
                     DdeConnection( SAL_UNUSED_PARAMETER const OUString&, SAL_UNUSED_PARAMETER const OUString& );
