@@ -520,7 +520,7 @@ Table *HWPFile::getTable(int index)
     return tables[index];
 }
 
-void HWPFile::AddParaShape(std::shared_ptr<ParaShape>& pshape)
+void HWPFile::AddParaShape(std::shared_ptr<ParaShape> const & pshape)
 {
     int nscount = 0;
     for(int j = 0 ; j < MAXTABS-1 ; j++)
@@ -552,7 +552,7 @@ void HWPFile::AddParaShape(std::shared_ptr<ParaShape>& pshape)
         pshape->index = value;
 }
 
-void HWPFile::AddCharShape(std::shared_ptr<CharShape>& cshape)
+void HWPFile::AddCharShape(std::shared_ptr<CharShape> const & cshape)
 {
     int value = compareCharShape(cshape.get());
     if (value == 0)
@@ -606,7 +606,7 @@ void HWPFile::AddFBoxStyle(FBoxStyle * fbstyle)
     fbslist.push_back(fbstyle);
 }
 
-int HWPFile::compareCharShape(CharShape *shape)
+int HWPFile::compareCharShape(CharShape const *shape)
 {
     int count = cslist.size();
     if( count > 0 )
@@ -632,7 +632,7 @@ int HWPFile::compareCharShape(CharShape *shape)
 }
 
 
-int HWPFile::compareParaShape(ParaShape *shape)
+int HWPFile::compareParaShape(ParaShape const *shape)
 {
     int count = pslist.size();
     if( count > 0 )
