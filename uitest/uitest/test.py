@@ -177,7 +177,23 @@ class UITest(object):
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
 
-    def execute_blocking_action(self, action, dialog_element, args = ()):
+    def execute_blocking_action(self, action, dialog_element=None,
+            args=(), dialog_handler=None):
+        """Executes an action which blocks while a dialog is shown.
+
+        Click a button or perform some other action on the dialog when it
+        is shown.
+
+        Args:
+            action(callable): Will be called to show a dialog, and is expected
+                to block while the dialog is shown.
+            dialog_element(str, optional): The name of a button on the dialog
+                which will be clicked when the dialog is shown.
+            args(tuple, optional): The arguments to be passed to `action`
+            dialog_handler(callable, optional): Will be called when the dialog
+                is shown, with the dialog object passed as a parameter.
+        """
+
         thread = threading.Thread(target=action, args=args)
         with EventListener(self._xContext, ["DialogExecute", "ModelessDialogExecute"]) as event:
             thread.start()
@@ -185,8 +201,11 @@ class UITest(object):
             while time_ < MAX_WAIT:
                 if event.executed:
                     xDlg = self._xUITest.getTopFocusWindow()
-                    xUIElement = xDlg.getChild(dialog_element)
-                    xUIElement.executeAction("CLICK", tuple())
+                    if dialog_element:
+                        xUIElement = xDlg.getChild(dialog_element)
+                        xUIElement.executeAction("CLICK", tuple())
+                    if dialog_handler:
+                        dialog_handler(xDlg)
                     thread.join()
                     return
 
