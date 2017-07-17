@@ -71,8 +71,8 @@ private:
     EntryMap        maEntries;
 
 public:
-    GdiPlusBuffer()
-    :   Timer(),
+    GdiPlusBuffer( const sal_Char *pDebugName )
+    :   Timer( pDebugName ),
         maEntries()
     {
         SetTimeout(1000);
@@ -172,7 +172,7 @@ public:
 // Global instance of GdiPlusBuffer which manages Gdiplus::Bitmap
 // instances
 
-static GdiPlusBuffer aGdiPlusBuffer;
+static GdiPlusBuffer aGdiPlusBuffer( "vcl::win GdiPlusBuffer aGdiPlusBuffer" );
 
 
 WinSalBitmap::WinSalBitmap()
