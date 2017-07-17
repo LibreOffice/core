@@ -43,20 +43,6 @@ $(eval $(call gb_Library_use_externals,comphelper,\
     zlib \
 ))
 
-ifeq ($(TLS),NSS)
-$(eval $(call gb_Library_use_externals,comphelper,\
-       plc4 \
-       nss3 \
-))
-else
-ifeq ($(TLS),OPENSSL)
-$(eval $(call gb_Library_use_externals,comphelper,\
-	openssl \
-	openssl_headers \
-))
-endif
-endif
-
 $(eval $(call gb_Library_use_libraries,comphelper,\
     cppu \
     cppuhelper \
