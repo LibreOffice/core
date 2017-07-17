@@ -502,6 +502,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	$(call gb_Helper_optional,SCRIPTING,vbaswobj) \
 	wpftwriter \
 	writerfilter \
+	$(call gb_Helper_optional,DBCONNECTIVITY,writer) \
 ))
 
 # cli_cppuhelper is NONE even though it is actually in URE because it is CliNativeLibrary
