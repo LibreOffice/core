@@ -476,7 +476,7 @@ namespace osl_Pipe
     public:
         bool bRes, bRes1;
 
-        void close_001( )
+        void close_closeVsClear( )
             {
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipe1), osl_Pipe_CREATE );
                 aPipe.close( );
@@ -491,7 +491,7 @@ namespace osl_Pipe
                                         !bRes1);
             }
 
-        void close_002( )
+        void close_useAfterClose( )
             {
                 ::osl::StreamPipe aPipe( test::uniquePipeName(aTestPipe1), osl_Pipe_CREATE );
                 aPipe.close( );
@@ -502,8 +502,8 @@ namespace osl_Pipe
             }
 
         CPPUNIT_TEST_SUITE( close );
-        CPPUNIT_TEST( close_001 );
-        CPPUNIT_TEST( close_002 );
+        CPPUNIT_TEST( close_closeVsClear );
+        CPPUNIT_TEST( close_useAfterClose );
         CPPUNIT_TEST_SUITE_END( );
     };
 
