@@ -163,11 +163,11 @@ struct SfxItemPool_Impl
     }
 
     void readTheItems(SvStream & rStream, sal_uInt32 nCount, sal_uInt16 nVersion,
-                      SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** pArr);
+                      SfxPoolItem const * pDefItem, SfxPoolItemArray_Impl ** pArr);
 
     // unit testing
     friend class PoolItemTest;
-    static SfxItemPool_Impl *GetImpl(SfxItemPool *pPool) { return pPool->pImpl.get(); }
+    static SfxItemPool_Impl *GetImpl(SfxItemPool const *pPool) { return pPool->pImpl.get(); }
 };
 
 

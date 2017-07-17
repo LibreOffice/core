@@ -379,7 +379,7 @@ bool SfxItemPool::IsInRange( sal_uInt16 nWhich ) const
 // This had to be moved to a method of its own to keep Solaris GCC happy:
 void SfxItemPool_Impl::readTheItems (
     SvStream & rStream, sal_uInt32 nItemCount, sal_uInt16 nVer,
-    SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** ppArr)
+    SfxPoolItem const * pDefItem, SfxPoolItemArray_Impl ** ppArr)
 {
     SfxMultiRecordReader aItemsRec( &rStream, SFX_ITEMPOOL_REC_ITEMS );
 

@@ -1980,8 +1980,8 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString)
     }
 }
 
-short SvNumberformat::ImpCheckCondition(double& fNumber,
-                                        double& fLimit,
+short SvNumberformat::ImpCheckCondition(double fNumber,
+                                        double fLimit,
                                         SvNumberformatLimitOps eOp)
 {
     switch(eOp)
