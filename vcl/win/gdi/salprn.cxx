@@ -685,7 +685,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
     if( nFlags & JobSetFlags::DUPLEXMODE )
     {
         DuplexMode eDuplex = DuplexMode::Unknown;
-        if( (pDevModeW->dmFields & DM_DUPLEX) )
+        if( pDevModeW->dmFields & DM_DUPLEX )
         {
             if( pDevModeW->dmDuplex == DMDUP_SIMPLEX )
                 eDuplex = DuplexMode::Off;

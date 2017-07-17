@@ -5817,17 +5817,17 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             }
             break;
         case WM_IME_REQUEST:
-            if ( (sal_uIntPtr)( wParam ) == IMR_RECONVERTSTRING )
+            if ( (sal_uIntPtr)wParam == IMR_RECONVERTSTRING )
             {
                 nRet = ImplHandleIMEReconvertString( hWnd, lParam );
                 rDef = FALSE;
             }
-            else if( (sal_uIntPtr)( wParam ) == IMR_CONFIRMRECONVERTSTRING )
+            else if( (sal_uIntPtr)wParam == IMR_CONFIRMRECONVERTSTRING )
             {
                 nRet = ImplHandleIMEConfirmReconvertString( hWnd, lParam );
                 rDef = FALSE;
             }
-            else if ( (sal_uIntPtr)( wParam ) == IMR_QUERYCHARPOSITION )
+            else if ( (sal_uIntPtr)wParam == IMR_QUERYCHARPOSITION )
             {
                 if ( ImplSalYieldMutexTryToAcquire() )
                 {

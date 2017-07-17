@@ -3580,7 +3580,7 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
         // surfaces spanning multiple displays). Note: canvas
         // (without sprite) stays the same)
         const sal_uInt32 nDisplay = static_cast< WinSalFrame* >( mpWindowImpl->mpFrame )->mnDisplay;
-        if( (nDisplay >= Application::GetScreenCount()) )
+        if( nDisplay >= Application::GetScreenCount() )
         {
             xCanvas.set( xCanvasFactory->createInstanceWithArgumentsAndContext(
                                  bSpriteCanvas ?

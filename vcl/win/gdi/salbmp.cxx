@@ -42,6 +42,10 @@
 #include <gdiplus.h>
 #include "postwin.h"
 
+#if defined _MSC_VER
+#undef min
+#undef max
+#endif
 
 inline void ImplSetPixel4( sal_uInt8* pScanline, long nX, const BYTE cIndex )
 {
@@ -762,7 +766,7 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const 
     if( nColors )
     {
         // copy the palette entries if any
-        const sal_uInt16 nMinCount = (std::min)( nColors, rPal.GetEntryCount() );
+        const sal_uInt16 nMinCount = std::min( nColors, rPal.GetEntryCount() );
         if( nMinCount )
             memcpy( pBI->bmiColors, rPal.ImplGetColorBuffer(), nMinCount * sizeof(RGBQUAD) );
     }
@@ -944,7 +948,7 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode 
                 PBITMAPINFO     pBI = static_cast<PBITMAPINFO>(GlobalLock( mhDIB ));
                 const sal_uInt16    nCount = pBuffer->maPalette.GetEntryCount();
                 const sal_uInt16    nDIBColorCount = ImplGetDIBColorCount( mhDIB );
-                memcpy( pBI->bmiColors, pBuffer->maPalette.ImplGetColorBuffer(), (std::min)( nDIBColorCount, nCount ) * sizeof( RGBQUAD ) );
+                memcpy( pBI->bmiColors, pBuffer->maPalette.ImplGetColorBuffer(), std::min( nDIBColorCount, nCount ) * sizeof( RGBQUAD ) );
                 GlobalUnlock( mhDIB );
             }
 
