@@ -25,6 +25,10 @@ $(eval $(call gb_Library_set_include,emfio,\
     -I$(SRCDIR)/emfio/inc \
 ))
 
+$(eval $(call gb_Library_add_defs,emfio,\
+	-DEMFIO_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_custom_headers,emfio,\
 	officecfg/registry \
 ))
