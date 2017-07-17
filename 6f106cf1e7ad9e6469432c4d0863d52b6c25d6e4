@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_9f49838e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-17T20:03:22Z",
+      "side": 1,
+      "message": "please add the reason for the revert, how the loop behavior has changed",
+      "revId": "6f106cf1e7ad9e6469432c4d0863d52b6c25d6e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_7f44d773",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1413,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-17T20:03:22Z",
+      "side": 1,
+      "message": "that commit said loplugin:loopvartoosmall so i guess the sal_uInt16 variable should be size_t instead",
+      "revId": "6f106cf1e7ad9e6469432c4d0863d52b6c25d6e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
