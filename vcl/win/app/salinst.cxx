@@ -618,7 +618,7 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
 
         // #i18883# only sleep if potential deadlock scenario, ie, when a dialog is open
         if( ImplGetSVData()->maAppData.mnModalMode )
-            SwitchToThread();
+            Sleep(1);
         else
             bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
 
