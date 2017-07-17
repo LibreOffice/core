@@ -353,7 +353,7 @@ bool StgCache::Read( sal_Int32 nPage, void* pBuf )
     return Good();
 }
 
-bool StgCache::Write( sal_Int32 nPage, void* pBuf )
+bool StgCache::Write( sal_Int32 nPage, void const * pBuf )
 {
     if( Good() )
     {
@@ -405,7 +405,7 @@ void StgCache::ResetError()
     m_pStrm->ResetError();
 }
 
-void StgCache::MoveError( StorageBase& r )
+void StgCache::MoveError( StorageBase const & r )
 {
     if( m_nError != ERRCODE_NONE )
     {

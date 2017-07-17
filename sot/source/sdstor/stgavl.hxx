@@ -27,8 +27,8 @@ class StgAvlNode
 {
     friend class StgAvlIterator;
 private:
-    short Locate( StgAvlNode*, StgAvlNode**, StgAvlNode**, StgAvlNode** );
-    short Adjust( StgAvlNode**, StgAvlNode* );
+    short Locate( StgAvlNode const *, StgAvlNode**, StgAvlNode**, StgAvlNode** );
+    short Adjust( StgAvlNode**, StgAvlNode const * );
     StgAvlNode* RotLL();
     StgAvlNode* RotLR();
     StgAvlNode* RotRR();
@@ -42,7 +42,7 @@ protected:
     StgAvlNode();
 public:
     virtual ~StgAvlNode();
-    StgAvlNode* Find( StgAvlNode* );
+    StgAvlNode* Find( StgAvlNode const * );
     static bool Insert( StgAvlNode**, StgAvlNode* );
     static bool Remove( StgAvlNode**, StgAvlNode*, bool bDel );
     virtual short Compare( const StgAvlNode* ) const = 0;

@@ -319,7 +319,7 @@ public:
     virtual bool                Equals( const BaseStorage& rStream ) const override;
 
     UCBStorageElement_Impl*     FindElement_Impl( const OUString& rName ) const;
-    bool                        CopyStorageElement_Impl( UCBStorageElement_Impl& rElement,
+    bool                        CopyStorageElement_Impl( UCBStorageElement_Impl const & rElement,
                                                          BaseStorage* pDest, const OUString& rNew ) const;
     BaseStorage*                OpenStorage_Impl( const OUString & rEleName,
                                                   StreamMode, bool bDirect, bool bForceUCBStorage );
