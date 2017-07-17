@@ -40,10 +40,9 @@ sal_Int16 SAL_CALL CertificateImpl::getVersion()
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSerialNumber()
 {
-    // This is mapped to the fingerprint for gpg
-    const char* keyId = m_pKey.primaryFingerprint();
-    return comphelper::arrayToSequence<sal_Int8>(
-        keyId, strlen(keyId));
+    // TODO: perhaps map to subkey's cardSerialNumber - if you have
+    // one to test
+    return Sequence< sal_Int8 >();
 }
 
 OUString SAL_CALL CertificateImpl::getIssuerName()
@@ -153,24 +152,25 @@ OUString SAL_CALL CertificateImpl::getSignatureAlgorithm()
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getSHA1Thumbprint()
 {
-    // This is mapped to the short keyID for gpg
-    const char* keyId = m_pKey.shortKeyID();
+    // This is mapped to the fingerprint for gpg
+    const char* keyId = m_pKey.primaryFingerprint();
     return comphelper::arrayToSequence<sal_Int8>(
         keyId, strlen(keyId));
 }
 
-uno::Sequence<sal_Int8> CertificateImpl::getSHA256Thumbprint()
+Sequence<sal_Int8> CertificateImpl::getSHA256Thumbprint()
 {
-    // This is mapped to the long keyID for gpg
-    const char* keyId = m_pKey.keyID();
+    // This is mapped to the fingerprint for gpg (though that's only
+    // SHA1 actually)
+    const char* keyId = m_pKey.primaryFingerprint();
     return comphelper::arrayToSequence<sal_Int8>(
         keyId, strlen(keyId));
 }
 
 Sequence< sal_Int8 > SAL_CALL CertificateImpl::getMD5Thumbprint()
 {
-    // This is mapped to the short keyID for gpg
-    const char* keyId = m_pKey.shortKeyID();
+    // This is mapped to the shorter keyID for gpg
+    const char* keyId = m_pKey.keyID();
     return comphelper::arrayToSequence<sal_Int8>(
         keyId, strlen(keyId));
 }
@@ -212,7 +212,7 @@ void CertificateImpl::setCertificate(GpgME::Context* ctx, const GpgME::Key& key)
     // extract key data, store into m_aBits
     GpgME::Data data_out;
     ctx->setArmor(false); // caller will base64-encode anyway
-    GpgME::Error err = ctx->exportPublicKeys(key.keyID(), data_out);
+    GpgME::Error err = ctx->exportPublicKeys(key.primaryFingerprint(), data_out);
 
     if (err)
         throw RuntimeException("The GpgME library failed to retrieve the public key");
