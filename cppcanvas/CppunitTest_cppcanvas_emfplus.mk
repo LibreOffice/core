@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_use_components,cppcanvas_emfplus,\
 	canvas/source/factory/canvasfactory \
 	cppcanvas/source/uno/mtfrenderer \
 	configmgr/source/configmgr \
+	emfio/emfio \
 	extensions/source/scanner/scn \
 	filter/source/config/cache/filterconfig1 \
 	framework/util/fwk \
