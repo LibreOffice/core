@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_3fb6cfdc",
+        "filename": "sw/inc/dialog.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-17T17:12:14Z",
+      "side": 1,
+      "message": "Actually this German Dialoge is plural dialogs. I\u0027ll change it on the fly.",
+      "revId": "14f17fd4bace46e213e7ca7a30cd16858aae0e83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
