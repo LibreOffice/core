@@ -27,6 +27,7 @@
 #include "file/FCatalog.hxx"
 #include "file/FConnection.hxx"
 #include "writer/WCatalog.hxx"
+#include "writer/WTable.hxx"
 
 using namespace ::com::sun::star;
 
@@ -35,10 +36,11 @@ namespace connectivity
 namespace writer
 {
 
-sdbcx::ObjectType OWriterTables::createObject(const OUString& /*rName*/)
+sdbcx::ObjectType OWriterTables::createObject(const OUString& rName)
 {
-    sdbcx::ObjectType xRet;
-    SAL_WARN("connectivity.writer", "TODO implement OWriterTables::createObject()");
+    OWriterTable* pTable = new OWriterTable(this, static_cast<OWriterConnection*>(static_cast<file::OFileCatalog&>(m_rParent).getConnection()), rName, "TABLE");
+    sdbcx::ObjectType xRet = pTable;
+    pTable->construct();
     return xRet;
 }
 
