@@ -64,6 +64,7 @@
 #include "pagedesc.hxx"
 #include "calc.hxx"
 
+#include <tblafmt.hxx>
 #include <unotbl.hxx>
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
@@ -84,6 +85,7 @@ public:
     virtual void tearDown() override;
 
     void randomTest();
+    void testTableAutoFormats();
     void testPageDescName();
     void testFileNameFields();
     void testDocStat();
@@ -120,6 +122,7 @@ public:
 
     CPPUNIT_TEST(testTransliterate);
     CPPUNIT_TEST(randomTest);
+    CPPUNIT_TEST(testTableAutoFormats);
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
     CPPUNIT_TEST(testDocStat);
@@ -1140,6 +1143,309 @@ void SwDocTest::randomTest()
         xmlFreeTextWriter( writer );
 #endif
     }
+}
+
+void SwDocTest::testTableAutoFormats()
+{
+    SwGlobals::ensure();
+
+    //create new AutoFormatTable
+    SwTableAutoFormatTable aTableAFT;
+
+    //check the style size - default is expected
+    CPPUNIT_ASSERT_EQUAL( size_t(1),  aTableAFT.size() );
+
+    //create new style
+    SwTableAutoFormat aTableAF( "TestItemStyle" );
+
+    //create new AutoFormat
+    SwBoxAutoFormat aBoxAF;
+
+    //SetFont
+    SvxFontItem aFont( RES_CHRATR_FONT );
+    aFont.SetFamily( FontFamily::FAMILY_DECORATIVE );
+    aFont.SetPitch( FontPitch::PITCH_VARIABLE );
+    aFont.SetCharSet( RTL_TEXTENCODING_MS_1251 );
+    aBoxAF.SetFont( aFont );
+    //SetHeight
+    SvxFontHeightItem aHeight( 280, 120, RES_CHRATR_FONTSIZE );
+    aBoxAF.SetHeight( aHeight );
+    //SetWeight
+    SvxWeightItem aWeight( FontWeight::WEIGHT_BOLD, RES_CHRATR_WEIGHT );
+    aBoxAF.SetWeight( aWeight );
+    //SetPosture
+    SvxPostureItem aPosture( FontItalic::ITALIC_NORMAL, RES_CHRATR_POSTURE );
+    aBoxAF.SetPosture( aPosture );
+    //SetCJKFont
+    SvxFontItem aCJKFont( RES_CHRATR_FONT );
+    aCJKFont.SetFamily( FontFamily::FAMILY_MODERN );
+    aCJKFont.SetPitch( FontPitch::PITCH_FIXED );
+    aCJKFont.SetCharSet( RTL_TEXTENCODING_MS_1251 );
+    aBoxAF.SetCJKFont( aCJKFont );
+    //SetCJKHeight
+    SvxFontHeightItem aCJKHeight( 230, 110, RES_CHRATR_FONTSIZE );
+    aBoxAF.SetCJKHeight( aCJKHeight );
+    //SetCJKWeight
+    SvxWeightItem aCJKWeight( FontWeight::WEIGHT_SEMIBOLD, RES_CHRATR_WEIGHT );
+    aBoxAF.SetCJKWeight( aCJKWeight );
+    //SetCJKPosture
+    SvxPostureItem aCJKPosture( FontItalic::ITALIC_OBLIQUE, RES_CHRATR_POSTURE );
+    aBoxAF.SetCJKPosture( aCJKPosture );
+    //SetCTLFont
+    SvxFontItem aCTLFont( RES_CHRATR_FONT );
+    aCTLFont.SetFamily( FontFamily::FAMILY_ROMAN );
+    aCTLFont.SetPitch( FontPitch::PITCH_FIXED );
+    aCTLFont.SetCharSet( RTL_TEXTENCODING_MS_1251 );
+    aBoxAF.SetCTLFont( aCTLFont );
+    //SetCTLHeight
+    SvxFontHeightItem aCTLHeight( 215, 105, RES_CHRATR_FONTSIZE );
+    aBoxAF.SetCTLHeight( aCTLHeight );
+    //SetCTLWeight
+    SvxWeightItem aCTLWeight( FontWeight::WEIGHT_ULTRABOLD, RES_CHRATR_WEIGHT );
+    aBoxAF.SetCTLWeight( aCTLWeight );
+    //SetCTLPosture
+    SvxPostureItem aCTLPosture( FontItalic::ITALIC_OBLIQUE, RES_CHRATR_POSTURE );
+    aBoxAF.SetCTLPosture( aCTLPosture );
+    //SetUnderline
+    SvxUnderlineItem aUnderline( FontLineStyle::LINESTYLE_DOTTED, RES_CHRATR_UNDERLINE );
+    aBoxAF.SetUnderline( aUnderline );
+    //SetOverline
+    SvxOverlineItem aOverline( FontLineStyle::LINESTYLE_DASH, RES_CHRATR_OVERLINE );
+    aBoxAF.SetOverline( aOverline );
+    //SetCrossedOut
+    SvxCrossedOutItem aCrossedOut( FontStrikeout::STRIKEOUT_BOLD, RES_CHRATR_CROSSEDOUT );
+    aBoxAF.SetCrossedOut( aCrossedOut );
+    //SetContour
+    SvxContourItem aContour( true, RES_CHRATR_CONTOUR );
+    aBoxAF.SetContour( aContour );
+    //SetShadowed
+    SvxShadowedItem aShadowed( false, RES_CHRATR_SHADOWED );
+    aBoxAF.SetShadowed( aShadowed );
+    //SetColor
+    SvxColorItem aColor( Color(0xFF23FF), RES_CHRATR_COLOR );
+    aBoxAF.SetColor( aColor );
+    //SetAdjust
+    SvxAdjustItem aAdjust( SvxAdjust::Center, RES_PARATR_ADJUST );
+    aBoxAF.SetAdjust( aAdjust );
+    //SetTextOrientation
+    SvxFrameDirectionItem aTOrientation( SvxFrameDirection::Vertical_RL_TB, RES_FRAMEDIR );
+    aBoxAF.SetTextOrientation( aTOrientation );
+    //SetVerticalAlignment
+    SwFormatVertOrient aVAlignment( 3, css::text::VertOrientation::CENTER, css::text::RelOrientation::PAGE_LEFT );
+    aBoxAF.SetVerticalAlignment( aVAlignment );
+    //SetBox
+    SvxBoxItem aBox( RES_BOX );
+    aBox.SetAllDistances( 5 );
+    aBoxAF.SetBox( aBox );
+    //SetBackground
+    SvxBrushItem aBackground( Color(0xFF11FF), RES_BACKGROUND );
+    aBoxAF.SetBackground( aBackground );
+    //Set m_aTLBR
+    aBoxAF.m_aTLBR.ScaleMetrics( 11,12 );
+    SvxLineItem aTLBRLine = aBoxAF.m_aTLBR;
+    //Set m_aBLTR
+    aBoxAF.m_aBLTR.ScaleMetrics( 13,14 );
+    SvxLineItem aBLTRLine = aBoxAF.m_aBLTR;
+    //Set m_aHorJustify
+    SvxHorJustifyItem aHJustify( SvxCellHorJustify::Center, 0 );
+    aBoxAF.m_aHorJustify = aHJustify;
+    //Set m_aVerJustify
+    SvxVerJustifyItem aVJustify( SVX_VER_JUSTIFY_CENTER , 0 );
+    aBoxAF.m_aVerJustify = aVJustify;
+    //Set m_aStacked
+    aBoxAF.m_aStacked.SetValue( true );
+    SfxBoolItem aStacked = aBoxAF.m_aStacked;
+    //Set m_aMargin
+    aBoxAF.m_aMargin.SetLeftMargin( sal_Int16(4) );
+    aBoxAF.m_aMargin.SetRightMargin( sal_Int16(3) );
+    aBoxAF.m_aMargin.SetTopMargin( sal_Int16(2) );
+    aBoxAF.m_aMargin.SetBottomMargin( sal_Int16(3) );
+    SvxMarginItem aMargin = aBoxAF.m_aMargin;
+    //Set m_aLinebreak
+    aBoxAF.m_aLinebreak.SetValue( true );
+    SfxBoolItem aLBreak = aBoxAF.m_aLinebreak;
+    //Set m_aRotateAngle
+    aBoxAF.m_aRotateAngle.SetValue( sal_Int32(5) );
+    SfxInt32Item aRAngle = aBoxAF.m_aRotateAngle;
+    //Set m_aRotateMode
+    aBoxAF.m_aRotateMode.SetValue( SVX_ROTATE_MODE_CENTER );
+    SvxRotateModeItem aRMode = aBoxAF.m_aRotateMode;
+    //Set m_sNumFormatString
+    OUString aNFString = "UnitTestFormat";
+    aBoxAF.m_sNumFormatString = aNFString;
+    //Set m_eSysLanguage
+    LanguageType aSLang( LANGUAGE_ENGLISH_INDIA );
+    aBoxAF.m_eSysLanguage = aSLang;
+    //Set m_eNumFormatLanguage
+    LanguageType aNFLang( LANGUAGE_GERMAN );
+    aBoxAF.m_eNumFormatLanguage = aNFLang;
+    //Set m_aBreak
+    SvxFormatBreakItem aBreak( SvxBreak::PageBefore, 0 );
+    aTableAF.m_aBreak = aBreak;
+    //Set m_aKeepWithNextPara
+    SvxFormatKeepItem aKWNPara( true, 0 );
+    aTableAF.m_aKeepWithNextPara = aKWNPara;
+    //Set m_aPageDesc
+    SwFormatPageDesc aPDesc;
+    uno::Any aPDAny( sal_uInt16(3) );
+    aPDesc.PutValue( aPDAny, 0 );
+    aTableAF.m_aPageDesc = aPDesc;
+    //Set m_aRepeatHeading
+    sal_uInt16 aRHeading = 3;
+    aTableAF.m_aRepeatHeading = aRHeading;
+    //Set m_bLayoutSplit
+    bool aLSplit = false;
+    aTableAF.m_bLayoutSplit = aLSplit;
+    //Set m_bRowSplit
+    bool aRSplit = false;
+    aTableAF.m_bRowSplit = aRSplit;
+    //Set m_bCollapsingBorders
+    bool aCBorders = false;
+    aTableAF.m_bCollapsingBorders = aCBorders;
+    //Set m_aShadow
+    SvxShadowItem aShadow( 0, nullptr, 103, SvxShadowLocation::BottomLeft );
+    aTableAF.m_aShadow = aShadow;
+    //Set bInclFont
+    bool aIFont = false;
+    aTableAF.bInclFont = aIFont;
+    //Set bInclJustify
+    bool aIJustify = false;
+    aTableAF.bInclJustify = aIJustify;
+    //Set bInclFrame
+    bool aIFrame = false;
+    aTableAF.bInclFrame = aIFrame;
+    //Set bInclBackground
+    bool aIBackground = false;
+    aTableAF.bInclBackground = aIBackground;
+    //Set bInclValueFormat
+    bool aIVFormat = false;
+    aTableAF.bInclValueFormat = aIVFormat;
+
+    //set the box format to AutoFormat
+    aTableAF.SetBoxFormat( aBoxAF, sal_uInt8(0) );
+    //add AutoFormat to AutoFormatTable
+    aTableAFT.AddAutoFormat( aTableAF );
+
+    //check the style size
+    CPPUNIT_ASSERT_EQUAL( size_t(2),  aTableAFT.size() );
+
+    //save the bInclFontstyles
+    aTableAFT.Save();
+
+    //check the style size after save
+    CPPUNIT_ASSERT_EQUAL( size_t(2),  aTableAFT.size() );
+
+    //create new AutoFormatTable
+    SwTableAutoFormatTable aLoadTAFT;
+
+    //check the style size
+    CPPUNIT_ASSERT_EQUAL( size_t(1),  aLoadTAFT.size() );
+
+    //load the saved styles
+    aLoadTAFT.Load();
+
+    //check the style size after load
+    CPPUNIT_ASSERT_EQUAL( size_t(2),  aLoadTAFT.size() );
+
+    //assert the values
+    SwTableAutoFormat* pLoadAF = aLoadTAFT.FindAutoFormat( "TestItemStyle" );
+    CPPUNIT_ASSERT( pLoadAF );
+    //GetFont
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetFont() == aFont ) );
+    //GetHeight
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetHeight() == aHeight ) );
+    //GetWeight
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetWeight() == aWeight ) );
+    //GetPosture
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetPosture() == aPosture ) );
+    //GetCJKFont
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCJKFont() == aCJKFont ) );
+    //GetCJKHeight
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCJKHeight() == aCJKHeight ) );
+    //GetCJKWeight
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCJKWeight() == aCJKWeight ) );
+    //GetCJKPosture
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCJKPosture() == aCJKPosture ) );
+    //GetCTLFont
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCTLFont() == aCTLFont ) );
+    //GetCTLHeight
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCTLHeight() == aCTLHeight ) );
+    //GetCTLWeight
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCTLWeight() == aCTLWeight ) );
+    //GetCTLPosture
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCTLPosture() == aCTLPosture ) );
+    //GetUnderline
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetUnderline() == aUnderline ) );
+    //GetOverline
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetOverline() == aOverline ) );
+    //GetCrossedOut
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetCrossedOut() == aCrossedOut ) );
+    //GetContour
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetContour() == aContour ) );
+    //GetShadowed
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetShadowed() == aShadowed ) );
+    //GetColor
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetColor() == aColor) );
+    //GetAdjust
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetAdjust() == aAdjust ) );
+    //GetTextOrientation
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetTextOrientation() == aTOrientation ) );
+    //GetVerticalAlignment
+    CPPUNIT_ASSERT (bool( pLoadAF->GetBoxFormat(0).GetVerticalAlignment() == aVAlignment ) );
+    //GetBox
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetBox() == aBox ) );
+    //GetBackground
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetBackground() == aBackground ) );
+    //Get m_aTLBR
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aTLBR == aTLBRLine ) );
+    //Get m_aBLTR
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aBLTR == aBLTRLine ) );
+    //Get m_aHorJustify
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aHorJustify == aHJustify ) );
+    //Get m_aVerJustify
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aVerJustify == aVJustify ) );
+    //Get m_aStacked
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aStacked == aStacked ) );
+    //Get m_aMargin
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aMargin == aMargin ) );
+    //Get m_aLinebreak
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aLinebreak == aLBreak ) );
+    //Get m_aRotateAngle
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aRotateAngle == aRAngle ) );
+    //Get m_aRotateMode
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_aRotateMode == aRMode ) );
+    //Get m_sNumFormatString
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_sNumFormatString == aNFString ) );
+    //Get m_eSysLanguage
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_eSysLanguage == aSLang ) );
+    //Get m_eNumFormatLanguage
+    CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).m_eNumFormatLanguage == aNFLang ) );
+    //Get m_aBreak
+    CPPUNIT_ASSERT( bool( pLoadAF->m_aBreak == aBreak ) );
+    //Get m_aKeepWithNextPara
+    CPPUNIT_ASSERT( bool( pLoadAF->m_aKeepWithNextPara == aKWNPara ) );
+    //Get m_aPageDesc
+    CPPUNIT_ASSERT( bool( pLoadAF->m_aPageDesc == aPDesc ) );
+    //Get m_aRepeatHeading
+    CPPUNIT_ASSERT( bool( pLoadAF->m_aRepeatHeading == aRHeading ) );
+    //Get m_bLayoutSplit
+    CPPUNIT_ASSERT( bool( pLoadAF->m_bLayoutSplit == aLSplit ) );
+    //Get m_bRowSplit
+    CPPUNIT_ASSERT( bool( pLoadAF->m_bRowSplit == aRSplit ) );
+    //Get m_bCollapsingBorders
+    CPPUNIT_ASSERT( bool( pLoadAF->m_bCollapsingBorders == aCBorders ) );
+    //Get m_aShadow
+    CPPUNIT_ASSERT( bool( pLoadAF->m_aShadow == aShadow ) );
+    //Get bInclFont
+    CPPUNIT_ASSERT( bool( pLoadAF->bInclFont == aIFont ) );
+    //Get bInclJustify
+    CPPUNIT_ASSERT( bool( pLoadAF->bInclJustify == aIJustify ) );
+    //Get bInclFrame
+    CPPUNIT_ASSERT( bool( pLoadAF->bInclFrame == aIFrame ) );
+    //Get bInclBackground
+    CPPUNIT_ASSERT( bool( pLoadAF->bInclBackground == aIBackground ) );
+    //Get bInclValueFormat
+    CPPUNIT_ASSERT( bool( pLoadAF->bInclValueFormat == aIVFormat ) );
 }
 
 static OUString
