@@ -169,7 +169,7 @@ bool HWPFile::Read4b(int &out)
     return true;
 }
 
-int HWPFile::Read1b(void *ptr, size_t nmemb)
+size_t HWPFile::Read1b(void *ptr, size_t nmemb)
 {
     return hiodev ? hiodev->read1b(ptr, nmemb) : 0;
 }

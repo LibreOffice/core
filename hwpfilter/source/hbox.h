@@ -630,7 +630,7 @@ struct Picture: public FBox
 /**
  * It's for the Drawing object
  */
-    std::unique_ptr<unsigned char[]> follow;                        /* When the type of image is drawing, gives additional information. */
+    std::vector<unsigned char> follow;                        /* When the type of image is drawing, gives additional information. */
 
     bool ishyper;
 
