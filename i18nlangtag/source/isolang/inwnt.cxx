@@ -60,12 +60,12 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
         {
             LANGID nLangId;
 
-            nLangId = (pGetUserDefault)();
+            nLangId = pGetUserDefault();
             nLang = GetSVLang( nLangId );
 
             if ( nLang == LANGUAGE_DONTKNOW )
             {
-                nLangId = (pGetSystemDefault)();
+                nLangId = pGetSystemDefault();
                 nLang = GetSVLang( nLangId );
             }
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
