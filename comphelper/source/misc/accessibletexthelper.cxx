@@ -78,7 +78,7 @@ namespace comphelper
     }
 
 
-    bool OCommonAccessibleText::implIsValidBoundary( i18n::Boundary& rBoundary, sal_Int32 nLength )
+    bool OCommonAccessibleText::implIsValidBoundary( i18n::Boundary const & rBoundary, sal_Int32 nLength )
     {
         return ( rBoundary.startPos >= 0 ) && ( rBoundary.startPos < nLength ) && ( rBoundary.endPos >= 0 ) && ( rBoundary.endPos <= nLength );
     }
