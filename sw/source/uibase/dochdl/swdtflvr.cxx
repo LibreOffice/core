@@ -304,14 +304,13 @@ void SwTransferable::AddSupportedFormats()
     }
 }
 
-void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& rDoc )
+void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& )
 {
     //set OleVisArea. Upper left corner of the page and size of
     //RealSize in Twips.
     const Size aSz( OLESIZE );
     SwRect aVis( Point( DOCUMENTBORDER, DOCUMENTBORDER ), aSz );
     pDoc->SetVisArea( aVis.SVRect() );
-    rDoc.getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, true );
 }
 
 uno::Reference < embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64& nAspect ) const
