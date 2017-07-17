@@ -1410,9 +1410,10 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
         rStream.WriteUInt16( m_pImpl->m_AutoFormats.size() - 1 );
         bRet = ERRCODE_NONE == rStream.GetError();
 
-        for (auto const & rFormat: m_pImpl->m_AutoFormats)
+        for (sal_uInt16 i = 1; bRet && i < m_pImpl->m_AutoFormats.size(); ++i)
         {
-            bRet = rFormat->Save(rStream, AUTOFORMAT_FILE_VERSION);
+            SwTableAutoFormat const& rFormat = *m_pImpl->m_AutoFormats[i];
+            bRet = rFormat.Save(rStream, AUTOFORMAT_FILE_VERSION);
         }
     }
     rStream.Flush();
