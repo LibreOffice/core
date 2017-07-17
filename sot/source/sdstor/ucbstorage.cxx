@@ -2412,7 +2412,7 @@ void UCBStorage::FillInfoList( SvStorageInfoList* pList ) const
     }
 }
 
-bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, BaseStorage* pDest, const OUString& rNew ) const
+bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl const & rElement, BaseStorage* pDest, const OUString& rNew ) const
 {
     // insert stream or storage into the list or stream of the destination storage
     // not into the content, this will be done on commit !

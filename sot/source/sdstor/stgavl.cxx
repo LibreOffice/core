@@ -33,7 +33,7 @@ StgAvlNode::~StgAvlNode()
     delete m_pRight;
 }
 
-StgAvlNode* StgAvlNode::Find( StgAvlNode* pFind )
+StgAvlNode* StgAvlNode::Find( StgAvlNode const * pFind )
 {
     if ( pFind )
     {
@@ -53,7 +53,7 @@ StgAvlNode* StgAvlNode::Find( StgAvlNode* pFind )
 // +/0/- for >/=/< previous
 
 short StgAvlNode::Locate
-    ( StgAvlNode* pFind,
+    ( StgAvlNode const * pFind,
       StgAvlNode** pPivot, StgAvlNode **pParent, StgAvlNode** pPrev )
 {
     short nRes = 0;
@@ -89,7 +89,7 @@ short StgAvlNode::Locate
 // adjust balance factors in AVL tree from pivot down.
 // Returns delta balance.
 
-short StgAvlNode::Adjust( StgAvlNode** pHeavy, StgAvlNode* pNew )
+short StgAvlNode::Adjust( StgAvlNode** pHeavy, StgAvlNode const * pNew )
 {
     StgAvlNode* pCur = this;
     short nDelta;

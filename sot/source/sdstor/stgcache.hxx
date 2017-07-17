@@ -74,13 +74,13 @@ public:
     void  SetStrm( UCBStorageStream* );
     bool  Good() const                      { return m_nError == ERRCODE_NONE; }
     ErrCode GetError()                      { return m_nError;    }
-    void  MoveError( StorageBase& );
+    void  MoveError( StorageBase const & );
     void  SetError( ErrCode );
     void  ResetError();
     bool  Open( const OUString& rName, StreamMode );
     void  Close();
     bool  Read( sal_Int32 nPage, void* pBuf );
-    bool  Write( sal_Int32 nPage, void* pBuf );
+    bool  Write( sal_Int32 nPage, void const * pBuf );
 
     // two routines for accessing FAT pages
     // Assume that the data is a FAT page and get/put FAT data.
