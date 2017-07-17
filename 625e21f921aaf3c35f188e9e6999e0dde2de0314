@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_a472b6e3",
+        "filename": "include/rtl/textcvt.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-07-17T11:17:23Z",
+      "side": 1,
+      "message": "If you end the comment in a colon (and probably also start it with an upper case letter, like a full sentence), it becomes more obvious that it pertains to the following line, not the preceding one.  (And is \"mispelled\" misspelled on purpose?)",
+      "revId": "625e21f921aaf3c35f188e9e6999e0dde2de0314",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
