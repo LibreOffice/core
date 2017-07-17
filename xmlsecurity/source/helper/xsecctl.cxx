@@ -726,10 +726,12 @@ void XSecController::exportSignature(
             // GPG or X509 key?
             if (!signatureInfo.ouGpgCertificate.isEmpty())
             {
+                pAttributeList = new SvXMLAttributeList();
+                pAttributeList->AddAttribute("xmlns:loext", NS_LOEXT);
                 /* Write PGPData element */
                 xDocumentHandler->startElement(
                     "PGPData",
-                    cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                    cssu::Reference< cssxs::XAttributeList > (pAttributeList));
                 {
                     /* Write keyid element */
                     xDocumentHandler->startElement(
@@ -750,10 +752,10 @@ void XSecController::exportSignature(
 
                     /* Write PGPOwner element */
                     xDocumentHandler->startElement(
-                        "PGPOwner",
-                        cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                        "loext:PGPOwner",
+                        cssu::Reference< cssxs::XAttributeList >(new SvXMLAttributeList()));
                     xDocumentHandler->characters( signatureInfo.ouGpgOwner );
-                    xDocumentHandler->endElement( "PGPOwner" );
+                    xDocumentHandler->endElement( "loext:PGPOwner" );
                 }
                 xDocumentHandler->endElement( "PGPData" );
             }
