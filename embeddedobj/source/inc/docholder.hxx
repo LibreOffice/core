@@ -128,7 +128,12 @@ public:
 
     OUString GetTitle() const
     {
-        return m_aContainerName + " - " + m_aDocumentNamePart;
+        return m_aContainerName + ( m_aDocumentNamePart.isEmpty() ? OUString() : ( " - " + m_aDocumentNamePart ) );
+    }
+
+    OUString GetContainerName() const
+    {
+        return m_aContainerName;
     }
 
     void SetOutplaceFrameProperties( const css::uno::Sequence< css::uno::Any >& aProps )
