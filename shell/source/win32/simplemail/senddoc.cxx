@@ -206,11 +206,11 @@ void initParameter(int argc, char* argv[])
             continue;
         }
 
-        if ((_stricmp(argv[i], "--mapi-dialog") == 0))
+        if (_stricmp(argv[i], "--mapi-dialog") == 0)
         {
             gMapiFlags |= MAPI_DIALOG;
         }
-        else if ((_stricmp(argv[i], "--mapi-logon-ui") == 0))
+        else if (_stricmp(argv[i], "--mapi-logon-ui") == 0)
         {
             gMapiFlags |= MAPI_LOGON_UI;
         }
@@ -228,7 +228,7 @@ void initParameter(int argc, char* argv[])
                 gSubject = argv[i+1];
             else if (_stricmp(argv[i], "--body") == 0)
                 gBody = argv[i+1];
-            else if ((_stricmp(argv[i], "--attach") == 0))
+            else if (_stricmp(argv[i], "--attach") == 0)
                 gAttachments.push_back(argv[i+1]);
 
             i++;

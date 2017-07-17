@@ -87,7 +87,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
             REFIID riid,
             void __RPC_FAR *__RPC_FAR *ppvObject)
 {
-    if ((pUnkOuter != nullptr))
+    if (pUnkOuter != nullptr)
         return CLASS_E_NOAGGREGATION;
 
     IUnknown* pUnk = nullptr;
