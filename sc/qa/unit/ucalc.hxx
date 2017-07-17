@@ -220,6 +220,7 @@ public:
     void testMatConcatReplication();
     void testRefR1C1WholeCol();
     void testRefR1C1WholeRow();
+    void testIterations();
 
     void testExternalRef();
     void testExternalRefFunctions();
@@ -614,6 +615,7 @@ public:
     CPPUNIT_TEST(testFuncGETPIVOTDATALeafAccess);
     CPPUNIT_TEST(testRefR1C1WholeCol);
     CPPUNIT_TEST(testRefR1C1WholeRow);
+    CPPUNIT_TEST(testIterations);
     CPPUNIT_TEST(testMatrixOp);
     CPPUNIT_TEST(testFuncRangeOp);
     CPPUNIT_TEST(testFuncFORMULA);
