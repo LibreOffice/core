@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_libraries,writer,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,writer,\
+	connectivity/source/drivers/writer/WCatalog \
 	connectivity/source/drivers/writer/WConnection \
 	connectivity/source/drivers/writer/WDatabaseMetaData \
 	connectivity/source/drivers/writer/WDriver \
