@@ -431,19 +431,35 @@ bool Picture::Read(HWPFile & hwpf)
 
     if (follow_block_size != 0)
     {
-        follow.reset( new unsigned char[follow_block_size] );
+        follow.clear();
 
-        hwpf.Read1b(follow.get(), follow_block_size);
+        //read potentially compressed data in blocks as its more
+        //likely large values are simply broken and we'll run out
+        //of data before we need to realloc
+        for (size_t i = 0; i < follow_block_size; i+= SAL_MAX_UINT16)
+        {
+           size_t nOldSize = follow.size();
+           size_t nBlock = std::min<size_t>(SAL_MAX_UINT16, follow_block_size - nOldSize);
+           follow.resize(nOldSize + nBlock);
+           size_t nReadBlock = hwpf.Read1b(follow.data() + nOldSize, nBlock);
+           if (nBlock != nReadBlock)
+           {
+               follow.resize(nOldSize + nReadBlock);
+               break;
+           }
+        }
+        follow_block_size = follow.size();
+
         if (pictype == PICTYPE_DRAW)
         {
-            hmem = new HMemIODev(reinterpret_cast<char *>(follow.get()), follow_block_size);
+            hmem = new HMemIODev(reinterpret_cast<char *>(follow.data()), follow_block_size);
             LoadDrawingObjectBlock(this);
             style.cell = picinfo.picdraw.hdo;
             delete hmem;
 
             hmem = nullptr;
         }
-        else
+        else if (follow_block_size >= 4)
         {
             if ((follow[3] << 24 | follow[2] << 16 | follow[1] << 8 | follow[0]) == 0x269)
             {
