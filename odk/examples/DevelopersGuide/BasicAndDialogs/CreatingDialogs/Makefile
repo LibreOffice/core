@@ -106,7 +106,7 @@ $(COMPONENT_PACKAGE) : $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANIFEST)
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
-ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
