@@ -194,7 +194,7 @@ void SAL_CALL XSecParser::startElement(
             m_ouGpgCertificate.clear();
             m_bInGpgCertificate = true;
         }
-        else if (aName == "PGPOwner")
+        else if (aName == "loext:PGPOwner")
         {
             m_ouGpgOwner.clear();
             m_bInGpgOwner = true;
@@ -322,7 +322,7 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
             m_pXSecController->setGpgCertificate( m_ouGpgCertificate );
             m_bInGpgCertificate = false;
         }
-        else if (aName == "PGPOwner")
+        else if (aName == "loext:PGPOwner")
         {
             m_pXSecController->setGpgOwner( m_ouGpgOwner );
             m_bInGpgOwner = false;

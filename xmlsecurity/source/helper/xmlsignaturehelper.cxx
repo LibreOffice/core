@@ -51,7 +51,6 @@
 
 #define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
 #define NS_DOCUMENTSIGNATURES_ODF_1_2 "urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"
-#define NS_DOCUMENTSIGNATURES_LOEXT "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
 #define OOXML_SIGNATURE_ORIGIN "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"
 #define OOXML_SIGNATURE_SIGNATURE "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature"
 
@@ -59,7 +58,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< uno::XComponentContext >& rxCtx)
-    : mxCtx(rxCtx), mbODFPre1_2(false), mbHasGpgSignatures(false)
+    : mxCtx(rxCtx), mbODFPre1_2(false)
 {
     mpXSecController = new XSecController(rxCtx);
     mbError = false;
@@ -129,7 +128,6 @@ void XMLSignatureHelper::SetGpgCertificate(sal_Int32 nSecurityId,
                                            const OUString& ouGpgCert,
                                            const OUString& ouGpgOwner)
 {
-    mbHasGpgSignatures = true;
     mpXSecController->setGpgCertificate(
         nSecurityId,
         ouGpgCertDigest,
@@ -180,9 +178,6 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
     pAttributeList->AddAttribute(
         "xmlns",
         sNamespace);
-
-    if (mbHasGpgSignatures)
-        pAttributeList->AddAttribute("xmlns:loext", NS_DOCUMENTSIGNATURES_LOEXT);
 
     xSaxWriter->startDocument();
     xSaxWriter->startElement(
