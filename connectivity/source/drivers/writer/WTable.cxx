@@ -30,6 +30,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <svl/converter.hxx>
 #include "writer/WConnection.hxx"
+#include "writer/WColumns.hxx"
 #include <connectivity/sdbcx/VColumn.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/thread.h>
@@ -231,7 +232,7 @@ void OWriterTable::refreshColumns()
     if (m_pColumns)
         m_pColumns->reFill(aVector);
     else
-        SAL_WARN("connectivity.writer", "TODO implement OWriterTable::refreshColumns");
+        m_pColumns = new OWriterColumns(this, m_aMutex, aVector);
 }
 
 void OWriterTable::refreshIndexes()
