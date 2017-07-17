@@ -377,7 +377,6 @@ Picture::Picture()
     , cap_pos(0)
     , num(0)
     , pictype(0)
-    , follow(nullptr)
     , ishyper(false)
 {
 }

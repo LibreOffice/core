@@ -3827,16 +3827,16 @@ void HwpReader::makePicture(Picture * hbox)
                 padd("xlink:type", sXML_CDATA, "simple");
 #ifdef _WIN32
                 if( hbox->follow[4] != 0 )
-                    padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(hbox->follow.get() + 4).c_str())));
+                    padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(hbox->follow.data() + 4).c_str())));
                 else
-                    padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(hbox->follow.get() + 5).c_str())));
+                    padd("xlink:href", sXML_CDATA, reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(hbox->follow.data() + 5).c_str())));
 #else
                 if( hbox->follow[4] != 0 )
                     padd("xlink:href", sXML_CDATA,
-                        reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.get() + 4)).c_str())).c_str())));
+                        reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 4)).c_str())).c_str())));
                 else
                     padd("xlink:href", sXML_CDATA,
-                        reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.get() + 5)).c_str())).c_str())));
+                        reinterpret_cast<sal_Unicode const *>(hconv(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 5)).c_str())).c_str())));
 #endif
                 rstartEl("draw:a", mxList.get());
                 mxList->clear();
