@@ -42,6 +42,7 @@ $(eval $(call gb_Library_add_exception_objects,writer,\
 	connectivity/source/drivers/writer/WConnection \
 	connectivity/source/drivers/writer/WDatabaseMetaData \
 	connectivity/source/drivers/writer/WDriver \
+	connectivity/source/drivers/writer/WPreparedStatement \
 	connectivity/source/drivers/writer/WTable \
 	connectivity/source/drivers/writer/WTables \
 	connectivity/source/drivers/writer/Wservices \
