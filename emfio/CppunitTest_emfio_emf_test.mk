@@ -27,16 +27,13 @@ $(eval $(call gb_CppunitTest_add_exception_objects,emfio_emf,\
 
 $(eval $(call gb_CppunitTest_use_sdk_api,emfio_emf))
 
-$(eval $(call gb_CppunitTest_use_library_objects,emfio_emf,\
-    emfio \
-))
-
 $(eval $(call gb_CppunitTest_use_libraries,emfio_emf,\
     basegfx \
     drawinglayer \
     cppu \
     cppuhelper \
     comphelper \
+    emfio \
     sal \
     svt \
     test \

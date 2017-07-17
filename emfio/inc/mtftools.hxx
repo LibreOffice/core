@@ -30,6 +30,8 @@
 #include <vcl/outdevstate.hxx>
 #include <vcl/FilterConfigItem.hxx>
 
+#include "emfiodllapi.h"
+
 #define ERROR                   0
 #define NULLREGION              1
 #define COMPLEXREGION           3
@@ -298,7 +300,7 @@ namespace emfio
         virtual ~GDIObj() = default; // Polymorphic base class
     };
 
-    struct WinMtfFontStyle : GDIObj
+    struct EMFIO_DLLPUBLIC WinMtfFontStyle : GDIObj
     {
         vcl::Font    aFont;
 
@@ -438,7 +440,7 @@ namespace emfio
         {}
     };
 
-    class MtfTools
+    class EMFIO_DLLPUBLIC MtfTools
     {
     protected:
         WinMtfPathObj       maPathObj;
