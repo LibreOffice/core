@@ -1448,16 +1448,17 @@ int Desktop::Main()
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
 
-        /* tdf#109085 temporary don't show warning about another instance running
-        m_xLockfile.reset(new Lockfile);
-
-        if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
-             !rCmdLineArgs.IsNoLockcheck() && !m_xLockfile->check( Lockfile_execWarning ))
+        if ( getenv ( "NO_LOCKFILE" ) == nullptr )
         {
-            // Lockfile exists, and user clicked 'no'
-            return EXIT_FAILURE;
+            m_xLockfile.reset(new Lockfile);
+
+            if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
+                 !rCmdLineArgs.IsNoLockcheck() && !m_xLockfile->check( Lockfile_execWarning ))
+            {
+                // Lockfile exists, and user clicked 'no'
+                return EXIT_FAILURE;
+            }
         }
-        */
 
         // check if accessibility is enabled but not working and allow to quit
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
