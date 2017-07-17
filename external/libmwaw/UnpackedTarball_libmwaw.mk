@@ -35,12 +35,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
 ))
 endif
 
-$(eval $(call gb_UnpackedTarball_add_patches,libmwaw,\
-	external/libmwaw/0001-fix-build-with-MSVC.patch.1 \
-	external/libmwaw/libmwaw-fix-compare-assert.patch.1 \
-	external/libmwaw/0001-ofz-1037-resize-vector-correctly.patch.1 \
-))
-
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
     external/libmwaw/iOS.patch.0 \
 ))
