@@ -227,14 +227,20 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                 }
                 else
                 {
-                    SwPaM* pCursor = pWrtShell->GetCursor();
                     // mark the start position only if not at start of doc
                     if(!pWrtShell->IsStartOfDoc())
                     {
-                        m_pSpellState->m_xStartRange =
-                            SwXTextRange::CreateXTextRange(
-                                *pWrtShell->GetDoc(),
-                                *pCursor->Start(), pCursor->End());
+                        // Record the position *before* the current cursor, as
+                        // the word at the current cursor can possibly be
+                        // replaced by a spellcheck correction which invalidates
+                        // an XTextRange at this position.
+                        SwDoc *pDoc = pWrtShell->GetDoc();
+                        auto pStart = pWrtShell->GetCursor()->Start();
+                        auto pUnoCursor = pDoc->CreateUnoCursor(*pStart);
+                        pUnoCursor->Left( 1 );
+                        pStart = pUnoCursor->Start();
+                        m_pSpellState->m_xStartRange
+                            = SwXTextRange::CreateXTextRange(*pDoc, *pStart, nullptr);
                     }
                     pWrtShell->SpellStart( SwDocPositions::Start, SwDocPositions::End, SwDocPositions::Curr );
                 }
