@@ -96,7 +96,8 @@ static void lcl_MakeAutoFrames( const SwFrameFormats& rSpzArr, sal_uLong nMovedI
 SwUndoDelete::SwUndoDelete(
     SwPaM& rPam,
     bool bFullPara,
-    bool bCalledByTableCpy )
+    bool bCalledByTableCpy,
+    bool bCalledByRedlineDelete )
     : SwUndo(SwUndoId::DELETE, rPam.GetDoc()),
     SwUndRng( rPam ),
     m_pMvStt( nullptr ),
@@ -116,7 +117,8 @@ SwUndoDelete::SwUndoDelete(
     m_bDelFullPara( bFullPara ),
     m_bResetPgDesc( false ),
     m_bResetPgBrk( false ),
-    m_bFromTableCopy( bCalledByTableCpy )
+    m_bFromTableCopy( bCalledByTableCpy ),
+    m_bFromRedlineDelete( bCalledByRedlineDelete )
 {
 
     bCacheComment = false;
@@ -214,7 +216,8 @@ SwUndoDelete::SwUndoDelete(
 
     if( !pSttTextNd && !pEndTextNd )
         --rPam.GetPoint()->nNode;
-    rPam.DeleteMark();          // the SPoint is in the selection
+    if( !m_bFromRedlineDelete )     // Make sure that it's not a redline since calling DeleteMark() will result in an empty redline
+        rPam.DeleteMark();          // the SPoint is in the selection
 
     if( !pEndTextNd )
         nEndContent = 0;
@@ -385,7 +388,8 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
         // delete now also the text (all attribute changes are added to
         // UNDO history)
         m_pSttStr.reset( new OUString( pSttTextNd->GetText().copy(nSttContent, nLen)) );
-        pSttTextNd->EraseText( pStt->nContent, nLen );
+        if( !m_bFromRedlineDelete )
+            pSttTextNd->EraseText( pStt->nContent, nLen );
         if( pSttTextNd->GetpSwpHints() )
             pSttTextNd->GetpSwpHints()->DeRegister();
 
@@ -421,7 +425,8 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
         // UNDO history)
         m_pEndStr.reset( new OUString( pEndTextNd->GetText().copy( 0,
                                     pEnd->nContent.GetIndex() )) );
-        pEndTextNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
+        if( !m_bFromRedlineDelete )
+            pEndTextNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
         if( pEndTextNd->GetpSwpHints() )
             pEndTextNd->GetpSwpHints()->DeRegister();
 
@@ -503,14 +508,18 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
 
     // Both 'deletes' can be consolidated, so 'move' the related character
     if( m_bBackSp )
+    {
         nSttContent--;    // BackSpace: add char to array!
+    }
     else
     {
         nEndContent++;    // Delete: attach char at the end
         nUChrPos++;
     }
     (*m_pSttStr) = m_pSttStr->replaceAt( nUChrPos, 0, OUString(cDelChar) );
-    pDelTextNd->EraseText( pStt->nContent, 1 );
+
+    if( !m_bFromRedlineDelete )
+        pDelTextNd->EraseText( pStt->nContent, 1 );
 
     m_bGroup = true;
     return true;
@@ -761,6 +770,13 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc& rDoc = rContext.GetDoc();
 
+    if(m_bFromRedlineDelete)
+    {
+        SwPaM & rPam = AddUndoRedoPaM(rContext);
+        rDoc.getIDocumentRedlineAccess().DeleteRedline(rPam, true, USHRT_MAX);
+        return;
+    }
+
     sal_uLong nCalcStt = nSttNode - m_nNdDiff;
 
     if( m_nSectDiff && m_bBackSp )
@@ -970,6 +986,19 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwPaM & rPam = AddUndoRedoPaM(rContext);
     SwDoc& rDoc = *rPam.GetDoc();
+
+    if(m_bFromRedlineDelete)
+    {
+        RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
+        if (rPam.GetPoint() != rPam.GetMark())
+        {
+            rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline(nsRedlineType_t::REDLINE_DELETE, rPam), false );
+        }
+        SetPaM(rPam, true);
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+        return;
+    }
 
     if( m_pRedlSaveData )
     {
