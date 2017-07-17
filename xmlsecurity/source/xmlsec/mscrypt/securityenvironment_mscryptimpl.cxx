@@ -994,9 +994,9 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const css::
         if( CryptAcquireCertificatePrivateKey( pCertContext ,
                    0 ,
                    nullptr ,
-                   &( hProv ) ,
-                   &( dwKeySpec ) ,
-                   &( fCallerFreeProv ) )
+                   &hProv,
+                   &dwKeySpec,
+                   &fCallerFreeProv )
         ) {
             characters |=  css::security::CertificateCharacters::HAS_PRIVATE_KEY ;
 
