@@ -749,13 +749,11 @@ void XSecController::exportSignature(
                     }
 
                     /* Write PGPOwner element */
-                    pAttributeList = new SvXMLAttributeList();
-                    pAttributeList->AddAttribute("namespace", "loext");
                     xDocumentHandler->startElement(
-                        "PGPOwner",
-                        cssu::Reference< cssxs::XAttributeList >(pAttributeList));
+                        "loext:PGPOwner",
+                        cssu::Reference< cssxs::XAttributeList >(new SvXMLAttributeList()));
                     xDocumentHandler->characters( signatureInfo.ouGpgOwner );
-                    xDocumentHandler->endElement( "PGPOwner" );
+                    xDocumentHandler->endElement( "loext:PGPOwner" );
                 }
                 xDocumentHandler->endElement( "PGPData" );
             }
