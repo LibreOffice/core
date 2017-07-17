@@ -149,7 +149,7 @@ void timerStart(timer* mytimer)
 }
 
 /* Timer functions - get current value */
-double timerCurrent(timer* mytimer)
+double timerCurrent(timer const * mytimer)
 {
 #ifdef _WIN32
     LARGE_INTEGER stop, frequency;
@@ -181,7 +181,7 @@ double random(double min, double max)
 }
 
 /* Populate input */
-void populateInput(std::unique_ptr<LibreOfficeDeviceEvaluationIO>& testData)
+void populateInput(std::unique_ptr<LibreOfficeDeviceEvaluationIO> const & testData)
 {
     double* input0 = &testData->input0[0];
     double* input1 = &testData->input1[0];
@@ -197,7 +197,7 @@ void populateInput(std::unique_ptr<LibreOfficeDeviceEvaluationIO>& testData)
 }
 
 /* Evaluate devices */
-ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOfficeDeviceEvaluationIO>& testData)
+ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOfficeDeviceEvaluationIO> const & testData)
 {
     if (rDevice.eType == DeviceType::OpenCLDevice)
     {
@@ -377,7 +377,7 @@ ds_status evaluateScoreForDevice(ds_device& rDevice, std::unique_ptr<LibreOffice
     return DS_SUCCESS;
 }
 
-ds_status profileDevices(std::unique_ptr<ds_profile>& pProfile, std::unique_ptr<LibreOfficeDeviceEvaluationIO>& pTestData)
+ds_status profileDevices(std::unique_ptr<ds_profile> const & pProfile, std::unique_ptr<LibreOfficeDeviceEvaluationIO> const & pTestData)
 {
     ds_status status = DS_SUCCESS;
 
@@ -397,7 +397,7 @@ ds_status profileDevices(std::unique_ptr<ds_profile>& pProfile, std::unique_ptr<
 }
 
 /* Pick best device */
-ds_status pickBestDevice(std::unique_ptr<ds_profile>& profile, int& rBestDeviceIndex)
+ds_status pickBestDevice(std::unique_ptr<ds_profile> const & profile, int& rBestDeviceIndex)
 {
     double bestScore = DBL_MAX;
 
@@ -469,7 +469,7 @@ ds_status pickBestDevice(std::unique_ptr<ds_profile>& profile, int& rBestDeviceI
 }
 
 /* Return device ID for matching device name */
-int matchDevice(std::unique_ptr<ds_profile>& profile, char* deviceName)
+int matchDevice(std::unique_ptr<ds_profile> const & profile, char* deviceName)
 {
     int deviceMatch = -1;
     for (unsigned int d = 0; d < profile->devices.size() - 1; d++)
@@ -517,7 +517,7 @@ public:
 };
 
 
-void writeDevicesLog(std::unique_ptr<ds_profile>& rProfile, OUString const & sProfilePath, int nSelectedIndex)
+void writeDevicesLog(std::unique_ptr<ds_profile> const & rProfile, OUString const & sProfilePath, int nSelectedIndex)
 {
     OUString aCacheFile(sProfilePath + "opencl_devices.log");
     LogWriter aWriter(aCacheFile);

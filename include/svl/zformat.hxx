@@ -114,7 +114,7 @@ public:
     sal_uInt16 GetCount() const { return nAnzStrings;}
 
     Color* GetColor() const { return pColor; }
-    void SetColor( Color* pCol, OUString& rName )
+    void SetColor( Color* pCol, OUString const & rName )
      { pColor = pCol; sColorName = rName; }
     const OUString& GetColorName() const { return sColorName; }
 
@@ -561,8 +561,8 @@ private:
     // check subcondition
     // OP undefined => -1
     // else 0 or 1
-    SVL_DLLPRIVATE static short ImpCheckCondition(double& fNumber,
-                         double& fLimit,
+    SVL_DLLPRIVATE static short ImpCheckCondition(double fNumber,
+                         double fLimit,
                          SvNumberformatLimitOps eOp);
 
     // Helper function for number strings

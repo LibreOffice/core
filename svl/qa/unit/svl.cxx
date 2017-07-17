@@ -84,7 +84,7 @@ private:
                             const OUString& sCode,
                             double fPreviewNumber,
                             LanguageType eLang,
-                            OUString& sExpected);
+                            OUString const & sExpected);
     void checkDateInput( SvNumberFormatter& rFormatter, const char* pTimezone, const char* pIsoDate );
     std::unique_ptr<icu::TimeZone> m_pDefaultTimeZone;
 };
@@ -393,7 +393,7 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
                               const OUString& sCode,
                               double fPreviewNumber,
                               LanguageType eLang,
-                              OUString& sExpected)
+                              OUString const & sExpected)
 {
     OUString sStr;
     Color* pColor = nullptr;
