@@ -418,6 +418,12 @@ postprocess_FILES_writer := \
 	$(postprocess_MOD)/org/openoffice/Office/Embedding-writer.xcu \
 	$(postprocess_MOD)/org/openoffice/Setup-writer.xcu
 
+ifeq (DBCONNECTIVITY,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+postprocess_FILES_writer += \
+	$(call gb_XcuModuleTarget_get_target,connectivity/registry/writer)/org/openoffice/Office/DataAccess/Drivers-writer.xcu
+postprocess_DRIVERS += writer
+endif
+
 postprocess_DEPS_xsltfilter := main
 postprocess_OPTDEPS_xsltfilter := calc writer
 postprocess_FILES_xsltfilter := \
