@@ -129,7 +129,7 @@ public:
     const   LocaleDataWrapper&  operator*() const   { return *get(); }
 };
 
-/** Load a calendar only if it's needed. Keep calendar for "en" locale
+/** Load a calendar only if it's needed. Keep calendar for "en-US" locale
     separately, as there can be alternation between locale dependent and
     locale independent formats.
     SvNumberformatter uses it upon switching locales.
@@ -143,7 +143,7 @@ class OnDemandCalendarWrapper
             css::lang::Locale  aEnglishLocale;
             css::lang::Locale  aLocale;
     mutable css::lang::Locale  aLastAnyLocale;
-            std::unique_ptr<CalendarWrapper> pEnglishPtr;
+    mutable std::unique_ptr<CalendarWrapper> pEnglishPtr;
     mutable std::unique_ptr<CalendarWrapper> pAnyPtr;
 
 public:
@@ -161,8 +161,7 @@ public:
                                     {
                                         m_xContext = rxContext;
                                         changeLocale( rLocale );
-                                        pEnglishPtr.reset(new CalendarWrapper( m_xContext ));
-                                        pEnglishPtr->loadDefaultCalendar( aEnglishLocale );
+                                        pEnglishPtr.reset();
                                         pAnyPtr.reset();
                                     }
 
@@ -176,6 +175,11 @@ public:
                                         CalendarWrapper* pPtr;
                                         if ( aLocale == aEnglishLocale )
                                         {
+                                            if (!pEnglishPtr)
+                                            {
+                                                pEnglishPtr.reset( new CalendarWrapper( m_xContext ));
+                                                pEnglishPtr->loadDefaultCalendar( aEnglishLocale );
+                                            }
                                             pPtr = pEnglishPtr.get();
                                         }
                                         else
