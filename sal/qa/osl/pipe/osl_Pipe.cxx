@@ -355,7 +355,7 @@ namespace osl_Pipe
     public:
         bool bRes, bRes1;
 
-        void clear_001( )
+        void clear_test( )
             {
                 ::osl::Pipe aPipe;
                 aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
@@ -367,7 +367,7 @@ namespace osl_Pipe
             }
 
         CPPUNIT_TEST_SUITE( clear );
-        CPPUNIT_TEST( clear_001 );
+        CPPUNIT_TEST( clear_test );
         CPPUNIT_TEST_SUITE_END( );
     };
 
