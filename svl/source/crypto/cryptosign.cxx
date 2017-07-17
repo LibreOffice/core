@@ -72,6 +72,7 @@ using namespace com::sun::star;
 
 namespace {
 
+#if HAVE_FEATURE_NSS
 void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 {
     static const sal_Char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
@@ -79,6 +80,7 @@ void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
     rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
     rBuffer.append( pHexDigits[ nInt & 15 ] );
 }
+#endif // HAVE_FEATURE_NSS
 
 #if HAVE_FEATURE_NSS && !defined(_WIN32)
 
@@ -2282,10 +2284,9 @@ bool Signing::Verify(SvStream& rStream,
     // Not implemented.
     (void)rStream;
     (void)aByteRanges;
-    (void)bNonDetected;
+    (void)bNonDetached;
     (void)aSignature;
     (void)rInformation;
-static_assert(false, "WHAT!!!");
     return false;
 #endif
 }
