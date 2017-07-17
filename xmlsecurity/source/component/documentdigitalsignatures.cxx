@@ -335,13 +335,9 @@ DocumentDigitalSignatures::ImplVerifySignatures(
                     rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName,
                                                                xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
-                // Verify certificate
-                //We have patched our version of libxmlsec, so that it does not verify the certificates. This has two
-                //reasons. First we want two separate status for signature and certificate. Second libxmlsec calls
-                //CERT_VerifyCertificate (Solaris, Linux) falsely, so that it always regards the certificate as valid.
-                //On Windows the checking of the certificate path is buggy. It does name matching (issuer, subject name)
-                //to find the parent certificate. It does not take into account that there can be several certificates
-                //with the same subject name.
+                // On Windows checking the certificate path is buggy. It does name matching (issuer, subject name)
+                // to find the parent certificate. It does not take into account that there can be several certificates
+                // with the same subject name.
 
                 try {
                     rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(rSigInfo.Signer,
