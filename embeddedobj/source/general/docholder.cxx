@@ -983,8 +983,11 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
             {
                 LanguageTag aLocale( Application::GetSettings().GetUILanguageTag() );
                 ResMgr* pResMgr = ResMgr::SearchCreateResMgr( "sfx", aLocale );
-                OUString nTitle = ResId( STR_EMBEDDED_TITLE, *pResMgr );
-                xModelTitle->setTitle( m_pEmbedObj->getContainerName() + nTitle );
+                OUString sEmbedded = ResId( STR_EMBEDDED_TITLE, *pResMgr );
+                xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded);
+                m_aContainerName = m_pEmbedObj->getContainerName();
+                // TODO: get real m_aDocumentNamePart
+                m_aDocumentNamePart = sEmbedded;
             }
 
             if ( bInPlace )
