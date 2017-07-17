@@ -868,7 +868,6 @@ uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
 
         // TODO/LATER: get it for the real aspect
         awt::Size aSize;
-        GetExtent( embed::Aspects::MSOLE_CONTENT, &aSize );
         LoadDocToFrame(false);
 
         if ( xOwnLM.is() )
@@ -876,6 +875,9 @@ uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
             xOwnLM->unlock();
             xOwnLM->lock();
         }
+
+        GetExtent(embed::Aspects::MSOLE_CONTENT, &aSize);
+        SetExtent(embed::Aspects::MSOLE_CONTENT, aSize);
 
         if ( xOwnLM.is() )
             xOwnLM->unlock();
