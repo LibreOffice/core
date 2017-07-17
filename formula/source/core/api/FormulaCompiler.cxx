@@ -2135,20 +2135,36 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
 
     if( eOp == ocSpaces )
     {
-        bool bIntersectionOp = mxSymbols->isODFF();
-        if (bIntersectionOp)
+        bool bWriteSpaces = true;
+        if (mxSymbols->isODFF())
         {
             const FormulaToken* p = pArr->PeekPrevNoSpaces();
-            bIntersectionOp = (p && p->GetOpCode() == ocColRowName);
+            bool bIntersectionOp = (p && p->GetOpCode() == ocColRowName);
             if (bIntersectionOp)
             {
                 p = pArr->PeekNextNoSpaces();
                 bIntersectionOp = (p && p->GetOpCode() == ocColRowName);
             }
+            if (bIntersectionOp)
+            {
+                rBuffer.append( "!!");
+                bWriteSpaces = false;
+            }
         }
-        if (bIntersectionOp)
-            rBuffer.append( "!!");
-        else
+        else if (mxSymbols->isOOXML())
+        {
+            // ECMA-376-1:2016 18.17.2 Syntax states "that no space characters
+            // shall separate a function-name from the left parenthesis (()
+            // that follows it." and Excel even chokes on it.
+            const FormulaToken* p = pArr->PeekPrevNoSpaces();
+            if (p && p->isFunction())
+            {
+                p = pArr->PeekNextNoSpaces();
+                if (p && p->GetOpCode() == ocOpen)
+                    bWriteSpaces = false;
+            }
+        }
+        if (bWriteSpaces)
         {
             // most times it's just one blank
             sal_uInt8 n = t->GetByte();
