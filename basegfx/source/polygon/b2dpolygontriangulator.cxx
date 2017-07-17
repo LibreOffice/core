@@ -114,7 +114,7 @@ namespace basegfx
             B2DPolygon                                      maResult;
 
             void handleClosingEdge(const B2DPoint& rStart, const B2DPoint& rEnd);
-            bool CheckPointInTriangle(EdgeEntry* pEdgeA, EdgeEntry* pEdgeB, const B2DPoint& rTestPoint);
+            bool CheckPointInTriangle(EdgeEntry* pEdgeA, EdgeEntry const * pEdgeB, const B2DPoint& rTestPoint);
             void createTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC);
 
         public:
@@ -178,7 +178,7 @@ namespace basegfx
             }
         }
 
-        bool Triangulator::CheckPointInTriangle(EdgeEntry* pEdgeA, EdgeEntry* pEdgeB, const B2DPoint& rTestPoint)
+        bool Triangulator::CheckPointInTriangle(EdgeEntry* pEdgeA, EdgeEntry const * pEdgeB, const B2DPoint& rTestPoint)
         {
             // inside triangle or on edge?
             if(tools::isPointInTriangle(pEdgeA->getStart(), pEdgeA->getEnd(), pEdgeB->getEnd(), rTestPoint, true))

@@ -272,7 +272,7 @@ namespace /* private */ {
 
 
     void read_recently_used_items(
-        recently_used_file& file,
+        recently_used_file const & file,
         recently_used_item_list_t& item_list)
     {
         xml_parser xparser;

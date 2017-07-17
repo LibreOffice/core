@@ -278,11 +278,11 @@ namespace basegfx
                 processing must proceed with, when going through the
                 list of upcoming active edges).
              */
-            std::ptrdiff_t intersect( SweepLineEvent&   rEvent,
-                                      ActiveEdge&       rActiveEdge,
-                                      VectorOfPolygons& rPolygonPool,
-                                      B2DPolyPolygon&   rRes,
-                                      bool              isFinishingEdge )
+            std::ptrdiff_t intersect( SweepLineEvent const & rEvent,
+                                      ActiveEdge&            rActiveEdge,
+                                      VectorOfPolygons&      rPolygonPool,
+                                      B2DPolyPolygon&        rRes,
+                                      bool                   isFinishingEdge )
             {
                 OSL_PRECOND( !mbIsFinished,
                              "ImplPolygon::intersect(): called on already finished polygon!" );
@@ -338,8 +338,8 @@ namespace basegfx
             }
 
         private:
-            void handleInitialOwnEdge(SweepLineEvent& rEvent,
-                                      ActiveEdge&     rActiveEdge)
+            void handleInitialOwnEdge(SweepLineEvent const & rEvent,
+                                      ActiveEdge&            rActiveEdge)
             {
                 const bool isActiveEdgeProceedLeft(
                     rActiveEdge.getEdgeDirection() == ActiveEdge::PROCEED_LEFT);
@@ -363,9 +363,9 @@ namespace basegfx
                 mpLeadingRightEdge = &rActiveEdge;
             }
 
-            void handleFinalOwnLeftEdge(ActiveEdge&       rActiveEdge,
-                                        VectorOfPolygons& rPolygonPool,
-                                        B2DPolyPolygon&   rRes)
+            void handleFinalOwnLeftEdge(ActiveEdge const & rActiveEdge,
+                                        VectorOfPolygons&  rPolygonPool,
+                                        B2DPolyPolygon&    rRes)
             {
                 OSL_ENSURE( rActiveEdge.getEdgeDirection() == ActiveEdge::PROCEED_LEFT,
                             "ImplPolygon::handleFinalOwnLeftEdge(): end edge wrong polygon order" );
@@ -465,8 +465,8 @@ namespace basegfx
             }
 
             /// True when sweep line hits our own active edge
-            static bool metOwnEdge(const SweepLineEvent& rEvent,
-                            ActiveEdge&           rActiveEdge)
+            static bool metOwnEdge(SweepLineEvent const & rEvent,
+                                   ActiveEdge const &     rActiveEdge)
             {
                 const bool bHitOwnEdge=&rEvent.getRect() == &rActiveEdge.getRect();
                 return bHitOwnEdge;
@@ -604,9 +604,9 @@ namespace basegfx
             @param rCurrEvent
             The actual event that caused this call
          */
-        void createActiveEdgesFromStartEvent( ListOfEdges&      io_rEdgeList,
-                                              VectorOfPolygons& io_rPolygonPool,
-                                              SweepLineEvent&   rCurrEvent )
+        void createActiveEdgesFromStartEvent( ListOfEdges &          io_rEdgeList,
+                                              VectorOfPolygons &     io_rPolygonPool,
+                                              SweepLineEvent const & rCurrEvent )
         {
             ListOfEdges         aNewEdges;
             const B2DRectangle& rRect=rCurrEvent.getRect();
@@ -686,8 +686,8 @@ namespace basegfx
                                  aNewEdges );
         }
 
-        inline bool isSameRect(ActiveEdge&              rEdge,
-                               const basegfx::B2DRange& rRect)
+        inline bool isSameRect(ActiveEdge const &        rEdge,
+                               basegfx::B2DRange const & rRect)
         {
             return &rEdge.getRect() == &rRect;
         }

@@ -235,7 +235,7 @@ namespace basegfx
             }
 
             /// This is a very uncommon case but why not ...
-            void freeIfLast(B2DPoint *pPoint)
+            void freeIfLast(B2DPoint const *pPoint)
             {
                 // just re-use the last point if we can.
                 if ( nCurPoint > 0 && pPoint == mpPointBase + nCurPoint - 1 )

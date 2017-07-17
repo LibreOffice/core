@@ -240,7 +240,7 @@ const FastAttributeList::FastAttributeIter FastAttributeList::find( sal_Int32 nT
 
 sal_Int32 FastTokenHandlerBase::getTokenFromChars(
         const css::uno::Reference< css::xml::sax::XFastTokenHandler > &xTokenHandler,
-        FastTokenHandlerBase *pTokenHandler,
+        const FastTokenHandlerBase *pTokenHandler,
         const char *pToken, size_t nLen /* = 0 */ )
 {
     sal_Int32 nRet;
