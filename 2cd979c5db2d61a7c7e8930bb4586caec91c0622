@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_7f09372c",
+        "filename": "include/android/compatibility.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-17T12:09:37Z",
+      "side": 1,
+      "message": "This must be inline (all non-template functions in this header should be inline), otherwise you get linker errors later:\n\n/home/vmiklos/git/libreoffice/master-android/external/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld.gold: error: /home/vmiklos/git/libreoffice/master-android/instdir/program/libsofficeapp.a(init.o): multiple definition of \u0027std::fmax(double, double)\u0027\n\nand so on.",
+      "revId": "2cd979c5db2d61a7c7e8930bb4586caec91c0622",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
