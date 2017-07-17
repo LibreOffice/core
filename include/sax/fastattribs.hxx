@@ -66,7 +66,7 @@ class SAX_DLLPUBLIC FastTokenHandlerBase
      */
     static sal_Int32 getTokenFromChars(
                          const css::uno::Reference<css::xml::sax::XFastTokenHandler > &xTokenHandler,
-                         FastTokenHandlerBase *pTokenHandler /* can be NULL */,
+                         const FastTokenHandlerBase *pTokenHandler /* can be NULL */,
                          const char *pStr, size_t nLength );
 };
 

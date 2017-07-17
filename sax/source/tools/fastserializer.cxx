@@ -296,7 +296,7 @@ namespace sax_fastparser {
     }
 #endif
 
-    void FastSaxSerializer::startFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList )
+    void FastSaxSerializer::startFastElement( ::sal_Int32 Element, FastAttributeList const * pAttrList )
     {
         if ( !mbMarkStackEmpty )
         {
@@ -358,7 +358,7 @@ namespace sax_fastparser {
         writeBytes(sClosingBracket, N_CHARS(sClosingBracket));
     }
 
-    void FastSaxSerializer::singleFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList )
+    void FastSaxSerializer::singleFastElement( ::sal_Int32 Element, FastAttributeList const * pAttrList )
     {
         if ( !mbMarkStackEmpty )
         {
@@ -410,7 +410,7 @@ namespace sax_fastparser {
         maTokenValues.clear();
     }
 
-    void FastSaxSerializer::writeFastAttributeList(FastAttributeList& rAttrList)
+    void FastSaxSerializer::writeFastAttributeList(FastAttributeList const & rAttrList)
     {
 #ifdef DBG_UTIL
         ::std::set<OString> DebugAttributes;

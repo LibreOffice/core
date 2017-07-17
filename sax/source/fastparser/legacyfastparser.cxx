@@ -56,7 +56,7 @@ private:
 
 public:
     NamespaceHandler();
-    void addNSDeclAttributes( rtl::Reference < comphelper::AttributeList >& rAttrList );
+    void addNSDeclAttributes( rtl::Reference < comphelper::AttributeList > const & rAttrList );
 
     //XFastNamespaceHandler
     virtual void SAL_CALL registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI ) override;
@@ -67,7 +67,7 @@ NamespaceHandler::NamespaceHandler()
 {
 }
 
-void NamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::AttributeList >& rAttrList )
+void NamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::AttributeList > const & rAttrList )
 {
     for(const auto& aNamespaceDefine : m_aNamespaceDefines)
     {
