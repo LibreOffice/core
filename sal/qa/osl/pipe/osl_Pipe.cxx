@@ -274,7 +274,7 @@ namespace osl_Pipe
         untested yet.
         */
 
-        void create_named_security_001( )
+        void create_named_security_createOnly( )
             {
                 const Security rSec;
                 ::osl::Pipe aPipe;
@@ -288,7 +288,7 @@ namespace osl_Pipe
                                         !bRes1);
             }
 
-        void create_named_security_002( )
+        void create_named_security_createAndOpen( )
             {
                 const Security rSec;
                 ::osl::Pipe aPipe, aPipe1;
@@ -302,7 +302,7 @@ namespace osl_Pipe
                                         bRes1);
             }
 
-        void create_named_001( )
+        void create_named_createOnly( )
             {
                 ::osl::Pipe aPipe;
                 bRes = aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
@@ -315,7 +315,7 @@ namespace osl_Pipe
                                         !bRes1);
             }
 
-        void create_named_002( )
+        void create_named_createAndOpen( )
             {
                 ::osl::Pipe aPipe, aPipe1;
                 bRes = aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
@@ -328,7 +328,7 @@ namespace osl_Pipe
                                         bRes1);
             }
 
-        void create_named_003( )
+        void create_named_defaultOptionOpen( )
             {
                 ::osl::Pipe aPipe;
                 bRes = aPipe.create( test::uniquePipeName(aTestPipeName) );
@@ -339,11 +339,11 @@ namespace osl_Pipe
             }
 
         CPPUNIT_TEST_SUITE( create );
-        CPPUNIT_TEST( create_named_security_001 );
-        CPPUNIT_TEST( create_named_security_002 );
-        CPPUNIT_TEST( create_named_001 );
-        CPPUNIT_TEST( create_named_002 );
-        CPPUNIT_TEST( create_named_003 );
+        CPPUNIT_TEST( create_named_security_createOnly );
+        CPPUNIT_TEST( create_named_security_createAndOpen );
+        CPPUNIT_TEST( create_named_createOnly );
+        CPPUNIT_TEST( create_named_createAndOpen );
+        CPPUNIT_TEST( create_named_defaultOptionOpen );
         CPPUNIT_TEST_SUITE_END( );
     };
 
