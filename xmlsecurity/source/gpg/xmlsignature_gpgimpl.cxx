@@ -371,7 +371,10 @@ SAL_CALL XMLSignature_GpgImpl::validate(
             data_signature, data_text);
 
         // TODO: needs some more error handling, needs checking _all_ signatures
-        if( verify_res.isNull() || verify_res.numSignatures() == 0 )
+        if( verify_res.isNull() || verify_res.numSignatures() == 0
+            // there is at least 1 signature and it is anything else than fully valid
+            || ( (verify_res.numSignatures() > 0)
+                  && verify_res.signature(0).status().encodedError() > 0 ) )
         {
             // let's try again, but this time import the public key
             // payload (avoiding that in a first cut for being a bit
@@ -408,21 +411,27 @@ SAL_CALL XMLSignature_GpgImpl::validate(
 
             // got a key packet, import & re-validate
             xmlChar* pKeyPacket=xmlNodeGetContent(cur);
-            if(xmlSecBase64Decode(pKeyPacket, reinterpret_cast<xmlSecByte*>(pKeyPacket), xmlStrlen(pKeyPacket)) < 0)
+            int nKeyLen = xmlSecBase64Decode(pKeyPacket, reinterpret_cast<xmlSecByte*>(pKeyPacket), xmlStrlen(pKeyPacket));
+            if( nKeyLen < 0)
                 throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
             GpgME::Data data_key(
                 reinterpret_cast<char*>(pKeyPacket),
-                xmlStrlen(pKeyPacket), false);
+                nKeyLen, false);
 
             GpgME::ImportResult import_res=rCtx.importKeys(data_key);
             xmlFree(pKeyPacket);
 
-            // and re-run
+            // and re-run (rewind text and signature streams to position 0)
+            data_text.seek(0,SEEK_SET);
+            data_signature.seek(0,SEEK_SET);
             verify_res=rCtx.verifyDetachedSignature(data_signature, data_text);
 
             // TODO: needs some more error handling, needs checking _all_ signatures
-            if( verify_res.isNull() || verify_res.numSignatures() == 0 )
+            if( verify_res.isNull() || verify_res.numSignatures() == 0
+                // there is at least 1 signature and it is anything else than valid
+                || ( (verify_res.numSignatures() > 0)
+                      && verify_res.signature(0).status().encodedError() > 0 ) )
             {
                 clearErrorRecorder();
                 xmlFree(pSignatureValue);
