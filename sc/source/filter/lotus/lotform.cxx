@@ -43,7 +43,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
 
     bool                        bAddIn = false;
 
-    OSL_ENSURE( nAnz < 128, "-LotusToSc::DoFunc(): Too many (128)!" );
+    SAL_WARN_IF( nAnz > 128, "sc", "-LotusToSc::DoFunc(): Too many (128)!" );
 
     if( eOc == ocNoName )
     {
@@ -84,7 +84,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
     switch( eOc )
     {
         case ocIndex:
-            OSL_ENSURE( nAnz > 2, "+LotusToSc::DoFunc(): ocIndex needs at least 2 parameters!" );
+            SAL_WARN_IF( nAnz < 2, "sc", "+LotusToSc::DoFunc(): ocIndex needs at least 2 parameters!" );
             nMerk0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
             eParam[ 1 ] = nMerk0;
@@ -93,7 +93,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             break;
         case ocIRR:
         {
-            OSL_ENSURE( nAnz == 2, "+LotusToSc::DoFunc(): ocIRR needs 2 parameters!" );
+            SAL_WARN_IF( nAnz != 2, "sc", "+LotusToSc::DoFunc(): ocIRR needs 2 parameters!" );
             nMerk0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
             eParam[ 1 ] = nMerk0;
@@ -128,7 +128,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         case ocRate:
         {
             // new quantity = 4!
-            OSL_ENSURE( nAnz == 3,
+            SAL_WARN_IF( nAnz != 3, "sc",
                 "*LotusToSc::DoFunc(): ZINS() needs 3 parameters!" );
             nAnz = 4;
             eParam[ 3 ] = eParam[ 0 ];  // 3. -> 1.
@@ -139,7 +139,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             break;
         case ocNper:
         {
-            OSL_ENSURE( nAnz == 3,
+            SAL_WARN_IF( nAnz != 3, "sc",
                 "*LotusToSc::DoFunc(): TERM() or CTERM() need 3 parameters!" );
             nAnz = 4;
             if ( OString(pExtString) == "TERM" )
@@ -191,7 +191,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         if( eOc == ocPMT )
         {   // special case ocPMT, ignore (negate?) last parameter!
             // additionally: 1. -> 3., 3. -> 2., 2. -> 1.
-            OSL_ENSURE( nAnz == 3,
+            SAL_WARN_IF( nAnz != 3, "sc",
                 "+LotusToSc::DoFunc(): ocPMT needs 3 parameters!" );
             aPool << eParam[ 1 ] << ocSep << eParam[ 0 ] << ocSep
                 << ocNegSub << eParam[ 2 ];
@@ -272,7 +272,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
                     nRow &= 0x1FFF;
                 break;
             default:
-                OSL_FAIL( "*LotusToSc::LotusRelToScRel(): unhandeled case?" );
+                SAL_WARN( "sc", "*LotusToSc::LotusRelToScRel(): unhandeled case?" );
         }
     }
     else
@@ -292,7 +292,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
                 nRow &= 0x3FFF;
                 break;
             default:
-                OSL_FAIL( "*LotusToSc::LotusRelToScRel(): unhandeled case?" );
+                SAL_WARN( "sc", "*LotusToSc::LotusRelToScRel(): unhandeled case?" );
         }
     }
 
@@ -639,14 +639,14 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
                 }
                 break;
                 default:
-                OSL_FAIL( "*LotusToSc::Convert(): unknown enum!" );
+                    SAL_WARN( "sc", "*LotusToSc::Convert(): unknown enum!" );
         }
     }
 
     rpErg = aPool[ aStack.Get() ];
 
-    OSL_ENSURE( nBytesLeft >= 0, "*LotusToSc::Convert(): processed too much!");
-    OSL_ENSURE( nBytesLeft <= 0, "*LotusToSc::Convert(): what happens with the rest?" );
+    SAL_WARN_IF( nBytesLeft < 0, "sc", "*LotusToSc::Convert(): processed too much!");
+    SAL_WARN_IF( nBytesLeft > 0, "sc", "*LotusToSc::Convert(): what happens with the rest?" );
 
     if( rRest )
         aIn.SeekRel( nBytesLeft );  // Correct any remainder/overflow

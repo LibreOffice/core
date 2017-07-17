@@ -185,7 +185,7 @@ ErrCode ImportLotus::Read()
             break;
         }
 
-        OSL_ENSURE( nNextRec >= pIn->Tell(),
+        SAL_WARN_IF( nNextRec < pIn->Tell(), "sc",
             "*ImportLotus::Read(): Read too much..." );
 
         pIn->Seek( nNextRec );
@@ -206,7 +206,7 @@ ErrCode ImportLotus::Read()
         }
         for( nCnt = 1 ; nCnt < nTabs ; nCnt++ )
         {
-            OSL_ENSURE( pD->HasTable( nCnt ),
+            SAL_WARN_IF( !pD->HasTable( nCnt ), "sc",
                 "-ImportLotus::Read(): Where is my table?!" );
             pD->GetName( nCnt, aTabName );
             if( aTabName == "temp" )
@@ -263,7 +263,7 @@ ErrCode ImportLotus::Read(SvStream& rIn)
 
                 case 0x0001:                            // EOF
                     bRead = false;
-                    OSL_ENSURE( nTab == 0,
+                    SAL_WARN_IF( nTab != 0, "sc",
                         "-ImportLotus::Read( SvStream& ): EOF twice!" );
                     nTab++;
                 break;
@@ -290,7 +290,7 @@ ErrCode ImportLotus::Read(SvStream& rIn)
                 break;
             }
 
-            OSL_ENSURE( nNextRec >= pIn->Tell(),
+            SAL_WARN_IF( nNextRec < pIn->Tell(), "sc",
                 "*ImportLotus::Read(): Read too much..." );
             pIn->Seek( nNextRec );
             aPrgrsBar.Progress();
