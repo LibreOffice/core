@@ -283,7 +283,7 @@ Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
 std::wstring getFileExtension(const std::wstring& aFilename)
 {
     std::wstring::size_type idx = aFilename.rfind(L".");
-    if ((idx != std::wstring::npos))
+    if (idx != std::wstring::npos)
     {
         return std::wstring(aFilename, idx);
     }
