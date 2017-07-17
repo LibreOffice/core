@@ -111,7 +111,7 @@ class SwBoxAutoFormat
     LanguageType        m_eSysLanguage, m_eNumFormatLanguage;
 
     css::uno::WeakReference<css::uno::XInterface> m_wXObject;
-
+    friend class SwDocTest;
 public:
     SwBoxAutoFormat();
     SwBoxAutoFormat( const SwBoxAutoFormat& rNew );
