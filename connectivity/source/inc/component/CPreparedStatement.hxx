@@ -17,27 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CPREPAREDSTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CPREPAREDSTATEMENT_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CPREPAREDSTATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CPREPAREDSTATEMENT_HXX
 
 #include "file/FPreparedStatement.hxx"
 
 namespace connectivity
 {
-    namespace calc
+    namespace component
     {
         class OConnection;
-        class OCalcPreparedStatement : public file::OPreparedStatement
+        /// Prepared statement implementation for Writer tables and Calc sheets.
+        class OOO_DLLPUBLIC_FILE OComponentPreparedStatement : public file::OPreparedStatement
         {
         protected:
             virtual file::OResultSet* createResultSet() override;
         public:
-            OCalcPreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
+            OComponentPreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
         };
     }
 }
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CPREPAREDSTATEMENT_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CPREPAREDSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,6 +62,7 @@ enum DATASOURCE_TYPE
     DST_FIREBIRD            = 26,
     DST_EMBEDDED_FIREBIRD   = 27,
     DST_POSTGRES            = 28,
+    DST_WRITER              = 29,
 
     DST_USERDEFINE1,    /// first user defined driver
     DST_USERDEFINE2,
@@ -90,7 +91,7 @@ enum DATASOURCE_TYPE
 #define PAGE_DBSETUPWIZARD_JDBC                      10
 #define PAGE_DBSETUPWIZARD_ADO                       11
 #define PAGE_DBSETUPWIZARD_ODBC                      12
-#define PAGE_DBSETUPWIZARD_SPREADSHEET               13
+#define PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET   13
 #define PAGE_DBSETUPWIZARD_AUTHENTIFICATION          14
 #define PAGE_DBSETUPWIZARD_FINAL                     16
 #define PAGE_DBSETUPWIZARD_USERDEFINED               17

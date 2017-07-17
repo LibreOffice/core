@@ -60,13 +60,21 @@ String STR_FILTER_SXC
 {
     Text [ en-US ] = "%PRODUCTNAME Calc (*.ods;*.sxc)" ;
 };
+String STR_FILTER_SXW
+{
+    Text [ en-US ] = "%PRODUCTNAME Writer (*.odt;*.sxw)" ;
+};
 String STR_FILTER_DBF
 {
     Text [ en-US ] = "dBase (*.dbf)" ;
 };
 String STR_FILTER_XLS
 {
-    Text [ en-US ] = "Microsoft Excel (*.xls)" ;
+    Text [ en-US ] = "Microsoft Excel (*.xls;*.xlsx)" ;
+};
+String STR_FILTER_DOC
+{
+    Text [ en-US ] = "Microsoft Word (*.doc;*.docx)" ;
 };
 String STR_FILTER_TXT
 {

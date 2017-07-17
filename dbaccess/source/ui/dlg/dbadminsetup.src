@@ -74,9 +74,9 @@ String STR_PAGETITLE_ODBC
     Text[ en-US ] = "Set up ODBC connection" ;
 };
 
-String STR_PAGETITLE_SPREADSHEET
+String STR_PAGETITLE_DOCUMENT_OR_SPREADSHEET
 {
-    Text[ en-US ] = "Set up Spreadsheet connection" ;
+    Text[ en-US ] = "Set up Writer Document or Spreadsheet connection" ;
 };
 
 String STR_PAGETITLE_AUTHENTIFICATION

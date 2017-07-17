@@ -224,6 +224,17 @@ namespace dbaui
                 askForFileName(aFileDlg);
             }
             break;
+            case  ::dbaccess::DST_WRITER:
+            {
+                SvtModuleOptions aModule;
+                ::sfx2::FileDialogHelper aFileDlg(
+                    ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
+                    FileDialogFlags::NONE,
+                    aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::EFactory::WRITER)
+                    ,SfxFilterFlags::IMPORT);
+                askForFileName(aFileDlg);
+            }
+            break;
             case  ::dbaccess::DST_MSACCESS:
             {
                 const OUString sExt("*.mdb;*.mde");
@@ -664,7 +675,7 @@ namespace dbaui
 
                 const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
 
-                if ( ( ::dbaccess::DST_CALC == eType) || ( ::dbaccess::DST_MSACCESS == eType) || ( ::dbaccess::DST_MSACCESS_2007 == eType) )
+                if ( ( ::dbaccess::DST_CALC == eType) || ( ::dbaccess::DST_WRITER == eType) || ( ::dbaccess::DST_MSACCESS == eType) || ( ::dbaccess::DST_MSACCESS_2007 == eType) )
                 {
                     if( pathExists(sURL, true) == PATH_NOT_EXIST )
                     {

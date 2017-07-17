@@ -17,27 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CSTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CSTATEMENT_HXX
+#include "component/CColumns.hxx"
+#include "file/FTable.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 
-#include "file/FStatement.hxx"
+using namespace connectivity::component;
+using namespace connectivity;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::container;
 
-namespace connectivity
+
+sdbcx::ObjectType OComponentColumns::createObject(const OUString& _rName)
 {
-    namespace calc
-    {
-        class OConnection;
-        class OCalcStatement : public file::OStatement
-        {
-        protected:
-            virtual file::OResultSet* createResultSet() override;
-        public:
-            OCalcStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
-            DECLARE_SERVICE_INFO();
-        };
-    }
+    ::rtl::Reference<OSQLColumns> aCols = m_pTable->getTableColumns();
+
+    OSQLColumns::Vector::const_iterator aIter = find(aCols->get().begin(),aCols->get().end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
+    sdbcx::ObjectType xRet;
+    if(aIter != aCols->get().end())
+        xRet = sdbcx::ObjectType(*aIter,UNO_QUERY);
+    return xRet;
 }
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

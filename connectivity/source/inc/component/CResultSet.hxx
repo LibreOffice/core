@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CRESULTSET_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CRESULTSET_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CRESULTSET_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CRESULTSET_HXX
 
 #include "file/FResultSet.hxx"
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
@@ -26,19 +26,20 @@
 
 namespace connectivity
 {
-    namespace calc
+    namespace component
     {
-        class OCalcResultSet;
+        class OComponentResultSet;
         // these typedef's are only necessary for the compiler
         typedef ::cppu::ImplHelper2<  css::sdbcx::XRowLocate,
-                                      css::sdbcx::XDeleteRows> OCalcResultSet_BASE;
-        typedef file::OResultSet                                            OCalcResultSet_BASE2;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OCalcResultSet> OCalcResultSet_BASE3;
+                                      css::sdbcx::XDeleteRows> OComponentResultSet_BASE;
+        typedef file::OResultSet                                            OComponentResultSet_BASE2;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OComponentResultSet> OComponentResultSet_BASE3;
 
 
-        class OCalcResultSet : public OCalcResultSet_BASE2,
-                                public OCalcResultSet_BASE,
-                                public OCalcResultSet_BASE3
+        /// ResultSet implementation for Writer tables and Calc sheets.
+        class OOO_DLLPUBLIC_FILE OComponentResultSet : public OComponentResultSet_BASE2,
+                                public OComponentResultSet_BASE,
+                                public OComponentResultSet_BASE3
         {
             bool m_bBookmarkable;
         protected:
@@ -50,7 +51,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OCalcResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator);
+            OComponentResultSet( file::OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator);
 
         private:
             // XInterface
@@ -78,6 +79,6 @@ namespace connectivity
     }
 }
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CRESULTSET_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CRESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

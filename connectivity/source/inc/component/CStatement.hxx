@@ -17,30 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CCOLUMNS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CCOLUMNS_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CSTATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CSTATEMENT_HXX
 
-#include "file/FColumns.hxx"
+#include "file/FStatement.hxx"
 
 namespace connectivity
 {
-    namespace calc
+    namespace component
     {
-        class OCalcColumns : public file::OColumns
+        class OConnection;
+        /// Statement implementation for Writer tables and Calc sheets.
+        class OOO_DLLPUBLIC_FILE OComponentStatement : public file::OStatement
         {
         protected:
-            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+            virtual file::OResultSet* createResultSet() override;
         public:
-            OCalcColumns(file::OFileTable* _pTable,
-                            ::osl::Mutex& _rMutex,
-                            const TStringVector &_rVector
-                         ) : file::OColumns(_pTable,_rMutex,_rVector)
-            {}
-
+            OComponentStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
+            DECLARE_SERVICE_INFO();
         };
     }
 }
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CCOLUMNS_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
