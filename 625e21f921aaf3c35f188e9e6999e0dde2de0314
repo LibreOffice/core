@@ -16,6 +16,24 @@
       "revId": "625e21f921aaf3c35f188e9e6999e0dde2de0314",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_bfb0ff8c",
+        "filename": "include/rtl/textcvt.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-07-17T19:42:35Z",
+      "side": 1,
+      "message": "My sense of irony is not so large as to intentionally mark a misspelling with a misspelt word... but I appreciate the vote of confidence :-)",
+      "parentUuid": "3a461143_a472b6e3",
+      "revId": "625e21f921aaf3c35f188e9e6999e0dde2de0314",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
