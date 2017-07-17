@@ -40,7 +40,7 @@
 void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString)
 {
     // evaluate Label-Format
-    OSL_ENSURE( pString != nullptr, "PutFormString(): pString == NULL" );
+    SAL_WARN_IF( pString == nullptr, "sc", "PutFormString(): pString == NULL" );
     if (!pString)
         return;
 
@@ -410,7 +410,7 @@ LR_ID LotusRangeList::GetIndex( const LotusRange &rRef )
 
 void LotusRangeList::Append( LotusRange* pLR, const OUString& rName )
 {
-    OSL_ENSURE( pLR, "*LotusRangeList::Append(): no pointer!" );
+    SAL_WARN_IF( !pLR, "sc", "*LotusRangeList::Append(): no pointer!" );
     maRanges.push_back(pLR);
 
     ScTokenArray    aTokArray;
