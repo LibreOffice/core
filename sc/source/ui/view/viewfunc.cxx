@@ -545,7 +545,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat));
                     ScMarkData aMark;
                     aMark.SelectTable( i, true);
-                    aMark.SetMarkArea( ScRange( ScAddress( nCol, nRow, i)));
+                    aMark.SetMarkArea( ScRange( nCol, nRow, i));
                     rFunc.ApplyAttributes( aMark, aPattern, false);
                     bNumFmtChanged = true;
                 }
