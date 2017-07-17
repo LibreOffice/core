@@ -75,8 +75,8 @@ bool OStoreLockBytes::isKindOf (sal_uInt32 nTypeId)
  */
 storeError OStoreLockBytes::create (
     OStorePageManager *pManager,
-    rtl_String        *pPath,
-    rtl_String        *pName,
+    rtl_String const  *pPath,
+    rtl_String const  *pName,
     storeAccessMode    eMode)
 {
     rtl::Reference<OStorePageManager> xManager (pManager);

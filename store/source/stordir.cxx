@@ -101,8 +101,8 @@ bool OStoreDirectory_Impl::isKindOf (sal_uInt32 nTypeId)
  */
 storeError OStoreDirectory_Impl::create (
     OStorePageManager *pManager,
-    rtl_String        *pPath,
-    rtl_String        *pName,
+    rtl_String const  *pPath,
+    rtl_String const  *pName,
     storeAccessMode    eMode)
 {
     rtl::Reference<OStorePageManager> xManager (pManager);

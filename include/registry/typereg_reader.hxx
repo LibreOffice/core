@@ -91,7 +91,7 @@ REG_DLLPUBLIC void SAL_CALL typereg_reader_release(void * handle);
 
    @since UDK 3.2.0
  */
-REG_DLLPUBLIC typereg_Version SAL_CALL typereg_reader_getVersion(void * handle);
+REG_DLLPUBLIC typereg_Version SAL_CALL typereg_reader_getVersion(void const * handle);
 
 /**
    Returns the documentation of a type reader.

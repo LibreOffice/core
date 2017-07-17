@@ -896,7 +896,7 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
 }
 
 RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
-                                     ORegKey* pSourceKey,
+                                     ORegKey const * pSourceKey,
                                      const OUString& valueName,
                                      sal_uInt32 nCut,
                                      bool bWarnings,
@@ -1021,7 +1021,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
 RegError ORegistry::checkBlop(OStoreStream& rValue,
                               const OUString& sTargetPath,
                               sal_uInt32 srcValueSize,
-                              sal_uInt8* pSrcBuffer,
+                              sal_uInt8 const * pSrcBuffer,
                               bool bReport)
 {
     RegistryTypeReader reader(pSrcBuffer, srcValueSize);
@@ -1123,8 +1123,8 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
     }
 }
 
-static sal_uInt32 checkTypeReaders(RegistryTypeReader& reader1,
-                                   RegistryTypeReader& reader2,
+static sal_uInt32 checkTypeReaders(RegistryTypeReader const & reader1,
+                                   RegistryTypeReader const & reader2,
                                    std::set< OUString >& nameSet)
 {
     sal_uInt32 count=0;
@@ -1145,8 +1145,8 @@ static sal_uInt32 checkTypeReaders(RegistryTypeReader& reader1,
 }
 
 RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
-                                     RegistryTypeReader& reader,
-                                     RegistryTypeReader& reader2)
+                                     RegistryTypeReader const & reader,
+                                     RegistryTypeReader const & reader2)
 {
     std::set< OUString > nameSet;
     sal_uInt32 count = checkTypeReaders(reader, reader2, nameSet);
