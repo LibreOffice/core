@@ -20,7 +20,6 @@
 #include <math.h>
 
 #include <svl/zforlist.hxx>
-#include <osl/diagnose.h>
 #include "attrib.hxx"
 #include "dif.hxx"
 #include "docpool.hxx"
@@ -113,7 +112,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
             case T_UNKNOWN:
                 break;
             default:
-                OSL_FAIL( "ScImportDif - missing enum" );
+                SAL_WARN( "sc.filter", "ScImportDif - missing enum" );
         }
 
     }
@@ -204,7 +203,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
                 case D_SYNT_ERROR:
                     break;
                 default:
-                    OSL_FAIL( "ScImportDif - missing enum" );
+                    SAL_WARN( "sc.filter", "ScImportDif - missing enum" );
             }
         }
 
@@ -235,7 +234,7 @@ DifParser::DifParser( SvStream& rNewIn, ScDocument& rDoc, rtl_TextEncoding e )
 {
     if ( rIn.GetStreamCharSet() != eCharSet )
     {
-        OSL_FAIL( "CharSet passed overrides and modifies StreamCharSet" );
+        SAL_WARN( "sc.filter", "CharSet passed overrides and modifies StreamCharSet" );
         rIn.SetStreamCharSet( eCharSet );
     }
     rIn.StartReadingUnicodeText( eCharSet );
@@ -356,7 +355,7 @@ TOPIC DifParser::GetNextTopic()
             }
                 break;
             case S_Data:
-                OSL_ENSURE( aLine.getLength() >= 2,
+                SAL_WARN_IF( aLine.getLength() < 2, "sc.filter",
                     "+GetNextTopic(): <String> is too short!" );
                 if( aLine.getLength() > 2 )
                     aData = aLine.copy( 1, aLine.getLength() - 2 );
@@ -365,7 +364,7 @@ TOPIC DifParser::GetNextTopic()
                 eS = S_END;
                 break;
             case S_END:
-                OSL_FAIL( "DifParser::GetNextTopic - unexpected state" );
+                SAL_WARN( "sc.filter", "DifParser::GetNextTopic - unexpected state" );
                 break;
             case S_UNKNOWN:
                 // skip 2 lines
@@ -377,7 +376,7 @@ TOPIC DifParser::GetNextTopic()
                 eS = S_END;
                 break;
             default:
-                OSL_FAIL( "DifParser::GetNextTopic - missing enum" );
+                SAL_WARN( "sc.filter", "DifParser::GetNextTopic - missing enum" );
         }
     }
 
@@ -399,7 +398,7 @@ DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
 {
     DATASET eRet = D_SYNT_ERROR;
 
-    OSL_ENSURE( pNumFormatter, "-DifParser::GetNumberDataset(): No Formatter, more fun!" );
+    SAL_WARN_IF( !pNumFormatter, "sc.filter", "-DifParser::GetNumberDataset(): No Formatter, more fun!" );
     OUString aTestVal( pPossibleNumericData );
     sal_uInt32 nFormat = 0;
     double fTmpVal;
@@ -411,7 +410,6 @@ DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
     }
     else
         eRet = D_SYNT_ERROR;
-
     return eRet;
 }
 
@@ -436,7 +434,8 @@ bool DifParser::LookAhead()
     const sal_Unicode* pAktBuffer;
     bool bValidStructure = false;
 
-    OSL_ENSURE( aLookAheadLine.isEmpty(), "*DifParser::LookAhead(): LookAhead called twice in a row" );
+    SAL_WARN_IF( !aLookAheadLine.isEmpty(), "sc.filter",
+                 "*DifParser::LookAhead(): LookAhead called twice in a row" );
     rIn.ReadUniOrByteStringLine( aLookAheadLine, rIn.GetStreamCharSet() );
 
     pAktBuffer = aLookAheadLine.getStr();
@@ -616,15 +615,16 @@ DifColumn::DifColumn ()
 
 void DifColumn::SetNumFormat( SCROW nRow, const sal_uInt32 nNumFormat )
 {
-    OSL_ENSURE( ValidRow(nRow), "*DifColumn::SetNumFormat(): Row too big!" );
+    SAL_WARN_IF( !ValidRow(nRow), "sc.filter",
+                 "*DifColumn::SetNumFormat(): Row too big!" );
 
     if( nNumFormat > 0 )
     {
         if(mpAkt)
         {
-            OSL_ENSURE( nRow > 0,
+            SAL_WARN_IF( nRow <= 0, "sc.filter",
                 "*DifColumn::SetNumFormat(): more cannot be zero!" );
-            OSL_ENSURE( nRow > mpAkt->nEnd,
+            SAL_WARN_IF( nRow <= mpAkt->nEnd, "sc.filter",
                 "*DifColumn::SetNumFormat(): start from scratch?" );
 
             if( mpAkt->nNumFormat == nNumFormat && mpAkt->nEnd == nRow - 1 )
@@ -655,7 +655,7 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 
     for (std::vector<ENTRY>::const_iterator it = maEntries.begin(); it != maEntries.end(); ++it)
     {
-        OSL_ENSURE( it->nNumFormat > 0,
+        SAL_WARN_IF( it->nNumFormat <= 0, "sc.filter",
             "+DifColumn::Apply(): Number format must not be 0!" );
 
         rItemSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, it->nNumFormat ) );
@@ -676,7 +676,7 @@ DifAttrCache::~DifAttrCache()
 
 void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_uInt32 nNumFormat )
 {
-    OSL_ENSURE( ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col too big!" );
+    SAL_WARN_IF( !ValidCol(nCol), "sc.filter", "-DifAttrCache::SetNumFormat(): Col too big!" );
 
     if( !mvCols[ nCol ] )
         mvCols[ nCol ].reset( new DifColumn );
