@@ -71,7 +71,7 @@ namespace
         return aRetval;
     }
 
-    sal_uInt32 createCrc32(FileSharedPtr& rCandidate, sal_uInt32 nOffset)
+    sal_uInt32 createCrc32(FileSharedPtr const & rCandidate, sal_uInt32 nOffset)
     {
         sal_uInt32 nCrc32(0);
 
@@ -112,7 +112,7 @@ namespace
         return nCrc32;
     }
 
-    bool read_sal_uInt32(FileSharedPtr& rFile, sal_uInt32& rTarget)
+    bool read_sal_uInt32(FileSharedPtr const & rFile, sal_uInt32& rTarget)
     {
         sal_uInt8 aArray[4];
         sal_uInt64 nBaseRead(0);
@@ -141,7 +141,7 @@ namespace
         return osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(aArray), 4, &nBaseWritten) && 4 == nBaseWritten;
     }
 
-    bool read_OString(FileSharedPtr& rFile, OString& rTarget)
+    bool read_OString(FileSharedPtr const & rFile, OString& rTarget)
     {
         sal_uInt32 nLength(0);
 
@@ -474,7 +474,7 @@ namespace
             }
         }
 
-        bool read_entry(FileSharedPtr& rFile)
+        bool read_entry(FileSharedPtr const & rFile)
         {
             // read maName
             if (!read_OString(rFile, maName))
@@ -892,7 +892,7 @@ namespace
             }
         }
 
-        bool read_entries(FileSharedPtr& rFile)
+        bool read_entries(FileSharedPtr const & rFile)
         {
             // read NumExtensionEntries
             sal_uInt32 nExtEntries(0);
@@ -1249,7 +1249,7 @@ namespace
             return mnCrc32;
         }
 
-        bool read_header(FileSharedPtr& rFile)
+        bool read_header(FileSharedPtr const & rFile)
         {
             if (!rFile)
             {

@@ -495,7 +495,7 @@ static void splitPath( std::vector<OUString> &rElems,
 static uno::Reference< embed::XStorage > LookupStorageAtPath(
         const uno::Reference< embed::XStorage > &xParentStorage,
         std::vector<OUString> &rElems, sal_uInt32 nOpenMode,
-        LifecycleProxy &rNastiness )
+        LifecycleProxy const &rNastiness )
 {
     uno::Reference< embed::XStorage > xStorage( xParentStorage );
     rNastiness.m_xBadness->push_back( xStorage );
@@ -510,7 +510,7 @@ static uno::Reference< embed::XStorage > LookupStorageAtPath(
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageAtPath(
         const uno::Reference< embed::XStorage > &xStorage,
         const OUString& rPath, sal_uInt32 nOpenMode,
-        LifecycleProxy &rNastiness )
+        LifecycleProxy const &rNastiness )
 {
     std::vector<OUString> aElems;
     splitPath( aElems, rPath );
@@ -520,7 +520,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageAtPath(
 uno::Reference< io::XStream > OStorageHelper::GetStreamAtPath(
         const uno::Reference< embed::XStorage > &xParentStorage,
         const OUString& rPath, sal_uInt32 nOpenMode,
-        LifecycleProxy &rNastiness )
+        LifecycleProxy const &rNastiness )
 {
     std::vector<OUString> aElems;
     splitPath( aElems, rPath );
@@ -536,7 +536,7 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPath(
 uno::Reference< io::XStream > OStorageHelper::GetStreamAtPackageURL(
         uno::Reference< embed::XStorage > const& xParentStorage,
         const OUString& rURL, sal_uInt32 const nOpenMode,
-        LifecycleProxy & rNastiness)
+        LifecycleProxy const & rNastiness)
 {
     OUString path;
     if (rURL.startsWithIgnoreAsciiCase("vnd.sun.star.Package:", &path))
