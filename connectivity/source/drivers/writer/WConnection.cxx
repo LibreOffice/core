@@ -18,6 +18,7 @@
  */
 
 #include "writer/WConnection.hxx"
+#include "writer/WDatabaseMetaData.hxx"
 #include "writer/WDriver.hxx"
 #include "resource/sharedresources.hxx"
 #include "resource/common_res.hrc"
@@ -194,7 +195,8 @@ uno::Reference< sdbc::XDatabaseMetaData > SAL_CALL OWriterConnection::getMetaDat
     uno::Reference< sdbc::XDatabaseMetaData > xMetaData = m_xMetaData;
     if (!xMetaData.is())
     {
-        SAL_WARN("connectivity.writer", "TODO implement OWriterConnection::getMetaData()");
+        xMetaData = new OWriterDatabaseMetaData(this);
+        m_xMetaData = xMetaData;
     }
 
     return xMetaData;
