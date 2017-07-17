@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_1ff03390",
+        "filename": "include/tools/inetmime.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-17T17:37:12Z",
+      "side": 1,
+      "message": "Rather \"extensions are\" instead of \"extension is\". See https://tools.ietf.org/html/rfc2231",
+      "range": {
+        "startLine": 162,
+        "startChar": 21,
+        "endLine": 162,
+        "endChar": 33
+      },
+      "revId": "9f29c1ddf8b38da7a6ab87a01a9fb8b9bdc171c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
