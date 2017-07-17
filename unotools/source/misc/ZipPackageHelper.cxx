@@ -100,7 +100,7 @@ Reference< XInterface >& ZipPackageHelper::getRootFolder()
     return mxRootFolder;
 }
 
-Reference< XInterface > ZipPackageHelper::addFolder( Reference< XInterface >& xRootFolder,
+Reference< XInterface > ZipPackageHelper::addFolder( Reference< XInterface > const & xRootFolder,
                                                      const OUString& rName )
 {
     if ( rName == ".." || rName == "." )
@@ -123,7 +123,7 @@ Reference< XInterface > ZipPackageHelper::addFolder( Reference< XInterface >& xR
     return xFolder;
 }
 
-void ZipPackageHelper::addFolderWithContent( Reference< XInterface >& xRootFolder, const OUString& rDirURL )
+void ZipPackageHelper::addFolderWithContent( Reference< XInterface > const & xRootFolder, const OUString& rDirURL )
 {
     if (rDirURL.isEmpty())
         return;
@@ -159,7 +159,7 @@ void ZipPackageHelper::addFolderWithContent( Reference< XInterface >& xRootFolde
     }
 }
 
-void ZipPackageHelper::addFile( css::uno::Reference< css::uno::XInterface >& xRootFolder,
+void ZipPackageHelper::addFile( css::uno::Reference< css::uno::XInterface > const & xRootFolder,
                                 const OUString& rSourceFile )
 {
     OUString aFileURL( rSourceFile );

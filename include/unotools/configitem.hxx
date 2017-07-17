@@ -154,7 +154,7 @@ namespace utl
             bool                ClearNodeSet(const OUString& rNode);
             // remove selected members of a set
             bool                ClearNodeElements(const OUString& rNode,
-                                        css::uno::Sequence< OUString >& rElements);
+                                        css::uno::Sequence< OUString > const & rElements);
             // change or add members to a set
             bool                SetSetProperties(const OUString& rNode, const css::uno::Sequence< css::beans::PropertyValue >& rValues);
             // remove, change or add members of a set

@@ -182,7 +182,7 @@ namespace utl
         OObserverImpl::ensureObservation();
     }
 
-    void DesktopTerminationObserver::revokeTerminationListener( ITerminationListener* _pListener )
+    void DesktopTerminationObserver::revokeTerminationListener( ITerminationListener const * _pListener )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         Listeners& rListeners = getListenerAdminData().aListeners;
