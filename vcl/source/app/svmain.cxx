@@ -57,6 +57,8 @@
 #include <svsys.h>
 #include <process.h>
 #include <ole2.h>
+#else
+#include <stdlib.h>
 #endif
 
 #ifdef ANDROID
@@ -344,6 +346,12 @@ bool InitVCL()
 
 #if OSL_DEBUG_LEVEL > 0
     DebugEventInjector::getCreate();
+#endif
+
+#ifndef _WIN32
+    // Clear startup notification details for child processes
+    // See https://bugs.freedesktop.org/show_bug.cgi?id=11375 for discussion
+    unsetenv("DESKTOP_STARTUP_ID");
 #endif
 
     return true;
