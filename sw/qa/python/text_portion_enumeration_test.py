@@ -388,6 +388,14 @@ class MetaFieldNode(MetaNode):
         return self._dup(MetaFieldNode, self.xmlid)
 
 
+class Range():
+    def __init__(self, start, end, node):
+        self.start = start
+        self.end = end
+        self.node = node
+        self.extent = end - start
+
+
 class Inserter():
 
     def __init__(self, xDoc):
@@ -590,6 +598,41 @@ class TreeInserter(Inserter):
         xCursor = self.xText.createTextCursorByRange(xRange)
         xCursor.gotoEndOfParagraph(True)
         return xCursor
+
+
+# FIXME: this does not account for inserted dummy characters!
+class RangeInserter(Inserter):
+    def __init__(self, xDoc):
+        super().__init__(xDoc)
+        self.initparagraph()
+
+    # def inserttext(self, pos, text):
+        # self.xCursor.gotoStartOfParagraph(False)
+        # self.xCursor.goRight(pos, False)
+        # self.inserttext(self.xCursor, text)
+
+    def insertrange(self, range):
+        self.xCursor.gotoStartOfParagraph(False)
+        self.xCursor.goRight(range.start, False)
+        self.xCursor.goRight(range.extent, True)
+        return self.insertnode(self.xCursor, range.node)
+
+    def insertnode(self, xParaCursor, node):
+        nodetype = node.nodetype
+        if nodetype == "Text":
+            text = node
+            self.inserttext(xParaCursor, text.content)
+        elif nodetype == "Hyperlink":
+            href = node
+            self.inserthyperlink(xParaCursor, href.url)
+        elif nodetype == "Ruby":
+            ruby = node
+            self.insertruby(xParaCursor, ruby.ruby)
+        elif nodetype == "SoftPageBreak":
+            raise RuntimeError("sorry, cannot test SoftPageBreak")
+        else:
+            raise RuntimeError("unexpected nodetype: {}".format(nodetype))
+        return None
 
 
 class EnumConverter():
@@ -1472,6 +1515,266 @@ class TextPortionEnumerationTest(unittest.TestCase):
         root.appendchild(FrameNode(name5, AT_CHARACTER))
         root.appendchild(TextFieldNode("h"))
         self.dotest(root)
+
+    # some range tests for the insertion: these are for the current
+    # API which treats hyperlinks and rubys not as entities, but as formatting
+    # attributes; if these ever become entities, they should not be split!'''
+
+    def test_range1(self):
+        name1 = self.mkname("url")
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("12345")
+        inserter.insertrange(Range(0, 0, text))
+        url1 = HyperlinkNode(name1)
+        range1 = Range(0, 5, url1)
+        inserter.insertrange(range1)
+        root = TreeNode()
+        root.appendchild(url1)
+        url1.appendchild(text)
+        self.dotest(root, False)
+
+    def test_range_hyperlink_hyperlink(self):
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        url1 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(1, 4, url1))
+        ## overlap left
+        url2 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(0, 2, url2))
+        root = TreeNode()
+        root.appendchild(url2.dup().appendchild(TextNode("12")))
+        root.appendchild(url1.dup().appendchild(TextNode("34")))
+        root.appendchild(TextNode("56789"))
+        self.dotest(root, False)
+        ## overlap right
+        url3 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(3, 7, url3))
+        root = TreeNode()
+        root.appendchild(url2.dup().appendchild(TextNode("12")))
+        root.appendchild(url1.dup().appendchild(TextNode("3")))
+        root.appendchild(url3.dup().appendchild(TextNode("4567")))
+        root.appendchild(TextNode("89"))
+        self.dotest(root, False)
+        ## around
+        url4 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(3, 7, url4))
+        root = TreeNode()
+        root.appendchild(url2.dup().appendchild(TextNode("12")))
+        root.appendchild(url1.dup().appendchild(TextNode("3")))
+        root.appendchild(url4.dup().appendchild(TextNode("4567")))
+        root.appendchild(TextNode("89"))
+        self.dotest(root, False)
+        ## inside
+        url5 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(4, 6, url5))
+        root = TreeNode()
+        root.appendchild(url2.dup().appendchild(TextNode("12")))
+        root.appendchild(url1.dup().appendchild(TextNode("3")))
+        root.appendchild(url4.dup().appendchild(TextNode("4")))
+        root.appendchild(url5.dup().appendchild(TextNode("56")))
+        root.appendchild(url4.dup().appendchild(TextNode("7")))
+        root.appendchild(TextNode("89"))
+        self.dotest(root, False)
+        ## empty
+        url6 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(7, 7, url6))
+        root = TreeNode()
+        root.appendchild(url2.dup().appendchild(TextNode("12")))
+        root.appendchild(url1.dup().appendchild(TextNode("3")))
+        root.appendchild(url4.dup().appendchild(TextNode("4")))
+        root.appendchild(url5.dup().appendchild(TextNode("56")))
+        root.appendchild(url4.dup().appendchild(TextNode("7")))
+        ##  this one gets eaten, but we still need to test inserting it (#i106930#)
+        # root.appendchild(url6.dup().appendchild(TextNode("")))
+        root.appendchild(TextNode("89"))
+        ## inside (left-edge)
+        url7 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(0, 1, url7))
+        root = TreeNode()
+        root.appendchild(url7.dup().appendchild(TextNode("1")))
+        root.appendchild(url2.dup().appendchild(TextNode("2")))
+        root.appendchild(url1.dup().appendchild(TextNode("3")))
+        root.appendchild(url4.dup().appendchild(TextNode("4")))
+        root.appendchild(url5.dup().appendchild(TextNode("56")))
+        root.appendchild(url4.dup().appendchild(TextNode("7")))
+        root.appendchild(TextNode("89"))
+        ## inside (right-edge)
+        url8 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(5, 6, url8))
+        root = TreeNode()
+        root.appendchild(url7.dup().appendchild(TextNode("1")))
+        root.appendchild(url2.dup().appendchild(TextNode("2")))
+        root.appendchild(url1.dup().appendchild(TextNode("3")))
+        root.appendchild(url4.dup().appendchild(TextNode("4")))
+        root.appendchild(url5.dup().appendchild(TextNode("5")))
+        root.appendchild(url8.dup().appendchild(TextNode("6")))
+        root.appendchild(url4.dup().appendchild(TextNode("7")))
+        root.appendchild(TextNode("89"))
+        self.dotest(root, False)
+
+    def test_range_hyperlink_ruby(self):
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        url1 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(1, 4, url1))
+        # overlap left
+        rby2 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(0, 2, rby2))
+        root = TreeNode()
+        root.appendchild(rby2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(url1.dup().appendchild(TextNode("2"))))
+        root.appendchild(url1.dup().appendchild(TextNode("34")))
+        root.appendchild(TextNode("56789"))
+        self.dotest(root, False)
+        # overlap right
+        rby3 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(3, 5, rby3))
+        root = TreeNode()
+        root.appendchild(rby2.dup()
+                .appendchild(TextNode("1"))
+                .appendchild(url1.dup().appendchild(TextNode("2"))))
+        root.appendchild(url1.dup().appendchild(TextNode("3")))
+        root.appendchild(rby3.dup()
+                .appendchild(url1.dup().appendchild(TextNode("4")))
+                .appendchild(TextNode("5")))
+        root.appendchild(TextNode("6789"))
+        self.dotest(root, False)
+        # around
+        rby4 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(2, 3, rby4))
+        root = TreeNode()
+        root.appendchild(rby2.dup()
+                .appendchild(TextNode("1"))
+                .appendchild(url1.dup().appendchild(TextNode("2"))))
+        root.appendchild(rby4.dup()
+                .appendchild(url1.dup().appendchild(TextNode("3"))))
+        root.appendchild(rby3.dup()
+                .appendchild(url1.dup().appendchild(TextNode("4")))
+                .appendchild(TextNode("5")))
+        root.appendchild(TextNode("6789"))
+        self.dotest(root, False)
+        # inside
+        url5 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(6, 9, url5))
+        rby6 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(7, 8, rby6))
+        root = TreeNode()
+        root.appendchild(rby2.dup()
+                .appendchild(TextNode("1"))
+                .appendchild(url1.dup().appendchild(TextNode("2"))))
+        root.appendchild(rby4.dup()
+                .appendchild(url1.dup().appendchild(TextNode("3"))))
+        root.appendchild(rby3.dup()
+                .appendchild(url1.dup().appendchild(TextNode("4")))
+                .appendchild(TextNode("5")))
+        root.appendchild(TextNode("6"))
+        root.appendchild(url5.dup().appendchild(TextNode("7")))
+        root.appendchild(rby6.dup()
+                .appendchild(url5.dup().appendchild(TextNode("8"))))
+        root.appendchild(url5.dup().appendchild(TextNode("9")))
+        self.dotest(root, False)
+
+    def test_range_ruby_hyperlink(self):
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        rby1 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(1, 6, rby1))
+        ## overlap left
+        url2 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(0, 3, url2))
+        root = TreeNode()
+        root.appendchild(url2.dup().appendchild(TextNode("1")))
+        root.appendchild(rby1.dup()
+                .appendchild(url2.dup().appendchild(TextNode("23")))
+                .appendchild(TextNode("456")))
+        root.appendchild(TextNode("789"))
+        self.dotest(root, False)
+        ## overlap right
+        url3 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(5, 7, url3))
+        root = TreeNode()
+        root.appendchild(url2.dup().appendchild(TextNode("1")))
+        root.appendchild(rby1.dup()
+                .appendchild(url2.dup().appendchild(TextNode("23")))
+                .appendchild(TextNode("45"))
+                .appendchild(url3.dup().appendchild(TextNode("6"))))
+        root.appendchild(url3.dup().appendchild(TextNode("7")))
+        root.appendchild(TextNode("89"))
+        self.dotest(root, False)
+        ## around (not quite, due to API)
+        url4 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(1, 8, url4))
+        root = TreeNode()
+        root.appendchild(url2.dup().appendchild(TextNode("1")))
+        root.appendchild(rby1.dup()
+                .appendchild(url4.dup()
+                    .appendchild(TextNode("23456"))))
+        root.appendchild(url4.dup().appendchild(TextNode("78")))
+        root.appendchild(TextNode("9"))
+        self.dotest(root, False)
+        ## inside
+        url5 = HyperlinkNode(self.mkname("url"))
+        inserter.insertrange(Range(3, 5, url5))
+        root = TreeNode()
+        root.appendchild(url2.dup().appendchild(TextNode("1")))
+        root.appendchild(rby1.dup()
+                .appendchild(url4.dup()
+                    .appendchild(TextNode("23")))
+                .appendchild(url5.dup()
+                    .appendchild(TextNode("45")))
+                .appendchild(url4.dup()
+                    .appendchild(TextNode("6"))))
+        root.appendchild(url4.dup().appendchild(TextNode("78")))
+        root.appendchild(TextNode("9"))
+        self.dotest(root, False)
+
+    def test_range_ruby_ruby(self):
+        inserter = RangeInserter(self.__class__.xDoc)
+        text = TextNode("123456789")
+        inserter.insertrange(Range(0, 0, text))
+        rby1 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(1, 4, rby1))
+        ## overlap left
+        rby2 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(0, 2, rby2))
+        root = TreeNode()
+        root.appendchild(rby2.dup().appendchild(TextNode("12")))
+        root.appendchild(rby1.dup().appendchild(TextNode("34")))
+        root.appendchild(TextNode("56789"))
+        self.dotest(root, False)
+        ## overlap right
+        rby3 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(3, 7, rby3))
+        root = TreeNode()
+        root.appendchild(rby2.dup().appendchild(TextNode("12")))
+        root.appendchild(rby1.dup().appendchild(TextNode("3")))
+        root.appendchild(rby3.dup().appendchild(TextNode("4567")))
+        root.appendchild(TextNode("89"))
+        self.dotest(root, False)
+        ## around
+        rby4 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(3, 7, rby4))
+        root = TreeNode()
+        root.appendchild(rby2.dup().appendchild(TextNode("12")))
+        root.appendchild(rby1.dup().appendchild(TextNode("3")))
+        root.appendchild(rby4.dup().appendchild(TextNode("4567")))
+        root.appendchild(TextNode("89"))
+        self.dotest(root, False)
+        ## inside
+        rby5 = RubyNode(self.mkname("ruby"))
+        inserter.insertrange(Range(4, 6, rby5))
+        root = TreeNode()
+        root.appendchild(rby2.dup().appendchild(TextNode("12")))
+        root.appendchild(rby1.dup().appendchild(TextNode("3")))
+        root.appendchild(rby4.dup().appendchild(TextNode("4")))
+        root.appendchild(rby5.dup().appendchild(TextNode("56")))
+        root.appendchild(rby4.dup().appendchild(TextNode("7")))
+        root.appendchild(TextNode("89"))
+        self.dotest(root, False)
 
     def dotest(self, intree, insert=True):
         xDoc = self.__class__.xDoc
