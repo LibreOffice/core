@@ -63,7 +63,7 @@ public:
 
     void                    Update( ItemIndex RMIndex, const OUString& _rText );
 
-    void                    SetPosition( RoadmapItem* OldHyperLabel );
+    void                    SetPosition( RoadmapItem const * OldHyperLabel );
 
     void                    ToggleBackgroundColor( const Color& _rGBColor );
     void                    SetInteractive( bool _bInteractive );
@@ -583,7 +583,7 @@ void ORoadmap::DrawHeadline(vcl::RenderContext& rRenderContext)
     rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
 }
 
-RoadmapItem* ORoadmap::GetByPointer(vcl::Window* pWindow)
+RoadmapItem* ORoadmap::GetByPointer(vcl::Window const * pWindow)
 {
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
     for (   HL_Vector::const_iterator i = rItems.begin();
@@ -737,7 +737,7 @@ RoadmapTypes::ItemIndex RoadmapItem::GetIndex() const
     return mpDescription ? mpDescription->GetIndex() : ItemIndex(-1);
 }
 
-void RoadmapItem::SetPosition(RoadmapItem* _pOldItem)
+void RoadmapItem::SetPosition(RoadmapItem const * _pOldItem)
 {
     Point aIDPos;
     if ( _pOldItem == nullptr )

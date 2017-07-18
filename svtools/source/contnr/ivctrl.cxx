@@ -101,12 +101,12 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const OUString& rText, c
     return pEntry;
 }
 
-void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, OutputDevice& rDev )
+void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry const * pEntry, const Point& rPos, OutputDevice& rDev )
 {
     rDev.DrawImage( rPos, pEntry->GetImage() );
 }
 
-OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry )
+OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry const * pEntry )
 {
     return pEntry->GetText();
 }

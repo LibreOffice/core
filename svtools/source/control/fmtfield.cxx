@@ -462,7 +462,7 @@ void FormattedField::Modify()
     impl_Modify();
 }
 
-void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
+void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection const * pNewSel)
 {
 
     if (m_bAutoColor)

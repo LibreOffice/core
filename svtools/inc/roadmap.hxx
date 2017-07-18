@@ -104,7 +104,7 @@ private:
     void                 DeselectOldRoadmapItems();
     ItemId               GetNextAvailableItemId( ItemIndex NewIndex );
     ItemId               GetPreviousAvailableItemId( ItemIndex NewIndex );
-    RoadmapItem*         GetByPointer(vcl::Window* pWindow);
+    RoadmapItem*         GetByPointer(vcl::Window const * pWindow);
     RoadmapItem*         InsertHyperLabel( ItemIndex Index, const OUString& _aStr, ItemId RMID, bool _bEnabled, bool _bIncomplete  );
     void                 UpdatefollowingHyperLabels( ItemIndex Index );
 };

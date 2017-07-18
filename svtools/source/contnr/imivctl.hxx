@@ -237,7 +237,7 @@ class SvxIconChoiceCtrl_Impl
                         }
     void                InitScrollBarBox();
     void                ToggleSelection( SvxIconChoiceCtrlEntry* );
-    void                DeselectAllBut( SvxIconChoiceCtrlEntry* );
+    void                DeselectAllBut( SvxIconChoiceCtrlEntry const * );
     void                Center( SvxIconChoiceCtrlEntry* pEntry ) const;
     void                StopEditTimer() { aEditIdle.Stop(); }
     void                StartEditTimer() { aEditIdle.Start(); }
@@ -291,7 +291,7 @@ class SvxIconChoiceCtrl_Impl
 
                         DECL_LINK(TextEditEndedHdl, LinkParamNone*, void);
 
-    void                ShowFocus ( tools::Rectangle& rRect );
+    void                ShowFocus ( tools::Rectangle const & rRect );
     void                DrawFocusRect(vcl::RenderContext& rRenderContext);
 
     bool                IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const;

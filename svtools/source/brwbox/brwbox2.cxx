@@ -1023,7 +1023,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     _rOut.SetLineColor( aOldLineColor );
 }
 
-void BrowseBox::PaintData( vcl::Window& rWin, vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
+void BrowseBox::PaintData( vcl::Window const & rWin, vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
     if (!bBootstrapped && IsReallyVisible())
         BrowseBox::StateChanged(StateChangedType::InitShow);

@@ -202,7 +202,7 @@ private:
     static void             SVT_DLLPRIVATE ImplEnsureGraphicManager();
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
     bool                    SVT_DLLPRIVATE ImplGetCropParams(
-                                OutputDevice* pOut,
+                                OutputDevice const * pOut,
                                 Point& rPt,
                                 Size& rSz,
                                 const GraphicAttr* pAttr,
@@ -337,7 +337,7 @@ public:
     }
 
     bool                    IsCached(
-                                OutputDevice* pOut,
+                                OutputDevice const * pOut,
                                 const Size& rSz,
                                 const GraphicAttr* pAttr,
                                 GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD
@@ -505,7 +505,7 @@ private:
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
-                            GraphicObject& rObj,
+                            GraphicObject const & rObj,
                             const GraphicAttr& rAttr,
                             bool& rCached
                         );
@@ -589,7 +589,7 @@ public:
     void                SetCacheTimeout( sal_uLong nTimeoutSeconds );
 
     bool                IsInCache(
-                            OutputDevice* pOut,
+                            OutputDevice const * pOut,
                             const Point& rPt,
                             const Size& rSz,
                             const GraphicObject& rObj,
@@ -600,7 +600,7 @@ public:
                             OutputDevice* pOut,
                             const Point& rPt,
                             const Size& rSz,
-                            GraphicObject& rObj,
+                            GraphicObject const & rObj,
                             const GraphicAttr& rAttr,
                             const GraphicManagerDrawFlags nFlags,
                             bool& rCached

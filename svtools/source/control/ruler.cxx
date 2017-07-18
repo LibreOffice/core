@@ -1059,7 +1059,7 @@ void Ruler::ImplCalc()
     mbCalc = false;
 }
 
-void Ruler::ImplFormat(vcl::RenderContext& rRenderContext)
+void Ruler::ImplFormat(vcl::RenderContext const & rRenderContext)
 {
     // if already formatted, don't do it again
     if (!mbFormat)

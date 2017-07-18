@@ -1007,7 +1007,7 @@ void SvtFileView::SetViewMode( FileViewMode eMode )
     mpImpl->SetViewMode( eMode );
 }
 
-OUString SvtFileView::GetURL( SvTreeListEntry* pEntry )
+OUString SvtFileView::GetURL( SvTreeListEntry const * pEntry )
 {
     OUString aURL;
     if ( pEntry && pEntry->GetUserData() )
@@ -1959,7 +1959,7 @@ static const CollatorWrapper*   pCollatorWrapper = nullptr;
 
 /* this function returns true, if aOne is less then aTwo
 */
-bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl* const aTwo )
+bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl const * aTwo )
 {
     DBG_ASSERT( pCollatorWrapper, "*CompareSortingData_Impl(): Can't work this way!" );
 

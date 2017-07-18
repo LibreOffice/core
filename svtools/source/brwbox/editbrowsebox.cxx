@@ -1132,7 +1132,7 @@ namespace svt
     }
 
 
-    void EditBrowseBox::ResizeController(CellControllerRef& rController, const tools::Rectangle& rRect)
+    void EditBrowseBox::ResizeController(CellControllerRef const & rController, const tools::Rectangle& rRect)
     {
         rController->GetWindow().SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
     }

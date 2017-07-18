@@ -568,7 +568,7 @@ OUString FontList::GetFontMapText( const FontMetric& rInfo ) const
 
 namespace
 {
-    FontMetric makeMissing(ImplFontListFontMetric* pFontNameInfo, const OUString &rName,
+    FontMetric makeMissing(ImplFontListFontMetric const * pFontNameInfo, const OUString &rName,
         FontWeight eWeight, FontItalic eItalic)
     {
         FontMetric aInfo;

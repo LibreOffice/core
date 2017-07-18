@@ -62,7 +62,7 @@ public:
                                     The font for asian characters.
                                     @param  _pCmplxFont
                                     The font for complex text layout. */
-    void                        SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont );
+    void                        SetFonts( vcl::Font const * _pLatinFont, vcl::Font const * _pAsianFont, vcl::Font const * _pCmplxFont );
 
                                 /** Sets the default font of the current output device to all script types. */
     void                        SetDefaultFont();

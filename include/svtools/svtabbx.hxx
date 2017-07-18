@@ -154,7 +154,7 @@ public:
                                  sal_uLong nPos = TREELIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = nullptr ) override;
     virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=TREELIST_APPEND) override;
     virtual sal_uLong Insert( SvTreeListEntry* pEntry, sal_uLong nRootPos = TREELIST_APPEND ) override;
-    void            RemoveEntry( SvTreeListEntry* _pEntry );
+    void            RemoveEntry( SvTreeListEntry const * _pEntry );
     void            Clear();
 
     // Accessible -------------------------------------------------------------

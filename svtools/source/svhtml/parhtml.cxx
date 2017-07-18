@@ -1357,7 +1357,7 @@ void HTMLParser::UnescapeToken()
     }
 }
 
-const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId *pNoConvertToken )
+const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId const *pNoConvertToken )
 {
     // If the options for the current token have already been returned,
     // return them once again.
