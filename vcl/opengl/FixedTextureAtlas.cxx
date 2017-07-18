@@ -125,7 +125,7 @@ OpenGLTexture FixedTextureAtlasManager::Reserve(int nWidth, int nHeight)
     return OpenGLTexture(pFixedTexture->mpTexture, aRectangle, nSlot);
 }
 
-OpenGLTexture FixedTextureAtlasManager::InsertBuffer(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData)
+OpenGLTexture FixedTextureAtlasManager::InsertBuffer(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8 const * pData)
 {
     OpenGLTexture aTexture = Reserve(nWidth, nHeight);
     if (pData == nullptr)

@@ -238,7 +238,7 @@ protected:
     FncGetPixel mFncGetPixel;
     FncSetPixel mFncSetPixel;
 
-    SAL_DLLPRIVATE void ImplInitScanBuffer( Bitmap& rBitmap );
+    SAL_DLLPRIVATE void ImplInitScanBuffer( Bitmap const & rBitmap );
     SAL_DLLPRIVATE bool ImplSetAccessPointers( ScanlineFormat nFormat );
 
 public:

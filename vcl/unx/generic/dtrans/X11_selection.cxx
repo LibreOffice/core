@@ -1878,7 +1878,7 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
     return bHandled;
 }
 
-bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
+bool SelectionManager::handleSendPropertyNotify( XPropertyEvent const & rNotify )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

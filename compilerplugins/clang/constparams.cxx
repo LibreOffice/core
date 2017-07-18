@@ -36,8 +36,9 @@ public:
 
     bool VisitFunctionDecl(FunctionDecl *);
     bool VisitDeclRefExpr( const DeclRefExpr* );
+
 private:
-    bool checkIfCanBeConst(const Stmt*);
+    bool checkIfCanBeConst(const Stmt*, const ParmVarDecl*);
     bool isPointerOrReferenceToConst(const QualType& qt);
     StringRef getFilename(const SourceLocation& loc);
 
@@ -85,11 +86,29 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
         StringRef name = functionDecl->getName();
         if (name == "yyerror" // ignore lex/yacc callback
                 // some function callbacks
+                // TODO should really use a two-pass algorithm to detect and ignore these automatically
             || name == "PDFSigningPKCS7PasswordCallback"
             || name == "VCLExceptionSignal_impl"
             || name == "parseXcsFile"
+            || name == "GraphicsExposePredicate"
+            || name == "ImplPredicateEvent"
+            || name == "timestamp_predicate"
+            || name == "signalScreenSizeChanged"
+            || name == "signalMonitorsChanged"
+            || name == "signalButton"
+            || name == "signalFocus"
+            || name == "signalDestroy"
+            || name == "signalSettingsNotify"
+            || name == "signalStyleSet"
+            || name == "signalIMCommit"
+            || name == "compressWheelEvents"
+            || name == "MenuBarSignalKey"
+            || name == "signalDragDropReceived"
                 // UNO component entry points
-            || name.endswith("component_getFactory"))
+            || name.endswith("component_getFactory")
+                // in Scheduler::, wants to loop until a reference to a bool becomes true
+            || name == "ProcessEventsToSignal"
+            )
                 return true;
     }
 
@@ -120,7 +139,7 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
             continue;
         if (type.LvalueReference().Const())
             continue;
-        // since we can't normally change typedefs, just ignore them
+        // since we normally can't change typedefs, just ignore them
         if (isa<TypedefType>(pParmVarDecl->getType()))
             continue;
         // TODO ignore these for now, has some effects I don't understand
@@ -156,7 +175,6 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
                     pOther->getLocStart())
                     << pOther->getSourceRange();
             }
-            //functionDecl->dump();
         }
     }
     return ret;
@@ -174,13 +192,15 @@ bool ConstParams::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     if (interestingSet.find(parmVarDecl) == interestingSet.end()) {
         return true;
     }
-    if (!checkIfCanBeConst(declRefExpr))
+    if (!checkIfCanBeConst(declRefExpr, parmVarDecl))
         cannotBeConstSet.insert(parmVarDecl);
 
     return true;
 }
 
-bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
+// Walk up from a DeclRefExpr to a ParamVarDecl, checking if the usage means that the
+// ParamVarDecl can be const.
+bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVarDecl)
 {
     const Stmt* parent = parentStmt( stmt );
     if (isa<UnaryOperator>(parent)) {
@@ -191,7 +211,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
             return false;
         }
         if (op == UO_Deref) {
-            return checkIfCanBeConst(parent);
+            return checkIfCanBeConst(parent, parmVarDecl);
         }
         return true;
     } else if (auto binaryOp = dyn_cast<BinaryOperator>(parent)) {
@@ -211,7 +231,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
         }
         // for pointer arithmetic need to check parent
         if (binaryOp->getType()->isPointerType()) {
-            return checkIfCanBeConst(parent);
+            return checkIfCanBeConst(parent, parmVarDecl);
         }
         return true;
     } else if (isa<CXXConstructExpr>(parent)) {
@@ -222,8 +242,6 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
                 return isPointerOrReferenceToConst(constructorDecl->getParamDecl(i)->getType());
             }
         }
-        std::cout << "dump0" << std::endl;
-        parent->dump();
     } else if (isa<CXXOperatorCallExpr>(parent)) {
         const CXXOperatorCallExpr* operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(parent);
         const CXXMethodDecl* calleeMethodDecl = dyn_cast<CXXMethodDecl>(operatorCallExpr->getDirectCallee());
@@ -254,9 +272,6 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
                 }
             }
         }
-        std::cout << "dump1" << std::endl;
-        parent->dump();
-        stmt->dump();
     } else if (isa<CallExpr>(parent)) {
         const CallExpr* callExpr = dyn_cast<CallExpr>(parent);
         QualType functionType = callExpr->getCallee()->getType();
@@ -287,20 +302,6 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
                 return calleeMethodDecl->isConst();
             }
         }
-        if (!calleeFunctionDecl) {
-            std::cout << "---------------dump2" << std::endl;
-            std::cout << "parent" << std::endl;
-            parent->dump();
-            std::cout << "child" << std::endl;
-            stmt->dump();
-            std::cout << "callee-type" << std::endl;
-            callExpr->getCallee()->getType()->dump();
-            for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
-                std::cout << "    param " << i << std::endl;
-                callExpr->getArg(i)->dump();
-            }
-            return true;
-        }
         // TODO could do better
         if (calleeFunctionDecl->isVariadic()) {
             return false;
@@ -315,32 +316,18 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
                 return isPointerOrReferenceToConst(calleeFunctionDecl->getParamDecl(i)->getType());
             }
         }
-        std::cout << "------------dump3" << std::endl;
-        std::cout << "parent" << std::endl;
-        parent->dump();
-        std::cout << "child" << std::endl;
-        stmt->dump();
-        calleeFunctionDecl->dump();
-        for (unsigned i = 0; i < callExpr->getNumArgs(); ++i) {
-            std::cout << "    param " << i << std::endl;
-            callExpr->getArg(i)->dump();
-        }
-        if (isa<CXXMemberCallExpr>(parent)) {
-            std::cout << "implicit" << std::endl;
-            dyn_cast<CXXMemberCallExpr>(parent)->getImplicitObjectArgument()->dump();
-        }
     } else if (isa<CXXReinterpretCastExpr>(parent)) {
         return false;
     } else if (isa<CXXConstCastExpr>(parent)) {
         return false;
     } else if (isa<CastExpr>(parent)) { // all other cast expression subtypes
-        return checkIfCanBeConst(parent);
+        return checkIfCanBeConst(parent, parmVarDecl);
     } else if (isa<MemberExpr>(parent)) {
-        return checkIfCanBeConst(parent);
+        return checkIfCanBeConst(parent, parmVarDecl);
     } else if (isa<ArraySubscriptExpr>(parent)) {
-        return checkIfCanBeConst(parent);
+        return checkIfCanBeConst(parent, parmVarDecl);
     } else if (isa<ParenExpr>(parent)) {
-        return checkIfCanBeConst(parent);
+        return checkIfCanBeConst(parent, parmVarDecl);
     } else if (isa<DeclStmt>(parent)) {
         // TODO could do better here, but would require tracking the target(s)
         return false;
@@ -367,10 +354,32 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt)
     } else if (const ConditionalOperator* conditionalExpr = dyn_cast<ConditionalOperator>(parent)) {
         if (conditionalExpr->getCond() == stmt)
             return true;
-        return checkIfCanBeConst(parent);
-    } else {
-        std::cout << "dump5" << std::endl;
+        return checkIfCanBeConst(parent, parmVarDecl);
+    } else if (isa<UnaryExprOrTypeTraitExpr>(parent)) {
+        return false; // ???
+    } else if (isa<CXXNewExpr>(parent)) {
+        return true; // because the ParamVarDecl must be a parameter to the expression, probably an array count
+    } else if (auto lambdaExpr = dyn_cast<LambdaExpr>(parent)) {
+        for (auto it = lambdaExpr->capture_begin(); it != lambdaExpr->capture_end(); ++it)
+        {
+            if (it->getCapturedVar() == parmVarDecl)
+                return it->getCaptureKind() != LCK_ByRef;
+        }
+        report(
+             DiagnosticsEngine::Warning,
+             "cannot handle this lambda",
+              parent->getLocStart())
+              << parent->getSourceRange();
         parent->dump();
+        parmVarDecl->dump();
+    } else {
+        report(
+             DiagnosticsEngine::Warning,
+             "oh dear, what can the matter be?",
+              parent->getLocStart())
+              << parent->getSourceRange();
+        parent->dump();
+        parmVarDecl->dump();
     }
     return true;
 }

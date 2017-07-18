@@ -1280,7 +1280,7 @@ public:
             }
         }
 
-        static BitmapEx AlphaRecovery(OutputDevice &rDev, Point aPt, BitmapEx &aSrc)
+        static BitmapEx AlphaRecovery(OutputDevice &rDev, Point aPt, BitmapEx const &aSrc)
         {
             // Compositing onto 2x colors beyond our control
             ScopedVclPtrInstance< VirtualDevice > aWhite;

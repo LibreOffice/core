@@ -403,7 +403,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 }
 
 XImage* X11SalBitmap::ImplCreateXImage(
-    SalDisplay *pSalDisp,
+    SalDisplay const *pSalDisp,
     SalX11Screen nScreen,
     long nDepth,
     const SalTwoRect& rTwoRect
@@ -627,7 +627,7 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
         }
 
         if( mpCache )
-            mpCache->ImplRemove( const_cast<X11SalBitmap*>(this) );
+            mpCache->ImplRemove( this );
 
         SalTwoRect aTwoRect( rTwoRect );
         if( aTwoRect.mnSrcX < 0 )
@@ -1111,7 +1111,7 @@ void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp )
         maBmpList.push_back( new ImplBmpObj( pBmp ) );
 }
 
-void ImplSalBitmapCache::ImplRemove( X11SalBitmap* pBmp )
+void ImplSalBitmapCache::ImplRemove( X11SalBitmap const * pBmp )
 {
     for(
         BmpList_impl::iterator it = maBmpList.begin();

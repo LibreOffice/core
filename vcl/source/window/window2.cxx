@@ -624,7 +624,7 @@ Size Window::CalcOutputSize( const Size& rWinSz ) const
     return aSz;
 }
 
-vcl::Font Window::GetDrawPixelFont(OutputDevice* pDev) const
+vcl::Font Window::GetDrawPixelFont(OutputDevice const * pDev) const
 {
     vcl::Font aFont = GetPointFont(*const_cast<Window*>(this));
     Size aFontSize = aFont.GetFontSize();
@@ -634,7 +634,7 @@ vcl::Font Window::GetDrawPixelFont(OutputDevice* pDev) const
     return aFont;
 }
 
-long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
+long Window::GetDrawPixel( OutputDevice const * pDev, long nPixels ) const
 {
     long nP = nPixels;
     if ( pDev->GetOutDevType() != OUTDEV_WINDOW )
@@ -1329,7 +1329,7 @@ void Window::SetOutputSizePixel( const Size& rNewSize )
 //as dirty for the size remains unchanged, but layout changed circumstances
 namespace
 {
-    bool queue_ungrouped_resize(vcl::Window *pOrigWindow)
+    bool queue_ungrouped_resize(vcl::Window const *pOrigWindow)
     {
         bool bSomeoneCares = false;
 

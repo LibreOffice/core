@@ -2959,7 +2959,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     }
 }
 
-void ToolBox::ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem* pItem)
+void ToolBox::ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem)
 {
     if ( !pItem->maRect.IsEmpty() )
     {
@@ -4598,7 +4598,7 @@ bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
     return bRet;
 }
 
-bool ImplCloseLastPopup( vcl::Window *pParent )
+bool ImplCloseLastPopup( vcl::Window const *pParent )
 {
     // close last popup toolbox (see also:
     // ImplHandleMouseFloatMode(...) in winproc.cxx )
@@ -4854,7 +4854,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
 }
 
 // returns the current toolbox line of the item
-ToolBox::ImplToolItems::size_type ToolBox::ImplGetItemLine( ImplToolItem* pCurrentItem )
+ToolBox::ImplToolItems::size_type ToolBox::ImplGetItemLine( ImplToolItem const * pCurrentItem )
 {
     ImplToolItems::const_iterator it = mpData->m_aItems.begin();
     ImplToolItems::size_type nLine = 1;

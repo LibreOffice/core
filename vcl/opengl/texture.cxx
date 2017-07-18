@@ -190,7 +190,7 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
     }
 }
 
-bool ImplOpenGLTexture::InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData)
+bool ImplOpenGLTexture::InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8 const * pData)
 {
     if (!pData || mnTexture == 0)
         return false;
@@ -461,7 +461,7 @@ GLenum OpenGLTexture::GetFilter() const
     return GL_NEAREST;
 }
 
-bool OpenGLTexture::CopyData(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData)
+bool OpenGLTexture::CopyData(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8 const * pData)
 {
     if (!pData || !IsValid())
         return false;

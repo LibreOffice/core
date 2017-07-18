@@ -117,7 +117,7 @@ private:
 
     bool doLoadImage(ImageRequestParameters& rParameters);
 
-    std::vector<OUString> getPaths(OUString const & name, LanguageTag& rLanguageTag);
+    std::vector<OUString> getPaths(OUString const & name, LanguageTag const & rLanguageTag);
 
     bool checkPathAccess();
 

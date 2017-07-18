@@ -33,7 +33,7 @@ void ProgressBar::ImplInit()
     ImplInitSettings( true, true, true );
 }
 
-static WinBits clearProgressBarBorder( vcl::Window* pParent, WinBits nOrgStyle )
+static WinBits clearProgressBarBorder( vcl::Window const * pParent, WinBits nOrgStyle )
 {
     WinBits nOutStyle = nOrgStyle;
     if( pParent && (nOrgStyle & WB_BORDER) != 0 )

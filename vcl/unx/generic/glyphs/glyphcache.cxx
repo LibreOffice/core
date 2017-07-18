@@ -276,7 +276,7 @@ void GlyphCache::GarbageCollect()
     }
 }
 
-inline void GlyphCache::UsingGlyph( GlyphData& rGlyphData )
+inline void GlyphCache::UsingGlyph( GlyphData const & rGlyphData )
 {
     rGlyphData.SetLruValue( mnLruIndex++ );
 }

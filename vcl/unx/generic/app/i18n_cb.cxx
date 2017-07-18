@@ -225,7 +225,7 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
 // Handle the change of attributes in a preedit_draw_callback
 
 void
-Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback* feedback,
+Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback const * feedback,
         int from, int amount )
 {
     if ( (from + amount) > (int)ptext->nLength )

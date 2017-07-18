@@ -279,7 +279,7 @@ public:
                                    SvStream& rStream,
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                    sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
-                                   WmfExternal *pExtHeader = nullptr );
+                                   WmfExternal const *pExtHeader = nullptr );
 
     /// Imports multiple graphics.
     ///
@@ -291,7 +291,7 @@ public:
                                    sal_uInt16 nFormat,
                                    sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                    css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
-                                   WmfExternal *pExtHeader = nullptr );
+                                   WmfExternal const *pExtHeader = nullptr );
 
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();

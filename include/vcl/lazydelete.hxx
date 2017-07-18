@@ -115,7 +115,7 @@ namespace vcl
         /** strict weak ordering function to bring objects to be destroyed lazily
         in correct order, e.g. for Window objects children before parents
         */
-        static bool is_less( vcl::Window* left, vcl::Window* right );
+        static bool is_less( vcl::Window const * left, vcl::Window const * right );
 
         LazyDeletor()  { LazyDelete::addDeletor( this ); }
         virtual ~LazyDeletor() override

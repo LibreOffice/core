@@ -68,7 +68,7 @@ void ImplGetSpinbuttonValue(vcl::Window* pWin,
     rValue.mnLowerPart = bHorz ? ControlPart::ButtonRight : ControlPart::ButtonDown;
 }
 
-bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window* pWin, const SpinbuttonValue& rSpinbuttonValue)
+bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window const * pWin, const SpinbuttonValue& rSpinbuttonValue)
 {
     bool bNativeOK = false;
 

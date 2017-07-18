@@ -136,7 +136,7 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev ) const
     }
 }
 
-void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bool bBack ) const
+void SalGraphics::mirror( long& x, long nWidth, const OutputDevice *pOutDev, bool bBack ) const
 {
     long w;
     if( pOutDev && pOutDev->GetOutDevType() == OUTDEV_VIRDEV )

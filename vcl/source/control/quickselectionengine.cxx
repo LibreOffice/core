@@ -70,7 +70,7 @@ namespace vcl
         lcl_reset( *this );
     }
 
-    static StringEntryIdentifier findMatchingEntry( const OUString& _searchString, QuickSelectionEngine_Data& _engineData )
+    static StringEntryIdentifier findMatchingEntry( const OUString& _searchString, QuickSelectionEngine_Data const & _engineData )
     {
         const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
         // TODO: do we really need the Window's settings here? The original code used it ...

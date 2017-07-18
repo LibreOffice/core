@@ -91,7 +91,7 @@ class ScaleTask : public comphelper::ThreadTask
 public:
     explicit ScaleTask( const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, ScaleRangeFn pFn )
         : comphelper::ThreadTask(pTag), mpFn( pFn ) {}
-    void push( ScaleRangeContext &aRC ) { maStrips.push_back( aRC ); }
+    void push( ScaleRangeContext const &aRC ) { maStrips.push_back( aRC ); }
     virtual void doWork() override
     {
         std::vector< ScaleRangeContext >::iterator it;

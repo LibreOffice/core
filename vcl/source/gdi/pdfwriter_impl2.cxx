@@ -66,7 +66,7 @@ void PDFWriterImpl::implWriteGradient( const tools::PolyPolygon& i_rPolyPoly, co
 }
 
 void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSize, const BitmapEx& i_rBitmapEx, const Graphic& i_Graphic,
-                                       VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
+                                       VirtualDevice const * i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
 {
     if ( !i_rBitmapEx.IsEmpty() && i_rSize.Width() && i_rSize.Height() )
     {
@@ -1948,7 +1948,7 @@ void PDFWriterImpl::putG4Span( long i_nSpan, bool i_bWhitePixel, BitStreamState&
     putG4Bits( pTable[i_nSpan].mnCodeBits, pTable[i_nSpan].mnCode, io_rState );
 }
 
-void PDFWriterImpl::writeG4Stream( BitmapReadAccess* i_pBitmap )
+void PDFWriterImpl::writeG4Stream( BitmapReadAccess const * i_pBitmap )
 {
     long nW = i_pBitmap->Width();
     long nH = i_pBitmap->Height();

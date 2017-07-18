@@ -1827,7 +1827,7 @@ namespace
 {
     //return true for window types which exist in vcl but are not themselves
     //represented in the .ui format, i.e. only their children exist.
-    bool isConsideredGtkPseudo(vcl::Window *pWindow)
+    bool isConsideredGtkPseudo(vcl::Window const *pWindow)
     {
         return pWindow->GetType() == WindowType::TABPAGE;
     }

@@ -348,7 +348,7 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
     }
 }
 
-bool RenderList::addDrawTextureWithMaskColor(OpenGLTexture& rTexture, SalColor nColor, const SalTwoRect& r2Rect)
+bool RenderList::addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, SalColor nColor, const SalTwoRect& r2Rect)
 {
     if (!rTexture)
         return false;

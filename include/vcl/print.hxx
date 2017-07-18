@@ -213,7 +213,7 @@ private:
     SAL_DLLPRIVATE void         ImplUpdateFontList();
     SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup&, bool bMatchNearest );
 
-    SAL_DLLPRIVATE bool         StartJob( const OUString& rJobName, std::shared_ptr<vcl::PrinterController>& );
+    SAL_DLLPRIVATE bool         StartJob( const OUString& rJobName, std::shared_ptr<vcl::PrinterController> const & );
 
     static SAL_DLLPRIVATE ErrCode
                                 ImplSalPrinterErrorCodeToVCL( sal_uLong nError );
@@ -559,7 +559,7 @@ public:
     SAL_DLLPRIVATE    css::uno::Sequence< css::beans::PropertyValue >
                                         getPageParametersProtected( int i_nPage ) const;
 
-    SAL_DLLPRIVATE    DrawModeFlags     removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
+    SAL_DLLPRIVATE    DrawModeFlags     removeTransparencies( GDIMetaFile const & i_rIn, GDIMetaFile& o_rOut );
     SAL_DLLPRIVATE    void              resetPrinterOptions( bool i_bFileOutput );
 };
 

@@ -83,7 +83,7 @@ public:
     void clear();
 
 public:
-    FcResult LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **family,
+    FcResult LocalizedElementFromPattern(FcPattern const * pPattern, FcChar8 **family,
                                          const char *elementtype, const char *elementlangtype);
 //to-do, make private and add some cleaner accessor methods
     std::unordered_map< OString, OString, OStringHash > m_aFontNameToLocalized;
@@ -329,7 +329,7 @@ void FontCfgWrapper::cacheLocalizedFontNames(const FcChar8 *origfontname, const 
         m_aLocalizedToCanonical[OString(reinterpret_cast<const char*>(bestfontname))] = OString(reinterpret_cast<const char*>(origfontname));
 }
 
-FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **element,
+FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern const * pPattern, FcChar8 **element,
                                                      const char *elementtype, const char *elementlangtype)
 {                                                /* e. g.:      ^ FC_FAMILY              ^ FC_FAMILYLANG */
     FcChar8 *origelement;

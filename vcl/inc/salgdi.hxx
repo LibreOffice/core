@@ -202,7 +202,7 @@ public:
     void                        SetLayout( SalLayoutFlags aLayout ) { m_nLayout = aLayout;}
 
     void                        mirror( long& nX, const OutputDevice *pOutDev ) const;
-    void                        mirror( long& nX, long& nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
+    void                        mirror( long& nX, long nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
     bool                        mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const;
     void                        mirror( tools::Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
     void                        mirror( vcl::Region& rRgn, const OutputDevice *pOutDev ) const;

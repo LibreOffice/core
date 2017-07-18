@@ -139,8 +139,8 @@ public:
     void                Copy();
     void                Paste();
 
-    void                Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard );
-    void                Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard );
+    void                Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard );
+    void                Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard );
 
     void                Undo();
     void                Redo();

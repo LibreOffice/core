@@ -119,7 +119,7 @@ class VCL_DLLPUBLIC PushButton : public Button
 public:
     SAL_DLLPRIVATE void            ImplSetDefButton( bool bSet );
     SAL_DLLPRIVATE void            ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext, tools::Rectangle& rRect, DrawButtonFlags nStyle);
-    SAL_DLLPRIVATE static bool     ImplHitTestPushButton(vcl::Window* pDev, const Point& rPos);
+    SAL_DLLPRIVATE static bool     ImplHitTestPushButton(vcl::Window const * pDev, const Point& rPos);
     SAL_DLLPRIVATE bool            ImplIsDefButton() const;
 
     explicit        PushButton( vcl::Window* pParent, WinBits nStyle = 0 );

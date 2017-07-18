@@ -2884,7 +2884,7 @@ sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uInt32 nPara, sal_Int32 nPos )
     return nRightToLeft;
 }
 
-long TextEngine::ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, std::size_t nTextPortion )
+long TextEngine::ImpGetPortionXOffset( sal_uInt32 nPara, TextLine const * pLine, std::size_t nTextPortion )
 {
     long nX = pLine->GetStartX();
 

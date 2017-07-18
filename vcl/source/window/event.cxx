@@ -358,7 +358,7 @@ void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
 }
 
 
-static MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, vcl::Window* pSource, vcl::Window* pDest )
+static MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, vcl::Window const * pSource, vcl::Window const * pDest )
 {
     // the mouse event occurred in a different window, we need to translate the coordinates of
     // the mouse cursor within that (source) window to the coordinates the mouse cursor would

@@ -457,7 +457,7 @@ static void handle_toolbox_highlight(vcl::Window *pWindow)
     notify_toolbox_item_focus(pToolBox);
 }
 
-static void handle_toolbox_highlightoff(vcl::Window *pWindow)
+static void handle_toolbox_highlightoff(vcl::Window const *pWindow)
 {
     ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pWindow->GetParent() );
 

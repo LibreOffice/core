@@ -77,7 +77,7 @@ OUString UIObject::get_action(VclEventId /*nEvent*/) const
 
 namespace {
 
-bool isDialogWindow(vcl::Window* pWindow)
+bool isDialogWindow(vcl::Window const * pWindow)
 {
     WindowType nType = pWindow->GetType();
     // DIALOG to MODALDIALOG
@@ -94,7 +94,7 @@ bool isDialogWindow(vcl::Window* pWindow)
     return false;
 }
 
-bool isTopWindow(vcl::Window* pWindow)
+bool isTopWindow(vcl::Window const * pWindow)
 {
     WindowType eType = pWindow->GetType();
     return eType == WindowType::FLOATINGWINDOW;
@@ -389,7 +389,7 @@ vcl::Window* findChild(vcl::Window* pParent, const OUString& rID)
     return nullptr;
 }
 
-void addChildren(vcl::Window* pParent, std::set<OUString>& rChildren)
+void addChildren(vcl::Window const * pParent, std::set<OUString>& rChildren)
 {
     if (!pParent)
         return;

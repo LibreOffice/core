@@ -309,10 +309,10 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
 namespace vcl
 {
 
-void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow,
+void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window const & rWindow,
                                           const tools::Rectangle& rRect, sal_uInt16 nHighlight,
                                           bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
-                                          Color* pSelectionTextColor, long nCornerRadius, Color* pPaintColor)
+                                          Color* pSelectionTextColor, long nCornerRadius, Color const * pPaintColor)
 {
     if (rRect.IsEmpty())
         return;
@@ -505,7 +505,7 @@ void Window::PushPaintHelper(PaintHelper *pHelper, vcl::RenderContext& rRenderCo
     pHelper->SetPaintRect(aPaintRect);
 }
 
-void Window::PopPaintHelper(PaintHelper *pHelper)
+void Window::PopPaintHelper(PaintHelper const *pHelper)
 {
     if (mpWindowImpl->mpWinData)
     {

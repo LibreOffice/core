@@ -46,7 +46,7 @@ public:
     XRenderPictFormat* FindStandardFormat(int nFormat) const;
 
     // the methods below are thin wrappers for the XRENDER API
-    XRenderPictFormat* FindVisualFormat( Visual* ) const;
+    XRenderPictFormat* FindVisualFormat( Visual const * ) const;
     Picture     CreatePicture( Drawable, const XRenderPictFormat*,
                     unsigned long nDrawable, const XRenderPictureAttributes* ) const;
     void        ChangePicture( Picture, unsigned long nValueMask,
@@ -74,7 +74,7 @@ inline XRenderPictFormat* XRenderPeer::FindStandardFormat(int nFormat) const
     return XRenderFindStandardFormat(mpDisplay, nFormat);
 }
 
-inline XRenderPictFormat* XRenderPeer::FindVisualFormat( Visual* pVisual ) const
+inline XRenderPictFormat* XRenderPeer::FindVisualFormat( Visual const * pVisual ) const
 {
     return XRenderFindVisualFormat ( mpDisplay, pVisual );
 }

@@ -44,7 +44,7 @@ bool ImplAccelManager::InsertAccel( Accelerator* pAccel )
     return true;
 }
 
-void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
+void ImplAccelManager::RemoveAccel( Accelerator const * pAccel )
 {
     // do we have a list ?
     if ( !mpAccelList )

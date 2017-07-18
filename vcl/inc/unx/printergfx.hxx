@@ -332,7 +332,7 @@ public:
     { return maVirtualStatus.mbArtItalic; }
     bool            GetArtificialBold() const
     { return maVirtualStatus.mbArtBold; }
-    void            SetTextColor (PrinterColor& rTextColor)
+    void            SetTextColor (PrinterColor const & rTextColor)
     { maTextColor = rTextColor; }
 
     void            DrawGlyph(const Point& rPoint,

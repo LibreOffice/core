@@ -148,7 +148,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
 
     long            HandleKeyEvent      ( XKeyEvent         *pEvent );
     long            HandleMouseEvent    ( XEvent            *pEvent );
-    long            HandleFocusEvent    ( XFocusChangeEvent *pEvent );
+    long            HandleFocusEvent    ( XFocusChangeEvent const *pEvent );
     long            HandleExposeEvent   ( XEvent            *pEvent );
     long            HandleSizeEvent     ( XConfigureEvent   *pEvent );
     long            HandleStateEvent    ( XPropertyEvent    *pEvent );

@@ -163,7 +163,7 @@ OpenGLTexture PackedTextureAtlasManager::Reserve(int nWidth, int nHeight)
     return OpenGLTexture();
 }
 
-OpenGLTexture PackedTextureAtlasManager::InsertBuffer(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData)
+OpenGLTexture PackedTextureAtlasManager::InsertBuffer(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8 const * pData)
 {
     OpenGLTexture aTexture = Reserve(nWidth, nHeight);
     if (aTexture && pData == nullptr)

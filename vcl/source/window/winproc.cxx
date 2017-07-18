@@ -186,7 +186,7 @@ static void ImplHandleMouseHelpRequest( vcl::Window* pChild, const Point& rMouse
     }
 }
 
-static void ImplSetMousePointer( vcl::Window* pChild )
+static void ImplSetMousePointer( vcl::Window const * pChild )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maHelpData.mbExtHelpMode )
@@ -195,8 +195,8 @@ static void ImplSetMousePointer( vcl::Window* pChild )
         pChild->ImplGetFrame()->SetPointer( pChild->ImplGetMousePointer() );
 }
 
-static bool ImplCallCommand( const VclPtr<vcl::Window>& pChild, CommandEventId nEvt, void* pData = nullptr,
-                             bool bMouse = false, Point* pPos = nullptr )
+static bool ImplCallCommand( const VclPtr<vcl::Window>& pChild, CommandEventId nEvt, void const * pData = nullptr,
+                             bool bMouse = false, Point const * pPos = nullptr )
 {
     Point aPos;
     if ( pPos )
@@ -1562,7 +1562,7 @@ static void ImplHandlePaint( vcl::Window* pWindow, const tools::Rectangle& rBoun
     }
 }
 
-static void KillOwnPopups( vcl::Window* pWindow )
+static void KillOwnPopups( vcl::Window const * pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window *pParent = pWindow->ImplGetWindowImpl()->mpFrameWindow;
@@ -1678,7 +1678,7 @@ static void ImplHandleMoveResize( vcl::Window* pWindow, long nNewWidth, long nNe
     ImplHandleResize( pWindow, nNewWidth, nNewHeight );
 }
 
-static void ImplActivateFloatingWindows( vcl::Window* pWindow, bool bActive )
+static void ImplActivateFloatingWindows( vcl::Window const * pWindow, bool bActive )
 {
     // First check all overlapping windows
     vcl::Window* pTempWindow = pWindow->ImplGetWindowImpl()->mpFirstOverlap;
@@ -1929,7 +1929,7 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
     }
 }
 
-static MouseEventModifiers ImplGetMouseMoveMode( SalMouseEvent* pEvent )
+static MouseEventModifiers ImplGetMouseMoveMode( SalMouseEvent const * pEvent )
 {
     MouseEventModifiers nMode = MouseEventModifiers::NONE;
     if ( !pEvent->mnCode )
@@ -1941,7 +1941,7 @@ static MouseEventModifiers ImplGetMouseMoveMode( SalMouseEvent* pEvent )
     return nMode;
 }
 
-static MouseEventModifiers ImplGetMouseButtonMode( SalMouseEvent* pEvent )
+static MouseEventModifiers ImplGetMouseButtonMode( SalMouseEvent const * pEvent )
 {
     MouseEventModifiers nMode = MouseEventModifiers::NONE;
     if ( pEvent->mnButton == MOUSE_LEFT )
@@ -1999,7 +1999,7 @@ inline bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent* pEv
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
-static bool ImplHandleMenuEvent( vcl::Window* pWindow, SalMenuEvent* pEvent, SalEvent nEvent )
+static bool ImplHandleMenuEvent( vcl::Window const * pWindow, SalMenuEvent* pEvent, SalEvent nEvent )
 {
     // Find SystemWindow and its Menubar and let it dispatch the command
     bool bRet = false;

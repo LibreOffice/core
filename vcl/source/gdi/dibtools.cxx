@@ -347,7 +347,7 @@ namespace
 
 }
 
-bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, BitmapPalette& rPalette, bool bForceToMonoWhileReading, bool bRLE4)
+bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteAccess& rAcc, BitmapPalette& rPalette, bool bForceToMonoWhileReading, bool bRLE4)
 {
     Scanline pRLE = pBuffer;
     Scanline pEndRLE = pBuffer + rHeader.nSizeImage;
@@ -1055,7 +1055,7 @@ bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
     return bRet;
 }
 
-bool ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
+bool ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess const & rAcc )
 {
     const sal_uInt16    nColors = rAcc.GetPaletteEntryCount();
     const sal_uLong     nPalSize = nColors * 4UL;
@@ -1078,7 +1078,7 @@ bool ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
     return rOStm.GetError() == ERRCODE_NONE;
 }
 
-bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
+bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess const & rAcc, bool bRLE4 )
 {
     const sal_uLong nWidth = rAcc.Width();
     const sal_uLong nHeight = rAcc.Height();
@@ -1191,7 +1191,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
     return rOStm.GetError() == ERRCODE_NONE;
 }
 
-bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess* pAccAlpha, sal_uLong nCompression, sal_uInt32& rImageSize)
+bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapReadAccess const * pAccAlpha, sal_uLong nCompression, sal_uInt32& rImageSize)
 {
     if(!pAccAlpha && BITFIELDS == nCompression)
     {
@@ -1387,7 +1387,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
     return (!rOStm.GetError());
 }
 
-bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess* pAccAlpha, bool bCompressed)
+bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapReadAccess const * pAccAlpha, bool bCompressed)
 {
     const MapMode aMapPixel(MapUnit::MapPixel);
     DIBV5Header aHeader;
@@ -1570,7 +1570,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
     return bRet;
 }
 
-bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess& rAcc, bool bUseDIBV5)
+bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess const & rAcc, bool bUseDIBV5)
 {
     const sal_uInt32 nPalCount((rAcc.HasPalette() ? rAcc.GetPaletteEntryCount() : isBitfieldCompression(rAcc.GetScanlineFormat()) ? 3UL : 0UL));
     const sal_uInt32 nOffset(14 + (bUseDIBV5 ? DIBV5HEADERSIZE : DIBINFOHEADERSIZE) + nPalCount * 4UL);

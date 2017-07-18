@@ -701,7 +701,7 @@ namespace
     }
 }
 
-bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY, TextureCombo& rCombo)
+bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap const * pPixmap, X11Pixmap const * pMask, int nX, int nY, TextureCombo& rCombo)
 {
     const int aAttribs[] =
     {

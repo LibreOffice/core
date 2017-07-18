@@ -59,7 +59,7 @@ protected:
 
                             LongCurrencyFormatter();
 private:
-    friend bool ImplLongCurrencyReformat( const OUString&, BigInt const &, BigInt const &, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter& );
+    friend bool ImplLongCurrencyReformat( const OUString&, BigInt const &, BigInt const &, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter const & );
     SAL_DLLPRIVATE void        ImpInit();
 
     BigInt                  mnFieldValue;

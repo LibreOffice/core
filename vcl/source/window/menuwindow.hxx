@@ -52,7 +52,7 @@ class MenuWindow
 {
 protected:
     /// Show the appropriate help tooltip.
-    static bool ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
+    static bool ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu const * pMenu, sal_uInt16 nHighlightedItem,
             const HelpEvent& rHEvt, const tools::Rectangle &rHighlightRect);
 };
 

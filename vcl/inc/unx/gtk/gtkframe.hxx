@@ -122,7 +122,7 @@ class GtkSalFrame : public SalFrame
                 group( rPrev.group )
             {}
 
-            bool operator== (GdkEventKey *event) const
+            bool operator== (GdkEventKey const *event) const
             {
                 return (event != nullptr)
                     && (event->window == window)
@@ -396,7 +396,7 @@ public:
         m_pDropTarget = pDropTarget;
     }
 
-    void deregisterDropTarget(GtkDropTarget* pDropTarget)
+    void deregisterDropTarget(GtkDropTarget const * pDropTarget)
     {
         assert(m_pDropTarget == pDropTarget); (void)pDropTarget;
         m_pDropTarget = nullptr;
@@ -408,7 +408,7 @@ public:
         m_pDragSource = pDragSource;
     }
 
-    void deregisterDragSource(GtkDragSource* pDragSource)
+    void deregisterDragSource(GtkDragSource const * pDragSource)
     {
         assert(m_pDragSource == pDragSource); (void)pDragSource;
         m_pDragSource = nullptr;
@@ -429,7 +429,7 @@ public:
 
     void nopaint_container_resize_children(GtkContainer*);
 
-    void LaunchAsyncScroll(GdkEvent* pEvent);
+    void LaunchAsyncScroll(GdkEvent const * pEvent);
     DECL_LINK(AsyncScroll, Timer *, void);
 
 #endif

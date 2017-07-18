@@ -29,7 +29,7 @@ class VCL_PLUGIN_PUBLIC FixedTextureAtlasManager
 public:
     FixedTextureAtlasManager(int nWidthFactor, int nHeightFactor, int nTextureSize);
     ~FixedTextureAtlasManager();
-    OpenGLTexture InsertBuffer(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData);
+    OpenGLTexture InsertBuffer(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8 const * pData);
     OpenGLTexture Reserve(int nWidth, int nHeight);
 
     int GetSubtextureSize()

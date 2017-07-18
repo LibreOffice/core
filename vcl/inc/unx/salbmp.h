@@ -85,7 +85,7 @@ public:
                                 );
 
     SAL_DLLPRIVATE XImage*      ImplCreateXImage(
-                                    SalDisplay* pSalDisp,
+                                    SalDisplay const * pSalDisp,
                                     SalX11Screen nXScreen,
                                     long nDepth,
                                     const SalTwoRect& rTwoRect
@@ -228,7 +228,7 @@ public:
                     ~ImplSalBitmapCache();
 
     void            ImplAdd( X11SalBitmap* pBmp );
-    void            ImplRemove( X11SalBitmap* pBmp );
+    void            ImplRemove( X11SalBitmap const * pBmp );
     void            ImplClear();
 };
 

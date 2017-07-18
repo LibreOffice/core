@@ -142,10 +142,10 @@ public:
     void DrawLinearGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
     void DrawAxialGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
     void DrawRadialGradient( const Gradient& rGradient, const tools::Rectangle& rRect );
-    void DeferredTextDraw(OpenGLTexture& rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
+    void DeferredTextDraw(OpenGLTexture const & rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
 
     void FlushDeferredDrawing();
-    bool FlushLinesOrTriangles(DrawShaderType eType, RenderParameters& rParameters);
+    bool FlushLinesOrTriangles(DrawShaderType eType, RenderParameters const & rParameters);
 
 public:
     // get the width of the device

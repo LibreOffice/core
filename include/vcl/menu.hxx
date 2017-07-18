@@ -179,7 +179,7 @@ protected:
     SAL_DLLPRIVATE sal_uInt16 ImplGetPrevVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplGetNextVisible( sal_uInt16 nPos ) const;
     SAL_DLLPRIVATE void ImplPaint(vcl::RenderContext& rRenderContext,
-                                  sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = nullptr,
+                                  sal_uInt16 nBorder, long nOffY = 0, MenuItemData const * pThisDataOnly = nullptr,
                                   bool bHighlighted = false, bool bLayout = false, bool bRollover = false ) const;
     SAL_DLLPRIVATE void ImplPaintMenuTitle(vcl::RenderContext&, const tools::Rectangle& rRect) const;
     SAL_DLLPRIVATE void ImplSelect();
@@ -194,11 +194,11 @@ protected:
 
     // returns native check and option menu symbol height in rCheckHeight and rRadioHeight
     // return value is maximum width and height of checkboxes and radiobuttons
-    SAL_DLLPRIVATE Size ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, long& rCheckHeight, long& rRadioHeight) const;
+    SAL_DLLPRIVATE Size ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderContext, long& rCheckHeight, long& rRadioHeight) const;
 
     // returns native submenu arrow size and spacing from right border
     // return value is whether it's supported natively
-    SAL_DLLPRIVATE static bool ImplGetNativeSubmenuArrowSize(vcl::RenderContext& rRenderContext, Size& rArrowSize, long& rArrowSpacing);
+    SAL_DLLPRIVATE static bool ImplGetNativeSubmenuArrowSize(vcl::RenderContext const & rRenderContext, Size& rArrowSize, long& rArrowSpacing);
 
     SAL_DLLPRIVATE void ImplAddDel( ImplMenuDelData &rDel );
     SAL_DLLPRIVATE void ImplRemoveDel( ImplMenuDelData &rDel );

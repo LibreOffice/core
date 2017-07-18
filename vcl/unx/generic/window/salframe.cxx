@@ -102,7 +102,7 @@ static ::Window  hPresentationWindow = None, hPresFocusWindow = None;
 static ::std::list< ::Window > aPresentationReparentList;
 static int          nVisibleFloats      = 0;
 
-static void doReparentPresentationDialogues( SalDisplay* pDisplay )
+static void doReparentPresentationDialogues( SalDisplay const * pDisplay )
 {
     GetGenericData()->ErrorTrapPush();
     while( !aPresentationReparentList.empty() )
@@ -308,7 +308,7 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
     netwm_icon.resize( pos );
 }
 
-static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen,
+static bool lcl_SelectAppIconPixmap( SalDisplay const *pDisplay, SalX11Screen nXScreen,
                                          sal_uInt16 nIcon, sal_uInt16 iconSize,
                                          Pixmap& icon_pixmap, Pixmap& icon_mask, NetWmIconData& netwm_icon)
 {
@@ -3314,7 +3314,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     return True;
 }
 
-long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
+long X11SalFrame::HandleFocusEvent( XFocusChangeEvent const *pEvent )
 {
     // ReflectionX in Windows mode changes focus while mouse is grabbed
     if( nVisibleFloats > 0 && GetDisplay()->getWMAdaptor()->getWindowManagerName() == "ReflectionX Windows" )

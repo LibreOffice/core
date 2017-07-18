@@ -366,7 +366,7 @@ static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const
  */
 
 void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
-    SalPrinterQueueInfo* pQueueInfo, ImplJobSetup* pJobSetup)
+    SalPrinterQueueInfo const * pQueueInfo, ImplJobSetup* pJobSetup)
 {
     if( pJobSetup )
     {
@@ -1268,7 +1268,7 @@ class PrinterUpdate
     static void doUpdate();
     DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, Timer*, void );
 public:
-    static void update(SalGenericInstance &rInstance);
+    static void update(SalGenericInstance const &rInstance);
     static void jobStarted() { nActiveJobs++; }
     static void jobEnded();
 };
@@ -1296,7 +1296,7 @@ IMPL_STATIC_LINK_NOARG( PrinterUpdate, UpdateTimerHdl, Timer*, void )
         pPrinterUpdateIdle->Start();
 }
 
-void PrinterUpdate::update(SalGenericInstance &rInstance)
+void PrinterUpdate::update(SalGenericInstance const &rInstance)
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;

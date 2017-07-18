@@ -490,7 +490,7 @@ FreetypeFont::~FreetypeFont()
 }
 
 
-void FreetypeFont::GetFontMetric(ImplFontMetricDataRef& rxTo) const
+void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
 {
     rxTo->FontAttributes::operator =(mpFontInfo->GetFontAttributes());
 

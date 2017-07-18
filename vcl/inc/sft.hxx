@@ -372,7 +372,7 @@ namespace vcl
                               sal_uInt8     *encoding,
                               int            nGlyphs,
                               int            nNameRecs,
-                              NameRecord    *nr);
+                              NameRecord const *nr);
 
 /**
  * Generates a new PostScript Type42 font and dumps it to <b>outf</b> file.

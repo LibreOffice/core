@@ -193,7 +193,7 @@ ImplImageTree::~ImplImageTree()
 {
 }
 
-std::vector<OUString> ImplImageTree::getPaths(OUString const & name, LanguageTag& rLanguageTag)
+std::vector<OUString> ImplImageTree::getPaths(OUString const & name, LanguageTag const & rLanguageTag)
 {
     std::vector<OUString> sPaths;
 
@@ -322,7 +322,7 @@ bool loadDiskCachedVersion(OUString const & sVariant, ImageRequestParameters& rP
     return true;
 }
 
-void cacheBitmapToDisk(OUString const & sVariant, ImageRequestParameters& rParameters)
+void cacheBitmapToDisk(OUString const & sVariant, ImageRequestParameters const & rParameters)
 {
     OUString sUrl(createIconCacheUrl(rParameters.msStyle, sVariant, rParameters.msName));
     vcl::PNGWriter aWriter(rParameters.mrBitmap);

@@ -377,7 +377,7 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
 }
 
 void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int nHeight,
-                           const GLenum nFormat, const GLenum nType, sal_uInt8* pData)
+                           const GLenum nFormat, const GLenum nType, sal_uInt8 const * pData)
 {
     if (nWidth == nHeight)
     {

@@ -16,7 +16,7 @@ namespace test {
 namespace
 {
 
-void drawPixelOffset(OutputDevice& rDevice, tools::Rectangle& rRect, int nOffset)
+void drawPixelOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset)
 {
     for (long x = 0 + nOffset; x < (rRect.GetWidth() - nOffset); ++x)
     {

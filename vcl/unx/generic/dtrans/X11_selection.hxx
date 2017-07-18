@@ -369,7 +369,7 @@ namespace x11 {
 
         // handle various events
         bool handleSelectionRequest( XSelectionRequestEvent& rRequest );
-        bool handleSendPropertyNotify( XPropertyEvent& rNotify );
+        bool handleSendPropertyNotify( XPropertyEvent const & rNotify );
         bool handleReceivePropertyNotify( XPropertyEvent& rNotify );
         bool handleSelectionNotify( XSelectionEvent& rNotify );
         bool handleDragEvent( XEvent& rMessage );

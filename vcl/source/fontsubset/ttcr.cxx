@@ -1019,7 +1019,7 @@ static void DisposeNameRecord(void *ptr)
     }
 }
 
-static NameRecord* NameRecordNewCopy(NameRecord *nr)
+static NameRecord* NameRecordNewCopy(NameRecord const *nr)
 {
     NameRecord* p = static_cast<NameRecord*>(smalloc(sizeof(NameRecord)));
 
@@ -1033,7 +1033,7 @@ static NameRecord* NameRecordNewCopy(NameRecord *nr)
     return p;
 }
 
-TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord *nr)
+TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord const *nr)
 {
     TrueTypeTable* table = static_cast<TrueTypeTable*>(smalloc(sizeof(TrueTypeTable)));
     list l = listNewEmpty();

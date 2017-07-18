@@ -588,7 +588,7 @@ static OString ImplWindowStateToStr(const WindowStateData& rData)
     return rStrBuf.makeStringAndClear();
 }
 
-void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window* i_pConfigureWin )
+void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window const * i_pConfigureWin )
 {
     tools::Rectangle aScreenRect;
     if( !Application::IsUnifiedDisplay() )

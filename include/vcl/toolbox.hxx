@@ -193,7 +193,7 @@ private:
     SAL_DLLPRIVATE bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel = false );
     SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus = false );
     SAL_DLLPRIVATE bool            ImplChangeHighlightUpDn( bool bUp, bool bNoCycle = false );
-    SAL_DLLPRIVATE ImplToolItems::size_type ImplGetItemLine( ImplToolItem* pCurrentItem );
+    SAL_DLLPRIVATE ImplToolItems::size_type ImplGetItemLine( ImplToolItem const * pCurrentItem );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( ImplToolItems::size_type nLine );
     SAL_DLLPRIVATE bool            ImplOpenItem( vcl::KeyCode aKeyCode );
     SAL_DLLPRIVATE bool            ImplActivateItem( vcl::KeyCode aKeyCode );
@@ -208,7 +208,7 @@ private:
     SAL_DLLPRIVATE const OUString& ImplGetHelpText( sal_uInt16 nItemId ) const;
     SAL_DLLPRIVATE Size            ImplGetOptimalFloatingSize();
     SAL_DLLPRIVATE bool            ImplHasExternalMenubutton();
-    SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem* pItem );
+    SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem const * pItem );
 
     DECL_DLLPRIVATE_LINK(    ImplCallExecuteCustomMenu, void*, void );
     DECL_DLLPRIVATE_LINK(    ImplUpdateHdl, Timer*, void );

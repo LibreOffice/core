@@ -228,7 +228,7 @@ static tools::Rectangle NWGetTabItemRect( SalX11Screen nScreen, tools::Rectangle
 
 static tools::Rectangle NWGetEditBoxPixmapRect( SalX11Screen nScreen, tools::Rectangle aAreaRect );
 
-static void NWPaintOneEditBox( SalX11Screen nScreen, GdkDrawable * gdkDrawable, GdkRectangle *gdkRect,
+static void NWPaintOneEditBox( SalX11Screen nScreen, GdkDrawable * gdkDrawable, GdkRectangle const *gdkRect,
                                ControlType nType, ControlPart nPart, tools::Rectangle aEditBoxRect,
                                ControlState nState, const ImplControlValue& aValue,
                                const OUString& rCaption );
@@ -2321,7 +2321,7 @@ static tools::Rectangle NWGetEditBoxPixmapRect(SalX11Screen nScreen,
  */
 static void NWPaintOneEditBox(    SalX11Screen nScreen,
                                 GdkDrawable * gdkDrawable,
-                                GdkRectangle *    gdkRect,
+                                GdkRectangle const *   gdkRect,
                                 ControlType            nType,
                                 ControlPart,
                                 tools::Rectangle                aEditBoxRect,

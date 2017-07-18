@@ -1482,7 +1482,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     rIStm.SetEndian( nOldFormat );
 }
 
-void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
+void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile const & rMtf )
 {
     sal_uLong           nCountPos;
     vcl::Font           aSaveFont;
@@ -1524,7 +1524,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     }
 }
 
-sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
+sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile const & rMtf,
                                       VirtualDevice& rSaveVDev, bool& rRop_0_1,
                                       Color& rLineCol, ::std::stack< Color* >& rLineColStack,
                                       rtl_TextEncoding& rActualCharSet )

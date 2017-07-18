@@ -93,7 +93,7 @@ private:
     void ImplOpenChunk(sal_uLong nChunkType);
     void ImplWriteChunk(sal_uInt8 nNumb);
     void ImplWriteChunk(sal_uInt32 nNumb);
-    void ImplWriteChunk(unsigned char* pSource, sal_uInt32 nDatSize);
+    void ImplWriteChunk(unsigned char const * pSource, sal_uInt32 nDatSize);
 };
 
 PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
@@ -674,7 +674,7 @@ void PNGWriterImpl::ImplWriteChunk (sal_uInt32 nSource)
     rChunkData.aData.push_back(static_cast<sal_uInt8>(nSource));
 }
 
-void PNGWriterImpl::ImplWriteChunk (unsigned char* pSource, sal_uInt32 nDatSize)
+void PNGWriterImpl::ImplWriteChunk (unsigned char const * pSource, sal_uInt32 nDatSize)
 {
     if (nDatSize)
     {

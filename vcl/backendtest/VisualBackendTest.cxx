@@ -49,7 +49,7 @@
 
 using namespace css;
 
-void drawBitmapCentered(tools::Rectangle& rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext)
+void drawBitmapCentered(tools::Rectangle const & rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext)
 {
     long nWidth = rRect.GetWidth();
     long nHeight = rRect.GetHeight();
@@ -64,7 +64,7 @@ void drawBitmapCentered(tools::Rectangle& rRect, Bitmap aBitmap, vcl::RenderCont
     rRenderContext.DrawBitmap(aPoint, aBitmap);
 }
 
-void drawBitmapScaledAndCentered(tools::Rectangle& rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext, BmpScaleFlag aFlag = BmpScaleFlag::Fast)
+void drawBitmapScaledAndCentered(tools::Rectangle const & rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext, BmpScaleFlag aFlag = BmpScaleFlag::Fast)
 {
     long nWidth = rRect.GetWidth();
     long nHeight = rRect.GetHeight();
@@ -78,7 +78,7 @@ void drawBitmapScaledAndCentered(tools::Rectangle& rRect, Bitmap aBitmap, vcl::R
     drawBitmapCentered(rRect, aBitmap, rRenderContext);
 }
 
-void drawBackgroundRect(tools::Rectangle& rRect, Color aColor, vcl::RenderContext& rRenderContext)
+void drawBackgroundRect(tools::Rectangle const & rRect, Color aColor, vcl::RenderContext& rRenderContext)
 {
     rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
     rRenderContext.SetFillColor(aColor);
@@ -87,7 +87,7 @@ void drawBackgroundRect(tools::Rectangle& rRect, Color aColor, vcl::RenderContex
     rRenderContext.Pop();
 }
 
-void assertAndSetBackground(vcl::test::TestResult eResult, tools::Rectangle& rRect, vcl::RenderContext& rRenderContext)
+void assertAndSetBackground(vcl::test::TestResult eResult, tools::Rectangle const & rRect, vcl::RenderContext& rRenderContext)
 {
     if (eResult == vcl::test::TestResult::Passed)
         drawBackgroundRect(rRect, COL_GREEN, rRenderContext);
