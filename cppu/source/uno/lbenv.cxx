@@ -52,8 +52,8 @@ namespace
 {
 
 
-inline bool td_equals( typelib_InterfaceTypeDescription * pTD1,
-                              typelib_InterfaceTypeDescription * pTD2 )
+inline bool td_equals( typelib_InterfaceTypeDescription const * pTD1,
+                       typelib_InterfaceTypeDescription const * pTD2 )
 {
     return (pTD1 == pTD2 ||
             (pTD1->aBase.pTypeName->length == pTD2->aBase.pTypeName->length &&
@@ -89,7 +89,7 @@ struct ObjectEntry
         uno_freeProxyFunc fpFreeProxy );
     inline InterfaceEntry * find(
         typelib_InterfaceTypeDescription * pTypeDescr );
-    inline sal_Int32 find( void * iface_ptr, std::size_t pos );
+    inline sal_Int32 find( void const * iface_ptr, std::size_t pos );
 };
 
 
@@ -213,7 +213,7 @@ inline InterfaceEntry * ObjectEntry::find(
 
 
 inline sal_Int32 ObjectEntry::find(
-    void * iface_ptr, std::size_t pos )
+    void const * iface_ptr, std::size_t pos )
 {
     std::size_t size = aInterfaces.size();
     for ( ; pos < size; ++pos )

@@ -142,7 +142,7 @@ extern "C" void * binuno_queryInterface(
 
 
 inline bool _type_equals(
-    typelib_TypeDescriptionReference * pType1, typelib_TypeDescriptionReference * pType2 )
+    typelib_TypeDescriptionReference const * pType1, typelib_TypeDescriptionReference const * pType2 )
 
 {
     return (pType1 == pType2 ||
