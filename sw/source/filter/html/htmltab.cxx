@@ -1992,7 +1992,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
     sal_uInt16 nRowsReq = m_nCurrentRow + nRowSpan;
     sal_uInt16 i, j;
 
-    // if we need more colums than we currently have, we need to add cells for all rows
+    // if we need more columns than we currently have, we need to add cells for all rows
     if( m_nCols < nColsReq )
     {
         for( i=m_nCols; i<nColsReq; i++ )

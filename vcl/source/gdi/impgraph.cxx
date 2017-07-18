@@ -1639,7 +1639,7 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
             {
                 if(rImpGraphic.getVectorGraphicData().get())
                 {
-                    // stream out Vector GHraphic defining data (length, byte array and evtl. path)
+                    // stream out Vector Graphic defining data (length, byte array and evtl. path)
                     // this is used e.g. in swapping out graphic data and in transporting it over UNO API
                     // as sequence of bytes, but AFAIK not written anywhere to any kind of file, so it should be
                     // no problem to extend it; only used at runtime
