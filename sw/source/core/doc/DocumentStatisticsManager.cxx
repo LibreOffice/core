@@ -127,11 +127,10 @@ void DocumentStatisticsManager::UpdateDocStat( bool bCompleteAsync, bool bFields
             while (IncrementalDocStatCalculate(
                         std::numeric_limits<long>::max(), bFields)) {}
         }
+        else if (IncrementalDocStatCalculate(5000, bFields))
+            maStatsUpdateIdle.Start();
         else
-        {
-            if (!maStatsUpdateIdle.IsActive() && IncrementalDocStatCalculate(5000, bFields))
-                maStatsUpdateIdle.Start();
-        }
+            maStatsUpdateIdle.Stop();
     }
 }
 
@@ -239,8 +238,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
 IMPL_LINK_TYPED( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pIdle, void )
 {
     if (IncrementalDocStatCalculate(32000))
-        pIdle->Stop();
-
+        pIdle->Start();
     SwView* pView = m_rDoc.GetDocShell() ? m_rDoc.GetDocShell()->GetView() : nullptr;
     if( pView )
         pView->UpdateDocStats();

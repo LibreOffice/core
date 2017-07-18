@@ -96,7 +96,10 @@ IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
         for(SwViewShell& rSh : pShell->GetRingContainer())
         {
             if( rSh.ActionPend() )
+            {
+                pIdle->Start();
                 return;
+            }
         }
 
         if( pTmpRoot->IsNeedGrammarCheck() )
@@ -117,6 +120,7 @@ IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
             {
                 (*pLayIter)->GetCurrShell()->LayoutIdle();
                 // Defer the remaining work.
+                pIdle->Start();
                 return;
             }
         }
@@ -131,7 +135,10 @@ IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
         {
             if ( m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().IsInUpdateFields() ||
                       m_rDoc.getIDocumentFieldsAccess().IsExpFieldsLocked() )
+            {
+                pIdle->Start();
                 return;
+            }
 
             //  Action brackets!
             m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetInUpdateFields( true );
@@ -159,7 +166,6 @@ IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
     if( pModLogFile && 1 != (long)pModLogFile )
         delete pModLogFile, static_cast<long&>(pModLogFile) = 1;
 #endif
-    pIdle->Stop();
 }
 
 DocumentTimerManager::~DocumentTimerManager() {}
