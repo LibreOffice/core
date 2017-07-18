@@ -24,7 +24,6 @@
 
 #define SID_DELETE                      (SID_SFX_START + 713)
 
-#define SID_DISTRIBUTION                (SID_CHAOS_START + 26)
 #define SID_VIEW_FLD_PIC                (SID_CHAOS_START + 185)
 
 #endif
