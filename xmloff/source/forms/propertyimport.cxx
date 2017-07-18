@@ -308,7 +308,7 @@ bool OPropertyImport::encounteredAttribute(const OUString& _rAttributeName) cons
 
 void OPropertyImport::Characters(const OUString& _rChars )
 {
-    // ignore them (should be whitespaces only)
+    // ignore them (should be whitespace only)
     OSL_ENSURE(_rChars.trim().isEmpty(), "OPropertyImport::Characters: non-whitespace characters!");
 }
 

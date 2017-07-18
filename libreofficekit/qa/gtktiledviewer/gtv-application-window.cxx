@@ -85,7 +85,7 @@ gtv_application_window_init(GtvApplicationWindow* win)
     win->columnbar = gtv_calc_header_bar_new();
     gtv_calc_header_bar_set_type_and_width(GTV_CALC_HEADER_BAR(win->columnbar), CalcHeaderType::COLUMN);
 
-    // attach row/colum/corner to the container
+    // attach row/column/corner to the container
     gtk_grid_attach(GTK_GRID(priv->gridcontainer), win->cornerarea, 0, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(priv->gridcontainer), win->rowbar, 0, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(priv->gridcontainer), win->columnbar, 1, 0, 1, 1);

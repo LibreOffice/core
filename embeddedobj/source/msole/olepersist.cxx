@@ -1838,7 +1838,7 @@ void SAL_CALL OleEmbeddedObject::reload(
     // TODO:
     // throw away current document
     // load new document from current storage
-    // use meaningfull part of lArguments
+    // use meaningful part of lArguments
 }
 
 
