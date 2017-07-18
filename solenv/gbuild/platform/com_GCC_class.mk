@@ -122,7 +122,7 @@ endef
 # CppunitTest class
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
-gb_CppunitTest_GDBTRACE := gdb -nx -ex "add-auto-load-safe-path $(INSTDIR)" --batch --command=$(SRCDIR)/solenv/bin/gdbtrycatchtrace-stdout -return-child-result --args
+gb_CppunitTest_GDBTRACE := gdb -nx -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))" --batch --command=$(SRCDIR)/solenv/bin/gdbtrycatchtrace-stdout -return-child-result --args
 endif
 
 # ExternalProject class

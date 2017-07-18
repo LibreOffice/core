@@ -123,7 +123,7 @@ else
 		( \
 		$(if $(gb_CppunitTest_localized),for l in $(WITH_LANG_LIST) ; do LO_TEST_LOCALE="$$l" ) \
 		$(if $(gb_CppunitTest_PREGDBTRACE),$(gb_CppunitTest_PREGDBTRACE) &&) \
-		$(if $(filter gdb,$(CPPUNITTRACE)),,$(gb_CppunitTest_CPPTESTPRECOMMAND)) \
+		$(if $(filter gdb,$(gb_CppunitTest_GDBTRACE)),,$(gb_CppunitTest_CPPTESTPRECOMMAND)) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(gb_CppunitTest_malloc_check) \
