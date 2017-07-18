@@ -81,6 +81,10 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
     {
         bool bAll = true;
         uno::Any aAny;
+        // Per ODF this is default, but we did it wrong before LO 6.0 (tdf#108824)
+        bool bIsMouseVisible = true;
+        if (rImport.getGeneratorVersion() < SvXMLImport::LO_6x)
+            bIsMouseVisible = false;
 
         // read attributes
         const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -141,8 +145,7 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
                 }
                 else if( IsXMLToken( aLocalName, XML_MOUSE_VISIBLE ) )
                 {
-                    aAny <<= IsXMLToken( sValue, XML_TRUE );
-                    mpImpl->mxPresProps->setPropertyValue("IsMouseVisible", aAny );
+                    bIsMouseVisible = IsXMLToken( sValue, XML_TRUE );
                 }
                 else if( IsXMLToken( aLocalName, XML_START_WITH_NAVIGATOR ) )
                 {
@@ -167,6 +170,7 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport,  sal_uInt16 nPrfx, c
             }
         }
         mpImpl->mxPresProps->setPropertyValue("IsShowAll", Any(bAll) );
+        mpImpl->mxPresProps->setPropertyValue("IsMouseVisible", Any(bIsMouseVisible) );
     }
 }
 
