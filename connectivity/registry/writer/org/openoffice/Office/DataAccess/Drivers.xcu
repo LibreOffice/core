@@ -13,7 +13,7 @@
         <value>com.sun.star.comp.sdbc.writer.ODriver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">Document</value>
+        <value xml:lang="en-US">Writer Document</value>
       </prop>
       <node oor:name="Features">
         <node oor:name="EscapeDateTime" oor:op="replace">
