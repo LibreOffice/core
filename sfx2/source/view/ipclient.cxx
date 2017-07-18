@@ -566,6 +566,7 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw
     m_xImp->m_aScaleWidth = m_xImp->m_aScaleHeight = Fraction(1,1);
     m_xImp->m_xClient = static_cast< embed::XEmbeddedClient* >( m_xImp.get() );
     pViewShell->NewIPClient_Impl(this);
+    m_xImp->m_aTimer.SetDebugName( "sfx::SfxInPlaceClient m_xImpl::m_aTimer" );
     m_xImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
     m_xImp->m_aTimer.SetInvokeHandler( LINK( m_xImp.get(), SfxInPlaceClient_Impl, TimerHdl ) );
 }
