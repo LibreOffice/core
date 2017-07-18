@@ -313,7 +313,7 @@ void XSecController::setDate( OUString& ouDate )
         return;
     }
     InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
-    utl::ISO8601parseDateTime( ouDate, isi.signatureInfor.stDateTime);
+    (void)utl::ISO8601parseDateTime( ouDate, isi.signatureInfor.stDateTime);
     isi.signatureInfor.ouDateTime = ouDate;
 }
 
