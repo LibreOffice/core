@@ -62,7 +62,6 @@ using namespace css;
 
 const sal_uInt16 SvxBackgroundTabPage::pPageRanges[] =
 {
-    SID_VIEW_FLD_PIC, SID_VIEW_FLD_PIC,
     SID_ATTR_BRUSH, SID_ATTR_BRUSH,
     SID_ATTR_BRUSH_CHAR, SID_ATTR_BRUSH_CHAR,
     0
@@ -434,12 +433,6 @@ VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( vcl::Window* pParent, const Sfx
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
 {
-    if(SfxItemState::DEFAULT <= rSet->GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
-    {
-        ResetFromWallpaperItem( *rSet );
-        return;
-    }
-
     m_bColorSelected = false;
 
     // condition of the preview button is persistent due to UserData
@@ -561,56 +554,6 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     }
 }
 
-void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
-{
-    ShowSelector();
-
-    // condition of the preview button is persistent due to UserData
-    OUString aUserData = GetUserData();
-    m_pBtnPreview->Check( !aUserData.isEmpty() && '1' == aUserData[0] );
-
-    // get and evaluate Input-BrushItem
-    const SvxBrushItem* pBgdAttr = nullptr;
-    sal_uInt16 nWhich = GetWhich( SID_VIEW_FLD_PIC );
-    std::unique_ptr<SvxBrushItem> pTemp;
-
-    if ( rSet.GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
-    {
-        const CntWallpaperItem* pItem = static_cast<const CntWallpaperItem*>(&rSet.Get( nWhich ));
-        pTemp.reset(new SvxBrushItem( *pItem, nWhich ));
-        pBgdAttr = pTemp.get();
-    }
-
-    m_pBtnTile->Check();
-
-    if ( pBgdAttr )
-    {
-        FillControls_Impl(*pBgdAttr, aUserData);
-        // brush shall be kept when showing the graphic, too
-        if( aBgdColor != pBgdAttr->GetColor() )
-        {
-            aBgdColor = pBgdAttr->GetColor();
-            sal_uInt16 nCol = GetItemId_Impl(*m_pBackgroundColorSet, aBgdColor);
-            m_pBackgroundColorSet->SelectItem( nCol );
-            m_pPreviewWin1->NotifyChange( aBgdColor );
-        }
-    }
-    else
-    {
-        lcl_setFillStyle(m_pLbSelect, drawing::FillStyle_SOLID);
-        ShowColorUI_Impl();
-
-        const SfxPoolItem* pOld = GetOldItem( rSet, SID_VIEW_FLD_PIC );
-        if ( pOld )
-            aBgdColor = Color( static_cast<const CntWallpaperItem*>(pOld)->GetColor() );
-    }
-
-    // We now have always a link to the background
-    bLinkOnly = true;
-    m_pBtnLink->Check();
-    m_pBtnLink->Show( false );
-}
-
 /** When destroying a SfxTabPage this virtual method is called,
     so that the TabPage can save internal information.
 
@@ -628,8 +571,6 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
         pPageImpl->pLoadIdle->Stop();
         LoadIdleHdl_Impl( pPageImpl->pLoadIdle );
     }
-    if(SfxItemState::DEFAULT <= rCoreSet->GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
-        return FillItemSetWithWallpaperItem( *rCoreSet, SID_VIEW_FLD_PIC );
 
     bool bModified = false;
     sal_uInt16 nSlot = SID_ATTR_BRUSH;
@@ -827,84 +768,6 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 bModified = true;
             }
         }
-    }
-    return bModified;
-}
-
-bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, sal_uInt16 nSlot)
-{
-    sal_uInt16 nWhich = GetWhich( nSlot );
-    const SfxPoolItem* pOld = GetOldItem( rCoreSet, nSlot );
-    DBG_ASSERT(pOld,"FillItemSetWithWallpaperItem: Item not found");
-    if (!pOld)
-        return false;
-    const SfxItemSet& rOldSet = GetItemSet();
-
-    SvxBrushItem        rOldItem( static_cast<const CntWallpaperItem&>(*pOld), nWhich );
-    SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
-    const bool          bIsBrush    = ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) );
-    bool                bModified = false;
-
-    if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
-        || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap changed?
-    {
-        // background art hasn't been changed
-
-        if ( (GPOS_NONE == eOldPos) || !m_pLbSelect->IsVisible() )
-        {
-            // Brush-treatment:
-            if ( rOldItem.GetColor() != aBgdColor )
-            {
-                bModified = true;
-                CntWallpaperItem aItem( nWhich );
-                aItem.SetColor( aBgdColor );
-                rCoreSet.Put( aItem );
-            }
-            else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
-                rCoreSet.ClearItem( nWhich );
-        }
-        else
-        {
-            // Bitmap-treatment:
-            SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
-
-            bool bBitmapChanged = ( ( eNewPos != eOldPos ) ||
-                                   ( rOldItem.GetGraphicLink() != aBgdGraphicPath ) );
-            bool bBrushChanged = ( rOldItem.GetColor() != aBgdColor );
-            if( bBitmapChanged || bBrushChanged )
-            {
-                bModified = true;
-
-                CntWallpaperItem aItem( nWhich );
-                WallpaperStyle eWallStyle = SvxBrushItem::GraphicPos2WallpaperStyle(eNewPos);
-                aItem.SetStyle( sal::static_int_cast< sal_uInt16 >( eWallStyle ) );
-                aItem.SetColor( aBgdColor );
-                aItem.SetBitmapURL( aBgdGraphicPath );
-                rCoreSet.Put( aItem );
-            }
-            else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
-                rCoreSet.ClearItem( nWhich );
-        }
-    }
-    else // Brush <-> Bitmap changed!
-    {
-        CntWallpaperItem aItem( nWhich );
-        if ( bIsBrush )
-        {
-            aItem.SetColor( aBgdColor );
-            rCoreSet.Put( aItem );
-        }
-        else
-        {
-            WallpaperStyle eWallStyle =
-                SvxBrushItem::GraphicPos2WallpaperStyle( GetGraphicPosition_Impl() );
-            aItem.SetStyle( sal::static_int_cast< sal_uInt16 >( eWallStyle ) );
-            aItem.SetColor( aBgdColor );
-            aItem.SetBitmapURL( aBgdGraphicPath );
-            rCoreSet.Put( aItem );
-        }
-
-        bModified = true;
     }
     return bModified;
 }
