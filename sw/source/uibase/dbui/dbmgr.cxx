@@ -2573,8 +2573,10 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
     OUString sFilterAllData(SwResId(STR_FILTER_ALL_DATA));
     OUString sFilterSXB(SwResId(STR_FILTER_SXB));
     OUString sFilterSXC(SwResId(STR_FILTER_SXC));
+    OUString sFilterSXW(SwResId(STR_FILTER_SXW));
     OUString sFilterDBF(SwResId(STR_FILTER_DBF));
     OUString sFilterXLS(SwResId(STR_FILTER_XLS));
+    OUString sFilterDOC(SwResId(STR_FILTER_DOC));
     OUString sFilterTXT(SwResId(STR_FILTER_TXT));
     OUString sFilterCSV(SwResId(STR_FILTER_CSV));
 #ifdef _WIN32
@@ -2582,12 +2584,14 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
     OUString sFilterACCDB(SwResId(STR_FILTER_ACCDB));
 #endif
     xFltMgr->appendFilter( sFilterAll, "*" );
-    xFltMgr->appendFilter( sFilterAllData, "*.ods;*.sxc;*.dbf;*.xls;*.txt;*.csv");
+    xFltMgr->appendFilter( sFilterAllData, "*.ods;*.sxc;*.odt;*.sxw;*.dbf;*.xls;*.xlsx;*.doc;*.docx;*.txt;*.csv");
 
     xFltMgr->appendFilter( sFilterSXB, "*.odb" );
     xFltMgr->appendFilter( sFilterSXC, "*.ods;*.sxc" );
+    xFltMgr->appendFilter( sFilterSXW, "*.odt;*.sxw" );
     xFltMgr->appendFilter( sFilterDBF, "*.dbf" );
-    xFltMgr->appendFilter( sFilterXLS, "*.xls" );
+    xFltMgr->appendFilter( sFilterXLS, "*.xls;*.xlsx" );
+    xFltMgr->appendFilter( sFilterDOC, "*.doc;*.docx" );
     xFltMgr->appendFilter( sFilterTXT, "*.txt" );
     xFltMgr->appendFilter( sFilterCSV, "*.csv" );
 #ifdef _WIN32
@@ -2628,12 +2632,20 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
     }
     else if(sExt.equalsIgnoreAsciiCase("sxc")
         || sExt.equalsIgnoreAsciiCase("ods")
-            || sExt.equalsIgnoreAsciiCase("xls"))
+            || sExt.equalsIgnoreAsciiCase("xls")
+            || sExt.equalsIgnoreAsciiCase("xlsx"))
     {
         OUString sDBURL("sdbc:calc:");
         sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
         type = DBCONN_CALC;
+    }
+    else if (sExt.equalsIgnoreAsciiCase("sxw") || sExt.equalsIgnoreAsciiCase("odt") || sExt.equalsIgnoreAsciiCase("doc") || sExt.equalsIgnoreAsciiCase("docx"))
+    {
+        OUString sDBURL("sdbc:writer:");
+        sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        aURLAny <<= sDBURL;
+        type = DBCONN_WRITER;
     }
     else if(sExt.equalsIgnoreAsciiCase("dbf"))
     {
@@ -2701,6 +2713,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
     switch (type) {
     case DBCONN_UNKNOWN:
     case DBCONN_CALC:
+    case DBCONN_WRITER:
         break;
     case DBCONN_ODB:
         bStore = false;
