@@ -50,7 +50,7 @@ static bool IsValidFilePathComponent(
 {
         sal_Unicode const * lpComponentEnd = nullptr;
         sal_Unicode const * lpCurrent = lpComponent;
-        bool    fValid = true;  /* Assume success */
+        bool    bValid = true;  /* Assume success */
         sal_Unicode cLast = 0;
 
         /* Path component length must not exceed MAX_PATH even if long path with "\\?\" prefix is used */
@@ -92,7 +92,7 @@ static bool IsValidFilePathComponent(
                     else
                     {
                         lpComponentEnd = lpCurrent - 1;
-                        fValid = false;
+                        bValid = false;
                     }
                     break;
                 default:
@@ -109,14 +109,14 @@ static bool IsValidFilePathComponent(
             case '|':
             case ':':
                 lpComponentEnd = lpCurrent;
-                fValid = false;
+                bValid = false;
                 break;
             default:
                 /* Characters below ASCII 32 are not allowed */
                 if ( *lpCurrent < ' ' )
                 {
                     lpComponentEnd = lpCurrent;
-                    fValid = false;
+                    bValid = false;
                 }
                 break;
             }
@@ -127,15 +127,15 @@ static bool IsValidFilePathComponent(
             ( See condition of while loop ) */
         if ( !lpComponentEnd )
         {
-            fValid = false;
+            bValid = false;
             lpComponentEnd = lpCurrent;
         }
 
-        if ( fValid )
+        if ( bValid )
         {
             // Empty components are not allowed
             if ( lpComponentEnd - lpComponent < 1 )
-                fValid = false;
+                bValid = false;
 
             // If we reached the end of the string nullptr is returned
             else if ( !*lpComponentEnd )
@@ -146,7 +146,7 @@ static bool IsValidFilePathComponent(
         if ( lppComponentEnd )
             *lppComponentEnd = lpComponentEnd;
 
-        return fValid;
+        return bValid;
 }
 
 static sal_Int32 countInitialSeparators(sal_Unicode const * path) {
@@ -161,7 +161,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
 {
         sal_Unicode const * lpszPath = path->buffer;
         sal_Unicode const * lpComponent = lpszPath;
-        bool    fValid = true;
+        bool    bValid = true;
         DWORD   dwPathType = PATHTYPE_ERROR;
         sal_Int32 nLength = rtl_uString_getLength( path );
 
@@ -169,7 +169,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
             dwFlags |= VALIDATEPATH_ALLOW_ELLIPSE;
 
         if ( !lpszPath )
-            fValid = false;
+            bValid = false;
 
         DWORD   dwCandidatPathType = PATHTYPE_ERROR;
 
@@ -205,13 +205,13 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
 
         if ( ( dwCandidatPathType & PATHTYPE_MASK_TYPE ) == PATHTYPE_ABSOLUTE_UNC )
         {
-            fValid = IsValidFilePathComponent( lpComponent, &lpComponent, VALIDATEPATH_ALLOW_ELLIPSE );
+            bValid = IsValidFilePathComponent( lpComponent, &lpComponent, VALIDATEPATH_ALLOW_ELLIPSE );
 
             /* So far we have a valid servername. Now let's see if we also have a network resource */
 
             dwPathType = dwCandidatPathType;
 
-            if ( fValid )
+            if ( bValid )
             {
                 if ( lpComponent &&  !*++lpComponent )
                     lpComponent = nullptr;
@@ -224,11 +224,11 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
                 {
                     /* Now test the network resource */
 
-                    fValid = IsValidFilePathComponent( lpComponent, &lpComponent, 0 );
+                    bValid = IsValidFilePathComponent( lpComponent, &lpComponent, 0 );
 
                     /* If we now reached the end of the path, everything is O.K. */
 
-                    if ( fValid && (!lpComponent || !*++lpComponent ) )
+                    if ( bValid && (!lpComponent || !*++lpComponent ) )
                     {
                         lpComponent = nullptr;
                         dwPathType |= PATHTYPE_IS_VOLUME;
@@ -241,13 +241,13 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
             if ( 1 == countInitialSeparators( lpComponent ) )
                 lpComponent++;
             else if ( *lpComponent )
-                fValid = false;
+                bValid = false;
 
             dwPathType = dwCandidatPathType;
 
             /* Now we are behind the backslash or it was a simple drive without backslash */
 
-            if ( fValid && !*lpComponent )
+            if ( bValid && !*lpComponent )
             {
                 lpComponent = nullptr;
                 dwPathType |= PATHTYPE_IS_VOLUME;
@@ -272,12 +272,12 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
         else
         {
             /* Anything else is an error */
-            fValid = false;
+            bValid = false;
             lpComponent = lpszPath;
         }
 
         /* Now validate each component of the path */
-        while ( fValid && lpComponent )
+        while ( bValid && lpComponent )
         {
             // Correct path by merging consecutive slashes:
             if (*lpComponent == '\\' && corrected != nullptr) {
@@ -288,9 +288,9 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
                 lpComponent = lpszPath + i;
             }
 
-            fValid = IsValidFilePathComponent( lpComponent, &lpComponent, dwFlags | VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD);
+            bValid = IsValidFilePathComponent( lpComponent, &lpComponent, dwFlags | VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD);
 
-            if ( fValid && lpComponent )
+            if ( bValid && lpComponent )
             {
                 lpComponent++;
 
@@ -302,12 +302,12 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
         }
 
         /* The path can be longer than MAX_PATH only in case it has the longpath prefix */
-        if ( fValid && !( dwPathType &  PATHTYPE_IS_LONGPATH ) && rtl_ustr_getLength( lpszPath ) >= MAX_PATH )
+        if ( bValid && !( dwPathType &  PATHTYPE_IS_LONGPATH ) && rtl_ustr_getLength( lpszPath ) >= MAX_PATH )
         {
-            fValid = false;
+            bValid = false;
         }
 
-        return fValid ? dwPathType : PATHTYPE_ERROR;
+        return bValid ? dwPathType : PATHTYPE_ERROR;
 }
 
 static sal_Int32 PathRemoveFileSpec(LPWSTR lpPath, LPWSTR lpFileName, sal_Int32 nFileBufLen )
