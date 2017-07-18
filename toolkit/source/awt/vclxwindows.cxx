@@ -188,7 +188,7 @@ namespace toolkit
         _pWindow->SetSettings( aSettings );
     }
 
-    static Any getVisualEffect( vcl::Window* _pWindow )
+    static Any getVisualEffect( vcl::Window const * _pWindow )
     {
         Any aEffect;
 
@@ -2578,11 +2578,10 @@ sal_Int32 SAL_CALL VCLXMultiPage::insertTab()
 {
     TabControl *pTabControl = getTabControl();
     VclPtrInstance<TabPage> pTab( pTabControl );
-    OUString title ("");
-    return static_cast< sal_Int32 >( insertTab( pTab, title ) );
+    return static_cast< sal_Int32 >( insertTab( pTab, OUString() ) );
 }
 
-sal_uInt16 VCLXMultiPage::insertTab( TabPage* pPage, OUString& sTitle )
+sal_uInt16 VCLXMultiPage::insertTab( TabPage* pPage, OUString const & sTitle )
 {
     TabControl *pTabControl = getTabControl();
     sal_uInt16 id = sal::static_int_cast< sal_uInt16 >( mTabId++ );
@@ -3706,7 +3705,7 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-css::awt::Size SAL_CALL VCLXScrollBar::implGetMinimumSize( vcl::Window* p )
+css::awt::Size SAL_CALL VCLXScrollBar::implGetMinimumSize( vcl::Window const * p )
 {
     long n = p->GetSettings().GetStyleSettings().GetScrollBarSize();
     return css::awt::Size( n, n );

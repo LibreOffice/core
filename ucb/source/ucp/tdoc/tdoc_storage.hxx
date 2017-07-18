@@ -96,7 +96,7 @@ namespace tdoc_ucp {
     private:
         friend class Storage;
 
-        void releaseElement( Storage * pElement );
+        void releaseElement( Storage const * pElement );
 
         /// @throws css::embed::InvalidStorageException
         /// @throws css::lang::IllegalArgumentException

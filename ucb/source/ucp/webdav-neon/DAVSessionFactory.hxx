@@ -77,7 +77,7 @@ private:
 
     ::uno::Reference< ::uno::XComponentContext > m_xContext;
 
-    void releaseElement( DAVSession * pElement );
+    void releaseElement( DAVSession const * pElement );
 
     friend class DAVSession;
 };

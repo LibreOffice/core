@@ -39,7 +39,7 @@
 
 using namespace ::com::sun::star;
 
-css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window* pWindow )
+css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window const * pWindow )
 {
     switch ( pWindow->GetType() )
     {
@@ -204,7 +204,7 @@ void UnoWrapper::ReleaseAllGraphics( OutputDevice* pOutDev )
 
 }
 
-static bool lcl_ImplIsParent( vcl::Window* pParentWindow, vcl::Window* pPossibleChild )
+static bool lcl_ImplIsParent( vcl::Window const * pParentWindow, vcl::Window* pPossibleChild )
 {
     vcl::Window* pWindow = ( pPossibleChild != pParentWindow ) ? pPossibleChild : nullptr;
     while ( pWindow && ( pWindow != pParentWindow ) )

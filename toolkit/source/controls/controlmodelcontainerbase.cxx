@@ -1323,7 +1323,7 @@ void ControlContainerBase::createPeer( const Reference< XToolkit > & rxToolkit, 
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 }
 
-void ControlContainerBase::ImplInsertControl( Reference< XControlModel >& rxModel, const OUString& rName )
+void ControlContainerBase::ImplInsertControl( Reference< XControlModel > const & rxModel, const OUString& rName )
 {
     Reference< XPropertySet > xP( rxModel, UNO_QUERY );
 
@@ -1344,7 +1344,7 @@ void ControlContainerBase::ImplInsertControl( Reference< XControlModel >& rxMode
     }
 }
 
-void ControlContainerBase::ImplRemoveControl( Reference< XControlModel >& rxModel )
+void ControlContainerBase::ImplRemoveControl( Reference< XControlModel > const & rxModel )
 {
     Sequence< Reference< XControl > > aControls = getControls();
     Reference< XControl > xCtrl = StdTabController::FindControl( aControls, rxModel );

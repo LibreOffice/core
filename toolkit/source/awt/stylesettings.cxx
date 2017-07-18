@@ -127,7 +127,7 @@ namespace toolkit
 
     namespace
     {
-        sal_Int32 lcl_getStyleColor( WindowStyleSettings_Data& i_rData, Color const & (StyleSettings::*i_pGetter)() const )
+        sal_Int32 lcl_getStyleColor( WindowStyleSettings_Data const & i_rData, Color const & (StyleSettings::*i_pGetter)() const )
         {
             const VclPtr<vcl::Window>& pWindow = i_rData.pOwningWindow->GetWindow();
             const AllSettings aAllSettings = pWindow->GetSettings();
@@ -135,7 +135,7 @@ namespace toolkit
             return (aStyleSettings.*i_pGetter)().GetColor();
         }
 
-        void lcl_setStyleColor( WindowStyleSettings_Data& i_rData, void (StyleSettings::*i_pSetter)( Color const & ), const sal_Int32 i_nColor )
+        void lcl_setStyleColor( WindowStyleSettings_Data const & i_rData, void (StyleSettings::*i_pSetter)( Color const & ), const sal_Int32 i_nColor )
         {
             VclPtr<vcl::Window> pWindow = i_rData.pOwningWindow->GetWindow();
             AllSettings aAllSettings = pWindow->GetSettings();
@@ -145,7 +145,7 @@ namespace toolkit
             pWindow->SetSettings( aAllSettings );
         }
 
-        FontDescriptor lcl_getStyleFont( WindowStyleSettings_Data& i_rData, vcl::Font const & (StyleSettings::*i_pGetter)() const )
+        FontDescriptor lcl_getStyleFont( WindowStyleSettings_Data const & i_rData, vcl::Font const & (StyleSettings::*i_pGetter)() const )
         {
             const VclPtr<vcl::Window>& pWindow = i_rData.pOwningWindow->GetWindow();
             const AllSettings aAllSettings = pWindow->GetSettings();
@@ -153,7 +153,7 @@ namespace toolkit
             return VCLUnoHelper::CreateFontDescriptor( (aStyleSettings.*i_pGetter)() );
         }
 
-        void lcl_setStyleFont( WindowStyleSettings_Data& i_rData, void (StyleSettings::*i_pSetter)( vcl::Font const &),
+        void lcl_setStyleFont( WindowStyleSettings_Data const & i_rData, void (StyleSettings::*i_pSetter)( vcl::Font const &),
             vcl::Font const & (StyleSettings::*i_pGetter)() const, const FontDescriptor& i_rFont )
         {
             VclPtr<vcl::Window> pWindow = i_rData.pOwningWindow->GetWindow();

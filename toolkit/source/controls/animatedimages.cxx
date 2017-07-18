@@ -222,7 +222,7 @@ namespace toolkit {
                 throw IndexOutOfBoundsException( OUString(), i_context );
         }
 
-        void lcl_notify( ::osl::ClearableMutexGuard& i_guard, ::cppu::OBroadcastHelper& i_broadcaseHelper,
+        void lcl_notify( ::osl::ClearableMutexGuard& i_guard, ::cppu::OBroadcastHelper const & i_broadcaseHelper,
             void ( SAL_CALL XContainerListener::*i_notificationMethod )( const ContainerEvent& ),
             const sal_Int32 i_accessor, const Sequence< OUString >& i_imageURLs, const Reference< XInterface >& i_context )
         {
