@@ -25,7 +25,6 @@
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/datetime.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <sax/tools/converter.hxx>
 #include <tools/zcodec.hxx>
 
 #if HAVE_FEATURE_NSS && !defined(_WIN32)
