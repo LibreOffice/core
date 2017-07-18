@@ -214,7 +214,7 @@ void SilentCommandEnv::pop()
 
 static const char aAccessSrvc[] = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
-static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContext > &xContext )
+static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContext > const &xContext )
 {
     OUString sServiceName = "com.sun.star.deployment.ui.UpdateRequiredDialog";
     uno::Reference< uno::XInterface > xService;

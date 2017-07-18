@@ -93,7 +93,7 @@ public:
 
     void notifyMenubar( bool bPrepareOnly, bool bRecheckOnly );
     static void createNotifyJob( bool bPrepareOnly,
-        css::uno::Sequence< css::uno::Sequence< OUString > > &rItemList );
+        css::uno::Sequence< css::uno::Sequence< OUString > > const &rItemList );
 
 private:
     UpdateDialog(UpdateDialog &) = delete;
@@ -138,9 +138,9 @@ private:
     bool isIgnoredUpdate( UpdateDialog::Index *pIndex );
     void setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, bool bIgnoreAll );
 
-    void addEnabledUpdate( OUString const & name, dp_gui::UpdateData & data );
-    void addDisabledUpdate( UpdateDialog::DisabledUpdate & data );
-    void addSpecificError( UpdateDialog::SpecificError & data );
+    void addEnabledUpdate( OUString const & name, dp_gui::UpdateData const & data );
+    void addDisabledUpdate( UpdateDialog::DisabledUpdate const & data );
+    void addSpecificError( UpdateDialog::SpecificError const & data );
 
     void checkingDone();
 

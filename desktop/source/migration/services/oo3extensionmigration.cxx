@@ -80,7 +80,7 @@ OO3ExtensionMigration::~OO3ExtensionMigration()
 {
 }
 
-void OO3ExtensionMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
+void OO3ExtensionMigration::checkAndCreateDirectory( INetURLObject const & rDirURL )
 {
     ::osl::FileBase::RC aResult = ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
     if ( aResult == ::osl::FileBase::E_NOENT )

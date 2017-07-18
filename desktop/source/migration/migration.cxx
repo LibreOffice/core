@@ -336,7 +336,7 @@ bool MigrationImpl::checkMigrationCompleted()
     return bMigrationCompleted;
 }
 
-static void insertSorted(migrations_available& rAvailableMigrations, supported_migration& aSupportedMigration)
+static void insertSorted(migrations_available& rAvailableMigrations, supported_migration const & aSupportedMigration)
 {
     bool                           bInserted( false );
     migrations_available::iterator pIter = rAvailableMigrations.begin();
@@ -448,7 +448,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
     return vrMigrations;
 }
 
-static FileBase::RC _checkAndCreateDirectory(INetURLObject& dirURL)
+static FileBase::RC _checkAndCreateDirectory(INetURLObject const & dirURL)
 {
     FileBase::RC result = Directory::create(dirURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri));
     if (result == FileBase::E_NOENT) {

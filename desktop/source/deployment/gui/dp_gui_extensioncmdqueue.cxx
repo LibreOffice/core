@@ -230,18 +230,18 @@ private:
 
     void _insert(const TExtensionCmd& rExtCmd);
 
-    void _addExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+    void _addExtension( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                         const OUString &rPackageURL,
                         const OUString &rRepository,
                         const bool bWarnUser );
-    void _removeExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+    void _removeExtension( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                            const uno::Reference< deployment::XPackage > &xPackage );
-    void _enableExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+    void _enableExtension( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                            const uno::Reference< deployment::XPackage > &xPackage );
-    void _disableExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+    void _disableExtension( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                             const uno::Reference< deployment::XPackage > &xPackage );
     void _checkForUpdates( const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList );
-    void _acceptLicense( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+    void _acceptLicense( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                            const uno::Reference< deployment::XPackage > &xPackage );
 
     enum Input { NONE, START, STOP };
@@ -813,7 +813,7 @@ void ExtensionCmdQueue::Thread::execute()
 }
 
 
-void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                                                const OUString &rPackageURL,
                                                const OUString &rRepository,
                                                const bool bWarnUser )
@@ -863,7 +863,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
 }
 
 
-void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                                                   const uno::Reference< deployment::XPackage > &xPackage )
 {
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
@@ -943,7 +943,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
 }
 
 
-void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                                                   const uno::Reference< deployment::XPackage > &xPackage )
 {
     if ( !xPackage.is() )
@@ -967,7 +967,7 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
 }
 
 
-void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                                                    const uno::Reference< deployment::XPackage > &xPackage )
 {
     if ( !xPackage.is() )
@@ -991,7 +991,7 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
 }
 
 
-void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
+void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv > const &rCmdEnv,
                                                 const uno::Reference< deployment::XPackage > &xPackage )
 {
     if ( !xPackage.is() )
