@@ -293,7 +293,8 @@ public:
         DBCONN_DBASE,
         DBCONN_FLAT,
         DBCONN_MSJET,
-        DBCONN_MSACE
+        DBCONN_MSACE,
+        DBCONN_WRITER
     };
 
     /// MailMergeEvent source
