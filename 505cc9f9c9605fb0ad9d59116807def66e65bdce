@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_c5b09c8e",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-18T20:35:33Z",
+      "side": 1,
+      "message": "okay, looks like we haven\u0027t had to make use of LO_5x at all! it\u0027s been a long time since we needed such a hack...\n\nso with LO_6x this means that the fix can\u0027t be backported to 5.4; that\u0027s fine for me, if you want a backport then add a LO_54x instead, but if cloph is tagging RC3 today it might be too late... (i don\u0027t want to add these hacks for micro versions)",
+      "revId": "505cc9f9c9605fb0ad9d59116807def66e65bdce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
