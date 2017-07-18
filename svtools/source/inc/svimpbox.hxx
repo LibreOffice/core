@@ -170,13 +170,13 @@ private:
                             SvTreeListEntry* pNewCursor );
     void                BeginDrag();
     bool ButtonDownCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry* pEntry );
-    bool MouseMoveCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry* pEntry );
+    bool MouseMoveCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry const * pEntry );
     bool ButtonUpCheckCtrl( const MouseEvent& rMEvt );
     bool ButtonDownCheckExpand( const MouseEvent&, SvTreeListEntry* );
 
     bool EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPos, long nLine);
     void                InitScrollBarBox();
-    SvLBoxTab*          NextTab( SvLBoxTab* );
+    SvLBoxTab*          NextTab( SvLBoxTab const * );
 
     bool SetMostRight( SvTreeListEntry* pEntry );
     void                FindMostRight( SvTreeListEntry* pParent, SvTreeListEntry* EntryToIgnore );
@@ -190,11 +190,11 @@ private:
 
     void UpdateStringSorter();
 
-    short               UpdateContextBmpWidthVector( SvTreeListEntry* pEntry, short nWidth );
-    void                UpdateContextBmpWidthMax( SvTreeListEntry* pEntry );
+    short               UpdateContextBmpWidthVector( SvTreeListEntry const * pEntry, short nWidth );
+    void                UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry );
     void                UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEntry );
 
-    void                CalcCellFocusRect( SvTreeListEntry* pEntry, tools::Rectangle& rRect );
+    void                CalcCellFocusRect( SvTreeListEntry const * pEntry, tools::Rectangle& rRect );
 
     bool AreChildrenTransient() const { return bAreChildrenTransient; }
     void         SetChildrenNotTransient() { bAreChildrenTransient = false; }
@@ -231,7 +231,7 @@ protected:
     void                BeginScroll();
     void                EndScroll();
     void                PositionScrollBars( Size& rOSize, sal_uInt16 nMask );
-    void                FindMostRight( SvTreeListEntry* EntryToIgnore );
+    void                FindMostRight( SvTreeListEntry const * EntryToIgnore );
     void                FillView();
     void                ShowVerSBar();
     void                StopUserEvent();

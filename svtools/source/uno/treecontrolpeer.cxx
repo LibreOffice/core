@@ -168,7 +168,7 @@ void TreeControlPeer::addEntry( UnoTreeListEntry* pEntry )
 }
 
 
-void TreeControlPeer::removeEntry( UnoTreeListEntry* pEntry )
+void TreeControlPeer::removeEntry( UnoTreeListEntry const * pEntry )
 {
     if( mpTreeNodeMap && pEntry && pEntry->mxNode.is() )
     {
@@ -894,7 +894,7 @@ void SAL_CALL TreeControlPeer::removeTreeEditListener( const Reference< XTreeEdi
     maTreeEditListeners.removeInterface( xListener );
 }
 
-bool TreeControlPeer::onEditingEntry( UnoTreeListEntry* pEntry )
+bool TreeControlPeer::onEditingEntry( UnoTreeListEntry const * pEntry )
 {
     if( mpTreeImpl && pEntry && pEntry->mxNode.is() && (maTreeEditListeners.getLength() > 0)  )
     {
@@ -913,7 +913,7 @@ bool TreeControlPeer::onEditingEntry( UnoTreeListEntry* pEntry )
     return true;
 }
 
-bool TreeControlPeer::onEditedEntry( UnoTreeListEntry* pEntry, const OUString& rNewText )
+bool TreeControlPeer::onEditedEntry( UnoTreeListEntry const * pEntry, const OUString& rNewText )
 {
     if( mpTreeImpl && pEntry && pEntry->mxNode.is() ) try
     {
@@ -999,7 +999,7 @@ void TreeControlPeer::updateTree( const css::awt::tree::TreeDataModelEvent& rEve
         updateNode( rTree, xNode );
 }
 
-void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XTreeNode >& xNode )
+void TreeControlPeer::updateNode( UnoTreeListBoxImpl const & rTree, const Reference< XTreeNode >& xNode )
 {
     if( xNode.is() )
     {
@@ -1024,7 +1024,7 @@ void TreeControlPeer::updateNode( UnoTreeListBoxImpl& rTree, const Reference< XT
     }
 }
 
-void TreeControlPeer::updateChildNodes( UnoTreeListBoxImpl& rTree, const Reference< XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry )
+void TreeControlPeer::updateChildNodes( UnoTreeListBoxImpl const & rTree, const Reference< XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry )
 {
     if( xParentNode.is() && pParentEntry )
     {

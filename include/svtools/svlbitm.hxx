@@ -140,7 +140,7 @@ class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
     SvLBoxButtonKind eKind;
     SvItemStateFlags nItemFlags;
 
-    static void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::RenderContext& pRenderContext);
+    static void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::RenderContext const & pRenderContext);
 public:
     // An SvLBoxButton can be of three different kinds: an
     // enabled checkbox (the normal kind), a disabled checkbox

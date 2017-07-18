@@ -75,10 +75,10 @@ public:
 void ImplFillPrnDlgListBox( const Printer* pPrinter,
                             ListBox* pBox, PushButton* pPropBtn );
 void ImplFreePrnDlgListBox( ListBox* pBox, bool bClear = true );
-Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
-                                  Printer* pPrinter, Printer* pTempPrinter );
-Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter );
-void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo );
+Printer* ImplPrnDlgListBoxSelect( ListBox const * pBox, PushButton* pPropBtn,
+                                  Printer const * pPrinter, Printer* pTempPrinter );
+Printer* ImplPrnDlgUpdatePrinter( Printer const * pPrinter, Printer* pTempPrinter );
+void ImplPrnDlgUpdateQueueInfo( ListBox const * pBox, QueueInfo& rInfo );
 OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo );
 
 #endif // INCLUDED_SVTOOLS_PRNSETUP_HXX

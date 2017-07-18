@@ -284,7 +284,7 @@ private:
 
 protected:
 
-    bool            CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 );
+    bool            CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int8 );
     void            ImplShowTargetEmphasis( SvTreeListEntry* pEntry, bool bShow);
     void            EnableSelectionAsDropTarget( bool bEnable = true );
     // Standard impl returns 0; derived classes which support D'n'D must override
@@ -381,7 +381,7 @@ public:
     /**
      * Removes the entry along with all of its descendants
      */
-    void            RemoveEntry(SvTreeListEntry* pEntry);
+    void            RemoveEntry(SvTreeListEntry const * pEntry);
 
     DragDropMode    GetDragDropMode() const { return nDragDropMode; }
     SelectionMode   GetSelectionMode() const { return eSelMode; }
@@ -399,11 +399,11 @@ public:
     SvTreeListEntry*    GetRootLevelParent(SvTreeListEntry* pEntry ) const;
 
     using Window::GetChildCount;
-    sal_uLong           GetChildCount( SvTreeListEntry* pParent ) const;
+    sal_uLong           GetChildCount( SvTreeListEntry const * pParent ) const;
     sal_uLong           GetLevelChildCount( SvTreeListEntry* pParent ) const;
 
-    SvViewDataEntry* GetViewDataEntry( SvTreeListEntry* pEntry ) const;
-    SvViewDataItem*  GetViewDataItem(SvTreeListEntry*, SvLBoxItem*);
+    SvViewDataEntry* GetViewDataEntry( SvTreeListEntry const * pEntry ) const;
+    SvViewDataItem*  GetViewDataItem(SvTreeListEntry const *, SvLBoxItem const *);
     const SvViewDataItem*  GetViewDataItem(const SvTreeListEntry*, const SvLBoxItem*) const;
 
     bool IsInplaceEditingEnabled() const { return bool(nImpFlags & SvTreeListBoxFlags::EDT_ENABLED); }
@@ -535,7 +535,7 @@ protected:
 
     SVT_DLLPRIVATE short        GetHeightOffset( const Image& rBmp, Size& rLogicSize);
 
-    SVT_DLLPRIVATE void         SetEntryHeight( SvTreeListEntry* pEntry );
+    SVT_DLLPRIVATE void         SetEntryHeight( SvTreeListEntry const * pEntry );
     SVT_DLLPRIVATE void         AdjustEntryHeight( const Image& rBmp );
     SVT_DLLPRIVATE void         AdjustEntryHeight();
 
@@ -562,7 +562,7 @@ protected:
     SvLBoxTab*      GetFirstDynamicTab( sal_uInt16& rTabPos ) const;
     SvLBoxTab*      GetFirstTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos );
     void            GetLastTab( SvLBoxTabFlags nFlagMask, sal_uInt16& rTabPos );
-    SvLBoxTab*      GetTab( SvTreeListEntry*, SvLBoxItem* ) const;
+    SvLBoxTab*      GetTab( SvTreeListEntry const *, SvLBoxItem const * ) const;
     void            ClearTabList();
 
     virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);

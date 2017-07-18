@@ -306,7 +306,7 @@ namespace svt
     }
 
 
-    void OWizardMachine::implResetDefault(vcl::Window* _pWindow)
+    void OWizardMachine::implResetDefault(vcl::Window const * _pWindow)
     {
         vcl::Window* pChildLoop = _pWindow->GetWindow(GetWindowType::FirstChild);
         while (pChildLoop)

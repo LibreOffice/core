@@ -431,7 +431,7 @@ bool SvTreeListBox::DoubleClickHdl()
 }
 
 
-bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 nAction )
+bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int8 nAction )
 {
     if ( pSource == this )
     {
@@ -673,7 +673,7 @@ void SvTreeListBox::RemoveSelection()
         pModel->Remove(*it);
 }
 
-void SvTreeListBox::RemoveEntry(SvTreeListEntry* pEntry)
+void SvTreeListBox::RemoveEntry(SvTreeListEntry const * pEntry)
 {
     pModel->Remove(pEntry);
 }
@@ -786,7 +786,7 @@ SvTreeListEntry* SvTreeListBox::GetRootLevelParent( SvTreeListEntry* pEntry ) co
     return pModel->GetRootLevelParent(pEntry);
 }
 
-sal_uLong SvTreeListBox::GetChildCount( SvTreeListEntry* pParent ) const
+sal_uLong SvTreeListBox::GetChildCount( SvTreeListEntry const * pParent ) const
 {
     return pModel->GetChildCount(pParent);
 }
@@ -806,12 +806,12 @@ sal_uLong SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
     return _pParent->m_Children.size();
 }
 
-SvViewDataEntry* SvTreeListBox::GetViewDataEntry( SvTreeListEntry* pEntry ) const
+SvViewDataEntry* SvTreeListBox::GetViewDataEntry( SvTreeListEntry const * pEntry ) const
 {
     return const_cast<SvViewDataEntry*>(SvListView::GetViewData(pEntry));
 }
 
-SvViewDataItem* SvTreeListBox::GetViewDataItem(SvTreeListEntry* pEntry, SvLBoxItem* pItem)
+SvViewDataItem* SvTreeListBox::GetViewDataItem(SvTreeListEntry const * pEntry, SvLBoxItem const * pItem)
 {
     return const_cast<SvViewDataItem*>(static_cast<const SvTreeListBox*>(this)->GetViewDataItem(pEntry, pItem));
 }
@@ -2138,7 +2138,7 @@ short SvTreeListBox::GetHeightOffset(const Image& rBmp, Size& aSizeLogic )
     return nOffset;
 }
 
-void SvTreeListBox::SetEntryHeight( SvTreeListEntry* pEntry )
+void SvTreeListBox::SetEntryHeight( SvTreeListEntry const * pEntry )
 {
     short nHeightMax=0;
     sal_uInt16 nCount = pEntry->ItemCount();
@@ -3295,7 +3295,7 @@ SvLBoxTab* SvTreeListBox::GetFirstDynamicTab() const
     return GetFirstDynamicTab( nDummy );
 }
 
-SvLBoxTab* SvTreeListBox::GetTab( SvTreeListEntry* pEntry, SvLBoxItem* pItem) const
+SvLBoxTab* SvTreeListBox::GetTab( SvTreeListEntry const * pEntry, SvLBoxItem const * pItem) const
 {
     sal_uInt16 nPos = pEntry->GetPos( pItem );
     return aTabs[ nPos ];

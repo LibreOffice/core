@@ -206,11 +206,11 @@ protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) override;
     static void         DrawEntryImage(
-                            SvxIconChoiceCtrlEntry* pEntry,
+                            SvxIconChoiceCtrlEntry const * pEntry,
                             const Point& rPos,
                             OutputDevice& rDev );
 
-    static OUString     GetEntryText( SvxIconChoiceCtrlEntry* pEntry );
+    static OUString     GetEntryText( SvxIconChoiceCtrlEntry const * pEntry );
 
     virtual void        FillLayoutData() const override;
 

@@ -231,7 +231,7 @@ void GraphicObject::ImplAutoSwapIn()
     }
 }
 
-bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
+bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
                                        tools::PolyPolygon& rClipPolyPoly, bool& bRectClipRegion ) const
 {
     bool bRet = false;
@@ -420,7 +420,7 @@ void GraphicObject::FireSwapOutRequest()
     ImplAutoSwapOutHdl( nullptr );
 }
 
-bool GraphicObject::IsCached( OutputDevice* pOut, const Size& rSz,
+bool GraphicObject::IsCached( OutputDevice const * pOut, const Size& rSz,
                               const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags ) const
 {
     bool bRet;

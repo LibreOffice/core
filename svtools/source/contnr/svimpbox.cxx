@@ -154,7 +154,7 @@ void SvImpLBox::UpdateStringSorter()
     }
 }
 
-short SvImpLBox::UpdateContextBmpWidthVector( SvTreeListEntry* pEntry, short nWidth )
+short SvImpLBox::UpdateContextBmpWidthVector( SvTreeListEntry const * pEntry, short nWidth )
 {
     DBG_ASSERT( pView->pModel, "View and Model aren't valid!" );
 
@@ -204,7 +204,7 @@ void SvImpLBox::UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEnt
     }
 }
 
-void SvImpLBox::UpdateContextBmpWidthMax( SvTreeListEntry* pEntry )
+void SvImpLBox::UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry )
 {
     sal_uInt16 nDepth = pView->pModel->GetDepth( pEntry );
     if( aContextBmpWidthVector.size() < 1 )
@@ -218,7 +218,7 @@ void SvImpLBox::UpdateContextBmpWidthMax( SvTreeListEntry* pEntry )
     }
 }
 
-void SvImpLBox::CalcCellFocusRect( SvTreeListEntry* pEntry, tools::Rectangle& rRect )
+void SvImpLBox::CalcCellFocusRect( SvTreeListEntry const * pEntry, tools::Rectangle& rRect )
 {
     if ( pEntry && bIsCellFocusEnabled )
     {
@@ -1878,7 +1878,7 @@ bool SvImpLBox::ButtonDownCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pE
     return false;
 }
 
-bool SvImpLBox::MouseMoveCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pEntry)
+bool SvImpLBox::MouseMoveCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry const * pEntry)
 {
     if( pActiveButton )
     {
@@ -3151,7 +3151,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
     return false;
 }
 
-SvLBoxTab* SvImpLBox::NextTab( SvLBoxTab* pTab )
+SvLBoxTab* SvImpLBox::NextTab( SvLBoxTab const * pTab )
 {
     sal_uInt16 nTabCount = pView->TabCount();
     if( nTabCount <= 1 )
@@ -3222,7 +3222,7 @@ bool SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
     return false;
 }
 
-void SvImpLBox::FindMostRight( SvTreeListEntry* pEntryToIgnore )
+void SvImpLBox::FindMostRight( SvTreeListEntry const * pEntryToIgnore )
 {
     nMostRight = -1;
     pMostRightEntry = nullptr;
@@ -3374,7 +3374,7 @@ bool SvImpLBox::IsSelectable( const SvTreeListEntry* pEntry )
 {
     if( pEntry )
     {
-        SvViewDataEntry* pViewDataNewCur = pView->GetViewDataEntry(const_cast<SvTreeListEntry*>(pEntry));
+        SvViewDataEntry* pViewDataNewCur = pView->GetViewDataEntry(pEntry);
         return (pViewDataNewCur == nullptr) || pViewDataNewCur->IsSelectable();
     }
     else

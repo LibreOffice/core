@@ -583,7 +583,7 @@ sal_uLong SvHeaderTabListBox::Insert( SvTreeListEntry* pEntry, sal_uLong nRootPo
     return nPos;
 }
 
-void SvHeaderTabListBox::RemoveEntry( SvTreeListEntry* _pEntry )
+void SvHeaderTabListBox::RemoveEntry( SvTreeListEntry const * _pEntry )
 {
     GetModel()->Remove( _pEntry );
     m_aAccessibleChildren.clear();

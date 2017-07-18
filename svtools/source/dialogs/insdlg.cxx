@@ -285,7 +285,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
     return aUIName;
 }
 
-bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotClipboardFormatId& _nFormat)
+bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotClipboardFormatId const & _nFormat)
 {
     bool bRet = false;
     if( _nFormat == SotClipboardFormatId::EMBED_SOURCE_OLE || _nFormat == SotClipboardFormatId::EMBEDDED_OBJ_OLE )

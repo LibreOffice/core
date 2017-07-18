@@ -315,7 +315,7 @@ void SvLBoxButton::Clone( SvLBoxItem* pSource )
     pData = static_cast<SvLBoxButton*>(pSource)->pData;
 }
 
-void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::RenderContext& rRenderContext)
+void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::RenderContext const & rRenderContext)
 {
     if (rRenderContext.IsNativeControlSupported( i_eType, ControlPart::Entire) )
     {
