@@ -181,8 +181,8 @@ FileHandle_Impl::Allocator::~Allocator()
 
 void FileHandle_Impl::Allocator::allocate (sal_uInt8 **ppBuffer, SIZE_T * pnSize)
 {
-    assert(ppBuffer != nullptr);
-    assert(pnSize != nullptr);
+    assert(ppBuffer);
+    assert(pnSize);
     *ppBuffer = static_cast< sal_uInt8* >(rtl_cache_alloc(m_cache));
     *pnSize = m_bufsiz;
 }
@@ -196,7 +196,7 @@ void FileHandle_Impl::Allocator::deallocate (sal_uInt8 * pBuffer)
 FileHandle_Impl::Guard::Guard(LPCRITICAL_SECTION pMutex)
     : m_mutex (pMutex)
 {
-    assert(pMutex != nullptr);
+    assert(pMutex);
     ::EnterCriticalSection (m_mutex);
 }
 
