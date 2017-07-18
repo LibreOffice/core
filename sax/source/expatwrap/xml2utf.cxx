@@ -125,7 +125,7 @@ XMLFile2UTFConverter::~XMLFile2UTFConverter()
 void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
 {
     const sal_Int8 *pSource = seq.getArray();
-    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 4) )
+    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 5 ) )
     {
 
         // scan for encoding
@@ -177,7 +177,7 @@ bool XMLFile2UTFConverter::isEncodingRecognizable( const Sequence< sal_Int8 > &s
         return false;
     }
 
-    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 4 ) ) {
+    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 5 ) ) {
         // scan if the <?xml tag finishes within this buffer
         bCheckIfFirstClosingBracketExsists = true;
     }
@@ -222,7 +222,7 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
     }
 
     // first level : detect possible file formats
-    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 4 ) ) {
+    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 5 ) ) {
 
         // scan for encoding
         OString str( reinterpret_cast<const char *>(pSource), seq.getLength() );
