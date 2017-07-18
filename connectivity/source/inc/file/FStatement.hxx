@@ -102,8 +102,8 @@ namespace connectivity
             void createColumnMapping();
             // searches the statement for sort criteria
             void anylizeSQL();
-            void setOrderbyColumn( connectivity::OSQLParseNode* pColumnRef,
-                                     connectivity::OSQLParseNode* pAscendingDescending);
+            void setOrderbyColumn( connectivity::OSQLParseNode const * pColumnRef,
+                                   connectivity::OSQLParseNode const * pAscendingDescending);
 
             virtual void initializeResultSet(OResultSet* _pResult);
 

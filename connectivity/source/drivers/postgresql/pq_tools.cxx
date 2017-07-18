@@ -94,12 +94,12 @@ OUString concatQualified( const OUString & a, const OUString &b)
     return buf.makeStringAndClear();
 }
 
-static inline OString iOUStringToOString( const OUString& str, ConnectionSettings *settings) {
+static inline OString iOUStringToOString( const OUString& str, ConnectionSettings const *settings) {
     OSL_ENSURE(settings, "pgsql-sdbc: OUStringToOString got NULL settings");
     return OUStringToOString( str, ConnectionSettings::encoding );
 }
 
-OString OUStringToOString( const OUString& str, ConnectionSettings *settings) {
+OString OUStringToOString( const OUString& str, ConnectionSettings const *settings) {
     return iOUStringToOString( str, settings );
 }
 

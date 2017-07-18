@@ -56,7 +56,7 @@ void OPredicateCompiler::Clean()
     m_aCodeList.clear();
 }
 
-void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
+void OSQLAnalyzer::bindParameterRow(OValueRefRow const & _pRow)
 {
     OCodeList& rCodeList    = m_aCompiler->m_aCodeList;
     for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end();++aIter)
@@ -87,7 +87,7 @@ void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,std::vector< OS
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }
 
-OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
+OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow const & _rRow)
 {
     sal_uInt32 nBookmarkValue = std::abs((sal_Int32)(_rRow->get())[0]->getValue());
 

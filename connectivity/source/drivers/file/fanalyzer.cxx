@@ -53,7 +53,7 @@ void OSQLAnalyzer::setIndexes(const Reference< XNameAccess>& _xIndexes)
     m_aCompiler->m_xIndexes = _xIndexes;
 }
 
-void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
+void OSQLAnalyzer::start(OSQLParseNode const * pSQLParseNode)
 {
     if (SQL_ISRULE(pSQLParseNode,select_statement))
     {
@@ -138,7 +138,7 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
     }
 }
 
-void OSQLAnalyzer::bindEvaluationRow(OValueRefRow& _pRow)
+void OSQLAnalyzer::bindEvaluationRow(OValueRefRow const & _pRow)
 {
     bindRow(m_aCompiler->m_aCodeList,_pRow);
 }
@@ -169,7 +169,7 @@ bool OSQLAnalyzer::hasFunctions() const
     return m_bHasSelectionCode;
 }
 
-void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow& _pRow,const std::vector<sal_Int32>& _rColumnMapping)
+void OSQLAnalyzer::setSelectionEvaluationResult(OValueRefRow const & _pRow,const std::vector<sal_Int32>& _rColumnMapping)
 {
     sal_Int32 nPos = 1;
     for ( std::vector< TPredicates >::iterator aIter = m_aSelectionEvaluations.begin(); aIter != m_aSelectionEvaluations.end();++aIter,++nPos)

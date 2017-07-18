@@ -169,7 +169,7 @@ namespace connectivity
             void releaseBuffer();
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue);
+            void updateValue(sal_Int32 columnIndex, SQLSMALLINT _nType, void const * _pValue);
             void fillNeededData(SQLRETURN _nRet);
             bool moveImpl(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset);
             TVoidPtr allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex);

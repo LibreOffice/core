@@ -195,7 +195,7 @@ void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
     m_pFileStream->Seek(m_aRowPosToFilePos[0].second);
 }
 
-void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, sal_Int32& nStartPosFirstLine, sal_Int32& nStartPosFirstLine2,
+void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString const & aFirstLine, sal_Int32& nStartPosFirstLine, sal_Int32& nStartPosFirstLine2,
                                              sal_Int32& io_nType, sal_Int32& io_nPrecisions, sal_Int32& io_nScales, OUString& o_sTypeName,
                                              const sal_Unicode cDecimalDelimiter, const sal_Unicode cThousandDelimiter, const CharClass&  aCharClass)
 {

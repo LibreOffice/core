@@ -110,7 +110,7 @@ namespace connectivity
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static void GetInfo(OConnection* _pConnection,
+            static void GetInfo(OConnection const * _pConnection,
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 OUString &_rValue,
@@ -119,7 +119,7 @@ namespace connectivity
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static void GetInfo(OConnection* _pConnection,
+            static void GetInfo(OConnection const * _pConnection,
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 sal_Int32 &_rValue,
@@ -127,7 +127,7 @@ namespace connectivity
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static void GetInfo(OConnection* _pConnection,
+            static void GetInfo(OConnection const * _pConnection,
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 SQLUSMALLINT &_rValue,
@@ -135,7 +135,7 @@ namespace connectivity
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static void GetInfo(OConnection* _pConnection,
+            static void GetInfo(OConnection const * _pConnection,
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 SQLUINTEGER &_rValue,
@@ -188,7 +188,7 @@ namespace connectivity
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static OUString getStringValue(  OConnection* _pConnection,
+            static OUString getStringValue(  OConnection const * _pConnection,
                                                     SQLHANDLE _aStatementHandle,
                                                     sal_Int32 columnIndex,
                                                     SQLSMALLINT _fSqlType,
@@ -206,7 +206,7 @@ namespace connectivity
                                                                             const css::uno::Reference< css::uno::XInterface >& _xInterface);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static void getValue(   OConnection* _pConnection,
+            static void getValue(   OConnection const * _pConnection,
                                     SQLHANDLE _aStatementHandle,
                                     sal_Int32 columnIndex,
                                     SQLSMALLINT _nType,
@@ -217,7 +217,7 @@ namespace connectivity
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static void bindValue(  OConnection* _pConnection,
+            static void bindValue(  OConnection const * _pConnection,
                                     SQLHANDLE _aStatementHandle,
                                     sal_Int32 columnIndex,
                                     SQLSMALLINT _nType,

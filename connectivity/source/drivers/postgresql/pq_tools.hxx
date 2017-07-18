@@ -55,7 +55,7 @@ bool isWhitespace( sal_Unicode c );
 
 OUString concatQualified( const OUString & a, const OUString &b);
 
-OString OUStringToOString( const OUString& str, ConnectionSettings *settings);
+OString OUStringToOString( const OUString& str, ConnectionSettings const *settings);
 
 void bufferQuoteConstant( OUStringBuffer & buf, const OUString & str, ConnectionSettings *settings );
 void bufferQuoteAnyConstant( OUStringBuffer & buf, const css::uno::Any &val, ConnectionSettings *settings );

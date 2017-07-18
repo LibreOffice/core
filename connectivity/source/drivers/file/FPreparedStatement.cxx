@@ -419,7 +419,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
         *((m_aParameterRow->get())[parameterIndex]) = x;
 }
 
-sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
+sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode const * pParameter, const Reference<XPropertySet>& _xCol)
 {
     OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument is not a parameter");
     OSL_ENSURE(pParameter->count() > 0,"OResultSet: Error in Parse Tree");
@@ -461,7 +461,7 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
     return m_xParamColumns->get().size();
 }
 
-void OPreparedStatement::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable)
+void OPreparedStatement::describeColumn(OSQLParseNode const * _pParameter, OSQLParseNode const * _pNode,const OSQLTable& _xTable)
 {
     Reference<XPropertySet> xProp;
     if(SQL_ISRULE(_pNode,column_ref))

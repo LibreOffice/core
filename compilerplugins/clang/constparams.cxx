@@ -111,6 +111,8 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
             || name.endswith("component_getFactory")
                 // in Scheduler::, wants to loop until a reference to a bool becomes true
             || name == "ProcessEventsToSignal"
+                // external API
+            || name == "Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_flush"
             )
                 return true;
     }

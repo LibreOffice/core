@@ -76,7 +76,7 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
     return  sValue;
 }
 
-SQLLEN OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
+SQLLEN OResultSetMetaData::getNumColAttrib(OConnection const * _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 _column
@@ -107,7 +107,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
     return getNumColAttrib(column,SQL_DESC_DISPLAY_SIZE);
 }
 
-SQLSMALLINT OResultSetMetaData::getColumnODBCType(OConnection* _pConnection
+SQLSMALLINT OResultSetMetaData::getColumnODBCType(OConnection const * _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 column)

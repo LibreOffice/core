@@ -637,7 +637,7 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
     }
 }
 
-void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>& records)
+void MorkParser::getRecordKeysForListTable(std::string const & listName, std::set<int>& records)
 {
 #ifdef VERBOSE
     boost::io::ios_all_saver ias(std::cout);
