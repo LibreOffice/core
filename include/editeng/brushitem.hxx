@@ -30,7 +30,6 @@
 
 class Graphic;
 class GraphicObject;
-class CntWallpaperItem;
 
 #define BRUSH_GRAPHIC_VERSION   ((sal_uInt16)0x0001)
 
@@ -75,7 +74,6 @@ public:
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const SvxBrushItem& );
     SvxBrushItem( SvxBrushItem&& );
-    SvxBrushItem( const CntWallpaperItem&, sal_uInt16 nWhich );
 
     virtual ~SvxBrushItem() override;
 
@@ -120,8 +118,6 @@ public:
     SvxBrushItem&       operator=(const SvxBrushItem& rItem);
     SvxBrushItem&       operator=(SvxBrushItem&& rItem);
 
-    static SvxGraphicPosition   WallpaperStyle2GraphicPos( WallpaperStyle eStyle );
-    static WallpaperStyle       GraphicPos2WallpaperStyle( SvxGraphicPosition ePos );
     static sal_Int8             TransparencyToPercent(sal_Int32 nTrans);
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;

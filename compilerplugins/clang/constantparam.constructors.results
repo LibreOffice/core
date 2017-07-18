@@ -342,10 +342,6 @@ include/svl/aeitem.hxx:54
     void SfxAllEnumItem::SfxAllEnumItem(unsigned short,class SvStream &)
     unsigned short nWhich
     Which()
-include/svl/cntwall.hxx:39
-    void CntWallpaperItem::CntWallpaperItem(unsigned short,class SvStream &,unsigned short)
-    unsigned short nWhich
-    Which()
 include/svl/ctypeitm.hxx:34
     void CntContentTypeItem::CntContentTypeItem(unsigned short,const class rtl::OUString &)
     unsigned short nWhich

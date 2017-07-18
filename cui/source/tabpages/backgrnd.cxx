@@ -28,7 +28,6 @@
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
-#include <svl/cntwall.hxx>
 #include <svx/dialogs.hrc>
 
 #include <cuires.hrc>
