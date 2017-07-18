@@ -15,6 +15,7 @@
 #include <algorithm>
 #include "plugin.hxx"
 #include "compat.hxx"
+#include "check.hxx"
 
 /**
 This performs two analyses:
@@ -62,6 +63,7 @@ bool operator < (const MyFieldInfo &lhs, const MyFieldInfo &rhs)
 static std::set<MyFieldInfo> touchedFromInsideSet;
 static std::set<MyFieldInfo> touchedFromOutsideSet;
 static std::set<MyFieldInfo> readFromSet;
+static std::set<MyFieldInfo> writeToSet;
 static std::set<MyFieldInfo> definitionSet;
 
 
@@ -79,15 +81,25 @@ public:
     bool VisitFieldDecl( const FieldDecl* );
     bool VisitMemberExpr( const MemberExpr* );
     bool VisitDeclRefExpr( const DeclRefExpr* );
+    bool VisitCXXConstructorDecl( const CXXConstructorDecl* );
+    bool VisitVarDecl( const VarDecl* );
     bool TraverseCXXConstructorDecl( CXXConstructorDecl* );
     bool TraverseCXXMethodDecl( CXXMethodDecl* );
     bool TraverseFunctionDecl( FunctionDecl* );
+
 private:
     MyFieldInfo niceName(const FieldDecl*);
     void checkTouchedFromOutside(const FieldDecl* fieldDecl, const Expr* memberExpr);
     void checkWriteOnly(const FieldDecl* fieldDecl, const Expr* memberExpr);
-    RecordDecl * insideMoveOrCopyDeclParent;
-    RecordDecl * insideStreamOutputOperator;
+    void checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberExpr);
+    bool isSomeKindOfZero(const Expr* arg);
+    bool IsPassedByNonConstRef(const Stmt * child, const CallExpr * callExpr, const FunctionDecl * calleeFunctionDecl, bool bParamsAndArgsOffset);
+
+    RecordDecl *   insideMoveOrCopyDeclParent;
+    RecordDecl *   insideStreamOutputOperator;
+    // For reasons I do not understand, parentFunctionDecl() is not reliable, so
+    // we store the parent function on the way down the AST.
+    FunctionDecl * insideFunctionDecl;
 };
 
 void UnusedFields::run()
@@ -105,10 +117,10 @@ void UnusedFields::run()
             output += "outside:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : readFromSet)
             output += "read:\t" + s.parentClass + "\t" + s.fieldName + "\n";
+        for (const MyFieldInfo & s : writeToSet)
+            output += "write:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : definitionSet)
-        {
             output += "definition:\t" + s.access + "\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.fieldType + "\t" + s.sourceLocation + "\n";
-        }
         std::ofstream myfile;
         myfile.open( SRCDIR "/loplugin.unusedfields.log", std::ios::app | std::ios::out);
         myfile << output;
@@ -117,13 +129,17 @@ void UnusedFields::run()
     else
     {
         for (const MyFieldInfo & s : readFromSet)
-        {
             report(
                 DiagnosticsEngine::Warning,
                 "read %0",
                 s.parentRecord->getLocStart())
                 << s.fieldName;
-        }
+        for (const MyFieldInfo & s : writeToSet)
+            report(
+                DiagnosticsEngine::Warning,
+                "write %0",
+                s.parentRecord->getLocStart())
+                << s.fieldName;
     }
 }
 
@@ -182,8 +198,89 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
         return true;
     }
 
+    if (fieldDecl->getInClassInitializer() && !isSomeKindOfZero(fieldDecl->getInClassInitializer())) {
+        writeToSet.insert(niceName(fieldDecl));
+    }
+
     definitionSet.insert(niceName(fieldDecl));
     return true;
+}
+
+/**
+ Does the expression being used to initialise a field value evaluate to
+ the same as a default value?
+ */
+bool UnusedFields::isSomeKindOfZero(const Expr* arg)
+{
+    assert(arg);
+    arg = arg->IgnoreParenCasts();
+    if (isa<CXXDefaultArgExpr>(arg)) {
+        arg = dyn_cast<CXXDefaultArgExpr>(arg)->getExpr();
+    }
+    arg = arg->IgnoreParenCasts();
+    // ignore this, it seems to trigger an infinite recursion
+    if (isa<UnaryExprOrTypeTraitExpr>(arg)) {
+        return false;
+    }
+    if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(arg)) {
+        return cxxConstructExpr->getConstructor()->isDefaultConstructor();
+    }
+    APSInt x1;
+    if (arg->EvaluateAsInt(x1, compiler.getASTContext()))
+    {
+        return x1 == 0;
+    }
+    if (isa<CXXNullPtrLiteralExpr>(arg)) {
+        return true;
+    }
+    if (isa<MaterializeTemporaryExpr>(arg))
+    {
+        const CXXBindTemporaryExpr* strippedArg = dyn_cast_or_null<CXXBindTemporaryExpr>(arg->IgnoreParenCasts());
+        if (strippedArg)
+        {
+            auto temp = dyn_cast<CXXTemporaryObjectExpr>(strippedArg->getSubExpr());
+            if (temp->getNumArgs() == 0)
+            {
+                if (loplugin::TypeCheck(temp->getType()).Class("OUString").Namespace("rtl").GlobalNamespace()) {
+                    return true;
+                }
+                if (loplugin::TypeCheck(temp->getType()).Class("OString").Namespace("rtl").GlobalNamespace()) {
+                    return true;
+                }
+                return false;
+            }
+        }
+    }
+
+    // Get the expression contents.
+    // This helps us find params which are always initialised with something like "OUString()".
+    SourceManager& SM = compiler.getSourceManager();
+    SourceLocation startLoc = arg->getLocStart();
+    SourceLocation endLoc = arg->getLocEnd();
+    const char *p1 = SM.getCharacterData( startLoc );
+    const char *p2 = SM.getCharacterData( endLoc );
+    if (!p1 || !p2 || (p2 - p1) < 0 || (p2 - p1) > 40) {
+        return false;
+    }
+    unsigned n = Lexer::MeasureTokenLength( endLoc, SM, compiler.getLangOpts());
+    std::string s( p1, p2 - p1 + n);
+    // strip linefeed and tab characters so they don't interfere with the parsing of the log file
+    std::replace( s.begin(), s.end(), '\r', ' ');
+    std::replace( s.begin(), s.end(), '\n', ' ');
+    std::replace( s.begin(), s.end(), '\t', ' ');
+
+    // now normalize the value. For some params, like OUString, we can pass it as OUString() or "" and they are the same thing
+    if (s == "OUString()")
+        return true;
+    else if (s == "OString()")
+        return true;
+    else if (s == "aEmptyOUStr") //sw
+        return true;
+    else if (s == "EMPTY_OUSTRING")//sc
+        return true;
+    else if (s == "GetEmptyOUString()") //sc
+        return true;
+    return false;
 }
 
 static char easytolower(char in)
@@ -217,8 +314,10 @@ bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
         if (cxxMethodDecl->isCopyAssignmentOperator() || cxxMethodDecl->isMoveAssignmentOperator())
             insideMoveOrCopyDeclParent = cxxMethodDecl->getParent();
     }
+    insideFunctionDecl = cxxMethodDecl;
     bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(cxxMethodDecl);
     insideMoveOrCopyDeclParent = nullptr;
+    insideFunctionDecl = nullptr;
     return ret;
 }
 
@@ -233,8 +332,10 @@ bool UnusedFields::TraverseFunctionDecl(FunctionDecl* functionDecl)
             insideStreamOutputOperator = qt.getNonReferenceType().getUnqualifiedType()->getAsCXXRecordDecl();
         }
     }
+    insideFunctionDecl = functionDecl;
     bool ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
     insideStreamOutputOperator = nullptr;
+    insideFunctionDecl = nullptr;
     return ret;
 }
 
@@ -257,6 +358,8 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
     checkTouchedFromOutside(fieldDecl, memberExpr);
 
     checkWriteOnly(fieldDecl, memberExpr);
+
+    checkReadOnly(fieldDecl, memberExpr);
 
     return true;
 }
@@ -448,6 +551,292 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
     MyFieldInfo fieldInfo = niceName(fieldDecl);
     if (bPotentiallyReadFrom)
         readFromSet.insert(fieldInfo);
+}
+
+void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberExpr)
+{
+    if (insideMoveOrCopyDeclParent)
+    {
+        RecordDecl const * cxxRecordDecl1 = fieldDecl->getParent();
+        // we don't care about writes to a field when inside the copy/move constructor/operator= for that field
+        if (cxxRecordDecl1 && (cxxRecordDecl1 == insideMoveOrCopyDeclParent))
+            return;
+    }
+
+    auto parentsRange = compiler.getASTContext().getParents(*memberExpr);
+    const Stmt* child = memberExpr;
+    const Stmt* parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
+    // walk up the tree until we find something interesting
+    bool bPotentiallyWrittenTo = false;
+    bool bDump = false;
+    auto walkupUp = [&]() {
+       child = parent;
+       auto parentsRange = compiler.getASTContext().getParents(*parent);
+       parent = parentsRange.begin() == parentsRange.end() ? nullptr : parentsRange.begin()->get<Stmt>();
+    };
+    do
+    {
+        if (!parent)
+        {
+            break;
+        }
+        if (isa<CXXReinterpretCastExpr>(parent))
+        {
+            // once we see one of these, there is not much useful we can know
+            bPotentiallyWrittenTo = true;
+            break;
+        }
+        else if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
+#if CLANG_VERSION >= 40000
+             || isa<ArrayInitLoopExpr>(parent)
+#endif
+             || isa<ExprWithCleanups>(parent))
+        {
+            walkupUp();
+        }
+        else if (auto unaryOperator = dyn_cast<UnaryOperator>(parent))
+        {
+            UnaryOperator::Opcode op = unaryOperator->getOpcode();
+            if (op == UO_AddrOf || op == UO_PostInc || op == UO_PostDec || op == UO_PreInc || op == UO_PreDec)
+            {
+                bPotentiallyWrittenTo = true;
+                break;
+            }
+            walkupUp();
+        }
+        else if (auto arraySubscriptExpr = dyn_cast<ArraySubscriptExpr>(parent))
+        {
+            if (arraySubscriptExpr->getIdx() == child)
+                break;
+            walkupUp();
+        }
+        else if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(parent))
+        {
+            const FunctionDecl * calleeFunctionDecl = operatorCallExpr->getDirectCallee();
+            if (calleeFunctionDecl)
+            {
+                // if calling a non-const operator on the field
+                auto calleeMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl);
+                if (calleeMethodDecl
+                    && operatorCallExpr->getArg(0) == child && !calleeMethodDecl->isConst())
+                {
+                    bPotentiallyWrittenTo = true;
+                    break;
+                }
+                bool bParamsAndArgsOffset = calleeMethodDecl != nullptr;
+                if (IsPassedByNonConstRef(child, operatorCallExpr, calleeFunctionDecl, bParamsAndArgsOffset))
+                    bPotentiallyWrittenTo = true;
+            }
+            else
+                bPotentiallyWrittenTo = true; // conservative, could improve
+            break;
+        }
+        else if (auto cxxMemberCallExpr = dyn_cast<CXXMemberCallExpr>(parent))
+        {
+            const CXXMethodDecl * calleeMethodDecl = cxxMemberCallExpr->getMethodDecl();
+            if (calleeMethodDecl)
+            {
+                // if calling a non-const method on the field
+                const Expr* tmp = dyn_cast<Expr>(child);
+                if (tmp->isBoundMemberFunction(compiler.getASTContext())) {
+                    tmp = dyn_cast<MemberExpr>(tmp)->getBase();
+                }
+                if (cxxMemberCallExpr->getImplicitObjectArgument() == tmp
+                     && !calleeMethodDecl->isConst())
+                {
+                    bPotentiallyWrittenTo = true;
+                    break;
+                }
+                // check for being passed as parameter by non-const-reference
+                if (IsPassedByNonConstRef(child, cxxMemberCallExpr, calleeMethodDecl, false/*bParamsAndArgsOffset*/))
+                    bPotentiallyWrittenTo = true;
+            }
+            else
+                bPotentiallyWrittenTo = true; // can happen in templates
+            break;
+        }
+        else if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(parent))
+        {
+            const CXXConstructorDecl * cxxConstructorDecl = cxxConstructExpr->getConstructor();
+            // check for being passed as parameter by non-const-reference
+            unsigned len = std::min(cxxConstructExpr->getNumArgs(),
+                                    cxxConstructorDecl->getNumParams());
+            for (unsigned i = 0; i < len; ++i)
+                if (cxxConstructExpr->getArg(i) == child)
+                    if (loplugin::TypeCheck(cxxConstructorDecl->getParamDecl(i)->getType()).NonConst().LvalueReference())
+                    {
+                        bPotentiallyWrittenTo = true;
+                        break;
+                    }
+            break;
+        }
+        else if (auto callExpr = dyn_cast<CallExpr>(parent))
+        {
+            const FunctionDecl * calleeFunctionDecl = callExpr->getDirectCallee();
+            if (calleeFunctionDecl) {
+                if (IsPassedByNonConstRef(child, callExpr, calleeFunctionDecl, false/*bParamsAndArgsOffset*/))
+                    bPotentiallyWrittenTo = true;
+            } else
+                bPotentiallyWrittenTo = true; // conservative, could improve
+            break;
+        }
+        else if (auto binaryOp = dyn_cast<BinaryOperator>(parent))
+        {
+            BinaryOperator::Opcode op = binaryOp->getOpcode();
+            const bool assignmentOp = op == BO_Assign || op == BO_MulAssign
+                || op == BO_DivAssign || op == BO_RemAssign || op == BO_AddAssign
+                || op == BO_SubAssign || op == BO_ShlAssign || op == BO_ShrAssign
+                || op == BO_AndAssign || op == BO_XorAssign || op == BO_OrAssign;
+            if (binaryOp->getLHS() == child && assignmentOp) {
+                bPotentiallyWrittenTo = true;
+            }
+            break;
+        }
+        else if (isa<ReturnStmt>(parent))
+        {
+            if (insideFunctionDecl && loplugin::TypeCheck(insideFunctionDecl->getReturnType()).NonConst().LvalueReference()) {
+                bPotentiallyWrittenTo = true;
+            }
+            break;
+        }
+        else if (isa<ConditionalOperator>(parent)
+                 || isa<SwitchStmt>(parent)
+                 || isa<DeclStmt>(parent)
+                 || isa<WhileStmt>(parent)
+                 || isa<CXXNewExpr>(parent)
+                 || isa<ForStmt>(parent)
+                 || isa<InitListExpr>(parent)
+                 || isa<CXXDependentScopeMemberExpr>(parent)
+                 || isa<UnresolvedMemberExpr>(parent)
+                 || isa<MaterializeTemporaryExpr>(parent)
+                 || isa<IfStmt>(parent)
+                 || isa<DoStmt>(parent)
+                 || isa<CXXDeleteExpr>(parent)
+                 || isa<UnaryExprOrTypeTraitExpr>(parent)
+                 || isa<CXXUnresolvedConstructExpr>(parent)
+                 || isa<CompoundStmt>(parent)
+                 || isa<LabelStmt>(parent)
+                 || isa<CXXForRangeStmt>(parent)
+                 || isa<CXXTypeidExpr>(parent)
+                 || isa<DefaultStmt>(parent))
+        {
+            break;
+        }
+        else
+        {
+            bPotentiallyWrittenTo = true;
+            bDump = true;
+            break;
+        }
+    } while (true);
+
+    if (bDump)
+    {
+        report(
+             DiagnosticsEngine::Warning,
+             "oh dear, what can the matter be? writtenTo=%0",
+              memberExpr->getLocStart())
+              << bPotentiallyWrittenTo
+              << memberExpr->getSourceRange();
+        if (parent)
+        {
+            report(
+                 DiagnosticsEngine::Note,
+                 "parent over here",
+                  parent->getLocStart())
+                  << parent->getSourceRange();
+            parent->dump();
+        }
+        memberExpr->dump();
+    }
+
+    MyFieldInfo fieldInfo = niceName(fieldDecl);
+    if (bPotentiallyWrittenTo)
+        writeToSet.insert(fieldInfo);
+}
+
+bool UnusedFields::IsPassedByNonConstRef(const Stmt * child, const CallExpr * callExpr,
+                                         const FunctionDecl * calleeFunctionDecl,
+                                         bool bParamsAndArgsOffset)
+{
+    unsigned len = std::min(callExpr->getNumArgs() + (bParamsAndArgsOffset ? 1 : 0),
+                            calleeFunctionDecl->getNumParams());
+    for (unsigned i = 0; i < len; ++i)
+        if (callExpr->getArg(i + (bParamsAndArgsOffset ? 1 : 0)) == child)
+            if (loplugin::TypeCheck(calleeFunctionDecl->getParamDecl(i)->getType()).NonConst().LvalueReference())
+                return true;
+    return false;
+}
+
+// fields that are assigned via member initialisers do not get visited in VisitDeclRef, so
+// have to do it here
+bool UnusedFields::VisitCXXConstructorDecl( const CXXConstructorDecl* cxxConstructorDecl )
+{
+    if (ignoreLocation( cxxConstructorDecl )) {
+        return true;
+    }
+    // ignore stuff that forms part of the stable URE interface
+    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(cxxConstructorDecl->getLocation()))) {
+        return true;
+    }
+
+    // templates make EvaluateAsInt crash inside clang
+    if (cxxConstructorDecl->isDependentContext())
+       return true;
+
+    // we don't care about writes to a field when inside the copy/move constructor/operator= for that field
+    if (insideMoveOrCopyDeclParent && cxxConstructorDecl->getParent() == insideMoveOrCopyDeclParent)
+        return true;
+
+    for(auto it = cxxConstructorDecl->init_begin(); it != cxxConstructorDecl->init_end(); ++it)
+    {
+        const CXXCtorInitializer* init = *it;
+        const FieldDecl* fieldDecl = init->getMember();
+        if (fieldDecl && init->getInit() && !isSomeKindOfZero(init->getInit()))
+        {
+            MyFieldInfo fieldInfo = niceName(fieldDecl);
+            writeToSet.insert(fieldInfo);
+        }
+    }
+    return true;
+}
+
+// Fields that are assigned via init-list-expr do not get visited in VisitDeclRef, so
+// have to do it here.
+// TODO could be more precise here about which fields are actually being written to
+bool UnusedFields::VisitVarDecl( const VarDecl* varDecl)
+{
+    if (!varDecl->getLocation().isValid() || ignoreLocation( varDecl ))
+        return true;
+    // ignore stuff that forms part of the stable URE interface
+    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())))
+        return true;
+
+    if (!varDecl->hasInit())
+        return true;
+    auto initListExpr = dyn_cast<InitListExpr>(varDecl->getInit()->IgnoreImplicit());
+    if (!initListExpr)
+        return true;
+
+    // If this is an array, navigate down until we hit a record.
+    // It appears to be somewhat painful to navigate down an array type structure reliably.
+    QualType varType = varDecl->getType().getDesugaredType(compiler.getASTContext());
+    while (varType->isArrayType() || varType->isConstantArrayType()
+            || varType->isIncompleteArrayType() || varType->isVariableArrayType()
+            || varType->isDependentSizedArrayType())
+        varType = varType->getAsArrayTypeUnsafe()->getElementType().getDesugaredType(compiler.getASTContext());
+    auto recordType = varType->getAs<RecordType>();
+    if (!recordType)
+        return true;
+
+    auto recordDecl = recordType->getDecl();
+    for (auto it = recordDecl->field_begin(); it != recordDecl->field_end(); ++it)
+    {
+        MyFieldInfo fieldInfo = niceName(*it);
+        writeToSet.insert(fieldInfo);
+    }
+
+    return true;
 }
 
 bool UnusedFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )

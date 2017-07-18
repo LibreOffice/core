@@ -10,6 +10,7 @@ definitionToSourceLocationMap = dict()
 definitionToTypeMap = dict()
 touchedFromInsideSet = set()
 readFromSet = set()
+writeToSet = set()
 sourceLocationSet = set()
 touchedFromOutsideSet = set()
 
@@ -51,6 +52,8 @@ with io.open("loplugin.unusedfields.log", "rb", buffering=1024*1024) as txt:
             touchedFromOutsideSet.add(parseFieldInfo(tokens))
         elif tokens[0] == "read:":
             readFromSet.add(parseFieldInfo(tokens))
+        elif tokens[0] == "write:":
+            writeToSet.add(parseFieldInfo(tokens))
         else:
             print( "unknown line: " + line)
 
@@ -145,6 +148,15 @@ for d in definitionSet:
     writeonlySet.add((d[0] + " " + d[1] + " " + definitionToTypeMap[d], srcLoc))
 
 
+readonlySet = set()
+for d in definitionSet:
+    parentClazz = d[0];
+    if d in writeToSet:
+        continue
+    srcLoc = definitionToSourceLocationMap[d];
+    readonlySet.add((d[0] + " " + d[1] + " " + definitionToTypeMap[d], srcLoc))
+
+
 canBePrivateSet = set()
 for d in protectedAndPublicDefinitionSet:
     clazz = d[0] + " " + d[1]
@@ -164,6 +176,7 @@ def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
 tmp1list = sorted(untouchedSet, key=lambda v: natural_sort_key(v[1]))
 tmp2list = sorted(writeonlySet, key=lambda v: natural_sort_key(v[1]))
 tmp3list = sorted(canBePrivateSet, key=lambda v: natural_sort_key(v[1]))
+tmp4list = sorted(readonlySet, key=lambda v: natural_sort_key(v[1]))
 
 # print out the results
 with open("compilerplugins/clang/unusedfields.untouched.results", "wt") as f:
@@ -177,6 +190,10 @@ with open("compilerplugins/clang/unusedfields.writeonly.results", "wt") as f:
 # this one is not checked in yet because I haven't actually done anything with it
 with open("loplugin.unusedfields.report-can-be-private", "wt") as f:
     for t in tmp3list:
+        f.write( t[1] + "\n" )
+        f.write( "    " + t[0] + "\n" )
+with open("compilerplugins/clang/unusedfields.readonly.results", "wt") as f:
+    for t in tmp4list:
         f.write( t[1] + "\n" )
         f.write( "    " + t[0] + "\n" )
 

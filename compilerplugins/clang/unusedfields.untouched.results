@@ -68,16 +68,34 @@ include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
 include/svtools/genericunodialog.hxx:170
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
-include/svtools/unoevent.hxx:159
+include/svtools/unoevent.hxx:161
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
-include/unotest/macros_test.hxx:21
-    TestMacroInfo sFileBaseName class rtl::OUString
-include/unotest/macros_test.hxx:22
-    TestMacroInfo sMacroUrl class rtl::OUString
 include/vcl/uitest/uiobject.hxx:241
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:173
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50
+    GtvApplicationWindow parent_instance GtkApplicationWindow
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:54
+    GtvApplicationWindow doctype LibreOfficeKitDocumentType
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:73
+    GtvApplicationWindowClass parentClass GtkApplicationWindow
+libreofficekit/qa/gtktiledviewer/gtv-application.hxx:26
+    GtvApplication parent GtkApplication
+libreofficekit/qa/gtktiledviewer/gtv-application.hxx:31
+    GtvApplicationClass parentClass GtkApplication
+libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:28
+    GtvCalcHeaderBar parent GtkDrawingArea
+libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:37
+    GtvCalcHeaderBarClass parentClass GtkDrawingAreaClass
+libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:26
+    GtvCommentsSidebar parent GtkBox
+libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:35
+    GtvCommentsSidebarClass parentClass GtkBoxClass
+libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
+    GtvMainToolbar parent GtkBox
+libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
+    GtvMainToolbarClass parentClass GtkBoxClass
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
 opencl/source/openclwrapper.cxx:302
@@ -102,9 +120,11 @@ sal/osl/unx/thread.cxx:115
     osl_thread_global_st m_priority struct osl_thread_priority_st
 sc/inc/formulalogger.hxx:42
     sc::FormulaLogger maMessages std::vector<OUString>
+sc/qa/unit/ucalc_column.cxx:103
+    aInputs aName const char *
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/ui/inc/dataprovider.hxx:46
+sc/source/ui/inc/dataprovider.hxx:47
     sc::ExternalDataMapper maDocument class ScDocument
 sc/source/ui/inc/docsh.hxx:438
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
@@ -114,13 +134,13 @@ sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1323
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1233
+sd/source/ui/view/viewshel.cxx:1258
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1234
+sd/source/ui/view/viewshel.cxx:1259
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1235
+sd/source/ui/view/viewshel.cxx:1260
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1236
+sd/source/ui/view/viewshel.cxx:1261
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:195
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
@@ -156,15 +176,15 @@ vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cPortName char [32]
-vcl/source/gdi/pdfwriter_impl.cxx:5432
+vcl/source/gdi/pdfwriter_impl.cxx:5423
     (anonymous namespace)::(anonymous) extnID SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5433
+vcl/source/gdi/pdfwriter_impl.cxx:5424
     (anonymous namespace)::(anonymous) critical SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5434
+vcl/source/gdi/pdfwriter_impl.cxx:5425
     (anonymous namespace)::(anonymous) extnValue SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5803
+vcl/source/gdi/pdfwriter_impl.cxx:5794
     (anonymous namespace)::(anonymous) statusString SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5804
+vcl/source/gdi/pdfwriter_impl.cxx:5795
     (anonymous namespace)::(anonymous) failInfo SECItem
 vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>

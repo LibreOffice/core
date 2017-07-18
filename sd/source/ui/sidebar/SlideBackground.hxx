@@ -115,8 +115,6 @@ private:
     ::sfx2::sidebar::ControllerItem maCloseMasterController;
 
     std::unique_ptr< SvxPageItem >          mpPageItem;
-    std::unique_ptr< SvxLongLRSpaceItem >   mpLRItem;
-    std::unique_ptr< SvxLongULSpaceItem >   mpULItem;
     std::unique_ptr< XFillColorItem >       mpColorItem;
     std::unique_ptr< XFillGradientItem >    mpGradientItem;
     std::unique_ptr< XFillHatchItem >       mpHatchItem;
