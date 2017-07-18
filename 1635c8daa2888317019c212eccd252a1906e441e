@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_e5e4b80e",
+        "filename": "sax/source/expatwrap/xml2utf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-18T14:02:44Z",
+      "side": 1,
+      "message": "I suspect that the 4 bytes here, is because of the BOM/etc checking below, but I could be wrong.\nAlthough honestly, an XML file needs to be at least about 24 bytes before it can be parsed.\nDiscussion here:\n   https://github.com/mathiasbynens/small/issues/32",
+      "revId": "1635c8daa2888317019c212eccd252a1906e441e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
