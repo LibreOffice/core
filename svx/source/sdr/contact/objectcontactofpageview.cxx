@@ -52,9 +52,11 @@ namespace sdr
             return GetPageWindow().GetPageView().GetPage();
         }
 
-        ObjectContactOfPageView::ObjectContactOfPageView(SdrPageWindow& rPageWindow)
-        :   ObjectContact(),
-            mrPageWindow(rPageWindow)
+        ObjectContactOfPageView::ObjectContactOfPageView(
+                SdrPageWindow& rPageWindow, const sal_Char *pDebugName)
+            : ObjectContact()
+            , Idle(pDebugName)
+            , mrPageWindow(rPageWindow)
         {
             // init PreviewRenderer flag
             setPreviewRenderer(((SdrPaintView&)rPageWindow.GetPageView().GetView()).IsPreviewRenderer());

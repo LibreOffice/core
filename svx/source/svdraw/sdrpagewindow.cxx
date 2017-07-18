@@ -439,7 +439,8 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 const sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact() const
 {
     if (!mpImpl->mpObjectContact)
-        mpImpl->mpObjectContact = new sdr::contact::ObjectContactOfPageView(const_cast<SdrPageWindow&>(*this));
+        mpImpl->mpObjectContact = new sdr::contact::ObjectContactOfPageView(
+            const_cast<SdrPageWindow&>(*this), "svx::svdraw::SdrPageWindow mpObjectContact" );
 
     return *mpImpl->mpObjectContact;
 }
@@ -447,7 +448,8 @@ const sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact() const
 sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact()
 {
     if (!mpImpl->mpObjectContact)
-        mpImpl->mpObjectContact = new sdr::contact::ObjectContactOfPageView(*this);
+        mpImpl->mpObjectContact = new sdr::contact::ObjectContactOfPageView(
+             *this, "svx::svdraw::SdrPageWindow mpObjectContact" );
 
     return *mpImpl->mpObjectContact;
 }
