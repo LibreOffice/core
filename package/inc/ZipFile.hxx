@@ -71,6 +71,7 @@ class ZipFile
             const ::rtl::Reference < EncryptionData > &rData,
             sal_Int8 nStreamMode,
             bool bDecrypt,
+            const bool bUseBufferedStream = true,
             const OUString& aMediaType = OUString() );
 
     bool hasValidPassword ( ZipEntry & rEntry, const rtl::Reference < EncryptionData > &rData );
@@ -108,7 +109,8 @@ public:
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
-            const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
+            const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
+            const bool bUseBufferedStream = true );
 
     static css::uno::Reference< css::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
             const css::uno::Reference< css::uno::XComponentContext >& xArgContext,
