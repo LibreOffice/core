@@ -1985,12 +1985,10 @@ void SdXMLExport::exportPresentationSettings()
             bHasAttr = true;
         }
 
+        // We need to always export this attribute, because the import had the wrong default (tdf#108824)
         xPresProps->getPropertyValue("IsMouseVisible") >>= bTemp;
-        if( bTemp )
-        {
-            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_VISIBLE, XML_TRUE );
-            bHasAttr = true;
-        }
+        AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_VISIBLE, bTemp ? XML_TRUE : XML_FALSE);
+        bHasAttr = true;
 
         xPresProps->getPropertyValue("StartWithNavigator") >>= bTemp;
         if( bTemp )
