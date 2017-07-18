@@ -689,10 +689,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                         if(eFillCmd==FILL_DATE)
                         {
-                            Date aNullDate = pDoc->GetFormatTable()->GetNullDate();
-                            Date aStartDate = aNullDate;
+                            const Date& rNullDate = pDoc->GetFormatTable()->GetNullDate();
+                            Date aStartDate = rNullDate;
                             aStartDate+= (long)fStartVal;
-                            Date aEndDate = aNullDate;
+                            Date aEndDate = rNullDate;
                             aEndDate+= (long)fInputEndVal;
                             double fTempDate=0;
 
@@ -1119,10 +1119,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE( pFact, "ScAbstractFactory create fail!" );
-                        Date aNullDate( GetViewData()->GetDocument()->GetFormatTable()->GetNullDate() );
+                        const Date& rNullDate( GetViewData()->GetDocument()->GetFormatTable()->GetNullDate() );
                         ScopedVclPtr<AbstractScDPDateGroupDlg> pDlg( pFact->CreateScDPDateGroupDlg(
                             pTabViewShell->GetDialogParent(),
-                            aNumInfo, nParts, aNullDate ) );
+                            aNumInfo, nParts, rNullDate ) );
                         OSL_ENSURE( pDlg, "Dialog create fail!" );
                         if( pDlg->Execute() == RET_OK )
                         {

@@ -513,8 +513,8 @@ void ScInterpreter::ScNetWorkdays( bool bOOXML_Version )
     {
         vector<double> nSortArray;
         bool bWeekendMask[ 7 ];
-        Date aNullDate = pFormatter->GetNullDate();
-        sal_uInt32 nNullDate = Date::DateToDays( aNullDate.GetDay(), aNullDate.GetMonth(), aNullDate.GetYear() );
+        const Date& rNullDate = pFormatter->GetNullDate();
+        sal_uInt32 nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
         FormulaError nErr;
         if ( bOOXML_Version )
         {
@@ -574,8 +574,8 @@ void ScInterpreter::ScWorkday_MS()
         nFuncFmtType = css::util::NumberFormat::DATE;
         vector<double> nSortArray;
         bool bWeekendMask[ 7 ];
-        Date aNullDate = pFormatter->GetNullDate();
-        sal_uInt32 nNullDate = Date::DateToDays( aNullDate.GetDay(), aNullDate.GetMonth(), aNullDate.GetYear() );
+        const Date& rNullDate = pFormatter->GetNullDate();
+        sal_uInt32 nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
         FormulaError nErr = GetWeekendAndHolidayMasks_MS( nParamCount, nNullDate,
                             nSortArray, bWeekendMask, true );
         if ( nErr != FormulaError::NONE )

@@ -529,8 +529,7 @@ void ScOrcusSheet::set_date_time(
     sal_uInt32 nSec = floor(second);
     sal_uInt32 nNanoSec = (second - nSec) * ::tools::Time::nanoSecPerSec;
     tools::Time aTime(hour, minute, nSec, nNanoSec);
-    Date aNullDate(pFormatter->GetNullDate());
-    long nDateDiff = aDate - aNullDate;
+    long nDateDiff = aDate - pFormatter->GetNullDate();
 
     double fTime =
         static_cast<double>(aTime.GetNanoSec()) / ::tools::Time::nanoSecPerSec +

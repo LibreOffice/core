@@ -812,8 +812,7 @@ void ScETSForecastCalculation::refill()
 
 double ScETSForecastCalculation::convertXtoMonths( double x )
 {
-    Date aNullDate = mpFormatter->GetNullDate();
-    Date aDate = aNullDate + static_cast< long >( x );
+    Date aDate = mpFormatter->GetNullDate() + static_cast< long >( x );
     int nYear = aDate.GetYear();
     int nMonth = aDate.GetMonth();
     double fMonthLength;
