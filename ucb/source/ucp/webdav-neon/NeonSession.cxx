@@ -291,14 +291,14 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
         //thePassWord = OUString::createFromAscii( inoutPassWord );
     }
 
-    bool bCanUseSystemCreds = false;
-
 #if defined NE_FEATURE_SSPI && ! defined SYSTEM_NEON
-    bCanUseSystemCreds
+    const bool bCanUseSystemCreds
         = (attempt == 0) && // avoid endless loops
           ne_has_support( NE_FEATURE_SSPI ) && // Windows-only feature.
           ( ( ne_strcasecmp( inAuthProtocol, "NTLM" ) == 0 ) ||
             ( ne_strcasecmp( inAuthProtocol, "Negotiate" ) == 0 ) );
+#else
+    const bool bCanUseSystemCreds = false;
 #endif
 
     int theRetVal = pListener->authenticate(
