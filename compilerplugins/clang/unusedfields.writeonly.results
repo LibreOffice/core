@@ -6,6 +6,10 @@ basctl/source/inc/bastype2.hxx:180
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/dlged.hxx:121
     basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory>
+basic/qa/cppunit/test_scanner.cxx:26
+    (anonymous namespace)::Symbol line sal_uInt16
+basic/qa/cppunit/test_scanner.cxx:27
+    (anonymous namespace)::Symbol col1 sal_uInt16
 basic/source/runtime/dllmgr.hxx:48
     SbiDllMgr impl_ std::unique_ptr<Impl>
 bridges/source/cpp_uno/gcc3_linux_x86-64/callvirtualmethod.cxx:56
@@ -196,6 +200,8 @@ dbaccess/source/sdbtools/connection/objectnames.hxx:44
     sdbtools::ObjectNames m_aModuleClient class sdbtools::SdbtClient
 dbaccess/source/sdbtools/connection/tablename.cxx:56
     sdbtools::TableName_Impl m_aModuleClient class sdbtools::SdbtClient
+desktop/qa/desktop_lib/test_desktop_lib.cxx:175
+    DesktopLOKTest m_bModified _Bool
 desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:120
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/unx/source/splashx.c:369
@@ -268,7 +274,7 @@ include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
-include/svtools/unoevent.hxx:159
+include/svtools/unoevent.hxx:161
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/bmpmask.hxx:129
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
@@ -280,10 +286,6 @@ include/svx/srchdlg.hxx:231
     SvxSearchDialog pSearchController class SvxSearchController *
 include/svx/srchdlg.hxx:232
     SvxSearchDialog pOptionsController class SvxSearchController *
-include/unotest/macros_test.hxx:21
-    TestMacroInfo sFileBaseName class rtl::OUString
-include/unotest/macros_test.hxx:22
-    TestMacroInfo sMacroUrl class rtl::OUString
 include/vcl/menu.hxx:462
     MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
 include/vcl/salnativewidgets.hxx:415
@@ -302,6 +304,32 @@ include/xmloff/shapeimport.hxx:181
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50
+    GtvApplicationWindow parent_instance GtkApplicationWindow
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:54
+    GtvApplicationWindow doctype LibreOfficeKitDocumentType
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:61
+    GtvApplicationWindow statusbar GtkWidget *
+libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:73
+    GtvApplicationWindowClass parentClass GtkApplicationWindow
+libreofficekit/qa/gtktiledviewer/gtv-application.hxx:26
+    GtvApplication parent GtkApplication
+libreofficekit/qa/gtktiledviewer/gtv-application.hxx:31
+    GtvApplicationClass parentClass GtkApplication
+libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:28
+    GtvCalcHeaderBar parent GtkDrawingArea
+libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:37
+    GtvCalcHeaderBarClass parentClass GtkDrawingAreaClass
+libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:26
+    GtvCommentsSidebar parent GtkBox
+libreofficekit/qa/gtktiledviewer/gtv-comments-sidebar.hxx:35
+    GtvCommentsSidebarClass parentClass GtkBoxClass
+libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.cxx:36
+    GtvMainToolbarPrivateImpl m_pPartModeSelector GtkWidget *
+libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
+    GtvMainToolbar parent GtkBox
+libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
+    GtvMainToolbarClass parentClass GtkBoxClass
 lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
@@ -384,8 +412,8 @@ sc/inc/pivot.hxx:74
     ScDPLabelData mnFlags sal_Int32
 sc/inc/pivot.hxx:77
     ScDPLabelData mbIsValue _Bool
-sc/inc/types.hxx:107
-    sc::MultiDataCellState mnTab1 SCTAB
+sc/qa/unit/ucalc_column.cxx:103
+    aInputs aName const char *
 sc/source/core/data/cellvalues.cxx:25
     sc::(anonymous namespace)::BlockPos mnEnd size_t
 sc/source/core/data/column4.cxx:1291
@@ -446,8 +474,10 @@ sc/source/filter/xml/xmldrani.hxx:76
     ScXMLDatabaseRangeContext bIsSelection _Bool
 sc/source/filter/xml/xmlexternaltabi.hxx:118
     ScXMLExternalRefCellContext mnCellType sal_Int16
-sc/source/ui/inc/dataprovider.hxx:46
+sc/source/ui/inc/dataprovider.hxx:47
     sc::ExternalDataMapper maDocument class ScDocument
+sc/source/ui/inc/dataprovider.hxx:170
+    sc::ScDBDataManager mpDBData class ScDBData *
 sc/source/ui/inc/docsh.hxx:438
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sc/source/ui/inc/filtdlg.hxx:198
@@ -478,19 +508,21 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
     sd::sidebar::TemplatePreviewProvider msURL class rtl::OUString
+sd/source/ui/sidebar/SlideBackground.hxx:100
+    sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
 sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1323
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1233
+sd/source/ui/view/viewshel.cxx:1258
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1234
+sd/source/ui/view/viewshel.cxx:1259
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1235
+sd/source/ui/view/viewshel.cxx:1260
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1236
+sd/source/ui/view/viewshel.cxx:1261
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:195
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
@@ -510,8 +542,6 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
 soltools/cpp/cpp.h:143
     macroValidator pMacro Nlist *
-starmath/inc/error.hxx:48
-    SmErrorDesc m_eType enum SmParseError
 starmath/inc/view.hxx:163
     SmCmdBoxWindow aController class SmEditController
 starmath/inc/view.hxx:224
@@ -638,7 +668,7 @@ vcl/inc/sft.hxx:486
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/opengl/salbmp.cxx:412
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
-vcl/source/filter/graphicfilter.cxx:1036
+vcl/source/filter/graphicfilter.cxx:1034
     ImpFilterLibCache mpLast struct ImpFilterLibCacheEntry *
 vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD type sal_uInt16
@@ -652,27 +682,27 @@ vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cPortName char [32]
-vcl/source/gdi/pdfwriter_impl.cxx:5432
+vcl/source/gdi/pdfwriter_impl.cxx:5423
     (anonymous namespace)::(anonymous) extnID SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5433
+vcl/source/gdi/pdfwriter_impl.cxx:5424
     (anonymous namespace)::(anonymous) critical SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5434
+vcl/source/gdi/pdfwriter_impl.cxx:5425
     (anonymous namespace)::(anonymous) extnValue SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5456
+vcl/source/gdi/pdfwriter_impl.cxx:5447
     (anonymous namespace)::(anonymous) version SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5458
+vcl/source/gdi/pdfwriter_impl.cxx:5449
     (anonymous namespace)::(anonymous) reqPolicy SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5459
+vcl/source/gdi/pdfwriter_impl.cxx:5450
     (anonymous namespace)::(anonymous) nonce SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5460
+vcl/source/gdi/pdfwriter_impl.cxx:5451
     (anonymous namespace)::(anonymous) certReq SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5461
+vcl/source/gdi/pdfwriter_impl.cxx:5452
     (anonymous namespace)::(anonymous) extensions (anonymous namespace)::Extension *
-vcl/source/gdi/pdfwriter_impl.cxx:5505
+vcl/source/gdi/pdfwriter_impl.cxx:5496
     (anonymous namespace)::SigningCertificateV2 certs struct (anonymous namespace)::ESSCertIDv2 **
-vcl/source/gdi/pdfwriter_impl.cxx:5803
+vcl/source/gdi/pdfwriter_impl.cxx:5794
     (anonymous namespace)::(anonymous) statusString SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5804
+vcl/source/gdi/pdfwriter_impl.cxx:5795
     (anonymous namespace)::(anonymous) failInfo SECItem
 vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
@@ -696,5 +726,3 @@ vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
 writerfilter/source/dmapper/PropertyMap.hxx:185
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-xmlsecurity/inc/sigstruct.hxx:110
-    SignatureInformation nDigestID sal_Int32
