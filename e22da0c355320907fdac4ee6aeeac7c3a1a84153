@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_c5417c3b",
+        "filename": "sw/qa/core/uwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-18T11:25:44Z",
+      "side": 1,
+      "message": "m_aTLBR and m_aBLTR are missing?",
+      "revId": "e22da0c355320907fdac4ee6aeeac7c3a1a84153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a55c7026",
+        "filename": "sw/qa/core/uwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-18T11:25:44Z",
+      "side": 1,
+      "message": "why does that not work?",
+      "revId": "e22da0c355320907fdac4ee6aeeac7c3a1a84153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
