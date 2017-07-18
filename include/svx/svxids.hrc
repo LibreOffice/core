@@ -26,12 +26,6 @@
 #include <editeng/editids.hrc>
 #include <svx/unomid.hxx>
 
-// as long as still defined in sfxids.hrc -------------------------------------
-
-#ifdef SID_INSERT_FRAME
-#undef SID_INSERT_FRAME
-#endif
-
 // member IDs
 
 #define MID_INTER_LINESPACE     0x36
