@@ -34,6 +34,7 @@ define sw_ooxmlexport_components
 	dbaccess/util/dba \
 	drawinglayer/drawinglayer \
 	embeddedobj/util/embobj \
+	emfio/emfio \
 	$(if $(filter WNT,$(OS)), \
 		$(if $(DISABLE_ATL),, \
 			embeddedobj/source/msole/emboleobj.windows \

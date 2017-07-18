@@ -55,6 +55,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_htmlexport,\
     configmgr/source/configmgr \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
+    emfio/emfio \
     filter/source/config/cache/filterconfig1 \
     filter/source/storagefilterdetect/storagefd \
     filter/source/textfilterdetect/textfd \
@@ -73,6 +74,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_htmlexport,\
     sw/util/msword \
     sfx2/util/sfx \
     starmath/util/sm \
+    svgio/svgio \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
     toolkit/util/tk \

@@ -78,6 +78,7 @@ $(eval $(call gb_CppunitTest_use_components,chart2_export,\
     dtrans/util/mcnttype \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
+    emfio/emfio \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
     filter/source/odfflatxml/odfflatxml \

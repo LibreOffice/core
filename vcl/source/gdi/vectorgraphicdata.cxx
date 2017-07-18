@@ -158,33 +158,26 @@ void VectorGraphicData::ensureSequenceAndRange()
         if(myInputStream.is())
         {
             // create Vector Graphic Data interpreter
-            try
+            uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+
+            if (VectorGraphicDataType::Emf == getVectorGraphicDataType()
+                || VectorGraphicDataType::Wmf == getVectorGraphicDataType())
             {
-                uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+                const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
+                uno::Sequence< ::beans::PropertyValue > aSequence;
 
-                if (VectorGraphicDataType::Emf == getVectorGraphicDataType()
-                    || VectorGraphicDataType::Wmf == getVectorGraphicDataType())
+                if (mpExternalHeader)
                 {
-                    const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
-                    uno::Sequence< ::beans::PropertyValue > aSequence;
-
-                    if (mpExternalHeader)
-                    {
-                        aSequence = mpExternalHeader->getSequence();
-                    }
-
-                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
+                    aSequence = mpExternalHeader->getSequence();
                 }
-                else
-                {
-                    const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
 
-                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
-                }
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath, aSequence));
             }
-            catch(const uno::Exception&)
+            else
             {
-                OSL_ENSURE(false, "Got no graphic::XSvgParser (!)" );
+                const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
+
+                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
             }
         }
 

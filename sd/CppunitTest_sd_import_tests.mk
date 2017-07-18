@@ -74,6 +74,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     dbaccess/util/dba \
     desktop/source/deployment/deployment \
     embeddedobj/util/embobj \
+    emfio/emfio \
     filter/source/config/cache/filterconfig1 \
 	filter/source/odfflatxml/odfflatxml \
     filter/source/svg/svgfilter \

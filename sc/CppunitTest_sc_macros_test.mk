@@ -73,6 +73,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
+    emfio/emfio \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
     filter/source/storagefilterdetect/storagefd \

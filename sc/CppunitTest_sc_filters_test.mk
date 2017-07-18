@@ -77,6 +77,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     connectivity/source/manager/sdbc2 \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
+    emfio/emfio \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
     filter/source/xmlfilteradaptor/xmlfa \

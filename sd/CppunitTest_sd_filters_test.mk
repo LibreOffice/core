@@ -72,6 +72,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     configmgr/source/configmgr \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
+    emfio/emfio \
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \

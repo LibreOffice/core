@@ -69,6 +69,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlimport,\
     configmgr/source/configmgr \
     drawinglayer/drawinglayer \
     embeddedobj/util/embobj \
+    emfio/emfio \
     filter/source/config/cache/filterconfig1 \
     forms/util/frm \
     framework/util/fwk \

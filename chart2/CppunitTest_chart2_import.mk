@@ -76,6 +76,7 @@ $(eval $(call gb_CppunitTest_use_components,chart2_import,\
     configmgr/source/configmgr \
     dtrans/util/mcnttype \
     embeddedobj/util/embobj \
+    emfio/emfio \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
     filter/source/odfflatxml/odfflatxml \

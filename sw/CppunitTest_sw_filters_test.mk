@@ -55,6 +55,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     configmgr/source/configmgr \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
+    emfio/emfio \
     filter/source/config/cache/filterconfig1 \
     filter/source/t602/t602filter \
     forms/util/frm \
