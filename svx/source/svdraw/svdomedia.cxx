@@ -430,6 +430,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                 OUString tempFileURL;
                 OUString tempDirURL;
                 bool bSuccess;
+                tempDirURL = "";
 #if HAVE_FEATURE_GLTF
                 if( url.endsWith(".json") )
                     bSuccess = lcl_HandleJsonPackageURL(url, GetModel(), tempFileURL, tempDirURL);
