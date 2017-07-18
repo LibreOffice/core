@@ -215,8 +215,8 @@ private:
         dp_gui::UpdateData & out_data) const;
 
     bool update(
-        UpdateDialog::DisabledUpdate & du,
-        dp_gui::UpdateData & data) const;
+        UpdateDialog::DisabledUpdate const & du,
+        dp_gui::UpdateData const & data) const;
 
     uno::Reference< uno::XComponentContext > m_context;
     UpdateDialog & m_dialog;
@@ -449,8 +449,8 @@ void UpdateDialog::Thread::prepareUpdateData(
 }
 
 bool UpdateDialog::Thread::update(
-    UpdateDialog::DisabledUpdate & du,
-    dp_gui::UpdateData & data) const
+    UpdateDialog::DisabledUpdate const & du,
+    dp_gui::UpdateData const & data) const
 {
     bool ret = false;
     if (du.unsatisfiedDependencies.getLength() == 0)
@@ -719,7 +719,7 @@ void UpdateDialog::addAdditional( UpdateDialog::Index * index, SvLBoxButtonKind 
 
 
 void UpdateDialog::addEnabledUpdate( OUString const & name,
-                                     dp_gui::UpdateData & data )
+                                     dp_gui::UpdateData const & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_enabledUpdates.size() );
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( ENABLED_UPDATE, nIndex, name );
@@ -742,7 +742,7 @@ void UpdateDialog::addEnabledUpdate( OUString const & name,
 }
 
 
-void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate & data )
+void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate const & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_disabledUpdates.size() );
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( DISABLED_UPDATE, nIndex, data.name );
@@ -755,7 +755,7 @@ void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate & data )
 }
 
 
-void UpdateDialog::addSpecificError( UpdateDialog::SpecificError & data )
+void UpdateDialog::addSpecificError( UpdateDialog::SpecificError const & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_specificErrors.size() );
     UpdateDialog::Index *pEntry = new UpdateDialog::Index( SPECIFIC_ERROR, nIndex, data.name );
@@ -793,7 +793,7 @@ void UpdateDialog::enableOk() {
 
 // *********************************************************************************
 void UpdateDialog::createNotifyJob( bool bPrepareOnly,
-    uno::Sequence< uno::Sequence< OUString > > &rItemList )
+    uno::Sequence< uno::Sequence< OUString > > const &rItemList )
 {
     if ( !dp_misc::office_is_running() )
         return;

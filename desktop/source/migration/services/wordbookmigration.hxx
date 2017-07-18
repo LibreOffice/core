@@ -58,7 +58,7 @@ namespace migration
         OUString         m_sSourceDir;
 
         TStringVectorPtr        getFiles( const OUString& rBaseURL ) const;
-        void                    checkAndCreateDirectory( INetURLObject& rDirURL );
+        void                    checkAndCreateDirectory( INetURLObject const & rDirURL );
         void                    copyFiles();
 
     public:

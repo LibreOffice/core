@@ -70,7 +70,7 @@ static char const PROCESSING_DONE[] = "InternalIPC::ProcessingDone";
 // will not be included in the returned string) or it cannot read anything (due
 // to error or closed pipe, in which case an empty string will be returned to
 // signal failure):
-OString readStringFromPipe(osl::StreamPipe & pipe) {
+OString readStringFromPipe(osl::StreamPipe const & pipe) {
     for (OStringBuffer str;;) {
         char buf[1024];
         sal_Int32 n = pipe.recv(buf, SAL_N_ELEMENTS(buf));

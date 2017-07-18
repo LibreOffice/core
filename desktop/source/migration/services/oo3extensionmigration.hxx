@@ -78,7 +78,7 @@ namespace migration
             SCANRESULT_DONTMIGRATE_EXTENSION
         };
 
-        void                    checkAndCreateDirectory( INetURLObject& rDirURL );
+        void                    checkAndCreateDirectory( INetURLObject const & rDirURL );
         ScanResult              scanExtensionFolder( const OUString& sExtFolder );
         void                    scanUserExtensions( const OUString& sSourceDir, TStringVector& aMigrateExtensions );
         bool                    scanDescriptionXml( const OUString& sDescriptionXmlFilePath );

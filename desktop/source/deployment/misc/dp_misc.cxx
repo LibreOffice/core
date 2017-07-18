@@ -441,7 +441,7 @@ OUString generateRandomPipeId()
 Reference<XInterface> resolveUnoURL(
     OUString const & connectString,
     Reference<XComponentContext> const & xLocalContext,
-    AbortChannel * abortChannel )
+    AbortChannel const * abortChannel )
 {
     Reference<bridge::XUnoUrlResolver> xUnoUrlResolver(
         bridge::UnoUrlResolver::create( xLocalContext ) );

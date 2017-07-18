@@ -100,7 +100,7 @@ namespace migration
     }
 
 
-    void BasicMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
+    void BasicMigration::checkAndCreateDirectory( INetURLObject const & rDirURL )
     {
         ::osl::FileBase::RC aResult = ::osl::Directory::create( rDirURL.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
         if ( aResult == ::osl::FileBase::E_NOENT )

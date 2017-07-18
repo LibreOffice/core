@@ -27,7 +27,7 @@
 
 namespace desktop {
 
-bool Lockfile_execWarning( Lockfile * that )
+bool Lockfile_execWarning( Lockfile const * that )
 {
     // read information from lock
     OUString aLockname = that->m_aLockname;

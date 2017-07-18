@@ -51,7 +51,7 @@
 namespace desktop {
 
     class Lockfile;
-    bool Lockfile_execWarning( Lockfile * that );
+    bool Lockfile_execWarning( Lockfile const * that );
 
     class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Lockfile
     {
@@ -61,7 +61,7 @@ namespace desktop {
         Lockfile( bool bIPCserver = true );
 
         // separating GUI code:
-        typedef bool (* fpExecWarning)( Lockfile * that );
+        typedef bool (* fpExecWarning)( Lockfile const * that );
 
         // checks the lockfile, asks user when lockfile is
         // found (iff gui) and returns false when we may not continue
@@ -83,7 +83,7 @@ namespace desktop {
         // access to data in file
         void syncToFile() const;
         bool isStale() const;
-        friend bool Lockfile_execWarning( Lockfile * that );
+        friend bool Lockfile_execWarning( Lockfile const * that );
 
     };
 
