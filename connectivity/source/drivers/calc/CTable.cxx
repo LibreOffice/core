@@ -348,7 +348,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                 if ( eCellType == CellContentType_VALUE )
                 {
                     ::Date aDate( rNullDate );
-                    aDate += (long)::rtl::math::approxFloor( xCell->getValue() );
+                    aDate += static_cast<sal_Int32>(::rtl::math::approxFloor( xCell->getValue() ));
                     rValue = aDate.GetUNODate();
                 }
                 else

@@ -203,7 +203,7 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
             continue;
         }
 
-        Date date = maNullDate + static_cast<long>(approxFloor(rCellData.GetValue()));
+        Date date = maNullDate + static_cast<sal_Int32>(approxFloor(rCellData.GetValue()));
         switch (nGroupType)
         {
             case DataPilotFieldGroupBy::YEARS:
