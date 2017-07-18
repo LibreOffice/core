@@ -20,7 +20,6 @@
 #define INCLUDED_SFX2_SFXSIDS_HRC
 
 #include <svl/solar.hrc>
-#include <sfx2/cntids.hrc>
 #include <svl/memberid.hrc>
 
 // Please be careful:
@@ -374,6 +373,7 @@
 #define SID_CUT                             (SID_SFX_START + 710)
 #define SID_COPY                            (SID_SFX_START + 711)
 #define SID_PASTE                           (SID_SFX_START + 712)
+#define SID_DELETE                          (SID_SFX_START + 713)
 
 #define SID_BACKSPACE                       (SID_SFX_START + 714)
 #define SID_FORMATPAINTBRUSH                (SID_SFX_START + 715)
