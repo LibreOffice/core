@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_8520549d",
+        "filename": "sc/source/filter/dif/difexp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-18T11:10:28Z",
+      "side": 1,
+      "message": "Unfortunately changes in this file cross the changes in https://gerrit.libreoffice.org/39366\n\nBest would be to remove this file from the change.",
+      "revId": "ab58c0058da7f92e663f1e42d132e9c831407c6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e53758e1",
+        "filename": "sc/source/filter/dif/difimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-18T11:10:28Z",
+      "side": 1,
+      "message": "This should be an assert() instead as it indicates a programming error.",
+      "revId": "ab58c0058da7f92e663f1e42d132e9c831407c6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

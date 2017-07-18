@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_053544d9",
+        "filename": "sc/source/filter/dif/difimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-18T11:10:28Z",
+      "side": 0,
+      "message": "Please no unrelated changes, and don\u0027t remove such blank line as it enhances readability of the code.",
+      "revId": "c76c3655a394462b7b23bdfe6da4542fbdf30fbb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
