@@ -53,7 +53,6 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/types.hxx>
 #include <svl/memberid.hrc>
-#include <svl/cntwall.hxx>
 #include <svtools/borderhelper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -3945,70 +3944,6 @@ void SvxBrushItem::SetGraphicLink( const OUString& rNew )
 void SvxBrushItem::SetGraphicFilter( const OUString& rNew )
 {
     maStrFilter = rNew;
-}
-
-SvxGraphicPosition SvxBrushItem::WallpaperStyle2GraphicPos( WallpaperStyle eStyle )
-{
-    SvxGraphicPosition eResult;
-    // This switch is not the fastest, but the safest
-    switch( eStyle )
-    {
-        case WallpaperStyle::NONE: eResult = GPOS_NONE; break;
-        case WallpaperStyle::Tile: eResult = GPOS_TILED; break;
-        case WallpaperStyle::Center: eResult = GPOS_MM; break;
-        case WallpaperStyle::Scale: eResult = GPOS_AREA; break;
-        case WallpaperStyle::TopLeft: eResult = GPOS_LT; break;
-        case WallpaperStyle::Top: eResult = GPOS_MT; break;
-        case WallpaperStyle::TopRight: eResult = GPOS_RT; break;
-        case WallpaperStyle::Left: eResult = GPOS_LM; break;
-        case WallpaperStyle::Right: eResult = GPOS_RM; break;
-        case WallpaperStyle::BottomLeft: eResult = GPOS_LB; break;
-        case WallpaperStyle::Bottom: eResult = GPOS_MB; break;
-        case WallpaperStyle::BottomRight: eResult = GPOS_RB; break;
-        default: eResult = GPOS_NONE;
-    }
-    return eResult;
-};
-
-WallpaperStyle SvxBrushItem::GraphicPos2WallpaperStyle( SvxGraphicPosition ePos )
-{
-    WallpaperStyle eResult;
-    switch( ePos )
-    {
-        case GPOS_NONE: eResult = WallpaperStyle::NONE; break;
-        case GPOS_TILED: eResult = WallpaperStyle::Tile; break;
-        case GPOS_MM: eResult = WallpaperStyle::Center; break;
-        case GPOS_AREA: eResult = WallpaperStyle::Scale; break;
-        case GPOS_LT: eResult = WallpaperStyle::TopLeft; break;
-        case GPOS_MT: eResult = WallpaperStyle::Top; break;
-        case GPOS_RT: eResult = WallpaperStyle::TopRight; break;
-        case GPOS_LM: eResult = WallpaperStyle::Left; break;
-        case GPOS_RM: eResult = WallpaperStyle::Right; break;
-        case GPOS_LB: eResult = WallpaperStyle::BottomLeft; break;
-        case GPOS_MB: eResult = WallpaperStyle::Bottom; break;
-        case GPOS_RB: eResult = WallpaperStyle::BottomRight; break;
-        default: eResult = WallpaperStyle::NONE;
-    }
-    return eResult;
-}
-
-SvxBrushItem::SvxBrushItem(const CntWallpaperItem& rItem, sal_uInt16 _nWhich)
-    : SfxPoolItem(_nWhich)
-    , nShadingValue(ShadingPattern::CLEAR)
-    , nGraphicTransparency(0)
-    , bLoadAgain(true)
-{
-    aColor = rItem.GetColor();
-
-    if (!rItem.GetBitmapURL().isEmpty())
-    {
-        maStrLink    = rItem.GetBitmapURL();
-        SetGraphicPos( WallpaperStyle2GraphicPos((WallpaperStyle)rItem.GetStyle() ) );
-    }
-    else
-    {
-        SetGraphicPos( GPOS_NONE );
-    }
 }
 
 void SvxBrushItem::ApplyGraphicTransparency_Impl()
