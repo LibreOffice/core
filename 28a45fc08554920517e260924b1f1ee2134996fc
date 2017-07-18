@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_e5a03893",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1589,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-18T15:46:37Z",
+      "side": 1,
+      "message": "By the way, dummy uno commands don\u0027t need to go here. This is only for real uno commands.",
+      "revId": "28a45fc08554920517e260924b1f1ee2134996fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
