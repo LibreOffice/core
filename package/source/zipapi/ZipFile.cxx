@@ -609,12 +609,16 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
             const ::rtl::Reference< EncryptionData > &rData,
             sal_Int8 nStreamMode,
             bool bIsEncrypted,
+            const bool bUseBufferedStream,
             const OUString& aMediaType )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     rtl::Reference< XUnbufferedStream > xSrcStream = new XUnbufferedStream(
         m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode);
+
+    if (!bUseBufferedStream)
+        return xSrcStream.get();
 
     uno::Reference<io::XInputStream> xBufStream;
     static const sal_Int32 nThreadingThreshold = 10000;
@@ -698,14 +702,15 @@ uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
 uno::Reference< XInputStream > ZipFile::getRawData( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
         bool bIsEncrypted,
-        const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder )
+        const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
+        const bool bUseBufferedStream )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    return createStreamForZipEntry ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_RAW, bIsEncrypted );
+    return createStreamForZipEntry ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_RAW, bIsEncrypted, bUseBufferedStream );
 }
 
 uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
@@ -722,7 +727,7 @@ uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
 
-    return createStreamForZipEntry ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, true, aMediaType );
+    return createStreamForZipEntry ( aMutexHolder, rEntry, rData, UNBUFF_STREAM_WRAPPEDRAW, true, true, aMediaType );
 }
 
 bool ZipFile::readLOC( ZipEntry &rEntry )
