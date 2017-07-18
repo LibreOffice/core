@@ -16,6 +16,24 @@
       "revId": "951af0302f60dfd5fc082552d85d8ddb522fc5a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_05c9c478",
+        "filename": "xmloff/source/draw/sdxmlexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1999,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-18T14:26:15Z",
+      "side": 0,
+      "message": "actually \"fix the import\" is a bit more involved: an old LO version omitting the attribute means \"false\" apparently, so the import probably should check the generator, which requires a new constant SvXMLImport::LO_53x...",
+      "parentUuid": "3a461143_e51d9810",
+      "revId": "951af0302f60dfd5fc082552d85d8ddb522fc5a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
