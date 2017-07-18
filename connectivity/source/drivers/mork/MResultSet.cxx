@@ -998,7 +998,7 @@ void OResultSet::fillRowData()
 }
 
 
-static bool matchRow( OValueRow& row1, OValueRow& row2 )
+static bool matchRow( OValueRow const & row1, OValueRow const & row2 )
 {
     OValueVector::Vector::const_iterator row1Iter = row1->get().begin();
     OValueVector::Vector::const_iterator row2Iter = row2->get().begin();

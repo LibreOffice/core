@@ -126,7 +126,7 @@ void ONDXPage::QueryDelete()
     }
 }
 
-ONDXPagePtr& ONDXPage::GetChild(ODbaseIndex* pIndex)
+ONDXPagePtr& ONDXPage::GetChild(ODbaseIndex const * pIndex)
 {
     if (!aChild.Is() && pIndex)
     {
@@ -660,7 +660,7 @@ void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
 // ONDXNode
 
 
-void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
+void ONDXNode::Read(SvStream &rStream, ODbaseIndex const & rIndex)
 {
     rStream.ReadUInt32( aKey.nRecord ); // key
 
@@ -1006,7 +1006,7 @@ sal_uInt16 ONDXPage::Search(const ONDXPage* pPage)
 
 // runs recursively
 void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
-                                  ONDXKey& rReplace)
+                                  ONDXKey const & rReplace)
 {
     OSL_ENSURE(rSearch != rReplace,"Invalid here:rSearch == rReplace");
     if (rSearch != rReplace)

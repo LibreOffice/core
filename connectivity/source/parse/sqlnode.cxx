@@ -1484,7 +1484,7 @@ OSQLParser::~OSQLParser()
     }
 }
 
-void OSQLParseNode::substituteParameterNames(OSQLParseNode* _pNode)
+void OSQLParseNode::substituteParameterNames(OSQLParseNode const * _pNode)
 {
     sal_Int32 nCount = _pNode->count();
     for(sal_Int32 i=0;i < nCount;++i)
@@ -1504,7 +1504,7 @@ void OSQLParseNode::substituteParameterNames(OSQLParseNode* _pNode)
     }
 }
 
-bool OSQLParser::extractDate(OSQLParseNode* pLiteral,double& _rfValue)
+bool OSQLParser::extractDate(OSQLParseNode const * pLiteral,double& _rfValue)
 {
     Reference< XNumberFormatsSupplier > xFormatSup = m_xFormatter->getNumberFormatsSupplier();
     Reference< XNumberFormatTypes > xFormatTypes;
@@ -1651,7 +1651,7 @@ OSQLParseNode& OSQLParseNode::operator=(const OSQLParseNode& rParseNode)
 }
 
 
-bool OSQLParseNode::operator==(OSQLParseNode& rParseNode) const
+bool OSQLParseNode::operator==(OSQLParseNode const & rParseNode) const
 {
     // The members must be equal
     bool bResult = (m_nNodeID  == rParseNode.m_nNodeID) &&

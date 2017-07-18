@@ -486,7 +486,7 @@ namespace connectivity
     {
         bool m_bBound;
         TSetRefBound(bool _bBound) : m_bBound(_bBound){}
-        void operator()(ORowSetValueDecoratorRef& _rValue) const { _rValue->setBound(m_bBound); }
+        void operator()(ORowSetValueDecoratorRef const & _rValue) const { _rValue->setBound(m_bBound); }
 
     };
 

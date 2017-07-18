@@ -58,7 +58,7 @@ namespace connectivity
                 {  }
             void dispose();
 
-            void start(connectivity::OSQLParseNode* pSQLParseNode);
+            void start(connectivity::OSQLParseNode const * pSQLParseNode);
             OOperand* execute(connectivity::OSQLParseNode* pPredicateNode);
 
             void Clean();
@@ -69,25 +69,25 @@ namespace connectivity
         protected:
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode);
+            void execute_COMPARE(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void execute_LIKE(connectivity::OSQLParseNode* pPredicateNode);
+            void execute_LIKE(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void execute_BETWEEN(connectivity::OSQLParseNode* pPredicateNode);
+            void execute_BETWEEN(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void execute_ISNULL(connectivity::OSQLParseNode* pPredicateNode);
+            void execute_ISNULL(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void execute_Fold(OSQLParseNode* pPredicateNode);
+            void execute_Fold(OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void executeFunction(OSQLParseNode* pPredicateNode);
+            void executeFunction(OSQLParseNode const * pPredicateNode);
         };
 
 
@@ -102,14 +102,14 @@ namespace connectivity
             virtual ~OPredicateInterpreter() override;
 
             bool        evaluate(OCodeList& rCodeList);
-            void        evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal);
+            void        evaluateSelection(OCodeList& rCodeList, ORowSetValueDecoratorRef const & _rVal);
 
             bool start()
             {
                 return evaluate(m_rCompiler->m_aCodeList);
             }
 
-            void startSelection(ORowSetValueDecoratorRef& _rVal)
+            void startSelection(ORowSetValueDecoratorRef const & _rVal)
             {
                 evaluateSelection(m_rCompiler->m_aCodeList,_rVal);
             }

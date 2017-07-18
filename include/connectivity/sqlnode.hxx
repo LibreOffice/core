@@ -252,7 +252,7 @@ namespace connectivity
         OSQLParseNode(const OSQLParseNode& rParseNode);
         OSQLParseNode& operator=(const OSQLParseNode& rParseNode);
 
-        bool operator==(OSQLParseNode& rParseNode) const;
+        bool operator==(OSQLParseNode const & rParseNode) const;
 
         // destructor destructs the tree recursively
         virtual ~OSQLParseNode();
@@ -400,7 +400,7 @@ namespace connectivity
 
         // substitute all occurrences of :var or [name] into the dynamic parameter ?
         // _pNode will be modified if parameters exists
-        static void substituteParameterNames(OSQLParseNode* _pNode);
+        static void substituteParameterNames(OSQLParseNode const * _pNode);
 
         /** return a table range when it exists.
         */

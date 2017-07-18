@@ -261,7 +261,7 @@ void OConnectionPool::invalidatePooledConnections()
         m_xInvalidator->start();
 }
 
-Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::iterator& _rIter)
+Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::iterator const & _rIter)
 {
     Reference<XConnection> xConnection;
 

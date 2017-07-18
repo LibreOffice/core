@@ -82,7 +82,7 @@ enum class LogLevel
     Info,
     LAST = Info
 };
-bool isLog(ConnectionSettings *settings, LogLevel nLevel);
+bool isLog(ConnectionSettings const *settings, LogLevel nLevel);
 void log(ConnectionSettings *settings, LogLevel nLevel, const OUString &logString);
 void log(ConnectionSettings *settings, LogLevel nLevel, const char *str);
 
