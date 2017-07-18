@@ -63,7 +63,7 @@ struct PDFEntry
     virtual PDFEntry* clone() const = 0;
 
 protected:
-    static EmitImplData* getEmitData( EmitContext& rContext );
+    static EmitImplData* getEmitData( EmitContext const & rContext );
     static void setEmitData( EmitContext& rContext, EmitImplData* pNewEmitData );
 };
 

@@ -48,7 +48,7 @@ void Element::applyToChildren( ElementTreeVisitor& rVisitor )
         (*it)->visitedBy( rVisitor, it );
 }
 
-void Element::setParent( std::list<Element*>::iterator& el, Element* pNewParent )
+void Element::setParent( std::list<Element*>::iterator const & el, Element* pNewParent )
 {
     if( pNewParent )
     {
@@ -191,7 +191,7 @@ void ParagraphElement::visitedBy( ElementTreeVisitor&                          r
     rVisitor.visit(*this,rParentIt);
 }
 
-bool ParagraphElement::isSingleLined( PDFIProcessor& rProc ) const
+bool ParagraphElement::isSingleLined( PDFIProcessor const & rProc ) const
 {
     std::list< Element* >::const_iterator it = Children.begin();
     TextElement* pText = nullptr, *pLastText = nullptr;
@@ -366,12 +366,12 @@ void PageElement::resolveHyperlinks()
     }
 }
 
-void PageElement::resolveFontStyles( PDFIProcessor& rProc )
+void PageElement::resolveFontStyles( PDFIProcessor const & rProc )
 {
     resolveUnderlines(rProc);
 }
 
-void PageElement::resolveUnderlines( PDFIProcessor& rProc )
+void PageElement::resolveUnderlines( PDFIProcessor const & rProc )
 {
     // FIXME: currently the algorithm used is quadratic
     // this could be solved by some sorting beforehand

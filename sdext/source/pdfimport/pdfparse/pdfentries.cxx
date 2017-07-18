@@ -107,7 +107,7 @@ PDFEntry::~PDFEntry()
 {
 }
 
-EmitImplData* PDFEntry::getEmitData( EmitContext& rContext )
+EmitImplData* PDFEntry::getEmitData( EmitContext const & rContext )
 {
     return rContext.m_pImplData.get();
 }

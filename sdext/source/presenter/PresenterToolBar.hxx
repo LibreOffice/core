@@ -190,7 +190,7 @@ private:
 
     void ProcessEntry (
         const css::uno::Reference<css::beans::XPropertySet>& rProperties,
-        Context& rContext);
+        Context const & rContext);
 
     /** @throws css::lang::DisposedException when the object has already been
         disposed.

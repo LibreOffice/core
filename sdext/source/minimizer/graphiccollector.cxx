@@ -87,7 +87,7 @@ void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntit
     }
 }
 
-void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference< XShape >& rxShape, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
+void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference< XShape > const & rxShape, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
 {
     Reference< XGraphic > xGraphic;
     Reference< XPropertySet > xShapePropertySet( rxShape, UNO_QUERY_THROW );
