@@ -175,10 +175,17 @@ public:
                             mnGeneratorVersion = SvXMLImport::LO_44x; // 4.4
                         }
                     }
+                    else if ('5' == loVersion[0])
+                    {
+                        mnGeneratorVersion = SvXMLImport::LO_5x;
+                    }
+                    else if ('6' == loVersion[0])
+                    {
+                        mnGeneratorVersion = SvXMLImport::LO_6x;
+                    }
                     else
                     {
-                        SAL_INFO_IF('5' != loVersion[0], "xmloff.core", "unknown LO version: " << loVersion);
-                        mnGeneratorVersion = SvXMLImport::LO_5x;
+                        SAL_WARN("xmloff.core", "unknown LO version: " << loVersion);
                     }
                     return; // ignore buildIds
                 }
