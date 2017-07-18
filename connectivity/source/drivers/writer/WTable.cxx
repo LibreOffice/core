@@ -188,7 +188,6 @@ OWriterTable::OWriterTable(sdbcx::OCollection* _pTables, OWriterConnection* _pCo
     ,m_nDataCols(0)
     ,m_nDataRows(0)
     ,m_bHasHeaders(false)
-    ,m_aNullDate(::Date::EMPTY)
 {
 }
 
