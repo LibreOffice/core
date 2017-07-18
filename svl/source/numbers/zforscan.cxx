@@ -40,7 +40,8 @@ const sal_Unicode cNoBreakSpace = 0xA0;
 const sal_Unicode cNarrowNoBreakSpace = 0x202F;
 
 ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
-    : eNewLnge(LANGUAGE_DONTKNOW)
+    : maNullDate( 30, 12, 1899)
+    , eNewLnge(LANGUAGE_DONTKNOW)
     , eTmpLnge(LANGUAGE_DONTKNOW)
     , nCurrPos(-1)
 {
@@ -77,7 +78,6 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     StandardColor[8]  =  Color(COL_YELLOW);
     StandardColor[9]  =  Color(COL_WHITE);
 
-    pNullDate = new Date(30,12,1899);
     nStandardPrec = 2;
 
     sErrStr =  "###";
@@ -86,7 +86,6 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
 
 ImpSvNumberformatScan::~ImpSvNumberformatScan()
 {
-    delete pNullDate;
     Reset();
 }
 
@@ -429,10 +428,14 @@ void ImpSvNumberformatScan::SetDependentKeywords()
 
 void ImpSvNumberformatScan::ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear)
 {
-    if ( pNullDate )
-        *pNullDate = Date(nDay, nMonth, nYear);
-    else
-        pNullDate = new Date(nDay, nMonth, nYear);
+    maNullDate = Date(nDay, nMonth, nYear);
+    if (!maNullDate.IsValidDate())
+    {
+        maNullDate.Normalize();
+        SAL_WARN("svl.numbers","ImpSvNumberformatScan::ChangeNullDate - not valid"
+                " d: " << nDay << " m: " << nMonth << " y: " << nYear << " normalized to"
+                " d: " << maNullDate.GetDay() << " m: " << maNullDate.GetMonth() << " y: " << maNullDate.GetYear());
+    }
 }
 
 void ImpSvNumberformatScan::ChangeStandardPrec(sal_uInt16 nPrec)

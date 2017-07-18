@@ -122,7 +122,7 @@ OUString ScDPUtil::getDateGroupName(
         {
             Date aDate(1, 1, SC_DP_LEAPYEAR);
             aDate += (nValue - 1);            // nValue is 1-based
-            Date aNullDate = *pFormatter->GetNullDate();
+            Date aNullDate = pFormatter->GetNullDate();
             long nDays = aDate - aNullDate;
 
             const sal_uInt32 nFormat = pFormatter->GetFormatIndex(NF_DATE_SYS_DDMMM, ScGlobal::eLnge);
@@ -334,7 +334,7 @@ sal_Int32 ScDPUtil::getDatePartValue(
     }
     else
     {
-        Date aDate = *(pFormatter->GetNullDate());
+        Date aDate = pFormatter->GetNullDate();
         aDate += (long)::rtl::math::approxFloor(fValue);
 
         switch ( nDatePart )

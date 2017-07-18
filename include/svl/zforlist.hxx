@@ -574,7 +574,7 @@ public:
                               LanguageType eLnge, SvNumberformat* pFormat );
 
     /// Return the reference date
-    Date* GetNullDate();
+    const Date& GetNullDate();
     /// Return the standard decimal precision
     sal_uInt16 GetStandardPrec();
     /// Return whether zero suppression is switched on

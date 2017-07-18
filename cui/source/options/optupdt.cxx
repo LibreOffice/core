@@ -145,10 +145,10 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
         LanguageType eUILang = Application::GetSettings().GetUILanguageTag().getLanguageType();
         SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessComponentContext(), eUILang );
         Color*      pColor = nullptr;
-        Date*       pNullDate = pNumberFormatter->GetNullDate();
+        const Date& rNullDate = pNumberFormatter->GetNullDate();
         sal_uInt32  nFormat = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::DATE, eUILang );
 
-        pNumberFormatter->GetOutputString( aDate - *pNullDate, nFormat, aDateStr, &pColor );
+        pNumberFormatter->GetOutputString( aDate - rNullDate, nFormat, aDateStr, &pColor );
 
         nFormat = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::TIME, eUILang );
         pNumberFormatter->GetOutputString( aTime.GetTimeInDays(), nFormat, aTimeStr, &pColor );

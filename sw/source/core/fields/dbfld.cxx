@@ -275,8 +275,8 @@ bool SwDBField::FormatValue( SvNumberFormatter* pDocFormatter, OUString &aString
             DataType::TIMESTAMP  == nColumnType )
         {
             Date aStandard( 1, 1, 1900 );
-            if( *pDocFormatter->GetNullDate() != aStandard )
-                aNumber += (aStandard - *pDocFormatter->GetNullDate());
+            if( pDocFormatter->GetNullDate() != aStandard )
+                aNumber += (aStandard - pDocFormatter->GetNullDate());
         }
         bValidValue = true;
         if( pField )

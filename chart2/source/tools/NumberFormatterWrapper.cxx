@@ -79,9 +79,7 @@ Date NumberFormatterWrapper::getNullDate() const
     }
     else if( m_pNumberFormatter )
     {
-        Date* pDate = m_pNumberFormatter->GetNullDate();
-        if( pDate )
-            aRet = *pDate;
+        aRet = m_pNumberFormatter->GetNullDate();
     }
     return aRet;
 }
@@ -101,13 +99,10 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
     sal_uInt16 nDay = 30,nMonth = 12;
     if ( m_aNullDate.hasValue() )
     {
-        Date* pDate = m_pNumberFormatter->GetNullDate();
-        if ( pDate )
-        {
-            nYear = pDate->GetYear();
-            nMonth = pDate->GetMonth();
-            nDay = pDate->GetDay();
-        } // if ( pDate )
+        const Date& rDate = m_pNumberFormatter->GetNullDate();
+        nYear = rDate.GetYear();
+        nMonth = rDate.GetMonth();
+        nDay = rDate.GetDay();
         util::Date aNewNullDate;
         m_aNullDate >>= aNewNullDate;
         m_pNumberFormatter->ChangeNullDate(aNewNullDate.Day,aNewNullDate.Month,aNewNullDate.Year);

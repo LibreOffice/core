@@ -927,11 +927,8 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& a
         }
         else if (aPropertyName == PROPERTYNAME_NULLDATE)
         {
-            Date* pDate = pFormatter->GetNullDate();
-            if (pDate)
-            {
-                aRet <<= pDate->GetUNODate();
-            }
+            const Date& rDate = pFormatter->GetNullDate();
+            aRet <<= rDate.GetUNODate();
         }
         else if (aPropertyName == PROPERTYNAME_STDDEC)
             aRet <<= (sal_Int16)( pFormatter->GetStandardPrec() );

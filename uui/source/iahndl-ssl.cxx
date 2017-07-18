@@ -120,11 +120,11 @@ getLocalizedDatTimeStr(
     SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( xContext, eUILang );
     OUString      aTmpStr;
     Color*      pColor = nullptr;
-    Date*       pNullDate = pNumberFormatter->GetNullDate();
+    const Date&  rNullDate = pNumberFormatter->GetNullDate();
     sal_uInt32  nFormat
         = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::DATE, eUILang );
 
-    pNumberFormatter->GetOutputString( aDate - *pNullDate, nFormat, aTmpStr, &pColor );
+    pNumberFormatter->GetOutputString( aDate - rNullDate, nFormat, aTmpStr, &pColor );
     aDateTimeStr = aTmpStr + " ";
 
     nFormat = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::TIME, eUILang );

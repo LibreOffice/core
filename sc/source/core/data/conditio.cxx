@@ -1619,11 +1619,11 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
 
     const Date& rActDate = *mpCache;
     SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-    long nCurrentDate = rActDate - *(pFormatter->GetNullDate());
+    long nCurrentDate = rActDate - pFormatter->GetNullDate();
 
     double nVal = rCell.getValue();
     long nCellDate = (long) ::rtl::math::approxFloor(nVal);
-    Date aCellDate = *(pFormatter->GetNullDate());
+    Date aCellDate = pFormatter->GetNullDate();
     aCellDate += (long) ::rtl::math::approxFloor(nVal);
 
     switch(meType)

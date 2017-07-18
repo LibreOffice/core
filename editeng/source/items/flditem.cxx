@@ -479,7 +479,7 @@ OUString SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumbe
             nFormatKey = rFormatter.GetStandardFormat( css::util::NumberFormat::DATE, eLang );
     }
 
-    double fDiffDate = aDate - *(rFormatter.GetNullDate());
+    double fDiffDate = aDate - rFormatter.GetNullDate();
     OUString aStr;
     Color* pColor = nullptr;
     rFormatter.GetOutputString( fDiffDate, nFormatKey, aStr, &pColor );

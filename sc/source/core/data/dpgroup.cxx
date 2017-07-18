@@ -694,7 +694,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
                     // grouped by dates.
                     aCri.mpFilter.reset(
                         new ScDPGroupDateFilter(
-                            aMatchValues, *pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
+                            aMatchValues, pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
                 }
                 else
                 {
@@ -727,7 +727,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
                 aCri.mnFieldIndex = nSrcDim;  // use the source dimension, not the group dimension.
                 aCri.mpFilter.reset(
                     new ScDPGroupDateFilter(
-                        aMatchValues, *pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
+                        aMatchValues, pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
 
                 aNewCriteria.push_back(aCri);
             }

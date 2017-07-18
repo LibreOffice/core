@@ -94,7 +94,7 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     if (!bStrict)
         aDate += nDay - 1;
     if (aDate.IsValidAndGregorian())
-        return (double) (aDate - *(pFormatter->GetNullDate()));
+        return (double) (aDate - pFormatter->GetNullDate());
     else
     {
         SetError(FormulaError::NoValue);
@@ -106,7 +106,7 @@ void ScInterpreter::ScGetActDate()
 {
     nFuncFmtType = css::util::NumberFormat::DATE;
     Date aActDate( Date::SYSTEM );
-    long nDiff = aActDate - *(pFormatter->GetNullDate());
+    long nDiff = aActDate - pFormatter->GetNullDate();
     PushDouble((double) nDiff);
 }
 
@@ -114,7 +114,7 @@ void ScInterpreter::ScGetActTime()
 {
     nFuncFmtType = css::util::NumberFormat::DATETIME;
     Date aActDate( Date::SYSTEM );
-    long nDiff = aActDate - *(pFormatter->GetNullDate());
+    long nDiff = aActDate - pFormatter->GetNullDate();
     tools::Time aActTime( tools::Time::SYSTEM );
     double nTime = aActTime.GetHour()    / static_cast<double>(::tools::Time::hourPerDay)   +
                    aActTime.GetMin()     / static_cast<double>(::tools::Time::minutePerDay) +
@@ -125,21 +125,21 @@ void ScInterpreter::ScGetActTime()
 
 void ScInterpreter::ScGetYear()
 {
-    Date aDate = *(pFormatter->GetNullDate());
+    Date aDate = pFormatter->GetNullDate();
     aDate += (long) GetInt32();
     PushDouble( (double) aDate.GetYear() );
 }
 
 void ScInterpreter::ScGetMonth()
 {
-    Date aDate = *(pFormatter->GetNullDate());
+    Date aDate = pFormatter->GetNullDate();
     aDate += (long) GetInt32();
     PushDouble( (double) aDate.GetMonth() );
 }
 
 void ScInterpreter::ScGetDay()
 {
-    Date aDate = *(pFormatter->GetNullDate());
+    Date aDate = pFormatter->GetNullDate();
     aDate += (long) GetInt32();
     PushDouble((double) aDate.GetDay());
 }
@@ -199,7 +199,7 @@ void ScInterpreter::ScGetDayOfWeek()
         else
             nFlag = 1;
 
-        Date aDate = *(pFormatter->GetNullDate());
+        Date aDate = pFormatter->GetNullDate();
         aDate += (long) GetInt32();
         int nVal = (int) aDate.GetDayOfWeek();  // MONDAY = 0
         switch (nFlag)
@@ -241,7 +241,7 @@ void ScInterpreter::ScWeeknumOOo()
     {
         sal_Int16 nFlag = GetInt16();
 
-        Date aDate = *(pFormatter->GetNullDate());
+        Date aDate = pFormatter->GetNullDate();
         aDate += (long) GetInt32();
         PushInt( (int) aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY ));
     }
@@ -258,7 +258,7 @@ void ScInterpreter::ScGetWeekOfYear()
         else
             nFlag = GetInt16();
 
-        Date aDate = *(pFormatter->GetNullDate());
+        Date aDate = pFormatter->GetNullDate();
         aDate += (long) GetInt32();
 
         sal_Int32 nMinimumNumberOfDaysInWeek;
@@ -301,7 +301,7 @@ void ScInterpreter::ScGetIsoWeekOfYear()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
-        Date aDate = *(pFormatter->GetNullDate());
+        Date aDate = pFormatter->GetNullDate();
         aDate += (long) GetInt32();
         PushInt( (int) aDate.GetWeekOfYear() );
     }
@@ -513,7 +513,7 @@ void ScInterpreter::ScNetWorkdays( bool bOOXML_Version )
     {
         vector<double> nSortArray;
         bool bWeekendMask[ 7 ];
-        Date aNullDate = *( pFormatter->GetNullDate() );
+        Date aNullDate = pFormatter->GetNullDate();
         sal_uInt32 nNullDate = Date::DateToDays( aNullDate.GetDay(), aNullDate.GetMonth(), aNullDate.GetYear() );
         FormulaError nErr;
         if ( bOOXML_Version )
@@ -574,7 +574,7 @@ void ScInterpreter::ScWorkday_MS()
         nFuncFmtType = css::util::NumberFormat::DATE;
         vector<double> nSortArray;
         bool bWeekendMask[ 7 ];
-        Date aNullDate = *( pFormatter->GetNullDate() );
+        Date aNullDate = pFormatter->GetNullDate();
         sal_uInt32 nNullDate = Date::DateToDays( aNullDate.GetDay(), aNullDate.GetMonth(), aNullDate.GetYear() );
         FormulaError nErr = GetWeekendAndHolidayMasks_MS( nParamCount, nNullDate,
                             nSortArray, bWeekendMask, true );
@@ -736,9 +736,9 @@ void ScInterpreter::ScGetDiffDate360()
             }
             else
                 fSign = 1.0;
-            Date aDate1 = *(pFormatter->GetNullDate());
+            Date aDate1 = pFormatter->GetNullDate();
             aDate1 += (long) ::rtl::math::approxFloor(nDate1);
-            Date aDate2 = *(pFormatter->GetNullDate());
+            Date aDate2 = pFormatter->GetNullDate();
             aDate2 += (long) ::rtl::math::approxFloor(nDate2);
             if (aDate1.GetDay() == 31)
                 aDate1 -= (sal_uLong) 1;
@@ -810,12 +810,12 @@ void ScInterpreter::ScGetDateDif()
         // split dates in day, month, year for use with formats other than "d"
         sal_uInt16 d1, m1, d2, m2;
         sal_Int16 y1, y2;
-        Date aDate1( *( pFormatter->GetNullDate()));
+        Date aDate1( pFormatter->GetNullDate());
         aDate1 += nDate1;
         y1 = aDate1.GetYear();
         m1 = aDate1.GetMonth();
         d1 = aDate1.GetDay();
-        Date aDate2( *( pFormatter->GetNullDate()));
+        Date aDate2( pFormatter->GetNullDate());
         aDate2 += nDate2;
         y2 = aDate2.GetYear();
         m2 = aDate2.GetMonth();

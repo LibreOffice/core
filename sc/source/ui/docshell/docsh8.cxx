@@ -966,7 +966,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
                             }
                             else
                             {
-                                Date aDate = *(pNumFmt->GetNullDate());     // tools date
+                                Date aDate = pNumFmt->GetNullDate();        // tools date
                                 aDate += (long)fVal;                        //! approxfloor?
                                 xRowUpdate->updateDate( nCol+1, aDate.GetUNODate() );
                             }

@@ -95,7 +95,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                         SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
                         nFormatIndex = pFormTable->GetStandardFormat(
                                 css::util::NumberFormat::DATE, ScGlobal::eLnge );
-                        nVal = Date( aDate ) - *pFormTable->GetNullDate();
+                        nVal = Date( aDate ) - pFormTable->GetNullDate();
                     }
                     bValue = true;
                 }
@@ -125,7 +125,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
 
                     util::DateTime aStamp = xRow->getTimestamp(nRowPos);
                     nVal = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) -
-                                                *pFormTable->GetNullDate() ) +
+                                                pFormTable->GetNullDate() ) +
                            aStamp.Hours       / static_cast<double>(::tools::Time::hourPerDay)   +
                            aStamp.Minutes     / static_cast<double>(::tools::Time::minutePerDay) +
                            aStamp.Seconds     / static_cast<double>(::tools::Time::secondPerDay) +

@@ -316,7 +316,7 @@ SvNumberFormatter& XclRoot::GetFormatter() const
 
 DateTime XclRoot::GetNullDate() const
 {
-    return *GetFormatter().GetNullDate();
+    return GetFormatter().GetNullDate();
 }
 
 sal_uInt16 XclRoot::GetBaseYear() const

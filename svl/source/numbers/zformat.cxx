@@ -2997,7 +2997,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         case NF_KEY_AMPM:               // AM/PM
             if ( !bCalendarSet )
             {
-                double fDiff = DateTime(*(rScan.GetNullDate())) - GetCal().getEpochStart();
+                double fDiff = DateTime(rScan.GetNullDate()) - GetCal().getEpochStart();
                 fDiff += fNumberOrig;
                 GetCal().setLocalDateTime( fDiff );
                 bCalendarSet = true;
@@ -3454,7 +3454,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     bool bRes = false;
 
     CalendarWrapper& rCal = GetCal();
-    double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
+    double fDiff = DateTime(rScan.GetNullDate()) - rCal.getEpochStart();
     fNumber += fDiff;
     rCal.setLocalDateTime( fNumber );
     int nUseMonthCase = 0; // Not decided yet
@@ -3661,7 +3661,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     bool bRes = false;
 
     CalendarWrapper& rCal = GetCal();
-    double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
+    double fDiff = DateTime(rScan.GetNullDate()) - rCal.getEpochStart();
     fNumber += fDiff;
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();

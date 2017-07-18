@@ -121,9 +121,9 @@ void SwDateTimeField::SetDateTime(const DateTime& rDT)
 double SwDateTimeField::GetDateTime(SwDoc* pDoc, const DateTime& rDT)
 {
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
-    Date* pNullDate = pFormatter->GetNullDate();
+    const Date& rNullDate = pFormatter->GetNullDate();
 
-    double fResult = rDT - DateTime(*pNullDate);
+    double fResult = rDT - DateTime(rNullDate);
 
     return fResult;
 }
@@ -139,11 +139,11 @@ double SwDateTimeField::GetValue() const
 Date SwDateTimeField::GetDate() const
 {
     SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-    Date* pNullDate = pFormatter->GetNullDate();
+    const Date& rNullDate = pFormatter->GetNullDate();
 
     long nVal = static_cast<long>( GetValue() );
 
-    Date aDate = *pNullDate + nVal;
+    Date aDate = rNullDate + nVal;
 
     return aDate;
 }

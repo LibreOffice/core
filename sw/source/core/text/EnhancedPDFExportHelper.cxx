@@ -1595,7 +1595,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             const SwPostItField* pField = static_cast<SwPostItField*>(pFirst->GetField());
                             SvNumberFormatter* pNumFormatter = pDoc->GetNumberFormatter();
                             const Date aDateDiff( pField->GetDate() -
-                                                 *pNumFormatter->GetNullDate() );
+                                                 pNumFormatter->GetNullDate() );
                             const sal_uLong nFormat =
                                 pNumFormatter->GetStandardFormat( css::util::NumberFormat::DATE, pField->GetLanguage() );
                             OUString sDate;

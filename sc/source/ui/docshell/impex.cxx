@@ -1162,7 +1162,7 @@ static bool lcl_PutString(
                 pCalendar->setValue( i18n::CalendarFieldIndex::MILLISECOND, nMilli );
                 if ( pCalendar->isValid() )
                 {
-                    double fDiff = DateTime(*pDocFormatter->GetNullDate()) -
+                    double fDiff = DateTime(pDocFormatter->GetNullDate()) -
                         pCalendar->getEpochStart();
                     // #i14974# must use getLocalDateTime to get the same
                     // date values as set above

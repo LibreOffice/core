@@ -220,9 +220,9 @@ static double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
     SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
     if( pFormatter )
     {
-        Date* pNull = pFormatter->GetNullDate();
+        const Date& rNull = pFormatter->GetNullDate();
         Date aDate( nDate >> 24, (nDate& 0x00FF0000) >> 16, nDate& 0x0000FFFF );
-        nRet = aDate - *pNull;
+        nRet = aDate - rNull;
     }
     return nRet;
 }

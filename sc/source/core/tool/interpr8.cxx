@@ -192,7 +192,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
     // Method: assume there is an month interval and verify.
     // If month interval is used, replace maRange.X with month values
     // for ease of calculations.
-    Date aNullDate = *( mpFormatter->GetNullDate() );
+    Date aNullDate = mpFormatter->GetNullDate();
     Date aDate = aNullDate + static_cast< long >( maRange[ 0 ].X );
     mnMonthDay = aDate.GetDay();
     for ( SCSIZE i = 1; i < mnCount && mnMonthDay; i++ )
@@ -812,7 +812,7 @@ void ScETSForecastCalculation::refill()
 
 double ScETSForecastCalculation::convertXtoMonths( double x )
 {
-    Date aNullDate = *( mpFormatter->GetNullDate() );
+    Date aNullDate = mpFormatter->GetNullDate();
     Date aDate = aNullDate + static_cast< long >( x );
     int nYear = aDate.GetYear();
     int nMonth = aDate.GetMonth();

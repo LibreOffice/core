@@ -80,7 +80,7 @@ public:
     const OUString& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
     const OUString& GetErrorString() const    { return sErrStr; }
 
-    Date* GetNullDate() const                   { return pNullDate; }
+    const Date& GetNullDate() const           { return maNullDate; }
     const OUString& GetStandardName() const
         {
             if ( bKeywordsNeedInit )
@@ -150,7 +150,7 @@ public:
 private: // Private section
     NfKeywordTable sKeyword;                    // Syntax keywords
     Color StandardColor[NF_MAX_DEFAULT_COLORS]; // Standard color array
-    Date* pNullDate;                            // 30Dec1899
+    Date maNullDate;                            // 30Dec1899
     OUString sNameStandardFormat;               // "Standard"
     sal_uInt16 nStandardPrec;                   // Default Precision for Standardformat
     SvNumberFormatter* pFormatter;              // Pointer to the FormatList

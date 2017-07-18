@@ -1136,8 +1136,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                 if(rNumFormatr.GetType(aNumFormat.GetValue()) & css::util::NumberFormat::DATE)
                                 {
                                     ::Date aStandard(1,1,1900);
-                                    if (*rNumFormatr.GetNullDate() != aStandard)
-                                        fVal += (aStandard - *rNumFormatr.GetNullDate());
+                                    if (rNumFormatr.GetNullDate() != aStandard)
+                                        fVal += (aStandard - rNumFormatr.GetNullDate());
                                 }
                                 aTableSet.Put( SwTableBoxValue( fVal ));
                             }
@@ -1370,8 +1370,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                 if(rNumFormatr.GetType(pDBCol->nFormat) & css::util::NumberFormat::DATE)
                                 {
                                     ::Date aStandard(1,1,1900);
-                                    if (*rNumFormatr.GetNullDate() != aStandard)
-                                        nValue += (aStandard - *rNumFormatr.GetNullDate());
+                                    if (rNumFormatr.GetNullDate() != aStandard)
+                                        nValue += (aStandard - rNumFormatr.GetNullDate());
                                 }
                                 rNumFormatr.GetOutputString( nValue,
                                             pDBCol->nFormat,

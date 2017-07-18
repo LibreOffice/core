@@ -395,7 +395,7 @@ void SvNumberFormatter::ChangeNullDate(sal_uInt16 nDay,
     pStringScanner->ChangeNullDate(nDay, nMonth, nYear);
 }
 
-Date* SvNumberFormatter::GetNullDate()
+const Date& SvNumberFormatter::GetNullDate()
 {
     return pFormatScanner->GetNullDate();
 }

@@ -3224,7 +3224,7 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
 
     ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     SvNumberFormatter aFormat( comphelper::getProcessComponentContext(), ScGlobal::eLnge);
-    DBConnector aDB(*pCache, xRowSet, *aFormat.GetNullDate());
+    DBConnector aDB(*pCache, xRowSet, aFormat.GetNullDate());
     if (!aDB.isValid())
         return nullptr;
 
@@ -3327,7 +3327,7 @@ void ScDPCollection::DBCaches::updateCache(
     }
 
     SvNumberFormatter aFormat( comphelper::getProcessComponentContext(), ScGlobal::eLnge);
-    DBConnector aDB(rCache, xRowSet, *aFormat.GetNullDate());
+    DBConnector aDB(rCache, xRowSet, aFormat.GetNullDate());
     if (!aDB.isValid())
         return;
 

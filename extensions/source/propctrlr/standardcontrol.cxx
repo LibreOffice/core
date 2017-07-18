@@ -281,7 +281,7 @@ namespace pcr
             ::DateTime aDateTime( ::DateTime::EMPTY );
             ::utl::typeConvert( aUNODateTime, aDateTime );
 
-            double nValue = aDateTime - ::DateTime( *getTypedControlWindow()->GetFormatter()->GetNullDate() );
+            double nValue = aDateTime - ::DateTime( getTypedControlWindow()->GetFormatter()->GetNullDate() );
             getTypedControlWindow()->SetValue( nValue );
         }
     }
@@ -294,7 +294,7 @@ namespace pcr
         {
             double nValue = getTypedControlWindow()->GetValue();
 
-            ::DateTime aDateTime( *getTypedControlWindow()->GetFormatter()->GetNullDate() );
+            ::DateTime aDateTime( getTypedControlWindow()->GetFormatter()->GetNullDate() );
 
             // add the "days" part
             double nDays = floor( nValue );

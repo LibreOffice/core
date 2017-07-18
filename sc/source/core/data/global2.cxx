@@ -590,7 +590,7 @@ Label_fallback_to_unambiguous:
                                 else
                                 {
                                     if (pFormatter)
-                                        fValue = aDate - *(pFormatter->GetNullDate());
+                                        fValue = aDate - pFormatter->GetNullDate();
                                     else
                                     {
                                         SAL_WARN("sc.core","ScGlobal::ConvertStringToValue - fixed null date");

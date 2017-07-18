@@ -267,7 +267,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if (nCount > 1)
             {
                 double nVal;
-                Date aNullDate = *pDocument->GetFormatTable()->GetNullDate();
+                Date aNullDate = pDocument->GetFormatTable()->GetNullDate();
                 Date aDate1 = aNullDate;
                 nVal = aFirstCell.mfValue;
                 aDate1 += (long)nVal;
@@ -1077,7 +1077,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
     const sal_uInt16 nMaxYear = 9956;
 
     long nInc = (long) nStep;       // upper/lower limits ?
-    Date aNullDate = *pDocument->GetFormatTable()->GetNullDate();
+    Date aNullDate = pDocument->GetFormatTable()->GetNullDate();
     Date aDate = aNullDate;
     aDate += (long)rVal;
     switch (eCmd)

@@ -1070,15 +1070,15 @@ OUString SwDocInfoField::Expand() const
                     if( aAny >>= aDate)
                     {
                         SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
-                        Date* pNullDate = pFormatter->GetNullDate();
-                        sVal = ExpandValue( lcl_DateToDouble<util::Date>( aDate, *pNullDate ), GetFormat(), GetLanguage());
+                        const Date& rNullDate = pFormatter->GetNullDate();
+                        sVal = ExpandValue( lcl_DateToDouble<util::Date>( aDate, rNullDate ), GetFormat(), GetLanguage());
                     }
                     else if( aAny >>= aDateTime )
                     {
                         double fDateTime = lcl_TimeToDouble<util::DateTime>( aDateTime );
                         SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
-                        Date* pNullDate = pFormatter->GetNullDate();
-                        fDateTime += lcl_DateToDouble<util::DateTime>( aDateTime, *pNullDate );
+                        const Date& rNullDate = pFormatter->GetNullDate();
+                        fDateTime += lcl_DateToDouble<util::DateTime>( aDateTime, rNullDate );
                         sVal = ExpandValue( fDateTime, GetFormat(), GetLanguage());
                     }
                     else if( aAny >>= aDuration )

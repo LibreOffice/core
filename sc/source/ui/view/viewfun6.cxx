@@ -280,7 +280,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
             case css::util::NumberFormat::DATE:
                 {
                     Date aActDate( Date::SYSTEM );
-                    fVal = aActDate - *pFormatter->GetNullDate();
+                    fVal = aActDate - pFormatter->GetNullDate();
                     if (nCurNumFormatType == css::util::NumberFormat::DATE)
                         nFormat = nCurNumFormat;
                 }
@@ -300,7 +300,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
             case css::util::NumberFormat::DATETIME:
                 {
                     DateTime aActDateTime( DateTime::SYSTEM );
-                    fVal = aActDateTime - DateTime( *pFormatter->GetNullDate());
+                    fVal = aActDateTime - DateTime( pFormatter->GetNullDate());
                     if (nCurNumFormatType == css::util::NumberFormat::DATETIME)
                         nFormat = nCurNumFormat;
                 }
@@ -353,7 +353,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                             // date, which otherwise would only be possible by
                             // applying a date format.
                             double fDate = rtl::math::approxFloor( fCell);
-                            if (fDate == (Date( Date::SYSTEM) - *pFormatter->GetNullDate()))
+                            if (fDate == (Date( Date::SYSTEM) - pFormatter->GetNullDate()))
                                 bForceReqFmt = true;
                         }
                         break;
@@ -379,7 +379,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                             // zero and date is current date, else force time only.
                             double fDate = rtl::math::approxFloor( fCell);
                             double fTime = fCell - fDate;
-                            if (fTime == 0.0 && fDate == (Date( Date::SYSTEM) - *pFormatter->GetNullDate()))
+                            if (fTime == 0.0 && fDate == (Date( Date::SYSTEM) - pFormatter->GetNullDate()))
                                 nReqFmt = css::util::NumberFormat::DATETIME;
                             else
                                 bForceReqFmt = true;
@@ -400,7 +400,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
             case css::util::NumberFormat::DATE:
                 {
                     Date aActDate( Date::SYSTEM );
-                    fVal = aActDate - *pFormatter->GetNullDate();
+                    fVal = aActDate - pFormatter->GetNullDate();
                 }
                 break;
             case css::util::NumberFormat::TIME:
@@ -423,7 +423,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                         {
                             double fTime = fCell - rtl::math::approxFloor( fCell);
                             Date aActDate( Date::SYSTEM );
-                            fVal = (aActDate - *pFormatter->GetNullDate()) + fTime;
+                            fVal = (aActDate - pFormatter->GetNullDate()) + fTime;
                         }
                         break;
                     default:
@@ -432,7 +432,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                             // Converting the null date to DateTime forces the
                             // correct operator-() to be used, resulting in a
                             // fractional date+time instead of only date value.
-                            fVal = aActDateTime - DateTime( *pFormatter->GetNullDate());
+                            fVal = aActDateTime - DateTime( pFormatter->GetNullDate());
                         }
                 }
                 break;
