@@ -126,8 +126,8 @@ public:
         const HierarchyEntryData& operator*() const;
     };
 
-    bool first( iterator& it );
-    bool next ( iterator& it );
+    bool first( iterator const & it );
+    bool next ( iterator const & it );
 };
 
 } // namespace hierarchy_ucp

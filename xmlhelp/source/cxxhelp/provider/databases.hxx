@@ -104,7 +104,7 @@ namespace chelp {
             css::uno::Sequence< OUString > listAnchor;
             css::uno::Sequence< OUString > listTitle;
 
-            void init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids );
+            void init( Databases const *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids );
         };
 
         explicit KeywordInfo( const std::vector< KeywordElement >& aVector );

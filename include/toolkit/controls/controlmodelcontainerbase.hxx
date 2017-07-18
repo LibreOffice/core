@@ -227,8 +227,8 @@ protected:
     css::uno::Reference< css::awt::XTabController >   mxTabController;
     css::uno::Reference< css::util::XModifyListener > mxListener;
 
-    void        ImplInsertControl( css::uno::Reference< css::awt::XControlModel >& rxModel, const OUString& rName );
-    void        ImplRemoveControl( css::uno::Reference< css::awt::XControlModel >& rxModel );
+    void        ImplInsertControl( css::uno::Reference< css::awt::XControlModel > const & rxModel, const OUString& rName );
+    void        ImplRemoveControl( css::uno::Reference< css::awt::XControlModel > const & rxModel );
     virtual void        ImplSetPosSize( css::uno::Reference< css::awt::XControl >& rxCtrl );
     void        ImplUpdateResourceResolver();
     void        ImplStartListingForResourceEvents();

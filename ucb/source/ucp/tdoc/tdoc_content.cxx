@@ -2165,7 +2165,7 @@ void Content::transfer(
 
 
 //static
-bool Content::hasData( ContentProvider* pProvider, const Uri & rUri )
+bool Content::hasData( ContentProvider const * pProvider, const Uri & rUri )
 {
     if ( rUri.isRoot() )
     {
@@ -2201,7 +2201,7 @@ bool Content::hasData( ContentProvider* pProvider, const Uri & rUri )
 
 
 //static
-bool Content::loadData( ContentProvider* pProvider,
+bool Content::loadData( ContentProvider const * pProvider,
                         const Uri & rUri,
                         ContentProperties& rProps )
 {
@@ -2759,7 +2759,7 @@ uno::Reference< io::XInputStream > Content::getInputStream(
 /// @throws uno::RuntimeException
 static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
                 const OUString & rUri,
-                ContentProvider * pProvider,
+                ContentProvider const * pProvider,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     OUString aPassword;

@@ -605,7 +605,7 @@ KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
     init( pDatabases,pHdf,data );
 }
 
-void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids )
+void KeywordInfo::KeywordElement::init( Databases const *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids )
 {
     const sal_Unicode* idstr = ids.getStr();
     std::vector< OUString > id,anchor;

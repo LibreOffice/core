@@ -97,7 +97,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
     }
 }
 
-void DAVSessionFactory::releaseElement( DAVSession * pElement )
+void DAVSessionFactory::releaseElement( DAVSession const * pElement )
 {
     OSL_ASSERT( pElement );
     osl::MutexGuard aGuard( m_aMutex );

@@ -104,6 +104,8 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
             || name == "compressWheelEvents"
             || name == "MenuBarSignalKey"
             || name == "signalDragDropReceived"
+            || name == "memory_write"
+            || name == "file_write"
                 // UNO component entry points
             || name.endswith("component_getFactory")
                 // in Scheduler::, wants to loop until a reference to a bool becomes true

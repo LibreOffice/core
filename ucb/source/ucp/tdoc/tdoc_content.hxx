@@ -112,10 +112,10 @@ private:
     getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
     virtual OUString getParentURL() override;
 
-    static bool hasData( ContentProvider* pProvider, const Uri & rUri );
+    static bool hasData( ContentProvider const * pProvider, const Uri & rUri );
     bool hasData( const Uri & rUri ) { return hasData( m_pProvider, rUri ); }
 
-    static bool loadData( ContentProvider* pProvider,
+    static bool loadData( ContentProvider const * pProvider,
                           const Uri & rUri,
                           ContentProperties& rProps );
     /// @throws css::ucb::CommandFailedException
