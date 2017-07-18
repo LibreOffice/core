@@ -572,7 +572,7 @@ bool ZipPackageStream::saveChild(
 
     if ( !bUseNonSeekableAccess )
     {
-        xStream = getRawData();
+        xStream = getRawData( false );
 
         if ( !xStream.is() )
         {
@@ -708,7 +708,7 @@ bool ZipPackageStream::saveChild(
         // to get a new version of it as we can't seek backwards.
         if ( IsPackageMember() )
         {
-            xStream = getRawData();
+            xStream = getRawData( false );
             if ( !xStream.is() )
             {
                 // Make sure that we actually _got_ a new one !
@@ -937,13 +937,13 @@ void SAL_CALL ZipPackageStream::setInputStream( const uno::Reference< io::XInput
     m_nStreamMode = PACKAGE_STREAM_DETECT;
 }
 
-uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
+uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData( const bool bUseBufferedStream )
 {
     try
     {
         if ( IsPackageMember() )
         {
-            return m_rZipPackage.getZipFile().getRawData( aEntry, GetEncryptionData(), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef() );
+            return m_rZipPackage.getZipFile().getRawData( aEntry, GetEncryptionData(), m_bIsEncrypted, m_rZipPackage.GetSharedMutexRef(), bUseBufferedStream );
         }
         else if ( GetOwnSeekStream().is() )
         {
