@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_vcl,filter_eps_test))
 
 $(eval $(call gb_CppunitTest_use_components,filter_eps_test,\
     configmgr/source/configmgr \
+    emfio/emfio \
     i18npool/util/i18npool \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
