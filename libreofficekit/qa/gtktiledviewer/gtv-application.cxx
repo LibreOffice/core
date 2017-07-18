@@ -44,13 +44,13 @@ gtv_application_init(GtvApplication* app)
 {
     static const GOptionEntry commandLineOptions[] =
     {
-        { "version", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, nullptr, "Show LOkit version", nullptr },
-        { "lo-path", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, nullptr, "LO path", nullptr },
-        { "user-profile", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, nullptr, "User profile to use", nullptr },
-        { "enable-tiled-annotations", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, nullptr, "Whether tiled annotations should be enabled", nullptr },
-        { "background-color", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_STRING, nullptr, "Background color", nullptr },
-        { "hide-page-shadow", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, nullptr, "Hide page shadow", nullptr },
-        { "hide-whitespace", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, nullptr, "Hide whitespace", nullptr }
+        { "version", 0, 0, G_OPTION_ARG_NONE, nullptr, "Show LOkit version", nullptr },
+        { "lo-path", 0, 0, G_OPTION_ARG_STRING, nullptr, "LO path", nullptr },
+        { "user-profile", 0, 0, G_OPTION_ARG_STRING, nullptr, "User profile to use", nullptr },
+        { "enable-tiled-annotations", 0, 0, G_OPTION_ARG_NONE, nullptr, "Whether tiled annotations should be enabled", nullptr },
+        { "background-color", 0, 0, G_OPTION_ARG_STRING, nullptr, "Background color", nullptr },
+        { "hide-page-shadow", 0, 0, G_OPTION_ARG_NONE, nullptr, "Hide page shadow", nullptr },
+        { "hide-whitespace", 0, 0, G_OPTION_ARG_NONE, nullptr, "Hide whitespace", nullptr }
     };
 
     g_application_add_main_option_entries(G_APPLICATION(app), commandLineOptions);
