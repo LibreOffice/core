@@ -145,7 +145,7 @@ void SwOneExampleFrame::CreateControl()
         pValues[1].Name = "Referer";
         pValues[1].Value <<= OUString("private:user");
         pValues[2].Name = "ReadOnly";
-        pValues[2].Value <<= (sTempURL != cFactory);
+        pValues[2].Value <<= (true);
         uno::Any aArgs;
         aArgs.setValue(&aSeq, cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get());
 
