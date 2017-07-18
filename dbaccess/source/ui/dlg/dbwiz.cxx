@@ -156,6 +156,7 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCur
                 case  ::dbaccess::DST_MSACCESS_2007:
                 case  ::dbaccess::DST_JDBC:
                 case  ::dbaccess::DST_CALC:
+                case  ::dbaccess::DST_WRITER:
                     nNextState = WZS_INVALID_STATE;
                     break;
                 case  ::dbaccess::DST_DBASE:

@@ -77,7 +77,7 @@ private:
     OUString                m_sRM_OracleText;
     OUString                m_sRM_MySQLText;
     OUString                m_sRM_ODBCText;
-    OUString                m_sRM_SpreadSheetText;
+    OUString                m_sRM_DocumentOrSpreadSheetText;
     OUString                m_sRM_AuthentificationText;
     OUString                m_sRM_FinalText;
     INetURLObject           m_aDocURL;

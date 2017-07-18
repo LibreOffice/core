@@ -387,6 +387,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
     const KnownPrefix aKnowPrefixes[] =
     {
         KnownPrefix( "sdbc:calc:",          DST_CALC,               false ),
+        KnownPrefix( "sdbc:writer:",        DST_WRITER,             false ),
         KnownPrefix( "sdbc:flat:",          DST_FLAT,               false ),
         KnownPrefix( "sdbc:odbc:",          DST_ODBC,               false ),
         KnownPrefix( "sdbc:dbase:",         DST_DBASE,              false ),
@@ -435,7 +436,8 @@ void ODsnTypeCollection::fillPageIds(const OUString& _sURL,std::vector<sal_Int16
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_TEXT);
             break;
         case DST_CALC:
-            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_SPREADSHEET);
+        case DST_WRITER:
+            _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_DOCUMENT_OR_SPREADSHEET);
             break;
         case DST_ODBC:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_ODBC);

@@ -474,6 +474,7 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
         case  ::dbaccess::DST_DBASE:
         case  ::dbaccess::DST_FLAT:
         case  ::dbaccess::DST_CALC:
+        case  ::dbaccess::DST_WRITER:
             break;
         case  ::dbaccess::DST_MSACCESS:
         case  ::dbaccess::DST_MSACCESS_2007:

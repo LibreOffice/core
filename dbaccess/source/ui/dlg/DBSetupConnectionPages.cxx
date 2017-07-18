@@ -689,7 +689,7 @@ using namespace ::com::sun::star;
         callModifiedHdl();
     }
 
-    VclPtr<OGenericAdministrationPage> OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
+    VclPtr<OGenericAdministrationPage> OSpreadSheetConnectionPageSetup::CreateDocumentOrSpreadSheetTabPage( vcl::Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return VclPtr<OSpreadSheetConnectionPageSetup>::Create( pParent, _rAttrSet );
     }
