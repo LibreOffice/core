@@ -727,8 +727,7 @@ void XSecController::exportSignature(
             if (!signatureInfo.ouGpgCertificate.isEmpty())
             {
                 pAttributeList = new SvXMLAttributeList();
-                pAttributeList->AddAttribute("xmlns:loext",
-                                             "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0");
+                pAttributeList->AddAttribute("xmlns:loext", NS_LOEXT);
                 /* Write PGPData element */
                 xDocumentHandler->startElement(
                     "PGPData",
