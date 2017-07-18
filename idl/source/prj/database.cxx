@@ -85,7 +85,7 @@ SvRefMemberList<SvMetaType *>& SvIdlDataBase::GetTypeList()
     return aTypeList;
 }
 
-void SvIdlDataBase::SetError( const OString& rError, SvToken& rTok )
+void SvIdlDataBase::SetError( const OString& rError, SvToken const & rTok )
 {
     if( rTok.GetLine() > 10000 )
         aError.SetText( "line count overflow" );

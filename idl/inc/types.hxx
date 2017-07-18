@@ -55,7 +55,7 @@ class SvMetaType : public SvMetaReference
     MetaTypeType                        nType;
     bool                                bIsItem;
 
-    void                WriteSfxItem( const OString& rItemName, SvIdlDataBase & rBase,
+    void                WriteSfxItem( const OString& rItemName, SvIdlDataBase const & rBase,
                                       SvStream & rOutStm );
 protected:
     bool                ReadHeaderSvIdl( SvTokenStream & rInStm );

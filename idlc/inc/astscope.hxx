@@ -54,7 +54,7 @@ public:
     // Look up a predefined type by its ExprType
     AstDeclaration* lookupPrimitiveType(ExprType type);
 
-    AstDeclaration* lookupForAdd(AstDeclaration* pDecl);
+    AstDeclaration* lookupForAdd(AstDeclaration const * pDecl);
 
 protected:
     AstDeclaration const * getLast() const
