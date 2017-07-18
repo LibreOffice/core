@@ -485,7 +485,7 @@ private:
     }
 };
 
-static void ImplSetStoredData( ZipEntry & rEntry, uno::Reference< io::XInputStream> & rStream )
+static void ImplSetStoredData( ZipEntry & rEntry, uno::Reference< io::XInputStream> const & rStream )
 {
     // It's very annoying that we have to do this, but lots of zip packages
     // don't allow data descriptors for STORED streams, meaning we have to
@@ -883,7 +883,7 @@ bool ZipPackageStream::saveChild(
     return bSuccess;
 }
 
-void ZipPackageStream::successfullyWritten( ZipEntry *pEntry )
+void ZipPackageStream::successfullyWritten( ZipEntry const *pEntry )
 {
     if ( !IsPackageMember() )
     {

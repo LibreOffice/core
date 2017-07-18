@@ -259,7 +259,7 @@ struct OStorage_Impl
 
     void RemoveStreamRelInfo( const OUString& aOriginalName );
     void CreateRelStorage();
-    void CommitStreamRelInfo( SotElement_Impl* pStreamElement );
+    void CommitStreamRelInfo( SotElement_Impl const * pStreamElement );
     css::uno::Reference< css::io::XInputStream > GetRelInfoStreamForName( const OUString& aName );
     void CommitRelInfo( const css::uno::Reference< css::container::XNameContainer >& xNewPackageFolder );
 
