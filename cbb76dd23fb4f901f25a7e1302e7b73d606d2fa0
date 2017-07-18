@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_aa40bf57",
+        "filename": "include/LibreOfficeKit/LibreOfficeKitEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-18T09:58:48Z",
+      "side": 1,
+      "message": "I understand that this is still WIP, but don\u0027t forget to add the documentation here.",
+      "revId": "cbb76dd23fb4f901f25a7e1302e7b73d606d2fa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_8a3b03eb",
+        "filename": "include/svx/ruler.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-18T09:58:48Z",
+      "side": 1,
+      "message": "I think the convention is to capitalize the enum names. So, RulerChangeType",
+      "revId": "cbb76dd23fb4f901f25a7e1302e7b73d606d2fa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6a36d704",
+        "filename": "svtools/source/control/ruler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-18T09:58:48Z",
+      "side": 1,
+      "message": "No need to call it GetnPageWidth really; GetPageWidth is fine. Let\u0027s keep how it is for other functions around.",
+      "range": {
+        "startLine": 2681,
+        "startChar": 15,
+        "endLine": 2681,
+        "endChar": 16
+      },
+      "revId": "cbb76dd23fb4f901f25a7e1302e7b73d606d2fa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
