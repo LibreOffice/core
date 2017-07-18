@@ -444,7 +444,7 @@ void ErrorHandler::error2(
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::error3(ErrorCode e, AstDeclaration* d1, AstDeclaration* d2, AstDeclaration* d3)
+void ErrorHandler::error3(ErrorCode e, AstDeclaration const * d1, AstDeclaration const * d2, AstDeclaration const * d3)
 {
     errorHeader(e);
     fprintf(stderr, "'%s', '%s', '%s'\n", d1->getScopedName().getStr(),
@@ -528,11 +528,11 @@ char const * nodeTypeName(NodeType nodeType) {
 
 }
 
-void ErrorHandler::inheritanceError(NodeType nodeType, const OString* name, AstDeclaration* pDecl)
+void ErrorHandler::inheritanceError(NodeType nodeType, const OString* name, AstDeclaration const * pDecl)
 {
     if ( nodeType == NT_interface &&
          (pDecl->getNodeType() == NT_interface) &&
-         !(static_cast<AstInterface*>(pDecl)->isDefined()) )
+         !(static_cast<AstInterface const *>(pDecl)->isDefined()) )
     {
         errorHeader(ErrorCode::CannotInheritFromForward);
         fprintf(stderr, "interface '%s' cannot inherit from forward declared interface '%s'\n",
@@ -556,7 +556,7 @@ void ErrorHandler::forwardLookupError(const AstDeclaration* pForward,
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::constantExpected(AstDeclaration* pDecl,
+void ErrorHandler::constantExpected(AstDeclaration const * pDecl,
                                     const OString& name)
 {
     errorHeader(ErrorCode::ExpectedConstant);

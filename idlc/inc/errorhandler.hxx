@@ -80,7 +80,7 @@ public:
     static void error1(ErrorCode e, AstDeclaration const * d);
     static void error2(
         ErrorCode e, AstDeclaration const * d1, AstDeclaration const * d2);
-    static void error3(ErrorCode e, AstDeclaration* d1, AstDeclaration* d2, AstDeclaration* d3);
+    static void error3(ErrorCode e, AstDeclaration const * d1, AstDeclaration const * d2, AstDeclaration const * d3);
 
     // Warning
     static void warning0(WarningCode e, const sal_Char* warningmsg);
@@ -100,13 +100,13 @@ public:
     // Report a type error
     static void noTypeError(AstDeclaration const * pDecl);
 
-    static void inheritanceError(NodeType nodeType, const OString* name, AstDeclaration* pDecl);
+    static void inheritanceError(NodeType nodeType, const OString* name, AstDeclaration const * pDecl);
 
     static void flagError(ErrorCode e, sal_uInt32 flag);
 
     static void forwardLookupError(const AstDeclaration* pForward, const OString& name);
 
-    static void constantExpected(AstDeclaration* pDecl, const OString& name);
+    static void constantExpected(AstDeclaration const * pDecl, const OString& name);
 
     static void evalError(AstExpression* pExpr);
 

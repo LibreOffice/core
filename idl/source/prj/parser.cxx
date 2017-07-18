@@ -476,7 +476,7 @@ SvMetaType * SvIdlParser::ReadKnownType()
     throw SvParseException( rInStm, "wrong typedef: ");
 }
 
-bool SvIdlParser::ReadIfBoolAttribute( SvBOOL& rBool, SvStringHashEntry * pName )
+bool SvIdlParser::ReadIfBoolAttribute( SvBOOL& rBool, SvStringHashEntry const * pName )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken& rTok = rInStm.GetToken_Next();
@@ -499,7 +499,7 @@ bool SvIdlParser::ReadIfBoolAttribute( SvBOOL& rBool, SvStringHashEntry * pName 
     return false;
 }
 
-bool SvIdlParser::ReadIfIdAttribute( SvIdentifier& rIdentifier, SvStringHashEntry * pName )
+bool SvIdlParser::ReadIfIdAttribute( SvIdentifier& rIdentifier, SvStringHashEntry const * pName )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken& rTok = rInStm.GetToken_Next();
@@ -572,14 +572,14 @@ bool SvIdlParser::ReadIf(char cChar)
     return false;
 }
 
-void SvIdlParser::Read(SvStringHashEntry* entry)
+void SvIdlParser::Read(SvStringHashEntry const * entry)
 {
     if( !rInStm.GetToken().Is(entry) )
         throw SvParseException("expected " + entry->GetName(), rInStm.GetToken());
     rInStm.GetToken_Next();
 }
 
-bool SvIdlParser::ReadIf(SvStringHashEntry* entry)
+bool SvIdlParser::ReadIf(SvStringHashEntry const * entry)
 {
     if( rInStm.GetToken().Is(entry) )
     {

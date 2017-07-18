@@ -55,9 +55,9 @@ public:
     // friend functions
     friend FileStream &operator<<(FileStream& o, sal_uInt32 i);
     friend FileStream &operator<<(FileStream& o, char const * s);
-    friend FileStream &operator<<(FileStream& o, ::rtl::OString* s);
+    friend FileStream &operator<<(FileStream& o, ::rtl::OString const * s);
     friend FileStream &operator<<(FileStream& o, const ::rtl::OString& s);
-    friend FileStream &operator<<(FileStream& o, ::rtl::OStringBuffer* s);
+    friend FileStream &operator<<(FileStream& o, ::rtl::OStringBuffer const * s);
     friend FileStream &operator<<(FileStream& o, const ::rtl::OStringBuffer& s);
     friend FileStream & operator <<(FileStream & out, rtl::OUString const & s);
 

@@ -218,7 +218,7 @@ sal_uLong SvMetaType::MakeSfx( OStringBuffer& rAttrArray )
 }
 
 void SvMetaType::WriteSfxItem(
-    const OString& rItemName, SvIdlDataBase& rBase, SvStream& rOutStm )
+    const OString& rItemName, SvIdlDataBase const & rBase, SvStream& rOutStm )
 {
     WriteStars( rOutStm );
     OString aVarName = " a" + rItemName + "_Impl";

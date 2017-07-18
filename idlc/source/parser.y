@@ -66,7 +66,7 @@ using ::rtl::OStringBuffer;
 extern int yylex(void);
 void yyerror(char const *);
 
-void checkIdentifier(::rtl::OString* id)
+void checkIdentifier(::rtl::OString const * id)
 {
     static short check = 0;
     if (check == 0) {
