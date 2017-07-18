@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_e56598e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-18T11:28:41Z",
+      "side": 1,
+      "message": "Btw, the convention we use is now tdf#... for bugs in our own bug tracker. fdo#... is the FreeDesktop.Org one (of which all LibreOffice relevant bugs are replicated in the TDF one).",
+      "revId": "b0210c34dcaa5fc44956078ffa1dfe734d379224",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
