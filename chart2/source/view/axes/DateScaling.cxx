@@ -59,7 +59,7 @@ double SAL_CALL DateScaling::doScaling( double value )
     else
     {
         Date aDate(m_aNullDate);
-        aDate += static_cast<long>(::rtl::math::approxFloor(value));
+        aDate += static_cast<sal_Int32>(::rtl::math::approxFloor(value));
         switch( m_nTimeUnit )
         {
             case DAY:

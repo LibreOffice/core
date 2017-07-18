@@ -1861,7 +1861,7 @@ bool ChartView::getExplicitValuesForAxis(
             //remove 'one' from max
             if( rExplicitScale.AxisType == css::chart2::AxisType::DATE )
             {
-                Date aMaxDate(rExplicitScale.NullDate); aMaxDate += static_cast<long>(::rtl::math::approxFloor(rExplicitScale.Maximum));
+                Date aMaxDate(rExplicitScale.NullDate); aMaxDate += static_cast<sal_Int32>(::rtl::math::approxFloor(rExplicitScale.Maximum));
                 //for explicit scales with shifted categories we need one interval more
                 switch( rExplicitScale.TimeResolution )
                 {

@@ -270,10 +270,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 Date aNullDate = pDocument->GetFormatTable()->GetNullDate();
                 Date aDate1 = aNullDate;
                 nVal = aFirstCell.mfValue;
-                aDate1 += (long)nVal;
+                aDate1 += static_cast<sal_Int32>(nVal);
                 Date aDate2 = aNullDate;
                 nVal = GetValue(nCol+nAddX, nRow+nAddY);
-                aDate2 += (long)nVal;
+                aDate2 += static_cast<sal_Int32>(nVal);
                 if ( aDate1 != aDate2 )
                 {
                     long nCmpInc = 0;
@@ -301,7 +301,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if (aCell.meType == CELLTYPE_VALUE)
                         {
                             nVal = aCell.mfValue;
-                            aDate2 = aNullDate + (long) nVal;
+                            aDate2 = aNullDate + static_cast<sal_Int32>(nVal);
                             if ( eType == FILL_DAY )
                             {
                                 if ( aDate2-aDate1 != nCmpInc )
@@ -1079,7 +1079,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
     long nInc = (long) nStep;       // upper/lower limits ?
     Date aNullDate = pDocument->GetFormatTable()->GetNullDate();
     Date aDate = aNullDate;
-    aDate += (long)rVal;
+    aDate += static_cast<sal_Int32>(rVal);
     switch (eCmd)
     {
         case FILL_WEEKDAY:

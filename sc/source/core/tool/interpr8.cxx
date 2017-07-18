@@ -193,11 +193,11 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
     // If month interval is used, replace maRange.X with month values
     // for ease of calculations.
     Date aNullDate = mpFormatter->GetNullDate();
-    Date aDate = aNullDate + static_cast< long >( maRange[ 0 ].X );
+    Date aDate = aNullDate + static_cast< sal_Int32 >( maRange[ 0 ].X );
     mnMonthDay = aDate.GetDay();
     for ( SCSIZE i = 1; i < mnCount && mnMonthDay; i++ )
     {
-        Date aDate1 = aNullDate + static_cast< long >( maRange[ i ].X );
+        Date aDate1 = aNullDate + static_cast< sal_Int32 >( maRange[ i ].X );
         if ( aDate != aDate1 )
         {
             if ( aDate1.GetDay() != mnMonthDay )
@@ -210,7 +210,7 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
     {
         for ( SCSIZE i = 0; i < mnCount; i++ )
         {
-            aDate = aNullDate + static_cast< long >( maRange[ i ].X );
+            aDate = aNullDate + static_cast< sal_Int32 >( maRange[ i ].X );
             maRange[ i ].X = aDate.GetYear() * 12 + aDate.GetMonth();
         }
     }
@@ -332,13 +332,13 @@ bool ScETSForecastCalculation::PreprocessDataRange( const ScMatrixRef& rMatX, co
         SCSIZE nMissingXCount = 0;
         double fOriginalCount = static_cast< double >( mnCount );
         if ( mnMonthDay )
-            aDate = aNullDate + static_cast< long >( maRange[ 0 ].X );
+            aDate = aNullDate + static_cast< sal_Int32 >( maRange[ 0 ].X );
         for ( SCSIZE i = 1; i < mnCount; i++ )
         {
             double fDist;
             if ( mnMonthDay )
             {
-                Date aDate1 = aNullDate + static_cast< long >( maRange[ i ].X );
+                Date aDate1 = aNullDate + static_cast< sal_Int32 >( maRange[ i ].X );
                 fDist = 12 * ( aDate1.GetYear() - aDate.GetYear() ) +
                          ( aDate1.GetMonth() - aDate.GetMonth() );
                 aDate = aDate1;
@@ -812,7 +812,7 @@ void ScETSForecastCalculation::refill()
 
 double ScETSForecastCalculation::convertXtoMonths( double x )
 {
-    Date aDate = mpFormatter->GetNullDate() + static_cast< long >( x );
+    Date aDate = mpFormatter->GetNullDate() + static_cast< sal_Int32 >( x );
     int nYear = aDate.GetYear();
     int nMonth = aDate.GetMonth();
     double fMonthLength;

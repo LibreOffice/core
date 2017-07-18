@@ -1619,12 +1619,12 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
 
     const Date& rActDate = *mpCache;
     SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-    long nCurrentDate = rActDate - pFormatter->GetNullDate();
+    sal_Int32 nCurrentDate = rActDate - pFormatter->GetNullDate();
 
     double nVal = rCell.getValue();
-    long nCellDate = (long) ::rtl::math::approxFloor(nVal);
+    sal_Int32 nCellDate = static_cast<sal_Int32>(::rtl::math::approxFloor(nVal));
     Date aCellDate = pFormatter->GetNullDate();
-    aCellDate += (long) ::rtl::math::approxFloor(nVal);
+    aCellDate += static_cast<sal_Int32>(::rtl::math::approxFloor(nVal));
 
     switch(meType)
     {
@@ -1647,8 +1647,8 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
         case condformat::LASTWEEK:
             if( rActDate.GetDayOfWeek() != SUNDAY )
             {
-                Date aBegin(rActDate - 8 - static_cast<long>(rActDate.GetDayOfWeek()));
-                Date aEnd(rActDate - 2 -static_cast<long>(rActDate.GetDayOfWeek()));
+                Date aBegin(rActDate - 8 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()));
+                Date aEnd(rActDate - 2 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()));
                 return aCellDate.IsBetween( aBegin, aEnd );
             }
             else
@@ -1661,8 +1661,8 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
         case condformat::THISWEEK:
             if( rActDate.GetDayOfWeek() != SUNDAY )
             {
-                Date aBegin(rActDate - 1 - static_cast<long>(rActDate.GetDayOfWeek()));
-                Date aEnd(rActDate + 5 - static_cast<long>(rActDate.GetDayOfWeek()));
+                Date aBegin(rActDate - 1 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()));
+                Date aEnd(rActDate + 5 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()));
                 return aCellDate.IsBetween( aBegin, aEnd );
             }
             else
@@ -1674,7 +1674,7 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
         case condformat::NEXTWEEK:
             if( rActDate.GetDayOfWeek() != SUNDAY )
             {
-                return aCellDate.IsBetween( rActDate + 6 - static_cast<long>(rActDate.GetDayOfWeek()), rActDate + 12 - static_cast<long>(rActDate.GetDayOfWeek()) );
+                return aCellDate.IsBetween( rActDate + 6 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()), rActDate + 12 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()) );
             }
             else
             {
