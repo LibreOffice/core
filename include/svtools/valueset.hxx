@@ -246,7 +246,7 @@ private:
 
     SVT_DLLPRIVATE void         ImplInitScrollBar();
     SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext& rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
+    SVT_DLLPRIVATE void         ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSetItem* pItem, tools::Rectangle aRect);
     SVT_DLLPRIVATE void         ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUString& rStr);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nItemId, const bool bFocus, const bool bDrawSel);
     SVT_DLLPRIVATE void         ImplDrawSelect(vcl::RenderContext& rRenderContext);
@@ -376,7 +376,7 @@ public:
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
 
-    void            Format(vcl::RenderContext& rRenderContext);
+    void            Format(vcl::RenderContext const & rRenderContext);
     void            SetFormat();
 
     void            StartSelection();

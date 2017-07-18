@@ -106,7 +106,7 @@ namespace svt
             */
             virtual void SAL_CALL disposing() override;
 
-            static void resetPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+            static void resetPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             virtual void impl_setPopupMenu();
             static OUString determineBaseURL( const OUString& aURL );
 

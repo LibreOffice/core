@@ -118,8 +118,8 @@ private:
 
     void disposeControl();
 
-    bool onEditingEntry( UnoTreeListEntry* pEntry );
-    bool onEditedEntry( UnoTreeListEntry* pEntry, const OUString& rNewText );
+    bool onEditingEntry( UnoTreeListEntry const * pEntry );
+    bool onEditedEntry( UnoTreeListEntry const * pEntry, const OUString& rNewText );
 
     void fillTree( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeDataModel >& xDataModel );
     void addNode( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParentEntry );
@@ -128,8 +128,8 @@ private:
     void updateEntry( UnoTreeListEntry* pEntry );
 
     void updateTree( const css::awt::tree::TreeDataModelEvent& rEvent );
-    void updateNode( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xNode );
-    void updateChildNodes( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry );
+    void updateNode( UnoTreeListBoxImpl const & rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xNode );
+    void updateChildNodes( UnoTreeListBoxImpl const & rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry );
 
     static OUString getEntryString( const css::uno::Any& rValue );
 
@@ -149,7 +149,7 @@ private:
     void onChangeRootDisplayed( bool bIsRootDisplayed );
 
     void addEntry( UnoTreeListEntry* pEntry );
-    void removeEntry( UnoTreeListEntry* pEntry );
+    void removeEntry( UnoTreeListEntry const * pEntry );
 
     bool loadImage( const OUString& rURL, Image& rImage );
 

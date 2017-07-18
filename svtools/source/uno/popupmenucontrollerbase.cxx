@@ -74,7 +74,7 @@ void PopupMenuControllerBase::throwIfDisposed()
 }
 
 // protected function
-void PopupMenuControllerBase::resetPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu )
+void PopupMenuControllerBase::resetPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     if ( rPopupMenu.is() && rPopupMenu->getItemCount() > 0 )
     {

@@ -102,7 +102,7 @@ void SvTreeList::InsertView( SvListView* pView )
     nRefCount++;
 }
 
-void SvTreeList::RemoveView( SvListView* pView )
+void SvTreeList::RemoveView( SvListView const * pView )
 {
     for ( ListViewsType::iterator it = aViewList.begin(); it != aViewList.end(); ++it )
     {
@@ -602,7 +602,7 @@ SvTreeListEntry* SvTreeList::Last() const
     return pEntry;
 }
 
-sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvTreeListEntry* pEntry ) const
+sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvTreeListEntry const * pEntry ) const
 {
     DBG_ASSERT(pView&&pEntry,"View/Entry?");
 
@@ -1586,7 +1586,7 @@ void SvTreeList::ReverseChildren( SvTreeListEntry* pParent )
     SetListPositions(pParent->m_Children); // correct list position in target list
 }
 
-void SvTreeList::GetInsertionPos( SvTreeListEntry* pEntry, SvTreeListEntry* pParent,
+void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntry* pParent,
     sal_uLong& rPos )
 {
     DBG_ASSERT(pEntry,"No Entry");

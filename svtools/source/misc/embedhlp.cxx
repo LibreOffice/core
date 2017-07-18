@@ -448,7 +448,7 @@ const Graphic* EmbeddedObjectRef::GetGraphic() const
     return mpImpl->pGraphic.get();
 }
 
-Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
+Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
 {
     MapMode aSourceMapMode( MapUnit::Map100thMM );
     Size aResult;

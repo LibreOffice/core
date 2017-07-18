@@ -233,7 +233,7 @@ struct ImplTabBarItem
         return maTabBgColor == Color(COL_AUTO);
     }
 
-    bool IsSelected(ImplTabBarItem* pCurItem) const
+    bool IsSelected(ImplTabBarItem const * pCurItem) const
     {
         return mbSelect || (pCurItem == this);
     }

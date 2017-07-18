@@ -682,7 +682,7 @@ private:
     SVT_DLLPRIVATE void ImplInit( WinBits nWinBits );
     SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SVT_DLLPRIVATE void ImplCalc();
-    SVT_DLLPRIVATE void ImplFormat(vcl::RenderContext& rRenderContext);
+    SVT_DLLPRIVATE void ImplFormat(vcl::RenderContext const & rRenderContext);
     SVT_DLLPRIVATE void ImplInitExtraField( bool bUpdate );
     SVT_DLLPRIVATE void ImplInvertLines(vcl::RenderContext& rRenderContext);
     SVT_DLLPRIVATE void ImplDraw(vcl::RenderContext& rRenderContext);

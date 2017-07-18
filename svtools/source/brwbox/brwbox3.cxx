@@ -44,7 +44,7 @@ namespace svt
                                             AccessibleBrowseBoxObjType _eType,
                                             const Reference< XAccessible >& _rParent,
                                             BrowseBox& _rBrowseBox,
-                                            IAccessibleFactory& rFactory
+                                            IAccessibleFactory const & rFactory
                                           )
     {
         Reference< XAccessible > xRet;

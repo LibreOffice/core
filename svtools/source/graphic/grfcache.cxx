@@ -407,7 +407,7 @@ private:
     DrawModeFlags               mnOutDevDrawMode;
     sal_uInt16                  mnOutDevBitCount;
 
-    static bool IsCacheableAsBitmap( const GDIMetaFile& rMtf, OutputDevice* pOut, const Size& rSz );
+    static bool IsCacheableAsBitmap( const GDIMetaFile& rMtf, OutputDevice const * pOut, const Size& rSz );
 
     // Copy assignment is forbidden and not implemented.
     GraphicDisplayCacheEntry (const GraphicDisplayCacheEntry &) = delete;
@@ -415,7 +415,7 @@ private:
 
 public:
 
-    static sal_uLong                GetNeededSize( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    static sal_uLong                GetNeededSize( OutputDevice const * pOut, const Point& rPt, const Size& rSz,
                                                const GraphicObject& rObj, const GraphicAttr& rAttr );
 
 public:
@@ -455,7 +455,7 @@ public:
     void                        SetReleaseTime( const ::salhelper::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
     const ::salhelper::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }
 
-    bool                        Matches( OutputDevice* pOut, const Point& /*rPtPixel*/, const Size& rSzPixel,
+    bool                        Matches( OutputDevice const * pOut, const Point& /*rPtPixel*/, const Size& rSzPixel,
                                          const GraphicCacheEntry* pCacheEntry, const GraphicAttr& rAttr ) const
                                 {
                                     // #i46805# Additional match
@@ -510,7 +510,7 @@ static void checkMetadataBitmap( const BitmapEx& rBmpEx,
 // ImplCreateOutput() would use the optimization of using the single bitmap.
 // If you do changes here, change the original function too.
 bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
-    OutputDevice* pOut, const Size& rSz )
+    OutputDevice const * pOut, const Size& rSz )
 {
     const Size aNewSize( rMtf.GetPrefSize() );
     GDIMetaFile rOutMtf = rMtf;
@@ -757,7 +757,7 @@ bool GraphicDisplayCacheEntry::IsCacheableAsBitmap( const GDIMetaFile& rMtf,
     return nNumBitmaps == 1 && !bNonBitmapActionEncountered;
 }
 
-sal_uLong GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& /*rPt*/, const Size& rSz,
+sal_uLong GraphicDisplayCacheEntry::GetNeededSize( OutputDevice const * pOut, const Point& /*rPt*/, const Size& rSz,
                                                const GraphicObject& rObj, const GraphicAttr& rAttr )
 {
     const Graphic&      rGraphic = rObj.GetGraphic();
@@ -1061,14 +1061,14 @@ void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
     }
 }
 
-bool GraphicCache::IsDisplayCacheable( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicCache::IsDisplayCacheable( OutputDevice const * pOut, const Point& rPt, const Size& rSz,
                                        const GraphicObject& rObj, const GraphicAttr& rAttr ) const
 {
     return( GraphicDisplayCacheEntry::GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) <=
             GetMaxObjDisplayCacheSize() );
 }
 
-bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicCache::IsInDisplayCache( OutputDevice const * pOut, const Point& rPt, const Size& rSz,
                                      const GraphicObject& rObj, const GraphicAttr& rAttr ) const
 {
     const Point                 aPtPixel( pOut->LogicToPixel( rPt ) );

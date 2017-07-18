@@ -91,7 +91,7 @@ public:
     sal_uLong               GetCacheTimeout() const { return mnReleaseTimeoutSeconds; }
 
     bool                IsDisplayCacheable(
-                                OutputDevice* pOut,
+                                OutputDevice const * pOut,
                                 const Point& rPt,
                                 const Size& rSz,
                                 const GraphicObject& rObj,
@@ -99,7 +99,7 @@ public:
                             ) const;
 
     bool                IsInDisplayCache(
-                                OutputDevice* pOut,
+                                OutputDevice const * pOut,
                                 const Point& rPt,
                                 const Size& rSz,
                                 const GraphicObject& rObj,

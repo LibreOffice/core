@@ -73,7 +73,7 @@ void GraphicManager::SetCacheTimeout( sal_uLong nTimeoutSeconds )
     mpCache->SetCacheTimeout( nTimeoutSeconds );
 }
 
-bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
+bool GraphicManager::IsInCache( OutputDevice const * pOut, const Point& rPt,
                                     const Size& rSz, const GraphicObject& rObj,
                                     const GraphicAttr& rAttr ) const
 {
@@ -81,7 +81,7 @@ bool GraphicManager::IsInCache( OutputDevice* pOut, const Point& rPt,
 }
 
 bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                              GraphicObject& rObj, const GraphicAttr& rAttr,
+                              GraphicObject const & rObj, const GraphicAttr& rAttr,
                               const GraphicManagerDrawFlags nFlags, bool& rCached )
 {
     Point   aPt( rPt );
@@ -178,7 +178,7 @@ namespace
 {
     struct simpleSortByDataChangeTimeStamp
     {
-        bool operator() (GraphicObject* p1, GraphicObject* p2) const
+        bool operator() (GraphicObject const * p1, GraphicObject const * p2) const
         {
             return p1->GetDataChangeTimeStamp() < p2->GetDataChangeTimeStamp();
         }
@@ -230,7 +230,7 @@ void GraphicManager::ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj )
 }
 
 bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
-                               const Size& rSz, GraphicObject& rObj,
+                               const Size& rSz, GraphicObject const & rObj,
                                const GraphicAttr& rAttr,
                                bool& rCached )
 {

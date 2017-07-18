@@ -71,7 +71,7 @@ public:
                                     const SvtScriptedTextHelper_Impl& _rCopy );
 
                                 /** Sets new fonts and recalculates the text width. */
-    void                        SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont );
+    void                        SetFonts( vcl::Font const * _pLatinFont, vcl::Font const * _pAsianFont, vcl::Font const * _pCmplxFont );
                                 /** Sets a new text and calculates all script breaks and the text width. */
     void                        SetText(
                                     const OUString& _rText,
@@ -242,7 +242,7 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
     CalculateSizes();
 }
 
-void SvtScriptedTextHelper_Impl::SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont )
+void SvtScriptedTextHelper_Impl::SetFonts( vcl::Font const * _pLatinFont, vcl::Font const * _pAsianFont, vcl::Font const * _pCmplxFont )
 {
     maLatinFont = _pLatinFont ? *_pLatinFont : maDefltFont;
     maAsianFont = _pAsianFont ? *_pAsianFont : maDefltFont;
@@ -304,7 +304,7 @@ SvtScriptedTextHelper::~SvtScriptedTextHelper()
 {
 }
 
-void SvtScriptedTextHelper::SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont )
+void SvtScriptedTextHelper::SetFonts( vcl::Font const * _pLatinFont, vcl::Font const * _pAsianFont, vcl::Font const * _pCmplxFont )
 {
     mpImpl->SetFonts( _pLatinFont, _pAsianFont, _pCmplxFont );
 }
