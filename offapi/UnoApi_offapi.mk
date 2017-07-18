@@ -1590,7 +1590,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/xml,\
 	XMLImportFilter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/xml/crypto,\
-	XMLEncryption \
 	XMLSignature \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/xml/input,\
