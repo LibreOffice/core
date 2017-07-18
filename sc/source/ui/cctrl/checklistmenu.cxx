@@ -1435,7 +1435,7 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
 
     // Convert the numeric date value to a date object.
     Date aDate = pFormatter->GetNullDate();
-    aDate += static_cast<long>(rtl::math::approxFloor(nVal));
+    aDate += static_cast<sal_Int32>(rtl::math::approxFloor(nVal));
 
     sal_Int16 nYear = aDate.GetYear();
     sal_uInt16 nMonth = aDate.GetMonth();

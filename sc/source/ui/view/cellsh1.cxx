@@ -691,9 +691,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             const Date& rNullDate = pDoc->GetFormatTable()->GetNullDate();
                             Date aStartDate = rNullDate;
-                            aStartDate+= (long)fStartVal;
+                            aStartDate += static_cast<sal_Int32>(fStartVal);
                             Date aEndDate = rNullDate;
-                            aEndDate+= (long)fInputEndVal;
+                            aEndDate += static_cast<sal_Int32>(fInputEndVal);
                             double fTempDate=0;
 
                             if(aStartDate.GetYear()!=aEndDate.GetYear())

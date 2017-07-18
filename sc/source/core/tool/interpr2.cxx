@@ -126,21 +126,21 @@ void ScInterpreter::ScGetActTime()
 void ScInterpreter::ScGetYear()
 {
     Date aDate = pFormatter->GetNullDate();
-    aDate += (long) GetInt32();
+    aDate += GetInt32();
     PushDouble( (double) aDate.GetYear() );
 }
 
 void ScInterpreter::ScGetMonth()
 {
     Date aDate = pFormatter->GetNullDate();
-    aDate += (long) GetInt32();
+    aDate += GetInt32();
     PushDouble( (double) aDate.GetMonth() );
 }
 
 void ScInterpreter::ScGetDay()
 {
     Date aDate = pFormatter->GetNullDate();
-    aDate += (long) GetInt32();
+    aDate += GetInt32();
     PushDouble((double) aDate.GetDay());
 }
 
@@ -200,7 +200,7 @@ void ScInterpreter::ScGetDayOfWeek()
             nFlag = 1;
 
         Date aDate = pFormatter->GetNullDate();
-        aDate += (long) GetInt32();
+        aDate += GetInt32();
         int nVal = (int) aDate.GetDayOfWeek();  // MONDAY = 0
         switch (nFlag)
         {
@@ -242,7 +242,7 @@ void ScInterpreter::ScWeeknumOOo()
         sal_Int16 nFlag = GetInt16();
 
         Date aDate = pFormatter->GetNullDate();
-        aDate += (long) GetInt32();
+        aDate += GetInt32();
         PushInt( (int) aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY ));
     }
 }
@@ -259,7 +259,7 @@ void ScInterpreter::ScGetWeekOfYear()
             nFlag = GetInt16();
 
         Date aDate = pFormatter->GetNullDate();
-        aDate += (long) GetInt32();
+        aDate += GetInt32();
 
         sal_Int32 nMinimumNumberOfDaysInWeek;
         DayOfWeek eFirstDayOfWeek;
@@ -302,7 +302,7 @@ void ScInterpreter::ScGetIsoWeekOfYear()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         Date aDate = pFormatter->GetNullDate();
-        aDate += (long) GetInt32();
+        aDate += GetInt32();
         PushInt( (int) aDate.GetWeekOfYear() );
     }
 }
@@ -737,9 +737,9 @@ void ScInterpreter::ScGetDiffDate360()
             else
                 fSign = 1.0;
             Date aDate1 = pFormatter->GetNullDate();
-            aDate1 += (long) ::rtl::math::approxFloor(nDate1);
+            aDate1 += static_cast<sal_Int32>(::rtl::math::approxFloor(nDate1));
             Date aDate2 = pFormatter->GetNullDate();
-            aDate2 += (long) ::rtl::math::approxFloor(nDate2);
+            aDate2 += static_cast<sal_Int32>(::rtl::math::approxFloor(nDate2));
             if (aDate1.GetDay() == 31)
                 aDate1 -= (sal_uLong) 1;
             else if (!bFlag)

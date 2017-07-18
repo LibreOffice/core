@@ -334,7 +334,7 @@ sal_Int32 ScDPUtil::getDatePartValue(
     else
     {
         Date aDate = pFormatter->GetNullDate();
-        aDate += (long)::rtl::math::approxFloor(fValue);
+        aDate += static_cast<sal_Int32>(::rtl::math::approxFloor(fValue));
 
         switch ( nDatePart )
         {

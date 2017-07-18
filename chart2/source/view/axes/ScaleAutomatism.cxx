@@ -548,8 +548,8 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         ExplicitIncrementData& rExplicitIncrement,
         bool bAutoMinimum, bool bAutoMaximum ) const
 {
-    Date aMinDate(m_aNullDate); aMinDate += static_cast<long>(::rtl::math::approxFloor(rExplicitScale.Minimum));
-    Date aMaxDate(m_aNullDate); aMaxDate += static_cast<long>(::rtl::math::approxFloor(rExplicitScale.Maximum));
+    Date aMinDate(m_aNullDate); aMinDate += static_cast<sal_Int32>(::rtl::math::approxFloor(rExplicitScale.Minimum));
+    Date aMaxDate(m_aNullDate); aMaxDate += static_cast<sal_Int32>(::rtl::math::approxFloor(rExplicitScale.Maximum));
     rExplicitIncrement.PostEquidistant = false;
 
     if( aMinDate > aMaxDate )

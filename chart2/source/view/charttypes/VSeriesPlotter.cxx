@@ -1382,11 +1382,11 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
             aNullDate = m_apNumberFormatterWrapper->getNullDate();
         if( aIt!=aEnd )
         {
-            Date aPrevious(aNullDate); aPrevious+=static_cast<long>(rtl::math::approxFloor(*aIt));
+            Date aPrevious(aNullDate); aPrevious+=static_cast<sal_Int32>(rtl::math::approxFloor(*aIt));
             ++aIt;
             for(;aIt!=aEnd;++aIt)
             {
-                Date aCurrent(aNullDate); aCurrent+=static_cast<long>(rtl::math::approxFloor(*aIt));
+                Date aCurrent(aNullDate); aCurrent+=static_cast<sal_Int32>(rtl::math::approxFloor(*aIt));
                 if( nRet == css::chart::TimeUnit::YEAR )
                 {
                     if( DateHelper::IsInSameYear( aPrevious, aCurrent ) )
