@@ -77,9 +77,6 @@
 #define RID_SVL_START               (RID_LIB_START+7450)
 //      RID_SVL_END                 (RID_LIB_START+7899)
 
-#define RID_CHAOS_START             (RID_LIB_START+7900)
-//      RID_CHAOS_END               (RID_LIB_START+7999)
-
 #define RID_FORMS_START             (RID_LIB_START+8000)
 //      RID_FORMS_END               (RID_LIB_START+8999)
 
@@ -141,9 +138,6 @@
 
 // free: HID_LIB_START 2000-2050
 
-//      HID_CHAOS_START             (HID_LIB_START+2051)
-//      HID_CHAOS_END               (HID_LIB_START+2069)
-
 // free: HID_LIB_START 2070-9999
 
 // free: HID_START 20000-24999
@@ -165,8 +159,6 @@
 
 #define SID_SFX_START                5000
 //      SID_SFX_END                  8999
-#define SID_CHAOS_START              9000
-//      SID_CHAOS_END                9799
 #define SID_DOCKWIN_START            9800
 //      SID_DOCKWIN_END              9999
 
