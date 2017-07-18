@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_e51d9810",
+        "filename": "xmloff/source/draw/sdxmlexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1999,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-18T13:42:58Z",
+      "side": 0,
+      "message": "ODF 1.2 part 1 says:\n\n19.400 presentation:mouse-visible\nThe presentation:mouse-visible attribute specifies whether a mouse pointer is visible during a presentation.\nThe defined values for the presentation:mouse-visible attribute are:\nfalse: mouse not visible during presentation.\ntrue: mouse visible during presentation.\nThe default value for this attribute is true.\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\nso apparently, the import for this attribute is doing it wrong, and should initialize the setting to \"true\" if there is no attribute.\n\nif we don\u0027t export a \"false\" value we are no longer interoperable with other implementations whose authors actually read the ODF spec.\n\nhowever, it still makes sense to also write \"true\" values, so that all the LO versions that have this wrong default on import bug use the explicit \"true\" value.\n\nin summary, fix the import, and always export this attribute.",
+      "revId": "951af0302f60dfd5fc082552d85d8ddb522fc5a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
