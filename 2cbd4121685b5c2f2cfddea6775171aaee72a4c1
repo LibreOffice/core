@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_6a17b7a3",
+        "filename": "cppu/source/uno/cascade_mapping.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-07-18T08:29:21Z",
+      "side": 1,
+      "message": "I think these loggings (and all the ctor/dtor probably too) are too fine grained and benign to warrant SAL_INFOs (and individual log areas).  The disabled-by-default LOG_LIFECYCLE_* stuff was apparently there as an enable-on-demand debugging aid.  It should probably better have been removed completely rather than turned into SAL_INFOs.",
+      "revId": "2cbd4121685b5c2f2cfddea6775171aaee72a4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_0a4ab3c5",
+        "filename": "include/sal/log-areas.dox",
+        "patchSetId": 6
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-07-18T08:29:21Z",
+      "side": 1,
+      "message": "this list was apparently sorted lexicographically",
+      "revId": "2cbd4121685b5c2f2cfddea6775171aaee72a4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
