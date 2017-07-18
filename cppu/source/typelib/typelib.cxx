@@ -2216,7 +2216,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
 
 
 extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
-    typelib_TypeDescriptionReference ** ppRet, rtl_uString * pName )
+    typelib_TypeDescriptionReference ** ppRet, rtl_uString const * pName )
     SAL_THROW_EXTERN_C()
 {
     if( *ppRet )
