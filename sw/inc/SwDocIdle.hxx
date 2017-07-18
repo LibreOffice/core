@@ -32,7 +32,7 @@ namespace sw {
  * quite probably not a problem, as busy documents have a high chance to have
  * generated idle tasks.
  */
-class SwDocIdle : public AutoIdle
+class SwDocIdle : public Idle
 {
 private:
     SwDoc &m_rDoc;
