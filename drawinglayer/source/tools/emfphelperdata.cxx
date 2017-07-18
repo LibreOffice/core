@@ -291,6 +291,11 @@ namespace emfplushelper
 
     void EmfPlusHelperData::mappingChanged()
     {
+        if (mnPixX == 0 || mnPixY == 0)
+        {
+            SAL_WARN("cppcanvas.emf", "dimensions in pixels is 0");
+            return;
+        }
         // Call when mnMmX/mnMmY/mnPixX/mnPixY/mnFrameLeft/mnFrameTop/maWorldTransform/ changes.
         // Currently not used are mnHDPI/mnVDPI/mnFrameRight/mnFrameBottom. *If* these should
         // be used in the future, this method will need to be called.
