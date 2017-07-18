@@ -466,7 +466,7 @@ private:
         else
         {
             // Multi-item condition.
-            SAL_WARN_IF(rItems.size() <= 1, "sc.filter", "rItems should have more than 1 element");
+            assert( rItems.size() > 1 && "rItems should have more than 1 element");
 
             // Store the 1st value for backward compatibility.
             const ScQueryEntry::Item& rItem = rItems.front();
