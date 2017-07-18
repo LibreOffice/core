@@ -156,3 +156,4 @@ fuzzer_draw_libraries = \
     sd \
     sdd \
     icg \
+    emfio \
