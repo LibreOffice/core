@@ -19,6 +19,8 @@
 
 #include "writer/WPreparedStatement.hxx"
 
+#include "writer/WResultSet.hxx"
+
 using namespace com::sun::star;
 
 namespace connectivity
@@ -28,8 +30,7 @@ namespace writer
 
 file::OResultSet* OWriterPreparedStatement::createResultSet()
 {
-    SAL_WARN("connectivity.writer", "TODO implement OWriterPreparedStatement::createResultSet");
-    return nullptr;
+    return new OWriterResultSet(this, m_aSQLIterator);
 }
 
 IMPLEMENT_SERVICE_INFO(OWriterPreparedStatement,"com.sun.star.sdbc.driver.writer.PreparedStatement", "com.sun.star.sdbc.PreparedStatement");
