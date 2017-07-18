@@ -139,7 +139,7 @@ void SwOneExampleFrame::CreateControl()
         uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
                 { "OpenFlags", uno::Any(OUString("-RB")) },
                 { "Referer", uno::Any(OUString("private:user")) },
-                { "ReadOnly", uno::Any(sTempURL != cFactory) }
+                { "ReadOnly", uno::Any(true) }
             }));
         uno::Any aArgs(aSeq);
 
