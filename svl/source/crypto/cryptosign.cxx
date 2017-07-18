@@ -773,7 +773,7 @@ bool CreateSigningCertificateAttribute(void* pDerEncoded, int nDerEncoded, PCCER
         return false;
     }
 
-    if (!CryptHashData(hHash, reinterpret_cast<const BYTE*>(pDerEncoded), nDerEncoded, 0))
+    if (!CryptHashData(hHash, static_cast<const BYTE*>(pDerEncoded), nDerEncoded, 0))
     {
         SAL_WARN("svl.crypto", "CryptHashData() failed");
         return false;
