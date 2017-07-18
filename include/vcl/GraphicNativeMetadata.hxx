@@ -30,7 +30,7 @@ public:
     GraphicNativeMetadata();
     ~GraphicNativeMetadata();
 
-    bool read(Graphic& rGraphic);
+    bool read(Graphic const & rGraphic);
     sal_uInt16 getRotation() { return mRotation;}
 };
 

@@ -170,7 +170,7 @@ namespace vcl
  * memory for its own copy of NameRecords, so nr array has to
  * be explicitly deallocated when it is not needed.
  */
-    TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord *nr);
+    TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord const *nr);
 
 /**
  * Creates a new 'post' table of one of the supported formats

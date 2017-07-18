@@ -195,14 +195,14 @@ public:
     /*
      * set NET_WM_PID
      */
-    void setPID( X11SalFrame* pFrame ) const;
+    void setPID( X11SalFrame const * pFrame ) const;
 
     /*
      * set WM_CLIENT_MACHINE
      */
-    void setClientMachine( X11SalFrame* pFrame ) const;
+    void setClientMachine( X11SalFrame const * pFrame ) const;
 
-    void answerPing( X11SalFrame*, XClientMessageEvent* ) const;
+    void answerPing( X11SalFrame const *, XClientMessageEvent const * ) const;
 
     /*
      *  maximizes frame
@@ -285,7 +285,7 @@ public:
      *  changes the transient hint of a window to reference frame
      *  if reference frame is NULL the root window is used instead
      */
-    void changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferenceFrame ) const;
+    void changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame const * pReferenceFrame ) const;
 };
 
 } // namespace

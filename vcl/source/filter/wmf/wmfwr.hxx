@@ -198,7 +198,7 @@ private:
 
 public:
     WMFWriter();
-    bool WriteWMF(const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem, bool bPlaceable);
+    bool WriteWMF(const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem const * pFilterConfigItem, bool bPlaceable);
 };
 
 #endif

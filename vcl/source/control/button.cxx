@@ -644,7 +644,7 @@ void PushButton::ImplInitPushButtonData()
 
 namespace
 {
-    vcl::Window* getPreviousSibling(vcl::Window *pParent)
+    vcl::Window* getPreviousSibling(vcl::Window const *pParent)
     {
         return pParent ? pParent->GetWindow(GetWindowType::LastChild) : nullptr;
     }
@@ -753,7 +753,7 @@ void PushButton::ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext,
         rRect = aDecoView.DrawButton(rRect, nStyle);
 }
 
-bool PushButton::ImplHitTestPushButton( vcl::Window* pDev,
+bool PushButton::ImplHitTestPushButton( vcl::Window const * pDev,
                                         const Point& rPos )
 {
     Point       aTempPoint;
@@ -799,7 +799,7 @@ DrawTextFlags PushButton::ImplGetTextStyle( DrawFlags nDrawFlags ) const
 
 static void ImplDrawBtnDropDownArrow( OutputDevice* pDev,
                                       long nX, long nY,
-                                      Color& rColor, bool bBlack )
+                                      Color const & rColor, bool bBlack )
 {
     Color aOldLineColor = pDev->GetLineColor();
     Color aOldFillColor = pDev->GetFillColor();

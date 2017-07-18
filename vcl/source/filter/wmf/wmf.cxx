@@ -55,7 +55,7 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
 }
 
 bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              FilterConfigItem* pConfigItem, bool bPlaceable)
+                              FilterConfigItem const * pConfigItem, bool bPlaceable)
 {
     WMFWriter aWMFWriter;
     GDIMetaFile aGdiMetaFile(rMTF);

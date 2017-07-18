@@ -50,8 +50,8 @@ class L10N_DLLPUBLIC HelpLinker
 public:
     /// @throws HelpProcessingException
     void main(std::vector<std::string> &args,
-              std::string* pExtensionPath = nullptr,
-              std::string* pDestination = nullptr,
+              std::string const * pExtensionPath = nullptr,
+              std::string const * pDestination = nullptr,
               const OUString* pOfficeHelpPath = nullptr );
 
     HelpLinker()

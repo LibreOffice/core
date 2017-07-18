@@ -62,7 +62,7 @@ public:
 
     void ExtendEventMask(  ::Window aFocusWindow );
     void SetICFocus( SalFrame* pFocusFrame );
-    void UnsetICFocus( SalFrame* pFrame );
+    void UnsetICFocus( SalFrame const * pFrame );
     void HandleDestroyIM();
 
     void EndExtTextInput();
@@ -70,7 +70,7 @@ public:
     int  UpdateSpotLocation();
 
     void Map( SalFrame *pFrame );
-    void Unmap( SalFrame* pFrame );
+    void Unmap( SalFrame const * pFrame );
 
     SalI18N_InputContext( SalFrame *aFrame );
     ~SalI18N_InputContext();

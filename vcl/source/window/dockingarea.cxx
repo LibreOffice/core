@@ -68,7 +68,7 @@ void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-static void ImplInvalidateMenubar( DockingAreaWindow* pThis )
+static void ImplInvalidateMenubar( DockingAreaWindow const * pThis )
 {
     // due to a possible common gradient covering menubar and top dockingarea
     // the menubar must be repainted if the top dockingarea changes size or visibility

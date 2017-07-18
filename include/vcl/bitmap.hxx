@@ -664,7 +664,7 @@ public:
 
     SAL_DLLPRIVATE bool     ImplConvolutionPass(
                                 Bitmap& aNewBitmap,
-                                BitmapReadAccess* pReadAcc,
+                                BitmapReadAccess const * pReadAcc,
                                 int aNumberOfContributions,
                                 const double* pWeights,
                                 int* pPixels,
@@ -672,8 +672,8 @@ public:
 
     SAL_DLLPRIVATE bool     ImplMakeMono( sal_uInt8 cThreshold );
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE bool     ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor = nullptr );
-    SAL_DLLPRIVATE bool     ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor = nullptr );
+    SAL_DLLPRIVATE bool     ImplConvertUp( sal_uInt16 nBitCount, Color const * pExtColor = nullptr );
+    SAL_DLLPRIVATE bool     ImplConvertDown( sal_uInt16 nBitCount, Color const * pExtColor = nullptr );
     SAL_DLLPRIVATE bool     ImplConvertGhosted();
     SAL_DLLPRIVATE bool     ImplDitherMatrix();
     SAL_DLLPRIVATE bool     ImplDitherFloyd();

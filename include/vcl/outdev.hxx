@@ -1179,7 +1179,7 @@ private:
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
 
-    SAL_DLLPRIVATE static void  ImplDrawWavePixel( long nOriginX, long nOriginY, long nCurX, long nCurY, short nOrientation, SalGraphics* pGraphics, OutputDevice* pOutDev,
+    SAL_DLLPRIVATE static void  ImplDrawWavePixel( long nOriginX, long nOriginY, long nCurX, long nCurY, short nOrientation, SalGraphics* pGraphics, OutputDevice const * pOutDev,
                                                    bool bDrawPixAsRect, long nPixWidth, long nPixHeight );
     SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
     SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
@@ -1516,8 +1516,8 @@ private:
 
     SAL_DLLPRIVATE Bitmap       BlendBitmap(
                                     Bitmap&             aBmp,
-                                    BitmapReadAccess*   pP,
-                                    BitmapReadAccess*   pA,
+                                    BitmapReadAccess const * pP,
+                                    BitmapReadAccess const * pA,
                                     const sal_Int32     nOffY,
                                     const sal_Int32     nDstHeight,
                                     const sal_Int32     nOffX,
@@ -1531,8 +1531,8 @@ private:
 
     SAL_DLLPRIVATE Bitmap       BlendBitmapWithAlpha(
                                     Bitmap&             aBmp,
-                                    BitmapReadAccess*   pP,
-                                    BitmapReadAccess*   pA,
+                                    BitmapReadAccess const *   pP,
+                                    BitmapReadAccess const *   pA,
                                     const tools::Rectangle&    aDstRect,
                                     const sal_Int32     nOffY,
                                     const sal_Int32     nDstHeight,

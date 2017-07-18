@@ -616,7 +616,7 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
     return 0;
 }
 
-bool CalcSpline(tools::Polygon& rPoly, bool Periodic, sal_uInt16& n,
+bool CalcSpline(tools::Polygon const & rPoly, bool Periodic, sal_uInt16& n,
                 double*& ax, double*& ay, double*& bx, double*& by,
                 double*& cx, double*& cy, double*& dx, double*& dy, double*& T)
 {
@@ -685,7 +685,7 @@ bool CalcSpline(tools::Polygon& rPoly, bool Periodic, sal_uInt16& n,
     return bRet;
 }
 
-bool Spline2Poly(tools::Polygon& rSpln, bool Periodic, tools::Polygon& rPoly)
+bool Spline2Poly(tools::Polygon const & rSpln, bool Periodic, tools::Polygon& rPoly)
 {
     const short MinKoord = -32000;    // to prevent
     const short MaxKoord = 32000;     // overflows

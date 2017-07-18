@@ -262,7 +262,7 @@ static int XUnits(int unitsPerEm, int n)
     return (n * 1000) / unitsPerEm;
 }
 
-static const sal_uInt8* getTable( TrueTypeFont *ttf, sal_uInt32 ord)
+static const sal_uInt8* getTable( TrueTypeFont const *ttf, sal_uInt32 ord)
 {
     return ttf->tables[ord];
 }
@@ -338,7 +338,7 @@ static void HexFmtBlockWrite(HexFmt *_this, const void *ptr, sal_uInt32 size)
 /* Outline Extraction functions */
 
 /* fills the aw and lsb entries of the TTGlyphMetrics structure from hmtx table -*/
-static void GetMetrics(TrueTypeFont *ttf, sal_uInt32 glyphID, TTGlyphMetrics *metrics)
+static void GetMetrics(TrueTypeFont const *ttf, sal_uInt32 glyphID, TTGlyphMetrics *metrics)
 {
     const sal_uInt8* table = getTable( ttf, O_hmtx );
 
@@ -1927,7 +1927,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                           sal_uInt8          *encoding,
                           int            nGlyphs,
                           int            nNameRecs,
-                          NameRecord    *nr)
+                          NameRecord const *nr)
 {
     TrueTypeCreator *ttcr;
     TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr, *cmap=nullptr, *name=nullptr, *post = nullptr, *os2 = nullptr;

@@ -99,7 +99,7 @@ ImplFontCache::~ImplFontCache()
     }
 }
 
-LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection* pFontList,
+LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection const * pFontList,
     const vcl::Font& rFont, const Size& rSize, float fExactHeight )
 {
     const OUString& aSearchName = rFont.GetFamilyName();
@@ -109,7 +109,7 @@ LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection* pFo
     return GetFontInstance( pFontList, aFontSelData );
 }
 
-LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection* pFontList,
+LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection const * pFontList,
     FontSelectPattern& aFontSelData )
 {
     // check if a directly matching logical font instance is already cached,
@@ -206,7 +206,7 @@ LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection* pFo
     return pFontInstance;
 }
 
-LogicalFontInstance* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection* pFontCollection,
+LogicalFontInstance* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection const * pFontCollection,
     FontSelectPattern& rFontSelData, int nFallbackLevel, OUString& rMissingCodes )
 {
     // get a candidate font for glyph fallback

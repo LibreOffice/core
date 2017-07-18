@@ -75,7 +75,7 @@ private:
     // used by FreetypeFont class only
     void                    AddedGlyph( GlyphData& );
     void                    RemovingGlyph();
-    void                    UsingGlyph( GlyphData& );
+    void                    UsingGlyph( GlyphData const & );
 
 private:
     void                    GarbageCollect();
@@ -132,7 +132,7 @@ public:
 
     const FontSelectPattern& GetFontSelData() const      { return maFontSelData; }
 
-    void                    GetFontMetric(ImplFontMetricDataRef&) const;
+    void                    GetFontMetric(ImplFontMetricDataRef const &) const;
     const unsigned char*    GetTable( const char* pName, sal_uLong* pLength );
     const FontCharMapRef    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;

@@ -26,11 +26,11 @@ public:
 
     void logCommand(const OUString& rAction);
 
-    void logAction(VclPtr<Control>& xUIElement, VclEventId nEvent);
+    void logAction(VclPtr<Control> const & xUIElement, VclEventId nEvent);
 
     void log(const OUString& rString);
 
-    void logKeyInput(VclPtr<vcl::Window>& xUIElement, const KeyEvent& rEvent);
+    void logKeyInput(VclPtr<vcl::Window> const & xUIElement, const KeyEvent& rEvent);
 
     static UITestLogger& getInstance();
 

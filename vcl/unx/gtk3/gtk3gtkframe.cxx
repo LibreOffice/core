@@ -2658,7 +2658,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     return true;
 }
 
-void GtkSalFrame::LaunchAsyncScroll(GdkEvent* pEvent)
+void GtkSalFrame::LaunchAsyncScroll(GdkEvent const * pEvent)
 {
     //if we don't match previous pending states, flush that queue now
     if (!m_aPendingScrollEvents.empty() && pEvent->scroll.state != m_aPendingScrollEvents.back()->scroll.state)

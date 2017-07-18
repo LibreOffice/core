@@ -758,7 +758,7 @@ public:
 
      @see HandleKey
     */
-    static ImplSVEvent *        PostKeyEvent( VclEventId nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent );
+    static ImplSVEvent *        PostKeyEvent( VclEventId nEvent, vcl::Window *pWin, KeyEvent const * pKeyEvent );
 
     /** Send mouse event
 
@@ -766,7 +766,7 @@ public:
      @param     pWin            Pointer to window to which the event is sent
      @param     pMouseEvent     Mouse event to send
     */
-    static ImplSVEvent *        PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, MouseEvent* pMouseEvent );
+    static ImplSVEvent *        PostMouseEvent( VclEventId nEvent, vcl::Window *pWin, MouseEvent const * pMouseEvent );
 
     /** Remove mouse and keypress events from a window... any also zoom and scroll events
      if the platform supports it.
@@ -874,7 +874,7 @@ public:
 
      @returns Pointer to next top window.
     */
-    static vcl::Window*              GetNextTopLevelWindow( vcl::Window* pWindow );
+    static vcl::Window*              GetNextTopLevelWindow( vcl::Window const * pWindow );
 
     /** Return the number of top-level windows being used by the application
 
@@ -1064,7 +1064,7 @@ public:
 
      @see InsertAccel
     */
-    static void                 RemoveAccel( Accelerator* pAccel );
+    static void                 RemoveAccel( Accelerator const * pAccel );
 
     /** Get the number of reserved key codes used by the application.
 

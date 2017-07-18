@@ -213,7 +213,7 @@ PrinterController::PrinterController( const VclPtr<Printer>& i_xPrinter )
     mpImplData->mxPrinter = i_xPrinter;
 }
 
-static OUString queryFile( Printer* pPrinter )
+static OUString queryFile( Printer const * pPrinter )
 {
     OUString aResult;
 
@@ -528,7 +528,7 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& xController
     FinishPrintJob(xController);
 }
 
-bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::PrinterController>& i_xController)
+bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::PrinterController> const & i_xController)
 {
     mnError = ERRCODE_NONE;
 
@@ -1201,7 +1201,7 @@ int PrinterController::getFilteredPageCount()
     return (getPageCountProtected() + (nDiv-1)) / nDiv;
 }
 
-DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut )
+DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile const & i_rIn, GDIMetaFile& o_rOut )
 {
     DrawModeFlags nRestoreDrawMode = mpImplData->mxPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mxPrinter->GetDPIX();

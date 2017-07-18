@@ -39,7 +39,7 @@ using namespace ::com::sun::star::container ;
 using namespace ::com::sun::star::configuration;
 using namespace ::com::sun::star::task      ;   // XStatusIndicator
 
-static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const OUString& rTree )
+static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgProv, const OUString& rTree )
 {
     bool bAvailable = !rTree.isEmpty();
     if ( bAvailable )

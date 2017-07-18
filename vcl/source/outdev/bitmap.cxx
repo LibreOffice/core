@@ -1350,10 +1350,10 @@ namespace
     inline BitmapColor AlphaBlend( int nX,               int nY,
                                    const long            nMapX,
                                    const long            nMapY,
-                                   BitmapReadAccess*     pP,
-                                   BitmapReadAccess*     pA,
-                                   BitmapReadAccess*     pB,
-                                   BitmapWriteAccess*    pAlphaW,
+                                   BitmapReadAccess const *  pP,
+                                   BitmapReadAccess const *  pA,
+                                   BitmapReadAccess const *  pB,
+                                   BitmapWriteAccess const * pAlphaW,
                                    sal_uInt8&            nResAlpha )
     {
         BitmapColor aDstCol,aSrcCol;
@@ -1387,8 +1387,8 @@ bool OutputDevice::BlendBitmap(
 
 Bitmap OutputDevice::BlendBitmapWithAlpha(
             Bitmap&             aBmp,
-            BitmapReadAccess*   pP,
-            BitmapReadAccess*   pA,
+            BitmapReadAccess const *   pP,
+            BitmapReadAccess const *   pA,
             const tools::Rectangle&    aDstRect,
             const sal_Int32     nOffY,
             const sal_Int32     nDstHeight,
@@ -1483,8 +1483,8 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
 
 Bitmap OutputDevice::BlendBitmap(
             Bitmap&             aBmp,
-            BitmapReadAccess*   pP,
-            BitmapReadAccess*   pA,
+            BitmapReadAccess const * pP,
+            BitmapReadAccess const * pA,
             const sal_Int32     nOffY,
             const sal_Int32     nDstHeight,
             const sal_Int32     nOffX,

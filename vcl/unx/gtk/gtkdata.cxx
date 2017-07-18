@@ -162,14 +162,14 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event )
     return aFilterReturn;
 }
 
-void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
+void GtkSalDisplay::screenSizeChanged( GdkScreen const * pScreen )
 {
     m_pSys->countScreenMonitors();
     if (pScreen)
         emitDisplayChanged();
 }
 
-void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
+void GtkSalDisplay::monitorsChanged( GdkScreen const * pScreen )
 {
     m_pSys->countScreenMonitors();
     if (pScreen)
@@ -671,7 +671,7 @@ extern "C" {
     }
 
     static gboolean sal_gtk_timeout_expired( SalGtkTimeoutSource *pTSource,
-                                             gint *nTimeoutMS, GTimeVal *pTimeNow )
+                                             gint *nTimeoutMS, GTimeVal const *pTimeNow )
     {
         glong nDeltaSec = pTSource->aFireTime.tv_sec - pTimeNow->tv_sec;
         glong nDeltaUSec = pTSource->aFireTime.tv_usec - pTimeNow->tv_usec;

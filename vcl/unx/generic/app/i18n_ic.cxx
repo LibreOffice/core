@@ -361,7 +361,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 // unmap it the hard way
 
 void
-SalI18N_InputContext::Unmap( SalFrame* pFrame )
+SalI18N_InputContext::Unmap( SalFrame const * pFrame )
 {
     if ( maContext != nullptr )
     {
@@ -590,7 +590,7 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
 }
 
 void
-SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
+SalI18N_InputContext::UnsetICFocus( SalFrame const * pFrame )
 {
     I18NStatus& rStatus( I18NStatus::get() );
     if( rStatus.getParent() == pFrame )

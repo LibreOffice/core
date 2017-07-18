@@ -167,8 +167,8 @@ public:
     GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event );
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
 
-    void screenSizeChanged( GdkScreen* );
-    void monitorsChanged( GdkScreen* );
+    void screenSizeChanged( GdkScreen const * );
+    void monitorsChanged( GdkScreen const * );
 
     virtual void PostUserEvent() override;
 

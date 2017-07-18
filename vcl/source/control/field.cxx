@@ -438,7 +438,7 @@ const LanguageTag& FormatterBase::GetLanguageTag() const
     return mpLocaleDataWrapper->getLanguageTag();
 }
 
-void FormatterBase::ImplSetText( const OUString& rText, Selection* pNewSelection )
+void FormatterBase::ImplSetText( const OUString& rText, Selection const * pNewSelection )
 {
     if ( mpField )
     {
@@ -559,7 +559,7 @@ OUString NumericFormatter::CreateFieldText( sal_Int64 nValue ) const
     return ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep(), IsShowTrailingZeros() );
 }
 
-void NumericFormatter::ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection )
+void NumericFormatter::ImplSetUserValue( sal_Int64 nNewValue, Selection const * pNewSelection )
 {
     nNewValue = ClipAgainstMinMax(nNewValue);
     mnLastValue = nNewValue;

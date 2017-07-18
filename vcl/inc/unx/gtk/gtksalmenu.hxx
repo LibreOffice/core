@@ -103,7 +103,7 @@ public:
                                                       MenuItemBits nBits,
                                                       bool bChecked,
                                                       bool bIsSubmenu );
-    void                        NativeSetEnableItem( gchar* aCommand, gboolean bEnable );
+    void                        NativeSetEnableItem( gchar const * aCommand, gboolean bEnable );
     void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck );
     void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName );
 
@@ -123,7 +123,7 @@ public:
 
     void CreateMenuBarWidget();
     void DestroyMenuBarWidget();
-    gboolean SignalKey(GdkEventKey* pEvent);
+    gboolean SignalKey(GdkEventKey const * pEvent);
     void ReturnFocus();
 
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;

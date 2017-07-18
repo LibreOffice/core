@@ -1313,7 +1313,7 @@ ErrCode GraphicFilter::ImportGraphic(
     sal_uInt16 nFormat,
     sal_uInt16* pDeterminedFormat,
     GraphicFilterImportFlags nImportFlags,
-    WmfExternal *pExtHeader)
+    WmfExternal const *pExtHeader)
 {
     return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, nullptr, pExtHeader );
 }
@@ -1468,7 +1468,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
-                                     WmfExternal *pExtHeader )
+                                     WmfExternal const *pExtHeader )
 {
     OUString                       aFilterName;
     OUString                       aExternalFilterName;

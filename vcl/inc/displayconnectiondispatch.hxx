@@ -46,7 +46,7 @@ public:
     void start();
     void terminate();
 
-    bool dispatchEvent( void* pData, int nBytes );
+    bool dispatchEvent( void const * pData, int nBytes );
 
     // XDisplayConnection
     virtual void SAL_CALL addEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler, sal_Int32 eventMask ) override;

@@ -818,10 +818,10 @@ i12626
 
     void appendLiteralStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc = RTL_TEXTENCODING_ASCII_US );
     void appendLiteralStringEncrypt( const OString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
-    void appendLiteralStringEncrypt( OStringBuffer& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
+    void appendLiteralStringEncrypt( OStringBuffer const & rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyphs(int nGlyphs, const GlyphItem** pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pCodeUnits, sal_Int32* pCodeUnitsPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const PhysicalFontFace* pFallbackFonts[]);
+    void registerGlyphs(int nGlyphs, const GlyphItem** pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pCodeUnits, sal_Int32 const * pCodeUnitsPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const PhysicalFontFace* pFallbackFonts[]);
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -874,7 +874,7 @@ i12626
     /* writes a builtin font object and returns its objectid (or 0 in case of failure ) */
     sal_Int32 emitBuiltinFont( const PdfBuiltinFontFace*, sal_Int32 nObject );
     /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
-    std::map< sal_Int32, sal_Int32 > emitSystemFont( const PhysicalFontFace*, EmbedFont& );
+    std::map< sal_Int32, sal_Int32 > emitSystemFont( const PhysicalFontFace*, EmbedFont const & );
     /* writes a font descriptor and returns its object id (or 0) */
     sal_Int32 emitFontDescriptor( const PhysicalFontFace*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
@@ -1054,12 +1054,12 @@ i12626
     void implWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient,
                             VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
     void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx, const Graphic& i_pGraphic,
-                           VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
+                           VirtualDevice const * pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
 
     // helpers for CCITT 1bit bitmap stream
     void putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStreamState& io_rState );
     void putG4Span( long i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState );
-    void writeG4Stream( BitmapReadAccess* i_pBitmap );
+    void writeG4Stream( BitmapReadAccess const * i_pBitmap );
 
     // color helper functions
     void appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer );

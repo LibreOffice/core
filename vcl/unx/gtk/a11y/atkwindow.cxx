@@ -37,7 +37,7 @@ static void (* window_real_initialize) (AtkObject *obj, gpointer data) = nullptr
 static void (* window_real_finalize) (GObject *obj) = nullptr;
 
 static void
-init_from_window( AtkObject *accessible, vcl::Window *pWindow )
+init_from_window( AtkObject *accessible, vcl::Window const *pWindow )
 {
     static AtkRole aDefaultRole = ATK_ROLE_INVALID;
 

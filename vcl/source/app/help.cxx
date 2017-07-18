@@ -232,7 +232,7 @@ void Help::UpdatePopover(sal_uIntPtr nId, vcl::Window* pParent, const tools::Rec
     pHelpWin->Invalidate();
 }
 
-void Help::HidePopover(vcl::Window* pParent, sal_uLong nId)
+void Help::HidePopover(vcl::Window const * pParent, sal_uLong nId)
 {
     if (pParent->ImplGetFrame()->HidePopover(nId))
     {

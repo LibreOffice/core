@@ -255,7 +255,7 @@ sal_Int32 PDFDocument::WriteAppearanceObject()
     return nAppearanceId;
 }
 
-sal_Int32 PDFDocument::WriteAnnotObject(PDFObjectElement& rFirstPage, sal_Int32 nSignatureId, sal_Int32 nAppearanceId)
+sal_Int32 PDFDocument::WriteAnnotObject(PDFObjectElement const & rFirstPage, sal_Int32 nSignatureId, sal_Int32 nAppearanceId)
 {
     // Decide what identifier to use for the new signature.
     sal_uInt32 nNextSignature = GetNextSignature();
@@ -535,7 +535,7 @@ bool PDFDocument::WriteCatalogObject(sal_Int32 nAnnotId, PDFReferenceElement*& p
     return true;
 }
 
-void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement* pRoot)
+void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const * pRoot)
 {
     if (m_pXRefStream)
     {
@@ -1910,7 +1910,7 @@ int PDFDocument::AsHex(char ch)
     return nRet;
 }
 
-std::vector<unsigned char> PDFDocument::DecodeHexString(PDFHexStringElement* pElement)
+std::vector<unsigned char> PDFDocument::DecodeHexString(PDFHexStringElement const * pElement)
 {
     std::vector<unsigned char> aRet;
     const OString& rHex = pElement->GetValue();

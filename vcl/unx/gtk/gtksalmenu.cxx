@@ -686,7 +686,7 @@ void GtkSalMenu::ReturnFocus()
     mbReturnFocusToDocument = false;
 }
 
-gboolean GtkSalMenu::SignalKey(GdkEventKey* pEvent)
+gboolean GtkSalMenu::SignalKey(GdkEventKey const * pEvent)
 {
     if (pEvent->keyval == GDK_KEY_F6)
     {
@@ -905,7 +905,7 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
         g_free( aCommand );
 }
 
-void GtkSalMenu::NativeSetEnableItem( gchar* aCommand, gboolean bEnable )
+void GtkSalMenu::NativeSetEnableItem( gchar const * aCommand, gboolean bEnable )
 {
     SolarMutexGuard aGuard;
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );

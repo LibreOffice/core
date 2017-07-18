@@ -152,7 +152,7 @@ public:
     void                    SetEventCallback( rtl::Reference< vcl::DisplayConnectionDispatch > const & pInstance )
         { m_pEventInst = pInstance; }
 
-    bool                    CallEventCallback( void* pEvent, int nBytes );
+    bool                    CallEventCallback( void const * pEvent, int nBytes );
 
     virtual OUString        GetConnectionIdentifier() = 0;
 

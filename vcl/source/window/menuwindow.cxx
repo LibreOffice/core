@@ -37,7 +37,7 @@ static sal_uLong ImplChangeTipTimeout( sal_uLong nTimeout, vcl::Window *pWindow 
     return nRet;
 }
 
-bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
+bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu const * pMenu, sal_uInt16 nHighlightedItem,
         const HelpEvent& rHEvt, const tools::Rectangle &rHighlightRect)
 {
     if( ! pMenu )

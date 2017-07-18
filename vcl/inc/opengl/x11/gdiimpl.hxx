@@ -31,7 +31,7 @@ public:
 protected:
     virtual rtl::Reference<OpenGLContext> CreateWinContext() override;
 
-    bool RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY, TextureCombo& rCombo);
+    bool RenderPixmap(X11Pixmap const * pPixmap, X11Pixmap const * pMask, int nX, int nY, TextureCombo& rCombo);
 
 public:
     // implementation of X11GraphicsImpl

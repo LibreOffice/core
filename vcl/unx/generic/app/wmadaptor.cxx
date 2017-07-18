@@ -1731,7 +1731,7 @@ void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) cons
 /*
  *  WMAdaptor::changeReferenceFrame
  */
-void WMAdaptor::changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferenceFrame ) const
+void WMAdaptor::changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame const * pReferenceFrame ) const
 {
     if( ! ( pFrame->nStyle_ & SalFrameStyleFlags::PLUG )
         && ! pFrame->IsOverrideRedirect()
@@ -2228,7 +2228,7 @@ void NetWMAdaptor::setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const
 /*
  * WMAdaptor::setPID
  */
-void WMAdaptor::setPID( X11SalFrame* i_pFrame ) const
+void WMAdaptor::setPID( X11SalFrame const * i_pFrame ) const
 {
     if( m_aWMAtoms[NET_WM_PID] )
     {
@@ -2248,14 +2248,14 @@ void WMAdaptor::setPID( X11SalFrame* i_pFrame ) const
 /*
 * WMAdaptor::setClientMachine
 */
-void WMAdaptor::setClientMachine( X11SalFrame* i_pFrame ) const
+void WMAdaptor::setClientMachine( X11SalFrame const * i_pFrame ) const
 {
     OString aWmClient( OUStringToOString( GetGenericData()->GetHostname(), RTL_TEXTENCODING_ASCII_US ) );
     XTextProperty aClientProp = { reinterpret_cast<unsigned char *>(const_cast<char *>(aWmClient.getStr())), XA_STRING, 8, sal::static_int_cast<unsigned long>( aWmClient.getLength() ) };
     XSetWMClientMachine( m_pDisplay, i_pFrame->GetShellWindow(), &aClientProp );
 }
 
-void WMAdaptor::answerPing( X11SalFrame* i_pFrame, XClientMessageEvent* i_pEvent ) const
+void WMAdaptor::answerPing( X11SalFrame const * i_pFrame, XClientMessageEvent const * i_pEvent ) const
 {
     if( m_aWMAtoms[NET_WM_PING] &&
         i_pEvent->message_type == m_aWMAtoms[ WM_PROTOCOLS ] &&

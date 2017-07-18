@@ -110,7 +110,7 @@ private:
     SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = nullptr, bool bIsUserInput = false );
     SAL_DLLPRIVATE static OUString ImplGetValidString( const OUString& rString );
     SAL_DLLPRIVATE void        ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, long nXStart, long nXEnd);
-    SAL_DLLPRIVATE void        ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, long nXEnd);
+    SAL_DLLPRIVATE void        ImplPaintBorder(vcl::RenderContext const & rRenderContext, long nXStart, long nXEnd);
     SAL_DLLPRIVATE void        ImplShowCursor( bool bOnlyIfVisible = true );
     SAL_DLLPRIVATE void        ImplAlign();
     SAL_DLLPRIVATE void        ImplAlignAndPaint();
@@ -120,8 +120,8 @@ private:
     SAL_DLLPRIVATE void        ImplHideDDCursor();
     SAL_DLLPRIVATE bool        ImplHandleKeyEvent( const KeyEvent& rKEvt );
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
-    SAL_DLLPRIVATE void        ImplCopy(css::uno::Reference<css::datatransfer::clipboard::XClipboard>& rxClipboard);
-    SAL_DLLPRIVATE void        ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard>& rxClipboard);
+    SAL_DLLPRIVATE void        ImplCopy(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
+    SAL_DLLPRIVATE void        ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
     SAL_DLLPRIVATE long        ImplGetTextYPosition() const;
     SAL_DLLPRIVATE css::uno::Reference<css::i18n::XExtendedInputSequenceChecker > const & ImplGetInputSequenceChecker();
     SAL_DLLPRIVATE static css::uno::Reference<css::i18n::XBreakIterator > ImplGetBreakIterator();
@@ -157,7 +157,7 @@ protected:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 public:
     // public because needed in button.cxx
-    SAL_DLLPRIVATE bool ImplUseNativeBorder(vcl::RenderContext& rRenderContext, WinBits nStyle);
+    SAL_DLLPRIVATE bool ImplUseNativeBorder(vcl::RenderContext const & rRenderContext, WinBits nStyle);
 
     Edit( vcl::Window* pParent, WinBits nStyle = WB_BORDER );
     virtual ~Edit() override;

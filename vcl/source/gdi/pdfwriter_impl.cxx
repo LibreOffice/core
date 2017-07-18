@@ -967,7 +967,7 @@ public:
     void translate( double tx, double ty );
     void invert();
 
-    void append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer );
+    void append( PDFWriterImpl::PDFPage const & rPage, OStringBuffer& rBuffer );
 
     Point transform( const Point& rPoint ) const;
 };
@@ -1071,7 +1071,7 @@ void Matrix3::invert()
     set( fn );
 }
 
-void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer )
+void Matrix3::append( PDFWriterImpl::PDFPage const & rPage, OStringBuffer& rBuffer )
 {
     appendDouble( f[0], rBuffer );
     rBuffer.append( ' ' );
@@ -2047,7 +2047,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
     rOutBuffer.append( ">" );
 }
 
-inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
+inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer const & rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
 {
     rOutBuffer.append( "(" );
     sal_Int32 nChars = rInString.getLength();
@@ -2906,7 +2906,7 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( const PdfBuiltinFontFace* pFD, sal_Int
     return nFontObject;
 }
 
-std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFontFace* pFont, EmbedFont& rEmbed )
+std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFontFace* pFont, EmbedFont const & rEmbed )
 {
     std::map< sal_Int32, sal_Int32 > aRet;
 
@@ -6283,7 +6283,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                                     const GlyphItem** pGlyphs,
                                     sal_Int32* pGlyphWidths,
                                     sal_Ucs* pCodeUnits,
-                                    sal_Int32* pCodeUnitsPerGlyph,
+                                    sal_Int32 const * pCodeUnitsPerGlyph,
                                     sal_uInt8* pMappedGlyphs,
                                     sal_Int32* pMappedFontObjects,
                                     const PhysicalFontFace* pFallbackFonts[] )

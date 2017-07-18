@@ -659,7 +659,7 @@ bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const Bi
     return false;
 }
 
-bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
+bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
     const BitmapReadAccess& rSrcRA, const BitmapReadAccess& rMskRA,
     const SalTwoRect& rTR )
 {

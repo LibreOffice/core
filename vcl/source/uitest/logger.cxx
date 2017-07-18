@@ -45,7 +45,7 @@ void UITestLogger::logCommand(const OUString& rAction)
 namespace {
 
 // most likely this should be recursive
-bool child_windows_have_focus(VclPtr<Control>& xUIElement)
+bool child_windows_have_focus(VclPtr<Control> const & xUIElement)
 {
     sal_Int32 nCount = xUIElement->GetChildCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
@@ -60,7 +60,7 @@ bool child_windows_have_focus(VclPtr<Control>& xUIElement)
 
 }
 
-void UITestLogger::logAction(VclPtr<Control>& xUIElement, VclEventId nEvent)
+void UITestLogger::logAction(VclPtr<Control> const & xUIElement, VclEventId nEvent)
 {
     if (!mbValid)
         return;
@@ -90,7 +90,7 @@ void UITestLogger::log(const OUString& rString)
     maStream.WriteLine(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
 }
 
-void UITestLogger::logKeyInput(VclPtr<vcl::Window>& xUIElement, const KeyEvent& rEvent)
+void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const KeyEvent& rEvent)
 {
     if (!mbValid)
         return;

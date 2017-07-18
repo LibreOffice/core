@@ -353,7 +353,7 @@ void MenuBarWindow::KillActivePopup()
     }
 }
 
-void MenuBarWindow::PopupClosed( Menu* pPopup )
+void MenuBarWindow::PopupClosed( Menu const * pPopup )
 {
     if ( pPopup == pActivePopup )
     {
@@ -518,7 +518,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         GrabFocus();
 }
 
-static int ImplGetTopDockingAreaHeight( vcl::Window *pWindow )
+static int ImplGetTopDockingAreaHeight( vcl::Window const *pWindow )
 {
     // find docking area that is top aligned and return its height
     // note: dockingareas are direct children of the SystemWindow
