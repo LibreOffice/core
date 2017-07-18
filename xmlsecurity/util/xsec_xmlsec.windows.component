@@ -37,9 +37,6 @@
   <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl">
     <service name="com.sun.star.xml.wrapper.XMLElementWrapper"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_MSCryptImpl">
-    <service name="com.sun.star.xml.crypto.XMLEncryption"/>
-  </implementation>
   <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_MSCryptImpl">
     <service name="com.sun.star.xml.crypto.XMLSecurityContext"/>
   </implementation>
