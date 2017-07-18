@@ -650,7 +650,7 @@ Reference< XInterface >  ConnectionCreateInstance(
 }
 
 
-bool isLog(ConnectionSettings *settings, LogLevel nLevel)
+bool isLog(ConnectionSettings const *settings, LogLevel nLevel)
 {
     return static_cast<int>(settings->m_nLogLevel) >= static_cast<int>(nLevel)
            && settings->logFile;

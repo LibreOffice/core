@@ -160,7 +160,7 @@ namespace connectivity
         // convert a string into double trim it to scale of _nscale and than transform it back to string
         OUString stringToDouble(const OUString& _rValue,sal_Int16 _nScale);
         OSQLParseNode*  buildDate(sal_Int32 _nType,OSQLParseNode*& pLiteral);
-        bool            extractDate(OSQLParseNode* pLiteral,double& _rfValue);
+        bool            extractDate(OSQLParseNode const * pLiteral,double& _rfValue);
         void            killThousandSeparator(OSQLParseNode* pLiteral);
         OSQLParseNode*  convertNode(sal_Int32 nType, OSQLParseNode* pLiteral);
         // makes a string out of a number, pLiteral will be deleted

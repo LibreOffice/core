@@ -92,7 +92,7 @@ public:
     std::string const &getColumn( int oid );
 
     void retrieveLists(std::set<std::string>& lists);
-    void getRecordKeysForListTable(std::string& listName, std::set<int>& records);
+    void getRecordKeysForListTable(std::string const & listName, std::set<int>& records);
 
     void dump();
 

@@ -1235,7 +1235,7 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
 }
 
 
-void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode * pSearchCondition)
+void OSQLParseTreeIterator::traverseSearchCondition(OSQLParseNode const * pSearchCondition)
 {
     if (
             SQL_ISRULE(pSearchCondition,boolean_primary) &&
@@ -1501,9 +1501,9 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
 }
 
 void OSQLParseTreeIterator::traverseOnePredicate(
-                                OSQLParseNode * pColumnRef,
+                                OSQLParseNode const * pColumnRef,
                                 OUString& rValue,
-                                OSQLParseNode * pParseNode)
+                                OSQLParseNode const * pParseNode)
 {
     if ( !pParseNode )
         return;
@@ -1594,7 +1594,7 @@ OSQLTable OSQLParseTreeIterator::impl_createTableObject( const OUString& rTableN
     return aReturnTable;
 }
 
-void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable)
+void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable)
 {
     if (!_rTable.is())
         return;
@@ -1639,7 +1639,7 @@ void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns>& _rColum
     }
 }
 
-void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt, sal_Int32 _nType, bool bAggFkt)
+void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns> const & _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt, sal_Int32 _nType, bool bAggFkt)
 {
     if(rColumnName.toChar() == '*' && rTableRange.isEmpty())
     {   // SELECT * ...

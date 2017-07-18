@@ -593,7 +593,7 @@ bool ODbaseTable::ReadMemoHeader()
     return true;
 }
 
-OUString ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName )
+OUString ODbaseTable::getEntry(OConnection const * _pConnection,const OUString& _sName )
 {
     OUString sURL;
     try
@@ -2279,7 +2279,7 @@ void SAL_CALL ODbaseTable::rename( const OUString& newName )
 }
 namespace
 {
-    void renameFile(OConnection* _pConenction,const OUString& oldName,
+    void renameFile(OConnection const * _pConenction,const OUString& oldName,
                     const OUString& newName,const OUString& _sExtension)
     {
         OUString aName = ODbaseTable::getEntry(_pConenction,oldName);

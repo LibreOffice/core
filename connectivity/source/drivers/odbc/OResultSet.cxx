@@ -992,7 +992,7 @@ void SAL_CALL OResultSet::moveToCurrentRow(  )
     invalidateCache();
 }
 
-void OResultSet::updateValue(sal_Int32 columnIndex,SQLSMALLINT _nType,void* _pValue)
+void OResultSet::updateValue(sal_Int32 columnIndex, SQLSMALLINT _nType, void const * _pValue)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -1068,7 +1068,7 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const OUString& x
     m_aRow[columnIndex] = x;
     m_aRow[columnIndex].setTypeKind(nType); // OJ: otherwise longvarchar will be recognized by fillNeededData
     m_aRow[columnIndex].setBound(true);
-    updateValue(columnIndex,nOdbcType,const_cast<OUString *>(&x));
+    updateValue(columnIndex,nOdbcType, &x);
 }
 
 void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x )
@@ -1078,7 +1078,7 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
     m_aRow[columnIndex] = x;
     m_aRow[columnIndex].setTypeKind(nType); // OJ: otherwise longvarbinary will be recognized by fillNeededData
     m_aRow[columnIndex].setBound(true);
-    updateValue(columnIndex,nOdbcType,const_cast<css::uno::Sequence<sal_Int8> *>(&x));
+    updateValue(columnIndex,nOdbcType, &x);
 }
 
 void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x )

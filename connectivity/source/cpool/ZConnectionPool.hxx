@@ -123,7 +123,7 @@ namespace connectivity
     private:
         css::uno::Reference< css::sdbc::XConnection> createNewConnection(const OUString& _rURL,
                                 const css::uno::Sequence< css::beans::PropertyValue >& _rInfo);
-        css::uno::Reference< css::sdbc::XConnection> getPooledConnection(TConnectionMap::iterator& _rIter);
+        css::uno::Reference< css::sdbc::XConnection> getPooledConnection(TConnectionMap::iterator const & _rIter);
         // calculate the timeout and the corresponding ALiveCount
         void calculateTimeOuts();
 

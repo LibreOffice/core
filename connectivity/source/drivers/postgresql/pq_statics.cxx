@@ -85,7 +85,7 @@ struct PropertyDefEx : public PropertyDef
 };
 
 static cppu::IPropertyArrayHelper * createPropertyArrayHelper(
-    PropertyDef *props, int count , sal_Int16 attr )
+    PropertyDef const *props, int count , sal_Int16 attr )
 {
     Sequence< Property > seq( count );
     for( int i = 0 ; i < count ; i ++ )
@@ -96,7 +96,7 @@ static cppu::IPropertyArrayHelper * createPropertyArrayHelper(
 }
 
 static cppu::IPropertyArrayHelper * createPropertyArrayHelper(
-    PropertyDefEx *props, int count )
+    PropertyDefEx const *props, int count )
 {
     Sequence< Property > seq( count );
     for( int i = 0 ; i < count ; i ++ )

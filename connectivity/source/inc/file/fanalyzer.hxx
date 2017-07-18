@@ -55,7 +55,7 @@ namespace connectivity
                 {  }
 
             OConnection* getConnection() const { return m_pConnection; }
-            void bindEvaluationRow(OValueRefRow& _pRow); // Bind an evaluation row to the restriction
+            void bindEvaluationRow(OValueRefRow const & _pRow); // Bind an evaluation row to the restriction
             /** bind the select columns if they contain a function which needs a row value
                 @param  _pRow   the result row
             */
@@ -64,16 +64,16 @@ namespace connectivity
             /** binds the row to parameter for the restrictions
                 @param  _pRow   the parameter row
             */
-            void bindParameterRow(OValueRefRow& _pRow);
+            void bindParameterRow(OValueRefRow const & _pRow);
 
             void setIndexes(const css::uno::Reference< css::container::XNameAccess>& _xIndexes);
 
             void dispose();
-            void start(OSQLParseNode* pSQLParseNode);
+            void start(OSQLParseNode const * pSQLParseNode);
             bool hasRestriction() const;
             bool hasFunctions() const;
             bool evaluateRestriction()   { return m_aInterpreter->start(); }
-            void setSelectionEvaluationResult(OValueRefRow& _pRow,const std::vector<sal_Int32>& _rColumnMapping);
+            void setSelectionEvaluationResult(OValueRefRow const & _pRow,const std::vector<sal_Int32>& _rColumnMapping);
             void setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols);
             static OOperandAttr* createOperandAttr(sal_Int32 _nPos,
                                                     const css::uno::Reference< css::beans::XPropertySet>& _xCol,

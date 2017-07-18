@@ -127,8 +127,8 @@ namespace connectivity
 
             void         createColumnMapping();
             void         analyseSQL();
-            void         setOrderbyColumn( connectivity::OSQLParseNode* pColumnRef,
-                                           connectivity::OSQLParseNode* pAscendingDescending);
+            void         setOrderbyColumn( connectivity::OSQLParseNode const * pColumnRef,
+                                           connectivity::OSQLParseNode const * pAscendingDescending);
 
         public:
             // other methods

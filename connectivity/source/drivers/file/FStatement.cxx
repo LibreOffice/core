@@ -337,8 +337,8 @@ void OStatement_Base::anylizeSQL()
     }
 }
 
-void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
-                                        OSQLParseNode* pAscendingDescending)
+void OStatement_Base::setOrderbyColumn( OSQLParseNode const * pColumnRef,
+                                        OSQLParseNode const * pAscendingDescending)
 {
     OUString aColumnName;
     if (pColumnRef->count() == 1)
