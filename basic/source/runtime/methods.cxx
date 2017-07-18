@@ -1704,7 +1704,7 @@ sal_Int16 implGetDateDay( double aDate )
     aDate -= 2.0; // standardize: 1.1.1900 => 0.0
     aDate = floor( aDate );
     Date aRefDate( 1, 1, 1900 );
-    aRefDate += static_cast<long>(aDate);
+    aRefDate += static_cast<sal_Int32>(aDate);
 
     sal_Int16 nRet = (sal_Int16)( aRefDate.GetDay() );
     return nRet;
@@ -4674,7 +4674,7 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
         if (nAddMonths)
             aCurDate.AddMonths( nAddMonths);
         if (nAddDays)
-            aCurDate += (long)nAddDays;
+            aCurDate += nAddDays;
     }
 
     long nDiffDays = GetDayDiff( aCurDate );

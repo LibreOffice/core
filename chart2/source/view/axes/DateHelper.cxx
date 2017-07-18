@@ -69,7 +69,7 @@ bool DateHelper::IsLessThanOneYearAway( const Date& rD1, const Date& rD2 )
 
 double DateHelper::RasterizeDateValue( double fValue, const Date& rNullDate, long TimeResolution )
 {
-    Date aDate(rNullDate); aDate += static_cast<long>(::rtl::math::approxFloor(fValue));
+    Date aDate(rNullDate); aDate += static_cast<sal_Int32>(::rtl::math::approxFloor(fValue));
     switch(TimeResolution)
     {
         case css::chart::TimeUnit::DAY:

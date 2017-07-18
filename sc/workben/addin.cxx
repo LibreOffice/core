@@ -346,7 +346,7 @@ OUString SAL_CALL ScTestAddIn::getDateString( const css::uno::Reference< css::be
         {
             Date aNewDate( aDate.Day, aDate.Month, aDate.Year );
 
-            aNewDate += (long)(fValue+0.5);
+            aNewDate += static_cast<sal_Int32>(fValue+0.5);
 
             String aRet;
             aRet += aNewDate.GetDay();
