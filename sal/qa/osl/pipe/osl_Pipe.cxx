@@ -562,7 +562,7 @@ namespace osl_Pipe
     public:
         bool bRes, bRes1;
 
-        void getHandle_equalityOperatorAgainstSelf( )
+        void getHandle_001( )
             {
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );
                 bRes = aPipe == aPipe.getHandle( );
@@ -572,7 +572,7 @@ namespace osl_Pipe
                                         bRes );
             }
 
-        void getHandle_equalityOperatorAgainstDerivedPipe( )
+        void getHandle_002( )
             {
                 ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 ::osl::Pipe aPipe1( aPipe.getHandle( ) );
@@ -585,8 +585,8 @@ namespace osl_Pipe
             }
 
         CPPUNIT_TEST_SUITE( getHandle );
-        CPPUNIT_TEST( getHandle_equalityOperatorAgainstSelf );
-        CPPUNIT_TEST( getHandle_equalityOperatorAgainstDerivedPipe );
+        CPPUNIT_TEST( getHandle_001 );
+        CPPUNIT_TEST( getHandle_002 );
         CPPUNIT_TEST_SUITE_END( );
     };
 
