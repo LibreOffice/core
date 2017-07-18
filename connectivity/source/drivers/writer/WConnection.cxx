@@ -28,6 +28,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <tools/urlobj.hxx>
 #include "writer/WPreparedStatement.hxx"
+#include "writer/WStatement.hxx"
 #include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -224,9 +225,7 @@ uno::Reference< sdbc::XStatement > SAL_CALL OWriterConnection::createStatement()
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-
-    uno::Reference< sdbc::XStatement > xReturn;
-    SAL_WARN("connectivity.writer", "TODO implement OWriterConnection::createStatement()");
+    uno::Reference<sdbc::XStatement> xReturn = new OWriterStatement(this);
     m_aStatements.push_back(uno::WeakReferenceHelper(xReturn));
     return xReturn;
 }
