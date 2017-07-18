@@ -56,7 +56,7 @@ void SAL_CALL CRC32::update(const Sequence< sal_Int8 > &b)
     nCRC = rtl_crc32(nCRC, b.getConstArray(),b.getLength());
 }
 
-sal_Int64 SAL_CALL CRC32::updateStream( Reference < XInputStream > & xStream )
+sal_Int64 SAL_CALL CRC32::updateStream( Reference < XInputStream > const & xStream )
 {
     sal_Int32 nLength;
     sal_Int64 nTotal = 0;

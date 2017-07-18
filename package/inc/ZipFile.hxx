@@ -124,7 +124,7 @@ public:
                                     const OUString& aMediaType,
                                     sal_Int8 * & pHeader );
 
-    static bool StaticFillData ( ::rtl::Reference < BaseEncryptionData > & rData,
+    static bool StaticFillData ( ::rtl::Reference < BaseEncryptionData > const & rData,
                                      sal_Int32 &rEncAlgorithm,
                                      sal_Int32 &rChecksumAlgorithm,
                                      sal_Int32 &rDerivedKeySize,

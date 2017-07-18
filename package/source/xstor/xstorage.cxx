@@ -1624,7 +1624,7 @@ void OStorage_Impl::CreateRelStorage()
     }
 }
 
-void OStorage_Impl::CommitStreamRelInfo( SotElement_Impl* pStreamElement )
+void OStorage_Impl::CommitStreamRelInfo( SotElement_Impl const * pStreamElement )
 {
     // this method should be used only in OStorage_Impl::Commit() method
 

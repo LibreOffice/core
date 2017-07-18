@@ -295,7 +295,7 @@ void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
     pHeader += nMediaTypeLength;
 }
 
-bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rData,
+bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > const & rData,
                                     sal_Int32 &rEncAlg,
                                     sal_Int32 &rChecksumAlg,
                                     sal_Int32 &rDerivedKeySize,
