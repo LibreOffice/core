@@ -1986,9 +1986,9 @@ void SdXMLExport::exportPresentationSettings()
         }
 
         xPresProps->getPropertyValue("IsMouseVisible") >>= bTemp;
-        if( bTemp )
+        if( !bTemp )
         {
-            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_VISIBLE, XML_TRUE );
+            AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_VISIBLE, XML_FALSE );
             bHasAttr = true;
         }
 
