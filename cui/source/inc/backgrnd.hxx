@@ -129,8 +129,6 @@ private:
     SvxGraphicPosition  GetGraphicPosition_Impl();
     void                FillControls_Impl(const SvxBrushItem& rBgdAttr,
                                             const OUString& rUserData);
-    bool                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, sal_uInt16 nSlot);
-    void                ResetFromWallpaperItem( const SfxItemSet& rSet );
 
     DECL_LINK( LoadIdleHdl_Impl, Timer*, void );
     DECL_LINK(SelectHdl_Impl, ListBox&, void );
