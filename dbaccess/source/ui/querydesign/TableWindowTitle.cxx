@@ -25,7 +25,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include "dbustrings.hrc"
-#include <sfx2/cntids.hrc>
 #include "TableWindowListBox.hxx"
 #include "TableConnection.hxx"
 #include "dbu_qry.hrc"
