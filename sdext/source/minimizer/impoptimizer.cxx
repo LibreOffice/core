@@ -206,7 +206,7 @@ void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOptimizati
     }
 }
 
-void ImpCompressGraphic( Reference< XGraphicProvider >& rxGraphicProvider, const Reference< XGraphic >& rxGraphic, Reference< XOutputStream >& rxOutputStream,
+void ImpCompressGraphic( Reference< XGraphicProvider > const & rxGraphicProvider, const Reference< XGraphic >& rxGraphic, Reference< XOutputStream > const & rxOutputStream,
     const OUString& rDestMimeType, const awt::Size& rLogicalSize, sal_Int32 nJPEGQuality, sal_Int32 nImageResolution, bool bRemoveCropping, const text::GraphicCrop& rGraphicCropLogic )
 {
     try

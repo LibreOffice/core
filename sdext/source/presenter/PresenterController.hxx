@@ -122,8 +122,8 @@ public:
     const css::uno::Reference<css::drawing::framework::XConfigurationController>&
         GetConfigurationController() const;
     const css::uno::Reference<css::drawing::XDrawPage>& GetCurrentSlide() const;
-    static bool HasTransition (css::uno::Reference<css::drawing::XDrawPage>& rxPage);
-    static bool HasCustomAnimation (css::uno::Reference<css::drawing::XDrawPage>& rxPage);
+    static bool HasTransition (css::uno::Reference<css::drawing::XDrawPage> const & rxPage);
+    static bool HasCustomAnimation (css::uno::Reference<css::drawing::XDrawPage> const & rxPage);
     void SetAccessibilityActiveState (const bool bIsActive);
     bool IsAccessibilityActive() const { return mbIsAccessibilityActive;}
 

@@ -575,7 +575,7 @@ const Reference<drawing::XDrawPage>& PresenterController::GetCurrentSlide() cons
     return mxCurrentSlide;
 }
 
-bool PresenterController::HasTransition (Reference<drawing::XDrawPage>& rxPage)
+bool PresenterController::HasTransition (Reference<drawing::XDrawPage> const & rxPage)
 {
     bool bTransition = false;
     sal_uInt16 aTransitionType = 0;
@@ -597,7 +597,7 @@ bool PresenterController::HasTransition (Reference<drawing::XDrawPage>& rxPage)
     return bTransition;
 }
 
-bool PresenterController::HasCustomAnimation (Reference<drawing::XDrawPage>& rxPage)
+bool PresenterController::HasCustomAnimation (Reference<drawing::XDrawPage> const & rxPage)
 {
     bool bCustomAnimation = false;
     if( rxPage.is() )
