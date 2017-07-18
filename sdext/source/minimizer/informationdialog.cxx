@@ -152,7 +152,7 @@ OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& 
     return rControlName;
 }
 
-OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
+OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rControlName, Reference< XActionListener > const & xActionListener,
     sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, PPPOptimizerTokenEnum nResID )
 {
     OUString pNames[] = {

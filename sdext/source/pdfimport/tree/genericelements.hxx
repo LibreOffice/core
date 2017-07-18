@@ -100,7 +100,7 @@ namespace pdfi
         /** el must be a valid dereferenceable iterator of el->Parent->Children
             pNewParent must not be NULL
         */
-        static void setParent( std::list<Element*>::iterator& el, Element* pNewParent );
+        static void setParent( std::list<Element*>::iterator const & el, Element* pNewParent );
 
         double              x, y, w, h;
         sal_Int32           StyleId;
@@ -193,7 +193,7 @@ namespace pdfi
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) override;
 
         // returns true only if only a single line is contained
-        bool isSingleLined( PDFIProcessor& rProc ) const;
+        bool isSingleLined( PDFIProcessor const & rProc ) const;
         // returns the highest line height of the contained textelements
         // line height is font height if the text element is itself multilined
         double getLineHeight( PDFIProcessor& rProc ) const;
@@ -257,8 +257,8 @@ namespace pdfi
 
         static void updateParagraphGeometry( Element* pEle );
         void resolveHyperlinks();
-        void resolveFontStyles( PDFIProcessor& rProc );
-        void resolveUnderlines( PDFIProcessor& rProc );
+        void resolveFontStyles( PDFIProcessor const & rProc );
+        void resolveUnderlines( PDFIProcessor const & rProc );
 
         sal_Int32      PageNumber;
         ListElement    Hyperlinks; // contains not yet realized links on this page

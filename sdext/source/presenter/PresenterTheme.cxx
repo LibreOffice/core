@@ -154,7 +154,7 @@ public:
 
 private:
     void ProcessPaneStyle (
-        ReadContext& rReadContext,
+        ReadContext const & rReadContext,
         const ::std::vector<css::uno::Any>& rValues);
 };
 
@@ -191,7 +191,7 @@ public:
 
 private:
     void ProcessViewStyle(
-        ReadContext& rReadContext,
+        ReadContext const & rReadContext,
         const Reference<beans::XPropertySet>& rxProperties);
 };
 
@@ -847,7 +847,7 @@ void PaneStyleContainer::Read (
 }
 
 void PaneStyleContainer::ProcessPaneStyle(
-    ReadContext& rReadContext,
+    ReadContext const & rReadContext,
     const ::std::vector<Any>& rValues)
 {
     if (rValues.size() != 6)
@@ -953,8 +953,6 @@ void ViewStyleContainer::Read (
     ReadContext& rReadContext,
     const Reference<container::XHierarchicalNameAccess>& rxThemeRoot)
 {
-    (void)rReadContext;
-
     Reference<container::XNameAccess> xViewStyleList (
         PresenterConfigurationAccess::GetConfigurationNode(
             rxThemeRoot,
@@ -972,7 +970,7 @@ void ViewStyleContainer::Read (
 }
 
 void ViewStyleContainer::ProcessViewStyle(
-    ReadContext& rReadContext,
+    ReadContext const & rReadContext,
     const Reference<beans::XPropertySet>& rxProperties)
 {
     std::shared_ptr<ViewStyle> pStyle (new ViewStyle());

@@ -360,13 +360,14 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     } else if (isa<UnaryExprOrTypeTraitExpr>(parent)) {
         return false; // ???
     } else if (isa<CXXNewExpr>(parent)) {
-        return true; // because the ParamVarDecl must be a parameter to the expression, probably an array count
+        return true; // because the ParamVarDecl must be a parameter to the expression, probably an array length
     } else if (auto lambdaExpr = dyn_cast<LambdaExpr>(parent)) {
         for (auto it = lambdaExpr->capture_begin(); it != lambdaExpr->capture_end(); ++it)
         {
-            if (it->getCapturedVar() == parmVarDecl)
+            if (it->capturesVariable() && it->getCapturedVar() == parmVarDecl)
                 return it->getCaptureKind() != LCK_ByRef;
         }
+        /* sigh. just running this message will cause clang to crash (in sdext)
         report(
              DiagnosticsEngine::Warning,
              "cannot handle this lambda",
@@ -374,14 +375,18 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
               << parent->getSourceRange();
         parent->dump();
         parmVarDecl->dump();
+         */
+         return false;
+    } else if (isa<CXXTypeidExpr>(parent)) {
+        return true;
     } else {
+        parent->dump();
+        parmVarDecl->dump();
         report(
              DiagnosticsEngine::Warning,
              "oh dear, what can the matter be?",
               parent->getLocStart())
               << parent->getSourceRange();
-        parent->dump();
-        parmVarDecl->dump();
     }
     return true;
 }

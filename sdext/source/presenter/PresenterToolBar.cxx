@@ -101,8 +101,8 @@ namespace {
         void ReadElementMode (
             const Reference<beans::XPropertySet>& rxProperties,
             const OUString& rsModeName,
-            std::shared_ptr<ElementMode>& rpDefaultMode,
-            ::sdext::presenter::PresenterToolBar::Context& rContext);
+            std::shared_ptr<ElementMode> const & rpDefaultMode,
+            ::sdext::presenter::PresenterToolBar::Context const & rContext);
     };
     typedef std::shared_ptr<ElementMode> SharedElementMode;
 
@@ -629,7 +629,7 @@ void PresenterToolBar::CreateControls (
 
 void PresenterToolBar::ProcessEntry (
     const Reference<beans::XPropertySet>& rxProperties,
-    Context& rContext)
+    Context const & rContext)
 {
     if ( ! rxProperties.is())
         return;
@@ -1361,8 +1361,8 @@ ElementMode::ElementMode()
 void ElementMode::ReadElementMode (
     const Reference<beans::XPropertySet>& rxElementProperties,
     const OUString& rsModeName,
-    std::shared_ptr<ElementMode>& rpDefaultMode,
-    ::sdext::presenter::PresenterToolBar::Context& rContext)
+    std::shared_ptr<ElementMode> const & rpDefaultMode,
+    ::sdext::presenter::PresenterToolBar::Context const & rContext)
 {
     try
     {
