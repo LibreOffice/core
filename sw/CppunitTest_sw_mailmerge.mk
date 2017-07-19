@@ -39,6 +39,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_mailmerge, \
     configmgr/source/configmgr \
     connectivity/source/cpool/dbpool2 \
     connectivity/source/drivers/calc/calc \
+    connectivity/source/drivers/writer/writer \
     connectivity/source/manager/sdbc2 \
     dbaccess/source/filter/xml/dbaxml \
     dbaccess/util/dba \
