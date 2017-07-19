@@ -31,6 +31,8 @@ interface XPrimitive2D;
 
     This interface allows to parse an WMF/EMF/EMF+ stream in form of a sequence of bytes
     to be parsed into a sequence of XPrimitive2Ds
+
+    @since LibreOffice 6.0
  */
 interface XEmfParser : ::com::sun::star::uno::XInterface
 {

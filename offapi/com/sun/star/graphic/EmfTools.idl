@@ -28,6 +28,8 @@ module com { module sun { module star { module graphic
 /** Service that describes the necessary interfaces and properties
     to handle emf files.
     Parses an WMF/EMF/EMF+ file to a sequence of B2DPrimitives for internal usage
+
+    @since LibreOffice 6.0
  */
 
 service EmfTools : XEmfParser;
