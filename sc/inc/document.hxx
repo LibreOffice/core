@@ -1685,7 +1685,7 @@ public:
                             const OUString& sValStr, double& nX);
 
     SC_DLLPUBLIC void           ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
-                                                       ScEditDataArray* pDataArray = nullptr );
+                                                       ScEditDataArray* pDataArray = nullptr, bool* pIsChanged = nullptr );
     void                        DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
     void                        DeleteSelectionTab( SCTAB nTab, InsertDeleteFlags nDelFlag, const ScMarkData& rMark );
 

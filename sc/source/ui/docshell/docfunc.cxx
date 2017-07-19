@@ -1367,16 +1367,22 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
     sal_uInt16 nExtFlags = 0;
     if ( !bImportingXML )
         rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content before the change
-    rDoc.ApplySelectionPattern( rPattern, rMark );
-    if ( !bImportingXML )
-        rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content after the change
 
-    if (!AdjustRowHeight( aMultiRange ))
-        rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid, nExtFlags );
-    else if (nExtFlags & SC_PF_LINES)
-        lcl_PaintAbove( rDocShell, aMultiRange );   // because of lines above the range
+    bool bChanged = true;
+    rDoc.ApplySelectionPattern( rPattern, rMark, nullptr, &bChanged );
 
-    aModificator.SetDocumentModified();
+    if(bChanged)
+    {
+        if ( !bImportingXML )
+            rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content after the change
+
+        if (!AdjustRowHeight( aMultiRange ))
+            rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid, nExtFlags );
+        else if (nExtFlags & SC_PF_LINES)
+            lcl_PaintAbove( rDocShell, aMultiRange );   // because of lines above the range
+
+        aModificator.SetDocumentModified();
+    }
 
     return true;
 }

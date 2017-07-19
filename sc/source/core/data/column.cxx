@@ -423,7 +423,7 @@ sal_uInt32 ScColumn::GetNumberFormat( SCROW nRow ) const
     return pAttrArray->GetPattern( nRow )->GetNumberFormat( pDocument->GetFormatTable() );
 }
 
-SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray )
+SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
     SCROW nTop = 0;
     SCROW nBottom = 0;
@@ -434,7 +434,7 @@ SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData&
         ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
         while (aMultiIter.Next( nTop, nBottom ))
         {
-            pAttrArray->ApplyCacheArea( nTop, nBottom, pCache, pDataArray );
+            pAttrArray->ApplyCacheArea( nTop, nBottom, pCache, pDataArray, pIsChanged );
             bFound = true;
         }
     }
