@@ -322,6 +322,7 @@ SalData::SalData()
     mpDitherLow = nullptr;      // Dither mapping table
     mpDitherHigh = nullptr;     // Dither mapping table
     mnTimerId = nullptr;        // windows timer id
+    mbOnIdleRunScheduler = false; // if yield is idle, run the scheduler
     mhSalObjMsgHook = nullptr;  // hook to get interesting msg for SalObject
     mhWantLeaveMsg = nullptr;   // window handle, that want a MOUSELEAVE message
     mpMouseLeaveTimer = nullptr; // Timer for MouseLeave Test
@@ -565,19 +566,37 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     MSG aMsg;
     bool bWasMsg = false, bOneEvent = false;
+    SalData *const pSalData = GetSalData();
 
     int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
     do
     {
-        if ( PeekMessageW( &aMsg, nullptr, 0, 0, PM_REMOVE ) )
+        bOneEvent = PeekMessageW( &aMsg, nullptr, 0, 0, PM_REMOVE );
+        if ( bOneEvent )
         {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
-
-            bOneEvent = bWasMsg = true;
+            bWasMsg = true;
+            // This is just a wakeup message, in case we were in GetMessageW.
+            // So we can just drop it, but we have to fix the accounting!
+            if ( aMsg.message == SAL_MSG_TIMER_CALLBACK && 1 == aMsg.wParam )
+            {
+                assert( pSalData->mbOnIdleRunScheduler );
+                ++nMaxEvents;
+            }
+            else
+            {
+                TranslateMessage( &aMsg );
+                ImplSalDispatchMessage( &aMsg );
+            }
         }
         else
-            bOneEvent = false;
+        {
+            if ( nMaxEvents && pSalData->mbOnIdleRunScheduler )
+            {
+                pSalData->mbOnIdleRunScheduler = false;
+                EmitTimerCallback();
+                bOneEvent = true;
+            }
+        }
     } while( --nMaxEvents && bOneEvent );
 
     // Also check that we don't wait when application already has quit
@@ -708,7 +727,13 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
                                  SAL_MSG_TIMER_CALLBACK, PM_REMOVE) )
                 assert( "Multiple timer messages in queue" );
-            EmitTimerCallback();
+#ifndef NDEBUG
+            const SalData *pSalData = GetSalData();
+#endif
+            assert( (wParam && pSalData->mbOnIdleRunScheduler) ||
+                    (!wParam && !pSalData->mbOnIdleRunScheduler) );
+            if (0 == wParam)
+                EmitTimerCallback();
             break;
     }
 
