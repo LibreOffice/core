@@ -231,7 +231,7 @@ CommandLineEvent CheckWebQuery(/* in,out */ OUString& arg, CommandLineEvent curE
 
         stream.Close();
 
-        arg = OUString::createFromAscii(aResult.getStr());
+        arg = OStringToOUString(aResult.makeStringAndClear(), osl_getThreadTextEncoding());
         return CommandLineEvent::ForceNew;
     }
     catch (...)
