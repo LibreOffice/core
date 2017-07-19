@@ -75,7 +75,7 @@ NotebookbarMenuController::~NotebookbarMenuController()
 {
 }
 
-void NotebookbarMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
+void NotebookbarMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     if ( SvtMiscOptions().DisableUICustomization() )
         return;

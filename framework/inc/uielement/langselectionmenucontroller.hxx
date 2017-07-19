@@ -89,7 +89,7 @@ namespace framework
             OUString                                         m_aGuessedTextLang;
             LanguageGuessingHelper                           m_aLangGuessHelper;
 
-            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu, const Mode rMode );
+            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu, const Mode rMode );
     };
 }
 

@@ -68,7 +68,7 @@ FontSizeMenuController::~FontSizeMenuController()
 }
 
 // private function
-OUString FontSizeMenuController::retrievePrinterName( css::uno::Reference< css::frame::XFrame >& rFrame )
+OUString FontSizeMenuController::retrievePrinterName( css::uno::Reference< css::frame::XFrame > const & rFrame )
 {
     OUString aPrinterName;
 
@@ -97,7 +97,7 @@ OUString FontSizeMenuController::retrievePrinterName( css::uno::Reference< css::
 }
 
 // private function
-void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XPopupMenu >& rPopupMenu )
+void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     // check menu item
     sal_uInt16          nChecked    = 0;
@@ -121,7 +121,7 @@ void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XP
 }
 
 // private function
-void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
+void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     VCLXPopupMenu*          pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*              pVCLPopupMenu = nullptr;

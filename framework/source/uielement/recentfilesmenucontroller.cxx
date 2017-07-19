@@ -89,7 +89,7 @@ public:
 
 private:
     virtual void impl_setPopupMenu() override;
-    void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+    void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
     void executeEntry( sal_Int32 nIndex );
 
     std::vector< OUString >   m_aRecentFilesItems;
@@ -116,7 +116,7 @@ RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno:
 }
 
 // private function
-void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
+void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     VCLXPopupMenu* pPopupMenu    = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));
     PopupMenu*     pVCLPopupMenu = nullptr;
