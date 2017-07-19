@@ -17,29 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WSTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WSTATEMENT_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CSTATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CSTATEMENT_HXX
 
 #include "file/FStatement.hxx"
 
 namespace connectivity
 {
-namespace writer
-{
+    namespace component
+    {
+        class OConnection;
+        /// Statement implementation for Writer tables and Calc sheets.
+        class OOO_DLLPUBLIC_FILE OComponentStatement : public file::OStatement
+        {
+        protected:
+            virtual file::OResultSet* createResultSet() override;
+        public:
+            OComponentStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
+            DECLARE_SERVICE_INFO();
+        };
+    }
+}
 
-class OConnection;
-class OWriterStatement : public file::OStatement
-{
-protected:
-    virtual file::OResultSet* createResultSet() override;
-public:
-    OWriterStatement(file::OConnection* _pConnection) : file::OStatement(_pConnection) {}
-    DECLARE_SERVICE_INFO();
-};
-
-} // namespace writer
-} // namespace connectivity
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WSTATEMENT_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
