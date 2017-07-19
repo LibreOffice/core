@@ -38,7 +38,7 @@ namespace cppcanvas
             virtual ~EMFPPath() override;
 
             // TODO: remove rR argument when debug code is no longer needed
-            void Read(SvStream& s, sal_uInt32 pathFlags, ImplRenderer& rR);
+            void Read(SvStream& s, sal_uInt32 pathFlags, ImplRenderer const & rR);
 
             ::basegfx::B2DPolyPolygon& GetPolygon(ImplRenderer& rR, bool bMapIt = true, bool bAddLineToCloseShape = false);
         };

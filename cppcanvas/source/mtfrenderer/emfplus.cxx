@@ -297,7 +297,7 @@ namespace cppcanvas
                              x & 0xff), \
                         rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
 
-        void ImplRenderer::EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms,
+        void ImplRenderer::EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon const & polygon, const ActionFactoryParameters& rParms,
                                                 OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor)
         {
             ::basegfx::B2DPolyPolygon localPolygon (polygon);
@@ -815,7 +815,7 @@ namespace cppcanvas
             return cellSize;
         }
 
-        void ImplRenderer::GraphicStatePush(GraphicStateMap& map, sal_Int32 index, OutDevState& rState)
+        void ImplRenderer::GraphicStatePush(GraphicStateMap& map, sal_Int32 index, OutDevState const & rState)
         {
             GraphicStateMap::iterator iter = map.find( index );
 
@@ -852,7 +852,7 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms,
+        void ImplRenderer::processEMFPlus( MetaCommentAction const * pAct, const ActionFactoryParameters& rFactoryParms,
                                            OutDevState& rState, const CanvasSharedPtr& rCanvas )
         {
             sal_uInt32 length = pAct->GetDataSize ();
