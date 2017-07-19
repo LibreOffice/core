@@ -339,6 +339,18 @@ en-US = "Catalan"
 [STR_DESC_MODULE_LANGPACK_CA]
 en-US = "Installs Catalan support in %PRODUCTNAME %PRODUCTVERSION"
 
+[STR_NAME_MODULE_LANGPACK_CA_XR]
+en-US = "Catalan (Valencia RACV)"
+
+[STR_DESC_MODULE_LANGPACK_CA_XR]
+en-US = "Installs Catalan (Valencia RACV) support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_CA_XV]
+en-US = "Catalan (Valencia AVL)"
+
+[STR_DESC_MODULE_LANGPACK_CA_XV]
+en-US = "Installs Catalan (Valencia AVL) support in %PRODUCTNAME %PRODUCTVERSION"
+
 [STR_NAME_MODULE_LANGPACK_DA]
 en-US = "Danish"
 
