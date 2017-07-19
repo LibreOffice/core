@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <tools/urlobj.hxx>
-#include "writer/WPreparedStatement.hxx"
+#include "component/CPreparedStatement.hxx"
 #include "component/CStatement.hxx"
 #include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
@@ -234,7 +234,7 @@ uno::Reference< sdbc::XPreparedStatement > SAL_CALL OWriterConnection::prepareSt
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    OWriterPreparedStatement* pStmt = new OWriterPreparedStatement(this);
+    auto pStmt = new component::OComponentPreparedStatement(this);
     uno::Reference<sdbc::XPreparedStatement> xHoldAlive = pStmt;
     pStmt->construct(sql);
     m_aStatements.push_back(uno::WeakReferenceHelper(*pStmt));
