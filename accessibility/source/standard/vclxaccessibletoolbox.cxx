@@ -303,7 +303,7 @@ void VCLXAccessibleToolBox::UpdateIndeterminate_Impl( ToolBox::ImplToolItems::si
     }
 }
 
-void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator& _rMapPos,
+void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator const & _rMapPos,
         bool _bNotifyRemoval )
 {
     Reference< XAccessible > xItemAcc( _rMapPos->second );
