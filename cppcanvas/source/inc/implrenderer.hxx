@@ -220,7 +220,7 @@ static float GetSwapFloat( SvStream& rSt )
             void MapToDevice (double &x, double &y);
             ::basegfx::B2DPoint Map (double ix, double iy);
             ::basegfx::B2DSize MapSize (double iwidth, double iheight);
-            void GraphicStatePush (GraphicStateMap& map, sal_Int32 index, OutDevState& rState);
+            void GraphicStatePush (GraphicStateMap& map, sal_Int32 index, OutDevState const & rState);
             void GraphicStatePop (GraphicStateMap& map, sal_Int32 index, OutDevState& rState);
 
         private:
@@ -276,7 +276,7 @@ static float GetSwapFloat( SvStream& rSt )
             void processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream = false);
 
             /* EMF+ */
-            void processEMFPlus( MetaCommentAction* pAct, const ActionFactoryParameters& rFactoryParms, OutDevState& rState, const CanvasSharedPtr& rCanvas );
+            void processEMFPlus( MetaCommentAction const * pAct, const ActionFactoryParameters& rFactoryParms, OutDevState& rState, const CanvasSharedPtr& rCanvas );
             double setFont(css::rendering::FontRequest& aFontRequest, sal_uInt8 fontObjectId, const ActionFactoryParameters& rParms, OutDevState& rState );
 
             /// Render LineCap, like the start or end arrow of a polygon.
@@ -286,8 +286,8 @@ static float GetSwapFloat( SvStream& rSt )
                     const css::rendering::StrokeAttributes& rAttributes,
                     const ActionFactoryParameters& rParms, OutDevState& rState);
 
-            void EMFPPlusDrawPolygon (const ::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, sal_uInt32 penIndex);
-            void EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon& polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor);
+            void EMFPPlusDrawPolygon (const ::basegfx::B2DPolyPolygon & polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, sal_uInt32 penIndex);
+            void EMFPPlusFillPolygon (::basegfx::B2DPolyPolygon const & polygon, const ActionFactoryParameters& rParms, OutDevState& rState, const CanvasSharedPtr& rCanvas, bool isColor, sal_uInt32 brushIndexOrColor);
 
             ActionVector maActions;
 
