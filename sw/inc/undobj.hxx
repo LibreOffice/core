@@ -142,7 +142,7 @@ namespace o3tl {
 
 /// will DelContentIndex destroy a frame anchored at character at rAnchorPos?
 bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
-        SwPosition const & rStart, SwPosition const & rEnd, const SwDoc* doc,
+        SwPosition const & rStart, SwPosition const & rEnd,
         DelContentType const nDelContentType = DelContentType::AllMask);
 
 // This class has to be inherited into an Undo-object if it saves content
