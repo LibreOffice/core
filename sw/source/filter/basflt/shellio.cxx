@@ -245,8 +245,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                     &&  !IsDestroyFrameAnchoredAtChar(
                                               *pFrameAnchor,
                                               *pUndoPam->GetPoint(),
-                                              *pUndoPam->GetMark(),
-                                              mxDoc.get())
+                                              *pUndoPam->GetMark())
                                     )
                                 )
                             )
