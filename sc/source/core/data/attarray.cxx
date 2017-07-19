@@ -850,12 +850,13 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
 #undef SET_LINECOLOR
 #undef SET_LINE
 
-void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache, ScEditDataArray* pDataArray )
+void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache, ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
 #if DEBUG_SC_TESTATTRARRAY
     TestData();
 #endif
 
+    bool bChanged = false;
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
         SCSIZE nPos;
@@ -879,6 +880,8 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                 SCROW nY1 = nStart;
                 SCROW nY2 = pData[nPos].nRow;
                 nStart = pData[nPos].nRow + 1;
+
+                bChanged = true;
 
                 if ( nY1 < nStartRow || nY2 > nEndRow )
                 {
@@ -925,6 +928,9 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
         if (pDocument->IsStreamValid(nTab))
             pDocument->SetStreamValid(nTab, false);
     }
+
+    if( pIsChanged)
+        *pIsChanged = bChanged;
 
 #if DEBUG_SC_TESTATTRARRAY
     TestData();

@@ -5775,7 +5775,7 @@ void ScDocument::ApplyFrameAreaTab(const ScRange& rRange,
                                           rRange.aEnd.Col(),   rRange.aEnd.Row());
 }
 
-void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark, ScEditDataArray* pDataArray )
+void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
     const SfxItemSet* pSet = &rAttr.GetItemSet();
     bool bSet = false;
@@ -5801,7 +5801,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
             ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd && *itr < nMax; ++itr)
                 if (maTabs[*itr])
-                    maTabs[*itr]->ApplySelectionCache( &aCache, rMark, pDataArray );
+                    maTabs[*itr]->ApplySelectionCache( &aCache, rMark, pDataArray, pIsChanged );
         }
     }
 }

@@ -2746,10 +2746,10 @@ void ScTable::ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr )
 }
 
 void ScTable::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark,
-                                   ScEditDataArray* pDataArray )
+                                   ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
     for (SCCOL i=0; i < aCol.size(); i++)
-        aCol[i].ApplySelectionCache( pCache, rMark, pDataArray );
+        aCol[i].ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged );
 }
 
 void ScTable::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )

@@ -143,7 +143,7 @@ public:
                             bool bPutToPool = false, ScEditDataArray* pDataArray = nullptr );
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
     void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
-                            ScEditDataArray* pDataArray = nullptr );
+                            ScEditDataArray* pDataArray = nullptr, bool* const pIsChanged = nullptr );
     void    SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                                 const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
