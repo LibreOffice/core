@@ -597,6 +597,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xc
 	MS_PowerPoint_2007_XML \
 	MS_PowerPoint_2007_XML_AutoPlay \
 	MS_PowerPoint_2007_XML_Template \
+	MS_PowerPoint_2007_XML_VBA \
 	impress_OOXML_Presentation \
 	impress_OOXML_Presentation_Template \
 	impress_OOXML_Presentation_AutoPlay \
@@ -622,6 +623,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filter
 	impress_MS_PowerPoint_2007_XML \
 	impress_MS_PowerPoint_2007_XML_AutoPlay \
 	impress_MS_PowerPoint_2007_XML_Template \
+	impress_MS_PowerPoint_2007_XML_VBA \
 	impress_OOXML \
 	impress_OOXML_Template \
 	impress_OOXML_AutoPlay \
