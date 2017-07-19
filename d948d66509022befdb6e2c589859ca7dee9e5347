@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_976de734",
+        "filename": "schema/odf1.0/OpenDocument-schema-v1.0-os.rng",
+        "patchSetId": 2
+      },
+      "lineNbr": 16415,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-07-19T12:34:01Z",
+      "side": 1,
+      "message": "guys, we cannot change the ODF schema willy-nilly ;)\n\nEven if the spelling is horribly wrong.",
+      "revId": "d948d66509022befdb6e2c589859ca7dee9e5347",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
