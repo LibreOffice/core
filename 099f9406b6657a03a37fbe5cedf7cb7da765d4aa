@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_97afa7e2",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-07-19T06:49:40Z",
+      "side": 1,
+      "message": "A precondition of rtl::OUString::createFromAscii(s) is that all elements of s are ASCII (00--7F) characters, which is not guaranteed here.  See rtl::OStringToOUString (best-effort) and rtl_convertStringToUString (signalling failure) for conversion from rtl::OString (and an rtl_TextEncoding) to rtl::OUString.",
+      "revId": "099f9406b6657a03a37fbe5cedf7cb7da765d4aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
