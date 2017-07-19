@@ -28,12 +28,14 @@
 #include <oox/export/shapes.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 #include <sax/fshelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <tools/poly.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
@@ -55,6 +57,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
@@ -69,6 +72,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <utility>
 
 // presentation namespaces
@@ -398,6 +402,8 @@ bool PowerPointExport::exportDocument()
                                       FSEND );
 
     WriteAuthors();
+
+    WriteVBA();
 
     mPresentationFS->endElementNS( XML_p, XML_presentation );
     mPresentationFS.reset();
@@ -1439,7 +1445,8 @@ void PowerPointExport::WriteAuthors()
 
 sal_Int32 PowerPointExport::GetAuthorIdAndLastIndex( const OUString& sAuthor, sal_Int32& nLastIndex )
 {
-    if ( maAuthors.count( sAuthor ) <= 0 ) {
+    if (maAuthors.count(sAuthor) <= 0)
+    {
         struct AuthorComments aAuthorComments;
 
         aAuthorComments.nId = maAuthors.size();
@@ -1511,6 +1518,32 @@ bool PowerPointExport::WriteComments( sal_uInt32 nPageNum )
     }
 
     return false;
+}
+
+void PowerPointExport::WriteVBA()
+{
+    if (!mbPptm)
+        return;
+
+    uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(getModel(), uno::UNO_QUERY);
+    if (!xStorageBasedDocument.is())
+        return;
+
+    uno::Reference<embed::XStorage> xDocumentStorage(xStorageBasedDocument->getDocumentStorage(), uno::UNO_QUERY);
+    OUString aMacrosName("_MS_VBA_Macros");
+    if (!xDocumentStorage.is() || !xDocumentStorage->hasByName(aMacrosName))
+        return;
+
+    const sal_Int32 nOpenMode = embed::ElementModes::READ;
+    uno::Reference<io::XInputStream> xMacrosStream(xDocumentStorage->openStreamElement(aMacrosName, nOpenMode), uno::UNO_QUERY);
+    if (!xMacrosStream.is())
+        return;
+
+    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream("ppt/vbaProject.bin", "application/vnd.ms-office.vbaProject");
+    comphelper::OStorageHelper::CopyInputToOutput(xMacrosStream, xOutputStream);
+
+    // Write the relationship.
+    addRelation(mPresentationFS->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
 }
 
 void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 /* nMode */,
