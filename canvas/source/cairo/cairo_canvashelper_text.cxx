@@ -54,7 +54,7 @@ namespace cairocanvas
     }
 
     static bool
-    setupFontTransform( ::OutputDevice&                 rOutDev,
+    setupFontTransform( ::OutputDevice const &          rOutDev,
                         ::Point&                        o_rPoint,
                         vcl::Font&                      io_rVCLFont,
                         const rendering::ViewState&     rViewState,
@@ -202,7 +202,7 @@ namespace cairocanvas
     }
 
     //set the clip of the rOutDev to the cairo surface
-    void CanvasHelper::clip_cairo_from_dev(::OutputDevice& rOutDev)
+    void CanvasHelper::clip_cairo_from_dev(::OutputDevice const & rOutDev)
     {
         vcl::Region aRegion(rOutDev.GetClipRegion());
         if (!aRegion.IsEmpty() && !aRegion.IsNull())
