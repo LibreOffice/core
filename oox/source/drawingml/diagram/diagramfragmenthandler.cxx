@@ -122,7 +122,7 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
                                                                                const AttributeList& rAttribs )
 {
     // state-table like way of navigating the color fragment. we
-    // currently ignore everything except styleLbl in the colorsDef
+    // currently ignore everything except styleLbl in the styleDef
     // element
     switch( getCurrentElement() )
     {
@@ -136,16 +136,16 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
         {
             switch( nElement )
             {
-                case DGM_TOKEN(lnRef) :     // CT_StyleMatrixReference
+                case A_TOKEN(lnRef):     // CT_StyleMatrixReference
                     return createStyleMatrixContext(nElement,rAttribs,
                                                     maStyleEntry.maLineStyle);
-                case DGM_TOKEN(fillRef) :   // CT_StyleMatrixReference
+                case A_TOKEN(fillRef):   // CT_StyleMatrixReference
                     return createStyleMatrixContext(nElement,rAttribs,
                                                     maStyleEntry.maFillStyle);
-                case DGM_TOKEN(effectRef) : // CT_StyleMatrixReference
+                case A_TOKEN(effectRef): // CT_StyleMatrixReference
                     return createStyleMatrixContext(nElement,rAttribs,
                                                     maStyleEntry.maEffectStyle);
-                case DGM_TOKEN(fontRef) :   // CT_FontRe    ference
+                case A_TOKEN(fontRef):   // CT_FontReference
                     return createStyleMatrixContext(nElement,rAttribs,
                                                     maStyleEntry.maTextStyle);
             }

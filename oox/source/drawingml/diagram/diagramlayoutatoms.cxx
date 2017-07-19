@@ -320,15 +320,16 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
     if( aDataNode != rDgm.getData()->getPointsPresNameMap().end() &&
         aDataNode->second.size() > nIdx )
     {
+        const dgm::Point* aPresNode = aDataNode->second.at(nIdx);
         SAL_INFO(
             "oox.drawingml",
             "Filling content from " << nIdx << "th layout node named \""
                 << msName << "\", modelId \""
-                << aDataNode->second.at(nIdx)->msModelId << "\"");
+                << aPresNode->msModelId << "\"");
 
         // got the presentation node - now, need the actual data node:
         const DiagramData::StringMap::const_iterator aNodeName=rDgm.getData()->getPresOfNameMap().find(
-            aDataNode->second.at(nIdx)->msModelId);
+            aPresNode->msModelId);
         if( aNodeName != rDgm.getData()->getPresOfNameMap().end() )
         {
             DiagramData::StringMap::value_type::second_type::const_iterator aVecIter=aNodeName->second.begin();
@@ -404,22 +405,30 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
                     << " for layout node named \"" << msName << "\"");
         }
 
-        // TODO(Q1): apply styling & coloring - taking
-        // layout node's styleLbl for both style & color
-        // now, but docs are a bit unclear on this
-        if( !msStyleLabel.isEmpty() )
+        // TODO(Q1): apply styling & coloring - take presentation
+        // point's presStyleLbl for both style & color
+        // if not found use layout node's styleLbl
+        // however, docs are a bit unclear on this
+        OUString aStyleLabel = aPresNode->msPresentationLayoutStyleLabel;
+        if (aStyleLabel.isEmpty())
+            aStyleLabel = msStyleLabel;
+        if( !aStyleLabel.isEmpty() )
         {
-            const DiagramQStyleMap::const_iterator aStyle=rDgm.getStyles().find(msStyleLabel);
+            const DiagramQStyleMap::const_iterator aStyle = rDgm.getStyles().find(aStyleLabel);
             if( aStyle != rDgm.getStyles().end() )
             {
-                rShape->getShapeStyleRefs()[XML_fillRef] = aStyle->second.maFillStyle;
-                rShape->getShapeStyleRefs()[XML_lnRef] = aStyle->second.maLineStyle;
-                rShape->getShapeStyleRefs()[XML_effectRef] = aStyle->second.maEffectStyle;
-                rShape->getShapeStyleRefs()[XML_fontRef] = aStyle->second.maTextStyle;
-                Color aColor=aStyle->second.maTextStyle.maPhClr;
+                const DiagramStyle& rStyle = aStyle->second;
+                rShape->getShapeStyleRefs()[XML_fillRef] = rStyle.maFillStyle;
+                rShape->getShapeStyleRefs()[XML_lnRef] = rStyle.maLineStyle;
+                rShape->getShapeStyleRefs()[XML_effectRef] = rStyle.maEffectStyle;
+                rShape->getShapeStyleRefs()[XML_fontRef] = rStyle.maTextStyle;
+            }
+            else
+            {
+                SAL_WARN("oox.drawingml", "Style " << aStyleLabel << " not found");
             }
 
-            const DiagramColorMap::const_iterator aColor=rDgm.getColors().find(msStyleLabel);
+            const DiagramColorMap::const_iterator aColor = rDgm.getColors().find(aStyleLabel);
             if( aColor != rDgm.getColors().end() )
             {
                 const DiagramColor& rColor=aColor->second;
@@ -432,12 +441,6 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const Diagram& rDgm, sal_uI
                 if( rColor.maTextFillColor.isUsed() )
                     rShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rColor.maTextFillColor;
             }
-        }
-        else
-        {
-            // if no style label apply at least some fill color
-            rShape->getShapeStyleRefs()[XML_fillRef].maPhClr.setScrgbClr(0, 0, 0);
-            rShape->getShapeStyleRefs()[XML_fillRef].mnThemedIdx = 2;
         }
 
         // even if no data node found, successful anyway. it's
