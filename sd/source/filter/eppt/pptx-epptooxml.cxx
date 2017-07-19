@@ -27,6 +27,7 @@
 #include <epptdef.hxx>
 #include <oox/export/shapes.hxx>
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 #include <sax/fshelper.hxx>
@@ -95,15 +96,15 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::container::XIndexAccess;
 using ::sax_fastparser::FSHelperPtr;
-
+using namespace oox::drawingml;
+using namespace oox::core;
 
 #if OSL_DEBUG_LEVEL > 1
 void dump_pset(Reference< XPropertySet > const & rXPropSet);
 #endif
 
 namespace oox {
-    using namespace drawingml;
-    namespace core {
+namespace core {
 
 class PowerPointShapeExport : public ShapeExport
 {
@@ -123,6 +124,9 @@ public:
     // helper parts
     bool WritePlaceholder( const Reference< XShape >& xShape, PlaceholderType ePlaceholder, bool bMaster );
 };
+
+}
+}
 
 enum PPTXLayout {
     LAYOUT_BLANK,
@@ -315,8 +319,8 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape( const Reference< XShape >
     return *this;
 }
 
-PowerPointExport::PowerPointExport( const Reference< XComponentContext > & rxCtxt  )
-    : XmlFilterBase(rxCtxt)
+PowerPointExport::PowerPointExport(const Reference< XComponentContext > & rContext, const uno::Sequence<uno::Any>& rArguments)
+    : XmlFilterBase(rContext)
     , PPTWriterBase()
     , mnLayoutFileIdMax(1)
     , mnSlideIdMax(1 << 8)
@@ -324,6 +328,8 @@ PowerPointExport::PowerPointExport( const Reference< XComponentContext > & rxCtx
     , mnAnimationNodeIdMax(1)
     , mbCreateNotes(false)
 {
+    comphelper::SequenceAsHashMap aArgumentsMap(rArguments);
+    mbPptm = aArgumentsMap.getUnpackedValueOrDefault("IsPPTM", false);
 }
 
 PowerPointExport::~PowerPointExport()
@@ -358,8 +364,12 @@ bool PowerPointExport::exportDocument()
 
     addRelation( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument", "ppt/presentation.xml" );
 
-    mPresentationFS = openFragmentStreamWithSerializer( "ppt/presentation.xml",
-                                                    "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" );
+    // PPTM needs a different media type for the presentation.xml stream.
+    OUString aMediaType("application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml");
+    if (mbPptm)
+        aMediaType = "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml";
+
+    mPresentationFS = openFragmentStreamWithSerializer("ppt/presentation.xml", aMediaType);
 
     addRelation( mPresentationFS->getOutputStream(),
                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
@@ -1658,15 +1668,6 @@ void PowerPointExport::AddLayoutIdAndRelation( const FSHelperPtr& pFS, sal_Int32
               FSEND );
 }
 
-sal_Int32 PowerPointExport::nStyleLevelToken[5] =
-{
-    XML_lvl1pPr,
-    XML_lvl2pPr,
-    XML_lvl3pPr,
-    XML_lvl4pPr,
-    XML_lvl5pPr
-};
-
 void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > const & aXBackgroundPropSet )
 {
     SAL_INFO("sd.eppt", "write slide master: " << nPageNum << "\n--------------");
@@ -2286,51 +2287,17 @@ bool PowerPointExport::ImplCreateMainNotes()
     return true;
 }
 
-OUString SAL_CALL PowerPointExport_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Impress.oox.PowerPointExport" );
-}
-
-uno::Sequence< OUString > SAL_CALL PowerPointExport_getSupportedServiceNames() throw()
-{
-    return Sequence< OUString >();
-}
-
-/// @throws uno::Exception
-uno::Reference< uno::XInterface > SAL_CALL PowerPointExport_createInstance(const uno::Reference< XComponentContext > & rxCtxt )
-{
-    return static_cast<cppu::OWeakObject*>(new PowerPointExport( rxCtxt ));
-}
-
 OUString PowerPointExport::getImplementationName()
 {
-    return PowerPointExport_getImplementationName();
-}
-}
+    return OUString("com.sun.star.comp.Impress.oox.PowerPointExport");
 }
 
 // UNO component
-
-static const struct cppu::ImplementationEntry g_entries[] =
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL
+css_comp_Impress_oox_PowerPointExport(uno::XComponentContext* rxCtxt,
+                                      uno::Sequence<css::uno::Any> const& rArguments)
 {
-    {
-        oox::core::PowerPointExport_createInstance,
-        oox::core::PowerPointExport_getImplementationName,
-       oox::core::PowerPointExport_getSupportedServiceNames,
-        cppu::createSingleComponentFactory,
-        nullptr , 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
-
-extern "C"
-{
-
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL sdfilt_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
-{
-    return cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
-
+    return cppu::acquire(new PowerPointExport(rxCtxt, rArguments));
 }
 
 #if OSL_DEBUG_LEVEL > 1

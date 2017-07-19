@@ -39,8 +39,6 @@ namespace oox {
     }
 namespace core {
 
-class PowerPointShapeExport;
-
 struct LayoutInfo
 {
     std::vector< sal_Int32 > mnFileIdArray;
@@ -65,7 +63,7 @@ class PowerPointExport : public XmlFilterBase, public PPTWriterBase
     friend class PowerPointShapeExport;
 public:
 
-    PowerPointExport( const css::uno::Reference< css::uno::XComponentContext > & rxCtxt  );
+    PowerPointExport(const css::uno::Reference<css::uno::XComponentContext> & rContext, const css::uno::Sequence<css::uno::Any>& rArguments);
 
     virtual ~PowerPointExport() override;
 
@@ -134,6 +132,9 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() override;
 
+    /// Should we export as .pptm, ie. do we contain macros?
+    bool mbPptm;
+
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 
     LayoutInfo mLayoutInfo[EPP_LAYOUT_SIZE];
@@ -145,8 +146,6 @@ private:
     sal_uInt32 mnAnimationNodeIdMax;
 
     bool mbCreateNotes;
-
-    static sal_Int32 nStyleLevelToken[5];
 
     ::oox::drawingml::ShapeExport::ShapeHashMap maShapeMap;
 

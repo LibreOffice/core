@@ -192,9 +192,11 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
     if ( rContentType == "application/vnd.ms-excel.sheet.binary.macroEnabled.main" )
         return OUString( "MS Excel 2007 Binary" );
 
-    if( rContentType == "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" ||
-        rContentType == "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml" )
+    if (rContentType == "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml")
         return OUString( "MS PowerPoint 2007 XML" );
+
+    if (rContentType == "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml")
+        return OUString( "MS PowerPoint 2007 XML VBA" );
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml" ||
         rContentType == "application/vnd.ms-powerpoint.slideshow.macroEnabled.main+xml" )

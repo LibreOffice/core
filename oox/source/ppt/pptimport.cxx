@@ -21,6 +21,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -216,14 +217,23 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
     if( XmlFilterBase::filter( rDescriptor ) )
         return true;
 
-    if( isExportFilter() ) {
-        Reference< XExporter > xExporter( Reference<css::lang::XMultiServiceFactory>(getComponentContext()->getServiceManager(), UNO_QUERY_THROW)->createInstance( "com.sun.star.comp.Impress.oox.PowerPointExport" ), UNO_QUERY );
+    if (isExportFilter())
+    {
+        uno::Sequence<uno::Any> aArguments(comphelper::InitAnySequence(
+        {
+            {"IsPPTM", uno::makeAny(exportVBA())},
+        }));
 
-        if( xExporter.is() ) {
+        Reference<css::lang::XMultiServiceFactory> aFactory(getComponentContext()->getServiceManager(), UNO_QUERY_THROW);
+        Reference< XExporter > xExporter(aFactory->createInstanceWithArguments("com.sun.star.comp.Impress.oox.PowerPointExport", aArguments), UNO_QUERY);
+
+        if (xExporter.is())
+        {
             Reference< XComponent > xDocument( getModel(), UNO_QUERY );
             Reference< XFilter > xFilter( xExporter, UNO_QUERY );
 
-            if( xFilter.is() ) {
+            if (xFilter.is())
+            {
                 xExporter->setSourceDocument( xDocument );
                 if( xFilter->filter( rDescriptor ) )
                     return true;
