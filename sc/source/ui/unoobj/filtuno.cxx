@@ -73,7 +73,7 @@ namespace
 
     charsetSource load_CharSet(rtl_TextEncoding &nCharSet, bool bExport, SvStream* dbf_Stream)
     {
-        if (dbfReadCharset(nCharSet, dbf_Stream))
+        if (dbf_Stream && dbfReadCharset(nCharSet, dbf_Stream))
         {
             return charsetSource::charset_from_file;
         }
