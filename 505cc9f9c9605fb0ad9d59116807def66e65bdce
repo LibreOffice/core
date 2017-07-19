@@ -16,6 +16,24 @@
       "revId": "505cc9f9c9605fb0ad9d59116807def66e65bdce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_d7b92f30",
+        "filename": "include/xmloff/xmlimp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-07-19T07:09:32Z",
+      "side": 1,
+      "message": "As it\u0027s only a minor bug I don\u0027t plan to backport (same reason, no such hacks in micro versions).",
+      "parentUuid": "3a461143_c5b09c8e",
+      "revId": "505cc9f9c9605fb0ad9d59116807def66e65bdce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
