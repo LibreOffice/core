@@ -136,6 +136,7 @@ typedef struct
 static const ExtensionMap aWriterExtensionMap[] =
 {
     { "doc",   "MS Word 97" },
+    { "docm",  "MS Word 2007 XML VBA" },
     { "docx",  "MS Word 2007 XML" },
     { "fodt",  "OpenDocument Text Flat XML" },
     { "html",  "HTML (StarWriter)" },
@@ -158,6 +159,7 @@ static const ExtensionMap aCalcExtensionMap[] =
     { "pdf",   "calc_pdf_Export" },
     { "xhtml", "XHTML Calc File" },
     { "xls",   "MS Excel 97" },
+    { "xlsm",  "Calc MS Excel 2007 VBA XML" },
     { "xlsx",  "Calc MS Excel 2007 XML" },
     { "png",   "calc_png_Export" },
     { nullptr, nullptr }
@@ -173,6 +175,7 @@ static const ExtensionMap aImpressExtensionMap[] =
     { "pdf",   "impress_pdf_Export" },
     { "potm",  "Impress MS PowerPoint 2007 XML Template" },
     { "pot",   "MS PowerPoint 97 Vorlage" },
+    { "pptm",  "Impress MS PowerPoint 2007 XML VBA" },
     { "pptx",  "Impress MS PowerPoint 2007 XML" },
     { "pps",   "MS PowerPoint 97 Autoplay" },
     { "ppt",   "MS PowerPoint 97" },
