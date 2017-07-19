@@ -29,8 +29,9 @@
 enum class D2DTextAntiAliasMode
 {
     Default,
-    ClearType,
+    Aliased,
     AntiAliased,
+    ClearType,
 };
 
 class D2DWriteTextOutRenderer : public TextOutRenderer
@@ -55,7 +56,7 @@ public:
         SalGraphics &rGraphics,
         HDC hDC) override;
 
-    bool BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 1, 1));
+    HRESULT BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 1, 1));
 
     bool BindFont(HDC hDC) /*override*/;
     bool ReleaseFont() /*override*/;
@@ -70,10 +71,8 @@ public:
     bool Ready() const;
 
     void applyTextAntiAliasMode();
-    void setTextAntiAliasMode(D2DTextAntiAliasMode eMode)
-    {
-        meTextAntiAliasMode = eMode;
-    }
+    void changeTextAntiAliasMode(D2DTextAntiAliasMode eMode);
+
 private:
     static void CleanupModules();
 
@@ -82,6 +81,7 @@ private:
     D2DWriteTextOutRenderer & operator = (const D2DWriteTextOutRenderer &) = delete;
 
     bool GetDWriteFaceFromHDC(HDC hDC, IDWriteFontFace ** ppFontFace, float * lfSize) const;
+    bool performRender(CommonSalLayout const &rLayout, SalGraphics &rGraphics, HDC hDC, bool& bRetry);
 
     ID2D1Factory        * mpD2DFactory;
     IDWriteFactory      * mpDWriteFactory;
@@ -93,7 +93,6 @@ private:
     float             mlfEmHeight;
     HDC               mhDC;
     D2DTextAntiAliasMode meTextAntiAliasMode;
-    IDWriteRenderingParams* mpRenderingParameters;
 };
 
 #endif // INCLUDED_VCL_INC_WIN_DWRITERENDERER_HXX

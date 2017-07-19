@@ -79,7 +79,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     if (!pTxt)
         return false;
 
-    pTxt->setTextAntiAliasMode(D2DTextAntiAliasMode::AntiAliased);
+    pTxt->changeTextAntiAliasMode(D2DTextAntiAliasMode::AntiAliased);
 
     if (!pTxt->BindFont(aHDC.get()))
     {
@@ -180,7 +180,6 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     };
 
     pRT->BeginDraw();
-    pTxt->applyTextAntiAliasMode();
     pRT->DrawGlyphRun(baseline, &glyphs, pBrush);
     HRESULT hResult = pRT->EndDraw();
 

@@ -80,12 +80,15 @@ D2DTextAntiAliasMode lclGetSystemTextAntiAliasMode()
 
     if (bFontSmoothing)
     {
-        UINT nType;
-        if (!SystemParametersInfo(SPI_GETFONTSMOOTHINGTYPE, 0, &nType, 0))
-            return eMode;
+        eMode = D2DTextAntiAliasMode::AntiAliased;
 
-        eMode = (nType == FE_FONTSMOOTHINGCLEARTYPE) ? D2DTextAntiAliasMode::ClearType
-                                                     : D2DTextAntiAliasMode::AntiAliased;
+        UINT nType;
+        if (SystemParametersInfo(SPI_GETFONTSMOOTHINGTYPE, 0, &nType, 0) && nType == FE_FONTSMOOTHINGCLEARTYPE)
+            eMode = D2DTextAntiAliasMode::ClearType;
+    }
+    else
+    {
+        eMode = D2DTextAntiAliasMode::Aliased;
     }
 
     return eMode;
@@ -150,7 +153,6 @@ D2DWriteTextOutRenderer::D2DWriteTextOutRenderer()
         hr = CreateRenderTarget();
     }
     meTextAntiAliasMode = lclGetSystemTextAntiAliasMode();
-    mpRenderingParameters = lclSetRenderingMode(mpDWriteFactory, DWRITE_RENDERING_MODE_GDI_CLASSIC);
 }
 
 D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
@@ -169,23 +171,31 @@ D2DWriteTextOutRenderer::~D2DWriteTextOutRenderer()
 
 void D2DWriteTextOutRenderer::applyTextAntiAliasMode()
 {
-    D2D1_TEXT_ANTIALIAS_MODE eMode = D2D1_TEXT_ANTIALIAS_MODE_DEFAULT;
+    D2D1_TEXT_ANTIALIAS_MODE eTextAAMode = D2D1_TEXT_ANTIALIAS_MODE_DEFAULT;
+    DWRITE_RENDERING_MODE eRenderingMode = DWRITE_RENDERING_MODE_DEFAULT;
     switch (meTextAntiAliasMode)
     {
         case D2DTextAntiAliasMode::Default:
-            eMode = D2D1_TEXT_ANTIALIAS_MODE_ALIASED;
+            eRenderingMode = DWRITE_RENDERING_MODE_DEFAULT;
+            eTextAAMode = D2D1_TEXT_ANTIALIAS_MODE_DEFAULT;
+            break;
+        case D2DTextAntiAliasMode::Aliased:
+            eRenderingMode = DWRITE_RENDERING_MODE_ALIASED;
+            eTextAAMode = D2D1_TEXT_ANTIALIAS_MODE_ALIASED;
             break;
         case D2DTextAntiAliasMode::AntiAliased:
-            eMode = D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE;
+            eRenderingMode = DWRITE_RENDERING_MODE_CLEARTYPE_GDI_CLASSIC;
+            eTextAAMode = D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE;
             break;
         case D2DTextAntiAliasMode::ClearType:
-            eMode = D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE;
+            eRenderingMode = DWRITE_RENDERING_MODE_CLEARTYPE_GDI_CLASSIC;
+            eTextAAMode = D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE;
             break;
         default:
             break;
     }
-    mpRT->SetTextAntialiasMode(eMode);
-    mpRT->SetTextRenderingParams(mpRenderingParameters);
+    mpRT->SetTextRenderingParams(lclSetRenderingMode(mpDWriteFactory, eRenderingMode));
+    mpRT->SetTextAntialiasMode(eTextAAMode);
 }
 
 HRESULT D2DWriteTextOutRenderer::CreateRenderTarget()
@@ -195,7 +205,19 @@ HRESULT D2DWriteTextOutRenderer::CreateRenderTarget()
         mpRT->Release();
         mpRT = nullptr;
     }
-    return CHECKHR(mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT));
+    HRESULT hr = CHECKHR(mpD2DFactory->CreateDCRenderTarget(&mRTProps, &mpRT));
+    if (SUCCEEDED(hr))
+        applyTextAntiAliasMode();
+    return hr;
+}
+
+void D2DWriteTextOutRenderer::changeTextAntiAliasMode(D2DTextAntiAliasMode eMode)
+{
+    if (meTextAntiAliasMode != eMode)
+    {
+        meTextAntiAliasMode = eMode;
+        applyTextAntiAliasMode();
+    }
 }
 
 bool D2DWriteTextOutRenderer::Ready() const
@@ -203,41 +225,64 @@ bool D2DWriteTextOutRenderer::Ready() const
     return mpGdiInterop && mpRT;
 }
 
-bool D2DWriteTextOutRenderer::BindDC(HDC hDC, tools::Rectangle const & rRect)
+HRESULT D2DWriteTextOutRenderer::BindDC(HDC hDC, tools::Rectangle const & rRect)
 {
-    if (rRect.GetWidth() == 0 || rRect.GetHeight() == 0)
-        return false;
     RECT const rc = { rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() };
-    return SUCCEEDED(CHECKHR(mpRT->BindDC(hDC, &rc)));
+    return CHECKHR(mpRT->BindDC(hDC, &rc));
 }
 
-bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
-    SalGraphics &rGraphics,
-    HDC hDC)
+bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const & rLayout, SalGraphics& rGraphics, HDC hDC)
+{
+    bool bRetry = false;
+    bool bResult = false;
+    int nCount = 0;
+    do
+    {
+       bRetry = false;
+       bResult = performRender(rLayout, rGraphics, hDC, bRetry);
+       nCount++;
+    } while (bRetry && nCount < 3);
+    return bResult;
+}
+
+bool D2DWriteTextOutRenderer::performRender(CommonSalLayout const & rLayout, SalGraphics& rGraphics, HDC hDC, bool& bRetry)
 {
     if (!Ready())
         return false;
 
-    if (!BindFont(hDC))
+    HRESULT hr = S_OK;
+    hr = BindDC(hDC);
+
+    if (hr == D2DERR_RECREATE_TARGET)
     {
-        // If for any reason we can't bind fallback to legacy APIs.
-        return ExTextOutRenderer()(rLayout, rGraphics, hDC);
+        CreateRenderTarget();
+        bRetry = true;
+        return false;
     }
+
+    mlfEmHeight = 0;
+    if (!GetDWriteFaceFromHDC(hDC, &mpFontFace, &mlfEmHeight))
+        return false;
 
     tools::Rectangle bounds;
     bool succeeded = rLayout.GetBoundRect(rGraphics, bounds);
-    succeeded &= BindDC(hDC, bounds);   // Update the bounding rect.
+    if (succeeded)
+    {
+        hr = BindDC(hDC, bounds);   // Update the bounding rect.
+        succeeded &= SUCCEEDED(hr);
+    }
 
     ID2D1SolidColorBrush* pBrush = nullptr;
-    COLORREF bgrTextColor = GetTextColor(mhDC);
-    D2D1::ColorF aD2DColor(GetRValue(bgrTextColor) / 255.0f, GetGValue(bgrTextColor) / 255.0f, GetBValue(bgrTextColor) / 255.0f);
-    succeeded &= SUCCEEDED(CHECKHR(mpRT->CreateSolidColorBrush(aD2DColor, &pBrush)));
+    if (succeeded)
+    {
+        COLORREF bgrTextColor = GetTextColor(hDC);
+        D2D1::ColorF aD2DColor(GetRValue(bgrTextColor) / 255.0f, GetGValue(bgrTextColor) / 255.0f, GetBValue(bgrTextColor) / 255.0f);
+        succeeded &= SUCCEEDED(CHECKHR(mpRT->CreateSolidColorBrush(aD2DColor, &pBrush)));
+    }
 
-    HRESULT hr = S_OK;
     if (succeeded)
     {
         mpRT->BeginDraw();
-        applyTextAntiAliasMode();
 
         int nStart = 0;
         Point aPos(0, 0);
@@ -271,7 +316,10 @@ bool D2DWriteTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     ReleaseFont();
 
     if (hr == D2DERR_RECREATE_TARGET)
+    {
         CreateRenderTarget();
+        bRetry = true;
+    }
 
     return succeeded;
 }
