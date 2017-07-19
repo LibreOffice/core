@@ -65,7 +65,7 @@ namespace framework
 
         private:
             virtual void impl_setPopupMenu() override;
-            void fillPopupMenu( const css::uno::Sequence< OUString >& rFontNameSeq, css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( const css::uno::Sequence< OUString >& rFontNameSeq, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
 
             OUString                                        m_aFontFamilyName;
             css::uno::Reference< css::frame::XDispatch >    m_xFontListDispatch;

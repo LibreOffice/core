@@ -66,9 +66,9 @@ namespace framework
 
         private:
             virtual void impl_setPopupMenu() override;
-            void setCurHeight( long nHeight, css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
-            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
-            OUString retrievePrinterName( css::uno::Reference< css::frame::XFrame >& rFrame );
+            void setCurHeight( long nHeight, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+            OUString retrievePrinterName( css::uno::Reference< css::frame::XFrame > const & rFrame );
 
             std::unique_ptr<long[]>                          m_pHeightArray;
             css::awt::FontDescriptor                         m_aFontDescriptor;

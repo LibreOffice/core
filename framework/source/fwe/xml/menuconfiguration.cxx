@@ -53,7 +53,7 @@ MenuConfiguration::~MenuConfiguration()
 }
 
 Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
-    Reference< XInputStream >& rInputStream )
+    Reference< XInputStream > const & rInputStream )
 {
     Reference< XParser > xParser = Parser::create( m_xContext );
 
@@ -99,8 +99,8 @@ Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
 }
 
 void MenuConfiguration::StoreMenuBarConfigurationToXML(
-    Reference< XIndexAccess >& rMenuBarConfiguration,
-    Reference< XOutputStream >& rOutputStream, bool bIsMenuBar )
+    Reference< XIndexAccess > const & rMenuBarConfiguration,
+    Reference< XOutputStream > const & rOutputStream, bool bIsMenuBar )
 {
     Reference< XWriter > xWriter = Writer::create(m_xContext);
     xWriter->setOutputStream( rOutputStream );

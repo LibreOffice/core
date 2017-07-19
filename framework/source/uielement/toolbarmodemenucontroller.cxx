@@ -75,7 +75,7 @@ ToolbarModeMenuController::~ToolbarModeMenuController()
 {
 }
 
-void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
+void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     if ( SvtMiscOptions().DisableUICustomization() )
         return;

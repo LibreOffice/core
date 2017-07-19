@@ -93,7 +93,7 @@ static const char ITEM_DESCRIPTOR_VISIBLE[]    = "IsVisible";
 static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU = 1000;
 
 static css::uno::Reference< css::frame::XLayoutManager > getLayoutManagerFromFrame(
-    css::uno::Reference< css::frame::XFrame >& rFrame )
+    css::uno::Reference< css::frame::XFrame > const & rFrame )
 {
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
 
@@ -1177,7 +1177,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     }
 }
 
-void ToolBarManager::FillOverflowToolbar( ToolBox* pParent )
+void ToolBarManager::FillOverflowToolbar( ToolBox const * pParent )
 {
     CommandInfo aCmdInfo;
     bool bInsertSeparator = false;
@@ -1401,7 +1401,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     return true;
 }
 
-void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
+void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
 {
     // No config menu entries if command ".uno:ConfigureDialog" is not enabled
     Reference< XDispatch > xDisp;

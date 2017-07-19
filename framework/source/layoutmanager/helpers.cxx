@@ -61,7 +61,7 @@ bool isReverseOrderDockingArea( const sal_Int32 nDockArea )
             ( eDockArea == ui::DockingArea_DOCKINGAREA_RIGHT ));
 }
 
-bool isToolboxHorizontalAligned( ToolBox* pToolBox )
+bool isToolboxHorizontalAligned( ToolBox const * pToolBox )
 {
     if ( pToolBox )
         return (( pToolBox->GetAlign() == WindowAlign::Top ) || ( pToolBox->GetAlign() == WindowAlign::Bottom ));
