@@ -111,7 +111,7 @@ private:
     DECL_LINK(            RemovePlacePressed_Hdl, Button*, void );
     DECL_LINK(            Split_Hdl, Splitter*, void );
 
-    void                        OpenHdl_Impl(void* pVoid);
+    void                        OpenHdl_Impl(void const * pVoid);
     void                        Init_Impl( PickerFlags nBits );
     /** find a filter with the given wildcard
     @param _rFilter
