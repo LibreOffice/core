@@ -17,27 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CSTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CSTATEMENT_HXX
+#include "component/CStatement.hxx"
+#include "component/CResultSet.hxx"
 
-#include "file/FStatement.hxx"
+using namespace connectivity::component;
+using namespace connectivity::file;
+using namespace com::sun::star::uno;
 
-namespace connectivity
+OResultSet* OComponentStatement::createResultSet()
 {
-    namespace calc
-    {
-        class OConnection;
-        class OCalcStatement : public file::OStatement
-        {
-        protected:
-            virtual file::OResultSet* createResultSet() override;
-        public:
-            OCalcStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
-            DECLARE_SERVICE_INFO();
-        };
-    }
+    return new connectivity::component::OComponentResultSet(this,m_aSQLIterator);
 }
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CSTATEMENT_HXX
+IMPLEMENT_SERVICE_INFO(OComponentStatement,"com.sun.star.sdbc.driver.component.Statement","com.sun.star.sdbc.Statement");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

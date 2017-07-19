@@ -28,13 +28,11 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <tools/urlobj.hxx>
 #include "writer/WPreparedStatement.hxx"
-#include "writer/WStatement.hxx"
+#include "component/CStatement.hxx"
 #include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
-
-using namespace connectivity::file;
 
 typedef connectivity::file::OConnection OConnection_BASE;
 
@@ -225,7 +223,7 @@ uno::Reference< sdbc::XStatement > SAL_CALL OWriterConnection::createStatement()
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    uno::Reference<sdbc::XStatement> xReturn = new OWriterStatement(this);
+    uno::Reference<sdbc::XStatement> xReturn = new component::OComponentStatement(this);
     m_aStatements.push_back(uno::WeakReferenceHelper(xReturn));
     return xReturn;
 }

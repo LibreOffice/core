@@ -28,7 +28,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <tools/urlobj.hxx>
 #include "calc/CPreparedStatement.hxx"
-#include "calc/CStatement.hxx"
+#include "component/CStatement.hxx"
 #include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -237,7 +237,7 @@ Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  )
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    Reference< XStatement > xReturn = new OCalcStatement(this);
+    Reference< XStatement > xReturn = new connectivity::component::OComponentStatement(this);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
