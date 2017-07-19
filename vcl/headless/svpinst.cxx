@@ -310,9 +310,7 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
     assert(nReleased == 0); // not implemented
     // first, check for already queued events.
 
-    // release yield mutex
     std::list< SalUserEvent > aEvents;
-    sal_uLong nAcquireCount = ReleaseYieldMutex();
     {
         osl::MutexGuard g(m_aEventGuard);
         if( ! m_aUserEvents.empty() )
@@ -329,8 +327,6 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
             }
         }
     }
-    // acquire yield mutex again
-    AcquireYieldMutex( nAcquireCount );
 
     bool bEvent = !aEvents.empty();
     if( bEvent )
