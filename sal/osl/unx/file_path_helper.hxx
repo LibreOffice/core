@@ -24,148 +24,97 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
-/*******************************************
-   osl_systemPathRemoveSeparator
-   Removes the last separator from the
-   given system path if any and if the path
+/**
+   Removes the last separator from the given system path if any and if the path
    is not the root path '/'
 
-   @param  ppustrPath [inout] a system path
-           if the path is not the root path
-           and the last character is a
-           path separator it will be cut off
-              ppustrPath must not be NULL and
-           must point to a valid rtl_uString
+   @param  ppustrPath[inout]    a system path if the path is not the root path
+                                and the last character is a path separator it
+                                will be cut off ppustrPath must not be NULL and
+                                must point to a valid rtl_uString
 
    @returns nothing
 
- ******************************************/
+*/
+void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath);
 
-void SAL_CALL osl_systemPathRemoveSeparator(
-    /*inout*/ rtl_uString* pustrPath);
-
-/*******************************************
-   osl_systemPathEnsureSeparator
-   Adds a trailing path separator to the
-   given system path if not already there
+/**
+   Adds a trailing path separator to the given system path if not already there
    and if the path is not the root path '/'
 
-   @param  pustrPath [inout] a system path
-           if the path is not the root path
-           '/' and has no trailing separator
-           a separator will be added
-           ppustrPath must not be NULL and
-           must point to a valid rtl_uString
+   @param  pustrPath [inout]    a system path if the path is not the root path
+                                '/' and has no trailing separator a separator
+                                will be added ppustrPath must not be NULL and
+                                must point to a valid rtl_uString
 
    @returns nothing
 
- ******************************************/
+*/
+void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath);
 
-void SAL_CALL osl_systemPathEnsureSeparator(
-    rtl_uString** ppustrPath);
+/**
+   Returns true if the given path is a relative path and so starts not with '/'
 
-/*******************************************
-   osl_systemPathIsRelativePath
-   Returns true if the given path is a
-   relative path and so starts not with '/'
+   @param  pustrPath [in]       a system path - must not be NULL
 
-   @param  pustrPath [in] a system path
-           pustrPath must not be NULL
+   @retval  sal_True    the given path doesn't start with a separator
+   @retval  sal_False   the given path starts with a seperator
 
-   @returns sal_True if the given path
-            doesn't start with a separator
-            else sal_False will be returned
-
- ******************************************/
-
+*/
 bool SAL_CALL osl_systemPathIsRelativePath(
     const rtl_uString* pustrPath);
 
-/******************************************
-   osl_systemPathMakeAbsolutePath
+/**
    Append a relative path to a base path
 
-   @param  pustrBasePath [in] a system
-           path that will be considered as
-           base path
-           pustrBasePath must not be NULL
+   @param  pustrBasePath [in]   a system path that will be considered as
+                                base path pustrBasePath must not be NULL
 
-   @param  pustrRelPath [in] a system path
-           that will be considered as
-           relative path
-           pustrBasePath must not be NULL
+   @param  pustrRelPath [in]    a system path that will be considered as
+                                relative path pustrBasePath must not be NULL
 
-   @param  ppustrAbsolutePath [out] the
-           resulting path which is a
-           concatination of the base and
-           the relative path
-           if base path is empty the
-           resulting absolute path is the
-           relative path
-           if relative path is empty the
-           resulting absolute path is the
-           base path
-           if base and relative path are
-           empty the resulting absolute
-           path is also empty
-           ppustrAbsolutePath must not be
-           NULL and *ppustrAbsolutePath
-           must be 0 or point to a valid
-           rtl_uString
-
- *****************************************/
-
+   @param  ppustrAbsolutePath [out] the resulting path which is a concatenation
+                                of the base and the relative path if base path
+                                is empty the resulting absolute path is the
+                                relative path if relative path is empty the
+                                resulting absolute path is the base path if base
+                                and relative path are empty the resulting absolute
+                                path is also empty ppustrAbsolutePath must not be
+                                NULL and *ppustrAbsolutePath must be 0 or point to
+                                a valid rtl_uString
+*/
 void SAL_CALL osl_systemPathMakeAbsolutePath(
     const rtl_uString* pustrBasePath,
     const rtl_uString* pustrRelPath,
     rtl_uString**      ppustrAbsolutePath);
 
-/*****************************************
-   osl_systemPathGetFileOrLastDirectoryPart
-   Returns the file or the directory part
-   of the given path
+/**
+   Returns the file or the directory part of the given path
 
-   @param pustrPath [in] a system path,
-          must not be NULL
+   @param pustrPath [in]        a system path, must not be NULL
 
-   @param ppustrFileOrDirPart [out] on
-          return receives the last part
-          of the given directory or the
-          file name
-          if pustrPath is the root path
-          '/' an empty string will be
-          returned
-          if pustrPath has a trailing
-          '/' the last part before the
-          '/' will be returned else
-          the part after the last '/'
-          will be returned
+   @param ppustrFileOrDirPart [out] on return receives the last part of the
+                                given directory or the file name if pustrPath is the
+                                root path '/' an empty string will be returned if
+                                pustrPath has a trailing '/' the last part before the
+                                '/' will be returned else the part after the last '/'
+                                will be returned
 
    @returns nothing
 
- ****************************************/
-
+*/
 void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
-    const rtl_uString*     pustrPath,
+    const rtl_uString*  pustrPath,
     rtl_uString**       ppustrFileNameOrLastDirPart);
 
-/********************************************
-   osl_systemPathIsHiddenFileOrDirectoryEntry
-   Returns sal_True if the last part of
-   given system path is not '.' or '..'
-   alone and starts with a '.'
+/**
+   @param   pustrPath [in] a system path, must not be NULL
 
-   @param   pustrPath [in] a system path,
-            must not be NULL
+   @retval  sal_True the last part of the given system path starts with '.'
+   @retval  sal_False the last part of the given system path is '.' or '..'
+                alone or doesn't start with a dot
 
-   @returns sal_True if the last part of
-            the given system path starts
-            with '.' or sal_False the last
-            part is '.' or '..' alone or
-            doesn't start with a dot
-
-*********************************************/
-
+*/
 bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
     const rtl_uString* pustrPath);
 
