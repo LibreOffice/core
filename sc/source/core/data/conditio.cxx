@@ -1649,8 +1649,8 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
                 const DayOfWeek eDay = rActDate.GetDayOfWeek();
                 if( eDay != SUNDAY )
                 {
-                    Date aBegin(rActDate - 8 - static_cast<sal_Int32>(eDay));
-                    Date aEnd(rActDate - 2 - static_cast<sal_Int32>(eDay));
+                    Date aBegin(rActDate - (8 + static_cast<sal_Int32>(eDay)));
+                    Date aEnd(rActDate - (2 + static_cast<sal_Int32>(eDay)));
                     return aCellDate.IsBetween( aBegin, aEnd );
                 }
                 else
@@ -1666,8 +1666,8 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
                 const DayOfWeek eDay = rActDate.GetDayOfWeek();
                 if( eDay != SUNDAY )
                 {
-                    Date aBegin(rActDate - 1 - static_cast<sal_Int32>(eDay));
-                    Date aEnd(rActDate + 5 - static_cast<sal_Int32>(eDay));
+                    Date aBegin(rActDate - (1 + static_cast<sal_Int32>(eDay)));
+                    Date aEnd(rActDate + (5 + static_cast<sal_Int32>(eDay)));
                     return aCellDate.IsBetween( aBegin, aEnd );
                 }
                 else
@@ -1682,8 +1682,8 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
                 const DayOfWeek eDay = rActDate.GetDayOfWeek();
                 if( eDay != SUNDAY )
                 {
-                    return aCellDate.IsBetween( rActDate + 6 - static_cast<sal_Int32>(eDay),
-                            rActDate + 12 - static_cast<sal_Int32>(eDay) );
+                    return aCellDate.IsBetween( rActDate + (6 - static_cast<sal_Int32>(eDay)),
+                            rActDate + (12 - static_cast<sal_Int32>(eDay)) );
                 }
                 else
                 {
