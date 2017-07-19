@@ -18,7 +18,7 @@
  */
 
 #include "calc/CStatement.hxx"
-#include "calc/CResultSet.hxx"
+#include "component/CResultSet.hxx"
 
 using namespace connectivity::calc;
 using namespace connectivity::file;
@@ -26,7 +26,7 @@ using namespace com::sun::star::uno;
 
 OResultSet* OCalcStatement::createResultSet()
 {
-    return new OCalcResultSet(this,m_aSQLIterator);
+    return new connectivity::component::OComponentResultSet(this,m_aSQLIterator);
 }
 
 IMPLEMENT_SERVICE_INFO(OCalcStatement,"com.sun.star.sdbc.driver.calc.Statement","com.sun.star.sdbc.Statement");
