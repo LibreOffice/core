@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_f752abdc",
+        "filename": "config_host.mk.in",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-19T08:07:32Z",
+      "side": 1,
+      "message": "This should be avoided -- please try to use clang and let\u0027s see if it causes any problems. We invested enough effort to move away from gcc on Android, no need to have it back.",
+      "revId": "358eac797d7586ce0baceb4a00aef866c91cbb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_175e57e9",
+        "filename": "external/curl/ExternalProject_curl.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-19T08:07:32Z",
+      "side": 1,
+      "message": "What is the intention here? Avoid curl even if NSS is enabled?\n\nIf so, you want \"if (enable-nss and (not Android))\", while you did \"if enable-nss\" -\u003e \"if not Android\"; which will break things. (IIRC the x86 fuzzer disables nss but is not Android).",
+      "revId": "358eac797d7586ce0baceb4a00aef866c91cbb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_376353b3",
+        "filename": "external/curl/ExternalProject_curl.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-19T08:07:32Z",
+      "side": 1,
+      "message": "Same here, enable-nss -\u003e not-android is not a safe move.",
+      "revId": "358eac797d7586ce0baceb4a00aef866c91cbb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_5758dffa",
+        "filename": "external/nss/ExternalProject_nss.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-19T08:07:32Z",
+      "side": 1,
+      "message": "Avoid gcc here.",
+      "revId": "358eac797d7586ce0baceb4a00aef866c91cbb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_9772477b",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-19T08:07:32Z",
+      "side": 1,
+      "message": "It will cause less conflicts in the future if you do \"#if 0\" and #endif around this function in the patch, rather than deleting all of it.",
+      "revId": "358eac797d7586ce0baceb4a00aef866c91cbb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_b76f4391",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-19T08:07:32Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "358eac797d7586ce0baceb4a00aef866c91cbb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_170577c1",
+        "filename": "postprocess/Rdb_services.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-19T08:07:32Z",
+      "side": 1,
+      "message": "enable-nss-\u003enot-Android move is unsafe.",
+      "revId": "358eac797d7586ce0baceb4a00aef866c91cbb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_370a73d3",
+        "filename": "sd/Library_sd.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-19T08:07:32Z",
+      "side": 1,
+      "message": "unsafe enable-nss -\u003e not-Android move.",
+      "revId": "358eac797d7586ce0baceb4a00aef866c91cbb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_7714fbf4",
+        "filename": "xmlsecurity/Module_xmlsecurity.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-19T08:07:32Z",
+      "side": 1,
+      "message": "This won\u0027t work, you have:\n\nif\nif\nendif\n... real code ...\nendif\n\nwhile you want:\n\nif\nif\n... real code ...\nendif\nendif\n\nto implement a \"enable-nss and not android\" block.",
+      "revId": "358eac797d7586ce0baceb4a00aef866c91cbb17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
