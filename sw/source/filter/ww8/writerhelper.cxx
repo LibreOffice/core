@@ -60,21 +60,6 @@ using namespace com::sun::star;
 
 namespace
 {
-    /*
-     Stroustroup forgets copy_if, See C++ Programming language Chp 18, pg 530
-    */
-    template <typename In , typename Out , typename Pred>
-        Out my_copy_if(In first, In last, Out res, Pred p)
-    {
-        while (first != last)
-        {
-            if (p(*first))
-                *res = *first;
-            ++first;
-        }
-        return res;
-    }
-
     // #i98791# - adjust sorting
     // Utility to sort SwTextFormatColl's by their assigned outline style list level
     class outlinecmp
@@ -549,7 +534,7 @@ namespace sw
         ww8::Frames GetFramesInNode(const ww8::Frames &rFrames, const SwNode &rNode)
         {
             ww8::Frames aRet;
-            my_copy_if(rFrames.begin(), rFrames.end(),
+            std::copy_if(rFrames.begin(), rFrames.end(),
                 std::back_inserter(aRet), anchoredto(rNode.GetIndex()));
             return aRet;
         }
