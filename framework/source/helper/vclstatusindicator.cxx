@@ -122,7 +122,7 @@ void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
 }
 
 void VCLStatusIndicator::impl_recalcLayout(vcl::Window* pStatusBar   ,
-                                           vcl::Window* pParentWindow)
+                                           vcl::Window const * pParentWindow)
 {
     if (
         (!pStatusBar   ) ||

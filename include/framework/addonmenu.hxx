@@ -47,7 +47,7 @@ class FWE_DLLPUBLIC AddonMenuManager
 
         // Merge the Add-Ons help menu items into the given menu bar at a defined pos
         static void       MergeAddonHelpMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                              MenuBar* pMergeMenuBar );
+                                              MenuBar const * pMergeMenuBar );
 
         // Merge the addon popup menus into the given menu bar at the provided pos.
         static void       MergeAddonPopupMenus( const css::uno::Reference< css::frame::XFrame >& rFrame,

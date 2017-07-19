@@ -91,7 +91,7 @@ class ToolBarManager : public ToolbarManager_Base
         void CheckAndUpdateImages();
         virtual void RefreshImages();
         void FillToolbar( const css::uno::Reference< css::container::XIndexAccess >& rToolBarData );
-        void FillOverflowToolbar( ToolBox* pParent );
+        void FillOverflowToolbar( ToolBox const * pParent );
         void notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand );
         void Destroy();
 
@@ -128,7 +128,7 @@ class ToolBarManager : public ToolbarManager_Base
 
         virtual bool MenuItemAllowed( sal_uInt16 ) const;
 
-        void AddCustomizeMenuItems(ToolBox* pToolBar);
+        void AddCustomizeMenuItems(ToolBox const * pToolBar);
         void InitImageManager();
         void RemoveControllers();
         void CreateControllers();

@@ -169,7 +169,7 @@ void EditToolbarController::LoseFocus()
     notifyFocusLost();
 }
 
-bool EditToolbarController::PreNotify( NotifyEvent& rNEvt )
+bool EditToolbarController::PreNotify( NotifyEvent const & rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {

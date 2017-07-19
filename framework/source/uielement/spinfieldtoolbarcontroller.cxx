@@ -261,7 +261,7 @@ void SpinfieldToolbarController::GetFocus()
     notifyFocusGet();
 }
 
-bool SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )
+bool SpinfieldToolbarController::PreNotify( NotifyEvent const & rNEvt )
 {
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {

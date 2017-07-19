@@ -72,7 +72,7 @@ FontMenuController::~FontMenuController()
 }
 
 // private function
-void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq, Reference< css::awt::XPopupMenu >& rPopupMenu )
+void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq, Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     const OUString*    pFontNameArray = rFontNameSeq.getConstArray();
     VCLXPopupMenu*     pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXMenu::GetImplementation( rPopupMenu ));

@@ -76,7 +76,7 @@ namespace framework
             DECL_STATIC_LINK( NotebookbarMenuController, ExecuteHdl_Impl, void*, void );
 
         private:
-            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
 
             css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     };
