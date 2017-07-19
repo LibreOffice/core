@@ -17,32 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "writer/WColumns.hxx"
-
+#include "component/CColumns.hxx"
+#include "file/FTable.hxx"
 #include <connectivity/sdbcx/VColumn.hxx>
 
-#include "writer/WTable.hxx"
+using namespace connectivity::component;
+using namespace connectivity;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::container;
 
-using namespace ::com::sun::star;
 
-namespace connectivity
+sdbcx::ObjectType OComponentColumns::createObject(const OUString& _rName)
 {
-namespace writer
-{
-
-sdbcx::ObjectType OWriterColumns::createObject(const OUString& _rName)
-{
-    OWriterTable* pTable = static_cast<OWriterTable*>(m_pTable);
-    ::rtl::Reference<OSQLColumns> aCols = pTable->getTableColumns();
+    ::rtl::Reference<OSQLColumns> aCols = m_pTable->getTableColumns();
 
     OSQLColumns::Vector::const_iterator aIter = find(aCols->get().begin(),aCols->get().end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
     sdbcx::ObjectType xRet;
-    if (aIter != aCols->get().end())
-        xRet = sdbcx::ObjectType(*aIter, uno::UNO_QUERY);
+    if(aIter != aCols->get().end())
+        xRet = sdbcx::ObjectType(*aIter,UNO_QUERY);
     return xRet;
 }
 
-} // namespace writer
-} // namespace connectivity
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

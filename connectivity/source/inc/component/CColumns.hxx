@@ -17,30 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "calc/CColumns.hxx"
-#include "calc/CTable.hxx"
-#include <connectivity/sdbcx/VColumn.hxx>
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CCOLUMNS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CCOLUMNS_HXX
 
-using namespace connectivity::calc;
-using namespace connectivity;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::container;
+#include "file/FColumns.hxx"
 
-
-sdbcx::ObjectType OCalcColumns::createObject(const OUString& _rName)
+namespace connectivity
 {
-    OCalcTable* pTable = static_cast<OCalcTable*>(m_pTable);
-    ::rtl::Reference<OSQLColumns> aCols = pTable->getTableColumns();
+    namespace component
+    {
+        /// Columns implementation for Writer tables and Calc sheets.
+        class OOO_DLLPUBLIC_FILE OComponentColumns : public file::OColumns
+        {
+        protected:
+            virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
+        public:
+            OComponentColumns(file::OFileTable* _pTable,
+                            ::osl::Mutex& _rMutex,
+                            const TStringVector &_rVector
+                         ) : file::OColumns(_pTable,_rMutex,_rVector)
+            {}
 
-    OSQLColumns::Vector::const_iterator aIter = find(aCols->get().begin(),aCols->get().end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
-    sdbcx::ObjectType xRet;
-    if(aIter != aCols->get().end())
-        xRet = sdbcx::ObjectType(*aIter,UNO_QUERY);
-    return xRet;
+        };
+    }
 }
 
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CCOLUMNS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
