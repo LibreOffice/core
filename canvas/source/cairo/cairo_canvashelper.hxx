@@ -269,7 +269,7 @@ namespace cairocanvas
         ::cairo::SurfaceSharedPtr   mpSurface;
         ::basegfx::B2ISize maSize;
 
-        void clip_cairo_from_dev(::OutputDevice& rOutDev);
+        void clip_cairo_from_dev(::OutputDevice const & rOutDev);
 
     };
 

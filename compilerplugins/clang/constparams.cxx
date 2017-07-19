@@ -417,7 +417,7 @@ StringRef ConstParams::getFilename(const SourceLocation& loc)
     return name;
 }
 
-loplugin::Plugin::Registration< ConstParams > X("constparams", false);
+loplugin::Plugin::Registration< ConstParams > X("constparams", true);
 
 }
 
