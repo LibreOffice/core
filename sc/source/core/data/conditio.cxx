@@ -1645,40 +1645,50 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
                 return true;
             break;
         case condformat::LASTWEEK:
-            if( rActDate.GetDayOfWeek() != SUNDAY )
             {
-                Date aBegin(rActDate - 8 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()));
-                Date aEnd(rActDate - 2 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()));
-                return aCellDate.IsBetween( aBegin, aEnd );
-            }
-            else
-            {
-                Date aBegin(rActDate - 8);
-                Date aEnd(rActDate - 1);
-                return aCellDate.IsBetween( aBegin, aEnd );
+                const DayOfWeek eDay = rActDate.GetDayOfWeek();
+                if( eDay != SUNDAY )
+                {
+                    Date aBegin(rActDate - 8 - static_cast<sal_Int32>(eDay));
+                    Date aEnd(rActDate - 2 - static_cast<sal_Int32>(eDay));
+                    return aCellDate.IsBetween( aBegin, aEnd );
+                }
+                else
+                {
+                    Date aBegin(rActDate - 8);
+                    Date aEnd(rActDate - 1);
+                    return aCellDate.IsBetween( aBegin, aEnd );
+                }
             }
             break;
         case condformat::THISWEEK:
-            if( rActDate.GetDayOfWeek() != SUNDAY )
             {
-                Date aBegin(rActDate - 1 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()));
-                Date aEnd(rActDate + 5 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()));
-                return aCellDate.IsBetween( aBegin, aEnd );
-            }
-            else
-            {
-                Date aEnd( rActDate + 6);
-                return aCellDate.IsBetween( rActDate, aEnd );
+                const DayOfWeek eDay = rActDate.GetDayOfWeek();
+                if( eDay != SUNDAY )
+                {
+                    Date aBegin(rActDate - 1 - static_cast<sal_Int32>(eDay));
+                    Date aEnd(rActDate + 5 - static_cast<sal_Int32>(eDay));
+                    return aCellDate.IsBetween( aBegin, aEnd );
+                }
+                else
+                {
+                    Date aEnd( rActDate + 6);
+                    return aCellDate.IsBetween( rActDate, aEnd );
+                }
             }
             break;
         case condformat::NEXTWEEK:
-            if( rActDate.GetDayOfWeek() != SUNDAY )
             {
-                return aCellDate.IsBetween( rActDate + 6 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()), rActDate + 12 - static_cast<sal_Int32>(rActDate.GetDayOfWeek()) );
-            }
-            else
-            {
-                return aCellDate.IsBetween( rActDate + 7, rActDate + 13 );
+                const DayOfWeek eDay = rActDate.GetDayOfWeek();
+                if( eDay != SUNDAY )
+                {
+                    return aCellDate.IsBetween( rActDate + 6 - static_cast<sal_Int32>(eDay),
+                            rActDate + 12 - static_cast<sal_Int32>(eDay) );
+                }
+                else
+                {
+                    return aCellDate.IsBetween( rActDate + 7, rActDate + 13 );
+                }
             }
             break;
         case condformat::LASTMONTH:
