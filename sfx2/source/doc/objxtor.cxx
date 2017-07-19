@@ -336,7 +336,7 @@ SfxObjectShell::SfxObjectShell
                                         ben"otigt */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
     Konstruktor der Klasse SfxObjectShell.
 */
@@ -373,7 +373,7 @@ SfxObjectShell::~SfxObjectShell()
     if ( USHRT_MAX != pImp->nVisualDocumentNumber )
         pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
 
-    // Basic-Manager zerst"oren
+    // destroy BasicManager
     pImp->pBasicManager->reset( NULL );
 
     if ( pSfxApp->GetDdeService() )
@@ -433,7 +433,7 @@ sal_Bool SfxObjectShell::Stamp_GetPrintCancelState() const
 
 void SfxObjectShell::ViewAssigned()
 
-/*  [Beschreibung]
+/*  [Description]
 
     Diese Methode wird gerufen, wenn eine View zugewiesen wird.
 */
@@ -626,7 +626,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
         // fragen, ob gespeichert werden soll
         short nRet = RET_YES;
         //TODO/CLEANUP
-        //brauchen wir UI=2 noch?
+        //do we still need UI=2 ?
         //if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
         {
             //initiate help agent to inform about "print modifies the document"
@@ -666,7 +666,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
                 bClose = sal_True;
         }
         else if ( RET_CANCEL == nRet )
-            // abgebrochen
+            // canceled
             return sal_False;
         else if ( RET_NEWTASK == nRet )
         {
@@ -818,12 +818,12 @@ StarBASIC* SfxObjectShell::GetBasic() const
 //--------------------------------------------------------------------
 
 void SfxObjectShell::InitBasicManager_Impl()
-/*  [Beschreibung]
+/*  [Description]
 
     creates a document's BasicManager and loads it, if we are already based on
     a storage.
 
-    [Anmerkung]
+    [Note]
 
     Diese Methode mu"s aus den "Uberladungen von <SvPersist::Load()> (mit
     dem pStor aus dem Parameter von Load()) sowie aus der "Uberladung
