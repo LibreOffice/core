@@ -19,6 +19,8 @@
 
 #include "vbafiledialog.hxx"
 
+#include <osl/file.hxx>
+
 #include <ooo/vba/office/MsoFileDialogType.hpp>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -84,8 +86,11 @@ sal_Int32 ScVbaFileDialog::Show()
                     break;
                 }
 
-                for( auto& sPath : xFilePicker->getSelectedFiles() )
+                for( auto& sURL : xFilePicker->getSelectedFiles() )
                 {
+                    OUString sPath;
+                    osl::FileBase::getSystemPathFromFileURL(sURL, sPath);
+
                     sSelectedPaths.push_back(sPath);
                 }
             }
@@ -103,10 +108,15 @@ sal_Int32 ScVbaFileDialog::Show()
                     break;
                 }
 
-                OUString sPath = xFolderPicker->getDirectory();
+                OUString sURL = xFolderPicker->getDirectory();
 
-                if(!sPath.isEmpty())
+                if(!sURL.isEmpty())
+                {
+                    OUString sPath;
+                    osl::FileBase::getSystemPathFromFileURL(sURL, sPath);
+
                     sSelectedPaths.push_back(sPath);
+                }
 
             }
             break;
