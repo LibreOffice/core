@@ -398,11 +398,6 @@ SAL_DLLPUBLIC oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **strLoc
 /**@{ begin section oslSocket
 */
 
-
-/*-***************************************************************************/
-/* oslSocket */
-/*-***************************************************************************/
-
 typedef struct oslSocketImpl * oslSocket;
 
 /** increases the refcount of the socket handle by one
