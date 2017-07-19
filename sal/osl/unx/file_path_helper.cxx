@@ -151,11 +151,8 @@ bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
             dirent == FPH_PARENT_DIR_ENTRY());
 }
 
-/***********************************************
- Simple iterator for a path list separated by
- the specified character
- **********************************************/
-
+/** Simple iterator for a path list separated by the specified character
+*/
 class path_list_iterator
 {
 public:
