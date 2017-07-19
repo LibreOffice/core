@@ -16,6 +16,24 @@
       "revId": "099f9406b6657a03a37fbe5cedf7cb7da765d4aa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_172c9749",
+        "filename": "desktop/source/app/cmdlineargs.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-07-19T08:33:32Z",
+      "side": 1,
+      "message": "1. I relied on the fourth line of .iqy being properly-encoded WEB URL, i.e. ASCII-only (even for internationalized URLs).\n2. In any case, this is guarded by try..catch, so it would just ignore this .iqy as web query if it contains invalid characters, and open as simple text - which is acceptable.\n\nIf you suggest to accept wider range of input files (with other 8-bit-encoded URIs as well), I\u0027ll do it in a later patch.",
+      "parentUuid": "3a461143_97afa7e2",
+      "revId": "099f9406b6657a03a37fbe5cedf7cb7da765d4aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
