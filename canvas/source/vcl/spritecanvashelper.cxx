@@ -66,7 +66,7 @@ namespace vclcanvas
         }
 
         void repaintBackground( OutputDevice&               rOutDev,
-                                OutputDevice&               rBackBuffer,
+                                OutputDevice const &        rBackBuffer,
                                 const ::basegfx::B2DRange&  rArea )
         {
             const ::Point& rPos( vcl::unotools::pointFromB2DPoint( rArea.getMinimum()) );
