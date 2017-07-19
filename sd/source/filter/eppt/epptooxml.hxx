@@ -157,6 +157,9 @@ private:
     AuthorsMap maAuthors;
 
     void WriteAuthors();
+
+    /// If this is PPTM, output the VBA stream.
+    void WriteVBA();
 };
 
 }

@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -34,16 +35,18 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-#include "oox/drawingml/theme.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/themefragmenthandler.hxx"
-#include "drawingml/textliststylecontext.hxx"
+#include <oox/drawingml/theme.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/themefragmenthandler.hxx>
+#include <drawingml/textliststylecontext.hxx>
 #include <oox/helper/attributelist.hxx>
-#include "oox/ppt/pptshape.hxx"
-#include "oox/ppt/presentationfragmenthandler.hxx"
-#include "oox/ppt/slidefragmenthandler.hxx"
-#include "oox/ppt/layoutfragmenthandler.hxx"
-#include "oox/ppt/pptimport.hxx"
+#include <oox/ole/olestorage.hxx>
+#include <oox/ole/vbaproject.hxx>
+#include <oox/ppt/pptshape.hxx>
+#include <oox/ppt/presentationfragmenthandler.hxx>
+#include <oox/ppt/slidefragmenthandler.hxx>
+#include <oox/ppt/layoutfragmenthandler.hxx>
+#include <oox/ppt/pptimport.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 
@@ -394,8 +397,8 @@ void PresentationFragmentHandler::finalizeImport()
     StringRangeEnumerator aRangeEnumerator( aPageRange, 0, nPageCount - 1 );
     StringRangeEnumerator::Iterator aIter = aRangeEnumerator.begin();
     StringRangeEnumerator::Iterator aEnd  = aRangeEnumerator.end();
-    if(aIter!=aEnd) {
-
+    if (aIter!=aEnd)
+    {
         // todo: localized progress bar text
         const Reference< task::XStatusIndicator >& rxStatusIndicator( getFilter().getStatusIndicator() );
         if ( rxStatusIndicator.is() )
@@ -423,6 +426,18 @@ void PresentationFragmentHandler::finalizeImport()
         // todo error handling;
         if ( rxStatusIndicator.is() )
             rxStatusIndicator->end();
+    }
+
+    // open the VBA project storage
+    OUString aVbaFragmentPath = getFragmentPathFromFirstType(CREATE_MSOFFICE_RELATION_TYPE("vbaProject"));
+    if (!aVbaFragmentPath.isEmpty())
+    {
+        uno::Reference<io::XInputStream> xInStrm = getFilter().openInputStream(aVbaFragmentPath);
+        if (xInStrm.is())
+        {
+            StorageRef xPrjStrg(new oox::ole::OleStorage(getFilter().getComponentContext(), xInStrm, false));
+            getFilter().getVbaProject().importVbaProject(*xPrjStrg);
+        }
     }
 }
 
