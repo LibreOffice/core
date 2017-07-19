@@ -52,6 +52,7 @@ fuzzer_core_libraries = \
     deploymentmisc \
     drawinglayer \
     editeng \
+    emfio \
     filterconfig \
     fsstorage \
     fwe \
@@ -156,4 +157,3 @@ fuzzer_draw_libraries = \
     sd \
     sdd \
     icg \
-    emfio \

@@ -27,6 +27,7 @@ core_factory_list = [
     ("libcomphelper.a", "comphelp_component_getFactory"),
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
     ("libdrawinglayerlo.a", "drawinglayer_component_getFactory"),
+    ("libemfiolo.a", "emfio_component_getFactory"),
     ("libfilterconfiglo.a", "filterconfig1_component_getFactory"),
     ("libfsstoragelo.a", "fsstorage_component_getFactory"),
     ("libhyphenlo.a", "hyphen_component_getFactory"),
@@ -288,7 +289,6 @@ calc_constructor_list = [
 draw_factory_list = [
     ("libsdlo.a", "sd_component_getFactory"),
     ("libsvgiolo.a", "svgio_component_getFactory"),
-    ("libemfiolo.a", "emfio_component_getFactory"),
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
     ("libdeployment.a", "deployment_component_getFactory"),
     ("libemboleobj.a", "emboleobj_component_getFactory"),
