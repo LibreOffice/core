@@ -387,8 +387,9 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         uno::Reference<text::XTextRange> const& xInsertPosition)
 {
     const OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
-    if( aFilterName == "Impress MS PowerPoint 2007 XML" ||
-        aFilterName == "Impress MS PowerPoint 2007 XML AutoPlay" )
+    if (aFilterName == "Impress MS PowerPoint 2007 XML" ||
+        aFilterName == "Impress MS PowerPoint 2007 XML AutoPlay" ||
+        aFilterName == "Impress MS PowerPoint 2007 XML VBA")
     {
         // As this is a MSFT format, we should use the "MS Compat"
         // mode for spacing before and after paragraphs.
