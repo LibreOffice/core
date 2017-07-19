@@ -19,7 +19,7 @@
 
 #include "writer/WPreparedStatement.hxx"
 
-#include "writer/WResultSet.hxx"
+#include "component/CResultSet.hxx"
 
 using namespace com::sun::star;
 
@@ -30,7 +30,7 @@ namespace writer
 
 file::OResultSet* OWriterPreparedStatement::createResultSet()
 {
-    return new OWriterResultSet(this, m_aSQLIterator);
+    return new component::OComponentResultSet(this, m_aSQLIterator);
 }
 
 IMPLEMENT_SERVICE_INFO(OWriterPreparedStatement,"com.sun.star.sdbc.driver.writer.PreparedStatement", "com.sun.star.sdbc.PreparedStatement");
