@@ -17,27 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WPREPAREDSTATEMENT_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WPREPAREDSTATEMENT_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CPREPAREDSTATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CPREPAREDSTATEMENT_HXX
 
 #include "file/FPreparedStatement.hxx"
 
 namespace connectivity
 {
-namespace writer
-{
-class OConnection;
-class OWriterPreparedStatement : public file::OPreparedStatement
-{
-protected:
-    virtual file::OResultSet* createResultSet() override;
-public:
-    OWriterPreparedStatement(file::OConnection* _pConnection) : file::OPreparedStatement(_pConnection) {}
-    DECLARE_SERVICE_INFO();
-};
-} // namespace writer
-} // namespace connectivity
+    namespace component
+    {
+        class OConnection;
+        /// Prepared statement implementation for Writer tables and Calc sheets.
+        class OOO_DLLPUBLIC_FILE OComponentPreparedStatement : public file::OPreparedStatement
+        {
+        protected:
+            virtual file::OResultSet* createResultSet() override;
+        public:
+            OComponentPreparedStatement( file::OConnection* _pConnection) : file::OPreparedStatement( _pConnection){}
+            DECLARE_SERVICE_INFO();
+        };
+    }
+}
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WPREPAREDSTATEMENT_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CPREPAREDSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

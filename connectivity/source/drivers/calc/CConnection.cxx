@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <tools/urlobj.hxx>
-#include "calc/CPreparedStatement.hxx"
+#include "component/CPreparedStatement.hxx"
 #include "component/CStatement.hxx"
 #include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
@@ -249,7 +249,7 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OCalcPreparedStatement* pStmt = new OCalcPreparedStatement(this);
+    auto pStmt = new connectivity::component::OComponentPreparedStatement(this);
     Reference< XPreparedStatement > xHoldAlive = pStmt;
     pStmt->construct(sql);
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));

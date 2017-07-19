@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "calc/CPreparedStatement.hxx"
+#include "component/CPreparedStatement.hxx"
 #include "component/CResultSet.hxx"
 
-using namespace connectivity::calc;
+using namespace connectivity::component;
 using namespace connectivity::file;
 using namespace com::sun::star::uno;
 
-OResultSet* OCalcPreparedStatement::createResultSet()
+OResultSet* OComponentPreparedStatement::createResultSet()
 {
     return new connectivity::component::OComponentResultSet(this,m_aSQLIterator);
 }
 
-IMPLEMENT_SERVICE_INFO(OCalcPreparedStatement,"com.sun.star.sdbc.driver.calc.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
+IMPLEMENT_SERVICE_INFO(OComponentPreparedStatement,"com.sun.star.sdbc.driver.component.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
