@@ -337,6 +337,7 @@ SalData::SalData()
     mpDitherLow = 0;            // Dither mapping table
     mpDitherHigh = 0;           // Dither mapping table
     mnTimerId = 0;              // windows timer id
+    mbOnIdleRunScheduler = false; // if yield is idle, run the scheduler
     mhSalObjMsgHook = 0;        // hook to get interesting msg for SalObject
     mhWantLeaveMsg = 0;         // window handle, that want a MOUSELEAVE message
     mpMouseLeaveTimer = 0;      // Timer for MouseLeave Test
@@ -580,27 +581,50 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     MSG aMsg;
     bool bWasMsg = false, bOneEvent = false;
+    SalData *const pSalData = GetSalData();
 
     int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
     do
     {
-        if ( PeekMessageW( &aMsg, 0, 0, 0, PM_REMOVE ) )
+        bOneEvent = PeekMessageW( &aMsg, nullptr, 0, 0, PM_REMOVE );
+        if ( bOneEvent )
         {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
-
-            bOneEvent = bWasMsg = true;
+            bWasMsg = true;
+            if ( !(aMsg.message == SAL_MSG_TIMER_CALLBACK && 1 == aMsg.wParam) )
+            {
+                TranslateMessage( &aMsg );
+                ImplSalDispatchMessage( &aMsg );
+            }
+            else
+            {
+                // This is just the scheduler wakeup message, in case we're
+                // waiting in GetMessageW
+                // So we can just drop it, but we have to fix the accounting!
+                assert( pSalData->mbOnIdleRunScheduler );
+                ++nMaxEvents;
+            }
         }
         else
-            bOneEvent = false;
+        {
+            if ( nMaxEvents && pSalData->mbOnIdleRunScheduler )
+            {
+                pSalData->mbOnIdleRunScheduler = false;
+                EmitTimerCallback();
+                bOneEvent = true;
+            }
+        }
     } while( --nMaxEvents && bOneEvent );
 
     if ( bWait && ! bWasMsg )
     {
         if ( GetMessageW( &aMsg, 0, 0, 0 ) )
         {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
+            // Ignore the scheduler wakeup message
+            if ( !(aMsg.message == SAL_MSG_TIMER_CALLBACK && 1 == aMsg.wParam) )
+            {
+                TranslateMessage( &aMsg );
+                ImplSalDispatchMessage( &aMsg );
+            }
         }
     }
     return bWasMsg;
@@ -722,7 +746,8 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
                                  SAL_MSG_TIMER_CALLBACK, PM_REMOVE) )
                 assert( "Multiple timer messages in queue" );
-            EmitTimerCallback();
+            if ( 0 == wParam )
+                EmitTimerCallback();
             break;
     }
 

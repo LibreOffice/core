@@ -26,7 +26,7 @@
 #include <sehandler.hxx>
 #endif
 
-void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
+static void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
 
 // See http://msdn.microsoft.com/en-us/library/windows/desktop/ms687003%28v=vs.85%29.aspx
 // (and related pages) for details about the Timer Queues.
@@ -56,6 +56,7 @@ void ImplSalStopTimer()
                          SAL_MSG_TIMER_CALLBACK, PM_REMOVE) )
         nMsgCount++;
     assert( nMsgCount <= 1 );
+    pSalData->mbOnIdleRunScheduler = false;
 }
 
 void ImplSalStartTimer( sal_uLong nMS )
@@ -70,11 +71,12 @@ void ImplSalStartTimer( sal_uLong nMS )
     // cannot change a one-shot timer, so delete it and create a new one
     ImplSalStopTimer();
 
-    // directly post a timer callback message for instant timers / idles
-    if ( 0 == nMS )
+    // run the scheduler, if yield is idle for the 0ms case
+    pSalData->mbOnIdleRunScheduler = ( 0 == nMS );
+    if ( pSalData->mbOnIdleRunScheduler )
     {
         BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd,
-                                      SAL_MSG_TIMER_CALLBACK, 0, 0);
+                                      SAL_MSG_TIMER_CALLBACK, 1, 0);
         SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else
@@ -123,7 +125,7 @@ void WinSalTimer::Stop()
 Don't acquire the SolarMutex to avoid deadlocks, just wake up the main thread
 at better resolution than 10ms.
 */
-void CALLBACK SalTimerProc(PVOID, BOOLEAN)
+static void CALLBACK SalTimerProc(PVOID, BOOLEAN)
 {
 #if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;

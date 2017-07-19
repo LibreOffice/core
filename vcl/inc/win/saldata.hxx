@@ -81,6 +81,7 @@ public:
     BYTE*                   mpDitherLow;            // Dither mapping table
     BYTE*                   mpDitherHigh;           // Dither mapping table
     HANDLE                  mnTimerId;              ///< Windows timer id
+    bool                    mbOnIdleRunScheduler;   ///< Run the scheduler, if yield is idle
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
@@ -264,6 +265,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SALOBJ_MSG_POSTFOCUS        (WM_USER+161)
 
 // Call the Timer's callback from the main thread
+// wParam = 1 == run when yield is idle instead of direct
 #define SAL_MSG_TIMER_CALLBACK      (WM_USER+162)
 // Stop the timer from the main thread; wParam = 0, lParam = 0
 #define SAL_MSG_STOPTIMER           (WM_USER+163)
