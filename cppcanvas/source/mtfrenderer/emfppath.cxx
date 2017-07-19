@@ -60,7 +60,7 @@ namespace cppcanvas
         }
 
         // TODO: remove rR argument when debug code is no longer needed
-        void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags, ImplRenderer& rR)
+        void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags, ImplRenderer const & rR)
         {
             for (int i = 0; i < nPoints; i ++) {
                 if (pathFlags & 0x800) {
