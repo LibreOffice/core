@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_f7ee2beb",
+        "filename": "sal/qa/osl/pipe/osl_Pipe.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2017-07-19T09:00:12Z",
+      "side": 1,
+      "message": "Did you intend to put this comment on the no_acquire branch rather than the acquire one \u003d)\n\nEither way - with this comment on the right method - this looks great +2 from me to merge.\n\nThanks Chris !",
+      "revId": "508dd2999ff19998d631ee5a2b52f22fbaf160a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
