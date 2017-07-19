@@ -1121,7 +1121,7 @@ Document::retrieveRunAttributes(
     return comphelper::mapValuesToSequence( aRunAttrSeq );
 }
 
-void Document::changeParagraphText(Paragraph * pParagraph,
+void Document::changeParagraphText(Paragraph const * pParagraph,
                                    OUString const & rText)
 {
     SolarMutexGuard aGuard;
@@ -1134,7 +1134,7 @@ void Document::changeParagraphText(Paragraph * pParagraph,
     }
 }
 
-void Document::changeParagraphText(Paragraph * pParagraph,
+void Document::changeParagraphText(Paragraph const * pParagraph,
                                    ::sal_Int32 nBegin, ::sal_Int32 nEnd,
                                    bool bCut, bool bPaste,
                                    OUString const & rText)
@@ -1179,7 +1179,7 @@ void Document::copyParagraphText(Paragraph const * pParagraph,
 }
 
 void Document::changeParagraphAttributes(
-    Paragraph * pParagraph, ::sal_Int32 nBegin, ::sal_Int32 nEnd,
+    Paragraph const * pParagraph, ::sal_Int32 nBegin, ::sal_Int32 nEnd,
     css::uno::Sequence< css::beans::PropertyValue > const & rAttributeSet)
 {
     SolarMutexGuard aGuard;
@@ -1211,7 +1211,7 @@ void Document::changeParagraphAttributes(
     }
 }
 
-void Document::changeParagraphSelection(Paragraph * pParagraph,
+void Document::changeParagraphSelection(Paragraph const * pParagraph,
                                         ::sal_Int32 nBegin, ::sal_Int32 nEnd)
 {
     SolarMutexGuard aGuard;
