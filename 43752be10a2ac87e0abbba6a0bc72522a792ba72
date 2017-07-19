@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_b76583e2",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8257,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-07-19T05:33:27Z",
+      "side": 1,
+      "message": "Why use 1e-4 when comparing to a value given up to 1e-5?",
+      "range": {
+        "startLine": 8257,
+        "startChar": 133,
+        "endLine": 8257,
+        "endChar": 137
+      },
+      "revId": "43752be10a2ac87e0abbba6a0bc72522a792ba72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_d7620fd8",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 8264,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-07-19T05:33:27Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 8264,
+        "startChar": 143,
+        "endLine": 8264,
+        "endChar": 147
+      },
+      "revId": "43752be10a2ac87e0abbba6a0bc72522a792ba72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
