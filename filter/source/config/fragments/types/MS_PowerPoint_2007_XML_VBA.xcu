@@ -1,3 +1,4 @@
+
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -15,16 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-<node oor:name="Impress MS PowerPoint 2007 XML" oor:op="replace">
-    <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER PREFERRED ENCRYPTION PASSWORDTOMODIFY SUPPORTSSIGNING</value></prop>
-    <prop oor:name="UIComponent"/>
-    <prop oor:name="FilterService"><value>com.sun.star.comp.oox.ppt.PowerPointImport</value></prop>
-    <prop oor:name="UserData"/>
-    <prop oor:name="FileFormatVersion"/>
-    <prop oor:name="Type"><value>MS PowerPoint 2007 XML</value></prop>
-    <prop oor:name="TemplateName"/>
-    <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
-    <prop oor:name="UIName">
-        <value xml:lang="en-US">Microsoft PowerPoint 2007-2013 XML</value>
-    </prop>
+<node oor:name="MS PowerPoint 2007 XML VBA" oor:op="replace" >
+    <prop oor:name="DetectService"><value>com.sun.star.comp.oox.FormatDetector</value></prop>
+    <prop oor:name="URLPattern"/>
+    <prop oor:name="Extensions"><value>pptm</value></prop>
+    <prop oor:name="MediaType"><value>application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml</value></prop>
+    <prop oor:name="Preferred"><value>true</value></prop>
+    <prop oor:name="PreferredFilter"><value>Impress MS PowerPoint 2007 XML VBA</value></prop>
+    <prop oor:name="UIName"><value xml:lang="en-US">Microsoft PowerPoint 2007-2013 XML VBA</value></prop>
+    <prop oor:name="ClipboardFormat"/>
 </node>
