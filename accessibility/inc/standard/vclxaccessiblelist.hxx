@@ -126,7 +126,7 @@ public:
     void UpdateSelection_Acc (const ::rtl::OUString& sTextOfSelectedItem, bool b_IsDropDownList);
     void UpdateSelection_Impl_Acc (bool b_IsDropDownList);
 
-    static void NotifyListItem(css::uno::Any& val);
+    static void NotifyListItem(css::uno::Any const & val);
     ::accessibility::IComboListBoxHelper* getListBoxHelper() { return m_pListBoxHelper.get(); }
 protected:
     BoxType     m_aBoxType;
