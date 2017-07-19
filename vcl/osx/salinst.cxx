@@ -556,8 +556,6 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
     bool bDispatchUser = true;
     while( bDispatchUser )
     {
-        sal_uLong nCount = ReleaseYieldMutex();
-
         // get one user event
         SalUserEvent aEvent( nullptr, nullptr, SalEvent::NONE );
         {
@@ -571,7 +569,6 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
             else
                 bDispatchUser = false;
         }
-        AcquireYieldMutex( nCount );
 
         // dispatch it
         if( aEvent.mpFrame && AquaSalFrame::isAlive( aEvent.mpFrame ) )
