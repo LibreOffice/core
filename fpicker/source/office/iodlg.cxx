@@ -116,7 +116,7 @@ namespace
 {
 
 
-    OUString getMostCurrentFilter( std::unique_ptr<SvtExpFileDlg_Impl>& pImpl )
+    OUString getMostCurrentFilter( std::unique_ptr<SvtExpFileDlg_Impl> const & pImpl )
     {
         assert( pImpl && "invalid impl pointer" );
         const SvtFileDialogFilter_Impl* pFilter = pImpl->_pUserFilter;
@@ -131,7 +131,7 @@ namespace
     }
 
 
-    bool restoreCurrentFilter( std::unique_ptr<SvtExpFileDlg_Impl>& pImpl )
+    bool restoreCurrentFilter( std::unique_ptr<SvtExpFileDlg_Impl> const & pImpl )
     {
         SAL_WARN_IF( !pImpl->GetCurFilter(), "fpicker.office", "restoreCurrentFilter: no current filter!" );
         SAL_WARN_IF( pImpl->GetCurFilterDisplayName().isEmpty(), "fpicker.office", "restoreCurrentFilter: no current filter (no display name)!" );
@@ -839,7 +839,7 @@ IMPL_LINK( SvtFileDialog, OpenUrlHdl_Impl, SvtURLBox*, pVoid, void )
 {
     OpenHdl_Impl(pVoid);
 }
-void SvtFileDialog::OpenHdl_Impl(void* pVoid)
+void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
 {
     if ( pImpl->_bMultiSelection && _pFileView->GetSelectionCount() > 1 )
     {

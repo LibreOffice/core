@@ -186,12 +186,12 @@ namespace svt
     }
 
 
-    OUString OControlAccess::getHelpURL( vcl::Window* _pControl, bool _bFileView )
+    OUString OControlAccess::getHelpURL( vcl::Window const * _pControl, bool _bFileView )
     {
         OString aHelpId = _pControl->GetHelpId();
         if ( _bFileView )
             // the file view "overrides" the SetHelpId
-            aHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
+            aHelpId = static_cast< SvtFileView const * >( _pControl )->GetHelpId( );
 
         OUString sHelpURL;
         OUString aTmp( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
@@ -677,7 +677,7 @@ namespace svt
     }
 
 
-    Any OControlAccess::implGetControlProperty( Control* _pControl, PropFlags _nProperty ) const
+    Any OControlAccess::implGetControlProperty( Control const * _pControl, PropFlags _nProperty ) const
     {
         DBG_ASSERT( _pControl, "OControlAccess::implGetControlProperty: invalid argument, this will crash!" );
 
@@ -705,10 +705,10 @@ namespace svt
                 DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                Sequence< OUString > aItems( static_cast< ListBox* >( _pControl )->GetEntryCount() );
+                Sequence< OUString > aItems( static_cast< ListBox const * >( _pControl )->GetEntryCount() );
                 OUString* pItems = aItems.getArray();
-                for ( sal_Int32 i=0; i<static_cast< ListBox* >( _pControl )->GetEntryCount(); ++i )
-                    *pItems++ = static_cast< ListBox* >( _pControl )->GetEntry( i );
+                for ( sal_Int32 i=0; i<static_cast< ListBox const * >( _pControl )->GetEntryCount(); ++i )
+                    *pItems++ = static_cast< ListBox const * >( _pControl )->GetEntry( i );
 
                 aReturn <<= aItems;
             }
@@ -719,10 +719,10 @@ namespace svt
                 DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                sal_Int32 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
+                sal_Int32 nSelected = static_cast< ListBox const * >( _pControl )->GetSelectEntryPos();
                 OUString sSelected;
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
-                    sSelected = static_cast< ListBox* >( _pControl )->GetSelectEntry();
+                    sSelected = static_cast< ListBox const * >( _pControl )->GetSelectEntry();
                 aReturn <<= sSelected;
             }
             break;
@@ -732,9 +732,9 @@ namespace svt
                 DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                sal_Int32 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
+                sal_Int32 nSelected = static_cast< ListBox const * >( _pControl )->GetSelectEntryPos();
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
-                    aReturn <<= static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
+                    aReturn <<= static_cast< ListBox const * >( _pControl )->GetSelectEntryPos();
                 else
                     aReturn <<= (sal_Int32)-1;
             }
@@ -744,7 +744,7 @@ namespace svt
                 DBG_ASSERT( WindowType::CHECKBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                aReturn <<= static_cast< CheckBox* >( _pControl )->IsChecked( );
+                aReturn <<= static_cast< CheckBox const * >( _pControl )->IsChecked( );
                 break;
 
             default:

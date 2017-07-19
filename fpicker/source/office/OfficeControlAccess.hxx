@@ -86,7 +86,7 @@ namespace svt
         void                        enableControl( sal_Int16 _nId, bool _bEnable );
 
         static void             setHelpURL( vcl::Window* _pControl, const OUString& _rURL, bool _bFileView );
-        static OUString  getHelpURL( vcl::Window* _pControl, bool _bFileView );
+        static OUString  getHelpURL( vcl::Window const * _pControl, bool _bFileView );
 
     private:
         /** implements the various methods for setting properties on controls
@@ -120,7 +120,7 @@ namespace svt
                 See PropFlags::*
             @return
         */
-        css::uno::Any  implGetControlProperty( Control* _pControl, PropFlags _nProperty ) const;
+        css::uno::Any  implGetControlProperty( Control const * _pControl, PropFlags _nProperty ) const;
 
         static void implDoListboxAction( ListBox* _pListbox, sal_Int16 _nCtrlAction, const css::uno::Any& _rValue );
 
