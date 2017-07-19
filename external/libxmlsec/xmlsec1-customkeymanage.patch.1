@@ -14,9 +14,6 @@ Conflicts:
 	src/nss/x509.c
 	src/nss/x509vfy.c
 ---
- include/xmlsec/mscrypto/Makefile.am |   1 +
- include/xmlsec/mscrypto/Makefile.in |   1 +
- include/xmlsec/mscrypto/akmngr.h    |  53 +++
  include/xmlsec/nss/Makefile.am      |   3 +
  include/xmlsec/nss/Makefile.in      |   3 +
  include/xmlsec/nss/akmngr.h         |  56 +++
@@ -24,7 +21,6 @@ Conflicts:
  include/xmlsec/nss/ciphers.h        |  35 ++
  include/xmlsec/nss/keysstore.h      |   4 +
  include/xmlsec/nss/tokens.h         | 182 +++++++++
- src/mscrypto/akmngr.c               | 209 ++++++++++
  src/nss/Makefile.am                 |   2 +
  src/nss/Makefile.in                 |  20 +
  src/nss/akmngr.c                    | 384 ++++++++++++++++++
@@ -35,99 +31,13 @@ Conflicts:
  src/nss/tokens.c                    | 544 +++++++++++++++++++++++++
  src/nss/x509.c                      | 491 ++++++-----------------
  src/nss/x509vfy.c                   | 248 ++++--------
- win32/Makefile.msvc                 |   4 +
  22 files changed, 2971 insertions(+), 838 deletions(-)
- create mode 100644 include/xmlsec/mscrypto/akmngr.h
  create mode 100644 include/xmlsec/nss/akmngr.h
  create mode 100644 include/xmlsec/nss/ciphers.h
  create mode 100644 include/xmlsec/nss/tokens.h
- create mode 100644 src/mscrypto/akmngr.c
  create mode 100644 src/nss/akmngr.c
  create mode 100644 src/nss/tokens.c
 
-diff --git a/include/xmlsec/mscrypto/Makefile.am b/include/xmlsec/mscrypto/Makefile.am
-index 18dff94c..44837b62 100644
---- a/include/xmlsec/mscrypto/Makefile.am
-+++ b/include/xmlsec/mscrypto/Makefile.am
-@@ -3,6 +3,7 @@ NULL =
- xmlsecmscryptoincdir = $(includedir)/xmlsec1/xmlsec/mscrypto
- 
- xmlsecmscryptoinc_HEADERS = \
-+akmngr.h \
- app.h \
- certkeys.h \
- crypto.h \
-diff --git a/include/xmlsec/mscrypto/Makefile.in b/include/xmlsec/mscrypto/Makefile.in
-index e613f83c..07923cc7 100644
---- a/include/xmlsec/mscrypto/Makefile.in
-+++ b/include/xmlsec/mscrypto/Makefile.in
-@@ -400,6 +400,7 @@ top_srcdir = @top_srcdir@
- NULL = 
- xmlsecmscryptoincdir = $(includedir)/xmlsec1/xmlsec/mscrypto
- xmlsecmscryptoinc_HEADERS = \
-+akmngr.h \
- app.h \
- certkeys.h \
- crypto.h \
-diff --git a/include/xmlsec/mscrypto/akmngr.h b/include/xmlsec/mscrypto/akmngr.h
-new file mode 100644
-index 00000000..dca7b016
---- /dev/null
-+++ b/include/xmlsec/mscrypto/akmngr.h
-@@ -0,0 +1,53 @@
-+/** 
-+ * XMLSec library
-+ *
-+ * This is free software; see Copyright file in the source
-+ * distribution for preciese wording.
-+ * 
-+ * Copyright ..........................
-+ */
-+#ifndef __XMLSEC_MSCRYPTO_AKMNGR_H__
-+#define __XMLSEC_MSCRYPTO_AKMNGR_H__    
-+
-+#include <windows.h>
-+#include <wincrypt.h>
-+
-+#include <xmlsec/xmlsec.h>
-+#include <xmlsec/keys.h>
-+#include <xmlsec/transforms.h>
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif /* __cplusplus */ 
-+
-+XMLSEC_CRYPTO_EXPORT xmlSecKeysMngrPtr
-+xmlSecMSCryptoAppliedKeysMngrCreate(
-+    HCERTSTORE keyStore ,
-+    HCERTSTORE certStore
-+) ;
-+
-+XMLSEC_CRYPTO_EXPORT int
-+xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore (
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCERTSTORE keyStore
-+) ;
-+
-+XMLSEC_CRYPTO_EXPORT int
-+xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore (
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCERTSTORE trustedStore
-+) ;
-+
-+XMLSEC_CRYPTO_EXPORT int
-+xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore (
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCERTSTORE untrustedStore
-+) ;
-+
-+#ifdef __cplusplus
-+}
-+#endif /* __cplusplus */
-+
-+#endif /* __XMLSEC_MSCRYPTO_AKMNGR_H__ */
-+
-+
 diff --git a/include/xmlsec/nss/Makefile.am b/include/xmlsec/nss/Makefile.am
 index e3521622..997ca7fd 100644
 --- a/include/xmlsec/nss/Makefile.am
@@ -491,221 +401,6 @@ index 00000000..444c5614
 +#endif /* __cplusplus */
 +
 +#endif	/* __XMLSEC_NSS_TOKENS_H__ */
-+
-diff --git a/src/mscrypto/akmngr.c b/src/mscrypto/akmngr.c
-new file mode 100644
-index 00000000..6d33e706
---- /dev/null
-+++ b/src/mscrypto/akmngr.c
-@@ -0,0 +1,209 @@
-+/** 
-+ * XMLSec library
-+ *
-+ * This is free software; see Copyright file in the source
-+ * distribution for preciese wording.
-+ * 
-+ * Copyright.........................
-+ */
-+#include "globals.h"
-+
-+#include <xmlsec/xmlsec.h>
-+#include <xmlsec/keys.h>
-+#include <xmlsec/keysmngr.h>
-+#include <xmlsec/transforms.h>
-+#include <xmlsec/errors.h>
-+
-+#include <xmlsec/mscrypto/crypto.h>
-+#include <xmlsec/mscrypto/keysstore.h>
-+#include <xmlsec/mscrypto/akmngr.h>
-+#include <xmlsec/mscrypto/x509.h>
-+
-+/**
-+ * xmlSecMSCryptoAppliedKeysMngrCreate:
-+ * @hKeyStore:		the pointer to key store.
-+ * @hCertStore:		the pointer to certificate database.
-+ *
-+ * Create and load key store and certificate database into keys manager
-+ *
-+ * Returns keys manager pointer on success or NULL otherwise.
-+ */
-+xmlSecKeysMngrPtr
-+xmlSecMSCryptoAppliedKeysMngrCreate(
-+    HCERTSTORE hKeyStore ,
-+    HCERTSTORE hCertStore
-+) {
-+	xmlSecKeyDataStorePtr	certStore = NULL ;
-+	xmlSecKeysMngrPtr		keyMngr = NULL ;
-+	xmlSecKeyStorePtr		keyStore = NULL ;
-+
-+	keyStore = xmlSecKeyStoreCreate( xmlSecMSCryptoKeysStoreId ) ;
-+	if( keyStore == NULL ) {
-+		xmlSecError( XMLSEC_ERRORS_HERE ,
-+			NULL ,
-+			"xmlSecKeyStoreCreate" ,
-+			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
-+			XMLSEC_ERRORS_NO_MESSAGE ) ;
-+		return NULL ;
-+	}
-+
-+	/*-
-+	 * At present, MS Crypto engine do not provide a way to setup a key store.
-+	 */
-+	if( keyStore != NULL ) {
-+		/*TODO: binding key store.*/
-+	}
-+
-+	keyMngr = xmlSecKeysMngrCreate() ;
-+	if( keyMngr == NULL ) {
-+		xmlSecError( XMLSEC_ERRORS_HERE ,
-+			NULL ,
-+			"xmlSecKeysMngrCreate" ,
-+			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
-+			XMLSEC_ERRORS_NO_MESSAGE ) ;
-+
-+		xmlSecKeyStoreDestroy( keyStore ) ;
-+		return NULL ;
-+	}
-+
-+	/*-
-+	 * Add key store to manager, from now on keys manager destroys the store if
-+	 * needed
-+	 */
-+	if( xmlSecKeysMngrAdoptKeysStore( keyMngr, keyStore ) < 0 ) {
-+		xmlSecError( XMLSEC_ERRORS_HERE ,
-+			xmlSecErrorsSafeString( xmlSecKeyStoreGetName( keyStore ) ) ,
-+			"xmlSecKeysMngrAdoptKeyStore" ,
-+			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
-+			XMLSEC_ERRORS_NO_MESSAGE ) ;
-+
-+		xmlSecKeyStoreDestroy( keyStore ) ;
-+		xmlSecKeysMngrDestroy( keyMngr ) ;
-+		return NULL ;
-+	}
-+
-+	/*-
-+	 * Initialize crypto library specific data in keys manager
-+	 */
-+	if( xmlSecMSCryptoKeysMngrInit( keyMngr ) < 0 ) {
-+		xmlSecError( XMLSEC_ERRORS_HERE ,
-+			NULL ,
-+			"xmlSecMSCryptoKeysMngrInit" ,
-+			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
-+			XMLSEC_ERRORS_NO_MESSAGE ) ;
-+
-+		xmlSecKeysMngrDestroy( keyMngr ) ;
-+		return NULL ;
-+	}
-+
-+	/*-
-+	 * Set certificate databse to X509 key data store
-+	 */
-+	/*-
-+	 * At present, MS Crypto engine do not provide a way to setup a cert store.
-+	 */
-+
-+	/*-
-+	 * Set the getKey callback
-+	 */
-+	keyMngr->getKey = xmlSecKeysMngrGetKey ;
-+
-+	return keyMngr ;
-+}
-+
-+int
-+xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore (
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCERTSTORE keyStore
-+) {
-+	xmlSecKeyDataStorePtr x509Store ;
-+
-+	xmlSecAssert2( mngr != NULL, -1 ) ;
-+	xmlSecAssert2( keyStore != NULL, -1 ) ;
-+
-+    x509Store = xmlSecKeysMngrGetDataStore( mngr, xmlSecMSCryptoX509StoreId ) ;
-+	if( x509Store == NULL ) {
-+		xmlSecError( XMLSEC_ERRORS_HERE ,
-+			NULL ,
-+			"xmlSecKeysMngrGetDataStore" ,
-+			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
-+			XMLSEC_ERRORS_NO_MESSAGE ) ;
-+		return( -1 ) ;
-+	}
-+
-+	if( xmlSecMSCryptoX509StoreAdoptKeyStore( x509Store, keyStore ) < 0 ) {
-+		xmlSecError( XMLSEC_ERRORS_HERE ,
-+			xmlSecErrorsSafeString( xmlSecKeyDataStoreGetName( x509Store ) ) ,
-+			"xmlSecMSCryptoX509StoreAdoptKeyStore" ,
-+			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
-+			XMLSEC_ERRORS_NO_MESSAGE ) ;
-+		return( -1 ) ;
-+	}
-+
-+	return( 0 ) ;
-+}
-+
-+int
-+xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore (
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCERTSTORE trustedStore
-+) {
-+	xmlSecKeyDataStorePtr x509Store ;
-+
-+	xmlSecAssert2( mngr != NULL, -1 ) ;
-+	xmlSecAssert2( trustedStore != NULL, -1 ) ;
-+
-+    x509Store = xmlSecKeysMngrGetDataStore( mngr, xmlSecMSCryptoX509StoreId ) ;
-+	if( x509Store == NULL ) {
-+		xmlSecError( XMLSEC_ERRORS_HERE ,
-+			NULL ,
-+			"xmlSecKeysMngrGetDataStore" ,
-+			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
-+			XMLSEC_ERRORS_NO_MESSAGE ) ;
-+		return( -1 ) ;
-+	}
-+
-+	if( xmlSecMSCryptoX509StoreAdoptTrustedStore( x509Store, trustedStore ) < 0 ) {
-+		xmlSecError( XMLSEC_ERRORS_HERE ,
-+			xmlSecErrorsSafeString( xmlSecKeyDataStoreGetName( x509Store ) ) ,
-+			"xmlSecMSCryptoX509StoreAdoptKeyStore" ,
-+			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
-+			XMLSEC_ERRORS_NO_MESSAGE ) ;
-+		return( -1 ) ;
-+	}
-+
-+	return( 0 ) ;
-+}
-+
-+int
-+xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore (
-+	xmlSecKeysMngrPtr	mngr ,
-+	HCERTSTORE untrustedStore
-+) {
-+	xmlSecKeyDataStorePtr x509Store ;
-+
-+	xmlSecAssert2( mngr != NULL, -1 ) ;
-+	xmlSecAssert2( untrustedStore != NULL, -1 ) ;
-+
-+    x509Store = xmlSecKeysMngrGetDataStore( mngr, xmlSecMSCryptoX509StoreId ) ;
-+	if( x509Store == NULL ) {
-+		xmlSecError( XMLSEC_ERRORS_HERE ,
-+			NULL ,
-+			"xmlSecKeysMngrGetDataStore" ,
-+			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
-+			XMLSEC_ERRORS_NO_MESSAGE ) ;
-+		return( -1 ) ;
-+	}
-+
-+	if( xmlSecMSCryptoX509StoreAdoptUntrustedStore( x509Store, untrustedStore ) < 0 ) {
-+		xmlSecError( XMLSEC_ERRORS_HERE ,
-+			xmlSecErrorsSafeString( xmlSecKeyDataStoreGetName( x509Store ) ) ,
-+			"xmlSecMSCryptoX509StoreAdoptKeyStore" ,
-+			XMLSEC_ERRORS_R_XMLSEC_FAILED ,
-+			XMLSEC_ERRORS_NO_MESSAGE ) ;
-+		return( -1 ) ;
-+	}
-+
-+	return( 0 ) ;
-+}
 +
 diff --git a/src/nss/Makefile.am b/src/nss/Makefile.am
 index e666f33c..ec9e7896 100644
@@ -4621,28 +4316,6 @@ index b28a37e1..39574fdd 100644
  #endif /* XMLSEC_NO_X509 */
  
  
-diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
-index ef1909ce..5ea58000 100644
---- a/win32/Makefile.msvc
-+++ b/win32/Makefile.msvc
-@@ -225,6 +225,9 @@ XMLSEC_OPENSSL_OBJS_A = \
- 	$(XMLSEC_OPENSSL_INTDIR_A)\x509vfy.obj 
- 
- XMLSEC_NSS_OBJS = \
-+	$(XMLSEC_NSS_INTDIR)\akmngr.obj\
-+	$(XMLSEC_NSS_INTDIR)\keywrapers.obj\
-+	$(XMLSEC_NSS_INTDIR)\tokens.obj\
- 	$(XMLSEC_NSS_INTDIR)\app.obj\
- 	$(XMLSEC_NSS_INTDIR)\bignum.obj\
- 	$(XMLSEC_NSS_INTDIR)\ciphers.obj \
-@@ -260,6 +263,7 @@ XMLSEC_NSS_OBJS_A = \
- 	$(XMLSEC_NSS_INTDIR_A)\strings.obj
- 
- XMLSEC_MSCRYPTO_OBJS = \
-+	$(XMLSEC_MSCRYPTO_INTDIR)\akmngr.obj\
- 	$(XMLSEC_MSCRYPTO_INTDIR)\app.obj\
- 	$(XMLSEC_MSCRYPTO_INTDIR)\crypto.obj \
- 	$(XMLSEC_MSCRYPTO_INTDIR)\ciphers.obj \
 -- 
 2.12.0
 
