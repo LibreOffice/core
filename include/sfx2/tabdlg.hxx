@@ -86,7 +86,6 @@ friend class SfxTabDialogUIObject;
     std::unique_ptr< TabDlg_Impl >        m_pImpl;
     sal_uInt16*         m_pRanges;
     sal_uInt16          m_nAppPageId;
-    bool                m_bItemsReset;
     bool                m_bStandardPushed;
 
     DECL_DLLPRIVATE_LINK(ActivatePageHdl, TabControl*, void );

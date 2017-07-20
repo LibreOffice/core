@@ -252,14 +252,6 @@ namespace sfx2
         SfxDockingWindow::StateChanged( i_nType );
     }
 
-    void TitledDockingWindow::EndDocking( const tools::Rectangle& i_rRect, bool i_bFloatMode )
-    {
-        SfxDockingWindow::EndDocking( i_rRect, i_bFloatMode );
-
-        m_aEndDockingHdl.Call( this );
-    }
-
-
     void TitledDockingWindow::DataChanged( const DataChangedEvent& i_rDataChangedEvent )
     {
         SfxDockingWindow::DataChanged( i_rDataChangedEvent );

@@ -318,7 +318,6 @@ SfxTabDialog::SfxTabDialog
     , m_pOutSet(nullptr)
     , m_pRanges(nullptr)
     , m_nAppPageId(USHRT_MAX)
-    , m_bItemsReset(false)
     , m_bStandardPushed(false)
     , m_pExampleSet(nullptr)
 {
@@ -1064,18 +1063,8 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
     // Create TabPage if possible:
     if ( !pTabPage )
     {
-        const SfxItemSet* pTmpSet = nullptr;
-
         if ( m_pSet )
-        {
-            if ( m_bItemsReset && m_pSet->GetParent() )
-                pTmpSet = m_pSet->GetParent();
-            else
-                pTmpSet = m_pSet;
-        }
-
-        if ( pTmpSet )
-            pTabPage = (pDataObject->fnCreatePage)( pTabCtrl, pTmpSet );
+            pTabPage = (pDataObject->fnCreatePage)( pTabCtrl, m_pSet );
         else
             pTabPage = (pDataObject->fnCreatePage)
                             ( pTabCtrl, CreateInputItemSet( nId ) );

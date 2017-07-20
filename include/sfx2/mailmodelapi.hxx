@@ -50,8 +50,6 @@ protected:
 
 private:
     std::unique_ptr<AddressList_Impl>   mpToList;
-    std::unique_ptr<AddressList_Impl>   mpCcList;
-    std::unique_ptr<AddressList_Impl>   mpBccList;
     OUString            maFromAddress;
     OUString            maSubject;
 

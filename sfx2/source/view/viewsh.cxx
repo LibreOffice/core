@@ -1076,7 +1076,6 @@ SfxViewShell::SfxViewShell
 :   SfxShell(this)
 ,   pImpl( new SfxViewShell_Impl(nFlags) )
 ,   pFrame(pViewFrame)
-,   pSubShell(nullptr)
 ,   pWindow(nullptr)
 ,   bNoNewWindow( nFlags & SfxViewShellFlags::NO_NEWWINDOW )
 ,   mbPrinterSettingsModified(false)
