@@ -566,7 +566,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
     }
 
     if (rRole == "values-y" || rRole == "values-first" || rRole == "values-last" ||
-        rRole == "values-min" || rRole == "values-max")
+        rRole == "values-min" || rRole == "values-max" || rRole == "values-size")
     {
         // Column values.  Append a new data column and populate it.
 
