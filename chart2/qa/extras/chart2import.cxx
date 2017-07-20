@@ -39,6 +39,7 @@ public:
     void testODTChartSeries();
     void testDOCChartSeries();
     void testDOCXChartSeries();
+    void testDOCXChartValuesSize();
     void testPPTXChartSeries();
     void testPPTXSparseChartSeries();
     /**
@@ -105,6 +106,7 @@ public:
     CPPUNIT_TEST(testODTChartSeries);
     CPPUNIT_TEST(testDOCChartSeries);
     CPPUNIT_TEST(testDOCXChartSeries);
+    CPPUNIT_TEST(testDOCXChartValuesSize);
     CPPUNIT_TEST(testPPTChartSeries);
     CPPUNIT_TEST(testPPTXChartSeries);
     CPPUNIT_TEST(testPPTXSparseChartSeries);
@@ -373,6 +375,27 @@ void Chart2ImportTest::testDOCXChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Series 1"), aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("Series 2"), aLabels[1][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("Series 3"), aLabels[2][0].get<OUString>());
+}
+
+void Chart2ImportTest::testDOCXChartValuesSize()
+{
+    load( "/chart2/qa/extras/data/docx/", "bubblechart.docx" );
+    Reference<chart2::XChartDocument> xChartDoc( getChartDocFromWriter(0), uno::UNO_QUERY );
+    CPPUNIT_ASSERT( xChartDoc.is() );
+
+    uno::Reference< chart::XChartDataArray > xDataArray( xChartDoc->getDataProvider(), UNO_QUERY_THROW );
+    Sequence<OUString> aColumnDesc = xDataArray->getColumnDescriptions();
+    // Number of columns = 3 (Y-values, X-values and bubble sizes).
+    // Without the fix there would only be 2 columns (no bubble sizes).
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "There must be 3 columns and descriptions", static_cast<sal_Int32>(3), aColumnDesc.getLength() );
+    Sequence<Sequence<double>> aData = xDataArray->getData();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "There must be exactly 3 data points", static_cast<sal_Int32>(3), aData.getLength() );
+
+    std::vector<std::vector<double>> aExpected = { { 2.7, 0.7, 10.0 }, { 3.2, 1.8, 4.0 }, { 0.8, 2.6, 8.0 } };
+
+    for ( sal_Int32 nRowIdx = 0; nRowIdx < 3; ++nRowIdx )
+        for( sal_Int32 nColIdx = 0; nColIdx < 3; ++nColIdx )
+            CPPUNIT_ASSERT_DOUBLES_EQUAL( aExpected[nRowIdx][nColIdx], aData[nRowIdx][nColIdx], 1e-1 );
 }
 
 void Chart2ImportTest::testPPTChartSeries()
