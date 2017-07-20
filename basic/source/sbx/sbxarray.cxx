@@ -287,7 +287,7 @@ void SbxArray::Remove( sal_uInt32 nIdx )
     }
 }
 
-void SbxArray::Remove( SbxVariable* pVar )
+void SbxArray::Remove( SbxVariable const * pVar )
 {
     if( pVar )
     {

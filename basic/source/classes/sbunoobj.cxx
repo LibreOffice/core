@@ -111,7 +111,7 @@ static char const aSeqLevelStr[] = "[]";
 // redirection built in. The property name specifies the name
 // of the default property.
 
-bool SbUnoObject::getDefaultPropName( SbUnoObject* pUnoObj, OUString& sDfltProp )
+bool SbUnoObject::getDefaultPropName( SbUnoObject const * pUnoObj, OUString& sDfltProp )
 {
     bool bResult = false;
     Reference< XDefaultProperty> xDefaultProp( pUnoObj->maTmpUnoObj, UNO_QUERY );
@@ -521,7 +521,7 @@ SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
     return eRetType;
 }
 
-static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, bool bIsZeroIndex, Type* pType )
+static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int32 >& indices, Sequence< sal_Int32 >& sizes, const Any& aValue, sal_Int32& dimension, bool bIsZeroIndex, Type const * pType )
 {
     const Type& aType = aValue.getValueType();
     TypeClass eTypeClass = aType.getTypeClass();
@@ -1166,7 +1166,7 @@ static bool implGetTypeByName( const OUString& rName, Type& rRetType )
 
 
 // converting of Sbx to Uno with known target class
-Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProperty )
+Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUnoProperty )
 {
     Any aRetVal;
 
@@ -1502,7 +1502,7 @@ enum class INVOKETYPE
    GetProp = 0,
    Func
 };
-Any invokeAutomationMethod( const OUString& Name, Sequence< Any >& args, SbxArray* pParams, sal_uInt32 nParamCount, Reference< XInvocation >& rxInvocation, INVOKETYPE invokeType )
+Any invokeAutomationMethod( const OUString& Name, Sequence< Any > const & args, SbxArray* pParams, sal_uInt32 nParamCount, Reference< XInvocation > const & rxInvocation, INVOKETYPE invokeType )
 {
     Sequence< sal_Int16 > OutParamIndex;
     Sequence< Any > OutParam;
@@ -2423,7 +2423,7 @@ void SbUnoObject::doIntrospection()
 // Start of a list of all SbUnoMethod-Instances
 static SbUnoMethod* pFirst = nullptr;
 
-void clearUnoMethodsForBasic( StarBASIC* pBasic )
+void clearUnoMethodsForBasic( StarBASIC const * pBasic )
 {
     SbUnoMethod* pMeth = pFirst;
     while( pMeth )
@@ -4424,7 +4424,7 @@ typedef std::vector< StarBasicDisposeItem* > DisposeItemVector;
 
 static DisposeItemVector GaDisposeItemVector;
 
-static DisposeItemVector::iterator lcl_findItemForBasic( StarBASIC* pBasic )
+static DisposeItemVector::iterator lcl_findItemForBasic( StarBASIC const * pBasic )
 {
     DisposeItemVector::iterator it;
     for( it = GaDisposeItemVector.begin() ; it != GaDisposeItemVector.end() ; ++it )
@@ -4462,7 +4462,7 @@ void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic )
     pArray->Put( pVar, pArray->Count() );
 }
 
-void disposeComVariablesForBasic( StarBASIC* pBasic )
+void disposeComVariablesForBasic( StarBASIC const * pBasic )
 {
     DisposeItemVector::iterator it = lcl_findItemForBasic( pBasic );
     if( it != GaDisposeItemVector.end() )

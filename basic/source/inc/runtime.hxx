@@ -193,7 +193,7 @@ public:
     // offer NumberFormatter also static
     static SvNumberFormatter* PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
         sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
-        LanguageType* peFormatterLangType=nullptr, DateOrder* peFormatterDateOrder=nullptr );
+        LanguageType const * peFormatterLangType=nullptr, DateOrder* peFormatterDateOrder=nullptr );
 };
 
 // There's one instance of this class for every executed sub-program.
@@ -287,7 +287,7 @@ class SbiRuntime
     // #56204 swap out DIM-functionality into help method (step0.cxx)
     void DimImpl( SbxVariableRef refVar );
 
-    static bool implIsClass( SbxObject* pObj, const OUString& aClass );
+    static bool implIsClass( SbxObject const * pObj, const OUString& aClass );
 
     void StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt );
 
@@ -363,7 +363,7 @@ public:
     SbMethod* GetCaller() { return pMeth;}
     SbxVariable* GetExternalCaller(){ return mpExtCaller; }
 
-    SbiForStack* FindForStackItemForCollection( class BasicCollection* pCollection );
+    SbiForStack* FindForStackItemForCollection( class BasicCollection const * pCollection );
 
     SbxBase* FindElementExtern( const OUString& rName );
     static bool isVBAEnabled();
@@ -376,7 +376,7 @@ inline void checkArithmeticOverflow( double d )
         StarBASIC::Error( ERRCODE_BASIC_MATH_OVERFLOW );
 }
 
-inline void checkArithmeticOverflow( SbxVariable* pVar )
+inline void checkArithmeticOverflow( SbxVariable const * pVar )
 {
     if( pVar->GetType() == SbxDOUBLE )
     {

@@ -277,7 +277,7 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 
-void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, bool )
+void SbStdClipboard::MethClear( SbxVariable*, SbxArray const * pPar_, bool )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
@@ -322,7 +322,7 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, bool )
     pVar->PutBool( false );
 }
 
-void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar_, bool )
+void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray const * pPar_, bool )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
@@ -350,7 +350,7 @@ void SbStdClipboard::MethSetData( SbxArray* pPar_, bool )
 
 }
 
-void SbStdClipboard::MethSetText( SbxArray* pPar_, bool )
+void SbStdClipboard::MethSetText( SbxArray const * pPar_, bool )
 {
     if( !pPar_ || (pPar_->Count() != 2) )
     {

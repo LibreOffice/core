@@ -131,7 +131,7 @@ public:
 
     static void insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont, BasicManager* pMgr,
                                    const uno::Any& aLibAny, const OUString& aLibName );
-    static void addLibraryModulesImpl( BasicManager* pMgr, const uno::Reference< container::XNameAccess >& xLibNameAccess,
+    static void addLibraryModulesImpl( BasicManager const * pMgr, const uno::Reference< container::XNameAccess >& xLibNameAccess,
                                        const OUString& aLibName );
 
 
@@ -177,7 +177,7 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
 }
 
 
-void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
+void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager const * pMgr,
     const uno::Reference< container::XNameAccess >& xLibNameAccess, const OUString& aLibName )
 {
     uno::Sequence< OUString > aModuleNames = xLibNameAccess->getElementNames();
@@ -1367,7 +1367,7 @@ StarBASIC* BasicManager::CreateLibForLibContainer( const OUString& rLibName,
 }
 
 
-BasicLibInfo* BasicManager::FindLibInfo( StarBASIC* pBasic )
+BasicLibInfo* BasicManager::FindLibInfo( StarBASIC const * pBasic )
 {
     for (auto const& rpLib : mpImpl->aLibs)
     {
