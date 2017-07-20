@@ -853,8 +853,6 @@ ErrCode SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     ErrCode nError = ERRCODE_NONE;
     if( pMedium )
         nError = rxWriter->Write( *pPam, *pMedium, pRealFileName );
-    else if( pStg.is() )
-        nError = rxWriter->Write( *pPam, *pStg, pRealFileName );
     else if( pStrm )
         nError = rxWriter->Write( *pPam, *pStrm, pRealFileName );
     else if( xStg.is() )

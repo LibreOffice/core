@@ -62,7 +62,6 @@ SwParaDlg::SwParaDlg(vcl::Window *pParent,
     , m_nParaExt(0)
     , m_nParaNumPara(0)
     , m_nParaDrpCps(0)
-    , m_nParaBckGrnd(0)
     , m_nParaBorder(0)
     , m_nAreaId(0)
     , m_nTransparenceId(0)
@@ -142,18 +141,12 @@ SwParaDlg::SwParaDlg(vcl::Window *pParent,
 
         if(!bHtmlMode || (nHtmlMode & (HTMLMODE_SOME_STYLES|HTMLMODE_FULL_STYLES)))
         {
-            // remove?
-            //OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            //OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            //m_nParaBckGrnd = AddTabPage("labelTP_BACKGROUND", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
-            //
             // add Area and Transparence TabPages
             m_nAreaId = AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
             m_nTransparenceId = AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
         }
         else
         {
-            // RemoveTabPage("labelTP_BACKGROUND");
             RemoveTabPage("area");
             RemoveTabPage("transparence");
         }
@@ -218,21 +211,6 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     else if( m_nParaDrpCps == nId )
     {
         static_cast<SwDropCapsPage&>(rPage).SetFormat(false);
-    }
-    else if( m_nParaBckGrnd == nId )
-    {
-      if(!( nHtmlMode & HTMLMODE_ON ) ||
-        nHtmlMode & HTMLMODE_SOME_STYLES)
-        {
-            // pagebreak only when the cursor is in the body-area and not in a table
-            const FrameTypeFlags eType = rSh.GetFrameType(nullptr,true);
-            if(!(FrameTypeFlags::BODY & eType) ||
-                rSh.GetSelectionType() & SelectionType::Table)
-            {
-                aSet.Put(SfxBoolItem(SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,true));
-                rPage.PageCreated(aSet);
-            }
-        }
     }
     else if( m_nParaNumPara == nId)
     {

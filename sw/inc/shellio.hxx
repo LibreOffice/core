@@ -486,7 +486,6 @@ public:
 class SW_DLLPUBLIC SwWriter
 {
     SvStream* pStrm;
-    tools::SvRef<SotStorage> pStg;
     css::uno::Reference < css::embed::XStorage > xStg;
     SfxMedium* pMedium;
 

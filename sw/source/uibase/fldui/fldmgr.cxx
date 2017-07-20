@@ -362,7 +362,6 @@ inline sal_uInt16 GetPackCount() {  return SAL_N_ELEMENTS(aSwFields); }
 
 // FieldManager controls inserting and updating of fields
 SwFieldMgr::SwFieldMgr(SwWrtShell* pSh ) :
-    pMacroItem(nullptr),
     pWrtShell(pSh),
     bEvalExp(true)
 {
@@ -1121,8 +1120,6 @@ bool SwFieldMgr::InsertField(
     case TYP_INTERNETFLD:
         {
             SwFormatINetFormat aFormat( rData.m_sPar1, sCurFrame );
-            if( pMacroItem )
-                aFormat.SetMacroTable( &pMacroItem->GetMacroTable() );
             return pCurShell->InsertURL( aFormat, rData.m_sPar2 );
         }
 
