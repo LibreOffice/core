@@ -473,7 +473,7 @@ void SAL_CALL AccessibleControlShape::modeChanged(const ModeChangeEvent& rSource
     // parent to replace this object with a new one.  Disposing this
     // object and sending notifications about the replacement are in
     // the responsibility of our parent.
-    const bool bReplaced = mpParent->ReplaceChild(this, mxShape, mnIndex, maShapeTreeInfo);
+    const bool bReplaced = mpParent->ReplaceChild(this, mxShape, 0, maShapeTreeInfo);
     SAL_WARN_IF(!bReplaced, "sw.uno", "AccessibleControlShape::modeChanged: replacing ourselves away did fail");
 }
 
@@ -861,7 +861,7 @@ void SAL_CALL AccessibleControlShape::elementInserted( const css::container::Con
 
         // second, we need to replace ourself with a new version, which now can be based on the
         // control
-        OSL_VERIFY( mpParent->ReplaceChild ( this, mxShape, mnIndex, maShapeTreeInfo ) );
+        OSL_VERIFY( mpParent->ReplaceChild ( this, mxShape, 0, maShapeTreeInfo ) );
     }
 }
 

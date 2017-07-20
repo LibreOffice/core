@@ -90,7 +90,6 @@ private:
     css::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
     Point                           maTextOffset;
     bool                            mbDataValid;
-    bool                            mbDestroyed;
     bool                            mbIsLocked;
     bool                            mbNeedsUpdate;
     bool                            mbOldUndoMode;
@@ -164,7 +163,6 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
     mpTextForwarder ( nullptr ),
     mpViewForwarder ( nullptr ),
     mbDataValid     ( false ),
-    mbDestroyed     ( false ),
     mbIsLocked      ( false ),
     mbNeedsUpdate   ( false ),
     mbOldUndoMode   ( false ),
@@ -201,7 +199,6 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     mpTextForwarder ( nullptr ),
     mpViewForwarder ( nullptr ),
     mbDataValid     ( false ),
-    mbDestroyed     ( false ),
     mbIsLocked      ( false ),
     mbNeedsUpdate   ( false ),
     mbOldUndoMode   ( false ),
@@ -704,7 +701,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 
 SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
 {
-    if( mbDestroyed || mpObject == nullptr )
+    if( mpObject == nullptr )
         return nullptr;
 
     if( mpModel == nullptr )
@@ -758,7 +755,7 @@ SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
 
 SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( bool bCreate )
 {
-    if( mbDestroyed || mpObject == nullptr )
+    if( mpObject == nullptr )
         return nullptr;
 
     if( mpModel == nullptr )
@@ -833,7 +830,7 @@ void SvxTextEditSourceImpl::UpdateData()
         }
         else
         {
-            if( mpOutliner && mpObject && mpText && !mbDestroyed )
+            if( mpOutliner && mpObject && mpText )
             {
                 SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
                 if( pTextObj )

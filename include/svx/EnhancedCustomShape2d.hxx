@@ -113,7 +113,6 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         css::uno::Sequence< css::beans::PropertyValues >                          seqHandles;
         css::uno::Sequence< css::awt::Size >                                      seqSubViewSize;
 
-        bool                    bTextFlow       : 1;
         bool                    bFilled         : 1;
         bool                    bStroked        : 1;
 

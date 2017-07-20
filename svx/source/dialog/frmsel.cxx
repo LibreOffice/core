@@ -229,7 +229,6 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     mbBLTR( false ),
     mbFullRepaint( true ),
     mbAutoSelect( true ),
-    mbClicked( false ),
     mbHCMode( false ),
     maChildVec( 8 )
 {
@@ -1127,7 +1126,7 @@ void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
         /*  If frame borders are set to "don't care" and the control does not
             support this state, hide them on first mouse click.
             DR 2004-01-30: Why are the borders set to "don't care" then?!? */
-        bool bHideDontCare = !mxImpl->mbClicked && !SupportsDontCareState();
+        bool bHideDontCare = !SupportsDontCareState();
 
         for( FrameBorderIter aIt( mxImpl->maEnabBorders ); aIt.Is(); ++aIt )
         {

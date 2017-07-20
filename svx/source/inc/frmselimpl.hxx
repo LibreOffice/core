@@ -135,7 +135,6 @@ struct FrameSelectorImpl
     bool                mbBLTR;         /// true = Bottom-left to top-right frame border enabled.
     bool                mbFullRepaint;  /// Used for repainting (false = only copy virtual device).
     bool                mbAutoSelect;   /// true = Auto select a frame border, if focus reaches control.
-    bool                mbClicked;      /// true = The control has been clicked at least one time.
     bool                mbHCMode;       /// true = High contrast mode.
 
     rtl::Reference<a11y::AccFrameSelector> mxAccess;   /// Pointer to accessibility object of the control.
