@@ -49,6 +49,11 @@ void SvxCharView::MouseButtonDown( const MouseEvent& rMEvt )
 
         maMouseClickHdl.Call(this);
     }
+
+    if(rMEvt.isRight())
+    {
+        maRightClickHdl.Call();
+    }
 }
 
 void SvxCharView::KeyInput( const KeyEvent& rKEvt )
@@ -174,6 +179,11 @@ void SvxCharView::setInsertCharHdl(const Link<SvxCharView*,void> &rLink)
 void SvxCharView::setMouseClickHdl(const Link<SvxCharView*,void> &rLink)
 {
     maMouseClickHdl = rLink;
+}
+
+void SvxCharView::setRightClickHdl(const Link<SvxCharView*,void> &rLink)
+{
+    maRightClickHdl = rLink;
 }
 
 void SvxCharView::SetFont( const vcl::Font& rFont )

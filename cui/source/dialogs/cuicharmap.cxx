@@ -489,8 +489,10 @@ void SvxCharacterMap::init()
     for(int i = 0; i < 16; i++)
     {
         m_pRecentCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
+        m_pRecentCharView[i]->setRightClickHdl(LINK(this,SvxCharacterMap, RecentRightClickHdl));
         m_pRecentCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
         m_pFavCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
+        m_pFavCharView[i]->setRightClickHdl(LINK(this,SvxCharacterMap, FavRightClickHdl));
         m_pFavCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
     }
 }
@@ -576,6 +578,16 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
     }
 }
 
+
+void SvxCharacterMap::createContextMenu()
+{
+    ScopedVclPtrInstance<PopupMenu> pItemMenu;
+    pItemMenu->InsertItem(MNI_CLEAR,CuiResId(STR_CLEAR_RECENT_CHAR));
+    pItemMenu->InsertItem(MNI_CLEARALL,CuiResId(STR_CLEAR_ALL_RECENT_CHAR));
+    pItemMenu->SetSelectHdl(LINK(this, SvxCharacterMap, ContextMenuSelectHdl));
+    pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    Invalidate();
+}
 
 void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
 {
