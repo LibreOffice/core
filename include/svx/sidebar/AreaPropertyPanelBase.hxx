@@ -109,7 +109,6 @@ public:
 protected:
     sal_uInt16                                          meLastXFS;
 
-    sal_Int32                                           mnLastPosGradient;
     sal_Int32                                           mnLastPosHatch;
     sal_Int32                                           mnLastPosBitmap;
     sal_Int32                                           mnLastPosPattern;

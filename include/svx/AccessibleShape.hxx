@@ -383,11 +383,6 @@ protected:
     */
     AccessibleShapeTreeInfo maShapeTreeInfo;
 
-    /** Index that is appended to the object's name to disambiguate between
-        different names with the otherwise same name.
-    */
-    long mnIndex;
-
     /** the index in parent.
     */
     sal_Int32 m_nIndexInParent;

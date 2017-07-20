@@ -703,7 +703,6 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
     nColorData          ( 0 ),
-    bTextFlow           ( false ),
     bFilled             ( static_cast<const XFillStyleItem&>(pAObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue() != drawing::FillStyle_NONE ),
     bStroked            ( static_cast<const XLineStyleItem&>(pAObj->GetMergedItem( XATTR_LINESTYLE )).GetValue() != drawing::LineStyle_NONE ),
     bFlipH              ( false ),
@@ -1105,8 +1104,6 @@ tools::Rectangle EnhancedCustomShape2d::GetTextRect() const
     if ( !nSize )
         return aLogicRect;
     nIndex = 0;
-    if ( bTextFlow && ( nSize > 1 ) )
-        nIndex++;
     Point aTopLeft( GetPoint( seqTextFrames[ nIndex ].TopLeft, !bOOXMLShape, true ) );
     Point aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, !bOOXMLShape, true ) );
     if ( bFlipH )

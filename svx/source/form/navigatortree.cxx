@@ -129,7 +129,6 @@ namespace svxform
         ,m_aTimerCounter( DROP_ACTION_TIMER_INITIAL_TICKS )
         ,m_bDragDataDirty(false)
         ,m_bPrevSelectionMixed(false)
-        ,m_bMarkingObjects(false)
         ,m_bRootSelected(false)
         ,m_bInitialUpdate(true)
         ,m_bKeyboardCut( false )
@@ -588,10 +587,8 @@ namespace svxform
             m_pRootEntry = InsertEntry( SvxResId(RID_STR_FORMS), aRootImage, aRootImage,
                 nullptr, false, 0 );
         }
-        else if (!m_bMarkingObjects && dynamic_cast<const FmNavRequestSelectHint*>(&rHint))
-        {   // if m_bMarkingObjects is sal_True, I mark objects myself
-            // and because of the synchronous mechanism, its exactly the hint,
-            // which was triggered by myself, and thus can be ignored
+        else if (dynamic_cast<const FmNavRequestSelectHint*>(&rHint))
+        {
             FmNavRequestSelectHint* pershHint = const_cast<FmNavRequestSelectHint*>(static_cast<const FmNavRequestSelectHint*>(&rHint));
             FmEntryDataArray& arredToSelect = pershHint->GetItems();
             SynchronizeSelection(arredToSelect);

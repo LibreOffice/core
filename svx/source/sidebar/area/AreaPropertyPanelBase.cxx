@@ -69,7 +69,6 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui", rxFrame),
       meLastXFS(static_cast<sal_uInt16>(-1)),
-      mnLastPosGradient(0),
       mnLastPosHatch(0),
       mnLastPosBitmap(0),
       mnLastPosPattern(0),
@@ -304,25 +303,22 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
             mpMTRAngle->Enable();
             mpLbFillAttr->Clear();
 
-            if (LISTBOX_ENTRY_NOTFOUND != mnLastPosGradient)
+            const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
+
+            if(0 < aItem.GetGradientList()->Count())
             {
-                const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
+                const XGradient aGradient = aItem.GetGradientList()->GetGradient(0)->GetGradient();
+                const XFillGradientItem aXFillGradientItem(aGradient);
 
-                if(mnLastPosGradient < aItem.GetGradientList()->Count())
-                {
-                    const XGradient aGradient = aItem.GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
-                    const XFillGradientItem aXFillGradientItem(aGradient);
+                // #i122676# change FillStyle and Gradient in one call
+                XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
+                setFillStyleAndGradient(&aXFillStyleItem, aXFillGradientItem);
+                mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
 
-                    // #i122676# change FillStyle and Gradient in one call
-                    XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
-                    setFillStyleAndGradient(&aXFillStyleItem, aXFillGradientItem);
-                    mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
-                    mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
-
-                    mpMTRAngle->SetValue(aGradient.GetAngle() / 10);
-                    css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
-                    mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( eXGS ));
-                }
+                mpMTRAngle->SetValue(aGradient.GetAngle() / 10);
+                css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
+                mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( eXGS ));
             }
             break;
         }

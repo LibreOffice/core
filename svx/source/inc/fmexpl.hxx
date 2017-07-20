@@ -407,7 +407,6 @@ namespace svxform
 
         bool            m_bDragDataDirty        : 1;    // ditto
         bool            m_bPrevSelectionMixed   : 1;
-        bool            m_bMarkingObjects       : 1;    // if this is sal_True, I do not need to react to the RequestSelectHints
         bool            m_bRootSelected         : 1;
         bool            m_bInitialUpdate        : 1;    // am I the first time in the UpdateContent?
         bool            m_bKeyboardCut          : 1;

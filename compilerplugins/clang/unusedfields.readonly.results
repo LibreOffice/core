@@ -666,12 +666,6 @@ include/svtools/editsyntaxhighlighter.hxx:33
     MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
 include/svtools/headbar.hxx:241
     HeaderBar maDoubleClickHdl Link<class HeaderBar *, void>
-include/svx/AccessibleShape.hxx:389
-    accessibility::AccessibleShape mnIndex long
-include/svx/EnhancedCustomShape2d.hxx:116
-    EnhancedCustomShape2d bTextFlow _Bool
-include/svx/sidebar/AreaPropertyPanelBase.hxx:112
-    svx::sidebar::AreaPropertyPanelBase mnLastPosGradient sal_Int32
 include/svx/svdmark.hxx:142
     SdrMarkList maPointName class rtl::OUString
 include/svx/svdmark.hxx:143
@@ -1196,16 +1190,10 @@ svx/source/inc/datanavi.hxx:552
     svxform::AddSubmissionDialog m_aMethodString class svxform::MethodString
 svx/source/inc/datanavi.hxx:553
     svxform::AddSubmissionDialog m_aReplaceString class svxform::ReplaceString
-svx/source/inc/fmexpl.hxx:410
-    svxform::NavigatorTree m_bMarkingObjects _Bool
-svx/source/inc/frmselimpl.hxx:138
-    svx::FrameSelectorImpl mbClicked _Bool
 svx/source/inc/gridcell.hxx:528
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/gridcell.hxx:529
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/unodraw/unoshtxt.cxx:93
-    SvxTextEditSourceImpl mbDestroyed _Bool
 sw/inc/acmplwrd.hxx:43
     SwAutoCompleteWord m_LookupTree editeng::Trie
 sw/inc/calc.hxx:162
