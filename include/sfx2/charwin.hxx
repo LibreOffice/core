@@ -38,6 +38,7 @@ public:
 
     void setInsertCharHdl(const Link<SvxCharView*,void> &rLink);
     void setMouseClickHdl(const Link<SvxCharView*,void> &rLink);
+    void setRightClickHdl(const Link<SvxCharView*,void> &rLink);
 
 protected:
     virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&) override;
@@ -52,6 +53,7 @@ private:
 
     Link<SvxCharView*, void> maInsertCharHdl;
     Link<SvxCharView*, void> maMouseClickHdl;
+    Link<SvxCharView*, void> maRightClickHdl;
 };
 
 #endif
