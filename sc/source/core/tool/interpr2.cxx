@@ -718,28 +718,28 @@ void ScInterpreter::ScGetDiffDate360()
             bFlag = GetBool();
         else
             bFlag = false;
-        double nDate2 = GetDouble();
-        double nDate1 = GetDouble();
+        sal_Int32 nDate2 = GetInt32();
+        sal_Int32 nDate1 = GetInt32();
         if (nGlobalError != FormulaError::NONE)
             PushError( nGlobalError);
         else
         {
-            double fSign;
+            sal_Int32 nSign;
             // #i84934# only for non-US European algorithm swap dates. Else
             // follow Excel's meaningless extrapolation for "interoperability".
             if (bFlag && (nDate2 < nDate1))
             {
-                fSign = nDate1;
+                nSign = nDate1;
                 nDate1 = nDate2;
-                nDate2 = fSign;
-                fSign = -1.0;
+                nDate2 = nSign;
+                nSign = -1;
             }
             else
-                fSign = 1.0;
+                nSign = 1;
             Date aDate1 = pFormatter->GetNullDate();
-            aDate1 += static_cast<sal_Int32>(::rtl::math::approxFloor(nDate1));
+            aDate1 += nDate1;
             Date aDate2 = pFormatter->GetNullDate();
-            aDate2 += static_cast<sal_Int32>(::rtl::math::approxFloor(nDate2));
+            aDate2 += nDate2;
             if (aDate1.GetDay() == 31)
                 aDate1 -= (sal_uLong) 1;
             else if (!bFlag)
@@ -768,7 +768,7 @@ void ScInterpreter::ScGetDiffDate360()
                 else
                     aDate2.SetDay(30);
             }
-            PushDouble( fSign *
+            PushDouble( (double) nSign *
                 (  (double) aDate2.GetDay() + (double) aDate2.GetMonth() * 30.0 +
                    (double) aDate2.GetYear() * 360.0
                  - (double) aDate1.GetDay() - (double) aDate1.GetMonth() * 30.0
