@@ -1870,18 +1870,6 @@ writerfilter/source/dmapper/DomainMapper_Impl.cxx:165
     writerfilter::dmapper::FieldConversion cFieldServiceName const sal_Char *
 writerfilter/source/dmapper/DomainMapper_Impl.cxx:166
     writerfilter::dmapper::FieldConversion eFieldId enum writerfilter::dmapper::FieldId
-writerfilter/source/dmapper/GraphicImport.cxx:160
-    writerfilter::dmapper::GraphicBorderLine nLineColor sal_Int32
-writerfilter/source/dmapper/GraphicImport.cxx:190
-    writerfilter::dmapper::GraphicImport_Impl nRightPosition sal_Int32
-writerfilter/source/dmapper/PropertyMap.hxx:214
-    writerfilter::dmapper::SectionPropertyMap m_bPageNoRestart _Bool
-writerfilter/source/dmapper/PropertyMap.hxx:229
-    writerfilter::dmapper::SectionPropertyMap m_nDzaGutter sal_Int32
-writerfilter/source/dmapper/TDefTableHandler.hxx:44
-    writerfilter::dmapper::TDefTableHandler m_aCellBorderPositions ::std::vector<sal_Int32>
-writerfilter/source/dmapper/TDefTableHandler.hxx:45
-    writerfilter::dmapper::TDefTableHandler m_aCellVertAlign ::std::vector<sal_Int32>
 writerfilter/source/ooxml/OOXMLFactory.hxx:60
     writerfilter::ooxml::AttributeInfo m_nToken writerfilter::Token_t
 writerfilter/source/ooxml/OOXMLFactory.hxx:61

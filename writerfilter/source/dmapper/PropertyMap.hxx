@@ -211,7 +211,6 @@ private:
     bool                                            m_bSeparatorLineIsOn;
     bool                                            m_bEvenlySpaced;
 
-    bool                                            m_bPageNoRestart;
     sal_Int32                                       m_nPageNumber;
     // Page number type is a value from css::style::NumberingType.
     sal_Int16                                       m_nPageNumberType;
@@ -225,8 +224,6 @@ private:
     sal_Int32                                       m_nBottomMargin;
     sal_Int32                                       m_nHeaderTop;
     sal_Int32                                       m_nHeaderBottom;
-
-    sal_Int32                                       m_nDzaGutter;
 
     sal_Int32                                       m_nGridType;
     sal_Int32                                       m_nGridLinePitch;
