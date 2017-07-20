@@ -194,8 +194,8 @@ namespace svgio
         sal_Int32 read_hex(sal_Unicode aChar);
         bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName, bool bCaseIndependent);
         bool read_color(const OUString& rCandidate, basegfx::BColor& rColor, bool bCaseIndependent, SvgNumber& rOpacity);
-        basegfx::B2DRange readViewBox(const OUString& rCandidate, InfoProvider& rInfoProvider);
-        basegfx::B2DHomMatrix readTransform(const OUString& rCandidate, InfoProvider& rInfoProvider);
+        basegfx::B2DRange readViewBox(const OUString& rCandidate, InfoProvider const & rInfoProvider);
+        basegfx::B2DHomMatrix readTransform(const OUString& rCandidate, InfoProvider const & rInfoProvider);
         bool readSingleNumber(const OUString& rCandidate, SvgNumber& aNum);
         bool readLocalUrl(const OUString& rCandidate, OUString& rURL);
         bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint, OUString& rURL, bool bCaseIndependent, SvgNumber& rOpacity);

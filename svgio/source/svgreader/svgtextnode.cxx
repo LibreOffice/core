@@ -88,7 +88,7 @@ namespace svgio
         void SvgTextNode::addTextPrimitives(
             const SvgNode& rCandidate,
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-            drawinglayer::primitive2d::Primitive2DContainer& rSource)
+            drawinglayer::primitive2d::Primitive2DContainer const & rSource)
         {
             if(!rSource.empty())
             {

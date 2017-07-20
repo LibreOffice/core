@@ -50,7 +50,7 @@ using namespace com::sun::star;
 
 namespace
 {
-    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode* pNode, svgio::svgreader::SvgCharacterNode* pLast)
+    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgCharacterNode* pLast)
     {
         if(pNode)
         {

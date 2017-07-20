@@ -289,7 +289,7 @@ namespace svgio
             /// helper which does the necessary with a given path
             void add_text(
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-                drawinglayer::primitive2d::Primitive2DContainer& rSource) const;
+                drawinglayer::primitive2d::Primitive2DContainer const & rSource) const;
             void add_path(
                 const basegfx::B2DPolyPolygon& rPath,
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,

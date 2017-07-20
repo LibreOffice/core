@@ -956,7 +956,7 @@ namespace svgio
             return false;
         }
 
-        basegfx::B2DRange readViewBox(const OUString& rCandidate, InfoProvider& rInfoProvider)
+        basegfx::B2DRange readViewBox(const OUString& rCandidate, InfoProvider const & rInfoProvider)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -997,7 +997,7 @@ namespace svgio
             return basegfx::B2DRange();
         }
 
-        basegfx::B2DHomMatrix readTransform(const OUString& rCandidate, InfoProvider& rInfoProvider)
+        basegfx::B2DHomMatrix readTransform(const OUString& rCandidate, InfoProvider const & rInfoProvider)
         {
             basegfx::B2DHomMatrix aMatrix;
             const sal_Int32 nLen(rCandidate.getLength());

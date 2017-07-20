@@ -198,7 +198,7 @@ namespace svgio
             }
         }
 
-        void SvgPatternNode::getValuesRelative(double& rfX, double& rfY, double& rfW, double& rfH, const basegfx::B2DRange& rGeoRange, SvgNode& rUser) const
+        void SvgPatternNode::getValuesRelative(double& rfX, double& rfY, double& rfW, double& rfH, const basegfx::B2DRange& rGeoRange, SvgNode const & rUser) const
         {
             double fTargetWidth(rGeoRange.getWidth());
             double fTargetHeight(rGeoRange.getHeight());
