@@ -251,9 +251,12 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         if( rAttribs.hasAttribute( XML_type ) )
         {
             pShape.reset( new Shape("com.sun.star.drawing.CustomShape") );
-            const sal_Int32 nType(rAttribs.getToken( XML_type, XML_obj ));
-            pShape->setSubType( nType );
-            pShape->getCustomShapeProperties()->setShapePresetType( nType );
+            if (!rAttribs.getBool(XML_hideGeom, false))
+            {
+                const sal_Int32 nType(rAttribs.getToken( XML_type, XML_obj ));
+                pShape->setSubType( nType );
+                pShape->getCustomShapeProperties()->setShapePresetType( nType );
+            }
         }
         else
         {
