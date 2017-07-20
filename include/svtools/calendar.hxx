@@ -334,7 +334,6 @@ class SVT_DLLPUBLIC CalendarField : public DateField
 private:
     VclPtr<ImplCFieldFloatWin> mpFloatWin;
     VclPtr<Calendar>    mpCalendar;
-    WinBits             mnCalendarStyle;
     VclPtr<PushButton>  mpTodayBtn;
     VclPtr<PushButton>  mpNoneBtn;
     Date                maDefaultDate;

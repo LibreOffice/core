@@ -1106,7 +1106,6 @@ void HeaderBar::Select()
 
 void HeaderBar::DoubleClick()
 {
-    maDoubleClickHdl.Call( this );
 }
 
 void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
