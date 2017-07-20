@@ -838,5 +838,11 @@ DECLARE_ODFIMPORT_TEST(testTdf109080_style_ns, "tdf109080_style_ns.odt")
         parseDump("/root/page[2]/footer/txt/text()"));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf109228, "tdf109228.odt")
+{
+    //  Embedded object with no frame name was imported incorrectly, it was achored 'to character' instead of 'as character'
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
