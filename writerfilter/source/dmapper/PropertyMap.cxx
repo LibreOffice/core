@@ -370,7 +370,6 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     , m_xColumnContainer( nullptr )
     , m_bSeparatorLineIsOn( false )
     , m_bEvenlySpaced( false )
-    , m_bPageNoRestart( false )
     , m_nPageNumber( -1 )
     , m_nPageNumberType( -1 )
     , m_nBreakType( -1 )
@@ -382,7 +381,6 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     , m_nBottomMargin( 2540 )
     , m_nHeaderTop( 1270 )    // 720 twip
     , m_nHeaderBottom( 1270 ) // 720 twip
-    , m_nDzaGutter( 0 )
     , m_nGridType( 0 )
     , m_nGridLinePitch( 1 )
     , m_nDxtCharSpace( 0 )
@@ -989,11 +987,6 @@ uno::Reference< beans::XPropertySet > lcl_GetRangeProperties( bool bIsFirstSecti
 
 void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl )
 {
-    if ( m_nDzaGutter > 0 )
-    {
-        //todo: iGutterPos from DocProperties are missing
-        m_nLeftMargin += m_nDzaGutter;
-    }
     Insert( PROP_LEFT_MARGIN, uno::makeAny( m_nLeftMargin ) );
     Insert( PROP_RIGHT_MARGIN, uno::makeAny( m_nRightMargin ) );
 
@@ -1397,7 +1390,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                         uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName
                             : m_sFollowPageStyleName ) );
 
-                    if (m_bPageNoRestart || 0 <= m_nPageNumber)
+                    if (0 <= m_nPageNumber)
                     {
                         sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;
                         xRangeProperties->setPropertyValue(getPropertyName(PROP_PAGE_NUMBER_OFFSET),

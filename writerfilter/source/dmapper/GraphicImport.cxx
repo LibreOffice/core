@@ -157,18 +157,16 @@ void XInputStreamHelper::closeInput(  )
 struct GraphicBorderLine
 {
     sal_Int32   nLineWidth;
-    sal_Int32   nLineColor;
     bool        bHasShadow;
 
     GraphicBorderLine() :
         nLineWidth(0)
-        ,nLineColor(0)
         ,bHasShadow(false)
         {}
 
     bool isEmpty()
     {
-        return nLineWidth == 0 && nLineColor == 0 && !bHasShadow;
+        return nLineWidth == 0 && !bHasShadow;
     }
 
 };
@@ -187,7 +185,6 @@ public:
 
     sal_Int32 nLeftPosition;
     sal_Int32 nTopPosition;
-    sal_Int32 nRightPosition;
 
     bool      bUseSimplePos;
     sal_Int32 zOrder;
@@ -259,7 +256,6 @@ public:
         ,rDomainMapper( rDMapper )
         ,nLeftPosition(0)
         ,nTopPosition(0)
-        ,nRightPosition(0)
         ,bUseSimplePos(false)
         ,zOrder(-1)
         ,nHoriOrient(   text::HoriOrientation::NONE )
@@ -1156,7 +1152,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             }
             else
             {
-                aBorderLine.Color = rBorderLine.nLineColor;
+                aBorderLine.Color = 0;
                 aBorderLine.InnerLineWidth = 0;
                 aBorderLine.OuterLineWidth = (sal_Int16)rBorderLine.nLineWidth;
                 aBorderLine.LineDistance = 0;
@@ -1212,7 +1208,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SIZE_PROTECTED ),
                     uno::makeAny(true));
 
-            sal_Int32 nWidth = m_pImpl->nRightPosition - m_pImpl->nLeftPosition;
+            sal_Int32 nWidth = - m_pImpl->nLeftPosition;
             if (m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
                 //adjust margins

@@ -38,12 +38,6 @@ class PropertyMap;
 class TablePropertyMap;
 class TDefTableHandler : public LoggedProperties
 {
-public:
-
-private:
-    ::std::vector<sal_Int32>                                m_aCellBorderPositions;
-    ::std::vector<sal_Int32>                                m_aCellVertAlign;
-
     std::vector<css::table::BorderLine2> m_aLeftBorderLines;
     std::vector<css::table::BorderLine2> m_aRightBorderLines;
     std::vector<css::table::BorderLine2> m_aTopBorderLines;

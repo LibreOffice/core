@@ -415,17 +415,6 @@ void TDefTableHandler::lcl_sprm(Sprm & rSprm)
 void TDefTableHandler::fillCellProperties(
             size_t nCell, const ::std::shared_ptr< TablePropertyMap >& pCellProperties ) const
 {
-    if( m_aCellBorderPositions.size() > nCell )
-    {
-        sal_Int16 nVertOrient = text::VertOrientation::NONE;
-        switch( m_aCellVertAlign[nCell] ) //0 - top 1 - center 2 - bottom
-        {
-            case 1: nVertOrient = text::VertOrientation::CENTER; break;
-            case 2: nVertOrient = text::VertOrientation::BOTTOM; break;
-            default:;
-        }
-        pCellProperties->Insert( PROP_VERT_ORIENT, uno::makeAny( nVertOrient ) );
-    }
     if( m_aTopBorderLines.size() > nCell )
         pCellProperties->Insert( PROP_TOP_BORDER, uno::makeAny( m_aTopBorderLines[nCell] ) );
     if( m_aLeftBorderLines.size() > nCell )
