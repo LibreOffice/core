@@ -98,7 +98,7 @@ void DateTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos, bool bShif
         switch( m_aIncrement.MajorTimeInterval.TimeUnit )
         {
         case DAY:
-            aDate += m_aIncrement.MajorTimeInterval.Number;
+            aDate.AddDays( m_aIncrement.MajorTimeInterval.Number );
             break;
         case YEAR:
             aDate = DateHelper::GetDateSomeYearsAway( aDate, m_aIncrement.MajorTimeInterval.Number );
@@ -129,7 +129,7 @@ void DateTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos, bool bShif
         switch( m_aIncrement.MinorTimeInterval.TimeUnit )
         {
         case DAY:
-            aDate += m_aIncrement.MinorTimeInterval.Number;
+            aDate.AddDays( m_aIncrement.MinorTimeInterval.Number );
             break;
         case YEAR:
             aDate = DateHelper::GetDateSomeYearsAway( aDate, m_aIncrement.MinorTimeInterval.Number );

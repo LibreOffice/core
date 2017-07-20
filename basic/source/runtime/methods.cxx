@@ -1702,7 +1702,7 @@ sal_Int16 implGetDateDay( double aDate )
     aDate -= 2.0; // standardize: 1.1.1900 => 0.0
     aDate = floor( aDate );
     Date aRefDate( 1, 1, 1900 );
-    aRefDate += static_cast<sal_Int32>(aDate);
+    aRefDate.AddDays( aDate );
 
     sal_Int16 nRet = (sal_Int16)( aRefDate.GetDay() );
     return nRet;
@@ -1711,9 +1711,9 @@ sal_Int16 implGetDateDay( double aDate )
 sal_Int16 implGetDateMonth( double aDate )
 {
     Date aRefDate( 1,1,1900 );
-    long nDays = (long)aDate;
+    sal_Int32 nDays = (sal_Int32)aDate;
     nDays -= 2; // standardize: 1.1.1900 => 0.0
-    aRefDate += nDays;
+    aRefDate.AddDays( nDays );
     sal_Int16 nRet = (sal_Int16)( aRefDate.GetMonth() );
     return nRet;
 }
@@ -4582,7 +4582,7 @@ sal_Int16 implGetDateYear( double aDate )
     Date aRefDate( 1,1,1900 );
     long nDays = (long) aDate;
     nDays -= 2; // standardize: 1.1.1900 => 0.0
-    aRefDate += nDays;
+    aRefDate.AddDays( nDays );
     sal_Int16 nRet = aRefDate.GetYear();
     return nRet;
 }
@@ -4672,7 +4672,7 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
         if (nAddMonths)
             aCurDate.AddMonths( nAddMonths);
         if (nAddDays)
-            aCurDate += nAddDays;
+            aCurDate.AddDays( nAddDays);
     }
 
     long nDiffDays = GetDayDiff( aCurDate );

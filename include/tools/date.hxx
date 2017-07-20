@@ -125,6 +125,10 @@ public:
     */
     void            AddMonths( sal_Int32 nAddMonths );
 
+    /** Add days skipping year 0 and truncating at limits.
+     */
+    void            AddDays( sal_Int32 nAddDays );
+
     /** Obtain the day of the week for the date.
 
         Internally normalizes a copy of values.
@@ -216,8 +220,6 @@ public:
                         { mnDate = rDate.mnDate; return *this; }
     Date&           operator =( const css::util::Date& rUDate )
                         { setDateFromDMY( rUDate.Day, rUDate.Month, rUDate.Year); return *this; }
-    Date&           operator +=( sal_Int32 nDays );
-    Date&           operator -=( sal_Int32 nDays );
     Date&           operator ++();
     Date&           operator --();
 

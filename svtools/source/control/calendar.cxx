@@ -418,7 +418,7 @@ void Calendar::ImplFormat()
     maFirstDate = aTempDate;
     nWeekDay = (sal_uInt16)aTempDate.GetDayOfWeek();
     nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
-    maFirstDate -= static_cast<sal_Int32>(nWeekDay);
+    maFirstDate.AddDays( -nWeekDay );
     mnDayCount = nWeekDay;
     sal_uInt16 nDaysInMonth;
     sal_uInt16 nMonthCount = (sal_uInt16)(mnMonthPerLine*mnLines);
@@ -426,12 +426,12 @@ void Calendar::ImplFormat()
     {
         nDaysInMonth = aTempDate.GetDaysInMonth();
         mnDayCount += nDaysInMonth;
-        aTempDate += nDaysInMonth;
+        aTempDate.AddDays( nDaysInMonth );
     }
     Date aTempDate2 = aTempDate;
     --aTempDate2;
     nDaysInMonth = aTempDate2.GetDaysInMonth();
-    aTempDate2 -= nDaysInMonth-1;
+    aTempDate2.AddDays( -(nDaysInMonth-1) );
     nWeekDay = (sal_uInt16)aTempDate2.GetDayOfWeek();
     nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
     mnDayCount += 42-nDaysInMonth-nWeekDay;
@@ -484,7 +484,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
 
     long        nY;
     long        nOffX;
-    sal_uInt16      nDay;
+    sal_Int32   nDay;
     DayOfWeek   eStartDay = ImplGetWeekStart();
 
     rDate = GetFirstMonth();
@@ -515,12 +515,12 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                     long nDayY = nY+mnDaysOffY;
                     if ( rPos.Y() < nDayY )
                         return 0;
-                    sal_uInt16 nDayIndex = (sal_uInt16)rDate.GetDayOfWeek();
-                    nDayIndex = (nDayIndex+(7-(sal_uInt16)eStartDay)) % 7;
+                    sal_Int32 nDayIndex = (sal_Int32)rDate.GetDayOfWeek();
+                    nDayIndex = (nDayIndex+(7-(sal_Int32)eStartDay)) % 7;
                     if ( (i == 0) && (j == 0) )
                     {
                         Date aTempDate = rDate;
-                        aTempDate -= nDayIndex;
+                        aTempDate.AddDays( -nDayIndex );
                         for ( nDay = 0; nDay < nDayIndex; nDay++ )
                         {
                             nOffX = nDayX + (nDay*mnDayWidth);
@@ -528,7 +528,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                                  (rPos.X() >= nOffX) && (rPos.X() < nOffX+mnDayWidth) )
                             {
                                 rDate = aTempDate;
-                                rDate += nDay;
+                                rDate.AddDays( nDay );
                                 return CALENDAR_HITTEST_DAY;
                             }
                         }
@@ -537,14 +537,14 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                     {
                         if ( rPos.Y() < nDayY )
                         {
-                            rDate += nDayIndex;
+                            rDate.AddDays( nDayIndex );
                             return 0;
                         }
                         nOffX = nDayX + (nDayIndex*mnDayWidth);
                         if ( (rPos.Y() >= nDayY) && (rPos.Y() < nDayY+mnDayHeight) &&
                              (rPos.X() >= nOffX) && (rPos.X() < nOffX+mnDayWidth) )
                         {
-                            rDate += nDay-1;
+                            rDate.AddDays( nDay-1 );
                             return CALENDAR_HITTEST_DAY;
                         }
                         if ( nDayIndex == 6 )
@@ -559,14 +559,14 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                     {
                         sal_uInt16 nWeekDay = (sal_uInt16)rDate.GetDayOfWeek();
                         nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
-                        sal_uInt16 nDayCount = 42-nDaysInMonth-nWeekDay;
+                        sal_Int32 nDayCount = 42-nDaysInMonth-nWeekDay;
                         Date aTempDate = rDate;
-                        aTempDate += nDaysInMonth;
+                        aTempDate.AddDays( nDaysInMonth );
                         for ( nDay = 1; nDay <= nDayCount; nDay++ )
                         {
                             if ( rPos.Y() < nDayY )
                             {
-                                rDate += nDayIndex;
+                                rDate.AddDays( nDayIndex );
                                 return 0;
                             }
                             nOffX = nDayX + (nDayIndex*mnDayWidth);
@@ -574,7 +574,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                                  (rPos.X() >= nOffX) && (rPos.X() < nOffX+mnDayWidth) )
                             {
                                 rDate = aTempDate;
-                                rDate += nDay-1;
+                                rDate.AddDays( nDay-1 );
                                 return CALENDAR_HITTEST_DAY;
                             }
                             if ( nDayIndex == 6 )
@@ -589,7 +589,7 @@ sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                 }
             }
 
-            rDate += nDaysInMonth;
+            rDate.AddDays( nDaysInMonth );
             nX += mnMonthWidth;
         }
 
@@ -905,7 +905,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
             if (i == 0 && j == 0)
             {
                 Date aTempDate = aDate;
-                aTempDate -= nDayIndex;
+                aTempDate.AddDays( -nDayIndex );
                 for (nDay = 0; nDay < nDayIndex; ++nDay)
                 {
                     nDeltaX = nDayX + (nDay * mnDayWidth);
@@ -934,7 +934,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
                 nWeekDay = (nWeekDay + (7 - (sal_uInt16)eStartDay)) % 7;
                 sal_uInt16 nDayCount = 42 - nDaysInMonth - nWeekDay;
                 Date aTempDate = aDate;
-                aTempDate += nDaysInMonth;
+                aTempDate.AddDays( nDaysInMonth );
                 for (nDay = 1; nDay <= nDayCount; ++nDay)
                 {
                     nDeltaX = nDayX + (nDayIndex * mnDayWidth);
@@ -952,7 +952,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
                 }
             }
 
-            aDate += nDaysInMonth;
+            aDate.AddDays( nDaysInMonth );
             nX += mnMonthWidth;
         }
 
@@ -1137,10 +1137,10 @@ void Calendar::ImplScroll( bool bPrev )
     if ( bPrev )
     {
         --aNewFirstMonth;
-        aNewFirstMonth -= aNewFirstMonth.GetDaysInMonth()-1;
+        aNewFirstMonth.AddDays( -(aNewFirstMonth.GetDaysInMonth()-1));
     }
     else
-        aNewFirstMonth += aNewFirstMonth.GetDaysInMonth();
+        aNewFirstMonth.AddDays( aNewFirstMonth.GetDaysInMonth());
     SetFirstDate( aNewFirstMonth );
 }
 
@@ -1395,23 +1395,23 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             break;
 
         case KEY_UP:
-            aNewDate -= 7;
+            aNewDate.AddDays( -7 );
             break;
 
         case KEY_DOWN:
-            aNewDate += 7;
+            aNewDate.AddDays( 7 );
             break;
 
         case KEY_PAGEUP:
             {
             Date aTempDate = aNewDate;
-            aTempDate -= aNewDate.GetDay()+1;
-            aNewDate -= aTempDate.GetDaysInMonth();
+            aTempDate.AddDays( -(aNewDate.GetDay()+1) );
+            aNewDate.AddDays( -aTempDate.GetDaysInMonth() );
             }
             break;
 
         case KEY_PAGEDOWN:
-            aNewDate += aNewDate.GetDaysInMonth();
+            aNewDate.AddDays( aNewDate.GetDaysInMonth() );
             break;
 
         case KEY_SPACE:
@@ -1689,13 +1689,13 @@ void Calendar::SetCurDate( const Date& rNewDate )
             if ( nDateOff < 365 )
             {
                 Date aFirstDate = GetFirstMonth();
-                aFirstDate += aFirstDate.GetDaysInMonth();
+                aFirstDate.AddDays( aFirstDate.GetDaysInMonth() );
                 ++aTempDate;
                 while ( nDateOff > aTempDate.GetDaysInMonth() )
                 {
-                    aFirstDate += aFirstDate.GetDaysInMonth();
+                    aFirstDate.AddDays( aFirstDate.GetDaysInMonth() );
                     sal_Int32 nDaysInMonth = aTempDate.GetDaysInMonth();
-                    aTempDate += nDaysInMonth;
+                    aTempDate.AddDays( nDaysInMonth );
                     nDateOff -= nDaysInMonth;
                 }
                 SetFirstDate( aFirstDate );
@@ -1743,7 +1743,7 @@ Date Calendar::GetLastMonth() const
     Date aDate = GetFirstMonth();
     sal_uInt16 nMonthCount = GetMonthCount();
     for ( sal_uInt16 i = 0; i < nMonthCount; i++ )
-        aDate += aDate.GetDaysInMonth();
+        aDate.AddDays( aDate.GetDaysInMonth() );
     --aDate;
     return aDate;
 }
@@ -1796,9 +1796,9 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
         Date aLastDate = GetLastMonth();
         if ( rDate > aLastDate )
         {
-            sal_uInt16 nWeekDay = (sal_uInt16)aLastDate.GetDayOfWeek();
-            nWeekDay = (nWeekDay+(7-(sal_uInt16)ImplGetWeekStart())) % 7;
-            aLastDate -= nWeekDay;
+            sal_Int32 nWeekDay = (sal_Int32)aLastDate.GetDayOfWeek();
+            nWeekDay = (nWeekDay+(7-ImplGetWeekStart())) % 7;
+            aLastDate.AddDays( nWeekDay );
             aRect = GetDateRect( aLastDate );
             nDaysOff = rDate-aLastDate;
             nDayIndex = 0;
@@ -1859,7 +1859,7 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
                 }
             }
 
-            aDate += nDaysInMonth;
+            aDate.AddDays( nDaysInMonth );
             nX += mnMonthWidth;
         }
 

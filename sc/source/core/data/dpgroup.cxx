@@ -286,7 +286,7 @@ bool isDateInGroup(const ScDPItemData& rGroupItem, const ScDPItemData& rChildIte
                 nGroupPart == css::sheet::DataPilotFieldGroupBy::QUARTERS)
             {
                 Date aDate(1, 1, SC_DP_LEAPYEAR);
-                aDate += (nChildValue - 1);            // days are 1-based
+                aDate.AddDays(nChildValue - 1);            // days are 1-based
                 sal_Int32 nCompare = aDate.GetMonth();
                 if (nGroupPart == css::sheet::DataPilotFieldGroupBy::QUARTERS)
                     nCompare = ( ( nCompare - 1 ) / 3 ) + 1;    // get quarter from date

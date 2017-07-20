@@ -190,7 +190,7 @@ DateTime& DateTime::operator +=( double fTimeInDays )
         fInt = ::rtl::math::approxFloor( fTimeInDays );
         fFrac = fInt >= fTimeInDays ? 0.0 : fTimeInDays - fInt;
     }
-    Date::operator+=( sal_Int32(fInt) );     // full days
+    AddDays( sal_Int32(fInt) );     // full days
     if ( fFrac )
     {
         tools::Time aTime(0);  // default ctor calls system time, we don't need that
@@ -268,7 +268,7 @@ DateTime DateTime::CreateFromWin32FileDateTime( sal_uInt32 rLower, sal_uInt32 rU
     Date aDate(1,1,1601);
     // (0xffffffffffffffff / a100nPerDay = 21350398) fits into sal_Int32
     // (0x7fffffff = 2147483647)
-    aDate += static_cast<sal_Int32>(nDays);
+    aDate.AddDays(nDays);
 
     SAL_WARN_IF( aDate - Date(1,1,1601) != static_cast<sal_Int32>(nDays), "tools.datetime",
             "DateTime::CreateFromWin32FileDateTime - date truncated to max");
@@ -287,7 +287,7 @@ DateTime DateTime::CreateFromUnixTime(const double fSecondsSinceEpoch)
     const sal_Int32 nDays = static_cast <sal_Int32>(::rtl::math::approxFloor(fValue));
 
     Date aDate (1, 1, 1970);
-    aDate += nDays;
+    aDate.AddDays(nDays);
     SAL_WARN_IF(aDate - Date(1, 1, 1970) != static_cast<sal_Int32>(nDays), "tools.datetime",
                 "DateTime::CreateFromUnixTime - date truncated to max");
 
