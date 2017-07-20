@@ -1210,14 +1210,8 @@ sw/inc/acmplwrd.hxx:43
     SwAutoCompleteWord m_LookupTree editeng::Trie
 sw/inc/calc.hxx:162
     SwCalc m_aSysLocale class SvtSysLocale
-sw/inc/dbmgr.hxx:253
-    SwDBManager bMergeLock _Bool
-sw/inc/doc.hxx:365
-    SwDoc mbXMLExport _Bool
 sw/inc/hints.hxx:195
     SwAttrSetChg m_bDelSet _Bool
-sw/inc/shellio.hxx:489
-    SwWriter pStg tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:81
     SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
 sw/source/core/bastyp/calc.cxx:92
@@ -1610,34 +1604,18 @@ sw/source/filter/ww8/ww8struc.hxx:1073
     SEPr fLayout sal_uInt8
 sw/source/filter/ww8/ww8struc.hxx:1074
     SEPr reserved4 sal_Int16
-sw/source/ui/dbui/dbinsdlg.cxx:120
-    DB_Column::(anonymous) nFormat sal_uLong
-sw/source/ui/dbui/mmoutputtypepage.cxx:100
-    SwSendMailDialog_Impl xConnectedMailService uno::Reference<mail::XMailService>
 sw/source/uibase/dbui/mmconfigitem.cxx:103
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
 sw/source/uibase/dbui/mmconfigitem.cxx:105
     SwMailMergeConfigItem_Impl m_aMaleGreetingLines std::vector<OUString>
 sw/source/uibase/dbui/mmconfigitem.cxx:107
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
-sw/source/uibase/inc/dbtree.hxx:33
-    SwDBTreeList sDefDBName class rtl::OUString
-sw/source/uibase/inc/fldmgr.hxx:99
-    SwFieldMgr pMacroItem const class SvxMacroItem *
 sw/source/uibase/inc/frmpage.hxx:93
     SwFramePage m_aFramePosString class SvxSwFramePosString
-sw/source/uibase/inc/numfmtlb.hxx:34
-    NumFormatListBox pVw class SwView *
-sw/source/uibase/inc/numfmtlb.hxx:35
-    NumFormatListBox pOwnFormatter class SvNumberFormatter *
-sw/source/uibase/inc/swuipardlg.hxx:35
-    SwParaDlg m_nParaBckGrnd sal_uInt16
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:46
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
-sw/source/uibase/sidebar/ThemePanel.cxx:55
-    (anonymous namespace)::ColorVariable maColor class Color
 toolkit/source/awt/stylesettings.cxx:90
     toolkit::StyleMethodGuard m_aGuard class SolarMutexGuard
 tools/source/fsys/urlobj.cxx:290

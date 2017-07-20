@@ -198,10 +198,7 @@ void SwDBTreeList::InitTreeList()
         OUString sDBName(pDBNames[i]);
         InsertEntry(sDBName, aImg, aImg, nullptr, true);
     }
-    OUString sDBName(sDefDBName.getToken(0, DB_DELIM));
-    OUString sTableName(sDefDBName.getToken(1, DB_DELIM));
-    OUString sColumnName(sDefDBName.getToken(2, DB_DELIM));
-    Select(sDBName, sTableName, sColumnName);
+    Select(OUString(), OUString(), OUString());
 
     bInitialized = true;
 }

@@ -262,9 +262,6 @@ SwDoc::SwDoc()
     mbClipBoard( false ),
     mbColumnSelection( false ),
     mbIsPrepareSelAll(false),
-#ifdef DBG_UTIL
-    mbXMLExport(false),
-#endif
     mbContainsAtPageObjWithContentAnchor(false), //#i119292#, fdo#37024
 
     meDocType(DOCTYPE_NATIVE)

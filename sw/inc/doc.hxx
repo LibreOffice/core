@@ -361,10 +361,6 @@ private:
     bool mbColumnSelection       : 1;    //< TRUE: this content has been created by a column selection (clipboard docs only)
     bool mbIsPrepareSelAll       : 1;
 
-#ifdef DBG_UTIL
-    bool mbXMLExport : 1;                //< true: during XML export
-#endif
-
     // true: Document contains at least one anchored object, which is anchored AT_PAGE with a content position.
     //       Thus, certain adjustment needed during formatting for these kind of anchored objects.
     bool mbContainsAtPageObjWithContentAnchor : 1;
@@ -580,9 +576,6 @@ public:
     inline void SetOLEPrtNotifyPending( bool bSet = true );
     void PrtOLENotify( bool bAll ); // All or only marked
 
-#ifdef DBG_UTIL
-    bool InXMLExport() const            { return mbXMLExport; }
-#endif
     bool IsPrepareSelAll() const { return mbIsPrepareSelAll; }
     void SetPrepareSelAll() { mbIsPrepareSelAll = true; }
 

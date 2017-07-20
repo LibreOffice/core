@@ -58,8 +58,6 @@ NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
     nStdEntry           (0),
     bOneArea            (false),
     nDefFormat          (0),
-    pVw                 (nullptr),
-    pOwnFormatter       (nullptr),
     bShowLanguageControl(false),
     bUseAutomaticLanguage(true)
 {
@@ -87,7 +85,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeNumFormatListBox(VclPtr<vcl::W
 
 void NumFormatListBox::Init()
 {
-    SwView *pView = GetView();
+    SwView *pView = GetActiveView();
 
     if (pView)
         eCurLanguage = pView->GetWrtShell().GetCurLang();
@@ -105,37 +103,17 @@ NumFormatListBox::~NumFormatListBox()
     disposeOnce();
 }
 
-void NumFormatListBox::dispose()
-{
-    delete pOwnFormatter;
-    ListBox::dispose();
-}
-
-SwView* NumFormatListBox::GetView()
-{
-    if( pVw )
-        return pVw;
-    return ::GetActiveView();
-}
-
 void NumFormatListBox::SetFormatType(const short nFormatType)
 {
     if (nCurrFormatType == -1 ||
         (nCurrFormatType & nFormatType) == 0)   // there are mixed formats, like for example DateTime
     {
-        SvNumberFormatter* pFormatter;
-
-        if( pOwnFormatter )
-            pFormatter = pOwnFormatter;
-        else
-        {
-            SwView *pView = GetView();
-            OSL_ENSURE(pView, "no view found");
-            if(!pView)
-                return;
-            SwWrtShell &rSh = pView->GetWrtShell();
-            pFormatter = rSh.GetNumberFormatter();
-        }
+        SwView *pView = GetActiveView();
+        OSL_ENSURE(pView, "no view found");
+        if(!pView)
+            return;
+        SwWrtShell &rSh = pView->GetWrtShell();
+        SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
 
         Clear();    // Remove all entries from the Listbox
 
@@ -249,11 +227,8 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             }
         }
 
-        if (!pOwnFormatter)
-        {
-            const sal_Int32 nPos = InsertEntry(SwResId( STR_DEFINE_NUMBERFORMAT ));
-            SetEntryData( nPos, nullptr );
-        }
+        const sal_Int32 nPos = InsertEntry(SwResId( STR_DEFINE_NUMBERFORMAT ));
+        SetEntryData( nPos, nullptr );
 
         SelectEntryPos( nStdEntry );
 
@@ -269,18 +244,12 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefaultFormat)
         return;
     }
 
-    SvNumberFormatter* pFormatter;
-    if (pOwnFormatter)
-        pFormatter = pOwnFormatter;
-    else
-    {
-        SwView *pView = GetView();
-        OSL_ENSURE(pView, "no view found");
-        if(!pView)
-            return;
-        SwWrtShell &rSh = pView->GetWrtShell();
-        pFormatter = rSh.GetNumberFormatter();
-    }
+    SwView *pView = GetActiveView();
+    OSL_ENSURE(pView, "no view found");
+    if(!pView)
+        return;
+    SwWrtShell &rSh = pView->GetWrtShell();
+    SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
 
     short nType = pFormatter->GetType(nDefaultFormat);
 
@@ -361,7 +330,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
 {
     const sal_Int32 nPos = rBox.GetSelectEntryPos();
     OUString sDefine(SwResId( STR_DEFINE_NUMBERFORMAT ));
-    SwView *pView = GetView();
+    SwView *pView = GetActiveView();
 
     if( pView && nPos == rBox.GetEntryCount() - 1 &&
         rBox.GetEntry( nPos ) == sDefine )
@@ -397,7 +366,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
         ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aCoreSet,
-            GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
+            GetActiveView()->GetViewFrame()->GetFrame().GetFrameInterface(),
             RC_DLG_SWNUMFMTDLG ));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
 

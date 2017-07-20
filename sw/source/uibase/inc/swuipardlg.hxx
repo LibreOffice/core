@@ -32,7 +32,6 @@ class SwParaDlg: public SfxTabDialog
     sal_uInt16 m_nParaExt;
     sal_uInt16 m_nParaNumPara;
     sal_uInt16 m_nParaDrpCps;
-    sal_uInt16 m_nParaBckGrnd;
     sal_uInt16 m_nParaBorder;
     sal_uInt16 m_nAreaId;
     sal_uInt16 m_nTransparenceId;
