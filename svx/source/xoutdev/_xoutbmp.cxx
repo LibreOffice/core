@@ -119,7 +119,8 @@ Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const BmpMirrorFlags
 
 ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                  const OUString& rFilterName, const XOutFlags nFlags,
-                                 const Size* pMtfSize_100TH_MM )
+                                 const Size* pMtfSize_100TH_MM,
+                                 const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
     if( rGraphic.GetType() != GraphicType::NONE )
     {
@@ -342,7 +343,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                     if( !(nFlags & XOutFlags::DontAddExtension) )
                         aURL.setExtension( aExt );
                     rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-                    nErr = ExportGraphic( aGraphic, aURL, rFilter, nFilter );
+                    nErr = ExportGraphic( aGraphic, aURL, rFilter, nFilter, pFilterData );
                 }
             }
         }

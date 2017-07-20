@@ -60,7 +60,8 @@ public:
     static Animation    MirrorAnimation( const Animation& rAnimation, bool bHMirr, bool bVMirr );
     static ErrCode      WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                       const OUString& rFilterName, const XOutFlags nFlags,
-                                      const Size* pMtfSize_100TH_MM = nullptr );
+                                      const Size* pMtfSize_100TH_MM = nullptr,
+                                      const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr);
     static bool         GraphicToBase64(const Graphic& rGraphic, OUString& rOUString);
 
     static ErrCode      ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
