@@ -177,49 +177,6 @@ void SfxCharmapCtrl::updateRecentCharControl()
     }
 }
 
-void SfxCharmapCtrl::updateRecentCharacterList(const OUString& sTitle, const OUString& rFont)
-{
-    auto itChar = std::find_if(maRecentCharList.begin(),
-         maRecentCharList.end(),
-         [sTitle] (const OUString & a) { return a == sTitle; });
-
-    auto itChar2 = std::find_if(maRecentCharFontList.begin(),
-         maRecentCharFontList.end(),
-         [rFont] (const OUString & a) { return a == rFont; });
-
-    // if recent char to be added is already in list, remove it
-    if( itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
-    {
-        maRecentCharList.erase( itChar );
-        maRecentCharFontList.erase( itChar2);
-    }
-
-    if (maRecentCharList.size() == 16)
-    {
-        maRecentCharList.pop_back();
-        maRecentCharFontList.pop_back();
-    }
-
-    maRecentCharList.push_front(sTitle);
-    maRecentCharFontList.push_front(rFont);
-
-    css::uno::Sequence< OUString > aRecentCharList(maRecentCharList.size());
-    css::uno::Sequence< OUString > aRecentCharFontList(maRecentCharFontList.size());
-
-    for (size_t i = 0; i < maRecentCharList.size(); ++i)
-    {
-        aRecentCharList[i] = maRecentCharList[i];
-        aRecentCharFontList[i] = maRecentCharFontList[i];
-    }
-
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(comphelper::getProcessComponentContext()));
-    officecfg::Office::Common::RecentCharacters::RecentCharacterList::set(aRecentCharList, batch);
-    officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
-    batch->commit();
-
-    updateRecentCharControl();
-}
-
 
 IMPL_STATIC_LINK(SfxCharmapCtrl, LoseFocusHdl, Control&, pItem, void)
 {
