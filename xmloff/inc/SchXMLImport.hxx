@@ -151,8 +151,6 @@ enum SchXMLRegEquationAttrMap
 class SchXMLImport : public SvXMLImport
 {
 private:
-    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
-
     rtl::Reference<SchXMLImportHelper> maImportHelper;
 
 protected:

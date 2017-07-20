@@ -503,13 +503,6 @@ SchXMLImport::SchXMLImport(
 
 SchXMLImport::~SchXMLImport() throw ()
 {
-    // stop progress view
-    if( mxStatusIndicator.is())
-    {
-        mxStatusIndicator->end();
-        mxStatusIndicator->reset();
-    }
-
     uno::Reference< chart2::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
     if( xChartDoc.is() && xChartDoc->hasControllersLocked() )
         xChartDoc->unlockControllers();

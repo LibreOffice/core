@@ -1922,7 +1922,5 @@ xmloff/inc/MultiPropertySetHelper.hxx:78
     MultiPropertySetHelper aEmptyAny css::uno::Any
 xmloff/inc/SchXMLExport.hxx:39
     SchXMLExport mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
-xmloff/inc/SchXMLImport.hxx:154
-    SchXMLImport mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
 xmloff/source/core/xmlexp.cxx:251
     SvXMLExport_Impl maSaveOptions class SvtSaveOptions
