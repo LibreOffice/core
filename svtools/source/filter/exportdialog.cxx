@@ -352,6 +352,9 @@ awt::Size ExportDialog::GetOriginalSize()
 
 void ExportDialog::GetGraphicSource()
 {
+    if (mxGraphic.is())
+        return;
+
     if ( mxSourceDocument.is() )
     {
         uno::Reference< frame::XModel > xModel( mxSourceDocument, uno::UNO_QUERY );
@@ -414,38 +417,76 @@ void ExportDialog::GetGraphicStream()
             mpTempStream = new SvMemoryStream();
             maBitmap = Bitmap();
 
-            uno::Reference < io::XStream > xStream( new utl::OStreamWrapper( *mpTempStream ) );
-            uno::Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
-
-            uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter =
-                drawing::GraphicExportFilter::create( mxContext );
-
-            OUString sFormat( maExt );
-            uno::Sequence< beans::PropertyValue > aDescriptor( 3 );
-            aDescriptor[0].Name = "OutputStream";
-            aDescriptor[0].Value <<= xOutputStream;
-            aDescriptor[1].Name = "FilterName";
-            aDescriptor[1].Value <<= sFormat;
-            aDescriptor[2].Name = "FilterData";
-            aDescriptor[2].Value <<= aNewFilterData;
-
-            uno::Reference< lang::XComponent > xSourceDoc;
-            if ( mxPage.is() )
-                xSourceDoc.set( mxPage, uno::UNO_QUERY_THROW );
-            else if ( mxShapes.is() )
-                xSourceDoc.set( mxShapes, uno::UNO_QUERY_THROW );
-            else if ( mxShape.is() )
-                xSourceDoc.set( mxShape, uno::UNO_QUERY_THROW );
-            if ( xSourceDoc.is() )
+            if ( mxGraphic.is() )
             {
-                xGraphicExporter->setSourceDocument( xSourceDoc );
-                xGraphicExporter->filter( aDescriptor );
+                SvMemoryStream* pTempStream = dynamic_cast<SvMemoryStream*>( mpTempStream );
+                Graphic aGraphic( mxGraphic );
 
-                if ( mnFormat == FORMAT_JPG )
+                if ( aGraphic.GetType() == GraphicType::Bitmap )
                 {
-                    mpTempStream->Seek( STREAM_SEEK_TO_BEGIN );
-                    maBitmap = GetGraphicBitmap( *mpTempStream );
-                    mpTempStream->Seek( STREAM_SEEK_TO_END );
+                    Size aSizePixel( aGraphic.GetSizePixel() );
+                    if( maSize.Width && maSize.Height &&
+                        ( ( maSize.Width != aSizePixel.Width() ) ||
+                          ( maSize.Height != aSizePixel.Height() ) ) )
+                    {
+                        BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+                        // export: use highest quality
+                        aBmpEx.Scale( Size( maSize.Width, maSize.Height ), BmpScaleFlag::Lanczos );
+                        aGraphic = aBmpEx;
+                    }
+                }
+
+                GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+                const sal_uInt16 nFilter = rFilter.GetExportFormatNumberForShortName( maExt );
+                if ( rFilter.IsExportPixelFormat( nFilter ) )
+                {
+                    pTempStream->SetResizeOffset(1024);
+                    pTempStream->SetStreamSize(1024);
+                    rFilter.ExportGraphic( aGraphic, "", *pTempStream, nFilter, &aNewFilterData );
+
+                    if ( mnFormat == FORMAT_JPG )
+                    {
+                        mpTempStream->Seek( STREAM_SEEK_TO_BEGIN );
+                        maBitmap = GetGraphicBitmap( *mpTempStream );
+                        mpTempStream->Seek( STREAM_SEEK_TO_END );
+                    }
+                }
+            }
+            else
+            {
+                uno::Reference < io::XStream > xStream( new utl::OStreamWrapper( *mpTempStream ) );
+                uno::Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
+
+                uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter =
+                    drawing::GraphicExportFilter::create( mxContext );
+
+                OUString sFormat( maExt );
+                uno::Sequence< beans::PropertyValue > aDescriptor( 3 );
+                aDescriptor[0].Name = "OutputStream";
+                aDescriptor[0].Value <<= xOutputStream;
+                aDescriptor[1].Name = "FilterName";
+                aDescriptor[1].Value <<= sFormat;
+                aDescriptor[2].Name = "FilterData";
+                aDescriptor[2].Value <<= aNewFilterData;
+
+                uno::Reference< lang::XComponent > xSourceDoc;
+                if ( mxPage.is() )
+                    xSourceDoc.set( mxPage, uno::UNO_QUERY_THROW );
+                else if ( mxShapes.is() )
+                    xSourceDoc.set( mxShapes, uno::UNO_QUERY_THROW );
+                else if ( mxShape.is() )
+                    xSourceDoc.set( mxShape, uno::UNO_QUERY_THROW );
+                if ( xSourceDoc.is() )
+                {
+                    xGraphicExporter->setSourceDocument( xSourceDoc );
+                    xGraphicExporter->filter( aDescriptor );
+
+                    if ( mnFormat == FORMAT_JPG )
+                    {
+                        mpTempStream->Seek( STREAM_SEEK_TO_BEGIN );
+                        maBitmap = GetGraphicBitmap( *mpTempStream );
+                        mpTempStream->Seek( STREAM_SEEK_TO_END );
+                    }
                 }
             }
         }
@@ -514,11 +555,13 @@ bool ExportDialog::IsTempExportAvailable() const
 ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     const css::uno::Reference< css::uno::XComponentContext >& rxContext,
     const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
-    bool bExportSelection, bool bIsPixelFormat)
+    bool bExportSelection, bool bIsPixelFormat,
+    const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
     : ModalDialog(rPara.pWindow, "GraphicExportDialog", "svt/ui/graphicexport.ui")
     , mrFltCallPara(rPara)
     , mxContext(rxContext)
     , mxSourceDocument(rxSourceDocument)
+    , mxGraphic(rxGraphic)
     , mpSbCompression(nullptr)
     , mpNfCompression(nullptr)
     , msEstimatedSizePix1(SvtResId(STR_SVT_ESTIMATED_SIZE_PIX_1))
@@ -603,18 +646,31 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     Size aResolution( Application::GetDefaultDevice()->LogicToPixel( Size( 100, 100 ), MapUnit::MapCM ) );
     maResolution.Width = aResolution.Width();
     maResolution.Height= aResolution.Height();
-    maOriginalSize = GetOriginalSize();
-    if ( bIsPixelFormat )
+
+    if ( mxGraphic.is() )
     {
-        double fPixelsPer100thmm = static_cast< double >( maResolution.Width ) / 100000.0;
-        maSize = awt::Size( static_cast< sal_Int32 >( ( fPixelsPer100thmm * maOriginalSize.Width ) + 0.5 ),
-            static_cast< sal_Int32 >( ( fPixelsPer100thmm * maOriginalSize.Height ) + 0.5 ) );
+        Graphic aGraphic(mxGraphic);
+        Size aSize = aGraphic.GetSizePixel();
+        maSize = awt::Size(aSize.getWidth(), aSize.getHeight());
+        double f100thmmPerPixel = 100000.0 / static_cast< double >( maResolution.Width );
+        maOriginalSize = awt::Size(
+                static_cast< sal_Int32 >( f100thmmPerPixel * maSize.Width ),
+                static_cast< sal_Int32 >( f100thmmPerPixel * maSize.Height ) );
     }
     else
     {
-        maSize = maOriginalSize;
+        maOriginalSize = GetOriginalSize();
+        if ( bIsPixelFormat )
+        {
+            double fPixelsPer100thmm = static_cast< double >( maResolution.Width ) / 100000.0;
+            maSize = awt::Size( static_cast< sal_Int32 >( ( fPixelsPer100thmm * maOriginalSize.Width ) + 0.5 ),
+                static_cast< sal_Int32 >( ( fPixelsPer100thmm * maOriginalSize.Height ) + 0.5 ) );
+        }
+        else
+        {
+            maSize = maOriginalSize;
+        }
     }
-
     setupControls();
 
     // Size

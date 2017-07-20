@@ -34,6 +34,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.h>
@@ -187,10 +188,12 @@ sal_Int16 SvFilterOptionsDialog::execute()
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
     OUString aInternalFilterName;
+    uno::Reference<graphic::XGraphic> xGraphic;
     sal_Int32 j, nCount = maMediaDescriptor.getLength();
     for ( j = 0; j < nCount; j++ )
     {
-        if ( maMediaDescriptor[ j ].Name == "FilterName" )
+        const OUString& rName = maMediaDescriptor[ j ].Name;
+        if ( rName == "FilterName" )
         {
             OUString aStr;
             maMediaDescriptor[ j ].Value >>= aStr;
@@ -199,6 +202,10 @@ sal_Int16 SvFilterOptionsDialog::execute()
             aInternalFilterName = aInternalFilterName.replaceAll( "impress_", "" );
             break;
        }
+        else if ( rName == "Graphic" )
+        {
+            maMediaDescriptor[ j ].Value >>= xGraphic;
+        }
     }
     if ( !aInternalFilterName.isEmpty() )
     {
@@ -216,7 +223,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
             aFltCallDlgPara.aFilterData = maFilterDataSequence;
             aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
             bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
-            if ( ScopedVclPtrInstance<ExportDialog>( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection, bIsPixelFormat )->Execute() == RET_OK )
+            if ( ScopedVclPtrInstance<ExportDialog>( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection, bIsPixelFormat, xGraphic )->Execute() == RET_OK )
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
 
             // taking the out parameter from the dialog

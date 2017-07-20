@@ -32,13 +32,12 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -46,6 +45,11 @@
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/task/ErrorCodeIOException.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 using namespace css::uno;
 using namespace css::lang;
@@ -55,6 +59,9 @@ using namespace css::beans;
 using namespace css::io;
 using namespace css::document;
 using namespace css::ui::dialogs;
+using namespace css::container;
+using namespace com::sun::star::task;
+using namespace css::frame;
 
 using namespace sfx2;
 
@@ -118,6 +125,59 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
     }
     rExtension = aExtension;
 }
+
+namespace {
+
+
+bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
+                              Sequence< PropertyValue >& rFilterData )
+{
+    bool bStatus = false;
+    try
+    {
+        const OUString aServiceName("com.sun.star.svtools.SvFilterOptionsDialog");
+        Reference< XExecutableDialog > xFilterDialog(
+                comphelper::getProcessServiceFactory()->createInstance( aServiceName ), UNO_QUERY );
+        Reference< XPropertyAccess > xFilterProperties( xFilterDialog, UNO_QUERY );
+
+        if( xFilterDialog.is() && xFilterProperties.is() )
+        {
+            xFilterProperties->setPropertyValues( rPropsForDialog );
+            if( xFilterDialog->execute() )
+            {
+                bStatus = true;
+                Sequence< PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
+                const sal_Int32 nPropsLen = aPropsFromDialog.getLength();
+                for ( sal_Int32 nInd = 0; nInd < nPropsLen; ++nInd )
+                {
+                    if (aPropsFromDialog[nInd].Name == "FilterData")
+                    {
+                        aPropsFromDialog[nInd].Value >>= rFilterData;
+                    }
+                }
+            }
+        }
+    }
+    catch( const NoSuchElementException& e )
+    {
+        // the filter name is unknown
+        throw ErrorCodeIOException(
+            ("lcl_ExecuteFilterDialog: NoSuchElementException"
+             " \"" + e.Message + "\": ERRCODE_IO_ABORT"),
+            Reference< XInterface >(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER));
+    }
+    catch( const ErrorCodeIOException& )
+    {
+        throw;
+    }
+    catch( const Exception& e )
+    {
+        SAL_WARN("sfx.doc", "ignoring UNO exception " << e.Message);
+    }
+
+    return bStatus;
+}
+} // anonymous ns
 
 OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& rGraphicName )
 {
@@ -217,11 +277,60 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
             }
             OUString aFilter( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
-            XOutBitmap::WriteGraphic( rGraphic, sPath, aFilter,
-                                        XOutFlags::DontExpandFilename |
-                                        XOutFlags::DontAddExtension |
-                                        XOutFlags::UseNativeIfPossible );
-            return sPath;
+            if ( rGraphic.GetType() == GraphicType::Bitmap )
+            {
+                Graphic aGraphic = rGraphic;
+                Reference<XGraphic> xGraphic = aGraphic.GetXGraphic();
+
+                OUString aExportFilter = rGraphicFilter.GetExportInternalFilterName(nFilter);
+
+                Sequence< PropertyValue > aPropsForDialog(2);
+                aPropsForDialog[0].Name = "Graphic";
+                aPropsForDialog[0].Value <<= xGraphic;
+                aPropsForDialog[1].Name = "FilterName";
+                aPropsForDialog[1].Value <<= aExportFilter;
+
+                Sequence< PropertyValue > aFilterData;
+                bool bStatus = lcl_ExecuteFilterDialog(aPropsForDialog, aFilterData);
+                if (bStatus)
+                {
+                    sal_Int32 nWidth = 0;
+                    sal_Int32 nHeight = 0;
+
+                    sal_Int32 nLen = aFilterData.getLength();
+                    for (sal_Int32 i = 0; i < nLen; ++i)
+                    {
+                        if (aFilterData[i].Name == "PixelWidth")
+                        {
+                            aFilterData[i].Value >>= nWidth;
+                        }
+                        else if (aFilterData[i].Name == "PixelHeight")
+                        {
+                            aFilterData[i].Value >>= nHeight;
+                        }
+                    }
+
+                    // scaling must performed here because png/jpg writer s
+                    // do not take care of that.
+                    Size aSizePixel( aGraphic.GetSizePixel() );
+                    if( nWidth && nHeight &&
+                        ( ( nWidth != aSizePixel.Width() ) ||
+                          ( nHeight != aSizePixel.Height() ) ) )
+                    {
+                        BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+                        // export: use highest quality
+                        aBmpEx.Scale( Size( nWidth, nHeight ), BmpScaleFlag::Lanczos );
+                        aGraphic = aBmpEx;
+                    }
+
+                    XOutBitmap::WriteGraphic( aGraphic, sPath, aFilter,
+                                                XOutFlags::DontExpandFilename |
+                                                XOutFlags::DontAddExtension |
+                                                XOutFlags::UseNativeIfPossible,
+                                                nullptr, &aFilterData );
+                    return sPath;
+                }
+            }
         }
     }
     return OUString();
