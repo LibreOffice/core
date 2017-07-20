@@ -341,6 +341,7 @@ enum OpCode : sal_uInt16
         ocLeftB             = SC_OPCODE_LEFTB,
         ocMidB              = SC_OPCODE_MIDB,
         ocReplaceB          = SC_OPCODE_REPLACEB,
+        ocFindB             = SC_OPCODE_FINDB,
         ocNumberValue       = SC_OPCODE_NUMBERVALUE,
     // Matrix functions
         ocMatValue          = SC_OPCODE_MAT_VALUE,
