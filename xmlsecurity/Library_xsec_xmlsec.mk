@@ -110,6 +110,7 @@ $(eval $(call gb_Library_use_system_win32_libs,xsec_xmlsec,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
+	xmlsecurity/source/xmlsec/mscrypt/akmngr \
 	xmlsecurity/source/xmlsec/mscrypt/sanextension_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/seinitializer_mscryptimpl \
