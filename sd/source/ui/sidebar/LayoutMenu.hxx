@@ -122,11 +122,6 @@ public:
 private:
     ViewShellBase& mrBase;
 
-    /** Do we use our own scroll bar or is viewport handling done by
-        our parent?
-    */
-    bool mbUseOwnScrollBar;
-
     /** If we are asked for the preferred window size, then use this
         many columns for the calculation.
     */

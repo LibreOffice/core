@@ -43,7 +43,6 @@ class SdUnoSearchReplaceDescriptor;
 class SdUnoSearchReplaceShape : public css::util::XReplaceable
 {
 protected:
-    css::drawing::XShape* mpShape;
     css::drawing::XDrawPage* mpPage;
 
     css::uno::Reference< css::text::XTextRange >  Search( const css::uno::Reference< css::text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr ) throw();

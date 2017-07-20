@@ -301,10 +301,6 @@ private:
     */
     std::shared_ptr<CanvasUpdateRequester> m_pUpdateRequester;
 
-    /** The clip rectangle as given to SetClip().
-    */
-    css::awt::Rectangle maClipRectangle;
-
     /** When this flag is true (it is set to true after every call to
         updateScreen()) then the next call to MergeViewState updates the
         maOffset member.  A possible optimization would set this flag only

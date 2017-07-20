@@ -52,11 +52,8 @@ private:
 
     css::uno::Reference< css::media::XPlayer > mxPlayer;
     ImplSVEvent * mnPlaySoundEvent;
-    bool mbUsableSelection;
     bool mbLabelPlaying;
     Idle maUpdateIdle;
-
-    void CheckSelectionState();
 
     DECL_LINK( PlayMusicHdl, void *, void );
     DECL_LINK( IsMusicStoppedHdl, Timer *, void );
@@ -64,8 +61,6 @@ private:
 public:
     explicit SdFileDialog_Imp();
     virtual ~SdFileDialog_Imp() override;
-
-    ErrCode Execute();
 
     // overwritten from FileDialogHelper, to receive user feedback
     virtual void SAL_CALL ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
@@ -77,10 +72,6 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
 
     switch( aEvent.ElementId )
     {
-        case css::ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER:
-            CheckSelectionState();
-            break;
-
         case css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY:
             if( mxControlAccess.is() )
             {
@@ -183,33 +174,9 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl, Timer *, void)
     }
 }
 
-// check whether to disable the "selection" checkbox
-void SdFileDialog_Imp::CheckSelectionState()
-{
-    if( mbUsableSelection && mxControlAccess.is() )
-    {
-        OUString  aCurrFilter( GetCurrentFilter() );
-
-        try
-        {
-            if( aCurrFilter.isEmpty() || ( aCurrFilter == SdResId( STR_EXPORT_HTML_NAME ) ) )
-                mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, false );
-            else
-                mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, true );
-        }
-        catch (const css::lang::IllegalArgumentException&)
-        {
-#ifdef DBG_UTIL
-            OSL_FAIL( "Cannot access \"selection\" checkbox" );
-#endif
-        }
-    }
-}
-
 SdFileDialog_Imp::SdFileDialog_Imp() :
     FileDialogHelper( css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PLAY ),
     mnPlaySoundEvent( nullptr ),
-    mbUsableSelection( false ),
     mbLabelPlaying(false)
 {
     maUpdateIdle.SetInvokeHandler(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
@@ -240,13 +207,6 @@ SdFileDialog_Imp::~SdFileDialog_Imp()
 {
     if( mnPlaySoundEvent )
         Application::RemoveUserEvent( mnPlaySoundEvent );
-}
-
-ErrCode SdFileDialog_Imp::Execute()
-{
-    // make sure selection checkbox is disabled if HTML is current filter!
-    CheckSelectionState();
-    return FileDialogHelper::Execute();
 }
 
 // -----------      SdOpenSoundFileDialog       -----------------------

@@ -81,11 +81,7 @@ IMPL_LINK_NOARG(CategoryListBox, implDoubleClickHdl, ListBox&, void)
 void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
     ReleaseMouse();
-    if( rMEvt.IsLeft() && (rMEvt.GetClicks() == 2) )
-    {
-        maDoubleClickHdl.Call( *this );
-    }
-    else
+    if (!( rMEvt.IsLeft() && (rMEvt.GetClicks() == 2) ))
     {
         ListBox::MouseButtonUp( rMEvt );
     }

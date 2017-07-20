@@ -38,7 +38,6 @@ namespace sd {
 class SD_DLLPUBLIC SdDocPreviewWin : public Control, public SfxListener
 {
 protected:
-    Link<SdDocPreviewWin&,void> aClickHdl;
     Color           maDocumentColor;
     rtl::Reference< sd::SlideShow > mxSlideShow;
 
@@ -58,8 +57,6 @@ public:
                     virtual ~SdDocPreviewWin() override;
     virtual void    dispose() override;
     virtual void    Resize() override;
-
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 

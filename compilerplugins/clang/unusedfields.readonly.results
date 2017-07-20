@@ -1058,24 +1058,6 @@ sd/source/filter/eppt/epptbase.hxx:279
     PPTExParaSheet maParaLevel struct PPTExParaLevel [5]
 sd/source/filter/ppt/propread.hxx:142
     PropRead mApplicationCLSID sal_uInt8 [16]
-sd/source/ui/animations/CategoryListBox.hxx:43
-    sd::CategoryListBox maDoubleClickHdl Link<class sd::CategoryListBox &, void>
-sd/source/ui/dlg/filedlg.cxx:55
-    SdFileDialog_Imp mbUsableSelection _Bool
-sd/source/ui/dlg/RemoteDialogClientBox.hxx:91
-    sd::ClientBox m_bInCheckMode _Bool
-sd/source/ui/inc/docprev.hxx:41
-    SdDocPreviewWin aClickHdl Link<class SdDocPreviewWin &, void>
-sd/source/ui/inc/unomodel.hxx:110
-    SdXImpressDocument mxStyleFamilies css::uno::WeakReference<css::container::XNameAccess>
-sd/source/ui/inc/unomodel.hxx:111
-    SdXImpressDocument mxPresentation css::uno::WeakReference<css::presentation::XPresentation>
-sd/source/ui/inc/unosrch.hxx:46
-    SdUnoSearchReplaceShape mpShape css::drawing::XShape *
-sd/source/ui/presenter/PresenterCanvas.hxx:306
-    sd::presenter::PresenterCanvas maClipRectangle css::awt::Rectangle
-sd/source/ui/sidebar/LayoutMenu.hxx:128
-    sd::sidebar::LayoutMenu mbUseOwnScrollBar _Bool
 sd/source/ui/sidebar/MasterPageContainer.cxx:148
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:149
@@ -1084,12 +1066,8 @@ sd/source/ui/sidebar/MasterPageContainer.cxx:154
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewNotAvailable class Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:155
     sd::sidebar::MasterPageContainer::Implementation maSmallPreviewNotAvailable class Image
-sd/source/ui/sidebar/PanelBase.hxx:62
-    sd::sidebar::PanelBase mxSidebar css::uno::Reference<css::ui::XSidebar>
 sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:97
     sd::slidesorter::controller::Animator maElapsedTime ::canvas::tools::ElapsedTime
-sd/source/ui/view/ViewShellManager.cxx:180
-    sd::ViewShellManager::Implementation mbKeepMainViewShellOnTop _Bool
 sdext/source/pdfimport/pdfparse/pdfentries.cxx:1018
     pdfparse::PDFFileImplData m_aOEntry sal_uInt8 [32]
 sdext/source/pdfimport/pdfparse/pdfentries.cxx:1019
