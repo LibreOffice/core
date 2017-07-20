@@ -55,8 +55,10 @@ class TimerTest : public test::BootstrapFixture
 public:
     TimerTest() : BootstrapFixture(true, false) {}
 
-    void testIdleMainloop();
     void testIdle();
+#ifndef WIN32
+    void testIdleMainloop();
+#endif
 #ifdef TEST_WATCHDOG
     void testWatchdog();
 #endif
@@ -75,7 +77,9 @@ public:
 
     CPPUNIT_TEST_SUITE(TimerTest);
     CPPUNIT_TEST(testIdle);
+#ifndef WIN32
     CPPUNIT_TEST(testIdleMainloop);
+#endif
 #ifdef TEST_WATCHDOG
     CPPUNIT_TEST(testWatchdog);
 #endif
@@ -130,10 +134,10 @@ void TimerTest::testIdle()
     CPPUNIT_ASSERT_MESSAGE("idle triggered", bTriggered);
 }
 
+#ifndef WIN32
 // tdf#91727
 void TimerTest::testIdleMainloop()
 {
-#ifndef _WIN32
     bool bTriggered = false;
     IdleBool aTest( bTriggered );
     // coverity[loop_top] - Application::Yield allows the timer to fire and toggle bDone
@@ -148,9 +152,8 @@ void TimerTest::testIdleMainloop()
         pSVData->maAppData.mnDispatchLevel--;
     }
     CPPUNIT_ASSERT_MESSAGE("mainloop idle triggered", bTriggered);
-#endif
 }
-
+#endif
 
 class TimerBool : public Timer
 {
