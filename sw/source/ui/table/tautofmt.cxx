@@ -24,7 +24,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
-
 #include <svl/zforlist.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
@@ -32,6 +31,8 @@
 #include <svtools/scriptedtext.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svx/framelinkarray.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
+
 #include "app.hrc"
 #include "strings.hrc"
 #include "swmodule.hxx"
@@ -819,14 +820,25 @@ void AutoFormatPreview::PaintCells(vcl::RenderContext& rRenderContext)
 
     // 3) border
     if (aCurData.IsFrame())
-        maArray.DrawArray(rRenderContext);
+    {
+        const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
+            drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+                rRenderContext,
+                aNewViewInformation2D));
+
+        if (pProcessor2D)
+        {
+            maArray.DrawArray(*pProcessor2D.get());
+            pProcessor2D.reset();
+        }
+    }
 }
 
 void AutoFormatPreview::Init()
 {
     SetBorderStyle( GetBorderStyle() | WindowBorderStyle::MONO );
     maArray.Initialize( 5, 5 );
-    maArray.SetUseDiagDoubleClipping( false );
     nLabelColWidth = 0;
     nDataColWidth1 = 0;
     nDataColWidth2 = 0;

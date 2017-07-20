@@ -380,7 +380,6 @@ void FrameSelectorImpl::InitBorderGeometry()
 
     // Frame helper array
     maArray.Initialize( mbVer ? 2 : 1, mbHor ? 2 : 1 );
-    maArray.SetUseDiagDoubleClipping( true );
 
     maArray.SetXOffset( mnLine1 );
     maArray.SetAllColWidths( (mbVer ? mnLine2 : mnLine3) - mnLine1 );
@@ -671,33 +670,25 @@ void FrameSelectorImpl::DrawAllFrameBorders()
     // Let the helper array draw itself
     static bool bUsePrimitives(true);
 
-    if (bUsePrimitives)
-    {
-        // This is used in the dialog/control for 'Border' attributes. When using
-        // the original paint below instead of primitives, the advantage currently
-        // is the correct visualization of diagonal line(s) including overlaying,
-        // but the rest is bad. Since the edit views use primitives and the preview
-        // should be 'real' I opt for also changing this to primitives. I will
-        // keep the old solution and add a switch (above) based on a static bool so
-        // that interested people may test this out in the debugger.
-        // This is one more hint to enhance the primitive visualization further to
-        // support diagonals better - that's the way to go.
-        const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
-        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
-            drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
-                *mpVirDev.get(),
-                aNewViewInformation2D));
+    // This is used in the dialog/control for 'Border' attributes. When using
+    // the original paint below instead of primitives, the advantage currently
+    // is the correct visualization of diagonal line(s) including overlaying,
+    // but the rest is bad. Since the edit views use primitives and the preview
+    // should be 'real' I opt for also changing this to primitives. I will
+    // keep the old solution and add a switch (above) based on a static bool so
+    // that interested people may test this out in the debugger.
+    // This is one more hint to enhance the primitive visualization further to
+    // support diagonals better - that's the way to go.
+    const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
+        drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+            *mpVirDev.get(),
+            aNewViewInformation2D));
 
-        if (pProcessor2D)
-        {
-            maArray.DrawArray(*pProcessor2D.get());
-            pProcessor2D.reset();
-        }
-    }
-    else
+    if (pProcessor2D)
     {
-        // original paint
-        maArray.DrawArray(*mpVirDev.get());
+        maArray.DrawArray(*pProcessor2D.get());
+        pProcessor2D.reset();
     }
 }
 

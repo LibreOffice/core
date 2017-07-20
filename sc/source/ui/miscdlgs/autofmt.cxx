@@ -36,6 +36,7 @@
 #include <vcl/builderfactory.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 
 #include "strings.hrc"
 #include "scmod.hxx"
@@ -393,7 +394,19 @@ void ScAutoFmtPreview::PaintCells(vcl::RenderContext& rRenderContext)
 
         // 3) border
         if (pCurData->GetIncludeFrame())
-            maArray.DrawArray(rRenderContext);
+        {
+            const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+            std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
+                drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+                    rRenderContext,
+                    aNewViewInformation2D));
+
+            if (pProcessor2D)
+            {
+                maArray.DrawArray(*pProcessor2D.get());
+                pProcessor2D.reset();
+            }
+        }
     }
 }
 
@@ -401,7 +414,7 @@ void ScAutoFmtPreview::Init()
 {
     SetBorderStyle( WindowBorderStyle::MONO );
     maArray.Initialize( 5, 5 );
-    maArray.SetUseDiagDoubleClipping( false );
+//    maArray.SetUseDiagDoubleClipping( false );
     mnLabelColWidth = 0;
     mnDataColWidth1 = 0;
     mnDataColWidth2 = 0;

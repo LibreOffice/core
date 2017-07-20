@@ -936,7 +936,6 @@ void ScDocument::FillInfo(
 
     svx::frame::Array& rArray = rTabInfo.maArray;
     rArray.Initialize( nColCount, nRowCount );
-    rArray.SetUseDiagDoubleClipping( false );
 
     for( size_t nRow = 0; nRow < nRowCount; ++nRow )
     {

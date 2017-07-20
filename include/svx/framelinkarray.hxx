@@ -23,6 +23,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svx/framelink.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/rotmodit.hxx>
 #include <memory>
 #include <vector>
 
@@ -118,6 +119,12 @@ public:
 
     /** Sets the bottom frame style of the specified row. Ignores merged ranges. */
     void                SetRowStyleBottom( size_t nRow, const Style& rStyle );
+
+    /** Sets the rotation parameters of the cell (nCol,nRow). Ignores merged ranges. */
+    void                SetCellRotation(size_t nCol, size_t nRow, SvxRotateMode eRotMode, double fOrientation);
+
+    /** Check if at least one cell is rotated */
+    bool                HasCellRotation() const;
 
     /** Returns the left frame style of the cell (nCol,nRow).
         Returns thicker of own left style or right style of the cell to the left.
@@ -246,9 +253,6 @@ public:
             clipped too. This array can handle only one clip range at a time. */
     void                SetClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow );
 
-    /** Returns the rectangle (output coordinates) of the current clipping range. */
-    tools::Rectangle           GetClipRangeRectangle() const;
-
     // cell coordinates -------------------------------------------------------
 
     /** Sets the X output coordinate of the left column. */
@@ -313,14 +317,6 @@ public:
         Returns the vertical angle of merged ranges. */
     double              GetVerDiagAngle( size_t nCol, size_t nRow ) const;
 
-    /** Specifies whether to use polygon clipping to draw diagonal frame borders.
-        @descr
-            If enabled, diagonal frame borders are drawn interrupted, if they are
-            crossed by a double frame border. Polygon clipping is very expensive
-            and should only be used for very small output devices (i.e. in the
-            Border tab page). Default after construction is OFF. */
-    void                SetUseDiagDoubleClipping( bool bSet );
-
     // mirroring --------------------------------------------------------------
 
     /** Mirrors the entire array horizontally. */
@@ -335,16 +331,6 @@ public:
                             size_t nFirstCol, size_t nFirstRow,
                             size_t nLastCol, size_t nLastRow,
                             const Color* pForceColor ) const;
-
-    /** Draws the part of the specified range, that is inside the clipping range.
-        @param pForceColor
-            If not NULL, only this color will be used to draw all frame borders. */
-    void                DrawRange( OutputDevice& rDev,
-                            size_t nFirstCol, size_t nFirstRow,
-                            size_t nLastCol, size_t nLastRow ) const;
-
-    /** Draws the part of the array, that is inside the clipping range. */
-    void                DrawArray(OutputDevice& rDev) const;
 
     /** Draws the part of the array, that is inside the clipping range. */
     void                DrawArray(drawinglayer::processor2d::BaseProcessor2D& rProcessor) const;

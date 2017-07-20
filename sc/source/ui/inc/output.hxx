@@ -196,7 +196,6 @@ private:
 
     bool    bSnapPixel;
 
-    bool    bAnyRotated;        // internal
     bool    bAnyClipped;        // internal
     bool    bTabProtected;
     bool    bLayoutRTL;
@@ -302,7 +301,7 @@ public:
                     // with logic MapMode set!
     void    DrawEdit(bool bPixelToLogic);
 
-    void    FindRotated();
+    void    SetCellRotations();
     void    DrawRotated(bool bPixelToLogic);        // logical
 
     void    DrawClear();

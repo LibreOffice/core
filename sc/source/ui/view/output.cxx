@@ -183,7 +183,6 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     bShowSpellErrors( false ),
     bMarkClipped( false ), // sal_False for printer/metafile etc.
     bSnapPixel( false ),
-    bAnyRotated( false ),
     bAnyClipped( false ),
     mpTargetPaintWindow(nullptr), // #i74769# use SdrPaintWindow direct
     mpSpellCheckCxt(nullptr)
@@ -618,7 +617,7 @@ void ScOutputData::SetPagebreakMode( ScPageBreakData* pPageData )
     }
 }
 
-void ScOutputData::FindRotated()
+void ScOutputData::SetCellRotations()
 {
     //! save nRotMax
     SCCOL nRotMax = nX2;
@@ -652,8 +651,16 @@ void ScOutputData::FindRotated()
                     ScRotateDir nDir = pPattern->GetRotateDir( pCondSet );
                     if (nDir != ScRotateDir::NONE)
                     {
+                        // Needed for CellInfo internal decisions (bg fill, ...)
                         pInfo->nRotateDir = nDir;
-                        bAnyRotated = true;
+
+                        // add rotation info to Array information
+                        const long nAttrRotate(pPattern->GetRotateVal(pCondSet));
+                        const SvxRotateMode eRotMode((SvxRotateMode)static_cast<const SvxRotateModeItem&>(pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue());
+                        const double fOrient((bLayoutRTL ? -1.0 : 1.0) * nAttrRotate * F_PI18000); // 1/100th degrees -> [0..2PI]
+                        svx::frame::Array& rArray = mrTabInfo.maArray;
+
+                        rArray.SetCellRotation(nY+1, nX+1, eRotMode, fOrient);
                     }
                 }
             }
@@ -985,8 +992,6 @@ void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const Sv
 
 void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 {
-    FindRotated();              //! from the outside?
-
     Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
     long nOneXLogic = aOnePixel.Width();
     long nOneYLogic = aOnePixel.Height();
@@ -1380,8 +1385,10 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 
     const Color* pForceColor = bUseSingleColor ? &aSingleColor : nullptr;
 
-    if (bAnyRotated)
+    if (mrTabInfo.maArray.HasCellRotation())
+    {
         DrawRotatedFrame(rRenderContext, pForceColor);        // removes the lines that must not be painted here
+    }
 
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
@@ -1617,16 +1624,16 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                     SvxRotateMode eRotMode = (SvxRotateMode)static_cast<const SvxRotateModeItem&>(
                                     pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
 
-                    if ( nAttrRotate )
+                    if (nAttrRotate)
                     {
-                        if (nX<nX1)         // compute negative position
+                        if (nX < nX1)         // compute negative position
                         {
                             nPosX = nInitPosX;
                             SCCOL nCol = nX1;
                             while (nCol > nX)
                             {
                                 --nCol;
-                                nPosX -= nLayoutSign * (long) pRowInfo[0].pCellInfo[nCol+1].nWidth;
+                                nPosX -= nLayoutSign * (long)pRowInfo[0].pCellInfo[nCol + 1].nWidth;
                             }
                         }
 
@@ -1636,247 +1643,99 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                         long nTop = nPosY - 1;
                         long nBottom = nPosY + nRowHeight - 1;
                         long nTopLeft = nPosX - nLayoutSign;
-                        long nTopRight = nPosX + ( nColWidth - 1 ) * nLayoutSign;
+                        long nTopRight = nPosX + (nColWidth - 1) * nLayoutSign;
                         long nBotLeft = nTopLeft;
                         long nBotRight = nTopRight;
 
                         // inclusion of the sign here hasn't been decided yet
                         // (if not, the extension of the non-rotated background must also be changed)
                         double nRealOrient = nLayoutSign * nAttrRotate * F_PI18000;     // 1/100th degrees
-                        double nCos = cos( nRealOrient );
-                        double nSin = sin( nRealOrient );
+                        double nCos = cos(nRealOrient);
+                        double nSin = sin(nRealOrient);
                         //! restrict !!!
-                        long nSkew = (long) ( nRowHeight * nCos / nSin );
+                        long nSkew = (long)(nRowHeight * nCos / nSin);
 
                         switch (eRotMode)
                         {
-                            case SVX_ROTATE_MODE_BOTTOM:
-                                nTopLeft += nSkew;
-                                nTopRight += nSkew;
-                                break;
-                            case SVX_ROTATE_MODE_CENTER:
-                                nSkew /= 2;
-                                nTopLeft += nSkew;
-                                nTopRight += nSkew;
-                                nBotLeft -= nSkew;
-                                nBotRight -= nSkew;
-                                break;
-                            case SVX_ROTATE_MODE_TOP:
-                                nBotLeft -= nSkew;
-                                nBotRight -= nSkew;
-                                break;
-                            default:
-                            {
-                                // added to avoid warnings
-                            }
+                        case SVX_ROTATE_MODE_BOTTOM:
+                            nTopLeft += nSkew;
+                            nTopRight += nSkew;
+                            break;
+                        case SVX_ROTATE_MODE_CENTER:
+                            nSkew /= 2;
+                            nTopLeft += nSkew;
+                            nTopRight += nSkew;
+                            nBotLeft -= nSkew;
+                            nBotRight -= nSkew;
+                            break;
+                        case SVX_ROTATE_MODE_TOP:
+                            nBotLeft -= nSkew;
+                            nBotRight -= nSkew;
+                            break;
+                        default:
+                        {
+                            // added to avoid warnings
+                        }
                         }
 
                         Point aPoints[4];
-                        aPoints[0] = Point( nTopLeft, nTop );
-                        aPoints[1] = Point( nTopRight, nTop );
-                        aPoints[2] = Point( nBotRight, nBottom );
-                        aPoints[3] = Point( nBotLeft, nBottom );
+                        aPoints[0] = Point(nTopLeft, nTop);
+                        aPoints[1] = Point(nTopRight, nTop);
+                        aPoints[2] = Point(nBotRight, nBottom);
+                        aPoints[3] = Point(nBotLeft, nBottom);
 
                         const SvxBrushItem* pBackground = pInfo->pBackground;
                         if (!pBackground)
-                            pBackground = static_cast<const SvxBrushItem*>( &pPattern->GetItem(
-                                                ATTR_BACKGROUND, pCondSet ));
+                            pBackground = static_cast<const SvxBrushItem*>(&pPattern->GetItem(
+                                ATTR_BACKGROUND, pCondSet));
                         if (bCellContrast)
                         {
                             //  high contrast for cell borders and backgrounds -> empty background
                             pBackground = ScGlobal::GetEmptyBrushItem();
                         }
-                        if(!pInfo->pColorScale)
+                        if (!pInfo->pColorScale)
                         {
                             const Color& rColor = pBackground->GetColor();
-                            if ( rColor.GetTransparency() != 255 )
+                            if (rColor.GetTransparency() != 255)
                             {
                                 //  draw background only for the changed row itself
                                 //  (background doesn't extend into other cells).
                                 //  For the borders (rotated and normal), clipping should be
                                 //  set if the row isn't changed, but at least the borders
                                 //  don't cover the cell contents.
-                                if ( rThisRowInfo.bChanged )
+                                if (rThisRowInfo.bChanged)
                                 {
-                                    tools::Polygon aPoly( 4, aPoints );
+                                    tools::Polygon aPoly(4, aPoints);
 
                                     // for DrawPolygon, whitout Pen one pixel is left out
                                     // to the right and below...
-                                    if ( rColor.GetTransparency() == 0 )
+                                    if (rColor.GetTransparency() == 0)
                                         rRenderContext.SetLineColor(rColor);
                                     else
                                         rRenderContext.SetLineColor();
                                     rRenderContext.SetFillColor(rColor);
-                                    rRenderContext.DrawPolygon( aPoly );
+                                    rRenderContext.DrawPolygon(aPoly);
                                 }
                             }
                         }
                         else
                         {
-                            tools::Polygon aPoly( 4, aPoints );
+                            tools::Polygon aPoly(4, aPoints);
                             const Color* pColor = pInfo->pColorScale.get();
 
                             // for DrawPolygon, whitout Pen one pixel is left out
                             // to the right and below...
-                            if ( pColor->GetTransparency() == 0 )
+                            if (pColor->GetTransparency() == 0)
                                 rRenderContext.SetLineColor(*pColor);
                             else
                                 rRenderContext.SetLineColor();
                             rRenderContext.SetFillColor(*pColor);
-                            rRenderContext.DrawPolygon( aPoly );
+                            rRenderContext.DrawPolygon(aPoly);
 
-                        }
-
-                        svx::frame::Style aTopLine, aBottomLine, aLeftLine, aRightLine;
-
-                        if ( nX < nX1 || nX > nX2 )     // Attributes in FillInfo not set
-                        {
-                            //! consider page borders for printing !!!!!
-                            const ::editeng::SvxBorderLine* pLeftLine;
-                            const ::editeng::SvxBorderLine* pTopLine;
-                            const ::editeng::SvxBorderLine* pRightLine;
-                            const ::editeng::SvxBorderLine* pBottomLine;
-                            mpDoc->GetBorderLines( nX, nY, nTab,
-                                    &pLeftLine, &pTopLine, &pRightLine, &pBottomLine );
-                            aTopLine.Set( pTopLine, mnPPTY );
-                            aBottomLine.Set( pBottomLine, mnPPTY );
-                            aLeftLine.Set( pLeftLine, mnPPTX );
-                            aRightLine.Set( pRightLine, mnPPTX );
-                        }
-                        else
-                        {
-                            size_t nCol = lclGetArrayColFromCellInfoX( nArrX, nX1, nX2, bLayoutRTL );
-                            aTopLine = rArray.GetCellStyleTop( nCol, nRow );
-                            aBottomLine = rArray.GetCellStyleBottom( nCol, nRow );
-                            aLeftLine = rArray.GetCellStyleLeft( nCol, nRow );
-                            aRightLine = rArray.GetCellStyleRight( nCol, nRow );
-                            // in RTL mode the array is already mirrored -> swap back left/right borders
-                            if( bLayoutRTL )
-                                std::swap( aLeftLine, aRightLine );
-                        }
-
-                        // Horizontal lines
-                        if (aTopLine.Prim() || aTopLine.Secn())
-                        {
-                            long nUpperRotate = lcl_getRotate( mpDoc, nTab, nX, nY - 1 );
-                            drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
-                            svx::frame::CreateBorderPrimitives(
-                                aSequence,
-                                aPoints[bLayoutRTL?1:0], aPoints[bLayoutRTL?0:1], aTopLine,
-                                svx::frame::Style(),
-                                svx::frame::Style(),
-                                aLeftLine,
-                                svx::frame::Style(),
-                                svx::frame::Style(),
-                                aRightLine,
-                                pForceColor, nUpperRotate, nAttrRotate );
-                            pProcessor->process(aSequence);
-                        }
-
-                        if (aBottomLine.Prim() || aBottomLine.Secn())
-                        {
-                            long nLowerRotate = lcl_getRotate( mpDoc, nTab, nX, nY + 1 );
-                            drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
-                            svx::frame::CreateBorderPrimitives(
-                                aSequence,
-                                aPoints[bLayoutRTL?2:3], aPoints[bLayoutRTL?3:2], aBottomLine,
-                                aLeftLine,
-                                svx::frame::Style(),
-                                svx::frame::Style(),
-                                aRightLine,
-                                svx::frame::Style(),
-                                svx::frame::Style(),
-                                pForceColor, 18000 - nAttrRotate, 18000 - nLowerRotate );
-                            pProcessor->process(aSequence);
-                        }
-
-                        // Vertical slanted lines
-                        if (aLeftLine.Prim() || aLeftLine.Secn())
-                        {
-                            long nLeftRotate = lcl_getRotate( mpDoc, nTab, nX - 1, nY );
-                            drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
-                            svx::frame::CreateBorderPrimitives(
-                                aSequence,
-                                aPoints[0], aPoints[3], aLeftLine,
-                                aTopLine,
-                                svx::frame::Style(),
-                                svx::frame::Style(),
-                                aBottomLine,
-                                svx::frame::Style(),
-                                svx::frame::Style(),
-                                pForceColor, nAttrRotate, nLeftRotate );
-                            pProcessor->process(aSequence);
-                        }
-
-                        if (aRightLine.Prim() || aRightLine.Secn())
-                        {
-                            long nRightRotate = lcl_getRotate( mpDoc, nTab, nX + 1, nY );
-                            drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
-                            svx::frame::CreateBorderPrimitives(
-                                aSequence,
-                                aPoints[1], aPoints[2], aRightLine,
-                                svx::frame::Style(),
-                                svx::frame::Style(),
-                                aTopLine,
-                                svx::frame::Style(),
-                                svx::frame::Style(),
-                                aBottomLine,
-                                pForceColor, 18000 - nRightRotate, 18000 - nAttrRotate );
-                            pProcessor->process(aSequence);
                         }
                     }
                 }
                 nPosX += nColWidth * nLayoutSign;
-            }
-
-            // delete the lines for normal output only afterwards in the second step
-
-            nX = nX1 > 0 ? (nX1-1) : static_cast<SCCOL>(0);
-            for (; nX<=nX2+1; nX++)         // visible part +- 1
-            {
-                sal_uInt16 nArrX = nX + 1;
-                CellInfo& rInfo = rThisRowInfo.pCellInfo[nArrX];
-                if ( rInfo.nRotateDir > ScRotateDir::Standard &&
-                        !rInfo.bHOverlapped && !rInfo.bVOverlapped )
-                {
-                    size_t nCol = lclGetArrayColFromCellInfoX( nArrX, nX1, nX2, bLayoutRTL );
-
-                    // horizontal: extend adjacent line
-                    // (only when the rotated cell has a border)
-                    ScRotateDir nDir = rInfo.nRotateDir;
-                    if ( rArray.GetCellStyleTop( nCol, nRow ).Prim() )
-                    {
-                        svx::frame::Style aStyle( lcl_FindHorLine( mpDoc, nX, nY, nTab, nDir, true ), mnPPTY );
-                        rArray.SetCellStyleTop( nCol, nRow, aStyle );
-                        if( nRow > 0 )
-                            rArray.SetCellStyleBottom( nCol, nRow - 1, aStyle );
-                    }
-                    if ( rArray.GetCellStyleBottom( nCol, nRow ).Prim() )
-                    {
-                        svx::frame::Style aStyle( lcl_FindHorLine( mpDoc, nX, nY, nTab, nDir, false ), mnPPTY );
-                        rArray.SetCellStyleBottom( nCol, nRow, aStyle );
-                        if( nRow + 1 < rArray.GetRowCount() )
-                            rArray.SetCellStyleTop( nCol, nRow + 1, aStyle );
-                    }
-
-                    // always remove vertical borders
-                    if( !rArray.IsMergedOverlappedLeft( nCol, nRow ) )
-                    {
-                        rArray.SetCellStyleLeft( nCol, nRow, svx::frame::Style() );
-                        if( nCol > 0 )
-                            rArray.SetCellStyleRight( nCol - 1, nRow, svx::frame::Style() );
-                    }
-                    if( !rArray.IsMergedOverlappedRight( nCol, nRow ) )
-                    {
-                        rArray.SetCellStyleRight( nCol, nRow, svx::frame::Style() );
-                        if( nCol + 1 < rArray.GetColCount() )
-                            rArray.SetCellStyleLeft( nCol + 1, nRow, svx::frame::Style() );
-                    }
-
-                    // remove diagonal borders
-                    rArray.SetCellStyleTLBR( nCol, nRow, svx::frame::Style() );
-                    rArray.SetCellStyleBLTR( nCol, nRow, svx::frame::Style() );
-                }
             }
         }
         nPosY += nRowHeight;

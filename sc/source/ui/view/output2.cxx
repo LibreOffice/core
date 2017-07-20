@@ -4632,8 +4632,10 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
 
     pEngine.reset();
 
-    if (bAnyRotated)
+    if (mrTabInfo.maArray.HasCellRotation())
+    {
         DrawRotated(bPixelToLogic);     //! call from outside ?
+    }
 }
 
 void ScOutputData::DrawRotated(bool bPixelToLogic)
