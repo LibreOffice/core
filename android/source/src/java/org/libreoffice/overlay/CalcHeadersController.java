@@ -6,13 +6,16 @@ import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.Button;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +28,7 @@ import org.mozilla.gecko.gfx.LayerView;
 
 import java.util.ArrayList;
 
+import static org.libreoffice.SearchController.addProperty;
 import static org.libreoffice.UnitConverter.twipToPixel;
 
 public class CalcHeadersController {
@@ -35,7 +39,7 @@ public class CalcHeadersController {
 
     private LibreOfficeMainActivity mContext;
 
-    public CalcHeadersController(LibreOfficeMainActivity context, LayerView layerView) {
+    public CalcHeadersController(LibreOfficeMainActivity context, final LayerView layerView) {
         mContext = context;
         mContext.getDocumentOverlay().setCalcHeadersController(this);
         mCalcRowHeadersView = context.findViewById(R.id.calc_header_row);
@@ -55,6 +59,52 @@ public class CalcHeadersController {
                 mCalcColumnHeadersView.showHeaderPopup(new PointF());
             }
         });
+        ((EditText)context.findViewById(R.id.calc_address)).setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO) {
+                    String text = v.getText().toString();
+                    JSONObject rootJson = new JSONObject();
+                    try {
+                        addProperty(rootJson, "ToPoint", "string", text);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:GoToCell", rootJson.toString()));
+                    mContext.hideSoftKeyboard();
+                    layerView.requestFocus();
+                }
+                return true;
+            }
+        });
+        ((EditText)context.findViewById(R.id.calc_formula)).setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO) {
+                    String text = v.getText().toString();
+                    JSONObject rootJson = new JSONObject();
+                    try {
+                        addProperty(rootJson, "StringName", "string", text);
+                        addProperty(rootJson, "DontCommit", "boolean", String.valueOf(false));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:EnterString", rootJson.toString()));
+                    mContext.hideSoftKeyboard();
+                    layerView.requestFocus();
+                    mContext.setDocumentChanged(true);
+                }
+                return true;
+            }
+        });
+        // manually select A1 for address bar and formula bar to update when calc first opens
+        JSONObject rootJson = new JSONObject();
+        try {
+            addProperty(rootJson, "ToPoint", "string", "A1");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:GoToCell", rootJson.toString()));
     }
 
     public void setupHeaderPopupView() {
