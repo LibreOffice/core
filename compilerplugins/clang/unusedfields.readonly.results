@@ -698,20 +698,10 @@ include/vcl/bitmap.hxx:176
     BmpFilterParam::(anonymous) mcSolarGreyThreshold sal_uInt8
 include/vcl/bitmap.hxx:177
     BmpFilterParam::(anonymous) mnRadius double
-include/vcl/button.hxx:287
-    RadioButton mbLegacyNoTextAlign _Bool
 include/vcl/filter/pdfdocument.hxx:173
     vcl::filter::PDFNameElement m_nLength sal_uInt64
-include/vcl/menu.hxx:121
-    MenuLogo aBitmap class BitmapEx
 include/vcl/opengl/OpenGLContext.hxx:57
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
-include/vcl/opengl/OpenGLContext.hxx:203
-    OpenGLContext mnPainting int
-include/vcl/throbber.hxx:83
-    Throbber meImageSet enum Throbber::ImageSet
-include/vcl/toolbox.hxx:106
-    ToolBox maOutDockRect tools::Rectangle
 include/xmloff/nmspmap.hxx:70
     SvXMLNamespaceMap sEmpty const class rtl::OUString
 io/source/acceptor/acc_socket.cxx:89
@@ -1754,10 +1744,6 @@ vcl/inc/unx/gtk/gloactiongroup.h:37
     GLOActionGroupClass parent_class GObjectClass
 vcl/inc/unx/gtk/gloactiongroup.h:40
     GLOActionGroupClass padding gpointer [12]
-vcl/inc/unx/i18n_status.hxx:57
-    vcl::I18NStatus::ChoiceData pData void *
-vcl/inc/unx/salgdi.h:339
-    X11SalGraphics bPrinter_ _Bool
 vcl/inc/unx/XIM.h:28
     (anonymous) client_data XPointer
 vcl/inc/unx/XIM.h:34
@@ -1814,12 +1800,6 @@ vcl/inc/unx/XIM.h:97
     (anonymous) count_subsets unsigned short
 vcl/inc/unx/XIM.h:98
     (anonymous) supported_subsets XIMUnicodeCharacterSubset *
-vcl/source/app/svapp.cxx:158
-    ImplHotKey mpNext struct ImplHotKey *
-vcl/source/app/svapp.cxx:159
-    ImplHotKey maKeyCode vcl::KeyCode
-vcl/source/app/svapp.cxx:164
-    ImplEventHook mpNext struct ImplEventHook *
 vcl/source/filter/jpeg/Exif.hxx:62
     Exif::TiffHeader byteOrder sal_uInt16
 vcl/source/filter/jpeg/transupp.h:132
@@ -1834,8 +1814,6 @@ vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
 vcl/source/filter/sgvmain.hxx:44
     DtHdType Reserved sal_uInt8 [256]
-vcl/source/filter/sgvmain.hxx:285
-    BmapType aFltPath class INetURLObject
 vcl/source/fontsubset/sft.cxx:1055
     vcl::_subHeader2 firstCode sal_uInt16
 vcl/source/fontsubset/sft.cxx:1056
@@ -1878,10 +1856,6 @@ vcl/source/gdi/pdfwriter_impl.cxx:5794
     (anonymous namespace)::(anonymous) statusString SECItem
 vcl/source/gdi/pdfwriter_impl.cxx:5795
     (anonymous namespace)::(anonymous) failInfo SECItem
-vcl/source/gdi/pdfwriter_impl.hxx:749
-    vcl::PDFWriterImpl::GraphicsState m_nTransparentPercent sal_Int32
-vcl/unx/generic/app/i18n_status.cxx:298
-    vcl::IIIMPStatusWindow m_aMenu ScopedVclPtrInstance<class PopupMenu>
 vcl/unx/generic/fontmanager/fontsubst.cxx:35
     FcPreMatchSubstitution maCachedFontMap FcPreMatchSubstitution::CachedFontMapType
 vcl/unx/generic/print/bitmap_gfx.cxx:67

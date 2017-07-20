@@ -116,13 +116,6 @@ struct ImplMenuDelData
     bool isDeleted() const { return mpMenu == nullptr; }
 };
 
-struct MenuLogo
-{
-    BitmapEx aBitmap;
-    Color aStartColor;
-    Color aEndColor;
-};
-
 typedef void (*MenuUserDataReleaseFunction)(sal_uLong);
 
 class VCL_DLLPUBLIC Menu : public VclReferenceBase
@@ -137,7 +130,6 @@ class VCL_DLLPUBLIC Menu : public VclReferenceBase
 private:
     ImplMenuDelData* mpFirstDel;
     std::unique_ptr<MenuItemList> pItemList; // list with MenuItems
-    MenuLogo* pLogo;
     VclPtr<Menu> pStartedFrom;
     VclPtr<vcl::Window> pWindow;
 

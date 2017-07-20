@@ -978,14 +978,14 @@ void ToolBox::ImplLineSizing( const Point& rPos, tools::Rectangle& rRect, sal_uI
     if ( bHorz )
     {
         nOneLineSize = ImplCalcSize( 1 ).Height();
-        nMaxSize = maOutDockRect.GetHeight() - 20;
+        nMaxSize = - 20;
         if ( nMaxSize < aWinSize.Height() )
             nMaxSize = aWinSize.Height();
     }
     else
     {
         nOneLineSize = ImplCalcSize( 1 ).Width();
-        nMaxSize = maOutDockRect.GetWidth() - 20;
+        nMaxSize = - 20;
         if ( nMaxSize < aWinSize.Width() )
             nMaxSize = aWinSize.Width();
     }
@@ -4223,97 +4223,13 @@ bool ToolBox::Docking( const Point& rPos, tools::Rectangle& rRect )
         aDockingRect.SetPos( ImplGetFrameWindow()->GetPointerPosPixel() );
     }
 
-    tools::Rectangle aIntersection = maOutDockRect.GetIntersection( aDockingRect );
-    if ( !aIntersection.IsEmpty() )
+    bFloatMode = true;
+
+    meDockAlign = meAlign;
+    if ( !mbLastFloatMode )
     {
-        tools::Rectangle   aInRect = maInDockRect;
-        Size aDockSize;
-        aDockSize.Width()  = ImplCalcSize( mnLines, TB_CALCMODE_VERT ).Width();
-        aDockSize.Height() = ImplCalcSize( mnLines, TB_CALCMODE_HORZ ).Height();
-        aInRect.Left()   += aDockSize.Width()/2;
-        aInRect.Top()    += aDockSize.Height()/2;
-        aInRect.Right()  -= aDockSize.Width()/2;
-        aInRect.Bottom() -= aDockSize.Height()/2;
-
-        // if the window is too small, use the complete InDock-Rect
-        if ( aInRect.Left() >= aInRect.Right() )
-        {
-            aInRect.Left()  = maInDockRect.Left();
-            aInRect.Right() = maInDockRect.Right();
-        }
-        if ( aInRect.Top() >= aInRect.Bottom() )
-        {
-            aInRect.Top()    = maInDockRect.Top();
-            aInRect.Bottom() = maInDockRect.Bottom();
-        }
-
-        // if the mouse is outside the Dock area, it can only
-        // become a floating window
-        tools::Rectangle aIntersect = aInRect.GetIntersection( aDockingRect );
-        if ( aIntersect == aDockingRect )
-            bFloatMode = true;
-        else
-        {
-            // docking rectangle is in the "sensible area"
-            Point aPos = aDockingRect.TopLeft();
-            Point aInPosTL( aPos.X()-aInRect.Left(), aPos.Y()-aInRect.Top() );
-            Point aInPosBR( aPos.X()-aInRect.Left() + aDockingRect.GetWidth(), aPos.Y()-aInRect.Top() + aDockingRect.GetHeight() );
-            Size  aInSize = aInRect.GetSize();
-
-            if ( aInPosTL.X() <= 0 )
-                meDockAlign = WindowAlign::Left;
-            else if ( aInPosTL.Y() <= 0)
-                meDockAlign = WindowAlign::Top;
-            else if ( aInPosBR.X() >= aInSize.Width() )
-                meDockAlign = WindowAlign::Right;
-            else if ( aInPosBR.Y() >= aInSize.Height() )
-                meDockAlign = WindowAlign::Bottom;
-
-            // update the Dock size if Dock-Align was changed
-            if ( (meDockAlign == WindowAlign::Top) || (meDockAlign == WindowAlign::Bottom) )
-                aDockSize.Width() = maInDockRect.GetWidth();
-            else
-                aDockSize.Height() = maInDockRect.GetHeight();
-
-            aDockingRect.SetSize( aDockSize );
-
-            Point aPosTL( maInDockRect.TopLeft() );
-            switch ( meDockAlign )
-            {
-                case WindowAlign::Top :
-                    aDockingRect.SetPos( aPosTL );
-                    break;
-                case WindowAlign::Left :
-                    aDockingRect.SetPos( aPosTL );
-                    break;
-                case WindowAlign::Bottom :
-                {
-                    Point aPosBL( maInDockRect.BottomLeft() );
-                    aPosBL.Y() -= aDockingRect.GetHeight();
-                    aDockingRect.SetPos( aPosBL );
-                    break;
-                }
-                case WindowAlign::Right :
-                {
-                    Point aPosTR( maInDockRect.TopRight() );
-                    aPosTR.X() -= aDockingRect.GetWidth();
-                    aDockingRect.SetPos( aPosTR );
-                    break;
-                }
-            }
-        }
-    }
-    else
-        bFloatMode = true;
-
-    if ( bFloatMode )
-    {
-        meDockAlign = meAlign;
-        if ( !mbLastFloatMode )
-        {
-            ImplToolItems::size_type nTemp = 0;
-            aDockingRect.SetSize( ImplCalcFloatSize( nTemp ) );
-        }
+        ImplToolItems::size_type nTemp = 0;
+        aDockingRect.SetSize( ImplCalcFloatSize( nTemp ) );
     }
 
     rRect = aDockingRect;

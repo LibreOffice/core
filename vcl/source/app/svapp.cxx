@@ -153,15 +153,8 @@ extern "C" {
     typedef UnoWrapperBase* (SAL_CALL *FN_TkCreateUnoWrapper)();
 }
 
-struct ImplHotKey
-{
-    ImplHotKey*             mpNext;
-    vcl::KeyCode            maKeyCode;
-};
-
 struct ImplEventHook
 {
-    ImplEventHook*          mpNext;
     void*                   mpUserData;
     VCLEventHookProc        mpProc;
 };
@@ -1520,71 +1513,6 @@ css::uno::Reference< css::awt::XDisplayConnection > Application::GetDisplayConne
 void Application::SetFilterHdl( const Link<ConvertData&,bool>& rLink )
 {
     ImplGetSVData()->maGDIData.mpGrfConverter->SetFilterHdl( rLink );
-}
-
-bool ImplCallHotKey( const vcl::KeyCode& rKeyCode )
-{
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplHotKey*     pHotKeyData = pSVData->maAppData.mpFirstHotKey;
-    while ( pHotKeyData )
-    {
-        if ( pHotKeyData->maKeyCode == rKeyCode )
-        {
-            return true;
-        }
-
-        pHotKeyData = pHotKeyData->mpNext;
-    }
-
-    return false;
-}
-
-void ImplFreeHotKeyData()
-{
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplHotKey*     pTempHotKeyData;
-    ImplHotKey*     pHotKeyData = pSVData->maAppData.mpFirstHotKey;
-    while ( pHotKeyData )
-    {
-        pTempHotKeyData = pHotKeyData->mpNext;
-        delete pHotKeyData;
-        pHotKeyData = pTempHotKeyData;
-    }
-
-    pSVData->maAppData.mpFirstHotKey = nullptr;
-}
-
-void ImplFreeEventHookData()
-{
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplEventHook*  pTempEventHookData;
-    ImplEventHook*  pEventHookData = pSVData->maAppData.mpFirstEventHook;
-    while ( pEventHookData )
-    {
-        pTempEventHookData = pEventHookData->mpNext;
-        delete pEventHookData;
-        pEventHookData = pTempEventHookData;
-    }
-
-    pSVData->maAppData.mpFirstEventHook = nullptr;
-}
-
-long Application::CallEventHooks( NotifyEvent& rEvt )
-{
-    ImplSVData*     pSVData = ImplGetSVData();
-    long            nRet = 0;
-    ImplEventHook*  pTempEventHookData;
-    ImplEventHook*  pEventHookData = pSVData->maAppData.mpFirstEventHook;
-    while ( pEventHookData )
-    {
-        pTempEventHookData = pEventHookData->mpNext;
-        nRet = pEventHookData->mpProc( rEvt, pEventHookData->mpUserData );
-        if ( nRet )
-            break;
-        pEventHookData = pTempEventHookData;
-    }
-
-    return nRet;
 }
 
 const LocaleDataWrapper& Application::GetAppLocaleDataWrapper()

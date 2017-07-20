@@ -54,7 +54,6 @@ public:
     struct ChoiceData
     {
         OUString  aString;
-        void*     pData;
     };
 private:
     SalFrame*                       m_pParent;

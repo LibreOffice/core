@@ -282,7 +282,6 @@ public:
     bool    InvOut;       // output inverted ?
     bool    LightOut;     // brighten? (SD20)
     sal_uInt8   GrfFlg;       // (SD20) 0=nSGF 1=Pcx 2=HPGL 4=Raw $FF=Undef (to fix DrawBmp)
-    INetURLObject aFltPath;   // for GraphicFilter
 
     BmapType()
         : Flags(0)

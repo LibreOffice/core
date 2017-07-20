@@ -10295,7 +10295,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
     if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::TransparentPercent) )
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::TransparentPercent;
-        if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 && m_aCurrentPDFState.m_nTransparentPercent != rNewState.m_nTransparentPercent )
+        if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )
         {
             // TODO: switch extended graphicsstate
         }

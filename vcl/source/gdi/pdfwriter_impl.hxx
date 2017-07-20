@@ -746,7 +746,6 @@ private:
         bool                             m_bClipRegion;
         ComplexTextLayoutFlags            m_nLayoutMode;
         LanguageType                     m_aDigitLanguage;
-        sal_Int32                        m_nTransparentPercent;
         PushFlags                        m_nFlags;
         GraphicsStateUpdateFlags         m_nUpdateFlags;
 
@@ -758,7 +757,6 @@ private:
                 m_bClipRegion( false ),
                 m_nLayoutMode( ComplexTextLayoutFlags::Default ),
                 m_aDigitLanguage( 0 ),
-                m_nTransparentPercent( 0 ),
                 m_nFlags( PushFlags::ALL ),
                 m_nUpdateFlags( GraphicsStateUpdateFlags::All )
         {}

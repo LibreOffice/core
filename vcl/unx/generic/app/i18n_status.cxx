@@ -295,7 +295,6 @@ namespace vcl {
 class IIIMPStatusWindow : public StatusWindow
 {
     VclPtr<MenuButton>      m_aStatusBtn;
-    ScopedVclPtrInstance<PopupMenu> m_aMenu;
     SalFrame*               m_pResetFocus;
     bool                    m_bShow;
     bool                    m_bOn;
@@ -334,13 +333,8 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
     layout();
 
     m_aStatusBtn->SetSelectHdl( LINK( this, IIIMPStatusWindow, SelectHdl ) );
-    m_aStatusBtn->SetPopupMenu( m_aMenu.get() );
+    m_aStatusBtn->SetPopupMenu( nullptr );
     m_aStatusBtn->Show();
-
-    const ::std::vector< I18NStatus::ChoiceData >& rChoices( I18NStatus::get().getChoices() );
-    int i = 1;
-    for( ::std::vector< I18NStatus::ChoiceData >::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it, i++ )
-        m_aMenu->InsertItem( i, it->aString );
 
     if( pParent )
     {
@@ -464,7 +458,7 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn, void )
         {
             XSetICValues( static_cast<X11SalFrame*>(I18NStatus::get().getParent())->getInputContext()->GetContext(),
                           XNUnicodeCharacterSubset,
-                          rChoices[nIndex].pData,
+                          nullptr,
                           nullptr);
             // FIXME: get rid of X11SalFrame
             X11SalFrame* pParent = static_cast<X11SalFrame*>(I18NStatus::get().getParent());

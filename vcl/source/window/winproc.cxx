@@ -57,8 +57,7 @@
 
 bool ImplCallPreNotify( NotifyEvent& rEvt )
 {
-    return Application::CallEventHooks( rEvt )
-        || rEvt.GetWindow()->CompatPreNotify( rEvt );
+    return rEvt.GetWindow()->CompatPreNotify( rEvt );
 }
 
 static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePos,
@@ -380,7 +379,6 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
             MouseEvent aMEvt( aChildPos, pWinFrameData->mnClickCount, nMode, nCode, nCode );
             NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
-            Application::CallEventHooks( aNEvt );
 
             if( pChild->IsCallHandlersOnInputDisabled() )
             {
@@ -1062,9 +1060,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                 }
             }
             else
-            {
-                bRet = ImplCallHotKey( aKeyCode );
-            }
+                bRet = false;
         }
     }
     else

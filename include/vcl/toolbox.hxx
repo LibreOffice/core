@@ -103,7 +103,6 @@ private:
     Idle               *mpIdle;
     tools::Rectangle           maUpperRect;
     tools::Rectangle           maLowerRect;
-    tools::Rectangle           maOutDockRect;
     tools::Rectangle           maInDockRect;
     tools::Rectangle           maPaintRect;
     VclPtr<FloatingWindow> mpFloatWin;

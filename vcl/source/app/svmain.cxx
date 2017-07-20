@@ -562,12 +562,6 @@ void DeInitVCL()
         delete pSVData->maAppData.mpKeyListeners;
         pSVData->maAppData.mpKeyListeners = nullptr;
     }
-
-    if ( pSVData->maAppData.mpFirstHotKey )
-        ImplFreeHotKeyData();
-    if ( pSVData->maAppData.mpFirstEventHook )
-        ImplFreeEventHookData();
-
     if (pSVData->mpBlendFrameCache)
     {
         delete pSVData->mpBlendFrameCache;
