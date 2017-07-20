@@ -60,7 +60,7 @@ bool SeqHasEntry(
 
 
 void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
-        Reference< XSearchableDictionaryList > &xDicList,
+        Reference< XSearchableDictionaryList > const &xDicList,
         std::vector< OUString > & rDicListProps )
 {
     if (!xDicList.is())
@@ -106,7 +106,7 @@ void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
 
 
 void SeqRemoveNegEntries( std::vector< OUString > &rSeq,
-        Reference< XSearchableDictionaryList > &rxDicList,
+        Reference< XSearchableDictionaryList > const &rxDicList,
         LanguageType nLanguage )
 {
     bool bSthRemoved = false;

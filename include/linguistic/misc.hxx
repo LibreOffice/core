@@ -107,9 +107,9 @@ LNG_DLLPUBLIC bool LinguIsUnspecified( LanguageType nLanguage );
 LNG_DLLPUBLIC bool LinguIsUnspecified( const OUString & rBcp47 );
 
 std::vector< LanguageType >
-    LocaleSeqToLangVec( css::uno::Sequence< css::lang::Locale > &rLocaleSeq );
+    LocaleSeqToLangVec( css::uno::Sequence< css::lang::Locale > const &rLocaleSeq );
 css::uno::Sequence<sal_Int16>
-    LocaleSeqToLangSeq( css::uno::Sequence< css::lang::Locale > &rLocaleSeq );
+    LocaleSeqToLangSeq( css::uno::Sequence< css::lang::Locale > const &rLocaleSeq );
 
 // checks if file pointed to by rURL is readonly
 // and may also check return if such a file exists or not
@@ -131,13 +131,13 @@ LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPo
 css::uno::Reference< css::linguistic2::XHyphenatedWord >
             RebuildHyphensAndControlChars(
                 const OUString &rOrigWord,
-                css::uno::Reference< css::linguistic2::XHyphenatedWord > &rxHyphWord );
+                css::uno::Reference< css::linguistic2::XHyphenatedWord > const &rxHyphWord );
 
 
 LNG_DLLPUBLIC bool        IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageType nLanguage );
 
 inline bool        IsUpper( const OUString &rText, LanguageType nLanguage )     { return IsUpper( rText, 0, rText.getLength(), nLanguage ); }
-LNG_DLLPUBLIC CapType SAL_CALL capitalType(const OUString&, CharClass *);
+LNG_DLLPUBLIC CapType SAL_CALL capitalType(const OUString&, CharClass const *);
 
 OUString      ToLower( const OUString &rText, LanguageType nLanguage );
 LNG_DLLPUBLIC bool      HasDigits( const OUString &rText );
@@ -163,7 +163,7 @@ css::uno::Reference<
             bool bSearchPosDics, bool bSearchSpellEntry );
 
 LNG_DLLPUBLIC DictionaryError AddEntryToDic(
-    css::uno::Reference< css::linguistic2::XDictionary >  &rxDic,
+    css::uno::Reference< css::linguistic2::XDictionary > const &rxDic,
     const OUString &rWord, bool bIsNeg,
     const OUString &rRplcTxt,
     bool bStripDot = true );
