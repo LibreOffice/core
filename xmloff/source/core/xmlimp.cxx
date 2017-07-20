@@ -185,7 +185,7 @@ public:
                     }
                     else
                     {
-                        SAL_WARN("xmloff.core", "unknown LO version: " << loVersion);
+                        SAL_INFO("xmloff.core", "unknown LO version: " << loVersion);
                     }
                     return; // ignore buildIds
                 }
