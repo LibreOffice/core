@@ -4080,6 +4080,18 @@ const char* SC_OPCODE_REPLACEB_ARY[] =
     NC_("SC_OPCODE_REPLACEB", "The text to be inserted.")
 };
 
+ // -=*# Resource for function FINDB #*=-
+const char* SC_OPCODE_FINDB_ARY[] =
+{
+    NC_("SC_OPCODE_FINDB", "Looks for a string of text within another (case sensitive), using byte positions."),
+    NC_("SC_OPCODE_FINDB", "find_text"),
+    NC_("SC_OPCODE_FINDB", "The text to be found."),
+    NC_("SC_OPCODE_FINDB", "text"),
+    NC_("SC_OPCODE_FINDB", "The text in which a search is to be made."),
+    NC_("SC_OPCODE_FINDB", "position"),
+    NC_("SC_OPCODE_FINDB", "The position in the text from which the search starts.")
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

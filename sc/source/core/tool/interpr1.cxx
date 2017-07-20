@@ -8596,20 +8596,26 @@ bool IsDBCS(sal_Unicode currentChar)
     bRet = (i < SAL_N_ELEMENTS(scriptList) && block >= scriptList[i].from);
     return bRet;
 }
-sal_Int32 getLengthB(const OUString &str)
+sal_Int32 lcl_getLengthB( const OUString &str, sal_Int32 nPos )
 {
-    if(str.isEmpty())
-        return 0;
     sal_Int32 index = 0;
     sal_Int32 length = 0;
-    while(index < str.getLength()){
-        if(IsDBCS(str[index]))
+    while ( index < nPos )
+    {
+        if (IsDBCS(str[index]))
             length += 2;
         else
             length++;
         index++;
     }
     return length;
+}
+sal_Int32 getLengthB(const OUString &str)
+{
+    if(str.isEmpty())
+        return 0;
+    else
+        return lcl_getLengthB( str, str.getLength() );
 }
 void ScInterpreter::ScLenB()
 {
@@ -8756,6 +8762,40 @@ void ScInterpreter::ScReplaceB()
             OUString aStr3 = lcl_RightB( aOldStr, nLen - fPos - fCount + 1);
 
             PushString( aStr1 + aNewStr + aStr3 );
+        }
+    }
+}
+
+void ScInterpreter::ScFindB()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 2, 3 ) )
+    {
+        sal_Int32 nStart;
+        if ( nParamCount == 3 )
+            nStart = GetStringPositionArgument();
+        else
+            nStart = 1;
+        OUString aStr  = GetString().getString();
+        int nLen       = getLengthB( aStr );
+        OUString asStr = GetString().getString();
+        int nsLen      = getLengthB( asStr );
+        if ( nStart < 1 || nStart > nLen - nsLen )
+            PushIllegalArgument();
+        else
+        {
+            // create a string from sStr starting at nStart
+            OUStringBuffer aBuf( lcl_RightB( aStr, nLen - nStart + 1 ) );
+            // search aBuf for asStr
+            sal_Int32 nPos = aBuf.indexOf( asStr, 0 );
+            if ( nPos == -1 )
+                PushNoValue();
+            else
+            {
+                // obtain byte value of nPos
+                int nBytePos = lcl_getLengthB( aBuf.makeStringAndClear(), nPos );
+                PushDouble( nBytePos + nStart );
+            }
         }
     }
 }
