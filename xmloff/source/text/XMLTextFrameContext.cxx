@@ -569,6 +569,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
 
     // Skip duplicated frames
     if(!mbMultipleContent && // It's allowed to have multiple image for the same frame
+       !sName.isEmpty() &&
        xTextImportHelper->IsDuplicateFrame(sName, nX, nY, nWidth, nHeight))
     {
         bCreateFailed = true;
