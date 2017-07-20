@@ -686,8 +686,6 @@ include/test/sheet/xdatapilottable.hxx:32
     apitest::XDataPilotTable xCellForCheck css::uno::Reference<css::table::XCell>
 include/test/sheet/xnamedranges.hxx:38
     apitest::XNamedRanges xSheet css::uno::Reference<css::sheet::XSpreadsheet>
-include/toolkit/controls/eventcontainer.hxx:52
-    toolkit::ScriptEventContainer mnElementCount sal_Int32
 include/tools/inetmime.hxx:66
     INetContentTypeParameter m_bConverted _Bool
 include/tools/multisel.hxx:43
