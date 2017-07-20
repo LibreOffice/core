@@ -1920,7 +1920,5 @@ writerfilter/source/ooxml/OOXMLFactory.hxx:62
     writerfilter::ooxml::AttributeInfo m_nRef Id
 xmloff/inc/MultiPropertySetHelper.hxx:78
     MultiPropertySetHelper aEmptyAny css::uno::Any
-xmloff/inc/SchXMLExport.hxx:39
-    SchXMLExport mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
 xmloff/source/core/xmlexp.cxx:251
     SvXMLExport_Impl maSaveOptions class SvtSaveOptions

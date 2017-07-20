@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star {
 class SchXMLExport : public SvXMLExport
 {
 private:
-    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
     rtl::Reference<SchXMLAutoStylePoolP> maAutoStylePool;
 
     rtl::Reference<SchXMLExportHelper> maExportHelper;

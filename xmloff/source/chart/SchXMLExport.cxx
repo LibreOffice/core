@@ -3517,12 +3517,6 @@ SchXMLExport::SchXMLExport(
 
 SchXMLExport::~SchXMLExport()
 {
-    // stop progress view
-    if( mxStatusIndicator.is())
-    {
-        mxStatusIndicator->end();
-        mxStatusIndicator->reset();
-    }
 }
 
 ErrCode SchXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
