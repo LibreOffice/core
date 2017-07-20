@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_4d0f72e1",
+        "filename": "xmlsecurity/source/helper/xsecctl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-20T14:01:48Z",
+      "side": 1,
+      "message": "that\u0027s a pretty manual way to declare a namespace - apparently this module doesn\u0027t use SvXMLExport?",
+      "revId": "755d9503519e092fe1cf1c55c4a1a2588743f197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
