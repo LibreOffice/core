@@ -35,6 +35,30 @@
 
             </android.support.design.widget.AppBarLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/calc_address"
+                    android:layout_width="@dimen/calc_address_bar_width"
+                    android:layout_height="@dimen/calc_toolbar_height"
+                    android:layout_weight="0"
+                    android:inputType="textNoSuggestions"
+                    android:imeOptions="actionDone|actionGo"
+                    android:visibility="gone"/>
+
+                <EditText
+                    android:id="@+id/calc_formula"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/calc_toolbar_height"
+                    android:layout_weight="1"
+                    android:inputType="text"
+                    android:imeOptions="actionDone|actionGo"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
