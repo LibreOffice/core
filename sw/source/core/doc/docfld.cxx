@@ -1135,15 +1135,18 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
         if( pFnd )
         {
             if( aFieldTypeTable[ n ] == pFnd )
+            {
                 aFieldTypeTable[ n ] = static_cast<SwCalcFieldType*>(pFnd->pNext.release());
+                delete pFnd;
+            }
             else
             {
                 SwHash* pPrev = aFieldTypeTable[ n ];
                 while( pPrev->pNext.get() != pFnd )
                     pPrev = pPrev->pNext.get();
                 pPrev->pNext = std::move(pFnd->pNext);
+                // no need to explicitly delete here, the embedded linked list uses unique_ptr
             }
-            delete pFnd;
         }
     }
 }
