@@ -36,7 +36,7 @@ namespace drawinglayer
     {
         void TextDecoratedPortionPrimitive2D::impCreateGeometryContent(
             std::vector< Primitive2DReference >& rTarget,
-            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& rDecTrans,
+            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose const & rDecTrans,
             const OUString& rText,
             sal_Int32 nTextPosition,
             sal_Int32 nTextLength,
