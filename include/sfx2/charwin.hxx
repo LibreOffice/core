@@ -31,6 +31,9 @@ public:
     void            SetFont( const vcl::Font& rFont );
     void            SetText( const OUString& rText ) override;
     void            InsertCharToDoc();
+    Point           GetClickPosition() const;
+
+    void            createContextMenu();
 
     virtual void    Resize() override;
 
@@ -38,6 +41,10 @@ public:
 
     void setInsertCharHdl(const Link<SvxCharView*,void> &rLink);
     void setMouseClickHdl(const Link<SvxCharView*,void> &rLink);
+    void setClearClickHdl(const Link<SvxCharView*,void> &rLink);
+    void setClearAllClickHdl(const Link<SvxCharView*,void> &rLink);
+
+    DECL_LINK(ContextMenuSelectHdl, Menu*, bool);
 
 protected:
     virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&) override;
@@ -48,10 +55,13 @@ protected:
 
 private:
     long            mnY;
+    Point           maPosition;
     vcl::Font       maFont;
 
     Link<SvxCharView*, void> maInsertCharHdl;
     Link<SvxCharView*, void> maMouseClickHdl;
+    Link<SvxCharView*, void> maClearClickHdl;
+    Link<SvxCharView*, void> maClearAllClickHdl;
 };
 
 #endif

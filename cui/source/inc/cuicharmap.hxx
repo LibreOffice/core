@@ -104,6 +104,10 @@ private:
     DECL_LINK(DecimalCodeChangeHdl, Edit&, void);
     DECL_LINK(HexCodeChangeHdl, Edit&, void);
     DECL_LINK(CharClickHdl, SvxCharView*, void);
+    DECL_LINK(RecentClearClickHdl, SvxCharView*, void);
+    DECL_LINK(FavClearClickHdl, SvxCharView*, void);
+    DECL_LINK(RecentClearAllClickHdl, SvxCharView*, void);
+    DECL_LINK(FavClearAllClickHdl, SvxCharView*, void);
     DECL_LINK(InsertClickHdl, Button*, void);
     DECL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, Control&, void);
     DECL_LINK(FavSelectHdl, Button*, void);

@@ -214,6 +214,16 @@ String STR_INPUT_NEW
     Text [ en-US ] = "Enter category name:";
 };
 
+String STR_CLEAR_CHAR
+{
+    Text [ en-US ] = "Clear";
+};
+
+String STR_CLEAR_ALL_CHAR
+{
+    Text [ en-US ] = "Clear All";
+};
+
 String STR_MSG_ERROR_LOCAL_MOVE
 {
     Text [ en-US ] = "Error moving the following templates to $1.\n$2" ;
