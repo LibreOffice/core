@@ -321,7 +321,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
     double fValue = fDateTime;
     sal_Int32 nValue = static_cast <sal_Int32> (::rtl::math::approxFloor (fValue));
     Date aDate (aTempNullDate.Day, aTempNullDate.Month, aTempNullDate.Year);
-    aDate += nValue;
+    aDate.AddDays( nValue);
     fValue -= nValue;
     double fCount;
     if (nValue > 0)
@@ -371,7 +371,7 @@ void SvXMLUnitConverter::convertDateTime( OUStringBuffer& rBuffer,
         if (fHoursValue >= 24.0)
         {
             fHoursValue -= 24.0;
-            aDate += 1;
+            aDate.AddDays(1);
         }
     }
     sal_Int16 nTempYear = aDate.GetYear();

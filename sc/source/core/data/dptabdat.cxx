@@ -66,7 +66,7 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
         return nLastRet;
 
     Date aDate( 30,12,1899 );                   //TODO: get from source data (and cache here)
-    aDate += nDateVal;
+    aDate.AddDays( nDateVal);
 
     long nRet = 0;
     switch (nHierarchy)

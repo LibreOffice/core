@@ -121,7 +121,7 @@ OUString ScDPUtil::getDateGroupName(
         case sheet::DataPilotFieldGroupBy::DAYS:
         {
             Date aDate(1, 1, SC_DP_LEAPYEAR);
-            aDate += (nValue - 1);            // nValue is 1-based
+            aDate.AddDays(nValue - 1);            // nValue is 1-based
             long nDays = aDate - pFormatter->GetNullDate();
 
             const sal_uInt32 nFormat = pFormatter->GetFormatIndex(NF_DATE_SYS_DDMMM, ScGlobal::eLnge);
@@ -334,7 +334,7 @@ sal_Int32 ScDPUtil::getDatePartValue(
     else
     {
         Date aDate = pFormatter->GetNullDate();
-        aDate += static_cast<sal_Int32>(::rtl::math::approxFloor(fValue));
+        aDate.AddDays(::rtl::math::approxFloor(fValue));
 
         switch ( nDatePart )
         {
