@@ -26,7 +26,6 @@ PanelBase::PanelBase (
     ViewShellBase& rViewShellBase)
     : Control(pParentWindow),
       mpWrappedControl(nullptr),
-      mxSidebar(),
       mrViewShellBase(rViewShellBase)
 {
 #ifdef DEBUG
@@ -69,8 +68,6 @@ bool PanelBase::ProvideWrappedControl()
         mpWrappedControl.reset(CreateWrappedControl(this, mrViewShellBase));
         if (mpWrappedControl)
             mpWrappedControl->Show();
-        if (mxSidebar.is())
-            mxSidebar->requestLayout();
     }
     return mpWrappedControl.get() != nullptr;
 }

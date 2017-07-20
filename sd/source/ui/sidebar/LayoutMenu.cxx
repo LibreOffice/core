@@ -129,7 +129,6 @@ LayoutMenu::LayoutMenu (
       DragSourceHelper(this),
       DropTargetHelper(this),
       mrBase(rViewShellBase),
-      mbUseOwnScrollBar(false),
       mxListener(nullptr),
       mbSelectionUpdatePending(true),
       mbIsMainViewChangePending(false),
@@ -162,8 +161,6 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
         | WB_MENUSTYLEVALUESET
         | WB_NO_DIRECTSELECT
         );
-    if (mbUseOwnScrollBar)
-        SetStyle (GetStyle() | WB_VSCROLL);
     SetExtraSpacing(2);
     SetSelectHdl (LINK(this, LayoutMenu, ClickHandler));
     InvalidateContent();
@@ -237,7 +234,7 @@ AutoLayout LayoutMenu::GetSelectedAutoLayout()
 ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
 {
     sal_Int32 nPreferredHeight = 200;
-    if ( ! mbUseOwnScrollBar && GetItemCount()>0)
+    if (GetItemCount()>0)
     {
         Image aImage = GetItemImage(GetItemId(0));
         Size aItemSize = CalcItemSizePixel (aImage.GetSizePixel());

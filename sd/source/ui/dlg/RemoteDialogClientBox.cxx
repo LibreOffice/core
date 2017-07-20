@@ -64,7 +64,6 @@ ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
     m_bHasScrollBar( false ),
     m_bHasActive( false ),
     m_bNeedsRecalc( true ),
-    m_bInCheckMode( false ),
     m_bAdjustActive( false ),
     m_bInDelete( false ),
     m_nActive( 0 ),
@@ -218,9 +217,6 @@ void ClientBox::selectEntry( const long nPos )
     //and some other state variables from ClientBox for
     //the whole painting operation. See issue i86993
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
-
-    if ( m_bInCheckMode )
-        return;
 
     if ( m_bHasActive )
     {
@@ -633,18 +629,11 @@ void ClientBox::addEntry( const std::shared_ptr<ClientInfo>& pClientInfo )
     }
     else
     {
-//         if ( !FindEntryPos( xEntry, 0, m_vEntries.size()-1, nPos ) )
-//         {
-            m_vEntries.insert( m_vEntries.begin()+nPos, xEntry );
-//         }
-//         else if ( !m_bInCheckMode )
-//         {
-//             OSL_FAIL( "ClientBox::addEntry(): Will not add duplicate entries"  );
-//         }
+        m_vEntries.insert( m_vEntries.begin()+nPos, xEntry );
     }
 
     //access to m_nActive must be guarded
-    if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
+    if ( m_bHasActive && ( m_nActive >= nPos ) )
         m_nActive += 1;
 
     guard.clear();
