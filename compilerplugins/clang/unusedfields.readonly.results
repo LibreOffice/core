@@ -688,8 +688,6 @@ include/test/sheet/xnamedranges.hxx:38
     apitest::XNamedRanges xSheet css::uno::Reference<css::sheet::XSpreadsheet>
 include/tools/inetmime.hxx:66
     INetContentTypeParameter m_bConverted _Bool
-include/tools/multisel.hxx:43
-    MultiSelection bSelectNew _Bool
 include/vcl/bitmap.hxx:175
     BmpFilterParam::(anonymous) mnSepiaPercent sal_uInt16
 include/vcl/bitmap.hxx:176
