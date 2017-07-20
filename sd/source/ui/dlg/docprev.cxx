@@ -143,23 +143,6 @@ void SdDocPreviewWin::Paint( vcl::RenderContext& /*rRenderContext*/, const ::too
     }
 }
 
-bool SdDocPreviewWin::EventNotify( NotifyEvent& rNEvt )
-{
-    if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
-    {
-        const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
-        if ( pMEvt->IsLeft() )
-        {
-            if( rNEvt.GetWindow() == this )
-            {
-                aClickHdl.Call(*this);
-            }
-        }
-    }
-
-    return Control::EventNotify(rNEvt);
-}
-
 void SdDocPreviewWin::updateViewSettings()
 {
     SvtAccessibilityOptions aAccOptions;

@@ -88,8 +88,7 @@ public:
   */
 
 SdUnoSearchReplaceShape::SdUnoSearchReplaceShape( drawing::XDrawPage* pPage ) throw()
-    : mpShape(nullptr)
-    , mpPage(pPage)
+    : mpPage(pPage)
 {
 }
 
@@ -130,10 +129,6 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
         {
             xShapes = nullptr;
         }
-    }
-    else
-    {
-        xShape = mpShape;
     }
 
     while( xShape.is() )
@@ -231,10 +226,7 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
             xShapes = nullptr;
         }
     }
-    else
-    {
-        xShape = mpShape;
-    }
+
     while( xShape.is() )
     {
         // find in xShape
@@ -329,10 +321,6 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() co
                 xShapes->getByIndex(0) >>= xShape;
             }
         }
-    }
-    else if( mpShape )
-    {
-        xShape = mpShape;
     }
 
     return xShape;

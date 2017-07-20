@@ -39,8 +39,6 @@ public:
 
 private:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
-
-    Link<CategoryListBox&,void>     maDoubleClickHdl;
 };
 
 }

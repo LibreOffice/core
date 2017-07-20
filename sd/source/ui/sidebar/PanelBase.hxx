@@ -59,7 +59,6 @@ protected:
         ViewShellBase& rViewShellBase) = 0;
 
 private:
-    css::uno::Reference<css::ui::XSidebar> mxSidebar;
     ViewShellBase& mrViewShellBase;
 
     bool ProvideWrappedControl();
