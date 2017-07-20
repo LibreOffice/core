@@ -660,12 +660,8 @@ include/svl/svdde.hxx:300
     DdeService pConv ConvList *
 include/svl/svdde.hxx:301
     DdeService nStatus short
-include/svtools/calendar.hxx:337
-    CalendarField mnCalendarStyle WinBits
 include/svtools/editsyntaxhighlighter.hxx:33
     MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
-include/svtools/headbar.hxx:241
-    HeaderBar maDoubleClickHdl Link<class HeaderBar *, void>
 include/svx/svdmark.hxx:142
     SdrMarkList maPointName class rtl::OUString
 include/svx/svdmark.hxx:143

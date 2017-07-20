@@ -2121,7 +2121,6 @@ CalendarField::CalendarField(vcl::Window* pParent, WinBits nWinStyle)
     : DateField(pParent, nWinStyle)
     , mpFloatWin(nullptr)
     , mpCalendar(nullptr)
-    , mnCalendarStyle(0)
     , mpTodayBtn(nullptr)
     , mpNoneBtn(nullptr)
     , maDefaultDate( Date::EMPTY )
@@ -2250,7 +2249,7 @@ Calendar* CalendarField::GetCalendar()
     {
         mpFloatWin = VclPtr<ImplCFieldFloatWin>::Create( this );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, CalendarField, ImplPopupModeEndHdl ) );
-        mpCalendar = VclPtr<Calendar>::Create( mpFloatWin, mnCalendarStyle | WB_TABSTOP );
+        mpCalendar = VclPtr<Calendar>::Create( mpFloatWin, WB_TABSTOP );
         mpCalendar->SetPosPixel( Point() );
         mpCalendar->SetSelectHdl( LINK( this, CalendarField, ImplSelectHdl ) );
     }
