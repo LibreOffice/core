@@ -794,7 +794,6 @@ SwDBManager::SwDBManager(SwDoc* pDoc)
     , bInitDBFields(false)
     , bInMerge(false)
     , bMergeSilent(false)
-    , bMergeLock(false)
     , pImpl(new SwDBManager_Impl(*this))
     , pMergeEvtSrc(nullptr)
     , m_pDoc(pDoc)
@@ -2038,12 +2037,10 @@ bool    SwDBManager::IsDataSourceOpen(const OUString& rDataSource,
 {
     if(pImpl->pMergeData)
     {
-        return !bMergeLock &&
-                ((rDataSource == pImpl->pMergeData->sDataSource &&
-                    rTableOrQuery == pImpl->pMergeData->sCommand)
-                    ||(rDataSource.isEmpty() && rTableOrQuery.isEmpty()))
-                    &&
-                    pImpl->pMergeData->xResultSet.is();
+        return ((rDataSource == pImpl->pMergeData->sDataSource
+                 && rTableOrQuery == pImpl->pMergeData->sCommand)
+                || (rDataSource.isEmpty() && rTableOrQuery.isEmpty()))
+               && pImpl->pMergeData->xResultSet.is();
     }
     else if(!bMergeShell)
     {

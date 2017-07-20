@@ -52,18 +52,15 @@ class ColorVariable
 {
 public:
     long mnIndex;
-    Color maColor;
     sal_Int16 mnTintShade;
 
     ColorVariable()
         : mnIndex(-1)
-        , maColor()
         , mnTintShade()
     {}
 
     ColorVariable(long nIndex, sal_Int16 nTintShade)
         : mnIndex(nIndex)
-        , maColor()
         , mnTintShade(nTintShade)
     {}
 };
@@ -95,7 +92,7 @@ public:
         }
         else
         {
-            aColor.SetColor(maVariable.maColor.GetColor());
+            aColor.SetColor(COL_BLACK);
         }
         return aColor;
     }

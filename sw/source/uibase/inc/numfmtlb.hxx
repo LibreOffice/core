@@ -31,8 +31,6 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
     sal_Int32           nStdEntry;
     bool                bOneArea;
     sal_uInt32          nDefFormat;
-    SwView*             pVw;
-    SvNumberFormatter*  pOwnFormatter;
     LanguageType        eCurLanguage;
     bool                bShowLanguageControl; //determine whether the language control has
                                               //to be shown in the number format dialog
@@ -42,13 +40,11 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
 
     SAL_DLLPRIVATE static double   GetDefValue(const short nFormatType);
     SAL_DLLPRIVATE void            Init();
-    SAL_DLLPRIVATE SwView*         GetView();
 
 public:
     NumFormatListBox(vcl::Window* pWin, WinBits nStyle);
 
     virtual ~NumFormatListBox() override;
-    virtual void    dispose() override;
 
     void            Clear();
 

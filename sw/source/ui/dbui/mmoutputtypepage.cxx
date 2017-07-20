@@ -98,7 +98,6 @@ struct SwSendMailDialog_Impl
     sal_uInt32                                  nCurrentDescriptor;
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     ::rtl::Reference< IMailDispatcherListener>  xMailListener;
-    uno::Reference< mail::XMailService >        xConnectedMailService;
     uno::Reference< mail::XMailService >        xConnectedInMailService;
     Idle                                        aRemoveIdle;
 
@@ -307,8 +306,6 @@ void SwSendMailDialog::dispose()
         {
             if(m_pImpl->xMailDispatcher->isStarted())
                 m_pImpl->xMailDispatcher->stop();
-            if(m_pImpl->xConnectedMailService.is() && m_pImpl->xConnectedMailService->isConnected())
-                m_pImpl->xConnectedMailService->disconnect();
             if(m_pImpl->xConnectedInMailService.is() && m_pImpl->xConnectedInMailService->isConnected())
                 m_pImpl->xConnectedInMailService->disconnect();
 
