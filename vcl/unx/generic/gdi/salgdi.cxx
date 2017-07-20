@@ -84,7 +84,6 @@ X11SalGraphics::X11SalGraphics():
     nTextPixel_(0),
     hBrush_(None),
     bWindow_(false),
-    bPrinter_(false),
     bVirDev_(false),
     bFontGC_(false),
     m_bOpenGL(OpenGLHelper::isVCLOpenGLEnabled())

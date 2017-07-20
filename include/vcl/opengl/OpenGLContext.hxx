@@ -200,7 +200,6 @@ private:
 
 public:
     vcl::Region maClipRegion;
-    int mnPainting;
 
     // Don't hold references to ourselves:
     OpenGLContext *mpPrevContext;

@@ -138,8 +138,6 @@ struct ImplSVAppData
     Help*                   mpHelp = nullptr;               // Application help
     VclPtr<PopupMenu>       mpActivePopupMenu;              // Actives Popup-Menu (in Execute)
     VclPtr<ImplWheelWindow> mpWheelWindow;                  // WheelWindow
-    ImplHotKey*             mpFirstHotKey = nullptr;        // HotKey-Verwaltung
-    ImplEventHook*          mpFirstEventHook = nullptr;     // Event-Hooks
     sal_uInt64              mnLastInputTime = 0;            // GetLastInputTime()
     sal_uInt16              mnDispatchLevel = 0;            // DispatchLevel
     sal_uInt16              mnModalMode = 0;                // ModalMode Count
@@ -370,10 +368,6 @@ VCL_PLUGIN_PUBLIC ResMgr*     ImplGetResMgr();
 VCL_PLUGIN_PUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
 DockingManager*     ImplGetDockingManager();
 BlendFrameCache*    ImplGetBlendFrameCache();
-
-bool        ImplCallHotKey( const vcl::KeyCode& rKeyCode );
-void        ImplFreeHotKeyData();
-void        ImplFreeEventHookData();
 
 bool        ImplCallPreNotify( NotifyEvent& rEvt );
 

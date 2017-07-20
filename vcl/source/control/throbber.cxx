@@ -45,7 +45,6 @@ Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style )
     ,mbRepeat( true )
     ,mnStepTime( 100 )
     ,mnCurStep( 0 )
-    ,meImageSet( ImageSet::Auto )
 {
     maWaitTimer.SetTimeout( mnStepTime );
     maWaitTimer.SetInvokeHandler( LINK( this, Throbber, TimeOutHdl ) );
@@ -96,9 +95,7 @@ namespace
 void Throbber::Resize()
 {
     ImageControl::Resize();
-
-    if ( meImageSet == ImageSet::Auto )
-        initImages();
+    initImages();
 }
 
 void Throbber::initImages()
@@ -106,16 +103,9 @@ void Throbber::initImages()
     try
     {
         ::std::vector< ::std::vector< Image > > aImageSets;
-        if ( meImageSet == ImageSet::Auto )
-        {
-            aImageSets.push_back( lcl_loadImageSet( ImageSet::N16px ) );
-            aImageSets.push_back( lcl_loadImageSet( ImageSet::N32px ) );
-            aImageSets.push_back( lcl_loadImageSet( ImageSet::N64px ) );
-        }
-        else
-        {
-            aImageSets.push_back( lcl_loadImageSet( meImageSet ) );
-        }
+        aImageSets.push_back( lcl_loadImageSet( ImageSet::N16px ) );
+        aImageSets.push_back( lcl_loadImageSet( ImageSet::N32px ) );
+        aImageSets.push_back( lcl_loadImageSet( ImageSet::N64px ) );
 
         // find the best matching image set (size-wise)
         const ::Size aWindowSizePixel = GetSizePixel();

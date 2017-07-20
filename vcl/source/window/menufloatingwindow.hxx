@@ -70,7 +70,7 @@ private:
     void End();
 
 protected:
-    vcl::Region ImplCalcClipRegion( bool bIncludeLogo = true ) const;
+    vcl::Region ImplCalcClipRegion() const;
     void ImplDrawScroller(vcl::RenderContext& rRenderContext, bool bUp);
     using Window::ImplScroll;
     void ImplScroll( const Point& rMousePos );

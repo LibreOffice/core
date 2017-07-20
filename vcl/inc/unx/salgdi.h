@@ -336,7 +336,6 @@ protected:
     Pixmap                          hBrush_;        // Dither
 
     bool                            bWindow_ : 1;       // is Window
-    bool                            bPrinter_ : 1;      // is Printer
     bool                            bVirDev_ : 1;       // is VirDev
     bool                            bFontGC_ : 1;       // is Font GC valid
     bool                            m_bOpenGL : 1;

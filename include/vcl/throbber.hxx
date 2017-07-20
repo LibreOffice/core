@@ -80,7 +80,6 @@ private:
     sal_Int32   mnStepTime;
     sal_Int32   mnCurStep;
     AutoTimer   maWaitTimer;
-    ImageSet    meImageSet;
 
     DECL_LINK( TimeOutHdl, Timer*, void );
 };

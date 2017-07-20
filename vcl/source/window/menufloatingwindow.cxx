@@ -169,7 +169,7 @@ long MenuFloatingWindow::ImplGetStartY() const
     return -nY;
 }
 
-vcl::Region MenuFloatingWindow::ImplCalcClipRegion( bool bIncludeLogo ) const
+vcl::Region MenuFloatingWindow::ImplCalcClipRegion() const
 {
     Size aOutSz = GetOutputSizePixel();
     Point aPos;
@@ -177,12 +177,7 @@ vcl::Region MenuFloatingWindow::ImplCalcClipRegion( bool bIncludeLogo ) const
     aRect.Top() += nScrollerHeight;
     aRect.Bottom() -= nScrollerHeight;
 
-    if ( pMenu && pMenu->pLogo && !bIncludeLogo )
-        aRect.Left() += pMenu->pLogo->aBitmap.GetSizePixel().Width();
-
     vcl::Region aRegion(aRect);
-    if ( pMenu && pMenu->pLogo && bIncludeLogo && nScrollerHeight )
-        aRegion.Union( tools::Rectangle( Point(), Size( pMenu->pLogo->aBitmap.GetSizePixel().Width(), aOutSz.Height() ) ) );
 
     return aRegion;
 }
@@ -634,7 +629,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
                 Invalidate();
             }
 
-            Scroll( 0, nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), ScrollFlags::Clip );
+            Scroll( 0, nScrollEntryHeight, ImplCalcClipRegion().GetBoundRect(), ScrollFlags::Clip );
         }
     }
     else if ( bScrollDown && !bUp )
@@ -663,7 +658,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
                 Invalidate();
             }
 
-            Scroll( 0, -nScrollEntryHeight, ImplCalcClipRegion( false ).GetBoundRect(), ScrollFlags::Clip );
+            Scroll( 0, -nScrollEntryHeight, ImplCalcClipRegion().GetBoundRect(), ScrollFlags::Clip );
         }
     }
 
@@ -813,9 +808,6 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
     long nStartY;
     long nY = GetInitialItemY(&nStartY);
 
-    if (pMenu->pLogo)
-        nX = pMenu->pLogo->aBitmap.GetSizePixel().Width();
-
     int nOuterSpaceX = ImplGetSVData()->maNWFData.mnMenuFormatBorderX;
 
     size_t nCount = pMenu->pItemList->size();
@@ -897,10 +889,6 @@ tools::Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos )
     Size    aSz = GetOutputSizePixel();
     long    nStartY = ImplGetStartY();
     long    nY = nScrollerHeight+nStartY;
-    long    nX = 0;
-
-    if ( pMenu->pLogo )
-        nX = pMenu->pLogo->aBitmap.GetSizePixel().Width();
 
     size_t nCount = pMenu->pItemList->size();
     for ( size_t n = 0; n < nCount; n++ )
@@ -911,7 +899,7 @@ tools::Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos )
             SAL_WARN_IF( !pMenu->ImplIsVisible( n ), "vcl", "ImplGetItemRect: Item not visible!" );
             if ( pData->eType != MenuItemType::SEPARATOR )
             {
-                aRect = tools::Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) );
+                aRect = tools::Rectangle( Point( 0, nY ), Size( aSz.Width(), pData->aSz.Height() ) );
                 if ( pData->nBits & MenuItemBits::POPUPSELECT )
                 {
                     long nFontHeight = GetTextHeight();
@@ -1192,7 +1180,7 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
     {
         rRenderContext.SetClipRegion();
-        long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
+        long nX = 0;
         Size aPxSize(GetOutputSizePixel());
         aPxSize.Width() -= nX;
         ImplControlValue aVal(pMenu->nTextPos - GUTTERBORDER);
@@ -1223,7 +1211,7 @@ void MenuFloatingWindow::ImplDrawScroller(vcl::RenderContext& rRenderContext, bo
 
     Size aOutSz(GetOutputSizePixel());
     long nY = bUp ? 0 : (aOutSz.Height() - nScrollerHeight);
-    long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
+    long nX = 0;
     tools::Rectangle aRect(Point(nX, nY), Size(aOutSz.Width() - nX, nScrollerHeight));
 
     DecorationView aDecoView(&rRenderContext);

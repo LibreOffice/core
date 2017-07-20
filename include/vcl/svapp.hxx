@@ -674,18 +674,6 @@ public:
     ///@{
 
 
-    /** Call on all event hooks
-
-     @param rEvt                Reference to the notification event to send
-                                to the event hook.
-
-     @return If any of the event hooks called upon fail with a non-zero
-         status, then it stops processing any more event hooks and returns
-         the error code as a long.
-
-    */
-    static long                 CallEventHooks( NotifyEvent& rEvt );
-
     /** Add a VCL event listener to the application. If no event listener exists,
      then initialize the application's event listener with a new one, then add
      the event listener.

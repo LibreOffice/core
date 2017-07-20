@@ -430,8 +430,6 @@ GC X11SalGraphicsImpl::SelectBrush()
         {
             XSetFillStyle ( pDisplay, mpBrushGC, FillSolid );
             XSetForeground( pDisplay, mpBrushGC, mnBrushPixel );
-            if( mrParent.bPrinter_ )
-                XSetTile( pDisplay, mpBrushGC, None );
         }
         else
         {
@@ -542,11 +540,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
     }
     else if( pSrcGraphics->bVirDev_ )
     {
-        // printer compatible virtual device
-        if( mrParent.bPrinter_ )
-            n = 2; // printer or compatible virtual device == same display
-        else
-            n = 1; // window or compatible virtual device
+        n = 1; // window or compatible virtual device
     }
     else
         n = 0;
@@ -654,8 +648,6 @@ void X11SalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
                                  const SalBitmap& rSrcBitmap,
                                  const SalBitmap& rMaskBitmap )
 {
-    SAL_WARN_IF( mrParent.bPrinter_, "vcl", "Drawing of transparent bitmaps on printer devices is strictly forbidden" );
-
     // decide if alpha masking or transparency masking is needed
     BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( BitmapAccessMode::Read );
     if( pAlphaBuffer != nullptr )
@@ -1696,9 +1688,6 @@ SalColor X11SalGraphicsImpl::getPixel( long nX, long nY )
 
 SalBitmap *X11SalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
 {
-    if( mrParent.bPrinter_ && !mrParent.bVirDev_ )
-        return nullptr;
-
     bool bFakeWindowBG = false;
 
     // normalize

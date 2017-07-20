@@ -2068,32 +2068,18 @@ void RadioButton::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
         }
         else
         {
-            if ( mbLegacyNoTextAlign && ( nWinStyle & WB_CENTER ) )
-                rStateRect.Left() = rPos.X()+((rSize.Width()-rImageSize.Width())/2);
-            else if ( mbLegacyNoTextAlign && ( nWinStyle & WB_RIGHT ) )
-                rStateRect.Left() = rPos.X()+rSize.Width()-rImageSize.Width(); //-1;
-            else
-                rStateRect.Left() = rPos.X(); //+1;
+            rStateRect.Left() = rPos.X();
             if ( nWinStyle & WB_VCENTER )
                 rStateRect.Top() = rPos.Y()+((rSize.Height()-rImageSize.Height())/2);
             else if ( nWinStyle & WB_BOTTOM )
                 rStateRect.Top() = rPos.Y()+rSize.Height()-rImageSize.Height(); //-1;
             else
-                rStateRect.Top() = rPos.Y(); //+1;
+                rStateRect.Top() = rPos.Y();
             rStateRect.Right()  = rStateRect.Left()+rImageSize.Width()-1;
             rStateRect.Bottom() = rStateRect.Top()+rImageSize.Height()-1;
             rMouseRect          = rStateRect;
 
             ImplSetFocusRect( rStateRect );
-
-/*  and above -1 because CalcSize() does not include focus-rectangle since images would be even
-    positioned higher in writer
-            rFocusRect          = rStateRect;
-            rFocusRect.Left()--;
-            rFocusRect.Top()--;
-            rFocusRect.Right()++;
-            rFocusRect.Bottom()++;
-*/
         }
     }
     else
@@ -2295,7 +2281,7 @@ void RadioButton::ImplCallClick( bool bGrabFocus, GetFocusFlags nFocusFlags )
 }
 
 RadioButton::RadioButton( vcl::Window* pParent, WinBits nStyle ) :
-    Button( WindowType::RADIOBUTTON ), mbLegacyNoTextAlign( false )
+    Button( WindowType::RADIOBUTTON )
 {
     ImplInitRadioButtonData();
     ImplInit( pParent, nStyle );

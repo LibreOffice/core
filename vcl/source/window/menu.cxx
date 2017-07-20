@@ -126,7 +126,6 @@ void ImplClosePopupToolBox( const VclPtr<vcl::Window>& pWin )
 Menu::Menu()
     : mpFirstDel(nullptr),
       pItemList(new MenuItemList),
-      pLogo(nullptr),
       pStartedFrom(nullptr),
       pWindow(nullptr),
       nTitleHeight(0),
@@ -185,8 +184,6 @@ void Menu::dispose()
     bKilled = true;
 
     pItemList->Clear();
-    delete pLogo;
-    pLogo = nullptr;
     delete mpLayoutData;
     mpLayoutData = nullptr;
 
@@ -1582,9 +1579,6 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             aSz.Height() = nCloseButtonHeight;
     }
 
-    if ( pLogo )
-        aSz.Width() += pLogo->aBitmap.GetSizePixel().Width();
-
     return aSz;
 }
 
@@ -1682,9 +1676,6 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     Point aTopLeft, aTmpPos;
-
-    if (pLogo)
-        aTopLeft.X() = pLogo->aBitmap.GetSizePixel().Width();
 
     int nOuterSpaceX = 0;
     if (!IsMenuBar())
@@ -2022,28 +2013,6 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
             aTopLeft.Y() += pData->aSz.Height();
         else
             aTopLeft.X() += pData->aSz.Width();
-    }
-
-    if (!bLayout && !pThisItemOnly && pLogo)
-    {
-        Size aLogoSz = pLogo->aBitmap.GetSizePixel();
-
-        tools::Rectangle aRect(Point(), Point(aLogoSz.Width() - 1, aOutSz.Height()));
-        if (rRenderContext.GetColorCount() >= 256)
-        {
-            Gradient aGrad(GradientStyle::Linear, pLogo->aStartColor, pLogo->aEndColor);
-            aGrad.SetAngle(1800);
-            aGrad.SetBorder(15);
-            rRenderContext.DrawGradient(aRect, aGrad);
-        }
-        else
-        {
-            rRenderContext.SetFillColor(pLogo->aStartColor);
-            rRenderContext.DrawRect(aRect);
-        }
-
-        Point aLogoPos(0, aOutSz.Height() - aLogoSz.Height());
-        pLogo->aBitmap.Draw(&rRenderContext, aLogoPos);
     }
 }
 

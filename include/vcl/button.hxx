@@ -280,11 +280,6 @@ private:
     bool            mbRadioCheck;
     bool            mbStateChanged;
     Link<RadioButton&,void> maToggleHdl;
-    // when mbLegacyNoTextAlign is set then the old behaviour where
-    // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
-    // occurs, otherwise the image ( radiobutton circle ) is placed
-    // to the left or right ( depending on RTL or LTR settings )
-    bool            mbLegacyNoTextAlign;
     SAL_DLLPRIVATE void     ImplInitRadioButtonData();
     SAL_DLLPRIVATE WinBits  ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void     ImplInitSettings( bool bBackground );
