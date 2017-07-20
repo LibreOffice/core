@@ -52,6 +52,8 @@ private:
                                mxContext;
     const css::uno::Reference< css::lang::XComponent >&
                                mxSourceDocument;
+    const css::uno::Reference< css::graphic::XGraphic >&
+                               mxGraphic;
 
     VclPtr<NumericField>       mpMfSizeX;
     VclPtr<ListBox>            mpLbSizeX;
@@ -171,7 +173,8 @@ public:
                         ExportDialog( FltCallDialogParameter& rPara,
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
-                            bool bExportSelection, bool bIsExportVectorFormat );
+                            bool bExportSelection, bool bIsExportVectorFormat,
+                            const css::uno::Reference< css::graphic::XGraphic >& rxGraphic = nullptr);
                         virtual ~ExportDialog() override;
                         virtual void dispose() override;
 };
