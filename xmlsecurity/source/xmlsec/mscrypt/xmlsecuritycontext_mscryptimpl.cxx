@@ -22,7 +22,7 @@
 
 #include "xmlsecuritycontext_mscryptimpl.hxx"
 #include "xmlsec/xmlstreamio.hxx"
-#include "xmlsec/mscrypto/akmngr.h"
+#include "akmngr.hxx"
 
 #include "xmlsec-wrapper.h"
 

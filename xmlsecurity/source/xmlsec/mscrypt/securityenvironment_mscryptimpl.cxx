@@ -38,7 +38,7 @@
 #include <comphelper/servicehelper.hxx>
 
 #include "xmlsec-wrapper.h"
-#include "xmlsec/mscrypto/akmngr.h"
+#include "akmngr.hxx"
 
 #include <biginteger.hxx>
 
