@@ -40,47 +40,43 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) :
+    ScXMLImportContext( rImport ),
     sVisibility(GetXMLToken(XML_VISIBLE))
 {
     nColCount = 1;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableColAttrTokenMap();
-
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_TABLE_COL_ATTR_REPEATED:
+            switch (aIter.getToken())
+            {
+            case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
                 {
-                    nColCount = std::max<sal_Int32>(sValue.toInt32(), 1);
+                    nColCount = std::max<sal_Int32>(aIter.toInt32(), 1);
                     nColCount = std::min<sal_Int32>(nColCount, MAXCOLCOUNT);
                 }
                 break;
-            case XML_TOK_TABLE_COL_ATTR_STYLE_NAME:
+            case XML_ELEMENT( TABLE, XML_STYLE_NAME ):
                 {
-                    sStyleName = sValue;
+                    sStyleName = aIter.toString();
                 }
                 break;
-            case XML_TOK_TABLE_COL_ATTR_VISIBILITY:
+            case XML_ELEMENT( TABLE, XML_VISIBILITY ):
                 {
-                    sVisibility = sValue;
+                    sVisibility = aIter.toString();
                 }
                 break;
-            case XML_TOK_TABLE_COL_ATTR_DEFAULT_CELL_STYLE_NAME:
+            case XML_ELEMENT( TABLE, XML_DEFAULT_CELL_STYLE_NAME ):
                 {
-                    sCellStyleName = sValue;
+                    sCellStyleName = aIter.toString();
                 }
                 break;
+            }
         }
     }
 }
@@ -89,14 +85,13 @@ ScXMLTableColContext::~ScXMLTableColContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableColContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableColContext::createFastChildContext(
+    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
+    return new SvXMLImportContext( GetImport() );
 }
 
-void ScXMLTableColContext::EndElement()
+void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScXMLImport& rXMLImport = GetScImport();
     SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
@@ -152,11 +147,10 @@ void ScXMLTableColContext::EndElement()
 }
 
 ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       const bool bTempHeader, const bool bTempGroup) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     nHeaderStartCol(0),
     nHeaderEndCol(0),
     nGroupStartCol(0),
@@ -171,20 +165,14 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
     else if (bGroup)
     {
         nGroupStartCol = rImport.GetTables().GetCurrentColCount();
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        for( sal_Int16 i=0; i < nAttrCount; ++i )
+        if ( xAttrList.is() )
         {
-            const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-            OUString aLocalName;
-            sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                                sAttrName, &aLocalName );
-            const OUString& sValue(xAttrList->getValueByIndex( i ));
+            sax_fastparser::FastAttributeList *pAttribList =
+                sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-            if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DISPLAY))
-            {
-                if (IsXMLToken(sValue, XML_FALSE))
-                    bGroupDisplay = false;
-            }
+            auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_DISPLAY ) ) );
+            if ( aIter != pAttribList->end() && IsXMLToken(aIter, XML_FALSE) )
+                bGroupDisplay = false;
         }
     }
 }
@@ -193,45 +181,39 @@ ScXMLTableColsContext::~ScXMLTableColsContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableColsContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetTableColsElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLName ) )
+    switch (nElement)
     {
-    case XML_TOK_TABLE_COLS_COL_GROUP:
-        pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
-                                                   rLName, xAttrList,
+    case XML_ELEMENT( TABLE, XML_TABLE_COLUMN_GROUP ):
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
                                                    false, true );
         break;
-    case XML_TOK_TABLE_COLS_HEADER_COLS:
-        pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
-                                                   rLName, xAttrList,
+    case XML_ELEMENT( TABLE, XML_TABLE_HEADER_COLUMNS ):
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
                                                    true, false );
         break;
-    case XML_TOK_TABLE_COLS_COLS:
-        pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
-                                                   rLName, xAttrList,
+    case XML_ELEMENT( TABLE, XML_TABLE_COLUMNS ):
+        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
                                                    false, false );
         break;
-    case XML_TOK_TABLE_COLS_COL:
-            pContext = new ScXMLTableColContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList//,
+    case XML_ELEMENT( TABLE, XML_TABLE_COLUMN ):
+        pContext = new ScXMLTableColContext( GetScImport(), nElement, xAttrList//,
                                                       //this
                                                       );
         break;
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLTableColsContext::EndElement()
+void SAL_CALL ScXMLTableColsContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScXMLImport& rXMLImport = GetScImport();
     if (bHeader)

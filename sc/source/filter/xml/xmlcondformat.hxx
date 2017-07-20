@@ -26,14 +26,13 @@ struct ScIconSetFormatData;
 class ScXMLConditionalFormatsContext : public ScXMLImportContext
 {
 public:
-    ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName );
+    ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_Int32 nElement );
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLConditionalFormatContext : public ScXMLImportContext

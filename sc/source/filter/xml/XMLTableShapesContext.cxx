@@ -25,10 +25,9 @@
 using namespace com::sun::star;
 
 ScXMLTableShapesContext::ScXMLTableShapesContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    ScXMLImportContext( rImport, nPrfx, rLName )
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+    ScXMLImportContext( rImport )
 {
     // here are no attributes
 }
@@ -57,10 +56,6 @@ SvXMLImportContext *ScXMLTableShapesContext::CreateChildContext( sal_uInt16 nPre
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
-}
-
-void ScXMLTableShapesContext::EndElement()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

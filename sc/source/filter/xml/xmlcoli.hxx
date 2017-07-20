@@ -33,17 +33,15 @@ class ScXMLTableColContext : public ScXMLImportContext
 
 public:
 
-    ScXMLTableColContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList );
+    ScXMLTableColContext( ScXMLImport& rImport, sal_Int32 nElement,
+                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
 
     virtual ~ScXMLTableColContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLTableColsContext : public ScXMLImportContext
@@ -58,18 +56,16 @@ class ScXMLTableColsContext : public ScXMLImportContext
 
 public:
 
-    ScXMLTableColsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const OUString& rLName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLTableColsContext( ScXMLImport& rImport, sal_Int32 nElement,
+                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         const bool bHeader, const bool bGroup);
 
     virtual ~ScXMLTableColsContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 #endif

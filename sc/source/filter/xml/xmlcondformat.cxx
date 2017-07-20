@@ -21,9 +21,8 @@
 #include "XMLConverter.hxx"
 #include "stylehelper.hxx"
 
-ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName):
-    ScXMLImportContext( rImport, nPrfx, rLName )
+ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_Int32 /*nElement*/ ):
+    ScXMLImportContext( rImport )
 {
     GetScImport().SetNewCondFormatData();
     GetScImport().GetDocument()->SetCondFormList(new ScConditionalFormatList(), GetScImport().GetTables().GetCurrentSheet());
@@ -46,7 +45,7 @@ SvXMLImportContext* ScXMLConditionalFormatsContext::CreateChildContext( sal_uInt
     return pContext;
 }
 
-void ScXMLConditionalFormatsContext::EndElement()
+void SAL_CALL ScXMLConditionalFormatsContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScDocument* pDoc = GetScImport().GetDocument();
 

@@ -35,17 +35,15 @@ class ScXMLTableSourceContext : public ScXMLImportContext
     css::sheet::SheetLinkMode          nMode;
 
 public:
-    ScXMLTableSourceContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
+    ScXMLTableSourceContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
 
     virtual ~ScXMLTableSourceContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 #endif

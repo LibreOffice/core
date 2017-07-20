@@ -67,17 +67,13 @@ public:
 class ScXMLTableProtectionContext : public ScXMLImportContext
 {
 public:
-    ScXMLTableProtectionContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
-                        const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList );
+    ScXMLTableProtectionContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
 
     virtual ~ScXMLTableProtectionContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 #endif
