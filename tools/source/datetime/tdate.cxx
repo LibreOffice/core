@@ -571,20 +571,10 @@ bool Date::Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_Int16 & rYear 
     return true;
 }
 
-Date& Date::operator +=( sal_Int32 nDays )
+void Date::AddDays( sal_Int32 nDays )
 {
     if (nDays != 0)
         *this = lcl_DaysToDate( GetAsNormalizedDays() + nDays );
-
-    return *this;
-}
-
-Date& Date::operator -=( sal_Int32 nDays )
-{
-    if (nDays != 0)
-        *this = lcl_DaysToDate( GetAsNormalizedDays() - nDays );
-
-    return *this;
 }
 
 Date& Date::operator ++()
@@ -602,14 +592,14 @@ Date& Date::operator --()
 Date operator +( const Date& rDate, sal_Int32 nDays )
 {
     Date aDate( rDate );
-    aDate += nDays;
+    aDate.AddDays( nDays );
     return aDate;
 }
 
 Date operator -( const Date& rDate, sal_Int32 nDays )
 {
     Date aDate( rDate );
-    aDate -= nDays;
+    aDate.AddDays( -nDays );
     return aDate;
 }
 

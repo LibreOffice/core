@@ -348,7 +348,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                 if ( eCellType == CellContentType_VALUE )
                 {
                     ::Date aDate( rNullDate );
-                    aDate += static_cast<sal_Int32>(::rtl::math::approxFloor( xCell->getValue() ));
+                    aDate.AddDays(::rtl::math::approxFloor( xCell->getValue() ));
                     rValue = aDate.GetUNODate();
                 }
                 else
@@ -402,7 +402,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                     aDateTime.Hours = (sal_uInt16) nIntTime;
 
                     ::Date aDate( rNullDate );
-                    aDate += nIntDays;
+                    aDate.AddDays( nIntDays );
                     aDateTime.Day = aDate.GetDay();
                     aDateTime.Month = aDate.GetMonth();
                     aDateTime.Year = aDate.GetYear();

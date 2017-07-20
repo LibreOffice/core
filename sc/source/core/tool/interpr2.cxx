@@ -92,7 +92,7 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     }
     Date aDate( nD, nM, nY);
     if (!bStrict)
-        aDate += nDay - 1;
+        aDate.AddDays( nDay - 1 );
     if (aDate.IsValidAndGregorian())
         return (double) (aDate - pFormatter->GetNullDate());
     else
@@ -126,21 +126,21 @@ void ScInterpreter::ScGetActTime()
 void ScInterpreter::ScGetYear()
 {
     Date aDate = pFormatter->GetNullDate();
-    aDate += GetInt32();
+    aDate.AddDays( GetInt32());
     PushDouble( (double) aDate.GetYear() );
 }
 
 void ScInterpreter::ScGetMonth()
 {
     Date aDate = pFormatter->GetNullDate();
-    aDate += GetInt32();
+    aDate.AddDays( GetInt32());
     PushDouble( (double) aDate.GetMonth() );
 }
 
 void ScInterpreter::ScGetDay()
 {
     Date aDate = pFormatter->GetNullDate();
-    aDate += GetInt32();
+    aDate.AddDays( GetInt32());
     PushDouble((double) aDate.GetDay());
 }
 
@@ -200,7 +200,7 @@ void ScInterpreter::ScGetDayOfWeek()
             nFlag = 1;
 
         Date aDate = pFormatter->GetNullDate();
-        aDate += GetInt32();
+        aDate.AddDays( GetInt32());
         int nVal = (int) aDate.GetDayOfWeek();  // MONDAY = 0
         switch (nFlag)
         {
@@ -242,7 +242,7 @@ void ScInterpreter::ScWeeknumOOo()
         sal_Int16 nFlag = GetInt16();
 
         Date aDate = pFormatter->GetNullDate();
-        aDate += GetInt32();
+        aDate.AddDays( GetInt32());
         PushInt( (int) aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY ));
     }
 }
@@ -259,7 +259,7 @@ void ScInterpreter::ScGetWeekOfYear()
             nFlag = GetInt16();
 
         Date aDate = pFormatter->GetNullDate();
-        aDate += GetInt32();
+        aDate.AddDays( GetInt32());
 
         sal_Int32 nMinimumNumberOfDaysInWeek;
         DayOfWeek eFirstDayOfWeek;
@@ -302,7 +302,7 @@ void ScInterpreter::ScGetIsoWeekOfYear()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         Date aDate = pFormatter->GetNullDate();
-        aDate += GetInt32();
+        aDate.AddDays( GetInt32());
         PushInt( (int) aDate.GetWeekOfYear() );
     }
 }
@@ -737,11 +737,11 @@ void ScInterpreter::ScGetDiffDate360()
             else
                 nSign = 1;
             Date aDate1 = pFormatter->GetNullDate();
-            aDate1 += nDate1;
+            aDate1.AddDays( nDate1);
             Date aDate2 = pFormatter->GetNullDate();
-            aDate2 += nDate2;
+            aDate2.AddDays( nDate2);
             if (aDate1.GetDay() == 31)
-                aDate1 -= (sal_uLong) 1;
+                aDate1.AddDays( -1);
             else if (!bFlag)
             {
                 if (aDate1.GetMonth() == 2)
@@ -763,7 +763,7 @@ void ScInterpreter::ScGetDiffDate360()
                 if (!bFlag )
                 {
                     if (aDate1.GetDay() == 30)
-                        aDate2 -= (sal_uLong) 1;
+                        aDate2.AddDays( -1);
                 }
                 else
                     aDate2.SetDay(30);
@@ -811,12 +811,12 @@ void ScInterpreter::ScGetDateDif()
         sal_uInt16 d1, m1, d2, m2;
         sal_Int16 y1, y2;
         Date aDate1( pFormatter->GetNullDate());
-        aDate1 += nDate1;
+        aDate1.AddDays( nDate1);
         y1 = aDate1.GetYear();
         m1 = aDate1.GetMonth();
         d1 = aDate1.GetDay();
         Date aDate2( pFormatter->GetNullDate());
-        aDate2 += nDate2;
+        aDate2.AddDays( nDate2);
         y2 = aDate2.GetYear();
         m2 = aDate2.GetMonth();
         d2 = aDate2.GetDay();

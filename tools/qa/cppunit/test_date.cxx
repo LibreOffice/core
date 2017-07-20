@@ -39,9 +39,11 @@ void DateTest::testDate()
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(1), aCE - aBCE);
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(-1), aBCE - aCE);
     aDate = aBCE;
-    CPPUNIT_ASSERT_EQUAL( aCE.GetDate(), (aDate += 1).GetDate());
+    aDate.AddDays(1);
+    CPPUNIT_ASSERT_EQUAL( aCE.GetDate(), aDate.GetDate());
     aDate = aCE;
-    CPPUNIT_ASSERT_EQUAL( aBCE.GetDate(), (aDate -= 1).GetDate());
+    aDate.AddDays(-1);
+    CPPUNIT_ASSERT_EQUAL( aBCE.GetDate(), aDate.GetDate());
 
     // The entire BCE and CE ranges cover that many days. Day 0 is -0001-12-31
     CPPUNIT_ASSERT_EQUAL( kMaxDays, aMax - aBCE);
@@ -49,13 +51,17 @@ void DateTest::testDate()
 
     // Truncate at limits, not under-/overflow or wrap.
     aDate = aMin;
-    CPPUNIT_ASSERT_EQUAL( aMin.GetDate(), (aDate -= 1).GetDate());
+    aDate.AddDays(-1);
+    CPPUNIT_ASSERT_EQUAL( aMin.GetDate(), aDate.GetDate());
     aDate = aMax;
-    CPPUNIT_ASSERT_EQUAL( aMax.GetDate(), (aDate += 1).GetDate());
+    aDate.AddDays(1);
+    CPPUNIT_ASSERT_EQUAL( aMax.GetDate(), aDate.GetDate());
     aDate = aBCE;
-    CPPUNIT_ASSERT_EQUAL( aMin.GetDate(), (aDate += (kMinDays-10)).GetDate());
+    aDate.AddDays(kMinDays-10);
+    CPPUNIT_ASSERT_EQUAL( aMin.GetDate(), aDate.GetDate());
     aDate = aBCE;
-    CPPUNIT_ASSERT_EQUAL( aMax.GetDate(), (aDate += (kMaxDays+10)).GetDate());
+    aDate.AddDays(kMaxDays+10);
+    CPPUNIT_ASSERT_EQUAL( aMax.GetDate(), aDate.GetDate());
     aDate = aMax;
     aDate.SetDay(32);
     aDate.Normalize();
@@ -109,14 +115,18 @@ void DateTest::testDate()
 
     // Year -1 is a leap year.
     aDate = Date(28,2,-1);
-    CPPUNIT_ASSERT_EQUAL( Date(29,2,-1).GetDate(), (aDate += 1).GetDate());
+    aDate.AddDays(1);
+    CPPUNIT_ASSERT_EQUAL( Date(29,2,-1).GetDate(), aDate.GetDate());
     aDate = Date(1,3,-1);
-    CPPUNIT_ASSERT_EQUAL( Date(29,2,-1).GetDate(), (aDate -= 1).GetDate());
+    aDate.AddDays(-1);
+    CPPUNIT_ASSERT_EQUAL( Date(29,2,-1).GetDate(), aDate.GetDate());
     // Year -5 is a leap year.
     aDate = Date(28,2,-5);
-    CPPUNIT_ASSERT_EQUAL( Date(29,2,-5).GetDate(), (aDate += 1).GetDate());
+    aDate.AddDays(1);
+    CPPUNIT_ASSERT_EQUAL( Date(29,2,-5).GetDate(), aDate.GetDate());
     aDate = Date(1,3,-5);
-    CPPUNIT_ASSERT_EQUAL( Date(29,2,-5).GetDate(), (aDate -= 1).GetDate());
+    aDate.AddDays(-1);
+    CPPUNIT_ASSERT_EQUAL( Date(29,2,-5).GetDate(), aDate.GetDate());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DateTest);

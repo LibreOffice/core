@@ -3037,9 +3037,9 @@ void SbRtl_Me(StarBASIC *, SbxArray & rPar, bool)
 sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam, sal_Int16 nFirstDay )
 {
     Date aRefDate( 1,1,1900 );
-    long nDays = (long) aDate;
+    sal_Int32 nDays = (sal_Int32) aDate;
     nDays -= 2; // normalize: 1.1.1900 => 0
-    aRefDate += nDays;
+    aRefDate.AddDays( nDays);
     DayOfWeek aDay = aRefDate.GetDayOfWeek();
     sal_Int16 nDay;
     if ( aDay != SUNDAY )

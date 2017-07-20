@@ -1624,7 +1624,7 @@ bool ScCondDateFormatEntry::IsValid( const ScAddress& rPos ) const
     double nVal = rCell.getValue();
     sal_Int32 nCellDate = static_cast<sal_Int32>(::rtl::math::approxFloor(nVal));
     Date aCellDate = pFormatter->GetNullDate();
-    aCellDate += static_cast<sal_Int32>(::rtl::math::approxFloor(nVal));
+    aCellDate.AddDays(nCellDate);
 
     switch(meType)
     {

@@ -270,10 +270,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 Date aNullDate = pDocument->GetFormatTable()->GetNullDate();
                 Date aDate1 = aNullDate;
                 nVal = aFirstCell.mfValue;
-                aDate1 += static_cast<sal_Int32>(nVal);
+                aDate1.AddDays(nVal);
                 Date aDate2 = aNullDate;
                 nVal = GetValue(nCol+nAddX, nRow+nAddY);
-                aDate2 += static_cast<sal_Int32>(nVal);
+                aDate2.AddDays(nVal);
                 if ( aDate1 != aDate2 )
                 {
                     long nCmpInc = 0;
@@ -1079,26 +1079,26 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
     long nInc = (long) nStep;       // upper/lower limits ?
     Date aNullDate = pDocument->GetFormatTable()->GetNullDate();
     Date aDate = aNullDate;
-    aDate += static_cast<sal_Int32>(rVal);
+    aDate.AddDays(rVal);
     switch (eCmd)
     {
         case FILL_WEEKDAY:
             {
-                aDate += nInc;
+                aDate.AddDays(nInc);
                 DayOfWeek eWeekDay = aDate.GetDayOfWeek();
                 if (nInc >= 0)
                 {
                     if (eWeekDay == SATURDAY)
-                        aDate += 2;
+                        aDate.AddDays(2);
                     else if (eWeekDay == SUNDAY)
-                        aDate += 1;
+                        aDate.AddDays(1);
                 }
                 else
                 {
                     if (eWeekDay == SATURDAY)
-                        aDate -= 1;
+                        aDate.AddDays(-1);
                     else if (eWeekDay == SUNDAY)
-                        aDate -= 2;
+                        aDate.AddDays(-2);
                 }
             }
             break;

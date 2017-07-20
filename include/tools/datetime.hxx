@@ -81,9 +81,9 @@ public:
     void            ConvertToLocalTime() { *this += Time::GetUTCOffset(); }
 
     DateTime&       operator +=( sal_Int32 nDays )
-                        { Date::operator+=( nDays ); return *this; }
+                        { AddDays( nDays ); return *this; }
     DateTime&       operator -=( sal_Int32 nDays )
-                        { Date::operator-=( nDays ); return *this; }
+                        { AddDays( -nDays ); return *this; }
     DateTime&       operator +=( double fTimeInDays );
     DateTime&       operator -=( double fTimeInDays )
                         { return operator+=( -fTimeInDays ); }

@@ -141,7 +141,7 @@ bool ScDPDateGroupEditHelper::ImplGetValue( double& rfValue ) const
 void ScDPDateGroupEditHelper::ImplSetValue( double fValue )
 {
     Date aDate( maNullDate );
-    aDate += static_cast< sal_Int32 >( fValue );
+    aDate.AddDays( fValue );
     mpEdValue->SetDate( aDate );
 }
 

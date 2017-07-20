@@ -574,7 +574,7 @@ void SfxOleDateProperty::ImplLoad( SvStream& rStrm )
     //stored as number of days (not seconds) since December 31, 1899
     ::Date aDate(31, 12, 1899);
     long nDays = fValue;
-    aDate += nDays;
+    aDate.AddDays( nDays );
     maDate.Day = aDate.GetDay();
     maDate.Month = aDate.GetMonth();
     maDate.Year = aDate.GetYear();
