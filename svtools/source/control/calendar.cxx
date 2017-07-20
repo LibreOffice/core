@@ -418,7 +418,7 @@ void Calendar::ImplFormat()
     maFirstDate = aTempDate;
     nWeekDay = (sal_uInt16)aTempDate.GetDayOfWeek();
     nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
-    maFirstDate -= (sal_uLong)nWeekDay;
+    maFirstDate -= static_cast<sal_Int32>(nWeekDay);
     mnDayCount = nWeekDay;
     sal_uInt16 nDaysInMonth;
     sal_uInt16 nMonthCount = (sal_uInt16)(mnMonthPerLine*mnLines);
@@ -981,7 +981,7 @@ void Calendar::ImplUpdateSelection( IntDateSet* pOld )
 
     for ( IntDateSet::const_iterator it = pOld->begin(); it != pOld->end(); ++it )
     {
-        sal_uLong nKey = *it;
+        sal_Int32 nKey = *it;
         if ( pNew->find( nKey ) == pNew->end() )
         {
             Date aTempDate( nKey );
@@ -991,7 +991,7 @@ void Calendar::ImplUpdateSelection( IntDateSet* pOld )
 
     for ( IntDateSet::const_iterator it = pNew->begin(); it != pNew->end(); ++it )
     {
-        sal_uLong nKey = *it;
+        sal_Int32 nKey = *it;
         if ( pOld->find( nKey ) == pOld->end() )
         {
             Date aTempDate( nKey );
@@ -1256,8 +1256,7 @@ void Calendar::ImplEndTracking( bool bCancel )
         if ( !bCancel )
         {
             // determine if we should scroll the visible area
-            sal_uLong nSelCount = mpSelectTable->size();
-            if ( nSelCount )
+            if ( !mpSelectTable->empty() )
             {
                 Date aFirstSelDate( *mpSelectTable->begin() );
                 Date aLastSelDate( *mpSelectTable->rbegin() );
@@ -1695,7 +1694,7 @@ void Calendar::SetCurDate( const Date& rNewDate )
                 while ( nDateOff > aTempDate.GetDaysInMonth() )
                 {
                     aFirstDate += aFirstDate.GetDaysInMonth();
-                    long nDaysInMonth = aTempDate.GetDaysInMonth();
+                    sal_Int32 nDaysInMonth = aTempDate.GetDaysInMonth();
                     aTempDate += nDaysInMonth;
                     nDateOff -= nDaysInMonth;
                 }
@@ -1779,7 +1778,7 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
 
     long    nX;
     long    nY;
-    sal_uLong   nDaysOff;
+    sal_Int32   nDaysOff;
     sal_uInt16  nDayIndex;
     Date    aDate = GetFirstMonth();
 
@@ -1787,7 +1786,7 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
     {
         aRect = GetDateRect( aDate );
         nDaysOff = aDate-rDate;
-        nX = (long)(nDaysOff*mnDayWidth);
+        nX = nDaysOff*mnDayWidth;
         aRect.Left() -= nX;
         aRect.Right() -= nX;
         return aRect;
@@ -1803,7 +1802,7 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
             aRect = GetDateRect( aLastDate );
             nDaysOff = rDate-aLastDate;
             nDayIndex = 0;
-            for ( sal_uLong i = 0; i <= nDaysOff; i++ )
+            for ( sal_Int32 i = 0; i <= nDaysOff; i++ )
             {
                 if ( aLastDate == rDate )
                 {
