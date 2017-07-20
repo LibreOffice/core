@@ -36,7 +36,7 @@ using drawinglayer::primitive2d::Primitive2DContainer;
 
 class Test : public test::BootstrapFixture, public XmlTestTools
 {
-    void checkRectPrimitive(Primitive2DSequence& rPrimitive);
+    void checkRectPrimitive(Primitive2DSequence const & rPrimitive);
 
     void testStyles();
     void testTdf87309();
@@ -113,7 +113,7 @@ Primitive2DSequence Test::parseSvg(const char* aSource)
     return xSvgParser->getDecomposition(aInputStream, aPath);
 }
 
-void Test::checkRectPrimitive(Primitive2DSequence& rPrimitive)
+void Test::checkRectPrimitive(Primitive2DSequence const & rPrimitive)
 {
     Primitive2dXmlDump dumper;
     xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(rPrimitive));

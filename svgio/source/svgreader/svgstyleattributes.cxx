@@ -253,7 +253,7 @@ namespace svgio
 
         void SvgStyleAttributes::add_text(
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-            drawinglayer::primitive2d::Primitive2DContainer& rSource) const
+            drawinglayer::primitive2d::Primitive2DContainer const & rSource) const
         {
             if(!rSource.empty())
             {

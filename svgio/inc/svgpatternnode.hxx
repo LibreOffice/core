@@ -69,7 +69,7 @@ namespace svgio
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
 
             /// global helpers
-            void getValuesRelative(double& rfX, double& rfY, double& rfW, double& rfH, const basegfx::B2DRange& rGeoRange, SvgNode& rUser) const;
+            void getValuesRelative(double& rfX, double& rfY, double& rfW, double& rfH, const basegfx::B2DRange& rGeoRange, SvgNode const & rUser) const;
 
             /// get pattern primitives buffered, uses decomposeSvgNode internally
             const drawinglayer::primitive2d::Primitive2DContainer& getPatternPrimitives() const;
