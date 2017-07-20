@@ -2746,11 +2746,16 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
 
             if (bHori)
             {
+                const basegfx::B2DPoint aOrigin(aPaintStart.X(), aPaintStart.Y());
+                const basegfx::B2DVector aX(basegfx::B2DPoint(aPaintEnd.X(), aPaintEnd.Y()) - aOrigin);
+                const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
                 drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+
                 svx::frame::CreateBorderPrimitives(
                     aSequence,
-                    aPaintStart,
-                    aPaintEnd,
+                    aOrigin,
+                    aX,
+                    aY,
                     aStyles[ 0 ],   // current style
                     aStyles[ 1 ],   // aLFromT
                     aStyles[ 2 ],   // aLFromL
@@ -2763,11 +2768,16 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
             }
             else
             {
+                const basegfx::B2DPoint aOrigin(aPaintEnd.X(), aPaintEnd.Y());
+                const basegfx::B2DVector aX(basegfx::B2DPoint(aPaintStart.X(), aPaintStart.Y()) - aOrigin);
+                const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
                 drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+
                 svx::frame::CreateBorderPrimitives(
                     aSequence,
-                    aPaintEnd,
-                    aPaintStart,
+                    aOrigin,
+                    aX,
+                    aY,
                     aStyles[ 0 ],   // current style
                     aStyles[ 4 ],   // aBFromL
                     aStyles[ 5 ],   // aBFromB

@@ -71,6 +71,7 @@ $(eval $(call gb_Library_use_libraries,swui,\
     ucbhelper \
     utl \
     vcl \
+    drawinglayer \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,swui,\
