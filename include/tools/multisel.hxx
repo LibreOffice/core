@@ -40,7 +40,6 @@ private:
     sal_uIntPtr     nSelCount;  // number of selected indexes
     bool            bInverseCur;// inverse cursor
     bool            bCurValid;  // are nCurIndex and nCurSubSel valid
-    bool            bSelectNew; // auto-select newly inserted indexes
 
     TOOLS_DLLPRIVATE void           ImplClear();
     TOOLS_DLLPRIVATE size_t         ImplFindSubSelection( long nIndex ) const;

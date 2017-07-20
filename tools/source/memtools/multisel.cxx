@@ -67,8 +67,7 @@ MultiSelection::MultiSelection():
     nCurIndex(0),
     nSelCount(0),
     bInverseCur(false),
-    bCurValid(false),
-    bSelectNew(false)
+    bCurValid(false)
 {
 }
 
@@ -83,8 +82,7 @@ void MultiSelection::Reset()
 MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     aTotRange(rOrig.aTotRange),
     nSelCount(rOrig.nSelCount),
-    bCurValid(rOrig.bCurValid),
-    bSelectNew(false)
+    bCurValid(rOrig.bCurValid)
 {
     if ( bCurValid )
     {
@@ -110,8 +108,7 @@ MultiSelection::MultiSelection( const Range& rRange ):
     nCurIndex(0),
     nSelCount(0),
     bInverseCur(false),
-    bCurValid(false),
-    bSelectNew(false)
+    bCurValid(false)
 {
 }
 
@@ -344,8 +341,7 @@ void MultiSelection::Insert( long nIndex, long nCount )
     // did we need to shift the sub selections?
     if ( nSubSelPos < aSels.size() )
     {   // did we insert an unselected into an existing sub selection?
-        if (  !bSelectNew
-           && aSels[ nSubSelPos ]->Min() != nIndex
+        if (  aSels[ nSubSelPos ]->Min() != nIndex
            && aSels[ nSubSelPos ]->IsInside(nIndex)
         ) { // split the sub selection
             if ( nSubSelPos < aSels.size() ) {
@@ -359,21 +355,6 @@ void MultiSelection::Insert( long nIndex, long nCount )
             aSels[ nSubSelPos ]->Min() = nIndex;
         }
 
-        // did we append an selected to an existing sub selection?
-        else if (  bSelectNew
-                && nSubSelPos > 0
-                && aSels[ nSubSelPos ]->Max() == nIndex-1
-        )   // expand the previous sub selection
-            aSels[ nSubSelPos-1 ]->Max() += nCount;
-
-        // did we insert an selected into an existing sub selection?
-        else if (  bSelectNew
-                && aSels[ nSubSelPos ]->Min() == nIndex
-        ) { // expand the sub selection
-            aSels[ nSubSelPos ]->Max() += nCount;
-            ++nSubSelPos;
-        }
-
         // shift the sub selections behind the inserting position
         for ( size_t nPos = nSubSelPos; nPos < aSels.size(); ++nPos )
         {
@@ -384,8 +365,6 @@ void MultiSelection::Insert( long nIndex, long nCount )
 
     bCurValid = false;
     aTotRange.Max() += nCount;
-    if ( bSelectNew )
-        nSelCount += nCount;
 }
 
 void MultiSelection::Remove( long nIndex )
