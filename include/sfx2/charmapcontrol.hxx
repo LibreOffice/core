@@ -55,7 +55,6 @@ private:
     void            updateFavCharControl();
 
     void            getRecentCharacterList(); //gets both recent char and recent char font list
-    void            updateRecentCharacterList(const OUString& rChar, const OUString& rFont);
     void            updateRecentCharControl();
 };
 
