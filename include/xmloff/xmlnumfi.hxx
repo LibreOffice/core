@@ -179,7 +179,7 @@ public:
     SvXMLNumImpData* GetData() const                { return pData; }
     sal_Int32 GetKey();
     sal_Int32 CreateAndInsert( SvNumberFormatter* pFormatter );
-    sal_Int32 CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier >& xFormatsSupplier );
+    sal_Int32 CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier > const & xFormatsSupplier );
     sal_uInt16 GetType() const                      { return nType; }   // SvXMLStylesTokens
 
     bool HasLongDoW() const                     { return bHasLongDoW; }

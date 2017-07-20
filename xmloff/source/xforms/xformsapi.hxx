@@ -45,7 +45,7 @@ css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsBinding( css::uno
 css::uno::Reference<css::beans::XPropertySet> xforms_findXFormsSubmission( css::uno::Reference<css::frame::XModel> const &, const OUString& );
 
 void xforms_setValue(
-    css::uno::Reference<css::beans::XPropertySet>& xPropSet,
+    css::uno::Reference<css::beans::XPropertySet> const & xPropSet,
     const OUString& rName,
     const css::uno::Any& rAny );
 

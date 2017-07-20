@@ -1331,7 +1331,7 @@ Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode()
     return mxRootNode;
 }
 
-void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode >& xRootNode, Reference< XPropertySet >& xPageProps )
+void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode >& xRootNode, Reference< XPropertySet > const & xPageProps )
 {
     if( xRootNode.is() && xPageProps.is() ) try
     {

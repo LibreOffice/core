@@ -128,7 +128,7 @@ private:
 
 public:
     SvXMLImportFastNamespaceHandler();
-    void addNSDeclAttributes( rtl::Reference < comphelper::AttributeList >& rAttrList );
+    void addNSDeclAttributes( rtl::Reference < comphelper::AttributeList > const & rAttrList );
 
     //XFastNamespaceHandler
     virtual void SAL_CALL registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI ) override;
@@ -268,10 +268,10 @@ protected:
     bool IsODFVersionConsistent( const OUString& aODFVersion );
 
     const css::uno::Reference< css::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
-    inline void SetEmbeddedResolver( css::uno::Reference< css::document::XEmbeddedObjectResolver >& _xEmbeddedResolver );
+    inline void SetEmbeddedResolver( css::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver );
 
     const css::uno::Reference< css::document::XGraphicObjectResolver >& GetGraphicResolver() const { return mxGraphicResolver; }
-    void SetGraphicResolver( css::uno::Reference< css::document::XGraphicObjectResolver >& _xGraphicResolver );
+    void SetGraphicResolver( css::uno::Reference< css::document::XGraphicObjectResolver > const & _xGraphicResolver );
 
 
     void CreateNumberFormatsSupplier_();
@@ -616,13 +616,13 @@ inline rtl::Reference< ::xmloff::OFormLayerXMLImport > const & SvXMLImport::GetF
 }
 
 inline void SvXMLImport::SetEmbeddedResolver(
-    css::uno::Reference< css::document::XEmbeddedObjectResolver >& _xEmbeddedResolver )
+    css::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver )
 {
     mxEmbeddedResolver = _xEmbeddedResolver;
 }
 
 inline void SvXMLImport::SetGraphicResolver(
-    css::uno::Reference< css::document::XGraphicObjectResolver >& _xGraphicResolver )
+    css::uno::Reference< css::document::XGraphicObjectResolver > const & _xGraphicResolver )
 {
     mxGraphicResolver = _xGraphicResolver;
 }

@@ -2117,7 +2117,7 @@ SvXMLImportFastNamespaceHandler::SvXMLImportFastNamespaceHandler()
 {
 }
 
-void SvXMLImportFastNamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::AttributeList >& rAttrList )
+void SvXMLImportFastNamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::AttributeList > const & rAttrList )
 {
     for(const auto& aNamespaceDefine : m_aNamespaceDefines)
     {

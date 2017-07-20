@@ -100,8 +100,7 @@ void XMLEmbeddedObjectImportContext_Impl::Characters( const OUString& rChars )
 }
 
 
-void XMLEmbeddedObjectImportContext::SetComponent(
-        Reference< XComponent >& rComp )
+void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const & rComp )
 {
     if( !rComp.is() || sFilterService.isEmpty() )
         return;

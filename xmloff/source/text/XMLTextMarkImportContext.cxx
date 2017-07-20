@@ -126,7 +126,7 @@ static SvXMLEnumMapEntry<lcl_MarkType> const lcl_aMarkTypeMap[] =
 };
 
 
-static const char *lcl_getFormFieldmarkName(OUString &name)
+static const char *lcl_getFormFieldmarkName(OUString const &name)
 {
     if (name == ODF_FORMCHECKBOX ||
         name == "msoffice.field.FORMCHECKBOX" ||

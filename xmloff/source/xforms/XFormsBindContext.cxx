@@ -58,7 +58,7 @@ static const struct SvXMLTokenMapEntry aAttributeMap[] =
 
 // helper function; see below
 static void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
-                                 Reference<XNameContainer>& );
+                                 Reference<XNameContainer> const & );
 
 XFormsBindContext::XFormsBindContext(
     SvXMLImport& rImport,
@@ -143,7 +143,7 @@ SvXMLImportContext* XFormsBindContext::HandleChild(
 
 static void lcl_fillNamespaceContainer(
     const SvXMLNamespaceMap& aMap,
-    Reference<XNameContainer>& xContainer )
+    Reference<XNameContainer> const & xContainer )
 {
     sal_uInt16 nKeyIter = aMap.GetFirstKey();
     do

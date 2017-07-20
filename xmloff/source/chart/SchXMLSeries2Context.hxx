@@ -115,7 +115,7 @@ public:
                     SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
                     const SvXMLStylesContext* pStylesCtxt,
                     const SvXMLStyleContext*& rpStyle,
-                    OUString &rCurrStyleName );
+                    OUString const &rCurrStyleName );
 
     static void setStylesToDataPoints( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt
