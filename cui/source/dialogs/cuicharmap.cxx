@@ -490,8 +490,12 @@ void SvxCharacterMap::init()
     for(int i = 0; i < 16; i++)
     {
         m_pRecentCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
+        m_pRecentCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, RecentClearClickHdl));
+        m_pRecentCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, RecentClearAllClickHdl));
         m_pRecentCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
         m_pFavCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
+        m_pFavCharView[i]->setClearClickHdl(LINK(this,SvxCharacterMap, FavClearClickHdl));
+        m_pFavCharView[i]->setClearAllClickHdl(LINK(this,SvxCharacterMap, FavClearAllClickHdl));
         m_pFavCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
     }
 }
@@ -660,6 +664,81 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
         setFavButtonState(OUString(&cFirst, 1), aFont.GetFamilyName());
     }
     m_pSubsetLB->SelectEntryPos( nPos );
+}
+
+IMPL_LINK(SvxCharacterMap, RecentClearClickHdl, SvxCharView*, rView, void)
+{
+    OUString sTitle = rView->GetText();
+    auto itChar = std::find_if(maRecentCharList.begin(),
+         maRecentCharList.end(),
+         [sTitle] (const OUString & a) { return a == sTitle; });
+
+    OUString sFont = rView->GetFont().GetFamilyName();
+    auto itChar2 = std::find_if(maRecentCharFontList.begin(),
+         maRecentCharFontList.end(),
+         [sFont] (const OUString & a)
+         { return a == sFont; });
+
+    // if recent char to be added is already in list, remove it
+    if( itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
+    {
+        maRecentCharList.erase( itChar );
+        maRecentCharFontList.erase( itChar2);
+    }
+
+    css::uno::Sequence< OUString > aRecentCharList(maRecentCharList.size());
+    css::uno::Sequence< OUString > aRecentCharFontList(maRecentCharFontList.size());
+
+    for (size_t i = 0; i < maRecentCharList.size(); ++i)
+    {
+        aRecentCharList[i] = maRecentCharList[i];
+        aRecentCharFontList[i] = maRecentCharFontList[i];
+    }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    officecfg::Office::Common::RecentCharacters::RecentCharacterList::set(aRecentCharList, batch);
+    officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
+    batch->commit();
+
+    updateRecentCharControl();
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, RecentClearAllClickHdl, SvxCharView*, void)
+{
+    css::uno::Sequence< OUString > aRecentCharList(0);
+    css::uno::Sequence< OUString > aRecentCharFontList(0);
+
+    maRecentCharList.clear();
+    maRecentCharFontList.clear();
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    officecfg::Office::Common::RecentCharacters::RecentCharacterList::set(aRecentCharList, batch);
+    officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
+    batch->commit();
+
+    updateRecentCharControl();
+}
+
+IMPL_LINK(SvxCharacterMap, FavClearClickHdl, SvxCharView*, rView, void)
+{
+    deleteFavCharacterFromList(rView->GetText(), rView->GetFont().GetFamilyName());
+    updateFavCharControl();
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, FavClearAllClickHdl, SvxCharView*, void)
+{
+    css::uno::Sequence< OUString > aFavCharList(0);
+    css::uno::Sequence< OUString > aFavCharFontList(0);
+
+    maFavCharList.clear();
+    maFavCharFontList.clear();
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
+    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
+    batch->commit();
+
+    updateFavCharControl();
 }
 
 IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
