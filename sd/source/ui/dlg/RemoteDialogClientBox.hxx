@@ -88,7 +88,6 @@ class ClientBox : public Control
     bool m_bHasScrollBar : 1;
     bool m_bHasActive : 1;
     bool m_bNeedsRecalc : 1;
-    bool m_bInCheckMode : 1;
     bool m_bAdjustActive : 1;
     bool m_bInDelete : 1;
     //Must be guarded together with m_vEntries to ensure a valid index at all times.

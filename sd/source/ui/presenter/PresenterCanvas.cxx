@@ -107,7 +107,6 @@ PresenterCanvas::PresenterCanvas (
       mxSharedWindow(rxSharedWindow),
       mxWindow(rxWindow),
       maOffset(),
-      maClipRectangle(),
       mbOffsetUpdatePending(true)
 {
     if (mxWindow.is())
@@ -589,22 +588,8 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
 
     // Get the bounding box of the window and create a range in the
     // coordinate system of the child window.
-    ::tools::Rectangle aLocalClip;
-    if (maClipRectangle.Width <= 0 || maClipRectangle.Height <= 0)
-    {
-        // No clip rectangle has been set via SetClip by the pane.
-        // Use the window extents instead.
-        aLocalClip = pWindow->GetWindowExtentsRelative(pSharedWindow);
-    }
-    else
-    {
-        // Use a previously given clip rectangle.
-        aLocalClip = ::tools::Rectangle(
-            maClipRectangle.X + rOffset.X,
-            maClipRectangle.Y + rOffset.Y,
-            maClipRectangle.X + maClipRectangle.Width + rOffset.X,
-            maClipRectangle.Y + maClipRectangle.Height + rOffset.Y);
-    }
+    // Use the window extents.
+    ::tools::Rectangle aLocalClip = pWindow->GetWindowExtentsRelative(pSharedWindow);
 
     // The local clip rectangle is used to clip the view state clipping
     // polygon.

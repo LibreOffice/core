@@ -58,7 +58,6 @@ public:
     explicit ShellDescriptor (ShellId nId);
     ShellDescriptor (const ShellDescriptor& rDescriptor);
     ShellDescriptor& operator= (const ShellDescriptor& rDescriptor);
-    bool IsMainViewShell() const;
     vcl::Window* GetWindow() const;
 };
 
@@ -173,11 +172,6 @@ private:
     typedef ::std::vector<SfxShell*> ShellStack;
 
     int mnUpdateLockCount;
-
-    /** When this flag is set then the main view shell is always kept at the
-        top of the shell stack.
-    */
-    bool mbKeepMainViewShellOnTop;
 
     /** The UpdateShellStack() method can be called recursively.  This flag
         is used to communicate between different levels of invocation: if
@@ -361,7 +355,6 @@ ViewShellManager::Implementation::Implementation (
       maShellFactories(),
       maActiveViewShells(),
       mnUpdateLockCount(0),
-      mbKeepMainViewShellOnTop(false),
       mbShellStackIsUpToDate(true),
       mpFormShell(nullptr),
       mpFormShellParent(nullptr),
@@ -485,22 +478,7 @@ void ViewShellManager::Implementation::ActivateShell (const ShellDescriptor& rDe
     // Put shell on top of the active view shells.
     if (rDescriptor.mpShell != nullptr)
     {
-        // Determine where to put the view shell on the stack.  By default
-        // it is put on top of the stack.  When the view shell of the center
-        // pane is to be kept top most and the new view shell is not
-        // displayed in the center pane then it is inserted at the position
-        // one below the top.
-        ActiveShellList::iterator iInsertPosition (maActiveViewShells.begin());
-        if (iInsertPosition != maActiveViewShells.end()
-            && mbKeepMainViewShellOnTop
-            && ! rDescriptor.IsMainViewShell()
-            && iInsertPosition->IsMainViewShell())
-        {
-            ++iInsertPosition;
-        }
-        maActiveViewShells.insert(
-            iInsertPosition,
-            rDescriptor);
+        maActiveViewShells.insert( maActiveViewShells.begin(), rDescriptor);
     }
 }
 
@@ -621,21 +599,11 @@ void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
         // the case in mind that mbKeepMainViewShellOnTop is true.  Shells
         // that are not the main view shell are placed on the second-to-top
         // position in this case.
-            if (iShell == maActiveViewShells.begin()
-            && (iShell->IsMainViewShell() || ! mbKeepMainViewShellOnTop))
+        if (iShell == maActiveViewShells.begin())
         {
             // The shell is at the top position and is either a) the main
             // view shell or b) another shell but the main view shell is not
             // kept at the top position.  We do not have to move the shell.
-            bMove = false;
-        }
-        else if (iShell == ++maActiveViewShells.begin()
-            && ! iShell->IsMainViewShell()
-            && mbKeepMainViewShellOnTop)
-        {
-            // The shell is a the second-to-top position, not the main view
-            // shell and the main view shell is kept at the top position.
-            // Therefore we do not have to move the shell.
             bMove = false;
         }
     }
@@ -658,15 +626,7 @@ void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
         TakeShellsFromStack(&rShell);
         maActiveViewShells.erase(iShell);
 
-        // Find out whether to insert at the top or one below.
-        ActiveShellList::iterator aInsertPosition (maActiveViewShells.begin());
-        if (mbKeepMainViewShellOnTop && ! aDescriptor.IsMainViewShell())
-        {
-            if (maActiveViewShells.back().IsMainViewShell())
-                ++aInsertPosition;
-        }
-
-        maActiveViewShells.insert(aInsertPosition, aDescriptor);
+        maActiveViewShells.insert(maActiveViewShells.begin(), aDescriptor);
     }
 }
 
@@ -1232,15 +1192,6 @@ ShellDescriptor& ShellDescriptor::operator= (const ShellDescriptor& rDescriptor)
         mbIsListenerAddedToWindow = rDescriptor.mbIsListenerAddedToWindow;
     }
     return *this;
-}
-
-bool ShellDescriptor::IsMainViewShell() const
-{
-    ViewShell* pViewShell = dynamic_cast<ViewShell*>(mpShell);
-    if (pViewShell != nullptr)
-        return pViewShell->IsMainViewShell();
-    else
-        return false;
 }
 
 vcl::Window* ShellDescriptor::GetWindow() const

@@ -2679,25 +2679,6 @@ void SAL_CALL SdXImpressDocument::dispose()
             SfxBaseModel::dispose();
             mbDisposed = true;
 
-            uno::Reference< container::XNameAccess > xStyles(mxStyleFamilies);
-            if( xStyles.is() )
-            {
-                uno::Reference< lang::XComponent > xComp( xStyles, uno::UNO_QUERY );
-                if( xComp.is() )
-                    xComp->dispose();
-
-                xStyles = nullptr;
-            }
-
-            uno::Reference< presentation::XPresentation > xPresentation( mxPresentation );
-            if( xPresentation.is() )
-            {
-                uno::Reference< css::presentation::XPresentation2 > xPres( mpDoc->getPresentation().get() );
-                uno::Reference< lang::XComponent > xPresComp( xPres, uno::UNO_QUERY );
-                if( xPresComp.is() )
-                    xPresComp->dispose();
-            }
-
             uno::Reference< container::XNameAccess > xLinks( mxLinks );
             if( xLinks.is() )
             {
