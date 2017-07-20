@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.EditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,9 +98,33 @@ public class InvalidationHandler implements Document.MessageCallback {
             case Document.CALLBACK_INVALIDATE_HEADER:
                 invalidateHeader();
                 break;
+            case Document.CALLBACK_CELL_ADDRESS:
+                cellAddress(payload);
+                break;
+            case Document.CALLBACK_CELL_FORMULA:
+                cellFormula(payload);
+                break;
             default:
                 Log.d(LOGTAG, "LOK_CALLBACK uncaught: " + messageID + " : " + payload);
         }
+    }
+
+    private void cellFormula(final String payload) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                ((EditText)mContext.findViewById(R.id.calc_formula)).setText(payload);
+            }
+        });
+    }
+
+    private void cellAddress(final String payload) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                ((EditText)mContext.findViewById(R.id.calc_address)).setText(payload);
+            }
+        });
     }
 
     private void invalidateHeader() {
@@ -111,6 +136,7 @@ public class InvalidationHandler implements Document.MessageCallback {
 
         if (cellCursorRect != null) {
             mDocumentOverlay.showCellSelection(cellCursorRect);
+            moveViewportToMakeSelectionVisible(cellCursorRect);
         }
     }
 
