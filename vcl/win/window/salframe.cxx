@@ -5705,14 +5705,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 // messages in the message queue and dispatch them before we return control to the system.
 
                 if ( nRet )
-                {
-                    MSG msg;
-
-                    while( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) )
-                    {
-                        DispatchMessage( &msg );
-                    }
-                }
+                    while ( Application::Reschedule( true ) );
             }
             else
             {
