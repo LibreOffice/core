@@ -111,14 +111,11 @@ typedef std::vector<Data_Impl*> SfxTabDlgData_Impl;
 
 struct TabDlg_Impl
 {
-    bool                bModified       : 1,
-                        bModal          : 1,
+    bool                bModal          : 1,
                         bHideResetBtn   : 1;
     SfxTabDlgData_Impl  aData;
 
     explicit TabDlg_Impl( sal_uInt8 nCnt ) :
-
-        bModified       ( false ),
         bModal          ( true ),
         bHideResetBtn   ( false )
     {
@@ -792,7 +789,7 @@ short SfxTabDialog::Ok()
         }
     }
 
-    if ( m_pImpl->bModified || ( m_pOutSet && m_pOutSet->Count() > 0 ) )
+    if ( m_pOutSet && m_pOutSet->Count() > 0 )
         bModified = true;
 
     if (m_bStandardPushed)

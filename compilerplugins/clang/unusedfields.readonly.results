@@ -1112,18 +1112,12 @@ sfx2/source/control/dispatch.cxx:132
     SfxDispatcher_Impl aObjBars struct SfxObjectBars_Impl [13]
 sfx2/source/control/dispatch.cxx:133
     SfxDispatcher_Impl aFixedObjBars struct SfxObjectBars_Impl [13]
-sfx2/source/dialog/tabdlg.cxx:114
-    TabDlg_Impl bModified _Bool
 sfx2/source/doc/doctempl.cxx:118
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 sfx2/source/doc/sfxbasemodel.cxx:189
     IMPL_SfxBaseModel_DataContainer m_xStarBasicAccess Reference<script::XStarBasicAccess>
 sfx2/source/inc/appdata.hxx:104
     SfxAppData_Impl nDocModalMode sal_uInt16
-sfx2/source/inc/objshimp.hxx:104
-    SfxObjectShell_Impl nAutoLoadLocks sal_uInt16
-sfx2/source/inc/objshimp.hxx:111
-    SfxObjectShell_Impl bDisposing _Bool
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
