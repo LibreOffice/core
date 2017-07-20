@@ -742,6 +742,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 findViewById(R.id.calc_header_top_left).setVisibility(View.VISIBLE);
                 findViewById(R.id.calc_header_row).setVisibility(View.VISIBLE);
                 findViewById(R.id.calc_header_column).setVisibility(View.VISIBLE);
+                findViewById(R.id.calc_address).setVisibility(View.VISIBLE);
+                findViewById(R.id.calc_formula).setVisibility(View.VISIBLE);
             }
         });
     }
