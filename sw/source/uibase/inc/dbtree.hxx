@@ -30,7 +30,6 @@ class SwWrtShell;
 
 class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
 {
-    OUString        sDefDBName;
     bool            bInitialized;
     bool            bShowColumns;
 

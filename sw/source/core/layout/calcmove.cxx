@@ -1112,21 +1112,6 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     int nConsecutiveFormatsWithoutChange = 0;
     PROTOCOL_ENTER( this, PROT::MakeAll, DbgAction::NONE, nullptr )
 
-#ifdef DBG_UTIL
-    const SwDoc *pDoc = GetAttrSet()->GetDoc();
-    if( pDoc )
-    {
-        static bool bWarned = false;
-        if( pDoc->InXMLExport() )
-        {
-            SAL_WARN_IF( !bWarned, "sw", "Formatting during XML-export!" );
-            bWarned = true;
-        }
-        else
-            bWarned = false;
-    }
-#endif
-
     // takes care of the notification in the dtor
     SwContentNotify *pNotify = new SwContentNotify( this );
 
