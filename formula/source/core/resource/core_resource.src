@@ -290,6 +290,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
         < "RIGHTB" ; SC_OPCODE_RIGHTB; >;
         < "LEFTB" ; SC_OPCODE_LEFTB; >;
         < "REPLACEB" ; SC_OPCODE_REPLACEB; >;
+        < "FINDB" ; SC_OPCODE_FINDB; >;
         < "MIDB" ; SC_OPCODE_MIDB; >;
         < "TEXT" ; SC_OPCODE_TEXT; >;
         < "SUBSTITUTE" ; SC_OPCODE_SUBSTITUTE; >;
@@ -733,6 +734,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
         < "RIGHTB" ; SC_OPCODE_RIGHTB; >;
         < "LEFTB" ; SC_OPCODE_LEFTB; >;
         < "REPLACEB" ; SC_OPCODE_REPLACEB; >;
+        < "FINDB" ; SC_OPCODE_FINDB; >;
         < "MIDB" ; SC_OPCODE_MIDB; >;
         < "TEXT" ; SC_OPCODE_TEXT; >;
         < "SUBSTITUTE" ; SC_OPCODE_SUBSTITUTE; >;
@@ -1179,6 +1181,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF
         < "RIGHTB" ; SC_OPCODE_RIGHTB; >;
         < "LEFTB" ; SC_OPCODE_LEFTB; >;
         < "REPLACEB" ; SC_OPCODE_REPLACEB; >;
+        < "FINDB" ; SC_OPCODE_FINDB; >;
         < "MIDB" ; SC_OPCODE_MIDB; >;
         < "TEXT" ; SC_OPCODE_TEXT; >;
         < "SUBSTITUTE" ; SC_OPCODE_SUBSTITUTE; >;
@@ -1626,6 +1629,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_API
         < "RIGHTB" ; SC_OPCODE_RIGHTB; >;
         < "LEFTB" ; SC_OPCODE_LEFTB; >;
         < "REPLACEB" ; SC_OPCODE_REPLACEB; >;
+        < "FINDB" ; SC_OPCODE_FINDB; >;
         < "MIDB" ; SC_OPCODE_MIDB; >;
         < "TEXT" ; SC_OPCODE_TEXT; >;
         < "SUBSTITUTE" ; SC_OPCODE_SUBSTITUTE; >;
@@ -2071,6 +2075,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH
         < "RIGHTB" ; SC_OPCODE_RIGHTB; >;
         < "LEFTB" ; SC_OPCODE_LEFTB; >;
         < "REPLACEB" ; SC_OPCODE_REPLACEB; >;
+        < "FINDB" ; SC_OPCODE_FINDB; >;
         < "MIDB" ; SC_OPCODE_MIDB; >;
         < "TEXT" ; SC_OPCODE_TEXT; >;
         < "SUBSTITUTE" ; SC_OPCODE_SUBSTITUTE; >;
@@ -2492,6 +2497,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES
         < "RIGHTB" ; SC_OPCODE_RIGHTB ; >;
         < "LEFTB" ; SC_OPCODE_LEFTB ; >;
         < "REPLACEB" ; SC_OPCODE_REPLACEB; >;
+        < "FINDB" ; SC_OPCODE_FINDB; >;
         < "MIDB" ; SC_OPCODE_MIDB ; >;
         < "TEXT" ; SC_OPCODE_TEXT ; >;
         < "SUBSTITUTE" ; SC_OPCODE_SUBSTITUTE ; >;
