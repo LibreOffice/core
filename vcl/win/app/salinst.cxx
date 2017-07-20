@@ -746,6 +746,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
                                  SAL_MSG_TIMER_CALLBACK, PM_REMOVE) )
                 assert( "Multiple timer messages in queue" );
+            assert( 0 == wParam );
             if ( 0 == wParam )
                 EmitTimerCallback();
             break;

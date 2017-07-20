@@ -1316,24 +1316,12 @@ BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
 {
     SalData*    pSalData = GetSalData();
     WinSalPrinter* pPrinter;
-    bool        bWhile = TRUE;
-    int         i = 0;
+    bool        bWhile = true;
 
     do
     {
         // process messages
-        MSG aMsg;
-        if ( PeekMessageW( &aMsg, 0, 0, 0, PM_REMOVE ) )
-        {
-            TranslateMessage( &aMsg );
-            DispatchMessageW( &aMsg );
-
-            i++;
-            if ( i > 15 )
-                bWhile = FALSE;
-        }
-        else
-            bWhile = FALSE;
+        bWhile = Application::Reschedule( true );
 
         pPrinter = pSalData->mpFirstPrinter;
         while ( pPrinter )
@@ -1496,25 +1484,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
 
     // As the Telecom Balloon Fax driver tends to send messages repeatedly
     // we try to process first all, and then insert a dummy message
-    bool bWhile = TRUE;
-    int  i = 0;
-    do
-    {
-        // process messages
-        MSG aMsg;
-        if ( PeekMessageW( &aMsg, 0, 0, 0, PM_REMOVE ) )
-        {
-            TranslateMessage( &aMsg );
-            DispatchMessageW( &aMsg );
-
-            i++;
-            if ( i > 15 )
-                bWhile = FALSE;
-        }
-        else
-            bWhile = FALSE;
-    }
-    while ( bWhile );
+    while ( Application::Reschedule( true ) );
     BOOL const ret = PostMessageW(GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0);
     SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
 
