@@ -55,7 +55,6 @@ class XMLTransformerBase : public XMLTransformer
 
     css::uno::Reference< css::xml::sax::XLocator >                    m_xLocator;
     css::uno::Reference< css::xml::sax::XDocumentHandler >            m_xHandler;     // the handlers
-    css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >    m_xExtHandler;
     css::uno::Reference< css::beans::XPropertySet >                   m_xPropSet;
     css::uno::Reference< css::i18n::XCharacterClassification >        xCharClass;
 

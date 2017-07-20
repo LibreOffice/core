@@ -360,32 +360,22 @@ void SAL_CALL XMLTransformerBase::setDocumentLocator( const Reference< XLocator 
 // XExtendedDocumentHandler
 void SAL_CALL XMLTransformerBase::startCDATA()
 {
-    if( m_xExtHandler.is() )
-        m_xExtHandler->startCDATA();
 }
 
 void SAL_CALL XMLTransformerBase::endCDATA()
 {
-    if( m_xExtHandler.is() )
-        m_xExtHandler->endCDATA();
 }
 
-void SAL_CALL XMLTransformerBase::comment( const OUString& rComment )
+void SAL_CALL XMLTransformerBase::comment( const OUString& /*rComment*/ )
 {
-    if( m_xExtHandler.is() )
-        m_xExtHandler->comment( rComment );
 }
 
 void SAL_CALL XMLTransformerBase::allowLineBreak()
 {
-    if( m_xExtHandler.is() )
-        m_xExtHandler->allowLineBreak();
 }
 
-void SAL_CALL XMLTransformerBase::unknown( const OUString& rString )
+void SAL_CALL XMLTransformerBase::unknown( const OUString& /*rString*/ )
 {
-    if( m_xExtHandler.is() )
-        m_xExtHandler->unknown( rString );
 }
 
 // XInitialize

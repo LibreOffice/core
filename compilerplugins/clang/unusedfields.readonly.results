@@ -1926,5 +1926,3 @@ xmloff/inc/SchXMLImport.hxx:154
     SchXMLImport mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
 xmloff/source/core/xmlexp.cxx:251
     SvXMLExport_Impl maSaveOptions class SvtSaveOptions
-xmloff/source/transform/TransformerBase.hxx:58
-    XMLTransformerBase m_xExtHandler css::uno::Reference<css::xml::sax::XExtendedDocumentHandler>
