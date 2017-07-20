@@ -31,6 +31,7 @@ using namespace com::sun::star;
 SvxCharView::SvxCharView(vcl::Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
     , mnY(0)
+    , maPosition(0,0)
 {
 }
 
@@ -49,6 +50,20 @@ void SvxCharView::MouseButtonDown( const MouseEvent& rMEvt )
 
         maMouseClickHdl.Call(this);
     }
+
+    if(rMEvt.IsRight())
+    {
+        Point aPosition (rMEvt.GetPosPixel());
+        maPosition = aPosition;
+        GrabFocus();
+        Invalidate();
+        createContextMenu();
+    }
+}
+
+Point SvxCharView::GetClickPosition() const
+{
+    return maPosition;
 }
 
 void SvxCharView::KeyInput( const KeyEvent& rKEvt )
@@ -80,6 +95,34 @@ void SvxCharView::InsertCharToDoc()
     aArgs[1].Value <<= maFont.GetFamilyName();
 
     comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+}
+
+void SvxCharView::createContextMenu()
+{
+    ScopedVclPtrInstance<PopupMenu> pItemMenu;
+    pItemMenu->InsertItem(0,"CuiResId(STR_CLEAR_CHAR)");
+    pItemMenu->InsertItem(1,"CuiResId(STR_CLEAR_ALL_CHAR)");
+    pItemMenu->SetSelectHdl(LINK(this, SvxCharView, ContextMenuSelectHdl));
+    pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    Invalidate();
+}
+
+IMPL_LINK(SvxCharView, ContextMenuSelectHdl, Menu*, pMenu, bool)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+
+    switch(nMenuId)
+    {
+    case 0:
+        maClearClickHdl.Call(this);
+        break;
+    case 1:
+        maClearAllClickHdl.Call(this);
+        break;
+    default:
+        break;
+    }
+    return false;
 }
 
 void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
@@ -174,6 +217,16 @@ void SvxCharView::setInsertCharHdl(const Link<SvxCharView*,void> &rLink)
 void SvxCharView::setMouseClickHdl(const Link<SvxCharView*,void> &rLink)
 {
     maMouseClickHdl = rLink;
+}
+
+void SvxCharView::setClearClickHdl(const Link<SvxCharView*,void> &rLink)
+{
+    maClearClickHdl = rLink;
+}
+
+void SvxCharView::setClearAllClickHdl(const Link<SvxCharView*,void> &rLink)
+{
+    maClearAllClickHdl = rLink;
 }
 
 void SvxCharView::SetFont( const vcl::Font& rFont )
