@@ -176,7 +176,7 @@ private:
     Color*          mpStandardColor;
     Color*          mpSaturdayColor;
     Color*          mpSundayColor;
-    sal_uLong       mnDayCount;
+    sal_Int32       mnDayCount;
     long            mnDaysOffX;
     long            mnWeekDayOffY;
     long            mnDaysOffY;
