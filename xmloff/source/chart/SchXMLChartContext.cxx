@@ -241,7 +241,7 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
 SchXMLChartContext::~SchXMLChartContext()
 {}
 
-bool lcl_hasServiceName(Reference<lang::XMultiServiceFactory> & xFactory, OUString const & rServiceName)
+bool lcl_hasServiceName(Reference<lang::XMultiServiceFactory> const & xFactory, OUString const & rServiceName)
 {
     const uno::Sequence<OUString> aServiceNames(xFactory->getAvailableServiceNames());
 

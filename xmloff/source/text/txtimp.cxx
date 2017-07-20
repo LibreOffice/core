@@ -1236,7 +1236,7 @@ void XMLTextImportHelper::InsertControlCharacter( sal_Int16 nControl )
 }
 
 void XMLTextImportHelper::InsertTextContent(
-    Reference < XTextContent > & xContent )
+    Reference < XTextContent > const & xContent )
 {
     assert(m_xImpl->m_xText.is());
     assert(m_xImpl->m_xCursorAsRange.is());
@@ -1368,10 +1368,10 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
    to the found list styles of the parent styles. (#i73973#)
 */
 static bool lcl_HasListStyle( const OUString& sStyleName,
-                                  const Reference < XNameContainer >& xParaStyles,
-                                  SvXMLImport& rImport,
-                                  const OUString& sNumberingStyleName,
-                                  const OUString& sOutlineStyleName )
+                              const Reference < XNameContainer >& xParaStyles,
+                              SvXMLImport const & rImport,
+                              const OUString& sNumberingStyleName,
+                              const OUString& sOutlineStyleName )
 {
     bool bRet( false );
 
@@ -1486,7 +1486,7 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
     return bRet;
 }
 OUString XMLTextImportHelper::SetStyleAndAttrs(
-        SvXMLImport& rImport,
+        SvXMLImport const & rImport,
         const Reference < XTextCursor >& rCursor,
         const OUString& rStyleName,
         bool bPara,
@@ -2086,7 +2086,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
 }
 
 void XMLTextImportHelper::SetHyperlink(
-    SvXMLImport& rImport,
+    SvXMLImport const & rImport,
     const Reference < XTextCursor >& rCursor,
     const OUString& rHRef,
     const OUString& rName,
@@ -2167,7 +2167,7 @@ void XMLTextImportHelper::SetHyperlink(
 }
 
 void XMLTextImportHelper::SetRuby(
-    SvXMLImport& rImport,
+    SvXMLImport const & rImport,
     const Reference < XTextCursor >& rCursor,
     const OUString& rStyleName,
     const OUString& rTextStyleName,
@@ -2666,7 +2666,7 @@ bool XMLTextImportHelper::hasCurrentFieldCtx()
     return !m_xImpl->m_FieldStack.empty();
 }
 
-void XMLTextImportHelper::setCurrentFieldParamsTo(css::uno::Reference< css::text::XFormField> &xFormField)
+void XMLTextImportHelper::setCurrentFieldParamsTo(css::uno::Reference< css::text::XFormField> const &xFormField)
 {
     assert(!m_xImpl->m_FieldStack.empty());
     if (!m_xImpl->m_FieldStack.empty() && xFormField.is())

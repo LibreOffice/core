@@ -397,7 +397,7 @@ RDFaImportHelper::ParseRDFa(
 void
 RDFaImportHelper::AddRDFa(
     uno::Reference<rdf::XMetadatable> const & i_xObject,
-    std::shared_ptr<ParsedRDFaAttributes> & i_pRDFaAttributes)
+    std::shared_ptr<ParsedRDFaAttributes> const & i_pRDFaAttributes)
 {
     if (!i_xObject.is())
     {

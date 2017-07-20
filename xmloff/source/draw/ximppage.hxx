@@ -43,7 +43,7 @@ protected:
     OUString               msNavOrder;
 
     /** sets the page style on this page */
-    void SetStyle( OUString& rStyleName );
+    void SetStyle( OUString const & rStyleName );
 
     /** sets the presentation layout at this page. It is used for drawing pages and for the handout master */
     void SetLayout();
@@ -55,7 +55,7 @@ protected:
     SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
 
     /** sets the properties from a page master style with the given name on this contexts page */
-    void SetPageMaster( OUString& rsPageMasterName );
+    void SetPageMaster( OUString const & rsPageMasterName );
 
     void SetNavigationOrder();
 

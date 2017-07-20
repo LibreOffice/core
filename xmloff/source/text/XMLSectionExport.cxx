@@ -1469,7 +1469,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
 }
 
 void XMLSectionExport::ExportLevelParagraphStyles(
-    Reference<XIndexReplace> & xLevelParagraphStyles)
+    Reference<XIndexReplace> const & xLevelParagraphStyles)
 {
     // iterate over levels
     sal_Int32 nPLevelCount = xLevelParagraphStyles->getCount();

@@ -221,7 +221,7 @@ OUString XMLTextListsHelper::GenerateNewListId() const
 }
 
 // Provide list id for a certain list block for import (#i92811#)
-OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rListBlock )
+OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext const & rListBlock )
 {
     OUString sListBlockListId( rListBlock.GetContinueListId() );
     if ( sListBlockListId.isEmpty() )
