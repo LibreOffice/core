@@ -4871,5 +4871,19 @@ StringArray SC_OPCODE_REPLACEB+RID_SC_FUNC_DESCRIPTIONS_START
         < "The text to be inserted." ; >;
     };
 };
+ // -=*# Resource for function FINDB #*=-
+StringArray SC_OPCODE_FINDB+RID_SC_FUNC_DESCRIPTIONS_START
+{
+    ItemList [ en-US ] =
+    {
+        < "Looks for a string of text within another (case sensitive), using byte positions." ; >;
+        < "find_text" ; >;
+        < "The text to be found." ; >;
+        < "text" ; >;
+        < "The text in which a search is to be made." ; >;
+        < "position" ; >;
+        < "The position in the text from which the search starts." ; >;
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

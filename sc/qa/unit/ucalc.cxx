@@ -2623,6 +2623,7 @@ void Test::testFunctionLists()
         "EXACT",
         "FILTERXML",
         "FIND",
+        "FINDB",
         "FIXED",
         "JIS",
         "LEFT",
