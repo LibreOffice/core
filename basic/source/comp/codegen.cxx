@@ -554,13 +554,13 @@ public:
 };
 
 sal_uInt32
-SbiCodeGen::calcNewOffSet( sal_uInt8* pCode, sal_uInt16 nOffset )
+SbiCodeGen::calcNewOffSet( sal_uInt8 const * pCode, sal_uInt16 nOffset )
 {
     return BufferTransformer< sal_uInt16, sal_uInt32 >::convertBufferOffSet( pCode, nOffset );
 }
 
 sal_uInt16
-SbiCodeGen::calcLegacyOffSet( sal_uInt8* pCode, sal_uInt32 nOffset )
+SbiCodeGen::calcLegacyOffSet( sal_uInt8 const * pCode, sal_uInt32 nOffset )
 {
     return BufferTransformer< sal_uInt32, sal_uInt16 >::convertBufferOffSet( pCode, nOffset );
 }

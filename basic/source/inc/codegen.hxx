@@ -53,8 +53,8 @@ public:
     void IncForLevel() { nForLevel++; }
     void DecForLevel() { nForLevel--; }
 
-    static sal_uInt32 calcNewOffSet( sal_uInt8* pCode, sal_uInt16 nOffset );
-    static sal_uInt16 calcLegacyOffSet( sal_uInt8* pCode, sal_uInt32 nOffset );
+    static sal_uInt32 calcNewOffSet( sal_uInt8 const * pCode, sal_uInt16 nOffset );
+    static sal_uInt16 calcLegacyOffSet( sal_uInt8 const * pCode, sal_uInt32 nOffset );
 
 };
 

@@ -80,8 +80,8 @@ using namespace com::sun::star::script;
 
 using namespace ::com::sun::star;
 
-static void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType );
-static void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled );
+static void lcl_clearImpl( SbxVariableRef const & refVar, SbxDataType const & eType );
+static void lcl_eraseImpl( SbxVariableRef const & refVar, bool bVBAEnabled );
 
 bool SbiRuntime::isVBAEnabled()
 {
@@ -385,7 +385,7 @@ SvNumberFormatter* SbiInstance::GetNumberFormatter()
 // #39629 offer NumberFormatter static too
 SvNumberFormatter* SbiInstance::PrepareNumberFormatter( sal_uInt32 &rnStdDateIdx,
     sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
-    LanguageType* peFormatterLangType, DateOrder* peFormatterDateOrder )
+    LanguageType const * peFormatterLangType, DateOrder* peFormatterDateOrder )
 {
     SvNumberFormatter* pNumberFormater = nullptr;
     LanguageType eLangType;
@@ -1209,7 +1209,7 @@ void SbiRuntime::ClearForStack()
     }
 }
 
-SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* pCollection )
+SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection const * pCollection )
 {
     for (SbiForStack *p = pForStk; p; p = p->pNext)
     {
@@ -1561,7 +1561,7 @@ void SbiRuntime::StepGET()
 }
 
 // #67607 copy Uno-Structs
-inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRef& refVar )
+inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef const & refVal, SbxVariableRef const & refVar )
 {
     SbxDataType eVarType = refVar->GetType();
     SbxDataType eValType = refVal->GetType();
@@ -2258,7 +2258,7 @@ void SbiRuntime::StepREDIMP_ERASE()
     }
 }
 
-static void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType )
+static void lcl_clearImpl( SbxVariableRef const & refVar, SbxDataType const & eType )
 {
     SbxFlagBits nSavFlags = refVar->GetFlags();
     refVar->ResetFlag( SbxFlagBits::Fixed );
@@ -2267,7 +2267,7 @@ static void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType )
     refVar->Clear();
 }
 
-static void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
+static void lcl_eraseImpl( SbxVariableRef const & refVar, bool bVBAEnabled )
 {
     SbxDataType eType = refVar->GetType();
     if( eType & SbxARRAY )
@@ -3137,7 +3137,7 @@ void SbiRuntime::StepPRCHAR( sal_uInt32 nOp1 )
 
 // check whether TOS is a certain object class (+StringID)
 
-bool SbiRuntime::implIsClass( SbxObject* pObj, const OUString& aClass )
+bool SbiRuntime::implIsClass( SbxObject const * pObj, const OUString& aClass )
 {
     bool bRet = true;
 

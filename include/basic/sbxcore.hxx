@@ -87,7 +87,7 @@ public:
 
     // Set the factory for Load/Store/Create
     static void AddFactory( SbxFactory* );
-    static void RemoveFactory( SbxFactory* );
+    static void RemoveFactory( SbxFactory const * );
 
     static SbxBase* Create( sal_uInt16, sal_uInt32 );
     static SbxObject* CreateObject( const OUString& );

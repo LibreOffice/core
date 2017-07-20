@@ -117,7 +117,7 @@ class SbUnoObject: public SbxObject
     void implCreateAll();
 
 public:
-    static bool getDefaultPropName( SbUnoObject* pUnoObj, OUString& sDfltProp );
+    static bool getDefaultPropName( SbUnoObject const * pUnoObj, OUString& sDfltProp );
     SbUnoObject( const OUString& aName_, const css::uno::Any& aUnoObj_ );
     virtual ~SbUnoObject() override;
 
@@ -145,13 +145,13 @@ typedef tools::SvRef<SbUnoObject> SbUnoObjectRef;
 
 // #67781 delete return values of the uno-methods
 void clearUnoMethods();
-void clearUnoMethodsForBasic( StarBASIC* pBasic );
+void clearUnoMethodsForBasic( StarBASIC const * pBasic );
 
 class SbUnoMethod : public SbxMethod
 {
     friend class SbUnoObject;
     friend void clearUnoMethods();
-    friend void clearUnoMethodsForBasic( StarBASIC* pBasic );
+    friend void clearUnoMethodsForBasic( StarBASIC const * pBasic );
 
     css::uno::Reference< css::reflection::XIdlMethod > m_xUnoMethod;
     css::uno::Sequence< css::reflection::ParamInfo >* pParamInfoSeq;
@@ -337,7 +337,7 @@ void RTL_Impl_IsUnoStruct( SbxArray& rPar );
 void RTL_Impl_EqualUnoObjects( SbxArray& rPar );
 void RTL_Impl_GetDefaultContext( SbxArray& rPar );
 
-void disposeComVariablesForBasic( StarBASIC* pBasic );
+void disposeComVariablesForBasic( StarBASIC const * pBasic );
 void clearNativeObjectWrapperVector();
 
 
@@ -353,7 +353,7 @@ class BasicCollection : public SbxObject
     void Initialize();
     virtual ~BasicCollection() override;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
-    sal_Int32 implGetIndex( SbxVariable* pIndexVar );
+    sal_Int32 implGetIndex( SbxVariable const * pIndexVar );
     sal_Int32 implGetIndexForName( const OUString& rName );
     void CollAdd( SbxArray* pPar_ );
     void CollItem( SbxArray* pPar_ );

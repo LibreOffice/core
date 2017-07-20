@@ -107,6 +107,7 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
             || name == "memory_write"
             || name == "file_write"
             || name == "SalMainPipeExchangeSignal_impl"
+            || name.startswith("SbRtl_")
                 // UNO component entry points
             || name.endswith("component_getFactory")
                 // in Scheduler::, wants to loop until a reference to a bool becomes true
@@ -197,6 +198,9 @@ bool ConstParams::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     if (interestingSet.find(parmVarDecl) == interestingSet.end()) {
         return true;
     }
+    // no need to check again if we have already eliminated this one
+    if (cannotBeConstSet.find(parmVarDecl) != cannotBeConstSet.end())
+        return true;
     if (!checkIfCanBeConst(declRefExpr, parmVarDecl))
         cannotBeConstSet.insert(parmVarDecl);
 
