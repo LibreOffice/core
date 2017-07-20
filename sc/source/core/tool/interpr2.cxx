@@ -783,8 +783,8 @@ void ScInterpreter::ScGetDateDif()
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         OUString aInterval = GetString().getString();
-        long nDate2 = ::rtl::math::approxFloor( GetDouble() );
-        long nDate1 = ::rtl::math::approxFloor( GetDouble() );
+        sal_Int32 nDate2 = GetInt32();
+        sal_Int32 nDate1 = GetInt32();
 
         if (nGlobalError != FormulaError::NONE)
         {
@@ -799,9 +799,9 @@ void ScInterpreter::ScGetDateDif()
             return;
         }
 
-        long dd = nDate2 - nDate1;
+        double dd = nDate2 - nDate1;
         // Zero difference or number of days can be returned immediately.
-        if (dd == 0 || aInterval.equalsIgnoreAsciiCase( "d" ))
+        if (dd == 0.0 || aInterval.equalsIgnoreAsciiCase( "d" ))
         {
             PushDouble( dd );
             return;
