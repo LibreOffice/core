@@ -28,6 +28,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlnmspe.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -36,10 +37,9 @@ using namespace xmloff::token;
 
 ScXMLTableScenarioContext::ScXMLTableScenarioContext(
         ScXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >& xAttrList ):
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+        sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ):
+    ScXMLImportContext( rImport ),
     aBorderColor( COL_BLACK ),
     bDisplayBorder( true ),
     bCopyBack( true ),
@@ -49,66 +49,49 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
     bProtected( false )
 {
     rImport.LockSolarMutex();
-    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetTableScenarioAttrTokenMap());
-    for( sal_Int16 i = 0; i < nAttrCount; ++i )
-    {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName ));
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+    if ( xAttrList.is() )
+    {
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_TABLE_SCENARIO_ATTR_DISPLAY_BORDER:
+            switch (aIter.getToken())
             {
-                bDisplayBorder = IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_TABLE_SCENARIO_ATTR_BORDER_COLOR:
-            {
-                sal_Int32 nColor(0);
-                ::sax::Converter::convertColor(nColor, sValue);
-                aBorderColor.SetColor(nColor);
-            }
-            break;
-            case XML_TOK_TABLE_SCENARIO_ATTR_COPY_BACK:
-            {
-                bCopyBack = IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_TABLE_SCENARIO_ATTR_COPY_STYLES:
-            {
-                bCopyStyles = IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_TABLE_SCENARIO_ATTR_COPY_FORMULAS:
-            {
-                bCopyFormulas = IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_TABLE_SCENARIO_ATTR_IS_ACTIVE:
-            {
-                bIsActive = IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
-            case XML_TOK_TABLE_SCENARIO_ATTR_SCENARIO_RANGES:
-            {
+            case XML_ELEMENT( TABLE, XML_DISPLAY_BORDER ):
+                bDisplayBorder = IsXMLToken(aIter, XML_TRUE);
+                break;
+            case XML_ELEMENT( TABLE, XML_BORDER_COLOR ):
+                {
+                    sal_Int32 nColor(0);
+                    ::sax::Converter::convertColor(nColor, aIter.toString());
+                    aBorderColor.SetColor(nColor);
+                }
+                break;
+            case XML_ELEMENT( TABLE, XML_COPY_BACK ):
+                bCopyBack = IsXMLToken(aIter, XML_TRUE);
+                break;
+            case XML_ELEMENT( TABLE, XML_COPY_STYLES ):
+                bCopyStyles = IsXMLToken(aIter, XML_TRUE);
+                break;
+            case XML_ELEMENT( TABLE, XML_COPY_FORMULAS ):
+                bCopyFormulas = IsXMLToken(aIter, XML_TRUE);
+                break;
+            case XML_ELEMENT( TABLE, XML_IS_ACTIVE ):
+                bIsActive = IsXMLToken(aIter, XML_TRUE);
+                break;
+            case XML_ELEMENT( TABLE, XML_SCENARIO_RANGES ):
                 ScRangeStringConverter::GetRangeListFromString(
-                    aScenarioRanges, sValue, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO );
+                    aScenarioRanges, aIter.toString(), GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO );
+                break;
+            case XML_ELEMENT( TABLE, XML_COMMENT ):
+                sComment = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_PROTECTED ):
+                bProtected = IsXMLToken(aIter, XML_TRUE);
+                break;
             }
-            break;
-            case XML_TOK_TABLE_SCENARIO_ATTR_COMMENT:
-            {
-                sComment = sValue;
-            }
-            break;
-            case XML_TOK_TABLE_SCENARIO_ATTR_PROTECTED:
-            {
-                bProtected = IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
         }
     }
 }
@@ -118,15 +101,13 @@ ScXMLTableScenarioContext::~ScXMLTableScenarioContext()
     GetScImport().UnlockSolarMutex();
 }
 
-SvXMLImportContext *ScXMLTableScenarioContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >& /* xAttrList */ )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableScenarioContext::createFastChildContext(
+    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
+    return new SvXMLImportContext( GetImport() );
 }
 
-void ScXMLTableScenarioContext::EndElement()
+void SAL_CALL ScXMLTableScenarioContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     SCTAB nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
     ScDocument* pDoc(GetScImport().GetDocument());

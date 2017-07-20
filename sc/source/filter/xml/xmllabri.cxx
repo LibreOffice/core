@@ -21,6 +21,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "xmlimprt.hxx"
+#include <xmloff/xmlnmspe.hxx>
 
 #include <o3tl/make_unique.hxx>
 
@@ -41,55 +42,49 @@ ScXMLLabelRangesContext::~ScXMLLabelRangesContext()
     GetScImport().UnlockSolarMutex();
 }
 
-SvXMLImportContext* ScXMLLabelRangesContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLLabelRangesContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext*     pContext(nullptr);
-    const SvXMLTokenMap&    rTokenMap(GetScImport().GetLabelRangesElemTokenMap());
 
-    switch( rTokenMap.Get( nPrefix, rLName ) )
+    switch (nElement)
     {
-        case XML_TOK_LABEL_RANGE_ELEM:
-            pContext = new ScXMLLabelRangeContext( GetScImport(), nPrefix, rLName, xAttrList );
+        case XML_ELEMENT( TABLE, XML_LABEL_RANGE ):
+            pContext = new ScXMLLabelRangeContext( GetScImport(), nElement, xAttrList );
         break;
     }
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
 ScXMLLabelRangeContext::ScXMLLabelRangeContext(
         ScXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+        sal_Int32 /*nElement*/,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) :
+    ScXMLImportContext( rImport ),
     bColumnOrientation( false )
 {
-    sal_Int16               nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-    const SvXMLTokenMap&    rAttrTokenMap(GetScImport().GetLabelRangeAttrTokenMap());
-
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
-        OUString    aLocalName;
-        sal_uInt16      nPrefix     (GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_LABEL_RANGE_ATTR_LABEL_RANGE:
-                sLabelRangeStr = sValue;
-            break;
-            case XML_TOK_LABEL_RANGE_ATTR_DATA_RANGE:
-                sDataRangeStr = sValue;
-            break;
-            case XML_TOK_LABEL_RANGE_ATTR_ORIENTATION:
-                bColumnOrientation = IsXMLToken(sValue, XML_COLUMN );
-            break;
+            switch (aIter.getToken())
+            {
+            case XML_ELEMENT( TABLE, XML_LABEL_CELL_RANGE_ADDRESS ):
+                sLabelRangeStr = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_DATA_CELL_RANGE_ADDRESS ):
+                sDataRangeStr = aIter.toString();
+                break;
+            case XML_ELEMENT( TABLE, XML_ORIENTATION ):
+                bColumnOrientation = IsXMLToken(aIter, XML_COLUMN );
+                break;
+            }
         }
     }
 }
@@ -98,15 +93,13 @@ ScXMLLabelRangeContext::~ScXMLLabelRangeContext()
 {
 }
 
-SvXMLImportContext* ScXMLLabelRangeContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >& /* xAttrList */ )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLLabelRangeContext::createFastChildContext(
+    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
+    return new SvXMLImportContext( GetImport() );
 }
 
-void ScXMLLabelRangeContext::EndElement()
+void SAL_CALL ScXMLLabelRangeContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     //  Label ranges must be stored as strings until all sheets are loaded
     //  (like named expressions).
