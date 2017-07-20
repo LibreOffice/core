@@ -20,6 +20,7 @@
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <wrtsh.hxx>
 #include <ndtxt.hxx>
@@ -806,6 +807,12 @@ DECLARE_ODFIMPORT_TEST(testTdf109080_style_ns, "tdf109080_style_ns.odt")
         parseDump("/root/page[1]/footer/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("This is the non-first-page footer"),
         parseDump("/root/page[2]/footer/txt/text()"));
+}
+
+DECLARE_ODFIMPORT_TEST(testTdf109228, "tdf109228.odt")
+{
+    //  Embedded object with no frame name was imported incorrectly, it was achored 'to character' instead of 'as character'
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
