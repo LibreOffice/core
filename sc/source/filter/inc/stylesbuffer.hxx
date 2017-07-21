@@ -671,10 +671,6 @@ public:
 private:
     FontRef             mxFont;             /// Font data.
     NumberFormatRef     mxNumFmt;           /// Number format data.
-    std::shared_ptr< Alignment >
-                        mxAlignment;        /// Alignment data.
-    std::shared_ptr< Protection >
-                        mxProtection;       /// Protection data.
     BorderRef           mxBorder;           /// Border data.
     FillRef             mxFill;             /// Fill data.
 };

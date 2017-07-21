@@ -874,8 +874,6 @@ sal/rtl/uuid.cxx:65
     UUID node sal_uInt8 [6]
 sc/inc/attrib.hxx:216
     ScTableListItem nCount sal_uInt16
-sc/inc/chgviset.hxx:48
-    ScChangeViewSettings bEveryoneButMe _Bool
 sc/inc/clipparam.hxx:41
     ScClipParam maProtectedChartRangesVector ScRangeListVector
 sc/inc/compiler.hxx:127
@@ -1008,10 +1006,6 @@ sc/source/filter/inc/scflt.hxx:757
     Sc10Import FramePalette struct Sc10Color [16]
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/filter/inc/stylesbuffer.hxx:675
-    oox::xls::Dxf mxAlignment std::shared_ptr<Alignment>
-sc/source/filter/inc/stylesbuffer.hxx:677
-    oox::xls::Dxf mxProtection std::shared_ptr<Protection>
 sc/source/filter/inc/XclExpChangeTrack.hxx:47
     XclExpUserBView aGUID sal_uInt8 [16]
 sc/source/filter/inc/XclExpChangeTrack.hxx:85
@@ -1042,10 +1036,6 @@ sc/source/ui/inc/dataprovider.hxx:47
     sc::ExternalDataMapper maDocument class ScDocument
 sc/source/ui/inc/dataprovider.hxx:149
     sc::CSVDataProvider mbImportUnderway _Bool
-sc/source/ui/inc/tabvwsh.hxx:161
-    ScTabViewShell nChartDestTab SCTAB
-sc/source/ui/inc/undobase.hxx:113
-    ScMultiBlockUndo meMode enum ScBlockUndoMode
 scripting/source/stringresource/stringresource.hxx:74
     stringresource::LocaleItem m_aIdToIndexMap stringresource::IdToIndexMap
 sd/inc/sdmod.hxx:117

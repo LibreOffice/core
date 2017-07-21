@@ -45,7 +45,6 @@ ScChangeViewSettings::ScChangeViewSettings( const ScChangeViewSettings& r ):
     bIsAuthor       =r.bIsAuthor;
     bIsComment      =r.bIsComment;
     bIsRange        =r.bIsRange;
-    bEveryoneButMe  =r.bEveryoneButMe;
     bShowAccepted   =r.bShowAccepted;
     bShowRejected   =r.bShowRejected;
     mbIsActionRange = r.mbIsActionRange;
@@ -69,7 +68,6 @@ ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSetting
     bIsAuthor       =r.bIsAuthor;
     bIsComment      =r.bIsComment;
     bIsRange        =r.bIsRange;
-    bEveryoneButMe  =r.bEveryoneButMe;
     bShowAccepted   =r.bShowAccepted;
     bShowRejected   =r.bShowRejected;
     mbIsActionRange = r.mbIsActionRange;

@@ -348,8 +348,7 @@ void ScBlockUndo::ShowBlock()
 ScMultiBlockUndo::ScMultiBlockUndo(
     ScDocShell* pDocSh, const ScRangeList& rRanges) :
     ScSimpleUndo(pDocSh),
-    maBlockRanges(rRanges),
-    meMode(SC_UNDO_SIMPLE)
+    maBlockRanges(rRanges)
 {
     mpDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
@@ -367,9 +366,6 @@ void ScMultiBlockUndo::BeginUndo()
 
 void ScMultiBlockUndo::EndUndo()
 {
-    if (meMode == SC_UNDO_AUTOHEIGHT)
-        AdjustHeight();
-
     EnableDrawAdjust(&pDocShell->GetDocument(), true);
     DoSdrUndoAction(mpDrawUndo, &pDocShell->GetDocument());
 
@@ -379,9 +375,6 @@ void ScMultiBlockUndo::EndUndo()
 
 void ScMultiBlockUndo::EndRedo()
 {
-    if (meMode == SC_UNDO_AUTOHEIGHT)
-        AdjustHeight();
-
     ShowBlock();
     ScSimpleUndo::EndRedo();
 }

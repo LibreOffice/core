@@ -2282,21 +2282,9 @@ void Dxf::finalizeImport()
 {
     if( mxFont.get() )
         mxFont->finalizeImport();
-    bool bRTL = false;
-    // number format already finalized by the number formats buffer
-    if( mxAlignment.get() )
-    {
-        mxAlignment->finalizeImport();
-        // how do we detect RTL when text dir is OOX_XF_CONTEXT? ( seems you
-        // would need access to the cell content, which we don't here )
-        if ( mxAlignment->getModel().mnTextDir == OOX_XF_TEXTDIR_RTL )
-            bRTL = true;
-    }
-    if( mxProtection.get() )
-        mxProtection->finalizeImport();
     if( mxBorder.get() )
     {
-        mxBorder->finalizeImport( bRTL );
+        mxBorder->finalizeImport( false/*bRTL*/ );
     }
     if( mxFill.get() )
         mxFill->finalizeImport();
@@ -2308,10 +2296,6 @@ void Dxf::fillToItemSet( SfxItemSet& rSet ) const
         mxFont->fillToItemSet(rSet, false);
     if (mxNumFmt)
         mxNumFmt->fillToItemSet(rSet);
-    if (mxAlignment)
-        mxAlignment->fillToItemSet(rSet);
-    if (mxProtection)
-        mxProtection->fillToItemSet(rSet);
     if (mxBorder)
         mxBorder->fillToItemSet(rSet);
     if (mxFill)

@@ -1819,14 +1819,6 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     // eNumType is known by the dialog
 }
 
-bool ScTabViewShell::GetChartArea( ScRangeListRef& rSource, tools::Rectangle& rDest, SCTAB& rTab ) const
-{
-    rSource = aChartSource;
-    rDest   = aChartPos;
-    rTab    = nChartDestTab;
-    return false;
-}
-
 ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()
 {
     if( !pNavSettings )
