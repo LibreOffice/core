@@ -146,7 +146,7 @@ public:
 #if defined(_WIN32)
     void                        AddDdeTopic( SfxObjectShell* );
 #endif
-    void                        RemoveDdeTopic( SfxObjectShell* );
+    void                        RemoveDdeTopic( SfxObjectShell const * );
 
     // "static" methods
     /**

@@ -490,7 +490,7 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 }
 #endif
 
-void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
+void SfxApplication::RemoveDdeTopic( SfxObjectShell const * pSh )
 {
 #if defined(_WIN32)
     //OV: DDE is disconnected in server mode!

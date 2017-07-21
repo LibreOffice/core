@@ -111,7 +111,7 @@ public:
     static SfxFrame*    Create( const css::uno::Reference< css::frame::XFrame >& xFrame );
     static css::uno::Reference< css::frame::XFrame >
                         CreateBlankFrame();
-    static SfxFrame*    Create( SfxObjectShell& rDoc, vcl::Window& rWindow, SfxInterfaceId nViewId, bool bHidden );
+    static SfxFrame*    Create( SfxObjectShell const & rDoc, vcl::Window& rWindow, SfxInterfaceId nViewId, bool bHidden );
 
     vcl::Window&        GetWindow() const { return *pWindow;}
     void                CancelTransfers();
@@ -131,7 +131,7 @@ public:
     sal_uInt32          GetFrameType() const;
     static void         GetDefaultTargetList( TargetList& );
     void                GetTargetList( TargetList& ) const;
-    void                UpdateDescriptor( SfxObjectShell *pDoc );
+    void                UpdateDescriptor( SfxObjectShell const *pDoc );
     void                Resize();
     const css::uno::Reference< css::frame::XFrame >&
                         GetFrameInterface() const;

@@ -198,7 +198,7 @@ void TemplateLocalView::showAllTemplates()
     maOpenRegionHdl.Call(nullptr);
 }
 
-void TemplateLocalView::showRegion(TemplateContainerItem *pItem)
+void TemplateLocalView::showRegion(TemplateContainerItem const *pItem)
 {
     mnCurRegionId = pItem->mnRegionId+1;
     maCurRegionName = pItem->maTitle;

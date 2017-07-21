@@ -313,7 +313,7 @@ bool SfxDispatcher::IsAppDispatcher() const
 }
 
 /// Decides if the request is FASTCALL or not, depending on arguments.
-bool lcl_IsConditionalFastCall(SfxRequest &rReq)
+bool lcl_IsConditionalFastCall(SfxRequest const &rReq)
 {
     sal_uInt16 nId = rReq.GetSlot();
     bool bRet = false;
@@ -761,7 +761,7 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI)
     are called with the handler <SfxShell::Deactivate(bool)>, starting with
     the lowest.
 */
-void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame* pNew)
+void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame const * pNew)
 {
     SFX_STACK(SfxDispatcher::DoDeactivate);
 
@@ -940,7 +940,7 @@ const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )
 }
 
 const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
-        SfxItemSet* pArgs, SfxItemSet* pInternalArgs, sal_uInt16 nModi)
+        SfxItemSet const * pArgs, SfxItemSet const * pInternalArgs, sal_uInt16 nModi)
 {
     if ( IsLocked() )
         return nullptr;

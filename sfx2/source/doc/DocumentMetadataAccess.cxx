@@ -268,7 +268,7 @@ splitXmlId(OUString const & i_XmlId,
 
 
 static uno::Reference<rdf::XURI>
-getURIForStream(struct DocumentMetadataAccess_Impl& i_rImpl,
+getURIForStream(struct DocumentMetadataAccess_Impl const & i_rImpl,
     OUString const& i_rPath)
 {
     const uno::Reference<rdf::XURI> xURI(
@@ -281,7 +281,7 @@ getURIForStream(struct DocumentMetadataAccess_Impl& i_rImpl,
 /** add statements declaring i_xResource to be a file of type i_xType with
     path i_rPath to manifest, with optional additional types i_pTypes */
 static void
-addFile(struct DocumentMetadataAccess_Impl & i_rImpl,
+addFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
     uno::Reference<rdf::XURI> const& i_xType,
     OUString const & i_rPath,
     const uno::Sequence < uno::Reference< rdf::XURI > > * i_pTypes)
@@ -313,7 +313,7 @@ addFile(struct DocumentMetadataAccess_Impl & i_rImpl,
 
 /** add content.xml or styles.xml to manifest */
 static bool
-addContentOrStylesFileImpl(struct DocumentMetadataAccess_Impl & i_rImpl,
+addContentOrStylesFileImpl(struct DocumentMetadataAccess_Impl const & i_rImpl,
     const OUString & i_rPath)
 {
     uno::Reference<rdf::XURI> xType;
@@ -330,7 +330,7 @@ addContentOrStylesFileImpl(struct DocumentMetadataAccess_Impl & i_rImpl,
 
 /** add metadata file to manifest */
 static void
-addMetadataFileImpl(struct DocumentMetadataAccess_Impl & i_rImpl,
+addMetadataFileImpl(struct DocumentMetadataAccess_Impl const & i_rImpl,
     const OUString & i_rPath,
     const uno::Sequence < uno::Reference< rdf::XURI > > & i_rTypes)
 {
@@ -341,7 +341,7 @@ addMetadataFileImpl(struct DocumentMetadataAccess_Impl & i_rImpl,
 
 /** remove a file from the manifest */
 static void
-removeFile(struct DocumentMetadataAccess_Impl & i_rImpl,
+removeFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
     uno::Reference<rdf::XURI> const& i_xPart)
 {
     if (!i_xPart.is()) throw uno::RuntimeException();
@@ -361,7 +361,7 @@ removeFile(struct DocumentMetadataAccess_Impl & i_rImpl,
 }
 
 static ::std::vector< uno::Reference< rdf::XURI > >
-getAllParts(struct DocumentMetadataAccess_Impl & i_rImpl)
+getAllParts(struct DocumentMetadataAccess_Impl const & i_rImpl)
 {
     ::std::vector< uno::Reference< rdf::XURI > > ret;
     try {
@@ -390,7 +390,7 @@ getAllParts(struct DocumentMetadataAccess_Impl & i_rImpl)
 }
 
 static bool
-isPartOfType(struct DocumentMetadataAccess_Impl & i_rImpl,
+isPartOfType(struct DocumentMetadataAccess_Impl const & i_rImpl,
     uno::Reference<rdf::XURI> const & i_xPart,
     uno::Reference<rdf::XURI> const & i_xType)
 {
@@ -589,7 +589,7 @@ retry:
 
 /** actually write a metadata file to the storage */
 static void
-exportStream(struct DocumentMetadataAccess_Impl & i_rImpl,
+exportStream(struct DocumentMetadataAccess_Impl const & i_rImpl,
     uno::Reference< embed::XStorage > const & i_xStorage,
     uno::Reference<rdf::XURI> const & i_xGraphName,
     OUString const & i_rFileName,

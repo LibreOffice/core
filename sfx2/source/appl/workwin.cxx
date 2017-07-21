@@ -1120,7 +1120,7 @@ Reference< css::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
 }
 
 
-bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
+bool SfxWorkWindow::IsPluginMode( SfxObjectShell const * pObjShell )
 {
     if ( pObjShell && pObjShell->GetMedium() )
     {

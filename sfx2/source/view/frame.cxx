@@ -364,7 +364,7 @@ void SfxFrame::GetViewData_Impl()
     }
 }
 
-void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
+void SfxFrame::UpdateDescriptor( SfxObjectShell const *pDoc )
 {
     // For PrepareForDoc_Impl frames, the descriptor of the updated
     // and new itemset to be initialized. All data fir restoring the view

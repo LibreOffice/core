@@ -517,7 +517,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 }
 
 
-void SfxSplitWindow::ReleaseWindow_Impl(SfxDockingWindow *pDockWin, bool bSave)
+void SfxSplitWindow::ReleaseWindow_Impl(SfxDockingWindow const *pDockWin, bool bSave)
 {
 //  The docking window is no longer stored in the internal data.
     sal_uInt16 nCount = maDockArr.size();
@@ -632,7 +632,7 @@ void SfxSplitWindow::InsertWindow( SfxDockingWindow* pDockWin, const Size& rSize
 }
 
 
-void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
+void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
                         const Size& rSize,
                         sal_uInt16 nLine, sal_uInt16 nPos, bool bNewLine)
 
@@ -757,7 +757,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
 }
 
 
-void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, bool bHide )
+void SfxSplitWindow::RemoveWindow( SfxDockingWindow const * pDockWin, bool bHide )
 
 /*  [Description]
 

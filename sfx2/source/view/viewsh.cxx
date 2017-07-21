@@ -372,7 +372,7 @@ void SfxViewShell::NewIPClient_Impl( SfxInPlaceClient *pIPClient )
     pImpl->GetIPClientList_Impl()->push_back(pIPClient);
 }
 
-void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
+void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient const *pIPClient )
 {
     SfxInPlaceClientList* pClientList = pImpl->GetIPClientList_Impl();
 
@@ -1549,7 +1549,7 @@ void SfxViewShell::ShowCursor( bool /*bOn*/ )
 }
 
 
-void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
+void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient const *pIP )
 {
 
     SfxInPlaceClientList *pClients = pImpl->GetIPClientList_Impl(false);
@@ -1597,7 +1597,7 @@ void SfxViewShell::VisAreaChanged()
 
 
 void SfxViewShell::CheckIPClient_Impl(
-        SfxInPlaceClient *const pIPClient, const tools::Rectangle& rVisArea)
+        SfxInPlaceClient const *const pIPClient, const tools::Rectangle& rVisArea)
 {
     if ( GetObjectShell()->IsInClose() )
         return;
@@ -1906,7 +1906,7 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rMenu, const OUString& rMen
     return true;
 }
 
-bool SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )
+bool SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent const & rEvent )
 {
     if (pImpl->m_pController.is())
         return pImpl->m_pController->HandleEvent_Impl( rEvent );

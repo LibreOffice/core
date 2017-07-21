@@ -178,7 +178,7 @@ void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
     NotebookbarTabControlBase::StateChanged( nStateChange );
 }
 
-void NotebookbarTabControl::FillShortcutsToolBox(Reference<XComponentContext>& xContext,
+void NotebookbarTabControl::FillShortcutsToolBox(Reference<XComponentContext> const & xContext,
                                           const Reference<XFrame>& xFrame,
                                           const OUString& aModuleName,
                                           ToolBox* pShortcuts

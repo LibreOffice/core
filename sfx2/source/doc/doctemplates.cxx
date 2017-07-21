@@ -259,14 +259,14 @@ class SfxDocTplService_Impl
                                               const OUString& rUITitle,
                                               const OUString& rOwnURL,
                                               bool bWriteableGroup );
-    void                        removeFromHierarchy( DocTemplates_EntryData_Impl *pData );
-    void                        addToHierarchy( GroupData_Impl *pGroup,
-                                                DocTemplates_EntryData_Impl *pData );
+    void                        removeFromHierarchy( DocTemplates_EntryData_Impl const *pData );
+    void                        addToHierarchy( GroupData_Impl const *pGroup,
+                                                DocTemplates_EntryData_Impl const *pData );
 
-    void                        removeFromHierarchy( GroupData_Impl *pGroup );
+    void                        removeFromHierarchy( GroupData_Impl const *pGroup );
     void                        addGroupToHierarchy( GroupData_Impl *pGroup );
 
-    void                        updateData( DocTemplates_EntryData_Impl *pData );
+    void                        updateData( DocTemplates_EntryData_Impl const *pData );
 
     //See: #i66157# and rhbz#1065807
     //return which template dir the rURL is a subpath of
@@ -2545,7 +2545,7 @@ void SfxDocTplService_Impl::createFromContent( GroupList_Impl& rList,
 }
 
 
-void SfxDocTplService_Impl::removeFromHierarchy( DocTemplates_EntryData_Impl *pData )
+void SfxDocTplService_Impl::removeFromHierarchy( DocTemplates_EntryData_Impl const *pData )
 {
     Content aTemplate;
 
@@ -2556,8 +2556,8 @@ void SfxDocTplService_Impl::removeFromHierarchy( DocTemplates_EntryData_Impl *pD
 }
 
 
-void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
-                                            DocTemplates_EntryData_Impl *pData )
+void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl const *pGroup,
+                                            DocTemplates_EntryData_Impl const *pData )
 {
     Content aGroup, aTemplate;
 
@@ -2583,7 +2583,7 @@ void SfxDocTplService_Impl::addToHierarchy( GroupData_Impl *pGroup,
 }
 
 
-void SfxDocTplService_Impl::updateData( DocTemplates_EntryData_Impl *pData )
+void SfxDocTplService_Impl::updateData( DocTemplates_EntryData_Impl const *pData )
 {
     Content aTemplate;
 
@@ -2628,7 +2628,7 @@ void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
 }
 
 
-void SfxDocTplService_Impl::removeFromHierarchy( GroupData_Impl *pGroup )
+void SfxDocTplService_Impl::removeFromHierarchy( GroupData_Impl const *pGroup )
 {
     Content aGroup;
 

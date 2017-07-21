@@ -31,7 +31,7 @@ public:
     virtual Size calculateRequisition() const override;
 
 private:
-    static void FillShortcutsToolBox(css::uno::Reference<css::uno::XComponentContext>& xContext,
+    static void FillShortcutsToolBox(css::uno::Reference<css::uno::XComponentContext> const & xContext,
                                           const css::uno::Reference<css::frame::XFrame>& xFrame,
                                           const OUString& aModuleName,
                                           ToolBox* pShortcuts

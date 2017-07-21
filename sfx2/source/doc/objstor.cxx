@@ -866,7 +866,7 @@ bool SfxObjectShell::DoLoadExternal( SfxMedium *pMed )
     return LoadExternal(*pMedium);
 }
 
-ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc )
+ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const * pDoc )
 {
     ErrCode nError = ERRCODE_NONE;
     SfxItemSet* pSet = pMedium->GetItemSet();
@@ -1063,7 +1063,7 @@ bool SfxObjectShell::DoSave()
     return bOk;
 }
 
-void Lock_Impl( SfxObjectShell* pDoc, bool bLock )
+void Lock_Impl( SfxObjectShell const * pDoc, bool bLock )
 {
     SfxViewFrame *pFrame= SfxViewFrame::GetFirst( pDoc );
     while ( pFrame )
@@ -2701,7 +2701,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
         return false;
 }
 
-bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString& aFilterName, SfxItemSet& rItemSet)
+bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString& aFilterName, SfxItemSet const & rItemSet)
 {
     // copy all items stored in the itemset of the current medium
     SfxAllItemSet* pMergedParams = new SfxAllItemSet( *pMedium->GetItemSet() );

@@ -178,7 +178,7 @@ public:
                                   const size_t *pPos );
     void                DeleteEntry( size_t nIndex );
 
-    int                 Compare( RegionData_Impl* pCompareWith ) const;
+    int                 Compare( RegionData_Impl const * pCompareWith ) const;
 };
 
 typedef vector< RegionData_Impl* > RegionList_Impl;
@@ -1440,7 +1440,7 @@ void RegionData_Impl::DeleteEntry( size_t nIndex )
 }
 
 
-int RegionData_Impl::Compare( RegionData_Impl* pCompare ) const
+int RegionData_Impl::Compare( RegionData_Impl const * pCompare ) const
 {
     return maTitle.compareTo( pCompare->maTitle );
 }

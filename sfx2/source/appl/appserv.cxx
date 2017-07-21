@@ -1252,7 +1252,7 @@ namespace
         return OUString( "com.sun.star.script.BasicIDE");
     }
 
-    SfxViewFrame* lcl_getBasicIDEViewFrame( SfxObjectShell* i_pBasicIDE )
+    SfxViewFrame* lcl_getBasicIDEViewFrame( SfxObjectShell const * i_pBasicIDE )
     {
         SfxViewFrame* pView = SfxViewFrame::GetFirst( i_pBasicIDE );
         while ( pView )

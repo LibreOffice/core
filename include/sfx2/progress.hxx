@@ -60,7 +60,7 @@ public:
 
     void                    Stop();
 
-    static SfxProgress*     GetActiveProgress( SfxObjectShell *pDocSh = nullptr );
+    static SfxProgress*     GetActiveProgress( SfxObjectShell const *pDocSh = nullptr );
     static void             EnterLock();
     static void             LeaveLock();
 };
