@@ -2337,7 +2337,6 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
 SvxNumberingPreview::SvxNumberingPreview(vcl::Window* pParent, WinBits nWinBits)
     : Window(pParent, nWinBits)
     , pActNum(nullptr)
-    , nPageWidth(0)
     , bPosition(false)
     , nActLevel(SAL_MAX_UINT16)
 {
@@ -2368,17 +2367,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
 
     if (pActNum)
     {
-        sal_uInt16 nWidthRelation;
-        if (nPageWidth)
-        {
-            nWidthRelation = sal_uInt16 (nPageWidth / aSize.Width());
-            if (bPosition)
-                nWidthRelation = nWidthRelation * 2 / 3;
-            else
-                nWidthRelation = nWidthRelation / 4;
-        }
-        else
-            nWidthRelation = 30; // chapter dialog
+        sal_uInt16 nWidthRelation = 30; // chapter dialog
 
         // height per level
         sal_uInt16 nXStep = sal::static_int_cast<sal_uInt16>(aSize.Width() / (3 * pActNum->GetLevelCount()));

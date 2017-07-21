@@ -56,7 +56,6 @@ using namespace com::sun::star;
 
 SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "ColorPage", "cui/ui/colorpage.ui", &rInAttrs)
-    , meType( XPropertyListType::Color )
     , mpTopDlg( GetParentDialog() )
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
@@ -485,7 +484,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, ListBox&, void)
     {
         XColorListRef pList = XPropertyList::AsColorList(
                                 XPropertyList::CreatePropertyListFromURL(
-                                meType, maPaletteManager.GetSelectedPalettePath()));
+                                XPropertyListType::Color, maPaletteManager.GetSelectedPalettePath()));
         pList->SetName(maPaletteManager.GetPaletteName());
         if(pList->Load())
         {

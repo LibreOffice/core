@@ -184,12 +184,6 @@ cui/source/inc/autocdlg.hxx:229
     StringChangeList aNewEntries DoubleStringArray
 cui/source/inc/autocdlg.hxx:230
     StringChangeList aDeletedEntries DoubleStringArray
-cui/source/inc/cuitabarea.hxx:125
-    SvxAreaTabDialog mnPageType enum PageType
-cui/source/inc/cuitabarea.hxx:659
-    SvxColorTabPage meType enum XPropertyListType
-cui/source/inc/numpages.hxx:49
-    SvxNumberingPreview nPageWidth long
 cui/source/inc/numpages.hxx:166
     SvxNumPickTabPage aNumSettingsArrays SvxNumSettingsArr_Impl [16]
 cui/source/inc/swpossizetabpage.hxx:77
@@ -198,8 +192,6 @@ cui/source/options/optcolor.cxx:257
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 cui/source/options/optpath.cxx:79
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
-cui/source/tabpages/macroass.cxx:59
-    SfxMacroTabPage_Impl bReadOnly _Bool
 dbaccess/source/core/api/RowSetBase.hxx:76
     dbaccess::ORowSetBase m_aModuleClient class dbaccess::OModuleClient
 dbaccess/source/core/dataaccess/ModelImpl.hxx:168
@@ -534,8 +526,6 @@ include/connectivity/DriversConfig.hxx:76
     connectivity::DriversConfig m_aNode connectivity::DriversConfig::OSharedConfigNode
 include/connectivity/sdbcx/VDescriptor.hxx:56
     connectivity::sdbcx::ODescriptor m_aCase comphelper::UStringMixEqual
-include/cppcanvas/renderer.hxx:131
-    cppcanvas::Renderer::Parameters maFontProportion ::boost::optional<sal_Int8>
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/editeng/brushitem.hxx:53
