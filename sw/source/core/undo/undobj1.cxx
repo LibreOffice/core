@@ -52,7 +52,13 @@ SwUndoFlyBase::SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId )
 SwUndoFlyBase::~SwUndoFlyBase()
 {
     if( bDelFormat )       // delete during an Undo?
+    {
+        if (pFrameFormat->GetOtherTextBoxFormat())
+        {   // clear that before delete
+            pFrameFormat->SetOtherTextBoxFormat(nullptr);
+        }
         delete pFrameFormat;
+    }
 }
 
 void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
@@ -107,6 +113,13 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
         pCNd->GetTextNode()->InsertItem(aFormat, nCntPos, nCntPos, SetAttrMode::NOHINTEXPAND);
     }
 
+    if (pFrameFormat->GetOtherTextBoxFormat())
+    {
+        // recklessly assume that this thing will live longer than the
+        // SwUndoFlyBase - not sure what could be done if that isn't the case...
+        pFrameFormat->GetOtherTextBoxFormat()->SetOtherTextBoxFormat(pFrameFormat);
+    }
+
     pFrameFormat->MakeFrames();
 
     if( bShowSelFrame )
@@ -145,6 +158,11 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 {
     bDelFormat = true;                 // delete Format in DTOR
     pFrameFormat->DelFrames();                 // destroy Frames
+
+    if (pFrameFormat->GetOtherTextBoxFormat())
+    {   // tdf#108867 clear that pointer
+        pFrameFormat->GetOtherTextBoxFormat()->SetOtherTextBoxFormat(nullptr);
+    }
 
     // all Uno objects should now log themselves off
     {
