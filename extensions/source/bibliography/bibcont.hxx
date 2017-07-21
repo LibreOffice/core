@@ -64,9 +64,6 @@ class BibBookContainer: public BibSplitWindow
 {
     private:
 
-        css::uno::Reference< css::frame::XFrame >             xTopFrameRef;
-        css::uno::Reference< css::frame::XFrame >             xBottomFrameRef;
-
         VclPtr<BibWindowContainer>     pTopWin;
         VclPtr<BibWindowContainer>     pBottomWin;
         HdlBibModul             pBibMod;

@@ -67,7 +67,6 @@ friend class BibFrameCtrl_Impl;
     bool                        bDisposing;
     bool                        bHierarchical;
     rtl::Reference<BibDataManager>                            m_xDatMan;
-    HdlBibModul                 pBibMod;
 
     DECL_LINK( DisposeHdl, void*, void );
 

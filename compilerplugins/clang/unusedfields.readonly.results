@@ -284,14 +284,6 @@ embeddedobj/source/inc/oleembobj.hxx:170
     OleEmbeddedObject m_nStatusAspect sal_Int64
 embeddedobj/source/inc/oleembobj.hxx:184
     OleEmbeddedObject m_bFromClipboard _Bool
-extensions/source/bibliography/bibbeam.hxx:48
-    bib::BibBeamer m_xToolBarRef css::uno::Reference<css::frame::XFrame>
-extensions/source/bibliography/bibcont.hxx:67
-    BibBookContainer xTopFrameRef css::uno::Reference<css::frame::XFrame>
-extensions/source/bibliography/bibcont.hxx:68
-    BibBookContainer xBottomFrameRef css::uno::Reference<css::frame::XFrame>
-extensions/source/bibliography/framectr.hxx:70
-    BibFrameController_Impl pBibMod HdlBibModul
 extensions/source/propctrlr/eformshelper.hxx:62
     pcr::EFormsHelper m_aSubmissionUINames pcr::MapStringToPropertySet
 extensions/source/propctrlr/eformshelper.hxx:64
@@ -300,10 +292,6 @@ extensions/source/propctrlr/propertyhandler.hxx:80
     pcr::PropertyHandler m_aEnsureResAccess class pcr::PcrClient
 extensions/source/scanner/scanner.hxx:46
     ScannerManager maProtector osl::Mutex
-filter/inc/gfxtypes.hxx:193
-    svgi::State meTextDisplayAlign enum svgi::TextAlign
-filter/inc/gfxtypes.hxx:204
-    svgi::State meViewportFillType enum svgi::PaintType
 filter/source/graphicfilter/eps/eps.cxx:112
     PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
 filter/source/graphicfilter/icgm/chart.hxx:44
@@ -340,8 +328,6 @@ formula/source/ui/dlg/structpg.hxx:68
     formula::StructPage m_aModuleClient class formula::OModuleClient
 framework/inc/dispatch/dispatchprovider.hxx:81
     framework::DispatchProvider m_aProtocolHandlerCache class framework::HandlerCache
-framework/inc/dispatch/oxt_handler.hxx:92
-    framework::Oxt_Handler m_xSelfHold css::uno::Reference<css::uno::XInterface>
 framework/source/uiconfiguration/moduleuiconfigurationmanager.cxx:184
     (anonymous namespace)::ModuleUIConfigurationManager::UIElementType aElementsHashMap (anonymous namespace)::ModuleUIConfigurationManager::UIElementDataHashMap
 framework/source/uiconfiguration/uiconfigurationmanager.cxx:164

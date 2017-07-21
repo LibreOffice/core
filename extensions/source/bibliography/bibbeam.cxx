@@ -203,9 +203,6 @@ namespace bib
         if ( isFormConnected() )
             disconnectForm();
 
-        if ( m_xToolBarRef.is() )
-            m_xToolBarRef->dispose();
-
         if ( pToolBar )
             pDatMan->SetToolbar(nullptr);
 
