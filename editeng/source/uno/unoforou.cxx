@@ -228,9 +228,8 @@ OUString SvxOutlinerForwarder::CalcFieldValue( const SvxFieldItem& rField, sal_I
     return rOutliner.CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );
 }
 
-void SvxOutlinerForwarder::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
+void SvxOutlinerForwarder::FieldClicked( const SvxFieldItem& /*rField*/, sal_Int32 /*nPara*/, sal_Int32 /*nPos*/ )
 {
-    rOutliner.FieldClicked( rField, nPara, nPos );
 }
 
 bool SvxOutlinerForwarder::IsValid() const

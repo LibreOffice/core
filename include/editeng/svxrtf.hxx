@@ -203,7 +203,6 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     bool    bIsSetDfltTab : 1;      // sal_True - DefTab was loaded
     bool    bChkStyleAttr : 1;      // sal_True - StyleSheets are evaluated
     bool    bCalcValue : 1;         // sal_True - Twip values adapt to App
-    bool    bReadDocInfo : 1;       // sal_True - DocInfo to read
     bool    bIsLeftToRightDef : 1;  // sal_True - in LeftToRight char run def.
                                         // sal_False - in RightToLeft char run def.
     bool    bIsInReadStyleTab : 1;  // sal_True - in ReadStyleTable
