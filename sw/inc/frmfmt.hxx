@@ -61,6 +61,7 @@ class SW_DLLPUBLIC SwFrameFormat: public SwFormat
     friend class ::sw::DocumentLayoutManager; ///< Is allowed to call protected CTor.
     friend class SwFrameFormats;     ///< Is allowed to update the list backref.
     friend class SwTextBoxHelper;
+    friend class SwUndoFlyBase; ///< calls SetOtherTextBoxFormat
 
     css::uno::WeakReference<css::uno::XInterface> m_wXObject;
 
