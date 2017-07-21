@@ -37,7 +37,7 @@ public:
     void SAL_CALL registerTimer(salhelper::Timer* pTimer);
 
     /// unregister timer
-    void SAL_CALL unregisterTimer(salhelper::Timer* pTimer);
+    void SAL_CALL unregisterTimer(salhelper::Timer const * pTimer);
 
     /// lookup timer
     bool SAL_CALL lookupTimer(const salhelper::Timer* pTimer);
@@ -292,7 +292,7 @@ void TimerManager::registerTimer(Timer* pTimer)
     }
 }
 
-void TimerManager::unregisterTimer(Timer* pTimer)
+void TimerManager::unregisterTimer(Timer const * pTimer)
 {
     if (!pTimer)
         return;

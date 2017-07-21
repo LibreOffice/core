@@ -58,8 +58,8 @@ OString Win_AddLongPathPrefix( const OString &rPathName )
 #ifdef SYSTEM_DICTS
 // find old style dictionaries in system directories
 void GetOldStyleDicsInDir(
-    OUString& aSystemDir, OUString& aFormatName,
-    OUString& aSystemSuffix, OUString& aSystemPrefix,
+    OUString const & aSystemDir, OUString const & aFormatName,
+    OUString const & aSystemSuffix, OUString const & aSystemPrefix,
     std::set< OUString >& aDicLangInUse,
     std::vector< SvtLinguConfigDictionaryEntry >& aRes )
 {

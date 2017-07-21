@@ -525,7 +525,7 @@ void freefile(struct filepointer *fp)
     free(fp);
 }
 
-char *copy(char *str)
+char *copy(char const *str)
 {
     char   *p = (char *)malloc(strlen(str) + 1);
 
@@ -533,7 +533,7 @@ char *copy(char *str)
     return p;
 }
 
-int match(char *str, char **list)
+int match(char const *str, char **list)
 {
     int    i;
 
@@ -670,7 +670,7 @@ void fatalerr(char *msg, ...)
     exit (1);
 }
 
-void warning(char *msg, ...)
+void warning(char const *msg, ...)
 {
 #ifdef DEBUG_MKDEPEND
     va_list args;
@@ -683,7 +683,7 @@ void warning(char *msg, ...)
 #endif /* DEBUG_MKDEPEND */
 }
 
-void warning1(char *msg, ...)
+void warning1(char const *msg, ...)
 {
 #ifdef DEBUG_MKDEPEND
     va_list args;

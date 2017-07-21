@@ -645,7 +645,7 @@ int
  * if fd==-1 and str, then from the string.
  */
 Source *
-    setsource(char *name, int path, int fd, char *str, int wrap)
+    setsource(char *name, int path, int fd, char const *str, int wrap)
 {
     Source *s = new(Source);
     size_t len;

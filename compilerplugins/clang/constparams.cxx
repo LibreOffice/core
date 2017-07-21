@@ -108,6 +108,11 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
             || name == "file_write"
             || name == "SalMainPipeExchangeSignal_impl"
             || name.startswith("SbRtl_")
+            || name == "my_if_errors"
+            || name == "my_eval_defined"
+            || name == "my_eval_variable"
+             // #ifdef win32
+            || name == "convert_slashes"
                 // UNO component entry points
             || name.endswith("component_getFactory")
                 // in Scheduler::, wants to loop until a reference to a bool becomes true

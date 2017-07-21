@@ -194,7 +194,7 @@ my_eval_variable (IfParser *ip, const char *var, size_t len)
 }
 
 
-int cppsetup(char *line)
+int cppsetup(char const *line)
 {
     IfParser ip;
     int val = 0;
