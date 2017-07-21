@@ -2033,12 +2033,19 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
 
     // Put back the Pam by one "content"; so that it's always outside of
     // the manipulated range.
-    // If there's no content anymore, set it to the StartNode (that's
-    // always there).
-    const bool bNullContent = !aSavePam.Move( fnMoveBackward, GoInContent );
+    // tdf#99692 don't Move() back if that would end up in another node
+    // because moving backward is not necessarily the inverse of forward then.
+    const bool bNullContent = aSavePam.GetPoint()->nContent == 0;
     if( bNullContent )
     {
         aSavePam.GetPoint()->nNode--;
+        aSavePam.GetPoint()->nContent.Assign(aSavePam.GetContentNode(), 0);
+    }
+    else
+    {
+        bool const success(aSavePam.Move(fnMoveBackward, GoInContent));
+        assert(success);
+        (void) success;
     }
 
     // Copy all Bookmarks that are within the Move range into an array,
