@@ -275,13 +275,13 @@ bool SdOptionsLayout::WriteData( Any* pValues ) const
 
 SdOptionsLayoutItem::SdOptionsLayoutItem()
 :   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT )
-,   maOptionsLayout ( 0, false )
+,   maOptionsLayout ( false, false )
 {
 }
 
 SdOptionsLayoutItem::SdOptionsLayoutItem( SdOptions* pOpts, ::sd::FrameView* pView )
 :   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT )
-,   maOptionsLayout ( 0, false )
+,   maOptionsLayout ( false, false )
 {
     if( pOpts )
     {
@@ -391,7 +391,7 @@ bool SdOptionsContents::WriteData( Any* pValues ) const
 
 SdOptionsContentsItem::SdOptionsContentsItem()
 :   SfxPoolItem         ( ATTR_OPTIONS_CONTENTS )
-,   maOptionsContents   ( 0, false )
+,   maOptionsContents   ( false, false )
 {
 }
 
@@ -642,13 +642,13 @@ bool SdOptionsMisc::WriteData( Any* pValues ) const
 
 SdOptionsMiscItem::SdOptionsMiscItem()
 :   SfxPoolItem     ( ATTR_OPTIONS_MISC )
-,   maOptionsMisc   ( 0, false )
+,   maOptionsMisc   ( false, false )
 {
 }
 
 SdOptionsMiscItem::SdOptionsMiscItem( SdOptions* pOpts, ::sd::FrameView* pView )
 :   SfxPoolItem     ( ATTR_OPTIONS_MISC )
-,   maOptionsMisc   ( 0, false )
+,   maOptionsMisc   ( false, false )
 {
     if( pOpts )
     {
@@ -853,13 +853,13 @@ bool SdOptionsSnap::WriteData( Any* pValues ) const
 
 SdOptionsSnapItem::SdOptionsSnapItem()
 :   SfxPoolItem     ( ATTR_OPTIONS_SNAP )
-,   maOptionsSnap   ( 0, false )
+,   maOptionsSnap   ( false, false )
 {
 }
 
 SdOptionsSnapItem::SdOptionsSnapItem( SdOptions* pOpts, ::sd::FrameView* pView )
 :   SfxPoolItem     ( ATTR_OPTIONS_SNAP )
-,   maOptionsSnap   ( 0, false )
+,   maOptionsSnap   ( false, false )
 {
     if( pView )
     {
@@ -1310,13 +1310,13 @@ bool SdOptionsPrint::WriteData( Any* pValues ) const
 
 SdOptionsPrintItem::SdOptionsPrintItem()
 :   SfxPoolItem     ( ATTR_OPTIONS_PRINT )
-,   maOptionsPrint  ( 0, false )
+,   maOptionsPrint  ( false, false )
 {
 }
 
 SdOptionsPrintItem::SdOptionsPrintItem( SdOptions* pOpts )
 :   SfxPoolItem     ( ATTR_OPTIONS_PRINT )
-,   maOptionsPrint  ( 0, false )
+,   maOptionsPrint  ( false, false )
 {
     if( pOpts )
     {
