@@ -122,8 +122,6 @@ private:
     ChangeType          mnGradientListState;
     ChangeType          mnHatchingListState;
 
-    PageType            mnPageType;
-
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 
 protected:
@@ -656,8 +654,6 @@ class SvxColorTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    XPropertyListType   meType;
-
     VclPtr<Window>             mpTopDlg;
 
     PaletteManager             maPaletteManager;
