@@ -497,11 +497,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     if( xChartModel.is() )
         xChartModel->lockControllers();
 
-    ScRangeListRef aDummy;
-    tools::Rectangle aMarkDest;
-    SCTAB nMarkTab;
-    bool bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
-
     // object size
     awt::Size aSz = xObj->getVisualAreaSize( nAspect );
     Size aSize( aSz.Width, aSz.Height );
@@ -509,11 +504,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
     bool bSizeCh = false;
-    if (bDrawRect && !aMarkDest.IsEmpty())
-    {
-        aSize = aMarkDest.GetSize();
-        bSizeCh = true;
-    }
     if (aSize.Height() <= 0 || aSize.Width() <= 0)
     {
         aSize.Width() = 5000;
@@ -555,8 +545,6 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
         }
         else
         {
-            if (bDrawRect)
-                nToTable = static_cast<sal_uInt16>(nMarkTab);
             rReq.AppendItem( SfxUInt16Item( FN_PARAM_4, nToTable ) );
         }
 
@@ -597,14 +585,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
 
     //  object position
 
-    Point aStart;
-    if ( bDrawRect )
-        aStart = aMarkDest.TopLeft();                       // marked by hand
-    else
-    {
-        // get chart position (from window size and data range)
-        aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
-    }
+    // get chart position (from window size and data range)
+    Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
 
     tools::Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
