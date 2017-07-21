@@ -264,170 +264,404 @@ void SwUndo::RepeatImpl( ::sw::RepeatContext & )
 
 OUString GetUndoComment(SwUndoId eId)
 {
-    // Undo
-    const char* STR_UNDO_ARY[] =
+    const char *pId = nullptr;
+    switch (eId)
     {
-        STR_CANT_UNDO,
-        STR_DELETE_UNDO,
-        STR_INSERT_UNDO,
-        STR_OVR_UNDO,
-        STR_SPLITNODE_UNDO,
-        STR_MOVE_UNDO,
-        STR_INSATTR_UNDO,
-        STR_SETFMTCOLL_UNDO,
-        STR_RESET_ATTR_UNDO,
-        STR_INSFMT_ATTR_UNDO,
-        STR_INSERT_DOC_UNDO,
-        STR_INSERT_GLOSSARY,
-        STR_DELBOOKMARK,
-        STR_INSBOOKMARK,
-        STR_SORT_TBL,
-        STR_SORT_TXT,
-        STR_INSTABLE_UNDO,
-        STR_TEXTTOTABLE_UNDO,
-        STR_TABLETOTEXT_UNDO,
-        STR_COPY_UNDO,
-        STR_REPLACE_UNDO,
-        STR_INSERT_PAGE_BREAK_UNDO,
-        STR_INSERT_COLUMN_BREAK_UNDO,
-        STR_PLAY_MACRO_UNDO,
-        STR_INSERT_ENV_UNDO,
-        STR_DRAG_AND_COPY,
-        STR_DRAG_AND_MOVE,
-        STR_INSERT_CHART,
-        STR_INSERTFLY,
-        STR_DELETEFLY,
-        STR_AUTOFORMAT,
-        STR_TABLEHEADLINE,
-        STR_REPLACE,
-        STR_INSERTSECTION,
-        STR_DELETESECTION,
-        STR_CHANGESECTION,
-        STR_CHANGESECTPASSWD,
-        STR_CHANGEDEFATTR,
-        STR_REPLACE_STYLE,
-        STR_DELETE_PAGE_BREAK,
-        STR_TEXT_CORRECTION,
-        STR_OUTLINE_LR,
-        STR_OUTLINE_UD,
-        STR_INSNUM,
-        STR_NUMUP,
-        STR_NUMDOWN,
-        STR_MOVENUM,
-        STR_INSERTDRAW,
-        STR_NUMORNONUM,
-        STR_INC_LEFTMARGIN,
-        STR_DEC_LEFTMARGIN,
-        STR_INSERTLABEL,
-        STR_SETNUMRULESTART,
-        STR_CHANGEFTN,
-        nullptr, /* !! sollte NIE gebraucht/uebersetzt werden !! */
-        STR_ACCEPT_REDLINE,
-        STR_REJECT_REDLINE,
-        STR_SPLIT_TABLE,
-        STR_DONTEXPAND,
-        STR_AUTOCORRECT,
-        STR_MERGE_TABLE,
-        STR_TRANSLITERATE,
-        STR_DELNUM,
-        STR_DRAWUNDO,
-        STR_DRAWGROUP,
-        STR_DRAWUNGROUP,
-        STR_DRAWDELETE,
-        STR_REREAD,
-        STR_DELGRF,
-        STR_DELOLE,
-        STR_TABLE_ATTR,
-        STR_UNDO_TABLE_AUTOFMT,
-        STR_UNDO_TABLE_INSCOL,
-        STR_UNDO_TABLE_INSROW,
-        STR_UNDO_TABLE_DELBOX,
-        STR_UNDO_COL_DELETE,
-        STR_UNDO_ROW_DELETE,
-        STR_UNDO_TABLE_SPLIT,
-        STR_UNDO_TABLE_MERGE,
-        STR_TABLE_NUMFORMAT,
-        STR_INSERT_TOX,
-        STR_CLEAR_TOX_RANGE,
-        STR_TABLE_TBLCPYTBL,
-        STR_TABLE_CPYTBL,
-        STR_INS_FROM_SHADOWCRSR,
-        STR_UNDO_CHAIN,
-        STR_UNDO_UNCHAIN,
-        STR_UNDO_FTNINFO,
-        STR_UNDO_ENDNOTEINFO,
-        STR_UNDO_COMPAREDOC,
-        STR_UNDO_SETFLYFRMFMT,
-        STR_UNDO_SETRUBYATTR,
-        STR_UNDO_TMPAUTOCORR,
-        STR_INSERT_FOOTNOTE,
-        STR_INSERT_URLBTN,
-        STR_INSERT_URLTXT,
-        STR_DELETE_INVISIBLECNTNT,
-        STR_TOXCHANGE,
-        STR_START_QUOTE,
-        STR_END_QUOTE,
-        STR_LDOTS,
-        STR_MULTISEL,
-        STR_TYPING_UNDO,
-        STR_PASTE_CLIPBOARD_UNDO,
-        STR_YIELDS,
-        STR_OCCURRENCES_OF,
-        STR_UNDO_TABS,
-        STR_UNDO_NLS,
-        STR_UNDO_PAGEBREAKS,
-        STR_UNDO_COLBRKS,
-        STR_UNDO_REDLINE_INSERT,
-        STR_UNDO_REDLINE_DELETE,
-        STR_UNDO_REDLINE_FORMAT,
-        STR_UNDO_REDLINE_TABLE,
-        STR_UNDO_REDLINE_FMTCOLL,
-        STR_N_REDLINES,
-        STR_UNDO_PAGEDESC,
-        STR_UNDO_PAGEDESC_CREATE,
-        STR_UNDO_PAGEDESC_DELETE,
-        STR_UNDO_PAGEDESC_RENAME,
-        STR_UNDO_HEADER_FOOTER,
-        STR_UNDO_FIELD,
-        STR_UNDO_TXTFMTCOL_CREATE,
-        STR_UNDO_TXTFMTCOL_DELETE,
-        STR_UNDO_TXTFMTCOL_RENAME,
-        STR_UNDO_CHARFMT_CREATE,
-        STR_UNDO_CHARFMT_DELETE,
-        STR_UNDO_CHARFMT_RENAME,
-        STR_UNDO_FRMFMT_CREATE,
-        STR_UNDO_FRMFMT_DELETE,
-        STR_UNDO_FRMFMT_RENAME,
-        STR_UNDO_NUMRULE_CREATE,
-        STR_UNDO_NUMRULE_DELETE,
-        STR_UNDO_NUMRULE_RENAME,
-        STR_UNDO_BOOKMARK_RENAME,
-        STR_UNDO_INDEX_ENTRY_INSERT,
-        STR_UNDO_INDEX_ENTRY_DELETE,
-        STR_FIELD,
-        STR_PARAGRAPHS,
-        STR_FRAME,
-        STR_OLE,
-        STR_MATH_FORMULA,
-        STR_CHART,
-        STR_NOTE,
-        STR_REFERENCE,
-        STR_SCRIPT,
-        STR_AUTHORITY_ENTRY,
-        STR_SPECIALCHAR,
-        STR_FOOTNOTE,
-        STR_GRAPHIC,
-        STR_DRAWING_OBJECTS,
-        STR_TABLE_NAME,
-        STR_PARAGRAPH_UNDO,
-        STR_UNDO_FLYFRMFMT_TITLE,
-        STR_UNDO_FLYFRMFMT_DESCRITPTION,
-        STR_UNDO_TBLSTYLE_CREATE,
-        STR_UNDO_TBLSTYLE_DELETE,
-        STR_UNDO_TBLSTYLE_UPDATE,
-        STR_UNDO_TABLE_DELETE
+        case SwUndoId::EMPTY:
+            pId = STR_CANT_UNDO;
+            break;
+        case SwUndoId::START:
+        case SwUndoId::END:
+            break;
+        case SwUndoId::DELETE:
+            pId = STR_DELETE_UNDO;
+            break;
+        case SwUndoId::INSERT:
+            pId = STR_INSERT_UNDO;
+            break;
+        case SwUndoId::OVERWRITE:
+            pId = STR_OVR_UNDO;
+            break;
+        case SwUndoId::SPLITNODE:
+            pId = STR_SPLITNODE_UNDO;
+            break;
+        case SwUndoId::INSATTR:
+            pId = STR_INSATTR_UNDO;
+            break;
+        case SwUndoId::SETFMTCOLL:
+            pId = STR_SETFMTCOLL_UNDO;
+            break;
+        case SwUndoId::RESETATTR:
+            pId = STR_RESET_ATTR_UNDO;
+            break;
+        case SwUndoId::INSFMTATTR:
+            pId = STR_INSFMT_ATTR_UNDO;
+            break;
+        case SwUndoId::INSDOKUMENT:
+            pId = STR_INSERT_DOC_UNDO;
+            break;
+        case SwUndoId::COPY:
+            pId = STR_COPY_UNDO;
+            break;
+        case SwUndoId::INSTABLE:
+            pId = STR_INSTABLE_UNDO;
+            break;
+        case SwUndoId::TABLETOTEXT:
+            pId = STR_TABLETOTEXT_UNDO;
+            break;
+        case SwUndoId::TEXTTOTABLE:
+            pId = STR_TEXTTOTABLE_UNDO;
+            break;
+        case SwUndoId::SORT_TXT:
+            pId = STR_SORT_TXT;
+            break;
+        case SwUndoId::INSLAYFMT:
+            pId = STR_INSERTFLY;
+            break;
+        case SwUndoId::TABLEHEADLINE:
+            pId = STR_TABLEHEADLINE;
+            break;
+        case SwUndoId::INSSECTION:
+            pId = STR_INSERTSECTION;
+            break;
+        case SwUndoId::OUTLINE_LR:
+            pId = STR_OUTLINE_LR;
+            break;
+        case SwUndoId::OUTLINE_UD:
+            pId = STR_OUTLINE_UD;
+            break;
+        case SwUndoId::INSNUM:
+            pId = STR_INSNUM;
+            break;
+        case SwUndoId::NUMUP:
+            pId = STR_NUMUP;
+            break;
+        case SwUndoId::MOVENUM:
+            pId = STR_MOVENUM;
+            break;
+        case SwUndoId::INSDRAWFMT:
+            pId = STR_INSERTDRAW;
+            break;
+        case SwUndoId::NUMORNONUM:
+            pId = STR_NUMORNONUM;
+            break;
+        case SwUndoId::INC_LEFTMARGIN:
+            pId = STR_INC_LEFTMARGIN;
+            break;
+        case SwUndoId::DEC_LEFTMARGIN:
+            pId = STR_DEC_LEFTMARGIN;
+            break;
+        case SwUndoId::INSERTLABEL:
+            pId = STR_INSERTLABEL;
+            break;
+        case SwUndoId::SETNUMRULESTART:
+            pId = STR_SETNUMRULESTART;
+            break;
+        case SwUndoId::CHGFTN:
+            pId = STR_CHANGEFTN;
+            break;
+        case SwUndoId::REDLINE:
+            /* !! sollte NIE gebraucht/uebersetzt werden !! */
+            break;
+        case SwUndoId::ACCEPT_REDLINE:
+            pId = STR_ACCEPT_REDLINE;
+            break;
+        case SwUndoId::REJECT_REDLINE:
+            pId = STR_REJECT_REDLINE;
+            break;
+        case SwUndoId::SPLIT_TABLE:
+            pId = STR_SPLIT_TABLE;
+            break;
+        case SwUndoId::DONTEXPAND:
+            pId = STR_DONTEXPAND;
+            break;
+        case SwUndoId::AUTOCORRECT:
+            pId = STR_AUTOCORRECT;
+            break;
+        case SwUndoId::MERGE_TABLE:
+            pId = STR_MERGE_TABLE;
+            break;
+        case SwUndoId::TRANSLITERATE:
+            pId = STR_TRANSLITERATE;
+            break;
+        case SwUndoId::PASTE_CLIPBOARD:
+            pId = STR_PASTE_CLIPBOARD_UNDO;
+            break;
+        case SwUndoId::TYPING:
+            pId = STR_TYPING_UNDO;
+            break;
+        case SwUndoId::REPEAT_DUMMY_6:
+        case SwUndoId::REPEAT_DUMMY_7:
+        case SwUndoId::REPEAT_DUMMY_8:
+        case SwUndoId::REPEAT_DUMMY_9:
+            break;
+        case SwUndoId::MOVE:
+            pId = STR_MOVE_UNDO;
+            break;
+        case SwUndoId::INSGLOSSARY:
+            pId = STR_INSERT_GLOSSARY;
+            break;
+        case SwUndoId::DELBOOKMARK:
+            pId = STR_DELBOOKMARK;
+            break;
+        case SwUndoId::INSBOOKMARK:
+            pId = STR_INSBOOKMARK;
+            break;
+        case SwUndoId::SORT_TBL:
+            pId = STR_SORT_TBL;
+            break;
+        case SwUndoId::DELLAYFMT:
+            pId = STR_DELETEFLY;
+            break;
+        case SwUndoId::AUTOFORMAT:
+            pId = STR_AUTOFORMAT;
+            break;
+        case SwUndoId::REPLACE:
+            pId = STR_REPLACE;
+            break;
+        case SwUndoId::DELSECTION:
+            pId = STR_DELETESECTION;
+            break;
+        case SwUndoId::CHGSECTION:
+            pId = STR_CHANGESECTION;
+            break;
+        case SwUndoId::CHGSECTIONPASSWD:
+            pId = STR_CHANGESECTPASSWD;
+            break;
+        case SwUndoId::SETDEFTATTR:
+            pId = STR_CHANGEDEFATTR;
+            break;
+        case SwUndoId::DELNUM:
+            pId = STR_DELNUM;
+            break;
+        case SwUndoId::DRAWUNDO:
+            pId = STR_DRAWUNDO;
+            break;
+        case SwUndoId::DRAWGROUP:
+            pId = STR_DRAWGROUP;
+            break;
+        case SwUndoId::DRAWUNGROUP:
+            pId = STR_DRAWUNGROUP;
+            break;
+        case SwUndoId::DRAWDELETE:
+            pId = STR_DRAWDELETE;
+            break;
+        case SwUndoId::REREAD:
+            pId = STR_REREAD;
+            break;
+        case SwUndoId::DELGRF:
+            pId = STR_DELGRF;
+            break;
+        case SwUndoId::DELOLE:
+            pId = STR_DELOLE;
+            break;
+        case SwUndoId::TABLE_ATTR:
+            pId = STR_TABLE_ATTR;
+            break;
+        case SwUndoId::TABLE_AUTOFMT:
+            pId = STR_UNDO_TABLE_AUTOFMT;
+            break;
+        case SwUndoId::TABLE_INSCOL:
+            pId = STR_UNDO_TABLE_INSCOL;
+            break;
+        case SwUndoId::TABLE_INSROW:
+            pId = STR_UNDO_TABLE_INSROW;
+            break;
+        case SwUndoId::TABLE_DELBOX:
+            pId = STR_UNDO_TABLE_DELBOX;
+            break;
+        case SwUndoId::TABLE_SPLIT:
+            pId = STR_UNDO_TABLE_SPLIT;
+            break;
+        case SwUndoId::TABLE_MERGE:
+            pId = STR_UNDO_TABLE_MERGE;
+            break;
+        case SwUndoId::TBLNUMFMT:
+            pId = STR_TABLE_NUMFORMAT;
+            break;
+        case SwUndoId::INSTOX:
+            pId = STR_INSERT_TOX;
+            break;
+        case SwUndoId::CLEARTOXRANGE:
+            pId = STR_CLEAR_TOX_RANGE;
+            break;
+        case SwUndoId::TBLCPYTBL:
+            pId = STR_TABLE_TBLCPYTBL;
+            break;
+        case SwUndoId::CPYTBL:
+            pId = STR_TABLE_CPYTBL;
+            break;
+        case SwUndoId::INS_FROM_SHADOWCRSR:
+            pId = STR_INS_FROM_SHADOWCRSR;
+            break;
+        case SwUndoId::CHAINE:
+            pId = STR_UNDO_CHAIN;
+            break;
+        case SwUndoId::UNCHAIN:
+            pId = STR_UNDO_UNCHAIN;
+            break;
+        case SwUndoId::FTNINFO:
+            pId = STR_UNDO_FTNINFO;
+            break;
+        case SwUndoId::ENDNOTEINFO:
+            pId = STR_UNDO_ENDNOTEINFO;
+            break;
+        case SwUndoId::COMPAREDOC:
+            pId = STR_UNDO_COMPAREDOC;
+            break;
+        case SwUndoId::SETFLYFRMFMT:
+            pId = STR_UNDO_SETFLYFRMFMT;
+            break;
+        case SwUndoId::SETRUBYATTR:
+            pId = STR_UNDO_SETRUBYATTR;
+            break;
+        case SwUndoId::TMPAUTOCORR:
+            pId = STR_UNDO_TMPAUTOCORR;
+            break;
+        case SwUndoId::TOXCHANGE:
+            pId = STR_TOXCHANGE;
+            break;
+        case SwUndoId::CREATE_PAGEDESC:
+            pId = STR_UNDO_PAGEDESC_CREATE;
+            break;
+        case SwUndoId::CHANGE_PAGEDESC:
+            pId = STR_UNDO_PAGEDESC;
+            break;
+        case SwUndoId::DELETE_PAGEDESC:
+            pId = STR_UNDO_PAGEDESC_DELETE;
+            break;
+        case SwUndoId::HEADER_FOOTER:
+            pId = STR_UNDO_HEADER_FOOTER;
+            break;
+        case SwUndoId::FIELD:
+            pId = STR_UNDO_FIELD;
+            break;
+        case SwUndoId::TXTFMTCOL_CREATE:
+            pId = STR_UNDO_TXTFMTCOL_CREATE;
+            break;
+        case SwUndoId::TXTFMTCOL_DELETE:
+            pId = STR_UNDO_TXTFMTCOL_DELETE;
+            break;
+        case SwUndoId::TXTFMTCOL_RENAME:
+            pId = STR_UNDO_TXTFMTCOL_RENAME;
+            break;
+        case SwUndoId::CHARFMT_CREATE:
+            pId = STR_UNDO_CHARFMT_CREATE;
+            break;
+        case SwUndoId::CHARFMT_DELETE:
+            pId = STR_UNDO_CHARFMT_DELETE;
+            break;
+        case SwUndoId::CHARFMT_RENAME:
+            pId = STR_UNDO_CHARFMT_RENAME;
+            break;
+        case SwUndoId::FRMFMT_CREATE:
+            pId = STR_UNDO_FRMFMT_CREATE;
+            break;
+        case SwUndoId::FRMFMT_DELETE:
+            pId = STR_UNDO_FRMFMT_DELETE;
+            break;
+        case SwUndoId::FRMFMT_RENAME:
+            pId = STR_UNDO_FRMFMT_RENAME;
+            break;
+        case SwUndoId::NUMRULE_CREATE:
+            pId = STR_UNDO_NUMRULE_CREATE;
+            break;
+        case SwUndoId::NUMRULE_DELETE:
+            pId = STR_UNDO_NUMRULE_DELETE;
+            break;
+        case SwUndoId::NUMRULE_RENAME:
+            pId = STR_UNDO_NUMRULE_RENAME;
+            break;
+        case SwUndoId::BOOKMARK_RENAME:
+            pId = STR_UNDO_BOOKMARK_RENAME;
+            break;
+        case SwUndoId::INDEX_ENTRY_INSERT:
+            pId = STR_UNDO_INDEX_ENTRY_INSERT;
+            break;
+        case SwUndoId::INDEX_ENTRY_DELETE:
+            pId = STR_UNDO_INDEX_ENTRY_DELETE;
+            break;
+        case SwUndoId::COL_DELETE:
+            pId = STR_UNDO_COL_DELETE;
+            break;
+        case SwUndoId::ROW_DELETE:
+            pId = STR_UNDO_ROW_DELETE;
+            break;
+        case SwUndoId::RENAME_PAGEDESC:
+            pId = STR_UNDO_PAGEDESC_RENAME;
+            break;
+        case SwUndoId::NUMDOWN:
+            pId = STR_NUMDOWN;
+            break;
+        case SwUndoId::FLYFRMFMT_TITLE:
+            pId = STR_UNDO_FLYFRMFMT_TITLE;
+            break;
+        case SwUndoId::FLYFRMFMT_DESCRIPTION:
+            pId = STR_UNDO_FLYFRMFMT_DESCRITPTION;
+            break;
+        case SwUndoId::TBLSTYLE_CREATE:
+            pId = STR_UNDO_TBLSTYLE_CREATE;
+            break;
+        case SwUndoId::TBLSTYLE_DELETE:
+            pId = STR_UNDO_TBLSTYLE_DELETE;
+            break;
+        case SwUndoId::TBLSTYLE_UPDATE:
+            pId = STR_UNDO_TBLSTYLE_UPDATE;
+            break;
+        case SwUndoId::UI_REPLACE:
+            pId = STR_REPLACE_UNDO;
+            break;
+        case SwUndoId::UI_INSERT_PAGE_BREAK:
+            pId = STR_INSERT_PAGE_BREAK_UNDO;
+            break;
+        case SwUndoId::UI_INSERT_COLUMN_BREAK:
+            pId = STR_INSERT_COLUMN_BREAK_UNDO;
+            break;
+        case SwUndoId::UI_PLAY_MACRO:
+            pId = STR_PLAY_MACRO_UNDO;
+            break;
+        case SwUndoId::UI_INSERT_ENVELOPE:
+            pId = STR_INSERT_ENV_UNDO;
+            break;
+        case SwUndoId::UI_DRAG_AND_COPY:
+            pId = STR_DRAG_AND_COPY;
+            break;
+        case SwUndoId::UI_DRAG_AND_MOVE:
+            pId = STR_DRAG_AND_MOVE;
+            break;
+        case SwUndoId::UI_INSERT_CHART:
+            pId = STR_INSERT_CHART;
+            break;
+        case SwUndoId::UI_INSERT_FOOTNOTE:
+            pId = STR_INSERT_FOOTNOTE;
+            break;
+        case SwUndoId::UI_INSERT_URLBTN:
+            pId = STR_INSERT_URLBTN;
+            break;
+        case SwUndoId::UI_INSERT_URLTXT:
+            pId = STR_INSERT_URLTXT;
+            break;
+        case SwUndoId::UI_DELETE_INVISIBLECNTNT:
+            pId = STR_DELETE_INVISIBLECNTNT;
+            break;
+        case SwUndoId::UI_REPLACE_STYLE:
+            pId = STR_REPLACE_STYLE;
+            break;
+        case SwUndoId::UI_DELETE_PAGE_BREAK:
+            pId = STR_DELETE_PAGE_BREAK;
+            break;
+        case SwUndoId::UI_TEXT_CORRECTION:
+            pId = STR_TEXT_CORRECTION;
+            break;
+        case SwUndoId::UI_TABLE_DELETE:
+            pId = STR_UNDO_TABLE_DELETE;
+            break;
+        case SwUndoId::CONFLICT:
+            break;
     };
-    return SwResId(STR_UNDO_ARY[(int)eId]);
+
+    assert(pId);
+    return SwResId(pId);
 }
 
 OUString SwUndo::GetComment() const
