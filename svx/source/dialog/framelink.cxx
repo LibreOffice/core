@@ -345,6 +345,153 @@ double lcl_GetExtent(
     return nCut;
 }
 
+void getOffsetsFromStyle(const Style& rStyle, std::vector< double >& offsets)
+{
+    if (rStyle.Prim())
+    {
+        if (rStyle.Dist() && rStyle.Secn())
+        {
+            // both lines used (or all three), push four values, from outer to inner
+            switch (rStyle.GetRefMode())
+            {
+            case RefMode::Centered:
+            {
+                const double fHalfFullWidth(rStyle.GetWidth() * 0.5);
+                offsets.push_back(-fHalfFullWidth);
+                offsets.push_back(rStyle.Prim() - fHalfFullWidth);
+                offsets.push_back((rStyle.Prim() + rStyle.Dist()) - fHalfFullWidth);
+                offsets.push_back(fHalfFullWidth);
+                break;
+            }
+            case RefMode::Begin:
+                offsets.push_back(0.0);
+                offsets.push_back(rStyle.Prim());
+                offsets.push_back(rStyle.Prim() + rStyle.Dist());
+                offsets.push_back(rStyle.GetWidth());
+                break;
+            default: // case RefMode::End:
+            {
+                const double fFullWidth(rStyle.GetWidth());
+                offsets.push_back(-fFullWidth);
+                offsets.push_back(rStyle.Prim() - fFullWidth);
+                offsets.push_back((rStyle.Prim() + rStyle.Dist()) - fFullWidth);
+                offsets.push_back(0.0);
+                break;
+            }
+            }
+        }
+        else
+        {
+            // one line used, push two values, from outer to inner
+            switch (rStyle.GetRefMode())
+            {
+            case RefMode::Centered:
+                offsets.push_back(rStyle.Prim() * -0.5);
+                offsets.push_back(rStyle.Prim() * 0.5);
+                break;
+            case RefMode::Begin:
+                offsets.push_back(0.0);
+                offsets.push_back(rStyle.Prim());
+                break;
+            default: // case RefMode::End:
+                offsets.push_back(-rStyle.Prim());
+                offsets.push_back(0.0);
+                break;
+            }
+        }
+    }
+}
+
+void compareToStyle(
+    const basegfx::B2DPoint& rOrigin,
+    const basegfx::B2DVector& rOtherVector,
+    const basegfx::B2DVector& rOtherUnifiedPerpendicular,
+    const std::vector< double >& rOtherOffsets,
+    const Style& rStyle,
+    const basegfx::B2DVector& rMyVector,
+    std::vector< std::vector< double >>& rOtherCuts)
+{
+    if (rStyle.Prim())
+    {
+        std::vector< double > myOffsets;
+
+        // get offsets from outer to inner (two or four, depending on style)
+        getOffsetsFromStyle(rStyle, myOffsets);
+
+        if (!myOffsets.empty())
+        {
+            const basegfx::B2DVector aMyUnifiedPerpendicular(basegfx::getNormalizedPerpendicular(rMyVector));
+
+            for (size_t a(0); a < rOtherOffsets.size(); a++)
+            {
+                const basegfx::B2DPoint aOtherPos(rOrigin + (rOtherUnifiedPerpendicular * rOtherOffsets[a]));
+
+                for (size_t b(0); b < myOffsets.size(); b++)
+                {
+                    const basegfx::B2DPoint aMyPos(rOrigin + (aMyUnifiedPerpendicular * myOffsets[b]));
+                    double fCut(0.0);
+                    basegfx::tools::findCut(
+                        aOtherPos,
+                        rOtherVector,
+                        aMyPos,
+                        rMyVector,
+                        CutFlagValue::LINE,
+                        &fCut);
+
+                    rOtherCuts[a].push_back(fCut);
+                }
+            }
+        }
+    }
+}
+
+double getMinMaxCut(bool bMin, const std::vector< double >& rVector)
+{
+    if (rVector.empty())
+    {
+        return 0.0;
+    }
+
+    if (1 == rVector.size())
+    {
+        return rVector[0];
+    }
+
+    double fRetval(rVector[0]);
+
+    for (size_t a(1); a < rVector.size(); a++)
+    {
+        fRetval = bMin ? std::min(fRetval, rVector[a]) : std::max(fRetval, rVector[a]);
+    }
+
+    return fRetval;
+}
+
+std::vector< double > getMinMaxCuts(bool bMin, const std::vector< std::vector< double >>& rCuts)
+{
+    std::vector< double > aRetval(rCuts.size());
+
+    for (size_t a(0); a < rCuts.size(); a++)
+    {
+        aRetval[a] = getMinMaxCut(bMin, rCuts[a]);
+    }
+
+    return aRetval;
+}
+
+bool areCutsEmpty(std::vector< std::vector< double >>& rCuts)
+{
+    for (const auto& rVec : rCuts)
+    {
+        if (!rVec.empty())
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void CreateBorderPrimitives(
     drawinglayer::primitive2d::Primitive2DContainer& rTarget,
     const basegfx::B2DPoint& rOrigin,
@@ -363,7 +510,158 @@ void CreateBorderPrimitives(
     const DiagStyle& /*rRFromBL*/,
     const Color* pForceColor)
 {
-    if (rBorder.Prim() || rBorder.Secn())
+    static bool bCheckNewStuff(true);
+
+    if (bCheckNewStuff && rBorder.Prim())
+    {
+        double mfExtendLeftStart(0.0);
+        double mfExtendLeftEnd(0.0);
+        double mfExtendRightStart(0.0);
+        double mfExtendRightEnd(0.0);
+        std::vector< double > myOffsets;
+        getOffsetsFromStyle(rBorder, myOffsets);
+        const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
+        const double fLength(rX.getLength());
+
+        if (2 == myOffsets.size())
+        {
+            std::vector< std::vector< double >> myCutsS(myOffsets.size());
+            compareToStyle(rOrigin, rX, aPerpendX, myOffsets, rLFromT, rY, myCutsS);
+            compareToStyle(rOrigin, rX, aPerpendX, myOffsets, rLFromB, rY, myCutsS);
+            std::vector< double > nMinCutsS(getMinMaxCuts(true, myCutsS));
+            mfExtendLeftStart = ((nMinCutsS[0] + nMinCutsS[1]) * 0.5) * -1.0 * fLength;
+
+            std::vector< std::vector< double >> myCutsE(myOffsets.size());
+            compareToStyle(rOrigin, rX, aPerpendX, myOffsets, rRFromT, rY, myCutsE);
+            compareToStyle(rOrigin, rX, aPerpendX, myOffsets, rRFromB, rY, myCutsE);
+            std::vector< double > nMinCutsE(getMinMaxCuts(false, myCutsE));
+            mfExtendLeftEnd = ((nMinCutsE[0] + nMinCutsE[1]) * 0.5) * fLength;
+
+        }
+        else if (4 == myOffsets.size())
+        {
+            {
+                std::vector< double > myOffsetsA;
+                myOffsetsA.push_back(myOffsets[0]);
+                myOffsetsA.push_back(myOffsets[1]);
+
+                std::vector< std::vector< double >> myCutsS(myOffsetsA.size());
+                std::vector< double > nMinCutsS;
+                compareToStyle(rOrigin, rX, aPerpendX, myOffsetsA, rLFromT, rY, myCutsS);
+
+                if (!areCutsEmpty(myCutsS))
+                {
+                    nMinCutsS = getMinMaxCuts(false, myCutsS);
+                }
+                else
+                {
+                    compareToStyle(rOrigin, rX, aPerpendX, myOffsetsA, rLFromB, rY, myCutsS);
+                    nMinCutsS = getMinMaxCuts(true, myCutsS);
+                }
+
+                mfExtendLeftStart = ((nMinCutsS[0] + nMinCutsS[1]) * 0.5) * -1.0 * fLength;
+
+                std::vector< std::vector< double >> myCutsE(myOffsetsA.size());
+                std::vector< double > nMinCutsE;
+                compareToStyle(rOrigin, rX, aPerpendX, myOffsetsA, rRFromT, rY, myCutsE);
+
+                if (!areCutsEmpty(myCutsE))
+                {
+                    nMinCutsE = getMinMaxCuts(true, myCutsE);
+                }
+                else
+                {
+                    compareToStyle(rOrigin, rX, aPerpendX, myOffsetsA, rRFromB, rY, myCutsE);
+                    nMinCutsE = getMinMaxCuts(false, myCutsE);
+                }
+
+                mfExtendLeftEnd = ((nMinCutsE[0] + nMinCutsE[1]) * 0.5) * fLength;
+            }
+
+            {
+                std::vector< double > myOffsetsB;
+                myOffsetsB.push_back(myOffsets[2]);
+                myOffsetsB.push_back(myOffsets[3]);
+
+                std::vector< std::vector< double >> myCutsS(myOffsetsB.size());
+                std::vector< double > nMinCutsS;
+                compareToStyle(rOrigin, rX, aPerpendX, myOffsetsB, rLFromB, rY, myCutsS);
+
+                if (!areCutsEmpty(myCutsS))
+                {
+                    nMinCutsS = getMinMaxCuts(false, myCutsS);
+                }
+                else
+                {
+                    compareToStyle(rOrigin, rX, aPerpendX, myOffsetsB, rLFromT, rY, myCutsS);
+                    nMinCutsS = getMinMaxCuts(true, myCutsS);
+                }
+
+                mfExtendRightStart = ((nMinCutsS[0] + nMinCutsS[1]) * 0.5) * -1.0 * fLength;
+
+                std::vector< std::vector< double >> myCutsE(myOffsetsB.size());
+                std::vector< double > nMinCutsE;
+                compareToStyle(rOrigin, rX, aPerpendX, myOffsetsB, rRFromB, rY, myCutsE);
+
+                if (!areCutsEmpty(myCutsE))
+                {
+                    nMinCutsE = getMinMaxCuts(true, myCutsE);
+                }
+                else
+                {
+                    compareToStyle(rOrigin, rX, aPerpendX, myOffsetsB, rRFromT, rY, myCutsE);
+                    nMinCutsE = getMinMaxCuts(false, myCutsE);
+                }
+
+                mfExtendRightEnd = ((nMinCutsE[0] + nMinCutsE[1]) * 0.5) * fLength;
+            }
+        }
+
+        // do not forget RefMode offset, primitive will assume RefMode::Centered
+        basegfx::B2DVector aRefModeOffset;
+
+        if (RefMode::Centered != rBorder.GetRefMode())
+        {
+            const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
+            const double fHalfWidth(rBorder.GetWidth() * 0.5);
+
+            if (RefMode::Begin == rBorder.GetRefMode())
+            {
+                // move aligned below vector
+                aRefModeOffset = aPerpendX * fHalfWidth;
+            }
+            else if (RefMode::End == rBorder.GetRefMode())
+            {
+                // move aligned above vector
+                aRefModeOffset = aPerpendX * -fHalfWidth;
+            }
+        }
+
+        // create start/end for RefMode::Centered
+        const basegfx::B2DPoint aStart(rOrigin + aRefModeOffset);
+        const basegfx::B2DPoint aEnd(aStart + rX);
+
+        rTarget.append(
+            drawinglayer::primitive2d::Primitive2DReference(
+                new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                    aStart,
+                    aEnd,
+                    rBorder.Prim(),
+                    rBorder.Dist(),
+                    rBorder.Secn(),
+                    mfExtendLeftStart,
+                    mfExtendLeftEnd,
+                    mfExtendRightStart,
+                    mfExtendRightEnd,
+                    (pForceColor ? *pForceColor : rBorder.GetColorSecn()).getBColor(),
+                    (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
+                    (pForceColor ? *pForceColor : rBorder.GetColorGap()).getBColor(),
+                    rBorder.UseGapColor(),
+                    rBorder.Type(),
+                    rBorder.PatternScale())));
+    }
+
+    if (!bCheckNewStuff && (rBorder.Prim() || rBorder.Secn()))
     {
         basegfx::B2DPoint aStart(rOrigin);
         basegfx::B2DPoint aEnd(rOrigin + rX);
