@@ -163,7 +163,6 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
                                                 BibDataManager* pDataManager)
     :xWindow( xComponent )
     ,m_xDatMan( pDataManager )
-    ,pBibMod(nullptr)
 {
     bDisposing=false;
     bHierarchical=true;
@@ -175,8 +174,6 @@ BibFrameController_Impl::~BibFrameController_Impl()
 {
     mxImpl->pController = nullptr;
     m_xDatMan.clear();
-    if(pBibMod)
-        CloseBibModul(pBibMod);
 }
 
 OUString SAL_CALL BibFrameController_Impl::getImplementationName()

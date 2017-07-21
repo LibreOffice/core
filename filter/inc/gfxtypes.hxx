@@ -149,7 +149,6 @@ struct State
         mnFontWeight(400.0),
         meTextAnchor(BEFORE),
         meTextDisplayAlign(BEFORE),
-        mnTextLineIncrement(0.0),
         maCurrentColor(0.0),
         mbVisibility(true),
         meFillType(SOLID),
@@ -157,7 +156,6 @@ struct State
         mnOpacity(1.0),
         meStrokeType(NONE),
         mnStrokeOpacity(1.0),
-        meViewportFillType(NONE),
         mnViewportFillOpacity(1.0),
         maFillColor(0.0),
         maFillGradient(Gradient::LINEAR),
@@ -191,7 +189,6 @@ struct State
 
     TextAlign                   meTextAnchor; // text-anchor
     TextAlign                   meTextDisplayAlign; // display-align
-    double                      mnTextLineIncrement; // 0.0 means auto
 
     ARGBColor                   maCurrentColor;
     bool                        mbVisibility;
@@ -201,7 +198,6 @@ struct State
     double                      mnOpacity;
     PaintType                   meStrokeType;
     double                      mnStrokeOpacity;
-    PaintType                   meViewportFillType;
     double                      mnViewportFillOpacity;
 
     ARGBColor                   maFillColor;
@@ -238,7 +234,6 @@ inline bool operator==(const State& rLHS, const State& rRHS )
         rLHS.mnFontWeight==rRHS.mnFontWeight &&
         rLHS.meTextAnchor==rRHS.meTextAnchor &&
         rLHS.meTextDisplayAlign==rRHS.meTextDisplayAlign &&
-        rLHS.mnTextLineIncrement==rRHS.mnTextLineIncrement &&
         rLHS.maCurrentColor==rRHS.maCurrentColor &&
         rLHS.mbVisibility==rRHS.mbVisibility &&
         rLHS.meFillType==rRHS.meFillType &&
@@ -246,7 +241,6 @@ inline bool operator==(const State& rLHS, const State& rRHS )
         rLHS.mnOpacity==rRHS.mnOpacity &&
         rLHS.meStrokeType==rRHS.meStrokeType &&
         rLHS.mnStrokeOpacity==rRHS.mnStrokeOpacity &&
-        rLHS.meViewportFillType==rRHS.meViewportFillType &&
         rLHS.mnViewportFillOpacity==rRHS.mnViewportFillOpacity &&
         rLHS.maFillColor==rRHS.maFillColor &&
         rLHS.maFillGradient==rRHS.maFillGradient &&
@@ -292,14 +286,12 @@ namespace std
                 ^  std::hash<double>()(rState.mnFontWeight)
                 ^  size_t(rState.meTextAnchor)
                 ^  size_t(rState.meTextDisplayAlign)
-                ^  std::hash<double>()(rState.mnTextLineIncrement)
                 ^  size_t(rState.mbVisibility)
                 ^  size_t(rState.meFillType)
                 ^  std::hash<double>()(rState.mnFillOpacity)
                 ^  std::hash<double>()(rState.mnOpacity)
                 ^  size_t(rState.meStrokeType)
                 ^  std::hash<double>()(rState.mnStrokeOpacity)
-                ^  size_t(rState.meViewportFillType)
                 ^  std::hash<double>()(rState.mnViewportFillOpacity)
                 ^  size_t(rState.maFillColor.a)
                 ^  size_t(rState.maFillColor.r)

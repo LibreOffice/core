@@ -45,7 +45,6 @@ namespace bib
         private:
 
             css::uno::Reference< css::frame::XController >            m_xController;
-            css::uno::Reference< css::frame::XFrame >                 m_xToolBarRef;
 
             BibDataManager*         pDatMan;
             VclPtr<BibToolBar>      pToolBar;
