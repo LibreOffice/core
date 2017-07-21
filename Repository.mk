@@ -42,7 +42,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	libtest \
 	lngconvex \
 	localize \
-	localestr \
 	makedepend \
 	mbsdiff \
 	mork_helper \
