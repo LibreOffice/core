@@ -543,7 +543,7 @@ namespace accessibility
         return GetTextForwarder().HaveImageBullet( GetParagraphIndex() );
     }
 
-    tools::Rectangle AccessibleEditableTextPara::LogicToPixel( const tools::Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder )
+    tools::Rectangle AccessibleEditableTextPara::LogicToPixel( const tools::Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder const & rForwarder )
     {
         // convert to screen coordinates
         return tools::Rectangle( rForwarder.LogicToPixel( rRect.TopLeft(), rMapMode ),
@@ -848,7 +848,7 @@ namespace accessibility
 
 namespace
 {
-    OUString GetFieldTypeNameFromField(EFieldInfo &ree)
+    OUString GetFieldTypeNameFromField(EFieldInfo const &ree)
     {
         OUString strFldType;
         sal_Int32 nFieldType = -1;

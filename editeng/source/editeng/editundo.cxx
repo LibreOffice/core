@@ -28,7 +28,7 @@
 #include <editeng/editeng.hxx>
 
 
-static void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
+static void lcl_DoSetSelection( EditView const * pView, sal_uInt16 nPara )
 {
     EPaM aEPaM( nPara, 0 );
     EditPaM aPaM( pView->GetImpEditEngine()->CreateEditPaM( aEPaM ) );
@@ -515,7 +515,7 @@ struct RemoveAttribsFromPool
     SfxItemPool& mrPool;
 public:
     explicit RemoveAttribsFromPool(SfxItemPool& rPool) : mrPool(rPool) {}
-    void operator() (std::unique_ptr<ContentAttribsInfo>& rInfo)
+    void operator() (std::unique_ptr<ContentAttribsInfo> const & rInfo)
     {
         rInfo->RemoveAllCharAttribsFromPool(mrPool);
     }

@@ -129,7 +129,7 @@ static inline bool IsUpperLetter( sal_Int32 nCharType )
             ( css::i18n::KCharacterType::UPPER & nCharType);
 }
 
-bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const OUString& rTxt,
+bool lcl_IsUnsupportedUnicodeChar( CharClass const & rCC, const OUString& rTxt,
                                    sal_Int32 nStt, sal_Int32 nEnd )
 {
     for( ; nStt < nEnd; ++nStt )
@@ -157,7 +157,7 @@ bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const OUString& rTxt,
     return false;
 }
 
-static bool lcl_IsSymbolChar( CharClass& rCC, const OUString& rTxt,
+static bool lcl_IsSymbolChar( CharClass const & rCC, const OUString& rTxt,
                                   sal_Int32 nStt, sal_Int32 nEnd )
 {
     for( ; nStt < nEnd; ++nStt )
@@ -1204,7 +1204,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
     rDoc.Replace( nInsPos, sChg );
 }
 
-OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
+OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPos,
                                 sal_Unicode cInsChar, bool bSttQuote )
 {
     LanguageType eLang = rDoc.GetLanguage( nInsPos );

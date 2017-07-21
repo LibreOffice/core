@@ -157,7 +157,7 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
                               size_t nIndex,
                               size_t nMaxEnd,
                               const long* pDXArray,
-                              WrongList* pWrongs,
+                              WrongList const * pWrongs,
                               short nOrientation,
                               const Point& rOrigin,
                               bool bVertical,
@@ -1774,7 +1774,7 @@ bool ImpEditEngine::FinishCreateLines( ParaPortion* pParaPortion )
     return bRet;
 }
 
-void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, TextPortion* pPortion, sal_Int32 nPortionStart, long nRemainingWidth, bool bCanHyphenate )
+void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, TextPortion const * pPortion, sal_Int32 nPortionStart, long nRemainingWidth, bool bCanHyphenate )
 {
     ContentNode* const pNode = pParaPortion->GetNode();
 
@@ -4028,7 +4028,7 @@ void ImpEditEngine::CallStatusHdl()
     }
 }
 
-ContentNode* ImpEditEngine::GetPrevVisNode( ContentNode* pCurNode )
+ContentNode* ImpEditEngine::GetPrevVisNode( ContentNode const * pCurNode )
 {
     const ParaPortion* pPortion = FindParaPortion( pCurNode );
     DBG_ASSERT( pPortion, "GetPrevVisibleNode: No matching portion!" );
@@ -4038,7 +4038,7 @@ ContentNode* ImpEditEngine::GetPrevVisNode( ContentNode* pCurNode )
     return nullptr;
 }
 
-ContentNode* ImpEditEngine::GetNextVisNode( ContentNode* pCurNode )
+ContentNode* ImpEditEngine::GetNextVisNode( ContentNode const * pCurNode )
 {
     const ParaPortion* pPortion = FindParaPortion( pCurNode );
     DBG_ASSERT( pPortion, "GetNextVisibleNode: No matching portion!" );

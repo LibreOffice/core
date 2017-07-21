@@ -1948,7 +1948,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
     return xSpellAlt;
 }
 
-bool ImpEditEngine::SpellSentence(EditView& rEditView,
+bool ImpEditEngine::SpellSentence(EditView const & rEditView,
     svx::SpellPortions& rToFill )
 {
     bool bRet = false;
@@ -2032,7 +2032,7 @@ void ImpEditEngine::AddPortion(
 
 // Adds one or more portions of text to the SpellPortions depending on language changes
 void ImpEditEngine::AddPortionIterated(
-                            EditView& rEditView,
+                            EditView const & rEditView,
                             const EditSelection& rSel,
                             const Reference< XSpellAlternatives >& xAlt,
                             svx::SpellPortions& rToFill)
@@ -2099,7 +2099,7 @@ void ImpEditEngine::AddPortionIterated(
     }
 }
 
-void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
+void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
     const svx::SpellPortions& rNewPortions,
     bool bRecheck )
 {
@@ -2227,7 +2227,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
     }
 }
 
-void ImpEditEngine::PutSpellingToSentenceStart( EditView& rEditView )
+void ImpEditEngine::PutSpellingToSentenceStart( EditView const & rEditView )
 {
     if( pSpellInfo && !pSpellInfo->aLastSpellContentSelections.empty() )
     {

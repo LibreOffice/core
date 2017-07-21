@@ -652,12 +652,12 @@ bool EditEngine::IsIdleFormatterActive() const
     return pImpEditEngine->aIdleFormatter.IsActive();
 }
 
-ParaPortion* EditEngine::FindParaPortion(ContentNode* pNode)
+ParaPortion* EditEngine::FindParaPortion(ContentNode const * pNode)
 {
     return pImpEditEngine->FindParaPortion(pNode);
 }
 
-const ParaPortion* EditEngine::FindParaPortion(ContentNode* pNode) const
+const ParaPortion* EditEngine::FindParaPortion(ContentNode const * pNode) const
 {
     return pImpEditEngine->FindParaPortion(pNode);
 }
@@ -2160,7 +2160,7 @@ Reference< XSpellChecker1 >  EditEngine::GetSpeller()
     return pImpEditEngine->GetSpeller();
 }
 
-void EditEngine::SetHyphenator( Reference< XHyphenator > & xHyph )
+void EditEngine::SetHyphenator( Reference< XHyphenator > const & xHyph )
 {
     pImpEditEngine->SetHyphenator( xHyph );
 }
@@ -2208,17 +2208,17 @@ void EditEngine::ClearSpellErrors()
     pImpEditEngine->ClearSpellErrors();
 }
 
-bool EditEngine::SpellSentence(EditView& rView, svx::SpellPortions& rToFill )
+bool EditEngine::SpellSentence(EditView const & rView, svx::SpellPortions& rToFill )
 {
     return pImpEditEngine->SpellSentence( rView, rToFill );
 }
 
-void EditEngine::PutSpellingToSentenceStart( EditView& rEditView )
+void EditEngine::PutSpellingToSentenceStart( EditView const & rEditView )
 {
     pImpEditEngine->PutSpellingToSentenceStart( rEditView );
 }
 
-void EditEngine::ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck )
+void EditEngine::ApplyChangedSentence(EditView const & rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck )
 {
     pImpEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck  );
 }

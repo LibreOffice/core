@@ -728,7 +728,7 @@ void ImpEditEngine::TextModified()
 }
 
 
-void ImpEditEngine::ParaAttribsChanged( ContentNode* pNode )
+void ImpEditEngine::ParaAttribsChanged( ContentNode const * pNode )
 {
     assert(pNode && "ParaAttribsChanged: Which one?");
 
@@ -926,7 +926,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
     return pEditView->pImpEditView->GetEditSelection();
 }
 
-EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM& rPaM, bool bStart )
+EditPaM ImpEditEngine::CursorVisualStartEnd( EditView const * pEditView, const EditPaM& rPaM, bool bStart )
 {
     EditPaM aPaM( rPaM );
 
@@ -983,7 +983,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
     return aPaM;
 }
 
-EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode, bool bVisualToLeft )
+EditPaM ImpEditEngine::CursorVisualLeftRight( EditView const * pEditView, const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode, bool bVisualToLeft )
 {
     EditPaM aPaM( rPaM );
 
@@ -1216,7 +1216,7 @@ EditPaM ImpEditEngine::CursorRight( const EditPaM& rPaM, sal_uInt16 nCharacterIt
     return aNewPaM;
 }
 
-EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView* pView )
+EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView const * pView )
 {
     assert(pView && "No View - No Cursor Movement!");
 
@@ -1260,7 +1260,7 @@ EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView* pView )
     return aNewPaM;
 }
 
-EditPaM ImpEditEngine::CursorDown( const EditPaM& rPaM, EditView* pView )
+EditPaM ImpEditEngine::CursorDown( const EditPaM& rPaM, EditView const * pView )
 {
     OSL_ENSURE( pView, "No View - No Cursor Movement!" );
 
@@ -1386,7 +1386,7 @@ EditPaM ImpEditEngine::CursorEndOfDoc()
     return aPaM;
 }
 
-EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView* pView )
+EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView const * pView )
 {
     tools::Rectangle aRect = PaMtoEditCursor( rPaM );
     Point aTopLeft = aRect.TopLeft();
@@ -1399,7 +1399,7 @@ EditPaM ImpEditEngine::PageUp( const EditPaM& rPaM, EditView* pView )
     return GetPaM( aTopLeft );
 }
 
-EditPaM ImpEditEngine::PageDown( const EditPaM& rPaM, EditView* pView )
+EditPaM ImpEditEngine::PageDown( const EditPaM& rPaM, EditView const * pView )
 {
     tools::Rectangle aRect = PaMtoEditCursor( rPaM );
     Point aBottomRight = aRect.BottomRight();

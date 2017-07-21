@@ -230,7 +230,7 @@ public:
 
     bool            IsCursorAtWrongSpelledWord();
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    void            ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack );
+    void            ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void> const * pCallBack );
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;

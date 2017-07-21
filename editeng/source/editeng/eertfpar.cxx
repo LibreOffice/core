@@ -445,7 +445,7 @@ SvxRTFStyleType* EditRTFParser::FindStyleSheet( const OUString& rName )
     return nullptr;
 }
 
-SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
+SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType const * pRTFStyle )
 {
     // Check if a template exists, then it will not be changed!
     SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>(mpEditEngine->GetStyleSheetPool()->Find( pRTFStyle->sName, SfxStyleFamily::All ));

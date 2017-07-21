@@ -719,21 +719,21 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     return nullptr;
 }
 
-OUString SAL_CALL Hyphenator::makeLowerCase(const OUString& aTerm, CharClass * pCC)
+OUString SAL_CALL Hyphenator::makeLowerCase(const OUString& aTerm, CharClass const * pCC)
 {
     if (pCC)
         return pCC->lowercase(aTerm);
     return aTerm;
 }
 
-OUString SAL_CALL Hyphenator::makeUpperCase(const OUString& aTerm, CharClass * pCC)
+OUString SAL_CALL Hyphenator::makeUpperCase(const OUString& aTerm, CharClass const * pCC)
 {
     if (pCC)
         return pCC->uppercase(aTerm);
     return aTerm;
 }
 
-OUString SAL_CALL Hyphenator::makeInitCap(const OUString& aTerm, CharClass * pCC)
+OUString SAL_CALL Hyphenator::makeInitCap(const OUString& aTerm, CharClass const * pCC)
 {
     sal_Int32 tlen = aTerm.getLength();
     if (pCC && tlen)
