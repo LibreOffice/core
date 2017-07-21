@@ -1666,8 +1666,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
         // Special case for handling an area with several nodes,
         // or a single node that is not a TextNode
         OSL_ENSURE( &m_rDoc == pDoc, " invalid copy branch!" );
-        OSL_FAIL("mst: i thought this could be dead code;"
-                "please tell me what you did to get here!");
+        assert(!"mst: this is assumed to be dead code");
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
 
         // Then copy the area to the underlying document area
@@ -2084,6 +2083,8 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     pTNd = aSavePam.GetNode().GetTextNode();
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
+        assert(!"mst: this is assumed to be dead code");
+
         // correct the SavePam's Content first
         if( bNullContent )
         {
