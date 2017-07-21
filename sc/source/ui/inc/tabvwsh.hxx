@@ -156,9 +156,6 @@ private:
     bool                    bInPrepareClose;
     bool                    bInDispose;
 
-    ScRangeListRef          aChartSource;
-    tools::Rectangle               aChartPos;
-    SCTAB                   nChartDestTab;
     sal_uInt16              nCurRefDlgId;
 
     SfxBroadcaster*         pAccessibilityBroadcaster;
@@ -311,8 +308,6 @@ public:
     void            SetDrawTextUndo( ::svl::IUndoManager* pUndoMgr );
 
     void            FillFieldData( ScHeaderFieldData& rData );
-
-    bool            GetChartArea( ScRangeListRef& rSource, tools::Rectangle& rDest, SCTAB& rTab ) const;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

@@ -110,7 +110,6 @@ public:
 protected:
     ScRangeList     maBlockRanges;
     SdrUndoAction*  mpDrawUndo;
-    ScBlockUndoMode meMode;
 
     void BeginUndo();
     void EndUndo();
