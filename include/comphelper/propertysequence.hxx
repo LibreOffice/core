@@ -14,7 +14,6 @@
 #include <initializer_list>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace comphelper
@@ -36,18 +35,18 @@ namespace comphelper
         return vResult;
     }
 
-    /// Init list for property sequences that wrap the NamedValues in Anys.
+    /// Init list for property sequences that wrap the PropertyValues in Anys.
     ///
     /// This is particularly useful for creation of sequences that are later
     /// unwrapped using comphelper::SequenceAsHashMap.
-    inline css::uno::Sequence< css::uno::Any > InitAnySequence(
+    inline css::uno::Sequence< css::uno::Any > InitAnyPropertySequence(
         ::std::initializer_list< ::std::pair< OUString, css::uno::Any > > vInit)
     {
         css::uno::Sequence<css::uno::Any> vResult{static_cast<sal_Int32>(vInit.size())};
         size_t nCount{0};
         for(const auto& aEntry : vInit)
         {
-            vResult[nCount] <<= css::beans::NamedValue(aEntry.first, aEntry.second);
+            vResult[nCount] <<= css::beans::PropertyValue(aEntry.first, -1, aEntry.second, css::beans::PropertyState_DIRECT_VALUE);
             ++nCount;
         }
         return vResult;

@@ -219,7 +219,7 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
 
     if (isExportFilter())
     {
-        uno::Sequence<uno::Any> aArguments(comphelper::InitAnySequence(
+        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
             {"IsPPTM", uno::makeAny(exportVBA())},
         }));
