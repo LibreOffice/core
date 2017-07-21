@@ -677,7 +677,7 @@ void ScExportTest::testXfDefaultValuesXLSX()
 void ScExportTest::testColumnWidthResaveXLSX()
 {
     // tdf#91475 FILESAVE: Column width is not preserved in XLSX / after round trip.
-    // Test if after resave .xlsx file, columns width is identical with with previous one
+    // Test if after resave .xlsx file, columns width is identical with previous one
     ScDocShellRef xShell = loadDoc("different-column-width-excel2010.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
@@ -716,7 +716,7 @@ void ScExportTest::testColumnWidthExportFromODStoXLSX()
 {
     // tdf#91475 FILESAVE: Column width is not preserved in XLSX / after round trip.
     // Test if after export .ods to .xlsx format, displayed columns width
-    // is identical with with previous (.ods) one
+    // is identical with previous (.ods) one
 
     ScDocShellRef xShell = loadDoc("different-column-width.", FORMAT_ODS);
 
