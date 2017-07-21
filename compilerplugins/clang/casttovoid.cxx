@@ -414,53 +414,6 @@ private:
                 || compiler.getSourceManager().isMacroBodyExpansion(loc));
     }
 
-    bool containsPreprocessingConditionalInclusion(SourceRange range) {
-        auto const begin = compiler.getSourceManager().getExpansionLoc(
-            range.getBegin());
-        auto const end = compiler.getSourceManager().getExpansionLoc(
-            range.getEnd());
-        assert(begin.isFileID() && end.isFileID());
-        if (!(begin == end
-              || compiler.getSourceManager().isBeforeInTranslationUnit(
-                  begin, end)))
-        {
-            // Conservatively assume "yes" if lexing fails (e.g., due to
-            // macros):
-            return true;
-        }
-        auto hash = false;
-        for (auto loc = begin;;) {
-            Token tok;
-            if (Lexer::getRawToken(
-                    loc, tok, compiler.getSourceManager(),
-                    compiler.getLangOpts(), true))
-            {
-                // Conservatively assume "yes" if lexing fails (e.g., due to
-                // macros):
-                return true;
-            }
-            if (hash && tok.is(tok::raw_identifier)) {
-                auto const id = tok.getRawIdentifier();
-                if (id == "if" || id == "ifdef" || id == "ifndef"
-                    || id == "elif" || id == "else" || id == "endif")
-                {
-                    return true;
-                }
-            }
-            if (loc == range.getEnd()) {
-                break;
-            }
-            hash = tok.is(tok::hash) && tok.isAtStartOfLine();
-            loc = loc.getLocWithOffset(
-                std::max<unsigned>(
-                    Lexer::MeasureTokenLength(
-                        loc, compiler.getSourceManager(),
-                        compiler.getLangOpts()),
-                    1));
-        }
-        return false;
-    }
-
     DeclRefExpr const * checkCast(ExplicitCastExpr const * expr) {
         if (!loplugin::TypeCheck(expr->getTypeAsWritten()).Void()) {
             return nullptr;

@@ -242,6 +242,7 @@ public:
 
     bool VisitDeclRefExpr( const DeclRefExpr* );
     bool VisitVarDecl( const VarDecl* );
+    bool TraverseFunctionDecl( FunctionDecl* functionDecl );
 
 private:
     std::unordered_set<VarDecl const *> maVarDeclSet;
@@ -286,6 +287,16 @@ private:
         maVarDeclToIgnoreSet.insert(var);
     }
 };
+
+bool OnceVar::TraverseFunctionDecl( FunctionDecl* functionDecl )
+{
+    // Ignore functions that contains #ifdef-ery, can be quite tricky
+    // to make useful changes when this plugin fires in such functions
+    if (containsPreprocessingConditionalInclusion(
+            functionDecl->getSourceRange()))
+        return true;
+    return RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
+}
 
 bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
 {
