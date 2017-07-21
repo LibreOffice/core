@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -80,22 +81,12 @@ CacheConfiguration::CacheConfiguration()
             configuration::theDefaultProvider::get( ::comphelper::getProcessComponentContext() );
 
         // Obtain access to Impress configuration.
-        Sequence<Any> aCreationArguments(3);
-        aCreationArguments[0] <<= beans::PropertyValue(
-            "nodepath",
-            0,
-            makeAny(sPathToImpressConfigurationRoot),
-            beans::PropertyState_DIRECT_VALUE);
-        aCreationArguments[1] <<= beans::PropertyValue(
-            "depth",
-            0,
-            makeAny((sal_Int32)-1),
-            beans::PropertyState_DIRECT_VALUE);
-        aCreationArguments[2] <<= beans::PropertyValue(
-            "lazywrite",
-            0,
-            makeAny(true),
-            beans::PropertyState_DIRECT_VALUE);
+        Sequence<Any> aCreationArguments(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", makeAny(sPathToImpressConfigurationRoot)},
+            {"depth", makeAny((sal_Int32)-1)},
+            {"lazywrite", makeAny(true)}
+        }));
 
         Reference<XInterface> xRoot (xProvider->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationAccess",

@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
@@ -203,12 +204,10 @@ void FuHangulHanjaConversion::StartChineseConversion()
             {
                 //  initialize dialog
                 Reference< awt::XWindow > xDialogParentWindow(nullptr);
-                Sequence<Any> aSeq(1);
-                Any* pArray = aSeq.getArray();
-                PropertyValue aParam;
-                aParam.Name = "ParentWindow";
-                aParam.Value <<= xDialogParentWindow;
-                pArray[0] <<= aParam;
+                Sequence<Any> aSeq(comphelper::InitAnyPropertySequence(
+                {
+                    {"ParentWindow", uno::Any(xDialogParentWindow)}
+                }));
                 xInit->initialize( aSeq );
 
                 //execute dialog
