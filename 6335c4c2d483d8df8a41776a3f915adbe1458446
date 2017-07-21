@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_104add83",
+        "filename": "oox/source/drawingml/diagram/diagramlayoutatoms.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-21T13:48:22Z",
+      "side": 1,
+      "message": "\"childrens\" is also wrong",
+      "revId": "6335c4c2d483d8df8a41776a3f915adbe1458446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
