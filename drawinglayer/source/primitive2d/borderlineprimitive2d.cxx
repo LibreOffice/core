@@ -154,8 +154,8 @@ namespace drawinglayer
                     // single line, only inside values used, no vertical offsets
                     addPolygonStrokePrimitive2D(
                         aContainer,
-                        getStart(),
-                        getEnd(),
+                        getStart() - (aVector * getExtendLeftStart()),
+                        getEnd() + (aVector * getExtendLeftEnd()),
                         getRGBColorLeft(),
                         getLeftWidth(),
                         getStyle(),
