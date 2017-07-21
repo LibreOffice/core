@@ -94,8 +94,8 @@ public:
     void                SetReturnValue(const SfxPoolItem &);
     const SfxPoolItem*  GetReturnValue() const;
 
-    static css::uno::Reference< css::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame* pFrame );
-    static bool         HasMacroRecorder( SfxViewFrame* pFrame );
+    static css::uno::Reference< css::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame const * pFrame );
+    static bool         HasMacroRecorder( SfxViewFrame const * pFrame );
     SfxCallMode         GetCallMode() const;
     void                AllowRecording( bool );
     bool                AllowsRecording() const;

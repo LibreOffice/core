@@ -99,7 +99,7 @@ void LinkManager::CloseCachedComps()
     maCachedComps.clear();
 }
 
-void LinkManager::Remove( SvBaseLink *pLink )
+void LinkManager::Remove( SvBaseLink const *pLink )
 {
     // No duplicate links inserted
     bool bFound = false;
@@ -328,7 +328,7 @@ void LinkManager::UpdateAllLinks(
     CloseCachedComps();
 }
 
-SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
+SvLinkSourceRef LinkManager::CreateObj( SvBaseLink const * pLink )
 {
     switch( pLink->GetObjType() )
     {

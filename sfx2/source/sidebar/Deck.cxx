@@ -165,7 +165,7 @@ bool Deck::EventNotify(NotifyEvent& rEvent)
     return Window::EventNotify(rEvent);
 }
 
-bool Deck::ProcessWheelEvent(CommandEvent* pCommandEvent)
+bool Deck::ProcessWheelEvent(CommandEvent const * pCommandEvent)
 {
     if ( ! mpVerticalScrollBar)
         return false;

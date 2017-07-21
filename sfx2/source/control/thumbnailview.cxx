@@ -204,7 +204,7 @@ void ThumbnailView::ApplySettings(vcl::RenderContext& rRenderContext)
     mpItemAttrs->nMaxTextLength = 0;
 }
 
-void ThumbnailView::DrawItem(ThumbnailViewItem *pItem)
+void ThumbnailView::DrawItem(ThumbnailViewItem const *pItem)
 {
     if (pItem->isVisible())
     {

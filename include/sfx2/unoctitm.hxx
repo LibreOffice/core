@@ -116,7 +116,7 @@ class SfxDispatchController_Impl : public SfxControllerItem
 
     static void         addParametersToArgs( const css::util::URL& aURL,
                                              css::uno::Sequence< css::beans::PropertyValue >& rArgs );
-    static MapUnit      GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlot );
+    static MapUnit      GetCoreMetric( SfxItemPool const & rPool, sal_uInt16 nSlot );
 
     void                sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent);
 
@@ -130,7 +130,7 @@ public:
 
     static OUString getSlaveCommand( const css::util::URL& rURL );
 
-    void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pServ );
+    void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer const * pServ );
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void                setMasterSlaveCommand( bool bSet );
     /// @throws css::uno::RuntimeException

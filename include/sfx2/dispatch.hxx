@@ -126,8 +126,8 @@ public:
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
                                  SfxCallMode nCall,
-                                 SfxItemSet* pArgs,
-                                 SfxItemSet* pInternalArgs,
+                                 SfxItemSet const * pArgs,
+                                 SfxItemSet const * pInternalArgs,
                                  sal_uInt16 nModi);
 
     const SfxPoolItem*  ExecuteList( sal_uInt16 nSlot,
@@ -183,7 +183,7 @@ public:
     SAL_DLLPRIVATE bool IsReadOnlyShell_Impl( sal_uInt16 nShell ) const;
     SAL_DLLPRIVATE void RemoveShell_Impl( SfxShell& rShell );
     SAL_DLLPRIVATE void DoActivate_Impl( bool bMDI );
-    SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame* pNew );
+    SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame const * pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(bool);
 };
 

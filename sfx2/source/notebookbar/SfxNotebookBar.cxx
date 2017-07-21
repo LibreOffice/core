@@ -123,7 +123,7 @@ static utl::OConfigurationTreeRoot lcl_getCurrentImplConfigRoot()
 }
 
 static const utl::OConfigurationNode lcl_getCurrentImplConfigNode(const Reference<css::frame::XFrame>& xFrame,
-                                                                  utl::OConfigurationTreeRoot& rNotebookbarNode )
+                                                                  utl::OConfigurationTreeRoot const & rNotebookbarNode )
 {
     if (!rNotebookbarNode.isValid())
         return utl::OConfigurationNode();
@@ -336,7 +336,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     return false;
 }
 
-void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
+void SfxNotebookBar::RemoveListeners(SystemWindow const * pSysWindow)
 {
     Reference<XContextChangeEventMultiplexer> xMultiplexer
                         = ContextChangeEventMultiplexer::get(

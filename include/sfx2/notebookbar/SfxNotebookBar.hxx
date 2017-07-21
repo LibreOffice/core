@@ -41,7 +41,7 @@ public:
     /// Method restores normal behaviour of the Notebookbar
     static void UnlockNotebookBar();
 
-    static void RemoveListeners(SystemWindow* pSysWindow);
+    static void RemoveListeners(SystemWindow const * pSysWindow);
 
     static void ShowMenubar(bool bShow);
     static void ToggleMenubar();

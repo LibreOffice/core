@@ -1247,7 +1247,7 @@ IMPL_LINK( SfxBindings, NextJob, Timer *, pTimer, void )
     NextJob_Impl(pTimer);
 }
 
-bool SfxBindings::NextJob_Impl(Timer * pTimer)
+bool SfxBindings::NextJob_Impl(Timer const * pTimer)
 {
     const unsigned MAX_INPUT_DELAY = 200;
 
@@ -1725,7 +1725,7 @@ const css::uno::Reference< css::frame::XDispatchRecorder >& SfxBindings::GetReco
     return pImpl->xRecorder;
 }
 
-void SfxBindings::SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder >& rRecorder )
+void SfxBindings::SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder > const & rRecorder )
 {
     pImpl->xRecorder = rRecorder;
 }

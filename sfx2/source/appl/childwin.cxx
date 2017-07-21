@@ -202,7 +202,7 @@ SfxChildWindow::~SfxChildWindow()
 
 
 SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
-        vcl::Window *pParent, SfxBindings* pBindings, SfxChildWinInfo& rInfo)
+        vcl::Window *pParent, SfxBindings* pBindings, SfxChildWinInfo const & rInfo)
 {
     SfxChildWindow *pChild=nullptr;
     SfxChildWinFactory* pFact=nullptr;
@@ -619,7 +619,7 @@ void SfxChildWindow::Show( ShowFlags nFlags )
     pWindow->Show(true, nFlags);
 }
 
-vcl::Window* SfxChildWindow::GetContextWindow( SfxModule *pModule ) const
+vcl::Window* SfxChildWindow::GetContextWindow( SfxModule const *pModule ) const
 {
     return pModule == pImpl->pContextModule && pContext ? pContext->GetWindow(): nullptr;
 }

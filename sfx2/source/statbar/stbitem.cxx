@@ -547,7 +547,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
     sal_uInt16     nSlotID,
     sal_uInt16     nStbId,
     StatusBar* pBar,
-    SfxModule* pMod
+    SfxModule const * pMod
 )
 {
     SolarMutexGuard aGuard;

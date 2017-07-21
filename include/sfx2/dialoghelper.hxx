@@ -26,7 +26,7 @@ class VclBuilderContainer;
 
 //there has to be a "maingrid" container which contains all the widgets
 //except for the preview widget
-void SFX2_DLLPUBLIC setPreviewsToSamePlace(vcl::Window *pParent, VclBuilderContainer *pPage);
+void SFX2_DLLPUBLIC setPreviewsToSamePlace(vcl::Window const *pParent, VclBuilderContainer *pPage);
 
 Size SFX2_DLLPUBLIC getParagraphPreviewOptimalSize(const vcl::Window *pReference);
 

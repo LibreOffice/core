@@ -581,7 +581,7 @@ Sequence< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId()
 //  XStarBasicAccess
 
 
-Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectShell* pObjectShell )
+Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectShell const * pObjectShell )
 {
     Reference< script::XStarBasicAccess > xRet;
 
@@ -1718,7 +1718,7 @@ void SAL_CALL SfxBaseModel::initNew()
 
 namespace {
 
-OUString getFilterProvider( SfxMedium& rMedium )
+OUString getFilterProvider( SfxMedium const & rMedium )
 {
     std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();
     if (!pFilter)
@@ -3372,7 +3372,7 @@ static void GetCommandFromSequence( OUString& rCommand, sal_Int32& nIndex, const
     }
 }
 
-static void ConvertSlotsToCommands( SfxObjectShell* pDoc, Reference< container::XIndexContainer >& rToolbarDefinition )
+static void ConvertSlotsToCommands( SfxObjectShell const * pDoc, Reference< container::XIndexContainer > const & rToolbarDefinition )
 {
     if ( pDoc )
     {

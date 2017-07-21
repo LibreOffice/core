@@ -41,7 +41,7 @@ typedef svt::StatusbarController* ( *pfunc_setStatusBarControllerCreator)(
     const OUString& aCommandURL );
 
 typedef void ( *pfunc_getRefreshToolbars)(
-    css::uno::Reference< css::frame::XFrame >& rFrame );
+    css::uno::Reference< css::frame::XFrame > const & rFrame );
 
 typedef void ( *pfunc_createDockingWindow)(
     const css::uno::Reference< css::frame::XFrame >& rFrame,

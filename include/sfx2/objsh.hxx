@@ -420,7 +420,7 @@ public:
     const css::uno::Sequence< css::beans::PropertyValue >& GetModifyPasswordInfo() const;
     bool                        SetModifyPasswordInfo( const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
 
-    static ErrCode              HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
+    static ErrCode              HandleFilter( SfxMedium* pMedium, SfxObjectShell const * pDoc );
 
     virtual bool                PrepareClose(bool bUI = true);
     virtual HiddenInformation   GetHiddenInformationState( HiddenInformation nStates );
@@ -563,7 +563,7 @@ public:
 
     virtual css::uno::Sequence< OUString > GetEventNames();
 
-    vcl::Window*                GetDialogParent( SfxMedium* pMedium=nullptr );
+    vcl::Window*                GetDialogParent( SfxMedium const * pMedium=nullptr );
     static SfxObjectShell*      CreateObject( const OUString& rServiceName, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
     static SfxObjectShell*      CreateObjectByFactoryName( const OUString& rURL, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
     static css::uno::Reference< css::lang::XComponent >
@@ -715,7 +715,7 @@ public:
     SAL_DLLPRIVATE void SetNamedVisibility_Impl();
     SAL_DLLPRIVATE bool DoSave_Impl( const SfxItemSet* pSet );
     SAL_DLLPRIVATE bool Save_Impl( const SfxItemSet* pSet );
-    SAL_DLLPRIVATE bool PreDoSaveAs_Impl(const OUString& rFileName, const OUString& rFiltName, SfxItemSet& rItemSet);
+    SAL_DLLPRIVATE bool PreDoSaveAs_Impl(const OUString& rFileName, const OUString& rFiltName, SfxItemSet const & rItemSet);
     SAL_DLLPRIVATE bool APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet);
     SAL_DLLPRIVATE bool CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet& rItemSet);
     SAL_DLLPRIVATE bool GeneralInit_Impl(
@@ -727,7 +727,7 @@ public:
     // public-internals
     SAL_DLLPRIVATE IndexBitSet& GetNoSet_Impl();
     SAL_DLLPRIVATE void SetProgress_Impl( SfxProgress *pProgress );
-    SAL_DLLPRIVATE void PostActivateEvent_Impl( SfxViewFrame* );
+    SAL_DLLPRIVATE void PostActivateEvent_Impl( SfxViewFrame const * );
     SAL_DLLPRIVATE void SetActivateEvent_Impl(SfxEventHintId );
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 

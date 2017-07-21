@@ -1781,7 +1781,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
 }
 
 
-bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet& aTargetSet )
+bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet const & aTargetSet )
 {
     if ( GetError() )
         return false;
@@ -3275,7 +3275,7 @@ void SfxMedium::RemoveVersion_Impl( const OUString& rName )
     }
 }
 
-bool SfxMedium::TransferVersionList_Impl( SfxMedium& rMedium )
+bool SfxMedium::TransferVersionList_Impl( SfxMedium const & rMedium )
 {
     if ( rMedium.pImpl->aVersions.getLength() )
     {

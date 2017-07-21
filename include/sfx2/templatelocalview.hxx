@@ -91,7 +91,7 @@ public:
 
     virtual void showAllTemplates ();
 
-    void showRegion (TemplateContainerItem *pItem);
+    void showRegion (TemplateContainerItem const *pItem);
 
     void showRegion (const OUString &rName);
 
