@@ -23,9 +23,6 @@
 # AllLangMoTarget      nothing              MoTarget for all active langs
 # MoTarget             running msgfmt
 
-gb_MoTarget_LOCALESTRDEPS := $(call gb_Executable_get_runtime_dependencies,localestr)
-gb_MoTarget_LOCALESTRCOMMAND := $(call gb_Executable_get_command,localestr)
-
 # MoTarget
 
 $(call gb_MoTarget_get_clean_target,%) :
@@ -39,7 +36,7 @@ $(call gb_MoTarget_get_clean_target,%) :
 #and minimize msgctxt
 #eventually instead can do something like
 #msgfmt $(gb_POLOCATION)/$(LANGUAGE)/$(LIBRARY)/messages.po -o $@)
-$(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY) $(gb_MoTarget_LOCALESTRDEPS)
+$(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY)
 	$(call gb_Output_announce,$*,$(true),MO,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
@@ -71,7 +68,7 @@ $(call gb_AllLangMoTarget_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_AllLangMoTarget_get_target,$*))
 
-$(call gb_AllLangMoTarget_get_target,%) : $(gb_MoTarget_LOCALESTRDEPS)
+$(call gb_AllLangMoTarget_get_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
@@ -87,7 +84,7 @@ $(foreach lang,$(gb_AllLangMoTarget_LANGS),\
 
 $(foreach lang,$(gb_AllLangMoTarget_LANGS),\
 $(call gb_Helper_install,$(call gb_AllLangMoTarget_get_target,$(1)), \
-	$(call gb_MoTarget_get_install_target,$(shell $(SRCDIR)/bin/run localestr $(lang))/LC_MESSAGES/$(1)), \
+	$(call gb_MoTarget_get_install_target,$(shell $(SRCDIR)/solenv/bin/localestr $(lang))/LC_MESSAGES/$(1)), \
 	$(call gb_MoTarget_get_target,$(1)$(lang))))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_AllLangMoTarget_get_target,$(1)),$(call gb_AllLangMoTarget_get_clean_target,$(1))))
