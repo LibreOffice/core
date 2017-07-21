@@ -53,39 +53,6 @@ using namespace com::sun::star;
 
 Point aDragStartDiff;
 
-void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle )
-{
-    rAnyOle = rOneOle = false;
-    const size_t nCount = rMarkList.GetMarkCount();
-    for (size_t i=0; i<nCount; ++i)
-    {
-        SdrMark* pMark = rMarkList.GetMark(i);
-        SdrObject* pObj = pMark->GetMarkedSdrObj();
-        sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
-        if (nSdrObjKind == OBJ_OLE2)
-        {
-            rAnyOle = true;
-            rOneOle = (nCount == 1);
-            break;
-        }
-        else if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
-        {
-            SdrObjListIter aIter( *pObj, SdrIterMode::DeepNoGroups );
-            SdrObject* pSubObj = aIter.Next();
-            while (pSubObj)
-            {
-                if ( pSubObj->GetObjIdentifier() == OBJ_OLE2 )
-                {
-                    rAnyOle = true;
-                    // rOneOle remains sal_False - a group isn't treated like a single OLE object
-                    return;
-                }
-                pSubObj = aIter.Next();
-            }
-        }
-    }
-}
-
 void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
 {
     if ( AreObjectsMarked() )
@@ -198,78 +165,88 @@ void getRangeFromErrorBar(const uno::Reference< chart2::XChartDocument >& rChart
     }
 }
 
-bool getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRangeRep)
+void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRangeRep)
 {
     if (!rObj.IsChart())
         // not a chart object.
-        return false;
+        return;
 
     uno::Reference<embed::XEmbeddedObject> xObj = rObj.GetObjRef();
     if (!xObj.is())
-        return false;
+        return;
 
     uno::Reference<embed::XComponentSupplier> xCompSupp(xObj, uno::UNO_QUERY);
     if (!xCompSupp.is())
-        return false;
+        return;
 
     uno::Reference<chart2::XChartDocument> xChartDoc(xCompSupp->getComponent(), uno::UNO_QUERY);
     if (!xChartDoc.is())
-        return false;
+        return;
 
     if(xChartDoc->hasInternalDataProvider())
-        return true;
+        return;
 
     getRangeFromErrorBar(xChartDoc, rRangeRep);
 
     uno::Reference<chart2::data::XDataSource> xDataSource(xChartDoc, uno::UNO_QUERY);
     if (!xDataSource.is())
-        return true;
+        return;
 
     // Get all data sources used in this chart.
     getRangeFromDataSource(xDataSource, rRangeRep);
 
-    return true;
+    return;
 }
 
 // Get all cell ranges that are referenced by the selected chart objects.
-bool getChartSourceRanges(ScDocument* pDoc, const SdrMarkList& rObjs, std::vector<ScRange>& rRanges)
+void getOleSourceRanges(const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle, std::vector<ScRange>* pRanges = nullptr, ScDocument* pDoc = nullptr )
 {
+    bool bCalcSourceRanges = pRanges && pDoc;
     std::vector<OUString> aRangeReps;
-    bool bAnyOle = false, bRet = false;
-    for (size_t i = 0, n = rObjs.GetMarkCount(); i < n; ++i)
+    rAnyOle = rOneOle = false;
+    const size_t nCount = rMarkList.GetMarkCount();
+    for (size_t i=0; i<nCount; ++i)
     {
-        const SdrMark* pMark = rObjs.GetMark(i);
-        if (!pMark)
+        SdrMark* pMark = rMarkList.GetMark(i);
+        if ( !pMark )
             continue;
 
-        const SdrObject* pObj = pMark->GetMarkedSdrObj();
-        if (!pObj)
+        SdrObject* pObj = pMark->GetMarkedSdrObj();
+        if ( !pObj )
             continue;
 
-        switch (pObj->GetObjIdentifier())
+        sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+        if (nSdrObjKind == OBJ_OLE2)
         {
-            case OBJ_OLE2:
-                bRet = getRangeFromOle2Object(static_cast<const SdrOle2Obj&>(*pObj), aRangeReps);
-                bAnyOle = bAnyOle || bRet;
-            break;
-            case OBJ_GRUP:
+            rAnyOle = true;
+            rOneOle = (nCount == 1);
+            if ( bCalcSourceRanges )
+                getRangeFromOle2Object( static_cast<const SdrOle2Obj&>( *pObj ), aRangeReps );
+            else
+                break;
+        }
+        else if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
+        {
+            SdrObjListIter aIter( *pObj, SdrIterMode::DeepNoGroups );
+            SdrObject* pSubObj = aIter.Next();
+            while (pSubObj)
             {
-                SdrObjListIter aIter(*pObj, SdrIterMode::DeepNoGroups);
-                for (SdrObject* pSubObj = aIter.Next(); pSubObj; pSubObj = aIter.Next())
+                if ( pSubObj->GetObjIdentifier() == OBJ_OLE2 )
                 {
-                    if (pSubObj->GetObjIdentifier() != OBJ_OLE2)
-                        continue;
+                    rAnyOle = true;
+                    // rOneOle remains false - a group isn't treated like a single OLE object
+                    if ( !bCalcSourceRanges )
+                        return;
 
-                    bRet = getRangeFromOle2Object(static_cast<const SdrOle2Obj&>(*pSubObj), aRangeReps);
-                    bAnyOle = bAnyOle || bRet;
+                    getRangeFromOle2Object( static_cast<const SdrOle2Obj&>( *pSubObj ), aRangeReps );
                 }
-
+                pSubObj = aIter.Next();
             }
-            break;
-            default:
-                ;
         }
     }
+
+    if( bCalcSourceRanges )
+        return;
 
     // Compile all range representation strings into ranges.
     std::vector<OUString>::const_iterator it = aRangeReps.begin(), itEnd = aRangeReps.end();
@@ -280,13 +257,13 @@ bool getChartSourceRanges(ScDocument* pDoc, const SdrMarkList& rObjs, std::vecto
         if (aRange.Parse(*it, pDoc, pDoc->GetAddressConvention()) & ScRefFlags::VALID)
         {
             for(size_t i = 0; i < aRange.size(); ++i)
-                rRanges.push_back(*aRange[i]);
+                pRanges->push_back(*aRange[i]);
         }
         else if (aAddr.Parse(*it, pDoc, pDoc->GetAddressConvention()) & ScRefFlags::VALID)
-            rRanges.push_back(aAddr);
+            pRanges->push_back(aAddr);
     }
 
-    return bAnyOle;
+    return;
 }
 
 class InsertTabIndex
@@ -354,11 +331,17 @@ void copyChartRefDataToClipDoc(ScDocument* pSrcDoc, ScDocument* pClipDoc, const 
 
 }
 
+void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle )
+{
+    getOleSourceRanges( rMarkList, rAnyOle, rOneOle );
+}
+
 void ScDrawView::DoCopy()
 {
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     std::vector<ScRange> aRanges;
-    bool bAnyOle = getChartSourceRanges(pDoc, rMarkList, aRanges);
+    bool bAnyOle = false, bOneOle = false;
+    getOleSourceRanges( rMarkList, bAnyOle, bOneOle, &aRanges, pDoc );
 
     // update ScGlobal::xDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
