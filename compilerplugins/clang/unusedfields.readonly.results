@@ -674,8 +674,6 @@ include/vcl/opengl/OpenGLContext.hxx:57
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/xmloff/nmspmap.hxx:70
     SvXMLNamespaceMap sEmpty const class rtl::OUString
-io/source/acceptor/acc_socket.cxx:89
-    io_acceptor::SocketConnection m_addr ::osl::SocketAddr
 jvmfwk/plugins/sunmajor/pluginlib/util.cxx:251
     jfw_plugin::FileHandleReader m_aBuffer sal_Char [1024]
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50

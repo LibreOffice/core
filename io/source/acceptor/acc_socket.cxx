@@ -86,7 +86,6 @@ namespace io_acceptor {
         void completeConnectionString();
 
         ::osl::StreamSocket m_socket;
-        ::osl::SocketAddr m_addr;
         oslInterlockedCount m_nStatus;
         OUString m_sDescription;
 
@@ -350,7 +349,9 @@ namespace io_acceptor {
         }
 
         pConn->completeConnectionString();
-        OUString remoteHostname = pConn->m_addr.getHostname();
+        ::osl::SocketAddr remoteAddr;
+        pConn->m_socket.getPeerAddr(remoteAddr);
+        OUString remoteHostname = remoteAddr.getHostname();
         // we enable tcpNoDelay for loopback connections because
         // it can make a significant speed difference on linux boxes.
         if( m_bTcpNoDelay || remoteHostname == "localhost" ||
