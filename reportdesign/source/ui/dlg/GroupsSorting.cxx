@@ -102,7 +102,6 @@ class OFieldExpressionControl : public ::svt::EditBrowseBox
     VclPtr< ::svt::ComboBoxControl>  m_pComboCell;
     sal_Int32                       m_nDataPos;
     sal_Int32                       m_nCurrentPos;
-    ImplSVEvent *                   m_nPasteEvent;
     ImplSVEvent *                   m_nDeleteEvent;
     VclPtr<OGroupsSortingDialog>    m_pParent;
     bool                            m_bIgnoreEvent;
@@ -194,7 +193,6 @@ OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentD
     ,m_pComboCell(nullptr)
     ,m_nDataPos(-1)
     ,m_nCurrentPos(-1)
-    ,m_nPasteEvent(nullptr)
     ,m_nDeleteEvent(nullptr)
     ,m_pParent(_pParentDialog)
     ,m_bIgnoreEvent(false)
@@ -216,8 +214,6 @@ void OFieldExpressionControl::dispose()
     xGroups->removeContainerListener(aContainerListener.get());
 
     // delete events from queue
-    if( m_nPasteEvent )
-        Application::RemoveUserEvent( m_nPasteEvent );
     if( m_nDeleteEvent )
         Application::RemoveUserEvent( m_nDeleteEvent );
 

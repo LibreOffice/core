@@ -578,10 +578,6 @@ include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
 include/oox/core/contexthandler2.hxx:220
     oox::core::ContextHandler2Helper mnRootStackSize size_t
-include/oox/dump/dffdumper.hxx:57
-    oox::dump::DffStreamObject maSimpleProps class oox::dump::ItemFormatMap
-include/oox/dump/dffdumper.hxx:58
-    oox::dump::DffStreamObject maComplexProps class oox::dump::ItemFormatMap
 include/registry/refltype.hxx:65
     RTUik m_Data1 sal_uInt32
 include/registry/refltype.hxx:66
@@ -808,8 +804,6 @@ registry/source/reflwrit.cxx:181
     CPInfo::(anonymous) aUik struct RTUik *
 reportdesign/source/core/inc/ReportUndoFactory.hxx:30
     rptui::OReportUndoFactory m_aModuleClient class rptui::OModuleClient
-reportdesign/source/ui/dlg/GroupsSorting.cxx:105
-    rptui::OFieldExpressionControl m_nPasteEvent struct ImplSVEvent *
 reportdesign/source/ui/inc/ColorListener.hxx:35
     rptui::OColorListener m_aModuleClient class rptui::OModuleClient
 reportdesign/source/ui/inc/ColorListener.hxx:37
