@@ -58,6 +58,7 @@ struct FileFormat
 #define FODG_FORMAT_TYPE  (SfxFilterFlags::STARONEFILTER | SfxFilterFlags::OWN | SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT)
 #define FODP_FORMAT_TYPE  (SfxFilterFlags::STARONEFILTER | SfxFilterFlags::OWN | SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT)
 #define SXI_FORMAT_TYPE  (SfxFilterFlags::IMPORT | SfxFilterFlags::TEMPLATE | SfxFilterFlags::OWN | SfxFilterFlags::ALIEN | SfxFilterFlags::PREFERED | SfxFilterFlags::ENCRYPTION)
+#define PPTM_FORMAT_TYPE ( SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER | SfxFilterFlags::PREFERED )
 
 /** List of file formats we support in Impress unit tests.
 
@@ -74,10 +75,11 @@ FileFormat aFileFormats[] =
     { "pptx", "Impress Office Open XML", "Office Open XML Presentation", "", PPTX_FORMAT_TYPE },
     { "html", "graphic_HTML", "graphic_HTML", "", HTML_FORMAT_TYPE },
     { "pdf",  "draw_pdf_import", "pdf_Portable_Document_Format", "", PDF_FORMAT_TYPE },
-    { "fodg",  "OpenDocument Drawing Flat XML", "Flat XML ODF Drawing", "", FODG_FORMAT_TYPE },
-    { "fodp",  "OpenDocument Presentation Flat XML", "Flat XML ODF Presentation", "", FODP_FORMAT_TYPE },
+    { "fodg", "OpenDocument Drawing Flat XML", "Flat XML ODF Drawing", "", FODG_FORMAT_TYPE },
+    { "fodp", "OpenDocument Presentation Flat XML", "Flat XML ODF Presentation", "", FODP_FORMAT_TYPE },
     { "sxi",  "StarOffice XML (Impress)", "OpenOffice.org 1.0 Presentation", "", SXI_FORMAT_TYPE },
     { "odg",  "draw8", "draw8", "", ODP_FORMAT_TYPE },
+    { "pptm", "Impress MS PowerPoint 2007 XML VBA", "MS PowerPoint 2007 XML VBA", "", PPTM_FORMAT_TYPE },
     { nullptr, nullptr, nullptr, nullptr, SfxFilterFlags::NONE }
 };
 
@@ -88,8 +90,9 @@ FileFormat aFileFormats[] =
 #define PDF  4
 #define FODG 5
 #define FODP 6
-#define SXI 7
+#define SXI  7
 #define ODG  8
+#define PPTM 9
 
 /// Base class for filter tests loading or roundtriping a document, and asserting the document model.
 class SdModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
