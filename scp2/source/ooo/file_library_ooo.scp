@@ -463,23 +463,6 @@ End
 
 #ifdef UNX
 
-#ifdef ENABLE_KAB
-File gid_File_Lib_Kab_1
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(libkab1,UNXSUFFIX));
-End
-
-File gid_File_Lib_Kab_Drv_1
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = STRING(CONCAT2(libkabdrv1,UNXSUFFIX));
-End
-
-#endif
-
 #ifdef MACOSX
 File gid_File_Lib_Macab_1
     TXT_FILE_BODY;

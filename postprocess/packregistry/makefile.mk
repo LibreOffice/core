@@ -354,9 +354,6 @@ MY_FILES_main += \
     $(MY_MOD)/DataAccess/hsqldb.xcu \
     $(MY_MOD)/DataAccess/jdbc.xcu
 .END
-.IF "$(ENABLE_KAB)" == "TRUE"
-MY_FILES_main += $(MY_MOD)/DataAccess/kab.xcu
-.END
 
 .IF "$(SYSTEM_LIBTEXTCAT_DATA)" != ""
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/Paths-externallibtextcatdata.xcu

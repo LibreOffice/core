@@ -1677,7 +1677,6 @@ ToFile( "ENABLE_KDE4",       "@ENABLE_KDE4@",      "e" );
 ToFile( "KDE4_CFLAGS",       "@KDE4_CFLAGS@",      "e" );
 ToFile( "KDE4_LIBS",         "@KDE4_LIBS@",        "e" );
 ToFile( "MOC4",              "@MOC4@",             "e" );
-ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
 ToFile( "nodep",             "@nodep@",          "e" );

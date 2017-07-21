@@ -261,10 +261,6 @@ my_components += component/ucb/source/ucp/gio/ucpgio
 my_components += component/ucb/source/ucp/gvfs/ucpgvfs
 .END
 
-.IF "$(ENABLE_KAB)" != ""
-my_components += kab1
-.END
-
 .IF "$(ENABLE_KDE)" != ""
 my_components += kdebe1
 .END
