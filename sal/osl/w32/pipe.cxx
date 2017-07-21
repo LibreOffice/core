@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include "system.h"
 
 #include <osl/pipe.h>
@@ -28,8 +26,10 @@
 #include <osl/conditn.h>
 #include <osl/interlck.h>
 #include <osl/process.h>
-
 #include <rtl/alloc.h>
+
+#include <cassert>
+#include <string.h>
 
 #define PIPESYSTEM      "\\\\.\\pipe\\"
 #define PIPEPREFIX      "OSL_PIPE_"
@@ -288,8 +288,11 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     rtl_uString* path = nullptr;
     rtl_uString* temp = nullptr;
 
-    OSL_ASSERT(pPipe);
-    OSL_ASSERT(pPipe->m_File != INVALID_HANDLE_VALUE);
+    SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_acceptPipe: invalid pipe");
+    if (!pPipe)
+        return nullptr;
+
+    SAL_WARN_IF(pPipe->m_File == INVALID_HANDLE_VALUE, "sal.osl.pipe", "osl_acceptPipe: invalid handle");
 
     memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_AcceptEvent;
@@ -330,7 +333,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     }
 
     pAcceptedPipe = osl_createPipeImpl();
-    OSL_ASSERT(pAcceptedPipe);
+    assert(pAcceptedPipe);  // should never be the case that an oslPipe cannot be initialized
 
     osl_atomic_increment(&(pAcceptedPipe->m_Reference));
     rtl_uString_assign(&pAcceptedPipe->m_Name, pPipe->m_Name);
@@ -361,7 +364,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
     DWORD nBytes;
     OVERLAPPED os;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
 
     memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_ReadEvent;
@@ -399,7 +402,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
     DWORD nBytes;
     OVERLAPPED os;
 
-    OSL_ASSERT(pPipe);
+    assert(pPipe);
 
     memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_WriteEvent;
@@ -426,7 +429,7 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer , sal_Int32 
     sal_Int32 BytesSend = 0;
     sal_Int32 BytesToSend = n;
 
-    OSL_ASSERT(pPipe);
+    SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_writePipe: invalid pipe");
     while (BytesToSend > 0)
     {
         sal_Int32 RetVal;
@@ -451,7 +454,7 @@ sal_Int32 SAL_CALL osl_readPipe(oslPipe pPipe, void *pBuffer, sal_Int32 n)
     sal_Int32 BytesRead = 0;
     sal_Int32 BytesToRead = n;
 
-    OSL_ASSERT(pPipe);
+    SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_readPipe: invalid pipe");
     while (BytesToRead > 0)
     {
         sal_Int32 RetVal;
