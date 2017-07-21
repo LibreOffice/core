@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_105e5de9",
+        "filename": "sw/source/core/layout/calcmove.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-21T08:14:23Z",
+      "side": 0,
+      "message": "Are you sure this is a worthless warning? Sounds quite useful to me.",
+      "revId": "c9424e3fcf6014de72d73b39483b713f33946153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
