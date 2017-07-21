@@ -460,7 +460,8 @@ public:
     void        ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr );
     void        ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
     void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
-                                  ScEditDataArray* pDataArray = nullptr );
+                                  ScEditDataArray* pDataArray = nullptr,
+                                  bool* const pIsChanged = nullptr);
     void        SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
     void        SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr );

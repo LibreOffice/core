@@ -856,7 +856,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
     TestData();
 #endif
 
-    bool bChanged = false;
+    bool bChanged = pIsChanged ? *pIsChanged : false;
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
         SCSIZE nPos;
