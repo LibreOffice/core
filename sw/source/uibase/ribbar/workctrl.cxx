@@ -49,6 +49,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "bitmaps.hlst"
+#include <toolkit/helper/vclunohelper.hxx>
 
 // Size check
 #define NAVI_ENTRIES 20
@@ -576,6 +577,308 @@ VclPtr<vcl::Window> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Window *
 {
     VclPtrInstance<SwJumpToSpecificBox_Impl> pRet( pParent, GetSlotId() );
     return pRet.get();
+}
+
+class NavElementBox_Impl;
+class NavElementToolBoxControl : public svt::ToolboxController,
+                                 public lang::XServiceInfo
+{
+    public:
+        explicit NavElementToolBoxControl(
+            const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
+
+        // XInterface
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual void SAL_CALL acquire() throw () override;
+        virtual void SAL_CALL release() throw () override;
+
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+        // XComponent
+        virtual void SAL_CALL dispose() override;
+
+        // XStatusListener
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+
+        // XToolbarController
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
+        virtual void SAL_CALL click() override;
+        virtual void SAL_CALL doubleClick() override;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+
+        void dispatchCommand( const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
+        using svt::ToolboxController::dispatchCommand;
+
+    private:
+        VclPtr<NavElementBox_Impl>           m_pBox;
+};
+
+class NavElementBox_Impl : public ListBox
+{
+public:
+                        NavElementBox_Impl( vcl::Window* pParent,
+                                             const uno::Reference< frame::XFrame >& _xFrame,
+                                             NavElementToolBoxControl& rCtrl );
+
+    void                Update();
+
+    virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
+
+protected:
+    virtual void        Select() override;
+
+private:
+    NavElementToolBoxControl*                  m_pCtrl;
+    bool                                       m_bRelease;
+    uno::Reference< frame::XFrame >            m_xFrame;
+
+    void                ReleaseFocus_Impl();
+};
+
+NavElementBox_Impl::NavElementBox_Impl(
+    vcl::Window*                                      _pParent,
+    const uno::Reference< frame::XFrame >&            _xFrame,
+    NavElementToolBoxControl&                         _rCtrl ) :
+
+    ListBox( _pParent, WinBits( WB_DROPDOWN ) ),
+
+    m_pCtrl             ( &_rCtrl ),
+    m_bRelease          ( true ),
+    m_xFrame            ( _xFrame )
+{
+    SetSizePixel( Size( 150, 260 ) );
+
+    sal_uInt16 i;
+    for( i = 0; i < NID_COUNT - 2; i++ )
+    {
+        OUString sText;
+
+        sal_uInt16 nResStr = ST_TBL + i;
+        sText = SwResId( nResStr );
+        InsertEntry( sText );
+    }
+}
+
+void NavElementBox_Impl::ReleaseFocus_Impl()
+{
+    if ( !m_bRelease )
+    {
+        m_bRelease = true;
+        return;
+    }
+
+    if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
+        m_xFrame->getContainerWindow()->setFocus();
+}
+
+
+void NavElementBox_Impl::Select()
+{
+    ListBox::Select();
+
+    if ( !IsTravelSelect() )
+    {
+        sal_uInt16 nPos = GetSelectEntryPos();
+
+        SwView::SetMoveType( NID_START + 2 + nPos );
+
+        css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
+        aArgs[0].Name = "NavElement";
+        aArgs[0].Value <<=  nPos;   // not used
+
+        /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+            This instance may be deleted in the meantime (i.e. when a dialog is opened
+            while in Dispatch()), accessing members will crash in this case. */
+        ReleaseFocus_Impl();
+
+        m_pCtrl->dispatchCommand( aArgs );
+    }
+}
+
+
+void NavElementBox_Impl::Update()
+{
+    sal_uInt16 nItemId = ST_TBL - 2 + SwView::GetMoveType() - NID_START;
+    SelectEntry( SwResId( nItemId ) );
+}
+
+
+bool NavElementBox_Impl::EventNotify( NotifyEvent& rNEvt )
+{
+    bool bHandled = false;
+
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    {
+        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+
+        switch ( nCode )
+        {
+            case KEY_RETURN:
+            case KEY_TAB:
+            {
+                if ( KEY_TAB == nCode )
+                    m_bRelease = false;
+                else
+                    bHandled = true;
+                Select();
+                break;
+            }
+
+            case KEY_ESCAPE:
+                ReleaseFocus_Impl();
+                bHandled = true;
+                break;
+        }
+    }
+    else if( MouseNotifyEvent::LOSEFOCUS == rNEvt.GetType() )
+    {
+    }
+
+    return bHandled || ListBox::EventNotify( rNEvt );
+}
+
+
+NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
+ : svt::ToolboxController( rxContext,
+                           uno::Reference< frame::XFrame >(),
+                           ".uno:NavElement" ),
+   m_pBox( nullptr )
+{
+}
+
+// XInterface
+css::uno::Any SAL_CALL NavElementToolBoxControl::queryInterface( const css::uno::Type& aType )
+{
+    uno::Any a = ToolboxController::queryInterface( aType );
+    if ( a.hasValue() )
+        return a;
+
+    return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ));
+}
+
+void SAL_CALL NavElementToolBoxControl::acquire() throw ()
+{
+    ToolboxController::acquire();
+}
+
+void SAL_CALL NavElementToolBoxControl::release() throw ()
+{
+    ToolboxController::release();
+}
+
+// XServiceInfo
+sal_Bool SAL_CALL NavElementToolBoxControl::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+OUString SAL_CALL NavElementToolBoxControl::getImplementationName()
+{
+    return OUString("NavElementToolBoxController");
+}
+
+uno::Sequence< OUString > SAL_CALL NavElementToolBoxControl::getSupportedServiceNames(  )
+{
+    uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
+    return aSNS;
+}
+
+// XComponent
+void SAL_CALL NavElementToolBoxControl::dispose()
+{
+    svt::ToolboxController::dispose();
+
+    SolarMutexGuard aSolarMutexGuard;
+    m_pBox.disposeAndClear();
+}
+
+// XStatusListener
+void SAL_CALL NavElementToolBoxControl::statusChanged(
+    const frame::FeatureStateEvent& rEvent )
+{
+    if ( m_pBox )
+    {
+        SolarMutexGuard aSolarMutexGuard;
+        if ( rEvent.FeatureURL.Path == "NavElement" )
+        {
+            if ( rEvent.IsEnabled )
+            {
+                m_pBox->Enable();
+                m_pBox->Update();
+            }
+            else
+                m_pBox->Disable();
+        }
+    }
+}
+
+// XToolbarController
+void SAL_CALL NavElementToolBoxControl::execute( sal_Int16 /*KeyModifier*/ )
+{
+}
+
+void SAL_CALL NavElementToolBoxControl::click()
+{
+}
+
+void SAL_CALL NavElementToolBoxControl::doubleClick()
+{
+}
+
+uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createPopupWindow()
+{
+    return uno::Reference< awt::XWindow >();
+}
+
+uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWindow(
+    const uno::Reference< awt::XWindow >& xParent )
+{
+    uno::Reference< awt::XWindow > xItemWindow;
+
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
+    if ( pParent )
+    {
+        SolarMutexGuard aSolarMutexGuard;
+        m_pBox = VclPtr<NavElementBox_Impl>::Create( pParent, m_xFrame, *this );
+        xItemWindow = VCLUnoHelper::GetInterface( m_pBox );
+    }
+
+    uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
+
+
+    return xItemWindow;
+}
+
+
+void NavElementToolBoxControl::dispatchCommand(
+    const uno::Sequence< beans::PropertyValue >& rArgs )
+{
+    uno::Reference< frame::XDispatchProvider > xDispatchProvider( m_xFrame, uno::UNO_QUERY );
+    if ( xDispatchProvider.is() )
+    {
+        util::URL                               aURL;
+        uno::Reference< frame::XDispatch >      xDispatch;
+        uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
+
+        aURL.Complete = ".uno:NavElement";
+        xURLTransformer->parseStrict( aURL );
+        xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
+        if ( xDispatch.is() )
+            xDispatch->dispatch( aURL, rArgs );
+    }
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+NavElementToolBoxController_get_implementation(
+    css::uno::XComponentContext *rxContext,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new NavElementToolBoxControl(rxContext));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
