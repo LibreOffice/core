@@ -65,8 +65,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnBitmapListState ( ChangeType::NONE ),
     mnPatternListState ( ChangeType::NONE ),
     mnGradientListState ( ChangeType::NONE ),
-    mnHatchingListState ( ChangeType::NONE ),
-    mnPageType( PageType::Area )
+    mnHatchingListState ( ChangeType::NONE )
 {
     m_nAreaTabPage = AddTabPage( "RID_SVXPAGE_AREA", SvxAreaTabPage::Create, nullptr );
 
@@ -261,7 +260,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nTransparenceTabPage)
     {
-            static_cast<SvxTransparenceTabPage&>(rPage).SetPageType( mnPageType );
+            static_cast<SvxTransparenceTabPage&>(rPage).SetPageType( PageType::Area );
             static_cast<SvxTransparenceTabPage&>(rPage).SetDlgType( 0 );
     }
 }

@@ -55,7 +55,6 @@ public:
     VclPtr<VclFrame>                       pMacroFrame;
     VclPtr<SfxConfigFunctionListBox>       pMacroLB;
 
-    bool                            bReadOnly;
     Idle                            maFillGroupIdle;
     bool                            bGotEvents;
     bool m_bDummyActivated; ///< has this tab page already been activated
@@ -69,7 +68,6 @@ SfxMacroTabPage_Impl::SfxMacroTabPage_Impl()
     , pGroupLB(nullptr)
     , pMacroFrame(nullptr)
     , pMacroLB(nullptr)
-    , bReadOnly(false)
     , bGotEvents(false)
     , m_bDummyActivated(false)
 {
@@ -120,12 +118,12 @@ void SfxMacroTabPage::EnableButtons()
     {
         // get bound macro
         const SvxMacro* pM = aTbl.Get( (sal_uInt16)reinterpret_cast<sal_uLong>(pE->GetUserData()) );
-        mpImpl->pDeletePB->Enable( nullptr != pM && !mpImpl->bReadOnly );
+        mpImpl->pDeletePB->Enable( nullptr != pM );
 
         OUString sEventMacro = static_cast<const SvLBoxString&>(pE->GetItem( LB_MACROS_ITEMPOS )).GetText();
 
         OUString sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
-        mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly && !sScriptURI.equalsIgnoreAsciiCase( sEventMacro ) );
+        mpImpl->pAssignPB->Enable( !sScriptURI.equalsIgnoreAsciiCase( sEventMacro ) );
     }
     else
         mpImpl->pAssignPB->Enable( false );
@@ -270,7 +268,7 @@ void SfxMacroTabPage::Reset( const SfxItemSet* rSet )
 
 bool SfxMacroTabPage::IsReadOnly() const
 {
-    return mpImpl->bReadOnly;
+    return false;
 }
 
 IMPL_LINK_NOARG( SfxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
