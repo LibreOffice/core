@@ -27,9 +27,9 @@ LockedCanvasContext::LockedCanvasContext(ContextHandler2Helper& rParent)
 
 LockedCanvasContext::~LockedCanvasContext() = default;
 
-::oox::core::ContextHandlerRef LockedCanvasContext::onCreateContext(sal_Int32 aElementToken, const ::oox::AttributeList& /*rAttribs*/)
+::oox::core::ContextHandlerRef LockedCanvasContext::onCreateContext(sal_Int32 nElementToken, const ::oox::AttributeList& /*rAttribs*/)
 {
-    switch (getBaseToken(aElementToken))
+    switch (getBaseToken(nElementToken))
     {
     case XML_lockedCanvas:
         break;
@@ -52,7 +52,7 @@ LockedCanvasContext::~LockedCanvasContext() = default;
         return new oox::drawingml::ShapeGroupContext(*this, pMasterShape, mpShape);
     }
     default:
-        SAL_WARN("oox", "LockedCanvasContext::createFastChildContext: unhandled element:" << getBaseToken(aElementToken));
+        SAL_WARN("oox", "LockedCanvasContext::createFastChildContext: unhandled element:" << getBaseToken(nElementToken));
         break;
     }
     return nullptr;
