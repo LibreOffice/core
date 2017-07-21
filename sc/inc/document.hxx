@@ -1622,7 +1622,8 @@ public:
     SC_DLLPUBLIC void           ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow,
                                                   SCCOL nEndCol, SCROW nEndRow,
                                                   const ScMarkData& rMark, const ScPatternAttr& rAttr,
-                                                  ScEditDataArray* pDataArray = nullptr );
+                                                  ScEditDataArray* pDataArray = nullptr,
+                                                  bool* const pIsChanged = nullptr );
     SC_DLLPUBLIC void           ApplyPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
                                                      SCCOL nEndCol, SCROW nEndRow, SCTAB nTab,
                                                      const ScPatternAttr& rAttr );

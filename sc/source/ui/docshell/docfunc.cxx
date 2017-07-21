@@ -1369,7 +1369,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
     if ( !bImportingXML )
         rDocShell.UpdatePaintExt( nExtFlags, aMultiRange );     // content before the change
 
-    bool bChanged = true;
+    bool bChanged = false;
     rDoc.ApplySelectionPattern( rPattern, rMark, nullptr, &bChanged );
 
     if(bChanged)
