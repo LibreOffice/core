@@ -25,6 +25,14 @@
 
 # MoTarget
 
+ifeq ($(SYSTEM_PYTHON),)
+gb_Python_EXECUTABLE := $(gb_Python_INSTALLED_EXECUTABLE)
+gb_Python_DEPS ?= $(call gb_Package_get_target,python3) $(call gb_Package_get_target,python_shell)
+else
+gb_Python_EXECUTABLE := $(PYTHON_FOR_BUILD)
+gb_Python_DEPS :=
+endif
+
 $(call gb_MoTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),RES,2)
 	$(call gb_Helper_abbreviate_dirs,\
@@ -32,14 +40,14 @@ $(call gb_MoTarget_get_clean_target,%) :
 			$(call gb_MoTarget_get_target,$*) \
 			$(call gb_MoTarget_get_install_target,$*))
 
-$(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY)
+$(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY) $(gb_Python_DEPS)
 	$(call gb_Output_announce,$*,$(true),MO,2)
 #	 after translate should look like this
 #        $(call gb_Helper_abbreviate_dirs,\
 #                mkdir -p $(dir $@) && \
 #                $(MSGUNIQ) $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@)
 	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(dir $@) && $(SRCDIR)/solenv/bin/interim-update-module-for-gettext $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION) $@.po && \
+		mkdir -p $(dir $@) && $(gb_Python_EXECUTABLE) $(SRCDIR)/solenv/bin/interim-update-module-for-gettext $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION) $@.po && \
 		$(MSGUNIQ) --force-po $@.po | $(MSGFMT) - -o $@)
 
 #$(info $(call gb_MoTarget_get_target,$(1)))
