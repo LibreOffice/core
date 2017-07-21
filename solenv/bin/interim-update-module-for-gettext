@@ -65,6 +65,10 @@ if npos > 0:
         comments[-1] = polib.genKeyId(keyid.encode('utf-8'))
         entry.comment = "\n".join(comments)
         if (len(entry.msgid) and len(entry.msgstr)):
+            if (entry.msgid[0] == '\n' and entry.msgstr[0] != '\n'):
+                entry.msgstr = '\n' + entry.msgstr
+            elif (entry.msgid[0] != '\n' and entry.msgstr[0] == '\n'):
+                entry.msgstr = ' ' + entry.msgstr
             if (entry.msgid[-1] == '\n' and entry.msgstr[-1] != '\n'):
                 entry.msgstr = entry.msgstr + '\n'
             elif (entry.msgid[-1] != '\n' and entry.msgstr[-1] == '\n'):
