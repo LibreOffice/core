@@ -64,6 +64,12 @@ if npos > 0:
         keyid = entry.msgctxt + '|' + entry.msgid
         comments[-1] = polib.genKeyId(keyid.encode('utf-8'))
         entry.comment = "\n".join(comments)
+        if (len(entry.msgid) and len(entry.msgstr)):
+            if (entry.msgid[-1] == '\n' and entry.msgstr[-1] != '\n'):
+                entry.msgstr = entry.msgstr + '\n'
+            elif (entry.msgid[-1] != '\n' and entry.msgstr[-1] == '\n'):
+                entry.msgstr = entry.msgstr[:-1]
+
 else:
     messages = polib.POFile()
     messages.metadata = {
