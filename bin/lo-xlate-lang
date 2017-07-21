@@ -119,7 +119,7 @@ __DATA__
 :gu:gujarati
 :hr:croatian
 :km:khmer
-:ku:kurdish
+:kmr-Latn:Kurmanji
 :pa-IN:punjabi
 :rw:kinarwanda
 :xh:xhosa
@@ -174,6 +174,8 @@ __DATA__
 :si:sinhala
 :id:indonesian
 :my:burmese
+:am:amharic
+:gug:guarani
 01:en-US:english_american
 03:pt:portuguese
 07:ru:russian
