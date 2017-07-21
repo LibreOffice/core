@@ -70,7 +70,7 @@ FWE_DLLPUBLIC svt::StatusbarController* SAL_CALL CreateStatusBarController(
 
 FWE_DLLPUBLIC pfunc_getRefreshToolbars SAL_CALL SetRefreshToolbars( pfunc_getRefreshToolbars pRefreshToolbarsFunc );
 FWE_DLLPUBLIC void SAL_CALL RefreshToolbars(
-     css::uno::Reference< css::frame::XFrame >& rFrame );
+     css::uno::Reference< css::frame::XFrame > const & rFrame );
 
 FWE_DLLPUBLIC pfunc_createDockingWindow SAL_CALL SetDockingWindowCreator( pfunc_createDockingWindow pCreateDockingWindow );
 FWE_DLLPUBLIC void SAL_CALL CreateDockingWindow(

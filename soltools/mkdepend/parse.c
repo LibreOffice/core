@@ -36,7 +36,7 @@ int gobble( struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, struct symhash *symbols );
 int deftype ( char *line, struct inclist *file,
     int parse_it, struct symhash *symbols);
-int zero_value(char *exp, struct symhash *symbols);
+int zero_value(char const *exp, struct symhash *symbols);
 
 extern struct symhash *maininclist;
 
@@ -370,7 +370,7 @@ char * isdefined( char *symbol )
 /*
  * Return type based on if the #if expression evaluates to 0
  */
-int zero_value(char *exp, struct symhash *symbols)
+int zero_value(char const *exp, struct symhash *symbols)
 {
     global_symbols = symbols; /* HACK! see above */
     if (cppsetup(exp))
@@ -466,7 +466,7 @@ void hash_free( struct symhash *symbols )
     free( symbols->s_pairs );
 }
 
-void hash_define( char *name, char *val, struct symhash **symbols )
+void hash_define( char *name, char const *val, struct symhash **symbols )
 {
     int hashval;
     struct pair *it;

@@ -503,6 +503,7 @@ void SfxDocTplService_Impl::readFolderList()
 {
     SolarMutexGuard aGuard;
 
+    static_assert( SAL_N_ELEMENTS(TEMPLATE_SHORT_NAMES_ARY) == SAL_N_ELEMENTS(TEMPLATE_LONG_NAMES_ARY), "mismatch array lengths" );
     const size_t nCount = std::min(SAL_N_ELEMENTS(TEMPLATE_SHORT_NAMES_ARY), SAL_N_ELEMENTS(TEMPLATE_LONG_NAMES_ARY));
     for (size_t i = 0; i < nCount; ++i)
     {

@@ -353,7 +353,7 @@ struct hash
   c ^= b; c -= rot(b,24); \
 }
 
-static unsigned int hash_compute( struct hash* hash, const char* key, int length)
+static unsigned int hash_compute( struct hash const * hash, const char* key, int length)
 {
     unsigned int a;
     unsigned int b;
@@ -509,7 +509,7 @@ unsigned int i;
     }
 }
 
-static inline int compare_key(struct hash* hash, const char* a, const char* b, int len, int* cost)
+static inline int compare_key(struct hash const * hash, const char* a, const char* b, int len, int const * cost)
 {
 #ifdef HASH_STAT
     *cost += 1;
