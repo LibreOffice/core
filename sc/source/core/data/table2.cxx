@@ -2501,14 +2501,15 @@ void ScTable::ApplyPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr )
 }
 
 void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                     const ScPatternAttr& rAttr, ScEditDataArray* pDataArray )
+                                     const ScPatternAttr& rAttr, ScEditDataArray* pDataArray,
+                                     bool* const pIsChanged )
 {
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
     {
         PutInOrder(nStartCol, nEndCol);
         PutInOrder(nStartRow, nEndRow);
         for (SCCOL i = nStartCol; i <= nEndCol; i++)
-            aCol[i].ApplyPatternArea(nStartRow, nEndRow, rAttr, pDataArray);
+            aCol[i].ApplyPatternArea(nStartRow, nEndRow, rAttr, pDataArray, pIsChanged);
     }
 }
 

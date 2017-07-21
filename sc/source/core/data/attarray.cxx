@@ -856,7 +856,6 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
     TestData();
 #endif
 
-    bool bChanged = false;
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
         SCSIZE nPos;
@@ -881,7 +880,8 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                 SCROW nY2 = pData[nPos].nRow;
                 nStart = pData[nPos].nRow + 1;
 
-                bChanged = true;
+                if(pIsChanged)
+                    *pIsChanged = true;
 
                 if ( nY1 < nStartRow || nY2 > nEndRow )
                 {
@@ -928,9 +928,6 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
         if (pDocument->IsStreamValid(nTab))
             pDocument->SetStreamValid(nTab, false);
     }
-
-    if( pIsChanged)
-        *pIsChanged = bChanged;
 
 #if DEBUG_SC_TESTATTRARRAY
     TestData();

@@ -514,11 +514,11 @@ void ScColumn::ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 }
 
 void ScColumn::ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
-                                 ScEditDataArray* pDataArray )
+                                 ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
     const SfxItemSet* pSet = &rPatAttr.GetItemSet();
     SfxItemPoolCache aCache( pDocument->GetPool(), pSet );
-    pAttrArray->ApplyCacheArea( nStartRow, nEndRow, &aCache, pDataArray );
+    pAttrArray->ApplyCacheArea( nStartRow, nEndRow, &aCache, pDataArray, pIsChanged );
 }
 
 void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,

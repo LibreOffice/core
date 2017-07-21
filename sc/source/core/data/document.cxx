@@ -4723,13 +4723,14 @@ void ScDocument::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow,
                         SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark,
                         const ScPatternAttr& rAttr,
-                        ScEditDataArray* pDataArray )
+                        ScEditDataArray* pDataArray,
+                        bool* const pIsChanged )
 {
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nMax; ++itr)
         if (maTabs[*itr])
-            maTabs[*itr]->ApplyPatternArea( nStartCol, nStartRow, nEndCol, nEndRow, rAttr, pDataArray );
+            maTabs[*itr]->ApplyPatternArea( nStartCol, nStartRow, nEndCol, nEndRow, rAttr, pDataArray, pIsChanged );
 }
 
 void ScDocument::ApplyPatternAreaTab( SCCOL nStartCol, SCROW nStartRow,
@@ -5795,7 +5796,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
             ScRange aRange;
             rMark.GetMarkArea( aRange );
             ApplyPatternArea( aRange.aStart.Col(), aRange.aStart.Row(),
-                              aRange.aEnd.Col(), aRange.aEnd.Row(), rMark, rAttr, pDataArray );
+                              aRange.aEnd.Col(), aRange.aEnd.Row(), rMark, rAttr, pDataArray, pIsChanged );
         }
         else
         {
