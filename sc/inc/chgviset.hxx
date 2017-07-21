@@ -45,7 +45,6 @@ private:
     bool                bIsAuthor;
     bool                bIsComment;
     bool                bIsRange;
-    bool                bEveryoneButMe;
     bool                bShowAccepted;
     bool                bShowRejected;
     bool                mbIsActionRange;
@@ -64,7 +63,6 @@ public:
         , bIsAuthor(false)
         , bIsComment(false)
         , bIsRange(false)
-        , bEveryoneButMe(false)
         , bShowAccepted(false)
         , bShowRejected(false)
         , mbIsActionRange(false)
@@ -105,8 +103,6 @@ public:
     void                SetTheComment(const OUString& aString);
 
     bool                IsValidComment(const OUString* pCommentStr) const;
-
-    bool                IsEveryoneButMe() const {return bEveryoneButMe;}
 
     bool                HasRange() const {return bIsRange;}
     void                SetHasRange(bool bFlag) {bIsRange=bFlag;}

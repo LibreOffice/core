@@ -147,18 +147,8 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     if ( !rSettings.IsShowAccepted() && rAction.IsAccepted() && !rAction.IsRejecting() )
         return false;
 
-    if ( rSettings.HasAuthor() )
-    {
-        if ( rSettings.IsEveryoneButMe() )
-        {
-            // GetUser() at ChangeTrack is the current user
-            ScChangeTrack* pTrack = rDocument.GetChangeTrack();
-            if ( !pTrack || rAction.GetUser() == pTrack->GetUser() )
-                return false;
-        }
-        else if ( rAction.GetUser() != rSettings.GetTheAuthorToShow() )
-            return false;
-    }
+    if ( rSettings.HasAuthor() && rAction.GetUser() != rSettings.GetTheAuthorToShow() )
+        return false;
 
     if ( rSettings.HasComment() )
     {
