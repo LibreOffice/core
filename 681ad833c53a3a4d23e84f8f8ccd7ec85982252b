@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_301d1974",
+        "filename": "include/comphelper/propertysequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-21T14:16:57Z",
+      "side": 1,
+      "message": "wrap the PropertyValues in Anys\n-\u003e\n wrap the Anys in PropertyValues",
+      "revId": "681ad833c53a3a4d23e84f8f8ccd7ec85982252b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
