@@ -774,8 +774,6 @@ namespace cppcanvas
                 *rParms.mrParms.maFontLetterForm :
                 (rFont.GetItalic() == ITALIC_NONE) ? 0 : 9;
             aFontRequest.FontDescription.FontDescription.Proportion =
-                rParms.mrParms.maFontProportion.is_initialized() ?
-                *rParms.mrParms.maFontProportion :
                 (rFont.GetPitch() == PITCH_FIXED)
                     ? rendering::PanoseProportion::MONO_SPACED
                     : rendering::PanoseProportion::ANYTHING;
@@ -2970,8 +2968,7 @@ namespace cppcanvas
             if( rParams.maFontName.is_initialized() ||
                 rParams.maFontWeight.is_initialized() ||
                 rParams.maFontLetterForm.is_initialized() ||
-                rParams.maFontUnderline.is_initialized() ||
-                rParams.maFontProportion.is_initialized() )
+                rParams.maFontUnderline.is_initialized() )
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
 
