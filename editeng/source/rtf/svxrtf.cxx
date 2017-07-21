@@ -72,7 +72,6 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
     , bIsSetDfltTab( false)
     , bChkStyleAttr( false )
     , bCalcValue( false )
-    , bReadDocInfo( false )
     , bIsLeftToRightDef( true)
     , bIsInReadStyleTab( false)
 {
@@ -214,10 +213,7 @@ INSINGLECHAR:
         bNewGroup = false;
         break;
     case RTF_INFO:
-        if (bReadDocInfo && bNewDoc && m_xDocProps.is())
-            ReadInfo();
-        else
-            SkipGroup();
+        SkipGroup();
         break;
 
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

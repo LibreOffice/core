@@ -542,10 +542,6 @@ include/editeng/brushitem.hxx:53
     SvxBrushItem maSecOptions class SvtSecurityOptions
 include/editeng/numitem.hxx:318
     SvxNodeNum nLevelVal sal_uInt16 [10]
-include/editeng/outliner.hxx:610
-    Outliner aFieldClickedHdl Link<class EditFieldInfo *, void>
-include/editeng/svxrtf.hxx:206
-    SvxRTFParser bReadDocInfo _Bool
 include/filter/msfilter/svdfppt.hxx:210
     PptSlideLayoutAtom aPlaceholderId enum PptPlaceholder [8]
 include/filter/msfilter/svdfppt.hxx:865
