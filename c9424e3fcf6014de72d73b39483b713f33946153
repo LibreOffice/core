@@ -16,6 +16,24 @@
       "revId": "c9424e3fcf6014de72d73b39483b713f33946153",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_705de1e8",
+        "filename": "sw/source/core/layout/calcmove.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-21T08:15:24Z",
+      "side": 0,
+      "message": "It can never trigger since InXMLExport() always returns false",
+      "parentUuid": "3a461143_105e5de9",
+      "revId": "c9424e3fcf6014de72d73b39483b713f33946153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
