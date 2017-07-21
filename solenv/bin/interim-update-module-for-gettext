@@ -1,0 +1,81 @@
+#!/usr/bin/python
+
+import binascii
+import polib
+from os import listdir, walk, remove
+from os.path import isdir, join
+
+import sys
+
+if len(sys.argv) < 2:
+    print(" Syntax: interim-update-module-for-gettext path/to/dir/of/languages/language/module output.po")
+    sys.exit(2)
+
+uiline = False
+
+subpath = sys.argv[1]
+print >> sys.stderr, "interim-update-for-gettext: processing ", subpath
+messages = None
+npos = 0
+for dirpath, dirname, filenames in walk(subpath):
+    for filename in filenames:
+        ipath = join(dirpath, filename)
+        print >> sys.stderr, "interim-update-for-gettext: merging ", ipath
+        po = polib.pofile(ipath)
+        if len(po) != 0:
+            samplefile = po[0].occurrences[0][0]
+            if samplefile.endswith(".src") or samplefile.endswith(".ui"):
+                if npos == 0:
+                    messages = po
+                else:
+                    for entry in po:
+                        messages.append(entry)
+                npos = npos + 1
+
+if npos > 0:
+    middle = 0
+    for entry in messages:
+        if not len(entry.occurrences):
+            continue
+        location = entry.occurrences[0][0]
+        if location.endswith(".ui"):
+            uiline = True
+        else:
+            uiline = False
+        lines = entry.msgctxt.split('\n')
+        if uiline:
+            widgetid = lines[1]
+            typeid = lines[2]
+            entry.msgctxt = location[:-3] + "|" + widgetid
+            if typeid == "tooltip_text":
+                entry.msgctxt = entry.msgctxt + "|" + typeid
+            if entry.msgctxt == 'calloutpage|position' and entry.msgid == 'Middle':
+                middle = middle + 1
+                if middle == 2:
+                    entry.msgid = "Center"
+        else:
+            ctxline = lines[1]
+            if (ctxline.endswith("+RID_SC_FUNC_DESCRIPTIONS_START")):
+                ctxline = ctxline[:-len("+RID_SC_FUNC_DESCRIPTIONS_START")]
+            elif (ctxline.endswith("+RID_GLOBSTR_OFFSET")):
+                ctxline = ctxline[:-len("+RID_GLOBSTR_OFFSET")]
+            entry.msgctxt = ctxline
+        comments = entry.comment.split('\n')
+        keyid = entry.msgctxt + '|' + entry.msgid
+        comments[-1] = polib.genKeyId(keyid.encode('utf-8'))
+        entry.comment = "\n".join(comments)
+else:
+    messages = polib.POFile()
+    messages.metadata = {
+        'Project-Id-Version': '1.0',
+        'Report-Msgid-Bugs-To': 'you@example.com',
+        'POT-Creation-Date': '2007-10-18 14:00+0100',
+        'PO-Revision-Date': '2007-10-18 14:00+0100',
+        'Last-Translator': 'you <you@example.com>',
+        'Language-Team': 'English <yourteam@example.com>',
+        'MIME-Version': '1.0',
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Content-Transfer-Encoding': '8bit',
+    }
+
+messages.save(sys.argv[2])
