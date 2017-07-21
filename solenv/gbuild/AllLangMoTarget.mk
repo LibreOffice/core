@@ -32,15 +32,15 @@ $(call gb_MoTarget_get_clean_target,%) :
 			$(call gb_MoTarget_get_target,$*) \
 			$(call gb_MoTarget_get_install_target,$*))
 
-#for the moment merge existing source and ui translations into a single .po,
-#and minimize msgctxt
-#eventually instead can do something like
-#msgfmt $(gb_POLOCATION)/$(LANGUAGE)/$(LIBRARY)/messages.po -o $@)
 $(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY)
 	$(call gb_Output_announce,$*,$(true),MO,2)
+#	 after translate should look like this
+#        $(call gb_Helper_abbreviate_dirs,\
+#                mkdir -p $(dir $@) && \
+#                $(MSGUNIQ) $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@)
 	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(dir $@) && \
-		if test -e $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po; then $(MSGUNIQ) $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@; else touch $@; fi)
+		mkdir -p $(dir $@) && $(SRCDIR)/solenv/bin/interim-update-module-for-gettext $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION) $@.po && \
+		$(MSGUNIQ) --force-po $@.po | $(MSGFMT) - -o $@)
 
 #$(info $(call gb_MoTarget_get_target,$(1)))
 define gb_MoTarget_MoTarget
