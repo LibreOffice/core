@@ -252,11 +252,14 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
                 break;
                 case XML_arrow:
                     aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
-                    aPoints.push_back( OOX_ARROW_POINT( 100,  91 ) );
-                    aPoints.push_back( OOX_ARROW_POINT(  85, 100 ) );
-                    aPoints.push_back( OOX_ARROW_POINT(  50,  36 ) );
-                    aPoints.push_back( OOX_ARROW_POINT(  15, 100 ) );
-                    aPoints.push_back( OOX_ARROW_POINT(   0,  91 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 100,  93 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 100, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  52,  10 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  52, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  48, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  48,  10 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(   0, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(   0,  93 ) );
                     aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
                 break;
                 case XML_stealth:
