@@ -25,7 +25,6 @@ protected:
     OutputDevice& mrOutputDev;
     SfxStyleSheetBase* mpStyle;
     long mnMaxHeight;
-    OUString msRenderText;
 
 public:
     enum class RenderAlign
@@ -41,7 +40,6 @@ public:
         , mrOutputDev(rOutputDev)
         , mpStyle(pStyle)
         , mnMaxHeight(nMaxHeight)
-        , msRenderText()
     {}
 
     virtual ~StylePreviewRenderer()

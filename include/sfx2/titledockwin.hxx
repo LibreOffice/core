@@ -63,9 +63,6 @@ namespace sfx2
         virtual void DataChanged( const DataChangedEvent& i_rDataChangedEvent ) override;
         virtual void SetText( const OUString& i_rText ) override;
 
-        // DockingWindow overridables
-        void EndDocking(const tools::Rectangle& rRect, bool bFloatMode) override;
-
         virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
     protected:
         /** internal version of ResetToolBox
@@ -83,8 +80,6 @@ namespace sfx2
         OUString            m_sTitle;
         VclPtr<ToolBox>     m_aToolbox;
         VclPtr<Window>      m_aContentWindow;
-
-        Link<TitledDockingWindow*,void>  m_aEndDockingHdl;
 
         /** The border that is painted around the inner window.  The bevel
             shadow lines are part of the border, so where the border is 0 no

@@ -1234,8 +1234,6 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
         if ( i_eConnect != E_RECONNECT )
         {
             pViewFrame->GetDispatcher()->Push( *m_pData->m_pViewShell );
-            if ( m_pData->m_pViewShell->GetSubShell() )
-                pViewFrame->GetDispatcher()->Push( *m_pData->m_pViewShell->GetSubShell() );
             m_pData->m_pViewShell->PushSubShells_Impl();
             pViewFrame->GetDispatcher()->Flush();
         }
