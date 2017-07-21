@@ -54,8 +54,6 @@ private:
     sal_uInt16          dumpDffOptPropHeader();
 
 private:
-    ItemFormatMap       maSimpleProps;
-    ItemFormatMap       maComplexProps;
     sal_uInt16          mnInstVer;
     sal_Int32           mnRealSize;
 };

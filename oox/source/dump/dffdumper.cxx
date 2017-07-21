@@ -41,7 +41,6 @@ const sal_uInt16 DFF_ID_SPLITMENUCOLORS     = 0xF11E;   /// Current toolbar colo
 
 const sal_uInt16 DFF_OPT_IDMASK             = 0x3FFF;
 const sal_uInt16 DFF_OPT_COMPLEX            = 0x8000;
-const sal_uInt16 DFF_OPT_FLAGSMASK          = 0x003F;
 
 } // namespace
 
@@ -186,49 +185,11 @@ void DffStreamObject::dumpDffOpt()
         if( getFlag( nPropId, DFF_OPT_COMPLEX ) )
         {
             writeHexItem( "complex-size", nValue, "CONV-DEC" );
-            String aName;
-            PropType eType = PROPTYPE_BINARY;
-            ::std::map< sal_Int64, ItemFormat >::const_iterator aIt = maComplexProps.find( nBaseId );
-            if( aIt != maComplexProps.end() )
-            {
-                const ItemFormat& rItemFmt = aIt->second;
-                aName = rItemFmt.maItemName;
-                if ( rItemFmt.maListName == "binary" )
-                    eType = PROPTYPE_BINARY;
-                else if ( rItemFmt.maListName == "string" )
-                    eType = PROPTYPE_STRING;
-                else if ( rItemFmt.maListName == "blip" )
-                    eType = PROPTYPE_BLIP;
-                else if ( rItemFmt.maListName == "colorarray" )
-                    eType = PROPTYPE_COLORARRAY;
-            }
-            aPropInfos.push_back( PropInfo( aName( "property-data" ), eType, nBaseId, nValue ) );
+            aPropInfos.push_back( PropInfo( String( "property-data" ), PROPTYPE_BINARY, nBaseId, nValue ) );
         }
         else
         {
-            ::std::map< sal_Int64, ItemFormat >::const_iterator aIt = maSimpleProps.find( nBaseId );
-            if( aIt != maSimpleProps.end() )
-            {
-                const ItemFormat& rItemFmt = aIt->second;
-                // flags always at end of block of 64 properties
-                if( (nBaseId & DFF_OPT_FLAGSMASK) == DFF_OPT_FLAGSMASK )
-                {
-                    FlagsList* pFlagsList = dynamic_cast< FlagsList* >( cfg().getNameList( rItemFmt.maListName ).get() );
-                    sal_Int64 nOldIgnoreFlags = 0;
-                    if( pFlagsList )
-                    {
-                        nOldIgnoreFlags = pFlagsList->getIgnoreFlags();
-                        pFlagsList->setIgnoreFlags( nOldIgnoreFlags | 0xFFFF0000 | ~(nValue >> 16) );
-                    }
-                    writeValueItem( rItemFmt, nValue );
-                    if( pFlagsList )
-                        pFlagsList->setIgnoreFlags( nOldIgnoreFlags );
-                }
-                else
-                    writeValueItem( rItemFmt, nValue );
-            }
-            else
-                writeHexItem( "value", nValue );
+            writeHexItem( "value", nValue );
         }
     }
 
