@@ -97,7 +97,6 @@ struct ConnectionSettings
         maxIndexKeys(0),
         pTablesImpl(nullptr),
         pViewsImpl(nullptr),
-        showSystemColumns( false ),
         logFile( nullptr ),
         m_nLogLevel(LogLevel::Info)
     {}
@@ -113,7 +112,6 @@ struct ConnectionSettings
     Views *pViewsImpl;   // needed to implement renaming of tables / views
     OUString user;
     OUString catalog;
-    bool showSystemColumns;
     FILE *logFile;
     LogLevel m_nLogLevel;
 };

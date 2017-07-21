@@ -176,7 +176,7 @@ namespace toolkit
         if ( isAlive() )
         {
             // no own states, only the ones which are foreign controlled
-            pStateSet = new ::utl::AccessibleStateSetHelper( implGetForeignControlledStates() );
+            pStateSet = new ::utl::AccessibleStateSetHelper( 0 );
         }
         else
         {   // only the DEFUNC state if we're already disposed

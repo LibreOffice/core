@@ -38,7 +38,6 @@ namespace comphelper
     struct OAccImpl_Impl
     {
         Reference< XAccessible >    m_xAccParent;
-        sal_Int64                   m_nForeignControlledStates;
     };
 
     OAccessibleImplementationAccess::OAccessibleImplementationAccess( )
@@ -57,11 +56,6 @@ namespace comphelper
         return m_pImpl->m_xAccParent;
     }
 
-
-    sal_Int64 OAccessibleImplementationAccess::implGetForeignControlledStates( ) const
-    {
-        return m_pImpl->m_nForeignControlledStates;
-    }
 
     const Sequence< sal_Int8 > OAccessibleImplementationAccess::getUnoTunnelImplementationId()
     {

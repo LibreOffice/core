@@ -423,7 +423,6 @@ ExtendedEdit::ExtendedEdit(vcl::Window* pParent, WinBits nStyle)
 IMPL_LINK_NOARG(ExtendedEdit, ImplGetFocusHdl, Control&, void)
 {
     Application::InsertAccel( &aAcc );
-    aLoseFocusHdl.Call( this );
 }
 
 IMPL_LINK_NOARG(ExtendedEdit, ImplLoseFocusHdl, Control&, void)

@@ -31,7 +31,6 @@ class ExtendedEdit : public Edit
 private:
     Accelerator               aAcc;
     Link<Accelerator&,void>   aAccHdl;
-    Link<ExtendedEdit*,void>  aLoseFocusHdl;
 
 protected:
     DECL_LINK( EditAccHdl, Accelerator&, void );

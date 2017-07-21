@@ -1563,7 +1563,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
 
     while( rs->next() )
     {
-        if( m_pSettings->showSystemColumns || ! isSystemColumn( xRow->getShort( 12 ) ) )
+        if( ! isSystemColumn( xRow->getShort( 12 ) ) )
         {
             OUString sNewSchema( xRow->getString(1) );
             OUString sNewTable(  xRow->getString(2) );
