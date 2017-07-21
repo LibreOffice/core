@@ -339,7 +339,7 @@ DateTime XclRoot::GetDateTimeFromDouble( double fValue ) const
     DateTime aDateTime = GetNullDate() + fValue;
     // adjust dates before 1900-03-01 to get correct time values
     if( aDateTime < DateTime( Date( 1, 3, 1900 ) ) )
-        aDateTime += sal_Int32(1);
+        aDateTime.AddDays(1);
     return aDateTime;
 }
 

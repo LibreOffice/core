@@ -465,7 +465,7 @@ public:
 
     const DateTime&         GetDateTime() const             { return aDateTime; }
     const Date       GetDate() const                 { return Date(aDateTime.GetDate()); }
-    const tools::Time GetTime() const                 { return aDateTime.GetTime(); }
+    const tools::Time GetTime() const                 { return tools::Time(aDateTime.GetTime()); }
     sal_uInt32 GetPostItId() const             { return m_nPostItId; }
 
     /// Author
