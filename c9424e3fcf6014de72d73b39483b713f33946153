@@ -52,6 +52,24 @@
       "revId": "c9424e3fcf6014de72d73b39483b713f33946153",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_3036f903",
+        "filename": "sw/source/core/layout/calcmove.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-21T13:57:58Z",
+      "side": 0,
+      "message": "How do I detect an \"active layout action\" please ?",
+      "parentUuid": "3a461143_f055511d",
+      "revId": "c9424e3fcf6014de72d73b39483b713f33946153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
