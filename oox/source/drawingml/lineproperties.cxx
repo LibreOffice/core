@@ -205,14 +205,19 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
 
     if( !aBuffer.isEmpty() )
     {
+        bool bIsArrow = nArrowType == XML_arrow;
         sal_Int32 nLength = lclGetArrowSize( rArrowProps.moArrowLength.get( XML_med ) );
         sal_Int32 nWidth  = lclGetArrowSize( rArrowProps.moArrowWidth.get( XML_med ) );
 
         sal_Int32 nNameIndex = nWidth * 3 + nLength + 1;
         aBuffer.append( ' ' ).append( nNameIndex );
+        if (bIsArrow)
+        {
+            // Arrow marker form depends also on line width
+            aBuffer.append(' ').append(nLineWidth);
+        }
         OUString aMarkerName = aBuffer.makeStringAndClear();
 
-        bool bIsArrow = nArrowType == XML_arrow;
         double fArrowLength = 1.0;
         switch( nLength )
         {
@@ -229,7 +234,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
         }
         // set arrow width relative to line width
         sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 70 );
-        nMarkerWidth = static_cast< sal_Int32 >( fArrowWidth * nBaseLineWidth );
+        nMarkerWidth = static_cast<sal_Int32>( fArrowWidth * nBaseLineWidth );
 
         /*  Test if the marker already exists in the marker table, do not
             create it again in this case. If markers are inserted explicitly
@@ -238,7 +243,11 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
         if( !rPropMap.hasNamedLineMarkerInTable( aMarkerName ) )
         {
 // pass X and Y as percentage to OOX_ARROW_POINT
-#define OOX_ARROW_POINT( x, y ) awt::Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) )
+#define OOX_ARROW_POINT( x, y ) awt::Point( static_cast< sal_Int32 >( fArrowWidth * ( x ) ), static_cast< sal_Int32 >( fArrowLength * ( y ) ) )
+            // tdf#100491 Arrow line marker, unlike other markers, depends on line width.
+            // So calculate width of half line (more convinient during drawing) taking into account
+            // further conversions/scaling done in OOX_ARROW_POINT macro and scaling to nMarkerWidth.
+            const double fArrowLineHalfWidth = ::std::max< double >( 100.0 * 0.5 * nLineWidth / nMarkerWidth, 1 );
 
             ::std::vector< awt::Point > aPoints;
             OSL_ASSERT((rArrowProps.moArrowType.get() & sal_Int32(0xFFFF0000))==0);
@@ -251,13 +260,16 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
                     aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
                 break;
                 case XML_arrow:
-                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
-                    aPoints.push_back( OOX_ARROW_POINT( 100,  91 ) );
-                    aPoints.push_back( OOX_ARROW_POINT(  85, 100 ) );
-                    aPoints.push_back( OOX_ARROW_POINT(  50,  36 ) );
-                    aPoints.push_back( OOX_ARROW_POINT(  15, 100 ) );
-                    aPoints.push_back( OOX_ARROW_POINT(   0,  91 ) );
-                    aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 50, 0 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 100, 100 - fArrowLineHalfWidth * 1.5) );
+                    aPoints.push_back( OOX_ARROW_POINT( 100 - fArrowLineHalfWidth * 1.5, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 50.0 + fArrowLineHalfWidth, 5.5 * fArrowLineHalfWidth) );
+                    aPoints.push_back( OOX_ARROW_POINT( 50.0 + fArrowLineHalfWidth, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 50.0 - fArrowLineHalfWidth, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 50.0 - fArrowLineHalfWidth, 5.5 * fArrowLineHalfWidth) );
+                    aPoints.push_back( OOX_ARROW_POINT( fArrowLineHalfWidth * 1.5, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT( 0, 100 - fArrowLineHalfWidth * 1.5) );
+                    aPoints.push_back( OOX_ARROW_POINT( 50, 0 ) );
                 break;
                 case XML_stealth:
                     aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
