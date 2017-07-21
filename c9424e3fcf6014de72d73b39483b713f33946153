@@ -34,6 +34,24 @@
       "revId": "c9424e3fcf6014de72d73b39483b713f33946153",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f055511d",
+        "filename": "sw/source/core/layout/calcmove.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-21T13:55:46Z",
+      "side": 0,
+      "message": "hum... it looks like this was never set to true in CVS history ... \n\nin any case it would be more useful to assert that there is an active layout Action when we get here, which should cover more problematic cases",
+      "parentUuid": "3a461143_705de1e8",
+      "revId": "c9424e3fcf6014de72d73b39483b713f33946153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
