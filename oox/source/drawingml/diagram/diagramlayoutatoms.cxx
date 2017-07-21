@@ -210,7 +210,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
         case XML_lin:
         {
-            // spread childres evenly across one axis, strech across second
+            // spread children evenly across one axis, stretch across second
 
             if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
                 break;

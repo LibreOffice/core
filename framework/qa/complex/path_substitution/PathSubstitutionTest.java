@@ -68,7 +68,7 @@ public class PathSubstitutionTest
     {
         XMultiServiceFactory xMSF = getMSF();
         System.out.println("---- Testing the XStringSubstitution interface ----");
-        System.out.println("Create intance of test object.\n");
+        System.out.println("Create instance of test object.\n");
         XStringSubstitution oObj = null;
         try
         {

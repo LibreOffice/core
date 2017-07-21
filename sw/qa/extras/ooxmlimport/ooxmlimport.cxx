@@ -1399,7 +1399,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf109053, "tdf109053.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf108849, "tdf108849.docx")
 {
-    // sectPr element that is child element of body must be the last child. Hovewer, Word accepts it
+    // sectPr element that is child element of body must be the last child. However, Word accepts it
     // in wrong places, and we should do the same (bug-to-bug compatibility) without creating extra sections.
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Misplaced body-level sectPr's create extra sections!", 2, getPages());

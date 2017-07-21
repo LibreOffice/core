@@ -30,8 +30,8 @@
 
 using namespace ::xmloff::token;
 
-/* The basic idea of this class is that we have two two ways to search our
- * data...by prefix and by key. We use an unordered_map for fast prefix
+/* The basic idea of this class is that we have two ways to search our
+ * data, by prefix and by key. We use an unordered_map for fast prefix
  * searching and an STL map for fast key searching.
  *
  * The references to an 'Index' refer to an earlier implementation of the
