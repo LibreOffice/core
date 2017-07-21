@@ -847,7 +847,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
 
     sAddStyleContent = m_pAddStylesCB->GetText();
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(RES_SRCTYPES); i++)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RES_SRCTYPES); ++i)
     {
         m_pFromObjCLB->InsertEntry(SwResId(RES_SRCTYPES[i].first));
         m_pFromObjCLB->SetEntryData(i, reinterpret_cast<void*>(RES_SRCTYPES[i].second));

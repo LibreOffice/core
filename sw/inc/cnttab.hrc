@@ -20,23 +20,17 @@
 #ifndef INCLUDED_SW_INC_CNTTAB_HRC
 #define INCLUDED_SW_INC_CNTTAB_HRC
 
+#include <tox.hxx>
+
 #define NC_(Context, String) (Context "\004" u8##String)
 
-const std::pair<const char*, int> RES_SRCTYPES[] =
+const std::pair<const char*, SwTOOElements> RES_SRCTYPES[] =
 {
-    /* ids from tox.hxx
-    SwTOOElements::Math        = 0x01,
-    SwTOOElements::Chart       = 0x02,
-    TOO_IMAGE       = 0x04,
-    SwTOOElements::Calc        = 0x08,
-    SwTOOElements::DrawImpress= 0x10,
-    SwTOOElements::Other       = 0x80
-    */
-    { NC_("RES_SRCTYPES", "%PRODUCTNAME Math") ,  1},
-    { NC_("RES_SRCTYPES", "%PRODUCTNAME Chart") , 2},
-    { NC_("RES_SRCTYPES", "%PRODUCTNAME Calc") ,  8},
-    { NC_("RES_SRCTYPES", "%PRODUCTNAME Draw/%PRODUCTNAME Impress") ,    16},
-    { NC_("RES_SRCTYPES", "Other OLE Objects"),   128},
+    { NC_("RES_SRCTYPES", "%PRODUCTNAME Math"), SwTOOElements::Math},
+    { NC_("RES_SRCTYPES", "%PRODUCTNAME Chart"), SwTOOElements::Chart},
+    { NC_("RES_SRCTYPES", "%PRODUCTNAME Calc"), SwTOOElements::Calc},
+    { NC_("RES_SRCTYPES", "%PRODUCTNAME Draw/%PRODUCTNAME Impress"), SwTOOElements::DrawImpress},
+    { NC_("RES_SRCTYPES", "Other OLE Objects"), SwTOOElements::Other},
 };
 
 #endif
