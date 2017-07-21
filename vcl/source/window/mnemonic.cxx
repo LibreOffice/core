@@ -72,14 +72,13 @@ sal_Unicode MnemonicGenerator::ImplFindMnemonic( const OUString& rKey )
 
 void MnemonicGenerator::RegisterMnemonic( const OUString& rKey )
 {
-    const css::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     // Don't crash even when we don't have access to i18n service
     if ( !xCharClass.is() )
         return;
 
-    OUString aKey = xCharClass->toUpper( rKey, 0, rKey.getLength(), rLocale );
+    OUString aKey = xCharClass->toLower(rKey, 0, rKey.getLength(), css::lang::Locale());
 
     // If we find a Mnemonic, set the flag. In other case count the
     // characters, because we need this to set most as possible
@@ -116,14 +115,13 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
     if ( _rKey.isEmpty() || ImplFindMnemonic( _rKey ) )
         return _rKey;
 
-    const css::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     // Don't crash even when we don't have access to i18n service
     if ( !xCharClass.is() )
         return _rKey;
 
-    OUString aKey = xCharClass->toUpper( _rKey, 0, _rKey.getLength(), rLocale );
+    OUString aKey = xCharClass->toLower(_rKey, 0, _rKey.getLength(), css::lang::Locale());
 
     bool bChanged = false;
     sal_Int32 nLen = aKey.getLength();
@@ -255,7 +253,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
         // Append Ascii Mnemonic
         for ( c = MNEMONIC_RANGE_2_START; c <= MNEMONIC_RANGE_2_END; c++ )
         {
-            nMnemonicIndex = ImplGetMnemonicIndex( c );
+            nMnemonicIndex = ImplGetMnemonicIndex(sal_Unicode(rtl::toAsciiUpperCase(c)));
             if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
             {
                 if ( maMnemonics[nMnemonicIndex] )
@@ -316,7 +314,7 @@ OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
             // check for CJK-style mnemonic
             if( i > 0 && (i+2) < nLen )
             {
-                sal_Unicode c = aStr[i+1];
+                sal_Unicode c = sal_Unicode(rtl::toAsciiUpperCase(aStr[i+1]));
                 if( aStr[ i-1 ] == '(' &&
                     aStr[ i+2 ] == ')' &&
                     c >= MNEMONIC_RANGE_2_START && c <= MNEMONIC_RANGE_2_END )

@@ -31,14 +31,14 @@
 #define MNEMONIC_RANGE_1_START      0x30
 #define MNEMONIC_RANGE_1_END        0x39
 // Latin A-Z
-#define MNEMONIC_RANGE_2_START      0x41
-#define MNEMONIC_RANGE_2_END        0x5A
+#define MNEMONIC_RANGE_2_START      0x61
+#define MNEMONIC_RANGE_2_END        0x7A
 // Cyrillic
-#define MNEMONIC_RANGE_3_START      0x0410
-#define MNEMONIC_RANGE_3_END        0x042F
+#define MNEMONIC_RANGE_3_START      0x0430
+#define MNEMONIC_RANGE_3_END        0x044F
 // Greek
-#define MNEMONIC_RANGE_4_START      0x0391
-#define MNEMONIC_RANGE_4_END        0x03AB
+#define MNEMONIC_RANGE_4_START      0x03B1
+#define MNEMONIC_RANGE_4_END        0x03CB
 #define MNEMONIC_RANGES             4
 #define MAX_MNEMONICS               ((MNEMONIC_RANGE_1_END-MNEMONIC_RANGE_1_START+1)+\
                                      (MNEMONIC_RANGE_2_END-MNEMONIC_RANGE_2_START+1)+\
