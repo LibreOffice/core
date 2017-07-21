@@ -259,7 +259,7 @@ void SfxObjectShell::UpdateTime_Impl(
             // If 1 or up to 31 days between now and last editing - calculate time indirectly.
             // nAddTime = (24h - nTime) + (nDays * 24h) + aNow
             --nDays;
-             nAddTime    =  nDays*n24Time.GetTime() ;
+            nAddTime     =  tools::Time( nDays * n24Time.GetTime());
             nAddTime    +=  n24Time-static_cast<const tools::Time&>(pImpl->nTime);
             nAddTime    +=  aNow                    ;
         }

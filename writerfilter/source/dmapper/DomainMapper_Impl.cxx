@@ -4469,9 +4469,9 @@ static util::DateTime lcl_dateTimeFromSerial(const double& dSerial)
     const sal_uInt16 secondsPerHour = 3600;
 
     DateTime d(Date(30, 12, 1899));
-    d += (sal_Int32)dSerial;
+    d.AddDays( static_cast<sal_Int32>(dSerial) );
 
-    double frac = dSerial - (long)dSerial;
+    double frac = dSerial - static_cast<sal_Int32>(dSerial);
     sal_uInt32 seconds = frac * secondsPerDay;
 
     util::DateTime date;

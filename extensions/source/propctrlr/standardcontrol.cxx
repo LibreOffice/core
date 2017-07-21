@@ -298,13 +298,13 @@ namespace pcr
 
             // add the "days" part
             double nDays = floor( nValue );
-            aDateTime += nDays;
+            aDateTime.AddDays( nDays );
 
             // add the "time" part
             double nTime = nValue - nDays;
             nTime = ::rtl::math::round( nTime * 86400.0 ) / 86400.0;
                 // we're not interested in 100th seconds, and this here prevents rounding errors
-            aDateTime += nTime;
+            aDateTime.AddTime( nTime );
 
             util::DateTime aUNODateTime;
             ::utl::typeConvert( aDateTime, aUNODateTime );
