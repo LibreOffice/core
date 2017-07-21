@@ -254,7 +254,10 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
                     aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );
                     aPoints.push_back( OOX_ARROW_POINT( 100,  91 ) );
                     aPoints.push_back( OOX_ARROW_POINT(  85, 100 ) );
-                    aPoints.push_back( OOX_ARROW_POINT(  50,  36 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  54,  40 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  54, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  46, 100 ) );
+                    aPoints.push_back( OOX_ARROW_POINT(  46,  40 ) );
                     aPoints.push_back( OOX_ARROW_POINT(  15, 100 ) );
                     aPoints.push_back( OOX_ARROW_POINT(   0,  91 ) );
                     aPoints.push_back( OOX_ARROW_POINT(  50,   0 ) );

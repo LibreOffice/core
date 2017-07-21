@@ -12,7 +12,10 @@
     <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
     <point positionX="450" positionY="409" polygonFlags="NORMAL"/>
     <point positionX="382" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="225" positionY="162" polygonFlags="NORMAL"/>
+    <point positionX="243" positionY="180" polygonFlags="NORMAL"/>
+    <point positionX="243" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="207" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="207" positionY="180" polygonFlags="NORMAL"/>
     <point positionX="67" positionY="450" polygonFlags="NORMAL"/>
     <point positionX="0" positionY="409" polygonFlags="NORMAL"/>
     <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
@@ -72,7 +75,10 @@
     <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
     <point positionX="450" positionY="409" polygonFlags="NORMAL"/>
     <point positionX="382" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="225" positionY="162" polygonFlags="NORMAL"/>
+    <point positionX="243" positionY="180" polygonFlags="NORMAL"/>
+    <point positionX="243" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="207" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="207" positionY="180" polygonFlags="NORMAL"/>
     <point positionX="67" positionY="450" polygonFlags="NORMAL"/>
     <point positionX="0" positionY="409" polygonFlags="NORMAL"/>
     <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
@@ -132,7 +138,10 @@
     <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
     <point positionX="450" positionY="409" polygonFlags="NORMAL"/>
     <point positionX="382" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="225" positionY="162" polygonFlags="NORMAL"/>
+    <point positionX="243" positionY="180" polygonFlags="NORMAL"/>
+    <point positionX="243" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="207" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="207" positionY="180" polygonFlags="NORMAL"/>
     <point positionX="67" positionY="450" polygonFlags="NORMAL"/>
     <point positionX="0" positionY="409" polygonFlags="NORMAL"/>
     <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
@@ -192,7 +201,10 @@
     <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
     <point positionX="450" positionY="409" polygonFlags="NORMAL"/>
     <point positionX="382" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="225" positionY="162" polygonFlags="NORMAL"/>
+    <point positionX="243" positionY="180" polygonFlags="NORMAL"/>
+    <point positionX="243" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="207" positionY="450" polygonFlags="NORMAL"/>
+    <point positionX="207" positionY="180" polygonFlags="NORMAL"/>
     <point positionX="67" positionY="450" polygonFlags="NORMAL"/>
     <point positionX="0" positionY="409" polygonFlags="NORMAL"/>
     <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
