@@ -34,6 +34,7 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/random.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
@@ -67,11 +68,10 @@ static Reference< XNameAccess > getNodeAccess( const Reference< XMultiServiceFac
 
     try
     {
-        Sequence< Any > aArgs( 1 );
-        PropertyValue   aPropValue;
-        aPropValue.Name  = "nodepath";
-        aPropValue.Value <<= rNodePath;
-        aArgs[0] <<= aPropValue;
+        Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(rNodePath)}
+        }));
 
         xConfigAccess.set(
             xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", aArgs ),
