@@ -46,7 +46,6 @@ using namespace ::com::sun::star::chart2;
 BubbleChart::BubbleChart( const uno::Reference<XChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount, false )
-        , m_bShowNegativeValues(false)
         , m_fBubbleSizeScaling(1.0)
         , m_fMaxLogicBubbleSize( 0.0 )
         , m_fBubbleSizeFactorToScreen( 1.0 )
@@ -89,8 +88,6 @@ void BubbleChart::calculateMaximumLogicBubbleSize()
                         continue;
 
                     double fSize = pSeries->getBubble_Size( nIndex );
-                    if( m_bShowNegativeValues )
-                        fSize = fabs(fSize);
                     if( fSize > fMaxSize )
                         fMaxSize = fSize;
                 }
@@ -123,9 +120,6 @@ drawing::Direction3D BubbleChart::transformToScreenBubbleSize( double fLogicSize
 
     if( ::rtl::math::isNan(fLogicSize) || ::rtl::math::isInf(fLogicSize) )
         return aRet;
-
-    if( m_bShowNegativeValues )
-        fLogicSize = fabs(fLogicSize);
 
     double fMaxSize = m_fMaxLogicBubbleSize;
 
@@ -251,7 +245,7 @@ void BubbleChart::createShapes()
                     double fLogicY = pSeries->getYValue(nIndex);
                     double fBubbleSize = pSeries->getBubble_Size( nIndex );
 
-                    if( !m_bShowNegativeValues && fBubbleSize<0.0 )
+                    if( fBubbleSize<0.0 )
                         continue;
 
                     if( fBubbleSize == 0.0 || ::rtl::math::isNan(fBubbleSize) )

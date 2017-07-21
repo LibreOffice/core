@@ -1,5 +1,3 @@
-basctl/source/basicide/bastype3.hxx:34
-    basctl::ExtendedEdit aLoseFocusHdl Link<class basctl::ExtendedEdit *, void>
 basegfx/source/polygon/b2dtrapezoid.cxx:201
     basegfx::trapezoidhelper::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint [32]
 basic/qa/cppunit/basictest.hxx:27
@@ -56,8 +54,6 @@ canvas/source/vcl/impltools.hxx:117
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
 chart2/source/model/main/DataPoint.hxx:108
     chart::DataPoint m_bNoParentPropAllowed _Bool
-chart2/source/view/charttypes/BubbleChart.hxx:56
-    chart::BubbleChart m_bShowNegativeValues _Bool
 chart2/source/view/inc/GL3DRenderer.hxx:54
     chart::opengl3D::MaterialParameters pad float
 chart2/source/view/inc/GL3DRenderer.hxx:55
@@ -68,8 +64,6 @@ chart2/source/view/inc/GL3DRenderer.hxx:65
     chart::opengl3D::LightSource pad2 float
 chart2/source/view/inc/GL3DRenderer.hxx:66
     chart::opengl3D::LightSource pad3 float
-comphelper/source/misc/accimplaccess.cxx:41
-    comphelper::OAccImpl_Impl m_nForeignControlledStates sal_Int64
 connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
 connectivity/source/drivers/evoab2/EApi.h:125

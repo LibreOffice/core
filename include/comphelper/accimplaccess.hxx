@@ -70,12 +70,6 @@ namespace comphelper
         const css::uno::Reference< css::accessibility::XAccessible >&
                 implGetForeignControlledParent( ) const;
 
-        /** retrieves the set of currently set states which are controlled by a foreign instance
-        @return
-            a bit mask, where a set bit 2^n means that the AccessibleStateType n has been set
-        */
-        sal_Int64   implGetForeignControlledStates( ) const;
-
     protected:
         OAccessibleImplementationAccess( );
         virtual ~OAccessibleImplementationAccess( );
