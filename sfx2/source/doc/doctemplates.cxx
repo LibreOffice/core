@@ -503,8 +503,7 @@ void SfxDocTplService_Impl::readFolderList()
 {
     SolarMutexGuard aGuard;
 
-    constexpr size_t nCount = std::min(SAL_N_ELEMENTS(TEMPLATE_SHORT_NAMES_ARY), SAL_N_ELEMENTS(TEMPLATE_LONG_NAMES_ARY));
-
+    const size_t nCount = std::min(SAL_N_ELEMENTS(TEMPLATE_SHORT_NAMES_ARY), SAL_N_ELEMENTS(TEMPLATE_LONG_NAMES_ARY));
     for (size_t i = 0; i < nCount; ++i)
     {
         NamePair_Impl* pPair = new NamePair_Impl;
