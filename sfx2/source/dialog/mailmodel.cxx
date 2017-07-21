@@ -726,53 +726,21 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                 xSimpleMailMessage->setOriginator( maFromAddress );
 
                 size_t nToCount     = mpToList ? mpToList->size() : 0;
-                size_t nCcCount     = mpCcList ? mpCcList->size() : 0;
-                size_t nCcSeqCount  = nCcCount;
 
                 // set recipient (only one) for this simple mail server!!
-                if ( nToCount > 1 )
-                {
-                    nCcSeqCount = nToCount - 1 + nCcCount;
-                    xSimpleMailMessage->setRecipient( mpToList->at( 0 ) );
-                    nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
-                }
-                else if ( nToCount == 1 )
+                if ( nToCount >= 1 )
                 {
                     xSimpleMailMessage->setRecipient( mpToList->at( 0 ) );
                     nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
                 }
 
                 // all other recipient must be handled with CC recipients!
-                if ( nCcSeqCount > 0 )
+                if ( nToCount > 1 )
                 {
-                    size_t                  nIndex = 0;
-                    Sequence< OUString >    aCcRecipientSeq;
-
-                    aCcRecipientSeq.realloc( nCcSeqCount );
-                    if ( nCcSeqCount > nCcCount )
-                    {
-                        for ( size_t i = 1; i < nToCount; ++i )
-                        {
-                            aCcRecipientSeq[nIndex++] = mpToList->at(i);
-                        }
-                    }
-
-                    for ( size_t i = 0; i < nCcCount; i++ )
-                    {
-                        aCcRecipientSeq[nIndex++] = mpCcList->at(i);
-                    }
+                    Sequence< OUString >    aCcRecipientSeq( nToCount - 1 );
+                    for ( size_t i = 1; i < nToCount; ++i )
+                        aCcRecipientSeq[i - 1] = mpToList->at(i);
                     xSimpleMailMessage->setCcRecipient( aCcRecipientSeq );
-                }
-
-                size_t nBccCount = mpBccList ? mpBccList->size() : 0;
-                if ( nBccCount > 0 )
-                {
-                    Sequence< OUString > aBccRecipientSeq( nBccCount );
-                    for ( size_t i = 0; i < nBccCount; ++i )
-                    {
-                        aBccRecipientSeq[i] = mpBccList->at(i);
-                    }
-                    xSimpleMailMessage->setBccRecipient( aBccRecipientSeq );
                 }
 
                 Sequence< OUString > aAttachmentSeq(&(maAttachedDocuments[0]),maAttachedDocuments.size());

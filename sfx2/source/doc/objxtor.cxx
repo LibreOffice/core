@@ -240,11 +240,9 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     ,nFlagsInProgress( SfxLoadedFlags::NONE )
     ,bModalMode( false )
     ,bRunningMacro( false )
-    ,nAutoLoadLocks( 0 )
     ,eFlags( SfxObjectShellFlags::UNDEFINED )
     ,bReadOnlyUI( false )
     ,nStyleFilter( 0 )
-    ,bDisposing( false )
     ,m_bEnableSetModified( true )
     ,m_bIsModified( false )
     ,m_nMapUnit( MapUnit::Map100thMM )
@@ -390,7 +388,7 @@ bool SfxObjectShell::CloseInternal()
     if ( !pImpl->bClosing )
     {
         // Do not close if a progress is still running
-        if ( !pImpl->bDisposing && GetProgress() )
+        if ( GetProgress() )
             return false;
 
         pImpl->bClosing = true;

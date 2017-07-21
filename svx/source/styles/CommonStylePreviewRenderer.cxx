@@ -185,7 +185,7 @@ Size CommonStylePreviewRenderer::getRenderSize()
 
 bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, RenderAlign eRenderAlign)
 {
-    const OUString& rText = msRenderText.isEmpty() ? maStyleName : msRenderText;
+    const OUString& rText = maStyleName;
 
     // setup the device & draw
     vcl::Font aOldFont(mrOutputDev.GetFont());

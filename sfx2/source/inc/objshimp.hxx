@@ -101,14 +101,12 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     SfxLoadedFlags      nFlagsInProgress;
     bool                bModalMode;
     bool                bRunningMacro;
-    sal_uInt16          nAutoLoadLocks;
     SfxObjectShellFlags eFlags;
     bool                bReadOnlyUI;
     tools::SvRef<SvRefBase>  xHeaderAttributes;
     ::rtl::Reference< SfxBaseModel >
                         pBaseModel;
     sal_uInt16          nStyleFilter;
-    bool                bDisposing;
 
     bool                m_bEnableSetModified;
     bool                m_bIsModified;

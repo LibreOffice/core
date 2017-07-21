@@ -592,10 +592,6 @@ include/registry/refltype.hxx:68
     RTUik m_Data4 sal_uInt32
 include/registry/refltype.hxx:69
     RTUik m_Data5 sal_uInt32
-include/sfx2/mailmodelapi.hxx:53
-    SfxMailModel mpCcList std::unique_ptr<AddressList_Impl>
-include/sfx2/mailmodelapi.hxx:54
-    SfxMailModel mpBccList std::unique_ptr<AddressList_Impl>
 include/sfx2/msg.hxx:105
     SfxType createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:106
@@ -610,14 +606,6 @@ include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
 include/sfx2/sidebar/ResourceManager.hxx:103
     sfx2::sidebar::ResourceManager maMiscOptions class SvtMiscOptions
-include/sfx2/StylePreviewRenderer.hxx:29
-    sfx2::StylePreviewRenderer msRenderText class rtl::OUString
-include/sfx2/tabdlg.hxx:89
-    SfxTabDialog m_bItemsReset _Bool
-include/sfx2/titledockwin.hxx:87
-    sfx2::TitledDockingWindow m_aEndDockingHdl Link<class sfx2::TitledDockingWindow *, void>
-include/sfx2/viewsh.hxx:153
-    SfxViewShell pSubShell class SfxShell *
 include/svl/ondemand.hxx:59
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svl/svdde.hxx:60
@@ -1112,18 +1100,12 @@ sfx2/source/control/dispatch.cxx:132
     SfxDispatcher_Impl aObjBars struct SfxObjectBars_Impl [13]
 sfx2/source/control/dispatch.cxx:133
     SfxDispatcher_Impl aFixedObjBars struct SfxObjectBars_Impl [13]
-sfx2/source/dialog/tabdlg.cxx:114
-    TabDlg_Impl bModified _Bool
 sfx2/source/doc/doctempl.cxx:118
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 sfx2/source/doc/sfxbasemodel.cxx:189
     IMPL_SfxBaseModel_DataContainer m_xStarBasicAccess Reference<script::XStarBasicAccess>
 sfx2/source/inc/appdata.hxx:104
     SfxAppData_Impl nDocModalMode sal_uInt16
-sfx2/source/inc/objshimp.hxx:104
-    SfxObjectShell_Impl nAutoLoadLocks sal_uInt16
-sfx2/source/inc/objshimp.hxx:111
-    SfxObjectShell_Impl bDisposing _Bool
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:297

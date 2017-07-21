@@ -111,14 +111,11 @@ typedef std::vector<Data_Impl*> SfxTabDlgData_Impl;
 
 struct TabDlg_Impl
 {
-    bool                bModified       : 1,
-                        bModal          : 1,
+    bool                bModal          : 1,
                         bHideResetBtn   : 1;
     SfxTabDlgData_Impl  aData;
 
     explicit TabDlg_Impl( sal_uInt8 nCnt ) :
-
-        bModified       ( false ),
         bModal          ( true ),
         bHideResetBtn   ( false )
     {
@@ -321,7 +318,6 @@ SfxTabDialog::SfxTabDialog
     , m_pOutSet(nullptr)
     , m_pRanges(nullptr)
     , m_nAppPageId(USHRT_MAX)
-    , m_bItemsReset(false)
     , m_bStandardPushed(false)
     , m_pExampleSet(nullptr)
 {
@@ -792,7 +788,7 @@ short SfxTabDialog::Ok()
         }
     }
 
-    if ( m_pImpl->bModified || ( m_pOutSet && m_pOutSet->Count() > 0 ) )
+    if ( m_pOutSet && m_pOutSet->Count() > 0 )
         bModified = true;
 
     if (m_bStandardPushed)
@@ -1067,18 +1063,8 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
     // Create TabPage if possible:
     if ( !pTabPage )
     {
-        const SfxItemSet* pTmpSet = nullptr;
-
         if ( m_pSet )
-        {
-            if ( m_bItemsReset && m_pSet->GetParent() )
-                pTmpSet = m_pSet->GetParent();
-            else
-                pTmpSet = m_pSet;
-        }
-
-        if ( pTmpSet )
-            pTabPage = (pDataObject->fnCreatePage)( pTabCtrl, pTmpSet );
+            pTabPage = (pDataObject->fnCreatePage)( pTabCtrl, m_pSet );
         else
             pTabPage = (pDataObject->fnCreatePage)
                             ( pTabCtrl, CreateInputItemSet( nId ) );

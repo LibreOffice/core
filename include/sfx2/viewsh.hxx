@@ -150,7 +150,6 @@ friend class SfxPrinterController;
 
     std::unique_ptr<struct SfxViewShell_Impl>   pImpl;
     SfxViewFrame*               pFrame;
-    SfxShell*                   pSubShell;
     VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
     bool                        mbPrinterSettingsModified;
@@ -214,7 +213,6 @@ public:
     virtual bool                HasSelection( bool bText = true ) const;
     virtual SdrView*            GetDrawView() const;
 
-    SfxShell*                   GetSubShell() const { return pSubShell; }
     void                        AddSubShell( SfxShell& rShell );
     void                        RemoveSubShell( SfxShell *pShell=nullptr );
     SfxShell*                   GetSubShell( sal_uInt16 );

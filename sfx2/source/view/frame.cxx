@@ -123,7 +123,7 @@ bool SfxFrame::DoClose()
         try
         {
             Reference< XCloseable > xCloseable  ( pImpl->xFrame, UNO_QUERY );
-            if ( (!GetCurrentDocument() || !GetCurrentDocument()->Get_Impl()->bDisposing ) && xCloseable.is())
+            if (xCloseable.is())
                 xCloseable->close(true);
             else if ( pImpl->xFrame.is() )
             {

@@ -913,7 +913,7 @@ bool SfxObjectShell::IsAutoLoadLocked() const
 */
 
 {
-    return !IsReadOnly() || pImpl->nAutoLoadLocks > 0;
+    return !IsReadOnly();
 }
 
 
