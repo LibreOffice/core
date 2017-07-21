@@ -1166,14 +1166,14 @@ void EditPaM::SetNode(ContentNode* p)
     pNode = p;
 }
 
-bool EditPaM::DbgIsBuggy( EditDoc& rDoc )
+bool EditPaM::DbgIsBuggy( EditDoc const & rDoc )
 {
     return !pNode ||
            rDoc.GetPos( pNode ) >= rDoc.Count() ||
            nIndex > pNode->Len();
 }
 
-bool EditSelection::DbgIsBuggy( EditDoc& rDoc )
+bool EditSelection::DbgIsBuggy( EditDoc const & rDoc )
 {
     return aStartPaM.DbgIsBuggy( rDoc ) || aEndPaM.DbgIsBuggy( rDoc );
 }
@@ -2003,7 +2003,7 @@ public:
 
 struct ClearSpellErrorsHandler
 {
-    void operator() (std::unique_ptr<ContentNode>& rNode)
+    void operator() (std::unique_ptr<ContentNode> const & rNode)
     {
         rNode->DestroyWrongList();
     }

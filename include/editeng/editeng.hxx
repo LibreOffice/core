@@ -165,8 +165,8 @@ private:
     EDITENG_DLLPRIVATE void CursorMoved(ContentNode* pPrevNode);
     EDITENG_DLLPRIVATE void CheckIdleFormatter();
     EDITENG_DLLPRIVATE bool IsIdleFormatterActive() const;
-    EDITENG_DLLPRIVATE ParaPortion* FindParaPortion(ContentNode* pNode);
-    EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode* pNode) const;
+    EDITENG_DLLPRIVATE ParaPortion* FindParaPortion(ContentNode const * pNode);
+    EDITENG_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode const * pNode) const;
     EDITENG_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
 
     EDITENG_DLLPRIVATE css::uno::Reference<
@@ -421,7 +421,7 @@ public:
         css::linguistic2::XSpellChecker1 >
                     GetSpeller();
     void            SetHyphenator( css::uno::Reference<
-                            css::linguistic2::XHyphenator >& xHyph );
+                            css::linguistic2::XHyphenator > const & xHyph );
 
     void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
     void SetAllMisspellRanges( const std::vector<editeng::MisspellRanges>& rRanges );
@@ -442,11 +442,11 @@ public:
     bool            HasText( const SvxSearchItem& rSearchItem );
 
     //spell and return a sentence
-    bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill );
+    bool            SpellSentence(EditView const & rEditView, svx::SpellPortions& rToFill );
     // put spell position to start of current sentence
-    void            PutSpellingToSentenceStart( EditView& rEditView );
+    void            PutSpellingToSentenceStart( EditView const & rEditView );
     //applies a changed sentence
-    void            ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck );
+    void            ApplyChangedSentence(EditView const & rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck );
 
     // for text conversion (see also HasSpellErrors)
     bool            HasConvertibleTextPortion( LanguageType nLang );

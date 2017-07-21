@@ -309,7 +309,7 @@ public:
     void SetStartDoubleQuote( const sal_Unicode cStart )    { cStartDQuote = cStart; }
     void SetEndDoubleQuote( const sal_Unicode cEnd )        { cEndDQuote = cEnd; }
 
-    OUString GetQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
+    OUString GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPos,
                     sal_Unicode cInsChar, bool bSttQuote );
     void InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
                     sal_Unicode cInsChar, bool bSttQuote, bool bIns );

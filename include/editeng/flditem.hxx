@@ -128,7 +128,7 @@ public:
                             // If eLanguage==LANGUAGE_DONTKNOW the language/country
                             // used in number formatter initialization is taken.
     OUString                GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
-    static OUString         GetFormatted( Date& rDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    static OUString         GetFormatted( Date const & rDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
@@ -287,7 +287,7 @@ public:
                             // If eLanguage==LANGUAGE_DONTKNOW the language/country
                             // used in number formatter initialization is taken.
     OUString                GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
-    static OUString         GetFormatted( tools::Time& rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    static OUString         GetFormatted( tools::Time const & rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
@@ -403,7 +403,7 @@ public:
     SV_DECL_PERSIST1( SvxDateTimeField, css::text::textfield::Type::PRESENTATION_DATE_TIME )
     SvxDateTimeField();
 
-    static OUString    GetFormatted( Date& rDate, tools::Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    static OUString    GetFormatted( Date const & rDate, tools::Time const & rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
