@@ -98,6 +98,8 @@ public:
     void testTdf59046();
     void testTdf105739();
     void testPageBitmapWithTransparency();
+    void testPptmContentType();
+    void testPptmVBAStream();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -123,6 +125,8 @@ public:
     CPPUNIT_TEST(testTdf59046);
     CPPUNIT_TEST(testTdf105739);
     CPPUNIT_TEST(testPageBitmapWithTransparency);
+    CPPUNIT_TEST(testPptmContentType);
+    CPPUNIT_TEST(testPptmVBAStream);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -804,6 +808,34 @@ void SdOOXMLExportTest2::testPageBitmapWithTransparency()
     xDocShRef->DoClose();
 }
 
+void SdOOXMLExportTest2::testPptmContentType()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptm/macro.pptm"), PPTM);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTM, &tempFile);
+
+    // Assert that the content type is the one of PPTM
+    xmlDocPtr pXmlContentType = parseExport(tempFile, "[Content_Types].xml");
+    assertXPath(pXmlContentType,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/presentation.xml']",
+                "ContentType",
+                "application/vnd.ms-powerpoint.presentation.macroEnabled.main+xml");
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testPptmVBAStream()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptm/macro.pptm"), PPTM);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTM, &tempFile);
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), tempFile.GetURL());
+    // This failed: VBA stream was not roundtripped
+    CPPUNIT_ASSERT(xNameAccess->hasByName("ppt/vbaProject.bin"));
+
+    xDocShRef->DoClose();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
