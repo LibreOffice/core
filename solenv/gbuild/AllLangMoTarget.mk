@@ -43,7 +43,7 @@ $(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY) $(gb_MoTarget_LOCALEST
 	$(call gb_Output_announce,$*,$(true),MO,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		$(MSGUNIQ) $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@)
+		if test -e $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po; then $(MSGUNIQ) $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@; else touch $@; fi)
 
 #$(info $(call gb_MoTarget_get_target,$(1)))
 define gb_MoTarget_MoTarget
