@@ -80,13 +80,7 @@ public:
     void            ConvertToUTC()       { *this -= Time::GetUTCOffset(); }
     void            ConvertToLocalTime() { *this += Time::GetUTCOffset(); }
 
-    DateTime&       operator +=( sal_Int32 nDays )
-                        { AddDays( nDays ); return *this; }
-    DateTime&       operator -=( sal_Int32 nDays )
-                        { AddDays( -nDays ); return *this; }
-    DateTime&       operator +=( double fTimeInDays );
-    DateTime&       operator -=( double fTimeInDays )
-                        { return operator+=( -fTimeInDays ); }
+    void            AddTime( double fTimeInDays );
     DateTime&       operator +=( const tools::Time& rTime );
     DateTime&       operator -=( const tools::Time& rTime );
 

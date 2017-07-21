@@ -573,7 +573,7 @@ void SwAnnotationWin::CheckMetaText()
     {
         sMeta = SwResId(STR_NODATE);
     }
-    if (GetTime()!=0)
+    if (GetTime().GetTime()!=0)
     {
         sMeta += " " + rLocalData.getTime( GetTime(),false );
     }

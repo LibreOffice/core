@@ -64,13 +64,13 @@ public:
     static const sal_Int64 nanoPerMilli  = 1000000;
     static const sal_Int64 nanoPerCenti  = 10000000;
 
-                    Time( TimeInitEmpty )
+                    explicit Time( TimeInitEmpty )
                         { nTime = 0; }
-                    Time( TimeInitSystem );
-                    Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
+                    explicit Time( TimeInitSystem );
+                    explicit Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
                     Time( const tools::Time& rTime );
                     Time( const css::util::Time& rTime );
-                    Time( const css::util::DateTime& rDateTime );
+                    explicit Time( const css::util::DateTime& rDateTime );
                     Time( sal_uInt32 nHour, sal_uInt32 nMin,
                           sal_uInt32 nSec = 0, sal_uInt64 nNanoSec = 0 );
 

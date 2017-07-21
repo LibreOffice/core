@@ -152,14 +152,14 @@ DateTime& DateTime::operator -=( const tools::Time& rTime )
 DateTime operator +( const DateTime& rDateTime, sal_Int32 nDays )
 {
     DateTime aDateTime( rDateTime );
-    aDateTime += nDays;
+    aDateTime.AddDays( nDays );
     return aDateTime;
 }
 
 DateTime operator -( const DateTime& rDateTime, sal_Int32 nDays )
 {
     DateTime aDateTime( rDateTime );
-    aDateTime -= nDays;
+    aDateTime.AddDays( -nDays );
     return aDateTime;
 }
 
@@ -177,7 +177,7 @@ DateTime operator -( const DateTime& rDateTime, const tools::Time& rTime )
     return aDateTime;
 }
 
-DateTime& DateTime::operator +=( double fTimeInDays )
+void DateTime::AddTime( double fTimeInDays )
 {
     double fInt, fFrac;
     if ( fTimeInDays < 0.0 )
@@ -198,13 +198,12 @@ DateTime& DateTime::operator +=( double fTimeInDays )
         aTime.MakeTimeFromNS( static_cast<sal_Int64>(fFrac) );    // method handles negative ns
         operator+=( aTime );
     }
-    return *this;
 }
 
 DateTime operator +( const DateTime& rDateTime, double fTimeInDays )
 {
     DateTime aDateTime( rDateTime );
-    aDateTime += fTimeInDays;
+    aDateTime.AddTime( fTimeInDays );
     return aDateTime;
 }
 

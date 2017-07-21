@@ -277,12 +277,12 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( Date( aDateTime.GetDate()) );
     aLBEntry += " ";
-    aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
+    aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( tools::Time( aDateTime.GetTime()) );
     InsertElement( XsResId( STR_VALIDFROM ), aLBEntry, aLBEntry  );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( Date( aDateTime.GetDate()) );
     aLBEntry += " ";
-    aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
+    aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( tools::Time( aDateTime.GetTime()) );
     InsertElement( XsResId( STR_VALIDTO ), aLBEntry, aLBEntry );
 
     std::pair< OUString, OUString > pairSubject =
