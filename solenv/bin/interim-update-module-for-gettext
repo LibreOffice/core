@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import binascii
 import polib
@@ -14,13 +14,13 @@ if len(sys.argv) < 2:
 uiline = False
 
 subpath = sys.argv[1]
-print >> sys.stderr, "interim-update-for-gettext: processing ", subpath
+print("interim-update-for-gettext: processing " + subpath)
 messages = None
 npos = 0
 for dirpath, dirname, filenames in walk(subpath):
     for filename in filenames:
         ipath = join(dirpath, filename)
-        print >> sys.stderr, "interim-update-for-gettext: merging ", ipath
+        print("interim-update-for-gettext: merging " + ipath)
         po = polib.pofile(ipath)
         if len(po) != 0:
             samplefile = po[0].occurrences[0][0]

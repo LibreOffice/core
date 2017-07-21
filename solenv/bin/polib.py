@@ -867,7 +867,7 @@ class _BaseEntry(object):
                                    wrapwidth)
         ret.append('')
         usedirect = True
-        if type(ret[0] != unicode):
+        if not PY3 and type(ret[0] != unicode):
             try:
                 usedirect = False
                 ret = u('\n').join(x.decode('utf-8') for x in ret)
