@@ -361,8 +361,8 @@ OUString GetUndoComment(SwUndoId eId)
             pId = STR_CHANGEFTN;
             break;
         case SwUndoId::REDLINE:
-            /* !! sollte NIE gebraucht/uebersetzt werden !! */
-            break;
+            SAL_WARN("sw.core", "Should NEVER be used/translated");
+            return OUString();
         case SwUndoId::ACCEPT_REDLINE:
             pId = STR_ACCEPT_REDLINE;
             break;
