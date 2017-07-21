@@ -1,0 +1,17 @@
+#!/bin/sh
+
+case "$1" in
+    ca-valencia)
+        echo ca@valencia
+        ;;
+    kmr-Latn)
+        echo kmr@latin
+        ;;
+    sr-Latn)
+        echo sr@latin
+        ;;
+    *)
+        echo $1 | tr '-' '_'
+        ;;
+esac
+
