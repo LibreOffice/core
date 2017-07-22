@@ -472,10 +472,10 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
                 if (startswith(name, "read") || name.find(">>=") != std::string::npos)
                     // this is a write-only call
                     ;
-                else if (name == "clear" || name == "dispose" || name == "clearAndDispose" || name == "swap")
+                else if (name == "clear" || name == "dispose" || name == "disposeAndClear" || name == "swap")
                     // we're abusing the write-only analysis here to look for fields which don't have anything useful
                     // being done to them, so we're ignoring things like std::vector::clear, std::vector::swap,
-                    // and VclPtr::clearAndDispose
+                    // and VclPtr::disposeAndClear
                     ;
                 else
                     bPotentiallyReadFrom = true;
