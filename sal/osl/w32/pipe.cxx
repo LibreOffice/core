@@ -151,6 +151,11 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
     /* alloc memory */
     pPipe = osl_createPipeImpl();
+
+    assert(pPipe);  // if osl_createPipeImpl() cannot init. a new pipe, this is a failure
+    if (!pPipe)
+        return nullptr;
+
     osl_atomic_increment(&(pPipe->m_Reference));
 
     /* build system pipe name */
