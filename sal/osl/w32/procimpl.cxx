@@ -276,12 +276,12 @@ namespace /* private */
         return quoted.makeStringAndClear();
     }
 
-    //The parameter path must be a system path. If it is longer than 260 characters
-    //then it is shortened using the GetShortPathName function. This function only
-    //works if the path exists. Because "path" can be the path to an executable, it
-    //may not have the file extension ".exe". However, if the file on disk has the
-    //".exe" extension, then the function will fail. In this case a second attempt
-    //is started by adding the parameter "extension" to "path".
+    // The parameter path must be a system path. If it is longer than 260 characters
+    // then it is shortened using the GetShortPathName function. This function only
+    // works if the path exists. Because "path" can be the path to an executable, it
+    // may not have the file extension ".exe". However, if the file on disk has the
+    // ".exe" extension, then the function will fail. In this case a second attempt
+    // is started by adding the parameter "extension" to "path".
     rtl::OUString getShortPath(rtl::OUString const & path, rtl::OUString const & extension)
     {
         rtl::OUString ret(path);
