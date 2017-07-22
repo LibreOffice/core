@@ -153,6 +153,7 @@ long SwWrtShell::DelLeft()
             {
                 SwActContext aActContext(this);
                 ResetCursorStack();
+                SwapPam();   // SwapPam() is required for change-tracking
                 Delete();
                 UpdateAttr();
             }
