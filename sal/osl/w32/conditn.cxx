@@ -28,9 +28,6 @@
     as a WIN32 HANDLE (which is also a 32-bit value)
 */
 
-/*****************************************************************************/
-/* osl_createCondition */
-/*****************************************************************************/
 oslCondition SAL_CALL osl_createCondition(void)
 {
     oslCondition Condition;
@@ -44,20 +41,12 @@ oslCondition SAL_CALL osl_createCondition(void)
 
 }
 
-/*****************************************************************************/
-/* osl_destroyCondition */
-/*****************************************************************************/
 void SAL_CALL osl_destroyCondition(oslCondition Condition)
 {
     if(Condition)
-    {
         OSL_VERIFY(CloseHandle(Condition));
-    }
 }
 
-/*****************************************************************************/
-/* osl_setCondition */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
@@ -65,9 +54,6 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
     return SetEvent(reinterpret_cast<HANDLE>(Condition)) != FALSE;
 }
 
-/*****************************************************************************/
-/* osl_resetCondition */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
@@ -75,9 +61,6 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
     return ResetEvent(reinterpret_cast<HANDLE>(Condition)) != FALSE;
 }
 
-/*****************************************************************************/
-/* osl_waitCondition */
-/*****************************************************************************/
 oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
                                      const TimeValue* pTimeout)
 {
@@ -121,9 +104,6 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
     }
 }
 
-/*****************************************************************************/
-/* osl_checkCondition */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
