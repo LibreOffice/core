@@ -42,7 +42,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include "strings.hrc"
 #include "strings.hxx"
-#include "core_resource.hxx"
 
 namespace dbaui
 {

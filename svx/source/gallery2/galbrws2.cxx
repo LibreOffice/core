@@ -41,7 +41,6 @@
 #include "svx/galctrl.hxx"
 #include "svx/galmisc.hxx"
 #include "galbrws2.hxx"
-#include "svx/strings.hrc"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svx/fmmodel.hxx>

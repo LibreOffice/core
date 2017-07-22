@@ -74,8 +74,6 @@
 #include <helpids.h>
 #include <globals.hrc>
 #include <strings.hrc>
-#include <strings.hrc>
-#include <strings.hrc>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>

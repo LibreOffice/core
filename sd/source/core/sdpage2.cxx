@@ -41,7 +41,6 @@
 #include "pglink.hxx"
 #include "anminfo.hxx"
 
-#include "strings.hrc"
 #include "strings.hxx"
 #include "DrawDocShell.hxx"
 

@@ -89,7 +89,6 @@
 #include <sfx2/checkin.hxx>
 #include <sfx2/infobar.hxx>
 
-#include "sfx2/strings.hrc"
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/util/XCloneable.hpp>

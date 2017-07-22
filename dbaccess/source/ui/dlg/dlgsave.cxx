@@ -35,7 +35,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include "core_resource.hxx"
 #include "objectnamecheck.hxx"
 #include <tools/diagnose_ex.h>
 

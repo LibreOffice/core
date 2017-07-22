@@ -33,7 +33,6 @@
 #include "strings.hrc"
 #include "app.hrc"
 
-#include "strings.hrc"
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
 #include "SlideSorterViewShell.hxx"

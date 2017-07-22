@@ -98,7 +98,6 @@
 #include <vcl/EnumContext.hxx>
 #include <swslots.hxx>
 #include <SwRewriter.hxx>
-#include <strings.hrc>
 
 using namespace ::com::sun::star;
 

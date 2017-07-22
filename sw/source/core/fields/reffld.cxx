@@ -52,7 +52,6 @@
 #include <shellres.hxx>
 #include <poolfmt.hxx>
 #include <strings.hrc>
-#include <strings.hrc>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <calbck.hxx>

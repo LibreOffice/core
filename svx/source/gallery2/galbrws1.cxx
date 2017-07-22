@@ -34,7 +34,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include "svx/strings.hrc"
 #include <algorithm>
-#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
 #include <svx/svxdlg.hxx>

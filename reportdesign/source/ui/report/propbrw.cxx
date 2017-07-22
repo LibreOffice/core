@@ -55,7 +55,6 @@
 #include "ViewsWindow.hxx"
 #include "UITools.hxx"
 #include <unotools/confignode.hxx>
-#include "strings.hxx"
 
 namespace rptui
 {

@@ -68,7 +68,6 @@
 #include "framework/FrameworkHelper.hxx"
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 
 #include "drawdoc.hxx"
 #include "fusel.hxx"

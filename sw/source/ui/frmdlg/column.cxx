@@ -63,8 +63,6 @@
 #include <docary.hxx>
 #include <pagedesc.hxx>
 
-#include "strings.hrc"
-
 //to match associated data in ColumnPage.ui
 #define LISTBOX_SELECTION       0
 #define LISTBOX_SECTION         1

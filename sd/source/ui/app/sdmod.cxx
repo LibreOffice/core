@@ -51,7 +51,6 @@
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 #include "errhdl.hrc"
 
 #define SdModule

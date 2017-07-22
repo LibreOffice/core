@@ -85,7 +85,6 @@
 #include <rtl/ref.hxx>
 #include <framework/interaction.hxx>
 #include <svtools/sfxecode.hxx>
-#include "sfx2/strings.hrc"
 
 #include <memory>
 

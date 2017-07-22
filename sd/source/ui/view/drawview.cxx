@@ -45,7 +45,6 @@
 #include <svx/dialmgr.hxx>
 
 #include "strings.hrc"
-#include "strings.hrc"
 #include "View.hxx"
 #include "sdattr.hxx"
 #include "drawview.hxx"

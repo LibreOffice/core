@@ -41,7 +41,6 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"

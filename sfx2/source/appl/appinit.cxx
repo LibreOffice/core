@@ -51,7 +51,6 @@
 
 #include <sfx2/unoctitm.hxx>
 #include "sfx2/strings.hrc"
-#include "sfx2/strings.hrc"
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/dispatch.hxx>

@@ -43,7 +43,6 @@
 #include <comphelper/string.hxx>
 #include <tools/color.hxx>
 #include "WExtendPages.hxx"
-#include "core_resource.hxx"
 #include "QEnumTypes.hxx"
 #include "UITools.hxx"
 #include <vcl/svapp.hxx>

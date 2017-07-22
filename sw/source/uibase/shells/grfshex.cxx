@@ -40,7 +40,6 @@
 #include <svx/svdpagv.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <strings.hrc>
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -50,7 +49,6 @@
 
 // -> #111827#
 #include <SwRewriter.hxx>
-#include <strings.hrc>
 // <- #111827#
 
 using namespace ::com::sun::star;

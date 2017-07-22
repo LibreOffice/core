@@ -42,7 +42,6 @@
 #include "imapinfo.hxx"
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 
 
 #include "sdmod.hxx"

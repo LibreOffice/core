@@ -20,7 +20,6 @@
 #include <config_features.h>
 
 #include "core_resource.hxx"
-#include "core_resource.hxx"
 #include "TextConnectionHelper.hxx"
 #include "sqlmessage.hxx"
 #include "dbu_dlg.hxx"

@@ -106,7 +106,6 @@
 #include <printdata.hxx>
 #include <cmdid.h>
 #include <strings.hrc>
-#include <strings.hrc>
 #include <SwUndoTOXChange.hxx>
 #include <unocrsr.hxx>
 #include <docsh.hxx>

@@ -35,7 +35,6 @@
 
 #include <strings.hrc>
 #include <app.hrc>
-#include <strings.hrc>
 
 #include <viewopt.hxx>
 #include <cmdid.h>

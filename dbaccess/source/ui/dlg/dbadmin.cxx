@@ -31,7 +31,6 @@
 #include "strings.hrc"
 #include "dsitems.hxx"
 #include "dsnItem.hxx"
-#include "core_resource.hxx"
 #include "optionalboolitem.hxx"
 #include "propertysetitem.hxx"
 #include "stringlistitem.hxx"

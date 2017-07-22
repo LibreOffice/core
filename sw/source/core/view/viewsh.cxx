@@ -65,7 +65,6 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <accessibilityoptions.hxx>
 #include <strings.hrc>
-#include <strings.hrc>
 #include "bitmaps.hlst"
 #include <pagepreviewlayout.hxx>
 #include <sortedobjs.hxx>

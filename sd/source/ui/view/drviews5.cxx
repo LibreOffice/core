@@ -37,8 +37,6 @@
 #include "LayerTabBar.hxx"
 
 #include "strings.hrc"
-
-#include "strings.hrc"
 #include "app.hrc"
 #include "helpids.h"
 #include "optsitem.hxx"

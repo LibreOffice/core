@@ -26,7 +26,6 @@
 #include "dsitems.hxx"
 #include "stringconstants.hxx"
 #include "dbadmin.hxx"
-#include "core_resource.hxx"
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
 #include <vcl/stdtext.hxx>

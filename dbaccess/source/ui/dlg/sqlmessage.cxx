@@ -36,7 +36,6 @@
 #include <sfx2/sfxuno.hxx>
 #include "helpids.h"
 #include "UITools.hxx"
-#include "core_resource.hxx"
 
 #include <tools/urlobj.hxx>
 

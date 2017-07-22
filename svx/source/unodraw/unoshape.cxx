@@ -78,7 +78,6 @@
 #include "svx/xflhtit.hxx"
 #include "svx/xlndsit.hxx"
 #include "svdglob.hxx"
-#include "svx/strings.hrc"
 #include "svx/unomaster.hxx"
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

@@ -58,7 +58,6 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 #include "strmname.h"
 #include "FrameView.hxx"
 #include "optsitem.hxx"

@@ -28,7 +28,6 @@
 #include "helpids.h"
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 
 #include "DrawViewShell.hxx"
 #include "Window.hxx"

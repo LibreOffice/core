@@ -61,7 +61,6 @@
 #include "strings.hrc"
 #include "sdresid.hxx"
 #include "Outliner.hxx"
-#include "strings.hrc"
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"

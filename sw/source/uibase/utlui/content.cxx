@@ -58,7 +58,6 @@
 #include <cmdid.h>
 #include <helpids.h>
 #include <strings.hrc>
-#include <strings.hrc>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>

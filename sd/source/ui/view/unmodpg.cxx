@@ -26,7 +26,6 @@
 #include "strings.hrc"
 #include "strings.hxx"
 #include "glob.hxx"
-#include "strings.hrc"
 #include "app.hrc"
 
 #include "unmodpg.hxx"

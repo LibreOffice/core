@@ -23,7 +23,6 @@
 #include "strings.hrc"
 #include "strings.hxx"
 #include "commontypes.hxx"
-#include "core_resource.hxx"
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/processfactory.hxx>

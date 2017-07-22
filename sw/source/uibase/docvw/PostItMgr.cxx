@@ -58,7 +58,6 @@
 
 #include <swmodule.hxx>
 #include <strings.hrc>
-#include <strings.hrc>
 #include "cmdid.h"
 
 #include <sfx2/request.hxx>

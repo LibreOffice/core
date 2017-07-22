@@ -57,7 +57,6 @@
 #include <uitool.hxx>
 #include <viewopt.hxx>
 #include <strings.hrc>
-#include <strings.hrc>
 
 #include <PostItMgr.hxx>
 #include <fmtfld.hxx>

@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include "CustomAnimationList.hxx"
-#include "strings.hrc"
 #include "CustomAnimationPreset.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

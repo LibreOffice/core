@@ -28,7 +28,6 @@
 #include "svx/svditer.hxx"
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include "svdfmtf.hxx"
 #include <svx/svdetc.hxx>

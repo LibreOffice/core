@@ -45,7 +45,6 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 #include "strings.hrc"
-#include "strings.hrc"
 
 
 #include "sdmod.hxx"

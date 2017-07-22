@@ -32,7 +32,6 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include <svx/svddrgv.hxx>
 #include <svx/svdograf.hxx>
