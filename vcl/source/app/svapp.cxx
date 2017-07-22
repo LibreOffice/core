@@ -154,12 +154,6 @@ extern "C" {
     typedef UnoWrapperBase* (SAL_CALL *FN_TkCreateUnoWrapper)();
 }
 
-struct ImplEventHook
-{
-    void*                   mpUserData;
-    VCLEventHookProc        mpProc;
-};
-
 struct ImplPostEventData
 {
     VclEventId      mnEvent;
