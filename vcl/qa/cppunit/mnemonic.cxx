@@ -31,8 +31,10 @@ public:
 void VclMnemonicTest::testMnemonic()
 {
     MnemonicGenerator aGenerator;
-    OUString sResult = aGenerator.CreateMnemonic(OUString::fromUtf8(u8"ßa"));
-    CPPUNIT_ASSERT_EQUAL(sResult[1], u'~');
+
+    const sal_Unicode TEST[] = { 0x00DF, 'a' };
+    OUString sResult = aGenerator.CreateMnemonic(OUString(TEST, SAL_N_ELEMENTS(TEST)));
+    CPPUNIT_ASSERT_EQUAL(u'~', sResult[1]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclMnemonicTest);
