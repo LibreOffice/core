@@ -61,14 +61,14 @@ DWORD IsValidFilePath (
 DWORD GetCaseCorrectPathName (
     LPCWSTR lpszShortPath,  // file name
     LPWSTR  lpszLongPath,   // path buffer
-    sal_uInt32 cchBuffer,      // size of path buffer
+    sal_uInt32 cchBuffer,   // size of path buffer
     bool bCheckExistence
 );
 
 oslFileError osl_getSystemPathFromFileURL_ (
-    rtl_uString *  strURL,
+    rtl_uString * strURL,
     rtl_uString ** pustrPath,
-    bool       bAllowRelative
+    bool bAllowRelative
 );
 
 extern oslMutex g_CurrentDirectoryMutex;
