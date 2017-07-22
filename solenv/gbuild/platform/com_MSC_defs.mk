@@ -132,6 +132,7 @@ gb_AFLAGS := $(AFLAGS)
 #   warning)
 
 gb_CFLAGS := \
+	-utf-8 \
 	-Gd \
 	-GR \
 	-Gs \
@@ -161,6 +162,7 @@ gb_CFLAGS += \
 endif
 
 gb_CXXFLAGS := \
+	-utf-8 \
 	-Gd \
 	-GR \
 	-Gs \
