@@ -167,39 +167,26 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             if (rShape->getChildren().empty())
                 break;
 
-            const sal_Int32 nStartAngle=maMap.count(XML_stAng) ? maMap.find(XML_stAng)->second : 0;
-            const sal_Int32 nSpanAngle=maMap.count(XML_spanAng) ? maMap.find(XML_spanAng)->second : 360;
+            const sal_Int32 nStartAngle = maMap.count(XML_stAng) ? maMap.find(XML_stAng)->second : 0;
+            const sal_Int32 nSpanAngle = maMap.count(XML_spanAng) ? maMap.find(XML_spanAng)->second : 360;
+            const sal_Int32 nShapes = rShape->getChildren().size();
+            const awt::Size aCenter(rShape->getSize().Width / 2, rShape->getSize().Height / 2);
+            const awt::Size aChildSize(rShape->getSize().Width / 5, rShape->getSize().Height / 5);
+            const sal_Int32 r = std::min(
+                (rShape->getSize().Width - aChildSize.Width) / 2,
+                (rShape->getSize().Height - aChildSize.Height) / 2);
 
-            std::vector<ShapePtr>::const_iterator aCurrShape=rShape->getChildren().begin();
-            const std::vector<ShapePtr>::const_iterator aLastShape=rShape->getChildren().end();
-            const sal_Int32 nShapes=aLastShape-aCurrShape;
-
-            // find biggest shape
-            awt::Size aMaxSize;
-            while( aCurrShape != aLastShape )
+            sal_Int32 idx = 0;
+            for (auto & aCurrShape : rShape->getChildren())
             {
-                const awt::Size& sz=(*aCurrShape)->getSize();
-
-                aMaxSize.Width = std::max(
-                    aMaxSize.Width,
-                    sz.Width);
-                aMaxSize.Height = std::max(
-                    aMaxSize.Height,
-                    sz.Height);
-
-                ++aCurrShape;
-            }
-
-            // layout shapes
-            const sal_Int32 nMaxDim=std::max(aMaxSize.Width,aMaxSize.Height);
-            aCurrShape=rShape->getChildren().begin();
-            for( sal_Int32 i=0; i<nShapes; ++i, ++aCurrShape )
-            {
-                const double r=nShapes*nMaxDim/F_2PI * 360.0/nSpanAngle;
                 const awt::Point aCurrPos(
-                    r + r*sin( (double(i)*nSpanAngle/nShapes + nStartAngle)*F_PI180 ),
-                    r - r*cos( (double(i)*nSpanAngle/nShapes + nStartAngle)*F_PI180 ) );
-                (*aCurrShape)->setPosition(aCurrPos);
+                    aCenter.Width + r*sin( (double(idx)*nSpanAngle/nShapes + nStartAngle)*F_PI180 ) - aChildSize.Width/2,
+                    aCenter.Height - r*cos( (double(idx)*nSpanAngle/nShapes + nStartAngle)*F_PI180 ) - aChildSize.Height/2);
+
+                aCurrShape->setPosition(aCurrPos);
+                aCurrShape->setSize(aChildSize);
+                aCurrShape->setChildSize(aChildSize);
+                idx++;
             }
             break;
         }
