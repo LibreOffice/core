@@ -79,7 +79,8 @@ class XFFontFactory
 public:
     XFFontFactory();
     ~XFFontFactory();
-    XFFontFactory(const XFFontFactory&){}
+    XFFontFactory(const XFFontFactory&) = delete;
+void operator=(XFFontFactory&) = delete;
 
 private:
     /**
