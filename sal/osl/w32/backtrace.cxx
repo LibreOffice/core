@@ -36,11 +36,11 @@ OUString osl::detail::backtraceAsString(sal_uInt32 maxDepth)
     SymInitialize( hProcess, nullptr, true );
 
     std::unique_ptr<void*[]> aStack(new void*[ maxDepth ]);
-    // <https://msdn.microsoft.com/en-us/library/windows/desktop/
-    // bb204633(v=vs.85).aspx> "CaptureStackBackTrace function" claims that you
-    // "can capture up to MAXUSHORT frames", and on Windows Server 2003 and
-    // Windows XP it even "must be less than 63", but assume that a too large
-    // input value is clamped internally, instead of resulting in an error:
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/bb204633.aspx
+    // "CaptureStackBackTrace function" claims that you "can capture up to
+    // MAXUSHORT frames", and on Windows Server 2003 and Windows XP it even
+    // "must be less than 63", but assume that a too large input value is
+    // clamped internally, instead of resulting in an error:
     sal_uInt32 nFrames = CaptureStackBackTrace( 0, static_cast<ULONG>(maxDepth), aStack.get(), nullptr );
 
     SYMBOL_INFO  * pSymbol;
