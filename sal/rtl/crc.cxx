@@ -20,11 +20,9 @@
 #include <sal/types.h>
 #include <rtl/crc.h>
 
-/*========================================================================
- *
- * rtl_crc32Table (CRC polynomial 0xEDB88320).
- *
- *======================================================================*/
+/**
+    rtl_crc32Table (CRC polynomial 0xEDB88320).
+*/
 static const sal_uInt32 rtl_crc32Table[256] =
 {
     /* 0 */
@@ -124,17 +122,9 @@ static const sal_uInt32 rtl_crc32Table[256] =
     0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
 };
 
-/*========================================================================
- *
- * rtl_crc32 implementation.
- *
- *======================================================================*/
 #define UPDCRC32(crc, octet) \
     (rtl_crc32Table[((crc) ^ (octet)) & 0xff] ^ ((crc) >> 8))
 
-/*
- * rtl_crc32.
- */
 sal_uInt32 SAL_CALL rtl_crc32 (
     sal_uInt32  Crc,
     const void *Data, sal_uInt32 DatLen) SAL_THROW_EXTERN_C()
@@ -145,8 +135,12 @@ sal_uInt32 SAL_CALL rtl_crc32 (
         const sal_uInt8 *q = p + DatLen;
 
         Crc = ~Crc;
+
         while (p < q)
+        {
             Crc = UPDCRC32(Crc, *(p++));
+        }
+
         Crc = ~Crc;
     }
     return Crc;
