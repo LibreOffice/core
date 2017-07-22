@@ -27,7 +27,7 @@ class SwWrtShell;
 
 class SwInsertIdxMarkWrapper : public SfxChildWindow
 {
-    VclPtr<AbstractMarkFloatDlg>  pAbstDlg;
+    ScopedVclPtr<AbstractMarkFloatDlg>  pAbstDlg;
 protected:
     SwInsertIdxMarkWrapper( vcl::Window *pParentWindow,
                             sal_uInt16 nId,
@@ -42,7 +42,7 @@ public:
 
 class SwInsertAuthMarkWrapper : public SfxChildWindow
 {
-    VclPtr<AbstractMarkFloatDlg>  pAbstDlg;
+    ScopedVclPtr<AbstractMarkFloatDlg>  pAbstDlg;
 protected:
     SwInsertAuthMarkWrapper(    vcl::Window *pParentWindow,
                             sal_uInt16 nId,
