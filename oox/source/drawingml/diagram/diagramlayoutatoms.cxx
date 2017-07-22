@@ -24,6 +24,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include "oox/helper/attributelist.hxx"
+#include "oox/token/properties.hxx"
 #include "drawingml/fillproperties.hxx"
 #include "drawingml/lineproperties.hxx"
 #include "drawingml/textbody.hxx"
@@ -294,8 +295,41 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             break;
 
         case XML_tx:
+        {
+            // adjust text alignment
             // TODO: adjust text size to fit shape
+
+            TextBodyPtr pTextBody = rShape->getTextBody();
+            if (!pTextBody ||
+                pTextBody->getParagraphs().empty() ||
+                pTextBody->getParagraphs().front()->getRuns().empty())
+            {
+                break;
+            }
+
+            // text centered by default
+            pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_CENTER;
+            pTextBody->getTextProperties().maPropertyMap.setProperty(PROP_TextVerticalAdjust, css::drawing::TextVerticalAdjust_CENTER);
+
+            ParamMap::const_iterator aDir = maMap.find(XML_parTxLTRAlign);
+            // TODO: XML_parTxRTLAlign
+            if (aDir != maMap.end())
+            {
+                css::style::ParagraphAdjust aAlignment = GetParaAdjust(aDir->second);
+                for (auto & aParagraph : pTextBody->getParagraphs())
+                    aParagraph->getProperties().setParaAdjust(aAlignment);
+            }
+            else if (maMap.find(XML_stBulletLvl) == maMap.end())
+            {
+                for (auto & aParagraph : pTextBody->getParagraphs())
+                {
+                    aParagraph->getProperties().getParaLeftMargin() = 0;
+                    aParagraph->getProperties().setParaAdjust(css::style::ParagraphAdjust::ParagraphAdjust_CENTER);
+                }
+            }
+
             break;
+        }
 
         default:
             break;
