@@ -104,7 +104,7 @@ BOOL FileTimeToTimeValue(const FILETIME *cpFTime, TimeValue *pTimeVal)
     return fSuccess;
 }
 
-namespace /* private */
+namespace
 {
 
     struct Component
@@ -189,9 +189,7 @@ namespace /* private */
     inline bool has_path_parent(const rtl::OUString& path)
     { return has_path_parent(path.getStr()); }
 
-} // end namespace private
-
-// volume handling functions
+}
 
 oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
 {
@@ -225,8 +223,6 @@ oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle
     else
         return osl_File_E_INVAL;
 }
-
-// directory handling functions
 
 #define DIRECTORYITEM_DRIVE     0
 #define DIRECTORYITEM_FILE      1
@@ -1154,8 +1150,6 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
     return false;
 }
 
-// volume / file info handling functions
-
 static inline bool is_floppy_A_present()
 { return (GetLogicalDrives() & 1); }
 
@@ -1554,14 +1548,6 @@ static oslFileError SAL_CALL osl_getServerInfo(
         return osl_File_E_INVAL;
 
     pStatus->uValidFields = 0;
-
-    //  pStatus->uValidFields |= osl_FileStatus_Mask_FileName;
-
-    //  if ( _tcscmp( pItemImpl->FindData.cFileName, TEXT(".") ) == 0 )
-    //      rtl_uString_newFromAscii( &pStatus->ustrFileName, "/" );
-    //  else
-    //      rtl_uString_newFromStr( &pStatus->ustrFileName, pItemImpl->FindData.cFileName );
-
     pStatus->eType = osl_File_Type_Directory;
     pStatus->uValidFields |= osl_FileStatus_Mask_Type;
 
@@ -1690,8 +1676,6 @@ oslFileError SAL_CALL osl_getFileStatus(
     return osl_File_E_None;
 }
 
-// file attributes handling functions
-
 oslFileError SAL_CALL osl_setFileAttributes(
     rtl_uString *ustrFileURL,
     sal_uInt64 uAttributes )
@@ -1722,7 +1706,9 @@ oslFileError SAL_CALL osl_setFileAttributes(
         fSuccess = SetFileAttributes( SAL_W(rtl_uString_getStr(ustrSysPath)), dwFileAttributes );
     }
     else
+    {
         fSuccess = FALSE;
+    }
 
     if ( !fSuccess )
         error = oslTranslateFileError( GetLastError() );
