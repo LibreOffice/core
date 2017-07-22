@@ -31,9 +31,6 @@
     CRITICAL_SECTION structure.
 */
 
-/*****************************************************************************/
-/* osl_createMutex */
-/*****************************************************************************/
 oslMutex SAL_CALL osl_createMutex(void)
 {
     CRITICAL_SECTION *pMutexImpl;
@@ -47,9 +44,6 @@ oslMutex SAL_CALL osl_createMutex(void)
     return reinterpret_cast<oslMutex>(pMutexImpl);
 }
 
-/*****************************************************************************/
-/* osl_destroyMutex */
-/*****************************************************************************/
 void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
@@ -61,9 +55,6 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
     }
 }
 
-/*****************************************************************************/
-/* osl_acquireMutex */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
@@ -75,9 +66,6 @@ sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
     return true;
 }
 
-/*****************************************************************************/
-/* osl_tryToAcquireMutex */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
@@ -87,9 +75,6 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
     return TryEnterCriticalSection(pMutexImpl) != FALSE;
 }
 
-/*****************************************************************************/
-/* osl_releaseMutex */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 {
     CRITICAL_SECTION *pMutexImpl = reinterpret_cast<CRITICAL_SECTION *>(Mutex);
@@ -100,10 +85,6 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 
     return true;
 }
-
-/*****************************************************************************/
-/* osl_getGlobalMutex */
-/*****************************************************************************/
 
 /* initialized in dllentry.c */
 oslMutex g_Mutex;
