@@ -31,14 +31,14 @@ struct StringHashTableImpl {
 typedef StringHashTableImpl StringHashTable;
 
 // Only for use in the implementation
-static StringHashTable *rtl_str_hash_new (sal_uInt32 nSize);
-static void rtl_str_hash_free (StringHashTable *pHash);
+static StringHashTable *rtl_str_hash_new(sal_uInt32 nSize);
+static void rtl_str_hash_free(StringHashTable *pHash);
 
-StringHashTable *
-getHashTable ()
+StringHashTable * getHashTable()
 {
     static StringHashTable *pInternPool = nullptr;
-    if (pInternPool == nullptr) {
+    if (!pInternPool)
+    {
         static StringHashTable* pHash = rtl_str_hash_new(1024);
         pInternPool = pHash;
     }
@@ -49,8 +49,7 @@ getHashTable ()
 
 // TODO: add bottom bit-set list terminator to string list
 
-static sal_uInt32
-getNextSize (sal_uInt32 nSize)
+static sal_uInt32 getNextSize(sal_uInt32 nSize)
 {
     // Sedgewick - Algorithms in C P577.
     static const sal_uInt32 nPrimes[] = { 1021, 2039, 4093, 8191, 16381, 32749,
@@ -66,44 +65,44 @@ getNextSize (sal_uInt32 nSize)
     return nSize * 2;
 }
 
-static sal_uInt32
-hashString (rtl_uString *pString)
+static sal_uInt32 hashString(rtl_uString *pString)
 {
-    return (sal_uInt32) rtl_ustr_hashCode_WithLength (pString->buffer,
-                                                      pString->length);
+    return (sal_uInt32) rtl_ustr_hashCode_WithLength(pString->buffer,
+                                                     pString->length);
 }
 
-static StringHashTable *
-rtl_str_hash_new (sal_uInt32 nSize)
+static StringHashTable * rtl_str_hash_new(sal_uInt32 nSize)
 {
-    StringHashTable *pHash = static_cast<StringHashTable *>(malloc (sizeof (StringHashTable)));
+    StringHashTable *pHash = static_cast<StringHashTable *>(malloc(sizeof(StringHashTable)));
 
     pHash->nEntries = 0;
     pHash->nSize = getNextSize (nSize);
-    pHash->pData = static_cast<rtl_uString **>(calloc (sizeof (rtl_uString *), pHash->nSize));
+    pHash->pData = static_cast< rtl_uString ** >(calloc(sizeof(rtl_uString *), pHash->nSize));
 
     return pHash;
 }
 
-static void
-rtl_str_hash_free (StringHashTable *pHash)
+static void rtl_str_hash_free(StringHashTable *pHash)
 {
     if (!pHash)
         return;
+
     if (pHash->pData)
-        free (pHash->pData);
-    free (pHash);
+        free(pHash->pData);
+
+    free(pHash);
 }
 
 static void
-rtl_str_hash_insert_nonequal (StringHashTable   *pHash,
-                              rtl_uString       *pString)
+rtl_str_hash_insert_nonequal(StringHashTable   *pHash,
+                             rtl_uString       *pString)
 {
-    sal_uInt32  nHash = hashString (pString);
-    sal_uInt32  n;
+    sal_uInt32 nHash = hashString(pString);
+    sal_uInt32 n;
 
     n = nHash % pHash->nSize;
-    while (pHash->pData[n] != nullptr) {
+    while (pHash->pData[n])
+    {
         n++;
         if (n >= pHash->nSize)
             n = 0;
@@ -111,61 +110,64 @@ rtl_str_hash_insert_nonequal (StringHashTable   *pHash,
     pHash->pData[n] = pString;
 }
 
-static void
-rtl_str_hash_resize (sal_uInt32        nNewSize)
+static void rtl_str_hash_resize(sal_uInt32 nNewSize)
 {
     sal_uInt32 i;
     StringHashTable *pNewHash;
     StringHashTable *pHash = getHashTable();
 
-    OSL_ASSERT (nNewSize > pHash->nEntries);
+    OSL_ASSERT(nNewSize > pHash->nEntries);
 
-    pNewHash = rtl_str_hash_new (nNewSize);
+    pNewHash = rtl_str_hash_new(nNewSize);
 
     for (i = 0; i < pHash->nSize; i++)
     {
-        if (pHash->pData[i] != nullptr)
-            rtl_str_hash_insert_nonequal (pNewHash, pHash->pData[i]);
+        if (pHash->pData[i])
+            rtl_str_hash_insert_nonequal(pNewHash, pHash->pData[i]);
     }
+
     pNewHash->nEntries = pHash->nEntries;
-    free (pHash->pData);
+    free(pHash->pData);
     *pHash = *pNewHash;
     pNewHash->pData = nullptr;
-    rtl_str_hash_free (pNewHash);
+    rtl_str_hash_free(pNewHash);
 }
 
-static bool
-compareEqual (rtl_uString *pStringA, rtl_uString *pStringB)
+static bool compareEqual(rtl_uString *pStringA, rtl_uString *pStringB)
 {
     if (pStringA == pStringB)
         return true;
+
     if (pStringA->length != pStringB->length)
         return false;
+
     return !rtl_ustr_compare_WithLength( pStringA->buffer, pStringA->length,
                                          pStringB->buffer, pStringB->length);
 }
 
-rtl_uString *
-rtl_str_hash_intern (rtl_uString       *pString,
-                     int                can_return)
+rtl_uString * rtl_str_hash_intern (
+                rtl_uString *pString,
+                int         can_return)
 {
-    sal_uInt32  nHash = hashString (pString);
-    sal_uInt32  n;
+    sal_uInt32 nHash = hashString(pString);
+    sal_uInt32 n;
     rtl_uString *pHashStr;
 
     StringHashTable *pHash = getHashTable();
 
     // Should we resize ?
     if (pHash->nEntries >= pHash->nSize/2)
-        rtl_str_hash_resize (getNextSize(pHash->nSize));
+        rtl_str_hash_resize(getNextSize(pHash->nSize));
 
     n = nHash % pHash->nSize;
-    while ((pHashStr = pHash->pData[n]) != nullptr) {
-        if (compareEqual (pHashStr, pString))
+    while ((pHashStr = pHash->pData[n]))
+    {
+        if (compareEqual(pHashStr, pString))
         {
-            rtl_uString_acquire (pHashStr);
+            rtl_uString_acquire(pHashStr);
             return pHashStr;
         }
+
         n++;
         if (n >= pHash->nSize)
             n = 0;
@@ -176,37 +178,42 @@ rtl_str_hash_intern (rtl_uString       *pString,
         rtl_uString *pCopy = nullptr;
         rtl_uString_newFromString( &pCopy, pString );
         pString = pCopy;
+
         if (!pString)
             return nullptr;
     }
 
-    if (!SAL_STRING_IS_STATIC (pString))
+    if (!SAL_STRING_IS_STATIC(pString))
         pString->refCount |= SAL_STRING_INTERN_FLAG;
+
     pHash->pData[n] = pString;
     pHash->nEntries++;
 
     return pString;
 }
 
-void
-rtl_str_hash_remove (rtl_uString       *pString)
+void rtl_str_hash_remove(rtl_uString *pString)
 {
-    sal_uInt32   n;
-    sal_uInt32   nHash = hashString (pString);
+    sal_uInt32 n;
+    sal_uInt32 nHash = hashString(pString);
     rtl_uString *pHashStr;
 
     StringHashTable *pHash = getHashTable();
 
     n = nHash % pHash->nSize;
-    while ((pHashStr = pHash->pData[n]) != nullptr) {
-        if (compareEqual (pHashStr, pString))
+    while ((pHashStr = pHash->pData[n]))
+    {
+        if (compareEqual(pHashStr, pString))
             break;
+
         n++;
+
         if (n >= pHash->nSize)
             n = 0;
     }
-    OSL_ASSERT (pHash->pData[n] != nullptr);
-    if (pHash->pData[n] == nullptr)
+
+    OSL_ASSERT(pHash->pData[n]);
+    if (!pHash->pData[n])
         return;
 
     pHash->pData[n++] = nullptr;
@@ -215,11 +222,13 @@ rtl_str_hash_remove (rtl_uString       *pString)
     if (n >= pHash->nSize)
         n = 0;
 
-    while ((pHashStr = pHash->pData[n]) != nullptr) {
+    while ((pHashStr = pHash->pData[n]))
+    {
         pHash->pData[n] = nullptr;
         // FIXME: rather unsophisticated and N^2 in chain-length, but robust.
-        rtl_str_hash_insert_nonequal (pHash, pHashStr);
+        rtl_str_hash_insert_nonequal(pHash, pHashStr);
         n++;
+
         if (n >= pHash->nSize)
             n = 0;
     }
