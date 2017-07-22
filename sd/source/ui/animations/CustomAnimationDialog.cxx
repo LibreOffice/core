@@ -68,7 +68,6 @@
 #include <svx/dialogs.hrc>
 #include "sdresid.hxx"
 
-#include "strings.hrc"
 #include "CustomAnimationDialog.hxx"
 #include "CustomAnimationPane.hxx"
 #include "STLPropertySet.hxx"

@@ -59,7 +59,6 @@
 #include "workwin.hxx"
 #include <sfx2/fcontnr.hxx>
 #include "sfx2/strings.hrc"
-#include "sfx2/strings.hrc"
 #include <sfx2/templdlg.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msgpool.hxx>

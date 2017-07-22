@@ -31,7 +31,6 @@
 #include "docsh.hxx"
 #include "strings.hrc"
 #include "globals.hrc"
-#include "strings.hrc"
 #include "wgrfsh.hxx"
 
 #include <sfx2/request.hxx>

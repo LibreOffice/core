@@ -38,7 +38,6 @@
 #include <strings.hrc>
 
 // -> #111827#
-#include <strings.hrc>
 #include <swundo.hxx>
 #include <SwRewriter.hxx>
 // <- #111827#

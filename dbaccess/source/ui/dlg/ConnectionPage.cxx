@@ -40,7 +40,6 @@
 #include <comphelper/types.hxx>
 #include <vcl/stdtext.hxx>
 #include "sqlmessage.hxx"
-#include "core_resource.hxx"
 #include "odbcconfig.hxx"
 #include "dsselect.hxx"
 #include <svl/filenotation.hxx>

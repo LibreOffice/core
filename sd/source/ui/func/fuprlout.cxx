@@ -37,7 +37,6 @@
 #include "View.hxx"
 #include "strings.hrc"
 #include "glob.hxx"
-#include "strings.hrc"
 #include "strmname.h"
 #include "app.hrc"
 #include "DrawDocShell.hxx"

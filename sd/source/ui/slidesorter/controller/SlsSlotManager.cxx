@@ -61,7 +61,6 @@
 #include "sdpage.hxx"
 #include "sdxfer.hxx"
 #include "helpids.h"
-#include "strings.hrc"
 #include "unmodpg.hxx"
 #include "DrawViewShell.hxx"
 #include "sdabstdlg.hxx"

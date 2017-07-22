@@ -24,7 +24,6 @@
 #include "strings.hxx"
 #include "stringconstants.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hxx"
 #include "sqlmessage.hxx"
 #include "uiservices.hxx"
 #include "WCopyTable.hxx"

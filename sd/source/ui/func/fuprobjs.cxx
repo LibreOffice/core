@@ -27,7 +27,6 @@
 #include "app.hrc"
 
 #include "strings.hrc"
-#include "strings.hrc"
 #include "strings.hxx"
 
 #include "sdresid.hxx"

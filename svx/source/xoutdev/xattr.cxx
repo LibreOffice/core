@@ -45,7 +45,6 @@
 #include <tools/bigint.hxx>
 #include <svl/itemset.hxx>
 #include <svx/strings.hrc>
-#include "svx/strings.hrc"
 #include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>

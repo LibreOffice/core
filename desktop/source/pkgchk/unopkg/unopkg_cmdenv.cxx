@@ -40,8 +40,6 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
 #include <stdio.h>
-#include "strings.hrc"
-#include "dp_shared.hxx"
 #include "dp_version.hxx"
 
 using namespace ::com::sun::star;

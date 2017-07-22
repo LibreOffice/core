@@ -42,7 +42,6 @@
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
 #include "strings.hrc"
-#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "sdresid.hxx"
 #include "EventMultiplexer.hxx"

@@ -27,7 +27,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include "RptPage.hxx"
-#include "strings.hxx"
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 
 #include <strings.hrc>

@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
-#include "core_resource.hxx"
 #include "stringconstants.hxx"
 #include <functional>
 

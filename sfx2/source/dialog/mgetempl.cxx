@@ -39,7 +39,6 @@
 #include "templdgi.hxx"
 #include "sfx2/strings.hrc"
 
-#include <svl/style.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 

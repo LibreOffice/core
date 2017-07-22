@@ -21,7 +21,6 @@
 #include "strings.hxx"
 #include "stringconstants.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hxx"
 #include "sqlmessage.hxx"
 #include "UITools.hxx"
 #include "WColumnSelect.hxx"

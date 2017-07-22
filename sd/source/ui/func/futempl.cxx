@@ -63,7 +63,6 @@
 #include <svx/xfillit.hxx>
 #include "sdresid.hxx"
 #include "OutlineViewShell.hxx"
-#include "strings.hrc"
 #include "helpids.h"
 #include "sdabstdlg.hxx"
 #include <memory>

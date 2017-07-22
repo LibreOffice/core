@@ -36,7 +36,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include "UITools.hxx"
-#include "core_resource.hxx"
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::dbaui;

@@ -51,7 +51,6 @@
 #include "fusumry.hxx"
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 #include "sdresid.hxx"
 #include "sdxfer.hxx"
 #include "sdmod.hxx"

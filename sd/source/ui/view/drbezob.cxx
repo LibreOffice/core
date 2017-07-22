@@ -35,7 +35,6 @@
 
 
 #include "strings.hrc"
-#include "strings.hrc"
 
 #include "DrawDocShell.hxx"
 #include "ViewShell.hxx"

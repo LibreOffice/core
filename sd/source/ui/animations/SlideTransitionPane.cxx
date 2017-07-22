@@ -20,7 +20,6 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
 #include "SlideTransitionPane.hxx"
-#include "strings.hrc"
 #include "createslidetransitionpanel.hxx"
 
 #include "TransitionPreset.hxx"

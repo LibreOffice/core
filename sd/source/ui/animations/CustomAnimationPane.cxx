@@ -41,7 +41,6 @@
 #include "STLPropertySet.hxx"
 #include "CustomAnimationPane.hxx"
 #include "CustomAnimationDialog.hxx"
-#include "strings.hrc"
 #include "CustomAnimationList.hxx"
 #include "createcustomanimationpanel.hxx"
 #include <vcl/lstbox.hxx>

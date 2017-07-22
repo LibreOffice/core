@@ -107,13 +107,8 @@
 #include <listsh.hxx>
 #include <cmdid.h>
 #include <strings.hrc>
-#include <strings.hrc>
-#include <strings.hrc>
 #include <swerror.h>
 #include <globals.hrc>
-#include <strings.hrc>
-#include <strings.hrc>
-#include <strings.hrc>
 #include <app.hrc>
 #include <fmtclds.hxx>
 #include <helpids.h>

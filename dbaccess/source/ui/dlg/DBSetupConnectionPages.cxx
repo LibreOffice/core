@@ -35,9 +35,11 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
+
 #if HAVE_FEATURE_JAVA
-#include <jvmaccess/virtualmachine.hxx>
+    #include <jvmaccess/virtualmachine.hxx>
 #endif
+
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
 #include "dbadmin.hxx"
@@ -52,7 +54,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include "finteraction.hxx"
-#include "core_resource.hxx"
 #include <unotools/pathoptions.hxx>
 #include <svtools/roadmapwizard.hxx>
 #include "TextConnectionHelper.hxx"

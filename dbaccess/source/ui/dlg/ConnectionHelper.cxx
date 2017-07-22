@@ -31,7 +31,6 @@
 #include <svl/intitem.hxx>
 #include "dsitems.hxx"
 #include "helpids.h"
-#include "core_resource.hxx"
 #include <osl/process.h>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>

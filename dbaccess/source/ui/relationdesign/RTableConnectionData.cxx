@@ -31,7 +31,6 @@
 #include "strings.hxx"
 #include "UITools.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hxx"
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 

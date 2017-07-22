@@ -26,7 +26,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include "core_resource.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XChild.hpp>

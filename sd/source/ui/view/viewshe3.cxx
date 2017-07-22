@@ -33,7 +33,6 @@
 #include "app.hrc"
 #include "strings.hrc"
 
-#include "strings.hrc"
 #include "sdabstdlg.hxx"
 
 #include "fupoor.hxx"
