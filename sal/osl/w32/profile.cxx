@@ -69,10 +69,6 @@ static inline void copy_ustr_n( void *dest, const void *source, size_t length ) 
 
 /*#define DEBUG_OSL_PROFILE 1*/
 
-/*****************************************************************************/
-/* Data Type Definition */
-/*****************************************************************************/
-
 typedef FILETIME osl_TStamp;
 
 enum osl_TLockMode
@@ -124,10 +120,6 @@ struct osl_TProfileImpl
     osl_TProfileSection* m_Sections;
 };
 
-/*****************************************************************************/
-/* Static Module Function Declarations */
-/*****************************************************************************/
-
 static osl_TFile*           openFileImpl(rtl_uString * strFileName, oslProfileOption ProfileFlags  );
 static osl_TStamp           closeFileImpl(osl_TFile* pFile);
 static bool                 lockFile(const osl_TFile* pFile, osl_TLockMode eMode);
@@ -162,10 +154,6 @@ static bool osl_ProfileSwapProfileNames(osl_TProfileImpl*);
 static rtl_uString* osl_ProfileGenerateExtension(rtl_uString* ustrFileName, rtl_uString* ustrExtension);
 
 static bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName, rtl_uString** strProfileName);
-
-/*****************************************************************************/
-/* Exported Module Functions */
-/*****************************************************************************/
 
 oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flags)
 {
@@ -595,11 +583,9 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     pProfile = acquireProfile(Profile, true);
 
     if (pProfile == nullptr)
-    {
         return false;
-    }
 
-    if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
+    if (!(pProfile->m_Flags & osl_Profile_SYSTEM))
     {
         osl_TProfileSection* pSec;
         if (((pSec = findEntry(pProfile, pszSection, pszEntry, &NoEntry)) != nullptr) &&
@@ -636,16 +622,14 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
 sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_Char *pszSection,
                                        sal_Char* pszBuffer, sal_uInt32 MaxLen)
 {
-    sal_uInt32    i, n = 0;
-    sal_uInt32    NoEntry;
-    osl_TProfileImpl*    pProfile = nullptr;
+    sal_uInt32 i, n = 0;
+    sal_uInt32 NoEntry;
+    osl_TProfileImpl* pProfile = nullptr;
 
     pProfile = acquireProfile(Profile, false);
 
     if (pProfile == nullptr)
-    {
         return 0;
-    }
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
@@ -664,7 +648,9 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
                         pszBuffer[n++] = '\0';
                     }
                     else
+                    {
                         break;
+                    }
 
                 }
 
@@ -673,13 +659,17 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
             else
             {
                 for (i = 0; i < pSec->m_NoEntries; i++)
+                {
                     n += pSec->m_Entries[i].m_Len + 1;
+                }
 
                 n += 1;
             }
         }
         else
+        {
             n = 0;
+        }
     }
     else
     {
@@ -959,10 +949,6 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
     return n;
 }
 
-/*****************************************************************************/
-/* Static Module Functions */
-/*****************************************************************************/
-
 static osl_TStamp getFileStamp(osl_TFile* pFile)
 {
     FILETIME FileTime;
@@ -1025,8 +1011,8 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
                                           FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                                           OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
-        /* mfe: argghh!!! do not check if the file could be openend */
-        /*      default mode expects it that way!!!                 */
+        /* mfe: argghh!!! do not check if the file could be opened */
+        /*      default mode expects it that way!!!                */
     }
     else
     {
@@ -1725,15 +1711,11 @@ static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
     ustrTmpName=osl_ProfileGenerateExtension(pProfile->m_strFileName,ustrExtension);
     rtl_uString_release(ustrExtension);
 
-    if ( ustrTmpName == nullptr )
-    {
+    if (ustrTmpName == nullptr)
         return nullptr;
-    }
 
-    if ( ! ( pProfile->m_Flags & osl_Profile_READLOCK ) )
-    {
+    if (!(pProfile->m_Flags & osl_Profile_READLOCK))
         PFlags |= osl_Profile_WRITELOCK;
-    }
 
     /* open this file */
     pFile = openFileImpl(ustrTmpName,pProfile->m_Flags | PFlags);
