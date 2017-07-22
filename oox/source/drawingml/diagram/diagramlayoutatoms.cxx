@@ -24,6 +24,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include "oox/helper/attributelist.hxx"
+#include "oox/token/properties.hxx"
 #include "drawingml/fillproperties.hxx"
 #include "drawingml/lineproperties.hxx"
 #include "drawingml/textbody.hxx"
@@ -283,8 +284,58 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             break;
 
         case XML_tx:
+        {
+            // adjust text alignment
             // TODO: adjust text size to fit shape
+
+            TextBodyPtr pTextBody = rShape->getTextBody();
+            if (!pTextBody ||
+                pTextBody->getParagraphs().empty() ||
+                pTextBody->getParagraphs().front()->getRuns().empty())
+            {
+                break;
+            }
+
+            // text centered vertically by default
+            pTextBody->getTextProperties().meVA = css::drawing::TextVerticalAdjust_CENTER;
+            pTextBody->getTextProperties().maPropertyMap.setProperty(PROP_TextVerticalAdjust, css::drawing::TextVerticalAdjust_CENTER);
+
+            // normalize list level
+            sal_Int32 nBaseLevel = pTextBody->getParagraphs().front()->getProperties().getLevel();
+            for (auto & aParagraph : pTextBody->getParagraphs())
+            {
+                if (aParagraph->getProperties().getLevel() < nBaseLevel)
+                    nBaseLevel = aParagraph->getProperties().getLevel();
+            }
+
+            ParamMap::const_iterator aBulletLvl = maMap.find(XML_stBulletLvl);
+            if (aBulletLvl != maMap.end())
+                nBaseLevel -= aBulletLvl->second;
+
+            for (auto & aParagraph : pTextBody->getParagraphs())
+            {
+                sal_Int32 nLevel = aParagraph->getProperties().getLevel();
+                aParagraph->getProperties().setLevel(nLevel - nBaseLevel);
+            }
+
+            // explicit alignment
+            ParamMap::const_iterator aDir = maMap.find(XML_parTxLTRAlign);
+            // TODO: XML_parTxRTLAlign
+            if (aDir != maMap.end())
+            {
+                css::style::ParagraphAdjust aAlignment = GetParaAdjust(aDir->second);
+                for (auto & aParagraph : pTextBody->getParagraphs())
+                    aParagraph->getProperties().setParaAdjust(aAlignment);
+            }
+            else if (std::all_of(pTextBody->getParagraphs().begin(), pTextBody->getParagraphs().end(),
+                [](const std::shared_ptr<TextParagraph>& aParagraph) { return aParagraph->getProperties().getLevel() == 0; }))
+            {
+                // if not list use default alignment - centered
+                for (auto & aParagraph : pTextBody->getParagraphs())
+                    aParagraph->getProperties().setParaAdjust(css::style::ParagraphAdjust::ParagraphAdjust_CENTER);
+            }
             break;
+        }
 
         default:
             break;
