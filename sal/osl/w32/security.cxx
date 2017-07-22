@@ -27,10 +27,6 @@
 #include <sal/macros.h>
 #include "secimpl.hxx"
 
-/*****************************************************************************/
-/* Data Type Definition */
-/*****************************************************************************/
-
 /* Data for use in (un)LoadProfile Functions */
 /* Declarations based on USERENV.H for Windows 2000 Beta 2 */
 #define PI_NOUI         0x00000001   // Prevents displaying of messages
@@ -69,17 +65,9 @@ typedef BOOL (STDMETHODCALLTYPE FAR * LPFNGETUSERPROFILEDIR) (
 
 #define TOKEN_DUP_QUERY (TOKEN_QUERY|TOKEN_DUPLICATE)
 
-/*****************************************************************************/
-/* Static Module Function Declarations */
-/*****************************************************************************/
-
 static bool GetSpecialFolder(rtl_uString **strPath,int nFolder);
 static BOOL Privilege(LPTSTR pszPrivilege, BOOL bEnable);
 static bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName, bool bIncludeDomain);
-
-/*****************************************************************************/
-/* Exported Module Functions */
-/*****************************************************************************/
 
 oslSecurity SAL_CALL osl_getCurrentSecurity(void)
 {
@@ -129,7 +117,9 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
         ret = osl_Security_E_None;
     }
     else
+    {
         ret = osl_Security_E_UserUnknown;
+    }
 
     if (strDomain)
         free(strDomain);
@@ -189,7 +179,9 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
         ret = osl_Security_E_None;
     }
     else
+    {
         ret = osl_Security_E_UserUnknown;
+    }
 
     free(remoteName);
     free(userName);
@@ -207,7 +199,6 @@ static BOOL WINAPI CheckTokenMembership_Stub( HANDLE TokenHandle, PSID SidToChec
     if ( !hModule )
     {
         /* SAL is always linked against ADVAPI32 so we can rely on that it is already mapped */
-
         hModule = GetModuleHandleA( "ADVAPI32.DLL" );
 
         pCheckTokenMembership = reinterpret_cast<CheckTokenMembership_PROC>(GetProcAddress( hModule, "CheckTokenMembership" ));
@@ -270,7 +261,9 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
         return bSuccess;
     }
     else
+    {
         return false;
+    }
 }
 
 void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
@@ -318,7 +311,9 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                                            pInfoBuffer, nInfoBuffer, &nInfoBuffer))
             {
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+                {
                     pInfoBuffer = static_cast<UCHAR *>(realloc(pInfoBuffer, nInfoBuffer));
+                }
                 else
                 {
                     free(pInfoBuffer);
@@ -391,15 +386,14 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
         }
         else
         {
-            DWORD needed=0;
-            sal_Unicode     *Ident;
+            DWORD needed = 0;
+            sal_Unicode *Ident;
 
             WNetGetUserA(nullptr, nullptr, &needed);
             if (needed < 16)
-            {
                 needed = 16;
-            }
-            Ident=static_cast<sal_Unicode *>(malloc(needed*sizeof(sal_Unicode)));
+
+            Ident = static_cast<sal_Unicode *>(malloc(needed*sizeof(sal_Unicode)));
 
             if (WNetGetUserW(nullptr, SAL_W(Ident), &needed) != NO_ERROR)
             {
@@ -458,7 +452,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
 
 sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDirectory)
 {
-    bool    bSuccess = false;
+    bool bSuccess = false;
 
     if (Security != nullptr)
     {
@@ -547,13 +541,13 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
             if (fLoadUserProfile && fUnloadUserProfile)
             {
-                rtl_uString     *buffer = nullptr;
-                PROFILEINFOW    pi;
+                rtl_uString *buffer = nullptr;
+                PROFILEINFOW pi;
 
                 getUserNameImpl(Security, &buffer, false);
 
-                ZeroMemory( &pi, sizeof(pi) );
-                  pi.dwSize = sizeof(pi);
+                ZeroMemory(&pi, sizeof(pi));
+                pi.dwSize = sizeof(pi);
                 pi.lpUserName = SAL_W(rtl_uString_getStr(buffer));
                 pi.dwFlags = PI_NOUI;
 
@@ -620,15 +614,9 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
         static_cast<oslSecurityImpl*>(Security)->m_hProfile = nullptr;
 
         if (hAccessToken && (hAccessToken != static_cast<oslSecurityImpl*>(Security)->m_hToken))
-        {
             CloseHandle(hAccessToken);
-        }
     }
 }
-
-/*****************************************************************************/
-/* Static Module Functions */
-/*****************************************************************************/
 
 static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 {
@@ -671,11 +659,11 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 
             if (pSHGetSpecialFolderLocation && (pSHGetPathFromIDListA || pSHGetPathFromIDListW ) && pSHGetMalloc )
             {
-                   LPITEMIDLIST pidl;
+                LPITEMIDLIST pidl;
                 LPMALLOC pMalloc;
-                   HRESULT  hr;
+                HRESULT  hr;
 
-                   hr = pSHGetSpecialFolderLocation(GetActiveWindow(), nFolder, &pidl);
+                hr = pSHGetSpecialFolderLocation(GetActiveWindow(), nFolder, &pidl);
 
                 /* Get SHGetSpecialFolderLocation fails if directory does not exists. */
                 /* If it fails we try to create the directory and redo the call */
@@ -720,14 +708,14 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                 if (SUCCEEDED(hr))
                 {
                     if (pSHGetPathFromIDListW && pSHGetPathFromIDListW(pidl, SAL_W(PathW)))
-                       {
+                    {
                         /* if directory does not exist, create it */
                         if (_waccess(SAL_W(PathW), 0) < 0)
                             CreateDirectoryW(SAL_W(PathW), nullptr);
 
                         rtl_uString_newFromStr( strPath, PathW);
                         bRet = true;
-                       }
+                    }
                     else if (pSHGetPathFromIDListA && pSHGetPathFromIDListA(pidl, PathA))
                     {
                         /* if directory does not exist, create it */
@@ -738,11 +726,11 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                         OSL_ASSERT(*strPath != nullptr);
                         bRet = true;
                     }
-                   }
+                }
 
-                   if (SUCCEEDED(pSHGetMalloc(&pMalloc)))
+                if (SUCCEEDED(pSHGetMalloc(&pMalloc)))
                 {
-                       pMalloc->Free(pidl);
+                    pMalloc->Free(pidl);
                     pMalloc->Release();
                 }
             }
@@ -759,15 +747,11 @@ static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
     HANDLE           hToken;
     TOKEN_PRIVILEGES tp;
 
-    /*
-        obtain the processes token
-    */
+    // obtain the processes token
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_DUP_QUERY, &hToken))
         return FALSE;
 
-    /*
-        get the luid
-    */
+    // get the luid
     if (!LookupPrivilegeValue(nullptr, strPrivilege, &tp.Privileges[0].Luid))
         return FALSE;
 
@@ -778,9 +762,7 @@ static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
     else
         tp.Privileges[0].Attributes = 0;
 
-    /*
-        enable or disable the privilege
-    */
+    // enable or disable the privilege
     if (!AdjustTokenPrivileges(hToken, FALSE, &tp, 0, nullptr, nullptr))
         return FALSE;
 
@@ -810,7 +792,9 @@ static bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName
                                            pInfoBuffer, nInfoBuffer, &nInfoBuffer))
             {
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
+                {
                     pInfoBuffer = static_cast<UCHAR *>(realloc(pInfoBuffer, nInfoBuffer));
+                }
                 else
                 {
                     free(pInfoBuffer);
@@ -845,7 +829,8 @@ static bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName
                     {
                         wcscpy(SAL_W(Name), SAL_W(UserName));
                     }
-                   }
+                }
+
                 rtl_uString_newFromStr( strName, Name);
 
                 free(pInfoBuffer);
@@ -856,7 +841,7 @@ static bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName
         else
         {
             DWORD needed=0;
-            sal_Unicode         *pNameW=nullptr;
+            sal_Unicode *pNameW=nullptr;
 
             WNetGetUserW(nullptr, nullptr, &needed);
             pNameW = static_cast<sal_Unicode *>(malloc (needed*sizeof(sal_Unicode)));
