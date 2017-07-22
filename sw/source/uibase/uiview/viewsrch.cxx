@@ -63,7 +63,6 @@
 
 #include <strings.hrc>
 #include <SwRewriter.hxx>
-#include <strings.hrc>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 

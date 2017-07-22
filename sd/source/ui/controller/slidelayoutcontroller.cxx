@@ -42,7 +42,6 @@
 #include "app.hrc"
 #include "facreg.hxx"
 #include "strings.hrc"
-#include "strings.hrc"
 
 #include "bitmaps.hlst"
 #include "sdresid.hxx"

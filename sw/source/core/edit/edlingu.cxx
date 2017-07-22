@@ -49,7 +49,6 @@
 #include <viscrs.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <mdiexp.hxx>
-#include <strings.hrc>
 #include <cntfrm.hxx>
 #include <splargs.hxx>
 #include <redline.hxx>

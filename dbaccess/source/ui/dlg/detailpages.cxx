@@ -27,7 +27,6 @@
 #include "dsitems.hxx"
 #include "dbfindex.hxx"
 #include "dsnItem.hxx"
-#include "core_resource.hxx"
 
 #include "helpids.h"
 #include "dbu_dlg.hxx"

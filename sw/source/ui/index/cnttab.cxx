@@ -66,7 +66,6 @@
 
 #include <cmdid.h>
 #include <helpids.h>
-#include <strings.hrc>
 #include <globals.hrc>
 #include <cnttab.hrc>
 #include <SwStyleNameMapper.hxx>

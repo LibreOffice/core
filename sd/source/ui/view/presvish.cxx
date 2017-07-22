@@ -39,7 +39,6 @@
 #include "drawview.hxx"
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 #include "ViewShellBase.hxx"
 #include "FactoryIds.hxx"
 

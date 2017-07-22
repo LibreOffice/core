@@ -63,7 +63,6 @@
 #include "optsitem.hxx"
 
 #include "strings.hrc"
-#include "strings.hrc"
 
 #include "Outliner.hxx"
 #include "Window.hxx"

@@ -60,7 +60,6 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <strings.hrc>
-#include <strings.hrc>
 #include <hhcwrp.hxx>
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

@@ -41,8 +41,6 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
-
 
 #include "sdmod.hxx"
 #include "pres.hxx"

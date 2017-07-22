@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <sfx2/strings.hrc>
-#include "sfx2/strings.hrc"
 #include "bitmaps.hlst"
 
 #define MNI_OPEN               1

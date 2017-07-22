@@ -43,7 +43,6 @@
 
 #include "app.hrc"
 #include "helpids.h"
-#include "strings.hrc"
 
 #include "OutlineView.hxx"
 #include "Client.hxx"

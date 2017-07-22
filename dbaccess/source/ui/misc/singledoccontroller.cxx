@@ -24,7 +24,6 @@
 #include "browserids.hxx"
 #include "strings.hrc"
 #include "stringconstants.hxx"
-#include "core_resource.hxx"
 
 #include <svl/undo.hxx>
 

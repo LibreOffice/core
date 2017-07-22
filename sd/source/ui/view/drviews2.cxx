@@ -113,7 +113,6 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 
 #include "framework/FrameworkHelper.hxx"
 

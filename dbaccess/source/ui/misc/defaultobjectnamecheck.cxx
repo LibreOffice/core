@@ -22,8 +22,6 @@
 
 #include "strings.hrc"
 
-#include "core_resource.hxx"
-
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>

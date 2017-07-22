@@ -26,7 +26,6 @@
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "sdattr.hxx"
-#include "strings.hrc"
 #include "sdmod.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"

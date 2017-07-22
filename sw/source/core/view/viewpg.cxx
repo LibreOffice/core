@@ -37,7 +37,6 @@
 #include <fntcache.hxx>
 
 #include <strings.hrc>
-#include <strings.hrc>
 
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>

@@ -44,7 +44,6 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/docfile.hxx>
 #include "sfxtypes.hxx"
-#include "sfx2/strings.hrc"
 #include <sfx2/fcontnr.hxx>
 #include "nochaos.hxx"
 #include <sfx2/doctempl.hxx>

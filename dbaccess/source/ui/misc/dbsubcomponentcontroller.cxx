@@ -24,7 +24,6 @@
 #include "strings.hrc"
 #include "strings.hxx"
 #include "stringconstants.hxx"
-#include "core_resource.hxx"
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>

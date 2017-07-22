@@ -39,7 +39,6 @@
 #include <vcl/svapp.hxx>
 #include "callbacks.hxx"
 #include <dbaccess/IController.hxx>
-#include "core_resource.hxx"
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
 #include <algorithm>

@@ -61,7 +61,6 @@
 #include <svtools/soerr.hxx>
 #include <sfx2/ipclient.hxx>
 #include <svx/svdoashp.hxx>
-#include "strings.hrc"
 
 #include <config_features.h>
 

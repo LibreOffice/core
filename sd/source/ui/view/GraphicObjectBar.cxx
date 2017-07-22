@@ -38,7 +38,6 @@
 #include "app.hrc"
 
 #include "strings.hrc"
-#include "strings.hrc"
 #include "DrawDocShell.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"

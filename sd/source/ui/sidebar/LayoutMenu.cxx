@@ -29,7 +29,6 @@
 
 #include "sdpage.hxx"
 #include "sdresid.hxx"
-#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "tools/SlotStateListener.hxx"
 #include "DrawController.hxx"

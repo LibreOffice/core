@@ -33,7 +33,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include "core_resource.hxx"
 #include "stringconstants.hxx"
 #include "strings.hrc"
 #include "strings.hxx"

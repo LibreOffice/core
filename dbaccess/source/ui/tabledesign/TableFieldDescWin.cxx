@@ -26,7 +26,6 @@
 #include <vcl/settings.hxx>
 #include "helpids.h"
 #include "core_resource.hxx"
-#include "core_resource.hxx"
 
 #define STANDARD_MARGIN                  6
 #define DETAILS_HEADER_HEIGHT           25

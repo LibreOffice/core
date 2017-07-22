@@ -61,7 +61,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <algorithm>
 #include "EventMultiplexer.hxx"
-#include "strings.hrc"
 #include <vcl/salbtype.hxx>
 #include <vcl/EnumContext.hxx>
 

@@ -58,7 +58,6 @@
 #include "View.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "strings.hrc"
 
 #include "fupoor.hxx"
 #include "fusearch.hxx"

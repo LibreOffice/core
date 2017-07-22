@@ -52,7 +52,6 @@
 #include "QEnumTypes.hxx"
 #include "WCPage.hxx"
 #include <rtl/tencinfo.h>
-#include "core_resource.hxx"
 #include "UITools.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

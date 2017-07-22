@@ -49,7 +49,6 @@
 #include "navigatr.hxx"
 #include "anminfo.hxx"
 #include "strings.hrc"
-#include "strings.hrc"
 #include "sdxfer.hxx"
 #include "sdresid.hxx"
 #include "sdmod.hxx"

@@ -26,7 +26,6 @@
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <tools/debug.hxx>
-#include "core_resource.hxx"
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>

@@ -85,7 +85,6 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/request.hxx>
 #include "sfx2/strings.hrc"
-#include "sfx2/strings.hrc"
 #include "appdata.hxx"
 #include <sfx2/sfxsids.hrc>
 #include <basic/basmgr.hxx>

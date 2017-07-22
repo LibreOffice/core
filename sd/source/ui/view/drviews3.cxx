@@ -53,8 +53,6 @@
 
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
-
 
 #include "sdundogr.hxx"
 #include "undopage.hxx"

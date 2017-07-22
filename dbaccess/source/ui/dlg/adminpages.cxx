@@ -28,7 +28,6 @@
 #include "stringconstants.hxx"
 #include "dsitems.hxx"
 #include "dsselect.hxx"
-#include "core_resource.hxx"
 #include "odbcconfig.hxx"
 #include "optionalboolitem.hxx"
 #include "sqlmessage.hxx"
