@@ -34,9 +34,6 @@
     as a WIN32 HANDLE (which is also a 32-bit value)
 */
 
-/*****************************************************************************/
-/* osl_loadModule */
-/*****************************************************************************/
 oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldMode*/ )
 {
     HMODULE h;
@@ -61,11 +58,11 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
         h = LoadLibraryExW(reinterpret_cast<LPCWSTR>(Module->buffer), nullptr,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
 
-    //In case of long path names (\\?\c:\...) try to shorten the filename.
-    //LoadLibrary cannot handle file names which exceed 260 letters.
-    //In case the path is to long, the function will fail. However, the error
-    //code can be different. For example, it returned  ERROR_FILENAME_EXCED_RANGE
-    //on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
+    // In case of long path names (\\?\c:\...) try to shorten the filename.
+    // LoadLibrary cannot handle file names which exceed 260 letters.
+    // In case the path is to long, the function will fail. However, the error
+    // code can be different. For example, it returned  ERROR_FILENAME_EXCED_RANGE
+    // on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
     if (h == nullptr && Module->length > 260)
     {
         std::vector<WCHAR> vec(Module->length + 1);
@@ -90,9 +87,6 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     return ret;
 }
 
-/*****************************************************************************/
-/* osl_loadModuleAscii */
-/*****************************************************************************/
 oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 )
 {
     HMODULE h;
@@ -119,10 +113,6 @@ oslModule osl_loadModuleRelativeAscii(
     return osl_loadModuleAscii(relativePath, mode); //TODO: FIXME
 }
 
-/*****************************************************************************/
-/* osl_getModuleHandle */
-/*****************************************************************************/
-
 sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
@@ -137,17 +127,11 @@ osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
     return false;
 }
 
-/*****************************************************************************/
-/* osl_unloadModule */
-/*****************************************************************************/
 void SAL_CALL osl_unloadModule(oslModule Module)
 {
     FreeLibrary(static_cast<HMODULE>(Module));
 }
 
-/*****************************************************************************/
-/* osl_getSymbol */
-/*****************************************************************************/
 void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
 {
     /* casting from a function pointer to a data pointer is invalid
@@ -164,9 +148,6 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
 #endif
 }
 
-/*****************************************************************************/
-/* osl_getFunctionSymbol */
-/*****************************************************************************/
 oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString *strSymbolName )
 {
     rtl_String *symbolName = nullptr;
@@ -189,9 +170,6 @@ oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString
     return address;
 }
 
-/*****************************************************************************/
-/* osl_getAsciiFunctionSymbol */
-/*****************************************************************************/
 oslGenericFunction SAL_CALL
 osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 {
@@ -202,10 +180,6 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 
     return fncAddr;
 }
-
-/*****************************************************************************/
-/* osl_addressGetModuleURL */
-/*****************************************************************************/
 
 /*****************************************************************************/
 /* Implementation for Windows 95, 98 and Me */
@@ -410,19 +384,12 @@ static bool SAL_CALL osl_addressGetModuleURL_NT_( void *pv, rtl_uString **pustrU
     return bSuccess;
 }
 
-/*****************************************************************************/
-/* Dispatcher for osl_osl_addressGetModuleURL */
-/*****************************************************************************/
-
 sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
 {
     /* Use ..._NT first because ..._NT4 is much slower */
     return osl_addressGetModuleURL_NT_( pv, pustrURL ) || osl_addressGetModuleURL_NT4_( pv, pustrURL );
 }
 
-/*****************************************************************************/
-/* osl_getModuleURLFromFunctionAddress */
-/*****************************************************************************/
 sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, rtl_uString ** ppLibraryUrl )
 {
     /* casting a function pointer to a data pointer (void*) is
