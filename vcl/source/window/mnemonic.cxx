@@ -253,14 +253,14 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
         // Append Ascii Mnemonic
         for ( c = MNEMONIC_RANGE_2_START; c <= MNEMONIC_RANGE_2_END; c++ )
         {
-            nMnemonicIndex = ImplGetMnemonicIndex(sal_Unicode(rtl::toAsciiUpperCase(c)));
+            nMnemonicIndex = ImplGetMnemonicIndex(c);
             if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
             {
                 if ( maMnemonics[nMnemonicIndex] )
                 {
                     maMnemonics[nMnemonicIndex] = 0;
                     OUString aStr = OUStringBuffer().
-                        append('(').append(MNEMONIC_CHAR).append(c).
+                        append('(').append(MNEMONIC_CHAR).append(sal_Unicode(rtl::toAsciiUpperCase(c))).
                         append(')').makeStringAndClear();
                     nIndex = rKey.getLength();
                     if( nIndex >= 2 )

@@ -32,9 +32,24 @@ void VclMnemonicTest::testMnemonic()
 {
     MnemonicGenerator aGenerator;
 
-    const sal_Unicode TEST[] = { 0x00DF, 'a' };
-    OUString sResult = aGenerator.CreateMnemonic(OUString(TEST, SAL_N_ELEMENTS(TEST)));
-    CPPUNIT_ASSERT_EQUAL(u'~', sResult[1]);
+    {
+        const sal_Unicode TEST[] = { 0x00DF, 'a' };
+        OUString sResult = aGenerator.CreateMnemonic(OUString(TEST, SAL_N_ELEMENTS(TEST)));
+        CPPUNIT_ASSERT_EQUAL(u'~', sResult[1]);
+    }
+
+    {
+        const sal_Unicode TEST[] = { 0x4E00, 'b' };
+        OUString sResult = aGenerator.CreateMnemonic(OUString(TEST, SAL_N_ELEMENTS(TEST)));
+        CPPUNIT_ASSERT_EQUAL(u'~', sResult[1]);
+    }
+
+    {
+        const sal_Unicode TEST[] = { 0x4E00 };
+        OUString sResult = aGenerator.CreateMnemonic(OUString(TEST, SAL_N_ELEMENTS(TEST)));
+        CPPUNIT_ASSERT_EQUAL(OUString("(~C)"), sResult.copy(sResult.getLength() - 4));
+    }
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclMnemonicTest);
