@@ -63,10 +63,9 @@
 #endif /* PRIu64 */
 
 /** highbit(): log2() + 1
- *  (complexity O(1))
- */
-static inline unsigned int
-highbit(sal_Size n)
+    (complexity O(1))
+*/
+static inline unsigned int highbit(sal_Size n)
 {
   unsigned int k = 1;
 
@@ -105,16 +104,16 @@ highbit(sal_Size n)
   return k;
 }
 
-/** lowbit(): find first bit set
- *  (complexity O(1))
- */
-static inline unsigned int
-lowbit(sal_Size n)
+/** find first bit set
+    (complexity O(1))
+*/
+static inline unsigned int lowbit(sal_Size n)
 {
   unsigned int k = 1;
 
   if (n == 0)
     return 0;
+
 #if SAL_TYPES_SIZEOFLONG == 8
   if (!(n & 0xffffffff))
   {
@@ -122,35 +121,41 @@ lowbit(sal_Size n)
     n >>= 32;
   }
 #endif
+
   if (!(n & 0xffff))
   {
     k |= 16;
     n >>= 16;
   }
+
   if (!(n & 0xff))
   {
     k |= 8;
     n >>= 8;
   }
+
   if (!(n & 0xf))
   {
     k |= 4;
     n >>= 4;
   }
+
   if (!(n & 0x3))
   {
     k |= 2;
     n >>= 2;
   }
+
   if (!(n & 0x1))
     k++;
+
   return k;
 }
 
 /** Queue manipulation macros
- *  (doubly linked circular list)
- *  (complexity O(1))
- */
+    (doubly linked circular list)
+    (complexity O(1))
+*/
 #define QUEUE_STARTED_NAMED(entry, name) \
   (((entry)->m_##name##next == (entry)) && ((entry)->m_##name##prev == (entry)))
 
@@ -183,9 +188,6 @@ lowbit(sal_Size n)
   (entry)->m_##name##prev->m_##name##next = (entry); \
 }
 
-/** rtl_memory_lock_type
- *  (platform dependent)
- */
 #if defined(SAL_UNX)
 
 #include <unistd.h>
@@ -223,8 +225,8 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #endif /* SAL_UNX | SAL_W32 */
 
 /** Cache creation flags.
- *  @internal
- */
+    @internal
+*/
 #define RTL_CACHE_FLAG_NOMAGAZINE   (1 << 13) /* w/o magazine layer */
 #define RTL_CACHE_FLAG_QUANTUMCACHE (2 << 13) /* used as arena quantum cache */
 

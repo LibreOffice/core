@@ -38,12 +38,6 @@ static void determine_alloc_mode()
     alloc_mode = (getenv("G_SLICE") == nullptr ? AllocMode::CUSTOM : AllocMode::SYSTEM);
 }
 
-/* ================================================================= *
- *
- * custom allocator internals.
- *
- * ================================================================= */
-
 static const sal_Size g_alloc_sizes[] =
 {
     /* powers of 2**(1/4) */
@@ -78,14 +72,7 @@ static rtl_cache_type * g_alloc_table[RTL_MEMORY_CACHED_LIMIT >> RTL_MEMALIGN_SH
 
 static rtl_arena_type * gp_alloc_arena = nullptr;
 
-/* ================================================================= *
- *
- * custom allocator implementation.
- *
- * ================================================================= */
-
-void *
-SAL_CALL rtl_allocateMemory_CUSTOM (sal_Size n) SAL_THROW_EXTERN_C()
+void * SAL_CALL rtl_allocateMemory_CUSTOM(sal_Size n) SAL_THROW_EXTERN_C()
 {
     void * p = nullptr;
     if (n > 0)
@@ -124,8 +111,6 @@ try_alloc:
     return p;
 }
 
-/* ================================================================= */
-
 void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
 {
     if (p != nullptr)
@@ -139,8 +124,6 @@ void SAL_CALL rtl_freeMemory_CUSTOM (void * p) SAL_THROW_EXTERN_C()
             rtl_arena_free (gp_alloc_arena, addr, size);
     }
 }
-
-/* ================================================================= */
 
 void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
@@ -172,12 +155,6 @@ void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXT
 }
 
 #endif
-
-/* ================================================================= *
- *
- * custom allocator initialization / finalization.
- *
- * ================================================================= */
 
 void rtl_memory_init()
 {
@@ -219,10 +196,7 @@ void rtl_memory_init()
         }
     }
 #endif
-    // SAL_INFO("sal.rtl", "rtl_memory_init completed");
 }
-
-/* ================================================================= */
 
 void rtl_memory_fini()
 {
@@ -250,37 +224,24 @@ void rtl_memory_fini()
         gp_alloc_arena = nullptr;
     }
 #endif
-    // SAL_INFO("sal.rtl", "rtl_memory_fini completed");
 }
 
-/* ================================================================= *
- *
- * system allocator implementation.
- *
- * ================================================================= */
-
-void * SAL_CALL rtl_allocateMemory_SYSTEM (sal_Size n)
+void * SAL_CALL rtl_allocateMemory_SYSTEM(sal_Size n)
 {
     return malloc (n);
 }
 
-/* ================================================================= */
-
-void SAL_CALL rtl_freeMemory_SYSTEM (void * p)
+void SAL_CALL rtl_freeMemory_SYSTEM(void * p)
 {
     free (p);
 }
 
-/* ================================================================= */
-
-void * SAL_CALL rtl_reallocateMemory_SYSTEM (void * p, sal_Size n)
+void * SAL_CALL rtl_reallocateMemory_SYSTEM(void * p, sal_Size n)
 {
     return realloc (p, n);
 }
 
-/* ================================================================= */
-
-void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
+void* SAL_CALL rtl_allocateMemory(sal_Size n) SAL_THROW_EXTERN_C()
 {
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
@@ -303,7 +264,7 @@ void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
 #endif
 }
 
-void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+void* SAL_CALL rtl_reallocateMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
@@ -326,7 +287,7 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 #endif
 }
 
-void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_freeMemory(void * p) SAL_THROW_EXTERN_C()
 {
 #if !defined(FORCE_SYSALLOC)
     while (true)
@@ -348,13 +309,7 @@ void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
 #endif
 }
 
-/* ================================================================= *
- *
- * rtl_(allocate|free)ZeroMemory() implementation.
- *
- * ================================================================= */
-
-void * SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
+void * SAL_CALL rtl_allocateZeroMemory(sal_Size n) SAL_THROW_EXTERN_C()
 {
     void * p = rtl_allocateMemory (n);
     if (p != nullptr)
@@ -362,9 +317,7 @@ void * SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
     return p;
 }
 
-/* ================================================================= */
-
-void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_freeZeroMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     if (p != nullptr)
     {
@@ -373,16 +326,14 @@ void SAL_CALL rtl_freeZeroMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
     }
 }
 
-void* SAL_CALL rtl_allocateAlignedMemory (sal_Size Alignment, sal_Size Bytes) SAL_THROW_EXTERN_C()
+void* SAL_CALL rtl_allocateAlignedMemory(sal_Size Alignment, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
     return osl_aligned_alloc(Alignment, Bytes);
 }
 
-void SAL_CALL rtl_freeAlignedMemory (void* Ptr) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_freeAlignedMemory(void* Ptr) SAL_THROW_EXTERN_C()
 {
     osl_aligned_free(Ptr);
 }
-
-/* ================================================================= */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

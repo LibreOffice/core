@@ -32,13 +32,7 @@
 #include <sys/time.h>
 #endif
 
-/* ================================================================= *
- *
- * cache internals.
- *
- * ================================================================= */
-
-/** g_cache_list
+/**
  *  @internal
  */
 struct rtl_cache_list_st
@@ -58,32 +52,28 @@ struct rtl_cache_list_st
 
 static rtl_cache_list_st g_cache_list;
 
-/** gp_cache_arena
- *  provided for cache_type allocations, and hash_table resizing.
- *
- *  @internal
- */
+/**
+    provided for cache_type allocations, and hash_table resizing.
+
+    @internal
+*/
 static rtl_arena_type * gp_cache_arena = nullptr;
 
-/** gp_cache_magazine_cache
- *  @internal
- */
+/**
+    @internal
+*/
 static rtl_cache_type * gp_cache_magazine_cache = nullptr;
 
-/** gp_cache_slab_cache
- *  @internal
- */
+/**
+    @internal
+*/
 static rtl_cache_type * gp_cache_slab_cache = nullptr;
 
-/** gp_cache_bufctl_cache
- *  @internal
- */
+/**
+    @internal
+*/
 static rtl_cache_type * gp_cache_bufctl_cache = nullptr;
 
-/* ================================================================= */
-
-/** RTL_CACHE_HASH_INDEX()
- */
 #define RTL_CACHE_HASH_INDEX_IMPL(a, s, q, m) \
      ((((a) + ((a) >> (s)) + ((a) >> ((s) << 1))) >> (q)) & (m))
 
@@ -93,8 +83,7 @@ static rtl_cache_type * gp_cache_bufctl_cache = nullptr;
 namespace
 {
 
-void
-rtl_cache_hash_rescale (
+void rtl_cache_hash_rescale(
     rtl_cache_type * cache,
     sal_Size         new_size
 )
@@ -116,16 +105,6 @@ rtl_cache_hash_rescale (
 
         old_table = cache->m_hash_table;
         old_size  = cache->m_hash_size;
-
-        // SAL_INFO(
-        //  "sal.rtl",
-        //  "rtl_cache_hash_rescale(" << cache->m_name << "): nbuf: "
-        //      << (cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
-        //      << " (ave: "
-        //      << ((cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
-        //          >> cache->m_hash_shift)
-        //      << "), frees: " << cache->m_slab_stats.m_free << " [old_size: "
-        //      << old_size << ", new_size: " << new_size << ']');
 
         cache->m_hash_table = new_table;
         cache->m_hash_size  = new_size;
@@ -160,8 +139,7 @@ rtl_cache_hash_rescale (
     }
 }
 
-inline sal_uIntPtr
-rtl_cache_hash_insert (
+inline sal_uIntPtr rtl_cache_hash_insert(
     rtl_cache_type *        cache,
     rtl_cache_bufctl_type * bufctl
 )
@@ -176,10 +154,7 @@ rtl_cache_hash_insert (
     return bufctl->m_addr;
 }
 
-/** rtl_cache_hash_remove()
- */
-rtl_cache_bufctl_type *
-rtl_cache_hash_remove (
+rtl_cache_bufctl_type * rtl_cache_hash_remove(
     rtl_cache_type * cache,
     sal_uIntPtr      addr
 )
@@ -228,17 +203,10 @@ rtl_cache_hash_remove (
     return bufctl;
 }
 
-/* ================================================================= */
-
-/** RTL_CACHE_SLAB()
- */
 #define RTL_CACHE_SLAB(addr, size) \
     ((reinterpret_cast<rtl_cache_slab_type*>(RTL_MEMORY_P2END(reinterpret_cast<sal_uIntPtr>(addr), (size)))) - 1)
 
-/** rtl_cache_slab_constructor()
- */
-int
-rtl_cache_slab_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
+int rtl_cache_slab_constructor(void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_slab_type * slab = static_cast<rtl_cache_slab_type*>(obj);
 
@@ -248,10 +216,7 @@ rtl_cache_slab_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
     return 1;
 }
 
-/** rtl_cache_slab_destructor()
- */
-void
-rtl_cache_slab_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
+void rtl_cache_slab_destructor(void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_slab_type * slab = static_cast< rtl_cache_slab_type * >(obj);
     assert(QUEUE_STARTED_NAMED(slab, slab_)); // assure removed from queue(s)
@@ -259,14 +224,10 @@ rtl_cache_slab_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
     (void) slab; // avoid warnings
 }
 
-/** rtl_cache_slab_create()
- *
- *  @precond cache->m_slab_lock released.
- */
-rtl_cache_slab_type *
-rtl_cache_slab_create (
-    rtl_cache_type * cache
-)
+/**
+    @precond cache->m_slab_lock released.
+*/
+rtl_cache_slab_type * rtl_cache_slab_create(rtl_cache_type * cache)
 {
     rtl_cache_slab_type * slab = nullptr;
     void *                addr;
@@ -306,12 +267,10 @@ rtl_cache_slab_create (
     return slab;
 }
 
-/** rtl_cache_slab_destroy()
- *
- *  @precond cache->m_slab_lock released.
- */
-void
-rtl_cache_slab_destroy (
+/**
+    @precond cache->m_slab_lock released.
+*/
+void rtl_cache_slab_destroy(
     rtl_cache_type *      cache,
     rtl_cache_slab_type * slab
 )
@@ -352,14 +311,10 @@ rtl_cache_slab_destroy (
     }
 }
 
-/** rtl_cache_slab_populate()
- *
- *  @precond cache->m_slab_lock acquired.
- */
-bool
-rtl_cache_slab_populate (
-    rtl_cache_type * cache
-)
+/**
+    @precond cache->m_slab_lock acquired.
+*/
+bool rtl_cache_slab_populate(rtl_cache_type * cache)
 {
     rtl_cache_slab_type * slab;
 
@@ -385,16 +340,10 @@ rtl_cache_slab_populate (
     return (slab != nullptr);
 }
 
-/* ================================================================= */
-
-/** rtl_cache_slab_alloc()
- *
- *  Allocate a buffer from slab layer; used by magazine layer.
- */
-void *
-rtl_cache_slab_alloc (
-    rtl_cache_type * cache
-)
+/**
+    Allocate a buffer from slab layer; used by magazine layer.
+*/
+void * rtl_cache_slab_alloc (rtl_cache_type * cache)
 {
     void                * addr = nullptr;
     rtl_cache_slab_type * head;
@@ -471,12 +420,10 @@ rtl_cache_slab_alloc (
     return addr;
 }
 
-/** rtl_cache_slab_free()
- *
- *  Return a buffer to slab layer; used by magazine layer.
- */
-void
-rtl_cache_slab_free (
+/**
+    Return a buffer to slab layer; used by magazine layer.
+*/
+void rtl_cache_slab_free(
     rtl_cache_type * cache,
     void *           addr
 )
@@ -538,12 +485,7 @@ rtl_cache_slab_free (
     RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
 }
 
-/* ================================================================= */
-
-/** rtl_cache_magazine_constructor()
- */
-int
-rtl_cache_magazine_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
+int rtl_cache_magazine_constructor(void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_magazine_type * mag = static_cast<rtl_cache_magazine_type*>(obj);
     /* @@@ sal_Size size = (sal_Size)(arg); @@@ */
@@ -555,10 +497,7 @@ rtl_cache_magazine_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
     return 1;
 }
 
-/** rtl_cache_magazine_destructor()
- */
-void
-rtl_cache_magazine_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
+void rtl_cache_magazine_destructor(void * obj, SAL_UNUSED_PARAMETER void *)
 {
     rtl_cache_magazine_type * mag = static_cast< rtl_cache_magazine_type * >(
         obj);
@@ -567,10 +506,7 @@ rtl_cache_magazine_destructor (void * obj, SAL_UNUSED_PARAMETER void *)
     (void) mag; // avoid warnings
 }
 
-/** rtl_cache_magazine_clear()
- */
-void
-rtl_cache_magazine_clear (
+void rtl_cache_magazine_clear(
     rtl_cache_type *          cache,
     rtl_cache_magazine_type * mag
 )
@@ -591,14 +527,10 @@ rtl_cache_magazine_clear (
     }
 }
 
-/* ================================================================= */
-
-/** rtl_cache_depot_enqueue()
- *
- *  @precond cache->m_depot_lock acquired.
- */
-inline void
-rtl_cache_depot_enqueue (
+/**
+    @precond cache->m_depot_lock acquired.
+*/
+inline void rtl_cache_depot_enqueue(
     rtl_cache_depot_type *    depot,
     rtl_cache_magazine_type * mag
 )
@@ -611,12 +543,10 @@ rtl_cache_depot_enqueue (
     depot->m_mag_count++;
 }
 
-/** rtl_cache_depot_dequeue()
- *
- *  @precond cache->m_depot_lock acquired.
- */
-inline rtl_cache_magazine_type *
-rtl_cache_depot_dequeue (
+/**
+    @precond cache->m_depot_lock acquired.
+*/
+inline rtl_cache_magazine_type * rtl_cache_depot_dequeue(
     rtl_cache_depot_type * depot
 )
 {
@@ -640,12 +570,10 @@ rtl_cache_depot_dequeue (
     return mag;
 }
 
-/** rtl_cache_depot_exchange_alloc()
- *
- *  @precond cache->m_depot_lock acquired.
- */
-inline rtl_cache_magazine_type *
-rtl_cache_depot_exchange_alloc (
+/**
+    @precond cache->m_depot_lock acquired.
+*/
+inline rtl_cache_magazine_type * rtl_cache_depot_exchange_alloc(
     rtl_cache_type *          cache,
     rtl_cache_magazine_type * empty
 )
@@ -667,12 +595,10 @@ rtl_cache_depot_exchange_alloc (
     return full;
 }
 
-/** rtl_cache_depot_exchange_free()
- *
- *  @precond cache->m_depot_lock acquired.
- */
-inline rtl_cache_magazine_type *
-rtl_cache_depot_exchange_free (
+/**
+    @precond cache->m_depot_lock acquired.
+*/
+inline rtl_cache_magazine_type * rtl_cache_depot_exchange_free(
     rtl_cache_type *          cache,
     rtl_cache_magazine_type * full
 )
@@ -694,14 +620,10 @@ rtl_cache_depot_exchange_free (
     return empty;
 }
 
-/** rtl_cache_depot_populate()
- *
- *  @precond cache->m_depot_lock acquired.
- */
-bool
-rtl_cache_depot_populate (
-    rtl_cache_type * cache
-)
+/**
+    @precond cache->m_depot_lock acquired.
+*/
+bool rtl_cache_depot_populate(rtl_cache_type * cache)
 {
     rtl_cache_magazine_type * empty = nullptr;
 
@@ -720,12 +642,7 @@ rtl_cache_depot_populate (
     return (empty != nullptr);
 }
 
-/* ================================================================= */
-
-/** rtl_cache_constructor()
- */
-int
-rtl_cache_constructor (void * obj)
+int rtl_cache_constructor(void * obj)
 {
     rtl_cache_type * cache = static_cast<rtl_cache_type*>(obj);
 
@@ -750,10 +667,7 @@ rtl_cache_constructor (void * obj)
     return 1;
 }
 
-/** rtl_cache_destructor()
- */
-void
-rtl_cache_destructor (void * obj)
+void rtl_cache_destructor(void * obj)
 {
     rtl_cache_type * cache = static_cast<rtl_cache_type*>(obj);
 
@@ -774,12 +688,7 @@ rtl_cache_destructor (void * obj)
     RTL_MEMORY_LOCK_DESTROY(&(cache->m_depot_lock));
 }
 
-/* ================================================================= */
-
-/** rtl_cache_activate()
- */
-rtl_cache_type *
-rtl_cache_activate (
+rtl_cache_type * rtl_cache_activate(
     rtl_cache_type * cache,
     const char *     name,
     size_t           objsize,
@@ -896,12 +805,7 @@ rtl_cache_activate (
     return cache;
 }
 
-/** rtl_cache_deactivate()
- */
-void
-rtl_cache_deactivate (
-    rtl_cache_type * cache
-)
+void rtl_cache_deactivate(rtl_cache_type * cache)
 {
     /* remove from cache list */
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
@@ -951,29 +855,9 @@ rtl_cache_deactivate (
         }
     }
 
-    // SAL_INFO(
-    //  "sal.rtl",
-    //  "rtl_cache_deactivate(" << cache->m_name << "): [slab]: allocs: "
-    //      << cache->m_slab_stats.m_alloc << ", frees: "
-    //      << cache->m_slab_stats.m_free << "; total: "
-    //      << cache->m_slab_stats.m_mem_total << ", used: "
-    //      << cache->m_slab_stats.m_mem_alloc << "; [cpu]: allocs: "
-    //      << cache->m_cpu_stats.m_alloc << ", frees: "
-    //      << cache->m_cpu_stats.m_free << "; [total]: allocs: "
-    //      << (cache->m_slab_stats.m_alloc + cache->m_cpu_stats.m_alloc)
-    //      << ", frees: "
-    //      << (cache->m_slab_stats.m_free + cache->m_cpu_stats.m_free));
-
     /* cleanup slab layer */
     if (cache->m_slab_stats.m_alloc > cache->m_slab_stats.m_free)
     {
-        // SAL_INFO(
-        //  "sal.rtl",
-        //  "rtl_cache_deactivate(" << cache->m_name << "): cleaning up "
-        //      << (cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
-        //      << " leaked buffer(s) [" << cache->m_slab_stats.m_mem_alloc
-        //      << " bytes] [" << cache->m_slab_stats.m_mem_total << " total]");
-
         if (cache->m_features & RTL_CACHE_FEATURE_HASH)
         {
             /* cleanup bufctl(s) for leaking buffer(s) */
@@ -1039,16 +923,7 @@ rtl_cache_deactivate (
 
 } //namespace
 
-/* ================================================================= *
- *
- * cache implementation.
- *
- * ================================================================= */
-
-/** rtl_cache_create()
- */
-rtl_cache_type *
-SAL_CALL rtl_cache_create (
+rtl_cache_type * SAL_CALL rtl_cache_create(
     const char *     name,
     sal_Size         objsize,
     sal_Size         objalign,
@@ -1109,11 +984,7 @@ try_alloc:
     return result;
 }
 
-/** rtl_cache_destroy()
- */
-void SAL_CALL rtl_cache_destroy (
-    rtl_cache_type * cache
-) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_cache_destroy(rtl_cache_type * cache) SAL_THROW_EXTERN_C()
 {
     if (cache != nullptr)
     {
@@ -1123,12 +994,7 @@ void SAL_CALL rtl_cache_destroy (
     }
 }
 
-/** rtl_cache_alloc()
- */
-void *
-SAL_CALL rtl_cache_alloc (
-    rtl_cache_type * cache
-) SAL_THROW_EXTERN_C()
+void * SAL_CALL rtl_cache_alloc(rtl_cache_type * cache) SAL_THROW_EXTERN_C()
 {
     void * obj = nullptr;
 
@@ -1208,10 +1074,7 @@ SAL_CALL rtl_cache_alloc (
     return obj;
 }
 
-/** rtl_cache_free()
- */
-void
-SAL_CALL rtl_cache_free (
+void SAL_CALL rtl_cache_free(
     rtl_cache_type * cache,
     void *           obj
 ) SAL_THROW_EXTERN_C()
@@ -1290,8 +1153,7 @@ SAL_CALL rtl_cache_free (
 
 #if defined(SAL_UNX)
 
-void SAL_CALL
-rtl_secureZeroMemory (void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
     //currently glibc doesn't implement memset_s
     volatile char *p = static_cast<volatile char*>(Ptr);
@@ -1299,11 +1161,9 @@ rtl_secureZeroMemory (void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
         *p++ = 0;
 }
 
-static void *
-rtl_cache_wsupdate_all (void * arg);
+static void * rtl_cache_wsupdate_all(void * arg);
 
-static void
-rtl_cache_wsupdate_init()
+static void rtl_cache_wsupdate_init()
 {
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     g_cache_list.m_update_done = 0;
@@ -1317,8 +1177,7 @@ rtl_cache_wsupdate_init()
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 }
 
-static void
-rtl_cache_wsupdate_wait (unsigned int seconds)
+static void rtl_cache_wsupdate_wait(unsigned int seconds)
 {
     if (seconds > 0)
     {
@@ -1336,8 +1195,7 @@ rtl_cache_wsupdate_wait (unsigned int seconds)
     }
 }
 
-static void
-rtl_cache_wsupdate_fini()
+static void rtl_cache_wsupdate_fini()
 {
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     g_cache_list.m_update_done = 1;
@@ -1348,21 +1206,16 @@ rtl_cache_wsupdate_fini()
         pthread_join (g_cache_list.m_update_thread, nullptr);
 }
 
-/* ================================================================= */
-
 #elif defined(SAL_W32)
 
-void SAL_CALL
-rtl_secureZeroMemory (void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
     RtlSecureZeroMemory(Ptr, Bytes);
 }
 
-static DWORD WINAPI
-rtl_cache_wsupdate_all (void * arg);
+static DWORD WINAPI rtl_cache_wsupdate_all(void * arg);
 
-static void
-rtl_cache_wsupdate_init()
+static void rtl_cache_wsupdate_init()
 {
     DWORD dwThreadId;
 
@@ -1375,8 +1228,7 @@ rtl_cache_wsupdate_init()
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 }
 
-static void
-rtl_cache_wsupdate_wait (unsigned int seconds)
+static void rtl_cache_wsupdate_wait(unsigned int seconds)
 {
     if (seconds > 0)
     {
@@ -1386,8 +1238,7 @@ rtl_cache_wsupdate_wait (unsigned int seconds)
     }
 }
 
-static void
-rtl_cache_wsupdate_fini()
+static void rtl_cache_wsupdate_fini()
 {
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     g_cache_list.m_update_done = 1;
@@ -1399,15 +1250,12 @@ rtl_cache_wsupdate_fini()
 
 #endif /* SAL_UNX || SAL_W32 */
 
-/* ================================================================= */
+/**
+    update depot stats and purge excess magazines.
 
-/** rtl_cache_depot_wsupdate()
- *  update depot stats and purge excess magazines.
- *
- *  @precond cache->m_depot_lock acquired
- */
-static void
-rtl_cache_depot_wsupdate (
+    @precond cache->m_depot_lock acquired
+*/
+static void rtl_cache_depot_wsupdate(
     rtl_cache_type *       cache,
     rtl_cache_depot_type * depot
 )
@@ -1432,29 +1280,14 @@ rtl_cache_depot_wsupdate (
     // coverity[missing_unlock]
 }
 
-/** rtl_cache_wsupdate()
- *
- *  @precond cache->m_depot_lock released
- */
-static void
-rtl_cache_wsupdate (
-    rtl_cache_type * cache
-)
+/**
+    @precond cache->m_depot_lock released
+*/
+static void rtl_cache_wsupdate(rtl_cache_type * cache)
 {
     if (cache->m_magazine_cache != nullptr)
     {
         RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
-
-        // SAL_INFO(
-        //  "sal.rtl",
-        //  "rtl_cache_wsupdate(" << cache->m_name
-        //      << ") [depot: count, curr_min, prev_min] full: "
-        //      << cache->m_depot_full.m_mag_count << ", "
-        //      << cache->m_depot_full.m_curr_min << ", "
-        //      << cache->m_depot_full.m_prev_min << "; empty: "
-        //      << cache->m_depot_empty.m_mag_count << ", "
-        //      << cache->m_depot_empty.m_curr_min << ", "
-        //      << cache->m_depot_empty.m_prev_min);
 
         rtl_cache_depot_wsupdate (cache, &(cache->m_depot_full));
         rtl_cache_depot_wsupdate (cache, &(cache->m_depot_empty));
@@ -1463,15 +1296,12 @@ rtl_cache_wsupdate (
     }
 }
 
-/** rtl_cache_wsupdate_all()
- *
- */
 #if defined(SAL_UNX)
 static void *
 #elif defined(SAL_W32)
 static DWORD WINAPI
 #endif /* SAL_UNX || SAL_W32 */
-rtl_cache_wsupdate_all (void * arg)
+rtl_cache_wsupdate_all(void * arg)
 {
     osl::Thread::setName("rtl_cache_wsupdate_all");
     unsigned int seconds = sal::static_int_cast< unsigned int >(
@@ -1503,14 +1333,7 @@ rtl_cache_wsupdate_all (void * arg)
 #endif
 }
 
-/* ================================================================= *
- *
- * cache initialization.
- *
- * ================================================================= */
-
-void
-rtl_cache_init()
+void rtl_cache_init()
 {
     {
         /* list of caches */
@@ -1600,13 +1423,9 @@ rtl_cache_init()
     }
 
     rtl_cache_wsupdate_init();
-    // SAL_INFO("sal.rtl", "rtl_cache_init completed");
 }
 
-/* ================================================================= */
-
-void
-rtl_cache_fini()
+void rtl_cache_fini()
 {
     if (gp_cache_arena != nullptr)
     {
@@ -1645,24 +1464,10 @@ rtl_cache_fini()
         head = &(g_cache_list.m_cache_head);
         for (cache = head->m_cache_next; cache != head; cache = cache->m_cache_next)
         {
-            // SAL_INFO(
-            //  "sal.rtl",
-            //  "rtl_cache_fini(" << cache->m_name << ") [slab]: allocs: "
-            //      << cache->m_slab_stats.m_alloc << ", frees: "
-            //      << cache->m_slab_stats.m_free << "; total: "
-            //      << cache->m_slab_stats.m_mem_total << ", used: "
-            //      << cache->m_slab_stats.m_mem_alloc << "; [cpu]: allocs: "
-            //      << cache->m_cpu_stats.m_alloc << ", frees: "
-            //      << cache->m_cpu_stats.m_free  << "; [total]: allocs: "
-            //      << (cache->m_slab_stats.m_alloc
-            //          + cache->m_cpu_stats.m_alloc)
-            //      << ", frees: "
-            //      << (cache->m_slab_stats.m_free
-            //          + cache->m_cpu_stats.m_free));
+            // noop
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
     }
-    // SAL_INFO("sal.rtl", "rtl_cache_fini completed");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

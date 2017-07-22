@@ -24,9 +24,9 @@
 #include "rtl/alloc.h"
 #include "alloc_impl.hxx"
 
-/** rtl_cache_stat_type
- *  @internal
- */
+/**
+    @internal
+*/
 struct rtl_cache_stat_type
 {
     sal_uInt64 m_alloc;
@@ -36,9 +36,9 @@ struct rtl_cache_stat_type
     sal_Size   m_mem_alloc;
 };
 
-/** rtl_cache_bufctl_type
- *  @internal
- */
+/**
+    @internal
+*/
 struct rtl_cache_bufctl_type
 {
     rtl_cache_bufctl_type * m_next; /* linkage */
@@ -47,9 +47,9 @@ struct rtl_cache_bufctl_type
     sal_uIntPtr             m_slab; /* parent slab address */
 };
 
-/** rtl_cache_slab_type
- *  @internal
- */
+/**
+    @internal
+*/
 struct rtl_cache_slab_type
 {
     rtl_cache_slab_type *   m_slab_next; /* slab linkage */
@@ -62,9 +62,9 @@ struct rtl_cache_slab_type
     rtl_cache_bufctl_type * m_sp;        /* free buffer linkage 'stack pointer' */
 };
 
-/** rtl_cache_magazine_type
- *  @internal
- */
+/**
+    @internal
+*/
 #define RTL_CACHE_MAGAZINE_SIZE 61
 
 struct rtl_cache_magazine_type
@@ -77,9 +77,9 @@ struct rtl_cache_magazine_type
     void *                    m_objects[RTL_CACHE_MAGAZINE_SIZE];
 };
 
-/** rtl_cache_depot_type
- *  @internal
- */
+/**
+    @internal
+*/
 struct rtl_cache_depot_type
 {
     /* magazine list */
@@ -91,10 +91,10 @@ struct rtl_cache_depot_type
     sal_Size                  m_prev_min;
 };
 
-/** rtl_cache_type
- *  @internal
- */
-#define RTL_CACHE_HASH_SIZE        8
+/**
+    @internal
+*/
+#define RTL_CACHE_HASH_SIZE           8
 
 #define RTL_CACHE_FEATURE_HASH        1
 #define RTL_CACHE_FEATURE_BULKDESTROY 2
