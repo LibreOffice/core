@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// include files
-
 #include <osl_Condition_Const.h>
 #include <stdlib.h>
 
@@ -59,11 +57,8 @@ protected:
     }
 };
 
-// test code start here
-
 namespace osl_Condition
 {
-
     /** testing the method:
         Condition()
     */
@@ -95,7 +90,7 @@ namespace osl_Condition
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class ctors
+    };
 
     /** testing the method:
         void set()
@@ -142,7 +137,7 @@ namespace osl_Condition
         CPPUNIT_TEST( set_001 );
         CPPUNIT_TEST( set_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class set
+    };
 
     /** testing the method:
         void reset()
@@ -192,7 +187,7 @@ namespace osl_Condition
         CPPUNIT_TEST( reset_001 );
         CPPUNIT_TEST( reset_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class reset
+    };
 
     /** testing the method:
         Result wait(const TimeValue *pTimeout = 0)
@@ -208,7 +203,6 @@ namespace osl_Condition
             tv1 = new TimeValue;
             tv1->Seconds = 1;
             tv1->Nanosec = 0;
-
         }
 
         void tearDown( ) override
@@ -264,7 +258,7 @@ namespace osl_Condition
         CPPUNIT_TEST( wait_001 );
         CPPUNIT_TEST( wait_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class wait
+    };
 
     /** testing the method:
         sal_Bool check()
@@ -314,13 +308,13 @@ namespace osl_Condition
         CPPUNIT_TEST( check_001 );
         CPPUNIT_TEST( check_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class check
+    };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::ctors);
-CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::set);
-CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::reset);
-CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::wait);
-CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::check);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::ctors);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::set);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::reset);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::wait);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::check);
 
 } // namespace osl_Condition
 
