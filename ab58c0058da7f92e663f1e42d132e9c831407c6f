@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_2b5e8ee9",
+        "filename": "sc/source/filter/dif/difexp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2017-07-22T07:47:05Z",
+      "side": 1,
+      "message": "Ok, I will remove this file from my change",
+      "parentUuid": "3a461143_8520549d",
+      "revId": "ab58c0058da7f92e663f1e42d132e9c831407c6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_e53758e1",
         "filename": "sc/source/filter/dif/difimp.cxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2017-07-18T11:10:28Z",
       "side": 1,
       "message": "This should be an assert() instead as it indicates a programming error.",
+      "revId": "ab58c0058da7f92e663f1e42d132e9c831407c6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_4bbf5ad0",
+        "filename": "sc/source/filter/dif/difimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000103
+      },
+      "writtenOn": "2017-07-22T07:47:05Z",
+      "side": 1,
+      "message": "Question: should all OSL_ENSURE be replaced by assert(). It is not obvious to me all the time what to replace it with. When is SAL_WARN_IF an appropriate  replacement?\nAny advice/rule of thumb?",
+      "parentUuid": "3a461143_e53758e1",
       "revId": "ab58c0058da7f92e663f1e42d132e9c831407c6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
