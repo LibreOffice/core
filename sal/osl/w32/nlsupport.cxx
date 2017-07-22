@@ -129,10 +129,6 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
     return TRUE;
 }
 
-/*****************************************************************************
- * GetTextEncodingFromLCID
- *****************************************************************************/
-
 rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
 {
     rtl_TextEncoding Encoding = RTL_TEXTENCODING_DONTKNOW;
@@ -159,10 +155,6 @@ rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
 
     return Encoding;
 }
-
-/*****************************************************************************
- * osl_getTextEncodingFromLocale
- *****************************************************************************/
 
 rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 {
@@ -206,10 +198,6 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
     return RTL_TEXTENCODING_DONTKNOW;
 }
-
-/*****************************************************************************
- * imp_getProcessLocale
- *****************************************************************************/
 
 void imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
