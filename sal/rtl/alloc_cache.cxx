@@ -304,7 +304,7 @@ void rtl_cache_slab_destroy(
         rtl_cache_slab_destructor (slab, nullptr);
     }
 
-    if ((refcnt == 0) || (cache->m_features & RTL_CACHE_FEATURE_BULKDESTROY))
+    if (refcnt == 0 || cache->m_features & RTL_CACHE_FEATURE_BULKDESTROY)
     {
         /* free memory */
         rtl_arena_free (cache->m_source, addr, cache->m_slab_size);
@@ -351,7 +351,7 @@ void * rtl_cache_slab_alloc (rtl_cache_type * cache)
     RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_slab_lock));
 
     head = &(cache->m_free_head);
-    if ((head->m_slab_next != head) || rtl_cache_slab_populate (cache))
+    if (head->m_slab_next != head || rtl_cache_slab_populate (cache))
     {
         rtl_cache_slab_type   * slab;
         rtl_cache_bufctl_type * bufctl;
@@ -580,7 +580,7 @@ inline rtl_cache_magazine_type * rtl_cache_depot_exchange_alloc(
 {
     rtl_cache_magazine_type * full;
 
-    assert((!empty) || (empty->m_mag_used == 0));
+    assert(!empty || empty->m_mag_used == 0);
 
     /* dequeue full magazine */
     full = rtl_cache_depot_dequeue (&(cache->m_depot_full));

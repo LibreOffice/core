@@ -140,10 +140,10 @@ inline void rtl_arena_segment_get(
     assert(!*ppSegment);
 
     head = &(arena->m_segment_reserve_head);
-    if ((head->m_snext != head) || rtl_arena_segment_populate (arena))
+    if (head->m_snext != head || rtl_arena_segment_populate (arena))
     {
         (*ppSegment) = head->m_snext;
-        QUEUE_REMOVE_NAMED((*ppSegment), s);
+        QUEUE_REMOVE_NAMED(*ppSegment, s);
     }
 }
 
@@ -158,8 +158,8 @@ inline void rtl_arena_segment_put(
 {
     rtl_arena_segment_type * head;
 
-    assert(QUEUE_STARTED_NAMED((*ppSegment), s));
-    assert(QUEUE_STARTED_NAMED((*ppSegment), f));
+    assert(QUEUE_STARTED_NAMED(*ppSegment, s));
+    assert(QUEUE_STARTED_NAMED(*ppSegment, f));
 
     (*ppSegment)->m_addr = 0;
     (*ppSegment)->m_size = 0;
@@ -200,8 +200,8 @@ inline void rtl_arena_freelist_remove(
     rtl_arena_segment_type * segment
 )
 {
-    if ((segment->m_fnext->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD) &&
-        (segment->m_fprev->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD)    )
+    if (segment->m_fnext->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD &&
+        segment->m_fprev->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD)
     {
         rtl_arena_segment_type * head;
 
@@ -674,7 +674,7 @@ void rtl_arena_deactivate(rtl_arena_type * arena)
     RTL_MEMORY_LOCK_RELEASE(&(g_arena_list.m_lock));
 
     /* cleanup quantum cache(s) */
-    if ((arena->m_qcache_max > 0) && (arena->m_qcache_ptr))
+    if (arena->m_qcache_max > 0 && arena->m_qcache_ptr)
     {
         int  i, n = (arena->m_qcache_max >> arena->m_quantum_shift);
         for (i = 1; i <= n; i++)
@@ -852,7 +852,7 @@ void * SAL_CALL rtl_arena_alloc(
     {
         sal_Size size;
 
-        size = RTL_MEMORY_ALIGN((*pSize), arena->m_quantum);
+        size = RTL_MEMORY_ALIGN(*pSize, arena->m_quantum);
         if (size > arena->m_qcache_max)
         {
             /* allocate from segment list */
@@ -872,7 +872,7 @@ void * SAL_CALL rtl_arena_alloc(
                 /* resize */
                 assert(segment->m_size >= size);
                 oversize = segment->m_size - size;
-                if ((oversize >= arena->m_quantum) && (oversize >= arena->m_qcache_max))
+                if (oversize >= arena->m_quantum && oversize >= arena->m_qcache_max)
                 {
                     rtl_arena_segment_type * remainder = nullptr;
                     rtl_arena_segment_get (arena, &remainder);
@@ -939,9 +939,9 @@ void SAL_CALL rtl_arena_free (
                 prev = segment->m_sprev;
 
                 /* entire span free when prev is a span, and next is either a span or a list head */
-                if ((prev->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN) &&
+                if (prev->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN &&
                     ((next->m_type == RTL_ARENA_SEGMENT_TYPE_SPAN)  ||
-                     (next->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD))    )
+                     (next->m_type == RTL_ARENA_SEGMENT_TYPE_HEAD)))
                 {
                     assert(
                         prev->m_addr == segment->m_addr
