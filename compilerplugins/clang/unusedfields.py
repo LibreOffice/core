@@ -153,7 +153,23 @@ for d in definitionSet:
     parentClazz = d[0];
     if d in writeToSet:
         continue
+    fieldType = definitionToTypeMap[d]
     srcLoc = definitionToSourceLocationMap[d];
+    if "ModuleClient" in fieldType:
+        continue
+    # this is all representations of on-disk data structures
+    if (srcLoc.startswith("sc/source/filter/inc/scflt.hxx")
+        or srcLoc.startswith("sw/source/filter/ww8/")
+        or srcLoc.startswith("vcl/source/filter/sgvmain.hxx")
+        or srcLoc.startswith("vcl/source/filter/sgfbram.hxx")
+        or srcLoc.startswith("vcl/inc/unx/XIM.h")
+        or srcLoc.startswith("vcl/inc/unx/gtk/gloactiongroup.h")
+        or srcLoc.startswith("include/svl/svdde.hxx")):
+        continue
+    # I really don't care about these ancient file formats
+    if (srcLoc.startswith("hwpfilter/")
+        or srcLoc.startswith("lotuswordpro/")):
+        continue
     readonlySet.add((d[0] + " " + d[1] + " " + definitionToTypeMap[d], srcLoc))
 
 

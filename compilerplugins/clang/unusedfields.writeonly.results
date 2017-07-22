@@ -6,6 +6,8 @@ basctl/source/inc/bastype2.hxx:180
     basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/dlged.hxx:121
     basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory>
+basic/qa/cppunit/basictest.hxx:27
+    MacroSnippet maDll class BasicDLL
 basic/qa/cppunit/test_scanner.cxx:26
     (anonymous namespace)::Symbol line sal_uInt16
 basic/qa/cppunit/test_scanner.cxx:27
@@ -102,6 +104,8 @@ comphelper/source/container/enumerablemap.cxx:299
     comphelper::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
 configmgr/source/components.cxx:163
     configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
+connectivity/source/commontools/sqlerror.cxx:89
+    connectivity::SQLError_Impl m_aContext Reference<class com::sun::star::uno::XComponentContext>
 connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
 connectivity/source/drivers/evoab2/EApi.h:126
@@ -188,24 +192,40 @@ cppuhelper/source/access_control.cxx:80
     cppu::(anonymous namespace)::permission m_str1 rtl_uString *
 cppuhelper/source/access_control.cxx:81
     cppu::(anonymous namespace)::permission m_str2 rtl_uString *
-cui/source/inc/cuihyperdlg.hxx:47
+cui/source/inc/cuihyperdlg.hxx:56
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
-cui/source/inc/cuihyperdlg.hxx:67
+cui/source/inc/cuihyperdlg.hxx:76
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 dbaccess/source/core/dataaccess/documentdefinition.cxx:289
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
-dbaccess/source/sdbtools/connection/connectiontools.hxx:48
-    sdbtools::ConnectionTools m_aModuleClient class sdbtools::SdbtClient
-dbaccess/source/sdbtools/connection/objectnames.hxx:44
-    sdbtools::ObjectNames m_aModuleClient class sdbtools::SdbtClient
-dbaccess/source/sdbtools/connection/tablename.cxx:56
-    sdbtools::TableName_Impl m_aModuleClient class sdbtools::SdbtClient
 desktop/qa/desktop_lib/test_desktop_lib.cxx:175
     DesktopLOKTest m_bModified _Bool
-desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:120
+desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:119
     dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 desktop/unx/source/splashx.c:369
      input_mode long
+drawinglayer/source/tools/emfpbrush.hxx:104
+    emfplushelper::EMFPBrush wrapMode sal_Int32
+drawinglayer/source/tools/emfpbrush.hxx:108
+    emfplushelper::EMFPBrush hasTransformation _Bool
+drawinglayer/source/tools/emfpbrush.hxx:118
+    emfplushelper::EMFPBrush hatchStyle enum emfplushelper::EmfPlusHatchStyle
+drawinglayer/source/tools/emfpcustomlinecap.hxx:33
+    emfplushelper::EMFPCustomLineCap mbIsFilled _Bool
+drawinglayer/source/tools/emfppen.hxx:41
+    emfplushelper::EMFPPen pen_transformation basegfx::B2DHomMatrix
+drawinglayer/source/tools/emfppen.hxx:46
+    emfplushelper::EMFPPen mitterLimit float
+drawinglayer/source/tools/emfppen.hxx:48
+    emfplushelper::EMFPPen dashCap sal_Int32
+drawinglayer/source/tools/emfppen.hxx:49
+    emfplushelper::EMFPPen dashOffset float
+drawinglayer/source/tools/emfppen.hxx:51
+    emfplushelper::EMFPPen alignment sal_Int32
+drawinglayer/source/tools/emfppen.hxx:54
+    emfplushelper::EMFPPen customStartCap struct emfplushelper::EMFPCustomLineCap *
+drawinglayer/source/tools/emfppen.hxx:56
+    emfplushelper::EMFPPen customEndCap struct emfplushelper::EMFPCustomLineCap *
 embeddedobj/source/inc/oleembobj.hxx:127
     OleEmbeddedObject m_nTargetState sal_Int32
 embeddedobj/source/inc/oleembobj.hxx:139
@@ -224,14 +244,26 @@ embeddedobj/source/inc/oleembobj.hxx:170
     OleEmbeddedObject m_nStatusAspect sal_Int64
 embeddedobj/source/inc/oleembobj.hxx:184
     OleEmbeddedObject m_bFromClipboard _Bool
+emfio/inc/mtftools.hxx:121
+    emfio::LOGFONTW lfOrientation sal_Int32
+emfio/inc/mtftools.hxx:127
+    emfio::LOGFONTW lfOutPrecision sal_uInt8
+emfio/inc/mtftools.hxx:128
+    emfio::LOGFONTW lfClipPrecision sal_uInt8
+emfio/inc/mtftools.hxx:129
+    emfio::LOGFONTW lfQuality sal_uInt8
+emfio/source/emfuno/xemfparser.cxx:59
+    emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
+emfio/source/reader/emfreader.cxx:323
+    (anonymous namespace)::BLENDFUNCTION aBlendOperation unsigned char
+emfio/source/reader/emfreader.cxx:324
+    (anonymous namespace)::BLENDFUNCTION aBlendFlags unsigned char
 extensions/source/propctrlr/propertyhandler.hxx:80
     pcr::PropertyHandler m_aEnsureResAccess class pcr::PcrClient
 extensions/source/scanner/scanner.hxx:46
     ScannerManager maProtector osl::Mutex
 extensions/source/scanner/scanner.hxx:47
     ScannerManager mpData void *
-framework/inc/dispatch/oxt_handler.hxx:92
-    framework::Oxt_Handler m_xSelfHold css::uno::Reference<css::uno::XInterface>
 framework/inc/services/layoutmanager.hxx:262
     framework::LayoutManager m_bGlobalSettings _Bool
 framework/inc/services/layoutmanager.hxx:276
@@ -278,22 +310,40 @@ include/svtools/unoevent.hxx:161
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/bmpmask.hxx:129
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
-include/svx/float3d.hxx:176
+include/svx/float3d.hxx:199
     Svx3DWin pControllerItem class Svx3DCtrlItem *
-include/svx/imapdlg.hxx:118
+include/svx/imapdlg.hxx:140
     SvxIMapDlg aIMapItem class SvxIMapDlgItem
 include/svx/srchdlg.hxx:231
     SvxSearchDialog pSearchController class SvxSearchController *
 include/svx/srchdlg.hxx:232
     SvxSearchDialog pOptionsController class SvxSearchController *
-include/vcl/menu.hxx:462
+include/vcl/menu.hxx:454
     MenuBar::MenuBarButtonCallbackArg bHighlight _Bool
+include/vcl/pdfwriter.hxx:550
+    vcl::PDFWriter::PDFSignContext m_pDerEncoded sal_Int8 *
+include/vcl/pdfwriter.hxx:552
+    vcl::PDFWriter::PDFSignContext m_nDerEncoded sal_Int32
+include/vcl/pdfwriter.hxx:554
+    vcl::PDFWriter::PDFSignContext m_pByteRange1 void *
+include/vcl/pdfwriter.hxx:556
+    vcl::PDFWriter::PDFSignContext m_nByteRange1 sal_Int32
+include/vcl/pdfwriter.hxx:558
+    vcl::PDFWriter::PDFSignContext m_pByteRange2 void *
+include/vcl/pdfwriter.hxx:560
+    vcl::PDFWriter::PDFSignContext m_nByteRange2 sal_Int32
+include/vcl/pdfwriter.hxx:561
+    vcl::PDFWriter::PDFSignContext m_aSignTSA class rtl::OUString
+include/vcl/pdfwriter.hxx:562
+    vcl::PDFWriter::PDFSignContext m_aSignPassword class rtl::OUString
 include/vcl/salnativewidgets.hxx:415
     ToolbarValue mbIsTopDockingArea _Bool
 include/vcl/salnativewidgets.hxx:463
     PushButtonValue mbBevelButton _Bool
 include/vcl/salnativewidgets.hxx:464
     PushButtonValue mbSingleLine _Bool
+include/vcl/toolbox.hxx:106
+    ToolBox maInDockRect tools::Rectangle
 include/vcl/uitest/uiobject.hxx:241
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:173
@@ -304,6 +354,78 @@ include/xmloff/shapeimport.hxx:181
     SdXML3DSceneAttributesHelper mbVPNUsed _Bool
 include/xmloff/shapeimport.hxx:182
     SdXML3DSceneAttributesHelper mbVUPUsed _Bool
+l10ntools/inc/common.hxx:31
+    common::HandledArgs m_bUTF8BOM _Bool
+l10ntools/inc/export.hxx:75
+    ResData nIdLevel enum IdLevel
+l10ntools/inc/export.hxx:76
+    ResData bChild _Bool
+l10ntools/inc/export.hxx:77
+    ResData bChildWithText _Bool
+l10ntools/inc/export.hxx:79
+    ResData bText _Bool
+l10ntools/inc/export.hxx:80
+    ResData bQuickHelpText _Bool
+l10ntools/inc/export.hxx:81
+    ResData bTitle _Bool
+l10ntools/inc/export.hxx:90
+    ResData sQuickHelpText OStringHashMap
+l10ntools/inc/export.hxx:92
+    ResData sTitle OStringHashMap
+l10ntools/inc/export.hxx:94
+    ResData sTextTyp class rtl::OString
+l10ntools/inc/export.hxx:96
+    ResData m_aList ExportList
+l10ntools/inc/export.hxx:121
+    Export::(anonymous) mSimple std::ofstream *
+l10ntools/inc/export.hxx:122
+    Export::(anonymous) mPo class PoOfstream *
+l10ntools/inc/export.hxx:124
+    Export aOutput union (anonymous union at /home/noel/libo3/l10ntools/inc/export.hxx:119:5)
+l10ntools/inc/export.hxx:126
+    Export aResStack ResStack
+l10ntools/inc/export.hxx:128
+    Export bDefine _Bool
+l10ntools/inc/export.hxx:129
+    Export bNextMustBeDefineEOL _Bool
+l10ntools/inc/export.hxx:130
+    Export nLevel std::size_t
+l10ntools/inc/export.hxx:131
+    Export nList enum ExportListType
+l10ntools/inc/export.hxx:132
+    Export nListLevel std::size_t
+l10ntools/inc/export.hxx:133
+    Export bMergeMode _Bool
+l10ntools/inc/export.hxx:134
+    Export sMergeSrc class rtl::OString
+l10ntools/inc/export.hxx:136
+    Export bReadOver _Bool
+l10ntools/inc/export.hxx:137
+    Export sFilename class rtl::OString
+l10ntools/inc/export.hxx:139
+    Export aLanguages std::vector<OString>
+l10ntools/inc/export.hxx:280
+    MergeData sGID class rtl::OString
+l10ntools/inc/export.hxx:281
+    MergeData sLID class rtl::OString
+l10ntools/inc/export.hxx:334
+    QueueEntry nTyp int
+l10ntools/inc/export.hxx:335
+    QueueEntry sLine class rtl::OString
+l10ntools/inc/export.hxx:346
+    ParserQueue bCurrentIsM _Bool
+l10ntools/inc/export.hxx:347
+    ParserQueue bNextIsM _Bool
+l10ntools/inc/export.hxx:348
+    ParserQueue bLastWasM _Bool
+l10ntools/inc/export.hxx:349
+    ParserQueue bMflag _Bool
+l10ntools/inc/export.hxx:353
+    ParserQueue aQueueNext std::queue<QueueEntry> *
+l10ntools/inc/export.hxx:354
+    ParserQueue aQueueCur std::queue<QueueEntry> *
+l10ntools/inc/export.hxx:357
+    ParserQueue bStart _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50
     GtvApplicationWindow parent_instance GtkApplicationWindow
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:54
@@ -311,11 +433,11 @@ libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:54
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:61
     GtvApplicationWindow statusbar GtkWidget *
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:73
-    GtvApplicationWindowClass parentClass GtkApplicationWindow
+    GtvApplicationWindowClass parentClass GtkApplicationWindowClass
 libreofficekit/qa/gtktiledviewer/gtv-application.hxx:26
     GtvApplication parent GtkApplication
 libreofficekit/qa/gtktiledviewer/gtv-application.hxx:31
-    GtvApplicationClass parentClass GtkApplication
+    GtvApplicationClass parentClass GtkApplicationClass
 libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:28
     GtvCalcHeaderBar parent GtkDrawingArea
 libreofficekit/qa/gtktiledviewer/gtv-calc-header-bar.hxx:37
@@ -354,12 +476,6 @@ registry/source/reflread.cxx:867
     MethodList m_pCP class ConstantPool *
 reportdesign/source/ui/inc/ReportWindow.hxx:54
     rptui::OReportWindow m_pObjFac ::std::unique_ptr<DlgEdFactory>
-rsc/inc/rscdef.hxx:55
-    RscExpType cUnused _Bool
-rsc/inc/rsctools.hxx:108
-     lVal64 sal_uInt64
-rsc/inc/rsctools.hxx:127
-     lVal32 sal_uInt32
 sal/osl/unx/thread.cxx:93
     osl_thread_priority_st m_Highest int
 sal/osl/unx/thread.cxx:94
@@ -514,7 +630,7 @@ sd/source/ui/slidesorter/view/SlsLayouter.cxx:61
     sd::slidesorter::view::Layouter::Implementation mpTheme std::shared_ptr<view::Theme>
 sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
-sd/source/ui/view/DocumentRenderer.cxx:1323
+sd/source/ui/view/DocumentRenderer.cxx:1318
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1258
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
@@ -526,13 +642,15 @@ sd/source/ui/view/viewshel.cxx:1261
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:195
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
-sfx2/source/doc/doctempl.cxx:118
+sfx2/source/appl/shutdownicon.hxx:70
+    ShutdownIcon m_pResLocale std::locale *
+sfx2/source/doc/doctempl.cxx:116
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
-sfx2/source/inc/appdata.hxx:76
+sfx2/source/inc/appdata.hxx:75
     SfxAppData_Impl pDocTopics SfxDdeDocTopics_Impl *
-sfx2/source/inc/appdata.hxx:77
+sfx2/source/inc/appdata.hxx:76
     SfxAppData_Impl pTriggerTopic class SfxDdeTriggerTopic_Impl *
-sfx2/source/inc/appdata.hxx:78
+sfx2/source/inc/appdata.hxx:77
     SfxAppData_Impl pDdeService2 class DdeService *
 sfx2/source/view/classificationcontroller.cxx:59
     sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
@@ -548,6 +666,28 @@ starmath/inc/view.hxx:224
     SmViewShell maGraphicController class SmGraphicController
 store/source/storbase.hxx:269
     store::PageData m_aMarked store::PageData::L
+svl/source/crypto/cryptosign.cxx:120
+    (anonymous namespace)::(anonymous) extnID SECItem
+svl/source/crypto/cryptosign.cxx:121
+    (anonymous namespace)::(anonymous) critical SECItem
+svl/source/crypto/cryptosign.cxx:122
+    (anonymous namespace)::(anonymous) extnValue SECItem
+svl/source/crypto/cryptosign.cxx:144
+    (anonymous namespace)::(anonymous) version SECItem
+svl/source/crypto/cryptosign.cxx:146
+    (anonymous namespace)::(anonymous) reqPolicy SECItem
+svl/source/crypto/cryptosign.cxx:147
+    (anonymous namespace)::(anonymous) nonce SECItem
+svl/source/crypto/cryptosign.cxx:148
+    (anonymous namespace)::(anonymous) certReq SECItem
+svl/source/crypto/cryptosign.cxx:149
+    (anonymous namespace)::(anonymous) extensions (anonymous namespace)::Extension *
+svl/source/crypto/cryptosign.cxx:193
+    (anonymous namespace)::SigningCertificateV2 certs struct (anonymous namespace)::ESSCertIDv2 **
+svl/source/crypto/cryptosign.cxx:277
+    (anonymous namespace)::(anonymous) statusString SECItem
+svl/source/crypto/cryptosign.cxx:278
+    (anonymous namespace)::(anonymous) failInfo SECItem
 svl/source/misc/inethist.cxx:48
     INetURLHistory_Impl::head_entry m_nMagic sal_uInt32
 svtools/source/svhtml/htmlkywd.cxx:558
@@ -666,44 +806,24 @@ vcl/inc/salwtype.hxx:250
     SalSwipeEvent mnVelocityY double
 vcl/inc/sft.hxx:486
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
+vcl/inc/unx/i18n_status.hxx:56
+    vcl::I18NStatus::ChoiceData aString class rtl::OUString
 vcl/opengl/salbmp.cxx:412
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
+vcl/source/app/svapp.cxx:159
+    ImplEventHook mpUserData void *
+vcl/source/app/svapp.cxx:160
+    ImplEventHook mpProc VCLEventHookProc
 vcl/source/filter/graphicfilter.cxx:1034
     ImpFilterLibCache mpLast struct ImpFilterLibCacheEntry *
 vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD type sal_uInt16
 vcl/source/filter/jpeg/Exif.hxx:57
     Exif::ExifIFD count sal_uInt32
-vcl/source/filter/wmf/enhwmf.cxx:325
-    (anonymous namespace)::BLENDFUNCTION aBlendOperation unsigned char
-vcl/source/filter/wmf/enhwmf.cxx:326
-    (anonymous namespace)::BLENDFUNCTION aBlendFlags unsigned char
 vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cPortName char [32]
-vcl/source/gdi/pdfwriter_impl.cxx:5423
-    (anonymous namespace)::(anonymous) extnID SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5424
-    (anonymous namespace)::(anonymous) critical SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5425
-    (anonymous namespace)::(anonymous) extnValue SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5447
-    (anonymous namespace)::(anonymous) version SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5449
-    (anonymous namespace)::(anonymous) reqPolicy SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5450
-    (anonymous namespace)::(anonymous) nonce SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5451
-    (anonymous namespace)::(anonymous) certReq SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5452
-    (anonymous namespace)::(anonymous) extensions (anonymous namespace)::Extension *
-vcl/source/gdi/pdfwriter_impl.cxx:5496
-    (anonymous namespace)::SigningCertificateV2 certs struct (anonymous namespace)::ESSCertIDv2 **
-vcl/source/gdi/pdfwriter_impl.cxx:5794
-    (anonymous namespace)::(anonymous) statusString SECItem
-vcl/source/gdi/pdfwriter_impl.cxx:5795
-    (anonymous namespace)::(anonymous) failInfo SECItem
 vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/generic/app/wmadaptor.cxx:1270

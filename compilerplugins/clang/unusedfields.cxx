@@ -82,7 +82,7 @@ public:
     bool VisitMemberExpr( const MemberExpr* );
     bool VisitDeclRefExpr( const DeclRefExpr* );
     bool VisitCXXConstructorDecl( const CXXConstructorDecl* );
-    bool VisitVarDecl( const VarDecl* );
+    bool VisitInitListExpr( const InitListExpr* );
     bool TraverseCXXConstructorDecl( CXXConstructorDecl* );
     bool TraverseCXXMethodDecl( CXXMethodDecl* );
     bool TraverseFunctionDecl( FunctionDecl* );
@@ -93,7 +93,9 @@ private:
     void checkWriteOnly(const FieldDecl* fieldDecl, const Expr* memberExpr);
     void checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberExpr);
     bool isSomeKindOfZero(const Expr* arg);
-    bool IsPassedByNonConstRef(const Stmt * child, const CallExpr * callExpr, const FunctionDecl * calleeFunctionDecl, bool bParamsAndArgsOffset);
+    bool IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, const CallExpr * callExpr,
+                                        const FunctionDecl * calleeFunctionDecl);
+    bool IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, const CXXConstructExpr * cxxConstructExpr);
 
     RecordDecl *   insideMoveOrCopyDeclParent;
     RecordDecl *   insideStreamOutputOperator;
@@ -600,9 +602,8 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
             if (op == UO_AddrOf || op == UO_PostInc || op == UO_PostDec || op == UO_PreInc || op == UO_PreDec)
             {
                 bPotentiallyWrittenTo = true;
-                break;
             }
-            walkupUp();
+            break;
         }
         else if (auto arraySubscriptExpr = dyn_cast<ArraySubscriptExpr>(parent))
         {
@@ -621,10 +622,8 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
                     && operatorCallExpr->getArg(0) == child && !calleeMethodDecl->isConst())
                 {
                     bPotentiallyWrittenTo = true;
-                    break;
                 }
-                bool bParamsAndArgsOffset = calleeMethodDecl != nullptr;
-                if (IsPassedByNonConstRef(child, operatorCallExpr, calleeFunctionDecl, bParamsAndArgsOffset))
+                else if (IsPassedByNonConst(fieldDecl, child, operatorCallExpr, calleeFunctionDecl))
                     bPotentiallyWrittenTo = true;
             }
             else
@@ -647,8 +646,7 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
                     bPotentiallyWrittenTo = true;
                     break;
                 }
-                // check for being passed as parameter by non-const-reference
-                if (IsPassedByNonConstRef(child, cxxMemberCallExpr, calleeMethodDecl, false/*bParamsAndArgsOffset*/))
+                if (IsPassedByNonConst(fieldDecl, child, cxxMemberCallExpr, calleeMethodDecl))
                     bPotentiallyWrittenTo = true;
             }
             else
@@ -657,24 +655,15 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
         }
         else if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(parent))
         {
-            const CXXConstructorDecl * cxxConstructorDecl = cxxConstructExpr->getConstructor();
-            // check for being passed as parameter by non-const-reference
-            unsigned len = std::min(cxxConstructExpr->getNumArgs(),
-                                    cxxConstructorDecl->getNumParams());
-            for (unsigned i = 0; i < len; ++i)
-                if (cxxConstructExpr->getArg(i) == child)
-                    if (loplugin::TypeCheck(cxxConstructorDecl->getParamDecl(i)->getType()).NonConst().LvalueReference())
-                    {
-                        bPotentiallyWrittenTo = true;
-                        break;
-                    }
+            if (IsPassedByNonConst(fieldDecl, child, cxxConstructExpr))
+                bPotentiallyWrittenTo = true;
             break;
         }
         else if (auto callExpr = dyn_cast<CallExpr>(parent))
         {
             const FunctionDecl * calleeFunctionDecl = callExpr->getDirectCallee();
             if (calleeFunctionDecl) {
-                if (IsPassedByNonConstRef(child, callExpr, calleeFunctionDecl, false/*bParamsAndArgsOffset*/))
+                if (IsPassedByNonConst(fieldDecl, child, callExpr, calleeFunctionDecl))
                     bPotentiallyWrittenTo = true;
             } else
                 bPotentiallyWrittenTo = true; // conservative, could improve
@@ -687,8 +676,13 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
                 || op == BO_DivAssign || op == BO_RemAssign || op == BO_AddAssign
                 || op == BO_SubAssign || op == BO_ShlAssign || op == BO_ShrAssign
                 || op == BO_AndAssign || op == BO_XorAssign || op == BO_OrAssign;
-            if (binaryOp->getLHS() == child && assignmentOp) {
-                bPotentiallyWrittenTo = true;
+            if (assignmentOp)
+            {
+                if (binaryOp->getLHS() == child)
+                    bPotentiallyWrittenTo = true;
+                else if (loplugin::TypeCheck(binaryOp->getLHS()->getType()).LvalueReference().NonConstVolatile())
+                    // if the LHS is a non-const reference, we could write to the field later on
+                    bPotentiallyWrittenTo = true;
             }
             break;
         }
@@ -748,6 +742,7 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
             parent->dump();
         }
         memberExpr->dump();
+        fieldDecl->getType()->dump();
     }
 
     MyFieldInfo fieldInfo = niceName(fieldDecl);
@@ -755,16 +750,52 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
         writeToSet.insert(fieldInfo);
 }
 
-bool UnusedFields::IsPassedByNonConstRef(const Stmt * child, const CallExpr * callExpr,
-                                         const FunctionDecl * calleeFunctionDecl,
-                                         bool bParamsAndArgsOffset)
+bool UnusedFields::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, const CallExpr * callExpr,
+                                         const FunctionDecl * calleeFunctionDecl)
 {
-    unsigned len = std::min(callExpr->getNumArgs() + (bParamsAndArgsOffset ? 1 : 0),
+    unsigned len = std::min(callExpr->getNumArgs(),
                             calleeFunctionDecl->getNumParams());
-    for (unsigned i = 0; i < len; ++i)
-        if (callExpr->getArg(i + (bParamsAndArgsOffset ? 1 : 0)) == child)
-            if (loplugin::TypeCheck(calleeFunctionDecl->getParamDecl(i)->getType()).NonConst().LvalueReference())
-                return true;
+    // if it's an array, passing it by value to a method typically means the
+    // callee takes a pointer and can modify the array
+    if (fieldDecl->getType()->isConstantArrayType())
+    {
+        for (unsigned i = 0; i < len; ++i)
+            if (callExpr->getArg(i) == child)
+                if (loplugin::TypeCheck(calleeFunctionDecl->getParamDecl(i)->getType()).NonConst().Pointer())
+                    return true;
+    }
+    else
+    {
+        for (unsigned i = 0; i < len; ++i)
+            if (callExpr->getArg(i) == child)
+                if (loplugin::TypeCheck(calleeFunctionDecl->getParamDecl(i)->getType()).NonConst().LvalueReference())
+                    return true;
+    }
+    return false;
+}
+
+bool UnusedFields::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, const CXXConstructExpr * cxxConstructExpr)
+{
+    const CXXConstructorDecl * cxxConstructorDecl = cxxConstructExpr->getConstructor();
+    unsigned len = std::min(cxxConstructExpr->getNumArgs(),
+                            cxxConstructorDecl->getNumParams());
+    // if it's an array, passing it by value to a method typically means the
+    // callee takes a pointer and can modify the array
+    if (fieldDecl->getType()->isConstantArrayType())
+    {
+        for (unsigned i = 0; i < len; ++i)
+            if (cxxConstructExpr->getArg(i) == child)
+                if (loplugin::TypeCheck(cxxConstructorDecl->getParamDecl(i)->getType()).NonConst().Pointer())
+                    return true;
+    }
+    else
+    {
+        for (unsigned i = 0; i < len; ++i)
+            if (cxxConstructExpr->getArg(i) == child)
+                if (loplugin::TypeCheck(cxxConstructorDecl->getParamDecl(i)->getType()).NonConst().LvalueReference())
+                    return true;
+
+    }
     return false;
 }
 
@@ -803,28 +834,12 @@ bool UnusedFields::VisitCXXConstructorDecl( const CXXConstructorDecl* cxxConstru
 
 // Fields that are assigned via init-list-expr do not get visited in VisitDeclRef, so
 // have to do it here.
-// TODO could be more precise here about which fields are actually being written to
-bool UnusedFields::VisitVarDecl( const VarDecl* varDecl)
+bool UnusedFields::VisitInitListExpr( const InitListExpr* initListExpr)
 {
-    if (!varDecl->getLocation().isValid() || ignoreLocation( varDecl ))
-        return true;
-    // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())))
+    if (ignoreLocation( initListExpr ))
         return true;
 
-    if (!varDecl->hasInit())
-        return true;
-    auto initListExpr = dyn_cast<InitListExpr>(varDecl->getInit()->IgnoreImplicit());
-    if (!initListExpr)
-        return true;
-
-    // If this is an array, navigate down until we hit a record.
-    // It appears to be somewhat painful to navigate down an array type structure reliably.
-    QualType varType = varDecl->getType().getDesugaredType(compiler.getASTContext());
-    while (varType->isArrayType() || varType->isConstantArrayType()
-            || varType->isIncompleteArrayType() || varType->isVariableArrayType()
-            || varType->isDependentSizedArrayType())
-        varType = varType->getAsArrayTypeUnsafe()->getElementType().getDesugaredType(compiler.getASTContext());
+    QualType varType = initListExpr->getType().getDesugaredType(compiler.getASTContext());
     auto recordType = varType->getAs<RecordType>();
     if (!recordType)
         return true;
