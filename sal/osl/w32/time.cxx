@@ -27,8 +27,6 @@
 #include <osl/time.h>
 #include <sys/timeb.h>
 
-// osl_getSystemTime
-
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 {
     SYSTEMTIME SystemTime;
@@ -78,8 +76,6 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
     return true;
 }
 
-// osl_getDateTimeFromTimeValue
-
 sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDateTime* pDateTime )
 {
     FILETIME    aFileTime;
@@ -105,8 +101,6 @@ sal_Bool SAL_CALL osl_getDateTimeFromTimeValue( const TimeValue* pTimeVal, oslDa
 
     return false;
 }
-
-// osl_getTimeValueFromDateTime
 
 sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, TimeValue* pTimeVal )
 {
@@ -134,8 +128,6 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( const oslDateTime* pDateTime, Ti
     return false;
 }
 
-// osl_getLocalTimeFromSystemTime
-
 sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
     TIME_ZONE_INFORMATION aTimeZoneInformation;
@@ -162,8 +154,6 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( const TimeValue* pSystemTimeVa
 
     return false;
 }
-
-// osl_getSystemTimeFromLocalTime
 
 sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {
