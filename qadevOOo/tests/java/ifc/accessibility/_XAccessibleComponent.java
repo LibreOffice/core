@@ -48,7 +48,6 @@ import com.sun.star.uno.UnoRuntime;
 public class _XAccessibleComponent extends MultiMethodTest {
 
     public XAccessibleComponent oObj = null;
-    private Rectangle bounds = null;
     private final ArrayList<Rectangle> KnownBounds = new ArrayList<Rectangle>();
 
 
@@ -67,7 +66,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
      * </ul>
      */
     public void _containsPoint() {
-        requiredMethod("getBounds()");
+        Rectangle bounds = oObj.getBounds();
 
         boolean result = true;
 
@@ -375,7 +374,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
     }
 
     /**
-     * Retrieves the component bounds and stores it. <p>
+     * Retrieves the component bounds and discards it. <p>
      *
      * Has <b> OK </b> status if boundary position (x,y) is not negative
      * and size (Width, Height) is greater than 0.
@@ -383,7 +382,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
     public void _getBounds() {
         boolean result = true;
 
-        bounds = oObj.getBounds();
+        Rectangle bounds = oObj.getBounds();
         result &= ((bounds != null) && (bounds.X >= 0) && (bounds.Y >= 0) && (bounds.Width > 0) && (bounds.Height > 0));
 
         log.println("Bounds = " +
@@ -399,22 +398,14 @@ public class _XAccessibleComponent extends MultiMethodTest {
      *
      * Has <b> OK </b> status if the location is the same as location
      * of boundary obtained by <code>getBounds()</code> method.
-     *
-     * The following method tests are to be completed successfully before :
-     * <ul>
-     *  <li> <code> getBounds() </code> : to have bounds </li>
-     * </ul>
      */
     public void _getLocation() {
-        requiredMethod("getBounds()");
-
+        Rectangle bounds = oObj.getBounds();
         Point loc = oObj.getLocation();
         boolean result = loc.X == bounds.X && loc.Y == bounds.Y;
-        if (!result) {
-            log.println(
-                "loc.X=" + loc.X + " vs. bounds.X=" + bounds.X + ", loc.Y="
-                + loc.Y + " vs. bounds.Y=" + bounds.Y);
-        }
+        log.println(
+            "loc.X=" + loc.X + " vs. bounds.X=" + bounds.X + ", loc.Y="
+            + loc.Y + " vs. bounds.Y=" + bounds.Y);
         tRes.tested("getLocation()", result);
     }
 
@@ -425,19 +416,12 @@ public class _XAccessibleComponent extends MultiMethodTest {
      * Has <b> OK </b> status if component screen location equals
      * to screen location of its parent plus location of the component
      * relative to the parent. <p>
-     *
-     * The following method tests are to be completed successfully before :
-     * <ul>
-     *  <li> <code> getBounds() </code> : to have location of the component
-     *      relative to its parent</li>
-     * </ul>
      */
     public void _getLocationOnScreen() {
-        requiredMethod("getBounds()");
-
         XAccessibleComponent parent = getParentComponent();
 
         boolean result = true;
+        Rectangle bounds = oObj.getBounds();
         Point loc = oObj.getLocationOnScreen();
         log.println("Location is (" + loc.X + "," + loc.Y + ")");
 
@@ -457,36 +441,16 @@ public class _XAccessibleComponent extends MultiMethodTest {
      * Obtains the size of the component. <p>
      *
      * Has <b> OK </b> status if the size is the same as in bounds. <p>
-     *
-     * The following method tests are to be completed successfully before :
-     * <ul>
-     *  <li> <code> getBounds() </code>  </li>
-     * </ul>
      */
     public void _getSize() {
         requiredMethod("getBounds()");
 
-        boolean result = false;
+        boolean result = true;
+        Rectangle bounds = oObj.getBounds();
         Size size = oObj.getSize();
 
-        for (int i = 0; i < 2 && !result; i++)
-        {
-            result = true;
-            result &= (size.Width == bounds.Width);
-            result &= (size.Height == bounds.Height);
-            if (!result) {
-                log.println( "potential race bounds " + bounds.Width + "x" + bounds.Height +
-                             " vs. size " + size.Width + "x" + size.Height);
-                // Possibly we hit a race condition and it re-sized (?) ...
-                // One such race is described in
-                // <https://bugs.documentfoundation.org/show_bug.cgi?id=64587>
-                // "SvpSalInstance::CheckTimeout -> ScTable::SetRowHeightRange
-                // breaks JunitTest_sc_unoapi sc.ScAccessibleCell::com::sun::
-                // star::accessibility::XAccessibleComponent::getSize()".
-                bounds = oObj.getBounds();
-                size = oObj.getSize();
-            }
-        }
+        result &= (size.Width == bounds.Width);
+        result &= (size.Height == bounds.Height);
 
         tRes.tested("getSize()", result);
     }
