@@ -888,7 +888,12 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 ( pNewRedl->GetContentIdx() == nullptr ) )
                                 bDelete = true;
                         }
-                        else if( SwComparePosition::Inside == eCmpPos || SwComparePosition::Equal == eCmpPos)
+                        else if( SwComparePosition::Inside == eCmpPos )
+                        {
+                            bDelete = true;
+                            bMerged = true;
+                        }
+                        else if( SwComparePosition::Equal == eCmpPos )
                             bDelete = true;
 
                         if( bDelete )
