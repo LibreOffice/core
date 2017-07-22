@@ -33,10 +33,6 @@ extern "C" {
 void sal_detail_initialize(int argc, char ** argv)
 {
     sal_initGlobalTimer();
-    // SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
-    // SetDllDirectoryW(L"");
-    // SetSearchPathMode(
-    //   BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE | BASE_SEARCH_PATH_PERMANENT);
     HMODULE h = GetModuleHandleW(L"kernel32.dll");
     if (h != nullptr) {
         FARPROC p;
