@@ -46,23 +46,23 @@ static double const n10s[2][n10Count] = {
 };
 
 // return pow(10.0,nExp) optimized for exponents in the interval [-16,16]
-static double getN10Exp( int nExp )
+static double getN10Exp(int nExp)
 {
-    if ( nExp < 0 )
+    if (nExp < 0)
     {
         // && -nExp > 0 necessary for std::numeric_limits<int>::min()
         // because -nExp = nExp
-        if ( -nExp <= n10Count && -nExp > 0 )
+        if (-nExp <= n10Count && -nExp > 0)
             return n10s[1][-nExp-1];
-        return pow( 10.0, static_cast<double>( nExp ) );
+        return pow(10.0, static_cast<double>(nExp));
     }
-    if ( nExp > 0 )
+    if (nExp > 0)
     {
-        if ( nExp <= n10Count )
+        if (nExp <= n10Count)
             return n10s[0][nExp-1];
-        return pow( 10.0, static_cast<double>( nExp ) );
+
+        return pow(10.0, static_cast<double>(nExp));
     }
-    // ( nExp == 0 )
     return 1.0;
 }
 
@@ -95,7 +95,7 @@ struct StringTraits
                                    sal_Int32 * pOffset, sal_Char const * pChars,
                                    sal_Int32 nLen)
     {
-        assert(pChars != nullptr);
+        assert(pChars);
         rtl_stringbuffer_insert(pBuffer, pCapacity, *pOffset, pChars, nLen);
         *pOffset += nLen;
     }
@@ -104,7 +104,7 @@ struct StringTraits
                                    sal_Int32 * pOffset, sal_Char const * pStr,
                                    sal_Int32 nLen)
     {
-        assert(pStr != nullptr);
+        assert(pStr);
         rtl_stringbuffer_insert(pBuffer, pCapacity, *pOffset, pStr, nLen);
         *pOffset += nLen;
     }
@@ -132,7 +132,7 @@ struct UStringTraits
                                    sal_Int32 * pCapacity, sal_Int32 * pOffset,
                                    sal_Unicode const * pChars, sal_Int32 nLen)
     {
-        assert(pChars != nullptr);
+        assert(pChars);
         rtl_uStringbuffer_insert(pBuffer, pCapacity, *pOffset, pChars, nLen);
         *pOffset += nLen;
     }
@@ -153,10 +153,10 @@ struct UStringTraits
 bool isRepresentableInteger(double fAbsValue)
 {
     assert(fAbsValue >= 0.0);
-    const sal_Int64 kMaxInt = (static_cast<sal_Int64>(1) << 53) - 1;
-    if (fAbsValue <= static_cast<double>(kMaxInt))
+    const sal_Int64 kMaxInt = (static_cast< sal_Int64 >(1) << 53) - 1;
+    if (fAbsValue <= static_cast< double >(kMaxInt))
     {
-        sal_Int64 nInt = static_cast<sal_Int64>(fAbsValue);
+        sal_Int64 nInt = static_cast< sal_Int64 >(fAbsValue);
         // Check the integer range again because double comparison may yield
         // true within the precision range.
         // XXX loplugin:fpcomparison complains about floating-point comparison
@@ -164,7 +164,7 @@ bool isRepresentableInteger(double fAbsValue)
         // this here.
         double fInt;
         return (nInt <= kMaxInt &&
-                (!((fInt = static_cast<double>(nInt)) < fAbsValue) && !(fInt > fAbsValue)));
+                (!((fInt = static_cast< double >(nInt)) < fAbsValue) && !(fInt > fAbsValue)));
     }
     return false;
 }
@@ -185,20 +185,22 @@ inline void doubleToString(typename T::String ** pResult,
 
     // sign adjustment, instead of testing for fValue<0.0 this will also fetch
     // -0.0
-    bool bSign = rtl::math::isSignBitSet( fValue );
-    if( bSign )
+    bool bSign = rtl::math::isSignBitSet(fValue);
+
+    if (bSign)
         fValue = -fValue;
 
-    if ( rtl::math::isNan( fValue ) )
+    if (rtl::math::isNan(fValue))
     {
         // #i112652# XMLSchema-2
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("NaN");
-        if (pResultCapacity == nullptr)
+        if (!pResultCapacity)
         {
             pResultCapacity = &nCapacity;
             T::createBuffer(pResult, pResultCapacity);
             nResultOffset = 0;
         }
+
         T::appendAscii(pResult, pResultCapacity, &nResultOffset,
                        RTL_CONSTASCII_STRINGPARAM("NaN"));
 
@@ -206,19 +208,21 @@ inline void doubleToString(typename T::String ** pResult,
     }
 
     bool bHuge = fValue == HUGE_VAL; // g++ 3.0.1 requires it this way...
-    if ( bHuge || rtl::math::isInf( fValue ) )
+    if (bHuge || rtl::math::isInf(fValue))
     {
         // #i112652# XMLSchema-2
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-INF");
-        if (pResultCapacity == nullptr)
+        if (!pResultCapacity)
         {
             pResultCapacity = &nCapacity;
             T::createBuffer(pResult, pResultCapacity);
             nResultOffset = 0;
         }
+
         if ( bSign )
             T::appendAscii(pResult, pResultCapacity, &nResultOffset,
                            RTL_CONSTASCII_STRINGPARAM("-"));
+
         T::appendAscii(pResult, pResultCapacity, &nResultOffset,
                        RTL_CONSTASCII_STRINGPARAM("INF"));
 
@@ -227,31 +231,34 @@ inline void doubleToString(typename T::String ** pResult,
 
     // Use integer representation for integer values that fit into the
     // mantissa (1.((2^53)-1)) with a precision of 1 for highest accuracy.
-    const sal_Int64 kMaxInt = (static_cast<sal_Int64>(1) << 53) - 1;
+    const sal_Int64 kMaxInt = (static_cast< sal_Int64 >(1) << 53) - 1;
     if ((eFormat == rtl_math_StringFormat_Automatic ||
-         eFormat == rtl_math_StringFormat_F) && fValue <= static_cast<double>(kMaxInt))
+         eFormat == rtl_math_StringFormat_F) && fValue <= static_cast< double >(kMaxInt))
     {
-        sal_Int64 nInt = static_cast<sal_Int64>(fValue);
+        sal_Int64 nInt = static_cast< sal_Int64 >(fValue);
         // Check the integer range again because double comparison may yield
         // true within the precision range.
-        if (nInt <= kMaxInt && static_cast<double>(nInt) == fValue)
+        if (nInt <= kMaxInt && static_cast< double >(nInt) == fValue)
         {
             if (nDecPlaces == rtl_math_DecimalPlaces_Max)
                 nDecPlaces = 0;
             else
-                nDecPlaces = ::std::max<sal_Int32>( ::std::min<sal_Int32>( nDecPlaces, 15), -15);
+                nDecPlaces = ::std::max< sal_Int32 >(::std::min<sal_Int32>(nDecPlaces, 15), -15);
+
             if (bEraseTrailingDecZeros && nDecPlaces > 0)
                 nDecPlaces = 0;
 
             // Round before decimal position.
             if (nDecPlaces < 0)
             {
-                sal_Int64 nRounding = static_cast<sal_Int64>( getN10Exp( -nDecPlaces - 1));
+                sal_Int64 nRounding = static_cast< sal_Int64 >(getN10Exp(-nDecPlaces - 1));
                 sal_Int64 nTemp = nInt / nRounding;
                 int nDigit = nTemp % 10;
                 nTemp /= 10;
+
                 if (nDigit >= 5)
                     ++nTemp;
+
                 nTemp *= 10;
                 nTemp *= nRounding;
                 nInt = nTemp;
@@ -290,6 +297,7 @@ inline void doubleToString(typename T::String ** pResult,
             {
                 ::std::swap( pBuf[i], p[-i-1]);
             }
+
             // Append decimals.
             if (nDecPlaces > 0)
             {
@@ -298,7 +306,7 @@ inline void doubleToString(typename T::String ** pResult,
                     *p++ = '0';
             }
 
-            if (pResultCapacity == nullptr)
+            if (!pResultCapacity)
                 T::createString(pResult, pBuf, p - pBuf);
             else
                 T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf, p - pBuf);
@@ -311,23 +319,23 @@ inline void doubleToString(typename T::String ** pResult,
     int nExp = 0;
     if ( fValue > 0.0 )
     {
-        nExp = static_cast< int >( floor( log10( fValue ) ) );
-        fValue /= getN10Exp( nExp );
+        nExp = static_cast< int >(floor(log10(fValue)));
+        fValue /= getN10Exp(nExp);
     }
 
-    switch ( eFormat )
+    switch (eFormat)
     {
-        case rtl_math_StringFormat_Automatic :
+        case rtl_math_StringFormat_Automatic:
         {   // E or F depending on exponent magnitude
             int nPrec;
-            if ( nExp <= -15 || nExp >= 15 )        // #58531# was <-16, >16
+            if (nExp <= -15 || nExp >= 15) // #58531# was <-16, >16
             {
                 nPrec = 14;
                 eFormat = rtl_math_StringFormat_E;
             }
             else
             {
-                if ( nExp < 14 )
+                if (nExp < 14)
                 {
                     nPrec = 15 - nExp - 1;
                     eFormat = rtl_math_StringFormat_F;
@@ -338,29 +346,33 @@ inline void doubleToString(typename T::String ** pResult,
                     eFormat = rtl_math_StringFormat_F;
                 }
             }
-            if ( nDecPlaces == rtl_math_DecimalPlaces_Max )
+
+            if (nDecPlaces == rtl_math_DecimalPlaces_Max)
                 nDecPlaces = nPrec;
         }
         break;
+
         case rtl_math_StringFormat_G :
         case rtl_math_StringFormat_G1 :
         case rtl_math_StringFormat_G2 :
         {   // G-Point, similar to sprintf %G
-            if ( nDecPlaces == rtl_math_DecimalPlaces_DefaultSignificance )
+            if (nDecPlaces == rtl_math_DecimalPlaces_DefaultSignificance)
                 nDecPlaces = 6;
-            if ( nExp < -4 || nExp >= nDecPlaces )
+
+            if (nExp < -4 || nExp >= nDecPlaces)
             {
-                nDecPlaces = std::max< sal_Int32 >( 1, nDecPlaces - 1 );
-                if( eFormat == rtl_math_StringFormat_G )
+                nDecPlaces = std::max< sal_Int32 >(1, nDecPlaces - 1);
+
+                if (eFormat == rtl_math_StringFormat_G)
                     eFormat = rtl_math_StringFormat_E;
-                else if( eFormat == rtl_math_StringFormat_G2 )
+                else if (eFormat == rtl_math_StringFormat_G2)
                     eFormat = rtl_math_StringFormat_E2;
-                else if( eFormat == rtl_math_StringFormat_G1 )
+                else if (eFormat == rtl_math_StringFormat_G1)
                     eFormat = rtl_math_StringFormat_E1;
             }
             else
             {
-                nDecPlaces = std::max< sal_Int32 >( 0, nDecPlaces - nExp - 1 );
+                nDecPlaces = std::max< sal_Int32 >(0, nDecPlaces - nExp - 1);
                 eFormat = rtl_math_StringFormat_F;
             }
         }
@@ -371,17 +383,18 @@ inline void doubleToString(typename T::String ** pResult,
 
     sal_Int32 nDigits = nDecPlaces + 1;
 
-    if( eFormat == rtl_math_StringFormat_F )
+    if (eFormat == rtl_math_StringFormat_F)
         nDigits += nExp;
 
     // Round the number
-    if( nDigits >= 0 )
+    if(nDigits >= 0)
     {
-        if( ( fValue += nRoundVal[ nDigits > 15 ? 15 : nDigits ] ) >= 10 )
+        if ((fValue += nRoundVal[nDigits > 15 ? 15 : nDigits] ) >= 10)
         {
             fValue = 1.0;
             nExp++;
-            if( eFormat == rtl_math_StringFormat_F )
+
+            if (eFormat == rtl_math_StringFormat_F)
                 nDigits++;
         }
     }
@@ -390,16 +403,20 @@ inline void doubleToString(typename T::String ** pResult,
     typename T::Char aBuf[nBufMax];
     typename T::Char * pBuf;
     sal_Int32 nBuf = static_cast< sal_Int32 >
-        ( nDigits <= 0 ? std::max< sal_Int32 >( nDecPlaces, abs(nExp) )
+        (nDigits <= 0 ? std::max< sal_Int32 >(nDecPlaces, abs(nExp))
           : nDigits + nDecPlaces ) + 10 + (pGroups ? abs(nDigits) * 2 : 0);
-    if ( nBuf > nBufMax )
+
+    if (nBuf > nBufMax)
     {
         pBuf = static_cast< typename T::Char * >(
             rtl_allocateMemory(nBuf * sizeof (typename T::Char)));
-        OSL_ENSURE(pBuf != nullptr, "Out of memory");
+        OSL_ENSURE(pBuf, "Out of memory");
     }
     else
+    {
         pBuf = aBuf;
+    }
+
     typename T::Char * p = pBuf;
     if ( bSign )
         *p++ = static_cast< typename T::Char >('-');
@@ -408,64 +425,76 @@ inline void doubleToString(typename T::String ** pResult,
 
     int nDecPos;
     // Check for F format and number < 1
-    if( eFormat == rtl_math_StringFormat_F )
+    if(eFormat == rtl_math_StringFormat_F)
     {
-        if( nExp < 0 )
+        if(nExp < 0)
         {
             *p++ = static_cast< typename T::Char >('0');
-            if ( nDecPlaces > 0 )
+            if (nDecPlaces > 0)
             {
                 *p++ = cDecSeparator;
                 bHasDec = true;
             }
-            sal_Int32 i = ( nDigits <= 0 ? nDecPlaces : -nExp - 1 );
-            while( (i--) > 0 )
+
+            sal_Int32 i = (nDigits <= 0 ? nDecPlaces : -nExp - 1);
+
+            while((i--) > 0)
+            {
                 *p++ = static_cast< typename T::Char >('0');
+            }
+
             nDecPos = 0;
         }
         else
+        {
             nDecPos = nExp + 1;
+        }
     }
     else
+    {
         nDecPos = 1;
+    }
 
     int nGrouping = 0, nGroupSelector = 0, nGroupExceed = 0;
-    if ( nDecPos > 1 && pGroups && pGroups[0] && cGroupSeparator )
+    if (nDecPos > 1 && pGroups && pGroups[0] && cGroupSeparator)
     {
-        while ( nGrouping + pGroups[nGroupSelector] < nDecPos )
+        while (nGrouping + pGroups[nGroupSelector] < nDecPos)
         {
-            nGrouping += pGroups[ nGroupSelector ];
-            if ( pGroups[nGroupSelector+1] )
+            nGrouping += pGroups[nGroupSelector];
+            if (pGroups[nGroupSelector+1])
             {
-                if ( nGrouping + pGroups[nGroupSelector+1] >= nDecPos )
+                if (nGrouping + pGroups[nGroupSelector+1] >= nDecPos)
                     break;  // while
+
                 ++nGroupSelector;
             }
-            else if ( !nGroupExceed )
+            else if (!nGroupExceed)
+            {
                 nGroupExceed = nGrouping;
+            }
         }
     }
 
     // print the number
-    if( nDigits > 0 )
+    if (nDigits > 0)
     {
-        for ( int i = 0; ; i++ )
+        for (int i = 0; ; i++)
         {
-            if( i < 15 )
+            if (i < 15)
             {
                 int nDigit;
                 if (nDigits-1 == 0 && i > 0 && i < 14)
-                    nDigit = static_cast< int >( floor( fValue
-                                                        + nKorrVal[15-i] ) );
+                    nDigit = static_cast< int >(floor( fValue + nKorrVal[15-i]));
                 else
-                    nDigit = static_cast< int >( fValue + 1E-15 );
+                    nDigit = static_cast< int >(fValue + 1E-15);
+
                 if (nDigit >= 10)
                 {   // after-treatment of up-rounding to the next decade
                     sal_Int32 sLen = static_cast< long >(p-pBuf)-1;
                     if (sLen == -1)
                     {
                         p = pBuf;
-                        if ( eFormat == rtl_math_StringFormat_F )
+                        if (eFormat == rtl_math_StringFormat_F)
                         {
                             *p++ = static_cast< typename T::Char >('1');
                             *p++ = static_cast< typename T::Char >('0');
@@ -486,38 +515,37 @@ inline void doubleToString(typename T::String ** pResult,
                             typename T::Char cS = pBuf[j];
                             if (cS != cDecSeparator)
                             {
-                                if ( cS != static_cast< typename T::Char >('9'))
+                                if (cS != static_cast< typename T::Char >('9'))
                                 {
                                     pBuf[j] = ++cS;
                                     j = -1;                 // break loop
                                 }
                                 else
                                 {
-                                    pBuf[j]
-                                        = static_cast< typename T::Char >('0');
+                                    pBuf[j] = static_cast< typename T::Char >('0');
                                     if (j == 0)
                                     {
-                                        if ( eFormat == rtl_math_StringFormat_F)
+                                        if (eFormat == rtl_math_StringFormat_F)
                                         {   // insert '1'
                                             typename T::Char * px = p++;
-                                            while ( pBuf < px )
+                                            while (pBuf < px)
                                             {
                                                 *px = *(px-1);
                                                 px--;
                                             }
-                                            pBuf[0] = static_cast<
-                                                typename T::Char >('1');
+
+                                            pBuf[0] = static_cast< typename T::Char >('1');
                                         }
                                         else
                                         {
-                                            pBuf[j] = static_cast<
-                                                typename T::Char >('1');
+                                            pBuf[j] = static_cast< typename T::Char >('1');
                                             nExp++;
                                         }
                                     }
                                 }
                             }
                         }
+
                         *p++ = static_cast< typename T::Char >('0');
                     }
                     fValue = 0.0;
@@ -526,88 +554,104 @@ inline void doubleToString(typename T::String ** pResult,
                 {
                     *p++ = static_cast< typename T::Char >(
                         nDigit + static_cast< typename T::Char >('0') );
-                    fValue = ( fValue - nDigit ) * 10.0;
+                    fValue = (fValue - nDigit) * 10.0;
                 }
             }
             else
-                *p++ = static_cast< typename T::Char >('0');
-            if( !--nDigits )
-                break;  // for
-            if( nDecPos )
             {
-                if( !--nDecPos )
+                *p++ = static_cast< typename T::Char >('0');
+            }
+
+            if (!--nDigits)
+                break;  // for
+
+            if (nDecPos)
+            {
+                if(!--nDecPos)
                 {
                     *p++ = cDecSeparator;
                     bHasDec = true;
                 }
-                else if ( nDecPos == nGrouping )
+                else if (nDecPos == nGrouping)
                 {
                     *p++ = cGroupSeparator;
-                    nGrouping -= pGroups[ nGroupSelector ];
-                    if ( nGroupSelector && nGrouping < nGroupExceed )
+                    nGrouping -= pGroups[nGroupSelector];
+
+                    if (nGroupSelector && nGrouping < nGroupExceed)
                         --nGroupSelector;
                 }
             }
         }
     }
 
-    if ( !bHasDec && eFormat == rtl_math_StringFormat_F )
+    if (!bHasDec && eFormat == rtl_math_StringFormat_F)
     {   // nDecPlaces < 0 did round the value
-        while ( --nDecPos > 0 )
+        while (--nDecPos > 0)
         {   // fill before decimal point
-            if ( nDecPos == nGrouping )
+            if (nDecPos == nGrouping)
             {
                 *p++ = cGroupSeparator;
-                nGrouping -= pGroups[ nGroupSelector ];
-                if ( nGroupSelector && nGrouping < nGroupExceed )
+                nGrouping -= pGroups[nGroupSelector];
+
+                if (nGroupSelector && nGrouping < nGroupExceed)
                     --nGroupSelector;
             }
+
             *p++ = static_cast< typename T::Char >('0');
         }
     }
 
-    if ( bEraseTrailingDecZeros && bHasDec && p > pBuf )
+    if (bEraseTrailingDecZeros && bHasDec && p > pBuf)
     {
-        while ( *(p-1) == static_cast< typename T::Char >('0') )
+        while (*(p-1) == static_cast< typename T::Char >('0'))
+        {
             p--;
-        if ( *(p-1) == cDecSeparator )
+        }
+
+        if (*(p-1) == cDecSeparator)
             p--;
     }
 
     // Print the exponent ('E', followed by '+' or '-', followed by exactly
     // three digits for rtl_math_StringFormat_E).  The code in
     // rtl_[u]str_valueOf{Float|Double} relies on this format.
-    if( eFormat == rtl_math_StringFormat_E || eFormat == rtl_math_StringFormat_E2 || eFormat == rtl_math_StringFormat_E1 )
+    if (eFormat == rtl_math_StringFormat_E || eFormat == rtl_math_StringFormat_E2 || eFormat == rtl_math_StringFormat_E1)
     {
-        if ( p == pBuf )
+        if (p == pBuf)
             *p++ = static_cast< typename T::Char >('1');
                 // maybe no nDigits if nDecPlaces < 0
+
         *p++ = static_cast< typename T::Char >('E');
-        if( nExp < 0 )
+        if(nExp < 0)
         {
             nExp = -nExp;
             *p++ = static_cast< typename T::Char >('-');
         }
         else
+        {
             *p++ = static_cast< typename T::Char >('+');
-        if ( eFormat == rtl_math_StringFormat_E || nExp >= 100 )
+        }
+
+        if (eFormat == rtl_math_StringFormat_E || nExp >= 100)
             *p++ = static_cast< typename T::Char >(
                 nExp / 100 + static_cast< typename T::Char >('0') );
+
         nExp %= 100;
-        if ( eFormat == rtl_math_StringFormat_E || eFormat == rtl_math_StringFormat_E2 || nExp >= 10 )
+
+        if (eFormat == rtl_math_StringFormat_E || eFormat == rtl_math_StringFormat_E2 || nExp >= 10)
             *p++ = static_cast< typename T::Char >(
                 nExp / 10 + static_cast< typename T::Char >('0') );
+
         *p++ = static_cast< typename T::Char >(
             nExp % 10 + static_cast< typename T::Char >('0') );
     }
 
-    if (pResultCapacity == nullptr)
+    if (!pResultCapacity)
         T::createString(pResult, pBuf, p - pBuf);
     else
-        T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf,
-                       p - pBuf);
+        T::appendChars(pResult, pResultCapacity, &nResultOffset, pBuf, p - pBuf);
 
-    if ( pBuf != &aBuf[0] )
+    if (pBuf != &aBuf[0])
         rtl_freeMemory(pBuf);
 }
 
@@ -670,7 +714,10 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
 
     CharT const * p0 = pBegin;
     while (p0 != pEnd && (*p0 == CharT(' ') || *p0 == CharT('\t')))
+    {
         ++p0;
+    }
+
     bool bSign;
     if (p0 != pEnd && *p0 == CharT('-'))
     {
@@ -683,11 +730,12 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
         if (p0 != pEnd && *p0 == CharT('+'))
             ++p0;
     }
+
     CharT const * p = p0;
     bool bDone = false;
 
     // #i112652# XMLSchema-2
-    if (3 <= (pEnd - p))
+    if ((pEnd - p) >= 3)
     {
         if ((CharT('N') == p[0]) && (CharT('a') == p[1])
             && (CharT('N') == p[2]))
@@ -710,7 +758,9 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
     {
         // leading zeros and group separators may be safely ignored
         while (p != pEnd && (*p == CharT('0') || *p == cGroupSeparator))
+        {
             ++p;
+        }
 
         CharT const * pFirstSignificant = p;
         long nValExp = 0;       // carry along exponent of mantissa
@@ -725,7 +775,9 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 ++nValExp;
             }
             else if (c != cGroupSeparator)
+            {
                 break;
+            }
         }
 
         // fraction part of mantissa
@@ -739,8 +791,10 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 --nFracExp;
                 ++p;
             }
-            if ( nValExp == 0 )
+
+            if (nValExp == 0)
                 nValExp = nFracExp - 1; // no integer part => fraction exponent
+
             // one decimal digit needs ld(10) ~= 3.32 bits
             static const int nSigs = (DBL_MANT_DIG / 3) + 1;
             int nDigs = 0;
@@ -748,7 +802,9 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             {
                 CharT c = *p;
                 if (!rtl::isAsciiDigit(c))
+                {
                     break;
+                }
                 if ( nDigs < nSigs )
                 {   // further digits (more than nSigs) don't have any
                     // significance
@@ -757,25 +813,30 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                     ++nDigs;
                 }
             }
-            if ( fFrac != 0.0 )
+
+            if (fFrac != 0.0)
+            {
                 fVal += rtl::math::pow10Exp( fFrac, nFracExp );
-            else if ( nValExp < 0 )
+            }
+            else if (nValExp < 0)
             {
                 if (pFirstSignificant + 1 == p)
                 {
                     // No digit at all, only separator(s) without integer or
                     // fraction part. Bail out. No number. No error.
-                    if (pStatus != nullptr)
+                    if (pStatus)
                         *pStatus = eStatus;
-                    if (pParsedEnd != nullptr)
+
+                    if (pParsedEnd)
                         *pParsedEnd = pBegin;
+
                     return fVal;
                 }
                 nValExp = 0;    // no digit other than 0 after decimal point
             }
         }
 
-        if ( nValExp > 0 )
+        if (nValExp > 0)
             --nValExp;  // started with offset +1 at the first mantissa digit
 
         // Exponent
@@ -800,7 +861,10 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             {   // no matter what follows, zero stays zero, but carry on the
                 // offset
                 while (p != pEnd && rtl::isAsciiDigit(*p))
+                {
                     ++p;
+                }
+
                 if (p == pFirstExpDigit)
                 {   // no digits in exponent, reset end of scan
                     p = pExponent;
@@ -815,16 +879,20 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                     CharT c = *p;
                     if (!rtl::isAsciiDigit(c))
                         break;
+
                     int i = c - CharT('0');
+
                     if ( long10Overflow( nExp, i ) )
                         bOverflow = true;
                     else
                         nExp = nExp * 10 + i;
                 }
+
                 if ( nExp )
                 {
                     if ( bExpSign )
                         nExp = -nExp;
+
                     long nAllExp = ( bOverflow ? 0 : nExp + nValExp );
                     if ( nAllExp > DBL_MAX_10_EXP || (bOverflow && !bExpSign) )
                     {   // overflow
@@ -843,7 +911,9 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                         fVal = rtl::math::pow10Exp( fVal, nAllExp );
                     }
                     else
+                    {
                         fVal = rtl::math::pow10Exp( fVal, nExp );  // normal
+                    }
                 }
                 else if (p == pFirstExpDigit)
                 {   // no digits in exponent, reset end of scan
@@ -877,14 +947,18 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                         double sd;
                         sal_math_Double md;
                     } m;
+
                     m.sd = fVal;
                     m.md.w32_parts.msw |= 0x80000000; // create negative NaN
                     fVal = m.sd;
                     bSign = false; // don't negate again
                 }
+
                 // Eat any further digits:
                 while (p != pEnd && rtl::isAsciiDigit(*p))
+                {
                     ++p;
+                }
             }
         }
     }
@@ -892,15 +966,16 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
     // overflow also if more than DBL_MAX_10_EXP digits without decimal
     // separator, or 0. and more than DBL_MIN_10_EXP digits, ...
     bool bHuge = fVal == HUGE_VAL; // g++ 3.0.1 requires it this way...
-    if ( bHuge )
+    if (bHuge)
         eStatus = rtl_math_ConversionStatus_OutOfRange;
 
-    if ( bSign )
+    if (bSign)
         fVal = -fVal;
 
-    if (pStatus != nullptr)
+    if (pStatus)
         *pStatus = eStatus;
-    if (pParsedEnd != nullptr)
+
+    if (pParsedEnd)
         *pParsedEnd = p == p0 ? pBegin : p;
 
     return fVal;
@@ -942,26 +1017,25 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
 {
     OSL_ASSERT(nDecPlaces >= -20 && nDecPlaces <= 20);
 
-    if ( fValue == 0.0  )
+    if (fValue == 0.0)
         return fValue;
 
     // sign adjustment
     bool bSign = rtl::math::isSignBitSet( fValue );
-    if ( bSign )
+    if (bSign)
         fValue = -fValue;
 
     double fFac = 0;
-    if ( nDecPlaces != 0 )
+    if (nDecPlaces != 0)
     {
         // max 20 decimals, we don't have unlimited precision
         // #38810# and no overflow on fValue*=fFac
-        if ( nDecPlaces < -20 || 20 < nDecPlaces || fValue > (DBL_MAX / 1e20) )
+        if (nDecPlaces < -20 || 20 < nDecPlaces || fValue > (DBL_MAX / 1e20))
             return bSign ? -fValue : fValue;
 
-        fFac = getN10Exp( nDecPlaces );
+        fFac = getN10Exp(nDecPlaces);
         fValue *= fFac;
     }
-    //else  //! uninitialized fFac, not needed
 
     switch ( eMode )
     {
@@ -972,41 +1046,44 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
                 nExp = static_cast<int>( floor( log10( fValue ) ) );
             else
                 nExp = 0;
+
             int nIndex = 15 - nExp;
+
             if ( nIndex > 15 )
                 nIndex = 15;
             else if ( nIndex <= 1 )
                 nIndex = 0;
-            fValue = floor( fValue + 0.5 + nKorrVal[nIndex] );
+
+            fValue = floor(fValue + 0.5 + nKorrVal[nIndex]);
         }
         break;
-        case rtl_math_RoundingMode_Down :
-            fValue = rtl::math::approxFloor( fValue );
+        case rtl_math_RoundingMode_Down:
+            fValue = rtl::math::approxFloor(fValue);
         break;
-        case rtl_math_RoundingMode_Up :
-            fValue = rtl::math::approxCeil( fValue );
+        case rtl_math_RoundingMode_Up:
+            fValue = rtl::math::approxCeil(fValue);
         break;
-        case rtl_math_RoundingMode_Floor :
-            fValue = bSign ? rtl::math::approxCeil( fValue )
+        case rtl_math_RoundingMode_Floor:
+            fValue = bSign ? rtl::math::approxCeil(fValue)
                 : rtl::math::approxFloor( fValue );
         break;
-        case rtl_math_RoundingMode_Ceiling :
-            fValue = bSign ? rtl::math::approxFloor( fValue )
-                : rtl::math::approxCeil( fValue );
+        case rtl_math_RoundingMode_Ceiling:
+            fValue = bSign ? rtl::math::approxFloor(fValue)
+                : rtl::math::approxCeil(fValue);
         break;
         case rtl_math_RoundingMode_HalfDown :
         {
-            double f = floor( fValue );
-            fValue = ((fValue - f) <= 0.5) ? f : ceil( fValue );
+            double f = floor(fValue);
+            fValue = ((fValue - f) <= 0.5) ? f : ceil(fValue);
         }
         break;
-        case rtl_math_RoundingMode_HalfUp :
+        case rtl_math_RoundingMode_HalfUp:
         {
-            double f = floor( fValue );
-            fValue = ((fValue - f) < 0.5) ? f : ceil( fValue );
+            double f = floor(fValue);
+            fValue = ((fValue - f) < 0.5) ? f : ceil(fValue);
         }
         break;
-        case rtl_math_RoundingMode_HalfEven :
+        case rtl_math_RoundingMode_HalfEven:
 #if defined FLT_ROUNDS
 /*
     Use fast version. FLT_ROUNDS may be defined to a function by some compilers!
@@ -1021,7 +1098,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
 
     volatile: prevent compiler from being too smart
 */
-            if ( FLT_ROUNDS == 1 )
+            if (FLT_ROUNDS == 1)
             {
                 volatile double x = fValue + 1.0 / DBL_EPSILON;
                 fValue = x - 1.0 / DBL_EPSILON;
@@ -1029,9 +1106,11 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
             else
 #endif // FLT_ROUNDS
             {
-                double f = floor( fValue );
-                if ( (fValue - f) != 0.5 )
+                double f = floor(fValue);
+                if ((fValue - f) != 0.5)
+                {
                     fValue = floor( fValue + 0.5 );
+                }
                 else
                 {
                     double g = f / 2.0;
@@ -1044,7 +1123,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
         break;
     }
 
-    if ( nDecPlaces != 0 )
+    if (nDecPlaces != 0)
         fValue /= fFac;
 
     return bSign ? -fValue : fValue;
@@ -1052,35 +1131,39 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
 
 double SAL_CALL rtl_math_pow10Exp(double fValue, int nExp) SAL_THROW_EXTERN_C()
 {
-    return fValue * getN10Exp( nExp );
+    return fValue * getN10Exp(nExp);
 }
 
 double SAL_CALL rtl_math_approxValue( double fValue ) SAL_THROW_EXTERN_C()
 {
     if (fValue == 0.0 || fValue == HUGE_VAL || !::rtl::math::isFinite( fValue))
+    {
         // We don't handle these conditions.  Bail out.
         return fValue;
+    }
 
     double fOrigValue = fValue;
 
-    bool bSign = ::rtl::math::isSignBitSet( fValue);
+    bool bSign = ::rtl::math::isSignBitSet(fValue);
     if (bSign)
         fValue = -fValue;
 
-    int nExp = static_cast<int>( floor( log10( fValue)));
+    int nExp = static_cast< int >(floor(log10(fValue)));
     nExp = 14 - nExp;
-    double fExpValue = getN10Exp( nExp);
+    double fExpValue = getN10Exp(nExp);
 
     fValue *= fExpValue;
     // If the original value was near DBL_MIN we got an overflow. Restore and
     // bail out.
-    if (!rtl::math::isFinite( fValue))
+    if (!rtl::math::isFinite(fValue))
         return fOrigValue;
-    fValue = rtl_math_round( fValue, 0, rtl_math_RoundingMode_Corrected);
+
+    fValue = rtl_math_round(fValue, 0, rtl_math_RoundingMode_Corrected);
     fValue /= fExpValue;
+
     // If the original value was near DBL_MAX we got an overflow. Restore and
     // bail out.
-    if (!rtl::math::isFinite( fValue))
+    if (!rtl::math::isFinite(fValue))
         return fOrigValue;
 
     return bSign ? -fValue : fValue;
@@ -1090,47 +1173,54 @@ bool SAL_CALL rtl_math_approxEqual(double a, double b) SAL_THROW_EXTERN_C()
 {
     static const double e48 = 1.0 / (16777216.0 * 16777216.0);
     static const double e44 = e48 * 16.0;
+
     if (a == b)
         return true;
+
     if (a == 0.0 || b == 0.0)
         return false;
+
     const double d = fabs(a - b);
     if (!rtl::math::isFinite(d))
         return false;   // Nan or Inf involved
+
     if (d > ((a = fabs(a)) * e44) || d > ((b = fabs(b)) * e44))
         return false;
+
     if (isRepresentableInteger(d) && isRepresentableInteger(a) && isRepresentableInteger(b))
         return false;   // special case for representable integers.
+
     return (d < a * e48 && d < b * e48);
 }
 
-double SAL_CALL rtl_math_expm1( double fValue ) SAL_THROW_EXTERN_C()
+double SAL_CALL rtl_math_expm1(double fValue) SAL_THROW_EXTERN_C()
 {
     return expm1(fValue);
 }
 
-double SAL_CALL rtl_math_log1p( double fValue ) SAL_THROW_EXTERN_C()
+double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C()
 {
 #ifdef __APPLE__
     if (fValue == -0.0)
         return fValue; // OS X 10.8 libc returns 0.0 for -0.0
 #endif
+
     return log1p(fValue);
 }
 
-double SAL_CALL rtl_math_atanh( double fValue ) SAL_THROW_EXTERN_C()
+double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C()
 {
-   return 0.5 * rtl_math_log1p( 2.0 * fValue / (1.0-fValue) );
+   return 0.5 * rtl_math_log1p(2.0 * fValue / (1.0-fValue));
 }
 
 /** Parent error function (erf) */
-double SAL_CALL rtl_math_erf( double x ) SAL_THROW_EXTERN_C()
+double SAL_CALL rtl_math_erf(double x) SAL_THROW_EXTERN_C()
 {
     return erf(x);
 }
 
 /** Parent complementary error function (erfc) */
-double SAL_CALL rtl_math_erfc( double x ) SAL_THROW_EXTERN_C()
+double SAL_CALL rtl_math_erfc(double x) SAL_THROW_EXTERN_C()
 {
     return erfc(x);
 }
@@ -1138,7 +1228,7 @@ double SAL_CALL rtl_math_erfc( double x ) SAL_THROW_EXTERN_C()
 /** improved accuracy of asinh for |x| large and for x near zero
     @see #i97605#
  */
-double SAL_CALL rtl_math_asinh( double fX ) SAL_THROW_EXTERN_C()
+double SAL_CALL rtl_math_asinh(double fX) SAL_THROW_EXTERN_C()
 {
     if ( fX == 0.0 )
         return 0.0;
@@ -1149,8 +1239,10 @@ double SAL_CALL rtl_math_asinh( double fX ) SAL_THROW_EXTERN_C()
         fX = - fX;
         fSign = -1.0;
     }
+
     if ( fX < 0.125 )
         return fSign * rtl_math_log1p( fX + fX*fX / (1.0 + sqrt( 1.0 + fX*fX)));
+
     if ( fX < 1.25e7 )
         return fSign * log( fX + sqrt( 1.0 + fX*fX));
 
@@ -1160,10 +1252,10 @@ double SAL_CALL rtl_math_asinh( double fX ) SAL_THROW_EXTERN_C()
 /** improved accuracy of acosh for x large and for x near 1
     @see #i97605#
  */
-double SAL_CALL rtl_math_acosh( double fX ) SAL_THROW_EXTERN_C()
+double SAL_CALL rtl_math_acosh(double fX) SAL_THROW_EXTERN_C()
 {
     volatile double fZ = fX - 1.0;
-    if ( fX < 1.0 )
+    if (fX < 1.0)
     {
         double fResult;
         ::rtl::math::setNan( &fResult );
@@ -1171,10 +1263,13 @@ double SAL_CALL rtl_math_acosh( double fX ) SAL_THROW_EXTERN_C()
     }
     if ( fX == 1.0 )
         return 0.0;
+
     if ( fX < 1.1 )
         return rtl_math_log1p( fZ + sqrt( fZ*fZ + 2.0*fZ));
+
     if ( fX < 1.25e7 )
         return log( fX + sqrt( fX*fX - 1.0));
+
     return log( 2.0*fX);
 }
 
