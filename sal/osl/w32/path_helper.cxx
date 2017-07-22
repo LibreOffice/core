@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*******************************************************************
- Includes
- ******************************************************************/
-
 #include "path_helper.hxx"
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
@@ -28,16 +24,8 @@
 #include <algorithm>
 #include <wchar.h>
 
-/*******************************************************************
- Constants
- ******************************************************************/
-
 const rtl::OUString BACKSLASH ("\\");
 const rtl::OUString SLASH     ("/");
-
-/*******************************************************************
- osl_systemPathEnsureSeparator
- ******************************************************************/
 
 void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
 {
@@ -58,10 +46,6 @@ void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
                  "osl_systemPathEnsureSeparator: Post condition failed");
 }
 
-/*******************************************************************
- osl_systemPathRemoveSeparator
- ******************************************************************/
-
 void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
 {
     rtl::OUString path(*ppustrPath);
@@ -77,10 +61,6 @@ void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
         }
     }
 }
-
-/*******************************************************************
- osl_is_logical_drive_pattern
- ******************************************************************/
 
 // is [A-Za-z]:[/|\]\0
 const sal_Char* const LDP                = ":";
