@@ -23,9 +23,6 @@
 #include <osl/socket.h>
 #include <osl/interlck.h>
 
-/*****************************************************************************/
-/* oslSocketImpl */
-/*****************************************************************************/
 #define OSL_SOCKET_FLAGS_NONBLOCKING    0x0001
 
 struct oslSocketImpl {
