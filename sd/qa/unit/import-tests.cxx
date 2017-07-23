@@ -167,6 +167,7 @@ public:
     void testSmartArtChildren();
     void testTdf109223();
     void testActiveXCheckbox();
+    void testTdf109187();
 
     bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -241,6 +242,7 @@ public:
     CPPUNIT_TEST(testSmartArtChildren);
     CPPUNIT_TEST(testTdf109223);
     CPPUNIT_TEST(testActiveXCheckbox);
+    CPPUNIT_TEST(testTdf109187);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2361,6 +2363,21 @@ void SdImportTest::testActiveXCheckbox()
     sal_Int16 nState;
     xPropertySet->getPropertyValue("State") >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf109187()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf109187.pptx"), PPTX);
+    uno::Reference< beans::XPropertySet > xArrow1(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    awt::Gradient aGradient1;
+    CPPUNIT_ASSERT(xArrow1->getPropertyValue("FillGradient") >>= aGradient1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2250), aGradient1.Angle);
+    uno::Reference< beans::XPropertySet > xArrow2(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    awt::Gradient aGradient2;
+    CPPUNIT_ASSERT(xArrow2->getPropertyValue("FillGradient") >>= aGradient2);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1350), aGradient2.Angle);
 
     xDocShRef->DoClose();
 }
