@@ -1744,7 +1744,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
     // have applied, also when the section has a pPrev.
     // Now we even consider an empty column...
     OSL_ENSURE( pSect, "GetNextSctLeaf: Missing SectionFrame" );
-    if( ( IsInTab() && !IsTabFrame() ) || FindFooterOrHeader() )
+    if (!pSect || (IsInTab() && !IsTabFrame()) || FindFooterOrHeader())
         return pCol;
 
     // === IMPORTANT ===
