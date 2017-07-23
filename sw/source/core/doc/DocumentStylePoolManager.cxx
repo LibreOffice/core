@@ -1380,18 +1380,16 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             pDeriveFormat = m_rDoc.GetDfltCharFormat();
             pWhichRange = aCharFormatSetRange;
 
-            // Fault: unknown Format, but a CharFormat
-            //             -> return the first one
-            if( RES_POOLCHR_BEGIN > nId || nId >= RES_POOLCHR_END )
-            {
-                OSL_ENSURE( false, "invalid Id" );
-                nId = RES_POOLCHR_BEGIN;
-            }
-
-            if (nId > RES_POOLCHR_NORMAL_END)
+            if (nId >= RES_POOLCHR_HTML_BEGIN && nId < RES_POOLCHR_HTML_END)
                 pRCId = STR_POOLCHR_HTML_ARY[nId - RES_POOLCHR_HTML_BEGIN];
-            else
+            else if (nId >= RES_POOLCHR_NORMAL_BEGIN && nId < RES_POOLCHR_NORMAL_END)
                 pRCId = STR_POOLCHR_ARY[nId - RES_POOLCHR_BEGIN];
+            else
+            {
+                // Fault: unknown Format, but a CharFormat -> return the first one
+                OSL_ENSURE( false, "invalid Id" );
+                pRCId = STR_POOLCHR_ARY[0];
+            }
         }
         break;
     case POOLGRP_FRAMEFMT:
