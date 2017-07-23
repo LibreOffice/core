@@ -404,10 +404,12 @@ public:
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST(testTdf108524);
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTableInSection);
     CPPUNIT_TEST(testTableInNestedSection);
-    CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
+#endif
+    CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST_SUITE_END();
 
 private:
