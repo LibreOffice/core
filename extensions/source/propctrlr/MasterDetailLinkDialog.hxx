@@ -31,7 +31,6 @@ namespace pcr
 
     class MasterDetailLinkDialog :   public MasterDetailLinkDialog_DBase
                                     ,public MasterDetailLinkDialog_PBase
-                                    ,public PcrClient
     {
     public:
         explicit MasterDetailLinkDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);

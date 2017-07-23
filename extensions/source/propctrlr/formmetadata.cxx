@@ -103,9 +103,6 @@ namespace pcr
         if ( s_pPropertyInfos )
             return s_pPropertyInfos;
 
-        PcrClient aResourceAccess;
-        // this ensures that we have our resource file loaded
-
         static OPropertyInfoImpl aPropertyInfos[] =
         {
         /*

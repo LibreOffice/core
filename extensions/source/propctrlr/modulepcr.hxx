@@ -24,7 +24,28 @@
 
 namespace pcr
 {
-    DEFINE_MODULE(PcrModule, PcrClient)
+    /* -------------------------------------------------------------------- */
+    class PcrModule : public ::utl::OComponentResourceModule
+    {
+        friend struct CreateModuleClass;
+        typedef ::utl::OComponentResourceModule BaseClass;
+    public:
+        static PcrModule& getInstance();
+    private:
+        PcrModule();
+    };
+
+    /* -------------------------------------------------------------------- */
+    template < class TYPE >
+    class OAutoRegistration : public ::comphelper::OAutoRegistration< TYPE >
+    {
+    private:
+        typedef ::comphelper::OAutoRegistration< TYPE >    BaseClass;
+    public:
+        OAutoRegistration() : BaseClass( PcrModule::getInstance() )
+        {
+        }
+    };
 
     OUString PcrRes(const char* pId);
 } // namespace pcr

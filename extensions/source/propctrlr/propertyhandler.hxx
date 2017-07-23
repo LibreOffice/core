@@ -76,9 +76,6 @@ namespace pcr
                                     m_aSupportedProperties;
         mutable bool                m_bSupportedPropertiesAreKnown;
 
-        /// helper which ensures that we can access resources as long as the instance lives
-        PcrClient       m_aEnsureResAccess;
-
     private:
         /// the property listener which has been registered
         PropertyChangeListeners                               m_aPropertyListeners;

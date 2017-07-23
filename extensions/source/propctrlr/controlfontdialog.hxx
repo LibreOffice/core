@@ -37,7 +37,6 @@ namespace pcr
     class OControlFontDialog
                 :public OControlFontDialog_DBase
                 ,public OControlFontDialog_PBase
-                ,public PcrClient
     {
     protected:
         // <properties>

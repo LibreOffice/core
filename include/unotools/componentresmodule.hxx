@@ -31,8 +31,6 @@ namespace utl
 
     class OComponentResModuleImpl;
 
-    //= OComponentResourceModule
-
     /** extends the comphelper::OModule implementation with
         simply resource access
     */
@@ -51,77 +49,6 @@ namespace utl
         /// get the resource locale of the module
         const std::locale& getResLocale();
     };
-
-    //= defining a concrete module
-
-#define DEFINE_MODULE( ModuleClass, ClientClass ) \
-    /* -------------------------------------------------------------------- */ \
-    class ModuleClass : public ::utl::OComponentResourceModule \
-    { \
-        friend struct CreateModuleClass; \
-        typedef ::utl::OComponentResourceModule BaseClass; \
-    \
-    public: \
-        static ModuleClass& getInstance(); \
-    \
-    private: \
-        ModuleClass(); \
-    }; \
-    \
-    /* -------------------------------------------------------------------- */ \
-    class ClientClass : public ::comphelper::OModuleClient \
-    { \
-    private: \
-        typedef ::comphelper::OModuleClient BaseClass; \
-    \
-    public: \
-        ClientClass() : BaseClass( ModuleClass::getInstance() ) \
-        { \
-        } \
-    }; \
-    \
-    /* -------------------------------------------------------------------- */ \
-    template < class TYPE > \
-    class OAutoRegistration : public ::comphelper::OAutoRegistration< TYPE > \
-    { \
-    private: \
-        typedef ::comphelper::OAutoRegistration< TYPE >    BaseClass; \
-    \
-    public: \
-        OAutoRegistration() : BaseClass( ModuleClass::getInstance() ) \
-        { \
-        } \
-    };
-
-    //= implementing a concrete module
-
-#define IMPLEMENT_MODULE( ModuleClass, resprefix ) \
-    struct CreateModuleClass \
-    { \
-        ModuleClass* operator()() \
-        { \
-            static ModuleClass* pModule = new ModuleClass; \
-            return pModule; \
-            /*  yes, in theory, this is a resource leak, since the ModuleClass \
-                will never be cleaned up. However, using a non-heap instance of ModuleClass \
-                would not work: It would be cleaned up when the module is unloaded. \
-                This might happen (and is likely to happen) *after* the tools-library \
-                has been unloaded. However, the module's dtor is where we would delete \
-                our resource manager (in case not all our clients de-registered) - which \
-                would call into the already-unloaded tools-library. */ \
-        } \
-    }; \
-    \
-    ModuleClass::ModuleClass() \
-        :BaseClass( OString( resprefix ), Application::GetSettings().GetUILanguageTag() ) \
-    { \
-    } \
-    \
-    ModuleClass& ModuleClass::getInstance() \
-    { \
-        return *rtl_Instance< ModuleClass, CreateModuleClass, ::osl::MutexGuard, ::osl::GetGlobalMutex >:: \
-            create( CreateModuleClass(), ::osl::GetGlobalMutex() ); \
-    } \
 
 } // namespace utl
 
