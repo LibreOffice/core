@@ -37,7 +37,6 @@ class SwFrameFormat;
 class SwDrawFrameFormat;
 class SwFlyFrameFormat;
 class SwNodeIndex;
-class SwFormatField;
 
 namespace utl { class TransliterationWrapper; }
 namespace svt { class EmbeddedObjectRef; }
