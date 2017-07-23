@@ -70,7 +70,7 @@ public:
         actual list.  The text field is not provided for non drop down list
         boxes.
     */
-    sal_Int32 SAL_CALL getAccessibleChildCount() override;
+    sal_Int32 SAL_CALL getAccessibleChildCount() final override;
     /** For drop down list boxes the text field is a not editable
         VCLXAccessibleTextField, for combo boxes it is an
         editable VLCAccessibleEdit.
@@ -87,7 +87,7 @@ public:
 
     /** There is one action for drop down boxes and none for others.
     */
-    virtual sal_Int32 SAL_CALL getAccessibleActionCount() override;
+    virtual sal_Int32 SAL_CALL getAccessibleActionCount() final override;
     /** The action for drop down boxes lets the user toggle the visibility of the
         popup menu.
     */
@@ -152,6 +152,8 @@ protected:
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;
 
     virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
+
+    sal_Int32 implGetAccessibleChildCount();
 
 private:
     /// Index in parent.  This is settable from the outside.
