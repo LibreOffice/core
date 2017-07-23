@@ -65,45 +65,49 @@ struct UUID
       sal_uInt8           node[6];
 };
 
-static  void write_v3( sal_uInt8 *pUuid  )
+static void write_v3( sal_uInt8 *pUuid  )
 {
     UUID uuid;
     // copy to avoid alignment problems
-    memcpy( &uuid , pUuid , 16 );
+    memcpy(&uuid, pUuid, 16);
 
-    SWAP_NETWORK_TO_INT32( uuid.time_low );
-    SWAP_NETWORK_TO_INT16( uuid.time_mid );
-    SWAP_NETWORK_TO_INT16( uuid.time_hi_and_version );
+    SWAP_NETWORK_TO_INT32(uuid.time_low);
+    SWAP_NETWORK_TO_INT16(uuid.time_mid);
+    SWAP_NETWORK_TO_INT16(uuid.time_hi_and_version);
 
     /* put in the variant and version bits */
-    uuid.time_hi_and_version       &= 0x0FFF;
-    uuid.time_hi_and_version       |= (3 << 12);
+    uuid.time_hi_and_version &= 0x0FFF;
+    uuid.time_hi_and_version |= (3 << 12);
     uuid.clock_seq_hi_and_reserved &= 0x3F;
     uuid.clock_seq_hi_and_reserved |= 0x80;
 
-    SWAP_INT32_TO_NETWORK( uuid.time_low );
-    SWAP_INT16_TO_NETWORK( uuid.time_mid );
-    SWAP_INT16_TO_NETWORK( uuid.time_hi_and_version );
+    SWAP_INT32_TO_NETWORK(uuid.time_low);
+    SWAP_INT16_TO_NETWORK(uuid.time_mid);
+    SWAP_INT16_TO_NETWORK(uuid.time_hi_and_version);
 
-    memcpy( pUuid , &uuid , 16 );
+    memcpy(pUuid, &uuid, 16);
 }
 
-extern "C" void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
-                                         SAL_UNUSED_PARAMETER const sal_uInt8 *,
-                                         SAL_UNUSED_PARAMETER sal_Bool )
+extern "C" void SAL_CALL rtl_createUuid(sal_uInt8 *pTargetUUID ,
+                                        SAL_UNUSED_PARAMETER const sal_uInt8 *,
+                                        SAL_UNUSED_PARAMETER sal_Bool)
 {
     {
         osl::MutexGuard g(osl::Mutex::getGlobalMutex());
         static rtlRandomPool pool = nullptr;
-        if (pool == nullptr) {
+        if (!pool)
+        {
             pool = rtl_random_createPool();
-            if (pool == nullptr) {
+            if (!pool)
+            {
                 abort();
                     // only possible way to signal failure here (rtl_createUuid
                     // being part of a fixed C API)
             }
         }
-        if (rtl_random_getBytes(pool, pTargetUUID, 16) != rtl_Random_E_None) {
+
+        if (rtl_random_getBytes(pool, pTargetUUID, 16) != rtl_Random_E_None)
+        {
             abort();
                 // only possible way to signal failure here (rtl_createUuid
                 // being part of a fixed C API)
@@ -116,36 +120,36 @@ extern "C" void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
     pTargetUUID[8] |= 0x80;
 }
 
-extern "C" void SAL_CALL rtl_createNamedUuid( sal_uInt8  *pTargetUUID,
-                                              const sal_uInt8  *pNameSpaceUUID,
-                                              const rtl_String *pName )
+extern "C" void SAL_CALL rtl_createNamedUuid(sal_uInt8 *pTargetUUID,
+                                             const sal_uInt8 *pNameSpaceUUID,
+                                             const rtl_String *pName )
 {
-    rtlDigest digest = rtl_digest_createMD5  ();
+    rtlDigest digest = rtl_digest_createMD5();
 
-    rtl_digest_updateMD5( digest, pNameSpaceUUID , 16 );
-    rtl_digest_updateMD5( digest, pName->buffer , pName->length );
+    rtl_digest_updateMD5(digest, pNameSpaceUUID, 16);
+    rtl_digest_updateMD5(digest, pName->buffer, pName->length);
 
-    rtl_digest_getMD5( digest, pTargetUUID , 16 );
-    rtl_digest_destroyMD5 (digest);
+    rtl_digest_getMD5(digest, pTargetUUID, 16);
+    rtl_digest_destroyMD5(digest);
 
     write_v3(pTargetUUID);
 }
 
-extern "C" sal_Int32 SAL_CALL rtl_compareUuid( const sal_uInt8 *pUUID1 , const sal_uInt8 *pUUID2 )
+extern "C" sal_Int32 SAL_CALL rtl_compareUuid(const sal_uInt8 *pUUID1, const sal_uInt8 *pUUID2)
 {
     int i;
     UUID u1;
     UUID u2;
-    memcpy( &u1 , pUUID1 , 16 );
-    memcpy( &u2 , pUUID2 , 16 );
+    memcpy(&u1, pUUID1, 16 );
+    memcpy(&u2, pUUID2, 16 );
 
-    SWAP_NETWORK_TO_INT32( u1.time_low );
-    SWAP_NETWORK_TO_INT16( u1.time_mid );
-    SWAP_NETWORK_TO_INT16( u1.time_hi_and_version );
+    SWAP_NETWORK_TO_INT32(u1.time_low);
+    SWAP_NETWORK_TO_INT16(u1.time_mid);
+    SWAP_NETWORK_TO_INT16(u1.time_hi_and_version);
 
-    SWAP_NETWORK_TO_INT32( u2.time_low );
-    SWAP_NETWORK_TO_INT16( u2.time_mid );
-    SWAP_NETWORK_TO_INT16( u2.time_hi_and_version );
+    SWAP_NETWORK_TO_INT32(u2.time_low);
+    SWAP_NETWORK_TO_INT16(u2.time_mid);
+    SWAP_NETWORK_TO_INT16(u2.time_hi_and_version);
 
 #define CHECK(f1, f2) if (f1 != f2) return f1 < f2 ? -1 : 1;
     CHECK(u1.time_low, u2.time_low);
@@ -161,7 +165,6 @@ extern "C" sal_Int32 SAL_CALL rtl_compareUuid( const sal_uInt8 *pUUID1 , const s
             return 1;
     }
     return 0;
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
