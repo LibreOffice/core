@@ -356,12 +356,6 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             nStartTrans = maGradientProps.maGradientStops.begin()->second.getTransparency()*255/100;
                     }
 
-                    // Adjust for flips
-                    if ( bFlipH )
-                        nShapeRotation = 180*60000 - nShapeRotation;
-                    if ( bFlipV )
-                        nShapeRotation = -nShapeRotation;
-
                     // "rotate with shape" set to false -> do not rotate
                     if ( !maGradientProps.moRotateWithShape.get( true ) )
                         nShapeRotation = 0;
@@ -533,7 +527,13 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         // Now we have a potential border and a largest segment. Use those.
 
                         aGradient.Style = bSymmetric ? awt::GradientStyle_AXIAL : awt::GradientStyle_LINEAR;
-                        sal_Int32 nDmlAngle = maGradientProps.moShadeAngle.get( 0 ) + nShapeRotation;
+                        sal_Int32 nShadeAngle = maGradientProps.moShadeAngle.get( 0 );
+                        // Adjust for flips
+                        if ( bFlipH )
+                            nShadeAngle = 180*60000 - nShadeAngle;
+                        if ( bFlipV )
+                            nShadeAngle = -nShadeAngle;
+                        sal_Int32 nDmlAngle = nShadeAngle + nShapeRotation;
                         // convert DrawingML angle (in 1/60000 degrees) to API angle (in 1/10 degrees)
                         aGradient.Angle = static_cast< sal_Int16 >( (8100 - (nDmlAngle / (PER_DEGREE / 10))) % 3600 );
                         Color aStartColor, aEndColor;
