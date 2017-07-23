@@ -1,7 +1,7 @@
-basic/source/comp/codegen.cxx:390
+basic/source/comp/codegen.cxx:391
     PCodeVisitor::void-~PCodeVisitor<T>()
 basic/source/comp/codegen.cxx:468
-    OffSetAccumulator::void-start(sal_uInt8 *,)
+    OffSetAccumulator::void-start(const sal_uInt8 *,)
 basic/source/comp/codegen.cxx:469
     OffSetAccumulator::void-processOpCode0(enum SbiOpcode,)
 basic/source/comp/codegen.cxx:470
@@ -13,7 +13,7 @@ basic/source/comp/codegen.cxx:472
 basic/source/comp/codegen.cxx:487
     OffSetAccumulator::_Bool-processParams()
 basic/source/comp/codegen.cxx:498
-    BufferTransformer::void-start(sal_uInt8 *,)
+    BufferTransformer::void-start(const sal_uInt8 *,)
 basic/source/comp/codegen.cxx:499
     BufferTransformer::void-processOpCode0(enum SbiOpcode,)
 basic/source/comp/codegen.cxx:503
@@ -26,6 +26,12 @@ basic/source/comp/codegen.cxx:539
     BufferTransformer::void-end()
 chart2/source/inc/WeakListenerAdapter.hxx:58
     chart::WeakListenerAdapter::void-disposing(const css::lang::EventObject &,)
+connectivity/source/drivers/evoab2/NConnection.hxx:69
+    connectivity::evoab::OEvoabConnection::void-construct(const class rtl::OUString &,const css::uno::Sequence<css::beans::PropertyValue> &,)
+connectivity/source/drivers/evoab2/NConnection.hxx:88
+    connectivity::evoab::OEvoabConnection::css::uno::Reference<css::sdbcx::XTablesSupplier>-createCatalog()
+connectivity/source/drivers/firebird/SubComponent.hxx:72
+    connectivity::firebird::OPropertyArrayUsageHelper::void-~OPropertyArrayUsageHelper<TYPE>()
 extensions/source/dbpilots/unoautopilot.hxx:100
     dbp::OUnoAutoPilot::::cppu::IPropertyArrayHelper *-createArrayHelper()const
 extensions/source/propctrlr/commoncontrol.hxx:127
@@ -42,6 +48,8 @@ extensions/source/propctrlr/commoncontrol.hxx:137
     pcr::CommonBehaviourControl::void-notifyModifiedValue()
 extensions/source/propctrlr/commoncontrol.hxx:141
     pcr::CommonBehaviourControl::void-disposing()
+forms/source/inc/InterfaceContainer.hxx:70
+    frm::ElementDescription::void-~ElementDescription()
 forms/source/xforms/collection.hxx:130
     Collection::_Bool-isValid(const Collection::T &,)const
 forms/source/xforms/collection.hxx:139
@@ -68,6 +76,8 @@ forms/source/xforms/namedcollection.hxx:108
     NamedCollection::css::uno::Sequence<OUString>-getElementNames()
 forms/source/xforms/namedcollection.hxx:113
     NamedCollection::sal_Bool-hasByName(const class rtl::OUString &,)
+include/comphelper/componentmodule.hxx:142
+    comphelper::OModule::void-onLastClient()
 include/comphelper/IdPropArrayHelper.hxx:53
     comphelper::OIdPropertyArrayUsageHelper::void-~OIdPropertyArrayUsageHelper<TYPE>()
 include/comphelper/interaction.hxx:55
@@ -130,29 +140,31 @@ include/svl/svdde.hxx:307
     DdeService::void-~DdeService()
 include/toolkit/controls/geometrycontrolmodel.hxx:192
     OGeometryControlModel::void-fillProperties(css::uno::Sequence<css::beans::Property> &,css::uno::Sequence<css::beans::Property> &,)const
-include/vbahelper/vbacollectionimpl.hxx:292
+include/unotools/fontcvt.hxx:55
+    StarSymbolToMSMultiFont::void-~StarSymbolToMSMultiFont()
+include/vbahelper/vbacollectionimpl.hxx:291
     ScVbaCollectionBase::::sal_Int32-getCount()
-include/vbahelper/vbacollectionimpl.hxx:297
+include/vbahelper/vbacollectionimpl.hxx:296
     ScVbaCollectionBase::css::uno::Any-Item(const css::uno::Any &,const css::uno::Any &,)
-include/vbahelper/vbacollectionimpl.hxx:326
+include/vbahelper/vbacollectionimpl.hxx:325
     ScVbaCollectionBase::sal_Bool-hasElements()
-include/vbahelper/vbahelperinterface.hxx:78
+include/vbahelper/vbahelperinterface.hxx:77
     InheritedHelperInterfaceImpl::::sal_Int32-getCreator()
-include/vbahelper/vbahelperinterface.hxx:82
+include/vbahelper/vbahelperinterface.hxx:81
     InheritedHelperInterfaceImpl::css::uno::Reference<ov::XHelperInterface>-getParent()
-include/vbahelper/vbahelperinterface.hxx:84
+include/vbahelper/vbahelperinterface.hxx:83
     InheritedHelperInterfaceImpl::css::uno::Any-Application()
-include/vbahelper/vbahelperinterface.hxx:92
+include/vbahelper/vbahelperinterface.hxx:91
     InheritedHelperInterfaceImpl::class rtl::OUString-getImplementationName()
-include/vbahelper/vbahelperinterface.hxx:93
+include/vbahelper/vbahelperinterface.hxx:92
     InheritedHelperInterfaceImpl::sal_Bool-supportsService(const class rtl::OUString &,)
-include/vbahelper/vbahelperinterface.hxx:103
+include/vbahelper/vbahelperinterface.hxx:102
     InheritedHelperInterfaceImpl::css::uno::Sequence<OUString>-getSupportedServiceNames()
 include/vbahelper/vbareturntypes.hxx:40
     ooo::vba::DefaultReturnHelper::void-setValue(T1,)
 include/vbahelper/vbareturntypes.hxx:41
     ooo::vba::DefaultReturnHelper::T1-getValue()
-include/vcl/vclptr.hxx:147
+include/vcl/vclptr.hxx:110
     VclPtr::void-~VclPtr<T>()
 mysqlc/source/mysqlc_subcomponent.hxx:104
     connectivity::mysqlc::OPropertyArrayUsageHelper::void-~OPropertyArrayUsageHelper<TYPE>()
@@ -174,7 +186,7 @@ sc/source/core/opencl/formulagroupcl.cxx:1413
     sc::opencl::ParallelReductionVectorRef::size_t-GenReductionLoopHeader(std::stringstream &,int,_Bool &,)
 sc/source/core/opencl/formulagroupcl.cxx:1437
     sc::opencl::ParallelReductionVectorRef::size_t-Marshal(cl_kernel,int,int,cl_program,)
-sc/source/ui/inc/anyrefdg.hxx:244
+sc/source/ui/inc/anyrefdg.hxx:220
     ScRefHdlrImpl::void-dispose()
 sc/source/ui/vba/vbacondition.hxx:39
     ScVbaCondition::class rtl::OUString-Formula1()
@@ -232,15 +244,15 @@ sc/source/ui/vba/vbaformat.hxx:148
     ScVbaFormat::void-setReadingOrder(const css::uno::Any &,)
 sc/source/ui/vba/vbaformat.hxx:151
     ScVbaFormat::css::uno::Any-getReadingOrder()
-sc/source/ui/vba/vbapagebreak.hxx:46
+sc/source/ui/vba/vbapagebreak.hxx:45
     ScVbaPageBreak::sal_Int32-getType()
-sc/source/ui/vba/vbapagebreak.hxx:47
+sc/source/ui/vba/vbapagebreak.hxx:46
     ScVbaPageBreak::void-setType(sal_Int32,)
-sc/source/ui/vba/vbapagebreak.hxx:49
+sc/source/ui/vba/vbapagebreak.hxx:48
     ScVbaPageBreak::void-Delete()
-sc/source/ui/vba/vbapagebreak.hxx:50
+sc/source/ui/vba/vbapagebreak.hxx:49
     ScVbaPageBreak::css::uno::Reference<ov::excel::XRange>-Location()
-sd/source/ui/inc/ShellFactory.hxx:42
+sd/source/ui/inc/ShellFactory.hxx:41
     sd::ShellFactory::void-~ShellFactory<ShellType>()
 sd/source/ui/remotecontrol/ZeroconfService.hxx:41
     sd::ZeroconfService::void-~ZeroconfService()
@@ -260,11 +272,11 @@ slideshow/source/engine/activities/activitiesfactory.cxx:537
     slideshow::internal::(anonymous namespace)::ValuesActivity::void-endAnimation()
 slideshow/source/engine/activities/activitiesfactory.cxx:582
     slideshow::internal::(anonymous namespace)::ValuesActivity::void-performEnd()
-slideshow/source/engine/animationfactory.cxx:444
+slideshow/source/engine/animationfactory.cxx:442
     slideshow::internal::(anonymous namespace)::GenericAnimation::void-prefetch(const slideshow::internal::AnimatableShapeSharedPtr &,const slideshow::internal::ShapeAttributeLayerSharedPtr &,)
-slideshow/source/engine/animationfactory.cxx:448
+slideshow/source/engine/animationfactory.cxx:446
     slideshow::internal::(anonymous namespace)::GenericAnimation::void-start(const slideshow::internal::AnimatableShapeSharedPtr &,const slideshow::internal::ShapeAttributeLayerSharedPtr &,)
-sw/inc/docary.hxx:115
+sw/inc/docary.hxx:116
     SwVectorModifyBase::void-~SwVectorModifyBase<Value>()
 sw/inc/flypos.hxx:37
     SwPosFlyFrame::void-~SwPosFlyFrame()
@@ -286,46 +298,46 @@ vcl/inc/unx/saldata.hxx:68
     X11SalData::void-initNWF()
 vcl/inc/unx/saldata.hxx:69
     X11SalData::void-deInitNWF()
-vcl/inc/unx/saldisp.hxx:167
+vcl/inc/unx/saldisp.hxx:166
     SalXLib::void-~SalXLib()
-vcl/inc/unx/saldisp.hxx:168
+vcl/inc/unx/saldisp.hxx:167
     SalXLib::void-Init()
+vcl/inc/unx/saldisp.hxx:169
+    SalXLib::_Bool-Yield(_Bool,_Bool,)
 vcl/inc/unx/saldisp.hxx:170
-    SalXLib::enum SalYieldResult-Yield(_Bool,_Bool,)
-vcl/inc/unx/saldisp.hxx:171
     SalXLib::void-Wakeup()
-vcl/inc/unx/saldisp.hxx:172
+vcl/inc/unx/saldisp.hxx:171
     SalXLib::void-PostUserEvent()
-vcl/inc/unx/saldisp.hxx:174
+vcl/inc/unx/saldisp.hxx:173
     SalXLib::void-Insert(int,void *,YieldFunc,YieldFunc,YieldFunc,)
-vcl/inc/unx/saldisp.hxx:178
+vcl/inc/unx/saldisp.hxx:177
     SalXLib::void-Remove(int,)
-vcl/inc/unx/saldisp.hxx:180
+vcl/inc/unx/saldisp.hxx:179
     SalXLib::void-StartTimer(sal_uLong,)
-vcl/inc/unx/saldisp.hxx:181
+vcl/inc/unx/saldisp.hxx:180
     SalXLib::void-StopTimer()
-vcl/inc/unx/saldisp.hxx:396
+vcl/inc/unx/saldisp.hxx:392
     SalX11Display::void-Yield()
 vcl/inc/unx/salinst.h:47
     X11SalInstance::class SalX11Display *-CreateDisplay()const
-writerfilter/source/ooxml/OOXMLFactory.hxx:68
-    writerfilter::ooxml::OOXMLFactory_ns::void-startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:69
-    writerfilter::ooxml::OOXMLFactory_ns::void-charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
+    writerfilter::ooxml::OOXMLFactory_ns::void-startAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:70
-    writerfilter::ooxml::OOXMLFactory_ns::void-endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+    writerfilter::ooxml::OOXMLFactory_ns::void-charactersAction(class writerfilter::ooxml::OOXMLFastContextHandler *,const class rtl::OUString &,)
 writerfilter/source/ooxml/OOXMLFactory.hxx:71
+    writerfilter::ooxml::OOXMLFactory_ns::void-endAction(class writerfilter::ooxml::OOXMLFastContextHandler *,)
+writerfilter/source/ooxml/OOXMLFactory.hxx:72
     writerfilter::ooxml::OOXMLFactory_ns::void-attributeAction(class writerfilter::ooxml::OOXMLFastContextHandler *,writerfilter::Token_t,const class OOXMLValue::Pointer_t &,)
-writerfilter/source/ooxml/OOXMLFactory.hxx:74
+writerfilter/source/ooxml/OOXMLFactory.hxx:75
     writerfilter::ooxml::OOXMLFactory_ns::void-~OOXMLFactory_ns()
 writerperfect/inc/ImportFilter.hxx:178
     writerperfect::detail::ImportFilterImpl::void-doRegisterHandlers(Generator &,)
-xmloff/source/forms/elementimport.hxx:576
+xmloff/source/forms/elementimport.hxx:575
     xmloff::OContainerImport::class SvXMLImportContext *-CreateChildContext(sal_uInt16,const class rtl::OUString &,const css::uno::Reference<css::xml::sax::XAttributeList> &,)
-xmloff/source/forms/elementimport.hxx:579
+xmloff/source/forms/elementimport.hxx:578
     xmloff::OContainerImport::void-EndElement()
-xmloff/source/forms/elementimport.hxx:584
+xmloff/source/forms/elementimport.hxx:583
     xmloff::OContainerImport::css::uno::Reference<css::beans::XPropertySet>-createElement()
-xmloff/source/forms/elementimport.hxx:612
+xmloff/source/forms/elementimport.hxx:611
     xmloff::OColumnImport::css::uno::Reference<css::beans::XPropertySet>-createElement()
 

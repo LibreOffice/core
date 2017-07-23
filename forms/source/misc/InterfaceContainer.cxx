@@ -172,10 +172,6 @@ ElementDescription::ElementDescription( )
 }
 
 
-ElementDescription::~ElementDescription()
-{
-}
-
 OInterfaceContainer::OInterfaceContainer(
                 const Reference<XComponentContext>& _rxContext,
                 ::osl::Mutex& _rMutex,

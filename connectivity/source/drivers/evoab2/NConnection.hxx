@@ -66,7 +66,7 @@ namespace connectivity
         public:
             explicit OEvoabConnection( OEvoabDriver& _rDriver );
             /// @throws css::sdbc::SQLException
-            virtual void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo );
+            void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo );
 
             OString const & getPassword() { return m_aPassword; }
             void         setPassword( OString const & aStr ) { m_aPassword = aStr; }
@@ -85,7 +85,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             // XConnection
-            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
+            css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
             virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
             virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
             virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
