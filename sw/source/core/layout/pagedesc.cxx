@@ -377,7 +377,7 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
         }
     }
 
-    for (size_t i = 0; i <= SAL_N_ELEMENTS(STR_POOLPAGE); ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(STR_POOLPAGE); ++i)
     {
         if (rName == SwResId(STR_POOLPAGE[i]))
         {
