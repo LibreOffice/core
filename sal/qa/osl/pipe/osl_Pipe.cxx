@@ -172,12 +172,12 @@ namespace osl_Pipe
         void ctors_no_acquire( )
             {
                 /// create a pipe.
-                ::osl::Pipe* pPipe = new ::osl::Pipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
+                std::unique_ptr<osl::Pipe> xPipe(new osl::Pipe(test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE));
                 /// constructs a pipe reference without acquiring the handle.
-                ::osl::Pipe* pNoAcquirePipe = new ::osl::Pipe( pPipe->getHandle( ), SAL_NO_ACQUIRE );
+                std::unique_ptr<osl::Pipe> xNoAcquirePipe(new osl::Pipe(xPipe->getHandle(), SAL_NO_ACQUIRE));
 
-                StreamPipe aStreamPipe(pPipe->getHandle());
-                delete pNoAcquirePipe;
+                StreamPipe aStreamPipe(xPipe->getHandle());
+                xNoAcquirePipe.reset();
                 int nRet = aStreamPipe.send("a", 1);
 
                 if (nRet >= 0)
