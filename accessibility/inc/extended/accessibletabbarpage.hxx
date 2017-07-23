@@ -43,8 +43,8 @@ namespace accessibility
         css::accessibility::XAccessible,
         css::lang::XServiceInfo > AccessibleTabBarPage_BASE;
 
-    class AccessibleTabBarPage :    public AccessibleTabBarBase,
-                                    public AccessibleTabBarPage_BASE
+    class AccessibleTabBarPage final : public AccessibleTabBarBase,
+                                       public AccessibleTabBarPage_BASE
     {
         friend class AccessibleTabBarPageList;
 
@@ -56,7 +56,6 @@ namespace accessibility
 
         css::uno::Reference< css::accessibility::XAccessible >        m_xParent;
 
-    protected:
         bool                    IsEnabled();
         bool                    IsShowing();
         bool                    IsSelected();

@@ -117,12 +117,13 @@ Sequence< OUString > VCLXAccessibleScrollBar::getSupportedServiceNames()
 
 // XAccessibleAction
 
+static constexpr sal_Int32 ACCESSIBLE_ACTION_COUNT=4;
 
 sal_Int32 VCLXAccessibleScrollBar::getAccessibleActionCount( )
 {
     OExternalLockGuard aGuard( this );
 
-    return 4;
+    return ACCESSIBLE_ACTION_COUNT;
 }
 
 
@@ -130,7 +131,7 @@ sal_Bool VCLXAccessibleScrollBar::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+    if ( nIndex < 0 || nIndex >= ACCESSIBLE_ACTION_COUNT )
         throw IndexOutOfBoundsException();
 
     bool bReturn = false;
@@ -158,7 +159,7 @@ OUString VCLXAccessibleScrollBar::getAccessibleActionDescription ( sal_Int32 nIn
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+    if ( nIndex < 0 || nIndex >= ACCESSIBLE_ACTION_COUNT )
         throw IndexOutOfBoundsException();
 
     OUString sDescription;
@@ -180,7 +181,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleScrollBar::getAccessibleActionK
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+    if ( nIndex < 0 || nIndex >= ACCESSIBLE_ACTION_COUNT )
         throw IndexOutOfBoundsException();
 
     return Reference< XAccessibleKeyBinding >();

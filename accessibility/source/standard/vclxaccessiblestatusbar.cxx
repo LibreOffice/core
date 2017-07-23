@@ -295,7 +295,7 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 
 {
     OExternalLockGuard aGuard( this );
 
-    if ( i < 0 || i >= getAccessibleChildCount() )
+    if ( i < 0 || i >= static_cast<sal_Int32> (m_aAccessibleChildren.size()) )
         throw IndexOutOfBoundsException();
 
     Reference< XAccessible > xChild = m_aAccessibleChildren[i];
