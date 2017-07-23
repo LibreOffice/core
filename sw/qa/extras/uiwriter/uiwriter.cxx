@@ -5006,6 +5006,7 @@ void SwUiWriterTest::testLinesInSectionInTable()
     assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
 }
 
+#if HAVE_MORE_FONTS
 void SwUiWriterTest::testLinesMoveBackwardsInSectionInTable()
 {
 #ifndef MACOSX
@@ -5058,6 +5059,7 @@ void SwUiWriterTest::testTableInNestedSection()
     assertXPath(pXmlDoc, "//page[1]//section/tab", 1);
     assertXPath(pXmlDoc, "//page[2]//section/tab", 1);
 }
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
