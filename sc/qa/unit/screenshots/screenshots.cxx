@@ -40,6 +40,7 @@
 #include <patattr.hxx>
 
 #include <sc.hrc>
+#include <strings.hrc>
 #include <scresid.hxx>
 #include <scitems.hxx>
 
