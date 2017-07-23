@@ -60,6 +60,12 @@ public:
     /// Returns the signature (in PKCS#7 format) as string (hex).
     bool Sign(OStringBuffer& rCMSHexBuffer);
 
+    /// Verify and get Signature Information given a byte array.
+    static bool Verify(const std::vector<unsigned char>& aData,
+                       const bool bNonDetached,
+                       const std::vector<unsigned char>& aSignature,
+                       SignatureInformation& rInformation);
+
     /// Verify and get Signature Information given a signature and stream.
     static bool Verify(SvStream& rStream,
                        const std::vector<std::pair<size_t, size_t>>& aByteRanges,
