@@ -1884,13 +1884,11 @@ bool VerifyNonDetachedSignature(SvStream& rStream, const std::vector<std::pair<s
 #endif
 }
 
-bool Signing::Verify(SvStream& rStream,
-                     const std::vector<std::pair<size_t, size_t>>& aByteRanges,
+bool Signing::Verify(const std::vector<unsigned char>& aData,
                      const bool bNonDetached,
                      const std::vector<unsigned char>& aSignature,
                      SignatureInformation& rInformation)
 {
-
 #ifdef SVL_CRYPTO_NSS
     // Validate the signature. No need to call NSS_Init() here, assume that the
     // caller did that already.
@@ -1968,30 +1966,7 @@ bool Signing::Verify(SvStream& rStream,
     }
 
     // We have a hash, update it with the byte ranges.
-    for (const auto& rByteRange : aByteRanges)
-    {
-        rStream.Seek(rByteRange.first);
-
-        // And now hash this byte range.
-        const int nChunkLen = 4096;
-        std::vector<unsigned char> aBuffer(nChunkLen);
-        for (size_t nByte = 0; nByte < rByteRange.second;)
-        {
-            size_t nRemainingSize = rByteRange.second - nByte;
-            if (nRemainingSize < nChunkLen)
-            {
-                rStream.ReadBytes(aBuffer.data(), nRemainingSize);
-                HASH_Update(pHASHContext, aBuffer.data(), nRemainingSize);
-                nByte = rByteRange.second;
-            }
-            else
-            {
-                rStream.ReadBytes(aBuffer.data(), nChunkLen);
-                HASH_Update(pHASHContext, aBuffer.data(), nChunkLen);
-                nByte += nChunkLen;
-            }
-        }
-    }
+    HASH_Update(pHASHContext, aData.data(), aData.size());
 
     // Find out what is the expected length of the hash.
     unsigned int nMaxResultLen = 0;
@@ -2092,6 +2067,7 @@ bool Signing::Verify(SvStream& rStream,
         CERT_DestroyCertificate(pDocumentCertificate);
 
     return true;
+
 #elif defined SVL_CRYPTO_MSCRYPTO
     // Open a message for decoding.
     HCRYPTMSG hMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
@@ -2114,37 +2090,12 @@ bool Signing::Verify(SvStream& rStream,
     }
 
     // Update the message with the content blob.
-    for (const auto& rByteRange : aByteRanges)
+    if (!CryptMsgUpdate(hMsg, aData.data(), aData.size(), FALSE))
     {
-        rStream.Seek(rByteRange.first);
-
-        const int nChunkLen = 4096;
-        std::vector<unsigned char> aBuffer(nChunkLen);
-        for (size_t nByte = 0; nByte < rByteRange.second;)
-        {
-            size_t nRemainingSize = rByteRange.second - nByte;
-            if (nRemainingSize < nChunkLen)
-            {
-                rStream.ReadBytes(aBuffer.data(), nRemainingSize);
-                if (!CryptMsgUpdate(hMsg, aBuffer.data(), nRemainingSize, FALSE))
-                {
-                    SAL_WARN("xmlsecurity.pdfio", "ValidateSignature, CryptMsgUpdate() for the content failed: " << WindowsErrorString(GetLastError()));
-                    return false;
-                }
-                nByte = rByteRange.second;
-            }
-            else
-            {
-                rStream.ReadBytes(aBuffer.data(), nChunkLen);
-                if (!CryptMsgUpdate(hMsg, aBuffer.data(), nChunkLen, FALSE))
-                {
-                    SAL_WARN("xmlsecurity.pdfio", "ValidateSignature, CryptMsgUpdate() for the content failed: " << WindowsErrorString(GetLastError()));
-                    return false;
-                }
-                nByte += nChunkLen;
-            }
-        }
+        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature, CryptMsgUpdate() for the content failed: " << WindowsErrorString(GetLastError()));
+        return false;
     }
+
     if (!CryptMsgUpdate(hMsg, nullptr, 0, TRUE))
     {
         SAL_WARN("xmlsecurity.pdfio", "ValidateSignature, CryptMsgUpdate() for the last content failed: " << WindowsErrorString(GetLastError()));
@@ -2279,6 +2230,37 @@ bool Signing::Verify(SvStream& rStream,
     CertCloseStore(hStoreHandle, CERT_CLOSE_STORE_FORCE_FLAG);
     CryptMsgClose(hMsg);
     return true;
+#else
+    // Not implemented.
+    (void)aBuffer;
+    (void)bNonDetached;
+    (void)aSignature;
+    (void)rInformation;
+    return false;
+#endif
+}
+
+bool Signing::Verify(SvStream& rStream,
+                     const std::vector<std::pair<size_t, size_t>>& aByteRanges,
+                     const bool bNonDetached,
+                     const std::vector<unsigned char>& aSignature,
+                     SignatureInformation& rInformation)
+{
+#if defined(SVL_CRYPTO_NSS) || defined(SVL_CRYPTO_MSCRYPTO)
+
+    std::vector<unsigned char> buffer;
+
+    // Copy the byte ranges into a single buffer.
+    for (const auto& rByteRange : aByteRanges)
+    {
+        rStream.Seek(rByteRange.first);
+        const size_t size = buffer.size();
+        buffer.resize(size + rByteRange.second);
+        rStream.ReadBytes(buffer.data() + size, rByteRange.second);
+    }
+
+    return Verify(buffer, bNonDetached, aSignature, rInformation);
+
 #else
     // Not implemented.
     (void)rStream;
