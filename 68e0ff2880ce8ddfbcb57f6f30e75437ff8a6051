@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_064707bc",
+        "filename": "sc/source/filter/xml/xmldrani.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-23T19:31:14Z",
+      "side": 1,
+      "message": "Please indent.",
+      "revId": "68e0ff2880ce8ddfbcb57f6f30e75437ff8a6051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e6491bd2",
+        "filename": "sc/source/filter/xml/xmldrani.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-23T19:31:14Z",
+      "side": 1,
+      "message": "Please indent.",
+      "revId": "68e0ff2880ce8ddfbcb57f6f30e75437ff8a6051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_863a1735",
+        "filename": "sc/source/filter/xml/xmldrani.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-23T19:31:14Z",
+      "side": 1,
+      "message": "Can we please indent after a switch {",
+      "revId": "68e0ff2880ce8ddfbcb57f6f30e75437ff8a6051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a63f1324",
+        "filename": "sc/source/filter/xml/xmldrani.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-23T19:31:14Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "68e0ff2880ce8ddfbcb57f6f30e75437ff8a6051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c63c1f32",
+        "filename": "sc/source/filter/xml/xmldrani.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-23T19:31:14Z",
+      "side": 1,
+      "message": "Again.",
+      "revId": "68e0ff2880ce8ddfbcb57f6f30e75437ff8a6051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_261243b5",
+        "filename": "sc/source/filter/xml/xmlnexpi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-23T19:31:14Z",
+      "side": 1,
+      "message": "Please indent.",
+      "revId": "68e0ff2880ce8ddfbcb57f6f30e75437ff8a6051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_46174fa3",
+        "filename": "sc/source/filter/xml/xmlnexpi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-23T19:31:14Z",
+      "side": 1,
+      "message": "Please indent.",
+      "revId": "68e0ff2880ce8ddfbcb57f6f30e75437ff8a6051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_660c4b95",
+        "filename": "sc/source/filter/xml/xmlsorti.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-07-23T19:31:14Z",
+      "side": 1,
+      "message": "Please indent.",
+      "revId": "68e0ff2880ce8ddfbcb57f6f30e75437ff8a6051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
