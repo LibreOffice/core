@@ -41,8 +41,8 @@ typedef ::cppu::ImplHelper4 < css::accessibility::XAccessible,
                               css::accessibility::XAccessibleValue,
                               css::lang::XServiceInfo > VCLXAccessibleToolBoxItem_BASE;
 
-class VCLXAccessibleToolBoxItem : public AccessibleTextHelper_BASE,
-                                  public VCLXAccessibleToolBoxItem_BASE
+class VCLXAccessibleToolBoxItem final : public AccessibleTextHelper_BASE,
+                                        public VCLXAccessibleToolBoxItem_BASE
 {
 private:
     OUString                m_sOldName;
@@ -55,12 +55,13 @@ private:
     bool                    m_bIndeterminate;
 
     css::uno::Reference< css::accessibility::XAccessible >    m_xChild;
+    OUString GetText();
 
 public:
     sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
     void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
 
-protected:
+private:
     virtual ~VCLXAccessibleToolBoxItem() override;
 
     virtual void SAL_CALL                   disposing() override;
@@ -72,8 +73,6 @@ protected:
     virtual OUString                                    implGetText() override;
     virtual css::lang::Locale                           implGetLocale() override;
     virtual void                                        implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
-
-    OUString GetText();
 
 public:
     VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos );

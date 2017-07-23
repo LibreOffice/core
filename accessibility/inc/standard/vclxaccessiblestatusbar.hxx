@@ -31,7 +31,7 @@ class StatusBar;
 //  class VCLXAccessibleStatusBar
 
 
-class VCLXAccessibleStatusBar : public VCLXAccessibleComponent
+class VCLXAccessibleStatusBar final : public VCLXAccessibleComponent
 {
 private:
     typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
@@ -39,7 +39,6 @@ private:
     AccessibleChildren      m_aAccessibleChildren;
     VclPtr<StatusBar>       m_pStatusBar;
 
-protected:
     void                    UpdateShowing( sal_Int32 i, bool bShowing );
     void                    UpdateItemName( sal_Int32 i );
     void                    UpdateItemText( sal_Int32 i );
