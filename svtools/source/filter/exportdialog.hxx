@@ -118,7 +118,7 @@ private:
     sal_Int16           mnFormat;
     sal_Int32           mnMaxFilesizeForRealtimePreview;
 
-    SvStream*           mpTempStream;
+    SvMemoryStream*     mpTempStream;
     Bitmap              maBitmap;
 
     css::awt::Size      maOriginalSize;     // the original graphic size in 1/100mm

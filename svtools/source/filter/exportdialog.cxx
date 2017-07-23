@@ -419,7 +419,6 @@ void ExportDialog::GetGraphicStream()
 
             if ( mxGraphic.is() )
             {
-                SvMemoryStream* pTempStream = dynamic_cast<SvMemoryStream*>( mpTempStream );
                 Graphic aGraphic( mxGraphic );
 
                 if ( aGraphic.GetType() == GraphicType::Bitmap )
@@ -440,9 +439,9 @@ void ExportDialog::GetGraphicStream()
                 const sal_uInt16 nFilter = rFilter.GetExportFormatNumberForShortName( maExt );
                 if ( rFilter.IsExportPixelFormat( nFilter ) )
                 {
-                    pTempStream->SetResizeOffset(1024);
-                    pTempStream->SetStreamSize(1024);
-                    rFilter.ExportGraphic( aGraphic, "", *pTempStream, nFilter, &aNewFilterData );
+                    mpTempStream->SetResizeOffset(1024);
+                    mpTempStream->SetStreamSize(1024);
+                    rFilter.ExportGraphic( aGraphic, "", *mpTempStream, nFilter, &aNewFilterData );
 
                     if ( mnFormat == FORMAT_JPG )
                     {
