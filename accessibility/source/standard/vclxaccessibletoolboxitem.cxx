@@ -357,7 +357,7 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleDescription(  )
 {
     OExternalLockGuard aGuard( this );
 
-    if (m_nRole == AccessibleRole::PANEL && getAccessibleChildCount() > 0)
+    if (m_nRole == AccessibleRole::PANEL && m_xChild.is())
     {
         return AccResId( RID_STR_ACC_PANEL_DESCRIPTION );
     }
@@ -512,7 +512,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::copyText( sal_Int32 nStartIndex, sa
         Reference< datatransfer::clipboard::XClipboard > xClipboard = m_pToolBox->GetClipboard();
         if ( xClipboard.is() )
         {
-            OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+            OUString sText( OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex ) );
 
             vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
 
@@ -621,7 +621,7 @@ sal_Bool VCLXAccessibleToolBoxItem::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+    if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
     if ( m_pToolBox )
@@ -634,7 +634,7 @@ OUString VCLXAccessibleToolBoxItem::getAccessibleActionDescription ( sal_Int32 n
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+    if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
     return OUString(RID_STR_ACC_ACTION_CLICK);
@@ -644,7 +644,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleToolBoxItem::getAccessibleActio
 {
     OContextEntryGuard aGuard( this );
 
-    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+    if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
     return Reference< XAccessibleKeyBinding >();
