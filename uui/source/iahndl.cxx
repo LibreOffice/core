@@ -1194,7 +1194,8 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 
     OUString aMessage;
     {
-        ErrorResource aErrorResource(RID_UUI_ERRHDL, Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
+        std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
+        ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
         if (!aErrorResource.getString(nErrorCode, aMessage))
             return;
     }
