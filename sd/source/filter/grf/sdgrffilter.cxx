@@ -152,7 +152,7 @@ void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, ErrCode nStrea
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
     else
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SdResId(pId));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, pId ? SdResId(pId) : OUString());
         aErrorBox->Execute();
     }
 }
