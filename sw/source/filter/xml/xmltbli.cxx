@@ -100,7 +100,7 @@ enum SwXMLTableCellAttrTokens
     XML_TOK_TABLE_VALUE_TYPE,
 };
 
-static SvXMLTokenMapEntry aTableElemTokenMap[] =
+static const SvXMLTokenMapEntry aTableElemTokenMap[] =
 {
     { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS,
             XML_TOK_TABLE_HEADER_COLS },
@@ -125,7 +125,7 @@ static SvXMLTokenMapEntry aTableElemTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
+static const SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
 {
     { XML_NAMESPACE_XML, XML_ID, XML_TOK_TABLE_XMLID },
     { XML_NAMESPACE_TABLE, XML_STYLE_NAME, XML_TOK_TABLE_STYLE_NAME },
