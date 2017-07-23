@@ -627,6 +627,8 @@ bool Bitmap::ImplConvertDown(sal_uInt16 nBitCount, Color const * pExtColor)
                 }
             }
 
+            assert(pQLine2 || nHeight == 0);
+
             for (long nY = 0; nY < nHeight; nY++, nYTmp++)
             {
                 // first pixel in the line
