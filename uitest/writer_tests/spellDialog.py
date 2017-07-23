@@ -6,7 +6,24 @@
 
 from uitest.framework import UITestCase
 
+from libreoffice.linguistic.linguservice import get_spellchecker
+
 class SpellingAndGrammarDialog(UITestCase):
+
+    def is_supported_locale(self, language, country):
+        xSpellChecker = get_spellchecker(self.ui_test._xContext)
+        locales = xSpellChecker.getLocales()
+        for locale in locales:
+            if language != None:
+                if locale.Language != language:
+                    continue
+
+            if country != None:
+                if locale.Country != country:
+                    continue
+
+            # we found the correct combination
+            return True
 
     def launch_dialog(self):
         self.ui_test.execute_modeless_dialog_through_command(
@@ -33,6 +50,9 @@ dog tact
 frog, dog, tact"""
 
     def test_tdf46852(self):
+        supported_locale = self.is_supported_locale("en", "US")
+        if not supported_locale:
+            self.skipTest("no dictionary support for en_US available")
         # This automates the steps described in the bug report tdf#46852
 
         # Step 1: Create a document with repetitious misspelled words
