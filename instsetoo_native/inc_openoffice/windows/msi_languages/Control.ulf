@@ -53,7 +53,7 @@ en-US = "Cancel"
 en-US = "Specify a network location for the server image of the product."
 
 [OOO_CONTROL_20]
-en-US = "Enter the network location or click Change to browse to a location.  Click Install to create a server image of [ProductName] at the specified network location or click Cancel to exit the wizard."
+en-US = "Enter the network location or click Change to browse to a location. Click Install to create a server image of [ProductName] at the specified network location or click Cancel to exit the wizard."
 
 [OOO_CONTROL_21]
 en-US = "{&MSSansBold8}Network Location"
@@ -368,7 +368,7 @@ en-US = "&Update >"
 en-US = "{&TahomaBold10}Welcome to the Patch for [ProductName]"
 
 [OOO_CONTROL_162]
-en-US = "The Installation Wizard will install the Patch for [ProductName] on your computer.  To continue, click Update."
+en-US = "The Installation Wizard will install the Patch for [ProductName] on your computer. To continue, click Update."
 
 [OOO_CONTROL_163]
 en-US = "< &Back"
@@ -500,7 +500,7 @@ en-US = "&Next >"
 en-US = "{&TahomaBold10}Welcome to the Installation Wizard for [ProductName]"
 
 [OOO_CONTROL_218]
-en-US = "[ProductName] Setup is preparing the Installation Wizard which will guide you through the program setup process.  Please wait."
+en-US = "[ProductName] Setup is preparing the Installation Wizard which will guide you through the program setup process. Please wait."
 
 [OOO_CONTROL_219]
 en-US = "< &Back"
@@ -668,7 +668,7 @@ en-US = "To select a different version, click "Change". Otherwise click "Cancel"
 en-US = "To select a different folder, click "Change"."
 
 [OOO_CONTROL_308]
-en-US  = "Install [ProductName] to:"
+en-US = "Install [ProductName] to:"
 
 [OOO_CONTROL_309]
 en-US = "If you are just trying out [ProductName], you probably don't want this to happen, so leave the boxes unchecked."
@@ -680,23 +680,23 @@ en-US = "No languages have been selected for installation. Click OK, then select
 en-US = "No applications have been selected for installation. Click OK, then select one or more applications for installation."
 
 [OOO_CONTROL_319]
-en-US  = "Create a start link on desktop"
+en-US = "Create a start link on desktop"
 
 [OOO_CONTROL_321]
-en-US  = "Load [ProductName] during system start-up"
+en-US = "Load [ProductName] during system start-up"
 
 [OOO_CONTROL_322]
-en-US  = "Some files that need to be updated are currently in use."
+en-US = "Some files that need to be updated are currently in use."
 
 [OOO_CONTROL_323]
-en-US  = "The following applications are using files that need to be updated by this setup. You can let Installation Wizard close them and attempt to restart them or reboot the machine later."
+en-US = "The following applications are using files that need to be updated by this setup. You can let Installation Wizard close them and attempt to restart them or reboot the machine later."
 
 [OOO_CONTROL_324]
-en-US  = "{&MSSansBold8}Files in Use"
+en-US = "{&MSSansBold8}Files in Use"
 
 [OOO_CONTROL_325]
-en-US  = "Cancel"
+en-US = "Cancel"
 
 [OOO_CONTROL_326]
-en-US  = "OK"
+en-US = "OK"
 
