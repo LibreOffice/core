@@ -390,7 +390,7 @@ namespace cppcanvas
                 return false;
             }
 
-            ActionSharedPtr pPolyAction(
+            std::shared_ptr<Action> pPolyAction(
                 internal::PolyPolyActionFactory::createPolyPolyAction(
                     rPolyPoly, rParms.mrCanvas, rState ) );
 
@@ -699,7 +699,7 @@ namespace cppcanvas
                         uno::UNO_QUERY);
                     if( aTexture.Gradient.is() )
                     {
-                        ActionSharedPtr pPolyAction(
+                        std::shared_ptr<Action> pPolyAction(
                             internal::PolyPolyActionFactory::createPolyPolyAction(
                                 aDevicePoly,
                                 rParms.mrCanvas,
@@ -940,7 +940,7 @@ namespace cppcanvas
             }
 
             // create the actual text action
-            ActionSharedPtr pTextAction(
+            std::shared_ptr<Action> pTextAction(
                 TextActionFactory::createTextAction(
                     rStartPoint,
                     aReliefOffset,
@@ -957,7 +957,7 @@ namespace cppcanvas
                     rParms.mrParms,
                     bSubsettableActions ) );
 
-            ActionSharedPtr pStrikeoutTextAction;
+            std::shared_ptr<Action> pStrikeoutTextAction;
 
             if ( rState.textStrikeoutStyle == STRIKEOUT_X || rState.textStrikeoutStyle == STRIKEOUT_SLASH )
             {
@@ -1740,7 +1740,7 @@ namespace cppcanvas
 
                                     ::basegfx::B2DPolyPolygon aPoly( aPath.getB2DPolyPolygon() );
                                     aPoly.transform( rStates.getState().mapModeTransform );
-                                    ActionSharedPtr pPolyAction(
+                                    std::shared_ptr<Action> pPolyAction(
                                         internal::PolyPolyActionFactory::createPolyPolyAction(
                                             aPoly,
                                             rCanvas,
@@ -1806,7 +1806,7 @@ namespace cppcanvas
                         const OutDevState& rState( rStates.getState() );
                         if( rState.lineColor.getLength() )
                         {
-                            ActionSharedPtr pPointAction(
+                            std::shared_ptr<Action> pPointAction(
                                 internal::PointActionFactory::createPointAction(
                                     rState.mapModeTransform * vcl::unotools::b2DPointFromPoint(
                                         static_cast<MetaPointAction*>(pCurrAct)->GetPoint() ),
@@ -1831,7 +1831,7 @@ namespace cppcanvas
                         const OutDevState& rState( rStates.getState() );
                         if( rState.lineColor.getLength() )
                         {
-                            ActionSharedPtr pPointAction(
+                            std::shared_ptr<Action> pPointAction(
                                 internal::PointActionFactory::createPointAction(
                                     rState.mapModeTransform * vcl::unotools::b2DPointFromPoint(
                                         static_cast<MetaPixelAction*>(pCurrAct)->GetPoint() ),
@@ -1866,7 +1866,7 @@ namespace cppcanvas
                             const ::basegfx::B2DPoint aEndPoint(
                                 rState.mapModeTransform * vcl::unotools::b2DPointFromPoint( pLineAct->GetEndPoint() ));
 
-                            ActionSharedPtr pLineAction;
+                            std::shared_ptr<Action> pLineAction;
 
                             if( rLineInfo.IsDefault() )
                             {
@@ -2052,7 +2052,7 @@ namespace cppcanvas
                             ::basegfx::B2DPolygon aPoly( pPolyLineAct->GetPolygon().getB2DPolygon() );
                             aPoly.transform( rState.mapModeTransform );
 
-                            ActionSharedPtr pLineAction;
+                            std::shared_ptr<Action> pLineAction;
 
                             if( rLineInfo.IsDefault() )
                             {
@@ -2127,7 +2127,7 @@ namespace cppcanvas
                     {
                         MetaBmpAction* pAct = static_cast<MetaBmpAction*>(pCurrAct);
 
-                        ActionSharedPtr pBmpAction(
+                        std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
                                     pAct->GetBitmap(),
                                     rStates.getState().mapModeTransform *
@@ -2151,7 +2151,7 @@ namespace cppcanvas
                     {
                         MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pCurrAct);
 
-                        ActionSharedPtr pBmpAction(
+                        std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
                                     pAct->GetBitmap(),
                                     rStates.getState().mapModeTransform *
@@ -2184,7 +2184,7 @@ namespace cppcanvas
                                                     pAct->GetSrcSize() );
                         aBmp.Crop( aCropRect );
 
-                        ActionSharedPtr pBmpAction(
+                        std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
                                     aBmp,
                                     rStates.getState().mapModeTransform *
@@ -2210,7 +2210,7 @@ namespace cppcanvas
                     {
                         MetaBmpExAction* pAct = static_cast<MetaBmpExAction*>(pCurrAct);
 
-                        ActionSharedPtr pBmpAction(
+                        std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
                                     pAct->GetBitmapEx(),
                                     rStates.getState().mapModeTransform *
@@ -2234,7 +2234,7 @@ namespace cppcanvas
                     {
                         MetaBmpExScaleAction* pAct = static_cast<MetaBmpExScaleAction*>(pCurrAct);
 
-                        ActionSharedPtr pBmpAction(
+                        std::shared_ptr<Action> pBmpAction(
                                 internal::BitmapActionFactory::createBitmapAction(
                                     pAct->GetBitmapEx(),
                                     rStates.getState().mapModeTransform *
@@ -2267,7 +2267,7 @@ namespace cppcanvas
                                                    pAct->GetSrcSize() );
                         aBmp.Crop( aCropRect );
 
-                        ActionSharedPtr pBmpAction(
+                        std::shared_ptr<Action> pBmpAction(
                             internal::BitmapActionFactory::createBitmapAction(
                                 aBmp,
                                 rStates.getState().mapModeTransform *
@@ -2299,7 +2299,7 @@ namespace cppcanvas
                         BitmapEx aBmp( createMaskBmpEx( pAct->GetBitmap(),
                                                         pAct->GetColor() ));
 
-                        ActionSharedPtr pBmpAction(
+                        std::shared_ptr<Action> pBmpAction(
                             internal::BitmapActionFactory::createBitmapAction(
                                 aBmp,
                                 rStates.getState().mapModeTransform *
@@ -2329,7 +2329,7 @@ namespace cppcanvas
                         BitmapEx aBmp( createMaskBmpEx( pAct->GetBitmap(),
                                                         pAct->GetColor() ));
 
-                        ActionSharedPtr pBmpAction(
+                        std::shared_ptr<Action> pBmpAction(
                             internal::BitmapActionFactory::createBitmapAction(
                                 aBmp,
                                 rStates.getState().mapModeTransform *
@@ -2367,7 +2367,7 @@ namespace cppcanvas
                                                    pAct->GetSrcSize() );
                         aBmp.Crop( aCropRect );
 
-                        ActionSharedPtr pBmpAction(
+                        std::shared_ptr<Action> pBmpAction(
                             internal::BitmapActionFactory::createBitmapAction(
                                 aBmp,
                                 rStates.getState().mapModeTransform *
@@ -2408,7 +2408,7 @@ namespace cppcanvas
                             ::basegfx::B2DPolyPolygon aPoly( pAct->GetPolyPolygon().getB2DPolyPolygon() );
                             aPoly.transform( rState.mapModeTransform );
 
-                            ActionSharedPtr pPolyAction(
+                            std::shared_ptr<Action> pPolyAction(
                                 internal::PolyPolyActionFactory::createPolyPolyAction(
                                     aPoly,
                                     rCanvas,
@@ -2441,7 +2441,7 @@ namespace cppcanvas
 
                         DBG_TESTSOLARMUTEX();
 
-                        ActionSharedPtr pFloatTransAction(
+                        std::shared_ptr<Action> pFloatTransAction(
                             internal::TransparencyGroupActionFactory::createTransparencyGroupAction(
                                 std::move(pMtf),
                                 std::move(pGradient),
@@ -2517,7 +2517,7 @@ namespace cppcanvas
                                                         ::basegfx::B2DSize(pAct->GetWidth(),
                                                                            0 ));
 
-                        ActionSharedPtr pPolyAction(
+                        std::shared_ptr<Action> pPolyAction(
                             PolyPolyActionFactory::createPolyPolyAction(
                                 tools::createTextLinesPolyPolygon(
                                     rState.mapModeTransform *
@@ -2844,10 +2844,10 @@ namespace cppcanvas
             // find start and end action
             // =========================
             o_rRangeBegin = std::lower_bound( aBegin, aEnd,
-                                                MtfAction( ActionSharedPtr(), io_rStartIndex ),
+                                                MtfAction( std::shared_ptr<Action>(), io_rStartIndex ),
                                                 UpperBoundActionIndexComparator() );
             o_rRangeEnd   = std::lower_bound( aBegin, aEnd,
-                                                MtfAction( ActionSharedPtr(), io_rEndIndex ),
+                                                MtfAction( std::shared_ptr<Action>(), io_rEndIndex ),
                                                 UpperBoundActionIndexComparator() );
             return true;
         }

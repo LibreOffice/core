@@ -144,9 +144,6 @@ namespace cppcanvas
              */
             virtual sal_Int32 getActionCount() const = 0;
         };
-
-        typedef std::shared_ptr< Action > ActionSharedPtr;
-
     }
 }
 

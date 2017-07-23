@@ -79,7 +79,7 @@ namespace cppcanvas
                 Size of the transparency group object, in current
                 state coordinate system.
              */
-            ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&&                  rGroupMtf,
+            std::shared_ptr<Action> createTransparencyGroupAction( MtfAutoPtr&&                  rGroupMtf,
                                                                   GradientAutoPtr&&             rAlphaGradient,
                                                                   const ::basegfx::B2DPoint&    rDstPoint,
                                                                   const ::basegfx::B2DVector&   rDstSize,

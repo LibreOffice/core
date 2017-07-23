@@ -449,55 +449,55 @@ namespace cppcanvas
             }
         }
 
-        ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
+        std::shared_ptr<Action> PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
                                                                      const CanvasSharedPtr&           rCanvas,
                                                                      const OutDevState&               rState    )
         {
             OSL_ENSURE( rState.isLineColorSet || rState.isFillColorSet,
                         "PolyPolyActionFactory::createPolyPolyAction() with empty line and fill color" );
-            return ActionSharedPtr( new PolyPolyAction( rPoly, rCanvas, rState,
+            return std::shared_ptr<Action>( new PolyPolyAction( rPoly, rCanvas, rState,
                                                         rState.isFillColorSet,
                                                         rState.isLineColorSet ) );
         }
 
-        ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon&   rPoly,
+        std::shared_ptr<Action> PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon&   rPoly,
                                                                      const CanvasSharedPtr&             rCanvas,
                                                                      const OutDevState&                 rState,
                                                                      const rendering::Texture&          rTexture )
         {
-            return ActionSharedPtr( new TexturedPolyPolyAction( rPoly, rCanvas, rState, rTexture ) );
+            return std::shared_ptr<Action>( new TexturedPolyPolyAction( rPoly, rCanvas, rState, rTexture ) );
         }
 
-        ActionSharedPtr PolyPolyActionFactory::createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
+        std::shared_ptr<Action> PolyPolyActionFactory::createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
                                                                          const CanvasSharedPtr&           rCanvas,
                                                                          const OutDevState&               rState )
         {
             OSL_ENSURE( rState.isLineColorSet,
                         "PolyPolyActionFactory::createLinePolyPolyAction() called with empty line color" );
 
-            return ActionSharedPtr( new PolyPolyAction( rPoly, rCanvas, rState,
+            return std::shared_ptr<Action>( new PolyPolyAction( rPoly, rCanvas, rState,
                                                         false,
                                                         rState.isLineColorSet ) );
         }
 
-        ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon&   rPoly,
+        std::shared_ptr<Action> PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon&   rPoly,
                                                                      const CanvasSharedPtr&             rCanvas,
                                                                      const OutDevState&                 rState,
                                                                      const rendering::StrokeAttributes& rStrokeAttributes )
         {
             OSL_ENSURE( rState.isLineColorSet,
                         "PolyPolyActionFactory::createPolyPolyAction() for strokes called with empty line color" );
-            return ActionSharedPtr( new StrokedPolyPolyAction( rPoly, rCanvas, rState, rStrokeAttributes ) );
+            return std::shared_ptr<Action>( new StrokedPolyPolyAction( rPoly, rCanvas, rState, rStrokeAttributes ) );
         }
 
-        ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
+        std::shared_ptr<Action> PolyPolyActionFactory::createPolyPolyAction( const ::basegfx::B2DPolyPolygon& rPoly,
                                                                      const CanvasSharedPtr&           rCanvas,
                                                                      const OutDevState&               rState,
                                                                      int                              nTransparency     )
         {
             OSL_ENSURE( rState.isLineColorSet || rState.isFillColorSet,
                         "PolyPolyActionFactory::createPolyPolyAction() with empty line and fill color" );
-            return ActionSharedPtr( new PolyPolyAction( rPoly, rCanvas, rState,
+            return std::shared_ptr<Action>( new PolyPolyAction( rPoly, rCanvas, rState,
                                                         rState.isFillColorSet,
                                                         rState.isLineColorSet,
                                                         nTransparency ) );

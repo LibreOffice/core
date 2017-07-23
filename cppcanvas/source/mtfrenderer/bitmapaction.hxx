@@ -47,13 +47,13 @@ namespace cppcanvas
         namespace BitmapActionFactory
         {
             /// Unscaled bitmap action, only references destination point
-            ActionSharedPtr createBitmapAction( const ::BitmapEx&,
+            std::shared_ptr<Action> createBitmapAction( const ::BitmapEx&,
                                                        const ::basegfx::B2DPoint& rDstPoint,
                                                        const CanvasSharedPtr&,
                                                        const OutDevState& );
 
             /// Scaled bitmap action, dest point and dest size
-            ActionSharedPtr createBitmapAction( const ::BitmapEx&,
+            std::shared_ptr<Action> createBitmapAction( const ::BitmapEx&,
                                                        const ::basegfx::B2DPoint&  rDstPoint,
                                                        const ::basegfx::B2DVector& rDstSize,
                                                        const CanvasSharedPtr&,
