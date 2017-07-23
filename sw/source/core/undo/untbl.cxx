@@ -3215,10 +3215,10 @@ SwRewriter SwUndoTableStyleDelete::GetRewriter() const
     return aResult;
 }
 
-SwUndoTableStyleUpdate::SwUndoTableStyleUpdate(const OUString& rName, const SwTableAutoFormat& rOldFormat, const SwDoc* pDoc)
-    : SwUndo(SwUndoId::TBLSTYLE_UPDATE, pDoc),
-    m_pOldFormat(new SwTableAutoFormat(rOldFormat)),
-    m_pNewFormat(new SwTableAutoFormat(*pDoc->GetTableStyles().FindAutoFormat(rName)))
+SwUndoTableStyleUpdate::SwUndoTableStyleUpdate(const SwTableAutoFormat& rNewFormat, const SwTableAutoFormat& rOldFormat, const SwDoc* pDoc)
+    : SwUndo(SwUndoId::TBLSTYLE_UPDATE, pDoc)
+    , m_pOldFormat(new SwTableAutoFormat(rOldFormat))
+    , m_pNewFormat(new SwTableAutoFormat(rNewFormat))
 { }
 
 SwUndoTableStyleUpdate::~SwUndoTableStyleUpdate()

@@ -4705,7 +4705,7 @@ void SwDoc::ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFo
 
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            SwUndo * pUndo = new SwUndoTableStyleUpdate(rName, aOldFormat, this);
+            SwUndo * pUndo = new SwUndoTableStyleUpdate(*pFormat, aOldFormat, this);
 
             GetIDocumentUndoRedo().AppendUndo(pUndo);
         }

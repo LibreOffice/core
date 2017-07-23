@@ -419,7 +419,7 @@ class SwUndoTableStyleUpdate : public SwUndo
 {
     std::unique_ptr<SwTableAutoFormat> m_pOldFormat, m_pNewFormat;
 public:
-    SwUndoTableStyleUpdate(const OUString& rName, const SwTableAutoFormat& rOldFormat, const SwDoc* pDoc);
+    SwUndoTableStyleUpdate(const SwTableAutoFormat& rNewFormat, const SwTableAutoFormat& rOldFormat, const SwDoc* pDoc);
 
     virtual ~SwUndoTableStyleUpdate() override;
 
