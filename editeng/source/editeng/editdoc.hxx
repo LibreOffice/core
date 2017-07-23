@@ -192,8 +192,6 @@ private:
     SvxFont         aDefFont;          // faster than ever from the pool!
     bool            bHasEmptyAttribs;
 
-                    CharAttribList( const CharAttribList& ) {}
-
 public:
                     CharAttribList();
                     ~CharAttribList();
