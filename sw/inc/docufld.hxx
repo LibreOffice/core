@@ -32,7 +32,6 @@ class SwTextField;
 class SwFrame;
 class OutlinerParaObject;
 class SwTextAPIObject;
-class SwFormatField;
 
 enum SwAuthorFormat
 {

@@ -24,8 +24,6 @@
 #include "swdbdata.hxx"
 
 class SwDoc;
-class SwTextField;
-class SwFrame;
 
 // Database field.
 class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
