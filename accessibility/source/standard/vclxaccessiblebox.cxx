@@ -274,6 +274,11 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleChildCount()
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
+    return implGetAccessibleChildCount();
+}
+
+sal_Int32 VCLXAccessibleBox::implGetAccessibleChildCount()
+{
     // Usually a box has a text field and a list of items as its children.
     // Non drop down list boxes have no text field.  Additionally check
     // whether the object is valid.
@@ -297,7 +302,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int32
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if (i<0 || i>=getAccessibleChildCount())
+    if (i<0 || i>=implGetAccessibleChildCount())
         throw IndexOutOfBoundsException();
 
     Reference< XAccessible > xChild;
@@ -382,7 +387,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
         SolarMutexGuard aSolarGuard;
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-        if (nIndex<0 || nIndex>=getAccessibleActionCount())
+        if (nIndex!=0 || !m_bIsDropDownBox)
             throw css::lang::IndexOutOfBoundsException(
                 ("VCLXAccessibleBox::doAccessibleAction: index "
                  + OUString::number(nIndex) + " not among 0.."
@@ -418,7 +423,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
 OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 nIndex)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    if (nIndex<0 || nIndex>=getAccessibleActionCount())
+    if (nIndex!=0 || !m_bIsDropDownBox)
         throw css::lang::IndexOutOfBoundsException();
 
     if (m_bIsDropDownBox)

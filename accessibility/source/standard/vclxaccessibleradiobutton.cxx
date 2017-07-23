@@ -162,7 +162,7 @@ sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+    if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
     VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
@@ -176,7 +176,7 @@ OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 n
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+    if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
     return OUString(RID_STR_ACC_ACTION_SELECT);
@@ -186,7 +186,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActio
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+    if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
     OAccessibleKeyBindingHelper* pKeyBindingHelper = new OAccessibleKeyBindingHelper();
