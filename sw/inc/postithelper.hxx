@@ -28,7 +28,6 @@
 #include <SidebarWindowsTypes.hxx>
 
 class SfxBroadcaster;
-class SwTextField;
 class SwRootFrame;
 class SwPostItMgr;
 class SwEditWin;

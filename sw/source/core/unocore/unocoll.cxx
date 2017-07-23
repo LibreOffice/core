@@ -730,31 +730,31 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         case SwServiceType::FieldTypeDatabaseSetNum:
         case SwServiceType::FieldTypeDatabase:
         case SwServiceType::FieldTypeDatabaseName:
-        case SwServiceType::FieldTypePageCount      :
-        case SwServiceType::FieldTypeParagraphCount :
-        case SwServiceType::FieldTypeWordCount      :
-        case SwServiceType::FieldTypeCharacterCount :
-        case SwServiceType::FieldTypeTableCount     :
-        case SwServiceType::FieldTypeGraphicObjectCount    :
-        case SwServiceType::FieldTypeEmbeddedObjectCount   :
-        case SwServiceType::FieldTypeDocInfoChangeAuthor     :
-        case SwServiceType::FieldTypeDocInfoChangeDateTime  :
-        case SwServiceType::FieldTypeDocInfoEditTime         :
-        case SwServiceType::FieldTypeDocInfoDescription       :
-        case SwServiceType::FieldTypeDocInfoCreateAuthor     :
-        case SwServiceType::FieldTypeDocInfoCreateDateTime  :
-        case SwServiceType::FieldTypeDocInfoCustom            :
-        case SwServiceType::FieldTypeDocInfoPrintAuthor      :
-        case SwServiceType::FieldTypeDocInfoPrintDateTime   :
-        case SwServiceType::FieldTypeDocInfoKeywords         :
-        case SwServiceType::FieldTypeDocInfoSubject           :
-        case SwServiceType::FieldTypeDocInfoTitle             :
-        case SwServiceType::FieldTypeDocInfoRevision          :
+        case SwServiceType::FieldTypePageCount:
+        case SwServiceType::FieldTypeParagraphCount:
+        case SwServiceType::FieldTypeWordCount:
+        case SwServiceType::FieldTypeCharacterCount:
+        case SwServiceType::FieldTypeTableCount:
+        case SwServiceType::FieldTypeGraphicObjectCount:
+        case SwServiceType::FieldTypeEmbeddedObjectCount:
+        case SwServiceType::FieldTypeDocInfoChangeAuthor:
+        case SwServiceType::FieldTypeDocInfoChangeDateTime:
+        case SwServiceType::FieldTypeDocInfoEditTime:
+        case SwServiceType::FieldTypeDocInfoDescription:
+        case SwServiceType::FieldTypeDocInfoCreateAuthor:
+        case SwServiceType::FieldTypeDocInfoCreateDateTime:
+        case SwServiceType::FieldTypeDocInfoCustom:
+        case SwServiceType::FieldTypeDocInfoPrintAuthor:
+        case SwServiceType::FieldTypeDocInfoPrintDateTime:
+        case SwServiceType::FieldTypeDocInfoKeywords:
+        case SwServiceType::FieldTypeDocInfoSubject:
+        case SwServiceType::FieldTypeDocInfoTitle:
+        case SwServiceType::FieldTypeDocInfoRevision:
         case SwServiceType::FieldTypeBibliography:
-        case SwServiceType::FieldTypeInputUser                :
-        case SwServiceType::FieldTypeHiddenText               :
-        case SwServiceType::FieldTypeCombinedCharacters       :
-        case SwServiceType::FieldTypeDropdown                  :
+        case SwServiceType::FieldTypeInputUser:
+        case SwServiceType::FieldTypeHiddenText:
+        case SwServiceType::FieldTypeCombinedCharacters:
+        case SwServiceType::FieldTypeDropdown:
         case SwServiceType::FieldTypeTableFormula:
             // NOTE: the sw.SwXAutoTextEntry unoapi test depends on pDoc = 0
             xRet = SwXTextField::CreateXTextField(nullptr, nullptr, nObjectType);
@@ -790,28 +790,28 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             xRet = SwXFieldMaster::CreateXFieldMaster(&rDoc, pType);
         }
         break;
-        case SwServiceType::Paragraph :
+        case SwServiceType::Paragraph:
             xRet = SwXParagraph::CreateXParagraph(rDoc, nullptr);
         break;
-        case SwServiceType::NumberingRules :
+        case SwServiceType::NumberingRules:
             xRet = static_cast<cppu::OWeakObject*>(new SwXNumberingRules(rDoc));
         break;
-        case SwServiceType::TextColumns :
+        case SwServiceType::TextColumns:
             xRet = static_cast<cppu::OWeakObject*>(new SwXTextColumns);
         break;
         case SwServiceType::Defaults:
             xRet = static_cast<cppu::OWeakObject*>(new SwXTextDefaults(&rDoc));
         break;
-        case SwServiceType::IMapRectangle :
+        case SwServiceType::IMapRectangle:
             xRet = SvUnoImageMapRectangleObject_createInstance( sw_GetSupportedMacroItems() );
         break;
-        case SwServiceType::IMapCircle    :
+        case SwServiceType::IMapCircle:
             xRet = SvUnoImageMapCircleObject_createInstance( sw_GetSupportedMacroItems() );
         break;
-        case SwServiceType::IMapPolygon   :
+        case SwServiceType::IMapPolygon:
             xRet = SvUnoImageMapPolygonObject_createInstance( sw_GetSupportedMacroItems() );
         break;
-        case SwServiceType::Chart2DataProvider :
+        case SwServiceType::Chart2DataProvider:
             // #i64497# If a chart is in a temporary document during clipoard
             // paste, there should be no data provider, so that own data is used
             // This should not happen during copy/paste, as this will unlink

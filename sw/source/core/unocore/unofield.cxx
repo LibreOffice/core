@@ -1495,19 +1495,19 @@ void SAL_CALL SwXTextField::attach(
                     m_pImpl->m_pProps->sPar1);
         }
         break;
-        case SwServiceType::FieldTypeDocInfoChangeAuthor     :
-        case SwServiceType::FieldTypeDocInfoChangeDateTime  :
-        case SwServiceType::FieldTypeDocInfoEditTime         :
-        case SwServiceType::FieldTypeDocInfoDescription       :
-        case SwServiceType::FieldTypeDocInfoCreateAuthor     :
-        case SwServiceType::FieldTypeDocInfoCreateDateTime  :
-        case SwServiceType::FieldTypeDocInfoCustom            :
-        case SwServiceType::FieldTypeDocInfoPrintAuthor      :
-        case SwServiceType::FieldTypeDocInfoPrintDateTime   :
-        case SwServiceType::FieldTypeDocInfoKeywords         :
-        case SwServiceType::FieldTypeDocInfoSubject           :
-        case SwServiceType::FieldTypeDocInfoTitle             :
-        case SwServiceType::FieldTypeDocInfoRevision          :
+        case SwServiceType::FieldTypeDocInfoChangeAuthor:
+        case SwServiceType::FieldTypeDocInfoChangeDateTime:
+        case SwServiceType::FieldTypeDocInfoEditTime:
+        case SwServiceType::FieldTypeDocInfoDescription:
+        case SwServiceType::FieldTypeDocInfoCreateAuthor:
+        case SwServiceType::FieldTypeDocInfoCreateDateTime:
+        case SwServiceType::FieldTypeDocInfoCustom:
+        case SwServiceType::FieldTypeDocInfoPrintAuthor:
+        case SwServiceType::FieldTypeDocInfoPrintDateTime:
+        case SwServiceType::FieldTypeDocInfoKeywords:
+        case SwServiceType::FieldTypeDocInfoSubject:
+        case SwServiceType::FieldTypeDocInfoTitle:
+        case SwServiceType::FieldTypeDocInfoRevision:
         case SwServiceType::FieldTypeDocInfo:
         {
             SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo);
@@ -1822,13 +1822,13 @@ void SAL_CALL SwXTextField::attach(
                                     m_pImpl->m_pProps->sPar2);
         }
         break;
-        case SwServiceType::FieldTypePageCount            :
-        case SwServiceType::FieldTypeParagraphCount       :
-        case SwServiceType::FieldTypeWordCount            :
-        case SwServiceType::FieldTypeCharacterCount       :
-        case SwServiceType::FieldTypeTableCount           :
-        case SwServiceType::FieldTypeGraphicObjectCount  :
-        case SwServiceType::FieldTypeEmbeddedObjectCount :
+        case SwServiceType::FieldTypePageCount:
+        case SwServiceType::FieldTypeParagraphCount:
+        case SwServiceType::FieldTypeWordCount:
+        case SwServiceType::FieldTypeCharacterCount:
+        case SwServiceType::FieldTypeTableCount:
+        case SwServiceType::FieldTypeGraphicObjectCount:
+        case SwServiceType::FieldTypeEmbeddedObjectCount:
         {
             sal_uInt16 nSubType = DS_PAGE;
             switch (m_pImpl->m_nServiceId)
@@ -1882,7 +1882,7 @@ void SAL_CALL SwXTextField::attach(
         }
         break;
 
-        case SwServiceType::FieldTypeTableFormula :
+        case SwServiceType::FieldTypeTableFormula:
         {
             // create field
             sal_uInt16 nType = nsSwGetSetExpType::GSE_FORMULA;
