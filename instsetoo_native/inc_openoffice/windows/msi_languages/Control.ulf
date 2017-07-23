@@ -56,7 +56,7 @@ en-US = "Cancel"
 en-US = "Specify a network location for the server image of the product."
 
 [OOO_CONTROL_20]
-en-US = "Enter the network location or click Change to browse to a location.  Click Install to create a server image of [ProductName] at the specified network location or click Cancel to exit the wizard."
+en-US = "Enter the network location or click Change to browse to a location. Click Install to create a server image of [ProductName] at the specified network location or click Cancel to exit the wizard."
 
 [OOO_CONTROL_21]
 en-US = "{&MSSansBold8}Network Location"
@@ -398,7 +398,7 @@ en-US = "&Update >"
 en-US = "{&TahomaBold10}Welcome to the Patch for [ProductName]"
 
 [OOO_CONTROL_162]
-en-US = "The Installation Wizard will install the Patch for [ProductName] on your computer.  To continue, click Update."
+en-US = "The Installation Wizard will install the Patch for [ProductName] on your computer. To continue, click Update."
 
 [OOO_CONTROL_163]
 en-US = "< &Back"
@@ -548,7 +548,7 @@ en-US = "&Next >"
 en-US = "{&TahomaBold10}Welcome to the Installation Wizard for [ProductName]"
 
 [OOO_CONTROL_218]
-en-US = "[ProductName] Setup is preparing the Installation Wizard which will guide you through the program setup process.  Please wait."
+en-US = "[ProductName] Setup is preparing the Installation Wizard which will guide you through the program setup process. Please wait."
 
 [OOO_CONTROL_219]
 en-US = "< &Back"
@@ -728,7 +728,7 @@ en-US = "To select a different version, click "Change". Otherwise click "Cancel"
 en-US = "To select a different folder, click "Change"."
 
 [OOO_CONTROL_308]
-en-US  = "Install [ProductName] to:"
+en-US = "Install [ProductName] to:"
 
 [OOO_CONTROL_309]
 en-US = "If you are just trying out [ProductName], you probably don't want this to happen, so leave the boxes unchecked."
@@ -740,10 +740,10 @@ en-US = "No languages have been selected for installation. Click OK to select on
 en-US = "No applications have been selected for installation. Click OK to select one or more applications for installation."
 
 [OOO_CONTROL_319]
-en-US  = "Create a start link on desktop"
+en-US = "Create a start link on desktop"
 
 [OOO_CONTROL_320]
-en-US  = "Remove all older product versions"
+en-US = "Remove all older product versions"
 
 [OOO_CONTROL_LANG_1033]
 en-US = "English"
@@ -753,5 +753,4 @@ en-US = "German"
 
 [OOO_CONTROL_LANG_1034]
 en-US = "Spanish"
-
 
