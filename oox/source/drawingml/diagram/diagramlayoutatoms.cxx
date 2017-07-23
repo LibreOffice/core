@@ -261,7 +261,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             for ( ; nCol<nCount; nCol++)
             {
                 nRow = (nCount+nCol-1) / nCol;
-                if ((rShape->getSize().Height / nRow) / (rShape->getSize().Width / nCol) >= fAspectRatio)
+                const double fShapeHeight = rShape->getSize().Height;
+                const double fShapeWidth = rShape->getSize().Width;
+                if ((fShapeHeight / nRow) / (fShapeWidth / nCol) >= fAspectRatio)
                     break;
             }
             SAL_INFO("oox.drawingml", "Snake layout grid: " << nCol << "x" << nRow);
