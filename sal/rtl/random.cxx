@@ -25,11 +25,7 @@
 #include <rtl/digest.h>
 #include <rtl/random.h>
 #include "oslrandom.h"
-/*========================================================================
- *
- * rtlRandom internals.
- *
- *======================================================================*/
+
 #define RTL_RANDOM_RNG_1(a) ((a) * 16807L)
 #define RTL_RANDOM_RNG_2(a) ((a) * 65539L)
 
@@ -45,8 +41,6 @@
     if ((z) < 0) (z) += 30307L; \
 }
 
-/** RandomData_Impl.
- */
 struct RandomData_Impl
 {
     sal_Int16 m_nX;
@@ -54,12 +48,8 @@ struct RandomData_Impl
     sal_Int16 m_nZ;
 };
 
-/** data.
- */
 static double data (RandomData_Impl *pImpl);
 
-/** RandomPool_Impl.
- */
 #define RTL_RANDOM_DIGEST      rtl_Digest_AlgorithmMD5
 #define RTL_RANDOM_SIZE_DIGEST RTL_DIGEST_LENGTH_MD5
 #define RTL_RANDOM_SIZE_POOL   1023
@@ -74,25 +64,15 @@ struct RandomPool_Impl
     sal_uInt32 m_nCount;
 };
 
-/** initPool.
- */
-static bool initPool (
-    RandomPool_Impl *pImpl);
+static bool initPool(RandomPool_Impl *pImpl);
 
-/** seedPool.
- */
-static void seedPool (
+static void seedPool(
     RandomPool_Impl *pImpl, const sal_uInt8 *pBuffer, sal_Size nBufLen);
 
-/** readPool.
- */
-static void readPool (
+static void readPool(
     RandomPool_Impl *pImpl, sal_uInt8 *pBuffer, sal_Size nBufLen);
 
-/*
- * data.
- */
-static double data (RandomData_Impl *pImpl)
+static double data(RandomData_Impl *pImpl)
 {
     double random;
 
@@ -105,18 +85,15 @@ static double data (RandomData_Impl *pImpl)
     return random;
 }
 
-/*
- * initPool.
- */
-static bool initPool (RandomPool_Impl *pImpl)
+static bool initPool(RandomPool_Impl *pImpl)
 {
-    pImpl->m_hDigest = rtl_digest_create (RTL_RANDOM_DIGEST);
+    pImpl->m_hDigest = rtl_digest_create(RTL_RANDOM_DIGEST);
     if (pImpl->m_hDigest)
     {
         oslThreadIdentifier tid;
-        TimeValue           tv;
-        RandomData_Impl     rd;
-        double              seed;
+        TimeValue tv;
+        RandomData_Impl rd;
+        double seed;
 
         /* The use of uninitialized stack variables as a way to
          * enhance the entropy of the random pool triggers
@@ -131,36 +108,33 @@ static bool initPool (RandomPool_Impl *pImpl)
 
         tid = osl::Thread::getCurrentIdentifier();
         tid = RTL_RANDOM_RNG_2(RTL_RANDOM_RNG_1(tid));
-        seedPool (pImpl, reinterpret_cast<sal_uInt8*>(&tid), sizeof(tid));
+        seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&tid), sizeof(tid));
 
         osl_getSystemTime (&tv);
         tv.Seconds = RTL_RANDOM_RNG_2(tv.Seconds);
         tv.Nanosec = RTL_RANDOM_RNG_2(tv.Nanosec);
-        seedPool (pImpl, reinterpret_cast<sal_uInt8*>(&tv), sizeof(tv));
+        seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&tv), sizeof(tv));
 
-        rd.m_nX = (sal_Int16)(((tid         >> 1) << 1) + 1);
+        rd.m_nX = (sal_Int16)(((tid        >> 1) << 1) + 1);
         rd.m_nY = (sal_Int16)(((tv.Seconds >> 1) << 1) + 1);
         rd.m_nZ = (sal_Int16)(((tv.Nanosec >> 1) << 1) + 1);
-        seedPool (pImpl, reinterpret_cast<sal_uInt8*>(&rd), sizeof(rd));
+        seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&rd), sizeof(rd));
 
         while (pImpl->m_nData < RTL_RANDOM_SIZE_POOL)
         {
             seed = data (&rd);
-            seedPool (pImpl, reinterpret_cast<sal_uInt8*>(&seed), sizeof(seed));
+            seedPool (pImpl, reinterpret_cast< sal_uInt8* >(&seed), sizeof(seed));
         }
         return true;
     }
     return false;
 }
 
-/*
- * seedPool.
- */
-static void seedPool (
+static void seedPool(
     RandomPool_Impl *pImpl, const sal_uInt8 *pBuffer, sal_Size nBufLen)
 {
     sal_Size i;
-    sal_sSize  j, k;
+    sal_sSize j, k;
 
     for (i = 0; i < nBufLen; i += RTL_RANDOM_SIZE_DIGEST)
     {
@@ -168,27 +142,27 @@ static void seedPool (
         if (j > RTL_RANDOM_SIZE_DIGEST)
             j = RTL_RANDOM_SIZE_DIGEST;
 
-        rtl_digest_update (
+        rtl_digest_update(
             pImpl->m_hDigest, pImpl->m_pDigest, RTL_RANDOM_SIZE_DIGEST);
 
         k = (pImpl->m_nIndex + j) - RTL_RANDOM_SIZE_POOL;
         if (k > 0)
         {
-            rtl_digest_update (
+            rtl_digest_update(
                 pImpl->m_hDigest, &(pImpl->m_pData[pImpl->m_nIndex]), j - k);
-            rtl_digest_update (
+            rtl_digest_update(
                 pImpl->m_hDigest, &(pImpl->m_pData[0]), k);
         }
         else
         {
-            rtl_digest_update (
+            rtl_digest_update(
                 pImpl->m_hDigest, &(pImpl->m_pData[pImpl->m_nIndex]), j);
         }
 
-        rtl_digest_update (pImpl->m_hDigest, pBuffer, j);
+        rtl_digest_update(pImpl->m_hDigest, pBuffer, j);
         pBuffer += j;
 
-        rtl_digest_get (
+        rtl_digest_get(
             pImpl->m_hDigest, pImpl->m_pDigest, RTL_RANDOM_SIZE_DIGEST);
         for (k = 0; k < j; k++)
         {
@@ -205,9 +179,6 @@ static void seedPool (
         pImpl->m_nData = pImpl->m_nIndex;
 }
 
-/*
- * readPool.
- */
 static void readPool (
     RandomPool_Impl *pImpl, sal_uInt8 *pBuffer, sal_Size nBufLen)
 {
@@ -220,7 +191,7 @@ static void readPool (
             j = RTL_RANDOM_SIZE_DIGEST/2;
         nBufLen -= j;
 
-        rtl_digest_update (
+        rtl_digest_update(
             pImpl->m_hDigest,
             &(pImpl->m_pDigest[RTL_RANDOM_SIZE_DIGEST/2]),
             RTL_RANDOM_SIZE_DIGEST/2);
@@ -228,121 +199,103 @@ static void readPool (
         k = (pImpl->m_nIndex + j) - pImpl->m_nData;
         if (k > 0)
         {
-            rtl_digest_update (
+            rtl_digest_update(
                 pImpl->m_hDigest, &(pImpl->m_pData[pImpl->m_nIndex]), j - k);
-            rtl_digest_update (
+            rtl_digest_update(
                 pImpl->m_hDigest, &(pImpl->m_pData[0]), k);
         }
         else
         {
-            rtl_digest_update (
+            rtl_digest_update(
                 pImpl->m_hDigest, &(pImpl->m_pData[pImpl->m_nIndex]), j);
         }
 
-        rtl_digest_get (
+        rtl_digest_get(
             pImpl->m_hDigest, pImpl->m_pDigest, RTL_RANDOM_SIZE_DIGEST);
         for (k = 0; k < j; k++)
         {
-            if (pImpl->m_nIndex >= pImpl->m_nData) pImpl->m_nIndex = 0;
+            if (pImpl->m_nIndex >= pImpl->m_nData)
+                pImpl->m_nIndex = 0;
+
             pImpl->m_pData[pImpl->m_nIndex++] ^= pImpl->m_pDigest[k];
             *pBuffer++ = pImpl->m_pDigest[k + RTL_RANDOM_SIZE_DIGEST/2];
         }
     }
 
     pImpl->m_nCount++;
-    rtl_digest_update (
+    rtl_digest_update(
         pImpl->m_hDigest, &(pImpl->m_nCount), sizeof(pImpl->m_nCount));
-    rtl_digest_update (
+    rtl_digest_update(
         pImpl->m_hDigest, pImpl->m_pDigest, RTL_RANDOM_SIZE_DIGEST);
-    rtl_digest_get (
+    rtl_digest_get(
         pImpl->m_hDigest, pImpl->m_pDigest, RTL_RANDOM_SIZE_DIGEST);
 }
 
-/*========================================================================
- *
- * rtlRandom implementation.
- *
- *======================================================================*/
-/*
- * rtl_random_createPool.
- */
 rtlRandomPool SAL_CALL rtl_random_createPool() SAL_THROW_EXTERN_C()
 {
     RandomPool_Impl *pImpl = nullptr;
     char sanity[4];
 
     /* try to get system random number, if it fail fall back on own pool */
-    pImpl = static_cast<RandomPool_Impl*>(rtl_allocateZeroMemory (sizeof(RandomPool_Impl)));
+    pImpl = static_cast< RandomPool_Impl* >(rtl_allocateZeroMemory(sizeof(RandomPool_Impl)));
     if (pImpl)
     {
-        if(!osl_get_system_random_data(sanity, 4))
+        if (!osl_get_system_random_data(sanity, 4))
         {
-            if (!initPool (pImpl))
+            if (!initPool(pImpl))
             {
-                rtl_freeZeroMemory (pImpl, sizeof(RandomPool_Impl));
+                rtl_freeZeroMemory(pImpl, sizeof(RandomPool_Impl));
                 pImpl = nullptr;
             }
         }
     }
-    return static_cast<rtlRandomPool>(pImpl);
+    return static_cast< rtlRandomPool >(pImpl);
 }
 
-/*
- * rtl_random_destroyPool.
- */
-void SAL_CALL rtl_random_destroyPool (rtlRandomPool Pool) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_random_destroyPool(rtlRandomPool Pool) SAL_THROW_EXTERN_C()
 {
-    RandomPool_Impl *pImpl = static_cast<RandomPool_Impl *>(Pool);
+    RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(Pool);
     if (pImpl)
     {
-        if(pImpl->m_hDigest)
-        {
-            rtl_digest_destroy (pImpl->m_hDigest);
-        }
-        rtl_freeZeroMemory (pImpl, sizeof (RandomPool_Impl));
+        if (pImpl->m_hDigest)
+            rtl_digest_destroy(pImpl->m_hDigest);
+
+        rtl_freeZeroMemory (pImpl, sizeof(RandomPool_Impl));
     }
 }
 
-/*
- * rtl_random_addBytes.
- */
-rtlRandomError SAL_CALL rtl_random_addBytes (
+rtlRandomError SAL_CALL rtl_random_addBytes(
     rtlRandomPool Pool, const void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
-    RandomPool_Impl *pImpl   = static_cast<RandomPool_Impl *>(Pool);
-    const sal_uInt8 *pBuffer = static_cast<const sal_uInt8 *>(Buffer);
+    RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(Pool);
+    const sal_uInt8 *pBuffer = static_cast< const sal_uInt8* >(Buffer);
 
-    if ((pImpl == nullptr) || (pBuffer == nullptr))
+    if (!pImpl || !pBuffer)
         return rtl_Random_E_Argument;
-    if(pImpl->m_hDigest)
-    {
+
+    if (pImpl->m_hDigest)
         seedPool (pImpl, pBuffer, Bytes);
-    }
+
     return rtl_Random_E_None;
 }
 
-/*
- * rtl_random_getBytes.
- */
 rtlRandomError SAL_CALL rtl_random_getBytes (
     rtlRandomPool Pool, void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
 {
-    RandomPool_Impl *pImpl   = static_cast<RandomPool_Impl *>(Pool);
-    sal_uInt8       *pBuffer = static_cast<sal_uInt8 *>(Buffer);
+    RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(Pool);
+    sal_uInt8 *pBuffer = static_cast< sal_uInt8* >(Buffer);
 
-    if ((pImpl == nullptr) || (pBuffer == nullptr))
+    if (!pImpl || !pBuffer)
         return rtl_Random_E_Argument;
 
-    if(pImpl->m_hDigest || !osl_get_system_random_data(static_cast<char*>(Buffer), Bytes))
+    if (pImpl->m_hDigest || !osl_get_system_random_data(static_cast< char* >(Buffer), Bytes))
     {
-        if(!pImpl->m_hDigest)
+        if (!pImpl->m_hDigest)
         {
             if (!initPool (pImpl))
-            {
                 return rtl_Random_E_Unknown;
-            }
         }
-        readPool (pImpl, pBuffer, Bytes);
+        readPool(pImpl, pBuffer, Bytes);
     }
     return rtl_Random_E_None;
 }
