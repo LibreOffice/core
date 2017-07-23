@@ -1901,7 +1901,7 @@ namespace cppcanvas
                 text, and creates a properly setup OutlineAction from
                 it.
              */
-            ActionSharedPtr createOutline( const ::basegfx::B2DPoint&       rStartPoint,
+            std::shared_ptr<Action> createOutline( const ::basegfx::B2DPoint&       rStartPoint,
                                            const ::basegfx::B2DSize&        rReliefOffset,
                                            const ::Color&                   rReliefColor,
                                            const ::basegfx::B2DSize&        rShadowOffset,
@@ -1941,7 +1941,7 @@ namespace cppcanvas
                 rVDev.SetFont(aOrigFont);
 
                 if( !bHaveOutlines )
-                    return ActionSharedPtr();
+                    return std::shared_ptr<Action>();
 
                 // remove offsetting from mapmode transformation
                 // (outline polygons must stay at origin, only need to
@@ -2000,7 +2000,7 @@ namespace cppcanvas
 
                 if( rParms.maTextTransformation.is_initialized() )
                 {
-                    return ActionSharedPtr(
+                    return std::shared_ptr<Action>(
                         new OutlineAction(
                             rStartPoint,
                             rReliefOffset,
@@ -2017,7 +2017,7 @@ namespace cppcanvas
                 }
                 else
                 {
-                    return ActionSharedPtr(
+                    return std::shared_ptr<Action>(
                         new OutlineAction(
                             rStartPoint,
                             rReliefOffset,
@@ -2036,7 +2036,7 @@ namespace cppcanvas
         } // namespace
 
 
-        ActionSharedPtr TextActionFactory::createTextAction( const ::Point&                 rStartPoint,
+        std::shared_ptr<Action> TextActionFactory::createTextAction( const ::Point&                 rStartPoint,
                                                              const ::Size&                  rReliefOffset,
                                                              const ::Color&                 rReliefColor,
                                                              const ::Size&                  rShadowOffset,
@@ -2099,7 +2099,7 @@ namespace cppcanvas
 
             const ::Color aEmptyColor( COL_AUTO );
 
-            ActionSharedPtr ret;
+            std::shared_ptr<Action> ret;
 
             // no DX array, and no need to subset - no need to store
             // DX array, then.
@@ -2115,7 +2115,7 @@ namespace cppcanvas
                     // nope
                     if( rParms.maTextTransformation.is_initialized() )
                     {
-                        ret = ActionSharedPtr( new TextAction(
+                        ret = std::shared_ptr<Action>( new TextAction(
                                                     aStartPoint,
                                                     rText,
                                                     nStartPos,
@@ -2126,7 +2126,7 @@ namespace cppcanvas
                     }
                     else
                     {
-                        ret = ActionSharedPtr( new TextAction(
+                        ret = std::shared_ptr<Action>( new TextAction(
                                                     aStartPoint,
                                                     rText,
                                                     nStartPos,
@@ -2139,7 +2139,7 @@ namespace cppcanvas
                 {
                     // at least one of the effects requested
                     if( rParms.maTextTransformation.is_initialized() )
-                        ret = ActionSharedPtr( new EffectTextAction(
+                        ret = std::shared_ptr<Action>( new EffectTextAction(
                                                     aStartPoint,
                                                     aReliefOffset,
                                                     rReliefColor,
@@ -2153,7 +2153,7 @@ namespace cppcanvas
                                                     rState,
                                                     *rParms.maTextTransformation ) );
                     else
-                        ret = ActionSharedPtr( new EffectTextAction(
+                        ret = std::shared_ptr<Action>( new EffectTextAction(
                                                     aStartPoint,
                                                     aReliefOffset,
                                                     rReliefColor,
@@ -2178,7 +2178,7 @@ namespace cppcanvas
                 {
                     // nope
                     if( rParms.maTextTransformation.is_initialized() )
-                        ret = ActionSharedPtr( new TextArrayAction(
+                        ret = std::shared_ptr<Action>( new TextArrayAction(
                                                     aStartPoint,
                                                     rText,
                                                     nStartPos,
@@ -2188,7 +2188,7 @@ namespace cppcanvas
                                                     rState,
                                                     *rParms.maTextTransformation ) );
                     else
-                        ret = ActionSharedPtr( new TextArrayAction(
+                        ret = std::shared_ptr<Action>( new TextArrayAction(
                                                     aStartPoint,
                                                     rText,
                                                     nStartPos,
@@ -2201,7 +2201,7 @@ namespace cppcanvas
                 {
                     // at least one of the effects requested
                     if( rParms.maTextTransformation.is_initialized() )
-                        ret = ActionSharedPtr( new EffectTextArrayAction(
+                        ret = std::shared_ptr<Action>( new EffectTextArrayAction(
                                                     aStartPoint,
                                                     aReliefOffset,
                                                     rReliefColor,
@@ -2216,7 +2216,7 @@ namespace cppcanvas
                                                     rState,
                                                     *rParms.maTextTransformation ) );
                     else
-                        ret = ActionSharedPtr( new EffectTextArrayAction(
+                        ret = std::shared_ptr<Action>( new EffectTextArrayAction(
                                                     aStartPoint,
                                                     aReliefOffset,
                                                     rReliefColor,

@@ -307,7 +307,7 @@ namespace cppcanvas
 
             localPolygon.transform( rState.mapModeTransform );
 
-            ActionSharedPtr pPolyAction;
+            std::shared_ptr<Action> pPolyAction;
 
             if (isColor) {
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tcolor fill:0x" << std::hex << brushIndexOrColor << std::dec);
@@ -580,7 +580,7 @@ namespace cppcanvas
                 bool bWasFillColorSet = rState.isFillColorSet;
                 rState.isFillColorSet = true;
                 rState.fillColor = rState.lineColor;
-                ActionSharedPtr pAction2(internal::PolyPolyActionFactory::createPolyPolyAction(aArrow, rParms.mrCanvas, rState));
+                std::shared_ptr<Action> pAction2(internal::PolyPolyActionFactory::createPolyPolyAction(aArrow, rParms.mrCanvas, rState));
                 if (pAction2)
                 {
                     maActions.push_back(MtfAction(pAction2, rParms.mrCurrActionIndex));
@@ -590,7 +590,7 @@ namespace cppcanvas
             }
             else
             {
-                ActionSharedPtr pAction(internal::PolyPolyActionFactory::createPolyPolyAction(aArrow, rParms.mrCanvas, rState, rAttributes));
+                std::shared_ptr<Action> pAction(internal::PolyPolyActionFactory::createPolyPolyAction(aArrow, rParms.mrCanvas, rState, rAttributes));
                 if (pAction)
                 {
                     maActions.push_back(MtfAction(pAction, rParms.mrCurrActionIndex));
@@ -685,7 +685,7 @@ namespace cppcanvas
                 }
 
                 // finally render the polygon
-                ActionSharedPtr pPolyAction(internal::PolyPolyActionFactory::createPolyPolyAction(aFinalPolyPolygon, rParms.mrCanvas, rState, aPolygonAttributes));
+                std::shared_ptr<Action> pPolyAction(internal::PolyPolyActionFactory::createPolyPolyAction(aFinalPolyPolygon, rParms.mrCanvas, rState, aPolygonAttributes));
                 if( pPolyAction )
                 {
                     maActions.push_back(MtfAction(pPolyAction, rParms.mrCurrActionIndex));
@@ -1236,7 +1236,7 @@ namespace cppcanvas
                                     Size aSize( aBmp.GetSizePixel() );
                                     SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
                                     if( aSize.Width() > 0 && aSize.Height() > 0 ) {
-                                        ActionSharedPtr pBmpAction (
+                                        std::shared_ptr<Action> pBmpAction (
                                             internal::BitmapActionFactory::createBitmapAction (
                                                 aBmp,
                                                 rState.mapModeTransform * aDstPoint,
@@ -1296,7 +1296,7 @@ namespace cppcanvas
 
                                 ::basegfx::B2DPoint point( Map( lx + 0.15*cellSize, ly + cellSize ) );
 
-                                ActionSharedPtr pTextAction(
+                                std::shared_ptr<Action> pTextAction(
                                     TextActionFactory::createTextAction(
                                                                         // position is just rough guess for now
                                                                         // we should calculate it exactly from layoutRect or font
@@ -1613,7 +1613,7 @@ namespace cppcanvas
 
                             ::basegfx::B2DPoint point( Map( charsPosX[0], charsPosY[0] ) );
 
-                            ActionSharedPtr pTextAction(
+                            std::shared_ptr<Action> pTextAction(
                                     TextActionFactory::createTextAction(
                                         vcl::unotools::pointFromB2DPoint ( point ),
                                         ::Size(),

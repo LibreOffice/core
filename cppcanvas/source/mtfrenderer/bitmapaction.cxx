@@ -197,24 +197,24 @@ namespace cppcanvas
             }
         }
 
-        ActionSharedPtr BitmapActionFactory::createBitmapAction( const ::BitmapEx&          rBmpEx,
+        std::shared_ptr<Action> BitmapActionFactory::createBitmapAction( const ::BitmapEx&          rBmpEx,
                                                                  const ::basegfx::B2DPoint& rDstPoint,
                                                                  const CanvasSharedPtr&     rCanvas,
                                                                  const OutDevState&         rState )
         {
-            return ActionSharedPtr( new BitmapAction(rBmpEx,
+            return std::shared_ptr<Action>( new BitmapAction(rBmpEx,
                                                      rDstPoint,
                                                      rCanvas,
                                                      rState ) );
         }
 
-        ActionSharedPtr BitmapActionFactory::createBitmapAction( const ::BitmapEx&           rBmpEx,
+        std::shared_ptr<Action> BitmapActionFactory::createBitmapAction( const ::BitmapEx&           rBmpEx,
                                                                  const ::basegfx::B2DPoint&  rDstPoint,
                                                                  const ::basegfx::B2DVector& rDstSize,
                                                                  const CanvasSharedPtr&      rCanvas,
                                                                  const OutDevState&          rState )
         {
-            return ActionSharedPtr( new BitmapAction(rBmpEx,
+            return std::shared_ptr<Action>( new BitmapAction(rBmpEx,
                                                      rDstPoint,
                                                      rDstSize,
                                                      rCanvas,

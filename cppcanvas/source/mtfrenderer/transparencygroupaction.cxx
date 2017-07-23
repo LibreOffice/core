@@ -477,14 +477,14 @@ namespace cppcanvas
 
         }
 
-        ActionSharedPtr TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&&                 rGroupMtf,
+        std::shared_ptr<Action> TransparencyGroupActionFactory::createTransparencyGroupAction( MtfAutoPtr&&                 rGroupMtf,
                                                                                        GradientAutoPtr&&            rAlphaGradient,
                                                                                        const ::basegfx::B2DPoint&   rDstPoint,
                                                                                        const ::basegfx::B2DVector&  rDstSize,
                                                                                        const CanvasSharedPtr&       rCanvas,
                                                                                        const OutDevState&           rState )
         {
-            return ActionSharedPtr( new TransparencyGroupAction(std::move(rGroupMtf),
+            return std::shared_ptr<Action>( new TransparencyGroupAction(std::move(rGroupMtf),
                                                                 std::move(rAlphaGradient),
                                                                 rDstPoint,
                                                                 rDstSize,

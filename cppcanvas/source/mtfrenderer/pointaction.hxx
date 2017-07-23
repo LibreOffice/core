@@ -46,12 +46,12 @@ namespace cppcanvas
         namespace PointActionFactory
         {
             /// Point in current color
-            ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,
+            std::shared_ptr<Action> createPointAction( const ::basegfx::B2DPoint&,
                                                       const CanvasSharedPtr&,
                                                       const OutDevState& );
 
             /// Point in given color
-            ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,
+            std::shared_ptr<Action> createPointAction( const ::basegfx::B2DPoint&,
                                                       const CanvasSharedPtr&,
                                                       const OutDevState&,
                                                       const ::Color&        );
