@@ -30,6 +30,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlnmspe.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -40,12 +41,11 @@ using ::com::sun::star::xml::sax::XAttributeList;
 ScXMLFilterContext::ConnStackItem::ConnStackItem(bool bOr) : mbOr(bOr), mnCondCount(0) {}
 
 ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
-                                        sal_uInt16 nPrfx,
-                                        const OUString& rLName,
-                                        const Reference<XAttributeList>& xAttrList,
+                                        sal_Int32 /*nElement*/,
+                                        const Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                         ScQueryParam& rParam,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     mrQueryParam(rParam),
     pDatabaseRangeContext(pTempDatabaseRangeContext),
     bSkipDuplicates(false),
@@ -54,46 +54,44 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
 {
     ScDocument* pDoc(GetScImport().GetDocument());
 
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                            sAttrName, &aLocalName );
-        const OUString& sValue(xAttrList->getValueByIndex( i ));
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_FILTER_ATTR_TARGET_RANGE_ADDRESS :
+            switch (aIter.getToken())
             {
-                ScRange aScRange;
-                sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aScRange, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
+                case XML_ELEMENT( TABLE, XML_TARGET_RANGE_ADDRESS ):
                 {
-                    aOutputPosition = aScRange.aStart;
-                    bCopyOutputData = true;
+                    ScRange aScRange;
+                    sal_Int32 nOffset(0);
+                    if (ScRangeStringConverter::GetRangeFromString( aScRange, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
+                    {
+                        aOutputPosition = aScRange.aStart;
+                        bCopyOutputData = true;
+                    }
                 }
+                break;
+                case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS ):
+                {
+                    sal_Int32 nOffset(0);
+                    if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, aIter.toString(), pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
+                        bConditionSourceRange = true;
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_CONDITION_SOURCE ):
+                {
+                    // not supported by StarOffice
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_DISPLAY_DUPLICATES ):
+                {
+                    bSkipDuplicates = !IsXMLToken(aIter, XML_TRUE);
+                }
+                break;
             }
-            break;
-            case XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS :
-            {
-                sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
-                    bConditionSourceRange = true;
-            }
-            break;
-            case XML_TOK_FILTER_ATTR_CONDITION_SOURCE :
-            {
-                // not supported by StarOffice
-            }
-            break;
-            case XML_TOK_FILTER_ATTR_DISPLAY_DUPLICATES :
-            {
-                bSkipDuplicates = !IsXMLToken(sValue, XML_TRUE);
-            }
-            break;
         }
     }
 }
@@ -137,7 +135,7 @@ SvXMLImportContext *ScXMLFilterContext::CreateChildContext( sal_uInt16 nPrefix,
     return pContext;
 }
 
-void ScXMLFilterContext::EndElement()
+void SAL_CALL ScXMLFilterContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrQueryParam.bInplace = !bCopyOutputData;
     mrQueryParam.bDuplicate = !bSkipDuplicates;

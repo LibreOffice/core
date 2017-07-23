@@ -76,9 +76,8 @@ public:
 
     virtual ~ScXMLNamedExpressionsContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     std::shared_ptr<Inserter> mpInserter;
@@ -89,17 +88,14 @@ class ScXMLNamedRangeContext : public ScXMLImportContext
 public:
 
     ScXMLNamedRangeContext(
-        ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+        ScXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 
     virtual ~ScXMLNamedRangeContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     ScXMLNamedExpressionsContext::Inserter* mpInserter;
@@ -110,17 +106,14 @@ class ScXMLNamedExpressionContext : public ScXMLImportContext
 public:
 
     ScXMLNamedExpressionContext(
-        ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+        ScXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 
     virtual ~ScXMLNamedExpressionContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const OUString& rLocalName,
-                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
-    virtual void EndElement() override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     ScXMLNamedExpressionsContext::Inserter* mpInserter;

@@ -46,9 +46,8 @@ class ScXMLSortContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSortContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+    ScXMLSortContext( ScXMLImport& rImport, sal_Int32 nElement,
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
     virtual ~ScXMLSortContext() override;
@@ -57,7 +56,7 @@ public:
                                      const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
     void AddSortField(const OUString& sFieldNumber, const OUString& sDataType, const OUString& sOrder);
 };
