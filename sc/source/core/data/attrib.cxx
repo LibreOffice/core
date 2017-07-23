@@ -871,7 +871,10 @@ bool ScViewObjectModeItem::GetPresentation
             }
             SAL_FALLTHROUGH;
         case SfxItemPresentation::Nameless:
-            rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
+            if (GetValue() == VOBJ_MODE_SHOW)
+                rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW);
+            else
+                rText += ScGlobal::GetRscString(STR_VOBJ_MODE_HIDE);
             return true;
             break;
 
