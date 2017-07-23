@@ -1392,9 +1392,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         }
     }
 
-    char* ODF_XML_Env = getenv ("ODF_TEXT_FLAT_XML_ENV");
-
-    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT) && ODF_XML_Env == nullptr)
+    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT))
     {
         ::tools::SvRef<SotStorageStream> xStm;
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, xStm ) )
@@ -1419,34 +1417,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             if( !bReturn )
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
                 bReturn = SdrView::Paste( *xStm, EE_FORMAT_XML, maDropPos, pPage, nPasteOptions );
-        }
-    }
-
-    if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::EDITENGINE) )
-    {
-        ::tools::SvRef<SotStorageStream> xStm;
-        if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::EDITENGINE, xStm ) )
-        {
-            OutlinerView* pOLV = GetTextEditOutlinerView();
-
-            xStm->Seek( 0 );
-
-            if( pOLV )
-            {
-                ::tools::Rectangle   aRect( pOLV->GetOutputArea() );
-                   Point       aPos( pOLV->GetWindow()->PixelToLogic( maDropPos ) );
-
-                if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
-                {
-                    // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    pOLV->Read( *xStm, EE_FORMAT_BIN, mpDocSh->GetHeaderAttributes() );
-                    bReturn = true;
-                }
-            }
-
-            if( !bReturn )
-                // mba: clipboard always must contain absolute URLs (could be from alien source)
-                bReturn = SdrView::Paste( *xStm, EE_FORMAT_BIN, maDropPos, pPage, nPasteOptions );
         }
     }
 
