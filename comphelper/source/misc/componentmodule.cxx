@@ -49,30 +49,11 @@ namespace comphelper
     }
 
     OModule::OModule()
-        : m_nClients(0)
-        , m_pImpl(new OModuleImpl)
+        : m_pImpl(new OModuleImpl)
     {
     }
 
     OModule::~OModule()
-    {
-    }
-
-    void OModule::registerClient( OModule::ClientAccess )
-    {
-        osl_atomic_increment( &m_nClients );
-    }
-
-    void OModule::revokeClient( OModule::ClientAccess )
-    {
-        if ( 0 == osl_atomic_decrement( &m_nClients ) )
-        {
-            ::osl::MutexGuard aGuard(m_aMutex);
-            onLastClient();
-        }
-    }
-
-    void OModule::onLastClient()
     {
     }
 

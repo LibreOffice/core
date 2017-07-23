@@ -38,7 +38,6 @@ namespace pcr
     class OTabOrderDialog
                 :public OTabOrderDialog_DBase
                 ,public OTabOrderDialog_PBase
-                ,public PcrClient
     {
     protected:
         // <properties>

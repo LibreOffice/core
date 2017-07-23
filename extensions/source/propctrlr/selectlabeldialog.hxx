@@ -37,7 +37,6 @@ namespace pcr
 
     class OSelectLabelDialog
             :public ModalDialog
-            ,public PcrClient
     {
         VclPtr<FixedText>       m_pMainDesc;
         VclPtr<SvTreeListBox>   m_pControlTree;

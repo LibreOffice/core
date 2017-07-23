@@ -39,9 +39,6 @@ namespace pcr
 
     OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
     {
-        PcrClient aResourceAccess;
-            // this ensures that we have our resource file loaded
-
         OUString sClassName;
         switch (nClassId)
         {

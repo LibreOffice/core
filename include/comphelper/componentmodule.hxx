@@ -82,7 +82,6 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OModule
     {
     private:
-        oslInterlockedCount     m_nClients;     /// number of registered clients
         std::unique_ptr<OModuleImpl>            m_pImpl;        /// impl class. lives as long as at least one client for the module is registered
 
     protected:
@@ -126,39 +125,9 @@ namespace comphelper
         */
         void* getComponentFactory( const sal_Char* _pImplementationName );
 
-    public:
-        class ClientAccess { friend class OModuleClient; private: ClientAccess() { } };
-        /// register a client for the module
-        void registerClient( ClientAccess );
-        /// revoke a client for the module
-        void revokeClient( ClientAccess );
-
-    protected:
-
-        /** called when the last client has been revoked
-            @precond
-                <member>m_aMutex</member> is locked
-        */
-        virtual void onLastClient();
-
     private:
         OModule( const OModule& ) = delete;
         OModule& operator=( const OModule& ) = delete;
-    };
-
-
-    //= OModuleClient
-
-    /** base class for objects which uses any global module-specific resources
-    */
-    class COMPHELPER_DLLPUBLIC OModuleClient
-    {
-    protected:
-        OModule&    m_rModule;
-
-    public:
-        OModuleClient( OModule& _rModule ) :m_rModule( _rModule )   { m_rModule.registerClient( OModule::ClientAccess() ); }
-        ~OModuleClient()                                            { m_rModule.revokeClient( OModule::ClientAccess() ); }
     };
 
 

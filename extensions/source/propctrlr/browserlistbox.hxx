@@ -74,7 +74,6 @@ namespace pcr
 
     class OBrowserListBox   :public Control
                             ,public IButtonClickListener
-                            ,public PcrClient
     {
     protected:
         VclPtr<Window>              m_aLinesPlayground;

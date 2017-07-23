@@ -36,7 +36,6 @@ namespace pcr
 
     class OPropertyInfoService
                 :public IPropertyInfoService
-                ,public PcrClient
     {
     protected:
         static sal_uInt16               s_nCount;
