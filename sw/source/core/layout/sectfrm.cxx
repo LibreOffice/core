@@ -1763,8 +1763,7 @@ SwLayoutFrame *SwFrame::GetPrevSctLeaf()
     }
 
     {
-        SwFrame *pPrv;
-        if( nullptr != ( pPrv = pSect->GetIndPrev() ) )
+        if (SwFrame *pPrv = pSect->GetIndPrev())
         {
             // Mooching, half dead SectionFrames shouldn't confuse us
             while( pPrv && pPrv->IsSctFrame() && !static_cast<SwSectionFrame*>(pPrv)->GetSection() )
