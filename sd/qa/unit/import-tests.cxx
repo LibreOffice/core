@@ -162,6 +162,7 @@ public:
     void testTdf89064();
     void testTdf108925();
     void testTdf109067();
+    void testTdf109187();
 
     bool checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -232,6 +233,7 @@ public:
     CPPUNIT_TEST(testTdf89064);
     CPPUNIT_TEST(testTdf108925);
     CPPUNIT_TEST(testTdf109067);
+    CPPUNIT_TEST(testTdf109187);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2215,6 +2217,21 @@ void SdImportTest::testTdf109067()
     awt::Gradient gradient;
     CPPUNIT_ASSERT(xShape->getPropertyValue("FillGradient") >>= gradient);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(450), gradient.Angle);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf109187()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf109187.pptx"), PPTX);
+    uno::Reference< beans::XPropertySet > xArrow1(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    awt::Gradient gradient1;
+    CPPUNIT_ASSERT(xArrow1->getPropertyValue("FillGradient") >>= gradient1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2250), gradient1.Angle);
+    uno::Reference< beans::XPropertySet > xArrow2(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    awt::Gradient gradient2;
+    CPPUNIT_ASSERT(xArrow2->getPropertyValue("FillGradient") >>= gradient2);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1350), gradient2.Angle);
 
     xDocShRef->DoClose();
 }
