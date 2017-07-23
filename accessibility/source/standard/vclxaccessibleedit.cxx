@@ -592,16 +592,18 @@ sal_Bool VCLXAccessibleEdit::setText( const OUString& sText )
 {
     OExternalLockGuard aGuard( this );
 
-    bool bSuccess = false;
-    try
+    bool bReturn = false;
+
+    VCLXEdit* pVCLXEdit = static_cast< VCLXEdit* >( GetVCLXWindow() );
+    if ( pVCLXEdit && pVCLXEdit->isEditable() )
     {
-        bSuccess = replaceText( 0, implGetText().getLength(), sText );
+        pVCLXEdit->setText( sText );
+        sal_Int32 nSize = sText.getLength();
+        pVCLXEdit->setSelection( awt::Selection( nSize, nSize ) );
+        bReturn = true;
     }
-    catch( const IndexOutOfBoundsException& )
-    {
-        OSL_FAIL( "VCLXAccessibleText::setText: caught an exception!" );
-    }
-    return bSuccess;
+
+    return bReturn;
 }
 
 
