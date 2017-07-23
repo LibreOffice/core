@@ -243,7 +243,6 @@ void ScTransferObj::AddSupportedFormats()
     AddFormat( SotClipboardFormatId::RICHTEXT );
     if ( aBlock.aStart == aBlock.aEnd )
     {
-        AddFormat( SotClipboardFormatId::EDITENGINE );
         AddFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT );
     }
 }
@@ -260,8 +259,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             bOK = SetTransferableObjectDescriptor( aObjDesc );
         }
         else if ( ( nFormat == SotClipboardFormatId::RTF || nFormat == SotClipboardFormatId::RICHTEXT ||
-            nFormat == SotClipboardFormatId::EDITENGINE  || nFormat == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT )
-                        && aBlock.aStart == aBlock.aEnd )
+            nFormat == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) && aBlock.aStart == aBlock.aEnd )
         {
             //  RTF from a single cell is handled by EditEngine
 

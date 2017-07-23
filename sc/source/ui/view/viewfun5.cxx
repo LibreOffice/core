@@ -285,8 +285,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
     else if ( ScImportExport::IsFormatSupported( nFormatId ) || nFormatId == SotClipboardFormatId::RTF ||
                 nFormatId == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT )
     {
-        if ( nFormatId == SotClipboardFormatId::RTF && ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE ) ||
-                aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) ) )
+        if ( nFormatId == SotClipboardFormatId::RTF && ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) ) )
         {
             //  use EditView's PasteSpecial / Drop
             PasteRTF( nPosX, nPosY, rxTransferable );
