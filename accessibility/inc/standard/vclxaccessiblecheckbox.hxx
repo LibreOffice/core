@@ -35,8 +35,8 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessibleAction,
     css::accessibility::XAccessibleValue > VCLXAccessibleCheckBox_BASE;
 
-class VCLXAccessibleCheckBox : public VCLXAccessibleTextComponent,
-                               public VCLXAccessibleCheckBox_BASE
+class VCLXAccessibleCheckBox final : public VCLXAccessibleTextComponent,
+                                     public VCLXAccessibleCheckBox_BASE
 {
 private:
     bool    m_bChecked;

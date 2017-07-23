@@ -231,7 +231,7 @@ OUString VCLXAccessibleMenu::getAccessibleActionDescription ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
-    if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
+    if ( nIndex < 0 || nIndex >= static_cast<sal_Int32>(m_aAccessibleChildren.size()) )
         throw IndexOutOfBoundsException();
 
     return OUString(  );

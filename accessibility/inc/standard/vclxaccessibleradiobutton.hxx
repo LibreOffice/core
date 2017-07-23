@@ -35,7 +35,7 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessibleAction,
     css::accessibility::XAccessibleValue > VCLXAccessibleRadioButton_BASE;
 
-class VCLXAccessibleRadioButton : public VCLXAccessibleTextComponent,
+class VCLXAccessibleRadioButton final : public VCLXAccessibleTextComponent,
                                   public VCLXAccessibleRadioButton_BASE
 {
 protected:
