@@ -117,6 +117,14 @@ void VBATest::testMiscVBAFunctions()
         "qbcolor.vb",
         "rate.vb",
         "rgb.vb",
+        "rtrim.vb",
+        "right.vb",
+        "second.vb",
+        "sgn.vb",
+        "sin.vb",
+        "sln.vb",
+        "space.vb",
+        "sqr.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
