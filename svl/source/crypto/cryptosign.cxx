@@ -1817,34 +1817,34 @@ bool VerifyNonDetachedSignature(const std::vector<unsigned char>& aData, const s
     HCRYPTPROV hProv = 0;
     if (!CryptAcquireContext(&hProv, nullptr, nullptr, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
     {
-        SAL_WARN("xmlsecurity.pdfio", "CryptAcquireContext() failed");
+        SAL_WARN("svl.crypto", "CryptAcquireContext() failed");
         return false;
     }
 
     HCRYPTHASH hHash = 0;
     if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash))
     {
-        SAL_WARN("xmlsecurity.pdfio", "CryptCreateHash() failed");
+        SAL_WARN("svl.crypto", "CryptCreateHash() failed");
         return false;
     }
 
     if (!CryptHashData(hHash, aData.data(), aData.size(), 0))
     {
-        SAL_WARN("xmlsecurity.pdfio", "CryptHashData() failed");
+        SAL_WARN("svl.crypto", "CryptHashData() failed");
         return false;
     }
 
     DWORD nActualHash = 0;
     if (!CryptGetHashParam(hHash, HP_HASHVAL, nullptr, &nActualHash, 0))
     {
-        SAL_WARN("xmlsecurity.pdfio", "CryptGetHashParam() failed to provide the hash length");
+        SAL_WARN("svl.crypto", "CryptGetHashParam() failed to provide the hash length");
         return false;
     }
 
     std::vector<unsigned char> aActualHash(nActualHash);
     if (!CryptGetHashParam(hHash, HP_HASHVAL, aActualHash.data(), &nActualHash, 0))
     {
-        SAL_WARN("xmlsecurity.pdfio", "CryptGetHashParam() failed to provide the hash");
+        SAL_WARN("svl.crypto", "CryptGetHashParam() failed to provide the hash");
         return false;
     }
 
@@ -1878,21 +1878,21 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
                                  /*decrypt_key_cb_arg=*/nullptr);
     if (!NSS_CMSMessage_IsSigned(pCMSMessage))
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: message is not signed");
+        SAL_WARN("svl.crypto", "ValidateSignature: message is not signed");
         return false;
     }
 
     NSSCMSContentInfo* pCMSContentInfo = NSS_CMSMessage_ContentLevel(pCMSMessage, 0);
     if (!pCMSContentInfo)
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: NSS_CMSMessage_ContentLevel() failed");
+        SAL_WARN("svl.crypto", "ValidateSignature: NSS_CMSMessage_ContentLevel() failed");
         return false;
     }
 
     auto pCMSSignedData = static_cast<NSSCMSSignedData*>(NSS_CMSContentInfo_GetContent(pCMSContentInfo));
     if (!pCMSSignedData)
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: NSS_CMSContentInfo_GetContent() failed");
+        SAL_WARN("svl.crypto", "ValidateSignature: NSS_CMSContentInfo_GetContent() failed");
         return false;
     }
 
@@ -1906,7 +1906,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     NSSCMSSignerInfo* pCMSSignerInfo = NSS_CMSSignedData_GetSignerInfo(pCMSSignedData, 0);
     if (!pCMSSignerInfo)
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: NSS_CMSSignedData_GetSignerInfo() failed");
+        SAL_WARN("svl.crypto", "ValidateSignature: NSS_CMSSignedData_GetSignerInfo() failed");
         return false;
     }
 
@@ -1934,7 +1934,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     HASHContext* pHASHContext = HASH_Create(eHashType);
     if (!pHASHContext)
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: HASH_Create() failed");
+        SAL_WARN("svl.crypto", "ValidateSignature: HASH_Create() failed");
         return false;
     }
 
@@ -1957,7 +1957,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         nMaxResultLen = msfilter::SHA512_HASH_LENGTH;
         break;
     default:
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: unrecognized algorithm");
+        SAL_WARN("svl.crypto", "ValidateSignature: unrecognized algorithm");
         return false;
     }
 
@@ -1968,7 +1968,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     CERTCertificate* pCertificate = NSS_CMSSignerInfo_GetSigningCertificate(pCMSSignerInfo, CERT_GetDefaultCertDB());
     if (!pCertificate)
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: NSS_CMSSignerInfo_GetSigningCertificate() failed");
+        SAL_WARN("svl.crypto", "ValidateSignature: NSS_CMSSignerInfo_GetSigningCertificate() failed");
         return false;
     }
     else
@@ -2004,7 +2004,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
      */
     if (StringToOID(&aOidData.oid, "1.2.840.113549.1.9.16.2.47", 0) != SECSuccess)
     {
-        SAL_WARN("xmlsecurity.pdfio", "StringToOID() failed");
+        SAL_WARN("svl.crypto", "StringToOID() failed");
         return false;
     }
     aOidData.offset = SEC_OID_UNKNOWN;
@@ -2051,27 +2051,27 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
                                           nullptr);
     if (!hMsg)
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CryptMsgOpenToDecode() failed");
+        SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgOpenToDecode() failed");
         return false;
     }
 
     // Update the message with the encoded header blob.
     if (!CryptMsgUpdate(hMsg, aSignature.data(), aSignature.size(), TRUE))
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature, CryptMsgUpdate() for the header failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the header failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
 
     // Update the message with the content blob.
     if (!CryptMsgUpdate(hMsg, aData.data(), aData.size(), FALSE))
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature, CryptMsgUpdate() for the content failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the content failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
 
     if (!CryptMsgUpdate(hMsg, nullptr, 0, TRUE))
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature, CryptMsgUpdate() for the last content failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "ValidateSignature, CryptMsgUpdate() for the last content failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
 
@@ -2079,13 +2079,13 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     DWORD nDigestID = 0;
     if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_HASH_ALGORITHM_PARAM, 0, nullptr, &nDigestID))
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CryptMsgGetParam() failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
     std::unique_ptr<BYTE[]> pDigestBytes(new BYTE[nDigestID]);
     if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_HASH_ALGORITHM_PARAM, 0, pDigestBytes.get(), &nDigestID))
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CryptMsgGetParam() failed: " << WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
     auto pDigestID = reinterpret_cast<CRYPT_ALGORITHM_IDENTIFIER*>(pDigestBytes.get());
@@ -2095,19 +2095,19 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         rInformation.nDigestID = xml::crypto::DigestID::SHA1;
     else
         // Don't error out here, we can still verify the message digest correctly, just the digest ID won't be set.
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: unhandled algorithm identifier '"<<pDigestID->pszObjId<<"'");
+        SAL_WARN("svl.crypto", "ValidateSignature: unhandled algorithm identifier '"<<pDigestID->pszObjId<<"'");
 
     // Get the signer CERT_INFO from the message.
     DWORD nSignerCertInfo = 0;
     if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_CERT_INFO_PARAM, 0, nullptr, &nSignerCertInfo))
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CryptMsgGetParam() failed");
+        SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed");
         return false;
     }
     std::unique_ptr<BYTE[]> pSignerCertInfoBuf(new BYTE[nSignerCertInfo]);
     if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_CERT_INFO_PARAM, 0, pSignerCertInfoBuf.get(), &nSignerCertInfo))
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CryptMsgGetParam() failed");
+        SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed");
         return false;
     }
     PCERT_INFO pSignerCertInfo = reinterpret_cast<PCERT_INFO>(pSignerCertInfoBuf.get());
@@ -2121,7 +2121,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
                                             hMsg);
     if (!hStoreHandle)
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CertOpenStore() failed");
+        SAL_WARN("svl.crypto", "ValidateSignature: CertOpenStore() failed");
         return false;
     }
 
@@ -2131,7 +2131,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
                                         pSignerCertInfo);
     if (!pSignerCertContext)
     {
-        SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CertGetSubjectCertificateFromStore() failed");
+        SAL_WARN("svl.crypto", "ValidateSignature: CertGetSubjectCertificateFromStore() failed");
         return false;
     }
     else
@@ -2151,14 +2151,14 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         DWORD nContentParam = 0;
         if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, nullptr, &nContentParam))
         {
-            SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CryptMsgGetParam() failed");
+            SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed");
             return false;
         }
 
         std::vector<BYTE> aContentParam(nContentParam);
         if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, aContentParam.data(), &nContentParam))
         {
-            SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CryptMsgGetParam() failed");
+            SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed");
             return false;
         }
 
@@ -2180,7 +2180,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
         std::unique_ptr<BYTE[]> pSignedAttributesBuf(new BYTE[nSignedAttributes]);
         if (!CryptMsgGetParam(hMsg, CMSG_SIGNER_AUTH_ATTR_PARAM, 0, pSignedAttributesBuf.get(), &nSignedAttributes))
         {
-            SAL_WARN("xmlsecurity.pdfio", "ValidateSignature: CryptMsgGetParam() failed");
+            SAL_WARN("svl.crypto", "ValidateSignature: CryptMsgGetParam() failed");
             return false;
         }
         auto pSignedAttributes = reinterpret_cast<PCRYPT_ATTRIBUTES>(pSignedAttributesBuf.get());
