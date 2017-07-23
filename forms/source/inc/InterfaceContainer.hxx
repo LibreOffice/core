@@ -67,7 +67,6 @@ namespace frm
 
     public:
         ElementDescription( );
-        virtual ~ElementDescription();
 
     private:
         ElementDescription( const ElementDescription& ) = delete;
