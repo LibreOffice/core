@@ -167,7 +167,7 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // database field
 
-SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uLong nFormat)
+SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uInt32 nFormat)
     :   SwValueField(pTyp, nFormat),
         nSubType(0),
         bIsInBodyText(true),
@@ -448,7 +448,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // base class for all further database fields
 
-SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFormat) :
+SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uInt32 nFormat) :
     SwField(pTyp, nFormat),
     aDBData(rDBData),
     nSubType(0)
@@ -808,7 +808,7 @@ SwFieldType* SwDBSetNumberFieldType::Copy() const
 
 SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
                                        const SwDBData& rDBData,
-                                       sal_uLong nFormat)
+                                       sal_uInt32 nFormat)
     : SwDBNameInfField(pTyp, rDBData, nFormat), nNumber(0)
 {}
 

@@ -214,8 +214,8 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         }
     }
 
-    nCount = pMgr->GetFormatCount(TYP_SEQFLD, false);
-    for ( size_t i = 0; i < nCount; ++i )
+    sal_uInt16 nFormatCount = pMgr->GetFormatCount(TYP_SEQFLD, false);
+    for ( sal_uInt16 i = 0; i < nFormatCount; ++i )
     {
         m_pFormatBox->InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
         const sal_uInt16 nFormatId = pMgr->GetFormatId(TYP_SEQFLD, i);

@@ -718,7 +718,7 @@ sal_uInt16 SwFieldMgr::GetFormatCount(sal_uInt16 nTypeId, bool bHtmlMode) const
 }
 
 // determine FormatString to a type
-OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
+OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uInt32 nFormatId) const
 {
     OSL_ENSURE(nTypeId < TYP_END, "forbidden TypeId");
     const sal_uInt16 nPos = GetPos(nTypeId);
@@ -731,7 +731,7 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
         return OUString();
 
     if (TYP_AUTHORFLD == nTypeId|| TYP_FILENAMEFLD == nTypeId)
-        nFormatId &= ~FF_FIXED;     // mask out Fixed-Flag
+        nFormatId &= ~static_cast<sal_uInt32>(FF_FIXED); // mask out Fixed-Flag
 
     if (nFormatId < aSwFields[nPos].nFormatLength)
         return SwResId(pStart[nFormatId]);
@@ -743,14 +743,14 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
         {
             Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
             const sal_Int16* pTypes = aTypes.getConstArray();
-            sal_Int32 nValidEntry = 0;
+            sal_uInt32 nValidEntry = 0;
             for (sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
             {
                 sal_Int16 nCurrent = pTypes[nType];
                 if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N &&
                         (nCurrent != (NumberingType::BITMAP | LINK_TOKEN)))
                 {
-                    if (nValidEntry == ((sal_Int32)nFormatId))
+                    if (nValidEntry == nFormatId)
                     {
                         sal_uInt32 n = SvxNumberingTypeTable::FindIndex(pTypes[nType]);
                         if (n != RESARRAY_INDEX_NOTFOUND)
@@ -773,7 +773,7 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
 }
 
 // determine FormatId from Pseudo-ID
-sal_uInt16 SwFieldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const
+sal_uInt16 SwFieldMgr::GetFormatId(sal_uInt16 nTypeId, sal_uInt32 nFormatId) const
 {
     sal_uInt16 nId = (sal_uInt16)nFormatId;
     switch( nTypeId )
@@ -902,7 +902,7 @@ bool SwFieldMgr::InsertField(
     bool bExp = false;
     bool bTable = false;
     bool bPageVar = false;
-    sal_uLong nFormatId = rData.m_nFormatId;
+    sal_uInt32 nFormatId = rData.m_nFormatId;
     sal_uInt16 nSubType = rData.m_nSubType;
     sal_Unicode cSeparator = rData.m_cSeparator;
     SwWrtShell* pCurShell = rData.m_pSh;
@@ -1510,7 +1510,7 @@ bool SwFieldMgr::InsertField(
 }
 
 // fields update
-void SwFieldMgr::UpdateCurField(sal_uLong nFormat,
+void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
                             const OUString& rPar1,
                             const OUString& rPar2,
                             SwField * _pTmpField)
@@ -1806,7 +1806,7 @@ void SwFieldMgr::SetMacroPath(const OUString& rPath)
     }
 }
 
-sal_uLong SwFieldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter)
+sal_uInt32 SwFieldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter)
 {
     short  nDefFormat;
 

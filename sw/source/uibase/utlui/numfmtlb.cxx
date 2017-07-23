@@ -260,9 +260,9 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
     }
 }
 
-void NumFormatListBox::SetDefFormat(const sal_uLong nDefaultFormat)
+void NumFormatListBox::SetDefFormat(const sal_uInt32 nDefaultFormat)
 {
-    if (nDefaultFormat == ULONG_MAX)
+    if (nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         nDefFormat = nDefaultFormat;
         return;
@@ -285,11 +285,11 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefaultFormat)
 
     SetFormatType(nType);
 
-    sal_uLong nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefaultFormat, eCurLanguage);
+    sal_uInt32 nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefaultFormat, eCurLanguage);
 
     for (sal_Int32 i = 0; i < GetEntryCount(); i++)
     {
-        if (nFormat == reinterpret_cast<sal_uLong>(GetEntryData(i)))
+        if (nFormat == static_cast<sal_uInt32>(reinterpret_cast<sal_uIntPtr>(GetEntryData(i))))
         {
             SelectEntryPos(i);
             nStdEntry = i;
@@ -313,7 +313,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefaultFormat)
     }
 
     sal_Int32 nPos = 0;
-    while (reinterpret_cast<sal_uLong>(GetEntryData(nPos)) == ULONG_MAX)
+    while (static_cast<sal_uInt32>(reinterpret_cast<sal_uIntPtr>(GetEntryData(nPos))) == NUMBERFORMAT_ENTRY_NOT_FOUND)
         nPos++;
 
     const sal_uInt32 nSysNumFormat = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
@@ -349,11 +349,11 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefaultFormat)
     nDefFormat = GetFormat();
 }
 
-sal_uLong NumFormatListBox::GetFormat() const
+sal_uInt32 NumFormatListBox::GetFormat() const
 {
     sal_Int32 nPos = GetSelectEntryPos();
 
-    return reinterpret_cast<sal_uLong>(GetEntryData(nPos));
+    return static_cast<sal_uInt32>(reinterpret_cast<sal_uIntPtr>(GetEntryData(nPos)));
 }
 
 IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
@@ -380,7 +380,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
 
         double fValue = GetDefValue( nCurrFormatType);
 
-        sal_uLong nFormat = pFormatter->GetStandardFormat( nCurrFormatType, eCurLanguage);
+        sal_uInt32 nFormat = pFormatter->GetStandardFormat( nCurrFormatType, eCurLanguage);
         aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, nFormat ));
 
         aCoreSet.Put( SvxNumberInfoItem( pFormatter, fValue,

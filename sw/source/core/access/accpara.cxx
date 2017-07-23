@@ -1473,7 +1473,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 break;
             case SwFieldIds::JumpEdit:
                 {
-                    const sal_uInt16 nFormat= pField->GetFormat();
+                    const sal_uInt32 nFormat= pField->GetFormat();
                     const sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
                     if (nFormat < nSize)
                     {
@@ -1534,7 +1534,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     if (nWhich == SwFieldIds::DocInfo)
                     {
                         strTypeName = sEntry;
-                        sal_uInt32 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
+                        sal_uInt16 nSize = aMgr.GetFormatCount(pField->GetTypeId(), false);
                         const sal_uInt16 nExSub = pField->GetSubType() & 0xff00;
                         if (nSize > 0 && nExSub > 0)
                         {

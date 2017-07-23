@@ -116,7 +116,7 @@ struct DB_Column
     union {
         OUString* pText;
         SwField* pField;
-        sal_uLong nFormat;
+        sal_uInt32 nFormat;
     };
     const SwInsDBColumn* pColInfo;
 
@@ -131,7 +131,7 @@ struct DB_Column
                           pColInfo(nullptr)
     {}
 
-    DB_Column( const SwInsDBColumn& rInfo, sal_uLong nFormat_ )
+    DB_Column( const SwInsDBColumn& rInfo, sal_uInt32 nFormat_ )
                         : eColType(Type::COL_TEXT),
                           nFormat(nFormat_),
                           pColInfo(&rInfo)
@@ -301,7 +301,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                                 aFormatVal >>= sFormat;
                                 lang::Locale aLoc;
                                 aLocale >>= aLoc;
-                                long nKey = xDocNumberFormats->queryKey( sFormat, aLoc, true);
+                                sal_Int32 nKey = xDocNumberFormats->queryKey( sFormat, aLoc, true);
                                 if(nKey < 0)
                                 {
                                     nKey = xDocNumberFormats->addNew( sFormat, aLoc );
@@ -913,11 +913,11 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rText,
                 nSttPos = 0;
 
                 sal_uInt16 nSubType = 0;
-                sal_uLong nFormat;
+                sal_uInt32 nFormat;
                 if( rFndCol.bHasFormat )
                 {
                     if( rFndCol.bIsDBFormat )
-                        nFormat =  rFndCol.nDBNumFormat;
+                        nFormat =  static_cast<sal_uInt32>(rFndCol.nDBNumFormat);
                     else
                     {
                         nFormat = rFndCol.nUsrNumFormat;
@@ -1122,7 +1122,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     if( pEntry->bHasFormat )
                     {
                         SwTableBoxNumFormat aNumFormat(
-                                        pEntry->bIsDBFormat ? pEntry->nDBNumFormat
+                                        pEntry->bIsDBFormat ? static_cast<sal_uInt32>(pEntry->nDBNumFormat)
                                                          : pEntry->nUsrNumFormat );
                         aTableSet.Put(aNumFormat);
                         if( xColumn.is() )
