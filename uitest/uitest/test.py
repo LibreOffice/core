@@ -198,7 +198,8 @@ class UITest(object):
         with EventListener(self._xContext, ["DialogExecute", "ModelessDialogExecute"]) as event:
             thread.start()
             time_ = 0
-            while time_ < MAX_WAIT:
+            # wait twice as long as we are potentially executing a second action
+            while time_ < 2*MAX_WAIT:
                 if event.executed:
                     xDlg = self._xUITest.getTopFocusWindow()
                     if dialog_element:
