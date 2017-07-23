@@ -356,8 +356,7 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
     switch (nErr)
     {
         case FormulaError::NONE:
-            pErrNumber = nullptr;
-            break;
+            return OUString();
         case FormulaError::IllegalArgument:
             pErrNumber = STR_LONG_ERR_ILL_ARG;
         break;
