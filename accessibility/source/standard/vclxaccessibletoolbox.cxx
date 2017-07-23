@@ -44,7 +44,7 @@ namespace
 
     /** XAccessibleContext implementation for a toolbox item which is represented by a VCL Window
     */
-    class OToolBoxWindowItemContext : public OAccessibleContextWrapper
+    class OToolBoxWindowItemContext final : public OAccessibleContextWrapper
     {
         sal_Int32 m_nIndexInParent;
     public:

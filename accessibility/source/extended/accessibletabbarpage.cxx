@@ -256,12 +256,10 @@ namespace accessibility
 
     Reference< XAccessible > AccessibleTabBarPage::getAccessibleChild( sal_Int32 i )
     {
+        (void)i;
         OExternalLockGuard aGuard( this );
 
-        if ( i < 0 || i >= getAccessibleChildCount() )
-            throw IndexOutOfBoundsException();
-
-        return Reference< XAccessible >();
+        throw IndexOutOfBoundsException();
     }
 
 
