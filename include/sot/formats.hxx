@@ -42,7 +42,7 @@ enum class SotClipboardFormatId : sal_uLong
     SVXB                   = 12,
     SVIM                   = 13,
     XFA                    = 14,
-    EDITENGINE             = 15,
+    EDITENGINE_ODF_TEXT_FLAT = 15,
     INTERNALLINK_STATE     = 16,
     SOLK                   = 17,
     NETSCAPE_BOOKMARK      = 18,
@@ -173,9 +173,8 @@ enum class SotClipboardFormatId : sal_uLong
     MATHML                 = 143,
     JPEG                   = 144,
     RICHTEXT               = 145,
-    EDITENGINE_ODF_TEXT_FLAT = 146,
     // the point at which we start allocating "runtime" format IDs
-    USER_END  = EDITENGINE_ODF_TEXT_FLAT
+    USER_END  = RICHTEXT
 };
 
 /** Make it easier to iterate over format IDs */
