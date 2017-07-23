@@ -142,12 +142,12 @@ namespace cppcanvas
             }
         }
 
-        ActionSharedPtr LineActionFactory::createLineAction( const ::basegfx::B2DPoint& rStartPoint,
+        std::shared_ptr<Action> LineActionFactory::createLineAction( const ::basegfx::B2DPoint& rStartPoint,
                                                              const ::basegfx::B2DPoint& rEndPoint,
                                                              const CanvasSharedPtr&     rCanvas,
                                                              const OutDevState&         rState  )
         {
-            return ActionSharedPtr( new LineAction( rStartPoint,
+            return std::shared_ptr<Action>( new LineAction( rStartPoint,
                                                     rEndPoint,
                                                     rCanvas,
                                                     rState) );

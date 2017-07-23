@@ -199,14 +199,14 @@ static float GetSwapFloat( SvStream& rSt )
             // public, since some functors need it, too.
             struct MtfAction
             {
-                MtfAction( const ActionSharedPtr&   rAction,
+                MtfAction( const std::shared_ptr<Action>&   rAction,
                            sal_Int32                nOrigIndex ) :
                     mpAction( rAction ),
                     mnOrigIndex( nOrigIndex )
                 {
                 }
 
-                ActionSharedPtr mpAction;
+                std::shared_ptr<Action> mpAction;
                 sal_Int32       mnOrigIndex;
             };
 

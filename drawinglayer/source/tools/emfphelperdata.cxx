@@ -820,7 +820,7 @@ namespace emfplushelper
                                 SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
-    //                                ActionSharedPtr pBmpAction(
+    //                                std::shared_ptr<Action> pBmpAction(
     //                                    internal::BitmapActionFactory::createBitmapAction(
     //                                        aBmp,
     //                                        rState.mapModeTransform * aDstPoint,
@@ -883,7 +883,7 @@ namespace emfplushelper
     //
     //                        ::basegfx::B2DPoint point(Map(lx + 0.15*cellSize, ly + cellSize));
     //
-    //                        ActionSharedPtr pTextAction(
+    //                        std::shared_ptr<Action> pTextAction(
     //                            TextActionFactory::createTextAction(
     //                                // position is just rough guess for now
     //                                // we should calculate it exactly from layoutRect or font
@@ -1261,7 +1261,7 @@ namespace emfplushelper
     //
     //                        ::basegfx::B2DPoint point(Map(charsPosX[0], charsPosY[0]));
     //
-    //                        ActionSharedPtr pTextAction(
+    //                        std::shared_ptr<Action> pTextAction(
     //                            TextActionFactory::createTextAction(
     //                                vcl::unotools::pointFromB2DPoint(point),
     //                                ::Size(),

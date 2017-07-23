@@ -155,19 +155,19 @@ namespace cppcanvas
             }
         }
 
-        ActionSharedPtr PointActionFactory::createPointAction( const ::basegfx::B2DPoint& rPoint,
+        std::shared_ptr<Action> PointActionFactory::createPointAction( const ::basegfx::B2DPoint& rPoint,
                                                                const CanvasSharedPtr&     rCanvas,
                                                                const OutDevState&         rState )
         {
-            return ActionSharedPtr( new PointAction( rPoint, rCanvas, rState ) );
+            return std::shared_ptr<Action>( new PointAction( rPoint, rCanvas, rState ) );
         }
 
-        ActionSharedPtr PointActionFactory::createPointAction( const ::basegfx::B2DPoint& rPoint,
+        std::shared_ptr<Action> PointActionFactory::createPointAction( const ::basegfx::B2DPoint& rPoint,
                                                                const CanvasSharedPtr&     rCanvas,
                                                                const OutDevState&         rState,
                                                                const ::Color&             rColor    )
         {
-            return ActionSharedPtr( new PointAction( rPoint, rCanvas, rState, rColor ) );
+            return std::shared_ptr<Action>( new PointAction( rPoint, rCanvas, rState, rColor ) );
         }
     }
 }
