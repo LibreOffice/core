@@ -38,6 +38,7 @@ class VCLXAccessibleMenu :  public VCLXAccessibleMenuItem,
 protected:
     virtual bool        IsFocused() override;
     virtual bool        IsPopupMenuOpen() override;
+    sal_Int32           implGetSelectedAccessibleChildCount();
 
 public:
     VCLXAccessibleMenu( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu );

@@ -42,8 +42,8 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > VCLXAccessibleStatusBarItem_BASE;
 
-class VCLXAccessibleStatusBarItem : public AccessibleTextHelper_BASE,
-                                    public VCLXAccessibleStatusBarItem_BASE
+class VCLXAccessibleStatusBarItem final : public AccessibleTextHelper_BASE,
+                                          public VCLXAccessibleStatusBarItem_BASE
 {
     friend class VCLXAccessibleStatusBar;
 
@@ -54,7 +54,6 @@ private:
     OUString                m_sItemText;
     bool                    m_bShowing;
 
-protected:
     bool                    IsShowing();
     void                    SetShowing( bool bShowing );
     void                    SetItemName( const OUString& sItemName );
@@ -96,7 +95,7 @@ public:
 
     // XAccessibleContext
     virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild(sal_Int32) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) override;
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;

@@ -182,6 +182,11 @@ sal_Int32 VCLXAccessibleMenu::getSelectedAccessibleChildCount(  )
 {
     OExternalLockGuard aGuard( this );
 
+    return implGetSelectedAccessibleChildCount();
+}
+
+sal_Int32 VCLXAccessibleMenu::implGetSelectedAccessibleChildCount(  )
+{
     sal_Int32 nRet = 0;
 
     for ( sal_Int32 i = 0, nCount = GetChildCount(); i < nCount; i++ )
@@ -192,7 +197,6 @@ sal_Int32 VCLXAccessibleMenu::getSelectedAccessibleChildCount(  )
 
     return nRet;
 }
-
 
 Reference< XAccessible > VCLXAccessibleMenu::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
 {

@@ -254,14 +254,9 @@ sal_Int32 VCLXAccessibleStatusBarItem::getAccessibleChildCount()
 }
 
 
-Reference< XAccessible > VCLXAccessibleStatusBarItem::getAccessibleChild( sal_Int32 i )
+Reference< XAccessible > VCLXAccessibleStatusBarItem::getAccessibleChild( sal_Int32 )
 {
-    OExternalLockGuard aGuard( this );
-
-    if ( i < 0 || i >= getAccessibleChildCount() )
-        throw IndexOutOfBoundsException();
-
-    return Reference< XAccessible >();
+    throw IndexOutOfBoundsException();
 }
 
 
