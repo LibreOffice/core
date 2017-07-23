@@ -66,7 +66,7 @@ class SW_DLLPUBLIC SwDBField : public SwValueField
     virtual SwField*    Copy() const override;
 
 public:
-    SwDBField(SwDBFieldType*, sal_uLong nFormat = 0);
+    SwDBField(SwDBFieldType*, sal_uInt32 nFormat = 0);
     virtual ~SwDBField() override;
 
     virtual SwFieldType*    ChgTyp( SwFieldType* ) override;
@@ -127,7 +127,7 @@ protected:
     const SwDBData& GetDBData() const {return aDBData;}
     SwDBData&       GetDBData() {return aDBData;}
 
-    SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFormat = 0);
+    SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uInt32 nFormat = 0);
 
 public:
     /// DBName
@@ -267,7 +267,7 @@ class SW_DLLPUBLIC SwDBSetNumberField : public SwDBNameInfField
 {
     long    nNumber;
 public:
-    SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, sal_uLong nFormat = 0);
+    SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, sal_uInt32 nFormat = 0);
 
     virtual OUString Expand() const override;
     virtual         SwField* Copy() const override;

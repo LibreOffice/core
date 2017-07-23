@@ -70,7 +70,7 @@ struct SwInsertField_Data
     sal_uInt16 m_nSubType;
     const OUString m_sPar1;
     const OUString m_sPar2;
-    sal_uLong m_nFormatId;
+    sal_uInt32 m_nFormatId;
     SwWrtShell* m_pSh;
     sal_Unicode m_cSeparator;
     bool m_bIsAutomaticLanguage;
@@ -80,7 +80,7 @@ struct SwInsertField_Data
     VclPtr<vcl::Window> m_pParent; // parent dialog used for SwWrtShell::StartInputFieldDlg()
 
     SwInsertField_Data(sal_uInt16 nType, sal_uInt16 nSub, const OUString& rPar1, const OUString& rPar2,
-                    sal_uLong nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
+                    sal_uInt32 nFormatId, SwWrtShell* pShell = nullptr, sal_Unicode cSep = ' ', bool bIsAutoLanguage = true) :
         m_nTypeId(nType),
         m_nSubType(nSub),
         m_sPar1(rPar1),
@@ -105,7 +105,7 @@ private:
     OUString          sMacroPath;
     OUString          sMacroName;
 
-    sal_uLong           nCurFormat;
+    sal_uInt32          nCurFormat;
     bool            bEvalExp;
 
     SAL_DLLPRIVATE LanguageType    GetCurrLanguage() const;
@@ -124,7 +124,7 @@ public:
     bool InsertField( const SwInsertField_Data& rData );
 
     // change the current field directly
-    void            UpdateCurField(sal_uLong nFormat,
+    void            UpdateCurField(sal_uInt32 nFormat,
                                  const OUString& rPar1,
                                  const OUString& rPar2,
                                  SwField * _pField = nullptr);
@@ -181,9 +181,9 @@ public:
 
     // format to a type
     sal_uInt16          GetFormatCount(sal_uInt16 nTypeId, bool bHtmlMode) const;
-    OUString            GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
-    sal_uInt16          GetFormatId(sal_uInt16 nTypeId, sal_uLong nFormatId) const;
-    sal_uLong           GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter);
+    OUString            GetFormatStr(sal_uInt16 nTypeId, sal_uInt32 nFormatId) const;
+    sal_uInt16          GetFormatId(sal_uInt16 nTypeId, sal_uInt32 nFormatId) const;
+    sal_uInt32          GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberFormatter* pFormatter);
 
     // turn off evaluation of expression fields for insertation
     // of many expression fields (see labels)

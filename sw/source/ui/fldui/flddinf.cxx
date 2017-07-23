@@ -326,7 +326,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
         bEnable = true;
     }
 
-    sal_uLong nFormat = IsFieldEdit() ? static_cast<SwDocInfoField*>(GetCurField())->GetFormat() : 0;
+    sal_uInt32 nFormat = IsFieldEdit() ? static_cast<SwDocInfoField*>(GetCurField())->GetFormat() : 0;
 
     sal_uInt16 nOldSubType = IsFieldEdit() ? (static_cast<SwDocInfoField*>(GetCurField())->GetSubType() & 0xff00) : 0;
 
@@ -430,7 +430,7 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
 
     sal_uInt16 nSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(pSelEntry->GetUserData());
 
-    sal_uLong nFormat = 0;
+    sal_uInt32 nFormat = 0;
 
     sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();
 

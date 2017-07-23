@@ -30,7 +30,7 @@ class SW_DLLPUBLIC NumFormatListBox : public ListBox
     short               nCurrFormatType;
     sal_Int32           nStdEntry;
     bool                bOneArea;
-    sal_uLong               nDefFormat;
+    sal_uInt32          nDefFormat;
     SwView*             pVw;
     SvNumberFormatter*  pOwnFormatter;
     LanguageType        eCurLanguage;
@@ -56,8 +56,8 @@ public:
 
     void            SetFormatType(const short nFormatType);
     short    GetFormatType() const { return nCurrFormatType; }
-    void            SetDefFormat(const sal_uLong nDefFormat);
-    sal_uLong           GetFormat() const;
+    void            SetDefFormat(const sal_uInt32 nDefFormat);
+    sal_uInt32      GetFormat() const;
 
     LanguageType GetCurLanguage() const { return eCurLanguage;}
     void                SetLanguage(LanguageType eSet)  { eCurLanguage = eSet;}
