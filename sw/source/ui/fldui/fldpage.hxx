@@ -70,7 +70,7 @@ protected:
                                     sal_uInt16 nSubType,
                                     const OUString& rPar1,
                                     const OUString& rPar2,
-                                    sal_uLong nFormatId,
+                                    sal_uInt32 nFormatId,
                                     sal_Unicode cDelim = ' ',
                                     bool bIsAutomaticLanguage = true);
 

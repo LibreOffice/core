@@ -119,7 +119,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
     bool bIsText = true;
     sal_uInt16 nInsertType = 0;
     sal_uInt16 nInsertSubType = 0;
-    sal_uLong nInsertFormat = 0;
+    sal_uInt32 nInsertFormat = 0;
 
     switch(nSlot)
     {
@@ -221,7 +221,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 bool bRes = false;
                 if( pItem )
                 {
-                    sal_uLong  nFormat = 0;
+                    sal_uInt32 nFormat = 0;
                     sal_uInt16 nType = 0;
                     OUString aPar1 = static_cast<const SfxStringItem *>(pItem)->GetValue();
                     OUString aPar2;
@@ -266,7 +266,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 bool bRes = false;
                 if( pItem && nSlot != FN_INSERT_FIELD_CTRL)
                 {
-                    sal_uLong  nFormat = 0;
+                    sal_uInt32 nFormat = 0;
                     sal_uInt16 nType = 0;
                     sal_uInt16 nSubType = 0;
                     OUString aPar1 = static_cast<const SfxStringItem *>(pItem)->GetValue();

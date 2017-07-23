@@ -117,7 +117,7 @@ void SwFieldPage::EditNewField( bool bOnlyActivate )
 
 // insert field
 void SwFieldPage::InsertField(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUString& rPar1,
-                            const OUString& rPar2, sal_uLong nFormatId,
+                            const OUString& rPar2, sal_uInt32 nFormatId,
                             sal_Unicode cSeparator, bool bIsAutomaticLanguage)
 {
     SwView* pView = GetActiveView();

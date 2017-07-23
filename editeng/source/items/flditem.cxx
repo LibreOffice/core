@@ -439,7 +439,7 @@ OUString SvxDateField::GetFormatted( Date const & aDate, SvxDateFormat eFormat, 
         eFormat = SVXDATEFORMAT_STDSMALL;
     }
 
-    sal_uLong nFormatKey;
+    sal_uInt32 nFormatKey;
 
     switch( eFormat )
     {
