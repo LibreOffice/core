@@ -143,6 +143,15 @@ DECLARE_RTFIMPORT_TEST(testFdo46662, "fdo46662.rtf")
     }
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf108951, "tdf108951.rtf")
+{
+    // This test is import-only, as we assert the list ID, which is OK to
+    // re-order on export, but then this test would not pass anymore.
+
+    // \ls2 was imported as WWNum1.
+    CPPUNIT_ASSERT_EQUAL(OUString("WWNum2"), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo47036, "fdo47036.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
