@@ -1679,7 +1679,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         nLen = 256;
                         if( sFormulaBuf[nLen - 1] == ',' )
                             --nLen;
-                        sFormulaBuf = sFormulaBuf.copy(0, nLen);
+                        sFormulaBuf.truncate(nLen);
                     }
 
                     sFormulaBuf.append( '"' );
