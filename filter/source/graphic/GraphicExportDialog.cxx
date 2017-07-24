@@ -35,8 +35,9 @@ using namespace css::uno;
 using namespace css::beans;
 using namespace css::lang;
 
-GraphicExportDialog::GraphicExportDialog( const Reference< XComponentContext >& )
-    : meFieldUnit(FUNIT_NONE)
+GraphicExportDialog::GraphicExportDialog( const Reference< XComponentContext >& ) :
+    meFieldUnit(FUNIT_NONE),
+    mbSelectionOnly(false)
 {
 }
 
@@ -84,6 +85,10 @@ void GraphicExportDialog::setPropertyValues( const Sequence<PropertyValue>& aPro
         {
             maMediaDescriptor[ i ].Value >>= maFilterDataSequence;
         }
+        else if ( maMediaDescriptor[ i ].Name == "SelectionOnly" )
+        {
+            maMediaDescriptor[ i ].Value >>= mbSelectionOnly;
+        }
     }
 }
 
@@ -96,7 +101,8 @@ void GraphicExportDialog::setTitle( const OUString& aTitle )
 sal_Int16 GraphicExportDialog::execute()
 {
     sal_Int16 nReturn = ui::dialogs::ExecutableDialogResults::CANCEL;
-    ScopedVclPtrInstance< GraphicExportOptionsDialog > graphicExportOptionsDialog( Application::GetDefDialogParent(), mxSourceDocument );
+    ScopedVclPtrInstance< GraphicExportOptionsDialog > graphicExportOptionsDialog( Application::GetDefDialogParent(),
+            mxSourceDocument, mbSelectionOnly );
     if (graphicExportOptionsDialog->Execute() == RET_OK )
     {
         maFilterDataSequence = graphicExportOptionsDialog->getFilterData();

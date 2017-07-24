@@ -48,6 +48,7 @@ class GraphicExportFilter :
 
     sal_Int32 mTargetWidth;
     sal_Int32 mTargetHeight;
+    bool      mbSelectionOnly;
 
 public:
     explicit GraphicExportFilter( const Reference<XComponentContext>& rxContext );

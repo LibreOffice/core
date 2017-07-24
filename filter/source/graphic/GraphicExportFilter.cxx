@@ -26,6 +26,7 @@
 GraphicExportFilter::GraphicExportFilter( const Reference<XComponentContext>&  )
     : mTargetWidth(0)
     , mTargetHeight(0)
+    , mbSelectionOnly(false)
 {}
 
 GraphicExportFilter::~GraphicExportFilter()
@@ -55,6 +56,10 @@ void GraphicExportFilter::gatherProperties( const Sequence<PropertyValue>& rProp
         else if ( aProperty.Name == "OutputStream" )
         {
             aProperty.Value >>= mxOutputStream;
+        }
+        else if ( aProperty.Name == "SelectionOnly" )
+        {
+            aProperty.Value >>= mbSelectionOnly;
         }
     }
 
@@ -93,7 +98,7 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
 {
     gatherProperties(rDescriptor);
 
-    DocumentToGraphicRenderer aRenderer( mxDocument );
+    DocumentToGraphicRenderer aRenderer( mxDocument, mbSelectionOnly );
     sal_Int32 aCurrentPage = aRenderer.getCurrentPageWriter();
     Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(aCurrentPage);
 
