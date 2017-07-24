@@ -1644,6 +1644,19 @@ DECLARE_ODFEXPORT_TEST(testTableStyles5, "table_styles_5.odt")
     }
 }
 
+DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
+{
+    // Test that the loext:mimetype attribute is written for exported images, tdf#109202
+    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    {
+        // Original image (svg)
+        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@loext:mime-type='image/svg+xml']");
+        // Fallback image (png)
+        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@loext:mime-type='image/png']");
+    }
+}
+
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
