@@ -114,6 +114,15 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 pFactory->attributeAction(pHandler, nToken, xValue);
             }
         break;
+        case ResourceType::MeasurementOrPercent:
+            {
+                const char *pValue = "";
+                pAttribs->getAsChar(nToken, pValue);
+                OOXMLValue::Pointer_t xValue(new OOXMLMeasurementOrPercentValue(pValue));
+                pHandler->newProperty(nId, xValue);
+                pFactory->attributeAction(pHandler, nToken, xValue);
+            }
+            break;
         case ResourceType::List:
             {
                 sal_uInt32 nValue;
