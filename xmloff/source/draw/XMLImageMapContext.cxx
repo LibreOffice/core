@@ -73,7 +73,7 @@ enum XMLImageMapToken: decltype(XML_TOK_UNKNOWN)
     XML_TOK_IMAP_TARGET
 };
 
-static SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
+static const SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
 {
     { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_IMAP_URL            },
     { XML_NAMESPACE_OFFICE, XML_NAME,           XML_TOK_IMAP_NAME           },

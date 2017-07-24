@@ -63,7 +63,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
 
-static SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
+static const SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_STYLE_STYLE                },
     { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,    XML_TOK_STYLE_PAGE_MASTER          },
