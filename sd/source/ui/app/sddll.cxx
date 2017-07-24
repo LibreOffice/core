@@ -51,7 +51,6 @@
 #include "OutlineViewShellBase.hxx"
 #include "PaneChildWindows.hxx"
 #include "sdresid.hxx"
-#include "sdobjfac.hxx"
 #include "SpellDialogChildWindow.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "SlideSorterViewShellBase.hxx"
@@ -286,9 +285,6 @@ void SdDLL::Init()
 
     // register css::form::component::Form-Object-Factory
     FmFormObjFactory();
-
-    // register Object-Factory
-    SdrObjFactory::InsertMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
 
     // register your exotic remote controls here
 #ifdef ENABLE_SDREMOTE

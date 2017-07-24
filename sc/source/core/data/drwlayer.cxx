@@ -79,7 +79,6 @@
 
 using namespace ::com::sun::star;
 
-static ScDrawObjFactory* pFac = nullptr;
 static E3dObjFactory* pF3d = nullptr;
 static sal_uInt16 nInst = 0;
 
@@ -323,7 +322,6 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
 
     if( !nInst++ )
     {
-        pFac = new ScDrawObjFactory;
         pF3d = new E3dObjFactory;
     }
 }
@@ -337,8 +335,6 @@ ScDrawLayer::~ScDrawLayer()
     delete pUndoGroup;
     if( !--nInst )
     {
-        delete pFac;
-        pFac = nullptr;
         delete pF3d;
         pF3d = nullptr;
     }

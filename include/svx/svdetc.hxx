@@ -168,7 +168,6 @@ public:
 
 
 std::vector<Link<SdrObjCreatorParams, SdrObject*>>& ImpGetUserMakeObjHdl();
-std::vector<Link<SdrObjUserDataCreatorParams, SdrObjUserData*>>& ImpGetUserMakeObjUserDataHdl();
 
 class SdrOle2Obj;
 class AutoTimer;
@@ -204,8 +203,6 @@ class SVX_DLLPUBLIC SdrGlobalData
 public:
     std::vector<Link<SdrObjCreatorParams, SdrObject*>>
                         aUserMakeObjHdl;
-    std::vector<Link<SdrObjUserDataCreatorParams, SdrObjUserData*>>
-                        aUserMakeObjUserDataHdl;
     SdrEngineDefaults*  pDefaults;
     OLEObjCache         aOLEObjCache;
 

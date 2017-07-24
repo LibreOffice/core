@@ -1245,8 +1245,6 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
 
                     if( aModel.GetModel() )
                     {
-                        SgaUserDataFactory  aFactory;
-
                         SdrPage*    pPage = aModel.GetModel()->GetPage(0);
                         SdrGrafObj* pGrafObj = new SdrGrafObj( *pGraphic );
 

@@ -373,12 +373,6 @@ std::vector<Link<SdrObjCreatorParams, SdrObject*>>& ImpGetUserMakeObjHdl()
     return rGlobalData.aUserMakeObjHdl;
 }
 
-std::vector<Link<SdrObjUserDataCreatorParams, SdrObjUserData*>>& ImpGetUserMakeObjUserDataHdl()
-{
-    SdrGlobalData& rGlobalData=GetSdrGlobalData();
-    return rGlobalData.aUserMakeObjUserDataHdl;
-}
-
 OUString ImpGetResStr(const char* pResID)
 {
     return SvxResId(pResID);

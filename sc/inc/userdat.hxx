@@ -31,14 +31,6 @@
 #define SC_UD_IMAPDATA      2
 #define SC_UD_MACRODATA     3
 
-class ScDrawObjFactory
-{
-    DECL_STATIC_LINK( ScDrawObjFactory, MakeUserData, SdrObjUserDataCreatorParams, SdrObjUserData* );
-public:
-    ScDrawObjFactory();
-   ~ScDrawObjFactory();
-};
-
 class SC_DLLPUBLIC ScDrawObjData : public SdrObjUserData
 {
 public:
