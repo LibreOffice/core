@@ -69,6 +69,24 @@
       "revId": "ab58c0058da7f92e663f1e42d132e9c831407c6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e14bc557",
+        "filename": "sc/source/filter/dif/difimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-24T08:13:07Z",
+      "side": 1,
+      "message": "Unfortunately it depends.. if it indicates a programming error then an assert(), if it depends on data, for example being read from a file format, then a SAL_WARN(). Here in this case an assert() would be appropriate as the following code relies on pNumFormatter being present.",
+      "parentUuid": "3a461143_4bbf5ad0",
+      "revId": "ab58c0058da7f92e663f1e42d132e9c831407c6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
