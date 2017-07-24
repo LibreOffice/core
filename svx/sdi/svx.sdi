@@ -6131,7 +6131,7 @@ SvxSizeItem AttributePageSize SID_ATTR_PAGE_SIZE
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Format;
 ]
 
