@@ -261,6 +261,23 @@ typedef OOXMLNthPtMeasureValue<20> OOXMLTwipsMeasureValue;
 /// Handles OOXML's ST_HpsMeasure value.
 typedef OOXMLNthPtMeasureValue<2> OOXMLHpsMeasureValue;
 
+class OOXMLMeasurementOrPercentValue : public OOXMLValue
+{
+protected:
+    int mnValue;
+public:
+    explicit OOXMLMeasurementOrPercentValue(const char * pValue);
+
+    virtual int getInt() const override;
+    virtual OOXMLValue* clone() const override
+    {
+        return new OOXMLMeasurementOrPercentValue(*this);
+    }
+#ifdef DEBUG_WRITERFILTER
+    virtual std::string toString() const override;
+#endif
+};
+
 class OOXMLShapeValue : public OOXMLValue
 {
 protected:

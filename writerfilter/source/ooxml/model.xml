@@ -14204,6 +14204,9 @@
           <value>auto</value>
         </choice>
       </define>
+      <define name="ST_MeasurementOrPercent">
+        <data type="string"/>
+      </define>
       <define name="CT_Height">
         <attribute name="val">
           <data type="string"/>
@@ -14214,7 +14217,7 @@
       </define>
       <define name="CT_TblWidth">
         <attribute name="w">
-          <ref name="ST_DecimalNumber"/>
+          <ref name="ST_MeasurementOrPercent"/>
         </attribute>
         <attribute name="type">
           <ref name="ST_TblWidth"/>
@@ -16667,6 +16670,7 @@
       <attribute name="val" tokenid="ooxml:CT_SignedHpsMeasure_val" action="setValue"/>
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
+    <resource name="ST_MeasurementOrPercent" resource="MeasurementOrPercent"/>
     <resource name="ST_DateTime" resource="String"/>
     <resource name="CT_MacroName" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_MacroName_val" action="setValue"/>
