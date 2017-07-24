@@ -510,7 +510,7 @@ long WPXSvInputStreamImpl::tell()
         return -1L;
     else
     {
-        sal_Int64 tmpPosition = mxSeekable->getPosition();
+        const sal_Int64 tmpPosition = mxSeekable->getPosition();
         if ((tmpPosition < 0) || (tmpPosition > LONG_MAX))
             return -1L;
         return (long)tmpPosition;
@@ -522,7 +522,7 @@ int WPXSvInputStreamImpl::seek(long offset)
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return -1;
 
-    sal_Int64 tmpPosition = mxSeekable->getPosition();
+    const sal_Int64 tmpPosition = mxSeekable->getPosition();
     if ((tmpPosition < 0) || (tmpPosition > LONG_MAX))
         return -1;
 
