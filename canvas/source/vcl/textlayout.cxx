@@ -242,7 +242,7 @@ namespace vclcanvas
 
         setupLayoutMode( *pVDev.get(), mnTextDirection );
 
-        const sal_Int32 nAboveBaseline( /*-aMetric.GetIntLeading()*/ - aMetric.GetAscent() );
+        const sal_Int32 nAboveBaseline( -aMetric.GetAscent() );
         const sal_Int32 nBelowBaseline( aMetric.GetDescent() );
 
         if( maLogicalAdvancements.getLength() )
