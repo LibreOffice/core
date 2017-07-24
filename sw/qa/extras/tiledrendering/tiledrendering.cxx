@@ -1796,8 +1796,9 @@ void SwTiledRenderingTest::testDisableUndoRepair()
         // first view, undo conflict
         pView1->GetState(aItemSet1);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
-        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item * >(aItemSet1.GetItem(SID_UNDO)));
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(aItemSet1.GetItem(SID_UNDO))->GetValue());
+        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aItemSet1.GetItem(SID_UNDO));
+        CPPUNIT_ASSERT(pUInt32Item);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
     }
 
     // Insert a character in the first view.
