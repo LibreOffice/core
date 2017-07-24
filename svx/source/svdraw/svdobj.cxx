@@ -3282,25 +3282,6 @@ void SdrObjFactory::RemoveMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> co
         rLL.erase(it);
 }
 
-void SdrObjFactory::InsertMakeUserDataHdl(Link<SdrObjUserDataCreatorParams, SdrObjUserData*> const & rLink)
-{
-    std::vector<Link<SdrObjUserDataCreatorParams, SdrObjUserData*>>& rLL=ImpGetUserMakeObjUserDataHdl();
-    auto it = std::find(rLL.begin(), rLL.end(), rLink);
-    if (it != rLL.end()) {
-        OSL_FAIL("SdrObjFactory::InsertMakeUserDataHdl(): Link already in place.");
-    } else {
-        rLL.push_back(rLink);
-    }
-}
-
-void SdrObjFactory::RemoveMakeUserDataHdl(Link<SdrObjUserDataCreatorParams, SdrObjUserData*> const & rLink)
-{
-    std::vector<Link<SdrObjUserDataCreatorParams, SdrObjUserData*>>& rLL=ImpGetUserMakeObjUserDataHdl();
-    auto it = std::find(rLL.begin(), rLL.end(), rLink);
-    if (it != rLL.end())
-        rLL.erase(it);
-}
-
 namespace svx
 {
     ISdrObjectFilter::~ISdrObjectFilter()
