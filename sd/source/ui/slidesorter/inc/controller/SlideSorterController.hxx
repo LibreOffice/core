@@ -240,6 +240,7 @@ private:
 
     int mnModelChangeLockCount;
     bool mbIsForcedRearrangePending;
+    bool mbContextMenuOpen;
 
     bool mbPostModelChangePending;
 

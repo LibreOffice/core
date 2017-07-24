@@ -110,6 +110,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mpListener(),
       mnModelChangeLockCount(0),
       mbIsForcedRearrangePending(false),
+      mbContextMenuOpen(false),
       mbPostModelChangePending(false),
       maSelectionBeforeSwitch(),
       mnCurrentPageBeforeSwitch(0),
@@ -382,7 +383,9 @@ bool SlideSorterController::Command (
                 SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
                 if (pDispatcher != nullptr)
                 {
+                    mbContextMenuOpen = true;
                     pDispatcher->ExecutePopup( aPopupId, pWindow, &aMenuLocation );
+                    mbContextMenuOpen = false;
                     mrSlideSorter.GetView().UpdatePageUnderMouse();
                     ::rtl::Reference<SelectionFunction> pFunction(GetCurrentSelectionFunction());
                     if (pFunction.is())
@@ -547,9 +550,14 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, vo
                     GetFocusManager().HideFocus();
                     mrView.GetToolTip().Hide();
 
-                    // Select the current slide so that it is properly
-                    // visualized when the focus is moved to the edit view.
-                    GetPageSelector().SelectPage(GetCurrentSlideManager()->GetCurrentSlide());
+                    //don't scroll back to the selected slide when we lose
+                    //focus due to a temporary active context menu
+                    if (!mbContextMenuOpen)
+                    {
+                        // Select the current slide so that it is properly
+                        // visualized when the focus is moved to the edit view.
+                        GetPageSelector().SelectPage(GetCurrentSlideManager()->GetCurrentSlide());
+                    }
                 }
                 break;
 
