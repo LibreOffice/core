@@ -846,6 +846,16 @@ DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
     getUserDefineAttribute(uno::makeAny(xCellC1), "proName", "v3");
 }
 
+DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
+{
+    // Test that the loext:mimetype attribute is written for exported images, tdf#109202
+    if (xmlDocPtr pXmlDoc = parseExport("content.xml"))
+    {
+        // Original image (svg)
+        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@loext:mime-type='image/svg+xml']");
+    }
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

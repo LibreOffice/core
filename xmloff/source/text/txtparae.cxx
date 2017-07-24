@@ -28,6 +28,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -110,6 +113,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -123,6 +127,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::graphic;
 using namespace ::xmloff;
 using namespace ::xmloff::token;
 
@@ -3041,6 +3046,22 @@ void XMLTextParagraphExport::exportContour(
                               true, true );
 }
 
+static OUString getMimeType(const OUString& sImageUrl)
+{
+    // Create the graphic to retrieve the mimetype from it
+    Reference< XGraphicProvider > xProvider = css::graphic::GraphicProvider::create(comphelper::getProcessComponentContext());
+    Sequence< PropertyValue > aMediaProperties( 1 );
+    aMediaProperties[0].Name = "URL";
+    aMediaProperties[0].Value <<= sImageUrl;
+    Reference< XGraphic > xGraphic( xProvider->queryGraphic( aMediaProperties ) );
+
+    OUString aSourceMimeType;
+    Reference< XPropertySet > xGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
+    if ( xGraphicPropertySet->getPropertyValue( "MimeType" ) >>= aSourceMimeType )
+        return aSourceMimeType;
+    return OUString("");
+}
+
 void XMLTextParagraphExport::_exportTextGraphic(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
@@ -3101,6 +3122,11 @@ void XMLTextParagraphExport::_exportTextGraphic(
     if( !sGrfFilter.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_FILTER_NAME,
                                   sGrfFilter );
+
+    // Add mimetype to make it easier for readers to get the base64 image type right, tdf#109202
+    OUString aSourceMimeType = getMimeType(sOrigURL);
+    if ( !aSourceMimeType.isEmpty() )
+        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mime-type", aSourceMimeType);
 
     {
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_DRAW,
