@@ -154,7 +154,7 @@ public:
     // check if a Create New Database button may be shown to insert connection url
     bool supportsDBCreation(const OUString& _sURL) const;
 
-    /// check if the given data source tyoe is based on the file system - i.e. the URL is a prefix plus a file URL
+    /// check if the given data source type is based on the file system - i.e. the URL is a prefix plus a file URL
     bool isFileSystemBased(const OUString& _sURL) const;
 
     bool isConnectionUrlRequired(const OUString& _sURL) const;
