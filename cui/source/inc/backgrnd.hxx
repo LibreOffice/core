@@ -105,7 +105,6 @@ private:
     sal_uInt16      nHtmlMode;
     bool        bAllowShowSelector  : 1;
     bool        bIsGraphicValid     : 1;
-    bool        bLinkOnly           : 1;
     bool        bHighlighting       : 1;
     bool        m_bColorSelected    : 1;
     Graphic     aBgdGraphic;

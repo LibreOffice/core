@@ -2763,7 +2763,7 @@ void SwFrameURLPage::Reset( const SfxItemSet *rSet )
     if ( SfxItemState::SET == rSet->GetItemState( SID_DOCFRAME, true, &pItem))
     {
         std::unique_ptr<TargetList> pList(new TargetList);
-        static_cast<const SfxFrameItem*>(pItem)->GetFrame()->GetTargetList(*pList);
+        SfxFrame::GetDefaultTargetList(*pList);
         if( !pList->empty() )
         {
             size_t nCount = pList->size();

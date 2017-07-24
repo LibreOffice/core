@@ -56,8 +56,6 @@ class CGM
         double              mnYFraction;
         bool                mbAngReverse;           // AngularDirection
 
-        Graphic*            mpGraphic;
-
         bool                mbStatus;
         bool                mbMetaFile;
         bool                mbIsFinished;

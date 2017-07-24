@@ -148,7 +148,6 @@ struct State
         maFontVariant("normal"),
         mnFontWeight(400.0),
         meTextAnchor(BEFORE),
-        meTextDisplayAlign(BEFORE),
         maCurrentColor(0.0),
         mbVisibility(true),
         meFillType(SOLID),
@@ -188,7 +187,6 @@ struct State
     double                      mnFontWeight;
 
     TextAlign                   meTextAnchor; // text-anchor
-    TextAlign                   meTextDisplayAlign; // display-align
 
     ARGBColor                   maCurrentColor;
     bool                        mbVisibility;
@@ -233,7 +231,6 @@ inline bool operator==(const State& rLHS, const State& rRHS )
         rLHS.maFontVariant==rRHS.maFontVariant &&
         rLHS.mnFontWeight==rRHS.mnFontWeight &&
         rLHS.meTextAnchor==rRHS.meTextAnchor &&
-        rLHS.meTextDisplayAlign==rRHS.meTextDisplayAlign &&
         rLHS.maCurrentColor==rRHS.maCurrentColor &&
         rLHS.mbVisibility==rRHS.mbVisibility &&
         rLHS.meFillType==rRHS.meFillType &&
@@ -285,7 +282,6 @@ namespace std
                 ^  size_t(rState.maFontVariant.hashCode())
                 ^  std::hash<double>()(rState.mnFontWeight)
                 ^  size_t(rState.meTextAnchor)
-                ^  size_t(rState.meTextDisplayAlign)
                 ^  size_t(rState.mbVisibility)
                 ^  size_t(rState.meFillType)
                 ^  std::hash<double>()(rState.mnFillOpacity)

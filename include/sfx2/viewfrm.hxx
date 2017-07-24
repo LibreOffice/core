@@ -148,8 +148,8 @@ public:
     bool                    DoClose();
     sal_uIntPtr             GetFrameType() const
                             { return GetFrame().GetFrameType(); }
-    void                    GetTargetList( TargetList& rList ) const
-                            { GetFrame().GetTargetList( rList ); }
+    static void             GetTargetList( TargetList& rList )
+                            { SfxFrame::GetDefaultTargetList( rList ); }
 
     void                    SetModalMode( bool );
     bool                    IsInModalMode() const;

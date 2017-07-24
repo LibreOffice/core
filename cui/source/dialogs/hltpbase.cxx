@@ -159,7 +159,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         if ( pFrame )
         {
             std::unique_ptr<TargetList> pList(new TargetList);
-            pFrame->GetTargetList(*pList);
+            SfxFrame::GetDefaultTargetList(*pList);
             if( !pList->empty() )
             {
                 size_t nCount = pList->size();
