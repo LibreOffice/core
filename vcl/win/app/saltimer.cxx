@@ -49,7 +49,7 @@ void ImplSalStopTimer()
     MSG aMsg;
     int nMsgCount = 0;
     while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
-                         SAL_MSG_TIMER_CALLBACK, PM_REMOVE) )
+                         SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD) )
         nMsgCount++;
     assert( nMsgCount <= 1 );
     pSalData->mbOnIdleRunScheduler = false;
