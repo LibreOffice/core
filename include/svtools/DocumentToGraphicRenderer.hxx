@@ -38,9 +38,12 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
     css::uno::Reference<css::frame::XController>   mxController;
     css::uno::Reference<css::view::XRenderable>    mxRenderable;
     css::uno::Reference<css::awt::XToolkit>        mxToolkit;
+    bool                                           mbSelectionOnly;
+
+    css::uno::Any getSelection() const;
 
 public:
-    DocumentToGraphicRenderer(const css::uno::Reference<css::lang::XComponent>& xDocument);
+    DocumentToGraphicRenderer(const css::uno::Reference<css::lang::XComponent>& xDocument, bool bSelectionOnly);
     ~DocumentToGraphicRenderer();
 
     sal_Int32 getCurrentPageWriter( );

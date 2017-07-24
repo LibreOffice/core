@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -37,12 +38,13 @@ using namespace css::uno;
 using namespace css::lang;
 using namespace css::beans;
 
-DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent>& rxDocument ) :
+DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent>& rxDocument, bool bSelectionOnly ) :
     mxDocument(rxDocument),
     mxModel( mxDocument, uno::UNO_QUERY ),
     mxController( mxModel->getCurrentController() ),
     mxRenderable (mxDocument, uno::UNO_QUERY ),
-    mxToolkit( VCLUnoHelper::CreateToolkit() )
+    mxToolkit( VCLUnoHelper::CreateToolkit() ),
+    mbSelectionOnly( bSelectionOnly )
 {
 }
 
@@ -56,12 +58,34 @@ Size DocumentToGraphicRenderer::getDocumentSizeInPixels(sal_Int32 aCurrentPage)
     return Application::GetDefaultDevice()->LogicToPixel( aSize100mm, MapUnit::Map100thMM );
 }
 
+uno::Any DocumentToGraphicRenderer::getSelection() const
+{
+    uno::Any aSelection;
+    aSelection <<= mxDocument;  // default: render whole document
+    if (mbSelectionOnly && mxController.is())
+    {
+        try
+        {
+            uno::Reference< view::XSelectionSupplier > xSelSup( mxController, uno::UNO_QUERY);
+            if (xSelSup.is())
+            {
+                uno::Any aViewSelection( xSelSup->getSelection());
+                if (aViewSelection.hasValue())
+                    aSelection = aViewSelection;
+            }
+        }
+        catch (const uno::Exception&)
+        {
+        }
+    }
+    return aSelection;
+}
+
 Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 aCurrentPage)
 {
     Reference< awt::XDevice > xDevice(mxToolkit->createScreenCompatibleDevice( 32, 32 ) );
 
-    uno::Any selection;
-    selection <<= mxDocument;
+    uno::Any selection( getSelection());
 
     PropertyValues renderProperties;
 
@@ -134,8 +158,7 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
         pOutputDev->Erase();
     }
 
-    uno::Any aSelection;
-    aSelection <<= mxDocument;
+    uno::Any aSelection( getSelection());
     mxRenderable->render(aCurrentPage - 1, aSelection, renderProps );
 
     aMtf.Stop();

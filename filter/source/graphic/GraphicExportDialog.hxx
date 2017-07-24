@@ -48,6 +48,7 @@ class GraphicExportDialog : public cppu::WeakImplHelper
 
     OUString   maDialogTitle;
     FieldUnit  meFieldUnit;
+    bool       mbSelectionOnly;
 
 public:
 

@@ -61,7 +61,8 @@ private:
     DECL_LINK( resolutionModifiedHandle,  Edit&, void );
 
 public:
-    GraphicExportOptionsDialog( vcl::Window* pWindow, const css::uno::Reference<css::lang::XComponent>& rxSourceDocument );
+    GraphicExportOptionsDialog( vcl::Window* pWindow,
+            const css::uno::Reference<css::lang::XComponent>& rxSourceDocument, bool bSelectionOnly );
     virtual ~GraphicExportOptionsDialog() override;
     virtual void dispose() override;
     css::uno::Sequence<css::beans::PropertyValue> getFilterData();
