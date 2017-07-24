@@ -11598,7 +11598,13 @@ else
     fi
     if test -z "$MSGFMT"; then
         AC_CHECK_PROGS(MSGFMT, [msgfmt])
+        if test -z "$MSGFMT"; then
+            AC_MSG_ERROR([msgfmt not found. Install GNU gettext, or re-run without languages.])
+        fi
         AC_CHECK_PROGS(MSGUNIQ, [msguniq])
+        if test -z "$MSGUNIQ"; then
+            AC_MSG_ERROR([msguniq not found. Install GNU gettext, or re-run without languages.])
+        fi
     fi
 fi
 AC_SUBST(MSGFMT)
