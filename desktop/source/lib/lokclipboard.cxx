@@ -9,6 +9,7 @@
 
 #include <lokclipboard.hxx>
 #include <comphelper/sequence.hxx>
+#include <vcl/graphicfilter.hxx>
 
 using namespace com::sun::star;
 
@@ -29,55 +30,74 @@ OUString SAL_CALL LOKClipboard::getName()
 }
 
 LOKTransferable::LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize)
-    : m_aMimeType(pMimeType),
-      m_aSequence(reinterpret_cast<const sal_Int8*>(pData), nSize)
+    : m_aSequence(reinterpret_cast<const sal_Int8*>(pData), nSize)
 {
-}
-
-uno::Any SAL_CALL LOKTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
-{
-    uno::Any aRet;
-    if (rFlavor.DataType == cppu::UnoType<OUString>::get())
+    OString aMimeType(pMimeType);
+    if (aMimeType.startsWith("image/png"))
     {
-        auto pText = reinterpret_cast<sal_Char*>(m_aSequence.getArray());
-        aRet <<= OUString(pText, m_aSequence.getLength(), RTL_TEXTENCODING_UTF8);
+        AddFormat(SotClipboardFormatId::PNG);
     }
-    else
-        aRet <<= m_aSequence;
-    return aRet;
-}
-
-std::vector<datatransfer::DataFlavor> LOKTransferable::getTransferDataFlavorsAsVector()
-{
-    std::vector<datatransfer::DataFlavor> aRet;
-    datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = OUString::fromUtf8(m_aMimeType.getStr());
-    aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
-
-    sal_Int32 nIndex(0);
-    if (m_aMimeType.getToken(0, ';', nIndex) == "text/plain")
+    else if (aMimeType.startsWith("image/jpeg"))
     {
-        if (m_aMimeType.getToken(0, ';', nIndex) != "charset=utf-16")
-            aFlavor.MimeType = "text/plain;charset=utf-16";
-        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        AddFormat(SotClipboardFormatId::JPEG);
     }
-    aRet.push_back(aFlavor);
-
-    return aRet;
-}
-
-uno::Sequence<datatransfer::DataFlavor> SAL_CALL LOKTransferable::getTransferDataFlavors()
-{
-    return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
-}
-
-sal_Bool SAL_CALL LOKTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
-{
-    const std::vector<datatransfer::DataFlavor> aFlavors = getTransferDataFlavorsAsVector();
-    return std::find_if(aFlavors.begin(), aFlavors.end(), [&rFlavor](const datatransfer::DataFlavor& i)
+    else if (aMimeType.startsWith("text/html"))
     {
-        return i.MimeType == rFlavor.MimeType && i.DataType == rFlavor.DataType;
-    }) != aFlavors.end();
+        AddFormat(SotClipboardFormatId::HTML);
+    }
+    else if (aMimeType.startsWith("text/rtf"))
+    {
+        AddFormat(SotClipboardFormatId::RTF);
+    }
+    else if (aMimeType.startsWith("text/richtext"))
+    {
+        AddFormat(SotClipboardFormatId::RICHTEXT);
+    }
+    else if (aMimeType.startsWith("text/plain"))
+    {
+        AddFormat(SotClipboardFormatId::STRING);
+    }
+}
+
+void LOKTransferable::AddSupportedFormats()
+{
+}
+
+bool LOKTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
+{
+    bool bSuccess(false);
+    sal_Char* pText = reinterpret_cast<sal_Char*>(m_aSequence.getArray());
+
+    SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
+
+    switch( nFormat )
+    {
+    case SotClipboardFormatId::PNG:
+    case SotClipboardFormatId::BITMAP:
+    case SotClipboardFormatId::JPEG:
+    {
+        Graphic aGraphic;
+        INetURLObject aURL(OUString(pText, m_aSequence.getLength(), RTL_TEXTENCODING_UTF8));
+        if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL))
+            bSuccess = SetBitmapEx(aGraphic.GetBitmapEx(), rFlavor);
+    }
+    break;
+
+    case SotClipboardFormatId::RTF:
+    case SotClipboardFormatId::RICHTEXT:
+    case SotClipboardFormatId::HTML:
+    case SotClipboardFormatId::STRING:
+    {
+        uno::Any aAny;
+        aAny <<= m_aSequence;
+        bSuccess = SetAny(aAny, rFlavor);
+    }
+    break;
+
+    default: break;
+    }
+
+    return bSuccess;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

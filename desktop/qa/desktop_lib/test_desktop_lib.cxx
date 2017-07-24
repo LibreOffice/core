@@ -86,7 +86,8 @@ public:
     void testSaveAs();
     void testSaveAsCalc();
     void testPasteWriter();
-    void testPasteWriterJPEG();
+    void testPasteWriterImage(LibLODocument_Impl* pDoc, OString&, OString&);
+    void testPasteWriterImages();
     void testUndoWriter();
     void testRowColumnHeaders();
     void testHiddenRowHeaders();
@@ -128,7 +129,7 @@ public:
     CPPUNIT_TEST(testSaveAs);
     CPPUNIT_TEST(testSaveAsCalc);
     CPPUNIT_TEST(testPasteWriter);
-    CPPUNIT_TEST(testPasteWriterJPEG);
+    CPPUNIT_TEST(testPasteWriterImages);
     CPPUNIT_TEST(testUndoWriter);
     CPPUNIT_TEST(testRowColumnHeaders);
     CPPUNIT_TEST(testHiddenRowHeaders);
@@ -501,6 +502,7 @@ void DesktopLOKTest::testPasteWriter()
     comphelper::LibreOfficeKit::setActive();
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     OString aText("hello");
+    OString aRtf("{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0 Monotype Corsiva;}}\\qc\\f0\\fs120\\i\\b Hello,\\line World!}");
 
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/plain;charset=utf-8", aText.getStr(), aText.getLength()));
 
@@ -513,21 +515,15 @@ void DesktopLOKTest::testPasteWriter()
     CPPUNIT_ASSERT(!pDocument->pClass->paste(pDocument, "textt/plain;charset=utf-8", aText.getStr(), aText.getLength()));
     // Writer is expected to support text/html.
     CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/html", aText.getStr(), aText.getLength()));
+    // Writer is expected to support text/rtf.
+    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "text/rtf", aRtf.getStr(), aRtf.getLength()));
 
     comphelper::LibreOfficeKit::setActive(false);
 }
 
-void DesktopLOKTest::testPasteWriterJPEG()
+void DesktopLOKTest::testPasteWriterImage(LibLODocument_Impl* pDoc, OString& aFile, OString& aMimeType)
 {
-    comphelper::LibreOfficeKit::setActive();
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-
-    OUString aFileURL;
-    createFileURL("paste.jpg", aFileURL);
-    std::ifstream aImageStream(aFileURL.toUtf8().copy(strlen("file://")).getStr());
-    std::vector<char> aImageContents((std::istreambuf_iterator<char>(aImageStream)), std::istreambuf_iterator<char>());
-
-    CPPUNIT_ASSERT(pDocument->pClass->paste(pDocument, "image/jpeg", aImageContents.data(), aImageContents.size()));
+    CPPUNIT_ASSERT(pDoc->pClass->paste(pDoc, aMimeType.getStr(), aFile.getStr(), aFile.getLength()));
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -548,6 +544,25 @@ void DesktopLOKTest::testPasteWriterJPEG()
     xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     // This was text::TextContentAnchorType_AS_CHARACTER, AnchorType argument was ignored.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, xShape->getPropertyValue("AnchorType").get<text::TextContentAnchorType>());
+
+    uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY)->dispose();
+}
+
+void DesktopLOKTest::testPasteWriterImages()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDoc = loadDoc("blank_text.odt");
+
+    OUString aFileURL;
+    OString aFile, aMimeType;
+    createFileURL("plus.png", aFileURL);
+    aFile = OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8);
+    aMimeType = "image/png";
+    testPasteWriterImage(pDoc, aFile, aMimeType);
+    createFileURL("paste.jpg", aFileURL);
+    aFile = OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8);
+    aMimeType = "image/jpeg";
+    testPasteWriterImage(pDoc, aFile, aMimeType);
 
     comphelper::LibreOfficeKit::setActive(false);
 }

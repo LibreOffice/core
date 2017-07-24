@@ -69,6 +69,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     salhelper \
     sb \
     sfx \
+    sot \
     svl \
     svx \
     svxcore \

@@ -13,6 +13,7 @@
 #include <vector>
 
 #include <cppuhelper/implbase.hxx>
+#include <svtools/transfer.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 /// A clipboard implementation for LibreOfficeKit.
@@ -30,22 +31,14 @@ public:
 };
 
 /// Represents the contents of LOKClipboard.
-class LOKTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
+class LOKTransferable : public TransferableHelper
 {
-    OString m_aMimeType;
     css::uno::Sequence<sal_Int8> m_aSequence;
-
-    /// Provides a list of flavors, used by getTransferDataFlavors() and isDataFlavorSupported().
-    std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector();
-
 public:
     LOKTransferable(const char* pMimeType, const char* pData, std::size_t nSize);
 
-    css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
-
-    css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
-
-    sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
+    virtual void AddSupportedFormats() override;
+    virtual bool GetData(const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc) override;
 };
 
 #endif
