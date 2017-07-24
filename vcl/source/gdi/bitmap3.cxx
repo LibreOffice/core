@@ -1445,6 +1445,8 @@ bool Bitmap::ImplDitherFloyd16()
                 pQLine2[ nX ] = pReadAcc->GetPixel( nYTmp, nX );
         }
 
+        assert(pQLine2 || nHeight == 0);
+
         for( long nY = 0; nY < nHeight; nY++, nYTmp++ )
         {
             // First RowPixel
