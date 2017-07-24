@@ -317,6 +317,7 @@
 
 	<xsl:template name="create-href">
 		<xsl:param name="href"/>
+		<xsl:param name="mimetype"/>
 
 		<xsl:choose>
 			<!-- internal OOo URL used in content tables -->
@@ -332,7 +333,14 @@
 				<xsl:value-of select="concat('a_', translate(normalize-space($title), '.,;: %()[]/\+', '_____________'))"/>
 			</xsl:when>
 			<xsl:when test="self::draw:image[office:binary-data]">
-				<xsl:text>data:image/*;base64,</xsl:text><xsl:value-of select="office:binary-data"/>
+                <xsl:choose>
+                    <xsl:when test="$mimetype">
+                        <xsl:text>data:</xsl:text><xsl:value-of select="$mimetype"/><xsl:text>;base64,</xsl:text><xsl:value-of select="office:binary-data"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>data:image/*;base64,</xsl:text><xsl:value-of select="office:binary-data"/>
+                    </xsl:otherwise>
+                </xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:choose>
