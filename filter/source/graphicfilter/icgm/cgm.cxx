@@ -43,7 +43,6 @@ CGM::CGM(uno::Reference< frame::XModel > const & rModel)
     , mnXFraction(0)
     , mnYFraction(0)
     , mbAngReverse(false)
-    , mpGraphic(nullptr)
     , mbStatus(true)
     , mbMetaFile(false)
     , mbIsFinished(false)
@@ -72,13 +71,6 @@ CGM::CGM(uno::Reference< frame::XModel > const & rModel)
 
 CGM::~CGM()
 {
-    if ( mpGraphic )
-    {
-        mpGDIMetaFile->Stop();
-        mpGDIMetaFile->SetPrefMapMode( MapMode() );
-        mpGDIMetaFile->SetPrefSize( Size( static_cast< long >( mnOutdx ), static_cast< long >( mnOutdy ) ) );
-        *mpGraphic = Graphic( *mpGDIMetaFile );
-    }
     for(sal_uInt8* i : maDefRepList)
         delete [] i;
     maDefRepList.clear();

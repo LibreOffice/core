@@ -316,7 +316,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     , nHtmlMode(0)
     , bAllowShowSelector(true)
     , bIsGraphicValid(false)
-    , bLinkOnly(false)
     , bHighlighting(false)
     , m_bColorSelected(false)
     , pPageImpl(new SvxBackgroundPage_Impl)
@@ -894,7 +893,7 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
         m_pBitmapContainer->Show();
 
         m_pFileFrame->Show();
-        m_pBtnLink->Show(!bLinkOnly && !(nHtmlMode & HTMLMODE_ON));
+        m_pBtnLink->Show(!(nHtmlMode & HTMLMODE_ON));
 
         m_pTypeFrame->Show();
 
@@ -1079,7 +1078,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
 
     OUString aStrBrowse(get<vcl::Window>("findgraphicsft")->GetText());
     pImportDlg = new SvxOpenGraphicDialog( aStrBrowse );
-    if ( bHtml || bLinkOnly )
+    if ( bHtml )
         pImportDlg->EnableLink(false);
     pImportDlg->SetPath( aBgdGraphicPath, m_pBtnLink->IsChecked() );
 
@@ -1122,7 +1121,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Timer*, pIdle, void )
                 // new file chosen
                 aBgdGraphicPath   = pImportDlg->GetPath();
                 aBgdGraphicFilter = pImportDlg->GetCurrentFilter();
-                bool bLink = ( nHtmlMode & HTMLMODE_ON ) || bLinkOnly || pImportDlg->IsAsLink();
+                bool bLink = ( nHtmlMode & HTMLMODE_ON ) || pImportDlg->IsAsLink();
                 m_pBtnLink->Check( bLink );
                 m_pBtnLink->Enable();
 

@@ -101,12 +101,6 @@ SfxFrame::~SfxFrame()
         pFramesArr_Impl->erase( it );
 
     delete pImpl->pDescr;
-
-    if ( pChildArr )
-    {
-        DBG_ASSERT( pChildArr->empty(), "Children are not removed!" );
-        delete pChildArr;
-    }
 }
 
 bool SfxFrame::DoClose()
@@ -173,9 +167,6 @@ bool SfxFrame::DocIsModified_Impl()
     if ( pImpl->pCurrentViewFrame && pImpl->pCurrentViewFrame->GetObjectShell() &&
             pImpl->pCurrentViewFrame->GetObjectShell()->IsModified() )
         return true;
-    for( sal_uInt16 nPos = GetChildFrameCount(); nPos--; )
-        if( (*pChildArr)[ nPos ]->DocIsModified_Impl() )
-            return true;
     return false;
 }
 
@@ -210,13 +201,6 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
                 bRet = pCur->PrepareClose( bUI );
         }
 
-        if ( bRet )
-        {
-            // if this frame has child frames, ask them too
-            for( sal_uInt16 nPos = GetChildFrameCount(); bRet && nPos--; )
-                bRet = (*pChildArr)[ nPos ]->PrepareClose_Impl( bUI );
-        }
-
         pImpl->bPrepClosing = false;
     }
 
@@ -228,17 +212,6 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
 }
 
 
-SfxFrame* SfxFrame::GetChildFrame( sal_uInt16 nPos ) const
-{
-    if ( pChildArr && pChildArr->size() > nPos )
-    {
-        DBG_ASSERT( nPos < pChildArr->size(), "Wrong Index!");
-        return (*pChildArr)[nPos];
-    }
-
-    return nullptr;
-}
-
 bool SfxFrame::IsClosing_Impl() const
 {
     return pImpl->bClosing;
@@ -247,11 +220,6 @@ bool SfxFrame::IsClosing_Impl() const
 void SfxFrame::SetIsClosing_Impl()
 {
     pImpl->bClosing = true;
-}
-
-sal_uInt16 SfxFrame::GetChildFrameCount() const
-{
-    return pChildArr ? pChildArr->size() : 0;
 }
 
 void SfxFrame::CancelTransfers()
@@ -274,11 +242,6 @@ void SfxFrame::CancelTransfers()
             }
         }
 
-        // First stop multiload Frames
-        sal_uInt16 nCount = GetChildFrameCount();
-        for( sal_uInt16 n = 0; n<nCount; n++ )
-            GetChildFrame( n )->CancelTransfers();
-
         //  Check if StarOne-Loader should be canceled
         SfxFrameWeakRef wFrame( this );
         if (wFrame.is())
@@ -297,11 +260,6 @@ bool SfxFrame::IsAutoLoadLocked_Impl() const
     const SfxObjectShell* pObjSh = GetCurrentDocument();
     if ( !pObjSh || !pObjSh->IsAutoLoadLocked() )
         return false;
-
-    // Its children are locked?
-    for ( sal_uInt16 n = GetChildFrameCount(); n--; )
-        if ( !GetChildFrame(n)->IsAutoLoadLocked_Impl() )
-            return false;
 
     // otherwise allow AutoLoad
     return true;
@@ -339,28 +297,14 @@ void SfxFrame::GetViewData_Impl()
     if( pViewFrame && pViewFrame->GetViewShell() )
     {
         SfxItemSet *pSet = GetDescriptor()->GetArgs();
-        bool bGetViewData = false;
         if ( GetController().is() && pSet->GetItemState( SID_VIEW_DATA ) != SfxItemState::SET )
         {
             css::uno::Any aData = GetController()->getViewData();
             pSet->Put( SfxUsrAnyItem( SID_VIEW_DATA, aData ) );
-            bGetViewData = true;
         }
 
         if ( pViewFrame->GetCurViewId() )
             pSet->Put( SfxUInt16Item( SID_VIEW_ID, (sal_uInt16)pViewFrame->GetCurViewId() ) );
-        if ( pChildArr )
-        {
-            // For Framesets also the data from the ChildViews have to be processed
-            sal_uInt16 nCount = pChildArr->size();
-            for ( sal_uInt16 n=nCount; n>0; n--)
-            {
-                SfxFrame* pFrame = (*pChildArr)[n-1];
-                if ( bGetViewData )
-                    pFrame->GetDescriptor()->GetArgs()->ClearItem( SID_VIEW_DATA );
-                pFrame->GetViewData_Impl();
-            }
-        }
     }
 }
 
@@ -435,22 +379,6 @@ void SfxFrame::GetDefaultTargetList(TargetList& rList)
     rList.push_back( OUString( "_parent" ) );
     rList.push_back( OUString( "_blank" ) );
     rList.push_back( OUString( "_self" ) );
-}
-
-void SfxFrame::GetTargetList( TargetList& rList ) const
-{
-    SfxFrame::GetDefaultTargetList(rList);
-
-    SfxViewFrame* pView = GetCurrentViewFrame();
-    if( pView && pView->GetViewShell() && pChildArr )
-    {
-        sal_uInt16 nCount = pChildArr->size();
-        for ( sal_uInt16 n=0; n<nCount; n++)
-        {
-            SfxFrame* pFrame = (*pChildArr)[n];
-            pFrame->GetTargetList( rList );
-        }
-    }
 }
 
 void SfxFrame::InsertTopFrame_Impl( SfxFrame* pFrame )

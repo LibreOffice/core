@@ -73,7 +73,6 @@ class SfxDispatcher;
 namespace tools { class Rectangle; }
 class SfxRequest;
 class SystemWindow;
-class SfxFrameArr_Impl;
 
 typedef ::std::vector<OUString> TargetList;
 
@@ -97,7 +96,6 @@ class SFX2_DLLPUBLIC SfxFrame : public SvCompatWeakBase<SfxFrame>
     friend class SfxFrameWindow_Impl;
 
 private:
-    SfxFrameArr_Impl*   pChildArr;
     std::unique_ptr< SfxFrame_Impl >     pImpl;
     VclPtr<vcl::Window> pWindow;
 
@@ -116,8 +114,6 @@ public:
     vcl::Window&        GetWindow() const { return *pWindow;}
     void                CancelTransfers();
     bool                DoClose();
-    sal_uInt16          GetChildFrameCount() const;
-    SfxFrame*           GetChildFrame( sal_uInt16 nPos ) const;
 
     void                SetPresentationMode( bool bSet );
     SystemWindow*       GetSystemWindow() const;
@@ -130,7 +126,6 @@ public:
 
     sal_uInt32          GetFrameType() const;
     static void         GetDefaultTargetList( TargetList& );
-    void                GetTargetList( TargetList& ) const;
     void                UpdateDescriptor( SfxObjectShell const *pDoc );
     void                Resize();
     const css::uno::Reference< css::frame::XFrame >&

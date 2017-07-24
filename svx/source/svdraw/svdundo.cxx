@@ -264,7 +264,6 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
     : SdrUndoObj(rNewObj)
     , pUndoSet(nullptr)
     , pRedoSet(nullptr)
-    , pRepeatSet(nullptr)
     , mxUndoStyleSheet()
     , mxRedoStyleSheet()
     , bHaveToTakeRedoSet(true)
@@ -311,7 +310,6 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
 {
     delete pUndoSet;
     delete pRedoSet;
-    delete pRepeatSet;
     delete pUndoGroup;
     delete pTextUndo;
     delete pTextRedo;
@@ -519,19 +517,6 @@ OUString SdrUndoAttrObj::GetComment() const
     }
 
     return aStr;
-}
-
-void SdrUndoAttrObj::SdrRepeat(SdrView& rView)
-{
-    if(pRepeatSet)
-    {
-        rView.SetAttrToMarked(*pRepeatSet, false);
-    }
-}
-
-bool SdrUndoAttrObj::CanSdrRepeat(SdrView& rView) const
-{
-    return (pRepeatSet!=nullptr && rView.AreObjectsMarked());
 }
 
 OUString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& /*rView*/) const

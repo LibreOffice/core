@@ -147,7 +147,6 @@ class SVX_DLLPUBLIC SdrUndoAttrObj : public SdrUndoObj
 protected:
     SfxItemSet*                 pUndoSet;
     SfxItemSet*                 pRedoSet;
-    SfxItemSet*                 pRepeatSet;
 
     // FIXME: Or should we better remember the StyleSheetNames?
     rtl::Reference< SfxStyleSheetBase > mxUndoStyleSheet;
@@ -175,9 +174,6 @@ public:
 
     virtual OUString GetComment() const override;
     virtual OUString GetSdrRepeatComment(SdrView& rView) const override;
-
-    virtual void SdrRepeat(SdrView& rView) override;
-    virtual bool CanSdrRepeat(SdrView& rView) const override;
 };
 
 /**

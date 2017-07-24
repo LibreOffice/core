@@ -49,6 +49,8 @@
 #include "DrawDocShell.hxx"
 #include "drawview.hxx"
 #include "sdabstdlg.hxx"
+#include <memory>
+
 namespace sd {
 
 void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
@@ -58,7 +60,7 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
     {
         Graphic     aGraphic;
         ImageMap*   pIMap = nullptr;
-        TargetList* pTargetList = nullptr;
+        std::unique_ptr<TargetList> pTargetList;
         SdIMapInfo* pIMapInfo = SdDrawDocument::GetIMapInfo( pObj );
 
         // get graphic from shape
@@ -69,14 +71,11 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
         if ( pIMapInfo )
         {
             pIMap = const_cast<ImageMap*>(&pIMapInfo->GetImageMap());
-            pTargetList = new TargetList;
-            GetViewFrame()->GetTargetList( *pTargetList );
+            pTargetList.reset(new TargetList);
+            SfxViewFrame::GetTargetList( *pTargetList );
         }
 
-        SvxIMapDlgChildWindow::UpdateIMapDlg( aGraphic, pIMap, pTargetList, pObj );
-
-        // We can delete the target list
-        delete pTargetList;
+        SvxIMapDlgChildWindow::UpdateIMapDlg( aGraphic, pIMap, pTargetList.get(), pObj );
     }
 }
 

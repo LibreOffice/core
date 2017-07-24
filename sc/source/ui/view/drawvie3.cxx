@@ -207,7 +207,7 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
             pImageMap = &pIMapInfo->GetImageMap();
 
         // handle target list
-        pViewData->GetViewShell()->GetViewFrame()->GetTargetList( aTargetList );
+        SfxViewFrame::GetTargetList( aTargetList );
 
         // handle graphics from object
         if ( dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr )
