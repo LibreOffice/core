@@ -216,7 +216,7 @@ namespace xmloff
                         aValue, eValueAttName);
                     break;
                 default:
-                    OSL_FAIL("OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
+                    OSL_FAIL("OPropertyExport::exportRemainingProperties: unsupported sequence type !");
                     break;
             }
         }
