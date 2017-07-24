@@ -96,8 +96,6 @@ EditPaM ImpEditEngine::Read(SvStream& rInput, const OUString& rBaseURL, EETextFo
         aPaM = ReadXML( rInput, rSel );
     else if ( eFormat == EE_FORMAT_HTML )
         aPaM = ReadHTML( rInput, rBaseURL, rSel, pHTTPHeaderAttrs );
-    else if ( eFormat == EE_FORMAT_BIN)
-        aPaM = ReadBin( rInput, rSel );
     else
     {
         OSL_FAIL( "Read: Unknown Format" );
@@ -184,18 +182,6 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const OUString& rBaseURL, Edi
     return xPrsr->GetCurSelection().Max();
 }
 
-EditPaM ImpEditEngine::ReadBin( SvStream& rInput, EditSelection aSel )
-{
-    // Simply abuse a temporary text object ...
-    std::unique_ptr<EditTextObject> xObj(EditTextObject::Create( rInput ));
-
-    EditPaM aLastPaM = aSel.Max();
-    if (xObj)
-        aLastPaM = InsertText( *xObj, aSel ).Max();
-
-    return aLastPaM;
-}
-
 void ImpEditEngine::Write(SvStream& rOutput, EETextFormat eFormat, const EditSelection& rSel)
 {
     if ( !rOutput.IsWritable() )
@@ -211,8 +197,6 @@ void ImpEditEngine::Write(SvStream& rOutput, EETextFormat eFormat, const EditSel
             WriteXML( rOutput, rSel );
         else if ( eFormat == EE_FORMAT_HTML )
             ;
-        else if ( eFormat == EE_FORMAT_BIN)
-            WriteBin( rOutput, rSel );
         else
         {
             OSL_FAIL( "Write: Unknown Format" );
@@ -285,14 +269,6 @@ static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_Int32 
         nAttr++;
         pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
     }
-}
-
-sal_uInt32 ImpEditEngine::WriteBin(SvStream& rOutput, const EditSelection& rSel, bool bStoreUnicodeStrings)
-{
-    std::unique_ptr<EditTextObject> xObj(CreateTextObject(rSel, nullptr));
-    xObj->mpImpl->StoreUnicodeStrings(bStoreUnicodeStrings);
-    xObj->Store(rOutput);
-    return 0;
 }
 
 sal_uInt32 ImpEditEngine::WriteXML(SvStream& rOutput, const EditSelection& rSel)

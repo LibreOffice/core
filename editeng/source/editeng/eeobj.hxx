@@ -28,18 +28,15 @@
 class EditDataObject :  public ::cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
 private:
-    SvMemoryStream  maBinData;
     SvMemoryStream  maRTFData;
     SvMemoryStream  maODFData;
     OUString        maText;
-
     OUString        maOfficeBookmark;
 
 public:
                     EditDataObject();
                     virtual ~EditDataObject() override;
 
-    SvMemoryStream& GetStream() { return maBinData; }
     SvMemoryStream& GetRTFStream() { return maRTFData; }
     SvMemoryStream& GetODFStream() { return maODFData; }
     OUString&       GetString() { return maText; }

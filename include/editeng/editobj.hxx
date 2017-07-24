@@ -92,10 +92,6 @@ public:
 
     EditTextObject* Clone() const;
 
-    void Store( SvStream& rOStream ) const;
-
-    static EditTextObject* Create( SvStream& rIStream );
-
     sal_Int32 GetParagraphCount() const;
 
     OUString GetText(sal_Int32 nPara) const;
