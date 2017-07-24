@@ -31,7 +31,7 @@ class SvXMLImport;
 
 #define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
 
-extern struct SvXMLTokenMapEntry aEmptyMap[1];
+extern const SvXMLTokenMapEntry aEmptyMap[1];
 
 /** handle attributes through an SvXMLTokenMap */
 class TokenContext : public SvXMLImportContext
