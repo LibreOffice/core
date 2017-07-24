@@ -67,7 +67,6 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         bool                    m_bVeto;
         bool                    m_bListenForTermination;
         bool                    m_bSystemDialogs;
-        std::locale*            m_pResLocale;
         sfx2::FileDialogHelper* m_pFileDlg;
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
