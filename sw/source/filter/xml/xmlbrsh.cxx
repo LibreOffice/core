@@ -51,7 +51,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_BGIMG_FILTER,
 };
 
-static SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
+static const SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
 {
     { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
     { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },

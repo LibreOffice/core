@@ -30,7 +30,7 @@
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XAttributeList;
 
-struct SvXMLTokenMapEntry aEmptyMap[1] =
+const SvXMLTokenMapEntry aEmptyMap[1] =
 {
     XML_TOKEN_MAP_END
 };

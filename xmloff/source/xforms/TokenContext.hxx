@@ -21,6 +21,7 @@
 #define INCLUDED_XMLOFF_SOURCE_XFORMS_TOKENCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
+#include <xmloff/xmltkmap.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
@@ -31,7 +32,7 @@ class SvXMLImport;
 
 #define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
 
-extern struct SvXMLTokenMapEntry aEmptyMap[1];
+extern const SvXMLTokenMapEntry aEmptyMap[1];
 
 /** handle attributes through an SvXMLTokenMap */
 class TokenContext : public SvXMLImportContext
