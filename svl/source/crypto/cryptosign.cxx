@@ -2205,7 +2205,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     return true;
 #else
     // Not implemented.
-    (void)aBuffer;
+    (void)aData;
     (void)bNonDetached;
     (void)aSignature;
     (void)rInformation;
