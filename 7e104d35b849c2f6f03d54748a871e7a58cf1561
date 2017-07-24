@@ -1,0 +1,216 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_ab3fde23",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2071,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-24T08:28:38Z",
+      "side": 1,
+      "message": "Why declaration and definition are separate ? \nconst std::string state \u003d pDoc-\u003egetRulerState()\n\nAlso it can be const.",
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_cb3c2a32",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2083,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-24T08:28:38Z",
+      "side": 1,
+      "message": "ditto.",
+      "range": {
+        "startLine": 2083,
+        "startChar": 21,
+        "endLine": 2083,
+        "endChar": 22
+      },
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_8173e1b0",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2717,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-24T08:28:38Z",
+      "side": 1,
+      "message": "As discussed, this looks so disconcerting to me -- using the getCommandValues API to \u0027set\u0027 something.",
+      "range": {
+        "startLine": 2703,
+        "startChar": 7,
+        "endLine": 2717,
+        "endChar": 12
+      },
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a168ddbb",
+        "filename": "include/LibreOfficeKit/LibreOfficeKitEnums.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-24T08:28:38Z",
+      "side": 1,
+      "message": "Don\u0027t forget to add the documentation.",
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c165e9e1",
+        "filename": "include/svx/ruler.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-24T08:28:38Z",
+      "side": 1,
+      "message": "What\u0027s the need of making it a virtual function at all ? You seem to be calling it only from SwRuler\u0027s Update() method. If that is what you want to do it, why have this function in svx ruler at all ?",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 35
+      },
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_4152d914",
+        "filename": "include/vcl/ITiledRenderable.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-24T08:28:38Z",
+      "side": 1,
+      "message": "I\u0027d prefer using OUString as return type of these functions for consistency.",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 5
+      },
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_2174ed9a",
+        "filename": "libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-24T08:28:38Z",
+      "side": 1,
+      "message": "Why have you separated the declaration and definition here ? And it looks like it can be const. Similarly I can see this pattern in other places also",
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_6157d502",
+        "filename": "libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-24T08:28:38Z",
+      "side": 1,
+      "message": "There is a userPromptDialog helper method in gtv-helpers.hxx. Did you have a look at it ? Can\u0027t we use it here somehow ?",
+      "range": {
+        "startLine": 150,
+        "startChar": 3,
+        "endLine": 178,
+        "endChar": 57
+      },
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_815cc126",
+        "filename": "libreofficekit/source/gtk/lokdocview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-24T08:28:38Z",
+      "side": 1,
+      "message": "We should register a new signal with the widget and emit it here to let the LOK clients using this widget know that something has changed.",
+      "range": {
+        "startLine": 1430,
+        "startChar": 6,
+        "endLine": 1430,
+        "endChar": 14
+      },
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_41a019f5",
+        "filename": "svx/source/dialog/svxruler.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3660,
+      "author": {
+        "id": 1000897
+      },
+      "writtenOn": "2017-07-24T08:28:38Z",
+      "side": 1,
+      "message": "Is it really necessary to have this function in svx ruler ?\n\nWhatever information you require I think is publicly inherited by the SwRuler, so you do all the stuff directly from the SwRuler class rather, and that would be best -- not touching these low-level classes and putting all of this LOK logic into sw module itself\n\nSimilarly, if it\u0027s possible to move the ::SetValues function to sw module, I\u0027d prefer that.",
+      "range": {
+        "startLine": 3645,
+        "startChar": 25,
+        "endLine": 3660,
+        "endChar": 41
+      },
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
