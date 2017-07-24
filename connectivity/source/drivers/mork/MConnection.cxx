@@ -390,7 +390,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
 
     if ( _rError.getErrorCondition() != 0 )
     {
-        SQLError aErrorHelper( comphelper::getComponentContext(getDriver()->getFactory()) );
+        SQLError aErrorHelper;
         const OUString& sParameter( _rError.getParameter() );
         if ( !sParameter.isEmpty() )
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );

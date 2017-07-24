@@ -639,7 +639,7 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( OUStringBuffer& rStri
             }
             else
             {
-                SQLError aErrors( ::comphelper::getProcessComponentContext() );
+                SQLError aErrors;
                 aErrors.raiseException( sdb::ErrorCondition::PARSER_CYCLIC_SUB_QUERIES );
             }
         }
@@ -1298,7 +1298,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
 OSQLParser::OSQLParser(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const IParseContext* _pContext)
     :m_pContext(_pContext)
     ,m_pParseTree(nullptr)
-    ,m_pData( new OSQLParser_Data( rxContext ) )
+    ,m_pData( new OSQLParser_Data )
     ,m_nFormatKey(0)
     ,m_nDateFormatKey(0)
     ,m_xContext(rxContext)

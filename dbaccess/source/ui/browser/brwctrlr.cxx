@@ -616,7 +616,7 @@ void SbaXDataBrowserController::onStartLoading( const Reference< XLoadable >& _r
 
 void SbaXDataBrowserController::impl_checkForCannotSelectUnfiltered( const SQLExceptionInfo& _rError )
 {
-    ::connectivity::SQLError aError( getORB() );
+    ::connectivity::SQLError aError;
     ::connectivity::ErrorCode nErrorCode( connectivity::SQLError::getErrorCode( sdb::ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED ) );
     if ( static_cast<const SQLException*>(_rError)->ErrorCode == nErrorCode )
     {

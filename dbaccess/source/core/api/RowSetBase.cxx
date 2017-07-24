@@ -84,7 +84,6 @@ ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu:
     ,m_rBHelper(_rBHelper)
     ,m_pEmptyCollection( nullptr )
     ,m_aContext( _rContext )
-    ,m_aErrors( _rContext )
     ,m_nLastColumnIndex(-1)
     ,m_nDeletedPosition(-1)
     ,m_nResultSetType( ResultSetType::FORWARD_ONLY )

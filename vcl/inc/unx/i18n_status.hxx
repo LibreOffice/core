@@ -50,16 +50,10 @@ public:
 
 class I18NStatus
 {
-public:
-    struct ChoiceData
-    {
-        OUString  aString;
-    };
 private:
     SalFrame*                       m_pParent;
     VclPtr<StatusWindow>            m_pStatusWindow;
     OUString                        m_aCurrentIM;
-    ::std::vector< ChoiceData >     m_aChoices;
 
     I18NStatus();
     ~I18NStatus();
@@ -79,8 +73,6 @@ public:
 
     enum ShowReason { focus, presentation, contextmap };
     void show( bool bShow, ShowReason eReason );
-
-    const ::std::vector< ChoiceData >& getChoices() const { return m_aChoices; }
 
     // External Control:
 
