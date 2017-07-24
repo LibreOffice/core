@@ -108,7 +108,7 @@ class OWriterConnection : public file::OConnection
             cppu::WeakComponentImplHelperBase::disposing();
         }
 
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) throw (::css::uno::RuntimeException, ::std::exception) override
         {
             const bool bShutDown = (rEvent.Source == m_xDesktop);
             if (bShutDown)
