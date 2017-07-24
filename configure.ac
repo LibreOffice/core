@@ -416,7 +416,8 @@ if test -n "$with_android_ndk"; then
     fi
     case "$with_android_ndk_toolchain_version" in
     clang5.0)
-        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.9
+        ANDROID_GCC_TOOLCHAIN_VERSION=4.9
+        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$ANDROID_GCC_TOOLCHAIN_VERSION
         ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm
         ANDROID_USING_CLANG=true
         ;;
@@ -449,8 +450,8 @@ if test -n "$with_android_ndk"; then
         AC_MSG_ERROR([We only support building for Android from Linux or OS X])
         ;;
     esac
-
-    ANDROID_COMPILER_BIN=$ANDROID_COMPILER_DIR/prebuilt/$ndk_build_os-x86/bin
+    ANDROID_CLANG_TOOLCHAIN=$ANDROID_COMPILER_DIR/prebuilt/$ndk_build_os-x86_64
+    ANDROID_COMPILER_BIN=$ANDROID_CLANG_TOOLCHAIN/bin
     ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_BINUTILS_DIR/prebuilt/$ndk_build_os-x86
     if test $build_cpu = x86_64; then
         if test -d $ANDROID_COMPILER_DIR/prebuilt/$ndk_build_os-x86_64; then
@@ -512,6 +513,8 @@ if test -n "$with_android_ndk"; then
         ANDROID_APP_ABI=x86
         ANDROIDCFLAGS="-march=atom -gcc-toolchain $ANDROID_BINUTILS_PREBUILT_ROOT -target i686-none-linux-android"
     fi
+
+    ANDROID_PLATFORM_DIRECTORY=$ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}
     ANDROIDCFLAGS="$ANDROIDCFLAGS -ffunction-sections -fdata-sections"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
     ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot=$ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}"
@@ -581,8 +584,12 @@ if test -n "$with_android_ndk"; then
     # remember to download the ownCloud Android library later
     BUILD_TYPE="$BUILD_TYPE OWNCLOUD_ANDROID_LIB"
 fi
+AC_SUBST(ANDROID_NDK_HOME)
 AC_SUBST(ANDROID_NDK_GDBSERVER)
 AC_SUBST(ANDROID_APP_ABI)
+AC_SUBST(ANDROID_CLANG_TOOLCHAIN)
+AC_SUBST(ANDROID_GCC_TOOLCHAIN_VERSION)
+AC_SUBST(ANDROID_PLATFORM_DIRECTORY)
 
 dnl ===================================================================
 dnl --with-android-sdk
