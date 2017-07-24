@@ -647,6 +647,40 @@ string OOXMLUniversalMeasureValue::toString() const
 }
 #endif
 
+// OOXMLMeasurementOrPercentValue
+// ECMA-376 5th ed. Part 1 , 17.18.107; 17.18.11
+OOXMLMeasurementOrPercentValue::OOXMLMeasurementOrPercentValue(const char * pValue)
+{
+    double val = rtl_str_toDouble(pValue); // will ignore the trailing unit
+
+    int nLen = strlen(pValue);
+    if (nLen > 2 &&
+        pValue[nLen - 1] == '%')
+    {
+        mnValue = static_cast<int>(val * 50);
+    }
+    else
+    {
+        // TODO: also allow units. For that, we need to know
+        // how to represent the number to converter or store
+        // the value in the type as number + unit and have
+        // getter with unit specification
+        mnValue = static_cast<int>(val);
+    }
+}
+
+int OOXMLMeasurementOrPercentValue::getInt() const
+{
+    return mnValue;
+}
+
+#ifdef DEBUG_WRITERFILTER
+string OOXMLMeasurementOrPercentValue::toString() const
+{
+    return OString::number(mnValue).getStr();
+}
+#endif
+
 /*
   class OOXMLShapeValue
  */
