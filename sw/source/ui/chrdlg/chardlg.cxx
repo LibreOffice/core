@@ -174,8 +174,7 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     m_pNotVisitedLB->SaveValue();
 
     std::unique_ptr<TargetList> pList( new TargetList );
-    const SfxFrame& rFrame = pView->GetViewFrame()->GetFrame();
-    rFrame.GetTargetList(*pList);
+    SfxFrame::GetDefaultTargetList(*pList);
     if ( !pList->empty() )
     {
         size_t nCount = pList->size();

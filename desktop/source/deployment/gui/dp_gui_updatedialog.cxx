@@ -224,7 +224,6 @@ private:
     uno::Reference< task::XInteractionHandler > m_xInteractionHdl;
 
     // guarded by Application::GetSolarMutex():
-    uno::Reference< task::XAbortChannel > m_abort;
     bool m_stop;
 };
 
@@ -250,14 +249,9 @@ UpdateDialog::Thread::Thread(
 }
 
 void UpdateDialog::Thread::stop() {
-    uno::Reference< task::XAbortChannel > abort;
     {
         SolarMutexGuard g;
-        abort = m_abort;
         m_stop = true;
-    }
-    if (abort.is()) {
-        abort->sendAbort();
     }
     m_updateInformation->cancel();
 }
