@@ -178,9 +178,9 @@ inline void Scheduler::UpdateSystemTimer( ImplSchedulerContext &rSchedCtx,
 {
     if ( InfiniteTimeoutMs == nMinPeriod )
     {
+        SAL_INFO("vcl.schedule", "  Stopping system timer");
         if ( rSchedCtx.mpSalTimer )
             rSchedCtx.mpSalTimer->Stop();
-        SAL_INFO("vcl.schedule", "  Stopping system timer");
         rSchedCtx.mnTimerPeriod = nMinPeriod;
     }
     else
@@ -205,9 +205,13 @@ static inline void AppendSchedulerData( ImplSchedulerContext &rSchedCtx,
 
 static inline ImplSchedulerData* DropSchedulerData(
     ImplSchedulerContext &rSchedCtx, ImplSchedulerData * const pPrevSchedulerData,
-                                     ImplSchedulerData * const pSchedulerData )
+                                     const ImplSchedulerData * const pSchedulerData )
 {
-    assert( !pPrevSchedulerData || (pPrevSchedulerData->mpNext == pSchedulerData) );
+    assert( pSchedulerData );
+    if ( pPrevSchedulerData )
+        assert( pPrevSchedulerData->mpNext == pSchedulerData );
+    else
+        assert( rSchedCtx.mpFirstSchedulerData == pSchedulerData );
 
     ImplSchedulerData * const pSchedulerDataNext = pSchedulerData->mpNext;
     if ( pPrevSchedulerData )
@@ -312,7 +316,7 @@ next_entry:
     if ( pMostUrgent )
     {
         SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                  << pMostUrgent << "  invoke     " << *pMostUrgent->mpTask );
+                  << pMostUrgent << "  invoke-in  " << *pMostUrgent->mpTask );
 
         Task *pTask = pMostUrgent->mpTask;
 
@@ -327,6 +331,9 @@ next_entry:
         pMostUrgent->mbInScheduler = true;
         pTask->Invoke();
         pMostUrgent->mbInScheduler = false;
+
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
+                  << pMostUrgent << "  invoke-out" );
 
         // eventually pop the scheduler stack
         // this just happens for nested calls, which renders all accounting
