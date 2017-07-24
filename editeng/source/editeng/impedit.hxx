@@ -630,11 +630,9 @@ private:
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadXML( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadHTML( SvStream& rInput, const OUString& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs );
-    EditPaM             ReadBin( SvStream& rInput, EditSelection aSel );
     ErrCode             WriteText( SvStream& rOutput, EditSelection aSel );
     ErrCode             WriteRTF( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteXML(SvStream& rOutput, const EditSelection& rSel);
-    sal_uInt32          WriteBin(SvStream& rOutput, const EditSelection& rSel, bool bStoreUnicode = false);
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,
                             std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );

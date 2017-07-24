@@ -393,28 +393,6 @@ SvtScriptType EditTextObject::GetScriptType() const
 }
 
 
-void EditTextObject::Store( SvStream& rOStream ) const
-{
-    if ( rOStream.GetError() )
-        return;
-
-    sal_uInt64 const nStartPos = rOStream.Tell();
-
-    sal_uInt16 nWhich = static_cast<sal_uInt16>(EE_FORMAT_BIN);
-    rOStream.WriteUInt16( nWhich );
-
-    sal_uInt32 nStructSz = 0;
-    rOStream.WriteUInt32( nStructSz );
-
-    mpImpl->StoreData(rOStream);
-
-    sal_uInt64 const nEndPos = rOStream.Tell();
-    nStructSz = nEndPos - nStartPos - sizeof( nWhich ) - sizeof( nStructSz );
-    rOStream.Seek( nStartPos + sizeof( nWhich ) );
-    rOStream.WriteUInt32( nStructSz );
-    rOStream.Seek( nEndPos );
-}
-
 EditTextObject* EditTextObject::Create( SvStream& rIStream )
 {
     sal_uInt64 const nStartPos = rIStream.Tell();
