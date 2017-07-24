@@ -52,7 +52,8 @@ enum class ResourceType {
     Math,
     Any,
     TwipsMeasure,
-    HpsMeasure
+    HpsMeasure,
+    MeasurementOrPercent
 };
 
 struct AttributeInfo
