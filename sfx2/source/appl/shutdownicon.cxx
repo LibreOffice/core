@@ -206,7 +206,6 @@ ShutdownIcon::ShutdownIcon( const css::uno::Reference< XComponentContext > & rxC
     m_bVeto ( false ),
     m_bListenForTermination ( false ),
     m_bSystemDialogs( false ),
-    m_pResLocale( nullptr ),
     m_pFileDlg( nullptr ),
     m_xContext( rxContext ),
     m_bInitialized( false )
@@ -541,12 +540,7 @@ ShutdownIcon* ShutdownIcon::createInstance()
 
 void ShutdownIcon::init()
 {
-    // access resource system and sfx only protected by solarmutex
-    ::SolarMutexGuard aSolarGuard;
-    std::locale *pResLocale = SfxResLocale::GetResLocale();
-
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
-    m_pResLocale = pResLocale;
     aGuard.clear();
     css::uno::Reference < XDesktop2 > xDesktop = Desktop::create( m_xContext );
     aGuard.reset();
