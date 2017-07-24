@@ -255,62 +255,62 @@
         <Month>
           <MonthID>jan</MonthID>
           <DefaultAbbrvName>janv.</DefaultAbbrvName>
-          <DefaultFullName>janvier</DefaultFullName>
+          <DefaultFullName>Janvier</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
           <DefaultAbbrvName>févr.</DefaultAbbrvName>
-          <DefaultFullName>février</DefaultFullName>
+          <DefaultFullName>Février</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
           <DefaultAbbrvName>mars</DefaultAbbrvName>
-          <DefaultFullName>mars</DefaultFullName>
+          <DefaultFullName>Mars</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
           <DefaultAbbrvName>avr.</DefaultAbbrvName>
-          <DefaultFullName>avril</DefaultFullName>
+          <DefaultFullName>Avril</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
           <DefaultAbbrvName>mai</DefaultAbbrvName>
-          <DefaultFullName>mai</DefaultFullName>
+          <DefaultFullName>Mai</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
           <DefaultAbbrvName>juin</DefaultAbbrvName>
-          <DefaultFullName>juin</DefaultFullName>
+          <DefaultFullName>Juin</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
           <DefaultAbbrvName>juil.</DefaultAbbrvName>
-          <DefaultFullName>juillet</DefaultFullName>
+          <DefaultFullName>Juillet</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
           <DefaultAbbrvName>août</DefaultAbbrvName>
-          <DefaultFullName>août</DefaultFullName>
+          <DefaultFullName>Août</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
           <DefaultAbbrvName>sept.</DefaultAbbrvName>
-          <DefaultFullName>septembre</DefaultFullName>
+          <DefaultFullName>Septembre</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
           <DefaultAbbrvName>oct.</DefaultAbbrvName>
-          <DefaultFullName>octobre</DefaultFullName>
+          <DefaultFullName>Octobre</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
           <DefaultAbbrvName>nov.</DefaultAbbrvName>
-          <DefaultFullName>novembre</DefaultFullName>
+          <DefaultFullName>Novembre</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
           <DefaultAbbrvName>déc.</DefaultAbbrvName>
-          <DefaultFullName>décembre</DefaultFullName>
+          <DefaultFullName>Décembre</DefaultFullName>
         </Month>
       </MonthsOfYear>
       <Eras>
