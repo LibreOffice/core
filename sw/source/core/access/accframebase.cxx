@@ -82,7 +82,7 @@ void SwAccessibleFrameBase::GetStates(
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
-        assert(bIsSelected && "bSelected out of sync");
+        assert(m_bIsSelected && "bSelected out of sync");
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
@@ -128,14 +128,14 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
         sal_Int16 nInitRole,
         const SwFlyFrame* pFlyFrame  ) :
     SwAccessibleContext( pInitMap, nInitRole, pFlyFrame ),
-    bIsSelected( false )
+    m_bIsSelected( false )
 {
     const SwFrameFormat *pFrameFormat = pFlyFrame->GetFormat();
     const_cast< SwFrameFormat * >( pFrameFormat )->Add( this );
 
     SetName( pFrameFormat->GetName() );
 
-    bIsSelected = IsSelected();
+    m_bIsSelected = IsSelected();
 }
 
 void SwAccessibleFrameBase::InvalidateCursorPos_()
@@ -145,8 +145,8 @@ void SwAccessibleFrameBase::InvalidateCursorPos_()
 
     {
         osl::MutexGuard aGuard( m_Mutex );
-        bOldSelected = bIsSelected;
-        bIsSelected = bNewSelected;
+        bOldSelected = m_bIsSelected;
+        m_bIsSelected = bNewSelected;
     }
 
     if( bNewSelected )
@@ -191,7 +191,7 @@ void SwAccessibleFrameBase::InvalidateFocus_()
 
         {
             osl::MutexGuard aGuard( m_Mutex );
-            bSelected = bIsSelected;
+            bSelected = m_bIsSelected;
         }
         assert(bSelected && "focus object should be selected");
 
@@ -203,7 +203,7 @@ void SwAccessibleFrameBase::InvalidateFocus_()
 bool SwAccessibleFrameBase::HasCursor()
 {
     osl::MutexGuard aGuard( m_Mutex );
-    return bIsSelected;
+    return m_bIsSelected;
 }
 
 SwAccessibleFrameBase::~SwAccessibleFrameBase()
