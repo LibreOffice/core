@@ -31,6 +31,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -114,6 +117,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -126,6 +130,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::graphic;
 using namespace ::xmloff;
 using namespace ::xmloff::token;
 
@@ -3069,9 +3074,24 @@ void XMLTextParagraphExport::_exportTextGraphic(
     // draw:filter-name
     OUString sGrfFilter;
     rPropSet->getPropertyValue( sGraphicFilter ) >>= sGrfFilter;
+
     if( !sGrfFilter.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_FILTER_NAME,
                                   sGrfFilter );
+
+
+    // Creat the graphic to retrieve the mimetype from it
+    Reference< XGraphicProvider > xProvider = css::graphic::GraphicProvider::create(comphelper::getProcessComponentContext());
+    Sequence< PropertyValue > aMediaProperties( 1 );
+    aMediaProperties[0].Name = "URL";
+    aMediaProperties[0].Value <<= sOrigURL;
+    Reference< XGraphic > xGraphic( xProvider->queryGraphic( aMediaProperties ) );
+
+    // Add mimetype to make it easier for readers to get the base64 image type right.
+    OUString aSourceMimeType;
+    Reference< XPropertySet > xGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
+    if ( xGraphicPropertySet->getPropertyValue( "MimeType" ) >>= aSourceMimeType )
+        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, "mimetype", aSourceMimeType);
 
     {
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_DRAW,
