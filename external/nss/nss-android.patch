@@ -1,0 +1,250 @@
+--- a/nss.org/nspr/config/config.mk	2017-08-14 18:58:33.560407294 +0530
++++ b/nss/nspr/config/config.mk	2017-08-14 18:59:34.319025410 +0530
+@@ -42,6 +42,13 @@
+ 
+ LDFLAGS		= $(OS_LDFLAGS)
+ 
++# When targeting Android, add HOST_CFLAGS to CC flags
++# It is mandatory when using Clang toolchain in NDK
++# See autoconf.mk in nspr/out/config/ for the values.
++ifeq ($(OS_TARGET),Android)
++CC += $(OS_CFLAGS)
++endif
++
+ # Enable profile-guided optimization
+ ifndef NO_PROFILE_GUIDED_OPTIMIZE
+ ifdef MOZ_PROFILE_GENERATE
+--- a/nss.org/nspr/config/Makefile.in	2017-08-14 18:58:33.560407294 +0530
++++ b/nss/nspr/config/Makefile.in	2017-08-14 18:59:34.319025410 +0530
+@@ -76,6 +76,7 @@
+ 
+ include $(topsrcdir)/config/rules.mk
+ 
++ifneq ($(OS_TARGET),Android)
+ PROGS	= $(OBJDIR)/now$(PROG_SUFFIX)
+ 
+ ifeq (,$(CROSS_COMPILE)$(filter-out OS2 WINNT,$(OS_ARCH)))
+@@ -88,6 +89,7 @@
+ TARGETS = $(PROGS) $(PLSRCS:.pl=)
+ endif
+ endif
++endif
+ 
+ OUTOPTION = -o # end of the line
+ ifeq (,$(filter-out WINNT WIN95 WINCE,$(OS_TARGET)))
+--- a/nss.org/nspr/configure	2017-08-14 18:58:33.544407658 +0530
++++ b/nss/nspr/configure	2017-08-14 18:59:34.319025410 +0530
+@@ -2509,7 +2509,9 @@
+ OBJDIR='$(OBJDIR_NAME)'
+ OBJDIR_NAME=.
+ OBJDIR_SUFFIX=OBJ
+-NSINSTALL='$(MOD_DEPTH)/config/$(OBJDIR_NAME)/nsinstall'
++if [ -z "$NSINSTALL" ]; then
++  NSINSTALL='$(MOD_DEPTH)/config/$(OBJDIR_NAME)/nsinstall'
++fi
+ NOSUCHFILE=/no-such-file
+ LIBNSPR='-L$(dist_libdir) -lnspr$(MOD_MAJOR_VERSION)'
+ LIBPLC='-L$(dist_libdir) -lplc$(MOD_MAJOR_VERSION)'
+@@ -2643,7 +2645,7 @@
+ 
+ case "$target" in
+ arm-linux*-android*|*-linuxandroid*)
+-    android_tool_prefix="arm-linux-androideabi"
++    android_tool_prefix="clang"
+     ;;
+ i?86-*android*)
+     android_tool_prefix="i686-linux-android"
+@@ -2737,18 +2739,19 @@
+     esac
+ 
+         AS="$android_toolchain"/bin/"$android_tool_prefix"-as
+-    CC="$android_toolchain"/bin/"$android_tool_prefix"-gcc
+-    CXX="$android_toolchain"/bin/"$android_tool_prefix"-g++
+-    CPP="$android_toolchain"/bin/"$android_tool_prefix"-cpp
++    CC="$android_toolchain"/bin/"$android_tool_prefix"
++    CXX="$android_toolchain"/bin/"$android_tool_prefix"++
++    CPP="$CC" -E
+     LD="$android_toolchain"/bin/"$android_tool_prefix"-ld
+     AR="$android_toolchain"/bin/"$android_tool_prefix"-ar
+     RANLIB="$android_toolchain"/bin/"$android_tool_prefix"-ranlib
+     STRIP="$android_toolchain"/bin/"$android_tool_prefix"-strip
+ 
+     CPPFLAGS="-I$android_platform/usr/include $CPPFLAGS"
+-    CFLAGS="-mandroid -I$android_platform/usr/include -fno-short-enums -fno-exceptions $CFLAGS"
+-    CXXFLAGS="-mandroid -I$android_platform/usr/include -fpic -fno-short-enums -fno-exceptions $CXXFLAGS"
+-    LDFLAGS="-mandroid -L$android_platform/usr/lib -Wl,-rpath-link=$android_platform/usr/lib --sysroot=$android_platform $LDFLAGS"
++    CFLAGS="-gcc-toolchain "$android_ndk"/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64"
++    CFLAGS="$CFLAGS -target armv7-none-linux-androideabi"
++    CFLAGS="$CFLAGS --sysroot=$android_platform"
++    CXXFLAGS="-I$android_platform/usr/include -fpic -fno-short-enums -fno-exceptions $CXXFLAGS"
+ 
+     $as_echo "#define ANDROID 1" >>confdefs.h
+ 
+@@ -5954,7 +5957,7 @@
+   CFLAGS="$_SAVE_CFLAGS"
+ fi
+ 
+-all_flags=`echo $arch_flag $thumb_flag $thumb_interwork_flag $fpu_flag $float_abi_flag $soft_float_flag $align_flag`
++all_flags=`echo -target armv7-none-linux-androideabi $arch_flag $thumb_flag $thumb_interwork_flag $fpu_flag $float_abi_flag $soft_float_flag $align_flag`
+ if test -n "$all_flags"; then
+     _SAVE_CFLAGS="$CFLAGS"
+     CFLAGS="$all_flags"
+--- a/nss.org/nss/coreconf/arch.mk	2017-08-14 18:58:33.596406475 +0530
++++ b/nss/nss/coreconf/arch.mk	2017-08-14 18:59:34.319025410 +0530
+@@ -237,7 +237,7 @@
+    OS_TEST := arm
+    OS_ARCH = Android
+    ifndef OS_TARGET_RELEASE
+-	OS_TARGET_RELEASE := 8
++	OS_TARGET_RELEASE := 15
+    endif
+ endif
+ 
+--- a/nss.org/nss/coreconf/Linux.mk	2017-08-14 18:58:33.596406475 +0530
++++ b/nss/nss/coreconf/Linux.mk	2017-08-14 19:00:20.201982027 +0530
+@@ -33,16 +33,17 @@
+ 	ANDROID_TARGET=$(ANDROID_PREFIX)-$(ANDROID_TOOLCHAIN_VERSION)
+ 	# should autodetect which linux we are on, currently android only
+ 	# supports linux-x86 prebuilts
+-	ANDROID_TOOLCHAIN=$(ANDROID_NDK)/toolchains/$(ANDROID_TARGET)/prebuilt/linux-x86
++	ANDROID_GCC_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_TARGET)/prebuilt/linux-x86_64
++	ANDROID_TOOLCHAIN=$(ANDROID_NDK)/toolchains/llvm/prebuilt/linux-x86_64
+ 	ANDROID_SYSROOT=$(ANDROID_NDK)/platforms/android-$(OS_TARGET_RELEASE)/arch-$(OS_TEST)
+-	ANDROID_CC=$(ANDROID_TOOLCHAIN)/bin/$(ANDROID_PREFIX)-gcc
+-	ANDROID_CCC=$(ANDROID_TOOLCHAIN)/bin/$(ANDROID_PREFIX)-g++
++	ANDROID_CC=$(ANDROID_TOOLCHAIN)/bin/clang
++	ANDROID_CCC=$(ANDROID_TOOLCHAIN)/bin/clang++
+         NSS_DISABLE_GTESTS=1
+ # internal tools need to be built with the native compiler
+ ifndef INTERNAL_TOOLS
+-	CC = $(ANDROID_CC) --sysroot=$(ANDROID_SYSROOT)
++	CC = $(ANDROID_CC) --gcc-toolchain=$(ANDROID_GCC_TOOLCHAIN) -target armv7-none-linux-androideabi --sysroot=$(ANDROID_SYSROOT) 
+ 	CCC = $(ANDROID_CCC) --sysroot=$(ANDROID_SYSROOT)
+-	DEFAULT_COMPILER=$(ANDROID_PREFIX)-gcc
++	DEFAULT_COMPILER=clang
+ 	ARCHFLAG = --sysroot=$(ANDROID_SYSROOT)
+ 	DEFINES += -DNO_SYSINFO -DNO_FORK_CHECK -DANDROID
+ 	CROSS_COMPILE = 1
+--- a/nss.org/nss/coreconf/Makefile	2017-08-14 18:58:33.596406475 +0530
++++ b/nss/nss/coreconf/Makefile	2017-08-14 18:59:34.319025410 +0530
+@@ -7,7 +7,9 @@
+ 
+ MODULE		= coreconf
+ 
++ifneq ($(OS_TARGET),Android)
+ DIRS		= nsinstall
++endif
+ 
+ include $(DEPTH)/coreconf/config.mk
+ include $(DEPTH)/coreconf/rules.mk
+--- a/nss.org/nss/coreconf/UNIX.mk	2017-08-14 18:58:33.596406475 +0530
++++ b/nss/nss/coreconf/UNIX.mk	2017-08-14 18:59:34.319025410 +0530
+@@ -24,7 +24,6 @@
+ NSINSTALL      = $(BUILD_TREE)/nss/nsinstall
+ else
+ NSINSTALL_DIR  = $(CORE_DEPTH)/coreconf/nsinstall
+-NSINSTALL      = $(NSINSTALL_DIR)/$(OBJDIR_NAME)/nsinstall
+ endif
+ 
+ MKDEPEND_DIR    = $(CORE_DEPTH)/coreconf/mkdepend
+--- a/nss.org/nss/coreconf/Werror.mk	2017-08-14 18:58:33.596406475 +0530
++++ b/nss/nss/coreconf/Werror.mk	2017-08-14 18:59:34.319025410 +0530
+@@ -52,9 +52,6 @@
+ 
+     WARNING_CFLAGS = -Wall
+     ifdef CC_IS_CLANG
+-      # -Qunused-arguments : clang objects to arguments that it doesn't understand
+-      #    and fixing this would require rearchitecture
+-      WARNING_CFLAGS += -Qunused-arguments
+       # -Wno-parentheses-equality : because clang warns about macro expansions
+       WARNING_CFLAGS += $(call disable_warning,parentheses-equality)
+       ifdef BUILD_OPT
+--- a/nss.org/nss/lib/freebl/unix_rand.c	2017-08-14 18:58:33.632405656 +0530
++++ b/nss/nss/lib/freebl/unix_rand.c	2017-08-14 18:59:34.319025410 +0530
+@@ -682,6 +682,7 @@ RNG_GetNoise(void *buf, size_t maxbytes)
+     return n;
+ }
+ 
++#ifndef __ANDROID__
+ #define SAFE_POPEN_MAXARGS 10 /* must be at least 2 */
+ 
+ /*
+@@ -809,6 +810,7 @@ safe_pclose(FILE *fp)
+ 
+     return status;
+ }
++#endif
+ 
+ #ifdef DARWIN
+ #include <TargetConditionals.h>
+@@ -820,12 +822,16 @@ safe_pclose(FILE *fp)
+ /* Fork netstat to collect its output by default. Do not unset this unless
+  * another source of entropy is available
+  */
++#ifndef __ANDROID__
+ #define DO_NETSTAT 1
++#endif
+ 
+ void
+ RNG_SystemInfoForRNG(void)
+ {
++    #ifndef __ANDROID__
+     FILE *fp;
++    #endif
+     char buf[BUFSIZ];
+     size_t bytes;
+     const char *const *cp;
+@@ -860,11 +866,13 @@ RNG_SystemInfoForRNG(void)
+     };
+ #endif
+ 
++#ifndef __ANDROID__
+ #if defined(BSDI)
+     static char netstat_ni_cmd[] = "netstat -nis";
+ #else
+     static char netstat_ni_cmd[] = "netstat -ni";
+ #endif
++#endif
+ 
+     GiveSystemInfo();
+ 
+@@ -890,7 +898,10 @@ RNG_SystemInfoForRNG(void)
+     if (gethostname(buf, sizeof(buf)) == 0) {
+         RNG_RandomUpdate(buf, strlen(buf));
+     }
++
++    #ifndef __ANDROID__
+     GiveSystemInfo();
++    #endif
+ 
+     /* grab some data from system's PRNG before any other files. */
+     bytes = RNG_FileUpdate("/dev/urandom", SYSTEM_RNG_SEED_COUNT);
+@@ -939,8 +950,10 @@ RNG_SystemInfoForRNG(void)
+  * and for Solaris 8 we have the libkstat interface, so we don't need to
+  * fork netstat.
+  */
+-
++#ifndef __ANDROID__
+ #undef DO_NETSTAT
++#endif
++
+     if (!bytes) {
+         /* On Solaris 8, /dev/urandom isn't available, so we use libkstat. */
+         PRUint32 kstat_bytes = 0;
+@@ -952,6 +965,7 @@ RNG_SystemInfoForRNG(void)
+     }
+ #endif
+ 
++#ifndef __ANDROID__
+ #ifdef DO_NETSTAT
+     fp = safe_popen(netstat_ni_cmd);
+     if (fp != NULL) {
+@@ -960,6 +974,7 @@ RNG_SystemInfoForRNG(void)
+         safe_pclose(fp);
+     }
+ #endif
++#endif
+ }
+ 
+ #define TOTAL_FILE_LIMIT 1000000 /* one million */
+ 
