@@ -1430,6 +1430,8 @@ int Desktop::Main()
                 officecfg::Office::Update::Update::OldBuildID::set(aBuildID, batch);
                 officecfg::Office::Update::Update::UpdateRunning::set(true, batch);
                 batch->commit();
+                // avoid the old oosplash staying around
+                CloseSplashScreen();
                 update();
             }
             else if (isTimeForUpdateCheck())
