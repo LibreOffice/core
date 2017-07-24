@@ -64,11 +64,6 @@ class LocalNameApproval : public IContainerApprove
     ::connectivity::SQLError    m_aErrors;
 
 public:
-    explicit LocalNameApproval( const Reference< XComponentContext >& _rxContext )
-        :m_aErrors( _rxContext )
-    {
-    }
-
     void SAL_CALL   approveElement( const OUString& _rName, const Reference< XInterface >& _rxElement ) override;
 };
 
@@ -96,7 +91,7 @@ ODocumentContainer::ODocumentContainer(const Reference< XComponentContext >& _xO
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
                     &m_pImpl->m_aProps.aTitle, cppu::UnoType<decltype(m_pImpl->m_aProps.aTitle)>::get());
 
-    setElementApproval( PContainerApprove( new LocalNameApproval ( _xORB ) ) );
+    setElementApproval( PContainerApprove( new LocalNameApproval ) );
 }
 
 ODocumentContainer::~ODocumentContainer()

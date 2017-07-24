@@ -60,29 +60,15 @@ namespace
 
 ResData::ResData( const OString &rGId )
     :
-    nIdLevel( IdLevel::Null ),
-    bChild( false ),
-    bChildWithText( false ),
-    bText( false ),
-    bQuickHelpText( false ),
-    bTitle( false ),
-    sGId( rGId ),
-    sTextTyp( "Text" )
+    sGId( rGId )
 {
     sGId = sGId.replaceAll("\r", OString());
 }
 
 ResData::ResData( const OString &rGId, const OString &rFilename)
     :
-    nIdLevel( IdLevel::Null ),
-    bChild( false ),
-    bChildWithText( false ),
-    bText( false ),
-    bQuickHelpText( false ),
-    bTitle( false ),
     sGId( rGId ),
-    sFilename( rFilename ),
-    sTextTyp( "Text" )
+    sFilename( rFilename )
 {
     sGId = sGId.replaceAll("\r", OString());
 }
@@ -197,11 +183,8 @@ MergeDataHashMap::iterator const & MergeDataHashMap::find(const OString& rKey)
 // class MergeData
 
 
-MergeData::MergeData(const OString &rGID,
-    const OString &rLID )
-    : sGID( rGID ),
-    sLID( rLID ) ,
-    pMergeEntrys( new MergeEntrys() )
+MergeData::MergeData()
+    : pMergeEntrys( new MergeEntrys() )
 {
 }
 
@@ -407,7 +390,7 @@ void MergeDataFile::InsertEntry(
 
     if( !pData )
     {
-        pData = new MergeData( rGID, rLID );
+        pData = new MergeData;
         aMap.insert( sKey, pData );
     }
 

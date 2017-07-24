@@ -67,7 +67,6 @@ OContentHelper::OContentHelper(const Reference< XComponentContext >& _xORB
     ,m_aPropertyChangeListeners(m_aMutex)
     ,m_xParentContainer( _xParentContainer )
     ,m_aContext( _xORB )
-    ,m_aErrorHelper( m_aContext )
     ,m_pImpl(_pImpl)
     ,m_nCommandId(0)
 {

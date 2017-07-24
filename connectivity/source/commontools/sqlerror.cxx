@@ -56,7 +56,7 @@ namespace connectivity
     class SQLError_Impl
     {
     public:
-        explicit SQLError_Impl( const Reference<XComponentContext> & _rxContext );
+        explicit SQLError_Impl();
 
         // versions of the public SQLError methods which are just delegated to this impl-class
         static const OUString& getMessagePrefix();
@@ -86,14 +86,11 @@ namespace connectivity
 
     private:
         ::osl::Mutex                                            m_aMutex;
-        Reference<XComponentContext>                            m_aContext;
         std::unique_ptr<std::locale>                            m_xResources;
         bool                                                    m_bAttemptedInit;
     };
 
-    SQLError_Impl::SQLError_Impl( const Reference<XComponentContext> & _rxContext )
-        :m_aContext( _rxContext )
-        ,m_bAttemptedInit( false )
+    SQLError_Impl::SQLError_Impl() : m_bAttemptedInit( false )
     {
     }
 
@@ -276,8 +273,8 @@ namespace connectivity
         return m_xResources.get() != nullptr;
     }
 
-    SQLError::SQLError( const Reference<XComponentContext> & _rxContext )
-        :m_pImpl( new SQLError_Impl( _rxContext ) )
+    SQLError::SQLError()
+        :m_pImpl( new SQLError_Impl )
     {
     }
 

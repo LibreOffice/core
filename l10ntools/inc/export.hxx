@@ -72,28 +72,12 @@ public:
     ResData( const OString &rGId , const OString &rFilename );
     bool SetId(const OString &rId, IdLevel nLevel);
 
-    IdLevel nIdLevel;
-    bool bChild;
-    bool bChildWithText;
-
-    bool bText;
-    bool bQuickHelpText;
-    bool bTitle;
-
     OString sResTyp;
     OString sId;
     OString sGId;
     OString sFilename;
 
     OStringHashMap sText;
-
-    OStringHashMap sQuickHelpText;
-
-    OStringHashMap sTitle;
-
-    OString sTextTyp;
-
-    ExportList  m_aList;
 };
 
 
@@ -116,27 +100,7 @@ class ParserQueue;
 class Export
 {
 private:
-    union
-    {
-        std::ofstream* mSimple;
-        PoOfstream* mPo;
-
-    } aOutput;
-
-    ResStack aResStack;                 ///< stack for parsing recursive
-
-    bool bDefine;                       // cur. res. in a define?
-    bool bNextMustBeDefineEOL;          ///< define but no \ at lineend
-    std::size_t nLevel; // res. recursive? how deep?
-    ExportListType nList;                       ///< cur. res. is List
-    std::size_t nListLevel;
-    bool bMergeMode;
-    OString sMergeSrc;
     bool bError;                        // any errors while export?
-    bool bReadOver;
-    OString sFilename;
-
-    std::vector<OString> aLanguages;
 
     ParserQueue* pParseQueue;
 
@@ -277,13 +241,11 @@ class MergeData
     friend class MergeDataHashMap;
 
 public:
-    OString sGID;
-    OString sLID;
     std::unique_ptr<MergeEntrys> pMergeEntrys;
 private:
     MergeDataHashMap::iterator m_aNextData;
 public:
-    MergeData( const OString &rGID, const OString &rLID );
+    MergeData();
     ~MergeData();
     MergeEntrys* GetMergeEntries() { return pMergeEntrys.get();}
 
@@ -343,21 +305,10 @@ public:
     ~ParserQueue();
 
     inline void Push( const QueueEntry& aEntry );
-    bool bCurrentIsM;  // public ?
-    bool bNextIsM;   // public ?
-    bool bLastWasM;   // public ?
-    bool bMflag;   // public ?
 
     void Close();
 private:
-    std::queue<QueueEntry>* aQueueNext;
-    std::queue<QueueEntry>* aQueueCur;
-
-    Export& aExport;
-    bool bStart;
-
     inline void Pop( std::queue<QueueEntry>& aQueue );
-
 };
 #endif // INCLUDED_L10NTOOLS_INC_EXPORT_HXX
 

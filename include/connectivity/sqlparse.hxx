@@ -113,11 +113,6 @@ namespace connectivity
     {
         css::lang::Locale               aLocale;
         ::connectivity::SQLError        aErrors;
-
-        OSQLParser_Data( const css::uno::Reference< css::uno::XComponentContext >& _rxContext )
-            :aErrors( _rxContext )
-        {
-        }
     };
 
     /** Parser for SQL92

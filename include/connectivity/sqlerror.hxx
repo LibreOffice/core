@@ -78,7 +78,7 @@ namespace connectivity
 
 
     public:
-        explicit        SQLError( const css::uno::Reference< css::uno::XComponentContext > & _rxContext );
+                        SQLError();
                         ~SQLError();
 
         /** returns the message associated with a given error condition, after (optionally) replacing
