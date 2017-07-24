@@ -65,14 +65,6 @@ BitmapEx GalleryResGetBitmapEx(const OUString &rId)
     return aBmpEx;
 }
 
-IMPL_STATIC_LINK(
-    SgaUserDataFactory, MakeUserData, SdrObjUserDataCreatorParams, aParams, SdrObjUserData* )
-{
-    if ( aParams.nInventor == SdrInventor::SgaImap && aParams.nObjIdentifier == ID_IMAPINFO )
-        return new SgaIMapInfo;
-    return nullptr;
-}
-
 GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
                              OUString& rFilterName, bool bShowProgress )
 {

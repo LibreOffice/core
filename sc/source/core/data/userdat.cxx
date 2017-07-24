@@ -21,31 +21,6 @@
 #include "drwlayer.hxx"
 #include "rechead.hxx"
 
-ScDrawObjFactory::ScDrawObjFactory()
-{
-    SdrObjFactory::InsertMakeUserDataHdl( LINK ( this, ScDrawObjFactory, MakeUserData ) );
-}
-
-ScDrawObjFactory::~ScDrawObjFactory()
-{
-    SdrObjFactory::RemoveMakeUserDataHdl( LINK ( this, ScDrawObjFactory, MakeUserData ) );
-}
-
-IMPL_STATIC_LINK(
-    ScDrawObjFactory, MakeUserData, SdrObjUserDataCreatorParams, aParams, SdrObjUserData* )
-{
-    if ( aParams.nInventor == SdrInventor::ScOrSwDraw )
-    {
-        if ( aParams.nObjIdentifier == SC_UD_OBJDATA )
-            return new ScDrawObjData;
-        else if ( aParams.nObjIdentifier == SC_UD_IMAPDATA )
-            return new ScIMapInfo;
-        else if ( aParams.nObjIdentifier == SC_UD_MACRODATA )
-            return new ScMacroInfo;
-        OSL_FAIL("MakeUserData: wrong ID");
-    }
-    return nullptr;
-}
 
 ScDrawObjData::ScDrawObjData() :
     SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_OBJDATA ),

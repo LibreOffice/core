@@ -115,15 +115,6 @@ public:
     const ImageMap&         GetImageMap() const { return aImageMap; }
 };
 
-class SgaUserDataFactory
-{
-public:
-    SgaUserDataFactory() { SdrObjFactory::InsertMakeUserDataHdl( LINK(this,SgaUserDataFactory,MakeUserData) ); }
-    ~SgaUserDataFactory() { SdrObjFactory::RemoveMakeUserDataHdl( LINK(this,SgaUserDataFactory,MakeUserData) ); }
-
-    DECL_STATIC_LINK( SgaUserDataFactory, MakeUserData, SdrObjUserDataCreatorParams, SdrObjUserData* );
-};
-
 class GraphicFilter;
 
 class SVX_DLLPUBLIC GalleryProgress

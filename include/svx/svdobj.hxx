@@ -968,12 +968,6 @@ struct SdrObjCreatorParams
     SdrInventor nInventor;
     sal_uInt16  nObjIdentifier;
 };
-struct SdrObjUserDataCreatorParams
-{
-    SdrInventor nInventor;
-    sal_uInt16  nObjIdentifier;
-    SdrObject*  pObject;
-};
 
 /**
  * Whoever creates his own objects must set a link in the SdrObjFactory class.
@@ -990,8 +984,6 @@ public:
     static SdrObject* MakeNewObject(SdrInventor nInventor, sal_uInt16 nObjIdentifier, const tools::Rectangle& rSnapRect, SdrPage* pPage);
     static void InsertMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
     static void RemoveMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
-    static void InsertMakeUserDataHdl(Link<SdrObjUserDataCreatorParams, SdrObjUserData*> const & rLink);
-    static void RemoveMakeUserDataHdl(Link<SdrObjUserDataCreatorParams, SdrObjUserData*> const & rLink);
 
 private:
     static SVX_DLLPRIVATE SdrObject* CreateObjectFromFactory(
