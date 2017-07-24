@@ -260,8 +260,8 @@ sal_uLong ImplSalReleaseYieldMutex()
         return 0;
 
     SalYieldMutex*  pYieldMutex = pInst->mpSalYieldMutex;
-    sal_uLong           nCount = pYieldMutex->GetAcquireCount( GetCurrentThreadId() );
-    sal_uLong           n = nCount;
+    const sal_uLong nCount = pYieldMutex->GetAcquireCount( GetCurrentThreadId() );
+    sal_uLong       n = nCount;
     while ( n )
     {
         pYieldMutex->release();
