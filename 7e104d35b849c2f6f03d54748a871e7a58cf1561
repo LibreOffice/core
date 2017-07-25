@@ -211,6 +211,30 @@
       "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_9c6d0635",
+        "filename": "svx/source/dialog/svxruler.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3660,
+      "author": {
+        "id": 1001578
+      },
+      "writtenOn": "2017-07-25T13:58:43Z",
+      "side": 1,
+      "message": "Yes, i agree about shifting it to sw module.\nshifting the createJsonNotification would be easy, but setValues uses some private functions of svxruler, if there is no problem in making them protected, i\u0027ll do it.",
+      "parentUuid": "3a461143_41a019f5",
+      "range": {
+        "startLine": 3645,
+        "startChar": 25,
+        "endLine": 3660,
+        "endChar": 41
+      },
+      "revId": "7e104d35b849c2f6f03d54748a871e7a58cf1561",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
