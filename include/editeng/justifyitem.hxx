@@ -107,7 +107,6 @@ public:
     virtual sal_uInt16       GetValueCount() const override;
     static OUString          GetValueText( sal_uInt16 nVal );
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
     SvxJustifyMethodItem& operator=(const SvxJustifyMethodItem& r);
 };

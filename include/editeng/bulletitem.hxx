@@ -61,13 +61,10 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
 
 public:
     explicit SvxBulletItem( sal_uInt16 nWhich );
-    explicit SvxBulletItem( SvStream& rStrm, sal_uInt16 nWhich );
     SvxBulletItem( const SvxBulletItem& );
     virtual ~SvxBulletItem() override;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nVersion ) const override;
-    virtual SvStream&       Store( SvStream & , sal_uInt16 nItemVersion ) const override;
 
     OUString            GetFullText() const;
 
