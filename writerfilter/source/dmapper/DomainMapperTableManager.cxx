@@ -176,18 +176,9 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             the final sizing of the table, but then must use the contents of each cell to determine final column widths.
                             (See 17.18.87 of the ISO/IEC 29500-1:2011.)
                             */
-                            bool bFixed = true;
                             IntVectorPtr pCellWidths = getCurrentCellWidths();
                             // Check whether all cells have fixed widths in the given row of table.
-                            for (std::vector<sal_Int32>::const_iterator aValIter = pCellWidths->begin(); aValIter != pCellWidths->end(); ++aValIter)
-                            {
-                                if (*aValIter == -1)
-                                {
-                                    bFixed = false;
-                                    break;
-                                }
-                            }
-
+                            bool bFixed = std::find(pCellWidths->begin(), pCellWidths->end(), -1) == pCellWidths->end();
                             if (!bFixed)
                             {
                                 // Set the width type of table with 'Auto' and set the width value to 0 (as per grid values)
