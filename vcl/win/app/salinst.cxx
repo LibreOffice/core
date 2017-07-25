@@ -658,6 +658,8 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
         if( ImplGetSVData()->maAppData.mnModalMode )
             Sleep(1);
         else
+            // If you change the SendMessageW function, you might need to update
+            // the PeekMessage( ... PM_QS_POSTMESSAGE) calls!
             bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)bHandleAllCurrentEvents );
 
         ImplSalAcquireYieldMutex( nCount );
@@ -743,8 +745,9 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             break;
         case SAL_MSG_TIMER_CALLBACK:
             MSG aMsg;
+            // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
             while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
-                                 SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD) )
+                                 SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) )
                 assert( "Multiple timer messages in queue" );
             assert( 0 == wParam );
             if ( 0 == wParam )

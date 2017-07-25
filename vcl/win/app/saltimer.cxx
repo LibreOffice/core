@@ -50,10 +50,11 @@ void ImplSalStopTimer()
     // remove all pending SAL_MSG_TIMER_CALLBACK messages
     // we always have to do this, since ImplSalStartTimer with 0ms just queues
     // a new SAL_MSG_TIMER_CALLBACK message
+    // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
     MSG aMsg;
     int nMsgCount = 0;
     while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
-                         SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD) )
+                         SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) )
         nMsgCount++;
     assert( nMsgCount <= 1 );
     pSalData->mbOnIdleRunScheduler = false;
