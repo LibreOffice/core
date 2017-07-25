@@ -2906,11 +2906,15 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
     }
 
     EnsurePaletteManager();
+    Color aColor = m_xPaletteManager->GetLastColor();
 
     auto aArgs( comphelper::InitPropertySequence( {
         { m_aCommandURL.copy(5), css::uno::makeAny( m_xPaletteManager->GetLastColor().GetColor() ) }
     } ) );
     Dispatch( aCommand, aArgs );
+
+    OUString sColorName = ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
+    m_xPaletteManager->AddRecentColor(aColor, sColorName);
 }
 
 sal_Bool SvxColorToolBoxControl::opensSubToolbar()
