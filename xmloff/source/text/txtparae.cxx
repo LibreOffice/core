@@ -3088,7 +3088,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
         const OUString sReplacementURL(GetExport().AddEmbeddedGraphicObject( sReplacementOrigURL ));
 
         // If there is no url, then graphic is empty
-        if(sReplacementURL.getLength())
+        if(!sReplacementURL.isEmpty())
         {
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sReplacementURL);
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
