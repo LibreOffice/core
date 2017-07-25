@@ -235,7 +235,7 @@ private:
                     mbIsCalculatingInitialLayoutSize:1;
 
 protected:
-    bool mbIsDefferedInit;
+    bool mbIsDeferredInit;
     VclPtr<vcl::Window>  mpDialogParent;
 private:
 
@@ -263,7 +263,7 @@ public:
     void            setOptimalLayoutSize();
 
     SAL_DLLPRIVATE bool    ImplStartDocking( const Point& rPos );
-    SAL_DLLPRIVATE bool    isDeferredInit() const { return mbIsDefferedInit; }
+    SAL_DLLPRIVATE bool    isDeferredInit() const { return mbIsDeferredInit; }
     virtual        void    doDeferredInit(WinBits nBits);
 protected:
                     DockingWindow( WindowType nType );

@@ -297,7 +297,7 @@ void DockingWindow::ImplInitDockingWindowData()
     mbRollUp       = false;
     mbDockBtn      = false;
     mbHideBtn      = false;
-    mbIsDefferedInit = false;
+    mbIsDeferredInit = false;
     mbIsCalculatingInitialLayoutSize = false;
     mpDialogParent = nullptr;
 
@@ -362,13 +362,13 @@ void DockingWindow::doDeferredInit(WinBits nBits)
     vcl::Window *pParent = mpDialogParent;
     mpDialogParent = nullptr;
     ImplInit(pParent, nBits);
-    mbIsDefferedInit = false;
+    mbIsDeferredInit = false;
 }
 
 void DockingWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
     const css::uno::Reference<css::frame::XFrame> &rFrame)
 {
-    mbIsDefferedInit = true;
+    mbIsDeferredInit = true;
     mpDialogParent = pParent; //should be unset in doDeferredInit
     m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame) );
 }

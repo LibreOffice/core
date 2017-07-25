@@ -175,7 +175,7 @@ void FloatingWindow::doDeferredInit(WinBits nBits)
     vcl::Window *pParent = mpDialogParent;
     mpDialogParent = nullptr;
     ImplInit(pParent, nBits);
-    mbIsDefferedInit = false;
+    mbIsDeferredInit = false;
 }
 
 void FloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)

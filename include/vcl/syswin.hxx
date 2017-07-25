@@ -167,12 +167,12 @@ private:
     Idle            maLayoutIdle;
     OUString        maNotebookBarUIFile;
 protected:
-    bool            mbIsDefferedInit;
+    bool            mbIsDeferredInit;
     VclPtr<vcl::Window> mpDialogParent;
 public:
     using Window::ImplIsInTaskPaneList;
     SAL_DLLPRIVATE bool ImplIsInTaskPaneList( vcl::Window* pWin );
-    SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDefferedInit; }
+    SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDeferredInit; }
 
 private:
     SAL_DLLPRIVATE void ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window const * i_pConfigureWin );
