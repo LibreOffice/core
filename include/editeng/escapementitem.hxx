@@ -62,8 +62,6 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const override;
 
     void SetEscapement( const SvxEscapement eNew )
     {

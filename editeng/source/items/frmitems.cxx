@@ -162,21 +162,6 @@ SfxPoolItem* SvxPaperBinItem::Clone( SfxItemPool* ) const
 }
 
 
-SvStream& SvxPaperBinItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
-{
-    rStrm.WriteUChar( GetValue() );
-    return rStrm;
-}
-
-
-SfxPoolItem* SvxPaperBinItem::Create( SvStream& rStrm, sal_uInt16 ) const
-{
-    sal_Int8 nBin;
-    rStrm.ReadSChar( nBin );
-    return new SvxPaperBinItem( Which(), nBin );
-}
-
-
 bool SvxPaperBinItem::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -349,14 +334,6 @@ bool SvxSizeItem::GetPresentation
 }
 
 
-SvStream& SvxSizeItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
-{
-    rStrm.WriteInt32( aSize.Width() );
-    rStrm.WriteInt32( aSize.Height() );
-    return rStrm;
-}
-
-
 void SvxSizeItem::ScaleMetrics( long nMult, long nDiv )
 {
     aSize.Width() = Scale( aSize.Width(), nMult, nDiv );
@@ -367,18 +344,6 @@ void SvxSizeItem::ScaleMetrics( long nMult, long nDiv )
 bool SvxSizeItem::HasMetrics() const
 {
     return true;
-}
-
-
-SfxPoolItem* SvxSizeItem::Create( SvStream& rStrm, sal_uInt16 ) const
-{
-    sal_Int32 nWidth(0), nHeight(0);
-    rStrm.ReadInt32( nWidth ).ReadInt32( nHeight );
-
-    SvxSizeItem* pAttr = new SvxSizeItem( Which() );
-    pAttr->SetSize(Size(nWidth, nHeight));
-
-    return pAttr;
 }
 
 
@@ -676,124 +641,6 @@ bool SvxLRSpaceItem::GetPresentation
 }
 
 
-/** @attention BulletFI: Before v501 in the Outliner the bullet was not on the position of
-    the FI, so in older documents one must set FI to 0.
- */
-#define BULLETLR_MARKER 0x599401FE
-
-
-SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
-{
-    short nSaveFI = nFirstLineOfst;
-    const_cast<SvxLRSpaceItem*>(this)->SetTextFirstLineOfst( 0 );  // nLeftMargin is manipulated together with this, see Create()
-
-    sal_uInt16 nMargin = 0;
-    if( nLeftMargin > 0 )
-        nMargin = sal_uInt16( nLeftMargin );
-    rStrm.WriteUInt16( nMargin );
-    rStrm.WriteUInt16( nPropLeftMargin );
-    if( nRightMargin > 0 )
-        nMargin = sal_uInt16( nRightMargin );
-    else
-        nMargin = 0;
-    rStrm.WriteUInt16( nMargin );
-    rStrm.WriteUInt16( nPropRightMargin );
-    rStrm.WriteInt16( nFirstLineOfst );
-    rStrm.WriteUInt16( nPropFirstLineOfst );
-    if( nTxtLeft > 0 )
-        nMargin = sal_uInt16( nTxtLeft );
-    else
-        nMargin = 0;
-    rStrm.WriteUInt16( nMargin );
-    if( nItemVersion >= LRSPACE_AUTOFIRST_VERSION )
-    {
-        sal_Int8 nAutoFirst = bAutoFirst ? 1 : 0;
-        if( nItemVersion >= LRSPACE_NEGATIVE_VERSION &&
-            ( nLeftMargin < 0 || nRightMargin < 0 || nTxtLeft < 0 ) )
-            nAutoFirst |= 0x80;
-        rStrm.WriteSChar( nAutoFirst );
-
-        // From 6.0 onwards, do not write Magic numbers...
-        DBG_ASSERT( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_50, "Change File format SvxLRSpaceItem!" );
-        rStrm.WriteUInt32( BULLETLR_MARKER );
-        rStrm.WriteInt16( nSaveFI );
-
-        if( 0x80 & nAutoFirst )
-        {
-            rStrm.WriteInt32( nLeftMargin );
-            rStrm.WriteInt32( nRightMargin );
-        }
-    }
-
-    const_cast<SvxLRSpaceItem*>(this)->SetTextFirstLineOfst( nSaveFI );
-
-    return rStrm;
-}
-
-
-SfxPoolItem* SvxLRSpaceItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
-{
-    sal_uInt16 left, prpleft, right, prpright, prpfirstline, txtleft;
-    short firstline;
-    sal_Int8 autofirst = 0;
-
-    if ( nVersion >= LRSPACE_AUTOFIRST_VERSION )
-    {
-        rStrm.ReadUInt16( left ).ReadUInt16( prpleft ).ReadUInt16( right ).ReadUInt16( prpright ).ReadInt16( firstline ).                 ReadUInt16( prpfirstline ).ReadUInt16( txtleft ).ReadSChar( autofirst );
-
-        sal_uInt64 const nPos = rStrm.Tell();
-        sal_uInt32 nMarker;
-        rStrm.ReadUInt32( nMarker );
-        if ( nMarker == BULLETLR_MARKER )
-        {
-            rStrm.ReadInt16( firstline );
-            if ( firstline < 0 )
-                left = left + static_cast<sal_uInt16>(firstline);   // see below: txtleft = ...
-        }
-        else
-            rStrm.Seek( nPos );
-    }
-    else if ( nVersion == LRSPACE_TXTLEFT_VERSION )
-    {
-        rStrm.ReadUInt16( left ).ReadUInt16( prpleft ).ReadUInt16( right ).ReadUInt16( prpright ).ReadInt16( firstline ).                 ReadUInt16( prpfirstline ).ReadUInt16( txtleft );
-    }
-    else if ( nVersion == LRSPACE_16_VERSION )
-    {
-        rStrm.ReadUInt16( left ).ReadUInt16( prpleft ).ReadUInt16( right ).ReadUInt16( prpright ).ReadInt16( firstline ).                 ReadUInt16( prpfirstline );
-    }
-    else
-    {
-        sal_Int8 nL, nR, nFL;
-        rStrm.ReadUInt16( left ).ReadSChar( nL ).ReadUInt16( right ).ReadSChar( nR ).ReadInt16( firstline ).ReadSChar( nFL );
-        prpleft = (sal_uInt16)nL;
-        prpright = (sal_uInt16)nR;
-        prpfirstline = (sal_uInt16)nFL;
-    }
-
-    txtleft = firstline >= 0 ? left : left - firstline;
-    SvxLRSpaceItem* pAttr = new SvxLRSpaceItem( Which() );
-
-    pAttr->nLeftMargin = left;
-    pAttr->nPropLeftMargin = prpleft;
-    pAttr->nRightMargin = right;
-    pAttr->nPropRightMargin = prpright;
-    pAttr->nFirstLineOfst = firstline;
-    pAttr->nPropFirstLineOfst = prpfirstline;
-    pAttr->nTxtLeft = txtleft;
-    pAttr->bAutoFirst = autofirst & 0x01;
-    if( nVersion >= LRSPACE_NEGATIVE_VERSION && ( autofirst & 0x80 ) )
-    {
-        sal_Int32 nMargin;
-        rStrm.ReadInt32( nMargin );
-        pAttr->nLeftMargin = nMargin;
-        pAttr->nTxtLeft = firstline >= 0 ? nMargin : nMargin - firstline;
-        rStrm.ReadInt32( nMargin );
-        pAttr->nRightMargin = nMargin;
-    }
-    return pAttr;
-}
-
-
 sal_uInt16 SvxLRSpaceItem::GetVersion( sal_uInt16 nFileVersion ) const
 {
     return (nFileVersion == SOFFICE_FILEFORMAT_31)
@@ -1030,39 +877,6 @@ bool SvxULSpaceItem::GetPresentation
 }
 
 
-SvStream& SvxULSpaceItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
-{
-    rStrm.WriteUInt16( GetUpper() )
-         .WriteUInt16( GetPropUpper() )
-         .WriteUInt16( GetLower() )
-         .WriteUInt16( GetPropLower() );
-    return rStrm;
-}
-
-
-SfxPoolItem* SvxULSpaceItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
-{
-    sal_uInt16 upper, lower, nPL = 0, nPU = 0;
-
-    if ( nVersion == ULSPACE_16_VERSION )
-        rStrm.ReadUInt16( upper ).ReadUInt16( nPU ).ReadUInt16( lower ).ReadUInt16( nPL );
-    else
-    {
-        sal_Int8 nU, nL;
-        rStrm.ReadUInt16( upper ).ReadSChar( nU ).ReadUInt16( lower ).ReadSChar( nL );
-        nPL = (sal_uInt16)nL;
-        nPU = (sal_uInt16)nU;
-    }
-
-    SvxULSpaceItem* pAttr = new SvxULSpaceItem( Which() );
-    pAttr->SetUpperValue( upper );
-    pAttr->SetLowerValue( lower );
-    pAttr->SetPropUpper( nPU );
-    pAttr->SetPropLower( nPL );
-    return pAttr;
-}
-
-
 sal_uInt16 SvxULSpaceItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 {
     return ULSPACE_16_VERSION;
@@ -1101,21 +915,6 @@ SfxPoolItem* SvxPrintItem::Clone( SfxItemPool* ) const
 }
 
 
-SvStream& SvxPrintItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
-{
-    rStrm.WriteSChar( (sal_Int8)GetValue() );
-    return rStrm;
-}
-
-
-SfxPoolItem* SvxPrintItem::Create( SvStream& rStrm, sal_uInt16 ) const
-{
-    sal_Int8 bIsPrint;
-    rStrm.ReadSChar( bIsPrint );
-    return new SvxPrintItem( Which(), bIsPrint != 0 );
-}
-
-
 bool SvxPrintItem::GetPresentation
 (
     SfxItemPresentation /*ePres*/,
@@ -1136,21 +935,6 @@ bool SvxPrintItem::GetPresentation
 SfxPoolItem* SvxOpaqueItem::Clone( SfxItemPool* ) const
 {
     return new SvxOpaqueItem( *this );
-}
-
-
-SvStream& SvxOpaqueItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
-{
-    rStrm.WriteSChar( (sal_Int8)GetValue() );
-    return rStrm;
-}
-
-
-SfxPoolItem* SvxOpaqueItem::Create( SvStream& rStrm, sal_uInt16 ) const
-{
-    sal_Int8 bIsOpaque;
-    rStrm.ReadSChar( bIsOpaque );
-    return new SvxOpaqueItem( Which(), bIsOpaque != 0 );
 }
 
 
@@ -1248,29 +1032,6 @@ bool SvxProtectItem::GetPresentation
         pId = RID_SVXITEMS_PROT_POS_TRUE;
     rText += EditResId(pId);
     return true;
-}
-
-
-SvStream& SvxProtectItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
-{
-    sal_Int8 cProt = 0;
-    if( IsPosProtected() )   cProt |= 0x01;
-    if( IsSizeProtected() )  cProt |= 0x02;
-    if( IsContentProtected() ) cProt |= 0x04;
-    rStrm.WriteSChar( cProt );
-    return rStrm;
-}
-
-
-SfxPoolItem* SvxProtectItem::Create( SvStream& rStrm, sal_uInt16 ) const
-{
-    sal_Int8 cFlags;
-    rStrm.ReadSChar( cFlags );
-    SvxProtectItem* pAttr = new SvxProtectItem( Which() );
-    pAttr->SetPosProtect( ( cFlags & 0x01 ) != 0 );
-    pAttr->SetSizeProtect( ( cFlags & 0x02 ) != 0 );
-    pAttr->SetContentProtect( ( cFlags & 0x04 ) != 0 );
-    return pAttr;
 }
 
 
@@ -2605,39 +2366,6 @@ bool SvxBoxInfoItem::GetPresentation
 }
 
 
-SvStream& SvxBoxInfoItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
-{
-    sal_Int8 cFlags = 0;
-
-    if ( IsTable() )
-        cFlags |= 0x01;
-    if ( IsDist() )
-        cFlags |= 0x02;
-    if ( IsMinDist() )
-        cFlags |= 0x04;
-    rStrm.WriteSChar( cFlags )
-         .WriteUInt16( GetDefDist() );
-    const SvxBorderLine* pLine[ 2 ];
-    pLine[ 0 ] = GetHori();
-    pLine[ 1 ] = GetVert();
-
-    for( int i = 0; i < 2; i++ )
-    {
-        const SvxBorderLine* l = pLine[ i ];
-        if( l )
-        {
-            rStrm.WriteChar( (char) i );
-            WriteColor( rStrm, l->GetColor() );
-            rStrm.WriteInt16( l->GetOutWidth() )
-                 .WriteInt16( l->GetInWidth() )
-                 .WriteInt16( l->GetDistance() );
-        }
-    }
-    rStrm.WriteChar( (char) 2 );
-    return rStrm;
-}
-
-
 void SvxBoxInfoItem::ScaleMetrics( long nMult, long nDiv )
 {
     if ( pHori ) pHori->ScaleMetrics( nMult, nDiv );
@@ -2649,42 +2377,6 @@ void SvxBoxInfoItem::ScaleMetrics( long nMult, long nDiv )
 bool SvxBoxInfoItem::HasMetrics() const
 {
     return true;
-}
-
-
-SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
-{
-    sal_Int8 cFlags;
-    sal_uInt16 _nDefDist;
-    rStrm.ReadSChar( cFlags ).ReadUInt16( _nDefDist );
-
-    SvxBoxInfoItem* pAttr = new SvxBoxInfoItem( Which() );
-
-    pAttr->SetTable  ( ( cFlags & 0x01 ) != 0 );
-    pAttr->SetDist   ( ( cFlags & 0x02 ) != 0 );
-    pAttr->SetMinDist( ( cFlags & 0x04 ) != 0 );
-    pAttr->SetDefDist( _nDefDist );
-
-    while( true )
-    {
-        sal_Int8 cLine;
-        rStrm.ReadSChar( cLine );
-
-        if( cLine > 1 )
-            break;
-        short nOutline, nInline, nDistance;
-        Color aColor;
-        ReadColor( rStrm, aColor ).ReadInt16( nOutline ).ReadInt16( nInline ).ReadInt16( nDistance );
-        SvxBorderLine aBorder( &aColor );
-        aBorder.GuessLinesWidths(SvxBorderLineStyle::NONE, nOutline, nInline, nDistance);
-
-        switch( cLine )
-        {
-            case 0: pAttr->SetLine( &aBorder, SvxBoxInfoItemLine::HORI ); break;
-            case 1: pAttr->SetLine( &aBorder, SvxBoxInfoItemLine::VERT ); break;
-        }
-    }
-    return pAttr;
 }
 
 
