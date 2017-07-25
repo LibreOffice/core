@@ -35,8 +35,6 @@ public:
     SvxWritingModeItem& operator=( const SvxWritingModeItem& rItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&       Store(SvStream & rStrm, sal_uInt16 nIVer) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileVersion ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     css::text::WritingMode  GetValue() const { return (css::text::WritingMode)SfxUInt16Item::GetValue(); }
