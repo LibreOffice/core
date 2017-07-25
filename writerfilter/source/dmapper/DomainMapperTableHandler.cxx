@@ -352,8 +352,6 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         //pPropMap->Insert( PROP_HORI_ORIENT, uno::makeAny( text::HoriOrientation::RIGHT ));
         sal_Int32 nGapHalf = 0;
         sal_Int32 nLeftMargin = 0;
-        sal_Int32 nTableWidth = 0;
-        sal_Int32 nTableWidthType = text::SizeType::FIX;
 
         comphelper::SequenceAsHashMap aGrabBag;
 
@@ -587,14 +585,23 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nLeftMargin - nGapHalf ) );
         }
 
+        sal_Int32 nTableWidth = 0;
+        sal_Int32 nTableWidthType = text::SizeType::FIX;
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH_TYPE, nTableWidthType );
         if( nTableWidthType == text::SizeType::FIX )
         {
             if( nTableWidth > 0 )
                 m_aTableProperties->Insert( PROP_WIDTH, uno::makeAny( nTableWidth ));
+            else
+            {
+                // tdf#109524: If there is no width for the table, make it simply 100% by default.
+                // TODO: use cell contents to evaluate width (according to ECMA-376-1:2016 17.18.87)
+                nTableWidth = 100;
+                nTableWidthType = text::SizeType::VARIABLE;
+            }
         }
-        else
+        if (nTableWidthType != text::SizeType::FIX)
         {
             m_aTableProperties->Insert( PROP_RELATIVE_WIDTH, uno::makeAny( sal_Int16( nTableWidth ) ) );
             m_aTableProperties->Insert( PROP_IS_WIDTH_RELATIVE, uno::makeAny( true ) );
