@@ -190,8 +190,10 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
     InsertItem      (SID_INPUT_FUNCTION, Image(BitmapEx(RID_BMP_INPUT_FUNCTION)), ToolBoxItemBits::NONE, 2);
     InsertItem      (SID_INPUT_SUM,      Image(BitmapEx(RID_BMP_INPUT_SUM)), ToolBoxItemBits::NONE, 3);
     InsertItem      (SID_INPUT_EQUAL,    Image(BitmapEx(RID_BMP_INPUT_EQUAL)), ToolBoxItemBits::NONE, 4);
-    InsertSeparator (5);
-    InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 6);
+    InsertItem      (SID_INPUT_CANCEL,   Image(BitmapEx(RID_BMP_INPUT_CANCEL)), ToolBoxItemBits::NONE, 5);
+    InsertItem      (SID_INPUT_OK,       Image(BitmapEx(RID_BMP_INPUT_OK)), ToolBoxItemBits::NONE, 6);
+    InsertSeparator (7);
+    InsertWindow    (7, &aTextWindow, ToolBoxItemBits::NONE, 8);
 
     aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
     aWndPos   ->SetHelpId       (HID_INSWIN_POS);
@@ -207,6 +209,18 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
 
     SetItemText (SID_INPUT_EQUAL, aTextEqual);
     SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
+
+    SetItemText ( SID_INPUT_CANCEL, aTextCancel );
+    SetHelpId   ( SID_INPUT_CANCEL, HID_INSWIN_CANCEL );
+
+    SetItemText ( SID_INPUT_OK, aTextOk );
+    SetHelpId   ( SID_INPUT_OK, HID_INSWIN_OK );
+
+    EnableItem( SID_INPUT_CANCEL, false );
+    EnableItem( SID_INPUT_OK, false );
+
+    HideItem( SID_INPUT_CANCEL );
+    HideItem( SID_INPUT_OK );
 
     SetHelpId( HID_SC_INPUTWIN ); // For the whole input row
 
@@ -504,14 +518,16 @@ void ScInputWindow::SetOkCancelMode()
 
     if (!bIsOkCancelMode)
     {
-        RemoveItem( 3 ); // Remove SID_INPUT_SUM and SID_INPUT_EQUAL
-        RemoveItem( 3 );
-        InsertItem( SID_INPUT_CANCEL, Image(BitmapEx(RID_BMP_INPUT_CANCEL)), ToolBoxItemBits::NONE, 3 );
-        InsertItem( SID_INPUT_OK,     Image(BitmapEx(RID_BMP_INPUT_OK)),     ToolBoxItemBits::NONE, 4 );
-        SetItemText ( SID_INPUT_CANCEL, aTextCancel );
-        SetHelpId   ( SID_INPUT_CANCEL, HID_INSWIN_CANCEL );
-        SetItemText ( SID_INPUT_OK,     aTextOk );
-        SetHelpId   ( SID_INPUT_OK,     HID_INSWIN_OK );
+        EnableItem  ( SID_INPUT_SUM,   false );
+        EnableItem  ( SID_INPUT_EQUAL, false );
+        HideItem    ( SID_INPUT_SUM );
+        HideItem    ( SID_INPUT_EQUAL );
+
+        ShowItem    ( SID_INPUT_CANCEL, true );
+        ShowItem    ( SID_INPUT_OK,     true );
+        EnableItem  ( SID_INPUT_CANCEL, true );
+        EnableItem  ( SID_INPUT_OK,     true );
+
         bIsOkCancelMode = true;
     }
 }
@@ -524,15 +540,16 @@ void ScInputWindow::SetSumAssignMode()
 
     if (bIsOkCancelMode)
     {
-        // Remove SID_INPUT_CANCEL, and SID_INPUT_OK
-        RemoveItem( 3 );
-        RemoveItem( 3 );
-        InsertItem( SID_INPUT_SUM,   Image(BitmapEx(RID_BMP_INPUT_SUM)),   ToolBoxItemBits::NONE, 3 );
-        InsertItem( SID_INPUT_EQUAL, Image(BitmapEx(RID_BMP_INPUT_EQUAL)), ToolBoxItemBits::NONE, 4 );
-        SetItemText ( SID_INPUT_SUM,   aTextSum );
-        SetHelpId   ( SID_INPUT_SUM,   HID_INSWIN_SUMME );
-        SetItemText ( SID_INPUT_EQUAL, aTextEqual );
-        SetHelpId   ( SID_INPUT_EQUAL, HID_INSWIN_FUNC );
+        EnableItem  ( SID_INPUT_CANCEL, false );
+        EnableItem  ( SID_INPUT_OK,     false );
+        HideItem    ( SID_INPUT_CANCEL );
+        HideItem    ( SID_INPUT_OK );
+
+        ShowItem    ( SID_INPUT_SUM,    true );
+        ShowItem    ( SID_INPUT_EQUAL,  true );
+        EnableItem  ( SID_INPUT_SUM,    true );
+        EnableItem  ( SID_INPUT_EQUAL,  true );
+
         bIsOkCancelMode = false;
 
         SetFormulaMode(false); // No editing -> no formula
