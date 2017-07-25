@@ -66,10 +66,6 @@ void* SAL_CALL nss_component_getFactory( const sal_Char* pImplName , void* pServ
         {
             xFactory = SecurityEnvironment_NssImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
         }
-        else if( XMLEncryption_NssImpl::impl_getImplementationName().equalsAscii( pImplName ) )
-        {
-            xFactory = XMLEncryption_NssImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        }
 #else
         if( ONSSInitializer_getImplementationName().equalsAscii( pImplName ) )
         {
