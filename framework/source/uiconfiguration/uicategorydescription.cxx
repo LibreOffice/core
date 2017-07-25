@@ -37,6 +37,7 @@
 #include <unotools/configmgr.hxx>
 
 #include <vcl/mnemonic.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <unordered_map>
@@ -294,14 +295,12 @@ Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 
 void ConfigurationAccess_UICategory::initializeConfigAccess()
 {
-    Sequence< Any > aArgs( 1 );
-    PropertyValue   aPropValue;
-
     try
     {
-        aPropValue.Name  = "nodepath";
-        aPropValue.Value <<= m_aConfigCategoryAccess;
-        aArgs[0] <<= aPropValue;
+        Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", Any(m_aConfigCategoryAccess)}
+        }));
 
         m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
                     "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );

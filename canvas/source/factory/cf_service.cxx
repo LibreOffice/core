@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -132,28 +133,24 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
             Reference<lang::XMultiServiceFactory> xConfigProvider(
                 configuration::theDefaultProvider::get( m_xContext ) );
 
-            Any propValue(
-                Any( beans::PropertyValue(
-                             "nodepath", -1,
-                             Any( OUString("/org.openoffice.Office.Canvas") ),
-                             beans::PropertyState_DIRECT_VALUE ) ) );
-
+            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            {
+                {"nodepath", uno::Any(OUString("/org.openoffice.Office.Canvas"))}
+            }));
             m_xCanvasConfigNameAccess.set(
                 xConfigProvider->createInstanceWithArguments(
                     "com.sun.star.configuration.ConfigurationAccess",
-                    Sequence<Any>( &propValue, 1 ) ),
+                    aArgs ),
                 UNO_QUERY_THROW );
 
-            propValue <<=
-                beans::PropertyValue(
-                    "nodepath", -1,
-                    Any( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ),
-                    beans::PropertyState_DIRECT_VALUE );
-
+            uno::Sequence<uno::Any> aArgs2(comphelper::InitAnyPropertySequence(
+            {
+                {"nodepath", uno::Any(OUString("/org.openoffice.Office.Canvas/CanvasServiceList"))}
+            }));
             Reference<container::XNameAccess> xNameAccess(
                 xConfigProvider->createInstanceWithArguments(
                     "com.sun.star.configuration.ConfigurationAccess",
-                    Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
+                    aArgs2 ), UNO_QUERY_THROW );
             Reference<container::XHierarchicalNameAccess> xHierarchicalNameAccess(
                 xNameAccess, UNO_QUERY_THROW);
 

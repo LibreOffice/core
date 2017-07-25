@@ -31,6 +31,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
 
 //  Defines
@@ -190,9 +191,6 @@ bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStat
 
 void GlobalSettings_Access::impl_initConfigAccess()
 {
-    css::uno::Sequence< css::uno::Any > aArgs( 2 );
-    css::beans::PropertyValue           aPropValue;
-
     try
     {
         if ( m_xContext.is() )
@@ -200,13 +198,11 @@ void GlobalSettings_Access::impl_initConfigAccess()
             css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider =
                  css::configuration::theDefaultProvider::get( m_xContext );
 
-            aPropValue.Name  = "nodepath";
-            aPropValue.Value <<= OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars");
-            aArgs[0] <<= aPropValue;
-            aPropValue.Name = "lazywrite";
-            aPropValue.Value <<= true;
-            aArgs[1] <<= aPropValue;
-
+            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            {
+                {"nodepath", uno::Any(OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars"))},
+                {"lazywrite", uno::Any(true)}
+            }));
             m_xConfigAccess.set(xConfigProvider->createInstanceWithArguments(
                                     SERVICENAME_CFGREADACCESS, aArgs ),
                                 css::uno::UNO_QUERY );

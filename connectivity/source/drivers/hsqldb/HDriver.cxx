@@ -46,6 +46,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -824,20 +825,11 @@ namespace connectivity
 
 
                 // arguments for creating the config access
-                Sequence< Any > aArguments(2);
-                // the path to the node to open
-                aArguments[0] <<= PropertyValue(
-                    "nodepath", 0,
-                    makeAny( OUString("/org.openoffice.Setup/L10N" ) ),
-                    PropertyState_DIRECT_VALUE
-                );
-                // the depth: -1 means unlimited
-                aArguments[1] <<= PropertyValue(
-                    "depth", 0,
-                    makeAny( (sal_Int32)-1 ), PropertyState_DIRECT_VALUE
-                );
-
-
+                Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
+                {
+                    {"nodepath", Any(OUString("/org.openoffice.Setup/L10N" ))}, // the path to the node to open
+                    {"depth", Any((sal_Int32)-1)}, // the depth: -1 means unlimited
+                }));
                 // create the access
                 Reference< XPropertySet > xNode(
                     xConfigProvider->createInstanceWithArguments(

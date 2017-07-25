@@ -95,6 +95,7 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
+#include <comphelper/propertysequence.hxx>
 
 #include "dlgname.hxx"
 
@@ -2968,17 +2969,11 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     uno::Reference< css::embed::XStorage > xStorage(
         xStorageFactory->createInstanceWithArguments( aArgs ), uno::UNO_QUERY );
 
-    uno::Sequence< uno::Any > aProp( 2 );
-    beans::PropertyValue aPropValue;
-
-    aPropValue.Name = "UserConfigStorage";
-    aPropValue.Value <<= xStorage;
-    aProp[ 0 ] <<= aPropValue;
-
-    aPropValue.Name = "OpenMode";
-    aPropValue.Value <<= css::embed::ElementModes::READWRITE;
-    aProp[ 1 ] <<= aPropValue;
-
+    uno::Sequence<uno::Any> aProp(comphelper::InitAnyPropertySequence(
+    {
+        {"UserConfigStorage", uno::Any(xStorage)},
+        {"OpenMode", uno::Any(css::embed::ElementModes::READWRITE)}
+    }));
     m_xImportedImageManager = css::ui::ImageManager::create( xComponentContext );
     m_xImportedImageManager->initialize(aProp);
 

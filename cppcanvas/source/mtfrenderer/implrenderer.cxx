@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/anytostring.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
@@ -681,18 +682,12 @@ namespace cppcanvas
                     ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
                                                                     aGradInfo.getTextureTransform() );
 
-                    uno::Sequence<uno::Any> args(3);
-                    beans::PropertyValue aProp;
-                    aProp.Name = "Colors";
-                    aProp.Value <<= aColors;
-                    args[0] <<= aProp;
-                    aProp.Name = "Stops";
-                    aProp.Value <<= aStops;
-                    args[1] <<= aProp;
-                    aProp.Name = "AspectRatio";
-                    aProp.Value <<= aGradInfo.getAspectRatio();
-                    args[2] <<= aProp;
-
+                    uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
+                    {
+                        {"Colors", uno::Any(aColors)},
+                        {"Stops", uno::Any(aStops)},
+                        {"AspectRatio", uno::Any(aGradInfo.getAspectRatio())},
+                    }));
                     aTexture.Gradient.set(
                         xFactory->createInstanceWithArguments(aGradientService,
                                                               args),

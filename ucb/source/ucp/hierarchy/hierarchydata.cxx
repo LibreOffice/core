@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
+#include <comphelper/propertysequence.hxx>
 #include "hierarchyprovider.hxx"
 #include "hierarchyuri.hxx"
 
@@ -284,12 +285,10 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                 bRoot = false;
             }
 
-            uno::Sequence< uno::Any > aArguments( 1 );
-            beans::PropertyValue      aProperty;
-
-            aProperty.Name    = CFGPROPERTY_NODEPATH;
-            aProperty.Value <<= aParentPath;
-            aArguments[ 0 ] <<= aProperty;
+            uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            {
+                {CFGPROPERTY_NODEPATH, uno::Any(aParentPath)}
+            }));
 
             uno::Reference< util::XChangesBatch > xBatch(
                     m_xConfigProvider->createInstanceWithArguments(
@@ -537,12 +536,10 @@ bool HierarchyEntry::move(
             bNewRoot = false;
         }
 
-        uno::Sequence< uno::Any > aArguments( 1 );
-        beans::PropertyValue      aProperty;
-
-        aProperty.Name  = CFGPROPERTY_NODEPATH;
-        aProperty.Value <<= aOldParentPath;
-        aArguments[ 0 ] <<= aProperty;
+        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        {
+            {CFGPROPERTY_NODEPATH, uno::Any(aOldParentPath)}
+        }));
 
         xOldParentBatch.set(
             m_xConfigProvider->createInstanceWithArguments(
@@ -564,14 +561,15 @@ bool HierarchyEntry::move(
         {
             bDifferentParents = true;
 
-            aProperty.Name    = CFGPROPERTY_NODEPATH;
-            aProperty.Value <<= aNewParentPath;
-            aArguments[ 0 ] <<= aProperty;
+            uno::Sequence<uno::Any> aArguments2(comphelper::InitAnyPropertySequence(
+            {
+                {CFGPROPERTY_NODEPATH, uno::Any(aNewParentPath)}
+            }));
 
             xNewParentBatch.set(
                 m_xConfigProvider->createInstanceWithArguments(
                     READWRITE_SERVICE_NAME,
-                    aArguments ),
+                    aArguments2 ),
                 uno::UNO_QUERY );
 
             OSL_ENSURE(
@@ -787,12 +785,10 @@ bool HierarchyEntry::remove()
                 bRoot = false;
             }
 
-            uno::Sequence< uno::Any > aArguments( 1 );
-            beans::PropertyValue      aProperty;
-
-            aProperty.Name    = CFGPROPERTY_NODEPATH;
-            aProperty.Value <<= aParentPath;
-            aArguments[ 0 ] <<= aProperty;
+            uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            {
+                {CFGPROPERTY_NODEPATH, uno::Any(aParentPath)}
+            }));
 
             uno::Reference< util::XChangesBatch > xBatch(
                 m_xConfigProvider->createInstanceWithArguments(
@@ -1021,11 +1017,10 @@ HierarchyEntry::getRootReadAccess()
                 {
                     // Create Root object.
 
-                    uno::Sequence< uno::Any > aArguments( 1 );
-                    beans::PropertyValue      aProperty;
-                    aProperty.Name = CFGPROPERTY_NODEPATH;
-                    aProperty.Value <<= OUString(); // root path
-                    aArguments[ 0 ] <<= aProperty;
+                    uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+                    {
+                        {CFGPROPERTY_NODEPATH, uno::Any(OUString())} // root path
+                    }));
 
                     m_bTriedToGetRootReadAccess = true;
 

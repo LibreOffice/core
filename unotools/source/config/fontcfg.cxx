@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <unotools/configpaths.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -102,11 +103,10 @@ DefaultFontConfiguration::DefaultFontConfiguration()
     {
         // get service provider
         m_xConfigProvider = theDefaultProvider::get(comphelper::getProcessComponentContext());
-        Sequence< Any > aArgs(1);
-        PropertyValue aVal;
-        aVal.Name = "nodepath";
-        aVal.Value <<= OUString( "/org.openoffice.VCL/DefaultFonts" );
-        aArgs.getArray()[0] <<= aVal;
+        Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", Any(OUString( "/org.openoffice.VCL/DefaultFonts" ))}
+        }));
         m_xConfigAccess =
             Reference< XNameAccess >(
                 m_xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
@@ -355,11 +355,10 @@ FontSubstConfiguration::FontSubstConfiguration() :
         Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
         // create configuration hierarchical access name
         m_xConfigProvider = theDefaultProvider::get( xContext );
-        Sequence< Any > aArgs(1);
-        PropertyValue aVal;
-        aVal.Name = "nodepath";
-        aVal.Value <<= OUString( "/org.openoffice.VCL/FontSubstitutions" );
-        aArgs.getArray()[0] <<= aVal;
+        Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", Any(OUString( "/org.openoffice.VCL/FontSubstitutions" ))}
+        }));
         m_xConfigAccess =
             Reference< XNameAccess >(
                 m_xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",

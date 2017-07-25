@@ -41,6 +41,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #include <com/sun/star/ucb/Store.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <rtl/uri.hxx>
 
 #include "filtask.hxx"
@@ -973,11 +974,10 @@ TaskManager::setv( const OUString& aUnqPath,
                     if( err )
                     {
                         --propChanged; // unsuccessful setting
-                        uno::Sequence< uno::Any > names( 1 );
-                        ret[0] <<= beans::PropertyValue(
-                            "Uri", -1,
-                            uno::makeAny(aUnqPath),
-                            beans::PropertyState_DIRECT_VALUE);
+                        uno::Sequence<uno::Any> names(comphelper::InitAnyPropertySequence(
+                        {
+                            {"Uri", uno::Any(aUnqPath)}
+                        }));
                         ret[i] <<= InteractiveAugmentedIOException(
                             OUString(),
                             nullptr,
@@ -1036,11 +1036,10 @@ TaskManager::setv( const OUString& aUnqPath,
                     if( err != osl::FileBase::E_None )
                     {
                         --propChanged; // unsuccessful setting
-                        uno::Sequence< uno::Any > names( 1 );
-                        names[0] <<= beans::PropertyValue(
-                            "Uri", -1,
-                            uno::makeAny(aUnqPath),
-                            beans::PropertyState_DIRECT_VALUE);
+                        uno::Sequence<uno::Any> names(comphelper::InitAnyPropertySequence(
+                        {
+                            {"Uri", uno::Any(aUnqPath)}
+                        }));
                         IOErrorCode ioError;
                         switch( err )
                         {

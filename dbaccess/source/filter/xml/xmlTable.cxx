@@ -31,6 +31,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <comphelper/namecontainer.hxx>
+#include <comphelper/propertysequence.hxx>
 
 namespace dbaxml
 {
@@ -87,16 +88,11 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
                 break;
         }
     }
-    Sequence< Any > aArguments(2);
-    PropertyValue aValue;
-    // set as folder
-    aValue.Name = "Name";
-    aValue.Value <<= m_sName;
-    aArguments[0] <<= aValue;
-    //parent
-    aValue.Name = "Parent";
-    aValue.Value <<= m_xParentContainer;
-    aArguments[1] <<= aValue;
+    uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+    {
+        {"Name", uno::Any(m_sName)}, // set as folder
+        {"Parent", uno::Any(m_xParentContainer)}
+    }));
     m_xTable.set(
         GetOwnImport().GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(m_sServiceName,aArguments, GetOwnImport().GetComponentContext()),
         UNO_QUERY);

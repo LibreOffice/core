@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/propertysequence.hxx>
 
 namespace dbaxml
 {
@@ -80,22 +81,13 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
     }
     if ( !m_sHREF.isEmpty() && !m_sName.isEmpty() && _xParentContainer.is() )
     {
-        Sequence< Any > aArguments(3);
-        PropertyValue aValue;
-        // set as folder
-        aValue.Name = PROPERTY_NAME;
-        aValue.Value <<= m_sName;
-        aArguments[0] <<= aValue;
-
-        aValue.Name = PROPERTY_PERSISTENT_NAME;
         sal_Int32 nIndex = m_sHREF.lastIndexOf('/')+1;
-        aValue.Value <<= m_sHREF.getToken(0,'/',nIndex);
-        aArguments[1] <<= aValue;
-
-        aValue.Name = PROPERTY_AS_TEMPLATE;
-        aValue.Value <<= m_bAsTemplate;
-        aArguments[2] <<= aValue;
-
+        Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
+        {
+            {PROPERTY_NAME, Any(m_sName)}, // set as folder
+            {PROPERTY_PERSISTENT_NAME, Any(m_sHREF.getToken(0,'/',nIndex))},
+            {PROPERTY_AS_TEMPLATE, Any(m_bAsTemplate)},
+        }));
         try
         {
             Reference< XMultiServiceFactory > xORB( _xParentContainer, UNO_QUERY_THROW );

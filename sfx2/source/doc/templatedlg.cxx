@@ -14,6 +14,7 @@
 #include "templatesearchviewitem.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -1071,13 +1072,10 @@ void SfxTemplateManagerDlg::OnTemplateLink ()
     try
     {
         Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
-        Sequence<Any> args(1);
-        PropertyValue val(
-            "nodepath",
-            0,
-            Any(sNodePath),
-            PropertyState_DIRECT_VALUE);
-        args.getArray()[0] <<= val;
+        uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(sNodePath)}
+        }));
         Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args), UNO_QUERY);
         if( xNameAccess.is() )
         {

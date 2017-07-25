@@ -58,6 +58,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
@@ -338,18 +339,11 @@ namespace
 
 bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, bool& _bShouldStartTableWizard )
 {
-    Sequence< Any > aWizardArgs(2);
-    aWizardArgs[0] <<= PropertyValue(
-                    "ParentWindow",
-                    0,
-                    makeAny( lcl_getTopMostWindow( m_aContext ) ),
-                    PropertyState_DIRECT_VALUE);
-
-    aWizardArgs[1] <<= PropertyValue(
-                    "InitialSelection",
-                    0,
-                    makeAny( _rxModel ),
-                    PropertyState_DIRECT_VALUE);
+    Sequence<Any> aWizardArgs(comphelper::InitAnyPropertySequence(
+    {
+        {"ParentWindow", Any(lcl_getTopMostWindow( m_aContext ))},
+        {"InitialSelection", Any(_rxModel)}
+    }));
 
     // create the dialog
     Reference< XExecutableDialog > xAdminDialog( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.sdb.DatabaseWizardDialog", aWizardArgs, m_aContext), UNO_QUERY_THROW);
@@ -559,12 +553,10 @@ IMPL_LINK_NOARG( DBContentLoader, OnStartTableWizard, void*, void )
     m_nStartWizard = nullptr;
     try
     {
-        Sequence< Any > aWizArgs(1);
-        PropertyValue aValue;
-        aValue.Name = "DatabaseLocation";
-        aValue.Value <<= m_sCurrentURL;
-        aWizArgs[0] <<= aValue;
-
+        Sequence<Any> aWizArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"DatabaseLocation", Any(m_sCurrentURL)}
+        }));
         SolarMutexGuard aGuard;
         Reference< XJobExecutor > xTableWizard( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.wizards.table.CallTableWizard", aWizArgs, m_aContext), UNO_QUERY);
         if ( xTableWizard.is() )

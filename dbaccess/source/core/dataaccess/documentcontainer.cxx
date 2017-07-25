@@ -37,6 +37,7 @@
 #include "core_resource.hxx"
 #include "strings.hrc"
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <vcl/svapp.hxx>
@@ -338,20 +339,12 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                 for(;elements != elementsEnd;++elements)
                 {
                     xCopyFrom->getByName(*elements) >>= xObjectToCopy;
-                    Sequence< Any > aArguments(3);
-                    PropertyValue aArgument;
-                    // set as folder
-                    aArgument.Name = "Name";
-                    aArgument.Value <<= *elements;
-                    aArguments[0] <<= aArgument;
-                    //parent
-                    aArgument.Name = "Parent";
-                    aArgument.Value <<= xContent;
-                    aArguments[1] <<= aArgument;
-
-                    aArgument.Name = PROPERTY_EMBEDDEDOBJECT;
-                    aArgument.Value <<= xObjectToCopy;
-                    aArguments[2] <<= aArgument;
+                    Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
+                    {
+                        {"Name", Any(*elements)}, // set as folder
+                        {"Parent", Any(xContent)},
+                        {PROPERTY_EMBEDDEDOBJECT, Any(xObjectToCopy)},
+                    }));
 
                     OUString sServiceName;
                     if ( Reference< XNameAccess >( xObjectToCopy, UNO_QUERY ).is() )

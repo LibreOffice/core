@@ -26,6 +26,7 @@
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <sfx2/dockwin.hxx>
 #include <sfx2/bindings.hxx>
@@ -136,18 +137,13 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
 
     SfxDispatcher* pDispatcher = pBindings->GetDispatcher();
     uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
-    uno::Sequence< uno::Any > aArgs(2);
-    beans::PropertyValue      aPropValue;
-    aPropValue.Name  = "Frame";
-    aPropValue.Value <<= xFrame;
-    aArgs[0] <<= aPropValue;
-    aPropValue.Name  = "ResourceURL";
-
     // create a resource URL from the nId provided by the sfx2
-    OUString aResourceURL( aDockWindowResourceURL );
-    aResourceURL += OUString::number(nId);
-    aPropValue.Value <<= aResourceURL;
-    aArgs[1] <<= aPropValue;
+    OUString aResourceURL =  aDockWindowResourceURL + OUString::number(nId);
+    uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+    {
+        {"Frame", uno::Any(xFrame)},
+        {"ResourceURL", uno::Any(aResourceURL)},
+    }));
 
     uno::Reference< awt::XWindow > xWindow;
     try

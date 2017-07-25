@@ -50,6 +50,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -1301,19 +1302,11 @@ void JavaVirtualMachine::registerConfigChangesListener()
         {
             // We register this instance as listener to changes in org.openoffice.Inet/Settings
             // arguments for ConfigurationAccess
-            css::uno::Sequence< css::uno::Any > aArguments(2);
-            aArguments[0] <<= css::beans::PropertyValue(
-                "nodepath",
-                0,
-                css::uno::makeAny(OUString("org.openoffice.Inet/Settings")),
-                css::beans::PropertyState_DIRECT_VALUE);
-            // depth: -1 means unlimited
-            aArguments[1] <<= css::beans::PropertyValue(
-                "depth",
-                0,
-                css::uno::makeAny( (sal_Int32)-1),
-                css::beans::PropertyState_DIRECT_VALUE);
-
+            css::uno::Sequence<css::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            {
+                {"nodepath", css::uno::Any(OUString("org.openoffice.Inet/Settings"))},
+                {"depth", css::uno::Any((sal_Int32)-1)}
+            }));
             m_xInetConfiguration.set(
                     xConfigProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationAccess",
@@ -1324,19 +1317,11 @@ void JavaVirtualMachine::registerConfigChangesListener()
                 m_xInetConfiguration->addContainerListener(this);
 
             // now register as listener to changes in org.openoffice.Java/VirtualMachine
-            css::uno::Sequence< css::uno::Any > aArguments2(2);
-            aArguments2[0] <<= css::beans::PropertyValue(
-                "nodepath",
-                0,
-                css::uno::makeAny(OUString("org.openoffice.Office.Java/VirtualMachine")),
-                css::beans::PropertyState_DIRECT_VALUE);
-            // depth: -1 means unlimited
-            aArguments2[1] <<= css::beans::PropertyValue(
-                "depth",
-                0,
-                css::uno::makeAny( (sal_Int32)-1),
-                css::beans::PropertyState_DIRECT_VALUE);
-
+            css::uno::Sequence<css::uno::Any> aArguments2(comphelper::InitAnyPropertySequence(
+            {
+                {"nodepath", css::uno::Any(OUString("org.openoffice.Office.Java/VirtualMachine"))},
+                {"depth", css::uno::Any((sal_Int32)-1)} // depth: -1 means unlimited
+            }));
             m_xJavaConfiguration.set(
                     xConfigProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationAccess",

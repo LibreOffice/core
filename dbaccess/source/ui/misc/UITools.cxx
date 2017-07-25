@@ -70,6 +70,7 @@
 #include "FieldDescriptions.hxx"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <svx/svxids.hrc>
 
@@ -1378,21 +1379,12 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
     try
     {
         Reference<XMultiServiceFactory> xORB( xNameAccess, UNO_QUERY_THROW );
-        Sequence< Any > aArguments(3);
-        PropertyValue aValue;
-        // set as folder
-        aValue.Name = "Name";
-        aValue.Value <<= sNewName;
-        aArguments[0] <<= aValue;
-        //parent
-        aValue.Name = "Parent";
-        aValue.Value <<= xNameAccess;
-        aArguments[1] <<= aValue;
-
-        aValue.Name = PROPERTY_EMBEDDEDOBJECT;
-        aValue.Value <<= _xContent;
-        aArguments[2] <<= aValue;
-
+        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        {
+            {"Name", uno::Any(sNewName)}, // set as folder
+            {"Parent", uno::Any(xNameAccess)},
+            {PROPERTY_EMBEDDEDOBJECT, uno::Any(_xContent)},
+        }));
         OUString sServiceName(_bCollection ? ((_bForm) ? OUString(SERVICE_NAME_FORM_COLLECTION) : OUString(SERVICE_NAME_REPORT_COLLECTION)) : OUString(SERVICE_SDB_DOCUMENTDEFINITION));
 
         Reference<XContent > xNew( xORB->createInstanceWithArguments( sServiceName, aArguments ), UNO_QUERY_THROW );
