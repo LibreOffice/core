@@ -399,10 +399,9 @@ void OOXMLPropertySet::add(const OOXMLPropertySet::Pointer_t& pPropertySet)
 
     if (pSet != nullptr)
     {
-        mProperties.resize(mProperties.size() + pSet->mProperties.size());
-        for (OOXMLProperties_t::iterator aIt = pSet->mProperties.begin();
-             aIt != pSet->mProperties.end(); ++aIt)
-            add(*aIt);
+        mProperties.reserve(mProperties.size() + pSet->mProperties.size());
+        for (const auto& aIt: pSet->mProperties)
+            add(aIt);
     }
 }
 
