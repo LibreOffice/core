@@ -292,20 +292,6 @@ SignatureInformations XMLSignatureHelper::GetSignatureInformations() const
     return mpXSecController->getSignatureInformations();
 }
 
-void XMLSignatureHelper::SignatureCreationResultListener(XMLSignatureCreationResult& rResult)
-{
-    maCreationResults.insert( maCreationResults.begin() + maCreationResults.size(), rResult );
-    if ( rResult.nSignatureCreationResult != css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
-        mbError = true;
-}
-
-void XMLSignatureHelper::SignatureVerifyResultListener(XMLSignatureVerifyResult& rResult)
-{
-    maVerifyResults.insert( maVerifyResults.begin() + maVerifyResults.size(), rResult );
-    if ( rResult.nSignatureVerifyResult != css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
-        mbError = true;
-}
-
 void XMLSignatureHelper::StartVerifySignatureElement()
 {
     if ( !maStartVerifySignatureHdl.IsSet() || maStartVerifySignatureHdl.Call(nullptr) )

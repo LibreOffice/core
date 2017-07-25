@@ -99,17 +99,6 @@ struct PrintFontInfo : public FastPrintFontInfo
     {}
 };
 
-// the values are per thousand of the font size
-// note: width, height contain advances, not bounding box
-struct CharacterMetric
-{
-    short int width, height;
-
-    CharacterMetric() : width( 0 ), height( 0 ) {}
-    bool operator!=( const CharacterMetric& rOther ) const
-    { return rOther.width != width || rOther.height != height; }
-};
-
 // a class to manage printable fonts
 
 class VCL_PLUGIN_PUBLIC PrintFontManager
@@ -245,13 +234,6 @@ public:
     {
         PrintFont* pFont = getFont( nFontID );
         return pFont ? pFont->m_eWeight : WEIGHT_DONTKNOW;
-    }
-
-    // get a specific fonts encoding
-    rtl_TextEncoding getFontEncoding( fontID nFontID ) const
-    {
-        PrintFont* pFont = getFont( nFontID );
-        return pFont ? pFont->m_aEncoding : RTL_TEXTENCODING_DONTKNOW;
     }
 
     // get a specific fonts system dependent filename

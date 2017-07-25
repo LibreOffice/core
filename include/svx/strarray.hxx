@@ -23,16 +23,6 @@
 #include <svx/svxdllapi.h>
 #include <vector>
 
-//  class SvxStringArray -------------------------------------------------
-
-class SVX_DLLPUBLIC SvxStringArray
-{
-    std::vector<OUString> m_aTranslations;
-public:
-    SvxStringArray(const char** pResId, size_t nLength);
-    const OUString GetString(sal_uInt32 nPos) const;
-};
-
 class SVX_DLLPUBLIC SvxFieldUnitTable
 {
 public:
@@ -55,7 +45,6 @@ class SVX_DLLPUBLIC SvxAttrNameTable
 public:
     static OUString GetString(sal_uInt32 i);
     static sal_uInt32 Count();
-    static sal_uInt16 GetValue(sal_uInt32 i);
     static sal_uInt32 FindIndex(int nValue);
 };
 

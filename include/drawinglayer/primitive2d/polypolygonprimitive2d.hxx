@@ -378,10 +378,6 @@ namespace drawinglayer
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
-            /// constructors. The one without definition range will use output range as definition range
-            PolyPolygonGraphicPrimitive2D(
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const attribute::FillGraphicAttribute& rFillGraphic);
             PolyPolygonGraphicPrimitive2D(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const basegfx::B2DRange& rDefinitionRange,

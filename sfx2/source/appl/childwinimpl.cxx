@@ -100,11 +100,6 @@ void SfxFrameArr_Impl::push_back( SfxFrame* p )
     maData.push_back(p);
 }
 
-size_t SfxFrameArr_Impl::size() const
-{
-    return maData.size();
-}
-
 bool SfxFrameArr_Impl::empty() const
 {
     return maData.empty();

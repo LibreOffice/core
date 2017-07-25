@@ -170,7 +170,6 @@ public:
                         { return pWindow->GetSizePixel(); }
     virtual void        Hide();
     virtual void        Show( ShowFlags nFlags );
-    bool                CanGetFocus() const;
     sal_uInt16          GetPosition();
     sal_uInt16          GetType()
                         { return nType; }

@@ -76,13 +76,9 @@ public:
     // Compound object
     const Color& GetDefaultAmbientColor() { return aDefaultAmbientColor; }
 
-    bool GetDefaultCreateNormals() const { return bDefaultCreateNormals; }
-    bool GetDefaultCreateTexture() const { return bDefaultCreateTexture; }
-
     // Cube object
     const basegfx::B3DPoint& GetDefaultCubePos() { return aDefaultCubePos; }
     const basegfx::B3DVector& GetDefaultCubeSize() { return aDefaultCubeSize; }
-    CubeFaces GetDefaultCubeSideFlags() const { return nDefaultCubeSideFlags; }
     bool GetDefaultCubePosIsCenter() const { return bDefaultCubePosIsCenter; }
 
     // Sphere object

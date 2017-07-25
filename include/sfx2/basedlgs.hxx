@@ -63,7 +63,6 @@ protected:
     OUString&           GetExtraData()      { return aExtraData; }
     sal_uInt32          GetUniqId() const   { return nUniqId; }
     void                SetUniqId(sal_uInt32 nSettingsId)  { nUniqId = nSettingsId; }
-    SfxItemSet*         GetItemSet()        { return pOutputSet; }
     void                CreateOutputItemSet( SfxItemPool& rPool );
     void                CreateOutputItemSet( const SfxItemSet& rInput );
     void                SetInputSet( const SfxItemSet* pInSet ) { pInputSet = pInSet; }

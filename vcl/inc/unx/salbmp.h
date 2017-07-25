@@ -197,10 +197,6 @@ public:
     long            ImplGetWidth() const { return maTwoRect.mnDestWidth; }
     long            ImplGetHeight() const { return maTwoRect.mnDestHeight; }
     long            ImplGetDepth() const { return mnDepth; }
-    sal_uIntPtr     ImplGetMemSize() const
-                    {
-                        return( ( maTwoRect.mnDestWidth * maTwoRect.mnDestHeight * mnDepth ) >> 3 );
-                    }
     const SalX11Screen& ImplGetScreen() const { return mnXScreen; }
 
     bool            ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRect& rTwoRect ) const;

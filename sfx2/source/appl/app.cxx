@@ -343,15 +343,9 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         pFrame->GetViewShell()->SetCurrentDocument();
 }
 
-std::locale* SfxApplication::GetSfxResLocale()
-{
-    return SfxResLocale::GetResLocale();
-}
-
 void SfxApplication::SetProgress_Impl
 (
     SfxProgress *pProgress
-
 )
 {
     DBG_ASSERT( ( !pImpl->pProgress && pProgress ) ||

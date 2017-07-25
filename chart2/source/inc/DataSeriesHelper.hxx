@@ -150,10 +150,6 @@ OOO_DLLPUBLIC_CHARTTOOLS bool hasAttributedDataPointDifferentValue(
     const OUString& rPropertyName,
     const css::uno::Any& rPropertyValue );
 
-OOO_DLLPUBLIC_CHARTTOOLS bool areAllSeriesAttachedToSameAxis(
-        const css::uno::Reference< css::chart2::XChartType >& xChartType,
-        sal_Int32 & rOutAxisIndex );
-
 OOO_DLLPUBLIC_CHARTTOOLS bool hasUnhiddenData( const css::uno::Reference<
         css::chart2::XDataSeries >& xSeries );
 

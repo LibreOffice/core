@@ -54,20 +54,6 @@ bool isSpace(char c) {
 
 }
 
-XmlReader::XmlReader(char const *sStr, size_t nLength)
-    : fileUrl_("stream")
-    , fileHandle_(nullptr)
-    , fileSize_(0)
-    , fileAddress_(nullptr)
-{
-    namespaceIris_.push_back(Span("http://www.w3.org/XML/1998/namespace"));
-    namespaces_.push_back(NamespaceData(Span("xml"), NAMESPACE_XML));
-    pos_ = sStr;
-    end_ = pos_ + nLength;
-    state_ = State::Content;
-    firstAttribute_ = true;
-}
-
 XmlReader::XmlReader(OUString const & fileUrl)
     : fileUrl_(fileUrl)
     , fileHandle_(nullptr)

@@ -26,8 +26,6 @@
 
 namespace desktop { namespace langselect {
 
-OUString getEmergencyLocale();
-
 bool prepareLocale();
 
 } }

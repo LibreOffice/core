@@ -1006,14 +1006,8 @@ public:
     const rtl::Reference < XMLPropertySetMapper >& GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
-    const SvXMLTokenMap& GetBodyElemTokenMap();
-    const SvXMLTokenMap& GetContentValidationsElemTokenMap();
     const SvXMLTokenMap& GetContentValidationElemTokenMap();
-    const SvXMLTokenMap& GetContentValidationAttrTokenMap();
     const SvXMLTokenMap& GetContentValidationMessageElemTokenMap();
-    const SvXMLTokenMap& GetContentValidationHelpMessageAttrTokenMap();
-    const SvXMLTokenMap& GetContentValidationErrorMessageAttrTokenMap();
-    const SvXMLTokenMap& GetContentValidationErrorMacroAttrTokenMap();
     const SvXMLTokenMap& GetCondFormatsTokenMap();
     const SvXMLTokenMap& GetCondFormatTokenMap();
     const SvXMLTokenMap& GetCondFormatAttrMap();
@@ -1025,15 +1019,8 @@ public:
     const SvXMLTokenMap& GetDataBarAttrMap();
     const SvXMLTokenMap& GetDataBarEntryAttrMap();
     const SvXMLTokenMap& GetIconSetAttrMap();
-    const SvXMLTokenMap& GetLabelRangesElemTokenMap();
-    const SvXMLTokenMap& GetLabelRangeAttrTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
-    const SvXMLTokenMap& GetTableProtectionAttrTokenMap();
     const SvXMLTokenMap& GetTableRowsElemTokenMap();
-    const SvXMLTokenMap& GetTableColsElemTokenMap();
-    const SvXMLTokenMap& GetTableAttrTokenMap();
-    const SvXMLTokenMap& GetTableScenarioAttrTokenMap();
-    const SvXMLTokenMap& GetTableColAttrTokenMap();
     const SvXMLTokenMap& GetTableRowElemTokenMap();
     const SvXMLTokenMap& GetTableRowAttrTokenMap();
     const SvXMLTokenMap& GetTableRowCellElemTokenMap();
@@ -1043,12 +1030,6 @@ public:
     const SvXMLTokenMap& GetDetectiveHighlightedAttrTokenMap();
     const SvXMLTokenMap& GetDetectiveOperationAttrTokenMap();
     const SvXMLTokenMap& GetTableCellRangeSourceAttrTokenMap();
-    const SvXMLTokenMap& GetNamedExpressionsElemTokenMap();
-    const SvXMLTokenMap& GetNamedRangeAttrTokenMap();
-    const SvXMLTokenMap& GetNamedExpressionAttrTokenMap();
-    const SvXMLTokenMap& GetDatabaseRangesElemTokenMap();
-    const SvXMLTokenMap& GetDatabaseRangeElemTokenMap();
-    const SvXMLTokenMap& GetDatabaseRangeAttrTokenMap();
     const SvXMLTokenMap& GetDatabaseRangeSourceSQLAttrTokenMap();
     const SvXMLTokenMap& GetDatabaseRangeSourceTableAttrTokenMap();
     const SvXMLTokenMap& GetDatabaseRangeSourceQueryAttrTokenMap();
@@ -1058,14 +1039,7 @@ public:
     const SvXMLTokenMap& GetFilterConditionAttrTokenMap();
     const SvXMLTokenMap& GetFilterSetItemAttrTokenMap();
     const SvXMLTokenMap& GetSortElemTokenMap();
-    const SvXMLTokenMap& GetSortAttrTokenMap();
     const SvXMLTokenMap& GetSortSortByAttrTokenMap();
-    const SvXMLTokenMap& GetDatabaseRangeSubTotalRulesElemTokenMap();
-    const SvXMLTokenMap& GetDatabaseRangeSubTotalRulesAttrTokenMap();
-    const SvXMLTokenMap& GetSubTotalRulesSortGroupsAttrTokenMap();
-    const SvXMLTokenMap& GetSubTotalRulesSubTotalRuleElemTokenMap();
-    const SvXMLTokenMap& GetSubTotalRulesSubTotalRuleAttrTokenMap();
-    const SvXMLTokenMap& GetSubTotalRuleSubTotalFieldAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotTablesElemTokenMap();
     const SvXMLTokenMap& GetDataPilotTableAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotTableElemTokenMap();
@@ -1081,13 +1055,11 @@ public:
     const SvXMLTokenMap& GetDataPilotSubTotalAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotMembersElemTokenMap();
     const SvXMLTokenMap& GetDataPilotMemberAttrTokenMap();
-    const SvXMLTokenMap& GetConsolidationAttrTokenMap();
     const SvXMLTokenMap& GetCellTextParaElemTokenMap();
     const SvXMLTokenMap& GetCellTextSpanElemTokenMap();
     const SvXMLTokenMap& GetCellTextSpanAttrTokenMap();
     const SvXMLTokenMap& GetCellTextURLAttrTokenMap();
     const SvXMLTokenMap& GetCellTextSAttrTokenMap();
-    const SvXMLTokenMap& GetDataStreamAttrTokenMap();
 
     void SetPostProcessData( sc::ImportPostProcessData* p );
     sc::ImportPostProcessData* GetPostProcessData() { return mpPostProcessData;}

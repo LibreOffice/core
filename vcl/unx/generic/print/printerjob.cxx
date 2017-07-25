@@ -156,12 +156,6 @@ PrinterJob::IsColorPrinter () const
 }
 
 osl::File*
-PrinterJob::GetCurrentPageHeader ()
-{
-    return maHeaderList.back();
-}
-
-osl::File*
 PrinterJob::GetCurrentPageBody ()
 {
     return maPageList.back();

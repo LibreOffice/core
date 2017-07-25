@@ -22,7 +22,6 @@ namespace vcl { class Font; }
 SVT_DLLPUBLIC UScriptCode otCoverageToScript(vcl::UnicodeCoverage::UnicodeCoverageEnum eOTCoverage);
 
 SVT_DLLPUBLIC bool isSymbolFont(const vcl::Font &rFont);
-SVT_DLLPUBLIC bool isOpenSymbolFont(const vcl::Font &rFont);
 
 SVT_DLLPUBLIC bool canRenderNameOfSelectedFont(OutputDevice const &rDevice);
 

@@ -64,33 +64,6 @@ void* UniqueIndexImpl::Get( Index nIndex ) const
     return nullptr;
 }
 
-UniqueIndexImpl::Index UniqueIndexImpl::FirstIndex() const
-{
-    if ( maMap.empty() )
-        return IndexNotFound;
-
-    return maMap.begin()->first;
-}
-
-UniqueIndexImpl::Index UniqueIndexImpl::LastIndex() const
-{
-    if ( maMap.empty() )
-        return IndexNotFound;
-
-    return maMap.rbegin()->first;
-}
-
-UniqueIndexImpl::Index UniqueIndexImpl::NextIndex(Index aIndex) const
-{
-    std::map<Index, void*>::const_iterator it = maMap.find( aIndex );
-    if ( it == maMap.end() )
-        return IndexNotFound;
-    ++it;
-    if ( it == maMap.end() )
-        return IndexNotFound;
-    return it->first;
-}
-
 UniqueIndexImpl::Index UniqueIndexImpl::GetIndexOf(void const * p) const
 {
     for( std::map<Index, void*>::const_iterator it = maMap.begin(); it != maMap.end(); ++it )

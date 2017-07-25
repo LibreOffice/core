@@ -25,17 +25,6 @@
 #include "fieldunit.hrc"
 #include "numberingtype.hrc"
 
-SvxStringArray::SvxStringArray(const char **pResId, size_t nLength)
-{
-    for (size_t i = 0; i < nLength; ++i)
-        m_aTranslations.push_back(SvxResId(pResId[i]));
-}
-
-const OUString SvxStringArray::GetString(sal_uInt32 nPos) const
-{
-    return m_aTranslations[nPos];
-}
-
 sal_uInt32 SvxFieldUnitTable::Count()
 {
     return SAL_N_ELEMENTS(RID_SVXSTR_FIELDUNIT_TABLE);
@@ -65,13 +54,6 @@ OUString SvxAttrNameTable::GetString(sal_uInt32 nPos)
 sal_uInt32 SvxAttrNameTable::Count()
 {
     return SAL_N_ELEMENTS(RID_ATTR_NAMES);
-}
-
-sal_uInt16 SvxAttrNameTable::GetValue(sal_uInt32 nPos)
-{
-    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
-        return RID_ATTR_NAMES[nPos].second;
-    return 0;
 }
 
 sal_uInt32 SvxAttrNameTable::FindIndex(int nValue)

@@ -477,49 +477,6 @@ const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
     return *pDocElemTokenMap;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetBodyElemTokenMap()
-{
-    if( !pBodyElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aBodyTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_TRACKED_CHANGES,         XML_TOK_BODY_TRACKED_CHANGES        },
-            { XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS,    XML_TOK_BODY_CALCULATION_SETTINGS   },
-            { XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATIONS,     XML_TOK_BODY_CONTENT_VALIDATIONS    },
-            { XML_NAMESPACE_TABLE, XML_LABEL_RANGES,            XML_TOK_BODY_LABEL_RANGES           },
-            { XML_NAMESPACE_TABLE, XML_TABLE,                   XML_TOK_BODY_TABLE                  },
-            { XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS,       XML_TOK_BODY_NAMED_EXPRESSIONS      },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_RANGES,         XML_TOK_BODY_DATABASE_RANGES        },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_RANGE,          XML_TOK_BODY_DATABASE_RANGE         },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLES,       XML_TOK_BODY_DATA_PILOT_TABLES      },
-            { XML_NAMESPACE_TABLE, XML_CONSOLIDATION,           XML_TOK_BODY_CONSOLIDATION          },
-            { XML_NAMESPACE_TABLE, XML_DDE_LINKS,               XML_TOK_BODY_DDE_LINKS              },
-            { XML_NAMESPACE_CALC_EXT, XML_DATA_STREAM_SOURCE,   XML_TOK_BODY_DATA_STREAM_SOURCE     },
-            XML_TOKEN_MAP_END
-        };
-
-        pBodyElemTokenMap = new SvXMLTokenMap( aBodyTokenMap );
-    } // if( !pBodyElemTokenMap )
-
-    return *pBodyElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetContentValidationsElemTokenMap()
-{
-    if( !pContentValidationsElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aContentValidationsElemTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION,  XML_TOK_CONTENT_VALIDATION  },
-            XML_TOKEN_MAP_END
-        };
-
-        pContentValidationsElemTokenMap = new SvXMLTokenMap( aContentValidationsElemTokenMap );
-    } // if( !pContentValidationsElemTokenMap )
-
-    return *pContentValidationsElemTokenMap;
-}
-
 const SvXMLTokenMap& ScXMLImport::GetContentValidationElemTokenMap()
 {
     if( !pContentValidationElemTokenMap )
@@ -539,26 +496,6 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationElemTokenMap()
     return *pContentValidationElemTokenMap;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetContentValidationAttrTokenMap()
-{
-    if( !pContentValidationAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aContentValidationAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_CONTENT_VALIDATION_NAME                 },
-            { XML_NAMESPACE_TABLE, XML_CONDITION,           XML_TOK_CONTENT_VALIDATION_CONDITION            },
-            { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS    },
-            { XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL,    XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL     },
-            { XML_NAMESPACE_TABLE, XML_DISPLAY_LIST,        XML_TOK_CONTENT_VALIDATION_DISPLAY_LIST         },
-            XML_TOKEN_MAP_END
-        };
-
-        pContentValidationAttrTokenMap = new SvXMLTokenMap( aContentValidationAttrTokenMap );
-    } // if( !pContentValidationAttrTokenMap )
-
-    return *pContentValidationAttrTokenMap;
-}
-
 const SvXMLTokenMap& ScXMLImport::GetContentValidationMessageElemTokenMap()
 {
     if( !pContentValidationMessageElemTokenMap )
@@ -573,58 +510,6 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationMessageElemTokenMap()
     } // if( !pContentValidationMessageElemTokenMap )
 
     return *pContentValidationMessageElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetContentValidationHelpMessageAttrTokenMap()
-{
-    if( !pContentValidationHelpMessageAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aContentValidationHelpMessageAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_TITLE,   XML_TOK_HELP_MESSAGE_ATTR_TITLE     },
-            { XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TOK_HELP_MESSAGE_ATTR_DISPLAY   },
-            XML_TOKEN_MAP_END
-        };
-
-        pContentValidationHelpMessageAttrTokenMap = new SvXMLTokenMap( aContentValidationHelpMessageAttrTokenMap );
-    } // if( !pContentValidationHelpMessageAttrTokenMap )
-
-    return *pContentValidationHelpMessageAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetContentValidationErrorMessageAttrTokenMap()
-{
-    if( !pContentValidationErrorMessageAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aContentValidationErrorMessageAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_TITLE,           XML_TOK_ERROR_MESSAGE_ATTR_TITLE        },
-            { XML_NAMESPACE_TABLE, XML_DISPLAY,         XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY      },
-            { XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE,    XML_TOK_ERROR_MESSAGE_ATTR_MESSAGE_TYPE },
-            XML_TOKEN_MAP_END
-        };
-
-        pContentValidationErrorMessageAttrTokenMap = new SvXMLTokenMap( aContentValidationErrorMessageAttrTokenMap );
-    } // if( !pContentValidationErrorMessageAttrTokenMap )
-
-    return *pContentValidationErrorMessageAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetContentValidationErrorMacroAttrTokenMap()
-{
-    if( !pContentValidationErrorMacroAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aContentValidationErrorMacroAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_NAME,    XML_TOK_ERROR_MACRO_ATTR_NAME       },
-            { XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TOK_ERROR_MACRO_ATTR_EXECUTE    },
-            XML_TOKEN_MAP_END
-        };
-
-        pContentValidationErrorMacroAttrTokenMap = new SvXMLTokenMap( aContentValidationErrorMacroAttrTokenMap );
-    } // if( !pContentValidationErrorMacroAttrTokenMap )
-
-    return *pContentValidationErrorMacroAttrTokenMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetCondFormatsTokenMap()
@@ -822,40 +707,6 @@ const SvXMLTokenMap& ScXMLImport::GetDataBarEntryAttrMap()
     return *pFormattingEntryAttrMap;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetLabelRangesElemTokenMap()
-{
-    if( !pLabelRangesElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aLabelRangesElemTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_LABEL_RANGE, XML_TOK_LABEL_RANGE_ELEM    },
-            XML_TOKEN_MAP_END
-        };
-
-        pLabelRangesElemTokenMap = new SvXMLTokenMap( aLabelRangesElemTokenMap );
-    } // if( !pLabelRangesElemTokenMap )
-
-    return *pLabelRangesElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetLabelRangeAttrTokenMap()
-{
-    if( !pLabelRangeAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aLabelRangeAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_LABEL_CELL_RANGE_ADDRESS,    XML_TOK_LABEL_RANGE_ATTR_LABEL_RANGE    },
-            { XML_NAMESPACE_TABLE, XML_DATA_CELL_RANGE_ADDRESS,     XML_TOK_LABEL_RANGE_ATTR_DATA_RANGE     },
-            { XML_NAMESPACE_TABLE, XML_ORIENTATION,                 XML_TOK_LABEL_RANGE_ATTR_ORIENTATION    },
-            XML_TOKEN_MAP_END
-        };
-
-        pLabelRangeAttrTokenMap = new SvXMLTokenMap( aLabelRangeAttrTokenMap );
-    } // if( !pLabelRangeAttrTokenMap )
-
-    return *pLabelRangeAttrTokenMap;
-}
-
 const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
 {
     if( !pTableElemTokenMap )
@@ -890,30 +741,6 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
     return *pTableElemTokenMap;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetTableProtectionAttrTokenMap()
-{
-    if (!pTableProtectionElemTokenMap)
-    {
-        static const SvXMLTokenMapEntry aTableProtectionTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_SELECT_PROTECTED_CELLS,      XML_TOK_TABLE_SELECT_PROTECTED_CELLS    },
-            { XML_NAMESPACE_TABLE, XML_SELECT_UNPROTECTED_CELLS,    XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS  },
-            { XML_NAMESPACE_OFFICE_EXT, XML_SELECT_PROTECTED_CELLS, XML_TOK_TABLE_SELECT_PROTECTED_CELLS_EXT    },
-            { XML_NAMESPACE_LO_EXT, XML_SELECT_PROTECTED_CELLS, XML_TOK_TABLE_SELECT_PROTECTED_CELLS_EXT    },
-            { XML_NAMESPACE_OFFICE_EXT, XML_SELECT_UNPROTECTED_CELLS, XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS_EXT  },
-            { XML_NAMESPACE_LO_EXT, XML_SELECT_UNPROTECTED_CELLS, XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS_EXT  },
-            { XML_NAMESPACE_LO_EXT, XML_INSERT_COLUMNS, XML_TOK_TABLE_INSERT_COLUMNS_EXT, },
-            { XML_NAMESPACE_LO_EXT, XML_INSERT_ROWS, XML_TOK_TABLE_INSERT_ROWS_EXT, },
-            { XML_NAMESPACE_LO_EXT, XML_DELETE_COLUMNS, XML_TOK_TABLE_DELETE_COLUMNS_EXT, },
-            { XML_NAMESPACE_LO_EXT, XML_DELETE_ROWS, XML_TOK_TABLE_DELETE_ROWS_EXT, },
-            XML_TOKEN_MAP_END
-        };
-        pTableProtectionElemTokenMap = new SvXMLTokenMap(aTableProtectionTokenMap);
-    }
-
-    return *pTableProtectionElemTokenMap;
-}
-
 const SvXMLTokenMap& ScXMLImport::GetTableRowsElemTokenMap()
 {
     if( !pTableRowsElemTokenMap )
@@ -931,92 +758,6 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowsElemTokenMap()
     } // if( !pTableRowsElemTokenMap )
 
     return *pTableRowsElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableColsElemTokenMap()
-{
-    if( !pTableColsElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aTableColsElemTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN_GROUP,      XML_TOK_TABLE_COLS_COL_GROUP    },
-            { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS,    XML_TOK_TABLE_COLS_HEADER_COLS  },
-            { XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS,           XML_TOK_TABLE_COLS_COLS         },
-            { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN,            XML_TOK_TABLE_COLS_COL          },
-            XML_TOKEN_MAP_END
-        };
-
-        pTableColsElemTokenMap = new SvXMLTokenMap( aTableColsElemTokenMap );
-    } // if( !pTableColsElemTokenMap )
-
-    return *pTableColsElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
-{
-    if( !pTableAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aTableAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE,     XML_NAME,           XML_TOK_TABLE_NAME          },
-            { XML_NAMESPACE_TABLE,     XML_STYLE_NAME,     XML_TOK_TABLE_STYLE_NAME    },
-            { XML_NAMESPACE_TABLE, XML_PROTECTED,                   XML_TOK_TABLE_PROTECTED         },
-            { XML_NAMESPACE_TABLE,     XML_PRINT_RANGES,   XML_TOK_TABLE_PRINT_RANGES  },
-            { XML_NAMESPACE_TABLE,     XML_PROTECTION_KEY, XML_TOK_TABLE_PASSWORD      },
-            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM, XML_TOK_TABLE_PASSHASH      },
-            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2, XML_TOK_TABLE_PASSHASH_2  },
-            { XML_NAMESPACE_LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2, XML_TOK_TABLE_PASSHASH_2  },
-            { XML_NAMESPACE_TABLE,     XML_PRINT,          XML_TOK_TABLE_PRINT         },
-            XML_TOKEN_MAP_END
-        };
-
-        pTableAttrTokenMap = new SvXMLTokenMap( aTableAttrTokenMap );
-    } // if( !pTableAttrTokenMap )
-
-    return *pTableAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableScenarioAttrTokenMap()
-{
-    if( !pTableScenarioAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aTableScenarioAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_DISPLAY_BORDER,      XML_TOK_TABLE_SCENARIO_ATTR_DISPLAY_BORDER  },
-            { XML_NAMESPACE_TABLE, XML_BORDER_COLOR,        XML_TOK_TABLE_SCENARIO_ATTR_BORDER_COLOR    },
-            { XML_NAMESPACE_TABLE, XML_COPY_BACK,           XML_TOK_TABLE_SCENARIO_ATTR_COPY_BACK       },
-            { XML_NAMESPACE_TABLE, XML_COPY_STYLES,         XML_TOK_TABLE_SCENARIO_ATTR_COPY_STYLES     },
-            { XML_NAMESPACE_TABLE, XML_COPY_FORMULAS,       XML_TOK_TABLE_SCENARIO_ATTR_COPY_FORMULAS   },
-            { XML_NAMESPACE_TABLE, XML_IS_ACTIVE,           XML_TOK_TABLE_SCENARIO_ATTR_IS_ACTIVE       },
-            { XML_NAMESPACE_TABLE, XML_SCENARIO_RANGES,     XML_TOK_TABLE_SCENARIO_ATTR_SCENARIO_RANGES },
-            { XML_NAMESPACE_TABLE, XML_COMMENT,             XML_TOK_TABLE_SCENARIO_ATTR_COMMENT         },
-            { XML_NAMESPACE_TABLE, XML_PROTECTED,           XML_TOK_TABLE_SCENARIO_ATTR_PROTECTED       },
-            XML_TOKEN_MAP_END
-        };
-
-        pTableScenarioAttrTokenMap = new SvXMLTokenMap( aTableScenarioAttrTokenMap );
-    } // if( !pTableScenarioAttrTokenMap )
-
-    return *pTableScenarioAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableColAttrTokenMap()
-{
-    if( !pTableColAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aTableColAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_COL_ATTR_STYLE_NAME       },
-            { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,     XML_TOK_TABLE_COL_ATTR_REPEATED         },
-            { XML_NAMESPACE_TABLE, XML_VISIBILITY,                  XML_TOK_TABLE_COL_ATTR_VISIBILITY       },
-            { XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME,    XML_TOK_TABLE_COL_ATTR_DEFAULT_CELL_STYLE_NAME },
-            XML_TOKEN_MAP_END
-        };
-
-        pTableColAttrTokenMap = new SvXMLTokenMap( aTableColAttrTokenMap );
-    } // if( !pTableColAttrTokenMap )
-
-    return *pTableColAttrTokenMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetTableRowElemTokenMap()
@@ -1170,122 +911,6 @@ const SvXMLTokenMap& ScXMLImport::GetTableCellRangeSourceAttrTokenMap()
     } // if( !pTableCellRangeSourceAttrTokenMap )
 
     return *pTableCellRangeSourceAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetNamedExpressionsElemTokenMap()
-{
-    if( !pNamedExpressionsElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aNamedExpressionsTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_NAMED_RANGE,             XML_TOK_NAMED_EXPRESSIONS_NAMED_RANGE           },
-            { XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION,        XML_TOK_NAMED_EXPRESSIONS_NAMED_EXPRESSION  },
-            XML_TOKEN_MAP_END
-        };
-
-        pNamedExpressionsElemTokenMap = new SvXMLTokenMap( aNamedExpressionsTokenMap );
-    } // if( !pNamedExpressionsElemTokenMap )
-
-    return *pNamedExpressionsElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetNamedRangeAttrTokenMap()
-{
-    if( !pNamedRangeAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aNamedRangeAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_NAMED_RANGE_ATTR_NAME               },
-            { XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS,  XML_TOK_NAMED_RANGE_ATTR_CELL_RANGE_ADDRESS },
-            { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_NAMED_RANGE_ATTR_BASE_CELL_ADDRESS  },
-            { XML_NAMESPACE_TABLE, XML_RANGE_USABLE_AS,     XML_TOK_NAMED_RANGE_ATTR_RANGE_USABLE_AS    },
-            XML_TOKEN_MAP_END
-        };
-
-        pNamedRangeAttrTokenMap = new SvXMLTokenMap( aNamedRangeAttrTokenMap );
-    } // if( !pNamedRangeAttrTokenMap )
-
-    return *pNamedRangeAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetNamedExpressionAttrTokenMap()
-{
-    if( !pNamedExpressionAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aNamedExpressionAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_NAMED_EXPRESSION_ATTR_NAME              },
-            { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_NAMED_EXPRESSION_ATTR_BASE_CELL_ADDRESS },
-            { XML_NAMESPACE_TABLE, XML_EXPRESSION,          XML_TOK_NAMED_EXPRESSION_ATTR_EXPRESSION        },
-            XML_TOKEN_MAP_END
-        };
-
-        pNamedExpressionAttrTokenMap = new SvXMLTokenMap( aNamedExpressionAttrTokenMap );
-    } // if( !pNamedExpressionAttrTokenMap )
-
-    return *pNamedExpressionAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetDatabaseRangesElemTokenMap()
-{
-    if( !pDatabaseRangesElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aDatabaseRangesTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_DATABASE_RANGE,  XML_TOK_DATABASE_RANGE      },
-            XML_TOKEN_MAP_END
-        };
-
-        pDatabaseRangesElemTokenMap = new SvXMLTokenMap( aDatabaseRangesTokenMap );
-    } // if( !pDatabaseRangesElemTokenMap )
-
-    return *pDatabaseRangesElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeElemTokenMap()
-{
-    if( !pDatabaseRangeElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aDatabaseRangeTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL,     XML_TOK_DATABASE_RANGE_SOURCE_SQL       },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE,   XML_TOK_DATABASE_RANGE_SOURCE_TABLE     },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY,   XML_TOK_DATABASE_RANGE_SOURCE_QUERY     },
-            { XML_NAMESPACE_TABLE, XML_FILTER,                  XML_TOK_FILTER                          },
-            { XML_NAMESPACE_TABLE, XML_SORT,                    XML_TOK_SORT                            },
-            { XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULES,          XML_TOK_DATABASE_RANGE_SUBTOTAL_RULES   },
-            XML_TOKEN_MAP_END
-        };
-
-        pDatabaseRangeElemTokenMap = new SvXMLTokenMap( aDatabaseRangeTokenMap );
-    } // if( !pDatabaseRangeElemTokenMap )
-
-    return *pDatabaseRangeElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeAttrTokenMap()
-{
-    if( !pDatabaseRangeAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aDatabaseRangeAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_DATABASE_RANGE_ATTR_NAME                    },
-            { XML_NAMESPACE_TABLE, XML_IS_SELECTION,            XML_TOK_DATABASE_RANGE_ATTR_IS_SELECTION            },
-            { XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_STYLES,   XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_STYLES   },
-            { XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_SIZE,     XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_SIZE     },
-            { XML_NAMESPACE_TABLE, XML_HAS_PERSISTENT_DATA,     XML_TOK_DATABASE_RANGE_ATTR_HAS_PERSISTENT_DATA     },
-            { XML_NAMESPACE_TABLE, XML_ORIENTATION,         XML_TOK_DATABASE_RANGE_ATTR_ORIENTATION             },
-            { XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER,     XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER         },
-            { XML_NAMESPACE_TABLE, XML_DISPLAY_FILTER_BUTTONS,  XML_TOK_DATABASE_RANGE_ATTR_DISPLAY_FILTER_BUTTONS  },
-            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,    XML_TOK_DATABASE_RANGE_ATTR_TARGET_RANGE_ADDRESS    },
-            { XML_NAMESPACE_TABLE, XML_REFRESH_DELAY,           XML_TOK_DATABASE_RANGE_ATTR_REFRESH_DELAY           },
-            XML_TOKEN_MAP_END
-        };
-
-        pDatabaseRangeAttrTokenMap = new SvXMLTokenMap( aDatabaseRangeAttrTokenMap );
-    } // if( !pDatabaseRangeAttrTokenMap )
-
-    return *pDatabaseRangeAttrTokenMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSourceSQLAttrTokenMap()
@@ -1452,29 +1077,6 @@ const SvXMLTokenMap& ScXMLImport::GetSortElemTokenMap()
     return *pSortElemTokenMap;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetSortAttrTokenMap()
-{
-    if( !pSortAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aSortAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT,  XML_TOK_SORT_ATTR_BIND_STYLES_TO_CONTENT    },
-            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,    XML_TOK_SORT_ATTR_TARGET_RANGE_ADDRESS      },
-            { XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE,          XML_TOK_SORT_ATTR_CASE_SENSITIVE            },
-            { XML_NAMESPACE_TABLE, XML_RFC_LANGUAGE_TAG,        XML_TOK_SORT_ATTR_RFC_LANGUAGE_TAG          },
-            { XML_NAMESPACE_TABLE, XML_LANGUAGE,                XML_TOK_SORT_ATTR_LANGUAGE                  },
-            { XML_NAMESPACE_TABLE, XML_SCRIPT,                  XML_TOK_SORT_ATTR_SCRIPT                    },
-            { XML_NAMESPACE_TABLE, XML_COUNTRY,                 XML_TOK_SORT_ATTR_COUNTRY                   },
-            { XML_NAMESPACE_TABLE, XML_ALGORITHM,               XML_TOK_SORT_ATTR_ALGORITHM                 },
-            XML_TOKEN_MAP_END
-        };
-
-        pSortAttrTokenMap = new SvXMLTokenMap( aSortAttrTokenMap );
-    } // if( !pSortAttrTokenMap )
-
-    return *pSortAttrTokenMap;
-}
-
 const SvXMLTokenMap& ScXMLImport::GetSortSortByAttrTokenMap()
 {
     if( !pSortSortByAttrTokenMap )
@@ -1491,107 +1093,6 @@ const SvXMLTokenMap& ScXMLImport::GetSortSortByAttrTokenMap()
     } // if( !pSortSortByAttrTokenMap )
 
     return *pSortSortByAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSubTotalRulesElemTokenMap()
-{
-    if( !pDatabaseRangeSubTotalRulesElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aDatabaseRangeSubTotalRulesTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_SORT_GROUPS,     XML_TOK_SUBTOTAL_RULES_SORT_GROUPS      },
-            { XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULE,   XML_TOK_SUBTOTAL_RULES_SUBTOTAL_RULE    },
-            XML_TOKEN_MAP_END
-        };
-
-        pDatabaseRangeSubTotalRulesElemTokenMap = new SvXMLTokenMap( aDatabaseRangeSubTotalRulesTokenMap );
-    } // if( !pDatabaseRangeSubTotalRulesElemTokenMap )
-
-    return *pDatabaseRangeSubTotalRulesElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSubTotalRulesAttrTokenMap()
-{
-    if( !pDatabaseRangeSubTotalRulesAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aDatabaseRangeSubTotalRulesAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT,          XML_TOK_SUBTOTAL_RULES_ATTR_BIND_STYLES_TO_CONTENT      },
-            { XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE,                  XML_TOK_SUBTOTAL_RULES_ATTR_CASE_SENSITIVE              },
-            { XML_NAMESPACE_TABLE, XML_PAGE_BREAKS_ON_GROUP_CHANGE, XML_TOK_SUBTOTAL_RULES_ATTR_PAGE_BREAKS_ON_GROUP_CHANGE },
-            XML_TOKEN_MAP_END
-        };
-
-        pDatabaseRangeSubTotalRulesAttrTokenMap = new SvXMLTokenMap( aDatabaseRangeSubTotalRulesAttrTokenMap );
-    } // if( !pDatabaseRangeSubTotalRulesAttrTokenMap )
-
-    return *pDatabaseRangeSubTotalRulesAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetSubTotalRulesSortGroupsAttrTokenMap()
-{
-    if( !pSubTotalRulesSortGroupsAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aSubTotalRulesSortGroupsAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_DATA_TYPE,   XML_TOK_SORT_GROUPS_ATTR_DATA_TYPE  },
-            { XML_NAMESPACE_TABLE, XML_ORDER,       XML_TOK_SORT_GROUPS_ATTR_ORDER      },
-            XML_TOKEN_MAP_END
-        };
-
-        pSubTotalRulesSortGroupsAttrTokenMap = new SvXMLTokenMap( aSubTotalRulesSortGroupsAttrTokenMap );
-    } // if( !pSubTotalRulesSortGroupsAttrTokenMap )
-
-    return *pSubTotalRulesSortGroupsAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetSubTotalRulesSubTotalRuleElemTokenMap()
-{
-    if( !pSubTotalRulesSubTotalRuleElemTokenMap )
-    {
-        static const SvXMLTokenMapEntry aSubTotalRulesSubTotalRuleTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_SUBTOTAL_FIELD,  XML_TOK_SUBTOTAL_RULE_SUBTOTAL_FIELD    },
-            XML_TOKEN_MAP_END
-        };
-
-        pSubTotalRulesSubTotalRuleElemTokenMap = new SvXMLTokenMap( aSubTotalRulesSubTotalRuleTokenMap );
-    } // if( !pSubTotalRulesSubTotalRuleElemTokenMap )
-
-    return *pSubTotalRulesSubTotalRuleElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetSubTotalRulesSubTotalRuleAttrTokenMap()
-{
-    if( !pSubTotalRulesSubTotalRuleAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aSubTotalRulesSubTotalRuleAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER,   XML_TOK_SUBTOTAL_RULE_ATTR_GROUP_BY_FIELD_NUMBER    },
-            XML_TOKEN_MAP_END
-        };
-
-        pSubTotalRulesSubTotalRuleAttrTokenMap = new SvXMLTokenMap( aSubTotalRulesSubTotalRuleAttrTokenMap );
-    } // if( !pSubTotalRulesSubTotalRuleAttrTokenMap )
-
-    return *pSubTotalRulesSubTotalRuleAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetSubTotalRuleSubTotalFieldAttrTokenMap()
-{
-    if( !pSubTotalRuleSubTotalFieldAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aSubTotalRuleSubTotalFieldAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE, XML_FIELD_NUMBER,    XML_TOK_SUBTOTAL_FIELD_ATTR_FIELD_NUMBER    },
-            { XML_NAMESPACE_TABLE, XML_FUNCTION,        XML_TOK_SUBTOTAL_FIELD_ATTR_FUNCTION        },
-            XML_TOKEN_MAP_END
-        };
-
-        pSubTotalRuleSubTotalFieldAttrTokenMap = new SvXMLTokenMap( aSubTotalRuleSubTotalFieldAttrTokenMap );
-    } // if( !pSubTotalRuleSubTotalFieldAttrTokenMap )
-
-    return *pSubTotalRuleSubTotalFieldAttrTokenMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetDataPilotTablesElemTokenMap()
@@ -1879,26 +1380,6 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotMemberAttrTokenMap()
     return *pDataPilotMemberAttrTokenMap;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetConsolidationAttrTokenMap()
-{
-    if( !pConsolidationAttrTokenMap )
-    {
-        static const SvXMLTokenMapEntry aConsolidationAttrTokenMap[] =
-        {
-            { XML_NAMESPACE_TABLE,  XML_FUNCTION,                       XML_TOK_CONSOLIDATION_ATTR_FUNCTION         },
-            { XML_NAMESPACE_TABLE,  XML_SOURCE_CELL_RANGE_ADDRESSES,    XML_TOK_CONSOLIDATION_ATTR_SOURCE_RANGES    },
-            { XML_NAMESPACE_TABLE,  XML_TARGET_CELL_ADDRESS,            XML_TOK_CONSOLIDATION_ATTR_TARGET_ADDRESS   },
-            { XML_NAMESPACE_TABLE,  XML_USE_LABEL,                      XML_TOK_CONSOLIDATION_ATTR_USE_LABEL        },
-            { XML_NAMESPACE_TABLE,  XML_LINK_TO_SOURCE_DATA,            XML_TOK_CONSOLIDATION_ATTR_LINK_TO_SOURCE   },
-            XML_TOKEN_MAP_END
-        };
-
-        pConsolidationAttrTokenMap = new SvXMLTokenMap( aConsolidationAttrTokenMap );
-    } // if( !pConsolidationAttrTokenMap )
-
-    return *pConsolidationAttrTokenMap;
-}
-
 const SvXMLTokenMap& ScXMLImport::GetCellTextParaElemTokenMap()
 {
     if (!pCellTextParaElemTokenMap)
@@ -1983,23 +1464,6 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextSAttrTokenMap()
         pCellTextSAttrTokenMap = new SvXMLTokenMap(aMap);
     }
     return *pCellTextSAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetDataStreamAttrTokenMap()
-{
-    if (!pDataStreamAttrTokenMap)
-    {
-        static const SvXMLTokenMapEntry aMap[] =
-        {
-            { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_DATA_STREAM_ATTR_URL },
-            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, XML_TOK_DATA_STREAM_ATTR_RANGE },
-            { XML_NAMESPACE_CALC_EXT, XML_EMPTY_LINE_REFRESH, XML_TOK_DATA_STREAM_ATTR_EMPTY_LINE_REFRESH },
-            { XML_NAMESPACE_CALC_EXT, XML_INSERTION_POSITION, XML_TOK_DATA_STREAM_ATTR_INSERTION_POSITION },
-            XML_TOKEN_MAP_END
-        };
-        pDataStreamAttrTokenMap = new SvXMLTokenMap(aMap);
-    }
-    return *pDataStreamAttrTokenMap;
 }
 
 void ScXMLImport::SetPostProcessData( sc::ImportPostProcessData* p )

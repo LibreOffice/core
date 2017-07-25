@@ -681,11 +681,6 @@ void SfxChildWindow::SetFrame( const css::uno::Reference< css::frame::XFrame > &
     }
 }
 
-bool SfxChildWindow::CanGetFocus() const
-{
-    return !(pImpl->pFact->aInfo.nFlags & SfxChildWindowFlags::CANTGETFOCUS);
-}
-
 void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, sal_uInt16 nId, SfxChildWinContextFactory* pFact)
 {
     SfxGetpApp()->RegisterChildWindowContext_Impl( pMod, nId, pFact );

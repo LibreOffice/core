@@ -40,7 +40,6 @@ public:
     sal_uInt16       GetMode() const     { return nMode; }
     sal_Int32        GetFStart() const   { return nFStart; }
     sal_uInt16       GetOffset() const   { return nOffset; }
-    sal_uInt16       GetEdFocus() const  { return nEdFocus; }
     const OUString&  GetUndoStr() const  { return aUndoStr; }
     bool             GetMatrixFlag()const{ return bMatrix;}
     const VclPtr<vcl::Window>& GetFocusWindow()const  { return xFocusWin; }

@@ -86,7 +86,6 @@ public:             // for usage in PrinterGfx
     sal_uInt16      GetPostscriptLevel (const JobData *pJobData = nullptr) const;
     bool        IsColorPrinter () const;
 
-    osl::File*      GetCurrentPageHeader ();
     osl::File*      GetCurrentPageBody ();
 
     const OUString& GetPrinterName() const { return m_aLastJobData.m_aPrinterName; }

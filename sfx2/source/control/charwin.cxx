@@ -166,11 +166,6 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Recta
         rRenderContext.SetFont(aOrigFont);
 }
 
-void SvxCharView::setInsertCharHdl(const Link<SvxCharView*,void> &rLink)
-{
-    maInsertCharHdl = rLink;
-}
-
 void SvxCharView::setMouseClickHdl(const Link<SvxCharView*,void> &rLink)
 {
     maMouseClickHdl = rLink;

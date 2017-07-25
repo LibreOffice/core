@@ -215,15 +215,6 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
     return eDT;
 }
 
-//Get SdDrawDocShell
-sd::DrawDocShell* SdNavigatorWin::GetDrawDocShell( const SdDrawDocument* pDoc )
-{
-    if( !pDoc )
-        return nullptr; // const as const can...
-    sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
-    return pDocShell;
-}
-
 IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl, ToolBox *, void)
 {
     sal_uInt16 nId = maToolbox->GetCurItemId();

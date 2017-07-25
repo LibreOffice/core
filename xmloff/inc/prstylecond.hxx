@@ -18,6 +18,5 @@
  */
 
 OUString GetParaStyleCondExternal( OUString const &);
-OUString GetParaStyleCondInternal( OUString const &);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

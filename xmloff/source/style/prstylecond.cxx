@@ -84,42 +84,4 @@ OUString GetParaStyleCondExternal( OUString const &internal)
     return OUString();
 }
 
-OUString GetParaStyleCondInternal( OUString const &external)
-{
-        sal_Int32 paren = external.indexOf('(');
-
-        if( paren > 0 && external[paren + 1] == ')' )
-        {
-            OUString stub( external.getStr(), paren );
-            int numval = -1;
-            unsigned i;
-
-            if(external.getLength() > paren + 2)
-            {
-                if(external[paren + 2] == '=')
-                {
-                    OUString num( external.getStr() + 3 );
-
-                    numval = num.toInt32();
-                }
-                else
-                {
-                    return OUString();
-                }
-            }
-
-            for(i = 0; i < CONDITION_COUNT; ++i)
-            {
-                if( aConditionMap[i].aValue == numval &&
-                    stub == GetXMLToken( aConditionMap[i].nExternal ) )
-                {
-                    return OUString( aConditionMap[i].aInternal,
-                                     strlen( aConditionMap[i].aInternal ),
-                                     RTL_TEXTENCODING_ASCII_US );
-                }
-            }
-        }
-        return OUString();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -70,31 +70,6 @@ void setMsLangIdFallback(OUString const & locale) {
 
 }
 
-OUString getEmergencyLocale() {
-    if (!foundLocale.isEmpty()) {
-        return foundLocale;
-    }
-    try {
-        css::uno::Sequence<OUString> inst(
-            officecfg::Setup::Office::InstalledLocales::get()->
-            getElementNames());
-        OUString locale(
-            getInstalledLocaleForLanguage(
-                inst,
-                officecfg::Office::Linguistic::General::UILocale::get()));
-        if (!locale.isEmpty()) {
-            return locale;
-        }
-        locale = getInstalledLocaleForSystemUILanguage(inst);
-        if (!locale.isEmpty()) {
-            return locale;
-        }
-    } catch (css::uno::Exception & e) {
-        SAL_WARN("desktop.app", "ignoring Exception \"" << e.Message << "\"");
-    }
-    return OUString();
-}
-
 bool prepareLocale() {
     // #i42730# Get the windows 16Bit locale, it should be preferred over the UI
     // locale:
