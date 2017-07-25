@@ -687,7 +687,7 @@ namespace
         for ( auto const & rEntry : aMapAdjustToAlign )
             if ( nValue == rEntry.nFormValue )
             {
-                _rValue <<= rEntry.nAPIValue;
+                _rValue <<= (sal_uInt16)rEntry.nAPIValue;
                 return;
             }
     }
