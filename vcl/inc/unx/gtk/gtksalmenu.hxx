@@ -22,7 +22,11 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <vcl/idle.hxx>
 
-#if ENABLE_DBUS && ENABLE_GIO && \
+#if GTK_CHECK_VERSION(3,0,0)
+#  define ENABLE_GMENU_INTEGRATION
+#  include <unx/gtk/glomenu.h>
+#  include <unx/gtk/gloactiongroup.h>
+#elif ENABLE_DBUS && ENABLE_GIO && \
     (GLIB_MAJOR_VERSION > 2 || GLIB_MINOR_VERSION >= 36)
 #  define ENABLE_GMENU_INTEGRATION
 #  include <unx/gtk/glomenu.h>

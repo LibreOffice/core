@@ -21,6 +21,8 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/gtk/gtkgdi.hxx>
+#include <unx/gtk/gtksalmenu.hxx>
+#include <unx/gtk/hudawareness.h>
 #include <vcl/help.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
@@ -41,13 +43,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <config_gio.h>
-
-#if ENABLE_DBUS && ENABLE_GIO
-#  include <unx/gtk/gtksalmenu.hxx>
-#endif
-#if defined ENABLE_GMENU_INTEGRATION // defined in gtksalmenu.hxx above
-#  include <unx/gtk/hudawareness.h>
-#endif
 
 #include <gtk/gtk.h>
 
@@ -109,9 +104,7 @@ using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
 
-#if defined ENABLE_GMENU_INTEGRATION
 static GDBusConnection* pSessionBus = nullptr;
-#endif
 
 static sal_uInt16 GetKeyModCode( guint state )
 {
@@ -504,8 +497,6 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     Init( pSysData );
 }
 
-#ifdef ENABLE_GMENU_INTEGRATION
-
 // AppMenu watch functions.
 
 static void ObjectDestroyedNotify( gpointer data )
@@ -765,11 +756,9 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
         pGtkSalMenu->EnableUnity(false);
     }
 }
-#endif
 
 void GtkSalFrame::EnsureAppMenuWatch()
 {
-#ifdef ENABLE_GMENU_INTEGRATION
     if ( !m_nWatcherId )
     {
         // Get a DBus session connection.
@@ -790,9 +779,6 @@ void GtkSalFrame::EnsureAppMenuWatch()
                                                        this,
                                                        nullptr );
     }
-#else
-    (void) this; // loplugin:staticmethods
-#endif
 }
 
 void GtkSalFrame::InvalidateGraphics()
@@ -852,15 +838,14 @@ GtkSalFrame::~GtkSalFrame()
         gtk_widget_destroy( GTK_WIDGET(m_pTopLevelGrid) );
     {
         SolarMutexGuard aGuard;
-#if defined ENABLE_GMENU_INTEGRATION
+
         if(m_nWatcherId)
             g_bus_unwatch_name(m_nWatcherId);
-#endif
+
         if( m_pWindow )
         {
             g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", nullptr );
 
-#if defined ENABLE_GMENU_INTEGRATION
             if ( pSessionBus )
             {
                 if ( m_nHudAwarenessId )
@@ -874,7 +859,6 @@ GtkSalFrame::~GtkSalFrame()
                 if ( m_nAppActionGroupExportId )
                     g_dbus_connection_unexport_action_group( pSessionBus, m_nAppActionGroupExportId );
             }
-#endif
             gtk_widget_destroy( m_pWindow );
         }
     }
@@ -1272,10 +1256,8 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 
     if( eWinType == GTK_WINDOW_TOPLEVEL )
     {
-#ifdef ENABLE_GMENU_INTEGRATION
         // Enable DBus native menu if available.
         ensure_dbus_setup( this );
-#endif
 
     }
 }
