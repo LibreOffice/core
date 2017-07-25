@@ -259,6 +259,11 @@ bool D2DWriteTextOutRenderer::performRender(CommonSalLayout const & rLayout, Sal
         bRetry = true;
         return false;
     }
+    if (FAILED(hr))
+    {
+        // If for any reason we can't bind fallback to legacy APIs.
+        return ExTextOutRenderer()(rLayout, rGraphics, hDC);
+    }
 
     mlfEmHeight = 0;
     if (!GetDWriteFaceFromHDC(hDC, &mpFontFace, &mlfEmHeight))
