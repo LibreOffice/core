@@ -104,7 +104,8 @@ bool ErrorHandler::GetErrorString(ErrCode nErrCodeId, OUString& rErrStr)
         return true;
     }
 
-    delete pInfo;
+    if (!nErrCodeId.IsDynamic())
+        delete pInfo;
     return false;
 }
 
@@ -156,7 +157,8 @@ DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, DialogMask nFlags)
         }
         else
         {
-            delete pInfo;
+            if (!nErrCodeId.IsDynamic())
+                delete pInfo;
 
             if(!rData.bIsWindowDsp)
             {
@@ -181,7 +183,8 @@ DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, DialogMask nFlags)
     else
         OSL_FAIL("ERRCODE_ABORT not handled");
 
-    delete pInfo;
+    if (!nErrCodeId.IsDynamic())
+        delete pInfo;
     return DialogMask::NONE;
 }
 
