@@ -153,7 +153,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/securityenvironment_nssimpl \
 	xmlsecurity/source/xmlsec/nss/seinitializer_nssimpl \
 	xmlsecurity/source/xmlsec/nss/x509certificate_nssimpl \
-	xmlsecurity/source/xmlsec/nss/xmlencryption_nssimpl \
 	xmlsecurity/source/xmlsec/nss/xmlsecuritycontext_nssimpl \
 	xmlsecurity/source/xmlsec/nss/xmlsignature_nssimpl \
 ))
