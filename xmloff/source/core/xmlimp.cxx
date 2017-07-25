@@ -2007,16 +2007,6 @@ const OUString SvXMLImport::getNamespacePrefixFromToken( sal_Int32 nToken )
         return OUString();
 }
 
-const OUString SvXMLImport::getNamespaceURIFromToken( sal_Int32 nToken )
-{
-    sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
-    auto aIter( aNamespaceMap.find( nNamespaceToken ) );
-    if( aIter != aNamespaceMap.end() )
-        return (*aIter).second.second;
-    else
-        return OUString();
-}
-
 void SvXMLImport::initializeNamespaceMaps()
 {
     auto mapTokenToNamespace = [&]( sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace )

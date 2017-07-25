@@ -75,7 +75,6 @@ public:
     SfxFrame* operator[] ( size_t i );
 
     void push_back( SfxFrame* p );
-    size_t size() const;
     bool empty() const;
 };
 

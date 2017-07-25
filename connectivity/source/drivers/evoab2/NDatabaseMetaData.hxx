@@ -85,8 +85,6 @@ namespace connectivity
 
             virtual ~OEvoabDatabaseMetaData() override;
         public:
-            OEvoabConnection* getOwnConnection() const { return m_pConnection; }
-
             explicit OEvoabDatabaseMetaData(OEvoabConnection* _pCon);
 
             // as I mentioned before this interface is really BIG

@@ -67,7 +67,6 @@ class SvxHyphenWordDialog : public SfxModalDialog
 
     void            InitControls_Impl();
     void            ContinueHyph_Impl( sal_Int32 nInsPos = -1 ); // continue by default
-    sal_uInt16      GetHyphIndex_Impl();
 
     DECL_LINK(Left_Impl, Button*, void);
     DECL_LINK(Right_Impl, Button*, void);

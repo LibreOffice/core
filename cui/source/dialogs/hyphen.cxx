@@ -274,23 +274,6 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
 }
 
 
-sal_uInt16 SvxHyphenWordDialog::GetHyphIndex_Impl()
-{
-    sal_uInt16 nPos = 0;
-    const OUString aTxt( m_pWordEdit->GetText() );
-
-    for ( sal_Int32 i=0; i < aTxt.getLength(); ++i )
-    {
-        sal_Unicode cChar = aTxt[ i ];
-        if ( cChar == CUR_HYPH_POS_CHAR )
-            break;
-        if ( cChar != HYPH_POS_CHAR )
-            nPos++;
-    }
-    return nPos;
-}
-
-
 void SvxHyphenWordDialog::SelLeft()
 {
     DBG_ASSERT( m_nOldPos > 0, "invalid hyphenation position" );

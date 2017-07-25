@@ -251,7 +251,6 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     bool            DrawHasMarkedObj();
     void            DrawEndAction();
     void            DrawMarkDropObj( SdrObject* pObj );
-    SdrObject*      GetEditObject();
     bool            IsMyModel(SdrEditView* pSdrView);
 
     void            DrawRedraw( ScOutputData& rOutputData, SdrLayerID nLayer );

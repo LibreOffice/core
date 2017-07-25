@@ -49,27 +49,6 @@ namespace embed {
     class XStorage; }
 }}}
 
-struct XMLSignatureCreationResult
-{
-    css::xml::crypto::SecurityOperationStatus nSignatureCreationResult;
-
-    XMLSignatureCreationResult( css::xml::crypto::SecurityOperationStatus nResult )
-    {
-        nSignatureCreationResult = nResult;
-    }
-};
-
-struct XMLSignatureVerifyResult
-{
-    css::xml::crypto::SecurityOperationStatus nSignatureVerifyResult;
-
-    XMLSignatureVerifyResult( css::xml::crypto::SecurityOperationStatus nResult )
-    {
-        nSignatureVerifyResult = nResult;
-    }
-};
-
-
 /**********************************************************
  XMLSignatureHelper
 
@@ -89,10 +68,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
     css::uno::Reference< css::xml::crypto::XUriBinding > mxUriBinding;
 
-    std::vector<XMLSignatureCreationResult>
-                                maCreationResults;
-    std::vector<XMLSignatureVerifyResult>
-                                maVerifyResults;
     rtl::Reference<XSecController> mpXSecController;
     bool                        mbError;
     bool mbODFPre1_2;
@@ -105,8 +80,6 @@ public:
     XMLSignatureHelper(const css::uno::Reference< css::uno::XComponentContext >& mrCtx );
     ~XMLSignatureHelper();
 
-    void SignatureCreationResultListener(XMLSignatureCreationResult& rResult);
-    void SignatureVerifyResultListener(XMLSignatureVerifyResult& rResult);
     void StartVerifySignatureElement();
 
     // Set the storage which should be used by the default UriBinding

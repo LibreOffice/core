@@ -198,7 +198,6 @@ public:
     bool                    IsSysChildWindow() const { return bool(nStyle_ & SalFrameStyleFlags::SYSTEMCHILD); }
     bool                    IsFloatGrabWindow() const;
     SalI18N_InputContext* getInputContext() const { return mpInputContext; }
-    bool                    isMapped() const { return bMapped_; }
     bool                    hasFocus() const { return mbInputFocus; }
 
     void                    beginUnicodeSequence();

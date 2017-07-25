@@ -133,9 +133,6 @@ public:
     static SfxApplication*      GetOrCreate();
     static SfxApplication*      Get();
 
-    // Resource Locale
-    static std::locale*         GetSfxResLocale();
-
     // DDE
 #if defined(_WIN32)
     static long                 DdeExecute( const OUString& rCmd );

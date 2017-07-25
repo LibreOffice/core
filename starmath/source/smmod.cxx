@@ -189,13 +189,6 @@ SmSymbolManager & SmModule::GetSymbolManager()
     return GetConfig()->GetSymbolManager();
 }
 
-SmLocalizedSymbolData & SmModule::GetLocSymbolData()
-{
-    if (!mpLocSymbolData)
-        mpLocSymbolData.reset(new SmLocalizedSymbolData);
-    return *mpLocSymbolData;
-}
-
 const SvtSysLocale& SmModule::GetSysLocale()
 {
     if( !mpSysLocale )

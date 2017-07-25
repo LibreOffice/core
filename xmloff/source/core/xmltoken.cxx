@@ -3336,17 +3336,6 @@ namespace xmloff { namespace token {
     }
 
     bool IsXMLToken(
-        const char* pCString,
-        enum XMLTokenEnum eToken )
-    {
-        assert(XML_TOKEN_INVALID < eToken);
-        assert(eToken < XML_TOKEN_END);
-
-        const XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
-        return !strcmp( pCString, pToken->pChar );
-    }
-
-    bool IsXMLToken(
         const sax_fastparser::FastAttributeList::FastAttributeIter& aIter,
         enum XMLTokenEnum eToken )
     {

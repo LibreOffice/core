@@ -308,19 +308,6 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
     }
 }
 
-SdrObject* ScGridWindow::GetEditObject()
-{
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
-    if (pDrView)
-    {
-        OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
-        if (pOlView && pOlView->GetWindow() == this)
-            return pDrView->GetTextEditObject();
-    }
-
-    return nullptr;
-}
-
 void ScGridWindow::UpdateStatusPosSize()
 {
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();

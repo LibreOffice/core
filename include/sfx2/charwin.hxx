@@ -36,7 +36,6 @@ public:
 
     virtual Size    GetOptimalSize() const override;
 
-    void setInsertCharHdl(const Link<SvxCharView*,void> &rLink);
     void setMouseClickHdl(const Link<SvxCharView*,void> &rLink);
 
 protected:

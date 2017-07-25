@@ -91,8 +91,6 @@ public:
     SmMathConfig *          GetConfig();
     SmSymbolManager &       GetSymbolManager();
 
-    SmLocalizedSymbolData &   GetLocSymbolData();
-
     static void GetState(SfxItemSet&);
 
     const SvtSysLocale& GetSysLocale();

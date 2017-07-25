@@ -47,8 +47,6 @@ namespace connectivity
           void setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns);
           sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
                         { return m_aEvoabFields[columnIndex - 1]; }
-          sal_Int32 getFieldSize() const
-            {return m_aEvoabFields.size();}
           /// Avoid ambiguous cast error from the compiler.
           operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
           { return this; }

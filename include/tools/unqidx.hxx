@@ -45,9 +45,6 @@ public:
     void* Get( Index aIndex ) const;
 
     Index GetIndexOf( void const* p ) const;
-    Index FirstIndex() const;
-    Index LastIndex() const;
-    Index NextIndex( Index aCurrIndex ) const;
 };
 
 template<typename T>
@@ -61,12 +58,6 @@ public:
 
     Index Insert(T* p) { return UniqueIndexImpl::Insert(p); }
     T*    Get(Index idx) const { return static_cast<T*>( UniqueIndexImpl::Get(idx) ); }
-    T*    Remove(Index idx) { return static_cast<T*>( UniqueIndexImpl::Remove(idx) ); }
-    Index GetIndexOf(T* p) const { return UniqueIndexImpl::GetIndexOf(p); }
-
-    using UniqueIndexImpl::FirstIndex;
-    using UniqueIndexImpl::LastIndex;
-    using UniqueIndexImpl::NextIndex;
 };
 
 #endif

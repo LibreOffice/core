@@ -483,16 +483,6 @@ namespace drawinglayer
 
         PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-            const attribute::FillGraphicAttribute& rFillGraphic)
-        :   BufferedDecompositionPrimitive2D(),
-            maPolyPolygon(rPolyPolygon),
-            maDefinitionRange(rPolyPolygon.getB2DRange()),
-            maFillGraphic(rFillGraphic)
-        {
-        }
-
-        PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(
-            const basegfx::B2DPolyPolygon& rPolyPolygon,
             const basegfx::B2DRange& rDefinitionRange,
             const attribute::FillGraphicAttribute& rFillGraphic)
         :   BufferedDecompositionPrimitive2D(),

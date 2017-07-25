@@ -70,7 +70,6 @@ class ResData
 public:
     ResData( const OString &rGId );
     ResData( const OString &rGId , const OString &rFilename );
-    bool SetId(const OString &rId, IdLevel nLevel);
 
     OString sResTyp;
     OString sId;
@@ -95,51 +94,6 @@ enum class StringType {
 
 typedef ::std::vector< ResData* > ResStack;
 class ParserQueue;
-
-/// Purpose: syntax check and export of *.src, called from lexer
-class Export
-{
-private:
-    bool bError;                        // any errors while export?
-
-    ParserQueue* pParseQueue;
-
-    void WriteData( ResData *pResData, bool bCreateNew = false ); ///< called before dest. cur ResData
-    void WriteExportList( ResData *pResData, ExportList& rExportList, const ExportListType nTyp );
-
-    OString FullId();                    ///< creates cur. GID
-
-    static OString GetPairedListID(const OString & rText);
-    static OString GetPairedListString(const OString& rText);
-    static OString StripList(const OString& rText);
-
-    void InsertListEntry(const OString &rLine);
-    static void CleanValue( OString &rValue );
-    static OString GetText(const OString &rSource, int nToken);
-
-    void ResData2Output( MergeEntrys *pEntry, StringType nType, const OString& rTextType );
-    void MergeRest( ResData *pResData );
-    static void ConvertMergeContent( OString &rText );
-    static void ConvertExportContent( OString &rText );
-
-    void WriteToMerged(const OString &rText , bool bSDFContent);
-    void SetChildWithText();
-
-    static void CutComment( OString &rText );
-
-public:
-    Export( const OString &rOutput );
-    Export(const OString &rMergeSource, const OString &rOutput, bool bUTF8BOM);
-    ~Export();
-
-    void Init();
-    void Execute( int nToken, const char * pToken ); ///< called from lexer
-
-    void SetError() { bError = true; }
-    bool GetError() { return bError; }
-    ParserQueue* GetParseQueue() { return pParseQueue; }
-};
-
 
 // class MergeEntrys
 
@@ -220,9 +174,6 @@ class MergeDataHashMap
         iterator begin() {return m_aHashMap.begin();}
         iterator end() {return m_aHashMap.end();}
 
-        const_iterator begin() const {return m_aHashMap.begin();}
-        const_iterator end() const {return m_aHashMap.end();}
-
     private:
         bool bFirstSearch;
         HashMap_t m_aHashMap;
@@ -276,7 +227,6 @@ class MergeDataFile
 
 
         std::vector<OString> GetLanguages() const;
-        const MergeDataHashMap& getMap() const { return aMap; }
 
         MergeEntrys *GetMergeEntrys( ResData *pResData );
         MergeEntrys *GetMergeEntrysCaseSensitive( ResData *pResData );
@@ -286,30 +236,6 @@ class MergeDataFile
 };
 
 
-class QueueEntry
-{
-public:
-    QueueEntry(int nTypVal, const OString &rLineVal)
-        : nTyp(nTypVal), sLine(rLineVal)
-    {
-    }
-    int nTyp;
-    OString sLine;
-};
-
-class ParserQueue
-{
-public:
-
-    ParserQueue( Export& aExportObj );
-    ~ParserQueue();
-
-    inline void Push( const QueueEntry& aEntry );
-
-    void Close();
-private:
-    inline void Pop( std::queue<QueueEntry>& aQueue );
-};
 #endif // INCLUDED_L10NTOOLS_INC_EXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

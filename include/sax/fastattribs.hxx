@@ -158,11 +158,6 @@ public:
                             RTL_TEXTENCODING_UTF8);
         }
 
-        const char* toCString() const
-        {
-            assert(mnIdx < mrList.maAttributeTokens.size());
-            return mrList.getFastAttributeValue(mnIdx);
-        }
         bool isString(const char *str) const
         {
             assert(mnIdx < mrList.maAttributeTokens.size());

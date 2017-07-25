@@ -28,20 +28,10 @@ chart2/source/view/main/OpenGLRender.hxx:104
     int OpenGLRender::RenderSymbol2DShape(float,float,int)
 chart2/source/view/main/OpenGLRender.hxx:121
     int OpenGLRender::Create2DCircle(int)
-compilerplugins/clang/test/externvar.hxx:23
-    int f(int)
-compilerplugins/clang/test/redundantinline.hxx:35
-    int S3::operator int()
-compilerplugins/clang/test/redundantinline.hxx:64
-    int S4::operator int()
-compilerplugins/clang/test/redundantinline.hxx:68
-    int S4::f5()
-compilerplugins/clang/test/redundantinline.hxx:70
-    int S4::f6()
-compilerplugins/clang/test/redundantinline.hxx:73
-    int f5()
-compilerplugins/clang/test/redundantinline.hxx:75
-    int f6()
+connectivity/source/drivers/evoab2/NResultSet.hxx:125
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> connectivity::evoab::OEvoabResultSet::operator*()
+connectivity/source/drivers/evoab2/NResultSetMetaData.hxx:53
+    class com::sun::star::uno::Reference<class com::sun::star::sdbc::XResultSetMetaData> connectivity::evoab::OEvoabResultSetMetaData::operator Reference()
 connectivity/source/inc/java/lang/Object.hxx:118
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
 connectivity/source/inc/OColumn.hxx:131
@@ -50,7 +40,7 @@ connectivity/source/inc/OColumn.hxx:133
     const class rtl::OUString & connectivity::OColumn::getCatalogName() const
 connectivity/source/inc/odbc/OConnection.hxx:82
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
-dbaccess/source/ui/browser/genericcontroller.cxx:1267
+dbaccess/source/ui/browser/genericcontroller.cxx:1266
     const type-parameter-?-? & dbaui::(anonymous namespace)::SGI_identity::operator()(const type-parameter-?-? &) const
 i18nlangtag/source/languagetag/languagetag.cxx:275
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
@@ -142,14 +132,16 @@ include/canvas/rendering/isurfaceproxymanager.hxx:58
     class std::shared_ptr<struct canvas::ISurfaceProxy> canvas::ISurfaceProxyManager::createSurfaceProxy(const class std::shared_ptr<struct canvas::IColorBuffer> &) const
 include/canvas/rendering/isurfaceproxymanager.hxx:64
     class std::shared_ptr<struct canvas::ISurfaceProxyManager> createSurfaceProxyManager(const class std::shared_ptr<struct canvas::IRenderModule> &)
-include/canvas/vclwrapper.hxx:135
+include/canvas/vclwrapper.hxx:134
     type-parameter-?-? & canvas::vcltools::VCLObject::get()
-include/canvas/vclwrapper.hxx:136
+include/canvas/vclwrapper.hxx:135
     const type-parameter-?-? & canvas::vcltools::VCLObject::get() const
-include/comphelper/unique_disposing_ptr.hxx:46
+include/comphelper/unique_disposing_ptr.hxx:45
     type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
 include/connectivity/FValue.hxx:327
     unsigned short connectivity::ORowSetValue::operator unsigned short() const
+include/editeng/editview.hxx:191
+    class ErrCode EditView::Read(class SvStream &,enum EETextFormat,class SvKeyValueIterator *)
 include/LibreOfficeKit/LibreOfficeKit.hxx:63
     struct _LibreOfficeKitDocument * lok::Document::get()
 include/LibreOfficeKit/LibreOfficeKit.hxx:71
@@ -178,6 +170,8 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:543
     char * lok::Office::getFilterTypes()
 include/LibreOfficeKit/LibreOfficeKit.hxx:593
     char * lok::Office::getVersionInfo()
+include/o3tl/array_view.hxx:158
+    unsigned long std::hash::operator()(array_view<type-parameter-?-?>)
 include/o3tl/enumarray.hxx:100
     typename type-parameter-?-?::value_type * o3tl::enumarray_iterator::operator->()
 include/o3tl/string_view.hxx:844
@@ -188,6 +182,8 @@ include/o3tl/string_view.hxx:854
     unsigned long std::hash::operator()(class o3tl::basic_string_view<char32_t, struct std::char_traits<char32_t> >)
 include/o3tl/string_view.hxx:859
     unsigned long std::hash::operator()(class o3tl::basic_string_view<wchar_t, struct std::char_traits<wchar_t> >)
+include/oox/dump/dumperbase.hxx:637
+    long oox::dump::FlagsList::getIgnoreFlags() const
 include/oox/dump/dumperbase.hxx:1392
     type-parameter-?-? oox::dump::InputObjectBase::dumpName(const class oox::dump::String &,const class oox::dump::NameListWrapper &)
 include/oox/dump/dumperbase.hxx:1398
@@ -244,12 +240,14 @@ include/oox/helper/binaryoutputstream.hxx:79
     class oox::BinaryOutputStream & oox::BinaryOutputStream::WriteUInt16(unsigned short)
 include/oox/helper/containerhelper.hxx:113
     typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::reference oox::Matrix::operator()(typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::size_type,typename vector<type-parameter-?-?, allocator<type-parameter-?-?> >::size_type)
-include/sax/fshelper.hxx:127
+include/sax/fshelper.hxx:205
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(int)
-include/sax/fshelper.hxx:128
+include/sax/fshelper.hxx:206
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(long)
-include/sax/fshelper.hxx:131
+include/sax/fshelper.hxx:209
     class sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::writeEscaped(const char *)
+include/svtools/treelistbox.hxx:536
+    short SvTreeListBox::GetHeightOffset(const class Image &,class Size &)
 include/test/sheet/xnamedrange.hxx:22
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> apitest::XNamedRange::init()
 include/test/sheet/xsheetannotation.hxx:36
@@ -270,10 +268,8 @@ include/vcl/fontcharmap.hxx:48
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
 include/vcl/gdimtf.hxx:185
     class SvStream & GDIMetaFile::Read(class SvStream &)
-include/vcl/graphicfilter.hxx:261
-    unsigned short GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
-include/vcl/menu.hxx:468
-    unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)
+include/vcl/graphicfilter.hxx:259
+    class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
 lotuswordpro/source/filter/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
 lotuswordpro/source/filter/lwpsvstream.hxx:77
@@ -284,9 +280,9 @@ sc/source/core/opencl/formulagroupcl.cxx:968
     unsigned long sc::opencl::DynamicKernelSlidingArgument::GenReductionLoopHeader(class std::basic_stringstream<char> &,_Bool &)
 sc/source/core/opencl/formulagroupcl.cxx:1413
     unsigned long sc::opencl::ParallelReductionVectorRef::GenReductionLoopHeader(class std::basic_stringstream<char> &,int,_Bool &)
-sc/source/core/tool/scmatrix.cxx:2209
+sc/source/core/tool/scmatrix.cxx:2213
     type-parameter-?-? * wrapped_iterator::operator->() const
-sc/source/core/tool/scmatrix.cxx:3175
+sc/source/core/tool/scmatrix.cxx:3179
     const class svl::SharedString & matop::COp::operator()(char,type-parameter-?-?,double,double,const class svl::SharedString &) const
 sc/source/ui/vba/vbaformat.hxx:69
     class com::sun::star::uno::Any ScVbaFormat::getAddIndent()
@@ -320,17 +316,23 @@ sc/source/ui/vba/vbaformat.hxx:145
     class com::sun::star::uno::Any ScVbaFormat::getMergeCells()
 sc/source/ui/vba/vbaformat.hxx:151
     class com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
-sd/source/filter/eppt/pptx-epptooxml.cxx:118
+sd/source/filter/eppt/pptx-epptooxml.cxx:126
     class oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,enum PageType,_Bool)
+sd/source/ui/inc/OutlineViewShell.hxx:114
+    class ErrCode sd::OutlineViewShell::ReadRtf(class SvStream &)
 sd/source/ui/remotecontrol/IBluetoothSocket.hxx:37
     int sd::IBluetoothSocket::write(const void *,unsigned int)
-sw/inc/calc.hxx:111
+sfx2/source/inc/childwinimpl.hxx:75
+    class SfxFrame * SfxFrameArr_Impl::operator[](unsigned long)
+sw/inc/calc.hxx:112
     class SwSbxValue & SwSbxValue::MakeDouble()
+sw/inc/editsh.hxx:617
+    const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
 sw/source/uibase/inc/fldmgr.hxx:114
     const class com::sun::star::uno::Reference<class com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 vcl/inc/PhysicalFontFace.hxx:79
     int PhysicalFontFace::GetWidth() const
-vcl/inc/unx/gtk/gtkdata.hxx:155
+vcl/inc/unx/gtk/gtkdata.hxx:153
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
 vcl/source/filter/FilterConfigCache.hxx:89
     class rtl::OUString FilterConfigCache::GetImportFormatMediaType(unsigned short)

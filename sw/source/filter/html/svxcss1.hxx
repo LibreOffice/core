@@ -161,10 +161,6 @@ class SvxCSS1MapEntry
     SvxCSS1PropertyInfo aPropInfo;
 
 public:
-    SvxCSS1MapEntry( SfxItemPool& rPool, const sal_uInt16 *pWhichMap ) :
-        aItemSet( rPool, pWhichMap )
-    {}
-
     SvxCSS1MapEntry( const SfxItemSet& rItemSet,
                      const SvxCSS1PropertyInfo& rProp );
 

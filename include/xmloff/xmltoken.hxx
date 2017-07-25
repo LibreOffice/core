@@ -3301,10 +3301,6 @@ namespace xmloff { namespace token {
         enum XMLTokenEnum eToken );
 
     XMLOFF_DLLPUBLIC bool IsXMLToken(
-        const char* pCString,
-        enum XMLTokenEnum eToken );
-
-    XMLOFF_DLLPUBLIC bool IsXMLToken(
         const sax_fastparser::FastAttributeList::FastAttributeIter& aIter,
         enum XMLTokenEnum eToken );
 } }
