@@ -23,57 +23,60 @@
 #include <svtools/svtdllapi.h>
 #include <sal/types.h>
 
-#define IMAGELIST_START                 3076  // must match to old Id's in SFX!
+enum class SvImageId {
+    NONE                   =    0,
+    START                  = 3076,  // must match to old Id's in SFX!
 
-#define IMG_IMPRESS                     (IMAGELIST_START + 47)
-#define IMG_BITMAP                      (IMAGELIST_START + 49)
-#define IMG_CALC                        (IMAGELIST_START + 50)
-#define IMG_CALCTEMPLATE                (IMAGELIST_START + 51)
-#define IMG_DATABASE                    (IMAGELIST_START + 53)
-#define IMG_IMPRESSTEMPLATE             (IMAGELIST_START + 54)
-#define IMG_GIF                         (IMAGELIST_START + 61)
-#define IMG_HTML                        (IMAGELIST_START + 63)
-#define IMG_JPG                         (IMAGELIST_START + 64)
-#define IMG_MATH                        (IMAGELIST_START + 68)
-#define IMG_MATHTEMPLATE                (IMAGELIST_START + 69)
-#define IMG_FILE                        (IMAGELIST_START + 74)
-#define IMG_PCD                         (IMAGELIST_START + 76)
-#define IMG_PCT                         (IMAGELIST_START + 77)
-#define IMG_PCX                         (IMAGELIST_START + 78)
-#define IMG_SIM                         (IMAGELIST_START + 79)
-#define IMG_TEXTFILE                    (IMAGELIST_START + 80)
-#define IMG_TIFF                        (IMAGELIST_START + 82)
-#define IMG_WMF                         (IMAGELIST_START + 84)
-#define IMG_WRITER                      (IMAGELIST_START + 86)
-#define IMG_WRITERTEMPLATE              (IMAGELIST_START + 87)
-#define IMG_FIXEDDEV                    (IMAGELIST_START + 88)
-#define IMG_REMOVABLEDEV                (IMAGELIST_START + 89)
-#define IMG_CDROMDEV                    (IMAGELIST_START + 90)
-#define IMG_NETWORKDEV                  (IMAGELIST_START + 91)
-#define IMG_TABLE                       (IMAGELIST_START + 112)
-#define IMG_FOLDER                      (IMAGELIST_START + 113)
-#define IMG_DXF                         (IMAGELIST_START + 141)
-#define IMG_MET                         (IMAGELIST_START + 142)
-#define IMG_PNG                         (IMAGELIST_START + 143)
-#define IMG_SGF                         (IMAGELIST_START + 144)
-#define IMG_SGV                         (IMAGELIST_START + 145)
-#define IMG_SVM                         (IMAGELIST_START + 146)
-#define IMG_GLOBAL_DOC                  (IMAGELIST_START + 150)
-#define IMG_DRAW                        (IMAGELIST_START + 151)
-#define IMG_DRAWTEMPLATE                (IMAGELIST_START + 152)
-#define IMG_TEMPLATE                    (IMAGELIST_START + 166)
-#define IMG_OO_DATABASE_DOC             (IMAGELIST_START + 169)
-#define IMG_OO_DRAW_DOC                 (IMAGELIST_START + 170)
-#define IMG_OO_MATH_DOC                 (IMAGELIST_START + 171)
-#define IMG_OO_GLOBAL_DOC               (IMAGELIST_START + 172)
-#define IMG_OO_IMPRESS_DOC              (IMAGELIST_START + 173)
-#define IMG_OO_CALC_DOC                 (IMAGELIST_START + 174)
-#define IMG_OO_WRITER_DOC               (IMAGELIST_START + 175)
-#define IMG_OO_DRAW_TEMPLATE            (IMAGELIST_START + 176)
-#define IMG_OO_IMPRESS_TEMPLATE         (IMAGELIST_START + 177)
-#define IMG_OO_CALC_TEMPLATE            (IMAGELIST_START + 178)
-#define IMG_OO_WRITER_TEMPLATE          (IMAGELIST_START + 179)
-#define IMG_EXTENSION                   (IMAGELIST_START + 180)
+    Impress                = START + 47,
+    Bitmap                 = START + 49,
+    Calc                   = START + 50,
+    CalcTemplate           = START + 51,
+    Database               = START + 53,
+    ImpressTemplate        = START + 54,
+    GIF                    = START + 61,
+    HTML                   = START + 63,
+    JPG                    = START + 64,
+    Math                   = START + 68,
+    MathTemplate           = START + 69,
+    File                   = START + 74,
+    PCD                    = START + 76,
+    PCT                    = START + 77,
+    PCX                    = START + 78,
+    SIM                    = START + 79,
+    TextFile               = START + 80,
+    TIFF                   = START + 82,
+    WMF                    = START + 84,
+    Writer                 = START + 86,
+    WriterTemplate         = START + 87,
+    FixedDevice            = START + 88,
+    RemoveableDevice       = START + 89,
+    CDRomDevice            = START + 90,
+    NetworkDevice          = START + 91,
+    Table                  = START + 112,
+    Folder                 = START + 113,
+    DXF                    = START + 141,
+    MET                    = START + 142,
+    PNG                    = START + 143,
+    SGF                    = START + 144,
+    SGV                    = START + 145,
+    SVM                    = START + 146,
+    GlobalDoc              = START + 150,
+    Draw                   = START + 151,
+    DrawTemplate           = START + 152,
+    Template               = START + 166,
+    OO_DatabaseDoc         = START + 169,
+    OO_DrawDoc             = START + 170,
+    OO_MathDoc             = START + 171,
+    OO_GlobalDoc           = START + 172,
+    OO_ImpressDoc          = START + 173,
+    OO_CalcDoc             = START + 174,
+    OO_WriterDoc           = START + 175,
+    OO_DrawTemplate        = START + 176,
+    OO_ImpressTemplate     = START + 177,
+    OO_CalcTemplate        = START + 178,
+    OO_WriterTemplate      = START + 179,
+    Extension              = START + 180,
+};
 
 
 class Image;
