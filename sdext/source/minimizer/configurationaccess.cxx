@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <sal/macros.h>
 
 using namespace ::com::sun::star;
@@ -289,14 +290,11 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
     try
     {
         Reference< lang::XMultiServiceFactory > xProvider = configuration::theDefaultProvider::get( mxContext );
-        Sequence< Any > aCreationArguments( 2 );
-        aCreationArguments[0] <<= PropertyValue(
-            "nodepath", 0,
-            makeAny( GetPathToConfigurationRoot() ),
-            PropertyState_DIRECT_VALUE );
-        aCreationArguments[1] <<= beans::PropertyValue(
-            "lazywrite", 0, makeAny( true ),
-            PropertyState_DIRECT_VALUE );
+        uno::Sequence<uno::Any> aCreationArguments(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath",  uno::Any(GetPathToConfigurationRoot())},
+            {"lazywrite", uno::Any(true)}
+        }));
         OUString sAccessService;
         if ( bReadOnly )
             sAccessService = "com.sun.star.configuration.ConfigurationAccess";

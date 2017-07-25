@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/i18n/Collator.hpp>
+#include <comphelper/propertysequence.hxx>
 #include "inputstream.hxx"
 #include <algorithm>
 #include <cassert>
@@ -200,11 +201,10 @@ OString Databases::getImageTheme()
         configuration::theDefaultProvider::get(m_xContext);
 
     // set root path
-    uno::Sequence < uno::Any > lParams(1);
-    beans::PropertyValue                       aParam ;
-    aParam.Name    = "nodepath";
-    aParam.Value <<= OUString("org.openoffice.Office.Common");
-    lParams[0] <<= aParam;
+    uno::Sequence<uno::Any> lParams(comphelper::InitAnyPropertySequence(
+    {
+        {"nodepath", uno::Any(OUString("org.openoffice.Office.Common"))}
+    }));
 
     // open it
     uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(

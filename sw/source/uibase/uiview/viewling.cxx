@@ -26,6 +26,7 @@
 #include <linguistic/lngprops.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/ehdl.hxx>
@@ -126,13 +127,10 @@ void SwView::ExecLingu(SfxRequest &rReq)
                     if( xInit.is() )
                     {
                         //  initialize dialog
-                        Reference< awt::XWindow > xDialogParentWindow(nullptr);
-                        Sequence<Any> aSeq(1);
-                        Any* pArray = aSeq.getArray();
-                        PropertyValue aParam;
-                        aParam.Name = "ParentWindow";
-                        aParam.Value <<= xDialogParentWindow;
-                        pArray[0] <<= aParam;
+                        uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                        {
+                            {"ParentWindow", uno::Any(Reference< awt::XWindow >())}
+                        }));
                         xInit->initialize( aSeq );
 
                         //execute dialog

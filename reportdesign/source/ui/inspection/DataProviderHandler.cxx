@@ -21,6 +21,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "strings.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
@@ -483,27 +484,15 @@ sal_Bool SAL_CALL DataProviderHandler::suspend(sal_Bool Suspend)
 }
 bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
 {
-    uno::Sequence<uno::Any> aSeq(6);
-    beans::PropertyValue aParam;
-    aParam.Name = "ParentWindow";
-    aParam.Value = m_xContext->getValueByName("DialogParentWindow");
-    aSeq[0] <<= aParam;
-    aParam.Name = "Detail";
-    aParam.Value <<= m_xDataProvider;
-    aSeq[1] <<= aParam;
-    aParam.Name = "Master";
-    aParam.Value <<= m_xReportComponent->getSection()->getReportDefinition();
-    aSeq[2] <<= aParam;
-
-    aParam.Name = "Explanation";
-    aParam.Value <<= RptResId(RID_STR_EXPLANATION);
-    aSeq[3] <<= aParam;
-    aParam.Name = "DetailLabel";
-    aParam.Value <<= RptResId(RID_STR_DETAILLABEL);
-    aSeq[4] <<= aParam;
-    aParam.Name = "MasterLabel";
-    aParam.Value <<= RptResId(RID_STR_MASTERLABEL);
-    aSeq[5] <<= aParam;
+    uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+    {
+        {"ParentWindow", uno::Any(m_xContext->getValueByName("DialogParentWindow"))},
+        {"Detail", uno::Any(m_xDataProvider)},
+        {"Master", uno::Any(m_xReportComponent->getSection()->getReportDefinition())},
+        {"Explanation", uno::Any(RptResId(RID_STR_EXPLANATION))},
+        {"DetailLabel", uno::Any(RptResId(RID_STR_DETAILLABEL))},
+        {"MasterLabel", uno::Any(RptResId(RID_STR_MASTERLABEL))},
+    }));
 
     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -516,14 +505,11 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
 
 bool DataProviderHandler::impl_dialogChartType_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
 {
-    uno::Sequence<uno::Any> aSeq(2);
-    beans::PropertyValue aParam;
-    aParam.Name = "ParentWindow";
-    aParam.Value = m_xContext->getValueByName("DialogParentWindow");
-    aSeq[0] <<= aParam;
-    aParam.Name = "ChartModel";
-    aParam.Value <<= m_xChartModel;
-    aSeq[1] <<= aParam;
+    uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+    {
+        {"ParentWindow", uno::Any(m_xContext->getValueByName("DialogParentWindow"))},
+        {"ChartModel", uno::Any(m_xChartModel)}
+    }));
 
     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(

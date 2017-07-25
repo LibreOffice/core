@@ -26,6 +26,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/DuplicateProviderException.hpp>
 #include <com/sun/star/ucb/GlobalTransferCommandArgument2.hpp>
@@ -854,11 +855,10 @@ bool UniversalContentBroker::getContentProviderData(
         makeAndAppendXMLName( aFullPath, rKey2 );
         aFullPath.append( "']/ProviderData" );
 
-        uno::Sequence< uno::Any > aArguments( 1 );
-        beans::PropertyValue      aProperty;
-        aProperty.Name = "nodepath";
-        aProperty.Value <<= aFullPath.makeStringAndClear();
-        aArguments[ 0 ] <<= aProperty;
+        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(aFullPath.makeStringAndClear())}
+        }));
 
         uno::Reference< uno::XInterface > xInterface(
                 xConfigProv->createInstanceWithArguments(

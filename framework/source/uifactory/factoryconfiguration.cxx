@@ -30,6 +30,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/weak.hxx>
 
 //  Defines
@@ -192,13 +193,10 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
 
     if ( !m_bConfigAccessInitialized )
     {
-        Sequence< Any > aArgs( 1 );
-        PropertyValue   aPropValue;
-
-        aPropValue.Name  = "nodepath";
-        aPropValue.Value <<= m_sRoot;
-        aArgs[0] <<= aPropValue;
-
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(m_sRoot)}
+        }));
         try
         {
             m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,aArgs ), UNO_QUERY );

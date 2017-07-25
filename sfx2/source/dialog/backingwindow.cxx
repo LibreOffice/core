@@ -40,6 +40,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
 
@@ -515,9 +516,10 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton, void)
     {
         try
         {
-            Sequence<Any> args(1);
-            PropertyValue val("nodepath", 0, Any(OUString("/org.openoffice.Office.Common/Help/StartCenter")), PropertyState_DIRECT_VALUE);
-            args.getArray()[0] <<= val;
+            uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
+            {
+                {"nodepath", uno::Any(OUString("/org.openoffice.Office.Common/Help/StartCenter"))}
+            }));
 
             Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
             Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS, args), UNO_QUERY);

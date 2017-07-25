@@ -27,6 +27,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -1345,21 +1346,12 @@ void ODocumentDefinition::saveAs()
                             rename(pDocuSave->getName());
                             updateDocumentTitle();
 
-                            Sequence< Any > aArguments(3);
-                            PropertyValue aValue;
-                            // set as folder
-                            aValue.Name = PROPERTY_NAME;
-                            aValue.Value <<= sOldName;
-                            aArguments[0] <<= aValue;
-
-                            aValue.Name = PROPERTY_PERSISTENT_NAME;
-                            aValue.Value <<= sPersistentName;
-                            aArguments[1] <<= aValue;
-
-                            aValue.Name = PROPERTY_AS_TEMPLATE;
-                            aValue.Value <<= m_pImpl->m_aProps.bAsTemplate;
-                            aArguments[2] <<= aValue;
-
+                            uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+                            {
+                                {PROPERTY_NAME, uno::Any(sOldName)}, // set as folder
+                                {PROPERTY_PERSISTENT_NAME, uno::Any(sPersistentName)},
+                                {PROPERTY_AS_TEMPLATE, uno::Any(m_pImpl->m_aProps.bAsTemplate)},
+                            }));
                             Reference< XMultiServiceFactory > xORB( m_xParentContainer, UNO_QUERY_THROW );
                             Reference< XInterface > xComponent( xORB->createInstanceWithArguments( SERVICE_SDB_DOCUMENTDEFINITION, aArguments ) );
                             Reference< XNameContainer > xNameContainer( m_xParentContainer, UNO_QUERY_THROW );
@@ -2017,15 +2009,11 @@ void ODocumentDefinition::fillReportData( const Reference< XComponentContext >& 
                                                const Reference< util::XCloseable >& _rxComponent,
                                                const Reference< XConnection >& _rxActiveConnection )
 {
-    Sequence< Any > aArgs(2);
-    PropertyValue aValue;
-    aValue.Name =  "TextDocument";
-    aValue.Value <<= _rxComponent;
-    aArgs[0] <<= aValue;
-    aValue.Name = "ActiveConnection";
-    aValue.Value <<= _rxActiveConnection;
-    aArgs[1] <<= aValue;
-
+    uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+    {
+        {"TextDocument", uno::Any(_rxComponent)},
+        {"ActiveConnection", uno::Any(_rxActiveConnection)}
+    }));
     try
     {
         Reference< XJobExecutor > xExecuteable(

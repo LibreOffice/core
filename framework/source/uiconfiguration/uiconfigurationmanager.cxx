@@ -47,6 +47,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ref.hxx>
@@ -1139,14 +1140,11 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
                              UNO_QUERY );
         Reference< XInitialization > xInit( m_xImageManager, UNO_QUERY );
 
-        Sequence< Any > aPropSeq( 2 );
-        PropertyValue aPropValue;
-        aPropValue.Name  = "UserConfigStorage";
-        aPropValue.Value <<= m_xDocConfigStorage;
-        aPropSeq[0] <<= aPropValue;
-        aPropValue.Name  = "ModuleIdentifier";
-        aPropValue.Value <<= m_aModuleIdentifier;
-        aPropSeq[1] <<= aPropValue;
+        Sequence<Any> aPropSeq(comphelper::InitAnyPropertySequence(
+        {
+            {"UserConfigStorage", Any(m_xDocConfigStorage)},
+            {"ModuleIdentifier", Any(m_aModuleIdentifier)},
+        }));
 
         xInit->initialize( aPropSeq );
     }

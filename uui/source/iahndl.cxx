@@ -66,6 +66,7 @@
 #include <osl/thread.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -857,11 +858,10 @@ UUIInteractionHelper::getInteractionHandlerList(
         aFullPath.append(
             "/org.openoffice.ucb.InteractionHandler/InteractionHandlers" );
 
-        uno::Sequence< uno::Any > aArguments( 1 );
-        beans::PropertyValue      aProperty;
-        aProperty.Name = "nodepath";
-        aProperty.Value <<= aFullPath.makeStringAndClear();
-        aArguments[ 0 ] <<= aProperty;
+        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(aFullPath.makeStringAndClear())}
+        }));
 
         uno::Reference< uno::XInterface > xInterface(
                 xConfigProv->createInstanceWithArguments(

@@ -44,6 +44,7 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -304,13 +305,10 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                     return;
 
                 //  initialize dialog
-                Reference<awt::XWindow> xDialogParentWindow(nullptr);
-                Sequence<Any> aSequence(1);
-                Any* pArray = aSequence.getArray();
-                PropertyValue aParam;
-                aParam.Name = "ParentWindow";
-                aParam.Value <<= xDialogParentWindow;
-                pArray[0] <<= aParam;
+                uno::Sequence<uno::Any> aSequence(comphelper::InitAnyPropertySequence(
+                {
+                    {"ParentWindow", uno::Any(Reference<awt::XWindow>())}
+                }));
                 xInit->initialize( aSequence );
 
                 //execute dialog

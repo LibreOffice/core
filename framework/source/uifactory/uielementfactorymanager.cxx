@@ -37,6 +37,7 @@
 #include <com/sun/star/ui/XUIElementFactoryManager.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -263,12 +264,10 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
 
     if ( !m_bConfigAccessInitialized )
     {
-        Sequence< Any > aArgs( 1 );
-        PropertyValue   aPropValue;
-
-        aPropValue.Name  = "nodepath";
-        aPropValue.Value <<= m_sRoot;
-        aArgs[0] <<= aPropValue;
+        Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", Any(m_sRoot)}
+        }));
 
         try
         {

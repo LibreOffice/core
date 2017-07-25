@@ -36,6 +36,7 @@
 #include <unotools/configmgr.hxx>
 
 #include <vcl/mnemonic.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 
@@ -500,15 +501,12 @@ Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
 
 void ConfigurationAccess_UICommand::initializeConfigAccess()
 {
-    Sequence< Any > aArgs( 1 );
-    PropertyValue   aPropValue;
-
     try
     {
-        aPropValue.Name  = "nodepath";
-        aPropValue.Value <<= m_aConfigCmdAccess;
-        aArgs[0] <<= aPropValue;
-
+        Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", Any(m_aConfigCmdAccess)}
+        }));
         m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
                     "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );
         if ( m_xConfigAccess.is() )
@@ -522,10 +520,12 @@ void ConfigurationAccess_UICommand::initializeConfigAccess()
             }
         }
 
-        aPropValue.Value <<= m_aConfigPopupAccess;
-        aArgs[0] <<= aPropValue;
+        Sequence<Any> aArgs2(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", Any(m_aConfigPopupAccess)}
+        }));
         m_xConfigAccessPopups.set( m_xConfigProvider->createInstanceWithArguments(
-                    "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );
+                    "com.sun.star.configuration.ConfigurationAccess", aArgs2 ),UNO_QUERY );
         if ( m_xConfigAccessPopups.is() )
         {
             // Add as container listener

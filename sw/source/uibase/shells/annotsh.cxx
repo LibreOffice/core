@@ -116,6 +116,7 @@
 #include <app.hrc>
 
 #include <comphelper/string.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
 #include <langhelper.hxx>
@@ -1289,13 +1290,10 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                         if( xInit.is() )
                         {
                             //  initialize dialog
-                            Reference< awt::XWindow > xDialogParentWindow(nullptr);
-                            Sequence<Any> aSeq(1);
-                            Any* pArray = aSeq.getArray();
-                            PropertyValue aParam;
-                            aParam.Name = "ParentWindow";
-                            aParam.Value <<= xDialogParentWindow;
-                            pArray[0] <<= aParam;
+                            uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                            {
+                                {"ParentWindow", uno::Any(Reference<awt::XWindow>())}
+                            }));
                             xInit->initialize( aSeq );
 
                             //execute dialog

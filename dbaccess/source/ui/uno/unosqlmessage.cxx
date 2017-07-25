@@ -24,6 +24,7 @@
 #include "stringconstants.hxx"
 #include "strings.hxx"
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 
@@ -91,10 +92,12 @@ void OSQLMessageDialog::initialize(Sequence<Any> const & args)
     Reference< css::awt::XWindow > parentWindow;
 
     if ((args.getLength() == 3) && (args[0] >>= title) && (args[1] >>= parentWindow)) {
-        Sequence<Any> s(3);
-        s[0] <<= PropertyValue( "Title", -1, makeAny(title), PropertyState_DIRECT_VALUE);
-        s[1] <<= PropertyValue( "ParentWindow", -1, makeAny(parentWindow), PropertyState_DIRECT_VALUE);
-        s[2] <<= PropertyValue( "SQLException", -1, args[2], PropertyState_DIRECT_VALUE);
+        Sequence<Any> s(comphelper::InitAnyPropertySequence(
+        {
+            {"Title", Any(title)},
+            {"ParentWindow", Any(parentWindow)},
+            {"SQLException", args[2]}
+        }));
         OGenericUnoDialog::initialize(s);
     } else {
         OGenericUnoDialog::initialize(args);

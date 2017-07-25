@@ -42,6 +42,7 @@
 #include <com/sun/star/rendering/PanoseWeight.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <comphelper/propertysequence.hxx>
 
 #include <bitmapaction.hxx>
 #include <implrenderer.hxx>
@@ -510,18 +511,12 @@ namespace cppcanvas
                             rParms.mrCanvas->getUNOCanvas()->getDevice()->getParametricPolyPolygonFactory() );
 
                     if( xFactory.is() ) {
-                        uno::Sequence<uno::Any> args( 3 );
-                        beans::PropertyValue aProp;
-                        aProp.Name = "Colors";
-                        aProp.Value <<= aColors;
-                        args[0] <<= aProp;
-                        aProp.Name = "Stops";
-                        aProp.Value <<= aStops;
-                        args[1] <<= aProp;
-                        aProp.Name = "AspectRatio";
-                        aProp.Value <<= static_cast<sal_Int32>(1);
-                        args[2] <<= aProp;
-
+                        uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
+                        {
+                            {"Colors", uno::Any(aColors)},
+                            {"Stops", uno::Any(aStops)},
+                            {"AspectRatio", uno::Any(static_cast<sal_Int32>(1))},
+                        }));
                         aTexture.Gradient.set(
                                 xFactory->createInstanceWithArguments( aGradientService,
                                     args ),
