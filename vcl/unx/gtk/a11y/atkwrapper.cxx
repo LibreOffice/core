@@ -778,7 +778,7 @@ ensureTypeFor( uno::XInterface *pAccessible )
 }
 
 AtkObject *
-atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAccessible, bool create )
+atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAccessible, bool create, AtkListener* pListener )
 {
     g_return_val_if_fail( rxAccessible.get() != nullptr, nullptr );
 
@@ -790,14 +790,14 @@ atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAc
     }
 
     if( create )
-        return atk_object_wrapper_new( rxAccessible );
+        return atk_object_wrapper_new( rxAccessible, nullptr, pListener );
 
     return nullptr;
 }
 
 AtkObject *
 atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
-                        AtkObject* parent )
+                        AtkObject* parent, AtkListener* pListener )
 {
     g_return_val_if_fail( rxAccessible.get() != nullptr, nullptr );
 
@@ -847,7 +847,7 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
             uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster(xContext, uno::UNO_QUERY);
             if( xBroadcaster.is() )
             {
-                uno::Reference<accessibility::XAccessibleEventListener> xListener(new AtkListener(pWrap));
+                uno::Reference<accessibility::XAccessibleEventListener> xListener( pListener ? pListener : new AtkListener(pWrap) );
                 xBroadcaster->addAccessibleEventListener(xListener);
             }
             else
