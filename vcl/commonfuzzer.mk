@@ -12,6 +12,7 @@ fuzzer_externals = \
     boost_headers \
     orcus \
     orcus-parser \
+    boost_locale \
     boost_filesystem \
     boost_system \
     boost_iostreams \
