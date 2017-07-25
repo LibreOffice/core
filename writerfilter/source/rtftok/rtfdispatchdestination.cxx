@@ -303,8 +303,8 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     }
                 }
                 m_aStates.top().eDestination = Destination::FOOTNOTE;
-                if (bCustomMark)
-                    Mapper().startCharacterGroup();
+                Mapper().startCharacterGroup();
+                runProps();
                 if (!m_aStates.top().pCurrentBuffer)
                     resolveSubstream(m_nGroupStartPos - 1, nId, aCustomMark);
                 else
@@ -322,8 +322,8 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                     auto pValue = std::make_shared<RTFValue>(1);
                     m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_FtnEdnRef_customMarkFollows, pValue);
                     text(aCustomMark);
-                    Mapper().endCharacterGroup();
                 }
+                Mapper().endCharacterGroup();
                 m_aStates.top().eDestination = Destination::SKIP;
             }
             break;
