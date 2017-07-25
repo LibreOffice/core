@@ -395,98 +395,129 @@ namespace pcr
             "OPropertyInfoService::getPropertyEnumRepresentations: this is no enum property!" );
 
         const char** pStringItemsResId = nullptr;
+        int nElements = 0;
         switch ( _nId )
         {
             case PROPERTY_ID_IMAGEPOSITION:
                 pStringItemsResId = RID_RSC_ENUM_IMAGE_POSITION;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_IMAGE_POSITION);
                 break;
             case PROPERTY_ID_BORDER:
                 pStringItemsResId = RID_RSC_ENUM_BORDER_TYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_BORDER_TYPE);
                 break;
             case PROPERTY_ID_ICONSIZE:
                 pStringItemsResId = RID_RSC_ENUM_ICONSIZE_TYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_ICONSIZE_TYPE);
                 break;
             case PROPERTY_ID_COMMANDTYPE:
                 pStringItemsResId = RID_RSC_ENUM_COMMAND_TYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_COMMAND_TYPE);
                 break;
             case PROPERTY_ID_LISTSOURCETYPE:
                 pStringItemsResId = RID_RSC_ENUM_LISTSOURCE_TYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_LISTSOURCE_TYPE);
                 break;
             case PROPERTY_ID_ALIGN:
                 pStringItemsResId = RID_RSC_ENUM_ALIGNMENT;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_ALIGNMENT);
                 break;
             case PROPERTY_ID_VERTICAL_ALIGN:
                 pStringItemsResId = RID_RSC_ENUM_VERTICAL_ALIGN;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_VERTICAL_ALIGN);
                 break;
             case PROPERTY_ID_BUTTONTYPE:
                 pStringItemsResId = RID_RSC_ENUM_BUTTONTYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_BUTTONTYPE);
                 break;
             case PROPERTY_ID_PUSHBUTTONTYPE:
                 pStringItemsResId = RID_RSC_ENUM_PUSHBUTTONTYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_PUSHBUTTONTYPE);
                 break;
             case PROPERTY_ID_SUBMIT_METHOD:
                 pStringItemsResId = RID_RSC_ENUM_SUBMIT_METHOD;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_SUBMIT_METHOD);
                 break;
             case PROPERTY_ID_SUBMIT_ENCODING:
                 pStringItemsResId = RID_RSC_ENUM_SUBMIT_ENCODING;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_SUBMIT_ENCODING);
                 break;
             case PROPERTY_ID_DATEFORMAT:
                 pStringItemsResId = RID_RSC_ENUM_DATEFORMAT_LIST;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_DATEFORMAT_LIST);
                 break;
             case PROPERTY_ID_TIMEFORMAT:
                 pStringItemsResId = RID_RSC_ENUM_TIMEFORMAT_LIST;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_TIMEFORMAT_LIST);
                 break;
             case PROPERTY_ID_DEFAULT_STATE:
             case PROPERTY_ID_STATE:
                 pStringItemsResId = RID_RSC_ENUM_CHECKED;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_CHECKED);
                 break;
             case PROPERTY_ID_CYCLE:
                 pStringItemsResId = RID_RSC_ENUM_CYCLE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_CYCLE);
                 break;
             case PROPERTY_ID_NAVIGATION:
                 pStringItemsResId = RID_RSC_ENUM_NAVIGATION;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_NAVIGATION);
                 break;
             case PROPERTY_ID_TARGET_FRAME:
                 pStringItemsResId = RID_RSC_ENUM_SUBMIT_TARGET;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_SUBMIT_TARGET);
                 break;
             case PROPERTY_ID_ORIENTATION:
                 pStringItemsResId = RID_RSC_ENUM_ORIENTATION;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_ORIENTATION);
                 break;
             case PROPERTY_ID_CELL_EXCHANGE_TYPE:
                 pStringItemsResId = RID_RSC_ENUM_CELL_EXCHANGE_TYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_CELL_EXCHANGE_TYPE);
                 break;
             case PROPERTY_ID_SHOW_SCROLLBARS:
                 pStringItemsResId = RID_RSC_ENUM_SCROLLBARS;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_SCROLLBARS);
                 break;
             case PROPERTY_ID_VISUALEFFECT:
                 pStringItemsResId = RID_RSC_ENUM_VISUALEFFECT;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_VISUALEFFECT);
                 break;
             case PROPERTY_ID_TEXTTYPE:
                 pStringItemsResId = RID_RSC_ENUM_TEXTTYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_TEXTTYPE);
                 break;
             case PROPERTY_ID_LINEEND_FORMAT:
                 pStringItemsResId = RID_RSC_ENUM_LINEEND_FORMAT;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_LINEEND_FORMAT);
                 break;
             case PROPERTY_ID_XSD_WHITESPACES:
                 pStringItemsResId = RID_RSC_ENUM_WHITESPACE_HANDLING;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_WHITESPACE_HANDLING);
                 break;
             case PROPERTY_ID_SELECTION_TYPE:
                 pStringItemsResId = RID_RSC_ENUM_SELECTION_TYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_SELECTION_TYPE);
                 break;
             case PROPERTY_ID_SCALE_MODE:
                 pStringItemsResId = RID_RSC_ENUM_SCALE_MODE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_SCALE_MODE);
                 break;
             case PROPERTY_ID_WRITING_MODE:
                 pStringItemsResId = RID_RSC_ENUM_WRITING_MODE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_WRITING_MODE);
                 break;
             case PROPERTY_ID_WHEEL_BEHAVIOR:
                 pStringItemsResId = RID_RSC_ENUM_WHEEL_BEHAVIOR;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_WHEEL_BEHAVIOR);
                 break;
             case PROPERTY_ID_TEXT_ANCHOR_TYPE:
                 pStringItemsResId = RID_RSC_ENUM_TEXT_ANCHOR_TYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_TEXT_ANCHOR_TYPE);
                 break;
             case PROPERTY_ID_SHEET_ANCHOR_TYPE:
                 pStringItemsResId = RID_RSC_ENUM_SHEET_ANCHOR_TYPE;
+                nElements = SAL_N_ELEMENTS(RID_RSC_ENUM_SHEET_ANCHOR_TYPE);
                 break;
             default:
                 OSL_FAIL( "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
@@ -495,12 +526,9 @@ namespace pcr
 
         std::vector< OUString > aReturn;
 
-        if (!pStringItemsResId)
-            return aReturn;
-
-        while (*pStringItemsResId)
+        for (int i = 0; i < nElements; ++i)
         {
-            aReturn.push_back(PcrRes(*pStringItemsResId++));
+            aReturn.push_back(PcrRes(pStringItemsResId[i]));
         }
 
         return aReturn;

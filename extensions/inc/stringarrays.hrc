@@ -212,7 +212,6 @@ const char* RID_RSC_ENUM_IMAGE_POSITION[] =
     NC_("RID_RSC_ENUM_IMAGE_POSITION", "Below centered"),
     NC_("RID_RSC_ENUM_IMAGE_POSITION", "Below right"),
     NC_("RID_RSC_ENUM_IMAGE_POSITION", "Centered"),
-    nullptr,
 };
 
 const char* RID_RSC_ENUM_WHITESPACE_HANDLING[] =
