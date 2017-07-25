@@ -399,8 +399,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     else if(nNewItemId == mnActiveId)
     {
         URLLoseFocusHdl( *m_pURLBox );
-        bool bNewState = !pTbx->IsItemChecked( TBI_ACTIVE );
-        pTbx->CheckItem( TBI_ACTIVE, bNewState );
+        bool bNewState = !pTbx->IsItemChecked(mnActiveId);
+        pTbx->CheckItem(mnActiveId, bNewState);
         pIMapWnd->SetCurrentObjState( !bNewState );
     }
     else if(nNewItemId == mnMacroId)
@@ -410,8 +410,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     else if(nNewItemId == mnPolyEditId)
     {
         SetActiveTool( nNewItemId );
-        pIMapWnd->SetPolyEditMode( pTbx->IsItemChecked( TBI_POLYEDIT ) ? SID_BEZIER_MOVE : 0 );
-        if( pTbx->IsKeyEvent() && pTbx->IsItemChecked( TBI_POLYEDIT ) )
+        pIMapWnd->SetPolyEditMode( pTbx->IsItemChecked(mnPolyEditId) ? SID_BEZIER_MOVE : 0 );
+        if( pTbx->IsKeyEvent() && pTbx->IsItemChecked(mnPolyEditId) )
             pIMapWnd->StartPolyEdit();
     }
     else if(nNewItemId == mnPolyMoveId)
@@ -567,8 +567,8 @@ void SvxIMapDlg::SetActiveTool( sal_uInt16 nId )
 
     bool bMove = mnPolyMoveId == nId
                 || ( mnPolyEditId == nId
-                && !m_pTbxIMapDlg1->IsItemChecked( TBI_POLYINSERT )
-                && !m_pTbxIMapDlg1->IsItemChecked( TBI_POLYDELETE ) );
+                && !m_pTbxIMapDlg1->IsItemChecked(mnPolyInsertId)
+                && !m_pTbxIMapDlg1->IsItemChecked(mnPolyDeleteId) );
 
     m_pTbxIMapDlg1->CheckItem( mnPolyMoveId, bMove );
 
