@@ -941,8 +941,16 @@ bool SwScanner::NextWord()
     {
         aBound.startPos = std::max( aBound.startPos, nStartPos );
         aBound.endPos = std::min( aBound.endPos, nEndPos );
-        nBegin = aBound.startPos;
-        nLen = aBound.endPos - nBegin;
+        if (aBound.endPos < aBound.startPos)
+        {
+            nBegin = nEndPos;
+            nLen = 0; // found word is outside of search interval
+        }
+        else
+        {
+            nBegin = aBound.startPos;
+            nLen = aBound.endPos - nBegin;
+        }
     }
 
     if( ! nLen )
