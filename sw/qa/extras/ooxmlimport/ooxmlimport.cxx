@@ -1418,6 +1418,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf109306, "tdf109306.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(80), getProperty<sal_Int16>(xTables->getByIndex(1), "RelativeWidth"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf109524, "tdf109524.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // The table should have a small width (just to hold the short text in its single cell).
+    // Until it's correctly implemented, we assign it 100% relative width.
+    // Previously, the table (without explicitly set width) had huge actual width
+    // and extended far outside of page's right border.
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(xTables->getByIndex(0), "IsWidthRelative")));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
