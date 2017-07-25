@@ -908,12 +908,6 @@ SvxNumBulletItem::SvxNumBulletItem(SvxNumRule const & rRule, sal_uInt16 _nWhich 
 {
 }
 
-SfxPoolItem* SvxNumBulletItem::Create(SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
-{
-    SvxNumRule aNumRule( rStream );
-    return new SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET );
-}
-
 SvxNumBulletItem::SvxNumBulletItem(const SvxNumBulletItem& rCopy) :
     SfxPoolItem(rCopy.Which())
 {
@@ -937,12 +931,6 @@ SfxPoolItem*  SvxNumBulletItem::Clone( SfxItemPool * ) const
 sal_uInt16  SvxNumBulletItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 {
     return NUMITEM_VERSION_03;
-}
-
-SvStream&   SvxNumBulletItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/ )const
-{
-    pNumRule->Store(rStream);
-    return rStream;
 }
 
 bool SvxNumBulletItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const

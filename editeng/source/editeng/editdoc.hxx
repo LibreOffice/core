@@ -839,8 +839,6 @@ public:
     EditEngineItemPool(bool bPersistenRefCounts);
 protected:
     virtual ~EditEngineItemPool() override;
-public:
-    virtual SvStream&   Store(SvStream& rStream) const override;
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITDOC_HXX

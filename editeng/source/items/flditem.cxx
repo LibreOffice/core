@@ -304,42 +304,6 @@ SfxPoolItem* SvxFieldItem::Clone( SfxItemPool* ) const
 }
 
 
-SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, sal_uInt16 ) const
-{
-    SvxFieldData* pData = nullptr;
-    SvPersistStream aPStrm( GetClassManager(), &rStrm );
-    aPStrm >> pData;
-
-    if( aPStrm.IsEof() )
-        aPStrm.SetError( SVSTREAM_GENERALERROR );
-
-    if ( aPStrm.GetError() == ERRCODE_IO_NOFACTORY )
-        aPStrm.ResetError();    // Actually a code for that not all were read Attr ...
-
-    return new SvxFieldItem( pData, Which() );
-}
-
-
-SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
-{
-    DBG_ASSERT( mxField.get(), "SvxFieldItem::Store: Field?!" );
-    SvPersistStream aPStrm( GetClassManager(), &rStrm );
-    // The reset error in the above Create method did not exist in 3.1,
-    // therefore newer items can not be saved for 3.x-exports!
-    if ( ( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_31 ) && mxField.get() &&
-            mxField->GetClassId() == 50 /* SdrMeasureField */ )
-    {
-        // SvxFieldData not enough, because not registered on ClassMgr.
-        SvxURLField aDummyData;
-        WriteSvPersistBase( aPStrm , &aDummyData );
-    }
-    else
-        WriteSvPersistBase( aPStrm, mxField.get() );
-
-    return rStrm;
-}
-
-
 bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
