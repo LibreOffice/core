@@ -240,39 +240,6 @@ bool SvxLineSpacingItem::GetPresentation
 }
 
 
-SfxPoolItem* SvxLineSpacingItem::Create(SvStream& rStrm, sal_uInt16) const
-{
-    sal_Int8    nPropSpace;
-    short   nInterSpace;
-    sal_uInt16  nHeight;
-    sal_Int8    nRule, nInterRule;
-
-    rStrm.ReadSChar( nPropSpace )
-         .ReadInt16( nInterSpace )
-         .ReadUInt16( nHeight )
-         .ReadSChar( nRule )
-         .ReadSChar( nInterRule );
-
-    SvxLineSpacingItem* pAttr = new SvxLineSpacingItem( nHeight, Which() );
-    pAttr->SetInterLineSpace( nInterSpace );
-    pAttr->SetPropLineSpace( nPropSpace );
-    pAttr->SetLineSpaceRule( (SvxLineSpaceRule)nRule );
-    pAttr->SetInterLineSpaceRule( (SvxInterLineSpaceRule)nInterRule );
-    return pAttr;
-}
-
-
-SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
-{
-    rStrm.WriteSChar( GetPropLineSpace() )
-         .WriteInt16( GetInterLineSpace() )
-         .WriteUInt16( GetLineHeight() )
-         .WriteSChar( (char) GetLineSpaceRule() )
-         .WriteSChar( (char) GetInterLineSpaceRule() );
-    return rStrm;
-}
-
-
 sal_uInt16 SvxLineSpacingItem::GetValueCount() const
 {
     return (sal_uInt16)SvxSpecialLineSpace::End;   // SvxSpecialLineSpace::TwoLines + 1
@@ -509,21 +476,6 @@ SfxPoolItem* SvxWidowsItem::Clone( SfxItemPool * ) const
 }
 
 
-SfxPoolItem* SvxWidowsItem::Create(SvStream& rStrm, sal_uInt16) const
-{
-    sal_Int8 nLines;
-    rStrm.ReadSChar( nLines );
-    return new SvxWidowsItem( nLines, Which() );
-}
-
-
-SvStream& SvxWidowsItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
-{
-    rStrm.WriteSChar( GetValue() );
-    return rStrm;
-}
-
-
 bool SvxWidowsItem::GetPresentation
 (
     SfxItemPresentation ePres,
@@ -567,21 +519,6 @@ SvxOrphansItem::SvxOrphansItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
 SfxPoolItem* SvxOrphansItem::Clone( SfxItemPool * ) const
 {
     return new SvxOrphansItem( *this );
-}
-
-
-SfxPoolItem* SvxOrphansItem::Create(SvStream& rStrm, sal_uInt16) const
-{
-    sal_Int8 nLines;
-    rStrm.ReadSChar( nLines );
-    return new SvxOrphansItem( nLines, Which() );
-}
-
-
-SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
-{
-    rStrm.WriteSChar( GetValue() );
-    return rStrm;
 }
 
 
