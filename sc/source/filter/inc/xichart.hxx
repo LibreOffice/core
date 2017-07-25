@@ -507,7 +507,7 @@ public:
     /** Converts and writes the contained number format to the passed property set. */
     void                ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const;
     /** Converts and writes all contained data to the passed data point label property set. */
-    void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const;
+    void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo, const ScfPropertySet* pGlobalPropSet = nullptr ) const;
     /** Creates a title text object. */
     css::uno::Reference< css::chart2::XTitle >
                         CreateTitle() const;
@@ -665,7 +665,7 @@ public:
     const XclImpChText* GetDataLabel() const { return mxLabel.get(); }
 
     /** Converts and writes the contained data to the passed property set. */
-    void                Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo ) const;
+    void                Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo, const ScfPropertySet* pGlobalPropSet = nullptr ) const;
     /** Writes the line format only, e.g. for trend lines or error bars. */
     void                ConvertLine( ScfPropertySet& rPropSet, XclChObjectType eObjType ) const;
     /** Writes the area format only for the series or a data point. */

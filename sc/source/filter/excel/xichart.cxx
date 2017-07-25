@@ -1072,7 +1072,7 @@ void XclImpChText::ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) cons
         mxSrcLink->ConvertNumFmt( rPropSet, bPercent );
 }
 
-void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const
+void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo, const ScfPropertySet* pGlobalPropSet ) const
 {
     // existing CHFRLABELPROPS record wins over flags from CHTEXT
     sal_uInt16 nShowFlags = mxLabelProps ? mxLabelProps->mnFlags : maData.mnFlags;
@@ -1125,6 +1125,11 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeIn
             case EXC_CHTEXT_POS_RIGHT:      nPlacement = RIGHT;                         break;
             case EXC_CHTEXT_POS_AUTO:       nPlacement = AVOID_OVERLAP;                 break;
         }
+        sal_Int32 nGlobalPlacement = 0;
+        if ( ( nPlacement == rTypeInfo.mnDefaultLabelPos ) && pGlobalPropSet &&
+             pGlobalPropSet->GetProperty( nGlobalPlacement, EXC_CHPROP_LABELPLACEMENT ) )
+            nPlacement = nGlobalPlacement;
+
         rPropSet.SetProperty( EXC_CHPROP_LABELPLACEMENT, nPlacement );
         // label number format (percentage format wins over value format)
         if( bShowPercent || bShowValue )
@@ -1507,7 +1512,7 @@ void XclImpChDataFormat::UpdateTrendLineFormat()
     UpdateDataLabel( nullptr );
 }
 
-void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo ) const
+void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo, const ScfPropertySet* pGlobalPropSet ) const
 {
     /*  Line and area format.
         #i71810# If the data points are filled with bitmaps, textures, or
@@ -1530,7 +1535,7 @@ void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeIn
     if( mx3dDataFmt )
         mx3dDataFmt->Convert( rPropSet );
     if( mxLabel )
-        mxLabel->ConvertDataLabel( rPropSet, rTypeInfo );
+        mxLabel->ConvertDataLabel( rPropSet, rTypeInfo, pGlobalPropSet );
 
     // 3D settings
     rPropSet.SetProperty< sal_Int16 >( EXC_CHPROP_PERCENTDIAGONAL, 0 );
@@ -2068,7 +2073,7 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
         for( XclImpChDataFormatMap::const_iterator aIt = maPointFmts.begin(), aEnd = maPointFmts.end(); aIt != aEnd; ++aIt )
         {
             ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, aIt->first );
-            aIt->second->Convert( aPointProp, rTypeInfo );
+            aIt->second->Convert( aPointProp, rTypeInfo, &aSeriesProp );
         }
     }
     return xDataSeries;
