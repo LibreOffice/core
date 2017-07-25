@@ -76,8 +76,6 @@ public:
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*     Create( SvStream& rStrm, sal_uInt16 nVer ) const override;
-    virtual SvStream&        Store( SvStream& rStrm, sal_uInt16 ) const override;
 
     sal_uInt8 &GetMinLead() { return nMinLead; }
     sal_uInt8 GetMinLead() const { return nMinLead; }

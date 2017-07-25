@@ -389,14 +389,6 @@ SfxPoolItem* SvxJustifyMethodItem::Clone( SfxItemPool* ) const
 }
 
 
-SfxPoolItem* SvxJustifyMethodItem::Create( SvStream& rStream, sal_uInt16 ) const
-{
-    sal_uInt16 nVal;
-    rStream.ReadUInt16( nVal );
-    return new SvxJustifyMethodItem( (SvxCellJustifyMethod)nVal, Which() );
-}
-
-
 sal_uInt16 SvxJustifyMethodItem::GetValueCount() const
 {
     return (sal_uInt16)SvxCellJustifyMethod::Distribute + 1;   // Last Enum value + 1

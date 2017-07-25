@@ -99,62 +99,6 @@ SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
     SetDefaults_Impl();
 }
 
-SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
-    : SfxPoolItem(_nWhich)
-    , pGraphicObject(nullptr)
-    , nStart(0)
-    , nStyle(SvxBulletStyle::ABC_BIG)
-    , nScale(0)
-{
-    sal_uInt16 nTmp1;
-    rStrm.ReadUInt16( nTmp1 );
-    nStyle = static_cast<SvxBulletStyle>(nTmp1);
-
-    if( nStyle != SvxBulletStyle::BMP )
-        aFont = CreateFont( rStrm, BULITEM_VERSION );
-    else
-    {
-        // Safe Load with Test on empty Bitmap
-        Bitmap          aBmp;
-        sal_uInt64 const nOldPos = rStrm.Tell();
-        // Ignore Errorcode when reading Bitmap,
-        // see comment in SvxBulletItem::Store()
-        bool bOldError = rStrm.GetError() != ERRCODE_NONE;
-        ReadDIB(aBmp, rStrm, true);
-
-        if ( !bOldError && rStrm.GetError() )
-        {
-            rStrm.ResetError();
-        }
-
-        if( aBmp.IsEmpty() )
-        {
-            rStrm.Seek( nOldPos );
-            nStyle = SvxBulletStyle::NONE;
-        }
-        else
-            pGraphicObject.reset( new GraphicObject( aBmp ) );
-    }
-
-    sal_Int32 nTmp(0);
-    rStrm.ReadInt32( nTmp ); nWidth = nTmp;
-    rStrm.ReadUInt16( nStart );
-    sal_uInt8 nTmpInt8(0);
-    rStrm.ReadUChar( nTmpInt8 ); // used to be nJustify
-
-    char cTmpSymbol(0);
-    rStrm.ReadChar( cTmpSymbol );
-    //convert single byte to unicode
-    cSymbol = OUString(&cTmpSymbol, 1, aFont.GetCharSet()).toChar();
-
-    rStrm.ReadUInt16( nScale );
-
-    // UNICODE: rStrm >> aPrevText;
-    aPrevText = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
-
-    // UNICODE: rStrm >> aFollowText;
-    aFollowText = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
-}
 
 SvxBulletItem::SvxBulletItem( const SvxBulletItem& rItem) : SfxPoolItem( rItem )
 {
@@ -179,12 +123,6 @@ SvxBulletItem::~SvxBulletItem()
 SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxBulletItem( *this );
-}
-
-
-SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) const
-{
-    return new SvxBulletItem( rStrm, Which() );
 }
 
 
@@ -264,62 +202,6 @@ bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
     }
 
     return true;
-}
-
-
-SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
-{
-    // Correction for empty bitmap
-    if( ( nStyle == SvxBulletStyle::BMP ) &&
-        ( !pGraphicObject || ( GraphicType::NONE == pGraphicObject->GetType() ) || ( GraphicType::Default == pGraphicObject->GetType() ) ) )
-    {
-        const_cast< SvxBulletItem* >( this )->pGraphicObject.reset();
-        const_cast< SvxBulletItem* >( this )->nStyle = SvxBulletStyle::NONE;
-    }
-
-    rStrm.WriteUInt16( static_cast<sal_uInt16>(nStyle) );
-
-    if( nStyle != SvxBulletStyle::BMP )
-        StoreFont( rStrm, aFont );
-    else
-    {
-        sal_uInt64 const _nStart = rStrm.Tell();
-
-        // Small preliminary estimate of the size ...
-        sal_uInt16 nFac = ( rStrm.GetCompressMode() != SvStreamCompressFlags::NONE ) ? 3 : 1;
-        const Bitmap aBmp( pGraphicObject->GetGraphic().GetBitmap() );
-        sal_uLong nBytes = aBmp.GetSizeBytes();
-        if ( nBytes < sal_uLong(0xFF00*nFac) )
-        {
-            WriteDIB(aBmp, rStrm, false, true);
-        }
-
-        sal_uInt64 const nEnd = rStrm.Tell();
-        // Item can not write with an overhead more than 64K or SfxMultiRecord
-        // will crash. Then prefer to forego on the bitmap, it is only
-        // important for the outliner and only for <= 5.0.
-        // When reading, the stream-operator makes note of the bitmap and the
-        // fact that there is none. This is now the case how it works with
-        // large bitmap created from another file format, which do not occupy a
-        // 64K chunk, but if a bitmap > 64K is used, the SvxNumBulletItem will
-        // have problem loading it, but does not crash.
-
-        if ( (nEnd-_nStart) > 0xFF00 )
-            rStrm.Seek( _nStart );
-    }
-    rStrm.WriteInt32( nWidth );
-    rStrm.WriteUInt16( nStart );
-    rStrm.WriteUChar( 0 ); // used to be nJustify
-    rStrm.WriteChar( OUStringToOString(OUString(cSymbol), aFont.GetCharSet()).toChar() );
-    rStrm.WriteUInt16( nScale );
-
-    // UNICODE: rStrm << aPrevText;
-    rStrm.WriteUniOrByteString(aPrevText, rStrm.GetStreamCharSet());
-
-    // UNICODE: rStrm << aFollowText;
-    rStrm.WriteUniOrByteString(aFollowText, rStrm.GetStreamCharSet());
-
-    return rStrm;
 }
 
 

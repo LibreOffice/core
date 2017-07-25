@@ -201,7 +201,6 @@ private:
                                const OUString& rNewName, SfxStyleFamily eNewFamily );
 
 public:
-    void StoreData( SvStream& rOStream ) const;
     void CreateData( SvStream& rIStream );
 
     EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pPool );
