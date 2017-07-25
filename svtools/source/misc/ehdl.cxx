@@ -221,9 +221,11 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
     bool bRet = false;
     rStr = RID_ERRHDL_CLASS;
 
+    ErrCode nErrId((sal_uInt16)(sal_uInt32)lErrId);
+
     for (const ErrMsgCode* pItem = pIds; pItem->second; ++pItem)
     {
-        if (pItem->second == lErrId)
+        if (pItem->second == nErrId)
         {
             rStr = rStr.replaceAll("$(ERROR)", Translate::get(pItem->first, *pResLocale));
             bRet = true;
