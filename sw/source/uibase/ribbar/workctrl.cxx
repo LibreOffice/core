@@ -287,6 +287,8 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
     m_pToolBox->SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
     m_pToolBox->StartSelection();
     m_pToolBox->Show();
+
+    AddStatusListener(".uno:NavElement");
 }
 
 SwScrollNaviPopup::~SwScrollNaviPopup()
@@ -307,15 +309,9 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet, void)
     if( nSet != NID_PREV && nSet != NID_NEXT )
     {
         SwView::SetMoveType(nSet);
-        m_pToolBox->SetItemText(NID_NEXT, sQuickHelp[nSet - NID_START]);
-        m_pToolBox->SetItemText(NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT]);
-        m_pInfoField->SetText(m_pToolBox->GetItemText(nSet));
-        // check the current button only
-        for(ToolBox::ImplToolItems::size_type i = 0; i < NID_COUNT; i++)
-        {
-            sal_uInt16 nItemId = m_pToolBox->GetItemId( i );
-            m_pToolBox->CheckItem( nItemId, nItemId == nSet );
-        }
+        Sequence< PropertyValue > aArgs;
+        SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
+                                     ".uno:NavElement", aArgs );
     }
     else
     {
@@ -360,6 +356,24 @@ OUString SwScrollNaviPopup::GetToolTip(bool bNext)
     if(!bNext)
         nResId += NID_COUNT;
     return SwResId(nResId);
+}
+
+void SwScrollNaviPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+{
+    if ( rEvent.FeatureURL.Path == "NavElement" )
+    {
+        sal_uInt16 nSet = SwView::GetMoveType();
+        m_pToolBox->SetItemText( NID_NEXT, sQuickHelp[nSet - NID_START] );
+        m_pToolBox->SetItemText( NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT] );
+        m_pInfoField->SetText( m_pToolBox->GetItemText( nSet ) );
+        // check the current button only
+        for( ToolBox::ImplToolItems::size_type i = 0; i < NID_COUNT; i++ )
+        {
+            sal_uInt16 nItemId = m_pToolBox->GetItemId( i );
+            m_pToolBox->CheckItem( nItemId, nItemId == nSet );
+        }
+
+    }
 }
 
 class SwZoomBox_Impl : public ComboBox
@@ -675,7 +689,6 @@ void NavElementBox_Impl::ReleaseFocus_Impl()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-
 void NavElementBox_Impl::Select()
 {
     ListBox::Select();
@@ -686,9 +699,7 @@ void NavElementBox_Impl::Select()
 
         SwView::SetMoveType( NID_START + 2 + nPos );
 
-        css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name = "NavElement";
-        aArgs[0].Value <<=  nPos;   // not used
+        css::uno::Sequence< css::beans::PropertyValue > aArgs;
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
             This instance may be deleted in the meantime (i.e. when a dialog is opened
@@ -699,13 +710,11 @@ void NavElementBox_Impl::Select()
     }
 }
 
-
 void NavElementBox_Impl::Update()
 {
     sal_uInt16 nItemId = ST_TBL - 2 + SwView::GetMoveType() - NID_START;
     SelectEntry( SwResId( nItemId ) );
 }
-
 
 bool NavElementBox_Impl::EventNotify( NotifyEvent& rNEvt )
 {
@@ -740,7 +749,6 @@ bool NavElementBox_Impl::EventNotify( NotifyEvent& rNEvt )
 
     return bHandled || ListBox::EventNotify( rNEvt );
 }
-
 
 NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
  : svt::ToolboxController( rxContext,
@@ -849,10 +857,8 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
 
     uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
 
-
     return xItemWindow;
 }
-
 
 void NavElementToolBoxControl::dispatchCommand(
     const uno::Sequence< beans::PropertyValue >& rArgs )
@@ -871,7 +877,6 @@ void NavElementToolBoxControl::dispatchCommand(
             xDispatch->dispatch( aURL, rArgs );
     }
 }
-
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 NavElementToolBoxController_get_implementation(
