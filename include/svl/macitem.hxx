@@ -27,6 +27,7 @@
 #include <map>
 
 class SvStream;
+enum class SvMacroItemId : sal_uInt16;
 
 #define SVX_MACRO_LANGUAGE_JAVASCRIPT "JavaScript"
 #define SVX_MACRO_LANGUAGE_STARBASIC "StarBasic"
@@ -69,7 +70,7 @@ inline SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLibName,
 {}
 
 // Macro Table, destroys the pointers in the DTor!
-typedef std::map<sal_uInt16, SvxMacro> SvxMacroTable;
+typedef std::map<SvMacroItemId, SvxMacro> SvxMacroTable;
 
 #define SVX_MACROTBL_VERSION31  0
 #define SVX_MACROTBL_VERSION40  1
@@ -100,15 +101,15 @@ public:
     bool empty() const { return aSvxMacroTable.empty(); }
 
     // returns NULL if no entry exists, or a pointer to the internal value
-    const SvxMacro* Get(sal_uInt16 nEvent) const;
+    const SvxMacro* Get(SvMacroItemId nEvent) const;
     // returns NULL if no entry exists, or a pointer to the internal value
-    SvxMacro* Get(sal_uInt16 nEvent);
+    SvxMacro* Get(SvMacroItemId nEvent);
     // return true if the key exists
-    bool IsKeyValid(sal_uInt16 nEvent) const;
+    bool IsKeyValid(SvMacroItemId nEvent) const;
     // This stores a copy of the rMacro parameter
-    SvxMacro& Insert(sal_uInt16 nEvent, const SvxMacro& rMacro);
+    SvxMacro& Insert(SvMacroItemId nEvent, const SvxMacro& rMacro);
     // If the entry exists, remove it from the map and release it's storage
-    void Erase(sal_uInt16 nEvent);
+    void Erase(SvMacroItemId nEvent);
 };
 
 
@@ -136,9 +137,9 @@ public:
     const SvxMacroTableDtor& GetMacroTable() const { return aMacroTable;}
     void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aMacroTable = rTbl; }
 
-    inline const SvxMacro& GetMacro( sal_uInt16 nEvent ) const;
-    inline bool HasMacro( sal_uInt16 nEvent ) const;
-           void SetMacro( sal_uInt16 nEvent, const SvxMacro& );
+    inline const SvxMacro& GetMacro( SvMacroItemId nEvent ) const;
+    inline bool HasMacro( SvMacroItemId nEvent ) const;
+           void SetMacro( SvMacroItemId nEvent, const SvxMacro& );
 
 private:
     SvxMacroTableDtor aMacroTable;
@@ -155,11 +156,11 @@ inline SvxMacroItem::SvxMacroItem( const SvxMacroItem &rCpy )
     aMacroTable( rCpy.GetMacroTable() )
 {}
 
-inline bool SvxMacroItem::HasMacro( sal_uInt16 nEvent ) const
+inline bool SvxMacroItem::HasMacro( SvMacroItemId nEvent ) const
 {
     return aMacroTable.IsKeyValid( nEvent );
 }
-inline const SvxMacro& SvxMacroItem::GetMacro( sal_uInt16 nEvent ) const
+inline const SvxMacro& SvxMacroItem::GetMacro( SvMacroItemId nEvent ) const
 {
     return *(aMacroTable.Get(nEvent));
 }

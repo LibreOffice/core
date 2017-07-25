@@ -532,9 +532,9 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
 
         SvxMacroItem aItem(RES_FRMMACRO);
         if( aStart.HasMacro() )
-            aItem.SetMacro( SW_EVENT_START_INS_GLOSSARY, aStart );
+            aItem.SetMacro( SvMacroItemId::SwStartInsGlossary, aStart );
         if( aEnd.HasMacro() )
-            aItem.SetMacro( SW_EVENT_END_INS_GLOSSARY, aEnd );
+            aItem.SetMacro( SvMacroItemId::SwEndInsGlossary, aEnd );
 
         aSet.Put( aItem );
         aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_AUTOTEXT ) );
@@ -548,8 +548,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
         {
             const SvxMacroTableDtor& rTable = static_cast<const SvxMacroItem*>(pItem)->GetMacroTable();
             pGlossaryHdl->SetMacros( m_pShortNameEdit->GetText(),
-                                        rTable.Get( SW_EVENT_START_INS_GLOSSARY ),
-                                        rTable.Get( SW_EVENT_END_INS_GLOSSARY ) );
+                                        rTable.Get( SvMacroItemId::SwStartInsGlossary ),
+                                        rTable.Get( SvMacroItemId::SwEndInsGlossary ) );
         }
     }
     else if (sItemIdent == "import")

@@ -157,7 +157,7 @@ void SwWrtShell::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pA
     }
 }
 
-sal_uInt16 SwWrtShell::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
+sal_uInt16 SwWrtShell::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCallEvent,
                                 bool bChkPtr)
 {
     return GetDoc()->CallEvent( nEvent, rCallEvent, bChkPtr );

@@ -152,9 +152,9 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
 // taken from unocore/unoevents.cxx or ui/unotxt.cxx
 const struct SvEventDescription aAutotextEvents[] =
 {
-    { SW_EVENT_START_INS_GLOSSARY,  "OnInsertStart" },
-    { SW_EVENT_END_INS_GLOSSARY,    "OnInsertDone" },
-    { 0, nullptr }
+    { SvMacroItemId::SwStartInsGlossary,  "OnInsertStart" },
+    { SvMacroItemId::SwEndInsGlossary,    "OnInsertDone" },
+    { SvMacroItemId::NONE, nullptr }
 };
 
 ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,

@@ -22,6 +22,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/event.hxx>
 #include "openflag.hxx"
 
 #include <svtools/htmlkywd.hxx>
@@ -102,8 +103,8 @@ bool SfxHTMLParser::ParseMapOptions(
 
 bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
                                      const HTMLOptions& rOptions,
-                                     sal_uInt16 nEventMouseOver,
-                                     sal_uInt16 nEventMouseOut )
+                                     SvMacroItemId nEventMouseOver,
+                                     SvMacroItemId nEventMouseOut )
 {
     DBG_ASSERT( pImageMap, "ParseAreaOptions: no Image-Map" );
 
@@ -115,7 +116,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
 
     for (size_t i = rOptions.size(); i; )
     {
-        sal_uInt16 nEvent = 0;
+        SvMacroItemId nEvent = SvMacroItemId::NONE;
         ScriptType eScrpType = STARBASIC;
         const HTMLOption& rOption = rOptions[--i];
         switch( rOption.GetToken() )
@@ -156,7 +157,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
             nEvent = nEventMouseOut;
             goto IMAPOBJ_SETEVENT;
 IMAPOBJ_SETEVENT:
-            if( nEvent )
+            if( nEvent != SvMacroItemId::NONE)
             {
                 OUString sTmp( rOption.GetString() );
                 if( !sTmp.isEmpty() )

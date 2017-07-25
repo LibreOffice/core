@@ -28,6 +28,7 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/event.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -112,17 +113,17 @@ static HTMLOptionEnum<HTMLWordWrapMode> aHTMLTextAreaWrapTable[] =
     { nullptr,                             (HTMLWordWrapMode)0 }
 };
 
-HTMLEventType aEventTypeTable[] =
+static SvMacroItemId aEventTypeTable[] =
 {
-    HTML_ET_ONSUBMITFORM,
-    HTML_ET_ONRESETFORM,
-    HTML_ET_ONGETFOCUS,
-    HTML_ET_ONLOSEFOCUS,
-    HTML_ET_ONCLICK,
-    HTML_ET_ONCLICK_ITEM,
-    HTML_ET_ONCHANGE,
-    HTML_ET_ONSELECT,
-    HTML_ET_END
+    SvMacroItemId::HtmlOnSubmitForm,
+    SvMacroItemId::HtmlOnResetForm,
+    SvMacroItemId::HtmlOnGetFocus,
+    SvMacroItemId::HtmlOnLoseFocus,
+    SvMacroItemId::HtmlOnClick,
+    SvMacroItemId::HtmlOnClickItem,
+    SvMacroItemId::HtmlOnChange,
+    SvMacroItemId::HtmlOnSelect,
+    SvMacroItemId::NONE
 };
 
 const sal_Char * aEventListenerTable[] =
@@ -743,7 +744,7 @@ static void lcl_html_setEvents(
     // First the number of events has to be determined
     sal_Int32 nEvents = 0;
 
-    for( int i = 0; HTML_ET_END != aEventTypeTable[i]; ++i )
+    for( int i = 0; SvMacroItemId::NONE != aEventTypeTable[i]; ++i )
     {
         const SvxMacro *pMacro = rMacroTable.Get( aEventTypeTable[i] );
         // As long as not all events are implemented the table also holds empty strings
@@ -768,7 +769,7 @@ static void lcl_html_setEvents(
     script::ScriptEventDescriptor* pDescs = aDescs.getArray();
     sal_Int32 nEvent = 0;
 
-    for( int i=0; HTML_ET_END != aEventTypeTable[i]; ++i )
+    for( int i=0; SvMacroItemId::NONE != aEventTypeTable[i]; ++i )
     {
         const SvxMacro *pMacro = rMacroTable.Get( aEventTypeTable[i] );
         if( pMacro && aEventListenerTable[i] )
@@ -1235,7 +1236,7 @@ void SwHTMLParser::NewForm( bool bAppend )
     {
         const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent = 0;
+        SvMacroItemId nEvent = SvMacroItemId::NONE;
         bool bSetEvent = false;
 
         switch( rOption.GetToken() )
@@ -1260,7 +1261,7 @@ void SwHTMLParser::NewForm( bool bAppend )
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONSUBMIT:
-            nEvent = HTML_ET_ONSUBMITFORM;
+            nEvent = SvMacroItemId::HtmlOnSubmitForm;
             bSetEvent = true;
             break;
 
@@ -1268,7 +1269,7 @@ void SwHTMLParser::NewForm( bool bAppend )
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONRESET:
-            nEvent = HTML_ET_ONRESETFORM;
+            nEvent = SvMacroItemId::HtmlOnResetForm;
             bSetEvent = true;
             break;
 
@@ -1402,7 +1403,7 @@ void SwHTMLParser::InsertInput()
     {
         const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent = 0;
+        SvMacroItemId nEvent = SvMacroItemId::NONE;
         bool bSetEvent = false;
 
         switch( rOption.GetToken() )
@@ -1464,7 +1465,7 @@ void SwHTMLParser::InsertInput()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONFOCUS:
-            nEvent = HTML_ET_ONGETFOCUS;
+            nEvent = SvMacroItemId::HtmlOnGetFocus;
             bSetEvent = true;
             break;
 
@@ -1472,7 +1473,7 @@ void SwHTMLParser::InsertInput()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONBLUR:
-            nEvent = HTML_ET_ONLOSEFOCUS;
+            nEvent = SvMacroItemId::HtmlOnLoseFocus;
             bSetEvent = true;
             break;
 
@@ -1480,7 +1481,7 @@ void SwHTMLParser::InsertInput()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONCLICK:
-            nEvent = HTML_ET_ONCLICK;
+            nEvent = SvMacroItemId::HtmlOnClick;
             bSetEvent = true;
             break;
 
@@ -1488,7 +1489,7 @@ void SwHTMLParser::InsertInput()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONCHANGE:
-            nEvent = HTML_ET_ONCHANGE;
+            nEvent = SvMacroItemId::HtmlOnChange;
             bSetEvent = true;
             break;
 
@@ -1496,7 +1497,7 @@ void SwHTMLParser::InsertInput()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONSELECT:
-            nEvent = HTML_ET_ONSELECT;
+            nEvent = SvMacroItemId::HtmlOnSelect;
             bSetEvent = true;
             break;
 
@@ -1647,11 +1648,11 @@ void SwHTMLParser::InsertInput()
                 xPropSet->setPropertyValue("DefaultState", aTmp );
             }
 
-            const SvxMacro* pMacro = aMacroTable.Get( HTML_ET_ONCLICK );
+            const SvxMacro* pMacro = aMacroTable.Get( SvMacroItemId::HtmlOnClick );
             if( pMacro )
             {
-                aMacroTable.Insert( HTML_ET_ONCLICK_ITEM, *pMacro );
-                aMacroTable.Erase( HTML_ET_ONCLICK );
+                aMacroTable.Insert( SvMacroItemId::HtmlOnClickItem, *pMacro );
+                aMacroTable.Erase( SvMacroItemId::HtmlOnClick );
             }
             // evaluating SIZE shouldn't be necessary here?
             bMinWidth = bMinHeight = true;
@@ -1874,7 +1875,7 @@ void SwHTMLParser::NewTextArea()
     {
         const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent = 0;
+        SvMacroItemId nEvent = SvMacroItemId::NONE;
         bool bSetEvent = false;
 
         switch( rOption.GetToken() )
@@ -1912,7 +1913,7 @@ void SwHTMLParser::NewTextArea()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONFOCUS:
-            nEvent = HTML_ET_ONGETFOCUS;
+            nEvent = SvMacroItemId::HtmlOnGetFocus;
             bSetEvent = true;
             break;
 
@@ -1920,7 +1921,7 @@ void SwHTMLParser::NewTextArea()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONBLUR:
-            nEvent = HTML_ET_ONLOSEFOCUS;
+            nEvent = SvMacroItemId::HtmlOnLoseFocus;
             bSetEvent = true;
             break;
 
@@ -1928,7 +1929,7 @@ void SwHTMLParser::NewTextArea()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONCLICK:
-            nEvent = HTML_ET_ONCLICK;
+            nEvent = SvMacroItemId::HtmlOnClick;
             bSetEvent = true;
             break;
 
@@ -1936,7 +1937,7 @@ void SwHTMLParser::NewTextArea()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONCHANGE:
-            nEvent = HTML_ET_ONCHANGE;
+            nEvent = SvMacroItemId::HtmlOnChange;
             bSetEvent = true;
             break;
 
@@ -1944,7 +1945,7 @@ void SwHTMLParser::NewTextArea()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONSELECT:
-            nEvent = HTML_ET_ONSELECT;
+            nEvent = SvMacroItemId::HtmlOnSelect;
             bSetEvent = true;
             break;
 
@@ -2153,7 +2154,7 @@ void SwHTMLParser::NewSelect()
     {
         const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent = 0;
+        SvMacroItemId nEvent = SvMacroItemId::NONE;
         bool bSetEvent = false;
 
         switch( rOption.GetToken() )
@@ -2188,7 +2189,7 @@ void SwHTMLParser::NewSelect()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONFOCUS:
-            nEvent = HTML_ET_ONGETFOCUS;
+            nEvent = SvMacroItemId::HtmlOnGetFocus;
             bSetEvent = true;
             break;
 
@@ -2196,7 +2197,7 @@ void SwHTMLParser::NewSelect()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONBLUR:
-            nEvent = HTML_ET_ONLOSEFOCUS;
+            nEvent = SvMacroItemId::HtmlOnLoseFocus;
             bSetEvent = true;
             break;
 
@@ -2204,7 +2205,7 @@ void SwHTMLParser::NewSelect()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONCLICK:
-            nEvent = HTML_ET_ONCLICK;
+            nEvent = SvMacroItemId::HtmlOnClick;
             bSetEvent = true;
             break;
 
@@ -2212,7 +2213,7 @@ void SwHTMLParser::NewSelect()
             eScriptType2 = STARBASIC;
             SAL_FALLTHROUGH;
         case HtmlOptionId::ONCHANGE:
-            nEvent = HTML_ET_ONCHANGE;
+            nEvent = SvMacroItemId::HtmlOnChange;
             bSetEvent = true;
             break;
 

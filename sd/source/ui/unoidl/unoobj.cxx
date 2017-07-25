@@ -254,9 +254,9 @@ const SvEventDescription* ImplGetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
     {
-        { SFX_EVENT_MOUSEOVER_OBJECT, "OnMouseOver" },
-        { SFX_EVENT_MOUSEOUT_OBJECT, "OnMouseOut" },
-        { 0, nullptr }
+        { SvMacroItemId::OnMouseOver, "OnMouseOver" },
+        { SvMacroItemId::OnMouseOut,  "OnMouseOut" },
+        { SvMacroItemId::NONE, nullptr }
     };
 
     return aMacroDescriptionsImpl;

@@ -27,6 +27,7 @@ class SvxMacro;
 class SvxMacroTableDtor;
 class SwTextINetFormat;
 class IntlWrapper;
+enum class SvMacroItemId : sal_uInt16;
 
 // ATT_INETFMT
 
@@ -131,10 +132,8 @@ public:
     }
 
     /// Macro getter and setter.
-    void SetMacro(
-            sal_uInt16 nEvent,
-            const SvxMacro& rMacro );
-    const SvxMacro* GetMacro( sal_uInt16 nEvent ) const;
+    void SetMacro( SvMacroItemId nEvent, const SvxMacro& rMacro );
+    const SvxMacro* GetMacro( SvMacroItemId nEvent ) const;
 };
 
 #endif

@@ -105,16 +105,16 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
         if( rValue.hasValue() && ( rValue >>= sState ))
         {
-            sal_uInt16 nEvent = 0;
+            SvMacroItemId nEvent = SvMacroItemId::NONE;
             switch( sState.toInt32() )
             {
-            case sfx2::LinkManager::STATE_LOAD_OK:      nEvent = SVX_EVENT_IMAGE_LOAD;  break;
-            case sfx2::LinkManager::STATE_LOAD_ERROR:   nEvent = SVX_EVENT_IMAGE_ERROR; break;
-            case sfx2::LinkManager::STATE_LOAD_ABORT:   nEvent = SVX_EVENT_IMAGE_ABORT; break;
+            case sfx2::LinkManager::STATE_LOAD_OK:      nEvent = SvMacroItemId::OnImageLoadDone;  break;
+            case sfx2::LinkManager::STATE_LOAD_ERROR:   nEvent = SvMacroItemId::OnImageLoadError; break;
+            case sfx2::LinkManager::STATE_LOAD_ABORT:   nEvent = SvMacroItemId::OnImageLoadCancel; break;
             }
 
             SwFrameFormat* pFormat;
-            if( nEvent && nullptr != ( pFormat = pContentNode->GetFlyFormat() ))
+            if( nEvent != SvMacroItemId::NONE && nullptr != ( pFormat = pContentNode->GetFlyFormat() ))
             {
                 SwCallMouseEvent aCallEvent;
                 aCallEvent.Set( EVENT_OBJECT_IMAGE, pFormat );

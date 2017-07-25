@@ -414,12 +414,12 @@ void SwWrtShell::ClickToINetAttr( const SwFormatINetFormat& rItem, LoadUrlFlags 
     m_bIsInClickToEdit = true;
 
     // At first run the possibly set ObjectSelect Macro
-    const SvxMacro* pMac = rItem.GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
+    const SvxMacro* pMac = rItem.GetMacro( SvMacroItemId::OnClick );
     if( pMac )
     {
         SwCallMouseEvent aCallEvent;
         aCallEvent.Set( &rItem );
-        GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent );
+        GetDoc()->CallEvent( SvMacroItemId::OnClick, aCallEvent );
     }
 
     // So that the implementation of templates is displayed immediately
@@ -444,12 +444,12 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, LoadUrlFlags nFilter )
     {
         bRet = true;
         // At first run the possibly set ObjectSelect Macro
-        const SvxMacro* pMac = &pFnd->GetMacro().GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
+        const SvxMacro* pMac = &pFnd->GetMacro().GetMacro( SvMacroItemId::OnClick );
         if( pMac )
         {
             SwCallMouseEvent aCallEvent;
             aCallEvent.Set( EVENT_OBJECT_URLITEM, pFnd );
-            GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent );
+            GetDoc()->CallEvent( SvMacroItemId::OnClick, aCallEvent );
         }
 
         ::LoadURL(*this, sURL, nFilter, sTargetFrameName);

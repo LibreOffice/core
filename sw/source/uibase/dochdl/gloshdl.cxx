@@ -571,9 +571,9 @@ void SwGlossaryHdl::SetMacros(const OUString& rShortName,
                                   : rStatGlossaries.GetGroupDoc( aCurGrp );
     SvxMacroTableDtor aMacroTable;
     if( pStart )
-        aMacroTable.Insert( SW_EVENT_START_INS_GLOSSARY, *pStart);
+        aMacroTable.Insert( SvMacroItemId::SwStartInsGlossary, *pStart);
     if( pEnd )
-        aMacroTable.Insert( SW_EVENT_END_INS_GLOSSARY, *pEnd);
+        aMacroTable.Insert( SvMacroItemId::SwEndInsGlossary, *pEnd);
     sal_uInt16 nIdx = pGlos->GetIndex( rShortName );
     if( !pGlos->SetMacroTable( nIdx, aMacroTable ) && pGlos->GetError() )
         ErrorHandler::HandleError( pGlos->GetError() );
@@ -596,11 +596,11 @@ void SwGlossaryHdl::GetMacros( const OUString &rShortName,
         SvxMacroTableDtor aMacroTable;
         if( pGlos->GetMacroTable( nIndex, aMacroTable ) )
         {
-            SvxMacro *pMacro = aMacroTable.Get( SW_EVENT_START_INS_GLOSSARY );
+            SvxMacro *pMacro = aMacroTable.Get( SvMacroItemId::SwStartInsGlossary );
             if( pMacro )
                 rStart = *pMacro;
 
-            pMacro = aMacroTable.Get( SW_EVENT_END_INS_GLOSSARY );
+            pMacro = aMacroTable.Get( SvMacroItemId::SwEndInsGlossary );
             if( pMacro )
                 rEnd = *pMacro;
         }

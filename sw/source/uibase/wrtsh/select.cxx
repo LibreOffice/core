@@ -708,9 +708,9 @@ IMPL_LINK( SwWrtShell, ExecFlyMac, const SwFlyFrameFormat*, pFlyFormat, void )
     OSL_ENSURE(pFormat, "no frame format");
     const SvxMacroItem &rFormatMac = pFormat->GetMacro();
 
-    if(rFormatMac.HasMacro(SW_EVENT_OBJECT_SELECT))
+    if(rFormatMac.HasMacro(SvMacroItemId::SwObjectSelect))
     {
-        const SvxMacro &rMac = rFormatMac.GetMacro(SW_EVENT_OBJECT_SELECT);
+        const SvxMacro &rMac = rFormatMac.GetMacro(SvMacroItemId::SwObjectSelect);
         if( IsFrameSelected() )
             m_bLayoutMode = true;
         CallChgLnk();

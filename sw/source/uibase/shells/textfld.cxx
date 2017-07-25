@@ -918,15 +918,15 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
                 aINetFormat.SetName(rHlnkItem.GetIntName());
                 if(pMacroTable)
                 {
-                    const SvxMacro *pMacro = pMacroTable->Get( SFX_EVENT_MOUSEOVER_OBJECT );
+                    const SvxMacro *pMacro = pMacroTable->Get( SvMacroItemId::OnMouseOver );
                     if( pMacro )
-                        aINetFormat.SetMacro(SFX_EVENT_MOUSEOVER_OBJECT, *pMacro);
-                    pMacro = pMacroTable->Get( SFX_EVENT_MOUSECLICK_OBJECT );
+                        aINetFormat.SetMacro(SvMacroItemId::OnMouseOver, *pMacro);
+                    pMacro = pMacroTable->Get( SvMacroItemId::OnClick );
                     if( pMacro )
-                        aINetFormat.SetMacro(SFX_EVENT_MOUSECLICK_OBJECT, *pMacro);
-                    pMacro = pMacroTable->Get( SFX_EVENT_MOUSEOUT_OBJECT );
+                        aINetFormat.SetMacro(SvMacroItemId::OnClick, *pMacro);
+                    pMacro = pMacroTable->Get( SvMacroItemId::OnMouseOut );
                     if( pMacro )
-                        aINetFormat.SetMacro(SFX_EVENT_MOUSEOUT_OBJECT, *pMacro);
+                        aINetFormat.SetMacro(SvMacroItemId::OnMouseOut, *pMacro);
                 }
                 rSh.SttSelect();
                 rSh.InsertURL( aINetFormat, rName, true );

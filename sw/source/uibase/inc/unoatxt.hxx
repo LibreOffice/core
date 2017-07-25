@@ -261,13 +261,13 @@ public:
 protected:
 
     virtual void replaceByName(
-        const sal_uInt16 nEvent,        /// item ID of event
-        const SvxMacro& rMacro)     /// event (will be copied)
+        const SvMacroItemId nEvent,  /// item ID of event
+        const SvxMacro& rMacro)      /// event (will be copied)
              override;
 
     virtual void getByName(
-        SvxMacro& rMacro,           /// macro to be filled
-        const sal_uInt16 nEvent )       /// item ID of event
+        SvxMacro& rMacro,             /// macro to be filled
+        const SvMacroItemId nEvent )  /// item ID of event
              override;
 };
 

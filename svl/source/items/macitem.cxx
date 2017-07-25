@@ -131,7 +131,7 @@ void SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
         if( SVX_MACROTBL_VERSION40 <= nVersion )
             rStrm.ReadUInt16( eType );
 
-        aSvxMacroTable.insert( SvxMacroTable::value_type(nCurKey, SvxMacro( aMacName, aLibName, (ScriptType)eType ) ));
+        aSvxMacroTable.insert( SvxMacroTable::value_type(SvMacroItemId(nCurKey), SvxMacro( aMacName, aLibName, (ScriptType)eType ) ));
     }
 }
 
@@ -151,7 +151,7 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
     while( it != aSvxMacroTable.end() && rStream.GetError() == ERRCODE_NONE )
     {
         const SvxMacro& rMac = it->second;
-        rStream.WriteUInt16( it->first );
+        rStream.WriteUInt16( (sal_uInt16)it->first );
         writeByteString(rStream, rMac.GetLibName());
         writeByteString(rStream, rMac.GetMacName());
 
@@ -163,34 +163,34 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
 }
 
 // returns NULL if no entry exists, or a pointer to the internal value
-const SvxMacro* SvxMacroTableDtor::Get(sal_uInt16 nEvent) const
+const SvxMacro* SvxMacroTableDtor::Get(SvMacroItemId nEvent) const
 {
     SvxMacroTable::const_iterator it = aSvxMacroTable.find(nEvent);
     return it == aSvxMacroTable.end() ? nullptr : &(it->second);
 }
 
 // returns NULL if no entry exists, or a pointer to the internal value
-SvxMacro* SvxMacroTableDtor::Get(sal_uInt16 nEvent)
+SvxMacro* SvxMacroTableDtor::Get(SvMacroItemId nEvent)
 {
     SvxMacroTable::iterator it = aSvxMacroTable.find(nEvent);
     return it == aSvxMacroTable.end() ? nullptr : &(it->second);
 }
 
 // return true if the key exists
-bool SvxMacroTableDtor::IsKeyValid(sal_uInt16 nEvent) const
+bool SvxMacroTableDtor::IsKeyValid(SvMacroItemId nEvent) const
 {
     SvxMacroTable::const_iterator it = aSvxMacroTable.find(nEvent);
     return it != aSvxMacroTable.end();
 }
 
 // This stores a copy of the rMacro parameter
-SvxMacro& SvxMacroTableDtor::Insert(sal_uInt16 nEvent, const SvxMacro& rMacro)
+SvxMacro& SvxMacroTableDtor::Insert(SvMacroItemId nEvent, const SvxMacro& rMacro)
 {
     return aSvxMacroTable.insert( SvxMacroTable::value_type( nEvent, rMacro ) ).first->second;
 }
 
 // If the entry exists, remove it from the map and release it's storage
-void SvxMacroTableDtor::Erase(sal_uInt16 nEvent)
+void SvxMacroTableDtor::Erase(SvMacroItemId nEvent)
 {
     SvxMacroTable::iterator it = aSvxMacroTable.find(nEvent);
     if ( it != aSvxMacroTable.end())
@@ -259,7 +259,7 @@ SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 }
 
 
-void SvxMacroItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
+void SvxMacroItem::SetMacro( SvMacroItemId nEvent, const SvxMacro& rMacro )
 {
     aMacroTable.Insert( nEvent, rMacro);
 }

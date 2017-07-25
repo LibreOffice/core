@@ -34,11 +34,11 @@ class SvxMacroTableDtor;
 
 struct SFX2_DLLPUBLIC SfxEventName
 {
-    sal_uInt16  mnId;
-    OUString    maEventName;
-    OUString    maUIName;
+    SvMacroItemId mnId;
+    OUString      maEventName;
+    OUString      maUIName;
 
-            SfxEventName( sal_uInt16 nId,
+            SfxEventName( SvMacroItemId nId,
                              const OUString& rEventName,
                              const OUString& rUIName )
                 : mnId( nId )
@@ -86,7 +86,7 @@ public:
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
     const SfxEventNamesList& GetEvents() const { return aEventsList;}
-    void                    AddEvent( const OUString&, const OUString&, sal_uInt16 );
+    void                    AddEvent( const OUString&, const OUString&, SvMacroItemId );
 };
 
 

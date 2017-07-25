@@ -25,14 +25,6 @@
 #include <calbck.hxx>
 #include <frmfmt.hxx>
 
-#define     SW_EVENT_OBJECT_SELECT        ( EVENT_APP_START + 0 )
-#define     SW_EVENT_START_INS_GLOSSARY   ( EVENT_APP_START + 1 )
-#define     SW_EVENT_END_INS_GLOSSARY     ( EVENT_APP_START + 2 )
-#define     SW_EVENT_FRM_KEYINPUT_ALPHA   ( EVENT_APP_START + 4 )
-#define     SW_EVENT_FRM_KEYINPUT_NOALPHA ( EVENT_APP_START + 5 )
-#define     SW_EVENT_FRM_RESIZE           ( EVENT_APP_START + 6 )
-#define     SW_EVENT_FRM_MOVE             ( EVENT_APP_START + 7 )
-
 #define     STR_SW_EVENT_PAGE_COUNT           0
 #define     STR_SW_EVENT_MAIL_MERGE           1
 #define     STR_SW_EVENT_MAIL_MERGE_END       2

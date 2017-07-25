@@ -1979,8 +1979,8 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     case HtmlTokenId::AREA:
         if( m_pImageMap )
-            ParseAreaOptions( m_pImageMap, m_sBaseURL, SFX_EVENT_MOUSEOVER_OBJECT,
-                                         SFX_EVENT_MOUSEOUT_OBJECT );
+            ParseAreaOptions( m_pImageMap, m_sBaseURL, SvMacroItemId::OnMouseOver,
+                                         SvMacroItemId::OnMouseOut );
         break;
 
     case HtmlTokenId::FRAMESET_ON:

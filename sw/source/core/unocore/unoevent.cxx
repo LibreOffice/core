@@ -38,60 +38,60 @@ using ::com::sun::star::container::XNameReplace;
 
 const struct SvEventDescription aGraphicEvents[] =
 {
-    { SW_EVENT_OBJECT_SELECT,       "OnSelect" },
-    { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
-    { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
-    { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
-    { SVX_EVENT_IMAGE_LOAD,         "OnLoadDone" },
-    { SVX_EVENT_IMAGE_ABORT,        "OnLoadCancel" },
-    { SVX_EVENT_IMAGE_ERROR,        "OnLoadError" },
-    { 0, nullptr }
+    { SvMacroItemId::SwObjectSelect,    "OnSelect" },
+    { SvMacroItemId::OnMouseOver,       "OnMouseOver" },
+    { SvMacroItemId::OnClick,           "OnClick" },
+    { SvMacroItemId::OnMouseOut,        "OnMouseOut" },
+    { SvMacroItemId::OnImageLoadDone,   "OnLoadDone" },
+    { SvMacroItemId::OnImageLoadCancel, "OnLoadCancel" },
+    { SvMacroItemId::OnImageLoadError,  "OnLoadError" },
+    { SvMacroItemId::NONE, nullptr }
 };
 
 const struct SvEventDescription aFrameEvents[] =
 {
-    { SW_EVENT_OBJECT_SELECT,       "OnSelect" },
-    { SW_EVENT_FRM_KEYINPUT_ALPHA,  "OnAlphaCharInput" },
-    { SW_EVENT_FRM_KEYINPUT_NOALPHA,    "OnNonAlphaCharInput" },
-    { SW_EVENT_FRM_RESIZE,          "OnResize" },
-    { SW_EVENT_FRM_MOVE,            "OnMove" },
-    { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
-    { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
-    { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
-    { 0, nullptr }
+    { SvMacroItemId::SwObjectSelect,       "OnSelect" },
+    { SvMacroItemId::SwFrmKeyInputAlpha,   "OnAlphaCharInput" },
+    { SvMacroItemId::SwFrmKeyInputNoAlpha, "OnNonAlphaCharInput" },
+    { SvMacroItemId::SwFrmResize,          "OnResize" },
+    { SvMacroItemId::SwFrmMove,            "OnMove" },
+    { SvMacroItemId::OnMouseOver,          "OnMouseOver" },
+    { SvMacroItemId::OnClick,              "OnClick" },
+    { SvMacroItemId::OnMouseOut,           "OnMouseOut" },
+    { SvMacroItemId::NONE, nullptr }
 };
 
 const struct SvEventDescription aOLEEvents[] =
 {
-    { SW_EVENT_OBJECT_SELECT,       "OnSelect" },
-    { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
-    { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
-    { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
-    { 0, nullptr }
+    { SvMacroItemId::SwObjectSelect, "OnSelect" },
+    { SvMacroItemId::OnMouseOver,    "OnMouseOver" },
+    { SvMacroItemId::OnClick,        "OnClick" },
+    { SvMacroItemId::OnMouseOut,     "OnMouseOut" },
+    { SvMacroItemId::NONE, nullptr }
 };
 
 const struct SvEventDescription aHyperlinkEvents[] =
 {
-    { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
-    { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
-    { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
-    { 0, nullptr }
+    { SvMacroItemId::OnMouseOver, "OnMouseOver" },
+    { SvMacroItemId::OnClick,     "OnClick" },
+    { SvMacroItemId::OnMouseOut,  "OnMouseOut" },
+    { SvMacroItemId::NONE, nullptr }
 };
 
 const struct SvEventDescription aFrameStyleEvents[] =
 {
-    { SW_EVENT_OBJECT_SELECT,       "OnSelect" },
-    { SW_EVENT_FRM_KEYINPUT_ALPHA,  "OnAlphaCharInput" },
-    { SW_EVENT_FRM_KEYINPUT_NOALPHA,    "OnNonAlphaCharInput" },
-    { SW_EVENT_FRM_RESIZE,          "OnResize" },
-    { SW_EVENT_FRM_MOVE,            "OnMove" },
-    { SFX_EVENT_MOUSEOVER_OBJECT,   "OnMouseOver" },
-    { SFX_EVENT_MOUSECLICK_OBJECT,  "OnClick" },
-    { SFX_EVENT_MOUSEOUT_OBJECT,    "OnMouseOut" },
-    { SVX_EVENT_IMAGE_LOAD,         "OnLoadDone" },
-    { SVX_EVENT_IMAGE_ABORT,        "OnLoadCancel" },
-    { SVX_EVENT_IMAGE_ERROR,        "OnLoadError" },
-    { 0, nullptr }
+    { SvMacroItemId::SwObjectSelect,       "OnSelect" },
+    { SvMacroItemId::SwFrmKeyInputAlpha,   "OnAlphaCharInput" },
+    { SvMacroItemId::SwFrmKeyInputNoAlpha, "OnNonAlphaCharInput" },
+    { SvMacroItemId::SwFrmResize,          "OnResize" },
+    { SvMacroItemId::SwFrmMove,            "OnMove" },
+    { SvMacroItemId::OnMouseOver,          "OnMouseOver" },
+    { SvMacroItemId::OnClick,              "OnClick" },
+    { SvMacroItemId::OnMouseOut,           "OnMouseOut" },
+    { SvMacroItemId::OnImageLoadDone,      "OnLoadDone" },
+    { SvMacroItemId::OnImageLoadCancel,    "OnLoadCancel" },
+    { SvMacroItemId::OnImageLoadError,     "OnLoadError" },
+    { SvMacroItemId::NONE, nullptr }
 };
 
 SwHyperlinkEventDescriptor::SwHyperlinkEventDescriptor() :
@@ -111,9 +111,9 @@ OUString SwHyperlinkEventDescriptor::getImplementationName()
 void SwHyperlinkEventDescriptor::copyMacrosFromINetFormat(
     const SwFormatINetFormat& aFormat)
 {
-    for(sal_uInt16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; ++i)
+    for(sal_uInt16 i = 0; mpSupportedMacroItems[i].mnEvent != SvMacroItemId::NONE; ++i)
     {
-        const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
+        const SvMacroItemId nEvent = mpSupportedMacroItems[i].mnEvent;
         const SvxMacro* aMacro = aFormat.GetMacro(nEvent);
         if (nullptr != aMacro)
             replaceByName(nEvent, *aMacro);
@@ -123,9 +123,9 @@ void SwHyperlinkEventDescriptor::copyMacrosFromINetFormat(
 void SwHyperlinkEventDescriptor::copyMacrosIntoINetFormat(
     SwFormatINetFormat& aFormat)
 {
-    for(sal_uInt16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; ++i)
+    for(sal_uInt16 i = 0; mpSupportedMacroItems[i].mnEvent != SvMacroItemId::NONE; ++i)
     {
-        const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
+        const SvMacroItemId nEvent = mpSupportedMacroItems[i].mnEvent;
         if (hasById(nEvent))
         {
             SvxMacro aMacro("", "");
