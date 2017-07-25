@@ -182,12 +182,6 @@ SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
 }
 
 
-SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) const
-{
-    return new SvxBulletItem( rStrm, Which() );
-}
-
-
 void SvxBulletItem::SetDefaultFont_Impl()
 {
     aFont = OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, GetDefaultFontFlags::NONE );
@@ -264,62 +258,6 @@ bool SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
     }
 
     return true;
-}
-
-
-SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
-{
-    // Correction for empty bitmap
-    if( ( nStyle == SvxBulletStyle::BMP ) &&
-        ( !pGraphicObject || ( GraphicType::NONE == pGraphicObject->GetType() ) || ( GraphicType::Default == pGraphicObject->GetType() ) ) )
-    {
-        const_cast< SvxBulletItem* >( this )->pGraphicObject.reset();
-        const_cast< SvxBulletItem* >( this )->nStyle = SvxBulletStyle::NONE;
-    }
-
-    rStrm.WriteUInt16( static_cast<sal_uInt16>(nStyle) );
-
-    if( nStyle != SvxBulletStyle::BMP )
-        StoreFont( rStrm, aFont );
-    else
-    {
-        sal_uInt64 const _nStart = rStrm.Tell();
-
-        // Small preliminary estimate of the size ...
-        sal_uInt16 nFac = ( rStrm.GetCompressMode() != SvStreamCompressFlags::NONE ) ? 3 : 1;
-        const Bitmap aBmp( pGraphicObject->GetGraphic().GetBitmap() );
-        sal_uLong nBytes = aBmp.GetSizeBytes();
-        if ( nBytes < sal_uLong(0xFF00*nFac) )
-        {
-            WriteDIB(aBmp, rStrm, false, true);
-        }
-
-        sal_uInt64 const nEnd = rStrm.Tell();
-        // Item can not write with an overhead more than 64K or SfxMultiRecord
-        // will crash. Then prefer to forego on the bitmap, it is only
-        // important for the outliner and only for <= 5.0.
-        // When reading, the stream-operator makes note of the bitmap and the
-        // fact that there is none. This is now the case how it works with
-        // large bitmap created from another file format, which do not occupy a
-        // 64K chunk, but if a bitmap > 64K is used, the SvxNumBulletItem will
-        // have problem loading it, but does not crash.
-
-        if ( (nEnd-_nStart) > 0xFF00 )
-            rStrm.Seek( _nStart );
-    }
-    rStrm.WriteInt32( nWidth );
-    rStrm.WriteUInt16( nStart );
-    rStrm.WriteUChar( 0 ); // used to be nJustify
-    rStrm.WriteChar( OUStringToOString(OUString(cSymbol), aFont.GetCharSet()).toChar() );
-    rStrm.WriteUInt16( nScale );
-
-    // UNICODE: rStrm << aPrevText;
-    rStrm.WriteUniOrByteString(aPrevText, rStrm.GetStreamCharSet());
-
-    // UNICODE: rStrm << aFollowText;
-    rStrm.WriteUniOrByteString(aFollowText, rStrm.GetStreamCharSet());
-
-    return rStrm;
 }
 
 

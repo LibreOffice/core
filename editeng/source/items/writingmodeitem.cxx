@@ -48,18 +48,6 @@ SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
     return new SvxWritingModeItem( *this );
 }
 
-SfxPoolItem* SvxWritingModeItem::Create( SvStream & , sal_uInt16  ) const
-{
-    OSL_FAIL("SvxWritingModeItem should not be streamed!");
-    return nullptr;
-}
-
-SvStream& SvxWritingModeItem::Store( SvStream & rStrm, sal_uInt16  ) const
-{
-    OSL_FAIL("SvxWritingModeItem should not be streamed!");
-    return rStrm;
-}
-
 sal_uInt16 SvxWritingModeItem::GetVersion( sal_uInt16 /*nFVer*/ ) const
 {
     return USHRT_MAX;

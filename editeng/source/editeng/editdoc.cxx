@@ -3084,24 +3084,4 @@ EditEngineItemPool::~EditEngineItemPool()
     ClearDefaults();
 }
 
-SvStream& EditEngineItemPool::Store( SvStream& rStream ) const
-{
-    // for a 3.1 export a hack has to be installed, as in there is a BUG in
-    // SfxItemSet::Load, but not subsequently after 3.1.
-
-    // The selected range must be kept after Store, because itemsets are not
-    // stored until then...
-
-    long nVersion = rStream.GetVersion();
-    bool b31Format = nVersion && ( nVersion <= SOFFICE_FILEFORMAT_31 );
-
-    EditEngineItemPool* pThis = const_cast<EditEngineItemPool*>(this);
-    if ( b31Format )
-        pThis->SetStoringRange( 3997, 4022 );
-    else
-        pThis->SetStoringRange( EE_ITEMS_START, EE_ITEMS_END );
-
-    return SfxItemPool::Store( rStream );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
