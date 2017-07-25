@@ -1541,11 +1541,13 @@ bool SvxColorWindow::IsNoSelection() const
 
 void SvxColorWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
-    if ( rEvent.IsEnabled && rEvent.FeatureURL.Complete == ".uno:ColorTableState"
-         && mrPaletteManager.GetPalette() == 0)
+    if (rEvent.FeatureURL.Complete == ".uno:ColorTableState")
     {
-        mrPaletteManager.ReloadColorSet(*mpColorSet);
-        mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
+        if (rEvent.IsEnabled && mrPaletteManager.GetPalette() == 0)
+        {
+            mrPaletteManager.ReloadColorSet(*mpColorSet);
+            mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
+        }
     }
     else
     {
