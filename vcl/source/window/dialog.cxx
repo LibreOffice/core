@@ -498,7 +498,7 @@ void Dialog::doDeferredInit(WinBits nBits)
     VclPtr<vcl::Window> pParent = mpDialogParent;
     mpDialogParent = nullptr;
     ImplInit(pParent, nBits, mnInitFlag);
-    mbIsDefferedInit = false;
+    mbIsDeferredInit = false;
 }
 
 Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)

@@ -1305,7 +1305,7 @@ void ToolBox::doDeferredInit(WinBits nBits)
     VclPtr<vcl::Window> pParent = mpDialogParent;
     mpDialogParent = nullptr;
     ImplInit(pParent, nBits);
-    mbIsDefferedInit = false;
+    mbIsDeferredInit = false;
 }
 
 ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :

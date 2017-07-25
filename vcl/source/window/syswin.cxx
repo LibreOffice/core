@@ -73,7 +73,7 @@ SystemWindow::SystemWindow(WindowType nType)
     , mnMenuBarMode(MenuBarMode::Normal)
     , mnIcon(0)
     , mpImplData(new ImplData)
-    , mbIsDefferedInit(false)
+    , mbIsDeferredInit(false)
 {
     mpWindowImpl->mbSysWin            = true;
     mpWindowImpl->mnActivateMode      = ActivateModeFlags::GrabFocus;
@@ -87,7 +87,7 @@ SystemWindow::SystemWindow(WindowType nType)
 void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
     const css::uno::Reference<css::frame::XFrame> &rFrame)
 {
-    mbIsDefferedInit = true;
+    mbIsDeferredInit = true;
     mpDialogParent = pParent; //should be unset in doDeferredInit
     m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame) );
 }

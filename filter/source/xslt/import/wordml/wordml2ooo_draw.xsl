@@ -1543,7 +1543,7 @@
                             </xsl:if>
                         </xsl:when>
                         <xsl:otherwise>
-                            <!--Means that you have to care about 2 adj parameters which is defferent-->
+                            <!--Means that you have to care about 2 adj parameters which is different-->
                             <xsl:variable name="mark_used_by_typeid">
                                 <xsl:if test="contains($typeid_adj, ',' )">
                                     <xsl:value-of select="',' "/>
