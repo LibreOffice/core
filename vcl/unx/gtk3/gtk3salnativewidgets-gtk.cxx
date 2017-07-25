@@ -2356,8 +2356,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         }
         else
         {
-            // context = mpMenuBarStyle; why does this not work
-            context = gtk_widget_get_style_context(mpWindow);
+            context = mpMenuBarStyle;
         }
         break;
     case ControlType::Fixedline:
