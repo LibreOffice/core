@@ -75,9 +75,7 @@ writerfilter::Reference<Properties>::Pointer_t OOXMLProperty::getProps()
 #ifdef DEBUG_WRITERFILTER
 string OOXMLProperty::getName() const
 {
-    string sResult;
-
-    sResult = (*QNameToString::Instance())(mId);
+    string sResult((*QNameToString::Instance())(mId));
 
     if (sResult.length() == 0)
         sResult = fastTokenToId(mId);
@@ -113,17 +111,14 @@ string OOXMLProperty::toString() const
 
 void OOXMLProperty::resolve(writerfilter::Properties & rProperties)
 {
-    writerfilter::Properties * pProperties = nullptr;
-    pProperties = &rProperties;
-
     switch (meType)
     {
     case SPRM:
         if (mId != 0x0)
-            pProperties->sprm(*this);
+            rProperties.sprm(*this);
         break;
     case ATTRIBUTE:
-        pProperties->attribute(mId, *getValue());
+        rProperties.attribute(mId, *getValue());
         break;
     }
 }
@@ -250,9 +245,7 @@ int OOXMLBooleanValue::getInt() const
 
 uno::Any OOXMLBooleanValue::getAny() const
 {
-    uno::Any aResult(mbValue);
-
-    return aResult;
+    return uno::Any(mbValue);
 }
 
 #ifdef DEBUG_WRITERFILTER
@@ -282,9 +275,7 @@ OOXMLStringValue::~OOXMLStringValue()
 
 uno::Any OOXMLStringValue::getAny() const
 {
-    uno::Any aAny(mStr);
-
-    return aAny;
+    return uno::Any(mStr);
 }
 
 OUString OOXMLStringValue::getString() const
@@ -318,9 +309,7 @@ OOXMLInputStreamValue::~OOXMLInputStreamValue()
 
 uno::Any OOXMLInputStreamValue::getAny() const
 {
-    uno::Any aAny(mxInputStream);
-
-    return aAny;
+    return uno::Any(mxInputStream);
 }
 
 #ifdef DEBUG_WRITERFILTER
@@ -526,9 +515,7 @@ int OOXMLIntegerValue::getInt() const
 
 uno::Any OOXMLIntegerValue::getAny() const
 {
-    uno::Any aResult(mnValue);
-
-    return aResult;
+    return uno::Any(mnValue);
 }
 
 OOXMLValue * OOXMLIntegerValue::clone() const
