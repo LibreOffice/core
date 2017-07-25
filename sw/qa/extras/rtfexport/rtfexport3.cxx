@@ -33,10 +33,10 @@ DECLARE_RTFEXPORT_TEST(testTdf108949, "tdf108949_footnoteCharFormat.odt")
     uno::Reference<text::XText> xFootnoteText;
     xFootnotes->getByIndex(0) >>= xFootnoteText;
     // This was green (0x00A800), the character property of the footnote character, not the footnote text
-    //CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xFootnoteText),1), "CharColor"));
+    CPPUNIT_ASSERT_MESSAGE ("Footnote Text color",sal_Int32(0x000000) >= getProperty<sal_Int32>(getRun(getParagraphOfText(1, xFootnoteText),1), "CharColor"));
 }
 
-DECLARE_RTFIMPORT_TEST(testTdf108949_footnote, "tdf108949_footnote.rtf")
+DECLARE_RTFEXPORT_TEST(testTdf108949_footnote, "tdf108949_footnote.rtf")
 {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Paragraph Numbering style", OUString(), getProperty<OUString>(getParagraph(2), "NumberingStyleName"));
 
