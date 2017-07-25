@@ -46,7 +46,7 @@ public:
     }
 #ifdef DBG_UTIL
 #ifndef WNT
-    int getRefCount() const { return mnRefCnt; }
+    sal_Int32 getRefCount() const { return mnRefCnt; }
 #endif
 #endif
 
