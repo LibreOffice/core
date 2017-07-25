@@ -48,127 +48,127 @@
 
 struct SvtExtensionResIdMapping_Impl
 {
-    const char*   _pExt;
-    bool    _bExt;
+    const char* _pExt;
+    bool        _bExt;
     const char* pStrId;
-    sal_uInt16  _nImgId;
+    SvImageId   _nImgId;
 };
 
 static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
 {
-    { "awk",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "bas",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "bat",   true,  STR_DESCRIPTION_BATCHFILE,             0 },
-    { "bmk",   false, STR_DESCRIPTION_BOOKMARKFILE,          0 },
-    { "bmp",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_BITMAP },
-    { "c",     true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "cfg",   false, STR_DESCRIPTION_CFGFILE,               0 },
-    { "cmd",   true,  STR_DESCRIPTION_BATCHFILE,             0 },
-    { "cob",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "com",   true,  STR_DESCRIPTION_APPLICATION,           0 },
-    { "cxx",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "dbf",   true,  STR_DESCRIPTION_DATABASE_TABLE,        IMG_TABLE },
-    { "def",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "dll",   true,  STR_DESCRIPTION_SYSFILE,               0 },
-    { "doc",   false, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
-    { "dot",   false, STR_DESCRIPTION_WORD_DOC,              IMG_WRITERTEMPLATE },
-    { "docx",  false, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
-    { "dxf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_DXF },
-    { "exe",   true,  STR_DESCRIPTION_APPLICATION,           0 },
-    { "gif",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_GIF },
-    { "h",     true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "hlp",   false, STR_DESCRIPTION_HELP_DOC,              0 },
-    { "hrc",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "htm",   false, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "html",  false, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "asp",   false, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "hxx",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "ini",   false, STR_DESCRIPTION_CFGFILE,               0 },
-    { "java",  true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "jpeg",  true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
-    { "jpg",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
-    { "lha",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "awk",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "bas",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "bat",   true,  STR_DESCRIPTION_BATCHFILE,             SvImageId::NONE },
+    { "bmk",   false, STR_DESCRIPTION_BOOKMARKFILE,          SvImageId::NONE },
+    { "bmp",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::Bitmap },
+    { "c",     true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "cfg",   false, STR_DESCRIPTION_CFGFILE,               SvImageId::NONE },
+    { "cmd",   true,  STR_DESCRIPTION_BATCHFILE,             SvImageId::NONE },
+    { "cob",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "com",   true,  STR_DESCRIPTION_APPLICATION,           SvImageId::NONE },
+    { "cxx",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "dbf",   true,  STR_DESCRIPTION_DATABASE_TABLE,        SvImageId::Table },
+    { "def",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "dll",   true,  STR_DESCRIPTION_SYSFILE,               SvImageId::NONE },
+    { "doc",   false, STR_DESCRIPTION_WORD_DOC,              SvImageId::Writer },
+    { "dot",   false, STR_DESCRIPTION_WORD_DOC,              SvImageId::WriterTemplate },
+    { "docx",  false, STR_DESCRIPTION_WORD_DOC,              SvImageId::Writer },
+    { "dxf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::DXF },
+    { "exe",   true,  STR_DESCRIPTION_APPLICATION,           SvImageId::NONE },
+    { "gif",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::GIF },
+    { "h",     true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "hlp",   false, STR_DESCRIPTION_HELP_DOC,              SvImageId::NONE },
+    { "hrc",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "htm",   false, STR_DESCRIPTION_HTMLFILE,              SvImageId::HTML },
+    { "html",  false, STR_DESCRIPTION_HTMLFILE,              SvImageId::HTML },
+    { "asp",   false, STR_DESCRIPTION_HTMLFILE,              SvImageId::HTML },
+    { "hxx",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "ini",   false, STR_DESCRIPTION_CFGFILE,               SvImageId::NONE },
+    { "java",  true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "jpeg",  true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::JPG },
+    { "jpg",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::JPG },
+    { "lha",   true,  STR_DESCRIPTION_ARCHIVFILE,            SvImageId::NONE },
 #ifdef _WIN32
-    { "lnk",   false, nullptr,                               0 },
+    { "lnk",   false, nullptr,                               SvImageId::NONE },
 #endif
-    { "log",   true,  STR_DESCRIPTION_LOGFILE,               0 },
-    { "lst",   true,  STR_DESCRIPTION_LOGFILE,               0 },
-    { "met",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET },
-    { "mml",   false, STR_DESCRIPTION_MATHML_DOC,            IMG_MATH },
-    { "mod",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "odb",   false, STR_DESCRIPTION_OO_DATABASE_DOC,       IMG_OO_DATABASE_DOC },
-    { "odg",   false, STR_DESCRIPTION_OO_DRAW_DOC,           IMG_OO_DRAW_DOC },
-    { "odf",   false, STR_DESCRIPTION_OO_MATH_DOC,           IMG_OO_MATH_DOC },
-    { "odm",   false, STR_DESCRIPTION_OO_GLOBAL_DOC,         IMG_OO_GLOBAL_DOC },
-    { "odp",   false, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_OO_IMPRESS_DOC },
-    { "ods",   false, STR_DESCRIPTION_OO_CALC_DOC,           IMG_OO_CALC_DOC },
-    { "odt",   false, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_OO_WRITER_DOC },
-    { "otg",   false, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_OO_DRAW_TEMPLATE },
-    { "otp",   false, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   IMG_OO_IMPRESS_TEMPLATE },
-    { "ots",   false, STR_DESCRIPTION_OO_CALC_TEMPLATE,      IMG_OO_CALC_TEMPLATE },
-    { "ott",   false, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    IMG_OO_WRITER_TEMPLATE },
-    { "pas",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "pcd",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
-    { "pct",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT },
-    { "pict",  true,  STR_DESCRIPTION_GRAPHIC_DOC,          IMG_PCT },
-    { "pcx",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCX },
-    { "pl",    true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "png",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG },
-    { "rar",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "rtf",   false, STR_DESCRIPTION_WORD_DOC,              IMG_WRITER },
-    { "sbl",   false, nullptr,                               0 },
-    { "sch",   false, nullptr,                               0 },
-    { "sda",   false, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
-    { "sdb",   false, STR_DESCRIPTION_SDATABASE_DOC,         IMG_DATABASE },
-    { "sdc",   false, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
-    { "sdd",   false, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
-    { "sdp",   false, STR_DESCRIPTION_SIMPRESS_DOC,          0 },
-    { "sds",   false, STR_DESCRIPTION_SCHART_DOC,            0 },
-    { "sdw",   false, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER },
-    { "sga",   false, nullptr,                               0 },
-    { "sgf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGF },
-    { "sgl",   false, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC },
-    { "sgv",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGV },
-    { "shtml", false, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
-    { "sim",   false, STR_DESCRIPTION_SIMAGE_DOC,            IMG_SIM },
-    { "smf",   false, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH },
-    { "src",   true,  STR_DESCRIPTION_SOURCEFILE,            0 },
-    { "svh",   false, STR_DESCRIPTION_HELP_DOC,              0 },
-    { "svm",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SVM },
-    { "stc",   false, STR_DESCRIPTION_CALC_TEMPLATE,         IMG_CALCTEMPLATE },
-    { "std",   false, STR_DESCRIPTION_DRAW_TEMPLATE,         IMG_DRAWTEMPLATE },
-    { "sti",   false, STR_DESCRIPTION_IMPRESS_TEMPLATE,      IMG_IMPRESSTEMPLATE },
-    { "stw",   false, STR_DESCRIPTION_WRITER_TEMPLATE,       IMG_WRITERTEMPLATE },
-    { "sxc",   false, STR_DESCRIPTION_SXCALC_DOC,            IMG_CALC },
-    { "sxd",   false, STR_DESCRIPTION_SXDRAW_DOC,            IMG_DRAW },
-    { "sxg",   false, STR_DESCRIPTION_SXGLOBAL_DOC,          IMG_GLOBAL_DOC },
-    { "sxi",   false, STR_DESCRIPTION_SXIMPRESS_DOC,         IMG_IMPRESS },
-    { "sxm",   false, STR_DESCRIPTION_SXMATH_DOC,            IMG_MATH },
-    { "sxs",   false, STR_DESCRIPTION_SXCHART_DOC,           0 },
-    { "sxw",   false, STR_DESCRIPTION_SXWRITER_DOC,          IMG_WRITER },
-    { "sys",   true,  STR_DESCRIPTION_SYSFILE,               0 },
-    { "tif",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
-    { "tiff",  true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
-    { "txt",   false, STR_DESCRIPTION_TEXTFILE,              IMG_TEXTFILE },
-    { "url",   false, STR_DESCRIPTION_LINK,                  0 },
-    { "vor",   false, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_WRITERTEMPLATE },
-    { "vxd",   true,  STR_DESCRIPTION_SYSFILE,               0 },
-    { "wmf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_WMF },
-    { "xls",   false, STR_DESCRIPTION_EXCEL_DOC,             IMG_CALC },
-    { "xlt",   false, STR_DESCRIPTION_EXCEL_TEMPLATE_DOC,    IMG_CALCTEMPLATE },
-    { "xlsx",  false, STR_DESCRIPTION_EXCEL_DOC,             IMG_CALC },
-    { "uu",    true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "uue",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "z",     true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "zip",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "zoo",   true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "gz",    true,  STR_DESCRIPTION_ARCHIVFILE,            0 },
-    { "ppt",   false, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
-    { "pot",   false, STR_DESCRIPTION_POWERPOINT_TEMPLATE,   IMG_IMPRESSTEMPLATE },
-    { "pps",   false, STR_DESCRIPTION_POWERPOINT_SHOW,       IMG_IMPRESS },
-    { "pptx",  false, STR_DESCRIPTION_POWERPOINT,            IMG_IMPRESS },
-    { "oxt",   false, STR_DESCRIPTION_EXTENSION,             IMG_EXTENSION },
-    { nullptr, false, nullptr, 0 }
+    { "log",   true,  STR_DESCRIPTION_LOGFILE,               SvImageId::NONE },
+    { "lst",   true,  STR_DESCRIPTION_LOGFILE,               SvImageId::NONE },
+    { "met",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::MET },
+    { "mml",   false, STR_DESCRIPTION_MATHML_DOC,            SvImageId::Math },
+    { "mod",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "odb",   false, STR_DESCRIPTION_OO_DATABASE_DOC,       SvImageId::OO_DatabaseDoc },
+    { "odg",   false, STR_DESCRIPTION_OO_DRAW_DOC,           SvImageId::OO_DrawDoc },
+    { "odf",   false, STR_DESCRIPTION_OO_MATH_DOC,           SvImageId::OO_MathDoc },
+    { "odm",   false, STR_DESCRIPTION_OO_GLOBAL_DOC,         SvImageId::OO_GlobalDoc },
+    { "odp",   false, STR_DESCRIPTION_OO_IMPRESS_DOC,        SvImageId::OO_ImpressDoc },
+    { "ods",   false, STR_DESCRIPTION_OO_CALC_DOC,           SvImageId::OO_CalcDoc },
+    { "odt",   false, STR_DESCRIPTION_OO_WRITER_DOC,         SvImageId::OO_WriterDoc },
+    { "otg",   false, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      SvImageId::OO_DrawTemplate },
+    { "otp",   false, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   SvImageId::OO_ImpressTemplate },
+    { "ots",   false, STR_DESCRIPTION_OO_CALC_TEMPLATE,      SvImageId::OO_CalcTemplate },
+    { "ott",   false, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    SvImageId::OO_WriterTemplate },
+    { "pas",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "pcd",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PCD },
+    { "pct",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PCT },
+    { "pict",  true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PCT },
+    { "pcx",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PCX },
+    { "pl",    true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "png",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::PNG },
+    { "rar",   true,  STR_DESCRIPTION_ARCHIVFILE,            SvImageId::NONE },
+    { "rtf",   false, STR_DESCRIPTION_WORD_DOC,              SvImageId::Writer },
+    { "sbl",   false, nullptr,                               SvImageId::NONE },
+    { "sch",   false, nullptr,                               SvImageId::NONE },
+    { "sda",   false, STR_DESCRIPTION_SDRAW_DOC,             SvImageId::Draw },
+    { "sdb",   false, STR_DESCRIPTION_SDATABASE_DOC,         SvImageId::Database },
+    { "sdc",   false, STR_DESCRIPTION_SCALC_DOC,             SvImageId::Calc },
+    { "sdd",   false, STR_DESCRIPTION_SIMPRESS_DOC,          SvImageId::Impress },
+    { "sdp",   false, STR_DESCRIPTION_SIMPRESS_DOC,          SvImageId::NONE },
+    { "sds",   false, STR_DESCRIPTION_SCHART_DOC,            SvImageId::NONE },
+    { "sdw",   false, STR_DESCRIPTION_SWRITER_DOC,           SvImageId::Writer },
+    { "sga",   false, nullptr,                               SvImageId::NONE },
+    { "sgf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::SGF },
+    { "sgl",   false, STR_DESCRIPTION_GLOBALDOC,             SvImageId::GlobalDoc },
+    { "sgv",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::SGV },
+    { "shtml", false, STR_DESCRIPTION_HTMLFILE,              SvImageId::HTML },
+    { "sim",   false, STR_DESCRIPTION_SIMAGE_DOC,            SvImageId::SIM },
+    { "smf",   false, STR_DESCRIPTION_SMATH_DOC,             SvImageId::Math },
+    { "src",   true,  STR_DESCRIPTION_SOURCEFILE,            SvImageId::NONE },
+    { "svh",   false, STR_DESCRIPTION_HELP_DOC,              SvImageId::NONE },
+    { "svm",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::SVM },
+    { "stc",   false, STR_DESCRIPTION_CALC_TEMPLATE,         SvImageId::CalcTemplate },
+    { "std",   false, STR_DESCRIPTION_DRAW_TEMPLATE,         SvImageId::DrawTemplate },
+    { "sti",   false, STR_DESCRIPTION_IMPRESS_TEMPLATE,      SvImageId::ImpressTemplate },
+    { "stw",   false, STR_DESCRIPTION_WRITER_TEMPLATE,       SvImageId::WriterTemplate },
+    { "sxc",   false, STR_DESCRIPTION_SXCALC_DOC,            SvImageId::Calc },
+    { "sxd",   false, STR_DESCRIPTION_SXDRAW_DOC,            SvImageId::Draw },
+    { "sxg",   false, STR_DESCRIPTION_SXGLOBAL_DOC,          SvImageId::GlobalDoc },
+    { "sxi",   false, STR_DESCRIPTION_SXIMPRESS_DOC,         SvImageId::Impress },
+    { "sxm",   false, STR_DESCRIPTION_SXMATH_DOC,            SvImageId::Math },
+    { "sxs",   false, STR_DESCRIPTION_SXCHART_DOC,           SvImageId::NONE },
+    { "sxw",   false, STR_DESCRIPTION_SXWRITER_DOC,          SvImageId::Writer },
+    { "sys",   true,  STR_DESCRIPTION_SYSFILE,               SvImageId::NONE },
+    { "tif",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::TIFF },
+    { "tiff",  true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::TIFF },
+    { "txt",   false, STR_DESCRIPTION_TEXTFILE,              SvImageId::TextFile },
+    { "url",   false, STR_DESCRIPTION_LINK,                  SvImageId::NONE },
+    { "vor",   false, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  SvImageId::WriterTemplate },
+    { "vxd",   true,  STR_DESCRIPTION_SYSFILE,               SvImageId::NONE },
+    { "wmf",   true,  STR_DESCRIPTION_GRAPHIC_DOC,           SvImageId::WMF },
+    { "xls",   false, STR_DESCRIPTION_EXCEL_DOC,             SvImageId::Calc },
+    { "xlt",   false, STR_DESCRIPTION_EXCEL_TEMPLATE_DOC,    SvImageId::CalcTemplate },
+    { "xlsx",  false, STR_DESCRIPTION_EXCEL_DOC,             SvImageId::Calc },
+    { "uu",    true,  STR_DESCRIPTION_ARCHIVFILE,            SvImageId::NONE },
+    { "uue",   true,  STR_DESCRIPTION_ARCHIVFILE,            SvImageId::NONE },
+    { "z",     true,  STR_DESCRIPTION_ARCHIVFILE,            SvImageId::NONE },
+    { "zip",   true,  STR_DESCRIPTION_ARCHIVFILE,            SvImageId::NONE },
+    { "zoo",   true,  STR_DESCRIPTION_ARCHIVFILE,            SvImageId::NONE },
+    { "gz",    true,  STR_DESCRIPTION_ARCHIVFILE,            SvImageId::NONE },
+    { "ppt",   false, STR_DESCRIPTION_POWERPOINT,            SvImageId::Impress },
+    { "pot",   false, STR_DESCRIPTION_POWERPOINT_TEMPLATE,   SvImageId::ImpressTemplate },
+    { "pps",   false, STR_DESCRIPTION_POWERPOINT_SHOW,       SvImageId::Impress },
+    { "pptx",  false, STR_DESCRIPTION_POWERPOINT,            SvImageId::Impress },
+    { "oxt",   false, STR_DESCRIPTION_EXTENSION,             SvImageId::Extension },
+    { nullptr, false, nullptr, SvImageId::NONE }
 };
 
 struct SvtFactory2ExtensionMapping_Impl
@@ -281,15 +281,15 @@ static sal_Int32 GetIndexOfExtension_Impl( const OUString& rExtension )
     return nRet;
 }
 
-static sal_uInt16 GetImageId_Impl( const OUString& rExtension )
+static SvImageId GetImageId_Impl( const OUString& rExtension )
 {
-    sal_uInt16 nImage = IMG_FILE;
+    SvImageId nImage = SvImageId::File;
     sal_Int32  nIndex = GetIndexOfExtension_Impl( rExtension );
     if ( nIndex != NO_INDEX )
     {
         nImage = ExtensionMap_Impl[ nIndex ]._nImgId;
-        if ( !nImage )
-            nImage = IMG_FILE;
+        if ( nImage == SvImageId::NONE )
+            nImage = SvImageId::File;
     }
 
     return nImage;
@@ -319,9 +319,9 @@ static bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtools::V
     return bRet;
 }
 
-static sal_uInt16 GetFolderImageId_Impl( const OUString& rURL )
+static SvImageId GetFolderImageId_Impl( const OUString& rURL )
 {
-    sal_uInt16 nRet = IMG_FOLDER;
+    SvImageId nRet = SvImageId::Folder;
     ::svtools::VolumeInfo aVolumeInfo;
     try
     {
@@ -329,13 +329,13 @@ static sal_uInt16 GetFolderImageId_Impl( const OUString& rURL )
         if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
         {
             if ( aVolumeInfo.m_bIsRemote )
-                nRet = IMG_NETWORKDEV;
+                nRet = SvImageId::NetworkDevice;
             else if ( aVolumeInfo.m_bIsCompactDisc )
-                nRet = IMG_CDROMDEV;
+                nRet = SvImageId::CDRomDevice;
             else if ( aVolumeInfo.m_bIsRemoveable )
-                nRet = IMG_REMOVABLEDEV;
+                nRet = SvImageId::RemoveableDevice;
             else if ( aVolumeInfo.m_bIsVolume )
-                nRet = IMG_FIXEDDEV;
+                nRet = SvImageId::FixedDevice;
         }
     }
     catch( const css::uno::RuntimeException& )
@@ -349,10 +349,10 @@ static sal_uInt16 GetFolderImageId_Impl( const OUString& rURL )
     return nRet;
 }
 
-static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFolder )
+static SvImageId GetImageId_Impl( const INetURLObject& rObject, bool bDetectFolder )
 {
     OUString aExt, sURL = rObject.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-    sal_uInt16 nImage = IMG_FILE;
+    SvImageId nImage = SvImageId::File;
 
     if ( rObject.GetProtocol() == INetProtocol::PrivSoffice )
     {
@@ -367,14 +367,14 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFol
             return nImage;
         }
         else if ( aType == "image" )
-            nImage = (sal_uInt16)aURLPath.getToken( 1, '/' ).toInt32();
+            nImage = (SvImageId)aURLPath.getToken( 1, '/' ).toInt32();
     }
     else
     {
         aExt = rObject.getExtension();
         if ( aExt == "vor" )
         {
-            sal_uInt16 nId = IMG_WRITERTEMPLATE;
+            SvImageId nId = SvImageId::WriterTemplate;
             try
             {
                 tools::SvRef<SotStorage> aStorage = new SotStorage( sURL, StreamMode::STD_READ );
@@ -382,14 +382,14 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFol
                 {
                     SvGlobalName aGlobalName = aStorage->GetClassName();
                     if ( aGlobalName == SvGlobalName(SO3_SC_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_30) )
-                        nId = IMG_CALCTEMPLATE;
+                        nId = SvImageId::CalcTemplate;
                     else if ( aGlobalName == SvGlobalName(SO3_SDRAW_CLASSID_50) )
-                        nId = IMG_DRAWTEMPLATE;
+                        nId = SvImageId::DrawTemplate;
                     else if ( aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_50) ||
                             aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_30) )
-                        nId = IMG_IMPRESSTEMPLATE;
+                        nId = SvImageId::ImpressTemplate;
                     else if ( aGlobalName == SvGlobalName(SO3_SM_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_30) )
-                        nId = IMG_MATHTEMPLATE;
+                        nId = SvImageId::MathTemplate;
                 }
             }
             catch (const css::ucb::ContentCreationException& e)
@@ -401,7 +401,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFol
         }
     }
 
-    if ( nImage == IMG_FILE && !sURL.isEmpty() )
+    if ( nImage == SvImageId::File && !sURL.isEmpty() )
     {
         if ( bDetectFolder && CONTENT_HELPER::IsFolder( sURL ) )
             nImage = GetFolderImageId_Impl( sURL );
@@ -481,215 +481,217 @@ static const char* GetFolderDescriptionId_Impl( const OUString& rURL )
     return pRet;
 }
 
-static Image GetImageFromList_Impl( sal_uInt16 nImageId, bool bBig )
+static Image GetImageFromList_Impl( SvImageId nImageId, bool bBig )
 {
     if (bBig)
     {
         switch (nImageId)
         {
-            case IMG_IMPRESS:
+            case SvImageId::Impress:
                 return Image(BitmapEx(BMP_IMPRESS_LC));
-            case IMG_BITMAP:
+            case SvImageId::Bitmap:
                 return Image(BitmapEx(BMP_BITMAP_LC));
-            case IMG_CALC:
+            case SvImageId::Calc:
                 return Image(BitmapEx(BMP_CALC_LC));
-            case IMG_CALCTEMPLATE:
+            case SvImageId::CalcTemplate:
                 return Image(BitmapEx(BMP_CALCTEMPLATE_LC));
-            case IMG_DATABASE:
+            case SvImageId::Database:
                 return Image(BitmapEx(BMP_DATABASE_LC));
-            case IMG_IMPRESSTEMPLATE:
+            case SvImageId::ImpressTemplate:
                 return Image(BitmapEx(BMP_IMPRESSTEMPLATE_LC));
-            case IMG_GIF:
+            case SvImageId::GIF:
                 return Image(BitmapEx(BMP_GIF_LC));
-            case IMG_HTML:
+            case SvImageId::HTML:
                 return Image(BitmapEx(BMP_HTML_LC));
-            case IMG_JPG:
+            case SvImageId::JPG:
                 return Image(BitmapEx(BMP_JPG_LC));
-            case IMG_MATH:
+            case SvImageId::Math:
                 return Image(BitmapEx(BMP_MATH_LC));
-            case IMG_MATHTEMPLATE:
+            case SvImageId::MathTemplate:
                 return Image(BitmapEx(BMP_MATHTEMPLATE_LC));
-            case IMG_FILE:
+            case SvImageId::File:
                 return Image(BitmapEx(BMP_FILE_LC));
-            case IMG_PCD:
+            case SvImageId::PCD:
                 return Image(BitmapEx(BMP_PCD_LC));
-            case IMG_PCT:
+            case SvImageId::PCT:
                 return Image(BitmapEx(BMP_PCT_LC));
-            case IMG_PCX:
+            case SvImageId::PCX:
                 return Image(BitmapEx(BMP_PCX_LC));
-            case IMG_SIM:
+            case SvImageId::SIM:
                 return Image(BitmapEx(BMP_SIM_LC));
-            case IMG_TEXTFILE:
+            case SvImageId::TextFile:
                 return Image(BitmapEx(BMP_TEXTFILE_LC));
-            case IMG_TIFF:
+            case SvImageId::TIFF:
                 return Image(BitmapEx(BMP_TIFF_LC));
-            case IMG_WMF:
+            case SvImageId::WMF:
                 return Image(BitmapEx(BMP_WMF_LC));
-            case IMG_WRITER:
+            case SvImageId::Writer:
                 return Image(BitmapEx(BMP_WRITER_LC));
-            case IMG_WRITERTEMPLATE:
+            case SvImageId::WriterTemplate:
                 return Image(BitmapEx(BMP_WRITERTEMPLATE_LC));
-            case IMG_FIXEDDEV:
+            case SvImageId::FixedDevice:
                 return Image(BitmapEx(BMP_FIXEDDEV_LC));
-            case IMG_REMOVABLEDEV:
+            case SvImageId::RemoveableDevice:
                 return Image(BitmapEx(BMP_REMOVABLEDEV_LC));
-            case IMG_CDROMDEV:
+            case SvImageId::CDRomDevice:
                 return Image(BitmapEx(BMP_CDROMDEV_LC));
-            case IMG_NETWORKDEV:
+            case SvImageId::NetworkDevice:
                 return Image(BitmapEx(BMP_NETWORKDEV_LC));
-            case IMG_TABLE:
+            case SvImageId::Table:
                 return Image(BitmapEx(BMP_TABLE_LC));
-            case IMG_FOLDER:
+            case SvImageId::Folder:
                 return Image(BitmapEx(BMP_FOLDER_LC));
-            case IMG_DXF:
+            case SvImageId::DXF:
                 return Image(BitmapEx(BMP_DXF_LC));
-            case IMG_MET:
+            case SvImageId::MET:
                 return Image(BitmapEx(BMP_MET_LC));
-            case IMG_PNG:
+            case SvImageId::PNG:
                 return Image(BitmapEx(BMP_PNG_LC));
-            case IMG_SGF:
+            case SvImageId::SGF:
                 return Image(BitmapEx(BMP_SGF_LC));
-            case IMG_SGV:
+            case SvImageId::SGV:
                 return Image(BitmapEx(BMP_SGV_LC));
-            case IMG_SVM:
+            case SvImageId::SVM:
                 return Image(BitmapEx(BMP_SVM_LC));
-            case IMG_GLOBAL_DOC:
+            case SvImageId::GlobalDoc:
                 return Image(BitmapEx(BMP_GLOBAL_DOC_LC));
-            case IMG_DRAW:
+            case SvImageId::Draw:
                 return Image(BitmapEx(BMP_DRAW_LC));
-            case IMG_DRAWTEMPLATE:
+            case SvImageId::DrawTemplate:
                 return Image(BitmapEx(BMP_DRAWTEMPLATE_LC));
-            case IMG_TEMPLATE:
+            case SvImageId::Template:
                 return Image(BitmapEx(BMP_TEMPLATE_LC));
-            case IMG_OO_DATABASE_DOC:
+            case SvImageId::OO_DatabaseDoc:
                 return Image(BitmapEx(BMP_OO_DATABASE_DOC_LC));
-            case IMG_OO_DRAW_DOC:
+            case SvImageId::OO_DrawDoc:
                 return Image(BitmapEx(BMP_OO_DRAW_DOC_LC));
-            case IMG_OO_MATH_DOC:
+            case SvImageId::OO_MathDoc:
                 return Image(BitmapEx(BMP_OO_MATH_DOC_LC));
-            case IMG_OO_GLOBAL_DOC:
+            case SvImageId::OO_GlobalDoc:
                 return Image(BitmapEx(BMP_OO_GLOBAL_DOC_LC));
-            case IMG_OO_IMPRESS_DOC:
+            case SvImageId::OO_ImpressDoc:
                 return Image(BitmapEx(BMP_OO_IMPRESS_DOC_LC));
-            case IMG_OO_CALC_DOC:
+            case SvImageId::OO_CalcDoc:
                 return Image(BitmapEx(BMP_OO_CALC_DOC_LC));
-            case IMG_OO_WRITER_DOC:
+            case SvImageId::OO_WriterDoc:
                 return Image(BitmapEx(BMP_OO_WRITER_DOC_LC));
-            case IMG_OO_DRAW_TEMPLATE:
+            case SvImageId::OO_DrawTemplate:
                 return Image(BitmapEx(BMP_OO_DRAW_TEMPLATE_LC));
-            case IMG_OO_IMPRESS_TEMPLATE:
+            case SvImageId::OO_ImpressTemplate:
                 return Image(BitmapEx(BMP_OO_IMPRESS_TEMPLATE_LC));
-            case IMG_OO_CALC_TEMPLATE:
+            case SvImageId::OO_CalcTemplate:
                 return Image(BitmapEx(BMP_OO_CALC_TEMPLATE_LC));
-            case IMG_OO_WRITER_TEMPLATE:
+            case SvImageId::OO_WriterTemplate:
                 return Image(BitmapEx(BMP_OO_WRITER_TEMPLATE_LC));
-            case IMG_EXTENSION:
+            case SvImageId::Extension:
                 return Image(BitmapEx(BMP_EXTENSION_LC));
+            default: break;
         }
     }
     else
     {
         switch (nImageId)
         {
-            case IMG_IMPRESS:
+            case SvImageId::Impress:
                 return Image(BitmapEx(BMP_IMPRESS_SC));
-            case IMG_BITMAP:
+            case SvImageId::Bitmap:
                 return Image(BitmapEx(BMP_BITMAP_SC));
-            case IMG_CALC:
+            case SvImageId::Calc:
                 return Image(BitmapEx(BMP_CALC_SC));
-            case IMG_CALCTEMPLATE:
+            case SvImageId::CalcTemplate:
                 return Image(BitmapEx(BMP_CALCTEMPLATE_SC));
-            case IMG_DATABASE:
+            case SvImageId::Database:
                 return Image(BitmapEx(BMP_DATABASE_SC));
-            case IMG_IMPRESSTEMPLATE:
+            case SvImageId::ImpressTemplate:
                 return Image(BitmapEx(BMP_IMPRESSTEMPLATE_SC));
-            case IMG_GIF:
+            case SvImageId::GIF:
                 return Image(BitmapEx(BMP_GIF_SC));
-            case IMG_HTML:
+            case SvImageId::HTML:
                 return Image(BitmapEx(BMP_HTML_SC));
-            case IMG_JPG:
+            case SvImageId::JPG:
                 return Image(BitmapEx(BMP_JPG_SC));
-            case IMG_MATH:
+            case SvImageId::Math:
                 return Image(BitmapEx(BMP_MATH_SC));
-            case IMG_MATHTEMPLATE:
+            case SvImageId::MathTemplate:
                 return Image(BitmapEx(BMP_MATHTEMPLATE_SC));
-            case IMG_FILE:
+            case SvImageId::File:
                 return Image(BitmapEx(BMP_FILE_SC));
-            case IMG_PCD:
+            case SvImageId::PCD:
                 return Image(BitmapEx(BMP_PCD_SC));
-            case IMG_PCT:
+            case SvImageId::PCT:
                 return Image(BitmapEx(BMP_PCT_SC));
-            case IMG_PCX:
+            case SvImageId::PCX:
                 return Image(BitmapEx(BMP_PCX_SC));
-            case IMG_SIM:
+            case SvImageId::SIM:
                 return Image(BitmapEx(BMP_SIM_SC));
-            case IMG_TEXTFILE:
+            case SvImageId::TextFile:
                 return Image(BitmapEx(BMP_TEXTFILE_SC));
-            case IMG_TIFF:
+            case SvImageId::TIFF:
                 return Image(BitmapEx(BMP_TIFF_SC));
-            case IMG_WMF:
+            case SvImageId::WMF:
                 return Image(BitmapEx(BMP_WMF_SC));
-            case IMG_WRITER:
+            case SvImageId::Writer:
                 return Image(BitmapEx(BMP_WRITER_SC));
-            case IMG_WRITERTEMPLATE:
+            case SvImageId::WriterTemplate:
                 return Image(BitmapEx(BMP_WRITERTEMPLATE_SC));
-            case IMG_FIXEDDEV:
+            case SvImageId::FixedDevice:
                 return Image(BitmapEx(BMP_FIXEDDEV_SC));
-            case IMG_REMOVABLEDEV:
+            case SvImageId::RemoveableDevice:
                 return Image(BitmapEx(BMP_REMOVABLEDEV_SC));
-            case IMG_CDROMDEV:
+            case SvImageId::CDRomDevice:
                 return Image(BitmapEx(BMP_CDROMDEV_SC));
-            case IMG_NETWORKDEV:
+            case SvImageId::NetworkDevice:
                 return Image(BitmapEx(BMP_NETWORKDEV_SC));
-            case IMG_TABLE:
+            case SvImageId::Table:
                 return Image(BitmapEx(BMP_TABLE_SC));
-            case IMG_FOLDER:
+            case SvImageId::Folder:
                 // if not bBig, then return our new small folder image (256 colors)
                 return Image(BitmapEx(RID_BMP_FOLDER));
-            case IMG_DXF:
+            case SvImageId::DXF:
                 return Image(BitmapEx(BMP_DXF_SC));
-            case IMG_MET:
+            case SvImageId::MET:
                 return Image(BitmapEx(BMP_MET_SC));
-            case IMG_PNG:
+            case SvImageId::PNG:
                 return Image(BitmapEx(BMP_PNG_SC));
-            case IMG_SGF:
+            case SvImageId::SGF:
                 return Image(BitmapEx(BMP_SGF_SC));
-            case IMG_SGV:
+            case SvImageId::SGV:
                 return Image(BitmapEx(BMP_SGV_SC));
-            case IMG_SVM:
+            case SvImageId::SVM:
                 return Image(BitmapEx(BMP_SVM_SC));
-            case IMG_GLOBAL_DOC:
+            case SvImageId::GlobalDoc:
                 return Image(BitmapEx(BMP_GLOBAL_DOC_SC));
-            case IMG_DRAW:
+            case SvImageId::Draw:
                 return Image(BitmapEx(BMP_DRAW_SC));
-            case IMG_DRAWTEMPLATE:
+            case SvImageId::DrawTemplate:
                 return Image(BitmapEx(BMP_DRAWTEMPLATE_SC));
-            case IMG_TEMPLATE:
+            case SvImageId::Template:
                 return Image(BitmapEx(BMP_TEMPLATE_SC));
-            case IMG_OO_DATABASE_DOC:
+            case SvImageId::OO_DatabaseDoc:
                 return Image(BitmapEx(BMP_OO_DATABASE_DOC_SC));
-            case IMG_OO_DRAW_DOC:
+            case SvImageId::OO_DrawDoc:
                 return Image(BitmapEx(BMP_OO_DRAW_DOC_SC));
-            case IMG_OO_MATH_DOC:
+            case SvImageId::OO_MathDoc:
                 return Image(BitmapEx(BMP_OO_MATH_DOC_SC));
-            case IMG_OO_GLOBAL_DOC:
+            case SvImageId::OO_GlobalDoc:
                 return Image(BitmapEx(BMP_OO_GLOBAL_DOC_SC));
-            case IMG_OO_IMPRESS_DOC:
+            case SvImageId::OO_ImpressDoc:
                 return Image(BitmapEx(BMP_OO_IMPRESS_DOC_SC));
-            case IMG_OO_CALC_DOC:
+            case SvImageId::OO_CalcDoc:
                 return Image(BitmapEx(BMP_OO_CALC_DOC_SC));
-            case IMG_OO_WRITER_DOC:
+            case SvImageId::OO_WriterDoc:
                 return Image(BitmapEx(BMP_OO_WRITER_DOC_SC));
-            case IMG_OO_DRAW_TEMPLATE:
+            case SvImageId::OO_DrawTemplate:
                 return Image(BitmapEx(BMP_OO_DRAW_TEMPLATE_SC));
-            case IMG_OO_IMPRESS_TEMPLATE:
+            case SvImageId::OO_ImpressTemplate:
                 return Image(BitmapEx(BMP_OO_IMPRESS_TEMPLATE_SC));
-            case IMG_OO_CALC_TEMPLATE:
+            case SvImageId::OO_CalcTemplate:
                 return Image(BitmapEx(BMP_OO_CALC_TEMPLATE_SC));
-            case IMG_OO_WRITER_TEMPLATE:
+            case SvImageId::OO_WriterTemplate:
                 return Image(BitmapEx(BMP_OO_WRITER_TEMPLATE_SC));
-            case IMG_EXTENSION:
+            case SvImageId::Extension:
                 return Image(BitmapEx(BMP_EXTENSION_SC));
+            default: break;
         }
     }
 
@@ -763,24 +765,24 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
 
 Image SvFileInformationManager::GetImage( const INetURLObject& rObject, bool bBig )
 {
-    sal_uInt16 nImage = GetImageId_Impl( rObject, true );
-    DBG_ASSERT( nImage, "invalid ImageId" );
+    SvImageId nImage = GetImageId_Impl( rObject, true );
+    DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
     return GetImageFromList_Impl( nImage, bBig );
 }
 
 Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject )
 {
-    sal_Int16 nImage = GetImageId_Impl( rObject, false );
-    DBG_ASSERT( nImage, "invalid ImageId" );
+    SvImageId nImage = GetImageId_Impl( rObject, false );
+    DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
     return GetImageFromList_Impl( nImage, false/*bBig*/ );
 }
 
 Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, bool bBig )
 {
-    sal_uInt16 nImage = GetImageId_Impl( rObject, true );
-    DBG_ASSERT( nImage, "invalid ImageId" );
+    SvImageId nImage = GetImageId_Impl( rObject, true );
+    DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
 
-    if ( nImage == IMG_FILE )
+    if ( nImage == SvImageId::File )
         return Image();
 
     return GetImageFromList_Impl( nImage, bBig );
@@ -788,17 +790,17 @@ Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject,
 
 Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo )
 {
-    sal_uInt16 nImage = IMG_FOLDER;
-    DBG_ASSERT( nImage, "invalid ImageId" );
+    SvImageId nImage = SvImageId::Folder;
+    DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
 
     if ( rInfo.m_bIsRemote )
-        nImage = IMG_NETWORKDEV;
+        nImage = SvImageId::NetworkDevice;
     else if ( rInfo.m_bIsCompactDisc )
-        nImage = IMG_CDROMDEV;
+        nImage = SvImageId::CDRomDevice;
     else if ( rInfo.m_bIsRemoveable || rInfo.m_bIsFloppy )
-        nImage = IMG_REMOVABLEDEV;
+        nImage = SvImageId::RemoveableDevice;
     else if ( rInfo.m_bIsVolume )
-        nImage = IMG_FIXEDDEV;
+        nImage = SvImageId::FixedDevice;
 
     return GetImageFromList_Impl( nImage, false/*bBig*/ );
 }
