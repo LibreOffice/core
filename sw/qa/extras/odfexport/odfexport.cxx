@@ -19,6 +19,8 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/drawing/XGraphicExportFilter.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -32,6 +34,8 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/propertysequence.hxx>
+#include <unotools/streamwrap.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -1654,6 +1658,36 @@ DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
     }
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT(xShape.is());
+
+    // Save the first shape to a SVG
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter = drawing::GraphicExportFilter::create(comphelper::getProcessComponentContext());
+    uno::Reference<lang::XComponent> xSourceDoc(xShape, uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xSourceDoc);
+
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+            { "OutputStream", uno::Any(xOutputStream) },
+            { "FilterName", uno::Any(OUString("SVG")) }
+        }));
+    xGraphicExporter->filter(aDescriptor);
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    // TODO: Disabled. Parsing of SVG gives just root node without any children.
+    // Reason of such behavior unclear. So XPATH assert fails.
+
+    // Parse resulting SVG as XML file.
+    // xmlDocPtr pXmlDoc = parseXmlStream(&aStream);
+
+    // Check amount of paths required to draw an arrow.
+    // Since there are still some emty paths in output test can fail later. There are just two
+    // really used and visible paths.
+    //assertXPath(pXmlDoc, "/svg/path", 4);
+}
 
 #endif
 
