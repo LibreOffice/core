@@ -93,6 +93,8 @@ public:
     void testSecondaryAxisTitleDefaultRotationXLSX();
     void testAxisTitleRotationXLSX();
 
+    void testTdf90510(); // Pie chart label placement settings(XLS)
+
     void testInternalDataProvider();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
@@ -147,6 +149,7 @@ public:
     CPPUNIT_TEST(testAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST(testSecondaryAxisTitleDefaultRotationXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
+    CPPUNIT_TEST(testTdf90510);
 
     CPPUNIT_TEST(testInternalDataProvider);
 
@@ -1244,6 +1247,19 @@ void Chart2ImportTest::testInternalDataProvider() {
     CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("hello")), xSequence[1]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("0")),     xSequence[2]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("world")), xSequence[3]);
+}
+
+void Chart2ImportTest::testTdf90510()
+{
+    load("/chart2/qa/extras/data/xls/", "piechart_outside.xls");
+    uno::Reference< chart::XChartDocument > xChart1Doc( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load chart", xChart1Doc.is() );
+    Reference<beans::XPropertySet> xPropSet( xChart1Doc->getDiagram()->getDataPointProperties( 0, 0 ), uno::UNO_QUERY_THROW );
+    uno::Any aAny = xPropSet->getPropertyValue( "LabelPlacement" );
+    CPPUNIT_ASSERT( aAny.hasValue() );
+    sal_Int32 nLabelPlacement = 0;
+    CPPUNIT_ASSERT( aAny >>= nLabelPlacement );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Data labels should be placed outside", chart::DataLabelPlacement::OUTSIDE, nLabelPlacement );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
