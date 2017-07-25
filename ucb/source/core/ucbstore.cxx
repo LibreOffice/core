@@ -32,6 +32,7 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/NotRemoveableException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -939,12 +940,10 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 
             if ( m_pImpl->m_xConfigProvider.is() )
             {
-                Sequence< Any > aArguments( 1 );
-                PropertyValue aProperty;
-                aProperty.Name = CFGPROPERTY_NODEPATH;
-                aProperty.Value
-                    <<= OUString( STORE_CONTENTPROPERTIES_KEY  );
-                aArguments[ 0 ] <<= aProperty;
+                Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
+                {
+                    {CFGPROPERTY_NODEPATH,  Any(OUString( STORE_CONTENTPROPERTIES_KEY ))}
+                }));
 
                 m_pImpl->m_bTriedToGetRootReadAccess = true;
 
@@ -997,16 +996,11 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 
             if ( m_pImpl->m_xConfigProvider.is() )
             {
-                Sequence< Any > aArguments( 2 );
-                PropertyValue   aProperty;
-
-                aProperty.Name = CFGPROPERTY_NODEPATH;
-                aProperty.Value <<= OUString( STORE_CONTENTPROPERTIES_KEY  );
-                aArguments[ 0 ] <<= aProperty;
-
-                aProperty.Name = CFGPROPERTY_LAZYWRITE;
-                aProperty.Value <<= true;
-                aArguments[ 1 ] <<= aProperty;
+                Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
+                {
+                    {CFGPROPERTY_NODEPATH,  Any(OUString( STORE_CONTENTPROPERTIES_KEY ))},
+                    {CFGPROPERTY_LAZYWRITE, Any(true)}
+                }));
 
                 m_pImpl->m_bTriedToGetRootWriteAccess = true;
 

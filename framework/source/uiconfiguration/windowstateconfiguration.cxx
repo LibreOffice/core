@@ -40,6 +40,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <unordered_map>
@@ -1209,18 +1210,13 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
 
 void ConfigurationAccess_WindowState::impl_initializeConfigAccess()
 {
-    Sequence< Any > aArgs( 2 );
-    PropertyValue   aPropValue;
-
     try
     {
-        aPropValue.Name  = "nodepath";
-        aPropValue.Value <<= m_aConfigWindowAccess;
-        aArgs[0] <<= aPropValue;
-        aPropValue.Name = "lazywrite";
-        aPropValue.Value <<= true;
-        aArgs[1] <<= aPropValue;
-
+        Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", Any(m_aConfigWindowAccess)},
+            {"lazywrite", Any(true)}
+        }));
         m_xConfigAccess.set( m_xConfigProvider->createInstanceWithArguments(
                     "com.sun.star.configuration.ConfigurationUpdateAccess", aArgs ), UNO_QUERY );
         if ( m_xConfigAccess.is() )

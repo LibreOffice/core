@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
+#include <comphelper/propertysequence.hxx>
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
@@ -64,23 +65,22 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
 
     uno::Reference< lang::XMultiServiceFactory > xConfig(
         configuration::theDefaultProvider::get(xContext));
-    uno::Any args[1];
-    beans::PropertyValue aValue( "nodepath", 0, uno::Any( OUString("/org.openoffice.Office.OptionsDialog/Nodes") ),
-                                 beans::PropertyState_DIRECT_VALUE );
-    args[0] <<= aValue;
+    uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
+    {
+        {"nodepath", uno::Any(OUString("/org.openoffice.Office.OptionsDialog/Nodes"))}
+    }));
     m_xNameAccessNodes.set(
-        xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
-                                              uno::Sequence< uno::Any >( args, 1 )),
+        xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", args),
         uno::UNO_QUERY_THROW);
 
     // get the 'get more extensions here' url
+    uno::Sequence<uno::Any> args2(comphelper::InitAnyPropertySequence(
+    {
+        {"nodepath", uno::Any(OUString("/org.openoffice.Office.ExtensionManager/ExtensionRepositories"))}
+    }));
     uno::Reference< container::XNameAccess > xNameAccessRepositories;
-    beans::PropertyValue aValue2( "nodepath", 0, uno::Any( OUString("/org.openoffice.Office.ExtensionManager/ExtensionRepositories") ),
-                                  beans::PropertyState_DIRECT_VALUE );
-    args[0] <<= aValue2;
     xNameAccessRepositories.set(
-        xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess",
-                                              uno::Sequence< uno::Any >( args, 1 )),
+        xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", args2),
         uno::UNO_QUERY_THROW);
     try
     {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException

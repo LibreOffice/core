@@ -23,6 +23,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <rtl/ref.hxx>
 
@@ -153,17 +154,14 @@ namespace {
             {
 
                 // convert the parameters for creating the dialog to PropertyValues
-                Sequence< Any > aArguments(5);
-                Any* pArguments = aArguments.getArray();
-                // the parent window
-                *pArguments++ <<= PropertyValue( "ParentWindow", -1, makeAny( xParentWindow ), PropertyState_DIRECT_VALUE);
-                // the data source to use
-                *pArguments++ <<= PropertyValue( "DataSource", -1, makeAny( xDataSource ), PropertyState_DIRECT_VALUE);
-                *pArguments++ <<= PropertyValue( "DataSourceName", -1, makeAny( sDataSourceName ), PropertyState_DIRECT_VALUE);
-                // the table to use
-                *pArguments++ <<= PropertyValue( "Command", -1, makeAny( sCommand ), PropertyState_DIRECT_VALUE);
-                // the title
-                *pArguments++ <<= PropertyValue( "Title", -1, makeAny( sTitle ), PropertyState_DIRECT_VALUE);
+                Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
+                {
+                    {"ParentWindow", Any(xParentWindow)},
+                    {"DataSource", Any(xDataSource)},
+                    {"DataSourceName", Any(sDataSourceName)},
+                    {"Command", Any(sCommand)}, // the table to use
+                    {"Title", Any(sTitle)}
+                }));
                 OGenericUnoDialog::initialize(aArguments);
                 return;
             }

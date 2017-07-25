@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -277,25 +278,14 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 if ( m_xToolbarControllerFactory.is() &&
                      m_xToolbarControllerFactory->hasController( aURL, m_aModuleIdentifier ))
                 {
-                    Sequence< Any > aArgs(5);
-                    PropertyValue   aPropValue;
-
-                    aPropValue.Name     = "ModuleIdentifier";
-                    aPropValue.Value    <<= m_aModuleIdentifier;
-                    aArgs[0] <<= aPropValue;
-                    aPropValue.Name     = "Frame";
-                    aPropValue.Value    <<= m_xFrame;
-                    aArgs[1] <<= aPropValue;
-                    aPropValue.Name     = "ServiceManager";
-                    aPropValue.Value    <<= Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW);
-                    aArgs[2] <<= aPropValue;
-                    aPropValue.Name     = "ParentWindow";
-                    aPropValue.Value    <<= xToolbarWindow;
-                    aArgs[3] <<= aPropValue;
-                    aPropValue.Name     = "ItemId";
-                    aPropValue.Value    <<= sal_Int32( nId );
-                    aArgs[4] <<= aPropValue;
-
+                    uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+                    {
+                        {"ModuleIdentifier", uno::Any(m_aModuleIdentifier)},
+                        {"Frame", uno::Any(m_xFrame)},
+                        {"ServiceManager", uno::Any(Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW))},
+                        {"ParentWindow", uno::Any(xToolbarWindow)},
+                        {"ItemId", uno::Any(sal_Int32( nId ))}
+                    }));
                     try
                     {
                         xController.set( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext(

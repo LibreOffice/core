@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -614,11 +615,10 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     {
         Reference< lang::XMultiServiceFactory > xConfigProvider = theDefaultProvider::get( xContext );
 
-        uno::Sequence < uno::Any > lParams(1);
-        beans::PropertyValue                       aParam ;
-        aParam.Name    = "nodepath";
-        aParam.Value <<= OUString("/org.openoffice.Setup/Product");
-        lParams[0] <<= aParam;
+        uno::Sequence<uno::Any> lParams(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(OUString("/org.openoffice.Setup/Product"))}
+        }));
 
         // open it
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(

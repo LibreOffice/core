@@ -29,6 +29,7 @@
 #include "stringconstants.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <comphelper/propertysequence.hxx>
 
 namespace dbaxml
 {
@@ -71,20 +72,14 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
     {
         try
         {
-            Sequence< Any > aArguments(2);
-            PropertyValue aValue;
-            // set as folder
-            aValue.Name = "Name";
-            aValue.Value <<= m_sName;
-            aArguments[0] <<= aValue;
-            //parent
-            aValue.Name = "Parent";
-            aValue.Value <<= _xParentContainer;
-            aArguments[1] <<= aValue;
-
             Reference<XMultiServiceFactory> xORB(_xParentContainer,UNO_QUERY);
             if ( xORB.is() )
             {
+                Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
+                {
+                    {"Name", Any(m_sName)}, // set as folder
+                    {"Parent", Any(_xParentContainer)},
+                }));
                 m_xContainer.set(xORB->createInstanceWithArguments(_sCollectionServiceName,aArguments),UNO_QUERY);
                 Reference<XNameContainer> xNameContainer(_xParentContainer,UNO_QUERY);
                 if ( xNameContainer.is() && !xNameContainer->hasByName(m_sName) )

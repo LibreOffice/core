@@ -29,6 +29,7 @@
 #include <nativenumbersupplier.hxx>
 #include <stdio.h>
 #include <string.h>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 // Cyrillic upper case
@@ -983,11 +984,10 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName)
         if (! xConfigProvider.is())
             throw RuntimeException();
 
-        Sequence< Any > aArgs(1);
-        beans::PropertyValue aPath;
-        aPath.Name = "nodepath";
-        aPath.Value <<= OUString("/org.openoffice.Office.Common/I18N");
-        aArgs[0] <<= aPath;
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Common/I18N"))}
+        }));
 
         Reference<XInterface> xInterface = xConfigProvider->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationAccess", aArgs);

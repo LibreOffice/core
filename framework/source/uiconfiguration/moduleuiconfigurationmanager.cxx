@@ -49,6 +49,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -1442,18 +1443,12 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
                                    UNO_QUERY );
         Reference< XInitialization > xInit( m_xModuleImageManager, UNO_QUERY );
 
-        Sequence< Any > aPropSeq( 3 );
-        PropertyValue aPropValue;
-        aPropValue.Name  = "UserConfigStorage";
-        aPropValue.Value <<= m_xUserConfigStorage;
-        aPropSeq[0] <<= aPropValue;
-        aPropValue.Name  = "ModuleIdentifier";
-        aPropValue.Value <<= m_aModuleIdentifier;
-        aPropSeq[1] <<= aPropValue;
-        aPropValue.Name  = "UserRootCommit";
-        aPropValue.Value <<= m_xUserRootCommit;
-        aPropSeq[2] <<= aPropValue;
-
+        uno::Sequence<uno::Any> aPropSeq(comphelper::InitAnyPropertySequence(
+        {
+            {"UserConfigStorage", uno::Any(m_xUserConfigStorage)},
+            {"ModuleIdentifier", uno::Any(m_aModuleIdentifier)},
+            {"UserRootCommit", uno::Any(m_xUserRootCommit)},
+        }));
         xInit->initialize( aPropSeq );
     }
 

@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -45,22 +46,12 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
     {
         if (rxContext.is())
         {
-            Sequence<Any> aCreationArguments(3);
-            aCreationArguments[0] <<= beans::PropertyValue(
-                "nodepath",
-                0,
-                makeAny(rsRootName),
-                beans::PropertyState_DIRECT_VALUE);
-            aCreationArguments[1] <<= beans::PropertyValue(
-                "depth",
-                0,
-                makeAny((sal_Int32)-1),
-                beans::PropertyState_DIRECT_VALUE);
-            aCreationArguments[2] <<= beans::PropertyValue(
-                "lazywrite",
-                0,
-                makeAny(true),
-                beans::PropertyState_DIRECT_VALUE);
+            uno::Sequence<uno::Any> aCreationArguments(comphelper::InitAnyPropertySequence(
+            {
+                {"nodepath", uno::Any(rsRootName)},
+                {"depth", uno::Any((sal_Int32)-1)},
+                {"lazywrite", uno::Any(true)}
+            }));
 
             OUString sAccessService;
             if (eMode == READ_ONLY)

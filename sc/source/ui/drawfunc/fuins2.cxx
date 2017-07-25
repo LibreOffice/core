@@ -48,6 +48,7 @@
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -650,18 +651,11 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
                 uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
                 if( xChartModel.is() && xInit.is() )
                 {
-                    uno::Reference< awt::XWindow > xDialogParentWindow(nullptr);
-                    //  initialize dialog
-                    uno::Sequence<uno::Any> aSeq(2);
-                    uno::Any* pArray = aSeq.getArray();
-                    beans::PropertyValue aParam1;
-                    aParam1.Name = "ParentWindow";
-                    aParam1.Value <<= xDialogParentWindow;
-                    beans::PropertyValue aParam2;
-                    aParam2.Name = "ChartModel";
-                    aParam2.Value <<= xChartModel;
-                    pArray[0] <<= aParam1;
-                    pArray[1] <<= aParam2;
+                    uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                    {
+                        {"ParentWindow", uno::Any(uno::Reference< awt::XWindow >())},
+                        {"ChartModel", uno::Any(xChartModel)}
+                    }));
                     xInit->initialize( aSeq );
 
                     // try to set the dialog's position so it doesn't hide the chart

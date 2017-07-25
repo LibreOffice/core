@@ -25,6 +25,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <boost/optional.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -350,12 +351,10 @@ void DescriptionInfoset::checkBlacklist() const
         if (currentversion.getLength() == 0)
             return;  // nothing to check
 
-        css::uno::Sequence< css::uno::Any > args = css::uno::Sequence< css::uno::Any >(1);
-        css::beans::PropertyValue prop;
-        prop.Name = "nodepath";
-        prop.Value <<= OUString("/org.openoffice.Office.ExtensionDependencies/Extensions");
-        args[0] <<= prop;
-
+        css::uno::Sequence<css::uno::Any> args(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", css::uno::Any(OUString("/org.openoffice.Office.ExtensionDependencies/Extensions"))}
+        }));
         css::uno::Reference< css::container::XNameAccess > blacklist(
             (css::configuration::theDefaultProvider::get(m_context)
              ->createInstanceWithArguments(

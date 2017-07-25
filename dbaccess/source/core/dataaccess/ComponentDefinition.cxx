@@ -25,6 +25,7 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/property.hxx>
+#include <comphelper/propertysequence.hxx>
 #include "definitioncolumn.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -77,11 +78,10 @@ void OComponentDefinition::initialize( const Sequence< Any >& aArguments )
     OUString rName;
     if( (aArguments.getLength() == 1) && (aArguments[0] >>= rName) )
     {
-        Sequence< Any > aNewArgs(1);
-        PropertyValue aValue;
-        aValue.Name = PROPERTY_NAME;
-        aValue.Value <<= rName;
-        aNewArgs[0] <<= aValue;
+        Sequence<Any> aNewArgs(comphelper::InitAnyPropertySequence(
+        {
+            {PROPERTY_NAME, Any(rName)}
+        }));
         OContentHelper::initialize(aNewArgs);
     }
     else

@@ -44,6 +44,7 @@
 #include <sfx2/objsh.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/configmgr.hxx>
@@ -464,26 +465,24 @@ CanvasSettings::CanvasSettings() :
             css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
 
-        Any propValue(
-            Any( NamedValue(
-                         "nodepath",
-                         Any( OUString("/org.openoffice.Office.Canvas") ) ) ) );
-
+        Sequence<Any> aArgs1(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", Any(OUString("/org.openoffice.Office.Canvas"))}
+        }));
         mxForceFlagNameAccess.set(
             xConfigProvider->createInstanceWithArguments(
                 "com.sun.star.configuration.ConfigurationUpdateAccess",
-                Sequence<Any>( &propValue, 1 ) ),
+                aArgs1 ),
             UNO_QUERY_THROW );
 
-        propValue <<=
-            NamedValue(
-                "nodepath",
-                Any( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ) );
-
+        Sequence<Any> aArgs2(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", Any(OUString("/org.openoffice.Office.Canvas/CanvasServiceList"))}
+        }));
         Reference<XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
                 "com.sun.star.configuration.ConfigurationAccess",
-                Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
+                aArgs2 ), UNO_QUERY_THROW );
         Reference<XHierarchicalNameAccess> xHierarchicalNameAccess(
             xNameAccess, UNO_QUERY_THROW);
 

@@ -30,6 +30,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/propertysequence.hxx>
 
 
 using namespace ::com::sun::star;
@@ -121,12 +122,10 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurati
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider = configuration::theDefaultProvider::get( m_xContext );
 
-        uno::Sequence< uno::Any > aArgs( 1 );
-        beans::PropertyValue aPathProp;
-        aPathProp.Name = "nodepath";
-        aPathProp.Value <<= aPath;
-        aArgs[0] <<= aPathProp;
-
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(aPath)}
+        }));
         xConfig.set( m_xConfigProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationAccess",
                         aArgs ),

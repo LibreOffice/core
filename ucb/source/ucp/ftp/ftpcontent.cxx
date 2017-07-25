@@ -41,6 +41,7 @@
 #include "curl.hxx"
 #include <curl/easy.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/fd_inputstream.hxx>
@@ -322,13 +323,10 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
 
             case THROWACCESSDENIED:
                 {
-                    Sequence<Any> seq(1);
-                    PropertyValue value;
-                    value.Name = "Uri";
-                    value.Handle = -1;
-                    value.Value <<= m_aFTPURL.ident(false,false);
-                    value.State = PropertyState_DIRECT_VALUE;
-                    seq[0] <<= value;
+                    Sequence<Any> seq(comphelper::InitAnyPropertySequence(
+                    {
+                        {"Uri", Any(m_aFTPURL.ident(false,false))}
+                    }));
                     ucbhelper::cancelCommandExecution(
                         IOErrorCode_ACCESS_DENIED,
                         seq,
@@ -357,13 +355,10 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 }
             case THROWNOFILE:
                 {
-                    Sequence<Any> seq(1);
-                    PropertyValue value;
-                    value.Name = "Uri";
-                    value.Handle = -1;
-                    value.Value <<= m_aFTPURL.ident(false,false);
-                    value.State = PropertyState_DIRECT_VALUE;
-                    seq[0] <<= value;
+                    Sequence<Any> seq(comphelper::InitAnyPropertySequence(
+                    {
+                        {"Uri", Any(m_aFTPURL.ident(false,false))}
+                    }));
                     ucbhelper::cancelCommandExecution(
                         IOErrorCode_NO_FILE,
                         seq,

@@ -62,6 +62,7 @@
 #include "com/sun/star/ucb/XPersistentPropertySet.hpp"
 
 #include "comphelper/processfactory.hxx"
+#include <comphelper/propertysequence.hxx>
 #include "ucbhelper/cancelcommandexecution.hxx"
 #include "ucbhelper/contentidentifier.hxx"
 #include "ucbhelper/propertyvalueset.hxx"
@@ -491,17 +492,13 @@ uno::Any SAL_CALL Content::execute(
         // Remove own and all children's persistent data.
         if ( !removeData() )
         {
-            uno::Any aProps
-                = uno::makeAny(
-                         beans::PropertyValue(
-                             "Uri",
-                             -1,
-                             uno::makeAny(m_xIdentifier->
-                                              getContentIdentifier()),
-                             beans::PropertyState_DIRECT_VALUE));
+            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            {
+                 {"Uri", uno::Any(m_xIdentifier->getContentIdentifier())}
+            }));
             ucbhelper::cancelCommandExecution(
                 ucb::IOErrorCode_CANT_WRITE,
-                uno::Sequence< uno::Any >(&aProps, 1),
+                aArgs,
                 Environment,
                 "Cannot remove persistent data!",
                 this );
@@ -1305,17 +1302,13 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             if ( !storeData( uno::Reference< io::XInputStream >(), xEnv ) )
             {
-                uno::Any aProps
-                    = uno::makeAny(
-                             beans::PropertyValue(
-                                 "Uri",
-                                 -1,
-                                 uno::makeAny(m_xIdentifier->
-                                                  getContentIdentifier()),
-                                 beans::PropertyState_DIRECT_VALUE));
+                uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+                {
+                     {"Uri", uno::Any(m_xIdentifier->getContentIdentifier())}
+                }));
                 ucbhelper::cancelCommandExecution(
                     ucb::IOErrorCode_CANT_WRITE,
-                    uno::Sequence< uno::Any >(&aProps, 1),
+                    aArgs,
                     xEnv,
                     "Cannot store persistent data!",
                     this );
@@ -1379,17 +1372,13 @@ uno::Any Content::open(
             if ( !xStream.is() )
             {
                 // No interaction if we are not persistent!
-                uno::Any aProps
-                    = uno::makeAny(
-                             beans::PropertyValue(
-                                 "Uri",
-                                 -1,
-                                 uno::makeAny(m_xIdentifier->
-                                                  getContentIdentifier()),
-                                 beans::PropertyState_DIRECT_VALUE));
+                uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+                {
+                    {"Uri", uno::Any(m_xIdentifier->getContentIdentifier())}
+                }));
                 ucbhelper::cancelCommandExecution(
                     ucb::IOErrorCode_CANT_READ,
-                    uno::Sequence< uno::Any >(&aProps, 1),
+                    aArgs,
                     m_eState == PERSISTENT
                         ? xEnv
                         : uno::Reference< ucb::XCommandEnvironment >(),
@@ -1413,17 +1402,13 @@ uno::Any Content::open(
                 if ( !xIn.is() )
                 {
                     // No interaction if we are not persistent!
-                    uno::Any aProps
-                        = uno::makeAny(
-                                 beans::PropertyValue(
-                                     "Uri",
-                                     -1,
-                                     uno::makeAny(m_xIdentifier->
-                                                      getContentIdentifier()),
-                                     beans::PropertyState_DIRECT_VALUE));
+                    uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+                    {
+                        {"Uri", uno::Any(m_xIdentifier->getContentIdentifier())}
+                    }));
                     ucbhelper::cancelCommandExecution(
                         ucb::IOErrorCode_CANT_READ,
-                        uno::Sequence< uno::Any >(&aProps, 1),
+                        aArgs,
                         m_eState == PERSISTENT
                             ? xEnv
                             : uno::Reference< ucb::XCommandEnvironment >(),
@@ -1473,17 +1458,13 @@ uno::Any Content::open(
                     if ( !xIn.is() )
                     {
                         // No interaction if we are not persistent!
-                        uno::Any aProps
-                            = uno::makeAny(
-                                     beans::PropertyValue(
-                                         "Uri",
-                                         -1,
-                                         uno::makeAny(m_xIdentifier->
-                                                          getContentIdentifier()),
-                                         beans::PropertyState_DIRECT_VALUE));
+                        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+                        {
+                            {"Uri", uno::Any(m_xIdentifier->getContentIdentifier())}
+                        }));
                         ucbhelper::cancelCommandExecution(
                             ucb::IOErrorCode_CANT_READ,
-                            uno::Sequence< uno::Any >(&aProps, 1),
+                            aArgs,
                             m_eState == PERSISTENT
                                 ? xEnv
                                 : uno::Reference<
@@ -1657,16 +1638,13 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
 
     if ( !storeData( xData, xEnv ) )
     {
-        uno::Any aProps
-            = uno::makeAny(beans::PropertyValue(
-                                  "Uri",
-                                  -1,
-                                  uno::makeAny(m_xIdentifier->
-                                                   getContentIdentifier()),
-                                  beans::PropertyState_DIRECT_VALUE));
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"Uri", uno::Any(m_xIdentifier->getContentIdentifier())}
+        }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_WRITE,
-            uno::Sequence< uno::Any >(&aProps, 1),
+            aArgs,
             xEnv,
             "Cannot store persistent data!",
             this );
@@ -1914,15 +1892,13 @@ void Content::transfer(
     {
         if ( aId.startsWith( rInfo.SourceURL ) )
         {
-            uno::Any aProps
-                = uno::makeAny(beans::PropertyValue(
-                                      "Uri",
-                                      -1,
-                                      uno::makeAny( rInfo.SourceURL ),
-                                      beans::PropertyState_DIRECT_VALUE));
+            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            {
+                {"Uri", uno::Any(rInfo.SourceURL)}
+            }));
             ucbhelper::cancelCommandExecution(
                 ucb::IOErrorCode_RECURSIVE,
-                uno::Sequence< uno::Any >(&aProps, 1),
+                aArgs,
                 xEnv,
                 "Target is equal to or is a child of source!",
                 this );
@@ -1992,16 +1968,13 @@ void Content::transfer(
 
     if ( !copyData( aSourceUri, aNewName ) )
     {
-        uno::Any aProps
-            = uno::makeAny(
-                     beans::PropertyValue(
-                         "Uri",
-                         -1,
-                         uno::makeAny( rInfo.SourceURL ),
-                         beans::PropertyState_DIRECT_VALUE));
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"Uri", uno::Any(rInfo.SourceURL)}
+        }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_WRITE,
-            uno::Sequence< uno::Any >(&aProps, 1),
+            aArgs,
             xEnv,
             "Cannot copy data!",
             this );
@@ -2023,16 +1996,13 @@ void Content::transfer(
 
     if ( !copyAdditionalPropertySet( aSourceUri.getUri(), aTargetUri ) )
     {
-        uno::Any aProps
-            = uno::makeAny(
-                     beans::PropertyValue(
-                         "Uri",
-                         -1,
-                         uno::makeAny( rInfo.SourceURL ),
-                         beans::PropertyState_DIRECT_VALUE));
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"Uri", uno::Any(rInfo.SourceURL)}
+        }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_WRITE,
-            uno::Sequence< uno::Any >(&aProps, 1),
+            aArgs,
             xEnv,
             "Cannot copy additional properties!",
             this );
@@ -2062,15 +2032,13 @@ void Content::transfer(
 
     if ( !xTarget.is() )
     {
-        uno::Any aProps
-            = uno::makeAny(beans::PropertyValue(
-                                  "Uri",
-                                  -1,
-                                  uno::makeAny( aTargetUri ),
-                                  beans::PropertyState_DIRECT_VALUE));
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"Uri", uno::Any(aTargetUri)}
+        }));
         ucbhelper::cancelCommandExecution(
             ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >(&aProps, 1),
+            aArgs,
             xEnv,
             "Cannot instantiate target object!",
             this );
@@ -2104,15 +2072,13 @@ void Content::transfer(
 
         if ( !xSource.is() )
         {
-            uno::Any aProps
-                = uno::makeAny(beans::PropertyValue(
-                                      "Uri",
-                                      -1,
-                                      uno::makeAny( rInfo.SourceURL ),
-                                      beans::PropertyState_DIRECT_VALUE));
+            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            {
+                {"Uri", uno::Any(rInfo.SourceURL)}
+            }));
             ucbhelper::cancelCommandExecution(
                 ucb::IOErrorCode_CANT_READ,
-                uno::Sequence< uno::Any >(&aProps, 1),
+                aArgs,
                 xEnv,
                 "Cannot instantiate target object!",
                 this );
@@ -2125,16 +2091,13 @@ void Content::transfer(
         // Remove all persistent data of source and its children.
         if ( !xSource->removeData() )
         {
-            uno::Any aProps
-                = uno::makeAny(
-                         beans::PropertyValue(
-                             "Uri",
-                             -1,
-                             uno::makeAny( rInfo.SourceURL ),
-                             beans::PropertyState_DIRECT_VALUE));
+            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            {
+                {"Uri", uno::Any(rInfo.SourceURL)}
+            }));
             ucbhelper::cancelCommandExecution(
                 ucb::IOErrorCode_CANT_WRITE,
-                uno::Sequence< uno::Any >(&aProps, 1),
+                aArgs,
                 xEnv,
                 "Cannot remove persistent data of source object!",
                 this );
@@ -2144,16 +2107,13 @@ void Content::transfer(
         // Remove own and all children's Additional Core Properties.
         if ( !xSource->removeAdditionalPropertySet() )
         {
-            uno::Any aProps
-                = uno::makeAny(
-                         beans::PropertyValue(
-                             "Uri",
-                             -1,
-                             uno::makeAny( rInfo.SourceURL ),
-                             beans::PropertyState_DIRECT_VALUE));
+            uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            {
+                {"Uri", uno::Any(rInfo.SourceURL)}
+            }));
             ucbhelper::cancelCommandExecution(
                 ucb::IOErrorCode_CANT_WRITE,
-                uno::Sequence< uno::Any >(&aProps, 1),
+                aArgs,
                 xEnv,
                 "Cannot remove additional properties of source object!",
                 this );

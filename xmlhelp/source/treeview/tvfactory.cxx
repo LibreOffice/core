@@ -21,6 +21,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "tvfactory.hxx"
 #include "tvread.hxx"
@@ -66,15 +67,12 @@ Reference< XInterface > SAL_CALL
 TVFactory::createInstance(
     const OUString& aServiceSpecifier )
 {
-    Sequence< Any > seq( 1 );
-    seq[0] <<= PropertyValue(
-        "nodepath",
-        -1,
-        Any( OUString() ),
-        PropertyState_DIRECT_VALUE );
+    uno::Sequence<uno::Any> seq(comphelper::InitAnyPropertySequence(
+    {
+        {"nodepath", uno::Any(OUString())}
+    }));
 
-    return createInstanceWithArguments( aServiceSpecifier,
-                                        seq );
+    return createInstanceWithArguments( aServiceSpecifier, seq );
 }
 
 Reference< XInterface > SAL_CALL

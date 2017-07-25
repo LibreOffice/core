@@ -25,6 +25,7 @@
 #include "strings.hrc"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -148,16 +149,11 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, Button*, void)
                 }
                 else // sub folder doesn't exist
                 {
-                    Sequence< Any > aValues(2);
-                    PropertyValue aValue;
-                    aValue.Name = "ResourceName";
-                    aValue.Value <<= sSubFolder;
-                    aValues[0] <<= aValue;
-
-                    aValue.Name = "ResourceType";
-                    aValue.Value <<= OUString("folder");
-                    aValues[1] <<= aValue;
-
+                    Sequence<Any> aValues(comphelper::InitAnyPropertySequence(
+                    {
+                        {"ResourceName", Any(sSubFolder)},
+                        {"ResourceType", Any(OUString("folder"))}
+                    }));
                     InteractiveAugmentedIOException aException(OUString(),Reference<XInterface>(),
                                                                InteractionClassification_ERROR,
                                                                IOErrorCode_NOT_EXISTING_PATH,aValues);

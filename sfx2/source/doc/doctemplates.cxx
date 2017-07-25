@@ -1747,12 +1747,10 @@ bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
                 configuration::theDefaultProvider::get( xContext );
 
-        uno::Sequence< uno::Any > aArgs( 1 );
-        beans::PropertyValue aPathProp;
-        aPathProp.Name = "nodepath";
-        aPathProp.Value <<= OUString( "/org.openoffice.Setup/Office/Factories/"  );
-        aArgs[0] <<= aPathProp;
-
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(OUString( "/org.openoffice.Setup/Office/Factories/" ))}
+        }));
         uno::Reference< container::XNameAccess > xSOFConfig(
             xConfigProvider->createInstanceWithArguments(
                                     "com.sun.star.configuration.ConfigurationAccess",

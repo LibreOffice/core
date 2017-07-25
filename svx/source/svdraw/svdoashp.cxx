@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <svl/urihelper.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/svdogrp.hxx>
@@ -419,11 +420,10 @@ Reference< XCustomShapeEngine > const & SdrObjCustomShape::GetCustomShapeEngine(
     Reference< XShape > aXShape = GetXShapeForSdrObject(const_cast<SdrObjCustomShape*>(this));
     if ( aXShape.is() )
     {
-        Sequence< Any > aArgument( 1 );
-        Sequence< PropertyValue > aPropValues( 1 );
-        aPropValues[ 0 ].Name = "CustomShape";
-        aPropValues[ 0 ].Value <<= aXShape;
-        aArgument[ 0 ] <<= aPropValues;
+        uno::Sequence<uno::Any> aArgument(comphelper::InitAnyPropertySequence(
+        {
+            {"CustomShape", uno::Any(aXShape)}
+        }));
         Reference< XInterface > xInterface( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aEngine, aArgument, xContext ) );
         if ( xInterface.is() )
             mxCustomShapeEngine.set( xInterface, UNO_QUERY );

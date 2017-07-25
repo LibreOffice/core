@@ -29,6 +29,7 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <unotools/pathoptions.hxx>
 #include <officecfg/Office/UI/Effects.hxx>
 #include <tools/stream.hxx>
@@ -205,15 +206,14 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
             configuration::theDefaultProvider::get( xContext );
 
         // read path to transition effects files from config
-        Any propValue = uno::makeAny(
-            beans::PropertyValue("nodepath", -1,
-                uno::makeAny( OUString("/org.openoffice.Office.Impress/Misc")),
-                beans::PropertyState_DIRECT_VALUE ) );
-
+        uno::Sequence<uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Impress/Misc"))}
+        }));
         Reference<container::XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
                 "com.sun.star.configuration.ConfigurationAccess",
-                Sequence<Any>( &propValue, 1 ) ),
+                aArgs),
                 UNO_QUERY_THROW );
         uno::Sequence< OUString > aFiles;
         xNameAccess->getByName("TransitionFiles") >>= aFiles;

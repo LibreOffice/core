@@ -48,6 +48,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -174,18 +175,12 @@ void SwInsertChart()
             uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
             if( xInit.is() )
             {
-                uno::Reference< awt::XWindow > xDialogParentWindow(nullptr);
                 //  initialize dialog
-                uno::Sequence<uno::Any> aSeq(2);
-                uno::Any* pArray = aSeq.getArray();
-                beans::PropertyValue aParam1;
-                aParam1.Name = "ParentWindow";
-                aParam1.Value <<= xDialogParentWindow;
-                beans::PropertyValue aParam2;
-                aParam2.Name = "ChartModel";
-                aParam2.Value <<= xChartModel;
-                pArray[0] <<= aParam1;
-                pArray[1] <<= aParam2;
+                uno::Sequence<uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                {
+                    {"ParentWindow", uno::Any(uno::Reference< awt::XWindow >())},
+                    {"ChartModel", uno::Any(xChartModel)}
+                }));
                 xInit->initialize( aSeq );
 
                 // try to set the dialog's position so it doesn't hide the chart

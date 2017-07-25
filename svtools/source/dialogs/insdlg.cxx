@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 using namespace ::com::sun::star;
@@ -104,15 +105,12 @@ void SvObjectServerList::FillInsertObjects()
         uno::Reference< lang::XMultiServiceFactory > sProviderMSFactory =
             configuration::theDefaultProvider::get(xContext);
 
-        OUString sReaderService( "com.sun.star.configuration.ConfigurationAccess" );
-        uno::Sequence< uno::Any > aArguments( 1 );
-        beans::PropertyValue aPathProp;
-        aPathProp.Name = "nodepath";
-        aPathProp.Value <<= OUString( "/org.openoffice.Office.Embedding/ObjectNames" );
-        aArguments[0] <<= aPathProp;
-
+        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        {
+            {"nodepath", uno::Any(OUString( "/org.openoffice.Office.Embedding/ObjectNames" ))}
+        }));
         uno::Reference< container::XNameAccess > xNameAccess(
-            sProviderMSFactory->createInstanceWithArguments( sReaderService,aArguments ),
+            sProviderMSFactory->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", aArguments ),
             uno::UNO_QUERY );
 
         if( xNameAccess.is())
