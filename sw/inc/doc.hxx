@@ -1388,7 +1388,7 @@ public:
     bool ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
 
     // Call into intransparent Basic / JavaScript.
-    sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
+    sal_uInt16 CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCallEvent,
                         bool bChkPtr = false );
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).

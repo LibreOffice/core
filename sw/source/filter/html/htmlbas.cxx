@@ -50,11 +50,11 @@ using namespace ::com::sun::star::container;
 
 static HTMLOutEvent aBodyEventTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_O_SDonload,    OOO_STRING_SVTOOLS_HTML_O_onload,    (sal_uInt16)SfxEventHintId::OpenDoc   },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonunload,  OOO_STRING_SVTOOLS_HTML_O_onunload,  (sal_uInt16)SfxEventHintId::PrepareCloseDoc   },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonfocus,   OOO_STRING_SVTOOLS_HTML_O_onfocus,   (sal_uInt16)SfxEventHintId::ActivateDoc   },
-    { OOO_STRING_SVTOOLS_HTML_O_SDonblur,    OOO_STRING_SVTOOLS_HTML_O_onblur,    (sal_uInt16)SfxEventHintId::DeactivateDoc },
-    { nullptr,                               nullptr,                             0                   }
+    { OOO_STRING_SVTOOLS_HTML_O_SDonload,    OOO_STRING_SVTOOLS_HTML_O_onload,    SvMacroItemId::OpenDoc   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonunload,  OOO_STRING_SVTOOLS_HTML_O_onunload,  SvMacroItemId::PrepareCloseDoc   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonfocus,   OOO_STRING_SVTOOLS_HTML_O_onfocus,   SvMacroItemId::ActivateDoc   },
+    { OOO_STRING_SVTOOLS_HTML_O_SDonblur,    OOO_STRING_SVTOOLS_HTML_O_onblur,    SvMacroItemId::DeactivateDoc },
+    { nullptr,                               nullptr,                             SvMacroItemId::NONE }
 };
 
 void SwHTMLParser::NewScript()

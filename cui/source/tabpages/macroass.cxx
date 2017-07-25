@@ -117,7 +117,7 @@ void SfxMacroTabPage::EnableButtons()
     if ( pE )
     {
         // get bound macro
-        const SvxMacro* pM = aTbl.Get( (sal_uInt16)reinterpret_cast<sal_uLong>(pE->GetUserData()) );
+        const SvxMacro* pM = aTbl.Get( (SvMacroItemId)reinterpret_cast<sal_uLong>(pE->GetUserData()) );
         mpImpl->pDeletePB->Enable( nullptr != pM );
 
         OUString sEventMacro = static_cast<const SvLBoxString&>(pE->GetItem( LB_MACROS_ITEMPOS )).GetText();
@@ -167,7 +167,7 @@ void SfxMacroTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-void SfxMacroTabPage::AddEvent( const OUString & rEventName, sal_uInt16 nEventId )
+void SfxMacroTabPage::AddEvent( const OUString & rEventName, SvMacroItemId nEventId )
 {
     OUString sTmp = rEventName + "\t";
 
@@ -325,7 +325,7 @@ bool SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
     const bool bAssEnabled = pBtn != mpImpl->pDeletePB && mpImpl->pAssignPB->IsEnabled();
 
     // remove from the table
-    sal_uInt16 nEvent = (sal_uInt16)reinterpret_cast<sal_uLong>(pE->GetUserData());
+    SvMacroItemId nEvent = (SvMacroItemId)reinterpret_cast<sal_uLong>(pE->GetUserData());
     aTbl.Erase( nEvent );
 
     OUString sScriptURI;
@@ -428,7 +428,7 @@ void SfxMacroTabPage::FillEvents()
 
             OUString          sOld( rLItem.GetText() );
             OUString          sNew;
-            sal_uInt16        nEventId = ( sal_uInt16 ) reinterpret_cast<sal_uLong>( pE->GetUserData() );
+            SvMacroItemId     nEventId = (SvMacroItemId) reinterpret_cast<sal_uLong>( pE->GetUserData() );
             if( aTbl.IsKeyValid( nEventId ) )
                 sNew = ConvertToUIName_Impl( aTbl.Get( nEventId ) );
 

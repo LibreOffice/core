@@ -30,6 +30,7 @@
 class SvxMacroTableDtor;
 class SvxMacroItem;
 class SvxMacro;
+enum class SvMacroItemId : sal_uInt16;
 
 /** SvEventDescription: Description of a single event.
     mnEvent is the id used by SvxMacroItem
@@ -39,7 +40,7 @@ class SvxMacro;
 */
 struct SvEventDescription
 {
-    sal_uInt16 mnEvent;
+    SvMacroItemId mnEvent;
     const sal_Char* mpEventName;
 };
 
@@ -121,8 +122,8 @@ protected:
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
     virtual void replaceByName(
-        const sal_uInt16 nEvent,        /// item ID of event
-        const SvxMacro& rMacro)     /// event (will be copied)
+        const SvMacroItemId nEvent,  /// item ID of event
+        const SvxMacro& rMacro)      /// event (will be copied)
              = 0;
 
     /// Must be implemented in subclass.
@@ -132,13 +133,13 @@ protected:
     /// @throws css::uno::RuntimeException
     virtual void getByName(
         SvxMacro& rMacro,
-        const sal_uInt16 nEvent ) = 0;
+        const SvMacroItemId nEvent ) = 0;
 
     /// convert an API event name to the event ID as used by SvxMacroItem
-    sal_uInt16 mapNameToEventID(const OUString& rName) const;
+    SvMacroItemId mapNameToEventID(const OUString& rName) const;
 
     /// get the event ID for the name; return 0 if not supported
-    sal_uInt16 getMacroID(const OUString& rName) const;
+    SvMacroItemId getMacroID(const OUString& rName) const;
 };
 
 
@@ -173,14 +174,14 @@ protected:
 
     using SvBaseEventDescriptor::replaceByName;
     virtual void replaceByName(
-        const sal_uInt16 nEvent,        /// item ID of event
-        const SvxMacro& rMacro)     /// event (will be copied)
+        const SvMacroItemId nEvent,   /// item ID of event
+        const SvxMacro& rMacro)       /// event (will be copied)
              override;
 
     using SvBaseEventDescriptor::getByName;
     virtual void getByName(
-        SvxMacro& rMacros,          /// macro to be filled with values
-        const sal_uInt16 nEvent )       /// item ID of event
+        SvxMacro& rMacros,            /// macro to be filled with values
+        const SvMacroItemId nEvent )  /// item ID of event
              override;
 
 
@@ -221,18 +222,18 @@ public:
 
 protected:
 
-    sal_Int16 getIndex(const sal_uInt16 nID) const;
+    sal_Int16 getIndex(const SvMacroItemId nID) const;
 
     using SvBaseEventDescriptor::replaceByName;
     virtual void replaceByName(
-        const sal_uInt16 nEvent,        /// item ID of event
-        const SvxMacro& rMacro)     /// event (will be copied)
+        const SvMacroItemId nEvent,  /// item ID of event
+        const SvxMacro& rMacro)      /// event (will be copied)
              override;
 
     using SvBaseEventDescriptor::getByName;
     virtual void getByName(
-        SvxMacro& rMacro,           /// macro to be filled
-        const sal_uInt16 nEvent )       /// item ID of event
+        SvxMacro& rMacro,             /// macro to be filled
+        const SvMacroItemId nEvent )  /// item ID of event
              override;
 
     /// do we have an event?
@@ -240,8 +241,7 @@ protected:
     /// return false: no macro; getByName() will return an empty macro
     /// @throws css::lang::IllegalArgumentException if the event is not supported
     bool hasById(
-        const sal_uInt16 nEvent ) const     /// item ID of event
-             ;
+        const SvMacroItemId nEvent ) const;     /// item ID of event
 
 };
 

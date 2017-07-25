@@ -51,20 +51,20 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
     {
     case MACASSGN_AUTOTEXT:
         aItem.AddEvent( SwResId(STR_EVENT_START_INS_GLOSSARY), OUString(),
-                            SW_EVENT_START_INS_GLOSSARY );
+                            SvMacroItemId::SwStartInsGlossary );
         aItem.AddEvent( SwResId(STR_EVENT_END_INS_GLOSSARY), OUString(),
-                            SW_EVENT_END_INS_GLOSSARY);
+                            SvMacroItemId::SwEndInsGlossary);
         // in order for the new handler to become active!
         break;
     case MACASSGN_ALLFRM:
     case MACASSGN_GRAPHIC:          // graphics
         {
             aItem.AddEvent( SwResId(STR_EVENT_IMAGE_ERROR), OUString(),
-                                SVX_EVENT_IMAGE_ERROR);
+                                SvMacroItemId::OnImageLoadError);
             aItem.AddEvent( SwResId(STR_EVENT_IMAGE_ABORT), OUString(),
-                                SVX_EVENT_IMAGE_ABORT);
+                                SvMacroItemId::OnImageLoadCancel);
             aItem.AddEvent( SwResId(STR_EVENT_IMAGE_LOAD), OUString(),
-                                SVX_EVENT_IMAGE_LOAD);
+                                SvMacroItemId::OnImageLoadDone);
         }
         SAL_FALLTHROUGH;
     case MACASSGN_FRMURL:           // Frame - URL-Attributes
@@ -73,13 +73,13 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
                 (MACASSGN_FRMURL == eType || MACASSGN_ALLFRM == eType))
             {
                 aItem.AddEvent( SwResId( STR_EVENT_FRM_KEYINPUT_A ), OUString(),
-                                SW_EVENT_FRM_KEYINPUT_ALPHA );
+                                SvMacroItemId::SwFrmKeyInputAlpha );
                 aItem.AddEvent( SwResId( STR_EVENT_FRM_KEYINPUT_NOA ), OUString(),
-                                SW_EVENT_FRM_KEYINPUT_NOALPHA );
+                                SvMacroItemId::SwFrmKeyInputNoAlpha );
                 aItem.AddEvent( SwResId( STR_EVENT_FRM_RESIZE ), OUString(),
-                                SW_EVENT_FRM_RESIZE );
+                                SvMacroItemId::SwFrmResize );
                 aItem.AddEvent( SwResId( STR_EVENT_FRM_MOVE ), OUString(),
-                                SW_EVENT_FRM_MOVE );
+                                SvMacroItemId::SwFrmMove );
             }
         }
         SAL_FALLTHROUGH;
@@ -87,17 +87,17 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
         {
             if( !bHtmlMode )
                 aItem.AddEvent( SwResId(STR_EVENT_OBJECT_SELECT), OUString(),
-                                SW_EVENT_OBJECT_SELECT );
+                                SvMacroItemId::SwObjectSelect );
         }
         SAL_FALLTHROUGH;
     case MACASSGN_INETFMT:          // INetFormat-Attributes
         {
             aItem.AddEvent( SwResId(STR_EVENT_MOUSEOVER_OBJECT), OUString(),
-                                SFX_EVENT_MOUSEOVER_OBJECT );
+                                SvMacroItemId::OnMouseOver );
             aItem.AddEvent( SwResId(STR_EVENT_MOUSECLICK_OBJECT), OUString(),
-                                SFX_EVENT_MOUSECLICK_OBJECT);
+                                SvMacroItemId::OnClick);
             aItem.AddEvent( SwResId(STR_EVENT_MOUSEOUT_OBJECT), OUString(),
-                                SFX_EVENT_MOUSEOUT_OBJECT);
+                                SvMacroItemId::OnMouseOut);
         }
         break;
     }

@@ -75,7 +75,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
             const SvxMacro& rMac = it->second;
             if( STARBASIC == rMac.GetScriptType() )
             {
-                rStrm.WriteUInt16( it->first );
+                rStrm.WriteUInt16( sal_uInt16(it->first) );
 
                 // UNICODE: rStrm << pMac->GetLibName();
                 rStrm.WriteUniOrByteString(rMac.GetLibName(), rStrm.GetStreamCharSet());
@@ -97,7 +97,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
             const SvxMacro& rMac = it->second;
             if( STARBASIC != rMac.GetScriptType() )
             {
-                rStrm.WriteUInt16( it->first );
+                rStrm.WriteUInt16( sal_uInt16(it->first) );
 
                 // UNICODE: rStrm << pMac->GetLibName();
                 rStrm.WriteUniOrByteString(rMac.GetLibName(), rStrm.GetStreamCharSet());
@@ -253,17 +253,17 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
 
 void SvxHyperlinkItem::SetMacro( HyperDialogEvent nEvent, const SvxMacro& rMacro )
 {
-    sal_uInt16 nSfxEvent = 0;
+    SvMacroItemId nSfxEvent = SvMacroItemId::NONE;
     switch( nEvent )
     {
         case HyperDialogEvent::MouseOverObject:
-            nSfxEvent = SFX_EVENT_MOUSEOVER_OBJECT;
+            nSfxEvent = SvMacroItemId::OnMouseOver;
             break;
         case HyperDialogEvent::MouseClickObject:
-            nSfxEvent = SFX_EVENT_MOUSECLICK_OBJECT;
+            nSfxEvent = SvMacroItemId::OnClick;
             break;
         case HyperDialogEvent::MouseOutObject:
-            nSfxEvent = SFX_EVENT_MOUSEOUT_OBJECT;
+            nSfxEvent = SvMacroItemId::OnMouseOut;
             break;
         default: break;
     }

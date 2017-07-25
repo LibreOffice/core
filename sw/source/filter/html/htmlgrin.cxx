@@ -317,7 +317,7 @@ void SwHTMLParser::InsertImage()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        sal_uInt16 nEvent = 0;
+        SvMacroItemId nEvent = SvMacroItemId::NONE;
         ScriptType eScriptType2 = eDfltScriptType;
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
@@ -385,21 +385,21 @@ void SwHTMLParser::InsertImage()
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
             case HtmlOptionId::ONLOAD:
-                nEvent = SVX_EVENT_IMAGE_LOAD;
+                nEvent = SvMacroItemId::OnImageLoadDone;
                 goto IMAGE_SETEVENT;
 
             case HtmlOptionId::SDONABORT:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
             case HtmlOptionId::ONABORT:
-                nEvent = SVX_EVENT_IMAGE_ABORT;
+                nEvent = SvMacroItemId::OnImageLoadCancel;
                 goto IMAGE_SETEVENT;
 
             case HtmlOptionId::SDONERROR:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
             case HtmlOptionId::ONERROR:
-                nEvent = SVX_EVENT_IMAGE_ERROR;
+                nEvent = SvMacroItemId::OnImageLoadError;
                 goto IMAGE_SETEVENT;
 IMAGE_SETEVENT:
                 {
@@ -755,17 +755,16 @@ IMAGE_SETEVENT:
         pFlyFormat->SetFormatAttr( aURL );
 
         {
-            static const sal_uInt16 aEvents[] = {
-                SFX_EVENT_MOUSEOVER_OBJECT,
-                SFX_EVENT_MOUSECLICK_OBJECT,
-                SFX_EVENT_MOUSEOUT_OBJECT,
-                0 };
+            static const SvMacroItemId aEvents[] = {
+                SvMacroItemId::OnMouseOver,
+                SvMacroItemId::OnClick,
+                SvMacroItemId::OnMouseOut };
 
-            for( int n = 0; aEvents[ n ]; ++n )
+            for( SvMacroItemId id : aEvents )
             {
-                const SvxMacro *pMacro = rINetFormat.GetMacro( aEvents[ n ] );
+                const SvxMacro *pMacro = rINetFormat.GetMacro( id );
                 if( nullptr != pMacro )
-                    aMacroItem.SetMacro( aEvents[ n ], *pMacro );
+                    aMacroItem.SetMacro( id, *pMacro );
             }
         }
 
@@ -1068,7 +1067,7 @@ void SwHTMLParser::NewAnchor()
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
     {
-        sal_uInt16 nEvent = 0;
+        SvMacroItemId nEvent = SvMacroItemId::NONE;
         ScriptType eScriptType2 = eDfltScriptType;
         const HTMLOption& rOption = rHTMLOptions[--i];
         switch( rOption.GetToken() )
@@ -1108,21 +1107,21 @@ void SwHTMLParser::NewAnchor()
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
             case HtmlOptionId::ONCLICK:
-                nEvent = SFX_EVENT_MOUSECLICK_OBJECT;
+                nEvent = SvMacroItemId::OnClick;
                 goto ANCHOR_SETEVENT;
 
             case HtmlOptionId::SDONMOUSEOVER:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
             case HtmlOptionId::ONMOUSEOVER:
-                nEvent = SFX_EVENT_MOUSEOVER_OBJECT;
+                nEvent = SvMacroItemId::OnMouseOver;
                 goto ANCHOR_SETEVENT;
 
             case HtmlOptionId::SDONMOUSEOUT:
                 eScriptType2 = STARBASIC;
                 SAL_FALLTHROUGH;
             case HtmlOptionId::ONMOUSEOUT:
-                nEvent = SFX_EVENT_MOUSEOUT_OBJECT;
+                nEvent = SvMacroItemId::OnMouseOut;
                 goto ANCHOR_SETEVENT;
 ANCHOR_SETEVENT:
                 {

@@ -20,16 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFORM_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFORM_HXX
 
-enum HTMLEventType
-{
-    HTML_ET_ONSUBMITFORM,   HTML_ET_ONRESETFORM,
-    HTML_ET_ONGETFOCUS,     HTML_ET_ONLOSEFOCUS,
-    HTML_ET_ONCLICK,        HTML_ET_ONCLICK_ITEM,
-    HTML_ET_ONCHANGE,       HTML_ET_ONSELECT,
-    HTML_ET_END
-};
-
-extern HTMLEventType aEventTypeTable[];
 extern const sal_Char * aEventListenerTable[];
 extern const sal_Char * aEventMethodTable[];
 extern const sal_Char * aEventSDOptionTable[];

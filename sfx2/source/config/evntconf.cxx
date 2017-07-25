@@ -126,7 +126,7 @@ sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const
     return 0;
 }
 
-void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName, sal_uInt16 nID )
+void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName, SvMacroItemId nID )
 {
     aEventsList.push_back( new SfxEventName( nID, rName, !rUIName.isEmpty() ? rUIName : rName ) );
 }

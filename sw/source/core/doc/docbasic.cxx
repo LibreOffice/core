@@ -129,7 +129,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
     return ERRCODE_NONE == eErr;
 }
 
-sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
+sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCallEvent,
                     bool bCheckPtr )
 {
     if( !mpDocShell )        // we can't do that without a DocShell!

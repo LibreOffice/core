@@ -1487,13 +1487,13 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     const SwFrameFormat* pFlyFormat = rSh.GetFlyFrameFormat();
     if( pFlyFormat )
     {
-        sal_uInt16 nEvent;
+        SvMacroItemId nEvent;
 
         if( 32 <= aCh &&
             0 == (( KEY_MOD1 | KEY_MOD2 ) & rKeyCode.GetModifier() ))
-            nEvent = SW_EVENT_FRM_KEYINPUT_ALPHA;
+            nEvent = SvMacroItemId::SwFrmKeyInputAlpha;
         else
-            nEvent = SW_EVENT_FRM_KEYINPUT_NOALPHA;
+            nEvent = SvMacroItemId::SwFrmKeyInputNoAlpha;
 
         const SvxMacro* pMacro = pFlyFormat->GetMacro().GetMacroTable().Get( nEvent );
         if( pMacro )
@@ -1504,7 +1504,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             xArgs->Put( xVar.get(), 1 );
 
             xVar = new SbxVariable;
-            if( SW_EVENT_FRM_KEYINPUT_ALPHA == nEvent )
+            if( SvMacroItemId::SwFrmKeyInputAlpha == nEvent )
                 xVar->PutChar( aCh );
             else
                 xVar->PutUShort( rKeyCode.GetModifier() | rKeyCode.GetCode() );
@@ -4020,9 +4020,9 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                         const SwFrameFormat *const pFlyFormat(rSh.GetFlyFrameFormat());
                         const SvxMacro* pMacro = nullptr;
 
-                        sal_uInt16 nEvent = SdrHdlKind::Move == g_eSdrMoveHdl
-                                            ? SW_EVENT_FRM_MOVE
-                                            : SW_EVENT_FRM_RESIZE;
+                        SvMacroItemId nEvent = SdrHdlKind::Move == g_eSdrMoveHdl
+                                            ? SvMacroItemId::SwFrmMove
+                                            : SvMacroItemId::SwFrmResize;
 
                         if (nullptr != pFlyFormat)
                             pMacro = pFlyFormat->GetMacro().GetMacroTable().Get(nEvent);
@@ -4037,7 +4037,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             xVar->PutString( pFlyFormat->GetName() );
                             xArgs->Put( xVar.get(), ++nPos );
 
-                            if( SW_EVENT_FRM_RESIZE == nEvent )
+                            if( SvMacroItemId::SwFrmResize == nEvent )
                             {
                                 xVar = new SbxVariable;
                                 xVar->PutUShort( static_cast< sal_uInt16 >(g_eSdrMoveHdl) );
@@ -4211,10 +4211,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     if( m_aSaveCallEvent != aLastCallEvent )
                     {
                         if( aLastCallEvent.HasEvent() )
-                            rSh.CallEvent( SFX_EVENT_MOUSEOUT_OBJECT,
+                            rSh.CallEvent( SvMacroItemId::OnMouseOut,
                                             aLastCallEvent, true );
                         // 0 says that the object doesn't have any table
-                        if( !rSh.CallEvent( SFX_EVENT_MOUSEOVER_OBJECT,
+                        if( !rSh.CallEvent( SvMacroItemId::OnMouseOver,
                                         m_aSaveCallEvent ))
                             m_aSaveCallEvent.Clear();
                     }
@@ -4222,7 +4222,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 else if( aLastCallEvent.HasEvent() )
                 {
                     // cursor was on an object
-                    rSh.CallEvent( SFX_EVENT_MOUSEOUT_OBJECT,
+                    rSh.CallEvent( SvMacroItemId::OnMouseOut,
                                     aLastCallEvent, true );
                 }
 
@@ -4483,9 +4483,9 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         const SwFrameFormat *const pFlyFormat(rSh.GetFlyFrameFormat());
                         const SvxMacro* pMacro = nullptr;
 
-                        sal_uInt16 nEvent = SdrHdlKind::Move == eOldSdrMoveHdl
-                                            ? SW_EVENT_FRM_MOVE
-                                            : SW_EVENT_FRM_RESIZE;
+                        SvMacroItemId nEvent = SdrHdlKind::Move == eOldSdrMoveHdl
+                                            ? SvMacroItemId::SwFrmMove
+                                            : SvMacroItemId::SwFrmResize;
 
                         if (nullptr != pFlyFormat)
                             pMacro = pFlyFormat->GetMacro().GetMacroTable().Get(nEvent);
@@ -4499,7 +4499,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             xVar->PutString( pFlyFormat->GetName() );
                             xArgs->Put( xVar.get(), ++nPos );
 
-                            if( SW_EVENT_FRM_RESIZE == nEvent )
+                            if( SvMacroItemId::SwFrmResize == nEvent )
                             {
                                 xVar = new SbxVariable;
                                 xVar->PutUShort( static_cast< sal_uInt16 >(eOldSdrMoveHdl) );

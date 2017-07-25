@@ -30,16 +30,45 @@
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
 
-#define EVENT_SFX_START              5000
-//      EVENT_SFX_END                9999
+/**
+  these values get stored in streams in a 16-bit value
+*/
+enum class SvMacroItemId : sal_uInt16 {
+    NONE                 = 0,
 
-#define EVENT_APP_START             20000
-//      EVENT_APP_END               29999
+    // used by SwHTMLForm_Impl
+    HtmlOnSubmitForm,
+    HtmlOnResetForm,
+    HtmlOnGetFocus,
+    HtmlOnLoseFocus,
+    HtmlOnClick,
+    HtmlOnClickItem,
+    HtmlOnChange,
+    HtmlOnSelect,
 
-// Events for Controls etc.
-#define SFX_EVENT_MOUSEOVER_OBJECT     ( EVENT_SFX_START + 100 )
-#define SFX_EVENT_MOUSECLICK_OBJECT    ( EVENT_SFX_START + 101 )
-#define SFX_EVENT_MOUSEOUT_OBJECT      ( EVENT_SFX_START + 102 )
+    // used by SwHTMLParser
+    OpenDoc,
+    PrepareCloseDoc,
+    ActivateDoc,
+    DeactivateDoc,
+
+    // Events for Controls etc.
+    OnMouseOver          =  5100,
+    OnClick              =  5101,
+    OnMouseOut           =  5102,
+
+    OnImageLoadDone      = 10000,
+    OnImageLoadCancel    = 10001,
+    OnImageLoadError     = 10002,
+
+    SwObjectSelect       = 20000,
+    SwStartInsGlossary   = 20001,
+    SwEndInsGlossary     = 20002,
+    SwFrmKeyInputAlpha   = 20004,
+    SwFrmKeyInputNoAlpha = 20005,
+    SwFrmResize          = 20006,
+    SwFrmMove            = 20007,
+};
 
 class SfxObjectShell;
 

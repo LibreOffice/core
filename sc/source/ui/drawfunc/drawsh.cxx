@@ -330,7 +330,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin )
     {
         SvxMacroTableDtor aTab;
         OUString sMacro = pInfo->GetMacro();
-        aTab.Insert(SFX_EVENT_MOUSECLICK_OBJECT, SvxMacro(sMacro, OUString()));
+        aTab.Insert(SvMacroItemId::OnClick, SvxMacro(sMacro, OUString()));
         aItem.SetMacroTable( aTab );
     }
 
@@ -339,7 +339,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin )
     pItemSet->Put ( aItem );
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
-    aNamesItem.AddEvent( ScResId(RID_SCSTR_ONCLICK), OUString(), SFX_EVENT_MOUSECLICK_OBJECT );
+    aNamesItem.AddEvent( ScResId(RID_SCSTR_ONCLICK), OUString(), SvMacroItemId::OnClick );
     pItemSet->Put( aNamesItem );
 
     css::uno::Reference < css::frame::XFrame > xFrame;
@@ -355,7 +355,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin )
         if( SfxItemState::SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, false, &pItem ))
         {
             OUString sMacro;
-            const SvxMacro* pMacro = static_cast<const SvxMacroItem*>(pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
+            const SvxMacro* pMacro = static_cast<const SvxMacroItem*>(pItem)->GetMacroTable().Get( SvMacroItemId::OnClick );
             if ( pMacro )
                 sMacro = pMacro->GetMacName();
 

@@ -253,7 +253,7 @@ void SwFormatINetFormat::SetMacroTable( const SvxMacroTableDtor* pNewTable )
     }
 }
 
-void SwFormatINetFormat::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
+void SwFormatINetFormat::SetMacro( SvMacroItemId nEvent, const SvxMacro& rMacro )
 {
     if( !mpMacroTable )
         mpMacroTable.reset( new SvxMacroTableDtor );
@@ -261,7 +261,7 @@ void SwFormatINetFormat::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
     mpMacroTable->Insert( nEvent, rMacro );
 }
 
-const SvxMacro* SwFormatINetFormat::GetMacro( sal_uInt16 nEvent ) const
+const SvxMacro* SwFormatINetFormat::GetMacro( SvMacroItemId nEvent ) const
 {
     const SvxMacro* pRet = nullptr;
     if( mpMacroTable && mpMacroTable->IsKeyValid( nEvent ) )

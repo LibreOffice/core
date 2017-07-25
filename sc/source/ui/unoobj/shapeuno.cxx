@@ -24,6 +24,7 @@
 #include <svtools/unoimap.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/svapp.hxx>
+#include <sfx2/event.hxx>
 #include <svx/unoshape.hxx>
 #include <editeng/unofield.hxx>
 #include <svx/shapepropertynotifier.hxx>
@@ -68,7 +69,7 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
     {
-        { 0, nullptr }
+        { SvMacroItemId::NONE, nullptr }
     };
     return aMacroDescriptionsImpl;
 }

@@ -342,13 +342,13 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, void)
 
         if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseOverObject )
             pMacroPage->AddEvent( CuiResId(RID_SVXSTR_HYPDLG_MACROACT1),
-                                  SFX_EVENT_MOUSEOVER_OBJECT );
+                                  SvMacroItemId::OnMouseOver );
         if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseClickObject )
             pMacroPage->AddEvent( CuiResId(RID_SVXSTR_HYPDLG_MACROACT2),
-                                  SFX_EVENT_MOUSECLICK_OBJECT);
+                                  SvMacroItemId::OnClick);
         if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseOutObject )
             pMacroPage->AddEvent( CuiResId(RID_SVXSTR_HYPDLG_MACROACT3),
-                                  SFX_EVENT_MOUSEOUT_OBJECT);
+                                  SvMacroItemId::OnMouseOut);
 
         if ( bIsInputEnabled )
             GetParent()->EnableInput();

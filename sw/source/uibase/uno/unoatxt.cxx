@@ -957,9 +957,9 @@ uno::Reference< container::XNameReplace > SwXAutoTextEntry::getEvents()
 
 const struct SvEventDescription aAutotextEvents[] =
 {
-    { SW_EVENT_START_INS_GLOSSARY,  "OnInsertStart" },
-    { SW_EVENT_END_INS_GLOSSARY,    "OnInsertDone" },
-    { 0, nullptr }
+    { SvMacroItemId::SwStartInsGlossary,  "OnInsertStart" },
+    { SvMacroItemId::SwEndInsGlossary,    "OnInsertDone" },
+    { SvMacroItemId::NONE, nullptr }
 };
 
 SwAutoTextEventDescriptor::SwAutoTextEventDescriptor(
@@ -981,13 +981,13 @@ OUString SwAutoTextEventDescriptor::getImplementationName()
 }
 
 void SwAutoTextEventDescriptor::replaceByName(
-    const sal_uInt16 nEvent,
+    const SvMacroItemId nEvent,
     const SvxMacro& rMacro)
 {
     OSL_ENSURE( nullptr != rAutoTextEntry.GetGlossaries(),
                 "Strangely enough, the AutoText vanished!" );
-    OSL_ENSURE( (nEvent == SW_EVENT_END_INS_GLOSSARY) ||
-                (nEvent == SW_EVENT_START_INS_GLOSSARY) ,
+    OSL_ENSURE( (nEvent == SvMacroItemId::SwEndInsGlossary) ||
+                (nEvent == SvMacroItemId::SwStartInsGlossary) ,
                 "Unknown event ID" );
 
     SwGlossaries *const pGlossaries =
@@ -1015,11 +1015,11 @@ void SwAutoTextEventDescriptor::replaceByName(
 
 void SwAutoTextEventDescriptor::getByName(
     SvxMacro& rMacro,
-    const sal_uInt16 nEvent )
+    const SvMacroItemId nEvent )
 {
     OSL_ENSURE( nullptr != rAutoTextEntry.GetGlossaries(), "no AutoText" );
-    OSL_ENSURE( (nEvent == SW_EVENT_END_INS_GLOSSARY) ||
-                (nEvent == SW_EVENT_START_INS_GLOSSARY) ,
+    OSL_ENSURE( (nEvent == SvMacroItemId::SwEndInsGlossary) ||
+                (nEvent == SvMacroItemId::SwStartInsGlossary) ,
                 "Unknown event ID" );
 
     SwGlossaries *const pGlossaries =

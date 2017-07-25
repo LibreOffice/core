@@ -48,12 +48,6 @@
 #define MID_ZOOMSLIDER_MINZOOM          0x7b
 #define MID_ZOOMSLIDER_MAXZOOM          0x7c
 
-// event IDs block 2
-
-#define SVX_EVENT_IMAGE_LOAD                (SID_LIB_START)
-#define SVX_EVENT_IMAGE_ABORT               (SID_LIB_START + 1)
-#define SVX_EVENT_IMAGE_ERROR               (SID_LIB_START + 2)
-
 // function IDs
 #define FID_SVX_START                       (SID_LIB_START + 500)
 

@@ -21,6 +21,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <sfx2/event.hxx>
 #include <svtools/unoevent.hxx>
 #include <svl/macitem.hxx>
 
@@ -238,7 +239,7 @@ SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupport
 {
     assert(pSupportedMacroItems != nullptr && "Need a list of supported events!");
 
-    for( ; mpSupportedMacroItems[mnMacroItems].mnEvent != 0; mnMacroItems++) ;
+    for( ; mpSupportedMacroItems[mnMacroItems].mnEvent != SvMacroItemId::NONE; mnMacroItems++) ;
 }
 
 
@@ -250,10 +251,10 @@ void SvBaseEventDescriptor::replaceByName(
     const OUString& rName,
     const Any& rElement )
 {
-    sal_uInt16 nMacroID = getMacroID(rName);
+    SvMacroItemId nMacroID = getMacroID(rName);
 
     // error checking
-    if (0 == nMacroID)
+    if (SvMacroItemId::NONE == nMacroID)
         throw NoSuchElementException();
     if (rElement.getValueType() != getElementType())
         throw IllegalArgumentException();
@@ -271,10 +272,10 @@ void SvBaseEventDescriptor::replaceByName(
 Any SvBaseEventDescriptor::getByName(
     const OUString& rName )
 {
-    sal_uInt16 nMacroID = getMacroID(rName);
+    SvMacroItemId nMacroID = getMacroID(rName);
 
     // error checking
-    if (0 == nMacroID)
+    if (SvMacroItemId::NONE == nMacroID)
         throw NoSuchElementException();
 
     // perform get (in subclass)
@@ -300,8 +301,8 @@ Sequence<OUString> SvBaseEventDescriptor::getElementNames()
 sal_Bool SvBaseEventDescriptor::hasByName(
     const OUString& rName )
 {
-    sal_uInt16 nMacroID = getMacroID(rName);
-    return (nMacroID != 0);
+    SvMacroItemId nMacroID = getMacroID(rName);
+    return (nMacroID != SvMacroItemId::NONE);
 }
 
 Type SvBaseEventDescriptor::getElementType()
@@ -326,7 +327,7 @@ Sequence<OUString> SvBaseEventDescriptor::getSupportedServiceNames()
     return aSequence;
 }
 
-sal_uInt16 SvBaseEventDescriptor::mapNameToEventID(const OUString& rName) const
+SvMacroItemId SvBaseEventDescriptor::mapNameToEventID(const OUString& rName) const
 {
     // iterate over known event names
     for(sal_Int16 i = 0; i < mnMacroItems; i++)
@@ -338,10 +339,10 @@ sal_uInt16 SvBaseEventDescriptor::mapNameToEventID(const OUString& rName) const
     }
 
     // not found -> return zero
-    return 0;
+    return SvMacroItemId::NONE;
 }
 
-sal_uInt16 SvBaseEventDescriptor::getMacroID(const OUString& rName) const
+SvMacroItemId SvBaseEventDescriptor::getMacroID(const OUString& rName) const
 {
     return mapNameToEventID(rName);
 }
@@ -361,7 +362,7 @@ SvEventDescriptor::~SvEventDescriptor()
 }
 
 void SvEventDescriptor::replaceByName(
-    const sal_uInt16 nEvent,
+    const SvMacroItemId nEvent,
     const SvxMacro& rMacro)
 {
     SvxMacroItem aItem(getMacroItemWhich());
@@ -372,7 +373,7 @@ void SvEventDescriptor::replaceByName(
 
 void SvEventDescriptor::getByName(
     SvxMacro& rMacro,
-    const sal_uInt16 nEvent )
+    const SvMacroItemId nEvent )
 {
     const SvxMacroItem& rItem = getMacroItem();
     if( rItem.HasMacro( nEvent ) )
@@ -397,12 +398,12 @@ SvDetachedEventDescriptor::~SvDetachedEventDescriptor()
 {
 }
 
-sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const
+sal_Int16 SvDetachedEventDescriptor::getIndex(const SvMacroItemId nID) const
 {
     // iterate over supported events
     sal_Int16 nIndex = 0;
     while ( (mpSupportedMacroItems[nIndex].mnEvent != nID) &&
-            (mpSupportedMacroItems[nIndex].mnEvent != 0)      )
+            (mpSupportedMacroItems[nIndex].mnEvent != SvMacroItemId::NONE)      )
     {
         nIndex++;
     }
@@ -416,7 +417,7 @@ OUString SvDetachedEventDescriptor::getImplementationName()
 
 
 void SvDetachedEventDescriptor::replaceByName(
-    const sal_uInt16 nEvent,
+    const SvMacroItemId nEvent,
     const SvxMacro& rMacro)
 {
     sal_Int16 nIndex = getIndex(nEvent);
@@ -430,7 +431,7 @@ void SvDetachedEventDescriptor::replaceByName(
 
 void SvDetachedEventDescriptor::getByName(
     SvxMacro& rMacro,
-    const sal_uInt16 nEvent )
+    const SvMacroItemId nEvent )
 {
     sal_Int16 nIndex = getIndex(nEvent);
     if (-1 == nIndex )
@@ -441,7 +442,7 @@ void SvDetachedEventDescriptor::getByName(
 }
 
 bool SvDetachedEventDescriptor::hasById(
-    const sal_uInt16 nEvent ) const     /// item ID of event
+    const SvMacroItemId nEvent ) const     /// item ID of event
 {
     sal_Int16 nIndex = getIndex(nEvent);
     if (-1 == nIndex)
@@ -461,9 +462,9 @@ SvMacroTableEventDescriptor::SvMacroTableEventDescriptor(
     const SvEventDescription* pSupportedMacroItems) :
         SvDetachedEventDescriptor(pSupportedMacroItems)
 {
-    for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; i++)
+    for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != SvMacroItemId::NONE; i++)
     {
-        const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
+        const SvMacroItemId nEvent = mpSupportedMacroItems[i].mnEvent;
         const SvxMacro* pMacro = rMacroTable.Get(nEvent);
         if (nullptr != pMacro)
             replaceByName(nEvent, *pMacro);
@@ -477,9 +478,9 @@ SvMacroTableEventDescriptor::~SvMacroTableEventDescriptor()
 void SvMacroTableEventDescriptor::copyMacrosIntoTable(
     SvxMacroTableDtor& rMacroTable)
 {
-    for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != 0; i++)
+    for(sal_Int16 i = 0; mpSupportedMacroItems[i].mnEvent != SvMacroItemId::NONE; i++)
     {
-        const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
+        const SvMacroItemId nEvent = mpSupportedMacroItems[i].mnEvent;
         if (hasById(nEvent))
         {
             SvxMacro& rMacro = rMacroTable.Insert(nEvent, SvxMacro("", ""));
