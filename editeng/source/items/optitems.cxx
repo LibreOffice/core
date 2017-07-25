@@ -126,23 +126,4 @@ bool SfxHyphenRegionItem::GetPresentation
 }
 
 
-SfxPoolItem* SfxHyphenRegionItem::Create(SvStream& rStrm, sal_uInt16 ) const
-{
-    sal_uInt8 _nMinLead, _nMinTrail;
-    rStrm.ReadUChar( _nMinLead ).ReadUChar( _nMinTrail );
-    SfxHyphenRegionItem* pAttr = new SfxHyphenRegionItem( Which() );
-    pAttr->GetMinLead() = _nMinLead;
-    pAttr->GetMinTrail() = _nMinTrail;
-    return pAttr;
-}
-
-
-SvStream& SfxHyphenRegionItem::Store( SvStream& rStrm, sal_uInt16 ) const
-{
-    rStrm.WriteUChar( GetMinLead() )
-         .WriteUChar( GetMinTrail() );
-    return rStrm;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

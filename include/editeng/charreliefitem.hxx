@@ -40,8 +40,6 @@ public:
                        const sal_uInt16 nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
-    virtual SvStream&       Store(SvStream & rStrm, sal_uInt16 nIVer) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileVersion ) const override;
 
     virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
