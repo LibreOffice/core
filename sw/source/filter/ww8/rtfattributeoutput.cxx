@@ -2657,6 +2657,8 @@ void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
 
     m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_SUPER " ");
+    EndRunProperties(nullptr);
+    m_aRun->append(' ');
     WriteTextFootnoteNumStr(rFootnote);
     m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FOOTNOTE);
     if (rFootnote.IsEndNote() || m_rExport.m_pDoc->GetFootnoteInfo().ePos == FTNPOS_CHAPTER)
