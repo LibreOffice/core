@@ -139,7 +139,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
         //  for XML import, all row heights are updated together after importing
         return false;
     }
-    if ( !rDoc.IsAdjustHeightEnabled() )
+    if ( rDoc.IsAdjustHeightLocked() )
     {
         return false;
     }

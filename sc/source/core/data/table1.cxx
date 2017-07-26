@@ -483,7 +483,7 @@ bool ScTable::SetOptimalHeight(
     OSL_ENSURE( rCxt.getExtraHeight() == 0 || rCxt.isForceAutoSize(),
         "automatic OptimalHeight with Extra" );
 
-    if ( !pDocument->IsAdjustHeightEnabled() )
+    if ( pDocument->IsAdjustHeightLocked() )
     {
         return false;
     }
@@ -511,7 +511,7 @@ void ScTable::SetOptimalHeightOnly(
     OSL_ENSURE( rCxt.getExtraHeight() == 0 || rCxt.isForceAutoSize(),
         "automatic OptimalHeight with Extra" );
 
-    if ( !pDocument->IsAdjustHeightEnabled() )
+    if ( pDocument->IsAdjustHeightLocked() )
         return;
 
     SCSIZE  nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
