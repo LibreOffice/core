@@ -30,18 +30,12 @@
 
 /**
  * xmlSecMSCryptoAppliedKeysMngrCreate:
- * @hKeyStore:        the pointer to key store.
- * @hCertStore:        the pointer to certificate database.
  *
  * Create and load key store and certificate database into keys manager
  *
  * Returns keys manager pointer on success or NULL otherwise.
  */
-xmlSecKeysMngrPtr
-xmlSecMSCryptoAppliedKeysMngrCreate(
-    HCERTSTORE /*hKeyStore*/,
-    HCERTSTORE /*hCertStore*/
-)
+xmlSecKeysMngrPtr xmlSecMSCryptoAppliedKeysMngrCreate()
 {
     xmlSecKeysMngrPtr        keyMngr = NULL ;
     xmlSecKeyStorePtr        keyStore = NULL ;
