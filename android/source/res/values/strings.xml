@@ -135,4 +135,9 @@
     <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
     <string name="slideshow_action_back">Back</string>
 
+    <!-- Password dialog strings -->
+    <string name="action_pwd_dialog_OK">OK</string>
+    <string name="action_pwd_dialog_cancel">Cancel</string>
+    <string name="action_pwd_dialog_title">Please enter password</string>
+
 </resources>

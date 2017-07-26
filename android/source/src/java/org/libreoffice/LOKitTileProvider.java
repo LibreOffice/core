@@ -50,7 +50,7 @@ class LOKitTileProvider implements TileProvider {
      * @param messageCallback - callback for messages retrieved from LOKit
      * @param input - input path of the document
      */
-    LOKitTileProvider(LibreOfficeMainActivity context, Document.MessageCallback messageCallback, String input) {
+    LOKitTileProvider(LibreOfficeMainActivity context, InvalidationHandler messageCallback, String input) {
         mContext = context;
         mMessageCallback = messageCallback;
 
@@ -58,13 +58,16 @@ class LOKitTileProvider implements TileProvider {
         LibreOfficeKit.init(mContext);
 
         mOffice = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
+        mOffice.setMessageCallback(messageCallback);
+        mOffice.setOptionalFeatures(Document.LOK_FEATURE_DOCUMENT_PASSWORD);
+        mContext.setTileProvider(this);
 
         mInputFile = input;
 
         Log.i(LOGTAG, "====> Loading file '" + input + "'");
         mDocument = mOffice.documentLoad(input);
 
-        if (mDocument == null) {
+        if (mDocument == null && !mContext.isPasswordProtected()) {
             Log.i(LOGTAG, "====> mOffice.documentLoad() returned null, trying to restart 'Office' and loading again");
             mOffice.destroy();
             Log.i(LOGTAG, "====> mOffice.destroy() done");
@@ -72,6 +75,9 @@ class LOKitTileProvider implements TileProvider {
             Log.i(LOGTAG, "====> getLibreOfficeKitHandle() = " + handle);
             mOffice = new Office(handle);
             Log.i(LOGTAG, "====> new Office created");
+            mOffice.setMessageCallback(messageCallback);
+            mOffice.setOptionalFeatures(Document.LOK_FEATURE_DOCUMENT_PASSWORD);
+            Log.i(LOGTAG, "====> setup Lokit callback and optional features (password support)");
             mDocument = mOffice.documentLoad(input);
         }
 
@@ -287,7 +293,7 @@ class LOKitTileProvider implements TileProvider {
             }
         }
 
-        if (!ret) {
+        if (!ret && !mContext.isPasswordProtected()) {
             final String message = error;
             LOKitShell.getMainHandler().post(new Runnable() {
                 @Override
@@ -295,6 +301,8 @@ class LOKitTileProvider implements TileProvider {
                     mContext.showAlertDialog(message);
                 }
             });
+        } else if (!ret && mContext.isPasswordProtected()) {
+            mContext.finish();
         }
 
         return ret;
@@ -593,6 +601,14 @@ class LOKitTileProvider implements TileProvider {
             return 0;
 
         return mDocument.getPart();
+    }
+
+    public void setDocumentPassword(String url, String password) {
+        mOffice.setDocumentPassword(url, password);
+    }
+
+    public Document.MessageCallback getMessageCallback() {
+        return mMessageCallback;
     }
 }
 
