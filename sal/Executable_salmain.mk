@@ -44,4 +44,10 @@ $(eval $(call gb_Executable_use_libraries,salmainargs,\
 $(eval $(call gb_Executable_add_exception_objects,salmainargs,\
     sal/workben/salmainargs \
 ))
+
+$(call gb_Executable_get_clean_target,salmain) :
+	rm -f $(WORKDIR)/LinkTarget/Executable/salmain*
+
+$(call gb_Executable_get_clean_target,salmainargs) :
+	rm -f $(WORKDIR)/LinkTarget/Executable/salmain*
 # vim: set ts=4 sw=4 et:
