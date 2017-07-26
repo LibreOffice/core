@@ -172,6 +172,7 @@ class LOKitThread extends Thread {
     }
 
     private void updateZoomConstraints() {
+        if (mTileProvider == null) return;
         mLayerClient = mContext.getLayerClient();
         if (mTileProvider.isSpreadsheet()) {
             // Calc has a fixed zoom at 1x and doesn't allow zooming for now

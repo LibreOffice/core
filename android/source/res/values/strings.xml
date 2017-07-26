@@ -152,4 +152,9 @@
     <string name="calc_optimal_length_default_text">Enter Extra Length in 100th/mm</string>
     <string name="calc_alert_double_click_optimal_length">Hint: Double tap on a header sets optimal width/height.</string>
 
+    <!-- Password dialog strings -->
+    <string name="action_pwd_dialog_OK">OK</string>
+    <string name="action_pwd_dialog_cancel">Cancel</string>
+    <string name="action_pwd_dialog_title">Please enter password</string>
+
 </resources>

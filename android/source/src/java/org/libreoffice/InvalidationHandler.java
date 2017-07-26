@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.kit.Document;
+import org.libreoffice.kit.Office;
 import org.libreoffice.overlay.DocumentOverlay;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * Parses (interprets) and handles invalidation messages from LibreOffice.
  */
-public class InvalidationHandler implements Document.MessageCallback {
+public class InvalidationHandler implements Document.MessageCallback, Office.MessageCallback {
     private static String LOGTAG = InvalidationHandler.class.getSimpleName();
     private final DocumentOverlay mDocumentOverlay;
     private final GeckoLayerClient mLayerClient;
@@ -97,6 +98,9 @@ public class InvalidationHandler implements Document.MessageCallback {
             case Document.CALLBACK_INVALIDATE_HEADER:
                 invalidateHeader();
                 break;
+            case Document.CALLBACK_DOCUMENT_PASSWORD:
+                documentPassword();
+                break;
             default:
                 Log.d(LOGTAG, "LOK_CALLBACK uncaught: " + messageID + " : " + payload);
         }
@@ -104,6 +108,19 @@ public class InvalidationHandler implements Document.MessageCallback {
 
     private void invalidateHeader() {
         LOKitShell.sendEvent(new LOEvent(LOEvent.UPDATE_CALC_HEADERS));
+    }
+
+    private void documentPassword() {
+        mContext.setPasswordProtected(true);
+        mContext.promptForPassword();
+        synchronized (this) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        mContext.setPassword();
     }
 
     private void invalidateCellCursor(String payload) {

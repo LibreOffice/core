@@ -95,6 +95,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private SearchController mSearchController;
     private CalcHeadersController mCalcHeadersController;
     private boolean mIsSpreadsheet;
+    private LOKitTileProvider mTileProvider;
+    private String mPassword;
+    private boolean mPasswordProtected;
 
     public GeckoLayerClient getLayerClient() {
         return mLayerClient;
@@ -697,6 +700,37 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             Log.d(LOGTAG, "Editing Preference Changed");
             mIsExperimentalMode = sharedPreferences.getBoolean(ENABLE_EXPERIMENTAL_PREFS_KEY, false);
         }
+    }
+
+    public void promptForPassword() {
+        PasswordDialogFragment passwordDialogFragment = new PasswordDialogFragment();
+        passwordDialogFragment.setLOMainActivity(this);
+        passwordDialogFragment.show(getSupportFragmentManager(), "PasswordDialogFragment");
+    }
+
+    // this function can only be called in InvalidationHandler.java
+    public void setPassword() {
+        mTileProvider.setDocumentPassword("file://"+mInputFile.getPath(), mPassword);
+    }
+
+    // setTileProvider is meant to let main activity have a handle of LOKit when dealing with password
+    public void setTileProvider(LOKitTileProvider loKitTileProvider) {
+        mTileProvider = loKitTileProvider;
+    }
+
+    public void savePassword(String pwd) {
+        mPassword = pwd;
+        synchronized (mTileProvider.getMessageCallback()) {
+            mTileProvider.getMessageCallback().notifyAll();
+        }
+    }
+
+    public void setPasswordProtected(boolean b) {
+        mPasswordProtected = b;
+    }
+
+    public boolean isPasswordProtected() {
+        return mPasswordProtected;
     }
 
     public void initializeCalcHeaders() {
