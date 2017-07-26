@@ -2532,7 +2532,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     ScDocument& rSrcDoc = pNewShell->GetDocument();
     rSrcDoc.EnableExecuteLink(false); // to prevent circular access of external references.
     rSrcDoc.EnableUndo(false);
-    rSrcDoc.EnableAdjustHeight(false);
+    rSrcDoc.LockAdjustHeight();
     rSrcDoc.EnableUserInteraction(false);
 
     ScExtDocOptions* pExtOptNew = rSrcDoc.GetExtDocOptions();
