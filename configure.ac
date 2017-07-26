@@ -414,7 +414,6 @@ if test -n "$with_android_ndk"; then
         # Default to Clang 5.0
         with_android_ndk_toolchain_version=clang5.0
     fi
-
     case "$with_android_ndk_toolchain_version" in
     clang5.0)
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.9
@@ -511,7 +510,7 @@ if test -n "$with_android_ndk"; then
         ANDROIDCFLAGS=""
     else # x86
         ANDROID_APP_ABI=x86
-        ANDROIDCFLAGS="-march=atom"
+        ANDROIDCFLAGS="-march=atom -gcc-toolchain $ANDROID_BINUTILS_PREBUILT_ROOT -target i686-none-linux-android"
     fi
     ANDROIDCFLAGS="$ANDROIDCFLAGS -ffunction-sections -fdata-sections"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
