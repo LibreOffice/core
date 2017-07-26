@@ -99,6 +99,29 @@ bool SvpSalGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, cons
 
 namespace
 {
+    cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer)
+    {
+        cairo_format_t nFormat;
+        assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 1);
+        if (rBuffer.mnBitCount == 32)
+            nFormat = CAIRO_FORMAT_ARGB32;
+        else
+            nFormat = CAIRO_FORMAT_A1;
+        return nFormat;
+    }
+
+    void Toggle1BitTransparency(const BitmapBuffer& rBuf)
+    {
+        // TODO: make upper layers use standard alpha
+        if (getCairoFormat(rBuf) == CAIRO_FORMAT_A1)
+        {
+            const int nImageSize = rBuf.mnHeight * rBuf.mnScanlineSize;
+            unsigned char* pDst = rBuf.mpBits;
+            for (int i = nImageSize; --i >= 0; ++pDst)
+                *pDst = ~*pDst;
+        }
+    }
+
     class SourceHelper
     {
     public:
@@ -910,7 +933,7 @@ void SvpSalGraphics::applyColor(cairo_t *cr, SalColor aColor)
     }
     else
     {
-        double fSet = aColor == COL_BLACK ? 0.0 : 1.0;
+        double fSet = aColor == COL_BLACK ? 1.0 : 0.0;
         cairo_set_source_rgba(cr, 1, 1, 1, fSet);
         cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     }
@@ -967,8 +990,12 @@ static basegfx::B2DRange renderSource(cairo_t* cr, const SalTwoRect& rTR,
     if (rTR.mnSrcWidth != 0 && rTR.mnSrcHeight != 0) {
         cairo_scale(cr, (double)(rTR.mnDestWidth)/rTR.mnSrcWidth, ((double)rTR.mnDestHeight)/rTR.mnSrcHeight);
     }
+
+    cairo_save(cr);
     cairo_set_source_surface(cr, source, -rTR.mnSrcX, -rTR.mnSrcY);
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     cairo_paint(cr);
+    cairo_restore(cr);
 
     return extents;
 }
@@ -1025,12 +1052,16 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rTR,
 
 void SvpSalGraphics::drawBitmap(const SalTwoRect& rTR, const SalBitmap& rSourceBitmap)
 {
+    if (rSourceBitmap.GetBitCount() == 1)
+    {
+        MaskHelper aMask(rSourceBitmap);
+        cairo_surface_t* source = aMask.getMask();
+        copySource(rTR, source);
+        return;
+    }
+
     SourceHelper aSurface(rSourceBitmap);
     cairo_surface_t* source = aSurface.getSurface();
-    if (!source)
-    {
-        SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawBitmap case");
-    }
     copySource(rTR, source);
 }
 
@@ -1118,6 +1149,8 @@ SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeigh
 
     cairo_destroy(cr);
     cairo_surface_destroy(target);
+
+    Toggle1BitTransparency(*pBitmap->GetBuffer());
 
     return pBitmap;
 }
@@ -1254,17 +1287,6 @@ bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
 
 namespace
 {
-    cairo_format_t getCairoFormat(const BitmapBuffer& rBuffer)
-    {
-        cairo_format_t nFormat;
-        assert(rBuffer.mnBitCount == 32 || rBuffer.mnBitCount == 1);
-        if (rBuffer.mnBitCount == 32)
-            nFormat = CAIRO_FORMAT_ARGB32;
-        else
-            nFormat = CAIRO_FORMAT_A1;
-        return nFormat;
-    }
-
     bool isCairoCompatible(const BitmapBuffer* pBuffer)
     {
         if (!pBuffer)
