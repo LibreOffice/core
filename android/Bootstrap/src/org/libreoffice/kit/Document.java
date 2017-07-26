@@ -119,6 +119,15 @@ public class Document {
     public static final int KEYBOARD_MODIFIER_MOD2 = 0x4000;
     public static final int KEYBOARD_MODIFIER_MOD3 = 0x8000;
 
+    /** Optional features of LibreOfficeKit, in particular callbacks that block
+     *  LibreOfficeKit until the corresponding reply is received, which would
+     *  deadlock if the client does not support the feature.
+     */
+    public static final long LOK_FEATURE_DOCUMENT_PASSWORD = 1;
+    public static final long LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY = (1 << 1);
+    public static final long LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK = (1 << 2);
+    public static final long LOK_FEATURE_NO_TILED_ANNOTATIONS = (1 << 3);
+
     private final ByteBuffer handle;
     private MessageCallback messageCallback = null;
 

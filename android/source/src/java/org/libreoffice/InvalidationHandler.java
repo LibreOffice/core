@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.libreoffice.canvas.SelectionHandle;
 import org.libreoffice.kit.Document;
+import org.libreoffice.kit.Office;
 import org.libreoffice.overlay.DocumentOverlay;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * Parses (interprets) and handles invalidation messages from LibreOffice.
  */
-public class InvalidationHandler implements Document.MessageCallback {
+public class InvalidationHandler implements Document.MessageCallback, Office.MessageCallback {
     private static String LOGTAG = InvalidationHandler.class.getSimpleName();
     private final DocumentOverlay mDocumentOverlay;
     private final GeckoLayerClient mLayerClient;
@@ -91,9 +92,25 @@ public class InvalidationHandler implements Document.MessageCallback {
                 Log.d(LOGTAG, "LOK_CALLBACK: Search not found.");
                 // this callback is never caught. Hope someone fix this.
                 break;
+            case Document.CALLBACK_DOCUMENT_PASSWORD:
+                documentPassword();
+                break;
             default:
                 Log.d(LOGTAG, "LOK_CALLBACK uncaught: " + messageID + " : " + payload);
         }
+    }
+
+    private void documentPassword() {
+        mContext.setPasswordProtected(true);
+        mContext.promptForPassword();
+        synchronized (this) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        mContext.setPassword();
     }
 
     /**

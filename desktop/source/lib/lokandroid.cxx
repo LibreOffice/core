@@ -85,6 +85,7 @@ struct CallbackData
 };
 
 static CallbackData gCallbackData;
+static CallbackData gCallbackDataLOKit;
 
 /**
  * Handle retrieved callback
@@ -141,6 +142,45 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_docume
     jobject aHandle = pEnv->NewDirectByteBuffer((void*) pDocument, sizeof(LibreOfficeKitDocument));
 
     return aHandle;
+}
+
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_setDocumentPassword
+    (JNIEnv* pEnv, jobject aObject, jstring sUrl, jstring sPassword)
+{
+    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+
+    char const* pUrl = copyJavaString(pEnv, sUrl);
+    if (sPassword == NULL) {
+        pLibreOfficeKit->pClass->setDocumentPassword(pLibreOfficeKit, pUrl, nullptr);
+    } else {
+        char const* pPassword = copyJavaString(pEnv, sPassword);
+        pLibreOfficeKit->pClass->setDocumentPassword(pLibreOfficeKit, pUrl, pPassword);
+    }
+}
+
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_setOptionalFeatures
+    (JNIEnv* pEnv, jobject aObject, jlong options)
+{
+    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+
+    uint64_t pOptions = (uint64_t)options;
+
+    pLibreOfficeKit->pClass->setOptionalFeatures(pLibreOfficeKit, pOptions);
+}
+
+/** Implementation of org.libreoffice.kit.Office.bindMessageCallback method */
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_bindMessageCallback
+    (JNIEnv* pEnv, jobject aObject)
+{
+    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+
+    gCallbackDataLOKit.aObject = (jobject) pEnv->NewGlobalRef(aObject);
+    jclass aClass = pEnv->GetObjectClass(aObject);
+    gCallbackDataLOKit.aClass = (jclass) pEnv->NewGlobalRef(aClass);
+
+    gCallbackDataLOKit.aJavaCallbackMethod = pEnv->GetMethodID(aClass, "messageRetrievedLOKit", "(ILjava/lang/String;)V");
+
+    pLibreOfficeKit->pClass->registerCallback(pLibreOfficeKit, messageCallback, (void*) &gCallbackDataLOKit);
 }
 
 /* Document */
