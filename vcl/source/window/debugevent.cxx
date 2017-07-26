@@ -22,7 +22,8 @@
 #if OSL_DEBUG_LEVEL > 0
 
 DebugEventInjector::DebugEventInjector( sal_uInt32 nMaxEvents) :
-    mnEventsLeft( nMaxEvents )
+      Timer("debug event injector")
+    , mnEventsLeft( nMaxEvents )
 {
     SetTimeout( 1000 /* ms */ );
     Start();
