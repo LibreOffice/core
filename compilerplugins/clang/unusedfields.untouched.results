@@ -18,8 +18,6 @@ chart2/source/view/inc/GL3DRenderer.hxx:66
     chart::opengl3D::LightSource pad3 float
 comphelper/source/container/enumerablemap.cxx:299
     comphelper::MapEnumeration m_xKeepMapAlive Reference<class com::sun::star::uno::XInterface>
-connectivity/source/commontools/sqlerror.cxx:89
-    connectivity::SQLError_Impl m_aContext Reference<class com::sun::star::uno::XComponentContext>
 connectivity/source/drivers/evoab2/EApi.h:122
     (anonymous) address_format char *
 connectivity/source/drivers/evoab2/EApi.h:126
@@ -38,14 +36,20 @@ cppu/source/threadpool/threadpool.cxx:377
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:61
     AlignSize_Impl nInt16 sal_Int16
+dbaccess/source/sdbtools/connection/objectnames.cxx:73
+    sdbtools::PlainExistenceCheck m_aContext const Reference<class com::sun::star::uno::XComponentContext>
+dbaccess/source/sdbtools/connection/objectnames.cxx:114
+    sdbtools::TableValidityCheck m_aContext const Reference<class com::sun::star::uno::XComponentContext>
+dbaccess/source/sdbtools/connection/objectnames.cxx:153
+    sdbtools::QueryValidityCheck m_aContext const Reference<class com::sun::star::uno::XComponentContext>
 dbaccess/source/sdbtools/inc/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
 emfio/source/emfuno/xemfparser.cxx:59
     emfio::emfreader::XEmfParser context_ uno::Reference<uno::XComponentContext>
-extensions/source/propctrlr/propertyhandler.hxx:80
-    pcr::PropertyHandler m_aEnsureResAccess class pcr::PcrClient
 extensions/source/scanner/scanner.hxx:46
     ScannerManager maProtector osl::Mutex
+filter/source/graphicfilter/icgm/cgm.hxx:138
+    CGM mpGDIMetaFile class GDIMetaFile *
 filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:71
     XMLFilterListBox m_aEnsureResLocale class EnsureResLocale
 filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:130
@@ -54,19 +58,23 @@ include/comphelper/MasterPropertySet.hxx:38
     comphelper::SlaveData mxSlave css::uno::Reference<css::beans::XPropertySet>
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
+include/editeng/svxrtf.hxx:196
+    SvxRTFParser m_xDocProps css::uno::Reference<css::document::XDocumentProperties>
 include/editeng/unotext.hxx:608
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
+include/sfx2/charwin.hxx:52
+    SvxCharView maInsertCharHdl Link<class SvxCharView *, void>
 include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
 include/svtools/genericunodialog.hxx:170
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
-include/svtools/unoevent.hxx:161
+include/svtools/unoevent.hxx:162
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/vcl/pdfwriter.hxx:550
     vcl::PDFWriter::PDFSignContext m_pDerEncoded sal_Int8 *
@@ -86,84 +94,10 @@ include/vcl/pdfwriter.hxx:562
     vcl::PDFWriter::PDFSignContext m_aSignPassword class rtl::OUString
 include/vcl/pdfwriter.hxx:564
     vcl::PDFWriter::PDFSignContext m_rCMSHexBuffer class rtl::OStringBuffer &
-include/vcl/toolbox.hxx:106
-    ToolBox maInDockRect tools::Rectangle
 include/vcl/uitest/uiobject.hxx:241
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/xmloff/formlayerexport.hxx:173
     xmloff::OOfficeFormsExport m_pImpl std::unique_ptr<OFormsRootExport>
-l10ntools/inc/export.hxx:75
-    ResData nIdLevel enum IdLevel
-l10ntools/inc/export.hxx:76
-    ResData bChild _Bool
-l10ntools/inc/export.hxx:77
-    ResData bChildWithText _Bool
-l10ntools/inc/export.hxx:79
-    ResData bText _Bool
-l10ntools/inc/export.hxx:80
-    ResData bQuickHelpText _Bool
-l10ntools/inc/export.hxx:81
-    ResData bTitle _Bool
-l10ntools/inc/export.hxx:90
-    ResData sQuickHelpText OStringHashMap
-l10ntools/inc/export.hxx:92
-    ResData sTitle OStringHashMap
-l10ntools/inc/export.hxx:94
-    ResData sTextTyp class rtl::OString
-l10ntools/inc/export.hxx:96
-    ResData m_aList ExportList
-l10ntools/inc/export.hxx:121
-    Export::(anonymous) mSimple std::ofstream *
-l10ntools/inc/export.hxx:122
-    Export::(anonymous) mPo class PoOfstream *
-l10ntools/inc/export.hxx:124
-    Export aOutput union (anonymous union at /home/noel/libo3/l10ntools/inc/export.hxx:119:5)
-l10ntools/inc/export.hxx:126
-    Export aResStack ResStack
-l10ntools/inc/export.hxx:128
-    Export bDefine _Bool
-l10ntools/inc/export.hxx:129
-    Export bNextMustBeDefineEOL _Bool
-l10ntools/inc/export.hxx:130
-    Export nLevel std::size_t
-l10ntools/inc/export.hxx:131
-    Export nList enum ExportListType
-l10ntools/inc/export.hxx:132
-    Export nListLevel std::size_t
-l10ntools/inc/export.hxx:133
-    Export bMergeMode _Bool
-l10ntools/inc/export.hxx:134
-    Export sMergeSrc class rtl::OString
-l10ntools/inc/export.hxx:136
-    Export bReadOver _Bool
-l10ntools/inc/export.hxx:137
-    Export sFilename class rtl::OString
-l10ntools/inc/export.hxx:139
-    Export aLanguages std::vector<OString>
-l10ntools/inc/export.hxx:280
-    MergeData sGID class rtl::OString
-l10ntools/inc/export.hxx:281
-    MergeData sLID class rtl::OString
-l10ntools/inc/export.hxx:334
-    QueueEntry nTyp int
-l10ntools/inc/export.hxx:335
-    QueueEntry sLine class rtl::OString
-l10ntools/inc/export.hxx:346
-    ParserQueue bCurrentIsM _Bool
-l10ntools/inc/export.hxx:347
-    ParserQueue bNextIsM _Bool
-l10ntools/inc/export.hxx:348
-    ParserQueue bLastWasM _Bool
-l10ntools/inc/export.hxx:349
-    ParserQueue bMflag _Bool
-l10ntools/inc/export.hxx:353
-    ParserQueue aQueueNext std::queue<QueueEntry> *
-l10ntools/inc/export.hxx:354
-    ParserQueue aQueueCur std::queue<QueueEntry> *
-l10ntools/inc/export.hxx:356
-    ParserQueue aExport class Export &
-l10ntools/inc/export.hxx:357
-    ParserQueue bStart _Bool
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:50
     GtvApplicationWindow parent_instance GtkApplicationWindow
 libreofficekit/qa/gtktiledviewer/gtv-application-window.hxx:54
@@ -224,18 +158,20 @@ sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1318
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1258
+sd/source/ui/view/viewshel.cxx:1257
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1259
+sd/source/ui/view/viewshel.cxx:1258
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1260
+sd/source/ui/view/viewshel.cxx:1259
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1261
+sd/source/ui/view/viewshel.cxx:1260
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
-sd/source/ui/view/ViewShellBase.cxx:195
+sd/source/ui/view/ViewShellBase.cxx:194
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
 sfx2/source/doc/doctempl.cxx:116
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
+starmath/inc/smmod.hxx:70
+    SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
 starmath/inc/view.hxx:224
     SmViewShell maGraphicController class SmGraphicController
 svl/source/crypto/cryptosign.cxx:120
@@ -272,12 +208,6 @@ unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
-vcl/inc/unx/i18n_status.hxx:56
-    vcl::I18NStatus::ChoiceData aString class rtl::OUString
-vcl/source/app/svapp.cxx:159
-    ImplEventHook mpUserData void *
-vcl/source/app/svapp.cxx:160
-    ImplEventHook mpProc VCLEventHookProc
 vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:35

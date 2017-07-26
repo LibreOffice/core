@@ -38,13 +38,10 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC E3dDefaultAttributes
 private:
     // Compound object
     Color               aDefaultAmbientColor;
-    bool                bDefaultCreateNormals;
-    bool                bDefaultCreateTexture;
 
     // Cube object
     basegfx::B3DPoint   aDefaultCubePos;
     basegfx::B3DVector  aDefaultCubeSize;
-    CubeFaces           nDefaultCubeSideFlags;
     bool                bDefaultCubePosIsCenter;
 
     // Sphere object

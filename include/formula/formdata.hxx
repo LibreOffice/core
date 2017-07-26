@@ -48,7 +48,6 @@ public:
     void             SetMode( sal_uInt16 nNew )                  { nMode = nNew; }
     void             SetFStart( sal_Int32 nNew )                 { nFStart = nNew; }
     void             SetOffset( sal_uInt16 nNew )                { nOffset = nNew; }
-    void             SetEdFocus( sal_uInt16 nNew )               { nEdFocus = nNew; }
     void             SetUndoStr( const OUString& rNew )          { aUndoStr = rNew; }
     void             SetMatrixFlag(bool bNew)                    { bMatrix=bNew;}
     void             SetFocusWindow(const VclPtr<vcl::Window>& rWin) { xFocusWin=rWin;}
@@ -62,7 +61,6 @@ private:
     sal_uInt16          nMode;              // enum ScFormulaDlgMode
     sal_Int32           nFStart;
     sal_uInt16          nOffset;
-    sal_uInt16          nEdFocus;
     OUString            aUndoStr;
     bool                bMatrix;
     VclPtr<vcl::Window> xFocusWin;

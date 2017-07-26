@@ -65,7 +65,7 @@ RtfImportInfo::~RtfImportInfo()
 
 EditRTFParser::EditRTFParser(
     SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine) :
-    SvxRTFParser(rAttrPool, rIn, nullptr),
+    SvxRTFParser(rAttrPool, rIn),
     aCurSel(std::move(aSel)),
     mpEditEngine(pEditEngine),
     aRTFMapMode(MapUnit::MapTwip),

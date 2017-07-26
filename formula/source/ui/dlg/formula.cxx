@@ -1160,7 +1160,6 @@ void FormulaDlg_Impl::SetData( sal_Int32 nFStart, sal_Int32 nNextFStart, sal_Int
     FormEditData* pData = m_pHelper->getFormEditData();
     pData->SetFStart( nNextFStart );
     pData->SetOffset( 0 );
-    pData->SetEdFocus( 0 );
 
     FillDialog();
 }
@@ -1314,7 +1313,6 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
         OUString aFormula = m_pHelper->getCurrentFormula();
         sal_Int32 n1 = m_aFormulaHelper.GetArgStart( aFormula, nFormulaStrPos, nEdFocus + pData->GetOffset() );
 
-        pData->SetEdFocus( nEdFocus );
         pData->SaveValues();
         pData->SetMode( (sal_uInt16) FORMULA_FORMDLG_FORMULA );
         pData->SetFStart( n1 );
@@ -1961,7 +1959,6 @@ void FormEditData::Reset()
     nMode = 0;
     nFStart = 0;
     nOffset = 0;
-    nEdFocus = 0;
     bMatrix = false;
     xFocusWin.clear();
     aSelection.Min() = 0;
@@ -1974,7 +1971,6 @@ FormEditData& FormEditData::operator=( const FormEditData& r )
     nMode           = r.nMode;
     nFStart         = r.nFStart;
     nOffset         = r.nOffset;
-    nEdFocus        = r.nEdFocus;
     aUndoStr        = r.aUndoStr;
     bMatrix         = r.bMatrix ;
     xFocusWin       = r.xFocusWin;

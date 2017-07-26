@@ -135,7 +135,6 @@ class CGM
                             ~CGM();
 
                             CGM(css::uno::Reference< css::frame::XModel > const & rModel);
-        GDIMetaFile*        mpGDIMetaFile;
         sal_uInt32          GetBackGroundColor();
         bool                IsValid() const { return mbStatus; };
         bool                IsFinished() const { return mbIsFinished; };
