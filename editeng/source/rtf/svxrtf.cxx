@@ -568,67 +568,6 @@ void SvxRTFParser::ReadFontTable()
         SetDefault( RTF_DEFF, nDfltFont );
 }
 
-OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
-{
-    rStr.clear();
-    int _nOpenBrakets = 1;  // the first was already detected earlier!!
-
-    while( _nOpenBrakets && IsParserWorking() )
-    {
-        switch( GetNextToken() )
-        {
-        case '}':       --_nOpenBrakets;    break;
-        case '{':
-            {
-                if( RTF_IGNOREFLAG != GetNextToken() )
-                    SkipToken();
-                else if( RTF_UNKNOWNCONTROL != GetNextToken() )
-                    SkipToken( -2 );
-                else
-                {
-                    // filter out at once
-                    ReadUnknownData();
-                    int nToken = GetNextToken();
-                    if( '}' != nToken )
-                        eState = SvParserState::Error;
-                    break;
-                }
-                ++_nOpenBrakets;
-            }
-            break;
-
-        case RTF_TEXTTOKEN:
-            rStr += aToken;
-            break;
-        }
-    }
-    SkipToken();        // the closing brace is evaluated "above"
-    return rStr;
-}
-
-util::DateTime SvxRTFParser::GetDateTimeStamp( )
-{
-    util::DateTime aDT;
-    bool bContinue = true;
-
-    while( bContinue && IsParserWorking() )
-    {
-        int nToken = GetNextToken();
-        switch( nToken )
-        {
-        case RTF_YR:    aDT.Year = (sal_uInt16)nTokenValue;     break;
-        case RTF_MO:    aDT.Month = (sal_uInt16)nTokenValue;    break;
-        case RTF_DY:    aDT.Day = (sal_uInt16)nTokenValue;      break;
-        case RTF_HR:    aDT.Hours = (sal_uInt16)nTokenValue;    break;
-        case RTF_MIN:   aDT.Minutes = (sal_uInt16)nTokenValue;  break;
-        default:
-            bContinue = false;
-        }
-    }
-    SkipToken();        // the closing brace is evaluated "above"
-    return aDT;
-}
-
 void SvxRTFParser::ClearColorTbl()
 {
     while ( !aColorTbl.empty() )

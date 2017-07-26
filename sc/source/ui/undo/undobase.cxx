@@ -379,48 +379,6 @@ void ScMultiBlockUndo::EndRedo()
     ScSimpleUndo::EndRedo();
 }
 
-void ScMultiBlockUndo::AdjustHeight()
-{
-    ScDocument& rDoc = pDocShell->GetDocument();
-
-    ScopedVclPtrInstance< VirtualDevice > pVirtDev;
-    Fraction aZoomX( 1, 1 );
-    Fraction aZoomY = aZoomX;
-    double nPPTX, nPPTY;
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (pViewShell)
-    {
-        ScViewData& rData = pViewShell->GetViewData();
-        nPPTX = rData.GetPPTX();
-        nPPTY = rData.GetPPTY();
-        aZoomX = rData.GetZoomX();
-        aZoomY = rData.GetZoomY();
-    }
-    else
-    {
-        // Leave zoom at 100
-        nPPTX = ScGlobal::nScreenPPTX;
-        nPPTY = ScGlobal::nScreenPPTY;
-    }
-
-    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, pVirtDev);
-    for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
-    {
-        const ScRange& r = *maBlockRanges[i];
-        bool bRet = rDoc.SetOptimalHeight(aCxt, r.aStart.Row(), r.aEnd.Row(), r.aStart.Tab());
-
-        if (bRet)
-        {
-            // tdf#76183: recalculate objects' positions
-            rDoc.SetDrawPageSize(r.aStart.Tab());
-
-            pDocShell->PostPaint(
-                0, r.aStart.Row(), r.aStart.Tab(), MAXCOL, MAXROW, r.aEnd.Tab(),
-                PaintPartFlags::Grid | PaintPartFlags::Left);
-        }
-    }
-}
-
 void ScMultiBlockUndo::ShowBlock()
 {
     if ( IsPaintLocked() )

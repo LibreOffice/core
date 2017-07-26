@@ -53,8 +53,7 @@ OUString SmResId(const char* pId);
 class SmLocalizedSymbolData
 {
 public:
-    SmLocalizedSymbolData();
-    ~SmLocalizedSymbolData();
+    SmLocalizedSymbolData() = delete;
 
     static const OUString GetUiSymbolName( const OUString &rExportName );
     static const OUString GetExportSymbolName( const OUString &rUiName );

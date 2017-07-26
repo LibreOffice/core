@@ -35,11 +35,6 @@ ScDrawObjData* ScDrawObjData::Clone( SdrObject* ) const
     return new ScDrawObjData( *this );
 }
 
-ScIMapInfo::ScIMapInfo() :
-    SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_IMAPDATA )
-{
-}
-
 ScIMapInfo::ScIMapInfo( const ImageMap& rImageMap ) :
     SdrObjUserData( SdrInventor::ScOrSwDraw, SC_UD_IMAPDATA ),
     aImageMap( rImageMap )

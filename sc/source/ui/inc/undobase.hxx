@@ -115,7 +115,6 @@ protected:
     void EndUndo();
     void EndRedo();
 
-    void AdjustHeight();
     void ShowBlock();
 };
 

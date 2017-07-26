@@ -54,7 +54,6 @@ class ScIMapInfo : public SdrObjUserData
     ImageMap        aImageMap;
 
 public:
-                    ScIMapInfo();
                     ScIMapInfo( const ImageMap& rImageMap );
                     ScIMapInfo( const ScIMapInfo& rIMapInfo );
     virtual         ~ScIMapInfo() override;

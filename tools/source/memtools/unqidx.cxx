@@ -37,39 +37,12 @@ UniqueIndexImpl::Index UniqueIndexImpl::Insert( void* p )
     return nUniqIndex++;
 }
 
-void* UniqueIndexImpl::Remove( Index nIndex )
-{
-    std::map<Index, void*>::iterator it = maMap.find( nIndex );
-    if ( it != maMap.end() )
-    {
-        // Allow to recycle freed indexes, as was done by
-        // original implementation based on a vector
-        // This is not really needed when using a map, and
-        // really unique indexes might be better/safer?
-        if ( nIndex < nUniqIndex )
-            nUniqIndex = nIndex;
-
-        void* p = it->second;
-        maMap.erase( it );
-        return p;
-    }
-    return nullptr;
-}
-
 void* UniqueIndexImpl::Get( Index nIndex ) const
 {
     std::map<Index, void*>::const_iterator it = maMap.find( nIndex );
     if ( it != maMap.end() )
         return it->second;
     return nullptr;
-}
-
-UniqueIndexImpl::Index UniqueIndexImpl::GetIndexOf(void const * p) const
-{
-    for( std::map<Index, void*>::const_iterator it = maMap.begin(); it != maMap.end(); ++it )
-        if( it->second == p )
-            return it->first;
-    return IndexNotFound;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
