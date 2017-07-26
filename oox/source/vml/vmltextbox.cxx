@@ -82,6 +82,20 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         std::vector<beans::PropertyValue> aPropVec;
         const TextParagraphModel& rParagraph = aIt->maParagraph;
         const TextFontModel& rFont = aIt->maFont;
+        if (rFont.moName.has())
+        {
+            aPropertyValue.Name = "CharFontName";
+            aPropertyValue.Value <<= rFont.moName.get();
+            aPropVec.push_back(aPropertyValue);
+
+            aPropertyValue.Name = "CharFontNameAsian";
+            aPropertyValue.Value <<= rFont.moNameAsian.get();
+            aPropVec.push_back(aPropertyValue);
+
+            aPropertyValue.Name = "CharFontNameComplex";
+            aPropertyValue.Value <<= rFont.moNameComplex.get();
+            aPropVec.push_back(aPropertyValue);
+        }
         if (rFont.mobBold.has())
         {
             aPropertyValue.Name = "CharWeight";
