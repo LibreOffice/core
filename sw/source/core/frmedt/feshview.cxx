@@ -1158,8 +1158,7 @@ bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
     if ( IsFrameSelected() || !Imp()->HasDrawView() )
         return false;
     else
-        return Imp()->GetDrawView()
-                    ->IsObjMarked( const_cast< SdrObject * >( &rObj ) );
+        return Imp()->GetDrawView()->IsObjMarked( &rObj );
 }
 
 bool SwFEShell::IsObjSameLevelWithMarked(const SdrObject* pObj) const
@@ -1425,7 +1424,7 @@ namespace
 
         virtual bool    includeObject( const SdrObject& i_rObject ) const override
         {
-            return m_pPV && m_pPV->GetView().IsObjMarkable( const_cast< SdrObject* >( &i_rObject ), m_pPV );
+            return m_pPV && m_pPV->GetView().IsObjMarkable( &i_rObject, m_pPV );
         }
 
     private:

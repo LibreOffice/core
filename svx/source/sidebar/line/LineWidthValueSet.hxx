@@ -32,7 +32,7 @@ public:
     virtual ~LineWidthValueSet() override;
     virtual void dispose() override;
 
-    void SetUnit(OUString* str);
+    void SetUnit(OUString const * str);
     void SetSelItem(sal_uInt16 nSel);
     sal_uInt16 GetSelItem() { return nSelItem;}
     void SetImage(const Image& img);

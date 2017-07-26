@@ -83,7 +83,7 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, co
 }
 
 
-static void ImpGetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnThisEsc, const void* pnRet, const void*)
+static void ImpGetEscDir(SdrGluePoint & rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnThisEsc, const void* pnRet, const void*)
 {
     sal_uInt16& nRet=*const_cast<sal_uInt16 *>(static_cast<sal_uInt16 const *>(pnRet));
     if (nRet!=FUZZY) {
@@ -126,7 +126,7 @@ void SdrGlueEditView::SetMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc, boo
 }
 
 
-static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnRet, const void*, const void*)
+static void ImpGetPercent(SdrGluePoint & rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pnRet, const void*, const void*)
 {
     sal_uInt16& nRet=*const_cast<sal_uInt16 *>(static_cast<sal_uInt16 const *>(pnRet));
     if (nRet!=FUZZY) {
@@ -162,7 +162,7 @@ void SdrGlueEditView::SetMarkedGluePointsPercent(bool bOn)
 }
 
 
-static void ImpGetAlign(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pbDontCare, const void* pbVert, const void* pnRet)
+static void ImpGetAlign(SdrGluePoint & rGP, const SdrObject* /*pObj*/, const void* pbFirst, const void* pbDontCare, const void* pbVert, const void* pnRet)
 {
     SdrAlign& nRet=*const_cast<SdrAlign *>(static_cast<SdrAlign const *>(pnRet));
     bool& bDontCare=*const_cast<bool *>(static_cast<bool const *>(pbDontCare));

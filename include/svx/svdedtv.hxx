@@ -149,7 +149,7 @@ protected:
     static void ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRad, SdrCrookMode eMode,
         bool bVertical, bool bNoContortion, bool bRotate, const tools::Rectangle& rMarkRect);
     static void ImpDistortObj(SdrObject* pO, const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion);
-    bool ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const;
+    bool ImpDelLayerCheck(SdrObjList const * pOL, SdrLayerID nDelID) const;
     void ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID);
 
     // Removes all objects of the MarkList from their ObjLists including Undo.

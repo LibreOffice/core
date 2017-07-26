@@ -825,10 +825,10 @@ void Cell::AddUndo()
 }
 
 
-sdr::properties::TextProperties* Cell::CloneProperties( sdr::properties::TextProperties* pProperties, SdrObject& rNewObj, Cell& rNewCell )
+sdr::properties::TextProperties* Cell::CloneProperties( sdr::properties::TextProperties const * pProperties, SdrObject& rNewObj, Cell& rNewCell )
 {
     if( pProperties )
-        return new sdr::properties::CellProperties( *static_cast<sdr::properties::CellProperties*>(pProperties), rNewObj, &rNewCell );
+        return new sdr::properties::CellProperties( *static_cast<sdr::properties::CellProperties const *>(pProperties), rNewObj, &rNewCell );
     else
         return nullptr;
 }
@@ -987,7 +987,7 @@ sal_Int32 SAL_CALL Cell::getError(  )
 // XPropertySet
 
 
-Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap )
+Any Cell::GetAnyForItem( SfxItemSet const & aSet, const SfxItemPropertySimpleEntry* pMap )
 {
     Any aAny( SvxItemPropertySet_getPropertyValue( pMap, aSet ) );
 

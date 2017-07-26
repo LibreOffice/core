@@ -191,7 +191,7 @@ protected:
         @return
             <TRUE/> if the column is selected, otherwise <FALSE/>
     */
-    bool isColumnSelected(DbGridColumn* _pColumn);
+    bool isColumnSelected(DbGridColumn const * _pColumn);
 };
 
 #endif // INCLUDED_SVX_FMGRIDCL_HXX

@@ -52,7 +52,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
+void SetAlignmentState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -89,7 +89,7 @@ void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
     rSet.Put( SfxInt32Item( SID_FONTWORK_ALIGNMENT, nAlignment ) );
 }
 
-void SetCharacterSpacingState( SdrView* pSdrView, SfxItemSet& rSet )
+void SetCharacterSpacingState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -114,7 +114,7 @@ void SetCharacterSpacingState( SdrView* pSdrView, SfxItemSet& rSet )
 }
 
 
-void SetKernCharacterPairsState( SdrView* pSdrView, SfxItemSet& rSet )
+void SetKernCharacterPairsState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -133,7 +133,7 @@ void SetKernCharacterPairsState( SdrView* pSdrView, SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_FONTWORK_KERN_CHARACTER_PAIRS, bChecked ) );
 }
 
-void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
+void SetFontWorkShapeTypeState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -198,7 +198,7 @@ FontworkBar::~FontworkBar()
     SetRepeatTarget(nullptr);
 }
 
-static vcl::Window* ImpGetViewWin(SdrView* pView)
+static vcl::Window* ImpGetViewWin(SdrView const * pView)
 {
     if( pView )
     {
@@ -218,7 +218,7 @@ static vcl::Window* ImpGetViewWin(SdrView* pView)
 }
 
 namespace svx {
-bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
+bool checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatus )
 {
     if ( nCheckStatus & 2 )
         return ( nCheckStatus & 1 ) != 0;
@@ -246,7 +246,7 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
 }
 }
 
-static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
+static void impl_execute( SdrView*, SfxRequest const & rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )
@@ -415,7 +415,7 @@ void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const
 }
 
 
-void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBindings )
+void FontworkBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindings& rBindings )
 {
     const char* pStrResId = nullptr;
 
@@ -546,7 +546,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
     };
 }
 
-void FontworkBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
+void FontworkBar::getState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     sal_uInt32 nCheckStatus = 0;
 

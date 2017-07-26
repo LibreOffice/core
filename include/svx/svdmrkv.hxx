@@ -153,8 +153,8 @@ protected:
     void ForceUndirtyMrkPnt() const                                       { if (mbMrkPntDirty) UndirtyMrkPnt(); }
 
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay) const;
-    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj) const;
-    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
+    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj) const;
+    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList const * pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
     bool ImpIsFrameHandles() const;
     void ImpTakeDescriptionStr(const char* pStrCacheID, OUString& rStr, ImpTakeDescriptionOptions nOpt=ImpTakeDescriptionOptions::NONE) const;
 
@@ -180,7 +180,7 @@ public:
 
     virtual void ClearPageView() override;
     virtual void HideSdrPage() override;
-    bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
+    bool IsObjMarkable(SdrObject const * pObj, SdrPageView const * pPV) const;
 
     // Returns sal_True if objects, points or glue points are selected by drawing a frame
     // (as long as the frame is drawn).
@@ -292,12 +292,11 @@ public:
     void MarkObj(const tools::Rectangle& rRect, bool bUnmark);
     void MarkObj(SdrObject* pObj, SdrPageView* pPV, bool bUnmark=false, bool bImpNoSetMarkHdl=false);
     void MarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
-    void UnmarkAllObj(SdrPageView* pPV=nullptr); // pPage=NULL => all displayed pages
+    void UnmarkAllObj(SdrPageView const * pPV=nullptr); // pPage=NULL => all displayed pages
 
     // This function is time-consuming intensive, as the MarkList has to be scanned.
-    bool IsObjMarked(SdrObject* pObj) const;
-    // void MarkAll(SdrPageView* pPV=NULL) { MarkAllObj(pPV); } -> replace with inline
-    void UnMarkAll(SdrPageView* pPV=nullptr) { UnmarkAllObj(pPV); }
+    bool IsObjMarked(SdrObject const * pObj) const;
+    void UnMarkAll(SdrPageView const * pPV=nullptr) { UnmarkAllObj(pPV); }
 
     // Request/set the size of the marking handles. Declaration in Pixel.
     // The value is meant to be the edge length ( link length ).
@@ -331,7 +330,7 @@ public:
 
     // Search for the number of the suitable handle. In case of empty search result,
     // SAL_MAX_SIZE is returned.
-    size_t GetHdlNum(SdrHdl* pHdl) const { return maHdlList.GetHdlNum(pHdl); }
+    size_t GetHdlNum(SdrHdl const * pHdl) const { return maHdlList.GetHdlNum(pHdl); }
     SdrHdl* GetHdl(size_t nHdlNum)  const { return maHdlList.GetHdl(nHdlNum); }
     const SdrHdlList& GetHdlList() const { return maHdlList; }
 

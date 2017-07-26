@@ -60,7 +60,7 @@ public:
 
     void init(const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary,
         vcl::Window *pED_Term, vcl::Window *pED_Mapping, ListBox *pLB_Property,
-        vcl::Window *pFT_Term, vcl::Window *pFT_Mapping, vcl::Window *pFT_Property);
+        vcl::Window const *pFT_Term, vcl::Window const *pFT_Mapping, vcl::Window const *pFT_Property);
 
     void deleteAll();
     void refillFromDictionary( sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );

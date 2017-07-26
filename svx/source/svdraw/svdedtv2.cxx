@@ -1995,7 +1995,7 @@ void SdrEditView::ConvertMarkedToPolyObj()
 
 namespace
 {
-    GDIMetaFile GetMetaFile(SdrGrafObj* pGraf)
+    GDIMetaFile GetMetaFile(SdrGrafObj const * pGraf)
     {
         if (pGraf->HasGDIMetaFile())
             return pGraf->GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();

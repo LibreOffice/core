@@ -264,7 +264,7 @@ namespace svxform
             m_pXFormsPage->DoMenuAction(m_nRemoveId);
     }
 
-    void DataTreeListBox::RemoveEntry( SvTreeListEntry* _pEntry )
+    void DataTreeListBox::RemoveEntry( SvTreeListEntry const * _pEntry )
     {
         if ( _pEntry )
         {
@@ -1445,7 +1445,7 @@ namespace svxform
     {
         ModelSelectHdl(&rBox);
     }
-    void DataNavigatorWindow::ModelSelectHdl(ListBox* pBox)
+    void DataNavigatorWindow::ModelSelectHdl(ListBox const * pBox)
     {
         sal_Int32 nPos = m_pModelsBox->GetSelectEntryPos();
         // pBox == NULL, if you want to force a new fill.
@@ -2396,7 +2396,7 @@ namespace svxform
         }
     }
 
-    void copyPropSet( const Reference< XPropertySet >& xFrom, Reference< XPropertySet >& xTo )
+    void copyPropSet( const Reference< XPropertySet >& xFrom, Reference< XPropertySet > const & xTo )
     {
         DBG_ASSERT( xFrom.is(), "copyPropSet(): no source" );
         DBG_ASSERT( xTo.is(), "copyPropSet(): no target" );

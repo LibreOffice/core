@@ -1744,7 +1744,7 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
         m_nMarkedColumnId = (sal_uInt16)-1;
 }
 
-bool FmGridControl::isColumnSelected(DbGridColumn* _pColumn)
+bool FmGridControl::isColumnSelected(DbGridColumn const * _pColumn)
 {
     OSL_ENSURE(_pColumn,"Column can not be null!");
     bool bSelected = false;

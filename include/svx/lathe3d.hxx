@@ -41,7 +41,7 @@ private:
  protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
-    void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
+    void SetDefaultAttributes(E3dDefaultAttributes const & rDefault);
 
  public:
     E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPoly2D);

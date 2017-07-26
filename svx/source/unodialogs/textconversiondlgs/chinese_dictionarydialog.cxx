@@ -382,7 +382,7 @@ void DictionaryList::Resize()
 
 void DictionaryList::init(const Reference< linguistic2::XConversionDictionary>& xDictionary,
     vcl::Window *pED_Term, vcl::Window *pED_Mapping, ListBox *pLB_Property,
-    vcl::Window *pFT_Term, vcl::Window *pFT_Mapping, vcl::Window *pFT_Property)
+    vcl::Window const *pFT_Term, vcl::Window const *pFT_Mapping, vcl::Window const *pFT_Property)
 {
     SetStyle( WB_VSCROLL | WB_TABSTOP );
     SetSelectionMode( SelectionMode::Single );

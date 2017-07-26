@@ -46,7 +46,7 @@ public:
 
     TableRow& operator=( const TableRow& );
 
-    void insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::iterator* pIter );
+    void insertColumns( sal_Int32 nIndex, sal_Int32 nCount, CellVector::iterator const * pIter );
     void removeColumns( sal_Int32 nIndex, sal_Int32 nCount );
     /// Reference to the table model containing this row.
     const TableModelRef& getModel() const;

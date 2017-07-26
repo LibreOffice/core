@@ -72,8 +72,8 @@ public:
         : Edit(pParent, WB_BORDER)
     {
     }
-    void    SetScrollHdl(Link<sal_Int32,bool>& rLink) {aScrollHdl = rLink;}
-    void    SetJumpHdl(Link<sal_Int32,void>& rLink) {aJumpHdl = rLink;}
+    void    SetScrollHdl(Link<sal_Int32,bool> const & rLink) {aScrollHdl = rLink;}
+    void    SetJumpHdl(Link<sal_Int32,void> const & rLink) {aJumpHdl = rLink;}
 };
 
 

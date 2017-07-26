@@ -48,7 +48,7 @@ namespace sdr
             void impPrepareGraphicWithAsynchroniousLoading();
             void impPrepareGraphicWithSynchroniousLoading();
             void doAsynchGraphicLoading();
-            void forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent* pEvent);
+            void forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent const * pEvent);
 
         protected:
             const SdrGrafObj& getSdrGrafObj() const;

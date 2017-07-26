@@ -228,7 +228,7 @@ public:
     /// it must not be locked
     /// @returns
     ///      true, if the object's layer is visible and not locked
-    bool IsObjMarkable(SdrObject* pObj) const;
+    bool IsObjMarkable(SdrObject const * pObj) const;
 
     /// Entering (editing) an object group
     /// After that, we have direct access to all member objects of the group.
