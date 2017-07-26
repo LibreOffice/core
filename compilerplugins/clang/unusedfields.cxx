@@ -66,6 +66,33 @@ static std::set<MyFieldInfo> readFromSet;
 static std::set<MyFieldInfo> writeToSet;
 static std::set<MyFieldInfo> definitionSet;
 
+/**
+ * Wrap the different kinds of callable and callee objects in the clang AST so I can define methods that handle everything.
+ */
+class CallerWrapper
+{
+    const CallExpr * m_callExpr;
+    const CXXConstructExpr * m_cxxConstructExpr;
+public:
+    CallerWrapper(const CallExpr * callExpr) : m_callExpr(callExpr), m_cxxConstructExpr(nullptr) {}
+    CallerWrapper(const CXXConstructExpr * cxxConstructExpr) : m_callExpr(nullptr), m_cxxConstructExpr(cxxConstructExpr) {}
+    unsigned getNumArgs () const
+    { return m_callExpr ? m_callExpr->getNumArgs() : m_cxxConstructExpr->getNumArgs(); }
+    const Expr * getArg (unsigned i) const
+    { return m_callExpr ? m_callExpr->getArg(i) : m_cxxConstructExpr->getArg(i); }
+};
+class CalleeWrapper
+{
+    const FunctionDecl * m_calleeFunctionDecl;
+    const CXXConstructorDecl * m_cxxConstructorDecl;
+public:
+    CalleeWrapper(const FunctionDecl * calleeFunctionDecl) : m_calleeFunctionDecl(calleeFunctionDecl), m_cxxConstructorDecl(nullptr) {}
+    CalleeWrapper(const CXXConstructExpr * cxxConstructExpr) : m_calleeFunctionDecl(nullptr), m_cxxConstructorDecl(cxxConstructExpr->getConstructor()) {}
+    unsigned getNumParams () const
+    { return m_calleeFunctionDecl ? m_calleeFunctionDecl->getNumParams() : m_cxxConstructorDecl->getNumParams(); }
+    const ParmVarDecl * getParamDecl (unsigned i) const
+    { return m_calleeFunctionDecl ? m_calleeFunctionDecl->getParamDecl(i) : m_cxxConstructorDecl->getParamDecl(i); }
+};
 
 class UnusedFields:
     public RecursiveASTVisitor<UnusedFields>, public loplugin::Plugin
@@ -93,9 +120,8 @@ private:
     void checkWriteOnly(const FieldDecl* fieldDecl, const Expr* memberExpr);
     void checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberExpr);
     bool isSomeKindOfZero(const Expr* arg);
-    bool IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, const CallExpr * callExpr,
-                                        const FunctionDecl * calleeFunctionDecl);
-    bool IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, const CXXConstructExpr * cxxConstructExpr);
+    bool IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, CallerWrapper callExpr,
+                                        CalleeWrapper calleeFunctionDecl);
 
     RecordDecl *   insideMoveOrCopyDeclParent;
     RecordDecl *   insideStreamOutputOperator;
@@ -655,7 +681,7 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
         }
         else if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(parent))
         {
-            if (IsPassedByNonConst(fieldDecl, child, cxxConstructExpr))
+            if (IsPassedByNonConst(fieldDecl, child, cxxConstructExpr, cxxConstructExpr))
                 bPotentiallyWrittenTo = true;
             break;
         }
@@ -750,51 +776,26 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
         writeToSet.insert(fieldInfo);
 }
 
-bool UnusedFields::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, const CallExpr * callExpr,
-                                         const FunctionDecl * calleeFunctionDecl)
+bool UnusedFields::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, CallerWrapper callExpr,
+                                         CalleeWrapper calleeFunctionDecl)
 {
-    unsigned len = std::min(callExpr->getNumArgs(),
-                            calleeFunctionDecl->getNumParams());
+    unsigned len = std::min(callExpr.getNumArgs(),
+                            calleeFunctionDecl.getNumParams());
     // if it's an array, passing it by value to a method typically means the
     // callee takes a pointer and can modify the array
     if (fieldDecl->getType()->isConstantArrayType())
     {
         for (unsigned i = 0; i < len; ++i)
-            if (callExpr->getArg(i) == child)
-                if (loplugin::TypeCheck(calleeFunctionDecl->getParamDecl(i)->getType()).NonConst().Pointer())
+            if (callExpr.getArg(i) == child)
+                if (loplugin::TypeCheck(calleeFunctionDecl.getParamDecl(i)->getType()).NonConst().Pointer())
                     return true;
     }
     else
     {
         for (unsigned i = 0; i < len; ++i)
-            if (callExpr->getArg(i) == child)
-                if (loplugin::TypeCheck(calleeFunctionDecl->getParamDecl(i)->getType()).NonConst().LvalueReference())
+            if (callExpr.getArg(i) == child)
+                if (loplugin::TypeCheck(calleeFunctionDecl.getParamDecl(i)->getType()).NonConst().LvalueReference())
                     return true;
-    }
-    return false;
-}
-
-bool UnusedFields::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, const CXXConstructExpr * cxxConstructExpr)
-{
-    const CXXConstructorDecl * cxxConstructorDecl = cxxConstructExpr->getConstructor();
-    unsigned len = std::min(cxxConstructExpr->getNumArgs(),
-                            cxxConstructorDecl->getNumParams());
-    // if it's an array, passing it by value to a method typically means the
-    // callee takes a pointer and can modify the array
-    if (fieldDecl->getType()->isConstantArrayType())
-    {
-        for (unsigned i = 0; i < len; ++i)
-            if (cxxConstructExpr->getArg(i) == child)
-                if (loplugin::TypeCheck(cxxConstructorDecl->getParamDecl(i)->getType()).NonConst().Pointer())
-                    return true;
-    }
-    else
-    {
-        for (unsigned i = 0; i < len; ++i)
-            if (cxxConstructExpr->getArg(i) == child)
-                if (loplugin::TypeCheck(cxxConstructorDecl->getParamDecl(i)->getType()).NonConst().LvalueReference())
-                    return true;
-
     }
     return false;
 }
