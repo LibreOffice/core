@@ -438,7 +438,7 @@ bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
     if (bSuccess)
     {
         const Date aTmpNullDate(aTempNullDate.Day, aTempNullDate.Month, aTempNullDate.Year);
-        const Date aTempDate((sal_uInt16)aDateTime.Day, (sal_uInt16)aDateTime.Month, (sal_uInt16)aDateTime.Year);
+        const Date aTempDate(aDateTime.Day, aDateTime.Month, aDateTime.Year);
         const sal_Int32 nTage = aTempDate - aTmpNullDate;
         double fTempDateTime = nTage;
         double Hour = aDateTime.Hours;
