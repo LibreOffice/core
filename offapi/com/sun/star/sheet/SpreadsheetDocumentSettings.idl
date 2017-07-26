@@ -179,6 +179,10 @@ published service SpreadsheetDocumentSettings
     /** specifies whether the automatic adjustment of the row height is
         enabled.
 
+        </p>This boolean is actually a counter internally, of the number of times
+        something has locked the height, so setting it to false will only perform one
+        unlock operation, and might leave it still locked</p>
+
         @since OOo 3.0
      */
     [optional, property] boolean IsAdjustHeightEnabled;
