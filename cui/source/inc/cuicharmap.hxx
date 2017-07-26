@@ -81,6 +81,7 @@ private:
     VclPtr<Button>         m_pFavouritesBtn;
     VclPtr<SvxCharView>    m_pRecentCharView[16];
     VclPtr<SvxCharView>    m_pFavCharView[16];
+    VclPtr<VclMultiLineEdit>      m_pCharName;
 
     vcl::Font       aFont;
     const SubsetMap* pSubsetMap;
@@ -142,6 +143,8 @@ public:
 
     void            updateFavCharControl();
     void            setFavButtonState(const OUString& sTitle, const OUString& rFont);
+
+    void            setCharName(char decimal[]);
 };
 
 #endif
