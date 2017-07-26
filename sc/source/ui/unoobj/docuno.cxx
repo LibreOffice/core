@@ -1970,6 +1970,8 @@ void SAL_CALL ScModelObj::lockControllers()
     SfxBaseModel::lockControllers();
     if (pDocShell)
         pDocShell->LockPaint();
+
+    pDocShell->GetDocument().EnableAdjustHeight(false);
 }
 
 void SAL_CALL ScModelObj::unlockControllers()
@@ -1980,6 +1982,8 @@ void SAL_CALL ScModelObj::unlockControllers()
         SfxBaseModel::unlockControllers();
         if (pDocShell)
             pDocShell->UnlockPaint();
+
+        pDocShell->GetDocument().EnableAdjustHeight(true);
     }
 }
 
