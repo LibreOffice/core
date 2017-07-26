@@ -143,6 +143,11 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
     {
         return false;
     }
+    uno::Reference< frame::XModel > xModel = rDocShell.GetModel();
+    if( xModel->hasControllersLocked() )
+    {
+        return false;
+    }
 
     SCTAB nTab      = rRange.aStart.Tab();
     SCROW nStartRow = rRange.aStart.Row();
