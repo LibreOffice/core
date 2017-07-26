@@ -45,6 +45,13 @@ BEGIN {
     if (index($0, showincludes_prefix) == 1) {
         $0 = substr($0, length(showincludes_prefix) + 1)
         sub(/^ */, "")
+
+        # The output from MSVC may contain a carriage return character at the
+        # end of filenames, in which case the translation unit will depend on a
+        # non-existing header, resulting in constant rebuild of all files,
+        # prevent that.
+        sub(//, "")
+
         gsub(/\\/, "/")
         gsub(/ /, "\\ ")
         if ($0 ~ whitelist) { # filter out system headers
