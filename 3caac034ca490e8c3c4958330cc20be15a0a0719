@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_62c27435",
+        "filename": "cui/source/dialogs/cuicharmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-07-26T09:04:07Z",
+      "side": 1,
+      "message": "If you need to initialize the error, you can do it directly in the declaration.\n\nProbably you also want to check if an error is set after calling u_charName()",
+      "revId": "3caac034ca490e8c3c4958330cc20be15a0a0719",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_82dda016",
+        "filename": "cui/uiconfig/ui/specialcharacters.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-07-26T09:04:07Z",
+      "side": 1,
+      "message": "Can you center the text in this text view?",
+      "revId": "3caac034ca490e8c3c4958330cc20be15a0a0719",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
