@@ -1953,77 +1953,28 @@ static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
     }
 }
 
-// at least MSC needs this at linkage level to be able to use it in a template
-typedef struct lcl_ScTable_DoSubTotals_RowEntry
-{
-    sal_uInt16  nGroupNo;
-    SCROW   nSubStartRow;
-    SCROW   nDestRow;
-    SCROW   nFuncStart;
-    SCROW   nFuncEnd;
-} RowEntry;
 
-//      new intermediate results
-//      rParam.nRow2 is changed!
-
-bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
+void ScTable::CreateRowEntry(   ::std::vector< RowEntry >& aRowVector       , const ScSubTotalParam&    rParam,
+                                const SCCOL*               nGroupCol        , const SCROW               nStartRow,
+                                OUString*          pCompString[MAXSUBTOTAL] , SCROW                     nEndRow,
+                                const sal_uInt16           nLevelCount      , bool                      bSpaceLeft,
+                                ScStyleSheet*               pStyle          , const bool                bTotal )
 {
-    SCCOL nStartCol = rParam.nCol1;
-    SCROW nStartRow = rParam.nRow1 + 1;     // Header
-    SCCOL nEndCol   = rParam.nCol2;
-    SCROW nEndRow    = rParam.nRow2;        // will change
+    const bool bIgnoreCase = !rParam.bCaseSens;
+    OUString  aSubString;
+    OUString  aOutString;
     sal_uInt16 i;
-
-    //  Remove empty rows at the end
-    //  so that all exceeding (MAXROW) can be found by InsertRow (#35180#)
-    //  If sorted, all empty rows are at the end.
-    SCSIZE nEmpty = GetEmptyLinesInBlock( nStartCol, nStartRow, nEndCol, nEndRow, DIR_BOTTOM );
-    nEndRow -= nEmpty;
-
-    sal_uInt16 nLevelCount = 0;             // Number of levels
-    bool bDoThis = true;
-    for (i=0; i<MAXSUBTOTAL && bDoThis; i++)
-        if (rParam.bGroupActive[i])
-            nLevelCount = i+1;
-        else
-            bDoThis = false;
-
-    if (nLevelCount==0)                 // do nothing
-        return true;
-
-    SCCOL*          nGroupCol = rParam.nField;  // columns which will be used when grouping
-
     //  With (blank) as a separate category, subtotal rows from
     //  the other columns must always be tested
     //  (previously only when a column occurred more than once)
     bool bTestPrevSub = ( nLevelCount > 1 );
-
-    OUString  aSubString;
-    OUString  aOutString;
-
-    bool bIgnoreCase = !rParam.bCaseSens;
-
-    OUString *pCompString[MAXSUBTOTAL];               // Pointer due to compiler problems
-    for (i=0; i<MAXSUBTOTAL; i++)
-        pCompString[i] = new OUString;
-
-                                //TODO: sort?
-
-    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(pDocument->GetStyleSheetPool()->Find(
-                                ScGlobal::GetRscString(STR_STYLENAME_RESULT), SfxStyleFamily::Para ));
-
-    bool bSpaceLeft = true;                                         // Success when inserting?
-
+    SCROW extraRow    = (bTotal) ? 1 : 0;
     // For performance reasons collect formula entries so their
     // references don't have to be tested for updates each time a new row is
     // inserted
-    RowEntry aRowEntry;
-    ::std::vector< RowEntry > aRowVector;
-
-    for (sal_uInt16 nLevel=0; nLevel<=nLevelCount && bSpaceLeft; nLevel++)      // including grand total
+    RowEntry aRowEntry;for (sal_uInt16 nLevel=0; nLevel<nLevelCount && bSpaceLeft; nLevel++)      // including grand total
     {
-        bool bTotal = ( nLevel == nLevelCount );
-        aRowEntry.nGroupNo = bTotal ? 0 : (nLevelCount-nLevel-1);
+        aRowEntry.nGroupNo = nLevelCount-nLevel-1;
 
         // how many results per level
         SCCOL nResCount         = rParam.nSubTotals[aRowEntry.nGroupNo];
@@ -2043,7 +1994,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
             bool bBlockVis = false;             // group visible?
             aRowEntry.nSubStartRow = nStartRow;
-            for (SCROW nRow=nStartRow; nRow<=nEndRow+1 && bSpaceLeft; nRow++)
+            for (SCROW nRow=nStartRow; nRow<=nEndRow+extraRow && bSpaceLeft; nRow++)
             {
                 bool bChanged;
                 if (nRow>nEndRow)
@@ -2112,35 +2063,33 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         aRowVector.push_back( aRowEntry );
 
                         if (bTotal)     // "Grand total"
-                            aOutString = ScGlobal::GetRscString( STR_TABLE_GESAMTERGEBNIS );
-                        else
-                        {               // "Result"
+                            aOutString = ScGlobal::GetRscString( STR_TABLE_GRAND );
+                        else           // "Result"
                             aOutString = aSubString;
-                            if (aOutString.isEmpty())
-                                aOutString = ScGlobal::GetRscString( STR_EMPTYDATA );
-                            aOutString += " ";
-                            const char* pStrId = STR_TABLE_ERGEBNIS;
-                            if ( nResCount == 1 )
-                                switch ( eResFunc[0] )
+                        if (aOutString.isEmpty())
+                            aOutString = ScGlobal::GetRscString( STR_EMPTYDATA );
+                        aOutString += " ";
+                        sal_uInt16 nStrId = STR_TABLE_ERGEBNIS;
+                        if ( nResCount == 1 )
+                            switch ( eResFunc[0] )
+                            {
+                                case SUBTOTAL_FUNC_AVE:     nStrId = STR_FUN_TEXT_AVG;      break;
+                                case SUBTOTAL_FUNC_CNT:
+                                case SUBTOTAL_FUNC_CNT2:    nStrId = STR_FUN_TEXT_COUNT;    break;
+                                case SUBTOTAL_FUNC_MAX:     nStrId = STR_FUN_TEXT_MAX;      break;
+                                case SUBTOTAL_FUNC_MIN:     nStrId = STR_FUN_TEXT_MIN;      break;
+                                case SUBTOTAL_FUNC_PROD:    nStrId = STR_FUN_TEXT_PRODUCT;  break;
+                                case SUBTOTAL_FUNC_STD:
+                                case SUBTOTAL_FUNC_STDP:    nStrId = STR_FUN_TEXT_STDDEV;   break;
+                                case SUBTOTAL_FUNC_SUM:     nStrId = STR_FUN_TEXT_SUM;      break;
+                                case SUBTOTAL_FUNC_VAR:
+                                case SUBTOTAL_FUNC_VARP:    nStrId = STR_FUN_TEXT_VAR;      break;
+                                default:
                                 {
-                                    case SUBTOTAL_FUNC_AVE:     pStrId = STR_FUN_TEXT_AVG;      break;
-                                    case SUBTOTAL_FUNC_CNT:
-                                    case SUBTOTAL_FUNC_CNT2:    pStrId = STR_FUN_TEXT_COUNT;    break;
-                                    case SUBTOTAL_FUNC_MAX:     pStrId = STR_FUN_TEXT_MAX;      break;
-                                    case SUBTOTAL_FUNC_MIN:     pStrId = STR_FUN_TEXT_MIN;      break;
-                                    case SUBTOTAL_FUNC_PROD:    pStrId = STR_FUN_TEXT_PRODUCT;  break;
-                                    case SUBTOTAL_FUNC_STD:
-                                    case SUBTOTAL_FUNC_STDP:    pStrId = STR_FUN_TEXT_STDDEV;   break;
-                                    case SUBTOTAL_FUNC_SUM:     pStrId = STR_FUN_TEXT_SUM;      break;
-                                    case SUBTOTAL_FUNC_VAR:
-                                    case SUBTOTAL_FUNC_VARP:    pStrId = STR_FUN_TEXT_VAR;      break;
-                                    default:
-                                    {
-                                        // added to avoid warnings
-                                    }
+                                    // added to avoid warnings
                                 }
-                            aOutString += ScGlobal::GetRscString(pStrId);
-                        }
+                            }
+                        aOutString += ScGlobal::GetRscString( nStrId );
                         SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, aOutString );
                         ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle );
 
@@ -2161,7 +2110,55 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             }
         }
     }
+}
+//      new intermediate results
+//      rParam.nRow2 is changed!
 
+bool ScTable::DoSubTotals( ScSubTotalParam& rParam ) {
+    SCCOL nStartCol = rParam.nCol1;
+    SCROW nStartRow = rParam.nRow1 + 1;     // Header
+    SCCOL nEndCol = rParam.nCol2;
+    SCROW nEndRow = rParam.nRow2;        // will change
+    sal_uInt16 i;
+
+    //  Remove empty rows at the end
+    //  so that all exceeding (MAXROW) can be found by InsertRow (#35180#)
+    //  If sorted, all empty rows are at the end.
+    SCSIZE nEmpty = GetEmptyLinesInBlock(nStartCol, nStartRow, nEndCol, nEndRow, DIR_BOTTOM);
+    nEndRow -= nEmpty;
+
+    sal_uInt16 nLevelCount = 0;             // Number of levels
+    bool bDoThis = true;
+    for (i = 0; i < MAXSUBTOTAL && bDoThis; i++)
+        if (rParam.bGroupActive[i])
+            nLevelCount = i + 1;
+        else
+            bDoThis = false;
+
+    if (nLevelCount == 0)                 // do nothing
+        return true;
+
+    SCCOL *nGroupCol = rParam.nField;  // columns which will be used when grouping
+
+
+    OUString* pCompString[MAXSUBTOTAL];               // Pointer due to compiler problems
+    for (i=0; i<MAXSUBTOTAL; i++)
+        pCompString[i] = new OUString;
+
+                                //TODO: sort?
+
+    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(pDocument->GetStyleSheetPool()->Find(
+                                ScGlobal::GetRscString(STR_STYLENAME_RESULT), SfxStyleFamily::Para ));
+
+    bool bSpaceLeft = true;                                         // Success when inserting?
+
+    ::std::vector< RowEntry > aRowVector;
+    CreateRowEntry( aRowVector  , rParam    , nGroupCol     , nStartRow,
+                    pCompString , nEndRow   , nLevelCount   , bSpaceLeft,
+                    pStyle      , false );
+    CreateRowEntry( aRowVector  , rParam    , nGroupCol     , nStartRow,
+                    pCompString , nEndRow   , nLevelCount   , bSpaceLeft,
+                    pStyle      , true );
     // now insert the formulas
     ScComplexRefData aRef;
     aRef.InitFlags();
@@ -2214,7 +2211,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     for (i=0; i<MAXSUBTOTAL; i++)
         delete pCompString[i];
 
-    rParam.nRow2 = nEndRow;                 // new end
+    rParam.nRow2 = nEndRow + nLevelCount;                 // new end
     return bSpaceLeft;
 }
 

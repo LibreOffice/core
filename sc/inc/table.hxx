@@ -117,6 +117,17 @@ class ScDBData;
 class ScDocumentImport;
 class ScHint;
 
+
+// at least MSC needs this at linkage level to be able to use it in a template
+typedef struct lcl_ScTable_DoSubTotals_RowEntry
+{
+    sal_uInt16  nGroupNo;
+    SCROW   nSubStartRow;
+    SCROW   nDestRow;
+    SCROW   nFuncStart;
+    SCROW   nFuncEnd;
+} RowEntry;
+
 class ScTable
 {
 private:
@@ -1021,6 +1032,13 @@ public:
     static void UpdateSearchItemAddressForReplace( const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow );
 
 private:
+
+
+    void CreateRowEntry(    ::std::vector< RowEntry >&  aRowVector              , const ScSubTotalParam&    rParam,
+                            const SCCOL*                nGroupCol               , const SCROW               nStartRow,
+                            OUString*               pCompString[MAXSUBTOTAL]    , SCROW                     nEndRow,
+                            const sal_uInt16            nLevelCount             , bool                      bSpaceLeft,
+                            ScStyleSheet*               pStyle                  , const bool                bTotal );
 
     void FillFormulaVertical(
         const ScFormulaCell& rSrcCell,
