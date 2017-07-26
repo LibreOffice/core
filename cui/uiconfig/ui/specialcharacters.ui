@@ -160,6 +160,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
+                <property name="row_spacing">6</property>
                 <child>
                   <object class="cuilo-SvxShowText" id="showchar">
                     <property name="width_request">80</property>
@@ -178,6 +179,7 @@
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
                     <property name="row_spacing">3</property>
                     <property name="column_spacing">6</property>
                     <property name="row_homogeneous">True</property>
@@ -272,6 +274,20 @@
                         <property name="width">2</property>
                       </packing>
                     </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkTextView" id="charname">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="editable">False</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="justification">center</property>
+                    <property name="cursor_visible">False</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
