@@ -70,14 +70,12 @@ namespace sdbtools
     class PlainExistenceCheck : public INameValidation
     {
     private:
-        const Reference<XComponentContext>    m_aContext;
         Reference< XConnection >                m_xConnection;
         Reference< XNameAccess >                m_xContainer;
 
     public:
-        PlainExistenceCheck( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxContainer )
-            :m_aContext( _rContext )
-            ,m_xConnection( _rxConnection )
+        PlainExistenceCheck( const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxContainer )
+            :m_xConnection( _rxConnection )
             ,m_xContainer( _rxContainer )
         {
             OSL_ENSURE( m_xContainer.is(), "PlainExistenceCheck::PlainExistenceCheck: this will crash!" );
@@ -111,13 +109,11 @@ namespace sdbtools
     // TableValidityCheck
     class TableValidityCheck : public INameValidation
     {
-        const Reference<XComponentContext>  m_aContext;
         const Reference< XConnection >        m_xConnection;
 
     public:
-        TableValidityCheck( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
-            :m_aContext( _rContext )
-            ,m_xConnection( _rxConnection )
+        TableValidityCheck( const Reference< XConnection >& _rxConnection )
+            :m_xConnection( _rxConnection )
         {
         }
 
@@ -150,13 +146,11 @@ namespace sdbtools
     // QueryValidityCheck
     class QueryValidityCheck : public INameValidation
     {
-        const Reference<XComponentContext>    m_aContext;
         const Reference< XConnection >          m_xConnection;
 
     public:
-        QueryValidityCheck( const Reference<XComponentContext>& _rContext, const Reference< XConnection >& _rxConnection )
-            :m_aContext( _rContext )
-            ,m_xConnection( _rxConnection )
+        QueryValidityCheck( const Reference< XConnection >& _rxConnection )
+            :m_xConnection( _rxConnection )
         {
         }
 
@@ -229,9 +223,6 @@ namespace sdbtools
         const NameCheckFactory& operator=(const NameCheckFactory&) = delete;
         /** creates an INameValidation instance which can be used to check the existence of query or table names
 
-            @param _rContext
-                the component's context
-
             @param  _nCommandType
                 the type of objects (CommandType::TABLE or CommandType::QUERY) of which names shall be checked for existence
 
@@ -245,15 +236,11 @@ namespace sdbtools
                 if the given command type is neither CommandType::TABLE or CommandType::QUERY
         */
         static  PNameValidation  createExistenceCheck(
-                    const Reference<XComponentContext>& _rContext,
                     sal_Int32 _nCommandType,
                     const Reference< XConnection >& _rxConnection
                 );
 
         /** creates an INameValidation instance which can be used to check the validity of a query or table name
-
-            @param _rContext
-                the component's context
 
             @param  _nCommandType
                 the type of objects (CommandType::TABLE or CommandType::QUERY) of which names shall be validated
@@ -268,7 +255,6 @@ namespace sdbtools
                 if the given command type is neither CommandType::TABLE or CommandType::QUERY
         */
         static  PNameValidation  createValidityCheck(
-                    const Reference<XComponentContext>& _rContext,
                     const sal_Int32 _nCommandType,
                     const Reference< XConnection >& _rxConnection
                 );
@@ -289,7 +275,7 @@ namespace sdbtools
             );
     }
 
-    PNameValidation  NameCheckFactory::createExistenceCheck( const Reference<XComponentContext>& _rContext, sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
+    PNameValidation  NameCheckFactory::createExistenceCheck( sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
     {
         verifyCommandType( _nCommandType );
 
@@ -312,8 +298,8 @@ namespace sdbtools
             );
         }
 
-        PNameValidation pTableCheck( new PlainExistenceCheck( _rContext, _rxConnection, xTables ) );
-        PNameValidation pQueryCheck( new PlainExistenceCheck( _rContext, _rxConnection, xQueries ) );
+        PNameValidation pTableCheck( new PlainExistenceCheck( _rxConnection, xTables ) );
+        PNameValidation pQueryCheck( new PlainExistenceCheck( _rxConnection, xQueries ) );
         PNameValidation pReturn;
 
         if ( aMeta.supportsSubqueriesInFrom() )
@@ -325,7 +311,7 @@ namespace sdbtools
         return pReturn;
     }
 
-    PNameValidation  NameCheckFactory::createValidityCheck( const Reference<XComponentContext>& _rContext, sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
+    PNameValidation  NameCheckFactory::createValidityCheck( sal_Int32 _nCommandType, const Reference< XConnection >& _rxConnection )
     {
         verifyCommandType( _nCommandType );
 
@@ -344,8 +330,8 @@ namespace sdbtools
         }
 
         if ( _nCommandType == CommandType::TABLE )
-            return PNameValidation( new TableValidityCheck( _rContext, _rxConnection ) );
-        return PNameValidation( new QueryValidityCheck( _rContext, _rxConnection ) );
+            return PNameValidation( new TableValidityCheck( _rxConnection ) );
+        return PNameValidation( new QueryValidityCheck( _rxConnection ) );
     }
 
     // ObjectNames
@@ -363,7 +349,7 @@ namespace sdbtools
     {
         EntryGuard aGuard( *this );
 
-        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), CommandType, getConnection() ) );
+        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( CommandType, getConnection() ) );
 
         OUString sBaseName( BaseName );
         if ( sBaseName.isEmpty() )
@@ -399,7 +385,7 @@ namespace sdbtools
     {
         EntryGuard aGuard( *this );
 
-        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), CommandType, getConnection()) );
+        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( CommandType, getConnection()) );
         return !pNameCheck->validateName( Name );
     }
 
@@ -407,7 +393,7 @@ namespace sdbtools
     {
         EntryGuard aGuard( *this );
 
-        PNameValidation pNameCheck( NameCheckFactory::createValidityCheck( getContext(), CommandType, getConnection()) );
+        PNameValidation pNameCheck( NameCheckFactory::createValidityCheck( CommandType, getConnection()) );
         return pNameCheck->validateName( Name );
     }
 
@@ -415,10 +401,10 @@ namespace sdbtools
     {
         EntryGuard aGuard( *this );
 
-        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( getContext(), CommandType, getConnection() ) );
+        PNameValidation pNameCheck( NameCheckFactory::createExistenceCheck( CommandType, getConnection() ) );
         pNameCheck->validateName_throw( Name );
 
-        pNameCheck = NameCheckFactory::createValidityCheck( getContext(), CommandType, getConnection() );
+        pNameCheck = NameCheckFactory::createValidityCheck( CommandType, getConnection() );
         pNameCheck->validateName_throw( Name );
     }
 

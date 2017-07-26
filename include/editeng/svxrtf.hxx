@@ -187,13 +187,11 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     RTFPlainAttrMapIds aPlainMap;
     RTFPardAttrMapIds aPardMap;
     std::vector<sal_uInt16> aWhichMap;
-    OUString  sBaseURL;
 
     EditPosition* pInsPos;
     SfxItemPool* pAttrPool;
     Color*  pDfltColor;
     vcl::Font*   pDfltFont;
-    css::uno::Reference< css::document::XDocumentProperties> m_xDocProps;
     SfxItemSet *pRTFDefaults;
 
     int     nDfltFont;
@@ -273,9 +271,7 @@ protected:
     // if no-one would like to have any twips
     virtual void CalcValue();
 
-    SvxRTFParser( SfxItemPool& rAttrPool,
-                    SvStream& rIn,
-                    css::uno::Reference< css::document::XDocumentProperties> const & i_xDocProps );
+    SvxRTFParser( SfxItemPool& rAttrPool, SvStream& rIn );
     virtual ~SvxRTFParser() override;
 
     void SetNewDoc( bool bFlag )        { bNewDoc = bFlag; }

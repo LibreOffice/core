@@ -57,14 +57,12 @@ static rtl_TextEncoding lcl_GetDefaultTextEncodingForRTF()
 
 // -------------- Methods --------------------
 
-SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
-            uno::Reference<document::XDocumentProperties> const & i_xDocProps )
+SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn )
     : SvRTFParser( rIn, 5 )
     , aPlainMap(rPool)
     , aPardMap(rPool)
     , pInsPos( nullptr )
     , pAttrPool( &rPool )
-    , m_xDocProps( i_xDocProps )
     , pRTFDefaults( nullptr )
     , nDfltFont( 0)
     , bNewDoc( true )
@@ -118,8 +116,6 @@ SvParserState SvxRTFParser::CallParser()
     bIsSetDfltTab = false;
     bNewGroup = false;
     nDfltFont = 0;
-
-    sBaseURL.clear();
 
     // generate the correct WhichId table from the set WhichIds.
     BuildWhichTable();

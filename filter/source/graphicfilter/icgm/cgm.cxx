@@ -63,7 +63,6 @@ CGM::CGM(uno::Reference< frame::XModel > const & rModel)
     , mnElementClass(0)
     , mnElementID(0)
     , mnElementSize(0)
-    , mpGDIMetaFile(nullptr)
 {
     pElement = new CGMElements;
     pCopyOfE = new CGMElements;
