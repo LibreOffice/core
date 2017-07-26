@@ -445,6 +445,7 @@ namespace sw { namespace mark
 
         // register mark
         m_aMarkNamesSet.insert(pMarkBase->GetName());
+        sortMarks();
         lcl_InsertMarkSorted(m_vAllMarks, pMark);
         switch(eType)
         {
