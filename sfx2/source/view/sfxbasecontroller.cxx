@@ -116,33 +116,33 @@ struct GroupIDToCommandGroup
 static bool                 bGroupIDMapInitialized = false;
 static const GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
 {
-    { GID_INTERN        ,   frame::CommandGroup::INTERNAL       },
-    { GID_APPLICATION   ,   frame::CommandGroup::APPLICATION    },
-    { GID_DOCUMENT      ,   frame::CommandGroup::DOCUMENT       },
-    { GID_VIEW          ,   frame::CommandGroup::VIEW           },
-    { GID_EDIT          ,   frame::CommandGroup::EDIT           },
-    { GID_MACRO         ,   frame::CommandGroup::MACRO          },
-    { GID_OPTIONS       ,   frame::CommandGroup::OPTIONS        },
-    { GID_MATH          ,   frame::CommandGroup::MATH           },
-    { GID_NAVIGATOR     ,   frame::CommandGroup::NAVIGATOR      },
-    { GID_INSERT        ,   frame::CommandGroup::INSERT         },
-    { GID_FORMAT        ,   frame::CommandGroup::FORMAT         },
-    { GID_TEMPLATE      ,   frame::CommandGroup::TEMPLATE       },
-    { GID_TEXT          ,   frame::CommandGroup::TEXT           },
-    { GID_FRAME         ,   frame::CommandGroup::FRAME          },
-    { GID_GRAPHIC       ,   frame::CommandGroup::GRAPHIC        },
-    { GID_TABLE         ,   frame::CommandGroup::TABLE          },
-    { GID_ENUMERATION   ,   frame::CommandGroup::ENUMERATION    },
-    { GID_DATA          ,   frame::CommandGroup::DATA           },
-    { GID_SPECIAL       ,   frame::CommandGroup::SPECIAL        },
-    { GID_IMAGE         ,   frame::CommandGroup::IMAGE          },
-    { GID_CHART         ,   frame::CommandGroup::CHART          },
-    { GID_EXPLORER      ,   frame::CommandGroup::EXPLORER       },
-    { GID_CONNECTOR     ,   frame::CommandGroup::CONNECTOR      },
-    { GID_MODIFY        ,   frame::CommandGroup::MODIFY         },
-    { GID_DRAWING       ,   frame::CommandGroup::DRAWING        },
-    { GID_CONTROLS      ,   frame::CommandGroup::CONTROLS       },
-    { SfxGroupId(0)     ,   0                                                   }
+    { SfxGroupId::Intern        ,   frame::CommandGroup::INTERNAL       },
+    { SfxGroupId::Application   ,   frame::CommandGroup::APPLICATION    },
+    { SfxGroupId::Document      ,   frame::CommandGroup::DOCUMENT       },
+    { SfxGroupId::View          ,   frame::CommandGroup::VIEW           },
+    { SfxGroupId::Edit          ,   frame::CommandGroup::EDIT           },
+    { SfxGroupId::Macro         ,   frame::CommandGroup::MACRO          },
+    { SfxGroupId::Options       ,   frame::CommandGroup::OPTIONS        },
+    { SfxGroupId::Math          ,   frame::CommandGroup::MATH           },
+    { SfxGroupId::Navigator     ,   frame::CommandGroup::NAVIGATOR      },
+    { SfxGroupId::Insert        ,   frame::CommandGroup::INSERT         },
+    { SfxGroupId::Format        ,   frame::CommandGroup::FORMAT         },
+    { SfxGroupId::Template      ,   frame::CommandGroup::TEMPLATE       },
+    { SfxGroupId::Text          ,   frame::CommandGroup::TEXT           },
+    { SfxGroupId::Frame         ,   frame::CommandGroup::FRAME          },
+    { SfxGroupId::Graphic       ,   frame::CommandGroup::GRAPHIC        },
+    { SfxGroupId::Table         ,   frame::CommandGroup::TABLE          },
+    { SfxGroupId::Enumeration   ,   frame::CommandGroup::ENUMERATION    },
+    { SfxGroupId::Data          ,   frame::CommandGroup::DATA           },
+    { SfxGroupId::Special       ,   frame::CommandGroup::SPECIAL        },
+    { SfxGroupId::Image         ,   frame::CommandGroup::IMAGE          },
+    { SfxGroupId::Chart         ,   frame::CommandGroup::CHART          },
+    { SfxGroupId::Explorer      ,   frame::CommandGroup::EXPLORER       },
+    { SfxGroupId::Connector     ,   frame::CommandGroup::CONNECTOR      },
+    { SfxGroupId::Modify        ,   frame::CommandGroup::MODIFY         },
+    { SfxGroupId::Drawing       ,   frame::CommandGroup::DRAWING        },
+    { SfxGroupId::Controls      ,   frame::CommandGroup::CONTROLS       },
+    { SfxGroupId::NONE,   0                                             }
 };
 
 typedef std::unordered_map< SfxGroupId, sal_Int16 > GroupHashMap;
@@ -154,7 +154,7 @@ sal_Int16 MapGroupIDToCommandGroup( SfxGroupId nGroupID )
     if ( !bGroupIDMapInitialized )
     {
         sal_Int32 i = 0;
-        while ( GroupIDCommandGroupMap[i].nGroupID != SfxGroupId(0) )
+        while ( GroupIDCommandGroupMap[i].nGroupID != SfxGroupId::NONE )
         {
             s_aHashMap.insert( GroupHashMap::value_type(
                 GroupIDCommandGroupMap[i].nGroupID,

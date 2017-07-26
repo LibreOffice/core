@@ -35,7 +35,7 @@ interface DrawView
     ]
     SID_RELOAD  // ole : no, status : ?
     [
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
         Asynchron , AutoUpdate ,
@@ -289,7 +289,7 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
         Export ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
@@ -354,7 +354,7 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
-        GroupId = GID_INSERT ;
+        GroupId = SfxGroupId::Insert ;
         Export , Asynchron ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
@@ -378,7 +378,7 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
         Export , Asynchron ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
@@ -668,7 +668,7 @@ interface DrawView
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
         Asynchron ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
@@ -769,7 +769,7 @@ interface DrawView
     [
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
         AutoUpdate ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
@@ -1226,7 +1226,7 @@ interface DrawView
     SID_OBJECT_ALIGN // ole : no, status : ?
     [
         StateMethod = GetMenuState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
         Export ;
     ]
 
@@ -1453,7 +1453,7 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_STYLE_DRAGHIERARCHIE // ole : no, status : ?
     [
@@ -1463,49 +1463,49 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_STYLE_DELETE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_STYLE_HIDE
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_STYLE_SHOW
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_STYLE_APPLY // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_STYLE_WATERCAN // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_STYLE_NEW_BY_EXAMPLE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_STYLE_UPDATE_BY_EXAMPLE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetAttrState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_SET_DEFAULT // ole : no, status : ?
     [
@@ -1646,7 +1646,7 @@ interface DrawView
     SID_CAPTUREPOINT // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_SWITCH_POINTEDIT // ole : no, status : ?
     [
@@ -1657,7 +1657,7 @@ interface DrawView
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     MenuConfig = TRUE ;
     ]
     SID_COLOR_CONTROL // ole : no, status : ?
@@ -1732,7 +1732,7 @@ interface DrawView
     SID_GALLERY_FORMATS // ole : no, status : ?
     [
         ExecMethod = ExecGallery ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_NAVIGATOR_INIT // ole : no, status : ?
     [

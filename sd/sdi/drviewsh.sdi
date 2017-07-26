@@ -137,7 +137,7 @@ interface ImpressEditView : DrawView
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
     SID_SEARCH_ITEM // ole : ?, status : ?
     [

@@ -21,7 +21,7 @@ interface TextOLEObject : BaseTextOLEObject
     import TextFrame;
 }
 
-shell SwOleShell: SwFrameShell
+shell SwOleShell : SwFrameShell
 {
     import TextOLEObject;
 }

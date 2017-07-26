@@ -104,7 +104,6 @@ with a.stdout as txt:
         if idName.endswith("_BEGIN"): continue
         if idName.endswith("_END"): continue
         if idName.startswith("RID_"):
-            if idName == "RID_GROUPS_SFXOFFSET": continue
             if idName == "RID_SVX_FIRSTFREE": continue
         if in_exclusion_set(idName): continue
         # search for the constant

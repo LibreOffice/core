@@ -41,7 +41,7 @@ interface TablePrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        GroupId = GID_INTERN ;
+        GroupId = SfxGroupId::Intern ;
     ]
 
     SfxVoidItem GoDownBlock SID_CURSORPAGEDOWN
@@ -52,7 +52,7 @@ interface TablePrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        GroupId = GID_INTERN ;
+        GroupId = SfxGroupId::Intern ;
     ]
 
     SID_CURSORHOME  [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
@@ -66,7 +66,7 @@ interface TablePrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        GroupId = GID_INTERN ;
+        GroupId = SfxGroupId::Intern ;
     ]
     SfxVoidItem GoUp SID_CURSORUP
     (
@@ -76,7 +76,7 @@ interface TablePrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        GroupId = GID_INTERN ;
+        GroupId = SfxGroupId::Intern ;
     ]
     SfxVoidItem GoLeft SID_CURSORLEFT
     (
@@ -86,7 +86,7 @@ interface TablePrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        GroupId = GID_INTERN ;
+        GroupId = SfxGroupId::Intern ;
     ]
 
     SfxVoidItem GoRight SID_CURSORRIGHT
@@ -97,7 +97,7 @@ interface TablePrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        GroupId = GID_INTERN ;
+        GroupId = SfxGroupId::Intern ;
     ]
 
     SID_PREV_TABLE
@@ -105,7 +105,7 @@ interface TablePrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        GroupId = GID_INTERN ;
+        GroupId = SfxGroupId::Intern ;
     ]
 
     SID_NEXT_TABLE
@@ -113,7 +113,7 @@ interface TablePrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        GroupId = GID_INTERN ;
+        GroupId = SfxGroupId::Intern ;
     ]
 
     SfxVoidItem GoToStart SID_CURSORTOPOFFILE ()
@@ -121,7 +121,7 @@ interface TablePrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        GroupId = GID_INTERN ;
+        GroupId = SfxGroupId::Intern ;
     ]
 
     SfxVoidItem GoToEndOfData SID_CURSORENDOFFILE ()
@@ -129,7 +129,7 @@ interface TablePrintPreview
         ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE;
-        GroupId = GID_INTERN ;
+        GroupId = SfxGroupId::Intern ;
     ]
     SID_PREVIEW_ZOOMIN  [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PREVIEW_ZOOMOUT [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]

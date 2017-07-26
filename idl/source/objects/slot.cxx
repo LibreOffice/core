@@ -434,7 +434,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     if( !GetGroupId().isEmpty() )
         rOutStm.WriteOString( GetGroupId() );
     else
-        rOutStm.WriteCharPtr( "SfxGroupId(0)" );
+        rOutStm.WriteCharPtr( "SfxGroupId::NONE" );
     rOutStm.WriteChar( ',' ) << endl;
     WriteTab( rOutStm, 4 );
 

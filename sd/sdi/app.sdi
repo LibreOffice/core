@@ -22,7 +22,7 @@ interface StarImpress
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        GroupId = GID_APPLICATION ;
+        GroupId = SfxGroupId::Application ;
         Container ;
     ]
 

@@ -116,7 +116,7 @@ interface TextBezier : TextSelection
     ]
 }
 
-shell SwBezierShell: SwBaseShell
+shell SwBezierShell : SwBaseShell
 {
     import TextBezier;
 }

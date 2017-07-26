@@ -317,7 +317,7 @@ interface BaseTextSelection
         ExecMethod = Execute ;
         StateMethod = StateStyle ;
         NoRecord;
-        GroupId = GID_TEMPLATE ;
+        GroupId = SfxGroupId::Template ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
