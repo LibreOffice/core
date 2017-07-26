@@ -1430,6 +1430,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf109524, "tdf109524.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testGroupShapeFontName, "groupshape-fontname.docx")
+{
+    // Font names inside a group shape were not imported
+    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xGroup->getByIndex(1), uno::UNO_QUERY)->getText();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "CharFontNameComplex"));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "CharFontNameAsian"));
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
