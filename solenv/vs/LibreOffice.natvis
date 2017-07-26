@@ -18,22 +18,20 @@
   </Type>
   <Type Name="_rtl_uString">
     <DisplayString Condition="length == 0">empty</DisplayString>
-    <DisplayString>{buffer,su}</DisplayString>
-    <StringView>buffer,su</StringView>
+    <DisplayString>{buffer,[length]su}</DisplayString>
+    <StringView>buffer,[length]su</StringView>
   </Type>
   <Type Name="_rtl_String">
     <DisplayString Condition="length == 0">empty</DisplayString>
-    <DisplayString>{buffer,s}</DisplayString>
-    <StringView>buffer,s</StringView>
+    <DisplayString>{buffer,[length]s}</DisplayString>
+    <StringView>buffer,[length]s</StringView>
   </Type>
-  <Type Name="com::sun::star::uno::Any">
+  <Type Name="_uno_Any">
     <!--
     typelib_TypeClass_VOID = 0,
-    typelib_TypeClass_ANY = 14,
     typelib_TypeClass_TYPEDEF = 16,
     typelib_TypeClass_STRUCT = 17,
     typelib_TypeClass_UNION = 18,/** Deprecated, UNOIDL does not have a union concept.*/
-    typelib_TypeClass_EXCEPTION = 19,
     typelib_TypeClass_ARRAY = 21,/** Deprecated, UNOIDL does not have an array concept.*/
     typelib_TypeClass_SERVICE = 23,/** (not implemented) */
     typelib_TypeClass_MODULE = 24,/** (not implemented) */
@@ -45,38 +43,41 @@
     typelib_TypeClass_CONSTANTS = 30,
     typelib_TypeClass_SINGLETON = 31,
     -->
-    <DisplayString Condition="pType->eTypeClass == 1">{pType->eTypeClass,en}: {*((wchar_t*)pData),c}</DisplayString><!-- typelib_TypeClass_CHAR -->
-    <DisplayString Condition="pType->eTypeClass == 2">{pType->eTypeClass,en}: {*((bool*)pData),d}</DisplayString><!-- typelib_TypeClass_BOOLEAN -->
-    <DisplayString Condition="pType->eTypeClass == 3">{pType->eTypeClass,en}: {*((unsigned char*)pData),d}</DisplayString><!-- typelib_TypeClass_BYTE -->
-    <DisplayString Condition="pType->eTypeClass == 4">{pType->eTypeClass,en}: {(*((short*)pData) &amp; 0xFFFF),d}</DisplayString><!-- typelib_TypeClass_SHORT -->
-    <DisplayString Condition="pType->eTypeClass == 5">{pType->eTypeClass,en}: {(*((unsigned short*)pData) &amp; 0xFFFF),d}</DisplayString><!-- typelib_TypeClass_UNSIGNED_SHORT -->
-    <DisplayString Condition="pType->eTypeClass == 6">{pType->eTypeClass,en}: {*((int*)pData),d}</DisplayString><!-- typelib_TypeClass_LONG -->
-    <DisplayString Condition="pType->eTypeClass == 7">{pType->eTypeClass,en}: {*((unsigned int*)pData),d}</DisplayString><!-- typelib_TypeClass_UNSIGNED_LONG -->
-    <DisplayString Condition="pType->eTypeClass == 8">{pType->eTypeClass,en}: {*((__int64*)pData),d}</DisplayString><!-- typelib_TypeClass_HYPER -->
-    <DisplayString Condition="pType->eTypeClass == 9">{pType->eTypeClass,en}: {*((unsigned __int64*)pData),d}</DisplayString><!-- typelib_TypeClass_UNSIGNED_HYPER -->
-    <DisplayString Condition="pType->eTypeClass == 10">{pType->eTypeClass,en}: {*((float*)pData)}</DisplayString><!-- typelib_TypeClass_FLOAT -->
-    <DisplayString Condition="pType->eTypeClass == 11">{pType->eTypeClass,en}: {*((double*)pData)}</DisplayString><!-- typelib_TypeClass_DOUBLE -->
-    <DisplayString Condition="pType->eTypeClass == 12">{pType->eTypeClass,en}: {*((rtl::OUString*)pData)}</DisplayString><!-- typelib_TypeClass_STRING -->
-    <DisplayString Condition="pType->eTypeClass == 13">{pType->eTypeClass,en}: {*((com::sun::star::uno::Type*)pData)}</DisplayString><!-- typelib_TypeClass_TYPE -->
-    <DisplayString Condition="pType->eTypeClass == 15">{pType->eTypeClass,en}: {*((sal_Int32*)pData),d}</DisplayString><!-- typelib_TypeClass_ENUM -->
-    <DisplayString Condition="pType->eTypeClass == 20">{pType->eTypeClass,en}: {*((uno_Sequence **)pData)}</DisplayString><!-- typelib_TypeClass_SEQUENCE -->
-    <DisplayString Condition="pType->eTypeClass == 22">{pType->eTypeClass,en}: {*((com::sun::star::uno::BaseReference *)pData)}</DisplayString><!-- typelib_TypeClass_INTERFACE -->
+    <DisplayString Condition="pType->eTypeClass == 1" >{*((wchar_t*)pData),c} (CHAR)</DisplayString><!-- typelib_TypeClass_CHAR -->
+    <DisplayString Condition="pType->eTypeClass == 2" >{*((bool*)pData),d} (BOOLEAN)</DisplayString><!-- typelib_TypeClass_BOOLEAN -->
+    <DisplayString Condition="pType->eTypeClass == 3" >{*((unsigned char*)pData),d} (BYTE)</DisplayString><!-- typelib_TypeClass_BYTE -->
+    <DisplayString Condition="pType->eTypeClass == 4" >{(*((short*)pData) &amp; 0xFFFF),d} (SHORT)</DisplayString><!-- typelib_TypeClass_SHORT -->
+    <DisplayString Condition="pType->eTypeClass == 5" >{(*((unsigned short*)pData) &amp; 0xFFFF),d} (UNSIGNED_SHORT)</DisplayString><!-- typelib_TypeClass_UNSIGNED_SHORT -->
+    <DisplayString Condition="pType->eTypeClass == 6" >{*((int*)pData),d} (LONG)</DisplayString><!-- typelib_TypeClass_LONG -->
+    <DisplayString Condition="pType->eTypeClass == 7" >{*((unsigned int*)pData),d} (UNSIGNED_LONG)</DisplayString><!-- typelib_TypeClass_UNSIGNED_LONG -->
+    <DisplayString Condition="pType->eTypeClass == 8" >{*((__int64*)pData),d} (HYPER)</DisplayString><!-- typelib_TypeClass_HYPER -->
+    <DisplayString Condition="pType->eTypeClass == 9" >{*((unsigned __int64*)pData),d} (UNSIGNED_HYPER)</DisplayString><!-- typelib_TypeClass_UNSIGNED_HYPER -->
+    <DisplayString Condition="pType->eTypeClass == 10">{*((float*)pData)} (FLOAT)</DisplayString><!-- typelib_TypeClass_FLOAT -->
+    <DisplayString Condition="pType->eTypeClass == 11">{*((double*)pData)} (DOUBLE)</DisplayString><!-- typelib_TypeClass_DOUBLE -->
+    <DisplayString Condition="pType->eTypeClass == 12">{*((rtl::OUString*)pData)} (STRING)</DisplayString><!-- typelib_TypeClass_STRING -->
+    <DisplayString Condition="pType->eTypeClass == 13">{*((com::sun::star::uno::Type*)pData)} (TYPE)</DisplayString><!-- typelib_TypeClass_TYPE -->
+    <DisplayString Condition="pType->eTypeClass == 14">{*((_uno_Any*)pData)} (ANY)</DisplayString><!-- typelib_TypeClass_ANY -->
+    <DisplayString Condition="pType->eTypeClass == 15">{*((sal_Int32*)pData),d} (ENUM)</DisplayString><!-- typelib_TypeClass_ENUM -->
+    <DisplayString Condition="pType->eTypeClass == 19">{*((com::sun::star::uno::Exception *)pData)} (EXCEPTION)</DisplayString><!-- typelib_TypeClass_EXCEPTION -->
+    <DisplayString Condition="pType->eTypeClass == 20">{*((uno_Sequence **)pData)} (SEQUENCE)</DisplayString><!-- typelib_TypeClass_SEQUENCE -->
+    <DisplayString Condition="pType->eTypeClass == 22">{*((com::sun::star::uno::BaseReference *)pData)} (INTERFACE)</DisplayString><!-- typelib_TypeClass_INTERFACE -->
     <DisplayString>{pType->eTypeClass,en}</DisplayString>
     <Expand>
-      <Item Name="Data" Condition="pType->eTypeClass == 22">*((com::sun::star::uno::BaseReference *)pData)</Item>
-      <Item Name="Data" Condition="pType->eTypeClass != 22">pData</Item>
+      <ExpandedItem Condition="pType->eTypeClass == 19">(com::sun::star::uno::Exception *)pData</ExpandedItem>
+      <ExpandedItem Condition="pType->eTypeClass == 22">(com::sun::star::uno::BaseReference *)pData</ExpandedItem>
+      <Item Name="Data" Condition="pType->eTypeClass != 19 &amp;&amp; pType->eTypeClass != 22">pData</Item>
     </Expand>
   </Type>
-  <Type Name="basegfx::internal::ImplMatLine&lt;3&gt;">
+  <Type Name="basegfx::internal::ImplMatLine &lt; 3 &gt;">
     <DisplayString>{mfValue[0]}, {mfValue[1]}, {mfValue[2]}</DisplayString>
   </Type>
-  <Type Name="basegfx::internal::ImplHomMatrixTemplate&lt;3&gt;">
+  <Type Name="basegfx::internal::ImplHomMatrixTemplate &lt; 3 &gt;">
     <DisplayString>{{{maLine[0]}}}, {{{maLine[1]}}}, {mpLine}</DisplayString>
   </Type>
-  <Type Name="o3tl::cow_wrapper&lt;basegfx::Impl2DHomMatrix,o3tl::UnsafeRefCountingPolicy&gt;::impl_t">
+  <Type Name="o3tl::cow_wrapper &lt; basegfx::Impl2DHomMatrix,o3tl::UnsafeRefCountingPolicy &gt;::impl_t">
     <DisplayString>{m_value}</DisplayString>
   </Type>
-  <Type Name="o3tl::cow_wrapper&lt;basegfx::Impl2DHomMatrix,o3tl::UnsafeRefCountingPolicy&gt;">
+  <Type Name="o3tl::cow_wrapper &lt; basegfx::Impl2DHomMatrix,o3tl::UnsafeRefCountingPolicy &gt;">
     <DisplayString>{m_pimpl}</DisplayString>
   </Type>
   <Type Name="basegfx::B2DHomMatrix">
@@ -100,69 +101,99 @@
   <Type Name="SwRect">
     <DisplayString>{m_Point}, {m_Size}</DisplayString>
   </Type>
-  <Type Name="com::sun::star::uno::Sequence&lt;*&gt;">
-    <DisplayString Condition="_pSequence->nElements == 0">empty</DisplayString>
-    <DisplayString>Sequence of {_pSequence->nElements} {"$T1",sb}</DisplayString>
+  <Type Name="com::sun::star::uno::Sequence &lt; * &gt;">
+    <DisplayString Condition="_pSequence->nElements == 0">empty sequence</DisplayString>
+    <DisplayString>sequence of {_pSequence->nElements} {"$T1",sb}</DisplayString>
     <Expand>
       <Item Name="[size]">_pSequence->nElements</Item>
       <ArrayItems>
         <Size>_pSequence->nElements</Size>
-        <ValuePointer>reinterpret_cast&lt; const $T1 * &gt;( _pSequence->elements )</ValuePointer>
+        <ValuePointer>reinterpret_cast &lt; const $T1 * &gt;( _pSequence->elements )</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
-  <Type Name="SwNodes">
+  <Type Name="BigPtrArray">
     <DisplayString>{{{m_nSize} nodes}}</DisplayString>
     <Expand>
-      <Item Name="[Count]">m_nSize</Item>
+      <Item Name="[size]">m_nSize</Item>
 
       <CustomListItems>
-        <Variable Name="idx" InitialValue="0"/>
-        <Variable Name="blockIx" InitialValue="0"/>
-        <Variable Name="p" InitialValue="m_vpInf[ 0 ]"/>
+        <!-- Visualiser needs to know the type of variable (including pointer type).
+             If later we try to assign an incompatible value, visualiser will error out.
+             For pointers, valid syntax is e.g. "(BlockInfo*)nullptr" -->
+        <Variable Name="blocks" InitialValue="m_ppInf._Mypair._Myval2"/>
+        <Variable Name="count" InitialValue="m_nSize"/>
+        <Variable Name="pos" InitialValue="0"/>
+        <Variable Name="block_count" InitialValue="m_nBlock"/>
+        <Variable Name="block_pos" InitialValue="0"/>
+        <Variable Name="block" InitialValue="blocks[0]"/>
+        <Variable Name="next_block" InitialValue="block"/>
 
         <Size>m_nSize</Size>
-        <Loop>
-          <Break Condition="idx &gt;= m_nSize"/>
 
-          <If Condition="p-&gt;nStart &gt; idx || p-&gt;nEnd &lt; idx">
-            <Exec>blockIx = 0</Exec>
-            <Loop>
-              <Break Condition="blockIx &gt;= m_vpInf._Mypair._Myval2._Mylast - m_vpInf._Mypair._Myval2._Myfirst"/>
-              <Break Condition="p-&gt;nStart &lt;= idx &amp;&amp; p-&gt;nEnd &gt;= idx"/>
-              <Exec>blockIx++</Exec>
-              <Exec>p = m_vpInf[ blockIx ]</Exec>
-            </Loop>
+        <Break Condition="block_pos &gt;= block_count"/>
+        <Break Condition="block == nullptr"/>
+        <Break Condition="block-&gt;nStart != 0"/>
+        <Break Condition="block-&gt;nEnd - block-&gt;nStart + 1 != block-&gt;nElem"/>
+
+        <Loop>
+          <Break Condition="pos &gt;= count"/>
+          <Item>*block-&gt;mvData._Elems[ pos - block-&gt;nStart ]</Item>
+          <If Condition="pos == block-&gt;nEnd">
+            <Exec>block_pos++</Exec>
+            <Break Condition="block_pos &gt;= block_count"/>
+            <Exec>next_block = blocks[block_pos]</Exec>
+            <Break Condition="next_block == nullptr"/>
+            <Break Condition="next_block-&gt;nEnd - next_block-&gt;nStart + 1 != next_block-&gt;nElem"/>
+            <Break Condition="next_block-&gt;nStart != block-&gt;nEnd + 1"/>
+            <Break Condition="next_block-&gt;nEnd &lt;= count"/>
+            <Exec>block = next_block</Exec>
           </If>
-          <Item>*static_cast&lt;SwNodePtr&gt;(p->mvData[ idx - p->nStart ])</Item>
-          <Exec>idx++</Exec>
+          <Exec>pos++</Exec>
         </Loop>
 
       </CustomListItems>
     </Expand>
   </Type>
   <Type Name="SwNode">
-    <DisplayString>{{SwNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{Node}}</DisplayString>
     <Expand>
-      <Item Name="Nodes">static_cast&lt; SwNodes* &gt;(m_pBlock->pBigArr)</Item>
+      <Item Name="Nodes">static_cast &lt; SwNodes* &gt;(m_pBlock->pBigArr)</Item>
     </Expand>
   </Type>
   <Type Name="SwEndNode">
-    <DisplayString>{{SwEndNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+    <DisplayString Condition="m_pStartOfSection != nullptr">[{m_pBlock->nStart + m_nOffset}] {{EndNode}} - for {*m_pStartOfSection}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{EndNode}}</DisplayString>
   </Type>
   <Type Name="SwStartNode">
-    <DisplayString Condition="m_eStartNodeType == 1">{{SwTableBoxStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 2">{{SwFlyStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 3">{{SwFootnoteStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 4">{{SwHeaderStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
-    <DisplayString Condition="m_eStartNodeType == 5">{{SwFooterStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
-    <DisplayString>{{SwStartNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 0">[{m_pBlock->nStart + m_nOffset}] {{NormalStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 1">[{m_pBlock->nStart + m_nOffset}] {{TableBoxStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 2">[{m_pBlock->nStart + m_nOffset}] {{FlyStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 3">[{m_pBlock->nStart + m_nOffset}] {{FootnoteStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 4">[{m_pBlock->nStart + m_nOffset}] {{HeaderStartNode}}</DisplayString>
+    <DisplayString Condition="m_eStartNodeType == 5">[{m_pBlock->nStart + m_nOffset}] {{FooterStartNode}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{StartNode}}</DisplayString>
   </Type>
   <Type Name="SwContentNode">
-    <DisplayString>{{SwContentNode {m_pBlock->nStart + m_nOffset}}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{ContentNode}}</DisplayString>
+  </Type>
+  <Type Name="SwOLENode">
+    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{OLENode}}</DisplayString>
+  </Type>
+  <Type Name="SwGrfNode">
+    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{GrfNode}}</DisplayString>
+  </Type>
+  <Type Name="SwSectionNode">
+    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{SectionNode}}</DisplayString>
+  </Type>
+  <Type Name="SwTableNode">
+    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{TableNode}}</DisplayString>
+  </Type>
+  <Type Name="SwDummySectionNode">
+    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{DummySectionNode}}</DisplayString>
   </Type>
   <Type Name="SwTextNode">
-    <DisplayString>{{SwTextNode {m_pBlock->nStart + m_nOffset}: {m_Text}}}</DisplayString>
+    <DisplayString>[{m_pBlock->nStart + m_nOffset}] {{TextNode: {m_Text}}}</DisplayString>
   </Type>
   <Type Name="SwNodeIndex">
     <DisplayString>{{{*m_pNode}}}</DisplayString>
@@ -183,8 +214,35 @@
       <Item Name="[size]">m_Array.node_count</Item>
       <IndexListItems>
         <Size>m_Array.node_count</Size>
-        <ValueNode>**(SwFrameFormat**)((char*)(m_PosIndex.ptrs.spc.data_[$i]) - 0x10)</ValueNode>
+        <ValueNode>**reinterpret_cast &lt; value_type* &gt; (&amp;static_cast &lt; ByPos::node_type* &gt; (static_cast &lt; ByPos::node_type::trampoline* &gt; (m_PosIndex.ptrs.spc.data_[$i]))->space)</ValueNode>
       </IndexListItems>
+    </Expand>
+  </Type>
+  <Type Name="SwFormat">
+    <DisplayString>Format: "{m_aFormatName,sub}"</DisplayString>
+  </Type>
+  <Type Name="com::sun::star::uno::BaseReference">
+    <DisplayString Condition="_pInterface == nullptr">empty</DisplayString>
+    <DisplayString>{{{_pInterface}}}</DisplayString>
+  </Type>
+  <Type Name="com::sun::star::uno::Reference &lt; * &gt;">
+    <DisplayString Condition="_pInterface == nullptr">empty</DisplayString>
+    <DisplayString>{{{reinterpret_cast &lt; $T1 * &gt;(_pInterface)}}}</DisplayString>
+    <Expand>
+      <ExpandedItem>reinterpret_cast &lt; $T1 * &gt;(_pInterface)</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="rtl::Reference &lt; * &gt;">
+    <DisplayString Condition="m_pBody == nullptr">empty</DisplayString>
+    <DisplayString>{{{reinterpret_cast &lt; $T1 * &gt;(m_pBody)}}}</DisplayString>
+    <Expand>
+      <ExpandedItem>reinterpret_cast &lt; $T1 * &gt;(m_pBody)</ExpandedItem>
+    </Expand>
+  </Type>
+  <Type Name="VclPtr &lt; * &gt;">
+    <DisplayString>{m_rInnerRef}</DisplayString>
+    <Expand>
+      <ExpandedItem>m_rInnerRef</ExpandedItem>
     </Expand>
   </Type>
 </AutoVisualizer>
