@@ -397,6 +397,8 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                 // Can be 0, as Draws are not allowed in Headers/Footers
                 if ( pFormat )
                 {
+                    // #tdf33692 - drawing object has to be made visible on ctrl+drag copy.
+                    pFormat->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PREPPASTING));
                     SdrObject* pNew = pFormat->FindSdrObject();
                     if ( RndStdIds::FLY_AS_CHAR != aAnchor.GetAnchorId() )
                     {
@@ -1005,9 +1007,8 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                             }
                             else
                             {
-                                OSL_ENSURE( RES_DRAWFRMFMT == pNew->Which(), "Neues Format.");
-                                // #i52780# - drawing object has
-                                // to be made visible on paste.
+                                OSL_ENSURE( RES_DRAWFRMFMT == pNew->Which(), "New format.");
+                                // #i52780# - drawing object has to be made visible on paste.
                                 pNew->CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::PREPPASTING));
                                 SdrObject *pObj = pNew->FindSdrObject();
                                 SwDrawView  *pDV = Imp()->GetDrawView();
