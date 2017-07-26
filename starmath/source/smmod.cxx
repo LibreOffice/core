@@ -47,14 +47,6 @@ OUString SmResId(const char* pId)
     return Translate::get(pId, SM_MOD()->GetResLocale());
 }
 
-SmLocalizedSymbolData::SmLocalizedSymbolData()
-{
-}
-
-SmLocalizedSymbolData::~SmLocalizedSymbolData()
-{
-}
-
 const OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName )
 {
     OUString aRes;

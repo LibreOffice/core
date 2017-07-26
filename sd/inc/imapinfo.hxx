@@ -31,9 +31,6 @@ class SdIMapInfo : public SdrObjUserData, public SfxListener
     ImageMap        aImageMap;
 
 public:
-                    SdIMapInfo() :
-                        SdrObjUserData( SdrInventor::StarDrawUserData, SD_IMAPINFO_ID ) {};
-
                     SdIMapInfo( const ImageMap& rImageMap ) :
                         SdrObjUserData( SdrInventor::StarDrawUserData, SD_IMAPINFO_ID ),
                         aImageMap( rImageMap ) {};

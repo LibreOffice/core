@@ -30,7 +30,7 @@ chart2/source/view/main/OpenGLRender.hxx:121
     int OpenGLRender::Create2DCircle(int)
 connectivity/source/drivers/evoab2/NResultSet.hxx:125
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> connectivity::evoab::OEvoabResultSet::operator*()
-connectivity/source/drivers/evoab2/NResultSetMetaData.hxx:53
+connectivity/source/drivers/evoab2/NResultSetMetaData.hxx:51
     class com::sun::star::uno::Reference<class com::sun::star::sdbc::XResultSetMetaData> connectivity::evoab::OEvoabResultSetMetaData::operator Reference()
 connectivity/source/inc/java/lang/Object.hxx:118
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
@@ -270,6 +270,8 @@ include/vcl/gdimtf.hxx:185
     class SvStream & GDIMetaFile::Read(class SvStream &)
 include/vcl/graphicfilter.hxx:259
     class ErrCode GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
+include/vcl/menu.hxx:460
+    unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)
 lotuswordpro/source/filter/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
 lotuswordpro/source/filter/lwpsvstream.hxx:77

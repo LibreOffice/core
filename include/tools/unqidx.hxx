@@ -41,10 +41,7 @@ public:
 
     Index Insert( void* p );
     // insert value with key, replacing existing entry if necessary
-    void* Remove( Index aIndex );
     void* Get( Index aIndex ) const;
-
-    Index GetIndexOf( void const* p ) const;
 };
 
 template<typename T>
