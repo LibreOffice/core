@@ -2771,25 +2771,32 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
 
             // logically vertical lines are painted centered on the line,
             // logically horizontal lines are painted "below" the line
-            bool const isBelow((mrTabFrame.IsVertical()) ? !bHori : bHori);
-            double const offsetStart = (isBelow)
-                ?   aStyles[0].GetWidth() / 2.0
-                :   std::max<double>(aStyles[1].GetWidth(),
-                        aStyles[3].GetWidth()) / 2.0;
-            double const offsetEnd = (isBelow)
-                ?   aStyles[0].GetWidth() / 2.0
-                :   std::max<double>(aStyles[4].GetWidth(),
-                        aStyles[6].GetWidth()) / 2.0;
-            if (mrTabFrame.IsVertical())
-            {
-                aPaintStart.X() -= static_cast<long>(offsetStart + 0.5);
-                aPaintEnd.X()   -= static_cast<long>(offsetEnd   + 0.5);
-            }
-            else
-            {
-                aPaintStart.Y() += static_cast<long>(offsetStart + 0.5);
-                aPaintEnd.Y()   += static_cast<long>(offsetEnd   + 0.5);
-            }
+            //
+            // This does not need to be done here, it is set in SwTabFramePainter::Insert
+            // already using SetRefMode(...) as property of the BorderLine Style, see there.
+            // When additionally adding the offset here manually, it will be applied
+            // double and will be rendered wrong. This did not happen before because
+            // the setting of the svx::frame::RefMode at svx::frame::Style was ignored there.
+            //
+            // bool const isBelow((mrTabFrame.IsVertical()) ? !bHori : bHori);
+            // double const offsetStart = (isBelow)
+            //     ?   aStyles[0].GetWidth() / 2.0
+            //     :   std::max<double>(aStyles[1].GetWidth(),
+            //             aStyles[3].GetWidth()) / 2.0;
+            // double const offsetEnd = (isBelow)
+            //     ?   aStyles[0].GetWidth() / 2.0
+            //     :   std::max<double>(aStyles[4].GetWidth(),
+            //             aStyles[6].GetWidth()) / 2.0;
+            // if (mrTabFrame.IsVertical())
+            // {
+            //     aPaintStart.X() -= static_cast<long>(offsetStart + 0.5);
+            //     aPaintEnd.X()   -= static_cast<long>(offsetEnd   + 0.5);
+            // }
+            // else
+            // {
+            //     aPaintStart.Y() += static_cast<long>(offsetStart + 0.5);
+            //     aPaintEnd.Y()   += static_cast<long>(offsetEnd   + 0.5);
+            // }
 
             if (bHori)
             {
