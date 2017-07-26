@@ -225,6 +225,26 @@ void ContentInfo::Dump() const
 }
 #endif
 
+bool ContentInfo::operator==( const ContentInfo& rCompare ) const
+{
+    if( (maText == rCompare.maText) &&
+            (aStyle == rCompare.aStyle ) &&
+            (maCharAttribs.size() == rCompare.maCharAttribs.size()) &&
+            (eFamily == rCompare.eFamily ) &&
+            (aParaAttribs == rCompare.aParaAttribs ) )
+    {
+        for (size_t i = 0, n = maCharAttribs.size(); i < n; ++i)
+        {
+            if (!(*(maCharAttribs[i]) == *(rCompare.maCharAttribs[i])))
+                return false;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 EditTextObject::EditTextObject( SfxItemPool* pPool ) :
     mpImpl(new EditTextObjectImpl(this, pPool))
 {
@@ -1606,7 +1626,7 @@ bool EditTextObjectImpl::operator==( const EditTextObjectImpl& rCompare ) const
 
     for (size_t i = 0, n = aContents.size(); i < n; ++i)
     {
-        if (aContents[i] != rCompare.aContents[i])
+        if (!(*(aContents[i]) == *(rCompare.aContents[i])))
             return false;
     }
 
