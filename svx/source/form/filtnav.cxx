@@ -809,7 +809,7 @@ void FmFilterModel::Remove( const ::std::vector<FmFilterData*>::iterator& rPos )
 }
 
 
-bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const
+bool FmFilterModel::ValidateText(FmFilterItem const * pItem, OUString& rText, OUString& rErrorMsg) const
 {
     FmFormItem* pFormItem = dynamic_cast<FmFormItem*>( pItem->GetParent()->GetParent()  );
     try
@@ -1317,7 +1317,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 
 namespace
 {
-    FmFilterItems* getTargetItems(SvTreeListEntry* _pTarget)
+    FmFilterItems* getTargetItems(SvTreeListEntry const * _pTarget)
     {
         FmFilterData*   pData = static_cast<FmFilterData*>(_pTarget->GetUserData());
         FmFilterItems*  pTargetItems = dynamic_cast<FmFilterItems*>(pData);
@@ -1465,7 +1465,7 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
 }
 
 
-void FmFilterNavigator::Remove(FmFilterData* pItem)
+void FmFilterNavigator::Remove(FmFilterData const * pItem)
 {
     // the entry for the data
     SvTreeListEntry* pEntry = FindEntry(pItem);
@@ -1826,7 +1826,7 @@ void FmFilterNavigatorWin::dispose()
 }
 
 
-void FmFilterNavigatorWin::UpdateContent(FmFormShell* pFormShell)
+void FmFilterNavigatorWin::UpdateContent(FmFormShell const * pFormShell)
 {
     if (!m_pNavigator)
         return;

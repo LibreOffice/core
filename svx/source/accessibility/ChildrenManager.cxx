@@ -89,7 +89,7 @@ void ChildrenManager::ClearAccessibleShapeList()
     mpImpl->ClearAccessibleShapeList ();
 }
 
-void ChildrenManager::SetInfo (AccessibleShapeTreeInfo& rShapeTreeInfo)
+void ChildrenManager::SetInfo (AccessibleShapeTreeInfo const & rShapeTreeInfo)
 {
     mpImpl->SetInfo (rShapeTreeInfo);
 }

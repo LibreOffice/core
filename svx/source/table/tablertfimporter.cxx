@@ -91,7 +91,7 @@ public:
     void NextColumn();
     void NewCellRow();
 
-    void InsertCell( RtfImportInfo* pInfo );
+    void InsertCell( RtfImportInfo const * pInfo );
     void InsertColumnEdge( sal_Int32 nEdge );
 
     void FillTable();
@@ -212,7 +212,7 @@ void SdrTableRTFParser::NextRow()
     ++mnRowCnt;
 }
 
-void SdrTableRTFParser::InsertCell( RtfImportInfo* pInfo )
+void SdrTableRTFParser::InsertCell( RtfImportInfo const * pInfo )
 {
 
     RTFCellInfoPtr xCellInfo( new RTFCellInfo(mrItemPool) );

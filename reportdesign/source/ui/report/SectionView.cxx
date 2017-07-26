@@ -132,7 +132,7 @@ void OSectionView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const SdrObject* pObj = pSdrHint->GetObject();
         const SdrHintKind eKind = pSdrHint->GetKind();
         // check for change of selected object
-        if(SdrHintKind::ObjectChange == eKind && pObj && IsObjMarked(const_cast<SdrObject*>(pObj)))
+        if(SdrHintKind::ObjectChange == eKind && pObj && IsObjMarked(pObj))
             AdjustMarkHdl();
         else if ( eKind == SdrHintKind::ObjectRemoved )
             ObjectRemovedInAliveMode(pObj);

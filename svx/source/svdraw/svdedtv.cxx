@@ -112,7 +112,7 @@ void SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
     mpModel->SetChanged();
 }
 
-bool SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
+bool SdrEditView::ImpDelLayerCheck(SdrObjList const * pOL, SdrLayerID nDelID) const
 {
     bool bDelAll(true);
 

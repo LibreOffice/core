@@ -111,7 +111,7 @@ void getLightingDirectionDefaults( const Direction3D **pLighting1Defaults, const
     *pLighting2Defaults = aLighting2Defaults;
 };
 
-static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
+static void impl_execute( SdrView*, SfxRequest const & rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
     static const char sExtrusion[] = "Extrusion";
     static const char sRotateAngle[] = "RotateAngle";
@@ -449,7 +449,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     }
 }
 
-void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBindings )
+void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindings& rBindings )
 {
     sal_uInt16 nSID = rReq.GetSlot();
     const char* pStrResId = nullptr;
@@ -608,7 +608,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
     }
 }
 
-void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
+void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -755,7 +755,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTRUSION_DIRECTION );
 }
 
-void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
+void getExtrusionProjectionState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -810,7 +810,7 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTRUSION_PROJECTION );
 }
 
-void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
+void getExtrusionSurfaceState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -895,7 +895,7 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTRUSION_SURFACE );
 }
 
-void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
+void getExtrusionDepthState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -974,7 +974,7 @@ static bool compare_direction( const Direction3D& d1, const Direction3D& d2 )
     return false;
 }
 
-void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
+void getExtrusionLightingDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -1053,7 +1053,7 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTRUSION_LIGHTING_DIRECTION );
 }
 
-void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
+void getExtrusionLightingIntensityState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -1120,7 +1120,7 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTRUSION_LIGHTING_INTENSITY );
 }
 
-void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
+void getExtrusionColorState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -1192,7 +1192,7 @@ void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
 }
 
 namespace svx {
-bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
+bool checkForSelectedCustomShapes( SdrView const * pSdrView, bool bOnlyExtruded )
 {
     static const char  sExtrusion[] = "Extrusion";
 
@@ -1223,7 +1223,7 @@ bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
 }
 }
 
-void ExtrusionBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
+void ExtrusionBar::getState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     if (rSet.GetItemState(SID_EXTRUSION_DIRECTION) != SfxItemState::UNKNOWN)
     {

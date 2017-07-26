@@ -333,7 +333,7 @@ void GalleryTheme::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 
-void GalleryTheme::implReleaseItems( GalleryObject* pObj )
+void GalleryTheme::implReleaseItems( GalleryObject const * pObj )
 {
     const SolarMutexGuard aGuard;
 

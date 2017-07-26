@@ -74,7 +74,7 @@ private:
     DECL_LINK( OpenPickerClickHdl, Button*, void );
 
     static bool SelectValueSetEntry(SvxColorValueSet* pColorSet, const Color& rColor);
-    static NamedColor GetSelectEntryColor(ValueSet* pColorSet);
+    static NamedColor GetSelectEntryColor(ValueSet const * pColorSet);
     NamedColor GetAutoColor() const;
 
 public:

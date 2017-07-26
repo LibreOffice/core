@@ -71,7 +71,7 @@ OUString GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bN
 //  misc local helper functions
 
 
-static std::vector< LanguageType > lcl_LocaleSeqToLangSeq( Sequence< css::lang::Locale > &rSeq )
+static std::vector< LanguageType > lcl_LocaleSeqToLangSeq( Sequence< css::lang::Locale > const &rSeq )
 {
     const css::lang::Locale *pLocale = rSeq.getConstArray();
     sal_Int32 nCount = rSeq.getLength();

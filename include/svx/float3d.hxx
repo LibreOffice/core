@@ -220,7 +220,7 @@ public:
     void    InitColorLB();
     bool    IsUpdateMode() const { return bUpdate; }
 
-    void    Update( SfxItemSet& rSet );
+    void    Update( SfxItemSet const & rSet );
     void    GetAttr( SfxItemSet& rSet );
 
     void UpdatePreview(); // upward (private)

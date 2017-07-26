@@ -677,7 +677,7 @@ void SvxSearchDialog::InitControls_Impl()
 
 namespace
 {
-    SvtModuleOptions::EFactory getModule(SfxBindings& rBindings)
+    SvtModuleOptions::EFactory getModule(SfxBindings const & rBindings)
     {
         SvtModuleOptions::EFactory eFactory(SvtModuleOptions::EFactory::UNKNOWN_FACTORY);
         try
@@ -1128,10 +1128,10 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Button *, pCtrl, void )
     ClickHdl_Impl(pCtrl);
 }
 
-void SvxSearchDialog::ClickHdl_Impl(void* pCtrl)
+void SvxSearchDialog::ClickHdl_Impl(void const * pCtrl)
 {
     if ( pCtrl && !bSet )
-        SetModifyFlag_Impl( static_cast<Control*>(pCtrl) );
+        SetModifyFlag_Impl( static_cast<Control const *>(pCtrl) );
     else
         bSet = false;
 
@@ -1780,7 +1780,7 @@ void SvxSearchDialog::EnableControls_Impl( const SearchOptionFlags nFlags )
 }
 
 
-void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
+void SvxSearchDialog::EnableControl_Impl( Control const * pCtrl )
 {
     if (m_pSearchBtn == pCtrl && ( SearchOptionFlags::SEARCH & nOptions ) )
     {

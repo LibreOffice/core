@@ -106,13 +106,13 @@ protected:
     TextChainCursorManager *ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, bool *bOutHandled);
 
 
-    OutlinerView* ImpFindOutlinerView(vcl::Window* pWin) const;
+    OutlinerView* ImpFindOutlinerView(vcl::Window const * pWin) const;
 
     // Create a new OutlinerView at the heap and initialize all required parameters.
     // pTextEditObj, pTextEditPV and pTextEditOutliner have to be initialized
     OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, OutlinerView* pGivenView, SfxViewShell* pViewShell = nullptr) const;
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const tools::Rectangle& rRect, OutputDevice& rTargetDevice) const;
-    void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
+    void ImpInvalidateOutlinerView(OutlinerView const & rOutlView) const;
 
     // Chaining
     void ImpChainingEventHdl();
@@ -273,7 +273,7 @@ public:
     void ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
     /** helper function for selections with multiple SdrText for one SdrTextObj (f.e. tables ) */
-    static void ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats );
+    static void ApplyFormatPaintBrushToText( SfxItemSet const & rFormatSet, SdrTextObj& rTextObj, SdrText* pText, bool bNoCharacterFormats, bool bNoParagraphFormats );
 
 protected:
     virtual void OnBeginPasteOrDrop( PasteOrDropInfos* pInfo );

@@ -87,7 +87,7 @@ namespace svxform
     typedef MapModelToShape::value_type ModelShapePair;
 
 
-    void    collectShapeModelMapping( SdrPage* _pPage, MapModelToShape& _rMapping )
+    void    collectShapeModelMapping( SdrPage const * _pPage, MapModelToShape& _rMapping )
     {
         OSL_ENSURE( _pPage, "collectShapeModelMapping: invalid arg!" );
 
@@ -672,14 +672,14 @@ namespace svxform
     }
 
 
-    bool NavigatorTree::IsFormEntry( SvTreeListEntry* pEntry )
+    bool NavigatorTree::IsFormEntry( SvTreeListEntry const * pEntry )
     {
         FmEntryData* pEntryData = static_cast<FmEntryData*>(pEntry->GetUserData());
         return !pEntryData || dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr;
     }
 
 
-    bool NavigatorTree::IsFormComponentEntry( SvTreeListEntry* pEntry )
+    bool NavigatorTree::IsFormComponentEntry( SvTreeListEntry const * pEntry )
     {
         FmEntryData* pEntryData = static_cast<FmEntryData*>(pEntry->GetUserData());
         return pEntryData && dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr;
@@ -1303,7 +1303,7 @@ namespace svxform
     }
 
 
-    void NavigatorTree::NewForm( SvTreeListEntry* pParentEntry )
+    void NavigatorTree::NewForm( SvTreeListEntry const * pParentEntry )
     {
 
         // get ParentFormData
@@ -1365,7 +1365,7 @@ namespace svxform
     }
 
 
-    FmControlData* NavigatorTree::NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, bool bEditName )
+    FmControlData* NavigatorTree::NewControl( const OUString& rServiceName, SvTreeListEntry const * pParentEntry, bool bEditName )
     {
 
         // get ParentForm
@@ -1410,7 +1410,7 @@ namespace svxform
     }
 
 
-    OUString NavigatorTree::GenerateName( FmEntryData* pEntryData )
+    OUString NavigatorTree::GenerateName( FmEntryData const * pEntryData )
     {
         const sal_uInt16 nMaxCount = 99;
         OUString aNewName;
@@ -2001,7 +2001,7 @@ namespace svxform
     }
 
 
-    bool NavigatorTree::IsHiddenControl(FmEntryData* pEntryData)
+    bool NavigatorTree::IsHiddenControl(FmEntryData const * pEntryData)
     {
         if (pEntryData == nullptr) return false;
 
@@ -2033,7 +2033,7 @@ namespace svxform
         pFormView->UnMarkAll();
     }
 
-    void NavigatorTree::MarkViewObj(FmFormData* pFormData, bool bDeep )
+    void NavigatorTree::MarkViewObj(FmFormData const * pFormData, bool bDeep )
     {
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
         if( !pFormShell )
@@ -2078,7 +2078,7 @@ namespace svxform
         } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
     }
 
-    void NavigatorTree::CollectObjects(FmFormData* pFormData, bool bDeep, ::std::set< Reference< XFormComponent > >& _rObjects)
+    void NavigatorTree::CollectObjects(FmFormData const * pFormData, bool bDeep, ::std::set< Reference< XFormComponent > >& _rObjects)
     {
         FmEntryDataList* pChildList = pFormData->GetChildList();
         FmControlData* pControlData;
@@ -2095,7 +2095,7 @@ namespace svxform
         } // for( sal_uInt32 i=0; i<pChildList->Count(); i++ )
     }
 
-    void NavigatorTree::MarkViewObj( FmControlData* pControlData)
+    void NavigatorTree::MarkViewObj( FmControlData const * pControlData)
     {
         if( !pControlData )
             return;

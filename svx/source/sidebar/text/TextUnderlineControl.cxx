@@ -85,7 +85,7 @@ void TextUnderlineControl::dispose()
     SfxPopupWindow::dispose();
 }
 
-FontLineStyle TextUnderlineControl::getLineStyle(Button* pButton)
+FontLineStyle TextUnderlineControl::getLineStyle(Button const * pButton)
 {
     if(pButton == maSingle)
         return LINESTYLE_SINGLE;
