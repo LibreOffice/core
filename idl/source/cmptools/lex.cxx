@@ -290,7 +290,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
     {
         OStringBuffer aBuf;
         while( rtl::isAsciiAlphanumeric( static_cast<unsigned char>(c) )
-               || c == '_' )
+               || c == '_' || c == ':')
         {
             aBuf.append(c);
             c = GetFastNextChar();

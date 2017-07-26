@@ -22,7 +22,7 @@ shell TextObjectBar
     [
         ExecMethod = Execute;
         StateMethod = GetAttrState;
-        GroupId = GID_DOCUMENT;
+        GroupId = SfxGroupId::Document;
         AutoUpdate;
     ]
 

@@ -326,7 +326,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         // at least one dummy
         WriteTab( rOutStm, 1 );
         rOutStm.WriteCharPtr( "SFX_SLOT_ARG(" ).WriteOString( GetName() )
-               .WriteCharPtr( ", 0, SfxGroupId(0), " )
+               .WriteCharPtr( ", 0, SfxGroupId::NONE, " )
                .WriteCharPtr( "SFX_STUB_PTR_EXEC_NONE," )
                .WriteCharPtr( "SFX_STUB_PTR_STATE_NONE," )
                .WriteCharPtr( "SfxSlotMode::NONE, SfxVoidItem, 0, 0, \"\", SfxSlotMode::NONE )" ) << endl;

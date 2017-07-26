@@ -46,21 +46,21 @@ interface DrawDocument
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
      // ?
     FID_SEARCH_ON // ole : ?, status : ?
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
      // ?
     FID_SEARCH_OFF // ole : ?, status : ?
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
     ]
 
     SID_GET_COLORLIST

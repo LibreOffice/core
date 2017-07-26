@@ -188,7 +188,7 @@ interface SlideSorterView
     ]
     SID_RELOAD // ole : no, status : ?
     [
-        GroupId = GID_DOCUMENT ;
+        GroupId = SfxGroupId::Document ;
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
         Asynchron , AutoUpdate ,

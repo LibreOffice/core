@@ -131,7 +131,7 @@ interface CellSelection
     [
         ExecMethod = ExecuteEdit ;
         StateMethod = GetBlockState ;
-        GroupId = GID_EDIT ;  //FS
+        GroupId = SfxGroupId::Edit ;  //FS
         MenuConfig , AccelConfig ;
     ]
     SID_DELETE_CONTENTS [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]

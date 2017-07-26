@@ -33,7 +33,7 @@ namespace sd {
 
 static SfxSlot aLeftImpressPaneShellSlots_Impl[] =
 {
-    { 0, SfxGroupId(0), SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, nullptr }
+    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, nullptr }
 };
 
 SFX_IMPL_INTERFACE(LeftImpressPaneShell, SfxShell)
@@ -58,7 +58,7 @@ LeftImpressPaneShell::~LeftImpressPaneShell()
 
 static SfxSlot aLeftDrawPaneShellSlots_Impl[] =
 {
-    { 0, SfxGroupId(0), SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, nullptr }
+    { 0, SfxGroupId::NONE, SfxSlotMode::NONE, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, 0, SfxDisableFlags::NONE, nullptr }
 };
 
 SFX_IMPL_INTERFACE(LeftDrawPaneShell, SfxShell)

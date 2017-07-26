@@ -52,57 +52,57 @@ namespace
 {
     const char* getGidResId(SfxGroupId nId)
     {
-        if (nId == GID_INTERN)
+        if (nId == SfxGroupId::Intern)
             return STR_GID_INTERN;
-        else if (nId == GID_APPLICATION)
+        else if (nId == SfxGroupId::Application)
             return STR_GID_APPLICATION;
-        else if (nId == GID_VIEW)
+        else if (nId == SfxGroupId::View)
             return STR_GID_VIEW;
-        else if (nId == GID_DOCUMENT)
+        else if (nId == SfxGroupId::Document)
             return STR_GID_DOCUMENT;
-        else if (nId == GID_EDIT)
+        else if (nId == SfxGroupId::Edit)
             return STR_GID_EDIT;
-        else if (nId == GID_MACRO)
+        else if (nId == SfxGroupId::Macro)
             return STR_GID_MACRO;
-        else if (nId == GID_OPTIONS)
+        else if (nId == SfxGroupId::Options)
             return STR_GID_OPTIONS;
-        else if (nId == GID_MATH)
+        else if (nId == SfxGroupId::Math)
             return STR_GID_MATH;
-        else if (nId == GID_NAVIGATOR)
+        else if (nId == SfxGroupId::Navigator)
             return STR_GID_NAVIGATOR;
-        else if (nId == GID_INSERT)
+        else if (nId == SfxGroupId::Insert)
             return STR_GID_INSERT;
-        else if (nId == GID_FORMAT)
+        else if (nId == SfxGroupId::Format)
             return STR_GID_FORMAT;
-        else if (nId == GID_TEMPLATE)
+        else if (nId == SfxGroupId::Template)
             return STR_GID_TEMPLATE;
-        else if (nId == GID_TEXT)
+        else if (nId == SfxGroupId::Text)
             return STR_GID_TEXT;
-        else if (nId == GID_FRAME)
+        else if (nId == SfxGroupId::Frame)
             return STR_GID_FRAME;
-        else if (nId == GID_GRAPHIC)
+        else if (nId == SfxGroupId::Graphic)
             return STR_GID_GRAPHIC;
-        else if (nId == GID_TABLE)
+        else if (nId == SfxGroupId::Table)
             return STR_GID_TABLE;
-        else if (nId == GID_ENUMERATION)
+        else if (nId == SfxGroupId::Enumeration)
             return STR_GID_ENUMERATION;
-        else if (nId == GID_DATA)
+        else if (nId == SfxGroupId::Data)
             return STR_GID_DATA;
-        else if (nId == GID_SPECIAL)
+        else if (nId == SfxGroupId::Special)
             return STR_GID_SPECIAL;
-        else if (nId == GID_IMAGE)
+        else if (nId == SfxGroupId::Image)
             return STR_GID_IMAGE;
-        else if (nId == GID_CHART)
+        else if (nId == SfxGroupId::Chart)
             return STR_GID_CHART;
-        else if (nId == GID_EXPLORER)
+        else if (nId == SfxGroupId::Explorer)
             return STR_GID_EXPLORER;
-        else if (nId == GID_CONNECTOR)
+        else if (nId == SfxGroupId::Connector)
             return STR_GID_CONNECTOR;
-        else if (nId == GID_MODIFY)
+        else if (nId == SfxGroupId::Modify)
             return STR_GID_MODIFY;
-        else if (nId == GID_DRAWING)
+        else if (nId == SfxGroupId::Drawing)
             return STR_GID_DRAWING;
-        else if (nId == GID_CONTROLS)
+        else if (nId == SfxGroupId::Controls)
             return STR_GID_CONTROLS;
         return nullptr;
     }
@@ -130,10 +130,10 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
     for ( size_t nFunc = 0; nFunc < rInterface.Count(); ++nFunc )
     {
         SfxSlot &rDef = rInterface.pSlots[nFunc];
-        if ( rDef.GetGroupId() && /* rDef.GetGroupId() != GID_INTERN && */
+        if ( rDef.GetGroupId() != SfxGroupId::NONE &&
              std::find(_vGroups.begin(), _vGroups.end(), rDef.GetGroupId()) == _vGroups.end() )
         {
-            if (rDef.GetGroupId() == GID_INTERN)
+            if (rDef.GetGroupId() == SfxGroupId::Intern)
                 _vGroups.insert(_vGroups.begin(), rDef.GetGroupId());
             else
                 _vGroups.push_back(rDef.GetGroupId());

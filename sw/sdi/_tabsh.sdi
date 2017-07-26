@@ -92,7 +92,7 @@ interface BaseTextTable
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        GroupId = GID_TABLE;
+        GroupId = SfxGroupId::Table;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
@@ -311,7 +311,7 @@ interface BaseTextTable
     [
         ExecMethod = Execute ;
         StateMethod = GetFrameBorderState ;
-        GroupId = GID_TABLE;
+        GroupId = SfxGroupId::Table;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 

@@ -21,10 +21,10 @@ interface WebDrawBase : BaseTextDrawBase
     import BaseTextSelection;
 }
 
-shell SwWebDrawBaseShell: SwBaseShell
+shell SwWebDrawBaseShell : SwBaseShell
 {
-        import WebDrawBase;
-        import Sidebar;
+    import WebDrawBase;
+    import Sidebar;
 
     SID_OBJECT_ALIGN
     [

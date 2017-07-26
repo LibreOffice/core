@@ -186,7 +186,7 @@ interface BaseTextEditView
     [
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
-        GroupId = GID_EDIT ;
+        GroupId = SfxGroupId::Edit ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
     SID_ATTR_ULSPACE

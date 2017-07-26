@@ -257,7 +257,7 @@ interface BaseTextFrame
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-        GroupId = GID_FRAME;
+        GroupId = SfxGroupId::Frame;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
@@ -379,7 +379,7 @@ interface BaseTextFrame
     [
         ExecMethod = ExecFrameStyle ;
         StateMethod = GetLineStyleState ;
-        GroupId = GID_FRAME;
+        GroupId = SfxGroupId::Frame;
         Export = False;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
