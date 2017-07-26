@@ -47,6 +47,7 @@
 #include <editeng/fontitem.hxx>
 #include "strings.hrc"
 #include "macroass.hxx"
+#include <unicode/uchar.h>
 
 using namespace css;
 
@@ -71,6 +72,8 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
     m_pSubsetLB->set_width_request(m_pSubsetLB->get_preferred_size().Width());
     get(m_pHexCodeText, "hexvalue");    get(m_pDecimalCodeText, "decimalvalue");
     get(m_pFavouritesBtn, "favbtn");
+    get(m_pCharName, "charname");
+    m_pCharName->set_height_request(m_pCharName->GetTextHeight()*2);
     //lock the size request of this widget to the width of the original .ui string
     m_pHexCodeText->set_width_request(m_pHexCodeText->get_preferred_size().Width());
 
@@ -177,6 +180,7 @@ void SvxCharacterMap::dispose()
     m_pShowChar.clear();
     m_pHexCodeText.clear();
     m_pDecimalCodeText.clear();
+    m_pCharName.clear();
 
     maRecentCharList.clear();
     maRecentCharFontList.clear();
@@ -494,6 +498,14 @@ void SvxCharacterMap::init()
         m_pFavCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, CharClickHdl));
         m_pFavCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
     }
+
+    char buffer[100];
+    UErrorCode errorCode;
+
+    /* get the character name */
+    errorCode=U_ZERO_ERROR;
+    u_charName((UChar32)90, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+    m_pCharName->SetText(OUString::createFromAscii(buffer));
 }
 
 bool SvxCharacterMap::isFavChar(const OUString& sTitle, const OUString& rFont)
@@ -577,7 +589,6 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
     }
 }
 
-
 void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
 {
     if(sGlyph.isEmpty())
@@ -647,6 +658,17 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
     m_pSubsetLB->Enable(bNeedSubset);
 }
 
+void SvxCharacterMap::setCharName(char decimal[])
+{
+    int nDecimalValue = std::stoi(decimal);
+    char buffer[100];
+    UErrorCode errorCode;
+
+    /* get the character name */
+    errorCode=U_ZERO_ERROR;
+    u_charName((UChar32)nDecimalValue, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+    m_pCharName->SetText(OUString::createFromAscii(buffer));
+}
 
 IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
 {
@@ -686,6 +708,7 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
 
     m_pHexCodeText->SetText( aHexText );
     m_pDecimalCodeText->SetText( aDecimalText );
+    setCharName(aDecBuf);
 
     rView->Invalidate();
     m_pOKBtn->Enable();
@@ -774,6 +797,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         char aDecBuf[32];
         snprintf( aDecBuf, sizeof(aDecBuf), "%u", static_cast<unsigned>(cChar) );
         aDecimalText = OUString::createFromAscii(aDecBuf);
+        setCharName(aDecBuf);
     }
 
     // Update the hex and decimal codes only if necessary
