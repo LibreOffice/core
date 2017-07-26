@@ -1043,7 +1043,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
     /*-
      * The following lines is based on the of xmlsec-mscrypto crypto engine
      */
-    pKeysMngr = xmlSecMSCryptoAppliedKeysMngrCreate( m_hKeyStore , m_hCertStore ) ;
+    pKeysMngr = xmlSecMSCryptoAppliedKeysMngrCreate() ;
     if( pKeysMngr == nullptr )
         throw RuntimeException() ;
 

@@ -26,11 +26,7 @@
 #include <xmlsec/keys.h>
 #include <xmlsec/transforms.h>
 
-xmlSecKeysMngrPtr
-xmlSecMSCryptoAppliedKeysMngrCreate(
-    HCERTSTORE keyStore,
-    HCERTSTORE certStore
-) ;
+xmlSecKeysMngrPtr xmlSecMSCryptoAppliedKeysMngrCreate();
 
 int
 xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore(
