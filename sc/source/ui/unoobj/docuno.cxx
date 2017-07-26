@@ -2310,10 +2310,10 @@ void SAL_CALL ScModelObj::setPropertyValue(
         }
         else if ( aPropertyName == SC_UNO_ISADJUSTHEIGHTENABLED )
         {
-            bool bOldAdjustHeightEnabled = rDoc.IsAdjustHeightEnabled();
-            bool bAdjustHeightEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-            if( bOldAdjustHeightEnabled != bAdjustHeightEnabled )
-                rDoc.EnableAdjustHeight( bAdjustHeightEnabled );
+            if( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )
+                rDoc.LockAdjustHeight();
+            else
+                rDoc.UnlockAdjustHeight();
         }
         else if ( aPropertyName == SC_UNO_ISEXECUTELINKENABLED )
         {
@@ -2498,7 +2498,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         }
         else if ( aPropertyName == SC_UNO_ISADJUSTHEIGHTENABLED )
         {
-            aRet <<= rDoc.IsAdjustHeightEnabled();
+            aRet <<= !( rDoc.IsAdjustHeightLocked() );
         }
         else if ( aPropertyName == SC_UNO_ISEXECUTELINKENABLED )
         {
