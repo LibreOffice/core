@@ -57,7 +57,6 @@ private:
     Point           maPosition;
     vcl::Font       maFont;
 
-    Link<SvxCharView*, void> maInsertCharHdl;
     Link<SvxCharView*, void> maMouseClickHdl;
     Link<SvxCharView*, void> maClearClickHdl;
     Link<SvxCharView*, void> maClearAllClickHdl;

@@ -1543,14 +1543,7 @@ ScXMLImport::ScXMLImport(
     sLocale(SC_LOCALE),
     sCellStyle(SC_UNONAME_CELLSTYL),
     pDocElemTokenMap( nullptr ),
-    pBodyElemTokenMap( nullptr ),
-    pContentValidationsElemTokenMap( nullptr ),
-    pContentValidationElemTokenMap( nullptr ),
-    pContentValidationAttrTokenMap( nullptr ),
     pContentValidationMessageElemTokenMap( nullptr ),
-    pContentValidationHelpMessageAttrTokenMap( nullptr ),
-    pContentValidationErrorMessageAttrTokenMap( nullptr ),
-    pContentValidationErrorMacroAttrTokenMap( nullptr ),
     pCondFormatsTokenMap( nullptr ),
     pCondFormatTokenMap( nullptr ),
     pCondFormatAttrMap( nullptr ),
@@ -1562,15 +1555,8 @@ ScXMLImport::ScXMLImport(
     pDataBarAttrMap( nullptr ),
     pFormattingEntryAttrMap( nullptr ),
     pIconSetAttrMap( nullptr ),
-    pLabelRangesElemTokenMap( nullptr ),
-    pLabelRangeAttrTokenMap( nullptr ),
     pTableElemTokenMap( nullptr ),
-    pTableProtectionElemTokenMap(nullptr),
     pTableRowsElemTokenMap( nullptr ),
-    pTableColsElemTokenMap( nullptr ),
-    pTableScenarioAttrTokenMap( nullptr ),
-    pTableAttrTokenMap( nullptr ),
-    pTableColAttrTokenMap( nullptr ),
     pTableRowElemTokenMap( nullptr ),
     pTableRowAttrTokenMap( nullptr ),
     pTableRowCellElemTokenMap( nullptr ),
@@ -1580,12 +1566,6 @@ ScXMLImport::ScXMLImport(
     pDetectiveHighlightedAttrTokenMap( nullptr ),
     pDetectiveOperationAttrTokenMap( nullptr ),
     pTableCellRangeSourceAttrTokenMap( nullptr ),
-    pNamedExpressionsElemTokenMap( nullptr ),
-    pNamedRangeAttrTokenMap( nullptr ),
-    pNamedExpressionAttrTokenMap( nullptr ),
-    pDatabaseRangesElemTokenMap( nullptr ),
-    pDatabaseRangeElemTokenMap( nullptr ),
-    pDatabaseRangeAttrTokenMap( nullptr ),
     pDatabaseRangeSourceSQLAttrTokenMap( nullptr ),
     pDatabaseRangeSourceTableAttrTokenMap( nullptr ),
     pDatabaseRangeSourceQueryAttrTokenMap( nullptr ),
@@ -1595,14 +1575,7 @@ ScXMLImport::ScXMLImport(
     pFilterConditionAttrTokenMap( nullptr ),
     pFilterSetItemAttrTokenMap( nullptr ),
     pSortElemTokenMap( nullptr ),
-    pSortAttrTokenMap( nullptr ),
     pSortSortByAttrTokenMap( nullptr ),
-    pDatabaseRangeSubTotalRulesElemTokenMap( nullptr ),
-    pDatabaseRangeSubTotalRulesAttrTokenMap( nullptr ),
-    pSubTotalRulesSortGroupsAttrTokenMap( nullptr ),
-    pSubTotalRulesSubTotalRuleElemTokenMap( nullptr ),
-    pSubTotalRulesSubTotalRuleAttrTokenMap( nullptr ),
-    pSubTotalRuleSubTotalFieldAttrTokenMap( nullptr ),
     pDataPilotTablesElemTokenMap( nullptr ),
     pDataPilotTableAttrTokenMap( nullptr ),
     pDataPilotTableElemTokenMap( nullptr ),
@@ -1618,13 +1591,11 @@ ScXMLImport::ScXMLImport(
     pDataPilotSubTotalAttrTokenMap( nullptr ),
     pDataPilotMembersElemTokenMap( nullptr ),
     pDataPilotMemberAttrTokenMap( nullptr ),
-    pConsolidationAttrTokenMap( nullptr ),
     pCellTextParaElemTokenMap(nullptr),
     pCellTextSpanElemTokenMap(nullptr),
     pCellTextSpanAttrTokenMap(nullptr),
     pCellTextURLAttrTokenMap(nullptr),
     pCellTextSAttrTokenMap(nullptr),
-    pDataStreamAttrTokenMap(nullptr),
     mpPostProcessData(nullptr),
     aTables(*this),
     m_pMyNamedExpressions(nullptr),
@@ -1683,14 +1654,8 @@ ScXMLImport::~ScXMLImport() throw()
 {
     //  delete pI18NMap;
     delete pDocElemTokenMap;
-    delete pBodyElemTokenMap;
-    delete pContentValidationsElemTokenMap;
     delete pContentValidationElemTokenMap;
-    delete pContentValidationAttrTokenMap;
     delete pContentValidationMessageElemTokenMap;
-    delete pContentValidationHelpMessageAttrTokenMap;
-    delete pContentValidationErrorMessageAttrTokenMap;
-    delete pContentValidationErrorMacroAttrTokenMap;
     delete pCondFormatsTokenMap;
     delete pCondFormatTokenMap;
     delete pCondFormatAttrMap;
@@ -1701,15 +1666,8 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDataBarTokenMap;
     delete pDataBarAttrMap;
     delete pFormattingEntryAttrMap;
-    delete pLabelRangesElemTokenMap;
-    delete pLabelRangeAttrTokenMap;
     delete pTableElemTokenMap;
-    delete pTableProtectionElemTokenMap;
     delete pTableRowsElemTokenMap;
-    delete pTableColsElemTokenMap;
-    delete pTableAttrTokenMap;
-    delete pTableScenarioAttrTokenMap;
-    delete pTableColAttrTokenMap;
     delete pTableRowElemTokenMap;
     delete pTableRowAttrTokenMap;
     delete pTableRowCellElemTokenMap;
@@ -1719,12 +1677,6 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDetectiveHighlightedAttrTokenMap;
     delete pDetectiveOperationAttrTokenMap;
     delete pTableCellRangeSourceAttrTokenMap;
-    delete pNamedExpressionsElemTokenMap;
-    delete pNamedRangeAttrTokenMap;
-    delete pNamedExpressionAttrTokenMap;
-    delete pDatabaseRangesElemTokenMap;
-    delete pDatabaseRangeElemTokenMap;
-    delete pDatabaseRangeAttrTokenMap;
     delete pDatabaseRangeSourceSQLAttrTokenMap;
     delete pDatabaseRangeSourceTableAttrTokenMap;
     delete pDatabaseRangeSourceQueryAttrTokenMap;
@@ -1734,14 +1686,7 @@ ScXMLImport::~ScXMLImport() throw()
     delete pFilterConditionAttrTokenMap;
     delete pFilterSetItemAttrTokenMap;
     delete pSortElemTokenMap;
-    delete pSortAttrTokenMap;
     delete pSortSortByAttrTokenMap;
-    delete pDatabaseRangeSubTotalRulesElemTokenMap;
-    delete pDatabaseRangeSubTotalRulesAttrTokenMap;
-    delete pSubTotalRulesSortGroupsAttrTokenMap;
-    delete pSubTotalRulesSubTotalRuleElemTokenMap;
-    delete pSubTotalRulesSubTotalRuleAttrTokenMap;
-    delete pSubTotalRuleSubTotalFieldAttrTokenMap;
     delete pDataPilotTablesElemTokenMap;
     delete pDataPilotTableAttrTokenMap;
     delete pDataPilotTableElemTokenMap;
@@ -1756,13 +1701,11 @@ ScXMLImport::~ScXMLImport() throw()
     delete pDataPilotSubTotalAttrTokenMap;
     delete pDataPilotMembersElemTokenMap;
     delete pDataPilotMemberAttrTokenMap;
-    delete pConsolidationAttrTokenMap;
     delete pCellTextParaElemTokenMap;
     delete pCellTextSpanElemTokenMap;
     delete pCellTextSpanAttrTokenMap;
     delete pCellTextURLAttrTokenMap;
     delete pCellTextSAttrTokenMap;
-    delete pDataStreamAttrTokenMap;
 
     delete pChangeTrackingImportHelper;
     delete pNumberFormatAttributesExportHelper;
