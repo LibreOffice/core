@@ -40,6 +40,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>
+#include <docsh.hxx>
 
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
@@ -1799,6 +1800,15 @@ formula::VectorRefArray ScDocument::FetchVectorRefArray( const ScAddress& rPos, 
         return formula::VectorRefArray();
 
     return maTabs[nTab]->FetchVectorRefArray(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
+}
+
+void ScDocument::UnlockAdjustHeight()
+{
+    assert(nAdjustHeightLock > 0);
+    if(nAdjustHeightLock > 0)
+        --nAdjustHeightLock;
+    if(nAdjustHeightLock == 0)
+        static_cast<ScDocShell*>( GetDocumentShell() )->UpdateAllRowHeights();
 }
 
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )

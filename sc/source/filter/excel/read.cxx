@@ -1290,7 +1290,7 @@ ErrCode ImportExcel8::Read()
         // Excel documents look much better without this call; better in the
         // sense that the row heights are identical to the original heights in
         // Excel.
-        if (pD->IsAdjustHeightEnabled())
+        if ( !pD->IsAdjustHeightLocked())
             AdjustRowHeight();
 #endif
         PostDocLoad();
