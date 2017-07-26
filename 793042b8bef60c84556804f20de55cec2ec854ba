@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_22c22c86",
+        "filename": "sw/qa/extras/rtfexport/rtfexport3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-07-26T02:53:24Z",
+      "side": 1,
+      "message": "import only for now.  Another patch makes it exportable.",
+      "range": {
+        "startLine": 39,
+        "startChar": 11,
+        "endLine": 39,
+        "endChar": 17
+      },
+      "revId": "793042b8bef60c84556804f20de55cec2ec854ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_62bc3406",
+        "filename": "writerfilter/source/rtftok/rtfdispatchdestination.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-07-26T02:53:24Z",
+      "side": 1,
+      "message": "my runProps() pretty much invalidates these lines I think. Not sure why they were added.  Removing them doesn\u0027t break \"make check\".\n\nOriginally coded by vmiklos in 2011 with https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dfbdc98489973a33af4ef3f6ae072abe51716c564",
+      "range": {
+        "startLine": 320,
+        "startChar": 20,
+        "endLine": 321,
+        "endChar": 60
+      },
+      "revId": "793042b8bef60c84556804f20de55cec2ec854ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
