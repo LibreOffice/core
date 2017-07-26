@@ -166,7 +166,7 @@ public:
     void    SetReadOnly(bool bRead){m_bReadOnly = bRead;}
     void    SetObject(sal_Int16 nPos) {m_bObject = m_bReadOnly = true; m_nFieldPos = nPos;}
 
-    void    ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat );
+    void    ImplInitWindow( vcl::Window const & rParent, const InitWindowFacet _eInitWhat );
 
     // properties that can bleed through onto the css::frame::Controller
     sal_Int16   SetAlignment(sal_Int16 _nAlign);
@@ -292,7 +292,7 @@ public:
     virtual void PaintFieldToCell( OutputDevice& rDev, const tools::Rectangle& rRect, const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
     virtual void PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRect );
 
-    void  ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat );
+    void  ImplInitWindow( vcl::Window const & rParent, const InitWindowFacet _eInitWhat );
 
     double GetValue(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) const;
 
@@ -779,7 +779,7 @@ public:
     virtual void SAL_CALL removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) override;
 
     bool Commit() {return m_pCellControl->Commit();}
-    void ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat )
+    void ImplInitWindow( vcl::Window const & rParent, const InitWindowFacet _eInitWhat )
         { m_pCellControl->ImplInitWindow( rParent, _eInitWhat ); }
 
     bool isAlignedController() const { return m_pCellControl->isAlignedController(); }

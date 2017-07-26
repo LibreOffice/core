@@ -71,7 +71,7 @@ public:
     void                SetName( const OUString& rName ) { m_sPageName = rName; }
     static bool         RequestHelp(
                             vcl::Window* pWin,
-                            SdrView* pView,
+                            SdrView const * pView,
                             const HelpEvent& rEvt );
 
 protected:

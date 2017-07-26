@@ -46,7 +46,7 @@ private:
     VclPtr<MetricField>    maMtrTrgrEndValue;
     VclPtr<MetricField>    maMtrTrgrBorder;
 
-    void InitStatus(XFillFloatTransparenceItem* pGradientItem);
+    void InitStatus(XFillFloatTransparenceItem const * pGradientItem);
     void ExecuteValueModify(sal_uInt8 nStartCol, sal_uInt8 nEndCol);
     DECL_LINK(ModifiedTrgrHdl_Impl, Edit&, void);
     DECL_LINK(Left_Click45_Impl, ToolBox*, void);
@@ -54,7 +54,7 @@ private:
 public:
     AreaTransparencyGradientPopup(AreaPropertyPanelBase& rPanel);
     virtual ~AreaTransparencyGradientPopup() override;
-    void Rearrange (XFillFloatTransparenceItem* pItem);
+    void Rearrange (XFillFloatTransparenceItem const * pItem);
     virtual void dispose() override;
 };
 

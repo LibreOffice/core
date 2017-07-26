@@ -89,7 +89,7 @@ public:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
 
-    void UpdateContent(FmFormShell*);
+    void UpdateContent(FmFormShell const *);
     void UpdateContent(const css::uno::Reference< css::form::XForm > &);
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
 

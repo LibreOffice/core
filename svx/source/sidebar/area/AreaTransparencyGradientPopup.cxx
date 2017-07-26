@@ -56,7 +56,7 @@ AreaTransparencyGradientPopup::~AreaTransparencyGradientPopup()
     disposeOnce();
 }
 
-void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem* pGradientItem)
+void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const * pGradientItem)
 {
     const XGradient& rGradient = pGradientItem->GetGradientValue();
 
@@ -85,7 +85,7 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem* pGrad
     maMtrTrgrBorder->SetValue(aGradient.GetBorder());
 }
 
-void AreaTransparencyGradientPopup::Rearrange(XFillFloatTransparenceItem* pGradientItem)
+void AreaTransparencyGradientPopup::Rearrange(XFillFloatTransparenceItem const * pGradientItem)
 {
     InitStatus(pGradientItem);
     const XGradient& rGradient = pGradientItem->GetGradientValue();

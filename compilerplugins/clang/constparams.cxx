@@ -111,6 +111,9 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
             || name == "my_if_errors"
             || name == "my_eval_defined"
             || name == "my_eval_variable"
+            || name == "ImpGetEscDir"
+            || name == "ImpGetPercent"
+            || name == "ImpGetAlign"
              // #ifdef win32
             || name == "convert_slashes"
                 // UNO component entry points
@@ -268,9 +271,10 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
             if (operatorCallExpr->getArg(0) == stmt) {
                 return calleeMethodDecl->isConst();
             }
-            if (operatorCallExpr->getArg(1) == stmt) {
-                return isPointerOrReferenceToConst(calleeMethodDecl->getParamDecl(0)->getType());
-            }
+            for (unsigned i = 1; i < operatorCallExpr->getNumArgs(); ++i)
+                if (operatorCallExpr->getArg(i) == stmt) {
+                    return isPointerOrReferenceToConst(calleeMethodDecl->getParamDecl(i - 1)->getType());
+                }
         } else {
             const Expr* callee = operatorCallExpr->getCallee()->IgnoreParenImpCasts();
             const DeclRefExpr* dr = dyn_cast<DeclRefExpr>(callee);

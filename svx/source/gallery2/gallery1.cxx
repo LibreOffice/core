@@ -743,7 +743,7 @@ GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
     return pTheme;
 }
 
-void Gallery::ImplDeleteCachedTheme( GalleryTheme* pTheme )
+void Gallery::ImplDeleteCachedTheme( GalleryTheme const * pTheme )
 {
     GalleryCacheThemeList::const_iterator aEnd = aThemeCache.end();
     for (GalleryCacheThemeList::iterator it = aThemeCache.begin(); it != aEnd; ++it)

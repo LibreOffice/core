@@ -262,7 +262,7 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectToolbarMenuHdl, ToolbarMenu*, pContro
 {
     SelectHdl(pControl);
 }
-void ExtrusionDirectionWindow::SelectHdl(void* pControl)
+void ExtrusionDirectionWindow::SelectHdl(void const * pControl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -761,7 +761,7 @@ IMPL_LINK( ExtrusionLightingWindow, SelectToolbarMenuHdl, ToolbarMenu*, pControl
 {
     SelectHdl(pControl);
 }
-void ExtrusionLightingWindow::SelectHdl(void* pControl)
+void ExtrusionLightingWindow::SelectHdl(void const * pControl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();

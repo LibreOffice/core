@@ -79,7 +79,7 @@ protected:
     void init();
 
     /// @throws css::beans::UnknownPropertyException
-    static void getAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, css::uno::Any& rValue );
+    static void getAny( SfxItemPool const * pPool, const comphelper::PropertyMapEntry* pEntry, css::uno::Any& rValue );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException

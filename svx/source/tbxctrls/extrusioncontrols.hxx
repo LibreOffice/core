@@ -76,7 +76,7 @@ private:
 
     DECL_LINK( SelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK( SelectValueSetHdl, ValueSet*, void );
-    void SelectHdl(void*);
+    void SelectHdl(void const *);
 
     void implSetDirection( sal_Int32 nSkew, bool bEnabled );
     void implSetProjection( sal_Int32 nProjection, bool bEnabled );
@@ -170,7 +170,7 @@ private:
 
     DECL_LINK( SelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK( SelectValueSetHdl, ValueSet*, void );
-    void SelectHdl(void*);
+    void SelectHdl(void const *);
 public:
     ExtrusionLightingWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
     virtual ~ExtrusionLightingWindow() override;

@@ -107,7 +107,7 @@ private:
     GalleryThemeEntry*          ImplGetThemeEntry( const OUString& rThemeName );
 
     SAL_DLLPRIVATE GalleryTheme* ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
-    SAL_DLLPRIVATE void         ImplDeleteCachedTheme( GalleryTheme* pTheme );
+    SAL_DLLPRIVATE void         ImplDeleteCachedTheme( GalleryTheme const * pTheme );
 
                                 Gallery( const OUString& rMultiPath );
                                 virtual ~Gallery() override;

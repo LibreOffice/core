@@ -79,7 +79,7 @@ E3dExtrudeObj::E3dExtrudeObj()
     SetDefaultAttributes(aDefault);
 }
 
-void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
+void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes const & rDefault)
 {
     GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(rDefault.GetDefaultExtrudeSmoothed()));
     GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(rDefault.GetDefaultExtrudeSmoothFrontBack()));

@@ -90,7 +90,7 @@ FmFormObjFactory::~FmFormObjFactory()
 // create css::form::Form objects
 namespace
 {
-    void    lcl_initProperty( FmFormObj* _pObject, const OUString& _rPropName, const Any& _rValue )
+    void    lcl_initProperty( FmFormObj const * _pObject, const OUString& _rPropName, const Any& _rValue )
     {
         try
         {

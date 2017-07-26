@@ -1392,7 +1392,7 @@ void SvxColorWindow::KeyInput( const KeyEvent& rKEvt )
     mpColorSet->KeyInput(rKEvt);
 }
 
-NamedColor SvxColorWindow::GetSelectEntryColor(ValueSet* pColorSet)
+NamedColor SvxColorWindow::GetSelectEntryColor(ValueSet const * pColorSet)
 {
     Color aColor = pColorSet->GetItemColor(pColorSet->GetSelectItemId());
     OUString sColorName = pColorSet->GetItemText(pColorSet->GetSelectItemId());

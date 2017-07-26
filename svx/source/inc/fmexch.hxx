@@ -168,12 +168,12 @@ namespace svxform
             const css::uno::Reference< css::form::XForms >& _rxFormsRoot
             ) { m_xFormsRoot = _rxFormsRoot; }
 
-        void buildPathFormat(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot);
+        void buildPathFormat(SvTreeListBox const * pTreeBox, SvTreeListEntry const * pRoot);
             // assembles m_aControlPaths from m_aSelectedEntries
             // (it is assumed that the entries are sorted in m_aSelectedEntries with respect to the neighbor relationship)
 
 
-        void buildListFromPath(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot);
+        void buildListFromPath(SvTreeListBox const * pTreeBox, SvTreeListEntry* pRoot);
             // The reverse way: throws everything out of m_aSelectedEntries and rebuilds it using m_aControlPaths
 
         void addHiddenControlsFormat(const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces);

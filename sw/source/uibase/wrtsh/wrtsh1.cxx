@@ -1378,15 +1378,12 @@ SelectionType SwWrtShell::GetSelectionType() const
             else if( GetDrawView()->GetContext() == SdrViewContext::Media )
                 nCnt |= SelectionType::Media;
 
-            if (svx::checkForSelectedCustomShapes(
-                const_cast<SdrView *>(GetDrawView()),
-                true /* bOnlyExtruded */ ))
+            if (svx::checkForSelectedCustomShapes( GetDrawView(), true /* bOnlyExtruded */ ))
             {
                 nCnt |= SelectionType::ExtrudedCustomShape;
             }
             sal_uInt32 nCheckStatus = 0;
-            if (svx::checkForSelectedFontWork(
-                const_cast<SdrView *>(GetDrawView()), nCheckStatus ))
+            if (svx::checkForSelectedFontWork( GetDrawView(), nCheckStatus ))
             {
                 nCnt |= SelectionType::FontWork;
             }

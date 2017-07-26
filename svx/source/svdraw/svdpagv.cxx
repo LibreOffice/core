@@ -632,7 +632,7 @@ bool SdrPageView::IsLayer(const OUString& rName, const SdrLayerIDSet& rBS) const
     return bRet;
 }
 
-bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
+bool SdrPageView::IsObjMarkable(SdrObject const * pObj) const
 {
     if (!pObj)
         return false;
@@ -646,7 +646,7 @@ bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
     {
         // If object is a Group object, visibility may depend on
         // multiple layers. If one object is markable, Group is markable.
-        SdrObjList* pObjList = static_cast<SdrObjGroup*>(pObj)->GetSubList();
+        SdrObjList* pObjList = static_cast<SdrObjGroup const *>(pObj)->GetSubList();
 
         if (pObjList && pObjList->GetObjCount())
         {

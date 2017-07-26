@@ -445,7 +445,7 @@ void SdrCaptionObj::ImpRecalcTail()
 // tail end pos for SdrCaptionType::Type1. This sure was the simplest method
 // to achieve this, at the cost of making a whole group of const methods
 // of this object implicitly change the object's position.
-void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect)
+void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect)
 {
     tools::Polygon aPol(2);
     Point aTl(rPoly[0]);
@@ -471,7 +471,7 @@ void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, tools::Polygon& rPo
     rPoly = aPol;
 }
 
-void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect)
+void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect)
 { // Gap/EscDir/EscPos/Angle
     tools::Polygon aPol(2);
     Point aTl(rPoly[0]);
@@ -488,7 +488,7 @@ void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, tools::Polygon& rPo
     rPoly=aPol;
 }
 
-void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect)
+void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect)
 { // Gap/EscDir/EscPos/Angle/LineLen
     tools::Polygon aPol(3);
     Point aTl(rPoly[0]);
@@ -521,7 +521,7 @@ void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, tools::Polygon& rPo
     rPoly=aPol;
 }
 
-void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle& rRect)
+void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, tools::Polygon& rPoly, tools::Rectangle const & rRect)
 {
     switch (rPara.eType) {
         case SdrCaptionType::Type1: ImpCalcTail1(rPara,rPoly,rRect); break;
