@@ -510,9 +510,7 @@ void CreateBorderPrimitives(
     const DiagStyle& /*rRFromBL*/,
     const Color* pForceColor)
 {
-    static bool bCheckNewStuff(true);
-
-    if (bCheckNewStuff && rBorder.Prim())
+    if (rBorder.Prim())
     {
         double mfExtendLeftStart(0.0);
         double mfExtendLeftEnd(0.0);
@@ -522,6 +520,30 @@ void CreateBorderPrimitives(
         getOffsetsFromStyle(rBorder, myOffsets);
         const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
         const double fLength(rX.getLength());
+
+        // do not forget RefMode offset, primitive will assume RefMode::Centered
+        basegfx::B2DVector aRefModeOffset;
+
+        if (RefMode::Centered != rBorder.GetRefMode())
+        {
+            const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
+            const double fHalfWidth(rBorder.GetWidth() * 0.5);
+
+            if (RefMode::Begin == rBorder.GetRefMode())
+            {
+                // move aligned below vector
+                aRefModeOffset = aPerpendX * fHalfWidth;
+            }
+            else if (RefMode::End == rBorder.GetRefMode())
+            {
+                // move aligned above vector
+                aRefModeOffset = aPerpendX * -fHalfWidth;
+            }
+        }
+
+        // create start/end for RefMode::Centered
+        const basegfx::B2DPoint aStart(rOrigin + aRefModeOffset);
+        const basegfx::B2DPoint aEnd(aStart + rX);
 
         if (2 == myOffsets.size())
         {
@@ -537,6 +559,18 @@ void CreateBorderPrimitives(
             std::vector< double > nMinCutsE(getMinMaxCuts(false, myCutsE));
             mfExtendLeftEnd = ((nMinCutsE[0] + nMinCutsE[1]) * 0.5) * fLength;
 
+            rTarget.append(
+                drawinglayer::primitive2d::Primitive2DReference(
+                    new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                        aStart,
+                        aEnd,
+                        drawinglayer::primitive2d::BorderLine(
+                            rBorder.Prim(),
+                            (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
+                            mfExtendLeftStart,
+                            mfExtendLeftEnd),
+                        rBorder.Type(),
+                        rBorder.PatternScale())));
         }
         else if (4 == myOffsets.size())
         {
@@ -615,74 +649,31 @@ void CreateBorderPrimitives(
 
                 mfExtendRightEnd = ((nMinCutsE[0] + nMinCutsE[1]) * 0.5) * fLength;
             }
+
+            rTarget.append(
+                drawinglayer::primitive2d::Primitive2DReference(
+                    new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                        aStart,
+                        aEnd,
+                        drawinglayer::primitive2d::BorderLine(
+                            rBorder.Prim(),
+                            (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
+                            mfExtendLeftStart,
+                            mfExtendLeftEnd),
+                        drawinglayer::primitive2d::BorderLine(
+                            rBorder.Dist(),
+                            (pForceColor ? *pForceColor : rBorder.GetColorGap()).getBColor(),
+                            (mfExtendLeftStart + mfExtendRightStart) * 0.5,
+                            (mfExtendLeftEnd + mfExtendRightEnd) * 0.5),
+                        drawinglayer::primitive2d::BorderLine(
+                            rBorder.Secn(),
+                            (pForceColor ? *pForceColor : rBorder.GetColorSecn()).getBColor(),
+                            mfExtendRightStart,
+                            mfExtendRightEnd),
+                        rBorder.UseGapColor(),
+                        rBorder.Type(),
+                        rBorder.PatternScale())));
         }
-
-        // do not forget RefMode offset, primitive will assume RefMode::Centered
-        basegfx::B2DVector aRefModeOffset;
-
-        if (RefMode::Centered != rBorder.GetRefMode())
-        {
-            const basegfx::B2DVector aPerpendX(basegfx::getNormalizedPerpendicular(rX));
-            const double fHalfWidth(rBorder.GetWidth() * 0.5);
-
-            if (RefMode::Begin == rBorder.GetRefMode())
-            {
-                // move aligned below vector
-                aRefModeOffset = aPerpendX * fHalfWidth;
-            }
-            else if (RefMode::End == rBorder.GetRefMode())
-            {
-                // move aligned above vector
-                aRefModeOffset = aPerpendX * -fHalfWidth;
-            }
-        }
-
-        // create start/end for RefMode::Centered
-        const basegfx::B2DPoint aStart(rOrigin + aRefModeOffset);
-        const basegfx::B2DPoint aEnd(aStart + rX);
-
-        rTarget.append(
-            drawinglayer::primitive2d::Primitive2DReference(
-                new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                    aStart,
-                    aEnd,
-                    rBorder.Prim(),
-                    rBorder.Dist(),
-                    rBorder.Secn(),
-                    mfExtendLeftStart,
-                    mfExtendLeftEnd,
-                    mfExtendRightStart,
-                    mfExtendRightEnd,
-                    (pForceColor ? *pForceColor : rBorder.GetColorSecn()).getBColor(),
-                    (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
-                    (pForceColor ? *pForceColor : rBorder.GetColorGap()).getBColor(),
-                    rBorder.UseGapColor(),
-                    rBorder.Type(),
-                    rBorder.PatternScale())));
-    }
-
-    if (!bCheckNewStuff && (rBorder.Prim() || rBorder.Secn()))
-    {
-        basegfx::B2DPoint aStart(rOrigin);
-        basegfx::B2DPoint aEnd(rOrigin + rX);
-        const long nRotateT = 9000; /// Angle of the top slanted frames in 100th of degree
-        const long nRotateB = 9000; /// Angle of the bottom slanted frames in 100th of degree
-
-        rTarget.append(
-            drawinglayer::primitive2d::Primitive2DReference(
-                new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                    aStart, aEnd,
-                    rBorder.Prim(),
-                    rBorder.Dist(),
-                    rBorder.Secn(),
-                    lcl_GetExtent(rBorder, rLFromT, rLFromB, nRotateT, -nRotateB, true, false),                  // top-left, so left for rBorder and right for left outer
-                    lcl_GetExtent(rBorder, rRFromT, rRFromB, 18000 - nRotateT, nRotateB - 18000, true, true),     // top-right
-                    lcl_GetExtent(rBorder, rLFromB, rLFromT, nRotateB, -nRotateT, false, false),                 // bottom-left
-                    lcl_GetExtent(rBorder, rRFromB, rRFromT, 18000 - nRotateB, nRotateT - 18000, false, true),    // bottom-right
-                    (pForceColor ? *pForceColor : rBorder.GetColorSecn()).getBColor(),
-                    (pForceColor ? *pForceColor : rBorder.GetColorPrim()).getBColor(),
-                    (pForceColor ? *pForceColor : rBorder.GetColorGap()).getBColor(),
-                    rBorder.UseGapColor(), rBorder.Type(), rBorder.PatternScale())));
     }
 }
 
@@ -742,45 +733,57 @@ void CreateDiagFrameBorderPrimitives(
     if (rTLBR.Prim())
     {
         // top-left to bottom-right
-        rTarget.append(
-            new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                rOrigin,
-                rOrigin + rXAxis + rYAxis,
-                rTLBR.Prim(),
-                rTLBR.Dist(),
-                rTLBR.Secn(),
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                (pForceColor ? *pForceColor : rTLBR.GetColorSecn()).getBColor(),
-                (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor(),
-                (pForceColor ? *pForceColor : rTLBR.GetColorGap()).getBColor(),
-                rTLBR.UseGapColor(),
-                rTLBR.Type(),
-                rTLBR.PatternScale()));
+        if (basegfx::fTools::equalZero(rTLBR.Secn()))
+        {
+            rTarget.append(
+                new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                    rOrigin,
+                    rOrigin + rXAxis + rYAxis,
+                    drawinglayer::primitive2d::BorderLine(rTLBR.Prim(), (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
+                    rTLBR.Type(),
+                    rTLBR.PatternScale()));
+        }
+        else
+        {
+            rTarget.append(
+                new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                    rOrigin,
+                    rOrigin + rXAxis + rYAxis,
+                    drawinglayer::primitive2d::BorderLine(rTLBR.Prim(), (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(rTLBR.Dist(), (pForceColor ? *pForceColor : rTLBR.GetColorGap()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(rTLBR.Secn(), (pForceColor ? *pForceColor : rTLBR.GetColorSecn()).getBColor()),
+                    rTLBR.UseGapColor(),
+                    rTLBR.Type(),
+                    rTLBR.PatternScale()));
+        }
     }
 
     if (rBLTR.Prim())
     {
         // bottom-left to top-right
-        rTarget.append(
-            new drawinglayer::primitive2d::BorderLinePrimitive2D(
-                rOrigin + rYAxis,
-                rOrigin + rXAxis,
-                rBLTR.Prim(),
-                rBLTR.Dist(),
-                rBLTR.Secn(),
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                (pForceColor ? *pForceColor : rBLTR.GetColorSecn()).getBColor(),
-                (pForceColor ? *pForceColor : rBLTR.GetColorPrim()).getBColor(),
-                (pForceColor ? *pForceColor : rBLTR.GetColorGap()).getBColor(),
-                rBLTR.UseGapColor(),
-                rBLTR.Type(),
-                rBLTR.PatternScale()));
+        if (basegfx::fTools::equalZero(rTLBR.Secn()))
+        {
+            rTarget.append(
+                new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                    rOrigin + rYAxis,
+                    rOrigin + rXAxis,
+                    drawinglayer::primitive2d::BorderLine(rTLBR.Prim(), (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
+                    rBLTR.Type(),
+                    rBLTR.PatternScale()));
+        }
+        else
+        {
+            rTarget.append(
+                new drawinglayer::primitive2d::BorderLinePrimitive2D(
+                    rOrigin + rYAxis,
+                    rOrigin + rXAxis,
+                    drawinglayer::primitive2d::BorderLine(rTLBR.Prim(), (pForceColor ? *pForceColor : rTLBR.GetColorPrim()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(rTLBR.Dist(), (pForceColor ? *pForceColor : rTLBR.GetColorGap()).getBColor()),
+                    drawinglayer::primitive2d::BorderLine(rTLBR.Secn(), (pForceColor ? *pForceColor : rTLBR.GetColorSecn()).getBColor()),
+                    rBLTR.UseGapColor(),
+                    rBLTR.Type(),
+                    rBLTR.PatternScale()));
+        }
     }
 }
 }

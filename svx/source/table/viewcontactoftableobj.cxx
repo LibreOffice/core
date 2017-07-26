@@ -295,24 +295,31 @@ namespace drawinglayer
                 {
                     const double fExtendIS(getExtend(getTopLine(), maTopFromLLine));
                     const double fExtendIE(getExtend(getBottomLine(), maBottomFromLLine));
-                    const double fExtendOS(getExtend(maTopFromLLine, getTopLine()));
-                    const double fExtendOE(getExtend(maBottomFromLLine, getBottomLine()));
 
-                    rContainer.push_back(new BorderLinePrimitive2D(
-                        aStart,
-                        aEnd,
-                        getChangedValue(getLeftLine().GetOutWidth(), true/*InTwips*/),
-                        getChangedValue(getLeftLine().GetDistance(), true/*InTwips*/),
-                        getChangedValue(getLeftLine().GetInWidth(), true/*InTwips*/),
-                        fExtendIS * fTwipsToMM,
-                        fExtendIE * fTwipsToMM,
-                        fExtendOS * fTwipsToMM,
-                        fExtendOE * fTwipsToMM,
-                        getLeftLine().GetColorOut().getBColor(),
-                        getLeftLine().GetColorIn().getBColor(),
-                        getLeftLine().GetColorGap().getBColor(),
-                        getLeftLine().HasGapColor(),
-                        getLeftLine().GetBorderLineStyle()));
+                    if (basegfx::fTools::equalZero(getLeftLine().GetInWidth()))
+                    {
+                        rContainer.push_back(
+                            new BorderLinePrimitive2D(
+                                aStart,
+                                aEnd,
+                                BorderLine(getChangedValue(getLeftLine().GetOutWidth(), true/*InTwips*/), getLeftLine().GetColorOut().getBColor(), fExtendIS * fTwipsToMM, fExtendIE * fTwipsToMM),
+                                getLeftLine().GetBorderLineStyle()));
+                    }
+                    else
+                    {
+                        const double fExtendOS(getExtend(maTopFromLLine, getTopLine()));
+                        const double fExtendOE(getExtend(maBottomFromLLine, getBottomLine()));
+
+                        rContainer.push_back(
+                            new BorderLinePrimitive2D(
+                                aStart,
+                                aEnd,
+                                BorderLine(getChangedValue(getLeftLine().GetOutWidth(), true/*InTwips*/), getLeftLine().GetColorOut().getBColor(), fExtendIS * fTwipsToMM, fExtendIE * fTwipsToMM),
+                                BorderLine(getChangedValue(getLeftLine().GetDistance(), true/*InTwips*/), getLeftLine().GetColorGap().getBColor()),
+                                BorderLine(getChangedValue(getLeftLine().GetInWidth(), true/*InTwips*/), getLeftLine().GetColorIn().getBColor(), fExtendOS * fTwipsToMM, fExtendOE * fTwipsToMM),
+                                getLeftLine().HasGapColor(),
+                                getLeftLine().GetBorderLineStyle()));
+                    }
                 }
             }
 
@@ -326,24 +333,31 @@ namespace drawinglayer
                 {
                     const double fExtendIS(getExtend(getLeftLine(), maLeftFromBLine ));
                     const double fExtendIE(getExtend(getRightLine(), maRightFromBLine));
-                    const double fExtendOS(getExtend(maLeftFromBLine, getLeftLine()));
-                    const double fExtendOE(getExtend(maRightFromBLine, getRightLine()));
 
-                    rContainer.push_back(new BorderLinePrimitive2D(
-                        aStart,
-                        aEnd,
-                        getChangedValue(getBottomLine().GetOutWidth(), true/*InTwips*/),
-                        getChangedValue(getBottomLine().GetDistance(), true/*InTwips*/),
-                        getChangedValue(getBottomLine().GetInWidth(), true/*InTwips*/),
-                        fExtendIS * fTwipsToMM,
-                        fExtendIE * fTwipsToMM,
-                        fExtendOS * fTwipsToMM,
-                        fExtendOE * fTwipsToMM,
-                        getBottomLine().GetColorOut(false).getBColor(),
-                        getBottomLine().GetColorIn(false).getBColor(),
-                        getBottomLine().GetColorGap().getBColor(),
-                        getBottomLine().HasGapColor(),
-                        getBottomLine().GetBorderLineStyle()));
+                    if (basegfx::fTools::equalZero(getBottomLine().GetInWidth()))
+                    {
+                        rContainer.push_back(
+                            new BorderLinePrimitive2D(
+                                aStart,
+                                aEnd,
+                                BorderLine(getChangedValue(getBottomLine().GetOutWidth(), true/*InTwips*/), getBottomLine().GetColorOut(false).getBColor(), fExtendIS * fTwipsToMM, fExtendIE * fTwipsToMM),
+                                getBottomLine().GetBorderLineStyle()));
+                    }
+                    else
+                    {
+                        const double fExtendOS(getExtend(maLeftFromBLine, getLeftLine()));
+                        const double fExtendOE(getExtend(maRightFromBLine, getRightLine()));
+
+                        rContainer.push_back(
+                            new BorderLinePrimitive2D(
+                                aStart,
+                                aEnd,
+                                BorderLine(getChangedValue(getBottomLine().GetOutWidth(), true/*InTwips*/), getBottomLine().GetColorOut(false).getBColor(), fExtendIS * fTwipsToMM, fExtendIE * fTwipsToMM),
+                                BorderLine(getChangedValue(getBottomLine().GetDistance(), true/*InTwips*/), getBottomLine().GetColorGap().getBColor()),
+                                BorderLine(getChangedValue(getBottomLine().GetInWidth(), true/*InTwips*/), getBottomLine().GetColorIn(false).getBColor(), fExtendOS * fTwipsToMM, fExtendOE * fTwipsToMM),
+                                getBottomLine().HasGapColor(),
+                                getBottomLine().GetBorderLineStyle()));
+                    }
                 }
             }
 
@@ -355,26 +369,33 @@ namespace drawinglayer
 
                 if(!aStart.equal(aEnd))
                 {
-                    const double fExtendIS(getExtend(getTopLine(), maTopFromRLine));
-                    const double fExtendIE(getExtend(getBottomLine(), maBottomFromRLine));
                     const double fExtendOS(getExtend(maTopFromRLine, getTopLine()));
                     const double fExtendOE(getExtend(maBottomFromRLine, getBottomLine()));
 
-                    rContainer.push_back(new BorderLinePrimitive2D(
-                        aStart,
-                        aEnd,
-                        getChangedValue(getRightLine().GetOutWidth(), true/*InTwips*/),
-                        getChangedValue(getRightLine().GetDistance(), true/*InTwips*/),
-                        getChangedValue(getRightLine().GetInWidth(), true/*InTwips*/),
-                        fExtendOS * fTwipsToMM,
-                        fExtendOE * fTwipsToMM,
-                        fExtendIS * fTwipsToMM,
-                        fExtendIE * fTwipsToMM,
-                        getRightLine().GetColorOut().getBColor(),
-                        getRightLine().GetColorIn().getBColor(),
-                        getRightLine().GetColorGap().getBColor(),
-                        getRightLine().HasGapColor(),
-                        getRightLine().GetBorderLineStyle()));
+                    if (basegfx::fTools::equalZero(getRightLine().GetInWidth()))
+                    {
+                        rContainer.push_back(
+                            new BorderLinePrimitive2D(
+                                aStart,
+                                aEnd,
+                                BorderLine(getChangedValue(getRightLine().GetOutWidth(), true/*InTwips*/), getRightLine().GetColorOut().getBColor(), fExtendOS * fTwipsToMM, fExtendOE * fTwipsToMM),
+                                getRightLine().GetBorderLineStyle()));
+                    }
+                    else
+                    {
+                        const double fExtendIS(getExtend(getTopLine(), maTopFromRLine));
+                        const double fExtendIE(getExtend(getBottomLine(), maBottomFromRLine));
+
+                        rContainer.push_back(
+                            new BorderLinePrimitive2D(
+                                aStart,
+                                aEnd,
+                                BorderLine(getChangedValue(getRightLine().GetOutWidth(), true/*InTwips*/), getRightLine().GetColorOut().getBColor(), fExtendOS * fTwipsToMM, fExtendOE * fTwipsToMM),
+                                BorderLine(getChangedValue(getRightLine().GetDistance(), true/*InTwips*/), getRightLine().GetColorGap().getBColor()),
+                                BorderLine(getChangedValue(getRightLine().GetInWidth(), true/*InTwips*/), getRightLine().GetColorIn().getBColor(), fExtendIS * fTwipsToMM, fExtendIE * fTwipsToMM),
+                                getRightLine().HasGapColor(),
+                                getRightLine().GetBorderLineStyle()));
+                    }
                 }
             }
 
@@ -391,26 +412,33 @@ namespace drawinglayer
 
                 if(!aStart.equal(aEnd))
                 {
-                    const double fExtendIS(getExtend(getLeftLine(), maLeftFromTLine));
-                    const double fExtendIE(getExtend(getRightLine(), maRightFromTLine));
                     const double fExtendOS(getExtend(maLeftFromTLine, getLeftLine()));
                     const double fExtendOE(getExtend(maRightFromTLine, getRightLine()));
 
-                    rContainer.push_back(new BorderLinePrimitive2D(
-                        aStart,
-                        aEnd,
-                        getChangedValue(getTopLine().GetOutWidth(), true/*InTwips*/),
-                        getChangedValue(getTopLine().GetDistance(), true/*InTwips*/),
-                        getChangedValue(getTopLine().GetInWidth(), true/*InTwips*/),
-                        fExtendOS * fTwipsToMM,
-                        fExtendOE * fTwipsToMM,
-                        fExtendIS * fTwipsToMM,
-                        fExtendIE * fTwipsToMM,
-                        getTopLine().GetColorOut(false).getBColor(),
-                        getTopLine().GetColorIn(false).getBColor(),
-                        getTopLine().GetColorGap().getBColor(),
-                        getTopLine().HasGapColor(),
-                        getTopLine().GetBorderLineStyle()));
+                    if (basegfx::fTools::equalZero(getTopLine().GetInWidth()))
+                    {
+                        rContainer.push_back(
+                            new BorderLinePrimitive2D(
+                                aStart,
+                                aEnd,
+                                BorderLine(getChangedValue(getTopLine().GetOutWidth(), true/*InTwips*/), getTopLine().GetColorOut(false).getBColor(), fExtendOS * fTwipsToMM, fExtendOE * fTwipsToMM),
+                                getTopLine().GetBorderLineStyle()));
+                    }
+                    else
+                    {
+                        const double fExtendIS(getExtend(getLeftLine(), maLeftFromTLine));
+                        const double fExtendIE(getExtend(getRightLine(), maRightFromTLine));
+
+                        rContainer.push_back(
+                            new BorderLinePrimitive2D(
+                                aStart,
+                                aEnd,
+                                BorderLine(getChangedValue(getTopLine().GetOutWidth(), true/*InTwips*/), getTopLine().GetColorOut(false).getBColor(), fExtendOS * fTwipsToMM, fExtendOE * fTwipsToMM),
+                                BorderLine(getChangedValue(getTopLine().GetDistance(), true/*InTwips*/), getTopLine().GetColorGap().getBColor()),
+                                BorderLine(getChangedValue(getTopLine().GetInWidth(), true/*InTwips*/), getTopLine().GetColorIn(false).getBColor(), fExtendIS * fTwipsToMM, fExtendIE * fTwipsToMM),
+                                getTopLine().HasGapColor(),
+                                getTopLine().GetBorderLineStyle()));
+                    }
                 }
             }
         }

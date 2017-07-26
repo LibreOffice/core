@@ -37,119 +37,136 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        BorderLine::BorderLine(
+            double fWidth,
+            const basegfx::BColor& rRGBColor,
+            double fExtendStart,
+            double fExtendEnd)
+        :   mfWidth(fWidth),
+            maRGBColor(rRGBColor),
+            mfExtendStart(fExtendStart),
+            mfExtendEnd(fExtendEnd)
+        {
+        }
+
+        bool BorderLine::operator==(const BorderLine& rBorderLine) const
+        {
+            return getWidth() == rBorderLine.getWidth()
+                && getRGBColor() == rBorderLine.getRGBColor()
+                && getExtendStart() == rBorderLine.getExtendStart()
+                && getExtendEnd() == rBorderLine.getExtendEnd();
+        }
+
         // helper to add a centered, maybe stroked line primitive to rContainer
         void addPolygonStrokePrimitive2D(
             Primitive2DContainer& rContainer,
             const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,
-            const basegfx::BColor& rColor,
-            double fWidth,
-            SvxBorderLineStyle aStyle,
-            double fPatternScale)
+            const attribute::LineAttribute& rLineAttribute,
+            const attribute::StrokeAttribute & rStrokeAttribute)
         {
             basegfx::B2DPolygon aPolygon;
 
             aPolygon.append(rStart);
             aPolygon.append(rEnd);
 
-            const attribute::LineAttribute aLineAttribute(rColor, fWidth);
-            static double fPatScFact(10.0); // 10.0 multiply, see old code
-            const std::vector<double> aDashing(svtools::GetLineDashing(aStyle, fPatternScale * fPatScFact));
-
-            if (aDashing.empty())
+            if (rStrokeAttribute.isDefault())
             {
                 rContainer.push_back(
                     new PolygonStrokePrimitive2D(
                         aPolygon,
-                        aLineAttribute));
+                        rLineAttribute));
             }
             else
             {
-                const attribute::StrokeAttribute aStrokeAttribute(aDashing);
-
                 rContainer.push_back(
                     new PolygonStrokePrimitive2D(
                         aPolygon,
-                        aLineAttribute,
-                        aStrokeAttribute));
+                        rLineAttribute,
+                        rStrokeAttribute));
             }
         }
 
         void BorderLinePrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            if (!getStart().equal(getEnd()) && (isInsideUsed() || isOutsideUsed()))
+            if (!getStart().equal(getEnd()))
             {
                 // get data and vectors
                 basegfx::B2DVector aVector(getEnd() - getStart());
                 aVector.normalize();
                 const basegfx::B2DVector aPerpendicular(basegfx::getPerpendicular(aVector));
+                static double fPatScFact(10.0); // 10.0 multiply, see old code
+                const std::vector<double> aDashing(svtools::GetLineDashing(getStyle(), getPatternScale() * fPatScFact));
+                const attribute::StrokeAttribute aStrokeAttribute(aDashing);
 
-                if (isOutsideUsed() && isInsideUsed())
+                if (3 == getBorderLines().size())
                 {
-                    // double line with gap. Use mfDiscreteDistance (see get2DDecomposition) as distance.
+                    // double line with gap. Use mfDiscreteGapDistance (see get2DDecomposition) as distance.
                     // That value is prepared to be at least one pixel (discrete unit) so that the
                     // decomposition is view-dependent in this cases
-                    if (isInsideUsed())
                     {
-                        // inside line (left). Create stroke primitive centered on line width
-                        const double fDeltaY((mfDiscreteDistance + getLeftWidth()) * 0.5);
+                        // inside line (left of vector). Create stroke primitive centered on line width
+                        const BorderLine& rLeft(getBorderLines()[0]);
+                        const double fDeltaY((mfDiscreteGapDistance + rLeft.getWidth()) * 0.5);
                         const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
-                        const basegfx::B2DPoint aStart(getStart() - (aVector * getExtendLeftStart()) - aDeltaY);
-                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * getExtendLeftEnd()) - aDeltaY);
+                        const basegfx::B2DPoint aStart(getStart() - (aVector * rLeft.getExtendStart()) - aDeltaY);
+                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rLeft.getExtendEnd()) - aDeltaY);
+                        const attribute::LineAttribute aLineAttribute(rLeft.getRGBColor(), rLeft.getWidth());
 
                         addPolygonStrokePrimitive2D(
                             rContainer,
                             aStart,
                             aEnd,
-                            getRGBColorLeft(),
-                            getLeftWidth(),
-                            getStyle(),
-                            getPatternScale());
+                            aLineAttribute,
+                            aStrokeAttribute);
                     }
 
-                    if (hasGapColor() && isDistanceUsed())
+                    if (hasGapColor())
                     {
-                        // gap (if visible, found no practical usage).
+                        // gap (if visible, found practical usage in Writer MultiColorBorderLines).
                         // Create stroke primitive on vector with given color
-                        addPolygonStrokePrimitive2D(
-                            rContainer,
-                            getStart(),
-                            getEnd(),
-                            getRGBColorGap(),
-                            mfDiscreteDistance,
-                            getStyle(),
-                            getPatternScale());
-                    }
-
-                    if (isOutsideUsed())
-                    {
-                        // outside line (right). Create stroke primitive centered on line width
-                        const double fDeltaY((mfDiscreteDistance + getRightWidth()) * 0.5);
-                        const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
-                        const basegfx::B2DPoint aStart(getStart() - (aVector * getExtendRightStart()) + aDeltaY);
-                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * getExtendRightEnd()) + aDeltaY);
+                        const BorderLine& rGap(getBorderLines()[1]);
+                        const basegfx::B2DPoint aStart(getStart() - (aVector * rGap.getExtendStart()));
+                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rGap.getExtendEnd()));
+                        const attribute::LineAttribute aLineAttribute(rGap.getRGBColor(), mfDiscreteGapDistance);
 
                         addPolygonStrokePrimitive2D(
                             rContainer,
                             aStart,
                             aEnd,
-                            getRGBColorRight(),
-                            getRightWidth(),
-                            getStyle(),
-                            getPatternScale());
+                            aLineAttribute,
+                            aStrokeAttribute);
+                    }
+
+                    {
+                        // outside line (right of vector). Create stroke primitive centered on line width
+                        const BorderLine& rRight(getBorderLines()[2]);
+                        const double fDeltaY((mfDiscreteGapDistance + rRight.getWidth()) * 0.5);
+                        const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
+                        const basegfx::B2DPoint aStart(getStart() - (aVector * rRight.getExtendStart()) + aDeltaY);
+                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rRight.getExtendEnd()) + aDeltaY);
+                        const attribute::LineAttribute aLineAttribute(rRight.getRGBColor(), rRight.getWidth());
+
+                        addPolygonStrokePrimitive2D(
+                            rContainer,
+                            aStart,
+                            aEnd,
+                            aLineAttribute,
+                            aStrokeAttribute);
                     }
                 }
-                else if(isInsideUsed())
+                else
                 {
                     // single line, only inside values used, no vertical offsets
+                    const BorderLine& rBorderLine(getBorderLines()[0]);
+                    const attribute::LineAttribute aLineAttribute(rBorderLine.getRGBColor(), rBorderLine.getWidth());
+
                     addPolygonStrokePrimitive2D(
                         rContainer,
-                        getStart() - (aVector * getExtendLeftStart()),
-                        getEnd() + (aVector * getExtendLeftEnd()),
-                        getRGBColorLeft(),
-                        getLeftWidth(),
-                        getStyle(),
-                        getPatternScale());
+                        getStart() - (aVector * rBorderLine.getExtendStart()),
+                        getEnd() + (aVector * rBorderLine.getExtendEnd()),
+                        aLineAttribute,
+                        aStrokeAttribute);
                 }
             }
         }
@@ -170,37 +187,42 @@ namespace drawinglayer
         BorderLinePrimitive2D::BorderLinePrimitive2D(
             const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,
-            double fLeftWidth,
-            double fDistance,
-            double fRightWidth,
-            double fExtendLeftStart,
-            double fExtendLeftEnd,
-            double fExtendRightStart,
-            double fExtendRightEnd,
-            const basegfx::BColor& rRGBColorRight,
-            const basegfx::BColor& rRGBColorLeft,
-            const basegfx::BColor& rRGBColorGap,
+            const BorderLine& rBorderLine,
+            SvxBorderLineStyle nStyle,
+            double fPatternScale)
+        :   BufferedDecompositionPrimitive2D(),
+            maStart(rStart),
+            maEnd(rEnd),
+            maBorderLines(),
+            mbHasGapColor(false),
+            mnStyle(nStyle),
+            mfPatternScale(fPatternScale),
+            mfDiscreteGapDistance(0.0)
+        {
+            maBorderLines.push_back(rBorderLine);
+        }
+
+        BorderLinePrimitive2D::BorderLinePrimitive2D(
+            const basegfx::B2DPoint& rStart,
+            const basegfx::B2DPoint& rEnd,
+            const BorderLine& rLeft,
+            const BorderLine& rGap,
+            const BorderLine& rRight,
             bool bHasGapColor,
             SvxBorderLineStyle nStyle,
             double fPatternScale)
         :   BufferedDecompositionPrimitive2D(),
             maStart(rStart),
             maEnd(rEnd),
-            mfLeftWidth(fLeftWidth),
-            mfDistance(fDistance),
-            mfRightWidth(fRightWidth),
-            mfExtendLeftStart(fExtendLeftStart),
-            mfExtendLeftEnd(fExtendLeftEnd),
-            mfExtendRightStart(fExtendRightStart),
-            mfExtendRightEnd(fExtendRightEnd),
-            maRGBColorRight(rRGBColorRight),
-            maRGBColorLeft(rRGBColorLeft),
-            maRGBColorGap(rRGBColorGap),
+            maBorderLines(),
             mbHasGapColor(bHasGapColor),
             mnStyle(nStyle),
             mfPatternScale(fPatternScale),
-            mfDiscreteDistance(0.0)
+            mfDiscreteGapDistance(0.0)
         {
+            maBorderLines.push_back(rLeft);
+            maBorderLines.push_back(rGap);
+            maBorderLines.push_back(rRight);
         }
 
         bool BorderLinePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
@@ -209,21 +231,23 @@ namespace drawinglayer
             {
                 const BorderLinePrimitive2D& rCompare = static_cast<const BorderLinePrimitive2D&>(rPrimitive);
 
-                return (getStart() == rCompare.getStart()
+                if (getStart() == rCompare.getStart()
                     && getEnd() == rCompare.getEnd()
-                    && getLeftWidth() == rCompare.getLeftWidth()
-                    && getDistance() == rCompare.getDistance()
-                    && getRightWidth() == rCompare.getRightWidth()
-                    && getExtendLeftStart() == rCompare.getExtendLeftStart()
-                    && getExtendLeftEnd() == rCompare.getExtendLeftEnd()
-                    && getExtendRightStart() == rCompare.getExtendRightStart()
-                    && getExtendRightEnd() == rCompare.getExtendRightEnd()
-                    && getRGBColorRight() == rCompare.getRGBColorRight()
-                    && getRGBColorLeft() == rCompare.getRGBColorLeft()
-                    && getRGBColorGap() == rCompare.getRGBColorGap()
                     && hasGapColor() == rCompare.hasGapColor()
                     && getStyle() == rCompare.getStyle()
-                    && getPatternScale() == rCompare.getPatternScale());
+                    && getPatternScale() == rCompare.getPatternScale())
+                {
+                    if (getBorderLines().size() == rCompare.getBorderLines().size())
+                    {
+                        for (size_t a(0); a < getBorderLines().size(); a++)
+                        {
+                            if (!(getBorderLines()[a] == rCompare.getBorderLines()[a]))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
             }
 
             return false;
@@ -233,7 +257,7 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard(m_aMutex);
 
-            if (!getStart().equal(getEnd()) && isOutsideUsed() && isInsideUsed())
+            if (!getStart().equal(getEnd()) && 3 == getBorderLines().size())
             {
                 // Double line with gap. In this case, we want to be view-dependent.
                 // Get the current DiscreteUnit, look at X and Y and use the maximum
@@ -246,9 +270,10 @@ namespace drawinglayer
                 // This can also be done using DiscreteMetricDependentPrimitive2D as base class
                 // for this class, but specialization is better here for later buffering (only
                 // do this when 'double line with gap')
-                const double fNewDiscreteDistance(std::max(fDiscreteUnit, getDistance()));
+                const double fDistance(getBorderLines()[1].getWidth());
+                const double fNewDiscreteDistance(std::max(fDiscreteUnit, fDistance));
 
-                if (!rtl::math::approxEqual(fNewDiscreteDistance, mfDiscreteDistance))
+                if (!rtl::math::approxEqual(fNewDiscreteDistance, mfDiscreteGapDistance))
                 {
                     if (!getBuffered2DDecomposition().empty())
                     {
@@ -257,7 +282,7 @@ namespace drawinglayer
                     }
 
                     // remember value for usage in create2DDecomposition
-                    const_cast< BorderLinePrimitive2D* >(this)->mfDiscreteDistance = fNewDiscreteDistance;
+                    const_cast< BorderLinePrimitive2D* >(this)->mfDiscreteGapDistance = fNewDiscreteDistance;
                 }
             }
 

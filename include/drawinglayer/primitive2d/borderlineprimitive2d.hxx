@@ -33,14 +33,49 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** BorderLine class
+        Helper class holding the style definition for a single part of a full BNorderLine definition
+        */
+        class DRAWINGLAYER_DLLPUBLIC BorderLine
+        {
+        private:
+            // line width
+            double              mfWidth;
+
+            // line color
+            basegfx::BColor     maRGBColor;
+
+            // line extends
+            double              mfExtendStart;
+            double              mfExtendEnd;
+
+            // not implemented
+            virtual bool operator!=(const BorderLine& rBorderLine) const = delete;
+
+        public:
+            BorderLine(
+                double fWidth,
+                const basegfx::BColor& rRGBColor,
+                double fExtendStart = 0.0,
+                double fExtendEnd = 0.0);
+
+            double getWidth() const { return mfWidth; }
+            const basegfx::BColor& getRGBColor() const { return maRGBColor; }
+            double getExtendStart() const { return mfExtendStart; }
+            double getExtendEnd() const { return mfExtendEnd; }
+
+            /// compare operator
+            virtual bool operator==(const BorderLine& rBorderLine) const;
+        };
+
         /** BorderLinePrimitive2D class
 
-            This is the basic primitive to build frames around objects, e.g. tables.
-            It defines a single or double line from Start to End using the LeftWidth,
-            Distance and RightWidth definitions.
-            The LineStart/End overlap is defined by the Extend(Left|Right)(Start|End)
-            definitions.
-         */
+        This is the basic primitive to build frames around objects, e.g. tables.
+        It defines a single or double line from Start to End using the LeftWidth,
+        Distance and RightWidth definitions.
+        The LineStart/End overlap is defined by the Extend(Left|Right)(Start|End)
+        definitions.
+        */
         class DRAWINGLAYER_DLLPUBLIC BorderLinePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
@@ -48,84 +83,49 @@ namespace drawinglayer
             basegfx::B2DPoint                               maStart;
             basegfx::B2DPoint                               maEnd;
 
-            /// the widths of single/double line
-            double                                          mfLeftWidth;
-            double                                          mfDistance;
-            double                                          mfRightWidth;
+            /// the single BorderLine style definition(s), one or three allowed (see constructors)
+            std::vector< BorderLine >                       maBorderLines;
 
-            /// edge overlap sizes
-            double                                          mfExtendLeftStart;
-            double                                          mfExtendLeftEnd;
-            double                                          mfExtendRightStart;
-            double                                          mfExtendRightEnd;
-
-            /// the line colors
-            basegfx::BColor                                 maRGBColorRight;
-            basegfx::BColor                                 maRGBColorLeft;
-            basegfx::BColor                                 maRGBColorGap;
             bool                                            mbHasGapColor;
 
+            /// common style definitions
             SvxBorderLineStyle                              mnStyle;
             double                                          mfPatternScale;
 
             // for view dependent decomposition in the case with distance (gap),
             // remember the last used concrete mfDistance, see get2DDecomposition
             // implementation
-            double                                          mfDiscreteDistance;
-
-            /// local helpers
-            bool isInsideUsed() const
-            {
-                return !basegfx::fTools::equalZero(mfLeftWidth);
-            }
-
-            bool isDistanceUsed() const
-            {
-                return !basegfx::fTools::equalZero(mfDistance);
-            }
-
-            bool isOutsideUsed() const
-            {
-                return !basegfx::fTools::equalZero(mfRightWidth);
-            }
+            double                                          mfDiscreteGapDistance;
 
             /// create local decomposition
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& rViewInformation) const override;
 
         public:
-            /// constructor
+            /// simplified constructor for BorderLine with single edge
             BorderLinePrimitive2D(
                 const basegfx::B2DPoint& rStart,
                 const basegfx::B2DPoint& rEnd,
-                double fLeftWidth,
-                double fDistance,
-                double fRightWidth,
-                double fExtendLeftStart,
-                double fExtendLeftEnd,
-                double fExtendRightStart,
-                double fExtendRightEnd,
-                const basegfx::BColor& rRGBColorRight,
-                const basegfx::BColor& rRGBColorLeft,
-                const basegfx::BColor& rRGBColorGap,
+                const BorderLine& rBorderLine,
+                SvxBorderLineStyle nStyle,
+                double fPatternScale = 1.0);
+
+            /// constructor for full-fledged BorderLine with two edges and gap
+            BorderLinePrimitive2D(
+                const basegfx::B2DPoint& rStart,
+                const basegfx::B2DPoint& rEnd,
+                const BorderLine& rLeft,
+                const BorderLine& rGap,
+                const BorderLine& rRight,
                 bool bHasGapColor,
                 SvxBorderLineStyle nStyle,
-                double fPatternScale = 1.0 );
+                double fPatternScale = 1.0);
 
             /// data read access
             const basegfx::B2DPoint& getStart() const { return maStart; }
             const basegfx::B2DPoint& getEnd() const { return maEnd; }
-            double getLeftWidth() const { return mfLeftWidth; }
-            double getDistance() const { return mfDistance; }
-            double getRightWidth() const { return mfRightWidth; }
-            double getExtendLeftStart() const { return mfExtendLeftStart; }
-            double getExtendLeftEnd() const { return mfExtendLeftEnd; }
-            double getExtendRightStart() const { return mfExtendRightStart; }
-            double getExtendRightEnd() const { return mfExtendRightEnd; }
-            const basegfx::BColor& getRGBColorRight () const { return maRGBColorRight; }
-            const basegfx::BColor& getRGBColorLeft () const { return maRGBColorLeft; }
-            const basegfx::BColor& getRGBColorGap () const { return maRGBColorGap; }
-            bool hasGapColor( ) const { return mbHasGapColor; }
-            SvxBorderLineStyle getStyle () const { return mnStyle; }
+            const std::vector< BorderLine >& getBorderLines() const { return maBorderLines; }
+            bool hasGapColor() const { return mbHasGapColor; }
+            SvxBorderLineStyle getStyle() const { return mnStyle; }
             double getPatternScale() const { return mfPatternScale; }
 
             /// helper to decide if AntiAliasing should be used
