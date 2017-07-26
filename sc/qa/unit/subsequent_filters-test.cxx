@@ -3131,7 +3131,8 @@ void ScFiltersTest::testOptimalHeightReset()
     SCTAB nTab = 0;
     SCROW nRow = 0;
     ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.EnableAdjustHeight( true );
+    if( rDoc.HasAdjustHeightLocked() )
+        rDoc.UnlockAdjustHeight();
     // open document in read/write mode ( otherwise optimal height stuff won't
     // be triggered ) *and* you can't delete cell contents.
     int nHeight = sc::TwipsToHMM ( rDoc.GetRowHeight(nRow, nTab, false) );
