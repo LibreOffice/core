@@ -81,6 +81,7 @@ private:
     VclPtr<Button>         m_pFavouritesBtn;
     VclPtr<SvxCharView>    m_pRecentCharView[16];
     VclPtr<SvxCharView>    m_pFavCharView[16];
+    VclPtr<FixedText>      m_pCharName;
 
     vcl::Font       aFont;
     const SubsetMap* pSubsetMap;
