@@ -49,6 +49,8 @@ struct TextParagraphModel
 struct OOX_DLLPUBLIC TextFontModel
 {
     OptValue< OUString > moName;     ///< Font name.
+    OptValue< OUString > moNameAsian; ///< Asian font name.
+    OptValue< OUString > moNameComplex; ///< Complex font name.
     OptValue< OUString > moColor;    ///< Font color, HTML encoded, sort of.
     OptValue< sal_Int32 > monSize;          ///< Font size in twips.
     OptValue< sal_Int32 > monUnderline;     ///< Single or double underline.
