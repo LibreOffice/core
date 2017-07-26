@@ -1338,6 +1338,26 @@ void SAL_CALL ScVbaApplication::OnKey( const OUString& Key, const uno::Any& Proc
     }
 }
 
+void SAL_CALL ScVbaApplication::setScreenUpdating(sal_Bool bUpdate)
+{
+    VbaApplicationBase::setScreenUpdating( bUpdate );
+
+    uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ), uno::UNO_SET_THROW );
+    ScDocShell* pDocShell = excel::getDocShell( xModel );
+    ScDocument& rDoc = pDocShell->GetDocument();
+
+    if( bUpdate )
+    {
+        rDoc.UnlockAdjustHeight();
+        if( !rDoc.IsAdjustHeightLocked() )
+            pDocShell->UpdateAllRowHeights();
+    }
+    else
+    {
+        rDoc.LockAdjustHeight();
+    }
+}
+
 void SAL_CALL ScVbaApplication::Undo()
 {
     uno::Reference< frame::XModel > xModel( getThisExcelDoc( mxContext ), uno::UNO_SET_THROW );

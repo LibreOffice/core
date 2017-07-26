@@ -1801,6 +1801,13 @@ formula::VectorRefArray ScDocument::FetchVectorRefArray( const ScAddress& rPos, 
     return maTabs[nTab]->FetchVectorRefArray(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1);
 }
 
+void ScDocument::UnlockAdjustHeight()
+{
+    assert(nAdjustHeightLock > 0);
+    if(nAdjustHeightLock > 0)
+        --nAdjustHeightLock;
+}
+
 bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
 {
     if ( rOld == rNew )
