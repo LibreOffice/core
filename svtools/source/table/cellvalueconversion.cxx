@@ -60,7 +60,7 @@ namespace svt
     namespace
     {
 
-        double lcl_convertDateToDays( long const i_day, long const i_month, long const i_year )
+        double lcl_convertDateToDays( sal_uInt16 const i_day, sal_uInt16 const i_month, sal_Int16 const i_year )
         {
             long const nNullDateDays = ::Date::DateToDays( 1, 1, 1900 );
             long const nValueDateDays = ::Date::DateToDays( i_day, i_month, i_year );
