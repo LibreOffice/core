@@ -154,7 +154,8 @@ namespace XSLT
             xmlXPathObjectPtr streamName = valuePop(ctxt);
             streamName = ensureStringValue(streamName, ctxt);
 
-            oh->insertByName(OUString::createFromAscii(reinterpret_cast<char*>(streamName->stringval)), OString(reinterpret_cast<char*>(value->stringval)));
+            oh->insertByName(OStringToOUString(reinterpret_cast<char*>(streamName->stringval), RTL_TEXTENCODING_UTF8),
+                             OString(reinterpret_cast<char*>(value->stringval)));
             valuePush(ctxt, xmlXPathNewCString(""));
         }
 
@@ -195,7 +196,7 @@ namespace XSLT
             OleHandler * oh = static_cast<OleHandler*> (data);
             xmlXPathObjectPtr streamName = valuePop(ctxt);
             streamName = ensureStringValue(streamName, ctxt);
-            const OString content = oh->getByName(OUString::createFromAscii(reinterpret_cast<char*>(streamName->stringval)));
+            const OString content = oh->getByName(OStringToOUString(reinterpret_cast<char*>(streamName->stringval), RTL_TEXTENCODING_UTF8));
             valuePush(ctxt, xmlXPathNewCString(content.getStr()));
             xmlXPathFreeObject(streamName);
         }
@@ -320,7 +321,7 @@ namespace XSLT
             xmlErrorPtr lastErr = xmlGetLastError();
             OUString msg;
             if (lastErr)
-                msg = OUString::createFromAscii(lastErr->message);
+                msg = OStringToOUString(lastErr->message, RTL_TEXTENCODING_UTF8);
             else
                 msg = "Unknown XSLT transformation error";
 
