@@ -593,7 +593,7 @@ void WorkbookGlobals::initialize()
         // #i76026# disable Undo while loading the document
         mpDoc->EnableUndo(false);
         // #i79826# disable calculating automatic row height while loading the document
-        mpDoc->EnableAdjustHeight(false);
+        mpDoc->LockAdjustHeight();
         // disable automatic update of linked sheets and DDE links
         mpDoc->EnableExecuteLink(false);
 
@@ -620,7 +620,7 @@ void WorkbookGlobals::finalize()
         // enable automatic update of linked sheets and DDE links
         mpDoc->EnableExecuteLink(true);
         // #i79826# enable updating automatic row height after loading the document
-        mpDoc->EnableAdjustHeight(true);
+        mpDoc->UnlockAdjustHeight();
 
         // #i76026# enable Undo after loading the document
         mpDoc->EnableUndo(true);

@@ -471,12 +471,12 @@ private:
 
     bool                bInUnoBroadcast;
     bool                bInUnoListenerCall;
+    sal_uInt32          nAdjustHeightLock;
     formula::FormulaGrammar::Grammar  eGrammar;
 
     mutable bool        bStyleSheetUsageInvalid;
 
     bool                mbUndoEnabled:1;
-    bool                mbAdjustHeightEnabled:1;
     bool                mbExecuteLinkEnabled:1;
     bool                mbChangeReadOnlyEnabled:1;    // allow changes in read-only document (for API import filters)
     bool                mbStreamValidLocked:1;
@@ -1377,8 +1377,9 @@ public:
     bool               IsUndoEnabled() const                       { return mbUndoEnabled; }
     SC_DLLPUBLIC void  EnableUndo( bool bVal );
 
-    bool                         IsAdjustHeightEnabled() const               { return mbAdjustHeightEnabled; }
-    void                         EnableAdjustHeight( bool bVal )             { mbAdjustHeightEnabled = bVal; }
+    bool                         IsAdjustHeightLocked() const               { return nAdjustHeightLock != 0; }
+    void                         LockAdjustHeight()                          { ++nAdjustHeightLock; }
+    SC_DLLPUBLIC void            UnlockAdjustHeight();
     bool                         IsExecuteLinkEnabled() const                { return mbExecuteLinkEnabled; }
     void                         EnableExecuteLink( bool bVal )              { mbExecuteLinkEnabled = bVal; }
     bool                         IsChangeReadOnlyEnabled() const             { return mbChangeReadOnlyEnabled; }

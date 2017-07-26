@@ -442,7 +442,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
 
     bool bRet = false;
     ErrCode nError = ERRCODE_NONE;
-    aDocument.EnableAdjustHeight(false);
+    aDocument.LockAdjustHeight();
     if (GetCreateMode() == SfxObjectCreateMode::ORGANIZER)
         bRet = aImport.Import(ImportFlags::Styles, nError);
     else
@@ -506,7 +506,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
 
     AfterXMLLoading(bRet);
 
-    aDocument.EnableAdjustHeight(true);
+    aDocument.UnlockAdjustHeight();
     return bRet;
 }
 

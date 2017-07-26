@@ -103,6 +103,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getCursor() override;
     virtual void SAL_CALL setCursor( ::sal_Int32 _cursor ) override;
     virtual void SAL_CALL OnKey( const OUString& Key, const css::uno::Any& Procedure ) override;
+    virtual void SAL_CALL setScreenUpdating( sal_Bool bUpdate ) override;
     virtual sal_Bool SAL_CALL getEnableEvents() override;
     virtual void SAL_CALL setEnableEvents( sal_Bool bEnable ) override;
     virtual sal_Bool SAL_CALL getEnableCancelKey() override;
