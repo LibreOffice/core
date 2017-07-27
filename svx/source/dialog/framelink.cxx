@@ -652,7 +652,10 @@ void CreateBorderPrimitives(
         else if (2 == myOffsets.size())
         {
             // we are a double edge, calculate cuts with edges coming from above/below
-            // for both edges to detect the line start/end extensions
+            // for both edges to detect the line start/end extensions. In the furure this
+            // needs to be extended to use two values per extension, getComplexExtendedLineValues
+            // internally prepares these already. drawinglayer::primitive2d::BorderLine will
+            // then need to take these double entries (maybe a pair) and use them internally.
             double mfExtendLeftStart(0.0);
             double mfExtendLeftEnd(0.0);
             double mfExtendRightStart(0.0);
@@ -687,8 +690,12 @@ void CreateBorderPrimitives(
                         drawinglayer::primitive2d::BorderLine(
                             rBorder.Dist(),
                             (pForceColor ? *pForceColor : rBorder.GetColorGap()).getBColor(),
-                            (mfExtendLeftStart + mfExtendRightStart) * 0.5,
-                            (mfExtendLeftEnd + mfExtendRightEnd) * 0.5),
+                            // needs to be determined in detail later, for now use the max prolongation
+                            // from left/right, butz do not less than half (0.0). This works decently,
+                            // but not perfect (see Writer, use three-color-style, look at upper/lower#
+                            // connections)
+                            std::max(0.0, std::max(mfExtendLeftStart, mfExtendRightStart)),
+                            std::max(0.0, std::max(mfExtendLeftEnd, mfExtendRightEnd))),
                         drawinglayer::primitive2d::BorderLine(
                             rBorder.Secn(),
                             (pForceColor ? *pForceColor : rBorder.GetColorSecn()).getBColor(),

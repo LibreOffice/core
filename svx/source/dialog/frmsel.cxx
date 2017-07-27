@@ -667,9 +667,6 @@ void FrameSelectorImpl::DrawAllFrameBorders()
         for( size_t nRow = 0; nRow < maArray.GetRowCount(); ++nRow )
             maArray.SetCellStyleDiag( nCol, nRow, maTLBR.GetUIStyle(), maBLTR.GetUIStyle() );
 
-    // Let the helper array draw itself
-    static bool bUsePrimitives(true);
-
     // This is used in the dialog/control for 'Border' attributes. When using
     // the original paint below instead of primitives, the advantage currently
     // is the correct visualization of diagonal line(s) including overlaying,

@@ -231,7 +231,7 @@ private:
 
     double          GetStretch();
 
-    void            DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Color* pForceColor);       // pixel
+    void            DrawRotatedFrame(vcl::RenderContext& rRenderContext);       // pixel
 
     drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
 
