@@ -2448,11 +2448,6 @@ struct SwLineEntry
     SwTwips mnKey;
     SwTwips mnStartPos;
     SwTwips mnEndPos;
-    SwTwips mnOffset;
-
-    bool mbOffsetPerp;
-    bool mbOffsetStart;
-    bool mbOffsetEnd;
 
     svx::frame::Style maAttribute;
 
@@ -2474,10 +2469,6 @@ SwLineEntry::SwLineEntry( SwTwips nKey,
     :   mnKey( nKey ),
         mnStartPos( nStartPos ),
         mnEndPos( nEndPos ),
-        mnOffset( 0 ),
-        mbOffsetPerp(false),
-        mbOffsetStart(false),
-        mbOffsetEnd(false),
         maAttribute( rAttribute )
 {
 }
@@ -2556,8 +2547,6 @@ class SwTabFramePainter
                             svx::frame::Style*,
                             bool bHori ) const;
 
-    void AdjustTopLeftFrames();
-
 public:
     explicit SwTabFramePainter( const SwTabFrame& rTabFrame );
 
@@ -2568,7 +2557,6 @@ SwTabFramePainter::SwTabFramePainter( const SwTabFrame& rTabFrame )
     : mrTabFrame( rTabFrame )
 {
     HandleFrame( rTabFrame );
-    AdjustTopLeftFrames();
 }
 
 void SwTabFramePainter::HandleFrame( const SwLayoutFrame& rLayoutFrame )
@@ -2666,42 +2654,6 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
             svx::frame::Style aStyles[ 7 ];
             aStyles[ 0 ] = rEntryStyle;
             FindStylesForLine( aStart, aEnd, aStyles, bHori );
-
-            // Account for double line thicknesses for the top- and left-most borders.
-            if (rEntry.mnOffset)
-            {
-                if (bHori)
-                {
-                    if (rEntry.mbOffsetPerp)
-                    {
-                        // Apply offset in perpendicular direction.
-                        aStart.Y() -= rEntry.mnOffset;
-                        aEnd.Y() -= rEntry.mnOffset;
-                    }
-                    if (rEntry.mbOffsetStart)
-                        // Apply offset at the start of a border.
-                        aStart.X() -= rEntry.mnOffset;
-                    if (rEntry.mbOffsetEnd)
-                        // Apply offset at the end of a border.
-                        aEnd.X() += rEntry.mnOffset;
-                }
-                else
-                {
-                    if (rEntry.mbOffsetPerp)
-                    {
-                        // Apply offset in perpendicular direction.
-                        aStart.X() -= rEntry.mnOffset;
-                        aEnd.X() -= rEntry.mnOffset;
-                    }
-                    if (rEntry.mbOffsetStart)
-                        // Apply offset at the start of a border.
-                        aStart.Y() -= rEntry.mnOffset;
-                    if (rEntry.mbOffsetEnd)
-                        // Apply offset at the end of a border.
-                        aEnd.Y() += rEntry.mnOffset;
-                }
-            }
-
             SwRect aRepaintRect( aStart, aEnd );
 
             // the repaint rectangle has to be moved a bit for the centered lines:
@@ -2769,47 +2721,25 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     aPaintEnd.Y() = aUpperAligned.Bottom_();
             }
 
-            // logically vertical lines are painted centered on the line,
-            // logically horizontal lines are painted "below" the line
-            //
-            // This does not need to be done here, it is set in SwTabFramePainter::Insert
-            // already using SetRefMode(...) as property of the BorderLine Style, see there.
-            // When additionally adding the offset here manually, it will be applied
-            // double and will be rendered wrong. This did not happen before because
-            // the setting of the svx::frame::RefMode at svx::frame::Style was ignored there.
-            //
-            // bool const isBelow((mrTabFrame.IsVertical()) ? !bHori : bHori);
-            // double const offsetStart = (isBelow)
-            //     ?   aStyles[0].GetWidth() / 2.0
-            //     :   std::max<double>(aStyles[1].GetWidth(),
-            //             aStyles[3].GetWidth()) / 2.0;
-            // double const offsetEnd = (isBelow)
-            //     ?   aStyles[0].GetWidth() / 2.0
-            //     :   std::max<double>(aStyles[4].GetWidth(),
-            //             aStyles[6].GetWidth()) / 2.0;
-            // if (mrTabFrame.IsVertical())
-            // {
-            //     aPaintStart.X() -= static_cast<long>(offsetStart + 0.5);
-            //     aPaintEnd.X()   -= static_cast<long>(offsetEnd   + 0.5);
-            // }
-            // else
-            // {
-            //     aPaintStart.Y() += static_cast<long>(offsetStart + 0.5);
-            //     aPaintEnd.Y()   += static_cast<long>(offsetEnd   + 0.5);
-            // }
-
             if (bHori)
             {
                 const basegfx::B2DPoint aOrigin(aPaintStart.X(), aPaintStart.Y());
                 const basegfx::B2DVector aX(basegfx::B2DPoint(aPaintEnd.X(), aPaintEnd.Y()) - aOrigin);
                 const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
-                drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+                drawinglayer::primitive2d::Primitive2DContainer aSequence;
 
                 svx::frame::CreateBorderPrimitives(
                     aSequence,
                     aOrigin,
                     aX,
-                    aY,
+
+                    // Writer creates it's vertical BorderLines bottom-to-top (see below).
+                    // To make the horizontal lines correctly 'guess' the line extensions
+                    // for the then mirrored svx::frame::Style for irregular double lines,
+                    // hand over the for that case correct orientatoin of the 'other'
+                    // incoming edges
+                    -aY,
+
                     aStyles[ 0 ],   // current style
                     aStyles[ 1 ],   // aLFromT
                     aStyles[ 2 ],   // aLFromL
@@ -2825,7 +2755,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                 const basegfx::B2DPoint aOrigin(aPaintEnd.X(), aPaintEnd.Y());
                 const basegfx::B2DVector aX(basegfx::B2DPoint(aPaintStart.X(), aPaintStart.Y()) - aOrigin);
                 const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
-                drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+                drawinglayer::primitive2d::Primitive2DContainer aSequence;
 
                 svx::frame::CreateBorderPrimitives(
                     aSequence,
@@ -2952,58 +2882,6 @@ void SwTabFramePainter::FindStylesForLine( const Point& rStartPoint,
             ++aIter;
         }
     }
-}
-
-namespace {
-
-void calcOffsetForDoubleLine( SwLineEntryMap& rLines )
-{
-    SwLineEntryMap aNewLines;
-    SwLineEntryMap::iterator it = rLines.begin(), itEnd = rLines.end();
-    bool bFirst = true;
-    for (; it != itEnd; ++it)
-    {
-        if (bFirst)
-        {
-            // First line needs to be offset to account for double line thickness.
-            SwLineEntrySet aNewSet;
-            const SwLineEntrySet& rSet = it->second;
-            SwLineEntrySet::iterator itSet = rSet.begin(), itSetEnd = rSet.end();
-            size_t nEntryCount = rSet.size();
-            for (size_t i = 0; itSet != itSetEnd; ++itSet, ++i)
-            {
-                SwLineEntry aLine = *itSet;
-                if (aLine.maAttribute.Secn())
-                {
-                    // Apply offset only for double lines.
-                    aLine.mnOffset = static_cast<SwTwips>(aLine.maAttribute.Dist());
-                    aLine.mbOffsetPerp = true;
-
-                    if (i == 0)
-                        aLine.mbOffsetStart = true;
-                    if (i == nEntryCount - 1)
-                        aLine.mbOffsetEnd = true;
-                }
-
-                aNewSet.insert(aLine);
-            }
-
-            aNewLines.insert(SwLineEntryMap::value_type(it->first, aNewSet));
-        }
-        else
-            aNewLines.insert(SwLineEntryMap::value_type(it->first, it->second));
-
-        bFirst = false;
-    }
-    rLines.swap(aNewLines);
-}
-
-}
-
-void SwTabFramePainter::AdjustTopLeftFrames()
-{
-    calcOffsetForDoubleLine(maHoriLines);
-    calcOffsetForDoubleLine(maVertLines);
 }
 
 /**

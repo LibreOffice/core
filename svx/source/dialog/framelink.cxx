@@ -523,7 +523,14 @@ double getSimpleExtendedLineValues(
 
     if (pResult)
     {
-        return (pResult->mfLeftRight + pResult->mfRightRight) * 0.5 * (bEdgeStart ? -fLength : fLength);
+        if (bEdgeStart)
+        {
+            return (pResult->mfLeftRight + pResult->mfRightRight) * -0.5 * fLength;
+        }
+        else
+        {
+            return (pResult->mfLeftLeft + pResult->mfRightLeft) * 0.5 * fLength;
+        }
     }
 
     return 0.0;
@@ -552,8 +559,17 @@ double getComplexExtendedLineValues(
 
     if (pResult)
     {
-        return (pResult->mfLeftRight + pResult->mfRightRight) * 0.5 * (bEdgeStart ? -fLength : fLength);
+        if (bEdgeStart)
+        {
+            return (pResult->mfLeftRight + pResult->mfRightRight) * 0.5 * -fLength;
+        }
+        else
+        {
+            return (pResult->mfLeftLeft + pResult->mfRightLeft) * 0.5 * fLength;
+        }
     }
+
+    return 0.0;
 }
 
 void CreateBorderPrimitives(
