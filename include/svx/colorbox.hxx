@@ -35,6 +35,7 @@ private:
     Link<SvxColorListBox&, void> m_aSelectedLink;
     SvxListBoxColorWrapper m_aColorWrapper;
     Color m_aAutoDisplayColor;
+    Color m_aSaveColor;
     NamedColor m_aSelectedColor;
     sal_uInt16 m_nSlotId;
     bool m_bShowNoneButton;
@@ -58,8 +59,8 @@ public:
 
     void SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton = false);
 
-    NamedColor GetSelectEntry() const;
-    Color GetSelectEntryColor() const;
+    Color GetSelectEntryColor() const { return m_aSelectedColor.first; }
+    NamedColor GetSelectEntry() const { return m_aSelectedColor; }
 
     void SelectEntry(const NamedColor& rColor);
     void SelectEntry(const Color& rColor);
@@ -70,6 +71,9 @@ public:
     void SetAutoDisplayColor(const Color &rColor) { m_aAutoDisplayColor = rColor; }
     void ShowPreview(const NamedColor &rColor);
     void EnsurePaletteManager();
+
+    void SaveValue() { m_aSaveColor = GetSelectEntryColor(); }
+    bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
 };
 
 /** A wrapper for SvxColorListBox. */

@@ -622,7 +622,6 @@ void PushButton::ImplInitPushButtonData()
 
     meSymbol        = SymbolType::DONTKNOW;
     meState         = TRISTATE_FALSE;
-    meSaveValue     = TRISTATE_FALSE;
     mnDDStyle       = PushButtonDropdownStyle::NONE;
     mbIsActive    = false;
     mbPressed       = false;
