@@ -199,6 +199,7 @@ public:
     void testTdf99004();
     void testTdf84695();
     void testTdf84695NormalChar();
+    void testParagraphOfTextRange();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -300,6 +301,7 @@ public:
     CPPUNIT_TEST(testTdf99004);
     CPPUNIT_TEST(testTdf84695);
     CPPUNIT_TEST(testTdf84695NormalChar);
+    CPPUNIT_TEST(testParagraphOfTextRange);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3702,6 +3704,27 @@ void SwUiWriterTest::testTdf84695NormalChar()
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, pressing a normal character did not start the fly frame edit mode.
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xShape->getString());
+}
+
+void SwUiWriterTest::testParagraphOfTextRange()
+{
+    SwDoc* pDoc = createDoc("paragraph-of-text-range.odt");
+
+    // Enter the table.
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInTable());
+    // Enter the section.
+    pWrtShell->Down(/*bSelect=*/false);
+    CPPUNIT_ASSERT(pWrtShell->IsDirectlyInSection());
+
+    // Assert that we get the right paragraph object.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xController(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xViewCursor(xController->getViewCursor(), uno::UNO_QUERY);
+    // This failed as there were no TextParagraph property.
+    auto xParagraph = getProperty< uno::Reference<text::XTextRange> >(xViewCursor->getStart(), "TextParagraph");
+    CPPUNIT_ASSERT_EQUAL(OUString("In section"), xParagraph->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
