@@ -1001,88 +1001,88 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     Reference < XController > xController;
-        // if a frame is given, it must be used for the starting point of the targeting mechanism
-        // this code is also used if asynchronous loading is possible, because loadComponent always is synchron
-        if ( !xTargetFrame.is() )
+    // if a frame is given, it must be used for the starting point of the targeting mechanism
+    // this code is also used if asynchronous loading is possible, because loadComponent always is synchron
+    if ( !xTargetFrame.is() )
+    {
+        if ( pTargetFrame )
         {
-            if ( pTargetFrame )
-            {
-                xTargetFrame = pTargetFrame->GetFrameInterface();
-            }
-            else
-            {
-                xTargetFrame.set( Desktop::create(::comphelper::getProcessComponentContext()), UNO_QUERY );
-            }
-        }
-
-        // make URL ready
-        const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
-        aFileName = pURLItem->GetValue();
-        if( aFileName.startsWith("#") ) // Mark without URL
-        {
-            SfxViewFrame *pView = pTargetFrame ? pTargetFrame->GetCurrentViewFrame() : nullptr;
-            if ( !pView )
-                pView = SfxViewFrame::Current();
-            pView->GetViewShell()->JumpToMark( aFileName.copy(1) );
-            rReq.SetReturnValue( SfxViewFrameItem( pView ) );
-            return;
-        }
-
-        // convert items to properties for framework API calls
-        Sequence < PropertyValue > aArgs;
-        TransformItems( SID_OPENDOC, *rReq.GetArgs(), aArgs );
-        // Any Referer (that was relevant in the above call to
-        // SvtSecurityOptions::isSecureMacroUri) is no longer relevant, assuming
-        // this "open" request is initiated directly by the user:
-        for (sal_Int32 i = 0; i != aArgs.getLength(); ++i) {
-            if (aArgs[i].Name == "Referer") {
-                ++i;
-                for (; i != aArgs.getLength(); ++i) {
-                    aArgs[i - 1] = aArgs[i];
-                }
-                aArgs.realloc(aArgs.getLength()-1);
-                break;
-            }
-        }
-
-        // TODO/LATER: either remove LinkItem or create an asynchronous process for it
-        if( bHidden || pLinkItem || rReq.IsSynchronCall() )
-        {
-            // if loading must be done synchron, we must wait for completion to get a return value
-            // find frame by myself; I must know the exact frame to get the controller for the return value from it
-            Reference < XComponent > xComp;
-
-            try
-            {
-                xComp = ::comphelper::SynchronousDispatch::dispatch( xTargetFrame, aFileName, aTarget, 0, aArgs );
-            }
-            catch(const RuntimeException&)
-            {
-                throw;
-            }
-            catch(const css::uno::Exception&)
-            {
-            }
-
-            Reference < XModel > xModel( xComp, UNO_QUERY );
-            if ( xModel.is() )
-                xController = xModel->getCurrentController();
-            else
-                xController.set( xComp, UNO_QUERY );
-
+            xTargetFrame = pTargetFrame->GetFrameInterface();
         }
         else
         {
-            URL aURL;
-            aURL.Complete = aFileName;
-            Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
-            xTrans->parseStrict( aURL );
-
-            Reference < XDispatchProvider > xProv( xTargetFrame, UNO_QUERY );
-            Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();
-            if ( xDisp.is() )
-                xDisp->dispatch( aURL, aArgs );
+            xTargetFrame.set( Desktop::create(::comphelper::getProcessComponentContext()), UNO_QUERY );
         }
+    }
+
+    // make URL ready
+    const SfxStringItem* pURLItem = rReq.GetArg<SfxStringItem>(SID_FILE_NAME);
+    aFileName = pURLItem->GetValue();
+    if( aFileName.startsWith("#") ) // Mark without URL
+    {
+        SfxViewFrame *pView = pTargetFrame ? pTargetFrame->GetCurrentViewFrame() : nullptr;
+        if ( !pView )
+            pView = SfxViewFrame::Current();
+        pView->GetViewShell()->JumpToMark( aFileName.copy(1) );
+        rReq.SetReturnValue( SfxViewFrameItem( pView ) );
+        return;
+    }
+
+    // convert items to properties for framework API calls
+    Sequence < PropertyValue > aArgs;
+    TransformItems( SID_OPENDOC, *rReq.GetArgs(), aArgs );
+    // Any Referer (that was relevant in the above call to
+    // SvtSecurityOptions::isSecureMacroUri) is no longer relevant, assuming
+    // this "open" request is initiated directly by the user:
+    for (sal_Int32 i = 0; i != aArgs.getLength(); ++i) {
+        if (aArgs[i].Name == "Referer") {
+            ++i;
+            for (; i != aArgs.getLength(); ++i) {
+                aArgs[i - 1] = aArgs[i];
+            }
+            aArgs.realloc(aArgs.getLength()-1);
+            break;
+        }
+    }
+
+    // TODO/LATER: either remove LinkItem or create an asynchronous process for it
+    if( bHidden || pLinkItem || rReq.IsSynchronCall() )
+    {
+        // if loading must be done synchron, we must wait for completion to get a return value
+        // find frame by myself; I must know the exact frame to get the controller for the return value from it
+        Reference < XComponent > xComp;
+
+        try
+        {
+            xComp = ::comphelper::SynchronousDispatch::dispatch( xTargetFrame, aFileName, aTarget, 0, aArgs );
+        }
+        catch(const RuntimeException&)
+        {
+            throw;
+        }
+        catch(const css::uno::Exception&)
+        {
+        }
+
+        Reference < XModel > xModel( xComp, UNO_QUERY );
+        if ( xModel.is() )
+            xController = xModel->getCurrentController();
+        else
+            xController.set( xComp, UNO_QUERY );
+
+    }
+    else
+    {
+        URL aURL;
+        aURL.Complete = aFileName;
+        Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
+        xTrans->parseStrict( aURL );
+
+        Reference < XDispatchProvider > xProv( xTargetFrame, UNO_QUERY );
+        Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();
+        if ( xDisp.is() )
+            xDisp->dispatch( aURL, aArgs );
+    }
 
     if ( xController.is() )
     {
