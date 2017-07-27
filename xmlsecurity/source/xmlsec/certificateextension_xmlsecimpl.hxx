@@ -52,7 +52,7 @@ class CertificateExtension_XmlSecImpl : public ::cppu::WeakImplHelper<
             return m_Extn.m_xExtnValue;
         }
 
-        void setCertExtn(unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical)
+        void setCertExtn(unsigned char const * value, unsigned int vlen, unsigned char const * id, unsigned int idlen, bool critical)
         {
             m_Extn.setCertExtn(value, vlen, id, idlen, critical);
         }
