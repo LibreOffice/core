@@ -1531,7 +1531,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         sal_Int32 nCnt = rInf.GetText().getLength();
         if ( nCnt < rInf.GetIdx() )
-            nCnt = 0;
+            assert(false); // layout bug, not handled below
         else
             nCnt = nCnt - rInf.GetIdx();
         nCnt = std::min<sal_Int32>( nCnt, rInf.GetLen() );
