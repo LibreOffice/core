@@ -1251,6 +1251,9 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
     SwRectFnSet aRectFnSet(this);
 
+    SwFrame const* pMoveBwdPre(nullptr);
+    bool isMoveBwdPreValid(false);
+
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
         // - loop prevention
@@ -1272,7 +1275,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                     GetUpper()->ResetCompletePaint();
                     // The predecessor was invalidated, so this is obsolete as well now.
                     OSL_ENSURE( pPre, "missing old Prev" );
-                    if( !pPre->IsSctFrame() )
+                    if ((pPre == pMoveBwdPre && isMoveBwdPreValid) && !pPre->IsSctFrame())
                         ::ValidateSz( pPre );
                 }
                 bMoveable = IsMoveable();
@@ -1405,6 +1408,9 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         // To prevent oscillations/loops, check that this has not just
         // flowed forwards.
         bool bDummy;
+        auto const pTemp(GetIndPrev());
+        auto const bTemp(pTemp && pTemp->GetValidSizeFlag()
+                               && pTemp->GetValidPrtAreaFlag());
         if ( !lcl_Prev( this ) &&
              !bMovedFwd &&
              ( bMoveable || ( bFly && !bTab ) ) &&
@@ -1412,6 +1418,8 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
              && MoveBwd( bDummy ) )
         {
             aRectFnSet.Refresh(this);
+            pMoveBwdPre = pTemp;
+            isMoveBwdPreValid = bTemp;
             bMovedBwd = true;
             bFormatted = false;
             if ( bKeep && bMoveable )
