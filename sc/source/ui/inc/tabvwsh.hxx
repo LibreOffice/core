@@ -389,6 +389,7 @@ public:
     void NotifyCursor(SfxViewShell* pViewShell) const override;
     /// Emits a LOK_CALLBACK_INVALIDATE_HEADER for all views whose current tab is equal to nCurrentTabIndex
     static void notifyAllViewsHeaderInvalidation(const OString& rPayload, SCTAB nCurrentTabIndex = -1);
+    css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
 };
 
 #endif
