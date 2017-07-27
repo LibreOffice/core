@@ -119,7 +119,7 @@ The current presentation contains no OLE objects.</value>
             <value xml:lang="en-US">Choose which slides to delete</value>
         </prop>
         <prop oor:name="STR_DELETE_MASTER_PAGES">
-            <value xml:lang="en-US">Delete unused ~master pages</value>
+            <value xml:lang="en-US">Delete unused ~master slides</value>
         </prop>
         <prop oor:name="STR_DELETE_NOTES_PAGES">
             <value xml:lang="en-US">~Clear notes</value>

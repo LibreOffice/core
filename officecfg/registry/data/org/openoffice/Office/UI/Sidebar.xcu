@@ -107,7 +107,7 @@
 
       <node oor:name="SdMasterPagesDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Master Pages</value>
+          <value xml:lang="en-US">Master Slides</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>SdMasterPagesDeck</value>
