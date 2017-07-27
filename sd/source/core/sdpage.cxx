@@ -1011,7 +1011,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
 
             if(eObjKind == PRESOBJ_HEADER )
             {
-                OSL_FAIL( "SdPage::CreateDefaultPresObj() - can't create a header placeholder for a slide master" );
+                OSL_FAIL( "SdPage::CreateDefaultPresObj() - can't create a header placeholder for a master slide" );
                 return nullptr;
             }
             else
