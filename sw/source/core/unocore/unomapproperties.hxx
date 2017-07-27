@@ -88,6 +88,7 @@
         { OUString(UNO_NAME_CELL), FN_UNO_CELL,         cppu::UnoType<css::table::XCell>::get(),         PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                     \
         { OUString(UNO_NAME_TEXT_FRAME), FN_UNO_TEXT_FRAME,     cppu::UnoType<css::text::XTextFrame>::get(),        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                     \
         { OUString(UNO_NAME_TEXT_SECTION), FN_UNO_TEXT_SECTION, cppu::UnoType<css::text::XTextSection>::get(),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                    \
+        { OUString(UNO_NAME_TEXT_PARAGRAPH), FN_UNO_TEXT_PARAGRAPH, cppu::UnoType<css::text::XTextContent>::get(),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },                    \
         { OUString(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,cppu::UnoType<sal_Int8>::get(), PROPERTY_NONE, 0},                                                     \
         { OUString(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME), FN_UNO_PARA_CONDITIONAL_STYLE_NAME, cppu::UnoType<OUString>::get(),      PropertyAttribute::READONLY, 0},                                                     \
         { OUString(UNO_NAME_LIST_ID), FN_UNO_LIST_ID, cppu::UnoType<OUString>::get(), PropertyAttribute::MAYBEVOID, 0}, \

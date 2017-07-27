@@ -261,6 +261,7 @@ public:
     void testTableInNestedSection();
     void testLinesInSectionInTable();
     void testLinesMoveBackwardsInSectionInTable();
+    void testParagraphOfTextRange();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -410,6 +411,7 @@ public:
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
 #endif
     CPPUNIT_TEST(testLinesInSectionInTable);
+    CPPUNIT_TEST(testParagraphOfTextRange);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5062,6 +5064,27 @@ void SwUiWriterTest::testTableInNestedSection()
     assertXPath(pXmlDoc, "//page[2]//section/tab", 1);
 }
 #endif
+
+void SwUiWriterTest::testParagraphOfTextRange()
+{
+    SwDoc* pDoc = createDoc("paragraph-of-text-range.odt");
+
+    // Enter the table.
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInTable());
+    // Enter the section.
+    pWrtShell->Down(/*bSelect=*/false);
+    CPPUNIT_ASSERT(pWrtShell->IsDirectlyInSection());
+
+    // Assert that we get the right paragraph object.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xController(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xViewCursor(xController->getViewCursor(), uno::UNO_QUERY);
+    // This failed as there were no TextParagraph property.
+    auto xParagraph = getProperty< uno::Reference<text::XTextRange> >(xViewCursor->getStart(), "TextParagraph");
+    CPPUNIT_ASSERT_EQUAL(OUString("In section"), xParagraph->getString());
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();

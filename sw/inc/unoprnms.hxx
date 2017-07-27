@@ -391,6 +391,7 @@
 #define UNO_NAME_FOOTER_BODY_DISTANCE "FooterBodyDistance"
 #define UNO_NAME_FOOTER_IS_DYNAMIC_HEIGHT "FooterIsDynamicHeight"
 #define UNO_NAME_FOOTER_IS_SHARED "FooterIsShared"
+#define UNO_NAME_TEXT_PARAGRAPH "TextParagraph"
 
 #define UNO_NAME_FOOTER_HEIGHT "FooterHeight"
 #define UNO_NAME_FOOTER_IS_ON "FooterIsOn"
