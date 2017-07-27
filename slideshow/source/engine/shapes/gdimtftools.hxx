@@ -112,9 +112,9 @@ namespace slideshow
             @param rGraphic
             Input graphic object, to extract animations from
          */
-        bool getAnimationFromGraphic( VectorOfMtfAnimationFrames& o_rFrames,
-                                      ::std::size_t&              o_rLoopCount,
-                                      const Graphic&              rGraphic );
+        bool getAnimationFromGraphic(VectorOfMtfAnimationFrames& o_rFrames,
+                                     sal_uInt32&                 o_rLoopCount,
+                                     const Graphic&              rGraphic);
 
         /** Retrieve scroll text animation rectangles from given metafile
 

@@ -947,11 +947,10 @@ Link<Animation*,void> ImpGraphic::ImplGetAnimationNotifyHdl() const
     return aLink;
 }
 
-sal_uLong ImpGraphic::ImplGetAnimationLoopCount() const
+sal_uInt32 ImpGraphic::ImplGetAnimationLoopCount() const
 {
-    return( mpAnimation ? mpAnimation->GetLoopCount() : 0UL );
+    return( mpAnimation ? mpAnimation->GetLoopCount() : 0 );
 }
-
 
 void ImpGraphic::ImplSetContext( const std::shared_ptr<GraphicReader>& pReader )
 {

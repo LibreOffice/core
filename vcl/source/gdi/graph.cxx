@@ -484,7 +484,7 @@ Link<Animation*,void> Graphic::GetAnimationNotifyHdl() const
     return mxImpGraphic->ImplGetAnimationNotifyHdl();
 }
 
-sal_uLong Graphic::GetAnimationLoopCount() const
+sal_uInt32 Graphic::GetAnimationLoopCount() const
 {
     return mxImpGraphic->ImplGetAnimationLoopCount();
 }

@@ -744,7 +744,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                         // LoopCount
                         if( i == 0 )
                         {
-                            long nLoopCount = aAnimation.GetLoopCount();
+                            sal_uInt32 nLoopCount = aAnimation.GetLoopCount();
 
                             if( !nLoopCount ) // endless
                                 m_pLbLoopCount->SelectEntryPos( m_pLbLoopCount->GetEntryCount() - 1);
@@ -980,11 +980,11 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
 
             // find LoopCount (number of passes)
             AnimationBitmap aAnimBmp;
-            long            nLoopCount = 0L;
-            sal_Int32          nPos = m_pLbLoopCount->GetSelectEntryPos();
+            sal_uInt32 nLoopCount = 0;
+            sal_Int32 nPos = m_pLbLoopCount->GetSelectEntryPos();
 
             if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != m_pLbLoopCount->GetEntryCount() - 1 ) // endless
-                nLoopCount = (long) m_pLbLoopCount->GetSelectEntry().toInt32();
+                nLoopCount = m_pLbLoopCount->GetSelectEntry().toUInt32();
 
             aAnimBmp.aBmpEx = *pBitmapEx;
             aAnimBmp.aPosPix = aPt;

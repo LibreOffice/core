@@ -263,7 +263,7 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
 }
 
 bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
-                              ::std::size_t&                o_rLoopCount,
+                              sal_uInt32&                   o_rLoopCount,
                               const Graphic&                rGraphic )
 {
     o_rFrames.clear();

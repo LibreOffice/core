@@ -510,7 +510,7 @@ void Animation::Replace( const AnimationBitmap& rNewAnimationBitmap, sal_uInt16 
     }
 }
 
-void Animation::SetLoopCount( const sal_uLong nLoopCount )
+void Animation::SetLoopCount(const sal_uInt32 nLoopCount)
 {
     mnLoopCount = nLoopCount;
     ResetLoopCount();
@@ -767,7 +767,7 @@ SvStream& ReadAnimation( SvStream& rIStm, Animation& rAnimation )
             rIStm.ReadUInt16( nTmp16 ); aAnimBmp.nWait = ( ( 65535 == nTmp16 ) ? ANIMATION_TIMEOUT_ON_CLICK : nTmp16 );
             rIStm.ReadUInt16( nTmp16 ); aAnimBmp.eDisposal = ( Disposal) nTmp16;
             rIStm.ReadCharAsBool( cTmp ); aAnimBmp.bUserInput = cTmp;
-            rIStm.ReadUInt32( nTmp32 ); rAnimation.mnLoopCount = (sal_uInt16) nTmp32;
+            rIStm.ReadUInt32( rAnimation.mnLoopCount );
             rIStm.ReadUInt32( nTmp32 ); // Unused
             rIStm.ReadUInt32( nTmp32 ); // Unused
             rIStm.ReadUInt32( nTmp32 ); // Unused

@@ -115,7 +115,7 @@ private:
     void                ImplSetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
     Link<Animation*,void> ImplGetAnimationNotifyHdl() const;
 
-    sal_uLong           ImplGetAnimationLoopCount() const;
+    sal_uInt32          ImplGetAnimationLoopCount() const;
 
 private:
 

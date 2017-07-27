@@ -187,7 +187,7 @@ public:
     void            SetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
     Link<Animation*,void> GetAnimationNotifyHdl() const;
 
-    sal_uLong       GetAnimationLoopCount() const;
+    sal_uInt32      GetAnimationLoopCount() const;
 
     BitmapChecksum  GetChecksum() const;
 

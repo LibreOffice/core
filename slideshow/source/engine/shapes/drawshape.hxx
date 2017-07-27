@@ -337,7 +337,7 @@ namespace slideshow
             int                                                                     mnIsAnimatedCount;
 
             /// Number of times the bitmap animation shall loop
-            ::std::size_t                                                           mnAnimationLoopCount;
+            sal_uInt32                                                              mnAnimationLoopCount;
 
             /// Whether shape is visible (without attribute layers)
             bool                                                                    mbIsVisible;
