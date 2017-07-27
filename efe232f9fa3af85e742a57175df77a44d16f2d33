@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_65d99e21",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2072,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-27T09:39:08Z",
+      "side": 1,
+      "message": "This can\u0027t work. Apparently you\u0027re mixing in a source state that predates the .hrc/.src change and resource compiler removal. Please make sure you have rebased your working tree to a fairly recent master and adapt and build this.",
+      "revId": "efe232f9fa3af85e742a57175df77a44d16f2d33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
