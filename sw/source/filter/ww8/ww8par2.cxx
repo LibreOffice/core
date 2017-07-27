@@ -401,14 +401,16 @@ long SwWW8ImplReader::Read_Footnote(WW8PLCFManResult* pRes)
     if (eEDN == pRes->nSprmId)
     {
         aDesc.meType = MAN_EDN;
-        if (m_pPlcxMan->GetEdn())
-            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_pPlcxMan->GetEdn()->GetData());
+        WW8PLCFx_SubDoc* pEndNote = m_pPlcxMan->GetEdn();
+        if (const void* pData = pEndNote ? pEndNote->GetData() : nullptr)
+            aDesc.mbAutoNum = 0 != *static_cast<short const*>(pData);
     }
     else
     {
         aDesc.meType = MAN_FTN;
-        if (m_pPlcxMan->GetFootnote())
-            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_pPlcxMan->GetFootnote()->GetData());
+        WW8PLCFx_SubDoc* pFootNote = m_pPlcxMan->GetFootnote();
+        if (const void* pData = pFootNote ? pFootNote->GetData() : nullptr)
+            aDesc.mbAutoNum = 0 != *static_cast<short const*>(pData);
     }
 
     aDesc.mnStartCp = pRes->nCp2OrIdx;
