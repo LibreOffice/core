@@ -1143,12 +1143,12 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pIconsAndTextRB, "iconsandtextrb");
     get(m_pContents, "contents");
     get(m_pContentsLabel, "contentslabel");
-    get(m_pAddCommandsButton, "add");
-    get(m_pAddSeparatorButton, "addseparatorbtn");
-    get(m_pAddSubmenuButton, "addsubmenubtn");
-    get(m_pModifyCommandButton, "modify");
-    get(m_pDeleteCommandButton, "deletebtn");
-    get(m_pResetTopLevelButton, "resetbtn");
+    //get(m_pAddCommandsButton, "add");
+    //get(m_pAddSeparatorButton, "addseparatorbtn");
+    //get(m_pAddSubmenuButton, "addsubmenubtn");
+    //get(m_pModifyCommandButton, "modify");
+    //get(m_pDeleteCommandButton, "deletebtn");
+    //get(m_pResetTopLevelButton, "resetbtn");
     get(m_pMoveUpButton, "up");
     get(m_pMoveDownButton, "down");
     get(m_pSaveInListBox, "savein");
@@ -1163,8 +1163,8 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     m_pDescriptionField->EnableCursor( false );
 
     // This button is applicable only for the toolbar config tab
-    m_pResetTopLevelButton->Enable( false );
-    m_pResetTopLevelButton->Hide();
+    //m_pResetTopLevelButton->Enable( false );
+    //m_pResetTopLevelButton->Hide();
     // These radio buttons are applicable only for the toolbar config tab
     m_pIconsOnlyRB->Enable( false );
     m_pTextOnlyRB->Enable( false );
@@ -1174,8 +1174,8 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     m_pIconsAndTextRB->Hide();
     m_pToolbarStyleLabel->Hide();
     // This button is applicable only for the Menus and Context Menus tabs
-    m_pAddSubmenuButton->Disable();
-    m_pAddSubmenuButton->Hide();
+    //m_pAddSubmenuButton->Disable();
+    //m_pAddSubmenuButton->Hide();
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -1197,12 +1197,12 @@ void SvxConfigPage::dispose()
     m_pContents.clear();
     m_pContentsLabel.clear();
     m_pEntries.clear();
-    m_pAddCommandsButton.clear();
-    m_pAddSeparatorButton.clear();
-    m_pAddSubmenuButton.clear();
-    m_pModifyCommandButton.clear();
-    m_pDeleteCommandButton.clear();
-    m_pResetTopLevelButton.clear();
+    //m_pAddCommandsButton.clear();
+    //m_pAddSeparatorButton.clear();
+    //m_pAddSubmenuButton.clear();
+    //m_pModifyCommandButton.clear();
+    //m_pDeleteCommandButton.clear();
+    //m_pResetTopLevelButton.clear();
     m_pMoveUpButton.clear();
     m_pMoveDownButton.clear();
     m_pSaveInListBox.clear();
