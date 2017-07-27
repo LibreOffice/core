@@ -3431,7 +3431,11 @@ gboolean GtkSalFrame::signalDragDrop(GtkWidget* pWidget, GdkDragContext* context
     // navigator unless this is set. Its unclear really what ACTION_DEFAULT means,
     // there is a deprecated 'GDK_ACTION_DEFAULT Means nothing, and should not be used'
     // possible equivalent in gtk.
-    aEvent.DropAction |= css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
+    // So (tdf#109227) set ACTION_DEFAULT if no modifier key is held down
+    GdkModifierType mask;
+    gdk_window_get_pointer(widget_get_window(pWidget), nullptr, nullptr, &mask);
+    if (!(mask & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)))
+        aEvent.DropAction |= css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
     aEvent.SourceActions = GdkToVcl(gdk_drag_context_get_actions(context));
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
     // For LibreOffice internal D&D we provide the Transferable without Gtk
@@ -3503,7 +3507,27 @@ gboolean GtkSalFrame::signalDragMotion(GtkWidget *pWidget, GdkDragContext *conte
     //inform the original caller of our choice and the callsite can decide
     //to overrule this choice. i.e. typically here we default to ACTION_MOVE
     sal_Int8 nSourceActions = GdkToVcl(gdk_drag_context_get_actions(context));
-    GdkDragAction eAction = getPreferredDragAction(nSourceActions);
+    GdkModifierType mask;
+    gdk_window_get_pointer(widget_get_window(pWidget), nullptr, nullptr, &mask);
+
+    // tdf#109227 if a modifier is held down, default to the matching
+    // action for that modifier combo, otherwise pick the preferred
+    // default from the possible source actions
+    sal_Int8 nNewDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    if ((mask & GDK_SHIFT_MASK) && !(mask & GDK_CONTROL_MASK))
+        nNewDropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+    else if ((mask & GDK_CONTROL_MASK) && !(mask & GDK_SHIFT_MASK))
+        nNewDropAction = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
+    else if ((mask & GDK_SHIFT_MASK) && (mask & GDK_CONTROL_MASK) )
+        nNewDropAction = css::datatransfer::dnd::DNDConstants::ACTION_LINK;
+    nNewDropAction &= nSourceActions;
+
+    GdkDragAction eAction;
+    if (!(mask & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) && !nNewDropAction)
+        eAction = getPreferredDragAction(nSourceActions);
+    else
+        eAction = getPreferredDragAction(nNewDropAction);
+
     gdk_drag_status(context, eAction, time);
     aEvent.Context = pContext;
     aEvent.LocationX = x;
