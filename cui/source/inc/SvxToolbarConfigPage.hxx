@@ -53,14 +53,14 @@ private:
 
     DECL_LINK( SelectToolbar, ListBox&, void );
     DECL_LINK( SelectToolbarEntry, SvTreeListBox*, void );
-    DECL_LINK( ToolbarSelectHdl, MenuButton *, void );
-    DECL_LINK( EntrySelectHdl, MenuButton *, void );
+    //DECL_LINK( ToolbarSelectHdl, MenuButton *, void );
+    //DECL_LINK( EntrySelectHdl, MenuButton *, void );
     DECL_LINK( StyleChangeHdl, Button *, void );
-    DECL_LINK( NewToolbarHdl, Button *, void );
-    DECL_LINK( AddCommandsHdl, Button *, void );
-    DECL_LINK( AddSeparatorHdl, Button *, void );
-    DECL_LINK( DeleteCommandHdl, Button *, void );
-    DECL_LINK( ResetTopLevelHdl, Button *, void );
+    //DECL_LINK( NewToolbarHdl, Button *, void );
+    //DECL_LINK( AddCommandsHdl, Button *, void );
+    //DECL_LINK( AddSeparatorHdl, Button *, void );
+    //DECL_LINK( DeleteCommandHdl, Button *, void );
+    //DECL_LINK( ResetTopLevelHdl, Button *, void );
     DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog&, void );
     DECL_LINK( MoveHdl, Button *, void );
 
@@ -70,7 +70,7 @@ private:
     void            DeleteSelectedContent() override;
     void            DeleteSelectedTopLevel() override;
 
-    VclPtr<PopupMenu> m_pMenu;
+    //VclPtr<PopupMenu> m_pMenu;
     VclPtr<PopupMenu> m_pEntry;
 
 public:

@@ -113,8 +113,15 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     m_pContentsListBox->set_vexpand(true);
     m_pContentsListBox->Show();
 
-    m_pAddSubmenuButton->Enable();
-    m_pAddSubmenuButton->Show();
+    m_pFunctionsListBox = VclPtr<SvxMenuEntriesListBox>::Create(m_pFunctions, this);
+    m_pFunctionsListBox->set_grid_left_attach(0);
+    m_pFunctionsListBox->set_grid_top_attach(0);
+    m_pFunctionsListBox->set_hexpand(true);
+    m_pFunctionsListBox->set_vexpand(true);
+    m_pFunctionsListBox->Show();
+
+    //m_pAddSubmenuButton->Enable();
+    //m_pAddSubmenuButton->Show();
 
     m_pTopLevelListBox->SetSelectHdl(
         LINK( this, SvxMenuConfigPage, SelectMenu ) );
@@ -125,41 +132,41 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxConfigPage, MoveHdl) );
 
-    m_pNewTopLevelButton->SetClickHdl  (
-        LINK( this, SvxMenuConfigPage, NewMenuHdl ) );
+    //m_pNewTopLevelButton->SetClickHdl  (
+        //LINK( this, SvxMenuConfigPage, NewMenuHdl ) );
 
-    m_pAddCommandsButton->SetClickHdl  (
-        LINK( this, SvxMenuConfigPage, AddCommandsHdl ) );
+    //m_pAddCommandsButton->SetClickHdl  (
+        //LINK( this, SvxMenuConfigPage, AddCommandsHdl ) );
 
-    m_pAddSeparatorButton->SetClickHdl  (
-        LINK( this, SvxMenuConfigPage, AddSeparatorHdl ) );
+    //m_pAddSeparatorButton->SetClickHdl  (
+        //LINK( this, SvxMenuConfigPage, AddSeparatorHdl ) );
 
-    m_pAddSubmenuButton->SetClickHdl  (
-        LINK( this, SvxMenuConfigPage, AddSubmenuHdl ) );
+    //m_pAddSubmenuButton->SetClickHdl  (
+        //LINK( this, SvxMenuConfigPage, AddSubmenuHdl ) );
 
-    m_pDeleteCommandButton->SetClickHdl  (
-        LINK( this, SvxMenuConfigPage, DeleteCommandHdl ) );
+    //m_pDeleteCommandButton->SetClickHdl  (
+        //LINK( this, SvxMenuConfigPage, DeleteCommandHdl ) );
 
-    PopupMenu* pMenu = m_pModifyTopLevelButton->GetPopupMenu();
-    pMenu->SetMenuFlags(
-        pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
+    //PopupMenu* pMenu = m_pModifyTopLevelButton->GetPopupMenu();
+    //pMenu->SetMenuFlags(
+        //pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
-    m_pModifyTopLevelButton->SetSelectHdl(
-        LINK( this, SvxMenuConfigPage, MenuSelectHdl ) );
+    //m_pModifyTopLevelButton->SetSelectHdl(
+        //LINK( this, SvxMenuConfigPage, MenuSelectHdl ) );
 
-    PopupMenu* pEntry = m_pModifyCommandButton->GetPopupMenu();
-    pEntry->SetMenuFlags(
-        pEntry->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
+    //PopupMenu* pEntry = m_pModifyCommandButton->GetPopupMenu();
+    //pEntry->SetMenuFlags(
+        //pEntry->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
-    m_pModifyCommandButton->SetSelectHdl(
-        LINK( this, SvxMenuConfigPage, EntrySelectHdl ) );
+    //m_pModifyCommandButton->SetSelectHdl(
+        //LINK( this, SvxMenuConfigPage, EntrySelectHdl ) );
 
     if ( !bIsMenuBar )
     {
         m_pTopLevel->set_label( CuiResId( RID_SVXSTR_PRODUCTNAME_CONTEXTMENUS ) );
-        m_pNewTopLevelButton->Hide();
-        pMenu->HideItem( pMenu->GetItemId( "move" ) );
-        pMenu->HideItem( pMenu->GetItemId( "menuitem3" ) );
+        //m_pNewTopLevelButton->Hide();
+        //pMenu->HideItem( pMenu->GetItemId( "move" ) );
+        //pMenu->HideItem( pMenu->GetItemId( "menuitem3" ) );
     }
 }
 
@@ -199,7 +206,7 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenuEntry, SvTreeListBox *, void )
 
 void SvxMenuConfigPage::UpdateButtonStates()
 {
-    PopupMenu* pPopup = m_pModifyCommandButton->GetPopupMenu();
+    //PopupMenu* pPopup = m_pModifyCommandButton->GetPopupMenu();
 
     // Disable Up and Down buttons depending on current selection
     SvTreeListEntry* selection = m_pContentsListBox->GetCurEntry();
@@ -208,9 +215,9 @@ void SvxMenuConfigPage::UpdateButtonStates()
     {
         m_pMoveUpButton->Enable( false );
         m_pMoveDownButton->Enable( false );
-        m_pDeleteCommandButton->Enable(false);
+        //m_pDeleteCommandButton->Enable(false);
 
-        pPopup->EnableItem( "modrename", false );
+        //pPopup->EnableItem( "modrename", false );
 
         m_pDescriptionField->SetText("");
 
@@ -228,19 +235,19 @@ void SvxMenuConfigPage::UpdateButtonStates()
 
     if ( pEntryData->IsSeparator() )
     {
-        pPopup->EnableItem( "modrename", false );
+        //pPopup->EnableItem( "modrename", false );
 
         m_pDescriptionField->SetText("");
 
-        m_pAddSeparatorButton->Enable( false );
-        m_pDeleteCommandButton->Enable();
+        //m_pAddSeparatorButton->Enable( false );
+        //m_pDeleteCommandButton->Enable();
     }
     else
     {
-        pPopup->EnableItem( "modrename" );
+        //pPopup->EnableItem( "modrename" );
 
-        m_pDeleteCommandButton->Enable();
-        m_pAddSeparatorButton->Enable();
+        //m_pDeleteCommandButton->Enable();
+        //m_pAddSeparatorButton->Enable();
 
         m_pDescriptionField->SetText(pEntryData->GetHelpText());
     }
@@ -313,18 +320,18 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
     m_pContentsListBox->Clear();
 
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
-    m_pModifyTopLevelButton->Enable( pMenuData != nullptr );
-    m_pModifyCommandButton->Enable( pMenuData != nullptr );
-    m_pAddCommandsButton->Enable( pMenuData != nullptr );
-    m_pAddSeparatorButton->Enable( pMenuData != nullptr );
-    m_pAddSubmenuButton->Enable( pMenuData != nullptr );
+    //m_pModifyTopLevelButton->Enable( pMenuData != nullptr );
+    //m_pModifyCommandButton->Enable( pMenuData != nullptr );
+    //m_pAddCommandsButton->Enable( pMenuData != nullptr );
+    //m_pAddSeparatorButton->Enable( pMenuData != nullptr );
+    //m_pAddSubmenuButton->Enable( pMenuData != nullptr );
 
-    PopupMenu* pPopup = m_pModifyTopLevelButton->GetPopupMenu();
+    //PopupMenu* pPopup = m_pModifyTopLevelButton->GetPopupMenu();
     if ( pMenuData )
     {
-        pPopup->EnableItem( "delete", pMenuData->IsDeletable() );
+        /*pPopup->EnableItem( "delete", pMenuData->IsDeletable() );
         pPopup->EnableItem( "rename", pMenuData->IsRenamable() );
-        pPopup->EnableItem( "move", pMenuData->IsMovable() );
+        pPopup->EnableItem( "move", pMenuData->IsMovable() );*/
 
         SvxEntries* pEntries = pMenuData->GetEntries();
         SvxEntries::const_iterator iter = pEntries->begin();
@@ -339,7 +346,7 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, SelectMenu, ListBox&, void )
     UpdateButtonStates();
 }
 
-IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
+/*IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
 {
     OString sIdent = pButton->GetCurItemIdent();
 
@@ -384,9 +391,9 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
             GetSaveInData()->SetModified();
         }
     }
-}
+}*/
 
-IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
+/*IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
 {
     OString sIdent = pButton->GetCurItemIdent();
     if (sIdent == "modrename")
@@ -421,14 +428,14 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
     {
         UpdateButtonStates();
     }
-}
+}*/
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
+/*IMPL_LINK_NOARG( SvxMenuConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
 {
     AddFunction();
-}
+}*/
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, NewMenuHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxMenuConfigPage, NewMenuHdl, Button *, void )
 {
     VclPtrInstance<SvxMainMenuOrganizerDialog> pDialog(
         nullptr, GetSaveInData()->GetEntries(), nullptr, true );
@@ -439,9 +446,9 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, NewMenuHdl, Button *, void )
         ReloadTopLevelListBox( pDialog->GetSelectedEntry() );
         GetSaveInData()->SetModified();
     }
-}
+}*/
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandsHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandsHdl, Button *, void )
 {
     if ( m_pSelectorDlg == nullptr )
     {
@@ -456,14 +463,14 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandsHdl, Button *, void )
 
     // Position the Script Selector over the Add button so it is
     // beside the menu contents list and does not obscure it
-    m_pSelectorDlg->SetPosPixel( m_pAddCommandsButton->GetPosPixel() );
+    //m_pSelectorDlg->SetPosPixel( m_pAddCommandsButton->GetPosPixel() );
 
     m_pSelectorDlg->SetImageProvider( GetSaveInData() );
 
     m_pSelectorDlg->Execute();
-}
+}*/
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, AddSeparatorHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxMenuConfigPage, AddSeparatorHdl, Button *, void )
 {
     SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
     pNewEntryData->SetUserDefined();
@@ -473,9 +480,9 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddSeparatorHdl, Button *, void )
     {
         UpdateButtonStates();
     }
-}
+}*/
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, AddSubmenuHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxMenuConfigPage, AddSubmenuHdl, Button *, void )
 {
     OUString aNewName;
     OUString aDesc = CuiResId( RID_SVXSTR_SUBMENU_NAME );
@@ -501,16 +508,16 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddSubmenuHdl, Button *, void )
 
         UpdateButtonStates();
     }
-}
+}*/
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, DeleteCommandHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxMenuConfigPage, DeleteCommandHdl, Button *, void )
 {
     DeleteSelectedContent();
     if ( GetSaveInData()->IsModified() )
     {
         UpdateButtonStates();
     }
-}
+}*/
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(
     const css::uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
