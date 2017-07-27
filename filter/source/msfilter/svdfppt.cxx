@@ -2196,7 +2196,7 @@ PptSlidePersistList* SdrPowerPointImport::GetPageList(PptPageKind ePageKind) con
     return nullptr;
 }
 
-SdrOutliner* SdrPowerPointImport::GetDrawOutliner( SdrTextObj* pSdrText )
+SdrOutliner* SdrPowerPointImport::GetDrawOutliner( SdrTextObj const * pSdrText )
 {
     if ( !pSdrText )
         return nullptr;
@@ -2322,7 +2322,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 }
                 boost::optional< sal_Int16 > oStartNumbering;
                 SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
-                pPara->ApplyTo( aParagraphAttribs, oStartNumbering, const_cast<SdrPowerPointImport&>(*this), nDestinationInstance );
+                pPara->ApplyTo( aParagraphAttribs, oStartNumbering, *this, nDestinationInstance );
 
                 sal_uInt32  nIsBullet2 = 0; //, nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : pTextObj->GetInstance();
                 pPara->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet2, nDestinationInstance );
@@ -2652,7 +2652,7 @@ SdrPage* SdrPowerPointImport::MakeBlancPage( bool bMaster ) const
     return pRet;
 }
 
-void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, DffRecordHeader& rComment10Hd )
+void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, SdrPage* pPage, DffRecordHeader const & rComment10Hd )
 {
     OUString        sAuthor;
     OUString        sText;
@@ -3125,7 +3125,7 @@ sal_uInt32 HeaderFooterEntry::NeedToImportInstance( const sal_uInt32 nInstance, 
     return nRet;
 }
 
-void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader& rHd, HeaderFooterEntry& rE )
+void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader const & rHd, HeaderFooterEntry& rE )
 {
     rHd.SeekToContent( rStCtrl );
     auto nEndRecPos = SanitizeEndPos(rStCtrl, rHd.GetRecEndFilePos());
@@ -3387,9 +3387,9 @@ PPTNumberFormatCreator::~PPTNumberFormatCreator()
 {
 }
 
-bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManager,
+bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport const & rManager,
     SvxNumberFormat& rNumberFormat, sal_uInt32 nLevel, TSS_Type nInstance, TSS_Type nDestinationInstance,
-        boost::optional< sal_Int16 >& rStartNumbering, sal_uInt32 nFontHeight,  PPTParagraphObj* pPara )
+        boost::optional< sal_Int16 >& rStartNumbering, sal_uInt32 nFontHeight,  PPTParagraphObj const * pPara )
 {
     bool bHardAttribute = ( nDestinationInstance == TSS_Type::Unknown );
 
@@ -3631,7 +3631,7 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
     return bHardAttribute;
 }
 
-void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, sal_uInt32 nLevel, const PPTParaLevel& rParaLevel, const PPTCharLevel& rCharLevel, TSS_Type nInstance )
+void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport const & rManager, SvxNumberFormat& rNumberFormat, sal_uInt32 nLevel, const PPTParaLevel& rParaLevel, const PPTCharLevel& rCharLevel, TSS_Type nInstance )
 {
     nIsBullet = ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn ) ) != 0 ? 1 : 0;
     nBulletChar = rParaLevel.mnBulletChar;
@@ -3679,7 +3679,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     }
 }
 
-bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, PPTParagraphObj* pParaObj,
+bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport const & rManager, SvxNumberFormat& rNumberFormat, PPTParagraphObj* pParaObj,
                                                 TSS_Type nDestinationInstance, boost::optional< sal_Int16 >& rStartNumbering )
 {
     sal_uInt32 nHardCount = 0;
@@ -3742,7 +3742,7 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     return nHardCount != 0;
 }
 
-void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat )
+void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport const & rManager, SvxNumberFormat& rNumberFormat )
 {
     vcl::Font aFont;
     PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( nBulletFont );
@@ -3915,7 +3915,7 @@ PPTParaSheet::PPTParaSheet( const PPTParaSheet& rSheet )
     *this = rSheet;
 }
 
-void PPTParaSheet::Read( SdrPowerPointImport&
+void PPTParaSheet::Read( SdrPowerPointImport const &
 #ifdef DBG_UTIL
                     rManager
 #endif
@@ -4847,7 +4847,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, const DffRecordHe
 }
 
 void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader& rTextHeader,
-                                            const OUString& aString, PPTTextRulerInterpreter& rRuler,
+                                            const OUString& aString, PPTTextRulerInterpreter const & rRuler,
                                             sal_uInt32& nCharCount, bool& bTextPropAtom )
 {
     sal_uInt32  nMask = 0; //TODO: nMask initialized here to suppress warning for now, see corresponding TODO below
@@ -5190,7 +5190,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
 }
 
 void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHeader,
-                                   PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd, TSS_Type nInstance )
+                                   PPTTextRulerInterpreter const & rRuler, const DffRecordHeader& rExtParaHd, TSS_Type nInstance )
 {
     sal_uInt32 nMerk = rIn.Tell();
     sal_uInt32 nExtParaPos = ( rExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom ) ? rExtParaHd.nFilePos + 8 : 0;
@@ -6170,7 +6170,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
     return bIsHardAttribute;
 }
 
-void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport& rManager, TSS_Type nDestinationInstance )
+void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport const & rManager, TSS_Type nDestinationInstance )
 {
     sal_Int16   nVal2;
     sal_uInt32  nVal, nUpperDist, nLowerDist;
@@ -7379,7 +7379,7 @@ void MergeCells( const Reference< XTable >& xTable, sal_Int32 nCol, sal_Int32 nR
    }
 }
 
-void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
+void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCell )
 {
     try
     {
@@ -7485,7 +7485,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
     }
 }
 
-void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTable, const std::vector< sal_Int32 >& vPositions, sal_Int32 nColumns )
+void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable > const & xTable, const std::vector< sal_Int32 >& vPositions, sal_Int32 nColumns )
 {
     try
     {
@@ -7731,7 +7731,7 @@ bool SdrPowerPointImport::IsVerticalText() const
     return bVerticalText;
 }
 
-void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj& rTextObj, SfxItemSet& rSet ) const
+void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj const & rTextObj, SfxItemSet& rSet ) const
 {
     SdrTextVertAdjust eTVA;
     SdrTextHorzAdjust eTHA;

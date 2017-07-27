@@ -250,7 +250,7 @@ void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
 }
 
 
-void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr )
+void SVGFontExport::implEmbedGlyph( OutputDevice const & rOut, const OUString& rCellStr )
 {
     tools::PolyPolygon         aPolyPoly;
     const sal_Unicode   nSpace = ' ';

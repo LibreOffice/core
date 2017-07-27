@@ -99,7 +99,7 @@ void SAL_CALL GlobalEventListenerImpl::disposing( const css::lang::EventObject& 
 }
 
 /** returns true if the given component supports the given service */
-static bool checkComponent( Reference< XComponent >& rxComponent, const OUString& rServiceName )
+static bool checkComponent( Reference< XComponent > const & rxComponent, const OUString& rServiceName )
 {
     try
     {
@@ -220,14 +220,14 @@ void XMLFilterTestDialog::test( const filter_info_impl& rFilterInfo )
     Execute();
 }
 
-static OUString getFileNameFromURL( OUString& rURL )
+static OUString getFileNameFromURL( OUString const & rURL )
 {
     INetURLObject aURL( rURL );
     OUString aName( aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset) );
     return aName;
 }
 
-void XMLFilterTestDialog::updateCurrentDocumentButtonState( Reference< XComponent > * pRef /* = NULL */ )
+void XMLFilterTestDialog::updateCurrentDocumentButtonState( Reference< XComponent > const * pRef /* = NULL */ )
 {
     if( pRef && pRef->is() )
     {

@@ -5544,7 +5544,7 @@ void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
 }
 
 
-void SvxMSDffManager::ExchangeInShapeOrder( SdrObject*   pOldObject,
+void SvxMSDffManager::ExchangeInShapeOrder( SdrObject const * pOldObject,
                                             sal_uLong    nTxBx,
                                             SdrObject*   pObject) const
 {
@@ -5563,7 +5563,7 @@ void SvxMSDffManager::ExchangeInShapeOrder( SdrObject*   pOldObject,
 }
 
 
-void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
+void SvxMSDffManager::RemoveFromShapeOrder( SdrObject const * pObject ) const
 {
     sal_uInt16 nShpCnt = m_aShapeOrders.size();
     for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
@@ -7059,7 +7059,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
 // TODO/MBA: code review and testing!
 SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 const OUString& rStorageName,
-                tools::SvRef<SotStorage>& rSrcStorage,
+                tools::SvRef<SotStorage> const & rSrcStorage,
                 const uno::Reference < embed::XStorage >& xDestStorage,
                 const Graphic& rGrf,
                 const tools::Rectangle& rBoundRect,
@@ -7385,7 +7385,7 @@ void SvxMSDffManager::insertShapeId( sal_Int32 nShapeId, SdrObject* pShape )
     maShapeIdContainer[nShapeId] = pShape;
 }
 
-void SvxMSDffManager::removeShapeId( SdrObject* pShape )
+void SvxMSDffManager::removeShapeId( SdrObject const * pShape )
 {
     SvxMSDffShapeIdContainer::iterator aIter( maShapeIdContainer.begin() );
     const SvxMSDffShapeIdContainer::iterator aEnd( maShapeIdContainer.end() );

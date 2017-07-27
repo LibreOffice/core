@@ -78,7 +78,7 @@ static OUString encodeZipUri( const OUString& rURI )
 }
 
 /// @throws Exception
-static Reference< XInterface > addFolder( Reference< XInterface >& xRootFolder, Reference< XSingleServiceFactory >& xFactory, const OUString& rName )
+static Reference< XInterface > addFolder( Reference< XInterface > const & xRootFolder, Reference< XSingleServiceFactory > const & xFactory, const OUString& rName )
 {
     if ( rName == ".." || rName == "." )
         throw lang::IllegalArgumentException();

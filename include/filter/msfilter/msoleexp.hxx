@@ -46,7 +46,7 @@ class MSFILTER_DLLPUBLIC SvxMSExportOLEObjects
 public:
     SvxMSExportOLEObjects( sal_uInt32 nCnvrtFlgs ) : nConvertFlags(nCnvrtFlgs) {}
 
-    void ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotStorage& rDestStg );
+    void ExportOLEObject( svt::EmbeddedObjectRef const & rObj, SotStorage& rDestStg );
     void ExportOLEObject( const css::uno::Reference < css::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg );
 };
 

@@ -69,7 +69,7 @@ class CGMImpressOutAct
 
     bool                        ImplCreateShape( const OUString& rType );
     bool                        ImplInitPage();
-    void                        ImplSetOrientation( FloatPoint& RefPoint, double& Orientation );
+    void                        ImplSetOrientation( FloatPoint const & RefPoint, double Orientation );
     void                        ImplSetLineBundle();
     void                        ImplSetFillBundle();
     void                        ImplSetTextBundle( const css::uno::Reference< css::beans::XPropertySet > & );
@@ -80,16 +80,16 @@ public:
     void                        BeginGroup();
     void                        EndGroup();
     void                        EndGrouping();
-    void                        DrawRectangle( FloatRect& );
-    void                        DrawEllipse( FloatPoint& center, FloatPoint&, double& Orientation );
-    void                        DrawEllipticalArc( FloatPoint& center, FloatPoint& size, double& orientation,
+    void                        DrawRectangle( FloatRect const & );
+    void                        DrawEllipse( FloatPoint const & center, FloatPoint const &, double& Orientation );
+    void                        DrawEllipticalArc( FloatPoint const & center, FloatPoint const & size, double& orientation,
                                     sal_uInt32 etype, double& startangle, double& endangle );
     void                        DrawBitmap( CGMBitmapDescriptor* );
     void                        DrawPolygon( tools::Polygon& );
     void                        DrawPolyLine( tools::Polygon& );
     void                        DrawPolybezier( tools::Polygon& );
-    void                        DrawPolyPolygon( tools::PolyPolygon& );
-    void                        DrawText( css::awt::Point& TextRectPos, css::awt::Size& TextRectSize, char* String, FinalFlag );
+    void                        DrawPolyPolygon( tools::PolyPolygon const & );
+    void                        DrawText( css::awt::Point const & TextRectPos, css::awt::Size& TextRectSize, char const * String, FinalFlag );
     void                        AppendText( const char* String );
 
     void                        FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
@@ -97,7 +97,7 @@ public:
     void                        CloseRegion();
     void                        NewRegion();
     void                        EndFigure();
-    void                        RegPolyLine( tools::Polygon&, bool bReverse = false );
+    void                        RegPolyLine( tools::Polygon const &, bool bReverse = false );
     void                        SetGradientOffset( long nHorzOfs, long nVertOfs );
     void                        SetGradientAngle( long nAngle );
     void                        SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo );
