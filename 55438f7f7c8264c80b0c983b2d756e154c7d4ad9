@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_28112d53",
+        "filename": "sc/inc/table.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-27T17:01:10Z",
+      "side": 1,
+      "message": "It should be unnecessary to move this into the header file, it should be sufficient to forward declare it, ie.\n\n struct RowEntry;\n\nand keep the definition in the .cxx implementation before the first use.\n\nIt may be best to rename from RowEntry to ScRowEntry to prevent any confusion with names that come from other header files included.\n\nAlso, the typedef is moot and just\n\n struct ScRowEntry\n {\n     ...\n };\n\nshould do it.",
+      "revId": "55438f7f7c8264c80b0c983b2d756e154c7d4ad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_481e7964",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1975,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-27T17:01:10Z",
+      "side": 1,
+      "message": "Concatenating these two lines is confusing. Please don\u0027t.",
+      "range": {
+        "startLine": 1975,
+        "startChar": 4,
+        "endLine": 1975,
+        "endChar": 26
+      },
+      "revId": "55438f7f7c8264c80b0c983b2d756e154c7d4ad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_8826a1b8",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2116,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-07-27T17:01:10Z",
+      "side": 1,
+      "message": "Nitpick: as the comment applies to the following function, the blank line should be after the last function\u0027s last line instead of before the next function.",
+      "revId": "55438f7f7c8264c80b0c983b2d756e154c7d4ad9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
