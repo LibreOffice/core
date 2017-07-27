@@ -3372,16 +3372,6 @@ void SvxColorListBox::SelectEntry(const Color& rColor)
     ShowPreview(m_aSelectedColor);
 }
 
-Color SvxColorListBox::GetSelectEntryColor() const
-{
-    return m_aSelectedColor.first;
-}
-
-NamedColor SvxColorListBox::GetSelectEntry() const
-{
-    return m_aSelectedColor;
-}
-
 SvxColorListBoxWrapper::SvxColorListBoxWrapper(SvxColorListBox& rListBox)
     : sfx::SingleControlWrapper<SvxColorListBox, Color>(rListBox)
 {
