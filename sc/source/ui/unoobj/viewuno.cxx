@@ -848,6 +848,34 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
     return bRet;
 }
 
+namespace
+{
+    uno::Reference<drawing::XShapes> getSelectedShapes(SdrView& rDrawView)
+    {
+        uno::Reference<drawing::XShapes> xShapes;
+        const SdrMarkList& rMarkList = rDrawView.GetMarkedObjectList();
+        const size_t nMarkCount = rMarkList.GetMarkCount();
+        if (nMarkCount)
+        {
+            //  generate ShapeCollection (like in SdXImpressView::getSelection in Draw)
+            //  XInterfaceRef will be returned and it has to be UsrObject-XInterface
+            xShapes = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
+
+            for (size_t i = 0; i < nMarkCount; ++i)
+            {
+                SdrObject* pDrawObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                if (pDrawObj)
+                {
+                    uno::Reference<drawing::XShape> xShape( pDrawObj->getUnoShape(), uno::UNO_QUERY );
+                    if (xShape.is())
+                        xShapes->add(xShape);
+                }
+            }
+        }
+        return xShapes;
+    }
+}
+
 uno::Any SAL_CALL ScTabViewObj::getSelection()
 {
     SolarMutexGuard aGuard;
@@ -856,34 +884,12 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
     if (pViewSh)
     {
         //  is something selected in drawing layer?
-
         SdrView* pDrawView = pViewSh->GetSdrView();
         if (pDrawView)
         {
-            const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
-            const size_t nMarkCount = rMarkList.GetMarkCount();
-            if (nMarkCount)
-            {
-                //  generate ShapeCollection (like in SdXImpressView::getSelection in Draw)
-                //  XInterfaceRef will be returned and it has to be UsrObject-XInterface
-
-                uno::Reference< drawing::XShapes > xShapes = drawing::ShapeCollection::create(
-                        comphelper::getProcessComponentContext());
-
-                uno::Reference<uno::XInterface> xRet(xShapes);
-
-                for (size_t i=0; i<nMarkCount; ++i)
-                {
-                    SdrObject* pDrawObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-                    if (pDrawObj)
-                    {
-                        uno::Reference<drawing::XShape> xShape( pDrawObj->getUnoShape(), uno::UNO_QUERY );
-                        if (xShape.is())
-                            xShapes->add(xShape);
-                    }
-                }
+            uno::Reference<uno::XInterface> xRet(getSelectedShapes(*pDrawView));
+            if (xRet.is())
                 return uno::makeAny(xRet);
-            }
         }
 
         //  otherwise sheet (cell) selection
