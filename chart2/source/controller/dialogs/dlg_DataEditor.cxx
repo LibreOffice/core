@@ -201,7 +201,7 @@ bool DataEditor::ApplyChangesToModel()
 // travels/no longer travels over this window.  _rMemFunc may be
 // TaskPaneList::AddWindow or TaskPaneList::RemoveWindow
 void DataEditor::notifySystemWindow(
-    vcl::Window* pWindow, vcl::Window* pToRegister,
+    vcl::Window const * pWindow, vcl::Window* pToRegister,
     const ::comphelper::mem_fun1_t<TaskPaneList, vcl::Window*>& rMemFunc )
 {
     OSL_ENSURE( pWindow, "Window must not be null!" );

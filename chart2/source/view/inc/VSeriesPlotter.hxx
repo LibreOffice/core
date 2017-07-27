@@ -327,7 +327,7 @@ protected:
 
     /// This method returns a text string representation of the passed numeric
     /// value by exploiting a NumberFormatterWrapper object.
-    OUString getLabelTextForValue( VDataSeries& rDataSeries
+    OUString getLabelTextForValue( VDataSeries const & rDataSeries
                 , sal_Int32 nPointIndex
                 , double fValue
                 , bool bAsPercentage );
@@ -366,9 +366,9 @@ protected:
     void createErrorBar_Y( const css::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const css::uno::Reference< css::drawing::XShapes >& xTarget
-        , double* pfScaledLogicX );
+        , double const * pfScaledLogicX );
 
-    void createRegressionCurvesShapes( VDataSeries& rVDataSeries
+    void createRegressionCurvesShapes( VDataSeries const & rVDataSeries
         , const css::uno::Reference< css::drawing::XShapes >& xTarget
         , const css::uno::Reference< css::drawing::XShapes >& xEquationTarget
         , bool bMaySkipPointsInRegressionCalculation );
@@ -383,7 +383,7 @@ protected:
           const css::uno::Reference< css::drawing::XShape >& xTarget
         , const css::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap* pOverwriteMap=nullptr );
+        , tPropertyNameValueMap const * pOverwriteMap=nullptr );
 
     virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates whether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
 

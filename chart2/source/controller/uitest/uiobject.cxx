@@ -145,7 +145,7 @@ std::unique_ptr<UIObject> ChartWindowUIObject::get_child(const OUString& rID)
 
 namespace {
 
-void recursiveAdd(chart::ObjectIdentifier& rID, std::set<OUString>& rChildren, const chart::ObjectHierarchy& rHierarchy)
+void recursiveAdd(chart::ObjectIdentifier const & rID, std::set<OUString>& rChildren, const chart::ObjectHierarchy& rHierarchy)
 {
     std::vector<chart::ObjectIdentifier> aChildIndentifiers = rHierarchy.getChildren(rID);
     std::transform(aChildIndentifiers.begin(), aChildIndentifiers.end(), std::inserter(rChildren, rChildren.begin()),

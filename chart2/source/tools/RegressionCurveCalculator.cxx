@@ -194,7 +194,7 @@ OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
 }
 
 void RegressionCurveCalculator::addStringToEquation(
-        OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer& aAddString, const sal_Int32* pMaxWidth)
+        OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer const & aAddString, const sal_Int32* pMaxWidth)
 {
     if ( pMaxWidth && ( nLineLength + aAddString.getLength() > *pMaxWidth ) )
     {  // wrap line

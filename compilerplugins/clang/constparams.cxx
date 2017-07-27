@@ -122,6 +122,9 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
             || name == "ProcessEventsToSignal"
                 // external API
             || name == "Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_flush"
+            || name == "egiGraphicExport"
+            || name == "etiGraphicExport"
+            || name == "epsGraphicExport"
             )
                 return true;
     }

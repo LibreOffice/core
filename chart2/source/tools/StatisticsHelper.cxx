@@ -270,7 +270,7 @@ void StatisticsHelper::setErrorDataSequence(
     const OUString & rNewRange,
     bool bPositiveValue,
     bool bYError /* = true */,
-    OUString * pXMLRange /* = 0 */ )
+    OUString const * pXMLRange /* = 0 */ )
 {
     Reference< chart2::data::XDataSink > xDataSink( xDataSource, uno::UNO_QUERY );
     if( ! ( xDataSink.is() && xDataProvider.is()))

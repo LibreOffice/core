@@ -120,7 +120,7 @@ private: //methods
     bool createTextShapes(
         const css::uno::Reference<css::drawing::XShapes >& xTarget,
         TickIter& rTickIter, AxisLabelProperties& rAxisLabelProperties,
-        TickFactory2D* pTickFactory, sal_Int32 nScreenDistanceBetweenTicks );
+        TickFactory2D const * pTickFactory, sal_Int32 nScreenDistanceBetweenTicks );
 
     /**
      * Variant of createTextShapes where none of auto-staggering and
@@ -130,9 +130,9 @@ private: //methods
     bool createTextShapesSimple(
         const css::uno::Reference<css::drawing::XShapes >& xTarget,
         TickIter& rTickIter, AxisLabelProperties& rAxisLabelProperties,
-        TickFactory2D* pTickFactory );
+        TickFactory2D const * pTickFactory );
 
-    void createTickMarkLineShapes( TickInfoArrayType& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D& rTickFactory2D, bool bOnlyAtLabels );
+    void createTickMarkLineShapes( TickInfoArrayType& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D const & rTickFactory2D, bool bOnlyAtLabels );
 
     TickFactory2D* createTickFactory2D();
     void hideIdenticalScreenValues( TickInfoArraysType& rTickInfos ) const;
@@ -144,7 +144,7 @@ private: //methods
      * positions based on the final stagger setting.
      */
     void    doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties
-                            , TickFactory2D* pTickFactory2D );
+                            , TickFactory2D const * pTickFactory2D );
 
     /**
      * @return true if we can break a single line label text into multiple

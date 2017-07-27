@@ -51,7 +51,7 @@ void PropertyMapper::setMappedProperties(
           const uno::Reference< beans::XPropertySet >& xTarget
         , const uno::Reference< beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap* pOverwriteMap )
+        , tPropertyNameValueMap const * pOverwriteMap )
 {
     if( !xTarget.is() || !xSource.is() )
         return;

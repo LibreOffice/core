@@ -109,7 +109,7 @@ bool lcl_GrowAndShiftLogic(
 
 bool lcl_MoveObjectLogic(
     RelativePosition &  rInOutRelPos,
-    RelativeSize &      rObjectSize,
+    RelativeSize const & rObjectSize,
     const awt::Size &   rRefSize,
     double              fShiftLogicX,
     double              fShiftLogicY )

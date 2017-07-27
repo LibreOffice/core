@@ -240,7 +240,7 @@ void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, Plotting
     rPolyPoly=aTmp;
 }
 
-bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, chart2::CurveStyle eCurveStyle, PlottingPositionHelper* pPosHelper, drawing::PolyPolygonShape3D &aPoly )
+bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, chart2::CurveStyle eCurveStyle, PlottingPositionHelper const * pPosHelper, drawing::PolyPolygonShape3D &aPoly )
 {
     sal_uInt32 nOuterCount = aStartPoly.SequenceX.getLength();
     if ( !nOuterCount )
@@ -366,7 +366,7 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
 }
 
 bool AreaChart::impl_createLine( VDataSeries* pSeries
-                , drawing::PolyPolygonShape3D* pSeriesPoly
+                , drawing::PolyPolygonShape3D const * pSeriesPoly
                 , PlottingPositionHelper* pPosHelper )
 {
     //return true if a line was created successfully
@@ -452,9 +452,9 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
 }
 
 bool AreaChart::impl_createArea( VDataSeries* pSeries
-                , drawing::PolyPolygonShape3D* pSeriesPoly
-                , drawing::PolyPolygonShape3D* pPreviousSeriesPoly
-                , PlottingPositionHelper* pPosHelper )
+                , drawing::PolyPolygonShape3D const * pSeriesPoly
+                , drawing::PolyPolygonShape3D const * pPreviousSeriesPoly
+                , PlottingPositionHelper const * pPosHelper )
 {
     //return true if an area was created successfully
 

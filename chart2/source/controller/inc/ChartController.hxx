@@ -530,7 +530,7 @@ private:
     css::uno::Reference< css::accessibility::XAccessibleContext >
         impl_createAccessibleTextContext();
 
-    void impl_PasteGraphic( css::uno::Reference< css::graphic::XGraphic > & xGraphic,
+    void impl_PasteGraphic( css::uno::Reference< css::graphic::XGraphic > const & xGraphic,
                             const ::Point & aPosition );
     void impl_PasteShapes( SdrModel* pModel );
     void impl_PasteStringAsTextShape( const OUString& rString, const css::awt::Point& rPosition );

@@ -59,7 +59,7 @@ public: //methods
     void remindSelectionBeforeMouseDown();
     bool isSelectionDifferentFromBeforeMouseDown() const;
 
-    void adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper* pDrawViewWrapper
+    void adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper const * pDrawViewWrapper
                                        , bool bIsRightMouse, bool bWaitingForDoubleClick );
 
     void applySelection( DrawViewWrapper* pDrawViewWrapper );
@@ -92,7 +92,7 @@ public:
 
     static OUString getHitObjectCID(
         const Point& rMPos,
-        DrawViewWrapper& rDrawViewWrapper,
+        DrawViewWrapper const & rDrawViewWrapper,
         bool bGetDiagramInsteadOf_Wall=false );
 
     static bool isRotateableObject( const OUString& rCID

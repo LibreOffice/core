@@ -118,7 +118,7 @@ drawing::Direction3D NetChart::getPreferredDiagramAspectRatio() const
 
 bool NetChart::impl_createLine( VDataSeries* pSeries
                 , drawing::PolyPolygonShape3D* pSeriesPoly
-                , PlottingPositionHelper* pPosHelper )
+                , PlottingPositionHelper const * pPosHelper )
 {
     //return true if a line was created successfully
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
@@ -171,8 +171,8 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
 
 bool NetChart::impl_createArea( VDataSeries* pSeries
                 , drawing::PolyPolygonShape3D* pSeriesPoly
-                , drawing::PolyPolygonShape3D* pPreviousSeriesPoly
-                , PlottingPositionHelper* pPosHelper )
+                , drawing::PolyPolygonShape3D const * pPreviousSeriesPoly
+                , PlottingPositionHelper const * pPosHelper )
 {
     //return true if an area was created successfully
 

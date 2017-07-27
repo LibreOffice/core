@@ -94,7 +94,7 @@ OOO_DLLPUBLIC_CHARTTOOLS    bool    impl_isDisposedOrClosed( bool bAssert=true )
 /// @throws css::uno::Exception
 OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_startTryClose(bool bDeliverOwnership);
 /// @throws css::util::CloseVetoException
-OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException& ex );
+OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException const & ex );
 OOO_DLLPUBLIC_CHARTTOOLS    void    g_close_endTryClose(bool bDeliverOwnership );
 OOO_DLLPUBLIC_CHARTTOOLS    void    g_close_endTryClose_doClose();
 /// @throws css::uno::RuntimeException
