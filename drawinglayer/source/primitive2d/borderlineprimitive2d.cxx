@@ -49,6 +49,10 @@ namespace drawinglayer
         {
         }
 
+        BorderLine::~BorderLine()
+        {
+        }
+
         bool BorderLine::operator==(const BorderLine& rBorderLine) const
         {
             return getWidth() == rBorderLine.getWidth()
@@ -104,13 +108,17 @@ namespace drawinglayer
                     // double line with gap. Use mfDiscreteGapDistance (see get2DDecomposition) as distance.
                     // That value is prepared to be at least one pixel (discrete unit) so that the
                     // decomposition is view-dependent in this cases
+                    const BorderLine& rLeft(getBorderLines()[0]);
+                    const BorderLine& rGap(getBorderLines()[1]);
+                    const BorderLine& rRight(getBorderLines()[2]);
+                    const double fFullWidth(rLeft.getWidth() + mfDiscreteGapDistance + rRight.getWidth());
+
                     {
-                        // inside line (left of vector). Create stroke primitive centered on line width
-                        const BorderLine& rLeft(getBorderLines()[0]);
-                        const double fDeltaY((mfDiscreteGapDistance + rLeft.getWidth()) * 0.5);
+                        // inside line (left of vector). Create stroke primitive centered on left line width
+                        const double fDeltaY((rLeft.getWidth() - fFullWidth) * 0.5);
                         const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
-                        const basegfx::B2DPoint aStart(getStart() - (aVector * rLeft.getExtendStart()) - aDeltaY);
-                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rLeft.getExtendEnd()) - aDeltaY);
+                        const basegfx::B2DPoint aStart(getStart() - (aVector * rLeft.getExtendStart()) + aDeltaY);
+                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rLeft.getExtendEnd()) + aDeltaY);
                         const attribute::LineAttribute aLineAttribute(rLeft.getRGBColor(), rLeft.getWidth());
 
                         addPolygonStrokePrimitive2D(
@@ -124,10 +132,11 @@ namespace drawinglayer
                     if (hasGapColor())
                     {
                         // gap (if visible, found practical usage in Writer MultiColorBorderLines).
-                        // Create stroke primitive on vector with given color
-                        const BorderLine& rGap(getBorderLines()[1]);
-                        const basegfx::B2DPoint aStart(getStart() - (aVector * rGap.getExtendStart()));
-                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rGap.getExtendEnd()));
+                        // Create stroke primitive on vector with given color centered on gap position
+                        const double fDeltaY(((fFullWidth - mfDiscreteGapDistance) * 0.5) - rRight.getWidth());
+                        const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
+                        const basegfx::B2DPoint aStart(getStart() - (aVector * rGap.getExtendStart()) + aDeltaY);
+                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * rGap.getExtendEnd()) + aDeltaY);
                         const attribute::LineAttribute aLineAttribute(rGap.getRGBColor(), mfDiscreteGapDistance);
 
                         addPolygonStrokePrimitive2D(
@@ -139,9 +148,8 @@ namespace drawinglayer
                     }
 
                     {
-                        // outside line (right of vector). Create stroke primitive centered on line width
-                        const BorderLine& rRight(getBorderLines()[2]);
-                        const double fDeltaY((mfDiscreteGapDistance + rRight.getWidth()) * 0.5);
+                        // outside line (right of vector). Create stroke primitive centered on right line width
+                        const double fDeltaY((fFullWidth - rRight.getWidth()) * 0.5);
                         const basegfx::B2DVector aDeltaY(aPerpendicular * fDeltaY);
                         const basegfx::B2DPoint aStart(getStart() - (aVector * rRight.getExtendStart()) + aDeltaY);
                         const basegfx::B2DPoint aEnd(getEnd() + (aVector * rRight.getExtendEnd()) + aDeltaY);

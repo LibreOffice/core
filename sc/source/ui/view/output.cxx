@@ -1387,7 +1387,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 
     if (mrTabInfo.maArray.HasCellRotation())
     {
-        DrawRotatedFrame(rRenderContext, pForceColor);        // removes the lines that must not be painted here
+        DrawRotatedFrame(rRenderContext);        // removes the lines that must not be painted here
     }
 
     long nInitPosX = nScrX;
@@ -1474,74 +1474,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
     rRenderContext.SetDrawMode(nOldDrawMode);
 }
 
-// Line below the cell
-
-static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
-                        SCCOL nCol, SCROW nRow, SCTAB nTab, ScRotateDir nRotDir,
-                        bool bTopLine )
-{
-    if ( nRotDir != ScRotateDir::Left && nRotDir != ScRotateDir::Right )
-        return nullptr;
-
-    bool bFound = false;
-    while (!bFound)
-    {
-        if ( nRotDir == ScRotateDir::Left )
-        {
-            // text to the left -> line from the right
-            if ( nCol < MAXCOL )
-                ++nCol;
-            else
-                return nullptr; // couldn't find it
-        }
-        else
-        {
-            // text to the right -> line from the left
-            if ( nCol > 0 )
-                --nCol;
-            else
-                return nullptr; // couldn't find it
-        }
-        const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
-        const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
-        if ( !pPattern->GetRotateVal( pCondSet ) ||
-                static_cast<const SvxRotateModeItem&>(pPattern->GetItem(
-                    ATTR_ROTATE_MODE, pCondSet)).GetValue() == SVX_ROTATE_MODE_STANDARD )
-            bFound = true;
-    }
-
-    if (bTopLine)
-        --nRow;
-    const ::editeng::SvxBorderLine* pThisBottom;
-    if ( ValidRow(nRow) )
-        pThisBottom = static_cast<const SvxBoxItem*>(pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER ))->GetBottom();
-    else
-        pThisBottom = nullptr;
-    const ::editeng::SvxBorderLine* pNextTop;
-    if ( nRow < MAXROW )
-        pNextTop = static_cast<const SvxBoxItem*>(pDoc->GetAttr( nCol, nRow+1, nTab, ATTR_BORDER ))->GetTop();
-    else
-        pNextTop = nullptr;
-
-    if ( ScHasPriority( pThisBottom, pNextTop ) )
-        return pThisBottom;
-    else
-        return pNextTop;
-}
-
-static long lcl_getRotate( ScDocument* pDoc, SCTAB nTab, SCCOL nX, SCROW nY )
-{
-    long nRotate = 0;
-
-    const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
-    const SfxItemSet* pCondSet = pDoc->GetCondResult( nX, nY, nTab );
-
-    nRotate = pPattern->GetRotateVal( pCondSet );
-
-    return nRotate;
-}
-
-void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Color* pForceColor)
+void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
 {
     //! save nRotMax
     SCCOL nRotMax = nX2;
@@ -1554,8 +1487,6 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     bool bCellContrast = mbUseStyleColor && rStyleSettings.GetHighContrastMode();
-
-    // color (pForceColor) is determined externally, including DrawMode changes
 
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
@@ -1575,9 +1506,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
     else
         rRenderContext.SetClipRegion( vcl::Region( aClipRect ) );
 
-    svx::frame::Array& rArray = mrTabInfo.maArray;
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D( ));
-
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)
     {
@@ -1586,8 +1515,6 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
         RowInfo& rPrevRowInfo = pRowInfo[nArrY-1];
         RowInfo& rThisRowInfo = pRowInfo[nArrY];
         RowInfo& rNextRowInfo = pRowInfo[nArrY+1];
-
-        size_t nRow = static_cast< size_t >( nArrY );
 
         long nRowHeight = rThisRowInfo.nHeight;
         if ( rThisRowInfo.nRotMaxCol != SC_ROTMAX_NONE &&
