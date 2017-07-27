@@ -351,7 +351,7 @@ AC_ARG_WITH(android-ndk,
 AC_ARG_WITH(android-ndk-toolchain-version,
     AS_HELP_STRING([--with-android-ndk-toolchain-version],
         [Specify which toolchain version to use, of those present in the
-        Android NDK you are using. The default is 4.9 currently.]), ,)
+        Android NDK you are using. The default is clang 5.0 currently.]), ,)
 
 AC_ARG_WITH(android-sdk,
     AS_HELP_STRING([--with-android-sdk],
@@ -530,9 +530,9 @@ if test -n "$with_android_ndk"; then
     test -z "$RANLIB" && RANLIB=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-ranlib
     test -z "$STRIP" && STRIP=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-strip
 
-    # When using the 4.6 or newer toolchain, use the gold linker
+    # When using the clang toolchain, use the gold linker
     case "$with_android_ndk_toolchain_version" in
-    4.[[6789]]*|[[56789]].*|clang*)
+    clang*)
         if test "$host_cpu" = arm -a "$ENABLE_LTO" != TRUE; then
             ANDROIDCFLAGS="$ANDROIDCFLAGS -fuse-ld=gold"
         fi
@@ -566,18 +566,12 @@ if test -n "$with_android_ndk"; then
 
     if test -z "$CC"; then
         case "$with_android_ndk_toolchain_version" in
-        4.*)
-            CC="$ANDROID_COMPILER_BIN/$android_gnu_prefix-gcc $ANDROIDCFLAGS"
-            ;;
         clang*)
             CC="$ANDROID_COMPILER_BIN/clang $ANDROIDCFLAGS"
         esac
     fi
     if test -z "$CXX"; then
         case "$with_android_ndk_toolchain_version" in
-        4.*)
-            CXX="$ANDROID_COMPILER_BIN/$android_gnu_prefix-g++ $ANDROIDCXXFLAGS"
-            ;;
         clang*)
             CXX="$ANDROID_COMPILER_BIN/clang++ $ANDROIDCXXFLAGS"
             ;;
