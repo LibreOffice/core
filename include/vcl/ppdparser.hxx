@@ -60,6 +60,7 @@ struct VCL_DLLPUBLIC PPDValue
 class VCL_DLLPUBLIC PPDKey
 {
     friend class PPDParser;
+    friend class CPDManager;
 
     typedef std::unordered_map< OUString, PPDValue, OUStringHash > hash_type;
     typedef std::vector< PPDValue* > value_type;
@@ -120,6 +121,7 @@ class VCL_DLLPUBLIC PPDParser
 {
     friend class PPDContext;
     friend class CUPSManager;
+    friend class CPDManager;
     friend class PPDCache;
 
     typedef std::unordered_map< OUString, PPDKey*, OUStringHash > hash_type;
@@ -174,6 +176,7 @@ private:
     PPDTranslator*                              m_pTranslator;
 
     PPDParser( const OUString& rFile );
+    PPDParser( const OUString& rFile, std::vector<PPDKey*> keys );
     ~PPDParser();
 
     void parseOrderDependency(const OString& rLine);
