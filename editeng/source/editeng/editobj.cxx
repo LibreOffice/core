@@ -225,13 +225,13 @@ void ContentInfo::Dump() const
 }
 #endif
 
-bool ContentInfo::operator==( const ContentInfo& rCompare ) const
+bool ContentInfo::Equals( const ContentInfo& rCompare, bool bComparePool ) const
 {
     if( (maText == rCompare.maText) &&
             (aStyle == rCompare.aStyle ) &&
             (maCharAttribs.size() == rCompare.maCharAttribs.size()) &&
             (eFamily == rCompare.eFamily ) &&
-            (aParaAttribs == rCompare.aParaAttribs ) )
+            aParaAttribs.Equals( rCompare.aParaAttribs, bComparePool ) )
     {
         for (size_t i = 0, n = maCharAttribs.size(); i < n; ++i)
         {
@@ -453,6 +453,11 @@ EditTextObject* EditTextObject::Clone() const
 bool EditTextObject::operator==( const EditTextObject& rCompare ) const
 {
     return mpImpl->operator==(*rCompare.mpImpl);
+}
+
+bool EditTextObject::Equals( const EditTextObject& rCompare, bool bComparePool ) const
+{
+    return mpImpl->Equals(*rCompare.mpImpl, bComparePool);
 }
 
 // #i102062#
@@ -1612,11 +1617,16 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
 bool EditTextObjectImpl::operator==( const EditTextObjectImpl& rCompare ) const
 {
+    return Equals( rCompare, true);
+}
+
+bool EditTextObjectImpl::Equals( const EditTextObjectImpl& rCompare, bool bComparePool ) const
+{
     if( this == &rCompare )
         return true;
 
     if( ( aContents.size() != rCompare.aContents.size() ) ||
-            ( pPool != rCompare.pPool ) ||
+            ( bComparePool && pPool != rCompare.pPool ) ||
             ( nMetric != rCompare.nMetric ) ||
             ( nUserType!= rCompare.nUserType ) ||
             ( nScriptType != rCompare.nScriptType ) ||
@@ -1626,7 +1636,7 @@ bool EditTextObjectImpl::operator==( const EditTextObjectImpl& rCompare ) const
 
     for (size_t i = 0, n = aContents.size(); i < n; ++i)
     {
-        if (!(*(aContents[i]) == *(rCompare.aContents[i])))
+        if (!(aContents[i]->Equals( *(rCompare.aContents[i]), bComparePool)))
             return false;
     }
 

@@ -1446,11 +1446,19 @@ void SfxItemSet::Load
 
 bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
 {
+    return Equals( rCmp, true);
+}
+
+bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
+{
     // Values we can get quickly need to be the same
+    const bool bDifferentPools = (m_pPool != rCmp.m_pPool);
     if ( m_pParent != rCmp.m_pParent ||
-         m_pPool != rCmp.m_pPool ||
+         (bComparePool && bDifferentPools) ||
          Count() != rCmp.Count() )
         return false;
+
+    // If we reach here and bDifferentPools==true that means bComparePool==false.
 
     // Counting Ranges takes longer; they also need to be the same, however
     sal_uInt16 nCount1 = TotalCount();
@@ -1499,7 +1507,7 @@ bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
         if ( *ppItem1 != *ppItem2 &&
              ( ( !*ppItem1 || !*ppItem2 ) ||
                ( IsInvalidItem(*ppItem1) || IsInvalidItem(*ppItem2) ) ||
-               (m_pPool->IsItemPoolable(**ppItem1)) ||
+               (!bDifferentPools && m_pPool->IsItemPoolable(**ppItem1)) ||
                  **ppItem1 != **ppItem2 ) )
             return false;
 
