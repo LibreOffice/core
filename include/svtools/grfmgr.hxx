@@ -186,7 +186,7 @@ private:
     OUString                maUserData;
     std::unique_ptr<Timer>  mxSwapOutTimer;
     std::unique_ptr<GrfSimpleCacheObj> mxSimpleCache;
-    sal_uLong               mnAnimationLoopCount;
+    sal_uInt32              mnAnimationLoopCount;
 
     // a unique increasing ID to be able to say which data change is older
     sal_uLong               mnDataChangeTimeStamp;
