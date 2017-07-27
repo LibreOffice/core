@@ -496,6 +496,9 @@ void Scheduler::ProcessEventsToSignal(bool& bSignal)
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1;
+#if OSL_DEBUG_LEVEL > 0
+    SchedulerGuard aSchedulerGuard;
+#endif
     while( Application::Reschedule( true ) )
     {
         if (0 == ++nSanity % 1000)
@@ -510,7 +513,7 @@ void Scheduler::ProcessEventsToIdle()
     const ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->mpDefInst->IsMainThread() )
         return;
-    const ImplSchedulerData* pSchedulerData = ImplGetSVData()->maSchedCtx.mpFirstSchedulerData;
+    const ImplSchedulerData* pSchedulerData = pSVData->maSchedCtx.mpFirstSchedulerData;
     bool bAnyIdle = false;
     while ( pSchedulerData )
     {
@@ -520,7 +523,7 @@ void Scheduler::ProcessEventsToIdle()
             if ( pIdle && pIdle->IsActive() )
             {
                 bAnyIdle = true;
-                SAL_WARN( "vcl.schedule",  "Unprocessed Idle: " << pIdle->GetDebugName() );
+                SAL_WARN( "vcl.schedule", "Unprocessed Idle: " << pIdle->GetDebugName() );
             }
         }
         pSchedulerData = pSchedulerData->mpNext;

@@ -25,6 +25,7 @@
 #include <salinst.hxx>
 #include <comphelper/profilezone.hxx>
 #include <schedulerimpl.hxx>
+#include <osl/mutex.hxx>
 
 namespace {
 
@@ -82,11 +83,27 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 } // end anonymous namespace
 
+bool Scheduler::ImplInitScheduler()
+{
+    ImplSVData*           pSVData = ImplGetSVData();
+    assert( pSVData != nullptr );
+    ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
+
+    rSchedCtx.mpMutex = new osl::Mutex;
+    return rSchedCtx.mpMutex != nullptr;
+}
+
 void Scheduler::ImplDeInitScheduler()
 {
     ImplSVData*           pSVData = ImplGetSVData();
     assert( pSVData != nullptr );
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
+
+    assert( nullptr == rSchedCtx.mpSchedulerStack );
+    assert( 0 == rSchedCtx.mnLockCount );
+
+    if ( rSchedCtx.mpMutex )
+        rSchedCtx.mpMutex->acquire();
 
     if (rSchedCtx.mpSalTimer) rSchedCtx.mpSalTimer->Stop();
     DELETEZ( rSchedCtx.mpSalTimer );
@@ -107,6 +124,57 @@ void Scheduler::ImplDeInitScheduler()
     rSchedCtx.mpFirstSchedulerData = nullptr;
     rSchedCtx.mpLastSchedulerData  = nullptr;
     rSchedCtx.mnTimerPeriod        = InfiniteTimeoutMs;
+
+    if ( rSchedCtx.mpMutex )
+        rSchedCtx.mpMutex->release();
+    DELETEZ( rSchedCtx.mpMutex );
+}
+
+bool Scheduler::Lock( sal_uInt32 nLockCount )
+{
+    ImplSVData*           pSVData = ImplGetSVData();
+    assert( pSVData != nullptr );
+    ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
+
+    if ( nullptr == rSchedCtx.mpMutex )
+        return false;
+
+    sal_uInt32 nTmpLockCount = nLockCount;
+    do {
+        if ( !rSchedCtx.mpMutex->acquire() )
+            return false;
+    }
+    while ( --nLockCount );
+    rSchedCtx.mnLockCount += nTmpLockCount;
+    return true;
+}
+
+sal_uInt32 Scheduler::Unlock( bool bUnlockAll )
+{
+    ImplSVData*           pSVData = ImplGetSVData();
+    assert( pSVData != nullptr );
+    ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
+
+    sal_uInt32 nLockCount = 0;
+    if ( rSchedCtx.mnLockCount )
+    {
+        if ( bUnlockAll )
+        {
+            nLockCount = rSchedCtx.mnLockCount;
+            do {
+                --rSchedCtx.mnLockCount;
+                rSchedCtx.mpMutex->release();
+            }
+            while ( rSchedCtx.mnLockCount );
+        }
+        else
+        {
+            nLockCount = 1;
+            --rSchedCtx.mnLockCount;
+            rSchedCtx.mpMutex->release();
+        }
+    }
+    return nLockCount;
 }
 
 /**
@@ -227,10 +295,13 @@ bool Scheduler::ProcessTaskScheduling()
 {
     ImplSVData *pSVData = ImplGetSVData();
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
-    sal_uInt64 nTime = tools::Time::GetSystemTicks();
-    if ( pSVData->mbDeInit || InfiniteTimeoutMs == rSchedCtx.mnTimerPeriod )
+    if ( pSVData->mbDeInit || nullptr == rSchedCtx.mpMutex
+            || InfiniteTimeoutMs == rSchedCtx.mnTimerPeriod )
         return false;
 
+    DBG_TESTSOLARMUTEX();
+
+    sal_uInt64 nTime = tools::Time::GetSystemTicks();
     if ( nTime < rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod )
     {
         SAL_WARN( "vcl.schedule", "we're too early - restart the timer!" );
@@ -248,7 +319,7 @@ bool Scheduler::ProcessTaskScheduling()
     sal_uInt64         nMostUrgentPeriod = InfiniteTimeoutMs;
     sal_uInt64         nReadyPeriod = InfiniteTimeoutMs;
 
-    DBG_TESTSOLARMUTEX();
+    SchedulerGuard aSchedulerGuard;
 
     pSchedulerData = rSchedCtx.mpFirstSchedulerData;
     while ( pSchedulerData )
@@ -329,7 +400,9 @@ next_entry:
         // defer pushing the scheduler stack to next run, as most tasks will
         // not run a nested Scheduler loop and don't need a stack push!
         pMostUrgent->mbInScheduler = true;
+        sal_uInt32 nLockCount = Unlock( true );
         pTask->Invoke();
+        Lock( nLockCount );
         pMostUrgent->mbInScheduler = false;
 
         SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
@@ -382,13 +455,11 @@ void Task::SetDeletionFlags()
 void Task::Start()
 {
     ImplSVData *const pSVData = ImplGetSVData();
-    if (pSVData->mbDeInit)
-    {
-        return;
-    }
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
+    if (pSVData->mbDeInit || nullptr == rSchedCtx.mpMutex)
+        return;
 
-    DBG_TESTSOLARMUTEX();
+    SchedulerGuard aSchedulerGuard;
 
     // Mark timer active
     mbActive = true;
@@ -453,6 +524,9 @@ Task::Task( const Task& rTask )
 
 Task::~Task() COVERITY_NOEXCEPT_FALSE
 {
+    if ( !mpSchedulerData )
+        return;
+    SchedulerGuard aSchedulerGuard;
     if ( mpSchedulerData )
         mpSchedulerData->mpTask = nullptr;
 }

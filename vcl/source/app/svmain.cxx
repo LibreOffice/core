@@ -300,6 +300,9 @@ bool InitVCL()
     }
     InitSalMain();
 
+    if ( !Scheduler::ImplInitScheduler() )
+        return false;
+
     ImplSVData* pSVData = ImplGetSVData();
 
     // remember Main-Thread-Id
