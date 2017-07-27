@@ -347,7 +347,7 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
             {
                 if (mpAccessibleDocument)
                     xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
-                uno::Reference<drawing::XShapes> xShapes (xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+                uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
                 if (xShapes.is())
                     mnShapesSelected = xShapes->getCount();
             }
@@ -364,7 +364,7 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
         if (!xSelectionSupplier.is())
             throw uno::RuntimeException();
 
-        uno::Reference<drawing::XShapes> xShapes(xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+        uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
         if (xShapes.is())
             FindSelectedShapesChanges(xShapes, false);
     }
@@ -660,8 +660,8 @@ bool ScChildrenShapes::IsSelected(sal_Int32 nIndex,
 #if OSL_DEBUG_LEVEL > 0 // test whether it is truly selected by a slower method
     uno::Reference< drawing::XShape > xReturnShape;
     bool bDebugResult(false);
-    uno::Reference<container::XIndexAccess> xIndexAccess;
-    xSelectionSupplier->getSelection() >>= xIndexAccess;
+    uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
+    uno::Reference<container::XIndexAccess> xIndexAccess(xShapes, uno::UNO_QUERY);
 
     if (xIndexAccess.is())
     {
@@ -696,7 +696,7 @@ bool ScChildrenShapes::SelectionChanged()
     if (!xSelectionSupplier.is())
         throw uno::RuntimeException();
 
-    uno::Reference<drawing::XShapes> xShapes(xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
 
     bResult = FindSelectedShapesChanges(xShapes, true);
 
@@ -717,8 +717,7 @@ void ScChildrenShapes::Select(sal_Int32 nIndex)
     uno::Reference<drawing::XShape> xShape;
     if (!IsSelected(nIndex, xShape) && maZOrderedShapes[nIndex]->bSelectable)
     {
-        uno::Reference<drawing::XShapes> xShapes;
-        xSelectionSupplier->getSelection() >>= xShapes;
+        uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
 
         if (!xShapes.is())
             xShapes = drawing::ShapeCollection::create(
@@ -786,9 +785,8 @@ void ScChildrenShapes::SelectAll()
 
 void ScChildrenShapes::FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const
 {
-    uno::Reference<container::XIndexAccess> xIndexAccess;
-    xSelectionSupplier->getSelection() >>= xIndexAccess;
-
+    uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
+    uno::Reference<container::XIndexAccess> xIndexAccess(xShapes, uno::UNO_QUERY);
     if (xIndexAccess.is())
     {
         sal_uInt32 nCount(xIndexAccess->getCount());
@@ -873,8 +871,7 @@ void ScChildrenShapes::Deselect(sal_Int32 nChildIndex)
     {
         if (xShape.is())
         {
-            uno::Reference<drawing::XShapes> xShapes;
-            xSelectionSupplier->getSelection() >>= xShapes;
+            uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
             if (xShapes.is())
                 xShapes->remove(xShape);
 
@@ -1260,7 +1257,8 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
         if (!xSelectionSupplier.is())
             throw uno::RuntimeException();
 
-        uno::Reference<container::XEnumerationAccess> xEnumAcc(xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+        uno::Reference<drawing::XShapes> xShapes(mpViewShell->getSelectedXShapes());
+        uno::Reference<container::XEnumerationAccess> xEnumAcc(xShapes, uno::UNO_QUERY);
         if (xEnumAcc.is())
         {
             uno::Reference<container::XEnumeration> xEnum = xEnumAcc->createEnumeration();
