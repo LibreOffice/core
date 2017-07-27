@@ -157,9 +157,6 @@ public:
 
     void            EndSelection();
 
-    void            SaveValue() { meSaveValue = GetState(); }
-    bool            IsValueChangedFromSaved() const { return meSaveValue != GetState(); }
-
     Size            CalcMinimumSize() const;
     virtual Size    GetOptimalSize() const override;
 
@@ -200,7 +197,6 @@ protected:
 private:
     SymbolType      meSymbol;
     TriState        meState;
-    TriState        meSaveValue;
     bool            mbPressed;
 };
 
