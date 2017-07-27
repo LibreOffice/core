@@ -58,6 +58,7 @@ namespace drawinglayer
                 const basegfx::BColor& rRGBColor,
                 double fExtendStart = 0.0,
                 double fExtendEnd = 0.0);
+            virtual ~BorderLine();
 
             double getWidth() const { return mfWidth; }
             const basegfx::BColor& getRGBColor() const { return maRGBColor; }

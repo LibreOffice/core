@@ -49,6 +49,10 @@ namespace drawinglayer
         {
         }
 
+        BorderLine::~BorderLine()
+        {
+        }
+
         bool BorderLine::operator==(const BorderLine& rBorderLine) const
         {
             return getWidth() == rBorderLine.getWidth()
