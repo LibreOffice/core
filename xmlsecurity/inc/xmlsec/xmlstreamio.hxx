@@ -28,7 +28,7 @@
 XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks() ;
 XSECXMLSEC_DLLPUBLIC void xmlDisableStreamInputCallbacks() ;
 XSECXMLSEC_DLLPUBLIC int xmlRegisterStreamInputCallbacks(
-    css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding
+    css::uno::Reference< css::xml::crypto::XUriBinding > const & aUriBinding
 );
 XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks() ;
 
