@@ -107,7 +107,7 @@ public:
     void        SetMaxTextLen(sal_Int32 nLen);
     sal_Int32   GetMaxTextLen() const;
 
-    void        SetMaxTextWidth( sal_uLong nMaxWidth );
+    void        SetMaxTextWidth(long nMaxWidth);
 
     void        InsertText( const OUString& rStr );
     OUString    GetSelected() const;
@@ -390,9 +390,9 @@ OUString ImpVclMEdit::GetSelected( LineEnd aSeparator ) const
     return mpTextWindow->GetTextView()->GetSelected( aSeparator );
 }
 
-void ImpVclMEdit::SetMaxTextWidth( sal_uLong nMaxWidth )
+void ImpVclMEdit::SetMaxTextWidth(long nMaxWidth)
 {
-    mpTextWindow->GetTextEngine()->SetMaxTextWidth( nMaxWidth );
+    mpTextWindow->GetTextEngine()->SetMaxTextWidth(nMaxWidth);
 }
 
 void ImpVclMEdit::Resize()
@@ -1168,7 +1168,7 @@ void VclMultiLineEdit::SetMaxTextLen(sal_Int32 nMaxLen)
     pImpVclMEdit->SetMaxTextLen(nMaxLen);
 }
 
-void VclMultiLineEdit::SetMaxTextWidth( sal_uLong nMaxWidth )
+void VclMultiLineEdit::SetMaxTextWidth(long nMaxWidth)
 {
     pImpVclMEdit->SetMaxTextWidth(nMaxWidth );
 }

@@ -85,7 +85,7 @@ public:
     virtual void    SetMaxTextLen(sal_Int32 nMaxLen) override;
     virtual sal_Int32 GetMaxTextLen() const override;
 
-    void            SetMaxTextWidth( sal_uLong nMaxWidth );
+    void            SetMaxTextWidth(long nMaxWidth);
 
     virtual void    SetSelection( const Selection& rSelection ) override;
     virtual const Selection& GetSelection() const override;
