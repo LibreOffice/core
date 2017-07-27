@@ -22,6 +22,7 @@
 
 #include <config_version.h>
 
+#include <osl/mutex.hxx>
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
 #include <vcl/svapp.hxx>
@@ -324,6 +325,9 @@ struct ImplSchedulerContext
     SalTimer*               mpSalTimer = nullptr;           ///< interface to sal event loop / system timer
     sal_uInt64              mnTimerStart = 0;               ///< start time of the timer
     sal_uInt64              mnTimerPeriod = SAL_MAX_UINT64; ///< current timer period
+    osl::Mutex              maMutex;                        ///< mutex for scheduler locking
+    sal_uInt32              mnLockCount = 0;                ///< count of mutex locks
+    bool                    mbActive = true;                ///< is the scheduler active?
 };
 
 struct ImplSVData
