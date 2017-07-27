@@ -257,10 +257,12 @@ public:
     void testCreateDocxAnnotation();
     void testTdf107976();
     void testTdf108524();
+#if HAVE_MORE_FONTS
     void testTableInSection();
     void testTableInNestedSection();
-    void testLinesInSectionInTable();
     void testLinesMoveBackwardsInSectionInTable();
+#endif
+    void testLinesInSectionInTable();
     void testParagraphOfTextRange();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
