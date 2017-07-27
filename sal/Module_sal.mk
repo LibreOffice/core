@@ -24,6 +24,7 @@ $(eval $(call gb_Module_add_targets,sal,\
     Executable_salmain \
     Executable_macro \
     Executable_alloca \
+    Executable_config \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sal,\
