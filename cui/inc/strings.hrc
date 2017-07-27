@@ -59,7 +59,7 @@
 #define RID_SVXSTR_PRODUCTNAME_TOOLBARS             NC_("RID_SVXSTR_PRODUCTNAME_TOOLBARS", "%PRODUCTNAME %MODULENAME Toolbars")
 #define RID_SVXSTR_PRODUCTNAME_CONTEXTMENUS         NC_("RID_SVXSTR_PRODUCTNAME_CONTEXTMENUS", "%PRODUCTNAME %MODULENAME Context Menus")
 #define RID_SVXSTR_TOOLBAR                          NC_("RID_SVXSTR_TOOLBAR", "Toolbar")
-#define RID_SVXSTR_TOOLBAR_CONTENT                  NC_("RID_SVXSTR_TOOLBAR_CONTENT", "Toolbar Content")
+//#define RID_SVXSTR_TOOLBAR_CONTENT                  NC_("RID_SVXSTR_TOOLBAR_CONTENT", "Toolbar Content")
 #define RID_SVXSTR_COMMANDS                         NC_("RID_SVXSTR_COMMANDS", "Commands")
 #define RID_SXVSTR_CONFIRM_DELETE_TOOLBAR           NC_("RID_SXVSTR_CONFIRM_DELETE_TOOLBAR", "There are no more commands on the toolbar. Do you want to delete the toolbar?")
 /* Translators: Do not translate %SAVE IN SELECTION% It is a placeholder
