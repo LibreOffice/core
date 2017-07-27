@@ -1274,7 +1274,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                     // flowing back and forth.
                     GetUpper()->ResetCompletePaint();
                     // The predecessor was invalidated, so this is obsolete as well now.
-                    OSL_ENSURE( pPre, "missing old Prev" );
+                    assert(pPre);
                     if ((pPre == pMoveBwdPre && isMoveBwdPreValid) && !pPre->IsSctFrame())
                         ::ValidateSz( pPre );
                 }
