@@ -401,13 +401,13 @@ protected:
     VclPtr<VclContainer>                       m_pEntries;
     VclPtr<SvTreeListBox>                      m_pContentsListBox;
 
-    VclPtr<PushButton>                         m_pAddCommandsButton;
-    VclPtr<PushButton>                         m_pAddSeparatorButton;
-    VclPtr<PushButton>                         m_pAddSubmenuButton;
-    VclPtr<MenuButton>                         m_pModifyCommandButton;
-    VclPtr<PushButton>                         m_pDeleteCommandButton;
+    //VclPtr<PushButton>                         m_pAddCommandsButton;
+    //VclPtr<PushButton>                         m_pAddSeparatorButton;
+    //VclPtr<PushButton>                         m_pAddSubmenuButton;
+    //VclPtr<MenuButton>                         m_pModifyCommandButton;
+    //VclPtr<PushButton>                         m_pDeleteCommandButton;
     // Resets the top level toolbar to default settings
-    VclPtr<PushButton>                         m_pResetTopLevelButton;
+    //VclPtr<PushButton>                         m_pResetTopLevelButton;
 
     VclPtr<PushButton>                         m_pMoveUpButton;
     VclPtr<PushButton>                         m_pMoveDownButton;

@@ -123,11 +123,11 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pContentsListBox->SetHelpId( HID_SVX_CONFIG_TOOLBAR_CONTENTS );
     m_pNewTopLevelButton->SetHelpId( HID_SVX_NEW_TOOLBAR );
     m_pModifyTopLevelButton->SetHelpId( HID_SVX_MODIFY_TOOLBAR );
-    m_pAddCommandsButton->SetHelpId( HID_SVX_NEW_TOOLBAR_ITEM );
-    m_pAddSeparatorButton->SetHelpId ( HID_SVX_ADD_SEPARATOR );
-    m_pModifyCommandButton->SetHelpId( HID_SVX_MODIFY_TOOLBAR_ITEM );
-    m_pDeleteCommandButton->SetHelpId ( HID_SVX_REMOVEBUTTON );
-    m_pResetTopLevelButton->SetHelpId ( HID_SVX_RESETBUTTON );
+    //m_pAddCommandsButton->SetHelpId( HID_SVX_NEW_TOOLBAR_ITEM );
+    //m_pAddSeparatorButton->SetHelpId ( HID_SVX_ADD_SEPARATOR );
+    //m_pModifyCommandButton->SetHelpId( HID_SVX_MODIFY_TOOLBAR_ITEM );
+    //m_pDeleteCommandButton->SetHelpId ( HID_SVX_REMOVEBUTTON );
+    //m_pResetTopLevelButton->SetHelpId ( HID_SVX_RESETBUTTON );
     m_pSaveInListBox->SetHelpId( HID_SVX_SAVE_IN );
     m_pMoveUpButton->SetHelpId( HID_SVX_UP_TOOLBAR_ITEM );
     m_pMoveDownButton->SetHelpId( HID_SVX_DOWN_TOOLBAR_ITEM );
@@ -141,7 +141,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pContentsLabel->SetText( CuiResId( RID_SVXSTR_COMMANDS ) );
 
     // The reset button will be used in the toolbar config tab
-    m_pResetTopLevelButton->Show();
+    //m_pResetTopLevelButton->Show();
     // These radio buttons will be used in the toolbar config tab
     m_pIconsOnlyRB->Enable();
     m_pTextOnlyRB->Enable();
@@ -166,17 +166,17 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pNewTopLevelButton->SetClickHdl  (
         LINK( this, SvxToolbarConfigPage, NewToolbarHdl ) );
 
-    m_pAddCommandsButton->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, AddCommandsHdl ) );
+    //m_pAddCommandsButton->SetClickHdl  (
+        //LINK( this, SvxToolbarConfigPage, AddCommandsHdl ) );
 
-    m_pAddSeparatorButton->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, AddSeparatorHdl ) );
+    //m_pAddSeparatorButton->SetClickHdl  (
+        //LINK( this, SvxToolbarConfigPage, AddSeparatorHdl ) );
 
-    m_pDeleteCommandButton->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, DeleteCommandHdl ) );
+    //m_pDeleteCommandButton->SetClickHdl  (
+        //LINK( this, SvxToolbarConfigPage, DeleteCommandHdl ) );
 
-    m_pResetTopLevelButton->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, ResetTopLevelHdl ) );
+    //m_pResetTopLevelButton->SetClickHdl  (
+        //LINK( this, SvxToolbarConfigPage, ResetTopLevelHdl ) );
 
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
@@ -195,9 +195,9 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pEntry->SetMenuFlags(
         m_pEntry->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
-    m_pModifyCommandButton->SetPopupMenu(m_pEntry);
-    m_pModifyCommandButton->SetSelectHdl(
-        LINK( this, SvxToolbarConfigPage, EntrySelectHdl ) );
+    //m_pModifyCommandButton->SetPopupMenu(m_pEntry);
+    //m_pModifyCommandButton->SetSelectHdl(
+        //LINK( this, SvxToolbarConfigPage, EntrySelectHdl ) );
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
@@ -372,7 +372,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, void )
     }
 }
 
-IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
+/*IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
 {
     bool bNeedsApply = false;
 
@@ -607,7 +607,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
         static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
         UpdateButtonStates();
     }
-}
+}*/
 
 void SvxToolbarConfigPage::Init()
 {
@@ -658,14 +658,14 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void
 
 void SvxToolbarConfigPage::UpdateButtonStates()
 {
-    PopupMenu* pPopup = m_pModifyCommandButton->GetPopupMenu();
-    pPopup->EnableItem(pPopup->GetItemId("toolrename"), false);
+    //PopupMenu* pPopup = m_pModifyCommandButton->GetPopupMenu();
+    /*pPopup->EnableItem(pPopup->GetItemId("toolrename"), false);
     pPopup->EnableItem(pPopup->GetItemId("toolrestore"), false);
     pPopup->EnableItem(pPopup->GetItemId("toolchange"), false);
-    pPopup->EnableItem(pPopup->GetItemId("toolreset"), false);
+    pPopup->EnableItem(pPopup->GetItemId("toolreset"), false);*/
 
-    m_pDeleteCommandButton->Enable( false );
-    m_pAddSeparatorButton->Enable( false );
+    //m_pDeleteCommandButton->Enable( false );
+    //m_pAddSeparatorButton->Enable( false );
 
     m_pDescriptionField->SetText("");
 
@@ -678,21 +678,21 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     SvxConfigEntry* pEntryData = static_cast<SvxConfigEntry*>(selection->GetUserData());
     if ( pEntryData->IsSeparator() )
     {
-        m_pDeleteCommandButton->Enable();
+        //m_pDeleteCommandButton->Enable();
     }
     else
     {
-        pPopup->EnableItem(pPopup->GetItemId("toolrename"));
-        pPopup->EnableItem(pPopup->GetItemId("toolchange"));
+        //pPopup->EnableItem(pPopup->GetItemId("toolrename"));
+        //pPopup->EnableItem(pPopup->GetItemId("toolchange"));
 
-        m_pDeleteCommandButton->Enable();
-        m_pAddSeparatorButton->Enable();
+        //m_pDeleteCommandButton->Enable();
+        //m_pAddSeparatorButton->Enable();
 
-        if ( !pEntryData->IsUserDefined() )
+        /*if ( !pEntryData->IsUserDefined() )
             pPopup->EnableItem(pPopup->GetItemId("toolrestore"));
 
         if ( pEntryData->IsIconModified() )
-            pPopup->EnableItem(pPopup->GetItemId("toolreset"));
+            pPopup->EnableItem(pPopup->GetItemId("toolreset"));*/
 
         m_pDescriptionField->SetText(pEntryData->GetHelpText());
     }
@@ -720,11 +720,11 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     if ( pToolbar == nullptr )
     {
         m_pModifyTopLevelButton->Enable( false );
-        m_pModifyCommandButton->Enable( false );
-        m_pAddCommandsButton->Enable( false );
-        m_pAddSeparatorButton->Enable( false );
-        m_pDeleteCommandButton->Enable( false );
-        m_pResetTopLevelButton->Enable( false );
+        //m_pModifyCommandButton->Enable( false );
+        //m_pAddCommandsButton->Enable( false );
+        //m_pAddSeparatorButton->Enable( false );
+        //m_pDeleteCommandButton->Enable( false );
+        //m_pResetTopLevelButton->Enable( false );
         m_pIconsOnlyRB->Enable( false );
         m_pTextOnlyRB->Enable( false );
         m_pIconsAndTextRB->Enable( false );
@@ -733,9 +733,9 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     }
 
     m_pModifyTopLevelButton->Enable();
-    m_pModifyCommandButton->Enable();
-    m_pAddCommandsButton->Enable();
-    m_pResetTopLevelButton->Enable( !pToolbar->IsRenamable() );
+    //m_pModifyCommandButton->Enable();
+    //m_pAddCommandsButton->Enable();
+    //m_pResetTopLevelButton->Enable( !pToolbar->IsRenamable() );
 
     m_pIconsOnlyRB->Enable();
     m_pTextOnlyRB->Enable();
@@ -882,7 +882,7 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
     }
 }
 
-IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
 {
     if ( m_pSelectorDlg == nullptr )
     {
@@ -891,7 +891,7 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
 
         // Position the Script Selector over the Add button so it is
         // beside the menu contents list and does not obscure it
-        m_pSelectorDlg->SetPosPixel( m_pAddCommandsButton->GetPosPixel() );
+        //m_pSelectorDlg->SetPosPixel( m_pAddCommandsButton->GetPosPixel() );
 
         m_pSelectorDlg->SetAddHdl(
             LINK( this, SvxToolbarConfigPage, AddFunctionHdl ) );
@@ -900,9 +900,9 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
     m_pSelectorDlg->SetImageProvider( GetSaveInData() );
 
     m_pSelectorDlg->Execute();
-}
+}*/
 
-IMPL_LINK_NOARG( SvxToolbarConfigPage, AddSeparatorHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxToolbarConfigPage, AddSeparatorHdl, Button *, void )
 {
     // get currently selected toolbar
     SvxConfigEntry* pToolbar = GetTopLevelSelection();
@@ -918,14 +918,14 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, AddSeparatorHdl, Button *, void )
 
     static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
     UpdateButtonStates();
-}
+}*/
 
-IMPL_LINK_NOARG( SvxToolbarConfigPage, DeleteCommandHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxToolbarConfigPage, DeleteCommandHdl, Button *, void )
 {
     DeleteSelectedContent();
-}
+}*/
 
-IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetTopLevelHdl, Button *, void )
+/*IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetTopLevelHdl, Button *, void )
 {
     sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
 
@@ -944,7 +944,7 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetTopLevelHdl, Button *, void )
 
         m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
     }
-}
+}*/
 
 IMPL_LINK_NOARG( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
 {
