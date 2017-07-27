@@ -162,6 +162,7 @@ public:
     void testTdf89064();
     void testTdf108925();
     void testTdf109067();
+    void testSmartArt1();
 
     bool checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -232,6 +233,7 @@ public:
     CPPUNIT_TEST(testTdf89064);
     CPPUNIT_TEST(testTdf108925);
     CPPUNIT_TEST(testTdf109067);
+    CPPUNIT_TEST(testSmartArt1);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2216,6 +2218,38 @@ void SdImportTest::testTdf109067()
     awt::Gradient gradient;
     CPPUNIT_ASSERT(xShape->getPropertyValue("FillGradient") >>= gradient);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(450), gradient.Angle);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testSmartArt1()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart1.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xShapeGroup->getCount());
+
+    uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xText0->getString());
+    uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("b"), xText1->getString());
+    uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("c"), xText2->getString());
+    uno::Reference<text::XText> xText3(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("d"), xText3->getString());
+    uno::Reference<text::XText> xText4(xShapeGroup->getByIndex(4), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("e"), xText4->getString());
+
+    uno::Reference<beans::XPropertySet> xShape(xShapeGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    sal_Int32 nFillColor = 0;
+    xShape->getPropertyValue("FillColor") >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4F81BD), nFillColor);
+
+    sal_Int16 nParaAdjust = 0;
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<beans::XPropertySet> xPropSet(xParagraph, uno::UNO_QUERY_THROW);
+    xPropSet->getPropertyValue("ParaAdjust") >>= nParaAdjust;
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
 
     xDocShRef->DoClose();
 }
