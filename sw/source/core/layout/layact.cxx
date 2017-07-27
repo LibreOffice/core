@@ -74,17 +74,12 @@
                 } \
             }
 
-#define RESCHEDULE \
-    { \
-        if ( IsReschedule() )  \
-        { \
-            ::RescheduleProgress( m_pImp->GetShell()->GetDoc()->GetDocShell() ); \
-        } \
-    }
-
 void SwLayAction::CheckWaitCursor()
 {
-    RESCHEDULE
+    if (IsReschedule())
+    {
+        ::RescheduleProgress(m_pImp->GetShell()->GetDoc()->GetDocShell());
+    }
     if ( !m_pWait && IsWaitAllowed() && IsPaint() &&
          ((std::clock() - m_nStartTicks) * 1000 / CLOCKS_PER_SEC >= CLOCKS_PER_SEC/2) )
     {
@@ -1723,7 +1718,10 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                 pContent = bNxtCnt ? pContentNext : pContent->GetNextContentFrame();
             }
 
-            RESCHEDULE;
+            if (IsReschedule())
+            {
+                ::RescheduleProgress(m_pImp->GetShell()->GetDoc()->GetDocShell());
+            }
         }
         else
         {
