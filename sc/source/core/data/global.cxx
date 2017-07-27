@@ -788,24 +788,7 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
         return true;
 
     if ( pObj1 && pObj2 )
-    {
-        // First test for equal text content
-        sal_Int32 nParCount = pObj1->GetParagraphCount();
-        if ( nParCount != pObj2->GetParagraphCount() )
-            return false;
-        for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
-            if ( pObj1->GetText(nPar) != pObj2->GetText(nPar) )
-                return false;
-
-        SvMemoryStream  aStream1;
-        SvMemoryStream  aStream2;
-        pObj1->Store( aStream1 );
-        pObj2->Store( aStream2 );
-        const sal_uInt64 nSize = aStream1.Tell();
-        if ( aStream2.Tell() == nSize )
-            if ( !memcmp( aStream1.GetData(), aStream2.GetData(), (sal_uInt16) nSize ) )
-                return true;
-    }
+        return pObj1->Equals( *pObj2, false);
 
     return false;
 }

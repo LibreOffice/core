@@ -163,7 +163,7 @@ public:
 
     const WrongList* GetWrongList() const;
     void SetWrongList( WrongList* p );
-    bool operator==( const ContentInfo& rCompare ) const;
+    bool Equals( const ContentInfo& rCompare, bool bComparePool ) const;
 
     // #i102062#
     bool isWrongListEqual(const ContentInfo& rCompare) const;
@@ -272,6 +272,7 @@ public:
     void StoreUnicodeStrings( bool b ) { bStoreUnicodeStrings = b; }
 
     bool operator==( const EditTextObjectImpl& rCompare ) const;
+    bool Equals( const EditTextObjectImpl& rCompare, bool bComparePool ) const;
 
     // #i102062#
     bool isWrongListEqual(const EditTextObjectImpl& rCompare) const;

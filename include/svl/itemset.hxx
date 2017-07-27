@@ -206,6 +206,20 @@ public:
     void                        Store( SvStream &, bool bDirect = false ) const;
 
     bool                        operator==(const SfxItemSet &) const;
+
+    /** Compare possibly ignoring SfxItemPool pointer.
+
+        This can be used to compare the content of two SfxItemSet even if they
+        don't share the same pool. EditTextObject::Equals(...,false) uses this
+        which is needed in ScGlobal::EETextObjEqual() for
+        ScPageHFItem::operator==()
+
+        @param  bComparePool
+                if <FALSE/> ignore SfxItemPool pointer,
+                if <TRUE/> compare also SfxItemPool pointer (identical to operator==())
+     */
+    bool                        Equals(const SfxItemSet &, bool bComparePool) const;
+
     sal_Int32                   getHash() const;
     OString                     stringify() const;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;

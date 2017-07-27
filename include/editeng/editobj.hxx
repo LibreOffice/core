@@ -133,6 +133,13 @@ public:
 
     bool operator==( const EditTextObject& rCompare ) const;
 
+    /** Compare possibly ignoring SfxItemPool pointer.
+        @param  bComparePool
+                if <FALSE/> ignore SfxItemPool pointer,
+                if <TRUE/> compare also SfxItemPool pointer (identical to operator==())
+     */
+    bool Equals( const EditTextObject& rCompare, bool bComparePool ) const;
+
     // #i102062#
     bool isWrongListEqual(const EditTextObject& rCompare) const;
 
