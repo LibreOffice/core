@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_65535ee2",
+        "filename": "svtools/source/table/cellvalueconversion.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-27T06:06:12Z",
+      "side": 1,
+      "message": "nNullDateDays and nValueDateDays can be sal_Int32 too",
+      "revId": "a49f8b21f56e4de08092be3a875d7867cedbc7fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
