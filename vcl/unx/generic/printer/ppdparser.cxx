@@ -27,6 +27,7 @@
 
 #include <unx/helper.hxx>
 #include "unx/cupsmgr.hxx"
+#include "unx/cpdmgr.hxx"
 
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"
@@ -44,6 +45,10 @@
 #include "com/sun/star/lang/Locale.hpp"
 
 #include <unordered_map>
+
+#ifdef ENABLE_CUPS
+#include <cups/cups.h>
+#endif
 
 namespace psp
 {
@@ -539,7 +544,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
     ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
 
     OUString aFile = rFile;
-    if( !rFile.startsWith( "CUPS:" ) )
+    if( !rFile.startsWith( "CUPS:" ) && !rFile.startsWith( "CPD:" ) )
         aFile = getPPDFile( rFile );
     if( aFile.isEmpty() )
     {
@@ -558,7 +563,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
             return *it;
 
     PPDParser* pNewParser = nullptr;
-    if( !aFile.startsWith( "CUPS:" ) )
+    if( !aFile.startsWith( "CUPS:" ) && !aFile.startsWith( "CPD:" ) )
         pNewParser = new PPDParser( aFile );
     else
     {
@@ -568,6 +573,9 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
 #ifdef ENABLE_CUPS
             pNewParser = const_cast<PPDParser*>(static_cast<CUPSManager&>(rMgr).createCUPSParser( aFile ));
 #endif
+        } else if ( rMgr.getType() == PrinterInfoManager::Type::CPD )
+        {
+            pNewParser = const_cast<PPDParser*>(static_cast<CPDManager&>(rMgr).createCPDParser( aFile ));
         }
     }
     if( pNewParser )
@@ -579,6 +587,118 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
         rPPDCache.aAllParsers.push_front( pNewParser );
     }
     return pNewParser;
+}
+
+PPDParser::PPDParser( const OUString& rFile, std::vector<PPDKey*> keys) :
+    m_aFile( rFile ),
+    m_bColorDevice( false ),
+    m_bType42Capable( false ),
+    m_nLanguageLevel( 0 ),
+    m_aFileEncoding( RTL_TEXTENCODING_MS_1252 ),
+    m_pDefaultImageableArea( nullptr ),
+    m_pImageableAreas( nullptr ),
+    m_pDefaultPaperDimension( nullptr ),
+    m_pPaperDimensions( nullptr ),
+    m_pDefaultInputSlot( nullptr ),
+    m_pInputSlots( nullptr ),
+    m_pDefaultResolution( nullptr ),
+    m_pResolutions( nullptr ),
+    m_pFontList( nullptr ),
+    m_pTranslator( new PPDTranslator() )
+{
+    for (PPDKey* key: keys)
+    {
+        insertKey( key -> getKey(), key );
+    }
+
+    // fill in shortcuts
+    const PPDKey* pKey;
+
+    pKey = getKey( OUString( "PageSize" ) );
+
+    if ( pKey ) {
+        PPDKey* pImageableAreas = new PPDKey( OUString( "ImageableArea" ) );
+        PPDKey* pPaperDimensions = new PPDKey( OUString( "PaperDimension" ) );
+        for (int i = 0; i < pKey->countValues(); i++) {
+            const PPDValue* pValue = pKey -> getValue(i);
+            OUString aValueName = pValue -> m_aOption;
+            PPDValue* pImageableAreaValue = pImageableAreas -> insertValue( aValueName, eQuoted );
+            PPDValue* pPaperDimensionValue = pPaperDimensions -> insertValue( aValueName, eQuoted );
+            rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+            OString o = OUStringToOString( aValueName, aEncoding );
+#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 7) || CUPS_VERSION_MAJOR > 1
+            pwg_media_t *pPWGMedia = pwgMediaForPWG(o.pData->buffer);
+            if (pPWGMedia != nullptr) {
+                OUStringBuffer aBuf( 256 );
+                aBuf.append( "0 0 " );
+                aBuf.append( PWG_TO_POINTS(pPWGMedia -> width) );
+                aBuf.append( " " );
+                aBuf.append( PWG_TO_POINTS(pPWGMedia -> length) );
+                if ( pImageableAreaValue )
+                    pImageableAreaValue->m_aValue = aBuf.makeStringAndClear();
+                aBuf.append( PWG_TO_POINTS(pPWGMedia -> width) );
+                aBuf.append( " " );
+                aBuf.append( PWG_TO_POINTS(pPWGMedia -> length) );
+                if ( pPaperDimensionValue )
+                    pPaperDimensionValue->m_aValue = aBuf.makeStringAndClear();
+                if ((aValueName).equals(pKey -> getDefaultValue() -> m_aOption)) {
+                    pImageableAreas -> m_pDefaultValue = pImageableAreaValue;
+                    pPaperDimensions -> m_pDefaultValue = pPaperDimensionValue;
+                }
+            }
+#endif // HAVE_CUPS_API_1_7
+        }
+        insertKey( OUString( "ImageableArea" ), pImageableAreas );
+        insertKey( OUString( "PaperDimension" ), pPaperDimensions );
+    }
+
+    m_pImageableAreas = getKey(  OUString( "ImageableArea" ) );
+    if( m_pImageableAreas )
+        m_pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
+    if (m_pImageableAreas == nullptr) {
+        SAL_WARN( "vcl.unx.print", "no ImageableArea in " << m_aFile);
+    }
+    if (m_pDefaultImageableArea == nullptr) {
+        SAL_WARN( "vcl.unx.print", "no DefaultImageableArea in " << m_aFile);
+    }
+
+    m_pPaperDimensions = getKey( OUString( "PaperDimension" ) );
+    if( m_pPaperDimensions )
+        m_pDefaultPaperDimension = m_pPaperDimensions->getDefaultValue();
+    if (m_pPaperDimensions == nullptr) {
+        SAL_WARN( "vcl.unx.print", "no PaperDimensions in " << m_aFile);
+    }
+    if (m_pDefaultPaperDimension == nullptr) {
+        SAL_WARN( "vcl.unx.print", "no DefaultPaperDimensions in " << m_aFile);
+    }
+
+    m_pResolutions = getKey( OUString( "Resolution" ) );
+    if( m_pResolutions )
+        m_pDefaultResolution = m_pResolutions->getDefaultValue();
+    if (m_pResolutions == nullptr) {
+        SAL_WARN( "vcl.unx.print", "no Resolution in " << m_aFile);
+    }
+    SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
+
+    m_pInputSlots = getKey( OUString( "InputSlot" ) );
+    if( m_pInputSlots )
+        m_pDefaultInputSlot = m_pInputSlots->getDefaultValue();
+    SAL_INFO_IF(!m_pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
+    SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
+
+    m_pFontList = getKey( OUString( "Font" ) );
+    if (m_pFontList == nullptr) {
+        SAL_WARN( "vcl.unx.print", "no Font in " << m_aFile);
+    }
+
+    // fill in direct values
+    if( (pKey = getKey( OUString( "ModelName" ) )) )
+        m_aPrinterName = pKey->getValue( 0 )->m_aValue;
+    if( (pKey = getKey( OUString( "NickName" ) )) )
+        m_aNickName = pKey->getValue( 0 )->m_aValue;
+    if( (pKey = getKey( OUString( "print-color-mode" ) )) )
+        m_bColorDevice = pKey->countValues() > 1;
+
 }
 
 PPDParser::PPDParser( const OUString& rFile ) :
