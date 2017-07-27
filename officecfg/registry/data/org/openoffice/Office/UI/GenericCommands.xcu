@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -2779,10 +2779,10 @@
           <value xml:lang="en-US">Styles</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">St~yles and Formatting</value>
+          <value xml:lang="en-US">St~yles</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Show Styles and Formatting Sidebar</value>
+          <value xml:lang="en-US">Show the Styles Sidebar</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
