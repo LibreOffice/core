@@ -23,6 +23,7 @@ $(eval $(call gb_Module_add_targets,sal,\
 	Executable_osl_process_child \
     Executable_salmain \
     Executable_macro \
+    Executable_alloca \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sal,\
