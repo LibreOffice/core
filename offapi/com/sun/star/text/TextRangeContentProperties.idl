@@ -81,6 +81,12 @@ service TextRangeContentProperties
     [optional, readonly, property] com::sun::star::text::XTextContent
         NestedTextContent;
 
+    /** Paragraph for the start of this range.
+
+        @since LibreOffice 6.0
+     */
+    [optional, readonly, property] com::sun::star::text::XTextContent TextParagraph;
+
 };
 
 
