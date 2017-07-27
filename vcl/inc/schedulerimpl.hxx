@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_SCHEDULERIMPL_HXX
 
 #include <salwtype.hxx>
+#include <svdata.hxx>
 
 class Task;
 
@@ -33,6 +34,26 @@ struct ImplSchedulerData final
     sal_uInt64         mnUpdateTime;  ///< Last Update Time
 
     const char *GetDebugName() const;
+};
+
+class SchedulerGuard final
+{
+    bool mbLocked;
+
+public:
+    SchedulerGuard()
+        : mbLocked( false )
+    {
+        mbLocked = Scheduler::Lock();
+        assert( mbLocked );
+    }
+
+    ~SchedulerGuard()
+    {
+        if ( !mbLocked )
+            return;
+        Scheduler::Unlock();
+    }
 };
 
 #endif // INCLUDED_VCL_INC_SCHEDULERIMPL_HXX
