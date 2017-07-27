@@ -117,7 +117,6 @@ class VCL_DLLPUBLIC PushButton : public Button
 protected:
     SymbolType      meSymbol;
     TriState        meState;
-    TriState        meSaveValue;
     PushButtonDropdownStyle mnDDStyle;
     bool            mbPressed;
     bool            mbIsActive;
@@ -189,9 +188,6 @@ public:
     bool            IsPressed() const { return mbPressed; }
 
     void            EndSelection();
-
-    void            SaveValue() { meSaveValue = GetState(); }
-    bool            IsValueChangedFromSaved() const { return meSaveValue != GetState(); }
 
     Size            CalcMinimumSize() const;
     virtual Size    GetOptimalSize() const override;

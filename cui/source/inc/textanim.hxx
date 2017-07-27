@@ -74,6 +74,11 @@ private:
     void                SelectDirection( SdrTextAniDirection nValue );
     sal_uInt16              GetSelectedDirection();
 
+    TriState m_aUpState;
+    TriState m_aLeftState;
+    TriState m_aRightState;
+    TriState m_aDownState;
+
 public:
     SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxTextAnimationPage() override;
