@@ -380,6 +380,8 @@ ScChildrenShapes::~ScChildrenShapes()
         if (pDrawBC)
             EndListening(*pDrawBC);
     }
+    if (mpAccessibleDocument && xSelectionSupplier.is())
+        xSelectionSupplier->removeSelectionChangeListener(mpAccessibleDocument);
 }
 
 void ScChildrenShapes::SetDrawBroadcaster()
