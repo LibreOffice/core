@@ -27,6 +27,7 @@
 
 #include <unx/helper.hxx>
 #include "unx/cupsmgr.hxx"
+#include "unx/cpdmgr.hxx"
 
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"
@@ -540,7 +541,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
     ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
 
     OUString aFile = rFile;
-    if( !rFile.startsWith( "CUPS:" ) )
+    if( !rFile.startsWith( "CUPS:" ) && !rFile.startsWith( "CPD:" ) )
         aFile = getPPDFile( rFile );
     if( aFile.isEmpty() )
     {
@@ -559,7 +560,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
             return *it;
 
     PPDParser* pNewParser = nullptr;
-    if( !aFile.startsWith( "CUPS:" ) )
+    if( !aFile.startsWith( "CUPS:" ) && !aFile.startsWith( "CPD:" ) )
         pNewParser = new PPDParser( aFile );
     else
     {
@@ -569,6 +570,9 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
 #ifdef ENABLE_CUPS
             pNewParser = const_cast<PPDParser*>(static_cast<CUPSManager&>(rMgr).createCUPSParser( aFile ));
 #endif
+        } else if ( rMgr.getType() == PrinterInfoManager::Type::CPD )
+        {
+            pNewParser = const_cast<PPDParser*>(static_cast<CPDManager&>(rMgr).createCPDParser( aFile ));
         }
     }
     if( pNewParser )

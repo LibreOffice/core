@@ -35,18 +35,17 @@ using namespace psp;
 using namespace osl;
 
 // Function to execute when name is acquired on the bus
-static void on_name_acquired (GDBusConnection *connection,
-                              const gchar *name,
-                              gpointer)
+void CPDManager::onNameAcquired (GDBusConnection *connection,
+                                 const gchar *name,
+                                 gpointer user_data)
 {
     g_message("Name Acquired %s", name);
 
-    GError *local_error, *error;
     gchar* contents;
-    GDBusNodeInfo *introspection_data = nullptr;
+    GDBusNodeInfo *introspection_data;
 
     // Get Interface for introspection
-    g_file_get_contents ("/home/yash/bigGit/PrintDialog_Backend/org.openprinting.Frontend.xml", &contents, nullptr, &error);
+    g_file_get_contents ("/usr/share/dbus-1/interfaces/org.openprinting.Frontend.xml", &contents, nullptr, nullptr);
     introspection_data = g_dbus_node_info_new_for_xml (contents, nullptr);
 
     g_dbus_connection_register_object (connection,
@@ -56,72 +55,87 @@ static void on_name_acquired (GDBusConnection *connection,
                                        nullptr,  /* user_data */
                                        nullptr,  /* user_data_free_func */
                                        nullptr); /* GError** */
-    local_error = nullptr;
-    g_dbus_connection_emit_signal (connection,
-                                   nullptr,
-                                   "/org/libreoffice/PrintDialog",
-                                   "org.openprinting.PrintFrontend",
-                                   "GetBackend",
-                                   nullptr,
-                                   &local_error);
-    g_assert_no_error (local_error);
-    g_message("Emitted Signal GetBackend");
+
+    CPDManager* current = static_cast<CPDManager*>(user_data);
+    std::vector<std::pair<std::string, std::string>> backends = current -> getTempBackends();
+    for (std::vector<std::pair<std::string, std::string>>::iterator it = backends.begin(); it != backends.end(); ++it) {
+        GDBusProxy *proxy;
+        // Get Interface for introspection
+        g_file_get_contents ("/usr/share/dbus-1/interfaces/org.openprinting.Backend.xml", &contents, nullptr, nullptr);
+        introspection_data = g_dbus_node_info_new_for_xml (contents, nullptr);
+        proxy = g_dbus_proxy_new_sync (connection,
+                                       G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                                       introspection_data->interfaces[0],
+                                       (*it).first.c_str(),
+                                       (*it).second.c_str(),
+                                       "org.openprinting.PrintBackend",
+                                       nullptr,
+                                       nullptr);
+        g_dbus_proxy_call(proxy, "ActivateBackend",
+                          nullptr,
+                          G_DBUS_CALL_FLAGS_NONE,
+                          -1, nullptr, nullptr, nullptr);
+    }
 }
 
-static void on_name_lost (GDBusConnection *,
-                          const gchar *name,
-                          gpointer)
+void CPDManager::onNameLost (GDBusConnection *,
+                             const gchar *name,
+                             gpointer)
 {
     g_message("Name Lost: %s", name);
 }
 
-static void got_signal (GDBusConnection *connection,
-                        const gchar     *sender_name,
-                        const gchar     *object_path,
-                        const gchar     *interface_name,
-                        const gchar     *signal_name,
-                        GVariant        *parameters,
-                        gpointer        user_data)
+void CPDManager::printerAdded (GDBusConnection *connection,
+                               const gchar     *sender_name,
+                               const gchar     *object_path,
+                               const gchar     *interface_name,
+                               const gchar     *signal_name,
+                               GVariant        *parameters,
+                               gpointer        user_data)
 {
-    CPDManager* current = static_cast<CPDManager*>(user_data);
     g_message("Received %s from %s at %s", signal_name, sender_name, object_path);
-    if (g_strcmp0 (signal_name, "PrinterAdded") == 0)
-        {
-            GDBusProxy *proxy;
-            proxy = current -> getProxy(sender_name);
-            if (proxy == nullptr) {
-                gchar* contents;
-                GDBusNodeInfo *introspection_data = nullptr;
+    CPDManager* current = static_cast<CPDManager*>(user_data);
+    GDBusProxy *proxy;
+    proxy = current -> getProxy(sender_name);
+    if (proxy == nullptr) {
+        gchar* contents;
+        GDBusNodeInfo *introspection_data = nullptr;
 
-                // Get Interface for introspection
-                g_file_get_contents ("/home/yash/bigGit/PrintDialog_Backend/org.openprinting.Backend.xml", &contents, nullptr, nullptr);
-                introspection_data = g_dbus_node_info_new_for_xml (contents, nullptr);
-                proxy = g_dbus_proxy_new_sync (connection,
-                                               G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                               introspection_data->interfaces[0],
-                                               sender_name,
-                                               object_path,
-                                               interface_name,
-                                               nullptr,
-                                               nullptr);
-                std::pair<std::string, GDBusProxy *> new_backend (sender_name, proxy);
-                current -> addBackend(new_backend);
-            }
-            CPDPrinter *pDest = static_cast<CPDPrinter *>(malloc(sizeof(CPDPrinter)));
-            // const gchar *name, *info, *location, *make_and_model, *state;
-            // gboolean is_accepting_jobs;
-            g_variant_get (parameters, "(ssssbs)", &(pDest -> name), &(pDest -> info), &(pDest -> location), &(pDest -> make_and_model), &(pDest -> is_accepting_jobs), &(pDest -> printer_state));
-            g_message("State: %s", (pDest -> printer_state).c_str());
-            const char *pName = (pDest -> name).c_str();
-            rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-            OUString aPrinterName = OStringToOUString( pName, aEncoding );
-            std::pair<OUString, CPDPrinter *> newDest (aPrinterName, pDest);
-            current -> addDestination(newDest);
-        } else if (g_strcmp0 (signal_name, "UpdatePrinter") == 0)
-        {
-        } else if (g_strcmp0 (signal_name, "DeletePrinter") == 0)
-        {
-        }
+        // Get Interface for introspection
+        g_file_get_contents ("/usr/share/dbus-1/interfaces/org.openprinting.Backend.xml", &contents, nullptr, nullptr);
+        introspection_data = g_dbus_node_info_new_for_xml (contents, nullptr);
+        proxy = g_dbus_proxy_new_sync (connection,
+                                       G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                                       introspection_data->interfaces[0],
+                                       sender_name,
+                                       object_path,
+                                       interface_name,
+                                       nullptr,
+                                       nullptr);
+
+        std::pair<std::string, GDBusProxy *> new_backend (sender_name, proxy);
+        current -> addBackend(new_backend);
+    }
+    CPDPrinter *pDest = static_cast<CPDPrinter *>(malloc(sizeof(CPDPrinter)));
+    pDest -> backend = proxy;
+    g_variant_get (parameters, "(sssssbs)", &(pDest -> name), &(pDest -> info), &(pDest -> location), &(pDest -> make_and_model), &(pDest -> printer_uri), &(pDest -> is_accepting_jobs), &(pDest -> printer_state));
+    std::stringstream uniqueName;
+    uniqueName << sender_name << "-" << (pDest -> name).c_str();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    OUString aPrinterName = OStringToOUString( uniqueName.str().c_str(), aEncoding );
+    std::pair<OUString, CPDPrinter *> newPrinter (aPrinterName, pDest);
+    current -> addNewPrinter(newPrinter);
+}
+
+void CPDManager::printerRemoved (GDBusConnection *,
+                                 const gchar     *sender_name,
+                                 const gchar     *object_path,
+                                 const gchar     *,
+                                 const gchar     *signal_name,
+                                 GVariant        *,
+                                 gpointer)
+{
+    g_message("Received %s from %s at %s", signal_name, sender_name, object_path);
 }
 
 GDBusProxy * CPDManager::getProxy(std::string target) {
@@ -137,8 +151,16 @@ void CPDManager::addBackend(std::pair<std::string, GDBusProxy *> pair) {
     g_message("Add new backend");
 }
 
-void CPDManager::addDestination(std::pair<OUString, CPDPrinter * > pair) {
-    // initialize printer with possible configuration from psprint.conf
+void CPDManager::addTempBackend(std::pair<std::string, std::string> pair) {
+    this -> m_tBackends.push_back(pair);
+    g_message("Add new temporary backend");
+}
+
+std::vector<std::pair<std::string, std::string>> CPDManager::getTempBackends() {
+    return this -> m_tBackends;
+}
+
+void CPDManager::addNewPrinter(std::pair<OUString, CPDPrinter * > pair) {
     OUString aPrinterName = pair.first;
     CPDPrinter *pDest = pair.second;
     std::unordered_map<OUString, CPDPrinter *, OUStringHash>::iterator it = m_aCPDDestMap.find( aPrinterName );
@@ -168,11 +190,17 @@ void CPDManager::addDestination(std::pair<OUString, CPDPrinter * > pair) {
     // is created implicitly by the JobData::operator=()
     // when it detects the NULL ptr m_pParser.
     // if we wanted to fill in the parser here this
-    // would mean we'd have to download PPDs for each and
+    // would mean we'd have to send a dbus message for each and
     // every printer - which would be really bad runtime
     // behaviour
     aPrinter.m_aInfo.m_pParser = nullptr;
     aPrinter.m_aInfo.m_aContext.setParser( nullptr );
+    std::unordered_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
+    if( c_it != m_aDefaultContexts.end() )
+    {
+        aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
+        aPrinter.m_aInfo.m_aContext = c_it->second;
+    }
     aPrinter.m_aInfo.setDefaultBackend(true);
     aPrinter.m_aInfo.m_aDriverName = aBuf.makeStringAndClear();
     aPrinter.m_bModified = false;
@@ -190,9 +218,25 @@ CPDManager* CPDManager::tryLoadCPD()
 #if ENABLE_DBUS && ENABLE_GIO
     static const char* pEnv = getenv("SAL_DISABLE_CPD");
 
-    if (!pEnv || !*pEnv)
-        pManager = new CPDManager();
-    g_message("Loaded CPD\n");
+    if (!pEnv || !*pEnv) {
+        GDir *dir;
+        GError *error;
+        const gchar *filename;
+        dir = g_dir_open(BACKEND_DIR, 0, &error);
+        if (error != nullptr) {
+            while ((filename = g_dir_read_name(dir))) {
+                if (pManager == nullptr) {
+                    pManager = new CPDManager();
+                }
+                gchar* contents;
+                std::stringstream filepath;
+                filepath << BACKEND_DIR << '/' << filename;
+                g_file_get_contents(filepath.str().c_str(), &contents, nullptr, nullptr);
+                std::pair<std::string, std::string> new_tbackend (filename, contents);
+                pManager -> addTempBackend(new_tbackend);
+            }
+        }
+    }
 #endif
     return pManager;
 }
@@ -228,7 +272,32 @@ CPDManager::~CPDManager()
 }
 
 
+const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
+{
+    g_message("createCPDParser called");
+    const PPDParser* pNewParser = nullptr;
+    OUString aPrinter;
 
+    if( rPrinter.startsWith("CPD:") )
+        aPrinter = rPrinter.copy( 4 );
+    else
+        aPrinter = rPrinter;
+
+
+    if( ! pNewParser )
+    {
+        // get the default PPD
+        pNewParser = PPDParser::getParser( "SGENPRT" );
+        SAL_WARN("vcl.unx.print", "Parsing default SGENPRT PPD" );
+
+        PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
+
+        rInfo.m_pParser = pNewParser;
+        rInfo.m_aContext.setParser( pNewParser );
+    }
+
+    return pNewParser;
+}
 
 
 void CPDManager::initialize()
@@ -239,28 +308,57 @@ void CPDManager::initialize()
     g_bus_own_name_on_connection (m_pConnection,
                                   "org.libreoffice.print-dialog",
                                   G_BUS_NAME_OWNER_FLAGS_NONE,
-                                  on_name_acquired,
-                                  on_name_lost,
-                                  NULL,
-                                  NULL);
+                                  onNameAcquired,
+                                  onNameLost,
+                                  this,
+                                  nullptr);
 
     g_dbus_connection_signal_subscribe (m_pConnection,                    // DBus Connection
-                                        NULL,                             // Sender Name
+                                        nullptr,                          // Sender Name
                                         "org.openprinting.PrintBackend",  // Sender Interface
-                                        NULL,                             // Signal Name
-                                        NULL,                             // Object Path
-                                        NULL,                             // arg0 behaviour
+                                        "PrinterAdded",                   // Signal Name
+                                        nullptr,                          // Object Path
+                                        nullptr,                          // arg0 behaviour
                                         G_DBUS_SIGNAL_FLAGS_NONE,         // Signal Flags
-                                        got_signal,                       // Callback Function
+                                        printerAdded,                     // Callback Function
                                         this,
-                                        NULL);
+                                        nullptr);
+    g_dbus_connection_signal_subscribe (m_pConnection,                    // DBus Connection
+                                        nullptr,                          // Sender Name
+                                        "org.openprinting.PrintBackend",  // Sender Interface
+                                        "PrinterRemoved",                 // Signal Name
+                                        nullptr,                          // Object Path
+                                        nullptr,                          // arg0 behaviour
+                                        G_DBUS_SIGNAL_FLAGS_NONE,         // Signal Flags
+                                        printerRemoved,                   // Callback Function
+                                        this,
+                                        nullptr);
+
+    // remove everything that is not a CUPS printer and not
+    // a special purpose printer (PDF, Fax)
+    std::list< OUString > aRemovePrinters;
+    for( std::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.begin();
+         it != m_aPrinters.end(); ++it )
+        {
+            if( m_aCPDDestMap.find( it->first ) != m_aCPDDestMap.end() )
+                continue;
+
+            if( !it->second.m_aInfo.m_aFeatures.isEmpty() )
+                continue;
+            aRemovePrinters.push_back( it->first );
+        }
+    while( aRemovePrinters.begin() != aRemovePrinters.end() )
+        {
+            m_aPrinters.erase( aRemovePrinters.front() );
+            aRemovePrinters.pop_front();
+        }
     // If password CB is needed
     //cpdSetPasswordCB( setPasswordCallback );
 }
 
 void CPDManager::setupJobContextData( JobData& rData )
 {
-    std::unordered_map< OUString, CPDPrinter *, OUStringHash >::iterator dest_it =
+    std::unordered_map<OUString, CPDPrinter *, OUStringHash>::iterator dest_it =
         m_aCPDDestMap.find( rData.m_aPrinterName );
 
     if( dest_it == m_aCPDDestMap.end() )
@@ -269,11 +367,32 @@ void CPDManager::setupJobContextData( JobData& rData )
     std::unordered_map< OUString, Printer, OUStringHash >::iterator p_it =
         m_aPrinters.find( rData.m_aPrinterName );
     if( p_it == m_aPrinters.end() ) // huh ?
-        {
-            SAL_WARN("vcl.unx.print", "CPD printer list in disorder, "
-                     "no dest for printer " << rData.m_aPrinterName);
-            return;
-        }
+    {
+        SAL_WARN("vcl.unx.print", "CPD printer list in disorder, "
+                 "no dest for printer " << rData.m_aPrinterName);
+        return;
+    }
+
+    if( p_it->second.m_aInfo.m_pParser == nullptr )
+    {
+        // in turn calls createCPDParser
+        // which updates the printer info
+        p_it->second.m_aInfo.m_pParser = PPDParser::getParser( p_it->second.m_aInfo.m_aDriverName );
+    }
+    if( p_it->second.m_aInfo.m_aContext.getParser() == nullptr )
+    {
+        OUString aPrinter;
+        if( p_it->second.m_aInfo.m_aDriverName.startsWith("CPD:") )
+            aPrinter = p_it->second.m_aInfo.m_aDriverName.copy( 4 );
+        else
+            aPrinter = p_it->second.m_aInfo.m_aDriverName;
+
+        p_it->second.m_aInfo.m_aContext = m_aDefaultContexts[ aPrinter ];
+    }
+
+    rData.m_pParser     = p_it->second.m_aInfo.m_pParser;
+    rData.m_aContext    = p_it->second.m_aInfo.m_aContext;
+
     g_message("Setup JobContextData called");
 }
 
@@ -281,14 +400,15 @@ FILE* CPDManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
     SAL_INFO( "vcl.unx.print", "startSpool: " << rPrintername << " " << (bQuickCommand ? "true" : "false") );
     if( m_aCPDDestMap.find( rPrintername ) == m_aCPDDestMap.end() )
-        {
-            SAL_INFO( "vcl.unx.print", "defer to PrinterInfoManager::startSpool" );
-            return PrinterInfoManager::startSpool( rPrintername, bQuickCommand );
-        }
+    {
+        SAL_INFO( "vcl.unx.print", "defer to PrinterInfoManager::startSpool" );
+        return PrinterInfoManager::startSpool( rPrintername, bQuickCommand );
+    }
     OUString aTmpURL, aTmpFile;
     osl_createTempFile( nullptr, nullptr, &aTmpURL.pData );
     osl_getSystemPathFromFileURL( aTmpURL.pData, &aTmpFile.pData );
     OString aSysFile = OUStringToOString( aTmpFile, osl_getThreadTextEncoding() );
+    g_message(aSysFile.getStr());
     FILE* fp = fopen( aSysFile.getStr(), "w" );
     if( fp )
         m_aSpoolFiles[fp] = aSysFile;
@@ -298,36 +418,42 @@ FILE* CPDManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 
 bool CPDManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber )
 {
+    bool success = false;
     SAL_INFO( "vcl.unx.print", "endSpool: " << rPrintername << "," << rJobTitle << " copy count = " << rDocumentJobData.m_nCopies );
     std::unordered_map< OUString, CPDPrinter *, OUStringHash >::iterator dest_it =
         m_aCPDDestMap.find( rPrintername );
     if( dest_it == m_aCPDDestMap.end() )
-        {
-            SAL_INFO( "vcl.unx.print", "defer to PrinterInfoManager::endSpool" );
-            return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData, bBanner, rFaxNumber );
-        }
+    {
+        SAL_INFO( "vcl.unx.print", "defer to PrinterInfoManager::endSpool" );
+        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData, bBanner, rFaxNumber );
+    }
 
     std::unordered_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
     if( it != m_aSpoolFiles.end() )
+    {
+        fclose( pFile );
+        rtl_TextEncoding aEnc = osl_getThreadTextEncoding();
+        OString sJobName(OUStringToOString(rJobTitle, aEnc));
+        if (!rFaxNumber.isEmpty())
         {
-            fclose( pFile );
-            rtl_TextEncoding aEnc = osl_getThreadTextEncoding();
-            OString sJobName(OUStringToOString(rJobTitle, aEnc));
-            if (!rFaxNumber.isEmpty())
-                {
-                    sJobName = OUStringToOString(rFaxNumber, aEnc);
-                }
-            CPDPrinter* pDest = dest_it->second;
-            g_message("Printing");
-            // g_dbus_proxy_call(pDest -> backend, "printJob",
-            //                   g_variant_new("(s)", "yo"),
-            //                   G_DBUS_CALL_FLAGS_NONE,
-            //                   -1, nullptr, nullptr, nullptr);
-            unlink( it->second.getStr() );
-            m_aSpoolFiles.erase( pFile );
+            sJobName = OUStringToOString(rFaxNumber, aEnc);
         }
+        OString aSysFile = it->second;
+        CPDPrinter* pDest = dest_it->second;
+        GVariant* ret;
+        ret = g_dbus_proxy_call_sync (pDest -> backend, "printFile",
+                                      g_variant_new(
+                                                    "(ss)",
+                                                    (pDest -> name).c_str(),
+                                                    aSysFile.getStr()),
+                                      G_DBUS_CALL_FLAGS_NONE,
+                                      -1, nullptr, nullptr);
+        g_variant_get (ret, "(b)", &success);
+        unlink( it->second.getStr() );
+        m_aSpoolFiles.erase( pFile );
+    }
 
-    return true;
+    return success;
 }
 
 bool CPDManager::checkPrintersChanged( bool )
@@ -368,10 +494,10 @@ bool CPDManager::setDefaultPrinter( const OUString& rName )
     std::unordered_map< OUString, CPDPrinter *, OUStringHash >::iterator nit =
         m_aCPDDestMap.find( rName );
     if( nit != m_aCPDDestMap.end())
-        {
-            m_aDefaultPrinter = rName;
-            bSuccess = true;
-        }
+    {
+        m_aDefaultPrinter = rName;
+        bSuccess = true;
+    }
     else
         bSuccess = PrinterInfoManager::setDefaultPrinter( rName );
 
