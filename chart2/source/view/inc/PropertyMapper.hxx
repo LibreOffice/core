@@ -49,7 +49,7 @@ public:
           const css::uno::Reference< css::beans::XPropertySet >& xTarget
         , const css::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap
-        , tPropertyNameValueMap* pOverwriteMap=nullptr );
+        , tPropertyNameValueMap const * pOverwriteMap=nullptr );
 
     /**
      * Fetch property values from the source object and map it to the

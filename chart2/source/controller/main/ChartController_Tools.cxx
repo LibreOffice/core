@@ -327,7 +327,7 @@ void ChartController::executeDispatch_Paste()
 // note: aPosition is ignored for now. The object is always pasted centered to
 // the page
 void ChartController::impl_PasteGraphic(
-    uno::Reference< graphic::XGraphic > & xGraphic,
+    uno::Reference< graphic::XGraphic > const & xGraphic,
     const ::Point & /* aPosition */ )
 {
     DBG_TESTSOLARMUTEX();

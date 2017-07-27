@@ -106,7 +106,7 @@ private:
         const css::uno::Reference< css::xml::sax::XParser > & xParser,
         const css::uno::Reference< css::lang::XMultiComponentFactory > & xFactory,
         const css::uno::Reference< css::document::XGraphicObjectResolver > & xGraphicObjectResolver,
-        css::uno::Reference< css::beans::XPropertySet >& xPropSet );
+        css::uno::Reference< css::beans::XPropertySet > const & xPropSet );
 
     /// @return a warning code, or 0 for successful operation
     ErrCode impl_Export( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,

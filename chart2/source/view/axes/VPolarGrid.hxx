@@ -49,7 +49,7 @@ public:
                     , TickInfoArraysType& rAllTickInfos
                     , const ExplicitIncrementData& rIncrement
                     , const ExplicitScaleData& rScale
-                    , PolarPlottingPositionHelper* pPosHelper
+                    , PolarPlottingPositionHelper const * pPosHelper
                     , double fLogicRadius, double fLogicZ );
 
 private: //member

@@ -49,7 +49,7 @@ namespace chart
 
 namespace
 {
-    short lcl_getHitTolerance( OutputDevice* pOutDev )
+    short lcl_getHitTolerance( OutputDevice const * pOutDev )
     {
         const short HITPIX=2; //hit-tolerance in pixel
         short nHitTolerance = 50;
@@ -307,7 +307,7 @@ SdrObject* DrawViewWrapper::getNamedSdrObject( const OUString& rName ) const
     return nullptr;
 }
 
-bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt )
+bool DrawViewWrapper::IsObjectHit( SdrObject const * pObj, const Point& rPnt )
 {
     if(pObj)
     {

@@ -293,7 +293,7 @@ uno::Reference< chart2::XRegressionCurve >
 }
 
 void RegressionCurveHelper::addMeanValueLine(
-    uno::Reference< XRegressionCurveContainer > & xRegCnt,
+    uno::Reference< XRegressionCurveContainer > const & xRegCnt,
     const uno::Reference< XPropertySet > & xSeriesProp )
 {
     if( !xRegCnt.is() ||
@@ -316,7 +316,7 @@ void RegressionCurveHelper::addMeanValueLine(
 }
 
 void RegressionCurveHelper::removeMeanValueLine(
-    Reference< XRegressionCurveContainer > & xRegCnt )
+    Reference< XRegressionCurveContainer > const & xRegCnt )
 {
     if( !xRegCnt.is())
         return;
@@ -346,7 +346,7 @@ void RegressionCurveHelper::removeMeanValueLine(
 
 uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::addRegressionCurve(
     SvxChartRegress eType,
-    uno::Reference< XRegressionCurveContainer >& xRegressionCurveContainer,
+    uno::Reference< XRegressionCurveContainer > const & xRegressionCurveContainer,
     const uno::Reference< XComponentContext >& /* xContext */,
     const uno::Reference< beans::XPropertySet >& xPropertySource,
     const uno::Reference< beans::XPropertySet >& xEquationProperties )
@@ -396,7 +396,7 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::addRegressionC
     and returns true, if anything was removed
  */
 bool RegressionCurveHelper::removeAllExceptMeanValueLine(
-    uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
+    uno::Reference< chart2::XRegressionCurveContainer > const & xRegCnt )
 {
     bool bRemovedSomething = false;
     if( xRegCnt.is())
@@ -430,7 +430,7 @@ bool RegressionCurveHelper::removeAllExceptMeanValueLine(
 }
 
 void RegressionCurveHelper::removeEquations(
-        uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
+        uno::Reference< chart2::XRegressionCurveContainer > const & xRegCnt )
 {
     if( xRegCnt.is())
     {
@@ -466,8 +466,8 @@ void RegressionCurveHelper::removeEquations(
 
 uno::Reference< XRegressionCurve > RegressionCurveHelper::changeRegressionCurveType(
     SvxChartRegress eType,
-    uno::Reference< XRegressionCurveContainer > & xRegressionCurveContainer,
-    uno::Reference< XRegressionCurve > & xRegressionCurve,
+    uno::Reference< XRegressionCurveContainer > const & xRegressionCurveContainer,
+    uno::Reference< XRegressionCurve > const & xRegressionCurve,
     const uno::Reference< XComponentContext > & xContext )
 {
     xRegressionCurveContainer->removeRegressionCurve( xRegressionCurve );

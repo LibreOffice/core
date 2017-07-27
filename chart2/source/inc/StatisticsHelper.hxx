@@ -67,7 +67,7 @@ namespace StatisticsHelper
         const OUString & rNewRange,
         bool bPositiveValue,
         bool bYError = true,
-        OUString * pXMLRange = nullptr );
+        OUString const * pXMLRange = nullptr );
 
     /// @return the newly created or existing error bar object
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::beans::XPropertySet >

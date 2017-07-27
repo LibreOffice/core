@@ -44,7 +44,7 @@ struct lcl_ModelProperties
     {}
 };
 
-lcl_ModelProperties lcl_getPropertiesFromModel( uno::Reference< frame::XModel > & xModel )
+lcl_ModelProperties lcl_getPropertiesFromModel( uno::Reference< frame::XModel > const & xModel )
 {
     lcl_ModelProperties aProps;
     try
@@ -62,7 +62,7 @@ lcl_ModelProperties lcl_getPropertiesFromModel( uno::Reference< frame::XModel > 
     return aProps;
 }
 
-void lcl_setShadeModeAtModel( uno::Reference< frame::XModel > & xModel, drawing::ShadeMode aShadeMode )
+void lcl_setShadeModeAtModel( uno::Reference< frame::XModel > const & xModel, drawing::ShadeMode aShadeMode )
 {
     try
     {

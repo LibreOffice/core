@@ -71,7 +71,7 @@ namespace
 wrapper::ItemConverter* createItemConverter(
     const OUString & aObjectCID, const uno::Reference<frame::XModel>& xChartModel,
     const uno::Reference<uno::XComponentContext>& xContext, SdrModel& rDrawModel,
-    ExplicitValueProvider* pExplicitValueProvider, ReferenceSizeProvider* pRefSizeProvider )
+    ExplicitValueProvider* pExplicitValueProvider, ReferenceSizeProvider const * pRefSizeProvider )
 {
     wrapper::ItemConverter* pItemConverter=nullptr;
 

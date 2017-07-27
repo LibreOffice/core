@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-OUString lcl_getObjectName( SdrObject* pObj )
+OUString lcl_getObjectName( SdrObject const * pObj )
 {
     if(pObj)
        return pObj->GetName();
@@ -156,7 +156,7 @@ void Selection::applySelection( DrawViewWrapper* pDrawViewWrapper )
     }
 }
 
-void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper* pDrawViewWrapper
+void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper const * pDrawViewWrapper
                                        , bool bIsRightMouse, bool bWaitingForDoubleClick )
 {
     if( pDrawViewWrapper )
@@ -379,7 +379,7 @@ bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
 
 OUString SelectionHelper::getHitObjectCID(
     const Point& rMPos,
-    DrawViewWrapper& rDrawViewWrapper,
+    DrawViewWrapper const & rDrawViewWrapper,
     bool bGetDiagramInsteadOf_Wall )
 {
     SolarMutexGuard aSolarGuard;

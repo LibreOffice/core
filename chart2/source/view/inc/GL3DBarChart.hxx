@@ -102,12 +102,12 @@ private:
     void updateRenderFPS();
     void updateDataUpdateFPS();
     DECL_LINK(UpdateTimerHdl, Timer*, void);
-    static int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
+    static int calcTimeInterval(TimeValue const &startTime, TimeValue const &endTime);
     float addScreenTextShape(OUString &nStr, const glm::vec2& rLeftOrRightTop, float nTextHeight, bool bLeftTopFlag,
                                   const glm::vec4& rColor,
                                   const glm::vec3& rPos = glm::vec3(0.0f, 0.0f, 0.0f),
                                   sal_uInt32 nEvent = 0);
-    void recordBarHistory(sal_uInt32 &nBarID, float &nVal);
+    void recordBarHistory(sal_uInt32 nBarID, float nVal);
     void updateClickEvent();
     void calcDistance(std::vector<sal_uInt32> &vectorNearest);
     static float calcScrollDistance(const glm::mat4 &mvp, const glm::vec3& rPos);

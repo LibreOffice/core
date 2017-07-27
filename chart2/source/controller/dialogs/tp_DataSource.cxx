@@ -115,7 +115,7 @@ OUString lcl_GetSelectedRolesRange( const SvTabListBox & rRoleListBox )
     return aResult;
 }
 
-OUString lcl_GetSequenceNameForLabel( ::chart::SeriesEntry * pEntry )
+OUString lcl_GetSequenceNameForLabel( ::chart::SeriesEntry const * pEntry )
 {
     OUString aResult( "values-y" );
     if( pEntry &&
