@@ -123,15 +123,15 @@ public:
 
     void SAL_CALL endDocument() override;
 
-    void SAL_CALL startElement(const OUString& aName, const uno::Reference<xml::sax::XAttributeList>& xAttribs) override;
+    void SAL_CALL startElement(const OUString& rName, const uno::Reference<xml::sax::XAttributeList>& xAttribs) override;
 
-    void SAL_CALL endElement(const OUString& aName) override;
+    void SAL_CALL endElement(const OUString& rName) override;
 
-    void SAL_CALL characters(const OUString& aChars) override;
+    void SAL_CALL characters(const OUString& rChars) override;
 
-    void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
+    void SAL_CALL ignorableWhitespace(const OUString& rWhitespaces) override;
 
-    void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) override;
+    void SAL_CALL processingInstruction(const OUString& rTarget, const OUString& rData) override;
 
     void SAL_CALL setDocumentLocator(const uno::Reference<xml::sax::XLocator>& xLocator) override;
 };
