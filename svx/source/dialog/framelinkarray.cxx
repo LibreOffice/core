@@ -132,8 +132,6 @@ void lclSetMergedRange( CellVec& rCells, size_t nWidth, size_t nFirstCol, size_t
 static const Style OBJ_STYLE_NONE;
 static const Cell OBJ_CELL_NONE;
 
-const bool DIAG_DBL_CLIP_DEFAULT = false;
-
 struct ArrayImpl
 {
     CellVec             maCells;
@@ -1122,7 +1120,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                         aY.normalize();
                     }
 
-                    drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+                    drawinglayer::primitive2d::Primitive2DContainer aSequence;
                     CreateBorderPrimitives(
                         aSequence,
                         aOrigin,
@@ -1188,7 +1186,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                 aY.normalize();
             }
 
-            drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+            drawinglayer::primitive2d::Primitive2DContainer aSequence;
             CreateBorderPrimitives(
                 aSequence,
                 aOrigin,
@@ -1288,7 +1286,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                         aY = -aY;
                     }
 
-                    drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+                    drawinglayer::primitive2d::Primitive2DContainer aSequence;
                     CreateBorderPrimitives(
                         // This replaces DrawVerFrameBorder which went from top to bottom. To be able to use
                         // the same method as for horizontal (CreateBorderPrimitives), the given borders
@@ -1367,7 +1365,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D& rProcessor,
                 aY = -aY;
             }
 
-            drawinglayer::primitive2d::Primitive2DContainer aSequence(1);
+            drawinglayer::primitive2d::Primitive2DContainer aSequence;
             CreateBorderPrimitives(
                 // also reordered, see call to CreateBorderPrimitives above
                 aSequence,

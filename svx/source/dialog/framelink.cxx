@@ -278,73 +278,6 @@ bool CheckFrameBorderConnectable( const Style& rLBorder, const Style& rRBorder,
 
 
 // Drawing functions
-// get offset to center of line in question
-double lcl_getCenterOfLineOffset(const Style& rBorder, bool bLeftEdge)
-{
-    const bool bPrimUsed(!basegfx::fTools::equalZero(rBorder.Prim())); // left
-    const bool bDistUsed(!basegfx::fTools::equalZero(rBorder.Dist())); // distance
-    const bool bSecnUsed(!basegfx::fTools::equalZero(rBorder.Secn())); // right
-
-    if (bDistUsed || bSecnUsed)
-    {
-        // double line, get center by adding half distance and half line width.
-        // bLeftEdge defines which line to use
-        return (rBorder.Dist() + (bLeftEdge ? rBorder.Prim() : rBorder.Secn())) * 0.5;
-    }
-    else if (bPrimUsed)
-    {
-        // single line, get center
-        return rBorder.Prim() * 0.5;
-    }
-
-    // no line width at all, stay on unit vector
-    return 0.0;
-}
-
-double lcl_GetExtent(
-    const Style& rBorder, const Style& rSide, const Style& rOpposite,
-    long nAngleSide, long nAngleOpposite,
-    bool bLeftEdge,     // left or right of rBorder
-    bool bOtherLeft )   // left or right of rSide/rOpposite
-{
-    Style aOtherBorder = rSide;
-    long nOtherAngle = nAngleSide;
-    if ( rSide.GetWidth() == 0 && rOpposite.GetWidth() > 0 )
-    {
-        nOtherAngle = nAngleOpposite;
-        aOtherBorder = rOpposite;
-    }
-    else if ( rSide.GetWidth() == 0 && rOpposite.GetWidth() == 0 )
-    {
-        if ( ( nAngleOpposite % 18000 ) == 0 )
-            nOtherAngle = nAngleSide;
-        else if ( ( nAngleSide % 18000 ) == 0 )
-            nOtherAngle = nAngleOpposite;
-    }
-
-    // Let's assume the border we are drawing is horizontal and compute all the angles / distances from this
-    basegfx::B2DVector aBaseVector( 1.0, 0.0 );
-    // added support to get the distances to the centers of the line, *not* the outre edge
-    basegfx::B2DPoint aBasePoint(0.0, lcl_getCenterOfLineOffset(rBorder, bLeftEdge));
-
-    basegfx::B2DHomMatrix aRotation;
-    aRotation.rotate( double( nOtherAngle ) * M_PI / 18000.0 );
-
-    basegfx::B2DVector aOtherVector = aRotation * aBaseVector;
-    // Compute a line shifted by half the width of the other border
-    basegfx::B2DVector aPerpendicular = basegfx::getNormalizedPerpendicular( aOtherVector );
-    // added support to get the distances to the centers of the line, *not* the outre edge
-    basegfx::B2DPoint aOtherPoint = basegfx::B2DPoint() + aPerpendicular * lcl_getCenterOfLineOffset(aOtherBorder, bOtherLeft);
-
-    // Find the cut between the two lines
-    double nCut = 0.0;
-    basegfx::tools::findCut(
-            aBasePoint, aBaseVector, aOtherPoint, aOtherVector,
-            CutFlagValue::ALL, &nCut );
-
-    return nCut;
-}
-
 struct OffsetPair
 {
     double          mfLeft;
@@ -523,7 +456,14 @@ double getSimpleExtendedLineValues(
 
     if (pResult)
     {
-        return (pResult->mfLeftRight + pResult->mfRightRight) * 0.5 * (bEdgeStart ? -fLength : fLength);
+        if (bEdgeStart)
+        {
+            return (pResult->mfLeftRight + pResult->mfRightRight) * -0.5 * fLength;
+        }
+        else
+        {
+            return (pResult->mfLeftLeft + pResult->mfRightLeft) * 0.5 * fLength;
+        }
     }
 
     return 0.0;
@@ -552,8 +492,17 @@ double getComplexExtendedLineValues(
 
     if (pResult)
     {
-        return (pResult->mfLeftRight + pResult->mfRightRight) * 0.5 * (bEdgeStart ? -fLength : fLength);
+        if (bEdgeStart)
+        {
+            return (pResult->mfLeftRight + pResult->mfRightRight) * 0.5 * -fLength;
+        }
+        else
+        {
+            return (pResult->mfLeftLeft + pResult->mfRightLeft) * 0.5 * fLength;
+        }
     }
+
+    return 0.0;
 }
 
 void CreateBorderPrimitives(
@@ -636,7 +585,10 @@ void CreateBorderPrimitives(
         else if (2 == myOffsets.size())
         {
             // we are a double edge, calculate cuts with edges coming from above/below
-            // for both edges to detect the line start/end extensions
+            // for both edges to detect the line start/end extensions. In the furure this
+            // needs to be extended to use two values per extension, getComplexExtendedLineValues
+            // internally prepares these already. drawinglayer::primitive2d::BorderLine will
+            // then need to take these double entries (maybe a pair) and use them internally.
             double mfExtendLeftStart(0.0);
             double mfExtendLeftEnd(0.0);
             double mfExtendRightStart(0.0);
@@ -671,8 +623,12 @@ void CreateBorderPrimitives(
                         drawinglayer::primitive2d::BorderLine(
                             rBorder.Dist(),
                             (pForceColor ? *pForceColor : rBorder.GetColorGap()).getBColor(),
-                            (mfExtendLeftStart + mfExtendRightStart) * 0.5,
-                            (mfExtendLeftEnd + mfExtendRightEnd) * 0.5),
+                            // needs to be determined in detail later, for now use the max prolongation
+                            // from left/right, butz do not less than half (0.0). This works decently,
+                            // but not perfect (see Writer, use three-color-style, look at upper/lower#
+                            // connections)
+                            std::max(0.0, std::max(mfExtendLeftStart, mfExtendRightStart)),
+                            std::max(0.0, std::max(mfExtendLeftEnd, mfExtendRightEnd))),
                         drawinglayer::primitive2d::BorderLine(
                             rBorder.Secn(),
                             (pForceColor ? *pForceColor : rBorder.GetColorSecn()).getBColor(),
