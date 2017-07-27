@@ -38,6 +38,7 @@
 #include <unordered_map>
 #include <boost/functional/hash.hpp>
 #include "ControlCacheKey.hxx"
+#include "schedulerimpl.hxx"
 
 struct ImplPostEventData;
 struct ImplTimerData;
@@ -46,7 +47,6 @@ struct ImplConfigData;
 class ImplDirectFontSubstitution;
 struct ImplHotKey;
 struct ImplEventHook;
-struct ImplSchedulerData;
 class Point;
 class ImplAccelManager;
 class PhysicalFontCollection;
@@ -324,6 +324,8 @@ struct ImplSchedulerContext
     SalTimer*               mpSalTimer = nullptr;           ///< interface to sal event loop / system timer
     sal_uInt64              mnTimerStart = 0;               ///< start time of the timer
     sal_uInt64              mnTimerPeriod = SAL_MAX_UINT64; ///< current timer period
+    SchedulerMutex          maMutex;                        ///< lock counting mutex for scheduler locking
+    bool                    mbActive = true;                ///< is the scheduler active?
 };
 
 struct ImplSVData
