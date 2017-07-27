@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 
+class SchedulerGuard;
 class Task;
 struct TaskImpl;
 struct ImplSchedulerContext;
@@ -29,14 +30,18 @@ struct ImplSchedulerData;
 
 class VCL_DLLPUBLIC Scheduler final
 {
+    friend class SchedulerGuard;
     friend class Task;
-    Scheduler() = delete;
+    Scheduler() SAL_DELETED_FUNCTION;
 
     static inline void UpdateSystemTimer( ImplSchedulerContext &rSchedCtx,
                                           sal_uInt64 nMinPeriod,
                                           bool bForce, sal_uInt64 nTime );
 
     static void ImplStartTimer ( sal_uInt64 nMS, bool bForce, sal_uInt64 nTime );
+
+    static bool Lock( sal_uInt32 nLockCount = 1 );
+    static sal_uInt32 Unlock( bool bUnlockAll = false );
 
 public:
     static constexpr sal_uInt64 ImmediateTimeoutMs = 0;
