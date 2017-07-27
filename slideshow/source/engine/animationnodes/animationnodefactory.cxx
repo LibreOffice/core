@@ -580,7 +580,7 @@ AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
 }
 
 #if defined(DBG_UTIL)
-void AnimationNodeFactory::showTree( AnimationNodeSharedPtr& pRootNode )
+void AnimationNodeFactory::showTree( AnimationNodeSharedPtr const & pRootNode )
 {
     if( pRootNode )
         DEBUG_NODES_SHOWTREE( std::dynamic_pointer_cast<BaseContainerNode>(

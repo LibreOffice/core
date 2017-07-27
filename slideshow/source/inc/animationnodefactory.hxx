@@ -50,7 +50,7 @@ namespace slideshow
 
 
 #if defined(DBG_UTIL)
-            void showTree( AnimationNodeSharedPtr& pRootNode );
+            void showTree( AnimationNodeSharedPtr const & pRootNode );
 # define SHOW_NODE_TREE(a) AnimationNodeFactory::showTree(a)
 #else
 # define SHOW_NODE_TREE(a)

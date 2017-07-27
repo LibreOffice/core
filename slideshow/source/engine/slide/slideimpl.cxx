@@ -274,7 +274,7 @@ private:
 };
 
 
-void slideRenderer( SlideImpl* pSlide, const UnoViewSharedPtr& rView )
+void slideRenderer( SlideImpl const * pSlide, const UnoViewSharedPtr& rView )
 {
     // fully clear view content to background color
     rView->clearAll();

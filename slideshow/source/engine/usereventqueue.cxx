@@ -340,7 +340,7 @@ protected:
         return false; // nothing hit
     }
 
-    bool sendEvent( ImpShapeEventMap::reverse_iterator& io_rHitShape )
+    bool sendEvent( ImpShapeEventMap::reverse_iterator const & io_rHitShape )
     {
         // take next event from queue
         const bool bRet( fireSingleEvent( io_rHitShape->second,
