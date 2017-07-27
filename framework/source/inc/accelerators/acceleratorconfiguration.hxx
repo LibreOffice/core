@@ -303,7 +303,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
     private:
 
         void impl_ts_load(bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg);
-        void impl_ts_save(bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg);
+        void impl_ts_save(bool bPreferred);
 
         void insertKeyToConfiguration(const css::awt::KeyEvent& aKeyEvent, const OUString& sCommand, const bool bPreferred);
         void removeKeyFromConfiguration(const css::awt::KeyEvent& aKeyEvent, const bool bPreferred);

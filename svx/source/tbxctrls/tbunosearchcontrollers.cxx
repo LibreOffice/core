@@ -301,7 +301,7 @@ public:
     static SearchToolbarControllersManager& createControllersManager();
 
     void registryController( const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Reference< css::frame::XStatusListener >& xStatusListener, const OUString& sCommandURL );
-    void freeController ( const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Reference< css::frame::XStatusListener >& xStatusListener, const OUString& sCommandURL );
+    void freeController ( const css::uno::Reference< css::frame::XFrame >& xFrame, const OUString& sCommandURL );
     css::uno::Reference< css::frame::XStatusListener > findController( const css::uno::Reference< css::frame::XFrame >& xFrame, const OUString& sCommandURL );
 
     void saveSearchHistory(const FindTextFieldControl* m_pFindTextFieldControl);
@@ -377,7 +377,7 @@ void SearchToolbarControllersManager::registryController( const css::uno::Refere
     }
 }
 
-void SearchToolbarControllersManager::freeController( const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Reference< css::frame::XStatusListener >& /*xStatusListener*/, const OUString& sCommandURL )
+void SearchToolbarControllersManager::freeController( const css::uno::Reference< css::frame::XFrame >& xFrame, const OUString& sCommandURL )
 {
     SearchToolbarControllersMap::iterator pIt = aSearchToolbarControllersMap.find(xFrame);
     if (pIt != aSearchToolbarControllersMap.end())
@@ -507,7 +507,7 @@ void SAL_CALL FindTextToolbarController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, m_aCommandURL);
 
     svt::ToolboxController::dispose();
     if (m_pFindTextFieldControl != nullptr) {
@@ -679,7 +679,7 @@ void SAL_CALL UpDownSearchToolboxController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, m_aCommandURL);
 
     svt::ToolboxController::dispose();
 }
@@ -795,7 +795,7 @@ void SAL_CALL MatchCaseToolboxController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, m_aCommandURL);
 
     svt::ToolboxController::dispose();
 
@@ -914,7 +914,7 @@ void SAL_CALL SearchFormattedToolboxController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, m_aCommandURL);
 
     svt::ToolboxController::dispose();
 
@@ -1030,7 +1030,7 @@ void SAL_CALL FindAllToolboxController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, m_aCommandURL);
 
     svt::ToolboxController::dispose();
 }
@@ -1137,7 +1137,7 @@ void SAL_CALL ExitSearchToolboxController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, m_aCommandURL);
 
     svt::ToolboxController::dispose();
 }
@@ -1255,7 +1255,7 @@ void SAL_CALL SearchLabelToolboxController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
-    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
+    SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, m_aCommandURL);
 
     svt::ToolboxController::dispose();
 }

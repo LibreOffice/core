@@ -202,8 +202,8 @@ class PresetHandler
             @return css::embed::XStorage
                     A valid storage if a paranet exists. NULL otherwise.
          */
-        css::uno::Reference< css::embed::XStorage > getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& xChild);
-        css::uno::Reference< css::embed::XStorage > getParentStorageUser (const css::uno::Reference< css::embed::XStorage >& xChild);
+        css::uno::Reference< css::embed::XStorage > getParentStorageShare();
+        css::uno::Reference< css::embed::XStorage > getParentStorageUser ();
 
         /** @short  free all internal structures and let this handler
                     work on a new type of configuration sets.

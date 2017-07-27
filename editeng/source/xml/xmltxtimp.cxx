@@ -58,7 +58,7 @@ using namespace xmloff::token;
 class SvxXMLTextImportContext : public SvXMLImportContext
 {
 public:
-    SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >& xAttrList, const uno::Reference< XText >& xText );
+    SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XText >& xText );
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList ) override;
 
@@ -69,7 +69,7 @@ private:
 };
 
 
-SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, const uno::Reference< XText >& xText )
+SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XText >& xText )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxText( xText )
 {
 }
@@ -79,7 +79,7 @@ SvXMLImportContext *SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nPre
     SvXMLImportContext* pContext = nullptr;
     if(XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_BODY ) )
     {
-        pContext = new SvxXMLTextImportContext( GetImport(), nPrefix, rLocalName, xAttrList, mxText );
+        pContext = new SvxXMLTextImportContext( GetImport(), nPrefix, rLocalName, mxText );
     }
     else if( XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_AUTOMATIC_STYLES ) )
     {
@@ -113,13 +113,13 @@ private:
     const uno::Reference< XText > mxText;
 };
 
-SvXMLImportContext *SvxXMLXTextImportComponent::CreateContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+SvXMLImportContext *SvxXMLXTextImportComponent::CreateContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext* pContext = nullptr;
 
     if(XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) )
     {
-        pContext = new SvxXMLTextImportContext( *this, nPrefix, rLocalName, xAttrList, mxText );
+        pContext = new SvxXMLTextImportContext( *this, nPrefix, rLocalName, mxText );
     }
 
     if( nullptr == pContext )

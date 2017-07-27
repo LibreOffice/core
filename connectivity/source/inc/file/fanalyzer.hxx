@@ -76,8 +76,7 @@ namespace connectivity
             void setSelectionEvaluationResult(OValueRefRow const & _pRow,const std::vector<sal_Int32>& _rColumnMapping);
             void setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols);
             static OOperandAttr* createOperandAttr(sal_Int32 _nPos,
-                                                    const css::uno::Reference< css::beans::XPropertySet>& _xCol,
-                                                    const css::uno::Reference< css::container::XNameAccess>& _xIndexes);
+                                                    const css::uno::Reference< css::beans::XPropertySet>& _xCol);
         };
     }
 }

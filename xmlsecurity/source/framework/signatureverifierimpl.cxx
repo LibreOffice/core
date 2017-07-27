@@ -145,12 +145,6 @@ cssu::Sequence< OUString > SAL_CALL SignatureVerifierImpl_getSupportedServiceNam
     return aRet;
 }
 
-cssu::Reference< cssu::XInterface > SAL_CALL SignatureVerifierImpl_createInstance(
-    const cssu::Reference< cssl::XMultiServiceFactory >& /*rSMgr*/)
-{
-    return static_cast<cppu::OWeakObject*>(new SignatureVerifierImpl);
-}
-
 /* XServiceInfo */
 OUString SAL_CALL SignatureVerifierImpl::getImplementationName(  )
 {
