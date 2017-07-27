@@ -848,12 +848,13 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
     return bRet;
 }
 
-namespace
+uno::Reference<drawing::XShapes> ScTabViewShell::getSelectedXShapes()
 {
-    uno::Reference<drawing::XShapes> getSelectedShapes(SdrView& rDrawView)
+    uno::Reference<drawing::XShapes> xShapes;
+    SdrView* pSdrView = GetSdrView();
+    if (pSdrView)
     {
-        uno::Reference<drawing::XShapes> xShapes;
-        const SdrMarkList& rMarkList = rDrawView.GetMarkedObjectList();
+        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
         const size_t nMarkCount = rMarkList.GetMarkCount();
         if (nMarkCount)
         {
@@ -872,8 +873,8 @@ namespace
                 }
             }
         }
-        return xShapes;
     }
+    return xShapes;
 }
 
 uno::Any SAL_CALL ScTabViewObj::getSelection()
@@ -884,13 +885,9 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
     if (pViewSh)
     {
         //  is something selected in drawing layer?
-        SdrView* pDrawView = pViewSh->GetSdrView();
-        if (pDrawView)
-        {
-            uno::Reference<uno::XInterface> xRet(getSelectedShapes(*pDrawView));
-            if (xRet.is())
-                return uno::makeAny(xRet);
-        }
+        uno::Reference<uno::XInterface> xRet(pViewSh->getSelectedXShapes());
+        if (xRet.is())
+            return uno::makeAny(xRet);
 
         //  otherwise sheet (cell) selection
 
