@@ -191,12 +191,6 @@ cssu::Sequence< OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceName
     return aRet;
 }
 
-cssu::Reference< cssu::XInterface > SAL_CALL SignatureCreatorImpl_createInstance(
-    const cssu::Reference< cssl::XMultiServiceFactory >& /*xMSF*/ )
-{
-    return static_cast<cppu::OWeakObject*>(new SignatureCreatorImpl);
-}
-
 /* XServiceInfo */
 OUString SAL_CALL SignatureCreatorImpl::getImplementationName(  )
 {

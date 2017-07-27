@@ -297,7 +297,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser
     return m_xWorkingStorageUser;
 }
 
-css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
+css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare()
 {
     css::uno::Reference< css::embed::XStorage > xWorking;
     {
@@ -308,7 +308,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare
     return SharedStorages::get().m_lStoragesShare.getParentStorage(xWorking);
 }
 
-css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(const css::uno::Reference< css::embed::XStorage >& /*xChild*/)
+css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser()
 {
     css::uno::Reference< css::embed::XStorage > xWorking;
     {

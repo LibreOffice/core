@@ -898,10 +898,8 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
 
     // initialize root storages for all resource types
     m_xUserRootCommit.set( m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), css::uno::UNO_QUERY); // can be empty
-    m_xDefaultConfigStorage = m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getParentStorageShare(
-                                m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getWorkingStorageShare());
-    m_xUserConfigStorage    = m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getParentStorageUser(
-                                m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getWorkingStorageUser());
+    m_xDefaultConfigStorage = m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getParentStorageShare();
+    m_xUserConfigStorage    = m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getParentStorageUser();
 
     if ( m_xUserConfigStorage.is() )
     {

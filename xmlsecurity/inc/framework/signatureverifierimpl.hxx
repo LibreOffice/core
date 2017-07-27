@@ -87,11 +87,6 @@ OUString SignatureVerifierImpl_getImplementationName();
 /// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAL_CALL SignatureVerifierImpl_getSupportedServiceNames(  );
 
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >
-SAL_CALL SignatureVerifierImpl_createInstance(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
-
 #endif
 
 

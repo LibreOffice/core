@@ -43,14 +43,13 @@ SvXMLImportContext *SvXMLAutoCorrectImport::CreateFastContext( sal_Int32 Element
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if( Element == SvXMLAutoCorrectToken::BLOCKLIST )
-        return new SvXMLWordListContext( *this, xAttrList );
+        return new SvXMLWordListContext( *this );
     else
         return SvXMLImport::CreateFastContext( Element, xAttrList );
 }
 
 SvXMLWordListContext::SvXMLWordListContext(
-   SvXMLAutoCorrectImport& rImport,
-   const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ ) :
+   SvXMLAutoCorrectImport& rImport ) :
    SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {
@@ -120,14 +119,13 @@ SvXMLImportContext *SvXMLExceptionListImport::CreateFastContext(sal_Int32 Elemen
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if( Element == SvXMLAutoCorrectToken::BLOCKLIST )
-        return new SvXMLExceptionListContext( *this, xAttrList );
+        return new SvXMLExceptionListContext( *this );
     else
         return SvXMLImport::CreateFastContext( Element, xAttrList );
 }
 
 SvXMLExceptionListContext::SvXMLExceptionListContext(
-   SvXMLExceptionListImport& rImport,
-   const css::uno::Reference< css::xml::sax::XFastAttributeList > & /* xAttrList */ ) :
+   SvXMLExceptionListImport& rImport ) :
    SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {

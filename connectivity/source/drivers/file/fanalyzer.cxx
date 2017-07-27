@@ -144,8 +144,7 @@ void OSQLAnalyzer::bindEvaluationRow(OValueRefRow const & _pRow)
 }
 
 OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
-                                              const Reference< XPropertySet>& _xCol,
-                                              const Reference< XNameAccess>& /*_xIndexes*/)
+                                              const Reference< XPropertySet>& _xCol)
 {
     return new OOperandAttr(static_cast<sal_uInt16>(_nPos),_xCol);
 }

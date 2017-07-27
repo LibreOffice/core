@@ -799,19 +799,16 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
     SolarMutexGuard g;
 
     bool bPreferred;
-    css::uno::Reference< css::container::XNameAccess > xAccess;
 
     bPreferred = true;
     // on-demand creation of the primary write cache
     impl_getCFG(bPreferred, true);
-    m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
-    impl_ts_save(bPreferred, xAccess);
+    impl_ts_save(bPreferred);
 
     bPreferred = false;
     // on-demand creation of the secondary write cache
     impl_getCFG(bPreferred, true);
-    m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
-    impl_ts_save(bPreferred, xAccess);
+    impl_ts_save(bPreferred);
 }
 
 void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
@@ -1097,7 +1094,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
         m_aSecondaryReadCache.takeOver(aReadCache);
 }
 
-void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& /*xCfg*/)
+void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred)
 {
     if (bPreferred)
     {
