@@ -132,8 +132,6 @@ void lclSetMergedRange( CellVec& rCells, size_t nWidth, size_t nFirstCol, size_t
 static const Style OBJ_STYLE_NONE;
 static const Cell OBJ_CELL_NONE;
 
-const bool DIAG_DBL_CLIP_DEFAULT = false;
-
 struct ArrayImpl
 {
     CellVec             maCells;
