@@ -465,7 +465,7 @@ public:
     virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const;
     virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, tools::Rectangle& rTextRect, SdrObject* pObj ) override;
     virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* pData, DffObjData& rObj ) override;
-    void                ImportHeaderFooterContainer( DffRecordHeader& rHeader, HeaderFooterEntry& rEntry );
+    void                ImportHeaderFooterContainer( DffRecordHeader const & rHeader, HeaderFooterEntry& rEntry );
 };
 
 
@@ -591,10 +591,10 @@ protected:
     sal_uInt32              GetAktPageId();
     sal_uInt32              GetMasterPageId(sal_uInt16 nPageNum, PptPageKind ePageKind) const;
     sal_uInt32              GetNotesPageId(sal_uInt16 nPageNum ) const;
-    static SdrOutliner*     GetDrawOutliner( SdrTextObj* pSdrText );
+    static SdrOutliner*     GetDrawOutliner( SdrTextObj const * pSdrText );
     void                    SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOptions );
 
-    void                    ApplyTextAnchorAttributes( PPTTextObj& rTextObj, SfxItemSet& rSet ) const;
+    void                    ApplyTextAnchorAttributes( PPTTextObj const & rTextObj, SfxItemSet& rSet ) const;
     bool                    IsVerticalText() const;
 
 public:
@@ -772,7 +772,7 @@ public:
                     PPTParaSheet( const PPTParaSheet& rParaSheet );
 
     void            Read(
-                        SdrPowerPointImport& rMan,
+                        SdrPowerPointImport const & rMan,
                         SvStream& rIn,
                         sal_uInt32 nLevel,
                         bool bFirst
@@ -792,18 +792,18 @@ class PPTNumberFormatCreator
     sal_uInt32 nBulletOfs;
 
     void        ImplGetNumberFormat(
-                    SdrPowerPointImport& rMan,
+                    SdrPowerPointImport const & rMan,
                     SvxNumberFormat& rNumberFormat
                 );
     bool       ImplGetExtNumberFormat(
-                    SdrPowerPointImport& rMan,
+                    SdrPowerPointImport const & rMan,
                     SvxNumberFormat& rNumberFormat,
                     sal_uInt32 nLevel,
                     TSS_Type nInstance,
                     TSS_Type nInstanceInSheet,
                     boost::optional< sal_Int16 >& rStartNumbering,
                     sal_uInt32 nFontHeight,
-                    PPTParagraphObj* pPara
+                    PPTParagraphObj const * pPara
                 );
 
 protected:
@@ -816,7 +816,7 @@ public:
     std::unique_ptr<PPTExtParaProv>  pExtParaProv;
 
     void        GetNumberFormat(
-                    SdrPowerPointImport& rMan,
+                    SdrPowerPointImport const & rMan,
                     SvxNumberFormat& rNumberFormat,
                     sal_uInt32 nLevel,
                     const PPTParaLevel& rParaLevel,
@@ -825,7 +825,7 @@ public:
                 );
 
     bool        GetNumberFormat(
-                    SdrPowerPointImport& rMan,
+                    SdrPowerPointImport const & rMan,
                     SvxNumberFormat& rNumberFormat,
                     PPTParagraphObj* pPara,
                     TSS_Type nInstanceInSheet,
@@ -1054,7 +1054,7 @@ struct PPTStyleTextPropReader
     void    Init(
                 SvStream& rIn,
                 const DffRecordHeader& rClientTextBoxHd,
-                PPTTextRulerInterpreter& rInterpreter,
+                PPTTextRulerInterpreter const & rInterpreter,
                 const DffRecordHeader& rExtParaHd,
                 TSS_Type nTextInstance
             );
@@ -1062,7 +1062,7 @@ struct PPTStyleTextPropReader
                 SvStream& rIn,
                 const DffRecordHeader& rTextHeader,
                 const OUString& aString,
-                PPTTextRulerInterpreter& rRuler,
+                PPTTextRulerInterpreter const & rRuler,
                 sal_uInt32& nCharCount,
                 bool& bTextPropAtom
             );
@@ -1169,7 +1169,7 @@ public:
     void                    ApplyTo(
                                 SfxItemSet& rSet,
                                 boost::optional< sal_Int16 >& rStartNumbering,
-                                SdrPowerPointImport& rManager,
+                                SdrPowerPointImport const & rManager,
                                 TSS_Type nInstanceInSheet
                             );
 };

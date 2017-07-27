@@ -98,7 +98,7 @@ Writer::~Writer()
 }
 
 
-void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > &xOut )
+void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > const &xOut )
 {
     sal_uInt32 nBufferSize = 64*1024;
 
@@ -128,7 +128,7 @@ void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > 
 }
 
 
-void Writer::storeTo( Reference< XOutputStream > &xOutStream )
+void Writer::storeTo( Reference< XOutputStream > const &xOutStream )
 {
     for(FontMap::iterator i = maFonts.begin(); i != maFonts.end(); ++i)
     {

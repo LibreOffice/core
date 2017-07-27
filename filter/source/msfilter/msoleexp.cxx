@@ -118,7 +118,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( const css::uno::Reference < css::em
     ExportOLEObject( aObj, rDestStg );
 }
 
-void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotStorage& rDestStg )
+void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj, SotStorage& rDestStg )
 {
     SvGlobalName aOwnGlobalName;
     SvGlobalName aObjName( rObj->getClassID() );

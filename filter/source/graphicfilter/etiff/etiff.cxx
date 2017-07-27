@@ -107,7 +107,7 @@ public:
 
     explicit            TIFFWriter(SvStream &rStream);
 
-    bool WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
+    bool WriteTIFF( const Graphic& rGraphic, FilterConfigItem const * pFilterConfigItem );
 };
 
 
@@ -144,7 +144,7 @@ TIFFWriter::TIFFWriter(SvStream &rStream)
 }
 
 
-bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
+bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem const * pFilterConfigItem)
 {
     if ( pFilterConfigItem )
     {

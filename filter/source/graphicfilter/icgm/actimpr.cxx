@@ -118,7 +118,7 @@ bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 }
 
 
-void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrientation )
+void CGMImpressOutAct::ImplSetOrientation( FloatPoint const & rRefPoint, double rOrientation )
 {
     maXPropSet->setPropertyValue( "RotationPointX", uno::Any((sal_Int32)rRefPoint.X) );
     maXPropSet->setPropertyValue( "RotationPointY", uno::Any((sal_Int32)rRefPoint.Y) );
@@ -431,7 +431,7 @@ void CGMImpressOutAct::EndGrouping()
     }
 }
 
-void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
+void CGMImpressOutAct::DrawRectangle( FloatRect const & rFloatRect )
 {
     if ( mnGroupActCount != ( mpCGM->mnActCount - 1 ) )         // POWERPOINT HACK !!!
     {
@@ -445,7 +445,7 @@ void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
     }
 }
 
-void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation )
+void CGMImpressOutAct::DrawEllipse( FloatPoint const & rCenter, FloatPoint const & rSize, double& rOrientation )
 {
     if ( ImplCreateShape( "com.sun.star.drawing.EllipseShape" ) )
     {
@@ -470,7 +470,7 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, doub
     }
 }
 
-void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation,
+void CGMImpressOutAct::DrawEllipticalArc( FloatPoint const & rCenter, FloatPoint const & rSize, double& rOrientation,
             sal_uInt32 nType, double& fStartAngle, double& fEndAngle )
 {
     if ( ImplCreateShape( "com.sun.star.drawing.EllipseShape" ) )
@@ -665,7 +665,7 @@ void CGMImpressOutAct::DrawPolybezier( tools::Polygon& rPolygon )
     }
 }
 
-void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon )
+void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon const & rPolyPolygon )
 {
     sal_uInt32 nNumPolys = rPolyPolygon.Count();
     if ( nNumPolys && ImplCreateShape( "com.sun.star.drawing.ClosedBezierShape" ) )
@@ -708,7 +708,7 @@ void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon )
     }
 }
 
-void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, char* pString, FinalFlag eFlag )
+void CGMImpressOutAct::DrawText( awt::Point const & rTextPos, awt::Size& rTextSize, char const * pString, FinalFlag eFlag )
 {
     if ( ImplCreateShape( "com.sun.star.drawing.TextShape" ) )
     {
@@ -926,7 +926,7 @@ void CGMImpressOutAct::EndFigure()
     maFlags.clear();
 }
 
-void CGMImpressOutAct::RegPolyLine( tools::Polygon& rPolygon, bool bReverse )
+void CGMImpressOutAct::RegPolyLine( tools::Polygon const & rPolygon, bool bReverse )
 {
     sal_uInt16 nPoints = rPolygon.GetSize();
     if ( nPoints )

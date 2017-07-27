@@ -1632,7 +1632,7 @@ bool copyStreams( const Reference< XInputStream >& xIS, const Reference< XOutput
     return false;
 }
 
-bool createDirectory( OUString& rURL )
+bool createDirectory( OUString const & rURL )
 {
     sal_Int32 nLastIndex = sizeof( "file:///" ) - 2;
     while( nLastIndex != -1 )
