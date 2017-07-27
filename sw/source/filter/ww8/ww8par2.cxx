@@ -434,14 +434,16 @@ long SwWW8ImplReader::Read_Footnote(WW8PLCFManResult* pRes)
     if (eEDN == pRes->nSprmId)
     {
         aDesc.meType = MAN_EDN;
-        if (m_xPlcxMan->GetEdn())
-            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_xPlcxMan->GetEdn()->GetData());
+        WW8PLCFx_SubDoc* pEndNote = m_xPlcxMan->GetEdn();
+        if (const void* pData = pEndNote ? pEndNote->GetData() : nullptr)
+            aDesc.mbAutoNum = 0 != *static_cast<short const*>(pData);
     }
     else
     {
         aDesc.meType = MAN_FTN;
-        if (m_xPlcxMan->GetFootnote())
-            aDesc.mbAutoNum = 0 != *static_cast<short const *>(m_xPlcxMan->GetFootnote()->GetData());
+        WW8PLCFx_SubDoc* pFootNote = m_xPlcxMan->GetFootnote();
+        if (const void* pData = pFootNote ? pFootNote->GetData() : nullptr)
+            aDesc.mbAutoNum = 0 != *static_cast<short const*>(pData);
     }
 
     aDesc.mnStartCp = pRes->nCp2OrIdx;
