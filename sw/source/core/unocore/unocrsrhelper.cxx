@@ -85,6 +85,7 @@
 #include <SwNodeNum.hxx>
 #include <fmtmeta.hxx>
 #include <txtfld.hxx>
+#include <unoparagraph.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -587,6 +588,18 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     uno::Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFormat() );
                     pAny->setValue(&xSect, cppu::UnoType<XTextSection>::get());
                 }
+            }
+            else
+                eNewState = PropertyState_DEFAULT_VALUE;
+        }
+        break;
+        case FN_UNO_TEXT_PARAGRAPH:
+        {
+            SwTextNode* pTextNode = rPam.GetPoint()->nNode.GetNode().GetTextNode();
+            if (pTextNode)
+            {
+                uno::Reference<text::XTextContent> xParagraph = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+                *pAny <<= xParagraph;
             }
             else
                 eNewState = PropertyState_DEFAULT_VALUE;
