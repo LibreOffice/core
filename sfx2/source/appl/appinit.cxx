@@ -47,7 +47,6 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/edit.hxx>
-#include <vcl/scheduler.hxx>
 
 #include <sfx2/unoctitm.hxx>
 #include "app.hrc"
@@ -106,10 +105,6 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
     SolarMutexGuard aGuard;
     utl::ConfigManager::storeConfigItems();
-
-    // Timers may access the SfxApplication and are only deleted in
-    // Application::Quit(), which is asynchronous (PostUserEvent) - disable!
-    Scheduler::ImplDeInitScheduler();
 
     SfxApplication* pApp = SfxGetpApp();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );

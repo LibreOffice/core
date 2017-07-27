@@ -21,6 +21,8 @@
 #define INCLUDED_VCL_INC_SCHEDULERIMPL_HXX
 
 #include <salwtype.hxx>
+#include <osl/mutex.hxx>
+#include <vcl/scheduler.hxx>
 
 class Task;
 
@@ -33,6 +35,39 @@ struct ImplSchedulerData final
     sal_uInt64         mnUpdateTime;  ///< Last Update Time
 
     const char *GetDebugName() const;
+};
+
+class SchedulerMutex final
+{
+    sal_uInt32          mnLockDepth;
+    osl::Mutex          maMutex;
+
+public:
+    SchedulerMutex() : mnLockDepth( 0 ) {}
+
+    bool acquire( sal_uInt32 nLockCount = 1 );
+    sal_uInt32 release( bool bUnlockAll = false );
+    sal_uInt32 lockDepth() const { return mnLockDepth; }
+};
+
+class SchedulerGuard final
+{
+    bool mbLocked;
+
+public:
+    SchedulerGuard()
+        : mbLocked( false )
+    {
+        mbLocked = Scheduler::Lock();
+        assert( mbLocked );
+    }
+
+    ~SchedulerGuard()
+    {
+        if ( !mbLocked )
+            return;
+        Scheduler::Unlock();
+    }
 };
 
 #endif // INCLUDED_VCL_INC_SCHEDULERIMPL_HXX

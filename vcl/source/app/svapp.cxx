@@ -519,6 +519,13 @@ bool Application::Reschedule( bool i_bAllEvents )
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1;
+#if OSL_DEBUG_LEVEL > 0
+    const ImplSVData* pSVData = ImplGetSVData();
+    bool bIsMainThread = pSVData->mpDefInst->IsMainThread();
+    bool mbLocked = false;
+    if ( bIsMainThread )
+        mbLocked = Scheduler::Lock();
+#endif
     while( Application::Reschedule( true ) )
     {
         if (0 == ++nSanity % 1000)
@@ -530,10 +537,9 @@ void Scheduler::ProcessEventsToIdle()
     // If we yield from a non-main thread we just can guarantee that all idle
     // events were processed at some point, but our check can't prevent further
     // processing in the main thread, which may add new events, so skip it.
-    const ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->mpDefInst->IsMainThread() )
+    if ( !bIsMainThread )
         return;
-    const ImplSchedulerData* pSchedulerData = ImplGetSVData()->maSchedCtx.mpFirstSchedulerData;
+    const ImplSchedulerData* pSchedulerData = pSVData->maSchedCtx.mpFirstSchedulerData;
     bool bAnyIdle = false;
     while ( pSchedulerData )
     {
@@ -543,12 +549,14 @@ void Scheduler::ProcessEventsToIdle()
             if ( pIdle && pIdle->IsActive() )
             {
                 bAnyIdle = true;
-                SAL_WARN( "vcl.schedule",  "Unprocessed Idle: " << pIdle->GetDebugName() );
+                SAL_WARN( "vcl.schedule", "Unprocessed Idle: " << pIdle->GetDebugName() );
             }
         }
         pSchedulerData = pSchedulerData->mpNext;
     }
     assert( !bAnyIdle );
+    if ( mbLocked )
+        Scheduler::Unlock();
 #endif
 }
 
