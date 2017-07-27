@@ -187,7 +187,7 @@
 
       <node oor:name="StyleListDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Styles and Formatting</value>
+          <value xml:lang="en-US">Styles</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>StyleListDeck</value>
@@ -1243,7 +1243,7 @@
 
       <node oor:name="StyleListPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Styles and Formatting</value>
+          <value xml:lang="en-US">Styles</value>
         </prop>
         <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
           <value>true</value>
