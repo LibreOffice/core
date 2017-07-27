@@ -30,16 +30,22 @@
 #include "printerinfomanager.hxx"
 #include "cupsmgr.hxx"
 
+#define BACKEND_DIR "/usr/share/print-backends"
+#define FRONTEND_INTERFACE "/usr/share/dbus-1/interfaces/org.openprinting.Frontend.xml"
+#define BACKEND_INTERFACE "/usr/share/dbus-1/interfaces/org.openprinting.Backend.xml"
+
 namespace psp
 {
 
 struct CPDPrinter
 {
-    std::string name;
-    std::string info;
-    std::string location;
-    std::string make_and_model;
-    std::string printer_state;
+    const char* id;
+    const char* name;
+    const char* info;
+    const char* location;
+    const char* make_and_model;
+    const char* printer_state;
+    const char* backend_name;
     bool is_accepting_jobs;
     GDBusProxy* backend;
 };
@@ -49,33 +55,63 @@ class CPDManager : public PrinterInfoManager
 #if ENABLE_DBUS && ENABLE_GIO
     GDBusConnection * m_pConnection = nullptr;
     bool m_aPrintersChanged = true;
+    std::vector<std::pair<std::string, gchar*>> m_tBackends;
     std::unordered_map< std::string, GDBusProxy * > m_pBackends;
     std::unordered_map< FILE*, OString, FPtrHash > m_aSpoolFiles;
     std::unordered_map< OUString, CPDPrinter *, OUStringHash > m_aCPDDestMap;
+    std::unordered_map< OUString, PPDContext, OUStringHash > m_aDefaultContexts;
 #endif
     CPDManager();
+    // Function called when CPDManager is destroyed
+    virtual ~CPDManager() override;
+
+    static void onNameAcquired(GDBusConnection *connection, const char* name, void* user_data);
+    static void onNameLost (GDBusConnection *, const char *name, void*);
+    static void printerAdded (GDBusConnection *connection,
+                              const gchar     *sender_name,
+                              const gchar     *object_path,
+                              const gchar     *interface_name,
+                              const gchar     *signal_name,
+                              GVariant        *parameters,
+                              gpointer        user_data);
+    static void printerRemoved (GDBusConnection *connection,
+                                const gchar     *sender_name,
+                                const gchar     *object_path,
+                                const gchar     *interface_name,
+                                const gchar     *signal_name,
+                                GVariant        *parameters,
+                                gpointer        user_data);
+
     virtual void initialize() override;
 
 public:
+    // Functions involved in initialization
     GDBusProxy * getProxy( std::string target );
     void addBackend( std::pair< std::string, GDBusProxy * > pair );
-    void addDestination( std::pair< OUString, CPDPrinter * > pair );
+    void addTempBackend( std::pair< std::string, gchar* > pair );
+    std::vector<std::pair<std::string, gchar*>> getTempBackends();
+    void addNewPrinter( OUString, OUString, CPDPrinter * );
+
+    // Create CPDManager
     static CPDManager* tryLoadCPD();
-    virtual ~CPDManager() override;
+
+    // Create a PPDParser for CPD Printers
+    const PPDParser* createCPDParser( const OUString& rPrinter );
+
+    // Functions related to printing
+    virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand ) override;
+    virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber ) override;
     virtual void setupJobContextData( JobData& rData ) override;
-    /// check if the printer configuration has changed
+
+    // check if the printer configuration has changed
     virtual bool checkPrintersChanged( bool bWait ) override;
+
     // members for administration
-    // disable for CUPS
+    // disable for CPD
     virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName ) override;
     virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly ) override;
     virtual bool writePrinterConfig() override;
     virtual bool setDefaultPrinter( const OUString& rPrinterName ) override;
-
-    virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand ) override;
-    virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber ) override;
-
-
 };
 
 } // namespace psp
