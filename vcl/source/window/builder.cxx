@@ -1867,7 +1867,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                 --nLevel;
             }
             else if (name.equals("property"))
-                collectProperty(reader, sID, aProperties);
+                collectProperty(reader, aProperties);
         }
 
         if (res == xmlreader::XmlReader::Result::End)
@@ -2172,7 +2172,7 @@ void VclBuilder::collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rM
         rMap[sProperty] = OUString::fromUtf8(sValue);
 }
 
-void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 /*nRowIndex*/)
+void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID)
 {
     int nLevel = 1;
 
@@ -2268,7 +2268,10 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
         if (res == xmlreader::XmlReader::Result::Begin)
         {
             if (name.equals("row"))
-                handleRow(reader, rID, nRowIndex++);
+            {
+                handleRow(reader, rID);
+                nRowIndex++;
+            }
             else
                 ++nLevel;
         }
@@ -2283,7 +2286,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
-void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rID, vcl::Window *pWindow)
+void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, vcl::Window *pWindow)
 {
     assert(pWindow);
 
@@ -2306,7 +2309,7 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rI
         {
             ++nLevel;
             if (name.equals("property"))
-                collectProperty(reader, rID, aProperties);
+                collectProperty(reader, aProperties);
         }
 
         if (res == xmlreader::XmlReader::Result::End)
@@ -2330,7 +2333,7 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rI
     }
 }
 
-std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const OString & /*rID*/)
+std::vector<OUString> VclBuilder::handleItems(xmlreader::XmlReader &reader)
 {
     int nLevel = 1;
 
@@ -2432,7 +2435,7 @@ void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
             {
                 ++nLevel;
                 if (name.equals("property"))
-                    collectProperty(reader, rID, aProperties);
+                    collectProperty(reader, aProperties);
             }
         }
 
@@ -2539,7 +2542,7 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
             {
                 ++nLevel;
                 if (name.equals("property"))
-                    collectProperty(reader, sID, aProperties);
+                    collectProperty(reader, aProperties);
                 else if (name.equals("accelerator"))
                     collectAccelerator(reader, aAccelerators);
             }
@@ -2557,7 +2560,7 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
     insertMenuObject(pParent, pSubMenu, sClass, sID, aProperties, aAccelerators);
 }
 
-void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rID)
+void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader)
 {
     m_pParserState->m_aSizeGroups.push_back(SizeGroup());
     SizeGroup &rSizeGroup = m_pParserState->m_aSizeGroups.back();
@@ -2596,7 +2599,7 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rI
             else
             {
                 if (name.equals("property"))
-                    collectProperty(reader, rID, rSizeGroup.m_aProperties);
+                    collectProperty(reader, rSizeGroup.m_aProperties);
             }
         }
 
@@ -2785,12 +2788,12 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
     }
     else if (sClass == "GtkSizeGroup")
     {
-        handleSizeGroup(reader, sID);
+        handleSizeGroup(reader);
         return nullptr;
     }
     else if (sClass == "AtkObject")
     {
-        handleAtkObject(reader, sID, pParent);
+        handleAtkObject(reader, pParent);
         return nullptr;
     }
 
@@ -2824,7 +2827,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
                 handleChild(pCurrentChild, reader);
             }
             else if (name.equals("items"))
-                aItems = handleItems(reader, sID);
+                aItems = handleItems(reader);
             else if (name.equals("style"))
             {
                 int nPriority = 0;
@@ -2848,7 +2851,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
             {
                 ++nLevel;
                 if (name.equals("property"))
-                    collectProperty(reader, sID, aProperties);
+                    collectProperty(reader, aProperties);
                 else if (name.equals("attribute"))
                     collectPangoAttribute(reader, aPangoAttributes);
                 else if (name.equals("relation"))
@@ -3103,7 +3106,7 @@ OString VclBuilder::getStyleClass(xmlreader::XmlReader &reader)
     return aRet;
 }
 
-void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString & /*rID*/, stringmap &rMap)
+void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap)
 {
     xmlreader::Span name;
     int nsId;

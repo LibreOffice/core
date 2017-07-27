@@ -1175,12 +1175,6 @@ cssu::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(
     return aRet;
 }
 
-cssu::Reference< cssu::XInterface > SAL_CALL SAXEventKeeperImpl_createInstance(
-    const cssu::Reference< cssl::XMultiServiceFactory > &)
-{
-    return static_cast<cppu::OWeakObject*>(new SAXEventKeeperImpl());
-}
-
 /* XServiceInfo */
 OUString SAL_CALL SAXEventKeeperImpl::getImplementationName(  )
 {

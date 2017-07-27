@@ -169,14 +169,12 @@ public:
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
     void detachRecursive(
-        const uno::Reference< accessibility::XAccessible >& xAccessible,
         const uno::Reference< accessibility::XAccessibleContext >& xContext
     );
 
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
     void detachRecursive(
-        const uno::Reference< accessibility::XAccessible >& xAccessible,
         const uno::Reference< accessibility::XAccessibleContext >& xContext,
         const uno::Reference< accessibility::XAccessibleStateSet >& xStateSet
     );
@@ -349,13 +347,12 @@ void DocumentFocusListener::detachRecursive(
         xAccessible->getAccessibleContext();
 
     if( xContext.is() )
-        detachRecursive(xAccessible, xContext);
+        detachRecursive(xContext);
 }
 
 /*****************************************************************************/
 
 void DocumentFocusListener::detachRecursive(
-    const uno::Reference< accessibility::XAccessible >& xAccessible,
     const uno::Reference< accessibility::XAccessibleContext >& xContext
 )
 {
@@ -363,13 +360,12 @@ void DocumentFocusListener::detachRecursive(
         xContext->getAccessibleStateSet();
 
     if( xStateSet.is() )
-        detachRecursive(xAccessible, xContext, xStateSet);
+        detachRecursive(xContext, xStateSet);
 }
 
 /*****************************************************************************/
 
 void DocumentFocusListener::detachRecursive(
-    const uno::Reference< accessibility::XAccessible >&,
     const uno::Reference< accessibility::XAccessibleContext >& xContext,
     const uno::Reference< accessibility::XAccessibleStateSet >& xStateSet
 )

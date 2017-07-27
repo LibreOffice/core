@@ -27,8 +27,7 @@ namespace cppcanvas
 {
     namespace tools
     {
-        uno::Sequence< double > intSRGBAToDoubleSequence( const uno::Reference< rendering::XGraphicDevice >&,
-                                                          Color::IntSRGBA                                   aColor  )
+        uno::Sequence< double > intSRGBAToDoubleSequence( Color::IntSRGBA aColor  )
         {
             uno::Sequence< double > aRes( 4 );
 
@@ -40,8 +39,7 @@ namespace cppcanvas
             return aRes;
         }
 
-        Color::IntSRGBA doubleSequenceToIntSRGBA( const uno::Reference< rendering::XGraphicDevice >&,
-                                                  const uno::Sequence< double >&                    rColor  )
+        Color::IntSRGBA doubleSequenceToIntSRGBA( const uno::Sequence< double >& rColor  )
         {
             return makeColor( static_cast<sal_uInt8>( 255*rColor[0] + .5 ),
                               static_cast<sal_uInt8>( 255*rColor[1] + .5 ),

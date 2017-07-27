@@ -56,8 +56,7 @@ FontIdentificator_createInstance(
 OUString SAL_CALL Clipboard_getImplementationName();
 
 css::uno::Reference<css::lang::XSingleServiceFactory> SAL_CALL
-Clipboard_createFactory(
-    css::uno::Reference<css::lang::XMultiServiceFactory > const &);
+Clipboard_createFactory();
 
 css::uno::Sequence<OUString> SAL_CALL DragSource_getSupportedServiceNames();
 

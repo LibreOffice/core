@@ -288,10 +288,6 @@ OUString SAXEventKeeperImpl_getImplementationName();
 /// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(  );
 
-/// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface >
-SAL_CALL SAXEventKeeperImpl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
-
 #endif
 
 

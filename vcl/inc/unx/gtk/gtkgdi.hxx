@@ -341,7 +341,6 @@ protected:
                           ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKScrollbar( ControlPart nPart,
                               const tools::Rectangle& rControlRectangle,
-                              const std::list< tools::Rectangle >& rClipList,
                               ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKEditBox( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                             const tools::Rectangle& rControlRectangle,
@@ -350,7 +349,6 @@ protected:
                             const OUString& rCaption );
     bool NWPaintGTKSpinBox(ControlType nType, ControlPart nPart,
                            const tools::Rectangle& rControlRectangle,
-                           const std::list< tools::Rectangle >& rClipList,
                            ControlState nState, const ImplControlValue& aValue,
                            const OUString& rCaption,
                            ControlCacheKey& rControlCacheKey);
@@ -361,7 +359,6 @@ protected:
                              const OUString& rCaption );
     bool NWPaintGTKTabItem( ControlType nType,
                             const tools::Rectangle& rControlRectangle,
-                            const std::list< tools::Rectangle >& rClipList,
                             ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKListBox( GdkDrawable* gdkDrawable, ControlPart nPart,
                             const tools::Rectangle& rControlRectangle,
@@ -388,11 +385,9 @@ protected:
                             const ImplControlValue& aValue );
     bool NWPaintGTKSlider( ControlPart nPart,
                            const tools::Rectangle& rControlRectangle,
-                           const std::list< tools::Rectangle >& rClipList,
                            ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKListNode(
                             const tools::Rectangle& rControlRectangle,
-                            const std::list< tools::Rectangle >& rClipList,
                             ControlState nState, const ImplControlValue& aValue );
 };
 

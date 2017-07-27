@@ -362,7 +362,7 @@ private:
     static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);
     static OString getStyleClass(xmlreader::XmlReader &reader);
     void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
-    void        collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
+    void        collectProperty(xmlreader::XmlReader &reader, stringmap &rVec);
     static void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
     static void collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
     static void collectAccelerator(xmlreader::XmlReader &reader, accelmap &rMap);
@@ -379,14 +379,14 @@ private:
     void        handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &reader);
 
     void        handleListStore(xmlreader::XmlReader &reader, const OString &rID);
-    void        handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex);
+    void        handleRow(xmlreader::XmlReader &reader, const OString &rID);
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
     void        handleMenu(xmlreader::XmlReader &reader, const OString &rID);
-    std::vector<OUString> handleItems(xmlreader::XmlReader &reader, const OString &rID);
+    std::vector<OUString> handleItems(xmlreader::XmlReader &reader);
 
-    void        handleSizeGroup(xmlreader::XmlReader &reader, const OString &rID);
+    void        handleSizeGroup(xmlreader::XmlReader &reader);
 
-    void        handleAtkObject(xmlreader::XmlReader &reader, const OString &rID, vcl::Window *pWindow);
+    void        handleAtkObject(xmlreader::XmlReader &reader, vcl::Window *pWindow);
 
     void        handleActionWidget(xmlreader::XmlReader &reader);
 

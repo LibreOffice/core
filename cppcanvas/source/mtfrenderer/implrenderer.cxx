@@ -1713,10 +1713,7 @@ namespace cppcanvas
                                         aMatrix );
 
                                     aTexture.Alpha = 1.0 - aFill.getTransparency();
-                                    aTexture.Bitmap =
-                                        vcl::unotools::xBitmapFromBitmapEx(
-                                            rCanvas->getUNOCanvas()->getDevice(),
-                                            aBmpEx );
+                                    aTexture.Bitmap = vcl::unotools::xBitmapFromBitmapEx( aBmpEx );
                                     if( aFill.isTiling() )
                                     {
                                         aTexture.RepeatModeX = rendering::TexturingMode::REPEAT;

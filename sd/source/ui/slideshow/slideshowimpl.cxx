@@ -1057,8 +1057,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
         {
             BitmapEx waitSymbolBitmap(BMP_WAIT_ICON);
             const Reference<rendering::XBitmap> xBitmap(
-                vcl::unotools::xBitmapFromBitmapEx(
-                    xSpriteCanvas->getDevice(), waitSymbolBitmap ) );
+                vcl::unotools::xBitmapFromBitmapEx( waitSymbolBitmap ) );
             if (xBitmap.is())
             {
                 mxShow->setProperty(
@@ -1070,8 +1069,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
 
             BitmapEx pointerSymbolBitmap(BMP_POINTER_ICON);
             const Reference<rendering::XBitmap> xPointerBitmap(
-                vcl::unotools::xBitmapFromBitmapEx(
-                    xSpriteCanvas->getDevice(), pointerSymbolBitmap ) );
+                vcl::unotools::xBitmapFromBitmapEx( pointerSymbolBitmap ) );
             if (xPointerBitmap.is())
             {
                 mxShow->setProperty(

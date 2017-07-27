@@ -20,26 +20,16 @@
 #ifndef INCLUDED_CPPCANVAS_SOURCE_INC_TOOLS_HXX
 #define INCLUDED_CPPCANVAS_SOURCE_INC_TOOLS_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppcanvas/color.hxx>
-
-namespace com { namespace sun { namespace star { namespace rendering
-{
-    class  XGraphicDevice;
-} } } }
-
 
 namespace cppcanvas
 {
     namespace tools
     {
-        css::uno::Sequence< double >
-            intSRGBAToDoubleSequence( const css::uno::Reference< css::rendering::XGraphicDevice >&,
-                                      Color::IntSRGBA );
+        css::uno::Sequence< double > intSRGBAToDoubleSequence( Color::IntSRGBA );
 
-        Color::IntSRGBA doubleSequenceToIntSRGBA( const css::uno::Reference< css::rendering::XGraphicDevice >& rDevice,
-                                                  const css::uno::Sequence< double >&                          rColor  );
+        Color::IntSRGBA doubleSequenceToIntSRGBA( const css::uno::Sequence< double >& rColor  );
     }
 }
 
