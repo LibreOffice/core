@@ -88,13 +88,14 @@ void SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 |*
 \************************************************************************/
 
-SvxTextAnimationPage::SvxTextAnimationPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SfxTabPage      ( pWindow
-                                  ,"TextAnimation"
-                                  ,"cui/ui/textanimtabpage.ui"
-                                  ,&rInAttrs ),
-                rOutAttrs       ( rInAttrs ),
-                eAniKind        ( SdrTextAniKind::NONE )
+SvxTextAnimationPage::SvxTextAnimationPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pWindow, "TextAnimation", "cui/ui/textanimtabpage.ui", &rInAttrs)
+    , rOutAttrs(rInAttrs)
+    , eAniKind(SdrTextAniKind::NONE)
+    , m_aUpState(TRISTATE_INDET)
+    , m_aLeftState(TRISTATE_INDET)
+    , m_aRightState(TRISTATE_INDET)
+    , m_aDownState(TRISTATE_INDET)
 {
     get(m_pLbEffect, "LB_EFFECT");
     get(m_pBoxDirection,"boxDIRECTION");
@@ -200,10 +201,10 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
         m_pBtnRight->Check( false );
         m_pBtnDown->Check( false );
     }
-    m_pBtnUp->SaveValue();
-    m_pBtnLeft->SaveValue();
-    m_pBtnRight->SaveValue();
-    m_pBtnDown->SaveValue();
+    m_aUpState = m_pBtnUp->GetState();
+    m_aLeftState = m_pBtnLeft->GetState();
+    m_aRightState = m_pBtnRight->GetState();
+    m_aDownState = m_pBtnDown->GetState();
 
     // Start inside
     pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANISTARTINSIDE );
@@ -375,10 +376,10 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
     }
 
     // animation direction
-    if( m_pBtnUp->IsValueChangedFromSaved() ||
-        m_pBtnLeft->IsValueChangedFromSaved() ||
-        m_pBtnRight->IsValueChangedFromSaved() ||
-        m_pBtnDown->IsValueChangedFromSaved() )
+    if (m_aUpState != m_pBtnUp->GetState() ||
+        m_aLeftState != m_pBtnLeft->GetState() ||
+        m_aRightState != m_pBtnRight->GetState() ||
+        m_aDownState != m_pBtnDown->GetState())
     {
         SdrTextAniDirection eValue = (SdrTextAniDirection) GetSelectedDirection();
         rAttrs->Put( SdrTextAniDirectionItem( eValue ) );
