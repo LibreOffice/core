@@ -116,7 +116,7 @@ namespace slideshow
             Input graphic object, to extract animations from
          */
         bool getAnimationFromGraphic( VectorOfMtfAnimationFrames& o_rFrames,
-                                      ::std::size_t&              o_rLoopCount,
+                                      sal_uInt32&                 o_rLoopCount,
                                       CycleMode&                  o_eCycleMode,
                                       const Graphic&              rGraphic );
 

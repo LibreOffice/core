@@ -118,8 +118,8 @@ public:
     const BitmapEx& GetBitmapEx() const { return maBitmapEx; }
     void            SetBitmapEx( const BitmapEx& rBmpEx ) { maBitmapEx = rBmpEx; }
 
-    sal_uLong       GetLoopCount() const { return mnLoopCount; }
-    void            SetLoopCount( const sal_uLong nLoopCount );
+    sal_uInt32      GetLoopCount() const { return mnLoopCount; }
+    void            SetLoopCount(const sal_uInt32 nLoopCount);
     void            ResetLoopCount();
 
     void            SetNotifyHdl( const Link<Animation*,void>& rLink ) { maNotifyLink = rLink; }
@@ -176,8 +176,8 @@ private:
     BitmapEx        maBitmapEx;
     Timer           maTimer;
     Size            maGlobalSize;
-    long            mnLoopCount;
-    long            mnLoops;
+    sal_uInt32      mnLoopCount;
+    sal_uInt32      mnLoops;
     size_t          mnPos;
     bool            mbIsInAnimation;
     bool            mbLoopTerminated;

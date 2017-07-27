@@ -259,7 +259,7 @@ namespace slideshow
             const DrawShapeSharedPtr&       rDrawShape,
             const WakeupEventSharedPtr&     rWakeupEvent,
             const ::std::vector<double>&    rTimeouts,
-            ::std::size_t                   nNumLoops,
+            sal_uInt32                      nNumLoops,
             CycleMode                       eCycleMode )
         {
             return ActivitySharedPtr(
