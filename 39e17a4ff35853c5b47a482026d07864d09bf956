@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_686095cf",
+        "filename": "include/vcl/scheduler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-27T18:21:06Z",
+      "side": 1,
+      "message": "this probably needs SAL_WARN_UNUSED_RESULT, since it can fail to actually lock",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_889b01c9",
+        "filename": "vcl/inc/svdata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-27T18:21:06Z",
+      "side": 1,
+      "message": "why not just declare the mutex inline? would skip a whole bunch of error  checking.\nAnd then you wouldn\u0027t need to Init the scheduler",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_0869d1be",
+        "filename": "vcl/source/app/scheduler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-27T18:21:06Z",
+      "side": 1,
+      "message": "but the \u0027new\u0027 call can\u0027t fail?",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c8a50905",
+        "filename": "vcl/source/app/scheduler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-27T18:21:06Z",
+      "side": 1,
+      "message": "I find it a little suspicious that mbDeInit is accessed outside any locking, and is not declared volatile or std::atomic\u003cbool\u003e",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e873a5af",
+        "filename": "vcl/source/app/scheduler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-27T18:21:06Z",
+      "side": 1,
+      "message": "thought we didn\u0027t need the solar mutex anymore?",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e8aac5d3",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-27T18:21:06Z",
+      "side": 1,
+      "message": "you sure about this part? Going to make it harder to track down bugs for developers because this part will make the locking of the debug build much different to the normal production build",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
