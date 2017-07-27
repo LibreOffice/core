@@ -59,7 +59,7 @@ extern "C" {
             }
             else if( vcl::Clipboard_getImplementationName().equalsAscii( pImplementationName ) )
             {
-                xFactory = vcl::Clipboard_createFactory( xMgr );
+                xFactory = vcl::Clipboard_createFactory();
             }
             else if( vcl::DragSource_getImplementationName().equalsAscii( pImplementationName ) )
             {

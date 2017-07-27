@@ -44,7 +44,7 @@ namespace cppcanvas
             OSL_ENSURE( mxDevice.is(), "ImplColor::getDeviceColor(): Invalid graphic device" );
 
             // TODO(F1): Color space handling
-            return tools::intSRGBAToDoubleSequence( mxDevice, aSRGBA );
+            return tools::intSRGBAToDoubleSequence( aSRGBA );
         }
 
     }

@@ -10,6 +10,7 @@
 #include <cassert>
 #include <string>
 #include <set>
+#include <iostream>
 
 #include "plugin.hxx"
 
@@ -80,7 +81,11 @@ bool CheckUnusedParams::VisitDeclRefExpr(DeclRefExpr const * declRef) {
 
 
 static int noFieldsInRecord(RecordType const * recordType) {
-    return std::distance(recordType->getDecl()->field_begin(), recordType->getDecl()->field_end());
+    auto recordDecl = recordType->getDecl();
+    // if it's complicated, lets just assume it has fields
+    if (isa<ClassTemplateSpecializationDecl>(recordDecl))
+        return 1;
+    return std::distance(recordDecl->field_begin(), recordDecl->field_end());
 }
 static bool startswith(const std::string& rStr, const char* pSubStr) {
     return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
@@ -291,6 +296,27 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
     // bool marker parameter
     if (fqn == "SvxIconReplacementDialog::SvxIconReplacementDialog")
         return true;
+    // callback
+    if (fqn == "basctl::SIDEModel_createInstance")
+        return true;
+    // callback
+    if (startswith(fqn, "SbRtl_"))
+        return true;
+    // takes pointer to fn
+    if (fqn == "migration::BasicMigration_create" || fqn == "migration::WordbookMigration_create"
+        || fqn == "FontIdentificator_createInstance" || fqn == "vcl::DragSource_createInstance"
+        || fqn == "vcl::DropTarget_createInstance" || fqn == "vcl::FontIdentificator_createInstance"
+        || fqn == "drawinglayer::unorenderer::XPrimitive2DRenderer_createInstance")
+         return true;
+    // TODO
+    if (fqn == "FontSubsetInfo::CreateFontSubsetFromType1")
+         return true;
+    // used in template magic
+    if (fqn == "MtfRenderer::MtfRenderer")
+         return true;
+    // FIXME
+    if (fqn == "GtkSalDisplay::filterGdkEvent")
+         return true;
 
     // ignore the LINK macros from include/tools/link.hxx
     if (decl->getLocation().isMacroID())
@@ -298,6 +324,8 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
 
     for( auto it = decl->param_begin(); it != decl->param_end(); ++it) {
         auto param = *it;
+        if (fqn.find("fillShapeProperties") != std::string::npos)
+            param->dump();
         if (param->hasAttr<UnusedAttr>())
             continue;
         if (!param->getName().empty())

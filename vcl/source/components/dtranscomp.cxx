@@ -231,7 +231,7 @@ OUString SAL_CALL Clipboard_getImplementationName()
      );
 }
 
-Reference< XSingleServiceFactory > SAL_CALL Clipboard_createFactory( const Reference< XMultiServiceFactory > &  )
+Reference< XSingleServiceFactory > SAL_CALL Clipboard_createFactory()
 {
     return Reference< XSingleServiceFactory >( new ClipboardFactory() );
 }

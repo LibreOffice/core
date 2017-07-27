@@ -169,11 +169,9 @@ namespace drawinglayer
 
                     if(!aBitmapEx.IsEmpty())
                     {
-                        const uno::Reference< rendering::XGraphicDevice > xGraphicDevice;
-
                         aBitmapEx.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
                         aBitmapEx.SetPrefSize(Size(basegfx::fround(fWidth), basegfx::fround(fHeight)));
-                        XBitmap = vcl::unotools::xBitmapFromBitmapEx(xGraphicDevice, aBitmapEx);
+                        XBitmap = vcl::unotools::xBitmapFromBitmapEx(aBitmapEx);
                     }
                 }
             }

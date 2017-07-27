@@ -965,7 +965,7 @@ bool GtkSalGraphics::DoDrawNativeControl(
     }
     else if ( (nType==ControlType::Scrollbar) && ((nPart==ControlPart::DrawBackgroundHorz) || (nPart==ControlPart::DrawBackgroundVert)) )
     {
-        return NWPaintGTKScrollbar( nPart, aCtrlRect, aClip, nState, aValue );
+        return NWPaintGTKScrollbar( nPart, aCtrlRect, nState, aValue );
     }
     else if ( ((nType==ControlType::Editbox) && ((nPart==ControlPart::Entire) || (nPart==ControlPart::HasBackgroundTexture)) )
         || ((nType==ControlType::Spinbox) && (nPart==ControlPart::HasBackgroundTexture))
@@ -981,7 +981,7 @@ bool GtkSalGraphics::DoDrawNativeControl(
     else if ( ((nType==ControlType::Spinbox) || (nType==ControlType::SpinButtons))
         && ((nPart==ControlPart::Entire) || (nPart==ControlPart::AllButtons)) )
     {
-        return NWPaintGTKSpinBox(nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption, rControlCacheKey);
+        return NWPaintGTKSpinBox(nType, nPart, aCtrlRect, nState, aValue, rCaption, rControlCacheKey);
     }
     else if ( (nType == ControlType::Combobox) &&
         ( (nPart==ControlPart::Entire)
@@ -995,7 +995,7 @@ bool GtkSalGraphics::DoDrawNativeControl(
         if ( nType == ControlType::TabBody )
             return true;
         else
-            return NWPaintGTKTabItem( nType, aCtrlRect, aClip, nState, aValue);
+            return NWPaintGTKTabItem( nType, aCtrlRect, nState, aValue);
     }
     else if ( (nType==ControlType::Listbox) && ((nPart==ControlPart::Entire) || (nPart==ControlPart::ListboxWindow)) )
     {
@@ -1031,7 +1031,7 @@ bool GtkSalGraphics::DoDrawNativeControl(
     }
     else if( (nType == ControlType::ListNode) && (nPart == ControlPart::Entire) )
     {
-        return NWPaintGTKListNode( aCtrlRect, aClip, nState, aValue );
+        return NWPaintGTKListNode( aCtrlRect, nState, aValue );
     }
     else if( (nType == ControlType::ListNet) && (nPart == ControlPart::Entire) )
     {
@@ -1040,7 +1040,7 @@ bool GtkSalGraphics::DoDrawNativeControl(
     }
     else if( nType == ControlType::Slider )
     {
-        return NWPaintGTKSlider( nPart, aCtrlRect, aClip, nState, aValue );
+        return NWPaintGTKSlider( nPart, aCtrlRect, nState, aValue );
     }
     else if( nType == ControlType::WindowBackground )
     {
@@ -1862,7 +1862,6 @@ static void NWCalcArrowRect( const tools::Rectangle& rButton, tools::Rectangle& 
 
 bool GtkSalGraphics::NWPaintGTKScrollbar( ControlPart nPart,
                                           const tools::Rectangle& rControlRectangle,
-                                          const std::list< tools::Rectangle >&,
                                           ControlState nState,
                                           const ImplControlValue& aValue )
 {
@@ -2389,7 +2388,6 @@ static void NWPaintOneEditBox(    SalX11Screen nScreen,
 
 bool GtkSalGraphics::NWPaintGTKSpinBox(ControlType nType, ControlPart nPart,
                                        const tools::Rectangle& rControlRectangle,
-                                       const std::list< tools::Rectangle >&,
                                        ControlState nState,
                                        const ImplControlValue& aValue,
                                        const OUString& rCaption,
@@ -2692,7 +2690,6 @@ static tools::Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
 
 bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType,
                                         const tools::Rectangle& rControlRectangle,
-                                        const std::list< tools::Rectangle >&,
                                         ControlState nState,
                                         const ImplControlValue& aValue )
 {
@@ -3380,7 +3377,6 @@ bool GtkSalGraphics::NWPaintGTKTooltip(
 
 bool GtkSalGraphics::NWPaintGTKListNode(
             const tools::Rectangle& rControlRectangle,
-            const std::list< tools::Rectangle >&,
             ControlState nState, const ImplControlValue& rValue )
 {
     NWEnsureGTKTreeView( m_nXScreen );
@@ -3489,7 +3485,6 @@ bool GtkSalGraphics::NWPaintGTKProgress(
 bool GtkSalGraphics::NWPaintGTKSlider(
             ControlPart nPart,
             const tools::Rectangle& rControlRectangle,
-            const std::list< tools::Rectangle >&,
             ControlState nState, const ImplControlValue& rValue )
 {
     OSL_ASSERT( rValue.getType() == ControlType::Slider );

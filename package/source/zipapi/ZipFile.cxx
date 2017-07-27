@@ -420,7 +420,7 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const rtl::R
             throw packages::WrongPasswordException(THROW_WHERE );
     }
 
-    return new XUnbufferedStream( rxContext, aMutexHolder, xStream, rData );
+    return new XUnbufferedStream( aMutexHolder, xStream, rData );
 }
 
 #if 0

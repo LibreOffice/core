@@ -81,9 +81,7 @@ namespace cppcanvas
             return BitmapSharedPtr();
 
         return BitmapSharedPtr( new internal::ImplBitmap( rCanvas,
-                                                          vcl::unotools::xBitmapFromBitmapEx(
-                                                              xCanvas->getDevice(),
-                                                              rBmpEx) ) );
+                                                          vcl::unotools::xBitmapFromBitmapEx(rBmpEx) ) );
     }
 
     RendererSharedPtr VCLFactory::createRenderer( const CanvasSharedPtr&        rCanvas,

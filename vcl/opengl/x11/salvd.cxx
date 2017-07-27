@@ -34,7 +34,6 @@ void X11SalGraphics::Init( X11OpenGLSalVirtualDevice *pDevice )
 
 X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
                                                       long &nDX, long &nDY,
-                                                      DeviceFormat /*eFormat*/,
                                                       const SystemGraphicsData *pData,
                                                       X11SalGraphics* pNewGraphics) :
     mpGraphics(pNewGraphics),

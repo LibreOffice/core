@@ -84,8 +84,7 @@ namespace cppcanvas
                                         const CanvasSharedPtr&     rCanvas,
                                         const OutDevState&         rState ) :
                 CachedPrimitiveBase( rCanvas, true ),
-                mxBitmap( vcl::unotools::xBitmapFromBitmapEx( rCanvas->getUNOCanvas()->getDevice(),
-                                                                rBmpEx ) ),
+                mxBitmap( vcl::unotools::xBitmapFromBitmapEx( rBmpEx ) ),
                 mpCanvas( rCanvas ),
                 maState()
             {
@@ -112,8 +111,7 @@ namespace cppcanvas
                                         const CanvasSharedPtr&      rCanvas,
                                         const OutDevState&          rState      ) :
                 CachedPrimitiveBase( rCanvas, true ),
-                mxBitmap( vcl::unotools::xBitmapFromBitmapEx( rCanvas->getUNOCanvas()->getDevice(),
-                                                                rBmpEx ) ),
+                mxBitmap( vcl::unotools::xBitmapFromBitmapEx( rBmpEx ) ),
                 mpCanvas( rCanvas ),
                 maState()
             {

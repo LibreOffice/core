@@ -103,9 +103,9 @@ OUString SAL_CALL MozillaBootstrap::getProfilePath( css::mozilla::MozillaProduct
 {
     return m_ProfileAccess->getProfilePath(product,profileName);
 }
-sal_Bool SAL_CALL MozillaBootstrap::isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName )
+sal_Bool SAL_CALL MozillaBootstrap::isProfileLocked( css::mozilla::MozillaProductType /*product*/, const OUString& /*profileName*/ )
 {
-    return m_ProfileAccess->isProfileLocked(product,profileName);
+    return true;
 }
 sal_Bool SAL_CALL MozillaBootstrap::getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName )
 {

@@ -74,8 +74,7 @@ namespace vcl
         /** Create an XBitmap from VCL BitmapEx
          */
         css::uno::Reference< css::rendering::XBitmap >
-            VCL_DLLPUBLIC xBitmapFromBitmapEx( const css::uno::Reference< css::rendering::XGraphicDevice >& xGraphicDevice,
-                                               const ::BitmapEx&                                            inputBitmap );
+            VCL_DLLPUBLIC xBitmapFromBitmapEx( const ::BitmapEx& inputBitmap );
 
         /** Create a BitmapEx from an XBitmap
          */

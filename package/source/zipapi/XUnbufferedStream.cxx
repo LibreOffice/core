@@ -107,7 +107,6 @@ XUnbufferedStream::XUnbufferedStream(
 
 // allows to read package raw stream
 XUnbufferedStream::XUnbufferedStream(
-                    const uno::Reference< uno::XComponentContext >& /*xContext*/,
                     const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
                     const Reference < XInputStream >& xRawStream,
                     const ::rtl::Reference< EncryptionData >& rData )

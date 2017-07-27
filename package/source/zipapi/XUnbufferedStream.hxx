@@ -76,7 +76,6 @@ public:
 
     // allows to read package raw stream
     XUnbufferedStream(
-                 const css::uno::Reference< css::uno::XComponentContext >& xContext,
                  const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
                  const css::uno::Reference < css::io::XInputStream >& xRawStream,
                  const ::rtl::Reference< EncryptionData >& rData );
