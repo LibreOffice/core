@@ -132,12 +132,12 @@
       </node>
       <node oor:name="private:resource/popupmenu/pagepanemaster" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Slide Master Sorter/Pane</value>
+          <value xml:lang="en-US">Master Slide Sorter/Pane</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/pagepanenoselmaster" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Slide Master Sorter/Pane (no selection)</value>
+          <value xml:lang="en-US">Master Slide Sorter/Pane (no selection)</value>
         </prop>
       </node>
       <node oor:name="private:resource/popupmenu/table" oor:op="replace">

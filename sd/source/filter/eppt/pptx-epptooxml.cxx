@@ -1703,7 +1703,7 @@ void PowerPointExport::AddLayoutIdAndRelation( const FSHelperPtr& pFS, sal_Int32
 
 void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > const & aXBackgroundPropSet )
 {
-    SAL_INFO("sd.eppt", "write slide master: " << nPageNum << "\n--------------");
+    SAL_INFO("sd.eppt", "write master slide: " << nPageNum << "\n--------------");
 
     // slides list
     if( nPageNum == 0 )
