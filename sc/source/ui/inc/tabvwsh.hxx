@@ -394,6 +394,7 @@ public:
     int getPart() const override;
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
+    css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
 };
 
 #endif

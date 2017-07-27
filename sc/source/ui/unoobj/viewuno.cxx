@@ -859,6 +859,35 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
     return bRet;
 }
 
+uno::Reference<drawing::XShapes> ScTabViewShell::getSelectedXShapes()
+{
+    uno::Reference<drawing::XShapes> xShapes;
+    SdrView* pSdrView = GetSdrView();
+    if (pSdrView)
+    {
+        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+        const size_t nMarkCount = rMarkList.GetMarkCount();
+        if (nMarkCount)
+        {
+            //  generate ShapeCollection (like in SdXImpressView::getSelection in Draw)
+            //  XInterfaceRef will be returned and it has to be UsrObject-XInterface
+            xShapes = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
+
+            for (size_t i = 0; i < nMarkCount; ++i)
+            {
+                SdrObject* pDrawObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                if (pDrawObj)
+                {
+                    uno::Reference<drawing::XShape> xShape( pDrawObj->getUnoShape(), uno::UNO_QUERY );
+                    if (xShape.is())
+                        xShapes->add(xShape);
+                }
+            }
+        }
+    }
+    return xShapes;
+}
+
 uno::Any SAL_CALL ScTabViewObj::getSelection()
     throw(uno::RuntimeException, std::exception)
 {
@@ -867,36 +896,10 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
     ScCellRangesBase* pObj = nullptr;
     if (pViewSh)
     {
-        //  Ist auf dem Drawing-Layer etwas selektiert?
-
-        SdrView* pDrawView = pViewSh->GetSdrView();
-        if (pDrawView)
-        {
-            const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
-            const size_t nMarkCount = rMarkList.GetMarkCount();
-            if (nMarkCount)
-            {
-                //  ShapeCollection erzeugen (wie in SdXImpressView::getSelection im Draw)
-                //  Zurueckgegeben wird XInterfaceRef, das muss das UsrObject-XInterface sein
-
-                uno::Reference< drawing::XShapes > xShapes = drawing::ShapeCollection::create(
-                        comphelper::getProcessComponentContext());
-
-                uno::Reference<uno::XInterface> xRet(xShapes);
-
-                for (size_t i=0; i<nMarkCount; ++i)
-                {
-                    SdrObject* pDrawObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-                    if (pDrawObj)
-                    {
-                        uno::Reference<drawing::XShape> xShape( pDrawObj->getUnoShape(), uno::UNO_QUERY );
-                        if (xShape.is())
-                            xShapes->add(xShape);
-                    }
-                }
-                return uno::makeAny(xRet);
-            }
-        }
+        //  is something selected in drawing layer?
+        uno::Reference<uno::XInterface> xRet(pViewSh->getSelectedXShapes());
+        if (xRet.is())
+            return uno::makeAny(xRet);
 
         //  sonst Tabellen-(Zellen-)Selektion
 
