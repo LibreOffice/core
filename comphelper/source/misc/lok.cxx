@@ -21,6 +21,8 @@ static bool g_bPartInInvalidation(false);
 
 static bool g_bTiledPainting(false);
 
+static bool g_bDialogPainting(false);
+
 static bool g_bTiledAnnotations(true);
 
 void setActive(bool bActive)
@@ -51,6 +53,16 @@ void setTiledPainting(bool bTiledPainting)
 bool isTiledPainting()
 {
     return g_bTiledPainting;
+}
+
+void setDialogPainting(bool bDialogPainting)
+{
+    g_bDialogPainting = bDialogPainting;
+}
+
+bool isDialogPainting()
+{
+    return g_bDialogPainting;
 }
 
 void setTiledAnnotations(bool bTiledAnnotations)

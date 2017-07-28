@@ -18,7 +18,10 @@
  */
 
 #include <stdlib.h>
+
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+
 #include <osl/file.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
@@ -29,6 +32,7 @@
 #include <vcl/idle.hxx>
 
 #include <sfx2/basedlgs.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/app.hxx>
@@ -387,6 +391,13 @@ void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
     rInfo.aSize  = aSize;
     if ( IsRollUp() )
         rInfo.nFlags |= SfxChildWindowFlags::ZOOMIN;
+}
+
+
+void SfxModelessDialog::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
+{
+    if (!comphelper::LibreOfficeKit::isDialogPainting())
+        SfxLokHelper::notifyDialogInvalidation(maID);
 }
 
 

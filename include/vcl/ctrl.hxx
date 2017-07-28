@@ -44,6 +44,8 @@ private:
 
     SAL_DLLPRIVATE void     ImplInitControlData();
 
+    virtual void            LogicInvalidate(const tools::Rectangle* pRectangle) override;
+
                             Control (const Control &) = delete;
                             Control & operator= (const Control &) = delete;
 

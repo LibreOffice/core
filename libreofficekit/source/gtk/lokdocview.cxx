@@ -433,6 +433,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED";
     case LOK_CALLBACK_COMMENT:
         return "LOK_CALLBACK_COMMENT";
+    case LOK_CALLBACK_DIALOG_INVALIDATE:
+        return "LOK_CALLBACK_DIALOG_INVALIDATE";
     }
     g_assert(false);
     return nullptr;
@@ -1421,6 +1423,9 @@ callback (gpointer pData)
     }
     case LOK_CALLBACK_COMMENT:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[COMMENT], 0, pCallback->m_aPayload.c_str());
+        break;
+    case LOK_CALLBACK_DIALOG_INVALIDATE:
+        // TODO: Register the signal with lokdocview and emit it
         break;
     default:
         g_assert(false);
