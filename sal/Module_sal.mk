@@ -25,6 +25,7 @@ $(eval $(call gb_Module_add_targets,sal,\
     Executable_macro \
     Executable_alloca \
     Executable_config \
+    Executable_processworkdir \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sal,\
