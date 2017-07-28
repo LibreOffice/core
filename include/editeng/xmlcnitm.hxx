@@ -46,7 +46,7 @@ public:
                                 MapUnit eCoreMetric,
                                 MapUnit ePresentationMetric,
                                 OUString &rText,
-                                const IntlWrapper *pIntlWrapper = nullptr ) const override;
+                                const IntlWrapper *pIntlWrapper ) const override;
 
     virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 
