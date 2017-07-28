@@ -2167,7 +2167,7 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         {
             OUString aStr;
             rPool.GetPresentation( *rItem.pItem,
-                                    eMapUnit, aStr );
+                                    eMapUnit, aStr, nullptr );
             rStr += aStr;
         }
         else if ( rItem.nSlot == SID_ATTR_BRUSH_CHAR )
