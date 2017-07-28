@@ -284,7 +284,7 @@ bool SvxSearchItem::GetPresentation
     MapUnit             ,
     MapUnit             ,
     OUString&           ,
-    const IntlWrapper *
+    const IntlWrapper&
 )   const
 {
     return false;

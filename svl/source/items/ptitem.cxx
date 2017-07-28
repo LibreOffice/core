@@ -59,7 +59,7 @@ bool SfxPointItem::GetPresentation
     MapUnit                 /*eCoreMetric*/,
     MapUnit                 /*ePresentationMetric*/,
     OUString&               rText,
-    const IntlWrapper *
+    const IntlWrapper&
 )   const
 {
     rText = OUString::number(aVal.X()) + ", " + OUString::number(aVal.Y()) + ", ";

@@ -601,8 +601,7 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 }
 
 //static
-OUString INetContentTypes::GetPresentation(INetContentType eTypeID,
-                                            const LanguageTag& aLocale)
+OUString INetContentTypes::GetPresentation(INetContentType eTypeID)
 {
     const char* pResID = nullptr;
     if (eTypeID <= CONTENT_TYPE_LAST)
@@ -615,7 +614,7 @@ OUString INetContentTypes::GetPresentation(INetContentType eTypeID,
         else
             return aPresentation;
     }
-    return svl::getStringResource(pResID, aLocale);
+    return SvlResId(pResID);
 }
 
 //static

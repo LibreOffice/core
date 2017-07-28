@@ -24,15 +24,7 @@
 
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace lang {
-    struct Locale;
-} } } }
-
-namespace svl {
-
-OUString getStringResource(
-    const char* id, LanguageTag const & locale);
-}
+OUString SvlResId(const char* id);
 
 #endif
 

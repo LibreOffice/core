@@ -56,7 +56,7 @@ bool SfxRectangleItem::GetPresentation
     MapUnit                 /*eCoreMetric*/,
     MapUnit                 /*ePresentationMetric*/,
     OUString&               rText,
-    const IntlWrapper *
+    const IntlWrapper&
 )   const
 {
     rText = OUString::number(aVal.Top())    + ", " +

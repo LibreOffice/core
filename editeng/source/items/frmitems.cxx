@@ -182,7 +182,7 @@ bool SvxPaperBinItem::GetPresentation
     SfxItemPresentation ePres,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     switch ( ePres )
@@ -320,25 +320,25 @@ bool SvxSizeItem::GetPresentation
     SfxItemPresentation ePres,
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
-    OUString&           rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     OUString cpDelimTmp(cpDelim);
     switch ( ePres )
     {
         case SfxItemPresentation::Nameless:
-            rText = GetMetricText( aSize.Width(), eCoreUnit, ePresUnit, pIntl ) +
+            rText = GetMetricText( aSize.Width(), eCoreUnit, ePresUnit, &rIntl ) +
                     cpDelimTmp +
-                    GetMetricText( aSize.Height(), eCoreUnit, ePresUnit, pIntl );
+                    GetMetricText( aSize.Height(), eCoreUnit, ePresUnit, &rIntl );
             return true;
 
         case SfxItemPresentation::Complete:
             rText = EditResId(RID_SVXITEMS_SIZE_WIDTH) +
-                    GetMetricText( aSize.Width(), eCoreUnit, ePresUnit, pIntl ) +
+                    GetMetricText( aSize.Width(), eCoreUnit, ePresUnit, &rIntl ) +
                     " " + EditResId(GetMetricId(ePresUnit)) +
                     cpDelimTmp +
                     EditResId(RID_SVXITEMS_SIZE_HEIGHT) +
-                    GetMetricText( aSize.Height(), eCoreUnit, ePresUnit, pIntl ) +
+                    GetMetricText( aSize.Height(), eCoreUnit, ePresUnit, &rIntl ) +
                     " " + EditResId(GetMetricId(ePresUnit));
             return true;
         // no break necessary
@@ -594,7 +594,7 @@ bool SvxLRSpaceItem::GetPresentation
     SfxItemPresentation ePres,
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
-    OUString&           rText, const IntlWrapper* pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     switch ( ePres )
@@ -608,7 +608,7 @@ bool SvxLRSpaceItem::GetPresentation
             }
             else
                 rText = GetMetricText( (long)nLeftMargin,
-                                       eCoreUnit, ePresUnit, pIntl );
+                                       eCoreUnit, ePresUnit, &rIntl );
             rText += OUString(cpDelim);
             if ( 100 != nPropFirstLineOfst )
             {
@@ -617,7 +617,7 @@ bool SvxLRSpaceItem::GetPresentation
             }
             else
                 rText += GetMetricText( (long)nFirstLineOfst,
-                                        eCoreUnit, ePresUnit, pIntl );
+                                        eCoreUnit, ePresUnit, &rIntl );
             rText += OUString(cpDelim);
             if ( 100 != nRightMargin )
             {
@@ -626,7 +626,7 @@ bool SvxLRSpaceItem::GetPresentation
             }
             else
                 rText += GetMetricText( (long)nRightMargin,
-                                        eCoreUnit, ePresUnit, pIntl );
+                                        eCoreUnit, ePresUnit, &rIntl );
             return true;
         }
         case SfxItemPresentation::Complete:
@@ -638,7 +638,7 @@ bool SvxLRSpaceItem::GetPresentation
             else
             {
                 rText = rText +
-                        GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             rText += OUString(cpDelim);
@@ -652,7 +652,7 @@ bool SvxLRSpaceItem::GetPresentation
                 {
                     rText = rText +
                             GetMetricText( (long)nFirstLineOfst,
-                                            eCoreUnit, ePresUnit, pIntl ) +
+                                            eCoreUnit, ePresUnit, &rIntl ) +
                             " " + EditResId(GetMetricId(ePresUnit));
                 }
                 rText += OUString(cpDelim);
@@ -665,7 +665,7 @@ bool SvxLRSpaceItem::GetPresentation
             {
                 rText = rText +
                         GetMetricText( (long)nRightMargin,
-                                       eCoreUnit, ePresUnit, pIntl ) +
+                                       eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             return true;
@@ -972,7 +972,7 @@ bool SvxULSpaceItem::GetPresentation
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
     OUString&           rText,
-    const IntlWrapper  *pIntl
+    const IntlWrapper&  rIntl
 )   const
 {
     switch ( ePres )
@@ -985,7 +985,7 @@ bool SvxULSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText = GetMetricText( (long)nUpper, eCoreUnit, ePresUnit, pIntl );
+                rText = GetMetricText( (long)nUpper, eCoreUnit, ePresUnit, &rIntl );
             rText += OUString(cpDelim);
             if ( 100 != nPropLower )
             {
@@ -993,7 +993,7 @@ bool SvxULSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText += GetMetricText( (long)nLower, eCoreUnit, ePresUnit, pIntl );
+                rText += GetMetricText( (long)nLower, eCoreUnit, ePresUnit, &rIntl );
             return true;
         }
         case SfxItemPresentation::Complete:
@@ -1007,7 +1007,7 @@ bool SvxULSpaceItem::GetPresentation
             else
             {
                 rText = rText +
-                        GetMetricText( (long)nUpper, eCoreUnit, ePresUnit, pIntl ) +
+                        GetMetricText( (long)nUpper, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             rText = rText + OUString(cpDelim) + EditResId(RID_SVXITEMS_ULSPACE_LOWER);
@@ -1019,7 +1019,7 @@ bool SvxULSpaceItem::GetPresentation
             else
             {
                 rText = rText +
-                        GetMetricText( (long)nLower, eCoreUnit, ePresUnit, pIntl ) +
+                        GetMetricText( (long)nLower, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             return true;
@@ -1121,7 +1121,7 @@ bool SvxPrintItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     const char* pId = RID_SVXITEMS_PRINT_FALSE;
@@ -1159,7 +1159,7 @@ bool SvxOpaqueItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     const char* pId = RID_SVXITEMS_OPAQUE_FALSE;
@@ -1229,7 +1229,7 @@ bool SvxProtectItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     const char* pId = RID_SVXITEMS_PROT_CONTENT_FALSE;
@@ -1463,7 +1463,7 @@ bool SvxShadowItem::GetPresentation
     SfxItemPresentation ePres,
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
-    OUString&           rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     switch ( ePres )
@@ -1478,7 +1478,7 @@ bool SvxShadowItem::GetPresentation
             rText = rText +
                     EditResId(pId) +
                     OUString(cpDelim) +
-                    GetMetricText( (long)nWidth, eCoreUnit, ePresUnit, pIntl ) +
+                    GetMetricText( (long)nWidth, eCoreUnit, ePresUnit, &rIntl ) +
                     OUString(cpDelim) +
                     EditResId(RID_SVXITEMS_SHADOW[(int)eLocation]);
             return true;
@@ -1495,7 +1495,7 @@ bool SvxShadowItem::GetPresentation
             rText = rText +
                     EditResId(pId) +
                     OUString(cpDelim) +
-                    GetMetricText( (long)nWidth, eCoreUnit, ePresUnit, pIntl ) +
+                    GetMetricText( (long)nWidth, eCoreUnit, ePresUnit, &rIntl ) +
                     " " + EditResId(GetMetricId(ePresUnit)) +
                     OUString(cpDelim) +
                     EditResId(RID_SVXITEMS_SHADOW[(int)eLocation]);
@@ -2063,7 +2063,7 @@ bool SvxBoxItem::GetPresentation
     SfxItemPresentation ePres,
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
-    OUString&           rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     OUString cpDelimTmp = OUString(cpDelim);
@@ -2075,37 +2075,37 @@ bool SvxBoxItem::GetPresentation
 
             if ( pTop )
             {
-                rText = pTop->GetValueString( eCoreUnit, ePresUnit, pIntl ) + cpDelimTmp;
+                rText = pTop->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
             }
             if( !(pTop && pBottom && pLeft && pRight &&
                   *pTop == *pBottom && *pTop == *pLeft && *pTop == *pRight) )
             {
                 if ( pBottom )
                 {
-                    rText = rText + pBottom->GetValueString( eCoreUnit, ePresUnit, pIntl ) + cpDelimTmp;
+                    rText = rText + pBottom->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
                 }
                 if ( pLeft )
                 {
-                    rText = rText + pLeft->GetValueString( eCoreUnit, ePresUnit, pIntl ) + cpDelimTmp;
+                    rText = rText + pLeft->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
                 }
                 if ( pRight )
                 {
-                    rText = rText + pRight->GetValueString( eCoreUnit, ePresUnit, pIntl ) + cpDelimTmp;
+                    rText = rText + pRight->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
                 }
             }
-            rText += GetMetricText( (long)nTopDist, eCoreUnit, ePresUnit, pIntl );
+            rText += GetMetricText( (long)nTopDist, eCoreUnit, ePresUnit, &rIntl );
             if( nTopDist != nBottomDist || nTopDist != nLeftDist ||
                 nTopDist != nRightDist )
             {
                 rText = rText +
                         cpDelimTmp +
                         GetMetricText( (long)nBottomDist, eCoreUnit,
-                                        ePresUnit, pIntl ) +
+                                        ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( (long)nLeftDist, eCoreUnit, ePresUnit, pIntl ) +
+                        GetMetricText( (long)nLeftDist, eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
                         GetMetricText( (long)nRightDist, eCoreUnit,
-                                        ePresUnit, pIntl );
+                                        ePresUnit, &rIntl );
             }
             return true;
         }
@@ -2121,7 +2121,7 @@ bool SvxBoxItem::GetPresentation
                 if( pTop && pBottom && pLeft && pRight &&
                     *pTop == *pBottom && *pTop == *pLeft && *pTop == *pRight )
                 {
-                    rText += pTop->GetValueString( eCoreUnit, ePresUnit, pIntl, true ) + cpDelimTmp;
+                    rText += pTop->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) + cpDelimTmp;
                 }
                 else
                 {
@@ -2129,28 +2129,28 @@ bool SvxBoxItem::GetPresentation
                     {
                         rText = rText +
                                 EditResId(RID_SVXITEMS_BORDER_TOP) +
-                                pTop->GetValueString( eCoreUnit, ePresUnit, pIntl, true ) +
+                                pTop->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
                                 cpDelimTmp;
                     }
                     if ( pBottom )
                     {
                         rText = rText +
                                 EditResId(RID_SVXITEMS_BORDER_BOTTOM) +
-                                pBottom->GetValueString( eCoreUnit, ePresUnit, pIntl, true ) +
+                                pBottom->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
                                 cpDelimTmp;
                     }
                     if ( pLeft )
                     {
                         rText = rText +
                                 EditResId(RID_SVXITEMS_BORDER_LEFT) +
-                                pLeft->GetValueString( eCoreUnit, ePresUnit, pIntl, true ) +
+                                pLeft->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
                                 cpDelimTmp;
                     }
                     if ( pRight )
                     {
                         rText = rText +
                                 EditResId(RID_SVXITEMS_BORDER_RIGHT) +
-                                pRight->GetValueString( eCoreUnit, ePresUnit, pIntl, true ) +
+                                pRight->GetValueString( eCoreUnit, ePresUnit, &rIntl, true ) +
                                 cpDelimTmp;
                     }
                 }
@@ -2162,7 +2162,7 @@ bool SvxBoxItem::GetPresentation
             {
                 rText = rText +
                         GetMetricText( (long)nTopDist, eCoreUnit,
-                                            ePresUnit, pIntl ) +
+                                            ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             else
@@ -2170,22 +2170,22 @@ bool SvxBoxItem::GetPresentation
                 rText = rText +
                         EditResId(RID_SVXITEMS_BORDER_TOP) +
                         GetMetricText( (long)nTopDist, eCoreUnit,
-                                        ePresUnit, pIntl ) +
+                                        ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_BOTTOM) +
                         GetMetricText( (long)nBottomDist, eCoreUnit,
-                                        ePresUnit, pIntl ) +
+                                        ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_LEFT) +
                         GetMetricText( (long)nLeftDist, eCoreUnit,
-                                        ePresUnit, pIntl ) +
+                                        ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_RIGHT) +
                         GetMetricText( (long)nRightDist, eCoreUnit,
-                                        ePresUnit, pIntl ) +
+                                        ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             return true;
@@ -2597,7 +2597,7 @@ bool SvxBoxInfoItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText.clear();
@@ -2933,7 +2933,7 @@ bool SvxFormatBreakItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = GetValueTextByPos( GetEnumValue() );
@@ -3072,7 +3072,7 @@ bool SvxFormatKeepItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
     ) const
 {
     const char* pId = RID_SVXITEMS_FMTKEEP_FALSE;
@@ -3201,13 +3201,13 @@ bool SvxLineItem::GetPresentation
     SfxItemPresentation ePres,
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
-    OUString&           rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     rText.clear();
 
     if ( pLine )
-        rText = pLine->GetValueString( eCoreUnit, ePresUnit, pIntl,
+        rText = pLine->GetValueString( eCoreUnit, ePresUnit, &rIntl,
             (SfxItemPresentation::Complete == ePres) );
     return true;
 }
@@ -3672,7 +3672,7 @@ bool SvxBrushItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
     ) const
 {
     if ( GPOS_NONE  == eGraphicPos )
@@ -4043,7 +4043,7 @@ bool SvxFrameDirectionItem::GetPresentation(
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *) const
+    OUString&           rText, const IntlWrapper&) const
 {
     rText = EditResId(getFrmDirResId(GetEnumValue()));
     return true;

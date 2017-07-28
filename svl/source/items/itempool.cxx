@@ -475,11 +475,11 @@ bool SfxItemPool::GetPresentation
     const SfxPoolItem&  rItem,
     MapUnit             eMetric,
     OUString&           rText,
-    const IntlWrapper * pIntlWrapper
+    const IntlWrapper&  rIntlWrapper
 )   const
 {
     return rItem.GetPresentation(
-        SfxItemPresentation::Complete, GetMetric(rItem.Which()), eMetric, rText, pIntlWrapper );
+        SfxItemPresentation::Complete, GetMetric(rItem.Which()), eMetric, rText, rIntlWrapper );
 }
 
 

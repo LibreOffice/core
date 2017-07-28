@@ -49,7 +49,7 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
-                                  OUString &rText, const IntlWrapper * = nullptr ) const override;
+                                  OUString &rText, const IntlWrapper& ) const override;
 };
 
 inline SvxFormatSplitItem::SvxFormatSplitItem( const bool bSplit, const sal_uInt16 nWh ) :

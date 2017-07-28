@@ -115,7 +115,7 @@ bool SfxStringListItem::GetPresentation
     MapUnit                 /*eCoreMetric*/,
     MapUnit                 /*ePresentationMetric*/,
     OUString&               rText,
-    const IntlWrapper *
+    const IntlWrapper&
 )   const
 {
     rText = "(List)";

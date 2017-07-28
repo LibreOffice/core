@@ -971,8 +971,7 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
             css::uno::Reference< css::frame::XTitle > xModelTitle( xDoc, css::uno::UNO_QUERY );
             if( xModelTitle.is() )
             {
-                LanguageTag aLocale( Application::GetSettings().GetUILanguageTag() );
-                std::locale aResLoc = Translate::Create("sfx", aLocale);
+                std::locale aResLoc = Translate::Create("sfx", SvtSysLocale().GetUILanguageTag());
                 OUString sEmbedded = Translate::get(STR_EMBEDDED_TITLE, aResLoc);
                 xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded);
                 m_aContainerName = m_pEmbedObj->getContainerName();

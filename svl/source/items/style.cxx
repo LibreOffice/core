@@ -344,14 +344,14 @@ OUString SfxStyleSheetBase::GetDescription( MapUnit eMetric )
     OUString aDesc;
     const SfxPoolItem* pItem = aIter.FirstItem();
 
-    IntlWrapper aIntlWrapper( SvtSysLocale().GetLanguageTag() );
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     while ( pItem )
     {
         OUString aItemPresentation;
 
         if ( !IsInvalidItem( pItem ) &&
              pPool->GetPool().GetPresentation(
-                *pItem, eMetric, aItemPresentation, &aIntlWrapper ) )
+                *pItem, eMetric, aItemPresentation, aIntlWrapper ) )
         {
             if ( !aDesc.isEmpty() && !aItemPresentation.isEmpty() )
                 aDesc += " + ";

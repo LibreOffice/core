@@ -41,7 +41,7 @@ public:
     virtual bool GetPresentation(const SfxPoolItem& rItem,
                                  MapUnit ePresentationMetric,
                                  OUString& rText,
-                                 const IntlWrapper * pIntlWrapper = nullptr) const override;
+                                 const IntlWrapper& rIntlWrapper) const override;
 
     static void TakeItemName(sal_uInt16 nWhich, OUString& rItemName);
 };

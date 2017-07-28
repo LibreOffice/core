@@ -26,6 +26,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
+#include <unotools/intlwrapper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/searchopt.hxx>
 #include <sfx2/dispatch.hxx>
@@ -2155,6 +2156,7 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         default: ;//prevent warning
     }
 
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     for ( sal_uInt16 i = 0; i < pList->Count(); ++i )
     {
         const SearchAttrItem& rItem = pList->GetObject(i);
@@ -2165,8 +2167,7 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         if ( !IsInvalidItem( rItem.pItem ) )
         {
             OUString aStr;
-            rPool.GetPresentation( *rItem.pItem,
-                                    eMapUnit, aStr );
+            rPool.GetPresentation(*rItem.pItem, eMapUnit, aStr, aIntlWrapper);
             rStr += aStr;
         }
         else if ( rItem.nSlot == SID_ATTR_BRUSH_CHAR )

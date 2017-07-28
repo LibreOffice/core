@@ -24,19 +24,11 @@
 
 static std::locale* pResLocale=nullptr;
 
-namespace
-{
-    std::locale* getResLocale(const LanguageTag& aLocale)
-    {
-        if (!pResLocale)
-            pResLocale = new std::locale(Translate::Create("svt", aLocale));
-        return pResLocale;
-    }
-}
-
 std::locale* SvtResLocale::GetResLocale()
 {
-    return getResLocale(Application::GetSettings().GetUILanguageTag());
+    if (!pResLocale)
+        pResLocale = new std::locale(Translate::Create("svt", SvtSysLocale().GetUILanguageTag()));
+    return pResLocale;
 }
 
 void SvtResLocale::DeleteResLocale()

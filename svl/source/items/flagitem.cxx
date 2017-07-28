@@ -50,7 +50,7 @@ bool SfxFlagItem::GetPresentation
     MapUnit              /*eCoreMetric*/,
     MapUnit              /*ePresentationMetric*/,
     OUString&               rText,
-    const IntlWrapper *
+    const IntlWrapper&
 )   const
 {
     rText.clear();

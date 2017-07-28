@@ -64,14 +64,14 @@ bool SwPageFootnoteInfoItem::GetPresentation
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
     OUString&           rText,
-    const IntlWrapper*  pIntl
+    const IntlWrapper&  rIntl
 )   const
 {
     const SwTwips nHght = GetPageFootnoteInfo().GetHeight();
     if ( nHght )
     {
         rText = SwResId( STR_MAX_FTN_HEIGHT ) + " " +
-                ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl ) + " " +
+                ::GetMetricText( nHght, eCoreUnit, ePresUnit, &rIntl ) + " " +
                 ::GetSvxString( ::GetMetricId( ePresUnit ) );
     }
     return true;

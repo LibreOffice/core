@@ -55,6 +55,7 @@
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xtextit0.hxx>
+#include <unotools/intlwrapper.hxx>
 
 using namespace com::sun::star;
 
@@ -887,6 +888,7 @@ void SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemS
 {
     SetMode(MYBROWSEMODE & BrowserMode(~BrowserMode::KEEPHIGHLIGHT));
     if (pSet!=nullptr) {
+        IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
         sal_uInt16 nEntryNum=0;
         SfxWhichIter aIter(*pSet);
         const SfxItemPool* pPool=pSet->GetPool();
@@ -989,7 +991,7 @@ void SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemS
 
                         rItem.GetPresentation(SfxItemPresentation::Nameless,
                                               pPool->GetMetric(nWhich),
-                                              MapUnit::MapMM, aEntry.aValue);
+                                              MapUnit::MapMM, aEntry.aValue, aIntlWrapper);
                         if (aEntry.bCanNum)
                         {
                             aEntry.aValue = OUString::number(aEntry.nVal) + ": " + aEntry.aValue;

@@ -22,56 +22,18 @@
 #include <map>
 #include <memory>
 #include <i18nlangtag/languagetag.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/resmgr.hxx>
+#include <unotools/syslocale.hxx>
 
 #include "getstringresource.hxx"
 
-namespace {
-
-class ResMgrMap {
-public:
-    ResMgrMap() = default;
-    ResMgrMap(const ResMgrMap&) = delete;
-    ResMgrMap& operator=(const ResMgrMap&) = delete;
-
-    const std::locale& get(LanguageTag const & locale);
-
-private:
-    typedef std::map<OUString, std::locale> Map;
-
-    Map map_;
-        // one SimpleResMgr for each language for which a resource was requested
-        // (when using the "non-simple" resmgr, the first request for any
-        // language wins, any further requests for any other languages supply
-        // the resmgr of the first call; for the simple resmgr we have a mgr
-        // for each language ever requested)
-};
-
-const std::locale& ResMgrMap::get(LanguageTag const & locale) {
-    OUString code( locale.getBcp47());
-    Map::iterator i(map_.find(code));
-    if (i == map_.end()) {
-        std::locale loc = Translate::Create("svl", locale);
-        i = map_.insert(Map::value_type(code, loc)).first;
-    }
-    return i->second;
-}
-
-struct theResMgrMap: public rtl::Static< ResMgrMap, theResMgrMap > {};
-
-}
-
-namespace svl {
-
-OUString getStringResource(const char* id, LanguageTag const & locale)
+OUString SvlResId(const char* id)
 {
-    return Translate::get(id, theResMgrMap::get().get(locale));
-}
-
+    static std::locale loc = Translate::Create("svl", SvtSysLocale().GetUILanguageTag());
+    return Translate::get(id, loc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

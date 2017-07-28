@@ -549,7 +549,6 @@ public:
     static CalendarWrapper*     GetCalendar();
     SC_DLLPUBLIC static CollatorWrapper*        GetCollator();
     static CollatorWrapper*     GetCaseCollator();
-    static IntlWrapper*         GetScIntlWrapper();
     static css::lang::Locale*   GetLocale();
 
     SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration();

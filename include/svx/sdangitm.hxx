@@ -36,8 +36,7 @@ public:
                                  MapUnit eCoreMetric,
                                  MapUnit ePresMetric,
                                  OUString& rText,
-                                 const IntlWrapper *
-                                 pIntlWrapper = nullptr) const override;
+                                 const IntlWrapper& rIntlWrapper) const override;
 };
 
 

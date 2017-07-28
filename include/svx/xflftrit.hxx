@@ -48,7 +48,7 @@ public:
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres, MapUnit eCoreMetric,
-                                  MapUnit ePresMetric, OUString &rText, const IntlWrapper * pIntlWrapper = nullptr ) const override;
+                                  MapUnit ePresMetric, OUString &rText, const IntlWrapper& rIntlWrapper ) const override;
 
     bool                    IsEnabled() const { return bEnabled; }
     void                    SetEnabled( bool bEnable ) { bEnabled = bEnable; }

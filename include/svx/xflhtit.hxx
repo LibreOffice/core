@@ -51,7 +51,7 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
-                                  OUString &rText, const IntlWrapper * = nullptr ) const override;
+                                  OUString &rText, const IntlWrapper& ) const override;
     virtual bool            HasMetrics() const override;
     virtual void            ScaleMetrics(long nMul, long nDiv) override;
 

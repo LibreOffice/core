@@ -20,6 +20,8 @@
 
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
+#include <unotools/intlwrapper.hxx>
+#include <unotools/syslocale.hxx>
 #include <osl/diagnose.h>
 #include <libxml/xmlwriter.h>
 #include <typeinfo>
@@ -112,7 +114,7 @@ bool SfxPoolItem::GetPresentation
     MapUnit             /*eCoreMetric*/,         // IN:  current metric of the SfxPoolItems
     MapUnit             /*ePresentationMetric*/, // IN:  target metric of the presentation
     OUString&           /*rText*/,               // OUT: textual representation
-    const IntlWrapper *
+    const IntlWrapper&
 )   const
 {
     return false;
@@ -124,7 +126,8 @@ void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("typeName"), BAD_CAST(typeid(*this).name()));
     OUString rText;
-    if (GetPresentation( SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM, rText))
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
+    if (GetPresentation( SfxItemPresentation::Complete, MapUnit::Map100thMM, MapUnit::Map100thMM, rText, aIntlWrapper))
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(rText.getStr()));
     xmlTextWriterEndElement(pWriter);
 }
@@ -171,7 +174,7 @@ bool SfxVoidItem::GetPresentation
     MapUnit                 /*eCoreMetric*/,
     MapUnit                 /*ePresentationMetric*/,
     OUString&               rText,
-    const IntlWrapper *
+    const IntlWrapper&
 )   const
 {
     rText = "Void";

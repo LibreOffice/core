@@ -46,7 +46,7 @@ bool SfxRangeItem::GetPresentation
     MapUnit                 /*eCoreMetric*/,
     MapUnit                 /*ePresentationMetric*/,
     OUString&               rText,
-    const IntlWrapper *
+    const IntlWrapper&
 )   const
 {
     rText = OUString::number(nFrom) + ":" + OUString::number(nTo);

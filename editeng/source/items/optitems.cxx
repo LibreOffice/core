@@ -55,7 +55,7 @@ bool SfxSpellCheckItem::GetPresentation
     MapUnit             ,
     MapUnit             ,
     OUString&           ,
-    const IntlWrapper*
+    const IntlWrapper&
 )   const
 {
     return true;
@@ -115,7 +115,7 @@ bool SfxHyphenRegionItem::GetPresentation
     MapUnit             ,
     MapUnit             ,
     OUString&           rText,
-    const IntlWrapper*
+    const IntlWrapper&
 )   const
 {
     rText = rText +

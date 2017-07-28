@@ -143,7 +143,7 @@ public:
     virtual bool                    GetPresentation( const SfxPoolItem& rItem,
                                                      MapUnit ePresentationMetric,
                                                      OUString& rText,
-                                                     const IntlWrapper * pIntlWrapper = nullptr ) const;
+                                                     const IntlWrapper& rIntlWrapper ) const;
     virtual SfxItemPool*            Clone() const;
     const OUString&                 GetName() const;
 

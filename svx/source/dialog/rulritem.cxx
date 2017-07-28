@@ -121,7 +121,7 @@ bool SvxLongLRSpaceItem::GetPresentation(
                         MapUnit             /*eCoreUnit*/,
                         MapUnit             /*ePresUnit*/,
                         OUString&           /*rText*/,
-                        const IntlWrapper*  /*pWrapper*/) const
+                        const IntlWrapper&  /*rWrapper*/) const
 {
     return false;
 }
@@ -247,7 +247,7 @@ bool SvxLongULSpaceItem::GetPresentation(
                         MapUnit             /*eCoreUnit*/,
                         MapUnit             /*ePresUnit*/,
                         OUString&           /*rText*/,
-                        const IntlWrapper*  /*pWrapper*/ ) const
+                        const IntlWrapper&  /*rWrapper*/ ) const
 {
     return false;
 }
@@ -368,7 +368,7 @@ bool SvxPagePosSizeItem::GetPresentation(
                         MapUnit             /*eCoreUnit*/,
                         MapUnit             /*ePresUnit*/,
                         OUString&           /*rText*/,
-                        const IntlWrapper*  /*pWrapper*/ ) const
+                        const IntlWrapper&  /*rWrapper*/ ) const
 {
     return false;
 }
@@ -459,7 +459,7 @@ bool SvxColumnItem::GetPresentation(
                         MapUnit             /*eCoreUnit*/,
                         MapUnit             /*ePresUnit*/,
                         OUString&           /*rText*/,
-                        const IntlWrapper*  /*pWrapper*/ ) const
+                        const IntlWrapper&  /*rWrapper*/ ) const
 {
     return false;
 }
@@ -694,7 +694,7 @@ bool SvxObjectItem::GetPresentation(
                         MapUnit             /*eCoreUnit*/,
                         MapUnit             /*ePresUnit*/,
                         OUString&           /*rText*/,
-                        const IntlWrapper*  /*pWrapper*/ ) const
+                        const IntlWrapper&  /*rWrapper*/ ) const
 {
     return false;
 }
