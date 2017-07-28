@@ -521,7 +521,11 @@ typedef enum
      *
      * Here all aproperties are same as described in svxruler.
      */
-    LOK_CALLBACK_RULER_UPDATE = 35
+    LOK_CALLBACK_RULER_UPDATE = 35,
+    /**
+     * Dialog invalidation
+     */
+    LOK_CALLBACK_DIALOG_INVALIDATE = 36
 
 }
 LibreOfficeKitCallbackType;
