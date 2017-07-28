@@ -178,9 +178,7 @@ private:
 
     std::list<css::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithSameId(OUString  const & identifier,
-                            OUString const & fileName,
-                            css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv =
-                            css::uno::Reference< css::ucb::XCommandEnvironment>());
+                            OUString const & fileName);
 
     css::uno::Reference<css::deployment::XPackage> backupExtension(
         OUString const & identifier, OUString const & fileName,

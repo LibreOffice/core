@@ -336,7 +336,7 @@ void lcl_CloneSubGrids(
 namespace chart
 {
 
-Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
+Axis::Axis() :
         ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_aScaleData( AxisHelper::createDefaultScale() ),
@@ -641,10 +641,10 @@ css::uno::Sequence< OUString > SAL_CALL Axis::getSupportedServiceNames()
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_Axis_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_Axis_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::Axis(context));
+    return cppu::acquire(new ::chart::Axis);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

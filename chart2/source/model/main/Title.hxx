@@ -49,7 +49,7 @@ class Title :
     public ::property::OPropertySet
 {
 public:
-    explicit Title( css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    explicit Title();
     virtual ~Title() override;
 
     /// XServiceInfo declarations

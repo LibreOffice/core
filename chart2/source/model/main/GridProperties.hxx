@@ -50,7 +50,6 @@ class GridProperties :
         public ::property::OPropertySet
 {
 public:
-    explicit GridProperties( css::uno::Reference< css::uno::XComponentContext > const & xContext );
     explicit GridProperties();
     virtual ~GridProperties() override;
 

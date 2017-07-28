@@ -51,7 +51,7 @@ class Legend :
     public ::property::OPropertySet
 {
 public:
-    explicit Legend( css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    explicit Legend();
     virtual ~Legend() override;
 
     /// XServiceInfo declarations

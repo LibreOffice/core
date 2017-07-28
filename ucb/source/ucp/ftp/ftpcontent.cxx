@@ -385,7 +385,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
 
-                aRet <<= getPropertyValues(Properties,Environment);
+                aRet <<= getPropertyValues(Properties);
             }
             else if(aCommand.Name == "setPropertyValues")
             {
@@ -738,8 +738,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
 
 
 Reference< XRow > FTPContent::getPropertyValues(
-    const Sequence< Property >& seqProp,
-    const Reference<XCommandEnvironment>& /*environment*/
+    const Sequence< Property >& seqProp
 )
 {
     rtl::Reference<ucbhelper::PropertyValueSet> xRow =

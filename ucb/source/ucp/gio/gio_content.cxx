@@ -818,8 +818,7 @@ void Content::copyData( const uno::Reference< io::XInputStream >& xIn,
     xOut->closeOutput();
 }
 
-bool Content::feedSink( const uno::Reference< uno::XInterface >& xSink,
-    const uno::Reference< ucb::XCommandEnvironment >& /*xEnv*/ )
+bool Content::feedSink( const uno::Reference< uno::XInterface >& xSink )
 {
     if ( !xSink.is() )
         return false;
@@ -894,7 +893,7 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
                     xEnv );
         }
 
-        if ( !feedSink( rOpenCommand.Sink, xEnv ) )
+        if ( !feedSink( rOpenCommand.Sink ) )
         {
             // Note: rOpenCommand.Sink may contain an XStream
             //       implementation. Support for this type of

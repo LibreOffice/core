@@ -42,10 +42,7 @@ private:
     VclPtr<OutputDevice> m_pRefDevice;
 
 public:
-    DrawModelWrapper() = delete;
-
-    SAL_DLLPRIVATE DrawModelWrapper(
-        const css::uno::Reference<css::uno::XComponentContext>& xContext );
+    SAL_DLLPRIVATE DrawModelWrapper();
     SAL_DLLPRIVATE virtual ~DrawModelWrapper() override;
 
     css::uno::Reference< css::lang::XMultiServiceFactory > getShapeFactory();

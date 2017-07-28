@@ -125,12 +125,6 @@ struct StaticGridInfo : public rtl::StaticAggregate< uno::Reference< beans::XPro
 namespace chart
 {
 
-GridProperties::GridProperties( Reference< uno::XComponentContext > const & /* xContext */ ) :
-        ::property::OPropertySet( m_aMutex ),
-    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
-{
-}
-
 GridProperties::GridProperties() :
         ::property::OPropertySet( m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
@@ -246,10 +240,10 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( GridProperties, GridProperties_Base, ::propert
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart2_GridProperties_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart2_GridProperties_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::GridProperties(context));
+    return cppu::acquire(new ::chart::GridProperties);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

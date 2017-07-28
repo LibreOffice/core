@@ -219,7 +219,7 @@ namespace ucb { namespace ucp { namespace ext
                 // unreachable
             }
 
-            aRet <<= setPropertyValues( aProperties, i_rEvironment );
+            aRet <<= setPropertyValues( aProperties );
         }
         else if ( aCommand.Name == "getPropertySetInfo" )
         {
@@ -502,7 +502,7 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-    Sequence< Any > Content::setPropertyValues( const Sequence< PropertyValue >& i_rValues, const Reference< XCommandEnvironment >& /* xEnv */)
+    Sequence< Any > Content::setPropertyValues( const Sequence< PropertyValue >& i_rValues)
     {
         ::osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 

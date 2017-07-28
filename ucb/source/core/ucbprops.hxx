@@ -46,7 +46,7 @@ private:
                             css::beans::Property& rProp );
 
 public:
-    explicit UcbPropertiesManager( const css::uno::Reference< css::lang::XMultiServiceFactory >&  rxSMgr );
+    explicit UcbPropertiesManager();
     virtual ~UcbPropertiesManager() override;
 
     // XServiceInfo
