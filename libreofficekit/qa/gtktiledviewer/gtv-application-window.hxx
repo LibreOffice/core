@@ -99,6 +99,12 @@ void gtv_application_window_set_part_broadcast(GtvApplicationWindow* window, boo
 
 gboolean gtv_application_window_get_part_broadcast(GtvApplicationWindow* window);
 
+void gtv_application_window_register_child_window(GtvApplicationWindow* window, GtkWindow* pChildWin);
+
+void gtv_application_window_unregister_child_window(GtvApplicationWindow* window, GtkWindow* pChildWin);
+
+GtkWindow* gtv_application_window_get_child_window_by_id(GtvApplicationWindow* window, const gchar* pWinId);
+
 G_END_DECLS
 
 #endif /* GTV_APPLICATION_WINDOW_H */
