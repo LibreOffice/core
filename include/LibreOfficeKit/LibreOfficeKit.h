@@ -267,7 +267,7 @@ struct _LibreOfficeKitDocumentClass
                        size_t nSize);
 
     /// WIP
-    void (*paintDialog) (LibreOfficeKitDocument* pThis, unsigned char* pBuffer, int nWidth, int nHeight);
+    void (*paintDialog) (LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
