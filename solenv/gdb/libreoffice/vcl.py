@@ -54,7 +54,6 @@ class ImplSchedulerDataPrinter(object):
                 assert 0 == timer['mnTimeout'], "Idle with timeout == {}".format( timer['mnTimeout'] )
             return res
         else:
-            assert gdbobj['mbDelete'], "No task set and not marked for deletion!"
             return "(no task)"
 
     def to_string(self):
