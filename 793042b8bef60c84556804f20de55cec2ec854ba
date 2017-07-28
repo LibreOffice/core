@@ -45,6 +45,24 @@
       "revId": "793042b8bef60c84556804f20de55cec2ec854ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_c8b0a9e0",
+        "filename": "writerfilter/source/rtftok/rtfdispatchdestination.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-28T08:40:03Z",
+      "side": 1,
+      "message": "As far as I see runProps() jut sends the attributes/sprms, it does not clear them. So best to leave these lines unchanged, I would say.",
+      "parentUuid": "3a461143_62bc3406",
+      "revId": "793042b8bef60c84556804f20de55cec2ec854ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
