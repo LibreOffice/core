@@ -132,6 +132,19 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
+void SfxLokHelper::notifyDialogInvalidation(const OUString& rDialogID)
+{
+    if (SfxLokHelper::getViewsCount() <= 0)
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DIALOG_INVALIDATE, OUStringToOString(rDialogID, RTL_TEXTENCODING_UTF8).getStr());
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 void SfxLokHelper::notifyInvalidation(SfxViewShell* pThisView, const OString& rPayload)
 {
     std::stringstream ss;

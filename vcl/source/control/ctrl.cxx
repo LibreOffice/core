@@ -18,12 +18,14 @@
  */
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
 
 #include <tools/rc.h>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 
@@ -414,6 +416,19 @@ void Control::ApplySettings(vcl::RenderContext& rRenderContext)
 void Control::ImplInitSettings(const bool, const bool)
 {
     ApplySettings(*this);
+}
+
+void Control::LogicInvalidate(const Rectangle* /*pRectangle*/)
+{
+    // Several repaint, resize invalidations are emitted when we are painting,
+    // ignore all of those
+    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
+    {
+        // For now just invalidate the whole dialog
+        Dialog* pParentDlg = GetParentDialog();
+        if (pParentDlg)
+            pParentDlg->LogicInvalidate(nullptr);
+    }
 }
 
 Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const Rectangle& rRect, const OUString& _rStr,

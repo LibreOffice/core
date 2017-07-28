@@ -52,6 +52,10 @@ COMPHELPER_DLLPUBLIC void setPartInInvalidation(bool bPartInInvalidation);
 COMPHELPER_DLLPUBLIC bool isTiledPainting();
 /// Set if we are doing tiled painting.
 COMPHELPER_DLLPUBLIC void setTiledPainting(bool bTiledPainting);
+/// Check if we are painting the dialog.
+COMPHELPER_DLLPUBLIC bool isDialogPainting();
+/// Set if we are painting the dialog.
+COMPHELPER_DLLPUBLIC void setDialogPainting(bool bDialogPainting);
 /// Set if we want no annotations rendering
 COMPHELPER_DLLPUBLIC void setTiledAnnotations(bool bTiledAnnotations);
 /// Check if annotations rendering is turned off
