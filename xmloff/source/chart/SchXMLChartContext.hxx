@@ -137,7 +137,7 @@ public:
     SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport, const OUString& rLocalName,
                         OUString& rTitle,
-                        css::uno::Reference< css::drawing::XShape >& xTitleShape );
+                        css::uno::Reference< css::drawing::XShape > const & xTitleShape );
     virtual ~SchXMLTitleContext() override;
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;

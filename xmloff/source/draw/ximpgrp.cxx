@@ -32,7 +32,7 @@ SdXMLGroupShapeContext::SdXMLGroupShapeContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes,
+    uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {

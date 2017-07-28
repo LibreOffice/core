@@ -262,13 +262,13 @@ public:
     SvXMLShapeContext* CreateGroupChildContext(
         SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes,
+        css::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape = false);
 
     SvXMLShapeContext* CreateFrameChildContext(
         SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes,
+        css::uno::Reference< css::drawing::XShapes > const & rShapes,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xFrameAttrList);
     static SvXMLImportContext* CreateFrameChildContext(
         SvXMLImportContext *pThisContext, sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -277,7 +277,7 @@ public:
     SvXMLShapeContext* Create3DSceneChildContext(
         SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes);
+        css::uno::Reference< css::drawing::XShapes > const & rShapes);
 
     const SvXMLTokenMap& GetGroupShapeElemTokenMap();
     const SvXMLTokenMap& GetFrameShapeElemTokenMap();

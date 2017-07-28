@@ -41,7 +41,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Sequence < css::util::RevisionTag >& rVersions,
         const OUString &rFileName,
-        css::uno::Reference< css::xml::sax::XDocumentHandler > &rHandler );
+        css::uno::Reference< css::xml::sax::XDocumentHandler > const &rHandler );
 
     ErrCode     exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
     void        ExportAutoStyles_() override {}

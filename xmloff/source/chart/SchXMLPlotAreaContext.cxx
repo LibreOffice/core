@@ -752,7 +752,7 @@ SchXMLWallFloorContext::SchXMLWallFloorContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    uno::Reference< chart::XDiagram >& xDiagram,
+    uno::Reference< chart::XDiagram > const & xDiagram,
     ContextType eContextType ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrImportHelper( rImpHelper ),
@@ -801,7 +801,7 @@ SchXMLStockContext::SchXMLStockContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    uno::Reference< chart::XDiagram >& xDiagram,
+    uno::Reference< chart::XDiagram > const & xDiagram,
     ContextType eContextType ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrImportHelper( rImpHelper ),

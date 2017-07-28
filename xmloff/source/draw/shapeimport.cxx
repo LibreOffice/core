@@ -338,7 +338,7 @@ SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes)
+    uno::Reference< drawing::XShapes > const & rShapes)
 {
     SdXMLShapeContext *pContext = nullptr;
 
@@ -413,7 +413,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes,
+    uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 {
     SdXMLShapeContext *pContext = nullptr;
@@ -546,7 +546,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& rAttrList,
-    uno::Reference< drawing::XShapes >& rShapes,
+    uno::Reference< drawing::XShapes > const & rShapes,
     const uno::Reference< xml::sax::XAttributeList>& rFrameAttrList)
 {
     SdXMLShapeContext *pContext = nullptr;
@@ -714,14 +714,14 @@ public:
     sal_Int32                       mnCurrentZ;
     std::shared_ptr<ShapeSortContext> mpParentContext;
 
-    ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, std::shared_ptr<ShapeSortContext> pParentContext );
+    ShapeSortContext( uno::Reference< drawing::XShapes > const & rShapes, std::shared_ptr<ShapeSortContext> pParentContext );
 
     void popGroupAndSort();
 private:
     void moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos );
 };
 
-ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, std::shared_ptr<ShapeSortContext> pParentContext )
+ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes > const & rShapes, std::shared_ptr<ShapeSortContext> pParentContext )
 :   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( std::move(pParentContext) )
 {
 }

@@ -42,7 +42,7 @@ using namespace xmloff::token;
 #define XML_STANDARDFORMAT "StandardFormat"
 
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
-            css::uno::Reference< css::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier)
+            css::uno::Reference< css::util::XNumberFormatsSupplier > const & xTempNumberFormatsSupplier)
     : xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : css::uno::Reference< css::util::XNumberFormats > ()),
     pExport(nullptr),
     sStandardFormat(XML_STANDARDFORMAT),
@@ -54,7 +54,7 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
 }
 
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
-            css::uno::Reference< css::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier,
+            css::uno::Reference< css::util::XNumberFormatsSupplier > const & xTempNumberFormatsSupplier,
             SvXMLExport& rTempExport )
 :   xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : css::uno::Reference< css::util::XNumberFormats > ()),
     pExport(&rTempExport),
