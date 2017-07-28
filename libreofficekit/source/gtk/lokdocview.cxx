@@ -279,6 +279,7 @@ enum
     PASSWORD_REQUIRED,
     COMMENT,
     RULER,
+    DIALOG_INVALIDATE,
 
     LAST_SIGNAL
 };
@@ -1430,7 +1431,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_RULER_UPDATE:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
     case LOK_CALLBACK_DIALOG_INVALIDATE:
-        // TODO: Register the signal with lokdocview and emit it
+        g_signal_emit(pCallback->m_pDocView, doc_view_signals[DIALOG_INVALIDATE], 0, pCallback->m_aPayload.c_str());
         break;
     default:
         g_assert(false);
@@ -3221,6 +3222,21 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
 
     doc_view_signals[RULER] =
         g_signal_new("ruler",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     nullptr, nullptr,
+                     g_cclosure_marshal_generic,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
+
+    /**
+     * LOKDocView::dialog-invalidate:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @pDialogId: The uno command for the dialog (dialog ID)
+     */
+    doc_view_signals[DIALOG_INVALIDATE] =
+        g_signal_new("dialog-invalidate",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,

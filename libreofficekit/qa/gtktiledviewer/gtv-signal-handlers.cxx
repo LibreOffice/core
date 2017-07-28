@@ -290,11 +290,21 @@ void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
     }
 }
 
+static gboolean deleteLokDialog(GtkWidget* pWidget, GdkEvent* /*event*/, gpointer userdata)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(userdata);
+    gtv_application_window_unregister_child_window(window, GTK_WINDOW(pWidget));
+
+    return FALSE;
+}
+
 void openLokDialog( GtkWidget* pSelector, gpointer /*pItem*/ )
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(pSelector));
     gchar* pDialogId = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(pSelector));
     GtkWidget* pDialog = gtv_lok_dialog_new(LOK_DOC_VIEW(window->lokdocview), pDialogId);
+    gtv_application_window_register_child_window(window, GTK_WINDOW(pDialog));
+    g_signal_connect(pDialog, "delete-event", G_CALLBACK(deleteLokDialog), window);
     g_free(pDialogId);
 
     gtk_window_set_resizable(GTK_WINDOW(pDialog), false);
