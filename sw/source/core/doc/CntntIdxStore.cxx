@@ -22,6 +22,7 @@
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <MarkManager.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <fmtanchr.hxx>
@@ -264,6 +265,11 @@ void ContentIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater)
             rUpdater(aNewPos, aEntry.m_nContent);
             SetRightMarkPos(pMark, aEntry.m_bOther, &aNewPos);
         }
+    }
+    if (!m_aBkmkEntries.empty())
+    {   // tdf#105705 sort bookmarks because SaveBkmks special handling of
+        // "bMarkPosEqual" may destroy sort order
+        dynamic_cast<sw::mark::MarkManager*>(pMarkAccess)->sortMarks();
     }
 }
 
