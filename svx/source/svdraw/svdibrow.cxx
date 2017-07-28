@@ -989,7 +989,7 @@ void SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemS
 
                         rItem.GetPresentation(SfxItemPresentation::Nameless,
                                               pPool->GetMetric(nWhich),
-                                              MapUnit::MapMM, aEntry.aValue);
+                                              MapUnit::MapMM, aEntry.aValue, nullptr);
                         if (aEntry.bCanNum)
                         {
                             aEntry.aValue = OUString::number(aEntry.nVal) + ": " + aEntry.aValue;
