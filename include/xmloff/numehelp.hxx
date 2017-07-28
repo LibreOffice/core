@@ -71,8 +71,8 @@ class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
     const OUString msCurrencyAbbreviation;
     XMLNumberFormatSet  aNumberFormats;
 public:
-    XMLNumberFormatAttributesExportHelper(css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier);
-    XMLNumberFormatAttributesExportHelper(css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier,
+    XMLNumberFormatAttributesExportHelper(css::uno::Reference< css::util::XNumberFormatsSupplier > const & xNumberFormatsSupplier);
+    XMLNumberFormatAttributesExportHelper(css::uno::Reference< css::util::XNumberFormatsSupplier > const & xNumberFormatsSupplier,
                                             SvXMLExport& rExport );
     ~XMLNumberFormatAttributesExportHelper();
 

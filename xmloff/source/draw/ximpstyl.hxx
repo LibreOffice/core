@@ -105,7 +105,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes);
+        css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLMasterPageContext() override;
 
     virtual SvXMLImportContext *CreateChildContext(

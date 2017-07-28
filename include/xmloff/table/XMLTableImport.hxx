@@ -47,7 +47,7 @@ public:
     virtual ~XMLTableImport() override;
 
     SvXMLImportContext* CreateTableContext( sal_uInt16 nPrfx, const OUString& rLName,
-                                            css::uno::Reference< css::table::XColumnRowRange >& xColumnRowRange );
+                                            css::uno::Reference< css::table::XColumnRowRange > const & xColumnRowRange );
 
     SvXMLStyleContext* CreateTableTemplateContext( sal_uInt16 nPrfx, const OUString& rLName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 

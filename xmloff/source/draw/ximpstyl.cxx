@@ -738,7 +738,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes)
+    uno::Reference< drawing::XShapes > const & rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLName, xAttrList, rShapes )
 {
     const bool bHandoutMaster = IsXMLToken( rLName, XML_HANDOUT_MASTER );

@@ -189,7 +189,7 @@ public:
                             SvXMLImport& rImport,
                             sal_uInt16 nPrefix,
                             const OUString& rLocalName,
-                            css::uno::Reference< css::chart::XDiagram >& xDiagram,
+                            css::uno::Reference< css::chart::XDiagram > const & xDiagram,
                             ContextType eContextType );
     virtual ~SchXMLWallFloorContext() override;
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -215,7 +215,7 @@ public:
                         SvXMLImport& rImport,
                         sal_uInt16 nPrefix,
                         const OUString& rLocalName,
-                        css::uno::Reference< css::chart::XDiagram >& xDiagram,
+                        css::uno::Reference< css::chart::XDiagram > const & xDiagram,
                         ContextType eContextType );
     virtual ~SchXMLStockContext() override;
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;

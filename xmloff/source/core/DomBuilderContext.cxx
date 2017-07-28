@@ -74,7 +74,7 @@ DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
 DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
                                       sal_uInt16 nPrefix,
                                       const OUString& rLocalName,
-                                      Reference<XNode>& xParent ) :
+                                      Reference<XNode> const & xParent ) :
     SvXMLImportContext( rImport, nPrefix, rLocalName ),
     mxNode( lcl_createElement( rImport, nPrefix, rLocalName, xParent ) )
 {

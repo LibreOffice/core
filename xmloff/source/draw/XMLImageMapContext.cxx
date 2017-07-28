@@ -548,7 +548,7 @@ XMLImageMapContext::XMLImageMapContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    Reference<XPropertySet> & rPropertySet) :
+    Reference<XPropertySet> const & rPropertySet) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         sImageMap("ImageMap"),
         xPropertySet(rPropertySet)
