@@ -710,7 +710,7 @@ SvxAlternativeSpelling SvxGetAltSpelling(
 }
 
 
-SvxDicListChgClamp::SvxDicListChgClamp( uno::Reference< XSearchableDictionaryList >  &rxDicList ) :
+SvxDicListChgClamp::SvxDicListChgClamp( uno::Reference< XSearchableDictionaryList > const &rxDicList ) :
     xDicList    ( rxDicList )
 {
     if (xDicList.is())

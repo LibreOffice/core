@@ -896,13 +896,13 @@ void SvxNumRule::UnLinkGraphics()
     }
 }
 
-SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule) :
+SvxNumBulletItem::SvxNumBulletItem(SvxNumRule const & rRule) :
     SfxPoolItem(SID_ATTR_NUMBERING_RULE),
     pNumRule(new SvxNumRule(rRule))
 {
 }
 
-SvxNumBulletItem::SvxNumBulletItem(SvxNumRule& rRule, sal_uInt16 _nWhich ) :
+SvxNumBulletItem::SvxNumBulletItem(SvxNumRule const & rRule, sal_uInt16 _nWhich ) :
     SfxPoolItem(_nWhich),
     pNumRule(new SvxNumRule(rRule))
 {

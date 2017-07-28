@@ -1207,7 +1207,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     return Pair( nRealDiffX, nRealDiffY );
 }
 
-bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin )
+bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin )
 {
     bool bDone = false;
 
