@@ -95,7 +95,7 @@ class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
     VclPtr<SvxSearchDialog> dialog;
 public:
     SvxSearchDialogWrapper( vcl::Window*pParent, sal_uInt16 nId,
-                            SfxBindings* pBindings, SfxChildWinInfo* pInfo );
+                            SfxBindings* pBindings, SfxChildWinInfo const * pInfo );
 
     virtual ~SvxSearchDialogWrapper () override;
     SvxSearchDialog *getDialog () { return dialog;}

@@ -114,7 +114,7 @@ class FmFieldWinMgr : public SfxChildWindow
 {
 public:
     FmFieldWinMgr(vcl::Window *pParent, sal_uInt16 nId,
-        SfxBindings *pBindings, SfxChildWinInfo *pInfo);
+        SfxBindings *pBindings, SfxChildWinInfo const *pInfo);
     SFX_DECL_CHILDWINDOW(FmFieldWinMgr);
 };
 

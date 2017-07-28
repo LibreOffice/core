@@ -105,12 +105,12 @@ class Imp3DDepthRemapper
     std::vector< ImpRemap3DDepth > maVector;
 
 public:
-    explicit Imp3DDepthRemapper(E3dScene& rScene);
+    explicit Imp3DDepthRemapper(E3dScene const & rScene);
 
     sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;
 };
 
-Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene& rScene)
+Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene const & rScene)
 {
     // only called when rScene.GetSubList() and nObjCount > 1L
     SdrObjList* pList = rScene.GetSubList();
@@ -243,7 +243,7 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
 
         if(nObjCount > 1)
         {
-            const_cast<E3dScene*>(this)->mp3DDepthRemapper = new Imp3DDepthRemapper(const_cast<E3dScene&>(*this));
+            const_cast<E3dScene*>(this)->mp3DDepthRemapper = new Imp3DDepthRemapper(*this);
         }
     }
 

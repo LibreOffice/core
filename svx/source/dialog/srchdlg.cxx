@@ -2336,7 +2336,7 @@ SFX_IMPL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper, SID_SEARCH_DLG);
 
 SvxSearchDialogWrapper::SvxSearchDialogWrapper( vcl::Window* _pParent, sal_uInt16 nId,
                                                 SfxBindings* pBindings,
-                                                SfxChildWinInfo* pInfo )
+                                                SfxChildWinInfo const * pInfo )
     : SfxChildWindow( _pParent, nId )
     , dialog (VclPtr<SvxSearchDialog>::Create(_pParent, this, *pBindings))
 {

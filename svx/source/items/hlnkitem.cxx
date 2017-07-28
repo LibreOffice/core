@@ -206,7 +206,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
 
 SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, const OUString& rName, const OUString& rURL,
                                     const OUString& rTarget, const OUString& rIntName, SvxLinkInsertMode eTyp,
-                                    HyperDialogEvent nEvents, SvxMacroTableDtor *pMacroTbl ):
+                                    HyperDialogEvent nEvents, SvxMacroTableDtor const *pMacroTbl ):
     SfxPoolItem (_nWhich),
     sName       (rName),
     sURL        (rURL),

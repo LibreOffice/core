@@ -39,7 +39,7 @@ public:
         const OUString& rFileName,
         const css::uno::Reference< css::xml::sax::XDocumentHandler > & xHandler,
         const css::uno::Reference< css::container::XNameContainer > & xTable,
-        css::uno::Reference< css::document::XGraphicObjectResolver >& xGrfResolver);
+        css::uno::Reference< css::document::XGraphicObjectResolver > const & xGrfResolver);
 
     virtual ~SvxXMLXTableExportComponent() override;
 

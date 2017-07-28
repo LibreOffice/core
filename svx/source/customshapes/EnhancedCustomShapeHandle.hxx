@@ -40,7 +40,7 @@ class EnhancedCustomShapeHandle : public cppu::WeakImplHelper
 
 public:
 
-            EnhancedCustomShapeHandle( css::uno::Reference< css::drawing::XShape >& xCustomShape, sal_uInt32 nIndex );
+            EnhancedCustomShapeHandle( css::uno::Reference< css::drawing::XShape > const & xCustomShape, sal_uInt32 nIndex );
     virtual ~EnhancedCustomShapeHandle() override;
 
     // XInterface

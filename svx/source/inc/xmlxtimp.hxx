@@ -36,7 +36,7 @@ public:
     SvxXMLXTableImport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::container::XNameContainer > & rTable,
-        css::uno::Reference< css::document::XGraphicObjectResolver >& rGrfResolver);
+        css::uno::Reference< css::document::XGraphicObjectResolver > const & rGrfResolver);
 
     virtual ~SvxXMLXTableImport() throw () override;
 

@@ -29,8 +29,8 @@ protected:
 public:
     OverlayHandle(const basegfx::B2DPoint& rBasePos,
                   const basegfx::B2DSize& rSize,
-                  Color& rStrokeColor,
-                  Color& rFillColor);
+                  Color const & rStrokeColor,
+                  Color const & rFillColor);
 
     virtual ~OverlayHandle() override;
 };

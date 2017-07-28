@@ -149,7 +149,7 @@ class FindTextFieldControl : public ComboBox
 {
 public:
     FindTextFieldControl( vcl::Window* pParent, WinBits nStyle,
-        css::uno::Reference< css::frame::XFrame >& xFrame,
+        css::uno::Reference< css::frame::XFrame > const & xFrame,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     virtual bool PreNotify( NotifyEvent& rNEvt ) override;
@@ -164,7 +164,7 @@ private:
 };
 
 FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent, WinBits nStyle,
-    css::uno::Reference< css::frame::XFrame >& xFrame,
+    css::uno::Reference< css::frame::XFrame > const & xFrame,
     const css::uno::Reference< css::uno::XComponentContext >& xContext) :
     ComboBox( pParent, nStyle ),
     m_xFrame(xFrame),
