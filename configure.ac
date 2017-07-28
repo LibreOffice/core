@@ -2015,7 +2015,7 @@ AC_ARG_WITH(export-validation,
     AS_HELP_STRING([--without-export-validation],
         [Disable validating OOXML and ODF files as exported from in-tree tests.
          Use this option e.g. if your system only provides Java 5.]),
-,with_export_validation=yes)
+,with_export_validation=auto)
 
 AC_ARG_WITH(bffvalidator,
     AS_HELP_STRING([--with-bffvalidator=<absolute path to BFFValidator>],
@@ -7038,9 +7038,19 @@ dnl ===================================================================
 dnl Export file validation
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable export file validation])
-if test "$with_export_validation" = yes; then
+if test "$with_export_validation" != "no"; then
     if test -z "$ENABLE_JAVA"; then
-        AC_MSG_RESULT([no, as Java is disabled])
+        if test "$with_export_validation" = "yes"; then
+            AC_MSG_ERROR([requested, but Java is disabled])
+        else
+            AC_MSG_RESULT([no, as Java is disabled])
+        fi
+    elif test "$_jdk_ver" -lt 10800; then
+        if test "$with_export_validation" = "yes"; then
+            AC_MSG_ERROR([requested, but Java is too old, need Java 8])
+        else
+            AC_MSG_RESULT([no, as Java is too old, need Java 8])
+        fi
     else
         AC_MSG_RESULT([yes])
         AC_DEFINE(HAVE_EXPORT_VALIDATION)
@@ -7112,7 +7122,7 @@ AC_MSG_CHECKING([for Microsoft Binary File Format Validator])
 if test "$with_bffvalidator" != "no"; then
     AC_DEFINE(HAVE_BFFVALIDATOR)
 
-    if test "$with_export_validation" != "yes"; then
+    if test "$with_export_validation" = "no"; then
         AC_MSG_ERROR([Please enable export validation (-with-export-validation)!])
     fi
 
