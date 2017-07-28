@@ -18,6 +18,8 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
+
+#include <vcl/scheduler.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
 #include <sfx2/objsh.hxx>
@@ -2161,12 +2163,10 @@ void DesktopLOKTest::testDialogsWriter()
     sal_Int32 nStride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nCanvasWidth);
     std::vector<unsigned char> aBuffer(nStride * nCanvasHeight);
 
-    pDocument->pClass->paintDialog(pDocument, aBuffer.data(), nCanvasWidth, nCanvasHeight);
+    pDocument->pClass->paintDialog(pDocument, ".uno:WordCountDialog", aBuffer.data(), &nCanvasWidth, &nCanvasHeight);
 
     cairo_surface_t* pSurface = cairo_image_surface_create_for_data(aBuffer.data(), CAIRO_FORMAT_ARGB32, nCanvasWidth, nCanvasHeight, nStride);
     cairo_surface_write_to_png(pSurface, "/tmp/dialog.png");
-
-    CPPUNIT_ASSERT(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
