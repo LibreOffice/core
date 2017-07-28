@@ -101,7 +101,9 @@ namespace sw {
 
             // make names
             OUString getUniqueMarkName(const OUString& rName) const;
+        public: // FIXME should be private, needs refactor
             void sortMarks();
+        private:
             void sortSubsetMarks();
 
             // container for all marks
