@@ -436,6 +436,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_COMMENT";
     case LOK_CALLBACK_RULER_UPDATE:
         return "LOK_CALLBACK_RULER_UPDATE";
+    case LOK_CALLBACK_DIALOG_INVALIDATE:
+        return "LOK_CALLBACK_DIALOG_INVALIDATE";
     }
     g_assert(false);
     return nullptr;
@@ -1427,6 +1429,8 @@ callback (gpointer pData)
         break;
     case LOK_CALLBACK_RULER_UPDATE:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[RULER], 0, pCallback->m_aPayload.c_str());
+    case LOK_CALLBACK_DIALOG_INVALIDATE:
+        // TODO: Register the signal with lokdocview and emit it
         break;
     default:
         g_assert(false);
