@@ -44,7 +44,7 @@ private:
 
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
-        if (getTestName().indexOf("SkipImage") != -1)
+        if (getTestName().indexOf("SkipImages") != -1)
             setFilterOptions("SkipImages");
         else
             setFilterOptions("");
@@ -138,7 +138,7 @@ DECLARE_HTMLEXPORT_TEST(testExportOfImages, "textAndImage.docx")
     assertXPath(pDoc, "/html/body/p/img", 1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImageEnabled, "textAndImage.docx")
+DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImagesEnabled, "textAndImage.docx")
 {
     htmlDocPtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
@@ -147,7 +147,7 @@ DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImageEnabled, "textAndImage.do
     assertXPath(pDoc, "/html/body/p/img", 0);
 }
 
-DECLARE_HTMLEXPORT_TEST(testSkipImageEmbedded, "skipimage-embedded.doc")
+DECLARE_HTMLEXPORT_TEST(testSkipImagesEmbedded, "skipimage-embedded.doc")
 {
     // Embedded spreadsheet was exported as image, so content was lost. Make
     // sure it's exported as HTML instead.
@@ -162,9 +162,9 @@ DECLARE_HTMLEXPORT_TEST(testSkipImageEmbedded, "skipimage-embedded.doc")
     assertXPath(pDoc, "//span/table", 1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testSkipImageEmbeddedDocument, "skipimage-embedded-document.docx")
+DECLARE_HTMLEXPORT_TEST(testSkipImagesEmbeddedDocument, "skipimage-embedded-document.docx")
 {
-    // Similar to testSkipImageEmbedded, but with an embedded Writer object,
+    // Similar to testSkipImagesEmbedded, but with an embedded Writer object,
     // not a Calc one, and this time OOXML, not WW8.
     htmlDocPtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
