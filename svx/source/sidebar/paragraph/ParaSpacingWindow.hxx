@@ -45,7 +45,7 @@ public:
     void SetUnit(FieldUnit eUnit);
 
 protected:
-    ParaULSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+    ParaULSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
     VclPtr<SvxRelativeField> m_pAboveSpacing;
     VclPtr<SvxRelativeField> m_pBelowSpacing;
     VclPtr<VclHBox> m_pAboveContainer;
@@ -59,13 +59,13 @@ protected:
 class ParaAboveSpacingWindow : public ParaULSpacingWindow
 {
 public:
-    explicit ParaAboveSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+    explicit ParaAboveSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
 };
 
 class ParaBelowSpacingWindow : public ParaULSpacingWindow
 {
 public:
-    explicit ParaBelowSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+    explicit ParaBelowSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
 };
 
 class ParaLRSpacingWindow : public VclVBox,
@@ -80,7 +80,7 @@ public:
     void SetContext(const vcl::EnumContext& eContext);
 
 protected:
-    ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+    ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
 
     VclPtr<SvxRelativeField> m_pBeforeSpacing;
     VclPtr<SvxRelativeField> m_pAfterSpacing;
@@ -99,19 +99,19 @@ protected:
 class ParaLeftSpacingWindow : public ParaLRSpacingWindow
 {
 public:
-    explicit ParaLeftSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+    explicit ParaLeftSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
 };
 
 class ParaRightSpacingWindow : public ParaLRSpacingWindow
 {
 public:
-    explicit ParaRightSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+    explicit ParaRightSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
 };
 
 class ParaFirstLineSpacingWindow : public ParaLRSpacingWindow
 {
 public:
-    explicit ParaFirstLineSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame);
+    explicit ParaFirstLineSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame);
 };
 
 }

@@ -34,7 +34,7 @@ using namespace svx;
 
 // ParaULSpacingWindow
 
-ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame)
     : VclVBox(pParent)
     , m_eUnit(MapUnit::MapTwip)
 {
@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(ParaULSpacingWindow, ModifySpacingHdl, Edit&, void)
 
 // ParaAboveSpacingWindow
 
-ParaAboveSpacingWindow::ParaAboveSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+ParaAboveSpacingWindow::ParaAboveSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame)
     : ParaULSpacingWindow(pParent, xFrame)
 {
     m_pAboveContainer->Show();
@@ -116,7 +116,7 @@ ParaAboveSpacingWindow::ParaAboveSpacingWindow(vcl::Window* pParent, css::uno::R
 
 // ParaBelowSpacingWindow
 
-ParaBelowSpacingWindow::ParaBelowSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+ParaBelowSpacingWindow::ParaBelowSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame)
     : ParaULSpacingWindow(pParent, xFrame)
 {
     m_pAboveContainer->Hide();
@@ -125,7 +125,7 @@ ParaBelowSpacingWindow::ParaBelowSpacingWindow(vcl::Window* pParent, css::uno::R
 
 // ParaLRSpacingWindow
 
-ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame)
     : VclVBox(pParent)
     , m_eUnit(MapUnit::MapTwip)
 {
@@ -294,7 +294,7 @@ IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, Edit&, void)
 
 // ParaLeftSpacingWindow
 
-ParaLeftSpacingWindow::ParaLeftSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+ParaLeftSpacingWindow::ParaLeftSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame)
     : ParaLRSpacingWindow(pParent, xFrame)
 {
     m_pBeforeContainer->Show();
@@ -304,7 +304,7 @@ ParaLeftSpacingWindow::ParaLeftSpacingWindow(vcl::Window* pParent, css::uno::Ref
 
 // ParaRightSpacingWindow
 
-ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame)
     : ParaLRSpacingWindow(pParent, xFrame)
 {
     m_pBeforeContainer->Hide();
@@ -314,7 +314,7 @@ ParaRightSpacingWindow::ParaRightSpacingWindow(vcl::Window* pParent, css::uno::R
 
 // ParaFirstLineSpacingWindow
 
-ParaFirstLineSpacingWindow::ParaFirstLineSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame>& xFrame)
+ParaFirstLineSpacingWindow::ParaFirstLineSpacingWindow(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> const & xFrame)
     : ParaLRSpacingWindow(pParent, xFrame)
 {
     m_pBeforeContainer->Hide();

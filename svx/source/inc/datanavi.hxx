@@ -351,7 +351,7 @@ namespace svxform
         virtual Size                GetOptimalSize() const override;
 
     public:
-        DataNavigatorWindow( vcl::Window* pParent, SfxBindings* pBindings );
+        DataNavigatorWindow( vcl::Window* pParent, SfxBindings const * pBindings );
         virtual ~DataNavigatorWindow() override;
         virtual void dispose() override;
 

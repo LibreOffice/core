@@ -52,7 +52,7 @@ class ImplConnectMarkerOverlay
     const SdrObject&                                mrObject;
 
 public:
-    ImplConnectMarkerOverlay(const SdrCreateView& rView, SdrObject& rObject);
+    ImplConnectMarkerOverlay(const SdrCreateView& rView, SdrObject const & rObject);
 
     // The OverlayObjects are cleared using the destructor of OverlayObjectList.
     // That destructor calls clear() at the list which removes all objects from the
@@ -61,7 +61,7 @@ public:
     const SdrObject& GetTargetObject() const { return mrObject; }
 };
 
-ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, SdrObject& rObject)
+ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, SdrObject const & rObject)
 :   mrObject(rObject)
 {
     basegfx::B2DPolyPolygon aB2DPolyPolygon(rObject.TakeXorPoly());
