@@ -120,7 +120,7 @@ bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
     return true;
 }
 
-void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell const * pOtherView, int nType, const OString& rKey, const OString& rPayload)
+void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload)
 {
     OString aPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView(pThisView)) +
                        "\", \"part\": \"" + OString::number(pThisView->getPart()) +
@@ -144,7 +144,7 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
     }
 }
 
-void SfxLokHelper::notifyInvalidation(SfxViewShell const * pThisView, const OString& rPayload)
+void SfxLokHelper::notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload)
 {
     OStringBuffer aBuf;
     aBuf.append(rPayload);
