@@ -36,9 +36,7 @@ using namespace ucb_cmdenv;
 // UcbCommandEnvironment Implementation.
 
 
-UcbCommandEnvironment::UcbCommandEnvironment(
-    const uno::Reference< lang::XMultiServiceFactory >& /*xSMgr*/ )
-//: m_xSMgr( xSMgr )
+UcbCommandEnvironment::UcbCommandEnvironment()
 {
 }
 
@@ -129,10 +127,10 @@ UcbCommandEnvironment::getProgressHandler()
 /// @throws uno::Exception
 static uno::Reference< uno::XInterface > SAL_CALL
 UcbCommandEnvironment_CreateInstance(
-    const uno::Reference< lang::XMultiServiceFactory> & rSMgr )
+    const uno::Reference< lang::XMultiServiceFactory> & /*rSMgr*/ )
 {
     lang::XServiceInfo * pX = static_cast< lang::XServiceInfo * >(
-        new UcbCommandEnvironment( rSMgr ) );
+        new UcbCommandEnvironment );
     return uno::Reference< uno::XInterface >::query( pX );
 }
 

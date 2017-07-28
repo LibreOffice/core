@@ -93,8 +93,7 @@ struct StaticFormattedStringInfo : public rtl::StaticAggregate< uno::Reference< 
 namespace chart
 {
 
-FormattedString::FormattedString(
-        uno::Reference< uno::XComponentContext > const & /* xContext */ ) :
+FormattedString::FormattedString() :
         ::property::OPropertySet( m_aMutex ),
     m_aString(),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
@@ -235,10 +234,10 @@ css::uno::Sequence< OUString > SAL_CALL FormattedString::getSupportedServiceName
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart_FormattedString_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_FormattedString_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::FormattedString(context));
+    return cppu::acquire(new ::chart::FormattedString);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

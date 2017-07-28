@@ -144,13 +144,10 @@ public:
     static OUString createParticleForSeries( sal_Int32 nDiagramIndex, sal_Int32 nCooSysIndex
             , sal_Int32 nChartTypeIndex, sal_Int32 nSeriesIndex );
 
-    static OUString createParticleForLegend(
-          const css::uno::Reference< css::chart2::XLegend >& xLegend
-        , ChartModel& rModel );
+    static OUString createParticleForLegend( ChartModel& rModel );
 
     static OUString createParticleForLegend(
-          const css::uno::Reference< css::chart2::XLegend >& xLegend
-        , const css::uno::Reference< css::frame::XModel >& xChartModel );
+        const css::uno::Reference< css::frame::XModel >& xChartModel );
 
     static OUString addChildParticle( const OUString& rParticle, const OUString& rChildParticle );
     static OUString createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex );

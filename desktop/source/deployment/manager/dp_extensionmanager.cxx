@@ -280,8 +280,7 @@ void ExtensionManager::addExtensionsToMap(
  */
 std::list<Reference<css::deployment::XPackage> >
     ExtensionManager::getExtensionsWithSameId(
-        OUString const & identifier, OUString const & fileName,
-        Reference< ucb::XCommandEnvironment> const & /*xCmdEnv*/)
+        OUString const & identifier, OUString const & fileName)
 
 {
     std::list<Reference<css::deployment::XPackage> > extensionList;
@@ -309,13 +308,12 @@ uno::Sequence<Reference<css::deployment::XPackage> >
 ExtensionManager::getExtensionsWithSameIdentifier(
         OUString const & identifier,
         OUString const & fileName,
-        Reference< ucb::XCommandEnvironment> const & xCmdEnv )
+        Reference< ucb::XCommandEnvironment> const & /*xCmdEnv*/ )
 {
     try
     {
         std::list<Reference<css::deployment::XPackage> > listExtensions =
-            getExtensionsWithSameId(
-                identifier, fileName, xCmdEnv);
+            getExtensionsWithSameId(identifier, fileName);
         bool bHasExtension = false;
 
         //throw an IllegalArgumentException if there is no extension at all.

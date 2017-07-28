@@ -130,9 +130,7 @@ private:
     css::uno::Reference<css::sdbc::XRow>
         getPropertyValues(
                 const css::uno::Sequence<
-                css::beans::Property>& seqProp,
-                const css::uno::Reference<
-                css::ucb::XCommandEnvironment >& Environment
+                css::beans::Property>& seqProp
             );
 
     css::uno::Sequence<css::uno::Any>

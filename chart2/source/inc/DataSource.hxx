@@ -36,7 +36,7 @@ class DataSource : public
         css::chart2::data::XDataSink >
 {
 public:
-    explicit DataSource( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit DataSource();
     explicit DataSource(
         const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rSequences );
 

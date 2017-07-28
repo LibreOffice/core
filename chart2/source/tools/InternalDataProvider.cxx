@@ -303,7 +303,7 @@ private:
 
 } // anonymous namespace
 
-InternalDataProvider::InternalDataProvider( const Reference< uno::XComponentContext > & /*_xContext*/)
+InternalDataProvider::InternalDataProvider()
     : m_bDataInColumns( true )
 {}
 
@@ -1520,10 +1520,10 @@ css::uno::Sequence< OUString > SAL_CALL InternalDataProvider::getSupportedServic
 } //  namespace chart
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
-com_sun_star_comp_chart_InternalDataProvider_get_implementation(css::uno::XComponentContext *context,
+com_sun_star_comp_chart_InternalDataProvider_get_implementation(css::uno::XComponentContext *,
         css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ::chart::InternalDataProvider(context));
+    return cppu::acquire(new ::chart::InternalDataProvider);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

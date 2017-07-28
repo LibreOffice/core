@@ -268,7 +268,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper 
                 //check whether the legend was hit but not selected (e.g. because it has no filling):
                 if( bBackGroundHit || m_aSelectedOID.getObjectCID() == aDiagramCID )
                 {
-                    OUString aLegendCID( ObjectIdentifier::createClassifiedIdentifierForParticle( ObjectIdentifier::createParticleForLegend(nullptr,nullptr) ) );//@todo read CID from model
+                    OUString aLegendCID( ObjectIdentifier::createClassifiedIdentifierForParticle( ObjectIdentifier::createParticleForLegend(nullptr) ) );//@todo read CID from model
                     SdrObject* pLegend = pDrawViewWrapper->getNamedSdrObject( aLegendCID );
                     if( pLegend )
                     {

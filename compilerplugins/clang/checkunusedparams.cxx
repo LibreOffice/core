@@ -58,6 +58,9 @@ void CheckUnusedParams::run()
     // leave this alone for now
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/libreofficekit/"))
          return;
+    // this has a certan pattern to it's code which appears to include lots of unused params
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/xmloff/"))
+         return;
 
     m_phase = PluginPhase::FindAddressOf;
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
@@ -89,6 +92,12 @@ static int noFieldsInRecord(RecordType const * recordType) {
 }
 static bool startswith(const std::string& rStr, const char* pSubStr) {
     return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
+}
+static bool endswith(const std::string& rStr, const char* pSubStr) {
+    auto len = strlen(pSubStr);
+    if (len > rStr.size())
+        return false;
+    return rStr.compare(rStr.size() - len, rStr.size(), pSubStr) == 0;
 }
 
 bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
@@ -296,26 +305,31 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
     // bool marker parameter
     if (fqn == "SvxIconReplacementDialog::SvxIconReplacementDialog")
         return true;
-    // callback
-    if (fqn == "basctl::SIDEModel_createInstance")
+    // used as pointer to fn
+    if (endswith(fqn, "_createInstance"))
         return true;
     // callback
     if (startswith(fqn, "SbRtl_"))
         return true;
     // takes pointer to fn
     if (fqn == "migration::BasicMigration_create" || fqn == "migration::WordbookMigration_create"
-        || fqn == "FontIdentificator_createInstance" || fqn == "vcl::DragSource_createInstance"
-        || fqn == "vcl::DropTarget_createInstance" || fqn == "vcl::FontIdentificator_createInstance"
-        || fqn == "drawinglayer::unorenderer::XPrimitive2DRenderer_createInstance")
+        || fqn == "comp_CBlankNode::_create" || fqn == "comp_CURI::_create"
+        || fqn == "comp_CLiteral::_create" || fqn == "CDocumentBuilder::_getInstance"
+        || fqn == "DOM::CDocumentBuilder::_getInstance"
+        || fqn == "xml_security::serial_number_adapter::create"
+        || fqn == "desktop::splash::create" || fqn == "ScannerManager_CreateInstance"
+        || fqn == "formula::FormulaOpCodeMapperObj::create")
          return true;
     // TODO
     if (fqn == "FontSubsetInfo::CreateFontSubsetFromType1")
          return true;
     // used in template magic
-    if (fqn == "MtfRenderer::MtfRenderer")
+    if (fqn == "MtfRenderer::MtfRenderer" || fqn == "shell::sessioninstall::SyncDbusSessionHelper::SyncDbusSessionHelper"
+        || fqn == "dp_gui::LicenseDialog::LicenseDialog")
          return true;
     // FIXME
-    if (fqn == "GtkSalDisplay::filterGdkEvent")
+    if (fqn == "GtkSalDisplay::filterGdkEvent" || fqn == "SvXMLEmbeddedObjectHelper::ImplReadObject"
+        || "chart::CachedDataSequence::CachedDataSequence")
          return true;
 
     // ignore the LINK macros from include/tools/link.hxx
@@ -324,8 +338,6 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
 
     for( auto it = decl->param_begin(); it != decl->param_end(); ++it) {
         auto param = *it;
-        if (fqn.find("fillShapeProperties") != std::string::npos)
-            param->dump();
         if (param->hasAttr<UnusedAttr>())
             continue;
         if (!param->getName().empty())
@@ -355,14 +367,18 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
                 continue;
         }
         report( DiagnosticsEngine::Warning,
-                "unused param %0 in %1", decl->getLocation())
-                << decl->getSourceRange()
+                "unused param %0 in %1", param->getLocStart())
+                << param->getSourceRange()
                 << param->getName()
                 << fqn;
         if (canon != decl)
+        {
+            unsigned idx = param->getFunctionScopeIndex();
+            const ParmVarDecl* pOther = canon->getParamDecl(idx);
             report( DiagnosticsEngine::Note, "declaration is here",
-                    canon->getLocation())
-                    << canon->getSourceRange();
+                    pOther->getLocStart())
+                    << pOther->getSourceRange();
+        }
     }
     return true;
 }

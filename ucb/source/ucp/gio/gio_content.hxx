@@ -112,8 +112,7 @@ private:
             const css::uno::Reference<
             css::ucb::XCommandEnvironment >& xEnv );
 
-    bool feedSink( const css::uno::Reference< css::uno::XInterface>& aSink,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+    bool feedSink( const css::uno::Reference< css::uno::XInterface>& aSink );
 
     bool exchangeIdentity(const css::uno::Reference< css::ucb::XContentIdentifier >&  xNewId);
 

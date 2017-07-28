@@ -54,7 +54,7 @@ class Axis :
     public ::property::OPropertySet
 {
 public:
-    explicit Axis( css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    explicit Axis();
     virtual ~Axis() override;
 
     /// XServiceInfo declarations
