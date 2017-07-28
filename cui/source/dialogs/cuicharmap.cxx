@@ -670,10 +670,9 @@ void SvxCharacterMap::setCharName(char decimal[])
 {
     int nDecimalValue = std::stoi(decimal);
     char buffer[100];
-    UErrorCode errorCode;
 
     /* get the character name */
-    errorCode=U_ZERO_ERROR;
+    UErrorCode errorCode = U_ZERO_ERROR;
     u_charName((UChar32)nDecimalValue, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
     m_pCharName->SetText(OUString::createFromAscii(buffer));
 }
