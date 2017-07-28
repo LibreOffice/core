@@ -18,6 +18,8 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
+
+#include <vcl/scheduler.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
 #include <sfx2/objsh.hxx>

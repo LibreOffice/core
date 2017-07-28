@@ -50,6 +50,7 @@
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <vcl/virdev.hxx>
 #include <salframe.hxx>
 
 #include <iostream>
@@ -862,6 +863,17 @@ bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
 {
     // default cannot select anything (which is okay, return true)
     return true;
+}
+
+void Dialog::paintDialog(VirtualDevice& rDevice)
+{
+    setDeferredProperties();
+    ImplAdjustNWFSizes();
+    Show();
+    ToTop();
+    ensureRepaint();
+
+    PaintToDevice(&rDevice, Point(0, 0), Size());
 }
 
 void Dialog::ensureRepaint()
