@@ -130,6 +130,10 @@ void GraphicExportDialog::setSourceDocument( const Reference<XComponent>& xDocum
         {
             aConfigPath = "Office.Draw/Layout/Other/MeasureUnit";
         }
+        else if ( xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument") )
+        {
+            aConfigPath = "Office.Calc/Layout/Other/MeasureUnit";
+        }
         else if ( xServiceInfo->supportsService("com.sun.star.text.TextDocument") || xServiceInfo->supportsService("com.sun.star.text.WebDocument") )
         {
             aConfigPath = "Office.Writer/Layout/Other/MeasureUnit";
