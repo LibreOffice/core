@@ -23,18 +23,6 @@
 #include <comphelper/processfactory.hxx>
 
 IntlWrapper::IntlWrapper(
-            const css::uno::Reference< css::uno::XComponentContext > & rxContext,
-            const LanguageTag& rLanguageTag )
-        :
-        maLanguageTag( rLanguageTag ),
-        m_xContext( rxContext ),
-        pLocaleData( nullptr ),
-        pCollator( nullptr ),
-        pCaseCollator( nullptr )
-{
-}
-
-IntlWrapper::IntlWrapper(
             const LanguageTag& rLanguageTag )
         :
         maLanguageTag( rLanguageTag ),

@@ -46,7 +46,7 @@ public:
     virtual bool GetPresentation(SfxItemPresentation,
                                  MapUnit, MapUnit,
                                  OUString & rText,
-                                 const IntlWrapper * = nullptr) const override;
+                                 const IntlWrapper&) const override;
 
     virtual bool QueryValue(css::uno::Any& rVal,
                             sal_uInt8 nMemberId = 0) const override;

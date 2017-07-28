@@ -38,7 +38,7 @@ bool SvxCharHiddenItem::GetPresentation
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
     OUString&           rText,
-    const IntlWrapper * /*pIntl*/
+    const IntlWrapper & /*rIntl*/
 )   const
 {
     const char* pId = RID_SVXITEMS_CHARHIDDEN_FALSE;

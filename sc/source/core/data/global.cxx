@@ -97,7 +97,6 @@ CollatorWrapper* ScGlobal::pCaseCollator = nullptr;
 ::utl::TransliterationWrapper* ScGlobal::pTransliteration = nullptr;
 ::utl::TransliterationWrapper* ScGlobal::pCaseTransliteration = nullptr;
 css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix = nullptr;
-IntlWrapper*    ScGlobal::pScIntlWrapper = nullptr;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 OUString*       ScGlobal::pEmptyOUString = nullptr;
 OUString*       ScGlobal::pStrClipDocName = nullptr;
@@ -576,7 +575,6 @@ void ScGlobal::Clear()
     pLocaleData = nullptr;
     DELETEZ(pSysLocale);
     DELETEZ(pLocale);
-    DELETEZ(pScIntlWrapper);
     DELETEZ(pStrClipDocName);
 
     DELETEZ(pUnitConverter);
@@ -1038,14 +1036,6 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
         pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
     }
     return pCaseTransliteration;
-}
-IntlWrapper*         ScGlobal::GetScIntlWrapper()
-{
-    if ( !pScIntlWrapper )
-    {
-        pScIntlWrapper = new IntlWrapper( LanguageTag( *GetLocale()) );
-    }
-    return pScIntlWrapper;
 }
 css::lang::Locale*     ScGlobal::GetLocale()
 {

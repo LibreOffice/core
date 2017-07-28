@@ -66,7 +66,7 @@ SfxPoolItem* SvxRotateModeItem::Create( SvStream& rStream, sal_uInt16 ) const
 bool SvxRotateModeItem::GetPresentation(
                                 SfxItemPresentation ePres,
                                 MapUnit /*eCoreUnit*/, MapUnit /*ePresUnit*/,
-                                OUString& rText, const IntlWrapper * )  const
+                                OUString& rText, const IntlWrapper& )  const
 {
     rText.clear();
 

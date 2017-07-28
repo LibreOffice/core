@@ -158,7 +158,7 @@ public:
                                     MapUnit eCoreMetric,
                                     MapUnit ePresentationMetric,
                                     OUString &rText,
-                                    const IntlWrapper * pIntlWrapper = nullptr ) const;
+                                    const IntlWrapper& rIntlWrapper ) const;
 
     virtual sal_uInt16       GetVersion( sal_uInt16 nFileFormatVersion ) const;
     virtual void             ScaleMetrics( long lMult, long lDiv );
@@ -255,7 +255,7 @@ public:
                                     MapUnit eCoreMetric,
                                     MapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = nullptr ) const override;
+                                    const IntlWrapper& ) const override;
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 
     // create a copy of itself
@@ -283,7 +283,7 @@ public:
                                     MapUnit eCoreMetric,
                                     MapUnit ePresMetric,
                                     OUString &rText,
-                                    const IntlWrapper * = nullptr ) const override;
+                                    const IntlWrapper& ) const override;
 
     // create a copy of itself
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override = 0;

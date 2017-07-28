@@ -69,7 +69,7 @@ bool SvxWritingModeItem::GetPresentation( SfxItemPresentation /*ePres*/,
         MapUnit /*eCoreMetric*/,
         MapUnit /*ePresMetric*/,
         OUString &rText,
-        const IntlWrapper *  ) const
+        const IntlWrapper& ) const
 {
     rText = EditResId(getFrmDirResId((int)GetValue()));
     return true;

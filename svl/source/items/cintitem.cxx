@@ -32,7 +32,7 @@ bool CntByteItem::operator ==(const SfxPoolItem & rItem) const
 // virtual
 bool CntByteItem::GetPresentation(SfxItemPresentation, MapUnit, MapUnit,
                                   OUString & rText,
-                                  const IntlWrapper *) const
+                                  const IntlWrapper&) const
 {
     rText = OUString::number( m_nValue );
     return true;
@@ -101,7 +101,7 @@ bool CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
 bool CntUInt16Item::GetPresentation(SfxItemPresentation,
                                     MapUnit, MapUnit,
                                     OUString & rText,
-                                    const IntlWrapper *)
+                                    const IntlWrapper&)
     const
 {
     rText = OUString::number( m_nValue );
@@ -169,7 +169,7 @@ bool CntInt32Item::operator ==(const SfxPoolItem & rItem) const
 bool CntInt32Item::GetPresentation(SfxItemPresentation,
                                    MapUnit, MapUnit,
                                    OUString & rText,
-                                   const IntlWrapper *) const
+                                   const IntlWrapper&) const
 {
     rText = OUString::number( m_nValue );
     return true;
@@ -236,7 +236,7 @@ bool CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
 bool CntUInt32Item::GetPresentation(SfxItemPresentation,
                                     MapUnit, MapUnit,
                                     OUString & rText,
-                                    const IntlWrapper *)
+                                    const IntlWrapper&)
     const
 {
     rText = OUString::number(m_nValue);

@@ -127,7 +127,7 @@ ToolbarsMenuController::ToolbarsMenuController( const css::uno::Reference< css::
     m_aPropUIName( "UIName" ),
     m_aPropResourceURL( "ResourceURL" ),
     m_bResetActive( false ),
-    m_aIntlWrapper( xContext, Application::GetSettings().GetLanguageTag() )
+    m_aIntlWrapper(SvtSysLocale().GetUILanguageTag())
 {
 }
 

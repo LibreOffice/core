@@ -176,7 +176,7 @@ bool SvxFontListItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText.clear();
@@ -411,7 +411,7 @@ bool SvxFontItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText = aFamilyName;
@@ -476,7 +476,7 @@ bool SvxPostureItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText = GetValueTextByPos( GetValue() );
@@ -623,7 +623,7 @@ bool SvxWeightItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText = GetValueTextByPos( GetValue() );
@@ -1006,7 +1006,7 @@ bool SvxFontHeightItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             eCoreUnit,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     if( MapUnit::MapRelative != ePropUnit )
@@ -1019,7 +1019,7 @@ bool SvxFontHeightItem::GetPresentation
     else if( 100 == nProp )
     {
         rText = GetMetricText( (long)nHeight,
-                                eCoreUnit, MapUnit::MapPoint, pIntl ) +
+                                eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                 " " + EditResId(GetMetricId(MapUnit::MapPoint));
     }
     else
@@ -1191,13 +1191,13 @@ bool SvxFontWidthItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             eCoreUnit,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     if ( 100 == nProp )
     {
         rText = GetMetricText( (long)nWidth,
-                                eCoreUnit, MapUnit::MapPoint, pIntl ) +
+                                eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                 " " + EditResId(GetMetricId(MapUnit::MapPoint));
     }
     else
@@ -1265,7 +1265,7 @@ bool SvxTextLineItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText = GetValueTextByPos( GetValue() );
@@ -1514,7 +1514,7 @@ bool SvxCrossedOutItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText = GetValueTextByPos( GetValue() );
@@ -1606,7 +1606,7 @@ bool SvxShadowedItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     const char* pId = RID_SVXITEMS_SHADOWED_FALSE;
@@ -1651,7 +1651,7 @@ bool SvxAutoKernItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     const char* pId = RID_SVXITEMS_AUTOKERN_FALSE;
@@ -1697,7 +1697,7 @@ bool SvxWordLineModeItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     const char* pId = RID_SVXITEMS_WORDLINE_FALSE;
@@ -1742,7 +1742,7 @@ bool SvxContourItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     const char* pId = RID_SVXITEMS_CONTOUR_FALSE;
@@ -1787,7 +1787,7 @@ bool SvxPropSizeItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText.clear();
@@ -1971,7 +1971,7 @@ bool SvxColorItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText = ::GetColorString( mColor );
@@ -2033,7 +2033,7 @@ bool SvxCharSetColorItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText.clear();
@@ -2086,13 +2086,13 @@ bool SvxKerningItem::GetPresentation
     SfxItemPresentation ePres,
     MapUnit             eCoreUnit,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     switch ( ePres )
     {
         case SfxItemPresentation::Nameless:
-            rText = GetMetricText( (long)GetValue(), eCoreUnit, MapUnit::MapPoint, pIntl ) +
+            rText = GetMetricText( (long)GetValue(), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                     " " + EditResId(GetMetricId(MapUnit::MapPoint));
             return true;
         case SfxItemPresentation::Complete:
@@ -2108,7 +2108,7 @@ bool SvxKerningItem::GetPresentation
             if (pId)
                 rText += EditResId(pId);
             rText = rText +
-                    GetMetricText( (long)GetValue(), eCoreUnit, MapUnit::MapPoint, pIntl ) +
+                    GetMetricText( (long)GetValue(), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                     " " + EditResId(GetMetricId(MapUnit::MapPoint));
             return true;
         }
@@ -2177,7 +2177,7 @@ bool SvxCaseMapItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText = GetValueTextByPos( (sal_uInt16)GetValue() );
@@ -2318,7 +2318,7 @@ bool SvxEscapementItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText = GetValueTextByPos( GetEnumValue() );
@@ -2468,7 +2468,7 @@ bool SvxLanguageItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText = SvtLanguageTable::GetLanguageString( GetValue() );
@@ -2551,7 +2551,7 @@ bool SvxNoLinebreakItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText.clear();
@@ -2592,7 +2592,7 @@ bool SvxNoHyphenItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText.clear();
@@ -2640,7 +2640,7 @@ bool SvxBlinkItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     const char* pId = RID_SVXITEMS_BLINK_FALSE;
@@ -2688,7 +2688,7 @@ bool SvxEmphasisMarkItem::GetPresentation
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
     OUString&           rText,
-    const IntlWrapper * /*pIntl*/
+    const IntlWrapper& /*rIntl*/
 )   const
 {
     static const char* RID_SVXITEMS_EMPHASIS[] =
@@ -2882,7 +2882,7 @@ bool SvxTwoLinesItem::PutValue( const css::uno::Any& rVal,
 
 bool SvxTwoLinesItem::GetPresentation( SfxItemPresentation /*ePres*/,
                             MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
-                            OUString &rText, const IntlWrapper* /*pIntl*/ ) const
+                            OUString &rText, const IntlWrapper& /*rIntl*/ ) const
 {
     if( !GetValue() )
         rText = EditResId( RID_SVXITEMS_TWOLINES_OFF );
@@ -2958,7 +2958,7 @@ sal_uInt16 SvxTextRotateItem::GetVersion(sal_uInt16 nFFVer) const
 bool SvxTextRotateItem::GetPresentation(
     SfxItemPresentation /*ePres*/,
     MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
-    OUString &rText, const IntlWrapper*) const
+    OUString &rText, const IntlWrapper&) const
 {
     if (!GetValue())
         rText = EditResId(RID_SVXITEMS_TEXTROTATE_OFF);
@@ -3063,7 +3063,7 @@ sal_uInt16 SvxCharRotateItem::GetVersion( sal_uInt16 nFFVer ) const
 bool SvxCharRotateItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
-        OUString &rText, const IntlWrapper*  ) const
+        OUString &rText, const IntlWrapper&) const
 {
     if( !GetValue() )
         rText = EditResId( RID_SVXITEMS_CHARROTATE_OFF );
@@ -3196,7 +3196,7 @@ sal_uInt16 SvxCharScaleWidthItem::GetVersion( sal_uInt16 nFFVer ) const
 bool SvxCharScaleWidthItem::GetPresentation(
         SfxItemPresentation /*ePres*/,
         MapUnit /*eCoreMetric*/, MapUnit /*ePresMetric*/,
-        OUString &rText, const IntlWrapper*  ) const
+        OUString &rText, const IntlWrapper&) const
 {
     if( !GetValue() )
         rText = EditResId( RID_SVXITEMS_CHARSCALE_OFF );
@@ -3289,7 +3289,7 @@ bool SvxCharReliefItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * /*pIntl*/
+    OUString&           rText, const IntlWrapper& /*rIntl*/
 )   const
 {
     rText = GetValueTextByPos( (sal_uInt16)GetValue() );

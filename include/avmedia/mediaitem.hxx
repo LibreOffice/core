@@ -76,7 +76,7 @@ public:
                                                  MapUnit eCoreUnit,
                                                  MapUnit ePresUnit,
                                                  OUString&  rText,
-                                                 const IntlWrapper *pIntl = nullptr ) const override;
+                                                 const IntlWrapper& rIntl ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 

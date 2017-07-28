@@ -225,8 +225,7 @@ public:
 
     static OUString GetContentType(INetContentType eTypeID);
 
-    static OUString GetPresentation(INetContentType eTypeID,
-                                    const LanguageTag& aLocale);
+    static OUString GetPresentation(INetContentType eTypeID);
 
     static INetContentType GetContentType4Extension(OUString const & rExtension);
 

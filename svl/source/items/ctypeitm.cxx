@@ -118,16 +118,12 @@ bool CntContentTypeItem::GetPresentation(
     MapUnit          eCoreMetric,
     MapUnit          ePresMetric,
     OUString          & rText,
-    const IntlWrapper * pIntlWrapper) const
+    const IntlWrapper & rIntlWrapper) const
 {
     if (_aPresentation.isEmpty())
     {
-        DBG_ASSERT(pIntlWrapper,
-                   "CntContentTypeItem::GetPresentation(): No IntlWrapper");
-        if (pIntlWrapper)
-            (const_cast< CntContentTypeItem * >(this))->_aPresentation
-             = INetContentTypes::GetPresentation(GetEnumValue(),
-                     pIntlWrapper->getLanguageTag());
+        (const_cast< CntContentTypeItem * >(this))->_aPresentation =
+            INetContentTypes::GetPresentation(GetEnumValue());
     }
     if (!_aPresentation.isEmpty())
     {
@@ -137,7 +133,7 @@ bool CntContentTypeItem::GetPresentation(
     else
         return CntUnencodedStringItem::GetPresentation(ePres, eCoreMetric,
                                                        ePresMetric, rText,
-                                                       pIntlWrapper);
+                                                       rIntlWrapper);
 }
 
 INetContentType CntContentTypeItem::GetEnumValue() const

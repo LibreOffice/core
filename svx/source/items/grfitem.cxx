@@ -137,7 +137,7 @@ bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 bool SvxGrfCrop::GetPresentation(
     SfxItemPresentation ePres, MapUnit eCoreUnit, MapUnit /*ePresUnit*/,
-    OUString &rText, const IntlWrapper* pIntl ) const
+    OUString &rText, const IntlWrapper& rIntl ) const
 {
     rText.clear();
     switch( ePres )
@@ -145,10 +145,10 @@ bool SvxGrfCrop::GetPresentation(
     case SfxItemPresentation::Nameless:
         return true;
     case SfxItemPresentation::Complete:
-        rText = "L: "  + ::GetMetricText( GetLeft(), eCoreUnit, MapUnit::MapMM, pIntl ) +
-                " R: " + ::GetMetricText( GetRight(), eCoreUnit, MapUnit::MapMM, pIntl ) +
-                " T: " + ::GetMetricText( GetTop(), eCoreUnit, MapUnit::MapMM, pIntl ) +
-                " B: " + ::GetMetricText( GetBottom(), eCoreUnit, MapUnit::MapMM, pIntl );
+        rText = "L: "  + ::GetMetricText( GetLeft(), eCoreUnit, MapUnit::MapMM, &rIntl ) +
+                " R: " + ::GetMetricText( GetRight(), eCoreUnit, MapUnit::MapMM, &rIntl ) +
+                " T: " + ::GetMetricText( GetTop(), eCoreUnit, MapUnit::MapMM, &rIntl ) +
+                " B: " + ::GetMetricText( GetBottom(), eCoreUnit, MapUnit::MapMM, &rIntl );
         return true;
         break;
 

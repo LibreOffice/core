@@ -223,7 +223,7 @@ bool SvxMacroItem::GetPresentation
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
     OUString&           rText,
-    const IntlWrapper *
+    const IntlWrapper&
 )   const
 {
 /*!!!

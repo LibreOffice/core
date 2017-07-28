@@ -50,7 +50,7 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString & rText,
-                                  const IntlWrapper* pIntlWrapper = nullptr ) const override;
+                                  const IntlWrapper& rIntlWrapper ) const override;
 
     virtual bool QueryValue( css::uno::Any& rVal,
                              sal_uInt8 nMemberId = 0 ) const override;

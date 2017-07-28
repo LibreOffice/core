@@ -25,6 +25,7 @@
 #include <svtools/unoimap.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
+#include <unotools/intlwrapper.hxx>
 #include <frmfmt.hxx>
 #include <unocoll.hxx>
 #include <unosett.hxx>
@@ -1242,7 +1243,8 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number((sal_Int32)GetValue()).getStr()));
 
     OUString aPresentation;
-    GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation);
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
+    GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation, aIntlWrapper);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
 
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("bAnchorOnly"), BAD_CAST(OString::boolean(bAnchorOnly).getStr()));
@@ -1695,7 +1697,8 @@ void SwFormatAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nOrder"), BAD_CAST(OString::number(m_nOrder).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nOrderCounter"), BAD_CAST(OString::number(m_nOrderCounter).getStr()));
     OUString aPresentation;
-    GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation);
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
+    GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation, aIntlWrapper);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
 
     xmlTextWriterEndElement(pWriter);

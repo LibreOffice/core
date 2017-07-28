@@ -659,7 +659,7 @@ static bool lcl_HFPresentation
     MapUnit             eCoreMetric,
     MapUnit             ePresentationMetric,
     OUString&           rText,
-    const IntlWrapper* pIntl
+    const IntlWrapper& rIntl
 )
 {
     const SfxItemSet& rSet = static_cast<const SfxSetItem&>(rItem).GetItemSet();
@@ -709,7 +709,7 @@ static bool lcl_HFPresentation
                 else
                 {
                     aText += GetMetricText( (long)nLeftMargin,
-                                           eCoreMetric, ePresentationMetric, pIntl );
+                                           eCoreMetric, ePresentationMetric, &rIntl );
                     aText += " " + EditResId(GetMetricId(ePresentationMetric));
                 }
                 aText += cpDelim;
@@ -724,16 +724,14 @@ static bool lcl_HFPresentation
                 else
                 {
                     aText += GetMetricText( (long)nRightMargin,
-                                            eCoreMetric, ePresentationMetric, pIntl );
+                                            eCoreMetric, ePresentationMetric, &rIntl );
                     aText += " " + EditResId(GetMetricId(ePresentationMetric));
                 }
             }
             break;
 
             default:
-                if ( !pIntl )
-                    pIntl = ScGlobal::GetScIntlWrapper();
-                pItem->GetPresentation( SfxItemPresentation::Complete, eCoreMetric, ePresentationMetric, aText, pIntl );
+                pItem->GetPresentation( SfxItemPresentation::Complete, eCoreMetric, ePresentationMetric, aText, rIntl );
 
         }
 
@@ -755,7 +753,7 @@ bool ScDocumentPool::GetPresentation(
     const SfxPoolItem&  rItem,
     MapUnit             ePresentationMetric,
     OUString&           rText,
-    const IntlWrapper* pIntl ) const
+    const IntlWrapper& rIntl ) const
 {
     sal_uInt16  nW = rItem.Which();
     OUString aStrYes  ( ScGlobal::GetRscString(STR_YES) );
@@ -852,7 +850,7 @@ bool ScDocumentPool::GetPresentation(
         {
             OUString  aBuffer;
 
-            if( lcl_HFPresentation( rItem, GetMetric( nW ), ePresentationMetric, aBuffer, pIntl ) )
+            if( lcl_HFPresentation( rItem, GetMetric( nW ), ePresentationMetric, aBuffer, rIntl ) )
             {
                 rText = ScGlobal::GetRscString(STR_HEADER) + " ( " + aBuffer + " ) ";
             }
@@ -863,7 +861,7 @@ bool ScDocumentPool::GetPresentation(
         {
             OUString  aBuffer;
 
-            if( lcl_HFPresentation( rItem, GetMetric( nW ), ePresentationMetric, aBuffer, pIntl ) )
+            if( lcl_HFPresentation( rItem, GetMetric( nW ), ePresentationMetric, aBuffer, rIntl ) )
             {
                 rText = ScGlobal::GetRscString(STR_FOOTER) + " ( " + aBuffer + " ) ";
             }
@@ -871,9 +869,7 @@ bool ScDocumentPool::GetPresentation(
         break;
 
         default:
-            if ( !pIntl )
-                pIntl = ScGlobal::GetScIntlWrapper();
-            ePresentationRet = rItem.GetPresentation( SfxItemPresentation::Complete, GetMetric( nW ), ePresentationMetric, rText, pIntl );
+            ePresentationRet = rItem.GetPresentation( SfxItemPresentation::Complete, GetMetric( nW ), ePresentationMetric, rText, rIntl );
         break;
     }
 

@@ -146,7 +146,7 @@ using namespace ::com::sun::star::uno;
 SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,
                     SfxObjectFactory* pGlobalFact )
-    : SfxModule( Translate::Create("sw", Application::GetSettings().GetUILanguageTag()), {pWebFact, pFact, pGlobalFact} ),
+    : SfxModule( Translate::Create("sw", SvtSysLocale().GetUILanguageTag()), {pWebFact, pFact, pGlobalFact} ),
     m_pModuleConfig(nullptr),
     m_pUsrPref(nullptr),
     m_pWebUsrPref(nullptr),

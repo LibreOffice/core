@@ -46,7 +46,7 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
-                                  OUString &rText, const IntlWrapper * = nullptr ) const override;
+                                  OUString &rText, const IntlWrapper& ) const override;
 
     SvxBlinkItem& operator=(const SvxBlinkItem& rBlink) {
             SetValue(rBlink.GetValue());

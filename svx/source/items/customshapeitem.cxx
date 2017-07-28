@@ -253,7 +253,7 @@ bool SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
 
 bool SdrCustomShapeGeometryItem::GetPresentation(
     SfxItemPresentation ePresentation, MapUnit /*eCoreMetric*/,
-    MapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper *) const
+    MapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper&) const
 {
     rText += " ";
     if ( ePresentation == SfxItemPresentation::Complete )

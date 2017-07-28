@@ -60,7 +60,7 @@ public:
     virtual bool GetPresentation(SfxItemPresentation,
                                                 MapUnit, MapUnit,
                                                 OUString & rText,
-                                                const IntlWrapper * = nullptr)
+                                                const IntlWrapper&)
         const override;
 
     virtual bool QueryValue( css::uno::Any& rVal,

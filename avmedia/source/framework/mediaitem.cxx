@@ -119,7 +119,7 @@ bool MediaItem::GetPresentation( SfxItemPresentation,
                                  MapUnit,
                                  MapUnit,
                                  OUString& rText,
-                                 const IntlWrapper * ) const
+                                 const IntlWrapper& ) const
 {
     rText.clear();
     return false;

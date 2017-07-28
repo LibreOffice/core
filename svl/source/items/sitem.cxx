@@ -66,7 +66,7 @@ bool SfxSetItem::GetPresentation
     MapUnit                /*eCoreMetric*/,
     MapUnit                /*ePresentationMetric*/,
     OUString&              /*rText*/,
-    const IntlWrapper *
+    const IntlWrapper&
 )   const
 {
     return false;

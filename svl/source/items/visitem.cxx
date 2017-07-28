@@ -43,7 +43,7 @@ bool SfxVisibilityItem::operator ==(const SfxPoolItem & rItem) const
 bool SfxVisibilityItem::GetPresentation(SfxItemPresentation,
                                         MapUnit, MapUnit,
                                         OUString & rText,
-                                        const IntlWrapper *) const
+                                        const IntlWrapper&) const
 {
     rText = m_nValue.bVisible ? OUString("TRUE") : OUString("FALSE");
     return true;

@@ -38,7 +38,7 @@ bool SfxEnumItemInterface::operator ==(const SfxPoolItem & rItem) const
 // virtual
 bool SfxEnumItemInterface::GetPresentation(SfxItemPresentation, MapUnit,
                                       MapUnit, OUString & rText,
-                                      const IntlWrapper *) const
+                                      const IntlWrapper&) const
 {
     rText = OUString::number( GetEnumValue() );
     return true;
@@ -119,7 +119,7 @@ bool SfxBoolItem::operator ==(const SfxPoolItem & rItem) const
 bool SfxBoolItem::GetPresentation(SfxItemPresentation,
                                                  MapUnit, MapUnit,
                                                  OUString & rText,
-                                                 const IntlWrapper *) const
+                                                 const IntlWrapper&) const
 {
     rText = GetValueTextByVal(m_bValue);
     return true;

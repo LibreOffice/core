@@ -103,7 +103,7 @@ SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
         aHeaderBar(VclPtr<HeaderBar>::Create(&rParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP)),
         nHeaderItemId(1),
         bPaintFlag(true),
-        aCollator(*(IntlWrapper( Application::GetSettings().GetLanguageTag() ).getCaseCollator()))
+        aCollator(*(IntlWrapper(SvtSysLocale().GetUILanguageTag()).getCaseCollator()))
 {
     m_rParentTableContainer.SetTable(this);
 
