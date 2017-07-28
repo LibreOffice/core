@@ -95,6 +95,22 @@ void Scheduler::ImplDeInitScheduler()
     DBG_TESTSOLARMUTEX();
 
     SchedulerGuard aSchedulerGuard;
+
+#if OSL_DEBUG_LEVEL > 0
+    {
+        ImplSchedulerData* pSchedulerData = rSchedCtx.mpFirstSchedulerData;
+        sal_uInt32 nTasks = 0;
+        while ( pSchedulerData )
+        {
+            ++nTasks;
+            pSchedulerData = pSchedulerData->mpNext;
+        }
+        SAL_INFO( "vcl.schedule.deinit", "DeInit the scheduler - tasks: " << nTasks );
+    }
+
+    // clean up all the sfx::SfxItemDisruptor_Impl Idles
+    ProcessEventsToIdle();
+#endif
     rSchedCtx.mbActive = false;
 
     assert( nullptr == rSchedCtx.mpSchedulerStack );
@@ -103,19 +119,57 @@ void Scheduler::ImplDeInitScheduler()
     if (rSchedCtx.mpSalTimer) rSchedCtx.mpSalTimer->Stop();
     DELETEZ( rSchedCtx.mpSalTimer );
 
+#if OSL_DEBUG_LEVEL > 0
+    sal_uInt32 nActiveTasks = 0, nIgnoredTasks = 0;
+#endif
     ImplSchedulerData* pSchedulerData = rSchedCtx.mpFirstSchedulerData;
     while ( pSchedulerData )
     {
         Task *pTask = pSchedulerData->mpTask;
         if ( pTask )
         {
-            pTask->mbActive = false;
+            if ( pTask->mbActive )
+            {
+#if OSL_DEBUG_LEVEL > 0
+                const char *sIgnored = "";
+                ++nActiveTasks;
+                // TODO: shutdown these timers before Scheduler de-init
+                // TODO: remove Task from static object
+                if ( pTask->GetDebugName() && ( false
+                        || !strcmp( pTask->GetDebugName(), "desktop::Desktop m_firstRunTimer" )
+                        || !strcmp( pTask->GetDebugName(), "editeng::ImpEditEngine aOnlineSpellTimer" )
+                        || !strcmp( pTask->GetDebugName(), "ImplHandleMouseMsg SalData::mpMouseLeaveTimer" )
+                        || !strcmp( pTask->GetDebugName(), "sc ScModule IdleTimer" )
+                        || !strcmp( pTask->GetDebugName(), "sd::CacheConfiguration maReleaseTimer" )
+                        || !strcmp( pTask->GetDebugName(), "svtools::GraphicCache maReleaseTimer" )
+                        || !strcmp( pTask->GetDebugName(), "svtools::GraphicObject mpSwapOutTimer" )
+                        || !strcmp( pTask->GetDebugName(), "svx OLEObjCache pTimer UnloadCheck" )
+                        || !strcmp( pTask->GetDebugName(), "vcl::win GdiPlusBuffer aGdiPlusBuffer" )
+                        ))
+                {
+                    sIgnored = " (ignored)";
+                    ++nIgnoredTasks;
+                }
+                const Timer *timer = dynamic_cast<Timer*>( pTask );
+                if ( timer )
+                    SAL_WARN( "vcl.schedule.deinit", "DeInit task: " << *timer << sIgnored );
+                else
+                    SAL_WARN( "vcl.schedule.deinit", "DeInit task: " << *pTask << sIgnored );
+#endif
+                pTask->mbActive = false;
+            }
             pTask->mpSchedulerData = nullptr;
         }
         ImplSchedulerData* pDeleteSchedulerData = pSchedulerData;
         pSchedulerData = pSchedulerData->mpNext;
         delete pDeleteSchedulerData;
     }
+#if OSL_DEBUG_LEVEL > 0
+    SAL_INFO( "vcl.schedule.deinit", "DeInit the scheduler - finished" );
+    SAL_WARN_IF( 0 != nActiveTasks, "vcl.schedule.deinit", "DeInit active tasks: "
+        << nActiveTasks << " (ignored: " << nIgnoredTasks << ")" );
+    assert( nIgnoredTasks == nActiveTasks );
+#endif
 
     rSchedCtx.mpFirstSchedulerData = nullptr;
     rSchedCtx.mpLastSchedulerData  = nullptr;

@@ -458,6 +458,7 @@ certain functionality.
 @li @c vcl.plugadapt - the Unix/X11 backend plugin mechanism
 @li @c vcl.quartz
 @li @c vcl.schedule - scheduler / main-loop information
+@li @c vcl.schedule.deinit
 @li @c vcl.screensaverinhibitor
 @li @c vcl.scrollbar - Scroll Bars
 @li @c vcl.se - VCL Session Manager
