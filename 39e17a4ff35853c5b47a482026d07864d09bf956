@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_48dcb912",
+        "filename": "include/vcl/scheduler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-07-28T10:17:32Z",
+      "side": 1,
+      "message": "Well - I\u0027m not sure, if I really should return a bool, or just bail out, somehow. Mutex::acquire may also fail, and I guess almost nobody checks this.\n\nAnd I\u0027ll probably simply put an osl::Mutex instance into the ImplSchedulerContext struct, instead of the pointer, and becomes kind of mood anyway.",
+      "parentUuid": "3a461143_686095cf",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_889b01c9",
         "filename": "vcl/inc/svdata.hxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-07-27T18:21:06Z",
       "side": 1,
       "message": "why not just declare the mutex inline? would skip a whole bunch of error  checking.\nAnd then you wouldn\u0027t need to Init the scheduler",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_a8e27dd3",
+        "filename": "vcl/inc/svdata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-07-28T10:17:32Z",
+      "side": 1,
+      "message": "No particular reason. Just copied from some older patch, when I did a first try to implement locking.",
+      "parentUuid": "3a461143_889b01c9",
       "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3a461143_68d97521",
+        "filename": "vcl/source/app/scheduler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-07-28T10:17:32Z",
+      "side": 1,
+      "message": "I\u0027ll simply include the osl::Mutex - makes much more sense.",
+      "parentUuid": "3a461143_0869d1be",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_c8a50905",
         "filename": "vcl/source/app/scheduler.cxx",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2017-07-27T18:21:06Z",
       "side": 1,
       "message": "I find it a little suspicious that mbDeInit is accessed outside any locking, and is not declared volatile or std::atomic\u003cbool\u003e",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_08271113",
+        "filename": "vcl/source/app/scheduler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-07-28T10:17:32Z",
+      "side": 1,
+      "message": "In this case it doesn\u0027t matter. ImplDeInitScheduler runs under the lock, so after this the Scheduler is \"empty\" and won\u0027t do anything.\n\nNot so for Task::Start(), which has to do this check after the SchedulerGuard.",
+      "parentUuid": "3a461143_c8a50905",
       "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,41 @@
     },
     {
       "key": {
+        "uuid": "3a461143_484af9c6",
+        "filename": "vcl/source/app/scheduler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-07-28T10:17:32Z",
+      "side": 1,
+      "message": "I don\u0027t know if the Tasks expects the Scheduler to run with SolarMutex locked, but it has been this way.\n\nBut now you should be able to start and stop tasks from other threads without holding the SolarMutex.",
+      "parentUuid": "3a461143_e873a5af",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_086e312f",
+        "filename": "vcl/source/app/scheduler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-07-28T10:17:32Z",
+      "side": 1,
+      "message": "This check has to go too. You always need the guard.",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_e8aac5d3",
         "filename": "vcl/source/app/svapp.cxx",
         "patchSetId": 1
@@ -98,6 +205,24 @@
       "writtenOn": "2017-07-27T18:21:06Z",
       "side": 1,
       "message": "you sure about this part? Going to make it harder to track down bugs for developers because this part will make the locking of the debug build much different to the normal production build",
+      "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_e85f2570",
+        "filename": "vcl/source/app/svapp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-07-28T10:17:32Z",
+      "side": 1,
+      "message": "That code is changed in the 2nd patchset, as it may dead, if it\u0027s used by a thread which can\u0027t run the scheduler and just yields to the main thread.\n\nSince I can\u0027t prevent other threads to start new tasks while doing the check, the Schedler has to be locked here.",
+      "parentUuid": "3a461143_e8aac5d3",
       "revId": "39e17a4ff35853c5b47a482026d07864d09bf956",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
