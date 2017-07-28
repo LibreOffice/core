@@ -3240,4 +3240,13 @@ void ScDocShell::SetIsInUcalc()
     mbUcalcTest = true;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportSLK(SvStream &rStream)
+{
+    ScDLL::Init();
+    ScDocument aDocument;
+    aDocument.MakeTable(0);
+    ScImportExport aImpEx(&aDocument);
+    return aImpEx.ImportStream(rStream, OUString(), SotClipboardFormatId::SYLK);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

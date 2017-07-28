@@ -136,6 +136,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_ww6fuzzer \
     Executable_ww8fuzzer \
     Executable_qpwfuzzer \
+    Executable_slkfuzzer \
 ))
 endif
 
