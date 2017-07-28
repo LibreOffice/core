@@ -57,8 +57,8 @@ class VCL_DLLPUBLIC FilterConfigItem
 public:
 
     FilterConfigItem( const OUString& rSubTree );
-    FilterConfigItem( css::uno::Sequence< css::beans::PropertyValue >* pFilterData );
-    FilterConfigItem( const OUString& rSubTree, css::uno::Sequence< css::beans::PropertyValue >* pFilterData );
+    FilterConfigItem( css::uno::Sequence< css::beans::PropertyValue > const * pFilterData );
+    FilterConfigItem( const OUString& rSubTree, css::uno::Sequence< css::beans::PropertyValue > const * pFilterData );
     /// Writes config in destructor
     ~FilterConfigItem();
     /// Writes config and sets unmodified state again.

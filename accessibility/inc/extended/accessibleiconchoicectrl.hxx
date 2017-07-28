@@ -61,7 +61,7 @@ namespace accessibility
             @param  _xParent
                 is our parent accessible object
         */
-        AccessibleIconChoiceCtrl( SvtIconChoiceCtrl& _rIconCtrl,
+        AccessibleIconChoiceCtrl( SvtIconChoiceCtrl const & _rIconCtrl,
                                   const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
 
         // XTypeProvider

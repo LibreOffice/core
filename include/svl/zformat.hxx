@@ -160,10 +160,10 @@ public:
                    LanguageType& eLan );
 
     // Copy ctor
-    SvNumberformat( SvNumberformat& rFormat );
+    SvNumberformat( SvNumberformat const & rFormat );
 
     // Copy ctor with exchange of format code string scanner (used in merge)
-    SvNumberformat( SvNumberformat& rFormat, ImpSvNumberformatScan& rSc );
+    SvNumberformat( SvNumberformat const & rFormat, ImpSvNumberformatScan& rSc );
 
     ~SvNumberformat();
 

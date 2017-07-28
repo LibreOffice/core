@@ -133,8 +133,8 @@ protected:
     virtual ~BasicManager() override;
 
 public:
-                    BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib = nullptr, OUString* pLibPath = nullptr, bool bDocMgr = false );
-                    BasicManager( StarBASIC* pStdLib, OUString* pLibPath = nullptr, bool bDocMgr = false );
+                    BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib = nullptr, OUString const * pLibPath = nullptr, bool bDocMgr = false );
+                    BasicManager( StarBASIC* pStdLib, OUString const * pLibPath = nullptr, bool bDocMgr = false );
 
     /** deletes the given BasicManager instance
 

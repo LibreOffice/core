@@ -583,7 +583,7 @@ OUString OReadToolBoxDocumentHandler::getErrorLineString()
 
 OWriteToolBoxDocumentHandler::OWriteToolBoxDocumentHandler(
     const Reference< XIndexAccess >& rItemAccess,
-    Reference< XDocumentHandler >& rWriteDocumentHandler ) :
+    Reference< XDocumentHandler > const & rWriteDocumentHandler ) :
     m_xWriteDocumentHandler( rWriteDocumentHandler ),
     m_rItemAccess( rItemAccess )
 {

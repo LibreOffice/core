@@ -769,7 +769,7 @@ namespace cppcanvas
                                   const OUString&     rText,
                                   sal_Int32                  nStartPos,
                                   sal_Int32                  nLen,
-                                  VirtualDevice&             rVDev,
+                                  VirtualDevice const &      rVDev,
                                   const CanvasSharedPtr&     rCanvas,
                                   const OutDevState&         rState );
 
@@ -781,7 +781,7 @@ namespace cppcanvas
                                   const OUString&            rText,
                                   sal_Int32                         nStartPos,
                                   sal_Int32                         nLen,
-                                  VirtualDevice&                    rVDev,
+                                  VirtualDevice const &             rVDev,
                                   const CanvasSharedPtr&            rCanvas,
                                   const OutDevState&                rState,
                                   const ::basegfx::B2DHomMatrix&    rTextTransform );
@@ -833,7 +833,7 @@ namespace cppcanvas
                                                 const OUString&     rText,
                                                 sal_Int32                  nStartPos,
                                                 sal_Int32                  nLen,
-                                                VirtualDevice&             rVDev,
+                                                VirtualDevice const &      rVDev,
                                                 const CanvasSharedPtr&     rCanvas,
                                                 const OutDevState&         rState ) :
                 mxFont( rState.xFont ),
@@ -872,7 +872,7 @@ namespace cppcanvas
                                                 const OUString&          rText,
                                                 sal_Int32                       nStartPos,
                                                 sal_Int32                       nLen,
-                                                VirtualDevice&                  rVDev,
+                                                VirtualDevice const &           rVDev,
                                                 const CanvasSharedPtr&          rCanvas,
                                                 const OutDevState&              rState,
                                                 const ::basegfx::B2DHomMatrix&  rTextTransform ) :
@@ -1190,7 +1190,7 @@ namespace cppcanvas
                                        sal_Int32                        nStartPos,
                                        sal_Int32                        nLen,
                                        const uno::Sequence< double >&   rOffsets,
-                                       VirtualDevice&                   rVDev,
+                                       VirtualDevice const &            rVDev,
                                        const CanvasSharedPtr&           rCanvas,
                                        const OutDevState&               rState  );
                 EffectTextArrayAction( const ::basegfx::B2DPoint&       rStartPoint,
@@ -1202,7 +1202,7 @@ namespace cppcanvas
                                        sal_Int32                        nStartPos,
                                        sal_Int32                        nLen,
                                        const uno::Sequence< double >&   rOffsets,
-                                       VirtualDevice&                   rVDev,
+                                       VirtualDevice const &            rVDev,
                                        const CanvasSharedPtr&           rCanvas,
                                        const OutDevState&               rState,
                                        const ::basegfx::B2DHomMatrix&   rTextTransform );
@@ -1252,7 +1252,7 @@ namespace cppcanvas
                                                           sal_Int32                         nStartPos,
                                                           sal_Int32                         nLen,
                                                           const uno::Sequence< double >&    rOffsets,
-                                                          VirtualDevice&                    rVDev,
+                                                          VirtualDevice const &             rVDev,
                                                           const CanvasSharedPtr&            rCanvas,
                                                           const OutDevState&                rState  ) :
                 mxTextLayout(),
@@ -1292,7 +1292,7 @@ namespace cppcanvas
                                                           sal_Int32                         nStartPos,
                                                           sal_Int32                         nLen,
                                                           const uno::Sequence< double >&    rOffsets,
-                                                          VirtualDevice&                    rVDev,
+                                                          VirtualDevice const &             rVDev,
                                                           const CanvasSharedPtr&            rCanvas,
                                                           const OutDevState&                rState,
                                                           const ::basegfx::B2DHomMatrix&    rTextTransform ) :
@@ -1527,7 +1527,7 @@ namespace cppcanvas
                                const ::basegfx::B2DRectangle&                       rOutlineBounds,
                                const uno::Reference< rendering::XPolyPolygon2D >&   rTextPoly,
                                const uno::Sequence< double >&                       rOffsets,
-                               VirtualDevice&                                       rVDev,
+                               VirtualDevice const &                                rVDev,
                                const CanvasSharedPtr&                               rCanvas,
                                const OutDevState&                                   rState  );
                 OutlineAction( const ::basegfx::B2DPoint&                           rStartPoint,
@@ -1538,7 +1538,7 @@ namespace cppcanvas
                                const ::basegfx::B2DRectangle&                       rOutlineBounds,
                                const uno::Reference< rendering::XPolyPolygon2D >&   rTextPoly,
                                const uno::Sequence< double >&                       rOffsets,
-                               VirtualDevice&                                       rVDev,
+                               VirtualDevice const &                                rVDev,
                                const CanvasSharedPtr&                               rCanvas,
                                const OutDevState&                                   rState,
                                const ::basegfx::B2DHomMatrix&                       rTextTransform );
@@ -1604,7 +1604,7 @@ namespace cppcanvas
                                           const ::basegfx::B2DRectangle&                        rOutlineBounds,
                                           const uno::Reference< rendering::XPolyPolygon2D >&    rTextPoly,
                                           const uno::Sequence< double >&                        rOffsets,
-                                          VirtualDevice&                                        rVDev,
+                                          VirtualDevice const &                                 rVDev,
                                           const CanvasSharedPtr&                                rCanvas,
                                           const OutDevState&                                    rState  ) :
                 mxTextPoly( rTextPoly ),
@@ -1645,7 +1645,7 @@ namespace cppcanvas
                                           const ::basegfx::B2DRectangle&                        rOutlineBounds,
                                           const uno::Reference< rendering::XPolyPolygon2D >&    rTextPoly,
                                           const uno::Sequence< double >&                        rOffsets,
-                                          VirtualDevice&                                        rVDev,
+                                          VirtualDevice const &                                 rVDev,
                                           const CanvasSharedPtr&                                rCanvas,
                                           const OutDevState&                                    rState,
                                           const ::basegfx::B2DHomMatrix&                        rTextTransform ) :

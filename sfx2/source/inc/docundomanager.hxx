@@ -72,7 +72,7 @@ public:
         E_FULLY_ALIVE
     };
 
-    SfxModelGuard( SfxBaseModel& i_rModel, const AllowedModelState i_eState = E_FULLY_ALIVE )
+    SfxModelGuard( SfxBaseModel const & i_rModel, const AllowedModelState i_eState = E_FULLY_ALIVE )
         : m_aGuard()
     {
         i_rModel.MethodEntryCheck( i_eState != E_INITIALIZING );

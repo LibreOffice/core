@@ -368,7 +368,7 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServic
     return { "com.sun.star.util.NumberFormatter" };
 }
 
-SvNumberFormatsObj::SvNumberFormatsObj( SvNumberFormatsSupplierObj& _rParent, ::comphelper::SharedMutex& _rMutex )
+SvNumberFormatsObj::SvNumberFormatsObj( SvNumberFormatsSupplierObj& _rParent, ::comphelper::SharedMutex const & _rMutex )
     :rSupplier( _rParent )
     ,m_aMutex( _rMutex )
 {

@@ -99,7 +99,7 @@ namespace
 
     public:
         // parent window, Query text, initial value
-        QueryString(vcl::Window*, OUString &, OUString &);
+        QueryString(vcl::Window*, OUString const &, OUString &);
         virtual ~QueryString() override { disposeOnce(); }
         virtual void dispose() override
         {
@@ -113,7 +113,7 @@ namespace
     /*
      *  QueryString
      */
-    QueryString::QueryString(vcl::Window* pParent, OUString& rQuery, OUString& rRet)
+    QueryString::QueryString(vcl::Window* pParent, OUString const & rQuery, OUString& rRet)
         : ModalDialog(pParent, "QueryDialog",
             "vcl/ui/querydialog.ui" )
         , m_rReturnValue( rRet )

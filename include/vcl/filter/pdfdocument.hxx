@@ -136,7 +136,7 @@ class VCL_DLLPUBLIC PDFReferenceElement : public PDFElement
     PDFNumberElement& m_rObject;
 
 public:
-    PDFReferenceElement(PDFDocument& rDoc, PDFNumberElement& rObject, PDFNumberElement& rGeneration);
+    PDFReferenceElement(PDFDocument& rDoc, PDFNumberElement& rObject, PDFNumberElement const & rGeneration);
     bool Read(SvStream& rStream) override;
     /// Assuming the reference points to a number object, return its value.
     double LookupNumber(SvStream& rStream) const;

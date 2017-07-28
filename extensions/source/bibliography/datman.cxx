@@ -237,8 +237,8 @@ public:
     virtual void dispose() override;
 };
 
-static sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
-                                    const OUString& rLogicalColumnName)
+static sal_uInt16 lcl_FindLogicalName(BibConfig const * pConfig ,
+                                      const OUString& rLogicalColumnName)
 {
     for(sal_uInt16 i = 0; i < COLUMN_COUNT; i++)
     {

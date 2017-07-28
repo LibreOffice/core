@@ -80,7 +80,7 @@ namespace toolkit
     class StyleMethodGuard
     {
     public:
-        explicit StyleMethodGuard( WindowStyleSettings_Data& i_rData )
+        explicit StyleMethodGuard( WindowStyleSettings_Data const & i_rData )
         {
             if ( i_rData.pOwningWindow == nullptr )
                 throw DisposedException();

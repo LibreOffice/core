@@ -554,7 +554,7 @@ public:
 
         This constructor is internal only.
     */
-    inline RegistryKey(Registry&    registry,
+    inline RegistryKey(Registry const & registry,
                        RegKeyHandle hKey);
 
 protected:
@@ -645,7 +645,7 @@ inline RegistryKey::RegistryKey()
     { }
 
 /// @cond INTERNAL
-inline RegistryKey::RegistryKey(Registry& registry, RegKeyHandle hKey)
+inline RegistryKey::RegistryKey(Registry const & registry, RegKeyHandle hKey)
     : m_registry(registry)
     , m_hImpl(hKey)
     {

@@ -514,7 +514,7 @@ public:
         public:
             CellDataLessComparison(
                 ::std::vector< Any > const & i_data,
-                ::comphelper::IKeyPredicateLess& i_predicate,
+                ::comphelper::IKeyPredicateLess const & i_predicate,
                 bool const i_sortAscending
             )
                 :m_data( i_data )

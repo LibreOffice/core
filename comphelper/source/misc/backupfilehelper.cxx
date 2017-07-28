@@ -1197,7 +1197,7 @@ namespace
         PackedFileEntry(
             sal_uInt32 nFullFileSize,
             sal_uInt32 nCrc32,
-            FileSharedPtr& rFile,
+            FileSharedPtr const & rFile,
             bool bDoCompress)
         :   mnFullFileSize(nFullFileSize),
             mnPackFileSize(nFullFileSize),
@@ -1549,7 +1549,7 @@ namespace
             return bRetval;
         }
 
-        bool tryPush(FileSharedPtr& rFileCandidate, bool bCompress)
+        bool tryPush(FileSharedPtr const & rFileCandidate, bool bCompress)
         {
             sal_uInt64 nFileSize(0);
 
