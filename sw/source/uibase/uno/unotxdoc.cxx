@@ -33,6 +33,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/msgpool.hxx>
 #include <sfx2/printer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
@@ -3636,32 +3638,35 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     #endif
 }
 
-vcl::DialogID SwXTextDocument::findDialog()
+void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight)
 {
-    return vcl::DialogID(0);
+    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
+    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
+    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
+    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
+    if (!pChild)
+    {
+        pViewFrame->ToggleChildWindow(pSlot->GetSlotId());
+        pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
+        if (!pChild)
+        {
+            SAL_WARN("lok.dialog", "Dialog " << rDialogID << " is not supported");
+            return;
+        }
+    }
+
+    Dialog* pDlg = static_cast<Dialog*>(pChild->GetWindow());
+    pDlg->paintDialog(rDevice);
+    const Size aSize = pDlg->GetOptimalSize();
+    nWidth = aSize.getWidth();
+    nHeight = aSize.getHeight();
 }
 
-void SwXTextDocument::paintDialog(vcl::DialogID /*rDialogID*/, VirtualDevice& rDevice, int nWidth, int nHeight)
-{
-    SfxViewShell* pViewShell = pDocShell->GetView();
-    SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
-    SfxChildWindow* pSfxChildWindow = SwSpellDialogChildWindow::CreateImpl(&pViewFrame->GetWindow(), SwSpellDialogChildWindow::GetChildWindowId(),
-                                                                           &pViewFrame->GetBindings(), nullptr);
-
-    Size aSize(nWidth, nHeight);
-
-    vcl::Window* pWindow = pSfxChildWindow->GetWindow();
-
-    pWindow->SetSizePixel(aSize);
-    pWindow->Show();
-    pWindow->Paint(rDevice, tools::Rectangle(Point(), aSize));
-}
-
-void SwXTextDocument::postDialogMouseEvent(vcl::DialogID /*rDialogID*/, int /*nType*/, int /*nCharCode*/, int /*nKeyCode*/)
+void SwXTextDocument::postDialogMouseEvent(const vcl::DialogID& /*rDialogID*/, int /*nType*/, int /*nCharCode*/, int /*nKeyCode*/)
 {
 }
 
-void SwXTextDocument::postDialogKeyEvent(vcl::DialogID /*rDialogID*/, int /*nType*/, int /*nX*/, int /*nY*/,
+void SwXTextDocument::postDialogKeyEvent(const vcl::DialogID& /*rDialogID*/, int /*nType*/, int /*nX*/, int /*nY*/,
                                          int /*nCount*/, int /*nButtons*/, int /*nModifier*/)
 {
 }

@@ -431,12 +431,11 @@ public:
     /// @see vcl::ITiledRenderable::getPostIts().
     OUString getPostIts() override;
 
-    vcl::DialogID findDialog() override;
-    void paintDialog(vcl::DialogID rDialogID, VirtualDevice &rDevice, int nWidth, int nHeight) override;
-    void postDialogMouseEvent(vcl::DialogID rDialogID, int nType,
+    void paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight) override;
+    void postDialogMouseEvent(const vcl::DialogID& rDialogID, int nType,
                              int nCharCode, int nKeyCode) override;
 
-    void postDialogKeyEvent(vcl::DialogID rDialogID, int nType, int nX, int nY,
+    void postDialogKeyEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
                             int nCount, int nButtons, int nModifier) override;
 
     // css::tiledrendering::XTiledRenderable
