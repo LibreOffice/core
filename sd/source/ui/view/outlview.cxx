@@ -313,7 +313,7 @@ OutlinerView* OutlineView::GetViewByWindow (vcl::Window* pWin) const
  */
 Paragraph* OutlineView::GetPrevTitle(const Paragraph* pPara)
 {
-    sal_Int32 nPos = mrOutliner.GetAbsPos(const_cast<Paragraph*>(pPara));
+    sal_Int32 nPos = mrOutliner.GetAbsPos(pPara);
 
     if (nPos > 0)
     {

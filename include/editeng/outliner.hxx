@@ -206,7 +206,7 @@ class EDITENG_DLLPUBLIC OutlinerView final
     EDITENG_DLLPRIVATE void         ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara, bool bExpand );
 
     EDITENG_DLLPRIVATE sal_Int32    ImpCheckMousePos( const Point& rPosPixel, MouseTarget& reTarget);
-    EDITENG_DLLPRIVATE void         ImpToggleExpand( Paragraph* pParentPara );
+    EDITENG_DLLPRIVATE void         ImpToggleExpand( Paragraph const * pParentPara );
     EDITENG_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( bool bIncludeHiddenChildren );
 
     EDITENG_DLLPRIVATE sal_Int32    ImpInitPaste( sal_Int32& rStart );
@@ -224,7 +224,7 @@ public:
     void        Scroll( long nHorzScroll, long nVertScroll );
 
     void        Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
-    bool        PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin = nullptr );
+    bool        PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFrameWin = nullptr );
     bool        MouseButtonDown( const MouseEvent& );
     bool        MouseButtonUp( const MouseEvent& );
     void        ReleaseMouse();
@@ -249,7 +249,7 @@ public:
     void        CreateSelectionList (std::vector<Paragraph*> &aSelList) ;
 
     // Retruns the number of selected paragraphs
-    sal_Int32   Select( Paragraph* pParagraph, bool bSelect = true);
+    sal_Int32   Select( Paragraph const * pParagraph, bool bSelect = true);
 
     OUString    GetSelected() const;
     void        SelectRange( sal_Int32 nFirst, sal_Int32 nCount );
@@ -363,7 +363,7 @@ public:
 
     bool        IsCursorAtWrongSpelledWord();
     bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    void        ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack );
+    void        ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void> const * pCallBack );
 
     void        SetInvalidateMore( sal_uInt16 nPixel );
     sal_uInt16  GetInvalidateMore() const;
@@ -659,7 +659,7 @@ protected:
     void            ParagraphDeleted( sal_Int32 nParagraph );
     void            ParaAttribsChanged( sal_Int32 nParagraph );
 
-    void            StyleSheetChanged( SfxStyleSheet* pStyle );
+    void            StyleSheetChanged( SfxStyleSheet const * pStyle );
 
     void            InvalidateBullet(sal_Int32 nPara);
     void            PaintBullet( sal_Int32 nPara, const Point& rStartPos,
@@ -698,7 +698,7 @@ public:
     void            SetAddExtLeading( bool b );
 
     size_t          InsertView( OutlinerView* pView, size_t nIndex = size_t(-1) );
-    void            RemoveView( OutlinerView* pView );
+    void            RemoveView( OutlinerView const * pView );
     OutlinerView*   RemoveView( size_t nIndex );
     OutlinerView*   GetView( size_t nIndex ) const;
     size_t          GetViewCount() const;
@@ -707,7 +707,7 @@ public:
     void            SetText( const OutlinerParaObject& );
     void            AddText( const OutlinerParaObject& );
     void            SetText( const OUString& rText, Paragraph* pParagraph );
-    OUString        GetText( Paragraph* pPara, sal_Int32 nParaCount=1 ) const;
+    OUString        GetText( Paragraph const * pPara, sal_Int32 nParaCount=1 ) const;
 
     void            SetToEmptyText();
 
@@ -734,11 +734,11 @@ public:
     sal_Int32       GetParagraphCount() const;
     Paragraph*      GetParagraph( sal_Int32 nAbsPos ) const;
 
-    bool            HasChildren( Paragraph* pParagraph ) const;
-    sal_Int32       GetChildCount( Paragraph* pParent ) const;
-    bool            IsExpanded( Paragraph* pPara ) const;
-    Paragraph*      GetParent( Paragraph* pParagraph ) const;
-    sal_Int32       GetAbsPos( Paragraph* pPara );
+    bool            HasChildren( Paragraph const * pParagraph ) const;
+    sal_Int32       GetChildCount( Paragraph const * pParent ) const;
+    bool            IsExpanded( Paragraph const * pPara ) const;
+    Paragraph*      GetParent( Paragraph const * pParagraph ) const;
+    sal_Int32       GetAbsPos( Paragraph const * pPara );
 
     sal_Int16       GetDepth( sal_Int32 nPara ) const;
     void            SetDepth( Paragraph* pParagraph, sal_Int16 nNewDepth );
@@ -865,9 +865,9 @@ public:
     void            SetParaAttribs( sal_Int32 nPara, const SfxItemSet& );
     SfxItemSet      GetParaAttribs( sal_Int32 nPara );
 
-    void            Remove( Paragraph* pPara, sal_Int32 nParaCount );
-    bool            Expand( Paragraph* );
-    bool            Collapse( Paragraph* );
+    void            Remove( Paragraph const * pPara, sal_Int32 nParaCount );
+    bool            Expand( Paragraph const * );
+    bool            Collapse( Paragraph const * );
 
     void            SetParaFlag( Paragraph* pPara,  ParaFlag nFlag );
     static bool     HasParaFlag( const Paragraph* pPara, ParaFlag nFlag );
@@ -905,10 +905,10 @@ public:
 
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
-    void            SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > &xSpeller );
+    void            SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 > const &xSpeller );
     css::uno::Reference< css::linguistic2::XSpellChecker1 >
                     GetSpeller();
-    void            SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator >& xHyph );
+    void            SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator > const & xHyph );
 
     static void     SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars);
 
@@ -953,11 +953,11 @@ public:
     OutlinerMode    GetOutlinerMode() const { return nOutlinerMode; }
 
     // spell and return a sentence
-    bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill );
+    bool            SpellSentence(EditView const & rEditView, svx::SpellPortions& rToFill );
     // put spell position to start of current sentence
-    void            PutSpellingToSentenceStart( EditView& rEditView );
+    void            PutSpellingToSentenceStart( EditView const & rEditView );
     // applies a changed sentence
-    void            ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck );
+    void            ApplyChangedSentence(EditView const & rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck );
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void            SetBeginDropHdl( const Link<EditView*,void>& rLink );

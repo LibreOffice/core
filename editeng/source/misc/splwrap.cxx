@@ -154,7 +154,7 @@ SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
 
 
 SvxSpellWrapper::SvxSpellWrapper( vcl::Window* pWn,
-        Reference< XHyphenator >  &xHyphenator,
+        Reference< XHyphenator > const &xHyphenator,
         const bool bStart, const bool bOther ) :
     pWin        ( pWn ),
     xHyph       ( xHyphenator ),

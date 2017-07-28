@@ -37,7 +37,7 @@ class EDITENG_DLLPUBLIC SfxSpellCheckItem: public SfxPoolItem
 public:
 
     SfxSpellCheckItem( css::uno::Reference<
-                            css::linguistic2::XSpellChecker1 >  &xChecker,
+                            css::linguistic2::XSpellChecker1 > const &xChecker,
                        sal_uInt16 nWhich  );
     SfxSpellCheckItem( const SfxSpellCheckItem& rItem );
 

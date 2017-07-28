@@ -295,8 +295,8 @@ class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem
 {
     std::unique_ptr<SvxNumRule> pNumRule;
 public:
-    explicit SvxNumBulletItem(SvxNumRule& rRule);
-    SvxNumBulletItem(SvxNumRule& rRule, sal_uInt16 nWhich );
+    explicit SvxNumBulletItem(SvxNumRule const & rRule);
+    SvxNumBulletItem(SvxNumRule const & rRule, sal_uInt16 nWhich );
     SvxNumBulletItem(const SvxNumBulletItem& rCopy);
     virtual ~SvxNumBulletItem() override;
 

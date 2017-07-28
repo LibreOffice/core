@@ -2503,7 +2503,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 }
 
 EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
-                                    bool bOverwrite, vcl::Window* pFrameWin )
+                                    bool bOverwrite, vcl::Window const * pFrameWin )
 {
     // i.e. Calc has special needs regarding a leading single quotation mark
     // when starting cell input.

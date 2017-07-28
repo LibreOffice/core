@@ -1234,7 +1234,7 @@ OUString SvxAutoCorrect::GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPo
 
 void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                     sal_Int32 nInsPos, sal_Unicode cChar,
-                                    bool bInsert, vcl::Window* pFrameWin )
+                                    bool bInsert, vcl::Window const * pFrameWin )
 {
     bool bIsNextRun = bRunNext;
     bRunNext = false;  // if it was set, then it has to be turned off
@@ -1515,7 +1515,7 @@ bool SvxAutoCorrect::AddWrtSttException( const OUString& rNew,
     return pLists && pLists->AddToWrdSttExceptList(rNew);
 }
 
-bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
+bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc const & rDoc,
                                         const OUString& rTxt, sal_Int32 nPos,
                                         OUString& rWord ) const
 {
@@ -2048,7 +2048,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                             const SvStringsISortDtor& rLst,
                             const sal_Char* pStrmName,
-                            tools::SvRef<SotStorage> &rStg,
+                            tools::SvRef<SotStorage> const &rStg,
                             bool bConvert )
 {
     if( rStg.is() )
