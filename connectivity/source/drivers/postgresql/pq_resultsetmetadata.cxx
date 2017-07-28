@@ -117,7 +117,7 @@ ResultSetMetaData::ResultSetMetaData(
     const css::uno::Reference< css::sdbc::XResultSet >  & origin,
     ResultSet * pResultSet,
     ConnectionSettings **ppSettings,
-    PGresult *pResult,
+    PGresult const *pResult,
     const OUString &schemaName,
     const OUString &tableName ) :
     m_xMutex( refMutex ),

@@ -718,7 +718,7 @@ struct LinearScaleContext
     std::unique_ptr<long[]> mpMapXOffset;
     std::unique_ptr<long[]> mpMapYOffset;
 
-    LinearScaleContext(tools::Rectangle& aDstRect, tools::Rectangle& aBitmapRect,
+    LinearScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle& aBitmapRect,
                  Size& aOutSize, long nOffX, long nOffY)
 
         : mpMapX(new long[aDstRect.GetWidth()])
@@ -882,7 +882,7 @@ struct TradScaleContext
     std::unique_ptr<long[]> mpMapX;
     std::unique_ptr<long[]> mpMapY;
 
-    TradScaleContext(tools::Rectangle& aDstRect, tools::Rectangle& aBitmapRect,
+    TradScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle& aBitmapRect,
                  Size& aOutSize, long nOffX, long nOffY)
 
         : mpMapX(new long[aDstRect.GetWidth()])

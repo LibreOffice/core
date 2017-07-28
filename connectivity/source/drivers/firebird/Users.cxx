@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 Users::Users(const uno::Reference< XDatabaseMetaData >& rMetaData,
              OWeakObject& rParent,
              Mutex& rMutex,
-             TStringVector& rNames) :
+             TStringVector const & rNames) :
     OCollection(rParent,
                 true,
                 rMutex,

@@ -45,7 +45,7 @@
         return t.tv_sec*1000 + t.tv_usec/1000;
     }
 
-    bool IsAbsolutePath(char *pPath)
+    bool IsAbsolutePath(char const *pPath)
     {
         if (pPath[0] != '/')
         {

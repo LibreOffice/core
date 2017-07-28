@@ -121,7 +121,7 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler final
     public:
             OWriteToolBoxDocumentHandler(
                 const css::uno::Reference< css::container::XIndexAccess >& rItemAccess,
-                css::uno::Reference< css::xml::sax::XDocumentHandler >& rDocumentHandler );
+                css::uno::Reference< css::xml::sax::XDocumentHandler > const & rDocumentHandler );
             ~OWriteToolBoxDocumentHandler();
 
         /// @throws css::xml::sax::SAXException

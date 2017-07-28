@@ -350,7 +350,7 @@ private:
     std::unique_ptr<SfxItemSet> mpIgnorableItems;
 public:
     // #i86923#
-    explicit StylePoolImpl( SfxItemSet* pIgnorableItems )
+    explicit StylePoolImpl( SfxItemSet const * pIgnorableItems )
         : maRoot(),
           mpIgnorableItems( pIgnorableItems != nullptr
                             ? pIgnorableItems->Clone( false )
@@ -444,7 +444,7 @@ IStylePoolIteratorAccess* StylePoolImpl::createIterator( bool bSkipUnusedItemSet
 // Ctor, Dtor and redirected methods of class StylePool, nearly inline ;-)
 
 // #i86923#
-StylePool::StylePool( SfxItemSet* pIgnorableItems )
+StylePool::StylePool( SfxItemSet const * pIgnorableItems )
     : pImpl( new StylePoolImpl( pIgnorableItems ) )
 {}
 

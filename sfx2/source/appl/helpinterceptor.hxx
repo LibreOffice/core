@@ -140,7 +140,7 @@ private:
 public:
     HelpStatusListener_Impl(
         css::uno::Reference < css::frame::XDispatch > const & xDispatch,
-        css::util::URL& rURL);
+        css::util::URL const & rURL);
     virtual ~HelpStatusListener_Impl() override;
 
     virtual void SAL_CALL   statusChanged( const css::frame::FeatureStateEvent& Event ) override;

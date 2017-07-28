@@ -211,11 +211,11 @@ namespace connectivity
              * @throws css::uno::RuntimeException
              */
             css::uno::Reference< css::sdbc::XBlob>
-                createBlob(ISC_QUAD* pBlobID);
+                createBlob(ISC_QUAD const * pBlobID);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             css::uno::Reference< css::sdbc::XClob>
-                createClob(ISC_QUAD* pBlobID);
+                createClob(ISC_QUAD const * pBlobID);
 
             /**
              * Create and/or connect to the sdbcx Catalog. This is completely

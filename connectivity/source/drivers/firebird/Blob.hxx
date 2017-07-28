@@ -58,7 +58,7 @@ namespace connectivity
         public:
             Blob(isc_db_handle* pDatabaseHandle,
                  isc_tr_handle* pTransactionHandle,
-                 ISC_QUAD& aBlobID);
+                 ISC_QUAD const & aBlobID);
 
             // ---- XBlob ----------------------------------------------------
             virtual sal_Int64 SAL_CALL

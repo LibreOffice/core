@@ -31,7 +31,7 @@ class SVL_DLLPUBLIC StylePool final
 private:
     std::unique_ptr<StylePoolImpl> pImpl;
 public:
-    explicit StylePool( SfxItemSet* pIgnorableItems = nullptr );
+    explicit StylePool( SfxItemSet const * pIgnorableItems = nullptr );
 
     /** Insert a SfxItemSet into the style pool.
 

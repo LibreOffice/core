@@ -65,7 +65,7 @@ void OOperandValue::setValue(const ORowSetValue& _rVal)
     m_aValue = _rVal;
 }
 
-OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
+OOperandParam::OOperandParam(OSQLParseNode const * pNode, sal_Int32 _nPos)
     : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)         // Standard-Type
 {
     OSL_ENSURE(SQL_ISRULE(pNode,parameter),"Argument is not a parameter");

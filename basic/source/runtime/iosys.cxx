@@ -292,8 +292,8 @@ class UCBStream : public SvStream
     Reference< XStream >        xS;
     Reference< XSeekable >      xSeek;
 public:
-    explicit UCBStream( Reference< XInputStream > & xIS );
-    explicit UCBStream( Reference< XStream > & xS );
+    explicit UCBStream( Reference< XInputStream > const & xIS );
+    explicit UCBStream( Reference< XStream > const & xS );
                        virtual ~UCBStream() override;
     virtual std::size_t GetData( void* pData, std::size_t nSize ) override;
     virtual std::size_t PutData( const void* pData, std::size_t nSize ) override;
@@ -302,13 +302,13 @@ public:
     virtual void        SetSize( sal_uInt64 nSize ) override;
 };
 
-UCBStream::UCBStream( Reference< XInputStream > & rStm )
+UCBStream::UCBStream( Reference< XInputStream > const & rStm )
     : xIS( rStm )
     , xSeek( rStm, UNO_QUERY )
 {
 }
 
-UCBStream::UCBStream( Reference< XStream > & rStm )
+UCBStream::UCBStream( Reference< XStream > const & rStm )
     : xS( rStm )
     , xSeek( rStm, UNO_QUERY )
 {

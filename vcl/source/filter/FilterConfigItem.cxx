@@ -144,7 +144,7 @@ FilterConfigItem::FilterConfigItem( const OUString& rSubTree )
     ImpInitTree( rSubTree );
 }
 
-FilterConfigItem::FilterConfigItem( css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
+FilterConfigItem::FilterConfigItem( css::uno::Sequence< css::beans::PropertyValue > const * pFilterData )
     : bModified(false)
 {
     if ( pFilterData )
@@ -152,7 +152,7 @@ FilterConfigItem::FilterConfigItem( css::uno::Sequence< css::beans::PropertyValu
 }
 
 FilterConfigItem::FilterConfigItem( const OUString& rSubTree,
-    css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
+    css::uno::Sequence< css::beans::PropertyValue > const * pFilterData )
 {
     ImpInitTree( rSubTree );
 

@@ -56,7 +56,7 @@ static const int nCHCount = SAL_N_ELEMENTS(aCH);
 
 PropertyChgHelper::PropertyChgHelper(
         const Reference< XInterface > &rxSource,
-        Reference< XLinguProperties > &rxPropSet,
+        Reference< XLinguProperties > const &rxPropSet,
         int nAllowedEvents ) :
     PropertyChgHelperBase(),
     aPropNames          (nCHCount),
@@ -303,7 +303,7 @@ sal_Bool SAL_CALL
 
 PropertyHelper_Thes::PropertyHelper_Thes(
         const Reference< XInterface > &rxSource,
-        Reference< XLinguProperties > &rxPropSet ) :
+        Reference< XLinguProperties > const &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, 0 )
 {
     SetDefaultValues();
@@ -336,7 +336,7 @@ static const char *aSP[] =
 
 PropertyHelper_Spell::PropertyHelper_Spell(
         const Reference< XInterface > & rxSource,
-        Reference< XLinguProperties > &rxPropSet ) :
+        Reference< XLinguProperties > const &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_SPELLCHECKER )
 {
     AddPropNames( aSP, SAL_N_ELEMENTS(aSP) );
@@ -517,7 +517,7 @@ static const char *aHP[] =
 
 PropertyHelper_Hyphen::PropertyHelper_Hyphen(
         const Reference< XInterface > & rxSource,
-        Reference< XLinguProperties > &rxPropSet ) :
+        Reference< XLinguProperties > const &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_HYPHENATOR )
 {
     AddPropNames( aHP, SAL_N_ELEMENTS(aHP) );
@@ -659,7 +659,7 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
 
 PropertyHelper_Thesaurus::PropertyHelper_Thesaurus(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet )
+            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet )
 {
     pInst = new PropertyHelper_Thes( rxSource, rxPropSet );
     xPropHelper = pInst;
@@ -686,7 +686,7 @@ void PropertyHelper_Thesaurus::SetTmpPropVals( const css::beans::PropertyValues 
 
 PropertyHelper_Hyphenation::PropertyHelper_Hyphenation(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet)
+            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet)
 {
     pInst = new PropertyHelper_Hyphen( rxSource, rxPropSet );
     xPropHelper = pInst;
@@ -740,7 +740,7 @@ bool PropertyHelper_Hyphenation::removeLinguServiceEventListener(
 
 PropertyHelper_Spelling::PropertyHelper_Spelling(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet )
+            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet )
 {
     pInst = new PropertyHelper_Spell( rxSource, rxPropSet );
     xPropHelper = pInst;
