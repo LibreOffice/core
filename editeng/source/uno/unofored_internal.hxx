@@ -21,7 +21,7 @@
 #define INCLUDED_EDITENG_SOURCE_UNO_UNFORED_INTERNAL_HXX
 
 
-SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich );
+SfxItemState GetSvxEditEngineItemState( EditEngine const & rEditEngine, const ESelection& rSel, sal_uInt16 nWhich );
 
 
 #endif // INCLUDED_EDITENG_SOURCE_UNO_UNFORED_INTERNAL_HXX

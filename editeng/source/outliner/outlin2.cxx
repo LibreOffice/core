@@ -228,17 +228,17 @@ void Outliner::SetMaxAutoPaperSize( const Size& rSz )
     pEditEngine->SetMaxAutoPaperSize( rSz );
 }
 
-bool Outliner::IsExpanded( Paragraph* pPara ) const
+bool Outliner::IsExpanded( Paragraph const * pPara ) const
 {
     return pParaList->HasVisibleChildren( pPara );
 }
 
-Paragraph* Outliner::GetParent( Paragraph* pParagraph ) const
+Paragraph* Outliner::GetParent( Paragraph const * pParagraph ) const
 {
     return pParaList->GetParent( pParagraph );
 }
 
-sal_Int32 Outliner::GetChildCount( Paragraph* pParent ) const
+sal_Int32 Outliner::GetChildCount( Paragraph const * pParent ) const
 {
     return pParaList->GetChildCount( pParent );
 }
@@ -389,7 +389,7 @@ bool Outliner::SpellNextDocument()
 }
 
 
-void Outliner::SetSpeller( Reference< XSpellChecker1 > &xSpeller )
+void Outliner::SetSpeller( Reference< XSpellChecker1 > const &xSpeller )
 {
     pEditEngine->SetSpeller( xSpeller );
 }
@@ -403,7 +403,7 @@ void Outliner::SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharacte
     EditEngine::SetForbiddenCharsTable(xForbiddenChars);
 }
 
-void Outliner::SetHyphenator( Reference< XHyphenator >& xHyph )
+void Outliner::SetHyphenator( Reference< XHyphenator > const & xHyph )
 {
     pEditEngine->SetHyphenator( xHyph );
 }
@@ -581,17 +581,17 @@ bool Outliner::IsForceAutoColor() const
     return pEditEngine->IsForceAutoColor();
 }
 
-bool Outliner::SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill )
+bool Outliner::SpellSentence(EditView const & rEditView, svx::SpellPortions& rToFill )
 {
     return pEditEngine->SpellSentence(rEditView, rToFill );
 }
 
-void Outliner::PutSpellingToSentenceStart( EditView& rEditView )
+void Outliner::PutSpellingToSentenceStart( EditView const & rEditView )
 {
     pEditEngine->PutSpellingToSentenceStart( rEditView );
 }
 
-void Outliner::ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck )
+void Outliner::ApplyChangedSentence(EditView const & rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck )
 {
     pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck );
 }

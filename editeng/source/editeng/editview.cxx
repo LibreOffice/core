@@ -407,7 +407,7 @@ void EditView::InsertText( const OUString& rStr, bool bSelect )
     pEE->FormatAndUpdate( this );
 }
 
-bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWin )
+bool EditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin )
 {
     return pImpEditView->PostKeyEvent( rKeyEvent, pFrameWin );
 }
@@ -748,7 +748,7 @@ void EditView::TransliterateText( TransliterationFlags nTransliterationMode )
     }
 }
 
-void EditView::CompleteAutoCorrect( vcl::Window* pFrameWin )
+void EditView::CompleteAutoCorrect( vcl::Window const * pFrameWin )
 {
     if ( !pImpEditView->HasSelection() && pImpEditView->pEditEngine->pImpEditEngine->GetStatus().DoAutoCorrect() )
     {

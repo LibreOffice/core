@@ -241,7 +241,7 @@ bool SvxOutlinerForwarder::IsValid() const
 
 SfxItemState SvxOutlinerForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
 {
-    return GetSvxEditEngineItemState( const_cast<EditEngine&>(rOutliner.GetEditEngine()), rSel, nWhich );
+    return GetSvxEditEngineItemState( rOutliner.GetEditEngine(), rSel, nWhich );
 }
 
 SfxItemState SvxOutlinerForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const

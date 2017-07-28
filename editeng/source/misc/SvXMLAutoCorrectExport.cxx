@@ -30,7 +30,7 @@ SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
     const css::uno::Reference< css::uno::XComponentContext > & xContext,
     const SvxAutocorrWordList *  pNewAutocorr_List,
     const OUString &rFileName,
-    css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler)
+    css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler)
 :   SvXMLExport( xContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     pAutocorr_List( pNewAutocorr_List )
 {
@@ -74,7 +74,7 @@ SvXMLExceptionListExport::SvXMLExceptionListExport(
     const css::uno::Reference< css::uno::XComponentContext > & xContext,
     const SvStringsISortDtor &rNewList,
     const OUString &rFileName,
-    css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler)
+    css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler)
 :   SvXMLExport( xContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     rList( rNewList )
 {

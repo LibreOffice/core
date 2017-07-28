@@ -170,28 +170,28 @@ void ParagraphList::MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32
     }
 }
 
-bool ParagraphList::HasChildren( Paragraph* pParagraph ) const
+bool ParagraphList::HasChildren( Paragraph const * pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
     return pNext && ( pNext->GetDepth() > pParagraph->GetDepth() );
 }
 
-bool ParagraphList::HasHiddenChildren( Paragraph* pParagraph ) const
+bool ParagraphList::HasHiddenChildren( Paragraph const * pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
     return pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && !pNext->IsVisible();
 }
 
-bool ParagraphList::HasVisibleChildren( Paragraph* pParagraph ) const
+bool ParagraphList::HasVisibleChildren( Paragraph const * pParagraph ) const
 {
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pNext = GetParagraph( ++n );
     return pNext && ( pNext->GetDepth() > pParagraph->GetDepth() ) && pNext->IsVisible();
 }
 
-sal_Int32 ParagraphList::GetChildCount( Paragraph* pParent ) const
+sal_Int32 ParagraphList::GetChildCount( Paragraph const * pParent ) const
 {
     sal_Int32 nChildCount = 0;
     sal_Int32 n = GetAbsPos( pParent );
@@ -204,22 +204,19 @@ sal_Int32 ParagraphList::GetChildCount( Paragraph* pParent ) const
     return nChildCount;
 }
 
-Paragraph* ParagraphList::GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const
+Paragraph* ParagraphList::GetParent( Paragraph const * pParagraph ) const
 {
-    /* rRelPos = 0 */;
     sal_Int32 n = GetAbsPos( pParagraph );
     Paragraph* pPrev = GetParagraph( --n );
     while ( pPrev && ( pPrev->GetDepth() >= pParagraph->GetDepth() ) )
     {
-//      if ( pPrev->GetDepth() == pParagraph->GetDepth() )
-//          rRelPos++;
         pPrev = GetParagraph( --n );
     }
 
     return pPrev;
 }
 
-void ParagraphList::Expand( Paragraph* pParent )
+void ParagraphList::Expand( Paragraph const * pParent )
 {
     sal_Int32 nChildCount = GetChildCount( pParent );
     sal_Int32 nPos = GetAbsPos( pParent );
@@ -235,7 +232,7 @@ void ParagraphList::Expand( Paragraph* pParent )
     }
 }
 
-void ParagraphList::Collapse( Paragraph* pParent )
+void ParagraphList::Collapse( Paragraph const * pParent )
 {
     sal_Int32 nChildCount = GetChildCount( pParent );
     sal_Int32 nPos = GetAbsPos( pParent );
@@ -251,7 +248,7 @@ void ParagraphList::Collapse( Paragraph* pParent )
     }
 }
 
-sal_Int32 ParagraphList::GetAbsPos( Paragraph* pParent ) const
+sal_Int32 ParagraphList::GetAbsPos( Paragraph const * pParent ) const
 {
     sal_Int32 pos = 0;
     std::vector<Paragraph*>::const_iterator iter;

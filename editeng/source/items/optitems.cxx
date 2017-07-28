@@ -31,7 +31,7 @@ using namespace ::com::sun::star::linguistic2;
 
 SfxSpellCheckItem::SfxSpellCheckItem
 (
-    Reference< XSpellChecker1 > &xChecker,
+    Reference< XSpellChecker1 > const &xChecker,
     sal_uInt16 _nWhich
 ) :
 
