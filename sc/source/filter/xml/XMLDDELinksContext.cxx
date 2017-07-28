@@ -45,26 +45,24 @@ ScXMLDDELinksContext::~ScXMLDDELinksContext()
     GetScImport().UnlockSolarMutex();
 }
 
-SvXMLImportContext *ScXMLDDELinksContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinksContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(rLName, XML_DDE_LINK))
-        pContext = new ScXMLDDELinkContext(GetScImport(), nPrefix, rLName, xAttrList);
+    if ( nElement == XML_ELEMENT( TABLE, XML_DDE_LINK) )
+        pContext = new ScXMLDDELinkContext(GetScImport(), nElement, xAttrList);
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
 ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ ) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+    ScXMLImportContext( rImport ),
     aDDELinkTable(),
     aDDELinkRow(),
     sApplication(),
@@ -82,19 +80,23 @@ ScXMLDDELinkContext::~ScXMLDDELinkContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDELinkContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinkContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if ((nPrefix == XML_NAMESPACE_OFFICE) && IsXMLToken(rLName, XML_DDE_SOURCE))
-        pContext = new ScXMLDDESourceContext(GetScImport(), nPrefix, rLName, xAttrList, this);
-    else if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(rLName, XML_TABLE))
-        pContext = new ScXMLDDETableContext(GetScImport(), nPrefix, rLName, xAttrList, this);
+    switch (nElement)
+    {
+        case XML_ELEMENT( OFFICE, XML_DDE_SOURCE ):
+            pContext = new ScXMLDDESourceContext(GetScImport(), nElement, xAttrList, this);
+        break;
+        case XML_ELEMENT( TABLE, XML_TABLE ):
+            pContext = new ScXMLDDETableContext(GetScImport(), nElement, xAttrList, this);
+        break;
+    }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
@@ -130,7 +132,7 @@ void ScXMLDDELinkContext::AddRowsToTable(const sal_Int32 nRowsP)
     aDDELinkRow.clear();
 }
 
-void ScXMLDDELinkContext::EndElement()
+void SAL_CALL ScXMLDDELinkContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScDocument* pDoc = GetScImport().GetDocument();
     if (nPosition > -1 && nColumns && nRows)
@@ -184,41 +186,39 @@ void ScXMLDDELinkContext::EndElement()
 }
 
 ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pDDELink(pTempDDELink)
 {
-    if( !xAttrList.is() ) return;
-
-    sal_Int16               nAttrCount      = xAttrList->getLength();
-
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_OFFICE)
+        for (auto &aIter : *pAttribList)
         {
-            if (IsXMLToken(aLocalName, XML_DDE_APPLICATION))
-                pDDELink->SetApplication(sValue);
-            else if (IsXMLToken(aLocalName, XML_DDE_TOPIC))
-                pDDELink->SetTopic(sValue);
-            else if (IsXMLToken(aLocalName, XML_DDE_ITEM))
-                pDDELink->SetItem(sValue);
-        }
-        else if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(aLocalName, XML_CONVERSION_MODE))
-        {
-            if (IsXMLToken(sValue, XML_INTO_ENGLISH_NUMBER))
-                pDDELink->SetMode(SC_DDE_ENGLISH);
-            else if (IsXMLToken(sValue, XML_KEEP_TEXT))
-                pDDELink->SetMode(SC_DDE_TEXT);
-            else
-                pDDELink->SetMode(SC_DDE_DEFAULT);
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT( OFFICE, XML_DDE_APPLICATION ):
+                    pDDELink->SetApplication(aIter.toString());
+                break;
+                case XML_ELEMENT( OFFICE, XML_DDE_TOPIC ):
+                    pDDELink->SetTopic(aIter.toString());
+                break;
+                case XML_ELEMENT( OFFICE, XML_DDE_ITEM ):
+                    pDDELink->SetItem(aIter.toString());
+                break;
+                case XML_ELEMENT( TABLE, XML_CONVERSION_MODE ):
+                    if (IsXMLToken(aIter, XML_INTO_ENGLISH_NUMBER))
+                        pDDELink->SetMode(SC_DDE_ENGLISH);
+                    else if (IsXMLToken(aIter, XML_KEEP_TEXT))
+                        pDDELink->SetMode(SC_DDE_TEXT);
+                    else
+                        pDDELink->SetMode(SC_DDE_DEFAULT);
+                break;
+            }
         }
     }
 }
@@ -227,26 +227,16 @@ ScXMLDDESourceContext::~ScXMLDDESourceContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDESourceContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
-{
-    SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
-}
-
-void ScXMLDDESourceContext::EndElement()
+void SAL_CALL ScXMLDDESourceContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pDDELink->CreateDDELink();
 }
 
 ScXMLDDETableContext::ScXMLDDETableContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */,
                                       ScXMLDDELinkContext* pTempDDELink) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pDDELink(pTempDDELink)
 {
     // here are no attributes
@@ -256,136 +246,101 @@ ScXMLDDETableContext::~ScXMLDDETableContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDETableContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDETableContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if (nPrefix == XML_NAMESPACE_TABLE)
+    switch (nElement)
     {
-        if (IsXMLToken(rLName, XML_TABLE_COLUMN))
-            pContext = new ScXMLDDEColumnContext(GetScImport(), nPrefix, rLName, xAttrList, pDDELink);
-        else if (IsXMLToken(rLName, XML_TABLE_ROW))
-            pContext = new ScXMLDDERowContext(GetScImport(), nPrefix, rLName, xAttrList, pDDELink);
+        case XML_ELEMENT( TABLE, XML_TABLE_COLUMN ):
+            pContext = new ScXMLDDEColumnContext(GetScImport(), nElement, xAttrList, pDDELink);
+        break;
+        case XML_ELEMENT( TABLE, XML_TABLE_ROW ):
+            pContext = new ScXMLDDERowContext(GetScImport(), nElement, xAttrList, pDDELink);
+        break;
     }
 
     if (!pContext)
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLDDETableContext::EndElement()
-{
-}
-
 ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pDDELink(pTempDDELink)
 {
-    if( !xAttrList.is() ) return;
-    sal_Int32 nCols(1);
-
-    sal_Int16               nAttrCount      = xAttrList->getLength();
-
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_Int32 nCols(1);
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
-            if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
-            {
-                ::sax::Converter::convertNumber(nCols, sValue);
-            }
+        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ) ) );
+        if (aIter != pAttribList->end())
+            nCols = aIter.toInt32();
+
+        pDDELink->AddColumns(nCols);
     }
-    pDDELink->AddColumns(nCols);
 }
 
 ScXMLDDEColumnContext::~ScXMLDDEColumnContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDEColumnContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
-{
-    SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
-}
-
-void ScXMLDDEColumnContext::EndElement()
-{
-}
-
 ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     pDDELink(pTempDDELink),
     nRows(1)
 {
-    if( !xAttrList.is() ) return;
-
-    sal_Int16               nAttrCount      = xAttrList->getLength();
-
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_TABLE)
-            if (IsXMLToken(aLocalName, XML_NUMBER_ROWS_REPEATED))
-            {
-                ::sax::Converter::convertNumber(nRows, sValue);
-            }
+        auto &aIter( pAttribList->find( XML_ELEMENT( TABLE, XML_NUMBER_ROWS_REPEATED ) ) );
+        if (aIter != pAttribList->end())
+            nRows = aIter.toInt32();
+
+        pDDELink->AddRows(nRows);
     }
-    pDDELink->AddRows(nRows);
 }
 
 ScXMLDDERowContext::~ScXMLDDERowContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDERowContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDERowContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
-    if (nPrefix == XML_NAMESPACE_TABLE)
-        if (IsXMLToken(rLName, XML_TABLE_CELL))
-            pContext = new ScXMLDDECellContext(GetScImport(), nPrefix, rLName, xAttrList, pDDELink);
+    if (nElement == XML_ELEMENT( TABLE, XML_TABLE_CELL ))
+        pContext = new ScXMLDDECellContext(GetScImport(), nElement, xAttrList, pDDELink);
 
     if (!pContext)
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
 
-void ScXMLDDERowContext::EndElement()
+void SAL_CALL ScXMLDDERowContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     pDDELink->AddRowsToTable(nRows);
 }
 
 ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
-                                      sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
-    ScXMLImportContext( rImport, nPrfx, rLName ),
+    ScXMLImportContext( rImport ),
     sValue(),
     fValue(),
     nCells(1),
@@ -394,44 +349,34 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
     bEmpty(true),
     pDDELink(pTempDDELink)
 {
-    if( !xAttrList.is() ) return;
-
-    sal_Int16               nAttrCount      = xAttrList->getLength();
-
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
+    if ( xAttrList.is() )
     {
-        const OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const OUString& sTempValue (xAttrList->getValueByIndex( nIndex ));
-        OUString aLocalName;
-        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        if (nPrefix == XML_NAMESPACE_OFFICE)
+        for (auto &aIter : *pAttribList)
         {
-            if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
+            switch (aIter.getToken())
             {
-                if (IsXMLToken(sTempValue, XML_STRING))
-                    bString = true;
-                else
-                    bString = false;
-            }
-            else if (IsXMLToken(aLocalName, XML_STRING_VALUE))
-            {
-                sValue = sTempValue;
-                bEmpty = false;
-                bString2 = true;
-            }
-            else if (IsXMLToken(aLocalName, XML_VALUE))
-            {
-                ::sax::Converter::convertDouble(fValue, sTempValue);
-                bEmpty = false;
-                bString2 = false;
-            }
-        }
-        else if (nPrefix == XML_NAMESPACE_TABLE)
-        {
-            if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
-            {
-                ::sax::Converter::convertNumber(nCells, sTempValue);
+                case XML_ELEMENT( OFFICE, XML_VALUE_TYPE ):
+                    if (IsXMLToken(aIter, XML_STRING))
+                        bString = true;
+                    else
+                        bString = false;
+                break;
+                case XML_ELEMENT( OFFICE, XML_STRING_VALUE ):
+                    sValue = aIter.toString();
+                    bEmpty = false;
+                    bString2 = true;
+                break;
+                case XML_ELEMENT( OFFICE, XML_VALUE ):
+                    ::sax::Converter::convertDouble(fValue, aIter.toString());
+                    bEmpty = false;
+                    bString2 = false;
+                break;
+                case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
+                    nCells = aIter.toInt32();
+                break;
             }
         }
     }
@@ -441,16 +386,7 @@ ScXMLDDECellContext::~ScXMLDDECellContext()
 {
 }
 
-SvXMLImportContext *ScXMLDDECellContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
-{
-    SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
-
-    return pContext;
-}
-
-void ScXMLDDECellContext::EndElement()
+void SAL_CALL ScXMLDDECellContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     OSL_ENSURE(bString == bString2, "something wrong with this type");
     ScDDELinkCell aCell;

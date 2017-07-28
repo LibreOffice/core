@@ -77,14 +77,6 @@ ScXMLConsolidationContext::~ScXMLConsolidationContext()
     GetScImport().UnlockSolarMutex();
 }
 
-SvXMLImportContext *ScXMLConsolidationContext::CreateChildContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
-{
-    return new SvXMLImportContext( GetImport(), nPrefix, rLName );
-}
-
 void SAL_CALL ScXMLConsolidationContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (bTargetAddr)
