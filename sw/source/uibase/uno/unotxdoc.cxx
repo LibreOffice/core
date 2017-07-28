@@ -3643,6 +3643,11 @@ void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice&
     SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
     SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
     const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
+    if (!pSlot)
+    {
+        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
+        return;
+    }
     SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
     if (!pChild)
     {
