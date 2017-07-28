@@ -56,7 +56,7 @@ public:
     DomBuilderContext( SvXMLImport& rImport,
                        sal_uInt16 nPrefix,
                        const OUString& rLocalName,
-                       css::uno::Reference<css::xml::dom::XNode>& );
+                       css::uno::Reference<css::xml::dom::XNode> const & );
 
     virtual ~DomBuilderContext() override;
 

@@ -82,7 +82,7 @@ SchemaRestrictionContext::SchemaRestrictionContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    Reference<css::xforms::XDataTypeRepository>& rRepository,
+    Reference<css::xforms::XDataTypeRepository> const & rRepository,
     const OUString& sTypeName ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
         mxRepository( rRepository ),

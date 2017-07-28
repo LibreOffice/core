@@ -44,7 +44,7 @@ public:
     SchemaRestrictionContext( SvXMLImport& rImport,
                               sal_uInt16 nPrfx,
                               const OUString& rLName,
-                              css::uno::Reference<css::xforms::XDataTypeRepository>& rRepository,
+                              css::uno::Reference<css::xforms::XDataTypeRepository> const & rRepository,
                               const OUString& sTypeName );
 
 protected:

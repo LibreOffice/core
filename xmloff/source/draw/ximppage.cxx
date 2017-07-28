@@ -210,7 +210,7 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList>& xAttrList,
-    Reference< drawing::XShapes >& rShapes)
+    Reference< drawing::XShapes > const & rShapes)
 : SvXMLImportContext( rImport, nPrfx, rLocalName )
 , mxShapes( rShapes )
 , mxAnnotationAccess( rShapes, UNO_QUERY )

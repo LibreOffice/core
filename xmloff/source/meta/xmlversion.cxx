@@ -44,7 +44,7 @@ XMLVersionListExport::XMLVersionListExport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     const css::uno::Sequence < css::util::RevisionTag >& rVersions,
     const OUString &rFileName,
-    Reference< XDocumentHandler > &rHandler )
+    Reference< XDocumentHandler > const &rHandler )
 :   SvXMLExport( rContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     maVersions( rVersions )
 {

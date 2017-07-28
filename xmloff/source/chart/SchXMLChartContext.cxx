@@ -1190,7 +1190,7 @@ void SchXMLChartContext::InitChart(
 SchXMLTitleContext::SchXMLTitleContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
                                         const OUString& rLocalName,
                                         OUString& rTitle,
-                                        uno::Reference< drawing::XShape >& xTitleShape ) :
+                                        uno::Reference< drawing::XShape > const & xTitleShape ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mrTitle( rTitle ),

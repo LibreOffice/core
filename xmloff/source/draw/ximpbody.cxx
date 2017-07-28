@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     sal_uInt16 nPrfx, const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes)
+    uno::Reference< drawing::XShapes > const & rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 ,   mbHadSMILNodes( false )
 {
