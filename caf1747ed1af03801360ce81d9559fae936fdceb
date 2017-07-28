@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_48ae7986",
+        "filename": "oox/source/vml/vmltextboxcontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-28T08:35:21Z",
+      "side": 1,
+      "message": "Reading writerfilter/source/dmapper/DomainMapper.cxx:324, this is OK.",
+      "revId": "caf1747ed1af03801360ce81d9559fae936fdceb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_68ab3575",
+        "filename": "oox/source/vml/vmltextboxcontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-28T08:35:21Z",
+      "side": 1,
+      "message": "In writerfilter \"cs\" is mapped to complex.",
+      "revId": "caf1747ed1af03801360ce81d9559fae936fdceb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_88b6a1da",
+        "filename": "oox/source/vml/vmltextboxcontext.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-07-28T08:35:21Z",
+      "side": 1,
+      "message": "In writerfilter \"hAnsi\" is ignored, it\u0027s \"eastAsia\" that is mapped to asian.",
+      "revId": "caf1747ed1af03801360ce81d9559fae936fdceb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
