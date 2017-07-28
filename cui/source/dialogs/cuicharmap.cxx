@@ -663,6 +663,8 @@ void SvxCharacterMap::setCharName(sal_UCS4 nDecimalValue)
 {
     /* get the character name */
     UErrorCode errorCode = U_ZERO_ERROR;
+    // icu has a private uprv_getMaxCharNameLength function which returns the max possible
+    // length of this property. Unicode 3.2 max char name length was 83
     char buffer[100];
     u_charName(nDecimalValue, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
     if (U_SUCCESS(errorCode))
