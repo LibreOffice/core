@@ -92,6 +92,8 @@ void Scheduler::ImplDeInitScheduler()
     DBG_TESTSOLARMUTEX();
 
     SchedulerGuard aSchedulerGuard;
+    // clean up all the sfx::SfxItemDisruptor_Impl Idles
+    ProcessEventsToIdle();
     rSchedCtx.mbActive = false;
 
     assert( nullptr == rSchedCtx.mpSchedulerStack );
@@ -101,18 +103,47 @@ void Scheduler::ImplDeInitScheduler()
     DELETEZ( rSchedCtx.mpSalTimer );
 
     ImplSchedulerData* pSchedulerData = rSchedCtx.mpFirstSchedulerData;
+    sal_uInt32 nActiveTasks = 0, nIgnoredTasks = 0;
     while ( pSchedulerData )
     {
         Task *pTask = pSchedulerData->mpTask;
         if ( pTask )
         {
-            pTask->mbActive = false;
+            if ( pTask->mbActive )
+            {
+                const char *sIgnored = "";
+                ++nActiveTasks;
+                // TODO: shutdown these timers before Scheduler DeInit
+                if ( pTask->GetDebugName() && (
+                           !strcmp( pTask->GetDebugName(), "svx OLEObjCache pTimer UnloadCheck" )
+                        || !strcmp( pTask->GetDebugName(), "svtools::GraphicCache maReleaseTimer" )
+                        || !strcmp( pTask->GetDebugName(), "editeng::ImpEditEngine aOnlineSpellTimer" )
+                        || !strcmp( pTask->GetDebugName(), "sc::ScModule aIdleTimer" )
+                        || !strcmp( pTask->GetDebugName(), "sd::CacheConfiguration maReleaseTimer" )
+                        || !strcmp( pTask->GetDebugName(), "svtools::GraphicObject mpSwapOutTimer" )
+                        || !strcmp( pTask->GetDebugName(), "desktop::Desktop m_firstRunTimer" )
+                        || !strcmp( pTask->GetDebugName(), "vcl::win GdiPlusBuffer aGdiPlusBuffer" )
+                        ))
+                {
+                    sIgnored = " (ignored)";
+                    ++nIgnoredTasks;
+                }
+                const Timer *timer = dynamic_cast<Timer*>( pTask );
+                if ( timer )
+                    SAL_WARN( "vcl.schedule", "DeInit task: " << *timer << sIgnored );
+                else
+                    SAL_WARN( "vcl.schedule", "DeInit task: " << *pTask << sIgnored );
+                pTask->mbActive = false;
+            }
             pTask->mpSchedulerData = nullptr;
         }
         ImplSchedulerData* pDeleteSchedulerData = pSchedulerData;
         pSchedulerData = pSchedulerData->mpNext;
         delete pDeleteSchedulerData;
     }
+    SAL_WARN_IF( 0 != nActiveTasks, "vcl.schedule", "DeInit active tasks: "
+        << nActiveTasks << " (ignored: " << nIgnoredTasks << ")" );
+    assert( nIgnoredTasks == nActiveTasks );
 
     rSchedCtx.mpFirstSchedulerData = nullptr;
     rSchedCtx.mpLastSchedulerData  = nullptr;

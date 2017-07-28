@@ -465,8 +465,6 @@ void DeInitVCL()
         pSVData->mpSettingsConfigItem = nullptr;
     }
 
-    Scheduler::ImplDeInitScheduler();
-
     pSVData->maWinData.maMsgBoxImgList.clear();
     pSVData->maCtrlData.maCheckImgList.clear();
     pSVData->maCtrlData.maRadioImgList.clear();
@@ -574,6 +572,8 @@ void DeInitVCL()
     delete pSVData->maGDIData.mpScreenFontCache;
     pSVData->maGDIData.mpScreenFontCache = nullptr;
 
+    Scheduler::ImplDeInitScheduler();
+
     // destroy all Sal interfaces before destroying the instance
     // and thereby unloading the plugin
     delete pSVData->mpSalSystem;
@@ -607,6 +607,7 @@ void DeInitVCL()
     pSVData->maWinData.mpTrackWin = nullptr;
     pSVData->maWinData.mpAutoScrollWin = nullptr;
     pSVData->maWinData.mpLastWheelWindow = nullptr;
+
     // Deinit Sal
     if (pSVData->mpDefInst)
     {
