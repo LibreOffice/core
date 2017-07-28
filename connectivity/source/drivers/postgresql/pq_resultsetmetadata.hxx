@@ -94,7 +94,7 @@ public:
         const css::uno::Reference< css::sdbc::XResultSet >  & origin,
         ResultSet *pResultSet,
         ConnectionSettings **pSettings,
-        PGresult *pResult,
+        PGresult const *pResult,
         const OUString &schemaName,
         const OUString &tableName );
 

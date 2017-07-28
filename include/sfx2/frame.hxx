@@ -182,7 +182,7 @@ class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
 
 public:
 
-                            SfxFrameItem( sal_uInt16 nWhich, SfxViewFrame *p );
+                            SfxFrameItem( sal_uInt16 nWhich, SfxViewFrame const *p );
                             SfxFrameItem( SfxFrame *p );
                             SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p );
 

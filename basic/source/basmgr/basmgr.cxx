@@ -438,7 +438,7 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
     return pInfo;
 }
 
-BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib, OUString* pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
+BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib, OUString const * pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
 {
     Init();
 
@@ -604,7 +604,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
     SetGlobalUNOConstant( "DialogLibraries", uno::Any( mpImpl->maContainerInfo.mxDialogCont ) );
 }
 
-BasicManager::BasicManager( StarBASIC* pSLib, OUString* pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
+BasicManager::BasicManager( StarBASIC* pSLib, OUString const * pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
 {
     Init();
     DBG_ASSERT( pSLib, "BasicManager cannot be created with a NULL-Pointer!" );

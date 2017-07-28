@@ -36,7 +36,7 @@ class FWE_DLLPUBLIC SaxNamespaceFilter :
                            public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
     public:
-        SaxNamespaceFilter( css::uno::Reference< css::xml::sax::XDocumentHandler >& rSax1DocumentHandler );
+        SaxNamespaceFilter( css::uno::Reference< css::xml::sax::XDocumentHandler > const & rSax1DocumentHandler );
         virtual ~SaxNamespaceFilter() override;
 
         // XDocumentHandler

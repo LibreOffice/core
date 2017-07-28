@@ -73,7 +73,7 @@ public:
 class ImplContextGraphicItem : public SvLBoxContextBmp
 {
 public:
-    ImplContextGraphicItem( Image& rI1,Image& rI2, bool bExpanded)
+    ImplContextGraphicItem( Image const & rI1, Image const & rI2, bool bExpanded)
         : SvLBoxContextBmp(rI1, rI2, bExpanded) {}
 
     OUString msExpandedGraphicURL;

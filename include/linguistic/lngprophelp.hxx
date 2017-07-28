@@ -93,7 +93,7 @@ protected:
 public:
     PropertyChgHelper(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet,
+            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet,
             int nAllowedEvents );
     virtual ~PropertyChgHelper() override;
 
@@ -138,7 +138,7 @@ class PropertyHelper_Thes :
 public:
     PropertyHelper_Thes(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet );
+            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
     virtual ~PropertyHelper_Thes() override;
 
     // XPropertyChangeListener
@@ -158,7 +158,7 @@ class LNG_DLLPUBLIC PropertyHelper_Thesaurus
 public:
     PropertyHelper_Thesaurus(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet );
+            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
     ~PropertyHelper_Thesaurus();
     void    AddAsPropListener();
     void    RemoveAsPropListener();
@@ -193,7 +193,7 @@ protected:
 public:
     PropertyHelper_Spell(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet );
+            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
     virtual ~PropertyHelper_Spell() override;
 
     virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals ) override;
@@ -222,7 +222,7 @@ class LNG_DLLPUBLIC PropertyHelper_Spelling
 public:
     PropertyHelper_Spelling(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet );
+            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
     ~PropertyHelper_Spelling();
 
     void    AddAsPropListener();
@@ -266,7 +266,7 @@ protected:
 public:
     PropertyHelper_Hyphen(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet);
+            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet);
     virtual ~PropertyHelper_Hyphen() override;
 
     virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals ) override;
@@ -292,7 +292,7 @@ class LNG_DLLPUBLIC PropertyHelper_Hyphenation
 public:
     PropertyHelper_Hyphenation(
             const css::uno::Reference< css::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > &rxPropSet);
+            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet);
     ~PropertyHelper_Hyphenation();
 
     void    AddAsPropListener();

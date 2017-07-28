@@ -31,7 +31,7 @@ using namespace ::com::sun::star::uno;
 
 Blob::Blob(isc_db_handle* pDatabaseHandle,
            isc_tr_handle* pTransactionHandle,
-           ISC_QUAD& aBlobID):
+           ISC_QUAD const & aBlobID):
     Blob_BASE(m_aMutex),
     m_pDatabaseHandle(pDatabaseHandle),
     m_pTransactionHandle(pTransactionHandle),

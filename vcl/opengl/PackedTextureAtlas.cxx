@@ -26,7 +26,7 @@ struct Node
     bool mOccupied;
 
     explicit Node(int nWidth, int nHeight);
-    explicit Node(tools::Rectangle& aRectangle);
+    explicit Node(tools::Rectangle const & aRectangle);
 
     bool isLeaf();
     Node* insert(int nWidth, int nHeight, int nPadding);
@@ -39,7 +39,7 @@ Node::Node(int nWidth, int nHeight)
     , mOccupied(false)
 {}
 
-Node::Node(tools::Rectangle& aRectangle)
+Node::Node(tools::Rectangle const & aRectangle)
     : mRectangle(aRectangle)
     , mLeftNode()
     , mRightNode()

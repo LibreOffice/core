@@ -349,7 +349,7 @@ void FreetypeFont::GarbageCollect( long nMinLruIndex )
     }
 }
 
-FreetypeFontInstance::FreetypeFontInstance( FontSelectPattern& rFSD )
+FreetypeFontInstance::FreetypeFontInstance( FontSelectPattern const & rFSD )
 :   LogicalFontInstance( rFSD )
 ,   mpFreetypeFont( nullptr )
 {}

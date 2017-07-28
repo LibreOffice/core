@@ -26,7 +26,7 @@ using namespace ::com::sun::star::uno;
 
 Clob::Clob(isc_db_handle* pDatabaseHandle,
            isc_tr_handle* pTransactionHandle,
-           ISC_QUAD& aBlobID):
+           ISC_QUAD const & aBlobID):
     Clob_BASE(m_aMutex),
     m_aBlob(new connectivity::firebird::Blob(pDatabaseHandle, pTransactionHandle, aBlobID))
 {

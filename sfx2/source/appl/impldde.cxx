@@ -61,13 +61,13 @@ class SvDDELinkEditDialog : public ModalDialog
 
     DECL_LINK( EditHdl_Impl, Edit&, void );
 public:
-    SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* );
+    SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink const * );
     virtual ~SvDDELinkEditDialog() override;
     virtual void dispose() override;
     OUString GetCmd() const;
 };
 
-SvDDELinkEditDialog::SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink* pLink )
+SvDDELinkEditDialog::SvDDELinkEditDialog( vcl::Window* pParent, SvBaseLink const * pLink )
     : ModalDialog( pParent, "LinkEditDialog", "sfx/ui/linkeditdialog.ui" )
 {
     get(m_pOKButton, "ok");

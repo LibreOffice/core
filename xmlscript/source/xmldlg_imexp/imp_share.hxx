@@ -152,8 +152,8 @@ public:
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
         css::uno::Reference<css::container::XNameContainer>
         const & xDialogModel,
-        std::shared_ptr< std::vector< OUString > >& pStyleNames,
-        std::shared_ptr< std::vector< css::uno::Reference< css::xml::input::XElement > > >& pStyles,
+        std::shared_ptr< std::vector< OUString > > const & pStyleNames,
+        std::shared_ptr< std::vector< css::uno::Reference< css::xml::input::XElement > > > const & pStyles,
         css::uno::Reference<css::frame::XModel> const & xDoc )
         : _xContext( xContext )
         , _pStyleNames( pStyleNames )

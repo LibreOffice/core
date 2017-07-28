@@ -157,7 +157,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
 
 
 bool LdapUserProfileBe::getLdapStringParam(
-    uno::Reference<container::XNameAccess>& xAccess,
+    uno::Reference<container::XNameAccess> const & xAccess,
     const OUString& aLdapSetting,
     OUString& aServerParameter)
 {

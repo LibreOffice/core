@@ -77,7 +77,7 @@ static OUString getImplementationName()
 namespace
 {
 
-Image GetMenuBarIcon( MenuBar* pMBar )
+Image GetMenuBarIcon( MenuBar const * pMBar )
 {
     OUString sResID;
     vcl::Window *pMBarWin = pMBar->GetWindow();

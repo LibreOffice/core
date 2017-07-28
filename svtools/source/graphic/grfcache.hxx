@@ -107,7 +107,7 @@ public:
                             ) const;
 
     bool                CreateDisplayCacheObj(
-                                OutputDevice* pOut,
+                                OutputDevice const * pOut,
                                 const Point& rPt,
                                 const Size& rSz,
                                 const GraphicObject& rObj,
@@ -116,7 +116,7 @@ public:
                             );
 
     bool                CreateDisplayCacheObj(
-                                OutputDevice* pOut,
+                                OutputDevice const * pOut,
                                 const Point& rPt,
                                 const Size& rSz,
                                 const GraphicObject& rObj,

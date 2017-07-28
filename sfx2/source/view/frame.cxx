@@ -395,7 +395,7 @@ void SfxFrame::RemoveTopFrame_Impl( SfxFrame* pFrame )
         rArr.erase( it );
 }
 
-SfxFrameItem::SfxFrameItem( sal_uInt16 nWhichId, SfxViewFrame *p )
+SfxFrameItem::SfxFrameItem( sal_uInt16 nWhichId, SfxViewFrame const *p )
     : SfxPoolItem( nWhichId ), pFrame( p ? &p->GetFrame() : nullptr )
 {
     wFrame = pFrame;

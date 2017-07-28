@@ -306,7 +306,7 @@ class FileLockBytes :
 public:
     /** Construction.
      */
-    explicit FileLockBytes (FileHandle & rFile);
+    explicit FileLockBytes (FileHandle const & rFile);
 
     FileLockBytes(const FileLockBytes&) = delete;
     FileLockBytes& operator=(const FileLockBytes&) = delete;
@@ -319,7 +319,7 @@ protected:
 
 } // namespace store
 
-FileLockBytes::FileLockBytes (FileHandle & rFile)
+FileLockBytes::FileLockBytes (FileHandle const & rFile)
     : m_hFile (rFile.m_handle), m_nSize (SAL_MAX_UINT32), m_xAllocator()
 {
 }
@@ -534,7 +534,7 @@ class MappedLockBytes :
 public:
     /** Construction.
      */
-    explicit MappedLockBytes (FileMapping & rMapping);
+    explicit MappedLockBytes (FileMapping const & rMapping);
 
     MappedLockBytes(const MappedLockBytes&) = delete;
     MappedLockBytes& operator=(const MappedLockBytes&) = delete;
@@ -547,7 +547,7 @@ protected:
 
 } // namespace store
 
-MappedLockBytes::MappedLockBytes (FileMapping & rMapping)
+MappedLockBytes::MappedLockBytes (FileMapping const & rMapping)
     : m_pData (rMapping.m_pAddr), m_nSize (rMapping.m_nSize), m_nPageSize(0), m_hFile (rMapping.m_hFile)
 {
 }

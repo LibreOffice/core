@@ -49,7 +49,7 @@ namespace accessibility
 
     // Ctor() and Dtor()
 
-    AccessibleListBox::AccessibleListBox( SvTreeListBox& _rListBox, const Reference< XAccessible >& _xParent ) :
+    AccessibleListBox::AccessibleListBox( SvTreeListBox const & _rListBox, const Reference< XAccessible >& _xParent ) :
 
         VCLXAccessibleComponent( _rListBox.GetWindowPeer() ),
         m_xParent( _xParent )

@@ -153,8 +153,8 @@ class MenuBarManager:
         struct MenuItemHandler
         {
             MenuItemHandler( sal_uInt16             aItemId,
-                             css::uno::Reference< css::frame::XStatusListener >& xManager,
-                             css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
+                             css::uno::Reference< css::frame::XStatusListener > const & xManager,
+                             css::uno::Reference< css::frame::XDispatch > const & rDispatch ) :
                              nItemId( aItemId ),
                              xSubMenuManager( xManager ),
                              xMenuItemDispatch( rDispatch ) {}

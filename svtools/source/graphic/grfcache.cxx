@@ -421,7 +421,7 @@ public:
 public:
 
                                 GraphicDisplayCacheEntry( const GraphicCacheEntry* pRefCacheEntry,
-                                                          OutputDevice* pOut, const Point& rPt, const Size& rSz,
+                                                          OutputDevice const * pOut, const Point& rPt, const Size& rSz,
                                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                                           const BitmapEx& rBmpEx ) :
                                     mpRefCacheEntry( pRefCacheEntry ),
@@ -434,7 +434,7 @@ public:
                                     }
 
                                 GraphicDisplayCacheEntry( const GraphicCacheEntry* pRefCacheEntry,
-                                                          OutputDevice* pOut, const Point& rPt, const Size& rSz,
+                                                          OutputDevice const * pOut, const Point& rPt, const Size& rSz,
                                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                                           const GDIMetaFile& rMtf ) :
                                     mpRefCacheEntry( pRefCacheEntry ),
@@ -1108,7 +1108,7 @@ OString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
     return aRet;
 }
 
-bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicCache::CreateDisplayCacheObj( OutputDevice const * pOut, const Point& rPt, const Size& rSz,
                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                           const BitmapEx& rBmpEx )
 {
@@ -1140,7 +1140,7 @@ bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, 
     return bRet;
 }
 
-bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicCache::CreateDisplayCacheObj( OutputDevice const * pOut, const Point& rPt, const Size& rSz,
                                           const GraphicObject& rObj, const GraphicAttr& rAttr,
                                           const GDIMetaFile& rMtf )
 {
