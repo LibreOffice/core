@@ -591,7 +591,7 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           int* pFontHeight);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
 
-static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned char* pBuffer, int nWidth, int nHeight);
+static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
@@ -3012,7 +3012,7 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
     return nullptr;
 }
 
-static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned char* pBuffer, int nWidth, int nHeight)
+static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight)
 {
     SolarMutexGuard aGuard;
 
@@ -3021,11 +3021,11 @@ static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned char* pBuffe
     ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
     pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
 
-    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(*nWidth, *nHeight), Fraction(1.0), Point(), pBuffer);
 
-    vcl::DialogID aDialogID(pDialogRenderable->findDialog());
+    vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
 
-    pDialogRenderable->paintDialog(aDialogID, *pDevice.get(), nWidth, nHeight);
+    pDialogRenderable->paintDialog(aDialogID, *pDevice.get(), *nWidth, *nHeight);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
