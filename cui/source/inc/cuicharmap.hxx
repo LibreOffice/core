@@ -144,7 +144,7 @@ public:
     void            updateFavCharControl();
     void            setFavButtonState(const OUString& sTitle, const OUString& rFont);
 
-    void            setCharName(char decimal[]);
+    void            setCharName(sal_UCS4 nDecimalValue);
 };
 
 #endif

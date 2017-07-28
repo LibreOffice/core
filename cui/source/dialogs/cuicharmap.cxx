@@ -666,14 +666,12 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
     m_pSubsetLB->Enable(bNeedSubset);
 }
 
-void SvxCharacterMap::setCharName(char decimal[])
+void SvxCharacterMap::setCharName(sal_UCS4 nDecimalValue)
 {
-    int nDecimalValue = std::stoi(decimal);
-    char buffer[100];
-
     /* get the character name */
     UErrorCode errorCode = U_ZERO_ERROR;
-    u_charName((UChar32)nDecimalValue, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+    char buffer[100];
+    u_charName(nDecimalValue, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
     m_pCharName->SetText(OUString::createFromAscii(buffer));
 }
 
@@ -790,7 +788,7 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
 
     m_pHexCodeText->SetText( aHexText );
     m_pDecimalCodeText->SetText( aDecimalText );
-    setCharName(aDecBuf);
+    setCharName(cChar);
 
     rView->Invalidate();
     m_pOKBtn->Enable();
@@ -879,7 +877,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         char aDecBuf[32];
         snprintf( aDecBuf, sizeof(aDecBuf), "%u", static_cast<unsigned>(cChar) );
         aDecimalText = OUString::createFromAscii(aDecBuf);
-        setCharName(aDecBuf);
+        setCharName(cChar);
     }
 
     // Update the hex and decimal codes only if necessary
