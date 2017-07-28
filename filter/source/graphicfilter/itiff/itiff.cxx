@@ -1128,7 +1128,6 @@ void TIFFReader::MakePalCol()
                 nNumColors = nLargestPixelIndex + 1;
             }
 
-            pAcc->SetPaletteEntryCount(nNumColors);
             for (sal_uInt32 i = 0; i < nNumColors; ++i)
             {
                 sal_uInt32 nVal = ( i * 255 / ( nNumColors - 1 ) ) & 0xff;
@@ -1139,6 +1138,7 @@ void TIFFReader::MakePalCol()
                     xColorMap[nNumColors - i - 1] = n0RGB;
             }
         }
+        pAcc->SetPaletteEntryCount(std::max<sal_uInt16>(nNumColors, pAcc->GetPaletteEntryCount()));
         for (sal_uInt32 i = 0; i < nNumColors; ++i)
         {
             pAcc->SetPaletteColor(i, BitmapColor( (sal_uInt8)( xColorMap[ i ] >> 16 ),
