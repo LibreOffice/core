@@ -654,8 +654,9 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     // check for timeouts here if you want to make screenshots
     static char* p_prioritize_timer = getenv ("SAL_HIGHPRIORITY_REPAINT");
+    bool bHandledEvent = false;
     if (p_prioritize_timer != nullptr)
-        CheckTimeout();
+        bHandledEvent = CheckTimeout();
 
     const int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
 
@@ -686,7 +687,6 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     timeval  Timeout      = noyield_;
     timeval *pTimeout     = &Timeout;
 
-    bool bHandledEvent = false;
 
     if (bWait)
     {
@@ -723,7 +723,7 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
     // usually handle timeouts here (as in 5.2)
     if (p_prioritize_timer == nullptr)
-        CheckTimeout();
+        bHandledEvent = CheckTimeout() || bHandledEvent;
 
     // handle wakeup events.
     if ((nFound > 0) && (FD_ISSET(m_pTimeoutFDS[0], &ReadFDS)))
