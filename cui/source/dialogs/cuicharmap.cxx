@@ -505,13 +505,7 @@ void SvxCharacterMap::init()
         m_pFavCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
     }
 
-    char buffer[100];
-    UErrorCode errorCode = U_ZERO_ERROR;;
-
-    /* get the character name */
-    u_charName((UChar32)90, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
-    if (U_SUCCESS(errorCode))
-        m_pCharName->SetText(OUString::createFromAscii(buffer));
+    setCharName(90);
 }
 
 bool SvxCharacterMap::isFavChar(const OUString& sTitle, const OUString& rFont)
