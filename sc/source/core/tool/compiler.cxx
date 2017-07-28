@@ -3330,6 +3330,9 @@ bool ScCompiler::IsMacro( const OUString& rName )
         return false;
     }
 
+    if (!pObj)
+        return false;
+
     // ODFF recommends to store user-defined functions prefixed with "USER.",
     // use only unprefixed name if encountered. BASIC doesn't allow '.' in a
     // function name so a function "USER.FOO" could not exist, and macro check
