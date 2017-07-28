@@ -1346,7 +1346,7 @@ namespace svxform
         }
     }
 
-    DataNavigatorWindow::DataNavigatorWindow(vcl::Window* pParent, SfxBindings* pBindings)
+    DataNavigatorWindow::DataNavigatorWindow(vcl::Window* pParent, SfxBindings const * pBindings)
         : Window(pParent)
         , m_pInstPage(nullptr)
         , m_pSubmissionPage(nullptr)

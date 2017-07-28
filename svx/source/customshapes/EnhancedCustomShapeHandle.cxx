@@ -22,7 +22,7 @@
 #include "svx/unoapi.hxx"
 
 
-EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( css::uno::Reference< css::drawing::XShape >& xCustomShape, sal_uInt32 nIndex ) :
+EnhancedCustomShapeHandle::EnhancedCustomShapeHandle( css::uno::Reference< css::drawing::XShape > const & xCustomShape, sal_uInt32 nIndex ) :
     mnIndex     ( nIndex ),
     mxCustomShape ( xCustomShape )
 {

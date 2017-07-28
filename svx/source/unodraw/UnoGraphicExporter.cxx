@@ -108,10 +108,10 @@ namespace {
         Fraction    maScaleX;
         Fraction    maScaleY;
 
-        explicit ExportSettings( SdrModel* pDoc );
+        explicit ExportSettings( SdrModel const * pDoc );
     };
 
-    ExportSettings::ExportSettings( SdrModel* pDoc )
+    ExportSettings::ExportSettings( SdrModel const * pDoc )
     : mnWidth( 0 )
     , mnHeight( 0 )
     , mbExportOnlyBackground( false )

@@ -288,7 +288,7 @@ void SvxXMLTableImportContext::importBitmap( const uno::Reference< XAttributeLis
 SvxXMLXTableImport::SvxXMLXTableImport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     const uno::Reference< XNameContainer > & rTable,
-    uno::Reference< XGraphicObjectResolver >& xGrfResolver )
+    uno::Reference< XGraphicObjectResolver > const & xGrfResolver )
 :   SvXMLImport(rContext, "", SvXMLImportFlags::NONE),
     mrTable( rTable )
 {

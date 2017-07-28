@@ -395,7 +395,7 @@ SFX_IMPL_FLOATINGWINDOW(FmFieldWinMgr, SID_FM_ADD_FIELD)
 
 
 FmFieldWinMgr::FmFieldWinMgr(vcl::Window* _pParent, sal_uInt16 _nId,
-               SfxBindings* _pBindings, SfxChildWinInfo* _pInfo)
+               SfxBindings* _pBindings, SfxChildWinInfo const * _pInfo)
               :SfxChildWindow(_pParent, _nId)
 {
     SetWindow( VclPtr<FmFieldWin>::Create(_pBindings, this, _pParent) );
