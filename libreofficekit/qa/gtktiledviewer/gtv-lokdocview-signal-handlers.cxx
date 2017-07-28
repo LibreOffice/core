@@ -15,6 +15,7 @@
 #include <gtv-calc-header-bar.hxx>
 #include <gtv-comments-sidebar.hxx>
 #include <gtv-lokdocview-signal-handlers.hxx>
+#include <gtv-lok-dialog.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/optional.hpp>
@@ -277,6 +278,16 @@ void LOKDocViewSigHandlers::comment(LOKDocView* pDocView, gchar* pComment, gpoin
         // already existing one now
         if (pSelf)
             gtk_widget_destroy(pSelf);
+    }
+}
+
+void LOKDocViewSigHandlers::dialogInvalidate(LOKDocView* pDocView, gchar* pDialogId, gpointer)
+{
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
+    GtkWindow* pDialog = gtv_application_window_get_child_window_by_id(window, pDialogId);
+    if (pDialog)
+    {
+        gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pDialog));
     }
 }
 
