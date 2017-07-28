@@ -758,6 +758,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
         case LOK_CALLBACK_SET_PART:
         case LOK_CALLBACK_TEXT_VIEW_SELECTION:
         case LOK_CALLBACK_INVALIDATE_HEADER:
+        case LOK_CALLBACK_DIALOG_INVALIDATE:
         {
             const auto& pos = std::find_if(m_queue.rbegin(), m_queue.rend(),
                     [type] (const queue_type::value_type& elem) { return (elem.first == type); });
