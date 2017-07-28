@@ -775,16 +775,12 @@ IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
 
     // Get the hexadecimal code
     OUString charValue = rView->GetText();
-    char aBuf[32];
     sal_Int32 tmp = 1;
     sal_UCS4 cChar = charValue.iterateCodePoints(&tmp, -1);
-    snprintf( aBuf, sizeof(aBuf), "%X", static_cast<unsigned>(cChar));
-    OUString aHexText = OUString::createFromAscii(aBuf);
+    OUString aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
 
     // Get the decimal code
-    char aDecBuf[32];
-    snprintf( aDecBuf, sizeof(aDecBuf), "%u", static_cast<unsigned>(cChar));
-    OUString aDecimalText = OUString::createFromAscii(aDecBuf);
+    OUString aDecimalText = OUString::number(cChar);
 
     m_pHexCodeText->SetText( aHexText );
     m_pDecimalCodeText->SetText( aDecimalText );
@@ -870,13 +866,9 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
     if ( bSelect )
     {
         // Get the hexadecimal code
-        char aBuf[32];
-        snprintf( aBuf, sizeof(aBuf), "%X", static_cast<unsigned>(cChar) );
-        aHexText = OUString::createFromAscii(aBuf);
+        aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
         // Get the decimal code
-        char aDecBuf[32];
-        snprintf( aDecBuf, sizeof(aDecBuf), "%u", static_cast<unsigned>(cChar) );
-        aDecimalText = OUString::createFromAscii(aDecBuf);
+        aDecimalText = OUString::number(cChar);
         setCharName(cChar);
     }
 
