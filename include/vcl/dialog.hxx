@@ -72,10 +72,14 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag = InitFlag::Default );
+    OUString               maID; // identifier for this dialog
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
     virtual        void    doDeferredInit(WinBits nBits) override;
+    virtual        void    LogicInvalidate(const tools::Rectangle* pRectangle) override { (void)pRectangle; }
+    // Paints the current dialog to the given virtual device
+    void paintDialog(VirtualDevice& rDevice);
 
 protected:
     explicit        Dialog( WindowType nType );
@@ -113,9 +117,6 @@ public:
     // paint is finished
     virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void PostPaint(vcl::RenderContext& rRenderContext) override;
-
-    // Paints the current dialog to the given virtual device
-    void paintDialog(VirtualDevice& rDevice);
 
     // ensureRepaint - triggers Application::Yield until the dialog is
     // completely repainted. Sometimes needed for dialogs showing progress

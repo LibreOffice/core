@@ -40,6 +40,8 @@ public:
     static void notifyOtherViews(SfxViewShell* pThisView, int nType, const OString& rKey, const OString& rPayload);
     /// Same as notifyOtherViews(), but works on a selected "other" view, not on all of them.
     static void notifyOtherView(SfxViewShell* pThisView, SfxViewShell const* pOtherView, int nType, const OString& rKey, const OString& rPayload);
+    /// Emits a LOK_CALLBACK_DIALOG_INVALIDATE with 'invalidate' action
+    static void notifyDialogInvalidation(const OUString& rPayload);
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
     static void notifyInvalidation(SfxViewShell const* pThisView, const OString& rPayload);
     /// A special value to signify 'infinity'.
