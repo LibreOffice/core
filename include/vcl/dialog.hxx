@@ -114,6 +114,9 @@ public:
     virtual void PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void PostPaint(vcl::RenderContext& rRenderContext) override;
 
+    // Paints the current dialog to the given virtual device
+    void paintDialog(VirtualDevice& rDevice);
+
     // ensureRepaint - triggers Application::Yield until the dialog is
     // completely repainted. Sometimes needed for dialogs showing progress
     // during actions
