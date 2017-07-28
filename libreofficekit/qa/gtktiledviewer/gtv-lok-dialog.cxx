@@ -23,6 +23,7 @@
 struct GtvLokDialogPrivate
 {
     LOKDocView* lokdocview;
+    GtkWidget* pDialogDrawingArea;
     gchar* dialogid;
 };
 
@@ -68,11 +69,13 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
 static void
 gtv_lok_dialog_init(GtvLokDialog* dialog)
 {
-    GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-    GtkWidget* pDialogDrawingArea = gtk_drawing_area_new();
+    GtvLokDialogPrivate* priv = getPrivate(dialog);
 
-    g_signal_connect(G_OBJECT(pDialogDrawingArea), "draw", G_CALLBACK(gtv_lok_dialog_draw), nullptr);
-    gtk_container_add(GTK_CONTAINER(pContentArea), pDialogDrawingArea);
+    GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+    priv->pDialogDrawingArea = gtk_drawing_area_new();
+
+    g_signal_connect(G_OBJECT(priv->pDialogDrawingArea), "draw", G_CALLBACK(gtv_lok_dialog_draw), nullptr);
+    gtk_container_add(GTK_CONTAINER(pContentArea), priv->pDialogDrawingArea);
 }
 
 static void
@@ -148,6 +151,14 @@ gtv_lok_dialog_class_init(GtvLokDialogClass* klass)
                                                                               G_PARAM_STATIC_STRINGS));
 
     g_object_class_install_properties (G_OBJECT_CLASS(klass), PROP_LAST, properties);
+}
+
+void
+gtv_lok_dialog_invalidate(GtvLokDialog* dialog)
+{
+    // trigger a draw on the drawing area
+    GtvLokDialogPrivate* priv = getPrivate(dialog);
+    gtk_widget_queue_draw(priv->pDialogDrawingArea);
 }
 
 GtkWidget*

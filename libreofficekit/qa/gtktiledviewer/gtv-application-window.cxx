@@ -36,6 +36,8 @@ struct GtvApplicationWindowPrivate
     gboolean toolbarBroadcast;
     gboolean partSelectorBroadcast;
 
+    GList* m_pChildWindows;
+
     // Rendering args; options with which lokdocview was rendered in this window
     GtvRenderingArgs* m_pRenderingArgs;
 };
@@ -105,6 +107,7 @@ gtv_application_window_init(GtvApplicationWindow* win)
 
     gtk_container_add(GTK_CONTAINER(win), priv->container);
 
+    priv->m_pChildWindows = nullptr;
     priv->m_pRenderingArgs = new GtvRenderingArgs();
 }
 
@@ -311,6 +314,7 @@ static void setupDocView(GtvApplicationWindow* window)
     g_signal_connect(window->lokdocview, "formula-changed", G_CALLBACK(LOKDocViewSigHandlers::formulaChanged), nullptr);
     g_signal_connect(window->lokdocview, "password-required", G_CALLBACK(LOKDocViewSigHandlers::passwordRequired), nullptr);
     g_signal_connect(window->lokdocview, "comment", G_CALLBACK(LOKDocViewSigHandlers::comment), nullptr);
+    g_signal_connect(window->lokdocview, "dialog-invalidate", G_CALLBACK(LOKDocViewSigHandlers::dialogInvalidate), nullptr);
 
     g_signal_connect(window->lokdocview, "configure-event", G_CALLBACK(LOKDocViewSigHandlers::configureEvent), nullptr);
 }
@@ -392,6 +396,50 @@ gtv_application_window_get_part_broadcast(GtvApplicationWindow* window)
 {
     GtvApplicationWindowPrivate* priv = getPrivate(window);
     return priv->partSelectorBroadcast;
+}
+
+void
+gtv_application_window_register_child_window(GtvApplicationWindow* window, GtkWindow* pChildWin)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    if (pChildWin)
+        priv->m_pChildWindows = g_list_append(priv->m_pChildWindows, pChildWin);
+}
+
+void
+gtv_application_window_unregister_child_window(GtvApplicationWindow* window, GtkWindow* pChildWin)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    if (pChildWin)
+        priv->m_pChildWindows = g_list_remove(priv->m_pChildWindows, pChildWin);
+}
+
+GtkWindow*
+gtv_application_window_get_child_window_by_id(GtvApplicationWindow* window, const gchar* pWinId)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    GList* pIt = nullptr;
+    GtkWindow* ret = nullptr;
+    // For now, only dialogs are registered as child window
+    for (pIt = priv->m_pChildWindows; pIt != nullptr; pIt = pIt->next)
+    {
+        gchar* dialogId = nullptr;
+        g_object_get(G_OBJECT(pIt->data), "dialogid", &dialogId, nullptr);
+
+        // prepend .uno:
+        gchar* completeWinId = nullptr;
+        if (pWinId != nullptr)
+        {
+            completeWinId = g_strconcat(".uno:", pWinId, nullptr);
+        }
+
+        if (dialogId != nullptr && g_str_equal(dialogId, completeWinId))
+        {
+            ret = GTK_WINDOW(pIt->data);
+            break;
+        }
+    }
+    return ret;
 }
 
 GtvApplicationWindow*
