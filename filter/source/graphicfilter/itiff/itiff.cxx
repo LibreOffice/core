@@ -1111,7 +1111,7 @@ void TIFFReader::MakePalCol()
 {
     if ( nDstBitsPerPixel <= 8 )
     {
-        sal_uLong i, nVal, n0RGB;
+        sal_uLong nVal, n0RGB;
         if  ( pColorMap == nullptr )
             pColorMap = new sal_uLong[ 256 ];
         if ( nPhotometricInterpretation <= 1 )
@@ -1124,8 +1124,8 @@ void TIFFReader::MakePalCol()
                 SAL_WARN("filter.tiff", "palette has less entries that largest index used. Expanding palette to match");
                 nNumColors = nLargestPixelIndex + 1;
             }
-            pAcc->SetPaletteEntryCount( (sal_uInt16)nNumColors );
-            for ( i = 0; i < nNumColors; i++ )
+
+            for (sal_uLong i = 0; i < nNumColors; ++i)
             {
                 nVal = ( i * 255 / ( nNumColors - 1 ) ) & 0xff;
                 n0RGB = nVal | ( nVal << 8 ) | ( nVal << 16 );
@@ -1135,7 +1135,8 @@ void TIFFReader::MakePalCol()
                     pColorMap[ nNumColors - i - 1 ] = n0RGB;
             }
         }
-        for ( i = 0; i < nNumColors; i++ )
+        pAcc->SetPaletteEntryCount(std::max<sal_uInt16>(nNumColors, pAcc->GetPaletteEntryCount()));
+        for (sal_uLong i = 0; i < nNumColors; ++i)
         {
             pAcc->SetPaletteColor( (sal_uInt16)i, BitmapColor( (sal_uInt8)( pColorMap[ i ] >> 16 ),
                 (sal_uInt8)( pColorMap[ i ] >> 8 ), (sal_uInt8)pColorMap[ i ] ) );
