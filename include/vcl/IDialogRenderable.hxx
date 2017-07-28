@@ -14,26 +14,29 @@
 #include <tools/gen.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
+
+#include "IDialogRenderable.hxx"
+
+#include <map>
 
 namespace vcl
 {
 
-typedef sal_Int32 DialogID;
+typedef OUString DialogID;
 
 class VCL_DLLPUBLIC IDialogRenderable
 {
 public:
     virtual ~IDialogRenderable();
 
-    virtual DialogID findDialog() = 0;
+    virtual void paintDialog(const DialogID& rDialogID, VirtualDevice &rDevice,
+                             int& nOutputWidth, int& nOutputHeight) = 0;
 
-    virtual void paintDialog(DialogID rDialogID, VirtualDevice &rDevice,
-                             int nOutputWidth, int nOutputHeight) = 0;
-
-    virtual void postDialogMouseEvent(DialogID rDialogID, int nType,
+    virtual void postDialogMouseEvent(const DialogID& rDialogID, int nType,
                                       int nCharCode, int nKeyCode) = 0;
 
-    virtual void postDialogKeyEvent(DialogID rDialogID, int nType, int nX, int nY,
+    virtual void postDialogKeyEvent(const DialogID& rDialogID, int nType, int nX, int nY,
                                     int nCount, int nButtons, int nModifier) = 0;
 };
 
