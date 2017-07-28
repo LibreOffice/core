@@ -50,6 +50,7 @@
 #include <svx/dialogs.hrc>
 #include "bitmaps.hlst"
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/toolbox.hxx>
 
 // Size check
 #define NAVI_ENTRIES 20
@@ -667,13 +668,17 @@ NavElementBox_Impl::NavElementBox_Impl(
     SetSizePixel( Size( 150, 260 ) );
 
     sal_uInt16 i;
-    for( i = 0; i < NID_COUNT - 2; i++ )
+    for( i = 0; i < NID_COUNT; i++ )
     {
+        sal_uInt16 nNaviId = aNavigationInsertIds[i];
         OUString sText;
-
-        sal_uInt16 nResStr = ST_TBL + i;
-        sText = SwResId( nResStr );
-        InsertEntry( sText );
+        if( ( NID_PREV != nNaviId ) && ( NID_NEXT != nNaviId ) )
+        {
+            // -2, there's no string for Next/Prev
+            sal_uInt16 nResStr = ST_TBL - 2 + nNaviId - NID_START;
+            sText = SwResId( nResStr );
+            InsertEntry( sText, Image( BitmapEx( aNavigationImgIds[i] ) ) );
+        }
     }
 }
 
@@ -696,8 +701,11 @@ void NavElementBox_Impl::Select()
     if ( !IsTravelSelect() )
     {
         sal_uInt16 nPos = GetSelectEntryPos();
+        // adjust array index for Ids after NID_PREV in aNavigationInsterIds
+        if ( nPos >= NID_COUNT/2 - 1 )
+            ++nPos;
 
-        SwView::SetMoveType( NID_START + 2 + nPos );
+        SwView::SetMoveType( aNavigationInsertIds[nPos] );
 
         css::uno::Sequence< css::beans::PropertyValue > aArgs;
 
@@ -805,8 +813,7 @@ void SAL_CALL NavElementToolBoxControl::dispose()
 }
 
 // XStatusListener
-void SAL_CALL NavElementToolBoxControl::statusChanged(
-    const frame::FeatureStateEvent& rEvent )
+void SAL_CALL NavElementToolBoxControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
     if ( m_pBox )
     {
@@ -884,6 +891,149 @@ NavElementToolBoxController_get_implementation(
     css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new NavElementToolBoxControl(rxContext));
+}
+
+class PrevNextScrollToolboxController : public svt::ToolboxController,
+                                      public css::lang::XServiceInfo
+{
+public:
+    enum Type { PREVIOUS, NEXT };
+
+    PrevNextScrollToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext, Type eType );
+
+    // XInterface
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual void SAL_CALL acquire() throw () override;
+    virtual void SAL_CALL release() throw () override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+
+    // XToolbarController
+    virtual void SAL_CALL execute( sal_Int16 /* KeyModifier */ ) override;
+    virtual void SAL_CALL click() override;
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
+
+private:
+    Type                     meType;
+};
+
+PrevNextScrollToolboxController::PrevNextScrollToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
+    : svt::ToolboxController( rxContext,
+            css::uno::Reference< css::frame::XFrame >(),
+            (eType == PREVIOUS) ? OUString( ".uno:ScrollToPrevious" ):  OUString( ".uno:ScrollToNext" ) ),
+      meType( eType )
+{
+    addStatusListener(".uno:NavElement");
+}
+
+// XInterface
+css::uno::Any SAL_CALL PrevNextScrollToolboxController::queryInterface( const css::uno::Type& aType )
+{
+    css::uno::Any a = ToolboxController::queryInterface( aType );
+    if ( a.hasValue() )
+        return a;
+
+    return ::cppu::queryInterface( aType, static_cast< css::lang::XServiceInfo* >( this ) );
+}
+
+void SAL_CALL PrevNextScrollToolboxController::acquire() throw ()
+{
+    ToolboxController::acquire();
+}
+
+void SAL_CALL PrevNextScrollToolboxController::release() throw ()
+{
+    ToolboxController::release();
+}
+
+// XServiceInfo
+OUString SAL_CALL PrevNextScrollToolboxController::getImplementationName()
+{
+    return meType == PrevNextScrollToolboxController::PREVIOUS?
+        OUString( "PreviousScrollToolboxController" ) :
+        OUString( "NextScrollToolboxController" );
+}
+
+sal_Bool SAL_CALL PrevNextScrollToolboxController::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL PrevNextScrollToolboxController::getSupportedServiceNames()
+{
+    return { "com.sun.star.frame.ToolbarController" };
+}
+
+// XComponent
+void SAL_CALL PrevNextScrollToolboxController::dispose()
+{
+    SolarMutexGuard aSolarMutexGuard;
+
+    svt::ToolboxController::dispose();
+}
+
+// XToolbarController
+void SAL_CALL PrevNextScrollToolboxController::execute( sal_Int16 /* KeyModifier */ )
+{
+}
+
+void SAL_CALL PrevNextScrollToolboxController::click()
+{
+    uno::Sequence< beans::PropertyValue > rArgs;
+
+    uno::Reference< frame::XDispatchProvider > xDispatchProvider( m_xFrame, uno::UNO_QUERY );
+    if ( xDispatchProvider.is() )
+    {
+        util::URL                               aURL;
+        uno::Reference< frame::XDispatch >      xDispatch;
+        uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
+
+        aURL.Complete = getCommandURL();
+        xURLTransformer->parseStrict( aURL );
+        xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
+        if ( xDispatch.is() )
+            xDispatch->dispatch( aURL, rArgs );
+    }
+}
+
+// XStatusListener
+void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+{
+    if ( rEvent.FeatureURL.Path == "NavElement" )
+    {
+        ToolBox* pToolBox = nullptr;
+        sal_uInt16 nId = 0;
+        if ( getToolboxId( nId, &pToolBox ) )
+        {
+            sal_uInt16 nMoveType = SwView::GetMoveType();
+            sal_uInt16 nItemId = ST_TBL - 2 + nMoveType - NID_START;
+            pToolBox->SetQuickHelpText( nId, ( meType == PrevNextScrollToolboxController::PREVIOUS?OUString( "Previous " ): OUString( "Next " ) ) + SwResId( nItemId ) );
+        }
+     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+PreviousScrollToolboxController_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new PrevNextScrollToolboxController(context, PrevNextScrollToolboxController::PREVIOUS));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+NextScrollToolboxController_get_implementation(
+    css::uno::XComponentContext *context,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new PrevNextScrollToolboxController(context, PrevNextScrollToolboxController::NEXT));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

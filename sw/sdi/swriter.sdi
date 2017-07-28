@@ -4970,7 +4970,7 @@ SfxVoidItem ScrollToPrevious FN_SCROLL_PREV
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_NAVIGATOR;
 ]
 
@@ -4987,7 +4987,7 @@ SfxVoidItem ScrollToNext FN_SCROLL_NEXT
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_NAVIGATOR;
 ]
 
