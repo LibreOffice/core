@@ -214,17 +214,17 @@ SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet
     : SfxTabDialog(pParent, "CustomizeDialog",
         "cui/ui/customizedialog.ui", pInSet)
     , m_nMenusPageId(0)
+    , m_nToolbarsPageId(0)
     , m_nContextMenusPageId(0)
     , m_nKeyboardPageId(0)
-    , m_nToolbarsPageId(0)
     , m_nEventsPageId(0)
 {
     SvxConfigPageHelper::InitImageType();
 
     m_nMenusPageId = AddTabPage("menus", CreateSvxMenuConfigPage, nullptr);
+    m_nToolbarsPageId = AddTabPage("toolbars", CreateSvxToolbarConfigPage, nullptr);
     m_nContextMenusPageId = AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
     m_nKeyboardPageId = AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
-    m_nToolbarsPageId = AddTabPage("toolbars", CreateSvxToolbarConfigPage, nullptr);
     m_nEventsPageId = AddTabPage("events", CreateSvxEventConfigPage, nullptr);
 
     const SfxPoolItem* pItem =
@@ -1131,52 +1131,26 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     , bInitialised(false)
     , pCurrentSaveInData(nullptr)
     , m_pContentsListBox(nullptr)
+    , m_pFunctionsListBox(nullptr)
     , m_pSelectorDlg(nullptr)
 {
-    get(m_pTopLevel, "toplevel");
-    get(m_pTopLevelLabel, "toplevelft");
     get(m_pTopLevelListBox, "toplevellist");
-    get(m_pNewTopLevelButton, "toplevelbutton");
-    get(m_pModifyTopLevelButton, "menuedit");
-    get(m_pToolbarStyleLabel, "toolbarstyleft");
-    get(m_pIconsOnlyRB, "iconsrb");
-    get(m_pTextOnlyRB, "textrb");
-    get(m_pIconsAndTextRB, "iconsandtextrb");
     get(m_pContents, "contents");
-    get(m_pContentsLabel, "contentslabel");
-    get(m_pAddCommandsButton, "add");
-    get(m_pAddSeparatorButton, "addseparatorbtn");
-    get(m_pAddSubmenuButton, "addsubmenubtn");
-    get(m_pModifyCommandButton, "modify");
-    get(m_pDeleteCommandButton, "deletebtn");
-    get(m_pResetTopLevelButton, "resetbtn");
     get(m_pMoveUpButton, "up");
     get(m_pMoveDownButton, "down");
     get(m_pSaveInListBox, "savein");
     get(m_pDescriptionField, "desc");
     m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*4);
     get(m_pEntries, "entries");
+    get(m_pFunctions, "functions");
     Size aSize(LogicToPixel(Size(108, 115), MapUnit::MapAppFont));
     m_pEntries->set_height_request(aSize.Height());
     m_pEntries->set_width_request(aSize.Width());
+    m_pFunctions->set_height_request(aSize.Height());
+    m_pFunctions->set_width_request(aSize.Width());
 
     m_pDescriptionField->SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     m_pDescriptionField->EnableCursor( false );
-
-    // This button is applicable only for the toolbar config tab
-    m_pResetTopLevelButton->Enable( false );
-    m_pResetTopLevelButton->Hide();
-    // These radio buttons are applicable only for the toolbar config tab
-    m_pIconsOnlyRB->Enable( false );
-    m_pTextOnlyRB->Enable( false );
-    m_pIconsAndTextRB->Enable( false );
-    m_pIconsOnlyRB->Hide();
-    m_pTextOnlyRB->Hide();
-    m_pIconsAndTextRB->Hide();
-    m_pToolbarStyleLabel->Hide();
-    // This button is applicable only for the Menus and Context Menus tabs
-    m_pAddSubmenuButton->Disable();
-    m_pAddSubmenuButton->Hide();
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -1186,24 +1160,10 @@ SvxConfigPage::~SvxConfigPage()
 
 void SvxConfigPage::dispose()
 {
-    m_pTopLevel.clear();
-    m_pTopLevelLabel.clear();
     m_pTopLevelListBox.clear();
-    m_pNewTopLevelButton.clear();
-    m_pModifyTopLevelButton.clear();
-    m_pToolbarStyleLabel.clear();
-    m_pIconsOnlyRB.clear();
-    m_pTextOnlyRB.clear();
-    m_pIconsAndTextRB.clear();
     m_pContents.clear();
-    m_pContentsLabel.clear();
     m_pEntries.clear();
-    m_pAddCommandsButton.clear();
-    m_pAddSeparatorButton.clear();
-    m_pAddSubmenuButton.clear();
-    m_pModifyCommandButton.clear();
-    m_pDeleteCommandButton.clear();
-    m_pResetTopLevelButton.clear();
+    m_pFunctions.clear();
     m_pMoveUpButton.clear();
     m_pMoveDownButton.clear();
     m_pSaveInListBox.clear();
@@ -1211,6 +1171,7 @@ void SvxConfigPage::dispose()
 
     m_pSelectorDlg.disposeAndClear();
     m_pContentsListBox.disposeAndClear();
+    m_pFunctionsListBox.disposeAndClear();
     SfxTabPage::dispose();
 }
 
@@ -1238,17 +1199,6 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         uno::Reference< css::frame::XModuleManager2 > xModuleManager(
             css::frame::ModuleManager::create( xContext ));
         OUString aModuleName = SvxConfigPageHelper::GetUIModuleName( aModuleId, xModuleManager );
-
-        OUString title = m_pTopLevel->get_label();
-        OUString aSearchString("%MODULENAME" );
-        sal_Int32 index = title.indexOf( aSearchString );
-
-        if ( index != -1 )
-        {
-            title = title.replaceAt(
-                index, aSearchString.getLength(), aModuleName );
-            m_pTopLevel->set_label(title);
-        }
 
         uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier >
             xModuleCfgSupplier( css::ui::theModuleUIConfigurationManagerSupplier::get(xContext) );

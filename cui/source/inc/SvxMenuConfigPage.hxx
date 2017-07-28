@@ -53,14 +53,6 @@ private:
     bool m_bIsMenuBar;
     DECL_LINK( SelectMenu, ListBox&, void );
     DECL_LINK( SelectMenuEntry, SvTreeListBox *, void );
-    DECL_LINK( NewMenuHdl, Button *, void );
-    DECL_LINK( MenuSelectHdl, MenuButton *, void );
-    DECL_LINK( EntrySelectHdl, MenuButton *, void );
-    DECL_LINK( AddCommandsHdl, Button *, void );
-    DECL_LINK( AddSeparatorHdl, Button *, void );
-    DECL_LINK( AddSubmenuHdl, Button *, void );
-    DECL_LINK( DeleteCommandHdl, Button *, void );
-    DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog&, void );
 
     void            Init() override;
     void            UpdateButtonStates() override;
