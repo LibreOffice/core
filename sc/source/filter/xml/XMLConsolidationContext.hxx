@@ -45,11 +45,6 @@ public:
                                     );
     virtual                     ~ScXMLConsolidationContext() override;
 
-    virtual SvXMLImportContext* CreateChildContext(
-                                    sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList
-                                    ) override;
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
