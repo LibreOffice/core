@@ -198,7 +198,7 @@ private:
 class VCL_DLLPUBLIC FreetypeFontInstance : public LogicalFontInstance
 {
 public:
-                            FreetypeFontInstance( FontSelectPattern& );
+                            FreetypeFontInstance( FontSelectPattern const & );
     virtual                 ~FreetypeFontInstance() override;
 
     void                    SetFreetypeFont(FreetypeFont* p);

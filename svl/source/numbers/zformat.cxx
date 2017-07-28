@@ -407,13 +407,13 @@ void SvNumberformat::ImpCopyNumberformat( const SvNumberformat& rFormat )
     }
 }
 
-SvNumberformat::SvNumberformat( SvNumberformat& rFormat )
+SvNumberformat::SvNumberformat( SvNumberformat const & rFormat )
     : rScan(rFormat.rScan), bStarFlag( rFormat.bStarFlag )
 {
     ImpCopyNumberformat( rFormat );
 }
 
-SvNumberformat::SvNumberformat( SvNumberformat& rFormat, ImpSvNumberformatScan& rSc )
+SvNumberformat::SvNumberformat( SvNumberformat const & rFormat, ImpSvNumberformatScan& rSc )
     : rScan(rSc)
     , bStarFlag( rFormat.bStarFlag )
 {

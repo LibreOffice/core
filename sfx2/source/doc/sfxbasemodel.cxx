@@ -339,11 +339,11 @@ class SfxOwnFramesLocker
 
     static vcl::Window* GetVCLWindow( const Reference< frame::XFrame >& xFrame );
 public:
-    explicit SfxOwnFramesLocker( SfxObjectShell* ObjechShell );
+    explicit SfxOwnFramesLocker( SfxObjectShell const * ObjechShell );
     ~SfxOwnFramesLocker();
 };
 
-SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell* pObjectShell )
+SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell const * pObjectShell )
 {
     if ( !pObjectShell )
         return;

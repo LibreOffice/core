@@ -110,7 +110,7 @@ namespace connectivity
         class OOperandParam : public OOperandRow
         {
         public:
-            OOperandParam(connectivity::OSQLParseNode* pNode, sal_Int32 _nPos);
+            OOperandParam(connectivity::OSQLParseNode const * pNode, sal_Int32 _nPos);
         };
 
         // Value operands

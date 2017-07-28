@@ -58,8 +58,8 @@ class SvParseException : public std::exception
 {
 public:
     SvIdlError aError;
-    SvParseException( SvTokenStream & rInStm, const OString& rError );
-    SvParseException( const OString& rError, SvToken& rTok );
+    SvParseException( SvTokenStream const & rInStm, const OString& rError );
+    SvParseException( const OString& rError, SvToken const & rTok );
 };
 
 

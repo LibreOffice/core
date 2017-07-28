@@ -91,7 +91,7 @@ private:
     mutable ::comphelper::SharedMutex   m_aMutex;
 
 public:
-                    SvNumberFormatsObj(SvNumberFormatsSupplierObj& pParent, ::comphelper::SharedMutex& _rMutex);
+                    SvNumberFormatsObj(SvNumberFormatsSupplierObj& pParent, ::comphelper::SharedMutex const & _rMutex);
     virtual         ~SvNumberFormatsObj() override;
 
 

@@ -209,7 +209,7 @@ public:
     SAL_DLLPRIVATE void         SignPDFExec_Impl(SfxRequest&);
     SAL_DLLPRIVATE void         MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         MiscState_Impl(SfxItemSet &);
-    SAL_DLLPRIVATE static void  PropExec_Impl(SfxRequest &);
+    SAL_DLLPRIVATE static void  PropExec_Impl(SfxRequest const &);
     SAL_DLLPRIVATE static void  PropState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void         OfaExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE static void  OfaState_Impl(SfxItemSet &);

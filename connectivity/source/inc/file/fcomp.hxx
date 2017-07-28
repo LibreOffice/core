@@ -59,7 +59,7 @@ namespace connectivity
             void dispose();
 
             void start(connectivity::OSQLParseNode const * pSQLParseNode);
-            OOperand* execute(connectivity::OSQLParseNode* pPredicateNode);
+            OOperand* execute(connectivity::OSQLParseNode const * pPredicateNode);
 
             void Clean();
             bool isClean() const {return m_aCodeList.empty();}
@@ -81,7 +81,7 @@ namespace connectivity
             void execute_ISNULL(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode);
+            OOperand* execute_Operand(connectivity::OSQLParseNode const * pPredicateNode);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void execute_Fold(OSQLParseNode const * pPredicateNode);

@@ -349,7 +349,7 @@ void Connection::notifyDatabaseModified()
 IMPLEMENT_SERVICE_INFO(Connection, "com.sun.star.sdbc.drivers.firebird.Connection",
                                                     "com.sun.star.sdbc.Connection")
 
-Reference< XBlob> Connection::createBlob(ISC_QUAD* pBlobId)
+Reference< XBlob> Connection::createBlob(ISC_QUAD const * pBlobId)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Connection_BASE::rBHelper.bDisposed);
@@ -362,7 +362,7 @@ Reference< XBlob> Connection::createBlob(ISC_QUAD* pBlobId)
     return xReturn;
 }
 
-Reference< XClob> Connection::createClob(ISC_QUAD* pBlobId)
+Reference< XClob> Connection::createClob(ISC_QUAD const * pBlobId)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Connection_BASE::rBHelper.bDisposed);

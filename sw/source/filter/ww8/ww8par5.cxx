@@ -414,8 +414,7 @@ OUString GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, LanguageTyp
     //convert back to the correct language layout.
     const sal_uInt32 nIndex = pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, nLang);
 
-    SvNumberformat aFormat = const_cast<SvNumberformat &>
-        (*(pFormatter->GetEntry(nIndex)));
+    SvNumberformat aFormat = *(pFormatter->GetEntry(nIndex));
     aFormat.ConvertLanguage(*pFormatter, nLang, LANGUAGE_ENGLISH_US);
 
     OUString sParams(aFormat.GetFormatstring());

@@ -34,7 +34,7 @@ SFX_IMPL_FLOATINGWINDOW( SfxRecordingFloatWrapper_Impl, SID_RECORDING_FLOATWINDO
 SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( vcl::Window* pParentWnd ,
                                                 sal_uInt16 nId ,
                                                 SfxBindings* pBind ,
-                                                SfxChildWinInfo* pInfo )
+                                                SfxChildWinInfo const * pInfo )
                     : SfxChildWindow( pParentWnd, nId )
                     , pBindings( pBind )
 {

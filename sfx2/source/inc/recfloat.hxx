@@ -30,7 +30,7 @@ public:
                         SfxRecordingFloatWrapper_Impl( vcl::Window* pParent ,
                                                 sal_uInt16 nId ,
                                                 SfxBindings* pBindings ,
-                                                SfxChildWinInfo* pInfo );
+                                                SfxChildWinInfo const * pInfo );
                         virtual ~SfxRecordingFloatWrapper_Impl() override;
 
                         SFX_DECL_CHILDWINDOW(SfxRecordingFloatWrapper_Impl);

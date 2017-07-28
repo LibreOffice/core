@@ -134,7 +134,7 @@ void OPredicateCompiler::start(OSQLParseNode const * pSQLParseNode)
 }
 
 
-OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
+OOperand* OPredicateCompiler::execute(OSQLParseNode const * pPredicateNode)
 {
     OOperand* pOperand = nullptr;
     if (pPredicateNode->count() == 3 &&                         // Expression is bracketed
@@ -408,7 +408,7 @@ void OPredicateCompiler::execute_ISNULL(OSQLParseNode const * pPredicateNode)
     m_aCodeList.push_back(pOperator);
 }
 
-OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode)
+OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode const * pPredicateNode)
 {
     OOperand* pOperand = nullptr;
 

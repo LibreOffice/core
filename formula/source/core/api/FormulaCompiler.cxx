@@ -307,7 +307,7 @@ bool isRangeResultOpCode( OpCode eOp )
             checked, bRight==true means opcodes for right side. If bRPN==true
             it doesn't matter.
  */
-bool isPotentialRangeType( FormulaToken* pToken, bool bRPN, bool bRight )
+bool isPotentialRangeType( FormulaToken const * pToken, bool bRPN, bool bRight )
 {
     switch (pToken->GetType())
     {

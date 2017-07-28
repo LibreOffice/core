@@ -44,7 +44,7 @@ class ConvDicXMLExport : public SvXMLExport
 public:
     ConvDicXMLExport( ConvDic &rConvDic,
         const OUString &rFileName,
-        css::uno::Reference< css::xml::sax::XDocumentHandler > &rHandler) :
+        css::uno::Reference< css::xml::sax::XDocumentHandler > const &rHandler) :
         SvXMLExport ( comphelper::getProcessComponentContext(), "com.sun.star.lingu2.ConvDicXMLExport", rFileName,
                       css::util::MeasureUnit::CM, rHandler ),
         rDic        ( rConvDic ),

@@ -74,7 +74,7 @@ namespace accessibility
             @param  _xParent
                 is our parent accessible object
         */
-        AccessibleListBox( SvTreeListBox& _rListBox,
+        AccessibleListBox( SvTreeListBox const & _rListBox,
                            const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
 
         // XTypeProvider

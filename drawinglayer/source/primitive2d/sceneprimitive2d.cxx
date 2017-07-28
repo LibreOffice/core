@@ -398,7 +398,7 @@ namespace drawinglayer
 
                         public:
                             explicit Executor(
-                                std::shared_ptr<comphelper::ThreadTaskTag>& rTag,
+                                std::shared_ptr<comphelper::ThreadTaskTag> const & rTag,
                                 processor3d::ZBufferProcessor3D* pZBufferProcessor3D,
                                 const primitive3d::Primitive3DContainer& rChildren3D)
                             :   comphelper::ThreadTask(rTag),

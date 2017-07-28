@@ -2030,7 +2030,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
     if( nFormat >= nFormatCount )
         return ImplSetError( ERRCODE_GRFILTER_FORMATERROR );
 
-    FilterConfigItem aConfigItem( const_cast<css::uno::Sequence< css::beans::PropertyValue >*>(pFilterData) );
+    FilterConfigItem aConfigItem( pFilterData );
     OUString aFilterName( pConfig->GetExportFilterName( nFormat ) );
 #ifndef DISABLE_DYNLOADING
     OUString aExternalFilterName(pConfig->GetExternalFilterName(nFormat, true));

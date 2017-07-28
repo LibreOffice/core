@@ -28,14 +28,14 @@
 #include <osl/file.hxx>
 
 
-SvParseException::SvParseException( SvTokenStream & rInStm, const OString& rError )
+SvParseException::SvParseException( SvTokenStream const & rInStm, const OString& rError )
 {
     SvToken& rTok = rInStm.GetToken();
     aError = SvIdlError( rTok.GetLine(), rTok.GetColumn() );
     aError.SetText( rError );
 };
 
-SvParseException::SvParseException( const OString& rError, SvToken& rTok )
+SvParseException::SvParseException( const OString& rError, SvToken const & rTok )
 {
     aError = SvIdlError( rTok.GetLine(), rTok.GetColumn() );
     aError.SetText( rError );
