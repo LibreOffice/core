@@ -1357,19 +1357,19 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
 
     aHtml.start(OOO_STRING_SVTOOLS_HTML_image);
 
-    OUString aGraphicInBase64;
-    if ( !XOutBitmap::GraphicToBase64(rGraphic, aGraphicInBase64) )
-    {
-        rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
-    }
-
     OStringBuffer sBuffer;
     if(rHTMLWrt.mbEmbedImages)
     {
-        sBuffer.append(OOO_STRING_SVTOOLS_HTML_O_data);
-        sBuffer.append(":");
-        sBuffer.append(OUStringToOString(aGraphicInBase64, RTL_TEXTENCODING_UTF8));
-        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.makeStringAndClear().getStr());
+        OUString aGraphicInBase64;
+        if (XOutBitmap::GraphicToBase64(rGraphic, aGraphicInBase64))
+        {
+            sBuffer.append(OOO_STRING_SVTOOLS_HTML_O_data);
+            sBuffer.append(":");
+            sBuffer.append(OUStringToOString(aGraphicInBase64, RTL_TEXTENCODING_UTF8));
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.makeStringAndClear().getStr());
+        }
+        else
+            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
     }
     else
     {
