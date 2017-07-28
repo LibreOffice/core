@@ -310,7 +310,7 @@ bool ScProtectionAttr::GetPresentation
         MapUnit /* eCoreMetric */,
         MapUnit /* ePresMetric */,
         OUString& rText,
-        const IntlWrapper* /* pIntl */
+        const IntlWrapper& /* rIntl */
     ) const
 {
     const OUString aStrYes ( ScGlobal::GetRscString(STR_YES) );
@@ -417,7 +417,7 @@ bool ScRangeItem::GetPresentation
         MapUnit             /* eCoreUnit */,
         MapUnit             /* ePresUnit */,
         OUString&           rText,
-        const IntlWrapper*  /* pIntl */
+        const IntlWrapper&  /* rIntl */
     ) const
 {
     rText.clear();
@@ -513,7 +513,7 @@ bool ScTableListItem::GetPresentation
         MapUnit             /* eCoreUnit */,
         MapUnit             /* ePresUnit */,
         OUString&           rText,
-        const IntlWrapper* /* pIntl */
+        const IntlWrapper& /* rIntl */
     ) const
 {
     switch ( ePres )
@@ -844,7 +844,7 @@ bool ScViewObjectModeItem::GetPresentation
     MapUnit             /* eCoreUnit */,
     MapUnit             /* ePresUnit */,
     OUString&           rText,
-    const IntlWrapper* /* pIntl */
+    const IntlWrapper& /* rIntl */
 )   const
 {
     OUString aDel(": ");
@@ -1007,7 +1007,7 @@ void lclAppendScalePageCount( OUString& rText, sal_uInt16 nPages )
 } // namespace
 
 bool ScPageScaleToItem::GetPresentation(
-        SfxItemPresentation ePres, MapUnit, MapUnit, OUString& rText, const IntlWrapper* ) const
+        SfxItemPresentation ePres, MapUnit, MapUnit, OUString& rText, const IntlWrapper& ) const
 {
     rText.clear();
     if( !IsValid())

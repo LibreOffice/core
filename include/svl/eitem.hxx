@@ -110,9 +110,9 @@ public:
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
-                                                MapUnit, MapUnit,
-                                                OUString & rText,
-                                                const IntlWrapper * = nullptr)
+                                 MapUnit, MapUnit,
+                                 OUString & rText,
+                                 const IntlWrapper&)
         const override;
 
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const override;

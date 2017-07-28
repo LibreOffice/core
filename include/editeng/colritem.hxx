@@ -51,7 +51,7 @@ public:
 
     virtual bool GetPresentation(SfxItemPresentation ePres,
                                  MapUnit eCoreMetric, MapUnit ePresMetric,
-                                 OUString &rText, const IntlWrapper* pIntlWrapper = nullptr) const override;
+                                 OUString &rText, const IntlWrapper& rIntlWrapper) const override;
 
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rStream, sal_uInt16 nVersion) const override;

@@ -41,12 +41,11 @@ public:
 
     virtual bool operator==( const SfxPoolItem& ) const override;
 
-    virtual bool GetPresentation(
-                                SfxItemPresentation ePresentation,
-                                MapUnit eCoreMetric,
-                                MapUnit ePresentationMetric,
-                                OUString &rText,
-                                const IntlWrapper *pIntlWrapper = nullptr ) const override;
+    virtual bool GetPresentation(SfxItemPresentation ePresentation,
+                                 MapUnit eCoreMetric,
+                                 MapUnit ePresentationMetric,
+                                 OUString &rText,
+                                 const IntlWrapper& rIntlWrapper) const override;
 
     virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const override;
 

@@ -37,7 +37,7 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText,
-                                  const IntlWrapper*    pIntl = nullptr ) const override;
+                                  const IntlWrapper& rIntl ) const override;
 };
 
 inline const SwFormatLayoutSplit &SwAttrSet::GetLayoutSplit(bool bInP) const

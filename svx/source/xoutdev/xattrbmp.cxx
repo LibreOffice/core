@@ -327,7 +327,7 @@ bool XFillBitmapItem::GetPresentation(
     MapUnit /*eCoreUnit*/,
     MapUnit /*ePresUnit*/,
     OUString& rText,
-    const IntlWrapper*) const
+    const IntlWrapper&) const
 {
     rText += GetName();
     return true;

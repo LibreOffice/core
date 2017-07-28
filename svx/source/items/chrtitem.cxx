@@ -121,42 +121,31 @@ SvxDoubleItem::SvxDoubleItem(double fValue, sal_uInt16 nId) :
 {
 }
 
-
 SvxDoubleItem::SvxDoubleItem(const SvxDoubleItem& rItem) :
     SfxPoolItem(rItem),
     fVal(rItem.fVal)
 {
 }
 
-
 bool SvxDoubleItem::GetPresentation
             ( SfxItemPresentation /*ePresentation*/, MapUnit /*eCoreMetric*/,
               MapUnit /*ePresentationMetric*/, OUString& rText,
-              const IntlWrapper * pIntlWrapper) const
+              const IntlWrapper& rIntlWrapper) const
 {
-    DBG_ASSERT( pIntlWrapper, "SvxDoubleItem::GetPresentation: no IntlWrapper" );
-    if ( pIntlWrapper )
-    {
-        rText = ::rtl::math::doubleToUString( fVal, rtl_math_StringFormat_E, 4,
-            pIntlWrapper->getLocaleData()->getNumDecimalSep()[0], true );
-    }
-    else
-        rText = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_E, 4, '.' );
+    rText = ::rtl::math::doubleToUString( fVal, rtl_math_StringFormat_E, 4,
+        rIntlWrapper.getLocaleData()->getNumDecimalSep()[0], true );
     return true;
 }
-
 
 bool SvxDoubleItem::operator == (const SfxPoolItem& rItem) const
 {
     return static_cast<const SvxDoubleItem&>(rItem).fVal == fVal;
 }
 
-
 SfxPoolItem* SvxDoubleItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxDoubleItem(*this);
 }
-
 
 SfxPoolItem* SvxDoubleItem::Create(SvStream& rIn, sal_uInt16 /*nVersion*/) const
 {

@@ -61,7 +61,7 @@ bool SvXMLAttrContainerItem::GetPresentation(
                     MapUnit /*eCoreMetric*/,
                     MapUnit /*ePresentationMetric*/,
                     OUString & /*rText*/,
-                    const IntlWrapper * /*pIntlWrapper*/ ) const
+                    const IntlWrapper& /*rIntlWrapper*/ ) const
 {
     return false;
 }

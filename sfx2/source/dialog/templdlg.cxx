@@ -444,7 +444,7 @@ TriState StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
     const bool bRet = aDropLink.Call(*this);
     rpNewParent = pTarget;
     lPos=0;
-    IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
     for(SvTreeListEntry *pTmpEntry=FirstChild(pTarget);
         pTmpEntry && pCollator->compareString(

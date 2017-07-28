@@ -38,7 +38,7 @@ public:
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
-                                  OUString &rText, const IntlWrapper * = nullptr ) const override;
+                                  OUString &rText, const IntlWrapper& ) const override;
 
     SvxCharHiddenItem& operator=(const SvxCharHiddenItem& rHidden) {
             SetValue(rHidden.GetValue());

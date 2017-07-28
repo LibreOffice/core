@@ -86,9 +86,9 @@ struct ComparisonData
     const SortDescriptor&   rSortOrder;
     IntlWrapper             aIntlWrapper;
 
-    ComparisonData( const SortDescriptor& _rSortOrder, const Reference< XComponentContext >& _rxContext )
-        :rSortOrder( _rSortOrder )
-        ,aIntlWrapper( _rxContext, SvtSysLocale().GetLanguageTag() )
+    ComparisonData(const SortDescriptor& _rSortOrder)
+        : rSortOrder(_rSortOrder)
+        , aIntlWrapper(SvtSysLocale().GetUILanguageTag())
     {
     }
 };
@@ -695,8 +695,8 @@ void OEvoabResultSet::construct( const QueryData& _rData )
 
         if ( m_pVersionHelper->hasContacts() && !_rData.aSortOrder.empty() )
         {
-            ComparisonData aCompData( _rData.aSortOrder, comphelper::getComponentContext(getConnection()->getDriver().getMSFactory()) );
-            m_pVersionHelper->sortContacts( aCompData );
+            ComparisonData aCompData(_rData.aSortOrder);
+            m_pVersionHelper->sortContacts(aCompData);
         }
     }
     m_nLength = m_pVersionHelper->getNumContacts();

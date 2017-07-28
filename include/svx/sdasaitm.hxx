@@ -44,7 +44,7 @@ class SVX_DLLPUBLIC SdrCustomShapeAdjustmentItem : public SfxPoolItem
             virtual bool                operator==( const SfxPoolItem& ) const override;
             virtual bool GetPresentation(SfxItemPresentation ePresentation,
                                          MapUnit eCoreMetric, MapUnit ePresentationMetric,
-                                         OUString &rText, const IntlWrapper * = nullptr) const override;
+                                         OUString &rText, const IntlWrapper&) const override;
             virtual SfxPoolItem*        Create( SvStream&, sal_uInt16 nItem ) const override;
             virtual SvStream&           Store( SvStream&, sal_uInt16 nVersion ) const override;
             virtual SfxPoolItem*        Clone( SfxItemPool* pPool = nullptr ) const override;

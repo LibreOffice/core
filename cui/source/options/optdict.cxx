@@ -381,7 +381,7 @@ sal_uLong SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
 {
     sal_uLong nPos = TREELIST_ENTRY_NOTFOUND;
 
-    IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
     sal_uLong j;
     for( j = 0; j < pWordsLB->GetEntryCount(); j++ )

@@ -47,26 +47,19 @@
 class UNOTOOLS_DLLPUBLIC IntlWrapper
 {
 private:
-
-            LanguageTag         maLanguageTag;
+    LanguageTag         maLanguageTag;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-            LocaleDataWrapper*  pLocaleData;
-            CollatorWrapper*    pCollator;
-            CollatorWrapper*    pCaseCollator;
+    LocaleDataWrapper*  pLocaleData;
+    CollatorWrapper*    pCollator;
+    CollatorWrapper*    pCaseCollator;
 
-            void                ImplNewLocaleData() const;
-            void                ImplNewCollator( bool bCaseSensitive ) const;
+    void                ImplNewLocaleData() const;
+    void                ImplNewCollator( bool bCaseSensitive ) const;
 
 public:
-                                IntlWrapper(
-                                    const css::uno::Reference< css::uno::XComponentContext > & rxContext,
-                                    const LanguageTag& rLanguageTag
-                                    );
-                                IntlWrapper(
-                                    const LanguageTag& rLanguageTag
-                                    );
-                                ~IntlWrapper();
+    IntlWrapper(const LanguageTag& rLanguageTag);
+    ~IntlWrapper();
 
     const LanguageTag&          getLanguageTag() const { return maLanguageTag; }
 

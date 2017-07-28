@@ -54,7 +54,7 @@ bool SvxHorJustifyItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *)    const
+    OUString&           rText, const IntlWrapper&)    const
 {
     rText = GetValueText( (sal_uInt16)GetValue() );
     return true;
@@ -203,7 +203,7 @@ bool SvxVerJustifyItem::GetPresentation
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
     OUString&           rText,
-    const IntlWrapper * )    const
+    const IntlWrapper& )    const
 {
     rText = GetValueText( GetValue() );
     return true;
@@ -334,7 +334,7 @@ bool SvxJustifyMethodItem::GetPresentation
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
     OUString&           rText,
-    const IntlWrapper * )    const
+    const IntlWrapper& )    const
 {
     rText = GetValueText( GetEnumValue() );
     return true;

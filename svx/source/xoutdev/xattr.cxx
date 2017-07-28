@@ -56,6 +56,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/tools/unotools.hxx>
+#include <unotools/intlwrapper.hxx>
 #include <vcl/gradient.hxx>
 
 #include <libxml/xmlwriter.h>
@@ -386,7 +387,7 @@ bool XLineStyleItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText.clear();
@@ -728,7 +729,7 @@ bool XLineDashItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = GetName();
@@ -1043,11 +1044,11 @@ bool XLineWidthItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
-    OUString&           rText, const IntlWrapper * pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     rText = GetMetricText( (long) GetValue(),
-                            eCoreUnit, ePresUnit, pIntl) +
+                            eCoreUnit, ePresUnit, &rIntl) +
             " " + EditResId( GetMetricId( ePresUnit) );
     return true;
 }
@@ -1105,7 +1106,7 @@ bool XLineColorItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = GetName();
@@ -1291,7 +1292,7 @@ bool XLineStartItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = GetName();
@@ -1853,7 +1854,7 @@ bool XLineEndItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = GetName();
@@ -1932,11 +1933,11 @@ bool XLineStartWidthItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
-    OUString&           rText, const IntlWrapper * pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     rText = GetMetricText( (long) GetValue(),
-                            eCoreUnit, ePresUnit, pIntl) +
+                            eCoreUnit, ePresUnit, &rIntl) +
             " " + EditResId( GetMetricId( ePresUnit) );
     return true;
 }
@@ -1980,11 +1981,11 @@ bool XLineEndWidthItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
-    OUString&           rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     rText = GetMetricText( (long) GetValue(),
-                            eCoreUnit, ePresUnit, pIntl) +
+                            eCoreUnit, ePresUnit, &rIntl) +
             " " + EditResId( GetMetricId( ePresUnit) );
     return true;
 }
@@ -2028,7 +2029,7 @@ bool XLineStartCenterItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = SvxResId(GetValue() ? RID_SVXSTR_CENTERED : RID_SVXSTR_NOTCENTERED);
@@ -2077,7 +2078,7 @@ bool XLineEndCenterItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = SvxResId(GetValue() ? RID_SVXSTR_CENTERED : RID_SVXSTR_NOTCENTERED);
@@ -2131,7 +2132,7 @@ bool XFillStyleItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText.clear();
@@ -2201,7 +2202,8 @@ void XFillStyleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number((sal_Int16)GetValue()).getStr()));
 
     OUString aPresentation;
-    GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation);
+    IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
+    GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation, aIntlWrapper);
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(aPresentation.toUtf8().getStr()));
 
     xmlTextWriterEndElement(pWriter);
@@ -2240,7 +2242,7 @@ bool XFillColorItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = GetName();
@@ -2305,7 +2307,7 @@ bool XSecondaryFillColorItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = GetName();
@@ -2495,7 +2497,7 @@ bool XFillGradientItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = GetName();
@@ -2806,9 +2808,9 @@ bool XFillFloatTransparenceItem::PutValue( const css::uno::Any& rVal, sal_uInt8 
 bool XFillFloatTransparenceItem::GetPresentation(    SfxItemPresentation ePres,
                                                                     MapUnit eCoreUnit, MapUnit ePresUnit,
                                                                     OUString& rText,
-                                                                    const IntlWrapper * pIntlWrapper ) const
+                                                                    const IntlWrapper& rIntlWrapper ) const
 {
-    return XFillGradientItem::GetPresentation( ePres, eCoreUnit, ePresUnit, rText, pIntlWrapper );
+    return XFillGradientItem::GetPresentation( ePres, eCoreUnit, ePresUnit, rText, rIntlWrapper );
 }
 
 bool XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
@@ -2956,7 +2958,7 @@ bool XFillHatchItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper *
+    OUString&           rText, const IntlWrapper&
 )   const
 {
     rText = GetName();

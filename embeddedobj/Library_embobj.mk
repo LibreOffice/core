@@ -27,6 +27,7 @@ $(eval $(call gb_Library_use_libraries,embobj,\
 	cppuhelper \
 	sal \
 	svt \
+	utl \
 	vcl \
 	tl \
 	i18nlangtag \

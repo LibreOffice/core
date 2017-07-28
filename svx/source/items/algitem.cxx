@@ -71,7 +71,7 @@ bool SvxOrientationItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper * ) const
+    OUString&           rText, const IntlWrapper& ) const
 {
     rText = GetValueText( GetValue() );
     return true;
@@ -203,7 +203,7 @@ bool SvxMarginItem::GetPresentation
     SfxItemPresentation ePres,
     MapUnit             eCoreUnit,
     MapUnit             ePresUnit,
-    OUString&           rText, const IntlWrapper *pIntl
+    OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
     OUString cpDelimTmp = OUString(cpDelim);
@@ -212,31 +212,31 @@ bool SvxMarginItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            rText = GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +
+            rText = GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl );
+                        GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, &rIntl );
             return true;
         }
         case SfxItemPresentation::Complete:
         {
             rText = SvxResId(RID_SVXITEMS_MARGIN_LEFT) +
-                        GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        GetMetricText( (long)nLeftMargin, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_TOP) +
-                        GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        GetMetricText( (long)nTopMargin, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_RIGHT) +
-                        GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        GetMetricText( (long)nRightMargin, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_BOTTOM) +
-                        GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, pIntl ) +
+                        GetMetricText( (long)nBottomMargin, eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             return true;
         }

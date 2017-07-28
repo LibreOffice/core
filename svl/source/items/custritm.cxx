@@ -38,7 +38,7 @@ bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 // virtual
 bool CntUnencodedStringItem::GetPresentation(SfxItemPresentation, MapUnit,
                                         MapUnit, OUString & rText,
-                                        const IntlWrapper *) const
+                                        const IntlWrapper&) const
 {
     rText = m_aValue;
     return true;

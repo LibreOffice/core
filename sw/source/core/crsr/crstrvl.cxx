@@ -67,6 +67,7 @@
 #include "txtfrm.hxx"
 #include <wrong.hxx>
 #include <calbck.hxx>
+#include <unotools/intlwrapper.hxx>
 #include <vcl/window.hxx>
 #include <docufld.hxx>
 
@@ -1615,13 +1616,14 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     OUString sAttrs;
                     SfxItemIter aIter( aSet );
                     const SfxPoolItem* pItem = aIter.FirstItem();
+                    const IntlWrapper aInt(SvtSysLocale().GetUILanguageTag());
                     while( true )
                     {
                         if( !IsInvalidItem( pItem ))
                         {
                             OUString aStr;
-                            GetDoc()->GetAttrPool().GetPresentation( *pItem,
-                                MapUnit::MapCM, aStr );
+                            GetDoc()->GetAttrPool().GetPresentation(*pItem,
+                                MapUnit::MapCM, aStr, aInt);
                             if (!sAttrs.isEmpty())
                                 sAttrs += ", ";
                             sAttrs += aStr;

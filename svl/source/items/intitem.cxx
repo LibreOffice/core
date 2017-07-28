@@ -68,7 +68,7 @@ bool SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
 bool SfxInt16Item::GetPresentation(SfxItemPresentation,
                                                   MapUnit, MapUnit,
                                                   OUString & rText,
-                                                  const IntlWrapper *) const
+                                                  const IntlWrapper&) const
 {
     rText = OUString::number(m_nValue);
     return true;

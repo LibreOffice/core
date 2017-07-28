@@ -61,7 +61,7 @@ public:
     virtual bool GetPresentation( const SfxPoolItem&  rItem,
                                   MapUnit          ePresentationMetric,
                                   OUString&           rText,
-                                  const IntlWrapper* pIntl = nullptr ) const override;
+                                  const IntlWrapper& rIntl ) const override;
 
     static void InitVersionMaps();
     static void DeleteVersionMaps();

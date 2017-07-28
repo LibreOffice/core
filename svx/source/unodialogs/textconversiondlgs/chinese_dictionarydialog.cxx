@@ -311,7 +311,7 @@ sal_Int32 DictionaryList::ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry
         if (nRightKind == SvLBoxItemType::String &&
              nLeftKind == SvLBoxItemType::String)
         {
-            IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
+            IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
             const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
 
             nCompare = pCollator->compareString( static_cast<SvLBoxString*>(pLeftItem)->GetText(),
