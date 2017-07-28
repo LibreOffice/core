@@ -3025,7 +3025,9 @@ static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId
 
     vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
 
+    comphelper::LibreOfficeKit::setDialogPainting(true);
     pDialogRenderable->paintDialog(aDialogID, *pDevice.get(), *nWidth, *nHeight);
+    comphelper::LibreOfficeKit::setDialogPainting(false);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
