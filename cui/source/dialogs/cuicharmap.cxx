@@ -510,8 +510,7 @@ void SvxCharacterMap::init()
 
     /* get the character name */
     u_charName((UChar32)90, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
-
-    if(U_SUCCESS(errorCode))
+    if (U_SUCCESS(errorCode))
         m_pCharName->SetText(OUString::createFromAscii(buffer));
 }
 
@@ -672,7 +671,8 @@ void SvxCharacterMap::setCharName(sal_UCS4 nDecimalValue)
     UErrorCode errorCode = U_ZERO_ERROR;
     char buffer[100];
     u_charName(nDecimalValue, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
-    m_pCharName->SetText(OUString::createFromAscii(buffer));
+    if (U_SUCCESS(errorCode))
+        m_pCharName->SetText(OUString::createFromAscii(buffer));
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
