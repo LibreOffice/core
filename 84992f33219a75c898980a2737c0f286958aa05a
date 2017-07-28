@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_28ae8d2e",
+        "filename": "sd/source/ui/slidesorter/controller/SlideSorterController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-07-28T10:50:23Z",
+      "side": 1,
+      "message": "missed an opportunity to overengineer this with comphelper::FlagGuard",
+      "revId": "84992f33219a75c898980a2737c0f286958aa05a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
