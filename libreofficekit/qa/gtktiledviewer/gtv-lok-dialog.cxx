@@ -106,7 +106,7 @@ gtv_lok_dialog_get_property(GObject* object, guint propId, GValue* value, GParam
         g_value_set_object(value, priv->lokdocview);
         break;
     case PROP_DIALOG_ID:
-        g_value_set_pointer(value, priv->dialogid);
+        g_value_set_string(value, priv->dialogid);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propId, pspec);
