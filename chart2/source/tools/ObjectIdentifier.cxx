@@ -357,7 +357,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         Reference< XLegend > xLegend( xObject, uno::UNO_QUERY );
         if( xLegend.is() )
         {
-            return createClassifiedIdentifierForParticle( createParticleForLegend( xLegend, rModel ) );
+            return createClassifiedIdentifierForParticle( createParticleForLegend( rModel ) );
         }
 
         //diagram
@@ -439,7 +439,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         Reference< XLegend > xLegend( xObject, uno::UNO_QUERY );
         if( xLegend.is() )
         {
-            return createClassifiedIdentifierForParticle( createParticleForLegend( xLegend, xChartModel ) );
+            return createClassifiedIdentifierForParticle( createParticleForLegend( xChartModel ) );
         }
 
         //diagram
@@ -642,9 +642,7 @@ OUString ObjectIdentifier::createParticleForSeries(
     return aRet.makeStringAndClear();
 }
 
-OUString ObjectIdentifier::createParticleForLegend(
-          const Reference< XLegend >& /*xLegend*/
-        , ChartModel& rModel )
+OUString ObjectIdentifier::createParticleForLegend( ChartModel& rModel )
 {
     OUStringBuffer aRet;
 
@@ -660,8 +658,7 @@ OUString ObjectIdentifier::createParticleForLegend(
 }
 
 OUString ObjectIdentifier::createParticleForLegend(
-          const Reference< XLegend >& /*xLegend*/
-        , const Reference< frame::XModel >& xChartModel )
+        const Reference< frame::XModel >& xChartModel )
 {
     OUStringBuffer aRet;
 

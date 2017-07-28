@@ -127,7 +127,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     for( sal_Int32 nN=0; nN<m_nDimensionCount; nN++ )
     {
         m_aAllAxis[nN].resize( 1 );
-        Reference< chart2::XAxis > xAxis( new Axis(m_xContext) );
+        Reference< chart2::XAxis > xAxis( new Axis );
         m_aAllAxis[nN][0] = xAxis;
 
         ModifyListenerHelper::addListenerToAllElements( m_aAllAxis[nN], m_xModifyEventForwarder );

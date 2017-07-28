@@ -141,12 +141,8 @@ protected: //methods
 
     VAxisBase* getVAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
-    OUString createCIDForAxis( const css::uno::Reference<
-                    css::chart2::XAxis >& xAxis
-                    , sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
-    OUString createCIDForGrid( const css::uno::Reference<
-                    css::chart2::XAxis >& xAxis
-                    , sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
+    OUString createCIDForAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
+    OUString createCIDForGrid( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
     sal_Int32 getNumberFormatKeyForAxis( const css::uno::Reference<
                      css::chart2::XAxis >& xAxis

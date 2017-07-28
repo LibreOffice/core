@@ -49,8 +49,7 @@ class FormattedString :
     public ::property::OPropertySet
 {
 public:
-    explicit FormattedString( css::uno::Reference<
-           css::uno::XComponentContext > const & xContext );
+    explicit FormattedString();
     virtual ~FormattedString() override;
 
     /// declare XServiceInfo methods

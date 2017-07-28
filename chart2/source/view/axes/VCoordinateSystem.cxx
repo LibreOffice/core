@@ -312,12 +312,12 @@ ExplicitIncrementData VCoordinateSystem::getExplicitIncrement( sal_Int32 nDimens
     return aRet;
 }
 
-OUString VCoordinateSystem::createCIDForAxis( const Reference< chart2::XAxis >& /* xAxis */, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+OUString VCoordinateSystem::createCIDForAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
     OUString aAxisParticle( ObjectIdentifier::createParticleForAxis( nDimensionIndex, nAxisIndex ) );
     return ObjectIdentifier::createClassifiedIdentifierForParticles( m_aCooSysParticle, aAxisParticle );
 }
-OUString VCoordinateSystem::createCIDForGrid( const Reference< chart2::XAxis >& /* xAxis */, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+OUString VCoordinateSystem::createCIDForGrid( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
     OUString aGridParticle( ObjectIdentifier::createParticleForGrid( nDimensionIndex, nAxisIndex ) );
     return ObjectIdentifier::createClassifiedIdentifierForParticles( m_aCooSysParticle, aGridParticle );

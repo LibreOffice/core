@@ -879,7 +879,7 @@ void VLegend::createShapes(
     {
         //create shape and add to page
         AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
-        OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( m_xLegend, mrModel ) );
+        OUString aLegendParticle( ObjectIdentifier::createParticleForLegend( mrModel ) );
         m_xShape.set( pShapeFactory->createGroup2D( m_xTarget,
                     ObjectIdentifier::createClassifiedIdentifierForParticle( aLegendParticle )),
                 uno::UNO_QUERY);

@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>& /*xContext*/ )
+DrawModelWrapper::DrawModelWrapper()
         : SdrModel( SvtPathOptions().GetPalettePath(), nullptr, nullptr, false )
         , m_pChartItemPool(nullptr)
         , m_xMainDrawPage(nullptr)

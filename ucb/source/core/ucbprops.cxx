@@ -43,8 +43,7 @@ using namespace com::sun::star::uno;
 
 #define ATTR_DEFAULT ( PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID | PropertyAttribute::MAYBEDEFAULT )
 
-UcbPropertiesManager::UcbPropertiesManager(
-                        const Reference< XMultiServiceFactory >& )
+UcbPropertiesManager::UcbPropertiesManager()
 : m_pProps({
     { "Account", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { "AutoUpdateInterval", -1, cppu::UnoType<sal_Int32>::get(), ATTR_DEFAULT },
@@ -199,10 +198,10 @@ XSERVICEINFO_COMMOM_IMPL( UcbPropertiesManager,
                           OUString( "com.sun.star.comp.ucb.UcbPropertiesManager" ) )
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface > SAL_CALL
-UcbPropertiesManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+UcbPropertiesManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & /*rSMgr*/ )
 {
     css::lang::XServiceInfo* pX =
-        static_cast<css::lang::XServiceInfo*>(new UcbPropertiesManager( rSMgr ));
+        static_cast<css::lang::XServiceInfo*>(new UcbPropertiesManager);
     return css::uno::Reference< css::uno::XInterface >::query( pX );
 }
 css::uno::Sequence< OUString >

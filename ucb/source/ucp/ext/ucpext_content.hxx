@@ -114,8 +114,7 @@ namespace ucb { namespace ucp { namespace ext
 
         css::uno::Sequence< css::uno::Any >
             setPropertyValues(
-                const css::uno::Sequence< css::beans::PropertyValue >& rValues,
-                const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv
+                const css::uno::Sequence< css::beans::PropertyValue >& rValues
             );
 
         static bool denotesRootContent( const OUString& i_rContentIdentifier );
