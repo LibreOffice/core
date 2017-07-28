@@ -104,8 +104,6 @@
 
 SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     : SvxConfigPage(pParent, rSet)
-    , m_pMenu(get_menu("modifymenu"))
-    , m_pEntry(get_menu("contentmenu"))
 {
     SetHelpId( HID_SVX_CONFIG_TOOLBAR );
 
@@ -116,67 +114,24 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pContentsListBox->set_vexpand(true);
     m_pContentsListBox->Show();
 
+    m_pFunctionsListBox = VclPtr<SvxToolbarEntriesListBox>::Create(m_pFunctions, this);
+    m_pFunctionsListBox->set_grid_left_attach(0);
+    m_pFunctionsListBox->set_grid_top_attach(0);
+    m_pFunctionsListBox->set_hexpand(true);
+    m_pFunctionsListBox->set_vexpand(true);
+    m_pFunctionsListBox->Show();
+
     m_pTopLevelListBox->SetHelpId ( HID_SVX_TOPLEVELLISTBOX );
-    m_pIconsOnlyRB->SetHelpId ( HID_SVX_ICONSONLY );
-    m_pTextOnlyRB->SetHelpId ( HID_SVX_TEXTONLY );
-    m_pIconsAndTextRB->SetHelpId ( HID_SVX_ICONSANDTEXT );
     m_pContentsListBox->SetHelpId( HID_SVX_CONFIG_TOOLBAR_CONTENTS );
-    m_pNewTopLevelButton->SetHelpId( HID_SVX_NEW_TOOLBAR );
-    m_pModifyTopLevelButton->SetHelpId( HID_SVX_MODIFY_TOOLBAR );
-    m_pAddCommandsButton->SetHelpId( HID_SVX_NEW_TOOLBAR_ITEM );
-    m_pAddSeparatorButton->SetHelpId ( HID_SVX_ADD_SEPARATOR );
-    m_pModifyCommandButton->SetHelpId( HID_SVX_MODIFY_TOOLBAR_ITEM );
-    m_pDeleteCommandButton->SetHelpId ( HID_SVX_REMOVEBUTTON );
-    m_pResetTopLevelButton->SetHelpId ( HID_SVX_RESETBUTTON );
     m_pSaveInListBox->SetHelpId( HID_SVX_SAVE_IN );
     m_pMoveUpButton->SetHelpId( HID_SVX_UP_TOOLBAR_ITEM );
     m_pMoveDownButton->SetHelpId( HID_SVX_DOWN_TOOLBAR_ITEM );
     m_pDescriptionField->SetHelpId ( HID_SVX_DESCFIELD );
 
-    m_pTopLevel->set_label(CuiResId(RID_SVXSTR_PRODUCTNAME_TOOLBARS));
-
-    m_pTopLevelLabel->SetText( CuiResId( RID_SVXSTR_TOOLBAR ) );
-    m_pModifyTopLevelButton->SetText( CuiResId( RID_SVXSTR_TOOLBAR ) );
-    m_pContents->set_label(CuiResId(RID_SVXSTR_TOOLBAR_CONTENT));
-    m_pContentsLabel->SetText( CuiResId( RID_SVXSTR_COMMANDS ) );
-
-    // The reset button will be used in the toolbar config tab
-    m_pResetTopLevelButton->Show();
-    // These radio buttons will be used in the toolbar config tab
-    m_pIconsOnlyRB->Enable();
-    m_pTextOnlyRB->Enable();
-    m_pIconsAndTextRB->Enable();
-    m_pIconsOnlyRB->Show();
-    m_pTextOnlyRB->Show();
-    m_pIconsAndTextRB->Show();
-    m_pToolbarStyleLabel->Show();
-
     m_pTopLevelListBox->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectToolbar ) );
     m_pContentsListBox->SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectToolbarEntry ) );
-
-    m_pIconsOnlyRB->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, StyleChangeHdl ) );
-    m_pTextOnlyRB->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, StyleChangeHdl ) );
-    m_pIconsAndTextRB->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, StyleChangeHdl ) );
-
-    m_pNewTopLevelButton->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, NewToolbarHdl ) );
-
-    m_pAddCommandsButton->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, AddCommandsHdl ) );
-
-    m_pAddSeparatorButton->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, AddSeparatorHdl ) );
-
-    m_pDeleteCommandButton->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, DeleteCommandHdl ) );
-
-    m_pResetTopLevelButton->SetClickHdl  (
-        LINK( this, SvxToolbarConfigPage, ResetTopLevelHdl ) );
 
     m_pMoveUpButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
     m_pMoveDownButton->SetClickHdl ( LINK( this, SvxToolbarConfigPage, MoveHdl) );
@@ -184,20 +139,6 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     // added for issue i53677 by shizhoubo
     m_pMoveDownButton->Enable();
     m_pMoveUpButton->Enable();
-
-    m_pMenu->SetMenuFlags(
-        m_pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
-
-    m_pModifyTopLevelButton->SetPopupMenu( m_pMenu );
-    m_pModifyTopLevelButton->SetSelectHdl(
-        LINK( this, SvxToolbarConfigPage, ToolbarSelectHdl ) );
-
-    m_pEntry->SetMenuFlags(
-        m_pEntry->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
-
-    m_pModifyCommandButton->SetPopupMenu(m_pEntry);
-    m_pModifyCommandButton->SetSelectHdl(
-        LINK( this, SvxToolbarConfigPage, EntrySelectHdl ) );
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
@@ -232,9 +173,6 @@ void SvxToolbarConfigPage::dispose()
         delete pData;
     }
     m_pSaveInListBox->Clear();
-
-    m_pEntry.clear();
-    m_pMenu.clear();
 
     SvxConfigPage::dispose();
 }
@@ -330,285 +268,6 @@ void SvxToolbarConfigPage::MoveEntry( bool bMoveUp )
     }
 }
 
-IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, void )
-{
-    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
-
-    SvxConfigEntry* pToolbar =
-        static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
-
-    ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
-
-    OString sCommand = m_pMenu->GetItemIdent(pButton->GetCurItemId());
-
-    if (sCommand == "modtooldelete")
-    {
-        DeleteSelectedTopLevel();
-        UpdateButtonStates();
-    }
-    else if (sCommand == "modtoolrename")
-    {
-        OUString aNewName( SvxConfigPageHelper::stripHotKey( pToolbar->GetName() ) );
-        OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
-
-        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
-        pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
-        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_TOOLBAR ) );
-
-        if ( pNameDialog->Execute() == RET_OK )
-        {
-            pNameDialog->GetName(aNewName);
-
-            pToolbar->SetName( aNewName );
-            pSaveInData->ApplyToolbar( pToolbar );
-
-            // have to use remove and insert to change the name
-            m_pTopLevelListBox->RemoveEntry( nSelectionPos );
-            nSelectionPos =
-                m_pTopLevelListBox->InsertEntry( aNewName, nSelectionPos );
-            m_pTopLevelListBox->SetEntryData( nSelectionPos, pToolbar );
-            m_pTopLevelListBox->SelectEntryPos( nSelectionPos );
-        }
-    }
-}
-
-IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
-{
-    bool bNeedsApply = false;
-
-    // get currently selected toolbar
-    SvxConfigEntry* pToolbar = GetTopLevelSelection();
-
-    OString sCommand = m_pEntry->GetItemIdent(pButton->GetCurItemId());
-
-    if (sCommand == "toolrename")
-    {
-        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
-        SvxConfigEntry* pEntry =
-            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
-
-        OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
-        OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
-
-        VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
-        pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
-        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_TOOLBAR ) );
-
-        if ( pNameDialog->Execute() == RET_OK ) {
-            pNameDialog->GetName(aNewName);
-
-            if( aNewName.isEmpty() ) //tdf#80758 - Accelerator character ("~") is passed as
-                pEntry->SetName( "~" ); // the button name in case of empty values.
-            else
-                pEntry->SetName( aNewName );
-
-            m_pContentsListBox->SetEntryText( pActEntry, aNewName );
-            bNeedsApply = true;
-        }
-    }
-    else if (sCommand == "toolrestore")
-    {
-        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
-        SvxConfigEntry* pEntry =
-            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
-
-        sal_uInt16 nSelectionPos = 0;
-
-        // find position of entry within the list
-        for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
-        {
-            if ( m_pContentsListBox->GetEntry( nullptr, i ) == pActEntry )
-            {
-                nSelectionPos = i;
-                break;
-            }
-        }
-
-        ToolbarSaveInData* pSaveInData =
-            static_cast<ToolbarSaveInData*>( GetSaveInData() );
-
-        OUString aSystemName =
-            pSaveInData->GetSystemUIName( pEntry->GetCommand() );
-
-        if ( !pEntry->GetName().equals( aSystemName ) )
-        {
-            pEntry->SetName( aSystemName );
-            m_pContentsListBox->SetEntryText(
-                pActEntry, SvxConfigPageHelper::stripHotKey( aSystemName ) );
-            bNeedsApply = true;
-        }
-
-        css::uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
-
-        try
-        {
-            GetSaveInData()->GetImageManager()->removeImages(
-                SvxConfigPageHelper::GetImageType(), aURLSeq );
-
-            // reset backup in entry
-            pEntry->SetBackupGraphic(
-                css::uno::Reference< css::graphic::XGraphic >() );
-
-            GetSaveInData()->PersistChanges(
-                GetSaveInData()->GetImageManager() );
-
-            m_pContentsListBox->GetModel()->Remove( pActEntry );
-
-            SvTreeListEntry* pNewLBEntry =
-                InsertEntryIntoUI( pEntry, nSelectionPos );
-
-            m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
-                pEntry->IsVisible() ?
-                    SvButtonState::Checked : SvButtonState::Unchecked );
-
-            m_pContentsListBox->Select( pNewLBEntry );
-            m_pContentsListBox->MakeVisible( pNewLBEntry );
-
-            bNeedsApply = true;
-        }
-        catch ( css::uno::Exception& )
-        {
-            SAL_WARN("cui.customize", "Error restoring image");
-        }
-    }
-    else if (sCommand == "toolchange")
-    {
-        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
-        SvxConfigEntry* pEntry =
-            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
-
-        sal_uInt16 nSelectionPos = 0;
-
-        // find position of entry within the list
-        for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
-        {
-            if ( m_pContentsListBox->GetEntry( nullptr, i ) == pActEntry )
-            {
-                nSelectionPos = i;
-                break;
-            }
-        }
-
-        ScopedVclPtr<SvxIconSelectorDialog> pIconDialog(
-            VclPtr<SvxIconSelectorDialog>::Create( nullptr,
-                GetSaveInData()->GetImageManager(),
-                GetSaveInData()->GetParentImageManager() ));
-
-        if ( pIconDialog->Execute() == RET_OK )
-        {
-            css::uno::Reference< css::graphic::XGraphic > newgraphic =
-                pIconDialog->GetSelectedIcon();
-
-            if ( newgraphic.is() )
-            {
-                css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >
-                    aGraphicSeq( 1 );
-
-                css::uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
-
-                if ( !pEntry->GetBackupGraphic().is() )
-                {
-                    css::uno::Reference< css::graphic::XGraphic > backup;
-                    backup = SvxConfigPageHelper::GetGraphic(
-                        GetSaveInData()->GetImageManager(), aURLSeq[ 0 ] );
-
-                    if ( backup.is() )
-                    {
-                        pEntry->SetBackupGraphic( backup );
-                    }
-                }
-
-                aGraphicSeq[ 0 ] = newgraphic;
-                try
-                {
-                    GetSaveInData()->GetImageManager()->replaceImages(
-                        SvxConfigPageHelper::GetImageType(), aURLSeq, aGraphicSeq );
-
-                    m_pContentsListBox->GetModel()->Remove( pActEntry );
-                    SvTreeListEntry* pNewLBEntry =
-                        InsertEntryIntoUI( pEntry, nSelectionPos );
-
-                    m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
-                        pEntry->IsVisible() ?
-                            SvButtonState::Checked : SvButtonState::Unchecked );
-
-                    m_pContentsListBox->Select( pNewLBEntry );
-                    m_pContentsListBox->MakeVisible( pNewLBEntry );
-
-                    GetSaveInData()->PersistChanges(
-                        GetSaveInData()->GetImageManager() );
-                }
-                catch ( css::uno::Exception& )
-                {
-                    SAL_WARN("cui.customize", "Error replacing image");
-                }
-            }
-        }
-    }
-    else if (sCommand == "toolreset")
-    {
-        SvTreeListEntry* pActEntry = m_pContentsListBox->GetCurEntry();
-        SvxConfigEntry* pEntry =
-            static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
-
-        sal_uInt16 nSelectionPos = 0;
-
-        // find position of entry within the list
-        for ( sal_uLong i = 0; i < m_pContentsListBox->GetEntryCount(); ++i )
-        {
-            if ( m_pContentsListBox->GetEntry( nullptr, i ) == pActEntry )
-            {
-                nSelectionPos = i;
-                break;
-            }
-        }
-
-        css::uno::Reference< css::graphic::XGraphic > backup =
-            pEntry->GetBackupGraphic();
-
-        css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >
-            aGraphicSeq( 1 );
-        aGraphicSeq[ 0 ] = backup;
-
-        css::uno::Sequence<OUString> aURLSeq { pEntry->GetCommand() };
-
-        try
-        {
-            GetSaveInData()->GetImageManager()->replaceImages(
-                SvxConfigPageHelper::GetImageType(), aURLSeq, aGraphicSeq );
-
-            m_pContentsListBox->GetModel()->Remove( pActEntry );
-
-            SvTreeListEntry* pNewLBEntry =
-                InsertEntryIntoUI( pEntry, nSelectionPos );
-
-            m_pContentsListBox->SetCheckButtonState( pNewLBEntry,
-                pEntry->IsVisible() ?
-                    SvButtonState::Checked : SvButtonState::Unchecked );
-
-            m_pContentsListBox->Select( pNewLBEntry );
-            m_pContentsListBox->MakeVisible( pNewLBEntry );
-
-            // reset backup in entry
-            pEntry->SetBackupGraphic(
-                css::uno::Reference< css::graphic::XGraphic >() );
-
-            GetSaveInData()->PersistChanges(
-                GetSaveInData()->GetImageManager() );
-        }
-        catch ( css::uno::Exception& )
-        {
-            SAL_WARN("cui.customize", "Error resetting image");
-        }
-    }
-
-    if ( bNeedsApply )
-    {
-        static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
-        UpdateButtonStates();
-    }
-}
-
 void SvxToolbarConfigPage::Init()
 {
     // ensure that the UI is cleared before populating it
@@ -658,15 +317,6 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void
 
 void SvxToolbarConfigPage::UpdateButtonStates()
 {
-    PopupMenu* pPopup = m_pModifyCommandButton->GetPopupMenu();
-    pPopup->EnableItem(pPopup->GetItemId("toolrename"), false);
-    pPopup->EnableItem(pPopup->GetItemId("toolrestore"), false);
-    pPopup->EnableItem(pPopup->GetItemId("toolchange"), false);
-    pPopup->EnableItem(pPopup->GetItemId("toolreset"), false);
-
-    m_pDeleteCommandButton->Enable( false );
-    m_pAddSeparatorButton->Enable( false );
-
     m_pDescriptionField->SetText("");
 
     SvTreeListEntry* selection = m_pContentsListBox->GetCurEntry();
@@ -676,24 +326,8 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     }
 
     SvxConfigEntry* pEntryData = static_cast<SvxConfigEntry*>(selection->GetUserData());
-    if ( pEntryData->IsSeparator() )
+    if ( !pEntryData->IsSeparator() )
     {
-        m_pDeleteCommandButton->Enable();
-    }
-    else
-    {
-        pPopup->EnableItem(pPopup->GetItemId("toolrename"));
-        pPopup->EnableItem(pPopup->GetItemId("toolchange"));
-
-        m_pDeleteCommandButton->Enable();
-        m_pAddSeparatorButton->Enable();
-
-        if ( !pEntryData->IsUserDefined() )
-            pPopup->EnableItem(pPopup->GetItemId("toolrestore"));
-
-        if ( pEntryData->IsIconModified() )
-            pPopup->EnableItem(pPopup->GetItemId("toolreset"));
-
         m_pDescriptionField->SetText(pEntryData->GetHelpText());
     }
 }
@@ -719,50 +353,8 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     SvxConfigEntry* pToolbar = GetTopLevelSelection();
     if ( pToolbar == nullptr )
     {
-        m_pModifyTopLevelButton->Enable( false );
-        m_pModifyCommandButton->Enable( false );
-        m_pAddCommandsButton->Enable( false );
-        m_pAddSeparatorButton->Enable( false );
-        m_pDeleteCommandButton->Enable( false );
-        m_pResetTopLevelButton->Enable( false );
-        m_pIconsOnlyRB->Enable( false );
-        m_pTextOnlyRB->Enable( false );
-        m_pIconsAndTextRB->Enable( false );
-
+        //TODO: Disable related buttons
         return;
-    }
-
-    m_pModifyTopLevelButton->Enable();
-    m_pModifyCommandButton->Enable();
-    m_pAddCommandsButton->Enable();
-    m_pResetTopLevelButton->Enable( !pToolbar->IsRenamable() );
-
-    m_pIconsOnlyRB->Enable();
-    m_pTextOnlyRB->Enable();
-    m_pIconsAndTextRB->Enable();
-
-    PopupMenu* pPopup = m_pModifyTopLevelButton->GetPopupMenu();
-
-    pPopup->EnableItem(m_pMenu->GetItemId("modtooldelete"), pToolbar->IsDeletable());
-    pPopup->EnableItem(m_pMenu->GetItemId("modtoolrename"), pToolbar->IsRenamable());
-
-    switch( pToolbar->GetStyle() )
-    {
-        case 0:
-        {
-            m_pIconsOnlyRB->Check();
-            break;
-        }
-        case 1:
-        {
-            m_pTextOnlyRB->Check();
-            break;
-        }
-        case 2:
-        {
-            m_pIconsAndTextRB->Check();
-            break;
-        }
     }
 
     SvxEntries* pEntries = pToolbar->GetEntries();
@@ -790,160 +382,6 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, SelectToolbar, ListBox&, void )
     }
 
     UpdateButtonStates();
-}
-
-IMPL_LINK( SvxToolbarConfigPage, StyleChangeHdl, Button*, pButton, void )
-{
-    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
-
-    SvxConfigEntry* pToolbar =
-        static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
-
-    ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
-
-    if (pButton == m_pIconsOnlyRB)
-    {
-        pToolbar->SetStyle( 0 );
-        pSaveInData->SetSystemStyle( m_xFrame, pToolbar->GetCommand(), 0 );
-
-        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
-    }
-    else if (pButton == m_pTextOnlyRB)
-    {
-        pToolbar->SetStyle( 1 );
-        pSaveInData->SetSystemStyle( m_xFrame, pToolbar->GetCommand(), 1 );
-
-        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
-    }
-    else if (pButton == m_pIconsAndTextRB)
-    {
-        pToolbar->SetStyle( 2 );
-        pSaveInData->SetSystemStyle( m_xFrame, pToolbar->GetCommand(), 2 );
-
-        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
-    }
-}
-
-IMPL_LINK_NOARG( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
-{
-    OUString prefix = CuiResId( RID_SVXSTR_NEW_TOOLBAR );
-
-    OUString aNewName =
-        SvxConfigPageHelper::generateCustomName( prefix, GetSaveInData()->GetEntries() );
-
-    OUString aNewURL =
-        SvxConfigPageHelper::generateCustomURL( GetSaveInData()->GetEntries() );
-
-    VclPtrInstance< SvxNewToolbarDialog > pNameDialog( nullptr, aNewName );
-
-    for ( sal_Int32 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
-    {
-        SaveInData* pData =
-            static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
-
-        const sal_Int32 nInsertPos = pNameDialog->m_pSaveInListBox->InsertEntry(
-            m_pSaveInListBox->GetEntry( i ) );
-
-        pNameDialog->m_pSaveInListBox->SetEntryData( nInsertPos, pData );
-    }
-
-    pNameDialog->m_pSaveInListBox->SelectEntryPos(
-        m_pSaveInListBox->GetSelectEntryPos() );
-
-    if ( pNameDialog->Execute() == RET_OK )
-    {
-        aNewName = pNameDialog->GetName();
-
-        sal_Int32 nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectEntryPos();
-
-        ToolbarSaveInData* pData = static_cast<ToolbarSaveInData*>(
-            pNameDialog->m_pSaveInListBox->GetEntryData( nInsertPos ));
-
-        if ( GetSaveInData() != pData )
-        {
-            m_pSaveInListBox->SelectEntryPos( nInsertPos );
-            m_pSaveInListBox->GetSelectHdl().Call(*m_pSaveInListBox);
-        }
-
-        SvxConfigEntry* pToolbar =
-            new SvxConfigEntry( aNewName, aNewURL, true );
-
-        pToolbar->SetUserDefined();
-        pToolbar->SetMain();
-
-        pData->CreateToolbar( pToolbar );
-
-        nInsertPos = m_pTopLevelListBox->InsertEntry( pToolbar->GetName() );
-        m_pTopLevelListBox->SetEntryData( nInsertPos, pToolbar );
-        m_pTopLevelListBox->SelectEntryPos( nInsertPos );
-        m_pTopLevelListBox->GetSelectHdl().Call(*m_pTopLevelListBox);
-
-        pData->SetModified();
-    }
-}
-
-IMPL_LINK_NOARG( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
-{
-    if ( m_pSelectorDlg == nullptr )
-    {
-        // Create Script Selector which shows slot commands
-        m_pSelectorDlg = VclPtr<SvxScriptSelectorDialog>::Create( this, true, m_xFrame );
-
-        // Position the Script Selector over the Add button so it is
-        // beside the menu contents list and does not obscure it
-        m_pSelectorDlg->SetPosPixel( m_pAddCommandsButton->GetPosPixel() );
-
-        m_pSelectorDlg->SetAddHdl(
-            LINK( this, SvxToolbarConfigPage, AddFunctionHdl ) );
-    }
-
-    m_pSelectorDlg->SetImageProvider( GetSaveInData() );
-
-    m_pSelectorDlg->Execute();
-}
-
-IMPL_LINK_NOARG( SvxToolbarConfigPage, AddSeparatorHdl, Button *, void )
-{
-    // get currently selected toolbar
-    SvxConfigEntry* pToolbar = GetTopLevelSelection();
-
-    SvxConfigEntry* pNewEntryData = new SvxConfigEntry;
-    pNewEntryData->SetUserDefined();
-
-    SvTreeListEntry* pNewLBEntry = InsertEntry( pNewEntryData );
-
-    m_pContentsListBox->SetCheckButtonInvisible( pNewLBEntry );
-    m_pContentsListBox->SetCheckButtonState(
-        pNewLBEntry, SvButtonState::Tristate );
-
-    static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
-    UpdateButtonStates();
-}
-
-IMPL_LINK_NOARG( SvxToolbarConfigPage, DeleteCommandHdl, Button *, void )
-{
-    DeleteSelectedContent();
-}
-
-IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetTopLevelHdl, Button *, void )
-{
-    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
-
-    SvxConfigEntry* pToolbar =
-        static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
-
-    ScopedVclPtrInstance<MessageDialog> qbox(this,
-        CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VclMessageType::Question, VclButtonsType::YesNo);
-
-    if ( qbox->Execute() == RET_YES )
-    {
-        ToolbarSaveInData* pSaveInData_ =
-        static_cast<ToolbarSaveInData*>(GetSaveInData());
-
-        pSaveInData_->RestoreToolbar( pToolbar );
-
-        m_pTopLevelListBox->GetSelectHdl().Call( *m_pTopLevelListBox );
-    }
 }
 
 IMPL_LINK_NOARG( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )

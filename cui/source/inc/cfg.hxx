@@ -81,9 +81,9 @@ class SvxConfigDialog : public SfxTabDialog
 private:
     css::uno::Reference< css::frame::XFrame > m_xFrame;
     sal_uInt16 m_nMenusPageId;
+    sal_uInt16 m_nToolbarsPageId;
     sal_uInt16 m_nContextMenusPageId;
     sal_uInt16 m_nKeyboardPageId;
-    sal_uInt16 m_nToolbarsPageId;
     sal_uInt16 m_nEventsPageId;
 
 public:
@@ -383,31 +383,18 @@ protected:
 
     // the top section of the tab page where top level menus and toolbars
     //  are displayed in a listbox
-    VclPtr<VclFrame>                           m_pTopLevel;
-    VclPtr<FixedText>                          m_pTopLevelLabel;
     VclPtr<ListBox>                            m_pTopLevelListBox;
-    VclPtr<PushButton>                         m_pNewTopLevelButton;
-    VclPtr<MenuButton>                         m_pModifyTopLevelButton;
-
-    VclPtr<FixedText>                          m_pToolbarStyleLabel;
-    VclPtr<RadioButton>                        m_pIconsOnlyRB;
-    VclPtr<RadioButton>                        m_pTextOnlyRB;
-    VclPtr<RadioButton>                        m_pIconsAndTextRB;
 
     // the contents section where the contents of the selected
     // menu or toolbar are displayed
     VclPtr<VclFrame>                           m_pContents;
-    VclPtr<FixedText>                          m_pContentsLabel;
     VclPtr<VclContainer>                       m_pEntries;
     VclPtr<SvTreeListBox>                      m_pContentsListBox;
 
-    VclPtr<PushButton>                         m_pAddCommandsButton;
-    VclPtr<PushButton>                         m_pAddSeparatorButton;
-    VclPtr<PushButton>                         m_pAddSubmenuButton;
-    VclPtr<MenuButton>                         m_pModifyCommandButton;
-    VclPtr<PushButton>                         m_pDeleteCommandButton;
-    // Resets the top level toolbar to default settings
-    VclPtr<PushButton>                         m_pResetTopLevelButton;
+    // the functions section where functions in the
+    // selected category will be displayed
+    VclPtr<VclContainer>                       m_pFunctions;
+    VclPtr<SvTreeListBox>                      m_pFunctionsListBox;
 
     VclPtr<PushButton>                         m_pMoveUpButton;
     VclPtr<PushButton>                         m_pMoveDownButton;
@@ -524,10 +511,6 @@ public:
     SvxEntries*     GetEntries() { return mpEntries;}
     SvxConfigEntry* GetSelectedEntry();
 };
-
-//SvxToolbarEntriesListBox class was here
-
-//SvxToolbarConfigPage class was here
 
 class ToolbarSaveInData : public SaveInData
 {
