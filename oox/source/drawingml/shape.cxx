@@ -116,6 +116,7 @@ Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 , mnRotation( 0 )
 , mbFlipH( false )
 , mbFlipV( false )
+, mbInheritedTextFlipV(false)
 , mbHidden( false )
 , mbHiddenMasterShape( false )
 , mbLockedCanvas( false )
@@ -157,6 +158,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mnRotation( pSourceShape->mnRotation )
 , mbFlipH( pSourceShape->mbFlipH )
 , mbFlipV( pSourceShape->mbFlipV )
+, mbInheritedTextFlipV(pSourceShape->mbInheritedTextFlipV)
 , mbHidden( pSourceShape->mbHidden )
 , mbHiddenMasterShape( pSourceShape->mbHiddenMasterShape )
 , mbLockedCanvas( pSourceShape->mbLockedCanvas )
@@ -314,6 +316,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     mnRotation = rReferencedShape.mnRotation;
     mbFlipH = rReferencedShape.mbFlipH;
     mbFlipV = rReferencedShape.mbFlipV;
+    mbInheritedTextFlipV = rReferencedShape.mbInheritedTextFlipV;
     mbHidden = rReferencedShape.mbHidden;
 }
 
@@ -393,6 +396,7 @@ void Shape::addChildren(
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
     while( aIter != rMaster.maChildren.end() ) {
         (*aIter)->setMasterTextListStyle( mpMasterTextListStyle );
+        (*aIter)->applyParentTextFlipV(mbInheritedTextFlipV != mbFlipV);
         (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), nullptr, pShapeMap );
     }
 }
@@ -1079,6 +1083,8 @@ Reference< XShape > const & Shape::createAndInsert(
             if( getTextBody() )
             {
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
+                if(mbInheritedTextFlipV)
+                    nTextRotateAngle -= 180 * 60000;
                 /* OOX measures text rotation clockwise in 1/60000th degrees,
                    relative to the containing shape. setTextRotateAngle wants
                    degrees anticlockwise. */
