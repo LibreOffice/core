@@ -231,7 +231,9 @@ sal_uInt16 SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
         const sal_uInt16 nRubyHeight = pGrid->GetRubyHeight();
         const bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
-        if ( GetInfo().IsMulti() )
+        if ( !pGrid->IsSquaredMode() )
+            nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+        else if ( GetInfo().IsMulti() )
             // we are inside the GetCharRect recursion for multi portions
             // we center the portion in its surrounding line
             nOfst = ( m_pCurr->Height() - nPorHeight ) / 2 + nPorAscent;
