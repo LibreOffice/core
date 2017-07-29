@@ -815,38 +815,19 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
         }
     }
 
-    if (pEvent->type == GDK_KEY_RELEASE)
+    GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
+    LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
+    pLOEvent->m_nKeyEvent = pEvent->type == GDK_KEY_RELEASE ? LOK_KEYEVENT_KEYUP : LOK_KEYEVENT_KEYINPUT;
+    pLOEvent->m_nCharCode = nCharCode;
+    pLOEvent->m_nKeyCode  = nKeyCode;
+    g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
+    g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
+    if (error != nullptr)
     {
-        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
-        LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
-        pLOEvent->m_nKeyEvent = LOK_KEYEVENT_KEYUP;
-        pLOEvent->m_nCharCode = nCharCode;
-        pLOEvent->m_nKeyCode  = nKeyCode;
-        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-        g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-        if (error != nullptr)
-        {
-            g_warning("Unable to call LOK_POST_KEY: %s", error->message);
-            g_clear_error(&error);
-        }
-        g_object_unref(task);
+        g_warning("Unable to call LOK_POST_KEY: %s", error->message);
+        g_clear_error(&error);
     }
-    else
-    {
-        GTask* task = g_task_new(pDocView, nullptr, nullptr, nullptr);
-        LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY);
-        pLOEvent->m_nKeyEvent = LOK_KEYEVENT_KEYINPUT;
-        pLOEvent->m_nCharCode = nCharCode;
-        pLOEvent->m_nKeyCode  = nKeyCode;
-        g_task_set_task_data(task, pLOEvent, LOEvent::destroy);
-        g_thread_pool_push(priv->lokThreadPool, g_object_ref(task), &error);
-        if (error != nullptr)
-        {
-            g_warning("Unable to call LOK_POST_KEY: %s", error->message);
-            g_clear_error(&error);
-        }
-        g_object_unref(task);
-    }
+    g_object_unref(task);
 
     return FALSE;
 }
