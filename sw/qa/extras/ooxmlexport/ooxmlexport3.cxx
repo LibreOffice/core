@@ -117,6 +117,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92470_footnoteRestart, "tdf92470_footnoteRestart
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT( pDoc );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote doesn't restart every Page", FTNNUM_PAGE, pDoc->GetFootnoteInfo().eNum );
+
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
