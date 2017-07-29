@@ -838,6 +838,89 @@ DECLARE_ODFIMPORT_TEST(testTdf109080_style_ns, "tdf109080_style_ns.odt")
         parseDump("/root/page[2]/footer/txt/text()"));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf103602_draw_ns, "tdf103602_draw_ns.odt")
+{
+    // Test we can import <draw:fill> and related attributes for page fill,
+    // header/footer fill in text documents.
+    // (produced by LibreOffice 5.x, in violation of ODF 1.2 spec)
+
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
+
+    // Page fill: hatched
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH,
+        getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Black 45 Degrees Wide"),
+        getProperty<OUString>(xPropertySet, "FillHatchName"));
+    CPPUNIT_ASSERT_EQUAL(true,
+        getProperty<bool>(xPropertySet, "FillBackground"));
+
+    // Header fill: gradient
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+        getProperty<drawing::FillStyle>(xPropertySet, "HeaderFillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Radial red/yellow"),
+        getProperty<OUString>(xPropertySet, "HeaderFillGradientName"));
+
+    // Footer fill: bitmap
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
+        getProperty<drawing::FillStyle>(xPropertySet, "FooterFillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sky"),
+        getProperty<OUString>(xPropertySet, "FooterFillBitmapName"));
+    CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT,
+        getProperty<drawing::BitmapMode>(xPropertySet, "FooterFillBitmapMode"));
+    CPPUNIT_ASSERT_EQUAL(2000,
+        getProperty<int>(xPropertySet, "FooterFillBitmapSizeX"));
+    CPPUNIT_ASSERT_EQUAL(1900,
+        getProperty<int>(xPropertySet, "FooterFillBitmapSizeY"));
+    CPPUNIT_ASSERT_EQUAL(5,
+        getProperty<int>(xPropertySet, "FooterFillBitmapPositionOffsetX"));
+    CPPUNIT_ASSERT_EQUAL(6,
+        getProperty<int>(xPropertySet, "FooterFillBitmapPositionOffsetY"));
+    CPPUNIT_ASSERT_EQUAL(3,
+        getProperty<int>(xPropertySet, "FooterFillBitmapOffsetX"));
+}
+
+DECLARE_ODFIMPORT_TEST(testTdf103602_loext_ns, "tdf103602_loext_ns.odt")
+{
+    // Test we can import <loext:fill> and related attributes for page fill,
+    // header/footer fill in text documents.
+
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
+
+    // Page fill: hatched
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH,
+        getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Black 45 Degrees Wide"),
+        getProperty<OUString>(xPropertySet, "FillHatchName"));
+    CPPUNIT_ASSERT_EQUAL(true,
+        getProperty<bool>(xPropertySet, "FillBackground"));
+
+    // Header fill: gradient
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+        getProperty<drawing::FillStyle>(xPropertySet, "HeaderFillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Radial red/yellow"),
+        getProperty<OUString>(xPropertySet, "HeaderFillGradientName"));
+
+    // Footer fill: bitmap
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
+        getProperty<drawing::FillStyle>(xPropertySet, "FooterFillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sky"),
+        getProperty<OUString>(xPropertySet, "FooterFillBitmapName"));
+    CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT,
+        getProperty<drawing::BitmapMode>(xPropertySet, "FooterFillBitmapMode"));
+    CPPUNIT_ASSERT_EQUAL(2000,
+        getProperty<int>(xPropertySet, "FooterFillBitmapSizeX"));
+    CPPUNIT_ASSERT_EQUAL(1900,
+        getProperty<int>(xPropertySet, "FooterFillBitmapSizeY"));
+    CPPUNIT_ASSERT_EQUAL(5,
+        getProperty<int>(xPropertySet, "FooterFillBitmapPositionOffsetX"));
+    CPPUNIT_ASSERT_EQUAL(6,
+        getProperty<int>(xPropertySet, "FooterFillBitmapPositionOffsetY"));
+    CPPUNIT_ASSERT_EQUAL(3,
+        getProperty<int>(xPropertySet, "FooterFillBitmapOffsetX"));
+}
+
 DECLARE_ODFIMPORT_TEST(testTdf109228, "tdf109228.odt")
 {
     //  Embedded object with no frame name was imported incorrectly, it was anchored 'to character' instead of 'as character'
