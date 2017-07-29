@@ -432,11 +432,11 @@ public:
     OUString getPostIts() override;
 
     void paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight) override;
-    void postDialogMouseEvent(const vcl::DialogID& rDialogID, int nType,
-                             int nCharCode, int nKeyCode) override;
+    void postDialogKeyEvent(const vcl::DialogID& rDialogID, int nType,
+                            int nCharCode, int nKeyCode) override;
 
-    void postDialogKeyEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
-                            int nCount, int nButtons, int nModifier) override;
+    void postDialogMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
+                              int nCount, int nButtons, int nModifier) override;
 
     // css::tiledrendering::XTiledRenderable
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) override;

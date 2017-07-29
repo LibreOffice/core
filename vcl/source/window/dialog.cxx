@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 
@@ -869,6 +870,45 @@ void Dialog::paintDialog(VirtualDevice& rDevice)
     ensureRepaint();
 
     PaintToDevice(&rDevice, Point(0, 0), Size());
+}
+
+void Dialog::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
+{
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    Point aPoint = GetPointerPosPixel();
+    SetLastMousePos(rMouseEvent.GetPosPixel());
+
+    MouseButtonDown(rMouseEvent);
+
+    SetPointerPosPixel(aPoint);
+}
+
+void Dialog::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
+{
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    Point aPoint = GetPointerPosPixel();
+    SetLastMousePos(rMouseEvent.GetPosPixel());
+
+    MouseButtonUp(rMouseEvent);
+
+    SetPointerPosPixel(aPoint);
+}
+
+void Dialog::LogicMouseButtonMove(const MouseEvent& rMouseEvent)
+{
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    Point aPoint = GetPointerPosPixel();
+    SetLastMousePos(rMouseEvent.GetPosPixel());
+
+    MouseMove(rMouseEvent);
+
+    SetPointerPosPixel(aPoint);
 }
 
 void Dialog::ensureRepaint()
