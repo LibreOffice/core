@@ -146,6 +146,7 @@ public:
     void testTdf100926();
     void testTdf89064();
     void testTdf108925();
+    void testTdf109223();
 
     bool checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -212,6 +213,7 @@ public:
     CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testTdf89064);
     CPPUNIT_TEST(testTdf108925);
+    CPPUNIT_TEST(testTdf109223);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2166,6 +2168,38 @@ void SdImportTest::testTdf108925()
     CPPUNIT_ASSERT(pNumFmt);
     CPPUNIT_ASSERT_EQUAL(pNumFmt->GetNumRule()->GetLevel(0).GetBulletRelSize(), sal_uInt16(25));
 
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf109223()
+{
+    // In the test document flipV attribute is defined for a group shape
+    // This transformation is not applied on child shapes
+    // To make the text direction right at least I added an additional text rotation when parent shape is flipped.
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf109223.pptx"), PPTX);
+    uno::Reference< container::XIndexAccess > xGroupShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xShape(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+
+    // Check the shape text to make sure we test the right shape
+    OUString sText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("Tested child shape"), sText);
+
+    // Check the attribute inherited from parent shape
+    bool bAttributeFound = false;
+    uno::Sequence<beans::PropertyValue> aProps;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("CustomShapeGeometry") >>= aProps);
+    for (sal_Int32 i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "TextPreRotateAngle")
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(180), rProp.Value.get<sal_Int32>());
+            bAttributeFound = true;
+            break;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(true, bAttributeFound);
     xDocShRef->DoClose();
 }
 
