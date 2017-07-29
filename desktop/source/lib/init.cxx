@@ -541,6 +541,11 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
                              int nType,
                              int nCharCode,
                              int nKeyCode);
+static void doc_postDialogKeyEvent(LibreOfficeKitDocument* pThis,
+                                   const char* pDialogId,
+                                   int nType,
+                                   int nCharCode,
+                                   int nKeyCode);
 static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nType,
                                 int nX,
@@ -548,6 +553,14 @@ static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nCount,
                                 int nButtons,
                                 int nModifier);
+static void doc_postDialogMouseEvent (LibreOfficeKitDocument* pThis,
+                                      const char* pDialogId,
+                                      int nType,
+                                      int nX,
+                                      int nY,
+                                      int nCount,
+                                      int nButtons,
+                                      int nModifier);
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
                                const char* pCommand,
                                const char* pArguments,
@@ -615,7 +628,9 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
         m_pDocumentClass->registerCallback = doc_registerCallback;
         m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
+        m_pDocumentClass->postDialogKeyEvent = doc_postDialogKeyEvent;
         m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
+        m_pDocumentClass->postDialogMouseEvent = doc_postDialogMouseEvent;
         m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
         m_pDocumentClass->setTextSelection = doc_setTextSelection;
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
@@ -2084,8 +2099,22 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
         gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
         return;
     }
-
     pDoc->postKeyEvent(nType, nCharCode, nKeyCode);
+}
+
+static void doc_postDialogKeyEvent(LibreOfficeKitDocument* pThis, const char* pDialogId, int nType, int nCharCode, int nKeyCode)
+{
+    SolarMutexGuard aGuard;
+
+    IDialogRenderable* pDoc = getDialogRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering";
+        return;
+    }
+
+    vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
+    pDoc->postDialogKeyEvent(aDialogID, nType, nCharCode, nKeyCode);
 }
 
 /** Class to react on finishing of a dispatched command.
@@ -2237,6 +2266,21 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     {
         pLib->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
     }
+}
+
+static void doc_postDialogMouseEvent(LibreOfficeKitDocument* pThis, const char* pDialogId, int nType, int nX, int nY, int nCount, int nButtons, int nModifier)
+{
+    SolarMutexGuard aGuard;
+
+    IDialogRenderable* pDoc = getDialogRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering";
+        return;
+    }
+
+    vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
+    pDoc->postDialogMouseEvent(aDialogID, nType, nX, nY, nCount, nButtons, nModifier);
 }
 
 static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
