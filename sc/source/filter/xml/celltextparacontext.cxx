@@ -13,23 +13,21 @@
 
 #include <xmloff/nmspmap.hxx>
 #include <comphelper/string.hxx>
+#include <xmloff/xmlnmspe.hxx>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 ScXMLCellTextParaContext::ScXMLCellTextParaContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLTableRowCellContext& rParent) :
-    ScXMLImportContext(rImport, nPrefix, rLName),
+    ScXMLImport& rImport, sal_Int32 /*nElement*/, ScXMLTableRowCellContext& rParent) :
+    ScXMLImportContext(rImport),
     mrParentCxt(rParent)
 {
 }
 
-void ScXMLCellTextParaContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
-{
-}
-
-void ScXMLCellTextParaContext::EndElement()
+void SAL_CALL ScXMLCellTextParaContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!maContent.isEmpty())
         mrParentCxt.PushParagraphSpan(maContent, OUString());
@@ -37,13 +35,13 @@ void ScXMLCellTextParaContext::EndElement()
     mrParentCxt.PushParagraphEnd();
 }
 
-void ScXMLCellTextParaContext::Characters(const OUString& rChars)
+void SAL_CALL ScXMLCellTextParaContext::characters( const OUString& rChars )
 {
     maContent += rChars;
 }
 
-SvXMLImportContext* ScXMLCellTextParaContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextParaContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if (!maContent.isEmpty())
     {
@@ -51,26 +49,25 @@ SvXMLImportContext* ScXMLCellTextParaContext::CreateChildContext(
         maContent.clear();
     }
 
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetCellTextParaElemTokenMap();
-    switch (rTokenMap.Get(nPrefix, rLocalName))
+    switch (nElement)
     {
-        case XML_TOK_CELL_TEXT_S:
-            return new ScXMLCellFieldSContext(GetScImport(), nPrefix, rLocalName, *this);
-        case XML_TOK_CELL_TEXT_SPAN:
-            return new ScXMLCellTextSpanContext(GetScImport(), nPrefix, rLocalName, *this);
-        case XML_TOK_CELL_TEXT_SHEET_NAME:
-            return new ScXMLCellFieldSheetNameContext(GetScImport(), nPrefix, rLocalName, *this);
-        case XML_TOK_CELL_TEXT_DATE:
-            return new ScXMLCellFieldDateContext(GetScImport(), nPrefix, rLocalName, *this);
-        case XML_TOK_CELL_TEXT_TITLE:
-            return new ScXMLCellFieldTitleContext(GetScImport(), nPrefix, rLocalName, *this);
-        case XML_TOK_CELL_TEXT_URL:
-            return new ScXMLCellFieldURLContext(GetScImport(), nPrefix, rLocalName, *this);
+        case XML_ELEMENT( TEXT, XML_S ):
+            return new ScXMLCellFieldSContext(GetScImport(), nElement, *this);
+        case XML_ELEMENT( TEXT, XML_SPAN ):
+            return new ScXMLCellTextSpanContext(GetScImport(), nElement, *this);
+        case XML_ELEMENT( TEXT, XML_SHEET_NAME ):
+            return new ScXMLCellFieldSheetNameContext(GetScImport(), nElement, *this);
+        case XML_ELEMENT( TEXT, XML_DATE ):
+            return new ScXMLCellFieldDateContext(GetScImport(), nElement, *this);
+        case XML_ELEMENT( TEXT, XML_TITLE ):
+            return new ScXMLCellFieldTitleContext(GetScImport(), nElement, *this);
+        case XML_ELEMENT( TEXT, XML_A ):
+            return new ScXMLCellFieldURLContext(GetScImport(), nElement, *this);
         default:
             ;
     }
 
-    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+    return new SvXMLImportContext(GetImport());
 }
 
 void ScXMLCellTextParaContext::PushSpan(const OUString& rSpan, const OUString& rStyleName)
@@ -100,40 +97,35 @@ void ScXMLCellTextParaContext::PushFieldURL(
 }
 
 ScXMLCellTextSpanContext::ScXMLCellTextSpanContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent) :
-    ScXMLImportContext(rImport, nPrefix, rLName),
+    ScXMLImport& rImport, sal_Int32 /*nElement*/, ScXMLCellTextParaContext& rParent) :
+    ScXMLImportContext(rImport),
     mrParentCxt(rParent)
 {
 }
 
-void ScXMLCellTextSpanContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+void SAL_CALL ScXMLCellTextSpanContext::startFastElement( sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    if (!xAttrList.is())
-        return;
-
-    OUString aLocalName;
-    sal_Int16 nAttrCount = xAttrList->getLength();
-
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetCellTextSpanAttrTokenMap();
-    for (sal_Int16 i = 0; i < nAttrCount; ++i)
+    if ( xAttrList.is() )
     {
-        sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
-            xAttrList->getNameByIndex(i), &aLocalName);
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        const OUString& rAttrValue = xAttrList->getValueByIndex(i);
-        sal_uInt16 nToken = rTokenMap.Get(nAttrPrefix, aLocalName);
-        switch (nToken)
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_CELL_TEXT_SPAN_ATTR_STYLE_NAME:
-                maStyleName = rAttrValue;
-            break;
-            default:
-                ;
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT( TEXT, XML_STYLE_NAME ):
+                    maStyleName = aIter.toString();
+                break;
+                default:
+                    ;
+            }
         }
     }
 }
 
-void ScXMLCellTextSpanContext::EndElement()
+void SAL_CALL ScXMLCellTextSpanContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!maContent.isEmpty())
     {
@@ -141,13 +133,13 @@ void ScXMLCellTextSpanContext::EndElement()
     }
 }
 
-void ScXMLCellTextSpanContext::Characters(const OUString& rChars)
+void SAL_CALL ScXMLCellTextSpanContext::characters( const OUString& rChars )
 {
     maContent += rChars;
 }
 
-SvXMLImportContext* ScXMLCellTextSpanContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellTextSpanContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if (!maContent.isEmpty())
     {
@@ -155,36 +147,35 @@ SvXMLImportContext* ScXMLCellTextSpanContext::CreateChildContext(
         maContent.clear();
     }
 
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetCellTextSpanElemTokenMap();
-    switch (rTokenMap.Get(nPrefix, rLocalName))
+    switch (nElement)
     {
-        case XML_TOK_CELL_TEXT_SPAN_ELEM_SHEET_NAME:
+        case XML_ELEMENT( TEXT, XML_SHEET_NAME ):
         {
-            ScXMLCellFieldSheetNameContext* p = new ScXMLCellFieldSheetNameContext(GetScImport(), nPrefix, rLocalName, mrParentCxt);
+            ScXMLCellFieldSheetNameContext* p = new ScXMLCellFieldSheetNameContext(GetScImport(), nElement, mrParentCxt);
             p->SetStyleName(maStyleName);
             return p;
         }
-        case XML_TOK_CELL_TEXT_SPAN_ELEM_DATE:
+        case XML_ELEMENT( TEXT, XML_DATE ):
         {
-            ScXMLCellFieldDateContext* p = new ScXMLCellFieldDateContext(GetScImport(), nPrefix, rLocalName, mrParentCxt);
+            ScXMLCellFieldDateContext* p = new ScXMLCellFieldDateContext(GetScImport(), nElement, mrParentCxt);
             p->SetStyleName(maStyleName);
             return p;
         }
-        case XML_TOK_CELL_TEXT_SPAN_ELEM_TITLE:
+        case XML_ELEMENT( TEXT, XML_TITLE ):
         {
-            ScXMLCellFieldTitleContext* p = new ScXMLCellFieldTitleContext(GetScImport(), nPrefix, rLocalName, mrParentCxt);
+            ScXMLCellFieldTitleContext* p = new ScXMLCellFieldTitleContext(GetScImport(), nElement, mrParentCxt);
             p->SetStyleName(maStyleName);
             return p;
         }
-        case XML_TOK_CELL_TEXT_SPAN_ELEM_URL:
+        case XML_ELEMENT( TEXT, XML_A ):
         {
-            ScXMLCellFieldURLContext* p = new ScXMLCellFieldURLContext(GetScImport(), nPrefix, rLocalName, mrParentCxt);
+            ScXMLCellFieldURLContext* p = new ScXMLCellFieldURLContext(GetScImport(), nElement, mrParentCxt);
             p->SetStyleName(maStyleName);
             return p;
         }
-        case XML_TOK_CELL_TEXT_SPAN_ELEM_S:
+        case XML_ELEMENT( TEXT, XML_S ):
         {
-            ScXMLCellFieldSContext* p = new ScXMLCellFieldSContext(GetScImport(), nPrefix, rLocalName, mrParentCxt);
+            ScXMLCellFieldSContext* p = new ScXMLCellFieldSContext(GetScImport(), nElement, mrParentCxt);
             p->SetStyleName(maStyleName);
             return p;
         }
@@ -192,12 +183,12 @@ SvXMLImportContext* ScXMLCellTextSpanContext::CreateChildContext(
             ;
     }
 
-    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+    return new SvXMLImportContext(GetImport());
 }
 
 ScXMLCellFieldSheetNameContext::ScXMLCellFieldSheetNameContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent) :
-    ScXMLImportContext(rImport, nPrefix, rLName),
+    ScXMLImport& rImport, sal_Int32 /*nElement*/, ScXMLCellTextParaContext& rParent) :
+    ScXMLImportContext(rImport),
     mrParentCxt(rParent)
 {
 }
@@ -207,29 +198,20 @@ void ScXMLCellFieldSheetNameContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void ScXMLCellFieldSheetNameContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
+void SAL_CALL ScXMLCellFieldSheetNameContext::startFastElement( sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     // <text:sheet-name> has no attributes (that I'm aware of).
 }
 
-void ScXMLCellFieldSheetNameContext::EndElement()
+void SAL_CALL ScXMLCellFieldSheetNameContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrParentCxt.PushFieldSheetName(maStyleName);
 }
 
-void ScXMLCellFieldSheetNameContext::Characters(const OUString& /*rChars*/)
-{
-}
-
-SvXMLImportContext* ScXMLCellFieldSheetNameContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
-{
-    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-}
-
 ScXMLCellFieldDateContext::ScXMLCellFieldDateContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent) :
-    ScXMLImportContext(rImport, nPrefix, rLName),
+    ScXMLImport& rImport, sal_Int32 /*nElement*/, ScXMLCellTextParaContext& rParent) :
+    ScXMLImportContext(rImport),
     mrParentCxt(rParent)
 {
 }
@@ -239,28 +221,14 @@ void ScXMLCellFieldDateContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void ScXMLCellFieldDateContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
-{
-}
-
-void ScXMLCellFieldDateContext::EndElement()
+void SAL_CALL ScXMLCellFieldDateContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrParentCxt.PushFieldDate(maStyleName);
 }
 
-void ScXMLCellFieldDateContext::Characters(const OUString& /*rChars*/)
-{
-}
-
-SvXMLImportContext* ScXMLCellFieldDateContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
-{
-    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-}
-
 ScXMLCellFieldTitleContext::ScXMLCellFieldTitleContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent) :
-    ScXMLImportContext(rImport, nPrefix, rLName),
+    ScXMLImport& rImport, sal_Int32 /*nElement*/, ScXMLCellTextParaContext& rParent) :
+    ScXMLImportContext(rImport),
     mrParentCxt(rParent)
 {
 }
@@ -270,28 +238,14 @@ void ScXMLCellFieldTitleContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void ScXMLCellFieldTitleContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
-{
-}
-
-void ScXMLCellFieldTitleContext::EndElement()
+void SAL_CALL ScXMLCellFieldTitleContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrParentCxt.PushFieldTitle(maStyleName);
 }
 
-void ScXMLCellFieldTitleContext::Characters(const OUString& /*rChars*/)
-{
-}
-
-SvXMLImportContext* ScXMLCellFieldTitleContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
-{
-    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-}
-
 ScXMLCellFieldURLContext::ScXMLCellFieldURLContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent) :
-    ScXMLImportContext(rImport, nPrefix, rLName),
+    ScXMLImport& rImport, sal_Int32 /*nElement*/, ScXMLCellTextParaContext& rParent) :
+    ScXMLImportContext(rImport),
     mrParentCxt(rParent)
 {
 }
@@ -301,58 +255,47 @@ void ScXMLCellFieldURLContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void ScXMLCellFieldURLContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+void SAL_CALL ScXMLCellFieldURLContext::startFastElement( sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    if (!xAttrList.is())
-        return;
-
-    OUString aLocalName;
-    sal_Int16 nAttrCount = xAttrList->getLength();
-
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetCellTextURLAttrTokenMap();
-    for (sal_Int16 i = 0; i < nAttrCount; ++i)
+    if ( xAttrList.is() )
     {
-        sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
-            xAttrList->getNameByIndex(i), &aLocalName);
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        const OUString& rAttrValue = xAttrList->getValueByIndex(i);
-        sal_uInt16 nToken = rTokenMap.Get(nAttrPrefix, aLocalName);
-        switch (nToken)
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_CELL_TEXT_URL_ATTR_UREF:
-                maURL = rAttrValue;
-            break;
-            case XML_TOK_CELL_TEXT_URL_ATTR_TYPE:
-                // Ignored for now.
-            break;
-            case XML_TOK_CELL_TEXT_URL_TARGET_FRAME:
-                maTargetFrame = rAttrValue;
-            break;
-            default:
-                ;
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT( XLINK, XML_HREF ):
+                    maURL = aIter.toString();
+                break;
+                case XML_ELEMENT( XLINK, XML_TYPE ):
+                    // Ignored for now.
+                break;
+                case XML_ELEMENT( OFFICE, XML_TARGET_FRAME_NAME ):
+                    maTargetFrame = aIter.toString();
+                break;
+                default:
+                    ;
+            }
         }
     }
 }
 
-void ScXMLCellFieldURLContext::EndElement()
+void SAL_CALL ScXMLCellFieldURLContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrParentCxt.PushFieldURL(maURL, maRep, maStyleName, maTargetFrame);
 }
 
-void ScXMLCellFieldURLContext::Characters(const OUString& rChars)
+void SAL_CALL ScXMLCellFieldURLContext::characters( const OUString& rChars )
 {
     maRep += rChars;
 }
 
-SvXMLImportContext* ScXMLCellFieldURLContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
-{
-    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-}
-
 ScXMLCellFieldSContext::ScXMLCellFieldSContext(
-    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent) :
-    ScXMLImportContext(rImport, nPrefix, rLName),
+    ScXMLImport& rImport, sal_Int32 /*nElement*/, ScXMLCellTextParaContext& rParent) :
+    ScXMLImportContext(rImport),
     mrParentCxt(rParent),
     mnCount(1)
 {
@@ -363,43 +306,38 @@ void ScXMLCellFieldSContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void ScXMLCellFieldSContext::StartElement(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+void SAL_CALL ScXMLCellFieldSContext::startFastElement( sal_Int32 /*nElement*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    if (!xAttrList.is())
-        return;
-
-    OUString aLocalName;
-    sal_Int16 nAttrCount = xAttrList->getLength();
-
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetCellTextSAttrTokenMap();
-    for (sal_Int16 i = 0; i < nAttrCount; ++i)
+    if ( xAttrList.is() )
     {
-        sal_uInt16 nAttrPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
-            xAttrList->getNameByIndex(i), &aLocalName);
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
 
-        const OUString& rAttrValue = xAttrList->getValueByIndex(i);
-        sal_uInt16 nToken = rTokenMap.Get(nAttrPrefix, aLocalName);
-        switch (nToken)
+        for (auto &aIter : *pAttribList)
         {
-            case XML_TOK_CELL_TEXT_S_ATTR_C:
-                mnCount = rAttrValue.toInt32();
-                if (mnCount <= 0)
-                    mnCount = 1;     // worth a warning?
-            break;
-            default:
-                ;
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT( TEXT, XML_C ):
+                    mnCount = aIter.toInt32();
+                    if (mnCount <= 0)
+                        mnCount = 1;     // worth a warning?
+                break;
+                default:
+                    ;
+            }
         }
     }
 }
 
-void ScXMLCellFieldSContext::EndElement()
+void SAL_CALL ScXMLCellFieldSContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (mnCount)
         PushSpaces();
 }
 
-SvXMLImportContext* ScXMLCellFieldSContext::CreateChildContext(
-    sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCellFieldSContext::createFastChildContext(
+    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     // <text:s> does not have child elements, but ...
     if (mnCount)
@@ -408,7 +346,7 @@ SvXMLImportContext* ScXMLCellFieldSContext::CreateChildContext(
         mnCount = 0;
     }
 
-    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+    return new SvXMLImportContext(GetImport());
 }
 
 void ScXMLCellFieldSContext::PushSpaces()

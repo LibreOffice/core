@@ -80,18 +80,16 @@ private:
 public:
                                 ScXMLDetectiveContext(
                                     ScXMLImport& rImport,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& rLName,
+                                    sal_Int32 nElement,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
     virtual                     ~ScXMLDetectiveContext() override;
 
-    virtual SvXMLImportContext* CreateChildContext(
-                                    sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+                                createFastChildContext(
+                                    sal_Int32 nElement,
+                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList
                                     ) override;
-    virtual void                EndElement() override;
 };
 
 class ScXMLDetectiveHighlightedContext : public ScXMLImportContext
@@ -104,19 +102,13 @@ private:
 public:
                                 ScXMLDetectiveHighlightedContext(
                                     ScXMLImport& rImport,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& rLName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
+                                    sal_Int32 nElement,
+                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                                     ScMyImpDetectiveObjVec* pNewDetectiveObjVec
                                     );
     virtual                     ~ScXMLDetectiveHighlightedContext() override;
 
-    virtual SvXMLImportContext* CreateChildContext(
-                                    sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList
-                                    ) override;
-    virtual void                EndElement() override;
+    virtual void SAL_CALL       endFastElement( sal_Int32 nElement ) override;
 };
 
 class ScXMLDetectiveOperationContext : public ScXMLImportContext
@@ -128,18 +120,12 @@ private:
 public:
                                 ScXMLDetectiveOperationContext(
                                     ScXMLImport& rImport,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& rLName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList
+                                    sal_Int32 nElement,
+                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList
                                     );
     virtual                     ~ScXMLDetectiveOperationContext() override;
 
-    virtual SvXMLImportContext* CreateChildContext(
-                                    sal_uInt16 nPrefix,
-                                    const OUString& rLocalName,
-                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList
-                                    ) override;
-    virtual void                EndElement() override;
+    virtual void SAL_CALL       endFastElement( sal_Int32 nElement ) override;
 };
 
 #endif
