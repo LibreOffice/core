@@ -305,21 +305,17 @@ void OOXMLFastContextHandler::sendTableDepth() const
 {
     if (mnTableDepth > 0)
     {
-        OOXMLPropertySet * pProps = new OOXMLPropertySet;
+        OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         {
             OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
-            OOXMLProperty::Pointer_t pProp
-                (new OOXMLProperty(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
         }
         {
             OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
-            OOXMLProperty::Pointer_t pProp
-                (new OOXMLProperty(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
         }
 
-        mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+        mpStream->props(pProps);
     }
 }
 
@@ -396,20 +392,18 @@ void OOXMLFastContextHandler::endParagraphGroup()
 
 void OOXMLFastContextHandler::startSdt()
 {
-    OOXMLPropertySet * pProps = new OOXMLPropertySet;
+    OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
     OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
-    OOXMLProperty::Pointer_t pProp(new OOXMLProperty(NS_ooxml::LN_CT_SdtBlock_sdtContent, pVal, OOXMLProperty::ATTRIBUTE));
-    pProps->add(pProp);
-    mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+    pProps->add(NS_ooxml::LN_CT_SdtBlock_sdtContent, pVal, OOXMLProperty::ATTRIBUTE);
+    mpStream->props(pProps);
 }
 
 void OOXMLFastContextHandler::endSdt()
 {
-    OOXMLPropertySet * pProps = new OOXMLPropertySet;
+    OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
     OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
-    OOXMLProperty::Pointer_t pProp(new OOXMLProperty(NS_ooxml::LN_CT_SdtBlock_sdtEndContent, pVal, OOXMLProperty::ATTRIBUTE));
-    pProps->add(pProp);
-    mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+    pProps->add(NS_ooxml::LN_CT_SdtBlock_sdtEndContent, pVal, OOXMLProperty::ATTRIBUTE);
+    mpStream->props(pProps);
 }
 
 void OOXMLFastContextHandler::startSectionGroup()
@@ -663,9 +657,7 @@ void OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(Id nId)
     OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
     OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
 
-    OOXMLProperty::Pointer_t pProp(new OOXMLProperty(nId, pValue, OOXMLProperty::SPRM));
-
-    pPropertySet->add(pProp);
+    pPropertySet->add(nId, pValue, OOXMLProperty::SPRM);
     mpParserState->setCharacterProperties(pPropertySet);
 }
 
@@ -711,9 +703,7 @@ void OOXMLFastContextHandler::sendPropertiesWithId(Id nId)
     OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
     OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySet);
 
-    OOXMLProperty::Pointer_t pProp(new OOXMLProperty(nId, pValue, OOXMLProperty::SPRM));
-
-    pPropertySet->add(pProp);
+    pPropertySet->add(nId, pValue, OOXMLProperty::SPRM);
     mpStream->props(pPropertySet);
 }
 
@@ -838,8 +828,7 @@ void OOXMLFastContextHandler::sendPropertyToParent()
 
         if (pProps.get() != nullptr)
         {
-            OOXMLProperty::Pointer_t pProp(new OOXMLProperty(mId, getValue(), OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(mId, getValue(), OOXMLProperty::SPRM);
         }
     }
 }
@@ -857,12 +846,9 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
             if (pProps.get() != nullptr)
             {
                 OOXMLValue::Pointer_t pValue
-                (new OOXMLPropertySetValue(getPropertySet()));
+                    (new OOXMLPropertySetValue(getPropertySet()));
 
-                OOXMLProperty::Pointer_t pProp(new OOXMLProperty(getId(), pValue, OOXMLProperty::SPRM));
-
-
-                pParentProps->add(pProp);
+                pParentProps->add(getId(), pValue, OOXMLProperty::SPRM);
 
             }
         }
@@ -907,9 +893,7 @@ void OOXMLFastContextHandlerStream::newProperty(Id nId,
     }
     else if (nId != 0x0)
     {
-        OOXMLProperty::Pointer_t pProperty(new OOXMLProperty(nId, pVal, OOXMLProperty::ATTRIBUTE));
-
-        mpPropertySetAttrs->add(pProperty);
+        mpPropertySetAttrs->add(nId, pVal, OOXMLProperty::ATTRIBUTE);
     }
 }
 
@@ -1006,9 +990,7 @@ void OOXMLFastContextHandlerProperties::newProperty
 {
     if (nId != 0x0)
     {
-        OOXMLProperty::Pointer_t pProperty(new OOXMLProperty(nId, pVal, OOXMLProperty::ATTRIBUTE));
-
-        mpPropertySet->add(pProperty);
+        mpPropertySet->add(nId, pVal, OOXMLProperty::ATTRIBUTE);
     }
 }
 
@@ -1345,14 +1327,13 @@ void OOXMLFastContextHandlerTextTableCell::startCell()
 {
     if (isForwardEvents())
     {
-        OOXMLPropertySet * pProps = new OOXMLPropertySet;
+        OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         {
             OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
-            OOXMLProperty::Pointer_t pProp(new OOXMLProperty(NS_ooxml::LN_tcStart, pVal, OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(NS_ooxml::LN_tcStart, pVal, OOXMLProperty::SPRM);
         }
 
-        mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+        mpStream->props(pProps);
     }
 }
 
@@ -1360,29 +1341,25 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
 {
     if (isForwardEvents())
     {
-        OOXMLPropertySet * pProps = new OOXMLPropertySet;
+        OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         {
             OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
-            OOXMLProperty::Pointer_t pProp(new OOXMLProperty(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
         }
         {
             OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
-            OOXMLProperty::Pointer_t pProp(new OOXMLProperty(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
         }
         {
             OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
-            OOXMLProperty::Pointer_t pProp(new OOXMLProperty(NS_ooxml::LN_tblCell, pVal, OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(NS_ooxml::LN_tblCell, pVal, OOXMLProperty::SPRM);
         }
         {
             OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
-            OOXMLProperty::Pointer_t pProp(new OOXMLProperty(NS_ooxml::LN_tcEnd, pVal, OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(NS_ooxml::LN_tcEnd, pVal, OOXMLProperty::SPRM);
         }
 
-        mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+        mpStream->props(pProps);
     }
 }
 
@@ -1418,24 +1395,21 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
 
     if (isForwardEvents())
     {
-        OOXMLPropertySet * pProps = new OOXMLPropertySet;
+        OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         {
             OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
-            OOXMLProperty::Pointer_t pProp(new OOXMLProperty(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
         }
         {
             OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
-            OOXMLProperty::Pointer_t pProp(new OOXMLProperty(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
         }
         {
             OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
-            OOXMLProperty::Pointer_t pProp(new OOXMLProperty(NS_ooxml::LN_tblRow, pVal, OOXMLProperty::SPRM));
-            pProps->add(pProp);
+            pProps->add(NS_ooxml::LN_tblRow, pVal, OOXMLProperty::SPRM);
         }
 
-        mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+        mpStream->props(pProps);
     }
 
     startCharacterGroup();
@@ -1458,6 +1432,17 @@ void OOXMLFastContextHandlerTextTableRow::handleGridAfter(const OOXMLValue::Poin
     }
 }
 
+namespace {
+OOXMLValue::Pointer_t fakeNoBorder()
+{
+    OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySet );
+    OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(0);
+    pProps->add(NS_ooxml::LN_CT_Border_val, pVal, OOXMLProperty::ATTRIBUTE);
+    OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue( pProps ));
+    return pValue;
+}
+}
+
 // Handle w:gridBefore here by faking necessary input that'll fake cells. I'm apparently
 // not insane enough to find out how to add cells in dmapper.
 void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Pointer_t& val )
@@ -1472,27 +1457,21 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Po
         if (isForwardEvents())
         {
             // This whole part is OOXMLFastContextHandlerTextTableCell::endCell() .
-            OOXMLPropertySet * pProps = new OOXMLPropertySet;
+            OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
             {
                 OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
-                OOXMLProperty::Pointer_t pProp
-                    (new OOXMLProperty(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM));
-                pProps->add(pProp);
+                pProps->add(NS_ooxml::LN_tblDepth, pVal, OOXMLProperty::SPRM);
             }
             {
                 OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
-                OOXMLProperty::Pointer_t pProp
-                    (new OOXMLProperty(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM));
-                pProps->add(pProp);
+                pProps->add(NS_ooxml::LN_inTbl, pVal, OOXMLProperty::SPRM);
             }
             {
                 OOXMLValue::Pointer_t pVal = OOXMLBooleanValue::Create(mnTableDepth > 0);
-                OOXMLProperty::Pointer_t pProp
-                    (new OOXMLProperty(NS_ooxml::LN_tblCell, pVal, OOXMLProperty::SPRM));
-                pProps->add(pProp);
+                pProps->add(NS_ooxml::LN_tblCell, pVal, OOXMLProperty::SPRM);
             }
 
-            mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+            mpStream->props(pProps);
 
             // fake <w:tcBorders> with no border
             OOXMLPropertySet::Pointer_t pCellProps( new OOXMLPropertySet );
@@ -1501,11 +1480,9 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Po
                 static Id borders[] = { NS_ooxml::LN_CT_TcBorders_top, NS_ooxml::LN_CT_TcBorders_bottom,
                     NS_ooxml::LN_CT_TcBorders_start, NS_ooxml::LN_CT_TcBorders_end };
                 for(sal_uInt32 border : borders)
-                    pBorderProps->add( fakeNoBorder( border ));
+                    pBorderProps->add(border, fakeNoBorder(), OOXMLProperty::SPRM);
                 OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue( pBorderProps ));
-                OOXMLProperty::Pointer_t pProp
-                    (new OOXMLProperty(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue, OOXMLProperty::SPRM));
-                pCellProps->add(pProp);
+                pCellProps->add(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue, OOXMLProperty::SPRM);
                 mpParserState->setCellProperties(pCellProps);
             }
         }
@@ -1513,19 +1490,6 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Po
         sendCellProperties();
         endParagraphGroup();
     }
-}
-
-OOXMLProperty::Pointer_t OOXMLFastContextHandlerTextTableRow::fakeNoBorder( Id id )
-{
-    OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySet );
-    OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(0);
-    OOXMLProperty::Pointer_t pPropVal
-        (new OOXMLProperty(NS_ooxml::LN_CT_Border_val, pVal, OOXMLProperty::ATTRIBUTE));
-    pProps->add(pPropVal);
-    OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue( pProps ));
-    OOXMLProperty::Pointer_t pProp
-        (new OOXMLProperty(id, pValue, OOXMLProperty::SPRM));
-    return pProp;
 }
 
 /*
@@ -1550,12 +1514,10 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
     mpParserState->startTable();
     mnTableDepth++;
 
-    std::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySet );
+    OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySet );
     {
         OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
-        OOXMLProperty::Pointer_t pProp
-            (new OOXMLProperty(NS_ooxml::LN_tblStart, pVal, OOXMLProperty::SPRM));
-        pProps->add(pProp);
+        pProps->add(NS_ooxml::LN_tblStart, pVal, OOXMLProperty::SPRM);
     }
     mpParserState->setCharacterProperties(pProps);
 
@@ -1567,12 +1529,10 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
 {
     endAction();
 
-    std::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySet );
+    OOXMLPropertySet::Pointer_t pProps( new OOXMLPropertySet );
     {
         OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(mnTableDepth);
-        OOXMLProperty::Pointer_t pProp
-            (new OOXMLProperty(NS_ooxml::LN_tblEnd, pVal, OOXMLProperty::SPRM));
-        pProps->add(pProp);
+        pProps->add(NS_ooxml::LN_tblEnd, pVal, OOXMLProperty::SPRM);
     }
     mpParserState->setCharacterProperties(pProps);
 
@@ -2104,11 +2064,10 @@ void OOXMLFastContextHandlerMath::process()
     import.readFormulaOoxml(buffer);
     if (isForwardEvents())
     {
-        OOXMLPropertySet * pProps = new OOXMLPropertySet;
+        OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
         OOXMLValue::Pointer_t pVal( new OOXMLStarMathValue( ref ));
-        OOXMLProperty::Pointer_t pProp( new OOXMLProperty( NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE ));
-        pProps->add( pProp );
-        mpStream->props( writerfilter::Reference< Properties >::Pointer_t( pProps ));
+        pProps->add(NS_ooxml::LN_starmath, pVal, OOXMLProperty::ATTRIBUTE);
+        mpStream->props( pProps );
     }
 }
 

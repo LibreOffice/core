@@ -146,12 +146,13 @@ public:
 private:
     OOXMLProperties_t mProperties;
     OString maType;
+    void add(const OOXMLProperty::Pointer_t& pProperty);
 public:
     OOXMLPropertySet();
     virtual ~OOXMLPropertySet();
 
     void resolve(Properties & rHandler) override;
-    void add(const OOXMLProperty::Pointer_t& pProperty);
+    void add(Id id, const OOXMLValue::Pointer_t& pValue, OOXMLProperty::Type_t eType);
     void add(const OOXMLPropertySet::Pointer_t& pPropertySet);
     OOXMLPropertySet * clone() const;
 

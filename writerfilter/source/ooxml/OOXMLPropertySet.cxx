@@ -382,9 +382,15 @@ void OOXMLPropertySet::add(const OOXMLProperty::Pointer_t& pProperty)
     }
 }
 
+void OOXMLPropertySet::add(Id id, const OOXMLValue::Pointer_t& pValue, OOXMLProperty::Type_t eType)
+{
+    OOXMLProperty::Pointer_t pProperty(new OOXMLProperty(id, pValue, eType));
+    add(pProperty);
+}
+
 void OOXMLPropertySet::add(const OOXMLPropertySet::Pointer_t& pPropertySet)
 {
-    OOXMLPropertySet * pSet = pPropertySet.get();
+    const OOXMLPropertySet * pSet = pPropertySet.get();
 
     if (pSet != nullptr)
     {
