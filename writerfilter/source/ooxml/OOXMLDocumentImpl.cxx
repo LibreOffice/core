@@ -356,23 +356,15 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
 
     OOXMLValue::Pointer_t pPayloadValue(new OOXMLBinaryValue(pPicture));
 
-    OOXMLProperty::Pointer_t pPayloadProperty
-        (new OOXMLProperty(NS_ooxml::LN_payload, pPayloadValue,
-                               OOXMLProperty::ATTRIBUTE));
-
     OOXMLPropertySet::Pointer_t pBlipSet(new OOXMLPropertySet);
 
-    pBlipSet->add(pPayloadProperty);
+    pBlipSet->add(NS_ooxml::LN_payload, pPayloadValue, OOXMLProperty::ATTRIBUTE);
 
     OOXMLValue::Pointer_t pBlipValue(new OOXMLPropertySetValue(pBlipSet));
 
-    OOXMLProperty::Pointer_t pBlipProperty
-        (new OOXMLProperty(NS_ooxml::LN_blip, pBlipValue,
-                               OOXMLProperty::ATTRIBUTE));
-
     OOXMLPropertySet * pProps = new OOXMLPropertySet;
 
-    pProps->add(pBlipProperty);
+    pProps->add(NS_ooxml::LN_blip, pBlipValue, OOXMLProperty::ATTRIBUTE);
 
     return pProps;
 }
@@ -380,9 +372,9 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
 void OOXMLDocumentImpl::resolvePicture(Stream & rStream,
                                        const OUString & rId)
 {
-    OOXMLPropertySet * pProps = getPicturePropSet(rId);
+    OOXMLPropertySet::Pointer_t pProps(getPicturePropSet(rId));
 
-    rStream.props(writerfilter::Reference<Properties>::Pointer_t(pProps));
+    rStream.props(pProps);
 }
 
 OUString OOXMLDocumentImpl::getTargetForId(const OUString & rId)

@@ -408,8 +408,6 @@ public:
     void endRow();
     void handleGridBefore( const OOXMLValue::Pointer_t& val );
     void handleGridAfter(const OOXMLValue::Pointer_t& rValue);
-private:
-    static OOXMLProperty::Pointer_t fakeNoBorder( Id id );
 };
 
 class OOXMLFastContextHandlerTextTable : public OOXMLFastContextHandler
