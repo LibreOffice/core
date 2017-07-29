@@ -137,6 +137,7 @@ public:
 
     void                            setRotation( sal_Int32 nRotation ) { mnRotation = nRotation; }
     void                            setFlip( bool bFlipH, bool bFlipV ) { mbFlipH = bFlipH; mbFlipV = bFlipV; }
+    void                            applyParentTextFlipV(bool bTextFlipV) { mbInheritedTextFlipV = bTextFlipV; }
     void                            addChild( const ShapePtr& rChildPtr ) { maChildren.push_back( rChildPtr ); }
     std::vector< ShapePtr >&        getChildren() { return maChildren; }
 
@@ -310,6 +311,7 @@ private:
     sal_Int32                       mnRotation;
     bool                            mbFlipH;
     bool                            mbFlipV;
+    bool                            mbInheritedTextFlipV; // Used by group shapes only
     bool                            mbHidden;
     bool                            mbHiddenMasterShape; // master shapes can be hidden in layout slides
                                                          // we need separate flag because we don't want
