@@ -33,11 +33,11 @@ public:
     virtual void paintDialog(const DialogID& rDialogID, VirtualDevice &rDevice,
                              int& nOutputWidth, int& nOutputHeight) = 0;
 
-    virtual void postDialogMouseEvent(const DialogID& rDialogID, int nType,
-                                      int nCharCode, int nKeyCode) = 0;
+    virtual void postDialogKeyEvent(const DialogID& rDialogID, int nType,
+                                    int nCharCode, int nKeyCode) = 0;
 
-    virtual void postDialogKeyEvent(const DialogID& rDialogID, int nType, int nX, int nY,
-                                    int nCount, int nButtons, int nModifier) = 0;
+    virtual void postDialogMouseEvent(const DialogID& rDialogID, int nType, int nX, int nY,
+                                      int nCount, int nButtons, int nModifier) = 0;
 };
 
 } // namespace vcl

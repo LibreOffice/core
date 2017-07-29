@@ -78,8 +78,11 @@ public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
     virtual        void    doDeferredInit(WinBits nBits) override;
     virtual        void    LogicInvalidate(const tools::Rectangle* pRectangle) override { (void)pRectangle; }
-    // Paints the current dialog to the given virtual device
+    /// Paints the current dialog to the given virtual device
     void paintDialog(VirtualDevice& rDevice);
+    void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
+    void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
+    void LogicMouseButtonMove(const MouseEvent& rMouseEvent);
 
 protected:
     explicit        Dialog( WindowType nType );
