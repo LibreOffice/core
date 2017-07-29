@@ -105,6 +105,8 @@ void gtv_application_window_unregister_child_window(GtvApplicationWindow* window
 
 GtkWindow* gtv_application_window_get_child_window_by_id(GtvApplicationWindow* window, const gchar* pWinId);
 
+GList* gtv_application_window_get_all_child_windows(GtvApplicationWindow* window);
+
 G_END_DECLS
 
 #endif /* GTV_APPLICATION_WINDOW_H */

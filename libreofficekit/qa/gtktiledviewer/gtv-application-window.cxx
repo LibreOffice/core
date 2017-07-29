@@ -442,6 +442,16 @@ gtv_application_window_get_child_window_by_id(GtvApplicationWindow* window, cons
     return ret;
 }
 
+// temporary function to invalidate all opened dialogs
+// because currently the dialog id returned in dialog invalidation payload
+// doesn't match our hard-coded list of dialog ids (uno commands) for some dialogs
+GList*
+gtv_application_window_get_all_child_windows(GtvApplicationWindow* window)
+{
+    GtvApplicationWindowPrivate* priv = getPrivate(window);
+    return priv->m_pChildWindows;
+}
+
 GtvApplicationWindow*
 gtv_application_window_new(GtkApplication* app)
 {
