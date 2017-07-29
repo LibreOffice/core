@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_targets,sal,\
     Executable_processworkdir \
     Executable_getprocessinfo \
     Executable_processcmdlineargs \
+    Executable_executeprocess \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sal,\
