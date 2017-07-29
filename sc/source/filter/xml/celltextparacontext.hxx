@@ -23,13 +23,12 @@ class ScXMLCellTextParaContext : public ScXMLImportContext
     ScXMLTableRowCellContext& mrParentCxt;
     OUString maContent;
 public:
-    ScXMLCellTextParaContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLTableRowCellContext& rParent);
+    ScXMLCellTextParaContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLTableRowCellContext& rParent);
 
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
-    virtual void Characters(const OUString& rChars) override;
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     void PushSpan(const OUString& rSpan, const OUString& rStyleName);
     void PushFieldSheetName(const OUString& rStyleName);
@@ -47,13 +46,14 @@ class ScXMLCellTextSpanContext : public ScXMLImportContext
     OUString maStyleName;
     OUString maContent;
 public:
-    ScXMLCellTextSpanContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+    ScXMLCellTextSpanContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
 
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
-    virtual void Characters(const OUString& rChars) override;
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 /**
@@ -64,15 +64,13 @@ class ScXMLCellFieldSheetNameContext : public ScXMLImportContext
     ScXMLCellTextParaContext& mrParentCxt;
     OUString maStyleName;
 public:
-    ScXMLCellFieldSheetNameContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+    ScXMLCellFieldSheetNameContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
-    virtual void Characters(const OUString& rChars) override;
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 /**
@@ -83,15 +81,11 @@ class ScXMLCellFieldDateContext : public ScXMLImportContext
     ScXMLCellTextParaContext& mrParentCxt;
     OUString maStyleName;
 public:
-    ScXMLCellFieldDateContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+    ScXMLCellFieldDateContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
-    virtual void Characters(const OUString& rChars) override;
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 /**
@@ -102,15 +96,11 @@ class ScXMLCellFieldTitleContext : public ScXMLImportContext
     ScXMLCellTextParaContext& mrParentCxt;
     OUString maStyleName;
 public:
-    ScXMLCellFieldTitleContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+    ScXMLCellFieldTitleContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
-    virtual void Characters(const OUString& rChars) override;
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
 /**
@@ -124,15 +114,14 @@ class ScXMLCellFieldURLContext : public ScXMLImportContext
     OUString maRep;
     OUString maTargetFrame;
 public:
-    ScXMLCellFieldURLContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+    ScXMLCellFieldURLContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
-    virtual void Characters(const OUString& rChars) override;
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
 };
 
 /**
@@ -146,14 +135,15 @@ class ScXMLCellFieldSContext : public ScXMLImportContext
 
     void PushSpaces();
 public:
-    ScXMLCellFieldSContext(ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName, ScXMLCellTextParaContext& rParent);
+    ScXMLCellFieldSContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
-    virtual void EndElement() override;
-    virtual SvXMLImportContext* CreateChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 #endif
