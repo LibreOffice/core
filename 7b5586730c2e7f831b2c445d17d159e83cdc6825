@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_eb72bfe4",
+        "filename": "editeng/source/editeng/editobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000911
+      },
+      "writtenOn": "2017-07-29T17:31:51Z",
+      "side": 1,
+      "message": "EditTextObject::Create is used in sc/source/core/data/attrib.cxx\n\n@Eike any suggestions?",
+      "revId": "7b5586730c2e7f831b2c445d17d159e83cdc6825",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
