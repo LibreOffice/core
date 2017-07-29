@@ -281,14 +281,23 @@ void LOKDocViewSigHandlers::comment(LOKDocView* pDocView, gchar* pComment, gpoin
     }
 }
 
-void LOKDocViewSigHandlers::dialogInvalidate(LOKDocView* pDocView, gchar* pDialogId, gpointer)
+void LOKDocViewSigHandlers::dialogInvalidate(LOKDocView* pDocView, gchar* /*pDialogId*/, gpointer)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView)));
-    GtkWindow* pDialog = gtv_application_window_get_child_window_by_id(window, pDialogId);
-    if (pDialog)
+//    GtkWindow* pDialog = gtv_application_window_get_child_window_by_id(window, pDialogId);
+
+    // temporary hack to invalidate all open dialogs
+    GList* pChildWins = gtv_application_window_get_all_child_windows(window);
+    GList* pIt = nullptr;
+    for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
+    {
+        gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pIt->data));
+    }
+/*  if (pDialog)
     {
         gtv_lok_dialog_invalidate(GTV_LOK_DIALOG(pDialog));
     }
+*/
 }
 
 gboolean LOKDocViewSigHandlers::configureEvent(GtkWidget* pWidget, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
