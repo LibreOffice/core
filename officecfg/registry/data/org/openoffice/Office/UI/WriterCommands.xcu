@@ -2830,7 +2830,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Quotations&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Citation&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Quotations</value>
         </prop>
