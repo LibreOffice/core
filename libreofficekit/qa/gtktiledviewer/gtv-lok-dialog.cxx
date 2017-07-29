@@ -63,11 +63,13 @@ pixelToTwip(float fInput)
     return (fInput / 96 / 1.0 /* zoom */) * 1440.0f;
 }
 
+#if 0
 static float
 twipToPixel(float fInput)
 {
     return fInput / 1440.0f * 96 * 1.0 /* zoom */;
 }
+#endif
 
 static void
 gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
