@@ -581,7 +581,7 @@ void SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(
         const OUString& rPropName = rPropMapper->GetEntryAPIName( nIdx );
         const sal_Int32 nPropFlags = rPropMapper->GetEntryFlags( nIdx );
 
-        if ( ( 0 == ( nPropFlags & MID_FLAG_NO_PROPERTY ) ) &&
+        if ( ( 0 == ( nPropFlags & MID_FLAG_NO_PROPERTY_IMPORT ) ) &&
              ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) ||
                !rPropSetInfo.is() ||
                (rPropSetInfo.is() && rPropSetInfo->hasPropertyByName( rPropName )) ) )
