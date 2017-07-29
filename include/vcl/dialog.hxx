@@ -82,7 +82,7 @@ public:
     void paintDialog(VirtualDevice& rDevice);
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
     void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
-    void LogicMouseButtonMove(const MouseEvent& rMouseEvent);
+    void LogicMouseMove(const MouseEvent& rMouseEvent);
 
 protected:
     explicit        Dialog( WindowType nType );

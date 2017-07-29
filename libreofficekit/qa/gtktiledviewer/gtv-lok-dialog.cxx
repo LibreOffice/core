@@ -34,6 +34,7 @@ struct GtvLokDialogPrivate
     guint32 m_nLastButtonPressTime;
     guint32 m_nLastButtonReleaseTime;
     guint32 m_nKeyModifier;
+    guint32 m_nLastButtonPressed;
 
     gchar* dialogid;
 };
@@ -125,11 +126,12 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
             nEventButton = MOUSE_RIGHT;
             break;
         }
+        priv->m_nLastButtonPressed = nEventButton;
         pDocument->pClass->postDialogMouseEvent(pDocument,
                                                 priv->dialogid,
                                                 LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-                                                pixelToTwip(pEvent->x),
-                                                pixelToTwip(pEvent->y),
+                                                (pEvent->x),
+                                                (pEvent->y),
                                                 nCount,
                                                 nEventButton,
                                                 0/* Modifier */);
@@ -155,12 +157,12 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
             nEventButton = MOUSE_RIGHT;
             break;
         }
-
+        priv->m_nLastButtonPressed = nEventButton;
         pDocument->pClass->postDialogMouseEvent(pDocument,
                                                 priv->dialogid,
                                                 LOK_MOUSEEVENT_MOUSEBUTTONUP,
-                                                pixelToTwip(pEvent->x),
-                                                pixelToTwip(pEvent->y),
+                                                (pEvent->x),
+                                                (pEvent->y),
                                                 nCount,
                                                 nEventButton,
                                                 0/* Modifier */);
@@ -169,6 +171,33 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
     default:
         break;
     }
+    return FALSE;
+}
+
+static gboolean
+gtv_lok_dialog_signal_motion(GtkWidget* pDialogDrawingArea, GdkEventButton* pEvent)
+{
+    GtvLokDialog* pDialog = GTV_LOK_DIALOG(gtk_widget_get_toplevel(pDialogDrawingArea));
+    GtvLokDialogPrivate* priv = getPrivate(pDialog);
+
+    GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_window_get_transient_for(GTK_WINDOW(pDialog)));
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
+
+    g_info("lok_dialog_signal_button: %d, %d (in twips: %d, %d)",
+           (int)pEvent->x, (int)pEvent->y,
+           (int)pixelToTwip(pEvent->x),
+           (int)pixelToTwip(pEvent->y));
+    gtk_widget_grab_focus(GTK_WIDGET(pDialog));
+
+    pDocument->pClass->postDialogMouseEvent(pDocument,
+                                            priv->dialogid,
+                                            LOK_MOUSEEVENT_MOUSEMOVE,
+                                            (pEvent->x),
+                                            (pEvent->y),
+                                            1,
+                                            priv->m_nLastButtonPressed,
+                                            0/* Modifier */);
+
     return FALSE;
 }
 
@@ -183,14 +212,17 @@ gtv_lok_dialog_init(GtvLokDialog* dialog)
     priv->m_nLastButtonPressTime = 0;
     priv->m_nLastButtonReleaseTime = 0;
     priv->m_nKeyModifier = 0;
+    priv->m_nLastButtonPressed = 0;
 
     gtk_widget_add_events(GTK_WIDGET(priv->pDialogDrawingArea),
                           GDK_BUTTON_PRESS_MASK
-                          |GDK_BUTTON_RELEASE_MASK);
+                          |GDK_BUTTON_RELEASE_MASK
+                          |GDK_BUTTON_MOTION_MASK);
 
     g_signal_connect(G_OBJECT(priv->pDialogDrawingArea), "draw", G_CALLBACK(gtv_lok_dialog_draw), nullptr);
-    g_signal_connect(G_OBJECT(priv->pDialogDrawingArea), "button-press-event", G_CALLBACK(gtv_lok_dialog_signal_button), dialog);
-    g_signal_connect(G_OBJECT(priv->pDialogDrawingArea), "button-release-event", G_CALLBACK(gtv_lok_dialog_signal_button), dialog);
+    g_signal_connect(G_OBJECT(priv->pDialogDrawingArea), "button-press-event", G_CALLBACK(gtv_lok_dialog_signal_button), nullptr);
+    g_signal_connect(G_OBJECT(priv->pDialogDrawingArea), "button-release-event", G_CALLBACK(gtv_lok_dialog_signal_button), nullptr);
+    g_signal_connect(G_OBJECT(priv->pDialogDrawingArea), "motion-notify-event", G_CALLBACK(gtv_lok_dialog_signal_motion), nullptr);
     gtk_container_add(GTK_CONTAINER(pContentArea), priv->pDialogDrawingArea);
 }
 
