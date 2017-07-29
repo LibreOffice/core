@@ -196,8 +196,18 @@ void scriptCat(const Reference< XModel >& xDoc )
     for ( sal_Int32 i = 0 ; i < aLibNames.getLength() ; ++i )
     {
         std::cout << "Library: '" << aLibNames[i] << "' children: ";
-        Reference< XNameContainer > xContainer(
-            xLibraries->getByName( aLibNames[i] ), UNO_QUERY );
+        Reference< XNameContainer > xContainer;
+        try {
+            if (!xLibraries->isLibraryLoaded( aLibNames[i] ))
+                xLibraries->loadLibrary( aLibNames[i] );
+            xContainer = Reference< XNameContainer >(
+                xLibraries->getByName( aLibNames[i] ), UNO_QUERY );
+        }
+        catch (const css::uno::Exception &e)
+        {
+            std::cout << "[" << aLibNames[i] << "] - failed to load library: " << e.Message << "\n";
+            continue;
+        }
         if( !xContainer.is() )
             std::cout << "0\n";
         else
@@ -210,14 +220,22 @@ void scriptCat(const Reference< XModel >& xDoc )
                 rtl::OUString &rObjectName = aObjectNames[j];
 
                 rtl::OUString aCodeString;
-                Any aCode = xContainer->getByName( rObjectName );
+                try
+                {
+                    Any aCode = xContainer->getByName( rObjectName );
 
-                if (! (aCode >>= aCodeString ) )
-                    std::cout << "[" << rObjectName << "] - error fetching code\n";
-                else
-                    std::cout << "[" << rObjectName << "]\n"
-                              << aCodeString.trim()
-                              << "\n[/" << rObjectName << "]\n";
+                    if (! (aCode >>= aCodeString ) )
+                        std::cout << "[" << rObjectName << "] - error fetching code\n";
+                    else
+                        std::cout << "[" << rObjectName << "]\n"
+                                  << aCodeString.trim()
+                                  << "\n[/" << rObjectName << "]\n";
+                }
+                catch (const css::uno::Exception &e)
+                {
+                    std::cout << "[" << rObjectName << "] - exception " << e.Message << " fetching code\n";
+                }
+
                 if (j < aObjectNames.getLength() - 1)
                     std::cout << "\n----------------------------------------------------------\n";
                 std::cout << "\n";
