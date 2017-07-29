@@ -36,6 +36,8 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
+#include "window.h"
+
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
@@ -877,12 +879,7 @@ void Dialog::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    Point aPoint = GetPointerPosPixel();
-    SetLastMousePos(rMouseEvent.GetPosPixel());
-
-    MouseButtonDown(rMouseEvent);
-
-    SetPointerPosPixel(aPoint);
+    ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonDown, &rMouseEvent);
 }
 
 void Dialog::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
@@ -890,25 +887,15 @@ void Dialog::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    Point aPoint = GetPointerPosPixel();
-    SetLastMousePos(rMouseEvent.GetPosPixel());
-
-    MouseButtonUp(rMouseEvent);
-
-    SetPointerPosPixel(aPoint);
+    ImplWindowFrameProc(this, SalEvent::ExternalMouseButtonUp, &rMouseEvent);
 }
 
-void Dialog::LogicMouseButtonMove(const MouseEvent& rMouseEvent)
+void Dialog::LogicMouseMove(const MouseEvent& rMouseEvent)
 {
     // When we're not doing tiled rendering, then positions must be passed as pixels.
     assert(comphelper::LibreOfficeKit::isActive());
 
-    Point aPoint = GetPointerPosPixel();
-    SetLastMousePos(rMouseEvent.GetPosPixel());
-
-    MouseMove(rMouseEvent);
-
-    SetPointerPosPixel(aPoint);
+    ImplWindowFrameProc(this, SalEvent::ExternalMouseMove, &rMouseEvent);
 }
 
 void Dialog::ensureRepaint()
