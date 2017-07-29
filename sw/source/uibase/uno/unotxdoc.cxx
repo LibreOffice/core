@@ -3774,7 +3774,7 @@ void SwXTextDocument::postDialogMouseEvent(const vcl::DialogID& rDialogID, int n
             pDialog->LogicMouseButtonUp(aEvent);
             break;
         case LOK_MOUSEEVENT_MOUSEMOVE:
-            //pDialog->LogicMouseMove(aEvent);
+            pDialog->LogicMouseMove(aEvent);
             break;
         default:
             assert(false);
