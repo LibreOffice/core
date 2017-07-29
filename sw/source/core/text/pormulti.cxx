@@ -1256,9 +1256,9 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     SwTextGridItem const*const pGrid(GetGridItem(m_pFrame->FindPageFrame()));
     const bool bHasGrid = pGrid && GetInfo().SnapToGrid();
     sal_uInt16 nRubyHeight = 0;
-    bool bRubyTop = false;
+    bool bRubyTop = true;
 
-    if ( bHasGrid )
+    if ( bHasGrid && pGrid->IsSquaredMode() )
     {
         nRubyHeight = pGrid->GetRubyHeight();
         bRubyTop = ! pGrid->GetRubyTextBelow();
@@ -1273,7 +1273,8 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     if ( bRubyInGrid )
     {
         GetInfo().SetSnapToGrid( ! bRubyTop );
-        rMulti.Height( m_pCurr->Height() );
+        if (pGrid->IsSquaredMode())
+            rMulti.Height( m_pCurr->Height() );
     }
 
     SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
@@ -1297,7 +1298,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
         GetInfo().DrawViewOpt( rMulti, POR_FLD );
 #endif
 
-    if ( bRubyInGrid )
+    if ( bRubyInGrid && pGrid->IsSquaredMode() )
         rMulti.Height( nOldHeight );
 
     // do we have to repaint a post it portion?
@@ -1394,7 +1395,7 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
 
     do
     {
-        if ( bHasGrid )
+        if ( bHasGrid && pGrid->IsSquaredMode() )
         {
             if( rMulti.HasRotation() )
             {
@@ -1524,16 +1525,18 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
             }
             else if ( bHasGrid && rMulti.IsRuby() )
             {
+                GetInfo().SetSnapToGrid( bRubyTop );
                 GetInfo().X( nTmpX );
-                if ( bRubyTop )
+                if (pGrid->IsSquaredMode() )
                 {
-                    nOfst += nRubyHeight;
-                    GetInfo().SetSnapToGrid( true );
+                    if ( bRubyTop )
+                        nOfst += nRubyHeight;
+                    else
+                        nOfst += m_pCurr->Height() - nRubyHeight;
                 }
                 else
                 {
-                    nOfst += m_pCurr->Height() - nRubyHeight;
-                    GetInfo().SetSnapToGrid( false );
+                    nOfst += rMulti.GetRoot().Height();
                 }
             } else
             {
