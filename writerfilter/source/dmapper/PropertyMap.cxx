@@ -992,17 +992,13 @@ void SectionPropertyMap::HandleMarginsHeaderFooter( bool bFirstPage, DomainMappe
 
     if ( rDM_Impl.m_oBackgroundColor )
         Insert( PROP_BACK_COLOR, uno::makeAny( *rDM_Impl.m_oBackgroundColor ) );
-    if (rDM_Impl.m_bHasFtn)
+
+    // Check for missing footnote separator only in case there is at least
+    // one footnote.
+    if (rDM_Impl.m_bHasFtn && !rDM_Impl.m_bHasFtnSep)
     {
-        // Check for missing footnote separator only in case there is at least
-        // one footnote.
-        if (!rDM_Impl.m_bHasFtnSep)
-        {
-            // Set footnote line width to zero, document has no footnote separator.
-            Insert(PROP_FOOTNOTE_LINE_RELATIVE_WIDTH, uno::makeAny(sal_Int32(0)));
-            rDM_Impl.m_bHasFtn = false;
-        }
-        rDM_Impl.m_bHasFtnSep = false;
+        // Set footnote line width to zero, document has no footnote separator.
+        Insert(PROP_FOOTNOTE_LINE_RELATIVE_WIDTH, uno::makeAny(sal_Int32(0)));
     }
 
     /*** if headers/footers are available then the top/bottom margins of the
@@ -1406,6 +1402,12 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     }
     rDM_Impl.SetIsLastSectionGroup( false );
     rDM_Impl.SetIsFirstParagraphInSection( true );
+
+    if ( !rDM_Impl.IsInFootOrEndnote() )
+    {
+        rDM_Impl.m_bHasFtn = false;
+        rDM_Impl.m_bHasFtnSep = false;
+    }
 }
 
 // Clear the flag that says we should take the header/footer content from
