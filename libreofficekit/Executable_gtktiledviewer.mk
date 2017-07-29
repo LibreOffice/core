@@ -9,10 +9,14 @@
 
 $(eval $(call gb_Executable_Executable,gtktiledviewer))
 
+$(eval $(call gb_Library_use_sdk_api,gtktiledviewer))
+
 $(eval $(call gb_Executable_set_include,gtktiledviewer,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \
     -I$(SRCDIR)/libreofficekit/qa/gtktiledviewer/ \
+    -I$(WORKDIR)/UnoApiHeadersTarget/offapi/normal/ \
+    -I$(WORKDIR)/UnoApiHeadersTarget/udkapi/normal/ \
 ))
 
 $(eval $(call gb_Executable_use_externals,gtktiledviewer,\
