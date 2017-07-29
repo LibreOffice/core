@@ -654,15 +654,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
     {
         case XML_TOK_TABLE_ROW_CELL_P:
         {
-            bIsEmpty = false;
             bTextP = true;
-
-            pContext = new ScXMLCellTextParaContext(rXMLImport, nPrefix, rLName, *this);
-        }
-        break;
-        case XML_TOK_TABLE_ROW_CELL_TABLE:
-        {
-            SAL_WARN("sc", "ScXMLTableRowCellContext::CreateChildContext: subtables are not supported");
         }
         break;
         case XML_TOK_TABLE_ROW_CELL_ANNOTATION:
@@ -672,24 +664,6 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
             mxAnnotationData.reset( new ScXMLAnnotationData );
             pContext = new ScXMLAnnotationContext( rXMLImport, nPrefix, rLName,
                                                     xAttrList, *mxAnnotationData);
-        }
-        break;
-        case XML_TOK_TABLE_ROW_CELL_DETECTIVE:
-        {
-            bIsEmpty = false;
-            if (!pDetectiveObjVec)
-                pDetectiveObjVec = new ScMyImpDetectiveObjVec;
-            pContext = new ScXMLDetectiveContext(
-                rXMLImport, nPrefix, rLName, pDetectiveObjVec );
-        }
-        break;
-        case XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE:
-        {
-            bIsEmpty = false;
-            if (!pCellRangeSource)
-                pCellRangeSource = new ScMyImpCellRangeSource();
-            pContext = new ScXMLCellRangeSourceContext(
-                rXMLImport, nPrefix, rLName, xAttrList, pCellRangeSource );
         }
         break;
     }
@@ -720,6 +694,53 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+
+    return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    // bool bTextP(false);
+    switch (nElement)
+    {
+        case XML_ELEMENT( TEXT, XML_P ):
+        {
+            bIsEmpty = false;
+            // bTextP = true;
+
+            pContext = new ScXMLCellTextParaContext(rXMLImport, nElement, *this);
+        }
+        break;
+        case XML_ELEMENT( TABLE, XML_SUB_TABLE ):
+        {
+            SAL_WARN("sc", "ScXMLTableRowCellContext::createFastChildContext: subtables are not supported");
+        }
+        break;
+        case XML_ELEMENT( TABLE, XML_DETECTIVE ):
+        {
+            bIsEmpty = false;
+            if (!pDetectiveObjVec)
+                pDetectiveObjVec = new ScMyImpDetectiveObjVec;
+            pContext = new ScXMLDetectiveContext(
+                rXMLImport, nElement, pDetectiveObjVec );
+        }
+        break;
+        case XML_ELEMENT( TABLE, XML_CELL_RANGE_SOURCE ):
+        {
+            bIsEmpty = false;
+            if (!pCellRangeSource)
+                pCellRangeSource = new ScMyImpCellRangeSource();
+            pContext = new ScXMLCellRangeSourceContext(
+                rXMLImport, nElement, xAttrList, pCellRangeSource );
+        }
+        break;
+    }
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
