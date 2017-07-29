@@ -269,6 +269,23 @@ struct _LibreOfficeKitDocumentClass
     /// WIP
     void (*paintDialog) (LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 
+    /// WIP
+    void (*postDialogKeyEvent) (LibreOfficeKitDocument* pThis,
+                                const char* pDialogId,
+                                int nType,
+                                int nCharCode,
+                                int nKeyCode);
+
+    /// WIP
+    void (*postDialogMouseEvent) (LibreOfficeKitDocument* pThis,
+                                  const char* pDialogId,
+                                  int nType,
+                                  int nX,
+                                  int nY,
+                                  int nCount,
+                                  int nButtons,
+                                  int nModifier);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
