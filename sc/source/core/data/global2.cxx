@@ -309,7 +309,7 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
                                 SfxObjectShell* pShell )
 {
     OUString aAbsName;
-    if ( !pShell->HasName() )
+    if (!pShell || !pShell->HasName())
     {   // maybe relative to document path working directory
         INetURLObject aObj;
         SvtPathOptions aPathOpt;
