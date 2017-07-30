@@ -3256,6 +3256,10 @@ namespace xmloff { namespace token {
         XML_MARGIN, // #i117001#
 
         XML_PROPERTY_MAPPING,
+        XML_PROVIDER,
+        XML_DATA_MAPPINGS,
+        XML_DATA_MAPPING,
+        XML_DATA_FREQUENCY,
 
         // regina, ODF1.2 additional symbols in charts
         XML_STAR,

@@ -3033,6 +3033,10 @@ min-value
 max-value
 margin
 propertry-mapping
+provider
+data-mappings
+data-mapping
+frequency
 star
 asterisk
 horizontal-bar

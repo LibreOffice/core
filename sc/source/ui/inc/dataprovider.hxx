@@ -39,24 +39,6 @@ class DataProvider;
 class CSVDataProvider;
 class ScDBDataManager;
 
-class SC_DLLPUBLIC ExternalDataMapper
-{
-    ScRange maRange;
-    ScDocShell* mpDocShell;
-    std::unique_ptr<DataProvider> mpDataProvider;
-    ScDocument maDocument;
-    ScDBCollection* mpDBCollection;
-    std::shared_ptr<ScDBDataManager> mpDBDataManager;
-
-public:
-    ExternalDataMapper(ScDocShell* pDocShell, const OUString& rUrl, const OUString& rName,
-        SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCOL2, SCROW nRow2, bool bAllowResize, bool& bSuccess);
-
-    ~ExternalDataMapper();
-
-    void StartImport();
-};
-
 struct Cell
 {
     struct Str

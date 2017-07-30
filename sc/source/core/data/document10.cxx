@@ -930,4 +930,12 @@ void ScDocument::EnsureFormulaCellResults( const ScRange& rRange )
     }
 }
 
+sc::ExternalDataMapper& ScDocument::GetExternalDataMapper()
+{
+    if (!mpDataMapper)
+        mpDataMapper.reset(new sc::ExternalDataMapper(this));
+
+    return *mpDataMapper;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

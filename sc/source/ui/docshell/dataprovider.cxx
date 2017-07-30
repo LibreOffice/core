@@ -56,30 +56,69 @@ std::unique_ptr<SvStream> FetchStreamFromURL(const OUString& rURL, OStringBuffer
 
 }
 
-ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rURL, const OUString& rName, SCTAB nTab,
-    SCCOL nCol1,SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bAllowResize, bool& bSuccess):
-    maRange (ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)),
-    mpDocShell(pDocShell),
-    mpDBCollection (pDocShell->GetDocument().GetDBCollection())
+ExternalDataSource::ExternalDataSource(const OUString& rURL,
+        const OUString& rProvider):
+    maURL(rURL),
+    maProvider(rProvider),
+    mnUpdateFrequency(0)
 {
-    bSuccess = true;
-    ScDBCollection::NamedDBs& rNamedDBS = mpDBCollection->getNamedDBs();
-    ScDBData* aDBData = new ScDBData (rName, nTab, nCol1, nRow1, nCol2, nRow2);
-    if(!rNamedDBS.insert (aDBData))
-        bSuccess = false;
-    mpDBDataManager = std::shared_ptr<ScDBDataManager>(new ScDBDataManager(aDBData, bAllowResize));
-    mpDBDataManager->SetDestinationRange(maRange);
+}
 
-    mpDataProvider = std::unique_ptr<DataProvider> (new CSVDataProvider(mpDocShell, rURL, maRange, mpDBDataManager.get()));
+ExternalDataSource::ExternalDataSource(const ExternalDataSource& r):
+    maURL(r.maURL),
+    maProvider(r.maProvider),
+    maID(r.maID),
+    mnUpdateFrequency(r.mnUpdateFrequency)
+{
+}
+
+void ExternalDataSource::setID(const OUString& rID)
+{
+    maID = rID;
+}
+
+const OUString& ExternalDataSource::getURL() const
+{
+    return maURL;
+}
+
+const OUString& ExternalDataSource::getProvider() const
+{
+    return maProvider;
+}
+
+const OUString& ExternalDataSource::getID() const
+{
+    return maID;
+}
+
+OUString ExternalDataSource::getDBName() const
+{
+    return OUString();
+}
+
+double ExternalDataSource::getUpdateFrequency() const
+{
+    return mnUpdateFrequency;
+}
+
+ExternalDataMapper::ExternalDataMapper(ScDocument* pDoc):
+    mpDoc(pDoc)
+{
 }
 
 ExternalDataMapper::~ExternalDataMapper()
 {
 }
 
-void ExternalDataMapper::StartImport()
+void ExternalDataMapper::insertDataSource(const sc::ExternalDataSource& rSource)
 {
-    mpDataProvider->StartImport();
+    maDataSources.push_back(rSource);
+}
+
+const std::vector<sc::ExternalDataSource>& ExternalDataMapper::getDataSources() const
+{
+    return maDataSources;
 }
 
 DataProvider::~DataProvider()
