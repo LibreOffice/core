@@ -173,7 +173,7 @@ namespace frm
 #define PROPERTY_ID_AUTOINCREMENT       (PROPERTY_ID_START +133)    // UINT16
     // free
 #define PROPERTY_ID_FILTER              (PROPERTY_ID_START +135)    // ::rtl::OUString
-    // free
+#define PROPERTY_ID_HAVINGCLAUSE        (PROPERTY_ID_START +136)    // ::rtl::OUString
 #define PROPERTY_ID_QUERY               (PROPERTY_ID_START +137)    // ::rtl::OUString
 #define PROPERTY_ID_DEFAULT_LONG_VALUE  (PROPERTY_ID_START +138)    // Double
 #define PROPERTY_ID_DEFAULT_DATE        (PROPERTY_ID_START +139)    // UINT32

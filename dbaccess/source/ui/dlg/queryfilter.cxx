@@ -169,9 +169,10 @@ DlgFilterCrit::DlgFilterCrit(vcl::Window * pParent,
 
     // insert the criteria into the dialog
     Sequence<Sequence<PropertyValue > > aValues = m_xQueryComposer->getStructuredFilter();
-    fillLines(aValues);
+    int i(0);
+    fillLines(i, aValues);
     aValues = m_xQueryComposer->getStructuredHavingClause();
-    fillLines(aValues);
+    fillLines(i, aValues);
 
     EnableLines();
 
@@ -467,7 +468,7 @@ IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Control&, rControl, void )
     }
 }
 
-void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,bool _bOr  )
+void DlgFilterCrit::SetLine( int nIdx, const PropertyValue& _rItem, bool _bOr )
 {
     OUString aStr;
     _rItem.Value >>= aStr;
@@ -785,13 +786,13 @@ void DlgFilterCrit::BuildWherePart()
     }
 }
 
-void DlgFilterCrit::fillLines(const Sequence<Sequence<PropertyValue > >& _aValues)
+void DlgFilterCrit::fillLines(int &i, const Sequence< Sequence< PropertyValue > >& _aValues)
 {
     const Sequence<PropertyValue >* pOrIter = _aValues.getConstArray();
     const Sequence<PropertyValue >* pOrEnd   = pOrIter + _aValues.getLength();
-    for(sal_uInt16 i=0;pOrIter != pOrEnd; ++pOrIter)
+    bool bOr(i != 0); // WHERE clause and HAVING clause are always ANDed, nor ORed
+    for(; pOrIter != pOrEnd; ++pOrIter)
     {
-        bool bOr = true;
         const PropertyValue* pAndIter   = pOrIter->getConstArray();
         const PropertyValue* pAndEnd    = pAndIter + pOrIter->getLength();
         for(;pAndIter != pAndEnd; ++pAndIter)
@@ -799,6 +800,7 @@ void DlgFilterCrit::fillLines(const Sequence<Sequence<PropertyValue > >& _aValue
             SetLine( i++,*pAndIter,bOr);
             bOr = false;
         }
+        bOr=true;
     }
 }
 
