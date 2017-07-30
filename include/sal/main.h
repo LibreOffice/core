@@ -29,6 +29,11 @@
 #include <unistd.h>
 #endif
 
+#ifdef UNX
+#include <unistd.h>
+extern char **environ;
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
