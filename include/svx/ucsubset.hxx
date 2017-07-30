@@ -22,6 +22,7 @@
 
 #include <svx/svxdllapi.h>
 
+#include <unordered_map>
 #include <vcl/metric.hxx>
 
 #include <list>
@@ -41,6 +42,7 @@ public:
     sal_UCS4        GetRangeMax() const { return mnRangeMax;}
     const OUString& GetName()     const { return maRangeName;}
 
+    std::unordered_map<sal_UCS4, OUString> nameMap;
 private:
     sal_UCS4        mnRangeMin;
     sal_UCS4        mnRangeMax;

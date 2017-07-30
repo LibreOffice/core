@@ -60,10 +60,10 @@ public:
     virtual void    dispose() override;
     virtual void    ApplySettings(vcl::RenderContext& rRenderContext) override;
 
-    void            RecalculateFont(vcl::RenderContext& rRenderContext);
+    virtual void            RecalculateFont(vcl::RenderContext& rRenderContext);
 
     void            SelectCharacter( sal_uInt32 cNew );
-    sal_UCS4        GetSelectCharacter() const;
+    virtual sal_UCS4        GetSelectCharacter() const;
 
     void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { aDoubleClkHdl = rLink; }
     void            SetSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aSelectHdl = rHdl; }
@@ -72,11 +72,11 @@ public:
     static sal_uInt32& getSelectedChar();
     void            SetFont( const vcl::Font& rFont );
 
-    svx::SvxShowCharSetItem*    ImplGetItem( int _nPos );
+    virtual svx::SvxShowCharSetItem*    ImplGetItem( int _nPos );
     int                         FirstInView() const;
-    int                         LastInView() const;
+    virtual int                         LastInView() const;
     int                         PixelToMapIndex( const Point&) const;
-    void                        SelectIndex( int index, bool bFocus = false );
+    virtual void                        SelectIndex( int index, bool bFocus = false );
     void                        OutputIndex( int index );
     void                        DeSelect();
     bool                 IsSelected(sal_uInt16 _nPos) const { return _nPos == nSelectedIndex; }
@@ -86,7 +86,7 @@ public:
 
     ScrollBar&                  getScrollBar() { return *aVscrollSB.get();}
     void                        ReleaseAccessible();
-    sal_Int32                   getMaxCharCount() const;
+    virtual sal_Int32                   getMaxCharCount() const;
 
     virtual void    Resize() override;
 
@@ -106,7 +106,7 @@ protected:
 
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
-private:
+protected:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
     ItemsMap        m_aItems;
     Link<SvxShowCharSet*,void>     aDoubleClkHdl;
@@ -131,8 +131,8 @@ private:
     bool mbUpdateBackground : 1;
 
 
-private:
-    void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2);
+protected:
+    virtual void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2);
     void            InitSettings(vcl::RenderContext& rRenderContext);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;

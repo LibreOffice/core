@@ -275,6 +275,9 @@
     <glade-widget-class title="Math Char Selection" name="svxlo-SvxShowCharSet"
                         generic-name="Math Char Selection" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Math Char Selection" name="svxlo-SvxSearchCharSet"
+                        generic-name="Math Char Selection" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Number Preview" name="cuilo-SvxNumberPreview"
                         generic-name="Number Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
