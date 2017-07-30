@@ -448,6 +448,35 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 
 #define ENV_BUFFER_SIZE (32*1024-1)
 
+oslProcessError SAL_CALL osl_getAllEnvironment(rtl_uString **ppustrVars)
+{
+    sal_uInt32 countenv;
+    LPTCH environ = GetEnvironmentStrings();
+
+    if (ppustrVars)
+    {
+        rtl_uString **temp;
+        for (temp = ppustrVars; *temp; ++temp)
+            rtl_freeMemory(*temp);
+
+        rtl_freeMemory(temp);
+    }
+
+    for (LPTSTR *env = environ; *env; ++env)
+        countenv++;
+
+    ppustrVars = static_cast<rtl_uString**>(rtl_allocateMemory(sizeof(rtl_uString*) * countenv));
+
+    for (LPTSTR *env = environ; *env; ++env, ++ppustrVars)
+    {
+        rtl_uString *pstrTmp = nullptr;
+        rtl_uString_newFromStr(&pstrTmp, reinterpret_cast< sal_Unicode* >(*env));
+        ppustrVars = &pstrTmp;
+    }
+    return osl_Process_E_None;
+}
+
+
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
 {
     WCHAR buff[ENV_BUFFER_SIZE];
