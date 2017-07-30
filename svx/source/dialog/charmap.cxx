@@ -25,6 +25,8 @@
 
 #include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
+#include <unordered_map>
+
 
 #include <svx/strings.hrc>
 
@@ -146,7 +148,7 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
             CaptureMouse();
 
             int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
-        // Fire the focus event
+            // Fire the focus event
             SelectIndex( nIndex, true);
         }
 
@@ -231,7 +233,7 @@ int SvxShowCharSet::LastInView() const
 }
 
 
-inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
+Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
 {
     const int nBase = FirstInView();
     int x = ((nIndex - nBase) % COLUMN_COUNT) * nX;
@@ -650,7 +652,6 @@ void SvxShowCharSet::OutputIndex( int nNewIndex )
 {
     SelectIndex( nNewIndex, true );
     aSelectHdl.Call( this );
-
 }
 
 
@@ -781,7 +782,22 @@ const Subset* SubsetMap::GetSubsetByUnicode( sal_UCS4 cChar ) const
 
 inline Subset::Subset(sal_UCS4 nMin, sal_UCS4 nMax, const OUString& rName)
 :   mnRangeMin(nMin), mnRangeMax(nMax), maRangeName(rName)
-{}
+{
+    for(sal_UCS4 i = nMin; i<= nMax; i++ )
+    {
+        UErrorCode errorCode = U_ZERO_ERROR;
+        // icu has a private uprv_getMaxCharNameLength function which returns the max possible
+        // length of this property. Unicode 3.2 max char name length was 83
+        char buffer[100];
+        u_charName(i, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+        if (U_SUCCESS(errorCode))
+        {
+            OUString sName = OUString::createFromAscii(buffer);
+            if(!sName.isEmpty())
+                nameMap.insert(std::make_pair(i, sName));
+        }
+    }
+}
 
 void SubsetMap::InitList()
 {
