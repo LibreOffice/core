@@ -267,7 +267,7 @@ sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const OUString& _rSelectedPredica
     return nPredicateType;
 }
 
-sal_Int32 DlgFilterCrit::GetSelectionPos(sal_Int32 eType,const ListBox& rListBox)
+sal_Int32 DlgFilterCrit::GetSelectionPos(sal_Int32 eType, const ListBox& rListBox)
 {
     sal_Int32 nPos;
     switch(eType)
