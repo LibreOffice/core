@@ -26,6 +26,7 @@
 #include <vcl/lstbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/charmap.hxx>
+#include <svx/searchcharmap.hxx>
 #include <sfx2/charwin.hxx>
 
 using namespace ::com::sun::star;
@@ -70,12 +71,14 @@ private:
     void            init();
 
     VclPtr<SvxShowCharSet> m_pShowSet;
+    VclPtr<SvxSearchCharSet> m_pSearchSet;
     VclPtr<PushButton>     m_pOKBtn;
     VclPtr<FixedText>      m_pFontText;
     VclPtr<ListBox>        m_pFontLB;
     VclPtr<FixedText>      m_pSubsetText;
     VclPtr<ListBox>        m_pSubsetLB;
     VclPtr<SvxShowText>    m_pShowChar;
+    VclPtr<Edit>           m_pSearchText;
     VclPtr<Edit>           m_pHexCodeText;
     VclPtr<Edit>           m_pDecimalCodeText;
     VclPtr<Button>         m_pFavouritesBtn;
@@ -83,8 +86,9 @@ private:
     VclPtr<SvxCharView>    m_pFavCharView[16];
     VclPtr<VclMultiLineEdit>      m_pCharName;
 
-    vcl::Font       aFont;
-    const SubsetMap* pSubsetMap;
+    vcl::Font           aFont;
+    const SubsetMap*    pSubsetMap;
+    bool                isSearchMode;
 
     std::deque<OUString> maRecentCharList;
     std::deque<OUString> maRecentCharFontList;
@@ -102,6 +106,10 @@ private:
     DECL_LINK(CharSelectHdl, SvxShowCharSet*, void);
     DECL_LINK(CharHighlightHdl, SvxShowCharSet*, void);
     DECL_LINK(CharPreSelectHdl, SvxShowCharSet*, void);
+    DECL_LINK(SearchCharDoubleClickHdl, SvxShowCharSet*,void);
+    DECL_LINK(SearchCharSelectHdl, SvxShowCharSet*, void);
+    DECL_LINK(SearchCharHighlightHdl, SvxShowCharSet*, void);
+    DECL_LINK(SearchCharPreSelectHdl, SvxShowCharSet*, void);
     DECL_LINK(DecimalCodeChangeHdl, Edit&, void);
     DECL_LINK(HexCodeChangeHdl, Edit&, void);
     DECL_LINK(CharClickHdl, SvxCharView*, void);
@@ -112,6 +120,8 @@ private:
     DECL_LINK(InsertClickHdl, Button*, void);
     DECL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, Control&, void);
     DECL_LINK(FavSelectHdl, Button*, void);
+    DECL_LINK(SearchUpdateHdl, Edit&, void);
+    DECL_LINK(SearchFieldGetFocusHdl, Control&, void);
 
     static void fillAllSubsets(ListBox &rListBox);
     void selectCharByCode(Radix radix);
@@ -145,6 +155,8 @@ public:
     void            setFavButtonState(const OUString& sTitle, const OUString& rFont);
 
     void            setCharName(sal_UCS4 nDecimalValue);
+
+    void            toggleSearchView(bool state);
 };
 
 #endif
