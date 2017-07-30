@@ -48,9 +48,6 @@ public:
     explicit NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
-    // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
-
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
@@ -199,20 +196,6 @@ NumberingToolBoxControl::NumberingToolBoxControl( const css::uno::Reference< css
 VclPtr<vcl::Window> NumberingToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
     return VclPtr<NumberingPopup>::Create( *this, pParent, mePageType );
-}
-
-
-void SAL_CALL NumberingToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-{
-    ToolBox* pToolBox = nullptr;
-    sal_uInt16 nId = 0;
-    if ( getToolboxId( nId, &pToolBox ) )
-    {
-        pToolBox->EnableItem( nId, rEvent.IsEnabled );
-        bool bChecked;
-        if ( rEvent.State >>= bChecked )
-            pToolBox->CheckItem( nId, bChecked );
-    }
 }
 
 void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
