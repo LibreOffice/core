@@ -1288,7 +1288,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    _rProps.realloc( 22 );
+    _rProps.realloc( 23 );
     css::beans::Property* pProperties = _rProps.getArray();
 
     if (m_xAggregateSet.is())
@@ -1312,6 +1312,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     // (e.g. the ones which result from linking master fields to detail fields
     // via column names instead of parameters)
     RemoveProperty( _rAggregateProps, PROPERTY_FILTER );
+    RemoveProperty( _rAggregateProps, PROPERTY_HAVINGCLAUSE );
     RemoveProperty( _rAggregateProps, PROPERTY_APPLYFILTER );
 
     DECL_IFACE_PROP4( ACTIVE_CONNECTION,XConnection,             BOUND, TRANSIENT, MAYBEVOID, CONSTRAINED);
@@ -1322,6 +1323,7 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
     DECL_PROP2      ( DATASOURCE,       OUString,                BOUND, CONSTRAINED             );
     DECL_PROP3      ( CYCLE,            TabulatorCycle,          BOUND, MAYBEVOID, MAYBEDEFAULT );
     DECL_PROP2      ( FILTER,           OUString,                BOUND, MAYBEDEFAULT            );
+    DECL_PROP2      ( HAVINGCLAUSE,     OUString,                BOUND, MAYBEDEFAULT            );
     DECL_BOOL_PROP2 ( INSERTONLY,                                BOUND, MAYBEDEFAULT            );
     DECL_PROP1      ( NAVIGATION,       NavigationBarMode,       BOUND                          );
     DECL_BOOL_PROP1 ( ALLOWADDITIONS,                            BOUND                          );
@@ -1464,6 +1466,10 @@ void ODatabaseForm::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             rValue <<= m_aFilterManager.getFilterComponent( FilterManager::FilterComponent::PublicFilter );
             break;
 
+        case PROPERTY_ID_HAVINGCLAUSE:
+            rValue <<= m_aFilterManager.getFilterComponent( FilterManager::FilterComponent::PublicHaving );
+            break;
+
         case PROPERTY_ID_APPLYFILTER:
             rValue <<= m_aFilterManager.isApplyPublicFilter();
             break;
@@ -1544,6 +1550,10 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
 
         case PROPERTY_ID_FILTER:
             bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aFilterManager.getFilterComponent( FilterManager::FilterComponent::PublicFilter ) );
+            break;
+
+        case PROPERTY_ID_HAVINGCLAUSE:
+            bModified = tryPropertyValue( rConvertedValue, rOldValue, rValue, m_aFilterManager.getFilterComponent( FilterManager::FilterComponent::PublicHaving ) );
             break;
 
         case PROPERTY_ID_APPLYFILTER:
@@ -1632,6 +1642,14 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
             OUString sNewFilter;
             rValue >>= sNewFilter;
             m_aFilterManager.setFilterComponent( FilterManager::FilterComponent::PublicFilter, sNewFilter );
+        }
+        break;
+
+        case PROPERTY_ID_HAVINGCLAUSE:
+        {
+            OUString sNewFilter;
+            rValue >>= sNewFilter;
+            m_aFilterManager.setFilterComponent( FilterManager::FilterComponent::PublicHaving, sNewFilter );
         }
         break;
 
@@ -1780,6 +1798,13 @@ PropertyState ODatabaseForm::getPropertyStateByHandle(sal_Int32 nHandle)
                 eState = PropertyState_DIRECT_VALUE;
             break;
 
+        case PROPERTY_ID_HAVINGCLAUSE:
+            if ( m_aFilterManager.getFilterComponent( FilterManager::FilterComponent::PublicHaving ).isEmpty() )
+                eState = PropertyState_DEFAULT_VALUE;
+            else
+                eState = PropertyState_DIRECT_VALUE;
+            break;
+
         case PROPERTY_ID_APPLYFILTER:
             eState = m_aFilterManager.isApplyPublicFilter() ? PropertyState_DEFAULT_VALUE : PropertyState_DIRECT_VALUE;
             break;
@@ -1813,6 +1838,7 @@ void ODatabaseForm::setPropertyToDefaultByHandle(sal_Int32 nHandle)
     {
         case PROPERTY_ID_INSERTONLY:
         case PROPERTY_ID_FILTER:
+        case PROPERTY_ID_HAVINGCLAUSE:
         case PROPERTY_ID_APPLYFILTER:
         case PROPERTY_ID_NAVIGATION:
         case PROPERTY_ID_CYCLE:
@@ -1840,6 +1866,10 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
             break;
 
         case PROPERTY_ID_FILTER:
+            aReturn <<= OUString();
+            break;
+
+        case PROPERTY_ID_HAVINGCLAUSE:
             aReturn <<= OUString();
             break;
 
@@ -3741,7 +3771,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     OFormComponents::write(_rxOutStream);
 
     // version
-    _rxOutStream->writeShort(0x0003);
+    _rxOutStream->writeShort(0x0004);
 
     // Name
     _rxOutStream << m_sName;
@@ -3819,10 +3849,13 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     _rxOutStream->writeShort((sal_Int16)m_eNavigation);
 
     OUString sFilter;
+    OUString sHaving;
     OUString sOrder;
     if (m_xAggregateSet.is())
     {
         m_xAggregateSet->getPropertyValue(PROPERTY_FILTER) >>= sFilter;
+        // version 4
+        m_xAggregateSet->getPropertyValue(PROPERTY_HAVINGCLAUSE) >>= sHaving;
         m_xAggregateSet->getPropertyValue(PROPERTY_SORT) >>= sOrder;
     }
     _rxOutStream << sFilter;
@@ -3922,6 +3955,11 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
 
         _rxInStream >> sAggregateProp;
         setPropertyValue(PROPERTY_FILTER, makeAny(sAggregateProp));
+        if(nVersion > 3)
+        {
+            _rxInStream >> sAggregateProp;
+            setPropertyValue(PROPERTY_HAVINGCLAUSE, makeAny(sAggregateProp));
+        }
 
         _rxInStream >> sAggregateProp;
         if (m_xAggregateSet.is())

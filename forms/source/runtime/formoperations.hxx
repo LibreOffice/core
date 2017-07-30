@@ -25,8 +25,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -35,7 +37,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-
+#include <connectivity/dbtools.hxx>
 
 namespace frm
 {
@@ -320,14 +322,22 @@ namespace frm
         {
         public:
             impl_appendFilterByColumn_throw(const FormOperations *pFO,
+                                            css::uno::Reference< css::sdb::XSingleSelectQueryComposer > const & xParser,
                                             css::uno::Reference< css::beans::XPropertySet > const & xField)
                 : m_pFO(pFO)
+                , m_xParser(xParser)
                 , m_xField(xField)
             {};
 
-            void operator()() { m_pFO->m_xParser->appendFilterByColumn( m_xField, true, css::sdb::SQLFilterOperator::EQUAL ); }
+            void operator()() {
+                if (dbtools::isAggregateColumn( m_xParser, m_xField ))
+                    m_pFO->m_xParser->appendHavingClauseByColumn( m_xField, true, css::sdb::SQLFilterOperator::EQUAL );
+                else
+                    m_pFO->m_xParser->appendFilterByColumn( m_xField, true, css::sdb::SQLFilterOperator::EQUAL );
+            }
         private:
             const FormOperations *m_pFO;
+            css::uno::Reference< css::sdb::XSingleSelectQueryComposer > m_xParser;
             css::uno::Reference< css::beans::XPropertySet > m_xField;
         };
 
