@@ -28,6 +28,8 @@ using namespace ::xmloff::token;
 #define MAP_IMPORT(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type|MID_FLAG_NO_PROPERTY_EXPORT, context, version, true }
 #define PLMAP(name,prefix,token,type,context) \
         MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_010)
+#define PLMAP_IMPORT(name,prefix,token,type,context) \
+        MAP_IMPORT(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_010)
 #define PLMAP_12(name,prefix,token,type,context) \
         MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_012)
 #define PLMAP_EXT(name,prefix,token,type,context) \
@@ -36,8 +38,10 @@ using namespace ::xmloff::token;
         MAP_IMPORT(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_012_EXT_COMPAT)
 #define HFMAP(name,prefix,token,type,context) \
         MAP(name,prefix,token,type|XML_TYPE_PROP_HEADER_FOOTER,context, SvtSaveOptions::ODFVER_010)
-#define HFMAP_EXT_IMPORT(name,prefix,token,type,context) \
-        MAP_IMPORT(name,prefix,token,type|XML_TYPE_PROP_HEADER_FOOTER,context, SvtSaveOptions::ODFVER_012_EXT_COMPAT)
+#define HFMAP_IMPORT(name,prefix,token,type,context) \
+        MAP_IMPORT(name,prefix,token,type|XML_TYPE_PROP_HEADER_FOOTER,context, SvtSaveOptions::ODFVER_010)
+#define HFMAP_EXT(name,prefix,token,type,context) \
+        MAP(name,prefix,token,type|XML_TYPE_PROP_HEADER_FOOTER,context, SvtSaveOptions::ODFVER_012_EXT_COMPAT)
 
 const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
 {
@@ -126,47 +130,48 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     // Also need own defines for the used context flags (e.g. CTF_PM_FILLGRADIENTNAME instead of
     // CTF_FILLGRADIENTNAME) since these are used to *filter* up to which entry the attributes belong to the
     // 'page-layout-properties' section (!), see SvXMLAutoStylePoolP_Impl::exportXML, look for XML_STYLE_FAMILY_PAGE_MASTER
-    PLMAP( "FillStyle",                     XML_NAMESPACE_DRAW,     XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                  0 ),
-    PLMAP( "FillColor",                     XML_NAMESPACE_DRAW,     XML_FILL_COLOR,             XML_TYPE_COLOR,                                         0 ),
-    PLMAP( "FillColor2",                    XML_NAMESPACE_DRAW,     XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                         0 ),
-    PLMAP( "FillGradientName",              XML_NAMESPACE_DRAW,     XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FILLGRADIENTNAME ),
-    PLMAP( "FillGradientStepCount",         XML_NAMESPACE_DRAW,     XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                      0 ),
-    PLMAP( "FillHatchName",                 XML_NAMESPACE_DRAW,     XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FILLHATCHNAME ),
-    PLMAP( "FillBackground",                XML_NAMESPACE_DRAW,     XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                          0 ),
-    PLMAP( "FillBitmapName",                XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FILLBITMAPNAME ),
-    PLMAP( "FillTransparence",              XML_NAMESPACE_DRAW,     XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,         0 ),    // exists in SW, too
-    PLMAP( "FillTransparenceGradientName",  XML_NAMESPACE_DRAW,     XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FILLTRANSNAME ),
-    PLMAP( "FillBitmapSizeX",               XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,     0 ),
-    PLMAP( "FillBitmapLogicalSize",         XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,       0 ),
-    PLMAP( "FillBitmapSizeY",               XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,     0 ),
-    PLMAP( "FillBitmapLogicalSize",         XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,       0 ),
-    PLMAP( "FillBitmapMode",                XML_NAMESPACE_STYLE,    XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,        CTF_PM_FILLBITMAPMODE ),
-    PLMAP( "FillBitmapPositionOffsetX",     XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                       0 ),
-    PLMAP( "FillBitmapPositionOffsetY",     XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                       0 ),
-    PLMAP( "FillBitmapRectanglePoint",      XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                            0 ),
-    PLMAP( "FillBitmapOffsetX",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY,   CTF_PM_REPEAT_OFFSET_X ),
-    PLMAP( "FillBitmapOffsetY",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY,   CTF_PM_REPEAT_OFFSET_Y ),
-    // Support importing the same fill attributes but in the LO extension XML namespace
-    PLMAP_EXT_IMPORT( "FillStyle",                    XML_NAMESPACE_LO_EXT,  XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                              0 ),
-    PLMAP_EXT_IMPORT( "FillColor",                    XML_NAMESPACE_LO_EXT,  XML_FILL_COLOR,             XML_TYPE_COLOR,                                     0 ),
-    PLMAP_EXT_IMPORT( "FillColor2",                   XML_NAMESPACE_LO_EXT,  XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                     0 ),
-    PLMAP_EXT_IMPORT( "FillGradientName",             XML_NAMESPACE_LO_EXT,  XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FILLGRADIENTNAME ),
-    PLMAP_EXT_IMPORT( "FillGradientStepCount",        XML_NAMESPACE_LO_EXT,  XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                  0 ),
-    PLMAP_EXT_IMPORT( "FillHatchName",                XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FILLHATCHNAME ),
-    PLMAP_EXT_IMPORT( "FillBackground",               XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                      0 ),
-    PLMAP_EXT_IMPORT( "FillBitmapName",               XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FILLBITMAPNAME ),
-    PLMAP_EXT_IMPORT( "FillTransparence",             XML_NAMESPACE_LO_EXT,  XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,     0 ),    // exists in SW, too
-    PLMAP_EXT_IMPORT( "FillTransparenceGradientName", XML_NAMESPACE_LO_EXT,  XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FILLTRANSNAME ),
-    PLMAP_EXT_IMPORT( "FillBitmapSizeX",              XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    PLMAP_EXT_IMPORT( "FillBitmapLogicalSize",        XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,   0 ),
-    PLMAP_EXT_IMPORT( "FillBitmapSizeY",              XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    PLMAP_EXT_IMPORT( "FillBitmapLogicalSize",        XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,   0 ),
-    PLMAP_EXT_IMPORT( "FillBitmapMode",               XML_NAMESPACE_LO_EXT,  XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,    CTF_PM_FILLBITMAPMODE ),
-    PLMAP_EXT_IMPORT( "FillBitmapPositionOffsetX",    XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                   0 ),
-    PLMAP_EXT_IMPORT( "FillBitmapPositionOffsetY",    XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                   0 ),
-    PLMAP_EXT_IMPORT( "FillBitmapRectanglePoint",     XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                        0 ),
-    PLMAP_EXT_IMPORT( "FillBitmapOffsetX",            XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_PM_REPEAT_OFFSET_X ),
-    PLMAP_EXT_IMPORT( "FillBitmapOffsetY",            XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_PM_REPEAT_OFFSET_Y ),
+    // These are all exported in the LO extension XML namespace, as this is not part of the ODF standard yet.
+    PLMAP_EXT( "FillStyle",                     XML_NAMESPACE_LO_EXT,  XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                0 ),
+    PLMAP_EXT( "FillColor",                     XML_NAMESPACE_LO_EXT,  XML_FILL_COLOR,             XML_TYPE_COLOR,                                       0 ),
+    PLMAP_EXT( "FillColor2",                    XML_NAMESPACE_LO_EXT,  XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                       0 ),
+    PLMAP_EXT( "FillGradientName",              XML_NAMESPACE_LO_EXT,  XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_FILLGRADIENTNAME ),
+    PLMAP_EXT( "FillGradientStepCount",         XML_NAMESPACE_LO_EXT,  XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                    0 ),
+    PLMAP_EXT( "FillHatchName",                 XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_FILLHATCHNAME ),
+    PLMAP_EXT( "FillBackground",                XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                        0 ),
+    PLMAP_EXT( "FillBitmapName",                XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_FILLBITMAPNAME ),
+    PLMAP_EXT( "FillTransparence",              XML_NAMESPACE_LO_EXT,  XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,       0 ),    // exists in SW, too
+    PLMAP_EXT( "FillTransparenceGradientName",  XML_NAMESPACE_LO_EXT,  XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_FILLTRANSNAME ),
+    PLMAP_EXT( "FillBitmapSizeX",               XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,   0 ),
+    PLMAP_EXT( "FillBitmapLogicalSize",         XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,     0 ),
+    PLMAP_EXT( "FillBitmapSizeY",               XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,   0 ),
+    PLMAP_EXT( "FillBitmapLogicalSize",         XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,     0 ),
+    PLMAP_EXT( "FillBitmapMode",                XML_NAMESPACE_LO_EXT,  XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,      CTF_PM_FILLBITMAPMODE ),
+    PLMAP_EXT( "FillBitmapPositionOffsetX",     XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                     0 ),
+    PLMAP_EXT( "FillBitmapPositionOffsetY",     XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                     0 ),
+    PLMAP_EXT( "FillBitmapRectanglePoint",      XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                          0 ),
+    PLMAP_EXT( "FillBitmapOffsetX",             XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_PM_REPEAT_OFFSET_X ),
+    PLMAP_EXT( "FillBitmapOffsetY",             XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_PM_REPEAT_OFFSET_Y ),
+    // LO 5.0-5.4 incorrectly wrote these in ODF standard namespaces, so import from there too:
+    PLMAP_IMPORT( "FillStyle",                    XML_NAMESPACE_DRAW,  XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                0 ),
+    PLMAP_IMPORT( "FillColor",                    XML_NAMESPACE_DRAW,  XML_FILL_COLOR,             XML_TYPE_COLOR,                                       0 ),
+    PLMAP_IMPORT( "FillColor2",                   XML_NAMESPACE_DRAW,  XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                       0 ),
+    PLMAP_IMPORT( "FillGradientName",             XML_NAMESPACE_DRAW,  XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_FILLGRADIENTNAME ),
+    PLMAP_IMPORT( "FillGradientStepCount",        XML_NAMESPACE_DRAW,  XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                    0 ),
+    PLMAP_IMPORT( "FillHatchName",                XML_NAMESPACE_DRAW,  XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_FILLHATCHNAME ),
+    PLMAP_IMPORT( "FillBackground",               XML_NAMESPACE_DRAW,  XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                        0 ),
+    PLMAP_IMPORT( "FillBitmapName",               XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_FILLBITMAPNAME ),
+    PLMAP_IMPORT( "FillTransparence",             XML_NAMESPACE_DRAW,  XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,       0 ),    // exists in SW, too
+    PLMAP_IMPORT( "FillTransparenceGradientName", XML_NAMESPACE_DRAW,  XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_FILLTRANSNAME ),
+    PLMAP_IMPORT( "FillBitmapSizeX",              XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,   0 ),
+    PLMAP_IMPORT( "FillBitmapLogicalSize",        XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,     0 ),
+    PLMAP_IMPORT( "FillBitmapSizeY",              XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,   0 ),
+    PLMAP_IMPORT( "FillBitmapLogicalSize",        XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,     0 ),
+    PLMAP_IMPORT( "FillBitmapMode",               XML_NAMESPACE_STYLE, XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,      CTF_PM_FILLBITMAPMODE ),
+    PLMAP_IMPORT( "FillBitmapPositionOffsetX",    XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                     0 ),
+    PLMAP_IMPORT( "FillBitmapPositionOffsetY",    XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                     0 ),
+    PLMAP_IMPORT( "FillBitmapRectanglePoint",     XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                          0 ),
+    PLMAP_IMPORT( "FillBitmapOffsetX",            XML_NAMESPACE_DRAW,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_PM_REPEAT_OFFSET_X ),
+    PLMAP_IMPORT( "FillBitmapOffsetY",            XML_NAMESPACE_DRAW,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_PM_REPEAT_OFFSET_Y ),
 
     // Index 107: footnote
     PLMAP( "FootnoteHeight",            XML_NAMESPACE_STYLE,    XML_FOOTNOTE_MAX_HEIGHT, XML_TYPE_MEASURE, CTF_PM_FTN_HEIGHT ),
@@ -213,47 +218,48 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     //Index 144: Header DrawingLayer FillAttributes
     // Use HFMAP to get XML_TYPE_PROP_HEADER_FOOTER ORed to the 4th entry
     // Names have to begin with 'Header', all 5th entries need to be ORed with the CTF_PM_HEADERFLAG
-    HFMAP( "HeaderFillStyle",                     XML_NAMESPACE_DRAW,     XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                  CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillColor",                     XML_NAMESPACE_DRAW,     XML_FILL_COLOR,             XML_TYPE_COLOR,                                         CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillColor2",                    XML_NAMESPACE_DRAW,     XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                         CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillGradientName",              XML_NAMESPACE_DRAW,     XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_HEADERFILLGRADIENTNAME ),
-    HFMAP( "HeaderFillGradientStepCount",         XML_NAMESPACE_DRAW,     XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                      CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillHatchName",                 XML_NAMESPACE_DRAW,     XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_HEADERFILLHATCHNAME ),
-    HFMAP( "HeaderFillBackground",                XML_NAMESPACE_DRAW,     XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                          CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillBitmapName",                XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_HEADERFILLBITMAPNAME ),
-    HFMAP( "HeaderFillTransparence",              XML_NAMESPACE_DRAW,     XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,         CTF_PM_HEADERFLAG ),    // exists in SW, too
-    HFMAP( "HeaderFillTransparenceGradientName",  XML_NAMESPACE_DRAW,     XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_HEADERFILLTRANSNAME ),
-    HFMAP( "HeaderFillBitmapSizeX",               XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,     CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillBitmapLogicalSize",         XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,       CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillBitmapSizeY",               XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,     CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillBitmapLogicalSize",         XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,       CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillBitmapMode",                XML_NAMESPACE_STYLE,    XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,        CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillBitmapPositionOffsetX",     XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                       CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillBitmapPositionOffsetY",     XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                       CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillBitmapRectanglePoint",      XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                            CTF_PM_HEADERFLAG ),
-    HFMAP( "HeaderFillBitmapOffsetX",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY,   CTF_PM_HEADERREPEAT_OFFSET_X ),
-    HFMAP( "HeaderFillBitmapOffsetY",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY,   CTF_PM_HEADERREPEAT_OFFSET_Y ),
-    // Support importing the same fill attributes but in the LO extension XML namespace
-    HFMAP_EXT_IMPORT( "HeaderFillStyle",                    XML_NAMESPACE_LO_EXT,  XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                              CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillColor",                    XML_NAMESPACE_LO_EXT,  XML_FILL_COLOR,             XML_TYPE_COLOR,                                     CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillColor2",                   XML_NAMESPACE_LO_EXT,  XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                     CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillGradientName",             XML_NAMESPACE_LO_EXT,  XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_HEADERFILLGRADIENTNAME ),
-    HFMAP_EXT_IMPORT( "HeaderFillGradientStepCount",        XML_NAMESPACE_LO_EXT,  XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                  CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillHatchName",                XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_HEADERFILLHATCHNAME ),
-    HFMAP_EXT_IMPORT( "HeaderFillBackground",               XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                      CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapName",               XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_HEADERFILLBITMAPNAME ),
-    HFMAP_EXT_IMPORT( "HeaderFillTransparence",             XML_NAMESPACE_LO_EXT,  XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,     CTF_PM_HEADERFLAG ),    // exists in SW, too
-    HFMAP_EXT_IMPORT( "HeaderFillTransparenceGradientName", XML_NAMESPACE_LO_EXT,  XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_HEADERFILLTRANSNAME ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapSizeX",              XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapLogicalSize",        XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,   CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapSizeY",              XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapLogicalSize",        XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,   CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapMode",               XML_NAMESPACE_LO_EXT,  XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,    CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapPositionOffsetX",    XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                   CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapPositionOffsetY",    XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                   CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapRectanglePoint",     XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                        CTF_PM_HEADERFLAG ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapOffsetX",            XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_PM_HEADERREPEAT_OFFSET_X ),
-    HFMAP_EXT_IMPORT( "HeaderFillBitmapOffsetY",            XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_PM_HEADERREPEAT_OFFSET_Y ),
+    // These are all exported in the LO extension XML namespace, as this is not part of the ODF standard yet.
+    HFMAP_EXT( "HeaderFillStyle",                     XML_NAMESPACE_LO_EXT,  XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillColor",                     XML_NAMESPACE_LO_EXT,  XML_FILL_COLOR,             XML_TYPE_COLOR,                                       CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillColor2",                    XML_NAMESPACE_LO_EXT,  XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                       CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillGradientName",              XML_NAMESPACE_LO_EXT,  XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_HEADERFILLGRADIENTNAME ),
+    HFMAP_EXT( "HeaderFillGradientStepCount",         XML_NAMESPACE_LO_EXT,  XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                    CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillHatchName",                 XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_HEADERFILLHATCHNAME ),
+    HFMAP_EXT( "HeaderFillBackground",                XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                        CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillBitmapName",                XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_HEADERFILLBITMAPNAME ),
+    HFMAP_EXT( "HeaderFillTransparence",              XML_NAMESPACE_LO_EXT,  XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,       CTF_PM_HEADERFLAG ),    // exists in SW, too
+    HFMAP_EXT( "HeaderFillTransparenceGradientName",  XML_NAMESPACE_LO_EXT,  XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_HEADERFILLTRANSNAME ),
+    HFMAP_EXT( "HeaderFillBitmapSizeX",               XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,   CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillBitmapLogicalSize",         XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,     CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillBitmapSizeY",               XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,   CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillBitmapLogicalSize",         XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,     CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillBitmapMode",                XML_NAMESPACE_LO_EXT,  XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,      CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillBitmapPositionOffsetX",     XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                     CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillBitmapPositionOffsetY",     XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                     CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillBitmapRectanglePoint",      XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                          CTF_PM_HEADERFLAG ),
+    HFMAP_EXT( "HeaderFillBitmapOffsetX",             XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_PM_HEADERREPEAT_OFFSET_X ),
+    HFMAP_EXT( "HeaderFillBitmapOffsetY",             XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_PM_HEADERREPEAT_OFFSET_Y ),
+    // LO 5.0-5.4 incorrectly wrote these in ODF standard namespaces, so import from there too:
+    HFMAP_IMPORT( "HeaderFillStyle",                    XML_NAMESPACE_DRAW,  XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillColor",                    XML_NAMESPACE_DRAW,  XML_FILL_COLOR,             XML_TYPE_COLOR,                                       CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillColor2",                   XML_NAMESPACE_DRAW,  XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                       CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillGradientName",             XML_NAMESPACE_DRAW,  XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_HEADERFILLGRADIENTNAME ),
+    HFMAP_IMPORT( "HeaderFillGradientStepCount",        XML_NAMESPACE_DRAW,  XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                    CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillHatchName",                XML_NAMESPACE_DRAW,  XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_HEADERFILLHATCHNAME ),
+    HFMAP_IMPORT( "HeaderFillBackground",               XML_NAMESPACE_DRAW,  XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                        CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillBitmapName",               XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_HEADERFILLBITMAPNAME ),
+    HFMAP_IMPORT( "HeaderFillTransparence",             XML_NAMESPACE_DRAW,  XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,       CTF_PM_HEADERFLAG ),    // exists in SW, too
+    HFMAP_IMPORT( "HeaderFillTransparenceGradientName", XML_NAMESPACE_DRAW,  XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,       CTF_PM_HEADERFILLTRANSNAME ),
+    HFMAP_IMPORT( "HeaderFillBitmapSizeX",              XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,   CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillBitmapLogicalSize",        XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,     CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillBitmapSizeY",              XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,   CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillBitmapLogicalSize",        XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,     CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillBitmapMode",               XML_NAMESPACE_STYLE, XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,      CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillBitmapPositionOffsetX",    XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                     CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillBitmapPositionOffsetY",    XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                     CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillBitmapRectanglePoint",     XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                          CTF_PM_HEADERFLAG ),
+    HFMAP_IMPORT( "HeaderFillBitmapOffsetX",            XML_NAMESPACE_DRAW,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_PM_HEADERREPEAT_OFFSET_X ),
+    HFMAP_IMPORT( "HeaderFillBitmapOffsetY",            XML_NAMESPACE_DRAW,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_PM_HEADERREPEAT_OFFSET_Y ),
 
     //////////////////////////////////////////////////////////////////////////
     //Index 184: Section for 'footer-style' own section, all members *have* to use CTF_PM_FOOTERFLAG in the context entry (the 5th one)
@@ -290,47 +296,48 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     //Index 213: Footer DrawingLayer FillAttributes
     // Use HFMAP to get XML_TYPE_PROP_HEADER_FOOTER ORed to the 4th entry
     // Names have to begin with 'Footer', all 5th entries need to be ORed with the CTF_PM_FOOTERFLAG
-    HFMAP( "FooterFillStyle",                     XML_NAMESPACE_DRAW,     XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                  CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillColor",                     XML_NAMESPACE_DRAW,     XML_FILL_COLOR,             XML_TYPE_COLOR,                                         CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillColor2",                    XML_NAMESPACE_DRAW,     XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                         CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillGradientName",              XML_NAMESPACE_DRAW,     XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FOOTERFILLGRADIENTNAME ),
-    HFMAP( "FooterFillGradientStepCount",         XML_NAMESPACE_DRAW,     XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                      CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillHatchName",                 XML_NAMESPACE_DRAW,     XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FOOTERFILLHATCHNAME ),
-    HFMAP( "FooterFillBackground",                XML_NAMESPACE_DRAW,     XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                          CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillBitmapName",                XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FOOTERFILLBITMAPNAME ),
-    HFMAP( "FooterFillTransparence",              XML_NAMESPACE_DRAW,     XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,         CTF_PM_FOOTERFLAG ),    // exists in SW, too
-    HFMAP( "FooterFillTransparenceGradientName",  XML_NAMESPACE_DRAW,     XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FOOTERFILLTRANSNAME ),
-    HFMAP( "FooterFillBitmapSizeX",               XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,     CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillBitmapLogicalSize",         XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,       CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillBitmapSizeY",               XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,     CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillBitmapLogicalSize",         XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,       CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillBitmapMode",                XML_NAMESPACE_STYLE,    XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,        CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillBitmapPositionOffsetX",     XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                       CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillBitmapPositionOffsetY",     XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                       CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillBitmapRectanglePoint",      XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                            CTF_PM_FOOTERFLAG ),
-    HFMAP( "FooterFillBitmapOffsetX",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERREPEAT_OFFSET_X ),
-    HFMAP( "FooterFillBitmapOffsetY",             XML_NAMESPACE_DRAW,     XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERREPEAT_OFFSET_Y ),
-    // Support importing the same fill attributes but in the LO extension XML namespace
-    HFMAP_EXT_IMPORT( "FooterFillStyle",                    XML_NAMESPACE_LO_EXT,  XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                              CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillColor",                    XML_NAMESPACE_LO_EXT,  XML_FILL_COLOR,             XML_TYPE_COLOR,                                     CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillColor2",                   XML_NAMESPACE_LO_EXT,  XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                     CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillGradientName",             XML_NAMESPACE_LO_EXT,  XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FOOTERFILLGRADIENTNAME ),
-    HFMAP_EXT_IMPORT( "FooterFillGradientStepCount",        XML_NAMESPACE_LO_EXT,  XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                  CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillHatchName",                XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FOOTERFILLHATCHNAME ),
-    HFMAP_EXT_IMPORT( "FooterFillBackground",               XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                      CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapName",               XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FOOTERFILLBITMAPNAME ),
-    HFMAP_EXT_IMPORT( "FooterFillTransparence",             XML_NAMESPACE_LO_EXT,  XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,     CTF_PM_FOOTERFLAG ),    // exists in SW, too
-    HFMAP_EXT_IMPORT( "FooterFillTransparenceGradientName", XML_NAMESPACE_LO_EXT,  XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FOOTERFILLTRANSNAME ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapSizeX",              XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapLogicalSize",        XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapSizeY",              XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapLogicalSize",        XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapMode",               XML_NAMESPACE_STYLE,   XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,    CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapPositionOffsetX",    XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                   CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapPositionOffsetY",    XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                   CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapRectanglePoint",     XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                        CTF_PM_FOOTERFLAG ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapOffsetX",            XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERREPEAT_OFFSET_X ),
-    HFMAP_EXT_IMPORT( "FooterFillBitmapOffsetY",            XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERREPEAT_OFFSET_Y ),
+    // These are all exported in the LO extension XML namespace, as this is not part of the ODF standard yet.
+    HFMAP_EXT( "FooterFillStyle",                     XML_NAMESPACE_LO_EXT,  XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                                  CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillColor",                     XML_NAMESPACE_LO_EXT,  XML_FILL_COLOR,             XML_TYPE_COLOR,                                         CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillColor2",                    XML_NAMESPACE_LO_EXT,  XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                         CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillGradientName",              XML_NAMESPACE_LO_EXT,  XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FOOTERFILLGRADIENTNAME ),
+    HFMAP_EXT( "FooterFillGradientStepCount",         XML_NAMESPACE_LO_EXT,  XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                      CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillHatchName",                 XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FOOTERFILLHATCHNAME ),
+    HFMAP_EXT( "FooterFillBackground",                XML_NAMESPACE_LO_EXT,  XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                          CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillBitmapName",                XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FOOTERFILLBITMAPNAME ),
+    HFMAP_EXT( "FooterFillTransparence",              XML_NAMESPACE_LO_EXT,  XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,         CTF_PM_FOOTERFLAG ),    // exists in SW, too
+    HFMAP_EXT( "FooterFillTransparenceGradientName",  XML_NAMESPACE_LO_EXT,  XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,         CTF_PM_FOOTERFILLTRANSNAME ),
+    HFMAP_EXT( "FooterFillBitmapSizeX",               XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,     CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillBitmapLogicalSize",         XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,       CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillBitmapSizeY",               XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,     CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillBitmapLogicalSize",         XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,       CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillBitmapMode",                XML_NAMESPACE_LO_EXT,  XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,        CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillBitmapPositionOffsetX",     XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                       CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillBitmapPositionOffsetY",     XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                       CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillBitmapRectanglePoint",      XML_NAMESPACE_LO_EXT,  XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                            CTF_PM_FOOTERFLAG ),
+    HFMAP_EXT( "FooterFillBitmapOffsetX",             XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERREPEAT_OFFSET_X ),
+    HFMAP_EXT( "FooterFillBitmapOffsetY",             XML_NAMESPACE_LO_EXT,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERREPEAT_OFFSET_Y ),
+    // LO 5.0-5.4 incorrectly wrote these in ODF standard namespaces, so import from there too:
+    HFMAP_IMPORT( "FooterFillStyle",                    XML_NAMESPACE_DRAW,  XML_FILL,                   XML_SW_TYPE_FILLSTYLE,                              CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillColor",                    XML_NAMESPACE_DRAW,  XML_FILL_COLOR,             XML_TYPE_COLOR,                                     CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillColor2",                   XML_NAMESPACE_DRAW,  XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR,                                     CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillGradientName",             XML_NAMESPACE_DRAW,  XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FOOTERFILLGRADIENTNAME ),
+    HFMAP_IMPORT( "FooterFillGradientStepCount",        XML_NAMESPACE_DRAW,  XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16,                                  CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillHatchName",                XML_NAMESPACE_DRAW,  XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FOOTERFILLHATCHNAME ),
+    HFMAP_IMPORT( "FooterFillBackground",               XML_NAMESPACE_DRAW,  XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL,                                      CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillBitmapName",               XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FOOTERFILLBITMAPNAME ),
+    HFMAP_IMPORT( "FooterFillTransparence",             XML_NAMESPACE_DRAW,  XML_OPACITY,                XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY,     CTF_PM_FOOTERFLAG ),    // exists in SW, too
+    HFMAP_IMPORT( "FooterFillTransparenceGradientName", XML_NAMESPACE_DRAW,  XML_OPACITY_NAME,           XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT,     CTF_PM_FOOTERFILLTRANSNAME ),
+    HFMAP_IMPORT( "FooterFillBitmapSizeX",              XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillBitmapLogicalSize",        XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillBitmapSizeY",              XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillBitmapLogicalSize",        XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,   CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillBitmapMode",               XML_NAMESPACE_STYLE, XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,    CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillBitmapPositionOffsetX",    XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                   CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillBitmapPositionOffsetY",    XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                   CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillBitmapRectanglePoint",     XML_NAMESPACE_DRAW,  XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                        CTF_PM_FOOTERFLAG ),
+    HFMAP_IMPORT( "FooterFillBitmapOffsetX",            XML_NAMESPACE_DRAW,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERREPEAT_OFFSET_X ),
+    HFMAP_IMPORT( "FooterFillBitmapOffsetY",            XML_NAMESPACE_DRAW,  XML_TILE_REPEAT_OFFSET,     XML_SW_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERREPEAT_OFFSET_Y ),
 
     { nullptr, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false } // index 253
 };
