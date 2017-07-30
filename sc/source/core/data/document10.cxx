@@ -29,6 +29,7 @@
 #include <svl/whiter.hxx>
 #include <editeng/colritem.hxx>
 #include "scitems.hxx"
+#include "datamapper.hxx"
 
 // Add totally brand-new methods to this source file.
 
@@ -928,6 +929,14 @@ void ScDocument::EnsureFormulaCellResults( const ScRange& rRange )
         pTab->EnsureFormulaCellResults(
             rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
     }
+}
+
+sc::ExternalDataMapper& ScDocument::GetExternalDataMapper()
+{
+    if (!mpDataMapper)
+        mpDataMapper.reset(new sc::ExternalDataMapper(this));
+
+    return *mpDataMapper;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

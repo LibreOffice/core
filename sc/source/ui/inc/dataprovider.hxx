@@ -23,6 +23,7 @@
 
 #include "docsh.hxx"
 #include "scdllapi.h"
+#include "datamapper.hxx"
 
 #include <queue>
 
@@ -38,24 +39,6 @@ namespace sc {
 class DataProvider;
 class CSVDataProvider;
 class ScDBDataManager;
-
-class SC_DLLPUBLIC ExternalDataMapper
-{
-    ScRange maRange;
-    ScDocShell* mpDocShell;
-    std::unique_ptr<DataProvider> mpDataProvider;
-    ScDocument maDocument;
-    ScDBCollection* mpDBCollection;
-    std::shared_ptr<ScDBDataManager> mpDBDataManager;
-
-public:
-    ExternalDataMapper(ScDocShell* pDocShell, const OUString& rUrl, const OUString& rName,
-        SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCOL2, SCROW nRow2, bool bAllowResize, bool& bSuccess);
-
-    ~ExternalDataMapper();
-
-    void StartImport();
-};
 
 struct Cell
 {
@@ -87,11 +70,8 @@ typedef std::vector<Line> LinesType;
 
 class CSVFetchThread : public salhelper::Thread
 {
-    std::unique_ptr<SvStream> mpStream;
     ScDocument& mrDocument;
     OUString maURL;
-    size_t mnColCount;
-    ScDBDataManager* mpDBDataManager;
 
     bool mbTerminate;
     osl::Mutex maMtxTerminate;
@@ -104,10 +84,9 @@ class CSVFetchThread : public salhelper::Thread
 
     orcus::csv::parser_config maConfig;
 
-    virtual void execute() override;
 
 public:
-    CSVFetchThread(ScDocument& rDoc, ScDBDataManager*, const OUString&, size_t);
+    CSVFetchThread(ScDocument& rDoc, const OUString&);
     virtual ~CSVFetchThread() override;
 
     void RequestTerminate();
@@ -120,72 +99,81 @@ public:
     void WaitForNewLines();
     LinesType* GetNewLines();
     void ResumeFetchStream();
+
+    virtual void execute() override;
 };
 
+/**
+ * Abstract class for all data provider.
+ *
+ */
 class DataProvider
 {
 public:
     virtual ~DataProvider() = 0;
 
-    virtual void StartImport() = 0;
-    virtual void Refresh() = 0;
-    virtual void WriteToDoc(ScDocument&) = 0;
+    virtual void Import() = 0;
+    virtual void WriteToDoc(ScDocument& rDoc, ScDBData* pDBData) = 0;
 
-    virtual ScRange GetRange() const = 0;
     virtual const OUString& GetURL() const = 0;
 };
 
 class CSVDataProvider : public DataProvider
 {
     OUString maURL;
-    ScRange mrRange;
     rtl::Reference<CSVFetchThread> mxCSVFetchThread;
-    ScDocShell* mpDocShell;
     ScDocument* mpDocument;
     ScDBDataManager* mpDBDataManager;
     LinesType* mpLines;
     size_t mnLineCount;
 
-    bool mbImportUnderway;
-
-
-public:
-    CSVDataProvider (ScDocShell* pDocShell, const OUString& rUrl, ScRange& rRange, ScDBDataManager*);
-    virtual ~CSVDataProvider() override;
-
-    virtual void StartImport() override;
-    virtual void Refresh() override;
-    virtual void WriteToDoc(ScDocument&) override;
+    void Refresh();
     Line GetLine();
 
-    ScRange GetRange() const override
-    {
-        return mrRange;
-    }
+public:
+    CSVDataProvider (ScDocument* pDoc, const OUString& rURL, ScDBDataManager* pDBManager);
+    virtual ~CSVDataProvider() override;
+
+    virtual void Import() override;
+
+    // TODO: this method should be moved to the ScDBDataManager
+    virtual void WriteToDoc(ScDocument& rDoc, ScDBData* pDBData) override;
     const OUString& GetURL() const override { return maURL; }
 };
 
+
+/**
+ * This class handles the copying of the data from the imported
+ * temporary document to the actual document. Additionally, in the future
+ * we may decide to store data transformations in this class.
+ *
+ * In addition this class also handles how to deal with excess data by for example extending the ScDBData or by only showing the first or last entries.
+ *
+ * TODO: move the DataProvider::WriteToDoc here
+ *
+ */
 class ScDBDataManager
 {
     ScDBData* mpDBData;
-    ScRange maSourceRange;
-    ScRange maDestinationRange;
-    bool mbAllowResize;
 
 public:
-    ScDBDataManager(ScDBData*, bool);
+    ScDBDataManager(ScDBData* pDBData, bool bAllowResize);
     ~ScDBDataManager();
 
-    bool IsResizeAllowed();
-    bool Resize();
-    bool RequiresResize(SCROW&, SCCOL&);
+    void SetDatabase(ScDBData* pDBData);
 
-    void SetDatabase(ScDBData*);
-    void SetSourceRange(SCCOL, SCROW);
-    void SetDestinationRange(ScRange&);
+    ScDBData* getDBData();
+};
 
-    ScRange& GetDestinationRange();
-    ScRange& GetSourceRange();
+class DataProviderFactory
+{
+private:
+
+    static bool isInternalDataProvider(const OUString& rProvider);
+
+public:
+
+    static std::shared_ptr<DataProvider> getDataProvider(ScDocument* pDoc, const OUString& rProvider, const OUString& rURL, const OUString& rID, ScDBDataManager* pManager);
 };
 
 }
