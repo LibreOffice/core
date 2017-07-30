@@ -57,9 +57,11 @@ using namespace css;
 SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
     : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
     , pSubsetMap( nullptr )
+    , isSearchMode(true)
     , mxContext(comphelper::getProcessComponentContext())
 {
     get(m_pShowSet, "showcharset");
+    get(m_pSearchSet, "searchcharset");
     get(m_pShowChar, "showchar");
     m_pShowChar->SetCentered(true);
     get(m_pOKBtn, "ok");
@@ -76,6 +78,7 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
     get(m_pCharName, "charname");
     m_pCharName->set_height_request(m_pCharName->GetTextHeight()*3);
     m_pCharName->SetPaintTransparent(true);
+    get(m_pSearchText, "search");
     //lock the size request of this widget to the width of the original .ui string
     m_pHexCodeText->set_width_request(m_pHexCodeText->get_preferred_size().Width());
 
@@ -140,6 +143,8 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
     }
 
     CreateOutputItemSet( pSet ? *pSet->GetPool() : SfxGetpApp()->GetPool() );
+    m_pShowSet->Show();
+    m_pSearchSet->Hide();
 }
 
 SvxCharacterMap::~SvxCharacterMap()
@@ -174,6 +179,7 @@ void SvxCharacterMap::dispose()
         m_pRecentCharView[i].clear();
 
     m_pShowSet.clear();
+    m_pSearchSet.clear();
     m_pOKBtn.clear();
     m_pFontText.clear();
     m_pFontLB.clear();
@@ -190,6 +196,7 @@ void SvxCharacterMap::dispose()
     maFavCharFontList.clear();
 
     m_pFavouritesBtn.clear();
+    m_pSearchText.clear();
 
     SfxModalDialog::dispose();
 }
@@ -199,7 +206,7 @@ void SvxCharacterMap::SetChar( sal_UCS4 c )
 {
     m_pShowSet->SelectCharacter( c );
 
-        setFavButtonState(OUString(&c, 1), aFont.GetFamilyName());
+    setFavButtonState(OUString(&c, 1), aFont.GetFamilyName());
 }
 
 
@@ -464,10 +471,17 @@ void SvxCharacterMap::init()
     m_pFontLB->SetSelectHdl( LINK( this, SvxCharacterMap, FontSelectHdl ) );
     m_pSubsetLB->SetSelectHdl( LINK( this, SvxCharacterMap, SubsetSelectHdl ) );
     m_pOKBtn->SetClickHdl( LINK( this, SvxCharacterMap, InsertClickHdl ) );
+
     m_pShowSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, CharDoubleClickHdl ) );
     m_pShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
     m_pShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
     m_pShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
+
+    m_pSearchSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, SearchCharDoubleClickHdl ) );
+    m_pSearchSet->SetSelectHdl( LINK( this, SvxCharacterMap, SearchCharSelectHdl ) );
+    m_pSearchSet->SetHighlightHdl( LINK( this, SvxCharacterMap, SearchCharHighlightHdl ) );
+    m_pSearchSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, SearchCharPreSelectHdl ) );
+
     m_pDecimalCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, DecimalCodeChangeHdl ) );
     m_pHexCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, HexCodeChangeHdl ) );
     m_pFavouritesBtn->SetClickHdl( LINK(this, SvxCharacterMap, FavSelectHdl));
@@ -506,6 +520,10 @@ void SvxCharacterMap::init()
     }
 
     setCharName(90);
+
+    m_pSearchText->SetGetFocusHdl(LINK( this, SvxCharacterMap, SearchFieldGetFocusHdl ));
+    m_pSearchText->SetUpdateDataHdl(LINK( this, SvxCharacterMap, SearchUpdateHdl ));
+    m_pSearchText->EnableUpdateData();
 }
 
 bool SvxCharacterMap::isFavChar(const OUString& sTitle, const OUString& rFont)
@@ -622,7 +640,13 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
 
     // notify children using this font
     m_pShowSet->SetFont( aFont );
+    m_pSearchSet->SetFont( aFont );
     m_pShowChar->SetFont( aFont );
+    if(isSearchMode)
+    {
+        SearchUpdateHdl(*m_pSearchText);
+        SearchCharHighlightHdl(m_pSearchSet);
+    }
 
     // setup unicode subset listbar with font specific subsets,
     // hide unicode subset listbar for symbol fonts
@@ -659,6 +683,26 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
     m_pSubsetLB->Enable(bNeedSubset);
 }
 
+void SvxCharacterMap::toggleSearchView(bool state)
+{
+    isSearchMode = state;
+    m_pHexCodeText->SetReadOnly(state);
+    m_pDecimalCodeText->SetReadOnly(state);
+    m_pSubsetLB->SetReadOnly(state);
+    m_pSubsetLB->Invalidate();
+
+    if(state)
+    {
+        m_pSearchSet->Show();
+        m_pShowSet->Hide();
+    }
+    else
+    {
+        m_pSearchSet->Hide();
+        m_pShowSet->Show();
+    }
+}
+
 void SvxCharacterMap::setCharName(sal_UCS4 nDecimalValue)
 {
     /* get the character name */
@@ -675,14 +719,29 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
 {
     const sal_Int32 nPos = m_pSubsetLB->GetSelectEntryPos();
     const Subset* pSubset = static_cast<const Subset*> (m_pSubsetLB->GetEntryData(nPos));
-    if( pSubset )
+    if( pSubset && !isSearchMode)
     {
         sal_UCS4 cFirst = pSubset->GetRangeMin();
         m_pShowSet->SelectCharacter( cFirst );
 
         setFavButtonState(OUString(&cFirst, 1), aFont.GetFamilyName());
+        m_pSubsetLB->SelectEntryPos( nPos );
     }
-    m_pSubsetLB->SelectEntryPos( nPos );
+    else if( pSubset && isSearchMode)
+    {
+        m_pSearchSet->SelectCharacter( pSubset );
+
+        const Subset* curSubset = nullptr;
+        if( pSubsetMap )
+            curSubset = pSubsetMap->GetSubsetByUnicode( m_pSearchSet->GetSelectCharacter() );
+        if( curSubset )
+            m_pSubsetLB->SelectEntry( curSubset->GetName() );
+        else
+            m_pSubsetLB->SetNoSelection();
+
+        sal_UCS4 sChar = m_pSearchSet->GetSelectCharacter();
+        setFavButtonState(OUString(&sChar, 1), aFont.GetFamilyName());
+    }
 }
 
 IMPL_LINK(SvxCharacterMap, RecentClearClickHdl, SvxCharView*, rView, void)
@@ -760,6 +819,59 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavClearAllClickHdl, SvxCharView*, void)
     updateFavCharControl();
 }
 
+IMPL_LINK_NOARG(SvxCharacterMap, SearchFieldGetFocusHdl, Control&, void)
+{
+    m_pOKBtn->Disable();
+}
+
+
+IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, Edit&, void)
+{
+    if(!m_pSearchText->GetText().isEmpty())
+    {
+        m_pSearchSet->ClearPreviousData();
+        OUString aKeyword = m_pSearchText->GetText();
+
+        toggleSearchView(true);
+
+        FontCharMapRef xFontCharMap(new FontCharMap());
+        m_pSearchSet->GetFontCharMap(xFontCharMap);
+
+        sal_UCS4 sChar = xFontCharMap->GetFirstChar();
+        while(sChar != xFontCharMap->GetLastChar())
+        {
+            UErrorCode errorCode = U_ZERO_ERROR;
+            char buffer[100];
+            u_charName(sChar, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+            if (U_SUCCESS(errorCode))
+            {
+                OUString sName = OUString::createFromAscii(buffer);
+                if(!sName.isEmpty() && sName.toAsciiLowerCase().indexOf(aKeyword.toAsciiLowerCase()) >= 0)
+                    m_pSearchSet->AppendCharToList(sChar);
+            }
+            sChar = xFontCharMap->GetNextChar(sChar);
+        }
+        //for last char
+        UErrorCode errorCode = U_ZERO_ERROR;
+        char buffer[100];
+        u_charName(sChar, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+        if (U_SUCCESS(errorCode))
+        {
+            OUString sName = OUString::createFromAscii(buffer);
+            if(!sName.isEmpty() && sName.toAsciiLowerCase().indexOf(aKeyword.toAsciiLowerCase()) >= 0)
+                m_pSearchSet->AppendCharToList(sChar);
+        }
+
+        m_pSearchSet->Resize();
+
+    }
+    else
+    {
+        toggleSearchView(false);
+    }
+}
+
+
 IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
 {
     m_pShowChar->SetText( rView->GetText() );
@@ -795,7 +907,21 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
     insertCharToDoc(aOUStr);
 }
 
+IMPL_LINK_NOARG(SvxCharacterMap, SearchCharDoubleClickHdl, SvxShowCharSet*, void)
+{
+    sal_UCS4 cChar = m_pSearchSet->GetSelectCharacter();
+    // using the new UCS4 constructor
+    OUString aOUStr( &cChar, 1 );
+    setFavButtonState(aOUStr, aFont.GetFamilyName());
+    insertCharToDoc(aOUStr);
+}
+
 IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
+{
+    m_pOKBtn->Enable();
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, SearchCharSelectHdl, SvxShowCharSet*, void)
 {
     m_pOKBtn->Enable();
 }
@@ -875,6 +1001,49 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
         m_pDecimalCodeText->SetText( aDecimalText );
 }
 
+IMPL_LINK_NOARG(SvxCharacterMap, SearchCharHighlightHdl, SvxShowCharSet*, void)
+{
+    OUString aText;
+    OUString aHexText;
+    OUString aDecimalText;
+    sal_UCS4 cChar = m_pSearchSet->GetSelectCharacter();
+    bool bSelect = (cChar > 0);
+
+    // show char sample
+    if ( bSelect )
+    {
+        aText = OUString( &cChar, 1 );
+        // Get the hexadecimal code
+        aHexText = OUString::number(cChar, 16).toAsciiUpperCase();
+        // Get the decimal code
+        aDecimalText = OUString::number(cChar);
+        setCharName(cChar);
+
+        // Update the hex and decimal codes only if necessary
+        if (m_pHexCodeText->GetText() != aHexText)
+            m_pHexCodeText->SetText( aHexText );
+        if (m_pDecimalCodeText->GetText() != aDecimalText)
+            m_pDecimalCodeText->SetText( aDecimalText );
+
+        const Subset* pSubset = nullptr;
+        if( pSubsetMap )
+            pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
+        if( pSubset )
+            m_pSubsetLB->SelectEntry( pSubset->GetName() );
+        else
+            m_pSubsetLB->SetNoSelection();
+    }
+
+    if(m_pSearchSet->HasFocus())
+    {
+        m_pShowChar->SetText( aText );
+        m_pShowChar->SetFont( aFont );
+        m_pShowChar->Update();
+
+        setFavButtonState(aText, aFont.GetFamilyName());
+    }
+}
+
 void SvxCharacterMap::selectCharByCode(Radix radix)
 {
     OUString aCodeString;
@@ -922,6 +1091,23 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
 
     m_pOKBtn->Enable();
 }
+
+IMPL_LINK_NOARG(SvxCharacterMap, SearchCharPreSelectHdl, SvxShowCharSet*, void)
+{
+    // adjust subset selection
+    if( pSubsetMap )
+    {
+        sal_UCS4 cChar = m_pSearchSet->GetSelectCharacter();
+
+        setFavButtonState(OUString(&cChar, 1), aFont.GetFamilyName());
+        const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
+        if( pSubset )
+            m_pSubsetLB->SelectEntry( pSubset->GetName() );
+    }
+
+    m_pOKBtn->Enable();
+}
+
 
 
 // class SvxShowText =====================================================
