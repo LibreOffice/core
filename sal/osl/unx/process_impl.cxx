@@ -44,6 +44,9 @@
 #if defined(MACOSX) || defined(IOS)
 #include <mach-o/dyld.h>
 
+#include <unistd.h>
+extern char **environ;
+
 namespace {
 
 oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
@@ -232,6 +235,34 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
         }
     }
     pthread_mutex_unlock (&(g_command_args.m_mutex));
+}
+
+oslProcessError SAL_CALL osl_getAllEnvironment(rtl_uString **ppustrVars)
+{
+    sal_uInt32 countenv=0;
+
+    for (char **env = environ; *env; ++env)
+        countenv++;
+
+    if (ppustrVars)
+    {
+        rtl_uString **temp;
+        for (temp = ppustrVars; *temp; ++temp)
+            rtl_freeMemory(*temp);
+
+        rtl_freeMemory(temp);
+    }
+
+    ppustrVars = static_cast<rtl_uString**>(rtl_allocateMemory(sizeof(rtl_uString*) * countenv));
+
+    for (char **env = environ; *env; ++env, ++ppustrVars)
+    {
+        rtl_uString *pstrTmp = nullptr;
+        rtl_uString_newFromAscii(&pstrTmp, *env);
+        ppustrVars = &pstrTmp;
+    }
+
+    return osl_Process_E_None;
 }
 
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uString** ppustrValue)
