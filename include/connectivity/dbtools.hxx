@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 #define INCLUDED_CONNECTIVITY_DBTOOLS_HXX
 
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -785,6 +786,44 @@ namespace dbtools
             const bool  _bValue,
             const sal_Int32 _nBooleanComparisonMode,
             OUStringBuffer& _out_rSQLPredicate
+        );
+
+    /** is this field an aggregate?
+
+        @param _xComposer
+            a query composer that knows the field by name
+        @param _xField
+            the field
+        @param whenNotFound
+            value returned when _sName is not known by _xComposer
+    */
+    OOO_DLLPUBLIC_DBTOOLS bool isAggregateColumn(
+            const css::uno::Reference< css::sdb::XSingleSelectQueryComposer > &_xComposer,
+            const css::uno::Reference< css::beans::XPropertySet > &_xField,
+            bool whenNotFound = false
+        );
+
+    /** is this column an aggregate?
+
+        @param _xColumns collection of columns
+            look for column sName in there
+        @param _sName
+            name of the column
+        @param whenNotFound
+            value returned when _sName is not in _xColumns
+    */
+    OOO_DLLPUBLIC_DBTOOLS bool isAggregateColumn(
+            const css::uno::Reference< css::container::XNameAccess > &_xColumns,
+            const OUString &_sName,
+            bool whenNotFound = false
+        );
+
+    /** is this column an aggregate?
+
+        @param _xColumn
+    */
+    OOO_DLLPUBLIC_DBTOOLS bool isAggregateColumn(
+            const css::uno::Reference< css::beans::XPropertySet > &_xColumn
         );
 
 }   // namespace dbtools
