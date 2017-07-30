@@ -17,6 +17,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -50,7 +51,6 @@ public:
     {
         std::vector<const char*> aBlacklist = {
             // These are known problems, they should be fixed one by one.
-            "fdo86963.odt",
             "shape-relsize.odt",
             "fdo60769.odt",
             "fdo38244.odt"
@@ -1652,6 +1652,49 @@ DECLARE_ODFEXPORT_TEST(testImageMimetype, "image-mimetype.odt")
         // Original image (svg)
         assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:frame/draw:image[@loext:mime-type='image/svg+xml']");
     }
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf103602_loext_ns, "tdf103602_loext_ns.odt")
+{
+    // Test we can import and export <loext:fill> and related attributes for
+    // page fill, header/footer fill in text documents.
+    // As for all odfexport tests, ODF validation will be checked on the
+    // exported odt file.
+
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
+
+    // Page fill: hatched
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH,
+        getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Black 45 Degrees Wide"),
+        getProperty<OUString>(xPropertySet, "FillHatchName"));
+    CPPUNIT_ASSERT_EQUAL(true,
+        getProperty<bool>(xPropertySet, "FillBackground"));
+
+    // Header fill: gradient
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
+        getProperty<drawing::FillStyle>(xPropertySet, "HeaderFillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Radial red/yellow"),
+        getProperty<OUString>(xPropertySet, "HeaderFillGradientName"));
+
+    // Footer fill: bitmap
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
+        getProperty<drawing::FillStyle>(xPropertySet, "FooterFillStyle"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Sky"),
+        getProperty<OUString>(xPropertySet, "FooterFillBitmapName"));
+    CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT,
+        getProperty<drawing::BitmapMode>(xPropertySet, "FooterFillBitmapMode"));
+    CPPUNIT_ASSERT_EQUAL(2000,
+        getProperty<int>(xPropertySet, "FooterFillBitmapSizeX"));
+    CPPUNIT_ASSERT_EQUAL(1900,
+        getProperty<int>(xPropertySet, "FooterFillBitmapSizeY"));
+    CPPUNIT_ASSERT_EQUAL(5,
+        getProperty<int>(xPropertySet, "FooterFillBitmapPositionOffsetX"));
+    CPPUNIT_ASSERT_EQUAL(6,
+        getProperty<int>(xPropertySet, "FooterFillBitmapPositionOffsetY"));
+    CPPUNIT_ASSERT_EQUAL(3,
+        getProperty<int>(xPropertySet, "FooterFillBitmapOffsetX"));
 }
 
 
