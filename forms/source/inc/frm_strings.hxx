@@ -48,7 +48,7 @@ namespace frm
     #define PROPERTY_CYCLE                    "Cycle"
     #define PROPERTY_CONTROLSOURCE            "DataField"
     #define PROPERTY_ENABLED                  "Enabled"
-    #define PROPERTY_ENABLEVISIBLE                  "EnableVisible"
+    #define PROPERTY_ENABLEVISIBLE            "EnableVisible"
     #define PROPERTY_READONLY                 "ReadOnly"
     #define PROPERTY_RELEVANT                 "Relevant"
     #define PROPERTY_ISREADONLY               "IsReadOnly"
