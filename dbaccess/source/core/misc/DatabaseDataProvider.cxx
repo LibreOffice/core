@@ -47,6 +47,8 @@
 #include <vector>
 #include <list>
 
+// TODO: update for new HavingClause-aware FilterManager
+
 namespace dbaccess
 {
 using namespace ::com::sun::star;

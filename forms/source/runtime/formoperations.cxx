@@ -307,8 +307,10 @@ namespace frm
             case FormFeature::ToggleApplyFilter:
             {
                 OUString sFilter;
-                m_xCursorProperties->getPropertyValue( PROPERTY_FILTER ) >>= sFilter;
-                if ( !sFilter.isEmpty() )
+                OUString sHaving;
+                m_xCursorProperties->getPropertyValue( PROPERTY_FILTER )       >>= sFilter;
+                m_xCursorProperties->getPropertyValue( PROPERTY_HAVINGCLAUSE ) >>= sHaving;
+                if ( ! (sFilter.isEmpty() && sHaving.isEmpty()) )
                 {
                     aState.State = m_xCursorProperties->getPropertyValue( PROPERTY_APPLYFILTER );
                     aState.Enabled = !impl_isInsertOnlyForm_throw();
@@ -718,13 +720,15 @@ namespace frm
                 OSL_ENSURE( xProperties.is(), "FormOperations::execute: no multi property access!" );
                 if ( xProperties.is() )
                 {
-                    Sequence< OUString > aNames( 2 );
+                    Sequence< OUString > aNames( 3 );
                     aNames[0] = PROPERTY_FILTER;
-                    aNames[1] = PROPERTY_SORT;
+                    aNames[1] = PROPERTY_HAVINGCLAUSE;
+                    aNames[2] = PROPERTY_SORT;
 
-                    Sequence< Any> aValues( 2 );
+                    Sequence< Any> aValues( 3 );
                     aValues[0] <<= OUString();
                     aValues[1] <<= OUString();
+                    aValues[2] <<= OUString();
 
                     WaitObject aWO( nullptr );
                     xProperties->setPropertyValues( aNames, aValues );
@@ -1034,6 +1038,11 @@ namespace frm
                     if ( m_xParser->getFilter() != sNewValue )
                         m_xParser->setFilter( sNewValue );
                 }
+                else if ( _rEvent.PropertyName == PROPERTY_HAVINGCLAUSE )
+                {
+                    if ( m_xParser->getHavingClause() != sNewValue )
+                        m_xParser->setHavingClause( sNewValue );
+                }
                 else if ( _rEvent.PropertyName == PROPERTY_SORT )
                 {
                     _rEvent.NewValue >>= sNewValue;
@@ -1221,14 +1230,17 @@ namespace frm
                 {
                     OUString sStatement;
                     OUString sFilter;
+                    OUString sHaving;
                     OUString sSort;
 
                     m_xCursorProperties->getPropertyValue( PROPERTY_ACTIVECOMMAND   ) >>= sStatement;
                     m_xCursorProperties->getPropertyValue( PROPERTY_FILTER          ) >>= sFilter;
+                    m_xCursorProperties->getPropertyValue( PROPERTY_HAVINGCLAUSE    ) >>= sHaving;
                     m_xCursorProperties->getPropertyValue( PROPERTY_SORT            ) >>= sSort;
 
                     m_xParser->setElementaryQuery( sStatement );
                     m_xParser->setFilter         ( sFilter    );
+                    m_xParser->setHavingClause   ( sHaving    );
                     m_xParser->setOrder          ( sSort      );
                 }
 
@@ -1236,6 +1248,7 @@ namespace frm
                 // we can keep our parser in sync
                 m_xCursorProperties->addPropertyChangeListener( PROPERTY_ACTIVECOMMAND, this );
                 m_xCursorProperties->addPropertyChangeListener( PROPERTY_FILTER, this );
+                m_xCursorProperties->addPropertyChangeListener( PROPERTY_HAVINGCLAUSE, this );
                 m_xCursorProperties->addPropertyChangeListener( PROPERTY_SORT, this );
             }
         }
@@ -1257,6 +1270,7 @@ namespace frm
             if ( m_xParser.is() && m_xCursorProperties.is() )
             {
                 m_xCursorProperties->removePropertyChangeListener( PROPERTY_FILTER, this );
+                m_xCursorProperties->removePropertyChangeListener( PROPERTY_HAVINGCLAUSE, this );
                 m_xCursorProperties->removePropertyChangeListener( PROPERTY_ACTIVECOMMAND, this );
                 m_xCursorProperties->removePropertyChangeListener( PROPERTY_SORT, this );
             }
@@ -1337,7 +1351,9 @@ namespace frm
 
     bool FormOperations::impl_hasFilterOrOrder_throw() const
     {
-        return impl_isParseable_throw() && ( !m_xParser->getFilter().isEmpty() || !m_xParser->getOrder().isEmpty() );
+        return impl_isParseable_throw() && ( !m_xParser->getFilter().isEmpty() ||
+                                             !m_xParser->getHavingClause().isEmpty() ||
+                                             !m_xParser->getOrder().isEmpty() );
     }
 
 
@@ -1600,21 +1616,27 @@ namespace frm
                 return;
 
             OUString sOriginalFilter;
-            m_xCursorProperties->getPropertyValue( PROPERTY_FILTER ) >>= sOriginalFilter;
+            OUString sOriginalHaving;
+            m_xCursorProperties->getPropertyValue( PROPERTY_FILTER       ) >>= sOriginalFilter;
+            m_xCursorProperties->getPropertyValue( PROPERTY_HAVINGCLAUSE ) >>= sOriginalHaving;
             bool bApplied = true;
             m_xCursorProperties->getPropertyValue( PROPERTY_APPLYFILTER ) >>= bApplied;
 
             // if we have a filter, but it's not applied, then we have to overwrite it, else append one
             if ( !bApplied )
+            {
                 m_xParser->setFilter( OUString() );
+                m_xParser->setHavingClause( OUString() );
+            }
 
-            impl_appendFilterByColumn_throw aAction(this, xBoundField);
+            impl_appendFilterByColumn_throw aAction(this, m_xParser, xBoundField);
             impl_doActionInSQLContext_throw( aAction, RID_STR_COULD_NOT_SET_FILTER );
 
             WaitObject aWO( nullptr );
             try
             {
-                m_xCursorProperties->setPropertyValue( PROPERTY_FILTER, makeAny( m_xParser->getFilter() ) );
+                m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       makeAny( m_xParser->getFilter() ) );
+                m_xCursorProperties->setPropertyValue( PROPERTY_HAVINGCLAUSE, makeAny( m_xParser->getHavingClause() ) );
                 m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( true ) );
 
                 m_xLoadableForm->reload();
@@ -1629,9 +1651,11 @@ namespace frm
             {   // something went wrong -> restore the original state
                 try
                 {
-                    m_xParser->setOrder( sOriginalFilter );
+                    m_xParser->setFilter      ( sOriginalFilter );
+                    m_xParser->setHavingClause( sOriginalHaving );
                     m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( bApplied ) );
-                    m_xCursorProperties->setPropertyValue( PROPERTY_FILTER, makeAny( m_xParser->getFilter() ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       makeAny( m_xParser->getFilter() ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_HAVINGCLAUSE, makeAny( m_xParser->getHavingClause() ) );
                     m_xLoadableForm->reload();
                 }
                 catch( const Exception& )
@@ -1678,7 +1702,10 @@ namespace frm
             {
                 WaitObject aWO( nullptr );
                 if ( _bFilter )
-                    m_xCursorProperties->setPropertyValue( PROPERTY_FILTER, makeAny( m_xParser->getFilter() ) );
+                {
+                    m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       makeAny( m_xParser->getFilter() ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_HAVINGCLAUSE, makeAny( m_xParser->getHavingClause() ) );
+                }
                 else
                     m_xCursorProperties->setPropertyValue( PROPERTY_SORT, makeAny( m_xParser->getOrder() ) );
                 m_xLoadableForm->reload();

@@ -245,7 +245,9 @@ namespace dbtools
 
 
     void ParameterManager::classifyLinks( const Reference< XNameAccess >& _rxParentColumns,
-        const Reference< XNameAccess >& _rxColumns, std::vector< OUString >& _out_rAdditionalFilterComponents )
+        const Reference< XNameAccess >& _rxColumns,
+        std::vector< OUString >& _out_rAdditionalFilterComponents,
+        std::vector< OUString >& _out_rAdditionalHavingComponents )
     {
         OSL_PRECOND( m_aMasterFields.size() == m_aDetailFields.size(),
             "ParameterManager::classifyLinks: master and detail fields should have the same length!" );
@@ -309,7 +311,10 @@ namespace dbtools
                     aInsertionPos.first->second.eType = ParameterClassification::LinkedByColumnName;
 
                     // remember the filter component
-                    _out_rAdditionalFilterComponents.push_back( sFilterCondition );
+                    if (isAggregateColumn(xDetailField))
+                        _out_rAdditionalHavingComponents.push_back( sFilterCondition );
+                    else
+                        _out_rAdditionalFilterComponents.push_back( sFilterCondition );
 
                     // remember the new "detail field" for this link
                     aStrippedDetailFields.push_back( sNewParamName );
@@ -381,7 +386,8 @@ namespace dbtools
 
             // classify the links - depending on what the detail fields in each link pair denotes
             std::vector< OUString > aAdditionalFilterComponents;
-            classifyLinks( xParentColumns, xColumns, aAdditionalFilterComponents );
+            std::vector< OUString > aAdditionalHavingComponents;
+            classifyLinks( xParentColumns, xColumns, aAdditionalFilterComponents, aAdditionalHavingComponents );
 
             // did we find links where the detail field refers to a detail column (instead of a parameter name)?
             if ( !aAdditionalFilterComponents.empty() )
@@ -401,8 +407,31 @@ namespace dbtools
                     sAdditionalFilter.append(" )");
                 }
 
-                // now set this filter at the 's filter manager
+                // now set this filter at the filter manager
                 _rFilterManager.setFilterComponent( FilterManager::FilterComponent::LinkFilter, sAdditionalFilter.makeStringAndClear() );
+
+                _rColumnsInLinkDetails = true;
+            }
+
+            if ( !aAdditionalHavingComponents.empty() )
+            {
+                // build a conjunction of all the filter components
+                OUStringBuffer sAdditionalHaving;
+                for (   std::vector< OUString >::const_iterator aComponent = aAdditionalHavingComponents.begin();
+                        aComponent != aAdditionalHavingComponents.end();
+                        ++aComponent
+                    )
+                {
+                    if ( !sAdditionalHaving.isEmpty() )
+                        sAdditionalHaving.append(" AND ");
+
+                    sAdditionalHaving.append("( ");
+                    sAdditionalHaving.append(*aComponent);
+                    sAdditionalHaving.append(" )");
+                }
+
+                // now set this having clause at the filter manager
+                _rFilterManager.setFilterComponent( FilterManager::FilterComponent::LinkHaving, sAdditionalHaving.makeStringAndClear() );
 
                 _rColumnsInLinkDetails = true;
             }

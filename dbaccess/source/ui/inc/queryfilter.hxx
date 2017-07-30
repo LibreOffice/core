@@ -94,12 +94,12 @@ namespace dbaui
         DECL_LINK( ListSelectHdl, ListBox&, void );
         DECL_LINK( ListSelectCompHdl, ListBox&, void );
 
-        void            SetLine( sal_uInt16 nIdx,const css::beans::PropertyValue& _rItem,bool _bOr );
+        void            SetLine( int nIdx, const css::beans::PropertyValue& _rItem, bool _bOr );
         void            EnableLines();
         sal_Int32       GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const;
         static sal_Int32  GetSelectionPos(sal_Int32 eType,const ListBox& rListBox);
         bool            getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,css::beans::PropertyValue& _rFilter) const;
-        void            fillLines(const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& _aValues);
+        void            fillLines(int &i, const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& _aValues);
 
         css::uno::Reference< css::beans::XPropertySet > getMatchingColumn( const Edit& _rValueInput ) const;
         css::uno::Reference< css::beans::XPropertySet > getColumn( const OUString& _rFieldName ) const;
