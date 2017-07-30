@@ -27,7 +27,7 @@ private:
 
 
     void testOperations() {
-        int some_data[] { 1, 2, 3 };
+        int const some_data[] { 1, 2, 3 };
         o3tl::array_view<int> v(some_data);
 
         CPPUNIT_ASSERT_EQUAL(1, *v.begin());
@@ -61,8 +61,8 @@ private:
         CPPUNIT_ASSERT_EQUAL(3, v.back());
         CPPUNIT_ASSERT_EQUAL(1, *v.data());
         {
-            int d1[] { 1, 2 };
-            int d2[] { 3, 4, 5, 6 };
+            int const d1[] { 1, 2 };
+            int const d2[] { 3, 4, 5, 6 };
             o3tl::array_view<int> v1( d1 );
             o3tl::array_view<int> v2( d2 );
             v1.swap(v2);

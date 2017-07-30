@@ -619,7 +619,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 break;
             }
 #if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
-            const char* ppFormats[] = { "SANE_FRAME_GRAY", "SANE_FRAME_RGB",
+            const char* const ppFormats[] = { "SANE_FRAME_GRAY", "SANE_FRAME_RGB",
                                   "SANE_FRAME_RED", "SANE_FRAME_GREEN",
                                   "SANE_FRAME_BLUE", "Unknown !!!" };
             fprintf( stderr, "Parameters for frame %d:\n", nStream );

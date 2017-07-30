@@ -438,7 +438,7 @@ void SwSortDlg::LanguageHdl(ListBox* pLBox)
 
     const int nLstBoxCnt = 3;
     ListBox* aLstArr[ nLstBoxCnt ] = { m_pTypDLB1, m_pTypDLB2, m_pTypDLB3 };
-    sal_uInt16* aTypeArr[ nLstBoxCnt ] = { &nType1, &nType2, &nType3 };
+    sal_uInt16* const aTypeArr[ nLstBoxCnt ] = { &nType1, &nType2, &nType3 };
     OUString aOldStrArr[ nLstBoxCnt ];
 
     for( int n = 0; n < nLstBoxCnt; ++n )

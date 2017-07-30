@@ -2105,7 +2105,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     HexFmt *h = HexFmtNew(outf);
     sal_uInt16 i, numTables = GetUInt16(sfntP, 4);
     GlyphOffsets *go = GlyphOffsetsNew(sfntP, sfntLen);
-    sal_uInt8 pad[] = {0,0,0,0};                     /* zeroes                       */
+    sal_uInt8 const pad[] = {0,0,0,0};                     /* zeroes                       */
 
     if (numTables > nMaxPossibleTables)
     {

@@ -1332,7 +1332,7 @@ void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
         nTime = tools::Time( tools::Time::SYSTEM ).GetTime();
     }
 
-    SwFieldIds aTypes[5] = {
+    SwFieldIds const aTypes[] {
         /*0*/   SwFieldIds::DocInfo,
         /*1*/   SwFieldIds::Author,
         /*2*/   SwFieldIds::ExtUser,

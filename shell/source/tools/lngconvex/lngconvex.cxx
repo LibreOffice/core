@@ -343,7 +343,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
         StreamExceptionsEnabler sexc_in(in);
 
         //skip the byte-order-mark 0xEF 0xBB 0xBF, identifying UTF8 files
-        unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};
+        unsigned char const BOM[3] = {0xEF, 0xBB, 0xBF};
         char buff[3];
         in.read(&buff[0], 3);
 

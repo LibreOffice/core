@@ -114,6 +114,9 @@ public:
         // macros managing to generate to a valid warning
         if (fn == SRCDIR "/solenv/bin/concat-deps.c")
              return;
+        // TODO bug in the plugin
+        if (fn == SRCDIR "/vcl/unx/generic/app/saldisp.cxx")
+            return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
@@ -220,6 +223,9 @@ public:
                     if (loplugin::TypeCheck(qt).LvalueReference().NonConst()) {
                         recordIgnore(expr->getArg(i));
                     }
+                    if (loplugin::TypeCheck(qt).Pointer().NonConst()) {
+                        recordIgnore(expr->getArg(i));
+                    }
                 }
             }
         }
@@ -233,6 +239,9 @@ public:
             if (i < cxxConstructorDecl->getNumParams()) {
                 QualType qt { cxxConstructorDecl->getParamDecl(i)->getType() };
                 if (loplugin::TypeCheck(qt).LvalueReference().NonConst()) {
+                    recordIgnore(expr->getArg(i));
+                }
+                if (loplugin::TypeCheck(qt).Pointer().NonConst()) {
                     recordIgnore(expr->getArg(i));
                 }
             }
@@ -321,9 +330,7 @@ bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
         return true;
     }
     auto const tc = loplugin::TypeCheck(varDecl->getType());
-    if (!varDecl->getType()->isScalarType()
-        && !varDecl->getType()->isBooleanType()
-        && !varDecl->getType()->isEnumeralType()
+    if (!varDecl->getType().isCXX11PODType(compiler.getASTContext())
         && !tc.Class("OString").Namespace("rtl").GlobalNamespace()
         && !tc.Class("OUString").Namespace("rtl").GlobalNamespace()
         && !tc.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
@@ -346,22 +353,14 @@ bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
     if (auto e = dyn_cast<ExprWithCleanups>(initExpr)) {
         initExpr = e->getSubExpr();
     }
-    if (auto stringLit = dyn_cast<clang::StringLiteral>(initExpr)) {
+    if (isa<clang::StringLiteral>(initExpr)) {
         foundStringLiteral = true;
-        // ignore long literals, helps to make the code more legible
-        if (stringLit->getLength() > 40) {
-            return true;
-        }
     } else if (auto constructExpr = dyn_cast<CXXConstructExpr>(initExpr)) {
         if (constructExpr->getNumArgs() == 0) {
             foundStringLiteral = true; // i.e., empty string
         } else {
             auto stringLit2 = dyn_cast<clang::StringLiteral>(constructExpr->getArg(0));
             foundStringLiteral = stringLit2 != nullptr;
-            // ignore long literals, helps to make the code more legible
-            if (stringLit2 && stringLit2->getLength() > 40) {
-                return true;
-            }
         }
     }
     if (!foundStringLiteral) {

@@ -2661,7 +2661,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
         {
             {
                 // B2:B7 should show A,B,....,F.
-                const char* expected[] = { "A", "B", "C", "D", "E", "F" };
+                const char* const expected[] = { "A", "B", "C", "D", "E", "F" };
                 for (SCROW i = 0; i <= 5; ++i)
                 {
                     ScAddress aPos(1,i+1,0);
@@ -2677,7 +2677,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
 
             {
                 // C2:C7 should show AA,BB,....,FF.
-                const char* expected[] = { "AA", "BB", "CC", "DD", "EE", "FF" };
+                const char* const expected[] = { "AA", "BB", "CC", "DD", "EE", "FF" };
                 for (SCROW i = 0; i <= 5; ++i)
                 {
                     ScAddress aPos(2,i+1,0);

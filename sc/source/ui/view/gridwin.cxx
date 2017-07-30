@@ -1131,12 +1131,11 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
             }
             else
             {
-                ScTypedStrData::EqualCaseSensitive aHdl;
                 std::vector<ScTypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();
                 std::vector<ScTypedStrData>::const_iterator it = itBeg;
                 for (; it != itEnd && LISTBOX_ENTRY_NOTFOUND == nSelPos; ++it)
                 {
-                    if (aHdl(*it, *pNew))
+                    if (ScTypedStrData::EqualCaseSensitive()(*it, *pNew))
                         nSelPos = std::distance(itBeg, it);
                 }
             }

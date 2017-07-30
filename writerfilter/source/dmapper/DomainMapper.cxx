@@ -2919,7 +2919,7 @@ void DomainMapper::lcl_endSectionGroup()
             // style, so force a dummy paragraph.
             lcl_startParagraphGroup();
             lcl_startCharacterGroup();
-            sal_uInt8 sBreak[] = { 0xd };
+            sal_uInt8 const sBreak[] = { 0xd };
             lcl_text(sBreak, 1);
             lcl_endCharacterGroup();
             lcl_endParagraphGroup();
@@ -3006,7 +3006,7 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
         {
             m_pImpl->clearDeferredBreak(PAGE_BREAK);
             lcl_startCharacterGroup();
-            sal_uInt8 sBreak[] = { 0xd };
+            sal_uInt8 const sBreak[] = { 0xd };
             lcl_text(sBreak, 1);
             lcl_endCharacterGroup();
             lcl_endParagraphGroup();

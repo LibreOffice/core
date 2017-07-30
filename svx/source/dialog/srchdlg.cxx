@@ -506,9 +506,8 @@ void SvxSearchDialog::Construct_Impl()
         {
             uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
                     configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
-            uno::Sequence< uno::Any > aArgs(1);
-            OUString sPath( "/org.openoffice.Office.Common/SearchOptions/");
-            aArgs[0] <<= sPath;
+            uno::Sequence< uno::Any > aArgs {
+                        Any(OUString( "/org.openoffice.Office.Common/SearchOptions/")) };
 
             uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationUpdateAccess",

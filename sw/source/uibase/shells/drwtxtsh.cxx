@@ -295,9 +295,8 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                 if (!xMCF.is())
                     return;
 
-                OUString sService("com.sun.star.linguistic2.ChineseTranslationDialog");
                 Reference<ui::dialogs::XExecutableDialog> xDialog(
-                        xMCF->createInstanceWithContext(sService, xContext), UNO_QUERY);
+                        xMCF->createInstanceWithContext("com.sun.star.linguistic2.ChineseTranslationDialog", xContext), UNO_QUERY);
 
                 Reference<lang::XInitialization> xInit(xDialog, UNO_QUERY);
 

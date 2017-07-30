@@ -566,9 +566,9 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
         {
             glDrawBuffer( GL_COLOR_ATTACHMENT0 );
 #if OSL_DEBUG_LEVEL > 0 // lets have some red debugging background.
-            GLfloat clearColor[4] = { 1.0, 0, 0, 0 };
+            GLfloat const clearColor[4] = { 1.0, 0, 0, 0 };
 #else
-            GLfloat clearColor[4] = { 1.0, 1.0, 1.0, 0 };
+            GLfloat const clearColor[4] = { 1.0, 1.0, 1.0, 0 };
 #endif
             glClearBufferfv( GL_COLOR, 0, clearColor );
             // FIXME: use glClearTexImage if we have it ?

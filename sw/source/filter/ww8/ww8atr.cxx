@@ -1585,7 +1585,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
         rStrm.WriteBytes( aEmptyHeader, nEmptyHdrLen );
         // writer fixed header
         const sal_uInt16 nFixHdrLen = 0x19;
-        sal_uInt8 aFixHeader[ nFixHdrLen ] =
+        sal_uInt8 const aFixHeader[ nFixHdrLen ] =
         {
             0x08, 0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE,
             0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9,

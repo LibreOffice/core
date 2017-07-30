@@ -911,8 +911,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                          ""
                     };
 
-                    const char** pHelpIds = bCreateHtml ? aHTMLHelpIds : aMasterHelpIds;
-                    aDlgHelper.SetControlHelpIds( nControlIds, pHelpIds );
+                    if (bCreateHtml)
+                        aDlgHelper.SetControlHelpIds( nControlIds, aHTMLHelpIds );
+                    else
+                        aDlgHelper.SetControlHelpIds( nControlIds, aMasterHelpIds );
                     uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
                     std::shared_ptr<const SfxFilter> pFlt;

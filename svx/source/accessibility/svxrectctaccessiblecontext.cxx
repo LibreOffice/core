@@ -499,11 +499,9 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getSelectedAccess
 
 void SAL_CALL SvxRectCtlAccessibleContext::deselectAccessibleChild( sal_Int32 /*nIndex*/ )
 {
-    OUString aMessage( "deselectAccessibleChild is not possible in this context" );
-
     SAL_WARN( "svx", "SvxRectCtlAccessibleContext::deselectAccessibleChild() is not possible!" );
 
-    throw lang::IndexOutOfBoundsException( aMessage, *this );   // never possible
+    throw lang::IndexOutOfBoundsException( "deselectAccessibleChild is not possible in this context", *this );   // never possible
 }
 
 // internals

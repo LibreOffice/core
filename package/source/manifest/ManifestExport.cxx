@@ -187,8 +187,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     uno::Reference < xml::sax::XExtendedDocumentHandler > xExtHandler ( xHandler, uno::UNO_QUERY );
     if ( xExtHandler.is() && bProvideDTD )
     {
-        OUString aDocType ( MANIFEST_DOCTYPE );
-        xExtHandler->unknown ( aDocType );
+        xExtHandler->unknown ( MANIFEST_DOCTYPE );
         xHandler->ignorableWhitespace ( sWhiteSpace );
     }
     xHandler->startElement( sManifestElement, xRootAttrList );

@@ -549,7 +549,7 @@ void RTFDocumentImpl::runProps()
 
 void RTFDocumentImpl::runBreak()
 {
-    sal_uInt8 sBreak[] = { 0xd };
+    sal_uInt8 const sBreak[] = { 0xd };
     Mapper().text(sBreak, 1);
     m_bNeedCr = false;
 }

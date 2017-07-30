@@ -262,19 +262,19 @@ public:
                     0.1, 0.1, 0.1, 0.1
                 };
 #endif
-                drawing::LineCap eLineCaps[] = {
+                drawing::LineCap const eLineCaps[] = {
                     drawing::LineCap_BUTT, drawing::LineCap_ROUND, drawing::LineCap_SQUARE, drawing::LineCap_BUTT,
                     drawing::LineCap_BUTT, drawing::LineCap_ROUND, drawing::LineCap_SQUARE, drawing::LineCap_BUTT,
                     drawing::LineCap_BUTT, drawing::LineCap_ROUND, drawing::LineCap_SQUARE, drawing::LineCap_BUTT,
                     drawing::LineCap_BUTT, drawing::LineCap_ROUND, drawing::LineCap_SQUARE, drawing::LineCap_BUTT
                 };
-                basegfx::B2DLineJoin eJoins[] = {
+                basegfx::B2DLineJoin const eJoins[] = {
                     basegfx::B2DLineJoin::NONE, basegfx::B2DLineJoin::Bevel, basegfx::B2DLineJoin::Miter, basegfx::B2DLineJoin::Round,
                     basegfx::B2DLineJoin::NONE, basegfx::B2DLineJoin::Bevel, basegfx::B2DLineJoin::Miter, basegfx::B2DLineJoin::Round,
                     basegfx::B2DLineJoin::NONE, basegfx::B2DLineJoin::Bevel, basegfx::B2DLineJoin::Miter, basegfx::B2DLineJoin::Round,
                     basegfx::B2DLineJoin::NONE, basegfx::B2DLineJoin::Bevel, basegfx::B2DLineJoin::Miter, basegfx::B2DLineJoin::Round
                 };
-                double aLineWidths[] = {
+                double const aLineWidths[] = {
                     10.0, 15.0, 20.0, 10.0,
                     10.0, 15.0, 20.0, 10.0,
                     10.0, 15.0, 20.0, 10.0,
@@ -408,7 +408,7 @@ public:
 
             std::vector<OUString> aFontNames;
 
-            sal_uInt32 nCols[] = {
+            sal_uInt32 const nCols[] = {
                 COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN, COL_RED, COL_MAGENTA,
                 COL_BROWN, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN,
                 COL_LIGHTCYAN, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE
@@ -562,7 +562,7 @@ public:
                 FontWeight aWeights[] = { WEIGHT_NORMAL,
                                           WEIGHT_BOLD,
                                           WEIGHT_NORMAL };
-                FontItalic aItalics[] = { ITALIC_NONE,
+                FontItalic const aItalics[] = { ITALIC_NONE,
                                           ITALIC_NONE,
                                           ITALIC_NORMAL };
                 vcl::Font aFont(OUString::createFromAscii(
@@ -1127,8 +1127,8 @@ public:
                 std::vector<tools::Rectangle> aRegions(DemoRenderer::partition(rCtx,2, 2));
                 DemoRenderer::clearRects(rDev, aRegions);
 
-                RenderType eRenderTypes[] = { RENDER_AS_BITMAP, RENDER_AS_OUTDEV,
-                                              RENDER_AS_BITMAPEX, RENDER_AS_ALPHA_OUTDEV };
+                RenderType const eRenderTypes[] { RENDER_AS_BITMAP, RENDER_AS_OUTDEV,
+                                                  RENDER_AS_BITMAPEX, RENDER_AS_ALPHA_OUTDEV };
                 for (size_t i = 0; i < aRegions.size(); i++)
                     SizeAndRender(rDev, aRegions[i], eRenderTypes[i], rCtx);
             }

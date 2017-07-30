@@ -359,7 +359,7 @@ ContextHandlerRef ArtisticEffectContext::onCreateContext(
         return nullptr;
 
     // effect attributes
-    sal_Int32 aAttribs[19] = {
+    sal_Int32 const aAttribs[19] = {
             XML_visible, XML_trans, XML_crackSpacing, XML_pressure, XML_numberOfShades,
             XML_grainSize, XML_intensity, XML_smoothness, XML_gridSize, XML_pencilSize,
             XML_size, XML_brushSize, XML_scaling, XML_detail, XML_bright, XML_contrast,

@@ -1098,11 +1098,6 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 mxSFI->move( aFolderUserBasic, aPrevFolder );
                 mxSFI->move( aFolderTmp, aFolderUserBasic );
 
-                OUString aUserSearchStr("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE");
-                OUString aSharedSearchStr("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE");
-                OUString const aBundledSearchStr("vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
-                OUString const aInstSearchStr("$(INST)");
-
                 Sequence< OUString > aNames = pPrevCont->getElementNames();
                 const OUString* pNames = aNames.getConstArray();
                 sal_Int32 nNameCount = aNames.getLength();
@@ -1129,10 +1124,10 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     {
                         OUString aStorageURL = pImplLib->maUnexpandedStorageURL;
                         bool bCreateLink = true;
-                        if( aStorageURL.indexOf( aUserSearchStr   ) != -1 ||
-                            aStorageURL.indexOf( aSharedSearchStr ) != -1 ||
-                            aStorageURL.indexOf( aBundledSearchStr ) != -1 ||
-                            aStorageURL.indexOf( aInstSearchStr   ) != -1 )
+                        if( aStorageURL.indexOf( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE"   ) != -1 ||
+                            aStorageURL.indexOf( "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE" ) != -1 ||
+                            aStorageURL.indexOf( "vnd.sun.star.expand:$BUNDLED_EXTENSIONS" ) != -1 ||
+                            aStorageURL.indexOf( "$(INST)"   ) != -1 )
                         {
                             bCreateLink = false;
                         }
@@ -2207,14 +2202,12 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     maNameContainer->insertByName( Name, aElement );
     maModifiable.setModified( true );
 
-    OUString aUserSearchStr("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE");
-    OUString aSharedSearchStr("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE");
-    OUString const aBundledSearchStr("vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
-    if( StorageURL.indexOf( aUserSearchStr ) != -1 )
+    if( StorageURL.indexOf( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE" ) != -1 )
     {
         pNewLib->mbExtension = true;
     }
-    else if( StorageURL.indexOf( aSharedSearchStr ) != -1 || StorageURL.indexOf( aBundledSearchStr ) != -1 )
+    else if( StorageURL.indexOf( "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE" ) != -1
+           || StorageURL.indexOf( "vnd.sun.star.expand:$BUNDLED_EXTENSIONS" ) != -1 )
     {
         pNewLib->mbExtension = true;
         pNewLib->mbReadOnly = true;

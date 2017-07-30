@@ -192,7 +192,7 @@ void DebugEventInjector::InjectKeyNavEdit()
     struct {
         double     mnProb;
         sal_uInt16 mnKey;
-    } nWeights[] = {
+    } const nWeights[] = {
         // edit / escape etc. - 50%
         { 0.20, KEY_SPACE },
         { 0.10, KEY_TAB },

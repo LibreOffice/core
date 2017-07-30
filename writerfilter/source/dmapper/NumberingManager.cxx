@@ -295,13 +295,12 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
 //  nXChFollow; following character 0 - tab, 1 - space, 2 - nothing
     aNumberingProperties.push_back(lcl_makePropVal(PROP_LEVEL_FOLLOW, m_nXChFollow));
 
-    const int nIds = 5;
-    PropertyIds aReadIds[nIds] =
+    PropertyIds const aReadIds[] =
     {
         PROP_ADJUST, PROP_INDENT_AT, PROP_FIRST_LINE_INDENT,
-            PROP_FIRST_LINE_OFFSET, PROP_LEFT_MARGIN
+        PROP_FIRST_LINE_OFFSET, PROP_LEFT_MARGIN
     };
-    for(PropertyIds & rReadId : aReadIds) {
+    for(PropertyIds const & rReadId : aReadIds) {
         boost::optional<PropertyMap::Property> aProp = getProperty(rReadId);
         if (aProp)
             aNumberingProperties.push_back(

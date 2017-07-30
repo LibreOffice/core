@@ -75,8 +75,7 @@ bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& lef
 bool ScTypedStrData::operator< (const ScTypedStrData& r) const
 {
     // Case insensitive comparison by default.
-    LessCaseInsensitive aHdl;
-    return aHdl(*this, r);
+    return LessCaseInsensitive()(*this, r);
 }
 
 ScTypedStrData::ScTypedStrData(
@@ -99,13 +98,11 @@ bool FindTypedStrData::operator() (const ScTypedStrData& r) const
 {
     if (mbCaseSens)
     {
-        ScTypedStrData::EqualCaseSensitive aHdl;
-        return aHdl(maVal, r);
+        return ScTypedStrData::EqualCaseSensitive()(maVal, r);
     }
     else
     {
-        ScTypedStrData::EqualCaseInsensitive aHdl;
-        return aHdl(maVal, r);
+        return ScTypedStrData::EqualCaseInsensitive()(maVal, r);
     }
 }
 

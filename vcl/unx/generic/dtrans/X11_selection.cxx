@@ -1077,8 +1077,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
 
             // prepare property for MULTIPLE request
             Sequence< sal_Int8 > aData;
-            Atom pTypes[4] = { XA_PIXMAP, XA_PIXMAP,
-            XA_COLORMAP, XA_COLORMAP };
+            Atom const pTypes[4] = { XA_PIXMAP, XA_PIXMAP, XA_COLORMAP, XA_COLORMAP };
             {
                 osl::MutexGuard aGuard(m_aMutex);
 
@@ -1088,7 +1087,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                     XA_ATOM,
                     32,
                     PropModeReplace,
-                    reinterpret_cast<unsigned char*>(pTypes),
+                    reinterpret_cast<unsigned char const *>(pTypes),
                     4 );
             }
 

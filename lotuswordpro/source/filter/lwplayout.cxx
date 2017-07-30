@@ -814,10 +814,10 @@ XFBorders* LwpMiddleLayout::GetXFBorders()
         //copy from lwpparastyle.
         XFBorders   *pXFBorders = new XFBorders();
         // apply 4 borders respectively
-        LwpBorderStuff::BorderType pType[] = { LwpBorderStuff::LEFT, LwpBorderStuff::RIGHT,
+        LwpBorderStuff::BorderType const pType[] = { LwpBorderStuff::LEFT, LwpBorderStuff::RIGHT,
             LwpBorderStuff::TOP, LwpBorderStuff::BOTTOM };
 
-        for (LwpBorderStuff::BorderType & nC : pType)
+        for (LwpBorderStuff::BorderType nC : pType)
         {
             if (pBorderStuff->HasSide(nC))
             {

@@ -1235,7 +1235,7 @@ void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset )
         { svx::FrameBorderType::Left,SvxBoxInfoItemValidFlags::LEFT },
         { svx::FrameBorderType::Right,SvxBoxInfoItemValidFlags::RIGHT },
     };
-    SvxBoxItemLine eTypes2[] = {
+    SvxBoxItemLine const eTypes2[] = {
         SvxBoxItemLine::TOP,
         SvxBoxItemLine::BOTTOM,
         SvxBoxItemLine::LEFT,

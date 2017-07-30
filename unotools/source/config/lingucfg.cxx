@@ -1130,9 +1130,7 @@ OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
     OUString   aRes;
     if (!rServiceImplName.isEmpty())
     {
-        OUString aImageName( "SpellAndGrammarContextMenuSuggestionImage" );
-        OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
-        aRes = aPath;
+        aRes = GetVendorImageUrl_Impl( rServiceImplName, "SpellAndGrammarContextMenuSuggestionImage" );
     }
     return aRes;
 }
@@ -1144,9 +1142,7 @@ OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
     OUString   aRes;
     if (!rServiceImplName.isEmpty())
     {
-        OUString aImageName( "SpellAndGrammarContextMenuDictionaryImage" );
-        OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
-        aRes = aPath;
+        aRes = GetVendorImageUrl_Impl( rServiceImplName, "SpellAndGrammarContextMenuDictionaryImage" );
     }
     return aRes;
 }
