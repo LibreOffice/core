@@ -3667,9 +3667,38 @@ void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice&
     nHeight = aSize.getHeight();
 }
 
-void SwXTextDocument::postDialogKeyEvent(const vcl::DialogID& /*rDialogID*/, int /*nType*/, int /*nCharCode*/, int /*nKeyCode*/)
+void SwXTextDocument::postDialogKeyEvent(const vcl::DialogID& rDialogID, int nType, int nCharCode, int nKeyCode)
 {
+    SolarMutexGuard aGuard;
 
+    // check if dialog is already open
+    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
+    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
+    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
+    if (!pSlot)
+    {
+        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
+        return;
+    }
+    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
+    if (pChild)
+    {
+        Dialog* pDialog = static_cast<Dialog*>(pChild->GetWindow());
+        KeyEvent aEvent(nCharCode, nKeyCode, 0);
+
+        switch (nType)
+        {
+        case LOK_KEYEVENT_KEYINPUT:
+            pDialog->LOKKeyInput(aEvent);
+            break;
+        case LOK_KEYEVENT_KEYUP:
+            pDialog->LOKKeyUp(aEvent);
+            break;
+        default:
+            assert(false);
+            break;
+        }
+    }
 }
 
 void SwXTextDocument::postDialogMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
