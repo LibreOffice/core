@@ -898,6 +898,20 @@ void Dialog::LogicMouseMove(const MouseEvent& rMouseEvent)
     ImplWindowFrameProc(this, SalEvent::ExternalMouseMove, &rMouseEvent);
 }
 
+void Dialog::LOKKeyInput(const KeyEvent& rKeyEvent)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplWindowFrameProc(this, SalEvent::ExternalKeyInput, &rKeyEvent);
+}
+
+void Dialog::LOKKeyUp(const KeyEvent& rKeyEvent)
+{
+    assert(comphelper::LibreOfficeKit::isActive());
+
+    ImplWindowFrameProc(this, SalEvent::ExternalKeyUp, &rKeyEvent);
+}
+
 void Dialog::ensureRepaint()
 {
     // ensure repaint
