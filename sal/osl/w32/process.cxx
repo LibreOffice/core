@@ -448,6 +448,70 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 
 #define ENV_BUFFER_SIZE (32*1024-1)
 
+oslProcessError SAL_CALL osl_getAllEnvironment(rtl_uString **ppustrVars)
+{
+    sal_uInt32 countenv = 0;
+
+    if (ppustrVars)
+    {
+        rtl_uString **temp;
+        for (temp = ppustrVars; *temp; ++temp)
+            rtl_freeMemory(*temp);
+
+        rtl_freeMemory(temp);
+    }
+
+    /* GetEnvironmentStrings() returns a string of strings... in other words, it returns an
+       environemnt block that contains the environment variables in the following format:
+
+       Var1=Value1\0
+       Var2=Value2\0
+       Var3=Value3\0
+       ...
+       VarN=ValueN\0\0
+
+       In other words, it signals its last record with an empty (zero character) string.
+
+       cf. https://msdn.microsoft.com/en-us/library/windows/desktop/ms683187.aspx
+    */
+    LPWCH environVar = GetEnvironmentStringsW();    // this is actually one long string of multiple
+                                                    // strings seperated by nullptr
+
+    if (!environVar)
+    {
+        SAL_WARN("sal.osl", "GetEnvironmentStringsW failed (" << GetLastError() << ").\n");
+        return osl_Process_E_Unknown;
+    }
+
+    LPWSTR env = reinterpret_cast< LPWSTR >(environVar);
+
+    // get the number of strings
+    while (*env)
+    {
+        env += lstrlen(env) + 1;                    // fast-forward pointer to next string after the '\0'
+        countenv++;
+    }
+
+    ppustrVars = static_cast<rtl_uString**>(rtl_allocateMemory(sizeof(rtl_uString*) * countenv));
+
+    env = reinterpret_cast< LPWSTR > (environVar);  // reset back to the environment string of strings
+
+    // copy strings into rtl_uString array
+    while (*env)
+    {
+        rtl_uString *pStrTmp = nullptr;
+        rtl_uString_newFromStr(&pStrTmp, reinterpret_cast< const sal_Unicode* >(env)); // new string from environment variable
+        env += lstrlen(env) + 1;                    // fast-foward pointer to next string after the '\0'
+        *ppustrVars = pStrTmp;                      // assign temp string to string array
+        ++ppustrVars;                               // move forward to next rtl_uString pointer
+    }
+
+    FreeEnvironmentStrings(environVar);
+
+    return osl_Process_E_None;
+}
+
+
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
 {
     WCHAR buff[ENV_BUFFER_SIZE];

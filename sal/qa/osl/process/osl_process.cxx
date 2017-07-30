@@ -446,6 +446,50 @@ public:
         osl_freeProcessHandle(process);
     }
 
+    void osl_execProc_test_getAllEnvironment()
+    {
+        // What is the return from the osl_getAllEnvironment function?
+        // Is it the pointer to an array of rtl_uString, where the last rtl_uString
+        // has some specific value (e.g. empty) to indicate end-of-array?
+        // Maybe better to also return length of array to avoid the special value?
+        // Or is it an array of pointers to rtl_uString (ending with nullptr)?
+
+        // Which scenario is supported?
+        {
+            // First scenario. We ignore strVars value on input in osl_getAllEnvironment;
+            // user must make sure that current valid value is properly disposed or pointer
+            // saved before calling osl_getAllEnvironment that will simply overwrite the address
+
+//            rtl_uString* strVars; // to be populated with array. Uninitialized!
+//            rtl_uString const* strVarsInitial = strVars;
+//            auto result = osl_getAllEnvironment(&strVars);
+//            CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, result);
+//            CPPUNIT_ASSERT(strVarsInitial != strVars);
+        }
+        {
+            // Second scenario. We consider strVars value on input in osl_getAllEnvironment;
+            // any non-null value is disposed in the osl_getAllEnvironment, thus passing
+            // uninitialized value to the function is user error (will likely segfault)
+
+            rtl_uString* strVars = nullptr; // Initialized
+            rtl_uString const* strVarsInitial = strVars;
+            auto result = osl_getAllEnvironment(&strVars);
+            CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, result);
+            CPPUNIT_ASSERT(strVarsInitial != strVars);
+
+            while (strVars)
+            {
+                OUString s(strVars);
+                std::wcout << s.getStr() << L"\n";
+            }
+
+            rtl_uString* strVars1 = strVars; // Initialized with old return value - to be disposed in function
+            result = osl_getAllEnvironment(&strVars);
+            CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, result);
+            CPPUNIT_ASSERT(strVars != strVars1);
+        }
+    }
+
     CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
     //TODO: Repair these (at least under Windows)
 #if !defined(_WIN32)
@@ -453,6 +497,7 @@ public:
     CPPUNIT_TEST(osl_execProc_merged_child_environment);
 #endif
     CPPUNIT_TEST(osl_execProc_test_batch);
+    CPPUNIT_TEST(osl_execProc_test_getAllEnvironment);
     ///TODO: Repair test (or tested function ;-) - test fails.
     CPPUNIT_TEST_SUITE_END();
 };
