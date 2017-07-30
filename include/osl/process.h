@@ -358,13 +358,21 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getCommandArg(
 
     @param[in] argc  The number of elements in the argv array.
     @param[in] argv  The array of command-line arguments.
+
     @see osl_getExecutableFile
     @see osl_getCommandArgCount
     @see osl_getCommandArg
 */
 SAL_DLLPUBLIC void SAL_CALL osl_setCommandArgs (int argc, char **argv);
 
+/** Get all the environment variables available to the current process.
+
+    @param[out] strVars all environment variables
+*/
+SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getAllEnvironment(rtl_uString **strVars);
+
 /** Get the value of one environment variable.
+
     @param[in] strVar  denotes the name of the variable to get.
     @param[out] strValue string that receives the value of environment variable.
 */
@@ -372,6 +380,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getEnvironment(
         rtl_uString *strVar, rtl_uString **strValue);
 
 /** Set the value of one environment variable.
+
     @param[in] strVar  denotes the name of the variable to set.
     @param[in] strValue  string of the new value of environment variable.
 
