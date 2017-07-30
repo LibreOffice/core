@@ -327,19 +327,16 @@ CSVDataProvider::~CSVDataProvider()
 
 void CSVDataProvider::Import()
 {
-    if (!mxCSVFetchThread.is())
+    ScDocument aDoc(SCDOCMODE_CLIP);
+    aDoc.ResetClip(mpDocument, (SCTAB)0);
+    mxCSVFetchThread = new CSVFetchThread(aDoc, maURL);
+    mxCSVFetchThread->launch();
+    if (mxCSVFetchThread.is())
     {
-        ScDocument aDoc(SCDOCMODE_CLIP);
-        aDoc.ResetClip(mpDocument, (SCTAB)0);
-        mxCSVFetchThread = new CSVFetchThread(aDoc, maURL);
-        mxCSVFetchThread->execute();
-        if (mxCSVFetchThread.is())
-        {
-            mxCSVFetchThread->join();
-        }
-
-        WriteToDoc(aDoc, mpDBDataManager->getDBData());
+        mxCSVFetchThread->join();
     }
+
+    WriteToDoc(aDoc, mpDBDataManager->getDBData());
 
     Refresh();
 }
