@@ -68,6 +68,7 @@
 #include <documentlinkmgr.hxx>
 #include <tokenstringcontext.hxx>
 #include <cellform.hxx>
+#include "datamapper.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>

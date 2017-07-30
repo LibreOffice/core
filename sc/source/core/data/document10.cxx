@@ -29,6 +29,7 @@
 #include <svl/whiter.hxx>
 #include <editeng/colritem.hxx>
 #include "scitems.hxx"
+#include "datamapper.hxx"
 
 // Add totally brand-new methods to this source file.
 

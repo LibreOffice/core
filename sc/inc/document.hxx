@@ -30,7 +30,6 @@
 #include "rangenam.hxx"
 #include "tabopparams.hxx"
 #include "types.hxx"
-#include "datamapper.hxx"
 #include <formula/grammar.hxx>
 #include <formula/types.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -87,6 +86,7 @@ class ColumnSet;
 class UpdatedRangeNames;
 class TableColumnBlockPositionSet;
 class ColumnIterator;
+class ExternalDataMapper;
 
 }
 

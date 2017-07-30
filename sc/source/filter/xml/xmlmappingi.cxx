@@ -17,6 +17,7 @@
 
 #include "datamapper.hxx"
 #include "document.hxx"
+#include "dbdata.hxx"
 
 #include <sax/tools/converter.hxx>
 
@@ -108,10 +109,15 @@ ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
     if (!aProvider.isEmpty())
     {
         ScDocument* pDoc = GetScImport().GetDocument();
-        auto& rDataMapper = pDoc->GetExternalDataMapper();
-        sc::ExternalDataSource aSource(aURL, aProvider);
-        aSource.setID(aID);
-        rDataMapper.insertDataSource(aSource);
+        ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aDBName));
+        if (pDBData)
+        {
+            auto& rDataMapper = pDoc->GetExternalDataMapper();
+            sc::ExternalDataSource aSource(aURL, aProvider);
+            aSource.setID(aID);
+            aSource.setDBData(pDBData);
+            rDataMapper.insertDataSource(aSource);
+        }
     }
 }
 
