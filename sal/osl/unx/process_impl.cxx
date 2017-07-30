@@ -119,9 +119,6 @@ oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 
 #endif
 
-/***************************************
- CommandArgs_Impl.
- **************************************/
 struct CommandArgs_Impl
 {
     pthread_mutex_t m_mutex;
@@ -136,9 +133,6 @@ static struct CommandArgs_Impl g_command_args =
     nullptr
 };
 
-/***************************************
-  osl_getExecutableFile().
- **************************************/
 oslProcessError SAL_CALL osl_getExecutableFile (rtl_uString ** ppustrFile)
 {
     pthread_mutex_lock (&(g_command_args.m_mutex));
@@ -154,9 +148,6 @@ oslProcessError SAL_CALL osl_getExecutableFile (rtl_uString ** ppustrFile)
     return osl_Process_E_None;
 }
 
-/***************************************
- osl_getCommandArgCount().
- **************************************/
 sal_uInt32 SAL_CALL osl_getCommandArgCount()
 {
     sal_uInt32 result = 0;
@@ -172,9 +163,6 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount()
     return result;
 }
 
-/***************************************
- osl_getCommandArg().
- **************************************/
 oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strCommandArg)
 {
     oslProcessError result = osl_Process_E_NotFound;
@@ -191,9 +179,6 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
     return result;
 }
 
-/***************************************
- osl_setCommandArgs().
- **************************************/
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
     assert(argc > 0);
@@ -249,9 +234,6 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
     pthread_mutex_unlock (&(g_command_args.m_mutex));
 }
 
-/***************************************
- osl_getEnvironment().
- **************************************/
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uString** ppustrValue)
 {
     oslProcessError  result   = osl_Process_E_NotFound;
@@ -284,9 +266,6 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
     return result;
 }
 
-/***************************************
- osl_setEnvironment().
- **************************************/
 oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uString* pustrValue)
 {
     oslProcessError  result   = osl_Process_E_Unknown;
@@ -340,9 +319,6 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
     return result;
 }
 
-/***************************************
- osl_clearEnvironment().
- **************************************/
 oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
 {
     oslProcessError  result   = osl_Process_E_Unknown;
@@ -372,9 +348,9 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
         else
             rtl_string_release(pBuffer);
 #elif (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
-        //MacOSX baseline is 10.4, which has an old-school void return
-        //for unsetenv.
-                //See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4
+        // MacOSX baseline is 10.4, which has an old-school void return
+        // for unsetenv.
+        // See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4
         unsetenv(rtl_string_getStr(pstr_env_var));
         result = osl_Process_E_None;
 #else
@@ -387,9 +363,6 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
     return result;
 }
 
-/***************************************
- osl_getProcessWorkingDir().
- **************************************/
 oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir)
 {
     oslProcessError result = osl_Process_E_Unknown;
@@ -416,12 +389,6 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
     return result;
 }
 
-/******************************************************************************
- *
- *              new functions to set/return the current process locale
- *
- *****************************************************************************/
-
 struct ProcessLocale_Impl
 {
     pthread_mutex_t m_mutex;
@@ -434,9 +401,6 @@ static struct ProcessLocale_Impl g_process_locale =
     nullptr
 };
 
-/**********************************************
- osl_getProcessLocale().
- *********************************************/
 oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
 {
     oslProcessError result = osl_Process_E_Unknown;
@@ -455,9 +419,6 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
     return result;
 }
 
-/**********************************************
- osl_setProcessLocale().
- *********************************************/
 oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
 {
     OSL_PRECOND(pLocale, "osl_setProcessLocale(): Invalid parameter.");
