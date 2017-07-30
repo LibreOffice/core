@@ -49,9 +49,6 @@ namespace drawinglayer
             double              mfExtendStart;
             double              mfExtendEnd;
 
-            // not implemented
-            virtual bool operator!=(const BorderLine& rBorderLine) const = delete;
-
         public:
             BorderLine(
                 double fWidth,
