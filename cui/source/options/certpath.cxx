@@ -57,11 +57,11 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
 
     try
     {
-        mozilla::MozillaProductType productTypes[3] = {
+        mozilla::MozillaProductType const productTypes[3] = {
             mozilla::MozillaProductType_Thunderbird,
             mozilla::MozillaProductType_Firefox,
             mozilla::MozillaProductType_Mozilla };
-        const char* productNames[3] = {
+        const char* const productNames[3] = {
             "thunderbird",
             "firefox",
             "mozilla" };

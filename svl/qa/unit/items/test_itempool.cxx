@@ -33,7 +33,7 @@ class PoolItemTest : public CppUnit::TestFixture
 
 void PoolItemTest::testPool()
 {
-    SfxItemInfo aItems[] =
+    SfxItemInfo const aItems[] =
         { { 1, true },
           { 2, false /* not poolable */ },
           { 3, false },

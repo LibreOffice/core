@@ -214,7 +214,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         // no format means use the current delimiter
         sProps.realloc( 3 );
         sProps[ nIndex ].Name = "FilterOptions";
-        sal_Int16 delims[] = { 0 /*default not used*/, 9/*tab*/, 44/*comma*/, 32/*space*/, 59/*semicolon*/ };
+        sal_Int16 const delims[] { 0 /*default not used*/, 9/*tab*/, 44/*comma*/, 32/*space*/, 59/*semicolon*/ };
 
         OUString sFormat;
         sal_Int16 nFormat = 0; // default indicator

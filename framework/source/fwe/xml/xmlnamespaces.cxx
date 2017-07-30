@@ -60,8 +60,7 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
         else
         {
             // a xml namespace without name is not allowed (e.g. "xmlns:" )
-            OUString aErrorMessage( "A xml namespace without name is not allowed!" );
-            throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            throw SAXException( "A xml namespace without name is not allowed!", Reference< XInterface >(), Any() );
         }
     }
 
@@ -69,8 +68,7 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
     {
         // namespace should be reseted - as xml draft states this is only allowed
         // for the default namespace - check and throw exception if check fails
-        OUString aErrorMessage( "Clearing xml namespace only allowed for default namespace!" );
-        throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+        throw SAXException( "Clearing xml namespace only allowed for default namespace!", Reference< XInterface >(), Any() );
     }
     else
     {
@@ -108,8 +106,7 @@ OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const
         else
         {
             // attribute with namespace but without name "namespace:" is not allowed!!
-            OUString aErrorMessage( "Attribute has no name only preceding namespace!" );
-            throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            throw SAXException( "Attribute has no name only preceding namespace!", Reference< XInterface >(), Any() );
         }
     }
 
@@ -143,8 +140,7 @@ OUString XMLNamespaces::applyNSToElementName( const OUString& aName ) const
         else
         {
             // attribute with namespace but without a name is not allowed (e.g. "cfg:" )
-            OUString aErrorMessage( "Attribute has no name only preceding namespace!" );
-            throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
+            throw SAXException( "Attribute has no name only preceding namespace!", Reference< XInterface >(), Any() );
         }
     }
     else

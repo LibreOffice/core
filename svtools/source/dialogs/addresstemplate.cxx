@@ -157,7 +157,7 @@ namespace svt
         // first collect all known programmatic names
         StringBag aKnownNames;
 
-        OUString sLogicalFieldNames(STR_LOGICAL_FIELD_NAMES);
+        OUString const sLogicalFieldNames(STR_LOGICAL_FIELD_NAMES);
         sal_Int32 nIndex = 0;
         do
         {

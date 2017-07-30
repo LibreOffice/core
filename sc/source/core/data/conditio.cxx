@@ -2266,7 +2266,7 @@ void ScConditionalFormatList::RemoveFromDocument(ScDocument* pDoc) const
     ScRangeList aRange = GetCombinedRange();
     ScMarkData aMark;
     aMark.MarkFromRangeList(aRange, true);
-    sal_uInt16 pItems[2] = { ATTR_CONDITIONAL,0};
+    sal_uInt16 const pItems[2] = { ATTR_CONDITIONAL,0};
     pDoc->ClearSelectionItems(pItems, aMark);
 }
 

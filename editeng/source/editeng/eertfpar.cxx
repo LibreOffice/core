@@ -318,7 +318,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
     if (eDestUnit != eSrcUnit)
     {
-        sal_uInt16 aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
+        sal_uInt16 const aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
         for (unsigned short aFntHeightIem : aFntHeightIems)
         {
             if (SfxItemState::SET == rSet.GetAttrSet().GetItemState( aFntHeightIem, false, &pItem ))

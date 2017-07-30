@@ -149,8 +149,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
 
                     if (isValid("-C") || isValid("-CS"))
                     {
-                        OString tmp("'-L' could not be combined with '-C' or '-CS' option");
-                        throw IllegalArgument(tmp);
+                        throw IllegalArgument("'-L' could not be combined with '-C' or '-CS' option");
                     }
                     m_options["-L"] = OString();
                     break;
@@ -170,8 +169,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
 
                         if (isValid("-L") || isValid("-C"))
                         {
-                            OString tmp("'-CS' could not be combined with '-L' or '-C' option");
-                            throw IllegalArgument(tmp);
+                            throw IllegalArgument("'-CS' could not be combined with '-L' or '-C' option");
                         }
                         m_options["-CS"] = OString();
                         break;
@@ -189,8 +187,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
 
                     if (isValid("-L") || isValid("-CS"))
                     {
-                        OString tmp("'-C' could not be combined with '-L' or '-CS' option");
-                        throw IllegalArgument(tmp);
+                        throw IllegalArgument("'-C' could not be combined with '-L' or '-CS' option");
                     }
                     m_options["-C"] = OString();
                     break;

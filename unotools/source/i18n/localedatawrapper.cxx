@@ -641,8 +641,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
     {
         if (areChecksEnabled())
         {
-            OUString aMsg( "LocaleDataWrapper::getCurrSymbolsImpl: no default currency" );
-            outputCheckMessage( appendLocaleInfo( aMsg ) );
+            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrSymbolsImpl: no default currency" ) );
         }
         nElem = 0;
         if ( nElem >= nCnt )
@@ -748,8 +747,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     {   // bad luck
         if (areChecksEnabled())
         {
-            OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: no currency formats" );
-            outputCheckMessage( appendLocaleInfo( aMsg ) );
+            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrFormatsImpl: no currency formats" ) );
         }
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
         return;
@@ -796,8 +794,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     scanCurrFormatImpl( pFormatArr[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
     if (areChecksEnabled() && (nNum == -1 || nSym == -1))
     {
-        OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?" );
-        outputCheckMessage( appendLocaleInfo( aMsg ) );
+        outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?" ) );
     }
     if (nBlank == -1)
     {
@@ -824,8 +821,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         scanCurrFormatImpl( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
         if (areChecksEnabled() && (nNum == -1 || nSym == -1 || (nPar == -1 && nSign == -1)))
         {
-            OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?" );
-            outputCheckMessage( appendLocaleInfo( aMsg ) );
+            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?" ) );
         }
         // NOTE: one of nPar or nSign are allowed to be -1
         if (nBlank == -1)
@@ -957,8 +953,7 @@ DateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode )
         {
             if (areChecksEnabled())
             {
-                OUString aMsg( "LocaleDataWrapper::scanDateOrder: not all DMY present" );
-                outputCheckMessage( appendLocaleInfo( aMsg ) );
+                outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::scanDateOrder: not all DMY present" ) );
             }
             if (nDay == -1)
                 nDay = rCode.getLength();
@@ -979,8 +974,7 @@ DateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode )
     {
         if (areChecksEnabled())
         {
-            OUString aMsg( "LocaleDataWrapper::scanDateOrder: no magic applicable" );
-            outputCheckMessage( appendLocaleInfo( aMsg ) );
+            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::scanDateOrder: no magic applicable" ) );
         }
         return DateOrder::DMY;
     }
@@ -995,8 +989,7 @@ void LocaleDataWrapper::getDateOrdersImpl()
     {   // bad luck
         if (areChecksEnabled())
         {
-            OUString aMsg( "LocaleDataWrapper::getDateOrdersImpl: no date formats" );
-            outputCheckMessage( appendLocaleInfo( aMsg ) );
+            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getDateOrdersImpl: no date formats" ) );
         }
         nDateOrder = nLongDateOrder = DateOrder::DMY;
         return;
@@ -1039,15 +1032,13 @@ void LocaleDataWrapper::getDateOrdersImpl()
     {
         if (areChecksEnabled())
         {
-            OUString aMsg( "LocaleDataWrapper::getDateOrdersImpl: no edit" );
-            outputCheckMessage( appendLocaleInfo( aMsg ) );
+            outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getDateOrdersImpl: no edit" ) );
         }
         if ( nDef == -1 )
         {
             if (areChecksEnabled())
             {
-                OUString aMsg( "LocaleDataWrapper::getDateOrdersImpl: no default" );
-                outputCheckMessage( appendLocaleInfo( aMsg ) );
+                outputCheckMessage( appendLocaleInfo( "LocaleDataWrapper::getDateOrdersImpl: no default" ) );
             }
             if ( nMedium != -1 )
                 nDef = nMedium;

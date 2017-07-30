@@ -1206,8 +1206,7 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const OUString& 
         xPropSet->setPropertyValue( "Name", makeAny( rName ) );
 
         // set the name of the to-be-created control
-        OUString aControlName("com.sun.star.form.control.InteractionGridControl");
-        Any aAny; aAny <<= aControlName;
+        Any aAny(OUString("com.sun.star.form.control.InteractionGridControl"));
         xPropSet->setPropertyValue( "DefaultControl",aAny );
 
         // the helpURL

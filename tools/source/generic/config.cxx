@@ -113,7 +113,7 @@ static sal_uInt8* ImplSysReadConfig( const OUString& rFileName,
             if( aFile.read( pBuf, nPos, nRead ) == ::osl::FileBase::E_None && nRead == nPos )
             {
                 //skip the byte-order-mark 0xEF 0xBB 0xBF, if it was UTF8 files
-                unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};
+                unsigned char const BOM[3] = {0xEF, 0xBB, 0xBF};
                 if (nRead > 2 && memcmp(pBuf, BOM, 3) == 0)
                 {
                     nRead -= 3;
@@ -156,7 +156,7 @@ static bool ImplSysWriteConfig( const OUString& rFileName,
         //write the byte-order-mark 0xEF 0xBB 0xBF first , if it was UTF8 files
         if ( rbIsUTF8BOM )
         {
-            unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};
+            unsigned char const BOM[3] = {0xEF, 0xBB, 0xBF};
             sal_uInt64 nUTF8BOMWritten;
             if( aFile.write( BOM, 3, nUTF8BOMWritten ) == ::osl::FileBase::E_None && 3 == nUTF8BOMWritten )
             {

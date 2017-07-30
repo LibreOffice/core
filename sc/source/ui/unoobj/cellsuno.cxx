@@ -9447,8 +9447,7 @@ ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange
     // Sort the vector by first range's start position, to avoid random shuffling
     // due to using the ScPatterAttr pointers
 
-    ScUniqueFormatsOrder aComp;
-    ::std::sort( aRangeLists.begin(), aRangeLists.end(), aComp );
+    ::std::sort( aRangeLists.begin(), aRangeLists.end(), ScUniqueFormatsOrder() );
 }
 
 

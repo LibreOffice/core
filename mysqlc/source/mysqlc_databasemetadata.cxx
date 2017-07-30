@@ -878,8 +878,8 @@ Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes()
 {
-    const char * table_types[] = {"TABLE", "VIEW"};
-    sal_Int32 requiredVersion[] = {0, 50000};
+    const char * const table_types[] = {"TABLE", "VIEW"};
+    sal_Int32 const requiredVersion[] = {0, 50000};
 
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance("org.openoffice.comp.helper.DatabaseMetaDataResultSet"),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;

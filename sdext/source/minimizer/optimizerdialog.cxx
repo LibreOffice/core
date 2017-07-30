@@ -110,7 +110,7 @@ void OptimizerDialog::InitRoadmap()
         InsertRoadmapItem( 3, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
         InsertRoadmapItem( 4, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
-        OUString sURL("private:graphicrepository/" BMP_PRESENTATION_MINIMIZER);
+        OUString const sURL("private:graphicrepository/" BMP_PRESENTATION_MINIMIZER);
 
         xPropertySet->setPropertyValue( "ImageURL", Any( sURL ) );
         xPropertySet->setPropertyValue( "Activated", Any( true ) );

@@ -112,7 +112,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
     if ( pSummaryInformation->IsValid() )
     {
         pSummaryInformation->Read();
-        sal_uInt8 aPropSetGUID[ 16 ] =
+        sal_uInt8 const aPropSetGUID[ 16 ]
         {
             0xe0, 0x85, 0x9f, 0xf2, 0xf9, 0x4f, 0x68, 0x10, 0xab, 0x91, 0x08, 0x00, 0x2b, 0x27, 0xb3, 0xd9
         };
@@ -265,7 +265,7 @@ bool ImplSdPPTImport::Import()
 
         pDInfoSec2->Read();
 
-        sal_uInt8 aPropSetGUID[ 16 ] =
+        sal_uInt8 const aPropSetGUID[ 16 ]
         {
             0x02, 0xd5, 0xcd, 0xd5, 0x9c, 0x2e, 0x1b, 0x10, 0x93, 0x97, 0x08, 0x00, 0x2b, 0x2c, 0xf9, 0xae
         };
@@ -363,7 +363,7 @@ bool ImplSdPPTImport::Import()
                 }
             }
 
-            sal_uInt8 aUserPropSetGUID[ 16 ] =
+            sal_uInt8 const aUserPropSetGUID[ 16 ]
             {
                 0x05, 0xd5, 0xcd, 0xd5, 0x9c, 0x2e, 0x1b, 0x10, 0x93, 0x97, 0x08, 0x00, 0x2b, 0x2c, 0xf9, 0xae
             };
@@ -1856,8 +1856,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
             }
         }
 
-        Ppt97AnimationStlSortHelper aSortHelper;
-        std::sort( aAnimationsOnThisPage.begin(), aAnimationsOnThisPage.end(), aSortHelper );
+        std::sort( aAnimationsOnThisPage.begin(), aAnimationsOnThisPage.end(), Ppt97AnimationStlSortHelper() );
 
         tAnimationVector::iterator aIter( aAnimationsOnThisPage.begin() );
         const tAnimationVector::iterator aEnd( aAnimationsOnThisPage.end() );

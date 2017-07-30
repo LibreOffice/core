@@ -116,8 +116,7 @@ LogicalFontInstance* ImplFontCache::GetFontInstance( PhysicalFontCollection cons
     // the most recently used font usually has a hit rate of >50%
     LogicalFontInstance *pFontInstance = nullptr;
     PhysicalFontFamily* pFontFamily = nullptr;
-    IFSD_Equal aIFSD_Equal;
-    if( mpFirstEntry && aIFSD_Equal( aFontSelData, mpFirstEntry->maFontSelData ) )
+    if( mpFirstEntry && IFSD_Equal()( aFontSelData, mpFirstEntry->maFontSelData ) )
         pFontInstance = mpFirstEntry;
     else
     {

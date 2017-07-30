@@ -88,8 +88,6 @@ OUString getParamFirstUrl(OUString const & name)
 VendorSettings::VendorSettings():
     m_xmlDocVendorSettingsFileUrl(BootParams::getVendorSettings())
 {
-    OString sMsgExc("[Java framework] Error in constructor "
-                         "VendorSettings::VendorSettings() (fwkbase.cxx)");
     //Prepare the xml document and context
     OString sSettingsPath = getVendorSettingsPath(m_xmlDocVendorSettingsFileUrl);
     if (sSettingsPath.isEmpty())
@@ -113,7 +111,8 @@ VendorSettings::VendorSettings():
             m_xmlPathContextVendorSettings, reinterpret_cast<xmlChar const *>("jf"),
             reinterpret_cast<xmlChar const *>(NS_JAVA_FRAMEWORK));
         if (res == -1)
-            throw FrameworkException(JFW_E_ERROR, sMsgExc);
+            throw FrameworkException(JFW_E_ERROR,
+                    "[Java framework] Error in constructor VendorSettings::VendorSettings() (fwkbase.cxx)");
     }
 }
 
@@ -480,8 +479,7 @@ OString makeClassPathOption(OUString const & sUserClassPath)
     {
         if (!sUserClassPath.isEmpty())
         {
-            char szSep[] = {SAL_PATHSEPARATOR,0};
-            sBufCP.appendAscii(szSep);
+            sBufCP.append(SAL_PATHSEPARATOR);
         }
         sBufCP.append(sAppCP);
     }

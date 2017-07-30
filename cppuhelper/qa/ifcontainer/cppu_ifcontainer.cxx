@@ -218,7 +218,7 @@ namespace cppu_ifcontainer
 
         void testOMultiTypeInterfaceContainerHelperInt32()
         {
-            sal_Int32 pTypes[nTests] =
+            sal_Int32 const pTypes[nTests] =
             {
                 0,
                 -1,
@@ -239,7 +239,7 @@ namespace cppu_ifcontainer
             typedef cppu::OMultiTypeInterfaceContainerHelperVar<
                 char const *, void, rtl::CStringEqual> StrContainer;
 
-            const char *pTypes[nTests] =
+            const char * const pTypes[nTests] =
             {
                 "this_is", "such", "fun", "writing", "unit", "tests", "when", "it", "works", "anyway"
             };

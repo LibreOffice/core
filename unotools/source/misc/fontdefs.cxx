@@ -324,7 +324,7 @@ OUString StripScriptFromName(const OUString& _aName)
 {
     // I worry that someone will have a font which *does* have
     // e.g. "Greek" legitimately at the end of its name :-(
-    const char*suffixes[] = { " baltic",
+    const char*const suffixes[] = { " baltic",
                               " ce",
                               " cyr",
                               " greek",

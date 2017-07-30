@@ -238,7 +238,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
 
     // fill the listboxes
     // method of field comparison
-    const char* aResIds[] = {
+    const char* const aResIds[] = {
         RID_STR_SEARCH_ANYWHERE,
         RID_STR_SEARCH_BEGINNING,
         RID_STR_SEARCH_END,

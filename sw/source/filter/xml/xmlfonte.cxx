@@ -40,8 +40,8 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
     SwXMLExport& _rExport, bool blockFontEmbedding ) :
     XMLFontAutoStylePool( _rExport, blockFontEmbedding )
 {
-    sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
-                                RES_CHRATR_CTL_FONT };
+    sal_uInt16 const aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
+                                      RES_CHRATR_CTL_FONT };
 
     const SfxItemPool& rPool = _rExport.getDoc()->GetAttrPool();
     const SfxPoolItem* pItem;

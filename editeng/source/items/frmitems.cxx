@@ -1877,7 +1877,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
 
                 // WTH are the borders and the distances saved in different order?
-                SvxBoxItemLine nLines[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT };
+                SvxBoxItemLine const nLines[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT };
                 for ( sal_Int32 n = 4; n < 9; n++ )
                 {
                     sal_Int32 nDist = 0;
@@ -4028,7 +4028,7 @@ sal_uInt16 SvxFrameDirectionItem::GetVersion( sal_uInt16 nFVer ) const
 
 const char* getFrmDirResId(size_t nIndex)
 {
-    const char* RID_SVXITEMS_FRMDIR[] =
+    const char* const RID_SVXITEMS_FRMDIR[] =
     {
         RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP,
         RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP,

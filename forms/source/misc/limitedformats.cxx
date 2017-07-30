@@ -325,8 +325,7 @@ namespace frm
 
             if (!bFoundIt)
             {   // somebody gave us a format which we can't translate
-                OUString sMessage ("This control supports only a very limited number of formats.");
-                throw IllegalArgumentException(sMessage, nullptr, 2);
+                throw IllegalArgumentException("This control supports only a very limited number of formats.", nullptr, 2);
             }
 
             return bModified;

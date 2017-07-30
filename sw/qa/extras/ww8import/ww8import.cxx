@@ -118,8 +118,8 @@ DECLARE_WW8IMPORT_TEST( testTdf105570, "tdf105570.doc" )
 
 DECLARE_WW8IMPORT_TEST(testTdf106799, "tdf106799.doc")
 {
-    sal_Int32 nCellWidths[3][4] = { { 9530, 0, 0, 0 },{ 2382, 2382, 2382, 2384 },{ 2382, 2382, 2382, 2384 } };
-    sal_Int32 nCellTxtLns[3][4] = { { 1, 0, 0, 0 },{ 1, 0, 0, 0},{ 1, 1, 1, 1 } };
+    sal_Int32 const nCellWidths[3][4] = { { 9530, 0, 0, 0 },{ 2382, 2382, 2382, 2384 },{ 2382, 2382, 2382, 2384 } };
+    sal_Int32 const nCellTxtLns[3][4] = { { 1, 0, 0, 0 },{ 1, 0, 0, 0},{ 1, 1, 1, 1 } };
     // Table was distorted because of missing sprmPFInnerTableCell at paragraph marks (0x0D) with sprmPFInnerTtp
     for (sal_Int32 nRow : { 0, 1, 2 })
         for (sal_Int32 nCell : { 0, 1, 2, 3 })

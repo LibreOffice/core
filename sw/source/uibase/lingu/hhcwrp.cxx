@@ -319,7 +319,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
     if (bKeepAttributes)
     {
         // get item set with all relevant attributes
-        sal_uInt16 aRanges[] = {
+        sal_uInt16 const aRanges[] {
                 RES_CHRATR_BEGIN, RES_FRMATR_END,
                 0, 0, 0  };
         SfxItemSet aItemSet( m_rWrtShell.GetAttrPool(), aRanges );
@@ -475,7 +475,7 @@ void SwHHCWrapper::ReplaceUnit(
             OSL_ENSURE( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                     "SwHHCWrapper::ReplaceUnit : unexpected target language" );
 
-            sal_uInt16 aRanges[] = {
+            sal_uInt16 const aRanges[] {
                     RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
                     RES_CHRATR_CJK_FONT,     RES_CHRATR_CJK_FONT,
                     0, 0, 0  };

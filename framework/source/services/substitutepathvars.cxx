@@ -477,8 +477,7 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
             // recursion depth reached!
             if ( bSubstRequired )
             {
-                OUString aMsg( "Endless recursion detected. Cannot substitute variables!" );
-                throw NoSuchElementException( aMsg, static_cast<cppu::OWeakObject *>(this) );
+                throw NoSuchElementException( "Endless recursion detected. Cannot substitute variables!", static_cast<cppu::OWeakObject *>(this) );
             }
             else
                 aResult = rText;

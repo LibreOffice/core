@@ -123,14 +123,14 @@ namespace pcr
             OSL_VERIFY( m_xControlModel->getPropertyValue( PROPERTY_CLASSID ) >>= nControlType );
 
             // some lists
-            sal_Int16 nNumericCompatibleTypes[] = { DataTypeClass::DECIMAL, DataTypeClass::FLOAT, DataTypeClass::DOUBLE, 0 };
-            sal_Int16 nDateCompatibleTypes[] = { DataTypeClass::DATE, 0 };
-            sal_Int16 nTimeCompatibleTypes[] = { DataTypeClass::TIME, 0 };
-            sal_Int16 nCheckboxCompatibleTypes[] = { DataTypeClass::BOOLEAN, DataTypeClass::STRING, DataTypeClass::anyURI, 0 };
-            sal_Int16 nRadiobuttonCompatibleTypes[] = { DataTypeClass::STRING, DataTypeClass::anyURI, 0 };
-            sal_Int16 nFormattedCompatibleTypes[] = { DataTypeClass::DECIMAL, DataTypeClass::FLOAT, DataTypeClass::DOUBLE, DataTypeClass::DATETIME, DataTypeClass::DATE, DataTypeClass::TIME, 0 };
+            sal_Int16 const nNumericCompatibleTypes[] = { DataTypeClass::DECIMAL, DataTypeClass::FLOAT, DataTypeClass::DOUBLE, 0 };
+            sal_Int16 const nDateCompatibleTypes[] = { DataTypeClass::DATE, 0 };
+            sal_Int16 const nTimeCompatibleTypes[] = { DataTypeClass::TIME, 0 };
+            sal_Int16 const nCheckboxCompatibleTypes[] = { DataTypeClass::BOOLEAN, DataTypeClass::STRING, DataTypeClass::anyURI, 0 };
+            sal_Int16 const nRadiobuttonCompatibleTypes[] = { DataTypeClass::STRING, DataTypeClass::anyURI, 0 };
+            sal_Int16 const nFormattedCompatibleTypes[] = { DataTypeClass::DECIMAL, DataTypeClass::FLOAT, DataTypeClass::DOUBLE, DataTypeClass::DATETIME, DataTypeClass::DATE, DataTypeClass::TIME, 0 };
 
-            sal_Int16* pCompatibleTypes = nullptr;
+            sal_Int16 const * pCompatibleTypes = nullptr;
             switch ( nControlType )
             {
             case FormComponentType::SPINBUTTON:

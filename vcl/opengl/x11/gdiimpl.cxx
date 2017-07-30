@@ -303,7 +303,7 @@ bool X11OpenGLContext::ImplInit()
 
         if (pFBC && best_fbc != -1)
         {
-            int pContextAttribs[] =
+            int const pContextAttribs[] =
             {
 #if 0 // defined(DBG_UTIL)
                 GLX_CONTEXT_MAJOR_VERSION_ARB, 3,

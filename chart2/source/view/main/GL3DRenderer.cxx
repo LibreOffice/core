@@ -840,9 +840,9 @@ void OpenGL3DRenderer::RenderLine3D(const Polygon3DInfo& polygon)
 {
     CHECK_GL_ERROR();
     glUseProgram(maResources.m_CommonProID);
-    PosVecf3 trans = {0.0f, 0, 0.0};
-    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+    PosVecf3 const trans = {0.0f, 0, 0.0};
+    PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
+    PosVecf3 const scale = {1.0f, 1.0f, 1.0f};
     MoveModelf(trans, angle, scale);
     m_Model = m_GlobalScaleMatrix * m_Model;
     m_3DMVP = m_3DProjection * m_3DView * m_Model;
@@ -959,9 +959,9 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
         //move the circle to the pos, and scale using the xScale and Y scale
         Vertices3D *pointList = polygon.verticesList[i];
         Normals3D *normalList = polygon.normalsList[i];
-        PosVecf3 trans = {0.0f, 0.0f, 0.0};
-        PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+        PosVecf3 const trans = {0.0f, 0.0f, 0.0};
+        PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
+        PosVecf3 const scale = {1.0f, 1.0f, 1.0f};
         MoveModelf(trans, angle, scale);
         m_Model = m_GlobalScaleMatrix * m_Model;
         glm::mat3 normalMatrix(m_Model);
@@ -2059,9 +2059,9 @@ void OpenGL3DRenderer::RenderTextShape()
     CHECK_GL_ERROR();
     for (TextInfo & textInfo : m_TextInfoList)
     {
-        PosVecf3 trans = {0, 0, 0};
-        PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {1.0, 1.0, 1.0f};
+        PosVecf3 const trans = {0, 0, 0};
+        PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
+        PosVecf3 const scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);
         m_Model = m_GlobalScaleMatrix * m_Model;
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;

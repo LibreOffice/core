@@ -268,7 +268,7 @@ void Chart2ImportTest::testErrorBarFormatting()
 void Chart2ImportTest::testSteppedLines()
 {
     const sal_Int32 MAXSHEET = 14;
-    chart2::CurveStyle curveStyle[] = {
+    chart2::CurveStyle const curveStyle[] = {
         chart2::CurveStyle_LINES,
         chart2::CurveStyle_CUBIC_SPLINES,
         chart2::CurveStyle_B_SPLINES,

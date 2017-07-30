@@ -206,9 +206,7 @@ namespace io_acceptor {
         }
         else
         {
-            OUString message("acc_socket.cxx:SocketConnection::read: error - connection already closed");
-
-            IOException ioException(message, static_cast<XConnection *>(this));
+            IOException ioException("acc_socket.cxx:SocketConnection::read: error - connection already closed", static_cast<XConnection *>(this));
 
             Any any;
             any <<= ioException;
@@ -240,9 +238,7 @@ namespace io_acceptor {
         }
         else
         {
-            OUString message("acc_socket.cxx:SocketConnection::write: error - connection already closed");
-
-            IOException ioException(message, static_cast<XConnection *>(this));
+            IOException ioException("acc_socket.cxx:SocketConnection::write: error - connection already closed", static_cast<XConnection *>(this));
 
             Any any;
             any <<= ioException;

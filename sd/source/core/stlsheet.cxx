@@ -213,8 +213,9 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         // we create the ItemSet 'on demand' if necessary
         if (!pSet)
         {
-            sal_uInt16 nWhichPairTable[] = { XATTR_LINE_FIRST,              XATTR_LINE_LAST,
-                                         XATTR_FILL_FIRST,              XATTR_FILL_LAST,
+            sal_uInt16 const nWhichPairTable[] {
+                                        XATTR_LINE_FIRST,              XATTR_LINE_LAST,
+                                        XATTR_FILL_FIRST,              XATTR_FILL_LAST,
 
                                         SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
                                         SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
@@ -239,8 +240,9 @@ SfxItemSet& SdStyleSheet::GetItemSet()
     {
         if (!pSet)
         {
-            sal_uInt16 nWhichPairTable[] = { XATTR_LINE_FIRST,              XATTR_LINE_LAST,
-                                         XATTR_FILL_FIRST,              XATTR_FILL_LAST,
+            sal_uInt16 const nWhichPairTable[] {
+                                        XATTR_LINE_FIRST,              XATTR_LINE_LAST,
+                                        XATTR_FILL_FIRST,              XATTR_FILL_LAST,
 
                                         SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
                                         SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
@@ -276,7 +278,8 @@ SfxItemSet& SdStyleSheet::GetItemSet()
         {
             if (!pSet)
             {
-                sal_uInt16 nWhichPairTable[] = { XATTR_LINE_FIRST,              XATTR_LINE_LAST,
+                sal_uInt16 const nWhichPairTable[] {
+                                             XATTR_LINE_FIRST,              XATTR_LINE_LAST,
                                              XATTR_FILL_FIRST,              XATTR_FILL_LAST,
 
                                              SDRATTR_SHADOW_FIRST,          SDRATTR_SHADOW_LAST,
@@ -289,9 +292,8 @@ SfxItemSet& SdStyleSheet::GetItemSet()
 
                                              EE_PARA_START,                 EE_CHAR_END,
 
-                                            SDRATTR_XMLATTRIBUTES,          SDRATTR_TEXT_USEFIXEDCELLHEIGHT,
-
-                                            SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+                                             SDRATTR_XMLATTRIBUTES,          SDRATTR_TEXT_USEFIXEDCELLHEIGHT,
+                                             SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
                                              0, 0 };
 
                 pSet = new SfxItemSet(GetPool().GetPool(), nWhichPairTable);

@@ -312,7 +312,7 @@ void ContentListBox_Impl::dispose()
 
 void ContentListBox_Impl::InitRoot()
 {
-    OUString aHelpTreeviewURL( "vnd.sun.star.hier://com.sun.star.help.TreeView/" );
+    OUString const aHelpTreeviewURL( "vnd.sun.star.hier://com.sun.star.help.TreeView/" );
     std::vector< OUString > aList =
         SfxContentHelper::GetHelpTreeViewContents( aHelpTreeviewURL );
 

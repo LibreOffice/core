@@ -596,7 +596,7 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
    xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
    bool bEmbeddings = false;
-   const char* testEmbeddedFileNames[3] = {"word/embeddings/Microsoft_Excel_Worksheet3.xlsx",
+   const char* const testEmbeddedFileNames[] {"word/embeddings/Microsoft_Excel_Worksheet3.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet2.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet1.xlsx"};
    for(int i = 0; i < aGrabBag.getLength(); ++i)
@@ -1121,7 +1121,7 @@ void Chart2ExportTest::testEmbeddingsOleObjectGrabBag()
    xTextDocumentPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
    bool bEmbeddings = false;
-   const char* testEmbeddedFileNames[1] = {"word/embeddings/oleObject1.bin"};
+   const char* const testEmbeddedFileNames[] = {"word/embeddings/oleObject1.bin"};
    for(int i = 0; i < aGrabBag.getLength(); ++i)
    {
        if (aGrabBag[i].Name == "OOXEmbeddings")

@@ -53,12 +53,11 @@ ActiveMSPList::~ActiveMSPList()
 Reference< provider::XScriptProvider >
 ActiveMSPList::createNewMSP( const uno::Any& context )
 {
-    OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
     Sequence< Any > args( &context, 1 );
 
     Reference< provider::XScriptProvider > msp(
         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            serviceName, args, m_xContext ), UNO_QUERY );
+            "com.sun.star.script.provider.MasterScriptProvider", args, m_xContext ), UNO_QUERY );
     return msp;
 }
 
