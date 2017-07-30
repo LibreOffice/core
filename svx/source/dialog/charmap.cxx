@@ -25,6 +25,8 @@
 
 #include <rtl/textenc.h>
 #include <svx/ucsubset.hxx>
+#include <unordered_map>
+
 
 #include <svx/strings.hrc>
 
@@ -146,7 +148,7 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
             CaptureMouse();
 
             int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
-        // Fire the focus event
+            // Fire the focus event
             SelectIndex( nIndex, true);
         }
 
@@ -231,7 +233,7 @@ int SvxShowCharSet::LastInView() const
 }
 
 
-inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
+Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
 {
     const int nBase = FirstInView();
     int x = ((nIndex - nBase) % COLUMN_COUNT) * nX;
@@ -650,7 +652,6 @@ void SvxShowCharSet::OutputIndex( int nNewIndex )
 {
     SelectIndex( nNewIndex, true );
     aSelectHdl.Call( this );
-
 }
 
 
@@ -763,9 +764,13 @@ SubsetMap::SubsetMap( const FontCharMapRef& rxFontCharMap )
 const Subset* SubsetMap::GetNextSubset( bool bFirst ) const
 {
     if( bFirst )
+    {
         maSubsetIterator = maSubsets.begin();
+    }
+
     if( maSubsetIterator == maSubsets.end() )
         return nullptr;
+
     const Subset* s = &*(maSubsetIterator++);
     return s;
 }
@@ -781,7 +786,8 @@ const Subset* SubsetMap::GetSubsetByUnicode( sal_UCS4 cChar ) const
 
 inline Subset::Subset(sal_UCS4 nMin, sal_UCS4 nMax, const OUString& rName)
 :   mnRangeMin(nMin), mnRangeMax(nMax), maRangeName(rName)
-{}
+{
+}
 
 void SubsetMap::InitList()
 {
