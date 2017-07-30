@@ -71,11 +71,13 @@ private:
 
     VclPtr<SvxShowCharSet> m_pShowSet;
     VclPtr<PushButton>     m_pOKBtn;
+    VclPtr<PushButton>     m_pSearchBtn;
     VclPtr<FixedText>      m_pFontText;
     VclPtr<ListBox>        m_pFontLB;
     VclPtr<FixedText>      m_pSubsetText;
     VclPtr<ListBox>        m_pSubsetLB;
     VclPtr<SvxShowText>    m_pShowChar;
+    VclPtr<Edit>           m_pSearchText;
     VclPtr<Edit>           m_pHexCodeText;
     VclPtr<Edit>           m_pDecimalCodeText;
     VclPtr<Button>         m_pFavouritesBtn;
@@ -112,6 +114,7 @@ private:
     DECL_LINK(InsertClickHdl, Button*, void);
     DECL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, Control&, void);
     DECL_LINK(FavSelectHdl, Button*, void);
+    DECL_LINK(SearchUpdateHdl, Button*, void);
 
     static void fillAllSubsets(ListBox &rListBox);
     void selectCharByCode(Radix radix);
