@@ -53,6 +53,7 @@ namespace frm
     #define PROPERTY_RELEVANT                 "Relevant"
     #define PROPERTY_ISREADONLY               "IsReadOnly"
     #define PROPERTY_FILTER                   "Filter"
+    #define PROPERTY_HAVINGCLAUSE             "HavingClause"
     #define PROPERTY_WIDTH                    "Width"
     #define PROPERTY_SEARCHABLE               "IsSearchable"
     #define PROPERTY_MULTILINE                "MultiLine"
