@@ -60,9 +60,11 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
     , mxContext(comphelper::getProcessComponentContext())
 {
     get(m_pShowSet, "showcharset");
+    get(m_pSearchSet, "searchcharset");
     get(m_pShowChar, "showchar");
     m_pShowChar->SetCentered(true);
     get(m_pOKBtn, "ok");
+    get(m_pSearchBtn, "searchbtn");
     get(m_pFontText, "fontft");
     get(m_pFontLB, "fontlb");
     m_pFontLB->SetStyle(m_pFontLB->GetStyle() | WB_SORT);
@@ -76,6 +78,7 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
     get(m_pCharName, "charname");
     m_pCharName->set_height_request(m_pCharName->GetTextHeight()*3);
     m_pCharName->SetPaintTransparent(true);
+    get(m_pSearchText, "search");
     //lock the size request of this widget to the width of the original .ui string
     m_pHexCodeText->set_width_request(m_pHexCodeText->get_preferred_size().Width());
 
@@ -140,6 +143,8 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
     }
 
     CreateOutputItemSet( pSet ? *pSet->GetPool() : SfxGetpApp()->GetPool() );
+    m_pShowSet->Hide();
+    m_pSearchSet->Show();
 }
 
 SvxCharacterMap::~SvxCharacterMap()
@@ -190,6 +195,8 @@ void SvxCharacterMap::dispose()
     maFavCharFontList.clear();
 
     m_pFavouritesBtn.clear();
+    m_pSearchBtn.clear();
+    m_pSearchText.clear();
 
     SfxModalDialog::dispose();
 }
@@ -506,6 +513,8 @@ void SvxCharacterMap::init()
     }
 
     setCharName(90);
+
+    m_pSearchBtn->SetClickHdl(LINK(this, SvxCharacterMap, SearchUpdateHdl));
 }
 
 bool SvxCharacterMap::isFavChar(const OUString& sTitle, const OUString& rFont)
@@ -758,6 +767,36 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavClearAllClickHdl, SvxCharView*, void)
     batch->commit();
 
     updateFavCharControl();
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, SearchUpdateHdl, Button*, void)
+{
+    OUString aKeyword = m_pSearchText->GetText();
+
+    if (!aKeyword.isEmpty())
+    {
+        const Subset* s;
+        while( nullptr != (s = pSubsetMap->GetNextSubset( false ))  )
+        {
+            sal_UCS4 i = s->GetRangeMin();
+            std::unordered_map<sal_UCS4, OUString> umap = s->nameMap;
+            for(; i<= s->GetRangeMax(); i++)
+            {
+                std::unordered_map<sal_UCS4,OUString>::const_iterator got = umap.find (i);
+
+                OUString sName;
+                if(got == umap.end())
+                    continue;
+                else
+                    sName = got->second;
+
+                if(!sName.isEmpty() && sName.toAsciiLowerCase().indexOf(aKeyword) >= 0)
+                {
+                    m_pShowChar->SetText(OUString(&i, 1));
+                }
+            }
+        }
+    }
 }
 
 IMPL_LINK(SvxCharacterMap, CharClickHdl, SvxCharView*, rView, void)
