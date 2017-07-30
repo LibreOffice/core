@@ -90,12 +90,12 @@ class ZipFile
 public:
 
     ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
-             css::uno::Reference < css::io::XInputStream > &xInput,
+             css::uno::Reference < css::io::XInputStream > const &xInput,
              const css::uno::Reference < css::uno::XComponentContext > &rxContext,
              bool bInitialise );
 
     ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
-             css::uno::Reference < css::io::XInputStream > &xInput,
+             css::uno::Reference < css::io::XInputStream > const &xInput,
              const css::uno::Reference < css::uno::XComponentContext > &rxContext,
              bool bInitialise,
              bool bForceRecover );

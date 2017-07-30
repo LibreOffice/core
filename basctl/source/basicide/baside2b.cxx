@@ -122,7 +122,7 @@ void setTextEngineText (ExtTextEngine& rEngine, OUString const& aStr)
 namespace
 {
 
-void lcl_DrawIDEWindowFrame(DockingWindow* pWin, vcl::RenderContext& rRenderContext)
+void lcl_DrawIDEWindowFrame(DockingWindow const * pWin, vcl::RenderContext& rRenderContext)
 {
     if (pWin->IsFloatingMode())
         return;
@@ -783,7 +783,7 @@ void EditorWindow::HandleProcedureCompletion()
     }
 }
 
-bool EditorWindow::GetProcedureName(OUString& rLine, OUString& rProcType, OUString& rProcName) const
+bool EditorWindow::GetProcedureName(OUString const & rLine, OUString& rProcType, OUString& rProcName) const
 {
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions(rLine, aPortions);

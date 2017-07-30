@@ -85,14 +85,14 @@ inline char * PyStr_AsString(PyObject *object)
     return PyUnicode_AsUTF8(object);
 }
 
-inline bool PyStr_Check(PyObject *object)
+inline bool PyStr_Check(PyObject const *object)
 {
     return PyUnicode_Check(object);
 }
 
 // compatibility wrappers for Python non-Unicode string/buffer type
 // (PyBytes in 3, PyString in 2)
-inline bool PyStrBytes_Check(PyObject *object)
+inline bool PyStrBytes_Check(PyObject const *object)
 {
     return PyBytes_Check(object);
 }
@@ -162,7 +162,7 @@ static const sal_Int32 CALL = 1;
 static const sal_Int32 ARGS = 2;
 }
 
-bool isLog( RuntimeCargo *cargo, sal_Int32 loglevel );
+bool isLog( RuntimeCargo const *cargo, sal_Int32 loglevel );
 void log( RuntimeCargo *cargo, sal_Int32 level, const OUString &logString );
 void log( RuntimeCargo *cargo, sal_Int32 level, const char *str );
 void logCall( RuntimeCargo *cargo, const char *intro,

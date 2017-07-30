@@ -160,7 +160,7 @@ struct NeonRequestContext
     const std::vector< OUString > * pHeaderNames;
     DAVResource *                          pResource;
 
-    explicit NeonRequestContext( uno::Reference< io::XOutputStream > & xOutStrm )
+    explicit NeonRequestContext( uno::Reference< io::XOutputStream > const & xOutStrm )
     : xOutputStream( xOutStrm ), xInputStream( nullptr ),
       pHeaderNames( nullptr ), pResource( nullptr ) {}
 
@@ -168,7 +168,7 @@ struct NeonRequestContext
     : xOutputStream( nullptr ), xInputStream( xInStrm ),
       pHeaderNames( nullptr ), pResource( nullptr ) {}
 
-    NeonRequestContext( uno::Reference< io::XOutputStream > & xOutStrm,
+    NeonRequestContext( uno::Reference< io::XOutputStream > const & xOutStrm,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource )
     : xOutputStream( xOutStrm ), xInputStream( nullptr ),

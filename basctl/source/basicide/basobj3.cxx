@@ -44,9 +44,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 extern "C" {
-    SAL_DLLPUBLIC_EXPORT long basicide_handle_basic_error( void* pPtr )
+    SAL_DLLPUBLIC_EXPORT long basicide_handle_basic_error( void const * pPtr )
     {
-        return HandleBasicError( static_cast<StarBASIC*>(pPtr) );
+        return HandleBasicError( static_cast<StarBASIC const *>(pPtr) );
     }
 }
 
@@ -212,7 +212,7 @@ StarBASIC* FindBasic( const SbxVariable* pVar )
     return const_cast<StarBASIC*>(static_cast<const StarBASIC*>(pSbx));
 }
 
-BasicManager* FindBasicManager( StarBASIC* pLib )
+BasicManager* FindBasicManager( StarBASIC const * pLib )
 {
     ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::AllWithApplication ) );
     for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
@@ -263,7 +263,7 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
     }
 }
 
-void RunMethod( SbMethod* pMethod )
+void RunMethod( SbMethod const * pMethod )
 {
     SbxValues aRes;
     aRes.eType = SbxVOID;
@@ -355,7 +355,7 @@ void InvalidateDebuggerSlots()
     }
 }
 
-long HandleBasicError( StarBASIC* pBasic )
+long HandleBasicError( StarBASIC const * pBasic )
 {
     EnsureIde();
     BasicStopped();

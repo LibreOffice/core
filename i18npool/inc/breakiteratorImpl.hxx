@@ -111,7 +111,7 @@ protected:
 private:
 
     struct lookupTableItem {
-        lookupTableItem(const css::lang::Locale& _aLocale, css::uno::Reference < XBreakIterator >& _xBI) : aLocale(_aLocale), xBI(_xBI) {};
+        lookupTableItem(const css::lang::Locale& _aLocale, css::uno::Reference < XBreakIterator > const & _xBI) : aLocale(_aLocale), xBI(_xBI) {};
         css::lang::Locale aLocale;
         css::uno::Reference < XBreakIterator > xBI;
     };

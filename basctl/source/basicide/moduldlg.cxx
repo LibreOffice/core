@@ -306,7 +306,7 @@ void Shell::CopyDialogResources(
     }
 }
 
-TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry const * pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, bool bMove )
 {
     DBG_ASSERT( pEntry, "No entry?" );   // ASS is ok here, should not be reached
@@ -451,7 +451,7 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
 
 // OrganizeDialog
 OrganizeDialog::OrganizeDialog(vcl::Window* pParent, sal_Int16 tabId,
-    EntryDescriptor& rDesc )
+    EntryDescriptor const & rDesc )
     : TabDialog( pParent, "OrganizeDialog",
         "modules/BasicIDE/ui/organizedialog.ui" )
     , m_aCurEntry( rDesc )
@@ -597,7 +597,7 @@ void ObjectPage::dispose()
     TabPage::dispose();
 }
 
-void ObjectPage::SetCurrentEntry (EntryDescriptor& rDesc)
+void ObjectPage::SetCurrentEntry (EntryDescriptor const & rDesc)
 {
     m_pBasicBox->SetCurrentEntry( rDesc );
 }

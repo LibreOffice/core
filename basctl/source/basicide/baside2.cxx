@@ -177,7 +177,7 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
 } // namespace
 
 ModulWindow::ModulWindow (ModulWindowLayout* pParent, ScriptDocument const& rDocument,
-                          const OUString& aLibName, const OUString& aName, OUString& aModule)
+                          const OUString& aLibName, const OUString& aName, OUString const & aModule)
     : BaseWindow(pParent, rDocument, aLibName, aName)
     , m_rLayout(*pParent)
     , m_nValid(ValidWindow)
@@ -587,7 +587,7 @@ void ModulWindow::ManageBreakPoints()
 }
 
 
-bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
+bool ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
 {
     GetShell()->GetViewFrame()->ToTop();
 

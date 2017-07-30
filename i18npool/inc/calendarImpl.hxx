@@ -95,7 +95,7 @@ public:
 
 private:
     struct lookupTableItem {
-        lookupTableItem(const OUString& _uniqueID, css::uno::Reference < css::i18n::XCalendar4 >& _xCalendar)
+        lookupTableItem(const OUString& _uniqueID, css::uno::Reference < css::i18n::XCalendar4 > const & _xCalendar)
             : uniqueID(_uniqueID), xCalendar(_xCalendar) {}
         OUString                                      uniqueID;
         css::uno::Reference < css::i18n::XCalendar4 > xCalendar;

@@ -30,7 +30,7 @@ void EnsureIde ();
 
 void ShellCreated (Shell* pShell);
 Shell* GetShell();
-void ShellDestroyed (Shell* pShell);
+void ShellDestroyed (Shell const * pShell);
 
 ExtraData* GetExtraData();
 

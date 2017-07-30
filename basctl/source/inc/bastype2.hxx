@@ -235,13 +235,13 @@ public:
         SvTreeListEntry* pParent, bool bChildrenOnDemand,
         std::unique_ptr<Entry> && aUserData
     );
-    void            RemoveEntry (SvTreeListEntry*);
+    void            RemoveEntry (SvTreeListEntry const *);
     void            RemoveEntry (ScriptDocument const&);
 
     OUString        GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
     static void     GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
 
-    void            SetCurrentEntry (EntryDescriptor&);
+    void            SetCurrentEntry (EntryDescriptor const &);
 
 private:
     LibraryType     GetLibraryType() const;

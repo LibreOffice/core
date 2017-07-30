@@ -79,7 +79,7 @@ private:
         OUString service;
         css::uno::Reference < XCollator > xC;
         lookupTableItem(const lang::Locale& rLocale, const OUString& _algorithm, const OUString& _service,
-        css::uno::Reference < XCollator >& _xC) : aLocale(rLocale), algorithm(_algorithm), service(_service), xC(_xC) {}
+                        css::uno::Reference < XCollator > const & _xC) : aLocale(rLocale), algorithm(_algorithm), service(_service), xC(_xC) {}
         bool SAL_CALL equals(const lang::Locale& rLocale, const OUString& _algorithm) {
         return aLocale.Language == rLocale.Language &&
             aLocale.Country == rLocale.Country &&

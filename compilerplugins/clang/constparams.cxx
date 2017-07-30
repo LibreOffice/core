@@ -155,6 +155,10 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             || name == "ImpGetPercent"
             || name == "ImpGetAlign"
             || name == "write_function"
+            || name == "PyUNO_getattr"
+            || name == "PyUNO_setattr"
+            || name == "PyUNOStruct_setattr"
+            || name == "PyUNOStruct_getattr"
              // #ifdef win32
             || name == "convert_slashes"
                 // UNO component entry points

@@ -72,7 +72,7 @@ using ZipUtils::Inflater;
 /** This class is used to read entries from a zip file
  */
 ZipFile::ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
-                  uno::Reference < XInputStream > &xInput,
+                  uno::Reference < XInputStream > const &xInput,
                   const uno::Reference < XComponentContext > & rxContext,
                   bool bInitialise )
 : m_aMutexHolder( aMutexHolder )
@@ -93,7 +93,7 @@ ZipFile::ZipFile( const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolde
 }
 
 ZipFile::ZipFile( const rtl::Reference< comphelper::RefCountedMutex >& aMutexHolder,
-                  uno::Reference < XInputStream > &xInput,
+                  uno::Reference < XInputStream > const &xInput,
                   const uno::Reference < XComponentContext > & rxContext,
                   bool bInitialise, bool bForceRecovery)
 : m_aMutexHolder( aMutexHolder )

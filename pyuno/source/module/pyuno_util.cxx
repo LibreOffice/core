@@ -104,7 +104,7 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * func )
 // Logging
 
 
-bool isLog( RuntimeCargo * cargo, sal_Int32 loglevel )
+bool isLog( RuntimeCargo const * cargo, sal_Int32 loglevel )
 {
     return cargo && cargo->logFile && loglevel <= cargo->logLevel;
 }
