@@ -32,6 +32,7 @@
 #include "xmlcvali.hxx"
 #include "xmlstyli.hxx"
 #include "xmllabri.hxx"
+#include "xmlmappingi.hxx"
 #include "XMLConsolidationContext.hxx"
 #include "XMLDDELinksContext.hxx"
 #include "XMLCalculationSettingsContext.hxx"
@@ -171,6 +172,10 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT( TABLE, XML_DATABASE_RANGES ):
         pContext = new ScXMLDatabaseRangesContext ( GetScImport(), nElement,
                                                         xAttrList );
+        break;
+    case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPINGS ):
+        pContext = new ScXMLMappingsContext(GetScImport(), nElement,
+                xAttrList);
         break;
     case XML_ELEMENT( TABLE, XML_DATABASE_RANGE ):
         pContext = new ScXMLDatabaseRangeContext ( GetScImport(), nElement,

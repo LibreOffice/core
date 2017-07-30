@@ -133,6 +133,7 @@
 #include "uiobject.hxx"
 #include "scabstdlg.hxx"
 #include "undoblk.hxx"
+#include "datamapper.hxx"
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
@@ -3086,6 +3087,16 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         else if (rKeyCode.GetCode() == KEY_F8)
         {
             dumpColumnCellStorage();
+        }
+        else if (rKeyCode.GetCode() == KEY_F7)
+        {
+            ScDocument* pDoc   = pViewData->GetDocument();
+            auto& rMapper = pDoc->GetExternalDataMapper();
+            for (auto& itr : rMapper.getDataSources())
+            {
+                itr.refresh(pDoc);
+            }
+            return;
         }
     }
 
