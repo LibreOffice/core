@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
 #include <dataprovider.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -56,30 +57,101 @@ std::unique_ptr<SvStream> FetchStreamFromURL(const OUString& rURL, OStringBuffer
 
 }
 
-ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rURL, const OUString& rName, SCTAB nTab,
-    SCCOL nCol1,SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bAllowResize, bool& bSuccess):
-    maRange (ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)),
-    mpDocShell(pDocShell),
-    mpDBCollection (pDocShell->GetDocument().GetDBCollection())
+ExternalDataSource::ExternalDataSource(const OUString& rURL,
+        const OUString& rProvider):
+    maURL(rURL),
+    maProvider(rProvider),
+    mnUpdateFrequency(0)
 {
-    bSuccess = true;
-    ScDBCollection::NamedDBs& rNamedDBS = mpDBCollection->getNamedDBs();
-    ScDBData* aDBData = new ScDBData (rName, nTab, nCol1, nRow1, nCol2, nRow2);
-    if(!rNamedDBS.insert (aDBData))
-        bSuccess = false;
-    mpDBDataManager = std::shared_ptr<ScDBDataManager>(new ScDBDataManager(aDBData, bAllowResize));
-    mpDBDataManager->SetDestinationRange(maRange);
+}
 
-    mpDataProvider = std::unique_ptr<DataProvider> (new CSVDataProvider(mpDocShell, rURL, maRange, mpDBDataManager.get()));
+void ExternalDataSource::setID(const OUString& rID)
+{
+    maID = rID;
+}
+
+const OUString& ExternalDataSource::getURL() const
+{
+    return maURL;
+}
+
+const OUString& ExternalDataSource::getProvider() const
+{
+    return maProvider;
+}
+
+const OUString& ExternalDataSource::getID() const
+{
+    return maID;
+}
+
+OUString ExternalDataSource::getDBName() const
+{
+    if (mpDBDataManager)
+    {
+        ScDBData* pDBData = mpDBDataManager->getDBData();
+        if (pDBData)
+            return pDBData->GetName();
+    }
+    return OUString();
+}
+
+void ExternalDataSource::setDBData(ScDBData* pDBData)
+{
+    if (!mpDBDataManager)
+    {
+        mpDBDataManager.reset(new ScDBDataManager(pDBData, false));
+    }
+    else
+    {
+        mpDBDataManager->SetDatabase(pDBData);
+    }
+}
+
+double ExternalDataSource::getUpdateFrequency() const
+{
+    return mnUpdateFrequency;
+}
+
+void ExternalDataSource::refresh(ScDocument* pDoc)
+{
+    // no DB data available
+    if (!mpDBDataManager)
+        return;
+
+    // if no data provider exists, try to create one
+    if (!mpDataProvider)
+        mpDataProvider = DataProviderFactory::getDataProvider(pDoc, maProvider, maURL, maID, mpDBDataManager.get());
+
+    // if we still have not been able to create one, we can not refresh the data
+    if (!mpDataProvider)
+        return;
+
+    mpDataProvider->Import();
+}
+
+ExternalDataMapper::ExternalDataMapper(ScDocument* /*pDoc*/)
+    //mpDoc(pDoc)
+{
 }
 
 ExternalDataMapper::~ExternalDataMapper()
 {
 }
 
-void ExternalDataMapper::StartImport()
+void ExternalDataMapper::insertDataSource(const sc::ExternalDataSource& rSource)
 {
-    mpDataProvider->StartImport();
+    maDataSources.push_back(rSource);
+}
+
+const std::vector<sc::ExternalDataSource>& ExternalDataMapper::getDataSources() const
+{
+    return maDataSources;
+}
+
+std::vector<sc::ExternalDataSource>& ExternalDataMapper::getDataSources()
+{
+    return maDataSources;
 }
 
 DataProvider::~DataProvider()
@@ -137,18 +209,14 @@ public:
     }
 };
 
-CSVFetchThread::CSVFetchThread(ScDocument& rDoc, ScDBDataManager* pBDDataManager, const OUString& mrURL, size_t nColCount):
-        Thread("ReaderThread"),
-        mpStream(nullptr),
+CSVFetchThread::CSVFetchThread(ScDocument& rDoc, const OUString& mrURL):
+        Thread("CSV Fetch Thread"),
         mrDocument(rDoc),
         maURL (mrURL),
-        mnColCount(nColCount),
-        mpDBDataManager(pBDDataManager),
         mbTerminate(false)
 {
     maConfig.delimiters.push_back(',');
     maConfig.text_qualifier = '"';
-    mrDocument.InsertTab(0, "blah");
 }
 
 CSVFetchThread::~CSVFetchThread()
@@ -175,17 +243,20 @@ void CSVFetchThread::EndThread()
 void CSVFetchThread::execute()
 {
     OStringBuffer aBuffer(64000);
-    mpStream = FetchStreamFromURL(maURL, aBuffer);
-    if (mpStream->good())
+    std::unique_ptr<SvStream> pStream = FetchStreamFromURL(maURL, aBuffer);
+    if (pStream->good())
     {
         LinesType aLines(10);
         SCROW nCurRow = 0;
         SCCOL nCol = 0;
         for (Line & rLine : aLines)
         {
+            if (mbTerminate)
+                return;
+
             rLine.maCells.clear();
-            mpStream->ReadLine(rLine.maLine);
-            CSVHandler aHdl(rLine, mnColCount);
+            pStream->ReadLine(rLine.maLine);
+            CSVHandler aHdl(rLine, MAXCOL);
             orcus::csv_parser<CSVHandler> parser(rLine.maLine.getStr(), rLine.maLine.getLength(), aHdl, maConfig);
             parser.parse();
 
@@ -210,8 +281,6 @@ void CSVFetchThread::execute()
             }
             nCurRow++;
         }
-        mpDBDataManager->SetSourceRange(nCol, nCurRow);
-
     }
 }
 
@@ -243,49 +312,40 @@ void CSVFetchThread::ResumeFetchStream()
     maCondReadStream.set();
 }
 
-CSVDataProvider::CSVDataProvider(ScDocShell* pDocShell, const OUString& rURL, ScRange& rRange, ScDBDataManager* pBDDataManager):
+CSVDataProvider::CSVDataProvider(ScDocument* pDoc, const OUString& rURL, ScDBDataManager* pBDDataManager):
     maURL(rURL),
-    mrRange(rRange),
-    mpDocShell(pDocShell),
-    mpDocument(&pDocShell->GetDocument()),
+    mpDocument(pDoc),
     mpDBDataManager(pBDDataManager),
     mpLines(nullptr),
-    mnLineCount(0),
-    mbImportUnderway(false)
+    mnLineCount(0)
 {
-    mpDBDataManager->SetDestinationRange(rRange);
 }
 
 CSVDataProvider::~CSVDataProvider()
 {
 }
 
-void CSVDataProvider::StartImport()
+void CSVDataProvider::Import()
 {
-    if (mbImportUnderway)
-        return;
-
-    if (!mxCSVFetchThread.is())
+    ScDocument aDoc(SCDOCMODE_CLIP);
+    aDoc.ResetClip(mpDocument, (SCTAB)0);
+    mxCSVFetchThread = new CSVFetchThread(aDoc, maURL);
+    mxCSVFetchThread->launch();
+    if (mxCSVFetchThread.is())
     {
-        ScDocument aDoc;
-        mxCSVFetchThread = new CSVFetchThread(aDoc, mpDBDataManager, maURL, mrRange.aEnd.Col() - mrRange.aStart.Col() + 1);
-        mxCSVFetchThread->launch();
-        if (mxCSVFetchThread.is())
-        {
-            mxCSVFetchThread->EndThread();
-            mxCSVFetchThread->join();
-        }
-
-        WriteToDoc(aDoc);
+        mxCSVFetchThread->join();
     }
+
+    WriteToDoc(aDoc, mpDBDataManager->getDBData());
 
     Refresh();
 }
 
 void CSVDataProvider::Refresh()
 {
-    mpDocShell->DoHardRecalc();
-    mpDocShell->SetDocumentModified();
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDocument->GetDocumentShell());
+    pDocShell->DoHardRecalc();
+    pDocShell->SetDocumentModified();
 }
 
 Line CSVDataProvider::GetLine()
@@ -310,35 +370,42 @@ Line CSVDataProvider::GetLine()
     return mpLines->at(mnLineCount++);
 }
 
-void CSVDataProvider::WriteToDoc(ScDocument& rDoc)
+// TODO: why don't we use existing copy functionality
+void CSVDataProvider::WriteToDoc(ScDocument& rDoc, ScDBData* pDBData)
 {
-    if (mpDBDataManager->Resize())
-        mrRange = mpDBDataManager->GetDestinationRange();
+    bool bShrunk = false;
+    SCCOL nStartCol = 0;
+    SCROW nStartRow = 0;
+    SCCOL nEndCol = MAXCOL;
+    SCROW nEndRow = MAXROW;
+    rDoc.ShrinkToUsedDataArea(bShrunk, 0, nStartCol, nStartRow, nEndCol, nEndRow, false, true, true);
 
+    ScRange aDestRange;
+    pDBData->GetArea(aDestRange);
     double* pfValue;
-    for (int nRow = mrRange.aStart.Row(); nRow < mrRange.aEnd.Row(); ++nRow)
+    for (int nRow = nStartRow; nRow < nEndRow; ++nRow)
     {
-        for (int nCol = mrRange.aStart.Col(); nCol < mrRange.aEnd.Col(); ++nCol)
+        for (int nCol = nStartCol; nCol < nEndCol; ++nCol)
         {
-            ScAddress aAddr = ScAddress(nCol, nRow, mrRange.aStart.Tab());
+            ScAddress aAddr = ScAddress(nCol, nRow, 0);
             pfValue = rDoc.GetValueCell(aAddr);
 
             if (pfValue == nullptr)
             {
-                OUString aString = rDoc.GetString(nCol, nRow, mrRange.aStart.Tab());
-                mpDocument->SetString(nCol, nRow, mrRange.aStart.Tab(), aString);
+                OUString aString = rDoc.GetString(nCol, nRow, 0);
+                mpDocument->SetString(aDestRange.aStart.Col() + nCol, aDestRange.aStart.Row() + nRow, aDestRange.aStart.Tab(), aString);
             }
             else
             {
-                mpDocument->SetValue(nCol, nRow, mrRange.aStart.Tab(), *pfValue);
+                mpDocument->SetValue(aDestRange.aStart.Col() + nCol, aDestRange.aStart.Row() + nRow, aDestRange.aStart.Tab(), *pfValue);
             }
         }
     }
 }
 
-ScDBDataManager::ScDBDataManager(ScDBData* pDBData,  bool bAllowResize = false):
-mpDBData(pDBData),
-mbAllowResize(bAllowResize)
+ScDBDataManager::ScDBDataManager(ScDBData* pDBData,  bool /*bAllowResize*/):
+    mpDBData(pDBData)
+    //mbAllowResize(bAllowResize)
 {
 }
 
@@ -351,60 +418,31 @@ void ScDBDataManager::SetDatabase(ScDBData* pDbData)
     mpDBData = pDbData;
 }
 
-bool ScDBDataManager::IsResizeAllowed()
+ScDBData* ScDBDataManager::getDBData()
 {
-    return mbAllowResize;
+    return mpDBData;
 }
 
-bool ScDBDataManager::RequiresResize(SCROW& RowDifference, SCCOL& ColDifference)
+bool DataProviderFactory::isInternalDataProvider(const OUString& rProvider)
 {
-    SCROW nTotalSourceRows = maSourceRange.aStart.Row() - maSourceRange.aEnd.Row();
-    SCCOL nTotalSourceCols = maSourceRange.aStart.Col() - maSourceRange.aEnd.Col();
-
-    SCROW nTotalDestinationRows = maDestinationRange.aStart.Row() - maDestinationRange.aEnd.Row();
-    SCCOL nTotalDestinationCols = maDestinationRange.aStart.Col() - maDestinationRange.aEnd.Col();
-
-    RowDifference = nTotalSourceRows - nTotalDestinationRows;
-    ColDifference = nTotalSourceCols - nTotalDestinationCols;
-
-    if (nTotalSourceRows != nTotalDestinationRows || nTotalSourceCols != nTotalDestinationCols)
-        return true;
-
-    return false;
+    return rProvider.startsWith("org.libreoffice.calc");
 }
 
-bool ScDBDataManager::Resize()
+std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* pDoc, const OUString& rProvider, const OUString& rURL, const OUString& /*rID*/, ScDBDataManager* pManager)
 {
-    SCROW RowDifference =0;
-    SCCOL ColDifference = 0;
-
-    if (IsResizeAllowed() && RequiresResize(RowDifference, ColDifference))
+    bool bInternal = DataProviderFactory::isInternalDataProvider(rProvider);
+    if (bInternal)
     {
-        maDestinationRange.aEnd = ScAddress(maDestinationRange.aEnd.Row() + RowDifference, maDestinationRange.aEnd.Col() + ColDifference, maDestinationRange.aEnd.Tab());
-
-        return true;
+        if (rProvider == "org.libreoffice.calc.csv")
+            return std::shared_ptr<DataProvider>(new CSVDataProvider(pDoc, rURL, pManager));
     }
-    return false;
-}
+    else
+    {
+        SAL_WARN("sc", "no external data provider supported yet");
+        return std::shared_ptr<DataProvider>();
+    }
 
-void ScDBDataManager::SetSourceRange(SCCOL nCol, SCROW nRow)
-{
-    maSourceRange = ScRange(0, 0, 0, nCol, nRow, 0);
-}
-
-void ScDBDataManager::SetDestinationRange(ScRange& aRange)
-{
-    maDestinationRange = aRange;
-}
-
-ScRange& ScDBDataManager::GetSourceRange()
-{
-    return maSourceRange;
-}
-
-ScRange& ScDBDataManager::GetDestinationRange()
-{
-    return maDestinationRange;
+    return std::shared_ptr<DataProvider>();
 }
 
 }

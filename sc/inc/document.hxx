@@ -86,6 +86,7 @@ class ColumnSet;
 class UpdatedRangeNames;
 class TableColumnBlockPositionSet;
 class ColumnIterator;
+class ExternalDataMapper;
 
 }
 
@@ -350,6 +351,7 @@ private:
     ScRefreshTimerControl* pRefreshTimerControl;
     std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenCharacters;
     ScDBData*           mpAnonymousDBData;
+    std::unique_ptr<sc::ExternalDataMapper> mpDataMapper;
 
     ScFieldEditEngine*  pCacheFieldEditEngine;
 
@@ -708,6 +710,7 @@ public:
     const ScDBData*              GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     ScDBData*                    GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     void                         RefreshDirtyTableColumnNames();
+    sc::ExternalDataMapper&      GetExternalDataMapper();
 
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, OUString* pName ) const;
 

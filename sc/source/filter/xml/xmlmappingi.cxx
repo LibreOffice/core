@@ -1,0 +1,143 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "xmlmappingi.hxx"
+
+#include <xmloff/xmltkmap.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlerror.hxx>
+
+#include "datamapper.hxx"
+#include "document.hxx"
+#include "dbdata.hxx"
+
+#include <sax/tools/converter.hxx>
+
+using namespace com::sun::star;
+using namespace xmloff::token;
+
+ScXMLMappingsContext::ScXMLMappingsContext( ScXMLImport& rImport,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+    ScXMLImportContext( rImport )
+{
+    // has no attributes
+    rImport.LockSolarMutex();
+}
+
+ScXMLMappingsContext::~ScXMLMappingsContext()
+{
+    GetScImport().UnlockSolarMutex();
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingsContext::createFastChildContext(
+                                      sal_Int32 nElement,
+                                      const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    switch( nElement )
+    {
+        case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPING ):
+        {
+            pContext = new ScXMLMappingContext( GetScImport(), nElement, xAttrList );
+        }
+        break;
+    }
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
+
+ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
+                                      sal_Int32 /*nElement*/,
+                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) :
+    ScXMLImportContext( rImport )
+{
+    OUString aProvider;
+    OUString aID;
+    OUString aURL;
+    // OUString aFrequency;
+    OUString aDBName;
+    if( xAttrList.is() )
+    {
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttrList );
+
+        for( auto &aIter : *pAttribList )
+        {
+            switch( aIter.getToken() )
+            {
+                case XML_ELEMENT( XLINK, XML_HREF ):
+                {
+                    aURL = aIter.toString();
+                }
+                break;
+                case XML_ELEMENT( CALC_EXT, XML_PROVIDER ):
+                {
+                    aProvider = aIter.toString();
+                }
+                break;
+                case XML_ELEMENT( CALC_EXT, XML_ID ):
+                {
+                    aID = aIter.toString();
+                }
+                break;
+                case XML_ELEMENT( CALC_EXT, XML_DATABASE_NAME ):
+                {
+                    aDBName = aIter.toString();
+                }
+                break;
+                case XML_ELEMENT( CALC_EXT, XML_DATA_FREQUENCY ):
+                {
+                }
+                break;
+            }
+        }
+    }
+
+    if (!aProvider.isEmpty())
+    {
+        ScDocument* pDoc = GetScImport().GetDocument();
+        ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aDBName));
+        if (pDBData)
+        {
+            auto& rDataMapper = pDoc->GetExternalDataMapper();
+            sc::ExternalDataSource aSource(aURL, aProvider);
+            aSource.setID(aID);
+            aSource.setDBData(pDBData);
+            rDataMapper.insertDataSource(aSource);
+        }
+    }
+}
+
+ScXMLMappingContext::~ScXMLMappingContext()
+{
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingContext::createFastChildContext(
+    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
+
+void SAL_CALL ScXMLMappingContext::endFastElement( sal_Int32 /*nElement*/ )
+{
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
