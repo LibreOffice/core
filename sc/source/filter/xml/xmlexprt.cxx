@@ -68,6 +68,7 @@
 #include <documentlinkmgr.hxx>
 #include <tokenstringcontext.hxx>
 #include <cellform.hxx>
+#include "datamapper.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -1933,6 +1934,7 @@ void ScXMLExport::ExportContent_()
     WriteNamedExpressions();
     WriteDataStream();
     aExportDatabaseRanges.WriteDatabaseRanges();
+    WriteExternalDataMapping();
     ScXMLExportDataPilot aExportDataPilot(*this);
     aExportDataPilot.WriteDataPilots(xSpreadDoc);
     WriteConsolidation();
@@ -4016,6 +4018,32 @@ void ScXMLExport::WriteNamedExpressions()
         return;
     ScRangeName* pNamedRanges = pDoc->GetRangeName();
     WriteNamedRange(pNamedRanges);
+}
+
+void ScXMLExport::WriteExternalDataMapping()
+{
+    if (!pDoc)
+        return;
+
+    if (getDefaultVersion() <= SvtSaveOptions::ODFVER_012)
+        // Export this only for 1.2 extended and above.
+        return;
+
+    sc::ExternalDataMapper& rDataMapper = pDoc->GetExternalDataMapper();
+    auto& rDataSources = rDataMapper.getDataSources();
+    if (!rDataSources.empty())
+    {
+        SvXMLElementExport aMappings(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_MAPPINGS, true, true);
+        for (auto& itr : rDataSources)
+        {
+            AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, itr.getURL());
+            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_PROVIDER, itr.getProvider());
+            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_DATA_FREQUENCY, OUString::number(itr.getUpdateFrequency()));
+            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_ID, itr.getID());
+            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_DATABASE_NAME, itr.getDBName());
+            SvXMLElementExport aMapping(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_MAPPING, true, true);
+        }
+    }
 }
 
 void ScXMLExport::WriteDataStream()
