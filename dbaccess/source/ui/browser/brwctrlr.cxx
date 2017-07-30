@@ -2006,18 +2006,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 break;
 
             // check if the column is a aggregate function
-            bool bHaving = false;
-            OUString sName;
-            xField->getPropertyValue(PROPERTY_NAME) >>= sName;
-            Reference< XColumnsSupplier > xColumnsSupplier(m_xParser, UNO_QUERY);
-            Reference< css::container::XNameAccess >  xCols = xColumnsSupplier.is() ? xColumnsSupplier->getColumns() : Reference< css::container::XNameAccess > ();
-            if ( xCols.is() && xCols->hasByName(sName) )
-            {
-                Reference<XPropertySet> xProp(xCols->getByName(sName),UNO_QUERY);
-                static const char sAgg[] = "AggregateFunction";
-                if ( xProp->getPropertySetInfo()->hasPropertyByName(sAgg) )
-                    xProp->getPropertyValue(sAgg) >>= bHaving;
-            }
+            const bool bHaving(isAggregateColumn(m_xParser, xField));
 
             Reference< XSingleSelectQueryComposer > xParser = createParser_nothrow();
             const OUString sOldFilter = xParser->getFilter();
@@ -2029,7 +2018,8 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             // -> completely overwrite it, else append one
             if (!bApplied)
             {
-                DO_SAFE( (bHaving ? xParser->setHavingClause(OUString()) : xParser->setFilter(::OUString())), "SbaXDataBrowserController::Execute : caught an exception while resetting the new filter !" );
+                DO_SAFE( xParser->setFilter(      OUString()), "SbaXDataBrowserController::Execute : caught an exception while resetting unapplied filter !" );
+                DO_SAFE( xParser->setHavingClause(OUString()), "SbaXDataBrowserController::Execute : caught an exception while resetting unapplied HAVING clause !" );
             }
 
             bool bParserSuccess = false;

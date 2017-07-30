@@ -296,13 +296,19 @@ namespace dbtools
                 the detail part denotes a column name. In such a case, an additional filter needs to be created,
                 containing a new parameter.
 
+            @param  _out_rAdditionalHavingComponents
+                the additional having clause components which are required for master-detail relationships where
+                the detail part denotes a column name. In such a case, an additional filter needs to be created,
+                containing a new parameter.
+
             @precond
                 <member>m_aMasterFields</member> and <member>m_aDetailFields</member> have the same length
         */
         void    classifyLinks(
                     const css::uno::Reference< css::container::XNameAccess >& _rxParentColumns,
                     const css::uno::Reference< css::container::XNameAccess >& _rxColumns,
-                    ::std::vector< OUString >& _out_rAdditionalFilterComponents
+                    ::std::vector< OUString >& _out_rAdditionalFilterComponents,
+                    ::std::vector< OUString >& _out_rAdditionalHavingComponents
                 );
 
         /** finalizes our <member>m_pOuterParameters</member> so that it can be used for
