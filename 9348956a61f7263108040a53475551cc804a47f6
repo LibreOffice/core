@@ -22,6 +22,30 @@
       "revId": "9348956a61f7263108040a53475551cc804a47f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_36dc2a12",
+        "filename": "accessibility/source/standard/vclxaccessiblescrollbar.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-30T17:17:29Z",
+      "side": 1,
+      "message": "static constexpr\nor\nnamespace {\n    constexpr\n}\nis currently best practice",
+      "parentUuid": "3a461143_b6abba88",
+      "range": {
+        "startLine": 120,
+        "startChar": 6,
+        "endLine": 120,
+        "endChar": 15
+      },
+      "revId": "9348956a61f7263108040a53475551cc804a47f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
