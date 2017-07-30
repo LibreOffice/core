@@ -22,6 +22,7 @@
 
 #include <svx/svxdllapi.h>
 
+#include <unordered_map>
 #include <vcl/metric.hxx>
 
 #include <list>
