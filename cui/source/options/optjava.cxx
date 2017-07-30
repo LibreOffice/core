@@ -136,7 +136,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     pJavaListContainer->set_height_request(aControlSize.Height());
     m_pJavaList = VclPtr<SvxJavaListBox>::Create(*pJavaListContainer, m_sAccessibilityText);
 
-    long aStaticTabs[]= { 4, 0, 0, 0, 0 };
+    long const aStaticTabs[]= { 4, 0, 0, 0, 0 };
 
     m_pJavaList->SvSimpleTable::SetTabs( aStaticTabs );
 

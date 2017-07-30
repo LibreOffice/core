@@ -708,14 +708,14 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef c
     // Check the original data is there.
     for (SCROW nRow=nRow1+1; nRow <= nRow2; ++nRow)
     {
-        double aCheck[] = { 1, 2, 3, 4, 5 };
+        double const aCheck[] = { 1, 2, 3, 4, 5 };
         CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(0,nRow,0)));
     }
     for (SCROW nRow=nRow1+1; nRow <= nRow2; ++nRow)
     {
         for (SCCOL nCol=1; nCol <= 3; ++nCol)
         {
-            double aCheck[] = { 1, 12, 123, 1234, 12345 };
+            double const aCheck[] = { 1, 12, 123, 1234, 12345 };
             CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(nCol,nRow,0)));
         }
     }
@@ -745,7 +745,7 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef c
     // adjusted to point to the original location.
     for (SCROW nRow=nRow1+1; nRow <= nRow2; ++nRow)
     {
-        double aCheck[] = { 5, 4, 3, 2, 1 };
+        double const aCheck[] = { 5, 4, 3, 2, 1 };
         CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(0,nRow,0)));
     }
     // The last column (D) are in-sheet relative references.
@@ -754,7 +754,7 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef c
     {
         for (SCCOL nCol=1; nCol <= nEndCol; ++nCol)
         {
-            double aCheck[] = { 12345, 1234, 123, 12, 1 };
+            double const aCheck[] = { 12345, 1234, 123, 12, 1 };
             CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(nCol,nRow,0)));
         }
     }

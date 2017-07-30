@@ -133,7 +133,7 @@ namespace basctl
             const sal_Char* pEventName;
             void (DocumentEventListener::*listenerMethod)( const ScriptDocument& _rDocument );
         };
-        EventEntry aEvents[] = {
+        EventEntry const aEvents[] = {
             { "OnNew",          &DocumentEventListener::onDocumentCreated },
             { "OnLoad",         &DocumentEventListener::onDocumentOpened },
             { "OnSave",         &DocumentEventListener::onDocumentSave },
@@ -145,7 +145,7 @@ namespace basctl
             { "OnModeChanged",  &DocumentEventListener::onDocumentModeChanged }
         };
 
-        for (EventEntry & aEvent : aEvents)
+        for (EventEntry const & aEvent : aEvents)
         {
             if ( !_rEvent.EventName.equalsAscii( aEvent.pEventName ) )
                 continue;

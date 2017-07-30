@@ -2170,8 +2170,8 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
                 sal_uInt32 n1;
                 sal_uInt16 n2, n3;
                 sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
-            } aGlbNmIds[4] = { { SO3_SM_CLASSID_60 }, { SO3_SM_CLASSID_50 },
-                               { SO3_SM_CLASSID_40 }, { SO3_SM_CLASSID_30 } };
+            } const aGlbNmIds[] = { { SO3_SM_CLASSID_60 }, { SO3_SM_CLASSID_50 },
+                                    { SO3_SM_CLASSID_40 }, { SO3_SM_CLASSID_30 } };
 
             for (const GlobalNameId & rId : aGlbNmIds) {
                 SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,

@@ -1832,7 +1832,7 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
 
     if (!isEmptyRectangle(priv->m_aGraphicSelection))
     {
-        GdkRGBA aBlack{0, 0, 0, 0};
+        GdkRGBA const aBlack{0, 0, 0, 0};
         renderGraphicHandle(pDocView, pCairo, priv->m_aGraphicSelection, aBlack);
     }
 

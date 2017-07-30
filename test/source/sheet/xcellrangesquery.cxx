@@ -44,7 +44,7 @@ void XCellRangesQuery::testQueryContentDifference()
 
 void XCellRangesQuery::testQueryEmptyCells()
 {
-    OUString aExpected( "Sheet1.A1:A5,Sheet1.B1:C1,Sheet1.B5,Sheet1.C3:C5,Sheet1.D1:E5" );
+    OUString const aExpected( "Sheet1.A1:A5,Sheet1.B1:C1,Sheet1.B5,Sheet1.C3:C5,Sheet1.D1:E5" );
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryEmptyCells();
     OUString aResult = xRanges->getRangeAddressesAsString();

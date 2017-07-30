@@ -149,8 +149,8 @@ CheckBox::CheckBox(vcl::Window* pParent, WinBits nStyle)
     , eMode(ObjectMode::Module)
     , m_aDocument(ScriptDocument::getApplicationScriptDocument())
 {
-    long aTabs_[] = { 1, 12 };  // TabPos needs at least one...
-                                // 12 because of the CheckBox
+    long const aTabs_[] = { 1, 12 };  // TabPos needs at least one...
+                                      // 12 because of the CheckBox
     SetTabs( aTabs_ );
     Init();
 }
@@ -499,7 +499,7 @@ LibPage::LibPage(vcl::Window * pParent)
     m_pLibBox->EnableInplaceEditing(true);
     m_pLibBox->SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
 
-    long aTabs[] = { 2, 30, 120 };
+    long const aTabs[] = { 2, 30, 120 };
     m_pLibBox->SetTabs( aTabs, MapUnit::MapPixel );
 
     FillListBox();

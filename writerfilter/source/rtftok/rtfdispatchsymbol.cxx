@@ -332,7 +332,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         checkFirstRun();
         if (bColumns)
         {
-            sal_uInt8 sBreak[] = { 0xe };
+            sal_uInt8 const sBreak[] = { 0xe };
             Mapper().startCharacterGroup();
             Mapper().text(sBreak, 1);
             Mapper().endCharacterGroup();
@@ -381,7 +381,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         {
             checkFirstRun();
             checkNeedPap();
-            sal_uInt8 sBreak[] = { 0xc };
+            sal_uInt8 const sBreak[] = { 0xc };
             Mapper().text(sBreak, 1);
             if (!m_bNeedPap)
             {

@@ -782,7 +782,7 @@ void DesktopLOKTest::testWriterComments()
 
     // Insert a comment at the beginning of the document and wait till the main
     // loop grabs the focus, so characters end up in the annotation window.
-    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    TimeValue const aTimeValue = {2 , 0}; // 2 seconds max
     m_aCommandResultCondition.reset();
     pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", nullptr, true);
     Scheduler::ProcessEventsToIdle();
@@ -1064,7 +1064,7 @@ void DesktopLOKTest::testContextMenuCalc()
                                       1, 4, 0);
     Scheduler::ProcessEventsToIdle();
 
-    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    TimeValue const aTimeValue = {2 , 0}; // 2 seconds max
     m_aContextMenuCondition.wait(aTimeValue);
 
     CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
@@ -1174,7 +1174,7 @@ void DesktopLOKTest::testContextMenuWriter()
                                       1, 4, 0);
     Scheduler::ProcessEventsToIdle();
 
-    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    TimeValue const aTimeValue = {2 , 0}; // 2 seconds max
     m_aContextMenuCondition.wait(aTimeValue);
 
     CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );
@@ -1230,7 +1230,7 @@ void DesktopLOKTest::testContextMenuImpress()
                                       1, 4, 0);
     Scheduler::ProcessEventsToIdle();
 
-    TimeValue aTimeValue = {2 , 0}; // 2 seconds max
+    TimeValue const aTimeValue = {2 , 0}; // 2 seconds max
     m_aContextMenuCondition.wait(aTimeValue);
 
     CPPUNIT_ASSERT( !m_aContextMenuResult.empty() );

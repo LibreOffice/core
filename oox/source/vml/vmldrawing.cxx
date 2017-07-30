@@ -54,7 +54,7 @@ namespace {
 OUString lclGetShapeId( sal_Int32 nShapeId )
 {
     // identifier consists of a literal NUL character, a lowercase 's', and the id
-    sal_Unicode aStr[2] = { '\0', 's' };
+    sal_Unicode const aStr[2] = { '\0', 's' };
     return OUString( aStr, 2 ) + OUString::number( nShapeId );
 }
 

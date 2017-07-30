@@ -2105,7 +2105,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99140, "tdf99140.docx")
 
 DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
 {
-    sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
+    sal_Int32 const cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
 
     uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
     uno::Reference< frame::XModel >             xModel( mxComponent, uno::UNO_QUERY );
@@ -2133,7 +2133,7 @@ DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
 // tdf#106742 for DOCX with compatibility level <= 14 (MS Word up to and incl. ver.2010), we should use cell margins when calculating table left border position
 DECLARE_OOXMLEXPORT_TEST( testTablePosition14, "table-position-14.docx" )
 {
-    sal_Int32 aXCoordsFromOffice[] = { 2500, -1000, 0, 0 };
+    sal_Int32 const aXCoordsFromOffice[] = { 2500, -1000, 0, 0 };
 
     uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
     uno::Reference< frame::XModel >             xModel( mxComponent, uno::UNO_QUERY );
@@ -2157,7 +2157,7 @@ DECLARE_OOXMLEXPORT_TEST( testTablePosition14, "table-position-14.docx" )
 // tdf#106742 for DOCX with compatibility level > 14 (MS Word since ver.2013), we should NOT use cell margins when calculating table left border position
 DECLARE_OOXMLEXPORT_TEST( testTablePosition15, "table-position-15.docx" )
 {
-    sal_Int32 aXCoordsFromOffice[] = { 2751, -899, 1, 106 };
+    sal_Int32 const aXCoordsFromOffice[] = { 2751, -899, 1, 106 };
 
     uno::Reference< text::XTextTablesSupplier > xTablesSupplier( mxComponent, uno::UNO_QUERY );
     uno::Reference< frame::XModel >             xModel( mxComponent, uno::UNO_QUERY );

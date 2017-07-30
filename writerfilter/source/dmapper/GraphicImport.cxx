@@ -1157,7 +1157,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 aBorderLine.OuterLineWidth = (sal_Int16)rBorderLine.nLineWidth;
                 aBorderLine.LineDistance = 0;
             }
-            PropertyIds aBorderProps[4] =
+            PropertyIds const aBorderProps[] =
             {
                 PROP_LEFT_BORDER,
                 PROP_RIGHT_BORDER,
@@ -1165,7 +1165,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 PROP_BOTTOM_BORDER
             };
 
-            for(PropertyIds & rBorderProp : aBorderProps)
+            for(PropertyIds const & rBorderProp : aBorderProps)
                 xGraphicObjectProperties->setPropertyValue(getPropertyName(rBorderProp), uno::makeAny(aBorderLine));
 
             // setting graphic object shadow proerties

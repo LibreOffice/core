@@ -112,7 +112,7 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(vcl::Window* pParent)
     SvSimpleTableContainer *pPasswordsLBContainer = get<SvSimpleTableContainer>("logins");
     m_pPasswordsLB = VclPtr<PasswordTable>::Create(*pPasswordsLBContainer, 0);
 
-    long aStaticTabs[]= { 2, 0, 0 };
+    long const aStaticTabs[]= { 2, 0, 0 };
     m_pPasswordsLB->SetTabs( aStaticTabs );
     m_pPasswordsLB->InsertHeaderItem( 1, get<FixedText>("website")->GetText(),
         HeaderBarItemBits::LEFT | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::CLICKABLE | HeaderBarItemBits::UPARROW );

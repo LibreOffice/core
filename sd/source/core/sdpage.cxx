@@ -241,8 +241,7 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
 
     if( aMatches.size() > 1 )
     {
-        OrdNumSorter aSortHelper;
-        std::sort( aMatches.begin(), aMatches.end(), aSortHelper );
+        std::sort( aMatches.begin(), aMatches.end(), OrdNumSorter() );
     }
 
     if( nIndex > 0 )

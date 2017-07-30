@@ -564,7 +564,7 @@ bool XPMReader::ImplGetPara ( sal_uLong nNumb )
 
 bool XPMReader::ImplGetString()
 {
-    sal_uInt8       sID[] = "/* XPM */";
+    sal_uInt8 const sID[] = "/* XPM */";
     sal_uInt8*      pString = mpStringBuf;
 
     mnStringSize = 0;

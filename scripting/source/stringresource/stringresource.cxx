@@ -441,8 +441,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
 
     if( getItemForLocale( locale, false ) != nullptr )
     {
-        OUString errorMsg("StringResourceImpl: locale already exists");
-        throw ElementExistException( errorMsg );
+        throw ElementExistException( "StringResourceImpl: locale already exists" );
     }
 
     // TODO?: Check if locale is valid? How?
@@ -593,8 +592,7 @@ sal_Int32 StringResourceImpl::getUniqueNumericId(  )
 
     if( m_nNextUniqueNumericId < UNIQUE_NUMBER_NEEDS_INITIALISATION )
     {
-        OUString errorMsg("getUniqueNumericId: Extended sal_Int32 range");
-        throw NoSupportException( errorMsg );
+        throw NoSupportException( "getUniqueNumericId: Extended sal_Int32 range" );
     }
     return m_nNextUniqueNumericId;
 }
@@ -739,23 +737,20 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     bool bReadOnlyOk = (aArguments[1] >>= m_bReadOnly);
     if( !bReadOnlyOk )
     {
-        OUString errorMsg("XInitialization::initialize: Expected ReadOnly flag");
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 1 );
+        throw IllegalArgumentException( "XInitialization::initialize: Expected ReadOnly flag", Reference< XInterface >(), 1 );
     }
 
     css::lang::Locale aCurrentLocale;
     bool bLocaleOk = (aArguments[2] >>= aCurrentLocale);
     if( !bLocaleOk )
     {
-        OUString errorMsg("XInitialization::initialize: Expected Locale");
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 2 );
+        throw IllegalArgumentException( "XInitialization::initialize: Expected Locale", Reference< XInterface >(), 2 );
     }
 
     bool bNameBaseOk = (aArguments[3] >>= m_aNameBase);
     if( !bNameBaseOk )
     {
-        OUString errorMsg("XInitialization::initialize: Expected NameBase string");
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 3 );
+        throw IllegalArgumentException( "XInitialization::initialize: Expected NameBase string", Reference< XInterface >(), 3 );
     }
     if( m_aNameBase.isEmpty() )
         m_aNameBase = aNameBaseDefaultStr;
@@ -763,8 +758,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     bool bCommentOk = (aArguments[4] >>= m_aComment);
     if( !bCommentOk )
     {
-        OUString errorMsg("XInitialization::initialize: Expected Comment string");
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 4 );
+        throw IllegalArgumentException( "XInitialization::initialize: Expected Comment string", Reference< XInterface >(), 4 );
     }
 
     implScanLocales();
@@ -2191,8 +2185,7 @@ void StringResourceWithStorageImpl::initialize( const Sequence< Any >& aArgument
 
     if( !bOk )
     {
-        OUString errorMsg("StringResourceWithStorageImpl::initialize: invalid storage");
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
+        throw IllegalArgumentException( "StringResourceWithStorageImpl::initialize: invalid storage", Reference< XInterface >(), 0 );
     }
 
     implInitializeCommonParameters( aArguments );
@@ -2352,8 +2345,7 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 
     if( !Storage.is() )
     {
-        OUString errorMsg( "StringResourceWithStorageImpl::setStorage: invalid storage" );
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
+        throw IllegalArgumentException( "StringResourceWithStorageImpl::setStorage: invalid storage", Reference< XInterface >(), 0 );
     }
 
     implLoadAllLocales();
@@ -2660,8 +2652,7 @@ void StringResourceWithLocationImpl::setURL( const OUString& URL )
     sal_Int32 nLen = URL.getLength();
     if( nLen == 0 )
     {
-        OUString errorMsg( "StringResourceWithLocationImpl::setURL: invalid URL" );
-        throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
+        throw IllegalArgumentException( "StringResourceWithLocationImpl::setURL: invalid URL", Reference< XInterface >(), 0 );
     }
 
     implLoadAllLocales();

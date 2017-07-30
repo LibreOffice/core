@@ -247,10 +247,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     }
     else
     {
-        OUString reason(
-        "ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"
+        invokeResult <<= OUString(
+            "ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"
         );
-        invokeResult <<= reason;
     }
 
     if ( bCaughtException )

@@ -378,7 +378,7 @@ void Test::testSortWithFormulaRefs()
         "=IF($List1.A7<>\"\";$List1.A7;\"\")",
     };
 
-    const char* aTextData[4] = {
+    const char* const aTextData[4] = {
         "bob",
         "tim",
         "brian",

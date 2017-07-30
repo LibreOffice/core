@@ -1359,8 +1359,8 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                 uno::Sequence<uno::Any> aSeq;
                 int nSeqIndex = 0;
 
-                sal_uInt16 aWhichIds[3] = { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
-                                            EE_CHAR_FONTINFO_CTL };
+                sal_uInt16 const aWhichIds[] { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
+                                               EE_CHAR_FONTINFO_CTL };
 
                 const SfxItemPool& rPool = mpDoc->GetPool();
                 const SfxPoolItem* pItem;

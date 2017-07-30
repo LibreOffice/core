@@ -1499,7 +1499,7 @@ public:
 
         // set work group size and execute
         size_t global_work_size[] = { 256, (size_t)w };
-        size_t local_work_size[] = { 256, 1 };
+        size_t const local_work_size[] = { 256, 1 };
         SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
         err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
             global_work_size, local_work_size, 0, nullptr, nullptr);
@@ -1557,7 +1557,7 @@ public:
 
             // set work group size and execute
             size_t global_work_size1[] = { 256, (size_t)w };
-            size_t local_work_size1[] = { 256, 1 };
+            size_t const local_work_size1[] = { 256, 1 };
             SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
             err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
                 global_work_size1, local_work_size1, 0, nullptr, nullptr);
@@ -2268,7 +2268,7 @@ public:
 
             // set work group size and execute
             size_t global_work_size[] = { 256, (size_t)nVectorWidth };
-            size_t local_work_size[] = { 256, 1 };
+            size_t const local_work_size[] = { 256, 1 };
             SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
             err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
                 global_work_size, local_work_size, 0, nullptr, nullptr);
@@ -2352,7 +2352,7 @@ public:
                     throw OpenCLError("clSetKernelArg", err, __FILE__, __LINE__);
                 // set work group size and execute
                 size_t global_work_size[] = { 256, (size_t)nVectorWidth };
-                size_t local_work_size[] = { 256, 1 };
+                size_t const local_work_size[] = { 256, 1 };
                 SAL_INFO("sc.opencl", "Enqueing kernel " << redKernel);
                 err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, nullptr,
                     global_work_size, local_work_size, 0, nullptr, nullptr);

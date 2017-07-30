@@ -446,7 +446,7 @@ SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     SetHelpId(HID_PVIEW_ZOOM_LB);
     SetSizePixel(LogicToPixel(Size(30, 86), MapUnit::MapAppFont));
     EnableAutocomplete( false );
-    const char* aZoomValues[] =
+    const char* const aZoomValues[] =
     { RID_SVXSTR_ZOOM_25 , RID_SVXSTR_ZOOM_50 ,
       RID_SVXSTR_ZOOM_75 , RID_SVXSTR_ZOOM_100 ,
       RID_SVXSTR_ZOOM_150 , RID_SVXSTR_ZOOM_200 ,

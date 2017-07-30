@@ -2553,8 +2553,8 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
         m_rWW8Export.InsUInt16( aShd.GetValue() );
     }
 
-    sal_uInt32 aSprmIds[] = { NS_sprm::sprmTDefTableShd,
-                              NS_sprm::sprmTDefTableShdRaw };
+    sal_uInt32 const aSprmIds[] { NS_sprm::sprmTDefTableShd,
+                                  NS_sprm::sprmTDefTableShdRaw };
     sal_uInt8 nBoxes0 = rTabBoxes.size();
     if (nBoxes0 > 21)
         nBoxes0 = 21;
@@ -3253,7 +3253,7 @@ void WW8Export::ExportDocument_Impl()
 
         pDataStrm = aTempData.GetStream( StreamMode::READWRITE | StreamMode::SHARE_DENYWRITE );
 
-        sal_uInt8 aRC4EncryptionHeader[ 52 ] = {0};
+        sal_uInt8 const aRC4EncryptionHeader[ 52 ] = {0};
         pTableStrm->WriteBytes(aRC4EncryptionHeader, 52);
     }
 

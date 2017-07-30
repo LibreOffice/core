@@ -106,7 +106,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
     pHeaderTreeContainer->set_width_request(aSize.Width());
     pHeaderTreeContainer->set_height_request(aSize.Height());
     m_pTable = VclPtr<SwAddressTable>::Create(*pHeaderTreeContainer);
-    long aStaticTabs[]= { 2, 0, 0 };
+    long const aStaticTabs[]= { 2, 0, 0 };
     m_pTable->SetTabs( aStaticTabs );
     m_pTable->InsertHeaderItem(1, m_sName );
     m_pTable->InsertHeaderItem(2, m_sType );

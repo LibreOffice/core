@@ -74,12 +74,12 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
     : XMLFontAutoStylePool(rExportP, bBlockFontEmbedding)
     , mpEditEnginePool(nullptr)
 {
-    sal_uInt16 aWhichIds[3] = { ATTR_FONT, ATTR_CJK_FONT,
-                                ATTR_CTL_FONT };
-    sal_uInt16 aEditWhichIds[3] = { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
-                                    EE_CHAR_FONTINFO_CTL };
-    sal_uInt16 aPageWhichIds[4] = { ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERLEFT,
-                                    ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT };
+    sal_uInt16 const aWhichIds[]     { ATTR_FONT, ATTR_CJK_FONT,
+                                       ATTR_CTL_FONT };
+    sal_uInt16 const aEditWhichIds[] { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
+                                       EE_CHAR_FONTINFO_CTL };
+    sal_uInt16 const aPageWhichIds[] { ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERLEFT,
+                                       ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT };
 
     const SfxItemPool* pItemPool(rExportP.GetDocument()->GetPool());
     AddFontItems(aWhichIds, 3, pItemPool, true);

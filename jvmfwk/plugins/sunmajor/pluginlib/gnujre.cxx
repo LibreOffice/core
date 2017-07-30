@@ -103,7 +103,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     OUString const sJavaHomeProperty("java.home");
     OUString const sJavaLibraryPathProperty("java.library.path");
     OUString const sGNUHomeProperty("gnu.classpath.home.url");
-    OUString sAccessProperty("javax.accessibility.assistive_technologies");
+    OUString const sAccessProperty("javax.accessibility.assistive_technologies");
 
     bool bVersion = false;
     bool bVendor = false;
@@ -261,8 +261,6 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     char const * const * arLDPaths = getLibraryPaths( & size);
     vector<OUString> ld_paths = getVectorFromCharArray(arLDPaths, size);
 
-    char arSep[]= {SAL_PATHSEPARATOR, 0};
-    OUString sPathSep= OUString::createFromAscii(arSep);
     bool bLdPath = true;
     int c = 0;
     for(i_path il = ld_paths.begin(); il != ld_paths.end(); ++il, ++c)
@@ -274,7 +272,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         {
 
             if(c > 0)
-                m_sLD_LIBRARY_PATH+= sPathSep;
+                m_sLD_LIBRARY_PATH+= OUStringLiteral1(SAL_PATHSEPARATOR);
             m_sLD_LIBRARY_PATH+= usSysPath;
         }
         else

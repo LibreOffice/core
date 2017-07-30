@@ -6862,8 +6862,8 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreatePageAreaDelimit
     double nLineLength = 200.0; // in Twips
 
     Point aPoints[] = { rRect.TopLeft(), rRect.TopRight(), rRect.BottomRight(), rRect.BottomLeft() };
-    double aXOffDirs[] = { -1.0, 1.0, 1.0, -1.0 };
-    double aYOffDirs[] = { -1.0, -1.0, 1.0, 1.0 };
+    double const aXOffDirs[] = { -1.0, 1.0, 1.0, -1.0 };
+    double const aYOffDirs[] = { -1.0, -1.0, 1.0, 1.0 };
 
     // Actually loop over the corners to create the two lines
     for ( int i = 0; i < 4; i++ )
@@ -6917,8 +6917,8 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateColumnAreaDelim
     double nLineLength = 100.0; // in Twips
 
     Point aPoints[] = { rRect.TopLeft(), rRect.TopRight(), rRect.BottomRight(), rRect.BottomLeft() };
-    double aXOffDirs[] = { 1.0, -1.0, -1.0, 1.0 };
-    double aYOffDirs[] = { 1.0, 1.0, -1.0, -1.0 };
+    double const aXOffDirs[] = { 1.0, -1.0, -1.0, 1.0 };
+    double const aYOffDirs[] = { 1.0, 1.0, -1.0, -1.0 };
 
     // Actually loop over the corners to create the two lines
     for ( int i = 0; i < 4; i++ )

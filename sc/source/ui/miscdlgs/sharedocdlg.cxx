@@ -94,7 +94,7 @@ ScShareDocumentDlg::ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewD
     m_pCbShare->SetToggleHdl( LINK( this, ScShareDocumentDlg, ToggleHandle ) );
     m_pFtWarning->Enable( bIsDocShared );
 
-    long nTabs[] = { 2, 0, 0 };
+    long const nTabs[] = { 2, 0, 0 };
     m_pLbUsers->SetTabs( nTabs );
 
     OUString aHeader(get<FixedText>("name")->GetText());

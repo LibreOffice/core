@@ -7604,7 +7604,7 @@ void Test::testFuncMDETERM()
 #endif
     }
 
-    int aVals[] = {23, 31, 13, 12, 34, 64, 34, 31, 98, 32, 33, 63, 45, 54, 65, 76};
+    int const aVals[] = {23, 31, 13, 12, 34, 64, 34, 31, 98, 32, 33, 63, 45, 54, 65, 76};
     int nIdx = 0;
     for( SCROW nRow = 0; nRow < 4; nRow++ )
         for( SCCOL nCol = 0; nCol < 4; nCol++ )

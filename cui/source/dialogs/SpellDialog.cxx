@@ -488,7 +488,7 @@ IMPL_LINK( SpellDialog, CheckGrammarHdl, Button*, pBox, void )
 
 void SpellDialog::StartSpellOptDlg_Impl()
 {
-    sal_uInt16 aSpellInfos[] =
+    sal_uInt16 const aSpellInfos[] =
     {
         SID_ATTR_SPELL,SID_ATTR_SPELL,
         SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,

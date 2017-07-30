@@ -3082,7 +3082,7 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
         }
         else
         {
-            sal_uInt16 aTableSplitBoxSetRange[] = {
+            sal_uInt16 const aTableSplitBoxSetRange[] {
                 RES_LR_SPACE,       RES_UL_SPACE,
                 RES_BACKGROUND,     RES_SHADOW,
                 RES_PROTECT,        RES_PROTECT,

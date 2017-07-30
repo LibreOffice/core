@@ -159,8 +159,8 @@ int OpenGLRender::InitOpenGL()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glEnable(GL_LIGHTING);
-    GLfloat light_direction[] = { 0.0 , 0.0 , 1.0 };
-    GLfloat materialDiffuse[] = { 1.0 , 1.0 , 1.0 , 1.0};
+    GLfloat const light_direction[] = { 0.0 , 0.0 , 1.0 };
+    GLfloat const materialDiffuse[] = { 1.0 , 1.0 , 1.0 , 1.0};
     glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light_direction);
     glMaterialfv(GL_FRONT,GL_DIFFUSE,materialDiffuse);
     glEnable(GL_LIGHT0);
@@ -192,9 +192,9 @@ int OpenGLRender::RenderLine2FBO()
     CHECK_GL_ERROR();
     glLineWidth(m_fLineWidth);
     size_t listNum = m_Line2DShapePointList.size();
-    PosVecf3 trans = {0.0f, 0.0f, 0.0f};
-    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+    PosVecf3 const trans = {0.0f, 0.0f, 0.0f};
+    PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
+    PosVecf3 const scale = {1.0f, 1.0f, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
     for (size_t i = 0; i < listNum; i++)
@@ -421,9 +421,9 @@ int OpenGLRender::RenderBubble2FBO()
     {
         //move the circle to the pos, and scale using the xScale and Y scale
         Bubble2DPointList &pointList = m_Bubble2DShapePointList.front();
-        PosVecf3 trans = {pointList.x, pointList.y, m_fZStep};
-        PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-        PosVecf3 scale = {pointList.xScale / 2, pointList.yScale / 2 , 1.0f};
+        PosVecf3 const trans = {pointList.x, pointList.y, m_fZStep};
+        PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
+        PosVecf3 const scale = {pointList.xScale / 2, pointList.yScale / 2 , 1.0f};
         MoveModelf(trans, angle, scale);
         m_MVP = m_Projection * m_View * m_Model;
         //render to fbo
@@ -520,9 +520,9 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
         //move the circle to the pos, and scale using the xScale and Y scale
         RectanglePointList &pointList = m_RectangleShapePointList.front();
         {
-            PosVecf3 trans = {0, 0, 0};
-            PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-            PosVecf3 scale = {1, 1, 1.0f};
+            PosVecf3 const trans = {0, 0, 0};
+            PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
+            PosVecf3 const scale = {1, 1, 1.0f};
             MoveModelf(trans, angle, scale);
             m_MVP = m_Projection * m_View * m_Model;
         }
@@ -570,9 +570,9 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
         {
             if(bFill)
             {
-                PosVecf3 trans = {0.0, 0.0, Z_STEP };
-                PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-                PosVecf3 scale = {1, 1, 1.0f};
+                PosVecf3 const trans = {0.0, 0.0, Z_STEP };
+                PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
+                PosVecf3 const scale = {1, 1, 1.0f};
                 MoveModelf(trans, angle, scale);
                 m_MVP = m_Projection * m_View * m_Model;
 
@@ -704,9 +704,9 @@ int OpenGLRender::RenderTextShape()
     for (size_t i = 0; i < listNum; i++)
     {
         TextInfo &textInfo = m_TextInfoList.front();
-        PosVecf3 trans = { textInfo.nDx, textInfo.nDy, 0};
-        PosVecf3 angle = {0.0f, 0.0f, float(textInfo.rotation)};
-        PosVecf3 scale = {1.0, 1.0, 1.0f};
+        PosVecf3 const trans = { textInfo.nDx, textInfo.nDy, 0};
+        PosVecf3 const angle = {0.0f, 0.0f, float(textInfo.rotation)};
+        PosVecf3 const scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);
         m_MVP = m_Projection * m_View * m_Model;
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
@@ -813,9 +813,9 @@ int OpenGLRender::RenderArea2DShape()
 
     glDisable(GL_MULTISAMPLE);
     size_t listNum = m_Area2DShapePointList.size();
-    PosVecf3 trans = {0.0f, 0.0f, 0.0f};
-    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    PosVecf3 scale = {1.0f, 1.0f, 1.0f};
+    PosVecf3 const trans = {0.0f, 0.0f, 0.0f};
+    PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
+    PosVecf3 const scale = {1.0f, 1.0f, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
     for (size_t i = 0; i < listNum; ++i)
@@ -945,9 +945,9 @@ void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadiu
 int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
 {
     int listNum = m_PieSegment2DShapePointList.size();
-    PosVecf3 trans = {fPosX, fPosY, 0.0f};
-    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    PosVecf3 scale = {fSize, fSize, 1.0f};
+    PosVecf3 const trans = {fPosX, fPosY, 0.0f};
+    PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
+    PosVecf3 const scale = {fSize, fSize, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
 
@@ -994,9 +994,9 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, sal_Int32 nSymbol)
 
     glPointSize(20.f);
     CHECK_GL_ERROR();
-    PosVecf3 trans = {0.0, 0.0, 0.0};
-    PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    PosVecf3 scale = {1.0, 1.0, 1.0f};
+    PosVecf3 const trans = {0.0, 0.0, 0.0};
+    PosVecf3 const angle = {0.0f, 0.0f, 0.0f};
+    PosVecf3 const scale = {1.0, 1.0, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
 

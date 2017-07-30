@@ -407,7 +407,7 @@ bool CommonSalLayout::HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aVariationSe
 
         // Find all GSUB lookups for “vert” feature.
         hb_set_t* pLookups = hb_set_create();
-        hb_tag_t  pFeatures[] = { HB_TAG('v','e','r','t'), HB_TAG_NONE };
+        hb_tag_t const pFeatures[] = { HB_TAG('v','e','r','t'), HB_TAG_NONE };
         hb_ot_layout_collect_lookups(pHbFace, HB_OT_TAG_GSUB, nullptr, nullptr, pFeatures, pLookups);
         if (!hb_set_is_empty(pLookups))
         {
@@ -592,7 +592,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             // preference. The coretext_aat shaper is available only on macOS,
             // but there is no harm in always including it, HarfBuzz will
             // ignore unavailable shapers.
-            const char* pHbShapers[] = { "graphite2", "coretext_aat", "ot", "fallback", nullptr };
+            const char*const pHbShapers[] = { "graphite2", "coretext_aat", "ot", "fallback", nullptr };
             hb_segment_properties_t aHbProps;
             hb_buffer_get_segment_properties(pHbBuffer, &aHbProps);
             hb_shape_plan_t* pHbPlan = hb_shape_plan_create_cached(pHbFace, &aHbProps, maFeatures.data(), maFeatures.size(), pHbShapers);
