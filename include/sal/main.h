@@ -29,6 +29,11 @@
 #include <unistd.h>
 #endif
 
+#ifdef UNX
+#include <unistd.h>
+extern char **environ;
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -96,6 +101,7 @@ int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nsh
 { \
     int argc = __argc; char ** argv = __argv; \
     (void) _hinst; (void) _dummy; (void) _cmdline; (void) _nshow; /* unused */ \
+    SAL_WARN_IF(!lpvEnv, "GetEnvironmentStrings failed " << GetLastError() << "\n"); \
     return main(argc, argv); \
 }
 
