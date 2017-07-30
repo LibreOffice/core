@@ -52,6 +52,7 @@ namespace dbtools
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::lang;
@@ -1005,6 +1006,40 @@ OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >&
     else
         return OUString("org.libreoffice.report.pentaho.SOReportJobFactory");
     return OUString();
+}
+
+bool isAggregateColumn(const Reference< XSingleSelectQueryComposer > &_xParser, const Reference< XPropertySet > &_xField, bool whenNotFound)
+{
+    OUString sName;
+    _xField->getPropertyValue("Name") >>= sName;
+    Reference< XColumnsSupplier > xColumnsSupplier(_xParser, UNO_QUERY);
+    Reference< css::container::XNameAccess >  xCols;
+    if (xColumnsSupplier.is())
+        xCols = xColumnsSupplier->getColumns();
+
+    return isAggregateColumn(xCols, sName, whenNotFound);
+}
+
+bool isAggregateColumn(const Reference< XNameAccess > &_xColumns, const OUString &_sName, bool whenNotFound)
+{
+    if ( _xColumns.is() && _xColumns->hasByName(_sName) )
+    {
+        Reference<XPropertySet> xProp(_xColumns->getByName(_sName),UNO_QUERY);
+        assert(xProp.is());
+        return isAggregateColumn( xProp );
+    }
+    return  whenNotFound;
+}
+
+bool isAggregateColumn( const Reference< XPropertySet > &_xColumn )
+{
+    bool bAgg(false);
+
+    static const char sAgg[] = "AggregateFunction";
+    if ( _xColumn->getPropertySetInfo()->hasPropertyByName(sAgg) )
+        _xColumn->getPropertyValue(sAgg) >>= bAgg;
+
+    return bAgg;
 }
 
 
