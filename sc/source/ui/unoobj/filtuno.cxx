@@ -278,7 +278,8 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute()
             switch(load_CharSet( eEncoding, bExport, pInStream.get()))
             {
                 case charsetSource::charset_from_file:
-                  skipDialog = true;break;
+                  skipDialog = true;
+                  break;
                 case charsetSource::charset_from_user_setting:
                 case charsetSource::charset_default:
                    break;
