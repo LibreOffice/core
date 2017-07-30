@@ -19,6 +19,7 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/urlobj.hxx>
@@ -312,8 +313,7 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
     if (!pShell || !pShell->HasName())
     {   // maybe relative to document path working directory
         INetURLObject aObj;
-        SvtPathOptions aPathOpt;
-        aObj.SetSmartURL( aPathOpt.GetWorkPath() );
+        aObj.SetSmartURL(!utl::ConfigManager::IsAvoidConfig() ? SvtPathOptions().GetWorkPath() : OUString("file:///tmp"));
         aObj.setFinalSlash();       // it IS a path
         bool bWasAbs = true;
         aAbsName = aObj.smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::DecodeMechanism::NONE);
