@@ -57,7 +57,7 @@ public:
     LibInfo&         GetLibInfo () { return aLibInfo; }
 
     EntryDescriptor&  GetLastEntryDescriptor () { return m_aLastEntryDesc; }
-    void              SetLastEntryDescriptor (EntryDescriptor& rDesc) { m_aLastEntryDesc = rDesc; }
+    void              SetLastEntryDescriptor (EntryDescriptor const & rDesc) { m_aLastEntryDesc = rDesc; }
 
     bool&             ChoosingMacro()          { return bChoosingMacro; }
     bool&             ShellInCriticalSection() { return bShellInCriticalSection; }

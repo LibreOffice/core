@@ -69,8 +69,8 @@ public:
 private:
     struct lookupTableItem {
         lookupTableItem(const css::lang::Locale& rLocale, const OUString& rName,
-        css::uno::Reference < XCharacterClassification >& rxCI) :
-        aLocale(rLocale), aName(rName), xCI(rxCI) {};
+                        css::uno::Reference < XCharacterClassification > const & rxCI) :
+            aLocale(rLocale), aName(rName), xCI(rxCI) {};
         css::lang::Locale aLocale;
         OUString aName;
         css::uno::Reference < XCharacterClassification > xCI;

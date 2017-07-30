@@ -91,7 +91,7 @@ void ShellCreated (Shell* pShell)
         pDll->SetShell(pShell);
 }
 
-void ShellDestroyed (Shell* pShell)
+void ShellDestroyed (Shell const * pShell)
 {
     Dll* pDll = theDllInstance::get().get();
     if (pDll && pDll->GetShell() == pShell)

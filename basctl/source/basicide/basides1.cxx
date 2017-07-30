@@ -1162,7 +1162,7 @@ VclPtr<BaseWindow> Shell::FindWindow(
     return nullptr;
 }
 
-bool Shell::CallBasicErrorHdl( StarBASIC* pBasic )
+bool Shell::CallBasicErrorHdl( StarBASIC const * pBasic )
 {
     bool bRet = false;
     VclPtr<ModulWindow> pModWin = ShowActiveModuleWindow( pBasic );
@@ -1171,7 +1171,7 @@ bool Shell::CallBasicErrorHdl( StarBASIC* pBasic )
     return bRet;
 }
 
-BasicDebugFlags Shell::CallBasicBreakHdl( StarBASIC* pBasic )
+BasicDebugFlags Shell::CallBasicBreakHdl( StarBASIC const * pBasic )
 {
     BasicDebugFlags nRet = BasicDebugFlags::NONE;
     VclPtr<ModulWindow> pModWin = ShowActiveModuleWindow( pBasic );
@@ -1201,7 +1201,7 @@ BasicDebugFlags Shell::CallBasicBreakHdl( StarBASIC* pBasic )
     return nRet;
 }
 
-VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC* pBasic )
+VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC const * pBasic )
 {
     SetCurLib( ScriptDocument::getApplicationScriptDocument(), OUString(), false );
 

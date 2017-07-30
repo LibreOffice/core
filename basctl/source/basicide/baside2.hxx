@@ -157,7 +157,7 @@ public:
     void            ChangeFontColor( Color aColor );
     void            UpdateSyntaxHighlighting ();
 
-    bool            GetProcedureName(OUString& rLine, OUString& rProcType, OUString& rProcName) const;
+    bool            GetProcedureName(OUString const & rLine, OUString& rProcType, OUString& rProcName) const;
 };
 
 
@@ -322,7 +322,7 @@ protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar ) override;
 
 public:
-    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, OUString& aModule );
+    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, OUString const & aModule );
 
                     virtual ~ModulWindow() override;
     virtual void    dispose() override;
@@ -361,7 +361,7 @@ public:
     void            UpdateBreakPoint( const BreakPoint& rBrk );
     void            BasicAddWatch();
 
-    bool            BasicErrorHdl( StarBASIC* pBasic );
+    bool            BasicErrorHdl( StarBASIC const * pBasic );
     BasicDebugFlags BasicBreakHdl();
     void            AssertValidEditEngine();
 

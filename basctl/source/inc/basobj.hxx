@@ -39,17 +39,17 @@ namespace basctl
 
     // help methods for the general use:
     SbMethod*       CreateMacro( SbModule* pModule, const OUString& rMacroName );
-    void            RunMethod( SbMethod* pMethod );
+    void            RunMethod( SbMethod const * pMethod );
 
     StarBASIC*      FindBasic( const SbxVariable* pVar );
     void            StopBasic();
-    long            HandleBasicError( StarBASIC* pBasic );
+    long            HandleBasicError( StarBASIC const * pBasic );
     void            BasicStopped( bool* pbAppWindowDisabled = nullptr, bool* pbDispatcherLocked = nullptr, sal_uInt16* pnWaitCount = nullptr,
                             SfxUInt16Item** ppSWActionCount = nullptr, SfxUInt16Item** ppSWLockViewCount = nullptr );
 
     bool            IsValidSbxName( const OUString& rName );
 
-    BasicManager*   FindBasicManager( StarBASIC* pLib );
+    BasicManager*   FindBasicManager( StarBASIC const * pLib );
 
     SfxBindings*    GetBindingsPtr();
 

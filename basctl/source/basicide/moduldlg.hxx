@@ -104,7 +104,7 @@ protected:
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) override;
     virtual TriState    NotifyCopying( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos ) override;
-    TriState            NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+    TriState            NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry const * pEntry,
                         SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, bool bMove );
 
 public:
@@ -168,7 +168,7 @@ private:
     EntryDescriptor    m_aCurEntry;
 
 public:
-    OrganizeDialog( vcl::Window* pParent, sal_Int16 tabId, EntryDescriptor& rDesc );
+    OrganizeDialog( vcl::Window* pParent, sal_Int16 tabId, EntryDescriptor const & rDesc );
     virtual ~OrganizeDialog() override;
     virtual void    dispose() override;
 
@@ -203,7 +203,7 @@ public:
     virtual ~ObjectPage() override;
     virtual void dispose() override;
 
-    void                SetCurrentEntry( EntryDescriptor& rDesc );
+    void                SetCurrentEntry( EntryDescriptor const & rDesc );
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };
 

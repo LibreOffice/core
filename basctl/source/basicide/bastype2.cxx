@@ -581,7 +581,7 @@ void TreeListBox::UpdateEntries()
 }
 
 // Removes the entry from the tree.
-void TreeListBox::RemoveEntry (SvTreeListEntry* pEntry)
+void TreeListBox::RemoveEntry (SvTreeListEntry const * pEntry)
 {
     // removing the associated user data
     delete static_cast<Entry*>(pEntry->GetUserData());
@@ -780,7 +780,7 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
     }
 }
 
-void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
+void TreeListBox::SetCurrentEntry (EntryDescriptor const & rDesc)
 {
     SvTreeListEntry* pCurEntry = nullptr;
     EntryDescriptor aDesc = rDesc;

@@ -774,7 +774,7 @@ void LocalizationMgr::handleBasicStopped()
 }
 
 
-DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
+DialogWindow* FindDialogWindowForEditor( DlgEditor const * pEditor )
 {
     Shell::WindowTable const& aWindowTable = GetShell()->GetWindowTable();
     for (Shell::WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it )
@@ -791,7 +791,7 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
 }
 
 
-void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEditor,
+void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor const * pEditor,
     const Any& rControlAny, const OUString& aCtrlName )
 {
     // Get library for DlgEditor
@@ -821,7 +821,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
         MarkDocumentModified( aDocument );
 }
 
-void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEditor,
+void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor const * pEditor,
     const css::uno::Any& rControlAny, const OUString& aNewCtrlName )
 {
     // Get library for DlgEditor
@@ -849,7 +849,7 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEdito
 }
 
 
-void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor* pEditor,
+void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor const * pEditor,
     const Any& rControlAny, const OUString& aCtrlName )
 {
     // Get library for DlgEditor
@@ -1019,7 +1019,7 @@ void LocalizationMgr::setResourceIDsForDialog( const Reference< container::XName
     }
 }
 
-void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
+void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor const * pEditor,
     const Any& rControlAny, const OUString& aCtrlName,
     const Reference< XStringResourceResolver >& xSourceStringResolver )
 {

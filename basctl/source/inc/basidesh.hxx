@@ -115,7 +115,7 @@ private:
     VclPtr<ModulWindow>  CreateBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName );
     VclPtr<DialogWindow> CreateDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
 
-    VclPtr<ModulWindow>  ShowActiveModuleWindow( StarBASIC* pBasic );
+    VclPtr<ModulWindow>  ShowActiveModuleWindow( StarBASIC const * pBasic );
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
@@ -176,8 +176,8 @@ public:
 
     virtual bool        HasUIFeature(SfxShellFeature nFeature) const override;
 
-    bool                CallBasicErrorHdl( StarBASIC* pBasic );
-    BasicDebugFlags     CallBasicBreakHdl( StarBASIC* pBasic );
+    bool                CallBasicErrorHdl( StarBASIC const * pBasic );
+    BasicDebugFlags     CallBasicBreakHdl( StarBASIC const * pBasic );
 
     VclPtr<BaseWindow>   FindWindow( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, ItemType nType, bool bFindSuspended = false );
     VclPtr<DialogWindow> FindDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rName, bool bCreateIfNotExist = false, bool bFindSuspended = false );

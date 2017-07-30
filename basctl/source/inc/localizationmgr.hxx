@@ -95,13 +95,13 @@ public:
 
     void handleBasicStopped();
 
-    static void setControlResourceIDsForNewEditorObject(DlgEditor* pEditor,
+    static void setControlResourceIDsForNewEditorObject(DlgEditor const * pEditor,
         const css::uno::Any& rControlAny, const OUString& aCtrlName);
 
-    static void renameControlResourceIDsForEditorObject(DlgEditor* pEditor,
+    static void renameControlResourceIDsForEditorObject(DlgEditor const * pEditor,
         const css::uno::Any& rControlAny, const OUString& aNewCtrlName);
 
-    static void deleteControlResourceIDsForDeletedEditorObject(DlgEditor* pEditor,
+    static void deleteControlResourceIDsForDeletedEditorObject(DlgEditor const * pEditor,
         const css::uno::Any& rControlAny, const OUString& aCtrlName);
 
     static void setStringResourceAtDialog( const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aDlgName,
@@ -125,7 +125,7 @@ public:
         const css::uno::Reference< css::container::XNameContainer >& xDialogModel,
         const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager );
 
-    static void copyResourcesForPastedEditorObject( DlgEditor* pEditor,
+    static void copyResourcesForPastedEditorObject( DlgEditor const * pEditor,
         const css::uno::Any& rControlAny, const OUString& aCtrlName,
         const css::uno::Reference< css::resource::XStringResourceResolver >& xSourceStringResolver );
 
