@@ -844,46 +844,7 @@ DECLARE_ODFIMPORT_TEST(testTdf103602_draw_ns, "tdf103602_draw_ns.odt")
     // header/footer fill in text documents.
     // (produced by LibreOffice 5.x, in violation of ODF 1.2 spec)
 
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
-
-    // Page fill: hatched
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH,
-        getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Black 45 Degrees Wide"),
-        getProperty<OUString>(xPropertySet, "FillHatchName"));
-    CPPUNIT_ASSERT_EQUAL(true,
-        getProperty<bool>(xPropertySet, "FillBackground"));
-
-    // Header fill: gradient
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
-        getProperty<drawing::FillStyle>(xPropertySet, "HeaderFillStyle"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Radial red/yellow"),
-        getProperty<OUString>(xPropertySet, "HeaderFillGradientName"));
-
-    // Footer fill: bitmap
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
-        getProperty<drawing::FillStyle>(xPropertySet, "FooterFillStyle"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Sky"),
-        getProperty<OUString>(xPropertySet, "FooterFillBitmapName"));
-    CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT,
-        getProperty<drawing::BitmapMode>(xPropertySet, "FooterFillBitmapMode"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000),
-        getProperty<sal_Int32>(xPropertySet, "FooterFillBitmapSizeX"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1900),
-        getProperty<sal_Int32>(xPropertySet, "FooterFillBitmapSizeY"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5),
-        getProperty<sal_Int32>(xPropertySet, "FooterFillBitmapPositionOffsetX"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6),
-        getProperty<sal_Int32>(xPropertySet, "FooterFillBitmapPositionOffsetY"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
-        getProperty<sal_Int32>(xPropertySet, "FooterFillBitmapOffsetX"));
-}
-
-DECLARE_ODFIMPORT_TEST(testTdf103602_loext_ns, "tdf103602_loext_ns.odt")
-{
-    // Test we can import <loext:fill> and related attributes for page fill,
-    // header/footer fill in text documents.
+    // See also related test case testTdf103602_loext_ns in odfexport.cxx
 
     uno::Reference<beans::XPropertySet> xPropertySet(
         getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
