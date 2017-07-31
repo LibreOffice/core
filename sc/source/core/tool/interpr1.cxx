@@ -7533,7 +7533,7 @@ void ScInterpreter::ScDBCount()
             // so the source range has to be restricted, like before the introduction
             // of ScDBQueryParamBase.
             p->nCol1 = p->nCol2 = p->mnField;
-            ScQueryCellIterator aCellIter( pDok, nTab, *p);
+            ScQueryCellIterator aCellIter( pDok, nTab, *p, true);
             if ( aCellIter.GetFirst() )
             {
                 do

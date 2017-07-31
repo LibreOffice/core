@@ -293,8 +293,8 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
 
 public:
                     ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
-                                        const ScQueryParam& aParam, bool bMod = true);
-                                        // for bMod = FALSE the QueryParam has to be filled
+                                        const ScQueryParam& aParam, bool bMod);
+                                        // when !bMod, the QueryParam has to be filled
                                         // (bIsString)
     bool GetFirst();
     bool GetNext();
