@@ -96,6 +96,7 @@ class XclRoot;
 #define EXC_CHPROP_MOVING_AVERAGE_PERIOD    "MovingAveragePeriod"
 #define EXC_CHPROP_NEGATIVEERROR            "NegativeError"
 #define EXC_CHPROP_NUMBERFORMAT             "NumberFormat"
+#define EXC_CHPROP_NUMBERFORMAT_LINKSRC     "LinkNumberFormatToSource"
 #define EXC_CHPROP_OFFSET                   "Offset"
 #define EXC_CHPROP_OVERLAPSEQ               "OverlapSequence"
 #define EXC_CHPROP_PERCENTAGENUMFMT         "PercentageNumberFormat"
