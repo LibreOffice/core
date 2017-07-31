@@ -1231,6 +1231,14 @@ DECLARE_RTFEXPORT_TEST(testWatermark, "watermark.rtf")
     CPPUNIT_ASSERT_EQUAL((float)66, nFontSize);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf109790, "tdf109790.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // Style information was reset, which caused character height to be 22.
+    CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -667,6 +667,9 @@ private:
     bool m_hasLFooter;
     bool m_hasRFooter;
     bool m_hasFFooter;
+
+    /// Are we after a \cell, but before a \row?
+    bool m_bAfterCellBeforeRow;
 };
 } // namespace rtftok
 } // namespace writerfilter
