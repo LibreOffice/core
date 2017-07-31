@@ -144,7 +144,7 @@ static const sal_Unicode aBulletTypes[] =
 };
 
 // Is one of the masked formats set?
-static bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
+static bool lcl_IsNumFmtSet(SvxNumRule const * pNum, sal_uInt16 nLevelMask)
 {
     bool bRet = false;
     sal_uInt16 nMask = 1;

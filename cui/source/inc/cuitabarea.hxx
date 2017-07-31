@@ -185,7 +185,7 @@ class SvxTransparenceTabPage : public SvxTabPage
     DECL_LINK(ModifyTransparentHdl_Impl, Edit&, void);
     DECL_LINK(ModifiedTrgrEditHdl_Impl, Edit&, void);
     DECL_LINK(ModifiedTrgrListBoxHdl_Impl, ListBox&, void);
-    void ModifiedTrgrHdl_Impl(void*);
+    void ModifiedTrgrHdl_Impl(void const *);
 
     void ActivateLinear(bool bActivate);
     void ActivateGradient(bool bActivate);
@@ -394,7 +394,7 @@ private:
     DECL_LINK( ModifiedListBoxHdl_Impl, ListBox&, void );
     DECL_LINK( ChangeAutoStepHdl_Impl, CheckBox&, void );
     DECL_LINK( ModifiedSliderHdl_Impl, Slider*, void );
-    void ModifiedHdl_Impl(void*);
+    void ModifiedHdl_Impl(void const *);
 
     void SetControlState_Impl( css::awt::GradientStyle eXGS );
     sal_Int32 SearchGradientList(const OUString& rGradientName);
@@ -463,7 +463,7 @@ private:
     DECL_LINK( ToggleHatchBackgroundColor_Impl, CheckBox&, void );
     DECL_LINK( ModifiedBackgroundHdl_Impl, SvxColorListBox&, void );
     DECL_LINK( ModifiedSliderHdl_Impl, Slider*, void );
-    void ModifiedHdl_Impl(void*);
+    void ModifiedHdl_Impl(void const *);
     DECL_LINK( ClickAddHdl_Impl, Button*, void );
     DECL_LINK( ClickModifyHdl_Impl, Button*, void );
     DECL_LINK( ClickRenameHdl_Impl, SvxPresetListBox*, void );

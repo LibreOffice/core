@@ -678,7 +678,7 @@ void SvBaseLinksDlg::SetType( SvBaseLink& rLink,
         pLinkMgr->GetPersist()->SetModified();
 }
 
-void SvBaseLinksDlg::SetActLink( SvBaseLink * pLink )
+void SvBaseLinksDlg::SetActLink( SvBaseLink const * pLink )
 {
     if( pLinkMgr )
     {

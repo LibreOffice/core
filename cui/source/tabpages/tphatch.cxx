@@ -354,7 +354,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
     ModifiedHdl_Impl(rSlider);
     m_pHatchLB->SetNoSelection();
 }
-void SvxHatchTabPage::ModifiedHdl_Impl( void* p )
+void SvxHatchTabPage::ModifiedHdl_Impl( void const * p )
 {
     if( p == m_pMtrAngle )
         m_pSliderAngle->SetThumbPos( m_pMtrAngle->GetValue() );

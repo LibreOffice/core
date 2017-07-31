@@ -176,14 +176,14 @@ private:
     DECL_LINK( ChangeStartClickHdl_Impl, Button*, void );
     DECL_LINK( ChangeStartListBoxHdl_Impl, ListBox&, void );
     DECL_LINK( ChangeStartModifyHdl_Impl, Edit&, void );
-    void ChangeStartHdl_Impl(void*);
+    void ChangeStartHdl_Impl(void const *);
     DECL_LINK( ChangeEndListBoxHdl_Impl, ListBox&, void );
     DECL_LINK( ChangeEndModifyHdl_Impl, Edit&, void );
     DECL_LINK( ChangeEndClickHdl_Impl, Button*, void );
-    void ChangeEndHdl_Impl(void*);
+    void ChangeEndHdl_Impl(void const *);
     DECL_LINK( ChangePreviewListBoxHdl_Impl, SvxColorListBox&, void );
     DECL_LINK( ChangePreviewModifyHdl_Impl, Edit&, void );
-    void ChangePreviewHdl_Impl(void*);
+    void ChangePreviewHdl_Impl(void const *);
     DECL_LINK( ChangeTransparentHdl_Impl, Edit&, void );
 
     DECL_LINK( ChangeEdgeStyleHdl_Impl, ListBox&, void );
@@ -193,8 +193,8 @@ private:
 
     void FillXLSet_Impl();
 
-    void InitSymbols(MenuButton* pButton);
-    void SymbolSelected(MenuButton* pButton);
+    void InitSymbols(MenuButton const * pButton);
+    void SymbolSelected(MenuButton const * pButton);
     void FillListboxes();
 public:
 
@@ -287,7 +287,7 @@ private:
     DECL_LINK( ClickModifyHdl_Impl, Button*, void );
     DECL_LINK( ClickDeleteHdl_Impl, Button*, void );
     DECL_LINK( SelectLinestyleListBoxHdl_Impl, ListBox&, void );
-    void SelectLinestyleHdl_Impl(ListBox*);
+    void SelectLinestyleHdl_Impl(ListBox const *);
     DECL_LINK( ChangePreviewHdl_Impl, Edit&, void );
     DECL_LINK( ChangeNumber1Hdl_Impl, Edit&, void );
     DECL_LINK( ChangeNumber2Hdl_Impl, Edit&, void );

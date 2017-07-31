@@ -80,7 +80,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
 public:
     SvxHyphenWordDialog( const OUString &rWord, LanguageType nLang,
                          vcl::Window* pParent,
-                         css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
+                         css::uno::Reference< css::linguistic2::XHyphenator > const &xHyphen,
                          SvxSpellWrapper* pWrapper );
     virtual ~SvxHyphenWordDialog() override;
     virtual void    dispose() override;

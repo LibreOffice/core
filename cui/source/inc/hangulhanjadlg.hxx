@@ -81,7 +81,7 @@ namespace svx
 
         DECL_LINK( SelectSuggestionListBoxHdl, ListBox&, void );
         DECL_LINK( SelectSuggestionValueSetHdl, ValueSet*, void );
-        void SelectSuggestionHdl(Control*);
+        void SelectSuggestionHdl(Control const *);
 
         void SetHelpIds();
 
@@ -306,7 +306,7 @@ namespace svx
         void            UpdateButtonStates();
 
         void            SetEditText( Edit& _rEdit, sal_uInt16 _nEntryNum );
-        void            EditModify( Edit* _pEdit, sal_uInt8 _nEntryOffset );
+        void            EditModify( Edit const * _pEdit, sal_uInt8 _nEntryOffset );
 
         bool            DeleteEntryFromDictionary( const css::uno::Reference< css::linguistic2::XConversionDictionary >& xDict );
 

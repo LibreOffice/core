@@ -92,7 +92,7 @@ static long nTabs[] =
 
 #define LB_MACROS_ITEMPOS   2
 
-OUString ConvertToUIName_Impl( SvxMacro *pMacro )
+OUString ConvertToUIName_Impl( SvxMacro const *pMacro )
 {
     OUString aName( pMacro->GetMacName() );
     OUString aEntry;
@@ -312,7 +312,7 @@ IMPL_LINK( SfxMacroTabPage, AssignDeleteHdl_Impl, SvTreeListBox*, pBtn, bool )
     return AssignDeleteHdl(pBtn);
 }
 
-bool SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
+bool SfxMacroTabPage::AssignDeleteHdl(Control const * pBtn)
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.FirstSelected();

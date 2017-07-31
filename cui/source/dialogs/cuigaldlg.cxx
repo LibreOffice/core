@@ -576,7 +576,7 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, Button*, void)
 
 
 GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
-    ExchangeData* _pData, SfxItemSet* pItemSet)
+    ExchangeData* _pData, SfxItemSet const * pItemSet)
     : SfxTabDialog( pParent, "GalleryThemeDialog",
         "cui/ui/gallerythemedialog.ui", pItemSet)
     , pData(_pData)

@@ -272,7 +272,7 @@ void SvxLineTabPage::Construct()
     FillListboxes();
 }
 
-void SvxLineTabPage::InitSymbols(MenuButton* pButton)
+void SvxLineTabPage::InitSymbols(MenuButton const * pButton)
 {
     // Initialize popup
     if(!pButton->GetPopupMenu()->GetPopupMenu( MN_GALLERY ))
@@ -421,7 +421,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
     }
 }
 
-void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
+void SvxLineTabPage::SymbolSelected(MenuButton const * pButton)
 {
     sal_uInt16 nItemId = pButton->GetCurItemId();
     const Graphic* pGraphic = nullptr;
@@ -1491,7 +1491,7 @@ IMPL_LINK( SvxLineTabPage, ChangePreviewModifyHdl_Impl, Edit&, rEdit, void )
 {
     ChangePreviewHdl_Impl(&rEdit);
 }
-void SvxLineTabPage::ChangePreviewHdl_Impl(void * pCntrl )
+void SvxLineTabPage::ChangePreviewHdl_Impl(void const * pCntrl )
 {
     if(pCntrl == m_pMtrLineWidth)
     {
@@ -1563,7 +1563,7 @@ IMPL_LINK( SvxLineTabPage, ChangeStartModifyHdl_Impl, Edit&, rEdit, void )
 {
     ChangeStartHdl_Impl(&rEdit);
 }
-void SvxLineTabPage::ChangeStartHdl_Impl( void * p )
+void SvxLineTabPage::ChangeStartHdl_Impl( void const * p )
 {
     if( m_pCbxSynchronize->IsChecked() )
     {
@@ -1638,7 +1638,7 @@ IMPL_LINK( SvxLineTabPage, ChangeEndModifyHdl_Impl, Edit&, rEdit, void )
 {
     ChangeEndHdl_Impl(&rEdit);
 }
-void SvxLineTabPage::ChangeEndHdl_Impl( void * p )
+void SvxLineTabPage::ChangeEndHdl_Impl( void const * p )
 {
     if( m_pCbxSynchronize->IsChecked() )
     {

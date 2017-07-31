@@ -1522,7 +1522,7 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
 /*
  * Remove entries which doesn't contain the search term
  */
-SvTreeListEntry* SfxAcceleratorConfigPage::applySearchFilter(OUString& rSearchTerm, SvTreeListBox* rListBox)
+SvTreeListEntry* SfxAcceleratorConfigPage::applySearchFilter(OUString const & rSearchTerm, SvTreeListBox* rListBox)
 {
     if ( rSearchTerm.isEmpty() || !rListBox )
     {

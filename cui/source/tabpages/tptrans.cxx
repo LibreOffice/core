@@ -148,7 +148,7 @@ IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrEditHdl_Impl, Edit&, rBox, void)
     ModifiedTrgrHdl_Impl(&rBox);
 }
 
-void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(void* pControl)
+void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(void const * pControl)
 {
     if(pControl == m_pLbTrgrGradientType || pControl == this)
     {

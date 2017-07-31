@@ -59,7 +59,7 @@ private:
 
     DECL_LINK( ChangeAttrEditHdl_Impl, Edit&, void );
     DECL_LINK( ChangeAttrListBoxHdl_Impl, ListBox&, void );
-    void ChangeAttrHdl_Impl(void*);
+    void ChangeAttrHdl_Impl(void const *);
 
 public:
 

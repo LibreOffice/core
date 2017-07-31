@@ -79,7 +79,7 @@ namespace svx
             @param  _pEntry
                 The entry to remove if the entry will be changed
         */
-        void openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry* _pEntry = nullptr);
+        void openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry const * _pEntry = nullptr);
 
     public:
         DbRegistrationOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );

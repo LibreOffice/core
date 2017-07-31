@@ -42,7 +42,7 @@ class SfxMacroTabPage : public SfxTabPage
 
     DECL_LINK( AssignDeleteHdl_Impl, SvTreeListBox*, bool );
     DECL_LINK( AssignDeleteClickHdl_Impl, Button *, void );
-    bool                        AssignDeleteHdl(Control *);
+    bool                        AssignDeleteHdl(Control const *);
     DECL_LINK( TimeOut_Impl, Timer*, void );
 
 protected:

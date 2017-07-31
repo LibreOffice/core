@@ -354,7 +354,7 @@ void SvxEditDictionaryDialog::Paint( const Rectangle& rRect )
 
 
 void SvxEditDictionaryDialog::SetDicReadonly_Impl(
-            Reference< XDictionary >  &xDic )
+            Reference< XDictionary > const &xDic )
 {
     // enable or disable new and delete button according to file attributes
     bDicIsReadonly = true;
@@ -576,7 +576,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelActionHdl, SvxDictEdit&, rDictEdit, boo
 {
     return NewDelHdl(&rDictEdit);
 }
-bool SvxEditDictionaryDialog::NewDelHdl(void* pBtn)
+bool SvxEditDictionaryDialog::NewDelHdl(void const * pBtn)
 {
     SvTreeListEntry* pEntry = pWordsLB->FirstSelected();
 

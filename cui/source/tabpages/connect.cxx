@@ -403,7 +403,7 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrEditHdl_Impl, Edit&, r, void )
 {
     ChangeAttrHdl_Impl(&r);
 }
-void SvxConnectionPage::ChangeAttrHdl_Impl(void* p)
+void SvxConnectionPage::ChangeAttrHdl_Impl(void const * p)
 {
     if( p == m_pMtrFldHorz1 )
     {

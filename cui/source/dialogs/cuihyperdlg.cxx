@@ -63,7 +63,7 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         {
             case SID_HYPERLINK_GETLINK :
             {
-                pParent->SetPage( const_cast<SvxHyperlinkItem*>(static_cast<const SvxHyperlinkItem*>(pState)) );
+                pParent->SetPage( static_cast<const SvxHyperlinkItem*>(pState) );
             }
             break;
             case SID_READONLY_MODE :
@@ -299,7 +299,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickCloseHdl_Impl, Button*, void)
 |*
 |************************************************************************/
 
-void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
+void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
 {
     sal_uInt16 nPageId = HyperLinkPageType::INTERNET;
 

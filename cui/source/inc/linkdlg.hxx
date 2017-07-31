@@ -84,7 +84,7 @@ public:
     SvBaseLinksDlg( vcl::Window * pParent, sfx2::LinkManager*, bool bHtml = false );
     virtual ~SvBaseLinksDlg() override;
     virtual void dispose() override;
-    void SetActLink( sfx2::SvBaseLink * pLink );
+    void SetActLink( sfx2::SvBaseLink const * pLink );
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_LINKDLG_HXX

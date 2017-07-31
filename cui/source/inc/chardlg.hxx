@@ -137,7 +137,7 @@ private:
     DECL_LINK( FontModifyEditHdl_Impl, Edit&, void );
     DECL_LINK( FontModifyListBoxHdl_Impl, ListBox&, void );
     DECL_LINK( FontModifyComboBoxHdl_Impl, ComboBox&, void );
-    void FontModifyHdl_Impl(void*);
+    void FontModifyHdl_Impl(void const *);
 
 public:
     using SfxTabPage::ActivatePage;

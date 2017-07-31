@@ -181,7 +181,7 @@ public:
     unsigned GetEntryHeight () const { return vEntries[0]->GetHeight(); }
     void Update (EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ScrollHdl(const ScrollBar&);
-    void ClickHdl (EditableColorConfig*, CheckBox*);
+    void ClickHdl (EditableColorConfig*, CheckBox const *);
     void ColorHdl (EditableColorConfig*, EditableExtendedColorConfig*, SvxColorListBox*);
     void Init(ScrollBar *pVScroll, HeaderBar *m_pHeaderHB);
     void AdjustScrollBar();
@@ -226,7 +226,7 @@ private:
         long GetTop () const { return m_pPreview->GetPosPixel().Y(); }
         unsigned GetHeight () const { return m_pColorList->GetSizePixel().Height(); }
     public:
-        bool Is (CheckBox* pBox) const { return m_pText == pBox; }
+        bool Is (CheckBox const * pBox) const { return m_pText.get() == pBox; }
         bool Is (SvxColorListBox* pBox) const { return m_pColorList == pBox; }
         void dispose()
         {
@@ -695,7 +695,7 @@ void ColorConfigWindow_Impl::ScrollHdl(const ScrollBar& rVScroll)
 }
 
 // ClickHdl()
-void ColorConfigWindow_Impl::ClickHdl (EditableColorConfig* pConfig, CheckBox* pBox)
+void ColorConfigWindow_Impl::ClickHdl (EditableColorConfig* pConfig, CheckBox const * pBox)
 {
     for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
     {

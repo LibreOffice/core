@@ -23,7 +23,7 @@ static sal_Int16 theImageType =
     css::ui::ImageType::COLOR_NORMAL |
     css::ui::ImageType::SIZE_DEFAULT;
 
-void SvxConfigPageHelper::RemoveEntry( SvxEntries* pEntries, SvxConfigEntry* pChildEntry )
+void SvxConfigPageHelper::RemoveEntry( SvxEntries* pEntries, SvxConfigEntry const * pChildEntry )
 {
     SvxEntries::iterator iter = pEntries->begin();
 
@@ -454,12 +454,12 @@ bool SvxConfigPageHelper::showKeyConfigTabPage(
         && sModuleId != "com.sun.star.frame.StartModule";
 }
 
-bool SvxConfigPageHelper::EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
+bool SvxConfigPageHelper::EntrySort( SvxConfigEntry const * a, SvxConfigEntry const * b )
 {
     return a->GetName().compareTo( b->GetName() ) < 0;
 }
 
-bool SvxConfigPageHelper::SvxConfigEntryModified( SvxConfigEntry* pEntry )
+bool SvxConfigPageHelper::SvxConfigEntryModified( SvxConfigEntry const * pEntry )
 {
     SvxEntries* pEntries = pEntry->GetEntries();
     if ( !pEntries )
