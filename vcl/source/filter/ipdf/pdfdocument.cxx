@@ -2727,7 +2727,7 @@ PDFDocument& PDFObjectElement::GetDocument()
     return m_rDoc;
 }
 
-PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, PDFNumberElement& rObject, PDFNumberElement const & rGeneration)
+PDFReferenceElement::PDFReferenceElement(PDFDocument& rDoc, PDFNumberElement& rObject, PDFNumberElement const& rGeneration)
     : m_rDoc(rDoc),
       m_fObjectValue(rObject.GetValue()),
       m_fGenerationValue(rGeneration.GetValue()),
