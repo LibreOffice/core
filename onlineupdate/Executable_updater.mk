@@ -19,10 +19,15 @@ $(eval $(call gb_Executable_set_include,updater,\
 $(eval $(call gb_Executable_use_custom_headers,updater,onlineupdate/generated))
 
 $(eval $(call gb_Executable_use_static_libraries,updater,\
-    libmar \
+	libmar \
+    libmarverify \
     updatehelper \
 	$(if $(filter WNT,$(OS)), \
 		winhelper )\
+))
+
+$(eval $(call gb_Executable_use_externals,updater,\
+	bzip2 \
 ))
 
 ifeq ($(OS),WNT)
@@ -32,8 +37,26 @@ $(eval $(call gb_Executable_add_libs,updater,\
 	Comctl32.lib \
 	Shell32.lib \
 	Shlwapi.lib \
+	Crypt32.lib \
 ))
+
+$(eval $(call gb_Executable_add_defs,updater,\
+	-DVERIFY_MAR_SIGNATURE \
+	-DUNICODE \
+))
+
 else
+
+$(eval $(call gb_Executable_add_defs,updater,\
+	-DVERIFY_MAR_SIGNATURE \
+	-DNSS3 \
+))
+
+$(eval $(call gb_Executable_use_externals,updater,\
+	nss3 \
+	gtk \
+))
+
 $(eval $(call gb_Executable_add_libs,updater,\
 	-lX11 \
 	-lXext \
@@ -43,19 +66,6 @@ $(eval $(call gb_Executable_add_libs,updater,\
 	-lpthread \
 ))
 endif
-
-$(eval $(call gb_Executable_use_externals,updater,\
-	bzip2 \
-	nss3 \
-	$(if $(filter LINUX,$(OS)), \
-		gtk )\
-))
-
-$(eval $(call gb_Executable_add_defs,updater,\
-	-DVERIFY_MAR_SIGNATURE \
-	-DNSS3 \
-	-DUNICODE \
-))
 
 $(eval $(call gb_Executable_add_exception_objects,updater,\
 	onlineupdate/source/update/updater/xpcom/glue/nsVersionComparator \
