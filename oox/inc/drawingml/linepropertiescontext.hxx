@@ -30,7 +30,7 @@ struct LineProperties;
 class LinePropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    LinePropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
+    LinePropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
             const ::oox::AttributeList& rAttributes,
             LineProperties& rLineProperties ) throw();
     virtual ~LinePropertiesContext() override;

@@ -182,8 +182,8 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
     }
 }
 
-void setTextStyle( Reference< beans::XPropertySet >& rxPropSet, const XmlFilterBase& rFilter,
-    oox::drawingml::TextListStylePtr& pTextListStylePtr, int nLevel )
+void setTextStyle( Reference< beans::XPropertySet > const & rxPropSet, const XmlFilterBase& rFilter,
+    oox::drawingml::TextListStylePtr const & pTextListStylePtr, int nLevel )
 {
     ::oox::drawingml::TextParagraphPropertiesPtr pTextParagraphPropertiesPtr( pTextListStylePtr->getListStyle()[ nLevel ] );
     if( pTextParagraphPropertiesPtr == nullptr )

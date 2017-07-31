@@ -25,7 +25,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-EffectPropertiesContext::EffectPropertiesContext( ContextHandler2Helper& rParent,
+EffectPropertiesContext::EffectPropertiesContext( ContextHandler2Helper const& rParent,
     EffectProperties& rEffectProperties ) throw()
 : ContextHandler2( rParent )
 , mrEffectProperties( rEffectProperties )

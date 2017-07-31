@@ -39,7 +39,7 @@ using namespace css::xml;
 
 namespace {
 
-std::vector<sal_uInt8> convertToVector(Sequence<sal_Int8>& input)
+std::vector<sal_uInt8> convertToVector(Sequence<sal_Int8> const & input)
 {
     const sal_uInt8* inputArray = reinterpret_cast<const sal_uInt8*>(input.getConstArray());
     return std::vector<sal_uInt8>(inputArray, inputArray + input.getLength());
@@ -191,7 +191,7 @@ bool DocumentDecryption::generateEncryptionKey(const OUString& rPassword)
     return false;
 }
 
-bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInputStream)
+bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream > const & xInputStream)
 {
     AgileEngine* engine = new AgileEngine;
     mEngine.reset(engine);

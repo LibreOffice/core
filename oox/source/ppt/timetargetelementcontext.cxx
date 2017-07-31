@@ -39,7 +39,7 @@ namespace oox { namespace ppt {
         : public FragmentHandler2
     {
     public:
-        ShapeTargetElementContext( FragmentHandler2& rParent, ShapeTargetElement & aValue )
+        ShapeTargetElementContext( FragmentHandler2 const & rParent, ShapeTargetElement & aValue )
             : FragmentHandler2( rParent )
                 , bTargetSet(false)
                 , maShapeTarget(aValue)
@@ -92,7 +92,7 @@ namespace oox { namespace ppt {
         ShapeTargetElement & maShapeTarget;
     };
 
-    TimeTargetElementContext::TimeTargetElementContext( FragmentHandler2& rParent, const AnimTargetElementPtr & pValue )
+    TimeTargetElementContext::TimeTargetElementContext( FragmentHandler2 const & rParent, const AnimTargetElementPtr & pValue )
         : FragmentHandler2( rParent ),
             mpTarget( pValue )
     {

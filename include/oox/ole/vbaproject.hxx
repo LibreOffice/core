@@ -146,7 +146,7 @@ public:
     /** Attaches VBA macros to objects registered via registerMacroAttacher(). */
     void                attachMacros();
 
-    void                setOleOverridesSink( css::uno::Reference< css::container::XNameContainer >&  rxOleOverridesSink ){ mxOleOverridesSink = rxOleOverridesSink; }
+    void                setOleOverridesSink( css::uno::Reference< css::container::XNameContainer > const & rxOleOverridesSink ){ mxOleOverridesSink = rxOleOverridesSink; }
 
 protected:
     /** Registers a dummy module that will be created when the VBA project is

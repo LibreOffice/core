@@ -28,7 +28,7 @@ namespace oox { namespace drawingml { namespace table {
 class TableStyleTextStyleContext : public ::oox::core::ContextHandler2
 {
 public:
-    TableStyleTextStyleContext( ::oox::core::ContextHandler2Helper& rParent,
+    TableStyleTextStyleContext( ::oox::core::ContextHandler2Helper const & rParent,
             const ::oox::AttributeList& rAttribs,
             TableStylePart& rTableStylePart );
     virtual ~TableStyleTextStyleContext() override;

@@ -182,7 +182,7 @@ public:
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
-                            basegfx::B2DHomMatrix& aTransformation );
+                            basegfx::B2DHomMatrix const & aTransformation );
 
     void                setXShape( const css::uno::Reference< css::drawing::XShape >& rXShape )
                             { mxShape = rXShape; };
@@ -233,10 +233,10 @@ protected:
                             ShapeIdMap* pShapeMap,
                             const basegfx::B2DHomMatrix& aTransformation );
 
-    void                keepDiagramCompatibilityInfo( ::oox::core::XmlFilterBase& rFilterBase );
+    void                keepDiagramCompatibilityInfo( ::oox::core::XmlFilterBase const & rFilterBase );
 
     css::uno::Reference< css::drawing::XShape >
-                        renderDiagramToGraphic( ::oox::core::XmlFilterBase& rFilterBase );
+                        renderDiagramToGraphic( ::oox::core::XmlFilterBase const & rFilterBase );
 
     OUString finalizeServiceName(
                             ::oox::core::XmlFilterBase& rFilter,

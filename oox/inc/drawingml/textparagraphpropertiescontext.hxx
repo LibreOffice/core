@@ -33,7 +33,7 @@ namespace oox { namespace drawingml {
 class TextParagraphPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextParagraphPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
+    TextParagraphPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
             const ::oox::AttributeList& rAttributes,
             TextParagraphProperties& rTextParagraphProperties );
     virtual ~TextParagraphPropertiesContext() override;

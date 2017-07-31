@@ -29,7 +29,7 @@ class TextSpacing;
 class TextSpacingContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextSpacingContext( ::oox::core::ContextHandler2Helper& rParent, TextSpacing & aSpacing );
+    TextSpacingContext( ::oox::core::ContextHandler2Helper const & rParent, TextSpacing & aSpacing );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

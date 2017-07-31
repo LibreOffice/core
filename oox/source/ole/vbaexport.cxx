@@ -812,7 +812,7 @@ void exportDirStream(SvStream& rStrm, const css::uno::Reference<css::container::
 }
 
 // section 2.3.4.3 Module Stream
-void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUString& aElementName, css::script::ModuleInfo& rInfo)
+void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUString& aElementName, css::script::ModuleInfo const & rInfo)
 {
     SvMemoryStream aModuleStream(4096, 4096);
 

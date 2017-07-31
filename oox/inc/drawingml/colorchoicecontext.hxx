@@ -33,7 +33,7 @@ class Color;
 class ColorValueContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            ColorValueContext( ::oox::core::ContextHandler2Helper& rParent, Color& rColor );
+    explicit            ColorValueContext( ::oox::core::ContextHandler2Helper const & rParent, Color& rColor );
 
 
     virtual void onStartElement(
@@ -54,7 +54,7 @@ private:
 class ColorContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            ColorContext( ::oox::core::ContextHandler2Helper& rParent, Color& rColor );
+    explicit            ColorContext( ::oox::core::ContextHandler2Helper const & rParent, Color& rColor );
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext(

@@ -29,7 +29,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-SlideMasterTextStylesContext::SlideMasterTextStylesContext( FragmentHandler2& rParent, SlidePersistPtr const & pSlidePersistPtr )
+SlideMasterTextStylesContext::SlideMasterTextStylesContext( FragmentHandler2 const & rParent, SlidePersistPtr const & pSlidePersistPtr )
 : FragmentHandler2( rParent )
 , mpSlidePersistPtr( pSlidePersistPtr )
 {

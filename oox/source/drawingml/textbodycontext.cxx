@@ -41,7 +41,7 @@ namespace oox { namespace drawingml {
 class TextParagraphContext : public ContextHandler2
 {
 public:
-    TextParagraphContext( ContextHandler2Helper& rParent, TextParagraph& rPara );
+    TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara );
 
     virtual ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
@@ -49,7 +49,7 @@ protected:
     TextParagraph& mrParagraph;
 };
 
-TextParagraphContext::TextParagraphContext( ContextHandler2Helper& rParent, TextParagraph& rPara )
+TextParagraphContext::TextParagraphContext( ContextHandler2Helper const & rParent, TextParagraph& rPara )
 : ContextHandler2( rParent )
 , mrParagraph( rPara )
 {
@@ -104,7 +104,7 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
     return nullptr;
 }
 
-RegularTextRunContext::RegularTextRunContext( ContextHandler2Helper& rParent, TextRunPtr const & pRunPtr )
+RegularTextRunContext::RegularTextRunContext( ContextHandler2Helper const & rParent, TextRunPtr const & pRunPtr )
 : ContextHandler2( rParent )
 , mpRunPtr( pRunPtr )
 , mbIsInText( false )
@@ -155,7 +155,7 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
     return this;
 }
 
-TextBodyContext::TextBodyContext( ContextHandler2Helper& rParent, TextBody& rTextBody )
+TextBodyContext::TextBodyContext( ContextHandler2Helper const & rParent, TextBody& rTextBody )
 : ContextHandler2( rParent )
 , mrTextBody( rTextBody )
 {

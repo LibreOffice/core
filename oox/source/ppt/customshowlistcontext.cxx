@@ -34,16 +34,16 @@ class CustomShowContext : public ::oox::core::FragmentHandler2
     CustomShow mrCustomShow;
 
 public:
-    CustomShowContext( ::oox::core::FragmentHandler2& rParent,
+    CustomShowContext( ::oox::core::FragmentHandler2 const & rParent,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
-            CustomShow& rCustomShow );
+            CustomShow const & rCustomShow );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 };
 
-CustomShowContext::CustomShowContext( FragmentHandler2& rParent,
+CustomShowContext::CustomShowContext( FragmentHandler2 const & rParent,
     const Reference< XFastAttributeList >& rxAttribs,
-        CustomShow& rCustomShow )
+        CustomShow const & rCustomShow )
 : FragmentHandler2( rParent )
 , mrCustomShow( rCustomShow )
 {
@@ -65,7 +65,7 @@ CustomShowContext::CustomShowContext( FragmentHandler2& rParent,
     return this;
 }
 
-CustomShowListContext::CustomShowListContext( FragmentHandler2& rParent,
+CustomShowListContext::CustomShowListContext( FragmentHandler2 const & rParent,
     std::vector< CustomShow >& rCustomShowList )
 : FragmentHandler2( rParent )
 , mrCustomShowList( rCustomShowList )

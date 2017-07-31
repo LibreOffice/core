@@ -32,7 +32,7 @@ namespace oox { namespace drawingml {
 class CustomShapeGeometryContext : public ::oox::core::ContextHandler2
 {
 public:
-    CustomShapeGeometryContext( ::oox::core::ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties );
+    CustomShapeGeometryContext( ::oox::core::ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties );
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 private:
@@ -44,7 +44,7 @@ private:
 class PresetShapeGeometryContext : public ::oox::core::ContextHandler2
 {
 public:
-    PresetShapeGeometryContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, CustomShapeProperties& rCustomShapeProperties );
+    PresetShapeGeometryContext( ::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttributes, CustomShapeProperties& rCustomShapeProperties );
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 private:
@@ -56,7 +56,7 @@ private:
 class PresetTextShapeContext : public ::oox::core::ContextHandler2
 {
 public:
-    PresetTextShapeContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, CustomShapeProperties& rCustomShapeProperties );
+    PresetTextShapeContext( ::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttributes, CustomShapeProperties& rCustomShapeProperties );
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 private:

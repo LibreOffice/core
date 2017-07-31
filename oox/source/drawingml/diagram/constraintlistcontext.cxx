@@ -30,7 +30,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 // CT_ConstraintLists
-ConstraintListContext::ConstraintListContext( ContextHandler2Helper& rParent,
+ConstraintListContext::ConstraintListContext( ContextHandler2Helper const & rParent,
                                               const LayoutAtomPtr &pNode )
     : ContextHandler2( rParent )
     , mpNode( pNode )

@@ -40,7 +40,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 // CT_TextBodyProperties
-TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rParent,
+TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper const & rParent,
     const AttributeList& rAttribs, TextBodyProperties& rTextBodyProp )
 : ContextHandler2( rParent )
 , mrTextBodyProp( rTextBodyProp )

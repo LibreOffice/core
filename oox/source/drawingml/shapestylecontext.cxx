@@ -32,7 +32,7 @@ namespace oox { namespace drawingml {
 
 // CT_ShapeStyle
 
-ShapeStyleContext::ShapeStyleContext( ContextHandler2Helper& rParent, Shape& rShape )
+ShapeStyleContext::ShapeStyleContext( ContextHandler2Helper const & rParent, Shape& rShape )
 : ContextHandler2( rParent )
 , mrShape( rShape )
 {

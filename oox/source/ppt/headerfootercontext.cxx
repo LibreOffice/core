@@ -27,7 +27,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-    HeaderFooterContext::HeaderFooterContext( FragmentHandler2& rParent,
+    HeaderFooterContext::HeaderFooterContext( FragmentHandler2 const & rParent,
         const AttributeList& rAttribs, HeaderFooter& rHeaderFooter )
         : FragmentHandler2( rParent )
     {

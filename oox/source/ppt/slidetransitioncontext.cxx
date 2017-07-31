@@ -42,7 +42,7 @@ using namespace ::com::sun::star::container;
 
 namespace oox { namespace ppt {
 
-SlideTransitionContext::SlideTransitionContext( FragmentHandler2& rParent, const AttributeList& rAttribs, PropertyMap & aProperties ) throw()
+SlideTransitionContext::SlideTransitionContext( FragmentHandler2 const & rParent, const AttributeList& rAttribs, PropertyMap & aProperties ) throw()
 : FragmentHandler2( rParent )
 , maSlideProperties( aProperties )
 , mbHasTransition( false )

@@ -33,7 +33,7 @@ namespace oox
 namespace shape
 {
 
-WpsContext::WpsContext(ContextHandler2Helper& rParent, uno::Reference<drawing::XShape> xShape)
+WpsContext::WpsContext(ContextHandler2Helper const & rParent, uno::Reference<drawing::XShape> xShape)
     : ContextHandler2(rParent),
       mxShape(std::move(xShape))
 {

@@ -31,7 +31,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-TextFieldContext::TextFieldContext( ContextHandler2Helper& rParent,
+TextFieldContext::TextFieldContext( ContextHandler2Helper const & rParent,
             const AttributeList& rAttributes,
             TextField& rTextField)
     : ContextHandler2( rParent )

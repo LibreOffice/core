@@ -42,7 +42,7 @@ using ::oox::core::ContextHandlerRef;
 using ::oox::core::FragmentHandler2;
 using ::oox::core::XmlFilterBase;
 
-AxControlPropertyContext::AxControlPropertyContext( FragmentHandler2& rFragment, ControlModelBase& rModel ) :
+AxControlPropertyContext::AxControlPropertyContext( FragmentHandler2 const & rFragment, ControlModelBase& rModel ) :
     ContextHandler2( rFragment ),
     mrModel( rModel ),
     mnPropId( XML_TOKEN_INVALID )

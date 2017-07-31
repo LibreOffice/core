@@ -49,7 +49,7 @@ private:
     std::unique_ptr<CryptoEngine>   mEngine;
     CryptoType                      mCryptoType;
 
-    bool readAgileEncryptionInfo( css::uno::Reference< css::io::XInputStream >& rStream );
+    bool readAgileEncryptionInfo( css::uno::Reference< css::io::XInputStream > const & rStream );
     bool readStandard2007EncryptionInfo( BinaryInputStream& rStream );
 
 public:

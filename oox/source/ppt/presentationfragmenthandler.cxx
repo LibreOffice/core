@@ -83,7 +83,7 @@ PresentationFragmentHandler::~PresentationFragmentHandler() throw()
 {
 }
 
-void ResolveTextFields( XmlFilterBase& rFilter )
+void ResolveTextFields( XmlFilterBase const & rFilter )
 {
     const oox::core::TextFieldStack& rTextFields = rFilter.getTextFieldStack();
     if ( !rTextFields.empty() )

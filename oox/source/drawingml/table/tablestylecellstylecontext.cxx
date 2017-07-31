@@ -32,7 +32,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml { namespace table {
 
-TableStyleCellStyleContext::TableStyleCellStyleContext( ContextHandler2Helper& rParent, TableStylePart& rTableStylePart )
+TableStyleCellStyleContext::TableStyleCellStyleContext( ContextHandler2Helper const & rParent, TableStylePart& rTableStylePart )
 : ContextHandler2( rParent )
 , mrTableStylePart( rTableStylePart )
 , mnLineType( XML_none )

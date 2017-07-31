@@ -136,7 +136,7 @@ bool lclDecodeVmlxBool( const OUString& rValue, bool bDefaultForEmpty )
 
 } // namespace
 
-ShapeLayoutContext::ShapeLayoutContext( ContextHandler2Helper& rParent, Drawing& rDrawing ) :
+ShapeLayoutContext::ShapeLayoutContext( ContextHandler2Helper const & rParent, Drawing& rDrawing ) :
     ContextHandler2( rParent ),
     mrDrawing( rDrawing )
 {
@@ -162,7 +162,7 @@ ContextHandlerRef ShapeLayoutContext::onCreateContext( sal_Int32 nElement, const
     return nullptr;
 }
 
-ClientDataContext::ClientDataContext( ContextHandler2Helper& rParent,
+ClientDataContext::ClientDataContext( ContextHandler2Helper const & rParent,
         ClientData& rClientData, const AttributeList& rAttribs ) :
     ContextHandler2( rParent ),
     mrClientData( rClientData )
@@ -222,12 +222,12 @@ void ClientDataContext::onEndElement()
     }
 }
 
-ShapeContextBase::ShapeContextBase( ContextHandler2Helper& rParent ) :
+ShapeContextBase::ShapeContextBase( ContextHandler2Helper const & rParent ) :
     ContextHandler2( rParent )
 {
 }
 
-ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& rParent,
+ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper const & rParent,
         ShapeContainer& rShapes, sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( nElement )
@@ -266,7 +266,7 @@ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& r
     return nullptr;
 }
 
-ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& rShapeType, const AttributeList& rAttribs ) :
+ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper const & rParent, ShapeType& rShapeType, const AttributeList& rAttribs ) :
     ShapeContextBase( rParent ),
     mrTypeModel( rShapeType.getTypeModel() )
 {
@@ -439,7 +439,7 @@ void ShapeTypeContext::setStyle( const OUString& rStyle )
     }
 }
 
-ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, const AttributeList& rAttribs ) :
+ShapeContext::ShapeContext( ContextHandler2Helper const & rParent, ShapeBase& rShape, const AttributeList& rAttribs ) :
     ShapeTypeContext( rParent, rShape, rAttribs ),
     mrShape( rShape ),
     mrShapeModel( rShape.getShapeModel() )
@@ -529,7 +529,7 @@ void ShapeContext::setVmlPath( const OUString& rPath )
         mrShapeModel.maVmlPath = rPath;
 }
 
-GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent, GroupShape& rShape, const AttributeList& rAttribs ) :
+GroupShapeContext::GroupShapeContext( ContextHandler2Helper const & rParent, GroupShape& rShape, const AttributeList& rAttribs ) :
     ShapeContext( rParent, rShape, rAttribs ),
     mrShapes( rShape.getChildren() )
 {
@@ -543,7 +543,7 @@ ContextHandlerRef GroupShapeContext::onCreateContext( sal_Int32 nElement, const 
     return xContext.get() ? xContext : ShapeContext::onCreateContext( nElement, rAttribs );
 }
 
-RectangleShapeContext::RectangleShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, RectangleShape& rShape ) :
+RectangleShapeContext::RectangleShapeContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, RectangleShape& rShape ) :
     ShapeContext( rParent, rShape, rAttribs )
 {
 }

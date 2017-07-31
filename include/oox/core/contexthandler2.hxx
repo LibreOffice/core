@@ -226,7 +226,7 @@ protected:
 class OOX_DLLPUBLIC ContextHandler2 : public ContextHandler, public ContextHandler2Helper
 {
 public:
-    explicit            ContextHandler2( ContextHandler2Helper& rParent );
+    explicit            ContextHandler2( ContextHandler2Helper const & rParent );
     virtual             ~ContextHandler2() override;
 
     // resolve ambiguity from base classes

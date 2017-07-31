@@ -139,7 +139,7 @@ namespace oox { namespace ppt {
         return bRet;
     }
 
-    AnimVariantContext::AnimVariantContext( FragmentHandler2& rParent, sal_Int32 aElement, Any & aValue )
+    AnimVariantContext::AnimVariantContext( FragmentHandler2 const & rParent, sal_Int32 aElement, Any & aValue )
         : FragmentHandler2( rParent )
             , mnElement( aElement )
             , maValue( aValue )

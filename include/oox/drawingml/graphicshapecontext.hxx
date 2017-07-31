@@ -36,7 +36,7 @@ namespace oox { namespace drawingml {
 class OOX_DLLPUBLIC GraphicShapeContext : public ShapeContext
 {
 public:
-    GraphicShapeContext( ::oox::core::ContextHandler2Helper& rParent, const ShapePtr& pMasterShapePtr, const ShapePtr& pShapePtr );
+    GraphicShapeContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pMasterShapePtr, const ShapePtr& pShapePtr );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 };
@@ -59,7 +59,7 @@ private:
 class OleObjectGraphicDataContext : public ShapeContext
 {
 public:
-    OleObjectGraphicDataContext( ::oox::core::ContextHandler2Helper& rParent, const ShapePtr& pShapePtr );
+    OleObjectGraphicDataContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr );
     virtual ~OleObjectGraphicDataContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
@@ -72,7 +72,7 @@ class DiagramGraphicDataContext
     : public ShapeContext
 {
 public:
-    DiagramGraphicDataContext( ::oox::core::ContextHandler2Helper& rParent, const ShapePtr& pShapePtr );
+    DiagramGraphicDataContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr );
     virtual ~DiagramGraphicDataContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
@@ -90,7 +90,7 @@ class ChartGraphicDataContext : public ShapeContext
 {
 public:
     explicit            ChartGraphicDataContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             const ShapePtr& rxShape, bool bEmbedShapes );
 
     virtual ::oox::core::ContextHandlerRef

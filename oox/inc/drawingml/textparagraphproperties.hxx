@@ -58,7 +58,7 @@ public:
     void setBulletSize(sal_Int16 nSize);
     void setFontSize(sal_Int16 nSize);
     void setStyleName( const OUString& rStyleName ) { maStyleName <<= rStyleName; }
-    void setGraphic( css::uno::Reference< css::graphic::XGraphic >& rXGraphic );
+    void setGraphic( css::uno::Reference< css::graphic::XGraphic > const & rXGraphic );
 
     std::shared_ptr< ::oox::drawingml::Color > maBulletColorPtr;
     css::uno::Any               mbBulletColorFollowText;

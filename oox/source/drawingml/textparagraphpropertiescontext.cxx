@@ -43,7 +43,7 @@ using namespace ::com::sun::star::text;
 namespace oox { namespace drawingml {
 
 // CT_TextParagraphProperties
-TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2Helper& rParent,
+TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2Helper const & rParent,
                                                                 const AttributeList& rAttribs,
                                                                 TextParagraphProperties& rTextParagraphProperties )
 : ContextHandler2( rParent )

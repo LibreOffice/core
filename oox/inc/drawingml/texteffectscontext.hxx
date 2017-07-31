@@ -23,7 +23,7 @@ namespace oox { namespace drawingml {
 class TextEffectsContext : public oox::core::ContextHandler2
 {
 public:
-    TextEffectsContext(oox::core::ContextHandler2Helper& rParent,
+    TextEffectsContext(oox::core::ContextHandler2Helper const & rParent,
                        sal_Int32 aElementToken,
                        std::vector<css::beans::PropertyValue>& rTextEffectsProperties);
     virtual ~TextEffectsContext() override;

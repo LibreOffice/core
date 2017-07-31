@@ -29,7 +29,7 @@ struct TextBodyProperties;
 class TextBodyPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextBodyPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
+    TextBodyPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
              const ::oox::AttributeList& rAttributes,
              TextBodyProperties& rTextBodyProp );
 

@@ -29,7 +29,7 @@ namespace oox { namespace drawingml {
 class ConstraintListContext : public ::oox::core::ContextHandler2
 {
 public:
-    ConstraintListContext( ContextHandler2Helper& rParent, const LayoutAtomPtr &pNode );
+    ConstraintListContext( ContextHandler2Helper const & rParent, const LayoutAtomPtr &pNode );
     virtual ~ConstraintListContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) override;

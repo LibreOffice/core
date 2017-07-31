@@ -30,7 +30,7 @@ class Theme;
 class ThemeElementsContext : public oox::core::ContextHandler2
 {
 public:
-    ThemeElementsContext( ::oox::core::ContextHandler2Helper& rParent, Theme& rTheme );
+    ThemeElementsContext( ::oox::core::ContextHandler2Helper const & rParent, Theme& rTheme );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement,
         const ::oox::AttributeList& rAttribs ) override;
 

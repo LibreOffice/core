@@ -71,7 +71,7 @@ namespace drawingml {
 
 // CT_Picture
 
-GraphicShapeContext::GraphicShapeContext( ContextHandler2Helper& rParent, const ShapePtr& pMasterShapePtr, const ShapePtr& pShapePtr )
+GraphicShapeContext::GraphicShapeContext( ContextHandler2Helper const & rParent, const ShapePtr& pMasterShapePtr, const ShapePtr& pShapePtr )
 : ShapeContext( rParent, pMasterShapePtr, pShapePtr )
 {
 }
@@ -177,7 +177,7 @@ void GraphicalObjectFrameContext::onEndElement()
     }
 }
 
-OleObjectGraphicDataContext::OleObjectGraphicDataContext( ContextHandler2Helper& rParent, const ShapePtr& xShape ) :
+OleObjectGraphicDataContext::OleObjectGraphicDataContext( ContextHandler2Helper const & rParent, const ShapePtr& xShape ) :
     ShapeContext( rParent, ShapePtr(), xShape ),
     mrOleObjectInfo( xShape->setOleObjectType() )
 {
@@ -237,7 +237,7 @@ ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nEleme
     return nullptr;
 }
 
-DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper& rParent, const ShapePtr& pShapePtr )
+DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper const & rParent, const ShapePtr& pShapePtr )
 : ShapeContext( rParent, ShapePtr(), pShapePtr )
 {
     pShapePtr->setDiagramType();
@@ -295,7 +295,7 @@ ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aEleme
     return ShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
-ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler2Helper& rParent, const ShapePtr& rxShape, bool bEmbedShapes ) :
+ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler2Helper const & rParent, const ShapePtr& rxShape, bool bEmbedShapes ) :
     ShapeContext( rParent, ShapePtr(), rxShape ),
     mrChartShapeInfo( rxShape->setChartType( bEmbedShapes ) )
 {

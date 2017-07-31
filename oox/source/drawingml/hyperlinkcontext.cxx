@@ -36,7 +36,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox {
 namespace drawingml {
 
-HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
+HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
         const AttributeList& rAttribs, PropertyMap& aProperties )
     : ContextHandler2( rParent )
     , maProperties(aProperties)

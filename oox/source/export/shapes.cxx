@@ -533,7 +533,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
     return *this;
 }
 
-static bool lcl_IsOnBlacklist(OUString& rShapeType)
+static bool lcl_IsOnBlacklist(OUString const & rShapeType)
 {
     static const std::initializer_list<OUStringLiteral> vBlacklist = {
         "block-arc",
@@ -599,7 +599,7 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
     return std::find(vBlacklist.begin(), vBlacklist.end(), rShapeType) != vBlacklist.end();
 }
 
-static bool lcl_IsOnWhitelist(OUString& rShapeType)
+static bool lcl_IsOnWhitelist(OUString const & rShapeType)
 {
     static const std::initializer_list<OUStringLiteral> vWhitelist = {
         "forbidden",

@@ -28,7 +28,7 @@ namespace oox { namespace drawingml {
 class ShapeStyleContext : public ::oox::core::ContextHandler2
 {
 public:
-    ShapeStyleContext( ::oox::core::ContextHandler2Helper& rParent, Shape& rShape );
+    ShapeStyleContext( ::oox::core::ContextHandler2Helper const & rParent, Shape& rShape );
     virtual ~ShapeStyleContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;

@@ -39,7 +39,7 @@ class IfContext
     : public LayoutNodeContext
 {
 public:
-    IfContext( ContextHandler2Helper& rParent,
+    IfContext( ContextHandler2Helper const & rParent,
                const AttributeList& rAttribs,
                const ConditionAtomPtr& pAtom )
         : LayoutNodeContext( rParent, rAttribs, pAtom )
@@ -50,7 +50,7 @@ class AlgorithmContext
     : public ContextHandler2
 {
 public:
-    AlgorithmContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, const AlgAtomPtr & pNode )
+    AlgorithmContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, const AlgAtomPtr & pNode )
         : ContextHandler2( rParent )
         , mnRevision( 0 )
         , mpNode( pNode )
@@ -89,7 +89,7 @@ class ChooseContext
     : public ContextHandler2
 {
 public:
-    ChooseContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, const LayoutAtomPtr & pNode )
+    ChooseContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, const LayoutAtomPtr & pNode )
         : ContextHandler2( rParent )
         , mpNode( pNode )
         {
@@ -139,7 +139,7 @@ class ForEachContext
     : public LayoutNodeContext
 {
 public:
-    ForEachContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, const ForEachAtomPtr& pAtom )
+    ForEachContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, const ForEachAtomPtr& pAtom )
         : LayoutNodeContext( rParent, rAttribs, pAtom )
         {
             rAttribs.getString( XML_ref );
@@ -152,7 +152,7 @@ class LayoutVariablePropertySetContext
     : public ContextHandler2
 {
 public:
-    LayoutVariablePropertySetContext( ContextHandler2Helper& rParent, LayoutNode::VarMap & aVar )
+    LayoutVariablePropertySetContext( ContextHandler2Helper const & rParent, LayoutNode::VarMap & aVar )
         : ContextHandler2( rParent )
         , mVariables( aVar )
         {
@@ -173,7 +173,7 @@ private:
 };
 
 // CT_LayoutNode
-LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper& rParent,
+LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper const & rParent,
                                       const AttributeList& rAttribs,
                                       const LayoutAtomPtr& pAtom )
     : ContextHandler2( rParent )

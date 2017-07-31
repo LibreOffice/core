@@ -30,7 +30,7 @@ struct Shape3DProperties;
 class Scene3DRotationPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    Scene3DRotationPropertiesContext( ::oox::core::ContextHandler2Helper& rParent, RotationProperties& rRotationProperties ) throw();
+    Scene3DRotationPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, RotationProperties& rRotationProperties ) throw();
 
     ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
@@ -41,7 +41,7 @@ private:
 class Scene3DPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    Scene3DPropertiesContext( ::oox::core::ContextHandler2Helper& rParent, Shape3DProperties& r3DProperties ) throw();
+    Scene3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, Shape3DProperties& r3DProperties ) throw();
 
     ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
@@ -52,7 +52,7 @@ private:
 class Shape3DPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    Shape3DPropertiesContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttribs, Shape3DProperties& r3DProperties ) throw();
+    Shape3DPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, const ::oox::AttributeList& rAttribs, Shape3DProperties& r3DProperties ) throw();
 
     ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 

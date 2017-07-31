@@ -33,7 +33,7 @@ class SolidFillContext : public ColorContext
 {
 public:
     explicit            SolidFillContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             FillProperties& rFillProps );
 };
 
@@ -43,7 +43,7 @@ class GradientFillContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            GradientFillContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             const ::oox::AttributeList& rAttribs,
                             GradientFillProperties& rGradientProps );
 
@@ -61,7 +61,7 @@ class PatternFillContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            PatternFillContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             const ::oox::AttributeList& rAttribs,
                             PatternFillProperties& rPatternProps );
 
@@ -81,7 +81,7 @@ class ArtisticEffectContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            ArtisticEffectContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             ArtisticEffectProperties& rEffect );
     virtual             ~ArtisticEffectContext() override;
 
@@ -101,7 +101,7 @@ class BlipExtensionContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            BlipExtensionContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             BlipFillProperties& rBlipProps );
     virtual             ~BlipExtensionContext() override;
 
@@ -121,7 +121,7 @@ class DuotoneContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            DuotoneContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             BlipFillProperties& rBlipProps );
     virtual             ~DuotoneContext() override;
 
@@ -142,7 +142,7 @@ class ColorChangeContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            ColorChangeContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             const ::oox::AttributeList& rAttribs,
                             BlipFillProperties& rBlipProps );
     virtual             ~ColorChangeContext() override;
@@ -163,7 +163,7 @@ class BlipContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            BlipContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             const ::oox::AttributeList& rAttribs,
                             BlipFillProperties& rBlipProps );
 
@@ -181,7 +181,7 @@ class BlipFillContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            BlipFillContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             const ::oox::AttributeList& rAttribs,
                             BlipFillProperties& rBlipProps );
 
@@ -200,7 +200,7 @@ class FillPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            FillPropertiesContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             FillProperties& rFillProps );
 
     virtual ::oox::core::ContextHandlerRef
@@ -210,7 +210,7 @@ public:
 
     static ::oox::core::ContextHandlerRef
                         createFillContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             sal_Int32 nElement,
                             const ::oox::AttributeList& rAttribs,
                             FillProperties& rFillProps );
@@ -230,7 +230,7 @@ class SimpleFillPropertiesContext : private FillProperties, public FillPropertie
 {
 public:
     explicit            SimpleFillPropertiesContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             Color& rColor );
     virtual             ~SimpleFillPropertiesContext() override;
 

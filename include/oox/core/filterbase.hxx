@@ -196,7 +196,7 @@ public:
 
     /** Imports the raw binary data from the specified stream.
         @return  True, if the data could be imported from the stream. */
-    bool                importBinaryData( StreamDataSequence& orDataSeq, const OUString& rStreamName );
+    bool                importBinaryData( StreamDataSequence const & orDataSeq, const OUString& rStreamName );
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 

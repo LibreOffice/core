@@ -130,7 +130,7 @@ void BinaryOutputStream::writeCompressedUnicodeArray( const OUString& rString, b
         writeUnicodeArray( rString );
 }
 
-SequenceOutputStream::SequenceOutputStream( StreamDataSequence& rData ) :
+SequenceOutputStream::SequenceOutputStream( StreamDataSequence const & rData ) :
     BinaryStreamBase( true ),
     SequenceSeekableStream( rData )
 {

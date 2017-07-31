@@ -22,7 +22,7 @@ namespace shape
 class LockedCanvasContext : public oox::core::ContextHandler2
 {
 public:
-    explicit LockedCanvasContext(oox::core::ContextHandler2Helper& rParent);
+    explicit LockedCanvasContext(oox::core::ContextHandler2Helper const & rParent);
     ~LockedCanvasContext() override;
 
     oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const ::oox::AttributeList& rAttribs) override;

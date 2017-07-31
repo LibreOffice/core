@@ -42,7 +42,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-SlideTimingContext::SlideTimingContext( FragmentHandler2& rParent, TimeNodePtrList & aTimeNodeList ) throw()
+SlideTimingContext::SlideTimingContext( FragmentHandler2 const & rParent, TimeNodePtrList & aTimeNodeList ) throw()
     : FragmentHandler2( rParent )
     , maTimeNodeList( aTimeNodeList )
 {

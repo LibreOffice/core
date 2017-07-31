@@ -32,7 +32,7 @@ class HyperLinkContext : public ::oox::core::ContextHandler2
 {
 public:
                         HyperLinkContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             const ::oox::AttributeList& rAttribs,
                             PropertyMap& aProperties );
     virtual             ~HyperLinkContext() override;

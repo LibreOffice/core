@@ -25,7 +25,7 @@
 
 namespace oox { namespace ppt {
 
-    BuildListContext::BuildListContext( FragmentHandler2& rParent )
+    BuildListContext::BuildListContext( FragmentHandler2 const & rParent )
         : FragmentHandler2( rParent )
         , mbInBldGraphic( false )
         ,   mbBuildAsOne( false )
