@@ -1701,7 +1701,7 @@ OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
 }
 
 OUString StringResourcePersistenceImpl::implGetFileNameForLocaleItem
-    ( LocaleItem* pLocaleItem, const OUString& aNameBase )
+    ( LocaleItem const * pLocaleItem, const OUString& aNameBase )
 {
     OUString aFileName = aNameBase;
     if( aFileName.isEmpty() )
@@ -1712,7 +1712,7 @@ OUString StringResourcePersistenceImpl::implGetFileNameForLocaleItem
 }
 
 OUString StringResourcePersistenceImpl::implGetPathForLocaleItem
-    ( LocaleItem* pLocaleItem, const OUString& aNameBase,
+    ( LocaleItem const * pLocaleItem, const OUString& aNameBase,
       const OUString& aLocation, bool bDefaultFile )
 {
     OUString aFileName = implGetFileNameForLocaleItem( pLocaleItem, aNameBase );

@@ -223,8 +223,8 @@ protected:
     virtual void implLoadAllLocales() override;
 
     void implScanLocaleNames( const css::uno::Sequence< OUString >& aContentSeq );
-    static OUString implGetFileNameForLocaleItem( LocaleItem* pLocaleItem, const OUString& aNameBase );
-    static OUString implGetPathForLocaleItem( LocaleItem* pLocaleItem, const OUString& aNameBase,
+    static OUString implGetFileNameForLocaleItem( LocaleItem const * pLocaleItem, const OUString& aNameBase );
+    static OUString implGetPathForLocaleItem( LocaleItem const * pLocaleItem, const OUString& aNameBase,
         const OUString& aLocation, bool bDefaultFile=false );
 
     bool implReadPropertiesFile( LocaleItem* pLocaleItem,

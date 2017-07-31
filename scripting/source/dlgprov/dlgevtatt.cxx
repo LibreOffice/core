@@ -194,7 +194,7 @@ namespace dlgprov
             throw RuntimeException(); // more text info here please
         return it->second;
     }
-    Reference< XScriptEventsSupplier > DialogEventsAttacherImpl::getFakeVbaEventsSupplier( const Reference< XControl >& xControl, OUString& sControlName )
+    Reference< XScriptEventsSupplier > DialogEventsAttacherImpl::getFakeVbaEventsSupplier( const Reference< XControl >& xControl, OUString const & sControlName )
     {
         Reference< XScriptEventsSupplier > xEventsSupplier;
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );

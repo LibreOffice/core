@@ -126,7 +126,7 @@ static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString&
 }
 
 
-static css::uno::Any getUCBProperty( ::ucbhelper::Content& content, OUString& prop )
+static css::uno::Any getUCBProperty( ::ucbhelper::Content& content, OUString const & prop )
 {
     css::uno::Any result;
     try
