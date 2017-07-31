@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_1152d867",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-07-31T16:53:14Z",
+      "side": 1,
+      "message": "The \"email\u003d\" part is surely not intended :)",
+      "revId": "0d2297da3582cce9328f2e4afbeb4ab829d01606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
