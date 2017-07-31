@@ -159,7 +159,7 @@ private:
     VclPtr<BubbleWindow> GetBubbleWindow();
     void            RemoveBubbleWindow( bool bRemoveIcon );
     void            AddMenuBarIcon( SystemWindow* pSysWin, bool bAddEventHdl );
-    Image           GetBubbleImage( OUString &rURL );
+    Image           GetBubbleImage( OUString const &rURL );
 
 public:
     explicit        UpdateCheckUI(const uno::Reference<uno::XComponentContext>&);
@@ -238,7 +238,7 @@ UpdateCheckUI::supportsService( OUString const & serviceName )
     return cppu::supportsService(this, serviceName);
 }
 
-Image UpdateCheckUI::GetBubbleImage( OUString &rURL )
+Image UpdateCheckUI::GetBubbleImage( OUString const &rURL )
 {
     Image aImage;
 

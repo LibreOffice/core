@@ -57,7 +57,7 @@ class GridWindow : public vcl::Window
             rRenderContext.DrawBitmapEx(maPos - aOffset, rBitmapEx);
         }
 
-        bool isHit(vcl::Window& rWin, const Point& rPos)
+        bool isHit(vcl::Window const & rWin, const Point& rPos)
         {
             const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
             const tools::Rectangle aTarget(maPos - aOffset, maPos + aOffset);
@@ -111,7 +111,7 @@ class GridWindow : public vcl::Window
     void computeExtremes();
     static void computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut );
     void computeNew();
-    static double interpolate( double x, double* pNodeX, double* pNodeY, int nNodes );
+    static double interpolate( double x, double const * pNodeX, double const * pNodeY, int nNodes );
 
     virtual void MouseMove( const MouseEvent& ) override;
     virtual void MouseButtonDown( const MouseEvent& ) override;
@@ -414,8 +414,8 @@ void GridWindow::computeNew()
 
 double GridWindow::interpolate(
     double x,
-    double* pNodeX,
-    double* pNodeY,
+    double const * pNodeX,
+    double const * pNodeY,
     int nNodes )
 {
     // compute Lagrange interpolation
