@@ -1210,7 +1210,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
                 aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
         }
 
-        OUString sLocationURL( aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+        OUString sLocationURL( aLocation.GetMainURL( INetURLObject::NO_DECODE ) );
         bool bIsInTempPath( false );
         OUString sSysTempPath;
         if( osl::FileBase::getTempDirURL( sSysTempPath ) == osl::FileBase::E_None )
