@@ -129,8 +129,8 @@ private:
     void                    FocusOnIcon ( sal_uInt16 nId );
 
 protected:
-    static void             ShowPageImpl ( IconChoicePageData* pData );
-    static void             HidePageImpl ( IconChoicePageData* pData );
+    static void             ShowPageImpl ( IconChoicePageData const * pData );
+    static void             HidePageImpl ( IconChoicePageData const * pData );
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
     IconChoicePage*  GetTabPage( sal_uInt16 nPageId )

@@ -319,7 +319,7 @@ IMPL_LINK_NOARG( SvxGradientTabPage, ChangeAutoStepHdl_Impl, CheckBox&, void )
     ModifiedHdl_Impl(m_pMtrIncrement);
 }
 
-void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
+void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
 {
     if( pControl == m_pMtrBorder )
         m_pSliderBorder->SetThumbPos( m_pMtrBorder->GetValue() );

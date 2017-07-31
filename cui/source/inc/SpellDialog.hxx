@@ -81,7 +81,7 @@ public:
     SentenceEditWindow_Impl(vcl::Window* pParent, WinBits nBits);
     virtual ~SentenceEditWindow_Impl() override;
 
-    void            Init(VclPtr<ToolBox> &rToolbar);
+    void            Init(VclPtr<ToolBox> const &rToolbar);
     void            SetModifyHdl(const Link<Edit&,void>& rLink) override { m_aModifyLink = rLink;}
 
     void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
@@ -194,7 +194,7 @@ private:
 
     DECL_LINK( InitHdl, void*, void );
 
-    void            AddToDictionaryExecute( sal_uInt16 ItemId, PopupMenu *pMenu );
+    void            AddToDictionaryExecute( sal_uInt16 ItemId, PopupMenu const *pMenu );
     void            StartSpellOptDlg_Impl();
     int             InitUserDicts();
     void            UpdateBoxes_Impl();

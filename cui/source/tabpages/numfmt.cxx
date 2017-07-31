@@ -1521,7 +1521,7 @@ IMPL_LINK( SvxNumberFormatTabPage, EditModifyHdl_Impl, Edit&, rEdit, void )
 {
     EditHdl_Impl(&rEdit);
 }
-void SvxNumberFormatTabPage::EditHdl_Impl( Edit* pEdFormat )
+void SvxNumberFormatTabPage::EditHdl_Impl( Edit const * pEdFormat )
 {
     sal_uInt32 nCurKey = NUMKEY_UNDEFINED;
 
@@ -1596,7 +1596,7 @@ IMPL_LINK( SvxNumberFormatTabPage, OptEditHdl_Impl, Edit&, rEdit, void )
 {
     OptHdl_Impl(&rEdit);
 }
-void SvxNumberFormatTabPage::OptHdl_Impl( void* pOptCtrl )
+void SvxNumberFormatTabPage::OptHdl_Impl( void const * pOptCtrl )
 {
     if (   (pOptCtrl == m_pEdLeadZeroes)
         || (pOptCtrl == m_pEdDecimals)

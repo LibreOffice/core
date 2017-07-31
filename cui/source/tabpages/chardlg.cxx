@@ -456,7 +456,7 @@ const FontList* SvxCharNamePage::GetFontList() const
 namespace
 {
     FontMetric calcFontMetrics(  SvxFont& _rFont,
-                    SvxCharNamePage* _pPage,
+                    SvxCharNamePage const * _pPage,
                     const FontNameBox* _pFontNameLB,
                     const FontStyleBox* _pFontStyleLB,
                     const FontSizeBox* _pFontSizeLB,
@@ -1173,14 +1173,14 @@ IMPL_LINK( SvxCharNamePage, FontModifyEditHdl_Impl, Edit&, rBox, void )
 {
     FontModifyHdl_Impl(&rBox);
 }
-void SvxCharNamePage::FontModifyHdl_Impl(void* pNameBox)
+void SvxCharNamePage::FontModifyHdl_Impl(void const * pNameBox)
 {
     m_pImpl->m_aUpdateIdle.Start();
 
     if ( m_pWestFontNameLB == pNameBox || m_pEastFontNameLB == pNameBox || m_pCTLFontNameLB == pNameBox )
     {
-        FillStyleBox_Impl( static_cast<FontNameBox*>(pNameBox) );
-        FillSizeBox_Impl( static_cast<FontNameBox*>(pNameBox) );
+        FillStyleBox_Impl( static_cast<FontNameBox const *>(pNameBox) );
+        FillSizeBox_Impl( static_cast<FontNameBox const *>(pNameBox) );
     }
 }
 
@@ -1254,7 +1254,7 @@ void SvxCharNamePage::SetFontList( const SvxFontListItem& rItem )
 
 namespace
 {
-    void enableRelativeMode( SvxCharNamePage* _pPage, FontSizeBox* _pFontSizeLB, sal_uInt16 _nHeightWhich )
+    void enableRelativeMode( SvxCharNamePage const * _pPage, FontSizeBox* _pFontSizeLB, sal_uInt16 _nHeightWhich )
     {
         _pFontSizeLB->EnableRelativeMode( 5, 995 ); // min 5%, max 995%, step 5
 

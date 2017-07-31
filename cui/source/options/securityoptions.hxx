@@ -44,7 +44,7 @@ namespace svx
         VclPtr<CheckBox> m_pBlockUntrustedRefererLinksCB;
 
     public:
-        SecurityOptionsDialog( vcl::Window* pParent, SvtSecurityOptions* pOptions );
+        SecurityOptionsDialog( vcl::Window* pParent, SvtSecurityOptions const * pOptions );
         virtual ~SecurityOptionsDialog() override;
         virtual void dispose() override;
 

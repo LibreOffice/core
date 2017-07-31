@@ -673,7 +673,7 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrEditHdl_Impl, Edit&, rBox, void )
 {
     ChangeAttrHdl_Impl(&rBox);
 }
-void SvxMeasurePage::ChangeAttrHdl_Impl( void* p )
+void SvxMeasurePage::ChangeAttrHdl_Impl( void const * p )
 {
     if( p == m_pMtrFldLineDist )
     {

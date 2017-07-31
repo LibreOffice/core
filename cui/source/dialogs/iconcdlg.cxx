@@ -283,14 +283,14 @@ void IconChoiceDialog::SetCtrlStyle()
 |
 \**********************************************************************/
 
-void IconChoiceDialog::ShowPageImpl ( IconChoicePageData* pData )
+void IconChoiceDialog::ShowPageImpl ( IconChoicePageData const * pData )
 {
     if ( pData->pPage )
         pData->pPage->Show();
 }
 
 
-void IconChoiceDialog::HidePageImpl ( IconChoicePageData* pData )
+void IconChoiceDialog::HidePageImpl ( IconChoicePageData const * pData )
 {
     if ( pData->pPage )
         pData->pPage->Hide();

@@ -68,7 +68,7 @@ struct SvxAsianLayoutPage_Impl
 
     bool                hasForbiddenCharacters(LanguageType eLang);
     SvxForbiddenChars_Impl* getForbiddenCharacters(LanguageType eLang);
-    void                    addForbiddenCharacters(LanguageType eLang, ForbiddenCharacters* pForbidden);
+    void                    addForbiddenCharacters(LanguageType eLang, ForbiddenCharacters const * pForbidden);
 };
 
 SvxAsianLayoutPage_Impl::~SvxAsianLayoutPage_Impl()
@@ -95,7 +95,7 @@ SvxForbiddenChars_Impl* SvxAsianLayoutPage_Impl::getForbiddenCharacters(Language
 }
 
 void SvxAsianLayoutPage_Impl::addForbiddenCharacters(
-    LanguageType eLang, ForbiddenCharacters* pForbidden)
+    LanguageType eLang, ForbiddenCharacters const * pForbidden)
 {
     SvxForbiddenCharacterMap_Impl::iterator itOld = aChangedLanguagesMap.find( eLang );
     if( itOld == aChangedLanguagesMap.end() )

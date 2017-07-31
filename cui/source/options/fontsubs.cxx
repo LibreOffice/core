@@ -268,7 +268,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectEditHdl, Edit&, rBox, void)
 {
     SelectHdl(&rBox);
 }
-void SvxFontSubstTabPage::SelectHdl(vcl::Window* pWin)
+void SvxFontSubstTabPage::SelectHdl(vcl::Window const * pWin)
 {
     if (pWin == m_pApply || pWin == m_pDelete)
     {

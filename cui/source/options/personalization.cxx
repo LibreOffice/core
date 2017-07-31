@@ -216,7 +216,7 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
     }
 }
 
-void SelectPersonaDialog::SetAppliedPersonaSetting( OUString& rPersonaSetting )
+void SelectPersonaDialog::SetAppliedPersonaSetting( OUString const & rPersonaSetting )
 {
     m_aAppliedPersona = rPersonaSetting;
 }
@@ -245,7 +245,7 @@ void SelectPersonaDialog::SetImages( const Image& aImage, sal_Int32 nIndex )
     m_vResultList[nIndex]->SetModeImage( aImage );
 }
 
-void SelectPersonaDialog::AddPersonaSetting( OUString& rPersonaSetting )
+void SelectPersonaDialog::AddPersonaSetting( OUString const & rPersonaSetting )
 {
     m_vPersonaSettings.push_back( rPersonaSetting );
 }

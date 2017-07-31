@@ -456,7 +456,7 @@ MenuSaveInData::SetEntries( SvxEntries* pNewEntries )
 }
 
 bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& xMenuSettings,
-    const OUString& rBaseTitle, SvxConfigEntry* pParentData, bool bContextMenu )
+    const OUString& rBaseTitle, SvxConfigEntry const * pParentData, bool bContextMenu )
 {
     SvxEntries* pEntries = pParentData->GetEntries();
 
@@ -618,7 +618,7 @@ bool MenuSaveInData::Apply()
 }
 
 void MenuSaveInData::Apply(
-    uno::Reference< container::XIndexContainer >& rMenuBar,
+    uno::Reference< container::XIndexContainer > const & rMenuBar,
     uno::Reference< lang::XSingleComponentFactory >& rFactory )
 {
     SvxEntries::const_iterator iter = GetEntries()->begin();
@@ -648,7 +648,7 @@ void MenuSaveInData::Apply(
 }
 
 void SaveInData::ApplyMenu(
-    uno::Reference< container::XIndexContainer >& rMenuBar,
+    uno::Reference< container::XIndexContainer > const & rMenuBar,
     uno::Reference< lang::XSingleComponentFactory >& rFactory,
     SvxConfigEntry* pMenuData )
 {
@@ -1513,7 +1513,7 @@ IMPL_LINK_NOARG( SvxConfigPage, SelectSaveInLocation, ListBox&, void )
     Init();
 }
 
-void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
+void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry const * pToSelect )
 {
     sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
     m_pTopLevelListBox->Clear();
@@ -1552,7 +1552,7 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
 }
 
 void SvxConfigPage::AddSubMenusToUI(
-    const OUString& rBaseTitle, SvxConfigEntry* pParentData )
+    const OUString& rBaseTitle, SvxConfigEntry const * pParentData )
 {
     SvxEntries::const_iterator iter = pParentData->GetEntries()->begin();
     SvxEntries::const_iterator end = pParentData->GetEntries()->end();
@@ -1801,7 +1801,7 @@ void SvxConfigPage::MoveEntry( bool bMoveUp )
 }
 
 bool SvxConfigPage::MoveEntryData(
-    SvTreeListEntry* pSourceEntry, SvTreeListEntry* pTargetEntry )
+    SvTreeListEntry const * pSourceEntry, SvTreeListEntry const * pTargetEntry )
 {
     //#i53677#
     if (nullptr == pSourceEntry || nullptr == pTargetEntry)
@@ -1843,7 +1843,7 @@ bool SvxConfigPage::MoveEntryData(
 
 SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     vcl::Window* pParent, SvxEntries* entries,
-    SvxConfigEntry* selection, bool bCreateMenu )
+    SvxConfigEntry const * selection, bool bCreateMenu )
     : ModalDialog(pParent, "MoveMenuDialog", "cui/ui/movemenu.ui")
     , mpEntries(nullptr)
     , bModified(false)
@@ -2561,9 +2561,9 @@ bool ToolbarSaveInData::Apply()
 }
 
 void ToolbarSaveInData::ApplyToolbar(
-    uno::Reference< container::XIndexContainer >& rToolbarBar,
+    uno::Reference< container::XIndexContainer > const & rToolbarBar,
     uno::Reference< lang::XSingleComponentFactory >& rFactory,
-    SvxConfigEntry* pToolbarData )
+    SvxConfigEntry const * pToolbarData )
 {
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
 
@@ -2792,7 +2792,7 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
 
 void ToolbarSaveInData::LoadToolbar(
     const uno::Reference< container::XIndexAccess >& xToolbarSettings,
-    SvxConfigEntry* pParentData )
+    SvxConfigEntry const * pParentData )
 {
     SvxEntries*         pEntries            = pParentData->GetEntries();
 

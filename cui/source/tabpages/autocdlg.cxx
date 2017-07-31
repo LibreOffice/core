@@ -157,7 +157,7 @@ void OfaAutoCorrDlg::EnableLanguage(bool bEnable)
 }
 
 static bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
-                    CollatorWrapper& rCmpClass )
+                    CollatorWrapper const & rCmpClass )
 {
     sal_Int32 nCount = rLB.GetEntryCount();
     sal_Int32 nSelPos = rLB.GetSelectEntryPos();
@@ -1219,7 +1219,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
 {
     return NewDelHdl(&rEdit);
 }
-bool OfaAutocorrReplacePage::NewDelHdl(void* pBtn)
+bool OfaAutocorrReplacePage::NewDelHdl(void const * pBtn)
 {
     SvTreeListEntry* pEntry = m_pReplaceTLB->FirstSelected();
     if( pBtn == m_pDeleteReplacePB )
@@ -1670,7 +1670,7 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
     return NewDelHdl(&rEdit);
 }
 
-bool OfaAutocorrExceptPage::NewDelHdl(void* pBtn)
+bool OfaAutocorrExceptPage::NewDelHdl(void const * pBtn)
 {
     if((pBtn == m_pNewAbbrevPB || pBtn == m_pAbbrevED.get() )
         && !m_pAbbrevED->GetText().isEmpty())

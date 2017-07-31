@@ -120,13 +120,13 @@ private:
 protected:
 
     void ApplyMenu(
-        css::uno::Reference< css::container::XIndexContainer >& rMenuBar,
+        css::uno::Reference< css::container::XIndexContainer > const & rMenuBar,
         css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
         SvxConfigEntry *pMenuData );
 
     bool LoadSubMenus(
         const css::uno::Reference< css::container::XIndexAccess >& xMenuSettings,
-        const OUString& rBaseTitle, SvxConfigEntry* pParentData, bool bContextMenu );
+        const OUString& rBaseTitle, SvxConfigEntry const * pParentData, bool bContextMenu );
 
 public:
 
@@ -198,7 +198,7 @@ private:
     static MenuSaveInData* GetDefaultData() { return pDefaultData; }
 
     void        Apply(
-        css::uno::Reference< css::container::XIndexContainer >& rNewMenuBar,
+        css::uno::Reference< css::container::XIndexContainer > const & rNewMenuBar,
         css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory );
 
 public:
@@ -442,7 +442,7 @@ protected:
                                         bool bFront = false );
 
     void                AddSubMenusToUI(    const OUString& rBaseTitle,
-                                        SvxConfigEntry* pParentData );
+                                        SvxConfigEntry const * pParentData );
 
     SvTreeListEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
                                         sal_uLong nPos = TREELIST_APPEND );
@@ -450,7 +450,7 @@ protected:
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );
 
-    void            ReloadTopLevelListBox( SvxConfigEntry* pSelection = nullptr );
+    void            ReloadTopLevelListBox( SvxConfigEntry const * pSelection = nullptr );
 
 public:
 
@@ -467,8 +467,8 @@ public:
 
     virtual void    MoveEntry( bool bMoveUp );
 
-    bool            MoveEntryData(  SvTreeListEntry* pSourceEntry,
-                                    SvTreeListEntry* pTargetEntry );
+    bool            MoveEntryData(  SvTreeListEntry const * pSourceEntry,
+                                    SvTreeListEntry const * pTargetEntry );
 
     bool            FillItemSet( SfxItemSet* ) override;
     void            Reset( const SfxItemSet* ) override;
@@ -517,7 +517,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
 public:
     SvxMainMenuOrganizerDialog (
         vcl::Window*, SvxEntries*,
-        SvxConfigEntry*, bool bCreateMenu = false );
+        SvxConfigEntry const *, bool bCreateMenu = false );
     virtual ~SvxMainMenuOrganizerDialog() override;
     virtual void dispose() override;
 
@@ -541,12 +541,12 @@ private:
 
     void        LoadToolbar(
         const css::uno::Reference< css::container::XIndexAccess >& xToolBarSettings,
-        SvxConfigEntry* pParentData );
+        SvxConfigEntry const * pParentData );
 
     void        ApplyToolbar(
-        css::uno::Reference< css::container::XIndexContainer >& rNewToolbarBar,
+        css::uno::Reference< css::container::XIndexContainer > const & rNewToolbarBar,
         css::uno::Reference< css::lang::XSingleComponentFactory >& rFactory,
-        SvxConfigEntry *pToolbar );
+        SvxConfigEntry const *pToolbar );
 
 public:
 

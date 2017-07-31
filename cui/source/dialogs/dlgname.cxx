@@ -147,7 +147,7 @@ void SvxObjectTitleDescDialog::dispose()
 |*
 \************************************************************************/
 
-SvxMessDialog::SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image* pImg )
+SvxMessDialog::SvxMessDialog( vcl::Window* pWindow, const OUString& rText, const OUString& rDesc, Image const * pImg )
     : ModalDialog(pWindow, "MessBox", "cui/ui/messbox.ui")
     , pImage(nullptr)
 {

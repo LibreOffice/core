@@ -55,10 +55,10 @@ private:
     OUString m_sProdMacros;
 
     static css::uno::Reference< css::script::browse::XBrowseNode >
-        getLangNodeFromRootNode( css::uno::Reference< css::script::browse::XBrowseNode >& root, OUString& language );
+        getLangNodeFromRootNode( css::uno::Reference< css::script::browse::XBrowseNode > const & root, OUString const & language );
     static void delUserData( SvTreeListEntry* pEntry );
 
-    static css::uno::Reference< css::uno::XInterface  > getDocumentModel( css::uno::Reference< css::uno::XComponentContext >& xCtx, OUString& docName );
+    static css::uno::Reference< css::uno::XInterface  > getDocumentModel( css::uno::Reference< css::uno::XComponentContext > const & xCtx, OUString const & docName );
 
 protected:
     virtual void            RequestingChildren( SvTreeListEntry* pParent ) override;
@@ -67,7 +67,7 @@ protected:
 public:
     void                    Init( const OUString& language );
     void                    RequestSubEntries(  SvTreeListEntry* pRootEntry,
-                                css::uno::Reference< css::script::browse::XBrowseNode >& node,
+                                css::uno::Reference< css::script::browse::XBrowseNode > const & node,
                                 css::uno::Reference< css::frame::XModel>& model  );
                             SFTreeListBox(vcl::Window* pParent);
                     virtual ~SFTreeListBox() override;
@@ -151,16 +151,16 @@ protected:
 
     DECL_LINK( ScriptSelectHdl, SvTreeListBox *, void );
     DECL_LINK( ButtonHdl, Button *, void );
-    static bool         getBoolProperty( css::uno::Reference< css::beans::XPropertySet >& xProps, OUString& propName );
-    void                CheckButtons(  css::uno::Reference< css::script::browse::XBrowseNode >& node );
+    static bool         getBoolProperty( css::uno::Reference< css::beans::XPropertySet > const & xProps, OUString const & propName );
+    void                CheckButtons(  css::uno::Reference< css::script::browse::XBrowseNode > const & node );
 
 
     void        createEntry( SvTreeListEntry* pEntry );
     void        renameEntry( SvTreeListEntry* pEntry );
     void        deleteEntry( SvTreeListEntry* pEntry );
     static css::uno::Reference< css::script::browse::XBrowseNode >
-                getBrowseNode( SvTreeListEntry* pEntry );
-    static css::uno::Reference< css::frame::XModel > getModel( SvTreeListEntry* pEntry );
+                getBrowseNode( SvTreeListEntry const * pEntry );
+    static css::uno::Reference< css::frame::XModel > getModel( SvTreeListEntry const * pEntry );
     OUString    getListOfChildren( const css::uno::Reference< css::script::browse::XBrowseNode >& node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();

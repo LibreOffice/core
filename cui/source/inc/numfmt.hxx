@@ -155,8 +155,8 @@ private:
     DECL_LINK( OptEditHdl_Impl, Edit&, void );
     DECL_LINK( OptClickHdl_Impl, Button*, void );
     DECL_LINK( TimeHdl_Impl, Timer *, void);
-    void EditHdl_Impl(Edit*);
-    void OptHdl_Impl(void*);
+    void EditHdl_Impl(Edit const *);
+    void OptHdl_Impl(void const *);
 };
 
 #endif

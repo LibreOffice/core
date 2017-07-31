@@ -1396,7 +1396,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl, Button*, void)
     m_pSizeCB->Enable(m_pPositionCB->IsEnabled() && !m_pPositionCB->IsChecked());
 }
 
-short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox &rRelationLB)
+short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox const &rRelationLB)
 {
     short nRel = 0;
     sal_Int32 nPos = rRelationLB.GetSelectEntryPos();
@@ -1410,7 +1410,7 @@ short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox &rRelationLB)
     return nRel;
 }
 
-short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &/*rAlignLB*/, ListBox &rRelationLB)
+short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &/*rAlignLB*/, ListBox const &rRelationLB)
 {
     short nAlign = 0;
 
@@ -1445,7 +1445,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
     return nAlign;
 }
 
-sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
+sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox const &rAlignLB)
 {
     sal_uInt16 nMapPos = 0;
     sal_Int32 nLBSelPos = rAlignLB.GetSelectEntryPos();

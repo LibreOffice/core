@@ -868,7 +868,7 @@ IMPL_LINK(SpellDialog, AddToDictSelectHdl, MenuButton*, pButton, void )
 }
 
 
-void SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu *pMenu )
+void SpellDialog::AddToDictionaryExecute( sal_uInt16 nItemId, PopupMenu const *pMenu )
 {
     m_pSentenceED->UndoActionStart( SPELLUNDO_CHANGE_GROUP );
 
@@ -1503,7 +1503,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     return bChange || VclMultiLineEdit::PreNotify(rNEvt);
 }
 
-void SentenceEditWindow_Impl::Init(VclPtr<ToolBox> &rToolbar)
+void SentenceEditWindow_Impl::Init(VclPtr<ToolBox> const &rToolbar)
 {
     m_xToolbar = rToolbar;
     m_xToolbar->SetSelectHdl(LINK(this,SentenceEditWindow_Impl,ToolbarHdl));
