@@ -127,23 +127,23 @@ void SwTextBoxHelper::destroy(SwFrameFormat* pShape)
     }
 }
 
-bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pShape, sal_uInt16 nType)
+bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType)
 {
     assert(nType == RES_FLYFRMFMT || nType == RES_DRAWFRMFMT);
-    if (!pShape || pShape->Which() != nType || !pShape->GetAttrSet().HasItem(RES_CNTNT))
+    if (!pFormat || pFormat->Which() != nType || !pFormat->GetAttrSet().HasItem(RES_CNTNT))
         return false;
 
-    sal_uInt16 nOtherType = (pShape->Which() == RES_FLYFRMFMT) ? RES_DRAWFRMFMT : RES_FLYFRMFMT;
-    SwFrameFormat* pFormat = pShape->GetOtherTextBoxFormat();
-    if (!pFormat)
+    sal_uInt16 nOtherType = (pFormat->Which() == RES_FLYFRMFMT) ? RES_DRAWFRMFMT : RES_FLYFRMFMT;
+    SwFrameFormat* pOtherFormat = pFormat->GetOtherTextBoxFormat();
+    if (!pOtherFormat)
         return false;
 
-    assert(pFormat->Which() == nOtherType);
-    if (pFormat->Which() != nOtherType)
+    assert(pOtherFormat->Which() == nOtherType);
+    if (pOtherFormat->Which() != nOtherType)
         return false;
 
-    const SwFormatContent& rContent = pShape->GetContent();
-    return pFormat->GetAttrSet().HasItem(RES_CNTNT) && pFormat->GetContent() == rContent;
+    const SwFormatContent& rContent = pFormat->GetContent();
+    return pOtherFormat->GetAttrSet().HasItem(RES_CNTNT) && pOtherFormat->GetContent() == rContent;
 }
 
 bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)
@@ -362,24 +362,24 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPrope
         syncProperty(pShape, RES_BOX, BOTTOM_BORDER_DISTANCE, rValue);
 }
 
-void SwTextBoxHelper::getProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, css::uno::Any& rValue)
+void SwTextBoxHelper::getProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, css::uno::Any& rValue)
 {
     if (!pShape)
         return;
 
-    nMemberId &= ~CONVERT_TWIPS;
+    nMemberID &= ~CONVERT_TWIPS;
 
     if (SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
     {
         if (nWID == RES_CHAIN)
         {
-            switch (nMemberId)
+            switch (nMemberID)
             {
             case MID_CHAIN_PREVNAME:
             case MID_CHAIN_NEXTNAME:
             {
                 const SwFormatChain& rChain = pFormat->GetChain();
-                rChain.QueryValue(rValue, nMemberId);
+                rChain.QueryValue(rValue, nMemberID);
             }
             break;
             case MID_CHAIN_NAME:
@@ -390,14 +390,14 @@ void SwTextBoxHelper::getProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uI
     }
 }
 
-void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, const css::uno::Any& rValue)
+void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, const css::uno::Any& rValue)
 {
     // No shape yet? Then nothing to do, initial properties are set by create().
     if (!pShape)
         return;
 
     uno::Any aValue(rValue);
-    nMemberId &= ~CONVERT_TWIPS;
+    nMemberID &= ~CONVERT_TWIPS;
 
     if (SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT))
     {
@@ -408,7 +408,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
         switch (nWID)
         {
         case RES_HORI_ORIENT:
-            switch (nMemberId)
+            switch (nMemberID)
             {
             case MID_HORIORIENT_ORIENT:
                 aPropertyName = UNO_NAME_HORI_ORIENT;
@@ -423,7 +423,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             }
             break;
         case RES_VERT_ORIENT:
-            switch (nMemberId)
+            switch (nMemberID)
             {
             case MID_VERTORIENT_ORIENT:
                 aPropertyName = UNO_NAME_VERT_ORIENT;
@@ -438,7 +438,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             }
             break;
         case RES_FRM_SIZE:
-            switch (nMemberId)
+            switch (nMemberID)
             {
             case MID_FRMSIZE_IS_AUTO_HEIGHT:
                 aPropertyName = UNO_NAME_FRAME_ISAUTOMATIC_HEIGHT;
@@ -456,7 +456,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             }
             break;
         case RES_ANCHOR:
-            switch (nMemberId)
+            switch (nMemberID)
             {
             case MID_ANCHOR_ANCHORTYPE:
                 if (aValue.get<text::TextContentAnchorType>() == text::TextContentAnchorType_AS_CHARACTER)
@@ -484,7 +484,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
         }
         break;
         case RES_CHAIN:
-            switch (nMemberId)
+            switch (nMemberID)
             {
             case MID_CHAIN_PREVNAME:
                 aPropertyName = UNO_NAME_CHAIN_PREV_NAME;
@@ -498,7 +498,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
             aPropertyName = UNO_NAME_TEXT_VERT_ADJUST;
             break;
         case RES_BOX:
-            switch (nMemberId)
+            switch (nMemberID)
             {
             case LEFT_BORDER_DISTANCE:
                 aPropertyName = UNO_NAME_LEFT_BORDER_DISTANCE;
@@ -564,17 +564,17 @@ void SwTextBoxHelper::saveLinks(const SwFrameFormats& rFormats, std::map<const S
     }
 }
 
-void SwTextBoxHelper::resetLink(SwFrameFormat* pShape, std::map<const SwFrameFormat*, SwFormatContent>& rMap)
+void SwTextBoxHelper::resetLink(SwFrameFormat* pShape, std::map<const SwFrameFormat*, SwFormatContent>& rOldContent)
 {
     if (pShape->Which() == RES_DRAWFRMFMT)
     {
         if (pShape->GetContent().GetContentIdx())
-            rMap.insert(std::make_pair(pShape, pShape->GetContent()));
+            rOldContent.insert(std::make_pair(pShape, pShape->GetContent()));
         pShape->ResetFormatAttr(RES_CNTNT);
     }
 }
 
-void SwTextBoxHelper::restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew, SavedLink& rSavedLinks, SavedContent& rOldContent)
+void SwTextBoxHelper::restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrameFormat*>& rNew, SavedLink& rSavedLinks, SavedContent& rResetContent)
 {
     std::size_t i = 0;
     for (auto aSetIt = rOld.begin(); aSetIt != rOld.end(); ++aSetIt, ++i)
@@ -589,8 +589,8 @@ void SwTextBoxHelper::restoreLinks(std::set<ZSortFly>& rOld, std::vector<SwFrame
                     rNew[i]->SetFormatAttr(rNew[j]->GetContent());
             }
         }
-        if (rOldContent.find(aSetIt->GetFormat()) != rOldContent.end())
-            const_cast<SwFrameFormat*>(aSetIt->GetFormat())->SetFormatAttr(rOldContent[aSetIt->GetFormat()]);
+        if (rResetContent.find(aSetIt->GetFormat()) != rResetContent.end())
+            const_cast<SwFrameFormat*>(aSetIt->GetFormat())->SetFormatAttr(rResetContent[aSetIt->GetFormat()]);
     }
 }
 

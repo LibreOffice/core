@@ -22,8 +22,8 @@ class SwTextNode;
 class SW_DLLPUBLIC SwRDFHelper
 {
 public:
-    /// Gets all (rTextNode, key, value) statements in RDF graphs of type rType.
-    static std::map<OUString, OUString> getTextNodeStatements(const OUString& rType, const SwTextNode& rTextNode);
+    /// Gets all (rNode, key, value) statements in RDF graphs of type rType.
+    static std::map<OUString, OUString> getTextNodeStatements(const OUString& rType, const SwTextNode& rNode);
     /// Add an (rTextNode, key, value) statement in the graph of type rType -- or if it does not exist, create a graph at rPath first.
     static void addTextNodeStatement(const OUString& rType, const OUString& rPath, SwTextNode& rTextNode, const OUString& rKey, const OUString& rValue);
 };
