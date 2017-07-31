@@ -91,6 +91,12 @@ namespace Translate
 {
     std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
     {
+        static std::unordered_map<OString, std::locale, OStringHash> aCache;
+        OString sIdentifier = rLocale.getGlibcLocaleString(".UTF-8").toUtf8();
+        OString sUnique = sIdentifier + OString(pPrefixName);
+        auto aFind = aCache.find(sUnique);
+        if (aFind != aCache.end())
+            return aFind->second;
         boost::locale::generator gen;
         gen.characters(boost::locale::char_facet);
         gen.categories(boost::locale::message_facet | boost::locale::information_facet);
@@ -100,8 +106,9 @@ namespace Translate
         osl::File::getSystemPathFromFileURL(uri, path);
         gen.add_messages_path(OUStringToOString(path, osl_getThreadTextEncoding()).getStr());
         gen.add_messages_domain(pPrefixName);
-        OString sIdentifier = rLocale.getGlibcLocaleString(".UTF-8").toUtf8();
-        return gen(sIdentifier.getStr());
+        std::locale aRet(gen(sIdentifier.getStr()));
+        aCache[sUnique] = aRet;
+        return aRet;
     }
 
     OUString get(const char* pContextAndId, const std::locale &loc)
