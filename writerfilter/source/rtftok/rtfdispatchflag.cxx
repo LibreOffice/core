@@ -461,9 +461,12 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     }
     break;
     case RTF_PARD:
+    {
         if (m_bHadPicture)
             dispatchSymbol(RTF_PAR);
         // \pard is allowed between \cell and \row, but in that case it should not reset the fact that we're inside a table.
+        // It should not reset the paragraph style, either, so remember the old paragraph style.
+        RTFValue::Pointer_t pOldStyle = m_aStates.top().aParagraphSprms.find(NS_ooxml::LN_CT_PPrBase_pStyle);
         m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
         m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
 
@@ -476,13 +479,17 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         {
             // We are still in a table.
             m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_inTbl, std::make_shared<RTFValue>(1));
+            if (m_bAfterCellBeforeRow && pOldStyle)
+                // And we still have the same paragraph style.
+                m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle, pOldStyle);
             // Ideally getDefaultSPRM() would take care of this, but it would not when we're buffering.
             m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_tabs, std::make_shared<RTFValue>());
         }
         resetFrame();
 
-        // Reset currently selected paragraph style as well.
+        // Reset currently selected paragraph style as well, unless we are in the special "after \cell, before \row" state.
         // By default the style with index 0 is applied.
+        if (!m_bAfterCellBeforeRow)
         {
             OUString const aName = getStyleName(0);
             // But only in case it's not a character style.
@@ -499,6 +506,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         // Need to send paragraph properties again, if there will be any.
         m_bNeedPap = true;
         break;
+    }
     case RTF_SECTD:
     {
         m_aStates.top().aSectionSprms = m_aDefaultState.aSectionSprms;
