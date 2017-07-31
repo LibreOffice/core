@@ -35,7 +35,7 @@
             <property name="row_homogeneous">True</property>
             <property name="column_homogeneous">True</property>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar1">
+              <object class="sfxlo-SvxCharView" id="viewchar1">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -46,7 +46,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar2">
+              <object class="sfxlo-SvxCharView" id="viewchar2">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -57,7 +57,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar4">
+              <object class="sfxlo-SvxCharView" id="viewchar4">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -68,7 +68,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar3">
+              <object class="sfxlo-SvxCharView" id="viewchar3">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -79,7 +79,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar12">
+              <object class="sfxlo-SvxCharView" id="viewchar12">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -90,7 +90,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar11">
+              <object class="sfxlo-SvxCharView" id="viewchar11">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -101,7 +101,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar10">
+              <object class="sfxlo-SvxCharView" id="viewchar10">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -112,7 +112,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar9">
+              <object class="sfxlo-SvxCharView" id="viewchar9">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -123,7 +123,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar5">
+              <object class="sfxlo-SvxCharView" id="viewchar5">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -134,7 +134,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar6">
+              <object class="sfxlo-SvxCharView" id="viewchar6">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -145,7 +145,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar7">
+              <object class="sfxlo-SvxCharView" id="viewchar7">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -156,7 +156,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar8">
+              <object class="sfxlo-SvxCharView" id="viewchar8">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -167,7 +167,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar13">
+              <object class="sfxlo-SvxCharView" id="viewchar13">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -178,7 +178,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar14">
+              <object class="sfxlo-SvxCharView" id="viewchar14">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -189,7 +189,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar15">
+              <object class="sfxlo-SvxCharView" id="viewchar15">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -200,7 +200,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="viewchar16">
+              <object class="sfxlo-SvxCharView" id="viewchar16">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -234,7 +234,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar1">
+              <object class="sfxlo-SvxCharView" id="favchar1">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -245,7 +245,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar2">
+              <object class="sfxlo-SvxCharView" id="favchar2">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -256,7 +256,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar4">
+              <object class="sfxlo-SvxCharView" id="favchar4">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -267,7 +267,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar3">
+              <object class="sfxlo-SvxCharView" id="favchar3">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -278,7 +278,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar12">
+              <object class="sfxlo-SvxCharView" id="favchar12">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -289,7 +289,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar11">
+              <object class="sfxlo-SvxCharView" id="favchar11">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -300,7 +300,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar10">
+              <object class="sfxlo-SvxCharView" id="favchar10">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -311,7 +311,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar9">
+              <object class="sfxlo-SvxCharView" id="favchar9">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -322,7 +322,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar5">
+              <object class="sfxlo-SvxCharView" id="favchar5">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -333,7 +333,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar6">
+              <object class="sfxlo-SvxCharView" id="favchar6">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -344,7 +344,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar7">
+              <object class="sfxlo-SvxCharView" id="favchar7">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -355,7 +355,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar8">
+              <object class="sfxlo-SvxCharView" id="favchar8">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -366,7 +366,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar13">
+              <object class="sfxlo-SvxCharView" id="favchar13">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -377,7 +377,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar14">
+              <object class="sfxlo-SvxCharView" id="favchar14">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -388,7 +388,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar15">
+              <object class="sfxlo-SvxCharView" id="favchar15">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>
@@ -399,7 +399,7 @@
               </packing>
             </child>
             <child>
-              <object class="cuilo-SvxCharView" id="favchar16">
+              <object class="sfxlo-SvxCharView" id="favchar16">
                 <property name="width_request">35</property>
                 <property name="height_request">35</property>
                 <property name="visible">True</property>

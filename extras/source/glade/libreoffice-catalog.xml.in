@@ -815,7 +815,7 @@
     <glade-widget-class title="Show Text" name="cuilo-SvxShowText"
                         generic-name="ShowText" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Char Win" name="cuilo-SvxCharView"
+    <glade-widget-class title="Char Win" name="sfxlo-SvxCharView"
                         generic-name="ShowText" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Notebook switching tabs depending on context" name="sfxlo-NotebookbarTabControl"
