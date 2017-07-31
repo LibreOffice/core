@@ -148,19 +148,23 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC TextHierarchyFieldPrimitive2D : public GroupPrimitive2D
         {
         private:
+            /// field type definition
             FieldType                               meType;
-            OUString                           maString;
+
+            /// field data as name/value pairs (dependent of field type definition)
+            std::vector< std::pair< OUString, OUString>>    meNameValue;
 
         public:
             /// constructor
             TextHierarchyFieldPrimitive2D(
                 const Primitive2DContainer& rChildren,
                 const FieldType& rFieldType,
-                const OUString& rString);
+                const std::vector< std::pair< OUString, OUString>>* pNameValue = nullptr);
 
             /// data read access
             FieldType getType() const { return meType; }
-            const OUString& getString() const { return maString; }
+            const std::vector< std::pair< OUString, OUString>>& getNameValue() const { return meNameValue; }
+            OUString getValue(const OUString& rName) const;
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
