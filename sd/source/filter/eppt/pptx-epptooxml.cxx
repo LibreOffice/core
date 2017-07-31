@@ -106,6 +106,10 @@ void dump_pset(Reference< XPropertySet > const & rXPropSet);
 
 #define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
 
+namespace oox {
+    using namespace drawingml;
+    namespace core {
+
 class PowerPointShapeExport : public ShapeExport
 {
     PowerPointExport&   mrExport;
@@ -2330,6 +2334,9 @@ bool PowerPointExport::ImplCreateMainNotes()
 OUString PowerPointExport::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Impress.oox.PowerPointExport");
+}
+
+}
 }
 
 // UNO component
