@@ -16,6 +16,24 @@
       "revId": "0d2297da3582cce9328f2e4afbeb4ab829d01606",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_71c79c12",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2017-07-31T17:29:30Z",
+      "side": 1,
+      "message": "Yes - but how to change it...?",
+      "parentUuid": "3a461143_1152d867",
+      "revId": "0d2297da3582cce9328f2e4afbeb4ab829d01606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
