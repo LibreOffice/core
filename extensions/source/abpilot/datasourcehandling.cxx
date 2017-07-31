@@ -55,7 +55,7 @@ namespace
 {
 
 /// Returns the URL of this object shell.
-OUString lcl_getOwnURL(SfxObjectShell* pObjectShell)
+OUString lcl_getOwnURL(SfxObjectShell const * pObjectShell)
 {
     OUString aRet;
 

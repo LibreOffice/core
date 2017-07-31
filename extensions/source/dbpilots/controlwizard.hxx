@@ -126,7 +126,7 @@ namespace dbp
         // with some common data extracted from the control model
         void initControlSettings(OControlWizardSettings* _pSettings);
         // commit the control-relevant settings
-        void commitControlSettings(OControlWizardSettings* _pSettings);
+        void commitControlSettings(OControlWizardSettings const * _pSettings);
 
         bool needDatasourceSelection();
 

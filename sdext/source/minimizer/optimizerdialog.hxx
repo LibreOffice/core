@@ -60,7 +60,7 @@ class OptimizerDialog : public UnoDialog, public ConfigurationAccess
 {
 public:
 
-    OptimizerDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext, css::uno::Reference< css::frame::XFrame >& rxFrame,
+    OptimizerDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext, css::uno::Reference< css::frame::XFrame > const & rxFrame,
         css::uno::Reference< css::frame::XDispatch > const & rxStatusDispatcher );
     ~OptimizerDialog();
 

@@ -38,7 +38,7 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame ) :
+UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame > const & rxFrame ) :
     mxContext( rxContext ),
     mxController( rxFrame->getController() ),
     mxDialogModel( mxContext->getServiceManager()->createInstanceWithContext(
