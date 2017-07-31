@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-07-28 11:13:31 using:
  ./bin/update_pch cppuhelper cppuhelper --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./cppuhelper/inc/pch/precompiled_cppuhelper.hxx "/opt/lo/bin/make cppuhelper.build" --find-conflicts
+ ./bin/update_pch_bisect ./cppuhelper/inc/pch/precompiled_cppuhelper.hxx "make cppuhelper.build" --find-conflicts
 */
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
@@ -32,6 +33,7 @@
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
+#include <osl/module.h>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
 #include <osl/security.hxx>
@@ -47,7 +49,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
-#include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
@@ -80,8 +81,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.h>
-#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
@@ -91,13 +90,11 @@
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase_ex.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
