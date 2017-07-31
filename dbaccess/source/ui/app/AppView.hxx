@@ -111,7 +111,7 @@ namespace dbaui
         void    createIconAutoMnemonics( MnemonicGenerator& _rMnemonics );
 
         /// automatically creates mnemonics for the texts in our task pane
-        void    setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics );
+        void    setTaskExternalMnemonics( MnemonicGenerator const & _rMnemonics );
 
         // Window overrides
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
@@ -147,7 +147,7 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        bool isLeaf(SvTreeListEntry* _pEntry) const;
+        bool isLeaf(SvTreeListEntry const * _pEntry) const;
 
         /** returns if one of the selected entries is a leaf
             @return

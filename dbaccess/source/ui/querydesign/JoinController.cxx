@@ -184,7 +184,7 @@ void OJoinController::impl_onModifyChanged()
     InvalidateFeature( SID_RELATION_ADD_RELATION );
 }
 
-void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY)
+void OJoinController::SaveTabWinPosSize(OTableWindow const * pTabWin, long nOffsetX, long nOffsetY)
 {
     // the data for the window
     TTableWindowData::value_type pData = pTabWin->GetData();

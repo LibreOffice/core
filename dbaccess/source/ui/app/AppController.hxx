@@ -459,7 +459,7 @@ namespace dbaui
                 <TRUE/> if the double click event has been handled by the called, and should not
                 be processed further.
         */
-        bool onEntryDoubleClick(SvTreeListBox& _rTree);
+        bool onEntryDoubleClick(SvTreeListBox const & _rTree);
         /** called when a container (category) in the application view has been selected
             @param  _pTree
                 The tree list box.

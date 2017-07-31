@@ -118,7 +118,7 @@ namespace dbaui
 
     class ORTFImportExport : public ODatabaseImportExport
     {
-        void appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk);
+        void appendRow(OString const * pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk);
     public:
         // export data
         ORTFImportExport(   const svx::ODataAccessDescriptor& _aDataDescriptor,

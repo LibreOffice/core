@@ -34,7 +34,7 @@ namespace dbaui
         short                m_nPos;
         OUString             m_strHelpText;
     public:
-        OPropColumnEditCtrl(vcl::Window* pParent, OUString& _rAllowedChars, const char* pHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        OPropColumnEditCtrl(vcl::Window* pParent, OUString const & _rAllowedChars, const char* pHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         virtual bool IsModified() const override { return IsValueChangedFromSaved(); }
 

@@ -49,7 +49,7 @@ using namespace com::sun::star::container;
 
 // ODbAdminDialog
 ODbAdminDialog::ODbAdminDialog(vcl::Window* _pParent
-                               , SfxItemSet* _pItems
+                               , SfxItemSet const * _pItems
                                , const Reference< XComponentContext >& _rxContext)
     : SfxTabDialog(_pParent, "AdminDialog",
         "dbaccess/ui/admindialog.ui", _pItems)

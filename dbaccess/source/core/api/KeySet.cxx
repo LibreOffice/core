@@ -151,7 +151,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
                                                 const OUString& i_rUpdateTableName,
                                                 const Reference<XDatabaseMetaData>& i_xMeta,
                                                 const Reference<XNameAccess>& i_xQueryColumns,
-                                                std::unique_ptr<SelectColumnsMetaData>& o_pKeyColumnNames)
+                                                std::unique_ptr<SelectColumnsMetaData> const & o_pKeyColumnNames)
 {
     // first ask the database itself for the best columns which can be used
     Sequence< OUString> aBestColumnNames;
@@ -822,7 +822,7 @@ void OKeySet::tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch)
     }
 }
 
-void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sal_Int32 i_nBookmark)
+void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rKeyRow, sal_Int32 i_nBookmark)
 {
     connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rKeyRow->get().begin();
 

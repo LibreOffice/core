@@ -776,8 +776,8 @@ void SAL_CALL ORowSetBase::afterLast(  )
     SAL_INFO("dbaccess", "ORowSetBase::afterLast() Clone = " << m_bClone);
 }
 
-bool SAL_CALL ORowSetBase::move(    std::mem_fun_t<bool,ORowSetBase>& _aCheckFunctor,
-                                    std::mem_fun_t<bool,ORowSetCache>& _aMovementFunctor)
+bool SAL_CALL ORowSetBase::move(    std::mem_fun_t<bool,ORowSetBase> const & _aCheckFunctor,
+                                    std::mem_fun_t<bool,ORowSetCache> const & _aMovementFunctor)
 {
     SAL_INFO("dbaccess", "ORowSetBase::move() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);

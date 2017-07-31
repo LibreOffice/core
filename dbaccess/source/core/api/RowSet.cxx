@@ -598,7 +598,7 @@ void ORowSet::freeResources( bool _bComplete )
     }
 }
 
-void ORowSet::setActiveConnection( Reference< XConnection >& _rxNewConn, bool _bFireEvent )
+void ORowSet::setActiveConnection( Reference< XConnection > const & _rxNewConn, bool _bFireEvent )
 {
     if (_rxNewConn.get() == m_xActiveConnection.get())
         // nothing to do

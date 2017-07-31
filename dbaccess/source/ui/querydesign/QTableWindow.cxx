@@ -138,7 +138,7 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
     static_cast<OQueryTableView*>(getTableView())->InsertField(aInfo);
 }
 
-bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo)
+bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDescRef const & rInfo)
 {
     OSL_ENSURE(m_xListBox != nullptr, "OQueryTableWindow::ExistsField : doesn't have css::form::ListBox !");
     OSL_ENSURE(rInfo.is(),"OQueryTableWindow::ExistsField: invalid argument for OTableFieldDescRef!");

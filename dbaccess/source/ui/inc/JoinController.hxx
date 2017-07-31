@@ -112,7 +112,7 @@ namespace dbaui
 
         void    SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
 
-        static void SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY);
+        static void SaveTabWinPosSize(OTableWindow const * pTabWin, long nOffsetX, long nOffsetY);
 
         // UNO interface overridables
         // XEventListener

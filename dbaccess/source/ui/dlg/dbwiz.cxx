@@ -65,7 +65,7 @@ using namespace com::sun::star::container;
 
 // ODbTypeWizDialog
 ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
-                               ,SfxItemSet* _pItems
+                               ,SfxItemSet const * _pItems
                                ,const Reference< XComponentContext >& _rxORB
                                ,const css::uno::Any& _aDataSourceName
                                )

@@ -123,10 +123,10 @@ namespace dbaui
         DECL_LINK( OnControlFocusLost, Control&, void );
         DECL_LINK( OnControlFocusGot, Control&, void );
 
-        void                UpdateFormatSample(OFieldDescription* pFieldDescr);
+        void                UpdateFormatSample(OFieldDescription const * pFieldDescr);
         void                ArrangeAggregates();
 
-        void                SetPosSize( VclPtr<Control>& rControl, long nRow, sal_uInt16 nCol );
+        void                SetPosSize( VclPtr<Control> const & rControl, long nRow, sal_uInt16 nCol );
 
         static void         ScrollAggregate(Control* pText, Control* pInput, Control* pButton, long nDeltaX, long nDeltaY);
         void                ScrollAllAggregates();

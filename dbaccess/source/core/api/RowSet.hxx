@@ -403,7 +403,7 @@ namespace dbaccess
         void    approveExecution();
 
         /// set m_xActiveConnection, fire a PropertyChangeEvent if necessary, do the event listener handling etc
-        void setActiveConnection( css::uno::Reference< css::sdbc::XConnection >& _rxNewConn, bool _bFireEvent = true );
+        void setActiveConnection( css::uno::Reference< css::sdbc::XConnection > const & _rxNewConn, bool _bFireEvent = true );
 
         void implCancelRowUpdates( bool _bNotifyModified );
 

@@ -301,7 +301,7 @@ void OCreationList::updateHelpText()
     m_rTaskWindow.setHelpText(pHelpTextId);
 }
 
-void OCreationList::onSelected( SvTreeListEntry* _pEntry ) const
+void OCreationList::onSelected( SvTreeListEntry const * _pEntry ) const
 {
     OSL_ENSURE( _pEntry, "OCreationList::onSelected: invalid entry!" );
     URL aCommand;
@@ -599,7 +599,7 @@ void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void OApplicationDetailView::setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics )
+void OApplicationDetailView::setTaskExternalMnemonics( MnemonicGenerator const & _rMnemonics )
 {
     m_aExternalMnemonics = _rMnemonics;
 }
@@ -732,7 +732,7 @@ OUString OApplicationDetailView::getQualifiedName( SvTreeListEntry* _pEntry ) co
     return m_pControlHelper->getQualifiedName( _pEntry );
 }
 
-bool OApplicationDetailView::isLeaf(SvTreeListEntry* _pEntry)
+bool OApplicationDetailView::isLeaf(SvTreeListEntry const * _pEntry)
 {
     return OAppDetailPageHelper::isLeaf(_pEntry);
 }

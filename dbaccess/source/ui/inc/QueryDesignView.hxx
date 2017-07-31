@@ -106,7 +106,7 @@ namespace dbaui
         const OUString&               getDecimalSeparator() const { return m_sDecimalSep;}
 
         SqlParseError   InsertField( const OTableFieldDescRef& rInfo, bool bActivate = true);
-        bool            HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const;
+        bool            HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef const & rInfo) const;
         // called when a table from tabview was deleted
         void TableDeleted(const OUString& rAliasName);
 

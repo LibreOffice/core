@@ -331,7 +331,7 @@ namespace emfio
             , aType(WinMtfFillStyleType::Solid)
         {}
 
-        explicit WinMtfFillStyle(Bitmap& rBmp)
+        explicit WinMtfFillStyle(Bitmap const & rBmp)
             : bTransparent(false)
             , aType(WinMtfFillStyleType::Pattern)
             , aBmp(rBmp)
@@ -609,7 +609,7 @@ namespace emfio
             bool bRecordPath
         );
         void                DrawText(Point& rPosition,
-            OUString& rString,
+            OUString const & rString,
             long* pDXArry = nullptr,
             long* pDYArry = nullptr,
             bool bRecordPath = false,
@@ -629,7 +629,7 @@ namespace emfio
         void                UpdateClipRegion();
         void                AddFromGDIMetaFile(GDIMetaFile& rGDIMetaFile);
 
-        void                PassEMFPlus(void* pBuffer, sal_uInt32 nLength);
+        void                PassEMFPlus(void const * pBuffer, sal_uInt32 nLength);
         void                PassEMFPlusHeaderInfo();
 
         Color               ReadColor();

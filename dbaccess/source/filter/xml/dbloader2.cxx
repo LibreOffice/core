@@ -256,7 +256,7 @@ public:
     virtual void SAL_CALL cancel() override;
 
 private:
-    bool impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, bool& _bShouldStartTableWizard );
+    bool impl_executeNewDatabaseWizard( Reference< XModel > const & _rxModel, bool& _bShouldStartTableWizard );
 };
 
 
@@ -337,7 +337,7 @@ namespace
     }
 }
 
-bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, bool& _bShouldStartTableWizard )
+bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel > const & _rxModel, bool& _bShouldStartTableWizard )
 {
     Sequence<Any> aWizardArgs(comphelper::InitAnyPropertySequence(
     {

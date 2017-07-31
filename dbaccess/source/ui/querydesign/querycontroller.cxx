@@ -142,7 +142,7 @@ namespace dbaui
 #if OSL_DEBUG_LEVEL > 0
     namespace
     {
-        void insertParseTree(SvTreeListBox* _pBox,::connectivity::OSQLParseNode* _pNode,SvTreeListEntry* _pParent = nullptr)
+        void insertParseTree(SvTreeListBox* _pBox, ::connectivity::OSQLParseNode const * _pNode,SvTreeListEntry* _pParent = nullptr)
         {
             OUString rString;
             if (!_pNode->isToken())

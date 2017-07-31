@@ -88,7 +88,7 @@ namespace dbaui
         void                        RemoveColumn( sal_uInt16 _nColumnId );
         void                        DeleteFields( const OUString& rAliasName );
 
-        bool                        HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const;
+        bool                        HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef const & rInfo) const;
 
         // AddGroupBy:: inserts a field with function == grouping. If the fields already exists and uses an aggregate function,
         // the flag is not set
@@ -243,7 +243,7 @@ namespace dbaui
             @return
                 <TRUE/> if an error occurred otherwise <FALSE/>
         */
-        bool            saveField(OUString& _sFieldName, OTableFieldDescRef& _pEntry, bool& _bListAction);
+        bool            saveField(OUString& _sFieldName, OTableFieldDescRef const & _pEntry, bool& _bListAction);
 
         /** sets the table window at the _pEntry
             @param  _pEntry
@@ -253,7 +253,7 @@ namespace dbaui
             @return
                 <TRUE/> if the table name was set otherwise <FALSE/>
         */
-        bool            fillEntryTable(OTableFieldDescRef& _pEntry,const OUString& _sTableName);
+        bool            fillEntryTable(OTableFieldDescRef const & _pEntry,const OUString& _sTableName);
 
         /** uses the parse node to fill all information into the field
             @param  _pColumnRef
@@ -269,12 +269,12 @@ namespace dbaui
         */
         bool            fillColumnRef(  const ::connectivity::OSQLParseNode* _pColumnRef,
                                         const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-                                        OTableFieldDescRef& _pEntry,
+                                        OTableFieldDescRef const & _pEntry,
                                         bool& _bListAction);
         bool            fillColumnRef(  const OUString& _sColumnName,
                                         const OUString& _sTableRange,
                                         const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData,
-                                        OTableFieldDescRef& _pEntry,
+                                        OTableFieldDescRef const & _pEntry,
                                         bool& _bListAction);
 
         /** append an undo action for the table field
@@ -306,13 +306,13 @@ namespace dbaui
             @param  _bListAction
                 When <TRUE/> an list action will be created.
         */
-        void            clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef& _pEntry, bool& _bListAction,sal_uInt16 _nColumnId);
+        void            clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef const & _pEntry, bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** remove or insert the necessary function types
             @param  _pEntry
                 The currently edited entry.
         */
-        void            setFunctionCell(OTableFieldDescRef& _pEntry);
+        void            setFunctionCell(OTableFieldDescRef const & _pEntry);
 
     private:
         using ::svt::EditBrowseBox::AcceptDrop;

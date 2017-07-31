@@ -212,7 +212,7 @@ void OApplicationView::createIconAutoMnemonics( MnemonicGenerator& _rMnemonics )
         m_pWin->getPanel()->createIconAutoMnemonics( _rMnemonics );
 }
 
-void OApplicationView::setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics )
+void OApplicationView::setTaskExternalMnemonics( MnemonicGenerator const & _rMnemonics )
 {
     if ( m_pWin && m_pWin->getDetailView() )
         m_pWin->getDetailView()->setTaskExternalMnemonics( _rMnemonics );
@@ -334,7 +334,7 @@ OUString OApplicationView::getQualifiedName( SvTreeListEntry* _pEntry ) const
     return getDetailView()->getQualifiedName( _pEntry );
 }
 
-bool OApplicationView::isLeaf(SvTreeListEntry* _pEntry) const
+bool OApplicationView::isLeaf(SvTreeListEntry const * _pEntry) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return OApplicationDetailView::isLeaf(_pEntry);

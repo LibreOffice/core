@@ -44,7 +44,7 @@ namespace dbaui
         // late Constructor, the base class CREATES Listbox on first call
         virtual bool         Init() override;
 
-        bool                 ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo);
+        bool                 ExistsField(const OUString& strFieldName, OTableFieldDescRef const & rInfo);
         bool                 ExistsAVisitedConn() const;
 
         virtual OUString     GetName() const override { return GetWinName(); }

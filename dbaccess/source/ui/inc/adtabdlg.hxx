@@ -86,7 +86,7 @@ namespace dbaui
         void Update();
 
         static  OUString  getDialogTitleForContext(
-            IAddTableDialogContext& _rContext );
+            IAddTableDialogContext const & _rContext );
 
     private:
         virtual bool Close() override;

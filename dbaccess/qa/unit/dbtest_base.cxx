@@ -30,7 +30,7 @@ public:
 
     uno::Reference< XConnection >
         getConnectionForDocument(
-            uno::Reference< XOfficeDatabaseDocument >& xDocument);
+            uno::Reference< XOfficeDatabaseDocument > const & xDocument);
 };
 
 uno::Reference< XOfficeDatabaseDocument >
@@ -48,7 +48,7 @@ uno::Reference< XOfficeDatabaseDocument >
 }
 
 uno::Reference< XConnection > DBTestBase::getConnectionForDocument(
-    uno::Reference< XOfficeDatabaseDocument >& xDocument)
+    uno::Reference< XOfficeDatabaseDocument > const & xDocument)
 {
     uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
     CPPUNIT_ASSERT(xDataSource.is());

@@ -461,7 +461,7 @@ bool OAddTableDlg::impl_isAddAllowed()
     return  m_rContext.allowAddition();
 }
 
-OUString OAddTableDlg::getDialogTitleForContext( IAddTableDialogContext& _rContext )
+OUString OAddTableDlg::getDialogTitleForContext( IAddTableDialogContext const & _rContext )
 {
     OUString sTitle;
 

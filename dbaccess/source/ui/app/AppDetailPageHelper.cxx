@@ -95,7 +95,7 @@ namespace dbaui
 
 namespace
 {
-    SvTreeListEntry* lcl_findEntry_impl(DBTreeListBox& rTree,const OUString& _rName,SvTreeListEntry* _pFirst)
+    SvTreeListEntry* lcl_findEntry_impl(DBTreeListBox const & rTree, const OUString& _rName, SvTreeListEntry* _pFirst)
     {
         SvTreeListEntry* pReturn = nullptr;
         sal_Int32 nIndex = 0;
@@ -122,7 +122,7 @@ namespace
         }
         return pReturn;
     }
-    SvTreeListEntry* lcl_findEntry(DBTreeListBox& rTree,const OUString& _rName,SvTreeListEntry* _pFirst)
+    SvTreeListEntry* lcl_findEntry(DBTreeListBox const & rTree, const OUString& _rName,SvTreeListEntry* _pFirst)
     {
         sal_Int32 nIndex = 0;
         OUString sErase = _rName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
@@ -512,7 +512,7 @@ sal_Int32 OAppDetailPageHelper::getElementCount()
     return nCount;
 }
 
-bool OAppDetailPageHelper::isLeaf(SvTreeListEntry* _pEntry)
+bool OAppDetailPageHelper::isLeaf(SvTreeListEntry const * _pEntry)
 {
     if ( !_pEntry )
         return false;

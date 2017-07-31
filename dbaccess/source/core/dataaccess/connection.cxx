@@ -262,7 +262,7 @@ void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap)
 // OConnection
 
 OConnection::OConnection(ODatabaseSource& _rDB
-                         , Reference< XConnection >& _rxMaster
+                         , Reference< XConnection > const & _rxMaster
                          , const Reference< XComponentContext >& _rxORB)
             :OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries

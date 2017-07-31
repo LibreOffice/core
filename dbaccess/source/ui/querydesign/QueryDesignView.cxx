@@ -98,7 +98,7 @@ namespace
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const ::connectivity::OSQLParseNode* pParseRoot );
 
-    SqlParseError AddFunctionCondition(OQueryDesignView* _pView,
+    SqlParseError AddFunctionCondition(OQueryDesignView const * _pView,
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const ::connectivity::OSQLParseNode * pCondition,
                                     const sal_uInt16 nLevel,
@@ -208,7 +208,7 @@ namespace
         }
         return aCondition;
     }
-    SqlParseError FillOuterJoins(OQueryDesignView* _pView,
+    SqlParseError FillOuterJoins(OQueryDesignView const * _pView,
                                 const ::connectivity::OSQLParseNode* pTableRefList)
     {
         SqlParseError eErrorCode = eOk;
@@ -242,7 +242,7 @@ namespace
     */
     SqlParseError FillDragInfo( const OQueryDesignView* _pView,
                             const ::connectivity::OSQLParseNode* pColumnRef,
-                            OTableFieldDescRef& _rDragInfo)
+                            OTableFieldDescRef const & _rDragInfo)
     {
         SqlParseError eErrorCode = eOk;
 
@@ -474,7 +474,7 @@ namespace
     }
     void GetNextJoin(   const Reference< XConnection>& _xConnection,
                         OQueryTableConnection* pEntryConn,
-                        OQueryTableWindow* pEntryTabTo,
+                        OQueryTableWindow const * pEntryTabTo,
                         OUString &aJoin,
                         tableNames_t &_rTableNames)
     {
@@ -1234,7 +1234,7 @@ namespace
                                     sal_uInt16& nLevel,
                                     bool bHaving,
                                     bool bAddOrOnOneLine);
-    SqlParseError ComparisonPredicate(OQueryDesignView* _pView,
+    SqlParseError ComparisonPredicate(OQueryDesignView const * _pView,
                             OSelectionBrowseBox* _pSelectionBrw,
                             const ::connectivity::OSQLParseNode * pCondition,
                             const sal_uInt16 nLevel,
@@ -1465,7 +1465,7 @@ namespace
         // Pass on the error code
         return eErrorCode;
     }
-    SqlParseError AddFunctionCondition(OQueryDesignView* _pView,
+    SqlParseError AddFunctionCondition(OQueryDesignView const * _pView,
                             OSelectionBrowseBox* _pSelectionBrw,
                             const ::connectivity::OSQLParseNode * pCondition,
                             const sal_uInt16 nLevel,
@@ -1555,7 +1555,7 @@ namespace
 
         return eErrorCode;
     }
-    SqlParseError ComparisonPredicate(OQueryDesignView* _pView,
+    SqlParseError ComparisonPredicate(OQueryDesignView const * _pView,
                             OSelectionBrowseBox* _pSelectionBrw,
                             const ::connectivity::OSQLParseNode * pCondition,
                             const sal_uInt16 nLevel,
@@ -1717,7 +1717,7 @@ namespace
 
     namespace
     {
-        OQueryTableWindow* lcl_findColumnInTables( const OUString& _rColumName, const OJoinTableView::OTableWindowMap& _rTabList, OTableFieldDescRef& _rInfo )
+        OQueryTableWindow* lcl_findColumnInTables( const OUString& _rColumName, const OJoinTableView::OTableWindowMap& _rTabList, OTableFieldDescRef const & _rInfo )
         {
             OJoinTableView::OTableWindowMap::const_iterator aIter = _rTabList.begin();
             OJoinTableView::OTableWindowMap::const_iterator aEnd = _rTabList.end();
@@ -1736,8 +1736,8 @@ namespace
                         OUString& aColumnName,
                         const OUString& aColumnAlias,
                         OUString& aTableRange,
-                        OTableFieldDescRef& _raInfo,
-                        OJoinTableView::OTableWindowMap* pTabList)
+                        OTableFieldDescRef const & _raInfo,
+                        OJoinTableView::OTableWindowMap const * pTabList)
     {
 
         // Put the table names together
@@ -1877,7 +1877,7 @@ namespace
 
         return true;
     }
-    void insertUnUsedFields(OQueryDesignView* _pView,OSelectionBrowseBox* _pSelectionBrw)
+    void insertUnUsedFields(OQueryDesignView const * _pView,OSelectionBrowseBox* _pSelectionBrw)
     {
         // now we have to insert the fields which aren't in the statement
         OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
@@ -2670,7 +2670,7 @@ void OQueryDesignView::TableDeleted(const OUString& rAliasName)
     static_cast<OQueryController&>(getController()).InvalidateFeature(ID_BROWSER_ADDTABLE); // inform the view again
 }
 
-bool OQueryDesignView::HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo)  const
+bool OQueryDesignView::HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef const & rInfo)  const
 {
     return m_pSelectionBox->HasFieldByAliasName( rFieldName, rInfo);
 }
