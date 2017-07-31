@@ -1447,7 +1447,7 @@ public:
     {
     }
 
-    bool operator() ( beans::PropertyValue& aVal )
+    bool operator() ( beans::PropertyValue const & aVal )
     {
         return aVal.Name == m_aName;
     }

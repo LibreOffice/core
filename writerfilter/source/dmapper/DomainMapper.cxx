@@ -96,7 +96,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
                             uno::Reference<lang::XComponent> const& xModel,
                             bool bRepairStorage,
                             SourceDocumentType eDocumentType,
-                            utl::MediaDescriptor& rMediaDesc) :
+                            utl::MediaDescriptor const & rMediaDesc) :
     LoggedProperties("DomainMapper"),
     LoggedTable("DomainMapper"),
     LoggedStream("DomainMapper"),

@@ -71,7 +71,7 @@ class GraphicImport : public LoggedProperties, public LoggedTable
     css::uno::Reference<css::text::XTextContent> m_xGraphicObject;
 
     css::uno::Reference<css::drawing::XShape> m_xShape;
-    void ProcessShapeOptions(Value & val);
+    void ProcessShapeOptions(Value const & val);
 
     css::uno::Reference<css::text::XTextContent > createGraphicObject(const css::beans::PropertyValues& aMediaProperties, const css::uno::Reference<css::beans::XPropertySet>& xShapeProps);
 

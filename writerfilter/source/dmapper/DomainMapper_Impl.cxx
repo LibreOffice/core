@@ -181,7 +181,7 @@ DomainMapper_Impl::DomainMapper_Impl(
             uno::Reference<uno::XComponentContext> const& xContext,
             uno::Reference<lang::XComponent> const& xModel,
             SourceDocumentType eDocumentType,
-            utl::MediaDescriptor& rMediaDesc) :
+            utl::MediaDescriptor const & rMediaDesc) :
         m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
         m_xTextDocument( xModel, uno::UNO_QUERY ),
@@ -805,10 +805,10 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
 
 
 static void lcl_AddRangeAndStyle(
-    ParagraphPropertiesPtr& pToBeSavedProperties,
+    ParagraphPropertiesPtr const & pToBeSavedProperties,
     uno::Reference< text::XTextAppend > const& xTextAppend,
     const PropertyMapPtr& pPropertyMap,
-    TextAppendContext& rAppendContext)
+    TextAppendContext const & rAppendContext)
 {
     uno::Reference<text::XParagraphCursor> xParaCursor(
         xTextAppend->createTextCursorByRange( rAppendContext.xInsertPosition.is() ? rAppendContext.xInsertPosition : xTextAppend->getEnd()), uno::UNO_QUERY_THROW );
@@ -1554,7 +1554,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
 }
 
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
-                                    uno::Reference< text::XTextRange >& xBefore )
+                                    uno::Reference< text::XTextRange > const & xBefore )
 {
     uno::Reference< beans::XPropertySet > xRet;
     if (m_aTextAppendStack.empty())
@@ -2897,7 +2897,7 @@ void FieldContext::AppendCommand(const OUString& rPart)
 /*-------------------------------------------------------------------------
 //collect the pieces of the command
   -----------------------------------------------------------------------*/
-void DomainMapper_Impl::AppendFieldCommand(OUString& rPartOfCommand)
+void DomainMapper_Impl::AppendFieldCommand(OUString const & rPartOfCommand)
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("appendFieldCommand");
@@ -3003,7 +3003,7 @@ static const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
 
 void DomainMapper_Impl::handleFieldSet
     (const FieldContextPtr& pContext,
-     uno::Reference< uno::XInterface > & xFieldInterface,
+     uno::Reference< uno::XInterface > const & xFieldInterface,
      uno::Reference< beans::XPropertySet > const& xFieldProperties)
 {
     OUString sVariable, sHint;
@@ -3171,7 +3171,7 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
 
 void DomainMapper_Impl::handleAutoNum
     (const FieldContextPtr& pContext,
-    uno::Reference< uno::XInterface > & xFieldInterface,
+    uno::Reference< uno::XInterface > const & xFieldInterface,
     uno::Reference< beans::XPropertySet > const& xFieldProperties)
 {
     //create a sequence field master "AutoNr"

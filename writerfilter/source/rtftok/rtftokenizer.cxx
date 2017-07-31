@@ -272,7 +272,7 @@ bool RTFTokenizer::lookupMathKeyword(RTFMathSymbol& rSymbol)
     return true;
 }
 
-RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
+RTFError RTFTokenizer::dispatchKeyword(OString const & rKeyword, bool bParam, int nParam)
 {
     if (m_rImport.getDestination() == Destination::SKIP)
     {

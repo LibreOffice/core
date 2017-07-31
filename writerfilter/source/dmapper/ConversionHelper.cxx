@@ -288,7 +288,7 @@ void lcl_SwapQuotesInField(OUString &rFmt)
     }
     rFmt = aBuffer.makeStringAndClear();
 }
-bool lcl_IsNotAM(OUString& rFmt, sal_Int32 nPos)
+bool lcl_IsNotAM(OUString const & rFmt, sal_Int32 nPos)
 {
     return (
             (nPos == rFmt.getLength() - 1) ||

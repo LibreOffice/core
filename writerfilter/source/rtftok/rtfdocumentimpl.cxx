@@ -208,7 +208,7 @@ const char* keywordToString(RTFKeyword nKeyword)
     return nullptr;
 }
 
-static util::DateTime lcl_getDateTime(RTFParserState& aState)
+static util::DateTime lcl_getDateTime(RTFParserState const & aState)
 {
     return {0 /*100sec*/, 0 /*sec*/, aState.nMinute, aState.nHour,
             aState.nDay, aState.nMonth, aState.nYear, false
@@ -333,10 +333,9 @@ void RTFDocumentImpl::finishSubstream()
 
 void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId)
 {
-    OUString aStr;
-    resolveSubstream(nPos, nId, aStr);
+    resolveSubstream(nPos, nId, OUString());
 }
-void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString& rIgnoreFirst)
+void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString const & rIgnoreFirst)
 {
     sal_uInt64 const nCurrent = Strm().Tell();
     // Seek to header position, parse, then seek back.
@@ -3187,7 +3186,7 @@ void RTFDocumentImpl::setDestination(Destination eDestination)
 
 // this is a questionably named method that is used only in a very special
 // situation where it looks like the "current" buffer is needed?
-void RTFDocumentImpl::setDestinationText(OUString& rString)
+void RTFDocumentImpl::setDestinationText(OUString const & rString)
 {
     m_aStates.top().aDestinationText.setLength(0);
     m_aStates.top().aDestinationText.append(rString);

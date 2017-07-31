@@ -270,7 +270,7 @@ struct StyleSheetTable_Impl
     OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 
     /// Appends the given key-value pair to the list of latent style properties of the current entry.
-    void AppendLatentStyleProperty(const OUString& aName, Value& rValue);
+    void AppendLatentStyleProperty(const OUString& aName, Value const & rValue);
     /// Sets all properties of xStyle back to default.
     static void SetPropertiesToDefault(const uno::Reference<style::XStyle>& xStyle);
 };
@@ -343,7 +343,7 @@ OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rP
     return OUString();
 }
 
-void StyleSheetTable_Impl::AppendLatentStyleProperty(const OUString& aName, Value& rValue)
+void StyleSheetTable_Impl::AppendLatentStyleProperty(const OUString& aName, Value const & rValue)
 {
     beans::PropertyValue aValue;
     aValue.Name = aName;
