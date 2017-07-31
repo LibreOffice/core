@@ -11,12 +11,12 @@
 #include <stdlib.h>
 #include "cryptox.h"
 
-#if defined(MAR_NSS)
-
 #ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable: 4204)
 #endif
+
+#if defined(MAR_NSS)
 
 /**
  * Loads the public key for the specified cert name from the NSS store.
