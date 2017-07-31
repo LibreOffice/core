@@ -3154,7 +3154,7 @@ void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader const & rHd, 
     }
 }
 
-PPTBuGraEntry::PPTBuGraEntry( Graphic& rGraphic, sal_uInt32 nInst ) :
+PPTBuGraEntry::PPTBuGraEntry( Graphic const & rGraphic, sal_uInt32 nInst ) :
     nInstance       ( nInst ),
     aBuGra          ( rGraphic )  {}
 
@@ -4533,12 +4533,12 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter() :
 {
 }
 
-PPTTextRulerInterpreter::PPTTextRulerInterpreter( PPTTextRulerInterpreter& rRuler )
+PPTTextRulerInterpreter::PPTTextRulerInterpreter( PPTTextRulerInterpreter const & rRuler )
 {
     mxImplRuler = rRuler.mxImplRuler;
 }
 
-PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecordHeader& rHeader, SvStream& rIn ) :
+PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecordHeader const & rHeader, SvStream& rIn ) :
     mxImplRuler ( new PPTRuler() )
 {
     if ( nFileOfs != 0xffffffff )
@@ -4841,7 +4841,7 @@ void StyleTextProp9::Read( SvStream& rIn )
 }
 
 PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, const DffRecordHeader& rTextHeader,
-                                                        PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd, TSS_Type nInstance )
+                                                        PPTTextRulerInterpreter const & rRuler, const DffRecordHeader& rExtParaHd, TSS_Type nInstance )
 {
     Init(rIn, rTextHeader, rRuler, rExtParaHd, nInstance);
 }
@@ -5838,7 +5838,7 @@ PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, TSS_Type nIn
 PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
         size_t const nCurParaPos, size_t& rnCurCharPos,
         const PPTStyleSheet& rStyleSheet,
-        TSS_Type nInstance, PPTTextRulerInterpreter& rRuler ) :
+        TSS_Type nInstance, PPTTextRulerInterpreter const & rRuler ) :
     PPTParaPropSet          ( *rPropReader.aParaPropList[nCurParaPos] ),
     PPTNumberFormatCreator  ( nullptr ),
     PPTTextRulerInterpreter ( rRuler ),
@@ -7114,7 +7114,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
     }
 }
 
-PPTTextObj::PPTTextObj( PPTTextObj& rTextObj )
+PPTTextObj::PPTTextObj( PPTTextObj const & rTextObj )
 {
     mxImplTextObj = rTextObj.mxImplTextObj;
 }

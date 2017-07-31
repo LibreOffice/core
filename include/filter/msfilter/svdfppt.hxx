@@ -696,7 +696,7 @@ struct PPTBuGraEntry
     sal_uInt32  nInstance;
     Graphic     aBuGra;
 
-                PPTBuGraEntry( Graphic& rGraphic, sal_uInt32 nInstance );
+                PPTBuGraEntry( Graphic const & rGraphic, sal_uInt32 nInstance );
 };
 
 class PPTExtParaProv
@@ -979,10 +979,10 @@ struct PPTTextRulerInterpreter
         rtl::Reference<PPTRuler>    mxImplRuler;
 
                     PPTTextRulerInterpreter();
-                    PPTTextRulerInterpreter( PPTTextRulerInterpreter& rRuler );
+                    PPTTextRulerInterpreter( PPTTextRulerInterpreter const & rRuler );
                     PPTTextRulerInterpreter(
                         sal_uInt32 nFileOfs,
-                        DffRecordHeader& rHd,
+                        DffRecordHeader const & rHd,
                         SvStream& rIn
                     );
                     ~PPTTextRulerInterpreter();
@@ -1045,7 +1045,7 @@ struct PPTStyleTextPropReader
             PPTStyleTextPropReader(
                 SvStream& rIn,
                 const DffRecordHeader& rClientTextBoxHd,
-                PPTTextRulerInterpreter& rInterpreter,
+                PPTTextRulerInterpreter const & rInterpreter,
                 const DffRecordHeader& rExtParaHd,
                 TSS_Type nTextInstance
             );
@@ -1157,7 +1157,7 @@ public:
                                 size_t& rnCurCharPos,
                                 const PPTStyleSheet&,
                                 TSS_Type nInstance,
-                                PPTTextRulerInterpreter& rRuler
+                                PPTTextRulerInterpreter const & rRuler
                             );
                             ~PPTParagraphObj();
 
@@ -1221,7 +1221,7 @@ public:
                                 PptSlidePersistEntry&,
                                 DffObjData*
                             );
-                            PPTTextObj( PPTTextObj& rTextObj );
+                            PPTTextObj( PPTTextObj const & rTextObj );
                             ~PPTTextObj();
 
     sal_uInt32              GetCurrentIndex() const { return mxImplTextObj->mnCurrentObject; };

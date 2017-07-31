@@ -4689,9 +4689,9 @@ void EscherSolverContainer::AddShape( const css::uno::Reference< css::drawing::X
 void EscherSolverContainer::AddConnector(
     const css::uno::Reference< css::drawing::XShape > & rConnector,
     const css::awt::Point& rPA,
-    css::uno::Reference< css::drawing::XShape > & rConA,
+    css::uno::Reference< css::drawing::XShape > const & rConA,
     const css::awt::Point& rPB,
-    css::uno::Reference< css::drawing::XShape > & rConB
+    css::uno::Reference< css::drawing::XShape > const & rConB
 )
 {
     maConnectorList.push_back( new EscherConnectorListEntry( rConnector, rPA, rConA, rPB, rConB ) );
