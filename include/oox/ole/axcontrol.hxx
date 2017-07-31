@@ -219,7 +219,7 @@ public:
                             sal_uInt32 nOleColor ) const;
 
     static void         convertToMSColor(
-                            PropertySet& rPropSet,
+                            PropertySet const & rPropSet,
                             sal_Int32 nPropId,
                             sal_uInt32& nOleColor,
                             sal_uInt32 nDefault = 0 );
@@ -236,7 +236,7 @@ public:
                             bool bHorizontal );
 
     static void         convertToMSOrientation(
-                            PropertySet& rPropMap,
+                            PropertySet const & rPropMap,
                             bool& bHorizontal );
 
     /** Converts the vertical alignment to UNO properties. */
@@ -281,7 +281,7 @@ public:
                             sal_Int32 nSpecialEffect ) const;
 
     static void        convertToAxBorder(
-                            PropertySet& rPropSet,
+                            PropertySet const & rPropSet,
                             sal_uInt32& nBorderColor,
                             sal_Int32& nBorderStyle,
                             sal_Int32& nSpecialEffect );
@@ -292,7 +292,7 @@ public:
                             sal_Int32 nSpecialEffect );
 
     static void         convertToAxVisualEffect(
-                            PropertySet& rPropSet,
+                            PropertySet const & rPropSet,
                             sal_Int32& nSpecialEffect );
 
     /** Converts the passed picture stream and Forms 2.0 position to UNO
@@ -319,7 +319,7 @@ public:
                             bool bAwtModel );
 
     static void        convertToAxState(
-                            PropertySet& rPropSet,
+                            PropertySet const & rPropSet,
                             OUString& rValue,
                             sal_Int32& nMultiSelect,
                             ApiDefaultStateMode eDefStateMode,
@@ -332,7 +332,7 @@ public:
                             sal_Int32 nOrientation );
 
     static void        convertToAxOrientation(
-                            PropertySet& rPropSet,
+                            PropertySet const & rPropSet,
                             const AxPairData& rSize,
                             sal_Int32& nOrientation );
 

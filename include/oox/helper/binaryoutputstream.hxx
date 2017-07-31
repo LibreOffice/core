@@ -185,7 +185,7 @@ public:
             wrapper. The data sequence MUST NOT be changed from outside as long
             as this stream wrapper is used to write to it.
      */
-    explicit            SequenceOutputStream( StreamDataSequence& rData );
+    explicit            SequenceOutputStream( StreamDataSequence const & rData );
 
     /** Writes the passed data sequence. */
     virtual void        writeData( const StreamDataSequence& rData, size_t nAtomSize = 1 ) override;

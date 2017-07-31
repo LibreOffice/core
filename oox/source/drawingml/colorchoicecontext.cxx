@@ -27,7 +27,7 @@
 namespace oox {
 namespace drawingml {
 
-ColorValueContext::ColorValueContext( ContextHandler2Helper& rParent, Color& rColor ) :
+ColorValueContext::ColorValueContext( ContextHandler2Helper const & rParent, Color& rColor ) :
     ContextHandler2( rParent ),
     mrColor( rColor )
 {
@@ -127,7 +127,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
     return nullptr;
 }
 
-ColorContext::ColorContext( ContextHandler2Helper& rParent, Color& rColor ) :
+ColorContext::ColorContext( ContextHandler2Helper const & rParent, Color& rColor ) :
     ContextHandler2( rParent ),
     mrColor( rColor )
 {

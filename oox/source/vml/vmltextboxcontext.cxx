@@ -33,8 +33,8 @@ using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
-TextPortionContext::TextPortionContext( ContextHandler2Helper& rParent,
-        TextBox& rTextBox, TextParagraphModel& rParagraph, const TextFontModel& rParentFont,
+TextPortionContext::TextPortionContext( ContextHandler2Helper const & rParent,
+        TextBox& rTextBox, TextParagraphModel const & rParagraph, const TextFontModel& rParentFont,
         sal_Int32 nElement, const AttributeList& rAttribs ) :
     ContextHandler2( rParent ),
     mrTextBox( rTextBox ),
@@ -176,7 +176,7 @@ void TextPortionContext::onEndElement()
         mrTextBox.appendPortion( maParagraph, maFont, OUString( ' ' ) );
 }
 
-TextBoxContext::TextBoxContext( ContextHandler2Helper& rParent, TextBox& rTextBox, const AttributeList& rAttribs,
+TextBoxContext::TextBoxContext( ContextHandler2Helper const & rParent, TextBox& rTextBox, const AttributeList& rAttribs,
     const GraphicHelper& graphicHelper ) :
     ContextHandler2( rParent ),
     mrTextBox( rTextBox )

@@ -195,7 +195,7 @@ View3DConverter::~View3DConverter()
 {
 }
 
-void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, TypeGroupConverter& rTypeGroup )
+void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, TypeGroupConverter const & rTypeGroup )
 {
     namespace cssd = ::com::sun::star::drawing;
     PropertySet aPropSet( rxDiagram );

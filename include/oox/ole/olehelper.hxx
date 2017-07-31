@@ -152,10 +152,10 @@ protected:
 public:
     MSConvertOCXControls( const css::uno::Reference< css::frame::XModel >& rxModel );
     virtual ~MSConvertOCXControls() override;
-    bool ReadOCXStorage( tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp );
-    bool ReadOCXCtlsStream(tools::SvRef<SotStorageStream>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp,
+    bool ReadOCXStorage( tools::SvRef<SotStorage> const & rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp );
+    bool ReadOCXCtlsStream(tools::SvRef<SotStorageStream> const & rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                    sal_Int32 nPos, sal_Int32 nSize );
-    static bool WriteOCXStream( const css::uno::Reference< css::frame::XModel >& rxModel, tools::SvRef<SotStorage> &rSrc1, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
+    static bool WriteOCXStream( const css::uno::Reference< css::frame::XModel >& rxModel, tools::SvRef<SotStorage> const &rSrc1, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
     static bool WriteOCXExcelKludgeStream( const css::uno::Reference< css::frame::XModel >& rxModel, const css::uno::Reference< css::io::XOutputStream >& xOutStrm, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
 };
 

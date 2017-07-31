@@ -20,7 +20,7 @@ struct Effect;
 class EffectPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    EffectPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
+    EffectPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
             EffectProperties& rEffectProperties ) throw();
     virtual ~EffectPropertiesContext() override;
 

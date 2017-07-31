@@ -39,9 +39,9 @@ class TextPortionContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            TextPortionContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             TextBox& rTextBox,
-                            TextParagraphModel& rParagraph,
+                            TextParagraphModel const & rParagraph,
                             const TextFontModel& rParentFont,
                             sal_Int32 nElement,
                             const AttributeList& rAttribs );
@@ -64,7 +64,7 @@ class TextBoxContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            TextBoxContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             TextBox& rTextBox,
                             const AttributeList& rAttribs,
                             const GraphicHelper& graphicHelper );

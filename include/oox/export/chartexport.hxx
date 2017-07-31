@@ -207,7 +207,7 @@ private:
 
 public:
 
-    ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, css::uno::Reference< css::frame::XModel >& xModel,
+    ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, css::uno::Reference< css::frame::XModel > const & xModel,
                  ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType );
     virtual ~ChartExport() {}
 

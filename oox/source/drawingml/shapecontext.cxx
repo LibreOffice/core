@@ -48,7 +48,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 // CT_Shape
-ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapePtr const & pMasterShapePtr, ShapePtr const & pShapePtr )
+ShapeContext::ShapeContext( ContextHandler2Helper const & rParent, ShapePtr const & pMasterShapePtr, ShapePtr const & pShapePtr )
 : ContextHandler2( rParent )
 , mpMasterShapePtr( pMasterShapePtr )
 , mpShapePtr( pShapePtr )

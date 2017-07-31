@@ -74,11 +74,11 @@ struct TitleLayoutInfo
     explicit     TitleLayoutInfo() : mpGetShape( nullptr ) {}
 
     void                convertTitlePos(
-                            ConverterRoot& rRoot,
+                            ConverterRoot const & rRoot,
                             const Reference< cssc::XChartDocument >& rxChart1Doc );
 };
 
-void TitleLayoutInfo::convertTitlePos( ConverterRoot& rRoot, const Reference< cssc::XChartDocument >& rxChart1Doc )
+void TitleLayoutInfo::convertTitlePos( ConverterRoot const & rRoot, const Reference< cssc::XChartDocument >& rxChart1Doc )
 {
     if( mxTitle.is() && mpGetShape ) try
     {

@@ -321,7 +321,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
 void Shape::addChildren( ::oox::core::XmlFilterBase& rFilterBase,
                          const Theme* pTheme,
                          const Reference< XShapes >& rxShapes,
-                         basegfx::B2DHomMatrix& aTransformation )
+                         basegfx::B2DHomMatrix const & aTransformation )
 {
     addChildren(rFilterBase, *this, pTheme, rxShapes, nullptr, aTransformation);
 }
@@ -1140,7 +1140,7 @@ Reference< XShape > const & Shape::createAndInsert(
     return mxShape;
 }
 
-void Shape::keepDiagramCompatibilityInfo( XmlFilterBase& rFilterBase )
+void Shape::keepDiagramCompatibilityInfo( XmlFilterBase const & rFilterBase )
 {
     try
     {
@@ -1189,7 +1189,7 @@ void Shape::keepDiagramCompatibilityInfo( XmlFilterBase& rFilterBase )
     }
 }
 
-Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
+Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase const & rFilterBase )
 {
     Reference< XShape > xShape;
 

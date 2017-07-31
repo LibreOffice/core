@@ -28,7 +28,7 @@ namespace oox { namespace drawingml {
 class spDefContext : public oox::core::ContextHandler2
 {
 public:
-    spDefContext( ::oox::core::ContextHandler2Helper& rParent, Shape& rDefaultObject );
+    spDefContext( ::oox::core::ContextHandler2Helper const & rParent, Shape& rDefaultObject );
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 protected:

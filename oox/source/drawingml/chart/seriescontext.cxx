@@ -82,7 +82,7 @@ ContextHandlerRef lclDataLabelSharedCreateContext( ContextHandler2& rContext,
     return nullptr;
 }
 
-void lclDataLabelSharedCharacters( ContextHandler2& rContext, const OUString& rChars, DataLabelModelBase& orModel )
+void lclDataLabelSharedCharacters( ContextHandler2 const & rContext, const OUString& rChars, DataLabelModelBase& orModel )
 {
     if( rContext.isCurrentElement( C_TOKEN( separator ) ) )
         orModel.moaSeparator = rChars;

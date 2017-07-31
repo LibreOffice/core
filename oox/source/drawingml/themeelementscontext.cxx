@@ -41,14 +41,14 @@ namespace drawingml {
 class FillStyleListContext : public ContextHandler2
 {
 public:
-    FillStyleListContext( ContextHandler2Helper& rParent, FillStyleList& rFillStyleList );
+    FillStyleListContext( ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList );
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     FillStyleList& mrFillStyleList;
 };
 
-FillStyleListContext::FillStyleListContext( ContextHandler2Helper& rParent, FillStyleList& rFillStyleList ) :
+FillStyleListContext::FillStyleListContext( ContextHandler2Helper const & rParent, FillStyleList& rFillStyleList ) :
     ContextHandler2( rParent ),
     mrFillStyleList( rFillStyleList )
 {
@@ -73,14 +73,14 @@ ContextHandlerRef FillStyleListContext::onCreateContext( sal_Int32 nElement, con
 class LineStyleListContext : public ContextHandler2
 {
 public:
-    LineStyleListContext( ContextHandler2Helper& rParent, LineStyleList& rLineStyleList );
+    LineStyleListContext( ContextHandler2Helper const & rParent, LineStyleList& rLineStyleList );
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     LineStyleList& mrLineStyleList;
 };
 
-LineStyleListContext::LineStyleListContext( ContextHandler2Helper& rParent, LineStyleList& rLineStyleList ) :
+LineStyleListContext::LineStyleListContext( ContextHandler2Helper const & rParent, LineStyleList& rLineStyleList ) :
     ContextHandler2( rParent ),
     mrLineStyleList( rLineStyleList )
 {
@@ -100,14 +100,14 @@ ContextHandlerRef LineStyleListContext::onCreateContext( sal_Int32 nElement, con
 class EffectStyleListContext : public ContextHandler2
 {
 public:
-    EffectStyleListContext( ContextHandler2Helper& rParent, EffectStyleList& rEffectStyleList );
+    EffectStyleListContext( ContextHandler2Helper const & rParent, EffectStyleList& rEffectStyleList );
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
 
 private:
     EffectStyleList& mrEffectStyleList;
 };
 
-EffectStyleListContext::EffectStyleListContext( ContextHandler2Helper& rParent, EffectStyleList& rEffectStyleList ) :
+EffectStyleListContext::EffectStyleListContext( ContextHandler2Helper const & rParent, EffectStyleList& rEffectStyleList ) :
     ContextHandler2( rParent ),
     mrEffectStyleList( rEffectStyleList )
 {
@@ -132,7 +132,7 @@ ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, c
 class FontSchemeContext : public ContextHandler2
 {
 public:
-    FontSchemeContext( ContextHandler2Helper& rParent, FontScheme& rFontScheme );
+    FontSchemeContext( ContextHandler2Helper const & rParent, FontScheme& rFontScheme );
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
     virtual void onEndElement() override;
 
@@ -141,7 +141,7 @@ private:
     TextCharacterPropertiesPtr mxCharProps;
 };
 
-FontSchemeContext::FontSchemeContext( ContextHandler2Helper& rParent, FontScheme& rFontScheme ) :
+FontSchemeContext::FontSchemeContext( ContextHandler2Helper const & rParent, FontScheme& rFontScheme ) :
     ContextHandler2( rParent ),
     mrFontScheme( rFontScheme )
 {
@@ -187,7 +187,7 @@ void FontSchemeContext::onEndElement()
     }
 }
 
-ThemeElementsContext::ThemeElementsContext( ContextHandler2Helper& rParent, Theme& rTheme ) :
+ThemeElementsContext::ThemeElementsContext( ContextHandler2Helper const & rParent, Theme& rTheme ) :
     ContextHandler2( rParent ),
     mrTheme( rTheme )
 {

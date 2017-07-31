@@ -41,7 +41,7 @@ class AxControlPropertyContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            AxControlPropertyContext(
-                            ::oox::core::FragmentHandler2& rFragment,
+                            ::oox::core::FragmentHandler2 const & rFragment,
                             ControlModelBase& rModel );
 
     virtual ::oox::core::ContextHandlerRef

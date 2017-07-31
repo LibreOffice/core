@@ -251,7 +251,7 @@ void ControlConverter::convertColor( PropertyMap& rPropMap, sal_Int32 nPropId, s
     rPropMap.setProperty( nPropId, OleHelper::decodeOleColor( mrGraphicHelper, nOleColor, mbDefaultColorBgr ) );
 }
 
-void ControlConverter::convertToMSColor( PropertySet& rPropSet, sal_Int32 nPropId, sal_uInt32& nOleColor, sal_uInt32 nDefault )
+void ControlConverter::convertToMSColor( PropertySet const & rPropSet, sal_Int32 nPropId, sal_uInt32& nOleColor, sal_uInt32 nDefault )
 {
     sal_uInt32 nRGB = 0;
     if (rPropSet.getProperty( nRGB, nPropId ))
@@ -275,7 +275,7 @@ void ControlConverter::convertOrientation( PropertyMap& rPropMap, bool bHorizont
     rPropMap.setProperty( PROP_Orientation, nScrollOrient );
 }
 
-void ControlConverter::convertToMSOrientation( PropertySet& rPropSet, bool& bHorizontal )
+void ControlConverter::convertToMSOrientation( PropertySet const & rPropSet, bool& bHorizontal )
 {
     sal_Int32 nScrollOrient = ScrollBarOrientation::HORIZONTAL;
     if ( rPropSet.getProperty( nScrollOrient, PROP_Orientation ) )
@@ -416,7 +416,7 @@ void ControlConverter::convertAxBorder( PropertyMap& rPropMap,
     convertColor( rPropMap, PROP_BorderColor, nBorderColor );
 }
 
-void ControlConverter::convertToAxBorder( PropertySet& rPropSet,
+void ControlConverter::convertToAxBorder( PropertySet const & rPropSet,
         sal_uInt32& nBorderColor, sal_Int32& nBorderStyle, sal_Int32& nSpecialEffect )
 {
     sal_Int16 nBorder = API_BORDER_NONE;
@@ -444,7 +444,7 @@ void ControlConverter::convertAxVisualEffect( PropertyMap& rPropMap, sal_Int32 n
     rPropMap.setProperty( PROP_VisualEffect, nVisualEffect );
 }
 
-void ControlConverter::convertToAxVisualEffect( PropertySet& rPropSet, sal_Int32& nSpecialEffect )
+void ControlConverter::convertToAxVisualEffect( PropertySet const & rPropSet, sal_Int32& nSpecialEffect )
 {
     sal_Int16 nVisualEffect = AX_SPECIALEFFECT_FLAT;
     rPropSet.getProperty( nVisualEffect, PROP_VisualEffect );
@@ -523,7 +523,7 @@ void ControlConverter::convertAxState( PropertyMap& rPropMap,
         rPropMap.setProperty( PROP_TriState, nMultiSelect == AX_SELECTION_MULTI );
 }
 
-void ControlConverter::convertToAxState( PropertySet& rPropSet,
+void ControlConverter::convertToAxState( PropertySet const & rPropSet,
         OUString& rValue, sal_Int32& nMultiSelect, ApiDefaultStateMode eDefStateMode, bool /*bAwtModel*/ )
 {
     bool bSupportsTriState = eDefStateMode == API_DEFAULTSTATE_TRISTATE;
@@ -560,7 +560,7 @@ void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
     convertOrientation( rPropMap, bHorizontal );
 }
 
-void ControlConverter::convertToAxOrientation( PropertySet& rPropSet,
+void ControlConverter::convertToAxOrientation( PropertySet const & rPropSet,
         const AxPairData& /*rSize*/, sal_Int32& nOrientation )
 {
     bool bHorizontal = true;

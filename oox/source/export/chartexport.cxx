@@ -364,7 +364,7 @@ sal_Int32 lcl_generateRandomValue()
     return comphelper::rng::uniform_int_distribution(0, 100000000-1);
 }
 
-ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< frame::XModel >& xModel, XmlFilterBase* pFB, DocumentType eDocumentType )
+ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< frame::XModel > const & xModel, XmlFilterBase* pFB, DocumentType eDocumentType )
     : DrawingML( std::move(pFS), pFB, eDocumentType )
     , mnXmlNamespace( nXmlNamespace )
     , mnSeriesCount(0)

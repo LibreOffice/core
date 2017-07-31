@@ -424,7 +424,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 class GeomGuideListContext : public ContextHandler2
 {
 public:
-    GeomGuideListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList );
+    GeomGuideListContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
@@ -432,7 +432,7 @@ protected:
     CustomShapeProperties&              mrCustomShapeProperties;
 };
 
-GeomGuideListContext::GeomGuideListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList )
+GeomGuideListContext::GeomGuideListContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList )
 : ContextHandler2( rParent )
 , mrGuideList( rGuideList )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -626,10 +626,10 @@ static const OUString& GetGeomGuideName( const OUString& rValue )
 class AdjPoint2DContext : public ContextHandler2
 {
 public:
-    AdjPoint2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
+    AdjPoint2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
 };
 
-AdjPoint2DContext::AdjPoint2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
+AdjPoint2DContext::AdjPoint2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
 : ContextHandler2( rParent )
 {
     rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_x ).get() );
@@ -640,7 +640,7 @@ AdjPoint2DContext::AdjPoint2DContext( ContextHandler2Helper& rParent, const Attr
 class XYAdjustHandleContext : public ContextHandler2
 {
 public:
-    XYAdjustHandleContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle );
+    XYAdjustHandleContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
@@ -648,7 +648,7 @@ protected:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
+XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
 : ContextHandler2( rParent )
 , mrAdjustHandle( rAdjustHandle )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -690,7 +690,7 @@ ContextHandlerRef XYAdjustHandleContext::onCreateContext( sal_Int32 aElementToke
 class PolarAdjustHandleContext : public ContextHandler2
 {
 public:
-    PolarAdjustHandleContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle );
+    PolarAdjustHandleContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
@@ -698,7 +698,7 @@ protected:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
+PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
 : ContextHandler2( rParent )
 , mrAdjustHandle( rAdjustHandle )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -743,7 +743,7 @@ ContextHandlerRef PolarAdjustHandleContext::onCreateContext( sal_Int32 aElementT
 class AdjustHandleListContext : public ContextHandler2
 {
 public:
-    AdjustHandleListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList );
+    AdjustHandleListContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
@@ -751,7 +751,7 @@ protected:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-AdjustHandleListContext::AdjustHandleListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList )
+AdjustHandleListContext::AdjustHandleListContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList )
 : ContextHandler2( rParent )
 , mrAdjustHandleList( rAdjustHandleList )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -779,7 +779,7 @@ ContextHandlerRef AdjustHandleListContext::onCreateContext( sal_Int32 aElementTo
 class ConnectionSiteContext : public ContextHandler2
 {
 public:
-    ConnectionSiteContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite );
+    ConnectionSiteContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
@@ -787,7 +787,7 @@ protected:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-ConnectionSiteContext::ConnectionSiteContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite )
+ConnectionSiteContext::ConnectionSiteContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite )
 : ContextHandler2( rParent )
 , mrConnectionSite( rConnectionSite )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -806,7 +806,7 @@ ContextHandlerRef ConnectionSiteContext::onCreateContext( sal_Int32 aElementToke
 class Path2DMoveToContext : public ContextHandler2
 {
 public:
-    Path2DMoveToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
+    Path2DMoveToContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
@@ -814,7 +814,7 @@ protected:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-Path2DMoveToContext::Path2DMoveToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
+Path2DMoveToContext::Path2DMoveToContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
 : ContextHandler2( rParent )
 , mrAdjPoint2D( rAdjPoint2D )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -832,7 +832,7 @@ ContextHandlerRef Path2DMoveToContext::onCreateContext( sal_Int32 aElementToken,
 class Path2DLineToContext : public ContextHandler2
 {
 public:
-    Path2DLineToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
+    Path2DLineToContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
@@ -840,7 +840,7 @@ protected:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-Path2DLineToContext::Path2DLineToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
+Path2DLineToContext::Path2DLineToContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
 : ContextHandler2( rParent )
 , mrAdjPoint2D( rAdjPoint2D )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -858,7 +858,7 @@ ContextHandlerRef Path2DLineToContext::onCreateContext( sal_Int32 aElementToken,
 class Path2DQuadBezierToContext : public ContextHandler2
 {
 public:
-    Path2DQuadBezierToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rPt1, EnhancedCustomShapeParameterPair& rPt2 );
+    Path2DQuadBezierToContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rPt1, EnhancedCustomShapeParameterPair& rPt2 );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
 protected:
@@ -868,7 +868,7 @@ protected:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-Path2DQuadBezierToContext::Path2DQuadBezierToContext( ContextHandler2Helper& rParent,
+Path2DQuadBezierToContext::Path2DQuadBezierToContext( ContextHandler2Helper const & rParent,
     CustomShapeProperties& rCustomShapeProperties,
         EnhancedCustomShapeParameterPair& rPt1,
             EnhancedCustomShapeParameterPair& rPt2 )
@@ -891,7 +891,7 @@ ContextHandlerRef Path2DQuadBezierToContext::onCreateContext( sal_Int32 aElement
 class Path2DCubicBezierToContext : public ContextHandler2
 {
 public:
-    Path2DCubicBezierToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties,
+    Path2DCubicBezierToContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties,
         EnhancedCustomShapeParameterPair&, EnhancedCustomShapeParameterPair&, EnhancedCustomShapeParameterPair& );
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
 
@@ -903,7 +903,7 @@ protected:
     int nCount;
 };
 
-Path2DCubicBezierToContext::Path2DCubicBezierToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties,
+Path2DCubicBezierToContext::Path2DCubicBezierToContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties,
     EnhancedCustomShapeParameterPair& rControlPt1,
         EnhancedCustomShapeParameterPair& rControlPt2,
             EnhancedCustomShapeParameterPair& rEndPt )
@@ -928,7 +928,7 @@ ContextHandlerRef Path2DCubicBezierToContext::onCreateContext( sal_Int32 aElemen
 class Path2DContext : public ContextHandler2
 {
 public:
-    Path2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< css::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D );
+    Path2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< css::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D );
     virtual ~Path2DContext() override;
     virtual ::oox::core::ContextHandlerRef
         onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
@@ -939,7 +939,7 @@ protected:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-Path2DContext::Path2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< css::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D )
+Path2DContext::Path2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< css::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D )
 : ContextHandler2( rParent )
 , mrPath2D( rPath2D )
 , mrSegments( rSegments )
@@ -1124,7 +1124,7 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
 class Path2DListContext : public ContextHandler2
 {
 public:
-    Path2DListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
+    Path2DListContext( ContextHandler2Helper const & rParent, CustomShapeProperties & rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
         std::vector< Path2D >& rPath2DList );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) override;
@@ -1136,7 +1136,7 @@ protected:
     std::vector< Path2D >& mrPath2DList;
 };
 
-Path2DListContext::Path2DListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
+Path2DListContext:: Path2DListContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
                                         std::vector< Path2D >& rPath2DList )
 : ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -1157,7 +1157,7 @@ ContextHandlerRef Path2DListContext::onCreateContext( sal_Int32 aElementToken, c
 }
 
 // CT_CustomGeometry2D
-CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties )
+CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler2Helper const & rParent, CustomShapeProperties& rCustomShapeProperties )
 : ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
@@ -1200,7 +1200,7 @@ ContextHandlerRef CustomShapeGeometryContext::onCreateContext( sal_Int32 aElemen
 }
 
 // CT_PresetGeometry2D
-PresetShapeGeometryContext::PresetShapeGeometryContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties )
+PresetShapeGeometryContext::PresetShapeGeometryContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties )
 : ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
@@ -1218,7 +1218,7 @@ ContextHandlerRef PresetShapeGeometryContext::onCreateContext( sal_Int32 aElemen
 }
 
 // CT_PresetTextShape
-PresetTextShapeContext::PresetTextShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties )
+PresetTextShapeContext::PresetTextShapeContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties )
 : ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {

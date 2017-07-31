@@ -31,7 +31,7 @@ namespace oox {
 namespace drawingml {
 
 /** context to import a CT_Transform2D */
-Transform2DContext::Transform2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, Shape& rShape, bool btxXfrm ) throw()
+Transform2DContext::Transform2DContext( ContextHandler2Helper const & rParent, const AttributeList& rAttribs, Shape& rShape, bool btxXfrm ) throw()
 : ContextHandler2( rParent )
 , mrShape( rShape )
 , mbtxXfrm ( btxXfrm )

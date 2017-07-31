@@ -45,7 +45,7 @@ namespace oox { namespace ppt {
         std::vector< CustomShow >& mrCustomShowList;
 
     public:
-        CustomShowListContext( ::oox::core::FragmentHandler2& rParent,
+        CustomShowListContext( ::oox::core::FragmentHandler2 const & rParent,
                 std::vector< CustomShow >& rCustomShowList );
 
         virtual ~CustomShowListContext( ) override;

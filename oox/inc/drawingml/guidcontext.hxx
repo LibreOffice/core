@@ -28,7 +28,7 @@ namespace oox { namespace drawingml {
     {
 
     public:
-        GuidContext( ::oox::core::ContextHandler2Helper& rParent, OUString& rGuidId );
+        GuidContext( ::oox::core::ContextHandler2Helper const & rParent, OUString& rGuidId );
         virtual void onCharacters( const OUString& aChars ) override;
 
     private:

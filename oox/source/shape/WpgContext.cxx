@@ -21,7 +21,7 @@ namespace oox
 namespace shape
 {
 
-WpgContext::WpgContext(ContextHandler2Helper& rParent)
+WpgContext::WpgContext(ContextHandler2Helper const & rParent)
     : ContextHandler2(rParent)
 {
     mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));

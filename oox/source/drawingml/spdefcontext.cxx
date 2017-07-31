@@ -31,7 +31,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-spDefContext::spDefContext( ContextHandler2Helper& rParent, Shape& rDefaultObject )
+spDefContext::spDefContext( ContextHandler2Helper const & rParent, Shape& rDefaultObject )
 : ContextHandler2( rParent )
 , mrDefaultObject( rDefaultObject )
 {

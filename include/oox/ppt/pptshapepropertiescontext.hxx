@@ -35,7 +35,7 @@ namespace oox { namespace ppt {
 class PPTShapePropertiesContext : public ::oox::drawingml::ShapePropertiesContext
 {
 public:
-    PPTShapePropertiesContext( ::oox::core::ContextHandler2Helper& rParent, ::oox::drawingml::Shape& rShape );
+    PPTShapePropertiesContext( ::oox::core::ContextHandler2Helper const & rParent, ::oox::drawingml::Shape& rShape );
     virtual ::oox::core::ContextHandlerRef
         onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 };

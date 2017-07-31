@@ -105,7 +105,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 TextEffectsContext::TextEffectsContext(
-                        ContextHandler2Helper& rParent,
+                        ContextHandler2Helper const & rParent,
                         sal_Int32 aElementToken,
                         std::vector<PropertyValue>& rTextEffectsProperties)
     : ContextHandler2(rParent)

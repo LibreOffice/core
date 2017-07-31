@@ -295,7 +295,7 @@ protected:
     /** Used by both RectangleShape and ComplexShape. */
     css::uno::Reference<css::drawing::XShape>createPictureObject(
             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
-            const css::awt::Rectangle& rShapeRect, OUString& rGraphicPath ) const;
+            const css::awt::Rectangle& rShapeRect, OUString const & rGraphicPath ) const;
 
 private:
     OUString     maService;          ///< Name of the UNO shape service.

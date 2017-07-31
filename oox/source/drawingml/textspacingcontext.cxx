@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 
 namespace oox { namespace drawingml {
 
-    TextSpacingContext::TextSpacingContext( ContextHandler2Helper& rParent, TextSpacing & aSpacing )
+    TextSpacingContext::TextSpacingContext( ContextHandler2Helper const & rParent, TextSpacing & aSpacing )
         : ContextHandler2( rParent )
         , maSpacing( aSpacing )
     {

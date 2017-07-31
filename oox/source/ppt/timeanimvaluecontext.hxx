@@ -30,7 +30,7 @@ namespace oox { namespace ppt {
         : public ::oox::core::FragmentHandler2
     {
     public:
-        TimeAnimValueListContext( ::oox::core::FragmentHandler2& rParent,
+        TimeAnimValueListContext( ::oox::core::FragmentHandler2 const & rParent,
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
             TimeAnimationValueList & aTavList );
 

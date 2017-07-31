@@ -31,7 +31,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml { namespace table {
 
-TableStyleTextStyleContext::TableStyleTextStyleContext( ContextHandler2Helper& rParent,
+TableStyleTextStyleContext::TableStyleTextStyleContext( ContextHandler2Helper const & rParent,
     const AttributeList& rAttribs, TableStylePart& rTableStylePart )
 : ContextHandler2( rParent )
 , mrTableStylePart( rTableStylePart )

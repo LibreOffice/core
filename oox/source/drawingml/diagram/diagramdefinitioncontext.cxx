@@ -30,7 +30,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 // CT_DiagramDefinition
-DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper& rParent,
+DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper const & rParent,
                                                     const AttributeList& rAttributes,
                                                     const DiagramLayoutPtr &pLayout )
     : ContextHandler2( rParent )

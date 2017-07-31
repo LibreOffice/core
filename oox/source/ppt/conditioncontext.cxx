@@ -40,7 +40,7 @@ using namespace ::com::sun::star::animations;
 
 namespace oox { namespace ppt {
 
-    CondContext::CondContext( FragmentHandler2& rParent, const Reference< XFastAttributeList >& xAttribs,
+    CondContext::CondContext( FragmentHandler2 const & rParent, const Reference< XFastAttributeList >& xAttribs,
                 const TimeNodePtr & pNode, AnimationCondition & aValue )
         :  TimeNodeContext( rParent, PPT_TOKEN( cond ), xAttribs, pNode )
         , maCond( aValue )
@@ -153,7 +153,7 @@ namespace oox { namespace ppt {
 
     /** CT_TLTimeConditionList */
     CondListContext::CondListContext(
-            FragmentHandler2& rParent, sal_Int32  aElement,
+            FragmentHandler2 const & rParent, sal_Int32  aElement,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode,
             AnimationConditionList & aCond )

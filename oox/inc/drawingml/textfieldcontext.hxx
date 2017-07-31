@@ -30,7 +30,7 @@ class TextFieldContext
     : public ::oox::core::ContextHandler2
 {
 public:
-    TextFieldContext( ::oox::core::ContextHandler2Helper& rParent,
+    TextFieldContext( ::oox::core::ContextHandler2Helper const & rParent,
                         const ::oox::AttributeList& rAttributes,
                         TextField& rTextField);
     virtual void onEndElement( ) override;

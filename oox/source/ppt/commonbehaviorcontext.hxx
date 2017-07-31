@@ -39,7 +39,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        CommonBehaviorContext( ::oox::core::FragmentHandler2& rParent,
+        CommonBehaviorContext( ::oox::core::FragmentHandler2 const & rParent,
              const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
              const TimeNodePtr & pNode );
         virtual ~CommonBehaviorContext( )

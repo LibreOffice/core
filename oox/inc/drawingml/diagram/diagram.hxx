@@ -34,7 +34,7 @@ namespace oox { namespace drawingml {
     generate and layout the shapes, and push it as children into the
     referenced shape.
  */
-void loadDiagram( ShapePtr& pShape,
+void loadDiagram( ShapePtr const & pShape,
                   core::XmlFilterBase& rFilter,
                   const OUString& rDataModelPath,
                   const OUString& rLayoutPath,

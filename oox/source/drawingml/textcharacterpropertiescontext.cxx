@@ -39,7 +39,7 @@ namespace oox { namespace drawingml {
 
 // CT_TextCharacterProperties
 TextCharacterPropertiesContext::TextCharacterPropertiesContext(
-        ContextHandler2Helper& rParent,
+        ContextHandler2Helper const & rParent,
         const AttributeList& rAttribs,
         TextCharacterProperties& rTextCharacterProperties )
 : ContextHandler2( rParent )

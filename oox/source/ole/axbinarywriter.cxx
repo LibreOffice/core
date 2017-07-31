@@ -86,7 +86,7 @@ void AxAlignedOutputStream::align( size_t nSize )
 
 namespace {
 
-void lclWriteString( AxAlignedOutputStream& rOutStrm, OUString& rValue, sal_uInt32 nSize, bool bArrayString )
+void lclWriteString( AxAlignedOutputStream& rOutStrm, OUString const & rValue, sal_uInt32 nSize, bool bArrayString )
 {
     bool bCompressed = getFlag( nSize, AX_STRING_COMPRESSED );
     rOutStrm.writeCompressedUnicodeArray( rValue, bCompressed || bArrayString );

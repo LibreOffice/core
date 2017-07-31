@@ -173,8 +173,8 @@ void ContextHandler2Helper::processCollectedChars()
     }
 }
 
-ContextHandler2::ContextHandler2( ContextHandler2Helper& rParent ) :
-    ContextHandler( dynamic_cast< ContextHandler& >( rParent ) ),
+ContextHandler2::ContextHandler2( ContextHandler2Helper const & rParent ) :
+    ContextHandler( dynamic_cast< ContextHandler const & >( rParent ) ),
     ContextHandler2Helper( rParent )
 {
 }

@@ -352,7 +352,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
 }
 
     CommonTimeNodeContext::CommonTimeNodeContext(
-            FragmentHandler2& rParent,
+            FragmentHandler2 const & rParent,
             sal_Int32  aElement,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )

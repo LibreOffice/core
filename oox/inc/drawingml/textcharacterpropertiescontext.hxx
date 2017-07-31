@@ -29,7 +29,7 @@ struct TextCharacterProperties;
 class TextCharacterPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextCharacterPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
+    TextCharacterPropertiesContext( ::oox::core::ContextHandler2Helper const & rParent,
             const ::oox::AttributeList& rAttribs,
             TextCharacterProperties& rTextCharacterProperties );
     virtual ~TextCharacterPropertiesContext() override;

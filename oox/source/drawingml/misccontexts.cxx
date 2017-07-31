@@ -36,13 +36,13 @@ using ::oox::core::ContextHandlerRef;
 namespace oox {
 namespace drawingml {
 
-SolidFillContext::SolidFillContext( ContextHandler2Helper& rParent,
+SolidFillContext::SolidFillContext( ContextHandler2Helper const & rParent,
         FillProperties& rFillProps ) :
     ColorContext( rParent, rFillProps.maFillColor )
 {
 }
 
-GradientFillContext::GradientFillContext( ContextHandler2Helper& rParent,
+GradientFillContext::GradientFillContext( ContextHandler2Helper const & rParent,
         const AttributeList& rAttribs, GradientFillProperties& rGradientProps ) :
     ContextHandler2( rParent ),
     mrGradientProps( rGradientProps )
@@ -88,7 +88,7 @@ ContextHandlerRef GradientFillContext::onCreateContext(
     return nullptr;
 }
 
-PatternFillContext::PatternFillContext( ContextHandler2Helper& rParent,
+PatternFillContext::PatternFillContext( ContextHandler2Helper const & rParent,
         const AttributeList& rAttribs, PatternFillProperties& rPatternProps ) :
     ContextHandler2( rParent ),
     mrPatternProps( rPatternProps )
@@ -109,7 +109,7 @@ ContextHandlerRef PatternFillContext::onCreateContext(
     return nullptr;
 }
 
-ColorChangeContext::ColorChangeContext( ContextHandler2Helper& rParent,
+ColorChangeContext::ColorChangeContext( ContextHandler2Helper const & rParent,
         const AttributeList& rAttribs, BlipFillProperties& rBlipProps ) :
     ContextHandler2( rParent ),
     mrBlipProps( rBlipProps )
@@ -138,7 +138,7 @@ ContextHandlerRef ColorChangeContext::onCreateContext(
     return nullptr;
 }
 
-BlipContext::BlipContext( ContextHandler2Helper& rParent,
+BlipContext::BlipContext( ContextHandler2Helper const & rParent,
         const AttributeList& rAttribs, BlipFillProperties& rBlipProps ) :
     ContextHandler2( rParent ),
     mrBlipProps( rBlipProps )
@@ -197,7 +197,7 @@ ContextHandlerRef BlipContext::onCreateContext(
     return nullptr;
 }
 
-DuotoneContext::DuotoneContext( ContextHandler2Helper& rParent,
+DuotoneContext::DuotoneContext( ContextHandler2Helper const & rParent,
         BlipFillProperties& rBlipProps ) :
     ContextHandler2( rParent ),
     mrBlipProps( rBlipProps ),
@@ -219,7 +219,7 @@ DuotoneContext::~DuotoneContext()
     return nullptr;
 }
 
-BlipFillContext::BlipFillContext( ContextHandler2Helper& rParent,
+BlipFillContext::BlipFillContext( ContextHandler2Helper const & rParent,
         const AttributeList& rAttribs, BlipFillProperties& rBlipProps ) :
     ContextHandler2( rParent ),
     mrBlipProps( rBlipProps )
@@ -260,7 +260,7 @@ ContextHandlerRef BlipFillContext::onCreateContext(
     return nullptr;
 }
 
-FillPropertiesContext::FillPropertiesContext( ContextHandler2Helper& rParent, FillProperties& rFillProps ) :
+FillPropertiesContext::FillPropertiesContext( ContextHandler2Helper const & rParent, FillProperties& rFillProps ) :
     ContextHandler2( rParent ),
     mrFillProps( rFillProps )
 {
@@ -273,7 +273,7 @@ ContextHandlerRef FillPropertiesContext::onCreateContext(
 }
 
 ContextHandlerRef FillPropertiesContext::createFillContext(
-        ContextHandler2Helper& rParent, sal_Int32 nElement,
+        ContextHandler2Helper const & rParent, sal_Int32 nElement,
         const AttributeList& rAttribs, FillProperties& rFillProps )
 {
     switch( nElement )
@@ -288,7 +288,7 @@ ContextHandlerRef FillPropertiesContext::createFillContext(
     return nullptr;
 }
 
-SimpleFillPropertiesContext::SimpleFillPropertiesContext( ContextHandler2Helper& rParent, Color& rColor ) :
+SimpleFillPropertiesContext::SimpleFillPropertiesContext( ContextHandler2Helper const & rParent, Color& rColor ) :
     FillPropertiesContext( rParent, *this ),
     mrColor( rColor )
 {
@@ -299,7 +299,7 @@ SimpleFillPropertiesContext::~SimpleFillPropertiesContext()
     mrColor = getBestSolidColor();
 }
 
-BlipExtensionContext::BlipExtensionContext( ContextHandler2Helper& rParent, BlipFillProperties& rBlipProps ) :
+BlipExtensionContext::BlipExtensionContext( ContextHandler2Helper const & rParent, BlipFillProperties& rBlipProps ) :
     ContextHandler2( rParent ),
     mrBlipProps( rBlipProps )
 {
@@ -323,7 +323,7 @@ ContextHandlerRef BlipExtensionContext::onCreateContext(
     return nullptr;
 }
 
-ArtisticEffectContext::ArtisticEffectContext( ContextHandler2Helper& rParent, ArtisticEffectProperties& rEffect ) :
+ArtisticEffectContext::ArtisticEffectContext( ContextHandler2Helper const & rParent, ArtisticEffectProperties& rEffect ) :
     ContextHandler2( rParent ),
     maEffect( rEffect )
 {

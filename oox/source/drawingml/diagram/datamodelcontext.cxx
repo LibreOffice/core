@@ -37,7 +37,7 @@ class CxnListContext
     : public ContextHandler2
 {
 public:
-    CxnListContext( ContextHandler2Helper& rParent,
+    CxnListContext( ContextHandler2Helper const & rParent,
                     dgm::Connections & aConnections )
         : ContextHandler2( rParent )
         , mrConnection( aConnections )
@@ -84,7 +84,7 @@ class PresLayoutVarsContext
     : public ContextHandler2
 {
 public:
-    PresLayoutVarsContext( ContextHandler2Helper& rParent,
+    PresLayoutVarsContext( ContextHandler2Helper const & rParent,
                            dgm::Point & rPoint ) :
         ContextHandler2( rParent ),
         mrPoint( rPoint )
@@ -137,7 +137,7 @@ class PropertiesContext
     : public ContextHandler2
 {
 public:
-    PropertiesContext( ContextHandler2Helper& rParent,
+    PropertiesContext( ContextHandler2Helper const & rParent,
                        dgm::Point & rPoint,
                        const AttributeList& rAttribs ) :
         ContextHandler2( rParent ),
@@ -201,7 +201,7 @@ class PtContext
     : public ContextHandler2
 {
 public:
-    PtContext( ContextHandler2Helper& rParent,
+    PtContext( ContextHandler2Helper const & rParent,
                const AttributeList& rAttribs,
                dgm::Point & rPoint):
         ContextHandler2( rParent ),
@@ -255,7 +255,7 @@ class PtListContext
     : public ContextHandler2
 {
 public:
-    PtListContext( ContextHandler2Helper& rParent,  dgm::Points& rPoints) :
+    PtListContext( ContextHandler2Helper const & rParent,  dgm::Points& rPoints) :
         ContextHandler2( rParent ),
         mrPoints( rPoints )
     {}
@@ -286,7 +286,7 @@ class BackgroundFormattingContext
     : public ContextHandler2
 {
 public:
-    BackgroundFormattingContext( ContextHandler2Helper& rParent, DiagramDataPtr & pModel )
+    BackgroundFormattingContext( ContextHandler2Helper const & rParent, DiagramDataPtr const & pModel )
         : ContextHandler2( rParent )
         , mpDataModel( pModel )
         {
@@ -322,7 +322,7 @@ private:
     DiagramDataPtr mpDataModel;
 };
 
-DataModelContext::DataModelContext( ContextHandler2Helper& rParent,
+DataModelContext::DataModelContext( ContextHandler2Helper const & rParent,
                                     const DiagramDataPtr & pDataModel )
     : ContextHandler2( rParent )
     , mpDataModel( pDataModel )

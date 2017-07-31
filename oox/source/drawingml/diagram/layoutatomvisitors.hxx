@@ -34,7 +34,7 @@ class ShapeCreationVisitor : public LayoutAtomVisitor
     const Diagram& mrDgm;
     sal_Int32 mnCurrIdx;
 
-    void defaultVisit(LayoutAtom& rAtom);
+    void defaultVisit(LayoutAtom const & rAtom);
     virtual void visit(ConstraintAtom& rAtom) override;
     virtual void visit(AlgAtom& rAtom) override;
     virtual void visit(ForEachAtom& rAtom) override;
@@ -65,7 +65,7 @@ class ShapeTemplateVisitor : public LayoutAtomVisitor
     virtual void visit(ShapeAtom& rAtom) override;
 
 public:
-    void defaultVisit(LayoutAtom& rAtom);
+    void defaultVisit(LayoutAtom const & rAtom);
     ShapePtr getShapeCopy() const
         { return mpShape; }
 };
@@ -75,7 +75,7 @@ class ShapeLayoutingVisitor : public LayoutAtomVisitor
     LayoutNode* mpCurrentLayoutNode;
     bool mbLookForAlg;
 
-    void defaultVisit(LayoutAtom& rAtom);
+    void defaultVisit(LayoutAtom const & rAtom);
     virtual void visit(ConstraintAtom& rAtom) override;
     virtual void visit(AlgAtom& rAtom) override;
     virtual void visit(ForEachAtom& rAtom) override;
@@ -96,7 +96,7 @@ class ShallowPresNameVisitor : public LayoutAtomVisitor
     const Diagram& mrDgm;
     size_t mnCnt;
 
-    void defaultVisit(LayoutAtom& rAtom);
+    void defaultVisit(LayoutAtom const & rAtom);
     virtual void visit(ConstraintAtom& rAtom) override;
     virtual void visit(AlgAtom& rAtom) override;
     virtual void visit(ForEachAtom& rAtom) override;

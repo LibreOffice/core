@@ -49,7 +49,7 @@ class ShapeLayoutContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            ShapeLayoutContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             Drawing& rDrawing );
 
     virtual ::oox::core::ContextHandlerRef
@@ -64,7 +64,7 @@ class ClientDataContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            ClientDataContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             ClientData& rClientData,
                             const AttributeList& rAttribs );
 
@@ -84,13 +84,13 @@ class ShapeContextBase : public ::oox::core::ContextHandler2
 public:
     static ::oox::core::ContextHandlerRef
                         createShapeContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             ShapeContainer& rShapes,
                             sal_Int32 nElement,
                             const AttributeList& rAttribs );
 
 protected:
-    explicit            ShapeContextBase( ::oox::core::ContextHandler2Helper& rParent );
+    explicit            ShapeContextBase( ::oox::core::ContextHandler2Helper const & rParent );
 };
 
 
@@ -98,7 +98,7 @@ class ShapeTypeContext : public ShapeContextBase
 {
 public:
     explicit            ShapeTypeContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             ShapeType& rShapeType,
                             const AttributeList& rAttribs );
 
@@ -121,7 +121,7 @@ class ShapeContext : public ShapeTypeContext
 {
 public:
     explicit            ShapeContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             ShapeBase& rShape,
                             const AttributeList& rAttribs );
 
@@ -154,7 +154,7 @@ class GroupShapeContext : public ShapeContext
 {
 public:
     explicit            GroupShapeContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             GroupShape& rShape,
                             const AttributeList& rAttribs );
 
@@ -170,7 +170,7 @@ class RectangleShapeContext : public ShapeContext
 {
 public:
     explicit            RectangleShapeContext(
-                            ::oox::core::ContextHandler2Helper& rParent,
+                            ::oox::core::ContextHandler2Helper const & rParent,
                             const AttributeList& rAttribs,
                             RectangleShape& rShape );
 

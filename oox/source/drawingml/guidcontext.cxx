@@ -25,7 +25,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-GuidContext::GuidContext( ContextHandler2Helper& rParent, OUString& rGuidId )
+GuidContext::GuidContext( ContextHandler2Helper const & rParent, OUString& rGuidId )
 : ContextHandler2( rParent )
 , mrGuidId( rGuidId )
 {

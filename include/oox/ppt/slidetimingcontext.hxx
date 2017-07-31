@@ -32,7 +32,7 @@ namespace oox { namespace ppt {
 class SlideTimingContext : public ::oox::core::FragmentHandler2
 {
 public:
-    SlideTimingContext( ::oox::core::FragmentHandler2& rParent, TimeNodePtrList & aTimeNodeList ) throw();
+    SlideTimingContext( ::oox::core::FragmentHandler2 const & rParent, TimeNodePtrList & aTimeNodeList ) throw();
     virtual ~SlideTimingContext() throw() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;

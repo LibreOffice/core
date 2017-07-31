@@ -35,7 +35,7 @@ namespace oox { namespace ppt {
     class SlideTransitionContext : public ::oox::core::FragmentHandler2
     {
     public:
-        SlideTransitionContext( ::oox::core::FragmentHandler2& rParent,
+        SlideTransitionContext( ::oox::core::FragmentHandler2 const & rParent,
             const AttributeList& rAttributes,
             PropertyMap & aProperties ) throw();
         virtual ~SlideTransitionContext() throw() override;

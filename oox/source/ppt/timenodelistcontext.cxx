@@ -105,7 +105,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        MediaNodeContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        MediaNodeContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -164,7 +164,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        SetTimeNodeContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        SetTimeNodeContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -215,7 +215,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        CmdTimeNodeContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        CmdTimeNodeContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -328,7 +328,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        SequenceTimeNodeContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        SequenceTimeNodeContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                                  const Reference< XFastAttributeList >& xAttribs,
                                  const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -371,7 +371,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        ParallelExclTimeNodeContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        ParallelExclTimeNodeContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                                      const Reference< XFastAttributeList >& xAttribs,
                                      const TimeNodePtr & pNode )
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -400,7 +400,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimColorContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        AnimColorContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -491,7 +491,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        AnimContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                      const Reference< XFastAttributeList >& xAttribs,
                       const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -595,7 +595,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimScaleContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        AnimScaleContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -675,7 +675,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimRotContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        AnimRotContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                         const Reference< XFastAttributeList >& xAttribs,
                          const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -722,7 +722,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimMotionContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        AnimMotionContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                          const Reference< XFastAttributeList >& xAttribs,
                           const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -817,7 +817,7 @@ namespace oox { namespace ppt {
         : public TimeNodeContext
     {
     public:
-        AnimEffectContext( FragmentHandler2& rParent, sal_Int32  aElement,
+        AnimEffectContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                              const Reference< XFastAttributeList >& xAttribs,
                              const TimeNodePtr & pNode ) throw()
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
@@ -855,7 +855,7 @@ namespace oox { namespace ppt {
     };
 
     TimeNodeContext * TimeNodeContext::makeContext(
-            FragmentHandler2& rParent, sal_Int32  aElement,
+            FragmentHandler2 const & rParent, sal_Int32  aElement,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )
     {
@@ -905,7 +905,7 @@ namespace oox { namespace ppt {
         return pCtx;
     }
 
-    TimeNodeContext::TimeNodeContext( FragmentHandler2& rParent, sal_Int32 aElement,
+    TimeNodeContext::TimeNodeContext( FragmentHandler2 const & rParent, sal_Int32 aElement,
             const Reference< XFastAttributeList >& /*xAttribs*/,
             const TimeNodePtr & pNode ) throw()
         : FragmentHandler2( rParent )
@@ -919,7 +919,7 @@ namespace oox { namespace ppt {
 
     }
 
-    TimeNodeListContext::TimeNodeListContext( FragmentHandler2& rParent, TimeNodePtrList & aList )
+    TimeNodeListContext::TimeNodeListContext( FragmentHandler2 const & rParent, TimeNodePtrList & aList )
         throw()
         : FragmentHandler2( rParent )
             , maList( aList )

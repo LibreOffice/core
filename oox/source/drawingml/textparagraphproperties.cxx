@@ -76,7 +76,7 @@ void BulletList::setBulletChar( const OUString & sChar )
     msBulletChar <<= sChar;
 }
 
-void BulletList::setGraphic( css::uno::Reference< css::graphic::XGraphic >& rXGraphic )
+void BulletList::setGraphic( css::uno::Reference< css::graphic::XGraphic > const & rXGraphic )
 {
     mnNumberingType <<= NumberingType::BITMAP;
     maGraphic <<= rXGraphic;

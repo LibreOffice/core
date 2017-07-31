@@ -43,7 +43,7 @@ public:
     /** Converts the OOXML plot area model to a chart2 diagram. */
     void                convertFromModel(
                             const css::uno::Reference< css::chart2::XDiagram >& rxDiagram,
-                            TypeGroupConverter& rTypeGroup );
+                            TypeGroupConverter const & rTypeGroup );
 };
 
 

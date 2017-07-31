@@ -32,7 +32,7 @@ using namespace ::oox::core;
 
 namespace oox { namespace drawingml {
 
-void ShapeCreationVisitor::defaultVisit(LayoutAtom& rAtom)
+void ShapeCreationVisitor::defaultVisit(LayoutAtom const & rAtom)
 {
     for (const auto& pAtom : rAtom.getChildren())
         pAtom->accept(*this);
@@ -150,7 +150,7 @@ void ShapeCreationVisitor::visit(ShapeAtom& /*rAtom*/)
     // stop processing
 }
 
-void ShapeTemplateVisitor::defaultVisit(LayoutAtom& rAtom)
+void ShapeTemplateVisitor::defaultVisit(LayoutAtom const & rAtom)
 {
     // visit all children, one of them needs to be the layout algorithm
     for (const auto& pAtom : rAtom.getChildren())
@@ -202,7 +202,7 @@ void ShapeTemplateVisitor::visit(ShapeAtom& rAtom)
     mpShape.reset(new Shape(pCurrShape));
 }
 
-void ShapeLayoutingVisitor::defaultVisit(LayoutAtom& rAtom)
+void ShapeLayoutingVisitor::defaultVisit(LayoutAtom const & rAtom)
 {
     // visit all children, one of them needs to be the layout algorithm
     for (const auto& pAtom : rAtom.getChildren())
@@ -260,7 +260,7 @@ void ShapeLayoutingVisitor::visit(ShapeAtom& /*rAtom*/)
     // stop processing
 }
 
-void ShallowPresNameVisitor::defaultVisit(LayoutAtom& rAtom)
+void ShallowPresNameVisitor::defaultVisit(LayoutAtom const & rAtom)
 {
     // visit all children, at least one of them needs to have proper
     // name set

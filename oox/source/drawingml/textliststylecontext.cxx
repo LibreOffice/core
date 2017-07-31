@@ -30,7 +30,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 // CT_TextListStyle
-TextListStyleContext::TextListStyleContext( ContextHandler2Helper& rParent, TextListStyle& rTextListStyle )
+TextListStyleContext::TextListStyleContext( ContextHandler2Helper const & rParent, TextListStyle& rTextListStyle )
 : ContextHandler2( rParent )
 , mrTextListStyle( rTextListStyle )
 {
