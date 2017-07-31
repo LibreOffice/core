@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_91a6c8bf",
+        "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2659,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-07-31T12:06:23Z",
+      "side": 1,
+      "message": "StartRunProperties does nothing in RTF, so a mis-match of start/end currently doesn\u0027t matter.  There doesn\u0027t seem to be a good place to put it anyway.  The alternative would be to FOLLOW the EndRunProperties with another StartRunProperties if a mismatch MUST be avoided. (That assumes that a start has already been called earlier.)",
+      "range": {
+        "startLine": 2659,
+        "startChar": 4,
+        "endLine": 2659,
+        "endChar": 20
+      },
+      "revId": "d22f301a0b1aecf391f1fd3fa3133b2d6e26cefa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
