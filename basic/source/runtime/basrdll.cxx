@@ -26,7 +26,7 @@
 
 #include <basic/sbstar.hxx>
 #include <basic/basrdll.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include "strings.hrc"
 #include <sbxbase.hxx>
 
@@ -41,7 +41,7 @@ struct BasicDLL::Impl
     Impl()
         : bDebugMode(false)
         , bBreakEnabled(true)
-        , aBasResLocale(Translate::Create("sb", Application::GetSettings().GetUILanguageTag()))
+        , aBasResLocale(Translate::Create("sb"))
         , xSbxAppData(new SbxAppData)
     { }
 };

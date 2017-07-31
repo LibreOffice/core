@@ -19,7 +19,7 @@
 
 #include <memory>
 #include "componentmodule.hxx"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/solar.hrc>
@@ -68,7 +68,7 @@ namespace compmodule
         if (!m_bInitialized)
         {
             // create a manager with a fixed prefix
-            m_aResLocale = Translate::Create("pcr", Application::GetSettings().GetUILanguageTag());
+            m_aResLocale = Translate::Create("pcr");
             m_bInitialized = true;
         }
         return m_aResLocale;

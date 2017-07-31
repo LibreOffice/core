@@ -19,7 +19,7 @@
 
 #include "ResId.hxx"
 #include "ResourceManager.hxx"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace chart
 {

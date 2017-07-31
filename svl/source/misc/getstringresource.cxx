@@ -19,20 +19,17 @@
 
 #include <sal/config.h>
 
-#include <map>
 #include <memory>
 #include <i18nlangtag/languagetag.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <tools/resmgr.hxx>
-#include <unotools/syslocale.hxx>
+#include <unotools/resmgr.hxx>
 
 #include "getstringresource.hxx"
 
 OUString SvlResId(const char* id)
 {
-    static std::locale loc = Translate::Create("svl", SvtSysLocale().GetUILanguageTag());
+    static std::locale loc = Translate::Create("svl");
     return Translate::get(id, loc);
 }
 

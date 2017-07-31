@@ -17,17 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resmgr.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-
+#include <unotools/resmgr.hxx>
 #include <mediamisc.hxx>
 
 namespace avmedia {
 
 const std::locale& GetResLocale()
 {
-    static std::locale loc = Translate::Create("avmedia", Application::GetSettings().GetUILanguageTag());
+    static std::locale loc = Translate::Create("avmedia");
     return loc;
 }
 

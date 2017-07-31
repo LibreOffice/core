@@ -156,7 +156,6 @@
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/ref.hxx>
-#include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
@@ -166,6 +165,7 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#include <unotools/resmgr.hxx>
 #include <unotools/unotoolsdllapi.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -145,7 +145,7 @@ SfxErrorHandler::SfxErrorHandler(const ErrMsgCode* pIdPs, ErrCode lStartP, ErrCo
     ErrorRegistry::RegisterDisplay(&aWndFunc);
     if (!pResLocale)
     {
-        xFreeLocale.reset(new std::locale(Translate::Create("svt", Application::GetSettings().GetUILanguageTag())));
+        xFreeLocale.reset(new std::locale(Translate::Create("svt")));
         pResLocale = xFreeLocale.get();
     }
 }
@@ -197,7 +197,7 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
     */
 
 {
-    std::locale loc(Translate::Create("svt", Application::GetSettings().GetUILanguageTag()));
+    std::locale loc(Translate::Create("svt"));
     for (const ErrMsgCode* pItem = getRID_ERRHDL(); pItem->second; ++pItem)
     {
         if (sal_uInt32(pItem->second) == lClassId)
@@ -277,7 +277,7 @@ bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
     std::locale* pFreeLocale = nullptr;
     if (!pResLocale)
     {
-        pFreeLocale = new std::locale(Translate::Create("svt", Application::GetSettings().GetUILanguageTag()));
+        pFreeLocale = new std::locale(Translate::Create("svt"));
         pResLocale = pFreeLocale;
     }
     if (pResLocale)

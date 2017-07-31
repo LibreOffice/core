@@ -38,7 +38,7 @@ $(eval $(call gb_Library_use_libraries,date,\
 	cppu \
 	cppuhelper \
 	sal \
-	tl \
+	utl \
 	i18nlangtag \
 ))
 

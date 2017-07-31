@@ -17,17 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
+#include <tools/solar.h>
 #include <svtools/svtresid.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 
 static std::locale* pResLocale=nullptr;
 
 std::locale* SvtResLocale::GetResLocale()
 {
     if (!pResLocale)
-        pResLocale = new std::locale(Translate::Create("svt", SvtSysLocale().GetUILanguageTag()));
+        pResLocale = new std::locale(Translate::Create("svt"));
     return pResLocale;
 }
 

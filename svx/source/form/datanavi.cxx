@@ -30,7 +30,7 @@
 #include "fpicker/strings.hrc"
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <svx/xmlexchg.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/miscopt.hxx>
@@ -3355,7 +3355,7 @@ namespace svxform
         m_pFilePickerBtn->SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
 
         // load the filter name from fps resource
-        m_sAllFilterName = Translate::get(STR_FILTERNAME_ALL, Translate::Create("fps", Application::GetSettings().GetUILanguageTag()));
+        m_sAllFilterName = Translate::get(STR_FILTERNAME_ALL, Translate::Create("fps"));
     }
 
     AddInstanceDialog::~AddInstanceDialog()

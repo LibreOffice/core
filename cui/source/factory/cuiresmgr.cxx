@@ -18,22 +18,12 @@
  */
 
 #include <dialmgr.hxx>
-#include <tools/resmgr.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-
-namespace
-{
-    const std::locale& GetResLocale()
-    {
-        static std::locale loc(Translate::Create("cui", Application::GetSettings().GetUILanguageTag()));
-        return loc;
-    }
-}
+#include <unotools/resmgr.hxx>
 
 OUString CuiResId(const char *pKey)
 {
-    return Translate::get(pKey, GetResLocale());
+    static std::locale loc(Translate::Create("cui"));
+    return Translate::get(pKey, loc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

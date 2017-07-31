@@ -18,10 +18,7 @@
  */
 
 #include <helper/accresmgr.hxx>
-
-#include <tools/resmgr.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
+#include <unotools/resmgr.hxx>
 
 using namespace accessibility;
 
@@ -39,7 +36,7 @@ void TkResMgr::ensureImplExists()
     if (m_pImpl)
         return;
 
-    m_pImpl = new std::locale(Translate::Create("acc", Application::GetSettings().GetUILanguageTag()));
+    m_pImpl = new std::locale(Translate::Create("acc"));
 
     if (m_pImpl)
     {

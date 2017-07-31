@@ -25,7 +25,7 @@
 
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/link.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/syslocaleoptions.hxx>
