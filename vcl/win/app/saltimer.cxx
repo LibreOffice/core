@@ -57,7 +57,6 @@ void ImplSalStopTimer()
                          SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) )
         nMsgCount++;
     assert( nMsgCount <= 1 );
-    pSalData->mbOnIdleRunScheduler = false;
 }
 
 void ImplSalStartTimer( sal_uLong nMS )
@@ -72,22 +71,13 @@ void ImplSalStartTimer( sal_uLong nMS )
     // cannot change a one-shot timer, so delete it and create a new one
     ImplSalStopTimer();
 
-    // run the scheduler, if yield is idle for the 0ms case
+    // keep the scheduler running, if a 0ms timer / Idle is scheduled
     pSalData->mbOnIdleRunScheduler = ( 0 == nMS );
-    if ( pSalData->mbOnIdleRunScheduler )
-    {
-        BOOL const ret = PostMessageW(pSalData->mpFirstInstance->mhComWnd,
-                                      SAL_MSG_TIMER_CALLBACK, 1, 0);
-        SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
-    }
-    else
-    {
-        // probably WT_EXECUTEONLYONCE is not needed, but it enforces Period
-        // to be 0 and should not hurt; also see
-        // https://www.microsoft.com/msj/0499/pooling/pooling.aspx
-        CreateTimerQueueTimer(&pSalData->mnTimerId, nullptr, SalTimerProc, nullptr,
-                              nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
-    }
+    // probably WT_EXECUTEONLYONCE is not needed, but it enforces Period
+    // to be 0 and should not hurt; also see
+    // https://www.microsoft.com/msj/0499/pooling/pooling.aspx
+    CreateTimerQueueTimer(&pSalData->mnTimerId, nullptr, SalTimerProc, nullptr,
+                          nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
 }
 
 WinSalTimer::~WinSalTimer()
