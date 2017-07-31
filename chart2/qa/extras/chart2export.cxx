@@ -71,6 +71,7 @@ public:
     void testFdo78290ScatterChartMarkerX();
     void testFdo78290CombinationChartMarkerX();
     void testAxisNumberFormatODS();
+    void testAxisNumberFormatXLS();
     void testDataLabelBordersDOCX();
     void testDataLabel3DChartDOCX();
     void testDataLabelBarChartDOCX();
@@ -135,6 +136,7 @@ public:
     CPPUNIT_TEST(testFdo78290ScatterChartMarkerX);
     CPPUNIT_TEST(testFdo78290CombinationChartMarkerX);
     CPPUNIT_TEST(testAxisNumberFormatODS);
+    CPPUNIT_TEST(testAxisNumberFormatXLS);
     CPPUNIT_TEST(testDataLabelBordersDOCX);
     CPPUNIT_TEST(testDataLabel3DChartDOCX);
     CPPUNIT_TEST(testDataLabelBarChartDOCX);
@@ -756,6 +758,65 @@ void Chart2ExportTest::testAxisNumberFormatODS()
     reload("calc8");
     xChartDoc = getChartDocFromSheet(0, mxComponent);
     aTest.check(xChartDoc);
+}
+
+void Chart2ExportTest::testAxisNumberFormatXLS()
+{
+    struct
+    {
+        void check( const Reference<chart2::XChartDocument>& xChartDoc, bool bNumFmtLinkedActual, sal_Int16 nNumFmtTypeFlag ) const
+        {
+            Reference<chart2::XAxis> xAxisY = getAxisFromDoc( xChartDoc, 0, 1, 0 );
+            bool bNumFmtLinked = false;
+            Reference<beans::XPropertySet> xPS( xAxisY, uno::UNO_QUERY_THROW );
+            xPS->getPropertyValue( "LinkNumberFormatToSource" ) >>= bNumFmtLinked;
+
+            if ( bNumFmtLinkedActual )
+                CPPUNIT_ASSERT_MESSAGE( "Y axis should have its number format linked to source.", bNumFmtLinked );
+            else
+            {
+                CPPUNIT_ASSERT_MESSAGE( "Y axis should not have its number format linked to source.", !bNumFmtLinked );
+
+                sal_Int32 nNumFmt = getNumberFormatFromAxis( xAxisY );
+                sal_Int16 nType = getNumberFormatType( xChartDoc, nNumFmt );
+                if ( nNumFmtTypeFlag == util::NumberFormat::PERCENT )
+                    CPPUNIT_ASSERT_MESSAGE( "Y axis should be percentage format.", ( nType & util::NumberFormat::PERCENT ) );
+                else
+                    CPPUNIT_ASSERT_MESSAGE( "Y axis should be number format.", ( nType & util::NumberFormat::NUMBER ) );
+            }
+        }
+
+        void change( const Reference<chart2::XChartDocument>& xChartDoc, bool bSetNumFmtLinked, sal_Int16 nNumFmtTypeFlag )
+        {
+            Reference<chart2::XAxis> xAxisY = getAxisFromDoc( xChartDoc, 0, 1, 0 );
+            Reference<beans::XPropertySet> xPS( xAxisY, uno::UNO_QUERY_THROW );
+            Any aAny( bSetNumFmtLinked );
+            xPS->setPropertyValue( "LinkNumberFormatToSource", aAny );
+            if ( !bSetNumFmtLinked )
+            {
+                Reference<util::XNumberFormatsSupplier> xNFS( xChartDoc, uno::UNO_QUERY_THROW );
+                Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
+                CPPUNIT_ASSERT( xNumberFormats.is() );
+                lang::Locale aLocale{ "en", "US", "" };
+                Sequence<sal_Int32> aNumFmts = xNumberFormats->queryKeys( nNumFmtTypeFlag, aLocale, false );
+                CPPUNIT_ASSERT( aNumFmts.hasElements() );
+                aAny <<= aNumFmts[0];
+                xPS->setPropertyValue( CHART_UNONAME_NUMFMT, aAny );
+            }
+        }
+
+    } aTest;
+
+    load( "/chart2/qa/extras/data/xls/", "axis_sourceformatting.xls" );
+
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    aTest.check( xChartDoc, true, util::NumberFormat::PERCENT );
+
+    aTest.change( xChartDoc, false, util::NumberFormat::NUMBER );
+    // Write the document(xls) with changes made close it, load it and check if changes are intact
+    reload( "MS Excel 97" );
+    xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    aTest.check( xChartDoc, false, util::NumberFormat::NUMBER );
 }
 
 void Chart2ExportTest::testDataLabelBordersDOCX()

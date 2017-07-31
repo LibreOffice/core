@@ -3002,7 +3002,11 @@ void XclExpChAxis::Convert( Reference< XAxis > const & xAxis, Reference< XAxis >
     // axis number format
     sal_Int32 nApiNumFmt = 0;
     if( !bCategoryAxis && aAxisProp.GetProperty( nApiNumFmt, EXC_CHPROP_NUMBERFORMAT ) )
-        mnNumFmtIdx = GetNumFmtBuffer().Insert( static_cast< sal_uInt32 >( nApiNumFmt ) );
+    {
+        bool bLinkNumberFmtToSource = false;
+        if ( !aAxisProp.GetProperty( bLinkNumberFmtToSource, EXC_CHPROP_NUMBERFORMAT_LINKSRC ) || !bLinkNumberFmtToSource )
+            mnNumFmtIdx = GetNumFmtBuffer().Insert( static_cast< sal_uInt32 >( nApiNumFmt ) );
+    }
 
     // grid -------------------------------------------------------------------
 

@@ -3323,9 +3323,18 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
             // label text rotation
             ConvertRotationBase( aAxisProp, true );
             // number format
-            sal_uInt32 nScNumFmt = GetNumFmtBuffer().GetScFormat( mnNumFmtIdx );
-            if( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
-                aAxisProp.SetProperty( EXC_CHPROP_NUMBERFORMAT, static_cast< sal_Int32 >( nScNumFmt ) );
+            bool bLinkNumberFmtToSource = true;
+            if ( mnNumFmtIdx != EXC_FORMAT_NOTFOUND )
+            {
+                sal_uInt32 nScNumFmt = GetNumFmtBuffer().GetScFormat( mnNumFmtIdx );
+                if( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
+                {
+                    aAxisProp.SetProperty( EXC_CHPROP_NUMBERFORMAT, static_cast< sal_Int32 >( nScNumFmt ) );
+                    bLinkNumberFmtToSource = false;
+                }
+            }
+
+            aAxisProp.SetProperty( EXC_CHPROP_NUMBERFORMAT_LINKSRC, bLinkNumberFmtToSource );
         }
 
         // axis scaling and increment -----------------------------------------
