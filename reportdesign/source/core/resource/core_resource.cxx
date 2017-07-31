@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "core_resource.hxx"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 
 // ---- needed as long as we have no contexts for components ---
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-
 #include <osl/thread.h>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -33,7 +30,7 @@
 
 OUString RptResId(const char* pId)
 {
-    static std::locale loc = Translate::Create("rpt", Application::GetSettings().GetUILanguageTag());
+    static std::locale loc = Translate::Create("rpt");
     return Translate::get(pId, loc);
 }
 

@@ -29,7 +29,7 @@
 #include <svtools/strings.hrc>
 #include <svx/svxerr.hxx>
 #include <svx/dialogs.hrc>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 
 #include "ids.hxx"
 #include "ids.hrc"
@@ -167,7 +167,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             SOURCE_SVX :
             SOURCE_UUI;
 
-        std::locale aResLocale = Translate::Create(aManager[eSource], Application::GetSettings().GetUILanguageTag());
+        std::locale aResLocale = Translate::Create(aManager[eSource]);
         ErrorResource aErrorResource(aId[eSource], aResLocale);
         if (!aErrorResource.getString(nErrorCode, aMessage))
             return;

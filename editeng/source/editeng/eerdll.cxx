@@ -18,7 +18,7 @@
  */
 
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -209,10 +209,9 @@ EditDLL::~EditDLL()
 
 std::locale& EditDLL::GetResLocale()
 {
-    static std::locale loc = Translate::Create("editeng", Application::GetSettings().GetUILanguageTag());
+    static std::locale loc = Translate::Create("editeng");
     return loc;
 }
-
 
 editeng::SharedVclResources::SharedVclResources()
     : m_pVirDev(VclPtr<VirtualDevice>::Create())

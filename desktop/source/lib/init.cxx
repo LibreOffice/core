@@ -68,7 +68,7 @@
 #include <svx/svxids.hrc>
 #include <svx/ucsubset.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/fontcharmap.hxx>

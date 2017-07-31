@@ -23,10 +23,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <osl/diagnose.h>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 
 namespace connectivity
 {
@@ -68,7 +66,7 @@ namespace connectivity
     oslInterlockedCount     SharedResources_Impl::s_nClients( 0 );
 
     SharedResources_Impl::SharedResources_Impl()
-        : m_aLocale(Translate::Create("cnr", Application::GetSettings().GetUILanguageTag()))
+        : m_aLocale(Translate::Create("cnr"))
     {
     }
 

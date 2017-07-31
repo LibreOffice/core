@@ -23,7 +23,7 @@ $(eval $(call gb_Library_use_libraries,updchk,\
 	cppu \
 	sal \
 	salhelper \
-	tl \
+	utl \
 	vcl \
 ))
 

@@ -17,14 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <svx/dialmgr.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 
 const std::locale& SvxResLocale()
 {
-    static std::locale loc = Translate::Create("svx", Application::GetSettings().GetUILanguageTag());
+    static std::locale loc = Translate::Create("svx");
     return loc;
 }
 

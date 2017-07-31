@@ -23,7 +23,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/process.h>
 #include <tools/gen.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <uno/current_context.hxx>
 
 #include <vcl/button.hxx>
@@ -166,7 +166,7 @@ const std::locale& ImplGetResLocale()
     ImplSVData* pSVData = ImplGetSVData();
     if (!pSVData->mbResLocaleSet)
     {
-        pSVData->maResLocale = Translate::Create("vcl", Application::GetSettings().GetUILanguageTag());
+        pSVData->maResLocale = Translate::Create("vcl");
         pSVData->mbResLocaleSet = true;
     }
     return pSVData->maResLocale;

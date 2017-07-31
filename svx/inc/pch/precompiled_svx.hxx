@@ -387,7 +387,6 @@
 #include <tools/link.hxx>
 #include <tools/poly.hxx>
 #include <tools/resary.hxx>
-#include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
@@ -403,6 +402,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/viewoptions.hxx>
 #include <svx/AccessibleShape.hxx>

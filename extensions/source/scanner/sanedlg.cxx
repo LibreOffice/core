@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <tools/config.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
@@ -321,7 +321,7 @@ namespace {
 
 OUString SaneResId(const char *pID)
 {
-    static std::locale loc = Translate::Create("pcr", Application::GetSettings().GetUILanguageTag());
+    static std::locale loc = Translate::Create("pcr");
     return Translate::get(pID, loc);
 }
 

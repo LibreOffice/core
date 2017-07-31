@@ -66,7 +66,7 @@ const std::locale& OModuleImpl::getResLocale()
     if (!m_xResources)
     {
         // create a manager with a fixed prefix
-        m_xResources.reset(new std::locale(Translate::Create("for", Application::GetSettings().GetUILanguageTag())));
+        m_xResources.reset(new std::locale(Translate::Create("for")));
     }
     return *m_xResources;
 }

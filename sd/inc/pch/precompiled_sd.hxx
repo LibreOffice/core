@@ -489,7 +489,6 @@
 #include <tools/link.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
@@ -508,6 +507,7 @@
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/readwritemutexguard.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>

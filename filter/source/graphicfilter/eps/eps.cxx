@@ -21,7 +21,7 @@
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>
@@ -437,7 +437,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
 
     if ( mbStatus && mnLevelWarning && pFilterConfigItem )
     {
-        std::locale loc = Translate::Create("flt", Application::GetSettings().GetUILanguageTag());
+        std::locale loc = Translate::Create("flt");
         ScopedVclPtrInstance< InfoBox > aInfoBox(nullptr, Translate::get(KEY_VERSION_CHECK, loc));
         aInfoBox->Execute();
     }

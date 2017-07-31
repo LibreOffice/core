@@ -62,7 +62,7 @@
 #include <vcl/waitobj.hxx>
 #include <svx/svxerr.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <editeng/unolingu.hxx>
 #include <unotools/lingucfg.hxx>
@@ -138,7 +138,7 @@ void ScModule::InitInterface_Impl()
 }
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
-    SfxModule( Translate::Create("sc", Application::GetSettings().GetUILanguageTag()), {pFact} ),
+    SfxModule( Translate::Create("sc"), {pFact} ),
     aIdleTimer("sc ScModule IdleTimer"),
     aSpellIdle("sc ScModule SpellIdle"),
     mpDragData(new ScDragData),
