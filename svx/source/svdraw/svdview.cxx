@@ -50,6 +50,7 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 
 
 SdrViewEvent::SdrViewEvent()
@@ -440,45 +441,66 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( pHitObj );
         if (pTextObj!=nullptr && pTextObj->HasText())
         {
-            bool bTEHit(pPV &&
-                SdrObjectPrimitiveHit(*pTextObj, aLocalLogicPosition, 0, *pPV, &pPV->GetVisibleLayers(), true));
+            // use the primitive-based HitTest which is more accurate anyways. It
+            // will correctly handle rotated/mirrored/sheared/scaled text and can
+            // now return a HitContainer containing the primitive hierarchy of the
+            // primitive that triggered the hit. The first entry is that primitive,
+            // the others are the full stack of primitives leading to that one which
+            // includes grouping primitives (like TextHierarchyPrimitives we deed here)
+            // but also all decomposed ones which lead to the creation of that primitive
+            drawinglayer::primitive2d::Primitive2DContainer aHitContainer;
+            const bool bTEHit(pPV && SdrObjectPrimitiveHit(*pTextObj, aLocalLogicPosition, 0, *pPV, &pPV->GetVisibleLayers(), true, &aHitContainer));
 
-            if (bTEHit)
+            if (bTEHit && !aHitContainer.empty())
             {
-                tools::Rectangle aTextRect;
-                tools::Rectangle aAnchor;
-                SdrOutliner* pOutliner = &pTextObj->ImpGetDrawOutliner();
-                if( pTextObj->GetModel() )
-                    pOutliner = &pTextObj->GetModel()->GetHitTestOutliner();
+                // search for TextHierarchyFieldPrimitive2D which contains the needed information
+                // about a possible URLField
+                const drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D* pTextHierarchyFieldPrimitive2D = nullptr;
 
-                pTextObj->TakeTextRect( *pOutliner, aTextRect, false, &aAnchor, false );
-
-                // #i73628# Use a text-relative position for hit test in hit test outliner
-                Point aTemporaryTextRelativePosition(aLocalLogicPosition - aTextRect.TopLeft());
-
-                // account for FitToSize
-                bool bFitToSize(pTextObj->IsFitToSize());
-                if (bFitToSize) {
-                    Fraction aX(aTextRect.GetWidth()-1,aAnchor.GetWidth()-1);
-                    Fraction aY(aTextRect.GetHeight()-1,aAnchor.GetHeight()-1);
-                    ResizePoint(aTemporaryTextRelativePosition,Point(),aX,aY);
-                }
-                // account for rotation
-                const GeoStat& rGeo=pTextObj->GetGeoStat();
-                if (rGeo.nRotationAngle!=0) RotatePoint(aTemporaryTextRelativePosition,Point(),-rGeo.nSin,rGeo.nCos); // -sin for Unrotate
-                // we currently don't account for ticker text
-                if(mpActualOutDev && mpActualOutDev->GetOutDevType() == OUTDEV_WINDOW)
+                for (const drawinglayer::primitive2d::Primitive2DReference& xReference : aHitContainer)
                 {
-                    OutlinerView aOLV(pOutliner, static_cast<vcl::Window*>(mpActualOutDev.get()));
-                    const EditView& aEV=aOLV.GetEditView();
-                    const SvxFieldItem* pItem=aEV.GetField(aTemporaryTextRelativePosition);
-                    if (pItem!=nullptr) {
-                        const SvxFieldData* pFld=pItem->GetField();
-                        const SvxURLField* pURL=dynamic_cast<const SvxURLField*>( pFld );
-                        if (pURL!=nullptr) {
-                            eHit=SdrHitKind::UrlField;
-                            rVEvt.pURLField=pURL;
+                    if (xReference.is())
+                    {
+                        // try to cast to drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D implementation
+                        pTextHierarchyFieldPrimitive2D = dynamic_cast<const drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D*>(xReference.get());
+
+                        if (pTextHierarchyFieldPrimitive2D)
+                        {
+                            break;
                         }
+                    }
+                }
+
+                if (nullptr != pTextHierarchyFieldPrimitive2D)
+                {
+                    if (drawinglayer::primitive2d::FieldType::FIELD_TYPE_URL == pTextHierarchyFieldPrimitive2D->getType())
+                    {
+                        // problem with the old code is that a *pointer* to an instance of
+                        // SvxURLField is set in the Event which is per se not good since that
+                        // data comes from a temporary EditEngine's data and could vanish any
+                        // moment. Have to replace for now with a static instance that gets
+                        // filled/initialized from the original data held in the TextHierarchyField-
+                        // Primitive2D (see impTextBreakupHandler::impCheckFieldPrimitive).
+                        // Unfortunately things like 'TargetFrame' are still used in Calc, so this
+                        // can currently not get replaced. For the future the Name/Value vector or
+                        // the TextHierarchyFieldPrimitive2D itself should/will be used for handling
+                        // that data
+                        static SvxURLField aSvxURLField;
+
+                        aSvxURLField.SetURL(pTextHierarchyFieldPrimitive2D->getValue("URL"));
+                        aSvxURLField.SetRepresentation(pTextHierarchyFieldPrimitive2D->getValue("Representation"));
+                        aSvxURLField.SetTargetFrame(pTextHierarchyFieldPrimitive2D->getValue("TargetFrame"));
+                        const OUString aFormat(pTextHierarchyFieldPrimitive2D->getValue("SvxURLFormat"));
+
+                        if (!aFormat.isEmpty())
+                        {
+                            aSvxURLField.SetFormat(static_cast<SvxURLFormat>(aFormat.toInt32()));
+                        }
+
+                        // set HitKind and pointer to local static instance in the Event
+                        // to comply to old stuff
+                        eHit = SdrHitKind::UrlField;
+                        rVEvt.pURLField = &aSvxURLField;
                     }
                 }
             }

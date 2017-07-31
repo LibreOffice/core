@@ -479,15 +479,22 @@ namespace
 
             if(pURLField)
             {
-                pPrimitive = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_URL, pURLField->GetURL());
+                // extended this to hold more of the contents of the original
+                // SvxURLField since that stuff is still used in HitTest and e.g. Calc
+                std::vector< std::pair< OUString, OUString>> meValues;
+                meValues.push_back(std::pair< OUString, OUString>("URL", pURLField->GetURL()));
+                meValues.push_back(std::pair< OUString, OUString>("Representation", pURLField->GetRepresentation()));
+                meValues.push_back(std::pair< OUString, OUString>("TargetFrame", pURLField->GetTargetFrame()));
+                meValues.push_back(std::pair< OUString, OUString>("SvxURLFormat", OUString::number(static_cast<sal_uInt16>(pURLField->GetFormat()))));
+                pPrimitive = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_URL, &meValues);
             }
             else if(pPageField)
             {
-                pPrimitive = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_PAGE, "");
+                pPrimitive = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_PAGE);
             }
             else
             {
-                pPrimitive = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_COMMON, "");
+                pPrimitive = new drawinglayer::primitive2d::TextHierarchyFieldPrimitive2D(aSequence, drawinglayer::primitive2d::FIELD_TYPE_COMMON);
             }
         }
 

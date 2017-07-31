@@ -45,6 +45,8 @@ namespace drawinglayer
         :   BaseProcessor2D(rViewInformation),
             maDiscreteHitPosition(),
             mfDiscreteHitTolerance(0.0),
+            maHitStack(),
+            mbCollectHitStack(false),
             mbHit(false),
             mbHitTextOnly(bHitTextOnly)
         {
@@ -535,6 +537,13 @@ namespace drawinglayer
 
                     break;
                 }
+            }
+
+            if (getHit() && getCollectHitStack())
+            {
+                /// push candidate to HitStack to create it. This only happens when a hit is found and
+                /// creating the HitStack was requested (see collectHitStack)
+                maHitStack.append(primitive2d::Primitive2DReference(const_cast< primitive2d::BasePrimitive2D* >(&rCandidate)));
             }
         }
 
