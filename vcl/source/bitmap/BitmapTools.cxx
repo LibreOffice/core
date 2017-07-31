@@ -21,7 +21,7 @@
 
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

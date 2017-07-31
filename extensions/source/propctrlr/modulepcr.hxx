@@ -20,15 +20,15 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MODULEPCR_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_MODULEPCR_HXX
 
-#include <unotools/componentresmodule.hxx>
+#include <comphelper/componentmodule.hxx>
 
 namespace pcr
 {
     /* -------------------------------------------------------------------- */
-    class PcrModule : public ::utl::OComponentResourceModule
+    class PcrModule : public ::comphelper::OModule
     {
         friend struct CreateModuleClass;
-        typedef ::utl::OComponentResourceModule BaseClass;
+        typedef ::comphelper::OModule BaseClass;
     public:
         static PcrModule& getInstance();
     private:

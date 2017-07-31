@@ -61,7 +61,7 @@
 #include "com/sun/star/task/InteractionRequestStringResolver.hpp"
 
 #include "strings.hrc"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -614,7 +614,7 @@ void UpdateHandler::loadStrings()
     else
         mbStringsLoaded = true;
 
-    std::locale loc = Translate::Create("pcr", Application::GetSettings().GetUILanguageTag());
+    std::locale loc = Translate::Create("pcr");
 
     msChecking      = loadString( loc, RID_UPDATE_STR_CHECKING );
     msCheckingError = loadString( loc, RID_UPDATE_STR_CHECKING_ERR );

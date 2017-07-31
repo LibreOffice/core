@@ -18,16 +18,14 @@
  */
 
 #include "ResourceManager.hxx"
-#include <tools/resmgr.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace chart
 {
 
 const std::locale& ResourceManager::getResourceLocale()
 {
-    static std::locale loc = Translate::Create("chart", Application::GetSettings().GetUILanguageTag());
+    static std::locale loc = Translate::Create("chart");
     return loc;
 }
 

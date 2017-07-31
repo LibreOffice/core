@@ -20,7 +20,7 @@
 #include "ids.hxx"
 #include "strings.hrc"
 #include "lockcorrupt.hxx"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/button.hxx>
 
 LockCorruptQueryBox::LockCorruptQueryBox(vcl::Window* pParent, const std::locale& rResLocale)

@@ -16,42 +16,24 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_UNOTOOLS_COMPONENTRESMODULE_HXX
-#define INCLUDED_UNOTOOLS_COMPONENTRESMODULE_HXX
+#ifndef INCLUDED_UNOTOOLS_RESMGR_HXX
+#define INCLUDED_UNOTOOLS_RESMGR_HXX
 
-#include <comphelper/componentmodule.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <osl/getglobalmutex.hxx>
-#include <memory>
+#include <unotools/syslocale.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
-class LanguageTag;
+typedef OUString (*ResHookProc)(const OUString& rStr);
 
-namespace utl
+namespace Translate
 {
+    UNOTOOLS_DLLPUBLIC std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale = SvtSysLocale().GetUILanguageTag());
+    UNOTOOLS_DLLPUBLIC OUString get(const char* pId, const std::locale &loc);
+    UNOTOOLS_DLLPUBLIC void SetReadStringHook( ResHookProc pProc );
+    UNOTOOLS_DLLPUBLIC ResHookProc GetReadStringHook();
+    UNOTOOLS_DLLPUBLIC OUString ExpandVariables(const OUString& rString);
+}
 
-    class OComponentResModuleImpl;
-
-    /** extends the comphelper::OModule implementation with
-        simply resource access
-    */
-    class UNOTOOLS_DLLPUBLIC OComponentResourceModule : public ::comphelper::OModule
-    {
-    private:
-        typedef ::comphelper::OModule   BaseClass;
-
-    private:
-        ::std::unique_ptr< OComponentResModuleImpl >  m_pImpl;
-
-    public:
-        OComponentResourceModule(const OString& _rResFilePrefix, const LanguageTag& rLanguage);
-        virtual ~OComponentResourceModule() override;
-
-        /// get the resource locale of the module
-        const std::locale& getResLocale();
-    };
-
-} // namespace utl
-
-#endif // INCLUDED_UNOTOOLS_COMPONENTRESMODULE_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 #include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <string.h>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <algorithm>
 #include <cmath>
 

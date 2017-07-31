@@ -19,9 +19,8 @@
 
 
 #include <sfx2/sfxresid.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-#include "tools/resmgr.hxx"
+#include <tools/solar.h>
+#include "unotools/resmgr.hxx"
 
 static std::locale* pResLocale = nullptr;
 
@@ -29,7 +28,7 @@ std::locale* SfxResLocale::GetResLocale()
 {
     if (!pResLocale)
     {
-        pResLocale = new std::locale(Translate::Create("sfx", Application::GetSettings().GetUILanguageTag()));
+        pResLocale = new std::locale(Translate::Create("sfx"));
     }
 
     return pResLocale;

@@ -23,6 +23,7 @@ $(eval $(call gb_Library_use_sdk_api,updatecheckui))
 $(eval $(call gb_Library_use_libraries,updatecheckui,\
 	vcl \
 	tl \
+	utl \
 	comphelper \
 	cppuhelper \
 	cppu \

@@ -33,10 +33,9 @@ namespace abp
     typedef ::comphelper::OPropertyArrayUsageHelper< OABSPilotUno > OABSPilotUno_PBase;
     /// the UNO wrapper for the address book source pilot
     class OABSPilotUno
-            :public compmodule::OModuleResourceClient
-            ,public svt::OGenericUnoDialog
-            ,public OABSPilotUno_JBase
-            ,public OABSPilotUno_PBase
+            : public svt::OGenericUnoDialog
+            , public OABSPilotUno_JBase
+            , public OABSPilotUno_PBase
     {
         OUString m_sDataSourceName;
 

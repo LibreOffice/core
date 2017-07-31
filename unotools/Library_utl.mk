@@ -11,7 +11,10 @@
 # utl is the name of the library as it is found in Repository.mk
 $(eval $(call gb_Library_Library,utl))
 
-$(eval $(call gb_Library_use_external,utl,boost_headers))
+$(eval $(call gb_Library_use_externals,utl,\
+	boost_headers \
+	boost_locale \
+))
 
 $(eval $(call gb_Library_use_custom_headers,utl,\
  officecfg/registry \
@@ -92,10 +95,10 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/i18n/localedatawrapper \
     unotools/source/i18n/nativenumberwrapper \
     unotools/source/i18n/readwritemutexguard \
+    unotools/source/i18n/resmgr \
     unotools/source/i18n/textsearch \
     unotools/source/i18n/transliterationwrapper \
     unotools/source/misc/closeveto \
-    unotools/source/misc/componentresmodule \
     unotools/source/misc/datetime \
     unotools/source/misc/desktopterminationobserver \
     unotools/source/misc/eventlisteneradapter \

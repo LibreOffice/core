@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -70,7 +70,7 @@ OUString BibResId(const char* pId)
 BibConfig* BibModul::pBibConfig = nullptr;
 
 BibModul::BibModul()
-    : m_aResLocale(Translate::Create("pcr", Application::GetSettings().GetUILanguageTag()))
+    : m_aResLocale(Translate::Create("pcr"))
 {
 }
 

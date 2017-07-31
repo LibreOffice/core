@@ -18,30 +18,12 @@
  */
 
 #include "classes/fwkresid.hxx"
-#include <tools/resmgr.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-
-#include <rtl/strbuf.hxx>
-
-namespace
-{
-    const std::locale& GetResLocale()
-    {
-        static std::locale* pResLocale = nullptr;
-        if (!pResLocale)
-        {
-            SolarMutexGuard aSolarGuard;
-            static std::locale loc(Translate::Create("fwe", Application::GetSettings().GetUILanguageTag()));
-            pResLocale = &loc;
-        }
-        return *pResLocale;
-    }
-}
+#include <unotools/resmgr.hxx>
 
 OUString FwkResId(const char* pId)
 {
-    return Translate::get(pId, GetResLocale());
+    static std::locale loc(Translate::Create("fwe"));
+    return Translate::get(pId, loc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

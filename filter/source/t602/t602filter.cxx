@@ -38,7 +38,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/character.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/streamwrap.hxx>
 
 using namespace ::cppu;

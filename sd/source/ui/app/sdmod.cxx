@@ -20,7 +20,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/status.hxx>
@@ -65,7 +65,7 @@ void SdModule::InitInterface_Impl()
 
 // Ctor
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
-:   SfxModule( Translate::Create("sd", Application::GetSettings().GetUILanguageTag()), {pFact1, pFact2} ),
+:   SfxModule( Translate::Create("sd"), {pFact1, pFact2} ),
     pTransferClip(nullptr),
     pTransferDrag(nullptr),
     pTransferSelection(nullptr),

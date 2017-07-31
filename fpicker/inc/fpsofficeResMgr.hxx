@@ -11,7 +11,7 @@
 
 #include <rtl/instance.hxx>
 #include <osl/getglobalmutex.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
@@ -21,7 +21,7 @@ namespace fpicker
     {
         std::locale* operator ()()
         {
-            return new std::locale(Translate::Create("fps", Application::GetSettings().GetUILanguageTag()));
+            return new std::locale(Translate::Create("fps"));
         }
 
         static std::locale* getOrCreate()

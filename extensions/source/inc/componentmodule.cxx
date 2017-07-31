@@ -19,7 +19,7 @@
 
 #include <memory>
 #include "componentmodule.hxx"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/solar.hrc>
@@ -27,88 +27,21 @@
 #include <tools/debug.hxx>
 #include <rtl/strbuf.hxx>
 
-#define ENTER_MOD_METHOD()  \
-    ::osl::MutexGuard aGuard(s_aMutex); \
-    ensureImpl()
-
-
 namespace compmodule
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::registry;
     using namespace ::comphelper;
     using namespace ::cppu;
 
-    // implementation for <type>OModule</type>. not threadsafe, has to be guarded by its owner
-    class OModuleImpl
+    OUString ModuleRes(const char* pId)
     {
-        std::locale              m_aResLocale;
-        bool                     m_bInitialized;
-
-    public:
-        /// ctor
-        OModuleImpl();
-
-        /// get the manager for the resources of the module
-        const std::locale& getResLocale();
-    };
-
-
-    OModuleImpl::OModuleImpl()
-        : m_bInitialized(false)
-    {
-    }
-
-    const std::locale& OModuleImpl::getResLocale()
-    {
-        // note that this method is not threadsafe, which counts for the whole class !
-        if (!m_bInitialized)
-        {
-            // create a manager with a fixed prefix
-            m_aResLocale = Translate::Create("pcr", Application::GetSettings().GetUILanguageTag());
-            m_bInitialized = true;
-        }
-        return m_aResLocale;
-    }
-
-    ::osl::Mutex    OModule::s_aMutex;
-    sal_Int32       OModule::s_nClients = 0;
-    OModuleImpl*    OModule::s_pImpl = nullptr;
-
-    const std::locale& OModule::getResLocale()
-    {
-        ENTER_MOD_METHOD();
-        return s_pImpl->getResLocale();
-    }
-
-    void OModule::registerClient()
-    {
-        ::osl::MutexGuard aGuard(s_aMutex);
-        ++s_nClients;
-    }
-
-    void OModule::revokeClient()
-    {
-        ::osl::MutexGuard aGuard(s_aMutex);
-        if (!--s_nClients && s_pImpl)
-        {
-            delete s_pImpl;
-            s_pImpl = nullptr;
-        }
-    }
-
-    void OModule::ensureImpl()
-    {
-        if (s_pImpl)
-            return;
-        s_pImpl = new OModuleImpl();
+        static std::locale loc = Translate::Create("pcr");
+        return Translate::get(pId, loc);
     }
 
     //- registration helper
-
 
     std::vector< OUString >*                OModule::s_pImplementationNames = nullptr;
     std::vector< Sequence< OUString > >*    OModule::s_pSupportedServices = nullptr;

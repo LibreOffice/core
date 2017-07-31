@@ -34,7 +34,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/digest.h>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/errcode.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/msgbox.hxx>
@@ -101,7 +101,7 @@ executeLoginDialog(
 
         if (bSavePassword)
         {
-            std::locale aLocale(Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
+            std::locale aLocale(Translate::Create("uui"));
             xDialog->SetSavePasswordText(
                 Translate::get(rInfo.GetIsRememberPersistent()
                           ? RID_SAVE_PASSWORD
@@ -414,7 +414,7 @@ executeMasterPasswordDialog(
     {
         SolarMutexGuard aGuard;
 
-        std::locale aResLocale(Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
+        std::locale aResLocale(Translate::Create("uui"));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
             ScopedVclPtrInstance< MasterPasswordCreateDialog > xDialog(
@@ -512,7 +512,7 @@ executePasswordDialog(
     {
         SolarMutexGuard aGuard;
 
-        std::locale aResLocale(Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
+        std::locale aResLocale(Translate::Create("uui"));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
             if (bIsSimplePasswordRequest)

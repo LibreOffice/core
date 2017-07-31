@@ -21,7 +21,7 @@
 
 #include <rtl/instance.hxx>
 #include <osl/getglobalmutex.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
@@ -44,7 +44,6 @@ namespace pcr
     };
 
     PcrModule::PcrModule()
-        :BaseClass( OString( "pcr" ), Application::GetSettings().GetUILanguageTag() )
     {
     }
 
@@ -56,7 +55,8 @@ namespace pcr
 
     OUString PcrRes(const char* pId)
     {
-        return Translate::get(pId, PcrModule::getInstance().getResLocale());
+        static std::locale loc = Translate::Create("pcr");
+        return Translate::get(pId, loc);
     }
 
 } // namespace pcr

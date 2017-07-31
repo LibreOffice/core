@@ -3326,14 +3326,6 @@ include/tools/poly.hxx:36
     enum PolyOptimizeFlags NO_SAME
 include/tools/poly.hxx:37
     enum PolyOptimizeFlags REDUCE
-include/tools/resmgr.hxx:55
-    enum RCFlags AUTORELEASE
-include/tools/resmgr.hxx:56
-    enum RCFlags NOTFOUND
-include/tools/resmgr.hxx:57
-    enum RCFlags FALLBACK_DOWN
-include/tools/resmgr.hxx:58
-    enum RCFlags FALLBACK_UP
 include/tools/stream.hxx:49
     enum StreamMode NOCREATE
 include/tools/stream.hxx:51

@@ -34,7 +34,7 @@ namespace XmlSec
 {
     const std::locale& GetResLocale()
     {
-        static const std::locale loc = Translate::Create("xsc", Application::GetSettings().GetUILanguageTag());
+        static const std::locale loc = Translate::Create("xsc");
         return loc;
     }
 

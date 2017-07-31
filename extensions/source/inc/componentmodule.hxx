@@ -26,7 +26,7 @@
 */
 
 #include <osl/mutex.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -47,20 +47,12 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
             rtl_ModuleCount*
         );
 
-    class OModuleImpl;
     class OModule
     {
-        friend class OModuleResourceClient;
-
     private:
         OModule() = delete; //TODO: get rid of this class
 
     protected:
-        // resource administration
-        static ::osl::Mutex     s_aMutex;       /// access safety
-        static sal_Int32        s_nClients;     /// number of registered clients
-        static OModuleImpl*     s_pImpl;        /// impl class. lives as long as at least one client for the module is registered
-
         // auto registration administration
         static  std::vector< OUString >*
             s_pImplementationNames;
@@ -112,35 +104,10 @@ typedef css::uno::Reference< css::lang::XSingleServiceFactory > (SAL_CALL *Facto
             const OUString& _rImplementationName,
             const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxServiceManager
             );
-
-    protected:
-        /// register a client for the module
-        static void registerClient();
-        /// revoke a client for the module
-        static void revokeClient();
-
-    private:
-        /** ensure that the impl class exists
-            @precond m_aMutex is guarded when this method gets called
-        */
-        static void ensureImpl();
     };
-
-
-    // base class for objects which uses any global module-specific resources
-    class OModuleResourceClient
-    {
-    public:
-        OModuleResourceClient()     { OModule::registerClient(); }
-        ~OModuleResourceClient()    { OModule::revokeClient(); }
-    };
-
 
     // specialized ResId, using the resource locale provided by the global module
-    static inline OUString ModuleRes(const char* pId)
-    {
-        return Translate::get(pId, OModule::getResLocale());
-    }
+    OUString ModuleRes(const char* pId);
 
     template <class TYPE>
     class OMultiInstanceAutoRegistration
