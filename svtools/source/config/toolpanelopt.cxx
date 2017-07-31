@@ -284,7 +284,7 @@ void SvtToolPanelOptions_Impl::ImplCommit()
 Sequence< OUString > SvtToolPanelOptions_Impl::GetPropertyNames()
 {
     // Build list of configuration key names.
-    OUString pProperties[] =
+    const OUString pProperties[] =
     {
         PROPERTYNAME_VISIBLE_IMPRESSVIEW,
         PROPERTYNAME_VISIBLE_OUTLINEVIEW,

@@ -36,7 +36,7 @@
 
 #include <sal/macros.h>
 
-static sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
+static const sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 
 #define DPI_COUNT (SAL_N_ELEMENTS(aDPIArray))
 
