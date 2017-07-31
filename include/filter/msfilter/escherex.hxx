@@ -450,9 +450,9 @@ struct MSFILTER_DLLPUBLIC EscherConnectorListEntry
 
                     EscherConnectorListEntry( const css::uno::Reference< css::drawing::XShape > & rC,
                                         const css::awt::Point& rPA,
-                                        css::uno::Reference< css::drawing::XShape > & rSA ,
+                                        css::uno::Reference< css::drawing::XShape > const & rSA ,
                                         const css::awt::Point& rPB,
-                                        css::uno::Reference< css::drawing::XShape > & rSB ) :
+                                        css::uno::Reference< css::drawing::XShape > const & rSB ) :
                                             mXConnector ( rC ),
                                             maPointA    ( rPA ),
                                             mXConnectToA( rSA ),
@@ -615,9 +615,9 @@ public:
     void            AddConnector(
                         const css::uno::Reference< css::drawing::XShape > &,
                         const css::awt::Point& rA,
-                        css::uno::Reference< css::drawing::XShape > &,
+                        css::uno::Reference< css::drawing::XShape > const &,
                         const css::awt::Point& rB,
-                        css::uno::Reference< css::drawing::XShape > & rConB
+                        css::uno::Reference< css::drawing::XShape > const & rConB
                     );
 
     void            WriteSolver( SvStream& );
