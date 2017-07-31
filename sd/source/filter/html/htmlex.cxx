@@ -68,7 +68,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <svtools/sfxecode.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

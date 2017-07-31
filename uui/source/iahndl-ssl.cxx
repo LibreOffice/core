@@ -31,7 +31,7 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/zforlist.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -155,7 +155,7 @@ executeUnknownAuthDialog(
         std::vector< OUString > aArguments;
         aArguments.push_back( getContentPart( rXCert->getSubjectName()) );
 
-        std::locale aResLocale(Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
+        std::locale aResLocale(Translate::Create("uui"));
         ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
 
         if (aErrorResource.getString(ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED, aMessage))
@@ -213,7 +213,7 @@ executeSSLWarnDialog(
                 break;
         }
 
-        std::locale aResLocale(Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
+        std::locale aResLocale(Translate::Create("uui"));
         ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
 
         if (aErrorResource.getString(

@@ -18,7 +18,7 @@
  */
 
 #include <unotools/componentresmodule.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 

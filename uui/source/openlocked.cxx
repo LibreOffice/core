@@ -19,7 +19,7 @@
 
 #include "strings.hrc"
 #include "openlocked.hxx"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 
 OpenLockedQueryBox::OpenLockedQueryBox( vcl::Window* pParent, const std::locale& rResLocale, const OUString& aMessage ) :
     MessBox(pParent, 0,

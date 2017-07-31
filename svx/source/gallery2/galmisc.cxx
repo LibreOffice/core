@@ -25,7 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/solar.hrc>
 #include <svl/urihelper.hxx>

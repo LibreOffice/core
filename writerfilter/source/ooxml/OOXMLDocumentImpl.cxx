@@ -33,7 +33,7 @@
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLPropertySet.hxx"
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svx/dialmgr.hxx>

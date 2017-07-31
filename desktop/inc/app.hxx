@@ -25,8 +25,8 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-#include <tools/resmgr.hxx>
 #include <unotools/bootstrap.hxx>
+#include <unotools/resmgr.hxx>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>

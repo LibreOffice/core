@@ -29,7 +29,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <osl/endian.h>
 #include <osl/process.h>
 #include <osl/thread.h>

@@ -29,7 +29,7 @@
 #include <basic/sbdef.hxx>
 #include <svtools/soerr.hxx>
 #include <svtools/strings.hrc>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/saveopt.hxx>
 #include <svl/intitem.hxx>
@@ -215,9 +215,9 @@ void SfxApplication::Initialize_Impl()
         getRID_ERRHDL(), ErrCode(ERRCODE_AREA_IO), ErrCode(ERRCODE_AREA_SVX));
 
 #if HAVE_FEATURE_SCRIPTING
-    pImpl->aBasicResLocale = Translate::Create("sb", Application::GetSettings().GetUILanguageTag());
+    pImpl->aBasicResLocale = Translate::Create("sb");
 #endif
-    pImpl->aSvtResLocale = Translate::Create("svt", Application::GetSettings().GetUILanguageTag());
+    pImpl->aSvtResLocale = Translate::Create("svt");
 
     pImpl->m_pSoErrorHdl = new SfxErrorHandler(
         getRID_SO_ERROR_HANDLER(), ErrCode(ERRCODE_AREA_SO), ErrCode(ERRCODE_AREA_SO_END), &(pImpl->aSvtResLocale));

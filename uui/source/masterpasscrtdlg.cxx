@@ -18,7 +18,7 @@
  */
 
 #include <sal/macros.h>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/layout.hxx>
 #include "strings.hrc"
 #include "masterpasscrtdlg.hxx"

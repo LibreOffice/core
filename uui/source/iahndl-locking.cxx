@@ -30,7 +30,7 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -74,7 +74,7 @@ handleLockedDocumentRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
+        std::locale aResLocale = Translate::Create("uui");
 
         OUString aMessage;
         std::vector< OUString > aArguments;
@@ -153,7 +153,7 @@ handleChangedByOthersRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
+        std::locale aResLocale = Translate::Create("uui");
         ScopedVclPtrInstance< FileChangedQueryBox > xDialog(pParent, aResLocale);
         sal_Int32 nResult = xDialog->Execute();
 
@@ -189,7 +189,7 @@ handleLockFileProblemRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
+        std::locale aResLocale = Translate::Create("uui");
 
         sal_Int32 nResult;
 

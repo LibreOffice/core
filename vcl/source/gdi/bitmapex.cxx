@@ -22,7 +22,7 @@
 
 #include <o3tl/any.hxx>
 #include <tools/debug.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/stream.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/salbtype.hxx>

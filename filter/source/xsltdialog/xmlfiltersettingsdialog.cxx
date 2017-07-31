@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/headbar.hxx>
 #include <unotools/streamwrap.hxx>
@@ -71,7 +71,7 @@ EnsureResLocale::EnsureResLocale()
 {
     if (!pXSLTResLocale)
     {
-        m_xResLocale.reset(new std::locale(Translate::Create("flt", Application::GetSettings().GetUILanguageTag())));
+        m_xResLocale.reset(new std::locale(Translate::Create("flt")));
         pXSLTResLocale = m_xResLocale.get();
     }
 }

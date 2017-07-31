@@ -13,7 +13,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/module.hxx>
 #include <sal/log.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -2078,7 +2078,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                     {
                         name = reader.getAttributeValue(false);
                         sType = OString(name.begin, name.length);
-                        m_pParserState->m_aResLocale = Translate::Create(sType.getStr(), Application::GetSettings().GetUILanguageTag());
+                        m_pParserState->m_aResLocale = Translate::Create(sType.getStr());
                     }
                 }
                 ++nLevel;

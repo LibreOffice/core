@@ -33,7 +33,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <comphelper/processfactory.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/window.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
@@ -196,7 +196,7 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     , mbBubbleChanged( false )
     , mnIconID( 0 )
 {
-    maSfxLocale = Translate::Create("sfx", Application::GetSettings().GetUILanguageTag());
+    maSfxLocale = Translate::Create("sfx");
 
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
 

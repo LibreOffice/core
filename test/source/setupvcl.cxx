@@ -17,7 +17,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <test/setupvcl.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
