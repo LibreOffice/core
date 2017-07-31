@@ -286,7 +286,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_nCellxMax(0),
       m_nListPictureId(0),
       m_bIsNewDoc(!rMediaDescriptor.getUnpackedValueOrDefault("InsertMode", false)),
-      m_rMediaDescriptor(rMediaDescriptor)
+      m_rMediaDescriptor(rMediaDescriptor),
+      m_bAfterCellBeforeRow(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, true));

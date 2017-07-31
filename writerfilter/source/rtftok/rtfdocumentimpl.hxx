@@ -650,6 +650,9 @@ private:
     bool m_bIsNewDoc;
     /// The media descriptor contains e.g. the base URL of the document.
     const utl::MediaDescriptor& m_rMediaDescriptor;
+
+    /// Are we after a \cell, but before a \row?
+    bool m_bAfterCellBeforeRow;
 };
 } // namespace rtftok
 } // namespace writerfilter
