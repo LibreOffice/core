@@ -245,7 +245,7 @@ void SFTreeListBox::Init( const OUString& language  )
 }
 
 Reference< XInterface  >
-SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, OUString& docName )
+SFTreeListBox::getDocumentModel( Reference< XComponentContext > const & xCtx, OUString const & docName )
 {
     Reference< XInterface > xModel;
     Reference< frame::XDesktop2 > desktop  = frame::Desktop::create(xCtx);
@@ -272,7 +272,7 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, OUString&
 }
 
 Reference< browse::XBrowseNode >
-SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNode, OUString& language )
+SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode > const & rootNode, OUString const & language )
 {
     Reference< browse::XBrowseNode > langNode;
 
@@ -296,7 +296,7 @@ SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNo
     return langNode;
 }
 
-void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< css::script::browse::XBrowseNode >& node,
+void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< css::script::browse::XBrowseNode > const & node,
                                        Reference< XModel >& model )
 {
     if (! node.is() )
@@ -531,7 +531,7 @@ short SvxScriptOrgDialog::Execute()
     return ModalDialog::Execute();
 }
 
-void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
+void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode > const & node )
 {
     if ( node.is() )
     {
@@ -776,7 +776,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton, void )
     }
 }
 
-Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode( SvTreeListEntry* pEntry )
+Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode( SvTreeListEntry const * pEntry )
 {
     Reference< browse::XBrowseNode > node;
     if ( pEntry )
@@ -791,7 +791,7 @@ Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode( SvTreeListEn
     return node;
 }
 
-Reference< XModel > SvxScriptOrgDialog::getModel( SvTreeListEntry* pEntry )
+Reference< XModel > SvxScriptOrgDialog::getModel( SvTreeListEntry const * pEntry )
 {
     Reference< XModel > model;
     if ( pEntry )
@@ -1099,8 +1099,8 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
 
 }
 
-bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xProps,
-                OUString& propName )
+bool SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet > const & xProps,
+                OUString const & propName )
 {
     bool result = false;
     try

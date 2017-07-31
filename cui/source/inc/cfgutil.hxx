@@ -145,7 +145,7 @@ class SfxConfigGroupListBox : public SvTreeListBox
 
     static css::uno::Reference< css::uno::XInterface  > getDocumentModel(
         css::uno::Reference< css::uno::XComponentContext > const & xCtx,
-        OUString& docName
+        OUString const & docName
     );
 
 

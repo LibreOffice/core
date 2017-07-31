@@ -799,7 +799,7 @@ Image SfxConfigGroupListBox::GetImage(
 }
 
 Reference< XInterface  >
-SfxConfigGroupListBox::getDocumentModel( Reference< XComponentContext > const & xCtx, OUString& docName )
+SfxConfigGroupListBox::getDocumentModel( Reference< XComponentContext > const & xCtx, OUString const & docName )
 {
     Reference< XInterface > xModel;
     Reference< frame::XDesktop2 > desktop = frame::Desktop::create( xCtx );

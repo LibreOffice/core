@@ -267,7 +267,7 @@ private:
         DECL_LINK(NewDelButtonHdl, Button*, void);
         DECL_LINK(NewDelActionHdl, AutoCorrEdit&, bool);
         DECL_LINK(ModifyHdl, Edit&, void);
-        bool NewDelHdl(void*);
+        bool NewDelHdl(void const *);
 
         void RefillReplaceBox(  bool bFromReset,
                                 LanguageType eOldLanguage,
@@ -327,7 +327,7 @@ private:
     DECL_LINK(NewDelActionHdl, AutoCorrEdit&, bool);
     DECL_LINK(SelectHdl, ListBox&, void);
     DECL_LINK(ModifyHdl, Edit&, void);
-    bool NewDelHdl(void*);
+    bool NewDelHdl(void const *);
                     /// Box filled with new language
     void            RefillReplaceBoxes(bool bFromReset,
                                         LanguageType eOldLanguage,

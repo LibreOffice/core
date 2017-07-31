@@ -204,7 +204,7 @@ class GalleryThemeProperties : public SfxTabDialog
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage &rPage) override;
 
 public:
-    GalleryThemeProperties(vcl::Window* pParent, ExchangeData* pData, SfxItemSet* pItemSet);
+    GalleryThemeProperties(vcl::Window* pParent, ExchangeData* pData, SfxItemSet const * pItemSet);
 };
 
 class TPGalleryThemeGeneral : public SfxTabPage

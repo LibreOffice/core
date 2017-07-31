@@ -404,7 +404,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUS
 }
 
 
-void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry* _pEntry)
+void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const OUString& _sOldLocation,SvTreeListEntry const * _pEntry)
 {
     ScopedVclPtrInstance< ODocumentLinkDialog > aDlg(this,_pEntry == nullptr);
 

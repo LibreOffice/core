@@ -353,7 +353,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleListBoxHdl_Impl, ListBox&, rListBox
     SelectLinestyleHdl_Impl(&rListBox);
 }
 
-void SvxLineDefTabPage::SelectLinestyleHdl_Impl(ListBox* p)
+void SvxLineDefTabPage::SelectLinestyleHdl_Impl(ListBox const * p)
 {
     if(pDashList->Count())
     {

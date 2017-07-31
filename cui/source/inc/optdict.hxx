@@ -125,14 +125,14 @@ private:
     DECL_LINK(NewDelButtonHdl, Button*, void);
     DECL_LINK(NewDelActionHdl, SvxDictEdit&, bool);
     DECL_LINK(ModifyHdl, Edit&, void);
-    bool NewDelHdl(void*);
+    bool NewDelHdl(void const *);
 
 
     void            ShowWords_Impl( sal_uInt16 nId );
     void            SetLanguage_Impl( LanguageType nLanguage );
     bool            IsDicReadonly_Impl() const { return bDicIsReadonly; }
     void            SetDicReadonly_Impl( css::uno::Reference<
-                            css::linguistic2::XDictionary >  &xDic );
+                            css::linguistic2::XDictionary > const &xDic );
 
     void            RemoveDictEntry(SvTreeListEntry* pEntry);
     sal_uLong       GetLBInsertPos(const OUString &rDicWord);

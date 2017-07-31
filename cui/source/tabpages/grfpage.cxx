@@ -40,7 +40,7 @@
 #define TWIP_TO_INCH        1440
 
 
-static inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
+static inline long lcl_GetValue( MetricField const & rMetric, FieldUnit eUnit )
 {
     return static_cast<long>(rMetric.Denormalize( rMetric.GetValue( eUnit )));
 }

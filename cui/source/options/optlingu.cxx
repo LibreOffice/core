@@ -1920,7 +1920,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectListBoxHdl_Impl, ListBox&, rBox, void )
     LangSelectHdl_Impl(&rBox);
 }
 
-void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox* pBox)
+void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox const * pBox)
 {
     LanguageType  eCurLanguage = m_pLanguageLB->GetSelectLanguage();
     static Locale aLastLocale;

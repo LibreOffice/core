@@ -156,7 +156,7 @@ private:
     DECL_LINK(SaveHdl, sfx2::FileDialogHelper *, void);
 
     OUString                    GetLabel4Command(const OUString& rCommand);
-    SvTreeListEntry*            applySearchFilter(OUString& rSearchTerm, SvTreeListBox* rListBox);
+    SvTreeListEntry*            applySearchFilter(OUString const & rSearchTerm, SvTreeListBox* rListBox);
     void                        InitAccCfg();
     sal_uLong                   MapKeyCodeToPos( const vcl::KeyCode &rCode ) const;
     void                        StartFileDialog( WinBits nBits, const OUString& rTitle );

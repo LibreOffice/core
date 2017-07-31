@@ -98,7 +98,7 @@ struct SvxBackgroundPage_Impl
 };
 
 /// Returns the fill style of the currently selected entry.
-static drawing::FillStyle lcl_getFillStyle(ListBox* pLbSelect)
+static drawing::FillStyle lcl_getFillStyle(ListBox const * pLbSelect)
 {
     return (drawing::FillStyle)reinterpret_cast<sal_uLong>(pLbSelect->GetSelectEntryData());
 }
@@ -116,7 +116,7 @@ static void lcl_setFillStyle(ListBox* pLbSelect, drawing::FillStyle eStyle)
     }
 }
 
-sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
+sal_uInt16 GetItemId_Impl( ValueSet const & rValueSet, const Color& rCol )
 {
     bool    bFound = false;
     sal_uInt16  nCount = rValueSet.GetItemCount();

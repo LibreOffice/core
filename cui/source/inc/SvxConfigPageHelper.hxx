@@ -27,7 +27,7 @@
 class SvxConfigPageHelper
 {
 public:
-    static void RemoveEntry( SvxEntries* pEntries, SvxConfigEntry* pChildEntry );
+    static void RemoveEntry( SvxEntries* pEntries, SvxConfigEntry const * pChildEntry );
 
     static OUString replaceSaveInName( const OUString& rMessage, const OUString& rSaveInName );
     static OUString stripHotKey( const OUString& str );
@@ -78,9 +78,9 @@ public:
     static bool showKeyConfigTabPage(
         const css::uno::Reference< css::frame::XFrame >& xFrame );
 
-    static bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b );
+    static bool EntrySort( SvxConfigEntry const * a, SvxConfigEntry const * b );
 
-    static bool SvxConfigEntryModified( SvxConfigEntry* pEntry );
+    static bool SvxConfigEntryModified( SvxConfigEntry const * pEntry );
 
 };
 

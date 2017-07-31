@@ -483,7 +483,7 @@ namespace svx
     {
         SelectSuggestionHdl(&rControl);
     }
-    void SuggestionDisplay::SelectSuggestionHdl( Control* pControl )
+    void SuggestionDisplay::SelectSuggestionHdl( Control const * pControl )
     {
         if( m_bInSelectionUpdate )
             return;
@@ -1699,7 +1699,7 @@ namespace svx
         _rEdit.SetText( aStr );
     }
 
-    void HangulHanjaEditDictDialog::EditModify( Edit* _pEdit, sal_uInt8 _nEntryOffset )
+    void HangulHanjaEditDictDialog::EditModify( Edit const * _pEdit, sal_uInt8 _nEntryOffset )
     {
         m_bModifiedSuggestions = true;
 

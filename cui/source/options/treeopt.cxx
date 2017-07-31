@@ -1695,7 +1695,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 }
 
-bool isNodeActive( OptionsNode* pNode, Module* pModule )
+bool isNodeActive( OptionsNode const * pNode, Module* pModule )
 {
     if ( pNode )
     {
@@ -1992,7 +1992,7 @@ static sal_uInt16 lcl_getGroupId( const OUString& rGroupName, const SvTreeListBo
 }
 
 static void lcl_insertLeaf(
-    OfaTreeOptionsDialog* pDlg, OptionsNode* pNode, OptionsLeaf* pLeaf, const SvTreeListBox& rTreeLB )
+    OfaTreeOptionsDialog* pDlg, OptionsNode const * pNode, OptionsLeaf const * pLeaf, const SvTreeListBox& rTreeLB )
 {
     sal_uInt16 nGrpId = lcl_getGroupId( pNode->m_sLabel, rTreeLB );
     if ( USHRT_MAX == nGrpId )

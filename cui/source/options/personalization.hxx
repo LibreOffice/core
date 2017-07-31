@@ -100,9 +100,9 @@ public:
     OUString GetSelectedPersona() const;
     void SetProgress( const OUString& );
     void SetImages( const Image&, sal_Int32 );
-    void AddPersonaSetting( OUString& );
+    void AddPersonaSetting( OUString const & );
     void ClearSearchResults();
-    void SetAppliedPersonaSetting( OUString& );
+    void SetAppliedPersonaSetting( OUString const & );
     const OUString& GetAppliedPersonaSetting() const;
 
 private:
