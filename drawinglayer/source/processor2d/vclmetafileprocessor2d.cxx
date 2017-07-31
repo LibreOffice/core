@@ -977,6 +977,7 @@ namespace drawinglayer
                     const OString aCommentStringCommon("FIELD_SEQ_BEGIN");
                     const OString aCommentStringPage("FIELD_SEQ_BEGIN;PageField");
                     const OString aCommentStringEnd("FIELD_SEQ_END");
+                    OUString aURL;
 
                     switch(rFieldPrimitive.getType())
                     {
@@ -992,8 +993,13 @@ namespace drawinglayer
                         }
                         case drawinglayer::primitive2d::FIELD_TYPE_URL :
                         {
-                            const OUString& rURL = rFieldPrimitive.getString();
-                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const sal_uInt8* >(rURL.getStr()), 2 * rURL.getLength()));
+                            aURL = rFieldPrimitive.getValue("URL");
+
+                            if (!aURL.isEmpty())
+                            {
+                                mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast<const sal_uInt8*>(aURL.getStr()), 2 * aURL.getLength()));
+                            }
+
                             break;
                         }
                     }
@@ -1015,7 +1021,7 @@ namespace drawinglayer
                             (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
                         aBookmark.nLinkId = mpPDFExtOutDevData->CreateLink(aRectLogic);
-                        aBookmark.aBookmark = rFieldPrimitive.getString();
+                        aBookmark.aBookmark = aURL;
                         std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = mpPDFExtOutDevData->GetBookmarks();
                         rBookmarks.push_back( aBookmark );
                     }

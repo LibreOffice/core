@@ -32,6 +32,7 @@ class SdrLayerIDSet;
 class SdrObjList;
 namespace sdr { namespace contact { class ViewObjectContact; }}
 namespace basegfx { class B2DPoint; }
+namespace drawinglayer { namespace primitive2d { class Primitive2DContainer; }}
 
 
 // Wrappers for classic Sdr* Mode/View classes
@@ -42,7 +43,9 @@ SVX_DLLPUBLIC SdrObject* SdrObjectPrimitiveHit(
     sal_uInt16 nTol,
     const SdrPageView& rSdrPageView,
     const SdrLayerIDSet* pVisiLayer,
-    bool bTextOnly);
+    bool bTextOnly,
+    /// allow getting back an evtl. resulting primitive stack which lead to a hit
+    drawinglayer::primitive2d::Primitive2DContainer* pHitContainer = nullptr);
 
 SVX_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
     const SdrObjList& rList,
@@ -59,7 +62,9 @@ SVX_DLLPUBLIC bool ViewObjectContactPrimitiveHit(
     const sdr::contact::ViewObjectContact& rVOC,
     const basegfx::B2DPoint& rHitPosition,
     double fLogicHitTolerance,
-    bool bTextOnly);
+    bool bTextOnly,
+    /// allow to get back the stack of primitives that lead to the hit
+    drawinglayer::primitive2d::Primitive2DContainer* pHitContainer = nullptr);
 
 
 #endif // INCLUDED_SVX_SDRHITTESTHELPER_HXX
