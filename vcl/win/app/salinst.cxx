@@ -575,29 +575,20 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
         if ( bOneEvent )
         {
             bWasMsg = true;
-            if ( !(aMsg.message == SAL_MSG_TIMER_CALLBACK && 1 == aMsg.wParam) )
-            {
-                TranslateMessage( &aMsg );
-                ImplSalDispatchMessage( &aMsg );
-            }
-            else
-            {
-                // This is just the scheduler wakeup message, in case we're
-                // waiting in GetMessageW
-                // So we can just drop it, but we have to fix the accounting!
-                assert( pSalData->mbOnIdleRunScheduler );
-                ++nMaxEvents;
-            }
+            TranslateMessage( &aMsg );
+            ImplSalDispatchMessage( &aMsg );
         }
         else
-        {
-            if ( nMaxEvents && pSalData->mbOnIdleRunScheduler )
+            // busy loop to catch the 0ms timeout
+            // We don't need to busy loop, if we wait anyway.
+            // Even if we didn't process the event directly, report it.
+            if ( pSalData->mbOnIdleRunScheduler && !bWait )
             {
-                pSalData->mbOnIdleRunScheduler = false;
-                EmitTimerCallback();
+                SwitchToThread();
+                nMaxEvents++;
                 bOneEvent = true;
+                bWasMsg = true;
             }
-        }
     } while( --nMaxEvents && bOneEvent );
 
     // Also check that we don't wait when application already has quit
@@ -606,11 +597,8 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
         if ( GetMessageW( &aMsg, nullptr, 0, 0 ) )
         {
             // Ignore the scheduler wakeup message
-            if ( !(aMsg.message == SAL_MSG_TIMER_CALLBACK && 1 == aMsg.wParam) )
-            {
-                TranslateMessage( &aMsg );
-                ImplSalDispatchMessage( &aMsg );
-            }
+            TranslateMessage( &aMsg );
+            ImplSalDispatchMessage( &aMsg );
         }
     }
     return bWasMsg;
@@ -735,9 +723,8 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             while ( PeekMessageW(&aMsg, nullptr, SAL_MSG_TIMER_CALLBACK,
                                  SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) )
                 assert( "Multiple timer messages in queue" );
-            assert( 0 == wParam );
-            if ( 0 == wParam )
-                EmitTimerCallback();
+            GetSalData()->mbOnIdleRunScheduler = false;
+            EmitTimerCallback();
             break;
     }
 
