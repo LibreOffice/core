@@ -526,7 +526,7 @@ int RemoteFilesDialog::GetSelectedServicePos()
     int nPos = 0;
     int i = -1;
 
-    if( m_aServices.size() == 0 )
+    if( m_aServices.empty() )
         return -1;
 
     while( nPos < ( int )m_aServices.size() )
