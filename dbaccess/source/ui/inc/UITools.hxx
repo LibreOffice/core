@@ -88,7 +88,7 @@ namespace dbaui
                                     const OUString& _rsDataSourceName,
                                     const css::uno::Reference< css::container::XNameAccess >& _xDatabaseContext,
                                     const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-                                    css::uno::Reference< css::lang::XEventListener>& _rEvtLst,
+                                    css::uno::Reference< css::lang::XEventListener> const & _rEvtLst,
                                     css::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
     /** creates a new connection and appends the eventlistener
         @param  _xDataSource            the datasource
@@ -100,7 +100,7 @@ namespace dbaui
     ::dbtools::SQLExceptionInfo createConnection(
                                     const css::uno::Reference< css::beans::XPropertySet >& _xDataSource,
                                     const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-                                    css::uno::Reference< css::lang::XEventListener>& _rEvtLst,
+                                    css::uno::Reference< css::lang::XEventListener> const & _rEvtLst,
                                     css::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
 
     /**  creates a error dialog which displays the SQLExceptionInfo. Also it supports a "more" button where detailed information are available
@@ -222,7 +222,7 @@ namespace dbaui
             ::comphelper::mem_fun(&TaskPaneList::AddWindow)
             ::comphelper::mem_fun(&TaskPaneList::RemoveWindow)
     */
-    void notifySystemWindow(vcl::Window* _pWindow,
+    void notifySystemWindow(vcl::Window const * _pWindow,
                             vcl::Window* _pToRegister,
                             const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& _rMemFunc);
 
@@ -281,7 +281,7 @@ namespace dbaui
     /** set the evaluation flag at the number formatter
         @param  _rxFormatter
     */
-    void setEvalDateFormatForFormatter(css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter);
+    void setEvalDateFormatForFormatter(css::uno::Reference< css::util::XNumberFormatter > const & _rxFormatter);
 
     /** query for a type info which can be used to create a primary key column
         @param  _rTypeInfo

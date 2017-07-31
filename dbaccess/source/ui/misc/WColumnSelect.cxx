@@ -284,7 +284,7 @@ void OWizColumnSelect::clearListBox(ListBox& _rListBox)
     _rListBox.Clear();
 }
 
-void OWizColumnSelect::fillColumns(ListBox* pRight,std::vector< OUString> &_rRightColumns)
+void OWizColumnSelect::fillColumns(ListBox const * pRight,std::vector< OUString> &_rRightColumns)
 {
     const sal_Int32 nCount = pRight->GetEntryCount();
     _rRightColumns.reserve(nCount);
@@ -293,7 +293,7 @@ void OWizColumnSelect::fillColumns(ListBox* pRight,std::vector< OUString> &_rRig
 }
 
 void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
-                                        OFieldDescription* _pSrcField,
+                                        OFieldDescription const * _pSrcField,
                                         std::vector< OUString>& _rRightColumns,
                                         const OUString&  _sColumnName,
                                         const OUString&  _sExtraChars,
@@ -319,7 +319,7 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
 }
 
 void OWizColumnSelect::moveColumn(  ListBox* _pRight,
-                                    ListBox* _pLeft,
+                                    ListBox const * _pLeft,
                                     std::vector< OUString>& _rRightColumns,
                                     const OUString&  _sColumnName,
                                     const OUString&  _sExtraChars,
@@ -364,7 +364,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 // not enough. We need to take into account what fields have
 // been removed earlier and adjust accordingly. Based on the
 // algorithm employed in moveColumn().
-sal_Int32 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
+sal_Int32 OWizColumnSelect::adjustColumnPosition( ListBox const * _pLeft,
                                                const OUString&   _sColumnName,
                                                ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                                const ::comphelper::UStringMixEqual& _aCase)

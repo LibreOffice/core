@@ -77,8 +77,8 @@ AxisItemConverter::AxisItemConverter(
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const Reference< chart2::XChartDocument > & xChartDoc,
-    ::chart::ExplicitScaleData * pScale /* = NULL */,
-    ::chart::ExplicitIncrementData * pIncrement /* = NULL */,
+    ::chart::ExplicitScaleData const * pScale /* = NULL */,
+    ::chart::ExplicitIncrementData const * pIncrement /* = NULL */,
     const awt::Size* pRefSize ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_xChartDoc( xChartDoc ),

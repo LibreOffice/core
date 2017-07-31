@@ -324,7 +324,7 @@ namespace dbaui
         ModalDialog::dispose();
     }
 
-    bool DbaIndexDialog::implCommit(SvTreeListEntry* _pEntry)
+    bool DbaIndexDialog::implCommit(SvTreeListEntry const * _pEntry)
     {
         OSL_ENSURE(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
 
@@ -428,7 +428,7 @@ namespace dbaui
         }
     }
 
-    bool DbaIndexDialog::implDropIndex(SvTreeListEntry* _pEntry, bool _bRemoveFromCollection)
+    bool DbaIndexDialog::implDropIndex(SvTreeListEntry const * _pEntry, bool _bRemoveFromCollection)
     {
         // do the drop
         Indexes::iterator aDropPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());

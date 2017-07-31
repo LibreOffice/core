@@ -335,7 +335,7 @@ namespace dbaui
                 implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType );
 
         EntryType getEntryType( const SvTreeListEntry* _pEntry ) const;
-        EntryType   getChildType( SvTreeListEntry* _pEntry ) const;
+        EntryType   getChildType( SvTreeListEntry const * _pEntry ) const;
         static bool    isObject( EntryType _eType ) { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
         static bool    isContainer( EntryType _eType ) { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
         bool isContainer( const SvTreeListEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
@@ -437,7 +437,7 @@ namespace dbaui
         */
         bool implGetQuerySignature( OUString& _rCommand, bool& _bEscapeProcessing );
 
-        bool isEntryCopyAllowed(SvTreeListEntry* _pEntry) const;
+        bool isEntryCopyAllowed(SvTreeListEntry const * _pEntry) const;
 
         void copyEntry(SvTreeListEntry* _pEntry);
 
@@ -452,7 +452,7 @@ namespace dbaui
             @return
                     <TRUE/> if it is the currently displayed otherwise <FALSE/>
         */
-        bool isCurrentlyDisplayedChanged(const OUString& _sName, SvTreeListEntry* _pContainer);
+        bool isCurrentlyDisplayedChanged(const OUString& _sName, SvTreeListEntry const * _pContainer);
 
         /** called whenever the content of the browser is used for preview, as the very last action
             of the load process

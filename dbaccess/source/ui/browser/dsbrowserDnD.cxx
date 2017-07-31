@@ -199,7 +199,7 @@ namespace dbaui
         if( isEntryCopyAllowed( pSelected ) )
             copyEntry( pSelected );
     }
-    bool SbaTableQueryBrowser::isEntryCopyAllowed(SvTreeListEntry* _pEntry) const
+    bool SbaTableQueryBrowser::isEntryCopyAllowed(SvTreeListEntry const * _pEntry) const
     {
         EntryType eType = getEntryType(_pEntry);
         return  ( eType == etTableOrView || eType == etQuery );

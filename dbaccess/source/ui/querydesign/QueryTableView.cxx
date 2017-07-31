@@ -67,7 +67,7 @@ namespace
         @param  _pConnection    the connection for which the undo action should be appended
         @param  _bOwner         is the undo action the owner
     */
-    void addUndoAction( OQueryTableView* _pView,
+    void addUndoAction( OQueryTableView const * _pView,
                         OQueryTabConnUndoAction* _pUndoAction,
                         OQueryTableConnection* _pConnection,
                         bool _bOwner = false)
@@ -655,7 +655,7 @@ OQueryTableWindow* OQueryTableView::FindTable(const OUString& rAliasName)
     return nullptr;
 }
 
-bool OQueryTableView::FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt)
+bool OQueryTableView::FindTableFromField(const OUString& rFieldName, OTableFieldDescRef const & rInfo, sal_uInt16& rCnt)
 {
     rCnt = 0;
     OTableWindowMap::const_iterator aIter = GetTabWinMap().begin();
@@ -735,7 +735,7 @@ void OQueryTableView::GetConnection(OQueryTableConnection* pConn)
     addConnection( pConn );
 }
 
-void OQueryTableView::DropConnection(VclPtr<OQueryTableConnection>& rConn)
+void OQueryTableView::DropConnection(VclPtr<OQueryTableConnection> const & rConn)
 {
     // Pay attention to the selection
     // remove from me and the document

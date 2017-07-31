@@ -306,7 +306,7 @@ public:
                                             const OUString& password,
                                             const Sequence< PropertyValue >& _aInfo,
                                             ODatabaseSource* _pDataSource);
-    void addEventListener(const Reference<XConnection>& _rxConnection,TConnectionMap::iterator& _rIter);
+    void addEventListener(const Reference<XConnection>& _rxConnection, TConnectionMap::iterator const & _rIter);
 };
 
 OSharedConnectionManager::OSharedConnectionManager(const Reference< XComponentContext >& _rxContext)
@@ -384,7 +384,7 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& 
     return xRet;
 }
 
-void OSharedConnectionManager::addEventListener(const Reference<XConnection>& _rxConnection,TConnectionMap::iterator& _rIter)
+void OSharedConnectionManager::addEventListener(const Reference<XConnection>& _rxConnection, TConnectionMap::iterator const & _rIter)
 {
     Reference<XComponent> xComp(_rxConnection,UNO_QUERY);
     xComp->addEventListener(this);

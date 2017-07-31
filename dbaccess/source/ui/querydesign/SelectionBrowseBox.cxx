@@ -561,7 +561,7 @@ void OSelectionBrowseBox::notifyFunctionFieldChanged(const OUString& _sOldFuncti
     RowModified(GetBrowseRow(BROW_FUNCTION_ROW), _nColumnId);
 }
 
-void OSelectionBrowseBox::clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef& _pEntry, bool& _bListAction,sal_uInt16 _nColumnId)
+void OSelectionBrowseBox::clearEntryFunctionField(const OUString& _sFieldName,OTableFieldDescRef const & _pEntry, bool& _bListAction,sal_uInt16 _nColumnId)
 {
     if ( isFieldNameAsterisk( _sFieldName ) && (!_pEntry->isNoneFunction() || _pEntry->IsGroupBy()) )
     {
@@ -579,7 +579,7 @@ void OSelectionBrowseBox::clearEntryFunctionField(const OUString& _sFieldName,OT
     }
 }
 
-bool OSelectionBrowseBox::fillColumnRef(const OSQLParseNode* _pColumnRef, const Reference< XConnection >& _rxConnection, OTableFieldDescRef& _pEntry, bool& _bListAction )
+bool OSelectionBrowseBox::fillColumnRef(const OSQLParseNode* _pColumnRef, const Reference< XConnection >& _rxConnection, OTableFieldDescRef const & _pEntry, bool& _bListAction )
 {
     OSL_ENSURE(_pColumnRef,"No valid parsenode!");
     OUString sColumnName,sTableRange;
@@ -587,7 +587,7 @@ bool OSelectionBrowseBox::fillColumnRef(const OSQLParseNode* _pColumnRef, const 
     return fillColumnRef(sColumnName,sTableRange,_rxConnection->getMetaData(),_pEntry,_bListAction);
 }
 
-bool OSelectionBrowseBox::fillColumnRef(const OUString& _sColumnName, const OUString& _sTableRange, const Reference<XDatabaseMetaData>& _xMetaData, OTableFieldDescRef& _pEntry, bool& _bListAction)
+bool OSelectionBrowseBox::fillColumnRef(const OUString& _sColumnName, const OUString& _sTableRange, const Reference<XDatabaseMetaData>& _xMetaData, OTableFieldDescRef const & _pEntry, bool& _bListAction)
 {
     bool bError = false;
     ::comphelper::UStringMixEqual bCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
@@ -628,7 +628,7 @@ bool OSelectionBrowseBox::fillColumnRef(const OUString& _sColumnName, const OUSt
     return bError;
 }
 
-bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _pEntry, bool& _bListAction)
+bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef const & _pEntry, bool& _bListAction)
 {
     bool bError = false;
 
@@ -2583,7 +2583,7 @@ OUString OSelectionBrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBo
     return sRetText;
 }
 
-bool OSelectionBrowseBox::fillEntryTable(OTableFieldDescRef& _pEntry,const OUString& _sTableName)
+bool OSelectionBrowseBox::fillEntryTable(OTableFieldDescRef const & _pEntry,const OUString& _sTableName)
 {
     bool bRet = false;
     OJoinTableView::OTableWindowMap& rTabWinList = getDesignView()->getTableView()->GetTabWinMap();
@@ -2601,7 +2601,7 @@ bool OSelectionBrowseBox::fillEntryTable(OTableFieldDescRef& _pEntry,const OUStr
     return bRet;
 }
 
-void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
+void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef const & _pEntry)
 {
     Reference< XConnection> xConnection = static_cast<OQueryController&>(getDesignView()->getController()).getConnection();
     if ( xConnection.is() )
@@ -2665,7 +2665,7 @@ Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _n
     return EditBrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
 }
 
-bool OSelectionBrowseBox::HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const
+bool OSelectionBrowseBox::HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef const & rInfo) const
 {
     OTableFields& aFields = getFields();
     OTableFields::const_iterator aIter = aFields.begin();

@@ -57,7 +57,7 @@ namespace dbaui
         void    AddTabWin(const OUString& strDatabase, const OUString& strTableName, const OUString& strAlias, bool bNewTable);
         /// search TabWin
         OQueryTableWindow*  FindTable(const OUString& rAliasName);
-        bool                FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
+        bool                FindTableFromField(const OUString& rFieldName, OTableFieldDescRef const & rInfo, sal_uInt16& rCnt);
 
         /// base class overwritten: create and delete Connections
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) override;
@@ -73,7 +73,7 @@ namespace dbaui
             This results effectively in complete reset of request form, as all
             windows are hidden, as are all Connections to these windows and all
             request columns based on those tables */
-        void DropConnection(VclPtr<OQueryTableConnection>& rConn);
+        void DropConnection(VclPtr<OQueryTableConnection> const & rConn);
 
         // show and hide TabWin (NOT create or delete)
         bool ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction, bool _bAppend);

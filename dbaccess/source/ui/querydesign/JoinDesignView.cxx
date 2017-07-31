@@ -99,7 +99,7 @@ void OJoinDesignView::setReadOnly(bool /*_bReadOnly*/)
 {
 }
 
-void OJoinDesignView::SaveTabWinUIConfig(OTableWindow* pWin)
+void OJoinDesignView::SaveTabWinUIConfig(OTableWindow const * pWin)
 {
     OJoinController::SaveTabWinPosSize(pWin, m_pScrollWindow->GetHScrollBar().GetThumbPos(), m_pScrollWindow->GetVScrollBar().GetThumbPos());
 }

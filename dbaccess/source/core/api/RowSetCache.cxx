@@ -1327,7 +1327,7 @@ void ORowSetCache::cancelRowModification()
     resetInsertRow(false);
 }
 
-void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,std::vector< Any >& o_aBookmarks )
+void ORowSetCache::updateRow( ORowSetMatrix::iterator const & _rUpdateRow, std::vector< Any >& o_aBookmarks )
 {
     if(isAfterLast() || isBeforeFirst())
         throw SQLException(DBA_RES(RID_STR_NO_UPDATEROW),nullptr,SQLSTATE_GENERAL,1000,Any() );
@@ -1719,7 +1719,7 @@ void ORowSetCache::reset(const Reference< XResultSet>& _xDriverSet)
 }
 
 void ORowSetCache::impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_aRow
-                                           ,std::vector<sal_Int32>& o_ChangedColumns)
+                                           ,std::vector<sal_Int32> const & o_ChangedColumns)
 {
     if ( o_ChangedColumns.size() > 1 )
     {

@@ -1407,7 +1407,7 @@ namespace
 
 namespace
 {
-    Reference< XFrame > lcl_getDatabaseDocumentFrame( ODatabaseModelImpl& _rImpl )
+    Reference< XFrame > lcl_getDatabaseDocumentFrame( ODatabaseModelImpl const & _rImpl )
     {
         Reference< XModel > xDatabaseDocumentModel( _rImpl.getModel_noCreate() );
 
@@ -1775,7 +1775,7 @@ Reference< util::XCloseable > ODocumentDefinition::getComponent()
 
 namespace
 {
-    Reference< XDatabaseDocumentUI > lcl_getDatabaseDocumentUI( ODatabaseModelImpl& _rModelImpl )
+    Reference< XDatabaseDocumentUI > lcl_getDatabaseDocumentUI( ODatabaseModelImpl const & _rModelImpl )
     {
         Reference< XDatabaseDocumentUI > xUI;
 

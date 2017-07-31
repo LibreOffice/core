@@ -134,7 +134,7 @@ using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
 SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
                                      const Reference< css::container::XNameAccess >& _xDatabaseContext,
                                     const Reference< css::uno::XComponentContext >& _rxContext,
-                                    Reference< css::lang::XEventListener>& _rEvtLst,
+                                    Reference< css::lang::XEventListener> const & _rEvtLst,
                                     Reference< css::sdbc::XConnection>& _rOUTConnection )
 {
     Reference<XPropertySet> xProp;
@@ -152,7 +152,7 @@ SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
 
 SQLExceptionInfo createConnection(  const Reference< css::beans::XPropertySet>& _xDataSource,
                                     const Reference< css::uno::XComponentContext >& _rxContext,
-                                    Reference< css::lang::XEventListener>& _rEvtLst,
+                                    Reference< css::lang::XEventListener> const & _rEvtLst,
                                     Reference< css::sdbc::XConnection>& _rOUTConnection )
 {
     SQLExceptionInfo aInfo;
@@ -951,7 +951,7 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
     return bRet;
 }
 
-void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& _rMemFunc)
+void notifySystemWindow(vcl::Window const * _pWindow, vcl::Window* _pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& _rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
     SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : nullptr;
@@ -1083,7 +1083,7 @@ OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,OUS
     return sName;
 }
 
-void setEvalDateFormatForFormatter(Reference< css::util::XNumberFormatter >& _rxFormatter)
+void setEvalDateFormatForFormatter(Reference< css::util::XNumberFormatter > const & _rxFormatter)
 {
     OSL_ENSURE( _rxFormatter.is(),"setEvalDateFormatForFormatter: Formatter is NULL!");
     if ( _rxFormatter.is() )

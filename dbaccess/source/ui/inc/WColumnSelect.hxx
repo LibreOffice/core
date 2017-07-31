@@ -46,11 +46,11 @@ namespace dbaui
         DECL_LINK( ListDoubleClickHdl, ListBox&, void );
 
         static void clearListBox(ListBox& _rListBox);
-        static void fillColumns( ListBox* pRight,
+        static void fillColumns( ListBox const * pRight,
                                 std::vector< OUString> &_rRightColumns);
 
         void createNewColumn(   ListBox* _pListbox,
-                                OFieldDescription* _pSrcField,
+                                OFieldDescription const * _pSrcField,
                                 std::vector< OUString>& _rRightColumns,
                                 const OUString&  _sColumnName,
                                 const OUString&  _sExtraChars,
@@ -58,7 +58,7 @@ namespace dbaui
                                 const ::comphelper::UStringMixEqual& _aCase);
 
         void moveColumn(        ListBox* _pRight,
-                                ListBox* _pLeft,
+                                ListBox const * _pLeft,
                                 std::vector< OUString>& _rRightColumns,
                                 const OUString&  _sColumnName,
                                 const OUString&  _sExtraChars,
@@ -67,7 +67,7 @@ namespace dbaui
 
         void enableButtons();
 
-        sal_Int32 adjustColumnPosition(ListBox* _pLeft,
+        sal_Int32 adjustColumnPosition(ListBox const * _pLeft,
                                     const OUString&  _sColumnName,
                                     ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                     const ::comphelper::UStringMixEqual& _aCase);

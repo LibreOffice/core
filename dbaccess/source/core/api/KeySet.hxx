@@ -114,7 +114,7 @@ namespace dbaccess
         * \param _rKeyRow The current key row of the row set.
         + \param i_nBookmark The bookmark is used to update the parameter
         */
-        void copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sal_Int32 i_nBookmark);
+        void copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rKeyRow, sal_Int32 i_nBookmark);
 
         css::uno::Reference< css::container::XNameAccess > getKeyColumns() const;
         // returns true if it did any work
@@ -128,7 +128,7 @@ namespace dbaccess
                                              const OUString& i_rUpdateTableName,
                                              const css::uno::Reference< css::sdbc::XDatabaseMetaData>& i_xMeta,
                                              const css::uno::Reference< css::container::XNameAccess>& i_xQueryColumns,
-                                             std::unique_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
+                                             std::unique_ptr<SelectColumnsMetaData> const & o_pKeyColumnNames);
         void ensureStatement( );
         virtual void makeNewStatement( );
         static void setOneKeyColumnParameter( sal_Int32 &nPos,

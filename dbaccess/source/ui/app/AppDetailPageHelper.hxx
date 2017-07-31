@@ -255,7 +255,7 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        static bool isLeaf(SvTreeListEntry* _pEntry);
+        static bool isLeaf(SvTreeListEntry const * _pEntry);
 
         /** returns if one of the selected entries is a leaf
             @return

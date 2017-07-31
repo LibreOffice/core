@@ -812,7 +812,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
     return true;
 }
 
-Reference<XPropertySet> getColumnHelper(SvTreeListEntry* _pCurrentlyDisplayed,const Reference<XPropertySet>& _rxSource)
+Reference<XPropertySet> getColumnHelper(SvTreeListEntry const * _pCurrentlyDisplayed, const Reference<XPropertySet>& _rxSource)
 {
     Reference<XPropertySet> xRet;
     if(_pCurrentlyDisplayed)
@@ -2767,7 +2767,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
         SbaXDataBrowserController::elementInserted(_rEvent);
 }
 
-bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(const OUString& _sName,SvTreeListEntry* _pContainer)
+bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(const OUString& _sName, SvTreeListEntry const * _pContainer)
 {
     return m_pCurrentlyDisplayed
             &&  getEntryType(m_pCurrentlyDisplayed) == getChildType(_pContainer)

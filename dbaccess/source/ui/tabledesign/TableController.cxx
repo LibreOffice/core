@@ -660,7 +660,7 @@ TOTypeInfoSP OTableController::getTypeInfoByType(sal_Int32 _nDataType) const
     return queryTypeInfoByType(_nDataType,m_aTypeInfo);
 }
 
-void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup, bool _bNew, bool _bKeyColumns)
+void OTableController::appendColumns(Reference<XColumnsSupplier> const & _rxColSup, bool _bNew, bool _bKeyColumns)
 {
     try
     {
@@ -721,7 +721,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup, boo
     }
 }
 
-void OTableController::appendPrimaryKey(Reference<XKeysSupplier>& _rxSup, bool _bNew)
+void OTableController::appendPrimaryKey(Reference<XKeysSupplier> const & _rxSup, bool _bNew)
 {
     if(!_rxSup.is())
         return; // the database doesn't support keys

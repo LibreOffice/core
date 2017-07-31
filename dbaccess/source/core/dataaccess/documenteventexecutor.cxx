@@ -71,7 +71,7 @@ namespace dbaccess
 
     namespace
     {
-        void lcl_dispatchScriptURL_throw( DocumentEventExecutor_Data& _rDocExecData,
+        void lcl_dispatchScriptURL_throw( DocumentEventExecutor_Data const & _rDocExecData,
             const OUString& _rScriptURL, const DocumentEvent& _rTrigger )
         {
             Reference< XModel > xDocument( _rDocExecData.xDocument.get(), UNO_QUERY_THROW );

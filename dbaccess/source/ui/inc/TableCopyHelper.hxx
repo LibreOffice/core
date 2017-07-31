@@ -122,7 +122,7 @@ namespace dbaui
             @param  _xConnection
                 The connection
         */
-        bool copyTagTable(  DropDescriptor& _rDesc,
+        bool copyTagTable(  DropDescriptor const & _rDesc,
                             bool _bCheck,
                             const SharedConnection& _xConnection);
 

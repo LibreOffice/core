@@ -234,7 +234,7 @@ void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
         pasteTable( SotClipboardFormatId::RTF,_rTransData,i_rDestDataSource,_xConnection);
 }
 
-bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, bool _bCheck, const SharedConnection& _xConnection)
+bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor const & _rDesc, bool _bCheck, const SharedConnection& _xConnection)
 {
     Reference<XEventListener> xEvt;
     ODatabaseImportExport* pImport = nullptr;

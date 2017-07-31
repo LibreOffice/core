@@ -1713,7 +1713,7 @@ bool OApplicationController::onContainerSelect(ElementType _eType)
     return true;
 }
 
-bool OApplicationController::onEntryDoubleClick( SvTreeListBox& _rTree )
+bool OApplicationController::onEntryDoubleClick( SvTreeListBox const & _rTree )
 {
     if ( getContainer() && getContainer()->isLeaf( _rTree.GetHdlEntry() ) )
     {

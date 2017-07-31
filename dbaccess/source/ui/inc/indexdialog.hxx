@@ -159,11 +159,11 @@ namespace dbaui
         void OnSaveIndex();
         void OnResetIndex();
 
-        bool implCommit(SvTreeListEntry* _pEntry);
+        bool implCommit(SvTreeListEntry const * _pEntry);
         bool implSaveModified(bool _bPlausibility = true);
         bool implCommitPreviouslySelected();
 
-        bool implDropIndex(SvTreeListEntry* _pEntry, bool _bRemoveFromCollection);
+        bool implDropIndex(SvTreeListEntry const * _pEntry, bool _bRemoveFromCollection);
 
         bool implCheckPlausibility(const Indexes::const_iterator& _rPos);
     };

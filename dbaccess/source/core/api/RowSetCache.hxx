@@ -104,7 +104,7 @@ namespace dbaccess
                         );
 
         void impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_aRow
-                                   ,std::vector<sal_Int32>& o_ChangedColumns
+                                   ,std::vector<sal_Int32> const & o_ChangedColumns
                                    );
         // checks and set the flags isAfterLast isLast and position when afterlast is true
         void checkPositionFlags();
@@ -190,7 +190,7 @@ namespace dbaccess
         bool insertRow(std::vector< css::uno::Any >& o_aBookmarks);
         void resetInsertRow(bool _bClearInsertRow);
 
-        void updateRow( ORowSetMatrix::iterator& _rUpdateRow,std::vector< css::uno::Any >& o_aBookmarks );
+        void updateRow( ORowSetMatrix::iterator const & _rUpdateRow, std::vector< css::uno::Any >& o_aBookmarks );
         bool deleteRow();
         void cancelRowUpdates(  );
         void moveToInsertRow(  );

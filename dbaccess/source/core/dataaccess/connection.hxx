@@ -107,7 +107,7 @@ protected:
     virtual ~OConnection() override;
 public:
     OConnection(ODatabaseSource& _rDB
-                ,css::uno::Reference< css::sdbc::XConnection >& _rxMaster
+                ,css::uno::Reference< css::sdbc::XConnection > const & _rxMaster
                 ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 // css::lang::XTypeProvider

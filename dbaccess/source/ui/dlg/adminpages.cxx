@@ -119,7 +119,7 @@ namespace dbaui
     {
         callModifiedHdl(&rCtrl);
     }
-    bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn, OUString& _sCurr)
+    bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn, OUString const & _sCurr)
     {
         // collect all ODBC data source names
         StringBag aOdbcDatasources;
@@ -192,7 +192,7 @@ namespace dbaui
     {
         return true;
     }
-    void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, sal_uInt16 _nID, bool& _bChangedSomething, bool _bRevertValue )
+    void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox const * _pCheckBox, sal_uInt16 _nID, bool& _bChangedSomething, bool _bRevertValue )
     {
         if ( _pCheckBox && _pCheckBox->IsValueChangedFromSaved() )
         {
@@ -213,7 +213,7 @@ namespace dbaui
             _bChangedSomething = true;
         }
     }
-    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, NumericField* _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
+    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, NumericField const * _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
     {
         if( _pEdit && _pEdit->IsValueChangedFromSaved() )
         {
@@ -221,7 +221,7 @@ namespace dbaui
             _bChangedSomething = true;
         }
     }
-    void OGenericAdministrationPage::fillString(SfxItemSet& _rSet, Edit* _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
+    void OGenericAdministrationPage::fillString(SfxItemSet& _rSet, Edit const * _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
     {
         if( _pEdit && _pEdit->IsValueChangedFromSaved() )
         {

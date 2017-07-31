@@ -38,10 +38,10 @@ void lcl_setSpecialReadOnly( bool _bReadOnly, vcl::Window* _pWin )
 }
 
 OPropColumnEditCtrl::OPropColumnEditCtrl(vcl::Window* pParent,
-                                                rtl::OUString& _rAllowedChars,
-                                                const char* pHelpId,
-                                                short nPosition,
-                                                WinBits nWinStyle)
+                                         OUString const & _rAllowedChars,
+                                         const char* pHelpId,
+                                         short nPosition,
+                                         WinBits nWinStyle)
     :OSQLNameEdit(pParent, nWinStyle, _rAllowedChars)
     ,m_nPos(nPosition)
 {

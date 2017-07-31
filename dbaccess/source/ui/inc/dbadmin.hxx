@@ -61,7 +61,7 @@ public:
         after the dialog has been destroyed
     */
     ODbAdminDialog(vcl::Window* pParent,
-        SfxItemSet* _pItems,
+        SfxItemSet const * _pItems,
         const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
     virtual ~ODbAdminDialog() override;

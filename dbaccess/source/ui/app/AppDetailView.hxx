@@ -79,7 +79,7 @@ namespace dbaui
         virtual void        ExecuteSearchEntry( const void* _pEntry ) const override;
 
     private:
-        void    onSelected( SvTreeListEntry* _pEntry ) const;
+        void    onSelected( SvTreeListEntry const * _pEntry ) const;
         /** sets a new current entry, and invalidates the old and the new one, if necessary
             @return <TRUE/> if and only if the "current entry" changed
         */
@@ -177,7 +177,7 @@ namespace dbaui
         */
         void createPage(ElementType _eType,const css::uno::Reference< css::container::XNameAccess >& _xContainer);
 
-        void setTaskExternalMnemonics( MnemonicGenerator& _rMnemonics );
+        void setTaskExternalMnemonics( MnemonicGenerator const & _rMnemonics );
 
         /** called to give the window the chance to intercept key events, while it has not
             the focus
@@ -212,7 +212,7 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        static bool isLeaf(SvTreeListEntry* _pEntry);
+        static bool isLeaf(SvTreeListEntry const * _pEntry);
 
         /** returns if one of the selected entries is a leaf
             @return

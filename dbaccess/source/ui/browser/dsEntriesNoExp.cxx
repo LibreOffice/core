@@ -38,7 +38,7 @@ using namespace ::svx;
 
 namespace dbaui
 {
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvTreeListEntry* _pEntry ) const
+SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvTreeListEntry const * _pEntry ) const
 {
     OSL_ENSURE(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
     switch (getEntryType(_pEntry))

@@ -961,7 +961,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
     return m_aCurrentColumns[SelectColumns];
 }
 
-bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OSQLParseTreeIterator& _rIterator,
+bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode const * pCondition, OSQLParseTreeIterator& _rIterator,
                                     std::vector< std::vector < PropertyValue > >& rFilters, const Reference< css::util::XNumberFormatter > & xFormatter) const
 {
     // Round brackets around the expression
@@ -997,7 +997,7 @@ bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OSQLPa
     }
 }
 
-bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
+bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode const * pCondition,
     OSQLParseTreeIterator& _rIterator, std::vector < PropertyValue >& rFilter, const Reference< XNumberFormatter > & xFormatter) const
 {
     // Round brackets
@@ -1084,7 +1084,7 @@ bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     return true;
 }
 
-sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredicate)
+sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode const * _pPredicate)
 {
     sal_Int32 nPredicate = SQLFilterOperator::EQUAL;
     switch (_pPredicate->getNodeType())
@@ -1113,7 +1113,7 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredica
     return nPredicate;
 }
 
-bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition, OSQLParseTreeIterator& _rIterator,
+bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode const * pCondition, OSQLParseTreeIterator const & _rIterator,
                                             std::vector < PropertyValue >& rFilter, const Reference< css::util::XNumberFormatter > & xFormatter) const
 {
     OSL_ENSURE(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition is not a ComparsionPredicate");
@@ -1221,7 +1221,7 @@ bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pConditi
 }
 
 // Functions for analysing SQL
-OUString OSingleSelectQueryComposer::getColumnName( ::connectivity::OSQLParseNode* pColumnRef, OSQLParseTreeIterator& _rIterator )
+OUString OSingleSelectQueryComposer::getColumnName( ::connectivity::OSQLParseNode const * pColumnRef, OSQLParseTreeIterator const & _rIterator )
 {
     OUString aTableRange, aColumnName;
     _rIterator.getColumnRange(pColumnRef,aColumnName,aTableRange);
@@ -1425,7 +1425,7 @@ OUString SAL_CALL OSingleSelectQueryComposer::getQueryWithSubstitution(  )
     return sSqlStatement;
 }
 
-OUString OSingleSelectQueryComposer::getStatementPart( TGetParseNode& _aGetFunctor, OSQLParseTreeIterator& _rIterator )
+OUString OSingleSelectQueryComposer::getStatementPart( TGetParseNode const & _aGetFunctor, OSQLParseTreeIterator& _rIterator )
 {
     OUString sResult;
 
@@ -1529,7 +1529,7 @@ void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Seque
     setHavingClause(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData->getIdentifierQuoteString()));
 }
 
-void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, bool andCriteria ,std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor,sal_Int32 filterOperator)
+void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, bool andCriteria, std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& > const & _aSetFunctor, sal_Int32 filterOperator)
 {
     try
     {
@@ -1705,7 +1705,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     }
 }
 
-Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredCondition( TGetParseNode& _aGetFunctor )
+Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredCondition( TGetParseNode const & _aGetFunctor )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 

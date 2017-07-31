@@ -248,7 +248,7 @@ IMPL_LINK(OFieldDescControl, OnScroll, ScrollBar*, /*pBar*/, void)
 
 namespace
 {
-    void getMaxXPosition(vcl::Window* _pWindow,long& _rnMaxXPosition)
+    void getMaxXPosition(vcl::Window const * _pWindow, long& _rnMaxXPosition)
     {
         if (_pWindow)
         {
@@ -989,7 +989,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     }
 }
 
-void OFieldDescControl::SetPosSize( VclPtr<Control>& rControl, long nRow, sal_uInt16 nCol )
+void OFieldDescControl::SetPosSize( VclPtr<Control> const & rControl, long nRow, sal_uInt16 nCol )
 {
 
     // Calculate size
@@ -1497,7 +1497,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
         pFieldDescr->SetAutoIncrementValue(m_pAutoIncrementValue->GetText());
 }
 
-void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
+void OFieldDescControl::UpdateFormatSample(OFieldDescription const * pFieldDescr)
 {
     if ( pFieldDescr && pFormatSample )
         pFormatSample->SetText(getControlDefault(pFieldDescr,false));

@@ -91,7 +91,7 @@ using namespace com::sun::star::frame;
 
 namespace
 {
-    bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, const std::function<bool ( const SfxPoolItem* )>& isItemType )
+    bool implCheckItemType( SfxItemSet const & _rSet, const sal_uInt16 _nId, const std::function<bool ( const SfxPoolItem* )>& isItemType )
     {
         bool bCorrectType = false;
 
@@ -996,7 +996,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
     }
 }
 
-OUString ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet& _rDest)
+OUString ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet const & _rDest)
 {
     const SfxStringItem* pUrlItem = _rDest.GetItem<SfxStringItem>(DSID_DOCUMENT_URL);
     OSL_ENSURE(pUrlItem,"Document URL is NULL. -> GPF!");
