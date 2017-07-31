@@ -27,7 +27,7 @@
 #include <desktop/exithelper.h>
 
 #include <tools/debug.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/asyncnotification.hxx>

@@ -403,7 +403,6 @@
 #include <tools/link.hxx>
 #include <tools/poly.hxx>
 #include <tools/ref.hxx>
-#include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/svborder.hxx>
@@ -428,6 +427,7 @@
 #include <unotools/options.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/printwarningoptions.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/streamwrap.hxx>

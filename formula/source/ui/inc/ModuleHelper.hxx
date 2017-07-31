@@ -21,7 +21,7 @@
 #define INCLUDED_FORMULA_SOURCE_UI_INC_MODULEHELPER_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace formula
 {

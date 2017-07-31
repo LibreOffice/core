@@ -33,7 +33,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <formula/funcvarargs.h>
 

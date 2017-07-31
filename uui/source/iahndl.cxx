@@ -61,7 +61,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <osl/conditn.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/errinf.hxx>
 #include <osl/thread.hxx>
 #include <tools/diagnose_ex.h>
@@ -998,7 +998,7 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog( vcl::Window *p
                                                                   OUString & rProposedNewName,
                                                                   bool bAllowOverwrite )
 {
-    std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
+    std::locale aResLocale = Translate::Create("uui");
     ScopedVclPtrInstance<NameClashDialog> aDialog(pParent, aResLocale, rTargetFolderURL,
                                                   rClashingName, rProposedNewName, bAllowOverwrite);
 
@@ -1100,7 +1100,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
             OUString aErrorString;
             ErrorHandler::GetErrorString( nErrorCode, aErrorString );
 
-            std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
+            std::locale aResLocale = Translate::Create("uui");
             OUString aTitle( utl::ConfigManager::getProductName() );
 
             OUString aErrTitle = Translate::get(STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE, aResLocale);
@@ -1194,7 +1194,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 
     OUString aMessage;
     {
-        std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
+        std::locale aResLocale = Translate::Create("uui");
         ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
         if (!aErrorResource.getString(nErrorCode, aMessage))
             return;

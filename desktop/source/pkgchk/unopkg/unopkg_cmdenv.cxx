@@ -22,7 +22,7 @@
 #include "dp_shared.hxx"
 #include "unopkg_shared.h"
 #include <osl/thread.h>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>

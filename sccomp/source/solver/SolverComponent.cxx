@@ -28,7 +28,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vector>
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
@@ -46,7 +46,7 @@ using namespace com::sun::star;
 
 OUString SolverComponent::GetResourceString(const char* pId)
 {
-    static std::locale loc = Translate::Create("scc", Application::GetSettings().GetUILanguageTag());
+    static std::locale loc = Translate::Create("scc");
     return Translate::get(pId, loc);
 }
 

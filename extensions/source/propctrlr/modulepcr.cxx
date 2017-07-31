@@ -21,7 +21,7 @@
 
 #include <rtl/instance.hxx>
 #include <osl/getglobalmutex.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 

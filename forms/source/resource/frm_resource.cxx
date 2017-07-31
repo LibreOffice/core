@@ -18,10 +18,7 @@
  */
 
 #include "frm_resource.hxx"
-#include <tools/resmgr.hxx>
-
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace frm
 {
@@ -29,7 +26,7 @@ namespace frm
     {
         OUString loadString(const char* pResId)
         {
-            static std::locale loc = Translate::Create("frm", Application::GetSettings().GetUILanguageTag());
+            static std::locale loc = Translate::Create("frm");
             return Translate::get(pResId, loc);
         }
     }

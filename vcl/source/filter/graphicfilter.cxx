@@ -27,7 +27,7 @@
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fract.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>

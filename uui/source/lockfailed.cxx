@@ -19,7 +19,7 @@
 
 #include "strings.hrc"
 #include "lockfailed.hxx"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/button.hxx>
 
 LockFailedQueryBox::LockFailedQueryBox(vcl::Window* pParent, const std::locale& rResLocale)

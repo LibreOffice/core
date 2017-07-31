@@ -24,7 +24,7 @@
 #include <svl/whiter.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/svxids.hrc>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
 #include "smmod.hxx"
@@ -121,7 +121,7 @@ void SmModule::InitInterface_Impl()
 }
 
 SmModule::SmModule(SfxObjectFactory* pObjFact)
-    : SfxModule(Translate::Create("sm", Application::GetSettings().GetUILanguageTag()), {pObjFact})
+    : SfxModule(Translate::Create("sm"), {pObjFact})
 {
     SetName("StarMath");
 

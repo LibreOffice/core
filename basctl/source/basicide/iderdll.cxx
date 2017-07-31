@@ -33,7 +33,7 @@
 #include <svx/svxids.hrc>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/make_unique.hxx>
 
@@ -118,7 +118,7 @@ Dll::Dll () :
 {
     SfxObjectFactory& rFactory = DocShell::Factory();
 
-    std::locale loc = Translate::Create("basctl", Application::GetSettings().GetUILanguageTag());
+    std::locale loc = Translate::Create("basctl");
 
     auto pModule = o3tl::make_unique<Module>(loc, &rFactory);
     SfxModule* pMod = pModule.get();

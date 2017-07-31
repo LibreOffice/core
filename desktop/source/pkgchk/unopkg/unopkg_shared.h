@@ -23,7 +23,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <osl/diagnose.h>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>

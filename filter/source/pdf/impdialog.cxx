@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 #include "sfx2/passwd.hxx"
 #include "svtools/miscopt.hxx"
-#include "tools/resmgr.hxx"
+#include "unotools/resmgr.hxx"
 
 #include "comphelper/propertyvalue.hxx"
 #include "comphelper/sequence.hxx"
@@ -44,7 +44,7 @@
 
 static std::locale& getPDFFilterResLocale()
 {
-    static std::locale loc = Translate::Create("flt", Application::GetSettings().GetUILanguageTag());
+    static std::locale loc = Translate::Create("flt");
     return loc;
 }
 
