@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_d187700d",
+        "filename": "sc/inc/document.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-31T12:39:47Z",
+      "side": 1,
+      "message": "if this is happening from multiple different threads, without holding any kind of mutex, I suggest that you should be using oslInterlockedCount instead of int",
+      "revId": "cf01b93582997e595a0938826eae27a5c51d2f13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_b182e4fe",
+        "filename": "sc/inc/document.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-31T12:39:47Z",
+      "side": 1,
+      "message": "IsAdjustHeightLocked would be a better name",
+      "revId": "cf01b93582997e595a0938826eae27a5c51d2f13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f17c6c22",
+        "filename": "sc/qa/unit/subsequent_filters-test.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 3134,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-31T12:39:47Z",
+      "side": 1,
+      "message": "why has this become conditional?",
+      "revId": "cf01b93582997e595a0938826eae27a5c51d2f13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_117ad824",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1990,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-31T12:39:47Z",
+      "side": 1,
+      "message": "if you\u0027re doing this here, does this mean that all callsites that do an unlock need to check if the lock is finally \u003d\u003d 0, and do a UpdateAllRowHeights()\nOr perhaps that UpdateAllRowHeights() should be called inside \nUnlockAdjustHeight() ?",
+      "revId": "cf01b93582997e595a0938826eae27a5c51d2f13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_3177d43b",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2331,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-07-31T12:39:47Z",
+      "side": 1,
+      "message": "this looks iffy to me now because it will do different things depending on the current state of the lock, which is probably not what the caller intended.\n\nI would suggest that\n\n(a) sending a boolean \u003d\u003d true here should lock it, and boolean \u003d\u003d false should unlock it\n\n(b) this change in semantics should be documented in \n   offapi/com/sun/star/sheet/SpreadsheetDocumentSettings.idl\nwhere the IsAdjustHeightEnabled property is defined.\n\nSomething like\n\"This boolean is actually a counter internally, of the number of times something has locked the height, so setting it to false will only perform one unlock operation, and might leave it still locked. Note that a \u0027false\u0027 more times than you call \u0027true\u0027 is likely to break LibreOffice in interesting ways\".",
+      "revId": "cf01b93582997e595a0938826eae27a5c51d2f13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
