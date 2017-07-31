@@ -46,7 +46,7 @@ OOXMLStreamImpl::OOXMLStreamImpl
 }
 
 OOXMLStreamImpl::OOXMLStreamImpl
-(OOXMLStreamImpl & rOOXMLStream, StreamType_t nStreamType)
+(OOXMLStreamImpl const & rOOXMLStream, StreamType_t nStreamType)
 : mxContext(rOOXMLStream.mxContext),
   mxStorageStream(rOOXMLStream.mxStorageStream),
   mxStorage(rOOXMLStream.mxStorage),
@@ -59,7 +59,7 @@ OOXMLStreamImpl::OOXMLStreamImpl
 }
 
 OOXMLStreamImpl::OOXMLStreamImpl
-(OOXMLStreamImpl & rOOXMLStream, const OUString & rId)
+(OOXMLStreamImpl const & rOOXMLStream, const OUString & rId)
 : mxContext(rOOXMLStream.mxContext),
   mxStorageStream(rOOXMLStream.mxStorageStream),
   mxStorage(rOOXMLStream.mxStorage),

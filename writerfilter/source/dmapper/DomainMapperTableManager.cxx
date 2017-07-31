@@ -66,7 +66,7 @@ DomainMapperTableManager::~DomainMapperTableManager()
 {
 }
 
-bool DomainMapperTableManager::attribute(Id nName, Value& rValue)
+bool DomainMapperTableManager::attribute(Id nName, Value const & rValue)
 {
     bool bRet = true;
 

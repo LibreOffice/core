@@ -471,7 +471,7 @@ public:
             css::uno::Reference < css::uno::XComponentContext > const& xContext,
             css::uno::Reference< css::lang::XComponent > const& xModel,
             SourceDocumentType eDocumentType,
-            utl::MediaDescriptor& rMediaDesc);
+            utl::MediaDescriptor const & rMediaDesc);
     ~DomainMapper_Impl();
 
     SectionPropertyMap* GetLastSectionContext( )
@@ -507,7 +507,7 @@ public:
     void SetIsLastParagraphInSection( bool bIsLast );
     bool GetIsLastParagraphInSection() { return m_bIsLastParaInSection;}
     void SetRubySprmId( sal_uInt32 nSprmId) { m_aRubyInfo.nSprmId = nSprmId ; }
-    void SetRubyText( OUString &sText,OUString &sStyle) {
+    void SetRubyText( OUString const &sText, OUString const &sStyle) {
         m_aRubyInfo.sRubyText = sText;
         m_aRubyInfo.sRubyStyle = sStyle;
     }
@@ -528,7 +528,7 @@ public:
     bool GetParaSectpr() { return m_bParaSectpr;}
 
     void SetSymbolChar( sal_Int32 nSymbol) { m_aSymbolData.cSymbol = sal_Unicode(nSymbol); }
-    void SetSymbolFont( OUString &rName ) { m_aSymbolData.sFont = rName; }
+    void SetSymbolFont( OUString const &rName ) { m_aSymbolData.sFont = rName; }
     const SymbolData & GetSymbolData() { return m_aSymbolData;}
 
     /// Setter method for m_bSdt.
@@ -552,12 +552,12 @@ public:
     void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const css::uno::Sequence<css::beans::PropertyValue>&);
     void appendOLE( const OUString& rStreamName, const OLEHandlerPtr& pOleHandler );
     void appendStarMath( const Value& v );
-    css::uno::Reference<css::beans::XPropertySet> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange>& xBefore);
+    css::uno::Reference<css::beans::XPropertySet> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange> const & xBefore);
 
     /// AutoText import: each entry is placed in the separate section
     void appendGlossaryEntry();
     /// Remember where entry was started
-    void setGlossaryEntryStart( css::uno::Reference<css::text::XTextRange>& xStart )
+    void setGlossaryEntryStart( css::uno::Reference<css::text::XTextRange> const & xStart )
     {
         m_xGlossaryEntryStart = xStart;
     }
@@ -655,11 +655,11 @@ public:
     //mark field in current context as locked (fixed)
     void SetFieldLocked();
     //collect the pieces of the command
-    void AppendFieldCommand(OUString& rPartOfCommand);
+    void AppendFieldCommand(OUString const & rPartOfCommand);
     void handleRubyEQField( const FieldContextPtr& pContext);
     void handleFieldSet
         (const FieldContextPtr& pContext,
-        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
+        css::uno::Reference< css::uno::XInterface > const & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleFieldAsk
         (const FieldContextPtr& pContext,
@@ -670,7 +670,7 @@ public:
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleAutoNum
         (const FieldContextPtr& pContext,
-        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
+        css::uno::Reference< css::uno::XInterface > const & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     static void handleAuthor
         (OUString const& rFirstParam,

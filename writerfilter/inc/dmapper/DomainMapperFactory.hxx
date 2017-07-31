@@ -42,7 +42,7 @@ public:
                  css::uno::Reference<css::lang::XComponent> const& xModel,
                  bool bRepairStorage,
                  SourceDocumentType eDocumentType,
-                 utl::MediaDescriptor& rMediaDesc);
+                 utl::MediaDescriptor const & rMediaDesc);
 };
 
 // export just for test
