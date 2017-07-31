@@ -131,7 +131,7 @@ void XclImpOutlineBuffer::MakeScOutline()
         }
         else
         {
-            OSL_ENSURE(nLevel < nCurLevel, "XclImpOutlineBuffer::MakeScOutline: unexpected level!");
+            OSL_ENSURE(nLevel <= nCurLevel, "XclImpOutlineBuffer::MakeScOutline: unexpected level!");
             for (sal_uInt8 i = 0; i < nCurLevel - nLevel; ++i)
             {
                 if (aOutlineStack.empty())
