@@ -67,7 +67,7 @@ void Catalog::refreshGroups()
 //----- IRefreshableUsers ----------------------------------------------------
 void Catalog::refreshUsers()
 {
-    OUString sSql("SELECT DISTINCT RDB$USER FROM RDB$USER_PRIVILEGES");
+    OUString const sSql("SELECT DISTINCT RDB$USER FROM RDB$USER_PRIVILEGES");
 
     uno::Reference< XResultSet > xUsers = m_xMetaData->getConnection()
                                             ->createStatement()->executeQuery(sSql);

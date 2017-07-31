@@ -368,9 +368,9 @@ private:
         set ForceArray at rCurr if so. Set nParam+1 as 1-based
         nCurrentFactorParam for subsequent ForceArrayOperator() calls.
      */
-    void CheckSetForceArrayParameter( FormulaTokenRef& rCurr, sal_uInt8 nParam );
+    void CheckSetForceArrayParameter( FormulaTokenRef const & rCurr, sal_uInt8 nParam );
 
-    void ForceArrayOperator( FormulaTokenRef& rCurr );
+    void ForceArrayOperator( FormulaTokenRef const & rCurr );
 
     class CurrentFactor
     {
@@ -391,7 +391,7 @@ private:
                 pCompiler->nCurrentFactorParam = nPrevParam;
             }
         // yes, this operator= may modify the RValue
-        void operator=( FormulaTokenRef& r )
+        void operator=( FormulaTokenRef const & r )
             {
                 pCompiler->ForceArrayOperator( r );
                 pCompiler->pCurrentFactorToken = r;
