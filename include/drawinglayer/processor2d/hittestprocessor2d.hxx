@@ -46,7 +46,13 @@ namespace drawinglayer
             /// discrete HitTolerance
             double                      mfDiscreteHitTolerance;
 
-            /// bitfield
+            /// stack of HitPrimitives, taken care of during HitTest run
+            primitive2d::Primitive2DContainer        maHitStack;
+
+            /// flag if HitStack shall be collected as part of the result, default is false
+            bool                        mbCollectHitStack : 1;
+
+            /// Boolean to flag if a hit was found. If yes, fast exit is taken
             bool                        mbHit : 1;
             bool                        mbHitToleranceUsed : 1;
 
@@ -79,9 +85,17 @@ namespace drawinglayer
                 bool bHitTextOnly);
             virtual ~HitTestProcessor2D();
 
+            /// switch on collecting primitives for a found hit on maHitStack, default is off
+            void collectHitStack(bool bCollect) { mbCollectHitStack = bCollect; }
+
+            /// get HitStack of primitives, first is the one that created the hit, last is the
+            /// top-most
+            const primitive2d::Primitive2DContainer& getHitStack() const { return maHitStack; }
+
             /// data read access
             const basegfx::B2DPoint& getDiscreteHitPosition() const { return maDiscreteHitPosition; }
             double getDiscreteHitTolerance() const { return mfDiscreteHitTolerance; }
+            bool getCollectHitStack() const { return mbCollectHitStack; }
             bool getHit() const { return mbHit; }
             bool getUseInvisiblePrimitiveContent() const { return mbUseInvisiblePrimitiveContent;}
             bool getHitTextOnly() const { return mbHitTextOnly; }

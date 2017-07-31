@@ -95,11 +95,28 @@ namespace drawinglayer
         TextHierarchyFieldPrimitive2D::TextHierarchyFieldPrimitive2D(
             const Primitive2DContainer& rChildren,
             const FieldType& rFieldType,
-            const OUString& rString)
+            const std::vector< std::pair< OUString, OUString>>* pNameValue)
         :   GroupPrimitive2D(rChildren),
             meType(rFieldType),
-            maString(rString)
+            meNameValue()
         {
+            if (nullptr != pNameValue)
+            {
+                meNameValue = *pNameValue;
+            }
+        }
+
+        OUString TextHierarchyFieldPrimitive2D::getValue(const OUString& rName) const
+        {
+            for (const std::pair< OUString, OUString >& candidate : meNameValue)
+            {
+                if (candidate.first.equals(rName))
+                {
+                    return candidate.second;
+                }
+            }
+
+            return OUString();
         }
 
         bool TextHierarchyFieldPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
@@ -109,7 +126,7 @@ namespace drawinglayer
                 const TextHierarchyFieldPrimitive2D& rCompare = static_cast<const TextHierarchyFieldPrimitive2D&>(rPrimitive);
 
                 return (getType() == rCompare.getType()
-                    &&  getString() == rCompare.getString());
+                    && getNameValue() == rCompare.getNameValue());
             }
 
             return false;
