@@ -358,7 +358,7 @@ public:
                 uno::makeAny(nVertRelation));
     }
 
-    void applyZOrder(uno::Reference<beans::XPropertySet>& xGraphicObjectProperties) const
+    void applyZOrder(uno::Reference<beans::XPropertySet> const & xGraphicObjectProperties) const
     {
         if (zOrder >= 0)
         {
@@ -368,7 +368,7 @@ public:
         }
     }
 
-    void applyName(uno::Reference<beans::XPropertySet>& xGraphicObjectProperties) const
+    void applyName(uno::Reference<beans::XPropertySet> const & xGraphicObjectProperties) const
     {
         try
         {
@@ -940,7 +940,7 @@ uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
 }
 
 
-void GraphicImport::ProcessShapeOptions(Value& rValue)
+void GraphicImport::ProcessShapeOptions(Value const & rValue)
 {
     sal_Int32 nIntValue = rValue.getInt();
     switch( m_pImpl->nShapeOptionType )

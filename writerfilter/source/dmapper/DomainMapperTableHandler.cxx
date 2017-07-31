@@ -261,7 +261,7 @@ struct TableInfo
 namespace
 {
 
-bool lcl_extractTableBorderProperty(const PropertyMapPtr& pTableProperties, const PropertyIds nId, TableInfo& rInfo, table::BorderLine2& rLine)
+bool lcl_extractTableBorderProperty(const PropertyMapPtr& pTableProperties, const PropertyIds nId, TableInfo const & rInfo, table::BorderLine2& rLine)
 {
     if (!pTableProperties)
         return false;

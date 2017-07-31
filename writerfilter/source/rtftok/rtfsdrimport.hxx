@@ -36,7 +36,7 @@ public:
     void appendGroupProperty(const OUString& aKey, const OUString& aValue);
     void resolveDhgt(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, sal_Int32 nZOrder, bool bOldStyle);
     /// Set line color and line width on the shape, using the relevant API depending on if the shape is a text frame or not.
-    static void resolveLineColorAndWidth(bool bTextFrame, const css::uno::Reference<css::beans::XPropertySet>& xPropertySet, css::uno::Any& rLineColor, css::uno::Any& rLineWidth);
+    static void resolveLineColorAndWidth(bool bTextFrame, const css::uno::Reference<css::beans::XPropertySet>& xPropertySet, css::uno::Any const & rLineColor, css::uno::Any const & rLineWidth);
     static void resolveFLine(css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, sal_Int32 nFLine);
     /**
      * These are the default in Word, but not in Writer.

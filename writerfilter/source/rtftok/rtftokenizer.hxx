@@ -54,7 +54,7 @@ private:
         return *m_pInStream;
     }
     RTFError resolveKeyword();
-    RTFError dispatchKeyword(OString& rKeyword, bool bParam, int nParam);
+    RTFError dispatchKeyword(OString const & rKeyword, bool bParam, int nParam);
 
     RTFListener& m_rImport;
     SvStream* m_pInStream;
