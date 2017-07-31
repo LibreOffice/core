@@ -38,8 +38,8 @@ class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
                                 public css::accessibility::XAccessibleHypertext//Added by yangzhh for HyperLink
 {
     friend class SwAccessibleNoTextHyperlink;
-    css::uno::Reference< css::accessibility::XAccessibleHyperlink > alink;
-    SwDepend        aDepend;
+    css::uno::Reference< css::accessibility::XAccessibleHyperlink > m_xHyperlink;
+    SwDepend        m_aDepend;
     OUString msTitle;
     OUString msDesc;
 

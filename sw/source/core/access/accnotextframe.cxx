@@ -60,7 +60,7 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
         sal_Int16 nInitRole,
         const SwFlyFrame* pFlyFrame  ) :
     SwAccessibleFrameBase( pInitMap, nInitRole, pFlyFrame ),
-    aDepend( this, const_cast < SwNoTextNode * >( GetNoTextNode() ) ),
+    m_aDepend( this, const_cast < SwNoTextNode * >( GetNoTextNode() ) ),
     msTitle(),
     msDesc()
 {
@@ -102,7 +102,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
         return;
 
     const SwNoTextNode *pNd = GetNoTextNode();
-    OSL_ENSURE( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
+    OSL_ENSURE( pNd == m_aDepend.GetRegisteredIn(), "invalid frame" );
     switch( nWhich )
     {
         // #i73249#
@@ -164,8 +164,8 @@ void SwAccessibleNoTextFrame::Dispose(bool bRecursive, bool bCanSkipInvisible)
 {
     SolarMutexGuard aGuard;
 
-    if( aDepend.GetRegisteredIn() )
-        aDepend.GetRegisteredIn()->Remove( &aDepend );
+    if( m_aDepend.GetRegisteredIn() )
+        m_aDepend.GetRegisteredIn()->Remove( &m_aDepend );
 
     SwAccessibleFrameBase::Dispose(bRecursive, bCanSkipInvisible);
 }
@@ -317,12 +317,12 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     if( aURL.GetMap() || !aURL.GetURL().isEmpty() )
     {
-        if ( !alink.is() )
+        if ( !m_xHyperlink.is() )
         {
-            alink = new SwAccessibleNoTextHyperlink( this, GetFrame() );
+            m_xHyperlink = new SwAccessibleNoTextHyperlink( this, GetFrame() );
         }
 
-        return alink;
+        return m_xHyperlink;
     }
 
     return nullptr;
