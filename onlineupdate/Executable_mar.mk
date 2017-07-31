@@ -18,12 +18,8 @@ $(eval $(call gb_Executable_set_include,mar,\
 
 $(eval $(call gb_Executable_use_static_libraries,mar,\
     libmar \
+    libmarverify \
 ))
-
-$(eval $(call gb_Executable_use_externals,mar,\
-	nss3 \
-))
-
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_libs,mar,\
@@ -32,9 +28,13 @@ $(eval $(call gb_Executable_add_libs,mar,\
 ))
 endif
 
+$(eval $(call gb_Executable_use_externals,mar,\
+	nss3 \
+))
+
 $(eval $(call gb_Executable_add_defs,mar,\
-	-DMAR_NSS \
 	-DUNICODE \
+	-DMAR_NSS \
 ))
 
 $(eval $(call gb_Executable_add_defs,mar,\

@@ -8,7 +8,7 @@ all : call
 unpack:
 	@echo "Unpacking the updater test project"
 	@rm -r $(UPDATER_DIR) || true
-	@mkdir -p $(WORKDIR)/updater/
+	@mkdir -p $(UPDATER_DIR)
 	@unzip single_step.zip -d $(WORKDIR)/updater > /dev/null
 	@mkdir -p $(UPDATER_DIR)/patch
 
