@@ -38,7 +38,7 @@
 #include <NumberFormatControl.hxx>
 
 #include <svtools/parhtml.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <sot/formats.hxx>
 
 #include "scitems.hxx"

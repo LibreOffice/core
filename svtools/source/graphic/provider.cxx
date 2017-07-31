@@ -22,7 +22,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/imagerepository.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>

@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <vcl/errcode.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
@@ -585,7 +585,7 @@ namespace
 
 const std::locale& implGetResLocale()
 {
-    static std::locale loc(Translate::Create("sb", Application::GetSettings().GetUILanguageTag()));
+    static std::locale loc(Translate::Create("sb"));
     return loc;
 }
 

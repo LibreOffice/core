@@ -18,7 +18,7 @@
  */
 
 #include "strings.hrc"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include "filechanged.hxx"
 
 FileChangedQueryBox::FileChangedQueryBox( vcl::Window* pParent, const std::locale& rLocale ) :

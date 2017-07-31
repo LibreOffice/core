@@ -24,7 +24,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/virdev.hxx>

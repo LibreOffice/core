@@ -33,7 +33,7 @@
 #include <algorithm>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 
 using namespace ::com::sun::star;
 using namespace sca::pricing;

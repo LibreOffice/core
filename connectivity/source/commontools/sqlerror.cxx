@@ -26,9 +26,7 @@
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/resmgr.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
+#include <unotools/resmgr.hxx>
 #include <osl/diagnose.h>
 
 #include <strings.hrc>
@@ -269,7 +267,7 @@ namespace connectivity
         ::osl::MutexGuard aGuard( m_aMutex );
         m_bAttemptedInit = true;
 
-        m_xResources.reset(new std::locale(Translate::Create("cnr", Application::GetSettings().GetUILanguageTag())));
+        m_xResources.reset(new std::locale(Translate::Create("cnr")));
         return m_xResources.get() != nullptr;
     }
 

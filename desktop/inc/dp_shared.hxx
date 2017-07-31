@@ -22,16 +22,14 @@
 
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
-#include <tools/resmgr.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
+#include <unotools/resmgr.hxx>
 
 namespace dp {
 
 struct DeploymentLocale :
     public ::rtl::StaticWithInit<std::locale, DeploymentLocale > {
         std::locale operator () () {
-            return Translate::Create("dkt", Application::GetSettings().GetUILanguageTag());
+            return Translate::Create("dkt");
     }
 };
 

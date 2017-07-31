@@ -19,7 +19,7 @@
 
 #include "strings.hrc"
 #include "alreadyopen.hxx"
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 
 AlreadyOpenQueryBox::AlreadyOpenQueryBox( vcl::Window* pParent, const std::locale& rLocale, const OUString& aMessage, bool bIsStoring ) :
     MessBox(pParent, 0,

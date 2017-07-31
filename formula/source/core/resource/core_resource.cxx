@@ -19,11 +19,9 @@
 
 #include "core_resource.hxx"
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 
 // ---- needed as long as we have no contexts for components ---
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <rtl/instance.hxx>
 #include <svl/solar.hrc>
 
@@ -48,7 +46,7 @@ namespace formula
         if (m_pImpl)
             return;
 
-        m_pImpl = new std::locale(Translate::Create("for", Application::GetSettings().GetUILanguageTag()));
+        m_pImpl = new std::locale(Translate::Create("for"));
     }
 
     void ResourceManager::registerClient()

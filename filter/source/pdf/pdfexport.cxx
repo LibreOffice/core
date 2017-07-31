@@ -22,7 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/fract.hxx>
 #include <tools/poly.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>
@@ -884,7 +884,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 if ( mxStatusIndicator.is() )
                 {
-                    std::locale loc(Translate::Create("flt", Application::GetSettings().GetUILanguageTag()));
+                    std::locale loc(Translate::Create("flt"));
                     sal_Int32 nTotalPageCount = aRangeEnum.size();
                     if ( bExportPages && bExportNotesPages )
                         nTotalPageCount *= 2;

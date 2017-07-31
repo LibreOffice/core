@@ -66,7 +66,7 @@
 #include <rtl/process.h>
 #include <vcl/svapp.hxx>
 #include <svtools/embedhlp.hxx>
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <sfx2/strings.hrc>
 
@@ -971,7 +971,7 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
             css::uno::Reference< css::frame::XTitle > xModelTitle( xDoc, css::uno::UNO_QUERY );
             if( xModelTitle.is() )
             {
-                std::locale aResLoc = Translate::Create("sfx", SvtSysLocale().GetUILanguageTag());
+                std::locale aResLoc = Translate::Create("sfx");
                 OUString sEmbedded = Translate::get(STR_EMBEDDED_TITLE, aResLoc);
                 xModelTitle->setTitle( m_pEmbedObj->getContainerName() + sEmbedded);
                 m_aContainerName = m_pEmbedObj->getContainerName();

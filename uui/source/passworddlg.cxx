@@ -20,7 +20,7 @@
 #include "passworddlg.hxx"
 #include "strings.hrc"
 
-#include <tools/resmgr.hxx>
+#include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 

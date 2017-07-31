@@ -2,12 +2,9 @@
 
 #include "WPFTResMgr.hxx"
 
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-
 std::locale &WPFTResLocale::GetResLocale()
 {
-    static std::locale loc(Translate::Create("wpt", Application::GetSettings().GetUILanguageTag()));
+    static std::locale loc(Translate::Create("wpt"));
     return loc;
 }
 
