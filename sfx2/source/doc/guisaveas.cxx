@@ -96,6 +96,15 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
+#include <osl/file.hxx>
+
+#ifdef _WIN32
+#include <Shlobj.h>
+#ifdef GetTempPath
+#undef GetTempPath
+#endif
+#endif
+
 // flags that specify requested operation
 #define EXPORT_REQUESTED            1
 #define PDFEXPORT_REQUESTED         2
@@ -1148,8 +1157,26 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
                 aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
         }
 
+        OUString sLocationURL( aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+        bool bIsInTempPath( false );
+        OUString sSysTempPath;
+        if( osl::FileBase::getTempDirURL( sSysTempPath ) == osl::FileBase::E_None )
+            bIsInTempPath = !sSysTempPath.isEmpty() && sLocationURL.startsWith( sSysTempPath );
+#ifdef _WIN32
+        if( !bIsInTempPath )
+        {
+            wchar_t sPath[MAX_PATH+1];
+            HRESULT hRes = SHGetFolderPathW( NULL, CSIDL_INTERNET_CACHE, NULL, SHGFP_TYPE_CURRENT, sPath );
+            if( SUCCEEDED(hRes) )
+            {
+                OUString sTempINetFiles;
+                if( osl::FileBase::getFileURLFromSystemPath(reinterpret_cast<sal_Unicode*>(sPath), sTempINetFiles) == osl::FileBase::E_None )
+                    bIsInTempPath = !sTempINetFiles.isEmpty() && sLocationURL.startsWith( sTempINetFiles );
+            }
+        }
+#endif
         // Suggest somewhere other than the system's temp directory
-        if( aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE ).startsWith( SvtPathOptions().GetTempPath() ) )
+        if( bIsInTempPath )
             aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
 
         aLocation.setFinalSlash();
