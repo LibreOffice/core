@@ -121,7 +121,7 @@ public:
     void            UpdateParaWin( const Selection& _rSelection, const OUString& _sRefStr);
 
     void            SetData( sal_Int32 nFStart, sal_Int32 nNextFStart, sal_Int32 nNextFEnd, sal_Int32& PrivStart, sal_Int32& PrivEnd);
-    void            PreNotify( NotifyEvent& rNEvt );
+    void            PreNotify( NotifyEvent const & rNEvt );
 
     RefEdit*        GetCurrRefEdit();
 
@@ -381,7 +381,7 @@ void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
 }
 
 
-void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
+void FormulaDlg_Impl::PreNotify( NotifyEvent const & rNEvt )
 {
     if (m_bIsShutDown)
         return;
@@ -1745,7 +1745,7 @@ void FormulaDlg_Impl::SetEdSelection()
 }
 
 FormulaModalDialog::FormulaModalDialog(   vcl::Window* pParent
-                                        , IFunctionManager* _pFunctionMgr
+                                        , IFunctionManager const * _pFunctionMgr
                                         , IControlReferenceHandler* _pDlg )
     : ModalDialog(pParent, "FormulaDialog", "formula/ui/formuladialog.ui")
     , m_pImpl(new FormulaDlg_Impl(this, false/*_bSupportFunctionResult*/,
@@ -1816,7 +1816,7 @@ void FormulaModalDialog::StoreFormEditData(FormEditData* pData)
 
 FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                              vcl::Window* pParent
-                            , IFunctionManager* _pFunctionMgr, IControlReferenceHandler* _pDlg ) :
+                            , IFunctionManager const * _pFunctionMgr, IControlReferenceHandler* _pDlg ) :
         SfxModelessDialog( pB, pCW, pParent, "FormulaDialog", "formula/ui/formuladialog.ui" ),
         m_pImpl( new FormulaDlg_Impl(this, true/*_bSupportFunctionResult*/
                                             , true/*_bSupportResult*/

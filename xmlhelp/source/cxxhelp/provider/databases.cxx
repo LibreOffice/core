@@ -595,10 +595,10 @@ namespace chelp {
 
 }
 
-KeywordInfo::KeywordElement::KeywordElement( Databases *pDatabases,
+KeywordInfo::KeywordElement::KeywordElement( Databases const *pDatabases,
                                              helpdatafileproxy::Hdf* pHdf,
-                                             OUString& ky,
-                                             OUString& data )
+                                             OUString const & ky,
+                                             OUString const & data )
     : key( ky )
 {
     pDatabases->replaceName( key );

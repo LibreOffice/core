@@ -92,10 +92,10 @@ namespace chelp {
 
         public:
 
-            KeywordElement( Databases* pDatabases,
+            KeywordElement( Databases const * pDatabases,
                             helpdatafileproxy::Hdf* pHdf,
-                            OUString& key,
-                            OUString& ids );
+                            OUString const & key,
+                            OUString const & ids );
 
         private:
 

@@ -2590,7 +2590,7 @@ formula::ParamClass FormulaCompiler::GetForceArrayParameter( const FormulaToken*
     return ParamClass::Unknown;
 }
 
-void FormulaCompiler::ForceArrayOperator( FormulaTokenRef& rCurr )
+void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
 {
     if (!pCurrentFactorToken || (pCurrentFactorToken.get() == rCurr.get()))
         return;
@@ -2628,7 +2628,7 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef& rCurr )
     }
 }
 
-void FormulaCompiler::CheckSetForceArrayParameter( FormulaTokenRef& rCurr, sal_uInt8 nParam )
+void FormulaCompiler::CheckSetForceArrayParameter( FormulaTokenRef const & rCurr, sal_uInt8 nParam )
 {
     if (!pCurrentFactorToken)
         return;

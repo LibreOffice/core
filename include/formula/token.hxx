@@ -423,7 +423,7 @@ private:
                                 pJump;
             ParamClass          eInForceArray;
 public:
-                                FormulaJumpToken( OpCode e, short* p ) :
+                                FormulaJumpToken( OpCode e, short const * p ) :
                                     FormulaToken( formula::svJump , e),
                                     eInForceArray( ParamClass::Unknown)
                                 {
