@@ -529,9 +529,10 @@ int RemoteFilesDialog::GetSelectedServicePos()
     if( m_aServices.empty() )
         return -1;
 
-    while( nPos < ( int )m_aServices.size() )
+    int nServices = static_cast<int>(m_aServices.size());
+    while( nPos < nServices )
     {
-        while( m_aServices[nPos]->IsLocal() )
+        while( (nPos < nServices) && m_aServices[nPos]->IsLocal() )
             nPos++;
         i++;
         if( i == nSelected )
