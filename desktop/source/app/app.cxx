@@ -1393,11 +1393,11 @@ int Desktop::Main()
                 OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
                 OUString aOldBuildID = officecfg::Office::Update::Update::OldBuildID::get();
 
-                OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
-                rtl::Bootstrap::expandMacros(aBuildID);
+                OUString aBuildID = Updater::getBuildID();
                 if (aOldBuildID == aBuildID)
                 {
-                    SAL_INFO("desktop", "failed updater");
+                    SAL_INFO("desktop", "No updating took place.");
+                    Updater::log("Old and new Build ID are the same. No Updating took place.");
                 }
                 else
                 {

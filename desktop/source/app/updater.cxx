@@ -668,8 +668,7 @@ void update_checker()
     }
 
     OUString aProductName = utl::ConfigManager::getProductName();
-    OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
-    rtl::Bootstrap::expandMacros(aBuildID);
+    OUString aBuildID = Updater::getBuildID();
     OUString aBuildTarget = "${_OS}_${_ARCH}";
     rtl::Bootstrap::expandMacros(aBuildTarget);
     OUString aChannel = officecfg::Office::Update::Update::UpdateChannel::get();
@@ -811,6 +810,14 @@ void Updater::log(const char* pMessage)
     SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
     aLog.WriteCharPtr(pMessage);
+}
+
+OUString Updater::getBuildID()
+{
+    OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
+    rtl::Bootstrap::expandMacros(aBuildID);
+
+    return aBuildID;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
