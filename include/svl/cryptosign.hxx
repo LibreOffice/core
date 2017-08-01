@@ -34,6 +34,9 @@ namespace svl {
 
 namespace crypto {
 
+/// Converts a hex-encoded string into a byte array.
+SVL_DLLPUBLIC std::vector<unsigned char> DecodeHexString(const OString& rHex);
+
 /// Helper to cryptographically sign and verify
 /// arbitrary data blocks.
 class SVL_DLLPUBLIC Signing

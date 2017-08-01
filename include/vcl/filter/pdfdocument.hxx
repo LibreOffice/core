@@ -314,7 +314,6 @@ class VCL_DLLPUBLIC PDFDocument
     /// All editing takes place in this buffer, if it happens.
     SvMemoryStream m_aEditBuffer;
 
-    static int AsHex(char ch);
     /// Suggest a minimal, yet free signature ID to use for the next signature.
     sal_uInt32 GetNextSignature();
     /// Write the signature object as part of signing.

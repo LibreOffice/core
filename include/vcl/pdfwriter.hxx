@@ -1231,9 +1231,6 @@ The following structure describes the permissions used in PDF security
     */
     void AddStream( const OUString& rMimeType, PDFOutputStream* pStream );
 
-    /// Fill a PDF signature template.
-    static bool Sign(PDFSignContext& rContext);
-
     /// Write rString as a PDF hex string into rBuffer.
     static void AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer);
 

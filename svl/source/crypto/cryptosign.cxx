@@ -878,6 +878,55 @@ namespace svl {
 
 namespace crypto {
 
+static int AsHex(char ch)
+{
+    int nRet = 0;
+    if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
+        nRet = ch - '0';
+    else
+    {
+        if (ch >= 'a' && ch <= 'f')
+            nRet = ch - 'a';
+        else if (ch >= 'A' && ch <= 'F')
+            nRet = ch - 'A';
+        else
+            return -1;
+        nRet += 10;
+    }
+    return nRet;
+}
+
+std::vector<unsigned char> DecodeHexString(const OString& rHex)
+{
+    std::vector<unsigned char> aRet;
+    size_t nHexLen = rHex.getLength();
+    {
+        int nByte = 0;
+        int nCount = 2;
+        for (size_t i = 0; i < nHexLen; ++i)
+        {
+            nByte = nByte << 4;
+            sal_Int8 nParsed = AsHex(rHex[i]);
+            if (nParsed == -1)
+            {
+                SAL_WARN("svl.crypto", "DecodeHexString: invalid hex value");
+                return aRet;
+            }
+            nByte += nParsed;
+            --nCount;
+            if (!nCount)
+            {
+                aRet.push_back(nByte);
+                nCount = 2;
+                nByte = 0;
+            }
+        }
+    }
+
+    return aRet;
+}
+
+
 #if defined(SVL_CRYPTO_NSS) || defined(SVL_CRYPTO_MSCRYPTO)
 
 bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
