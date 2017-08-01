@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_1c24af0b",
+        "filename": "sal/qa/osl/process/osl_process.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-08-01T10:25:35Z",
+      "side": 1,
+      "message": "Yeah, I think this is the better option. I\u0027ll modify the function accordingly.",
+      "revId": "5b172eef4f8f9d3d29977610ca24292227ca240b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
