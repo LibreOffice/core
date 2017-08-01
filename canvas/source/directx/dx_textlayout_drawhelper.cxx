@@ -169,14 +169,6 @@ namespace dxcanvas
                 xVirtualDevice->IntersectClipRegion(rClipRegion);
             }
 
-            if(rRenderState.Clip.is())
-            {
-                ::basegfx::B2DPolyPolygon aClipPoly(dxcanvas::tools::polyPolygonFromXPolyPolygon2D(rRenderState.Clip));
-                aClipPoly.transform(aWorldTransform);
-                const vcl::Region& rClipRegion = vcl::Region(::tools::PolyPolygon(aClipPoly));
-                xVirtualDevice->IntersectClipRegion(rClipRegion);
-            }
-
             // set world transform
             XFORM aXForm;
             aXForm.eM11 = (FLOAT)aWorldTransform.get(0, 0);
