@@ -331,10 +331,30 @@ namespace emfplushelper
 
         if (pen && polygon.count())
         {
-            mrTargetHolders.Current().append(
-                new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
-                    polygon,
-                    pen->GetColor().getBColor()));
+          // we need a line join attribute
+          basegfx::B2DLineJoin lineJoin = basegfx::B2DLineJoin::Round;
+          if (pen->penDataFlags & 0x00000008) // additional line join information
+          {
+            lineJoin = static_cast<basegfx::B2DLineJoin>(EMFPPen::lcl_convertLineJoinType(pen->lineJoin));
+          }
+
+          // we need a line cap attribute
+          css::drawing::LineCap lineCap = css::drawing::LineCap_BUTT;
+          if (pen->penDataFlags & 0x00000002) // additional line cap information
+          {
+            lineCap = static_cast<css::drawing::LineCap>(EMFPPen::lcl_convertStrokeCap(pen->startCap));
+            SAL_WARN_IF(pen->startCap != pen->endCap, "cppcanvas.emf", "emf+ pen uses different start and end cap");
+          }
+          // transform the pen width
+          const double transformedPenWidth = MapSize(pen->penWidth, 0).getX();
+          drawinglayer::attribute::LineAttribute lineAttribute(pen->GetColor().getBColor(),
+                                                               transformedPenWidth,
+                                                               lineJoin,
+                                                               lineCap);
+          mrTargetHolders.Current().append(
+              new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                  polygon,
+                  lineAttribute));
         }
     }
 

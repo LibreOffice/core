@@ -69,6 +69,8 @@ namespace emfplushelper
 
     EMFPPen::EMFPPen()
         : EMFPBrush()
+        , penDataFlags(0)
+        , penUnit(0)
         , penWidth(0.0)
         , startCap(0)
         , endCap(0)
@@ -169,7 +171,7 @@ namespace emfplushelper
 
     void EMFPPen::Read(SvStream& s, EmfPlusHelperData& rR)
     {
-        sal_uInt32 graphicsVersion, penType, penDataFlags, penUnit;
+        sal_uInt32 graphicsVersion, penType;
         int i;
         s.ReadUInt32(graphicsVersion).ReadUInt32(penType).ReadUInt32(penDataFlags).ReadUInt32(penUnit).ReadFloat(penWidth);
         SAL_INFO("cppcanvas.emf", "EMF+\tpen");
