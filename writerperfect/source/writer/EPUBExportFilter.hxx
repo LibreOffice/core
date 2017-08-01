@@ -15,6 +15,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace writerperfect
 {
@@ -27,10 +28,11 @@ class EPUBExportFilter : public cppu::WeakImplHelper
     css::lang::XServiceInfo
     >
 {
+    css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::lang::XComponent> mxSourceDocument;
 
 public:
-    EPUBExportFilter();
+    EPUBExportFilter(const css::uno::Reference<css::uno::XComponentContext> &xContext);
 
     // XFilter
     sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue> &rDescriptor) override;
