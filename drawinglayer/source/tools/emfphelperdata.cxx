@@ -28,6 +28,8 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <wmfemfhelper.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -882,9 +884,69 @@ namespace emfplushelper
 
                         if (flags & 0x8000)
                         {
+                            // read the layout rectangle
                             float lx, ly, lw, lh;
                             rMS.ReadFloat(lx).ReadFloat(ly).ReadFloat(lw).ReadFloat(lh);
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawString layoutRect: " << lx << "," << ly << " - " << lw << "x" << lh);
+                            // parse the string
+                            OUString text = read_uInt16s_ToOUString(rMS, stringLength);
+                            SAL_INFO("cppcanvas.emf", "EMF+ DrawString string: " << text);
+                            // get the stringFormat from the Object table
+                            EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
+                            // get the font from the flags
+                            EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
+                            if (!stringFormat || !font)
+                            {
+                              break;
+                            }
+                            // done reading
+
+                            // transform to TextSimplePortionPrimitive2D
+
+                            const OUString emptyString;
+                            drawinglayer::attribute::FontAttribute fontAttribute(
+                                font->family,                                    // font family
+                                emptyString,                                     // (no) font style
+                                font->Bold() ? 8u : 1u,                          // weight: 8 = bold
+                                font->family.compareTo("SYMBOL") == 0, // symbol
+                                stringFormat->DirectionVertical(),               // vertical
+                                font->Italic(),                                  // italic
+                                false,                                           // monospaced
+                                false,                                           // outline = false, no such thing in MS-EMFPLUS
+                                stringFormat->DirectionRightToLeft(),            // right-to-left
+                                false);                                          // BiDiStrong
+
+                            LanguageTag aLanguageTag(static_cast< LanguageType >(stringFormat->language));
+                            css::lang::Locale locale = aLanguageTag.getLocale();
+
+                            basegfx::B2DHomMatrix transformMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(MapSize(font->emSize,font->emSize),Map(lx,ly+font->emSize));
+
+                            basegfx::BColor color;
+                            if (flags & 0x8000) // we use a color
+                            {
+                              color = Color(0xff - (brushId >> 24), (brushId >> 16) & 0xff, (brushId >> 8) & 0xff, brushId & 0xff).getBColor();
+                            }
+                            else // we use a pen
+                            {
+                              const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[brushId & 0xff].get());
+                              if (pen)
+                              {
+                                color = pen->GetColor().getBColor();
+                              }
+                            }
+
+                            std::vector<double> emptyVector;
+                            mrTargetHolders.Current().append(
+                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                  transformMatrix,
+                                  text,
+                                  0,             // text always starts at 0
+                                  stringLength,
+                                  emptyVector,   // EMF-PLUS has no DX-array
+                                  fontAttribute,
+                                  locale,
+                                  color));
+
     //                      OUString text = read_uInt16s_ToOUString(rMS, stringLength);
     //                      EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
     //                        css::rendering::FontRequest aFontRequest;
