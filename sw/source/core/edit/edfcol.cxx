@@ -32,6 +32,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -40,6 +41,7 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <sfx2/classificationhelper.hxx>
+#include <svl/cryptosign.hxx>
 #include <vcl/svapp.hxx>
 
 #include <hintids.hxx>
@@ -59,6 +61,8 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <sfx2/watermarkitem.hxx>
+
+#include <cppuhelper/bootstrap.hxx>
 
 #define WATERMARK_NAME "PowerPlusWaterMarkObject"
 
@@ -541,15 +545,51 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
     if (!pPaM)
         return;
 
+    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    if (!pDocShell)
+        return;
+    SwWrtShell* pCurShell = pDocShell->GetWrtShell();
+    if (!pCurShell)
+        return;
+
     const SwPosition* pPosStart = pPaM->Start();
     SwTextNode* pNode = pPosStart->nNode.GetNode().GetTextNode();
     if (pNode)
     {
-        // Get the text (without fields).
+        // 1. Get the text (without fields).
         const OUString text = pNode->GetText();
-        (void)text;
+        if (text.isEmpty())
+            return;
 
-        //TODO: get signature, add signature field and metadata.
+        // 2. Get certificate and SignatureInformation (needed to show signer name).
+        //FIXME: Temporary until the Paragraph Signing Dialog is available.
+        uno::Reference<uno::XComponentContext> xComponentContext = cppu::defaultBootstrap_InitialComponentContext();
+        uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xComponentContext);
+        uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+        uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+        uno::Sequence<uno::Reference<security::XCertificate>> aCertificates = xSecurityEnvironment->getPersonalCertificates();
+        if (!aCertificates.hasElements())
+            return;
+
+        SignatureInformation aInfo(0);
+        uno::Reference<security::XCertificate> xCert = aCertificates[0];
+        if (!xCert.is())
+            return;
+
+        // 3. Sign it.
+        svl::crypto::Signing signing(xCert);
+        signing.AddDataRange(text.getStr(), text.getLength());
+        OStringBuffer signature;
+        if (!signing.Sign(signature))
+            return;
+
+        const auto pData = reinterpret_cast<const unsigned char*>(text.getStr());
+        const std::vector<unsigned char> data(pData, pData + text.getLength());
+        const std::vector<unsigned char> sig(svl::crypto::DecodeHexString(signature.makeStringAndClear()));
+        if (!svl::crypto::Signing::Verify(data, true, sig, aInfo))
+            return;
+
+        // 4. Add metadata.
     }
 }
 

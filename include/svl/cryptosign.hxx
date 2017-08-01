@@ -51,7 +51,7 @@ public:
     /// Add a range to sign.
     /// Note: for efficiency this takes a naked pointer, which must remain valid
     /// until this object is discarded.
-    void AddDataRange(void* pData, sal_Int32 size)
+    void AddDataRange(const void* pData, sal_Int32 size)
     {
         m_dataBlocks.emplace_back(pData, size);
     }
@@ -81,7 +81,7 @@ private:
     const css::uno::Reference<css::security::XCertificate> m_xCertificate;
 
     /// Data blocks (pointer-size pairs).
-    std::vector<std::pair<void*, sal_Int32>> m_dataBlocks;
+    std::vector<std::pair<const void*, sal_Int32>> m_dataBlocks;
     OUString m_aSignTSA;
     OUString m_aSignPassword;
 };
