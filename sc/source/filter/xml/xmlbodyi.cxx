@@ -141,17 +141,17 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT( TABLE, XML_TRACKED_CHANGES ):
         pChangeTrackingImportHelper = GetScImport().GetChangeTrackingImportHelper();
         if (pChangeTrackingImportHelper)
-            pContext = new ScXMLTrackedChangesContext( GetScImport(), nElement, xAttrList, pChangeTrackingImportHelper);
+            pContext = new ScXMLTrackedChangesContext( GetScImport(), xAttrList, pChangeTrackingImportHelper);
         break;
     case XML_ELEMENT( TABLE, XML_CALCULATION_SETTINGS ):
-        pContext = new ScXMLCalculationSettingsContext( GetScImport(), nElement, xAttrList );
+        pContext = new ScXMLCalculationSettingsContext( GetScImport(), xAttrList );
         bHadCalculationSettings = true;
         break;
     case XML_ELEMENT( TABLE, XML_CONTENT_VALIDATIONS ):
-        pContext = new ScXMLContentValidationsContext( GetScImport(), nElement, xAttrList );
+        pContext = new ScXMLContentValidationsContext( GetScImport() );
         break;
     case XML_ELEMENT( TABLE, XML_LABEL_RANGES ):
-        pContext = new ScXMLLabelRangesContext( GetScImport(), nElement, xAttrList );
+        pContext = new ScXMLLabelRangesContext( GetScImport() );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE ):
         if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
@@ -166,35 +166,30 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         break;
     case XML_ELEMENT( TABLE, XML_NAMED_EXPRESSIONS ):
         pContext = new ScXMLNamedExpressionsContext (
-            GetScImport(), nElement, xAttrList,
+            GetScImport(),
             new ScXMLNamedExpressionsContext::GlobalInserter(GetScImport()) );
         break;
     case XML_ELEMENT( TABLE, XML_DATABASE_RANGES ):
-        pContext = new ScXMLDatabaseRangesContext ( GetScImport(), nElement,
-                                                        xAttrList );
+        pContext = new ScXMLDatabaseRangesContext ( GetScImport() );
         break;
     case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPINGS ):
-        pContext = new ScXMLMappingsContext(GetScImport(), nElement,
-                xAttrList);
+        pContext = new ScXMLMappingsContext(GetScImport());
         break;
     case XML_ELEMENT( TABLE, XML_DATABASE_RANGE ):
-        pContext = new ScXMLDatabaseRangeContext ( GetScImport(), nElement,
+        pContext = new ScXMLDatabaseRangeContext ( GetScImport(),
                                                         xAttrList );
         break;
     case XML_ELEMENT( TABLE, XML_DATA_PILOT_TABLES ):
-        pContext = new ScXMLDataPilotTablesContext ( GetScImport(), nElement,
-                                                        xAttrList );
+        pContext = new ScXMLDataPilotTablesContext ( GetScImport() );
         break;
     case XML_ELEMENT( TABLE, XML_CONSOLIDATION ):
-        pContext = new ScXMLConsolidationContext ( GetScImport(), nElement,
-                                                        xAttrList );
+        pContext = new ScXMLConsolidationContext ( GetScImport(), xAttrList );
         break;
     case XML_ELEMENT( TABLE, XML_DDE_LINKS ):
-        pContext = new ScXMLDDELinksContext ( GetScImport(), nElement,
-                                                        xAttrList );
+        pContext = new ScXMLDDELinksContext ( GetScImport() );
         break;
     case XML_ELEMENT( CALC_EXT, XML_DATA_STREAM_SOURCE ):
-        pContext = new ScXMLDataStreamContext(GetScImport(), nElement, xAttrList);
+        pContext = new ScXMLDataStreamContext(GetScImport(), xAttrList);
         break;
     }
 
@@ -237,7 +232,7 @@ void SAL_CALL ScXMLBodyContext::endFastElement(sal_Int32 nElement)
     if (!bHadCalculationSettings)
     {
         // #111055#; set calculation settings defaults if there is no calculation settings element
-        rtl::Reference<ScXMLCalculationSettingsContext> pContext( new ScXMLCalculationSettingsContext(GetScImport(), nElement, nullptr) );
+        rtl::Reference<ScXMLCalculationSettingsContext> pContext( new ScXMLCalculationSettingsContext(GetScImport(), nullptr) );
         pContext->endFastElement( nElement );
     }
 

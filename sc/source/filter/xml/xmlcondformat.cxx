@@ -24,7 +24,7 @@
 
 using namespace xmloff::token;
 
-ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_Int32 /*nElement*/ ):
+ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rImport ):
     ScXMLImportContext( rImport )
 {
     GetScImport().SetNewCondFormatData();
@@ -38,7 +38,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
     switch (nElement)
     {
         case XML_ELEMENT( CALC_EXT, XML_CONDITIONAL_FORMAT ):
-            pContext = new ScXMLConditionalFormatContext( GetScImport(), nElement, xAttrList );
+            pContext = new ScXMLConditionalFormatContext( GetScImport(), xAttrList );
             break;
     }
 
@@ -56,7 +56,7 @@ void SAL_CALL ScXMLConditionalFormatsContext::endFastElement( sal_Int32 /*nEleme
     SAL_WARN_IF(bDeleted, "sc", "conditional formats have been deleted because they contained empty range info");
 }
 
-ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImport, sal_Int32 /*nElement*/,
+ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImport,
                         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList):
     ScXMLImportContext( rImport )
 {
@@ -94,19 +94,19 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditio
     switch (nElement)
     {
         case XML_ELEMENT( CALC_EXT, XML_CONDITION ):
-            pContext = new ScXMLCondContext( GetScImport(), nElement, xAttrList, mxFormat.get() );
+            pContext = new ScXMLCondContext( GetScImport(), xAttrList, mxFormat.get() );
             break;
         case XML_ELEMENT( CALC_EXT, XML_COLOR_SCALE ):
-            pContext = new ScXMLColorScaleFormatContext( GetScImport(), nElement, mxFormat.get() );
+            pContext = new ScXMLColorScaleFormatContext( GetScImport(), mxFormat.get() );
             break;
         case XML_ELEMENT( CALC_EXT, XML_DATA_BAR ):
-            pContext = new ScXMLDataBarFormatContext( GetScImport(), nElement, xAttrList, mxFormat.get() );
+            pContext = new ScXMLDataBarFormatContext( GetScImport(), xAttrList, mxFormat.get() );
             break;
         case XML_ELEMENT( CALC_EXT, XML_ICON_SET ):
-            pContext = new ScXMLIconSetFormatContext( GetScImport(), nElement, xAttrList, mxFormat.get() );
+            pContext = new ScXMLIconSetFormatContext( GetScImport(), xAttrList, mxFormat.get() );
             break;
         case XML_ELEMENT( CALC_EXT, XML_DATE_IS ):
-            pContext = new ScXMLDateContext( GetScImport(), nElement, xAttrList, mxFormat.get() );
+            pContext = new ScXMLDateContext( GetScImport(), xAttrList, mxFormat.get() );
             break;
         default:
             break;
@@ -131,7 +131,7 @@ ScXMLConditionalFormatContext::~ScXMLConditionalFormatContext()
 {
 }
 
-ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_Int32 /*nElement*/,
+ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport,
                         ScConditionalFormat* pFormat):
     ScXMLImportContext( rImport ),
     pColorScaleFormat(nullptr)
@@ -147,7 +147,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLColorSca
     switch (nElement)
     {
         case XML_ELEMENT( CALC_EXT, XML_COLOR_SCALE_ENTRY ):
-            pContext = new ScXMLColorScaleFormatEntryContext( GetScImport(), nElement, xAttrList, pColorScaleFormat );
+            pContext = new ScXMLColorScaleFormatEntryContext( GetScImport(), xAttrList, pColorScaleFormat );
             break;
         default:
             break;
@@ -156,7 +156,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLColorSca
     return pContext;
 }
 
-ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_Int32 /*nElement*/,
+ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
                         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat):
     ScXMLImportContext( rImport ),
@@ -288,7 +288,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLDataBarF
         case XML_ELEMENT( CALC_EXT, XML_DATA_BAR_ENTRY ):
         {
             ScColorScaleEntry* pEntry(nullptr);
-            pContext = new ScXMLFormattingEntryContext( GetScImport(), nElement, xAttrList, pEntry );
+            pContext = new ScXMLFormattingEntryContext( GetScImport(), xAttrList, pEntry );
             if(mnIndex == 0)
             {
                 mpFormatData->mpLowerLimit.reset(pEntry);
@@ -312,7 +312,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLDataBarF
     return pContext;
 }
 
-ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_Int32 /*nElement*/,
+ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat):
     ScXMLImportContext( rImport )
@@ -377,7 +377,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLIconSetF
         case XML_ELEMENT( CALC_EXT, XML_FORMATTING_ENTRY ):
             {
                 ScColorScaleEntry* pEntry(nullptr);
-                pContext = new ScXMLFormattingEntryContext( GetScImport(), nElement, xAttrList, pEntry );
+                pContext = new ScXMLFormattingEntryContext( GetScImport(), xAttrList, pEntry );
                 mpFormatData->m_Entries.push_back(std::unique_ptr<ScColorScaleEntry>(pEntry));
             }
             break;
@@ -550,7 +550,7 @@ void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& 
 
 }
 
-ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_Int32 /*nElement*/,
+ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport,
                         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat ):
     ScXMLImportContext( rImport )
@@ -622,7 +622,7 @@ void setColorEntryType(const OUString& rType, ScColorScaleEntry* pEntry, const O
 
 }
 
-ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImport& rImport, sal_Int32 /*nElement*/,
+ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImport& rImport,
                         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                         ScColorScaleFormat* pFormat):
     ScXMLImportContext( rImport ),
@@ -671,7 +671,7 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
     pFormat->AddEntry(mpFormatEntry);
 }
 
-ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport, sal_Int32 /*nElement*/,
+ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport,
                         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                         ScColorScaleEntry*& pColorScaleEntry):
     ScXMLImportContext( rImport )
@@ -745,7 +745,7 @@ condformat::ScCondFormatDateType getDateFromString(const OUString& rString)
 
 }
 
-ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport, sal_Int32 /*nElement*/,
+ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport,
                         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat ):
     ScXMLImportContext( rImport )

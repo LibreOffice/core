@@ -32,7 +32,6 @@ using namespace xmloff::token;
 ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */,
                                       OUStringBuffer& sTempValue) :
     ScXMLImportContext( rImport, nPrfx, rLName ),
     sOUText(),

@@ -1032,7 +1032,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     else
     {
         pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
-        if (IsEditable(xParentStates))
+        if (IsEditable())
             pStateSet->AddState(AccessibleStateType::EDITABLE);
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::FOCUSABLE);
@@ -1336,8 +1336,7 @@ bool ScAccessibleSpreadsheet::IsDefunc(
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
-bool ScAccessibleSpreadsheet::IsEditable(
-    const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
+bool ScAccessibleSpreadsheet::IsEditable()
 {
     if (IsFormulaMode())
     {

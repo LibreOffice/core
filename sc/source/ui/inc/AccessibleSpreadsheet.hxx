@@ -230,8 +230,7 @@ private:
 
     bool IsDefunc(
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
-    bool IsEditable(
-        const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
+    bool IsEditable();
     bool IsFocused();
     bool IsCompleteSheetSelected();
 
