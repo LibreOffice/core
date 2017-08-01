@@ -1107,7 +1107,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.StartUndo(SwUndoId::PARA_SIGN_ADD);
             rWrtSh.StartAction();
 
-            SwWrtShell::SignParagraph(pPaM);
+            rWrtSh.SignParagraph(pPaM);
 
             rWrtSh.EndAction();
 
