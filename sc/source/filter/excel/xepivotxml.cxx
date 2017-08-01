@@ -249,25 +249,58 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         auto aDPTypeEnd = aDPTypes.cend();
 
         auto pAttList = sax_fastparser::FastSerializerHelper::createAttrList();
-        // tdf#89139: Only create item list for string-only fields.
-        // Using containsXXX attributes in this case makes Excel think the file is corrupted.
-        // OTOH listing items for e.g. number fields also triggers "corrupted" warning in Excel.
-        bool bListItems = aDPTypes.size() == 1 && aDPTypes.find(ScDPItemData::String) != aDPTypeEnd;
+
+        bool bListItems = true;
+
+        std::set<ScDPItemData::Type> aDPTypesWithoutBlank = aDPTypes;
+        aDPTypesWithoutBlank.erase(ScDPItemData::Empty);
+
+        bool isContainsMoreThanOneType = aDPTypesWithoutBlank.size() > 1;
+        // XML_containsMixedType possible values:
+        // 1 - field contains more than one data type
+        // 0 - only one data type. The field can still contain blank values (that's why we are using aDPTypesWithoutBlank)
+        if (isContainsMoreThanOneType)
+            pAttList->add(XML_containsMixedTypes, ToPsz10(isContainsMoreThanOneType));
+
+        bool isContainsString = aDPTypesWithoutBlank.find(ScDPItemData::String) != aDPTypesWithoutBlank.cend();
+        // XML_containsSemiMixedTypes possible values:
+        // 1 - at least one text value, and can also contain a mix of other data types and blank values
+        // 0 - the field does not have a mix of text and other values
+        if (!(isContainsString && isContainsMoreThanOneType))
+            pAttList->add(XML_containsSemiMixedTypes, ToPsz10(isContainsString && isContainsMoreThanOneType));
+        if (!isContainsString)
+            pAttList->add(XML_containsString, ToPsz10(isContainsString));
+
+        bool isContainsBlank = aDPTypes.find(ScDPItemData::Empty) != aDPTypeEnd;
+        if (isContainsBlank)
+            pAttList->add(XML_containsBlank, ToPsz10(isContainsBlank));
+
+        bool isContainsNumber = aDPTypes.find(ScDPItemData::Value) != aDPTypeEnd;
+        if (isContainsNumber)
+            pAttList->add(XML_containsNumber, ToPsz10(isContainsNumber));
+
+        // Number type fields could be mixed with blank types, and it shouldn't not treated as listed items.
+        // Example:
+        //    <cacheField name="employeeID" numFmtId="0">
+        //        <sharedItems containsString="0" containsBlank="1" containsNumber="1" containsInteger="1" minValue="35" maxValue="89"/>
+        //    </cacheField>
+        if ((aDPTypesWithoutBlank.find(ScDPItemData::Value) != aDPTypesWithoutBlank.cend()) && (aDPTypesWithoutBlank.size() == 1))
+        {
+            pAttList->add(XML_minValue, OString::number(fMin));
+            pAttList->add(XML_maxValue, OString::number(fMax));
+            // If the range is already specified, then we shouldn't list all items
+            bListItems = false;
+        }
+
+        if ((aDPTypes.find(ScDPItemData::Empty) != aDPTypeEnd) && (aDPTypes.size() == 1))
+        {
+            // If all items are blank, then we shouldn't list all items
+            bListItems = false;
+        }
+
         if (bListItems)
         {
             pAttList->add(XML_count, OString::number(static_cast<long>(rFieldItems.size())));
-        }
-        else
-        {
-            pAttList->add(XML_containsMixedTypes, ToPsz10(aDPTypes.size() > 1));
-            pAttList->add(XML_containsSemiMixedTypes, ToPsz10(aDPTypes.size() > 1));
-            pAttList->add(XML_containsString, ToPsz10(aDPTypes.find(ScDPItemData::String) != aDPTypeEnd));
-            if (aDPTypes.find(ScDPItemData::Value) != aDPTypeEnd)
-            {
-                pAttList->add(XML_containsNumber, ToPsz10(true));
-                pAttList->add(XML_minValue, OString::number(fMin));
-                pAttList->add(XML_maxValue, OString::number(fMax));
-            }
         }
         sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
 
