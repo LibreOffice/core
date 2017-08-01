@@ -262,7 +262,6 @@ IsLoaded
 IsNumbering
 IsOutlineSymbolsSet
 IsPlaceholderDependent
-IsPostRotateAngle
 IsSharedFormula
 IsStartOfNewPage
 IsTextWrapped
