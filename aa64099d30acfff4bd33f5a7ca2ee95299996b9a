@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "3a461143_5c9d5764",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-01T07:46:39Z",
+      "side": 1,
+      "message": "That there MUST be a string, that\u0027s clear. But is also another type required?\n\nIn your document, all places have both containsString\u003d\"0\" and containsSemiMixedTypes\u003d\"0\". I am interested in cases where containsString\u003d\"1\" and containsSemiMixedTypes\u003d\"0\".",
+      "parentUuid": "3a461143_dce22703",
+      "range": {
+        "startLine": 267,
+        "startChar": 113,
+        "endLine": 267,
+        "endChar": 134
+      },
+      "revId": "aa64099d30acfff4bd33f5a7ca2ee95299996b9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_fcf9a3c9",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 4
