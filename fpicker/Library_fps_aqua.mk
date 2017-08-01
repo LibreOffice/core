@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_libraries,fps_aqua,\
 	cppuhelper \
 	i18nlangtag \
 	sal \
+	utl \
 	tl \
 	vcl \
 ))
