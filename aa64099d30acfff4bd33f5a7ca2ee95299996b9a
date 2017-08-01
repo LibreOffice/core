@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "3a461143_dce22703",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-08-01T07:07:52Z",
+      "side": 1,
+      "message": "I based my implementation on documentation and .xlsx files produced by MS Excel. Please take a look at example file, which I attached to bug report:\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d109016\n\nhttps://bugs.documentfoundation.org/attachment.cgi?id\u003d135036\u0026action\u003dedit\n\nIf in XML_cacheField field, there is no STRING then it containsSemiMixedTypes\u003d\"0\"\n\nExample:\n        \u003ccacheField name\u003d\"Quantity\" numFmtId\u003d\"0\"\u003e\n            \u003csharedItems containsSemiMixedTypes\u003d\"0\" containsString\u003d\"0\" containsNumber\u003d\"1\" minValue\u003d\"0.33300000000000002\" maxValue\u003d\"10\"/\u003e\n        \u003c/cacheField\u003e\n\n        \u003ccacheField name\u003d\"Type\" numFmtId\u003d\"0\"\u003e\n            \u003csharedItems count\u003d\"3\"\u003e\n                \u003cs v\u003d\"Breakfast\"/\u003e\n                \u003cs v\u003d\"Dinner\"/\u003e\n                \u003cs v\u003d\"Lunch\"/\u003e\n            \u003c/sharedItems\u003e\n        \u003c/cacheField\u003e",
+      "parentUuid": "3a461143_7c2cd34a",
+      "range": {
+        "startLine": 267,
+        "startChar": 113,
+        "endLine": 267,
+        "endChar": 134
+      },
+      "revId": "aa64099d30acfff4bd33f5a7ca2ee95299996b9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_fcf9a3c9",
         "filename": "sc/source/filter/excel/xepivotxml.cxx",
         "patchSetId": 4
