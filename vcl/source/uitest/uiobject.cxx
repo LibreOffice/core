@@ -97,7 +97,11 @@ bool isDialogWindow(vcl::Window const * pWindow)
 bool isTopWindow(vcl::Window const * pWindow)
 {
     WindowType eType = pWindow->GetType();
-    return eType == WindowType::FLOATINGWINDOW;
+    if (eType == WindowType::FLOATINGWINDOW)
+    {
+        return pWindow->GetStyle() & WB_SYSTEMFLOATWIN;
+    }
+    return false;
 }
 
 vcl::Window* get_top_parent(vcl::Window* pWindow)
