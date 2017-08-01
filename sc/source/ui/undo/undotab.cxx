@@ -225,7 +225,6 @@ void ScUndoInsertTables::Redo()
 
     pDocShell->SetInUndo( true );               //! BeginRedo
     bDrawIsInUndo = true;
-    pViewShell->SetTabNo(nTab);
     pViewShell->InsertTables( aNameList, nTab, static_cast<SCTAB>(aNameList.size()),false );
 
     bDrawIsInUndo = false;
