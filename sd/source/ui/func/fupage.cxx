@@ -320,7 +320,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
 
                 // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
                 SfxItemSet aMigrateSet( mpDoc->GetPool(), svl::Items<XATTR_FILLBITMAP, XATTR_FILLBITMAP>{} );
-                aMigrateSet.Put(XFillBitmapItem(OUString("background"), aGraphic));
+                aMigrateSet.Put(XFillBitmapItem("background", aGraphic));
                 SdrModel::MigrateItemSet( &aMigrateSet, pTempSet.get(), mpDoc );
 
                 pTempSet->Put( XFillBmpStretchItem( true ));
