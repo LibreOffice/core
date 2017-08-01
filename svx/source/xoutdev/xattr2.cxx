@@ -202,17 +202,6 @@ AffineMatrixItem::AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix)
     }
 }
 
-AffineMatrixItem::AffineMatrixItem(SvStream& rIn)
-:   SfxPoolItem(SID_ATTR_TRANSFORM_MATRIX)
-{
-    rIn.ReadDouble( maMatrix.m00 );
-    rIn.ReadDouble( maMatrix.m01 );
-    rIn.ReadDouble( maMatrix.m02 );
-    rIn.ReadDouble( maMatrix.m10 );
-    rIn.ReadDouble( maMatrix.m11 );
-    rIn.ReadDouble( maMatrix.m12 );
-}
-
 AffineMatrixItem::AffineMatrixItem(const AffineMatrixItem& rRef)
 :   SfxPoolItem(SID_ATTR_TRANSFORM_MATRIX)
 {
@@ -248,22 +237,6 @@ bool AffineMatrixItem::operator==(const SfxPoolItem& rRef) const
 SfxPoolItem* AffineMatrixItem::Clone( SfxItemPool* /*pPool*/ ) const
 {
     return new AffineMatrixItem(*this);
-}
-
-SfxPoolItem* AffineMatrixItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/ ) const
-{
-    return new AffineMatrixItem(rIn);
-}
-
-SvStream& AffineMatrixItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
-{
-    rStream.WriteDouble( maMatrix.m00 );
-    rStream.WriteDouble( maMatrix.m01 );
-    rStream.WriteDouble( maMatrix.m02 );
-    rStream.WriteDouble( maMatrix.m10 );
-    rStream.WriteDouble( maMatrix.m11 );
-    rStream.WriteDouble( maMatrix.m12 );
-    return rStream;
 }
 
 bool AffineMatrixItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
