@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3a461143_bc41db0d",
+        "filename": "android/source/jni/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001574
+      },
+      "writtenOn": "2017-08-01T03:44:20Z",
+      "side": 1,
+      "message": "This is a flag that enables logging native code to android studio logcat. I used it temporarily so I could delete it.",
+      "parentUuid": "3a461143_3c916b9a",
+      "range": {
+        "startLine": 8,
+        "startChar": 18,
+        "endLine": 8,
+        "endChar": 22
+      },
+      "revId": "86698ef89717b43c31e487003da3d6fa8ee146b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_9c87bf60",
         "filename": "android/source/src/java/org/libreoffice/InvalidationHandler.java",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2017-07-31T21:30:57Z",
       "side": 1,
       "message": "you can do this with wait and notify much better",
+      "revId": "86698ef89717b43c31e487003da3d6fa8ee146b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_dc46a722",
+        "filename": "android/source/src/java/org/libreoffice/InvalidationHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1001574
+      },
+      "writtenOn": "2017-08-01T03:44:20Z",
+      "side": 1,
+      "message": "Yeah I agree. I\u0027ll try to make it work.",
+      "parentUuid": "3a461143_9c87bf60",
       "revId": "86698ef89717b43c31e487003da3d6fa8ee146b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
