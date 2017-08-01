@@ -23,12 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <locale>
 
-struct SFX2_DLLPUBLIC SfxResLocale
-{
-    static std::locale* GetResLocale();
-    static void DeleteResLocale();
-};
-
 SFX2_DLLPUBLIC OUString SfxResId(const char* pId);
 
 #endif

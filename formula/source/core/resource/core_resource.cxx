@@ -16,63 +16,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <unotools/resmgr.hxx>
 #include "core_resource.hxx"
 
-#include <unotools/resmgr.hxx>
-
-// ---- needed as long as we have no contexts for components ---
-#include <rtl/instance.hxx>
-#include <svl/solar.hrc>
-
-
-namespace formula
+OUString ForResId(const char *pId)
 {
-
-
-    //= ResourceManager
-
-    namespace
-    {
-        // access safety
-        struct theResourceManagerMutex : public rtl::Static< osl::Mutex, theResourceManagerMutex > {};
-    }
-
-    sal_Int32       ResourceManager::s_nClients = 0;
-    std::locale*    ResourceManager::m_pImpl = nullptr;
-
-    void ResourceManager::ensureImplExists()
-    {
-        if (m_pImpl)
-            return;
-
-        m_pImpl = new std::locale(Translate::Create("for"));
-    }
-
-    void ResourceManager::registerClient()
-    {
-        ::osl::MutexGuard aGuard(theResourceManagerMutex::get());
-        ++s_nClients;
-    }
-
-    void ResourceManager::revokeClient()
-    {
-        ::osl::MutexGuard aGuard(theResourceManagerMutex::get());
-        if (!--s_nClients && m_pImpl)
-        {
-            delete m_pImpl;
-            m_pImpl = nullptr;
-        }
-    }
-
-    const std::locale& ResourceManager::getResLocale()
-    {
-        ensureImplExists();
-        return *m_pImpl;
-    }
-
-
-} // formula
-
+    static std::locale loc = Translate::Create("for");
+    return Translate::get(pId, loc);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

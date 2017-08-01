@@ -822,8 +822,8 @@ namespace accessibility
         {
             if( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() )
                 return getListBox()->IsExpanded( pEntry ) ?
-                TK_RES_STRING(STR_SVT_ACC_ACTION_COLLAPSE) :
-                TK_RES_STRING(STR_SVT_ACC_ACTION_EXPAND);
+                AccResId(STR_SVT_ACC_ACTION_COLLAPSE) :
+                AccResId(STR_SVT_ACC_ACTION_EXPAND);
             return OUString();
 
         }

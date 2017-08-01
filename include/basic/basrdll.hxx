@@ -33,8 +33,6 @@ public:
     BasicDLL();
     ~BasicDLL();
 
-    const std::locale& GetBasResLocale() const;
-
     static void BasicBreak();
 
     static void EnableBreak( bool bEnable );

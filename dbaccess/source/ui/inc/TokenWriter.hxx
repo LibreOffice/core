@@ -183,7 +183,6 @@ namespace dbaui
 
     class ORowSetImportExport : public ODatabaseImportExport
     {
-        dbaccess::OModuleClient   m_aModuleClient;
         std::vector<sal_Int32>    m_aColumnMapping;
         std::vector<sal_Int32>    m_aColumnTypes;
         css::uno::Reference< css::sdbc::XResultSetUpdate >    m_xTargetResultSetUpdate;

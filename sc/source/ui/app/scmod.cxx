@@ -182,7 +182,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pErrorHdl    = new SfxErrorHandler(RID_ERRHDLSC,
                                        ErrCode(ERRCODE_AREA_SC),
                                        ErrCode(ERRCODE_AREA_APP2-1),
-                                       &GetResLocale());
+                                       GetResLocale());
 
     aSpellIdle.SetInvokeHandler( LINK( this, ScModule, SpellTimerHdl ) );
     aSpellIdle.SetDebugName( "sc::ScModule aSpellIdle" );

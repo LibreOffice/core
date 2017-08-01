@@ -265,9 +265,9 @@ OUString VCLXAccessibleScrollBar::getAccessibleName(  )
     if ( pVCLXScrollBar )
     {
         if ( pVCLXScrollBar->getOrientation() == ScrollBarOrientation::HORIZONTAL )
-            aName = TK_RES_STRING( RID_STR_ACC_SCROLLBAR_NAME_HORIZONTAL );
+            aName = AccResId( RID_STR_ACC_SCROLLBAR_NAME_HORIZONTAL );
         else if ( pVCLXScrollBar->getOrientation() == ScrollBarOrientation::VERTICAL )
-            aName = TK_RES_STRING( RID_STR_ACC_SCROLLBAR_NAME_VERTICAL );
+            aName = AccResId( RID_STR_ACC_SCROLLBAR_NAME_VERTICAL );
     }
     return aName;
 }

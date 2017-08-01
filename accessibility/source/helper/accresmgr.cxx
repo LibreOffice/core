@@ -20,40 +20,10 @@
 #include <helper/accresmgr.hxx>
 #include <unotools/resmgr.hxx>
 
-using namespace accessibility;
-
-// TkResMgr
-
-std::locale* TkResMgr::m_pImpl = nullptr;
-
-TkResMgr::EnsureDelete::~EnsureDelete()
+OUString AccResId(const char* pId)
 {
-    delete TkResMgr::m_pImpl;
-}
-
-void TkResMgr::ensureImplExists()
-{
-    if (m_pImpl)
-        return;
-
-    m_pImpl = new std::locale(Translate::Create("acc"));
-
-    if (m_pImpl)
-    {
-        // now that we have a impl class, make sure it's deleted on unloading the library
-        static TkResMgr::EnsureDelete s_aDeleteTheImplClass;
-    }
-}
-
-OUString TkResMgr::loadString(const char *pResId)
-{
-    OUString sReturn;
-
-    ensureImplExists();
-    if (m_pImpl)
-        sReturn = Translate::get(pResId, *m_pImpl);
-
-    return sReturn;
+    static std::locale loc = Translate::Create("acc");
+    return Translate::get(pId, loc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

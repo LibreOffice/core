@@ -27,9 +27,8 @@
 #include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <svl/inettype.hxx>
+#include <svl/svlresid.hxx>
 #include <svl/svl.hrc>
-
-#include "getstringresource.hxx"
 
 namespace
 {

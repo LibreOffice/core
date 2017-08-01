@@ -139,15 +139,10 @@ static DialogMask aWndFunc(
     return nRet;
 }
 
-SfxErrorHandler::SfxErrorHandler(const ErrMsgCode* pIdPs, ErrCode lStartP, ErrCode lEndP, const std::locale* pLocale)
-    : lStart(lStartP), lEnd(lEndP), pIds(pIdPs), pResLocale(pLocale)
+SfxErrorHandler::SfxErrorHandler(const ErrMsgCode* pIdPs, ErrCode lStartP, ErrCode lEndP, const std::locale& rLocale)
+    : lStart(lStartP), lEnd(lEndP), pIds(pIdPs), rResLocale(rLocale)
 {
     ErrorRegistry::RegisterDisplay(&aWndFunc);
-    if (!pResLocale)
-    {
-        xFreeLocale.reset(new std::locale(Translate::Create("svt")));
-        pResLocale = xFreeLocale.get();
-    }
 }
 
 SfxErrorHandler::~SfxErrorHandler()
@@ -197,12 +192,11 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
     */
 
 {
-    std::locale loc(Translate::Create("svt"));
     for (const ErrMsgCode* pItem = getRID_ERRHDL(); pItem->second; ++pItem)
     {
         if (sal_uInt32(pItem->second) == lClassId)
         {
-            rStr = Translate::get(pItem->first, loc);
+            rStr = SvtResId(pItem->first);
             break;
         }
     }
@@ -227,7 +221,7 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
     {
         if (pItem->second == nErrId)
         {
-            rStr = rStr.replaceAll("$(ERROR)", Translate::get(pItem->first, *pResLocale));
+            rStr = rStr.replaceAll("$(ERROR)", Translate::get(pItem->first, rResLocale));
             bRet = true;
             break;
         }
@@ -247,8 +241,8 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
 }
 
 SfxErrorContext::SfxErrorContext(
-    sal_uInt16 nCtxIdP, vcl::Window *pWindow, const ErrMsgCode* pIdsP, const std::locale* pResLocaleP)
-:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), pResLocale(pResLocaleP)
+    sal_uInt16 nCtxIdP, vcl::Window *pWindow, const ErrMsgCode* pIdsP, const std::locale& rResLocaleP)
+:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), rResLocale(rResLocaleP)
 {
     if (!pIds)
         pIds = getRID_ERRCTX();
@@ -257,8 +251,8 @@ SfxErrorContext::SfxErrorContext(
 
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, const OUString &aArg1P, vcl::Window *pWindow,
-    const ErrMsgCode* pIdsP, const std::locale* pResLocaleP)
-:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), pResLocale(pResLocaleP),
+    const ErrMsgCode* pIdsP, const std::locale& rResLocaleP)
+:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), rResLocale(rResLocaleP),
     aArg1(aArg1P)
 {
     if (!pIds)
@@ -274,46 +268,32 @@ bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
 
 {
     bool bRet = false;
-    std::locale* pFreeLocale = nullptr;
-    if (!pResLocale)
+    for (const ErrMsgCode* pItem = pIds; pItem->second; ++pItem)
     {
-        pFreeLocale = new std::locale(Translate::Create("svt"));
-        pResLocale = pFreeLocale;
-    }
-    if (pResLocale)
-    {
-        for (const ErrMsgCode* pItem = pIds; pItem->second; ++pItem)
+        if (sal_uInt32(pItem->second) == nCtxId)
         {
-            if (sal_uInt32(pItem->second) == nCtxId)
+            rStr = Translate::get(pItem->first, rResLocale);
+            rStr = rStr.replaceAll("$(ARG1)", aArg1);
+            bRet = true;
+            break;
+        }
+    }
+
+    SAL_WARN_IF(!bRet, "svtools.misc", "ErrorContext cannot find the resource");
+
+    if ( bRet )
+    {
+        sal_uInt16 nId = nErrId.IsWarning() ? ERRCTX_WARNING : ERRCTX_ERROR;
+        for (const ErrMsgCode* pItem = getRID_ERRCTX(); pItem->second; ++pItem)
+        {
+            if (sal_uInt32(pItem->second) == nId)
             {
-                rStr = Translate::get(pItem->first, *pResLocale);
-                rStr = rStr.replaceAll("$(ARG1)", aArg1);
-                bRet = true;
+                rStr = rStr.replaceAll("$(ERR)", Translate::get(pItem->first, rResLocale));
                 break;
             }
         }
-
-        SAL_WARN_IF(!bRet, "svtools.misc", "ErrorContext cannot find the resource");
-
-        if ( bRet )
-        {
-            sal_uInt16 nId = nErrId.IsWarning() ? ERRCTX_WARNING : ERRCTX_ERROR;
-            for (const ErrMsgCode* pItem = getRID_ERRCTX(); pItem->second; ++pItem)
-            {
-                if (sal_uInt32(pItem->second) == nId)
-                {
-                    rStr = rStr.replaceAll("$(ERR)", Translate::get(pItem->first, *pResLocale));
-                    break;
-                }
-            }
-        }
     }
 
-    if (pFreeLocale)
-    {
-        delete pFreeLocale;
-        pResLocale = nullptr;
-    }
     return bRet;
 }
 
