@@ -1252,36 +1252,6 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-SvStream& SwFormatVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) const
-{
-#if SAL_TYPES_SIZEOFLONG == 8
-    rStream.WriteInt64(m_nYPos);
-#else
-    rStream.WriteInt32(m_nYPos);
-#endif
-    rStream.WriteInt16( m_eOrient ).WriteInt16( m_eRelation );
-    return rStream;
-}
-
-SfxPoolItem* SwFormatVertOrient::Create(SvStream &rStream, sal_uInt16 /*itemVersion*/) const
-{
-    SwTwips yPos(0);
-    sal_Int16 orient(0);
-    sal_Int16 relation(0);
-    // compatibility hack for Table Auto Format: SwTwips is "long" :(
-    // (this means that the file format is platform dependent)
-#if SAL_TYPES_SIZEOFLONG == 8
-    rStream.ReadInt64(yPos);
-#else
-    sal_Int32 n;
-    rStream.ReadInt32(n);
-    yPos = n;
-#endif
-    rStream.ReadInt16( orient ).ReadInt16( relation );
-
-    return new SwFormatVertOrient(yPos, orient, relation);
-}
-
 // Partially implemented inline in hxx
 SwFormatVertOrient::SwFormatVertOrient( SwTwips nY, sal_Int16 eVert,
                                   sal_Int16 eRel )

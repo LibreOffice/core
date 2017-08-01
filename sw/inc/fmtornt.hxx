@@ -51,9 +51,6 @@ public:
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    SvStream& Store(SvStream &rStream, sal_uInt16 itemVersion) const override;
-    SfxPoolItem* Create(SvStream &rStream, sal_uInt16 itemVersion) const override;
-
     sal_Int16 GetVertOrient() const { return m_eOrient; }
     sal_Int16 GetRelationOrient() const { return m_eRelation; }
     void   SetVertOrient( sal_Int16 eNew ) { m_eOrient = eNew; }
