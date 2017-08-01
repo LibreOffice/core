@@ -356,7 +356,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     xMasterPagesSupplier->getMasterPages());
                 if (xMasterPages.is())
                 {
-                    sal_uInt16 nIndex = GetCurPageId();
+                    sal_uInt16 nIndex = GetCurPagePos() + 1;
                     xMasterPages->insertNewByIndex (nIndex);
 
                     // Create shapes for the default layout.
