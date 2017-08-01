@@ -9,10 +9,10 @@
 
 struct WRITERPERFECT_DLLPUBLIC WPFTResLocale
 {
-    static std::locale& GetResLocale();
+    static std::locale &GetResLocale();
 };
 
-inline OUString WpResId(const char* pId)
+inline OUString WpResId(const char *pId)
 {
     return Translate::get(pId, WPFTResLocale::GetResLocale());
 }
