@@ -73,6 +73,7 @@ $(eval $(call gb_Library_add_exception_objects,wpftwriter,\
 	writerperfect/source/writer/PagesImportFilter \
 	writerperfect/source/writer/StarOfficeWriterImportFilter \
 	writerperfect/source/writer/WordPerfectImportFilter \
+	writerperfect/source/writer/exp/xmlimp \
 ))
 
 # vim: set noet sw=4 ts=4:
