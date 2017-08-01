@@ -267,7 +267,6 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
 
         EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
         sal_Int32 nRotateAngle = aCustomShape2d.GetRotateAngle();
-        bool bPostRotateAngle = aCustomShape2d.IsPostRotate();
 
         bool bFlipV = aCustomShape2d.IsFlipVert();
         bool bFlipH = aCustomShape2d.IsFlipHorz();
@@ -307,7 +306,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
                 }
                 pRenderedShape->Shear( pSdrObjCustomShape->GetSnapRect().Center(), nShearAngle, nTan, false);
             }
-            if( !bPostRotateAngle && nRotateAngle )
+            if(nRotateAngle )
             {
                 double a = nRotateAngle * F_PI18000;
                 pRenderedShape->NbcRotate( pSdrObjCustomShape->GetSnapRect().Center(), nRotateAngle, sin( a ), cos( a ) );
@@ -323,12 +322,6 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
                 Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
                 pRenderedShape->NbcMirror( aTop, aBottom );
-            }
-            // Specifically for pptx imports
-            if( bPostRotateAngle && nRotateAngle )
-            {
-                double a = nRotateAngle * F_PI18000;
-                pRenderedShape->NbcRotate( pSdrObjCustomShape->GetSnapRect().Center(), nRotateAngle, sin( a ), cos( a ) );
             }
             pRenderedShape->NbcSetStyleSheet( pSdrObjCustomShape->GetStyleSheet(), true );
             pRenderedShape->RecalcSnapRect();

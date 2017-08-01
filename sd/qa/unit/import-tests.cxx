@@ -291,6 +291,7 @@ void SdImportTest::testDocumentLayout()
         { "tdf90338.odp", "xml/tdf90338_", ODP, PPTX },
         { "tdf92001.odp", "xml/tdf92001_", ODP, PPTX },
         { "tdf100491.pptx", "xml/tdf100491_", PPTX, -1 },
+        { "tdf109317.pptx", "xml/tdf109317_", PPTX, ODP},
         // { "pptx/n828390.pptx", "pptx/xml/n828390_", PPTX, PPTX }, // Example
     };
 

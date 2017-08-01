@@ -3310,7 +3310,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3374,7 +3373,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3438,7 +3436,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3502,7 +3499,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3566,7 +3562,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3630,7 +3625,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3694,7 +3688,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3758,7 +3751,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3822,7 +3814,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3886,7 +3877,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -3950,7 +3940,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4014,7 +4003,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4078,7 +4066,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4142,7 +4129,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4206,7 +4192,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4270,7 +4255,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4334,7 +4318,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4398,7 +4381,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4462,7 +4444,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4526,7 +4507,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4590,7 +4570,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4654,7 +4633,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4718,7 +4696,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4782,7 +4759,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4846,7 +4822,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4910,7 +4885,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -4974,7 +4948,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5038,7 +5011,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5102,7 +5074,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5166,7 +5137,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5230,7 +5200,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5294,7 +5263,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5358,7 +5326,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5422,7 +5389,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5486,7 +5452,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5550,7 +5515,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5614,7 +5578,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5678,7 +5641,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5742,7 +5704,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5806,7 +5767,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5870,7 +5830,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5934,7 +5893,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -5998,7 +5956,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6062,7 +6019,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6126,7 +6082,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6190,7 +6145,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6254,7 +6208,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6318,7 +6271,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6382,7 +6334,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6446,7 +6397,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6510,7 +6460,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6574,7 +6523,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6638,7 +6586,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6702,7 +6649,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6766,7 +6712,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
@@ -6830,7 +6775,6 @@
      <PropertyValue name="Handles">
       <Handles/>
      </PropertyValue>
-     <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Path">
