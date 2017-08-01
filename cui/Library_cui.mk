@@ -161,7 +161,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optjava \
     cui/source/options/optjsearch \
     cui/source/options/optlingu \
-    cui/source/options/optmemory \
 	$(call gb_Helper_optional,OPENCL, \
 	    cui/source/options/optopencl) \
     cui/source/options/optpath \

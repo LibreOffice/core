@@ -48,7 +48,6 @@
 #include "optjava.hxx"
 #include "optjsearch.hxx"
 #include "optlingu.hxx"
-#include "optmemory.hxx"
 #if HAVE_FEATURE_OPENCL
 #include "optopencl.hxx"
 #endif
@@ -292,7 +291,6 @@ VclPtr<SfxTabPage> CreateGeneralTabPage( sal_uInt16 nId, vcl::Window* pParent, c
         case RID_SFXPAGE_LINGU:                     fnCreate = &SvxLinguTabPage::Create; break;
         case OFA_TP_VIEW:                           fnCreate = &OfaViewTabPage::Create; break;
         case OFA_TP_MISC:                           fnCreate = &OfaMiscTabPage::Create; break;
-        case OFA_TP_MEMORY:                         fnCreate = &OfaMemoryOptionsPage::Create; break;
         case RID_SVXPAGE_ASIAN_LAYOUT:              fnCreate = &SvxAsianLayoutPage::Create; break;
         case RID_SVX_FONT_SUBSTITUTION:             fnCreate = &SvxFontSubstTabPage::Create; break;
         case RID_SVXPAGE_INET_PROXY:                fnCreate = &SvxProxyTabPage::Create; break;
@@ -336,7 +334,6 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "ProductName",        nullptr,                SID_GENERAL_OPTIONS },
     { "ProductName",        "UserData",             RID_SFXPAGE_GENERAL },
     { "ProductName",        "General",              OFA_TP_MISC },
-    { "ProductName",        "Memory",               OFA_TP_MEMORY },
     { "ProductName",        "View",                 OFA_TP_VIEW },
     { "ProductName",        "Print",                RID_SFXPAGE_PRINTOPTIONS },
     { "ProductName",        "Paths",                RID_SFXPAGE_PATH },
