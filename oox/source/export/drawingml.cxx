@@ -1157,6 +1157,12 @@ void DrawingML::WriteStretch( const css::uno::Reference< css::beans::XPropertySe
 void DrawingML::WriteTransformation( const tools::Rectangle& rRect,
         sal_Int32 nXmlNamespace, bool bFlipH, bool bFlipV, sal_Int32 nRotation )
 {
+    //OOXML flips shapes before rotating them.
+    if(bFlipH)
+        nRotation = nRotation * -1 + 60000*360;
+    if(bFlipV)
+        nRotation = nRotation * -1 + 60000*360;
+
     mpFS->startElementNS( nXmlNamespace, XML_xfrm,
                           XML_flipH, bFlipH ? "1" : nullptr,
                           XML_flipV, bFlipV ? "1" : nullptr,

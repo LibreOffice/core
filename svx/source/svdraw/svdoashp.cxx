@@ -536,18 +536,6 @@ void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
     SetMergedItem( aGeometryItem );
 }
 
-
-bool SdrObjCustomShape::IsPostRotate() const
-{
-    const css::uno::Any* pAny;
-    bool bPostRotate = false;
-    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
-    pAny = rGeometryItem.GetPropertyValueByName( "IsPostRotateAngle" );
-    if ( pAny )
-        *pAny >>= bPostRotate;
-    return bPostRotate;
-}
-
 double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
 {
     const css::uno::Any* pAny;
