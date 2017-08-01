@@ -40,7 +40,6 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         break;
     case XML_grpSpPr:
         return new oox::drawingml::ShapePropertiesContext(*this, *mpShape);
-        break;
     case XML_wsp:
     {
         // Don't set default character height, Writer has its own way to set
@@ -49,15 +48,12 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false));
         return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
     }
-    break;
     case XML_pic:
         return new oox::drawingml::GraphicShapeContext(*this, mpShape, std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GraphicObjectShape"));
-        break;
     case XML_grpSp:
     {
         return new oox::drawingml::ShapeGroupContext(*this, mpShape, std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GroupShape"));
     }
-    break;
     case XML_graphicFrame:
         break;
     default:

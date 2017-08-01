@@ -55,10 +55,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
         break;
     case XML_spPr:
         return new oox::drawingml::ShapePropertiesContext(*this, *mpShape);
-        break;
     case XML_style:
         return new oox::drawingml::ShapeStyleContext(*this, *mpShape);
-        break;
     case XML_bodyPr:
         if (mxShape.is())
         {
