@@ -101,3 +101,35 @@
  
  
  #define SIP_ROTL(x, b) (uint64_t)(((x) << (b)) | ( (x) >> (64 - (b))))
+--- misc/expat-2.2.1/configure.ac
++++ misc/build/expat-2.2.1/configure.ac
+@@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
+
+
+ AC_MSG_CHECKING([for getrandom (Linux 3.17+, glibc 2.25+)])
+-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
++AC_LINK_IFELSE([AC_LANG_SOURCE([
+   #include <stdlib.h>  /* for NULL */
+   #include <sys/random.h>
+   int main() {
+--- misc/expat-2.2.1/configure	2017-07-12 17:04:34.000000000 +0200
++++ misc/build/expat-2.2.1/configure	2017-07-12 17:05:59.000000000 +0200
+@@ -16341,7 +16341,7 @@
+   }
+
+ _ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
++if ac_fn_c_try_link "$LINENO"; then :
+
+
+ $as_echo "#define HAVE_GETRANDOM 1" >>confdefs.h
+@@ -16386,7 +16386,8 @@
+     conftest$ac_exeext conftest.$ac_ext
+
+ fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++rm -f core conftest.err conftest.$ac_objext \
++    conftest$ac_exeext conftest.$ac_ext
+
+
+ for ac_header in fcntl.h unistd.h
