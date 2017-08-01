@@ -359,7 +359,7 @@ OUString SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleDescription(  )
 
     if (m_nRole == AccessibleRole::PANEL && getAccessibleChildCount() > 0)
     {
-        return TK_RES_STRING( RID_STR_ACC_PANEL_DESCRIPTION );
+        return AccResId( RID_STR_ACC_PANEL_DESCRIPTION );
     }
     else
     {
