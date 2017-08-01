@@ -15,6 +15,8 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
+#include "exp/xmlimp.hxx"
+
 using namespace com::sun::star;
 
 namespace writerperfect
@@ -31,7 +33,7 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDe
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
 
     // The document handler will make the calls on the text interface provided by the EPUB export.
-    uno::Reference<xml::sax::XDocumentHandler> xExportHandler;
+    uno::Reference<xml::sax::XDocumentHandler> xExportHandler(new exp::XMLImport);
 
     // Let the ODT exporter read the doc model and invoke the doc handler.
     xInitialization->initialize({uno::makeAny(xExportHandler)});
