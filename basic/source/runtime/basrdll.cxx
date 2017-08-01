@@ -35,13 +35,11 @@ struct BasicDLL::Impl
     bool        bDebugMode;
     bool        bBreakEnabled;
 
-    std::locale aBasResLocale;
     std::unique_ptr<SbxAppData> xSbxAppData;
 
     Impl()
         : bDebugMode(false)
         , bBreakEnabled(true)
-        , aBasResLocale(Translate::Create("sb"))
         , xSbxAppData(new SbxAppData)
     { }
 };
@@ -50,11 +48,6 @@ namespace {
 
 BasicDLL * BASIC_DLL;
 
-}
-
-OUString BasResId(const char* pId)
-{
-    return Translate::get(pId, BASIC_DLL->GetBasResLocale());
 }
 
 BasicDLL::BasicDLL()
@@ -66,8 +59,6 @@ BasicDLL::BasicDLL()
 BasicDLL::~BasicDLL()
 {
 }
-
-const std::locale& BasicDLL::GetBasResLocale() const { return m_xImpl->aBasResLocale; }
 
 void BasicDLL::EnableBreak( bool bEnable )
 {

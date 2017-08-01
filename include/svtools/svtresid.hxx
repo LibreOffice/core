@@ -21,14 +21,10 @@
 #define INCLUDED_SVTOOLS_SVTRESID_HXX
 
 #include <svtools/svtdllapi.h>
-#include <com/sun/star/lang/Locale.hpp>
+#include <rtl/ustring.hxx>
+#include <locale>
 
-struct SVT_DLLPUBLIC SvtResLocale
-{
-    static std::locale* GetResLocale();
-    static void DeleteResLocale();
-};
-
+SVT_DLLPUBLIC const std::locale& SvtResLocale();
 SVT_DLLPUBLIC OUString SvtResId(const char* pId);
 
 #endif // INCLUDED_SVTOOLS_SVTRESID_HXX

@@ -19,29 +19,12 @@
 
 
 #include <sfx2/sfxresid.hxx>
-#include <tools/solar.h>
 #include "unotools/resmgr.hxx"
-
-static std::locale* pResLocale = nullptr;
-
-std::locale* SfxResLocale::GetResLocale()
-{
-    if (!pResLocale)
-    {
-        pResLocale = new std::locale(Translate::Create("sfx"));
-    }
-
-    return pResLocale;
-}
-
-void SfxResLocale::DeleteResLocale()
-{
-    DELETEZ(pResLocale);
-}
 
 OUString SfxResId(const char* pId)
 {
-    return Translate::get(pId, *SfxResLocale::GetResLocale());
+    static std::locale loc = Translate::Create("sfx");
+    return Translate::get(pId, loc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -174,7 +174,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     m_pErrorHandler = new SfxErrorHandler( RID_SW_ERRHDL,
                                      ErrCode(ERRCODE_AREA_SW),
                                      ErrCode(ERRCODE_AREA_SW_END),
-                                     &GetResLocale() );
+                                     GetResLocale() );
 
     m_pModuleConfig = new SwModuleOptions;
 

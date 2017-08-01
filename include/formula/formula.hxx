@@ -24,7 +24,6 @@
 #include <utility>
 
 #include <formula/formuladllapi.h>
-#include <formula/omoduleclient.hxx>
 #include <formula/IFunctionDescription.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -88,7 +87,7 @@ protected:
 };
 
 class FORMULA_DLLPUBLIC FormulaDlg:
-    private OModuleClient, public SfxModelessDialog, public IFormulaEditorHelper
+    public SfxModelessDialog, public IFormulaEditorHelper
 {
     friend class FormulaDlg_Impl;
 public:

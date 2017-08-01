@@ -6,17 +6,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_FPICKER_SOURCE_OFFICE_FPSOFFICERESMGR_HXX
-#define INCLUDED_FPICKER_SOURCE_OFFICE_FPSOFFICERESMGR_HXX
 
-#include <unotools/resmgr.hxx>
+#ifndef INCLUDED_SVL_SVTRESID_HXX
+#define INCLUDED_SVL_SVTRESID_HXX
 
-inline OUString FpsResId(const char* pId)
-{
-    static std::locale loc = Translate::Create("fps");
-    return Translate::get(pId, loc);
-};
+#include <svl/svldllapi.h>
+#include <rtl/ustring.hxx>
+#include <locale>
 
-#endif
+SVL_DLLPUBLIC OUString SvlResId(const char* pId);
+
+#endif // INCLUDED_SVL_SVTRESID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

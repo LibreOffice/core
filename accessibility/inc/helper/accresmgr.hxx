@@ -22,41 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-#define TK_RES_STRING(id) ::accessibility::TkResMgr::loadString(id)
-
-// TkResMgr
-
-namespace accessibility
-{
-
-class TkResMgr
-{
-    static std::locale* m_pImpl;
-
-private:
-    // no instantiation allowed
-    TkResMgr() = delete;
-    ~TkResMgr() { }
-
-    // we'll instantiate one static member of the following class,
-    // which in its dtor ensures that m_pImpl will be deleted
-    class EnsureDelete
-    {
-    public:
-        EnsureDelete() { }
-        ~EnsureDelete();
-    };
-    friend class EnsureDelete;
-
-protected:
-    static void ensureImplExists();
-
-public:
-    // loads the string with the specified resource id
-    static OUString loadString(const char *pResId);
-};
-
-}
+OUString AccResId(const char* pId);
 
 #endif // INCLUDED_ACCESSIBILITY_INC_HELPER_ACCRESMGR_HXX
 

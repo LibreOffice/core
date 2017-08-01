@@ -18,26 +18,17 @@
  */
 
 #include <unotools/resmgr.hxx>
-#include <tools/solar.h>
 #include <svtools/svtresid.hxx>
 
-static std::locale* pResLocale=nullptr;
-
-std::locale* SvtResLocale::GetResLocale()
+const std::locale& SvtResLocale()
 {
-    if (!pResLocale)
-        pResLocale = new std::locale(Translate::Create("svt"));
-    return pResLocale;
-}
-
-void SvtResLocale::DeleteResLocale()
-{
-    DELETEZ(pResLocale);
+    static std::locale loc = Translate::Create("svt");
+    return loc;
 }
 
 OUString SvtResId(const char* pId)
 {
-    return Translate::get(pId, *SvtResLocale::GetResLocale());
+    return Translate::get(pId, SvtResLocale());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -218,9 +218,9 @@ OUString VCLXAccessibleCheckBox::getAccessibleActionDescription ( sal_Int32 nInd
         throw IndexOutOfBoundsException();
 
     if(IsChecked())
-        return TK_RES_STRING( RID_STR_ACC_ACTION_UNCHECK );
+        return AccResId( RID_STR_ACC_ACTION_UNCHECK );
     else
-        return TK_RES_STRING( RID_STR_ACC_ACTION_CHECK );
+        return AccResId( RID_STR_ACC_ACTION_CHECK );
 }
 
 
