@@ -60,7 +60,7 @@ VirtualMachine::AttachGuard::~AttachGuard()
 }
 
 VirtualMachine::VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
-                               JNIEnv * pMainThreadEnv):
+                               JNIEnv const * pMainThreadEnv):
     m_pVm(pVm), m_nVersion(nVersion), m_bDestroy(bDestroy)
 {
     (void) pMainThreadEnv; // avoid warnings

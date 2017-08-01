@@ -32,7 +32,7 @@ void X11SalGraphics::Init( X11OpenGLSalVirtualDevice *pDevice )
     mxImpl->Init();
 }
 
-X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
+X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics const * pGraphics,
                                                       long &nDX, long &nDY,
                                                       const SystemGraphicsData *pData,
                                                       X11SalGraphics* pNewGraphics) :
@@ -46,7 +46,7 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
     assert( pData == nullptr ); (void)pData;
 
     mpDisplay  = vcl_sal::getSalDisplay(GetGenericData());
-    mnXScreen  = pGraphics ? static_cast<X11SalGraphics*>(pGraphics)->GetScreenNumber() :
+    mnXScreen  = pGraphics ? static_cast<X11SalGraphics const *>(pGraphics)->GetScreenNumber() :
                              vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen();
     mnWidth    = nDX;
     mnHeight   = nDY;

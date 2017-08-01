@@ -35,8 +35,8 @@
 using namespace css;
 
 CertificateChooser::CertificateChooser(vcl::Window* _pParent,
-                                       uno::Reference<uno::XComponentContext>& _rxCtx,
-                                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > >& rxSecurityContexts)
+                                       uno::Reference<uno::XComponentContext> const & _rxCtx,
+                                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > const & rxSecurityContexts)
     : ModalDialog(_pParent, "SelectCertificateDialog", "xmlsec/ui/selectcertificatedialog.ui"),
     mvUserData()
 {

@@ -125,7 +125,7 @@ public:
         the future).
      */
     VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
-                   JNIEnv * pMainThreadEnv);
+                   JNIEnv const * pMainThreadEnv);
 
 private:
     VirtualMachine(VirtualMachine &) = delete;

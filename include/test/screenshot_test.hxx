@@ -36,7 +36,7 @@ private:
 private:
     /// helpers
     void implSaveScreenshot(const Bitmap& rScreenshot, const OString& rScreenshotId);
-    void saveScreenshot(VclAbstractDialog& rDialog);
+    void saveScreenshot(VclAbstractDialog const & rDialog);
     void saveScreenshot(Dialog& rDialog);
 
     /// helper method to populate maKnownDialogs, called in setUp(). Needs to be

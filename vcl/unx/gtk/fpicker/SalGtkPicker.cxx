@@ -119,7 +119,7 @@ GtkWindow* RunDialog::GetTransientFor()
     return pParent;
 }
 
-RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit ) :
+RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit > const & rToolkit ) :
     cppu::WeakComponentImplHelper< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
     mpDialog(pDialog), mxToolkit(rToolkit)
 {
