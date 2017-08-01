@@ -40,9 +40,8 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace ppt {
 
     CommonBehaviorContext::CommonBehaviorContext( FragmentHandler2 const & rParent,
-            const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )
-        : TimeNodeContext( rParent, PPT_TOKEN( cBhvr ), xAttribs, pNode )
+        : TimeNodeContext( rParent, PPT_TOKEN( cBhvr ), pNode )
             , mbInAttrList( false )
             , mbIsInAttrName( false )
     {

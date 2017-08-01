@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 
-VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& /*xContext*/ ) :
+VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs ) :
     mpShell( nullptr ),
     mbDisposed( true )
 {

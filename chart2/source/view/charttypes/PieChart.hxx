@@ -107,7 +107,6 @@ struct PieLabelInfo;
                                 , const css::awt::Size& rPageSize );
 
     bool                performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo const & rPieLabelInfo);
-    static bool         performLabelBestFitOuterPlacement(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
     void                performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
 
 private: //member

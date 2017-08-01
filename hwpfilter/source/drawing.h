@@ -430,7 +430,7 @@ static bool LoadDrawingObjectBlock(Picture * pic)
 
 // object manipulation function
 static int
-HWPDODefaultFunc(int , HWPDrawingObject * , int cmd, void *, int)
+HWPDODefaultFunc(int cmd)
 {
     if (cmd == OBJFUNC_LOAD)
         return OBJRET_FILE_NO_PRIVATE_BLOCK;
@@ -438,7 +438,7 @@ HWPDODefaultFunc(int , HWPDrawingObject * , int cmd, void *, int)
 }
 
 static int
-HWPDOLineFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
+HWPDOLineFunc(int /*type*/, HWPDrawingObject * hdo, int cmd, void * /*argp*/, int /*argv*/)
 {
     int ret = OBJRET_FILE_OK;
     switch (cmd)
@@ -455,7 +455,7 @@ HWPDOLineFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
             ret = OBJRET_FILE_NO_PRIVATE_BLOCK_2;
             break;
         default:
-            ret = HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+            ret = HWPDODefaultFunc(cmd);
             break;
     }
     return ret;
@@ -465,25 +465,25 @@ HWPDOLineFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 // rectangle
 
 static int
-HWPDORectFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
+HWPDORectFunc(int /*type*/, HWPDrawingObject * /*hdo*/, int cmd, void * /*argp*/, int /*argv*/)
 {
-    return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+    return HWPDODefaultFunc(cmd);
 }
 
 
 // ellipse
 
 static int
-HWPDOEllipseFunc(int type, HWPDrawingObject * hdo,
-int cmd, void *argp, int argv)
+HWPDOEllipseFunc(int /*type*/, HWPDrawingObject * /*hdo*/,
+int cmd, void * /*argp*/, int /*argv*/)
 {
-    return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+    return HWPDODefaultFunc(cmd);
 }
 
 #define WTMM(x)     ((double)(x) / 1800. * 25.4)
 static int
-HWPDOEllipse2Func(int type, HWPDrawingObject * hdo,
-int cmd, void *argp, int argv)
+HWPDOEllipse2Func(int /*type*/, HWPDrawingObject * hdo,
+int cmd, void * /*argp*/, int /*argv*/)
 {
     switch (cmd)
     {
@@ -502,7 +502,7 @@ int cmd, void *argp, int argv)
                 return OBJRET_FILE_ERROR;
             break;
         default:
-            return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+            return HWPDODefaultFunc(cmd);
     }
     return OBJRET_FILE_OK;
 }
@@ -511,7 +511,7 @@ int cmd, void *argp, int argv)
 // arc
 
 static int
-HWPDOArcFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
+HWPDOArcFunc(int /*type*/, HWPDrawingObject * hdo, int cmd, void * /*argp*/, int /*argv*/)
 {
     switch (cmd)
     {
@@ -526,14 +526,14 @@ HWPDOArcFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
                 return OBJRET_FILE_ERROR;
             break;
         default:
-            return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+            return HWPDODefaultFunc(cmd);
     }
     return OBJRET_FILE_OK;
 }
 
 
 static int
-HWPDOArc2Func(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
+HWPDOArc2Func(int /*type*/, HWPDrawingObject * /*hdo*/, int cmd, void * /*argp*/, int /*argv*/)
 {
     int ret = OBJRET_FILE_OK;
     switch (cmd)
@@ -542,7 +542,7 @@ HWPDOArc2Func(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
             ret = OBJRET_FILE_NO_PRIVATE_BLOCK;
             break;
         default:
-            ret = HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+            ret = HWPDODefaultFunc(cmd);
             break;
     }
     return ret;
@@ -550,8 +550,8 @@ HWPDOArc2Func(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 
 
 static int
-HWPDOFreeFormFunc(int type, HWPDrawingObject * hdo,
-int cmd, void *argp, int argv)
+HWPDOFreeFormFunc(int /*type*/, HWPDrawingObject * hdo,
+int cmd, void * /*argp*/, int /*argv*/)
 {
     switch (cmd)
     {
@@ -606,7 +606,7 @@ int cmd, void *argp, int argv)
                 delete[]hdo->u.freeform.pt;
             break;
         default:
-            return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+            return HWPDODefaultFunc(cmd);
     }
     return OBJRET_FILE_OK;
 }
@@ -640,8 +640,8 @@ static HWPPara *LoadParaList()
 
 
 static int
-HWPDOTextBoxFunc(int type, HWPDrawingObject * hdo,
-int cmd, void *argp, int argv)
+HWPDOTextBoxFunc(int /*type*/, HWPDrawingObject * hdo,
+int cmd, void * /*argp*/, int /*argv*/)
 {
     switch (cmd)
     {
@@ -660,7 +660,7 @@ int cmd, void *argp, int argv)
             }
             break;
         default:
-            return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+            return HWPDODefaultFunc(cmd);
     }
     return OBJRET_FILE_OK;
 }
@@ -668,10 +668,10 @@ int cmd, void *argp, int argv)
 
 
 static int
-HWPDOContainerFunc(int type, HWPDrawingObject * hdo,
-int cmd, void *argp, int argv)
+HWPDOContainerFunc(int /*type*/, HWPDrawingObject * /*hdo*/,
+int cmd, void * /*argp*/, int /*argv*/)
 {
-    return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
+    return HWPDODefaultFunc(cmd);
 }
 
 

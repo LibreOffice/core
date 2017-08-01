@@ -153,7 +153,7 @@ void WrappedAxisAndGridExistenceProperty::setPropertyValue( const Any& rOuterVal
         if( m_bAxis )
             AxisHelper::showAxis( m_nDimensionIndex, m_bMain, xDiagram, m_spChart2ModelContact->m_xContext );
         else
-            AxisHelper::showGrid( m_nDimensionIndex, 0, m_bMain, xDiagram, m_spChart2ModelContact->m_xContext );
+            AxisHelper::showGrid( m_nDimensionIndex, 0, m_bMain, xDiagram );
     }
     else
     {

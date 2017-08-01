@@ -119,13 +119,7 @@ public:
         , const css::uno::Reference< css::frame::XModel >& xChartModel
         , sal_Int32 nSubIndex = -1 );//-1: main grid, 0: first subgrid etc
 
-    SAL_DLLPRIVATE static OUString createParticleForDiagram(
-          const css::uno::Reference< css::chart2::XDiagram >& xDiagram
-        , ChartModel& rModel);
-
-    SAL_DLLPRIVATE static OUString createParticleForDiagram(
-          const css::uno::Reference< css::chart2::XDiagram >& xDiagram
-        , const css::uno::Reference< css::frame::XModel >& xChartModel );
+    SAL_DLLPRIVATE static OUString createParticleForDiagram();
 
     static OUString createParticleForCoordinateSystem(
           const css::uno::Reference< css::chart2::XCoordinateSystem >& xCooSys

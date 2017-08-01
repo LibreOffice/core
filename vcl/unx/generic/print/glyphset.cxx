@@ -212,7 +212,7 @@ struct EncEntry
 static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
     const char* pGlyphSetName, int nGlyphCount,
     /*const*/ const sal_uInt16* pRequestedGlyphs, /*const*/ const unsigned char* pEncoding,
-    bool bAllowType42, bool /*bAllowCID*/ )
+    bool bAllowType42 )
 {
     // match the font-subset to the printer capabilities
      // TODO: allow CFF for capable printers
@@ -265,7 +265,6 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     // of the glyph in the output file
     unsigned char  pEncoding[256];
     sal_uInt16 pTTGlyphMapping[256];
-    const bool bAllowCID = false; // TODO: nPSLanguageLevel>=3
 
     // loop through all the font glyph subsets
     sal_Int32 nGlyphSetID;
@@ -291,7 +290,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
         OString aGlyphSetName = GetGlyphSetName(nGlyphSetID);
         fprintf( pTmpFile, "%%%%BeginResource: font %s\n", aGlyphSetName.getStr() );
         CreatePSUploadableFont( pTTFont, pTmpFile, aGlyphSetName.getStr(), (*aGlyphSet).size(),
-                                pTTGlyphMapping, pEncoding, bAllowType42, bAllowCID );
+                                pTTGlyphMapping, pEncoding, bAllowType42 );
         fprintf( pTmpFile, "%%%%EndResource\n" );
         rSuppliedFonts.push_back( aGlyphSetName );
     }

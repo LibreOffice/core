@@ -42,7 +42,7 @@ namespace oox { namespace ppt {
 
     CondContext::CondContext( FragmentHandler2 const & rParent, const Reference< XFastAttributeList >& xAttribs,
                 const TimeNodePtr & pNode, AnimationCondition & aValue )
-        :  TimeNodeContext( rParent, PPT_TOKEN( cond ), xAttribs, pNode )
+        :  TimeNodeContext( rParent, PPT_TOKEN( cond ), pNode )
         , maCond( aValue )
     {
         maEvent.Trigger =  EventTrigger::NONE;
@@ -154,10 +154,9 @@ namespace oox { namespace ppt {
     /** CT_TLTimeConditionList */
     CondListContext::CondListContext(
             FragmentHandler2 const & rParent, sal_Int32  aElement,
-            const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode,
             AnimationConditionList & aCond )
-        : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+        : TimeNodeContext( rParent, aElement, pNode )
         , maConditions( aCond )
     {
     }

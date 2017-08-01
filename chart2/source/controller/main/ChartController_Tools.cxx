@@ -879,12 +879,12 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
             }
             else
             {
-                AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram, m_xCC );
+                AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
             }
         }
         else
         {
-            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram, m_xCC );
+            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram );
         }
         aUndoGuard.commit();
     }
@@ -911,12 +911,12 @@ void ChartController::executeDispatch_ToggleGridVertical()
             }
             else
             {
-                AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram, m_xCC );
+                AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, false, xDiagram );
             }
         }
         else
         {
-            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram, m_xCC );
+            AxisHelper::showGrid( nDimensionIndex, nCooSysIndex, true, xDiagram );
         }
 
         aUndoGuard.commit();

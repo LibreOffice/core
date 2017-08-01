@@ -143,7 +143,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nati
 }
 
 
-jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name, jstring key )
+jint read_from_storage_stream( JNIEnv * env, jstring name, jstring key )
 {
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XInputStream> xIn = pHelper.get() ? pHelper->getInputStream() : Reference< XInputStream>();
@@ -185,7 +185,7 @@ jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name,
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2
-  (JNIEnv* env, jobject obj_this, jstring name, jstring key)
+  (JNIEnv* env, jobject /*obj_this*/, jstring name, jstring key)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
@@ -194,12 +194,12 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
     DataLogFile aDataLog( env, name, "data" );
     return read_from_storage_stream( env, obj_this, name, key, &aDataLog );
 #else
-    return read_from_storage_stream( env, obj_this, name, key );
+    return read_from_storage_stream( env, name, key );
 #endif
 }
 
 
-jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key, jbyteArray buffer, jint off, jint len )
+jint read_from_storage_stream_into_buffer( JNIEnv * env, jstring name, jstring key, jbyteArray buffer, jint off, jint len )
 {
 #ifdef HSQLDB_DBG
     {
@@ -261,7 +261,8 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
     DataLogFile aDataLog( env, name, "data" );
     return read_from_storage_stream_into_buffer( env, obj_this, name, key, buffer, off, len, &aDataLog );
 #else
-    return read_from_storage_stream_into_buffer( env, obj_this, name, key, buffer, off, len );
+    (void)obj_this;
+    return read_from_storage_stream_into_buffer( env, name, key, buffer, off, len );
 #endif
 }
 
@@ -401,7 +402,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
 }
 
 
-void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jstring name, jstring key, jbyteArray buffer, jint off, jint len )
+void write_to_storage_stream_from_buffer( JNIEnv* env, jstring name, jstring key, jbyteArray buffer, jint off, jint len )
 {
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XOutputStream> xOut = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
@@ -455,12 +456,13 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
     DataLogFile aDataLog( env, name, "data" );
     write_to_storage_stream_from_buffer( env, obj_this, name, key, buffer, off, len, &aDataLog );
 #else
-    write_to_storage_stream_from_buffer( env, obj_this, name, key, buffer, off, len );
+    (void)obj_this;
+    write_to_storage_stream_from_buffer( env, name, key, buffer, off, len );
 #endif
 }
 
 
-void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, jstring key, jint v )
+void write_to_storage_stream( JNIEnv* env, jstring name, jstring key, jint v )
 {
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XOutputStream> xOut = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
@@ -505,9 +507,10 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
     aOpLog.logOperation( "writeInt" );
 
     DataLogFile aDataLog( env, name, "data" );
-    write_to_storage_stream( env, obj_this, name, key, v, &aDataLog );
+    write_to_storage_stream( env, name, key, v, &aDataLog );
 #else
-    write_to_storage_stream( env, obj_this, name, key, v );
+    (void)obj_this;
+    write_to_storage_stream( env, name, key, v );
 #endif
 }
 

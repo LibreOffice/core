@@ -837,8 +837,8 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                         static_cast<const SfxInt32Item&>(rOldSet.Get( SID_ATTR_TRANSFORM_HORI_POSITION)) ;
 
                 sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_pHoriLB);
-                short nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriLB, *m_pHoriToLB);
-                short nRel = GetRelation(m_pHMap, *m_pHoriToLB);
+                short nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriToLB);
+                short nRel = GetRelation(*m_pHoriToLB);
                 const long nHoriByPos =
                             static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FUNIT_TWIP)));
                 if (
@@ -867,8 +867,8 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                         static_cast<const SfxInt32Item&>(rOldSet.Get( SID_ATTR_TRANSFORM_VERT_POSITION));
 
                 sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_pVertLB);
-                short nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertLB, *m_pVertToLB);
-                short nRel = GetRelation(m_pVMap, *m_pVertToLB);
+                short nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertToLB);
+                short nRel = GetRelation(*m_pVertToLB);
                 // #i34055# - convert vertical position for
                 // as-character anchored objects
                 long nVertByPos =
@@ -1162,8 +1162,8 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
     {
         // horizontal alignment
         sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_pHoriToLB);
-        sal_uInt16 nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriLB, *m_pHoriToLB);
-        sal_uInt16 nRel = GetRelation(m_pHMap, *m_pHoriToLB);
+        sal_uInt16 nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriToLB);
+        sal_uInt16 nRel = GetRelation(*m_pHoriToLB);
 
         aVal.nHoriOrient = (short)nAlign;
         aVal.nHRelOrient = (short)nRel;
@@ -1175,8 +1175,8 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
     {
         // vertical alignment
         sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_pVertLB);
-        sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertLB, *m_pVertToLB);
-        sal_uInt16 nRel = GetRelation(m_pVMap, *m_pVertToLB);
+        sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertToLB);
+        sal_uInt16 nRel = GetRelation(*m_pVertToLB);
 
         aVal.nVertOrient = (short)nAlign;
         aVal.nVRelOrient = (short)nRel;
@@ -1259,7 +1259,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox&, rLB, void )
     {
         if(bHori)
         {
-            sal_uInt16 nRel = GetRelation(m_pHMap, *m_pHoriToLB);
+            sal_uInt16 nRel = GetRelation(*m_pHoriToLB);
             if(RelOrientation::PRINT_AREA == nRel && 0 == m_pVertLB->GetSelectEntryPos())
             {
                 m_pVertLB->SelectEntryPos(1);
@@ -1282,7 +1282,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
 
 
     sal_uInt16 nMapPos = GetMapPos(pMap, rLB);
-    sal_uInt16 nAlign = GetAlignment(pMap, nMapPos, rLB, *pRelLB);
+    sal_uInt16 nAlign = GetAlignment(pMap, nMapPos, *pRelLB);
 
     if (bHori)
     {
@@ -1396,7 +1396,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl, Button*, void)
     m_pSizeCB->Enable(m_pPositionCB->IsEnabled() && !m_pPositionCB->IsChecked());
 }
 
-short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox const &rRelationLB)
+short SvxSwPosSizeTabPage::GetRelation(ListBox const &rRelationLB)
 {
     short nRel = 0;
     sal_Int32 nPos = rRelationLB.GetSelectEntryPos();
@@ -1410,7 +1410,7 @@ short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox const &rRelationLB)
     return nRel;
 }
 
-short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &/*rAlignLB*/, ListBox const &rRelationLB)
+short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox const &rRelationLB)
 {
     short nAlign = 0;
 
@@ -1632,8 +1632,8 @@ void SvxSwPosSizeTabPage::UpdateExample()
     if ( m_pHMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_pHoriLB);
-        short nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriLB, *m_pHoriToLB);
-        short nRel = GetRelation(m_pHMap, *m_pHoriToLB);
+        short nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriToLB);
+        short nRel = GetRelation(*m_pHoriToLB);
 
         m_pExampleWN->SetHAlign(nAlign);
         m_pExampleWN->SetHoriRel(nRel);
@@ -1643,8 +1643,8 @@ void SvxSwPosSizeTabPage::UpdateExample()
     if ( m_pVMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_pVertLB);
-        sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertLB, *m_pVertToLB);
-        sal_uInt16 nRel = GetRelation(m_pVMap, *m_pVertToLB);
+        sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertToLB);
+        sal_uInt16 nRel = GetRelation(*m_pVertToLB);
 
         m_pExampleWN->SetVAlign(nAlign);
         m_pExampleWN->SetVertRel(nRel);

@@ -581,15 +581,6 @@ namespace canvas
             }
         }
 
-        void verifyInput( const rendering::FontInfo&                /*fontInfo*/,
-                          const char*                               /*pStr*/,
-                          const uno::Reference< uno::XInterface >&  /*xIf*/,
-                          ::sal_Int16                               /*nArgPos*/ )
-        {
-            // TODO(E3): Implement FontDescription checks, once the
-            // Panose stuff is ready.
-        }
-
         void verifyInput( const rendering::FontRequest&             fontRequest,
                           const char*                               pStr,
                           const uno::Reference< uno::XInterface >&  xIf,

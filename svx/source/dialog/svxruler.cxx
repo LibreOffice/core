@@ -2572,19 +2572,6 @@ void SvxRuler::Click()
     }
 }
 
-bool SvxRuler::CalcLimits ( long& nMax1,    // minimum value to be set
-                            long& nMax2,    // minimum value to be set
-                            bool )
-{
-    /*
-       Default implementation of the virtual function; the application can be
-       overridden to implement customized limits. The values are based on the page.
-    */
-    nMax1 = LONG_MIN;
-    nMax2 = LONG_MAX;
-    return false;
-}
-
 void SvxRuler::CalcMinMax()
 {
     /*
@@ -2966,19 +2953,8 @@ void SvxRuler::CalcMinMax()
                 // ObjectItem
                 else
                 {
-                    if(mxObjectItem->HasLimits())
-                    {
-                        if(CalcLimits(nMaxLeft, nMaxRight, (nIdx & 1) == 0))
-                        {
-                            nMaxLeft = ConvertPosPixel(nMaxLeft);
-                            nMaxRight = ConvertPosPixel(nMaxRight);
-                        }
-                    }
-                    else
-                    {
-                        nMaxLeft = LONG_MIN;
-                        nMaxRight = LONG_MAX;
-                    }
+                    nMaxLeft = LONG_MIN;
+                    nMaxRight = LONG_MAX;
                 }
                 break;
             }

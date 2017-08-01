@@ -529,7 +529,6 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         return;
 
     // does the state change?
-    nWidth = QueryColumnResize( nItemId, nWidth );
     if ( nWidth >= LONG_MAX || pCols[ nItemPos ]->Width() != nWidth )
     {
         long nOldWidth = pCols[ nItemPos ]->Width();
@@ -544,7 +543,6 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
             if ( pDataWin->bAutoSizeLastCol || nWidth > (sal_uLong)nMaxWidth )
             {
                 nWidth = nMaxWidth > 16 ? nMaxWidth : nOldWidth;
-                nWidth = QueryColumnResize( nItemId, nWidth );
             }
         }
 

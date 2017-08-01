@@ -98,7 +98,6 @@ namespace RegressionCurveHelper
         addRegressionCurve(
             SvxChartRegress eType,
             css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xCurveContainer,
-            const css::uno::Reference<css::uno::XComponentContext>& xContext,
             const css::uno::Reference<css::beans::XPropertySet >& xPropertySource =
                     css::uno::Reference<css::beans::XPropertySet>(),
             const css::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
@@ -114,8 +113,7 @@ namespace RegressionCurveHelper
         changeRegressionCurveType(
             SvxChartRegress eType,
             css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegressionCurveContainer,
-            css::uno::Reference<css::chart2::XRegressionCurve> const & xRegressionCurve,
-            const css::uno::Reference<css::uno::XComponentContext>& xContext );
+            css::uno::Reference<css::chart2::XRegressionCurve> const & xRegressionCurve );
 
     /// returns a calculator object for regression curves (used by the view)
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurveCalculator>

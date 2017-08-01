@@ -75,7 +75,7 @@
 
 using namespace ::com::sun::star;
 
-static sal_uInt16 lcl_CalcExtraSpace( ParaPortion*, const SvxLineSpacingItem& rLSItem )
+static sal_uInt16 lcl_CalcExtraSpace( const SvxLineSpacingItem& rLSItem )
 {
     sal_uInt16 nExtra = 0;
     if ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
@@ -4153,7 +4153,7 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
                     // Only Writer3: Do not add up, but minimum distance.
 
                     // check if distance by LineSpacing > Upper:
-                    sal_uInt16 nExtraSpace = GetYValue( lcl_CalcExtraSpace( pPortion, rLSItem ) );
+                    sal_uInt16 nExtraSpace = GetYValue( lcl_CalcExtraSpace( rLSItem ) );
                     if ( nExtraSpace > pPortion->nFirstLineOffset )
                     {
                         // Paragraph becomes 'bigger':
@@ -4183,7 +4183,7 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
                     // stuck in the height of PrevPortion.
                     if ( !pPrev->IsInvalid() )
                     {
-                        nExtraSpace = GetYValue( lcl_CalcExtraSpace( pPrev, rPrevLSItem ) );
+                        nExtraSpace = GetYValue( lcl_CalcExtraSpace( rPrevLSItem ) );
                         if ( nExtraSpace > nPrevLower )
                         {
                             sal_uInt16 nMoreLower = nExtraSpace - nPrevLower;

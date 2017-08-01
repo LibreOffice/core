@@ -115,12 +115,12 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Mail
                     list of optional arguments for this mail request
 */
 void SAL_CALL MailToDispatcher::dispatch( const css::util::URL&                                  aURL       ,
-                                          const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+                                          const css::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ )
 {
     // dispatch() is an [oneway] call ... and may our user release his reference to us immediately.
     // So we should hold us self alive till this call ends.
     css::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-    implts_dispatch(aURL,lArguments);
+    implts_dispatch(aURL);
     // No notification for status listener!
 }
 
@@ -137,7 +137,7 @@ void SAL_CALL MailToDispatcher::dispatch( const css::util::URL&                 
                     reference to a valid listener for state events
 */
 void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL&                                             aURL      ,
-                                                          const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
+                                                          const css::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
                                                           const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // This class was designed to die by reference. And if user release his reference to us immediately after calling this method
@@ -145,7 +145,7 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
     // Another reason: We can use this reference as source of sending event at the end too.
     css::uno::Reference< css::frame::XNotifyingDispatch > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
-    bool bState = implts_dispatch(aURL,lArguments);
+    bool bState = implts_dispatch(aURL);
     if (xListener.is())
     {
         css::frame::DispatchResultEvent aEvent;
@@ -167,16 +167,13 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
 
     @param      aURL
                     mail URL which should be executed
-    @param      lArguments
-                    list of optional arguments for this mail request
 
     @return     <TRUE/> if dispatch could be started successfully
                 Note: Our internal used shell executor doesn't return any state value - so we must
                 believe that call was successfully.
                 <FALSE/> if necessary resource couldn't be created or an exception was thrown.
 */
-bool MailToDispatcher::implts_dispatch( const css::util::URL&                                  aURL       ,
-                                            const css::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ )
+bool MailToDispatcher::implts_dispatch( const css::util::URL& aURL )
 {
     bool bSuccess = false;
 
