@@ -70,7 +70,7 @@ class LwpPageLayout;
 class LwpStory: public LwpContent
 {
 public:
-    LwpStory(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpStory(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpStory() override;
 private:
     //File format members:

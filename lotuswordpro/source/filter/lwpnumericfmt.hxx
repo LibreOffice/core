@@ -298,7 +298,7 @@ LwpNumericFormat::IsNegativeOverridden()
 class LwpLayoutNumerics : public LwpVirtualPiece
 {
 public:
-    LwpLayoutNumerics(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+    LwpLayoutNumerics(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     :LwpVirtualPiece(objHdr, pStrm),cNumerics(m_pObjStrm.get()){}
     XFStyle* Convert();
     virtual void Read() override;

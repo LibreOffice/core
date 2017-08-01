@@ -78,7 +78,7 @@ class LwpDLVList;
 class LwpVirtualPiece : public LwpDLVList
 {
 public:
-    LwpVirtualPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
+    LwpVirtualPiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
     {
         m_pOverride = nullptr;
     }
@@ -107,7 +107,7 @@ protected:
 class LwpParaBorderPiece : public LwpVirtualPiece
 {
 public:
-    LwpParaBorderPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
+    LwpParaBorderPiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
     {
         m_pOverride = new LwpParaBorderOverride();
     }
@@ -119,7 +119,7 @@ private:
 class LwpBreaksPiece : public LwpVirtualPiece
 {
 public:
-    LwpBreaksPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
+    LwpBreaksPiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
     {
         m_pOverride = new LwpBreaksOverride();
     }
@@ -131,7 +131,7 @@ private:
 class LwpNumberingPiece : public LwpVirtualPiece
 {
 public:
-    LwpNumberingPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
+    LwpNumberingPiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
     {
         m_pOverride = new LwpNumberingOverride();
     }
@@ -143,7 +143,7 @@ private:
 class LwpTabPiece : public LwpVirtualPiece
 {
 public:
-    LwpTabPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
+    LwpTabPiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
     {
         m_pOverride = new LwpTabOverride();
     }
@@ -155,7 +155,7 @@ private:
 class LwpBackgroundPiece : public LwpVirtualPiece
 {
 public:
-    LwpBackgroundPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
+    LwpBackgroundPiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
     {
         m_pOverride = new LwpBackgroundOverride();
     }
@@ -167,7 +167,7 @@ private:
 class LwpAlignmentPiece : public LwpVirtualPiece
 {
 public:
-    LwpAlignmentPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
+    LwpAlignmentPiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
     {
         m_pOverride = new LwpAlignmentOverride();
     }
@@ -179,7 +179,7 @@ private:
 class LwpIndentPiece : public LwpVirtualPiece
 {
 public:
-    LwpIndentPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
+    LwpIndentPiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
     {
         m_pOverride = new LwpIndentOverride();
     }
@@ -191,7 +191,7 @@ private:
 class LwpSpacingPiece : public LwpVirtualPiece
 {
 public:
-    LwpSpacingPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
+    LwpSpacingPiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
     {
         m_pOverride = new LwpSpacingOverride();
     }
@@ -203,7 +203,7 @@ private:
 class LwpAmikakePiece : public LwpVirtualPiece
 {
 public:
-    LwpAmikakePiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
+    LwpAmikakePiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
     {
         m_pOverride = new LwpAmikakeOverride();
     }
@@ -215,7 +215,7 @@ private:
 class LwpCharacterBorderPiece : public LwpVirtualPiece
 {
 public:
-    LwpCharacterBorderPiece(LwpObjectHeader& objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
+    LwpCharacterBorderPiece(LwpObjectHeader const & objHdr, LwpSvStream* pStrm):LwpVirtualPiece(objHdr, pStrm)
     {
         m_pOverride = new LwpCharacterBorderOverride();
     }

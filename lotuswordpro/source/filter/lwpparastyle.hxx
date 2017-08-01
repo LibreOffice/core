@@ -74,7 +74,7 @@ class XFBorders;
 class LwpParaStyle : public LwpTextStyle
 {
 public:
-    LwpParaStyle(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpParaStyle(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
 
     virtual ~LwpParaStyle() override;
 

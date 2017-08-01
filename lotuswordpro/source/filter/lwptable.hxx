@@ -78,7 +78,7 @@ class LwpTableLayout;
 class LwpSuperTable: public LwpContent
 {
 public:
-    LwpSuperTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpSuperTable(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperTable() override;
 
     virtual void Parse(IXFStream* pOutputStream) override;
@@ -109,7 +109,7 @@ protected:
 class LwpTable: public LwpContent
 {
 public:
-    LwpTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpTable(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTable() override;
 
     virtual void Parse(IXFStream* pOutputStream) override;
@@ -152,7 +152,7 @@ protected:
 class LwpTableHeading : public LwpTable
 {
 public:
-    LwpTableHeading(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpTableHeading(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableHeading() override;
 
     virtual void Parse(IXFStream* pOutputStream) override;
@@ -163,7 +163,7 @@ protected:
 class LwpParallelColumns : public LwpTable
 {
 public:
-    LwpParallelColumns(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpParallelColumns(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpParallelColumns() override;
 protected:
     void Read() override;
@@ -177,7 +177,7 @@ protected:
 class LwpGlossary : public LwpParallelColumns
 {
 public:
-    LwpGlossary(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpGlossary(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpGlossary() override;
 protected:
     void Read() override;

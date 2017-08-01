@@ -2070,7 +2070,7 @@ class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatch
     std::shared_ptr<CallbackFlushHandler> mpCallback; ///< Callback to call.
 
 public:
-    DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler>& pCallback)
+    DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler> const & pCallback)
         : maCommand(pCommand)
         , mpCallback(pCallback)
     {

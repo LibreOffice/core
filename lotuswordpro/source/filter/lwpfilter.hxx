@@ -61,7 +61,7 @@
 class SvStream;
 
 //test code
-int ReadWordproFile(SvStream &rStream, css::uno::Reference<css::xml::sax::XDocumentHandler>& XDoc);
+int ReadWordproFile(SvStream &rStream, css::uno::Reference<css::xml::sax::XDocumentHandler> const & XDoc);
 
 #endif
 

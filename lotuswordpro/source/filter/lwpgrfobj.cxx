@@ -85,7 +85,7 @@
 #define EF_NONE 0x0000
 #define EF_ODMA 0x0002
 
-LwpGraphicObject::LwpGraphicObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpGraphicObject::LwpGraphicObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpGraphicOleObject(objHdr, pStrm)
     , m_nCachedBaseLine(0)
     , m_bIsLinked(0)
@@ -326,7 +326,7 @@ void LwpGraphicObject::CreateDrawObjects()
 /**
  * @descr   create drawing object.
  */
-void LwpGraphicObject::GetBentoNamebyID(LwpObjectID& rMyID, std::string& rName)
+void LwpGraphicObject::GetBentoNamebyID(LwpObjectID const & rMyID, std::string& rName)
 {
     sal_uInt16 nHigh = rMyID.GetHigh();
     sal_uInt16 nLow = rMyID.GetLow();

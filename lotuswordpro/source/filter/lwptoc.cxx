@@ -75,7 +75,7 @@
 #include "xfilter/xfframe.hxx"
 #include "xfilter/xftable.hxx"
 
-LwpTocSuperLayout::LwpTocSuperLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpTocSuperLayout::LwpTocSuperLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpSuperTableLayout(objHdr, pStrm)
     , m_nFrom(0)
     , m_pCont(nullptr)
@@ -434,7 +434,7 @@ LwpTocLevelData * LwpTocSuperLayout::GetNextSearchLevelPtr(sal_uInt16 index, Lwp
     return nullptr;
 }
 
-LwpTocLevelData::LwpTocLevelData(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
+LwpTocLevelData::LwpTocLevelData(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {
     m_nFlags = 0;
     m_nLevel = 0;

@@ -613,7 +613,7 @@ void LwpFribPtr::ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen)
  * @descr:  If the position of pPreLayout is earlier than pNextLayout, return true, or return false, default return true
  *
 */
-bool LwpFribPtr::ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout)
+bool LwpFribPtr::ComparePagePosition(LwpVirtualLayout const * pPreLayout, LwpVirtualLayout const * pNextLayout)
 {
     if(!pPreLayout || !pNextLayout)
         return true;

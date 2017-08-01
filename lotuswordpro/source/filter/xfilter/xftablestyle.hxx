@@ -82,7 +82,7 @@ public:
 
     void    SetShadow(enumXFShadowPos pos, double offset, XFColor color );
 
-    void    SetBackColor(XFColor& color);
+    void    SetBackColor(XFColor const & color);
 
     void    SetBackImage(XFBGImage *pImage);
 
@@ -124,7 +124,7 @@ inline void XFTableStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor 
     m_aShadow.SetPosition(pos);
 }
 
-inline void XFTableStyle::SetBackColor(XFColor& color)
+inline void XFTableStyle::SetBackColor(XFColor const & color)
 {
     m_aBackColor = color;
 }

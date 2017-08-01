@@ -74,7 +74,7 @@ public:
     virtual ~XFRow() override;
 
 public:
-    void    AddCell(rtl::Reference<XFCell>& rCell);
+    void    AddCell(rtl::Reference<XFCell> const & rCell);
 
     void    SetRepeated(sal_Int32 repeat);
 

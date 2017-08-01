@@ -105,8 +105,8 @@ public:
 
     virtual void ToXml(IXFStream *pStrm) override;
 
-    friend bool operator==(XFBGImage& img1, XFBGImage& img2);
-    friend bool operator!=(XFBGImage& img1, XFBGImage& img2);
+    friend bool operator==(XFBGImage const & img1, XFBGImage const & img2);
+    friend bool operator!=(XFBGImage const & img1, XFBGImage const & img2);
 private:
     OUString   m_strFileName;
     OUString   m_strData;

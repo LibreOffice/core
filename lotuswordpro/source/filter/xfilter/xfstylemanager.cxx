@@ -104,7 +104,7 @@ void    XFStyleManager::Reset()
     s_aFontDecls.clear();
 }
 
-void    XFStyleManager::AddFontDecl(XFFontDecl& aFontDecl)
+void    XFStyleManager::AddFontDecl(XFFontDecl const & aFontDecl)
 {
     s_aFontDecls.push_back(aFontDecl);
 }

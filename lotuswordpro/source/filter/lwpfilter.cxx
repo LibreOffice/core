@@ -181,7 +181,7 @@ bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
     }
     return bCompressed;
 }
-int ReadWordproFile(SvStream &rStream, uno::Reference<css::xml::sax::XDocumentHandler>& xHandler)
+int ReadWordproFile(SvStream &rStream, uno::Reference<css::xml::sax::XDocumentHandler> const & xHandler)
 {
     try
     {

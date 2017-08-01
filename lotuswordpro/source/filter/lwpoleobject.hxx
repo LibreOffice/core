@@ -97,7 +97,7 @@ typedef struct tagAFID_CACHE
 class LwpGraphicOleObject : public LwpContent
 {
 public:
-    LwpGraphicOleObject(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpGraphicOleObject(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Read() override;
     void         GetGrafScaledSize(double& fWidth, double& fHeight);
     virtual void GetGrafOrgSize(double& rWidth, double& rHeight);
@@ -115,7 +115,7 @@ protected:
 class LwpOleObject : public LwpGraphicOleObject
 {
 public:
-    LwpOleObject(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpOleObject(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Read() override;
     virtual void Parse(IXFStream* pOutputStream) override;
     virtual void XFConvert(XFContentContainer * pCont) override;

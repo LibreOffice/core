@@ -201,7 +201,7 @@ public:
       CBenPropertyName ** ppPropertyName);
     // Pass NULL to begin iteration.  Done when returns NULL.
     // Objects are returned in order of increasing ID
-    CBenObject * GetNextObject(CBenObject * pCurrObject);
+    CBenObject * GetNextObject(CBenObject const * pCurrObject);
     CBenObject * FindNextObjectWithProperty(CBenObject * pCurrObject,
       BenObjectID PropertyID);
 
@@ -271,7 +271,7 @@ public: // Internal methods
         cpProperty = pProperty;
     }
 
-    inline CBenValueSegment * GetNextValueSegment(CBenValueSegment *
+    inline CBenValueSegment * GetNextValueSegment(CBenValueSegment const *
       pCurrValueSegment);
     CUtList& GetValueSegments() { return cValueSegments; }
 
@@ -332,7 +332,7 @@ private: // Data
     unsigned long cSize;
 };
 
-inline CBenValueSegment * CBenValue::GetNextValueSegment(CBenValueSegment *
+inline CBenValueSegment * CBenValue::GetNextValueSegment(CBenValueSegment const *
   pCurrValueSegment)
 { return static_cast<CBenValueSegment *>( cValueSegments.GetNextOrNULL(pCurrValueSegment) ); }
 

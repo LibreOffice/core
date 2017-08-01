@@ -107,8 +107,8 @@ public:
      */
     void    ToXml(IXFStream *pStrm);
 
-    friend bool operator==(XFPadding& p1, XFPadding& p2);
-    friend bool operator!=(XFPadding& p1, XFPadding& p2);
+    friend bool operator==(XFPadding const & p1, XFPadding const & p2);
+    friend bool operator!=(XFPadding const & p1, XFPadding const & p2);
 private:
     int     m_nFlag;
     double  m_fLeft;
@@ -186,7 +186,7 @@ inline void XFPadding::ToXml(IXFStream *pStrm)
     }
 }
 
-inline bool operator==(XFPadding& p1, XFPadding& p2)
+inline bool operator==(XFPadding const & p1, XFPadding const & p2)
 {
     return (
         (p1.m_nFlag == p2.m_nFlag) &&
@@ -197,7 +197,7 @@ inline bool operator==(XFPadding& p1, XFPadding& p2)
         );
 }
 
-inline bool operator!=(XFPadding& p1, XFPadding& p2)
+inline bool operator!=(XFPadding const & p1, XFPadding const & p2)
 {
     return !(p1==p2);
 }

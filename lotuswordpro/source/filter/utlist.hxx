@@ -101,7 +101,7 @@ public: // Methods
     CUtListElmt * GetFirst() { return cDummyElmt.GetNext(); }
     CUtListElmt * GetLast() { return cDummyElmt.GetPrev(); }
     CUtListElmt& GetTerminating() { return cDummyElmt; }
-    CUtListElmt * GetNextOrNULL(CUtListElmt * pCurr);
+    CUtListElmt * GetNextOrNULL(CUtListElmt const * pCurr);
 
     void Destroy();
 

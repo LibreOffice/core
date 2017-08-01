@@ -96,7 +96,7 @@ private:
 class LwpPageHint : public LwpDLVList
 {
 public:
-    LwpPageHint(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpPageHint(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     void Read() override;
     void Parse(IXFStream* pOutputStream) override;
     sal_uInt16 GetPageNumber(){return m_nPageNumber;}

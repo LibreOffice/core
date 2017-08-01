@@ -71,7 +71,7 @@
 
 
 /*class LwpTextStyle*/
-LwpTextStyle::LwpTextStyle(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpTextStyle::LwpTextStyle(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm),
     m_nFontID(0), m_nFinalFontID(0), m_nCSFlags(0), m_nUseCount(0),
     m_nStyleDefinition(0), m_nKey(0)
@@ -165,7 +165,7 @@ void LwpTextStyle::RegisterStyle()
 }
 
 /*class LwpCharacterStyle*/
-LwpCharacterStyle::LwpCharacterStyle(LwpObjectHeader& objHdr, LwpSvStream* pStrm) :
+LwpCharacterStyle::LwpCharacterStyle(LwpObjectHeader const & objHdr, LwpSvStream* pStrm) :
 LwpTextStyle(objHdr, pStrm)
 {
 }

@@ -81,7 +81,7 @@
 
 #include "lwpsilverbullet.hxx"
 
-LwpParaStyle::LwpParaStyle(LwpObjectHeader& objHdr, LwpSvStream* pStrm) :
+LwpParaStyle::LwpParaStyle(LwpObjectHeader const & objHdr, LwpSvStream* pStrm) :
 LwpTextStyle(objHdr, pStrm)
 {
 }

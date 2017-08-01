@@ -80,8 +80,8 @@ public:
      */
     void    ToXml(IXFStream *pStrm);
 
-    friend bool operator==(XFBreaks& b1, XFBreaks& b2);
-    friend bool operator!=(XFBreaks& b1, XFBreaks& b2);
+    friend bool operator==(XFBreaks const & b1, XFBreaks const & b2);
+    friend bool operator!=(XFBreaks const & b1, XFBreaks const & b2);
 
 private:
     enumXFBreaks    m_eBreaks;
@@ -120,12 +120,12 @@ inline void XFBreaks::ToXml(IXFStream *pStrm)
     }
 }
 
-inline bool operator==(XFBreaks& b1, XFBreaks& b2)
+inline bool operator==(XFBreaks const & b1, XFBreaks const & b2)
 {
     return b1.m_eBreaks == b2.m_eBreaks;
 }
 
-inline bool operator!=(XFBreaks& b1, XFBreaks& b2)
+inline bool operator!=(XFBreaks const & b1, XFBreaks const & b2)
 {
     return !(b1==b2);
 }

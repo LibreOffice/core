@@ -79,7 +79,7 @@ public:
 
     void    SetColumnStyle(sal_Int32 col, const OUString& style);
 
-    void    AddRow(rtl::Reference<XFRow>& rRow);
+    void    AddRow(rtl::Reference<XFRow> const & rRow);
 
     void    AddHeaderRow(XFRow *pRow);
 

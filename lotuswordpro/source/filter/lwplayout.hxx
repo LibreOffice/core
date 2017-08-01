@@ -97,7 +97,7 @@ class LwpPara;
 class LwpVirtualLayout : public LwpDLNFPVList
 {
 public:
-    LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual sal_uInt16 GetNumCols(){return 1;}
     virtual double GetColWidth(sal_uInt16 nIndex);
     virtual double GetColGap(sal_uInt16 nIndex);
@@ -286,7 +286,7 @@ public:
     LwpAssociatedLayouts(){}
     void Read(LwpObjectStream* pStrm);
     LwpObjectID& GetOnlyLayout() { return m_OnlyLayout;}
-    rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout* pStartLayout);
+    rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout const * pStartLayout);
 protected:
     LwpObjectID m_OnlyLayout; //LwpVirtualLayout
     LwpDLVListHeadTail m_Layouts;
@@ -295,7 +295,7 @@ protected:
 class LwpHeadLayout : public LwpVirtualLayout
 {
 public:
-    LwpHeadLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpHeadLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     void RegisterStyle() override;
     rtl::Reference<LwpVirtualLayout> FindEnSuperTableLayout();
 protected:
@@ -330,7 +330,7 @@ private:
 class LwpMiddleLayout : public LwpVirtualLayout
 {
 public:
-    LwpMiddleLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
+    LwpMiddleLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm );
     virtual ~LwpMiddleLayout() override;
     LwpLayoutGeometry* GetGeometry()
     {
@@ -418,7 +418,7 @@ public:
 class LwpLayout : public LwpMiddleLayout
 {
 public:
-    LwpLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
+    LwpLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm );
     virtual ~LwpLayout() override;
     XFColumns* GetXFColumns();
     XFColumnSep* GetColumnSep();
@@ -463,7 +463,7 @@ public:
 class LwpPlacableLayout : public LwpLayout
 {
 public:
-    LwpPlacableLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
+    LwpPlacableLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm );
     virtual ~LwpPlacableLayout() override;
     sal_uInt8 GetWrapType();
     LwpLayoutRelativity* GetRelativityPiece();

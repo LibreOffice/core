@@ -78,7 +78,7 @@ void LwpFootnoteSeenHead::Read(LwpObjectStream* pObjStrm)
     pObjStrm->SkipExtra();
 }
 
-LwpPageHint::LwpPageHint(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpPageHint::LwpPageHint(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpDLVList(objHdr,pStrm)
     , m_nLastFootnoteSeen(0)
     , m_nLastFootnoteProcessed(0)

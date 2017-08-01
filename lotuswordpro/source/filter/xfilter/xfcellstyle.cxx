@@ -87,7 +87,7 @@ void XFCellStyle::SetPadding(double left, double right,double top, double bottom
         m_aPadding.SetBottom( bottom );
 }
 
-void    XFCellStyle::SetBackColor(XFColor& color)
+void    XFCellStyle::SetBackColor(XFColor const & color)
 {
     m_aBackColor = color;
 }

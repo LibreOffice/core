@@ -75,7 +75,7 @@ class LwpTableLayout;
 class LwpRowLayout : public LwpVirtualLayout
 {
 public:
-    LwpRowLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpRowLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpRowLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_ROW_LAYOUT;}
     sal_uInt16 GetRowID() { return crowid;}
@@ -117,7 +117,7 @@ public:
 class LwpRowHeadingLayout : public LwpRowLayout
 {
 public:
-    LwpRowHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpRowHeadingLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpRowHeadingLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_ROW_HEADING_LAYOUT;}
 protected:

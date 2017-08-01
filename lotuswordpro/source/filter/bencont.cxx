@@ -133,7 +133,7 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
 }
 
 CBenObject *
-LtcBenContainer::GetNextObject(CBenObject * pCurrObject)
+LtcBenContainer::GetNextObject(CBenObject const * pCurrObject)
 {
     return static_cast<CBenObject *>(cObjects.GetNextOrNULL(pCurrObject));
 }

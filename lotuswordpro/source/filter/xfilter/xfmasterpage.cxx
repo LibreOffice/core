@@ -64,12 +64,12 @@
 #include "xfheader.hxx"
 #include "../lwpglobalmgr.hxx"
 
-void XFMasterPage::SetHeader(rtl::Reference<XFHeader>& rHeader)
+void XFMasterPage::SetHeader(rtl::Reference<XFHeader> const & rHeader)
 {
     m_xHeader = rHeader;
 }
 
-void XFMasterPage::SetFooter(rtl::Reference<XFFooter>& rFooter)
+void XFMasterPage::SetFooter(rtl::Reference<XFFooter> const & rFooter)
 {
     m_xFooter = rFooter;
 }

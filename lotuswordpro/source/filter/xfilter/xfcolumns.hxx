@@ -114,7 +114,7 @@ public:
 public:
     void    SetRelHeight(sal_Int32 height);
     void    SetWidth(double width);
-    void    SetColor(XFColor& color);
+    void    SetColor(XFColor const & color);
     void    SetVerticalAlign(enumXFAlignType align);
 
     void    ToXml(IXFStream *pStrm);
@@ -136,10 +136,10 @@ public:
         , m_fGap(0.0)
         { }
 public:
-    void    SetSeparator(XFColumnSep& aSeparator);
+    void    SetSeparator(XFColumnSep const & aSeparator);
     void    SetGap(double fGap);
     void    SetCount(sal_uInt16 nCount);
-    void    AddColumn(XFColumn& column);
+    void    AddColumn(XFColumn const & column);
 
     void    ToXml(IXFStream *pStrm);
 private:

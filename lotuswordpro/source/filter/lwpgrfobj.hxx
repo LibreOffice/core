@@ -91,7 +91,7 @@ class XFFrame;
 class LwpGraphicObject : public LwpGraphicOleObject
 {
 public:
-    LwpGraphicObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpGraphicObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpGraphicObject() override;
 private:
     unsigned char m_sDataFormat[AFID_MAX_FILE_FORMAT_SIZE];
@@ -117,7 +117,7 @@ public:
 
     void CreateDrawObjects();
     void CreateGrafObject();
-    static void GetBentoNamebyID(LwpObjectID& rMyID, std::string& rName);
+    static void GetBentoNamebyID(LwpObjectID const & rMyID, std::string& rName);
     sal_uInt32 GetRawGrafData(sal_uInt8*& pGrafData);
     sal_uInt32 GetGrafData(sal_uInt8*& pGrafData);
     void GetGrafOrgSize(long& rWidth, long& rHeight) { rWidth = m_Cache.Width; rHeight = m_Cache.Height; }

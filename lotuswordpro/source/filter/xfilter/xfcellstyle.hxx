@@ -119,7 +119,7 @@ public:
      * @descr:  Set background color of the cell.
      * @param:  color value of the back color.
      */
-    void    SetBackColor(XFColor& color);
+    void    SetBackColor(XFColor const & color);
 
     /**
      * descr:   set cell background image.

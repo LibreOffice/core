@@ -100,8 +100,8 @@ public:
 
     OUString   ToString ()const;
 
-    friend bool operator==(XFColor& c1, XFColor& c2);
-    friend bool operator!=(XFColor& c1, XFColor& c2);
+    friend bool operator==(XFColor const & c1, XFColor const & c2);
+    friend bool operator!=(XFColor const & c1, XFColor const & c2);
 private:
     sal_uInt8   m_nRed;
     sal_uInt8   m_nGreen;

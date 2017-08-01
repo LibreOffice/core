@@ -119,7 +119,7 @@ public:
     /**
      * @descr:  set the background color of the frame.
      */
-    void    SetBackColor(XFColor& color);
+    void    SetBackColor(XFColor const & color);
 
     /**
      * @descr   Set whether frame is protected. There are three properties that can be protected, content,size and position.
@@ -197,7 +197,7 @@ inline void XFFrameStyle::SetPadding(double left, double right,double top, doubl
         m_aPad.SetBottom( bottom );
 }
 
-inline void XFFrameStyle::SetBackColor(XFColor& color)
+inline void XFFrameStyle::SetBackColor(XFColor const & color)
 {
     m_aBackColor = color;
 }

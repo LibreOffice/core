@@ -69,7 +69,7 @@
 #include "xfilter/xfstylemanager.hxx"
 #include <osl/thread.h>
 
-LwpDocument::LwpDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpDocument::LwpDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
     , m_pOwnedFoundry(nullptr)
     , m_bGettingFirstDivisionWithContentsThatIsNotOLE(false)
@@ -767,7 +767,7 @@ void LwpDocument::ChangeStyleName()
         pStyle->SetStyleName("Placeholder");
     }
 }
-LwpDocSock::LwpDocSock(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpDocSock::LwpDocSock(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     :LwpDLNFVList(objHdr, pStrm)
 {}
 

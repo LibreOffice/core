@@ -62,7 +62,7 @@
 #include "lwpfilehdr.hxx"
 #include "lwpproplist.hxx"
 
-LwpDLVList::LwpDLVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpDLVList::LwpDLVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
 {}
 /**
@@ -80,7 +80,7 @@ void LwpDLVList::Read()
         pObjStrm->SkipExtra();
 
 }
-LwpDLNFVList::LwpDLNFVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpDLNFVList::LwpDLNFVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
         : LwpDLVList(objHdr, pStrm)
 {}
 /**
@@ -117,7 +117,7 @@ void LwpDLNFVList::ReadName(LwpObjectStream* pObjStrm)
  * @descr       ctor of LwpDLNFPVList from object stream
  *          Note that m_bHasProperties is initialized to true
  **/
-LwpDLNFPVList::LwpDLNFPVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpDLNFPVList::LwpDLNFPVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm),
     m_bHasProperties(true),m_pPropList(nullptr)
 {}

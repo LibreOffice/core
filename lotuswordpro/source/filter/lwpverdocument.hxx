@@ -70,7 +70,7 @@
 class LwpVerDocument : public LwpObject
 {
 public:
-    LwpVerDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpVerDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     void Read() override;
     virtual void RegisterStyle() override;
 private:

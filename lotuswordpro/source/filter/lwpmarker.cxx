@@ -67,7 +67,7 @@
 #include "xfilter/xfplaceholder.hxx"
 #include "xfilter/xfinputlist.hxx"
 
-LwpMarker::LwpMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpMarker::LwpMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpDLNFPVList(objHdr,pStrm)
     , m_nFlag(0)
     , m_nPageNumber(0)
@@ -97,7 +97,7 @@ OUString LwpMarker::GetNamedProperty(const OUString& name)
         return OUString();
 }
 
-LwpStoryMarker::LwpStoryMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpStoryMarker::LwpStoryMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpMarker(objHdr,pStrm)
     , m_nFlag(0)
 {
@@ -117,7 +117,7 @@ void LwpFribRange::Read(LwpObjectStream* pObjStrm)
     m_EndPara.ReadIndexed(pObjStrm);
 }
 
-LwpCHBlkMarker::LwpCHBlkMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpCHBlkMarker::LwpCHBlkMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpStoryMarker(objHdr, pStrm)
     , m_nTab(0)
     , m_nFlag(0)
@@ -317,7 +317,7 @@ void LwpCHBlkMarker::EnumAllKeywords()
     }
 }
 
-LwpBookMark::LwpBookMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpBookMark::LwpBookMark(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpDLNFVList(objHdr,pStrm)
     , m_nFlag(0)
 {
@@ -347,7 +347,7 @@ OUString LwpBookMark::GetName()
     return LwpDLNFVList::GetName().str();
 }
 
-LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpFieldMark::LwpFieldMark(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpStoryMarker(objHdr,pStrm)
     , m_nFlag(0)
     , m_nFieldType(0)
@@ -526,7 +526,7 @@ bool LwpFieldMark::IsDocPowerField(sal_uInt8& nType,OUString& sFormula)
     }
 }
 
-LwpRubyMarker::LwpRubyMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm):LwpStoryMarker(objHdr,pStrm)
+LwpRubyMarker::LwpRubyMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm):LwpStoryMarker(objHdr,pStrm)
 {
 }
 

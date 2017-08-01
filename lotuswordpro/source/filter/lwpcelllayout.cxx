@@ -74,7 +74,7 @@
 #include "xfilter/xfcellstyle.hxx"
 #include "xfilter/xfcolstyle.hxx"
 
-LwpCellLayout::LwpCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpCellLayout::LwpCellLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpMiddleLayout(objHdr, pStrm)
     , crowid(0)
     , ccolid(0)
@@ -672,7 +672,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
     pCell->SetProtect(bProtected);
 }
 
-LwpConnectedCellLayout::LwpConnectedCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpConnectedCellLayout::LwpConnectedCellLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpCellLayout(objHdr, pStrm)
     , cnumrows(0)
     , cnumcols(0)
@@ -840,7 +840,7 @@ void LwpConnectedCellLayout::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-LwpHiddenCellLayout::LwpHiddenCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpHiddenCellLayout::LwpHiddenCellLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpCellLayout(objHdr, pStrm)
 {}
 
@@ -913,7 +913,7 @@ rtl::Reference<XFCell> LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sa
 {
 }
 
-LwpParallelColumnsBlock::LwpParallelColumnsBlock(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpCellLayout(objHdr, pStrm)
+LwpParallelColumnsBlock::LwpParallelColumnsBlock(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpCellLayout(objHdr, pStrm)
 {}
 
 LwpParallelColumnsBlock::~LwpParallelColumnsBlock()

@@ -73,7 +73,7 @@
 class LwpContent : public LwpDLNFVList
 {
 public:
-    LwpContent(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpContent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 protected:
     LwpAssociatedLayouts m_LayoutsWithMe;
     sal_uInt16 m_nFlags;
@@ -105,7 +105,7 @@ protected:
     void Read() override;
 public:
     inline LwpAssociatedLayouts& GetLayoutsWithMe();
-    rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout* pStartLayout);
+    rtl::Reference<LwpVirtualLayout> GetLayout(LwpVirtualLayout const * pStartLayout);
     inline bool IsActive();
     virtual bool IsTable();
     inline OUString GetClassName();
@@ -145,7 +145,7 @@ inline LwpContent* LwpContent::GetNextEnumerated()
 class LwpHeadContent : public LwpContent
 {
 public:
-    LwpHeadContent(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpHeadContent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 protected:
     void Read() override;
 };

@@ -93,7 +93,7 @@ public:
      */
     void        Reset();
 
-    void        AddFontDecl(XFFontDecl& aFontDecl);
+    void        AddFontDecl(XFFontDecl const & aFontDecl);
 
     IXFStyleRet AddStyle(IXFStyle *pStyle);
 

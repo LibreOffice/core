@@ -204,12 +204,12 @@ public:
     /**
      * @descr   Set font color.
      */
-    void    SetColor(XFColor& color);
+    void    SetColor(XFColor const & color);
 
     /**
      * @descr   Set font background color.
      */
-    void    SetBackColor(XFColor& color);
+    void    SetBackColor(XFColor const & color);
     void    SetBackColorTransparent();
 
     //getter:
@@ -220,8 +220,8 @@ public:
 
     void    ToXml(IXFStream *pStrm);
 
-    friend bool operator==(XFFont& f1, XFFont& f2);
-    friend bool operator!=(XFFont& f1, XFFont& f2);
+    friend bool operator==(XFFont const & f1, XFFont const & f2);
+    friend bool operator!=(XFFont const & f1, XFFont const & f2);
     friend class    XFFontFactory;
 private:
     virtual ~XFFont() override {}
@@ -386,13 +386,13 @@ inline void XFFont::SetPosition(bool bUpperScript, sal_Int16 pos, sal_Int16 scal
     }
 }
 
-inline void XFFont::SetColor(XFColor& color)
+inline void XFFont::SetColor(XFColor const & color)
 {
     m_nFlag |= XFFONT_FLAG_COLOR;
     m_aColor = color;
 }
 
-inline void XFFont::SetBackColor(XFColor& color)
+inline void XFFont::SetBackColor(XFColor const & color)
 {
     m_bTransparent = false;
     m_nFlag |= XFFONT_FLAG_BGCOLOR;

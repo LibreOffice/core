@@ -74,9 +74,9 @@ public:
 
     void    SetLineStyle(enumXFAreaLineStyle style);
 
-    void    SetBackColor(XFColor& color);
+    void    SetBackColor(XFColor const & color);
 
-    void    SetLineColor(XFColor& color);
+    void    SetLineColor(XFColor const & color);
 
     void    SetLineAngle(sal_Int32 angle);
 
@@ -109,12 +109,12 @@ inline void XFDrawAreaStyle::SetLineStyle(enumXFAreaLineStyle style)
     m_eLineStyle = style;
 }
 
-inline void XFDrawAreaStyle::SetBackColor(XFColor& color)
+inline void XFDrawAreaStyle::SetBackColor(XFColor const & color)
 {
     m_aBackColor = color;
 }
 
-inline void XFDrawAreaStyle::SetLineColor(XFColor& color)
+inline void XFDrawAreaStyle::SetLineColor(XFColor const & color)
 {
     m_aLineColor = color;
 }

@@ -81,7 +81,7 @@ public:
     LwpBulletStyleMgr();
     ~LwpBulletStyleMgr();
     OUString RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
-        LwpIndentOverride* pIndent);
+        LwpIndentOverride const * pIndent);
     inline void SetFoundry(LwpFoundry* pFoundry);
     inline void SetContinueFlag(bool bFlag);
     XFContentContainer* AddBulletList(XFContentContainer* pCont, bool bIsOrdered,

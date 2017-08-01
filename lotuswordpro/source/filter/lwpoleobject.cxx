@@ -74,7 +74,7 @@
  * @param:  objHdr - object header, read before entering this function
  * @param: pStrm - file stream
  */
-LwpGraphicOleObject::LwpGraphicOleObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpGraphicOleObject::LwpGraphicOleObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)
 {}
 /**
@@ -185,7 +185,7 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
  * @param:  objHdr - object header, read before entering this function
  * @param: pStrm - file stream
  */
-LwpOleObject::LwpOleObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpOleObject::LwpOleObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpGraphicOleObject(objHdr, pStrm)
     , cPersistentFlags(0)
     , m_SizeRect(0,0,5,5)

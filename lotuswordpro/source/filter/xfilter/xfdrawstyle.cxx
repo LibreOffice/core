@@ -125,7 +125,7 @@ void XFDrawStyle::SetFontWorkStyle(enumXFFWStyle eStyle, enumXFFWAdjust eAdjust)
     m_pFontWorkStyle->SetFWAdjustType(eAdjust);
 }
 
-void    XFDrawStyle::SetAreaColor(XFColor& color)
+void    XFDrawStyle::SetAreaColor(XFColor const & color)
 {
     if( !m_pAreaStyle )
     {

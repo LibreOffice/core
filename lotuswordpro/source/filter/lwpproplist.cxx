@@ -60,7 +60,7 @@
 
 #include "lwpproplist.hxx"
 
-LwpPropListElement::LwpPropListElement(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpPropListElement::LwpPropListElement(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
 :LwpDLVList(objHdr,pStrm)
 {
 }

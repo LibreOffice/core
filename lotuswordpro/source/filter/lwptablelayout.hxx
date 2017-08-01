@@ -87,7 +87,7 @@ class LwpColumnLayout;
 class LwpTableLayout: public LwpLayout
 {
 public:
-    LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_TABLE_LAYOUT;}
     LwpObjectID& GetColumnLayoutHead(){return m_ColumnLayout;}
@@ -159,7 +159,7 @@ private:
 class LwpSuperTableLayout: public LwpPlacableLayout
 {
 public:
-    LwpSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperTableLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_SUPERTABLE_LAYOUT;}
     void RegisterNewStyle();
@@ -193,7 +193,7 @@ protected:
 class LwpColumnLayout : public LwpVirtualLayout
 {
 public:
-    LwpColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpColumnLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpColumnLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_COLUMN_LAYOUT;}
     sal_uInt32 GetColumnID(){return ccolid;}
@@ -214,7 +214,7 @@ protected:
 class LwpTableHeadingLayout : public LwpTableLayout
 {
 public:
-    LwpTableHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpTableHeadingLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableHeadingLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_TABLE_HEADING_LAYOUT;}
     void GetStartEndRow(sal_uInt16& nStartRow, sal_uInt16& nEndRow);
@@ -230,7 +230,7 @@ protected:
 class LwpSuperParallelColumnLayout : public LwpSuperTableLayout
 {
 public:
-    LwpSuperParallelColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpSuperParallelColumnLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperParallelColumnLayout() override;
 protected:
     void Read() override;
@@ -243,7 +243,7 @@ protected:
 class LwpParallelColumnsLayout : public LwpTableLayout
 {
 public:
-    LwpParallelColumnsLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpParallelColumnsLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpParallelColumnsLayout() override;
 protected:
     void Read() override;
@@ -252,7 +252,7 @@ protected:
 class LwpSuperGlossaryLayout : public LwpSuperTableLayout
 {
 public:
-    LwpSuperGlossaryLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpSuperGlossaryLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperGlossaryLayout() override;
 protected:
     void Read() override;

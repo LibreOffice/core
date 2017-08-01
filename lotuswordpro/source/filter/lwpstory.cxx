@@ -68,7 +68,7 @@
 #include "lwppagelayout.hxx"
 
 
-LwpStory::LwpStory(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpStory::LwpStory(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)
     , m_bPMModified(false)
     , m_pCurrentLayout(nullptr)

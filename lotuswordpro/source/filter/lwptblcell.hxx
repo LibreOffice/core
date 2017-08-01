@@ -79,7 +79,7 @@ class LwpTableLayout;
 class LwpCellList : public LwpDLVList
 {
 public:
-    LwpCellList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpCellList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpObjectID GetNextID(){return GetNext();}
@@ -102,7 +102,7 @@ protected:
 class LwpRowList : public LwpDLVList
 {
 public:
-    LwpRowList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpRowList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
     LwpObjectID GetChildHeadID(){return cChild.GetHead();}
@@ -123,7 +123,7 @@ private:
 class LwpNumericValue : public LwpObject
 {
 public:
-    LwpNumericValue(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpNumericValue(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     double GetValue(){return cNumber;}
     void Parse(IXFStream* pOutputStream) override;
@@ -142,7 +142,7 @@ private:
 class LwpTableRange: public LwpDLVList
 {
 public:
-    LwpTableRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpTableRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
     const LwpObjectID& GetCellRangeID(){return cpCellRange;}
@@ -162,7 +162,7 @@ private:
 class LwpCellRange: public LwpObject
 {
 public:
-    LwpCellRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpCellRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
     const LwpObjectID& GetFolderID(){return cpFolder;}
@@ -179,7 +179,7 @@ private:
 class LwpFolder: public LwpDLVList
 {
 public:
-    LwpFolder(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpFolder(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
     LwpObjectID GetChildHeadID(){ return cChild.GetHead();}
@@ -198,7 +198,7 @@ private:
 class LwpDependent: public LwpDLVList
 {
 public:
-    LwpDependent(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpDependent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) override;
 protected:
