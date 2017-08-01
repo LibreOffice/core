@@ -78,27 +78,21 @@ namespace connectivity
         SQLException
                 impl_buildSQLException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext,
                     const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 );
-
-        /// initializes our resource bundle
-        bool    impl_initResources();
-
     private:
         ::osl::Mutex                                            m_aMutex;
-        std::unique_ptr<std::locale>                            m_xResources;
-        bool                                                    m_bAttemptedInit;
+        std::locale                                             m_aResources;
     };
 
-    SQLError_Impl::SQLError_Impl() : m_bAttemptedInit( false )
+    SQLError_Impl::SQLError_Impl()
+        : m_aResources(Translate::Create("cnr"))
     {
     }
-
 
     const OUString& SQLError_Impl::getMessagePrefix()
     {
         static const OUString s_sMessagePrefix( "[OOoBase]" );
         return s_sMessagePrefix;
     }
-
 
     namespace
     {
@@ -239,12 +233,9 @@ namespace connectivity
     {
         OUStringBuffer aMessage;
 
-        if ( impl_initResources() )
-        {
-            OUString sResMessage(Translate::get(lcl_getResourceErrorID(_eCondition), *m_xResources));
-            OSL_ENSURE( !sResMessage.isEmpty(), "SQLError_Impl::impl_getErrorMessage: illegal error condition, or invalid resource!" );
-            aMessage.append( getMessagePrefix() ).append( " " ).append( sResMessage );
-        }
+        OUString sResMessage(Translate::get(lcl_getResourceErrorID(_eCondition), m_aResources));
+        OSL_ENSURE( !sResMessage.isEmpty(), "SQLError_Impl::impl_getErrorMessage: illegal error condition, or invalid resource!" );
+        aMessage.append( getMessagePrefix() ).append( " " ).append( sResMessage );
 
         return aMessage.makeStringAndClear();
     }
@@ -255,20 +246,6 @@ namespace connectivity
         if (sState.isEmpty())
             sState = OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
         return sState;
-    }
-
-    bool SQLError_Impl::impl_initResources()
-    {
-        if (m_xResources.get())
-            return true;
-        if (m_bAttemptedInit)
-            return false;
-
-        ::osl::MutexGuard aGuard( m_aMutex );
-        m_bAttemptedInit = true;
-
-        m_xResources.reset(new std::locale(Translate::Create("cnr")));
-        return m_xResources.get() != nullptr;
     }
 
     SQLError::SQLError()

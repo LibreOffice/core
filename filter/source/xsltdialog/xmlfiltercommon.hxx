@@ -82,6 +82,7 @@ struct application_info_impl
 extern std::vector< application_info_impl* >& getApplicationInfos();
 extern OUString getApplicationUIName( const OUString& rServiceName );
 extern const application_info_impl* getApplicationInfo( const OUString& rServiceName );
+OUString XsltResId(const char* pId);
 
 #endif
 

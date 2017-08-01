@@ -26,9 +26,9 @@
 #include "formula/funcutl.hxx"
 #include "formula/IControlReferenceHandler.hxx"
 #include "ControlHelper.hxx"
-#include "ModuleHelper.hxx"
 #include "strings.hrc"
 #include "bitmaps.hlst"
+#include "core_resource.hxx"
 #include "com/sun/star/accessibility/AccessibleRole.hpp"
 
 namespace formula
@@ -521,8 +521,8 @@ RefButton::RefButton( vcl::Window* _pParent, WinBits nStyle ) :
     ImageButton(_pParent, nStyle),
     aImgRefStart(BitmapEx(RID_BMP_REFBTN1)),
     aImgRefDone(BitmapEx(RID_BMP_REFBTN2)),
-    aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ) ),
-    aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ) ),
+    aShrinkQuickHelp( ForResId( RID_STR_SHRINK ) ),
+    aExpandQuickHelp( ForResId( RID_STR_EXPAND ) ),
     pAnyRefDlg( nullptr ),
     pRefEdit( nullptr )
 {

@@ -25,7 +25,6 @@
 #include "structpg.hxx"
 #include "formula/formdata.hxx"
 #include "formula/formula.hxx"
-#include "ModuleHelper.hxx"
 #include "formula/IFunctionDescription.hxx"
 #include "bitmaps.hlst"
 

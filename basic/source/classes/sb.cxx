@@ -35,7 +35,6 @@
 #include "stdobj.hxx"
 #include "filefmt.hxx"
 #include "basic.hrc"
-#include <basrid.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>

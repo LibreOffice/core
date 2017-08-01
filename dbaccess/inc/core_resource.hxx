@@ -32,21 +32,10 @@ namespace dbaccess
     // handling resources within the DBA-Core library
     class OOO_DLLPUBLIC_DBA ResourceManager
     {
-        friend class OModuleClient;
-        static sal_Int32    s_nClients;     /// number of registered clients
-        static std::locale*  m_pImpl;
-
     private:
         // no instantiation allowed
         ResourceManager() = delete;
         ~ResourceManager() { }
-
-    protected:
-        static void ensureImplExists();
-        /// register a client for the module
-        static void registerClient();
-        /// revoke a client for the module
-        static void revokeClient();
 
     public:
         /** loads the string with the specified resource id
@@ -88,16 +77,6 @@ namespace dbaccess
                 const sal_Char* _pPlaceholderAscii2,
                 const OUString& _rReplace2
         );
-    };
-
-    // OModuleClient
-    /** base class for objects which uses any global module-specific resources
-    */
-    class OModuleClient
-    {
-    public:
-        OModuleClient()     { ResourceManager::registerClient(); }
-        ~OModuleClient()    { ResourceManager::revokeClient(); }
     };
 }
 

@@ -37,6 +37,7 @@
 #include "svtools/imagemgr.hxx"
 #include <unotools/localfilehelper.hxx>
 #include "unotools/useroptions.hxx"
+#include <svl/svlresid.hxx>
 #include <svl/svl.hrc>
 
 using namespace ::com::sun::star::uno;
@@ -144,8 +145,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
         if ( nCount == 1 )
         {
             // adjust the title of the top level entry (the workspace)
-            std::locale loc = Translate::Create("svl");
-            _pMenu->SetItemText(--nItemId, Translate::get(STR_SVT_MIMETYPE_CNT_FSYSBOX, loc));
+            _pMenu->SetItemText(--nItemId, SvlResId(STR_SVT_MIMETYPE_CNT_FSYSBOX));
         }
         --nCount;
     }

@@ -55,20 +55,11 @@ public:
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 };
 
-class EnsureResLocale
-{
-    std::unique_ptr<std::locale> m_xResLocale;
-public:
-    EnsureResLocale();
-    ~EnsureResLocale();
-};
-
 class HeaderBar;
 
 class XMLFilterListBox : public SvTabListBox
 {
 private:
-    EnsureResLocale    m_aEnsureResLocale;
     VclPtr<HeaderBar>  m_pHeaderBar;
 
     DECL_LINK( TabBoxScrollHdl_Impl, SvTreeListBox*, void );
@@ -127,7 +118,6 @@ private:
     OUString createUniqueInterfaceName( const OUString& rInterfaceName );
 
 private:
-    EnsureResLocale                                       maEnsureResLocale;
     css::uno::Reference< css::uno::XComponentContext >    mxContext;
     css::uno::Reference< css::container::XNameContainer > mxFilterContainer;
     css::uno::Reference< css::container::XNameContainer > mxTypeDetection;

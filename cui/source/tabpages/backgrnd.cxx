@@ -822,7 +822,7 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
                               OUString(),
                               this,
                               getRID_SVXERRCTX(),
-                              &SvxResLocale() );
+                              SvxResLocale() );
 
     ErrorHandler::HandleError(
         *new StringErrorInfo( ERRCODE_SVX_GRAPHIC_NOTREADABLE,

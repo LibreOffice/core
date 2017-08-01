@@ -886,7 +886,8 @@ Reference< XInterface > SAL_CALL T602ImportFilter_createInstance( const Referenc
 }
 
 T602ImportFilterDialog::T602ImportFilterDialog()
-    : mpResLocale(nullptr)
+    : maLocale(SvtSysLocale().GetUILanguageTag())
+    , maResLocale(Translate::Create("flt"))
 {
 }
 
@@ -896,15 +897,19 @@ T602ImportFilterDialog::~T602ImportFilterDialog()
 
 // XLocalizable
 
-void SAL_CALL T602ImportFilterDialog::setLocale( const Locale& eLocale )
+void SAL_CALL T602ImportFilterDialog::setLocale(const Locale& rLocale)
 {
-    meLocale = eLocale;
-    initLocale();
+    LanguageTag aLocale(rLocale);
+    if (maLocale != aLocale)
+    {
+        maLocale = aLocale;
+        maResLocale = Translate::Create("flt", maLocale);
+    }
 }
 
 Locale SAL_CALL T602ImportFilterDialog::getLocale()
 {
-    return meLocale;
+    return maLocale.getLocale(false);
 }
 
 bool T602ImportFilterDialog::OptionsDlg()
@@ -1088,18 +1093,6 @@ bool T602ImportFilterDialog::OptionsDlg()
     return ret;
 }
 
-void T602ImportFilterDialog::initLocale()
-{
-    mpResLocale.reset(new std::locale(Translate::Create("flt", LanguageTag(meLocale))));
-}
-
-const std::locale* T602ImportFilterDialog::getResLocale()
-{
-    if (!mpResLocale)
-        initLocale();
-    return mpResLocale.get();
-}
-
 void SAL_CALL T602ImportFilterDialog::setTitle( const OUString& )
 {
 }
@@ -1114,7 +1107,7 @@ sal_Int16 SAL_CALL T602ImportFilterDialog::execute()
 
 OUString T602ImportFilterDialog::getResStr(const char* resid)
 {
-    return Translate::get(resid, *getResLocale());
+    return Translate::get(resid, maResLocale);
 }
 
 uno::Sequence<beans::PropertyValue> SAL_CALL T602ImportFilterDialog::getPropertyValues()

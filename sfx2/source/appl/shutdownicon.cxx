@@ -696,13 +696,7 @@ OUString ShutdownIcon::getShortcutName()
 #else
 
 #ifdef _WIN32
-    OUString aShortcutName( "StarOffice 6.0"  );
-    std::locale* pResLocale = SfxResLocale::GetResLocale();
-    if (pResLocale)
-    {
-        ::SolarMutexGuard aGuard;
-        aShortcutName = SfxResId(STR_QUICKSTART_LNKNAME);
-    }
+    OUString aShortcutName(SfxResId(STR_QUICKSTART_LNKNAME));
     aShortcutName += ".lnk";
 
     OUString aShortcut(GetAutostartFolderNameW32());

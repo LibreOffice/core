@@ -32,7 +32,6 @@ $(eval $(call gb_Library_use_libraries,fps_aqua,\
 	i18nlangtag \
 	sal \
 	utl \
-	tl \
 	vcl \
 ))
 

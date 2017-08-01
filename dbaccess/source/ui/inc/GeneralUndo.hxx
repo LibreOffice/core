@@ -29,8 +29,6 @@ namespace dbaui
 
     class OCommentUndoAction : public SfxUndoAction
     {
-        dbaccess::OModuleClient    m_aModuleClient;
-
     protected:
         OUString         m_strComment; // undo, redo comment
 

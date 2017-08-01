@@ -27,7 +27,6 @@
 
 namespace dbaccess
 {
-
     // ResourceManager
     namespace
     {
@@ -35,26 +34,10 @@ namespace dbaccess
         struct theResourceManagerMutex : public rtl::Static< osl::Mutex, theResourceManagerMutex > {};
     }
 
-    sal_Int32       ResourceManager::s_nClients = 0;
-    std::locale*    ResourceManager::m_pImpl = nullptr;
-
-    void ResourceManager::ensureImplExists()
-    {
-        if (m_pImpl)
-            return;
-
-        m_pImpl = new std::locale(Translate::Create("dba"));
-    }
-
     OUString ResourceManager::loadString(const char* pResId)
     {
-        OUString sReturn;
-
-        ensureImplExists();
-        if (m_pImpl)
-            sReturn = Translate::get(pResId, *m_pImpl);
-
-        return sReturn;
+        static std::locale loc = Translate::Create("dba");
+        return Translate::get(pResId, loc);
     }
 
     OUString ResourceManager::loadString(const char* pResId, const sal_Char* _pPlaceholderAscii, const OUString& _rReplace)
@@ -70,22 +53,6 @@ namespace dbaccess
         sString = sString.replaceFirst( OUString::createFromAscii(_pPlaceholderAscii1), _rReplace1 );
         sString = sString.replaceFirst( OUString::createFromAscii(_pPlaceholderAscii2), _rReplace2 );
         return sString;
-    }
-
-    void ResourceManager::registerClient()
-    {
-        ::osl::MutexGuard aGuard(theResourceManagerMutex::get());
-        ++s_nClients;
-    }
-
-    void ResourceManager::revokeClient()
-    {
-        ::osl::MutexGuard aGuard(theResourceManagerMutex::get());
-        if (!--s_nClients && m_pImpl)
-        {
-            delete m_pImpl;
-            m_pImpl = nullptr;
-        }
     }
 }
 

@@ -82,7 +82,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pSearchItem->SetAppFlag(SvxSearchApp::DRAW);
     StartListening( *SfxGetpApp() );
     SvxErrorHandler::ensure();
-    mpErrorHdl = new SfxErrorHandler(RID_SD_ERRHDL, ErrCode(ERRCODE_AREA_SD), ErrCode(ERRCODE_AREA_SD_END), &GetResLocale());
+    mpErrorHdl = new SfxErrorHandler(RID_SD_ERRHDL, ErrCode(ERRCODE_AREA_SD), ErrCode(ERRCODE_AREA_SD_END), GetResLocale());
 
     // Create a new ref device and (by calling SetReferenceDevice())
     // set its resolution to 600 DPI.  This leads to a visually better
