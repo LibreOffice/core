@@ -364,7 +364,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         Reference< XDiagram > xDiagram( xObject, uno::UNO_QUERY );
         if( xDiagram.is() )
         {
-            return createClassifiedIdentifierForParticle( createParticleForDiagram( xDiagram, rModel ) );
+            return createClassifiedIdentifierForParticle( createParticleForDiagram() );
         }
 
         //todo
@@ -446,7 +446,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         Reference< XDiagram > xDiagram( xObject, uno::UNO_QUERY );
         if( xDiagram.is() )
         {
-            return createClassifiedIdentifierForParticle( createParticleForDiagram( xDiagram, xChartModel ) );
+            return createClassifiedIdentifierForParticle( createParticleForDiagram() );
         }
 
         //todo
@@ -506,19 +506,9 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
     return aRet.makeStringAndClear();
 }
 
-OUString ObjectIdentifier::createParticleForDiagram(
-          const Reference< XDiagram >& /*xDiagram*/
-        , ChartModel& /*xChartModel*/ )
+OUString ObjectIdentifier::createParticleForDiagram()
 {
-    //todo: if more than one diagram is implemeted, add the correct diagram index here
-    return OUString("D=0");
-}
-
-OUString ObjectIdentifier::createParticleForDiagram(
-          const Reference< XDiagram >& /*xDiagram*/
-        , const Reference< frame::XModel >& /*xChartModel*/ )
-{
-    //todo: if more than one diagram is implemeted, add the correct diagram index here
+    //TODO: if more than one diagram is implemented, add the correct diagram index here
     return OUString("D=0");
 }
 
@@ -539,7 +529,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
             Reference< XCoordinateSystem > xCurrentCooSys( aCooSysList[nCooSysIndex] );
             if( xCooSys == xCurrentCooSys )
             {
-                aRet = ObjectIdentifier::createParticleForDiagram( xDiagram, rModel );
+                aRet = ObjectIdentifier::createParticleForDiagram();
                 aRet.append(":CS=");
                 aRet.append( OUString::number( nCooSysIndex ) );
                 break;
@@ -567,7 +557,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
             Reference< XCoordinateSystem > xCurrentCooSys( aCooSysList[nCooSysIndex] );
             if( xCooSys == xCurrentCooSys )
             {
-                aRet = ObjectIdentifier::createParticleForDiagram( xDiagram, xChartModel );
+                aRet = ObjectIdentifier::createParticleForDiagram();
                 aRet.append(":CS=");
                 aRet.append( OUString::number( nCooSysIndex ) );
                 break;
@@ -649,7 +639,7 @@ OUString ObjectIdentifier::createParticleForLegend( ChartModel& rModel )
     Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
     //todo: if more than one diagram is implemeted, find the correct diagram which is owner of the given legend
 
-    aRet.append( ObjectIdentifier::createParticleForDiagram( xDiagram, rModel ) );
+    aRet.append( ObjectIdentifier::createParticleForDiagram() );
     aRet.append(":");
     aRet.append(getStringForType( OBJECTTYPE_LEGEND ));
     aRet.append("=");
@@ -665,7 +655,7 @@ OUString ObjectIdentifier::createParticleForLegend(
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     //todo: if more than one diagram is implemeted, find the correct diagram which is owner of the given legend
 
-    aRet.append( ObjectIdentifier::createParticleForDiagram( xDiagram, xChartModel ) );
+    aRet.append( ObjectIdentifier::createParticleForDiagram() );
     aRet.append(":");
     aRet.append(getStringForType( OBJECTTYPE_LEGEND ));
     aRet.append("=");

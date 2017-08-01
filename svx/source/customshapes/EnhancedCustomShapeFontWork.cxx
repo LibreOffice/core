@@ -551,7 +551,7 @@ void CalcDistances( const tools::Polygon& rPoly, std::vector< double >& rDistanc
     }
 }
 
-void InsertMissingOutlinePoints( const tools::Polygon& /*rOutlinePoly*/, const std::vector< double >& rDistances,
+void InsertMissingOutlinePoints( const std::vector< double >& rDistances,
                                  const tools::Rectangle& rTextAreaBoundRect, tools::Polygon& rPoly )
 {
     sal_uInt16 nSize = rPoly.GetSize();
@@ -749,8 +749,8 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
                                 // create local polygon copy to work on
                                 tools::Polygon aLocalPoly(aCandidate);
 
-                                InsertMissingOutlinePoints( rOutlinePoly, vDistances, rTextAreaBoundRect, aLocalPoly );
-                                InsertMissingOutlinePoints( rOutlinePoly2, vDistances2, rTextAreaBoundRect, aLocalPoly );
+                                InsertMissingOutlinePoints( vDistances, rTextAreaBoundRect, aLocalPoly );
+                                InsertMissingOutlinePoints( vDistances2, rTextAreaBoundRect, aLocalPoly );
 
                                 sal_uInt16 _nPointCount = aLocalPoly.GetSize();
                                 if (_nPointCount)

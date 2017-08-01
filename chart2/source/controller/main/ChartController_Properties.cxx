@@ -313,7 +313,7 @@ wrapper::ItemConverter* createItemConverter(
 
                 pItemConverter =  new wrapper::AllAxisItemConverter(
                     xChartModel, rDrawModel.GetItemPool(),
-                    rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ), pRefSize.get());
+                    rDrawModel, pRefSize.get());
             }
             break;
             case OBJECTTYPE_GRID:

@@ -32,7 +32,6 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace ppt {
 
     TimeAnimValueListContext::TimeAnimValueListContext( FragmentHandler2 const & rParent,
-                const Reference< XFastAttributeList >& /*xAttribs*/,
                 TimeAnimationValueList & aTavList )
         : FragmentHandler2( rParent )
             , maTavList( aTavList )

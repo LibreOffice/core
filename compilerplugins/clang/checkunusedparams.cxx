@@ -28,9 +28,14 @@ class CheckUnusedParams: public RecursiveASTVisitor<CheckUnusedParams>, public l
 public:
     explicit CheckUnusedParams(InstantiationData const & data): Plugin(data) {}
     void run() override;
-    bool VisitFunctionDecl(FunctionDecl const * decl);
-    bool VisitDeclRefExpr(DeclRefExpr const *);
+    bool VisitFunctionDecl(FunctionDecl const *);
+    bool VisitUnaryAddrOf(UnaryOperator const *);
+    bool VisitInitListExpr(InitListExpr const *);
+    bool VisitCallExpr(CallExpr const *);
+    bool VisitBinAssign(BinaryOperator const *);
+    bool VisitCXXConstructExpr(CXXConstructExpr const *);
 private:
+    void checkForFunctionDecl(Expr const *, bool bCheckOnly = false);
     std::set<FunctionDecl const *> m_addressOfSet;
     enum class PluginPhase { FindAddressOf, Warning };
     PluginPhase m_phase;
@@ -68,20 +73,57 @@ void CheckUnusedParams::run()
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 }
 
-bool CheckUnusedParams::VisitDeclRefExpr(DeclRefExpr const * declRef) {
+bool CheckUnusedParams::VisitUnaryAddrOf(UnaryOperator const * op) {
     if (m_phase != PluginPhase::FindAddressOf)
         return true;
-    if (ignoreLocation(declRef))
-        return true;
-    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(declRef->getLocStart())))
-        return true;
-    auto functionDecl = dyn_cast<FunctionDecl>(declRef->getDecl());
-    if (!functionDecl)
-        return true;
-    m_addressOfSet.insert(functionDecl);
+    checkForFunctionDecl(op->getSubExpr());
     return true;
 }
 
+bool CheckUnusedParams::VisitBinAssign(BinaryOperator const * binaryOperator) {
+    if (m_phase != PluginPhase::FindAddressOf)
+        return true;
+    checkForFunctionDecl(binaryOperator->getRHS());
+    return true;
+}
+
+bool CheckUnusedParams::VisitCallExpr(CallExpr const * callExpr) {
+    if (m_phase != PluginPhase::FindAddressOf)
+        return true;
+    for (auto arg : callExpr->arguments())
+        checkForFunctionDecl(arg);
+    return true;
+}
+
+bool CheckUnusedParams::VisitCXXConstructExpr(CXXConstructExpr const * constructExpr) {
+    if (m_phase != PluginPhase::FindAddressOf)
+        return true;
+    for (auto arg : constructExpr->arguments())
+        checkForFunctionDecl(arg);
+    return true;
+}
+
+bool CheckUnusedParams::VisitInitListExpr(InitListExpr const * initListExpr) {
+    if (m_phase != PluginPhase::FindAddressOf)
+        return true;
+    for (auto subStmt : *initListExpr)
+        checkForFunctionDecl(dyn_cast<Expr>(subStmt));
+    return true;
+}
+
+void CheckUnusedParams::checkForFunctionDecl(Expr const * expr, bool bCheckOnly) {
+    auto e1 = expr->IgnoreParenCasts();
+    auto declRef = dyn_cast<DeclRefExpr>(e1);
+    if (!declRef)
+        return;
+    auto functionDecl = dyn_cast<FunctionDecl>(declRef->getDecl());
+    if (!functionDecl)
+        return;
+    if (bCheckOnly)
+        parentStmt(expr)->dump();
+    else
+        m_addressOfSet.insert(functionDecl->getCanonicalDecl());
+}
 
 static int noFieldsInRecord(RecordType const * recordType) {
     auto recordDecl = recordType->getDecl();
@@ -103,7 +145,7 @@ static bool endswith(const std::string& rStr, const char* pSubStr) {
 bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
     if (m_phase != PluginPhase::Warning)
         return true;
-    if (m_addressOfSet.find(decl) != m_addressOfSet.end())
+    if (m_addressOfSet.find(decl->getCanonicalDecl()) != m_addressOfSet.end())
         return true;
     if (ignoreLocation(decl))
         return true;
@@ -139,7 +181,6 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
     {
         return true;
     }
-
     FunctionDecl const * canon = decl->getCanonicalDecl();
     std::string fqn = canon->getQualifiedNameAsString(); // because sometimes clang returns nonsense for the filename of canon
     if (ignoreLocation(canon))
@@ -318,7 +359,30 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
         || fqn == "DOM::CDocumentBuilder::_getInstance"
         || fqn == "xml_security::serial_number_adapter::create"
         || fqn == "desktop::splash::create" || fqn == "ScannerManager_CreateInstance"
-        || fqn == "formula::FormulaOpCodeMapperObj::create")
+        || fqn == "formula::FormulaOpCodeMapperObj::create"
+        || fqn == "(anonymous namespace)::createInstance"
+        || fqn == "x_error_handler"
+        || fqn == "warning_func"
+        || fqn == "error_func"
+        || fqn == "ScaDateAddIn_CreateInstance"
+        || fqn == "ScaPricingAddIn_CreateInstance"
+        || fqn == "(anonymous namespace)::PDFSigningPKCS7PasswordCallback"
+        || fqn == "ContextMenuEventLink"
+        || fqn == "DelayedCloseEventLink"
+        || fqn == "GDIMetaFile::ImplColMonoFnc"
+        || fqn == "vcl::getGlyph0"
+        || fqn == "vcl::getGlyph6"
+        || fqn == "vcl::getGlyph12"
+        || fqn == "setPasswordCallback"
+        || fqn == "VCLExceptionSignal_impl"
+        || fqn == "getFontTable"
+        || fqn == "textconversiondlgs::ChineseTranslation_UnoDialog::create"
+        || fqn == "pcr::DefaultHelpProvider::Create"
+        || fqn == "pcr::DefaultFormComponentInspectorModel::Create"
+        || fqn == "GraphicExportDialog::GraphicExportDialog"
+        || fqn == "pcr::ObjectInspectorModel::Create"
+        || fqn == "GraphicExportFilter::GraphicExportFilter"
+        )
          return true;
     // TODO
     if (fqn == "FontSubsetInfo::CreateFontSubsetFromType1")
@@ -329,7 +393,24 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
          return true;
     // FIXME
     if (fqn == "GtkSalDisplay::filterGdkEvent" || fqn == "SvXMLEmbeddedObjectHelper::ImplReadObject"
-        || "chart::CachedDataSequence::CachedDataSequence")
+        || fqn == "chart::CachedDataSequence::CachedDataSequence")
+         return true;
+    // used via macro
+    if (fqn == "framework::MediaTypeDetectionHelper::MediaTypeDetectionHelper"
+        || fqn == "framework::UriAbbreviation::UriAbbreviation"
+        || fqn == "framework::DispatchDisabler::DispatchDisabler"
+        || fqn == "framework::DispatchRecorderSupplier::DispatchRecorderSupplier")
+         return true;
+    // TODO Armin Le Grand is still working on this
+    if (fqn == "svx::frame::CreateDiagFrameBorderPrimitives"
+        || fqn == "svx::frame::CreateBorderPrimitives")
+         return true;
+    // marked with a TODO
+    if (fqn == "pcr::FormLinkDialog::getExistingRelation"
+        || fqn == "ooo::vba::DebugHelper::basicexception")
+         return true;
+    // macros at work
+    if (fqn == "msfilter::lcl_PrintDigest")
          return true;
 
     // ignore the LINK macros from include/tools/link.hxx

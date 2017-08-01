@@ -524,7 +524,7 @@ void ControlConverter::convertAxState( PropertyMap& rPropMap,
 }
 
 void ControlConverter::convertToAxState( PropertySet const & rPropSet,
-        OUString& rValue, sal_Int32& nMultiSelect, ApiDefaultStateMode eDefStateMode, bool /*bAwtModel*/ )
+        OUString& rValue, sal_Int32& nMultiSelect, ApiDefaultStateMode eDefStateMode )
 {
     bool bSupportsTriState = eDefStateMode == API_DEFAULTSTATE_TRISTATE;
 
@@ -561,7 +561,7 @@ void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
 }
 
 void ControlConverter::convertToAxOrientation( PropertySet const & rPropSet,
-        const AxPairData& /*rSize*/, sal_Int32& nOrientation )
+        sal_Int32& nOrientation )
 {
     bool bHorizontal = true;
     convertToMSOrientation( rPropSet, bHorizontal );
@@ -1576,7 +1576,7 @@ void AxToggleButtonModel::convertFromProperties( PropertySet& rPropSet, const Co
 
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
     // need to process the image if one exists
-    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
+    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -1651,7 +1651,7 @@ void AxCheckBoxModel::convertFromProperties( PropertySet& rPropSet, const Contro
     ControlConverter::convertToAxVisualEffect( rPropSet, mnSpecialEffect );
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
     // need to process the image if one exists
-    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
+    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -1713,7 +1713,7 @@ void AxOptionButtonModel::convertFromProperties( PropertySet& rPropSet, const Co
     ControlConverter::convertToAxVisualEffect( rPropSet, mnSpecialEffect );
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
     // need to process the image if one exists
-    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN, mbAwtModel );
+    ControlConverter::convertToAxState( rPropSet, maValue, mnMultiSelect, API_DEFAULTSTATE_BOOLEAN );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
 }
 
@@ -2135,7 +2135,7 @@ void AxSpinButtonModel::convertFromProperties( PropertySet& rPropSet, const Cont
     ControlConverter::convertToMSColor( rPropSet, PROP_SymbolColor, mnArrowColor);
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
 
-    ControlConverter::convertToAxOrientation( rPropSet, maSize, mnOrientation );
+    ControlConverter::convertToAxOrientation( rPropSet, mnOrientation );
 }
 
 void AxSpinButtonModel::exportCompObj( BinaryOutputStream& rOutStream )
@@ -2306,7 +2306,7 @@ void AxScrollBarModel::convertFromProperties( PropertySet& rPropSet, const Contr
     mnPropThumb = AX_PROPTHUMB_ON; // default
     ControlConverter::convertToMSColor( rPropSet, PROP_SymbolColor, mnArrowColor);
     ControlConverter::convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
-    ControlConverter::convertToAxOrientation( rPropSet, maSize, mnOrientation );
+    ControlConverter::convertToAxOrientation( rPropSet, mnOrientation );
 
     rPropSet.getProperty( mnMin, PROP_ScrollValueMin );
     rPropSet.getProperty( mnMax, PROP_ScrollValueMax );

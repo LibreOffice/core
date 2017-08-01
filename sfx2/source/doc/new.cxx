@@ -66,7 +66,7 @@ Size SfxPreviewBase_Impl::GetOptimalSize() const
     return LogicToPixel(Size(127, 129), MapUnit::MapAppFont);
 }
 
-void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/, GDIMetaFile* pFile)
+void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFile* pFile)
 {
     rRenderContext.SetLineColor();
     Color aLightGrayCol(COL_LIGHTGRAY);
@@ -111,9 +111,9 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, const tool
     }
 }
 
-void SfxPreviewWin_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SfxPreviewWin_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    ImpPaint(rRenderContext, rRect, xMetaFile.get());
+    ImpPaint(rRenderContext, xMetaFile.get());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSfxPreviewWin(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)

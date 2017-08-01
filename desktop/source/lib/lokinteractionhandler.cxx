@@ -48,7 +48,6 @@
 using namespace com::sun::star;
 
 LOKInteractionHandler::LOKInteractionHandler(
-        uno::Reference<uno::XComponentContext> const & /*rxContext*/,
         const OString& rCommand,
         desktop::LibLibreOffice_Impl *const pLOKit,
         desktop::LibLODocument_Impl *const pLOKDocument)

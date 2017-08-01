@@ -347,7 +347,6 @@ void RegressionCurveHelper::removeMeanValueLine(
 uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::addRegressionCurve(
     SvxChartRegress eType,
     uno::Reference< XRegressionCurveContainer > const & xRegressionCurveContainer,
-    const uno::Reference< XComponentContext >& /* xContext */,
     const uno::Reference< beans::XPropertySet >& xPropertySource,
     const uno::Reference< beans::XPropertySet >& xEquationProperties )
 {
@@ -467,14 +466,12 @@ void RegressionCurveHelper::removeEquations(
 uno::Reference< XRegressionCurve > RegressionCurveHelper::changeRegressionCurveType(
     SvxChartRegress eType,
     uno::Reference< XRegressionCurveContainer > const & xRegressionCurveContainer,
-    uno::Reference< XRegressionCurve > const & xRegressionCurve,
-    const uno::Reference< XComponentContext > & xContext )
+    uno::Reference< XRegressionCurve > const & xRegressionCurve )
 {
     xRegressionCurveContainer->removeRegressionCurve( xRegressionCurve );
     return RegressionCurveHelper::addRegressionCurve(
             eType,
             xRegressionCurveContainer,
-            xContext,
             uno::Reference< beans::XPropertySet >( xRegressionCurve, uno::UNO_QUERY ),
             xRegressionCurve->getEquationProperties());
 }

@@ -52,7 +52,6 @@ namespace oox { namespace ppt {
     public:
         CondListContext( ::oox::core::FragmentHandler2 const & rParent,
              sal_Int32  aElement,
-             const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
              const TimeNodePtr & pNode, AnimationConditionList & aCondList );
         virtual ~CondListContext( ) throw( ) override;
 

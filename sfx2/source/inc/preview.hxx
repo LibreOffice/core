@@ -45,7 +45,7 @@ public:
         : SfxPreviewBase_Impl(pParent, nStyle)
     {}
 
-    static void ImpPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, GDIMetaFile* pFile);
+    static void ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFile* pFile);
 };
 
 #endif

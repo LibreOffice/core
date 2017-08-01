@@ -43,7 +43,6 @@ AllAxisItemConverter::AllAxisItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & /*xNamedPropertyContainerFactory*/,
     const awt::Size* pRefSize )
         : MultipleItemConverter( rItemPool )
 {

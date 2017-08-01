@@ -41,7 +41,7 @@ void setFourBitColor( double& rChannel, char nChar )
     rChannel = (nVal*16+nVal)/255.0;
 }
 
-void setEightBitColor( double& rChannel, const char* pStart, const char* )
+void setEightBitColor( double& rChannel, const char* pStart )
 {
     const sal_uInt8 nVal0(hex2int(pStart[0]));
     const sal_uInt8 nVal1(hex2int(pStart[1]));
@@ -124,9 +124,9 @@ namespace
             {
                 using namespace ::boost::spirit::classic;
 
-                auto lambdaSetEightBitColorR = [&self](const char* pStart, const char* nChar){ setEightBitColor(self.m_rColor.r, pStart, nChar); };
-                auto lambdaSetEightBitColorG = [&self](const char* pStart, const char* nChar){ setEightBitColor(self.m_rColor.g, pStart, nChar); };
-                auto lambdaSetEightBitColorB = [&self](const char* pStart, const char* nChar){ setEightBitColor(self.m_rColor.b, pStart, nChar); };
+                auto lambdaSetEightBitColorR = [&self](const char* pStart, const char* /*nChar*/){ setEightBitColor(self.m_rColor.r, pStart); };
+                auto lambdaSetEightBitColorG = [&self](const char* pStart, const char* /*nChar*/){ setEightBitColor(self.m_rColor.g, pStart); };
+                auto lambdaSetEightBitColorB = [&self](const char* pStart, const char* /*nChar*/){ setEightBitColor(self.m_rColor.b, pStart); };
                 auto lambdaSetFourBitColorR = [&self](char nChar){ setFourBitColor(self.m_rColor.r, nChar); };
                 auto lambdaSetFourBitColorG = [&self](char nChar){ setFourBitColor(self.m_rColor.g, nChar); };
                 auto lambdaSetFourBitColorB = [&self](char nChar){ setFourBitColor(self.m_rColor.b, nChar); };

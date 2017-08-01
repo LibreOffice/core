@@ -813,8 +813,7 @@ void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::
         RegressionCurveHelper::changeRegressionCurveType(
                         eNewRegressionType,
                         xRegressionCurveContainer,
-                        xRegressionCurve,
-                        uno::Reference< uno::XComponentContext >());
+                        xRegressionCurve);
     }
 }
 
