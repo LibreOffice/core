@@ -35,7 +35,6 @@ public:
         const css::uno::Reference<css::frame::XModel> & xChartModel,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
-        const css::uno::Reference<css::lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
         const css::awt::Size* pRefSize = nullptr );
 
     virtual ~AllAxisItemConverter() override;

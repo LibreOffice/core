@@ -356,7 +356,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
             sal_Int32  aElement,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )
-        : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+        : TimeNodeContext( rParent, aElement, pNode )
             , mbIterate( false )
     {
         AttributeList attribs( xAttribs );
@@ -607,9 +607,9 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
             return new TimeNodeListContext( *this, mpNode->getChildren() );
 
         case PPT_TOKEN( stCondLst ):
-            return new CondListContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode, mpNode->getStartCondition() );
+            return new CondListContext( *this, aElementToken, mpNode, mpNode->getStartCondition() );
         case PPT_TOKEN( endCondLst ):
-            return new CondListContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode, mpNode->getEndCondition() );
+            return new CondListContext( *this, aElementToken, mpNode, mpNode->getEndCondition() );
 
         case PPT_TOKEN( endSync ):
             return new CondContext( *this, rAttribs.getFastAttributeList(), mpNode, mpNode->getEndSyncValue() );

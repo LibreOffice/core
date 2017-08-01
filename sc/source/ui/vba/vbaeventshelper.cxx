@@ -515,8 +515,8 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, void*, p, void )
     release();
 }
 
-ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& xContext ) :
-    VbaEventsHelperBase( rArgs, xContext ),
+ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& /*xContext*/ ) :
+    VbaEventsHelperBase( rArgs ),
     mbOpened( false )
 {
     mpDocShell = dynamic_cast< ScDocShell* >( mpShell ); // mpShell from base class

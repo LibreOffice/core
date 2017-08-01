@@ -75,7 +75,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
  * Signature: (Ljava/lang/String;Ljava/lang/String;)I
  */
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2
-  (JNIEnv * env, jobject obj_this,jstring key, jstring name)
+  (JNIEnv * env, jobject /*obj_this*/, jstring key, jstring name)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile( env, name, "input" ).logOperation( "read()" );
@@ -83,7 +83,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     DataLogFile aDataLog( env, name, "input" );
     return read_from_storage_stream( env, obj_this, name, key, &aDataLog );
 #else
-    return read_from_storage_stream( env, obj_this, name, key );
+    return read_from_storage_stream( env, name, key );
 #endif
 }
 
@@ -94,7 +94,7 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
  * Signature: (Ljava/lang/String;Ljava/lang/String;[BII)I
  */
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
-  (JNIEnv * env, jobject obj_this,jstring key, jstring name, jbyteArray buffer, jint off, jint len)
+  (JNIEnv * env, jobject obj_this, jstring key, jstring name, jbyteArray buffer, jint off, jint len)
 {
 #ifdef HSQLDB_DBG
     OperationLogFile( env, name, "input" ).logOperation( "read( byte[], int, int )" );
@@ -102,7 +102,8 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     DataLogFile aDataLog( env, name, "input" );
     return read_from_storage_stream_into_buffer( env, obj_this, name, key, buffer, off, len, &aDataLog );
 #else
-    return read_from_storage_stream_into_buffer(env,obj_this,name,key,buffer,off,len);
+    (void)obj_this;
+    return read_from_storage_stream_into_buffer(env, name,key,buffer,off,len);
 #endif
 }
 

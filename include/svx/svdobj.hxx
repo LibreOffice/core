@@ -986,8 +986,7 @@ public:
     static void RemoveMakeObjectHdl(Link<SdrObjCreatorParams, SdrObject*> const & rLink);
 
 private:
-    static SVX_DLLPRIVATE SdrObject* CreateObjectFromFactory(
-        SdrInventor nInventor, sal_uInt16 nIdentifier, SdrPage* pPage, SdrModel* pModel );
+    static SVX_DLLPRIVATE SdrObject* CreateObjectFromFactory( SdrInventor nInventor, sal_uInt16 nIdentifier );
 
     SdrObjFactory() = delete;
 };

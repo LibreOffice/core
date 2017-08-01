@@ -322,8 +322,7 @@ public:
                             PropertySet const & rPropSet,
                             OUString& rValue,
                             sal_Int32& nMultiSelect,
-                            ApiDefaultStateMode eDefStateMode,
-                            bool bAwtModel );
+                            ApiDefaultStateMode eDefStateMode );
 
     /** Converts the Forms 2.0 control orientation to UNO properties. */
     static void        convertAxOrientation(
@@ -333,7 +332,6 @@ public:
 
     static void        convertToAxOrientation(
                             PropertySet const & rPropSet,
-                            const AxPairData& rSize,
                             sal_Int32& nOrientation );
 
 private:

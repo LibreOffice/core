@@ -49,7 +49,7 @@ ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Refer
     m_xDialog.set( m_xControl, uno::UNO_QUERY_THROW );
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
     m_xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
-    setGeometryHelper( new UserFormGeometryHelper( xContext, xControl, 0.0, 0.0 ) );
+    setGeometryHelper( new UserFormGeometryHelper( xControl, 0.0, 0.0 ) );
     if ( aArgs.getLength() >= 4 )
         aArgs[ 3 ] >>= m_sLibName;
 }

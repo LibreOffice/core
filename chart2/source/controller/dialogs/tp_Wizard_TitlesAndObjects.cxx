@@ -141,7 +141,7 @@ void TitlesAndObjectsTabPage::commitToModel()
         aNewExistenceList[1] = m_pCB_Grid_Y->IsChecked();
         aNewExistenceList[2] = m_pCB_Grid_Z->IsChecked();
         AxisHelper::changeVisibilityOfGrids( xDiagram
-                , aOldExistenceList, aNewExistenceList, m_xCC );
+                , aOldExistenceList, aNewExistenceList );
     }
 }
 

@@ -164,8 +164,7 @@ void setTrendlineVisible(const css::uno::Reference<css::frame::XModel>&
     {
         RegressionCurveHelper::addRegressionCurve(
                     SvxChartRegress::Linear,
-                    xRegressionCurveContainer,
-                    comphelper::getProcessComponentContext());
+                    xRegressionCurveContainer);
     }
     else
         RegressionCurveHelper::removeAllExceptMeanValueLine(
