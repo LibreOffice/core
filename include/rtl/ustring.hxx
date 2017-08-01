@@ -443,7 +443,7 @@ public:
     /**
       Move assign a new string.
 
-      @param    str         a OString.
+      @param    str         an OUString.
       @since LibreOffice 5.2
     */
     OUString & operator=( OUString && str )
