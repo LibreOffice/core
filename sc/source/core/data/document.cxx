@@ -786,7 +786,7 @@ void ScDocument::ClearTabs()
 bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 {
     bool bValid = false;
-    if (ValidTab(nTab) && (nTab + nSheets) < static_cast<SCTAB>(maTabs.size()))
+    if (ValidTab(nTab) && (nTab + nSheets) <= static_cast<SCTAB>(maTabs.size()))
     {
         if (maTabs[nTab])
         {
