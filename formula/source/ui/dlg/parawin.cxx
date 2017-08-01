@@ -26,9 +26,9 @@
 #include "formula/formdata.hxx"
 #include "formula/IFunctionDescription.hxx"
 #include <formula/funcvarargs.h>
-#include "ModuleHelper.hxx"
 #include "strings.hrc"
 #include "bitmaps.hlst"
+#include "core_resource.hxx"
 
 namespace formula
 {
@@ -38,8 +38,8 @@ ParaWin::ParaWin(vcl::Window* pParent,IControlReferenceHandler* _pDlg):
     TabPage         (pParent, "ParameterPage", "formula/ui/parameter.ui"),
     pFuncDesc       ( nullptr ),
     pMyParent       (_pDlg),
-    m_sOptional     ( ModuleRes( STR_OPTIONAL ) ),
-    m_sRequired     ( ModuleRes( STR_REQUIRED ) )
+    m_sOptional     ( ForResId( STR_OPTIONAL ) ),
+    m_sRequired     ( ForResId( STR_REQUIRED ) )
 {
     get(m_pFtEditDesc, "editdesc");
     get(m_pFtArgName, "parname");

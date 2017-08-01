@@ -30,7 +30,6 @@
 
 #include <vector>
 #include "formula/funcutl.hxx"
-#include "formula/omoduleclient.hxx"
 #include "ControlHelper.hxx"
 
 namespace formula
@@ -44,7 +43,6 @@ class IControlReferenceHandler;
 class ParaWin : public TabPage
 {
 private:
-        OModuleClient        m_aModuleClient;
         Link<ParaWin&,void>  aFxLink;
         Link<ParaWin&,void>  aArgModifiedLink;
 

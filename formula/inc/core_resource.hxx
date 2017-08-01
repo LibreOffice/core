@@ -17,18 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#ifndef INCLUDED_FORMULA_SOURCE_CORE_INC_CORE_RESOURCE_HXX
+#define INCLUDED_FORMULA_SOURCE_CORE_INC_CORE_RESOURCE_HXX
 
-#include "formula/omoduleclient.hxx"
+#include <rtl/ustring.hxx>
+#include <formula/formuladllapi.h>
 
-#include "ModuleHelper.hxx"
+FORMULA_DLLPUBLIC OUString ForResId(const char *pId);
 
-formula::OModuleClient::OModuleClient() {
-    OModule::registerClient();
-}
-
-formula::OModuleClient::~OModuleClient() {
-    OModule::revokeClient();
-}
+#endif // INCLUDED_FORMULA_SOURCE_CORE_INC_CORE_RESOURCE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

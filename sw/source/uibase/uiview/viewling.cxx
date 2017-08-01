@@ -423,7 +423,7 @@ void SwView::HyphenateDocument()
     }
 
     SfxErrorContext aContext( ERRCTX_SVX_LINGU_HYPHENATION, OUString(), m_pEditWin,
-         getRID_SVXERRCTX(), &SvxResLocale() );
+         getRID_SVXERRCTX(), SvxResLocale() );
 
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );
     if (!xHyph.is())
@@ -545,7 +545,7 @@ void SwView::StartThesaurus()
         return;
 
     SfxErrorContext aContext( ERRCTX_SVX_LINGU_THESAURUS, OUString(), m_pEditWin,
-         getRID_SVXERRCTX(), &SvxResLocale() );
+         getRID_SVXERRCTX(), SvxResLocale() );
 
     // Determine language
     LanguageType eLang = m_pWrtShell->GetCurLang();

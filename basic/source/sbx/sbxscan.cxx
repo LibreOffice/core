@@ -579,20 +579,19 @@ bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
     }
 }
 
-
-namespace
-{
-
-const std::locale& implGetResLocale()
+const std::locale& BasResLocale()
 {
     static std::locale loc(Translate::Create("sb"));
     return loc;
 }
 
-OUString SbxValueFormatResId(const char *pId)
+OUString BasResId(const char *pId)
 {
-    return Translate::get(pId, implGetResLocale());
+    return Translate::get(pId, BasResLocale());
 }
+
+namespace
+{
 
 enum class VbaFormatType
 {
@@ -820,13 +819,13 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 // initialize the Basic-formater help object:
                 // get resources for predefined output
                 // of the Format()-command, e. g. for "On/Off"
-                OUString aOnStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_ON);
-                OUString aOffStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_OFF);
-                OUString aYesStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_YES);
-                OUString aNoStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_NO);
-                OUString aTrueStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_TRUE);
-                OUString aFalseStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_FALSE);
-                OUString aCurrencyFormatStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_CURRENCY);
+                OUString aOnStrg = BasResId(STR_BASICKEY_FORMAT_ON);
+                OUString aOffStrg = BasResId(STR_BASICKEY_FORMAT_OFF);
+                OUString aYesStrg = BasResId(STR_BASICKEY_FORMAT_YES);
+                OUString aNoStrg = BasResId(STR_BASICKEY_FORMAT_NO);
+                OUString aTrueStrg = BasResId(STR_BASICKEY_FORMAT_TRUE);
+                OUString aFalseStrg = BasResId(STR_BASICKEY_FORMAT_FALSE);
+                OUString aCurrencyFormatStrg = BasResId(STR_BASICKEY_FORMAT_CURRENCY);
 
                 rAppData.pBasicFormater = o3tl::make_unique<SbxBasicFormater>(
                                                                 cComma,c1000,aOnStrg,aOffStrg,

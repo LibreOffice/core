@@ -235,7 +235,7 @@ void OpCodeList::putDefaultOpCode( const FormulaCompiler::NonConstOpCodeMapPtr& 
     }
     if (!pKey)
         return;
-    OUString sKey = !mbLocalized ? OUString::createFromAscii(pKey) : Translate::get(pKey, ResourceManager::getResLocale());
+    OUString sKey = !mbLocalized ? OUString::createFromAscii(pKey) : ForResId(pKey);
     xMap->putOpCode(sKey, OpCode(nOp), pCharClass);
 }
 
@@ -853,7 +853,6 @@ void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, bool bD
         aSymbolMap.mxSymbolMap.reset(
             new FormulaCompiler::OpCodeMap(
                 SC_OPCODE_LAST_OPCODE_ID + 1, true, FormulaGrammar::GRAM_NATIVE_UI));
-        OModuleClient aModuleClient;
         OpCodeList aOpCodeListSymbols(false, RID_STRLIST_FUNCTION_NAMES_SYMBOLS, aSymbolMap.mxSymbolMap);
         OpCodeList aOpCodeListNative(true, RID_STRLIST_FUNCTION_NAMES, aSymbolMap.mxSymbolMap);
         // No AddInMap for native core mapping.
@@ -949,7 +948,6 @@ void FormulaCompiler::loadSymbols(const std::pair<const char*, int>* pSymbols, F
     {
         // not Core
         rxMap.reset( new OpCodeMap( SC_OPCODE_LAST_OPCODE_ID + 1, eGrammar != FormulaGrammar::GRAM_ODFF, eGrammar ));
-        OModuleClient aModuleClient;
         OpCodeList aOpCodeList(false, pSymbols, rxMap, eSepType);
 
         fillFromAddInMap( rxMap, eGrammar);

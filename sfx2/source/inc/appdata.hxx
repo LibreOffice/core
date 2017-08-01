@@ -82,10 +82,6 @@ public:
 
     // application members
     SfxFilterMatcher*                   pMatcher;
-#if HAVE_FEATURE_SCRIPTING
-    std::locale                         aBasicResLocale;
-#endif
-    std::locale                         aSvtResLocale;
     SfxErrorHandler *m_pToolsErrorHdl;
     SfxErrorHandler *m_pSoErrorHdl;
 #if HAVE_FEATURE_SCRIPTING
