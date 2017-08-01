@@ -521,7 +521,6 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
                 ,m_nStartCol(0)
                 ,m_nStartRow(0)
                 ,m_nDataCols(0)
-                ,m_nDataRows(0)
                 ,m_bHasHeaders(false)
                 ,m_aNullDate(::Date::EMPTY)
 {
@@ -609,28 +608,6 @@ void OCalcTable::construct()
     refreshColumns();
 }
 
-void OCalcTable::refreshColumns()
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    TStringVector aVector;
-
-    OSQLColumns::Vector::const_iterator aEnd = m_aColumns->get().end();
-    for(OSQLColumns::Vector::const_iterator aIter = m_aColumns->get().begin();aIter != aEnd;++aIter)
-        aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
-
-    if(m_pColumns)
-        m_pColumns->reFill(aVector);
-    else
-        m_pColumns  = new component::OComponentColumns(this,m_aMutex,aVector);
-}
-
-void OCalcTable::refreshIndexes()
-{
-    //  Calc table has no index
-}
-
-
 void SAL_CALL OCalcTable::disposing()
 {
     OFileTable::disposing();
@@ -641,43 +618,6 @@ void SAL_CALL OCalcTable::disposing()
     m_pConnection = nullptr;
 
 }
-
-Sequence< Type > SAL_CALL OCalcTable::getTypes(  )
-{
-    Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
-    std::vector<Type> aOwnTypes;
-    aOwnTypes.reserve(aTypes.getLength());
-
-    const Type* pBegin = aTypes.getConstArray();
-    const Type* pEnd = pBegin + aTypes.getLength();
-    for(;pBegin != pEnd;++pBegin)
-    {
-        if(!(   *pBegin == cppu::UnoType<XKeysSupplier>::get()||
-                *pBegin == cppu::UnoType<XIndexesSupplier>::get()||
-                *pBegin == cppu::UnoType<XRename>::get()||
-                *pBegin == cppu::UnoType<XAlterTable>::get()||
-                *pBegin == cppu::UnoType<XDataDescriptorFactory>::get()))
-            aOwnTypes.push_back(*pBegin);
-    }
-    aOwnTypes.push_back(cppu::UnoType<css::lang::XUnoTunnel>::get());
-
-    return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
-}
-
-
-Any SAL_CALL OCalcTable::queryInterface( const Type & rType )
-{
-    if( rType == cppu::UnoType<XKeysSupplier>::get()||
-        rType == cppu::UnoType<XIndexesSupplier>::get()||
-        rType == cppu::UnoType<XRename>::get()||
-        rType == cppu::UnoType<XAlterTable>::get()||
-        rType == cppu::UnoType<XDataDescriptorFactory>::get())
-        return Any();
-
-    const Any aRet = ::cppu::queryInterface(rType,static_cast< css::lang::XUnoTunnel*> (this));
-    return aRet.hasValue() ? aRet : OTable_TYPEDEF::queryInterface(rType);
-}
-
 
 Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 {
@@ -693,82 +633,6 @@ sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId )
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OCalcTable_BASE::getSomething(rId);
-}
-
-sal_Int32 OCalcTable::getCurrentLastPos() const
-{
-    return m_nDataRows;
-}
-
-bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
-{
-    // prepare positioning:
-
-    sal_uInt32 nNumberOfRecords = m_nDataRows;
-    sal_uInt32 nTempPos = m_nFilePos;
-    m_nFilePos = nCurPos;
-
-    switch(eCursorPosition)
-    {
-        case IResultSetHelper::NEXT:
-            m_nFilePos++;
-            break;
-        case IResultSetHelper::PRIOR:
-            if (m_nFilePos > 0)
-                m_nFilePos--;
-            break;
-        case IResultSetHelper::FIRST:
-            m_nFilePos = 1;
-            break;
-        case IResultSetHelper::LAST:
-            m_nFilePos = nNumberOfRecords;
-            break;
-        case IResultSetHelper::RELATIVE1:
-            m_nFilePos = (m_nFilePos + nOffset < 0) ? 0L
-                            : (sal_uInt32)(m_nFilePos + nOffset);
-            break;
-        case IResultSetHelper::ABSOLUTE1:
-        case IResultSetHelper::BOOKMARK:
-            m_nFilePos = (sal_uInt32)nOffset;
-            break;
-    }
-
-    if (m_nFilePos > (sal_Int32)nNumberOfRecords)
-        m_nFilePos = (sal_Int32)nNumberOfRecords + 1;
-
-    if (m_nFilePos == 0 || m_nFilePos == (sal_Int32)nNumberOfRecords + 1)
-        goto Error;
-    else
-    {
-        //! read buffer / setup row object etc?
-    }
-    goto End;
-
-Error:
-    switch(eCursorPosition)
-    {
-        case IResultSetHelper::PRIOR:
-        case IResultSetHelper::FIRST:
-            m_nFilePos = 0;
-            break;
-        case IResultSetHelper::LAST:
-        case IResultSetHelper::NEXT:
-        case IResultSetHelper::ABSOLUTE1:
-        case IResultSetHelper::RELATIVE1:
-            if (nOffset > 0)
-                m_nFilePos = nNumberOfRecords + 1;
-            else if (nOffset < 0)
-                m_nFilePos = 0;
-            break;
-        case IResultSetHelper::BOOKMARK:
-            m_nFilePos = nTempPos;   // previous position
-    }
-    //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
-    return false;
-
-End:
-    nCurPos = m_nFilePos;
-    return true;
 }
 
 bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
@@ -800,13 +664,5 @@ bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
     }
     return true;
 }
-
-void OCalcTable::FileClose()
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    OCalcTable_BASE::FileClose();
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

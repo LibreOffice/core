@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CTABLE_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CTABLE_HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CTABLE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CTABLE_HXX
 
-#include "component/CTable.hxx"
+#include "file/FTable.hxx"
 #include <tools/date.hxx>
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -34,30 +34,19 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace connectivity
 {
-    namespace calc
+    namespace component
     {
-        typedef component::OComponentTable OCalcTable_BASE;
-        class OCalcConnection;
+        typedef file::OFileTable OComponentTable_BASE;
 
-        class OCalcTable :  public OCalcTable_BASE
+        /// Shared Table base class for Writer tables and Calc sheets.
+        class OOO_DLLPUBLIC_FILE OComponentTable :  public OComponentTable_BASE
         {
-        private:
-            std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
-            std::vector<sal_Int32> m_aPrecisions; // same as aboth
-            std::vector<sal_Int32> m_aScales;
-            css::uno::Reference< css::sheet::XSpreadsheet >           m_xSheet;
-            OCalcConnection* m_pConnection;
-            sal_Int32 m_nStartCol;
-            sal_Int32 m_nStartRow;
-            sal_Int32 m_nDataCols;
-            bool      m_bHasHeaders;
-            css::uno::Reference< css::util::XNumberFormats > m_xFormats;
-            ::Date m_aNullDate;
+        protected:
+            sal_Int32 m_nDataRows;
 
-            void fillColumns();
-
+            virtual void FileClose() override;
         public:
-            OCalcTable( sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
+            OComponentTable( sdbcx::OCollection* _pTables,file::OConnection* _pConnection,
                     const OUString& Name,
                     const OUString& Type,
                     const OUString& Description = OUString(),
@@ -65,19 +54,19 @@ namespace connectivity
                     const OUString& CatalogName = OUString()
                 );
 
-            virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
+            virtual void refreshColumns() override;
+            virtual void refreshIndexes() override;
 
-            virtual void SAL_CALL disposing() override;
+            virtual sal_Int32 getCurrentLastPos() const override;
+            virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) override;
 
-            // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
-
-            void construct() override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
+            //XTypeProvider
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         };
     }
 }
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_CALC_CTABLE_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_COMPONENT_CTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

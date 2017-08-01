@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_WRITER_WTABLE_HXX
 
-#include "file/FTable.hxx"
+#include "component/CTable.hxx"
 #include <tools/date.hxx>
 
 namespace com
@@ -56,7 +56,7 @@ namespace connectivity
 {
 namespace writer
 {
-typedef file::OFileTable OWriterTable_BASE;
+typedef component::OComponentTable OWriterTable_BASE;
 class OWriterConnection;
 
 class OWriterTable :  public OWriterTable_BASE
@@ -70,17 +70,10 @@ private:
     sal_Int32 m_nStartCol;
     sal_Int32 m_nStartRow;
     sal_Int32 m_nDataCols;
-    sal_Int32 m_nDataRows;
     bool      m_bHasHeaders;
     css::uno::Reference< css::util::XNumberFormats > m_xFormats;
 
     void fillColumns();
-
-protected:
-    virtual void FileClose() override;
-public:
-    virtual void refreshColumns() override;
-    virtual void refreshIndexes() override;
 
 public:
     OWriterTable(sdbcx::OCollection* _pTables, OWriterConnection* _pConnection,
@@ -91,13 +84,8 @@ public:
                  const OUString& CatalogName = OUString()
                 );
 
-    virtual sal_Int32 getCurrentLastPos() const override;
-    virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) override;
     virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
 
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
-    //XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
     virtual void SAL_CALL disposing() override;
 
     // css::lang::XUnoTunnel
