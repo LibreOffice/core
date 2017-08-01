@@ -33,8 +33,7 @@ public:
 
     ScXMLContentContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
-                        OUStringBuffer& sValue);
+                       OUStringBuffer& sValue);
 
     virtual ~ScXMLContentContext() override;
 

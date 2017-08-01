@@ -27,8 +27,7 @@
 class ScXMLTableShapesContext : public ScXMLImportContext
 {
 public:
-    ScXMLTableShapesContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
+    ScXMLTableShapesContext( ScXMLImport& rImport );
 
     virtual ~ScXMLTableShapesContext() override;
 

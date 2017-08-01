@@ -55,7 +55,7 @@ class ScXMLFilterContext : public ScXMLImportContext
 
 public:
 
-    ScXMLFilterContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLFilterContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScQueryParam& rParam,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -82,7 +82,6 @@ public:
 
     ScXMLAndContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                      const OUString& rLName,
-                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                      ScQueryParam& rParam,
                      ScXMLFilterContext* pTempFilterContext);
 
@@ -104,7 +103,6 @@ public:
 
     ScXMLOrContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                     const OUString& rLName,
-                    const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                     ScQueryParam& rParam,
                     ScXMLFilterContext* pTempFilterContext);
 
@@ -188,7 +186,7 @@ class ScXMLDPFilterContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDPFilterContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDPFilterContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pTempDataPilotTableContext);
 
@@ -240,7 +238,6 @@ public:
 
     ScXMLDPAndContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPAndContext() override;
@@ -259,7 +256,6 @@ public:
 
     ScXMLDPOrContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
-                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPOrContext() override;

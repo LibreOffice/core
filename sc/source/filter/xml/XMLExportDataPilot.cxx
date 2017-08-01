@@ -733,7 +733,7 @@ void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient
     SvXMLElementExport aElemGrandTotal(rExport, XML_NAMESPACE_TABLE_EXT, XML_DATA_PILOT_GRAND_TOTAL, true, true);
 }
 
-void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocument>& /* xSpreadDoc */)
+void ScXMLExportDataPilot::WriteDataPilots()
 {
     pDoc = rExport.GetDocument();
     if (!pDoc)

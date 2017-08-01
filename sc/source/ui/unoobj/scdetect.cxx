@@ -139,7 +139,7 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
 
 }
 
-ScFilterDetect::ScFilterDetect( const uno::Reference<uno::XComponentContext>& /*xContext*/ )
+ScFilterDetect::ScFilterDetect()
 {
 }
 
@@ -345,10 +345,10 @@ css::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_calc_FormatDetector_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_calc_FormatDetector_get_implementation(css::uno::XComponentContext* /*context*/,
                                                          css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScFilterDetect(context));
+    return cppu::acquire(new ScFilterDetect);
 }
 
 

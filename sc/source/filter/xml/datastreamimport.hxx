@@ -24,7 +24,7 @@ class ScXMLDataStreamContext : public ScXMLImportContext
 
 public:
     ScXMLDataStreamContext(
-        ScXMLImport& rImport, sal_Int32 nElement,
+        ScXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList );
 
     virtual ~ScXMLDataStreamContext() override;

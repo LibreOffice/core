@@ -124,16 +124,16 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPref
     {
         if( IsXMLToken( rLName, XML_CREATOR ) )
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, xAttrList, maAuthorBuffer);
+                                            rLName, maAuthorBuffer);
         else if( IsXMLToken( rLName, XML_DATE ) )
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, xAttrList, maCreateDateBuffer);
+                                            rLName, maCreateDateBuffer);
     }
     else if( XML_NAMESPACE_META == nPrefix )
     {
         if( IsXMLToken( rLName, XML_DATE_STRING ) )
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, xAttrList, maCreateDateStringBuffer);
+                                            rLName, maCreateDateStringBuffer);
     }
 
     if( !pContext && pShapeContext )
