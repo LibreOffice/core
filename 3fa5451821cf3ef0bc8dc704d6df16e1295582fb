@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_d773e0af",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1585,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-08-01T16:16:35Z",
+      "side": 1,
+      "message": "should be \u0027Notes\u0027",
+      "range": {
+        "startLine": 1585,
+        "startChar": 41,
+        "endLine": 1585,
+        "endChar": 45
+      },
+      "revId": "3fa5451821cf3ef0bc8dc704d6df16e1295582fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
