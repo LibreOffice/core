@@ -18,7 +18,7 @@ namespace apitest {
 class XElementAccess
 {
 public:
-    XElementAccess(css::uno::Type& rType): maType(rType) {}
+    XElementAccess(css::uno::Type const & rType): maType(rType) {}
 
     void testGetElementType();
     void testHasElements();

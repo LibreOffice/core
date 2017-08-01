@@ -225,7 +225,7 @@ ScVbaUserForm::setValue( const OUString& aPropertyName, const uno::Any& aValue )
 }
 
 uno::Reference< awt::XControl >
-ScVbaUserForm::nestedSearch( const OUString& aPropertyName, uno::Reference< awt::XControlContainer >& xContainer )
+ScVbaUserForm::nestedSearch( const OUString& aPropertyName, uno::Reference< awt::XControlContainer > const & xContainer )
 {
     uno::Reference< awt::XControl > xControl = xContainer->getControl( aPropertyName );
     if ( !xControl.is() )

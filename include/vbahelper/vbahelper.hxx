@@ -73,7 +73,7 @@ namespace ooo
 
         /** Returns the VBA document implementation object representing the passed UNO document model. */
         VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getVBADocument( const css::uno::Reference< css::frame::XModel >& xModel );
-        VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, SfxObjectShell* pShell );
+        VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, SfxObjectShell const * pShell );
         /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const css::uno::Reference< css::frame::XModel >& xModel );
 
@@ -95,7 +95,7 @@ namespace ooo
 
         VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const OUString& aUrl );
         VBAHELPER_DLLPUBLIC void dispatchRequests (const css::uno::Reference< css::frame::XModel>& xModel, const OUString & aUrl, const css::uno::Sequence< css::beans::PropertyValue >& sProps );
-        VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell* pView, sal_uInt16 nSlot );
+        VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell const * pView, sal_uInt16 nSlot );
         VBAHELPER_DLLPUBLIC sal_Int32 OORGBToXLRGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC sal_Int32 XLRGBToOORGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC css::uno::Any OORGBToXLRGB( const css::uno::Any& );
@@ -104,8 +104,8 @@ namespace ooo
         // the object when passed to IsNull will return true. aNULL
         // contains an empty object reference
         VBAHELPER_DLLPUBLIC const css::uno::Any& aNULL();
-        VBAHELPER_DLLPUBLIC void PrintOutHelper( SfxViewShell* pViewShell, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, bool bSelection  );
-        VBAHELPER_DLLPUBLIC void PrintPreviewHelper( const css::uno::Any& EnableChanges,  SfxViewShell* );
+        VBAHELPER_DLLPUBLIC void PrintOutHelper( SfxViewShell const * pViewShell, const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, bool bSelection  );
+        VBAHELPER_DLLPUBLIC void PrintPreviewHelper( const css::uno::Any& EnableChanges, SfxViewShell const * );
         VBAHELPER_DLLPUBLIC void WaitUntilPreviewIsClosed( SfxViewFrame* );
 
         /** Extracts a boolean value from the passed Any, which may contain a Boolean or an integer or floating-point value.

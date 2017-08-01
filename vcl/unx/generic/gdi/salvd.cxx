@@ -35,7 +35,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <opengl/x11/salvd.hxx>
 
-SalVirtualDevice* X11SalInstance::CreateX11VirtualDevice(SalGraphics* pGraphics,
+SalVirtualDevice* X11SalInstance::CreateX11VirtualDevice(SalGraphics const * pGraphics,
         long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
         X11SalGraphics* pNewGraphics)
 {
@@ -88,7 +88,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     mxImpl->Init();
 }
 
-X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics* pGraphics, long &nDX, long &nDY,
+X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nDX, long &nDY,
                                          DeviceFormat eFormat, const SystemGraphicsData *pData,
                                          X11SalGraphics* pNewGraphics) :
     pGraphics_(pNewGraphics),
@@ -140,7 +140,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics* pGraphics, long &nDX, long
     {
         nDX_ = nDX;
         nDY_ = nDY;
-        m_nXScreen = pGraphics ? static_cast<X11SalGraphics*>(pGraphics)->GetScreenNumber() :
+        m_nXScreen = pGraphics ? static_cast<X11SalGraphics const *>(pGraphics)->GetScreenNumber() :
                                  vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen();
         hDrawable_ = limitXCreatePixmap( GetXDisplay(),
                                          pDisplay_->GetDrawable( m_nXScreen ),

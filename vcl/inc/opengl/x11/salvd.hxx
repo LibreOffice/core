@@ -32,7 +32,7 @@ class X11OpenGLSalVirtualDevice : public SalVirtualDevice
     int               mnHeight;
 
 public:
-    X11OpenGLSalVirtualDevice( SalGraphics *pGraphics,
+    X11OpenGLSalVirtualDevice( SalGraphics const *pGraphics,
                                long &nDX, long &nDY,
                                const SystemGraphicsData *pData,
                                X11SalGraphics* pNewGraphics);

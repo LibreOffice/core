@@ -80,7 +80,7 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
     aPNGWriter.Write(aNew);
 }
 
-void ScreenshotTest::saveScreenshot(VclAbstractDialog& rDialog)
+void ScreenshotTest::saveScreenshot(VclAbstractDialog const & rDialog)
 {
     const Bitmap aScreenshot(rDialog.createScreenshot());
 

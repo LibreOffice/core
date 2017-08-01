@@ -58,7 +58,7 @@ public:
     virtual void                DestroyObject( SalObject* pObject ) override;
 
     /// Gtk vclplug needs to pass GtkSalGraphics to X11SalVirtualDevice, so create it, and pass as pNewGraphics.
-    static SalVirtualDevice* CreateX11VirtualDevice(SalGraphics* pGraphics, long &nDX, long &nDY,
+    static SalVirtualDevice* CreateX11VirtualDevice(SalGraphics const * pGraphics, long &nDX, long &nDY,
             DeviceFormat eFormat, const SystemGraphicsData* pData, X11SalGraphics* pNewGraphics);
 
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,

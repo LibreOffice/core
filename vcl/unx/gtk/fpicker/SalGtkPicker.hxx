@@ -98,7 +98,7 @@ public:
     virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
 public:
     RunDialog(GtkWidget *pDialog,
-        css::uno::Reference< css::awt::XExtendedToolkit > &rToolkit
+        css::uno::Reference< css::awt::XExtendedToolkit > const &rToolkit
         );
     virtual ~RunDialog() override;
     gint run();

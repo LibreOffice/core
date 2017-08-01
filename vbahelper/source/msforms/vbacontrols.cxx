@@ -66,7 +66,7 @@ private:
             mIndices[ msNames[ nIndex ] ] = nIndex;
         }
     }
-    void getNestedControls( ControlVec& vControls, uno::Reference< awt::XControlContainer >& xContainer )
+    void getNestedControls( ControlVec& vControls, uno::Reference< awt::XControlContainer > const & xContainer )
     {
         uno::Sequence< uno::Reference< awt::XControl > > aControls = xContainer->getControls();
         const uno::Reference< awt::XControl >* pCtrl = aControls.getConstArray();

@@ -44,7 +44,7 @@ class X11SalVirtualDevice : public SalVirtualDevice
     bool        bExternPixmap_;
 
 public:
-    X11SalVirtualDevice(SalGraphics *pGraphics, long &nDX, long &nDY,
+    X11SalVirtualDevice(SalGraphics const *pGraphics, long &nDX, long &nDY,
             DeviceFormat eFormat, const SystemGraphicsData *pData, X11SalGraphics* pNewGraphics);
 
     virtual ~X11SalVirtualDevice() override;

@@ -120,7 +120,7 @@ aNULL()
     return aNULLL;
 }
 
-void dispatchExecute(SfxViewShell* pViewShell, sal_uInt16 nSlot)
+void dispatchExecute(SfxViewShell const * pViewShell, sal_uInt16 nSlot)
 {
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
@@ -335,7 +335,7 @@ XLRGBToOORGB(  const uno::Any& aCol )
     return uno::makeAny( nCol );
 }
 
-void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& /*ActivePrinter*/, const uno::Any& /*PrintToFile*/, const uno::Any& Collate, const uno::Any& PrToFileName, bool bUseSelection  )
+void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& /*ActivePrinter*/, const uno::Any& /*PrintToFile*/, const uno::Any& Collate, const uno::Any& PrToFileName, bool bUseSelection  )
 {
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
@@ -419,7 +419,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
     //   of this method
 }
 
- void PrintPreviewHelper( const css::uno::Any& /*EnableChanges*/, SfxViewShell* pViewShell )
+void PrintPreviewHelper( const css::uno::Any& /*EnableChanges*/, SfxViewShell const * pViewShell )
 {
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
@@ -1106,7 +1106,7 @@ uno::Reference< XHelperInterface > getVBADocument( const uno::Reference< frame::
     return xIf;
 }
 
-uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, SfxObjectShell* pShell )
+uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, SfxObjectShell const * pShell )
 {
     uno::Reference< XHelperInterface > xIf;
     if ( pShell )
