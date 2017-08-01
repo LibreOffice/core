@@ -80,7 +80,10 @@ namespace dxcanvas
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(hdc);
-        ScopedVclPtrInstance<VirtualDevice> xVirtualDevice(&aSystemGraphicsData, Size(1, 1), DeviceFormat::DEFAULT);
+
+        Size aTargetSize(rViewState.AffineTransform.m00, rViewState.AffineTransform.m11);
+
+        ScopedVclPtrInstance<VirtualDevice> xVirtualDevice(&aSystemGraphicsData, aTargetSize, DeviceFormat::DEFAULT);
 
         // disable font antialiasing - GDI does not handle alpha
         // surfaces properly.
