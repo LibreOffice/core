@@ -498,8 +498,21 @@ Reference< XShape > const & Shape::createAndInsert(
 
         if( bUseRotationTransform && mnRotation != 0 )
         {
+            // OOXML flips shapes before rotating them.
+            sal_Int32 nRotation = mnRotation;
+            if(bIsCustomShape)
+            {
+                if(mbFlipH)
+                {
+                    nRotation = nRotation * -1 + 60000*360;
+                }
+                if(mbFlipV)
+                {
+                    nRotation = nRotation * -1 + 60000*360;
+                }
+            }
             // rotate around object's center
-            aTransformation.rotate( F_PI180 * ( (double)mnRotation / 60000.0 ) );
+            aTransformation.rotate( F_PI180 * ( (double)nRotation / 60000.0 ) );
         }
 
         // move object back from center

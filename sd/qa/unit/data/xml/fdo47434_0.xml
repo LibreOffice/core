@@ -27,7 +27,6 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
@@ -90,7 +89,6 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
@@ -153,7 +151,6 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
@@ -216,7 +213,6 @@
    <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
   </Transformation>
   <CustomShapeGeometry>
-   <PropertyValue name="IsPostRotateAngle" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredX" value="true" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>

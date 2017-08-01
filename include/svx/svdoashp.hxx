@@ -140,7 +140,6 @@ public:
 
     bool IsMirroredX() const;
     bool IsMirroredY() const;
-    bool IsPostRotate() const;
     void SetMirroredX( const bool bMirroredX );
     void SetMirroredY( const bool bMirroredY );
 
