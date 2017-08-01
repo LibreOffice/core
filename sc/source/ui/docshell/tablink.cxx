@@ -30,6 +30,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <unotools/configmgr.hxx>
 
 #include "tablink.hxx"
 
@@ -454,7 +455,7 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
 
     std::shared_ptr<const SfxFilter> pSfxFilter;
     auto pMedium = o3tl::make_unique<SfxMedium>( rFileName, StreamMode::STD_READ );
-    if ( pMedium->GetError() == ERRCODE_NONE )
+    if (pMedium->GetError() == ERRCODE_NONE && !utl::ConfigManager::IsAvoidConfig())
     {
         if ( bWithInteraction )
             pMedium->UseInteractionHandler(true);   // #i73992# no longer called from GuessFilter
