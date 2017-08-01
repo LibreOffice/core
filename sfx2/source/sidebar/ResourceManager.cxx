@@ -322,11 +322,29 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
     utl::OConfigurationNode aDeckNode (aDeckRootNode.openNode(pDeckDesc->msNodeName));
 
-    aDeckNode.setNodeValue("Title", makeAny(pDeckDesc->msTitle));
-    aDeckNode.setNodeValue("OrderIndex", makeAny(pDeckDesc->mnOrderIndex));
-    aDeckNode.setNodeValue("ContextList", makeAny( sContextList ));
+    css::uno::Any aTitle(makeAny(pDeckDesc->msTitle));
+    css::uno::Any aOrder(makeAny(pDeckDesc->mnOrderIndex));
+    css::uno::Any aContextList(makeAny(sContextList));
 
-    aDeckRootNode.commit();
+    bool bChanged = false;
+    if (aTitle != aDeckNode.getNodeValue("Title"))
+    {
+        aDeckNode.setNodeValue("Title", aTitle);
+        bChanged = true;
+    }
+    if (aOrder != aDeckNode.getNodeValue("OrderIndex"))
+    {
+        aDeckNode.setNodeValue("OrderIndex", aOrder);
+        bChanged = true;
+    }
+    if (aContextList != aDeckNode.getNodeValue("ContextList"))
+    {
+        aDeckNode.setNodeValue("ContextList", aContextList);
+        bChanged = true;
+    }
+
+    if (bChanged)
+        aDeckRootNode.commit();
 
     // save panel settings
 
@@ -343,6 +361,7 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
     SharedPanelContainer rPanels = pDeckDesc->mpDeck->GetPanels();
 
+    bChanged = false;
     for ( SharedPanelContainer::iterator iPanel(rPanels.begin()), iEnd(rPanels.end());
               iPanel!=iEnd; ++iPanel)
     {
@@ -354,14 +373,29 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
         utl::OConfigurationNode aPanelNode (aPanelRootNode.openNode(xPanelDesc->msNodeName));
 
-        aPanelNode.setNodeValue("Title", makeAny(xPanelDesc->msTitle));
-        aPanelNode.setNodeValue("OrderIndex", makeAny(xPanelDesc->mnOrderIndex));
-        aPanelNode.setNodeValue("ContextList", makeAny( sPanelContextList ));
+        aTitle <<= xPanelDesc->msTitle;
+        aOrder <<= xPanelDesc->mnOrderIndex;
+        aContextList <<= sPanelContextList;
 
+        if (aTitle != aPanelNode.getNodeValue("Title"))
+        {
+            aPanelNode.setNodeValue("Title", aTitle);
+            bChanged = true;
+        }
+        if (aOrder != aPanelNode.getNodeValue("OrderIndex"))
+        {
+            aPanelNode.setNodeValue("OrderIndex", aOrder);
+            bChanged = true;
+        }
+        if (aContextList != aPanelNode.getNodeValue("ContextList"))
+        {
+            aPanelNode.setNodeValue("ContextList", aContextList);
+            bChanged = true;
+        }
     }
 
-     aPanelRootNode.commit();
-
+    if (bChanged)
+        aPanelRootNode.commit();
 }
 
 void ResourceManager::ReadPanelList()
