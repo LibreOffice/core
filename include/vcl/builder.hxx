@@ -79,9 +79,6 @@ public:
     //given an sID return the response value for that widget
     short           get_response(const vcl::Window *pWindow) const;
 
-    OString         get_by_window(const vcl::Window *pWindow) const;
-    void            delete_by_window(vcl::Window *pWindow);
-
     //release ownership of pWindow, i.e. don't delete it
     void            drop_ownership(const vcl::Window *pWindow);
 
@@ -397,6 +394,9 @@ private:
     void        cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Window *pWindow, stringmap &rMap);
 
     void        set_response(const OString& sID, short nResponse);
+
+    OString         get_by_window(const vcl::Window *pWindow) const;
+    void            delete_by_window(vcl::Window *pWindow);
 };
 
 template <typename T>
