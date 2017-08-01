@@ -23,7 +23,7 @@ class ScXMLCellTextParaContext : public ScXMLImportContext
     ScXMLTableRowCellContext& mrParentCxt;
     OUString maContent;
 public:
-    ScXMLCellTextParaContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLTableRowCellContext& rParent);
+    ScXMLCellTextParaContext(ScXMLImport& rImport, ScXMLTableRowCellContext& rParent);
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
     virtual void SAL_CALL characters( const OUString& aChars ) override;
@@ -46,7 +46,7 @@ class ScXMLCellTextSpanContext : public ScXMLImportContext
     OUString maStyleName;
     OUString maContent;
 public:
-    ScXMLCellTextSpanContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
+    ScXMLCellTextSpanContext(ScXMLImport& rImport, ScXMLCellTextParaContext& rParent);
 
     virtual void SAL_CALL startFastElement( sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
@@ -64,7 +64,7 @@ class ScXMLCellFieldSheetNameContext : public ScXMLImportContext
     ScXMLCellTextParaContext& mrParentCxt;
     OUString maStyleName;
 public:
-    ScXMLCellFieldSheetNameContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
+    ScXMLCellFieldSheetNameContext(ScXMLImport& rImport, ScXMLCellTextParaContext& rParent);
 
     void SetStyleName(const OUString& rStyleName);
 
@@ -81,7 +81,7 @@ class ScXMLCellFieldDateContext : public ScXMLImportContext
     ScXMLCellTextParaContext& mrParentCxt;
     OUString maStyleName;
 public:
-    ScXMLCellFieldDateContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
+    ScXMLCellFieldDateContext(ScXMLImport& rImport, ScXMLCellTextParaContext& rParent);
 
     void SetStyleName(const OUString& rStyleName);
 
@@ -96,7 +96,7 @@ class ScXMLCellFieldTitleContext : public ScXMLImportContext
     ScXMLCellTextParaContext& mrParentCxt;
     OUString maStyleName;
 public:
-    ScXMLCellFieldTitleContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
+    ScXMLCellFieldTitleContext(ScXMLImport& rImport, ScXMLCellTextParaContext& rParent);
 
     void SetStyleName(const OUString& rStyleName);
 
@@ -114,7 +114,7 @@ class ScXMLCellFieldURLContext : public ScXMLImportContext
     OUString maRep;
     OUString maTargetFrame;
 public:
-    ScXMLCellFieldURLContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
+    ScXMLCellFieldURLContext(ScXMLImport& rImport, ScXMLCellTextParaContext& rParent);
 
     void SetStyleName(const OUString& rStyleName);
 
@@ -135,7 +135,7 @@ class ScXMLCellFieldSContext : public ScXMLImportContext
 
     void PushSpaces();
 public:
-    ScXMLCellFieldSContext(ScXMLImport& rImport, sal_Int32 nElement, ScXMLCellTextParaContext& rParent);
+    ScXMLCellFieldSContext(ScXMLImport& rImport, ScXMLCellTextParaContext& rParent);
 
     void SetStyleName(const OUString& rStyleName);
 

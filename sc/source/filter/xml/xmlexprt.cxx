@@ -672,7 +672,7 @@ void ScXMLExport::ExportFontDecls_()
     SvXMLExport::ExportFontDecls_();
 }
 
-table::CellRangeAddress ScXMLExport::GetEndAddress(const uno::Reference<sheet::XSpreadsheet>& xTable, const sal_Int32 /* nTable */)
+table::CellRangeAddress ScXMLExport::GetEndAddress(const uno::Reference<sheet::XSpreadsheet>& xTable)
 {
     table::CellRangeAddress aCellAddress;
     uno::Reference<sheet::XSheetCellCursor> xCursor(xTable->createCursor());
@@ -1936,7 +1936,7 @@ void ScXMLExport::ExportContent_()
     aExportDatabaseRanges.WriteDatabaseRanges();
     WriteExternalDataMapping();
     ScXMLExportDataPilot aExportDataPilot(*this);
-    aExportDataPilot.WriteDataPilots(xSpreadDoc);
+    aExportDataPilot.WriteDataPilots();
     WriteConsolidation();
     ScXMLExportDDELinks aExportDDELinks(*this);
     aExportDDELinks.WriteDDELinks(xSpreadDoc);
@@ -2581,7 +2581,7 @@ void ScXMLExport::ExportAutoStyles_()
                     {
                         sal_Int32 nColumns(pDoc->GetLastChangedCol(sal::static_int_cast<SCTAB>(nTable)));
                         pSharedData->SetLastColumn(nTable, nColumns);
-                        table::CellRangeAddress aCellAddress(GetEndAddress(xTable, nTable));
+                        table::CellRangeAddress aCellAddress(GetEndAddress(xTable));
                         if (aCellAddress.EndColumn > nColumns)
                         {
                             ++nColumns;
@@ -2921,7 +2921,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
         GetShapeExport()->seekShapes(uno::Reference<drawing::XShapes>(pSharedData->GetDrawPage(nTable), uno::UNO_QUERY));
         WriteTableShapes();
     }
-    table::CellRangeAddress aRange(GetEndAddress(xTable, nTable));
+    table::CellRangeAddress aRange(GetEndAddress(xTable));
     pSharedData->SetLastColumn(nTable, aRange.EndColumn);
     pSharedData->SetLastRow(nTable, aRange.EndRow);
     mpCellsItr->SetCurrentTable(static_cast<SCTAB>(nTable), xCurrentTable);

@@ -330,7 +330,7 @@ bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
 }
 
 OUString XclControlHelper::ExtractFromMacroDescriptor(
-        const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType, SfxObjectShell* /*pShell*/ )
+        const ScriptEventDescriptor& rDescriptor, XclTbxEventType eEventType )
 {
     if( (!rDescriptor.ScriptCode.isEmpty()) &&
             rDescriptor.ScriptType.equalsIgnoreAsciiCase("Script") &&

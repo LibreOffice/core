@@ -62,7 +62,6 @@ bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
 
 ScXMLDetectiveContext::ScXMLDetectiveContext(
         ScXMLImport& rImport,
-        sal_Int32 /*nElement*/,
         ScMyImpDetectiveObjVec* pNewDetectiveObjVec ) :
     ScXMLImportContext( rImport ),
     pDetectiveObjVec( pNewDetectiveObjVec )
@@ -81,10 +80,10 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDetectiveContext::
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_HIGHLIGHTED_RANGE ):
-            pContext = new ScXMLDetectiveHighlightedContext( GetScImport(), nElement, xAttrList, pDetectiveObjVec );
+            pContext = new ScXMLDetectiveHighlightedContext( GetScImport(), xAttrList, pDetectiveObjVec );
         break;
         case XML_ELEMENT( TABLE, XML_OPERATION ):
-            pContext = new ScXMLDetectiveOperationContext( GetScImport(), nElement, xAttrList );
+            pContext = new ScXMLDetectiveOperationContext( GetScImport(), xAttrList );
         break;
     }
     if( !pContext )
@@ -95,7 +94,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDetectiveContext::
 
 ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
         ScXMLImport& rImport,
-        sal_Int32 /*nElement*/,
         const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
         ScMyImpDetectiveObjVec* pNewDetectiveObjVec ):
     ScXMLImportContext( rImport ),
@@ -160,7 +158,6 @@ void SAL_CALL ScXMLDetectiveHighlightedContext::endFastElement( sal_Int32 /*nEle
 
 ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
         ScXMLImport& rImport,
-        sal_Int32 /*nElement*/,
         const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) :
     ScXMLImportContext( rImport ),
     aDetectiveOp(),

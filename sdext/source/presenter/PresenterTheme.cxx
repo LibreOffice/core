@@ -223,7 +223,6 @@ class PresenterTheme::Theme
 {
 public:
     Theme (
-        const OUString& rsName,
         const Reference<container::XHierarchicalNameAccess>& rThemeRoot,
         const OUString& rsNodeName);
 
@@ -572,7 +571,6 @@ double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
 //===== Theme =================================================================
 
 PresenterTheme::Theme::Theme (
-    const OUString& /*rsName*/,
     const Reference<container::XHierarchicalNameAccess>& rxThemeRoot,
     const OUString& rsNodeName)
     : msConfigurationNodeName(rsNodeName),
@@ -785,7 +783,7 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
                     >>= sThemeName;
                 if (sThemeName == sCurrentThemeName)
                 {
-                    pTheme.reset(new PresenterTheme::Theme(sThemeName,xTheme,rsKey));
+                    pTheme.reset(new PresenterTheme::Theme(xTheme,rsKey));
                     break;
                 }
             }

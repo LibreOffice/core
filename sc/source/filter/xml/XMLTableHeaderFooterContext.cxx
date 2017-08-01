@@ -157,7 +157,7 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
                     xText->setString("");
                     //SvXMLImport aSvXMLImport( GetImport() );
                     uno::Reference < text::XTextCursor > xTempTextCursor(xText->createTextCursor());
-                    pContext = new XMLHeaderFooterRegionContext( GetImport(), nPrefix, rLocalName, xAttrList, xTempTextCursor);
+                    pContext = new XMLHeaderFooterRegionContext( GetImport(), nPrefix, rLocalName, xTempTextCursor);
                 }
             }
         }
@@ -199,8 +199,6 @@ void XMLTableHeaderFooterContext::EndElement()
 
 XMLHeaderFooterRegionContext::XMLHeaderFooterRegionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,
-                       const uno::Reference<
-                            xml::sax::XAttributeList > & /* xAttrList */,
                        uno::Reference< text::XTextCursor >& xCursor ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xTextCursor ( xCursor )

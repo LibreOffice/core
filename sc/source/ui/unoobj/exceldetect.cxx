@@ -24,7 +24,7 @@
 using namespace com::sun::star;
 using utl::MediaDescriptor;
 
-ScExcelBiffDetect::ScExcelBiffDetect( const uno::Reference<uno::XComponentContext>& /*xContext*/ ) {}
+ScExcelBiffDetect::ScExcelBiffDetect() {}
 ScExcelBiffDetect::~ScExcelBiffDetect() {}
 
 OUString ScExcelBiffDetect::getImplementationName()
@@ -193,10 +193,10 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation(css::uno::XComponentContext* context,
+com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation(css::uno::XComponentContext* /*context*/,
                                                                   css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new ScExcelBiffDetect(context));
+    return cppu::acquire(new ScExcelBiffDetect);
 }
 
 

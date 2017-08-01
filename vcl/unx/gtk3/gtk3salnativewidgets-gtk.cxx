@@ -1197,8 +1197,7 @@ tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(
 void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
                                     const tools::Rectangle& rControlRectangle,
                                     ControlType nType,
-                                    ControlPart nPart,
-                                    const ImplControlValue& /*rValue*/ )
+                                    ControlPart nPart )
 {
     tools::Rectangle        areaRect;
     tools::Rectangle        buttonRect;
@@ -2487,7 +2486,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         PaintSpinButton(flags, cr, rControlRegion, nPart, rValue);
         break;
     case RenderType::Combobox:
-        PaintCombobox(flags, cr, rControlRegion, nType, nPart, rValue);
+        PaintCombobox(flags, cr, rControlRegion, nType, nPart);
         break;
     case RenderType::Icon:
         gtk_render_icon(context, cr, pixbuf, nX, nY);
