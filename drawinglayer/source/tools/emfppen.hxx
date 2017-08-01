@@ -39,6 +39,8 @@ namespace emfplushelper
     struct EMFPPen : public EMFPBrush
     {
         basegfx::B2DHomMatrix pen_transformation;   //TODO: This isn't used
+        sal_uInt32 penDataFlags;
+        sal_uInt32 penUnit;
         float penWidth;
         sal_Int32 startCap;
         sal_Int32 endCap;
