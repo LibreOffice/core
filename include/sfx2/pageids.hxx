@@ -40,7 +40,6 @@
 
 // options
 #define RID_SVXPAGE_ONLINEUPDATE            (RID_SVX_START + 298)
-#define OFA_TP_MEMORY                   (RID_OFA_START + 250)
 #define RID_SVXPAGE_INET_SECURITY           (RID_SVX_START + 200)
 #define RID_SVXPAGE_INET_PROXY              (RID_SVX_START + 157)
 #define RID_SVXPAGE_INET_MAIL               (RID_SVX_START + 155)
