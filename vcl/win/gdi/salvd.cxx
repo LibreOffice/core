@@ -97,12 +97,12 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         hDC = (pData->hDC) ? pData->hDC : GetDC(pData->hWnd);
         hBmp = nullptr;
         bOk = (hDC != nullptr);
-        if (bOk)
+        if ( bOk && nDX <= 1 && nDY <= 1 )
         {
             nDX = GetDeviceCaps( hDC, HORZRES );
             nDY = GetDeviceCaps( hDC, VERTRES );
         }
-        else
+        else if ( !bOk )
         {
             nDX = 0;
             nDY = 0;
