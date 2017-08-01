@@ -108,7 +108,7 @@ namespace oox { namespace ppt {
         MediaNodeContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode )
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
                 , mbIsNarration( false )
                 , mbFullScrn( false )
             {
@@ -140,12 +140,12 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ ) override
             {
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
+                    return new CommonBehaviorContext ( *this, mpNode );
                 default:
                     break;
                 }
@@ -165,9 +165,8 @@ namespace oox { namespace ppt {
     {
     public:
         SetTimeNodeContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
-                            const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode )
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
             {
 
             }
@@ -190,12 +189,12 @@ namespace oox { namespace ppt {
 
             }
 
-            virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
+            virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ ) override
             {
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
+                    return new CommonBehaviorContext ( *this, mpNode );
                 case PPT_TOKEN( to ):
                     // CT_TLAnimVariant
                     return new AnimVariantContext( *this, aElementToken, maTo );
@@ -218,7 +217,7 @@ namespace oox { namespace ppt {
         CmdTimeNodeContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode )
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
                 , maType(0)
             {
                 switch ( aElement )
@@ -304,12 +303,12 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ ) override
             {
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
+                    return new CommonBehaviorContext ( *this, mpNode );
                 default:
                     break;
                 }
@@ -331,7 +330,7 @@ namespace oox { namespace ppt {
         SequenceTimeNodeContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                                  const Reference< XFastAttributeList >& xAttribs,
                                  const TimeNodePtr & pNode )
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
                 , mnNextAc(0)
                 , mnPrevAc(0)
             {
@@ -348,11 +347,9 @@ namespace oox { namespace ppt {
                 case PPT_TOKEN( cTn ):
                     return new CommonTimeNodeContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode );
                 case PPT_TOKEN( nextCondLst ):
-                    return new CondListContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode,
-                                                   mpNode->getNextCondition() );
+                    return new CondListContext( *this, aElementToken, mpNode, mpNode->getNextCondition() );
                 case PPT_TOKEN( prevCondLst ):
-                    return new CondListContext( *this, aElementToken, rAttribs.getFastAttributeList(), mpNode,
-                                                   mpNode->getPrevCondition() );
+                    return new CondListContext( *this, aElementToken, mpNode, mpNode->getPrevCondition() );
                 default:
                     break;
                 }
@@ -372,9 +369,8 @@ namespace oox { namespace ppt {
     {
     public:
         ParallelExclTimeNodeContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
-                                     const Reference< XFastAttributeList >& xAttribs,
                                      const TimeNodePtr & pNode )
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
             {
             }
 
@@ -403,7 +399,7 @@ namespace oox { namespace ppt {
         AnimColorContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
             , mnColorSpace( xAttribs->getOptionalValueToken( XML_clrSpc, 0 ) )
             , mnDir( xAttribs->getOptionalValueToken( XML_dir, 0 ) )
             , mbHasByColor( false )
@@ -462,7 +458,7 @@ namespace oox { namespace ppt {
                     mbHasByColor = true;
                     return this;
                 case PPT_TOKEN( cBhvr ):
-                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
+                    return new CommonBehaviorContext ( *this, mpNode );
                 case PPT_TOKEN( to ):
                     // CT_Color
                     return new ColorContext( *this, maToClr );
@@ -494,7 +490,7 @@ namespace oox { namespace ppt {
         AnimContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                      const Reference< XFastAttributeList >& xAttribs,
                       const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
             {
                 NodePropertyMap & aProps( pNode->getNodeProperties() );
                 sal_Int32 nCalcMode = xAttribs->getOptionalValueToken( XML_calcmode, 0 );
@@ -571,14 +567,14 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ ) override
             {
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
+                    return new CommonBehaviorContext ( *this, mpNode );
                 case PPT_TOKEN( tavLst ):
-                    return new TimeAnimValueListContext ( *this, rAttribs.getFastAttributeList(), maTavList );
+                    return new TimeAnimValueListContext ( *this, maTavList );
                 default:
                     break;
                 }
@@ -598,7 +594,7 @@ namespace oox { namespace ppt {
         AnimScaleContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                             const Reference< XFastAttributeList >& xAttribs,
                             const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
                 , mbZoomContents( false )
             {
                 AttributeList attribs( xAttribs );
@@ -632,7 +628,7 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
+                    return new CommonBehaviorContext ( *this, mpNode );
                 case PPT_TOKEN( to ):
                 {
                     // CT_TLPoint
@@ -678,7 +674,7 @@ namespace oox { namespace ppt {
         AnimRotContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                         const Reference< XFastAttributeList >& xAttribs,
                          const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
             {
                 AttributeList attribs( xAttribs );
 
@@ -703,12 +699,12 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ ) override
             {
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
+                    return new CommonBehaviorContext ( *this, mpNode );
                 default:
                     break;
                 }
@@ -725,7 +721,7 @@ namespace oox { namespace ppt {
         AnimMotionContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                          const Reference< XFastAttributeList >& xAttribs,
                           const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
             {
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
                     <<= (sal_Int16)AnimationTransformType::TRANSLATE;
@@ -761,7 +757,7 @@ namespace oox { namespace ppt {
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
+                    return new CommonBehaviorContext ( *this, mpNode );
                 case PPT_TOKEN( to ):
                 {
                     // CT_TLPoint
@@ -820,7 +816,7 @@ namespace oox { namespace ppt {
         AnimEffectContext( FragmentHandler2 const & rParent, sal_Int32  aElement,
                              const Reference< XFastAttributeList >& xAttribs,
                              const TimeNodePtr & pNode ) throw()
-            : TimeNodeContext( rParent, aElement, xAttribs, pNode )
+            : TimeNodeContext( rParent, aElement, pNode )
             {
                 sal_Int32 nDir = xAttribs->getOptionalValueToken( XML_transition, 0 );
                 OUString sFilter = xAttribs->getOptionalValue( XML_filter );
@@ -835,12 +831,12 @@ namespace oox { namespace ppt {
                 }
             }
 
-        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override
+        virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ ) override
             {
                 switch ( aElementToken )
                 {
                 case PPT_TOKEN( cBhvr ):
-                    return new CommonBehaviorContext ( *this, rAttribs.getFastAttributeList(), mpNode );
+                    return new CommonBehaviorContext ( *this, mpNode );
                 case PPT_TOKEN( progress ):
                     return new AnimVariantContext( *this, aElementToken, maProgress );
                     // TODO handle it.
@@ -866,13 +862,13 @@ namespace oox { namespace ppt {
             pCtx = new AnimColorContext( rParent, aElement, xAttribs, pNode );
             break;
         case PPT_TOKEN( par ):
-            pCtx = new ParallelExclTimeNodeContext( rParent, aElement, xAttribs, pNode );
+            pCtx = new ParallelExclTimeNodeContext( rParent, aElement, pNode );
             break;
         case PPT_TOKEN( seq ):
             pCtx = new SequenceTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
         case PPT_TOKEN( excl ):
-            pCtx = new ParallelExclTimeNodeContext( rParent, aElement, xAttribs, pNode );
+            pCtx = new ParallelExclTimeNodeContext( rParent, aElement, pNode );
             break;
         case PPT_TOKEN( anim ):
             pCtx = new AnimContext ( rParent, aElement, xAttribs, pNode );
@@ -893,7 +889,7 @@ namespace oox { namespace ppt {
             pCtx = new CmdTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
         case PPT_TOKEN( set ):
-            pCtx = new SetTimeNodeContext( rParent, aElement, xAttribs, pNode );
+            pCtx = new SetTimeNodeContext( rParent, aElement, pNode );
             break;
         case PPT_TOKEN( audio ):
         case PPT_TOKEN( video ):
@@ -906,7 +902,6 @@ namespace oox { namespace ppt {
     }
 
     TimeNodeContext::TimeNodeContext( FragmentHandler2 const & rParent, sal_Int32 aElement,
-            const Reference< XFastAttributeList >& /*xAttribs*/,
             const TimeNodePtr & pNode ) throw()
         : FragmentHandler2( rParent )
         , mnElement( aElement )

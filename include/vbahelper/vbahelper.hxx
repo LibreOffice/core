@@ -197,7 +197,7 @@ class VBAHELPER_DLLPUBLIC ConcreteXShapeGeometryAttributes : public AbstractGeom
 {
     std::unique_ptr< ShapeHelper > m_pShapeHelper;
 public:
-    ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
+    ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::drawing::XShape >& xShape );
     virtual double getLeft() const override;
     virtual void setLeft( double nLeft ) override;
     virtual double getTop() const override;
@@ -215,7 +215,6 @@ class VBAHELPER_DLLPUBLIC UserFormGeometryHelper : public AbstractGeometryAttrib
 {
 public:
     UserFormGeometryHelper(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::awt::XControl >& xControl,
         double fOffsetX, double fOffsetY );
     virtual double getLeft() const override;

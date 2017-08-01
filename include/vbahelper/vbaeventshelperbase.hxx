@@ -61,8 +61,7 @@ class VBAHELPER_DLLPUBLIC VbaEventsHelperBase : public VbaEventsHelperBase_BASE
 {
 public:
     VbaEventsHelperBase(
-        const css::uno::Sequence< css::uno::Any >& rArgs,
-        const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        const css::uno::Sequence< css::uno::Any >& rArgs );
     virtual ~VbaEventsHelperBase() override;
 
     // script::vba::XVBAEventProcessor

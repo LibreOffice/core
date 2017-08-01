@@ -35,7 +35,7 @@ public:
     ~LoggedResourcesHelper();
 
     void startElement(const std::string & sElement);
-    static void endElement(const std::string & sElement);
+    static void endElement();
     static void chars(const OUString & rChars);
     static void chars(const std::string & rChars);
     static void attribute(const std::string & rName, const std::string & rValue);

@@ -3099,7 +3099,7 @@ SdrDelayBroadcastObjectChange::~SdrDelayBroadcastObjectChange()
 }
 
 
-SdrObject* SdrObjFactory::CreateObjectFromFactory( SdrInventor nInventor, sal_uInt16 nObjIdentifier, SdrPage* , SdrModel*  )
+SdrObject* SdrObjFactory::CreateObjectFromFactory( SdrInventor nInventor, sal_uInt16 nObjIdentifier  )
 {
     SdrObjCreatorParams aParams { nInventor, nObjIdentifier };
     for (const auto & i : ImpGetUserMakeObjHdl()) {
@@ -3159,7 +3159,7 @@ SdrObject* SdrObjFactory::MakeNewObject(SdrInventor nInvent, sal_uInt16 nIdent, 
     }
 
     if (!pObj)
-        pObj = CreateObjectFromFactory(nInvent, nIdent, pPage, pModel);
+        pObj = CreateObjectFromFactory(nInvent, nIdent);
 
     if (!pObj)
     {
@@ -3246,7 +3246,7 @@ SdrObject* SdrObjFactory::MakeNewObject(
     }
 
     if (!pObj)
-        pObj = CreateObjectFromFactory(nInventor, nIdentifier, pPage, pModel);
+        pObj = CreateObjectFromFactory(nInventor, nIdentifier);
 
     if (!pObj)
     {

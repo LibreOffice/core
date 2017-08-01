@@ -31,7 +31,6 @@ namespace oox { namespace ppt {
     {
     public:
         TimeAnimValueListContext( ::oox::core::FragmentHandler2 const & rParent,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
             TimeAnimationValueList & aTavList );
 
         virtual ~TimeAnimValueListContext( ) override;

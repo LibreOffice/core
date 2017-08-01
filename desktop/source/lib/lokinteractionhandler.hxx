@@ -81,7 +81,6 @@ public:
     void SetPassword(char const* pPassword);
 
     explicit LOKInteractionHandler(
-            com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const & rxContext,
             const OString& rCommand,
             desktop::LibLibreOffice_Impl *,
             desktop::LibLODocument_Impl *pLOKDocumt = nullptr);

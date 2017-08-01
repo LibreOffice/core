@@ -601,7 +601,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ )
     xProps->getPropertyValue( "ClassId" ) >>= nClassId;
     uno::Reference< XHelperInterface > xVbaParent; // #FIXME - should be worksheet I guess
     uno::Reference< drawing::XShape > xShape( xControlShape, uno::UNO_QUERY_THROW );
-    ::std::unique_ptr< ConcreteXShapeGeometryAttributes > xGeoHelper( new ConcreteXShapeGeometryAttributes( xContext, xShape ) );
+    ::std::unique_ptr< ConcreteXShapeGeometryAttributes > xGeoHelper( new ConcreteXShapeGeometryAttributes( xShape ) );
     switch( nClassId )
     {
         case form::FormComponentType::COMBOBOX:
@@ -646,7 +646,7 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ )
     uno::Reference< lang::XServiceInfo > xServiceInfo( xProps, uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xVBAControl;
     uno::Reference< XHelperInterface > xVbaParent; // #FIXME - should be worksheet I guess
-    ::std::unique_ptr< UserFormGeometryHelper > xGeoHelper( new UserFormGeometryHelper( xContext, xControl, fOffsetX, fOffsetY ) );
+    ::std::unique_ptr< UserFormGeometryHelper > xGeoHelper( new UserFormGeometryHelper( xControl, fOffsetX, fOffsetY ) );
 
     if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) )
         xVBAControl.set( new ScVbaCheckbox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );

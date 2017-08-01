@@ -297,7 +297,6 @@ namespace drawinglayer
                 sal_uInt32 nSegments,
                 const attribute::MaterialAttribute3D& rMaterial,
                 double fAngle,
-                double /*fDegreeStepWidth*/,
                 double fMiterMinimumAngle,
                 basegfx::B2DLineJoin aLineJoin)
             {
@@ -642,7 +641,6 @@ namespace drawinglayer
                                             nSegments,
                                             aMaterial,
                                             fAngle,
-                                            getDegreeStepWidth(),
                                             getMiterMinimumAngle(),
                                             getLineJoin()));
 

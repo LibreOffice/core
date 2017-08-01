@@ -1211,7 +1211,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
                                                        beans::PropertyState_DIRECT_VALUE);
 
         rtl::Reference<LOKInteractionHandler> const pInteraction(
-            new LOKInteractionHandler(::comphelper::getProcessComponentContext(), "load", pLib));
+            new LOKInteractionHandler("load", pLib));
         auto const pair(pLib->mInteractionMap.insert(std::make_pair(aURL.toUtf8(), pInteraction)));
         comphelper::ScopeGuard const g([&] () {
                 if (pair.second)
@@ -1464,7 +1464,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         {
             // gImpl does not have to exist when running from a unit test
             rtl::Reference<LOKInteractionHandler> const pInteraction(
-                    new LOKInteractionHandler(::comphelper::getProcessComponentContext(), "saveas", gImpl, pDocument));
+                    new LOKInteractionHandler("saveas", gImpl, pDocument));
             uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
 
             aSaveMediaDescriptor[MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteraction;
@@ -2116,7 +2116,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     if (gImpl && aCommand == ".uno:Save")
     {
         rtl::Reference<LOKInteractionHandler> const pInteraction(
-            new LOKInteractionHandler(::comphelper::getProcessComponentContext(), "save", gImpl, pDocument));
+            new LOKInteractionHandler("save", gImpl, pDocument));
         uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction.get());
 
         beans::PropertyValue aValue;

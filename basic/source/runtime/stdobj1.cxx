@@ -277,7 +277,7 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 
-void SbStdClipboard::MethClear( SbxVariable*, SbxArray const * pPar_, bool )
+void SbStdClipboard::MethClear( SbxArray const * pPar_ )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
@@ -287,7 +287,7 @@ void SbStdClipboard::MethClear( SbxVariable*, SbxArray const * pPar_, bool )
 
 }
 
-void SbStdClipboard::MethGetData( SbxArray* pPar_, bool )
+void SbStdClipboard::MethGetData( SbxArray* pPar_ )
 {
     if( !pPar_ || (pPar_->Count() != 2) )
     {
@@ -304,7 +304,7 @@ void SbStdClipboard::MethGetData( SbxArray* pPar_, bool )
 
 }
 
-void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, bool )
+void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_ )
 {
     if( !pPar_ || (pPar_->Count() != 2) )
     {
@@ -322,7 +322,7 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar_, bool )
     pVar->PutBool( false );
 }
 
-void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray const * pPar_, bool )
+void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray const * pPar_ )
 {
     if( pPar_ && (pPar_->Count() > 1) )
     {
@@ -333,7 +333,7 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray const * pPar_, boo
     pVar->PutString( OUString() );
 }
 
-void SbStdClipboard::MethSetData( SbxArray* pPar_, bool )
+void SbStdClipboard::MethSetData( SbxArray* pPar_ )
 {
     if( !pPar_ || (pPar_->Count() != 3) )
     {
@@ -350,7 +350,7 @@ void SbStdClipboard::MethSetData( SbxArray* pPar_, bool )
 
 }
 
-void SbStdClipboard::MethSetText( SbxArray const * pPar_, bool )
+void SbStdClipboard::MethSetText( SbxArray const * pPar_ )
 {
     if( !pPar_ || (pPar_->Count() != 2) )
     {
@@ -408,17 +408,16 @@ void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
         const sal_uInt32 nWhich = pVar->GetUserData();
-        bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
 
         // Methods
         switch( nWhich )
         {
-            case METH_CLEAR:            MethClear( pVar, pPar_, bWrite ); return;
-            case METH_GETDATA:          MethGetData( pPar_, bWrite ); return;
-            case METH_GETFORMAT:        MethGetFormat( pVar, pPar_, bWrite ); return;
-            case METH_GETTEXT:          MethGetText( pVar, pPar_, bWrite ); return;
-            case METH_SETDATA:          MethSetData( pPar_, bWrite ); return;
-            case METH_SETTEXT:          MethSetText( pPar_, bWrite ); return;
+            case METH_CLEAR:            MethClear( pPar_ ); return;
+            case METH_GETDATA:          MethGetData( pPar_ ); return;
+            case METH_GETFORMAT:        MethGetFormat( pVar, pPar_ ); return;
+            case METH_GETTEXT:          MethGetText( pVar, pPar_ ); return;
+            case METH_SETDATA:          MethSetData( pPar_ ); return;
+            case METH_SETTEXT:          MethSetText( pPar_ ); return;
         }
 
         SbxObject::Notify( rBC, rHint );

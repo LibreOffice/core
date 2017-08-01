@@ -657,7 +657,7 @@ double HmmToPoints( sal_Int32 nHmm )
     return nHmm / factor;
 }
 
-ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::uno::XComponentContext >& /*xContext*/, const css::uno::Reference< css::drawing::XShape >& xShape )
+ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::drawing::XShape >& xShape )
 {
     m_pShapeHelper.reset( new ShapeHelper( xShape ) );
 }
@@ -787,7 +787,6 @@ void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, con
 // ====UserFormGeomentryHelper====
 
 UserFormGeometryHelper::UserFormGeometryHelper(
-        const uno::Reference< uno::XComponentContext >& /*xContext*/,
         const uno::Reference< awt::XControl >& xControl,
         double fOffsetX, double fOffsetY ) :
     mfOffsetX( fOffsetX ),

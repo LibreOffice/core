@@ -96,8 +96,7 @@ namespace dbaccess
                             ,public OContentHelper_COMPBASE
     {
         css::uno::Sequence< css::uno::Any >
-            setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
-                               const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+            setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues );
 
         void impl_rename_throw(const OUString& _sNewName,bool _bNotify = true);
 

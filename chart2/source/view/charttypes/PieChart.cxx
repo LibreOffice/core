@@ -1574,15 +1574,6 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     return true;
 }
 
-/** Handle the outer placement of the labels in the best fit case.
- *
- */
-bool PieChart::performLabelBestFitOuterPlacement(ShapeParam& /*rShapeParam*/, PieLabelInfo& /*rPieLabelInfo*/)
-{
-    SAL_WARN( "chart2.pie.label.bestfit", "to be implemented" );
-    return false;
-}
-
 /** Handle the placement of the label in the best fit case.
  *  First off the routine try to place the label inside the related pie slice,
  *  if this is not possible the label is placed outside.
@@ -1594,7 +1585,7 @@ void PieChart::performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo& rPieLa
 
     if( !performLabelBestFitInnerPlacement(rShapeParam, rPieLabelInfo) )
     {
-        performLabelBestFitOuterPlacement(rShapeParam, rPieLabelInfo);
+        // TODO
     }
 }
 

@@ -77,8 +77,7 @@ public:
                 , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
-                , const css::uno::Reference< css::chart2::XDiagram >& xDiagram
-                , const css::uno::Reference< css::uno::XComponentContext >& xContext );
+                , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
 
     static void hideAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const css::uno::Reference< css::chart2::XDiagram >& xDiagram );
@@ -174,8 +173,7 @@ public:
 
     static bool changeVisibilityOfGrids( const css::uno::Reference< css::chart2::XDiagram>& xDiagram
                         , const css::uno::Sequence< sal_Bool >& rOldExistenceList
-                        , const css::uno::Sequence< sal_Bool >& rNewExistenceList
-                        , const css::uno::Reference< css::uno::XComponentContext >& xContext );
+                        , const css::uno::Sequence< sal_Bool >& rNewExistenceList );
 
     static bool changeVisibilityOfAxes( const css::uno::Reference< css::chart2::XDiagram>& xDiagram
                         , const css::uno::Sequence< sal_Bool >& rOldExistenceList

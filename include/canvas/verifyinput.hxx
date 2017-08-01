@@ -288,27 +288,6 @@ namespace canvas
                           const css::uno::Reference< css::uno::XInterface >&        xIf,
                           ::sal_Int16                                               nArgPos );
 
-        /** Basic check for font info validity.
-
-            @param fontInfo
-            Font info to check
-
-            @param xIf
-            The interface that should be reported as the one
-            generating the exception.
-
-            @param nArgPos
-            Argument position on the call site (i.e. the position of
-            the argument, checked here, on the UNO interface
-            method. Counting starts at 0).
-
-            @throws an lang::IllegalArgumentException, if anything is wrong
-         */
-        CANVASTOOLS_DLLPUBLIC void verifyInput( const css::rendering::FontInfo&    fontInfo,
-                          const char*                                   pStr,
-                          const css::uno::Reference< css::uno::XInterface >& xIf,
-                          ::sal_Int16                                   nArgPos );
-
         /** Basic check for font request validity.
 
             @param fontRequest
