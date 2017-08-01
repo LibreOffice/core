@@ -155,7 +155,7 @@ void setGridVisible(const css::uno::Reference<css::frame::XModel>& xModel, GridT
 
         if (bVisible)
             AxisHelper::showGrid(nDimensionIndex, nCooSysIndex, bMajor,
-                    xDiagram, comphelper::getProcessComponentContext());
+                    xDiagram);
         else
             AxisHelper::hideGrid(nDimensionIndex, nCooSysIndex, bMajor, xDiagram);
     }

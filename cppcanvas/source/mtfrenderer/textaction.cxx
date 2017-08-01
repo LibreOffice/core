@@ -482,7 +482,6 @@ namespace cppcanvas
              */
             bool renderEffectText( const TextRenderer&                          rRenderer,
                                    const rendering::RenderState&                rRenderState,
-                                   const rendering::ViewState&                  /*rViewState*/,
                                    const uno::Reference< rendering::XCanvas >&  xCanvas,
                                    const ::Color&                               rShadowColor,
                                    const ::basegfx::B2DSize&                    rShadowOffset,
@@ -931,7 +930,6 @@ namespace cppcanvas
 
                 return renderEffectText( *this,
                                          aLocalState,
-                                         mpCanvas->getViewState(),
                                          mpCanvas->getUNOCanvas(),
                                          maShadowColor,
                                          maShadowOffset,
@@ -1351,7 +1349,6 @@ namespace cppcanvas
 
                 return renderEffectText( *this,
                                          aLocalState,
-                                         mpCanvas->getViewState(),
                                          mpCanvas->getUNOCanvas(),
                                          maShadowColor,
                                          maShadowOffset,
@@ -1441,7 +1438,6 @@ namespace cppcanvas
                                                  xTextLines,
                                                  rViewState ),
                     aLocalState,
-                    rViewState,
                     xCanvas,
                     maShadowColor,
                     maShadowOffset,
@@ -1732,7 +1728,6 @@ namespace cppcanvas
 
                 return renderEffectText( *this,
                                          aLocalState,
-                                         mpCanvas->getViewState(),
                                          mpCanvas->getUNOCanvas(),
                                          maShadowColor,
                                          maShadowOffset,

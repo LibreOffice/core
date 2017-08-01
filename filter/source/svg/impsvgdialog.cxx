@@ -26,7 +26,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 
-inline sal_Int32 implMap( vcl::Window& /*rWnd*/, sal_Int32 nVal )
+inline sal_Int32 implMap( sal_Int32 nVal )
 {
     return( nVal << 1 );
 }
@@ -45,34 +45,34 @@ ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFi
     mbOldNativeDecoration( false )
 {
     SetText( "SVG Export Options" );
-    SetOutputSizePixel( Size( implMap( *this, 177 ), implMap( *this, 77 ) ) );
+    SetOutputSizePixel( Size( implMap( 177 ), implMap( 77 ) ) );
 
     maFI->SetText( "Export" );
-    maFI->SetPosSizePixel( Point( implMap( *this, 6 ), implMap( *this, 3 ) ),
-                                 Size( implMap( *this, 165 ), implMap( *this, 8 ) ) );
+    maFI->SetPosSizePixel( Point( implMap( 6 ), implMap( 3 ) ),
+                                 Size( implMap( 165 ), implMap( 8 ) ) );
 
     maCBTinyProfile->SetText( "Use SVG Tiny profile" );
-    maCBTinyProfile->SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 14 ) ),
-                                     Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
+    maCBTinyProfile->SetPosSizePixel( Point( implMap( 12 ), implMap( 14 ) ),
+                                     Size( implMap( 142 ), implMap( 10 ) ) );
 
     maCBEmbedFonts->SetText( "Embed fonts" );
-    maCBEmbedFonts->SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 27 ) ),
-                                    Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
+    maCBEmbedFonts->SetPosSizePixel( Point( implMap( 12 ), implMap( 27 ) ),
+                                    Size( implMap( 142 ), implMap( 10 ) ) );
 
     maCBUseNativeDecoration->SetText( "Use SVG native text decoration" );
-    maCBUseNativeDecoration->SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 41 ) ),
-                                             Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
+    maCBUseNativeDecoration->SetPosSizePixel( Point( implMap( 12 ), implMap( 41 ) ),
+                                             Size( implMap( 142 ), implMap( 10 ) ) );
 
     maCBTinyProfile->Check( maConfigItem.ReadBool( SVG_PROP_TINYPROFILE, false ) );
     maCBEmbedFonts->Check( maConfigItem.ReadBool( SVG_PROP_EMBEDFONTS, true ) );
     maCBUseNativeDecoration->Check( maConfigItem.ReadBool( SVG_PROP_NATIVEDECORATION, true ) );
 
-    maBTOK->SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 57 ) ),
-                            Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
-    maBTCancel->SetPosSizePixel( Point( implMap( *this, 65 ), implMap( *this, 57 ) ),
-                                Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
-    maBTHelp->SetPosSizePixel( Point( implMap( *this, 121 ), implMap( *this, 57 ) ),
-                              Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
+    maBTOK->SetPosSizePixel( Point( implMap( 12 ), implMap( 57 ) ),
+                            Size( implMap( 50 ), implMap( 14 ) ) );
+    maBTCancel->SetPosSizePixel( Point( implMap( 65 ), implMap( 57 ) ),
+                                Size( implMap( 50 ), implMap( 14 ) ) );
+    maBTHelp->SetPosSizePixel( Point( implMap( 121 ), implMap( 57 ) ),
+                              Size( implMap( 50 ), implMap( 14 ) ) );
 
     maCBTinyProfile->SetToggleHdl( LINK( this, ImpSVGDialog, OnToggleCheckbox ) );
     OnToggleCheckbox( *maCBTinyProfile.get() );

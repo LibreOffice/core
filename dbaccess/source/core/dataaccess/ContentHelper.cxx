@@ -202,7 +202,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
             // Unreachable
         }
 
-        aRet <<= setPropertyValues( aProperties, Environment );
+        aRet <<= setPropertyValues( aProperties );
     }
     else if ( aCommand.Name == "getPropertySetInfo" )
     {
@@ -314,7 +314,7 @@ void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments )
     }
 }
 
-Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue >& rValues,const Reference< XCommandEnvironment >& /*xEnv*/ )
+Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue >& rValues )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 

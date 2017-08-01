@@ -162,8 +162,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
                 xCurve = RegressionCurveHelper::changeRegressionCurveType(
                             eNewRegress,
                             m_xCurveContainer,
-                            xCurve,
-                            uno::Reference< uno::XComponentContext >());
+                            xCurve);
                 uno::Reference<beans::XPropertySet> xProperties( xCurve, uno::UNO_QUERY );
                 resetPropertySet( xProperties );
                 bChanged = true;

@@ -417,7 +417,6 @@ public:
     virtual void    CursorMoved();
     virtual void    ColumnMoved( sal_uInt16 nColId );
     virtual void    ColumnResized( sal_uInt16 nColId );
-    static long     QueryColumnResize( sal_uInt16 nColId, long nWidth );
     /// called when the row height has been changed interactively
     virtual void    RowHeightChanged();
     virtual long    QueryMinimumRowHeight();

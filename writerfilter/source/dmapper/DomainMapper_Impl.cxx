@@ -3195,7 +3195,6 @@ void DomainMapper_Impl::handleAutoNum
 
 void DomainMapper_Impl::handleAuthor
     (OUString const& rFirstParam,
-     uno::Reference< uno::XInterface > & /*xFieldInterface*/,
      uno::Reference< beans::XPropertySet > const& xFieldProperties,
      FieldId  eFieldId )
 {
@@ -3215,8 +3214,7 @@ void DomainMapper_Impl::handleAuthor
     void DomainMapper_Impl::handleDocProperty
         (const FieldContextPtr& pContext,
         OUString const& rFirstParam,
-        uno::Reference< uno::XInterface > & xFieldInterface,
-        uno::Reference< beans::XPropertySet > const&)
+        uno::Reference< uno::XInterface > & xFieldInterface)
 {
     //some docproperties should be imported as document statistic fields, some as DocInfo fields
     //others should be user fields
@@ -3361,8 +3359,6 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
 
 void DomainMapper_Impl::handleToc
     (const FieldContextPtr& pContext,
-     uno::Reference< uno::XInterface > & /*xFieldInterface*/,
-     uno::Reference< beans::XPropertySet > const& /*xFieldProperties*/,
     const OUString & sTOCServiceName)
 {
     OUString sValue;
@@ -3627,8 +3623,6 @@ void DomainMapper_Impl::handleBibliography
 
 void DomainMapper_Impl::handleIndex
     (const FieldContextPtr& pContext,
-     uno::Reference< uno::XInterface > & /*xFieldInterface*/,
-     uno::Reference< beans::XPropertySet > const& /*xFieldProperties*/,
     const OUString & sTOCServiceName)
 {
     uno::Reference< beans::XPropertySet > xTOC;
@@ -3802,7 +3796,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_USERNAME     :
                     case FIELD_USERINITIALS :
                         handleAuthor(sFirstParam,
-                            xFieldInterface, xFieldProperties,
+                            xFieldProperties,
                             aIt->second.eFieldId);
                     break;
                     case FIELD_DATE:
@@ -3852,7 +3846,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_DOCPROPERTY :
                         handleDocProperty(pContext, sFirstParam,
-                                xFieldInterface, xFieldProperties);
+                                xFieldInterface);
                     break;
                     case FIELD_DOCVARIABLE  :
                     {
@@ -4298,7 +4292,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_USERADDRESS  : //todo: user address collects street, city ...
                     break;
                     case FIELD_INDEX:
-                        handleIndex(pContext, xFieldInterface, xFieldProperties,
+                        handleIndex(pContext,
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                         break;
                     case FIELD_BIBLIOGRAPHY:
@@ -4306,7 +4300,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                         break;
                     case FIELD_TOC:
-                        handleToc(pContext, xFieldInterface, xFieldProperties,
+                        handleToc(pContext,
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                     break;
                     case FIELD_XE:

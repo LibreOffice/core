@@ -1391,8 +1391,7 @@ void annotateStyles( StatePool&                                        rStatePoo
 
 struct ShapeWritingVisitor
 {
-    ShapeWritingVisitor(StatePool&                                        /*rStatePool*/,
-                        StateMap&                                         rStateMap,
+    ShapeWritingVisitor(StateMap&                                         rStateMap,
                         const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler) :
         mrStateMap(rStateMap),
         mxDocumentHandler(xDocumentHandler),
@@ -1464,7 +1463,6 @@ struct ShapeWritingVisitor
 
                     writePathShape(xAttrs,
                                    xUnoAttrs,
-                                   xElem,
                                    sStyleId,
                                    aPoly);
                 }
@@ -1482,7 +1480,6 @@ struct ShapeWritingVisitor
 
                 writePathShape(xAttrs,
                                xUnoAttrs,
-                               xElem,
                                sStyleId,
                                basegfx::B2DPolyPolygon(aPoly));
                 break;
@@ -1540,7 +1537,6 @@ struct ShapeWritingVisitor
 
                     writePathShape(xAttrs,
                                    xUnoAttrs,
-                                   xElem,
                                    sStyleId,
                                    basegfx::B2DPolyPolygon(aPoly));
                 }
@@ -1566,7 +1562,6 @@ struct ShapeWritingVisitor
                     for( sal_uInt32 i(0L); i<aPoly.count(); ++i ) {
                         writePathShape(xAttrs,
                                        xUnoAttrs,
-                                       xElem,
                                        sStyleId,
                                        basegfx::B2DPolyPolygon(aPoly.getB2DPolygon(i)));
                     }
@@ -1575,7 +1570,6 @@ struct ShapeWritingVisitor
                 {
                     writePathShape(xAttrs,
                                    xUnoAttrs,
-                                   xElem,
                                    sStyleId,
                                    aPoly);
                 }
@@ -1612,7 +1606,6 @@ struct ShapeWritingVisitor
                 if ( r > 0 )
                     writeEllipseShape(xAttrs,
                                       xUnoAttrs,
-                                      xElem,
                                       sStyleId,
                                       basegfx::B2DEllipse(basegfx::B2DPoint(cx, cy), basegfx::B2DTuple(r,r)));
                 break;
@@ -1651,7 +1644,6 @@ struct ShapeWritingVisitor
                 if ( rx > 0 && ry > 0 )
                     writeEllipseShape(xAttrs,
                                       xUnoAttrs,
-                                      xElem,
                                       sStyleId,
                                       basegfx::B2DEllipse(basegfx::B2DPoint(cx, cy), basegfx::B2DTuple(rx,ry)));
                 break;
@@ -1707,7 +1699,7 @@ struct ShapeWritingVisitor
                 parseXlinkHref(aValueUtf8.getStr(), sLinkValue);
 
                 if (!sLinkValue.isEmpty())
-                    writeBinaryData(xAttrs, xUnoAttrs, xElem, basegfx::B2DRange(x,y,x+width,y+height), sLinkValue);
+                    writeBinaryData(xAttrs, xUnoAttrs, basegfx::B2DRange(x,y,x+width,y+height), sLinkValue);
                 break;
             }
             case XML_TSPAN:
@@ -1804,7 +1796,6 @@ struct ShapeWritingVisitor
 
     void writeBinaryData( rtl::Reference<SvXMLAttributeList> const &    xAttrs,
                         const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
-                        const uno::Reference<xml::dom::XElement>&       /* xElem */,
                         const basegfx::B2DRange&                        rShapeBounds,
                         const OUString&                                 data)
     {
@@ -1833,7 +1824,6 @@ struct ShapeWritingVisitor
 
     void writeEllipseShape( rtl::Reference<SvXMLAttributeList> const &   xAttrs,
                          const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
-                         const uno::Reference<xml::dom::XElement>&       xElem,
                          const OUString&                            rStyleId,
                          const basegfx::B2DEllipse&                      rEllipse)
     {
@@ -1843,13 +1833,11 @@ struct ShapeWritingVisitor
 
         basegfx::B2DPolygon aPoly = basegfx::tools::createPolygonFromEllipse(rEllipse.getB2DEllipseCenter(),
             rEllipse.getB2DEllipseRadius().getX(), rEllipse.getB2DEllipseRadius().getY());
-        writePathShape(xAttrs, xUnoAttrs, xElem, rStyleId, basegfx::B2DPolyPolygon(aPoly));
-
+        writePathShape(xAttrs, xUnoAttrs, rStyleId, basegfx::B2DPolyPolygon(aPoly));
     }
 
     void writePathShape( rtl::Reference<SvXMLAttributeList> const &      xAttrs,
                          const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
-                         const uno::Reference<xml::dom::XElement>&       xElem,
                          const OUString&                                 rStyleId,
                          const basegfx::B2DPolyPolygon&                  rPoly )
     {
@@ -1876,7 +1864,6 @@ struct ShapeWritingVisitor
                     basegfx::tools::adaptiveSubdivideByAngle(aPoly)) :
                 basegfx::tools::getRange(aPoly));
             fillShapeProperties(xAttrs,
-                                xElem,
                                 aBounds,
                                 "svggraphicstyle"+rStyleId);
 
@@ -1900,7 +1887,6 @@ struct ShapeWritingVisitor
     }
 
     void fillShapeProperties( rtl::Reference<SvXMLAttributeList> const & xAttrs,
-                              const uno::Reference<xml::dom::XElement>& /* xElem */,
                               const basegfx::B2DRange&                  rShapeBounds,
                               const OUString&                      rStyleName )
     {
@@ -1932,13 +1918,12 @@ struct ShapeWritingVisitor
 };
 
 /// Write out shapes from DOM tree
-void writeShapes( StatePool&                                        rStatePool,
-                         StateMap&                                         rStateMap,
-                         const uno::Reference<xml::dom::XElement>&         rElem,
-                         const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl,
-                         std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector )
+void writeShapes( StateMap&                                         rStateMap,
+                  const uno::Reference<xml::dom::XElement>&         rElem,
+                  const uno::Reference<xml::sax::XDocumentHandler>& xDocHdl,
+                  std::vector< uno::Reference<xml::dom::XElement> >& rUseElementVector )
 {
-    ShapeWritingVisitor aVisitor(rStatePool,rStateMap,xDocHdl);
+    ShapeWritingVisitor aVisitor(rStateMap,xDocHdl);
     visitElements(aVisitor, rElem, SHAPE_WRITER);
 
     std::vector< uno::Reference<xml::dom::XElement> >::iterator it;
@@ -2294,8 +2279,7 @@ bool SVGReader::parseAndConvert()
     m_xDocumentHandler->startElement("draw:page", xUnoAttrs);
 
     // write out all shapes
-    writeShapes(aStatePool,
-                aStateMap,
+    writeShapes(aStateMap,
                 xDocElem,
                 m_xDocumentHandler,
                 aUseElementVector);

@@ -7228,7 +7228,7 @@ void GetRowPositions( const tools::Rectangle& rSnapRect, const std::set< sal_Int
 }
 
 
-void GetColumnPositions( const tools::Rectangle& rSnapRect, const std::set< sal_Int32 >& /* rRows */,
+void GetColumnPositions( const tools::Rectangle& rSnapRect,
                         const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nRow, sal_Int32 nFlags )
 {
     std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( rSnapRect.Left() ) );
@@ -7291,7 +7291,7 @@ void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows
                 nRow = rRows.size();
                 nFlags = LinePositionBottom;
             }
-            GetColumnPositions( aSnapRect, rRows, rColumns, rPositions, nRow, nFlags );
+            GetColumnPositions( aSnapRect, rColumns, rPositions, nRow, nFlags );
         }
     }
     else

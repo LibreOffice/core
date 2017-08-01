@@ -28,8 +28,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;
 
-SwVbaEventsHelper::SwVbaEventsHelper( uno::Sequence< css::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext > const& xContext ) :
-    VbaEventsHelperBase( aArgs, xContext )
+SwVbaEventsHelper::SwVbaEventsHelper( uno::Sequence< css::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext > const& /*xContext*/ ) :
+    VbaEventsHelperBase( aArgs )
 {
     using namespace ::com::sun::star::script::ModuleType;
     registerEventHandler( DOCUMENT_NEW,     DOCUMENT,   "Document_New" );

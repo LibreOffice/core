@@ -444,8 +444,7 @@ void AxisHelper::showAxis( sal_Int32 nDimensionIndex, bool bMainAxis
 }
 
 void AxisHelper::showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
-                , const Reference< XDiagram >& xDiagram
-                , const Reference< uno::XComponentContext >& /*xContext*/ )
+                , const Reference< XDiagram >& xDiagram )
 {
     if( !xDiagram.is() )
         return;
@@ -1021,8 +1020,7 @@ bool AxisHelper::changeVisibilityOfAxes( const Reference< XDiagram >& xDiagram
 
 bool AxisHelper::changeVisibilityOfGrids( const Reference< XDiagram >& xDiagram
                         , const Sequence< sal_Bool >& rOldExistenceList
-                        , const Sequence< sal_Bool >& rNewExistenceList
-                        , const Reference< uno::XComponentContext >& xContext )
+                        , const Sequence< sal_Bool >& rNewExistenceList )
 {
     bool bChanged = false;
     for(sal_Int32 nN=0;nN<6;nN++)
@@ -1031,7 +1029,7 @@ bool AxisHelper::changeVisibilityOfGrids( const Reference< XDiagram >& xDiagram
         {
             bChanged = true;
             if(rNewExistenceList[nN])
-                AxisHelper::showGrid( nN%3, 0, nN<3, xDiagram, xContext );
+                AxisHelper::showGrid( nN%3, 0, nN<3, xDiagram );
             else
                 AxisHelper::hideGrid( nN%3, 0, nN<3, xDiagram );
         }

@@ -197,12 +197,6 @@ void BrowseBox::RowHeightChanged()
 }
 
 
-long BrowseBox::QueryColumnResize( sal_uInt16, long nWidth )
-{
-    return nWidth;
-}
-
-
 void BrowseBox::ColumnResized( sal_uInt16 )
 {
 }
@@ -1403,9 +1397,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
                     long nDeltaX = nDragX - nResizeX;
                     sal_uInt16 nId = GetColumnId(nResizeCol);
                     sal_uLong nOldWidth = GetColumnWidth(nId);
-                    nDragX = QueryColumnResize( GetColumnId(nResizeCol),
-                                    nOldWidth + nDeltaX )
-                             + nResizeX - nOldWidth;
+                    nDragX = nOldWidth + nDeltaX + nResizeX - nOldWidth;
 
                     // draw new auxiliary line
                     pDataWin->ShowTracking( tools::Rectangle( Point( nDragX, 0 ),

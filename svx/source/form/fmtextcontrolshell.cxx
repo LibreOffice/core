@@ -406,7 +406,7 @@ namespace svx
         }
 
 
-        OUString lcl_getUnoSlotName( SfxApplication&, SfxSlotId _nSlotId )
+        OUString lcl_getUnoSlotName( SfxSlotId _nSlotId )
         {
             OUString sSlotUnoName;
 
@@ -565,7 +565,7 @@ namespace svx
             #if OSL_DEBUG_LEVEL > 0
                 OUString sUnoSlotName;
                 if ( SfxGetpApp() )
-                    sUnoSlotName = lcl_getUnoSlotName( *SfxGetpApp(), nSlotId );
+                    sUnoSlotName = lcl_getUnoSlotName( nSlotId );
                 else
                     sUnoSlotName = "<unknown>";
                 OString sUnoSlotNameAscii( "\"" );
@@ -711,7 +711,7 @@ namespace svx
                 #if OSL_DEBUG_LEVEL > 0
                     else
                     {
-                        OUString sUnoSlotName = lcl_getUnoSlotName( *SfxGetpApp(), nSlotForItemSet );
+                        OUString sUnoSlotName = lcl_getUnoSlotName( nSlotForItemSet );
                         if ( sUnoSlotName.isEmpty() )
                             sUnoSlotName = "unknown (no SfxSlot)";
                         SAL_WARN( "svx", "FmTextControShell::executeAttributeDialog: Could not handle the following item:"
@@ -1259,7 +1259,7 @@ namespace svx
     {
         OSL_PRECOND( _rxProvider.is() && _pApplication, "FmTextControlShell::implGetFeatureDispatcher: invalid arg(s)!" );
         URL aFeatureURL;
-        aFeatureURL.Complete = lcl_getUnoSlotName( *_pApplication, _nSlot );
+        aFeatureURL.Complete = lcl_getUnoSlotName( _nSlot );
         try
         {
             if ( !m_xURLTransformer.is() )

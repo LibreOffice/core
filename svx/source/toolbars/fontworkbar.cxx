@@ -246,7 +246,7 @@ bool checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatu
 }
 }
 
-static void impl_execute( SdrView*, SfxRequest const & rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
+static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )
@@ -534,7 +534,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindin
                         pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                     }
                     SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
-                    impl_execute( pSdrView, rReq, aGeometryItem, pObj );
+                    impl_execute( rReq, aGeometryItem, pObj );
                     pObj->SetMergedItem( aGeometryItem );
                     pObj->BroadcastObjectChange();
                     if( bUndo )

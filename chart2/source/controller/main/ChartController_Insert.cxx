@@ -145,7 +145,7 @@ void ChartController::executeDispatch_InsertGrid()
             InsertAxisOrGridDialogData aDialogOutput;
             aDlg->getResult( aDialogOutput );
             bool bChanged = AxisHelper::changeVisibilityOfGrids( xDiagram
-                , aDialogInput.aExistenceList, aDialogOutput.aExistenceList, m_xCC );
+                , aDialogInput.aExistenceList, aDialogOutput.aExistenceList );
             if( bChanged )
                 aUndoGuard.commit();
         }
@@ -366,8 +366,7 @@ void ChartController::executeDispatch_InsertTrendline()
     uno::Reference< chart2::XRegressionCurve > xCurve =
         RegressionCurveHelper::addRegressionCurve(
             SvxChartRegress::Linear,
-            xRegressionCurveContainer,
-            m_xCC );
+            xRegressionCurveContainer );
 
     uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
 

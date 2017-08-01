@@ -674,23 +674,17 @@ public:
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     static void handleAuthor
         (OUString const& rFirstParam,
-        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         FieldId eFieldId);
     void handleDocProperty
         (const FieldContextPtr& pContext,
         OUString const& rFirstParam,
-        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
-        css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
+        css::uno::Reference< css::uno::XInterface > & xFieldInterface);
     void handleToc
         (const FieldContextPtr& pContext,
-        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
-        css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         const OUString & sTOCServiceName);
     void handleIndex
         (const FieldContextPtr& pContext,
-        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
-        css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         const OUString & sTOCServiceName);
 
     void handleBibliography

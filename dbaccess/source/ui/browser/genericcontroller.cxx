@@ -92,7 +92,6 @@ class UserDefinedFeatures
 public:
     explicit UserDefinedFeatures( const Reference< XController >& _rxController );
 
-    static FeatureState getState( const URL& _rFeatureURL );
     void            execute( const URL& _rFeatureURL, const Sequence< PropertyValue>& _rArgs );
 
 private:
@@ -102,16 +101,6 @@ private:
 UserDefinedFeatures::UserDefinedFeatures( const Reference< XController >& _rxController )
     :m_aController( _rxController )
 {
-}
-
-FeatureState UserDefinedFeatures::getState( const URL& /*_rFeatureURL*/ )
-{
-    // for now, enable all the time
-    // TODO: we should ask the dispatcher. However, this is laborious, since you cannot ask a dispatcher
-    // directly, but need to add a status listener.
-    FeatureState aState;
-    aState.bEnabled = true;
-    return aState;
 }
 
 void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< PropertyValue>& _rArgs )
@@ -874,7 +863,10 @@ FeatureState OGenericUnoController::GetState( sal_uInt16 _nId ) const
             aReturn.bEnabled = true;
             break;
         default:
-            aReturn = UserDefinedFeatures::getState( getURLForId( _nId ) );
+            // for now, enable all the time
+            // TODO: we should ask the dispatcher. However, this is laborious, since you cannot ask a dispatcher
+            // directly, but need to add a status listener.
+            aReturn.bEnabled = true;
             break;
     }
 
