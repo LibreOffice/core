@@ -103,7 +103,7 @@ private:
 class LwpDivisionOptions : public LwpObject
 {
 public:
-    LwpDivisionOptions(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpDivisionOptions(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
 protected:
     void Read() override;
 private:

@@ -81,7 +81,7 @@ namespace desktop
 
 struct DispatchHolder
 {
-    DispatchHolder( const URL& rURL, Reference< XDispatch >& rDispatch ) :
+    DispatchHolder( const URL& rURL, Reference< XDispatch > const & rDispatch ) :
         aURL( rURL ), xDispatch( rDispatch ) {}
 
     URL aURL;

@@ -81,8 +81,8 @@ public:
 
     void    ToXml(IXFStream *pStrm);
 
-    friend bool operator==(XFDropcap& dc1, XFDropcap& dc2);
-    friend bool operator!=(XFDropcap& dc1, XFDropcap& dc2);
+    friend bool operator==(XFDropcap const & dc1, XFDropcap const & dc2);
+    friend bool operator!=(XFDropcap const & dc1, XFDropcap const & dc2);
     friend class XFParaStyle;
 private:
     sal_Int32       m_nCharCount;
@@ -130,7 +130,7 @@ inline void XFDropcap::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "style:drop-cap" );
 }
 
-inline bool operator==(XFDropcap& dc1, XFDropcap& dc2)
+inline bool operator==(XFDropcap const & dc1, XFDropcap const & dc2)
 {
     return (
         (dc1.m_nCharCount == dc2.m_nCharCount)&&
@@ -140,7 +140,7 @@ inline bool operator==(XFDropcap& dc1, XFDropcap& dc2)
         );
 }
 
-inline bool operator!=(XFDropcap& dc1, XFDropcap& dc2)
+inline bool operator!=(XFDropcap const & dc1, XFDropcap const & dc2)
 {
     return !(dc1==dc2);
 }

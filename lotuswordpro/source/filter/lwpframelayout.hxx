@@ -123,7 +123,7 @@ private:
 class LwpFrameLayout: public LwpPlacableLayout
 {
 public:
-    LwpFrameLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpFrameLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFrameLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_FRAME_LAYOUT;}
     virtual void RegisterStyle() override;
@@ -152,7 +152,7 @@ private:
 class LwpGroupLayout: public LwpPlacableLayout
 {
 public:
-    LwpGroupLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpGroupLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpGroupLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_GROUP_LAYOUT;}
     virtual void RegisterStyle() override;
@@ -172,7 +172,7 @@ private:
 class LwpGroupFrame: public LwpContent
 {
 public:
-    LwpGroupFrame(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpGroupFrame(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpGroupFrame() override;
     virtual void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
@@ -185,7 +185,7 @@ class LwpFoundry;
 class LwpDropcapLayout : public LwpFrameLayout
 {
 public:
-    LwpDropcapLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpDropcapLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_DROPCAP_LAYOUT;}
     virtual void Parse(IXFStream* pOutputStream) override;
     virtual void XFConvert(XFContentContainer* pCont) override;
@@ -204,7 +204,7 @@ private:
 class LwpRubyLayout : public LwpFrameLayout
 {
 public:
-    LwpRubyLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpRubyLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     LwpRubyMarker* GetMarker();
     void ConvertContentText();
     LwpStory* GetContentStory();

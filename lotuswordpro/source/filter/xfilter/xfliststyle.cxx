@@ -288,7 +288,7 @@ void    XFListStyle::SetListBullet(sal_Int32 level,
     m_pListLevels[level-1] = pLevel;
 }
 
-void    XFListStyle::SetListNumber(sal_Int32 level, XFNumFmt& fmt, sal_Int16 start )
+void    XFListStyle::SetListNumber(sal_Int32 level, XFNumFmt const & fmt, sal_Int16 start )
 {
     assert(level>=1&&level<=10);
 

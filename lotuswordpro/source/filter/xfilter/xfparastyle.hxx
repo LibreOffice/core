@@ -155,7 +155,7 @@ public:
      * @param   offset the distance between the paragraph border and the shadow.
      * @param   color color to fill the shadow.
      */
-    void    SetShadow(enumXFShadowPos pos, double offset, XFColor& color);
+    void    SetShadow(enumXFShadowPos pos, double offset, XFColor const & color);
 
     /**
      * @descr   The borders is complex, so you have to create one before use.
@@ -183,7 +183,7 @@ public:
      * @descr   Set background color of the paragraph.
      * @param   color value of the back color.
      */
-    void    SetBackColor(XFColor& color);
+    void    SetBackColor(XFColor const & color);
 
     /**
      * @descr   Set background image of the paragraph.

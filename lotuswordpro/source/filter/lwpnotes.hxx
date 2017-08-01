@@ -86,7 +86,7 @@ private:
 class LwpNoteLayout: public LwpFrameLayout
 {
 public:
-    LwpNoteLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpNoteLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpNoteLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_NOTE_LAYOUT;}
     virtual void RegisterStyle() override;
@@ -110,7 +110,7 @@ private:
 class LwpNoteHeaderLayout: public LwpFrameLayout
 {
 public:
-    LwpNoteHeaderLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpNoteHeaderLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpNoteHeaderLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_NOTEHEADER_LAYOUT;}
     virtual void RegisterStyle() override;
@@ -127,7 +127,7 @@ protected:
 class LwpNoteTextLayout: public LwpFrameLayout
 {
 public:
-    LwpNoteTextLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpNoteTextLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpNoteTextLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_NOTETEXT_LAYOUT;}
     virtual void RegisterStyle() override;
@@ -144,7 +144,7 @@ protected:
 class LwpViewportLayout: public LwpPlacableLayout
 {
 public:
-    LwpViewportLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpViewportLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpViewportLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_VIEWPORT_LAYOUT;}
     virtual void RegisterStyle() override;

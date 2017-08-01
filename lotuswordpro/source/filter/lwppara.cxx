@@ -97,7 +97,7 @@
 #include "lwptable.hxx"
 #include <memory>
 
-LwpPara::LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpPara::LwpPara(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLVList(objHdr, pStrm)
     , m_nOrdinal(0)
     , m_nFlags(0)
@@ -302,7 +302,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
         AddBreakAfter(m_pXFContainer);
 }
 
-void LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
+void LwpPara::RegisterMasterPage(XFParaStyle const * pBaseStyle)
 {
     //get story
     LwpStory* pStory = dynamic_cast<LwpStory*>(m_Story.obj().get());

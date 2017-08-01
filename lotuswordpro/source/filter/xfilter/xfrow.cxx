@@ -77,7 +77,7 @@ XFRow::~XFRow()
 {
 }
 
-void XFRow::AddCell(rtl::Reference<XFCell>& rCell)
+void XFRow::AddCell(rtl::Reference<XFCell> const & rCell)
 {
     if (!rCell)
         return;

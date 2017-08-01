@@ -86,7 +86,7 @@ class LwpTableLayout;
 class LwpCellLayout : public LwpMiddleLayout
 {
 public:
-    LwpCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpCellLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpCellLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_CELL_LAYOUT;}
     virtual rtl::Reference<XFCell> ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol);
@@ -143,7 +143,7 @@ protected:
 class LwpHiddenCellLayout : public LwpCellLayout
 {
 public:
-    LwpHiddenCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpHiddenCellLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpHiddenCellLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_HIDDEN_CELL_LAYOUT;}
     virtual void Parse(IXFStream* pOutputStream) override;
@@ -162,7 +162,7 @@ protected:
 class LwpConnectedCellLayout : public LwpCellLayout
 {
 public:
-    LwpConnectedCellLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpConnectedCellLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpConnectedCellLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_CONNECTED_CELL_LAYOUT;}
     virtual void Parse(IXFStream* pOutputStream) override;
@@ -188,7 +188,7 @@ protected:
 class LwpParallelColumnsBlock : public LwpCellLayout
 {
 public:
-    LwpParallelColumnsBlock(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpParallelColumnsBlock(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpParallelColumnsBlock() override;
 protected:
     void Read() override;

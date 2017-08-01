@@ -759,7 +759,7 @@ void LwpFrameLink::Read(LwpObjectStream* pStrm)
     pStrm->SkipExtra();
 }
 
-LwpFrameLayout::LwpFrameLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpFrameLayout::LwpFrameLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm), m_pFrame(nullptr), m_bGettingMaxWidth(false)
 {
 }
@@ -1019,7 +1019,7 @@ void LwpFrameLayout::ApplyGraphicSize(XFFrame * pXFFrame)
     }
 }
 
-LwpGroupLayout::LwpGroupLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpGroupLayout::LwpGroupLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
     , m_pFrame(nullptr)
 {
@@ -1111,7 +1111,7 @@ void LwpGroupLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
     }
 }
 
-LwpGroupFrame::LwpGroupFrame(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpGroupFrame::LwpGroupFrame(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     :LwpContent(objHdr, pStrm)
 {}
 
@@ -1133,7 +1133,7 @@ void LwpGroupFrame::XFConvert(XFContentContainer* /*pCont*/)
 {
 }
 
-LwpDropcapLayout::LwpDropcapLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpDropcapLayout::LwpDropcapLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
 {
     m_nChars = 1;
@@ -1196,7 +1196,7 @@ void LwpDropcapLayout::RegisterStyle()
 {
 }
 
-LwpRubyLayout::LwpRubyLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpRubyLayout::LwpRubyLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
     , m_nPlacement(0)
     , m_nAlignment(0)

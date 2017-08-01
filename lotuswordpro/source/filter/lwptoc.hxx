@@ -70,7 +70,7 @@ class XFIndex;
 class LwpTocSuperLayout : public LwpSuperTableLayout
 {
 public:
-    LwpTocSuperLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpTocSuperLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTocSuperLayout() override;
     void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
@@ -144,7 +144,7 @@ public:
         USETEXT = 0x01,
         USENUMBER = 0x02
     };
-    LwpTocLevelData(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpTocLevelData(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     void RegisterStyle() override;
     virtual void XFConvert(XFContentContainer* pCont) override;
     sal_uInt16 GetLevel(){return m_nLevel;}

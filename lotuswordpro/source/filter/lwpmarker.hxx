@@ -70,7 +70,7 @@
 class LwpMarker : public LwpDLNFPVList
 {
 public:
-    LwpMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
+    LwpMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm);
     void Read() override;
     OUString GetNamedProperty(const OUString& name);
 protected:
@@ -101,7 +101,7 @@ private:
 class LwpStoryMarker : public LwpMarker
 {
 public:
-    LwpStoryMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
+    LwpStoryMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm);
     void Read() override;
 private:
     LwpFribRange m_Range;
@@ -111,7 +111,7 @@ private:
 class LwpCHBlkMarker : public LwpStoryMarker
 {
 public:
-    LwpCHBlkMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
+    LwpCHBlkMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm);
     void Read() override;
     sal_uInt16 GetAction(){return m_nAction;}
     void ConvertCHBlock(XFContentContainer* pXFPara,sal_uInt8 nType);
@@ -168,7 +168,7 @@ private:
 class LwpBookMark : public LwpDLNFVList
 {
 public:
-    LwpBookMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
+    LwpBookMark(LwpObjectHeader const &objHdr, LwpSvStream *pStrm);
 protected:
     void Read() override;
 public:
@@ -185,7 +185,7 @@ private:
 class LwpFieldMark : public LwpStoryMarker
 {
 public:
-    LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
+    LwpFieldMark(LwpObjectHeader const &objHdr, LwpSvStream *pStrm);
     void Read() override;
     void ParseIndex(OUString& sKey1,OUString& sKey2);
     void ParseTOC(OUString& sLevel,OUString& sText);
@@ -248,7 +248,7 @@ private:
 class LwpRubyMarker : public LwpStoryMarker
 {
 public:
-    LwpRubyMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm);
+    LwpRubyMarker(LwpObjectHeader const &objHdr, LwpSvStream *pStrm);
     void Read() override;
     const OUString& GetRubyText(){return m_strRubyText;}
     void SetRubyText(const OUString& sText){m_strRubyText = sText;}

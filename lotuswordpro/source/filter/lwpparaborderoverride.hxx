@@ -104,10 +104,10 @@ public:
     inline bool IsRightWidthOverridden();
     inline bool IsBetweenMarginOverridden();
 
-    void OverrideBorderStuff(LwpBorderStuff* pBorderStuff);
-    void OverrideBetweenStuff(LwpBorderStuff* pBorderStuff);
-    void OverrideShadow(LwpShadow* pShadow);
-    void OverrideMargins(LwpMargins* pMargins);
+    void OverrideBorderStuff(LwpBorderStuff const * pBorderStuff);
+    void OverrideBetweenStuff(LwpBorderStuff const * pBorderStuff);
+    void OverrideShadow(LwpShadow const * pShadow);
+    void OverrideMargins(LwpMargins const * pMargins);
     void OverrideAboveType(BorderWidthType eNewType);
     void OverrideBelowType(BorderWidthType eNewType);
     void OverrideRightType(BorderWidthType eNewType);

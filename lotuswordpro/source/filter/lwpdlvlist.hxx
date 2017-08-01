@@ -71,7 +71,7 @@
 class LwpDLVList : public LwpObject
 {
 public:
-    LwpDLVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpDLVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 protected:
     virtual ~LwpDLVList() override {}
 
@@ -90,7 +90,7 @@ public:
 class LwpDLNFVList : public LwpDLVList
 {
 public:
-    LwpDLNFVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpDLNFVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 protected:
     virtual ~LwpDLNFVList() override {}
 
@@ -116,7 +116,7 @@ class LwpPropList;
 class LwpDLNFPVList : public LwpDLNFVList
 {
 public:
-    LwpDLNFPVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpDLNFPVList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpDLNFPVList() override;
 protected:
     bool m_bHasProperties;

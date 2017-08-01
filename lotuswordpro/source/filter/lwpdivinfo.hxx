@@ -73,7 +73,7 @@
 class LwpDivInfo : public LwpObject
 {
 public:
-    LwpDivInfo(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpDivInfo(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     LwpObjectID& GetInitialLayoutID() { return m_InitialLayoutID; }
     LwpObjectID& GetFillerPageTextID() { return m_FillerPageTextID; }
     OUString GetDivName() { return m_Name.str(); }

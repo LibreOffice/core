@@ -106,7 +106,7 @@ XFFont::XFFont()
 
         sal_uInt32      m_nFlag;
 */
-bool operator==(XFFont& f1, XFFont& f2)
+bool operator==(XFFont const & f1, XFFont const & f2)
 {
     //The most possible entry be first:
     if( f1.m_nFlag != f2.m_nFlag )
@@ -234,7 +234,7 @@ bool operator==(XFFont& f1, XFFont& f2)
     return true;
 }
 
-bool operator!=(XFFont& f1, XFFont& f2)
+bool operator!=(XFFont const & f1, XFFont const & f2)
 {
     return !(f1==f2);
 }

@@ -69,7 +69,7 @@
 #include "xfilter/xfliststyle.hxx"
 #include "xfilter/xfstylemanager.hxx"
 
-LwpSilverBullet::LwpSilverBullet(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpSilverBullet::LwpSilverBullet(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm)
     , m_nFlags(0)
     , m_nUseCount(0)
@@ -246,7 +246,7 @@ LwpPara* LwpSilverBullet::GetBulletPara()
  *          includes numbering prefix, format and suffix.
  * @return:  An OUString object which store the numbering character.
  */
-OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumber)
+OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber const * pParaNumber)
 {
     if (!pParaNumber)
     {

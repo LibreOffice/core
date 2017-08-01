@@ -138,7 +138,7 @@ LwpFootnote* LwpFribFootnote::GetFootnote()
     return dynamic_cast<LwpFootnote*>(m_Footnote.obj().get());
 }
 
-LwpFootnote::LwpFootnote(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpFootnote::LwpFootnote(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpOrderedObject(objHdr, pStrm)
     , m_nType(0)
     , m_nRow(0)
@@ -394,7 +394,7 @@ LwpContent* LwpFootnote::FindFootnoteContent()
     return pContent;
 }
 
-LwpFootnoteTable::LwpFootnoteTable(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpFootnoteTable::LwpFootnoteTable(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpTable(objHdr, pStrm)
 {
 }
@@ -431,7 +431,7 @@ void LwpFootnoteSeparatorOptions::Read(LwpObjectStream *pObjStrm)
     pObjStrm->SkipExtra();
 }
 
-LwpFootnoteOptions::LwpFootnoteOptions(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpFootnoteOptions::LwpFootnoteOptions(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpObject(objHdr, pStrm)
     , m_nFlag(0)
 {

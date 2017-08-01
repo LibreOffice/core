@@ -123,7 +123,7 @@ class LwpTable;
 class LwpFootnote : public LwpOrderedObject
 {
 public:
-    LwpFootnote(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpFootnote(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFootnote() override;
     void RegisterStyle() override;
     void XFConvert(XFContentContainer * pCont) override;
@@ -150,7 +150,7 @@ private:
 class LwpFootnoteTable : public LwpTable
 {
 public:
-    LwpFootnoteTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpFootnoteTable(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 protected:
     void Read() override;
 };
@@ -234,7 +234,7 @@ public:
 class LwpFootnoteOptions : public LwpObject
 {
 public:
-    LwpFootnoteOptions(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpFootnoteOptions(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     void RegisterStyle() override;
 protected:
     void Read() override;

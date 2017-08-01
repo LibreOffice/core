@@ -90,7 +90,7 @@ class LwpFribParaNumber;
 class LwpSilverBullet : public LwpDLNFVList
 {
 public:
-    LwpSilverBullet(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpSilverBullet(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
 
     virtual ~LwpSilverBullet() override;
 
@@ -112,11 +112,9 @@ public:
 
     bool HasName();
 
-    static OUString GetNumCharByStyleID(LwpFribParaNumber* pParaNumber);
+    static OUString GetNumCharByStyleID(LwpFribParaNumber const * pParaNumber);
 
-    ;
     inline bool IsLesserLevel(sal_uInt16 nPos);
-    ;
 
     LwpPara* GetBulletPara();
 

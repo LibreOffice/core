@@ -96,7 +96,7 @@ public:
     /**
      * @descr   Set drawing object area fill color.
      */
-    void    SetAreaColor(XFColor& color);
+    void    SetAreaColor(XFColor const & color);
 
     /**
      * @descr   Set drawing object area grid style.

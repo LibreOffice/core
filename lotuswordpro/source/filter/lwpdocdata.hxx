@@ -156,7 +156,7 @@ struct LwpEditorAttr
 class LwpDocData : public LwpObject
 {
 public:
-    LwpDocData(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpDocData(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 private:
     virtual ~LwpDocData() override;
 

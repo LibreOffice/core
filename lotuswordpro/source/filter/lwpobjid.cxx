@@ -153,7 +153,7 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
  *          else    lowid equals to the lowid of previous low id
  *              and high id = the high id of previous id + diff +1
 */
-void LwpObjectID::ReadCompressed( LwpObjectStream* pObj, LwpObjectID &prev )
+void LwpObjectID::ReadCompressed( LwpObjectStream* pObj, LwpObjectID const &prev )
 {
     sal_uInt8 diff = pObj->QuickReaduInt8();
 

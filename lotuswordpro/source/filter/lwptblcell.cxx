@@ -63,7 +63,7 @@
 #include "lwptblcell.hxx"
 #include "lwppara.hxx"
 
- LwpCellList::LwpCellList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+ LwpCellList::LwpCellList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
      : LwpDLVList(objHdr, pStrm)
      , cColumn(0)
 {}
@@ -110,7 +110,7 @@ void LwpCellList::Convert(XFCell * pCell, LwpTableLayout* /*pCellsMap*/)
     }
 }
 
-LwpNumericValue::LwpNumericValue(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpNumericValue::LwpNumericValue(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
     , cNumber(0)
 {}
@@ -129,7 +129,7 @@ void  LwpNumericValue::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-LwpRowList::LwpRowList(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpRowList::LwpRowList(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpDLVList(objHdr, pStrm)
     , cRowID(0)
 {}
@@ -156,7 +156,7 @@ void LwpRowList::Read()
 {
 }
 
-LwpTableRange::LwpTableRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpTableRange::LwpTableRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     :LwpDLVList(objHdr, pStrm)
 {}
 
@@ -176,7 +176,7 @@ void  LwpTableRange::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
- LwpCellRange::LwpCellRange(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
+ LwpCellRange::LwpCellRange(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
 {}
 
 LwpCellRange::~LwpCellRange()
@@ -192,7 +192,7 @@ void  LwpCellRange::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
- LwpFolder::LwpFolder(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
+ LwpFolder::LwpFolder(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpDLVList(objHdr, pStrm)
 {}
 
 LwpFolder::~LwpFolder()
@@ -217,7 +217,7 @@ void  LwpFolder::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-LwpDependent::LwpDependent(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpDependent::LwpDependent(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpDLVList(objHdr, pStrm)
     , cReferenceOffset(0)
     , cFlags(0)

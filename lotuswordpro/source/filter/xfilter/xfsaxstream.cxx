@@ -77,7 +77,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
-XFSaxStream::XFSaxStream(Reference<XDocumentHandler>& xHandler)
+XFSaxStream::XFSaxStream(Reference<XDocumentHandler> const & xHandler)
 {
     m_aHandler = xHandler;
     m_pAttrList.reset(new XFSaxAttrList );

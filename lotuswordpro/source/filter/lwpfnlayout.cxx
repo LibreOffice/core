@@ -60,7 +60,7 @@
 
 #include "lwpfnlayout.hxx"
 
-LwpFootnoteLayout::LwpFootnoteLayout(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpFootnoteLayout::LwpFootnoteLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     :LwpTableLayout(objHdr, pStrm)
 {
 }
@@ -91,7 +91,7 @@ void LwpFootnoteLayout::XFConvert(XFContentContainer * /*pCont*/)
 {
 }
 
-LwpFnRowLayout::LwpFnRowLayout(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpFnRowLayout::LwpFnRowLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     :LwpRowLayout(objHdr, pStrm)
 {
 }
@@ -133,7 +133,7 @@ void LwpFnRowLayout::XFConvert(XFContentContainer * /*pCont*/)
 {
 }
 
-LwpFnCellLayout::LwpFnCellLayout(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpFnCellLayout::LwpFnCellLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     :LwpCellLayout(objHdr, pStrm)
 {
 }
@@ -171,7 +171,7 @@ void LwpFnCellLayout::XFConvert(XFContentContainer * /*pCont*/)
 {
 }
 
-LwpEndnoteLayout::LwpEndnoteLayout(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpEndnoteLayout::LwpEndnoteLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     :LwpTableLayout(objHdr, pStrm)
 {
 }
@@ -213,7 +213,7 @@ void LwpEndnoteLayout::XFConvert(XFContentContainer * /*pCont*/)
 {
 }
 
-LwpEnSuperTableLayout::LwpEnSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpEnSuperTableLayout::LwpEnSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     :LwpSuperTableLayout(objHdr, pStrm)
 {
 }
@@ -273,7 +273,7 @@ void LwpEnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
     return nullptr;
 }
 
-LwpFnSuperTableLayout::LwpFnSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpFnSuperTableLayout::LwpFnSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     :LwpEnSuperTableLayout(objHdr, pStrm)
 {
 }
@@ -329,7 +329,7 @@ LwpVirtualLayout* LwpFnSuperTableLayout::GetMainTableLayout()
     return nullptr;
 }
 
-LwpContFromLayout::LwpContFromLayout(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpContFromLayout::LwpContFromLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     :LwpPlacableLayout(objHdr, pStrm)
 {
 }
@@ -360,7 +360,7 @@ void LwpContFromLayout::XFConvert(XFContentContainer * /*pCont*/)
 {
 }
 
-LwpContOnLayout::LwpContOnLayout(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpContOnLayout::LwpContOnLayout(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     :LwpPlacableLayout(objHdr, pStrm)
 {
 }

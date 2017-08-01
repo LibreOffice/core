@@ -331,22 +331,22 @@ void LwpParaBorderOverride::Override(LwpParaBorderOverride* pOther)
     }
 }
 
-void LwpParaBorderOverride::OverrideBorderStuff(LwpBorderStuff* pBorderStuff)
+void LwpParaBorderOverride::OverrideBorderStuff(LwpBorderStuff const * pBorderStuff)
 {
     *m_pBorderStuff = *pBorderStuff;
     LwpOverride::Override(PBO_STUFF, STATE_ON);
 }
-void LwpParaBorderOverride::OverrideBetweenStuff(LwpBorderStuff* pBorderStuff)
+void LwpParaBorderOverride::OverrideBetweenStuff(LwpBorderStuff const * pBorderStuff)
 {
     *m_pBetweenStuff = *pBorderStuff;
     LwpOverride::Override(PBO_BETWEENSTUFF, STATE_ON);
 }
-void LwpParaBorderOverride::OverrideShadow(LwpShadow* pShadow)
+void LwpParaBorderOverride::OverrideShadow(LwpShadow const * pShadow)
 {
     *m_pShadow = *pShadow;
     LwpOverride::Override(PBO_SHADOW, STATE_ON);
 }
-void LwpParaBorderOverride::OverrideMargins(LwpMargins* pMargins)
+void LwpParaBorderOverride::OverrideMargins(LwpMargins const * pMargins)
 {
     *m_pMargins = *pMargins;
     LwpOverride::Override(PBO_MARGINS, STATE_ON);

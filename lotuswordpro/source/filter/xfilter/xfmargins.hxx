@@ -83,8 +83,8 @@ public:
 
     void    ToXml(IXFStream *pStrm);
 
-    friend bool operator==(XFMargins& indent1, XFMargins& indent2);
-    friend bool operator!=(XFMargins& indent1, XFMargins& indent2);
+    friend bool operator==(XFMargins const & indent1, XFMargins const & indent2);
+    friend bool operator!=(XFMargins const & indent1, XFMargins const & indent2);
 private:
     double  m_fLeft;
     double  m_fRight;

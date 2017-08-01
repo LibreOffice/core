@@ -74,7 +74,7 @@
 #include "lwpchangemgr.hxx"
 #include "lwpglobalmgr.hxx"
 
-LwpPageLayout::LwpPageLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpPageLayout::LwpPageLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpLayout(objHdr, pStrm)
     , m_nPrinterBin(0)
     , m_nBdroffset(0)
@@ -422,7 +422,7 @@ bool LwpPageLayout::HasColumns()
 * @descr:   Whether has filler page text in current page layout
 *
 */
-bool LwpPageLayout::HasFillerPageText(LwpFoundry* pFoundry)
+bool LwpPageLayout::HasFillerPageText(LwpFoundry const * pFoundry)
 {
     if(!pFoundry) return false;
 
@@ -727,7 +727,7 @@ LwpPara* LwpPageLayout::GetPagePosition()
 
     return nullptr;
 }
-LwpHeaderLayout::LwpHeaderLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
+LwpHeaderLayout::LwpHeaderLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
     : LwpPlacableLayout(objHdr, pStrm)
     , m_nBorderOffset(0)
 {
@@ -891,7 +891,7 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
     mp1->SetHeader(xHeader);
 }
 
-LwpFooterLayout::LwpFooterLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
+LwpFooterLayout::LwpFooterLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
     : LwpPlacableLayout( objHdr, pStrm )
     , m_nBorderOffset(0)
 {

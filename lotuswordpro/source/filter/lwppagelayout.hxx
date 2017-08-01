@@ -67,7 +67,7 @@ class LwpFooterLayout;
 class LwpPageLayout: public LwpLayout
 {
 public:
-    LwpPageLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpPageLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpPageLayout() override;
     virtual void RegisterStyle() override;
     OUString RegisterEndnoteStyle();
@@ -99,7 +99,7 @@ protected:
     XFPageMaster*   m_pXFPageMaster;
 public:
     bool HasColumns();
-    bool HasFillerPageText(LwpFoundry* pFoundry);
+    bool HasFillerPageText(LwpFoundry const * pFoundry);
     void ConvertFillerPageText(XFContentContainer* pCont);
     void ResetXFColumns();
     LwpPageLayout* GetOddChildLayout();
@@ -111,7 +111,7 @@ public:
 class LwpHeaderLayout: public LwpPlacableLayout
 {
 public:
-    LwpHeaderLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpHeaderLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpHeaderLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_HEADER_LAYOUT;}
     using LwpPlacableLayout::RegisterStyle;
@@ -134,7 +134,7 @@ private:
 class LwpFooterLayout: public LwpPlacableLayout
 {
 public:
-    LwpFooterLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpFooterLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpFooterLayout() override;
     virtual LWP_LAYOUT_TYPE GetLayoutType () override { return LWP_FOOTER_LAYOUT;}
     using LwpPlacableLayout::RegisterStyle;

@@ -92,7 +92,7 @@ void    XFColumnSep::SetWidth(double width)
 {
     m_fWidth = width;
 }
-void    XFColumnSep::SetColor(XFColor& color)
+void    XFColumnSep::SetColor(XFColor const & color)
 {
     m_aColor = color;
 }
@@ -128,13 +128,13 @@ void    XFColumnSep::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "style:column-sep" );
 }
 
-void    XFColumns::SetSeparator(XFColumnSep& aSeparator)
+void    XFColumns::SetSeparator(XFColumnSep const & aSeparator)
 {
     m_aSeparator = aSeparator;
     m_nFlag |= XFCOLUMNS_FLAG_SEPARATOR;
 }
 
-void    XFColumns::AddColumn(XFColumn& column)
+void    XFColumns::AddColumn(XFColumn const & column)
 {
     m_aColumns.push_back(column);
 }

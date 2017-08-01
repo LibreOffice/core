@@ -61,7 +61,7 @@
 #include "lwpholder.hxx"
 #include "lwpfilehdr.hxx"
 
-LwpDLVListHeadHolder::LwpDLVListHeadHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpDLVListHeadHolder::LwpDLVListHeadHolder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
 {}
 /**
@@ -73,7 +73,7 @@ void LwpDLVListHeadHolder::Read()
     m_pObjStrm->SkipExtra();
 }
 
-LwpDLVListHeadTailHolder::LwpDLVListHeadTailHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpDLVListHeadTailHolder::LwpDLVListHeadTailHolder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
 {}
 /**
@@ -85,7 +85,7 @@ void LwpDLVListHeadTailHolder::Read()
     //m_pObjStrm->SkipExtra();
 }
 
-LwpObjectHolder::LwpObjectHolder(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpObjectHolder::LwpObjectHolder(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     :LwpDLVList(objHdr, pStrm)
 {}
 /**
@@ -100,7 +100,7 @@ void LwpObjectHolder::Read()
         m_pObjStrm->SkipExtra();
 }
 
-LwpListList::LwpListList(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpListList::LwpListList(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     :LwpObjectHolder(objHdr, pStrm)
 {}
 /**

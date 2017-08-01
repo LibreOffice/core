@@ -126,7 +126,7 @@ void LwpFribNote::XFConvert(XFContentContainer* pCont)
 
 }
 
-LwpNoteLayout::LwpNoteLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpNoteLayout::LwpNoteLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
     , m_nTime(0)
 {
@@ -226,7 +226,7 @@ OUString LwpNoteLayout::GetAuthor()
     return m_UserName.str();
 }
 
-LwpNoteHeaderLayout::LwpNoteHeaderLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpNoteHeaderLayout::LwpNoteHeaderLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
 {
 }
@@ -253,7 +253,7 @@ void LwpNoteHeaderLayout::XFConvert(XFContentContainer * /*pCont*/)
 {
 }
 
-LwpNoteTextLayout::LwpNoteTextLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpNoteTextLayout::LwpNoteTextLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpFrameLayout(objHdr, pStrm)
 {
 }
@@ -294,7 +294,7 @@ void LwpNoteTextLayout::XFConvert(XFContentContainer * pCont)
     }
 }
 
-LwpViewportLayout::LwpViewportLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpViewportLayout::LwpViewportLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
 {
 }

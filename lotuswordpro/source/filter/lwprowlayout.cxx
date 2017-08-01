@@ -69,7 +69,7 @@
 #include "xfilter/xfcell.hxx"
 #include "xfilter/xfcellstyle.hxx"
 
-LwpRowLayout::LwpRowLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpRowLayout::LwpRowLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpVirtualLayout(objHdr, pStrm)
     , crowid(0)
     , cheight(0)
@@ -462,7 +462,7 @@ bool LwpRowLayout::GetMergeCellFlag()
     return !m_ConnCellList.empty();
 }
 
-LwpRowHeadingLayout::LwpRowHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpRowHeadingLayout::LwpRowHeadingLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpRowLayout(objHdr, pStrm)
 {}
 

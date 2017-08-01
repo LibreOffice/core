@@ -139,7 +139,7 @@ class LwpDropcapLayout;
 class LwpPara : public LwpDLVList
 {
 public:
-    LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpPara(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
 
     void Read() override;
     void RegisterStyle() override;
@@ -184,8 +184,8 @@ public:
     void RegisterTabStyle(XFParaStyle* pXFParaStyle);
 
     LwpBulletStyleMgr* GetBulletStyleMgr();
-    bool operator <(LwpPara& Other);
-    bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);
+    bool operator <(LwpPara const & Other);
+    bool ComparePagePosition(LwpVirtualLayout const * pPreLayout, LwpVirtualLayout const * pNextLayout);
 
     bool IsInCell();
 
@@ -266,9 +266,9 @@ private:
     void OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyle);
 
     void OverrideParaBullet(LwpParaProperty* pProps);
-    void OverrideParaNumbering(LwpParaProperty* pProps);
+    void OverrideParaNumbering(LwpParaProperty const * pProps);
 
-    void RegisterMasterPage(XFParaStyle* pBaseStyle);
+    void RegisterMasterPage(XFParaStyle const * pBaseStyle);
     void RegisterNewSectionStyle(LwpPageLayout* pLayout);
 
     void ParseDropcapContent();

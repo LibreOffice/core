@@ -61,7 +61,7 @@
 #include "lwpfilehdr.hxx"
 #include "lwpglobalmgr.hxx"
 
-LwpDocData::LwpDocData(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpDocData::LwpDocData(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     :LwpObject(objHdr, pStrm)//m_pEditorAttrList(0)
 {}
 

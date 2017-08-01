@@ -73,7 +73,7 @@
 #include "lwpgrfobj.hxx"
 #include <osl/thread.h>
 
-LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpVirtualLayout::LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpDLNFPVList(objHdr, pStrm)
     , m_bGettingHonorProtection(false)
     , m_bGettingMarginsSameAsParent(false)
@@ -430,7 +430,7 @@ void LwpAssociatedLayouts::Read(LwpObjectStream* pStrm)
 * @descr:   Looking for the layout which follows the pStartLayout
 * @param:   pStartLayout - the layout which is used for looking for its following layout
 */
-rtl::Reference<LwpVirtualLayout> LwpAssociatedLayouts::GetLayout(LwpVirtualLayout *pStartLayout)
+rtl::Reference<LwpVirtualLayout> LwpAssociatedLayouts::GetLayout(LwpVirtualLayout const *pStartLayout)
 {
     if (!pStartLayout && !m_OnlyLayout.IsNull())
         /* Looking for the first layout and there's only one layout in  the list.*/
@@ -466,7 +466,7 @@ rtl::Reference<LwpVirtualLayout> LwpAssociatedLayouts::GetLayout(LwpVirtualLayou
     return rtl::Reference<LwpVirtualLayout>();
 }
 
-LwpHeadLayout::LwpHeadLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpHeadLayout::LwpHeadLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpVirtualLayout(objHdr, pStrm)
 {}
 
@@ -563,7 +563,7 @@ void LwpLayoutMisc::Read(LwpObjectStream* pStrm)
     pStrm->SkipExtra();
 }
 
-LwpMiddleLayout::LwpMiddleLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
+LwpMiddleLayout::LwpMiddleLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
     : LwpVirtualLayout(objHdr, pStrm)
     , m_bGettingGeometry(false)
 {
@@ -1459,7 +1459,7 @@ bool LwpMiddleLayout::HasContent()
     return content.is();
 }
 
-LwpLayout::LwpLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm ) :
+LwpLayout::LwpLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm ) :
     LwpMiddleLayout(objHdr, pStrm)
 {}
 
@@ -1936,7 +1936,7 @@ rtl::Reference<LwpVirtualLayout> LwpLayout::GetContainerLayout()
     return GetParentLayout();
 }
 
-LwpPlacableLayout::LwpPlacableLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
+LwpPlacableLayout::LwpPlacableLayout( LwpObjectHeader const &objHdr, LwpSvStream* pStrm )
     : LwpLayout(objHdr, pStrm)
     , m_nWrapType(0)
     , m_nBuoyancy(0)

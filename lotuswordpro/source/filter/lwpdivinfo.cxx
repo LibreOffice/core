@@ -64,7 +64,7 @@
 #include "lwpholder.hxx"
 #include "lwppagehint.hxx"
 
-LwpDivInfo::LwpDivInfo(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpDivInfo::LwpDivInfo(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
     , m_nFlags(0)
     , m_nPageNoStyle(0)

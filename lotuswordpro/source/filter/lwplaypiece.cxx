@@ -75,7 +75,7 @@ void LwpRotor:: Read(LwpObjectStream *pStrm)
     m_nRotation = pStrm->QuickReadInt16();
 }
 
-LwpLayoutGeometry::LwpLayoutGeometry(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpLayoutGeometry::LwpLayoutGeometry(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
     , m_nWidth(0)
     , m_nHeight(0)
@@ -103,7 +103,7 @@ void LwpLayoutGeometry::Read()
 void LwpLayoutGeometry::Parse(IXFStream* /*pOutputStream*/)
 {}
 
-LwpLayoutScale::LwpLayoutScale(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpLayoutScale::LwpLayoutScale(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
     , m_nScaleMode(0)
     , m_nScalePercentage(0)
@@ -137,7 +137,7 @@ void LwpLayoutScale::Read()
 void LwpLayoutScale::Parse(IXFStream* /*pOutputStream*/)
 {}
 
-LwpLayoutMargins::LwpLayoutMargins(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpLayoutMargins::LwpLayoutMargins(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
@@ -160,7 +160,7 @@ void LwpLayoutMargins::Read()
 void LwpLayoutMargins::Parse(IXFStream* /*pOutputStream*/)
 {}
 
-LwpLayoutBorder::LwpLayoutBorder(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpLayoutBorder::LwpLayoutBorder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
@@ -181,7 +181,7 @@ void LwpLayoutBorder::Read()
 void LwpLayoutBorder::Parse(IXFStream* /*pOutputStream*/)
 {}
 
-LwpLayoutBackground::LwpLayoutBackground(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpLayoutBackground::LwpLayoutBackground(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
@@ -226,7 +226,7 @@ void LwpExternalBorder:: Read(LwpObjectStream *pStrm)
     }
 }
 
-LwpLayoutExternalBorder::LwpLayoutExternalBorder(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpLayoutExternalBorder::LwpLayoutExternalBorder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
@@ -261,7 +261,7 @@ void LwpColumnInfo:: Read(LwpObjectStream *pStrm)
     m_nGap = pStrm->QuickReadInt32();
 }
 
-LwpLayoutColumns::LwpLayoutColumns(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpLayoutColumns::LwpLayoutColumns(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
     , m_nNumCols(0)
     , m_pColumns(nullptr)
@@ -314,7 +314,7 @@ double LwpLayoutColumns::GetColGap(sal_uInt16 nIndex)
 void LwpLayoutColumns::Parse(IXFStream* /*pOutputStream*/)
 {}
 
-LwpLayoutGutters::LwpLayoutGutters(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpLayoutGutters::LwpLayoutGutters(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
@@ -367,7 +367,7 @@ void LwpJoinStuff:: Read(LwpObjectStream *pStrm)
     }
 }
 
-LwpLayoutJoins::LwpLayoutJoins(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpLayoutJoins::LwpLayoutJoins(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
@@ -388,7 +388,7 @@ void LwpLayoutJoins::Read()
 void LwpLayoutJoins::Parse(IXFStream* /*pOutputStream*/)
 {}
 
-LwpLayoutShadow::LwpLayoutShadow(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpLayoutShadow::LwpLayoutShadow(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
 {}
 
@@ -439,7 +439,7 @@ void LwpLayoutRelativityGuts::Read(LwpObjectStream *pStrm)
     }
 }
 
-LwpLayoutRelativity::LwpLayoutRelativity(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpLayoutRelativity::LwpLayoutRelativity(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
 {
 }

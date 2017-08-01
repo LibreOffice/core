@@ -84,7 +84,7 @@
 #include "xfilter/xfparastyle.hxx"
 #include <memory>
 
-LwpSuperTableLayout::LwpSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpSuperTableLayout::LwpSuperTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
 {
     m_pFrame.reset(new LwpFrame(this) );
@@ -410,7 +410,7 @@ void  LwpSuperTableLayout::RegisterFrameStyle()
     m_pFrame->RegisterStyle(xFrameStyle);
 }
 
-LwpTableLayout::LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpTableLayout::LwpTableLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpLayout(objHdr, pStrm)
     , m_nRows(0)
     , m_nCols(0)
@@ -1407,7 +1407,7 @@ XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol)
 }
 
 //add end by
-LwpColumnLayout::LwpColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpColumnLayout::LwpColumnLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpVirtualLayout(objHdr, pStrm)
     , ccolid(0)
     , cwidth(0)
@@ -1438,7 +1438,7 @@ void LwpColumnLayout::RegisterStyle(double dCalculatedWidth)
     m_StyleName = pXFStyleManager->AddStyle(pColStyle).m_pStyle->GetStyleName();
 }
 
-LwpTableHeadingLayout::LwpTableHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpTableHeadingLayout::LwpTableHeadingLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpTableLayout(objHdr, pStrm)
     , cStartRow(0)
     , cEndRow(0)
@@ -1473,7 +1473,7 @@ void LwpTableHeadingLayout::GetStartEndRow(sal_uInt16& nStartRow, sal_uInt16& nE
     nEndRow = cEndRow;
 }
 
-LwpSuperParallelColumnLayout::LwpSuperParallelColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpSuperTableLayout(objHdr, pStrm)
+LwpSuperParallelColumnLayout::LwpSuperParallelColumnLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpSuperTableLayout(objHdr, pStrm)
 {
 }
 LwpSuperParallelColumnLayout::~LwpSuperParallelColumnLayout()
@@ -1486,7 +1486,7 @@ void LwpSuperParallelColumnLayout::Read()
 
 }
 
-LwpSuperGlossaryLayout::LwpSuperGlossaryLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpSuperTableLayout(objHdr, pStrm)
+LwpSuperGlossaryLayout::LwpSuperGlossaryLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpSuperTableLayout(objHdr, pStrm)
 {
 }
 
@@ -1500,7 +1500,7 @@ void LwpSuperGlossaryLayout::Read()
     m_pObjStrm->SkipExtra();
 }
 
-LwpParallelColumnsLayout::LwpParallelColumnsLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpTableLayout(objHdr, pStrm)
+LwpParallelColumnsLayout::LwpParallelColumnsLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpTableLayout(objHdr, pStrm)
 {
 }
 

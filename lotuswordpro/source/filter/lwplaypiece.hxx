@@ -81,7 +81,7 @@ private:
 class LwpLayoutGeometry : public LwpVirtualPiece
 {
 public:
-    LwpLayoutGeometry(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutGeometry(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     sal_Int32 GetWidth() { return m_nWidth; }
     sal_Int32 GetHeight() { return m_nHeight; }
@@ -109,7 +109,7 @@ public:
              CUSTOM = 8, MAINTAIN_ASPECT_RATIO = 16};
 
     enum    {CENTERED = 1, TILED = 2};
-    LwpLayoutScale(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutScale(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     sal_uInt16 GetScaleMode(){return m_nScaleMode;}
     sal_uInt32 GetScalePercentage(){return m_nScalePercentage;}
@@ -134,7 +134,7 @@ private:
 class LwpLayoutMargins : public LwpVirtualPiece
 {
 public:
-    LwpLayoutMargins(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutMargins(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpMargins& GetMargins() { return m_Margins; }
     LwpMargins& GetExtMargins(){ return m_ExtMargins;}
@@ -151,7 +151,7 @@ private:
 class LwpLayoutBorder : public LwpVirtualPiece
 {
 public:
-    LwpLayoutBorder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutBorder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpBorderStuff& GetBorderStuff(){ return m_BorderStuff;}
 protected:
@@ -165,7 +165,7 @@ private:
 class LwpLayoutBackground : public LwpVirtualPiece
 {
 public:
-    LwpLayoutBackground(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutBackground(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpBackgroundStuff& GetBackgoudStuff(){return m_BackgroundStuff;}
 protected:
@@ -193,7 +193,7 @@ private:
 class LwpLayoutExternalBorder : public LwpVirtualPiece
 {
 public:
-    LwpLayoutExternalBorder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutExternalBorder(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
 protected:
     virtual void Read() override;
@@ -219,7 +219,7 @@ private:
 class LwpLayoutColumns : public LwpVirtualPiece
 {
 public:
-    LwpLayoutColumns(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutColumns(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     sal_uInt16 GetNumCols(){return m_nNumCols;}
     double GetColWidth(sal_uInt16 nIndex);
@@ -236,7 +236,7 @@ private:
 class LwpLayoutGutters : public LwpVirtualPiece
 {
 public:
-    LwpLayoutGutters(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutGutters(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpBorderStuff& GetBorderStuff() { return m_BorderBuffer; }
 protected:
@@ -296,7 +296,7 @@ private:
 class LwpLayoutJoins : public LwpVirtualPiece
 {
 public:
-    LwpLayoutJoins(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutJoins(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
 protected:
     virtual void Read() override;
@@ -309,7 +309,7 @@ private:
 class LwpLayoutShadow : public LwpVirtualPiece
 {
 public:
-    LwpLayoutShadow(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutShadow(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpShadow& GetShadow() { return m_Shadow; }
 protected:
@@ -365,7 +365,7 @@ private:
 class LwpLayoutRelativity: public LwpVirtualPiece
 {
 public:
-    LwpLayoutRelativity(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
+    LwpLayoutRelativity(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     LwpLayoutRelativityGuts& GetRelGuts() { return m_RelGuts; }
 protected:

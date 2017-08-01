@@ -122,7 +122,7 @@ public:
         m_eListType = enumXFListLevelNumber;
     }
 public:
-    void    SetNumFmt(XFNumFmt& fmt)
+    void    SetNumFmt(XFNumFmt const & fmt)
     {
         m_aNumFmt = fmt;
     }
@@ -205,7 +205,7 @@ public:
                             const OUString& suffix
                             );
 
-    void    SetListNumber( sal_Int32 level, XFNumFmt& numFmt, sal_Int16 nStartValue );
+    void    SetListNumber( sal_Int32 level, XFNumFmt const & numFmt, sal_Int16 nStartValue );
 
     virtual enumXFStyle GetStyleFamily() override
     {

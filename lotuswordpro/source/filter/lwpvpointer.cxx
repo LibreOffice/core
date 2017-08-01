@@ -56,7 +56,7 @@
 #include "lwpvpointer.hxx"
 #include "lwpfilehdr.hxx"
 
-LwpVersionedPointer::LwpVersionedPointer(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpVersionedPointer::LwpVersionedPointer(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
 {}
 

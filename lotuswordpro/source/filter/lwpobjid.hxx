@@ -88,7 +88,7 @@ public:
     sal_uInt32 Read( LwpObjectStream *pStrm );
     void ReadIndexed( LwpSvStream* pStrm );
     sal_uInt32 ReadIndexed( LwpObjectStream *pStrm );
-    void ReadCompressed( LwpObjectStream* pObj, LwpObjectID& prev );
+    void ReadCompressed( LwpObjectStream* pObj, LwpObjectID const & prev );
 
     /**
      * @descr       return the size of object id with format: low(4bytes)+high(2bytes)

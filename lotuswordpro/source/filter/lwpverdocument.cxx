@@ -67,7 +67,7 @@
 #include "xfilter/xfparastyle.hxx"
 #include "lwptools.hxx"
 
-LwpVerDocument::LwpVerDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
+LwpVerDocument::LwpVerDocument(LwpObjectHeader const & objHdr, LwpSvStream* pStrm)
     : LwpObject(objHdr, pStrm)
     , m_nTabSpacing(0)
 {}

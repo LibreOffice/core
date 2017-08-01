@@ -82,8 +82,8 @@ public:
 
     void    ToXml(IXFStream *pStrm);
 
-    friend bool operator==(XFLineHeight& indent1, XFLineHeight& indent2);
-    friend bool operator!=(XFLineHeight& indent1, XFLineHeight& indent2);
+    friend bool operator==(XFLineHeight const & indent1, XFLineHeight const & indent2);
+    friend bool operator!=(XFLineHeight const & indent1, XFLineHeight const & indent2);
 private:
     union{
         sal_Int32   m_nValue;
@@ -143,7 +143,7 @@ inline void XFLineHeight::ToXml(IXFStream *pStrm)
     }
 }
 
-inline bool operator==(XFLineHeight& lh1, XFLineHeight& lh2)
+inline bool operator==(XFLineHeight const & lh1, XFLineHeight const & lh2)
 {
     if( lh1.m_eType != lh2.m_eType )
         return false;
@@ -160,7 +160,7 @@ inline bool operator==(XFLineHeight& lh1, XFLineHeight& lh2)
     return true;
 }
 
-inline bool operator!=(XFLineHeight& lh1, XFLineHeight& lh2)
+inline bool operator!=(XFLineHeight const & lh1, XFLineHeight const & lh2)
 {
     return !(lh1==lh2);
 }

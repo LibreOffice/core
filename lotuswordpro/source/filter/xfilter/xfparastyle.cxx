@@ -219,14 +219,14 @@ void    XFParaStyle::SetMargins(double left, double right, double top, double bo
         m_aMargin.SetBottom( bottom );
 }
 
-void    XFParaStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor& color)
+void    XFParaStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor const & color)
 {
     m_aShadow.SetPosition(pos);
     m_aShadow.SetOffset(offset);
     m_aShadow.SetColor(color);
 }
 
-void    XFParaStyle::SetBackColor(XFColor& color)
+void    XFParaStyle::SetBackColor(XFColor const & color)
 {
     m_aBackColor = color;
     m_nFlag |= XFPARA_FLAG_BACKCOLOR;

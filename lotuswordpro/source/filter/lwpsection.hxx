@@ -70,7 +70,7 @@ class LwpDLNFVList;
 class LwpOrderedObject : public LwpDLNFVList
 {
 public:
-    LwpOrderedObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpOrderedObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     void Read() override;
     LwpObjectID& GetPosition(){ return m_Para;}
     LwpObjectID& GetListList(){ return m_ListList;}
@@ -88,7 +88,7 @@ class LwpAtomHolder;
 class LwpSection : public LwpOrderedObject
 {
 public:
-    LwpSection(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpSection(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSection() override;
     inline LwpPageLayout* GetPageLayout();
     void Parse(IXFStream* pOutputStream) override;
@@ -116,7 +116,7 @@ inline LwpPageLayout* LwpSection::GetPageLayout()
 class LwpIndexSection : public LwpSection
 {
 public:
-    LwpIndexSection(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpIndexSection(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpIndexSection() override;
     bool IsFormatRunin();
     bool IsFormatSeparator();

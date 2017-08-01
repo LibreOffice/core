@@ -194,7 +194,7 @@ public:
 class LwpFormulaInfo : public LwpCellList
 {
 public:
-    LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpFormulaInfo(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     OUString Convert(LwpTableLayout* pCellsMap);
     void Convert(XFCell * pCell, LwpTableLayout* pCellsMap=nullptr) override;
 protected:

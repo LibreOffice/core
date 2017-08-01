@@ -76,7 +76,7 @@ public:
     /**
      * @descr   Set border color.
      */
-    void        SetColor(XFColor& color);
+    void        SetColor(XFColor const & color);
 
     /**
      * @descr   Set border width in cm.
@@ -111,8 +111,8 @@ private:
 
     OUString   ToString();
 
-    friend bool operator==(XFBorder& b1, XFBorder& b2);
-    friend bool operator!=(XFBorder& b1, XFBorder& b2);
+    friend bool operator==(XFBorder const & b1, XFBorder const & b2);
+    friend bool operator!=(XFBorder const & b1, XFBorder const & b2);
     friend class XFBorders;
 
 private:
@@ -139,7 +139,7 @@ public:
     /**
      * @descr   Set color of border side.
      */
-    void    SetColor(enumXFBorder side, XFColor& color);
+    void    SetColor(enumXFBorder side, XFColor const & color);
 
     /**
      * @descr   Set width or border side.
@@ -176,8 +176,8 @@ public:
 
     void    ToXml(IXFStream *pStrm);
 
-    friend bool operator==(XFBorders& b1, XFBorders& b2);
-    friend bool operator!=(XFBorders& b1, XFBorders& b2);
+    friend bool operator==(XFBorders const & b1, XFBorders const & b2);
+    friend bool operator!=(XFBorders const & b1, XFBorders const & b2);
 
 private:
     XFBorder    m_aBorderLeft;

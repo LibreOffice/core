@@ -75,7 +75,7 @@ OUString XFColor::ToString() const
     return OUString::createFromAscii(buf);
 }
 
-bool operator==(XFColor& c1, XFColor& c2)
+bool operator==(XFColor const & c1, XFColor const & c2)
 {
     return (
         (c1.m_nRed==c2.m_nRed)&&
@@ -84,7 +84,7 @@ bool operator==(XFColor& c1, XFColor& c2)
         );
 }
 
-bool operator!=(XFColor& c1, XFColor& c2)
+bool operator!=(XFColor const & c1, XFColor const & c2)
 {
     return !(c1==c2);
 }

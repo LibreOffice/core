@@ -60,7 +60,7 @@
 
  #include "lwptable.hxx"
 
- LwpSuperTable::LwpSuperTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpContent(objHdr, pStrm)
+ LwpSuperTable::LwpSuperTable(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpContent(objHdr, pStrm)
 {}
 
 LwpSuperTable::~LwpSuperTable()
@@ -82,7 +82,7 @@ void LwpSuperTable::XFConvert(XFContentContainer* /*pCont*/)
 }
 
 /*****************************************************************************/
- LwpTable::LwpTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+ LwpTable::LwpTable(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
      : LwpContent(objHdr, pStrm)
      , m_nRow(0)
      , m_nColumn(0)
@@ -142,7 +142,7 @@ void  LwpTable::Parse(IXFStream* /*pOutputStream*/)
 }
 
  /*****************************************************************************/
- LwpTableHeading::LwpTableHeading(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpTable(objHdr, pStrm)
+ LwpTableHeading::LwpTableHeading(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpTable(objHdr, pStrm)
 {}
 
 LwpTableHeading::~LwpTableHeading()
@@ -158,7 +158,7 @@ void  LwpTableHeading::Parse(IXFStream* /*pOutputStream*/)
 }
 
  /*****************************************************************************/
-LwpParallelColumns::LwpParallelColumns(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpTable(objHdr, pStrm)
+LwpParallelColumns::LwpParallelColumns(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpTable(objHdr, pStrm)
 {
 }
 
@@ -175,7 +175,7 @@ void LwpParallelColumns::Read()
     m_pObjStrm->SkipExtra();
 }
  /*****************************************************************************/
-LwpGlossary::LwpGlossary(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpParallelColumns(objHdr, pStrm)
+LwpGlossary::LwpGlossary(LwpObjectHeader const &objHdr, LwpSvStream* pStrm):LwpParallelColumns(objHdr, pStrm)
 {
 }
 

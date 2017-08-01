@@ -107,8 +107,8 @@ public:
 
     void    ToXml(IXFStream *pStrm);
 
-    friend bool operator==(XFShadow& s1, XFShadow& s2);
-    friend bool operator!=(XFShadow& s1, XFShadow& s2);
+    friend bool operator==(XFShadow const & s1, XFShadow const & s2);
+    friend bool operator!=(XFShadow const & s1, XFShadow const & s2);
 private:
     enumXFShadowPos m_ePosition;
     double          m_fOffset;

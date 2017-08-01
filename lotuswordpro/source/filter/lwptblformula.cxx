@@ -72,7 +72,7 @@ LwpFormulaArg::~LwpFormulaArg()
 {
 }
 
- LwpFormulaInfo::LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+ LwpFormulaInfo::LwpFormulaInfo(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpCellList(objHdr, pStrm)
     , m_bSupported(true)
     , m_nFormulaRow(0)

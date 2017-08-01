@@ -511,7 +511,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
  * @short:   Override paranumbering properties.
  * @param:   pProps pointer to the LwpParaProperty and we can get local paranumbering through it.
  */
-void LwpPara::OverrideParaNumbering(LwpParaProperty* pProps)
+void LwpPara::OverrideParaNumbering(LwpParaProperty const * pProps)
 {
     // get numbering override in parastyle
     LwpParaStyle* pParaStyle = GetParaStyle();
@@ -525,7 +525,7 @@ void LwpPara::OverrideParaNumbering(LwpParaProperty* pProps)
     //Override with the local numbering, if any
     if (pProps)
     {
-        LwpNumberingOverride* pPropNumbering = static_cast<LwpParaNumberingProperty*>(pProps)->GetLocalNumbering();
+        LwpNumberingOverride* pPropNumbering = static_cast<LwpParaNumberingProperty const *>(pProps)->GetLocalNumbering();
         if (pPropNumbering)
         {
             pOver.reset(pPropNumbering->clone());
@@ -593,7 +593,7 @@ LwpTabOverride* LwpPara::GetLocalTabOverride()
 * @descr:   Determined which para is earlier in position
 *
 */
-bool LwpPara::operator< (LwpPara& Other)
+bool LwpPara::operator< (LwpPara const & Other)
 {
     return m_nOrdinal < Other.m_nOrdinal;
 }
@@ -602,7 +602,7 @@ bool LwpPara::operator< (LwpPara& Other)
 * @descr:  If the two layouts in the same para, compare which layout is earlied according to frib order
 *
 */
-bool LwpPara::ComparePagePosition(LwpVirtualLayout * pPreLayout, LwpVirtualLayout * pNextLayout)
+bool LwpPara::ComparePagePosition(LwpVirtualLayout const * pPreLayout, LwpVirtualLayout const * pNextLayout)
 {
     m_Fribs.SetPara(this);
     return m_Fribs.ComparePagePosition(pPreLayout, pNextLayout);

@@ -70,9 +70,9 @@ class XFMasterPage : public XFStyle
 public:
     void    SetPageMaster(const OUString& pm);
 
-    void    SetHeader(rtl::Reference<XFHeader>& rHeader);
+    void    SetHeader(rtl::Reference<XFHeader> const & rHeader);
 
-    void    SetFooter(rtl::Reference<XFFooter>& rFooter);
+    void    SetFooter(rtl::Reference<XFFooter> const & rFooter);
 
     virtual enumXFStyle GetStyleFamily() override;
 

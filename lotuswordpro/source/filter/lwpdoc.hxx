@@ -79,7 +79,7 @@ class LwpVirtualLayout;
 class LwpDocument : public LwpDLNFPVList
 {
 public:
-    LwpDocument(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpDocument(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual ~LwpDocument() override;
 
 private:
@@ -225,7 +225,7 @@ inline LwpObjectID& LwpDocument::GetVerDoc()
 class LwpDocSock : public LwpDLNFVList
 {
 public:
-    LwpDocSock(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
+    LwpDocSock(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
 private:
     LwpObjectID m_Doc;
 protected:

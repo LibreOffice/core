@@ -66,7 +66,7 @@
 #include "lwpsection.hxx"
 #include "xfilter/xfsection.hxx"
 
-LwpOrderedObject::LwpOrderedObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
+LwpOrderedObject::LwpOrderedObject(LwpObjectHeader const &objHdr, LwpSvStream* pStrm)
     : LwpDLNFVList(objHdr, pStrm)
 {}
 
@@ -83,7 +83,7 @@ void LwpOrderedObject::Read()
     m_pObjStrm->SkipExtra();
 }
 
-LwpSection::LwpSection(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpSection::LwpSection(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpOrderedObject(objHdr, pStrm)
     , m_Flags(0)
 {}
@@ -116,7 +116,7 @@ void LwpSection::Parse(IXFStream * /*pOutputStream*/)
 
 }
 
-LwpIndexSection::LwpIndexSection(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
+LwpIndexSection::LwpIndexSection(LwpObjectHeader const &objHdr, LwpSvStream *pStrm)
     : LwpSection(objHdr, pStrm)
     , m_nForm(0)
     , m_nFlags(0)
