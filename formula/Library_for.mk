@@ -12,7 +12,6 @@ $(eval $(call gb_Library_Library,for))
 $(eval $(call gb_Library_set_include,for,\
     $$(INCLUDE) \
     -I$(SRCDIR)/formula/inc \
-    -I$(SRCDIR)/formula/source/core/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,for,\

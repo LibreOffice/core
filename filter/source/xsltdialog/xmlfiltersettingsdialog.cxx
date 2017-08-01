@@ -58,36 +58,10 @@ using namespace com::sun::star::util;
 
 using ::rtl::Uri;
 
-namespace {
-    static std::locale* pXSLTResLocale = nullptr;
-
-    const std::locale* getXSLTDialogResLocale()
-    {
-        return pXSLTResLocale;
-    }
-}
-
-EnsureResLocale::EnsureResLocale()
+OUString XsltResId(const char* pId)
 {
-    if (!pXSLTResLocale)
-    {
-        m_xResLocale.reset(new std::locale(Translate::Create("flt")));
-        pXSLTResLocale = m_xResLocale.get();
-    }
-}
-
-EnsureResLocale::~EnsureResLocale()
-{
-    if (m_xResLocale)
-        pXSLTResLocale = nullptr;
-}
-
-namespace
-{
-    OUString XsltResId(const char* pId)
-    {
-        return Translate::get(pId, *getXSLTDialogResLocale());
-    }
+    static std::locale loc = Translate::Create("flt");
+    return Translate::get(pId, loc);
 }
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
@@ -263,7 +237,7 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
-    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResLocale(), mxContext, &aTempInfo );
+    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, mxContext, &aTempInfo );
     if ( aDlg->Execute() == RET_OK )
     {
         // insert the new filter
@@ -282,7 +256,7 @@ void XMLFilterSettingsDialog::onEdit()
         filter_info_impl* pOldInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         // execute XML Filter Dialog
-        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResLocale(), mxContext, pOldInfo );
+        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, mxContext, pOldInfo );
         if ( aDlg->Execute() == RET_OK )
         {
             filter_info_impl* pNewInfo = aDlg->getNewFilterInfo();

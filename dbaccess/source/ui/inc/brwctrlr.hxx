@@ -76,7 +76,6 @@ namespace dbaui
         // for implementing the XFormController
         class FormControllerImpl;
         friend class FormControllerImpl;
-        dbaccess::OModuleClient                               m_aModuleClient;
 
         css::uno::Reference< css::sdbc::XRowSet >             m_xRowSet;      // our rowset
         css::uno::Reference< css::sdbcx::XColumnsSupplier >   m_xColumnsSupplier; // queried from the rowset member

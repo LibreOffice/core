@@ -36,11 +36,10 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
-XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, const std::locale& rResLocale,
+XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent,
     const Reference< XComponentContext >& rxContext, const filter_info_impl* pInfo)
     : TabDialog(pParent, "XSLTFilterDialog","filter/ui/xsltfilterdialog.ui")
     , mxContext(rxContext)
-    , mrResLocale(rResLocale)
 {
     get(m_pOKBtn, "ok");
     get(m_pTabCtrl, "tabcontrol");
@@ -250,7 +249,7 @@ bool XMLFilterTabDialog::onOk()
         m_pTabCtrl->SetCurPageId(nErrorPage);
         ActivatePageHdl(nullptr, m_pTabCtrl);
 
-        OUString aMessage(Translate::get(pErrorId, mrResLocale));
+        OUString aMessage(XsltResId(pErrorId));
 
         if( aReplace2.getLength() )
         {

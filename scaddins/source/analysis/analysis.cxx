@@ -71,7 +71,7 @@ OUString AnalysisAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrInde
 
 void AnalysisAddIn::InitData()
 {
-    aResLocale = Translate::Create("analysis", LanguageTag(aFuncLoc));
+    aResLocale = Translate::Create("sca", LanguageTag(aFuncLoc));
 
     delete pFD;
     pFD = new FuncDataList;

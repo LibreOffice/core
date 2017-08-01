@@ -27,8 +27,6 @@
 #include <vcl/tabctrl.hxx>
 #include <svtools/treelistbox.hxx>
 #include "formula/IFunctionDescription.hxx"
-#include "formula/omoduleclient.hxx"
-
 
 namespace formula
 {
@@ -65,7 +63,6 @@ public:
 class StructPage : public TabPage
 {
 private:
-    OModuleClient           m_aModuleClient;
     Link<StructPage&,void>  aSelLink;
 
     VclPtr<StructListBox>   m_pTlbStruct;

@@ -50,8 +50,8 @@
 #include "formula/formulahelper.hxx"
 #include "structpg.hxx"
 #include "parawin.hxx"
-#include "ModuleHelper.hxx"
 #include "strings.hrc"
+#include "core_resource.hxx"
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
@@ -236,8 +236,8 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     m_pTheRefButton (nullptr),
     m_pMEdit        (nullptr),
     m_bUserMatrixFlag(false),
-    m_aTitle1       ( ModuleRes( STR_TITLE1 ) ),
-    m_aTitle2       ( ModuleRes( STR_TITLE2 ) ),
+    m_aTitle1       ( ForResId( STR_TITLE1 ) ),
+    m_aTitle2       ( ForResId( STR_TITLE2 ) ),
     m_aFormulaHelper(_pFunctionMgr),
     m_bIsShutDown   (false),
     m_bMakingTree   (false),

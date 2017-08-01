@@ -30,7 +30,6 @@
 #include <svtools/treelistbox.hxx>
 
 #include <vector>
-#include "formula/omoduleclient.hxx"
 
 namespace formula
 {
@@ -58,7 +57,6 @@ typedef const IFunctionDescription* TFunctionDesc;
 class FuncPage : public TabPage
 {
 private:
-    OModuleClient            m_aModuleClient;
     Link<FuncPage&,void>     aDoubleClickLink;
     Link<FuncPage&,void>     aSelectionLink;
     VclPtr<ListBox>          m_pLbCategory;

@@ -149,7 +149,7 @@ OUString VCLXAccessibleButton::getAccessibleName(  )
         if ( nLength == 3 )
         {
             // it's a browse button
-            aName = TK_RES_STRING( RID_STR_ACC_NAME_BROWSEBUTTON );
+            aName = AccResId( RID_STR_ACC_NAME_BROWSEBUTTON );
         }
         else
         {

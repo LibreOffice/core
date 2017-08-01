@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <svtools/svtdllapi.h>
-
+#include <svtools/svtresid.hxx>
 #include <vcl/errinf.hxx>
 
 typedef std::pair<const char*, ErrCode> ErrMsgCode;
@@ -36,23 +36,23 @@ class SVT_DLLPUBLIC SfxErrorContext : private ErrorContext
 public:
     SfxErrorContext(
             sal_uInt16 nCtxIdP, vcl::Window *pWin=nullptr,
-            const ErrMsgCode* pIds = nullptr, const std::locale* pResLocaleP = nullptr);
+            const ErrMsgCode* pIds = nullptr, const std::locale& rResLocaleP = SvtResLocale());
     SfxErrorContext(
             sal_uInt16 nCtxIdP, const OUString &aArg1, vcl::Window *pWin=nullptr,
-            const ErrMsgCode* pIds = nullptr, const std::locale* pResLocaleP = nullptr);
+            const ErrMsgCode* pIds = nullptr, const std::locale& rResLocaleP = SvtResLocale());
     bool GetString(ErrCode nErrId, OUString &rStr) override;
 
 private:
     sal_uInt16 nCtxId;
     const ErrMsgCode* pIds;
-    const std::locale *pResLocale;
+    const std::locale& rResLocale;
     OUString aArg1;
 };
 
 class SVT_DLLPUBLIC SfxErrorHandler : private ErrorHandler
 {
 public:
-    SfxErrorHandler(const ErrMsgCode* pIds, ErrCode lStart, ErrCode lEnd, const std::locale* pResLocale = nullptr);
+    SfxErrorHandler(const ErrMsgCode* pIds, ErrCode lStart, ErrCode lEnd, const std::locale& rResLocale = SvtResLocale());
     virtual ~SfxErrorHandler() override;
 
 protected:
@@ -63,8 +63,7 @@ private:
     ErrCode              lStart;
     ErrCode              lEnd;
     const ErrMsgCode*    pIds;
-    const std::locale*   pResLocale;
-    std::unique_ptr<std::locale> xFreeLocale;
+    const std::locale&   rResLocale;
 
     SVT_DLLPRIVATE static void GetClassString(sal_uLong lErrId, OUString &);
     virtual bool          CreateString(const ErrorInfo *, OUString &) const override;

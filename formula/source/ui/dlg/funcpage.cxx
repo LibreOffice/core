@@ -25,7 +25,6 @@
 #include "formula/IFunctionDescription.hxx"
 
 #include "funcpage.hxx"
-#include "ModuleHelper.hxx"
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
 

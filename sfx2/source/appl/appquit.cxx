@@ -101,8 +101,6 @@ void SfxApplication::Deinitialize()
 
     // free administration managers
     DELETEZ(pImpl->pAppDispat);
-    SfxResLocale::DeleteResLocale();
-    SvtResLocale::DeleteResLocale();
 
     // from here no SvObjects have to exists
     DELETEZ(pImpl->pMatcher);

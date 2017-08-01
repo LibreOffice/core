@@ -214,16 +214,11 @@ void SfxApplication::Initialize_Impl()
     pImpl->m_pToolsErrorHdl = new SfxErrorHandler(
         getRID_ERRHDL(), ErrCode(ERRCODE_AREA_IO), ErrCode(ERRCODE_AREA_SVX));
 
-#if HAVE_FEATURE_SCRIPTING
-    pImpl->aBasicResLocale = Translate::Create("sb");
-#endif
-    pImpl->aSvtResLocale = Translate::Create("svt");
-
     pImpl->m_pSoErrorHdl = new SfxErrorHandler(
-        getRID_SO_ERROR_HANDLER(), ErrCode(ERRCODE_AREA_SO), ErrCode(ERRCODE_AREA_SO_END), &(pImpl->aSvtResLocale));
+        getRID_SO_ERROR_HANDLER(), ErrCode(ERRCODE_AREA_SO), ErrCode(ERRCODE_AREA_SO_END), SvtResLocale());
 #if HAVE_FEATURE_SCRIPTING
     pImpl->m_pSbxErrorHdl = new SfxErrorHandler(
-        getRID_BASIC_START(), ErrCode(ERRCODE_AREA_SBX), ErrCode(ERRCODE_AREA_SBX_END), &(pImpl->aBasicResLocale));
+        getRID_BASIC_START(), ErrCode(ERRCODE_AREA_SBX), ErrCode(ERRCODE_AREA_SBX_END), BasResLocale());
 #endif
 
     if (!utl::ConfigManager::IsAvoidConfig())

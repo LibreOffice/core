@@ -33,6 +33,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <xmloff/attrlist.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 namespace T602ImportFilter {
 
@@ -82,12 +83,10 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
         css::beans::XPropertyAccess
 >
 {
-    css::lang::Locale meLocale;
-    std::unique_ptr<std::locale> mpResLocale;
+    LanguageTag maLocale;
+    std::locale maResLocale;
     bool OptionsDlg();
-    const std::locale* getResLocale();
     OUString getResStr(const char* resid);
-    void initLocale();
 
     virtual ~T602ImportFilterDialog() override;
 

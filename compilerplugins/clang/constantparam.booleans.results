@@ -794,10 +794,6 @@ include/svtools/editsyntaxhighlighter.hxx:42
     void MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight(class vcl::Window *,long,enum HighlighterLanguage)
     enum HighlighterLanguage aLanguage
     1
-include/svtools/ehdl.hxx:36
-    void SfxErrorContext::SfxErrorContext(unsigned short,class vcl::Window *,unsigned short,class ResMgr *)
-    class ResMgr * pMgrP
-    0
 include/svtools/fileview.hxx:176
     void SvtFileView::EnableDelete(_Bool)
     _Bool bEnable

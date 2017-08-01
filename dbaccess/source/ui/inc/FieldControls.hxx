@@ -30,7 +30,6 @@ namespace dbaui
 
     class OPropColumnEditCtrl : public OSQLNameEdit
     {
-        dbaccess::OModuleClient m_aModuleClient;
         short                m_nPos;
         OUString             m_strHelpText;
     public:
@@ -44,7 +43,6 @@ namespace dbaui
 
     class OPropEditCtrl :   public Edit
     {
-        dbaccess::OModuleClient m_aModuleClient;
         short                m_nPos;
         OUString             m_strHelpText;
 
