@@ -37,10 +37,8 @@ public:
             XFillColorItem() {}
             XFillColorItem(sal_Int32 nIndex, const Color& rTheColor);
             XFillColorItem(const OUString& rName, const Color& rTheColor);
-            XFillColorItem(SvStream& rIn);
 
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

@@ -270,12 +270,6 @@ GraphicObject XFillBitmapItem::makeGraphicObject(SvStream& rIn, sal_uInt16 nVer)
     return GraphicObject();
 }
 
-XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
-    : NameOrIndex(XATTR_FILLBITMAP, rIn)
-    , maGraphicObject(makeGraphicObject(rIn, nVer))
-{
-}
-
 XFillBitmapItem::XFillBitmapItem(const GraphicObject& rGraphicObject)
     : NameOrIndex(XATTR_FILLBITMAP, -1)
     , maGraphicObject(rGraphicObject)
@@ -291,23 +285,6 @@ bool XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 {
     return (NameOrIndex::operator==(rItem)
         && maGraphicObject == static_cast<const XFillBitmapItem&>(rItem).maGraphicObject);
-}
-
-SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, sal_uInt16 nVer) const
-{
-    return new XFillBitmapItem( rIn, nVer );
-}
-
-SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
-{
-    NameOrIndex::Store(rOut, nItemVersion);
-
-    if(!IsIndex())
-    {
-        WriteDIBBitmapEx(maGraphicObject.GetGraphic().GetBitmapEx(), rOut);
-    }
-
-    return rOut;
 }
 
 
