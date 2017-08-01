@@ -9,7 +9,9 @@
 
 #include "EPUBExportFilter.hxx"
 
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 
@@ -18,14 +20,25 @@ using namespace com::sun::star;
 namespace writerperfect
 {
 
-EPUBExportFilter::EPUBExportFilter()
+EPUBExportFilter::EPUBExportFilter(const uno::Reference<uno::XComponentContext> &xContext)
+    : mxContext(xContext)
 {
 }
 
-sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &/*rDescriptor*/)
+sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDescriptor)
 {
-    SAL_WARN("writerperfect", "EPUBExportFilter::filter: implement me");
-    return true;
+    // Create ODT exporter, this will feed our document handler.
+    uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
+
+    // The document handler will make the calls on the text interface provided by the EPUB export.
+    uno::Reference<xml::sax::XDocumentHandler> xExportHandler;
+
+    // Let the ODT exporter read the doc model and invoke the doc handler.
+    xInitialization->initialize({uno::makeAny(xExportHandler)});
+    uno::Reference<document::XExporter> xExporter(xInitialization, uno::UNO_QUERY);
+    xExporter->setSourceDocument(mxSourceDocument);
+    uno::Reference<document::XFilter> xFilter(xInitialization, uno::UNO_QUERY);
+    return xFilter->filter(rDescriptor);
 }
 
 void EPUBExportFilter::cancel()
@@ -56,9 +69,9 @@ uno::Sequence<OUString> EPUBExportFilter::getSupportedServiceNames()
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *SAL_CALL com_sun_star_comp_Writer_EPUBExportFilter_get_implementation(uno::XComponentContext *, uno::Sequence<uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *SAL_CALL com_sun_star_comp_Writer_EPUBExportFilter_get_implementation(uno::XComponentContext *pContext, uno::Sequence<uno::Any> const &)
 {
-    return cppu::acquire(new EPUBExportFilter);
+    return cppu::acquire(new EPUBExportFilter(pContext));
 }
 
 } // namespace writerperfect
