@@ -39,12 +39,9 @@ public:
             XLineStartItem(const OUString& rName, const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineStartItem(const basegfx::B2DPolyPolygon& rPolyPolygon);
             XLineStartItem(const XLineStartItem& rItem);
-            XLineStartItem(SvStream& rIn);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
-    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
-    virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
