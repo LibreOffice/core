@@ -206,9 +206,13 @@ void PaletteManager::SetPalette( sal_Int32 nPos )
             }
         }
     }
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
-    officecfg::Office::Common::UserColors::PaletteName::set(GetPaletteName(), batch);
-    batch->commit();
+    OUString aPaletteName(officecfg::Office::Common::UserColors::PaletteName::get());
+    if (aPaletteName != GetPaletteName())
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+        officecfg::Office::Common::UserColors::PaletteName::set(GetPaletteName(), batch);
+        batch->commit();
+    }
 }
 
 sal_Int32 PaletteManager::GetPalette()
