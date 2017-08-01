@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a461143_d72be02e",
+        "filename": "external/nss/ExternalProject_nss.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-01T21:12:59Z",
+      "side": 1,
+      "message": "What does this --enable-64bit mean here unconditionally? I think we currently build for 32bit Android by default.",
+      "revId": "5fde68546cfe2868aae8bdecd85c916926d91d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_f720dc4b",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-01T21:12:59Z",
+      "side": 1,
+      "message": "Could you instead add this as a ifneq ($(OS_TARGET),Android) block? I assume that is the form upstream would take (if they do so).",
+      "revId": "5fde68546cfe2868aae8bdecd85c916926d91d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_171e480c",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-01T21:12:59Z",
+      "side": 1,
+      "message": "Same here, I think the easiest if you add it like:\n\nifneq OS OS2\nifneq OS Android\n...\nendif\nendif",
+      "revId": "5fde68546cfe2868aae8bdecd85c916926d91d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_371b441d",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-01T21:12:59Z",
+      "side": 1,
+      "message": "Same, just wrap this in an ifneq...endif block, don\u0027t remove it.",
+      "revId": "5fde68546cfe2868aae8bdecd85c916926d91d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_5718d01d",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-01T21:12:59Z",
+      "side": 1,
+      "message": "This is hard to upstream. Upstreamable version would be:\n\nif [ -z \"$NSINSTALL\" ]; then\n... original code ...\nfi\n\ni.e. if NSINSTALL is already defined, just don\u0027t touch it. (NSINSTALL\u003d$NSINSTALL is a NOP :) )",
+      "revId": "5fde68546cfe2868aae8bdecd85c916926d91d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_77d30c39",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-01T21:12:59Z",
+      "side": 1,
+      "message": "If you remove this, then just remove it, commenting it out just makes the patch harder to read.",
+      "revId": "5fde68546cfe2868aae8bdecd85c916926d91d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a461143_97d87855",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-01T21:12:59Z",
+      "side": 1,
+      "message": "This line looks unnecessary.",
+      "revId": "5fde68546cfe2868aae8bdecd85c916926d91d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
