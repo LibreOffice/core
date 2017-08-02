@@ -347,8 +347,9 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
 
 oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString* ustrFileURL, oslDirectoryItem* pItem)
 {
-    SAL_WARN_IF((!ustrFileURL) || (ustrFileURL->length == 0), "sal.file", "Invalid file URL");
-    SAL_WARN_IF(!pItem, "sal.file", "pItem is nullptr");
+    SAL_WARN_IF((!ustrFileURL) || (ustrFileURL->length == 0), "sal.file",
+                "Invalid file URL " << (ustrFileURL ? ("'" + OUString(ustrFileURL) + "'") : OUString("(null)")));
+    SAL_WARN_IF(!pItem, "sal.file", "pItem is null");
 
     rtl_uString* ustrSystemPath = nullptr;
     oslFileError osl_error = osl_File_E_INVAL;
