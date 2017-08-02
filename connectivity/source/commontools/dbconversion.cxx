@@ -194,43 +194,35 @@ namespace dbtools
 
     static void implBuildFromRelative( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_Int16& rYear)
     {
-        sal_Int32   nTempDays;
-        sal_Int32   i = 0;
-        bool    bCalc;
+        const int DAYS_IN_400_YEARS = 365 * 400 + 100 - 3;
+        const int DAYS_IN_100_YEARS = 365 * 100 + 24;
 
-        do
+        assert( nDays >= 0 );
+        sal_uInt32 nYear = (nDays / DAYS_IN_400_YEARS) * 400;
+        nDays = nDays % DAYS_IN_400_YEARS;
+
+        // Add an extra day for the first leap year that occurs every 400 years.
+        nYear += 100 * (nDays / DAYS_IN_100_YEARS) + (nDays < DAYS_IN_100_YEARS ? 1 : 0);
+        if ( nYear > SAL_MAX_INT16 )
         {
-            nTempDays = nDays;
-            rYear = (sal_uInt16)((nTempDays / 365) - i);
-            nTempDays -= (rYear-1) * 365;
-            nTempDays -= ((rYear-1) / 4) - ((rYear-1) / 100) + ((rYear-1) / 400);
-            bCalc = false;
-            if ( nTempDays < 1 )
-            {
-                i++;
-                bCalc = true;
-            }
-            else
-            {
-                if ( nTempDays > 365 )
-                {
-                    if ( (nTempDays != 366) || !implIsLeapYear( rYear ) )
-                    {
-                        i--;
-                        bCalc = true;
-                    }
-                }
-            }
+            rYear = SAL_MAX_INT16;
+            rMonth = 12;
+            rDay = 31;
+            return;
         }
-        while ( bCalc );
+        else
+            rYear = (sal_Int16) nYear;
+
+        nDays = nDays - (nDays < DAYS_IN_100_YEARS ? 1 : 0);
+        nDays = nDays % DAYS_IN_400_YEARS;
 
         rMonth = 1;
-        while ( nTempDays > implDaysInMonth( rMonth, rYear ) )
+        while ( nDays > implDaysInMonth( rMonth, rYear ) )
         {
-            nTempDays -= implDaysInMonth( rMonth, rYear );
+            nDays -= implDaysInMonth( rMonth, rYear );
             rMonth++;
         }
-        rDay = (sal_uInt16)nTempDays;
+        rDay = (sal_uInt16) nDays;
     }
 
     sal_Int32 DBTypeConversion::toDays(const css::util::Date& _rVal, const css::util::Date& _rNullDate)
