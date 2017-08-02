@@ -22,10 +22,8 @@ private:
 
 public:
 
-    static OUString getUpdateInfoURL();
     static OUString getUpdateInfoLog();
     static OUString getPatchDirURL();
-    static OUString getUpdateDirURL();
     static OUString getUpdateFileURL();
     static OUString getExecutableDirURL();
     static OUString getInstallationPath();

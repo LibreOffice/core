@@ -136,8 +136,7 @@ void createStr(const OUString& rStr, char** pArgs, size_t i)
 
 char** createCommandLine()
 {
-    OUString aInstallDir( "$BRAND_BASE_DIR/" );
-    rtl::Bootstrap::expandMacros(aInstallDir);
+    OUString aInstallDir = Updater::getInstallationPath();
 
     size_t nCommandLineArgs = rtl_getAppCommandArgCount();
     size_t nArgs = 8 + nCommandLineArgs;
@@ -161,13 +160,11 @@ char** createCommandLine()
     }
     {
         // the temporary updated build
-        OUString aUpdateDirURL = Updater::getUpdateDirURL();
-        OUString aWorkingDir = getPathFromURL(aUpdateDirURL);
-        Updater::log("Working Dir: " + aWorkingDir);
-        createStr(aWorkingDir, pArgs, 3);
+        Updater::log("Working Dir: " + aInstallDir);
+        createStr(aInstallDir, pArgs, 3);
     }
     {
-        const char* pPID = "/replace";
+        const char* pPID = "0";
         createStr(pPID, pArgs, 4);
     }
     {
@@ -287,39 +284,6 @@ void update()
         delete[] pArgs[i];
     }
     delete[] pArgs;
-}
-
-void CreateValidUpdateDir(const update_info& update_info)
-{
-    Updater::log(OString("Create Update Dir"));
-    OUString aInstallDir("$BRAND_BASE_DIR");
-    rtl::Bootstrap::expandMacros(aInstallDir);
-    OUString aInstallPath = getPathFromURL(aInstallDir);
-    OUString aWorkdirPath = getPathFromURL(Updater::getUpdateDirURL());
-
-    OUString aPatchDir = getPathFromURL(Updater::getPatchDirURL());
-
-    OUString aUpdaterPath = getPathFromURL(Updater::getExecutableDirURL() + OUString::fromUtf8(pUpdaterName));
-
-    OUString aCommand = aUpdaterPath + " " + aPatchDir + " " + aInstallPath + " " + aWorkdirPath + " -1";
-
-    OString aOCommand = OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8);
-
-    int nResult = std::system(aOCommand.getStr());
-    if (nResult)
-    {
-        // TODO: remove the update directory
-        SAL_WARN("desktop.updater", "failed to update");
-        Updater::log(OUString("failed to create update dir"));
-    }
-    else
-    {
-        OUString aUpdateInfoURL(Updater::getPatchDirURL() + "/update.info");
-        OUString aUpdateInfoPath = getPathFromURL(aUpdateInfoURL);
-        SvFileStream aUpdateInfoFile(aUpdateInfoPath, StreamMode::WRITE | StreamMode::TRUNC);
-        aUpdateInfoFile.WriteCharPtr("[UpdateInfo]\nOldBuildId=");
-        aUpdateInfoFile.WriteByteStringLine(update_info.aFromBuildID, RTL_TEXTENCODING_UTF8);
-    }
 }
 
 namespace {
@@ -712,7 +676,6 @@ void update_checker()
                         download_file(lang_update.aUpdateFile.aURL, lang_update.aUpdateFile.nSize, lang_update.aUpdateFile.aHash, aFileName);
                     }
                 }
-                CreateValidUpdateDir(aUpdateInfo);
                 OUString aSeeAlsoURL = aUpdateInfo.aSeeAlsoURL;
                 std::shared_ptr< comphelper::ConfigurationChanges > batch(
                         comphelper::ConfigurationChanges::create());
@@ -748,14 +711,6 @@ void update_checker()
     }
 }
 
-OUString Updater::getUpdateInfoURL()
-{
-    OUString aUpdateInfoURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/update.info");
-    rtl::Bootstrap::expandMacros(aUpdateInfoURL);
-
-    return aUpdateInfoURL;
-}
-
 OUString Updater::getUpdateInfoLog()
 {
     OUString aUpdateInfoURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/patch/updating.log");
@@ -771,15 +726,6 @@ OUString Updater::getPatchDirURL()
 
     return aPatchDirURL;
 }
-
-OUString Updater::getUpdateDirURL()
-{
-    OUString aUpdateDirURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/update_dir/");
-    rtl::Bootstrap::expandMacros(aUpdateDirURL);
-
-    return aUpdateDirURL;
-}
-
 
 OUString Updater::getUpdateFileURL()
 {
