@@ -120,7 +120,7 @@ namespace dbtools
         return  aTemp.makeStringAndClear();
     }
 
-    css::util::Date DBTypeConversion::toDate(sal_Int32 _nVal)
+    css::util::Date DBTypeConversion::toDate(const sal_Int32 _nVal)
     {
         css::util::Date aReturn;
         aReturn.Day = (sal_uInt16)(_nVal % 100);
@@ -130,7 +130,7 @@ namespace dbtools
     }
 
 
-    css::util::Time DBTypeConversion::toTime(sal_Int64 _nVal)
+    css::util::Time DBTypeConversion::toTime(const sal_Int64 _nVal)
     {
         css::util::Time aReturn;
         sal_uInt64 unVal = static_cast<sal_uInt64>(_nVal >= 0 ? _nVal : -_nVal);
@@ -202,7 +202,7 @@ namespace dbtools
         return nDays;
     }
 
-    static void implBuildFromRelative( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_Int16& rYear)
+    static void implBuildFromRelative( const sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_Int16& rYear)
     {
         sal_Int32   nTempDays;
         sal_Int32   i = 0;
@@ -274,7 +274,7 @@ namespace dbtools
         return ((double)nTime) + toDouble(aTimePart);
     }
 
-    static void addDays(sal_Int32 nDays, css::util::Date& _rDate)
+    static void addDays(const sal_Int32 nDays, css::util::Date& _rDate)
     {
         sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
 
@@ -291,13 +291,13 @@ namespace dbtools
         {
             _rDate.Day      = 1;
             _rDate.Month    = 1;
-            _rDate.Year     = 00;
+            _rDate.Year     = 1;
         }
         else
             implBuildFromRelative( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
     }
 
-    static void subDays( sal_Int32 nDays, css::util::Date& _rDate )
+    static void subDays(const sal_Int32 nDays, css::util::Date& _rDate )
     {
         sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
 
@@ -314,13 +314,13 @@ namespace dbtools
         {
             _rDate.Day      = 1;
             _rDate.Month    = 1;
-            _rDate.Year     = 00;
+            _rDate.Year     = 1;
         }
         else
             implBuildFromRelative( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
     }
 
-    css::util::Date DBTypeConversion::toDate(double dVal, const css::util::Date& _rNullDate)
+    css::util::Date DBTypeConversion::toDate(const double dVal, const css::util::Date& _rNullDate)
     {
         css::util::Date aRet = _rNullDate;
 
@@ -333,9 +333,9 @@ namespace dbtools
         return aRet;
     }
 
-    css::util::Time DBTypeConversion::toTime(double dVal, short nDigits)
+    css::util::Time DBTypeConversion::toTime(const double dVal, short nDigits)
     {
-        sal_Int32 nDays     = (sal_Int32)dVal;
+        const sal_Int32 nDays     = (sal_Int32)dVal;
         sal_Int64 nNS;
         {
             double fSeconds((dVal - (double)nDays) * (fNanoSecondsPerDay / nanoSecInSec));
@@ -381,7 +381,7 @@ namespace dbtools
         return aRet;
     }
 
-    css::util::DateTime DBTypeConversion::toDateTime(double dVal, const css::util::Date& _rNullDate)
+    css::util::DateTime DBTypeConversion::toDateTime(const double dVal, const css::util::Date& _rNullDate)
     {
         css::util::Date aDate = toDate(dVal, _rNullDate);
         // there is not enough precision in a double to have both a date
