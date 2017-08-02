@@ -111,7 +111,7 @@ public:
     const ImpSvNumberformatInfo& Info() const { return aI; }
 
     // Get count of substrings (symbols)
-    sal_uInt16 GetCount() const { return nAnzStrings;}
+    sal_uInt16 GetCount() const { return nStringsCnt;}
 
     Color* GetColor() const { return pColor; }
     void SetColor( Color* pCol, OUString const & rName )
@@ -132,7 +132,7 @@ private:
     ImpSvNumberformatInfo aI;           // helper struct for remaining information
     OUString sColorName;                // color name
     Color* pColor;                      // pointer to color of subformat
-    sal_uInt16 nAnzStrings;             // count of symbols
+    sal_uInt16 nStringsCnt;             // count of symbols
     SvNumberNatNum aNatNum;             // DoubleByteNumber
 
 };
