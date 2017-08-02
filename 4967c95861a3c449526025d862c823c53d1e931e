@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_aeed5727",
+        "filename": "connectivity/source/commontools/dbconversion.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-08-02T16:56:43Z",
+      "side": 1,
+      "message": "Correction: Let\u0027s take for example 01/01/0501 (1st January 501). The nDays value is 182622 (...)...\n\nYour algorithm gives year 500.\n\n(...)",
+      "parentUuid": "1a430d35_cb11b55f",
+      "range": {
+        "startLine": 204,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 89
+      },
+      "revId": "4967c95861a3c449526025d862c823c53d1e931e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_4b2f85a1",
         "filename": "connectivity/source/commontools/dbconversion.cxx",
         "patchSetId": 1
