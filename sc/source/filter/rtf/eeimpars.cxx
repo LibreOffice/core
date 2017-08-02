@@ -406,7 +406,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 mpDoc->SetEditText(ScAddress(nCol,nRow,nTab), mpEngine->CreateTextObject(pE->aSel));
             }
             if ( !pE->maImageList.empty() )
-                bHasGraphics |= GraphicSize( nCol, nRow, nTab, pE );
+                bHasGraphics |= GraphicSize( nCol, nRow, pE );
             if ( pE->pName )
             {   // Anchor Name => RangeName
                 if (!pRangeNames->findByUpperName(ScGlobal::pCharClass->uppercase(*pE->pName)))
@@ -477,7 +477,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
     }
 }
 
-bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseEntry* pE )
+bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, ScEEParseEntry* pE )
 {
     if ( pE->maImageList.empty() )
         return false;

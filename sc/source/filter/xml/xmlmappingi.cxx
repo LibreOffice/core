@@ -24,9 +24,7 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLMappingsContext::ScXMLMappingsContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+ScXMLMappingsContext::ScXMLMappingsContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport )
 {
     // has no attributes
@@ -48,7 +46,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingsContext::c
     {
         case XML_ELEMENT( CALC_EXT, XML_DATA_MAPPING ):
         {
-            pContext = new ScXMLMappingContext( GetScImport(), nElement, xAttrList );
+            pContext = new ScXMLMappingContext( GetScImport(), xAttrList );
         }
         break;
     }
@@ -60,7 +58,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLMappingsContext::c
 }
 
 ScXMLMappingContext::ScXMLMappingContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) :
     ScXMLImportContext( rImport )
 {

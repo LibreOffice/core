@@ -711,7 +711,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
             bIsEmpty = false;
             // bTextP = true;
 
-            pContext = new ScXMLCellTextParaContext(rXMLImport, nElement, *this);
+            pContext = new ScXMLCellTextParaContext(rXMLImport, *this);
         }
         break;
         case XML_ELEMENT( TABLE, XML_SUB_TABLE ):
@@ -725,7 +725,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
             if (!pDetectiveObjVec)
                 pDetectiveObjVec = new ScMyImpDetectiveObjVec;
             pContext = new ScXMLDetectiveContext(
-                rXMLImport, nElement, pDetectiveObjVec );
+                rXMLImport, pDetectiveObjVec );
         }
         break;
         case XML_ELEMENT( TABLE, XML_CELL_RANGE_SOURCE ):
@@ -734,7 +734,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
             if (!pCellRangeSource)
                 pCellRangeSource = new ScMyImpCellRangeSource();
             pContext = new ScXMLCellRangeSourceContext(
-                rXMLImport, nElement, xAttrList, pCellRangeSource );
+                rXMLImport, xAttrList, pCellRangeSource );
         }
         break;
     }

@@ -1352,7 +1352,6 @@ public:
     void                WriteEscherProperties(
                             ScfPropertySet& rPropSet,
                             XclChObjectTable& rGradientTable,
-                            XclChObjectTable& rHatchTable,
                             XclChObjectTable& rBitmapTable,
                             const XclChEscherFormat& rEscherFmt,
                             const XclChPicFormat* pPicFmt,

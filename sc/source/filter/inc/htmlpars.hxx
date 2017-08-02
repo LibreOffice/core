@@ -586,7 +586,7 @@ private:
     /** Processes the <meta> tag. */
     void                MetaOn( const HtmlImportInfo& rInfo );
     /** Opens the title of the HTML document (<title> tag). */
-    void                TitleOn( const HtmlImportInfo& rInfo );
+    void                TitleOn();
     /** Closes the title of the HTML document (</title> tag). */
     void                TitleOff( const HtmlImportInfo& rInfo );
 

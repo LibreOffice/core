@@ -321,7 +321,7 @@ class XclExpPivotTable : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit            XclExpPivotTable( const XclExpRoot& rRoot,
-                            const ScDPObject& rDPObj, const XclExpPivotCache& rPCache, size_t nId );
+                            const ScDPObject& rDPObj, const XclExpPivotCache& rPCache );
 
     /** Returns a pivot cache field. */
     const XclExpPCField* GetCacheField( sal_uInt16 nCacheIdx ) const;

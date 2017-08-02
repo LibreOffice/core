@@ -31,7 +31,6 @@ using namespace xmloff::token;
 
 ScXMLConsolidationContext::ScXMLConsolidationContext(
         ScXMLImport& rImport,
-        sal_Int32 /*nElement*/,
         const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) :
     ScXMLImportContext( rImport ),
     eFunction( SUBTOTAL_FUNC_NONE ),

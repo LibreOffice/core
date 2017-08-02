@@ -31,9 +31,7 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport )
 {
     // here are no attributes
@@ -46,12 +44,12 @@ ScXMLDDELinksContext::~ScXMLDDELinksContext()
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinksContext::createFastChildContext(
-    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
     if ( nElement == XML_ELEMENT( TABLE, XML_DDE_LINK) )
-        pContext = new ScXMLDDELinkContext(GetScImport(), nElement, xAttrList);
+        pContext = new ScXMLDDELinkContext(GetScImport());
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport() );
@@ -59,9 +57,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinksContext::c
     return pContext;
 }
 
-ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport ),
     aDDELinkTable(),
     aDDELinkRow(),
@@ -88,10 +84,10 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDELinkContext::cr
     switch (nElement)
     {
         case XML_ELEMENT( OFFICE, XML_DDE_SOURCE ):
-            pContext = new ScXMLDDESourceContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDDESourceContext(GetScImport(), xAttrList, this);
         break;
         case XML_ELEMENT( TABLE, XML_TABLE ):
-            pContext = new ScXMLDDETableContext(GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDDETableContext(GetScImport(), this);
         break;
     }
 
@@ -186,7 +182,6 @@ void SAL_CALL ScXMLDDELinkContext::endFastElement( sal_Int32 /*nElement*/ )
 }
 
 ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),
@@ -233,8 +228,6 @@ void SAL_CALL ScXMLDDESourceContext::endFastElement( sal_Int32 /*nElement*/ )
 }
 
 ScXMLDDETableContext::ScXMLDDETableContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),
     pDDELink(pTempDDELink)
@@ -254,10 +247,10 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDETableContext::c
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_TABLE_COLUMN ):
-            pContext = new ScXMLDDEColumnContext(GetScImport(), nElement, xAttrList, pDDELink);
+            pContext = new ScXMLDDEColumnContext(GetScImport(), xAttrList, pDDELink);
         break;
         case XML_ELEMENT( TABLE, XML_TABLE_ROW ):
-            pContext = new ScXMLDDERowContext(GetScImport(), nElement, xAttrList, pDDELink);
+            pContext = new ScXMLDDERowContext(GetScImport(), xAttrList, pDDELink);
         break;
     }
 
@@ -268,7 +261,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDETableContext::c
 }
 
 ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),
@@ -293,7 +285,6 @@ ScXMLDDEColumnContext::~ScXMLDDEColumnContext()
 }
 
 ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),
@@ -323,7 +314,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDDERowContext::cre
     SvXMLImportContext *pContext = nullptr;
 
     if (nElement == XML_ELEMENT( TABLE, XML_TABLE_CELL ))
-        pContext = new ScXMLDDECellContext(GetScImport(), nElement, xAttrList, pDDELink);
+        pContext = new ScXMLDDECellContext(GetScImport(), xAttrList, pDDELink);
 
     if (!pContext)
         pContext = new SvXMLImportContext( GetImport() );
@@ -337,7 +328,6 @@ void SAL_CALL ScXMLDDERowContext::endFastElement( sal_Int32 /*nElement*/ )
 }
 
 ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLDDELinkContext* pTempDDELink) :
     ScXMLImportContext( rImport ),

@@ -41,7 +41,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 ScXMLFilterContext::ConnStackItem::ConnStackItem(bool bOr) : mbOr(bOr), mnCondCount(0) {}
 
 ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
-                                        sal_Int32 /*nElement*/,
                                         const Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                         ScQueryParam& rParam,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
@@ -110,13 +109,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLFilterContext::cre
         case XML_ELEMENT( TABLE, XML_FILTER_AND ):
         {
             pContext = new ScXMLAndContext(
-                GetScImport(), nElement, xAttrList, mrQueryParam, this);
+                GetScImport(), mrQueryParam, this);
         }
         break;
         case XML_ELEMENT( TABLE, XML_FILTER_OR ):
         {
             pContext = new ScXMLOrContext(
-                GetScImport(), nElement, xAttrList, mrQueryParam, this);
+                GetScImport(), mrQueryParam, this);
         }
         break;
         case XML_ELEMENT( TABLE, XML_FILTER_CONDITION ):
@@ -192,8 +191,6 @@ bool ScXMLFilterContext::GetConnection()
 }
 
 ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
-                                  sal_Int32 /*nElement*/,
-                                  const uno::Reference<xml::sax::XFastAttributeList>& /* xAttrList */,
                                   ScQueryParam& rParam,
                                   ScXMLFilterContext* pTempFilterContext) :
     ScXMLImportContext( rImport ),
@@ -239,8 +236,6 @@ void SAL_CALL ScXMLAndContext::endFastElement( sal_Int32 /*nElement*/ )
 }
 
 ScXMLOrContext::ScXMLOrContext( ScXMLImport& rImport,
-                                sal_Int32 /*nElement*/,
-                                const Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */,
                                 ScQueryParam& rParam,
                                 ScXMLFilterContext* pTempFilterContext) :
     ScXMLImportContext( rImport ),
@@ -264,7 +259,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLOrContext::createF
         case XML_ELEMENT( TABLE, XML_FILTER_AND ):
         {
             pContext = new ScXMLAndContext(
-                GetScImport(), nElement, xAttrList, mrQueryParam, pFilterContext);
+                GetScImport(), mrQueryParam, pFilterContext);
         }
         break;
         case XML_ELEMENT( TABLE, XML_FILTER_CONDITION ):
@@ -487,7 +482,6 @@ ScXMLSetItemContext::~ScXMLSetItemContext()
 }
 
 ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLDataPilotTableContext* pTempDataPilotTableContext) :
     ScXMLImportContext( rImport ),
@@ -559,12 +553,12 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPFilterContext::c
     {
         case XML_ELEMENT( TABLE, XML_FILTER_AND ):
         {
-            pContext = new ScXMLDPAndContext( GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDPAndContext( GetScImport(), this);
         }
         break;
         case XML_ELEMENT( TABLE, XML_FILTER_OR ):
         {
-            pContext = new ScXMLDPOrContext( GetScImport(), nElement, xAttrList, this);
+            pContext = new ScXMLDPOrContext( GetScImport(), this);
         }
         break;
         case XML_ELEMENT( TABLE, XML_FILTER_CONDITION ):
@@ -603,8 +597,6 @@ void ScXMLDPFilterContext::AddFilterField (const ScQueryEntry& aFilterField)
 }
 
 ScXMLDPAndContext::ScXMLDPAndContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */,
                                       ScXMLDPFilterContext* pTempFilterContext) :
     ScXMLImportContext( rImport )
 {
@@ -647,9 +639,7 @@ void SAL_CALL ScXMLDPAndContext::endFastElement( sal_Int32 /*nElement*/ )
 }
 
 ScXMLDPOrContext::ScXMLDPOrContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */,
-                                      ScXMLDPFilterContext* pTempFilterContext) :
+                                    ScXMLDPFilterContext* pTempFilterContext) :
     ScXMLImportContext( rImport ),
     pFilterContext(pTempFilterContext)
 {
@@ -669,7 +659,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLDPOrContext::creat
     {
         case XML_ELEMENT( TABLE, XML_FILTER_AND ):
         {
-            pContext = new ScXMLDPAndContext( GetScImport(), nElement, xAttrList, pFilterContext);
+            pContext = new ScXMLDPAndContext( GetScImport(), pFilterContext);
         }
         break;
         case XML_ELEMENT( TABLE, XML_FILTER_CONDITION ):

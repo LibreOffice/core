@@ -21,7 +21,7 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLDataStreamContext::ScXMLDataStreamContext(
-    ScXMLImport& rImport, sal_Int32 /*nElement*/,
+    ScXMLImport& rImport,
     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList ) :
     ScXMLImportContext(rImport),
     mbRefreshOnEmpty(false),

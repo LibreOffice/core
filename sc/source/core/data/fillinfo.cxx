@@ -50,7 +50,7 @@
 
 static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
                             ScDocument* pDoc, RowInfo* pRowInfo,
-                            SCCOL nX1, SCROW nY1, SCCOL /* nX2 */, SCROW /* nY2 */, SCTAB nTab,
+                            SCCOL nX1, SCROW nY1, SCTAB nTab,
                             SCCOL& rStartX, SCROW& rStartY, SCCOL& rEndX, SCROW& rEndY )
 {
     CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nX+1];
@@ -739,7 +739,7 @@ void ScDocument::FillInfo(
                     SCROW nStartY;
                     SCCOL nEndX;
                     SCROW nEndY;
-                    lcl_GetMergeRange( nSignedX,nSignedY, nArrRow, this,pRowInfo, nCol1,nRow1,nCol2,nRow2,nTab,
+                    lcl_GetMergeRange( nSignedX,nSignedY, nArrRow, this,pRowInfo, nCol1,nRow1,nTab,
                                         nStartX,nStartY, nEndX,nEndY );
                     const ScPatternAttr* pStartPattern = GetPattern( nStartX,nStartY,nTab );
                     const SfxItemSet* pStartCond = GetCondResult( nStartX,nStartY,nTab );
@@ -976,7 +976,7 @@ void ScDocument::FillInfo(
                 SCCOL nFirstRealDocColS, nLastRealDocColS;
                 SCROW nFirstRealDocRowS, nLastRealDocRowS;
                 lcl_GetMergeRange( nCurrDocCol, nCurrDocRow,
-                    nCellInfoY, this, pRowInfo, nCol1,nRow1,nCol2,nRow2,nTab,
+                    nCellInfoY, this, pRowInfo, nCol1,nRow1,nTab,
                     nFirstRealDocColS, nFirstRealDocRowS, nLastRealDocColS, nLastRealDocRowS );
 
                 // *complete* merged range in document coordinates

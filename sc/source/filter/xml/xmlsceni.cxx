@@ -37,7 +37,6 @@ using namespace xmloff::token;
 
 ScXMLTableScenarioContext::ScXMLTableScenarioContext(
         ScXMLImport& rImport,
-        sal_Int32 /*nElement*/,
         const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ):
     ScXMLImportContext( rImport ),
     aBorderColor( COL_BLACK ),

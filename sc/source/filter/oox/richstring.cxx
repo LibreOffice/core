@@ -300,12 +300,12 @@ RichString::RichString( const WorkbookHelper& rHelper ) :
 {
 }
 
-RichStringPortionRef RichString::importText( const AttributeList& )
+RichStringPortionRef RichString::importText()
 {
     return createPortion();
 }
 
-RichStringPortionRef RichString::importRun( const AttributeList& )
+RichStringPortionRef RichString::importRun()
 {
     return createPortion();
 }

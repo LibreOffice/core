@@ -231,8 +231,7 @@ protected:
 public:
     ScXMLDocContext_Impl( ScXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const uno::Reference<xml::sax::XAttributeList>& xAttrList );
+        const OUString& rLName );
 
     ScXMLDocContext_Impl( ScXMLImport& rImport );
 
@@ -253,8 +252,7 @@ public:
 };
 
 ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                                           const OUString& rLName,
-                                           const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */ ) :
+                                           const OUString& rLName ) :
 SvXMLImportContext( rImport, nPrfx, rLName )
 {
 
@@ -272,11 +270,9 @@ class ScXMLFlatDocContext_Impl
 public:
     ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
-        const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
     ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
-        const uno::Reference<xml::sax::XFastAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -295,17 +291,15 @@ public:
 
 ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
                                                    sal_uInt16 i_nPrefix, const OUString & i_rLName,
-                                                   const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
                                                    const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
 SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
-ScXMLDocContext_Impl(i_rImport, i_nPrefix, i_rLName, i_xAttrList),
+ScXMLDocContext_Impl(i_rImport, i_nPrefix, i_rLName),
 SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
                          i_xDocProps)
 {
 }
 
 ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
-                                                   const uno::Reference<xml::sax::XFastAttributeList>& /*i_xAttrList*/,
                                                    const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
 SvXMLImportContext(i_rImport),
 ScXMLDocContext_Impl(i_rImport),
@@ -673,7 +667,7 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
                 GetModel(), uno::UNO_QUERY_THROW);
             // flat OpenDocument file format
             pContext = new ScXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
-                xAttrList, xDPS->getDocumentProperties());
+                xDPS->getDocumentProperties());
     }
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
@@ -682,7 +676,7 @@ SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
 }
 
 SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
-        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+        const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -700,7 +694,7 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
             GetModel(), uno::UNO_QUERY_THROW);
         // flat OpenDocument file format
         pContext = new ScXMLFlatDocContext_Impl( *this,
-            xAttrList, xDPS->getDocumentProperties());
+            xDPS->getDocumentProperties());
         break;
     }
 

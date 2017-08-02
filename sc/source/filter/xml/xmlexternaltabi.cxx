@@ -42,7 +42,7 @@ using namespace ::com::sun::star::xml::sax;
 using ::com::sun::star::uno::Reference;
 
 ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
-    ScXMLImport& rImport, sal_Int32 /*nElement*/,
+    ScXMLImport& rImport,
     const Reference<XFastAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
     ScXMLImportContext( rImport ),
     mrScImport(rImport),
@@ -119,8 +119,7 @@ void SAL_CALL ScXMLExternalRefTabSourceContext::endFastElement( sal_Int32 /*nEle
 }
 
 ScXMLExternalRefRowsContext::ScXMLExternalRefRowsContext(
-    ScXMLImport& rImport, sal_Int32 /* nElement */,
-    const Reference<XFastAttributeList>& /* xAttrList */, ScXMLExternalTabData& rRefInfo ) :
+    ScXMLImport& rImport, ScXMLExternalTabData& rRefInfo ) :
     ScXMLImportContext( rImport ),
     mrScImport(rImport),
     mrExternalRefInfo(rRefInfo)
@@ -145,10 +144,10 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowsContext::createFas
         case XML_TOK_TABLE_ROWS_HEADER_ROWS:
         case XML_TOK_TABLE_ROWS_ROWS:
             return new ScXMLExternalRefRowsContext(
-                mrScImport, nElement, xAttrList, mrExternalRefInfo);
+                mrScImport, mrExternalRefInfo);
         case XML_TOK_TABLE_ROWS_ROW:
             return new ScXMLExternalRefRowContext(
-                mrScImport, nElement, xAttrList, mrExternalRefInfo);
+                mrScImport, xAttrList, mrExternalRefInfo);
         default:
             ;
     }
@@ -156,7 +155,7 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowsContext::createFas
 }
 
 ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
-    ScXMLImport& rImport, sal_Int32 /* nElement */,
+    ScXMLImport& rImport,
     const Reference<XFastAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
     ScXMLImportContext( rImport ),
     mrScImport(rImport),
@@ -195,7 +194,7 @@ Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefRowContext::createFast
     const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get( nElement );
     if (nToken == XML_TOK_TABLE_ROW_CELL || nToken == XML_TOK_TABLE_ROW_COVERED_CELL)
-        return new ScXMLExternalRefCellContext(mrScImport, nElement, xAttrList, mrExternalRefInfo);
+        return new ScXMLExternalRefCellContext(mrScImport, xAttrList, mrExternalRefInfo);
 
     return new SvXMLImportContext( GetImport() );
 }
@@ -231,7 +230,7 @@ void SAL_CALL ScXMLExternalRefRowContext::endFastElement( sal_Int32 /* nElement 
 }
 
 ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
-    ScXMLImport& rImport, sal_Int32 /*nElement*/,
+    ScXMLImport& rImport,
     const Reference<XFastAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
     ScXMLImportContext( rImport ),
     mrScImport(rImport),
@@ -336,12 +335,12 @@ ScXMLExternalRefCellContext::~ScXMLExternalRefCellContext()
 }
 
 Reference< XFastContextHandler > SAL_CALL ScXMLExternalRefCellContext::createFastChildContext(
-    sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
+    sal_Int32 nElement, const Reference< XFastAttributeList >& /*xAttrList*/ )
 {
     const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowCellElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get( nElement );
     if (nToken == XML_TOK_TABLE_ROW_CELL_P)
-        return new ScXMLExternalRefCellTextContext(mrScImport, nElement, xAttrList, *this);
+        return new ScXMLExternalRefCellTextContext(mrScImport, *this);
 
     return new SvXMLImportContext( GetImport() );
 }
@@ -380,8 +379,7 @@ void ScXMLExternalRefCellContext::SetCellString(const OUString& rStr)
 }
 
 ScXMLExternalRefCellTextContext::ScXMLExternalRefCellTextContext(
-    ScXMLImport& rImport, sal_Int32 /*nElement*/,
-    const Reference<XFastAttributeList>& /*xAttrList*/,
+    ScXMLImport& rImport,
     ScXMLExternalRefCellContext& rParent ) :
     ScXMLImportContext( rImport ),
     mrParent(rParent)

@@ -28,8 +28,7 @@
 class ScXMLDDELinksContext : public ScXMLImportContext
 {
 public:
-    ScXMLDDELinksContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
+    ScXMLDDELinksContext( ScXMLImport& rImport);
 
     virtual ~ScXMLDDELinksContext() override;
 
@@ -60,8 +59,7 @@ class ScXMLDDELinkContext : public ScXMLImportContext
     sal_uInt8       nMode;
 
 public:
-    ScXMLDDELinkContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
+    ScXMLDDELinkContext( ScXMLImport& rImport);
 
     virtual ~ScXMLDDELinkContext() override;
 
@@ -86,7 +84,7 @@ class ScXMLDDESourceContext : public ScXMLImportContext
     ScXMLDDELinkContext* pDDELink;
 
 public:
-    ScXMLDDESourceContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDDESourceContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
@@ -100,8 +98,7 @@ class ScXMLDDETableContext : public ScXMLImportContext
     ScXMLDDELinkContext* pDDELink;
 
 public:
-    ScXMLDDETableContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLDDETableContext( ScXMLImport& rImport,
                         ScXMLDDELinkContext* pDDELink);
 
     virtual ~ScXMLDDETableContext() override;
@@ -115,7 +112,7 @@ class ScXMLDDEColumnContext : public ScXMLImportContext
     ScXMLDDELinkContext* pDDELink;
 
 public:
-    ScXMLDDEColumnContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDDEColumnContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
@@ -128,7 +125,7 @@ class ScXMLDDERowContext : public ScXMLImportContext
     sal_Int32               nRows;
 
 public:
-    ScXMLDDERowContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDDERowContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDDELinkContext* pDDELink);
 
@@ -152,7 +149,7 @@ class ScXMLDDECellContext : public ScXMLImportContext
     ScXMLDDELinkContext* pDDELink;
 
 public:
-    ScXMLDDECellContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDDECellContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDDELinkContext* pDDELink);
 

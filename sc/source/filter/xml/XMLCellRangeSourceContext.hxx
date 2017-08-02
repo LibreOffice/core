@@ -43,7 +43,6 @@ class ScXMLCellRangeSourceContext : public ScXMLImportContext
 public:
                                 ScXMLCellRangeSourceContext(
                                     ScXMLImport& rImport,
-                                    sal_Int32 nElement,
                                     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                                     ScMyImpCellRangeSource* pCellRangeSource
                                     );

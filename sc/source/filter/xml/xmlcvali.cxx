@@ -58,7 +58,7 @@ class ScXMLContentValidationContext : public ScXMLImportContext
 
 public:
 
-    ScXMLContentValidationContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLContentValidationContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
@@ -86,7 +86,7 @@ class ScXMLHelpMessageContext : public ScXMLImportContext
 
 public:
 
-    ScXMLHelpMessageContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLHelpMessageContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
@@ -109,7 +109,7 @@ class ScXMLErrorMessageContext : public ScXMLImportContext
 
 public:
 
-    ScXMLErrorMessageContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLErrorMessageContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
@@ -128,7 +128,7 @@ class ScXMLErrorMacroContext : public ScXMLImportContext
 
 public:
 
-    ScXMLErrorMacroContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLErrorMacroContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
@@ -138,9 +138,7 @@ public:
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
-ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
-                                      const css::uno::Reference<css::xml::sax::XFastAttributeList>& /* xAttrList */ ) :
+ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport )
 {
     // here are no attributes
@@ -158,7 +156,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidations
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_CONTENT_VALIDATION ):
-            pContext = new ScXMLContentValidationContext( GetScImport(), nElement, xAttrList);
+            pContext = new ScXMLContentValidationContext( GetScImport(), xAttrList);
         break;
     }
 
@@ -169,7 +167,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidations
 }
 
 ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) :
     ScXMLImportContext( rImport ),
     nShowList(sheet::TableValidationVisibility::UNSORTED),
@@ -252,13 +249,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationC
     switch (nElement)
     {
     case XML_ELEMENT( TABLE, XML_HELP_MESSAGE ):
-        pContext = new ScXMLHelpMessageContext( GetScImport(), nElement, xAttrList, this);
+        pContext = new ScXMLHelpMessageContext( GetScImport(), xAttrList, this);
         break;
     case XML_ELEMENT( TABLE, XML_ERROR_MESSAGE ):
-        pContext = new ScXMLErrorMessageContext( GetScImport(), nElement, xAttrList, this);
+        pContext = new ScXMLErrorMessageContext( GetScImport(), xAttrList, this);
         break;
     case XML_ELEMENT( TABLE, XML_ERROR_MACRO ):
-        pContext = new ScXMLErrorMacroContext( GetScImport(), nElement, xAttrList, this);
+        pContext = new ScXMLErrorMacroContext( GetScImport(), xAttrList, this);
         break;
     }
 
@@ -443,7 +440,6 @@ void ScXMLContentValidationContext::SetErrorMacro(const bool bExecute)
 }
 
 ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
     ScXMLImportContext( rImport ),
@@ -475,7 +471,7 @@ ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
 
 SvXMLImportContext *ScXMLHelpMessageContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -487,7 +483,7 @@ SvXMLImportContext *ScXMLHelpMessageContext::CreateChildContext( sal_uInt16 nPre
             if(nParagraphCount)
                 sMessage.append('\n');
             ++nParagraphCount;
-            pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sMessage);
+            pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, sMessage);
         }
         break;
     }
@@ -504,7 +500,6 @@ void SAL_CALL ScXMLHelpMessageContext::endFastElement( sal_Int32 /*nElement*/ )
 }
 
 ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
     ScXMLImportContext( rImport ),
@@ -540,7 +535,7 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
 
 SvXMLImportContext *ScXMLErrorMessageContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
-                                            const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -552,7 +547,7 @@ SvXMLImportContext *ScXMLErrorMessageContext::CreateChildContext( sal_uInt16 nPr
             if(nParagraphCount)
                 sMessage.append('\n');
             ++nParagraphCount;
-            pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sMessage);
+            pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, sMessage);
         }
         break;
     }
@@ -569,7 +564,6 @@ void SAL_CALL ScXMLErrorMessageContext::endFastElement( sal_Int32 /*nElement*/ )
 }
 
 ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLContentValidationContext* pTempValidationContext) :
     ScXMLImportContext( rImport ),

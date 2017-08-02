@@ -20,8 +20,7 @@ class ScXMLMappingsContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLMappingsContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
+    ScXMLMappingsContext( ScXMLImport& rImport );
 
     virtual ~ScXMLMappingsContext() override;
 
@@ -35,7 +34,7 @@ class ScXMLMappingContext : public ScXMLImportContext
 
 public:
 
-    ScXMLMappingContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLMappingContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
 
     virtual ~ScXMLMappingContext() override;

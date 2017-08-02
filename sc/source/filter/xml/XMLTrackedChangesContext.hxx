@@ -34,7 +34,7 @@ class ScXMLTrackedChangesContext : public ScXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
 public:
-    ScXMLTrackedChangesContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLTrackedChangesContext( ScXMLImport& rImport,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLTrackedChangesContext() override;

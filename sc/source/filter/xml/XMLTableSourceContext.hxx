@@ -35,7 +35,7 @@ class ScXMLTableSourceContext : public ScXMLImportContext
     css::sheet::SheetLinkMode          nMode;
 
 public:
-    ScXMLTableSourceContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLTableSourceContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
 
     virtual ~ScXMLTableSourceContext() override;
