@@ -124,6 +124,7 @@ static const ExtensionMap aWriterExtensionMap[] =
     { "odt",   "writer8" },
     { "ott",   "writer8_template" },
     { "pdf",   "writer_pdf_Export" },
+    { "rtf",   "Rich Text Format" },
     { "txt",   "Text" },
     { "xhtml", "XHTML Writer File" },
     { "png",   "writer_png_Export" },
