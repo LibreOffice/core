@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_ebce71b3",
+        "filename": "sc/inc/document.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2017-08-02T05:44:08Z",
+      "side": 1,
+      "message": "Do we need a check for 0 since nAdjustHeightLock is unsigned ?",
+      "revId": "cf01b93582997e595a0938826eae27a5c51d2f13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a461143_f17c6c22",
         "filename": "sc/qa/unit/subsequent_filters-test.cxx",
         "patchSetId": 8
