@@ -41,7 +41,7 @@ class ScXMLCalculationSettingsContext : public ScXMLImportContext
     bool bMatchWholeCell;
 
 public:
-    ScXMLCalculationSettingsContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLCalculationSettingsContext( ScXMLImport& rImport,
                         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList);
 
     virtual ~ScXMLCalculationSettingsContext() override;
@@ -59,7 +59,7 @@ public:
 class ScXMLNullDateContext : public ScXMLImportContext
 {
 public:
-    ScXMLNullDateContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLNullDateContext( ScXMLImport& rImport,
                         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
     virtual ~ScXMLNullDateContext() override;
@@ -71,7 +71,7 @@ public:
 class ScXMLIterationContext : public ScXMLImportContext
 {
 public:
-    ScXMLIterationContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLIterationContext( ScXMLImport& rImport,
                         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
     virtual ~ScXMLIterationContext() override;

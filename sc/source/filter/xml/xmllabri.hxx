@@ -27,9 +27,7 @@ class ScXMLLabelRangesContext : public ScXMLImportContext
 {
 public:
                                 ScXMLLabelRangesContext(
-                                    ScXMLImport& rImport,
-                                    sal_Int32 nElement,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList
+                                    ScXMLImport& rImport
                                     );
     virtual                     ~ScXMLLabelRangesContext() override;
 
@@ -50,7 +48,6 @@ private:
 public:
                                 ScXMLLabelRangeContext(
                                     ScXMLImport& rImport,
-                                    sal_Int32 nElement,
                                     const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList
                                     );
     virtual                     ~ScXMLLabelRangeContext() override;

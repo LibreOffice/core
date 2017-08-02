@@ -142,9 +142,7 @@ class ScXMLExport : public SvXMLExport
 
     void CollectInternalShape( css::uno::Reference< css::drawing::XShape > const & xShape );
 
-    static css::table::CellRangeAddress GetEndAddress(const css::uno::Reference<css::sheet::XSpreadsheet>& xTable,
-                                                        const sal_Int32 nTable);
-//  ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
+    static css::table::CellRangeAddress GetEndAddress(const css::uno::Reference<css::sheet::XSpreadsheet>& xTable);
     void GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks );
     void GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp );
     void WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,

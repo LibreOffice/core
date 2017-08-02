@@ -46,7 +46,7 @@ protected:
                         mpParser;      // must reset before mpEngine resets
     RowHeightMap        maRowHeights;
 
-    bool                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    bool                GraphicSize( SCCOL nCol, SCROW nRow,
                                      ScEEParseEntry* );
     void                InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                        ScEEParseEntry* );

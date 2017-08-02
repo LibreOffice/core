@@ -70,8 +70,7 @@ public:
     };
 
     ScXMLNamedExpressionsContext(
-        ScXMLImport& rImport, sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+        ScXMLImport& rImport,
         Inserter* pInserter );
 
     virtual ~ScXMLNamedExpressionsContext() override;
@@ -88,7 +87,7 @@ class ScXMLNamedRangeContext : public ScXMLImportContext
 public:
 
     ScXMLNamedRangeContext(
-        ScXMLImport& rImport, sal_Int32 nElement,
+        ScXMLImport& rImport,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 
@@ -106,7 +105,7 @@ class ScXMLNamedExpressionContext : public ScXMLImportContext
 public:
 
     ScXMLNamedExpressionContext(
-        ScXMLImport& rImport, sal_Int32 nElement,
+        ScXMLImport& rImport,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
 

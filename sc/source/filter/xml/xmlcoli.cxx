@@ -40,7 +40,6 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) :
     ScXMLImportContext( rImport ),
     sVisibility(GetXMLToken(XML_VISIBLE))
@@ -147,7 +146,6 @@ void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
 }
 
 ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       const bool bTempHeader, const bool bTempGroup) :
     ScXMLImportContext( rImport ),
@@ -189,21 +187,19 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableColsContext::
     switch (nElement)
     {
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN_GROUP ):
-        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableColsContext( GetScImport(), xAttrList,
                                                    false, true );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_HEADER_COLUMNS ):
-        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableColsContext( GetScImport(), xAttrList,
                                                    true, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMNS ):
-        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableColsContext( GetScImport(), xAttrList,
                                                    false, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN ):
-        pContext = new ScXMLTableColContext( GetScImport(), nElement, xAttrList//,
-                                                      //this
-                                                      );
+        pContext = new ScXMLTableColContext( GetScImport(), xAttrList );
         break;
     }
 

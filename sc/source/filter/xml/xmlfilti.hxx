@@ -55,7 +55,7 @@ class ScXMLFilterContext : public ScXMLImportContext
 
 public:
 
-    ScXMLFilterContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLFilterContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScQueryParam& rParam,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -79,8 +79,7 @@ class ScXMLAndContext : public ScXMLImportContext
 
 public:
 
-    ScXMLAndContext( ScXMLImport& rImport, sal_Int32 nElement,
-                     const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLAndContext( ScXMLImport& rImport,
                      ScQueryParam& rParam,
                      ScXMLFilterContext* pTempFilterContext);
 
@@ -99,8 +98,7 @@ class ScXMLOrContext : public ScXMLImportContext
 
 public:
 
-    ScXMLOrContext( ScXMLImport& rImport, sal_Int32 nElement,
-                    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLOrContext( ScXMLImport& rImport,
                     ScQueryParam& rParam,
                     ScXMLFilterContext* pTempFilterContext);
 
@@ -173,7 +171,7 @@ class ScXMLDPFilterContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDPFilterContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDPFilterContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pTempDataPilotTableContext);
 
@@ -222,8 +220,7 @@ class ScXMLDPAndContext : public ScXMLImportContext
     ScXMLDPFilterContext* pFilterContext;
 public:
 
-    ScXMLDPAndContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLDPAndContext( ScXMLImport& rImport,
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPAndContext() override;
@@ -239,8 +236,7 @@ class ScXMLDPOrContext : public ScXMLImportContext
     ScXMLDPFilterContext* pFilterContext;
 public:
 
-    ScXMLDPOrContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLDPOrContext( ScXMLImport& rImport,
                         ScXMLDPFilterContext* pTempFilterContext);
 
     virtual ~ScXMLDPOrContext() override;

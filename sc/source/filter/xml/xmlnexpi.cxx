@@ -47,8 +47,7 @@ void ScXMLNamedExpressionsContext::SheetLocalInserter::insert(ScMyNamedExpressio
 }
 
 ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext(
-    ScXMLImport& rImport, sal_Int32 /*nElement*/,
-    const uno::Reference<xml::sax::XFastAttributeList>& /* xAttrList */,
+    ScXMLImport& rImport,
     Inserter* pInserter ) :
     ScXMLImportContext( rImport ),
     mpInserter(pInserter)
@@ -70,11 +69,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNamedExpressionsCo
     {
         case XML_ELEMENT( TABLE, XML_NAMED_RANGE ):
             pContext = new ScXMLNamedRangeContext(
-                GetScImport(), nElement, xAttrList, mpInserter.get() );
+                GetScImport(), xAttrList, mpInserter.get() );
             break;
         case XML_ELEMENT( TABLE, XML_NAMED_EXPRESSION ):
             pContext = new ScXMLNamedExpressionContext(
-                GetScImport(), nElement, xAttrList, mpInserter.get() );
+                GetScImport(), xAttrList, mpInserter.get() );
             break;
     }
 
@@ -86,7 +85,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNamedExpressionsCo
 
 ScXMLNamedRangeContext::ScXMLNamedRangeContext(
     ScXMLImport& rImport,
-    sal_Int32 /*nElement*/,
     const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
     ScXMLNamedExpressionsContext::Inserter* pInserter ) :
     ScXMLImportContext( rImport ),
@@ -141,7 +139,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNamedRangeContext:
 }
 
 ScXMLNamedExpressionContext::ScXMLNamedExpressionContext(
-    ScXMLImport& rImport, sal_Int32 /*nElement*/,
+    ScXMLImport& rImport,
     const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
     ScXMLNamedExpressionsContext::Inserter* pInserter ) :
     ScXMLImportContext( rImport ),

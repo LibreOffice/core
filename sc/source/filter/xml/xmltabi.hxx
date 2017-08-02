@@ -67,7 +67,7 @@ public:
 class ScXMLTableProtectionContext : public ScXMLImportContext
 {
 public:
-    ScXMLTableProtectionContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLTableProtectionContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
 
     virtual ~ScXMLTableProtectionContext() override;

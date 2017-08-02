@@ -242,7 +242,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
             pStateSet->AddState(AccessibleStateType::ENABLED);
             pStateSet->AddState(AccessibleStateType::MULTI_LINE);
             pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
-            if (IsOpaque(xParentStates))
+            if (IsOpaque())
                 pStateSet->AddState(AccessibleStateType::OPAQUE);
             pStateSet->AddState(AccessibleStateType::SELECTABLE);
             if (IsSelected())
@@ -263,7 +263,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::MULTI_LINE);
         pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
         pStateSet->AddState(AccessibleStateType::FOCUSABLE);
-        if (IsOpaque(xParentStates))
+        if (IsOpaque())
             pStateSet->AddState(AccessibleStateType::OPAQUE);
         pStateSet->AddState(AccessibleStateType::SELECTABLE);
         if (IsSelected())
@@ -337,8 +337,7 @@ bool ScAccessibleCell::IsEditable(
     return bEditable;
 }
 
-bool ScAccessibleCell::IsOpaque(
-    const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
+bool ScAccessibleCell::IsOpaque()
 {
     // test whether there is a background color
     bool bOpaque(true);

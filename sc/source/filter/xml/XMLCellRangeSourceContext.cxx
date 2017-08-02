@@ -37,7 +37,6 @@ ScMyImpCellRangeSource::ScMyImpCellRangeSource() :
 
 ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         ScXMLImport& rImport,
-        sal_Int32 /*nElement*/,
         const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
         ScMyImpCellRangeSource* pCellRangeSource ) :
     ScXMLImportContext( rImport )

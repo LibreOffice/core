@@ -29,9 +29,7 @@ using namespace ::com::sun::star;
 using namespace xmloff::token;
 
 ScXMLLabelRangesContext::ScXMLLabelRangesContext(
-        ScXMLImport& rImport,
-        sal_Int32 /*nElement*/,
-        const uno::Reference< xml::sax::XFastAttributeList >& /* xAttrList */ ):
+        ScXMLImport& rImport ):
     ScXMLImportContext( rImport )
 {
     rImport.LockSolarMutex();
@@ -50,7 +48,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLLabelRangesContext
     switch (nElement)
     {
         case XML_ELEMENT( TABLE, XML_LABEL_RANGE ):
-            pContext = new ScXMLLabelRangeContext( GetScImport(), nElement, xAttrList );
+            pContext = new ScXMLLabelRangeContext( GetScImport(), xAttrList );
         break;
     }
     if( !pContext )
@@ -61,7 +59,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLLabelRangesContext
 
 ScXMLLabelRangeContext::ScXMLLabelRangeContext(
         ScXMLImport& rImport,
-        sal_Int32 /*nElement*/,
         const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) :
     ScXMLImportContext( rImport ),
     bColumnOrientation( false )

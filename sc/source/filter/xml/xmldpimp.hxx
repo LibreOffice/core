@@ -52,8 +52,7 @@ class ScXMLDataPilotTablesContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLDataPilotTablesContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
+    ScXMLDataPilotTablesContext( ScXMLImport& rImport);
 
     virtual ~ScXMLDataPilotTablesContext() override;
 
@@ -113,7 +112,7 @@ class ScXMLDataPilotTableContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDataPilotTableContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotTableContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
 
     virtual ~ScXMLDataPilotTableContext() override;
@@ -150,7 +149,7 @@ class ScXMLDPSourceSQLContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDPSourceSQLContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDPSourceSQLContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
 
@@ -163,7 +162,7 @@ class ScXMLDPSourceTableContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDPSourceTableContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDPSourceTableContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
 
@@ -176,7 +175,7 @@ class ScXMLDPSourceQueryContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDPSourceQueryContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDPSourceQueryContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
 
@@ -189,7 +188,7 @@ class ScXMLSourceServiceContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSourceServiceContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLSourceServiceContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
 
@@ -207,7 +206,7 @@ class ScXMLDataPilotGrandTotalContext : public ScXMLImportContext
 
 public:
     ScXMLDataPilotGrandTotalContext(
-        ScXMLImport& rImport, sal_Int32 nElement,
+        ScXMLImport& rImport,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
         ScXMLDataPilotTableContext* pTableContext );
 
@@ -222,7 +221,7 @@ class ScXMLSourceCellRangeContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSourceCellRangeContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLSourceCellRangeContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
 
@@ -264,7 +263,7 @@ class ScXMLDataPilotFieldContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDataPilotFieldContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotFieldContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotTableContext* pDataPilotTable);
 
@@ -304,7 +303,7 @@ class ScXMLDataPilotFieldReferenceContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLDataPilotFieldReferenceContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotFieldReferenceContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
 
@@ -317,7 +316,7 @@ class ScXMLDataPilotLevelContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDataPilotLevelContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotLevelContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
 
@@ -331,7 +330,7 @@ class ScXMLDataPilotDisplayInfoContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLDataPilotDisplayInfoContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotDisplayInfoContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
 
@@ -342,7 +341,7 @@ class ScXMLDataPilotSortInfoContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLDataPilotSortInfoContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotSortInfoContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
 
@@ -353,7 +352,7 @@ class ScXMLDataPilotLayoutInfoContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLDataPilotLayoutInfoContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotLayoutInfoContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
 
@@ -368,8 +367,7 @@ class ScXMLDataPilotSubTotalsContext : public ScXMLImportContext
     OUString                       maDisplayName;
 
 public:
-    ScXMLDataPilotSubTotalsContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLDataPilotSubTotalsContext( ScXMLImport& rImport,
                         ScXMLDataPilotFieldContext* pDataPilotField);
 
     virtual ~ScXMLDataPilotSubTotalsContext() override;
@@ -388,7 +386,7 @@ class ScXMLDataPilotSubTotalContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDataPilotSubTotalContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotSubTotalContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotSubTotalsContext* pDataPilotSubTotals);
 
@@ -401,8 +399,7 @@ class ScXMLDataPilotMembersContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDataPilotMembersContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLDataPilotMembersContext( ScXMLImport& rImport,
                         ScXMLDataPilotFieldContext* pDataPilotField);
 
     virtual ~ScXMLDataPilotMembersContext() override;
@@ -423,7 +420,7 @@ class ScXMLDataPilotMemberContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDataPilotMemberContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotMemberContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
 
@@ -438,7 +435,7 @@ class ScXMLDataPilotGroupsContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDataPilotGroupsContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
 
@@ -457,7 +454,7 @@ class ScXMLDataPilotGroupContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDataPilotGroupContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotGroupContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField);
 
@@ -478,7 +475,7 @@ class ScXMLDataPilotGroupMemberContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDataPilotGroupMemberContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDataPilotGroupMemberContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDataPilotGroupContext* pDataPilotGroup);
 

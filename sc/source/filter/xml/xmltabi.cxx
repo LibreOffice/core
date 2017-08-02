@@ -268,13 +268,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
             case XML_ELEMENT( TABLE, XML_TABLE_ROWS ):
                 // #i101319# don't discard rows in groups or header (repeat range)
                 return new ScXMLExternalRefRowsContext(
-                    GetScImport(), nElement, xAttrList, *pExternalRefInfo);
+                    GetScImport(), *pExternalRefInfo);
             case XML_ELEMENT( TABLE, XML_TABLE_ROW ):
                 return new ScXMLExternalRefRowContext(
-                    GetScImport(), nElement, xAttrList, *pExternalRefInfo);
+                    GetScImport(), xAttrList, *pExternalRefInfo);
             case XML_ELEMENT( TABLE, XML_TABLE_SOURCE ):
                 return new ScXMLExternalRefTabSourceContext(
-                    GetScImport(), nElement, xAttrList, *pExternalRefInfo);
+                    GetScImport(), xAttrList, *pExternalRefInfo);
             default:
                 ;
         }
@@ -289,29 +289,29 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     {
         SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
         pContext = new ScXMLNamedExpressionsContext(
-            GetScImport(), nElement, xAttrList,
+            GetScImport(),
             new ScXMLNamedExpressionsContext::SheetLocalInserter(GetScImport(), nTab));
     }
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN_GROUP ):
-        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableColsContext( GetScImport(), xAttrList,
                                                    false, true );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_HEADER_COLUMNS ):
-        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableColsContext( GetScImport(), xAttrList,
                                                    true, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMNS ):
-        pContext = new ScXMLTableColsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableColsContext( GetScImport(), xAttrList,
                                                    false, false );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_COLUMN ):
-        pContext = new ScXMLTableColContext( GetScImport(), nElement, xAttrList );
+        pContext = new ScXMLTableColContext( GetScImport(), xAttrList );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_PROTECTION ):
     case XML_ELEMENT( LO_EXT, XML_TABLE_PROTECTION ):
     case XML_ELEMENT( OFFICE_EXT, XML_TABLE_PROTECTION ):
-        pContext = new ScXMLTableProtectionContext( GetScImport(), nElement, xAttrList );
+        pContext = new ScXMLTableProtectionContext( GetScImport(), xAttrList );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_ROW_GROUP ):
         pContext = new ScXMLTableRowsContext( GetScImport(), xAttrList,
@@ -329,16 +329,16 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
             pContext = new ScXMLTableRowContext( GetScImport(),xAttrList );
         break;
     case XML_ELEMENT( TABLE, XML_TABLE_SOURCE ):
-        pContext = new ScXMLTableSourceContext( GetScImport(), nElement, xAttrList);
+        pContext = new ScXMLTableSourceContext( GetScImport(), xAttrList);
         break;
     case XML_ELEMENT( TABLE, XML_SCENARIO ):
-        pContext = new ScXMLTableScenarioContext( GetScImport(), nElement, xAttrList);
+        pContext = new ScXMLTableScenarioContext( GetScImport(), xAttrList);
         break;
     case XML_ELEMENT( TABLE, XML_SHAPES ):
-        pContext = new ScXMLTableShapesContext( GetScImport(), nElement, xAttrList);
+        pContext = new ScXMLTableShapesContext( GetScImport() );
         break;
     case XML_ELEMENT( CALC_EXT, XML_CONDITIONAL_FORMATS ):
-        pContext = new ScXMLConditionalFormatsContext( GetScImport(), nElement );
+        pContext = new ScXMLConditionalFormatsContext( GetScImport() );
         break;
     default:
         pContext = new SvXMLImportContext( GetImport() );
@@ -429,7 +429,7 @@ void SAL_CALL ScXMLTableContext::endFastElement(sal_Int32 /*nElement*/)
 }
 
 ScXMLTableProtectionContext::ScXMLTableProtectionContext(
-    ScXMLImport& rImport, sal_Int32 /*nElement*/,
+    ScXMLImport& rImport,
     const Reference< xml::sax::XFastAttributeList>& xAttrList ) :
     ScXMLImportContext( rImport )
 {

@@ -67,7 +67,7 @@ class ScXMLExportDataPilot
 public:
     explicit ScXMLExportDataPilot(ScXMLExport& rExport);
     ~ScXMLExportDataPilot();
-    void WriteDataPilots(const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreaDoc);
+    void WriteDataPilots();
 };
 
 #endif

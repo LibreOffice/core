@@ -159,7 +159,7 @@ private:
 
     void            WriteUserDataSequence(
                         css::uno::Sequence <css::beans::PropertyValue>& rSettings,
-                        const ScViewData& rViewData, SCTAB nTab ) const;
+                        const ScViewData& rViewData ) const;
 
     void            ReadUserDataSequence(
                         const css::uno::Sequence <css::beans::PropertyValue>& rSettings,

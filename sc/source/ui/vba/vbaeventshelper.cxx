@@ -515,7 +515,7 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, void*, p, void )
     release();
 }
 
-ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& /*xContext*/ ) :
+ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs ) :
     VbaEventsHelperBase( rArgs ),
     mbOpened( false )
 {
@@ -905,10 +905,10 @@ uno::Any ScVbaEventsHelper::createWindow( const uno::Sequence< uno::Any >& rArgs
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 ScVbaEventsHelper_get_implementation(
-    css::uno::XComponentContext *context,
+    css::uno::XComponentContext * /*context*/,
     css::uno::Sequence<css::uno::Any> const &arguments)
 {
-    return cppu::acquire(new ScVbaEventsHelper(arguments, context));
+    return cppu::acquire(new ScVbaEventsHelper(arguments));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

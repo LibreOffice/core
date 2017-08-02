@@ -32,7 +32,6 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) :
     ScXMLImportContext( rImport ),
     fIterationEpsilon(0.001),
@@ -102,9 +101,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLCalculationSetting
     SvXMLImportContext *pContext = nullptr;
 
     if (nElement == XML_ELEMENT( TABLE, XML_NULL_DATE ))
-        pContext = new ScXMLNullDateContext(GetScImport(), nElement, xAttrList, this);
+        pContext = new ScXMLNullDateContext(GetScImport(), xAttrList, this);
     else if (nElement == XML_ELEMENT( TABLE, XML_ITERATION ))
-        pContext = new ScXMLIterationContext(GetScImport(), nElement, xAttrList, this);
+        pContext = new ScXMLIterationContext(GetScImport(), xAttrList, this);
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport() );
@@ -143,7 +142,6 @@ void SAL_CALL ScXMLCalculationSettingsContext::endFastElement( sal_Int32 /*nElem
 }
 
 ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
     ScXMLImportContext( rImport )
@@ -178,7 +176,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLNullDateContext::c
 }
 
 ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
     ScXMLImportContext( rImport )
