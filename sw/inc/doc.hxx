@@ -1203,8 +1203,7 @@ public:
                     const SwCellFrame* pBoxFrame );
     void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
                     const SwCellFrame* pBoxFrame );
-    static void GetTabRows( SwTabCols &rFill, const SwCursor* pCursor,
-                    const SwCellFrame* pBoxFrame );
+    static void GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame );
     void SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                     const SwCellFrame* pBoxFrame );
 

@@ -2753,8 +2753,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
 
 //        "table of ..." fields
 
-static void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
-                            SwDoc& rDoc,
+static void lcl_toxMatchACSwitch(SwDoc& rDoc,
                             SwTOXBase& rBase,
                             WW8ReadFieldParams& rParam,
                             SwCaptionDisplay eCaptionType)
@@ -3054,7 +3053,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                     break;
                 case 'a':
                 case 'c':
-                    lcl_toxMatchACSwitch(*this, m_rDoc, *pBase, aReadParam,
+                    lcl_toxMatchACSwitch(m_rDoc, *pBase, aReadParam,
                                            ('c' == nRet)
                                          ? CAPTION_COMPLETE
                                          : CAPTION_TEXT );

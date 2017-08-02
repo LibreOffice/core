@@ -133,7 +133,6 @@ public:
                        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
     SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,
-                       const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
                        SwXMLTableContext *pTable );
 
     virtual ~SwXMLTableContext() override;

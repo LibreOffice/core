@@ -462,9 +462,9 @@ private:
      * Table methods.
      */
     void InitTableHelper(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
-    void StartTable(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
+    void StartTable();
     void StartTableRow(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
-    void StartTableCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
+    void StartTableCell();
     void TableCellProperties(const ww8::WW8TableNodeInfoInner::Pointer_t& pTableTextNodeInfoInner);
     void EndTableCell();
     void EndTableRow();

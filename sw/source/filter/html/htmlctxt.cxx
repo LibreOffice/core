@@ -452,8 +452,7 @@ bool SwHTMLParser::CreateContainer( const OUString& rClass,
         SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE,
                                 rPropInfo, *pFrameItemSet );
         Size aDummy(0,0);
-        SetFixSize( aDummy, aDummy, false, false, rItemSet, rPropInfo,
-                    *pFrameItemSet );
+        SetFixSize( aDummy, aDummy, false, false, rPropInfo, *pFrameItemSet );
         SetSpace( aDummy, rItemSet, rPropInfo, *pFrameItemSet );
         SetFrameFormatAttrs( rItemSet, HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Direction,
                         *pFrameItemSet );

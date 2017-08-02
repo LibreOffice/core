@@ -81,8 +81,7 @@ static SwTwips lcl_CalcContentHeight(SwLayoutFrame & frm)
     return nRemaining;
 }
 
-static void lcl_LayoutFrameEnsureMinHeight(SwLayoutFrame & rFrame,
-                                         const SwBorderAttrs * )
+static void lcl_LayoutFrameEnsureMinHeight(SwLayoutFrame & rFrame)
 {
     SwTwips nMinHeight = lcl_GetFrameMinHeight(rFrame);
 
@@ -405,7 +404,7 @@ void SwHeadFootFrame::Format(vcl::RenderContext* pRenderContext, const SwBorderA
     }
     else
     {
-        lcl_LayoutFrameEnsureMinHeight(*this, pAttrs);
+        lcl_LayoutFrameEnsureMinHeight(*this);
 
         long nUL = pAttrs->CalcTop()  + pAttrs->CalcBottom();
 

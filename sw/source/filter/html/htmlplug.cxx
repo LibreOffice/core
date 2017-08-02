@@ -120,7 +120,6 @@ const HtmlFrmOpts HTML_FRMOPTS_OLE_CSS1       =
 void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                const Size& rTwipDfltSize,
                                bool bPrcWidth, bool bPrcHeight,
-                               SfxItemSet& /*rCSS1ItemSet*/,
                                SvxCSS1PropertyInfo& rCSS1PropInfo,
                                SfxItemSet& rFlyItemSet )
 {
@@ -449,8 +448,7 @@ void SwHTMLParser::InsertEmbed()
 
     // and the size of the frame
     Size aDfltSz( HTML_DFLT_EMBED_WIDTH, HTML_DFLT_EMBED_HEIGHT );
-    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
-                aFrameSet );
+    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aPropInfo, aFrameSet );
     SetSpace( aSpace, aItemSet, aPropInfo, aFrameSet );
 
     // and insert into the document
@@ -612,8 +610,7 @@ void SwHTMLParser::NewObject()
 
     // and still the size of the frame
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
-    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
-                rFrameSet );
+    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aPropInfo, rFrameSet );
     SetSpace( aSpace, aItemSet, aPropInfo, rFrameSet );
 }
 #endif
@@ -746,8 +743,7 @@ void SwHTMLParser::InsertApplet()
 
     // and still the size or the frame
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
-    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
-                rFrameSet );
+    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aPropInfo, rFrameSet );
     SetSpace( aSpace, aItemSet, aPropInfo, rFrameSet );
 }
 #endif
@@ -929,8 +925,7 @@ void SwHTMLParser::InsertFloatingFrame()
 
     // and still the size of the frame
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
-    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aItemSet, aPropInfo,
-                aFrameSet );
+    SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight, aPropInfo, aFrameSet );
     SetSpace( aSpace, aItemSet, aPropInfo, aFrameSet );
 
     // and insert into the document

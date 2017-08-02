@@ -1855,7 +1855,7 @@ SwFieldType* SwExtUserFieldType::Copy() const
     return pTyp;
 }
 
-OUString SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 )
+OUString SwExtUserFieldType::Expand(sal_uInt16 nSub )
 {
     UserOptToken nRet = static_cast<UserOptToken>(USHRT_MAX);
     switch(nSub)
@@ -1893,13 +1893,13 @@ OUString SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 )
 SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFormat) :
     SwField(pTyp, nFormat), nType(nSubTyp)
 {
-    aContent = SwExtUserFieldType::Expand(nType, GetFormat());
+    aContent = SwExtUserFieldType::Expand(nType);
 }
 
 OUString SwExtUserField::Expand() const
 {
     if (!IsFixed())
-        const_cast<SwExtUserField*>(this)->aContent = SwExtUserFieldType::Expand(nType, GetFormat());
+        const_cast<SwExtUserField*>(this)->aContent = SwExtUserFieldType::Expand(nType);
 
     return aContent;
 }

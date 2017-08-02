@@ -7214,7 +7214,7 @@ void DocxAttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
 }
 
 static void impl_WriteTabElement( FSHelperPtr const & pSerializer,
-                                  const SvxTabStop& rTab, long /* nCurrentLeft */ )
+                                  const SvxTabStop& rTab )
 {
     FastAttributeList *pTabElementAttrList = FastSerializerHelper::createAttrList();
 
@@ -7258,9 +7258,6 @@ static void impl_WriteTabElement( FSHelperPtr const & pSerializer,
 
 void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 {
-    const SfxPoolItem* pLR = m_rExport.HasItem( RES_LR_SPACE );
-    long nCurrentLeft = pLR ? static_cast<const SvxLRSpaceItem*>(pLR)->GetTextLeft() : 0;
-
     sal_uInt16 nCount = rTabStop.Count();
 
     // <w:tabs> must contain at least one <w:tab>, so don't write it empty
@@ -7277,7 +7274,7 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     for (sal_uInt16 i = 0; i < nCount; i++ )
     {
         if( rTabStop[i].GetAdjustment() != SvxTabAdjust::Default )
-            impl_WriteTabElement( m_pSerializer, rTabStop[i], nCurrentLeft );
+            impl_WriteTabElement( m_pSerializer, rTabStop[i] );
         else
             GetExport().setDefaultTabStop( rTabStop[i].GetTabPos());
     }

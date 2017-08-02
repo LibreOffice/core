@@ -4848,7 +4848,7 @@ void SwHTMLParser::InsertSpacer()
             SvxCSS1PropertyInfo aDummyPropInfo;
 
             SetFixSize( aSize, aDfltSz, bPrcWidth, bPrcHeight,
-                        aDummyItemSet, aDummyPropInfo, aFrameSet );
+                        aDummyPropInfo, aFrameSet );
             SetSpace( aSpace, aDummyItemSet, aDummyPropInfo, aFrameSet );
 
             // protect the content

@@ -2499,8 +2499,7 @@ void SAL_CALL SwXTextField::update()
             {
                 SwExtUserField* pExtUserField = static_cast<SwExtUserField*>(pField);
                 pExtUserField->SetExpansion( SwExtUserFieldType::Expand(
-                                            pExtUserField->GetSubType(),
-                                            pExtUserField->GetFormat() ) );
+                                            pExtUserField->GetSubType() ) );
             }
             break;
 

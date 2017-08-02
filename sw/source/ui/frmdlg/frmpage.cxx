@@ -1094,8 +1094,8 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
                                                 rOldSet.Get(RES_HORI_ORIENT)) );
 
         const sal_Int32 nMapPos = GetMapPos(m_pHMap, *m_pHorizontalDLB);
-        const sal_Int16 eHOri = GetAlignment(m_pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
-        const sal_Int16 eRel = GetRelation(m_pHMap, *m_pHoriRelationLB);
+        const sal_Int16 eHOri = GetAlignment(m_pHMap, nMapPos, *m_pHoriRelationLB);
+        const sal_Int16 eRel = GetRelation(*m_pHoriRelationLB);
 
         aHoriOrient.SetHoriOrient( eHOri );
         aHoriOrient.SetRelationOrient( eRel );
@@ -1130,8 +1130,8 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
                                                 rOldSet.Get(RES_VERT_ORIENT)) );
 
         const sal_Int32 nMapPos = GetMapPos(m_pVMap, *m_pVerticalDLB);
-        const sal_Int16 eVOri = GetAlignment(m_pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
-        const sal_Int16 eRel = GetRelation(m_pVMap, *m_pVertRelationLB);
+        const sal_Int16 eVOri = GetAlignment(m_pVMap, nMapPos, *m_pVertRelationLB);
+        const sal_Int16 eRel = GetRelation(*m_pVertRelationLB);
 
         aVertOrient.SetVertOrient    ( eVOri);
         aVertOrient.SetRelationOrient( eRel );
@@ -1628,7 +1628,7 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
     RelHdl(_rLB);
 }
 
-sal_Int16 SwFramePage::GetRelation(FrameMap * /*pMap*/, ListBox &rRelationLB)
+sal_Int16 SwFramePage::GetRelation(ListBox &rRelationLB)
 {
     const sal_Int32 nPos = rRelationLB.GetSelectEntryPos();
 
@@ -1642,7 +1642,7 @@ sal_Int16 SwFramePage::GetRelation(FrameMap * /*pMap*/, ListBox &rRelationLB)
 }
 
 sal_Int16 SwFramePage::GetAlignment(FrameMap *pMap, sal_Int32 nMapPos,
-        ListBox &/*rAlignLB*/, ListBox &rRelationLB)
+        ListBox &rRelationLB)
 {
     if (!pMap || nMapPos < 0)
         return 0;
@@ -1824,8 +1824,8 @@ void SwFramePage::RangeModifyHdl()
     {
         // alignment horizonal
         const sal_Int32 nMapPos = GetMapPos(m_pHMap, *m_pHorizontalDLB);
-        aVal.nHoriOrient = GetAlignment(m_pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB);
-        aVal.nHRelOrient = GetRelation(m_pHMap, *m_pHoriRelationLB);
+        aVal.nHoriOrient = GetAlignment(m_pHMap, nMapPos, *m_pHoriRelationLB);
+        aVal.nHRelOrient = GetRelation(*m_pHoriRelationLB);
     }
     else
         aVal.nHoriOrient = text::HoriOrientation::NONE;
@@ -1834,8 +1834,8 @@ void SwFramePage::RangeModifyHdl()
     {
         // alignment vertical
         const sal_Int32 nMapPos = GetMapPos(m_pVMap, *m_pVerticalDLB);
-        aVal.nVertOrient = GetAlignment(m_pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB);
-        aVal.nVRelOrient = GetRelation(m_pVMap, *m_pVertRelationLB);
+        aVal.nVertOrient = GetAlignment(m_pVMap, nMapPos, *m_pVertRelationLB);
+        aVal.nVRelOrient = GetRelation(*m_pVertRelationLB);
     }
     else
         aVal.nVertOrient = text::VertOrientation::NONE;
@@ -1957,7 +1957,7 @@ IMPL_LINK( SwFramePage, PosHdl, ListBox&, rLB, void )
     FrameMap *pMap = bHori ? m_pHMap : m_pVMap;
 
     const sal_Int32 nMapPos = GetMapPos(pMap, rLB);
-    const sal_Int16 nAlign = GetAlignment(pMap, nMapPos, rLB, *pRelLB);
+    const sal_Int16 nAlign = GetAlignment(pMap, nMapPos, *pRelLB);
 
     if (bHori)
     {
@@ -2066,7 +2066,7 @@ IMPL_LINK( SwFramePage, RelHdl, ListBox&, rLB, void )
     {
         if(bHori)
         {
-            const sal_Int16 nRel = GetRelation(m_pHMap, *m_pHoriRelationLB);
+            const sal_Int16 nRel = GetRelation(*m_pHoriRelationLB);
             if(text::RelOrientation::PRINT_AREA == nRel && 0 == m_pVerticalDLB->GetSelectEntryPos())
             {
                 m_pVerticalDLB->SelectEntryPos(1);
@@ -2127,16 +2127,16 @@ void SwFramePage::UpdateExample()
     if ( m_pHMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         const sal_Int32 nMapPos = GetMapPos(m_pHMap, *m_pHorizontalDLB);
-        m_pExampleWN->SetHAlign(GetAlignment(m_pHMap, nMapPos, *m_pHorizontalDLB, *m_pHoriRelationLB));
-        m_pExampleWN->SetHoriRel(GetRelation(m_pHMap, *m_pHoriRelationLB));
+        m_pExampleWN->SetHAlign(GetAlignment(m_pHMap, nMapPos, *m_pHoriRelationLB));
+        m_pExampleWN->SetHoriRel(GetRelation(*m_pHoriRelationLB));
     }
 
     nPos = m_pVerticalDLB->GetSelectEntryPos();
     if ( m_pVMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         const sal_Int32 nMapPos = GetMapPos(m_pVMap, *m_pVerticalDLB);
-        m_pExampleWN->SetVAlign(GetAlignment(m_pVMap, nMapPos, *m_pVerticalDLB, *m_pVertRelationLB));
-        m_pExampleWN->SetVertRel(GetRelation(m_pVMap, *m_pVertRelationLB));
+        m_pExampleWN->SetVAlign(GetAlignment(m_pVMap, nMapPos, *m_pVertRelationLB));
+        m_pExampleWN->SetVertRel(GetRelation(*m_pVertRelationLB));
     }
 
     // size

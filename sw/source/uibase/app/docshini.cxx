@@ -117,7 +117,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::GLOBAL_DOCUMENT, true);       // Globaldokument
 
         if ( GetCreateMode() ==  SfxObjectCreateMode::EMBEDDED )
-            SwTransferable::InitOle( this, *m_pDoc );
+            SwTransferable::InitOle( this );
 
         // set forbidden characters if necessary
         if (!utl::ConfigManager::IsAvoidConfig())
@@ -539,7 +539,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
             case SfxObjectCreateMode::INTERNAL:
             case SfxObjectCreateMode::EMBEDDED:
                 {
-                    SwTransferable::InitOle( this, *m_pDoc );
+                    SwTransferable::InitOle( this );
                 }
                 // suppress SfxProgress, when we are Embedded
                 SW_MOD()->SetEmbeddedLoadSave( true );

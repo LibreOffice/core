@@ -66,6 +66,18 @@ void CheckUnusedParams::run()
     // this has a certan pattern to it's code which appears to include lots of unused params
     if (loplugin::hasPathnamePrefix(fn, SRCDIR "/xmloff/"))
          return;
+    // I believe someone is busy working on this chunk of code
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/ui/docshell/dataprovider.cxx"))
+         return;
+    // I think erack is working on stuff here
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/filter/excel/xiformula.cxx"))
+         return;
+    // lots of callbacks here
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/filter/lotus/op.cxx"))
+         return;
+    // template magic
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/source/filter/html/htmlpars.cxx"))
+         return;
 
     m_phase = PluginPhase::FindAddressOf;
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
@@ -382,6 +394,8 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
         || fqn == "GraphicExportDialog::GraphicExportDialog"
         || fqn == "pcr::ObjectInspectorModel::Create"
         || fqn == "GraphicExportFilter::GraphicExportFilter"
+        || fqn == "CertificateContainer::CertificateContainer"
+        || startswith(fqn, "ParseCSS1_")
         )
          return true;
     // TODO
@@ -407,15 +421,24 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
          return true;
     // marked with a TODO
     if (fqn == "pcr::FormLinkDialog::getExistingRelation"
-        || fqn == "ooo::vba::DebugHelper::basicexception")
+        || fqn == "ooo::vba::DebugHelper::basicexception"
+        || fqn == "ScPrintFunc::DrawToDev")
          return true;
     // macros at work
     if (fqn == "msfilter::lcl_PrintDigest")
          return true;
-
+    // TODO something wrong here, the method that calls this (Normal::GenSlidingWindowFunction) cannot be correct
+    if (fqn == "sc::opencl::OpBase::Gen")
+         return true;
+    // Can't change this without conflicting with another constructor with the same signature
+    if (fqn == "XclExpSupbook::XclExpSupbook")
+         return true;
     // ignore the LINK macros from include/tools/link.hxx
     if (decl->getLocation().isMacroID())
         return true;
+    // debug code in sw/
+    if (fqn == "lcl_dbg_out")
+         return true;
 
     for( auto it = decl->param_begin(); it != decl->param_end(); ++it) {
         auto param = *it;

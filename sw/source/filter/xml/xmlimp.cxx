@@ -120,8 +120,7 @@ class SwXMLBodyContext_Impl : public SvXMLImportContext
 public:
 
     SwXMLBodyContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
-                const OUString& rLName,
-                const Reference< xml::sax::XAttributeList > & xAttrList );
+                const OUString& rLName );
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -129,8 +128,7 @@ public:
 };
 
 SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
-                const Reference< xml::sax::XAttributeList > & /*xAttrList*/ ) :
+                sal_uInt16 nPrfx, const OUString& rLName) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     // tdf#107211: if at this point we don't have a defined char style "Default"
@@ -180,8 +178,7 @@ protected: // #i69629#
 public:
 
     SwXMLDocContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
-                const OUString& rLName,
-                const Reference< xml::sax::XAttributeList > & xAttrList );
+                const OUString& rLName );
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
@@ -189,8 +186,7 @@ public:
 };
 
 SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
-                const Reference< xml::sax::XAttributeList > & /*xAttrList*/ ) :
+                sal_uInt16 nPrfx, const OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
@@ -236,7 +232,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
     case XML_TOK_DOC_BODY:
         GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
         pContext = new SwXMLBodyContext_Impl( GetSwImport(), nPrefix,
-                                              rLocalName, xAttrList );
+                                              rLocalName );
         break;
     case XML_TOK_DOC_SETTINGS:
         pContext = new XMLDocumentSettingsContext( GetImport(), nPrefix, rLocalName, xAttrList );
@@ -261,7 +257,6 @@ public:
     SwXMLOfficeDocContext_Impl( SwXMLImport& rImport,
                 sal_uInt16 nPrfx,
                 const OUString& rLName,
-                const Reference< xml::sax::XAttributeList > & xAttrList,
                 const Reference< document::XDocumentProperties >& xDocProps);
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -274,10 +269,9 @@ SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
                 SwXMLImport& rImport,
                 sal_uInt16 nPrfx,
                 const OUString& rLName,
-                const Reference< xml::sax::XAttributeList > & xAttrList,
                 const Reference< document::XDocumentProperties >& xDocProps) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    SwXMLDocContext_Impl( rImport, nPrfx, rLName, xAttrList ),
+    SwXMLDocContext_Impl( rImport, nPrfx, rLName ),
     SvXMLMetaDocumentContext( rImport, nPrfx, rLName, xDocProps)
 {
 }
@@ -316,8 +310,7 @@ public:
 
     SwXMLDocStylesContext_Impl( SwXMLImport& rImport,
                                 sal_uInt16 nPrfx,
-                                const OUString& rLName,
-                                const Reference< xml::sax::XAttributeList > & xAttrList );
+                                const OUString& rLName );
 
     virtual void EndElement() override;
 };
@@ -325,10 +318,9 @@ public:
 SwXMLDocStylesContext_Impl::SwXMLDocStylesContext_Impl(
                     SwXMLImport& rImport,
                     sal_uInt16 nPrfx,
-                    const OUString& rLName,
-                    const Reference< xml::sax::XAttributeList > & xAttrList ) :
+                    const OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    SwXMLDocContext_Impl( rImport, nPrfx, rLName, xAttrList )
+    SwXMLDocContext_Impl( rImport, nPrfx, rLName )
 {
 }
 
@@ -360,8 +352,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     if( XML_NAMESPACE_OFFICE==nPrefix &&
         ( IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS ) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ))
-        pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName,
-                                             xAttrList );
+        pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName );
     else if ( XML_NAMESPACE_OFFICE==nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT_META ) )
     {
@@ -370,8 +361,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     else if ( XML_NAMESPACE_OFFICE==nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) )
     {
-        pContext = new SwXMLDocStylesContext_Impl( *this, nPrefix, rLocalName,
-                                                   xAttrList );
+        pContext = new SwXMLDocStylesContext_Impl( *this, nPrefix, rLocalName );
     }
     else if ( XML_NAMESPACE_OFFICE==nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT ) )
@@ -380,7 +370,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
             GetDocumentProperties());
         // flat OpenDocument file format
         pContext = new SwXMLOfficeDocContext_Impl( *this, nPrefix, rLocalName,
-                        xAttrList, xDocProps);
+                        xDocProps);
     }
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );

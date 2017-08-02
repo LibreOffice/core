@@ -790,8 +790,7 @@ bool SwAccessibleParagraph::GetLineBoundary(
 
 bool SwAccessibleParagraph::GetParagraphBoundary(
     i18n::Boundary& rBound,
-    const OUString& rText,
-    sal_Int32 )
+    const OUString& rText )
 {
     rBound.startPos = 0;
     rBound.endPos = rText.getLength();
@@ -859,7 +858,7 @@ bool SwAccessibleParagraph::GetTextBoundary(
             break;
 
         case AccessibleTextType::PARAGRAPH:
-            bRet = GetParagraphBoundary( rBound, rText, nPos );
+            bRet = GetParagraphBoundary( rBound, rText );
             break;
 
         case AccessibleTextType::CHARACTER:

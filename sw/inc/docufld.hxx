@@ -529,7 +529,7 @@ class SwExtUserFieldType : public SwFieldType
 public:
     SwExtUserFieldType();
 
-    static OUString         Expand(sal_uInt16 nSubType, sal_uInt32 nFormat);
+    static OUString         Expand(sal_uInt16 nSubType);
     virtual SwFieldType*    Copy() const override;
 };
 
