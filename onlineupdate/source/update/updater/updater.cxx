@@ -332,6 +332,8 @@ namespace {
 
 bool is_userprofile_in_instdir()
 {
+    return false;
+    /*
     // the algorithm is:
     // 1.) if userprofile path length is smaller than installation dir,
     //      the profile is surely not in instdir
@@ -350,6 +352,7 @@ bool is_userprofile_in_instdir()
         return false;
 
     return NS_tstrncmp(userprofile, gInstallDirPath, installdir_len) == 0;
+    */
 }
 
 }
