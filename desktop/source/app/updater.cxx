@@ -154,9 +154,8 @@ char** createCommandLine()
     }
     {
         // the actual update directory
-        OUString aInstallPath = getPathFromURL(aInstallDir);
-        Updater::log("Install Dir: " + aInstallPath);
-        createStr(aInstallPath, pArgs, 2);
+        Updater::log("Install Dir: " + aInstallDir);
+        createStr(aInstallDir, pArgs, 2);
     }
     {
         // the temporary updated build
