@@ -198,7 +198,7 @@ class UITest(object):
         with EventListener(self._xContext, ["DialogExecute", "ModelessDialogExecute"]) as event:
             thread.start()
             time_ = 0
-            # we are not necessarily opeinging a dialog, so wait much longer
+            # we are not necessarily opening a dialog, so wait much longer
             while time_ < 10 * MAX_WAIT:
                 if event.executed:
                     xDlg = self._xUITest.getTopFocusWindow()
