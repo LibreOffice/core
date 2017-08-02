@@ -46,7 +46,7 @@ class ScXMLSortContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSortContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLSortContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 

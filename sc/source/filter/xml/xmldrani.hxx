@@ -39,8 +39,7 @@ class ScXMLDatabaseRangesContext : public ScXMLImportContext
 {
 public:
 
-    ScXMLDatabaseRangesContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
+    ScXMLDatabaseRangesContext( ScXMLImport& rImport );
 
     virtual ~ScXMLDatabaseRangesContext() override;
 
@@ -93,7 +92,7 @@ class ScXMLDatabaseRangeContext : public ScXMLImportContext
 
 public:
 
-    ScXMLDatabaseRangeContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList);
 
     virtual ~ScXMLDatabaseRangeContext() override;
@@ -128,7 +127,7 @@ class ScXMLSourceSQLContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSourceSQLContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLSourceSQLContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -147,7 +146,7 @@ class ScXMLSourceTableContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSourceTableContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLSourceTableContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -166,7 +165,7 @@ class ScXMLSourceQueryContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSourceQueryContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLSourceQueryContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -184,7 +183,7 @@ class ScXMLConResContext : public ScXMLImportContext
 
 public:
 
-    ScXMLConResContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLConResContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -200,7 +199,7 @@ class ScXMLSubTotalRulesContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSubTotalRulesContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLSubTotalRulesContext( ScXMLImport& rImport,
                         const css::uno::Reference<
                                         css::xml::sax::XFastAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -217,7 +216,7 @@ class ScXMLSortGroupsContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSortGroupsContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLSortGroupsContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -234,7 +233,7 @@ class ScXMLSubTotalRuleContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSubTotalRuleContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLSubTotalRuleContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
 
@@ -258,7 +257,7 @@ class ScXMLSubTotalFieldContext : public ScXMLImportContext
 
 public:
 
-    ScXMLSubTotalFieldContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLSubTotalFieldContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLSubTotalRuleContext* pSubTotalRuleContext);
 

@@ -2539,7 +2539,7 @@ void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
 
 namespace {
 
-size_t get_index(SCSIZE nMaxRow, SCSIZE /*nMaxCol*/, size_t nRow, size_t nCol, size_t nRowOffset, size_t nColOffset)
+size_t get_index(SCSIZE nMaxRow, size_t nRow, size_t nCol, size_t nRowOffset, size_t nColOffset)
 {
     return nMaxRow * (nCol + nColOffset) + nRow + nRowOffset;
 }
@@ -2569,13 +2569,13 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
             FormulaError nErr = GetDoubleErrorValue(nVal);
             if (nErr != FormulaError::NONE)
             {
-                aValid[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = false;
-                nErrors[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = nErr;
+                aValid[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = false;
+                nErrors[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = nErr;
                 return;
             }
             OUString aStr;
             rFormatter.GetInputLineString( nVal, nKey, aStr);
-            aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr;
+            aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr;
         };
 
     std::function<void(size_t, size_t, bool)> aBoolFunc =
@@ -2583,13 +2583,13 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         {
             OUString aStr;
             rFormatter.GetInputLineString( nVal ? 1.0 : 0.0, nKey, aStr);
-            aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr;
+            aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr;
         };
 
     std::function<void(size_t, size_t, const svl::SharedString&)> aStringFunc =
         [&](size_t nRow, size_t nCol, const svl::SharedString& aStr)
         {
-            aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString();
+            aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString();
         };
 
     std::function<void(size_t, size_t)> aEmptyFunc =
@@ -2631,13 +2631,13 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
             FormulaError nErr = GetDoubleErrorValue(nVal);
             if (nErr != FormulaError::NONE)
             {
-                aValid[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = false;
-                nErrors[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = nErr;
+                aValid[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = false;
+                nErrors[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = nErr;
                 return;
             }
             OUString aStr;
             rFormatter.GetInputLineString( nVal, nKey, aStr);
-            aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr);
+            aSharedString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr);
         };
 
     std::function<void(size_t, size_t, bool)> aBoolFunc2 =
@@ -2645,21 +2645,21 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
         {
             OUString aStr;
             rFormatter.GetInputLineString( nVal ? 1.0 : 0.0, nKey, aStr);
-            aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr);
+            aSharedString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr);
         };
 
     std::function<void(size_t, size_t, const svl::SharedString&)> aStringFunc2 =
         [&](size_t nRow, size_t nCol, const svl::SharedString& aStr)
         {
-            aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] =
-                rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString());
+            aSharedString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] =
+                rStringPool.intern(aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr.getString());
         };
 
     std::function<void(size_t, size_t)> aEmptyFunc2 =
         [&](size_t nRow, size_t nCol)
         {
-            aSharedString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)] =
-                rStringPool.intern(aString[get_index(nMaxRow, nMaxCol, nRow, nCol, nRowOffset, nColOffset)]);
+            aSharedString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] =
+                rStringPool.intern(aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)]);
         };
 
     nRowOffset = 0;

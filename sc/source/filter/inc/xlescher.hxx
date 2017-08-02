@@ -432,7 +432,7 @@ public:
     /** Tries to extract an Excel macro name from the passed macro descriptor. */
     static OUString     ExtractFromMacroDescriptor(
                             const css::script::ScriptEventDescriptor& rDescriptor,
-                            XclTbxEventType eEventType, SfxObjectShell* pShell );
+                            XclTbxEventType eEventType );
 };
 
 #endif

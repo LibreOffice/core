@@ -41,7 +41,6 @@ using ::com::sun::star::xml::sax::XAttributeList;
 ScXMLFilterContext::ConnStackItem::ConnStackItem(bool bOr) : mbOr(bOr), mnCondCount(0) {}
 
 ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
-                                        sal_Int32 /*nElement*/,
                                         const Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                         ScQueryParam& rParam,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
@@ -112,13 +111,13 @@ SvXMLImportContext *ScXMLFilterContext::CreateChildContext( sal_uInt16 nPrefix,
         case XML_TOK_FILTER_AND:
         {
             pContext = new ScXMLAndContext(
-                GetScImport(), nPrefix, rLName, xAttrList, mrQueryParam, this);
+                GetScImport(), nPrefix, rLName, mrQueryParam, this);
         }
         break;
         case XML_TOK_FILTER_OR:
         {
             pContext = new ScXMLOrContext(
-                GetScImport(), nPrefix, rLName, xAttrList, mrQueryParam, this);
+                GetScImport(), nPrefix, rLName, mrQueryParam, this);
         }
         break;
         case XML_TOK_FILTER_CONDITION:
@@ -196,7 +195,6 @@ bool ScXMLFilterContext::GetConnection()
 ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
                                   sal_uInt16 nPrfx,
                                   const OUString& rLName,
-                                  const Reference<XAttributeList>& /* xAttrList */,
                                   ScQueryParam& rParam,
                                   ScXMLFilterContext* pTempFilterContext) :
     ScXMLImportContext( rImport, nPrfx, rLName ),
@@ -246,7 +244,6 @@ void ScXMLAndContext::EndElement()
 ScXMLOrContext::ScXMLOrContext( ScXMLImport& rImport,
                                 sal_uInt16 nPrfx,
                                 const OUString& rLName,
-                                const Reference<css::xml::sax::XAttributeList>& /* xAttrList */,
                                 ScQueryParam& rParam,
                                 ScXMLFilterContext* pTempFilterContext) :
     ScXMLImportContext( rImport, nPrfx, rLName ),
@@ -272,7 +269,7 @@ SvXMLImportContext *ScXMLOrContext::CreateChildContext( sal_uInt16 nPrefix,
         case XML_TOK_FILTER_AND:
         {
             pContext = new ScXMLAndContext(
-                GetScImport(), nPrefix, rLName, xAttrList, mrQueryParam, pFilterContext);
+                GetScImport(), nPrefix, rLName, mrQueryParam, pFilterContext);
         }
         break;
         case XML_TOK_FILTER_CONDITION:
@@ -513,7 +510,6 @@ void ScXMLSetItemContext::EndElement()
 }
 
 ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       ScXMLDataPilotTableContext* pTempDataPilotTableContext) :
     ScXMLImportContext( rImport ),
@@ -588,13 +584,13 @@ SvXMLImportContext *ScXMLDPFilterContext::CreateChildContext( sal_uInt16 nPrefix
         case XML_TOK_FILTER_AND:
         {
             pContext = new ScXMLDPAndContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, this);
+                                                          rLName, this);
         }
         break;
         case XML_TOK_FILTER_OR:
         {
             pContext = new ScXMLDPOrContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, this);
+                                                          rLName, this);
         }
         break;
         case XML_TOK_FILTER_CONDITION:
@@ -636,7 +632,6 @@ void ScXMLDPFilterContext::AddFilterField (const ScQueryEntry& aFilterField)
 ScXMLDPAndContext::ScXMLDPAndContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */,
                                       ScXMLDPFilterContext* pTempFilterContext) :
     ScXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -684,7 +679,6 @@ void ScXMLDPAndContext::EndElement()
 ScXMLDPOrContext::ScXMLDPOrContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
                                       const OUString& rLName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */,
                                       ScXMLDPFilterContext* pTempFilterContext) :
     ScXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext)
@@ -708,7 +702,7 @@ SvXMLImportContext *ScXMLDPOrContext::CreateChildContext( sal_uInt16 nPrefix,
         case XML_TOK_FILTER_AND:
         {
             pContext = new ScXMLDPAndContext( GetScImport(), nPrefix,
-                                                          rLName, xAttrList, pFilterContext);
+                                                          rLName, pFilterContext);
         }
         break;
         case XML_TOK_FILTER_CONDITION:

@@ -160,7 +160,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessi
     {
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::MULTI_LINE);
-        if (IsOpaque(xParentStates))
+        if (IsOpaque())
             pStateSet->AddState(AccessibleStateType::OPAQUE);
         if (isShowing())
             pStateSet->AddState(AccessibleStateType::SHOWING);
@@ -253,8 +253,7 @@ bool ScAccessiblePreviewCell::IsEditable(
     return false;
 }
 
-bool ScAccessiblePreviewCell::IsOpaque(
-    const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
+bool ScAccessiblePreviewCell::IsOpaque()
 {
     // test whether there is a background color
     //! could be moved to ScAccessibleCellBase

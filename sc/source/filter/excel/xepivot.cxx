@@ -1168,7 +1168,7 @@ void XclExpPTField::WriteSxvdex( XclExpStream& rStrm ) const
     rStrm.EndRecord();
 }
 
-XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& rDPObj, const XclExpPivotCache& rPCache, size_t ) :
+XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& rDPObj, const XclExpPivotCache& rPCache ) :
     XclExpRoot( rRoot ),
     mrPCache( rPCache ),
     maDataOrientField( *this, EXC_SXIVD_DATA ),
@@ -1622,7 +1622,7 @@ void XclExpPivotTableManager::CreatePivotTables()
         {
             ScDPObject& rDPObj = (*pDPColl)[ nDPObj ];
             if( const XclExpPivotCache* pPCache = CreatePivotCache( rDPObj ) )
-                maPTableList.AppendNewRecord( new XclExpPivotTable( GetRoot(), rDPObj, *pPCache, nDPObj ) );
+                maPTableList.AppendNewRecord( new XclExpPivotTable( GetRoot(), rDPObj, *pPCache ) );
         }
 }
 

@@ -30,7 +30,7 @@ struct ScXMLExternalTabData;
 class ScXMLExternalRefTabSourceContext : public ScXMLImportContext
 {
 public:
-    ScXMLExternalRefTabSourceContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLExternalRefTabSourceContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLExternalTabData& rRefInfo );
 
@@ -55,8 +55,7 @@ private:
 class ScXMLExternalRefRowsContext : public ScXMLImportContext
 {
 public:
-    ScXMLExternalRefRowsContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLExternalRefRowsContext( ScXMLImport& rImport,
                         ScXMLExternalTabData& rRefInfo );
 
     virtual ~ScXMLExternalRefRowsContext() override;
@@ -73,7 +72,7 @@ private:
 class ScXMLExternalRefRowContext : public ScXMLImportContext
 {
 public:
-    ScXMLExternalRefRowContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLExternalRefRowContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLExternalTabData& rRefInfo );
 
@@ -94,7 +93,7 @@ private:
 class ScXMLExternalRefCellContext : public ScXMLImportContext
 {
 public:
-    ScXMLExternalRefCellContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLExternalRefCellContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLExternalTabData& rRefInfo );
 
@@ -123,8 +122,7 @@ private:
 class ScXMLExternalRefCellTextContext : public ScXMLImportContext
 {
 public:
-    ScXMLExternalRefCellTextContext( ScXMLImport& rImport, sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLExternalRefCellTextContext( ScXMLImport& rImport,
                         ScXMLExternalRefCellContext& rParent );
 
     virtual ~ScXMLExternalRefCellTextContext() override;

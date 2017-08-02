@@ -2871,7 +2871,7 @@ void ScHTMLQueryParser::ProcessToken( const HtmlImportInfo& rInfo )
         case HtmlTokenId::META:             MetaOn( rInfo );                break;  // <meta>
 
 // --- title handling ---
-        case HtmlTokenId::TITLE_ON:         TitleOn( rInfo );               break;  // <title>
+        case HtmlTokenId::TITLE_ON:         TitleOn();                      break;  // <title>
         case HtmlTokenId::TITLE_OFF:        TitleOff( rInfo );              break;  // </title>
 
         case HtmlTokenId::STYLE_ON:                                         break;
@@ -3010,7 +3010,7 @@ void ScHTMLQueryParser::MetaOn( const HtmlImportInfo& rInfo )
     }
 }
 
-void ScHTMLQueryParser::TitleOn( const HtmlImportInfo& /*rInfo*/ )
+void ScHTMLQueryParser::TitleOn()
 {
     mbTitleOn = true;
     maTitle.setLength(0);
@@ -3092,7 +3092,7 @@ public:
 
     static void at_rule_name(const char* /*p*/, size_t /*n*/)
     {
-        // TODO: For now, we ignore at-rule properties.
+        // TODO: For now, we ignore at-rule properties
     }
 
     void property_name(const char* p, size_t n)
