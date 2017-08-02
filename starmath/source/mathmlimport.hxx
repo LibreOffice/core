@@ -21,9 +21,6 @@
 #define INCLUDED_STARMATH_SOURCE_MATHMLIMPORT_HXX
 
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/xmlexp.hxx>
-#include <xmloff/DocumentSettingsContext.hxx>
-#include <xmloff/xmltoken.hxx>
 
 #include <node.hxx>
 #include <deque>
@@ -31,8 +28,6 @@
 
 class SfxMedium;
 namespace com { namespace sun { namespace star {
-    namespace io {
-        class XIutputStream; }
     namespace beans {
         class XPropertySet; }
 } } }

@@ -18,13 +18,8 @@
  */
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include "starmath.hrc"
-#include "strings.hrc"
 #include "helpids.h"
 
 #include <vcl/menu.hxx>
@@ -33,17 +28,10 @@
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
-#include <editeng/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svl/intitem.hxx>
-#include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <svl/itemset.hxx>
-#include <editeng/fontitem.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/AccessibleTextHelper.hxx>
 
 #include "edit.hxx"
 #include "view.hxx"

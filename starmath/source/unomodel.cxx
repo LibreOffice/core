@@ -25,10 +25,7 @@
 #include <o3tl/make_unique.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/ctrltool.hxx>
-#include <svl/itemprop.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <editeng/paperinf.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/print.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
@@ -36,8 +33,6 @@
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <xmloff/xmluconv.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -50,7 +45,6 @@
 #include <symbol.hxx>
 #include <starmath.hrc>
 #include <strings.hrc>
-#include <smdll.hxx>
 #include "cfgitem.hxx"
 
 using namespace ::cppu;

@@ -20,15 +20,12 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <utility>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
-#include <com/sun/star/awt/FocusEvent.hpp>
-#include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
@@ -39,6 +36,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
+#include <svx/AccessibleTextHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/unohelp2.hxx>
@@ -56,7 +54,6 @@
 
 
 #include "accessibility.hxx"
-#include <unomodel.hxx>
 #include <document.hxx>
 #include <view.hxx>
 #include <o3tl/make_unique.hxx>

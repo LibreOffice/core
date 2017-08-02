@@ -22,14 +22,12 @@
 
 #include "types.hxx"
 #include "token.hxx"
-#include "error.hxx"
 #include "rect.hxx"
 #include "format.hxx"
 
 #include <o3tl/typed_flags_set.hxx>
 
 #include <cassert>
-#include <memory>
 #include <vector>
 
 enum class FontAttribute {

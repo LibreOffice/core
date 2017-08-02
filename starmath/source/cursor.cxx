@@ -11,9 +11,8 @@
 #include "visitors.hxx"
 #include "document.hxx"
 #include "view.hxx"
-#include "accessibility.hxx"
-#include "strings.hxx"
 #include <comphelper/string.hxx>
+#include <editeng/editeng.hxx>
 #include <cassert>
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){

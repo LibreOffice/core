@@ -20,14 +20,10 @@
 #include <memory>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <i18nlangtag/lang.h>
-#include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>
-#include <sal/macros.h>
 #include <o3tl/make_unique.hxx>
-#include <vcl/settings.hxx>
 #include "parse.hxx"
 #include "strings.hrc"
-#include "smdll.hxx"
 #include "smmod.hxx"
 #include "cfgitem.hxx"
 #include <cassert>

@@ -20,21 +20,22 @@
 #ifndef INCLUDED_STARMATH_SOURCE_CFGITEM_HXX
 #define INCLUDED_STARMATH_SOURCE_CFGITEM_HXX
 
+#include "utility.hxx"
+
 #include <deque>
 #include <vector>
 
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <unotools/configitem.hxx>
-#include <vcl/timer.hxx>
 
-#include <symbol.hxx>
 #include <types.hxx>
 #include <memory>
 
 class SmSym;
+class SmSymbolManager;
 class SmFormat;
 namespace vcl { class Font; }
 struct SmCfgOther;
