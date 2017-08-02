@@ -62,10 +62,6 @@ bool SwRootFrame::HasSameRect( const SwRect& rRect )
     @param _pVirDev
     input/output parameter - instance of the virtual output device.
 
-    @param _pMapMode
-    input/output parameter - instance of the mapping mode, which will be set
-    at the virtual output device.
-
     @param _rNewOrigin
     input parameter - constant instance of the origin, which will be used in
     the virtual output device
@@ -73,7 +69,6 @@ bool SwRootFrame::HasSameRect( const SwRect& rRect )
 // define to control, if old or new solution for setting the mapping for
 // an virtual output device is used.
 void SetMappingForVirtDev(  const Point&    _rNewOrigin,
-                            MapMode*        ,
                             const vcl::RenderContext* _pOrgOutDev,
                             vcl::RenderContext*  _pVirDev )
 {
@@ -170,7 +165,7 @@ void SwLayVout::Enter(  SwViewShell *pShell, SwRect &rRect, bool bOn )
         MapMode aMapMode( pOut->GetMapMode() );
         // OD 12.11.2002 #96272# - use method to set mapping
         //aMapMode.SetOrigin( Point(0,0) - aRect.Pos() );
-        ::SetMappingForVirtDev( aRect.Pos(), &aMapMode, pOut, pVirDev );
+        ::SetMappingForVirtDev( aRect.Pos(), pOut, pVirDev );
 
         if( aMapMode != pVirDev->GetMapMode() )
             pVirDev->SetMapMode( aMapMode );

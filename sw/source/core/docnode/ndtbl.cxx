@@ -2584,8 +2584,7 @@ static bool lcl_IsFrameInColumn( const SwCellFrame& rFrame, SwSelBoxes& rBoxes )
     return false;
 }
 
-void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
-                        const SwCellFrame* pBoxFrame )
+void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
 {
     OSL_ENSURE( pBoxFrame, "GetTabRows called without pBoxFrame" );
 
@@ -2816,7 +2815,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
     }
     aOld.SetLeftMin ( nLeftMin );
 
-    GetTabRows( aOld, nullptr, pBoxFrame );
+    GetTabRows( aOld, pBoxFrame );
 
     GetIDocumentUndoRedo().StartUndo( SwUndoId::TABLE_ATTR, nullptr );
 

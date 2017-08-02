@@ -2417,9 +2417,7 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
 }
 
 static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
-                                   SfxItemSet & /*rItemSet*/,
                                    SvxCSS1PropertyInfo& rPropInfo,
-                                   const SvxCSS1Parser& /*rParser*/,
                                    SvxBoxItemLine nWhichLine )
 {
     OSL_ENSURE( pExpr, "no expression" );
@@ -2475,50 +2473,47 @@ static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
 }
 
 static void ParseCSS1_padding_top( const CSS1Expression *pExpr,
-                                   SfxItemSet &rItemSet,
+                                   SfxItemSet & /*rItemSet*/,
                                    SvxCSS1PropertyInfo& rPropInfo,
-                                   const SvxCSS1Parser& rParser )
+                                   const SvxCSS1Parser& /*rParser*/ )
 {
-    ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::TOP );
+    ParseCSS1_padding_xxx( pExpr, rPropInfo, SvxBoxItemLine::TOP );
 }
 
 static void ParseCSS1_padding_bottom( const CSS1Expression *pExpr,
-                                      SfxItemSet &rItemSet,
+                                      SfxItemSet & /*rItemSet*/,
                                       SvxCSS1PropertyInfo& rPropInfo,
-                                      const SvxCSS1Parser& rParser )
+                                      const SvxCSS1Parser& /*rParser*/ )
 {
-    ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser,
-                           SvxBoxItemLine::BOTTOM );
+    ParseCSS1_padding_xxx( pExpr, rPropInfo, SvxBoxItemLine::BOTTOM );
 }
 
 static void ParseCSS1_padding_left( const CSS1Expression *pExpr,
-                                    SfxItemSet &rItemSet,
+                                    SfxItemSet & /*rItemSet*/,
                                     SvxCSS1PropertyInfo& rPropInfo,
-                                    const SvxCSS1Parser& rParser )
+                                    const SvxCSS1Parser& /*rParser*/ )
 {
-    ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser, SvxBoxItemLine::LEFT );
+    ParseCSS1_padding_xxx( pExpr, rPropInfo, SvxBoxItemLine::LEFT );
 }
 
 static void ParseCSS1_padding_right( const CSS1Expression *pExpr,
-                                     SfxItemSet &rItemSet,
+                                     SfxItemSet & /*rItemSet*/,
                                      SvxCSS1PropertyInfo& rPropInfo,
-                                     const SvxCSS1Parser& rParser )
+                                     const SvxCSS1Parser& /*rParser*/ )
 {
-    ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser,
-                           SvxBoxItemLine::RIGHT );
+    ParseCSS1_padding_xxx( pExpr, rPropInfo, SvxBoxItemLine::RIGHT );
 }
 
 static void ParseCSS1_padding( const CSS1Expression *pExpr,
-                               SfxItemSet &rItemSet,
+                               SfxItemSet & /*rItemSet*/,
                                SvxCSS1PropertyInfo& rPropInfo,
-                               const SvxCSS1Parser& rParser )
+                               const SvxCSS1Parser& /*rParser*/ )
 {
     int n=0;
     while( n<4 && pExpr && !pExpr->GetOp() )
     {
         SvxBoxItemLine nLine = n==0 || n==2 ? SvxBoxItemLine::BOTTOM : SvxBoxItemLine::LEFT;
-        if( ParseCSS1_padding_xxx( pExpr, rItemSet, rPropInfo, rParser,
-                                   nLine ) )
+        if( ParseCSS1_padding_xxx( pExpr, rPropInfo, nLine ) )
         {
             if( n==0 )
             {

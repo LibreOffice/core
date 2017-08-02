@@ -238,7 +238,7 @@ void RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNo
                 StartTableRow(pDeepInner);
             }
 
-            StartTableCell(pDeepInner);
+            StartTableCell();
         }
 
         // Again, if depth was incremented, start a new table even if we skipped the first cell.
@@ -257,9 +257,9 @@ void RtfAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t pTextNo
                     ww8::WW8TableNodeInfoInner::Pointer_t pInner(pTextNodeInfo->getInnerForDepth(nDepth));
 
                     m_bLastTable = (nDepth == pTextNodeInfo->getDepth());
-                    StartTable(pInner);
+                    StartTable();
                     StartTableRow(pInner);
-                    StartTableCell(pInner);
+                    StartTableCell();
                 }
 
                 m_nTableDepth = nCurrentDepth;
@@ -972,7 +972,7 @@ void RtfAttributeOutput::InitTableHelper(const ww8::WW8TableNodeInfoInner::Point
         m_pTableWrt = o3tl::make_unique<SwWriteTable>(pTable, pTable->GetTabLines(), nPageSize, nTableSz, false);
 }
 
-void RtfAttributeOutput::StartTable(const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
+void RtfAttributeOutput::StartTable()
 {
     // To trigger calling InitTableHelper()
     m_pTableWrt.reset(nullptr);
@@ -998,7 +998,7 @@ void RtfAttributeOutput::StartTableRow(const ww8::WW8TableNodeInfoInner::Pointer
     m_rExport.Strm().WriteCharPtr(m_aRowDefs.makeStringAndClear().getStr());
 }
 
-void RtfAttributeOutput::StartTableCell(const ww8::WW8TableNodeInfoInner::Pointer_t& /*pTableTextNodeInfoInner*/)
+void RtfAttributeOutput::StartTableCell()
 {
     m_bTableCellOpen = true;
 }

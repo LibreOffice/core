@@ -1916,7 +1916,7 @@ bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
     SwTwips nPageRight, SwTwips nPageSize);
 void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord,
     SfxItemSet &rFlySet);
-bool RTLDrawingsHack(long &rLeft, long nWidth,
+bool RTLDrawingsHack(long &rLeft,
     sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize);
 #endif

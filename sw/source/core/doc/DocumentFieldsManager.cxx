@@ -1378,9 +1378,7 @@ void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
                     {
                         bChgd = true;
                         SwExtUserField* pExtUserField = static_cast<SwExtUserField*>(pFormatField->GetField());
-                        pExtUserField->SetExpansion( SwExtUserFieldType::Expand(
-                                            pExtUserField->GetSubType(),
-                                            pExtUserField->GetFormat()));
+                        pExtUserField->SetExpansion( SwExtUserFieldType::Expand(pExtUserField->GetSubType()) );
                     }
                     break;
 

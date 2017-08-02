@@ -621,7 +621,7 @@ void SwFEShell::GetTabRows_( SwTabCols &rToFill, const SwFrame *pBox )
     }
     if ( !pLastRows )
     {
-        SwDoc::GetTabRows( rToFill, nullptr, static_cast<const SwCellFrame*>(pBox) );
+        SwDoc::GetTabRows( rToFill, static_cast<const SwCellFrame*>(pBox) );
 
         pLastRows   = new SwTabCols( rToFill );
         g_pRowCacheLastTable = pTab->GetTable();

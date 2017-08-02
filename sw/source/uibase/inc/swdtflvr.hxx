@@ -116,7 +116,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     static bool PasteFileName( TransferableDataHelper& rData,
                             SwWrtShell& rSh, SotClipboardFormatId nFormat, SwPasteSdr nAction,
-                            const Point* pPt, SotExchangeActionFlags nActionFlags, bool bMsg, bool * graphicInserted );
+                            const Point* pPt, SotExchangeActionFlags nActionFlags, bool * graphicInserted );
 
     static bool PasteDBData( TransferableDataHelper& rData, SwWrtShell& rSh,
                             SotClipboardFormatId nFormat, bool bLink, const Point* pDragPt,
@@ -155,7 +155,7 @@ public:
 
     // set properties on the document, like PageMargin, VisArea.
     // And set real Size
-    static void InitOle( SfxObjectShell* pDoc, SwDoc& rDoc );
+    static void InitOle( SfxObjectShell* pDoc );
 
     // copy - methods and helper methods for the copy
     int  Cut();

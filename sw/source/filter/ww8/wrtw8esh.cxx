@@ -634,7 +634,7 @@ sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     return bRet;
 }
 
-bool RTLDrawingsHack(long &rLeft, long /*nWidth*/,
+bool RTLDrawingsHack(long &rLeft,
     sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize)
 {
@@ -676,7 +676,7 @@ void WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
     ww8::Frame::WriterSource eSource = rFrameFormat.GetWriterType();
     if (eSource == ww8::Frame::eDrawing || eSource == ww8::Frame::eFormControl)
     {
-        if (RTLDrawingsHack(rLeft, nWidth, rHOr.GetHoriOrient(),
+        if (RTLDrawingsHack(rLeft, rHOr.GetHoriOrient(),
             rHOr.GetRelationOrient(), nPageLeft, nPageRight, nPageSize))
         {
             bRet = true;

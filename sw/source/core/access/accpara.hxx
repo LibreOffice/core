@@ -209,8 +209,7 @@ protected:
                               const OUString& rText,
                               sal_Int32 nPos );
     static bool GetParagraphBoundary( css::i18n::Boundary& rBound,
-                                   const OUString& rText,
-                                   sal_Int32 nPos );
+                                   const OUString& rText );
     bool GetAttributeBoundary( css::i18n::Boundary& rBound,
                                    sal_Int32 nPos );
     bool GetGlyphBoundary( css::i18n::Boundary& rBound,

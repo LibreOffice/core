@@ -303,7 +303,7 @@ void SwTransferable::AddSupportedFormats()
     }
 }
 
-void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& )
+void SwTransferable::InitOle( SfxObjectShell* pDoc )
 {
     //set OleVisArea. Upper left corner of the page and size of
     //RealSize in Twips.
@@ -443,7 +443,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         // in CORE a new one was created (OLE-objects copied!)
         m_aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( m_aDocShellRef.Is() )
-            SwTransferable::InitOle( m_aDocShellRef, *pTmpDoc );
+            SwTransferable::InitOle( m_aDocShellRef );
         pTmpDoc->SetTmpDocShell( nullptr );
 
         if( nSelectionType & SelectionType::Text && !m_pWrtShell->HasMark() )
@@ -596,7 +596,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                                          SfxObjectCreateMode::EMBEDDED );
                 m_aDocShellRef = pNewDocSh;
                 m_aDocShellRef->DoInitNew();
-                SwTransferable::InitOle( m_aDocShellRef, *pDoc );
+                SwTransferable::InitOle( m_aDocShellRef );
             }
             bOK = SetObject( &m_aDocShellRef, SWTRANSFER_OBJECTTYPE_SWOLE,
                             rFlavor );
@@ -898,7 +898,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         // a new one was created in CORE (OLE objects copied!)
         m_aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( m_aDocShellRef.Is() )
-            SwTransferable::InitOle( m_aDocShellRef, *pTmpDoc );
+            SwTransferable::InitOle( m_aDocShellRef );
         pTmpDoc->SetTmpDocShell( nullptr );
 
         if( m_pWrtShell->IsObjSelected() )
@@ -1055,7 +1055,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr 
     // a new one was created in CORE (OLE-Objects copied!)
     m_aDocShellRef = pCDoc->GetTmpDocShell();
     if( m_aDocShellRef.Is() )
-        SwTransferable::InitOle( m_aDocShellRef, *pCDoc );
+        SwTransferable::InitOle( m_aDocShellRef );
     pCDoc->SetTmpDocShell( nullptr );
 
     m_eBufferType = TransferBufferType::Document;
@@ -1379,7 +1379,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                                     : EXCHG_IN_ACTION_LINK == nAction
                                         ? SwPasteSdr::SetAttr
                                         : SwPasteSdr::Insert),
-                                pPt, nActionFlags, bMsg, nullptr );
+                                pPt, nActionFlags, nullptr );
                 break;
 
             case SotClipboardFormatId::FILE_LIST:
@@ -1427,7 +1427,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                 bool graphicInserted;
                 bRet = SwTransferable::PasteFileName( rData, rSh, nFormat,
                                             SwPasteSdr::Insert, pPt,
-                                            nActionFlags, bMsg,
+                                            nActionFlags,
                                             &graphicInserted );
                 if( graphicInserted )
                     bCallAutoCaption = true;
@@ -2524,7 +2524,7 @@ bool SwTransferable::PasteAsHyperlink( TransferableDataHelper& rData,
 bool SwTransferable::PasteFileName( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat,
                                     SwPasteSdr nAction, const Point* pPt,
-                                    SotExchangeActionFlags nActionFlags, bool /* bMsg */,
+                                    SotExchangeActionFlags nActionFlags,
                                     bool * graphicInserted)
 {
     bool bRet = SwTransferable::PasteGrf( rData, rSh, nFormat, nAction,
@@ -2734,7 +2734,7 @@ bool SwTransferable::PasteFileList( TransferableDataHelper& rData,
             TransferableDataHelper aData( pHlp );
 
             if( SwTransferable::PasteFileName( aData, rSh, SotClipboardFormatId::SIMPLE_FILE, nAct,
-                                            pPt, SotExchangeActionFlags::NONE, bMsg, nullptr ))
+                                            pPt, SotExchangeActionFlags::NONE, nullptr ))
             {
                 if( bLink )
                 {

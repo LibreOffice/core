@@ -631,7 +631,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
         {
             SwXMLTableContext *pTableContext =
                 new SwXMLTableContext( GetSwImport(), nPrefix, rLocalName,
-                                       xAttrList, GetTable() );
+                                       GetTable() );
             pContext = pTableContext;
             if( GetTable()->IsValid() )
                 InsertContent( pTableContext );
@@ -805,7 +805,6 @@ public:
     SwXMLTableColsContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -817,7 +816,6 @@ public:
 
 SwXMLTableColsContext_Impl::SwXMLTableColsContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > &,
         SwXMLTableContext *pTable ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xMyTable( pTable )
@@ -970,7 +968,6 @@ public:
 
     SwXMLTableRowsContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable,
             bool bHead );
 
@@ -984,7 +981,6 @@ public:
 SwXMLTableRowsContext_Impl::SwXMLTableRowsContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > &,
         SwXMLTableContext *pTable,
         bool bHead ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1367,7 +1363,6 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > &,
         SwXMLTableContext *pTable ) :
     XMLTextTableContext( rImport, nPrfx, rLName ),
     m_pColumnDefaultCellStyleNames( nullptr ),
@@ -1413,7 +1408,7 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
     case XML_TOK_TABLE_COLS:
         if( IsValid() )
             pContext = new SwXMLTableColsContext_Impl( GetSwImport(), nPrefix,
-                                                       rLocalName, xAttrList,
+                                                       rLocalName,
                                                        this );
         break;
     case XML_TOK_TABLE_COL:
@@ -1427,7 +1422,7 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
         SAL_FALLTHROUGH;
     case XML_TOK_TABLE_ROWS:
         pContext = new SwXMLTableRowsContext_Impl( GetSwImport(), nPrefix,
-                                                   rLocalName, xAttrList,
+                                                   rLocalName,
                                                    this, bHeader );
         break;
     case XML_TOK_TABLE_ROW:

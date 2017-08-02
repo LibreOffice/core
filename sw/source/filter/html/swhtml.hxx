@@ -677,7 +677,7 @@ private:
     // (not for graphics, therefore htmlplug.cxx)
     static void SetFixSize( const Size& rPixSize, const Size& rTwipDfltSize,
                      bool bPrcWidth, bool bPrcHeight,
-                     SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
+                     SvxCSS1PropertyInfo &rPropInfo,
                      SfxItemSet& rFlyItemSet );
     static void SetVarSize( SvxCSS1PropertyInfo &rPropInfo,
                      SfxItemSet& rFlyItemSet, SwTwips nDfltWidth=MINLAY,
