@@ -1397,14 +1397,13 @@ int Desktop::Main()
                 OUString aBuildID = Updater::getBuildID();
                 if (aOldBuildID == aBuildID)
                 {
-                    SAL_INFO("desktop", "No updating took place.");
                     Updater::log("Old and new Build ID are the same. No Updating took place.");
                 }
                 else
                 {
                     if (!aSeeAlso.isEmpty())
                     {
-                        SAL_INFO("desktop", "See also: " << aSeeAlso);
+                        SAL_INFO("updater", "See also: " << aSeeAlso);
                                 Reference< css::system::XSystemShellExecute > xSystemShell(
                         SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
 
