@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4e1a3319",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-02T22:21:44Z",
+      "side": 1,
+      "message": "and",
+      "range": {
+        "startLine": 274,
+        "startChar": 50,
+        "endLine": 274,
+        "endChar": 52
+      },
+      "revId": "cc96bf9438da0242c8cd0be72262e9d8fd41ea51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0e202b49",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-02T22:21:44Z",
+      "side": 1,
+      "message": "Ah, I see, these two are true by default - sorry for being not careful.\n\nStill, I suppose that this \"||\" is incorrect here and should be \"\u0026\u0026\"",
+      "range": {
+        "startLine": 276,
+        "startChar": 31,
+        "endLine": 276,
+        "endChar": 33
+      },
+      "revId": "cc96bf9438da0242c8cd0be72262e9d8fd41ea51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2e1de70f",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-02T22:21:44Z",
+      "side": 1,
+      "message": "I see that you decided not to optimize the whole condition. Then, at least this is equal to isContainsBlank",
+      "range": {
+        "startLine": 308,
+        "startChar": 13,
+        "endLine": 308,
+        "endChar": 61
+      },
+      "revId": "cc96bf9438da0242c8cd0be72262e9d8fd41ea51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
