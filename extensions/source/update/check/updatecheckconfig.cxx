@@ -34,6 +34,7 @@
 #pragma warning(push,1) // disable warnings within system headers
 #pragma warning(disable: 4917)
 #endif
+#include <objbase.h>
 #include <shlobj.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
@@ -159,16 +160,17 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
     }
 }
 
-OUString UpdateCheckConfig::getDesktopDirectory()
+OUString UpdateCheckConfig::getDownloadsDirectory()
 {
     OUString aRet;
 
 #ifdef _WIN32
-    WCHAR szPath[MAX_PATH];
+    PWSTR szPath;
 
-    if (TRUE == SHGetSpecialFolderPathW(nullptr, szPath, CSIDL_DESKTOPDIRECTORY, true))
+    if (SHGetKnownFolderPath(FOLDERID_Downloads, 0, nullptr, &szPath) == S_OK)
     {
         aRet = OUString( reinterpret_cast< sal_Unicode * >(szPath) );
+        CoTaskMemFree(szPath);
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
 #else
@@ -471,7 +473,7 @@ UpdateCheckConfig::getByName( const OUString& aName )
         aValue >>= aStr;
 
         if( aStr.isEmpty() )
-            aValue <<= getDesktopDirectory();
+            aValue <<= getDownloadsDirectory();
     }
     return aValue;
 }
