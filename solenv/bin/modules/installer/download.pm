@@ -1199,6 +1199,7 @@ sub nsis_language_converter
     elsif ( $language eq "lt" ) { $nsislanguage = "Lithuanian"; }
     elsif ( $language eq "mk" ) { $nsislanguage = "Macedonian"; }
     elsif ( $language eq "mn" ) { $nsislanguage = "Mongolian"; }
+    elsif ( $language eq "nb" ) { $nsislanguage = "Norwegian"; }
     elsif ( $language eq "no" ) { $nsislanguage = "Norwegian"; }
     elsif ( $language eq "no-NO" ) { $nsislanguage = "Norwegian"; }
     elsif ( $language eq "es" ) { $nsislanguage = "Spanish"; }
@@ -1364,7 +1365,7 @@ sub get_language_string_from_language_block
 ##################################################################
 # Windows: Replacing strings in NSIS nsh file
 # nsh file syntax:
-# !define MUI_TEXT_DIRECTORY_TITLE "Zielverzeichnis ausw‰hlen"
+# !define MUI_TEXT_DIRECTORY_TITLE "Zielverzeichnis ausw√§hlen"
 ##################################################################
 
 sub replace_identifier_in_nshfile
