@@ -137,8 +137,8 @@ public:
     // Stores the bool value for manually paused downloads
     void storeDownloadPaused(bool paused);
 
-    // Returns the directory that acts as the user's desktop
-    static OUString getDesktopDirectory();
+    // Returns the directory for downloaded files
+    static OUString getDownloadsDirectory();
 
     // Returns a directory accessible for all users
     static OUString getAllUsersDirectory();
