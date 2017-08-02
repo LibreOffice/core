@@ -94,6 +94,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private SearchController mSearchController;
     private CalcHeadersController mCalcHeadersController;
     private boolean mIsSpreadsheet;
+    private int mCalcZoom;
 
     public GeckoLayerClient getLayerClient() {
         return mLayerClient;
@@ -694,6 +695,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     public void initializeCalcHeaders() {
         mCalcHeadersController = new CalcHeadersController(this, mLayerClient.getView());
+        mToolbarController.disableMenuItem(R.id.action_zoom_calc, false);
         mCalcHeadersController.setupHeaderPopupView();
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
@@ -715,6 +717,32 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
     public void setDocumentChanged (boolean changed) {
         isDocumentChanged = changed;
+    }
+
+    public int getCalcZoom() {
+        if (mCalcHeadersController == null) {
+            mCalcZoom = (int) (getResources().getDisplayMetrics().density + 0.5); // same as ceil()
+        }
+        return mCalcZoom;
+    }
+
+    public void popZoomCalcDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String[] options = {getResources().getString(R.string.calc_zoom_default),
+                "1x", "2x", "3x", "4x", "5x"};
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    mCalcZoom = (int) (getResources().getDisplayMetrics().density + 0.5); // same as ceil()
+                } else {
+                    mCalcZoom = which;
+                }
+                LOKitShell.sendResumeEvent(mInputFile.getAbsolutePath(), partIndex); // refresh doc
+            }
+        });
+        builder.show();
+        Snackbar.make(findViewById(R.id.gecko_layout), R.string.calc_zoom_alert, Snackbar.LENGTH_LONG).show();
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
