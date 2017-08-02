@@ -1424,13 +1424,11 @@ int Desktop::Main()
                 Updater::removeUpdateFiles();
             }
 
-            osl::DirectoryItem aPatchInfo;
-            osl::DirectoryItem::get(Updater::getUpdateInfoURL(), aPatchInfo);
-            osl::DirectoryItem aDirectoryItem;
-            osl::DirectoryItem::get(Updater::getUpdateDirURL(), aDirectoryItem);
+            osl::DirectoryItem aUpdateFile;
+            osl::DirectoryItem::get(Updater::getUpdateFileURL(), aUpdateFile);
 
             const char* pUpdaterTestUpdate = std::getenv("LIBO_UPDATER_TEST_UPDATE");
-            if (pUpdaterTestUpdate || (aPatchInfo.is() && aDirectoryItem.is()))
+            if (pUpdaterTestUpdate || aUpdateFile.is())
             {
                 OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
                 rtl::Bootstrap::expandMacros(aBuildID);
