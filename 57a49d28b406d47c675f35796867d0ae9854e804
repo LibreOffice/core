@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_2b5b1956",
+        "filename": "download.lst",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-02T14:02:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_4b81458f",
+      "revId": "57a49d28b406d47c675f35796867d0ae9854e804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_2b74f9cd",
         "filename": "external/libepubgen/ExternalProject_libepubgen.mk",
         "patchSetId": 1
@@ -42,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_4b586557",
+        "filename": "external/libepubgen/ExternalProject_libepubgen.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-02T14:02:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_2b74f9cd",
+      "revId": "57a49d28b406d47c675f35796867d0ae9854e804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_eb7111e2",
         "filename": "external/libepubgen/ExternalProject_libepubgen.mk",
         "patchSetId": 1
@@ -59,6 +95,24 @@
         "endLine": 37,
         "endChar": 63
       },
+      "revId": "57a49d28b406d47c675f35796867d0ae9854e804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6b55211c",
+        "filename": "external/libepubgen/ExternalProject_libepubgen.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-02T14:02:56Z",
+      "side": 1,
+      "message": "Also BOOST_CPPFLAGS look redundant, now that I look at it.",
+      "parentUuid": "1a430d35_eb7111e2",
       "revId": "57a49d28b406d47c675f35796867d0ae9854e804",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
