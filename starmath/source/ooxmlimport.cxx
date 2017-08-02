@@ -11,6 +11,7 @@
 #include "ooxmlimport.hxx"
 #include "types.hxx"
 
+#include <oox/mathml/importutils.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <rtl/ustring.hxx>

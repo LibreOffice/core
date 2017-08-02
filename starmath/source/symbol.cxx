@@ -18,15 +18,11 @@
  */
 
 #include <vector>
-#include <iterator>
 
 #include "symbol.hxx"
-#include "view.hxx"
 #include "utility.hxx"
-#include "dialog.hxx"
 #include "cfgitem.hxx"
 #include "smmod.hxx"
-#include "strings.hrc"
 
 
 SmSym::SmSym() :

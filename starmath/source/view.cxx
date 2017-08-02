@@ -18,10 +18,8 @@
  */
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -30,7 +28,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -42,16 +39,12 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/miscopt.hxx>
-#include <svl/undo.hxx>
 #include <svl/whiter.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/zoomslideritem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
@@ -59,8 +52,6 @@
 #include <sfx2/zoomitem.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 
 #include <unotools/streamwrap.hxx>

@@ -25,22 +25,21 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase.hxx>
 #include <svl/SfxBroadcaster.hxx>
 
 #include <editeng/editeng.hxx>
 #include <editeng/unoedsrc.hxx>
-#include <svx/AccessibleTextHelper.hxx>
 #include <edit.hxx>
 #include <memory>
 
 class SmGraphicWindow;
 class SmEditWindow;
 class SmDocShell;
+
+namespace accessibility { class AccessibleTextHelper; }
 
 // classes and helper-classes used for accessibility in the graphic-window
 

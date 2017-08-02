@@ -28,12 +28,10 @@
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
 #include "smmod.hxx"
-#include "symbol.hxx"
 #include "cfgitem.hxx"
 #include "dialog.hxx"
 #include "edit.hxx"
 #include "view.hxx"
-#include "strings.hrc"
 #include "smmod.hrc"
 #include "starmath.hrc"
 #include "svx/modctrl.hxx"

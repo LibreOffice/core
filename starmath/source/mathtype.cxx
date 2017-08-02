@@ -17,11 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <mathtype.hxx>
+#include "mathtype.hxx"
 
 #include <filter/msfilter/classids.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/docfile.hxx>
+#include <sot/storage.hxx>
+
+#include "eqnolefilehdr.hxx"
+#include "node.hxx"
 
 void MathType::Init()
 {

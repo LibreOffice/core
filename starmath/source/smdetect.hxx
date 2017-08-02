@@ -21,16 +21,11 @@
 #define INCLUDED_STARMATH_SOURCE_SMDETECT_HXX
 
 #include <rtl/ustring.hxx>
-#include <osl/diagnose.h>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <cppuhelper/factory.hxx>
-#include <sfx2/sfxuno.hxx>
 
 
 namespace com

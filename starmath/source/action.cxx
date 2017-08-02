@@ -18,9 +18,7 @@
  */
 
 #include "action.hxx"
-#include "smdll.hxx"
 #include "document.hxx"
-#include "strings.hrc"
 #include "strings.hxx"
 
 SmFormatAction::SmFormatAction(SmDocShell *pDocSh,

@@ -10,8 +10,9 @@
 #ifndef INCLUDED_STARMATH_SOURCE_OOXMLIMPORT_HXX
 #define INCLUDED_STARMATH_SOURCE_OOXMLIMPORT_HXX
 
-#include <oox/mathml/importutils.hxx>
+#include <rtl/ustring.hxx>
 
+namespace oox { namespace formulaimport { class XmlStream; } }
 /**
  Class implementing reading of formulas from OOXML. The toplevel element is expected
  to be oMath (handle oMathPara outside of this code).

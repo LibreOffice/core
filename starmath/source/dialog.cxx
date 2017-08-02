@@ -25,19 +25,14 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/app.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <svtools/ctrltool.hxx>
-#include <sfx2/printer.hxx>
-#include <vcl/help.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <sfx2/dispatch.hxx>
-#include <osl/diagnose.h>
 #include <svx/ucsubset.hxx>
 
 #include "dialog.hxx"
@@ -48,8 +43,6 @@
 #include "smmod.hxx"
 #include "symbol.hxx"
 #include "view.hxx"
-#include "document.hxx"
-#include "unomodel.hxx"
 
 #include <algorithm>
 

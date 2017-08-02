@@ -19,11 +19,10 @@
 
 
 #include "node.hxx"
+#include "parse.hxx"
 #include "rect.hxx"
 #include "symbol.hxx"
 #include "smmod.hxx"
-#include "document.hxx"
-#include "view.hxx"
 #include "mathtype.hxx"
 #include "tmpdevice.hxx"
 #include "visitors.hxx"
