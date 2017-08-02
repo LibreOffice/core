@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_cb11b55f",
+        "filename": "connectivity/source/commontools/dbconversion.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-08-02T14:39:10Z",
+      "side": 1,
+      "message": "I don\u0027t think that is correct. We indeed have to \"add 1\", but that\u0027s because the first year is numbered \"1\", not zero, and is not related to leap years. As such, I think your algorithm will give a wrong result when nDays \u003e\u003d DAYS_IN_100_YEARS\n\nLet\u0027s take for example 01/01/0500 (1st January 500). The \"nDays\" value for that day is 182622 (which is DAYS_IN_400_YEARS + DAYS_IN_100_YEARS + 1), right? Since 01/01/0001 is day 1, exactly 400 years later is 01/01/0401 and exactly 100 years after that is 01/01/0501.\n\nYour algorithm gives year 500.\n\nI also don\u0027t understand how your algorithm can ever give a year who are congruent to something else than 0 or 1 modulo 100. E.g. does your algorithm work for date 1/1/0652? It seems to me it gives year 500 and then overflows the months.",
+      "range": {
+        "startLine": 204,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 89
+      },
+      "revId": "4967c95861a3c449526025d862c823c53d1e931e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4b2f85a1",
+        "filename": "connectivity/source/commontools/dbconversion.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-08-02T14:39:10Z",
+      "side": 1,
+      "message": "shouldn\u0027t that be DAYS_IN_100_YEAR?",
+      "range": {
+        "startLine": 217,
+        "startChar": 32,
+        "endLine": 217,
+        "endChar": 35
+      },
+      "revId": "4967c95861a3c449526025d862c823c53d1e931e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
