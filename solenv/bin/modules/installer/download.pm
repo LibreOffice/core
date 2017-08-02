@@ -1177,6 +1177,7 @@ sub nsis_language_converter
     if ( $language eq "en-US" ) { $nsislanguage = "English"; }
     elsif ( $language eq "sq" ) { $nsislanguage = "Albanian"; }
     elsif ( $language eq "ar" ) { $nsislanguage = "Arabic"; }
+    elsif ( $language eq "eu" ) { $nsislanguage = "Basque"; }
     elsif ( $language eq "bg" ) { $nsislanguage = "Bulgarian"; }
     elsif ( $language eq "ca" ) { $nsislanguage = "Catalan"; }
     elsif ( $language eq "hr" ) { $nsislanguage = "Croatian"; }
