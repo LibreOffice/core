@@ -1383,11 +1383,12 @@ int Desktop::Main()
             return EXIT_FAILURE;
 
 #if HAVE_FEATURE_UPDATE_MAR
-        const char* pUpdaterTestReplace = std::getenv("LIBO_UPDATER_TEST_REPLACE");
-        if (pUpdaterTestReplace || officecfg::Office::Update::Update::Enabled::get())
+        const char* pUpdaterTestEnable = std::getenv("LIBO_UPDATER_TEST_ENABLE");
+        if (pUpdaterTestEnable || officecfg::Office::Update::Update::Enabled::get())
         {
             // check if we just updated
-            bool bUpdateRunning = officecfg::Office::Update::Update::UpdateRunning::get();
+            const char* pUpdaterRunning = std::getenv("LIBO_UPDATER_TEST_RUNNING");
+            bool bUpdateRunning = officecfg::Office::Update::Update::UpdateRunning::get() || pUpdaterRunning;
             if (bUpdateRunning)
             {
                 OUString aSeeAlso = officecfg::Office::Update::Update::SeeAlso::get();
@@ -1426,7 +1427,8 @@ int Desktop::Main()
             osl::DirectoryItem aDirectoryItem;
             osl::DirectoryItem::get(Updater::getUpdateDirURL(), aDirectoryItem);
 
-            if (pUpdaterTestReplace || (aPatchInfo.is() && aDirectoryItem.is()))
+            const char* pUpdaterTestUpdate = std::getenv("LIBO_UPDATER_TEST_UPDATE");
+            if (pUpdaterTestUpdate || (aPatchInfo.is() && aDirectoryItem.is()))
             {
                 OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
                 rtl::Bootstrap::expandMacros(aBuildID);
