@@ -1436,6 +1436,10 @@ int Desktop::Main()
                 officecfg::Office::Update::Update::OldBuildID::set(aBuildID, batch);
                 officecfg::Office::Update::Update::UpdateRunning::set(true, batch);
                 batch->commit();
+
+                // make sure the change is written to the configuration before we start the update
+                css::uno::Reference<css::util::XFlushable> xFlushable(css::configuration::theDefaultProvider::get(xContext), UNO_QUERY);;
+                xFlushable->flush();
                 // avoid the old oosplash staying around
                 CloseSplashScreen();
                 update();
