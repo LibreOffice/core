@@ -116,6 +116,24 @@
       "revId": "57a49d28b406d47c675f35796867d0ae9854e804",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_eb167154",
+        "filename": "external/libepubgen/ExternalProject_libepubgen.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-02T14:29:42Z",
+      "side": 1,
+      "message": "Hm no, that\u0027s needed at least on Windows, I\u0027ll put it back.",
+      "parentUuid": "1a430d35_6b55211c",
+      "revId": "57a49d28b406d47c675f35796867d0ae9854e804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
