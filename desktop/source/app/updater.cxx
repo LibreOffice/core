@@ -750,6 +750,7 @@ OUString Updater::getExecutableDirURL()
 
 void Updater::log(const OUString& rMessage)
 {
+    SAL_INFO("updater", rMessage);
     OUString aUpdateLog = getUpdateInfoLog();
     SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
@@ -758,6 +759,7 @@ void Updater::log(const OUString& rMessage)
 
 void Updater::log(const OString& rMessage)
 {
+    SAL_INFO("updater", rMessage);
     OUString aUpdateLog = getUpdateInfoLog();
     SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
@@ -766,6 +768,7 @@ void Updater::log(const OString& rMessage)
 
 void Updater::log(const char* pMessage)
 {
+    SAL_INFO("updater", pMessage);
     OUString aUpdateLog = getUpdateInfoLog();
     SvFileStream aLog(aUpdateLog, StreamMode::STD_READWRITE);
     aLog.Seek(aLog.Tell() + aLog.remainingSize()); // make sure we are at the end
