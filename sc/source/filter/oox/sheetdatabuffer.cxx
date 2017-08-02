@@ -444,7 +444,7 @@ void SheetDataBuffer::finalizeImport()
     {
         RowStyles& rRowStyles = col->second;
         SCCOL nScCol = static_cast< SCCOL >( col->first );
-        const ScPatternAttr* pDefPattern = rDoc.getDoc().GetPattern(nScCol, 0, getSheetIndex());
+        const ScPatternAttr* pDefPattern = rDoc.getDoc().GetDefPattern();
         Xf::AttrList aAttrs(pDefPattern);
         for ( RowStyles::iterator rRows = rRowStyles.begin(), rRows_end = rRowStyles.end(); rRows != rRows_end; ++rRows )
         {
