@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ee72ffac",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-02T16:32:34Z",
+      "side": 1,
+      "message": "? I suppose it\u0027s a typo",
+      "range": {
+        "startLine": 269,
+        "startChar": 12,
+        "endLine": 269,
+        "endChar": 13
+      },
+      "revId": "c3f3c56a531ac6bf7f3148194f0747ab4f8b1725",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4e6233da",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-02T16:32:34Z",
+      "side": 1,
+      "message": "... or simply \u0027true\u0027 :)",
+      "range": {
+        "startLine": 270,
+        "startChar": 62,
+        "endLine": 270,
+        "endChar": 107
+      },
+      "revId": "c3f3c56a531ac6bf7f3148194f0747ab4f8b1725",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0e682bba",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-02T16:32:34Z",
+      "side": 1,
+      "message": "Here, too",
+      "range": {
+        "startLine": 271,
+        "startChar": 12,
+        "endLine": 271,
+        "endChar": 13
+      },
+      "revId": "c3f3c56a531ac6bf7f3148194f0747ab4f8b1725",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6e5fef0e",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-02T16:32:34Z",
+      "side": 1,
+      "message": "This is the same as isContainsNumber, because if aDPTypesWithoutBlank contain Value, so does aDPTypes, and vice versa",
+      "range": {
+        "startLine": 287,
+        "startChar": 13,
+        "endLine": 287,
+        "endChar": 90
+      },
+      "revId": "c3f3c56a531ac6bf7f3148194f0747ab4f8b1725",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ae9f17b3",
+        "filename": "sc/source/filter/excel/xepivotxml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-08-02T16:32:34Z",
+      "side": 1,
+      "message": "or alternatively size of aDPTypesWithoutBlank not equal to size of aDPTypes (I suppose it\u0027s faster)\n\nThe whole condition (with aDPTypes.size() \u003d\u003d 1)) equal to size of aDPTypesWithoutBlank \u003d\u003d 0",
+      "range": {
+        "startLine": 295,
+        "startChar": 13,
+        "endLine": 295,
+        "endChar": 61
+      },
+      "revId": "c3f3c56a531ac6bf7f3148194f0747ab4f8b1725",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
