@@ -1798,7 +1798,7 @@ tools::Rectangle Calendar::GetDateRect( const Date& rDate ) const
         {
             sal_Int32 nWeekDay = (sal_Int32)aLastDate.GetDayOfWeek();
             nWeekDay = (nWeekDay+(7-ImplGetWeekStart())) % 7;
-            aLastDate.AddDays( nWeekDay );
+            aLastDate.AddDays( -nWeekDay );
             aRect = GetDateRect( aLastDate );
             nDaysOff = rDate-aLastDate;
             nDayIndex = 0;
