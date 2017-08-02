@@ -2003,9 +2003,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     bool bIgnoreCase = !rParam.bCaseSens;
 
-    OUString *pCompString[MAXSUBTOTAL];               // Pointer due to compiler problems
-    for (i=0; i<MAXSUBTOTAL; i++)
-        pCompString[i] = new OUString;
+    OUString aCompString[MAXSUBTOTAL];
 
                                 //TODO: sort?
 
@@ -2036,9 +2034,9 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             {
                 GetString( nGroupCol[i], nStartRow, aSubString );
                 if ( bIgnoreCase )
-                    *pCompString[i] = ScGlobal::pCharClass->uppercase( aSubString );
+                    aCompString[i] = ScGlobal::pCharClass->uppercase( aSubString );
                 else
-                    *pCompString[i] = aSubString;
+                    aCompString[i] = aSubString;
             }                                                   // aSubString stays on the last
 
             bool bBlockVis = false;             // group visible?
@@ -2062,7 +2060,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             //  when sorting, blanks are separate group
                             //  otherwise blank cells are allowed below
                             bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
-                                            aString != *pCompString[i] );
+                                            aString != aCompString[i] );
                         }
                         if ( bChanged && bTestPrevSub )
                         {
@@ -2151,9 +2149,9 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         {
                             GetString( nGroupCol[i], nRow, aSubString );
                             if ( bIgnoreCase )
-                                *pCompString[i] = ScGlobal::pCharClass->uppercase( aSubString );
+                                aCompString[i] = ScGlobal::pCharClass->uppercase( aSubString );
                             else
-                                *pCompString[i] = aSubString;
+                                aCompString[i] = aSubString;
                         }
                     }
                 }
@@ -2210,9 +2208,6 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     if (bSpaceLeft)
         DoAutoOutline( nStartCol, nStartRow, nEndCol, nEndRow );
-
-    for (i=0; i<MAXSUBTOTAL; i++)
-        delete pCompString[i];
 
     rParam.nRow2 = nEndRow;                 // new end
     return bSpaceLeft;
