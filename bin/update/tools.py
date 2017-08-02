@@ -1,5 +1,6 @@
 import os
 import hashlib
+import zipfile
 import tarfile
 
 def uncompress_file_to_dir(compressed_file, uncompress_dir):
@@ -16,6 +17,9 @@ def uncompress_file_to_dir(compressed_file, uncompress_dir):
         tar.extractall(uncompress_dir)
         tar.close()
     elif extension == '.zip':
+        zip_file = zipfile.ZipFile(compressed_file)
+        zip_file.extractall(uncompress_dir)
+        zip_file.close()
         pass
     else:
         print("Error: unknown extension " + extension)
