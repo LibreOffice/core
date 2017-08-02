@@ -113,7 +113,7 @@ static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nL
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxLanguageBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
     if (bDropdown)
         nBits |= WB_DROPDOWN;
     else
@@ -126,7 +126,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxLanguageBox(VclPtr<vcl::Win
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxLanguageComboBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
     if (bDropdown)
         nBits |= WB_DROPDOWN;
     else

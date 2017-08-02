@@ -477,18 +477,6 @@ void VclBuilder::disposeBuilder()
     m_pParent.clear();
 }
 
-OUString VclBuilder::extractCustomProperty(VclBuilder::stringmap &rMap)
-{
-    OUString sCustomProperty;
-    VclBuilder::stringmap::iterator aFind = rMap.find(OString("customproperty"));
-    if (aFind != rMap.end())
-    {
-        sCustomProperty = aFind->second;
-        rMap.erase(aFind);
-    }
-    return sCustomProperty;
-}
-
 namespace
 {
     bool extractDrawValue(VclBuilder::stringmap& rMap)
@@ -934,7 +922,7 @@ namespace
             nBits |= WB_SIZEABLE;
         if (extractCloseable(rMap))
             nBits |= WB_CLOSEABLE;
-        OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+        OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
         if (!sBorder.isEmpty())
             nBits |= WB_BORDER;
         if (!extractDecorated(rMap))
@@ -950,20 +938,6 @@ namespace
             nBits |= WB_MOVEABLE;
         return nBits;
     }
-}
-
-FieldUnit VclBuilder::detectUnit(OUString const& rString)
-{
-    OUString const unit(extractUnit(rString));
-    return detectMetricUnit(unit);
-}
-
-void VclBuilder::ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
-{
-    OString sWidthChars("width-chars");
-    VclBuilder::stringmap::iterator aFind = rMap.find(sWidthChars);
-    if (aFind == rMap.end())
-        rMap[sWidthChars] = "25";
 }
 
 bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
@@ -1063,18 +1037,6 @@ bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
         return true;
     }
     return false;
-}
-
-bool VclBuilder::extractDropdown(VclBuilder::stringmap &rMap)
-{
-    bool bDropdown = true;
-    VclBuilder::stringmap::iterator aFind = rMap.find(OString("dropdown"));
-    if (aFind != rMap.end())
-    {
-        bDropdown = toBool(aFind->second);
-        rMap.erase(aFind);
-    }
-    return bDropdown;
 }
 
 bool VclBuilder::extractBuffer(const OString &id, stringmap &rMap)
@@ -1272,7 +1234,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkButton")
     {
         VclPtr<Button> xButton;
-        OUString sMenu = extractCustomProperty(rMap);
+        OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
         if (sMenu.isEmpty())
             xButton = extractStockAndBuildPushButton(pParent, rMap);
         else
@@ -1287,7 +1249,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkToggleButton")
     {
         VclPtr<Button> xButton;
-        OUString sMenu = extractCustomProperty(rMap);
+        OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
         assert(sMenu.getLength() && "not implemented yet");
         xButton = extractStockAndBuildMenuToggleButton(pParent, rMap);
         m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
@@ -1299,7 +1261,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         extractGroup(id, rMap);
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
-        OUString sWrap = extractCustomProperty(rMap);
+        OUString sWrap = BuilderUtils::extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
         VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, nBits);
@@ -1309,7 +1271,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkCheckButton")
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
-        OUString sWrap = extractCustomProperty(rMap);
+        OUString sWrap = BuilderUtils::extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
         //maybe always import as TriStateBox and enable/disable tristate
@@ -1327,7 +1289,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkSpinButton")
     {
         OUString sAdjustment = extractAdjustment(rMap);
-        OUString sPattern = extractCustomProperty(rMap);
+        OUString sPattern = BuilderUtils::extractCustomProperty(rMap);
         OUString sUnit = extractUnit(sPattern);
 
         WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_BORDER|WB_3DLOOK;
@@ -1371,12 +1333,12 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         xWindow = VclPtr<FixedHyperlink>::Create(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_NOLABEL);
     else if ((name == "GtkComboBox") || (name == "GtkComboBoxText") || (name == "VclComboBoxText"))
     {
-        OUString sPattern = extractCustomProperty(rMap);
+        OUString sPattern = BuilderUtils::extractCustomProperty(rMap);
         extractModel(id, rMap);
 
         WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
 
-        bool bDropdown = VclBuilder::extractDropdown(rMap);
+        bool bDropdown = BuilderUtils::extractDropdown(rMap);
 
         if (bDropdown)
             nBits |= WB_DROPDOWN;
@@ -1414,13 +1376,13 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "VclComboBoxNumeric")
     {
-        OUString sPattern = extractCustomProperty(rMap);
+        OUString sPattern = BuilderUtils::extractCustomProperty(rMap);
         OUString sAdjustment = extractAdjustment(rMap);
         extractModel(id, rMap);
 
         WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
 
-        bool bDropdown = VclBuilder::extractDropdown(rMap);
+        bool bDropdown = BuilderUtils::extractDropdown(rMap);
 
         if (bDropdown)
             nBits |= WB_DROPDOWN;
@@ -1459,7 +1421,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         //d) remove the users of makeSvTreeViewBox
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-        OUString sBorder = extractCustomProperty(rMap);
+        OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
         if (!sBorder.isEmpty())
             nWinStyle |= WB_BORDER;
         //ListBox manages its own scrolling,
@@ -1471,7 +1433,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkLabel")
     {
         WinBits nWinStyle = WB_CENTER|WB_VCENTER|WB_3DLOOK;
-        OUString sBorder = extractCustomProperty(rMap);
+        OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
         if (!sBorder.isEmpty())
             nWinStyle |= WB_BORDER;
         extractMnemonicWidget(id, rMap);
@@ -1524,7 +1486,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkEntry")
     {
         xWindow = VclPtr<Edit>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
-        ensureDefaultWidthChars(rMap);
+        BuilderUtils::ensureDefaultWidthChars(rMap);
     }
     else if (name == "GtkNotebook")
     {
@@ -1532,7 +1494,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkDrawingArea")
     {
-        OUString sBorder = extractCustomProperty(rMap);
+        OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
         xWindow = VclPtr<vcl::Window>::Create(pParent, sBorder.isEmpty() ? 0 : WB_BORDER);
     }
     else if (name == "GtkTextView")
@@ -1540,7 +1502,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         extractBuffer(id, rMap);
 
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT;
-        OUString sBorder = extractCustomProperty(rMap);
+        OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
         if (!sBorder.isEmpty())
             nWinStyle |= WB_BORDER;
         //VclMultiLineEdit manages its own scrolling,
@@ -1684,7 +1646,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                     setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
                 else if (xWindow->GetType() == WindowType::MENUBUTTON)
                 {
-                    OUString sMenu = extractCustomProperty(rMap);
+                    OUString sMenu = BuilderUtils::extractCustomProperty(rMap);
                     if (!sMenu.isEmpty())
                         m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
                     setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
@@ -1698,9 +1660,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         xWindow->SetHelpId(m_sHelpRoot + id);
         SAL_INFO("vcl.layout", "for " << name <<
             ", created " << xWindow.get() << " child of " <<
-            pParent << "(" << xWindow->mpWindowImpl->mpParent.get() << "/" <<
-            xWindow->mpWindowImpl->mpRealParent.get() << "/" <<
-            xWindow->mpWindowImpl->mpBorderWindow.get() << ") with helpid " <<
+            pParent << "(" << xWindow->ImplGetWindowImpl()->mpParent.get() << "/" <<
+            xWindow->ImplGetWindowImpl()->mpRealParent.get() << "/" <<
+            xWindow->ImplGetWindowImpl()->mpBorderWindow.get() << ") with helpid " <<
             xWindow->GetHelpId());
         m_aChildren.push_back(WinAndId(id, xWindow, bVertical));
     }
@@ -1726,16 +1688,106 @@ void VclBuilder::setDeferredProperties()
     stringmap aDeferredProperties;
     aDeferredProperties.swap(m_aDeferredProperties);
     m_bToplevelHasDeferredProperties = false;
-    set_properties(m_pParent, aDeferredProperties);
+    BuilderUtils::set_properties(m_pParent, aDeferredProperties);
 }
 
-void VclBuilder::set_properties(vcl::Window *pWindow, const stringmap &rProps)
+namespace BuilderUtils
 {
-    for (stringmap::const_iterator aI = rProps.begin(), aEnd = rProps.end(); aI != aEnd; ++aI)
+    void set_properties(vcl::Window *pWindow, const VclBuilder::stringmap &rProps)
     {
-        const OString &rKey = aI->first;
-        const OUString &rValue = aI->second;
-        pWindow->set_property(rKey, rValue);
+        for (VclBuilder::stringmap::const_iterator aI = rProps.begin(), aEnd = rProps.end(); aI != aEnd; ++aI)
+        {
+            const OString &rKey = aI->first;
+            const OUString &rValue = aI->second;
+            pWindow->set_property(rKey, rValue);
+        }
+    }
+
+    OUString convertMnemonicMarkup(const OUString &rIn)
+    {
+        OUStringBuffer aRet(rIn);
+        for (sal_Int32 nI = 0; nI < aRet.getLength(); ++nI)
+        {
+            if (aRet[nI] == '_' && nI+1 < aRet.getLength())
+            {
+                if (aRet[nI+1] != '_')
+                    aRet[nI] = MNEMONIC_CHAR;
+                else
+                    aRet.remove(nI, 1);
+                ++nI;
+            }
+        }
+        return aRet.makeStringAndClear();
+    }
+
+    OUString extractCustomProperty(VclBuilder::stringmap &rMap)
+    {
+        OUString sCustomProperty;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("customproperty"));
+        if (aFind != rMap.end())
+        {
+            sCustomProperty = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sCustomProperty;
+    }
+
+    FieldUnit detectUnit(OUString const& rString)
+    {
+        OUString const unit(extractUnit(rString));
+        return detectMetricUnit(unit);
+    }
+
+    void ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
+    {
+        OString sWidthChars("width-chars");
+        VclBuilder::stringmap::iterator aFind = rMap.find(sWidthChars);
+        if (aFind == rMap.end())
+            rMap[sWidthChars] = "25";
+    }
+
+    bool extractDropdown(VclBuilder::stringmap &rMap)
+    {
+        bool bDropdown = true;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("dropdown"));
+        if (aFind != rMap.end())
+        {
+            bDropdown = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bDropdown;
+    }
+
+    void reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition)
+    {
+        WindowImpl *pWindowImpl = rWindow.ImplGetWindowImpl();
+        if (pWindowImpl->mpParent != pWindowImpl->mpRealParent)
+        {
+            assert(pWindowImpl->mpBorderWindow == pWindowImpl->mpParent);
+            assert(pWindowImpl->mpBorderWindow->ImplGetWindowImpl()->mpParent == pWindowImpl->mpRealParent);
+            reorderWithinParent(*pWindowImpl->mpBorderWindow, nNewPosition);
+            return;
+        }
+        rWindow.reorderWithinParent(nNewPosition);
+    }
+
+    void reorderWithinParent(std::vector<vcl::Window*>& rChilds, bool bIsButtonBox)
+    {
+        for (size_t i = 0; i < rChilds.size(); ++i)
+        {
+            reorderWithinParent(*rChilds[i], i);
+
+            if (!bIsButtonBox)
+                continue;
+
+            //The first member of the group for legacy code needs WB_GROUP set and the
+            //others not
+            WinBits nBits = rChilds[i]->GetStyle();
+            nBits &= ~WB_GROUP;
+            if (i == 0)
+                nBits |= WB_GROUP;
+            rChilds[i]->SetStyle(nBits);
+        }
     }
 }
 
@@ -1788,7 +1840,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
         if (pCurrentChild == m_pParent.get() && m_bToplevelHasDeferredProperties)
             m_aDeferredProperties = rProps;
         else
-            set_properties(pCurrentChild, rProps);
+            BuilderUtils::set_properties(pCurrentChild, rProps);
 
         for (stringmap::iterator aI = rPango.begin(), aEnd = rPango.end(); aI != aEnd; ++aI)
         {
@@ -1807,20 +1859,6 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
     if (!pCurrentChild)
         pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back().m_pWindow.get();
     return pCurrentChild;
-}
-
-void VclBuilder::reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition)
-{
-    if (rWindow.mpWindowImpl->mpParent != rWindow.mpWindowImpl->mpRealParent)
-    {
-        assert(rWindow.mpWindowImpl->mpBorderWindow ==
-            rWindow.mpWindowImpl->mpParent);
-        assert(rWindow.mpWindowImpl->mpBorderWindow->mpWindowImpl->mpParent ==
-            rWindow.mpWindowImpl->mpRealParent);
-        reorderWithinParent(*rWindow.mpWindowImpl->mpBorderWindow, nNewPosition);
-        return;
-    }
-    rWindow.reorderWithinParent(nNewPosition);
 }
 
 void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
@@ -2062,7 +2100,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                         //sort child order within parent so that tabbing
                         //between controls goes in a visually sensible sequence
                         std::stable_sort(aChilds.begin(), aChilds.end(), sortIntoBestTabTraversalOrder(this));
-                        reorderWithinParent(aChilds, bIsButtonBox);
+                        BuilderUtils::reorderWithinParent(aChilds, bIsButtonBox);
                     }
                 }
             }
@@ -2095,25 +2133,6 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
 
         if (res == xmlreader::XmlReader::Result::Done)
             break;
-    }
-}
-
-void VclBuilder::reorderWithinParent(std::vector<vcl::Window*>& rChilds, bool bIsButtonBox)
-{
-    for (size_t i = 0; i < rChilds.size(); ++i)
-    {
-        reorderWithinParent(*rChilds[i], i);
-
-        if (!bIsButtonBox)
-            continue;
-
-        //The first member of the group for legacy code needs WB_GROUP set and the
-        //others not
-        WinBits nBits = rChilds[i]->GetStyle();
-        nBits &= ~WB_GROUP;
-        if (i == 0)
-            nBits |= WB_GROUP;
-        rChilds[i]->SetStyle(nBits);
     }
 }
 
@@ -2613,23 +2632,6 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader)
     }
 }
 
-OUString VclBuilder::convertMnemonicMarkup(const OUString &rIn)
-{
-    OUStringBuffer aRet(rIn);
-    for (sal_Int32 nI = 0; nI < aRet.getLength(); ++nI)
-    {
-        if (aRet[nI] == '_' && nI+1 < aRet.getLength())
-        {
-            if (aRet[nI+1] != '_')
-                aRet[nI] = MNEMONIC_CHAR;
-            else
-                aRet.remove(nI, 1);
-            ++nI;
-        }
-    }
-    return aRet.makeStringAndClear();
-}
-
 namespace
 {
     vcl::KeyCode makeKeyCode(const std::pair<OString,OString> &rKey)
@@ -2666,7 +2668,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
 
     if (rClass == "GtkMenuItem")
     {
-        OUString sLabel(convertMnemonicMarkup(extractLabel(rProps)));
+        OUString sLabel(BuilderUtils::convertMnemonicMarkup(extractLabel(rProps)));
         OUString aCommand(extractActionName(rProps));
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::TEXT, rID);
         pParent->SetItemCommand(nNewId, aCommand);
@@ -2675,14 +2677,14 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
     }
     else if (rClass == "GtkCheckMenuItem")
     {
-        OUString sLabel(convertMnemonicMarkup(extractLabel(rProps)));
+        OUString sLabel(BuilderUtils::convertMnemonicMarkup(extractLabel(rProps)));
         OUString aCommand(extractActionName(rProps));
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::CHECKABLE, rID);
         pParent->SetItemCommand(nNewId, aCommand);
     }
     else if (rClass == "GtkRadioMenuItem")
     {
-        OUString sLabel(convertMnemonicMarkup(extractLabel(rProps)));
+        OUString sLabel(BuilderUtils::convertMnemonicMarkup(extractLabel(rProps)));
         OUString aCommand(extractActionName(rProps));
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK, rID);
         pParent->SetItemCommand(nNewId, aCommand);
@@ -3324,8 +3326,8 @@ VclBuilder::PackingData VclBuilder::get_window_packing_data(const vcl::Window *p
     //border windows placed around them which are what you get
     //from GetChild, so scoot up a level if necessary to get the
     //window whose position value we have
-    const vcl::Window *pPropHolder = pWindow->mpWindowImpl->mpClientWindow ?
-        pWindow->mpWindowImpl->mpClientWindow : pWindow;
+    const vcl::Window *pPropHolder = pWindow->ImplGetWindowImpl()->mpClientWindow ?
+        pWindow->ImplGetWindowImpl()->mpClientWindow : pWindow;
 
     for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)

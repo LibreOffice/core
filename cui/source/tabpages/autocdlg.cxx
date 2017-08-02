@@ -2450,7 +2450,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeAutoCompleteMultiListBox(VclPt
 {
     WinBits nWinBits = WB_TABSTOP;
 
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 

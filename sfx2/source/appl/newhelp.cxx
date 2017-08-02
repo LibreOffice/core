@@ -286,7 +286,7 @@ ContentListBox_Impl::ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle)
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeContentListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinStyle = WB_TABSTOP;
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
     rRet = VclPtr<ContentListBox_Impl>::Create(pParent, nWinStyle);
@@ -473,7 +473,7 @@ IndexBox_Impl::IndexBox_Impl(vcl::Window* pParent, WinBits nStyle)
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeIndexBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
     VclPtrInstance<IndexBox_Impl> pListBox(pParent, nWinBits);
@@ -879,7 +879,7 @@ void SearchBox_Impl::Select()
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSearchResultsBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
     VclPtrInstance<SearchResultsBox_Impl> pListBox(pParent, nWinBits);
@@ -1140,7 +1140,7 @@ BookmarksBox_Impl::BookmarksBox_Impl(vcl::Window* pParent, WinBits nStyle)
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeBookmarksBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
     VclPtrInstance<BookmarksBox_Impl> pListBox(pParent, nWinBits);

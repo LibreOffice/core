@@ -660,7 +660,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSfxAccCfgTabListBox(VclPtr<vcl
 {
     WinBits nWinBits = WB_TABSTOP;
 
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nWinBits |= WB_BORDER;
 

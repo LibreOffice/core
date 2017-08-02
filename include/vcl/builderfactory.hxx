@@ -30,7 +30,7 @@
 #define VCL_BUILDER_FACTORY_CONSTRUCTOR(typeName,arg2) \
     extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL make##typeName(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap) \
     { \
-        OUString sBorder = VclBuilder::extractCustomProperty(rMap); \
+        OUString sBorder = BuilderUtils::extractCustomProperty(rMap); \
         WinBits wb = arg2; \
         if (!sBorder.isEmpty()) \
             wb |= WB_BORDER; \

@@ -989,7 +989,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvtFileView(VclPtr<vcl::Window
 {
     WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
 
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
 
     if (bDropdown)
         nBits |= WB_DROPDOWN;

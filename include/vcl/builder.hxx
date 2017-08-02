@@ -82,29 +82,11 @@ public:
     //release ownership of pWindow, i.e. don't delete it
     void            drop_ownership(const vcl::Window *pWindow);
 
-    //apply the properties of rProps to pWindow
-    static void     set_properties(vcl::Window *pWindow, const stringmap &rProps);
-
-    //Convert _ gtk markup to ~ vcl markup
-    static          OUString convertMnemonicMarkup(const OUString &rIn);
-
-    static OUString extractCustomProperty(stringmap &rMap);
-    static FieldUnit detectUnit(OUString const&);
-
-    static bool     extractDropdown(stringmap &rMap);
-
-    //add a default value of 25 width-chars to a map if width-chars not set
-    static void     ensureDefaultWidthChars(VclBuilder::stringmap &rMap);
-
     //see m_aDeferredProperties, you need this for toplevel dialogs
     //which build themselves from their ctor. The properties on
     //the top level are stored in m_aDeferredProperties and need
     //to be applied post ctor
     void            setDeferredProperties();
-
-    //Helpers to retrofit all the existing code to the builder
-    static void     reorderWithinParent(std::vector< vcl::Window*>& rChilds, bool bIsButtonBox);
-    static void     reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition);
 
     /// return UI-File name (without '.ui')
     const OString& getUIFile() const
@@ -398,6 +380,27 @@ private:
     OString         get_by_window(const vcl::Window *pWindow) const;
     void            delete_by_window(vcl::Window *pWindow);
 };
+
+namespace BuilderUtils
+{
+    //apply the properties of rProps to pWindow
+    VCL_DLLPUBLIC void set_properties(vcl::Window *pWindow, const VclBuilder::stringmap &rProps);
+
+    //Convert _ gtk markup to ~ vcl markup
+    VCL_DLLPUBLIC OUString convertMnemonicMarkup(const OUString &rIn);
+
+    VCL_DLLPUBLIC OUString extractCustomProperty(VclBuilder::stringmap &rMap);
+    VCL_DLLPUBLIC FieldUnit detectUnit(OUString const&);
+
+    VCL_DLLPUBLIC bool extractDropdown(VclBuilder::stringmap &rMap);
+
+    //add a default value of 25 width-chars to a map if width-chars not set
+    VCL_DLLPUBLIC void ensureDefaultWidthChars(VclBuilder::stringmap &rMap);
+
+    //Helpers to retrofit all the existing code to the builder
+    VCL_DLLPUBLIC void reorderWithinParent(std::vector< vcl::Window*>& rChilds, bool bIsButtonBox);
+    VCL_DLLPUBLIC void reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition);
+}
 
 template <typename T>
 inline T* VclBuilder::get(VclPtr<T>& ret, const OString& sID)

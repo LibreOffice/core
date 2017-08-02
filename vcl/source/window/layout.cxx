@@ -923,7 +923,7 @@ void VclButtonBox::sort_native_button_order()
     //sort child order within parent so that we match the platform
     //button order
     std::stable_sort(aChilds.begin(), aChilds.end(), sortButtons(m_bVerticalContainer));
-    VclBuilder::reorderWithinParent(aChilds, true);
+    BuilderUtils::reorderWithinParent(aChilds, true);
 }
 
 struct GridEntry

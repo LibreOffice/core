@@ -43,10 +43,10 @@ SvxTextEncodingBox::SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits )
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxTextEncodingBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
     VclPtrInstance<SvxTextEncodingBox> pListBox(pParent, nWinBits);

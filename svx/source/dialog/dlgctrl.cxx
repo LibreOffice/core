@@ -1034,7 +1034,7 @@ HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeHatchingLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
     VclPtrInstance<HatchingLB> pListBox(pParent, nWinStyle);
@@ -1074,7 +1074,7 @@ GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeGradientLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
     VclPtrInstance<GradientLB> pListBox(pParent, nWinStyle);
@@ -1114,7 +1114,7 @@ BitmapLB::BitmapLB( vcl::Window* pParent, WinBits aWB)
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeBitmapLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
     WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinStyle |= WB_BORDER;
     VclPtrInstance<BitmapLB> pListBox(pParent, nWinStyle);
@@ -1247,11 +1247,11 @@ LineLB::LineLB(vcl::Window* pParent, WinBits aWB)
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeLineLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
     VclPtrInstance<LineLB> pListBox(pParent, nWinBits);
@@ -1345,11 +1345,11 @@ LineEndLB::LineEndLB( vcl::Window* pParent, WinBits aWB )
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeLineEndLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
         nWinBits |= WB_BORDER;
     VclPtrInstance<LineEndLB> pListBox(pParent, nWinBits);

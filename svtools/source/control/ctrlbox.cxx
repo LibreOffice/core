@@ -505,7 +505,7 @@ LineListBox::LineListBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeLineListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
@@ -705,7 +705,7 @@ FontNameBox::FontNameBox( vcl::Window* pParent, WinBits nWinStyle ) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeFontNameBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
@@ -1095,7 +1095,7 @@ Size FontStyleBox::GetOptimalSize() const
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeFontStyleBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;
@@ -1291,7 +1291,7 @@ FontSizeBox::FontSizeBox( vcl::Window* pParent, WinBits nWinSize ) :
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeFontSizeBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
     WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_TABSTOP;
     if (bDropdown)
         nWinBits |= WB_DROPDOWN;

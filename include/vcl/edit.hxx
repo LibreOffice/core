@@ -40,9 +40,9 @@ namespace i18n {
     class XExtendedInputSequenceChecker;
 }}}}
 
+class VclBuilder;
 struct DDInfo;
 struct Impl_IMEInfos;
-
 
 #define EDIT_NOLIMIT                SAL_MAX_INT32
 #define EDIT_UPDATEDATA_TIMEOUT     350

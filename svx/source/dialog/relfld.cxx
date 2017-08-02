@@ -38,8 +38,8 @@ SvxRelativeField::SvxRelativeField(
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSvxRelativeField(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
 {
-    OUString const custom(VclBuilder::extractCustomProperty(rMap));
-    FieldUnit const eUnit(VclBuilder::detectUnit(custom));
+    OUString const custom(BuilderUtils::extractCustomProperty(rMap));
+    FieldUnit const eUnit(BuilderUtils::detectUnit(custom));
     rRet = VclPtr<SvxRelativeField>::Create(pParent,
                                             WB_BORDER | WB_SPIN | WB_REPEAT |
                                             WB_LEFT | WB_GROUP,

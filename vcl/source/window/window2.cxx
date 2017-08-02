@@ -1473,7 +1473,7 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
 {
     if ((rKey == "label") || (rKey == "title") || (rKey == "text") )
     {
-        SetText(VclBuilder::convertMnemonicMarkup(rValue));
+        SetText(BuilderUtils::convertMnemonicMarkup(rValue));
     }
     else if (rKey == "visible")
         Show(toBool(rValue));

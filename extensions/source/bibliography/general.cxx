@@ -321,7 +321,7 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
     AddControlWithError(lcl_GetColumnName(pMapping, CUSTOM5_POS), *pCustom5FT,
         sTableErrorString, HID_BIB_CUSTOM5_POS, 30, aChildren);
 
-    VclBuilder::reorderWithinParent(aChildren, false);
+    BuilderUtils::reorderWithinParent(aChildren, false);
 
     xPosListener = new BibPosListener(this);
     uno::Reference< sdbc::XRowSet >  xRowSet(pDatMan->getForm(), UNO_QUERY);

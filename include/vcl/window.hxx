@@ -433,7 +433,6 @@ namespace vcl { class Cursor; }
 class Dialog;
 class WindowImpl;
 class PaintHelper;
-class VclBuilder;
 class VclSizeGroup;
 class OutputDevice;
 class Application;
@@ -448,7 +447,6 @@ class PushButton;
 class RadioButton;
 class SystemChildWindow;
 class ImplBorderWindow;
-class VclBuilder;
 class ImplDockingWindowWrapper;
 class ImplPopupFloatWin;
 class MenuFloatingWindow;
@@ -495,7 +493,6 @@ class VCL_DLLPUBLIC Window : public ::OutputDevice
     friend class ::RadioButton;
     friend class ::SystemChildWindow;
     friend class ::ImplBorderWindow;
-    friend class ::VclBuilder;
     friend class ::PaintHelper;
     friend class ::LifecycleTest;
 

@@ -1260,12 +1260,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeSelectionListBox(VclPtr<vcl::W
 {
     WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
 
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
+    bool bDropdown = BuilderUtils::extractDropdown(rMap);
 
     if (bDropdown)
         nBits |= WB_DROPDOWN;
 
-    OUString sBorder = VclBuilder::extractCustomProperty(rMap);
+    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
     if (!sBorder.isEmpty())
        nBits |= WB_BORDER;
 
