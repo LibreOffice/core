@@ -2659,12 +2659,14 @@ bool ScTable::ValidQuery(
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
 
-    SCSIZE nEntryCount = rParam.GetEntryCount();
+    //---------------------------------------------------------------
 
-    typedef std::pair<bool,bool> ResultType;
-    static std::vector<ResultType> aResults;
-    if (aResults.size() < nEntryCount)
-        aResults.resize(nEntryCount);
+    const SCSIZE nFixedBools = 32;
+    bool aBool[nFixedBools];
+    bool aTest[nFixedBools];
+    SCSIZE nEntryCount = rParam.GetEntryCount();
+    bool* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new bool[nEntryCount] );
+    bool* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new bool[nEntryCount] );
 
     long    nPos = -1;
     QueryEvaluator aEval(*pDocument, *this, rParam, pbTestEqualCondition);
@@ -2727,32 +2729,38 @@ bool ScTable::ValidQuery(
         if (nPos == -1)
         {
             nPos++;
-            aResults[nPos] = aRes;
+            pPasst[nPos] = aRes.first;
+            pTest[nPos] = aRes.second;
         }
         else
         {
             if (rEntry.eConnect == SC_AND)
             {
-                aResults[nPos].first = aResults[nPos].first && aRes.first;
-                aResults[nPos].second = aResults[nPos].second && aRes.second;
+                pPasst[nPos] = pPasst[nPos] && aRes.first;
+                pTest[nPos] = pTest[nPos] && aRes.second;
             }
             else
             {
                 nPos++;
-                aResults[nPos] = aRes;
+                pPasst[nPos] = aRes.first;
+                pTest[nPos] = aRes.second;
             }
         }
     }
 
     for ( long j=1; j <= nPos; j++ )
     {
-        aResults[0].first = aResults[0].first || aResults[j].first;
-        aResults[0].second = aResults[0].second || aResults[j].second;
+        pPasst[0] = pPasst[0] || pPasst[j];
+        pTest[0] = pTest[0] || pTest[j];
     }
 
-    bool bRet = aResults[0].first;
+    bool bRet = pPasst[0];
+    if ( pPasst != &aBool[0] )
+        delete [] pPasst;
     if ( pbTestEqualCondition )
-        *pbTestEqualCondition = aResults[0].second;
+        *pbTestEqualCondition = pTest[0];
+    if ( pTest != &aTest[0] )
+        delete [] pTest;
 
     return bRet;
 }
