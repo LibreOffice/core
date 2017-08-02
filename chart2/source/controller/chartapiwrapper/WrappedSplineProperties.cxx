@@ -67,7 +67,7 @@ public:
                 if (!xChartTypePropertySet.is())
                     continue;
 
-                Any aSingleValue = this->convertInnerToOuterValue( xChartTypePropertySet->getPropertyValue(m_aOwnInnerName) );
+                Any aSingleValue = convertInnerToOuterValue( xChartTypePropertySet->getPropertyValue(m_aOwnInnerName) );
                 PROPERTYTYPE aCurValue = PROPERTYTYPE();
                 aSingleValue >>= aCurValue;
                 if( !bHasDetectableInnerValue )
@@ -116,7 +116,7 @@ public:
                         css::uno::Reference< css::beans::XPropertySet > xChartTypePropertySet( aChartTypes[nN], css::uno::UNO_QUERY );
                         if( xChartTypePropertySet.is() )
                         {
-                            xChartTypePropertySet->setPropertyValue(m_aOwnInnerName,this->convertOuterToInnerValue(uno::Any(aNewValue)));
+                            xChartTypePropertySet->setPropertyValue(m_aOwnInnerName,convertOuterToInnerValue(uno::Any(aNewValue)));
                         }
                     }
                     catch( uno::Exception & ex )

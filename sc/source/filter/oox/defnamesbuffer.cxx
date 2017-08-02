@@ -352,7 +352,7 @@ void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalL
 
     ScTokenArray* pTokenArray = mpScRangeData->GetCode();
     Sequence< FormulaToken > aFTokenSeq;
-    (void)ScTokenConversion::ConvertToTokenSequence( this->getScDocument(), aFTokenSeq, *pTokenArray );
+    (void)ScTokenConversion::ConvertToTokenSequence( getScDocument(), aFTokenSeq, *pTokenArray );
     // set built-in names (print ranges, repeated titles, filter ranges)
     if( !isGlobalName() ) switch( mcBuiltinId )
     {

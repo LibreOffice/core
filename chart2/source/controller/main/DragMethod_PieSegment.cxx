@@ -110,7 +110,7 @@ bool DragMethod_PieSegment::EndSdrDrag(bool /*bCopy*/)
 
     try
     {
-        Reference< frame::XModel > xChartModel( this->getChartModel() );
+        Reference< frame::XModel > xChartModel( getChartModel() );
         if( xChartModel.is() )
         {
             Reference< beans::XPropertySet > xPointProperties(

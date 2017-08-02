@@ -52,7 +52,7 @@ InsertErrorBarsDialog::InsertErrorBarsDialog(
 {
     ObjectType objType = eType == ErrorBarResources::ERROR_BAR_Y ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
 
-    this->SetText( ObjectNameProvider::getName_ObjectForAllSeries(objType) );
+    SetText( ObjectNameProvider::getName_ObjectForAllSeries(objType) );
 
     m_apErrorBarResources->SetChartDocumentForRangeChoosing( xChartDocument );
 }

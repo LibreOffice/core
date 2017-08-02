@@ -770,7 +770,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 }
                 //If the text box has links then save the link information so that
                 //it can be accessed in DomainMapper_Impl.cxx while chaining the text frames.
-                if (this->isLinkedTxbx())
+                if (isLinkedTxbx())
                 {
                     uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
                     uno::Sequence<beans::PropertyValue> aGrabBag;
@@ -778,11 +778,11 @@ Reference< XShape > const & Shape::createAndInsert(
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc( length + 3 );
                     aGrabBag[length].Name = "TxbxHasLink";
-                    aGrabBag[length].Value <<= this->isLinkedTxbx();
+                    aGrabBag[length].Value <<= isLinkedTxbx();
                     aGrabBag[length + 1 ].Name = "Txbx-Id";
-                    aGrabBag[length + 1 ].Value <<= this->getLinkedTxbxAttributes().id;
+                    aGrabBag[length + 1 ].Value <<= getLinkedTxbxAttributes().id;
                     aGrabBag[length + 2 ].Name = "Txbx-Seq";
-                    aGrabBag[length + 2 ].Value <<= this->getLinkedTxbxAttributes().seq;
+                    aGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
                     propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
                 }
 

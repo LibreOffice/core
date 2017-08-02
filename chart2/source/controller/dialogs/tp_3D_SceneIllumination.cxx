@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel, void*, 
 
     lcl_selectColor( *m_pLB_AmbientLight, lcl_getAmbientColor( m_xSceneProperties ));
 
-    this->updatePreview();
+    updatePreview();
 }
 
 void ThreeD_SceneIllumination_TabPage::applyLightSourceToModel( sal_uInt32 nLightNumber )
@@ -449,7 +449,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, SvxColorListBox&, r
             applyLightSourceToModel( nL );
         }
     }
-    this->updatePreview();
+    updatePreview();
 }
 
 IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, Button*, pBtn, void )
@@ -495,7 +495,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, Button*,
     {
         lcl_selectColor( *m_pLB_LightSource, pInfo->aLightSource.nDiffuseColor );
     }
-    this->updatePreview();
+    updatePreview();
 }
 
 void ThreeD_SceneIllumination_TabPage::updatePreview()

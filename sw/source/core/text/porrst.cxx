@@ -280,7 +280,7 @@ bool SwTextFrame::FormatEmpty()
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTextFrame::FormatEmpty with swapped frame" );
 
-    bool bCollapse = EmptyHeight( ) == 1 && this->IsCollapse( );
+    bool bCollapse = EmptyHeight( ) == 1 && IsCollapse( );
 
     if ( HasFollow() || GetTextNode()->GetpSwpHints() ||
         nullptr != GetTextNode()->GetNumRule() ||

@@ -3625,14 +3625,14 @@ IdleTask::IdleTask() : flag( false )
 bool IdleTask::GetFlag()
 {
     //returning the status of current flag
-    return this->flag;
+    return flag;
 }
 
 //Callback function of IdleTask Class
 IMPL_LINK(IdleTask, FlipFlag, Timer*, , void)
 {
     //setting the flag to make sure that low priority idle task has been dispatched
-    this->flag = true;
+    flag = true;
 }
 
 void SwUiWriterTest::testDocModState()

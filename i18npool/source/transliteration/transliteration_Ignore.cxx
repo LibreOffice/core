@@ -33,8 +33,8 @@ transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 n
     Sequence< sal_Int32 > offset2;
 
     // The method folding is defined in a sub class.
-    OUString s1 = this->folding( str1, pos1, nCount1, offset1);
-    OUString s2 = this->folding( str2, pos2, nCount2, offset2);
+    OUString s1 = folding( str1, pos1, nCount1, offset1);
+    OUString s2 = folding( str2, pos2, nCount2, offset2);
 
     const sal_Unicode * p1 = s1.getStr();
     const sal_Unicode * p2 = s2.getStr();
@@ -84,7 +84,7 @@ transliteration_Ignore::transliterate( const OUString& inStr, sal_Int32 startPos
         Sequence< sal_Int32 >& offset  )
 {
     // The method folding is defined in a sub class.
-    return this->folding( inStr, startPos, nCount, offset);
+    return folding( inStr, startPos, nCount, offset);
 }
 
 Sequence< OUString > SAL_CALL

@@ -277,7 +277,7 @@ bool SwFormatClipboard::CanCopyThisType( SelectionType nSelectionType )
 void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bPersistentCopy )
 {
     // first clear the previously stored attributes
-    this->Erase();
+    Erase();
     m_bPersistentCopy = bPersistentCopy;
 
     SelectionType nSelectionType = rWrtShell.GetSelectionType();
@@ -459,10 +459,10 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                               , bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
     SelectionType nSelectionType = rWrtShell.GetSelectionType();
-    if( !this->HasContentForThisType(nSelectionType) )
+    if( !HasContentForThisType(nSelectionType) )
     {
         if(!m_bPersistentCopy)
-            this->Erase();
+            Erase();
         return;
     }
 
@@ -576,7 +576,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
     rWrtShell.EndAction();
 
     if(!m_bPersistentCopy)
-        this->Erase();
+        Erase();
 }
 
 void SwFormatClipboard::Erase()

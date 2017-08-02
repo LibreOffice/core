@@ -947,7 +947,7 @@ void ChartDocumentWrapper::setBaseDiagram( const OUString& rBaseDiagram )
 
     uno::Reference< XDiagram > xDiagram( ChartDocumentWrapper::createInstance( rBaseDiagram ), uno::UNO_QUERY );
     if( xDiagram.is() )
-        this->setDiagram( xDiagram );
+        setDiagram( xDiagram );
 }
 
 void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAddIn )
@@ -979,7 +979,7 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
 {
     // get additional non-chart shapes for XML export
     uno::Reference< drawing::XShapes > xFoundShapes;
-    uno::Reference< drawing::XDrawPage > xDrawPage( this->impl_getDrawPage() );
+    uno::Reference< drawing::XDrawPage > xDrawPage( impl_getDrawPage() );
 
     uno::Reference< drawing::XShapes > xDrawPageShapes( xDrawPage, uno::UNO_QUERY );
     if( !xDrawPageShapes.is() )
@@ -1036,7 +1036,7 @@ void SAL_CALL ChartDocumentWrapper::removeEventListener( const Reference< lang::
 // ____ XDrawPageSupplier ____
 uno::Reference< drawing::XDrawPage > SAL_CALL ChartDocumentWrapper::getDrawPage()
 {
-    return this->impl_getDrawPage();
+    return impl_getDrawPage();
 }
 
 uno::Reference< drawing::XDrawPage > ChartDocumentWrapper::impl_getDrawPage() const
@@ -1383,7 +1383,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
         // this is a sort of dispose() from the new model,so release resources here
         try
         {
-            this->dispose();
+            dispose();
         }
         catch (const uno::Exception& ex)
         {

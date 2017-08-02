@@ -456,7 +456,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
             aSheets.push_back( xSheet );
         }
         uno::Reference< container::XIndexAccess > xIndexAccess = new SheetCollectionHelper( aSheets );
-        uno::Reference< XCollection > xSelectedSheets(  new ScVbaWorksheets( this->getParent(), mxContext, xIndexAccess, mxModel ) );
+        uno::Reference< XCollection > xSelectedSheets(  new ScVbaWorksheets( getParent(), mxContext, xIndexAccess, mxModel ) );
         return uno::makeAny( xSelectedSheets );
     }
     return  ScVbaWorksheets_BASE::Item( Index, Index2 );

@@ -489,7 +489,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
 
     if (rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException();
-    SwUnoCursor& rUnoCursor = this->GetCursor();
+    SwUnoCursor& rUnoCursor = GetCursor();
 
     sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
@@ -580,7 +580,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
 {
     SolarMutexGuard aGuard;
 
-    SwUnoCursor& rUnoCursor = this->GetCursor();
+    SwUnoCursor& rUnoCursor = GetCursor();
 
     std::vector< beans::GetDirectPropertyTolerantResult > aResultVector;
 

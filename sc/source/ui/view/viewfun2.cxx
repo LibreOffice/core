@@ -1347,7 +1347,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
 void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                                    SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount )
 {
-    ScGridWindow* pWin = this->GetActiveWin();
+    ScGridWindow* pWin = GetActiveWin();
     if ( pWin->InsideVisibleRange(nStartCol, nStartRow) && pWin->InsideVisibleRange(nEndCol, nEndRow) )
     {
         if ( nCount == ::std::numeric_limits<sal_uLong>::max() )

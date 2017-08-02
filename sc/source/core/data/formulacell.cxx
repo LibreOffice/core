@@ -969,7 +969,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
         if( p )
         {
             /* FIXME: original GetFormula() code obtained
-             * pCell only if (!this->IsInChangeTrack()),
+             * pCell only if (!IsInChangeTrack()),
              * GetEnglishFormula() omitted that test.
              * Can we live without in all cases? */
             ScFormulaCell* pCell = nullptr;
@@ -1034,7 +1034,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
         if( p )
         {
             /* FIXME: original GetFormula() code obtained
-             * pCell only if (!this->IsInChangeTrack()),
+             * pCell only if (!IsInChangeTrack()),
              * GetEnglishFormula() omitted that test.
              * Can we live without in all cases? */
             ScFormulaCell* pCell = nullptr;

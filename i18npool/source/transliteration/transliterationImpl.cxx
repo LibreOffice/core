@@ -518,7 +518,7 @@ TransliterationImpl::getRange(const Sequence< OUString > &inStrs,
     }
     ostr.realloc(j_tmp);
 
-    return this->getRange(ostr, j_tmp, ++_numCascade);
+    return getRange(ostr, j_tmp, ++_numCascade);
 }
 
 
@@ -532,7 +532,7 @@ TransliterationImpl::transliterateRange( const OUString& str1, const OUString& s
     ostr[0] = str1;
     ostr[1] = str2;
 
-    return this->getRange(ostr, 2, 0);
+    return getRange(ostr, 2, 0);
 }
 
 
@@ -546,8 +546,8 @@ TransliterationImpl::compareSubstring(
 
     Sequence <sal_Int32> offset;
 
-    OUString in_str1 = this->transliterate(str1, off1, len1, offset);
-    OUString in_str2 = this->transliterate(str2, off2, len2, offset);
+    OUString in_str1 = transliterate(str1, off1, len1, offset);
+    OUString in_str2 = transliterate(str2, off2, len2, offset);
     const sal_Unicode* unistr1 = in_str1.getStr();
     const sal_Unicode* unistr2 = in_str2.getStr();
     sal_Int32 strlen1 = in_str1.getLength();
@@ -569,7 +569,7 @@ TransliterationImpl::compareString(const OUString& str1, const OUString& str2 )
     if (caseignoreOnly && caseignore.is())
         return caseignore->compareString(str1, str2);
     else
-        return this->compareSubstring(str1, 0, str1.getLength(), str2, 0, str2.getLength());
+        return compareSubstring(str1, 0, str1.getLength(), str2, 0, str2.getLength());
 }
 
 

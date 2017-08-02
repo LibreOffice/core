@@ -45,8 +45,8 @@ void CacheItem::update(const CacheItem& rUpdateItem)
                        pItUpdate != rUpdateItem.end()  ;
                      ++pItUpdate                       )
     {
-        iterator pItThis = this->find(pItUpdate->first);
-        if (pItThis == this->end())
+        iterator pItThis = find(pItUpdate->first);
+        if (pItThis == end())
             (*this)[pItUpdate->first] = pItUpdate->second; // add new prop
         else
             pItThis->second = pItUpdate->second; // change value of existing prop
@@ -305,8 +305,8 @@ bool CacheItem::haveProps(const CacheItem& lProps) const
                       ++pIt                  )
     {
         // i) one required property does not exist at this item => return false
-        const_iterator pItThis = this->find(pIt->first);
-        if (pItThis == this->end())
+        const_iterator pItThis = find(pIt->first);
+        if (pItThis == end())
         {
             FILTER_CONFIG_LOG_1_("CacheItem::haveProps() ... didn't found \"%s\" => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
             return false;
@@ -338,8 +338,8 @@ bool CacheItem::dontHaveProps(const CacheItem& lProps) const
         //    => continue with next one, because
         //    "excluding" means... "don't have it".
         //    And "not exists" matches to "don't have it".
-        const_iterator pItThis = this->find(pIt->first);
-        if (pItThis == this->end())
+        const_iterator pItThis = find(pIt->first);
+        if (pItThis == end())
         {
             FILTER_CONFIG_LOG_1_("CacheItem::dontHaveProps() ... not found \"%s\" => continue loop!\n", _FILTER_CONFIG_TO_ASCII_(pIt->first))
             continue;

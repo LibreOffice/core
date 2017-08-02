@@ -52,12 +52,12 @@ Chart2ModelContact::Chart2ModelContact(
 
 Chart2ModelContact::~Chart2ModelContact()
 {
-    this->clear();
+    clear();
 }
 
 void Chart2ModelContact::setModel( const css::uno::Reference< css::frame::XModel >& xChartModel )
 {
-    this->clear();
+    clear();
     m_xChartModel = xChartModel;
     mpModel = dynamic_cast<ChartModel*>(xChartModel.get());
     uno::Reference< lang::XMultiServiceFactory > xTableFactory( xChartModel, uno::UNO_QUERY );
@@ -95,7 +95,7 @@ Reference< chart2::XChartDocument > Chart2ModelContact::getChart2Document() cons
 
 Reference< chart2::XDiagram > Chart2ModelContact::getChart2Diagram() const
 {
-    return ChartModelHelper::findDiagram( this->getChartModel() );
+    return ChartModelHelper::findDiagram( getChartModel() );
 }
 
 uno::Reference< lang::XUnoTunnel > const & Chart2ModelContact::getChartView() const

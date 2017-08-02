@@ -77,8 +77,8 @@ transliteration_commonclass::compareSubstring(
     Sequence <sal_Int32> offset1(2*len1);
     Sequence <sal_Int32> offset2(2*len2);
 
-    OUString in_str1 = this->transliterate(str1, off1, len1, offset1);
-    OUString in_str2 = this->transliterate(str2, off2, len2, offset2);
+    OUString in_str1 = transliterate(str1, off1, len1, offset1);
+    OUString in_str2 = transliterate(str2, off2, len2, offset2);
     sal_Int32 strlen1 = in_str1.getLength();
     sal_Int32 strlen2 = in_str2.getLength();
     const sal_Unicode* unistr1 = in_str1.getStr();
@@ -101,7 +101,7 @@ transliteration_commonclass::compareSubstring(
 sal_Int32 SAL_CALL
 transliteration_commonclass::compareString( const OUString& str1, const OUString& str2 )
 {
-    return( this->compareSubstring(str1, 0, str1.getLength(), str2, 0, str2.getLength()));
+    return( compareSubstring(str1, 0, str1.getLength(), str2, 0, str2.getLength()));
 }
 
 OUString SAL_CALL

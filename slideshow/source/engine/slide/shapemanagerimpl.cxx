@@ -64,11 +64,11 @@ void ShapeManagerImpl::activate()
         // clone listener map
         uno::Reference<presentation::XShapeEventListener> xDummyListener;
         for( const auto& rListener : mrGlobalListenersMap )
-            this->listenerAdded( xDummyListener, rListener.first );
+            listenerAdded( xDummyListener, rListener.first );
 
         // clone cursor map
         for( const auto& rListener : mrGlobalCursorMap )
-            this->cursorChanged( rListener.first, rListener.second );
+            cursorChanged( rListener.first, rListener.second );
 
         if( mpLayerManager )
             mpLayerManager->activate();

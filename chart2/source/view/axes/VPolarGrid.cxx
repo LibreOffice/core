@@ -106,7 +106,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
         , const std::vector<VLineProperties>& rLinePropertiesList )
 {
     Reference< drawing::XShapes > xMainTarget(
-        this->createGroupShape( xLogicTarget, m_aCID ) );
+        createGroupShape( xLogicTarget, m_aCID ) );
 
     const ExplicitScaleData&     rAngleScale = m_pPosHelper->getScales()[0];
     Reference< XScaling > xInverseScaling( NULL );
@@ -160,7 +160,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
         , const std::vector<VLineProperties>& rLinePropertiesList )
 {
     Reference< drawing::XShapes > xMainTarget(
-        this->createGroupShape( xLogicTarget, m_aCID ) );
+        createGroupShape( xLogicTarget, m_aCID ) );
 
     const ExplicitScaleData&     rRadiusScale = m_pPosHelper->getScales()[1];
     const ExplicitScaleData&     rAngleScale = m_pPosHelper->getScales()[0];
@@ -182,7 +182,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
         Reference< drawing::XShapes > xTarget( xMainTarget );
         if( nDepth > 0 )
         {
-            xTarget.set( this->createGroupShape( xLogicTarget
+            xTarget.set( createGroupShape( xLogicTarget
                 , ObjectIdentifier::addChildParticle( m_aCID, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_SUBGRID, nDepth-1 ) )
                 ) );
             if(!xTarget.is())
@@ -238,9 +238,9 @@ void VPolarGrid::createShapes()
     if(m_nDimension==2)
     {
         if(m_nDimensionIndex==1)
-            this->create2DRadiusGrid( m_xLogicTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
+            create2DRadiusGrid( m_xLogicTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
         //else //no Angle Grid so far as this equals exactly the y axis positions
-        //    this->create2DAngleGrid( m_xLogicTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
+        //    create2DAngleGrid( m_xLogicTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
     }
 }
 

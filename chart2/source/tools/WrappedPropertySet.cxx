@@ -96,7 +96,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
     {
         sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
         const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
-        Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
+        Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
         if( pWrappedProperty )
             pWrappedProperty->setPropertyValue( rValue, xInnerPropertySet );
         else if( xInnerPropertySet.is() )
@@ -142,7 +142,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
     {
         sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
         const WrappedProperty* pWrappedProperty = getWrappedProperty( nHandle );
-        Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
+        Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
         if( pWrappedProperty )
             aRet = pWrappedProperty->getPropertyValue( xInnerPropertySet );
         else if( xInnerPropertySet.is() )
@@ -177,7 +177,7 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
 
 void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
 {
-    Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
+    Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
         const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
@@ -189,7 +189,7 @@ void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPr
 }
 void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
 {
-    Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
+    Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
         const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
@@ -201,7 +201,7 @@ void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& 
 }
 void SAL_CALL WrappedPropertySet::addVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
 {
-    Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
+    Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
         const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
@@ -213,7 +213,7 @@ void SAL_CALL WrappedPropertySet::addVetoableChangeListener( const OUString& rPr
 }
 void SAL_CALL WrappedPropertySet::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
 {
-    Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
+    Reference< beans::XPropertySet > xInnerPropertySet( getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
         const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
@@ -234,7 +234,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
         OUString aPropertyName( rNameSeq[nN] );
         try
         {
-            this->setPropertyValue( aPropertyName, rValueSeq[nN] );
+            setPropertyValue( aPropertyName, rValueSeq[nN] );
         }
         catch( const beans::UnknownPropertyException& ex )
         {
@@ -258,7 +258,7 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
             try
             {
                 OUString aPropertyName( rNameSeq[nN] );
-                aRetSeq[nN] = this->getPropertyValue( aPropertyName );
+                aRetSeq[nN] = getPropertyValue( aPropertyName );
             }
             catch( const beans::UnknownPropertyException& ex )
             {
@@ -293,7 +293,7 @@ beans::PropertyState SAL_CALL WrappedPropertySet::getPropertyState( const OUStri
 {
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
 
-    Reference< beans::XPropertyState > xInnerPropertyState( this->getInnerPropertyState() );
+    Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
         const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
@@ -328,7 +328,7 @@ Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates(
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
             OUString aPropertyName( rNameSeq[nN] );
-            aRetSeq[nN] = this->getPropertyState( aPropertyName );
+            aRetSeq[nN] = getPropertyState( aPropertyName );
         }
     }
     return aRetSeq;
@@ -336,7 +336,7 @@ Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates(
 
 void SAL_CALL WrappedPropertySet::setPropertyToDefault( const OUString& rPropertyName )
 {
-    Reference< beans::XPropertyState > xInnerPropertyState( this->getInnerPropertyState() );
+    Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
         const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
@@ -349,7 +349,7 @@ void SAL_CALL WrappedPropertySet::setPropertyToDefault( const OUString& rPropert
 Any SAL_CALL WrappedPropertySet::getPropertyDefault( const OUString& rPropertyName )
 {
     Any aRet;
-    Reference< beans::XPropertyState > xInnerPropertyState( this->getInnerPropertyState() );
+    Reference< beans::XPropertyState > xInnerPropertyState( getInnerPropertyState() );
     if( xInnerPropertyState.is() )
     {
         const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
@@ -368,7 +368,7 @@ void SAL_CALL WrappedPropertySet::setAllPropertiesToDefault(  )
     for(sal_Int32 nN=0; nN<rPropSeq.getLength(); nN++)
     {
         OUString aPropertyName( rPropSeq[nN].Name );
-        this->setPropertyToDefault( aPropertyName );
+        setPropertyToDefault( aPropertyName );
     }
 }
 void SAL_CALL WrappedPropertySet::setPropertiesToDefault( const Sequence< OUString >& rNameSeq )
@@ -376,7 +376,7 @@ void SAL_CALL WrappedPropertySet::setPropertiesToDefault( const Sequence< OUStri
     for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
     {
         OUString aPropertyName( rNameSeq[nN] );
-        this->setPropertyToDefault( aPropertyName );
+        setPropertyToDefault( aPropertyName );
     }
 }
 Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence< OUString >& rNameSeq )
@@ -388,7 +388,7 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
             OUString aPropertyName( rNameSeq[nN] );
-            aRetSeq[nN] = this->getPropertyDefault( aPropertyName );
+            aRetSeq[nN] = getPropertyDefault( aPropertyName );
         }
     }
     return aRetSeq;

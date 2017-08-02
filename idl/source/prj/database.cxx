@@ -144,7 +144,7 @@ bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
             return true;
 
     aIdFileList.push_back( rFileName );
-    this->AddDepFile( aFullName );
+    AddDepFile( aFullName );
     SvTokenStream aTokStm( aFullName );
     if( aTokStm.GetStream().GetError() == ERRCODE_NONE )
     {

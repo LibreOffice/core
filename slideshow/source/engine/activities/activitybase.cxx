@@ -132,7 +132,7 @@ namespace slideshow
             if (mbFirstPerformCall) {
                 mbFirstPerformCall = false;
                 // notify derived classes that we're starting now
-                this->startAnimation();
+                startAnimation();
             }
 
             performEnd(); // calling private virtual

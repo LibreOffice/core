@@ -47,7 +47,7 @@ void MultipleItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
     }
     for( ; aIter != aEnd; ++aIter )
     {
-        SfxItemSet aSet = this->CreateEmptyItemSet();
+        SfxItemSet aSet = CreateEmptyItemSet();
         (*aIter)->FillItemSet( aSet );
         InvalidateUnequalItems( rOutItemSet, aSet );
     }

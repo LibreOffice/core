@@ -97,7 +97,7 @@ void Layout::ArrangeWindows ()
         if (bFirstSize)
         {
             bFirstSize = false;
-            this->OnFirstSize(nWidth, nHeight); // virtual
+            OnFirstSize(nWidth, nHeight); // virtual
         }
 
         // sides

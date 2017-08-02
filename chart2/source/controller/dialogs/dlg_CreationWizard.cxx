@@ -58,7 +58,7 @@ CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame:
     m_pDialogModel.reset(new DialogModel(m_xChartModel, m_xComponentContext));
     defaultButton(WizardButtonFlags::FINISH);
 
-    this->setTitleBase(SchResId(STR_DLG_CHART_WIZARD));
+    setTitleBase(SchResId(STR_DLG_CHART_WIZARD));
 
     WizardPath aPath = {
         STATE_CHARTTYPE,
@@ -69,13 +69,13 @@ CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame:
 
     declarePath(PATH_FULL, aPath);
 
-    this->SetRoadmapHelpId(HID_SCH_WIZARD_ROADMAP);
-    this->SetRoadmapInteractive(true);
+    SetRoadmapHelpId(HID_SCH_WIZARD_ROADMAP);
+    SetRoadmapInteractive(true);
 
     Size aAdditionalRoadmapSize(LogicToPixel(Size(85, 0), MapUnit::MapAppFont));
     Size aSize(LogicToPixel(Size(CHART_WIZARD_PAGEWIDTH, CHART_WIZARD_PAGEHEIGHT), MapUnit::MapAppFont));
     aSize.Width() += aAdditionalRoadmapSize.Width();
-    this->SetSizePixel(aSize);
+    SetSizePixel(aSize);
 
     if (!m_pDialogModel->getModel().isDataFromSpreadsheet())
     {

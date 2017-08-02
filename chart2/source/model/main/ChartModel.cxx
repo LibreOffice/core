@@ -880,7 +880,7 @@ Reference< chart2::data::XRangeHighlighter > SAL_CALL ChartModel::getRangeHighli
 {
     if( ! m_xRangeHighlighter.is())
     {
-        uno::Reference< view::XSelectionSupplier > xSelSupp( this->getCurrentController(), uno::UNO_QUERY );
+        uno::Reference< view::XSelectionSupplier > xSelSupp( getCurrentController(), uno::UNO_QUERY );
         if( xSelSupp.is() )
             m_xRangeHighlighter.set( ChartModelHelper::createRangeHighlighter( xSelSupp ));
     }
@@ -1029,7 +1029,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 
         //get view from old api wrapper
         Reference< datatransfer::XTransferable > xTransferable(
-            this->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+            createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
         if( xTransferable.is() )
         {
             datatransfer::DataFlavor aDataFlavor( lcl_aGDIMetaFileMIMEType,
@@ -1064,13 +1064,13 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
     uno::Any aResult;
-    if( this->isDataFlavorSupported( aFlavor ))
+    if( isDataFlavorSupported( aFlavor ))
     {
         try
         {
             //get view from old api wrapper
             Reference< datatransfer::XTransferable > xTransferable(
-                this->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+                createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
             if( xTransferable.is() &&
                 xTransferable->isDataFlavorSupported( aFlavor ))
             {
@@ -1282,7 +1282,7 @@ uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartM
 OUString SAL_CALL ChartModel::dump()
 {
     uno::Reference< qa::XDumper > xDumper(
-            this->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+            createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
     if (xDumper.is())
         return xDumper->dump();
 

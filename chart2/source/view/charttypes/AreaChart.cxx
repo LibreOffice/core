@@ -414,7 +414,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     uno::Reference< drawing::XShape > xShape(nullptr);
     if(m_nDimension==3)
     {
-        double fDepth = this->getTransformedDepth();
+        double fDepth = getTransformedDepth();
         sal_Int32 nPolyCount = aPoly.SequenceX.getLength();
         for(sal_Int32 nPoly=0;nPoly<nPolyCount;nPoly++)
         {
@@ -511,7 +511,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     if(m_nDimension==3)
     {
         xShape = m_pShapeFactory->createArea3D( xSeriesGroupShape_Shapes
-                , aPoly, this->getTransformedDepth() );
+                , aPoly, getTransformedDepth() );
     }
     else //m_nDimension!=3
     {
@@ -552,7 +552,7 @@ void AreaChart::impl_createSeriesShapes()
             for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
             {
                 sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
-                PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
+                PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
                 if(!pPosHelper)
                     pPosHelper = m_pMainPosHelper.get();
                 PlotterBase::m_pPosHelper = pPosHelper;
@@ -699,7 +699,7 @@ void AreaChart::createShapes()
                     if( rLogicYSumMap.find(nAttachedAxisIndex)==rLogicYSumMap.end() )
                         rLogicYSumMap[nAttachedAxisIndex]=0.0;
 
-                    PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
+                    PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
                     if(!pPosHelper)
                         pPosHelper = m_pMainPosHelper.get();
                     PlotterBase::m_pPosHelper = pPosHelper;
@@ -737,7 +737,7 @@ void AreaChart::createShapes()
                 uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xSeriesTarget);
 
                 sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
-                PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
+                PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
                 if(!pPosHelper)
                     pPosHelper = m_pMainPosHelper.get();
                 PlotterBase::m_pPosHelper = pPosHelper;
@@ -929,7 +929,7 @@ void AreaChart::createShapes()
                             LabelAlignment eAlignment = LABEL_ALIGN_TOP;
                             drawing::Position3D aScenePosition3D( aScenePosition.PositionX
                                     , aScenePosition.PositionY
-                                    , aScenePosition.PositionZ+this->getTransformedDepth() );
+                                    , aScenePosition.PositionZ+getTransformedDepth() );
 
                             sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, pPosHelper->isSwapXAndY() );
 

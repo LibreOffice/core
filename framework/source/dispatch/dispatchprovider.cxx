@@ -305,7 +305,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             // If we are this top frame itself (means our owner frame)
             // we should call ourself recursiv with a better target "_self".
             // So we can share the same code! (see reaction for "_self" inside this method too.)
-            xDispatcher = this->queryDispatch(aURL,SPECIALTARGET_SELF,0);
+            xDispatcher = queryDispatch(aURL,SPECIALTARGET_SELF,0);
         }
         else
         {

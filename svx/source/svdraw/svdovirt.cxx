@@ -130,7 +130,7 @@ void SdrVirtObj::RecalcBoundRect()
 
 SdrVirtObj* SdrVirtObj::Clone() const
 {
-    return new SdrVirtObj(this->rRefObj); // only a further reference
+    return new SdrVirtObj(rRefObj); // only a further reference
 }
 
 SdrVirtObj& SdrVirtObj::operator=(const SdrVirtObj& rObj)

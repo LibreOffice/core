@@ -491,7 +491,7 @@ Reference< beans::XPropertySet > SAL_CALL AxisWrapper::getMinorGrid()
 // ____ XShape ____
 awt::Point SAL_CALL AxisWrapper::getPosition()
 {
-    awt::Point aResult( m_spChart2ModelContact->GetAxisPosition( this->getAxis() ) );
+    awt::Point aResult( m_spChart2ModelContact->GetAxisPosition( getAxis() ) );
     return aResult;
 }
 
@@ -502,7 +502,7 @@ void SAL_CALL AxisWrapper::setPosition( const awt::Point& /*aPosition*/ )
 
 awt::Size SAL_CALL AxisWrapper::getSize()
 {
-    awt::Size aSize( m_spChart2ModelContact->GetAxisSize( this->getAxis() ) );
+    awt::Size aSize( m_spChart2ModelContact->GetAxisSize( getAxis() ) );
     return aSize;
 }
 
@@ -581,7 +581,7 @@ void SAL_CALL AxisWrapper::removeEventListener(
 //ReferenceSizePropertyProvider
 void AxisWrapper::updateReferenceSize()
 {
-    Reference< beans::XPropertySet > xProp( this->getAxis(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( getAxis(), uno::UNO_QUERY );
     if( xProp.is() )
     {
         if( xProp->getPropertyValue("ReferencePageSize").hasValue() )
@@ -592,7 +592,7 @@ void AxisWrapper::updateReferenceSize()
 Any AxisWrapper::getReferenceSize()
 {
     Any aRet;
-    Reference< beans::XPropertySet > xProp( this->getAxis(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( getAxis(), uno::UNO_QUERY );
     if( xProp.is() )
         aRet = xProp->getPropertyValue("ReferencePageSize");
     return aRet;
@@ -631,7 +631,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
 // WrappedPropertySet
 Reference< beans::XPropertySet > AxisWrapper::getInnerPropertySet()
 {
-    return Reference< beans::XPropertySet >( this->getAxis(), uno::UNO_QUERY );
+    return Reference< beans::XPropertySet >( getAxis(), uno::UNO_QUERY );
 }
 
 const Sequence< beans::Property >& AxisWrapper::getPropertySequence()

@@ -241,8 +241,8 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
 
     //Else move select, and delete if not complex
     }else{
-        this->Move(pDev, MoveLeft, false);
-        if(!this->HasComplexSelection())
+        Move(pDev, MoveLeft, false);
+        if(!HasComplexSelection())
             Delete();
     }
 }

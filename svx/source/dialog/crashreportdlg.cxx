@@ -106,7 +106,7 @@ IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn, void)
         mpBtnCancel->Disable();
         mpBtnClose->GrabFocus();
 
-        this->setOptimalLayoutSize();
+        setOptimalLayoutSize();
     }
     else if (pBtn == mpBtnCancel.get())
     {

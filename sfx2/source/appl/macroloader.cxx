@@ -112,7 +112,7 @@ uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
     sal_Int32 nCount = seqDescriptor.getLength();
     uno::Sequence< uno::Reference<frame::XDispatch> > lDispatcher(nCount);
     for( sal_Int32 i=0; i<nCount; ++i )
-        lDispatcher[i] = this->queryDispatch( seqDescriptor[i].FeatureURL,
+        lDispatcher[i] = queryDispatch( seqDescriptor[i].FeatureURL,
                                               seqDescriptor[i].FrameName,
                                               seqDescriptor[i].SearchFlags );
     return lDispatcher;

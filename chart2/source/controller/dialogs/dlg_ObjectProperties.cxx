@@ -338,7 +338,7 @@ SchAttribTabDlg::SchAttribTabDlg(vcl::Window* pParent,
     NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
     m_pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
 
-    this->SetText( pDialogParameter->getLocalizedName() );
+    SetText( pDialogParameter->getLocalizedName() );
 
     SvtCJKOptions aCJKOptions;
 

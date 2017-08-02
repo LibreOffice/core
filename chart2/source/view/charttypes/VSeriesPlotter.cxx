@@ -299,9 +299,9 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShapeFrontChild
     if(!xShapes.is())
     {
         //ensure that the series group shape is already created
-        uno::Reference< drawing::XShapes > xSeriesShapes( this->getSeriesGroupShape( pDataSeries, xTarget ) );
+        uno::Reference< drawing::XShapes > xSeriesShapes( getSeriesGroupShape( pDataSeries, xTarget ) );
         //ensure that the back child is created first
-        this->getSeriesGroupShapeBackChild( pDataSeries, xTarget );
+        getSeriesGroupShapeBackChild( pDataSeries, xTarget );
         //use series group shape as parent for the new created front group shape
         xShapes = createGroupShape( xSeriesShapes );
         pDataSeries->m_xFrontSubGroupShape = xShapes;
@@ -316,7 +316,7 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getSeriesGroupShapeBackChild(
     if(!xShapes.is())
     {
         //ensure that the series group shape is already created
-        uno::Reference< drawing::XShapes > xSeriesShapes( this->getSeriesGroupShape( pDataSeries, xTarget ) );
+        uno::Reference< drawing::XShapes > xSeriesShapes( getSeriesGroupShape( pDataSeries, xTarget ) );
         //use series group shape as parent for the new created back group shape
         xShapes = createGroupShape( xSeriesShapes );
         pDataSeries->m_xBackSubGroupShape = xShapes;
@@ -350,7 +350,7 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VData
     if(!xShapes.is())
     {
         //create a group shape for this series and add to logic target:
-        xShapes = this->createGroupShape( xTarget,rDataSeries.getErrorBarsCID(bYError) );
+        xShapes = createGroupShape( xTarget,rDataSeries.getErrorBarsCID(bYError) );
         rShapeGroup = xShapes;
     }
     return xShapes;
@@ -1011,7 +1011,7 @@ void VSeriesPlotter::createErrorBar_X( const drawing::Position3D& rUnscaledLogic
     if( xErrorBarProp.is())
     {
         uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
-            this->getErrorBarsGroupShape(rVDataSeries, xTarget, false) );
+            getErrorBarsGroupShape(rVDataSeries, xTarget, false) );
 
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
@@ -1033,7 +1033,7 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
     if( xErrorBarProp.is())
     {
         uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
-            this->getErrorBarsGroupShape(rVDataSeries, xTarget, true) );
+            getErrorBarsGroupShape(rVDataSeries, xTarget, true) );
 
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
@@ -1423,7 +1423,7 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, s
     if( !m_bCategoryXAxis || ( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() ) )
     {
         double fMinY, fMaxY;
-        this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
+        getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
         return fMinY;
     }
 
@@ -1456,7 +1456,7 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, s
     if( !m_bCategoryXAxis || ( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() ) )
     {
         double fMinY, fMaxY;
-        this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
+        getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
         return fMaxY;
     }
 
@@ -1975,7 +1975,7 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategoryRange(
         double fMinimumY; ::rtl::math::setNan(&fMinimumY);
         double fMaximumY; ::rtl::math::setNan(&fMaximumY);
 
-        this->calculateYMinAndMaxForCategory( nCatIndex
+        calculateYMinAndMaxForCategory( nCatIndex
             , bSeparateStackingForDifferentSigns, fMinimumY, fMaximumY, nAxisIndex );
 
         if(rfMinimumY > fMinimumY)
@@ -2133,7 +2133,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
                         continue;
 
                     std::vector<ViewLegendEntry> aSeriesEntries(
-                            this->createLegendEntriesForSeries(
+                            createLegendEntriesForSeries(
                                         rEntryKeyAspectRatio, *pSeries, xTextProperties,
                                         xTarget, xShapeFactory, xContext));
 
@@ -2284,8 +2284,8 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
                 , const Reference< lang::XMultiServiceFactory >& xShapeFactory )
 {
 
-    LegendSymbolStyle eLegendSymbolStyle = this->getLegendSymbolStyle();
-    uno::Any aExplicitSymbol( this->getExplicitSymbol( rSeries, -1 ) );
+    LegendSymbolStyle eLegendSymbolStyle = getLegendSymbolStyle();
+    uno::Any aExplicitSymbol( getExplicitSymbol( rSeries, -1 ) );
 
     VLegendSymbolFactory::PropertyType ePropType =
         VLegendSymbolFactory::PropertyType::FilledSeries;
@@ -2315,8 +2315,8 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
                 , const Reference< lang::XMultiServiceFactory >& xShapeFactory )
 {
 
-    LegendSymbolStyle eLegendSymbolStyle = this->getLegendSymbolStyle();
-    uno::Any aExplicitSymbol( this->getExplicitSymbol(rSeries,nPointIndex) );
+    LegendSymbolStyle eLegendSymbolStyle = getLegendSymbolStyle();
+    uno::Any aExplicitSymbol( getExplicitSymbol(rSeries,nPointIndex) );
 
     VLegendSymbolFactory::PropertyType ePropType =
         VLegendSymbolFactory::PropertyType::FilledSeries;
@@ -2393,7 +2393,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 uno::Reference< drawing::XShapes > xSymbolGroup( AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
 
                 // create the symbol
-                Reference< drawing::XShape > xShape( this->createLegendSymbolForPoint( rEntryKeyAspectRatio,
+                Reference< drawing::XShape > xShape( createLegendSymbolForPoint( rEntryKeyAspectRatio,
                     rSeries, nIdx, xSymbolGroup, xShapeFactory ) );
 
                 // set CID to symbol for selection
@@ -2422,7 +2422,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             uno::Reference< drawing::XShapes > xSymbolGroup( AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory)->createGroup2D( xTarget ));
 
             // create the symbol
-            Reference< drawing::XShape > xShape( this->createLegendSymbolForSeries(
+            Reference< drawing::XShape > xShape( createLegendSymbolForSeries(
                 rEntryKeyAspectRatio, rSeries, xSymbolGroup, xShapeFactory ) );
 
             // set CID to symbol for selection

@@ -633,7 +633,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
     }
     else if ( aPropertyName == SC_UNONAME_MOVEPROTECT )
     {
-        if( SdrObject* pObj = this->GetSdrObject() )
+        if( SdrObject* pObj = GetSdrObject() )
         {
             bool aProt = false;
             if( aValue >>= aProt )
@@ -815,7 +815,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
     else if ( aPropertyName == SC_UNONAME_MOVEPROTECT )
     {
         bool aProt = false;
-        if ( SdrObject* pObj = this->GetSdrObject() )
+        if ( SdrObject* pObj = GetSdrObject() )
             aProt = pObj->IsMoveProtect();
         aAny <<= aProt;
     }

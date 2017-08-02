@@ -1316,9 +1316,9 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
         || typeid(i_rSource) == typeid(MetadatableClipboard)
         || typeid(*this)     == typeid(MetadatableClipboard),
         "RegisterAsCopyOf element with different class?");
-    OSL_ENSURE(!this->m_pReg, "RegisterAsCopyOf called on element with XmlId?");
+    OSL_ENSURE(!m_pReg, "RegisterAsCopyOf called on element with XmlId?");
 
-    if (this->m_pReg)
+    if (m_pReg)
     {
         RemoveMetadataReference();
     }
@@ -1339,7 +1339,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
                         dynamic_cast<XmlIdRegistryDocument&>( rReg ) );
                     rRegDoc.RegisterCopy(i_rSource, *this,
                         i_bCopyPrecedesSource);
-                    this->m_pReg = &rRegDoc;
+                    m_pReg = &rRegDoc;
                 }
                 return;
             }
@@ -1366,7 +1366,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
                 }
                 Metadatable & rLink(
                     pRegClp->RegisterCopyClipboard(*this, SourceRef, isLatent));
-                this->m_pReg = pRegClp;
+                m_pReg = pRegClp;
                 // register as copy in the non-clipboard registry
                 pSourceRegDoc->RegisterCopy(i_rSource, rLink,
                     false); // i_bCopyPrecedesSource);
@@ -1390,12 +1390,12 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
                     // element is still in the same stream
                     // N.B.: we check the stream of pLink, not of i_rSource!
                     bool srcInContent( pLink->IsInContent() );
-                    bool tgtInContent( this->IsInContent() );
+                    bool tgtInContent( IsInContent() );
                     if (srcInContent == tgtInContent)
                     {
                         pRegDoc->RegisterCopy(*pLink, *this,
                             true); // i_bCopyPrecedesSource);
-                        this->m_pReg = pRegDoc;
+                        m_pReg = pRegDoc;
                     }
                     // otherwise: stream change! do not register!
                 }
@@ -1453,7 +1453,7 @@ void Metadatable::RestoreMetadata(
     RemoveMetadataReference();
     if (i_pUndo)
     {
-        this->RegisterAsCopyOf(*i_pUndo, true);
+        RegisterAsCopyOf(*i_pUndo, true);
     }
 }
 
@@ -1473,8 +1473,8 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
     }
     if (i_isMergedEmpty && !i_isOtherEmpty)
     {
-        this->RemoveMetadataReference();
-        this->RegisterAsCopyOf(i_rOther, true);
+        RemoveMetadataReference();
+        RegisterAsCopyOf(i_rOther, true);
         return;
     }
 
@@ -1485,7 +1485,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
     }
     if (!m_pReg)
     {
-        this->RegisterAsCopyOf(i_rOther, true);
+        RegisterAsCopyOf(i_rOther, true);
         // assumption: i_rOther will be deleted, so don't unregister it here
         return;
     }

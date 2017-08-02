@@ -431,7 +431,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvents
     // Examine the index and apply the array
     std::deque< AttachedObject_Impl > aList = implCheckIndex( nIndex )->aObjList;
     for( const auto& rObj : aList )
-        this->detach( nIndex, rObj.xTarget );
+        detach( nIndex, rObj.xTarget );
 
     const ScriptEventDescriptor* pArray = ScriptEvents.getConstArray();
     sal_Int32 nLen = ScriptEvents.getLength();
@@ -439,7 +439,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvents
         registerScriptEvent( nIndex, pArray[ i ] );
 
     for( const auto& rObj : aList )
-        this->attach( nIndex, rObj.xTarget, rObj.aHelper );
+        attach( nIndex, rObj.xTarget, rObj.aHelper );
 }
 
 
@@ -457,7 +457,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
 
     std::deque< AttachedObject_Impl > aList = aIt->aObjList;
     for( const auto& rObj : aList )
-        this->detach( nIndex, rObj.xTarget );
+        detach( nIndex, rObj.xTarget );
 
     OUString aLstType = ListenerType;
     sal_Int32 nLastDot = aLstType.lastIndexOf('.');
@@ -479,7 +479,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     }
 
     for( const auto& rObj : aList )
-        this->attach( nIndex, rObj.xTarget, rObj.aHelper );
+        attach( nIndex, rObj.xTarget, rObj.aHelper );
 }
 
 
@@ -490,10 +490,10 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
 
     std::deque< AttachedObject_Impl > aList = aIt->aObjList;
     for( const auto& rObj : aList )
-        this->detach( nIndex, rObj.xTarget );
+        detach( nIndex, rObj.xTarget );
     aIt->aEventList.clear();
     for( const auto& rObj : aList )
-        this->attach( nIndex, rObj.xTarget, rObj.aHelper );
+        attach( nIndex, rObj.xTarget, rObj.aHelper );
 }
 
 
@@ -518,7 +518,7 @@ void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
 
     std::deque< AttachedObject_Impl > aList = aIt->aObjList;
     for( const auto& rObj : aList )
-        this->detach( nIndex, rObj.xTarget );
+        detach( nIndex, rObj.xTarget );
 
     aIndex.erase( aIt );
 }

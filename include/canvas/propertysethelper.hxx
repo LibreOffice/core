@@ -68,27 +68,27 @@ namespace canvas
                     const SetterType&  setter)
             {
                 MapType::MapEntry aEntry={name, {getter, setter}};
-                this->push_back(aEntry);
+                push_back(aEntry);
             }
             MakeMap(const char*       name,
                     const GetterType& getter)
             {
                 MapType::MapEntry aEntry={name, {getter, SetterType()}};
-                this->push_back(aEntry);
+                push_back(aEntry);
             }
             MakeMap& operator()(const char*        name,
                                 const GetterType&  getter,
                                 const SetterType&  setter)
             {
                 MapType::MapEntry aEntry={name, {getter, setter}};
-                this->push_back(aEntry);
+                push_back(aEntry);
                 return *this;
             }
             MakeMap& operator()(const char*       name,
                                 const GetterType& getter)
             {
                 MapType::MapEntry aEntry={name, {getter, SetterType()}};
-                this->push_back(aEntry);
+                push_back(aEntry);
                 return *this;
             }
         };

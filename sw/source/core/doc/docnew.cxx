@@ -989,10 +989,10 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                 // copy the pagedesc from the current document to the new
                 // document and change the name of the to-be-applied style
                 OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
-                pTargetPageDesc = this->MakePageDesc( sNewPageDescName );
+                pTargetPageDesc = MakePageDesc( sNewPageDescName );
                 if( pTargetPageDesc )
                 {
-                    this->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, false );
+                    CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, false );
                     lcl_CopyFollowPageDesc( *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
                 }
             }
@@ -1074,8 +1074,8 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                               << " " << aCpyPam.GetNode().GetIndex() << ")" );
 #endif
 
-    this->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSGLOSSARY, nullptr );
-    this->getIDocumentFieldsAccess().LockExpFields();
+    GetIDocumentUndoRedo().StartUndo( SwUndoId::INSGLOSSARY, nullptr );
+    getIDocumentFieldsAccess().LockExpFields();
 
     // Position where the appended doc starts. Will be filled in later.
     // Initially uses GetEndOfContent() because SwNodeIndex has no default ctor.
@@ -1213,11 +1213,11 @@ else
                                       << " => " << aAnchor.GetPageNum() + pageOffset );
             if ( pageOffset != 0 )
                 aAnchor.SetPageNum( aAnchor.GetPageNum() + pageOffset );
-            this->getIDocumentLayoutAccess().CopyLayoutFormat( rCpyFormat, aAnchor, true, true );
+            getIDocumentLayoutAccess().CopyLayoutFormat( rCpyFormat, aAnchor, true, true );
         }
     }
 
-    this->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSGLOSSARY, nullptr );
+    GetIDocumentUndoRedo().EndUndo( SwUndoId::INSGLOSSARY, nullptr );
 
     getIDocumentFieldsAccess().UnlockExpFields();
     getIDocumentFieldsAccess().UpdateFields(false);

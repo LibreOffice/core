@@ -334,7 +334,7 @@ SplinePropertiesDialog::SplinePropertiesDialog( vcl::Window* pParent )
     get(m_pFT_SplineOrder, "PolynomialsLabel");
     get(m_pMF_SplineOrder, "PolynomialsSpinButton");
 
-    this->SetText( SchResId( STR_DLG_SMOOTH_LINE_PROPERTIES ) );
+    SetText( SchResId( STR_DLG_SMOOTH_LINE_PROPERTIES ) );
 
     m_pLB_Spline_Type->SetSelectHdl( LINK (this, SplinePropertiesDialog, SplineTypeListBoxHdl ) );
 }
@@ -692,7 +692,7 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         m_pFT_ChooseType->SetStyle(m_pFT_ChooseType->GetStyle() | WB_NOLABEL);
     }
 
-    this->SetText( SchResId(STR_PAGE_CHARTTYPE) );
+    SetText( SchResId(STR_PAGE_CHARTTYPE) );
 
     m_pMainTypeList->SetStyle(m_pMainTypeList->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_FLATVALUESET | WB_3DLOOK );
     m_pMainTypeList->SetSelectHdl( LINK( this, ChartTypeTabPage, SelectMainTypeHdl ) );
@@ -817,7 +817,7 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
         return;
     m_nChangingCalls++;
 
-    ChartTypeParameter aParameter( this->getCurrentParamter() );
+    ChartTypeParameter aParameter( getCurrentParamter() );
     if( m_pCurrentMainType )
     {
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
@@ -838,7 +838,7 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
         ASSERT_EXCEPTION(ex);
     }
     //the controls have to be enabled/disabled accordingly
-    this->fillAllControls( aParameter );
+    fillAllControls( aParameter );
 
     m_nChangingCalls--;
 }
@@ -857,9 +857,9 @@ IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
 {
     if( m_pCurrentMainType )
     {
-        ChartTypeParameter aParameter( this->getCurrentParamter() );
+        ChartTypeParameter aParameter( getCurrentParamter() );
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
-        this->fillAllControls( aParameter, false );
+        fillAllControls( aParameter, false );
         commitToModel( aParameter );
     }
 }
@@ -871,7 +871,7 @@ IMPL_LINK_NOARG(ChartTypeTabPage, SelectMainTypeHdl, ListBox&, void)
 
 void ChartTypeTabPage::selectMainType()
 {
-    ChartTypeParameter aParameter( this->getCurrentParamter() );
+    ChartTypeParameter aParameter( getCurrentParamter() );
 
     if( m_pCurrentMainType )
     {
@@ -879,10 +879,10 @@ void ChartTypeTabPage::selectMainType()
         m_pCurrentMainType->hideExtraControls();
     }
 
-    m_pCurrentMainType = this->getSelectedMainType();
+    m_pCurrentMainType = getSelectedMainType();
     if( m_pCurrentMainType )
     {
-        this->showAllControls(*m_pCurrentMainType);
+        showAllControls(*m_pCurrentMainType);
 
         m_pCurrentMainType->adjustParameterToMainType( aParameter );
         commitToModel( aParameter );
@@ -902,8 +902,8 @@ void ChartTypeTabPage::selectMainType()
             ASSERT_EXCEPTION(ex);
         }
 
-        this->fillAllControls( aParameter );
-        uno::Reference< beans::XPropertySet > xTemplateProps( this->getCurrentTemplate(), uno::UNO_QUERY );
+        fillAllControls( aParameter );
+        uno::Reference< beans::XPropertySet > xTemplateProps( getCurrentTemplate(), uno::UNO_QUERY );
         m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
     }
 }
@@ -967,10 +967,10 @@ void ChartTypeTabPage::initializePage()
             bFound = true;
 
             m_pMainTypeList->SelectEntryPos( nM );
-            this->showAllControls( **aIter );
+            showAllControls( **aIter );
             uno::Reference< beans::XPropertySet > xTemplateProps( aTemplate.first, uno::UNO_QUERY );
             ChartTypeParameter aParameter = (*aIter)->getChartTypeParameterForService( aServiceName, xTemplateProps );
-            m_pCurrentMainType = this->getSelectedMainType();
+            m_pCurrentMainType = getSelectedMainType();
 
             //set ThreeDLookScheme
             aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( xDiagram );
@@ -987,7 +987,7 @@ void ChartTypeTabPage::initializePage()
                 ASSERT_EXCEPTION(ex);
             }
 
-            this->fillAllControls( aParameter );
+            fillAllControls( aParameter );
             if( m_pCurrentMainType )
                 m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
             break;
@@ -1015,7 +1015,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() cons
 {
     if( m_pCurrentMainType && m_xChartModel.is() )
     {
-        ChartTypeParameter aParameter( this->getCurrentParamter() );
+        ChartTypeParameter aParameter( getCurrentParamter() );
         m_pCurrentMainType->adjustParameterToSubType( aParameter );
         uno::Reference< lang::XMultiServiceFactory > xTemplateManager( m_xChartModel->getChartTypeManager(), uno::UNO_QUERY );
         return m_pCurrentMainType->getCurrentTemplate( aParameter, xTemplateManager );

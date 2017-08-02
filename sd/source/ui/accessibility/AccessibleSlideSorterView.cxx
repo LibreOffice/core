@@ -841,7 +841,7 @@ void AccessibleSlideSorterView::Implementation::Notify (
 void AccessibleSlideSorterView::SwitchViewActivated()
 {
     // Firstly, set focus to view
-    this->FireAccessibleEvent(AccessibleEventId::STATE_CHANGED,
+    FireAccessibleEvent(AccessibleEventId::STATE_CHANGED,
                     Any(),
                     Any(AccessibleStateType::FOCUSED));
 

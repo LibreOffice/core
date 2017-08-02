@@ -85,7 +85,7 @@ public:
     { return mnBlue; }
     bool        operator== (const PrinterColor& aColor) const
     {
-        return aColor.Is() && this->Is()
+        return aColor.Is() && Is()
             && mnRed   == aColor.mnRed
             && mnGreen == aColor.mnGreen
             && mnBlue  == aColor.mnBlue;

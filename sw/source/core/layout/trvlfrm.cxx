@@ -1609,7 +1609,7 @@ bool SwRootFrame::IsDummyPage( sal_uInt16 nPageNum ) const
  */
 bool SwFrame::IsProtected() const
 {
-    if (this->IsContentFrame() && static_cast<const SwContentFrame*>(this)->GetNode())
+    if (IsContentFrame() && static_cast<const SwContentFrame*>(this)->GetNode())
     {
         const SwDoc *pDoc=static_cast<const SwContentFrame*>(this)->GetNode()->GetDoc();
         bool isFormProtected=pDoc->GetDocumentSettingManager().get(DocumentSettingId::PROTECT_FORM );

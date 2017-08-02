@@ -152,7 +152,7 @@ void VAxisBase::setExplicitScaleAndIncrement(
 
 void VAxisBase::createAllTickInfos( TickInfoArraysType& rAllTickInfos )
 {
-    std::unique_ptr< TickFactory > apTickFactory( this->createTickFactory() );
+    std::unique_ptr< TickFactory > apTickFactory( createTickFactory() );
     if( m_aScale.ShiftedCategoryPosition )
         apTickFactory->getAllTicksShifted( rAllTickInfos );
     else
@@ -178,7 +178,7 @@ bool VAxisBase::prepareShapeCreation()
         return true;
 
     //create named group shape
-    m_xGroupShape_Shapes = this->createGroupShape( m_xLogicTarget, m_nDimension==2 ? m_aCID : "");
+    m_xGroupShape_Shapes = createGroupShape( m_xLogicTarget, m_nDimension==2 ? m_aCID : "");
 
     if( m_aAxisProperties.m_bDisplayLabels )
         m_xTextTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget, m_aCID );

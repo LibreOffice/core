@@ -660,9 +660,9 @@ void SaxExpatParser_Impl::parse( )
                                                 nRead,
                                                 0 ) != XML_STATUS_ERROR );
 
-        if( ! bContinue || this->bExceptionWasThrown ) {
+        if( ! bContinue || bExceptionWasThrown ) {
 
-            if ( this->bRTExceptionWasThrown )
+            if ( bRTExceptionWasThrown )
                 throw rtexception;
 
             // Error during parsing !

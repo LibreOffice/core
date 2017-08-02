@@ -32,9 +32,9 @@ struct TagAttribute_Impl
     TagAttribute_Impl( const OUString &aName, const OUString &aType,
                          const OUString &aValue )
     {
-        this->sName     = aName;
-        this->sType     = aType;
-        this->sValue    = aValue;
+        sName     = aName;
+        sType     = aType;
+        sValue    = aValue;
     }
 
     OUString sName;

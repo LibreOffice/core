@@ -188,7 +188,7 @@ void SAL_CALL DataPoint::setFastPropertyValue_NoBroadcast(
     {
         uno::Any aOldValue;
         Reference< util::XModifyBroadcaster > xBroadcaster;
-        this->getFastPropertyValue( aOldValue, nHandle );
+        getFastPropertyValue( aOldValue, nHandle );
         if( aOldValue.hasValue() &&
             (aOldValue >>= xBroadcaster) &&
             xBroadcaster.is())

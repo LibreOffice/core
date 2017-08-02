@@ -298,7 +298,7 @@ sal_Bool MSWorksCalcImportFilter::filter(const css::uno::Sequence< css::beans::P
     writerperfect::WPXSvInputStream input(xInputStream);
     OdsGenerator exporter;
     exporter.addDocumentHandler(&aHandler, ODF_FLAT_XML);
-    this->doRegisterHandlers(exporter);
+    doRegisterHandlers(exporter);
 
     utl::MediaDescriptor aDescriptor(rDescriptor);
     try
@@ -352,7 +352,7 @@ sal_Bool MSWorksCalcImportFilter::filter(const css::uno::Sequence< css::beans::P
                     bool needEncoding;
                     const libwps::WPSConfidence confidence = libwps::WPSDocument::isFileFormatSupported(&structuredInput, kind, creator, needEncoding);
                     if (confidence!=libwps::WPS_CONFIDENCE_NONE)
-                        return this->doImportDocument(structuredInput, exporter, aDescriptor);
+                        return doImportDocument(structuredInput, exporter, aDescriptor);
                 }
             }
         }
@@ -361,7 +361,7 @@ sal_Bool MSWorksCalcImportFilter::filter(const css::uno::Sequence< css::beans::P
     {
     }
 
-    return this->doImportDocument(input, exporter, aDescriptor);
+    return doImportDocument(input, exporter, aDescriptor);
 }
 
 bool MSWorksCalcImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)

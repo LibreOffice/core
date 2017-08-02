@@ -200,7 +200,7 @@ void VCartesianGrid::createShapes()
 
     //create named group shape
     Reference< drawing::XShapes > xGroupShape_Shapes(
-        this->createGroupShape( m_xLogicTarget, m_aCID ) );
+        createGroupShape( m_xLogicTarget, m_aCID ) );
 
     if(!xGroupShape_Shapes.is())
         return;
@@ -209,7 +209,7 @@ void VCartesianGrid::createShapes()
     fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
     //create all scaled tickmark values
-    std::unique_ptr< TickFactory > apTickFactory( this->createTickFactory() );
+    std::unique_ptr< TickFactory > apTickFactory( createTickFactory() );
     TickFactory& aTickFactory = *apTickFactory.get();
     TickInfoArraysType aAllTickInfos;
     aTickFactory.getAllTicks( aAllTickInfos );
@@ -232,7 +232,7 @@ void VCartesianGrid::createShapes()
         Reference< drawing::XShapes > xTarget( xGroupShape_Shapes );
         if( nDepth > 0 )
         {
-            xTarget.set( this->createGroupShape( m_xLogicTarget
+            xTarget.set( createGroupShape( m_xLogicTarget
                 , ObjectIdentifier::addChildParticle( m_aCID, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_SUBGRID, nDepth-1 ) )
                 ) );
             if(!xTarget.is())

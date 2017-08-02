@@ -180,7 +180,7 @@ int SalAquaPicker::runandwaitforresult()
 {
     SolarMutexGuard aGuard;
 
-    int status = this->run();
+    int status = run();
 
     return status;
 }

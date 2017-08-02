@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 
 void ChartController::executeDispatch_EditText( const Point* pMousePixel )
 {
-    this->StartTextEdit( pMousePixel );
+    StartTextEdit( pMousePixel );
 }
 
 void ChartController::StartTextEdit( const Point* pMousePixel )
@@ -154,7 +154,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
         return;
     }
     if( !m_pDrawViewWrapper->IsTextEdit() )
-        this->StartTextEdit();
+        StartTextEdit();
 
     SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
     OSL_ENSURE( pFact, "No dialog factory" );

@@ -364,7 +364,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
 {
     // clone already existing views for slide bitmaps
     for( const auto& rView : rViewContainer )
-        this->viewAdded( rView );
+        viewAdded( rView );
 
     // register screen update (LayerManager needs to signal pending
     // updates)

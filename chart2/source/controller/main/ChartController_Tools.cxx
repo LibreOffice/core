@@ -334,7 +334,7 @@ void ChartController::impl_PasteGraphic(
     // note: the XPropertySet of the model is the old API. Also the property
     // "AdditionalShapes" that is used there.
     uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY );
-    DrawModelWrapper * pDrawModelWrapper( this->GetDrawModelWrapper());
+    DrawModelWrapper * pDrawModelWrapper( GetDrawModelWrapper());
     if( ! (xGraphic.is() && xModelProp.is()))
         return;
     uno::Reference< lang::XMultiServiceFactory > xFact( pDrawModelWrapper->getShapeFactory());
@@ -377,7 +377,7 @@ void ChartController::impl_PasteGraphic(
 
 void ChartController::impl_PasteShapes( SdrModel* pModel )
 {
-    DrawModelWrapper* pDrawModelWrapper( this->GetDrawModelWrapper() );
+    DrawModelWrapper* pDrawModelWrapper( GetDrawModelWrapper() );
     if ( pDrawModelWrapper && m_pDrawViewWrapper )
     {
         Reference< drawing::XDrawPage > xDestPage( pDrawModelWrapper->getMainDrawPage() );
@@ -433,7 +433,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
 
 void ChartController::impl_PasteStringAsTextShape( const OUString& rString, const awt::Point& rPosition )
 {
-    DrawModelWrapper* pDrawModelWrapper( this->GetDrawModelWrapper() );
+    DrawModelWrapper* pDrawModelWrapper( GetDrawModelWrapper() );
     if ( pDrawModelWrapper && m_pDrawViewWrapper )
     {
         const Reference< lang::XMultiServiceFactory >& xShapeFactory( pDrawModelWrapper->getShapeFactory() );

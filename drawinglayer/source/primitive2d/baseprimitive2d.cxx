@@ -192,7 +192,7 @@ namespace drawinglayer
 
             if(!empty())
             {
-                const sal_Int32 nCount(this->size());
+                const sal_Int32 nCount(size());
 
                 for(sal_Int32 a(0L); a < nCount; a++)
                 {

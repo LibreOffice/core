@@ -167,7 +167,7 @@ void NotebookBar::DataChanged(const DataChangedEvent& rDCEvt)
 
 void NotebookBar::UpdateBackground()
 {
-    const StyleSettings& rStyleSettings = this->GetSettings().GetStyleSettings();
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const BitmapEx aPersona = rStyleSettings.GetPersonaHeader();
 
     if (!aPersona.IsEmpty())

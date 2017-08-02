@@ -537,7 +537,7 @@ void SAL_CALL DataSeriesPointWrapper::disposing( const lang::EventObject& /*Sour
 
 bool DataSeriesPointWrapper::isSupportingAreaProperties()
 {
-    Reference< chart2::XDataSeries > xSeries( this->getDataSeries() );
+    Reference< chart2::XDataSeries > xSeries( getDataSeries() );
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
@@ -565,7 +565,7 @@ Reference< beans::XPropertySet > DataSeriesPointWrapper::getDataPointProperties(
 {
     Reference< beans::XPropertySet > xPointProp;
 
-    Reference< chart2::XDataSeries > xSeries( this->getDataSeries() );
+    Reference< chart2::XDataSeries > xSeries( getDataSeries() );
 
     // may throw an IllegalArgumentException
     if( xSeries.is() )
@@ -577,7 +577,7 @@ Reference< beans::XPropertySet > DataSeriesPointWrapper::getDataPointProperties(
 //ReferenceSizePropertyProvider
 void DataSeriesPointWrapper::updateReferenceSize()
 {
-    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( getInnerPropertySet(), uno::UNO_QUERY );
     if( xProp.is() )
     {
         if( xProp->getPropertyValue("ReferencePageSize").hasValue() )
@@ -588,7 +588,7 @@ void DataSeriesPointWrapper::updateReferenceSize()
 Any DataSeriesPointWrapper::getReferenceSize()
 {
     Any aRet;
-    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( getInnerPropertySet(), uno::UNO_QUERY );
     if( xProp.is() )
         aRet = xProp->getPropertyValue("ReferencePageSize");
     return aRet;
@@ -794,16 +794,16 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
         switch(aNewValue)
         {
             case css::chart::ChartErrorCategory_CONSTANT_VALUE:
-                aHigh = this->getPropertyValue("ConstantErrorHigh");
-                aLow = this->getPropertyValue("ConstantErrorLow");
+                aHigh = getPropertyValue("ConstantErrorHigh");
+                aLow = getPropertyValue("ConstantErrorLow");
                 bSetHighAndLowValues = true;
                 break;
             case css::chart::ChartErrorCategory_PERCENT:
-                aHigh = aLow = this->getPropertyValue("PercentageError");
+                aHigh = aLow = getPropertyValue("PercentageError");
                 bSetHighAndLowValues = true;
                 break;
             case css::chart::ChartErrorCategory_ERROR_MARGIN:
-                aHigh = aLow = this->getPropertyValue("ErrorMargin");
+                aHigh = aLow = getPropertyValue("ErrorMargin");
                 bSetHighAndLowValues = true;
                 break;
             default:
@@ -817,14 +817,14 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const OUString& rPropert
             switch(aNewValue)
             {
                 case css::chart::ChartErrorCategory_CONSTANT_VALUE:
-                    this->setPropertyValue("ConstantErrorHigh",aHigh);
-                    this->setPropertyValue("ConstantErrorLow",aLow);
+                    setPropertyValue("ConstantErrorHigh",aHigh);
+                    setPropertyValue("ConstantErrorLow",aLow);
                     break;
                 case css::chart::ChartErrorCategory_PERCENT:
-                    this->setPropertyValue("PercentageError",aHigh);
+                    setPropertyValue("PercentageError",aHigh);
                     break;
                 case css::chart::ChartErrorCategory_ERROR_MARGIN:
-                    this->setPropertyValue("ErrorMargin",aHigh);
+                    setPropertyValue("ErrorMargin",aHigh);
                     break;
                 default:
                     break;

@@ -5961,12 +5961,12 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
         // Patriarch found (the upmost shape group container) ?
         if( DFF_msofbtSpgrContainer == nFbt )
         {
-            if(!this->GetShapeGroupContainerData( rSt, nLength, true, nDrawingContainerId )) return;
+            if(!GetShapeGroupContainerData( rSt, nLength, true, nDrawingContainerId )) return;
         }
         // empty Shape Container ? (outside of shape group container)
         else if( DFF_msofbtSpContainer == nFbt )
         {
-            if(!this->GetShapeContainerData( rSt, nLength, ULONG_MAX, nDrawingContainerId )) return;
+            if(!GetShapeContainerData( rSt, nLength, ULONG_MAX, nDrawingContainerId )) return;
         }
         else
             rSt.SeekRel( nLength );
@@ -5995,14 +5995,14 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
         if( DFF_msofbtSpContainer == nFbt )
         {
             sal_uLong nGroupOffs = bFirst ? nStartShapeGroupCont - DFF_COMMON_RECORD_HEADER_SIZE : ULONG_MAX;
-            if ( !this->GetShapeContainerData( rSt, nLength, nGroupOffs, nDrawingContainerId ) )
+            if ( !GetShapeContainerData( rSt, nLength, nGroupOffs, nDrawingContainerId ) )
                 return false;
             bFirst = false;
         }
         // nested shape group container ?
         else if( DFF_msofbtSpgrContainer == nFbt )
         {
-            if ( !this->GetShapeGroupContainerData( rSt, nLength, false, nDrawingContainerId ) )
+            if ( !GetShapeGroupContainerData( rSt, nLength, false, nDrawingContainerId ) )
                 return false;
         }
         else

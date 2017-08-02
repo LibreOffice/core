@@ -96,9 +96,9 @@ public:
         Generator exporter;
         exporter.addDocumentHandler(&aHandler, ODF_FLAT_XML);
 
-        this->doRegisterHandlers(exporter);
+        doRegisterHandlers(exporter);
 
-        return this->doImportDocument(input, exporter, aDescriptor);
+        return doImportDocument(input, exporter, aDescriptor);
     }
 
     virtual void SAL_CALL cancel() override
@@ -136,7 +136,7 @@ public:
 
         WPXSvInputStream input(xInputStream);
 
-        if (this->doDetectFormat(input, sTypeName))
+        if (doDetectFormat(input, sTypeName))
         {
             assert(!sTypeName.isEmpty());
 

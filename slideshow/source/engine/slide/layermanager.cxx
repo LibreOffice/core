@@ -88,7 +88,7 @@ namespace slideshow
 
             // init views
             for( const auto& rView : mrViews )
-                this->viewAdded( rView );
+                viewAdded( rView );
         }
 
         void LayerManager::activate()

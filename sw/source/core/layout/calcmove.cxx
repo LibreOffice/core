@@ -925,9 +925,9 @@ bool SwTextNode::IsCollapse() const
         const SwEndNode *pNdAfter=GetNodes()[nIdx+1]->GetEndNode();
 
         // The paragraph is collapsed only if the NdAfter is the end of a cell
-        bool bInTable = this->FindTableNode( ) != nullptr;
+        bool bInTable = FindTableNode( ) != nullptr;
 
-        SwSortedObjs* pObjs = this->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() )->GetDrawObjs( );
+        SwSortedObjs* pObjs = getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() )->GetDrawObjs( );
         const size_t nObjs = ( pObjs != nullptr ) ? pObjs->size( ) : 0;
 
         return pNdBefore!=nullptr && pNdAfter!=nullptr && nObjs == 0 && bInTable;

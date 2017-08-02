@@ -2093,7 +2093,7 @@ void SwHTMLWriter::OutCSS1_TableCellBorderHack(SwFrameFormat const& rFrameFormat
     OutCSS1_SvxBox(*this, rFrameFormat.GetBox());
     if (!m_bFirstCSS1Property)
     {
-        this->Strm().WriteChar( cCSS1_style_opt_end );
+        Strm().WriteChar( cCSS1_style_opt_end );
     }
 }
 

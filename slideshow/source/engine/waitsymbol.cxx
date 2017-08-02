@@ -67,7 +67,7 @@ WaitSymbol::WaitSymbol( uno::Reference<rendering::XBitmap> const &   xBitmap,
     mbVisible(false)
 {
     for( const auto& pView : rViewContainer )
-        this->viewAdded( pView );
+        viewAdded( pView );
 }
 
 void WaitSymbol::setVisible( const bool bVisible )

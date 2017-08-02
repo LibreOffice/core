@@ -532,7 +532,7 @@ SbxDimArray& SbxDimArray::operator=( const SbxDimArray& rArray )
     {
         SbxArray::operator=( static_cast<const SbxArray&>(rArray) );
         m_vDimensions = rArray.m_vDimensions;
-        this->mbHasFixedSize = rArray.mbHasFixedSize;
+        mbHasFixedSize = rArray.mbHasFixedSize;
     }
     return *this;
 }

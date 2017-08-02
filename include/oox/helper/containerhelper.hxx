@@ -95,33 +95,33 @@ public:
     typedef typename container_type::const_iterator     const_iterator;
 
                  Matrix() : mnWidth( 0 ) {}
-    explicit     Matrix( size_type nWidth, size_type nHeight ) { this->resize( nWidth, nHeight ); }
-    explicit     Matrix( size_type nWidth, size_type nHeight, const_reference rData ) { this->resize( nWidth, nHeight, rData ); }
+    explicit     Matrix( size_type nWidth, size_type nHeight ) { resize( nWidth, nHeight ); }
+    explicit     Matrix( size_type nWidth, size_type nHeight, const_reference rData ) { resize( nWidth, nHeight, rData ); }
 
     bool         empty() const { return maData.empty(); }
     size_type    size() const { return maData.size(); }
     size_type    width() const { return mnWidth; }
-    size_type    height() const { return this->empty() ? 0 : (this->size() / this->width()); }
+    size_type    height() const { return empty() ? 0 : (size() / width()); }
 
-    void         clear() { this->resize( 0, 0 ); }
+    void         clear() { resize( 0, 0 ); }
     void         resize( size_type nWidth, size_type nHeight ) { mnWidth = nWidth; maData.resize( nWidth * nHeight ); }
     void         resize( size_type nWidth, size_type nHeight, const_reference rData ) { mnWidth = nWidth; maData.resize( nWidth * nHeight, rData ); }
 
     iterator     at( size_type nX, size_type nY ) { return maData.begin() + mnWidth * nY + nX; }
     const_iterator at( size_type nX, size_type nY ) const { return maData.begin() + mnWidth * nY + nX; }
 
-    reference    operator()( size_type nX, size_type nY ) { return *this->at( nX, nY ); }
-    const_reference operator()( size_type nX, size_type nY ) const { return *this->at( nX, nY ); }
+    reference    operator()( size_type nX, size_type nY ) { return *at( nX, nY ); }
+    const_reference operator()( size_type nX, size_type nY ) const { return *at( nX, nY ); }
 
     iterator     begin() { return maData.begin(); }
     const_iterator begin() const { return maData.begin(); }
     iterator     end() { return maData.end(); }
     const_iterator end() const { return maData.end(); }
 
-    iterator     row_begin( size_type nY ) { return this->at( 0, nY ); }
-    const_iterator row_begin( size_type nY ) const { return this->at( 0, nY ); }
-    iterator     row_end( size_type nY ) { return this->at( mnWidth, nY ); }
-    const_iterator row_end( size_type nY ) const { return this->at( mnWidth, nY ); }
+    iterator     row_begin( size_type nY ) { return at( 0, nY ); }
+    const_iterator row_begin( size_type nY ) const { return at( 0, nY ); }
+    iterator     row_end( size_type nY ) { return at( mnWidth, nY ); }
+    const_iterator row_end( size_type nY ) const { return at( mnWidth, nY ); }
 
     reference    row_front( size_type nY ) { return (*this)( 0, nY ); }
     const_reference row_front( size_type nY ) const { return (*this)( 0, nY ); }

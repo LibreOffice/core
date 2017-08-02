@@ -1534,7 +1534,7 @@ SwXMetaField::getPresentation(sal_Bool bShowCommand)
     else
     {
         // getString should check if this is invalid
-        const OUString content( this->getString() );
+        const OUString content( getString() );
         OUString prefix;
         OUString suffix;
         getPrefixAndSuffix(GetModel(), this, &prefix, &suffix);

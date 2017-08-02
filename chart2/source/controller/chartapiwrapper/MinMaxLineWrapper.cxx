@@ -257,7 +257,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< OUStrin
         OUString aPropertyName( rNameSeq[nN] );
         try
         {
-            this->setPropertyValue( aPropertyName, rValueSeq[nN] );
+            setPropertyValue( aPropertyName, rValueSeq[nN] );
         }
         catch( const beans::UnknownPropertyException& ex )
         {
@@ -275,7 +275,7 @@ uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyValues( const u
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
             OUString aPropertyName( rNameSeq[nN] );
-            aRetSeq[nN] = this->getPropertyValue( aPropertyName );
+            aRetSeq[nN] = getPropertyValue( aPropertyName );
         }
     }
     return aRetSeq;
@@ -304,8 +304,8 @@ beans::PropertyState SAL_CALL MinMaxLineWrapper::getPropertyState( const OUStrin
     if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
         return beans::PropertyState_DEFAULT_VALUE;
 
-    uno::Any aDefault( this->getPropertyDefault( rPropertyName ) );
-    uno::Any aValue( this->getPropertyValue( rPropertyName ) );
+    uno::Any aDefault( getPropertyDefault( rPropertyName ) );
+    uno::Any aValue( getPropertyValue( rPropertyName ) );
 
     if( aDefault == aValue )
         return beans::PropertyState_DEFAULT_VALUE;
@@ -321,14 +321,14 @@ uno::Sequence< beans::PropertyState > SAL_CALL MinMaxLineWrapper::getPropertySta
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
             OUString aPropertyName( rNameSeq[nN] );
-            aRetSeq[nN] = this->getPropertyState( aPropertyName );
+            aRetSeq[nN] = getPropertyState( aPropertyName );
         }
     }
     return aRetSeq;
 }
 void SAL_CALL MinMaxLineWrapper::setPropertyToDefault( const OUString& rPropertyName )
 {
-    this->setPropertyValue( rPropertyName, this->getPropertyDefault(rPropertyName) );
+    setPropertyValue( rPropertyName, getPropertyDefault(rPropertyName) );
 }
 
 uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const OUString& rPropertyName )
@@ -348,7 +348,7 @@ void SAL_CALL MinMaxLineWrapper::setAllPropertiesToDefault(  )
     for(sal_Int32 nN=0; nN<rPropSeq.getLength(); nN++)
     {
         OUString aPropertyName( rPropSeq[nN].Name );
-        this->setPropertyToDefault( aPropertyName );
+        setPropertyToDefault( aPropertyName );
     }
 }
 void SAL_CALL MinMaxLineWrapper::setPropertiesToDefault( const uno::Sequence< OUString >& rNameSeq )
@@ -356,7 +356,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertiesToDefault( const uno::Sequence< OU
     for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
     {
         OUString aPropertyName( rNameSeq[nN] );
-        this->setPropertyToDefault( aPropertyName );
+        setPropertyToDefault( aPropertyName );
     }
 }
 uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const uno::Sequence< OUString >& rNameSeq )
@@ -368,7 +368,7 @@ uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
             OUString aPropertyName( rNameSeq[nN] );
-            aRetSeq[nN] = this->getPropertyDefault( aPropertyName );
+            aRetSeq[nN] = getPropertyDefault( aPropertyName );
         }
     }
     return aRetSeq;

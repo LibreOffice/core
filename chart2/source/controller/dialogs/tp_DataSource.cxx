@@ -219,7 +219,7 @@ DataSourceTabPage::DataSourceTabPage(
     m_pFT_CAPTION->Show(!bHideDescription);
 
     m_aFixedTextRange = m_pFT_RANGE->GetText();
-    this->SetText( SchResId( STR_OBJECT_DATASERIES_PLURAL ) );
+    SetText( SchResId( STR_OBJECT_DATASERIES_PLURAL ) );
 
     // set handlers
     m_pLB_SERIES->SetSelectHdl( LINK( this, DataSourceTabPage, SeriesSelectionChangedHdl ));

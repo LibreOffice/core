@@ -146,7 +146,7 @@ void EquidistantTickFactory::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::
     if(!pfNextParentTick)
         return;
 
-    sal_Int32 nMaxSubTickCount = this->getMaxTickCount( nDepth );
+    sal_Int32 nMaxSubTickCount = getMaxTickCount( nDepth );
     if(!nMaxSubTickCount)
         return;
 
@@ -159,7 +159,7 @@ void EquidistantTickFactory::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::
     {
         for( sal_Int32 nPartTick = 1; nPartTick<nIntervalCount; nPartTick++ )
         {
-            pValue = this->getMinorTick( nPartTick, nDepth
+            pValue = getMinorTick( nPartTick, nDepth
                         , fLastParentTick, *pfNextParentTick );
             if(!pValue)
                 continue;
@@ -311,8 +311,8 @@ bool EquidistantTickFactory::isVisible( double fScaledValue ) const
 void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) const
 {
     //create point sequences for each tick depth
-    sal_Int32 nDepthCount = this->getTickDepth();
-    sal_Int32 nMaxMajorTickCount = this->getMaxTickCount(0);
+    sal_Int32 nDepthCount = getTickDepth();
+    sal_Int32 nMaxMajorTickCount = getMaxTickCount(0);
 
     if (nDepthCount <= 0 || nMaxMajorTickCount <= 0)
         return;
@@ -323,7 +323,7 @@ void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) co
     sal_Int32 nRealMajorTickCount = 0;
     for( sal_Int32 nMajorTick=0; nMajorTick<nMaxMajorTickCount; nMajorTick++ )
     {
-        double* pValue = this->getMajorTick( nMajorTick );
+        double* pValue = getMajorTick( nMajorTick );
         if(!pValue)
             continue;
         aAllTicks[0][nRealMajorTickCount] = *pValue;
@@ -334,7 +334,7 @@ void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) co
     aAllTicks[0].realloc(nRealMajorTickCount);
 
     if(nDepthCount>0)
-        this->addSubTicks( 1, aAllTicks );
+        addSubTicks( 1, aAllTicks );
 
     //so far we have added all ticks between the outer major tick marks
     //this was necessary to create sub ticks correctly

@@ -103,7 +103,7 @@ void ScFormulaListener::stopListening()
     if (mpDoc->IsClipOrUndo())
         return;
 
-    this->EndListeningAll();
+    EndListeningAll();
 }
 
 ScFormulaListener::~ScFormulaListener()

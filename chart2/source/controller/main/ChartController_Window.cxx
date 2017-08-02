@@ -524,7 +524,7 @@ IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl, Timer *, void)
 
     if( !m_bWaitingForMouseUp && m_aSelection.maybeSwitchSelectionAfterSingleClickWasEnsured() )
     {
-        this->impl_selectObjectAndNotiy();
+        impl_selectObjectAndNotiy();
         SolarMutexGuard aGuard;
         auto pChartWindow(GetChartWindow());
         if( pChartWindow )
@@ -592,7 +592,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            this->EndTextEdit();
+            EndTextEdit();
         }
     }
 
@@ -882,7 +882,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
                 if( !m_bWaitingForDoubleClick && m_aSelection.maybeSwitchSelectionAfterSingleClickWasEnsured() )
                 {
-                    this->impl_selectObjectAndNotiy();
+                    impl_selectObjectAndNotiy();
                 }
             }
             else
@@ -1308,7 +1308,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                 bReturn = true;
                 if( nCode == KEY_ESCAPE )
                 {
-                    this->EndTextEdit();
+                    EndTextEdit();
                 }
             }
         }
@@ -1616,9 +1616,9 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
         SolarMutexGuard aGuard;
         if ( m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() )
         {
-            this->EndTextEdit();
+            EndTextEdit();
         }
-        this->impl_selectObjectAndNotiy();
+        impl_selectObjectAndNotiy();
         auto pChartWindow(GetChartWindow());
         if ( pChartWindow )
         {
