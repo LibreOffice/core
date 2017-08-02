@@ -780,6 +780,20 @@ OUString Updater::getUpdateDirURL()
     return aUpdateDirURL;
 }
 
+
+OUString Updater::getUpdateFileURL()
+{
+    return getPatchDirURL() + "update.mar";
+}
+
+OUString Updater::getInstallationPath()
+{
+    OUString aInstallDir( "$BRAND_BASE_DIR/");
+    rtl::Bootstrap::expandMacros(aInstallDir);
+
+    return getPathFromURL(aInstallDir);
+}
+
 OUString Updater::getExecutableDirURL()
 {
     OUString aExeDir( "$BRAND_BASE_DIR/" LIBO_BIN_FOLDER "/" );
@@ -818,6 +832,40 @@ OUString Updater::getBuildID()
     rtl::Bootstrap::expandMacros(aBuildID);
 
     return aBuildID;
+}
+
+void Updater::removeUpdateFiles()
+{
+    Updater::log("Removing: " + getUpdateFileURL());
+    osl::File::remove(getUpdateFileURL());
+
+    OUString aPatchDirURL = getPatchDirURL();
+    osl::Directory aDir(aPatchDirURL);
+    aDir.open();
+
+    osl::FileBase::RC eRC;
+    do
+    {
+        osl::DirectoryItem aItem;
+        eRC = aDir.getNextItem(aItem);
+        if (eRC == osl::FileBase::E_None)
+        {
+            osl::FileStatus aStatus(osl_FileStatus_Mask_All);
+            if (aItem.getFileStatus(aStatus) != osl::FileBase::E_None)
+                continue;
+
+            if (!aStatus.isRegular())
+                continue;
+
+            OUString aURL = aStatus.getFileURL();
+            if (!aURL.endsWith(".mar"))
+                continue;
+
+            Updater::log("Removing. " + aURL);
+            osl::File::remove(aURL);
+        }
+    }
+    while (eRC == osl::FileBase::E_None);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

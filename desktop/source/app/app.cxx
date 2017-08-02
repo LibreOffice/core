@@ -1420,6 +1420,8 @@ int Desktop::Main()
                 officecfg::Office::Update::Update::SeeAlso::set(OUString(), batch);
                 officecfg::Office::Update::Update::OldBuildID::set(OUString(), batch);
                 batch->commit();
+
+                Updater::removeUpdateFiles();
             }
 
             osl::DirectoryItem aPatchInfo;
