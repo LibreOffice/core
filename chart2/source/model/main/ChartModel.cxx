@@ -548,6 +548,13 @@ void SAL_CALL ChartModel::dispose()
     if ( m_xDiagram.is() )
         ModifyListenerHelper::removeListener( m_xDiagram, this );
 
+    if ( m_xDataProvider.is() )
+    {
+        Reference<util::XModifyBroadcaster> xModifyBroadcaster( m_xDataProvider, uno::UNO_QUERY );
+        if ( xModifyBroadcaster.is() )
+            xModifyBroadcaster->removeModifyListener( this );
+    }
+
     m_xDataProvider.clear();
     m_xInternalDataProvider.clear();
     m_xNumberFormatsSupplier.clear();
