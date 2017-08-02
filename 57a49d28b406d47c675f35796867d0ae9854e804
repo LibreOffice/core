@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4b81458f",
+        "filename": "download.lst",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2017-08-02T13:36:41Z",
+      "side": 1,
+      "message": "EPUBGEN_VERSION_MICRO is not really needed. I use this in ExternalPackage_foo.mk for libs that are built as shared; then I only need to change it at one place when I upload a new version.",
+      "revId": "57a49d28b406d47c675f35796867d0ae9854e804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2b74f9cd",
+        "filename": "external/libepubgen/ExternalProject_libepubgen.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2017-08-02T13:36:41Z",
+      "side": 1,
+      "message": "Neither libxml2 nor zlib is needed.",
+      "range": {
+        "startLine": 20,
+        "startChar": 1,
+        "endLine": 20,
+        "endChar": 8
+      },
+      "revId": "57a49d28b406d47c675f35796867d0ae9854e804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_eb7111e2",
+        "filename": "external/libepubgen/ExternalProject_libepubgen.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2017-08-02T13:36:41Z",
+      "side": 1,
+      "message": "These defines are AFAIK not necessary.",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 63
+      },
+      "revId": "57a49d28b406d47c675f35796867d0ae9854e804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
