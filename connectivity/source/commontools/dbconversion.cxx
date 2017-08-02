@@ -42,6 +42,16 @@ namespace
     const sal_Int64 hourMask = 10000000000000LL;
 
     const double fNanoSecondsPerDay = nanoSecInSec * secInMin * minInHour * 24.0;
+
+    //  32767-12-31 in "(days since 0001-01-01) + 1" format
+    const sal_Int32 maxDays =  11967896;
+    // -32768-01-01 in "(days since 0001-01-01) + 1" format
+    // Yes, I know it is currently unused. Will have to be used
+    // when we implement negative years. Writing down the correct
+    // value for future reference.
+    // *** Please don't remove just because it is unused ***
+    // Lionel Élie Mamane 2017-08-02
+    // const sal_Int32 minDays = -11968270;
 }
 
 
@@ -269,8 +279,15 @@ namespace dbtools
         sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
 
         nTempDays += nDays;
-        // TODO: can we remove that check? Would allow dates before 1900.
-        if ( nTempDays <= 0 )
+        if ( nTempDays > maxDays )
+        {
+            _rDate.Day      = 31;
+            _rDate.Month    = 12;
+            _rDate.Year     = 9999;
+        }
+        // TODO: can we replace that check by minDays? Would allow dates BCE
+        //       implBuildFromRelative probably needs to be updated for the "no year 0" question
+        else if ( nTempDays <= 0 )
         {
             _rDate.Day      = 1;
             _rDate.Month    = 1;
@@ -285,8 +302,15 @@ namespace dbtools
         sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
 
         nTempDays -= nDays;
-        // TODO: can we remove that check? Would allow dates before 1900.
-        if ( nTempDays <= 0 )
+        if ( nTempDays > maxDays )
+        {
+            _rDate.Day      = 31;
+            _rDate.Month    = 12;
+            _rDate.Year     = 9999;
+        }
+        // TODO: can we replace that check by minDays? Would allow dates BCE
+        //       implBuildFromRelative probably needs to be updated for the "no year 0" question
+        else if ( nTempDays <= 0 )
         {
             _rDate.Day      = 1;
             _rDate.Month    = 1;
