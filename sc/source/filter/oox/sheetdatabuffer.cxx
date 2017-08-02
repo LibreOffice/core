@@ -453,7 +453,26 @@ void SheetDataBuffer::finalizeImport()
     {
         RowStyles& rRowStyles = col->second;
         SCCOL nScCol = static_cast< SCCOL >( col->first );
-        const ScPatternAttr* pDefPattern = rDoc.getDoc().GetPattern(nScCol, 0, getSheetIndex());
+
+        // tdf#91567 Get pattern from the first row without AutoFilter
+        const ScPatternAttr* pDefPattern = nullptr;
+        bool bAutoFilter = true;
+        SCROW nScRow = 0;
+        while ( bAutoFilter && nScRow < MAXROW )
+        {
+            pDefPattern = rDoc.getDoc().GetPattern( nScCol, nScRow, getSheetIndex() );
+            if ( pDefPattern )
+            {
+                const ScMergeFlagAttr* pAttr = static_cast<const ScMergeFlagAttr*>( pDefPattern->GetItemSet().GetItem( ATTR_MERGE_FLAG ) );
+                bAutoFilter = pAttr->HasAutoFilter();
+            }
+            else
+                break;
+            nScRow++;
+        }
+        if ( !pDefPattern || nScRow == MAXROW )
+            pDefPattern = rDoc.getDoc().GetDefPattern();
+
         Xf::AttrList aAttrs(pDefPattern);
         for ( RowStyles::iterator rRows = rRowStyles.begin(), rRows_end = rRowStyles.end(); rRows != rRows_end; ++rRows )
         {

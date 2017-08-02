@@ -215,6 +215,7 @@ public:
     void testOutlineODS();
 
     void testColumnStyleXLSX();
+    void testColumnStyleAutoFilterXLSX();
 
     void testSharedFormulaHorizontalXLS();
     void testSharedFormulaWrappedRefsXLS();
@@ -331,6 +332,7 @@ public:
     CPPUNIT_TEST(testPrintRangeODS);
     CPPUNIT_TEST(testOutlineODS);
     CPPUNIT_TEST(testColumnStyleXLSX);
+    CPPUNIT_TEST(testColumnStyleAutoFilterXLSX);
     CPPUNIT_TEST(testSharedFormulaHorizontalXLS);
     CPPUNIT_TEST(testSharedFormulaWrappedRefsXLS);
     CPPUNIT_TEST(testSharedFormulaBIFF5);
@@ -3266,6 +3268,21 @@ void ScFiltersTest::testColumnStyleXLSX()
 
     const ScProtectionAttr& rAttrNew = static_cast<const ScProtectionAttr&>(pPattern->GetItem(ATTR_PROTECTION));
     CPPUNIT_ASSERT(!rAttrNew.GetProtection());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testColumnStyleAutoFilterXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("column-style-autofilter.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    const ScPatternAttr* pPattern = rDoc.GetPattern(0, 10, 18);
+    CPPUNIT_ASSERT(pPattern);
+
+    const ScMergeFlagAttr& rAttr = static_cast<const ScMergeFlagAttr&>(pPattern->GetItem(ATTR_MERGE_FLAG));
+    CPPUNIT_ASSERT(!rAttr.HasAutoFilter());
 
     xDocSh->DoClose();
 }
