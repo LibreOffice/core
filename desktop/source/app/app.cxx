@@ -1444,6 +1444,7 @@ int Desktop::Main()
             else if (isTimeForUpdateCheck())
             {
                 sal_uInt64 nNow = tools::Time::GetSystemTicks();
+                Updater::log("Update Check Time: " + OUString::number(nNow));
                 std::shared_ptr< comphelper::ConfigurationChanges > batch(
                         comphelper::ConfigurationChanges::create());
                 officecfg::Office::Update::Update::LastUpdateTime::set(nNow, batch);
