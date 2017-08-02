@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0b6d7d32",
+        "filename": "sc/inc/document.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-02T11:45:17Z",
+      "side": 1,
+      "message": "I would also make this an assert. If something calls unlock more times than lock, we have a serious problem.",
+      "revId": "fcbc9e20708013e9c42a75e7ad0a992cbd786961",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4b778502",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 2321,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-02T11:45:17Z",
+      "side": 1,
+      "message": "I still think this block of code should read:\n\n    if( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )\n        rDoc.UnlockAdjustHeight();\n    else\n        rDoc.LockAdjustHeight();\n\n\nMaking it do different things based on the current state is just weird.",
+      "revId": "fcbc9e20708013e9c42a75e7ad0a992cbd786961",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6b7441fd",
+        "filename": "sc/source/ui/vba/vbaapplication.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-02T11:45:17Z",
+      "side": 1,
+      "message": "I think UpdateAllRowHeights() should be moved inside UnlockAdjustHeight(), where the code should look something like:\n\n    assert(m_nLockCount \u003e 0);\n    if (m_nLockCount \u003e 0)\n        --m_nLockCount;\n    if (m_nLockCount \u003d\u003d 0)\n         mpDocShell-\u003eUpdateAllRowHeights()\n\nso we only update row heights when the last unlock happens",
+      "revId": "fcbc9e20708013e9c42a75e7ad0a992cbd786961",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
