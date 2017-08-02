@@ -2696,7 +2696,7 @@ void ScInterpreter::ScStyle()
         PushIllegalParameter();
 }
 
-static ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
+static ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager const * pLinkMgr,
                                 const OUString& rA, const OUString& rT, const OUString& rI, sal_uInt8 nM )
 {
     size_t nCount = pLinkMgr->GetLinks().size();

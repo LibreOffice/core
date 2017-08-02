@@ -75,7 +75,7 @@ public:
     void        InitData();
     void        DeleteData();
 
-    void        AddFields( ScDocument* pSrcDoc, SCTAB nTab,
+    void        AddFields( ScDocument const * pSrcDoc, SCTAB nTab,
                             SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void        DoneFields();
 

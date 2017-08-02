@@ -642,7 +642,7 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 }
 
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
-    uno::Reference<sheet::XSpreadsheet>& rxTable)
+    uno::Reference<sheet::XSpreadsheet> const & rxTable)
 {
     aLastAddress.SetRow( 0 );
     aLastAddress.SetCol( 0 );

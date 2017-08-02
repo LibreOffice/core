@@ -49,7 +49,7 @@ ScMyOLEFixer::~ScMyOLEFixer()
 {
 }
 
-bool ScMyOLEFixer::IsOLE(uno::Reference< drawing::XShape >& rShape)
+bool ScMyOLEFixer::IsOLE(uno::Reference< drawing::XShape > const & rShape)
 {
     return rShape->getShapeType() == "com.sun.star.drawing.OLE2Shape";
 }
@@ -107,7 +107,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
     }
 }
 
-void ScMyOLEFixer::AddOLE(uno::Reference <drawing::XShape>& rShape,
+void ScMyOLEFixer::AddOLE(uno::Reference <drawing::XShape> const & rShape,
        const OUString &rRangeList)
 {
     ScMyToFixupOLE aShape;

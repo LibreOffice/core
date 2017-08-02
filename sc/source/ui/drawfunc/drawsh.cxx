@@ -89,7 +89,7 @@ void ScDrawShell::StateDisableItems( SfxItemSet &rSet )
     }
 }
 
-static void lcl_setModified( SfxObjectShell*  pShell )
+static void lcl_setModified( SfxObjectShell const * pShell )
 {
     if ( pShell )
     {

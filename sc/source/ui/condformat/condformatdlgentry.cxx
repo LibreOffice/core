@@ -143,7 +143,7 @@ void ScCondFrmtEntry::Deselect()
 
 namespace {
 
-void FillStyleListBox( ScDocument* pDoc, ListBox& rLbStyle )
+void FillStyleListBox( ScDocument const * pDoc, ListBox& rLbStyle )
 {
     rLbStyle.SetSeparatorPos(0);
     std::set<OUString> aStyleNames;
@@ -451,7 +451,7 @@ void ScConditionFrmtEntry::SetInactive()
 
 namespace {
 
-void UpdateStyleList(ListBox& rLbStyle, ScDocument* pDoc)
+void UpdateStyleList(ListBox& rLbStyle, ScDocument const * pDoc)
 {
     OUString aSelectedStyle = rLbStyle.GetSelectEntry();
     for(sal_Int32 i = rLbStyle.GetEntryCount(); i >= 1; --i)
@@ -475,7 +475,7 @@ void ScConditionFrmtEntry::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
 namespace {
 
-void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPreview )
+void StyleSelect( ListBox& rLbStyle, ScDocument const * pDoc, SvxFontPrevWindow& rWdPreview )
 {
     if(rLbStyle.GetSelectEntryPos() == 0)
     {
@@ -645,7 +645,7 @@ void ScFormulaFrmtEntry::SetInactive()
 
 namespace {
 
-OUString convertNumberToString(double nVal, ScDocument* pDoc)
+OUString convertNumberToString(double nVal, ScDocument const * pDoc)
 {
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
     OUString aText;
@@ -653,7 +653,7 @@ OUString convertNumberToString(double nVal, ScDocument* pDoc)
     return aText;
 }
 
-void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, SvxColorListBox& rLbCol, ScDocument* pDoc )
+void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, SvxColorListBox& rLbCol, ScDocument const * pDoc )
 {
     // entry Automatic is not available for color scales
     sal_Int32 nIndex = static_cast<sal_Int32>(rEntry.GetType());
@@ -1052,7 +1052,7 @@ IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl, ListBox&, void )
 
 namespace {
 
-void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ScDocument* pDoc )
+void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ScDocument const * pDoc )
 {
     rLbType.SelectEntryPos(rEntry.GetType());
     switch(rEntry.GetType())

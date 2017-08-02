@@ -1840,7 +1840,7 @@ const ScXMLEditAttributeMap& ScXMLExport::GetEditAttributeMap() const
     return *mpEditAttrMap;
 }
 
-void ScXMLExport::RegisterDefinedStyleNames( uno::Reference< css::sheet::XSpreadsheetDocument > & xSpreadDoc )
+void ScXMLExport::RegisterDefinedStyleNames( uno::Reference< css::sheet::XSpreadsheetDocument > const & xSpreadDoc )
 {
     ScFormatSaveData* pFormatData = ScModelObj::getImplementation(xSpreadDoc)->GetFormatSaveData();
     auto xAutoStylePool = GetAutoStylePool();
@@ -3718,7 +3718,7 @@ void ScXMLExport::SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgres
     }
 }
 
-bool ScXMLExport::IsEditCell(ScMyCell& rCell)
+bool ScXMLExport::IsEditCell(ScMyCell const & rCell)
 {
     return rCell.maBaseCell.meType == CELLTYPE_EDIT;
 }

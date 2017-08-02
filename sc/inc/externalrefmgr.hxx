@@ -398,7 +398,7 @@ public:
     class SC_DLLPUBLIC ApiGuard
     {
     public:
-        ApiGuard(ScDocument* pDoc);
+        ApiGuard(ScDocument const * pDoc);
         ~ApiGuard();
     private:
         ScExternalRefManager* mpMgr;
@@ -745,7 +745,7 @@ private:
      * @return range token array
      */
     ScExternalRefCache::TokenArrayRef getDoubleRefTokensFromSrcDoc(
-        ScDocument* pSrcDoc, const OUString& rTabName, ScRange& rRange,
+        ScDocument const * pSrcDoc, const OUString& rTabName, ScRange& rRange,
         ::std::vector<ScExternalRefCache::SingleRangeData>& rCacheData);
 
     /**
@@ -761,7 +761,7 @@ private:
      * @return range name token array
      */
     static ScExternalRefCache::TokenArrayRef getRangeNameTokensFromSrcDoc(
-        sal_uInt16 nFileId, ScDocument* pSrcDoc, OUString& rName);
+        sal_uInt16 nFileId, ScDocument const * pSrcDoc, OUString& rName);
 
     ScDocument* getInMemorySrcDocument(sal_uInt16 nFileId);
     ScDocument* getSrcDocument(sal_uInt16 nFileId);

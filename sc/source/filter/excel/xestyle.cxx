@@ -1432,7 +1432,7 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNum
 
 namespace {
 
-OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt32 nScNumFmt, SvNumberFormatter* pFormatter, NfKeywordTable* pKeywordTable)
+OUString GetNumberFormatCode(XclRoot const & rRoot, const sal_uInt32 nScNumFmt, SvNumberFormatter* pFormatter, NfKeywordTable const * pKeywordTable)
 {
     return rRoot.GetFormatter().GetFormatStringForExcel( nScNumFmt, *pKeywordTable, *pFormatter);
 }

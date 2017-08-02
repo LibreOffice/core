@@ -33,7 +33,7 @@ private:
 
     void CheckNumSheets();
     void CheckPrefix(Edit* pEdit);
-    void OnFocusPrefixInput(Edit* pEdit);
+    void OnFocusPrefixInput(Edit const * pEdit);
 
     DECL_LINK( NumModifiedHdl, Edit&, void );
     DECL_LINK( PrefixModifiedHdl, Edit&, void );

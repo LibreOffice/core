@@ -30,9 +30,9 @@ class SvxIMapDlg;
 
 sal_uInt16 ScIMapChildWindowId();
 
-ImageMap const & ScIMapDlgGetMap(SvxIMapDlg * pDlg);
+ImageMap const & ScIMapDlgGetMap(SvxIMapDlg const * pDlg);
 
-void const * ScIMapDlgGetObj(SvxIMapDlg * pDlg);
+void const * ScIMapDlgGetObj(SvxIMapDlg const * pDlg);
 
 void ScIMapDlgSet(
     Graphic const & rGraphic, ImageMap const * pImageMap,

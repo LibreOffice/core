@@ -106,13 +106,13 @@ protected:
 
 private:
     struct SubMenuItemData;
-    void handleMenuTimeout(SubMenuItemData* pTimer);
+    void handleMenuTimeout(SubMenuItemData const * pTimer);
 
     void resizeToFitMenuItems();
     void highlightMenuItem(vcl::RenderContext& rRenderContext, size_t nPos, bool bSelected);
 
     size_t getEnclosingMenuItem(const Point& rPos) const;
-    size_t getSubMenuPos(ScMenuFloatingWindow* pSubMenu);
+    size_t getSubMenuPos(ScMenuFloatingWindow const * pSubMenu);
 
     /**
      * Fire a menu highlight event since the accessibility framework needs
@@ -125,7 +125,7 @@ private:
      * close timer is not active, and the correct menu item associated with
      * the submenu is highlighted.
      */
-    void setSubMenuFocused(ScMenuFloatingWindow* pSubMenu);
+    void setSubMenuFocused(ScMenuFloatingWindow const * pSubMenu);
 
     /**
      * When a menu item of an invisible submenu is selected, we need to make
@@ -405,7 +405,7 @@ private:
     void packWindow();
     void setAllMemberState(bool bSet);
     void selectCurrentMemberOnly(bool bSet);
-    void updateMemberParents( SvTreeListEntry* pLeaf, size_t nIdx );
+    void updateMemberParents( SvTreeListEntry const * pLeaf, size_t nIdx );
 
     DECL_LINK( ButtonHdl, Button*, void );
     DECL_LINK( TriStateHdl, Button*, void );

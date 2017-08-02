@@ -42,19 +42,19 @@ public:
             ScEditableTester();
 
             // calls TestBlock
-            ScEditableTester( ScDocument* pDoc, SCTAB nTab,
+            ScEditableTester( ScDocument const * pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
 
             // calls TestSelectedBlock
-            ScEditableTester( ScDocument* pDoc,
+            ScEditableTester( ScDocument const * pDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
 
             // calls TestRange
-            ScEditableTester( ScDocument* pDoc, const ScRange& rRange );
+            ScEditableTester( ScDocument const * pDoc, const ScRange& rRange );
 
             // calls TestSelection
-            ScEditableTester( ScDocument* pDoc, const ScMarkData& rMark );
+            ScEditableTester( ScDocument const * pDoc, const ScMarkData& rMark );
 
             // calls TestView
             ScEditableTester( ScViewFunc* pView );
@@ -65,13 +65,13 @@ public:
 
             // Several calls to the Test... methods check if *all* of the ranges
             // are editable. For several independent checks, Reset() has to be used.
-    void    TestBlock( ScDocument* pDoc, SCTAB nTab,
+    void    TestBlock( ScDocument const * pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
-    void    TestSelectedBlock( ScDocument* pDoc,
+    void    TestSelectedBlock( ScDocument const * pDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
-    void    TestRange( ScDocument* pDoc, const ScRange& rRange );
-    void    TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
+    void    TestRange( ScDocument const * pDoc, const ScRange& rRange );
+    void    TestSelection( ScDocument const * pDoc, const ScMarkData& rMark );
 
     void TestBlockForAction(
         const ScDocument& rDoc, sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd,

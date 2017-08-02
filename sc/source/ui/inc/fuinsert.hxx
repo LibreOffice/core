@@ -49,14 +49,14 @@ class FuInsertChartFromFile : public FuPoor
 {
  public:
     FuInsertChartFromFile( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, SfxRequest& rReq, const OUString& rURL);
+           SdrModel* pDoc, SfxRequest const & rReq, const OUString& rURL);
 };
 
 class FuInsertMedia : public FuPoor
 {
  public:
     FuInsertMedia( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, SfxRequest& rReq);
+           SdrModel* pDoc, SfxRequest const & rReq);
     virtual ~FuInsertMedia() override;
 };
 

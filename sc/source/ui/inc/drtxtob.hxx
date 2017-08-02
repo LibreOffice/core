@@ -54,7 +54,7 @@ public:
     static void StateDisableItems( SfxItemSet &rSet );
 
     void Execute( SfxRequest &rReq );
-    void ExecuteTrans( SfxRequest& rReq );
+    void ExecuteTrans( SfxRequest const & rReq );
     void GetState( SfxItemSet& rSet );
     void GetClipState( SfxItemSet& rSet );
 
@@ -67,7 +67,7 @@ public:
     bool ExecuteParaDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
 
     void ExecuteExtra( SfxRequest &rReq );
-    void ExecFormText(SfxRequest& rReq);        // StarFontWork
+    void ExecFormText(SfxRequest const & rReq);        // StarFontWork
     void GetFormTextState(SfxItemSet& rSet);
 
 private:

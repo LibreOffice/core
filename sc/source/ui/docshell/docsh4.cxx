@@ -1534,7 +1534,7 @@ void ScDocShell::PageStyleModified( const OUString& rStyleName, bool bApi )
     }
 }
 
-void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
+void ScDocShell::ExecutePageStyle( SfxViewShell const & rCaller,
                                    SfxRequest&   rReq,
                                    SCTAB         nCurTab )
 {

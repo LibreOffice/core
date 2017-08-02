@@ -251,7 +251,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     bool            DrawHasMarkedObj();
     void            DrawEndAction();
     void            DrawMarkDropObj( SdrObject* pObj );
-    bool            IsMyModel(SdrEditView* pSdrView);
+    bool            IsMyModel(SdrEditView const * pSdrView);
 
     void            DrawRedraw( ScOutputData& rOutputData, SdrLayerID nLayer );
     void            DrawSdrGrid( const tools::Rectangle& rDrawingRect, OutputDevice* pContentDev );
@@ -434,7 +434,7 @@ public:
                                   int nOutputHeight,
                                   long nTileWidth,
                                   long nTileHeight);
-    void updateLibreOfficeKitCellCursor(SfxViewShell* pOtherShell) const;
+    void updateLibreOfficeKitCellCursor(SfxViewShell const * pOtherShell) const;
 
     ScViewData* getViewData();
     virtual FactoryFunction GetUITestFactory() const override;

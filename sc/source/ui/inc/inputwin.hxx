@@ -224,7 +224,7 @@ private:
 class ScInputWindow : public ToolBox                        // Parent toolbox
 {
 public:
-                    ScInputWindow( vcl::Window* pParent, SfxBindings* pBind );
+                    ScInputWindow( vcl::Window* pParent, SfxBindings const * pBind );
     virtual         ~ScInputWindow() override;
     virtual void    dispose() override;
 

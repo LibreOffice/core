@@ -68,7 +68,7 @@ TriState ScPivotLayoutTreeListBase::NotifyCopying(SvTreeListEntry* /*pTarget*/, 
     return TRISTATE_FALSE;
 }
 
-bool ScPivotLayoutTreeListBase::HasEntry(SvTreeListEntry* pEntry)
+bool ScPivotLayoutTreeListBase::HasEntry(SvTreeListEntry const * pEntry)
 {
     SvTreeListEntry* pEachEntry;
     for (pEachEntry = First(); pEachEntry != nullptr; pEachEntry = Next(pEachEntry))
@@ -103,7 +103,7 @@ void ScPivotLayoutTreeListBase::InsertEntryForSourceTarget(SvTreeListEntry* /*pS
 void ScPivotLayoutTreeListBase::InsertEntryForItem(ScItemValue* /*pItemValue*/, sal_uLong /*nPosition*/)
 {}
 
-void ScPivotLayoutTreeListBase::RemoveEntryForItem(ScItemValue* pItemValue)
+void ScPivotLayoutTreeListBase::RemoveEntryForItem(ScItemValue const * pItemValue)
 {
     SvTreeListEntry* pEachEntry;
     for (pEachEntry = First(); pEachEntry != nullptr; pEachEntry = Next(pEachEntry))

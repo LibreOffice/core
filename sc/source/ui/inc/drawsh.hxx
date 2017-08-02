@@ -69,13 +69,13 @@ public:
     void    GetDrawFuncState(SfxItemSet &rSet);
     void    GetState(SfxItemSet &rSet);
 
-    void    ExecFormText(SfxRequest& rReq);     // StarFontWork
+    void    ExecFormText(SfxRequest const & rReq);     // StarFontWork
     void    GetFormTextState(SfxItemSet& rSet);
 
-    void    ExecuteHLink(SfxRequest& rReq);     // Hyperlink
+    void    ExecuteHLink(SfxRequest const & rReq);     // Hyperlink
     void    GetHLinkState(SfxItemSet& rSet);
 
-    void    ExecFormatPaintbrush(SfxRequest& rReq);
+    void    ExecFormatPaintbrush(SfxRequest const & rReq);
     void    StateFormatPaintbrush(SfxItemSet& rSet);
 
     void    ExecuteMacroAssign( SdrObject* pObj, vcl::Window* pWin );

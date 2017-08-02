@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 const sal_Int16 CUSTOM_CHAR = 5;
 
 static uno::Any
-getWorkbook( uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSpreadsheetDocument > &xDoc, const uno::Reference< XHelperInterface >& xParent )
+getWorkbook( uno::Reference< uno::XComponentContext > const & xContext, const uno::Reference< sheet::XSpreadsheetDocument > &xDoc, const uno::Reference< XHelperInterface >& xParent )
 {
     // FIXME: fine as long as ScVbaWorkbook is stateless ...
     uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );

@@ -113,7 +113,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
     }
 }
 
-void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocument>& xSpreadDoc)
+void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocument> const & xSpreadDoc)
 {
     uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
     if (xPropertySet.is())

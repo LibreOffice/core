@@ -94,7 +94,7 @@ private:
 
     SfxUInt32Item*      NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt );
 public:
-                        FormCache( ScDocument* );
+                        FormCache( ScDocument const * );
                         ~FormCache();
 
     inline const SfxUInt32Item* GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt );

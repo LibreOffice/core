@@ -81,7 +81,7 @@ private:
 
 private:
     void Init();
-    void UpdateChecks(ScRangeData* pData);
+    void UpdateChecks(ScRangeData const * pData);
     void ShowOptions(const ScRangeNameLine& rLine);
 
     bool IsNameValid();

@@ -228,7 +228,7 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
     pEd->GrabFocus();
 }
 
-static bool lcl_Parse( const OUString& rString, ScDocument* pDoc, SCTAB nCurTab,
+static bool lcl_Parse( const OUString& rString, ScDocument const * pDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
 {
     bool bRet = false;

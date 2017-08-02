@@ -63,14 +63,14 @@ public:
     EditView* GetEditView() {return pEditView;}
 
     void    Execute(SfxRequest& rReq);
-    void    ExecuteTrans(SfxRequest& rReq);
+    void    ExecuteTrans(SfxRequest const & rReq);
     void    GetState(SfxItemSet &rSet);
     void    GetClipState(SfxItemSet& rSet);
 
     void    ExecuteAttr(SfxRequest& rReq);
     void    GetAttrState(SfxItemSet &rSet);
 
-    void    ExecuteUndo(SfxRequest& rReq);
+    void    ExecuteUndo(SfxRequest const & rReq);
     void    GetUndoState(SfxItemSet &rSet);
 
     OUString GetSelectionText( bool bWholeWord );

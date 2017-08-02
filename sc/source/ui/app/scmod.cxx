@@ -1426,21 +1426,21 @@ void ScModule::InputCancelHandler()
         pHdl->CancelHandler();
 }
 
-void ScModule::InputSelection( EditView* pView )
+void ScModule::InputSelection( EditView const * pView )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
         pHdl->InputSelection( pView );
 }
 
-void ScModule::InputChanged( EditView* pView )
+void ScModule::InputChanged( EditView const * pView )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
         pHdl->InputChanged( pView, false );
 }
 
-void ScModule::ViewShellGone( ScTabViewShell* pViewSh )
+void ScModule::ViewShellGone( ScTabViewShell const * pViewSh )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
@@ -1822,7 +1822,7 @@ void ScModule::AnythingChanged()
     nIdleCount = 0;
 }
 
-static void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
+static void lcl_CheckNeedsRepaint( ScDocShell const * pDocShell )
 {
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
     while ( pFrame )

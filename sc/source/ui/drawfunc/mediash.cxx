@@ -96,7 +96,7 @@ void ScMediaShell::GetMediaState( SfxItemSet& rSet )
     }
 }
 
-void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
+void ScMediaShell::ExecuteMedia( SfxRequest const & rReq )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
 

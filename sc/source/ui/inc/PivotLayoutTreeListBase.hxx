@@ -55,9 +55,9 @@ public:
 
     void PushEntriesToPivotFieldVector(ScPivotFieldVector& rVector);
 
-    void RemoveEntryForItem(ScItemValue* pItemValue);
+    void RemoveEntryForItem(ScItemValue const * pItemValue);
 
-    bool HasEntry(SvTreeListEntry* pEntry);
+    bool HasEntry(SvTreeListEntry const * pEntry);
 
 protected:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget);

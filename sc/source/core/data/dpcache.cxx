@@ -147,7 +147,7 @@ OUString createLabelString( const ScDocument* pDoc, SCCOL nCol, const ScRefCellV
 }
 
 void initFromCell(
-    ScDPCache::StringSetType& rStrPool, ScDocument* pDoc, const ScAddress& rPos,
+    ScDPCache::StringSetType& rStrPool, ScDocument const * pDoc, const ScAddress& rPos,
     const ScRefCellValue& rCell, ScDPItemData& rData, sal_uInt32& rNumFormat)
 {
     OUString aDocStr = rCell.getRawString(pDoc);
@@ -1380,7 +1380,7 @@ namespace {
 
 struct ClearGroupItems
 {
-    void operator() (std::unique_ptr<ScDPCache::Field>& r) const
+    void operator() (std::unique_ptr<ScDPCache::Field> const & r) const
     {
         r->mpGroup.reset();
     }

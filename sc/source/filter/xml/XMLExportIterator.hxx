@@ -357,7 +357,7 @@ public:
                                     { pDetectiveOp = pNewDetectiveOp; }
 
     void                        SetCurrentTable(const SCTAB nTable,
-                                    css::uno::Reference<css::sheet::XSpreadsheet>& rxTable);
+                                    css::uno::Reference<css::sheet::XSpreadsheet> const & rxTable);
     void                        SkipTable(SCTAB nSkip);
 
     bool                        GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);

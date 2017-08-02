@@ -66,7 +66,7 @@ private:
 
 public:
     FuPoor(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-           SdrModel* pDoc, SfxRequest& rReq);
+           SdrModel* pDoc, SfxRequest const & rReq);
     virtual ~FuPoor();
 
     // see member

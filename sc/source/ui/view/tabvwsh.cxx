@@ -109,7 +109,7 @@ SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )
     SFX_VIEW_REGISTRATION(ScDocShell);
 }
 
-OUString ScTabViewShell::GetFormula(ScAddress& rAddress)
+OUString ScTabViewShell::GetFormula(ScAddress const & rAddress)
 {
     OUString sFormula;
     ScDocument* pDoc = GetViewData().GetDocument();

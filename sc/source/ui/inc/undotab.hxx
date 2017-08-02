@@ -70,7 +70,7 @@ public:
                     ScUndoInsertTables(
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
-                            std::vector<OUString>& newNameList);
+                            std::vector<OUString> const & newNameList);
     virtual         ~ScUndoInsertTables() override;
 
     virtual void    Undo() override;

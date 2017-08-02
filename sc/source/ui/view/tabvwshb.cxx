@@ -69,7 +69,7 @@
 
 using namespace com::sun::star;
 
-void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
+void ScTabViewShell::ConnectObject( SdrOle2Obj const * pObj )
 {
     // is called from paint
 

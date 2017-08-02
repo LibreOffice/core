@@ -615,7 +615,7 @@ const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWh
     return rNew;
 }
 
-void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
+void ScDocumentPool::StyleDeleted( ScStyleSheet const * pStyle )
 {
     sal_uInt32 nCount = GetItemCount2(ATTR_PATTERN);
     for (sal_uInt32 i=0; i<nCount; i++)
@@ -626,7 +626,7 @@ void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
     }
 }
 
-void ScDocumentPool::CellStyleCreated( const OUString& rName, ScDocument* pDoc )
+void ScDocumentPool::CellStyleCreated( const OUString& rName, ScDocument const * pDoc )
 {
     // If a style was created, don't keep any pattern with its name string in the pool,
     // because it would compare equal to a pattern with a pointer to the new style.

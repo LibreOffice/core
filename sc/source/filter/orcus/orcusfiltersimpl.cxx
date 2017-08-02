@@ -41,7 +41,7 @@ using namespace com::sun::star;
 
 namespace {
 
-uno::Reference<task::XStatusIndicator> getStatusIndicator(SfxMedium& rMedium)
+uno::Reference<task::XStatusIndicator> getStatusIndicator(SfxMedium const & rMedium)
 {
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
     SfxItemSet* pSet = rMedium.GetItemSet();

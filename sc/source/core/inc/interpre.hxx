@@ -376,7 +376,7 @@ void ConvertMatrixJumpConditionToMatrix();
 inline bool MatrixParameterConversion();
 ScMatrixRef PopMatrix();
 sc::RangeMatrix PopRangeMatrix();
-void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr);
+void QueryMatrixType(ScMatrixRef const & xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr);
 
 formula::FormulaToken* CreateDoubleOrTypedToken( double fVal );
 

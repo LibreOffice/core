@@ -177,7 +177,7 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 }
 
 void ScUnoHelpFunctions::SetOptionalPropertyValue(
-    Reference<beans::XPropertySet>& rPropSet, const sal_Char* pPropName, const Any& rVal )
+    Reference<beans::XPropertySet> const & rPropSet, const sal_Char* pPropName, const Any& rVal )
 {
     try
     {

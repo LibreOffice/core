@@ -1437,7 +1437,7 @@ void ScDocument::SetPreviewFont( SfxItemSet* pFont )
     pPreviewFont = pFont;
 }
 
-void  ScDocument::SetPreviewSelection( ScMarkData& rSel )
+void  ScDocument::SetPreviewSelection( ScMarkData const & rSel )
 {
     maPreviewSelection = rSel;
 }

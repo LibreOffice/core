@@ -36,7 +36,7 @@ static OUString createEntryString(const ScRangeNameLine& rLine)
 ScRangeManagerTable::InitListener::~InitListener() {}
 
 ScRangeManagerTable::ScRangeManagerTable(SvSimpleTableContainer& rParent,
-        std::map<OUString, std::unique_ptr<ScRangeName>>& rRangeMap,
+        std::map<OUString, std::unique_ptr<ScRangeName>> const & rRangeMap,
         const ScAddress& rPos)
     : SvSimpleTable( rParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP )
     , maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE))

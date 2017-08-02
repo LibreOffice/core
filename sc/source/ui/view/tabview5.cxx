@@ -527,7 +527,7 @@ void ScTabView::DigitLanguageChanged()
             pWin->SetDigitLanguage( eNewLang );
 }
 
-void ScTabView::ScrollToObject( SdrObject* pDrawObj )
+void ScTabView::ScrollToObject( SdrObject const * pDrawObj )
 {
     if ( pDrawObj )
     {

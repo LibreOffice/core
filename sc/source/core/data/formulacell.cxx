@@ -2405,7 +2405,7 @@ svl::SharedString ScFormulaCell::GetResultString() const
     return aResult.GetString();
 }
 
-void ScFormulaCell::SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
+void ScFormulaCell::SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken const * pUL )
 {
     aResult.SetMatrix(nCols, nRows, pMat, pUL);
 }
@@ -2942,7 +2942,7 @@ namespace {
  * Check if we need to re-compile column or row names.
  */
 bool checkCompileColRowName(
-    const sc::RefUpdateContext& rCxt, ScDocument& rDoc, ScTokenArray& rCode,
+    const sc::RefUpdateContext& rCxt, ScDocument& rDoc, ScTokenArray const & rCode,
     const ScAddress& aOldPos, const ScAddress& aPos, bool bValChanged)
 {
     switch (rCxt.meMode)
@@ -3023,7 +3023,7 @@ bool checkCompileColRowName(
 }
 
 void setOldCodeToUndo(
-    ScDocument* pUndoDoc, const ScAddress& aUndoPos, ScTokenArray* pOldCode, FormulaGrammar::Grammar eTempGrammar, ScMatrixMode cMatrixFlag)
+    ScDocument* pUndoDoc, const ScAddress& aUndoPos, ScTokenArray const * pOldCode, FormulaGrammar::Grammar eTempGrammar, ScMatrixMode cMatrixFlag)
 {
     // Copy the cell to aUndoPos, which is its current position in the document,
     // so this works when UpdateReference is called before moving the cells
@@ -3448,7 +3448,7 @@ void ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
         bCompile = true;
 }
 
-void ScFormulaCell::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo )
+void ScFormulaCell::UpdateMoveTab( sc::RefUpdateMoveTabContext const & rCxt, SCTAB nTabNo )
 {
     // Adjust tokens only when it's not grouped or grouped top cell.
     bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
@@ -3704,7 +3704,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
 }
 
 // See also ScDocument::FindRangeNamesReferencingSheet()
-static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArray* pCode, const ScDocument* pDoc,
+static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArray const * pCode, const ScDocument* pDoc,
         int nRecursion)
 {
     FormulaTokenArrayPlainIterator aIter(*pCode);
@@ -3823,7 +3823,7 @@ void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
     pCode = mxGroup->mpCode;
 }
 
-ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& rOther ) const
+ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell const & rOther ) const
 {
     // no Matrix formulae yet.
     if ( GetMatrixFlag() != ScMatrixMode::NONE )

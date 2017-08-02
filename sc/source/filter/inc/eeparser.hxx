@@ -111,7 +111,7 @@ protected:
     SCCOL               nColMax;
     SCROW               nRowMax;
 
-    void                NewActEntry( ScEEParseEntry* );
+    void                NewActEntry( ScEEParseEntry const * );
 
 public:
                         ScEEParser( EditEngine* );

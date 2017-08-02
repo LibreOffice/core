@@ -1514,7 +1514,7 @@ void XclExpObjectManager::StartSheet()
     mxObjList.reset( new XclExpObjList( GetRoot(), *mxEscherEx ) );
 }
 
-std::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPage* pSdrPage )
+std::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPage const * pSdrPage )
 {
     if( pSdrPage )
         mxEscherEx->AddSdrPage( *pSdrPage );

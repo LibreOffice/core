@@ -41,18 +41,18 @@ protected:
 #ifdef SAL_W32
     #pragma pack(push, 16)
 #endif
-    void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , ScDocument* );
+    void            (ScRefHandlerCaller::*m_pSetReferenceHdl)( const ScRange& , ScDocument const * );
     void            (ScRefHandlerCaller::*m_pSetActiveHdl)();
-    void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::RefEdit* pEdit, formula::RefButton* pButton );
+    void            (ScRefHandlerCaller::*m_pRefInputStartPreHdl)( formula::RefEdit* pEdit, formula::RefButton const * pButton );
     void            (ScRefHandlerCaller::*m_pRefInputDonePostHdl)();
 #if defined( SAL_W32)
    #pragma pack(pop)
 #endif
 
 public:
-    typedef void            (ScRefHandlerCaller::*PFUNCSETREFHDLTYPE)( const ScRange& , ScDocument* );
+    typedef void            (ScRefHandlerCaller::*PFUNCSETREFHDLTYPE)( const ScRange& , ScDocument const * );
     typedef void            (ScRefHandlerCaller::*PCOMMONHDLTYPE)();
-    typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  formula::RefEdit* pEdit, formula::RefButton* pButton );
+    typedef void            (ScRefHandlerCaller::*PINPUTSTARTDLTYPE)(  formula::RefEdit* pEdit, formula::RefButton const * pButton );
 
     void SetSetRefHdl(  PFUNCSETREFHDLTYPE pNewHdl )
     {
@@ -125,7 +125,7 @@ private:
 
     DECL_LINK( EditSetFocusHdl, Control&, void );
     DECL_LINK( KillFocusHdl, Control&, void );
-    void    OnClick( Button *pBtn );
+    void    OnClick( Button const *pBtn );
     VclPtr<formula::RefEdit>           m_pRefEdit;
 public:
     class ScRefButtonEx : public ::formula::RefButton
@@ -153,9 +153,9 @@ private:
     VclPtr<ScRefButtonEx>              m_pBtnRef;
     VclPtr<VclContainer>               m_pRefGrid;
     friend class ScRefButtonEx;
-    void            SetReferenceHdl( const ScRange& , ScDocument* );
+    void            SetReferenceHdl( const ScRange& , ScDocument const * );
     void            SetActiveHdl();
-    void            RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton );
+    void            RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton const * pButton );
     void            RefInputDonePostHdl();
     ScValidationDlg * GetValidationDlg();
 public:

@@ -28,7 +28,7 @@ namespace
 {
 
 /// Paste only if SfxClassificationHelper recommends so.
-bool lcl_checkClassification(ScDocument* pSourceDoc, ScDocument* pDestinationDoc)
+bool lcl_checkClassification(ScDocument* pSourceDoc, ScDocument const * pDestinationDoc)
 {
     if (!pSourceDoc || !pDestinationDoc)
         return true;
@@ -96,7 +96,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
 }
 
 bool ScClipUtil::CheckDestRanges(
-    ScDocument* pDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark, const ScRangeList& rDest)
+    ScDocument const * pDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark, const ScRangeList& rDest)
 {
     for (size_t i = 0, n = rDest.size(); i < n; ++i)
     {

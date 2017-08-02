@@ -227,7 +227,7 @@ public:
 
     void            Execute( SfxRequest& rReq );
     void            GetState( SfxItemSet &rSet );
-    void            ExecutePageStyle ( SfxViewShell& rCaller, SfxRequest& rReq, SCTAB nCurTab );
+    void            ExecutePageStyle ( SfxViewShell const & rCaller, SfxRequest& rReq, SCTAB nCurTab );
     void            GetStatePageStyle( SfxItemSet& rSet, SCTAB nCurTab );
 
     void            CompareDocument( ScDocument& rOtherDoc );
@@ -451,7 +451,7 @@ public:
 //#i97876# Spreadsheet data changes are not notified
 namespace HelperNotifyChanges
 {
-    inline ScModelObj* getMustPropagateChangesModel(ScDocShell &rDocShell)
+    inline ScModelObj* getMustPropagateChangesModel(ScDocShell const &rDocShell)
     {
         ScModelObj* pModelObj = ScModelObj::getImplementation(rDocShell.GetModel());
         if (pModelObj && pModelObj->HasChangesListeners())
@@ -467,7 +467,7 @@ namespace HelperNotifyChanges
         rModelObj.NotifyChanges(rType, rChangeRanges, rProperties);
     }
 
-    inline void NotifyIfChangesListeners(ScDocShell &rDocShell, const ScRange &rRange,
+    inline void NotifyIfChangesListeners(ScDocShell const &rDocShell, const ScRange &rRange,
         const OUString &rType = OUString("cell-change"))
     {
         if (ScModelObj* pModelObj = getMustPropagateChangesModel(rDocShell))

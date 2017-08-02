@@ -32,7 +32,7 @@ public:
     ScItemValue* mpOriginalItemValue;
 
     ScItemValue(OUString const & aName, SCCOL nColumn, PivotFunc nFunctionMask);
-    ScItemValue(ScItemValue* pInputItemValue);
+    ScItemValue(ScItemValue const * pInputItemValue);
 
     ~ScItemValue();
 };
@@ -115,13 +115,13 @@ public:
     virtual void SetActive() override;
     virtual bool IsRefInputMode() const override;
 
-    void ItemInserted(ScItemValue* pItemValue, ScPivotLayoutTreeList::SvPivotTreeListType eType);
+    void ItemInserted(ScItemValue const * pItemValue, ScPivotLayoutTreeList::SvPivotTreeListType eType);
 
     void UpdateSourceRange();
 
     void ApplyChanges();
     void ApplySaveData(ScDPSaveData& rSaveData);
-    void ApplyLabelData(ScDPSaveData& rSaveData);
+    void ApplyLabelData(ScDPSaveData const & rSaveData);
 
     ScItemValue* GetItem(SCCOL nColumn);
     bool IsDataElement(SCCOL nColumn);
@@ -130,7 +130,7 @@ public:
     ScDPLabelDataVector& GetLabelDataVector() { return maPivotParameters.maLabelArray;}
     void PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames);
 
-    ScPivotLayoutTreeListBase* FindListBoxFor(SvTreeListEntry *pEntry);
+    ScPivotLayoutTreeListBase* FindListBoxFor(SvTreeListEntry const *pEntry);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

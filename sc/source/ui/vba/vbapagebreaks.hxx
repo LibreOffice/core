@@ -41,7 +41,7 @@ public:
     /// @throws css::uno::RuntimeException
     ScVbaHPageBreaks( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    css::uno::Reference< css::sheet::XSheetPageBreak >& xSheetPageBreak);
+                    css::uno::Reference< css::sheet::XSheetPageBreak > const & xSheetPageBreak);
 
     // XHPageBreaks
     virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before) override;
@@ -65,7 +65,7 @@ public:
     /// @throws css::uno::RuntimeException
     ScVbaVPageBreaks( const css::uno::Reference< ov::XHelperInterface >& xParent,
                       const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                      css::uno::Reference< css::sheet::XSheetPageBreak >& xSheetPageBreak );
+                      css::uno::Reference< css::sheet::XSheetPageBreak > const & xSheetPageBreak );
 
     virtual ~ScVbaVPageBreaks() override;
 

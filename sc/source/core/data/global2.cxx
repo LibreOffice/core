@@ -307,7 +307,7 @@ bool ScTabOpParam::operator==( const ScTabOpParam& r ) const
 }
 
 OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
-                                SfxObjectShell* pShell )
+                                SfxObjectShell const * pShell )
 {
     OUString aAbsName;
     if (!pShell || !pShell->HasName())

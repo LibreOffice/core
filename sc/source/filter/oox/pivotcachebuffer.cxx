@@ -753,14 +753,14 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
     return xFieldName.is() ? xFieldName->getName() : OUString();
 }
 
-void PivotCacheField::writeSourceHeaderCell( WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
+void PivotCacheField::writeSourceHeaderCell( WorksheetHelper const & rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
 {
     CellModel aModel;
     aModel.maCellAddr = ScAddress( SCCOL( nCol ), SCROW( nRow ), rSheetHelper.getSheetIndex() );
     rSheetHelper.getSheetData().setStringCell( aModel, maFieldModel.maName );
 }
 
-void PivotCacheField::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem ) const
+void PivotCacheField::writeSourceDataCell( WorksheetHelper const & rSheetHelper, sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem ) const
 {
     bool bHasIndex = rItem.getType() == XML_x;
     OSL_ENSURE( bHasIndex != maSharedItems.empty(), "PivotCacheField::writeSourceDataCell - shared items missing or not expected" );
@@ -770,7 +770,7 @@ void PivotCacheField::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_In
         writeItemToSourceDataCell( rSheetHelper, nCol, nRow, rItem );
 }
 
-void PivotCacheField::importPCRecordItem( SequenceInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
+void PivotCacheField::importPCRecordItem( SequenceInputStream& rStrm, WorksheetHelper const & rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
 {
     if( hasSharedItems() )
     {
@@ -791,7 +791,7 @@ void PivotCacheField::importPCRecordItem( SequenceInputStream& rStrm, WorksheetH
 
 // private --------------------------------------------------------------------
 
-void PivotCacheField::writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
+void PivotCacheField::writeItemToSourceDataCell( WorksheetHelper const & rSheetHelper,
         sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem )
 {
     if( rItem.getType() != XML_m )
@@ -813,7 +813,7 @@ void PivotCacheField::writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
 }
 
 void PivotCacheField::writeSharedItemToSourceDataCell(
-        WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nItemIdx ) const
+        WorksheetHelper const & rSheetHelper, sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nItemIdx ) const
 {
     if( const PivotCacheItem* pCacheItem = maSharedItems.getCacheItem( nItemIdx ) )
         writeItemToSourceDataCell( rSheetHelper, nCol, nRow, *pCacheItem );
@@ -1025,7 +1025,7 @@ sal_Int32 PivotCache::getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const
     return ContainerHelper::getVectorElement( maDatabaseIndexes, nFieldIdx, -1 );
 }
 
-void PivotCache::writeSourceHeaderCells( WorksheetHelper& rSheetHelper ) const
+void PivotCache::writeSourceHeaderCells( WorksheetHelper const & rSheetHelper ) const
 {
     OSL_ENSURE( static_cast< size_t >( maSheetSrcModel.maRange.aEnd.Col() - maSheetSrcModel.maRange.aStart.Col() + 1 ) == maDatabaseFields.size(),
         "PivotCache::writeSourceHeaderCells - source cell range width does not match number of source fields" );
@@ -1038,7 +1038,7 @@ void PivotCache::writeSourceHeaderCells( WorksheetHelper& rSheetHelper ) const
         (*aIt)->writeSourceHeaderCell( rSheetHelper, nCol, nRow );
 }
 
-void PivotCache::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 nColIdx, sal_Int32 nRowIdx, const PivotCacheItem& rItem ) const
+void PivotCache::writeSourceDataCell( WorksheetHelper const & rSheetHelper, sal_Int32 nColIdx, sal_Int32 nRowIdx, const PivotCacheItem& rItem ) const
 {
     SCCOL nCol = maSheetSrcModel.maRange.aStart.Col() + nColIdx;
     OSL_ENSURE( ( maSheetSrcModel.maRange.aStart.Col() <= nCol ) && ( nCol <= maSheetSrcModel.maRange.aEnd.Col() ), "PivotCache::writeSourceDataCell - invalid column index" );
@@ -1049,7 +1049,7 @@ void PivotCache::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 n
         pCacheField->writeSourceDataCell( rSheetHelper, nCol, nRow, rItem );
 }
 
-void PivotCache::importPCRecord( SequenceInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const
+void PivotCache::importPCRecord( SequenceInputStream& rStrm, WorksheetHelper const & rSheetHelper, sal_Int32 nRowIdx ) const
 {
     SCROW nRow = maSheetSrcModel.maRange.aStart.Row() + nRowIdx;
     OSL_ENSURE( ( maSheetSrcModel.maRange.aStart.Row() < nRow ) && ( nRow <= maSheetSrcModel.maRange.aEnd.Row() ), "PivotCache::importPCRecord - invalid row index" );
@@ -1133,7 +1133,7 @@ void PivotCache::prepareSourceDataSheet()
     }
 }
 
-void PivotCache::updateSourceDataRow( WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const
+void PivotCache::updateSourceDataRow( WorksheetHelper const & rSheetHelper, sal_Int32 nRow ) const
 {
     if( mnCurrRow != nRow )
     {

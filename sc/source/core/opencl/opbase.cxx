@@ -207,7 +207,7 @@ void Normal::GenSlidingWindowFunction(
 }
 
 void CheckVariables::GenTmpVariables(
-    std::stringstream& ss, SubArguments& vSubArguments )
+    std::stringstream& ss, SubArguments const & vSubArguments )
 {
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
@@ -319,7 +319,7 @@ void CheckVariables::CheckAllSubArgumentIsNan(
 }
 
 void CheckVariables::UnrollDoubleVector( std::stringstream& ss,
-    std::stringstream& unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
+    std::stringstream const & unrollstr, const formula::DoubleVectorRefToken* pCurDVR,
     int nCurWindowSize )
 {
     int unrollSize = 16;

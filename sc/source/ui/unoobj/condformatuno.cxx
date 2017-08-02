@@ -646,7 +646,7 @@ void SAL_CALL ScCondFormatObj::removeVetoableChangeListener( const OUString&,
 
 namespace {
 
-bool isObjectStillAlive(ScConditionalFormat* pFormat, const ScFormatEntry* pEntry)
+bool isObjectStillAlive(ScConditionalFormat const * pFormat, const ScFormatEntry* pEntry)
 {
     for(size_t i = 0, n= pFormat->size(); i < n; ++i)
     {

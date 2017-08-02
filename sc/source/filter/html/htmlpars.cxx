@@ -337,7 +337,7 @@ void ScHTMLLayoutParser::EntryEnd( ScEEParseEntry* pE, const ESelection& rSel )
     }
 }
 
-void ScHTMLLayoutParser::NextRow( HtmlImportInfo* pInfo )
+void ScHTMLLayoutParser::NextRow( HtmlImportInfo const * pInfo )
 {
     if ( bInCell )
         CloseEntry( pInfo );
@@ -348,7 +348,7 @@ void ScHTMLLayoutParser::NextRow( HtmlImportInfo* pInfo )
     bFirstRow = false;
 }
 
-bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
+bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset const * pOffset, sal_uInt16 nOffset,
         SCCOL* pCol, sal_uInt16 nOffsetTol )
 {
     OSL_ENSURE( pOffset, "ScHTMLLayoutParser::SeekOffset - illegal call" );
@@ -821,7 +821,7 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
         nTableWidth = nColOffset - nColOffsetStart;
 }
 
-void ScHTMLLayoutParser::CloseEntry( HtmlImportInfo* pInfo )
+void ScHTMLLayoutParser::CloseEntry( HtmlImportInfo const * pInfo )
 {
     bInCell = false;
     if ( bTabInTabCell )
@@ -1032,19 +1032,19 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
             SvxHorJustifyItem( SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY) );
 }
 
-void ScHTMLLayoutParser::TableRowOn( HtmlImportInfo* pInfo )
+void ScHTMLLayoutParser::TableRowOn( HtmlImportInfo const * pInfo )
 {
     if ( nColCnt > nColCntStart )
         NextRow( pInfo ); // The optional TableRowOff wasn't there
     nColOffset = nColOffsetStart;
 }
 
-void ScHTMLLayoutParser::TableRowOff( HtmlImportInfo* pInfo )
+void ScHTMLLayoutParser::TableRowOff( HtmlImportInfo const * pInfo )
 {
     NextRow( pInfo );
 }
 
-void ScHTMLLayoutParser::TableDataOff( HtmlImportInfo* pInfo )
+void ScHTMLLayoutParser::TableDataOff( HtmlImportInfo const * pInfo )
 {
     if ( bInCell )
         CloseEntry( pInfo ); // Only if it really was one
@@ -1161,7 +1161,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
     MakeColNoRef( pLocalColOffset, nColOffsetStart, 0, 0, 0 );
 }
 
-void ScHTMLLayoutParser::TableOff( HtmlImportInfo* pInfo )
+void ScHTMLLayoutParser::TableOff( HtmlImportInfo const * pInfo )
 {
     if ( bInCell )
         CloseEntry( pInfo );
@@ -1457,7 +1457,7 @@ void ScHTMLLayoutParser::AnchorOn( HtmlImportInfo* pInfo )
     }
 }
 
-bool ScHTMLLayoutParser::IsAtBeginningOfText( HtmlImportInfo* pInfo )
+bool ScHTMLLayoutParser::IsAtBeginningOfText( HtmlImportInfo const * pInfo )
 {
     ESelection& rSel = pActEntry->aSel;
     return rSel.nStartPara == rSel.nEndPara &&

@@ -33,7 +33,7 @@ protected:
 
 public:
     FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
-                       SdrModel* pDoc, SfxRequest& rReq);
+                       SdrModel* pDoc, SfxRequest const & rReq);
 
     virtual ~FuConstUnoControl() override;
                                        // Mouse- & Key-Events

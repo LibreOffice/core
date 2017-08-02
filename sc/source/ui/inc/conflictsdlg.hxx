@@ -145,7 +145,7 @@ private:
     OUString            GetActionString( const ScChangeAction* pAction, ScDocument* pDoc );
     void                HandleListBoxSelection( bool bSelectHandle );
 
-    static void         SetConflictAction( SvTreeListEntry* pRootEntry, ScConflictAction eConflictAction );
+    static void         SetConflictAction( SvTreeListEntry const * pRootEntry, ScConflictAction eConflictAction );
     void                KeepHandler( bool bMine );
     void                KeepAllHandler( bool bMine );
 

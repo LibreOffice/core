@@ -92,7 +92,7 @@ static void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_ATTR_CHAR_SHADOWED );
 }
 
-static void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
+static void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject const * pObj )
 {
     // use hyphenator only if hyphenation attribute is set
     if ( pObj && static_cast<const SfxBoolItem&>(pObj->GetMergedItem(EE_PARA_HYPHENATE)).GetValue() ) {
@@ -102,7 +102,7 @@ static void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
 }
 
 FuText::FuText(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
-                   SdrModel* pDoc, SfxRequest& rReq) :
+                   SdrModel* pDoc, SfxRequest const & rReq) :
     FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }

@@ -233,8 +233,8 @@ public:
 class Exc1904 : public ExcBoolRecord
 {
 public:
-                            Exc1904( ScDocument& rDoc );
-    virtual sal_uInt16          GetNum() const override;
+                            Exc1904( ScDocument const & rDoc );
+    virtual sal_uInt16      GetNum() const override;
 
     virtual void            SaveXml( XclExpXmlStream& rStrm ) override;
 private:
@@ -254,9 +254,9 @@ protected:
                             ExcBundlesheetBase();
 
 public:
-                            ExcBundlesheetBase( RootData& rRootData, SCTAB nTab );
+                            ExcBundlesheetBase( RootData const & rRootData, SCTAB nTab );
 
-    void             SetStreamPos(sal_uInt64 const nStrPos) { m_nStrPos = nStrPos; }
+    void                    SetStreamPos(sal_uInt64 const nStrPos) { m_nStrPos = nStrPos; }
     void                    UpdateStreamPos( XclExpStream& rStrm );
 
     virtual sal_uInt16          GetNum() const override;
@@ -270,7 +270,7 @@ private:
     virtual void            SaveCont( XclExpStream& rStrm ) override;
 
 public:
-                            ExcBundlesheet( RootData& rRootData, SCTAB nTab );
+                            ExcBundlesheet( RootData const & rRootData, SCTAB nTab );
     virtual std::size_t     GetLen() const override;
 };
 
@@ -362,7 +362,7 @@ public:
     bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
     std::size_t             GetTextBytes() const;
 
-    void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, OUString* pT );
+    void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, OUString const * pT );
 
     void                    Save( XclExpStream& rStrm );
     void                    SaveXml( XclExpXmlStream& rStrm );
@@ -380,7 +380,7 @@ private:
     std::vector<OUString> maMultiValues;
 
     bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
-                                sal_uInt8 nOp, double fVal, OUString* pText,
+                                sal_uInt8 nOp, double fVal, OUString const * pText,
                                 bool bSimple = false );
 
     virtual void            WriteBody( XclExpStream& rStrm ) override;

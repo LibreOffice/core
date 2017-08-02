@@ -64,7 +64,7 @@ protected:
     virtual             ~ScStyleSheet() override;
 
                 ScStyleSheet( const OUString&   rName,
-                              ScStyleSheetPool& rPool,
+                              ScStyleSheetPool const & rPool,
                               SfxStyleFamily    eFamily,
                               sal_uInt16        nMask );
 

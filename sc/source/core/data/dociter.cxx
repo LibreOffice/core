@@ -76,7 +76,7 @@ void decBlock(std::pair<Iter, size_t>& rPos)
 
 void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rpArr,
         SCROW& nAttrEndRow, const ScAttrArray* pNewArr, SCROW nRow,
-        ScDocument* pDoc )
+        ScDocument const * pDoc )
 {
     if ( rpArr != pNewArr || nAttrEndRow < nRow )
     {
@@ -327,7 +327,7 @@ const ScAttrArray* ScDBQueryDataIterator::GetAttrArrayByCol(ScDocument& rDoc, SC
 }
 
 bool ScDBQueryDataIterator::IsQueryValid(
-    ScDocument& rDoc, const ScQueryParam& rParam, SCTAB nTab, SCROW nRow, ScRefCellValue* pCell)
+    ScDocument& rDoc, const ScQueryParam& rParam, SCTAB nTab, SCROW nRow, ScRefCellValue const * pCell)
 {
     if (nTab >= rDoc.GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");

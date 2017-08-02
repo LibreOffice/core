@@ -310,7 +310,7 @@ public:
                 resulting reference is fully valid or not.
      */
     SC_DLLPUBLIC ScRefFlags Parse(
-                    const OUString&, ScDocument* = nullptr,
+                    const OUString&, ScDocument const * = nullptr,
                     const Details& rDetails = detailsOOOa1,
                     ExternalInfo* pExtInfo = nullptr,
                     const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
@@ -333,7 +333,7 @@ public:
                 The document for the maximum defined sheet number.
      */
     SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
-            ScAddress& rErrorPos, ScDocument* pDocument = nullptr );
+            ScAddress& rErrorPos, ScDocument const * pDocument = nullptr );
 
     inline bool operator==( const ScAddress& rAddress ) const;
     inline bool operator!=( const ScAddress& rAddress ) const;
@@ -518,13 +518,13 @@ public:
     inline bool In( const ScAddress& ) const;   ///< is Address& in Range?
     inline bool In( const ScRange& ) const;     ///< is Range& in Range?
 
-    SC_DLLPUBLIC ScRefFlags Parse( const OUString&, ScDocument* = nullptr,
+    SC_DLLPUBLIC ScRefFlags Parse( const OUString&, ScDocument const * = nullptr,
                                    const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                                    ScAddress::ExternalInfo* pExtInfo = nullptr,
                                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                                    const OUString* pErrRef = nullptr );
 
-    SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, ScDocument*,
+    SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, ScDocument const *,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
     SC_DLLPUBLIC ScRefFlags ParseCols( const OUString&,
                                        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
@@ -596,7 +596,7 @@ public:
                 The document for the maximum defined sheet number.
      */
     SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
-            ScRange& rErrorRange, ScDocument* pDocument = nullptr );
+            ScRange& rErrorRange, ScDocument const * pDocument = nullptr );
 
     /** Same as Move() but with sticky end col/row anchors. */
     SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool MoveSticky( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
@@ -831,7 +831,7 @@ public:
 
     inline bool operator == ( const ScRefAddress& r ) const;
 
-    OUString  GetRefString( ScDocument* pDocument, SCTAB nActTab,
+    OUString  GetRefString( ScDocument const * pDocument, SCTAB nActTab,
                             const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
 };
 
@@ -888,12 +888,12 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
     }
 }
 
-bool ConvertSingleRef( ScDocument* pDocument, const OUString& rRefString,
+bool ConvertSingleRef( ScDocument const * pDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rRefAddress,
                        const ScAddress::Details& rDetails,
                        ScAddress::ExternalInfo* pExtInfo = nullptr );
 
-bool ConvertDoubleRef( ScDocument* pDocument, const OUString& rRefString,
+bool ConvertDoubleRef( ScDocument const * pDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rStartRefAddress,
                        ScRefAddress& rEndRefAddress,
                        const ScAddress::Details& rDetails,

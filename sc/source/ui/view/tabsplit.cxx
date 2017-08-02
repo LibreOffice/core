@@ -23,7 +23,7 @@
 
 #include <vcl/settings.hxx>
 
-ScTabSplitter::ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle, ScViewData* pData ) :
+ScTabSplitter::ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle, ScViewData const * pData ) :
     Splitter(pParent, nWinStyle),
     pViewData(pData)
 {

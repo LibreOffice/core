@@ -56,7 +56,7 @@
 #include "editutil.hxx"
 #include "patattr.hxx"
 
-ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
+ScStyleSheetPool::ScStyleSheetPool( SfxItemPool const & rPoolP,
                                     ScDocument*     pDocument )
     :   SfxStyleSheetPool( rPoolP ),
         pActualStyleSheet( nullptr ),

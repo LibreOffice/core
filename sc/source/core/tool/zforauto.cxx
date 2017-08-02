@@ -40,7 +40,7 @@ ScNumFormatAbbrev::ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat) :
 }
 
 ScNumFormatAbbrev::ScNumFormatAbbrev(sal_uInt32 nFormat,
-                                     SvNumberFormatter& rFormatter)
+                                     SvNumberFormatter const & rFormatter)
 {
     PutFormatIndex(nFormat, rFormatter);
 }
@@ -63,7 +63,7 @@ void ScNumFormatAbbrev::Save( SvStream& rStream, rtl_TextEncoding eByteStrSet ) 
 }
 
 void ScNumFormatAbbrev::PutFormatIndex(sal_uInt32 nFormat,
-                                       SvNumberFormatter& rFormatter)
+                                       SvNumberFormatter const & rFormatter)
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry(nFormat);
     if (pFormat)

@@ -101,7 +101,7 @@ ScValidationDlg::~ScValidationDlg()
     disposeOnce();
 }
 
-void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pDoc )
+void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument const * pDoc )
 {
     if ( rRange.aStart != rRange.aEnd )
         if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
@@ -126,7 +126,7 @@ void ScTPValidationValue:: SetActiveHdl()
         }
 }
 
-void ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton )
+void ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton const * pButton )
 {
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
@@ -942,7 +942,7 @@ void ScTPValidationValue::ScRefButtonEx::Click()
     formula::RefButton::Click();
 }
 
-void ScTPValidationValue::OnClick( Button *pBtn )
+void ScTPValidationValue::OnClick( Button const *pBtn )
 {
     if( pBtn == m_pBtnRef )
         SetupRefDlg();

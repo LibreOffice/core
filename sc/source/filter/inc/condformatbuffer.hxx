@@ -256,7 +256,7 @@ class ExtCfDataBarRule : public WorksheetHelper
     ScDataBarFormatData* mpTarget;
 public:
 
-    ExtCfDataBarRule(ScDataBarFormatData* pTarget, WorksheetHelper& rParent);
+    ExtCfDataBarRule(ScDataBarFormatData* pTarget, WorksheetHelper const & rParent);
     void finalizeImport();
     void importDataBar(  const AttributeList& rAttribs );
     void importNegativeFillColor(  const AttributeList& rAttribs );

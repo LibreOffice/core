@@ -49,7 +49,7 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry,
     }
 }
 
-OUString convertNumberToString(double nVal, ScDocument* pDoc)
+OUString convertNumberToString(double nVal, ScDocument const * pDoc)
 {
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
     OUString aText;
@@ -57,7 +57,7 @@ OUString convertNumberToString(double nVal, ScDocument* pDoc)
     return aText;
 }
 
-void SetValue( ScDocument* pDoc, ScColorScaleEntry* pEntry, Edit& aEdit)
+void SetValue( ScDocument const * pDoc, ScColorScaleEntry const * pEntry, Edit& aEdit)
 {
     if(pEntry->GetType() == COLORSCALE_FORMULA)
         aEdit.SetText(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));

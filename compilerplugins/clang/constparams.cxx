@@ -409,7 +409,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     } else if (isa<CXXDependentScopeMemberExpr>(parent)) {
         return false;
     } else if (isa<MaterializeTemporaryExpr>(parent)) {
-        return true;
+        return checkIfCanBeConst(parent, parmVarDecl);
     } else if (auto conditionalExpr = dyn_cast<ConditionalOperator>(parent)) {
         if (conditionalExpr->getCond() == stmt)
             return true;
@@ -441,6 +441,8 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     } else if (isa<ExprWithCleanups>(parent)) {
         return checkIfCanBeConst(parent, parmVarDecl);
     } else if (isa<CaseStmt>(parent)) {
+        return true;
+    } else if (isa<CXXPseudoDestructorExpr>(parent)) {
         return true;
     } else {
         parent->dump();

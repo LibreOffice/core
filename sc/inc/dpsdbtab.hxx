@@ -61,7 +61,7 @@ class ScDatabaseDPData : public ScDPTableData
 private:
     ScDPFilteredCache aCacheTable;
 public:
-    ScDatabaseDPData(ScDocument* pDoc, const ScDPCache& rCache);
+    ScDatabaseDPData(ScDocument const * pDoc, const ScDPCache& rCache);
     virtual ~ScDatabaseDPData() override;
 
     virtual long                    GetColumnCount() override;

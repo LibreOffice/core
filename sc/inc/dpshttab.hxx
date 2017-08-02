@@ -98,7 +98,7 @@ private:
     ScDPFilteredCache  aCacheTable;
 
 public:
-    ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache);
+    ScSheetDPData(ScDocument const * pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache);
     virtual ~ScSheetDPData() override;
 
     virtual long                    GetColumnCount() override;

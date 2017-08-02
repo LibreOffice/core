@@ -226,7 +226,7 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
     mpXMLContext->loadXMLStructure(*mpLbTree, maXMLParam);
 }
 
-void ScXMLSourceDlg::HandleGetFocus(Control* pCtrl)
+void ScXMLSourceDlg::HandleGetFocus(Control const * pCtrl)
 {
     mpActiveEdit = nullptr;
     if (pCtrl == mpRefEdit || pCtrl == mpRefBtn)
@@ -244,7 +244,7 @@ class UnhighlightEntry
 public:
     explicit UnhighlightEntry(SvTreeListBox& rTree) : mrTree(rTree) {}
 
-    void operator() (SvTreeListEntry* p)
+    void operator() (SvTreeListEntry const * p)
     {
         SvViewDataEntry* pView = mrTree.GetViewDataEntry(p);
         if (!pView)
@@ -261,7 +261,7 @@ public:
  * Otherwise the reference entry equals the current entry.  A reference
  * entry is the entry that stores mapped cell position.
  */
-SvTreeListEntry* getReferenceEntry(SvTreeListBox& rTree, SvTreeListEntry* pCurEntry)
+SvTreeListEntry* getReferenceEntry(SvTreeListBox const & rTree, SvTreeListEntry* pCurEntry)
 {
     SvTreeListEntry* pParent = rTree.GetParent(pCurEntry);
     SvTreeListEntry* pRefEntry = nullptr;

@@ -64,7 +64,7 @@ using namespace com::sun::star;
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
 
-void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame )
+void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame const * pFrame )
 {
     //  called after opening the database beamer
 

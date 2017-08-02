@@ -350,7 +350,7 @@ sal_uLong ScContentTree::GetChildIndex( SvTreeListEntry* pEntry ) const
     return nChild;
 }
 
-static OUString lcl_GetDBAreaRange( ScDocument* pDoc, const OUString& rDBName )
+static OUString lcl_GetDBAreaRange( ScDocument const * pDoc, const OUString& rDBName )
 {
     OUString aRet;
     if (pDoc)
@@ -764,7 +764,7 @@ ScDocument* ScContentTree::GetSourceDocument()
 }
 
 //Move along and draw "*" sign .
-void ScContentTree::ObjectFresh( ScContentId nType, SvTreeListEntry* pEntry )
+void ScContentTree::ObjectFresh( ScContentId nType, SvTreeListEntry const * pEntry )
 {
     if ( bHiddenDoc && !pHiddenDocument )
         return;     // other document displayed
@@ -1199,7 +1199,7 @@ bool ScContentTree::DrawNamesChanged( ScContentId nType )
     return !bEqual;
 }
 
-static bool lcl_GetRange( ScDocument* pDoc, ScContentId nType, const OUString& rName, ScRange& rRange )
+static bool lcl_GetRange( ScDocument const * pDoc, ScContentId nType, const OUString& rName, ScRange& rRange )
 {
     bool bFound = false;
 
