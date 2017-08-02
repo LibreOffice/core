@@ -2736,7 +2736,7 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     // Writer creates it's vertical BorderLines bottom-to-top (see below).
                     // To make the horizontal lines correctly 'guess' the line extensions
                     // for the then mirrored svx::frame::Style for irregular double lines,
-                    // hand over the for that case correct orientatoin of the 'other'
+                    // hand over the for that case correct orientation of the 'other'
                     // incoming edges
                     -aY,
 

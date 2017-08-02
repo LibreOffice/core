@@ -245,7 +245,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
 // pass X and Y as percentage to OOX_ARROW_POINT
 #define OOX_ARROW_POINT( x, y ) awt::Point( static_cast< sal_Int32 >( fArrowWidth * ( x ) ), static_cast< sal_Int32 >( fArrowLength * ( y ) ) )
             // tdf#100491 Arrow line marker, unlike other markers, depends on line width.
-            // So calculate width of half line (more convinient during drawing) taking into account
+            // So calculate width of half line (more convenient during drawing) taking into account
             // further conversions/scaling done in OOX_ARROW_POINT macro and scaling to nMarkerWidth.
             const double fArrowLineHalfWidth = ::std::max< double >( 100.0 * 0.5 * nLineWidth / nMarkerWidth, 1 );
 
