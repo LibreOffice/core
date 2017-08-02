@@ -135,6 +135,9 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
             case R.id.action_presentation:
                 mContext.preparePresentation();
                 return true;
+            case R.id.action_zoom_calc:
+                mContext.popZoomCalcDialog();
+                return true;
         }
         return false;
     }
