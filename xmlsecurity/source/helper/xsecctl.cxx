@@ -948,14 +948,14 @@ SignatureInformations XSecController::getSignatureInformations() const
 
 void SAL_CALL XSecController::blockingStatusChanged( sal_Bool isBlocking )
 {
-    this->m_bIsBlocking = isBlocking;
+    m_bIsBlocking = isBlocking;
     checkChainingStatus();
 }
 
 void SAL_CALL XSecController::collectionStatusChanged(
     sal_Bool isInsideCollectedElement )
 {
-    this->m_bIsCollectingElement = isInsideCollectedElement;
+    m_bIsCollectingElement = isInsideCollectedElement;
     checkChainingStatus();
 }
 

@@ -152,7 +152,7 @@ OUString SvxChartColorTable::getDefaultName( size_t _nIndex )
 bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 {
     // note: XColorEntry has no operator ==
-    bool bEqual = ( this->m_aColorEntries.size() == _rOther.m_aColorEntries.size() );
+    bool bEqual = ( m_aColorEntries.size() == _rOther.m_aColorEntries.size() );
 
     if( bEqual )
     {
@@ -298,7 +298,7 @@ bool SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) const
     const SvxChartColorTableItem * rCTItem( dynamic_cast<const SvxChartColorTableItem * >( & rAttr ));
     if( rCTItem )
     {
-        return (this->m_aColorTable == rCTItem->GetColorList());
+        return (m_aColorTable == rCTItem->GetColorList());
     }
 
     return false;

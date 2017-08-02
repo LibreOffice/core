@@ -664,7 +664,7 @@ void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
     {
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
             &static_cast<SwModify&>(*this) ); // cast to base class!
-        this->Modify(&aMsgHint, &aMsgHint);
+        Modify(&aMsgHint, &aMsgHint);
     }
 }
 

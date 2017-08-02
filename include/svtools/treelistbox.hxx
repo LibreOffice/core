@@ -486,14 +486,14 @@ public:
 
     // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
     virtual TriState NotifyMoving(
-        SvTreeListEntry*  pTarget,       // D'n'D DropPosition in this->GetModel()
+        SvTreeListEntry*  pTarget,       // D'n'D DropPosition in GetModel()
         SvTreeListEntry*  pEntry,        // Entry to be moved from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent
         sal_uLong&        rNewChildPos); // The TargetParent's position in Childlist
 
     // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
     virtual TriState    NotifyCopying(
-        SvTreeListEntry*  pTarget,       // D'n'D DropPosition in this->GetModel()
+        SvTreeListEntry*  pTarget,       // D'n'D DropPosition in GetModel()
         SvTreeListEntry*  pEntry,        // Entry to be copied from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent
         sal_uLong&        rNewChildPos); // The TargetParent's position in Childlist

@@ -489,7 +489,7 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
     const IDocumentSettingAccess& rSettingAccess = pFormat->getIDocumentSettingAccess();
     rTimerAccess.StopIdling();
     // For creating the Flys by MakeFrames()
-    rLayoutAccess.SetCurrentViewShell( this->GetCurrShell() );
+    rLayoutAccess.SetCurrentViewShell( GetCurrShell() );
     mbCallbackActionEnabled = false; // needs to be set to true before leaving!
 
     SwDrawModel* pMd = pFormat->getIDocumentDrawModelAccess().GetDrawModel();
@@ -631,12 +631,12 @@ void SwRootFrame::RemoveMasterObjs( SdrPage *pPg )
 void SwRootFrame::AllCheckPageDescs() const
 {
     if ( !IsLayoutFreezed() )
-        CheckPageDescs( const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(this->Lower())) );
+        CheckPageDescs( const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(Lower())) );
 }
 
 void SwRootFrame::AllInvalidateAutoCompleteWords() const
 {
-    SwPageFrame *pPage = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(this->Lower()));
+    SwPageFrame *pPage = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(Lower()));
     while ( pPage )
     {
         pPage->InvalidateAutoCompleteWords();
@@ -646,7 +646,7 @@ void SwRootFrame::AllInvalidateAutoCompleteWords() const
 
 void SwRootFrame::AllAddPaintRect() const
 {
-    GetCurrShell()->AddPaintRect( this->Frame() );
+    GetCurrShell()->AddPaintRect( Frame() );
 }
 
 void SwRootFrame::AllRemoveFootnotes()
@@ -656,7 +656,7 @@ void SwRootFrame::AllRemoveFootnotes()
 
 void SwRootFrame::AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const
 {
-    SwPageFrame *pPage = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(this->Lower()));
+    SwPageFrame *pPage = const_cast<SwPageFrame*>(static_cast<const SwPageFrame*>(Lower()));
     while ( pPage )
     {
         if ( bSmartTags )

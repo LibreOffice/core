@@ -183,7 +183,7 @@ void OConnection::construct(const rtl::OUString& url, const Sequence< PropertyVa
     m_settings.schema = aDbName;
 
     // Check if the server is 4.1 or above
-    if (this->getMysqlVersion() < 40100) {
+    if (getMysqlVersion() < 40100) {
         throw SQLException(
             "MariaDB LibreOffice Connector requires MySQL Server 4.1 or above",
             *this,

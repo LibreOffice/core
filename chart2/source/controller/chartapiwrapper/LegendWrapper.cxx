@@ -84,7 +84,7 @@ Any WrappedLegendAlignmentProperty::getPropertyValue( const Reference< beans::XP
         else
         {
             aRet = xInnerPropertySet->getPropertyValue( m_aInnerName );
-            aRet = this->convertInnerToOuterValue( aRet );
+            aRet = convertInnerToOuterValue( aRet );
         }
     }
     return aRet;
@@ -110,7 +110,7 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
             return;
 
         //set corresponding LegendPosition
-        Any aInnerValue = this->convertOuterToInnerValue( rOuterValue );
+        Any aInnerValue = convertOuterToInnerValue( rOuterValue );
         xInnerPropertySet->setPropertyValue( m_aInnerName, aInnerValue );
 
         //correct LegendExpansion
@@ -282,7 +282,7 @@ awt::Point SAL_CALL LegendWrapper::getPosition()
 
 void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
 {
-    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
+    Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
     if( xProp.is() )
     {
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
@@ -302,13 +302,13 @@ awt::Size SAL_CALL LegendWrapper::getSize()
 
 void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
 {
-    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
+    Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
     if( xProp.is() )
     {
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
         awt::Rectangle aPageRectangle( 0,0,aPageSize.Width,aPageSize.Height);
 
-        awt::Point aPos( this->getPosition() );
+        awt::Point aPos( getPosition() );
         awt::Rectangle aNewPositionAndSize(aPos.X,aPos.Y,aSize.Width,aSize.Height);
 
         PositionAndSizeHelper::moveObject( OBJECTTYPE_LEGEND
@@ -347,7 +347,7 @@ void SAL_CALL LegendWrapper::removeEventListener(
 //ReferenceSizePropertyProvider
 void LegendWrapper::updateReferenceSize()
 {
-    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( getInnerPropertySet(), uno::UNO_QUERY );
     if( xProp.is() )
     {
         if( xProp->getPropertyValue( "ReferencePageSize" ).hasValue() )
@@ -358,7 +358,7 @@ void LegendWrapper::updateReferenceSize()
 Any LegendWrapper::getReferenceSize()
 {
     Any aRet;
-    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( getInnerPropertySet(), uno::UNO_QUERY );
     if( xProp.is() )
         aRet = xProp->getPropertyValue( "ReferencePageSize" );
 

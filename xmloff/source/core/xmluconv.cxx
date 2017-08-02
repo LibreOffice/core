@@ -796,7 +796,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
             {
                 if (!m_pImpl->m_xCharClass.is())
                 {
-                    this->m_pImpl->m_xCharClass = CharacterClassification::create( m_pImpl->m_xContext );
+                    m_pImpl->m_xCharClass = CharacterClassification::create( m_pImpl->m_xContext );
                 }
                 sal_Int16 nType = m_pImpl->m_xCharClass->getType(rName, i);
 

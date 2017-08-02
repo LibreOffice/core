@@ -200,12 +200,12 @@ TitleWrapper::~TitleWrapper()
 // ____ XShape ____
 awt::Point SAL_CALL TitleWrapper::getPosition()
 {
-    return m_spChart2ModelContact->GetTitlePosition( this->getTitleObject() );
+    return m_spChart2ModelContact->GetTitlePosition( getTitleObject() );
 }
 
 void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
 {
-    Reference< beans::XPropertySet > xPropertySet( this->getInnerPropertySet() );
+    Reference< beans::XPropertySet > xPropertySet( getInnerPropertySet() );
     if(xPropertySet.is())
     {
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
@@ -220,7 +220,7 @@ void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
 
 awt::Size SAL_CALL TitleWrapper::getSize()
 {
-    return m_spChart2ModelContact->GetTitleSize( this->getTitleObject() );
+    return m_spChart2ModelContact->GetTitleSize( getTitleObject() );
 }
 
 void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
@@ -260,7 +260,7 @@ Reference< beans::XPropertySet > TitleWrapper::getFirstCharacterPropertySet()
 {
     Reference< beans::XPropertySet > xProp;
 
-    Reference< chart2::XTitle > xTitle( this->getTitleObject() );
+    Reference< chart2::XTitle > xTitle( getTitleObject() );
     if( xTitle.is())
     {
         Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
@@ -299,7 +299,7 @@ void TitleWrapper::setFastCharacterPropertyValue(
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 
-    Reference< chart2::XTitle > xTitle( this->getTitleObject() );
+    Reference< chart2::XTitle > xTitle( getTitleObject() );
     if( xTitle.is())
     {
         Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
@@ -426,7 +426,7 @@ void SAL_CALL TitleWrapper::removePropertyChangeListener( const OUString& rPrope
 //ReferenceSizePropertyProvider
 void TitleWrapper::updateReferenceSize()
 {
-    Reference< beans::XPropertySet > xProp( this->getTitleObject(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( getTitleObject(), uno::UNO_QUERY );
     if( xProp.is() )
     {
         if( xProp->getPropertyValue( "ReferencePageSize" ).hasValue() )
@@ -437,7 +437,7 @@ void TitleWrapper::updateReferenceSize()
 Any TitleWrapper::getReferenceSize()
 {
     Any aRet;
-    Reference< beans::XPropertySet > xProp( this->getTitleObject(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( getTitleObject(), uno::UNO_QUERY );
     if( xProp.is() )
         aRet = xProp->getPropertyValue( "ReferencePageSize" );
 
@@ -457,7 +457,7 @@ Reference< chart2::XTitle > TitleWrapper::getTitleObject()
 
 Reference< beans::XPropertySet > TitleWrapper::getInnerPropertySet()
 {
-    return Reference< beans::XPropertySet >( this->getTitleObject(), uno::UNO_QUERY );
+    return Reference< beans::XPropertySet >( getTitleObject(), uno::UNO_QUERY );
 }
 
 const Sequence< beans::Property >& TitleWrapper::getPropertySequence()

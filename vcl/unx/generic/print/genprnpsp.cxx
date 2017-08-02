@@ -993,7 +993,7 @@ struct PDFNewJobParameters
 
     bool operator!=(const PDFNewJobParameters& rComp) const
     {
-        return ! this->operator==(rComp);
+        return ! operator==(rComp);
     }
 };
 

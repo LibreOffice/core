@@ -1560,7 +1560,7 @@ void VCartesianAxis::createLabels()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    std::unique_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    std::unique_ptr< TickFactory2D > apTickFactory2D( createTickFactory2D() );
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
@@ -1614,7 +1614,7 @@ void VCartesianAxis::createMaximumLabels()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    std::unique_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    std::unique_ptr< TickFactory2D > apTickFactory2D( createTickFactory2D() );
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
@@ -1651,7 +1651,7 @@ void VCartesianAxis::updatePositions()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    std::unique_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    std::unique_ptr< TickFactory2D > apTickFactory2D( createTickFactory2D() );
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
@@ -1752,7 +1752,7 @@ void VCartesianAxis::createShapes()
     if( !prepareShapeCreation() )
         return;
 
-    std::unique_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    std::unique_ptr< TickFactory2D > apTickFactory2D( createTickFactory2D() );
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;

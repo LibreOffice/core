@@ -482,7 +482,7 @@ bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int
         - entry is inserted at the end of the target childlist
 */
 TriState SvTreeListBox::NotifyMoving(
-    SvTreeListEntry*  pTarget,       // D&D dropping position in this->GetModel()
+    SvTreeListEntry*  pTarget,       // D&D dropping position in GetModel()
     SvTreeListEntry*  pEntry,        // entry that we want to move, from
                                  // GetSourceListBox()->GetModel()
     SvTreeListEntry*& rpNewParent,   // new target parent
@@ -516,7 +516,7 @@ TriState SvTreeListBox::NotifyMoving(
 }
 
 TriState SvTreeListBox::NotifyCopying(
-    SvTreeListEntry*  pTarget,       // D&D dropping position in this->GetModel()
+    SvTreeListEntry*  pTarget,       // D&D dropping position in GetModel()
     SvTreeListEntry*  pEntry,        // entry that we want to move, from
                                  // GetSourceListBox()->GetModel()
     SvTreeListEntry*& rpNewParent,   // new target parent
@@ -1074,7 +1074,7 @@ sal_Int8 SvTreeListBox::AcceptDrop( const AcceptDropEvent& rEvt )
         else
         {
             DBG_ASSERT(g_pDDSource, "SvTreeListBox::QueryDrop(): SourceBox == 0");
-            if (!( pEntry && g_pDDSource->GetModel() == this->GetModel()
+            if (!( pEntry && g_pDDSource->GetModel() == GetModel()
                     && DND_ACTION_MOVE == rEvt.mnAction
                     && (pEntry->nEntryFlags & SvTLEntryFlags::DISABLE_DROP)))
             {
@@ -1211,7 +1211,7 @@ nAction
 
 #ifndef UNX
     if (   (nAction == DND_ACTION_MOVE)
-        && (   (g_pDDTarget && (g_pDDTarget->GetModel() != this->GetModel()))
+        && (   (g_pDDTarget && (g_pDDTarget->GetModel() != GetModel()))
             || !g_pDDTarget))
     {
         RemoveSelection();

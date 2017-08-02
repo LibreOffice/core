@@ -572,7 +572,7 @@ bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPerce
 {
     OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString(CHART_UNONAME_NUMFMT);
     bool bHasNumberFormat = false;
-    uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( nPointIndex ));
+    uno::Reference< beans::XPropertySet > xPointProp( getPropertiesOfPoint( nPointIndex ));
     sal_Int32 nNumberFormat = -1;
     if( xPointProp.is() && (xPointProp->getPropertyValue(aPropName) >>= nNumberFormat) )
         bHasNumberFormat = true;
@@ -582,7 +582,7 @@ sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bFor
 {
     OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString(CHART_UNONAME_NUMFMT);
     sal_Int32 nNumberFormat = -1;
-    uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( nPointIndex ));
+    uno::Reference< beans::XPropertySet > xPointProp( getPropertiesOfPoint( nPointIndex ));
     if( xPointProp.is() )
         xPointProp->getPropertyValue(aPropName) >>= nNumberFormat;
     return nNumberFormat;
@@ -625,7 +625,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
     sal_Int32 nLabelPlacement=0;
     try
     {
-        uno::Reference< beans::XPropertySet > xPointProps( this->getPropertiesOfPoint( nPointIndex ) );
+        uno::Reference< beans::XPropertySet > xPointProps( getPropertiesOfPoint( nPointIndex ) );
         if( xPointProps.is() )
             xPointProps->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
 
@@ -807,7 +807,7 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
         adaptPointCache( index );
         if (!m_apSymbolProperties_AttributedPoint)
             m_apSymbolProperties_AttributedPoint
-                = getSymbolPropertiesFromPropertySet(this->getPropertiesOfPoint(index));
+                = getSymbolPropertiesFromPropertySet(getPropertiesOfPoint(index));
         pRet = m_apSymbolProperties_AttributedPoint.get();
         //if a single data point does not have symbols but the dataseries itself has symbols
         //we create an invisible symbol shape to enable selection of that point
@@ -815,7 +815,7 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
         {
             if (!m_apSymbolProperties_Series)
                 m_apSymbolProperties_Series
-                    = getSymbolPropertiesFromPropertySet(this->getPropertiesOfSeries());
+                    = getSymbolPropertiesFromPropertySet(getPropertiesOfSeries());
             if( m_apSymbolProperties_Series.get() && m_apSymbolProperties_Series->Style != SymbolStyle_NONE )
             {
                 if (!m_apSymbolProperties_InvisibleSymbolForSelection)
@@ -835,7 +835,7 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
     {
         if (!m_apSymbolProperties_Series)
             m_apSymbolProperties_Series
-                = getSymbolPropertiesFromPropertySet(this->getPropertiesOfSeries());
+                = getSymbolPropertiesFromPropertySet(getPropertiesOfSeries());
         pRet = m_apSymbolProperties_Series.get();
     }
 
@@ -856,7 +856,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getXErrorBarProperties( sal_I
 {
     uno::Reference< beans::XPropertySet > xErrorBarProp;
 
-    uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( index ));
+    uno::Reference< beans::XPropertySet > xPointProp( getPropertiesOfPoint( index ));
     if( xPointProp.is() )
         xPointProp->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarProp;
     return xErrorBarProp;
@@ -866,7 +866,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getYErrorBarProperties( sal_I
 {
     uno::Reference< beans::XPropertySet > xErrorBarProp;
 
-    uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( index ));
+    uno::Reference< beans::XPropertySet > xPointProp( getPropertiesOfPoint( index ));
     if( xPointProp.is() )
         xPointProp->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarProp;
     return xErrorBarProp;
@@ -879,7 +879,7 @@ bool VDataSeries::hasPointOwnColor( sal_Int32 index ) const
 
     try
     {
-        uno::Reference< beans::XPropertyState > xPointState( this->getPropertiesOfPoint(index), uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertyState > xPointState( getPropertiesOfPoint(index), uno::UNO_QUERY_THROW );
         return (xPointState->getPropertyState("Color") != beans::PropertyState_DEFAULT_VALUE );
     }
     catch(const uno::Exception& e)
@@ -905,7 +905,7 @@ bool VDataSeries::isAttributedDataPoint( sal_Int32 index ) const
 bool VDataSeries::isVaryColorsByPoint() const
 {
     bool bVaryColorsByPoint = false;
-    Reference< beans::XPropertySet > xSeriesProp( this->getPropertiesOfSeries() );
+    Reference< beans::XPropertySet > xSeriesProp( getPropertiesOfSeries() );
     if( xSeriesProp.is() )
         xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint;
     return bVaryColorsByPoint;
@@ -915,7 +915,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfPoint( sal_Int
 {
     if( isAttributedDataPoint( index ) )
         return m_xDataSeries->getDataPointByIndex(index);
-    return this->getPropertiesOfSeries();
+    return getPropertiesOfSeries();
 }
 
 uno::Reference<beans::XPropertySet> VDataSeries::getPropertiesOfSeries() const
@@ -958,14 +958,14 @@ DataPointLabel* VDataSeries::getDataPointLabel( sal_Int32 index ) const
         adaptPointCache( index );
         if( !m_apLabel_AttributedPoint.get() )
             m_apLabel_AttributedPoint
-                = getDataPointLabelFromPropertySet(this->getPropertiesOfPoint(index));
+                = getDataPointLabelFromPropertySet(getPropertiesOfPoint(index));
         pRet = m_apLabel_AttributedPoint.get();
     }
     else
     {
         if (!m_apLabel_Series)
             m_apLabel_Series
-                = getDataPointLabelFromPropertySet(this->getPropertiesOfPoint(index));
+                = getDataPointLabelFromPropertySet(getPropertiesOfPoint(index));
         pRet = m_apLabel_Series.get();
     }
     if( !m_bAllowPercentValueInDataLabel )
@@ -978,7 +978,7 @@ DataPointLabel* VDataSeries::getDataPointLabel( sal_Int32 index ) const
 
 DataPointLabel* VDataSeries::getDataPointLabelIfLabel( sal_Int32 index ) const
 {
-    DataPointLabel* pLabel = this->getDataPointLabel( index );
+    DataPointLabel* pLabel = getDataPointLabel( index );
     if( !pLabel || (!pLabel->ShowNumber && !pLabel->ShowNumberInPercent
         && !pLabel->ShowCategoryName ) )
         return nullptr;
@@ -1000,7 +1000,7 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
             // Cache these properties for this point.
             m_apLabelPropNames_AttributedPoint.reset(new tNameSequence);
             m_apLabelPropValues_AttributedPoint.reset(new tAnySequence);
-            xTextProp.set( this->getPropertiesOfPoint( index ));
+            xTextProp.set( getPropertiesOfPoint( index ));
             PropertyMapper::getTextLabelMultiPropertyLists(
                 xTextProp, *m_apLabelPropNames_AttributedPoint, *m_apLabelPropValues_AttributedPoint);
             bDoDynamicFontResize = true;
@@ -1015,7 +1015,7 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
             // Cache these properties for the whole series.
             m_apLabelPropNames_Series.reset(new tNameSequence);
             m_apLabelPropValues_Series.reset(new tAnySequence);
-            xTextProp.set( this->getPropertiesOfPoint( index ));
+            xTextProp.set( getPropertiesOfPoint( index ));
             PropertyMapper::getTextLabelMultiPropertyLists(
                 xTextProp, *m_apLabelPropNames_Series, *m_apLabelPropValues_Series);
             bDoDynamicFontResize = true;

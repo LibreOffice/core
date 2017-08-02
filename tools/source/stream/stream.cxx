@@ -747,7 +747,7 @@ void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
     bool bTryUtf8 = false;
     sal_uInt16 nFlag(0);
     sal_sSize nBack = sizeof(nFlag);
-    this->ReadUInt16( nFlag );
+    ReadUInt16( nFlag );
     switch ( nFlag )
     {
         case 0xfeff :
@@ -784,7 +784,7 @@ void SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
     {
         unsigned char nChar(0);
         nBack += sizeof(nChar);
-        this->ReadUChar( nChar );
+        ReadUChar( nChar );
         if (nChar == 0xbf)
             nBack = 0;      // it is UTF-8
     }

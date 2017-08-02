@@ -74,7 +74,7 @@ void ScrollableDialog::setScrollVisibility( ScrollBarVisibility rVisState )
         maVScrollBar->Show();
     }
     if ( mbHasHoriBar || mbHasVertBar )
-        this->SetStyle( Dialog::GetStyle() | WB_CLIPCHILDREN | WB_AUTOSIZE );
+        SetStyle( Dialog::GetStyle() | WB_CLIPCHILDREN | WB_AUTOSIZE );
 }
 
 ScrollableDialog::~ScrollableDialog()

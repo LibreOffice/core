@@ -96,7 +96,7 @@ RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
 
     m_pFT_Caption->Show(!bHideDescription);
 
-    this->SetText( m_pFTTitle->GetText());// OH:remove later with dialog
+    SetText( m_pFTTitle->GetText());// OH:remove later with dialog
 
     // set defaults as long as DetectArguments does not work
     m_pRB_Columns->Check();

@@ -161,7 +161,7 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
         if( bDoXScaling )
             x = xInverseScaling->doScaling( x );
         aResult[nP].X = x;
-        aResult[nP].Y = this->getCurveValue( x );
+        aResult[nP].Y = getCurveValue( x );
     }
 
     return aResult;

@@ -47,8 +47,8 @@ ScTabBgColorDlg::ScTabBgColorDlg(vcl::Window* pParent, const OUString& rTitle,
     m_pTabBgColorSet->SetColCount(SvxColorValueSet::getColumnCount());
     get(m_pBtnOk, "ok");
 
-    this->SetText( rTitle );
-    this->SetStyle(GetStyle() | WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL | WB_SYSTEMWINDOW | WB_STANDALONE | WB_HIDE);
+    SetText( rTitle );
+    SetStyle(GetStyle() | WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL | WB_SYSTEMWINDOW | WB_STANDALONE | WB_HIDE);
 
     FillColorValueSets_Impl();
     m_pTabBgColorSet->SetDoubleClickHdl( HDL(TabBgColorDblClickHdl_Impl) );
@@ -69,7 +69,7 @@ void ScTabBgColorDlg::dispose()
 
 void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
 {
-    rColor = this->m_aTabBgColor;
+    rColor = m_aTabBgColor;
 }
 
 void ScTabBgColorDlg::FillColorValueSets_Impl()

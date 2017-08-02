@@ -59,7 +59,7 @@ SwFieldPortion *SwFieldPortion::Clone( const OUString &rExpand ) const
     // pass placeholder property to created <SwFieldPortion> instance.
     SwFieldPortion* pClone = new SwFieldPortion( rExpand, pNewFnt, bPlaceHolder );
     pClone->SetNextOffset( nNextOffset );
-    pClone->m_bNoLength = this->m_bNoLength;
+    pClone->m_bNoLength = m_bNoLength;
     return pClone;
 }
 

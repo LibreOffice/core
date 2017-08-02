@@ -133,7 +133,7 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
 
 void DrawViewWrapper::ReInit()
 {
-    OutputDevice* pOutDev = this->GetFirstOutputDevice();
+    OutputDevice* pOutDev = GetFirstOutputDevice();
     Size aOutputSize(100,100);
     if(pOutDev)
         aOutputSize = pOutDev->GetOutputSize();
@@ -144,13 +144,13 @@ void DrawViewWrapper::ReInit()
     mbGridVisible = false;
     mbHlplVisible = false;
 
-    this->SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
+    SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
 
     //a correct work area is at least necessary for correct values in the position and  size dialog
     tools::Rectangle aRect(Point(0,0), aOutputSize);
-    this->SetWorkArea(aRect);
+    SetWorkArea(aRect);
 
-    this->ShowSdrPage(this->GetModel()->GetPage(0));
+    ShowSdrPage(GetModel()->GetPage(0));
 }
 
 DrawViewWrapper::~DrawViewWrapper()
@@ -161,7 +161,7 @@ DrawViewWrapper::~DrawViewWrapper()
 
 SdrPageView* DrawViewWrapper::GetPageView() const
 {
-    SdrPageView* pSdrPageView = this->GetSdrPageView();
+    SdrPageView* pSdrPageView = GetSdrPageView();
     return pSdrPageView;
 };
 
@@ -226,9 +226,9 @@ void DrawViewWrapper::MarkObject( SdrObject* pObj )
     if( m_pMarkHandleProvider )
         bFrameDragSingles = m_pMarkHandleProvider->getFrameDragSingles();
 
-    this->SetFrameDragSingles(bFrameDragSingles);//decide whether each single object should get handles
-    this->SdrView::MarkObj( pObj, this->GetPageView() );
-    this->showMarkHandles();
+    SetFrameDragSingles(bFrameDragSingles);//decide whether each single object should get handles
+    SdrView::MarkObj( pObj, GetPageView() );
+    showMarkHandles();
 }
 
 void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProvider )
@@ -240,14 +240,14 @@ void DrawViewWrapper::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg
 {
     svtools::ColorConfig aColorConfig;
     Color aFillColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
-    this->SetApplicationBackgroundColor(aFillColor);
-    this->E3dView::CompleteRedraw( pOut, rReg );
+    SetApplicationBackgroundColor(aFillColor);
+    E3dView::CompleteRedraw( pOut, rReg );
 }
 
 SdrObject* DrawViewWrapper::getSelectedObject() const
 {
     SdrObject* pObj(nullptr);
-    const SdrMarkList& rMarkList = this->GetMarkedObjectList();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     if(rMarkList.GetMarkCount() == 1)
     {
         SdrMark* pMark = rMarkList.GetMark(0);
@@ -258,7 +258,7 @@ SdrObject* DrawViewWrapper::getSelectedObject() const
 
 SdrObject* DrawViewWrapper::getTextEditObject() const
 {
-    SdrObject* pObj = this->getSelectedObject();
+    SdrObject* pObj = getSelectedObject();
     SdrObject* pTextObj = nullptr;
     if( pObj && pObj->HasTextEdit())
         pTextObj = static_cast<SdrTextObj*>(pObj);
@@ -299,7 +299,7 @@ SdrObject* DrawViewWrapper::getNamedSdrObject( const OUString& rName ) const
 {
     if(rName.isEmpty())
         return nullptr;
-    SdrPageView* pSdrPageView = this->GetPageView();
+    SdrPageView* pSdrPageView = GetPageView();
     if( pSdrPageView )
     {
         return DrawModelWrapper::getNamedSdrObject( rName, pSdrPageView->GetObjList() );
@@ -320,14 +320,14 @@ bool DrawViewWrapper::IsObjectHit( SdrObject const * pObj, const Point& rPnt )
 void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     //prevent wrong reselection of objects
-    SdrModel* pSdrModel( this->GetModel() );
+    SdrModel* pSdrModel( GetModel() );
     if( pSdrModel && pSdrModel->isLocked() )
         return;
 
     const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
 
     //#i76053# do nothing when only changes on the hidden draw page were made ( e.g. when the symbols for the dialogs are created )
-    SdrPageView* pSdrPageView = this->GetPageView();
+    SdrPageView* pSdrPageView = GetPageView();
     if( pSdrHint && pSdrPageView )
     {
         if( pSdrPageView->GetPage() != pSdrHint->GetPage() )
@@ -343,7 +343,7 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         {
             // #i79965# remember map mode
             OSL_ASSERT( ! m_bRestoreMapMode );
-            OutputDevice* pOutDev = this->GetFirstOutputDevice();
+            OutputDevice* pOutDev = GetFirstOutputDevice();
             if( pOutDev )
             {
                 m_aMapModeToRestore = pOutDev->GetMapMode();
@@ -356,7 +356,7 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             OSL_ASSERT( m_bRestoreMapMode );
             if( m_bRestoreMapMode )
             {
-                OutputDevice* pOutDev = this->GetFirstOutputDevice();
+                OutputDevice* pOutDev = GetFirstOutputDevice();
                 if( pOutDev )
                 {
                     pOutDev->SetMapMode( m_aMapModeToRestore );

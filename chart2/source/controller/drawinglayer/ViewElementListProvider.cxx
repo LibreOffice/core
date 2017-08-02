@@ -146,7 +146,7 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
 
 Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, const SfxItemSet* pSymbolShapeProperties ) const
 {
-    SdrObjList* pSymbolList = this->GetSymbolList();
+    SdrObjList* pSymbolList = GetSymbolList();
     if( !pSymbolList->GetObjCount() )
         return Graphic();
     if(nStandardSymbol<0)

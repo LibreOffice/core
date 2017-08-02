@@ -792,7 +792,7 @@ ScFormulaGroupIterator::ScFormulaGroupIterator( ScDocument* pDoc ) :
 
 sc::FormulaGroupEntry* ScFormulaGroupIterator::first()
 {
-    return this->next();
+    return next();
 }
 
 sc::FormulaGroupEntry* ScFormulaGroupIterator::next()

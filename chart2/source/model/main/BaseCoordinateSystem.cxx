@@ -230,7 +230,7 @@ Reference< chart2::XAxis > SAL_CALL BaseCoordinateSystem::getAxisByDimension(
 
     OSL_ASSERT( m_aAllAxis.size() == static_cast< size_t >( getDimension()));
 
-    if( nAxisIndex < 0 || nAxisIndex > this->getMaximumAxisIndexByDimension(nDimensionIndex) )
+    if( nAxisIndex < 0 || nAxisIndex > getMaximumAxisIndexByDimension(nDimensionIndex) )
         throw lang::IndexOutOfBoundsException();
 
     return m_aAllAxis[ nDimensionIndex ][nAxisIndex];

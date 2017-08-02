@@ -67,7 +67,7 @@ void VCartesianCoordinateSystem::createGridShapes()
         return;
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    bool bSwapXAndY = this->getPropertySwapXAndYAxis();
+    bool bSwapXAndY = getPropertySwapXAndYAxis();
 
     for( sal_Int32 nDimensionIndex=0; nDimensionIndex<3; nDimensionIndex++)
     {
@@ -77,15 +77,15 @@ void VCartesianCoordinateSystem::createGridShapes()
             continue;
 
         VCartesianGrid aGrid(nDimensionIndex,nDimensionCount, getGridListFromAxis( xAxis ));
-        aGrid.setExplicitScaleAndIncrement( this->getExplicitScale(nDimensionIndex,nAxisIndex)
-                            , this->getExplicitIncrement(nDimensionIndex,nAxisIndex) );
+        aGrid.setExplicitScaleAndIncrement( getExplicitScale(nDimensionIndex,nAxisIndex)
+                            , getExplicitIncrement(nDimensionIndex,nAxisIndex) );
         aGrid.set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
         aGrid.initPlotter(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory
-            , this->createCIDForGrid( nDimensionIndex,nAxisIndex ) );
+            , createCIDForGrid( nDimensionIndex,nAxisIndex ) );
         if(nDimensionCount==2)
             aGrid.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-        aGrid.setScales( this->getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
+        aGrid.setScales( getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
         aGrid.createShapes();
     }
 }
@@ -104,7 +104,7 @@ void VCartesianCoordinateSystem::createVAxisList(
     m_aAxisMap.clear();
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    bool bSwapXAndY = this->getPropertySwapXAndYAxis();
+    bool bSwapXAndY = getPropertySwapXAndYAxis();
 
     if(nDimensionCount<=0)
         return;
@@ -118,11 +118,11 @@ void VCartesianCoordinateSystem::createVAxisList(
         sal_Int32 nMaxAxisIndex = m_xCooSysModel->getMaximumAxisIndexByDimension(nDimensionIndex);
         for( sal_Int32 nAxisIndex = 0; nAxisIndex <= nMaxAxisIndex; nAxisIndex++ )
         {
-            Reference< XAxis > xAxis = this->getAxisByDimension(nDimensionIndex,nAxisIndex);
+            Reference< XAxis > xAxis = getAxisByDimension(nDimensionIndex,nAxisIndex);
             if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
                 continue;
 
-            AxisProperties aAxisProperties(xAxis,this->getExplicitCategoriesProvider());
+            AxisProperties aAxisProperties(xAxis,getExplicitCategoriesProvider());
             aAxisProperties.m_nDimensionIndex = nDimensionIndex;
             aAxisProperties.m_bSwapXAndY = bSwapXAndY;
             aAxisProperties.m_bIsMainAxis = (nAxisIndex==0);
@@ -146,7 +146,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             }
             aAxisProperties.init(true);
             if(aAxisProperties.m_bDisplayLabels)
-                aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis(xAxis, xChartDoc);
+                aAxisProperties.m_nNumberFormatKey = getNumberFormatKeyForAxis(xAxis, xChartDoc);
 
             std::shared_ptr< VAxisBase > apVAxis( new VCartesianAxis(aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
@@ -164,7 +164,7 @@ void VCartesianCoordinateSystem::initVAxisInList()
         return;
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    bool bSwapXAndY = this->getPropertySwapXAndYAxis();
+    bool bSwapXAndY = getPropertySwapXAndYAxis();
 
     tVAxisMap::iterator aIt( m_aAxisMap.begin() );
     tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
@@ -175,12 +175,12 @@ void VCartesianCoordinateSystem::initVAxisInList()
         {
             sal_Int32 nDimensionIndex = aIt->first.first;
             sal_Int32 nAxisIndex = aIt->first.second;
-            pVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
+            pVAxis->setExplicitScaleAndIncrement( getExplicitScale( nDimensionIndex, nAxisIndex ), getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
             pVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
-                , this->createCIDForAxis( nDimensionIndex, nAxisIndex ) );
+                , createCIDForAxis( nDimensionIndex, nAxisIndex ) );
             if(nDimensionCount==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            pVAxis->setScales( this->getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
+            pVAxis->setScales( getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
         }
     }
 }
@@ -191,7 +191,7 @@ void VCartesianCoordinateSystem::updateScalesAndIncrementsOnAxes()
         return;
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    bool bSwapXAndY = this->getPropertySwapXAndYAxis();
+    bool bSwapXAndY = getPropertySwapXAndYAxis();
 
     tVAxisMap::iterator aIt( m_aAxisMap.begin() );
     tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
@@ -202,10 +202,10 @@ void VCartesianCoordinateSystem::updateScalesAndIncrementsOnAxes()
         {
             sal_Int32 nDimensionIndex = aIt->first.first;
             sal_Int32 nAxisIndex = aIt->first.second;
-            pVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
+            pVAxis->setExplicitScaleAndIncrement( getExplicitScale( nDimensionIndex, nAxisIndex ), getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
             if(nDimensionCount==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            pVAxis->setScales( this->getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
+            pVAxis->setScales( getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
         }
     }
 }

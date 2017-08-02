@@ -1275,13 +1275,13 @@ void DataBrowser::RenewSeriesHeaders()
 
 void DataBrowser::ImplAdjustHeaderControls()
 {
-    sal_uInt16 nColCount = this->GetColumnCount();
-    sal_uInt32 nCurrentPos = this->GetPosPixel().getX();
-    sal_uInt32 nMaxPos = nCurrentPos + this->GetOutputSizePixel().getWidth();
+    sal_uInt16 nColCount = GetColumnCount();
+    sal_uInt32 nCurrentPos = GetPosPixel().getX();
+    sal_uInt32 nMaxPos = nCurrentPos + GetOutputSizePixel().getWidth();
     sal_uInt32 nStartPos = nCurrentPos;
 
     // width of header column
-    nCurrentPos +=  this->GetColumnWidth( 0 );
+    nCurrentPos +=  GetColumnWidth( 0 );
 
     Dialog* pDialog = GetParentDialog();
     vcl::Window* pWin = pDialog->get<VclContainer>("columns");
@@ -1301,7 +1301,7 @@ void DataBrowser::ImplAdjustHeaderControls()
         if( (*aIt)->GetStartColumn() == i )
             nStartPos = nCurrentPos;
 
-        nCurrentPos += (this->GetColumnWidth( i ));
+        nCurrentPos += (GetColumnWidth( i ));
 
         if( (*aIt)->GetEndColumn() == i )
         {

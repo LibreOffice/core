@@ -538,7 +538,7 @@ namespace svx
     }
     void SuggestionDisplay::SetHelpIds()
     {
-        this->SetHelpId( HID_HANGULDLG_SUGGESTIONS );
+        SetHelpId( HID_HANGULDLG_SUGGESTIONS );
         m_aValueSet->SetHelpId( HID_HANGULDLG_SUGGESTIONS_GRID );
         m_aListBox->SetHelpId( HID_HANGULDLG_SUGGESTIONS_LIST );
     }

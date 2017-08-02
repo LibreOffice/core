@@ -116,7 +116,7 @@ HStreamIODev::HStreamIODev(HStream * stream):_stream(stream)
 HStreamIODev::~HStreamIODev()
 {
 /* 플러시한 후 닫는다. */
-    this->flush();
+    flush();
     if (_gzfp)
         gz_close(_gzfp);
     _gzfp = nullptr;

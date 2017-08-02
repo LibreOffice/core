@@ -902,11 +902,11 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
         sal_Int32 nLevelCount = lcl_getInnerLevelCount( aCategories );
         if( nLevelCount == 1 )
         {
-            aResult = this->getDataByRangeRepresentation( lcl_aCategoriesLevelRangeNamePrefix + OUString::number( 0 ) );
+            aResult = getDataByRangeRepresentation( lcl_aCategoriesLevelRangeNamePrefix + OUString::number( 0 ) );
         }
         else
         {
-            Sequence< OUString > aLabels = m_bDataInColumns ? this->getRowDescriptions() : this->getColumnDescriptions();
+            Sequence< OUString > aLabels = m_bDataInColumns ? getRowDescriptions() : getColumnDescriptions();
             aResult.realloc( aLabels.getLength() );
             transform( aLabels.begin(), aLabels.end(),
                        aResult.getArray(), CommonFunctors::makeAny< OUString >() );

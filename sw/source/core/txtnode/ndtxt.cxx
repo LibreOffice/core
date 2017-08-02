@@ -386,7 +386,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         pNode->RegisterAsCopyOf(*this, true);
         if (nSplitPos == nTextLen)
         {
-            this->RemoveMetadataReference();
+            RemoveMetadataReference();
             // NB: SwUndoSplitNode will call pNode->JoinNext,
             // which is sufficient even in this case!
         }
@@ -642,7 +642,7 @@ SwContentNode *SwTextNode::JoinNext()
         sal_Int32 nOldLen = m_Text.getLength();
 
         // METADATA: merge
-        this->JoinMetadatable(*pTextNode, !this->Len(), !pTextNode->Len());
+        JoinMetadatable(*pTextNode, !Len(), !pTextNode->Len());
 
         SwWrongList *pList = GetWrong();
         if( pList )
@@ -1682,12 +1682,12 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     sal_Int32 nTextStartIdx = rStart.GetIndex();
     sal_Int32 nDestStart = rDestStart.GetIndex();      // remember old Pos
 
-    if (pDest->GetDoc()->IsClipBoard() && this->GetNum())
+    if (pDest->GetDoc()->IsClipBoard() && GetNum())
     {
         // #i111677# cache expansion of source (for clipboard)
         pDest->m_pNumStringCache.reset( (nTextStartIdx != 0)
             ? new OUString // fdo#49076: numbering only if copy from para start
-            : new OUString(this->GetNumString()));
+            : new OUString(GetNumString()));
     }
 
     if( !nLen )

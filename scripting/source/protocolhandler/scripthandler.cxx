@@ -112,7 +112,7 @@ const Sequence < DispatchDescriptor >& seqDescriptor )
     Sequence< Reference< XDispatch > > lDispatcher( nCount );
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        lDispatcher[ i ] = this->queryDispatch( seqDescriptor[ i ].FeatureURL,
+        lDispatcher[ i ] = queryDispatch( seqDescriptor[ i ].FeatureURL,
                                                 seqDescriptor[ i ].FrameName,
                                                 seqDescriptor[ i ].SearchFlags );
     }

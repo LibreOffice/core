@@ -41,7 +41,7 @@ namespace slideshow
         {
             // negate comparison, we want priority queue to be sorted
             // in increasing order of activation times
-            return this->nTime > rEvent.nTime;
+            return nTime > rEvent.nTime;
         }
 
 

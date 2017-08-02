@@ -273,7 +273,7 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
 void AxisProperties::init( bool bCartesian )
 {
     uno::Reference< beans::XPropertySet > xProp =
-        uno::Reference<beans::XPropertySet>::query( this->m_xAxisModel );
+        uno::Reference<beans::XPropertySet>::query( m_xAxisModel );
     if( !xProp.is() )
         return;
 
@@ -347,11 +347,11 @@ void AxisProperties::init( bool bCartesian )
         else if(m_nMajorTickmarks!=0)
             nMaxDepth=1;
 
-        this->m_aTickmarkPropertiesList.clear();
+        m_aTickmarkPropertiesList.clear();
         for( sal_Int32 nDepth=0; nDepth<nMaxDepth; nDepth++ )
         {
-            TickmarkProperties aTickmarkProperties = this->makeTickmarkProperties( nDepth );
-            this->m_aTickmarkPropertiesList.push_back( aTickmarkProperties );
+            TickmarkProperties aTickmarkProperties = makeTickmarkProperties( nDepth );
+            m_aTickmarkPropertiesList.push_back( aTickmarkProperties );
         }
     }
     catch( const uno::Exception& e )
@@ -382,26 +382,26 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
     {
         try
         {
-            xProp->getPropertyValue( "TextBreak" ) >>= this->bLineBreakAllowed;
-            xProp->getPropertyValue( "TextOverlap" ) >>= this->bOverlapAllowed;
-            xProp->getPropertyValue( "StackCharacters" ) >>= this->bStackCharacters;
-            xProp->getPropertyValue( "TextRotation" ) >>= this->fRotationAngleDegree;
+            xProp->getPropertyValue( "TextBreak" ) >>= bLineBreakAllowed;
+            xProp->getPropertyValue( "TextOverlap" ) >>= bOverlapAllowed;
+            xProp->getPropertyValue( "StackCharacters" ) >>= bStackCharacters;
+            xProp->getPropertyValue( "TextRotation" ) >>= fRotationAngleDegree;
 
             css::chart::ChartAxisArrangeOrderType eArrangeOrder;
             xProp->getPropertyValue( "ArrangeOrder" ) >>= eArrangeOrder;
             switch(eArrangeOrder)
             {
                 case css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
-                    this->eStaggering = SIDE_BY_SIDE;
+                    eStaggering = SIDE_BY_SIDE;
                     break;
                 case css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
-                    this->eStaggering = STAGGER_EVEN;
+                    eStaggering = STAGGER_EVEN;
                     break;
                 case css::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
-                    this->eStaggering = STAGGER_ODD;
+                    eStaggering = STAGGER_ODD;
                     break;
                 default:
-                    this->eStaggering = STAGGER_AUTO;
+                    eStaggering = STAGGER_AUTO;
                     break;
             }
         }

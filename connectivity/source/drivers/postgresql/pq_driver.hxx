@@ -74,7 +74,7 @@ class Driver : public MutexHolder, public DriverBase
 
 public:
     explicit Driver ( const css::uno::Reference < css::uno::XComponentContext > & ctx )
-        : DriverBase( this->m_mutex ),
+        : DriverBase( m_mutex ),
           m_ctx( ctx ),
           m_smgr( ctx->getServiceManager() )
     {}

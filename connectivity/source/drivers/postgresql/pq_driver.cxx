@@ -169,7 +169,7 @@ public:
         cppu::ComponentFactoryFunc fptr,
         const Sequence< OUString > & serviceNames,
         const Reference< XComponentContext > & defaultContext) :
-        cppu::WeakComponentImplHelper< XSingleComponentFactory, XServiceInfo >( this->m_mutex ),
+        cppu::WeakComponentImplHelper< XSingleComponentFactory, XServiceInfo >( m_mutex ),
         m_create( fptr ),
         m_serviceNames( serviceNames ),
         m_implName( rImplementationName_ ),

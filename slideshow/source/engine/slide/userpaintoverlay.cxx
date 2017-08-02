@@ -75,7 +75,7 @@ namespace slideshow
                 mbActive( bActive )
             {
                 for( const auto& rView : rViews )
-                    this->viewAdded( rView );
+                    viewAdded( rView );
 
                 drawPolygons();
             }
@@ -114,14 +114,14 @@ namespace slideshow
             {
                 mbIsLastPointValid = false;
                 mbActive = true;
-                this->maStrokeColor = rUserColor;
-                this->mbIsEraseModeActivated = false;
+                maStrokeColor = rUserColor;
+                mbIsEraseModeActivated = false;
                 return true;
             }
 
             bool widthChanged( double nUserStrokeWidth ) override
             {
-                this->mnStrokeWidth = nUserStrokeWidth;
+                mnStrokeWidth = nUserStrokeWidth;
                 mbIsEraseModeActivated = false;
                 return true;
             }
@@ -163,7 +163,7 @@ namespace slideshow
 
             bool eraseAllInkChanged( bool bEraseAllInk ) override
             {
-                this->mbIsEraseAllModeActivated = bEraseAllInk;
+                mbIsEraseAllModeActivated = bEraseAllInk;
                 // if the erase all mode is activated it will remove all ink from slide,
                 // therefore destroy all the polygons stored
                 if(mbIsEraseAllModeActivated)
@@ -180,9 +180,9 @@ namespace slideshow
             bool eraseInkWidthChanged( sal_Int32 rEraseInkSize ) override
             {
                 // Change the size
-                this->mnSize=rEraseInkSize;
+                mnSize=rEraseInkSize;
                 // Changed to mode Erase
-                this->mbIsEraseModeActivated = true;
+                mbIsEraseModeActivated = true;
                 return true;
             }
 
@@ -190,7 +190,7 @@ namespace slideshow
             {
                 mbIsLastPointValid = false;
                 mbActive = true;
-                this->mbIsEraseModeActivated = false;
+                mbIsEraseModeActivated = false;
                 return true;
             }
 
@@ -198,7 +198,7 @@ namespace slideshow
             {
                 mbIsLastPointValid = false;
                 mbActive = true;
-                this->mbIsEraseModeActivated = true;
+                mbIsEraseModeActivated = true;
                 return true;
             }
 

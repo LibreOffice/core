@@ -990,7 +990,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
             bool bAllowGrowVertical = !bVerticalWriting;
             bool bAllowGrowHorizontal = bVerticalWriting;
             // Compatibility mode for tdf#99729
-            if (this->pModel->IsAnchoredTextOverflowLegacy())
+            if (pModel->IsAnchoredTextOverflowLegacy())
             {
                 bAllowGrowVertical = bHorizontalIsBlock;
                 bAllowGrowHorizontal = bVerticalIsBlock;

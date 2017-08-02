@@ -138,7 +138,7 @@ bool Ppt97Animation::GetSpecialDuration( double& rfDurationInSeconds ) const
 bool Ppt97Animation::GetSpecialTextIterationDelay( double& rfTextIterationDelay ) const
 {
     bool bRet = false;
-    switch(this->GetTextAnimationType())
+    switch(GetTextAnimationType())
     {
     case presentation::TextAnimationType::BY_LETTER:
             rfTextIterationDelay = 0.075;
@@ -163,10 +163,10 @@ void Ppt97Animation::SetAnimateAssociatedShape( bool bAnimate )
     if( !bAnimate )
     {
         //the appear effect cannot be animated without text
-        if( this->GetPresetId() == "ooo-entrance-appear" )
+        if( GetPresetId() == "ooo-entrance-appear" )
             return;
         //the random effect may be the appear effect and than has the same problem
-        if( this->GetPresetId() == "ooo-entrance-random" )
+        if( GetPresetId() == "ooo-entrance-random" )
         {
             //this case is not 100% correct -> feel free to complete
             //i consider this case as seldom and not that problematic and a simple correct fix is not in sight
@@ -545,7 +545,7 @@ void Ppt97Animation::UpdateCacheData() const
 void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
 {
 
-    if( !this->HasEffect() )
+    if( !HasEffect() )
         return;
     if( !pObj || !pObj->GetPage() )
     {
@@ -567,7 +567,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     }
 
     const ::sd::CustomAnimationPresets& rPresets( ::sd::CustomAnimationPresets::getCustomAnimationPresets() );
-    ::sd::CustomAnimationPresetPtr pPreset( rPresets.getEffectDescriptor( this->GetPresetId() ) );
+    ::sd::CustomAnimationPresetPtr pPreset( rPresets.getEffectDescriptor( GetPresetId() ) );
     if( !pPreset.get() )
     {
         OSL_FAIL("no suitable preset found for ppt import");
@@ -577,7 +577,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     //--------------start doing something
 
     //1. ------ create an effect from the presets ------
-    ::sd::CustomAnimationEffectPtr pEffect( new ::sd::CustomAnimationEffect( pPreset->create( this->GetPresetSubType() ) ) );
+    ::sd::CustomAnimationEffectPtr pEffect( new ::sd::CustomAnimationEffect( pPreset->create( GetPresetSubType() ) ) );
     if( !pEffect.get() )
     {
         DBG_ASSERT(pEffect.get(),"no suitable effect found");
@@ -589,57 +589,57 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     // set the shape targeted by this effect
     pEffect->setTarget( makeAny( xShape ) );
 
-    pEffect->setBegin( this->GetDelayTimeInSeconds() );
+    pEffect->setBegin( GetDelayTimeInSeconds() );
 
     // some effects need a different duration than that of the mapped preset effect
     double fDurationInSeconds = 1.0; //in seconds
-    if( this->GetSpecialDuration( fDurationInSeconds ) )
+    if( GetSpecialDuration( fDurationInSeconds ) )
         pEffect->setDuration( fDurationInSeconds );
 
     // set after effect
-    if( this->HasAfterEffect() )
+    if( HasAfterEffect() )
     {
         pEffect->setHasAfterEffect( true );
-        if( this->HasAfterEffect_ChangeColor() )
-            pEffect->setDimColor( uno::makeAny( this->GetDimColor() ) );
+        if( HasAfterEffect_ChangeColor() )
+            pEffect->setDimColor( uno::makeAny( GetDimColor() ) );
         else
-            pEffect->setAfterEffectOnNext( this->HasAfterEffect_DimAtNextEffect() );
+            pEffect->setAfterEffectOnNext( HasAfterEffect_DimAtNextEffect() );
     }
 
     // set sound effect
-    if( this->HasSoundEffect() )
+    if( HasSoundEffect() )
         pEffect->createAudio( uno::makeAny( m_aSoundFileUrl ) );
 
     // text iteration
-    pEffect->setIterateType( this->GetTextAnimationType() );
+    pEffect->setIterateType( GetTextAnimationType() );
 
     // some effects need a different delay between text iteration than that of the mapped preset effect
     double fTextIterationDelay = 1.0;
-    if( this->GetSpecialTextIterationDelay( fTextIterationDelay ) )
+    if( GetSpecialTextIterationDelay( fTextIterationDelay ) )
         pEffect->setIterateInterval( fTextIterationDelay );
 
     // is the effect started on click or after the last effect (Another possible value is EffectNodeType::WITH_PREVIOUS )
-    pEffect->setNodeType( this->GetEffectNodeType() );
+    pEffect->setNodeType( GetEffectNodeType() );
 
     //set stop sound effect
-    if( this->HasStopPreviousSound() )
+    if( HasStopPreviousSound() )
         pEffect->setStopAudio();
 
     // append the effect to the main sequence
-    if( !this->HasParagraphEffect() )
+    if( !HasParagraphEffect() )
     {
-        // TODO: !this->HasAnimateAssociatedShape() can possibly have this set to ONLY_TEXT - see i#42737
+        // TODO: !HasAnimateAssociatedShape() can possibly have this set to ONLY_TEXT - see i#42737
         pEffect->setTargetSubItem( presentation::ShapeAnimationSubType::AS_WHOLE );
     }
 
     //3. ------ put the created effect to the model and do some last changes fro paragraph effects ------
     pMainSequence->append( pEffect );
-    if( this->HasParagraphEffect() )
+    if( HasParagraphEffect() )
     {
-        sal_Int32 nParagraphLevel = this->GetParagraphLevel();
-        double fDelaySeconds = this->GetDelayTimeInSeconds();
-        bool bAnimateAssociatedShape = this->HasAnimateAssociatedShape();//or only text
-        bool bTextReverse = this->HasReverseOrder();
+        sal_Int32 nParagraphLevel = GetParagraphLevel();
+        double fDelaySeconds = GetDelayTimeInSeconds();
+        bool bAnimateAssociatedShape = HasAnimateAssociatedShape();//or only text
+        bool bTextReverse = HasReverseOrder();
 
         // now create effects for each paragraph
         ::sd::CustomAnimationTextGroupPtr pGroup = pMainSequence->
@@ -656,11 +656,11 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
             {
                 ::sd::CustomAnimationEffectPtr pGroupEffect(*aIter);
 
-                ////todo? if( nIndex > 1 && pLastEffect && this->HasSoundEffect() )
+                ////todo? if( nIndex > 1 && pLastEffect && HasSoundEffect() )
                 ////          pLastEffect->setStopAudio();
                 if( nIndex < 2  )
                 {
-                    pGroupEffect->setNodeType( this->GetEffectNodeType() );
+                    pGroupEffect->setNodeType( GetEffectNodeType() );
                 }
                 else if( nIndex > 0 )
                 {
@@ -670,8 +670,8 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
                     else
                         bAtParagraphBegin = !pLastEffect || pLastEffect->getParaDepth() < nParagraphLevel;
                     if( bAtParagraphBegin )
-                        pGroupEffect->setNodeType( this->GetEffectNodeType() );
-                    else if( this->GetTextAnimationType() == presentation::TextAnimationType::BY_PARAGRAPH )
+                        pGroupEffect->setNodeType( GetEffectNodeType() );
+                    else if( GetTextAnimationType() == presentation::TextAnimationType::BY_PARAGRAPH )
                         pGroupEffect->setNodeType( presentation::EffectNodeType::WITH_PREVIOUS );
                     else
                         pGroupEffect->setNodeType( presentation::EffectNodeType::AFTER_PREVIOUS );

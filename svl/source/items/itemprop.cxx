@@ -58,7 +58,7 @@ public:
 
 SfxItemPropertyMap_Impl::SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl* pSource )
 {
-    this->SfxItemPropertyHashMap_t::operator=( *pSource );
+    SfxItemPropertyHashMap_t::operator=( *pSource );
     m_aPropSeq = pSource->m_aPropSeq;
 }
 

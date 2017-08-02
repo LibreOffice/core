@@ -1285,7 +1285,7 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
     {
         for (auto const& rURL : aMakeVisibleToolbars)
         {
-            this->requestToolbar(rURL);
+            requestToolbar(rURL);
         }
     }
 }

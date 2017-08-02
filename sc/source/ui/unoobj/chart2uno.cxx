@@ -1977,7 +1977,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         uno::Reference< chart2::data::XDataSource > xCompareDataSource;
         try
         {
-            xCompareDataSource.set( this->createDataSource( comphelper::containerToSequence( aResult ) ) );
+            xCompareDataSource.set( createDataSource( comphelper::containerToSequence( aResult ) ) );
         }
         catch( const lang::IllegalArgumentException & )
         {

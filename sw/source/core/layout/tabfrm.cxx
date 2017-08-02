@@ -951,10 +951,10 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
 
     // #i26745# - format row and cell frames of table
     {
-        this->Lower()->InvalidatePos_();
+        Lower()->InvalidatePos_();
         // #i43913# - correction
         // call method <lcl_InnerCalcLayout> with first lower.
-        lcl_InnerCalcLayout( this->Lower(), LONG_MAX, true );
+        lcl_InnerCalcLayout( Lower(), LONG_MAX, true );
     }
 
     //In order to be able to compare the positions of the cells with CutPos,

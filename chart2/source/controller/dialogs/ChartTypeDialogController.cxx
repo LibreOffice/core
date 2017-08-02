@@ -87,24 +87,24 @@ ChartTypeParameter::ChartTypeParameter( sal_Int32 SubTypeIndex, bool HasXAxisWit
 
 bool ChartTypeParameter::mapsToSameService( const ChartTypeParameter& rParameter ) const
 {
-    return this->mapsToSimilarService( rParameter, 0 );
+    return mapsToSimilarService( rParameter, 0 );
 }
 bool ChartTypeParameter::mapsToSimilarService( const ChartTypeParameter& rParameter, sal_Int32 nTheHigherTheLess ) const
 {
     sal_Int32 nMax=7;
     if(nTheHigherTheLess>nMax)
         return true;
-    if( this->bXAxisWithValues!=rParameter.bXAxisWithValues )
+    if( bXAxisWithValues!=rParameter.bXAxisWithValues )
         return nTheHigherTheLess>nMax-1;
-    if( this->b3DLook!=rParameter.b3DLook )
+    if( b3DLook!=rParameter.b3DLook )
         return nTheHigherTheLess>nMax-2;
-    if( this->eStackMode!=rParameter.eStackMode )
+    if( eStackMode!=rParameter.eStackMode )
         return nTheHigherTheLess>nMax-3;
-    if( this->nSubTypeIndex!=rParameter.nSubTypeIndex )
+    if( nSubTypeIndex!=rParameter.nSubTypeIndex )
         return nTheHigherTheLess>nMax-4;
-    if( this->bSymbols!=rParameter.bSymbols )
+    if( bSymbols!=rParameter.bSymbols )
         return nTheHigherTheLess>nMax-5;
-    if( this->bLines!=rParameter.bLines )
+    if( bLines!=rParameter.bLines )
         return nTheHigherTheLess>nMax-6;
     return true;
 }
@@ -124,7 +124,7 @@ Image ChartTypeDialogController::getImage()
 }
 bool ChartTypeDialogController::isSubType( const OUString& rServiceName )
 {
-    const tTemplateServiceChartTypeParameterMap& rTemplateMap = this->getTemplateMap();
+    const tTemplateServiceChartTypeParameterMap& rTemplateMap = getTemplateMap();
     tTemplateServiceChartTypeParameterMap::const_iterator aIt( rTemplateMap.find( rServiceName ));
     return aIt != rTemplateMap.end();
 }
@@ -133,7 +133,7 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
                                                     , const uno::Reference< beans::XPropertySet >& xTemplateProps )
 {
     ChartTypeParameter aRet;
-    const tTemplateServiceChartTypeParameterMap& rTemplateMap = this->getTemplateMap();
+    const tTemplateServiceChartTypeParameterMap& rTemplateMap = getTemplateMap();
     tTemplateServiceChartTypeParameterMap::const_iterator aIt( rTemplateMap.find( rServiceName ));
     if( aIt != rTemplateMap.end())
         aRet = (*aIt).second;
@@ -275,7 +275,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
 {
     uno::Reference< XChartTypeTemplate > xTemplate(nullptr);
 
-    OUString aServiceName( this->getServiceNameForParameter( rParameter ) );
+    OUString aServiceName( getServiceNameForParameter( rParameter ) );
     if(!aServiceName.isEmpty())
     {
         xTemplate.set( xTemplateManager->createInstance( aServiceName ), uno::UNO_QUERY );
@@ -315,7 +315,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
 
                 try
                 {
-                    this->setTemplateProperties( xTemplateProps );
+                    setTemplateProperties( xTemplateProps );
                 }
                 catch( const uno::Exception & ex )
                 {
@@ -331,7 +331,7 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
                 , const uno::Reference< XChartDocument >& xChartModel )
 {
     uno::Reference< lang::XMultiServiceFactory > xTemplateManager( xChartModel->getChartTypeManager(), uno::UNO_QUERY );
-    uno::Reference< XChartTypeTemplate > xTemplate( this->getCurrentTemplate( rParameter, xTemplateManager ) );
+    uno::Reference< XChartTypeTemplate > xTemplate( getCurrentTemplate( rParameter, xTemplateManager ) );
     if(xTemplate.is())
     {
         uno::Reference< frame::XModel > xModel( xChartModel, uno::UNO_QUERY);

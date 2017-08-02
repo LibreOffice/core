@@ -459,11 +459,11 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
             const OUString aOffsetPropName( "Offset" );
             // get offset mode
             chart2::PieChartOffsetMode ePieOffsetMode;
-            this->getFastPropertyValue( PROP_PIE_TEMPLATE_OFFSET_MODE ) >>= ePieOffsetMode;
+            getFastPropertyValue( PROP_PIE_TEMPLATE_OFFSET_MODE ) >>= ePieOffsetMode;
 
             // get default offset
             double fDefaultOffset = 0.5;
-            this->getFastPropertyValue( PROP_PIE_TEMPLATE_DEFAULT_OFFSET ) >>= fDefaultOffset;
+            getFastPropertyValue( PROP_PIE_TEMPLATE_DEFAULT_OFFSET ) >>= fDefaultOffset;
             double fOffsetToSet = fDefaultOffset;
 
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;

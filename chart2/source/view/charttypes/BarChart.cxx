@@ -85,7 +85,7 @@ drawing::Direction3D BarChart::getPreferredDiagramAspectRatio() const
     if( m_nDimension == 3 )
     {
         aRet = drawing::Direction3D(1.0,-1.0,1.0);
-        BarPositionHelper* pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( MAIN_AXIS_INDEX) ) );
+        BarPositionHelper* pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( MAIN_AXIS_INDEX) ) );
         if (pPosHelper)
         {
             drawing::Direction3D aScale( pPosHelper->getScaledLogicWidth() );
@@ -498,7 +498,7 @@ void BarChart::createShapes()
                 {
                     nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
                     //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
-                    pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( nAttachedAxisIndex ) ) );
+                    pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                     if(!pPosHelper)
                         pPosHelper = m_pMainPosHelper.get();
                 }
@@ -874,7 +874,7 @@ void BarChart::createShapes()
             {
                 sal_Int32 nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
                 //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
-                pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( nAttachedAxisIndex ) ) );
+                pPosHelper = dynamic_cast<BarPositionHelper*>(&( getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                 if(!pPosHelper)
                     pPosHelper = m_pMainPosHelper.get();
             }

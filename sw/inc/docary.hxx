@@ -127,7 +127,7 @@ public:
         for (const_iterator it = begin() + aStartIdx;
                             it != begin() + aEndIdx; ++it)
             delete *it;
-        this->erase( begin() + aStartIdx, begin() + aEndIdx);
+        erase( begin() + aStartIdx, begin() + aEndIdx);
     }
 
     size_t GetPos(Value const& p) const

@@ -257,7 +257,7 @@ void SAL_CALL BarChartTypeTemplate::applyStyle(
         {
             //apply Geometry3D
             uno::Any aAGeometry3D;
-            this->getFastPropertyValue( aAGeometry3D, PROP_BAR_TEMPLATE_GEOMETRY3D );
+            getFastPropertyValue( aAGeometry3D, PROP_BAR_TEMPLATE_GEOMETRY3D );
             DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "Geometry3D", aAGeometry3D );
         }
         catch( const uno::Exception & ex )

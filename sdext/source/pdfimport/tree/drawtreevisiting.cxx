@@ -51,7 +51,7 @@ const Reference< XBreakIterator >& DrawXmlOptimizer::GetBreakIterator()
 {
     if ( !mxBreakIter.is() )
     {
-        Reference< XComponentContext > xContext( this->m_rProcessor.m_xContext, uno::UNO_SET_THROW );
+        Reference< XComponentContext > xContext( m_rProcessor.m_xContext, uno::UNO_SET_THROW );
         mxBreakIter = BreakIterator::create(xContext);
     }
     return mxBreakIter;

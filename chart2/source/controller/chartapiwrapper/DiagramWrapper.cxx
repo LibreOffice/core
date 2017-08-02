@@ -727,7 +727,7 @@ awt::Point SAL_CALL DiagramWrapper::getPosition()
 void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
-    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
+    Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
     if( xProp.is() )
     {
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
@@ -757,7 +757,7 @@ awt::Size SAL_CALL DiagramWrapper::getSize()
 void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
-    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
+    Reference< beans::XPropertySet > xProp( getInnerPropertySet() );
     if( xProp.is() )
     {
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
@@ -790,7 +790,7 @@ OUString SAL_CALL DiagramWrapper::getShapeType()
 void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning()
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
-    uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
     {
         xDiaProps->setPropertyValue( "RelativeSize", Any() );
@@ -799,7 +799,7 @@ void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning()
 }
 sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  )
 {
-    uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
     {
         Any aRelativeSize( xDiaProps->getPropertyValue( "RelativeSize" ) );
@@ -813,13 +813,13 @@ void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectan
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
-    uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::Any(true) );
 }
 sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning()
 {
-    uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
     {
         Any aRelativeSize( xDiaProps->getPropertyValue( "RelativeSize" ) );
@@ -841,7 +841,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectan
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
-    uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xDiaProps( getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::Any(false) );
 }
@@ -1487,7 +1487,7 @@ private: //member
 WrappedNumberOfLinesProperty::WrappedNumberOfLinesProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
             : WrappedProperty("NumberOfLines",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
-            , m_aOuterValue( this->getPropertyDefault(nullptr) )
+            , m_aOuterValue( getPropertyDefault(nullptr) )
 {
 }
 

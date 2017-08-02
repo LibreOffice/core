@@ -1616,7 +1616,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
         {
             //also handle not sfx based ole objects e.g. charts
             //#i83860# resizing charts in impress distorts fonts
-            uno::Reference< embed::XVisualObject > xVisualObject( this->getXModel(), uno::UNO_QUERY );
+            uno::Reference< embed::XVisualObject > xVisualObject( getXModel(), uno::UNO_QUERY );
             if( xVisualObject.is() )
             {
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );

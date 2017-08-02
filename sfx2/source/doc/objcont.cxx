@@ -132,7 +132,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
     ScopedVclPtrInstance< VirtualDevice > pDevice;
     pDevice->EnableOutput( false );
 
-    MapMode aMode( this->GetMapUnit() );
+    MapMode aMode( GetMapUnit() );
     pDevice->SetMapMode( aMode );
     xFile->SetPrefMapMode( aMode );
 

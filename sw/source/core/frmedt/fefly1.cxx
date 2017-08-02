@@ -772,7 +772,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
     SwFlyFrameFormat* pFormat = nullptr;
     SET_CURR_SHELL( this );
     StartAllAction();
-    SwShellCursor *pStartCursor = dynamic_cast<SwShellCursor*>(this->GetSwCursor());
+    SwShellCursor *pStartCursor = dynamic_cast<SwShellCursor*>(GetSwCursor());
     SwShellCursor *pCursor = pStartCursor;
     do
     {

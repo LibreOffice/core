@@ -1013,7 +1013,7 @@ OUString SwPaM::GetText() const
 
 void SwPaM::InvalidatePaM()
 {
-    const SwNode &_pNd = this->GetNode();
+    const SwNode &_pNd = GetNode();
     const SwTextNode *_pTextNd = _pNd.GetTextNode();
     if (_pTextNd != nullptr)
     {

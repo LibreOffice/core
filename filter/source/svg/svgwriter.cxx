@@ -1530,10 +1530,10 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
         return;
 
     bool bStandAloneTextPortion = false;
-    if( !this->isTextShapeStarted() )
+    if( !isTextShapeStarted() )
     {
         bStandAloneTextPortion = true;
-        this->startTextShape();
+        startTextShape();
     }
 
     mbLineBreak = false;
@@ -1602,7 +1602,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
 
     if( bStandAloneTextPortion )
     {
-        this->endTextShape();
+        endTextShape();
     }
 }
 

@@ -70,7 +70,7 @@ void ConfigurationControllerResourceManager::ActivateResources (
         rResources.begin(),
         rResources.end(),
         [&] (Reference<XResourceId> const& xResource) {
-            return this->ActivateResource(xResource, rxConfiguration);
+            return ActivateResource(xResource, rxConfiguration);
         } );
 }
 
@@ -86,7 +86,7 @@ void ConfigurationControllerResourceManager::DeactivateResources (
         rResources.rbegin(),
         rResources.rend(),
         [&] (Reference<XResourceId> const& xResource) {
-            return this->DeactivateResource(xResource, rxConfiguration);
+            return DeactivateResource(xResource, rxConfiguration);
         } );
 }
 

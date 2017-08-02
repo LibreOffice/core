@@ -282,9 +282,9 @@ struct TagAttribute
                   const OUString &s_Type ,
                   const OUString &s_Value )
     {
-        this->sName     = s_Name;
-        this->sType     = s_Type;
-        this->sValue    = s_Value;
+        sName     = s_Name;
+        sType     = s_Type;
+        sValue    = s_Value;
     }
 
     OUString sName;

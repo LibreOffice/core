@@ -354,7 +354,7 @@ IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox&, rLb, void )
 void ScImportOptionsDlg::SaveImportOptions() const
 {
     std::shared_ptr < comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Calc::Dialogs::CSVExport::CharSet::set(this->m_pLbCharset->GetSelectTextEncoding(), batch);
+    officecfg::Office::Calc::Dialogs::CSVExport::CharSet::set(m_pLbCharset->GetSelectTextEncoding(), batch);
     officecfg::Office::Calc::Dialogs::CSVExport::FieldSeparator::set(m_pEdFieldSep->GetText(), batch);
     officecfg::Office::Calc::Dialogs::CSVExport::TextSeparator::set(m_pEdTextSep->GetText(), batch);
     officecfg::Office::Calc::Dialogs::CSVExport::FixedWidth::set(m_pCbFixed->IsChecked(), batch);

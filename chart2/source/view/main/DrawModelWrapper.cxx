@@ -148,7 +148,7 @@ uno::Reference< uno::XInterface > DrawModelWrapper::createUnoModel()
 
 uno::Reference< frame::XModel > DrawModelWrapper::getUnoModel()
 {
-    uno::Reference< uno::XInterface > xI = this->SdrModel::getUnoModel();
+    uno::Reference< uno::XInterface > xI = SdrModel::getUnoModel();
     return uno::Reference<frame::XModel>::query( xI );
 }
 
@@ -159,7 +159,7 @@ SdrModel& DrawModelWrapper::getSdrModel()
 
 uno::Reference< lang::XMultiServiceFactory > DrawModelWrapper::getShapeFactory()
 {
-    uno::Reference< lang::XMultiServiceFactory > xShapeFactory( this->getUnoModel(), uno::UNO_QUERY );
+    uno::Reference< lang::XMultiServiceFactory > xShapeFactory( getUnoModel(), uno::UNO_QUERY );
     return xShapeFactory;
 }
 
@@ -189,14 +189,14 @@ uno::Reference< drawing::XDrawPage > const & DrawModelWrapper::getMainDrawPage()
     //ensure that additional shapes are in front of the chart objects so create the chart root before
     // let us disable this call for now
     // TODO:moggi
-    // AbstractShapeFactory::getOrCreateShapeFactory(this->getShapeFactory())->getOrCreateChartRootShape( m_xMainDrawPage );
+    // AbstractShapeFactory::getOrCreateShapeFactory(getShapeFactory())->getOrCreateChartRootShape( m_xMainDrawPage );
     return m_xMainDrawPage;
 }
 uno::Reference< drawing::XDrawPage > const & DrawModelWrapper::getHiddenDrawPage()
 {
     if( !m_xHiddenDrawPage.is() )
     {
-        uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSuplier( this->getUnoModel(), uno::UNO_QUERY );
+        uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSuplier( getUnoModel(), uno::UNO_QUERY );
         if( xDrawPagesSuplier.is() )
         {
             uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSuplier->getDrawPages () );
@@ -240,13 +240,13 @@ uno::Reference< drawing::XShapes > DrawModelWrapper::getChartRootShape(
 
 void DrawModelWrapper::lockControllers()
 {
-    uno::Reference< frame::XModel > xDrawModel( this->getUnoModel() );
+    uno::Reference< frame::XModel > xDrawModel( getUnoModel() );
     if( xDrawModel.is())
         xDrawModel->lockControllers();
 }
 void DrawModelWrapper::unlockControllers()
 {
-    uno::Reference< frame::XModel > xDrawModel( this->getUnoModel() );
+    uno::Reference< frame::XModel > xDrawModel( getUnoModel() );
     if( xDrawModel.is())
         xDrawModel->unlockControllers();
 }
@@ -258,36 +258,36 @@ OutputDevice* DrawModelWrapper::getReferenceDevice() const
 
 SfxItemPool& DrawModelWrapper::GetItemPool()
 {
-    return this->SdrModel::GetItemPool();
+    return SdrModel::GetItemPool();
 }
 XColorListRef DrawModelWrapper::GetColorList() const
 {
-    return this->SdrModel::GetColorList();
+    return SdrModel::GetColorList();
 }
 XDashListRef DrawModelWrapper::GetDashList() const
 {
-    return this->SdrModel::GetDashList();
+    return SdrModel::GetDashList();
 }
 XLineEndListRef DrawModelWrapper::GetLineEndList() const
 {
-    return this->SdrModel::GetLineEndList();
+    return SdrModel::GetLineEndList();
 }
 XGradientListRef DrawModelWrapper::GetGradientList() const
 {
-    return this->SdrModel::GetGradientList();
+    return SdrModel::GetGradientList();
 }
 XHatchListRef DrawModelWrapper::GetHatchList() const
 {
-    return this->SdrModel::GetHatchList();
+    return SdrModel::GetHatchList();
 }
 XBitmapListRef DrawModelWrapper::GetBitmapList() const
 {
-    return this->SdrModel::GetBitmapList();
+    return SdrModel::GetBitmapList();
 }
 
 XPatternListRef DrawModelWrapper::GetPatternList() const
 {
-    return this->SdrModel::GetPatternList();
+    return SdrModel::GetPatternList();
 }
 
 SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rName )

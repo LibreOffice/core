@@ -210,7 +210,7 @@ void TickFactory2D::addPointSequenceForTickLine( drawing::PointSequenceSequence&
     if( fInnerDirectionSign==0.0 )
         fInnerDirectionSign = 1.0;
 
-    B2DVector aTickScreenPosition = this->getTickScreenPosition2D(fScaledLogicTickValue);
+    B2DVector aTickScreenPosition = getTickScreenPosition2D(fScaledLogicTickValue);
     if( bPlaceAtLabels )
         aTickScreenPosition += m_aAxisLineToLabelLineShift;
 
@@ -305,7 +305,7 @@ void TickFactory2D::updateScreenValues( TickInfoArraysType& rAllTickInfos ) cons
         {
             TickInfo& rTickInfo = (*aTickIter);
             rTickInfo.aTickScreenPosition =
-                this->getTickScreenPosition2D( rTickInfo.fScaledTickValue );
+                getTickScreenPosition2D( rTickInfo.fScaledTickValue );
         }
     }
 }

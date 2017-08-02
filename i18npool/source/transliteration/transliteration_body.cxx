@@ -205,7 +205,7 @@ OUString SAL_CALL
 Transliteration_body::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset)
 {
-    return this->transliterate(inStr, startPos, nCount, offset);
+    return transliterate(inStr, startPos, nCount, offset);
 }
 
 Transliteration_casemapping::Transliteration_casemapping()

@@ -371,7 +371,7 @@ namespace sw { namespace mark
     {
         // TODO: Does exist a better solution to trigger a format of the
         //       fieldmark portion? If yes, please use it.
-        SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
+        SwPaM aPaM( GetMarkPos(), GetOtherMarkPos() );
         aPaM.InvalidatePaM();
     }
 
@@ -417,7 +417,7 @@ namespace sw { namespace mark
 
         // For some reason the end mark is moved from 1 by the Insert: we don't
         // want this for checkboxes
-        SwPosition aNewEndPos = this->GetMarkEnd();
+        SwPosition aNewEndPos = GetMarkEnd();
         aNewEndPos.nContent--;
         SetMarkEndPos( aNewEndPos );
     }

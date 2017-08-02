@@ -178,7 +178,7 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
     if( nYResolution < 10 )
         nYResolution = 10;
 
-    if( this->getPropertySwapXAndYAxis() )
+    if( getPropertySwapXAndYAxis() )
         std::swap(nXResolution,nYResolution);
 
     //2D
@@ -232,7 +232,7 @@ void VCoordinateSystem::impl_adjustDimensionAndIndex( sal_Int32& rDimensionIndex
 {
     impl_adjustDimension( rDimensionIndex );
 
-    if( rAxisIndex < 0 || rAxisIndex > this->getMaximumAxisIndexByDimension(rDimensionIndex) )
+    if( rAxisIndex < 0 || rAxisIndex > getMaximumAxisIndexByDimension(rDimensionIndex) )
         rAxisIndex = 0;
 }
 
@@ -251,7 +251,7 @@ std::vector< ExplicitScaleData > VCoordinateSystem::getExplicitScales( sal_Int32
     std::vector< ExplicitScaleData > aRet(m_aExplicitScales);
 
     impl_adjustDimensionAndIndex( nDimensionIndex, nAxisIndex );
-    aRet[nDimensionIndex]=this->getExplicitScale( nDimensionIndex, nAxisIndex );
+    aRet[nDimensionIndex]=getExplicitScale( nDimensionIndex, nAxisIndex );
 
     return aRet;
 }
@@ -261,7 +261,7 @@ std::vector< ExplicitIncrementData > VCoordinateSystem::getExplicitIncrements( s
     std::vector< ExplicitIncrementData > aRet(m_aExplicitIncrements);
 
     impl_adjustDimensionAndIndex( nDimensionIndex, nAxisIndex );
-    aRet[nDimensionIndex]=this->getExplicitIncrement( nDimensionIndex, nAxisIndex );
+    aRet[nDimensionIndex]=getExplicitIncrement( nDimensionIndex, nAxisIndex );
 
     return aRet;
 }

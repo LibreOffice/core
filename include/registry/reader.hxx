@@ -92,7 +92,7 @@ public:
      */
     Reader & operator =(Reader const & other) {
         Reader temp(other);
-        std::swap(this->m_handle, temp.m_handle);
+        std::swap(m_handle, temp.m_handle);
         return *this;
     }
 

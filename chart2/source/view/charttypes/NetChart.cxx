@@ -265,7 +265,7 @@ void NetChart::impl_createSeriesShapes()
             for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
             {
                 sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
-                PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
+                PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
                 if(!pPosHelper)
                     pPosHelper = m_pMainPosHelper.get();
                 PlotterBase::m_pPosHelper = pPosHelper;
@@ -404,7 +404,7 @@ void NetChart::createShapes()
                     if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
                         aLogicYSumMap[nAttachedAxisIndex]=0.0;
 
-                    PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
+                    PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
                     if(!pPosHelper)
                         pPosHelper = m_pMainPosHelper.get();
                     PlotterBase::m_pPosHelper = pPosHelper;
@@ -447,7 +447,7 @@ void NetChart::createShapes()
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xSeriesTarget);
 
                     sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
-                    PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
+                    PlottingPositionHelper* pPosHelper = &(getPlottingPositionHelper( nAttachedAxisIndex ));
                     if(!pPosHelper)
                         pPosHelper = m_pMainPosHelper.get();
                     PlotterBase::m_pPosHelper = pPosHelper;
@@ -617,7 +617,7 @@ void NetChart::createShapes()
                             LabelAlignment eAlignment = LABEL_ALIGN_TOP;
                             drawing::Position3D aScenePosition3D( aScenePosition.PositionX
                                         , aScenePosition.PositionY
-                                        , aScenePosition.PositionZ+this->getTransformedDepth() );
+                                        , aScenePosition.PositionZ+getTransformedDepth() );
 
                             sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, pPosHelper->isSwapXAndY() );
 

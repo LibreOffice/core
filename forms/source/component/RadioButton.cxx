@@ -118,7 +118,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const OUString& rPropName, const Any& 
     // my name
     OUString sMyGroup;
     if (hasProperty(PROPERTY_GROUP_NAME, this))
-        this->getPropertyValue(PROPERTY_GROUP_NAME) >>= sMyGroup;
+        getPropertyValue(PROPERTY_GROUP_NAME) >>= sMyGroup;
     if (sMyGroup.isEmpty())
         sMyGroup = m_aName;
 
@@ -200,8 +200,8 @@ void ORadioButtonModel::setControlSource()
         OUString sName, sGroupName;
 
         if (hasProperty(PROPERTY_GROUP_NAME, this))
-            this->getPropertyValue(PROPERTY_GROUP_NAME) >>= sGroupName;
-        this->getPropertyValue(PROPERTY_NAME) >>= sName;
+            getPropertyValue(PROPERTY_GROUP_NAME) >>= sGroupName;
+        getPropertyValue(PROPERTY_NAME) >>= sName;
 
         Reference<XPropertySet> xMyProps(
             static_cast<XWeak*>(this), css::uno::UNO_QUERY);

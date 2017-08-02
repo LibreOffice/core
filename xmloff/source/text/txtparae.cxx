@@ -1165,7 +1165,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pBoundFrameSets(new BoundFrameSets(GetExport().GetModel())),
     pFieldExport( nullptr ),
     pListElements( nullptr ),
-    maListAutoPool( this->GetExport() ),
+    maListAutoPool( GetExport() ),
     pSectionExport( nullptr ),
     pIndexMarkExport( nullptr ),
     pRedlineExport( nullptr ),

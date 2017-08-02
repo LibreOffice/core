@@ -208,7 +208,7 @@ RewritePlugin::RewriteOptions::RewriteOptions( RewriteOption option )
 {
     // Note that 'flags' stores also RemoveLineIfEmpty, it must be kept in sync with the base class.
     if( flags & RewritePlugin::RemoveLineIfEmpty )
-        this->RemoveLineIfEmpty = true;
+        RemoveLineIfEmpty = true;
 }
 
 inline

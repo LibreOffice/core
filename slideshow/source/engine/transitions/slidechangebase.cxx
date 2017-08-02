@@ -180,7 +180,7 @@ void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
 
     // init views and create slide bitmaps
     for( const auto& pView : mrViewContainer )
-        this->viewAdded( pView );
+        viewAdded( pView );
 
     mbPrefetched = true;
 }

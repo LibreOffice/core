@@ -42,7 +42,7 @@ void WrappedDefaultProperty::setPropertyToDefault(
 {
     Reference< beans::XPropertySet > xInnerPropSet( xInnerPropertyState, uno::UNO_QUERY );
     if( xInnerPropSet.is())
-        this->setPropertyValue( m_aOuterDefaultValue, xInnerPropSet );
+        setPropertyValue( m_aOuterDefaultValue, xInnerPropSet );
 }
 
 uno::Any WrappedDefaultProperty::getPropertyDefault(
@@ -58,8 +58,8 @@ beans::PropertyState WrappedDefaultProperty::getPropertyState(
     try
     {
         Reference< beans::XPropertySet > xInnerProp( xInnerPropertyState, uno::UNO_QUERY_THROW );
-        uno::Any aValue = this->getPropertyValue( xInnerProp );
-        if( m_aOuterDefaultValue == this->convertInnerToOuterValue( aValue ))
+        uno::Any aValue = getPropertyValue( xInnerProp );
+        if( m_aOuterDefaultValue == convertInnerToOuterValue( aValue ))
             aState = beans::PropertyState_DEFAULT_VALUE;
     }
     catch( const beans::UnknownPropertyException& ex )

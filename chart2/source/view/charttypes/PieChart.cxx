@@ -602,7 +602,7 @@ void PieChart::createShapes()
             if( !bIsVisible )
                 continue;
 
-            aParam.mfDepth  = this->getTransformedDepth() * (n3DRelativeHeight / 100.0);
+            aParam.mfDepth  = getTransformedDepth() * (n3DRelativeHeight / 100.0);
 
             uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
             ///collect data point information (logic coordinates, style ):
@@ -773,7 +773,7 @@ PieChart::PieLabelInfo::PieLabelInfo()
 bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, const awt::Size& rPageSize, bool bMoveHalfWay, bool bMoveClockwise )
 {
     //return true if the move was successful
-    if(!this->bMovementAllowed)
+    if(!bMovementAllowed)
         return false;
 
     const sal_Int32 nLabelDistanceX = rPageSize.Width/50;
@@ -781,7 +781,7 @@ bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, c
 
     ///compute the rectangle representing the intersection of the label bounding
     ///boxes (`aOverlap`).
-    ::basegfx::B2IRectangle aOverlap( lcl_getRect( this->xLabelGroupShape ) );
+    ::basegfx::B2IRectangle aOverlap( lcl_getRect( xLabelGroupShape ) );
     aOverlap.intersect( lcl_getRect( pFix->xLabelGroupShape ) );
     if( !aOverlap.isEmpty() )
     {
@@ -797,7 +797,7 @@ bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, c
         ///`aTangentialDirection` is greater than the vertical component,
         ///the magnitude of the shift is equal to `aOverlap.Width` else to
         ///`aOverlap.Height`;
-        basegfx::B2IVector aRadiusDirection = this->aFirstPosition - this->aOrigin;
+        basegfx::B2IVector aRadiusDirection = aFirstPosition - aOrigin;
         aRadiusDirection.setLength(1.0);
         basegfx::B2IVector aTangentialDirection( -aRadiusDirection.getY(), aRadiusDirection.getX() );
         bool bShiftHorizontal = abs(aTangentialDirection.getX()) > abs(aTangentialDirection.getY());
@@ -813,17 +813,17 @@ bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, c
         ///`aTangentialDirection` is reversed;
         if(!bMoveClockwise)
             nShift*=-1;
-        awt::Point aOldPos( this->xLabelGroupShape->getPosition() );
+        awt::Point aOldPos( xLabelGroupShape->getPosition() );
         basegfx::B2IVector aNewPos = basegfx::B2IVector( aOldPos.X, aOldPos.Y ) + nShift*aTangentialDirection;
 
         ///a final check is performed in order to be sure that the moved label
         ///is still inside the page document;
         awt::Point aNewAWTPos( aNewPos.getX(), aNewPos.getY() );
-        if( !lcl_isInsidePage( aNewAWTPos, this->xLabelGroupShape->getSize(), rPageSize ) )
+        if( !lcl_isInsidePage( aNewAWTPos, xLabelGroupShape->getSize(), rPageSize ) )
             return false;
 
-        this->xLabelGroupShape->setPosition( aNewAWTPos );
-        this->bMoved = true;
+        xLabelGroupShape->setPosition( aNewAWTPos );
+        bMoved = true;
     }
     return true;
 

@@ -2649,7 +2649,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                 if( !aAuthor.isEmpty() )
                 {
                     SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC, XML_CREATOR, true, false );
-                    this->Characters(aAuthor);
+                    Characters(aAuthor);
                 }
 
                 // initials
@@ -2658,7 +2658,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                 {
                     SvXMLElementExport aInitialsElem( *this, XML_NAMESPACE_LO_EXT,
                             XML_SENDER_INITIALS, true, false );
-                    this->Characters(aInitials);
+                    Characters(aInitials);
                 }
 
                 {
@@ -2671,7 +2671,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 
                 css::uno::Reference < css::text::XText > xText( xAnnotation->getTextRange() );
                 if( xText.is() )
-                    this->GetTextParagraphExport()->exportText( xText );
+                    GetTextParagraphExport()->exportText( xText );
             }
             while( xAnnotationEnumeration->hasMoreElements() );
         }

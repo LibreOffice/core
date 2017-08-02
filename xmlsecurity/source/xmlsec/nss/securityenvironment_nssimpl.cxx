@@ -906,7 +906,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
      * Adopt symmetric key into keys manager
      */
     PK11SymKey* symKey = nullptr ;
-    for( unsigned int i = 0 ; ( symKey = this->getSymKey( i ) ) != nullptr ; i ++ ) {
+    for( unsigned int i = 0 ; ( symKey = getSymKey( i ) ) != nullptr ; i ++ ) {
         if( xmlSecNssAppliedKeysMngrSymKeyLoad( pKeysMngr, symKey ) < 0 ) {
             throw RuntimeException() ;
         }
@@ -916,7 +916,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
      * Adopt asymmetric public key into keys manager
      */
     SECKEYPublicKey* pubKey = nullptr ;
-    for( unsigned int i = 0 ; ( pubKey = this->getPubKey( i ) ) != nullptr ; i ++ ) {
+    for( unsigned int i = 0 ; ( pubKey = getPubKey( i ) ) != nullptr ; i ++ ) {
         if( xmlSecNssAppliedKeysMngrPubKeyLoad( pKeysMngr, pubKey ) < 0 ) {
             throw RuntimeException() ;
         }
@@ -926,7 +926,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
      * Adopt asymmetric private key into keys manager
      */
     SECKEYPrivateKey* priKey = nullptr ;
-    for( unsigned int i = 0 ; ( priKey = this->getPriKey( i ) ) != nullptr ; i ++ ) {
+    for( unsigned int i = 0 ; ( priKey = getPriKey( i ) ) != nullptr ; i ++ ) {
         if( xmlSecNssAppliedKeysMngrPriKeyLoad( pKeysMngr, priKey ) < 0 ) {
             throw RuntimeException() ;
         }
