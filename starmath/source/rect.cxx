@@ -19,13 +19,10 @@
 
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
-
 
 #include "rect.hxx"
 #include "types.hxx"
-#include "utility.hxx"
 #include "smmod.hxx"
 
 #include <cassert>

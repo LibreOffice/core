@@ -18,8 +18,6 @@
  */
 
 #include <svl/languageoptions.hxx>
-#include <vcl/svapp.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include "format.hxx"
 #include <cassert>
 

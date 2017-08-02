@@ -25,8 +25,6 @@
 #include <svx/zoomsliderctrl.hxx>
 #include <sfx2/docfac.hxx>
 #include <svx/lboxctrl.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/app.hxx>
 
 #include <smdll.hxx>
@@ -36,7 +34,6 @@
 #include <ElementsDockingWindow.hxx>
 
 #include <starmath.hrc>
-#include <strings.hrc>
 
 #include <svx/xmlsecctrl.hxx>
 #include <o3tl/make_unique.hxx>

@@ -20,14 +20,16 @@
 #ifndef INCLUDED_STARMATH_SOURCE_MATHTYPE_HXX
 #define INCLUDED_STARMATH_SOURCE_MATHTYPE_HXX
 
-#include "node.hxx"
-#include "eqnolefilehdr.hxx"
-
-#include <sot/storage.hxx>
+#include <rtl/ustring.hxx>
 
 #include <set>
+#include <vector>
 
 class SfxMedium;
+class SmMatrixNode;
+class SmNode;
+class SotStorage;
+class SotStorageStream;
 
 class MathTypeFont
 {

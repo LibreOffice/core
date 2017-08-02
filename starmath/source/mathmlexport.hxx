@@ -20,14 +20,12 @@
 #ifndef INCLUDED_STARMATH_SOURCE_MATHMLEXPORT_HXX
 #define INCLUDED_STARMATH_SOURCE_MATHMLEXPORT_HXX
 
-#include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmltoken.hxx>
 
-#include <node.hxx>
-
 class SfxMedium;
+class SmNode;
+class SmVerticalBraceNode;
 namespace com { namespace sun { namespace star {
     namespace io {
         class XOutputStream; }

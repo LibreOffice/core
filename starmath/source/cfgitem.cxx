@@ -21,21 +21,18 @@
 #include <vector>
 
 #include <svl/itemset.hxx>
-#include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <sal/macros.h>
 #include <officecfg/Office/Math.hxx>
 #include "cfgitem.hxx"
 
 #include "starmath.hrc"
-#include "strings.hrc"
-#include "smdll.hxx"
 #include "smmod.hxx"
+#include "symbol.hxx"
 #include "format.hxx"
 
 using namespace com::sun::star::uno;

@@ -18,8 +18,6 @@
  */
 
 #include "smdetect.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <sfx2/docfile.hxx>

@@ -11,8 +11,6 @@
 
 #include <sal/config.h>
 
-#include <sal/log.hxx>
-
 #include "node.hxx"
 
 #include <cassert>
