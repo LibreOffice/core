@@ -2201,13 +2201,13 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         // SSTB (see Spec. 2.2.4)
         sal_uInt16 fExtend = 0;
         pDataStream->ReadUInt16( fExtend );
-        sal_uInt16 nNoStrings = 0;
+        sal_uInt16 nStringsCnt = 0;
 
         // Isn't it that if fExtend isn't 0xFFFF then fExtend actually
-        // doesn't exist and we really have just read nNoStrings ( or cData )?
+        // doesn't exist and we really have just read nStringsCnt ( or cData )?
         if (fExtend != 0xFFFF)
             bAllOk = false;
-        pDataStream->ReadUInt16( nNoStrings );
+        pDataStream->ReadUInt16( nStringsCnt );
 
         // I guess this should be zero ( and we should ensure that )
         sal_uInt16 cbExtra = 0;
@@ -2215,17 +2215,17 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 
         OSL_ENSURE(bAllOk, "Unknown formfield dropdown list structure");
         if (!bAllOk)    //Not as expected, don't risk it at all.
-            nNoStrings = 0;
+            nStringsCnt = 0;
         const size_t nMinRecordSize = sizeof(sal_uInt16);
         const size_t nMaxRecords = pDataStream->remainingSize() / nMinRecordSize;
-        if (nNoStrings > nMaxRecords)
+        if (nStringsCnt > nMaxRecords)
         {
             SAL_WARN("sw.ww8", "Parsing error: " << nMaxRecords <<
-                     " max possible entries, but " << nNoStrings << " claimed, truncating");
-            nNoStrings = nMaxRecords;
+                     " max possible entries, but " << nStringsCnt << " claimed, truncating");
+            nStringsCnt = nMaxRecords;
         }
-        maListEntries.reserve(nNoStrings);
-        for (sal_uInt32 nI = 0; nI < nNoStrings; ++nI)
+        maListEntries.reserve(nStringsCnt);
+        for (sal_uInt32 nI = 0; nI < nStringsCnt; ++nI)
         {
             OUString sEntry =  read_uInt16_PascalString(*pDataStream);
             maListEntries.push_back(sEntry);

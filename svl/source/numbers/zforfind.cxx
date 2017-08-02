@@ -108,7 +108,7 @@ void ImpSvNumberInputScan::Reset()
     nESign       = 0;
     nDecPos      = 0;
     nNegCheck    = 0;
-    nAnzStrings  = 0;
+    nStringsCnt  = 0;
     nAnzNums     = 0;
     nThousand    = 0;
     eScannedType = css::util::NumberFormat::UNDEFINED;
@@ -285,7 +285,7 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
 }
 
 
-// FIXME: should be grouping; it is only used though in case nAnzStrings is
+// FIXME: should be grouping; it is only used though in case nStringsCnt is
 // near SV_MAX_ANZ_INPUT_STRINGS, in NumberStringDivision().
 
 bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
@@ -358,27 +358,27 @@ void ImpSvNumberInputScan::NumberStringDivision( const OUString& rString )
 {
     const sal_Unicode* pStr = rString.getStr();
     const sal_Unicode* const pEnd = pStr + rString.getLength();
-    while ( pStr < pEnd && nAnzStrings < SV_MAX_ANZ_INPUT_STRINGS )
+    while ( pStr < pEnd && nStringsCnt < SV_MAX_ANZ_INPUT_STRINGS )
     {
-        if ( NextNumberStringSymbol( pStr, sStrArray[nAnzStrings] ) )
+        if ( NextNumberStringSymbol( pStr, sStrArray[nStringsCnt] ) )
         {   // Number
-            IsNum[nAnzStrings] = true;
-            nNums[nAnzNums] = nAnzStrings;
+            IsNum[nStringsCnt] = true;
+            nNums[nAnzNums] = nStringsCnt;
             nAnzNums++;
-            if (nAnzStrings >= SV_MAX_ANZ_INPUT_STRINGS - 7 &&
+            if (nStringsCnt >= SV_MAX_ANZ_INPUT_STRINGS - 7 &&
                 nPosThousandString == 0) // Only once
             {
-                if ( SkipThousands( pStr, sStrArray[nAnzStrings] ) )
+                if ( SkipThousands( pStr, sStrArray[nStringsCnt] ) )
                 {
-                    nPosThousandString = nAnzStrings;
+                    nPosThousandString = nStringsCnt;
                 }
             }
         }
         else
         {
-            IsNum[nAnzStrings] = false;
+            IsNum[nStringsCnt] = false;
         }
-        nAnzStrings++;
+        nStringsCnt++;
     }
 }
 
@@ -543,7 +543,7 @@ inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
         rString[0] == u' ' &&
         rSep.getLength() == 1 && rString.getLength() == 1;
     if (!((rString == rSep || bSpaceBreak) &&      // nothing else
-           nStringPos < nAnzStrings - 1 &&         // safety first!
+           nStringPos < nStringsCnt - 1 &&         // safety first!
            IsNum[ nStringPos + 1 ] ))              // number follows
     {
         return false; // no? => out
@@ -878,7 +878,7 @@ short ImpSvNumberInputScan::GetESign( const OUString& rString, sal_Int32& nPos )
  */
 inline bool ImpSvNumberInputScan::GetNextNumber( sal_uInt16& i, sal_uInt16& j )
 {
-    if ( i < nAnzStrings && IsNum[i] )
+    if ( i < nStringsCnt && IsNum[i] )
     {
         j++;
         i++;
@@ -1015,11 +1015,11 @@ bool ImpSvNumberInputScan::MayBeIso8601()
     if (nMayBeIso8601 == 0)
     {
         nMayBeIso8601 = 1;
-        sal_Int32 nLen = ((nAnzNums >= 1 && nNums[0] < nAnzStrings) ? sStrArray[nNums[0]].getLength() : 0);
+        sal_Int32 nLen = ((nAnzNums >= 1 && nNums[0] < nStringsCnt) ? sStrArray[nNums[0]].getLength() : 0);
         if (nLen)
         {
             sal_Int32 n;
-            if (nAnzNums >= 3 && nNums[2] < nAnzStrings &&
+            if (nAnzNums >= 3 && nNums[2] < nStringsCnt &&
                 sStrArray[nNums[0]+1] == "-" && // separator year-month
                 (n = sStrArray[nNums[1]].toInt32()) >= 1 && n <= 12 &&  // month
                 sStrArray[nNums[1]+1] == "-" && // separator month-day
@@ -1083,7 +1083,7 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
     if (nMayBeMonthDate == 0)
     {
         nMayBeMonthDate = 1;
-        if (nAnzNums >= 2 && nNums[1] < nAnzStrings)
+        if (nAnzNums >= 2 && nNums[1] < nStringsCnt)
         {
             // "-Jan-"
             const OUString& rM = sStrArray[ nNums[ 0 ] + 1 ];
@@ -1171,7 +1171,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
         bool bOk = true;
         const OUString& rPat = sDateAcceptancePatterns[nPattern];
         sal_Int32 nPat = 0;
-        for ( ; nPat < rPat.getLength() && bOk && nNext < nAnzStrings; ++nPat, ++nNext)
+        for ( ; nPat < rPat.getLength() && bOk && nNext < nStringsCnt; ++nPat, ++nNext)
         {
             const sal_Unicode c = rPat[nPat];
             switch (c)
@@ -1253,7 +1253,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
         if (bOk)
         {
             // Check for trailing characters mismatch.
-            if (nNext < nAnzStrings)
+            if (nNext < nStringsCnt)
             {
                 // Pattern end but not input end.
                 // A trailing blank may be part of the current pattern input,
@@ -1322,13 +1322,13 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
     {
         return false;
     }
-    if (nParticle < nDatePatternStart || nParticle >= nAnzStrings || IsNum[nParticle])
+    if (nParticle < nDatePatternStart || nParticle >= nStringsCnt || IsNum[nParticle])
     {
         return false;
     }
     sal_uInt16 nNext = nDatePatternStart;
     const OUString& rPat = sDateAcceptancePatterns[nAcceptedDatePattern];
-    for (sal_Int32 nPat = 0; nPat < rPat.getLength() && nNext < nAnzStrings; ++nPat, ++nNext)
+    for (sal_Int32 nPat = 0; nPat < rPat.getLength() && nNext < nStringsCnt; ++nPat, ++nNext)
     {
         switch (rPat[nPat])
         {
@@ -2160,7 +2160,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
         {
             // Jan1 without separator is not a date, unless it is followed by a
             // separator and a (year) number.
-            if (nPos < rString.getLength() || (nAnzStrings >= 4 && nAnzNums >= 2))
+            if (nPos < rString.getLength() || (nStringsCnt >= 4 && nAnzNums >= 2))
             {
                 eScannedType = css::util::NumberFormat::DATE;   // !!! it IS a date !!!
                 nMonth = nTempMonth;
@@ -2205,7 +2205,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
                     {
                         // Jan1 without separator is not a date, unless it is followed by a
                         // separator and a (year) number.
-                        if (nPos < rString.getLength() || (nAnzStrings >= 4 && nAnzNums >= 2))
+                        if (nPos < rString.getLength() || (nStringsCnt >= 4 && nAnzNums >= 2))
                         {
                             nMonth = nTempMonth;
                             nMonthPos = 1; // month a the beginning
@@ -2556,8 +2556,8 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                 {
                 case '+':
                 case '-':
-                    if (nStringPos == nAnzStrings - 2 ||
-                        nStringPos == nAnzStrings - 4)
+                    if (nStringPos == nStringsCnt - 2 ||
+                        nStringPos == nStringsCnt - 4)
                     {
                         ++nPos;     // yyyy-mm-ddThh:mm[:ss]+xx[[:]yy]
                         // nTimezonePos needed for GetTimeRef()
@@ -2569,7 +2569,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                     break;
                 case ':':
                     if (nTimezonePos && nStringPos >= 11 &&
-                        nStringPos == nAnzStrings - 2)
+                        nStringPos == nStringsCnt - 2)
                     {
                         ++nPos;     // yyyy-mm-ddThh:mm[:ss]+xx:yy
                     }
@@ -2632,7 +2632,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
         {
             bool bSignedYear = false;
             if (bDecSepInDateSeps ||                // . also date separator
-                SkipDatePatternSeparator( nAnzStrings-1, nPos, bSignedYear))
+                SkipDatePatternSeparator( nStringsCnt-1, nPos, bSignedYear))
             {
                 if ( eScannedType != css::util::NumberFormat::UNDEFINED &&
                      eScannedType != css::util::NumberFormat::DATE &&
@@ -2744,12 +2744,12 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
         }
         if ( !nTimePos )
         {
-            nTimePos = nAnzStrings;
+            nTimePos = nStringsCnt;
         }
     }
 
     bool bSignedYear = false;
-    bool bDate = SkipDatePatternSeparator( nAnzStrings-1, nPos, bSignedYear);   // 12/31  31.12.  12/31/1999  31.12.1999
+    bool bDate = SkipDatePatternSeparator( nStringsCnt-1, nPos, bSignedYear);   // 12/31  31.12.  12/31/1999  31.12.1999
     if (!bDate)
     {
         const OUString& rDate = pFormatter->GetDateSep();
@@ -3035,13 +3035,13 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
 {
     Reset();
     NumberStringDivision( rString );             // breakdown into strings and numbers
-    if (nAnzStrings >= SV_MAX_ANZ_INPUT_STRINGS) // too many elements
+    if (nStringsCnt >= SV_MAX_ANZ_INPUT_STRINGS) // too many elements
     {
         return false;                            // Njet, Nope, ...
     }
     if (nAnzNums == 0)                           // no number in input
     {
-        if ( nAnzStrings > 0 )
+        if ( nStringsCnt > 0 )
         {
             // Here we may change the original, we don't need it anymore.
             // This saves copies and ToUpper() in GetLogical() and is faster.
@@ -3071,12 +3071,12 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
     switch ( nAnzNums )
     {
     case 1 :                                // Exactly 1 number in input
-        // nAnzStrings >= 1
+        // nStringsCnt >= 1
         if (GetNextNumber(i,j)) // i=1,0
         {   // Number at start
             if (eSetType == css::util::NumberFormat::FRACTION)  // Fraction 1 = 1/1
             {
-                if (i >= nAnzStrings || // no end string nor decimal separator
+                if (i >= nStringsCnt || // no end string nor decimal separator
                     sStrArray[i] == pFormatter->GetNumDecimalSep())
                 {
                     eScannedType = css::util::NumberFormat::FRACTION;
@@ -3099,7 +3099,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             if (nSign && !nNegCheck &&      // Sign +, -
                 eScannedType == css::util::NumberFormat::UNDEFINED &&   // not date or currency
                 nDecPos == 0 &&             // no previous decimal separator
-                (i >= nAnzStrings ||        // no end string nor decimal separator
+                (i >= nStringsCnt ||        // no end string nor decimal separator
                  sStrArray[i] == pFormatter->GetNumDecimalSep())
                 )
             {
@@ -3108,13 +3108,13 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                 return true;
             }
         }
-        if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
+        if (i < nStringsCnt && !ScanEndString( sStrArray[i], pFormat ))
         {
             return false;
         }
         break;
     case 2 :                                // Exactly 2 numbers in input
-                                            // nAnzStrings >= 3
+                                            // nStringsCnt >= 3
         if (!GetNextNumber(i,j))            // i=1,0
         {                                   // Analyze start string
             if (!ScanStartString( sStrArray[i], pFormat ))
@@ -3128,7 +3128,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         i++;                                // next symbol, i=2,3
         GetNextNumber(i,j);                 // i=3,4
-        if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
+        if (i < nStringsCnt && !ScanEndString( sStrArray[i], pFormat ))
         {
             return false;
         }
@@ -3146,7 +3146,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         break;
     case 3 :                                // Exactly 3 numbers in input
-                                            // nAnzStrings >= 5
+                                            // nStringsCnt >= 5
         if (!GetNextNumber(i,j))            // i=1,0
         {                                   // Analyze start string
             if (!ScanStartString( sStrArray[i], pFormat ))
@@ -3176,7 +3176,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         i++;                                // i=4,5
         GetNextNumber(i,j);                 // i=5,6
-        if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
+        if (i < nStringsCnt && !ScanEndString( sStrArray[i], pFormat ))
         {
             return false;
         }
@@ -3198,7 +3198,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         break;
     default:                                // More than 3 numbers in input
-                                            // nAnzStrings >= 7
+                                            // nStringsCnt >= 7
         if (!GetNextNumber(i,j))            // i=1,0
         {                                   // Analyze startstring
             if (!ScanStartString( sStrArray[i], pFormat ))
@@ -3224,7 +3224,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                     return false;
                 }
                 GetNextNumber(i,j);
-                if ( i < nAnzStrings && !ScanMidString( sStrArray[i], i, pFormat ) )
+                if ( i < nStringsCnt && !ScanMidString( sStrArray[i], i, pFormat ) )
                 {
                     return false;
                 }
@@ -3242,7 +3242,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                     return false;
                 }
                 GetNextNumber(i,j);
-                if ( i < nAnzStrings && !ScanMidString( sStrArray[i], i, pFormat ) )
+                if ( i < nStringsCnt && !ScanMidString( sStrArray[i], i, pFormat ) )
                 {
                     return false;
                 }
@@ -3250,7 +3250,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             }
         }
         GetNextNumber(i,j);
-        if (i < nAnzStrings && !ScanEndString( sStrArray[i], pFormat ))
+        if (i < nStringsCnt && !ScanEndString( sStrArray[i], pFormat ))
         {
             return false;
         }
@@ -3281,7 +3281,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         if ( nMatchedAllStrings )
         {
             bool bMatch = pFormat && pFormat->IsNumForStringElementCountEqual(
-                               nStringScanNumFor, nAnzStrings, nAnzNums );
+                               nStringScanNumFor, nStringsCnt, nAnzNums );
             if ( !bMatch )
             {
                 nMatchedAllStrings = 0;
@@ -3318,7 +3318,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         if ( nMatchedAllStrings )
         {
             bool bMatch = pFormat && pFormat->IsNumForStringElementCountEqual(
-                               nStringScanNumFor, nAnzStrings, nAnzNums );
+                               nStringScanNumFor, nStringsCnt, nAnzNums );
             if ( !bMatch )
             {
                 nMatchedAllStrings = 0;
