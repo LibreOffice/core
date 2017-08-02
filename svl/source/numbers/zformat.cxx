@@ -268,7 +268,7 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
 
 ImpSvNumFor::ImpSvNumFor()
 {
-    nAnzStrings = 0;
+    nStringsCnt = 0;
     aI.eScannedType = css::util::NumberFormat::UNDEFINED;
     aI.bThousand = false;
     aI.nThousand = 0;
@@ -284,9 +284,9 @@ ImpSvNumFor::~ImpSvNumFor()
 
 void ImpSvNumFor::Enlarge(sal_uInt16 nAnz)
 {
-    if ( nAnzStrings != nAnz )
+    if ( nStringsCnt != nAnz )
     {
-        nAnzStrings = nAnz;
+        nStringsCnt = nAnz;
         aI.nTypeArray.resize(nAnz);
         aI.sStrArray.resize(nAnz);
     }
@@ -294,8 +294,8 @@ void ImpSvNumFor::Enlarge(sal_uInt16 nAnz)
 
 void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor, ImpSvNumberformatScan* pSc )
 {
-    Enlarge( rNumFor.nAnzStrings );
-    aI.Copy( rNumFor.aI, nAnzStrings );
+    Enlarge( rNumFor.nStringsCnt );
+    aI.Copy( rNumFor.aI, nStringsCnt );
     sColorName = rNumFor.sColorName;
     if ( pSc )
     {
@@ -310,7 +310,7 @@ void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor, ImpSvNumberformatScan* pSc )
 
 bool ImpSvNumFor::HasNewCurrency() const
 {
-    for ( sal_uInt16 j=0; j<nAnzStrings; j++ )
+    for ( sal_uInt16 j=0; j<nStringsCnt; j++ )
     {
         if ( aI.nTypeArray[j] == NF_SYMBOLTYPE_CURRENCY )
         {
@@ -323,12 +323,12 @@ bool ImpSvNumFor::HasNewCurrency() const
 bool ImpSvNumFor::GetNewCurrencySymbol( OUString& rSymbol,
                                         OUString& rExtension ) const
 {
-    for ( sal_uInt16 j=0; j<nAnzStrings; j++ )
+    for ( sal_uInt16 j=0; j<nStringsCnt; j++ )
     {
         if ( aI.nTypeArray[j] == NF_SYMBOLTYPE_CURRENCY )
         {
             rSymbol = aI.sStrArray[j];
-            if ( j < nAnzStrings-1 && aI.nTypeArray[j+1] == NF_SYMBOLTYPE_CURREXT )
+            if ( j < nStringsCnt-1 && aI.nTypeArray[j+1] == NF_SYMBOLTYPE_CURREXT )
             {
                 rExtension = aI.sStrArray[j+1];
             }

@@ -909,16 +909,16 @@ sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
             }
         }
     }
-    nAnzStrings = 0;
+    nStringsCnt = 0;
     bool bStar = false; // Is set on detecting '*'
     Reset();
 
     sal_Int32 nPos = 0;
     const sal_Int32 nLen = rString.getLength();
-    while (nPos < nLen && nAnzStrings < NF_MAX_FORMAT_SYMBOLS)
+    while (nPos < nLen && nStringsCnt < NF_MAX_FORMAT_SYMBOLS)
     {
-        nTypeArray[nAnzStrings] = Next_Symbol(rString, nPos, sStrArray[nAnzStrings]);
-        if (nTypeArray[nAnzStrings] == NF_SYMBOLTYPE_STAR)
+        nTypeArray[nStringsCnt] = Next_Symbol(rString, nPos, sStrArray[nStringsCnt]);
+        if (nTypeArray[nStringsCnt] == NF_SYMBOLTYPE_STAR)
         { // Monitoring the '*'
             if (bStar)
             {
@@ -929,12 +929,12 @@ sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
                 // Valid only if there is a character following, else we are
                 // at the end of a code that does not have a fill character
                 // (yet?).
-                if (sStrArray[nAnzStrings].getLength() < 2)
+                if (sStrArray[nStringsCnt].getLength() < 2)
                     return nPos;
                 bStar = true;
             }
         }
-        nAnzStrings++;
+        nStringsCnt++;
     }
 
     return 0; // 0 => ok
@@ -942,7 +942,7 @@ sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
 
 void ImpSvNumberformatScan::SkipStrings(sal_uInt16& i, sal_Int32& nPos)
 {
-    while (i < nAnzStrings && (   nTypeArray[i] == NF_SYMBOLTYPE_STRING
+    while (i < nStringsCnt && (   nTypeArray[i] == NF_SYMBOLTYPE_STRING
                                || nTypeArray[i] == NF_SYMBOLTYPE_BLANK
                                || nTypeArray[i] == NF_SYMBOLTYPE_STAR) )
     {
@@ -954,7 +954,7 @@ void ImpSvNumberformatScan::SkipStrings(sal_uInt16& i, sal_Int32& nPos)
 sal_uInt16 ImpSvNumberformatScan::PreviousKeyword(sal_uInt16 i)
 {
     short res = 0;
-    if (i > 0 && i < nAnzStrings)
+    if (i > 0 && i < nStringsCnt)
     {
         i--;
         while (i > 0 && nTypeArray[i] <= 0)
@@ -972,10 +972,10 @@ sal_uInt16 ImpSvNumberformatScan::PreviousKeyword(sal_uInt16 i)
 sal_uInt16 ImpSvNumberformatScan::NextKeyword(sal_uInt16 i)
 {
     short res = 0;
-    if (i < nAnzStrings-1)
+    if (i < nStringsCnt-1)
     {
         i++;
-        while (i < nAnzStrings-1 && nTypeArray[i] <= 0)
+        while (i < nStringsCnt-1 && nTypeArray[i] <= 0)
         {
             i++;
         }
@@ -989,7 +989,7 @@ sal_uInt16 ImpSvNumberformatScan::NextKeyword(sal_uInt16 i)
 
 short ImpSvNumberformatScan::PreviousType( sal_uInt16 i )
 {
-    if ( i > 0 && i < nAnzStrings )
+    if ( i > 0 && i < nStringsCnt )
     {
         do
         {
@@ -1004,7 +1004,7 @@ short ImpSvNumberformatScan::PreviousType( sal_uInt16 i )
 sal_Unicode ImpSvNumberformatScan::PreviousChar(sal_uInt16 i)
 {
     sal_Unicode res = ' ';
-    if (i > 0 && i < nAnzStrings)
+    if (i > 0 && i < nStringsCnt)
     {
         i--;
         while (i > 0 &&
@@ -1026,10 +1026,10 @@ sal_Unicode ImpSvNumberformatScan::PreviousChar(sal_uInt16 i)
 sal_Unicode ImpSvNumberformatScan::NextChar(sal_uInt16 i)
 {
     sal_Unicode res = ' ';
-    if (i < nAnzStrings-1)
+    if (i < nStringsCnt-1)
     {
         i++;
-        while (i < nAnzStrings-1 &&
+        while (i < nStringsCnt-1 &&
                ( nTypeArray[i] == NF_SYMBOLTYPE_EMPTY ||
                  nTypeArray[i] == NF_SYMBOLTYPE_STRING ||
                  nTypeArray[i] == NF_SYMBOLTYPE_STAR ||
@@ -1048,11 +1048,11 @@ sal_Unicode ImpSvNumberformatScan::NextChar(sal_uInt16 i)
 bool ImpSvNumberformatScan::IsLastBlankBeforeFrac(sal_uInt16 i)
 {
     bool res = true;
-    if (i < nAnzStrings-1)
+    if (i < nStringsCnt-1)
     {
         bool bStop = false;
         i++;
-        while (i < nAnzStrings-1 && !bStop)
+        while (i < nStringsCnt-1 && !bStop)
         {
             i++;
             if ( nTypeArray[i] == NF_SYMBOLTYPE_DEL &&
@@ -1081,7 +1081,7 @@ bool ImpSvNumberformatScan::IsLastBlankBeforeFrac(sal_uInt16 i)
 
 void ImpSvNumberformatScan::Reset()
 {
-    nAnzStrings = 0;
+    nStringsCnt = 0;
     nAnzResStrings = 0;
     eScannedType = css::util::NumberFormat::UNDEFINED;
     bExp = false;
@@ -1121,7 +1121,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
     bool bHaveMinute = false;
 
     SkipStrings(i, nPos);
-    while (i < nAnzStrings)
+    while (i < nStringsCnt)
     {
         if (nTypeArray[i] > 0)
         {   // keyword
@@ -1252,14 +1252,14 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 eNewType = css::util::NumberFormat::FRACTION;
                 break;
             case '[':
-                if ( i < nAnzStrings-1 &&
+                if ( i < nStringsCnt-1 &&
                      nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                      sStrArray[i+1][0] == '$' )
                 {
                     eNewType = css::util::NumberFormat::CURRENCY;
                     bMatchBracket = true;
                 }
-                else if ( i < nAnzStrings-1 &&
+                else if ( i < nStringsCnt-1 &&
                           nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                           sStrArray[i+1][0] == '~' )
                 {
@@ -1423,7 +1423,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
         i++;
         if ( bMatchBracket )
         {   // no type detection inside of matching brackets if [$...], [~...]
-            while ( bMatchBracket && i < nAnzStrings )
+            while ( bMatchBracket && i < nStringsCnt )
             {
                 if ( nTypeArray[i] == NF_SYMBOLTYPE_DEL
                      && sStrArray[i][0] == ']' )
@@ -1460,7 +1460,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
 
 bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType eType, const OUString& rStr )
 {
-    if (nAnzStrings >= NF_MAX_FORMAT_SYMBOLS || nPos > nAnzStrings)
+    if (nStringsCnt >= NF_MAX_FORMAT_SYMBOLS || nPos > nStringsCnt)
     {
         return false;
     }
@@ -1470,12 +1470,12 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
     }
     else
     {
-        if ((size_t) (nAnzStrings + 1) >= NF_MAX_FORMAT_SYMBOLS)
+        if ((size_t) (nStringsCnt + 1) >= NF_MAX_FORMAT_SYMBOLS)
         {
             return false;
         }
-        ++nAnzStrings;
-        for (size_t i = nAnzStrings; i > nPos; --i)
+        ++nStringsCnt;
+        for (size_t i = nStringsCnt; i > nPos; --i)
         {
             nTypeArray[i] = nTypeArray[i-1];
             sStrArray[i] = sStrArray[i-1];
@@ -1490,7 +1490,7 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
 int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
                                                  sal_uInt16& rAnzResStrings )
 {
-    if ( i < nAnzStrings-1 &&
+    if ( i < nStringsCnt-1 &&
          sStrArray[i][0] == '[' &&
          nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
          sStrArray[i+1][0] == '~' )
@@ -1502,7 +1502,7 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
         sStrArray[i-1] += sStrArray[i];                   // [~
         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
         rAnzResStrings--;
-        if ( ++i >= nAnzStrings )
+        if ( ++i >= nStringsCnt )
         {
             return -1; // error
         }
@@ -1510,7 +1510,7 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
         OUString& rStr = sStrArray[i];
         nTypeArray[i] = NF_SYMBOLTYPE_CALENDAR;          // convert
         i++;
-        while ( i < nAnzStrings && sStrArray[i][0] != ']' )
+        while ( i < nStringsCnt && sStrArray[i][0] != ']' )
         {
             nPos = nPos + sStrArray[i].getLength();
             rStr += sStrArray[i];
@@ -1518,7 +1518,7 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
             rAnzResStrings--;
             i++;
         }
-        if ( rStr.getLength() && i < nAnzStrings &&
+        if ( rStr.getLength() && i < nStringsCnt &&
              sStrArray[i][0] == ']' )
         {
             nTypeArray[i] = NF_SYMBOLTYPE_CALDEL;
@@ -1590,7 +1590,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     sal_Int32 nPos = 0;                    // error correction position
     sal_uInt16 i = 0;                      // symbol loop counter
     sal_uInt16 nCounter = 0;               // counts digits
-    nAnzResStrings = nAnzStrings;          // counts remaining symbols
+    nAnzResStrings = nStringsCnt;          // counts remaining symbols
     bDecSep = false;                       // reset in case already used in TypeCheck
     bool bThaiT = false;                   // Thai T NatNum modifier present
     bool bTimePart = false;
@@ -1600,7 +1600,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     {
     case css::util::NumberFormat::TEXT:
     case css::util::NumberFormat::DEFINED:
-        while (i < nAnzStrings)
+        while (i < nStringsCnt)
         {
             switch (nTypeArray[i])
             {
@@ -1627,7 +1627,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     case css::util::NumberFormat::CURRENCY:
     case css::util::NumberFormat::SCIENTIFIC:
     case css::util::NumberFormat::FRACTION:
-        while (i < nAnzStrings)
+        while (i < nStringsCnt)
         {
             // TODO: rechecking eScannedType is unnecessary.
             // This switch-case is for eScannedType == css::util::NumberFormat::FRACTION anyway
@@ -1713,7 +1713,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 {
                     OUString sDiv;
                     sal_uInt16 j = i;
-                    while(j < nAnzStrings && sStrArray[j][0] >= '0' && sStrArray[j][0] <= '9')
+                    while(j < nStringsCnt && sStrArray[j][0] >= '0' && sStrArray[j][0] <= '9')
                     {
                         sDiv += sStrArray[j++];
                     }
@@ -1788,7 +1788,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         nPos = nPos + rStr.getLength();
                         i++;
                         nCounter++;
-                        while (i < nAnzStrings &&
+                        while (i < nStringsCnt &&
                               (sStrArray[i][0] == '#' ||
                                sStrArray[i][0] == '0' ||
                                sStrArray[i][0] == '?'))
@@ -1814,7 +1814,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         nPos = nPos + rStr.getLength();
                         i++;
                         nCounter++;
-                        while (i < nAnzStrings &&
+                        while (i < nStringsCnt &&
                                (sStrArray[i][0] == '-') )
                         {
                             // If more than two dashes are present in
@@ -1823,7 +1823,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             // Has to be this ugly. Period.
                             if ( eScannedType == css::util::NumberFormat::CURRENCY
                                  && rStr.getLength() >= 2 &&
-                                 (i == nAnzStrings-1 ||
+                                 (i == nStringsCnt-1 ||
                                   sStrArray[i+1][0] != '-') )
                             {
                                 break;
@@ -1869,7 +1869,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                     bDenomin = true; // end of denominator
                             }
                         }
-                        else if (i > 0 && i < nAnzStrings-1   &&
+                        else if (i > 0 && i < nStringsCnt-1   &&
                                  (cPre == '#' || cPre == '0')      &&
                                  ((cNext = NextChar(i)) == '#' || cNext == '0')) // #,#
                         {
@@ -1893,7 +1893,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 bool bFirst = true;
                                 //  set a hard No-Break Space or ConvertMode
                                 const OUString& rSepF = pFormatter->GetNumThousandSep();
-                                while ( i < nAnzStrings &&
+                                while ( i < nStringsCnt &&
                                         sStrArray[i] == sOldThousandSep &&
                                         StringEqualsChar( sOldThousandSep, NextChar(i) ) )
                                 {   // last was a space or another space
@@ -1914,7 +1914,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                     nThousand++;
                                     i++;
                                 }
-                                if ( i < nAnzStrings-1 &&
+                                if ( i < nStringsCnt-1 &&
                                      sStrArray[i] == sOldThousandSep )
                                 {
                                     // something following last space
@@ -1924,7 +1924,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                     if ( (nPos <= nCurrPos &&
                                           nCurrPos < nPos + sStrArray[i+1].getLength()) ||
                                          nTypeArray[i+1] == NF_KEY_CCC ||
-                                         (i < nAnzStrings-2 &&
+                                         (i < nStringsCnt-2 &&
                                           sStrArray[i+1][0] == '[' &&
                                           sStrArray[i+2][0] == '$') )
                                     {
@@ -1958,7 +1958,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                     sStrArray[i] = pFormatter->GetNumThousandSep();
                                     i++;
                                 }
-                                while (i < nAnzStrings && sStrArray[i] == sOldThousandSep);
+                                while (i < nStringsCnt && sStrArray[i] == sOldThousandSep);
                             }
                         }
                         else // any grsep
@@ -1966,7 +1966,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                             nPos = nPos + rStr.getLength();
                             i++;
-                            while ( i < nAnzStrings && sStrArray[i] == sOldThousandSep )
+                            while ( i < nStringsCnt && sStrArray[i] == sOldThousandSep )
                             {
                                 rStr += sStrArray[i];
                                 nPos = nPos + sStrArray[i].getLength();
@@ -1994,7 +1994,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                             nPos = nPos + rStr.getLength();
                             i++;
-                            while ( i < nAnzStrings && sStrArray[i] == sOldDecSep )
+                            while ( i < nStringsCnt && sStrArray[i] == sOldDecSep )
                             {
                                 rStr += sStrArray[i];
                                 nPos = nPos + sStrArray[i].getLength();
@@ -2045,7 +2045,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 bDenomin = true; // next content is not part of denominator
                             nPos = nPos + rStr.getLength();
                             i++;
-                            while (i < nAnzStrings && StringEqualsChar( sStrArray[i], cSaved ) )
+                            while (i < nStringsCnt && StringEqualsChar( sStrArray[i], cSaved ) )
                             {
                                 rStr += sStrArray[i];
                                 nPos = nPos + sStrArray[i].getLength();
@@ -2088,7 +2088,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     break;
                 case '[' :
                     if ( eScannedType == css::util::NumberFormat::CURRENCY &&
-                         i < nAnzStrings-1 &&
+                         i < nStringsCnt-1 &&
                          nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                          sStrArray[i+1][0] == '$' )
                     {
@@ -2099,7 +2099,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         sStrArray[i-1] += sStrArray[i];             // [$
                         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                         nAnzResStrings--;
-                        if ( ++i >= nAnzStrings )
+                        if ( ++i >= nStringsCnt )
                         {
                             return nPos; // Error
                         }
@@ -2108,7 +2108,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         nTypeArray[i] = NF_SYMBOLTYPE_CURRENCY; // convert
                         bool bHadDash = false;
                         i++;
-                        while ( i < nAnzStrings && sStrArray[i][0] != ']' )
+                        while ( i < nStringsCnt && sStrArray[i][0] != ']' )
                         {
                             nPos = nPos + sStrArray[i].getLength();
                             if ( bHadDash )
@@ -2134,7 +2134,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             }
                             i++;
                         }
-                        if ( rStr.getLength() && i < nAnzStrings && sStrArray[i][0] == ']' )
+                        if ( rStr.getLength() && i < nStringsCnt && sStrArray[i][0] == ']' )
                         {
                             nTypeArray[i] = NF_SYMBOLTYPE_CURRDEL;
                             nPos = nPos + sStrArray[i].getLength();
@@ -2267,12 +2267,12 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         }
         // Combine digits into groups to save memory (Info will be copied
         // later, taking only non-empty symbols).
-        for (i = 0; i < nAnzStrings; ++i)
+        for (i = 0; i < nStringsCnt; ++i)
         {
             if (nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
             {
                 OUString& rStr = sStrArray[i];
-                while (++i < nAnzStrings && nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
+                while (++i < nStringsCnt && nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
                 {
                     rStr += sStrArray[i];
                     nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
@@ -2282,7 +2282,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         }
         break; // of css::util::NumberFormat::NUMBER
     case css::util::NumberFormat::DATE:
-        while (i < nAnzStrings)
+        while (i < nStringsCnt)
         {
             switch (nTypeArray[i])
             {
@@ -2391,7 +2391,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         } // of while
         break; // of css::util::NumberFormat::DATE
     case css::util::NumberFormat::TIME:
-        while (i < nAnzStrings)
+        while (i < nStringsCnt)
         {
             sal_Unicode cChar;
 
@@ -2412,11 +2412,11 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
                         OUString& rStr = sStrArray[i];
                         i++;
-                        if (i < nAnzStrings)
+                        if (i < nStringsCnt)
                         {
                             nPos = nPos + sStrArray[i].getLength();
                             nCounter++;
-                            while (i < nAnzStrings &&
+                            while (i < nStringsCnt &&
                                    sStrArray[i][0] == '0')
                             {
                                 rStr += sStrArray[i];
@@ -2535,7 +2535,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         }
         break;                                 // of css::util::NumberFormat::TIME
     case css::util::NumberFormat::DATETIME:
-        while (i < nAnzStrings)
+        while (i < nStringsCnt)
         {
             int nCalRet;
             switch (nTypeArray[i])
@@ -2567,7 +2567,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             i++;
                             nPos = nPos + sStrArray[i].getLength();
                             nCounter++;
-                            while (i < nAnzStrings &&
+                            while (i < nStringsCnt &&
                                    sStrArray[i][0] == '0')
                             {
                                 rStr += sStrArray[i];
@@ -2854,7 +2854,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         }
         // strings containing keywords of the target locale must be quoted, so
         // the user sees the difference and is able to edit the format string
-        for ( i=0; i < nAnzStrings; i++ )
+        for ( i=0; i < nStringsCnt; i++ )
         {
             if ( nTypeArray[i] == NF_SYMBOLTYPE_STRING &&
                  sStrArray[i][0] != '\"' )
@@ -2874,7 +2874,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         OUString aTmp( sStrArray[i] );
                         sal_uInt16 j = i + 1;
                         while ( aTmp.getLength() < sOldCurSymbol.getLength() &&
-                                j < nAnzStrings &&
+                                j < nStringsCnt &&
                                 nTypeArray[j] == NF_SYMBOLTYPE_STRING )
                         {
                             aTmp += sStrArray[j++];
@@ -2908,7 +2908,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     // Concatenate strings, remove quotes for output, and rebuild the format string
     rString.clear();
     i = 0;
-    while (i < nAnzStrings)
+    while (i < nStringsCnt)
     {
         sal_Int32 nStringPos;
         sal_Int32 nArrPos = 0;
@@ -3017,9 +3017,9 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 }
                 i++;
             }
-            while ( i < nAnzStrings && nTypeArray[i] == NF_SYMBOLTYPE_STRING );
+            while ( i < nStringsCnt && nTypeArray[i] == NF_SYMBOLTYPE_STRING );
 
-            if ( i < nAnzStrings )
+            if ( i < nStringsCnt )
             {
                 i--; // enter switch on next symbol again
             }

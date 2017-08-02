@@ -398,8 +398,8 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> const & xPropSet)
     OUString sSelected;
     uno::Sequence<OUString> aListItems;
     xPropSet->getPropertyValue("StringItemList") >>= aListItems;
-    sal_Int32 nNoStrings = aListItems.getLength();
-    if (nNoStrings)
+    sal_Int32 nStringsCnt = aListItems.getLength();
+    if (nStringsCnt)
     {
         uno::Any aTmp = xPropSet->getPropertyValue("DefaultText");
         auto pStr = o3tl::tryAccess<OUString>(aTmp);

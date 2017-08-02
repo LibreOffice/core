@@ -90,12 +90,12 @@ private:
     Date* pNullDate;                            //* 30Dec1899
     // Variables for provisional results:
     OUString sStrArray[SV_MAX_ANZ_INPUT_STRINGS]; //* Array of scanned substrings
-    bool       IsNum[SV_MAX_ANZ_INPUT_STRINGS]; //* Whether a substring is numeric
-    sal_uInt16 nNums[SV_MAX_ANZ_INPUT_STRINGS]; //* Sequence of offsets to numeric strings
-    sal_uInt16 nAnzStrings;                     //* Total count of scanned substrings
-    sal_uInt16 nAnzNums;                        //* Count of numeric substrings
-    bool   bDecSepInDateSeps;                   //* True <=> DecSep in {.,-,/,DateSep}
-    sal_uInt8   nMatchedAllStrings;             //* Scan...String() matched all substrings,
+    bool       IsNum[SV_MAX_ANZ_INPUT_STRINGS];   //* Whether a substring is numeric
+    sal_uInt16 nNums[SV_MAX_ANZ_INPUT_STRINGS];   //* Sequence of offsets to numeric strings
+    sal_uInt16 nStringsCnt;                       //* Total count of scanned substrings
+    sal_uInt16 nAnzNums;                          //* Count of numeric substrings
+    bool   bDecSepInDateSeps;                     //* True <=> DecSep in {.,-,/,DateSep}
+    sal_uInt8   nMatchedAllStrings;               //* Scan...String() matched all substrings,
 
     // bit mask of nMatched... constants
     static const sal_uInt8 nMatchedEndString;        // 0x01
