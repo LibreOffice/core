@@ -311,14 +311,15 @@ void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, g
   std::string aAction = aRoot.get<std::string>("action");
   std::string aPos = aRoot.get<std::string>("position");
   gchar** ppCoordinates = g_strsplit(aPos.c_str(), ", ", 2);
+  gchar** ppCoordinate = ppCoordinates;
   int nX = 0;
   int nY = 0;
 
-  if (*ppCoordinates)
-      nX = atoi(*ppCoordinates);
-  ++ppCoordinates;
-  if (*ppCoordinates)
-      nY = atoi(*ppCoordinates);
+  if (*ppCoordinate)
+      nX = atoi(*ppCoordinate);
+  ++ppCoordinate;
+  if (*ppCoordinate)
+      nY = atoi(*ppCoordinate);
 
   g_strfreev(ppCoordinates);
 
