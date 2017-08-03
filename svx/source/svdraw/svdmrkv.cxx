@@ -1816,26 +1816,26 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
         if(pPV)
         {
             SdrPage* pPage=pPV->GetPage();
-            sal_uInt16 nPgAnz=1;
+            sal_uInt16 nPgCount=1;
 
             if(bMasters && pPage->TRG_HasMasterPage())
             {
-                nPgAnz++;
+                nPgCount++;
             }
 
             bool bExtraPassForWholePage=bWholePage && pPage!=pPV->GetObjList();
-            if (bExtraPassForWholePage) nPgAnz++; // First search in AktObjList, then on the entire page
-            sal_uInt16 nPgNum=bBack ? 0 : nPgAnz;
-            while (pHitObj==nullptr && (bBack ? nPgNum<nPgAnz : nPgNum>0)) {
+            if (bExtraPassForWholePage) nPgCount++; // First search in AktObjList, then on the entire page
+            sal_uInt16 nPgNum=bBack ? 0 : nPgCount;
+            while (pHitObj==nullptr && (bBack ? nPgNum<nPgCount : nPgNum>0)) {
                 SdrSearchOptions nTmpOptions=nOptions;
                 if (!bBack) nPgNum--;
                 const SdrLayerIDSet* pMVisLay=nullptr;
                 SdrObjList* pObjList=nullptr;
                 if (pbHitPassDirect!=nullptr) *pbHitPassDirect = true;
-                if (nPgNum>=nPgAnz-1 || (bExtraPassForWholePage && nPgNum>=nPgAnz-2))
+                if (nPgNum>=nPgCount-1 || (bExtraPassForWholePage && nPgNum>=nPgCount-2))
                 {
                     pObjList=pPV->GetObjList();
-                    if (bExtraPassForWholePage && nPgNum==nPgAnz-2) {
+                    if (bExtraPassForWholePage && nPgNum==nPgCount-2) {
                         pObjList=pPage;
                         if (pbHitPassDirect!=nullptr) *pbHitPassDirect = false;
                     }
