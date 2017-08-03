@@ -309,6 +309,19 @@ void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, g
   boost::property_tree::read_json(aStream, aRoot);
   //std::string aDialogId = aRoot.get<std::string>("dialogId");
   std::string aAction = aRoot.get<std::string>("action");
+  std::string aPos = aRoot.get<std::string>("position");
+  gchar** ppCoordinates = g_strsplit(aPos.c_str(), ", ", 2);
+  gchar** ppCoordinate = ppCoordinates;
+  int nX = 0;
+  int nY = 0;
+
+  if (*ppCoordinate)
+      nX = atoi(*ppCoordinate);
+  ++ppCoordinate;
+  if (*ppCoordinate)
+      nY = atoi(*ppCoordinate);
+
+  g_strfreev(ppCoordinates);
 
   // temporary hack to invalidate/close floating window of all opened dialogs
   GList* pChildWins = gtv_application_window_get_all_child_windows(window);
@@ -316,7 +329,7 @@ void LOKDocViewSigHandlers::dialogChild(LOKDocView* pDocView, gchar* pPayload, g
   for (pIt = pChildWins; pIt != nullptr; pIt = pIt->next)
   {
       if (aAction == "invalidate")
-          gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pIt->data));
+          gtv_lok_dialog_child_invalidate(GTV_LOK_DIALOG(pIt->data), nX, nY);
       else if (aAction == "close")
           gtv_lok_dialog_child_close(GTV_LOK_DIALOG(pIt->data));
   }
