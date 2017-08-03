@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0e7cab1f",
+        "filename": "external/nss/nss-android.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-03T07:40:46Z",
+      "side": 1,
+      "message": "This line is not necessary.",
+      "revId": "25bd453f46b77d30f3684bab87b5f62bba5a5348",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
