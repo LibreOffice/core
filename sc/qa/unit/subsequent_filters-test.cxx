@@ -241,6 +241,7 @@ public:
     void testTdf97598XLSX();
 
     void testPageScalingXLSX();
+    void testActiveXCheckboxXLSX();
 #ifdef UNX
     void testUnicodeFileNameGnumeric();
 #endif
@@ -366,6 +367,7 @@ public:
     CPPUNIT_TEST(testTdf97598XLSX);
 
     CPPUNIT_TEST(testPageScalingXLSX);
+    CPPUNIT_TEST(testActiveXCheckboxXLSX);
 #ifdef UNX
     CPPUNIT_TEST(testUnicodeFileNameGnumeric);
 #endif
@@ -3930,6 +3932,44 @@ void ScFiltersTest::testPageScalingXLSX()
     SfxItemSet& rSet = pStyleSheet->GetItemSet();
     sal_uInt16 nVal = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALE)).GetValue();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(90), nVal);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testActiveXCheckboxXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("activex_checkbox.", FORMAT_XLSX);
+    uno::Reference< frame::XModel > xModel = xDocSh->GetModel();
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(xModel, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier(xIA->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIA_DrawPage(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
+    uno::Reference< drawing::XControlShape > xControlShape(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xControlShape.is());
+
+    // Check control type
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.CheckBox")));
+
+    // Check custom label
+    OUString sLabel;
+    xPropertySet->getPropertyValue("Label") >>= sLabel;
+    CPPUNIT_ASSERT_EQUAL(OUString("Custom Caption"), sLabel);
+
+    // Check background color (highlight system color)
+    sal_Int32 nColor;
+    xPropertySet->getPropertyValue("BackgroundColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x316AC5), nColor);
+
+    // Check Text color (active border system color)
+    xPropertySet->getPropertyValue("TextColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD4D0C8), nColor);
+
+    // Check state of the checkbox
+    sal_Int16 nState;
+    xPropertySet->getPropertyValue("State") >>= nState;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
 
     xDocSh->DoClose();
 }
