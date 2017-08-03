@@ -178,6 +178,17 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions : public utl::detail::Op
         void      SetPageID( sal_Int32 nID );
 
         /*-****************************************************************************************************
+            @short      use it to set/get the page number which was the last active one
+            @descr      It's only supported for:    - tab-dialogs
+                        If you call it for other ones you will get an assertion in debug version.
+                        In a product version we do nothing!
+            @onerror    An assertion is thrown in debug version. Otherwise we do nothing!
+        *//*-*****************************************************************************************************/
+
+        OUString GetPageIdent() const;
+        void     SetPageIdent(const OUString& rIdent);
+
+        /*-****************************************************************************************************
             @short      use it to set/get the visual state of a window
             @descr      It's only supported for:    - windows
                         If you call it for other ones you will get an assertion in debug version.

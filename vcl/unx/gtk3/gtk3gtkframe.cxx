@@ -38,6 +38,7 @@
 #include <rtl/process.h>
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -3592,6 +3593,7 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
         pThis->m_pEventBox = nullptr;
         pThis->m_pTopLevelGrid = nullptr;
         pThis->m_pWindow = nullptr;
+        pThis->m_xFrameWeld.reset();
         pThis->InvalidateGraphics();
     }
 }
