@@ -60,6 +60,7 @@
 #include <unoprnms.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
+#include <rdfhelper.hxx>
 #include <sfx2/watermarkitem.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
@@ -579,17 +580,32 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
         // 3. Sign it.
         svl::crypto::Signing signing(xCert);
         signing.AddDataRange(text.getStr(), text.getLength());
-        OStringBuffer signature;
-        if (!signing.Sign(signature))
+        OStringBuffer sigBuf;
+        if (!signing.Sign(sigBuf))
             return;
 
+        const OString signature = sigBuf.makeStringAndClear();
         const auto pData = reinterpret_cast<const unsigned char*>(text.getStr());
         const std::vector<unsigned char> data(pData, pData + text.getLength());
-        const std::vector<unsigned char> sig(svl::crypto::DecodeHexString(signature.makeStringAndClear()));
+        const std::vector<unsigned char> sig(svl::crypto::DecodeHexString(signature));
         if (!svl::crypto::Signing::Verify(data, true, sig, aInfo))
             return;
 
-        // 4. Add metadata.
+        // 4. Add metadata
+        static const OUString metaNS("urn:bails");
+        static const OUString metaFile("bails.rdf");
+
+        std::map<OUString, OUString> aStatements = SwRDFHelper::getTextNodeStatements(metaNS, *pNode);
+        OUString name = "loext:signature:index";
+        const OUString indexOld = aStatements[name];
+
+        // Update the index
+        const OUString index = OUString::number(indexOld.isEmpty() ? 1 : (indexOld.toInt32() + 1));
+        SwRDFHelper::updateTextNodeStatement(metaNS, metaFile, *pNode, name, indexOld, index);
+
+        // Add the signature
+        name = "loext:signature:signature" + index;
+        SwRDFHelper::addTextNodeStatement(metaNS, metaFile, *pNode, name, OStringToOUString(signature, RTL_TEXTENCODING_UTF8, 0));
     }
 }
 
