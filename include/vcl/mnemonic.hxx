@@ -68,7 +68,7 @@ public:
     css::uno::Reference< css::i18n::XCharacterClassification > const & GetCharClass();
 
     // returns a string where all '~'-characters and CJK mnemonics of the form (~A) are completely removed
-    static OUString EraseAllMnemonicChars( const OUString& rStr );
+    static OUString EraseAllMnemonicChars(const OUString& rStr, sal_Unicode cChar = '~');
 };
 
 #endif // INCLUDED_VCL_MNEMONIC_HXX
