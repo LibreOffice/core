@@ -24,6 +24,7 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="insertbreak|BreakDialog">Insert Break</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -112,9 +113,8 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">columnrb</property>
+                        <property name="group">pagerb</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -129,7 +129,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pagerb</property>
                       </object>
@@ -148,7 +147,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">linerb</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
