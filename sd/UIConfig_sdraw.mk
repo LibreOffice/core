@@ -104,6 +104,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/dlgsnap \
 	sd/uiconfig/sdraw/ui/copydlg \
 	sd/uiconfig/sdraw/ui/drawchardialog \
+	sd/uiconfig/sdraw/ui/drawprinteroptions \
 	sd/uiconfig/sdraw/ui/drawparadialog \
 	sd/uiconfig/sdraw/ui/drawpagedialog \
 	sd/uiconfig/sdraw/ui/drawprtldialog \
@@ -111,7 +112,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/insertslidesdialog \
 	sd/uiconfig/sdraw/ui/namedesign \
 	sd/uiconfig/sdraw/ui/paranumberingtab \
-	sd/uiconfig/sdraw/ui/printeroptions \
 	sd/uiconfig/sdraw/ui/queryunlinkimagedialog \
 	sd/uiconfig/sdraw/ui/tabledesigndialog \
 	sd/uiconfig/sdraw/ui/vectorize \

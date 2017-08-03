@@ -124,6 +124,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/fontstylemenu \
 	sd/uiconfig/simpress/ui/headerfooterdialog \
 	sd/uiconfig/simpress/ui/headerfootertab \
+	sd/uiconfig/simpress/ui/impressprinteroptions \
 	sd/uiconfig/simpress/ui/insertslides \
 	sd/uiconfig/simpress/ui/interactiondialog \
 	sd/uiconfig/simpress/ui/interactionpage \
@@ -136,7 +137,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/optimpressgeneralpage \
 	sd/uiconfig/simpress/ui/photoalbum \
 	sd/uiconfig/simpress/ui/presentationdialog \
-	sd/uiconfig/simpress/ui/printeroptions \
 	sd/uiconfig/simpress/ui/prntopts \
 	sd/uiconfig/simpress/ui/publishingdialog \
 	sd/uiconfig/simpress/ui/remotedialog \
