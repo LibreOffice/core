@@ -62,8 +62,28 @@
 
 using namespace ::com::sun::star;
 
-SwFormatTablePage::SwFormatTablePage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", &rSet)
+SwFormatTablePage::SwFormatTablePage(Weld::Container* pParent, const SfxItemSet& rSet)
+    : NewSfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", &rSet)
+    , m_xNameED(m_xBuilder->weld_entry("name"))
+    , m_xWidthFT(m_xBuilder->weld_label("widthft"))
+    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("widthmf"))
+    , m_xRelWidthCB(m_xBuilder->weld_check_button("relwidth"))
+    , m_xFullBtn(m_xBuilder->weld_radio_button("full"))
+    , m_xLeftBtn(m_xBuilder->weld_radio_button("left"))
+    , m_xFromLeftBtn(m_xBuilder->weld_radio_button("fromleft"))
+    , m_xRightBtn(m_xBuilder->weld_radio_button("right"))
+    , m_xCenterBtn(m_xBuilder->weld_radio_button("center"))
+    , m_xFreeBtn(m_xBuilder->weld_radio_button("free"))
+    , m_xLeftFT(m_xBuilder->weld_label("leftft"))
+    , m_xLeftMF(m_xBuilder->weld_metric_spin_button("leftmf"))
+    , m_xRightFT(m_xBuilder->weld_label("rightft"))
+    , m_xRightMF(m_xBuilder->weld_metric_spin_button("rightmf"))
+    , m_xTopFT(m_xBuilder->weld_label("aboveft"))
+    , m_xTopMF(m_xBuilder->weld_metric_spin_button("abovemf"))
+    , m_xBottomFT(m_xBuilder->weld_label("belowft"))
+    , m_xBottomMF(m_xBuilder->weld_metric_spin_button("belowmf"))
+    , m_xContainer(m_xBuilder->weld_widget("properties"))
+    , m_xTextDirectionLB(m_xBuilder->weld_combo_box_text("textdirection"))
     , pTableData(nullptr)
     , nSaveWidth(0)
     , nMinTableWidth(MINLAY)
@@ -71,249 +91,196 @@ SwFormatTablePage::SwFormatTablePage(vcl::Window* pParent, const SfxItemSet& rSe
     , bFull(false)
     , bHtmlMode(false)
 {
-    get(m_pNameED, "name");
-    get(m_pWidthFT, "widthft");
-    m_aWidthMF.set(get<MetricField>("widthmf"));
-    m_aLeftMF.set(get<MetricField>("leftmf"));
-    m_aRightMF.set(get<MetricField>("rightmf"));
-    get(m_pRelWidthCB, "relwidth");
-    get(m_pFullBtn, "full");
-    get(m_pLeftBtn, "left");
-    get(m_pFromLeftBtn, "fromleft");
-    get(m_pRightBtn, "right");
-    get(m_pCenterBtn, "center");
-    get(m_pFreeBtn, "free");
-    get(m_pLeftFT, "leftft");
-    get(m_pRightFT, "rightft");
-    get(m_pTopFT, "aboveft");
-    get(m_pTopMF, "abovemf");
-    get(m_pBottomFT, "belowft");
-    get(m_pBottomMF, "belowmf");
-    get(m_pTextDirectionLB, "textdirection");
-
     SetExchangeSupport();
 
     const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem))
+    if (SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem))
         bHtmlMode = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 
-    bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
-    get<VclContainer>("properties")->Show(!bHtmlMode && bCTL);
+    const bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
+    if (!bHtmlMode && bCTL)
+        m_xContainer->show();
+    else
+        m_xContainer->hide();
 
     Init();
 }
 
-SwFormatTablePage::~SwFormatTablePage()
+void SwFormatTablePage::connect_values_changed()
 {
-    disposeOnce();
+    Link<Weld::MetricSpinButton&, void> aLk = LINK(this, SwFormatTablePage, UpDownHdl);
+    m_xTopMF->connect_value_changed(aLk);
+    m_xBottomMF->connect_value_changed(aLk);
+    m_xRightMF->connect_value_changed(aLk);
+    m_xLeftMF->connect_value_changed(aLk);
+    m_xWidthMF->connect_value_changed(aLk);
 }
 
-void SwFormatTablePage::dispose()
+void SwFormatTablePage::disconnect_values_changed()
 {
-    m_pNameED.clear();
-    m_pWidthFT.clear();
-    m_pRelWidthCB.clear();
-    m_pFullBtn.clear();
-    m_pLeftBtn.clear();
-    m_pFromLeftBtn.clear();
-    m_pRightBtn.clear();
-    m_pCenterBtn.clear();
-    m_pFreeBtn.clear();
-    m_pLeftFT.clear();
-    m_pRightFT.clear();
-    m_pTopFT.clear();
-    m_pTopMF.clear();
-    m_pBottomFT.clear();
-    m_pBottomMF.clear();
-    m_pTextDirectionLB.clear();
-    SfxTabPage::dispose();
+    Link<Weld::MetricSpinButton&, void> aLk;
+    m_xTopMF->connect_value_changed(aLk);
+    m_xBottomMF->connect_value_changed(aLk);
+    m_xRightMF->connect_value_changed(aLk);
+    m_xLeftMF->connect_value_changed(aLk);
+    m_xWidthMF->connect_value_changed(aLk);
 }
 
-void  SwFormatTablePage::Init()
-{
-    m_aLeftMF.SetMetricFieldMin(-999999);
-    m_aRightMF.SetMetricFieldMin(-999999);
 
+void SwFormatTablePage::Init()
+{
     //handler
-    Link<Button*,void> aLk2 = LINK( this, SwFormatTablePage, AutoClickHdl );
-    m_pFullBtn->SetClickHdl( aLk2 );
-    m_pFreeBtn->SetClickHdl( aLk2 );
-    m_pLeftBtn->SetClickHdl( aLk2 );
-    m_pFromLeftBtn->SetClickHdl( aLk2 );
-    m_pRightBtn->SetClickHdl( aLk2 );
-    m_pCenterBtn->SetClickHdl( aLk2 );
+    Link<Weld::Button&, void> aLk2 = LINK(this, SwFormatTablePage, AutoClickHdl);
+    m_xFullBtn->connect_clicked(aLk2);
+    m_xFreeBtn->connect_clicked(aLk2);
+    m_xLeftBtn->connect_clicked(aLk2);
+    m_xFromLeftBtn->connect_clicked(aLk2);
+    m_xRightBtn->connect_clicked(aLk2);
+    m_xCenterBtn->connect_clicked(aLk2);
 
-    Link<SpinField&,void> aLk = LINK( this, SwFormatTablePage, UpDownHdl );
-    m_pTopMF->SetUpHdl( aLk );
-    m_pBottomMF->SetUpHdl( aLk );
-    m_aRightMF.SetUpHdl( aLk );
-    m_aLeftMF.SetUpHdl( aLk );
-    m_aWidthMF.SetUpHdl( aLk );
+    connect_values_changed();
 
-    m_pTopMF->SetDownHdl( aLk );
-    m_pBottomMF->SetDownHdl( aLk );
-    m_aRightMF.SetDownHdl( aLk );
-    m_aLeftMF.SetDownHdl( aLk );
-    m_aWidthMF.SetDownHdl( aLk );
-
-    Link<Control&,void> aLk3 = LINK( this, SwFormatTablePage, LoseFocusHdl );
-    m_pTopMF->SetLoseFocusHdl( aLk3 );
-    m_pBottomMF->SetLoseFocusHdl( aLk3 );
-    m_aRightMF.SetLoseFocusHdl( aLk3 );
-    m_aLeftMF.SetLoseFocusHdl( aLk3 );
-    m_aWidthMF.SetLoseFocusHdl( aLk3 );
-
-    m_pRelWidthCB->SetClickHdl(LINK( this, SwFormatTablePage, RelWidthClickHdl ));
+    m_xRelWidthCB->connect_clicked(LINK(this, SwFormatTablePage, RelWidthClickHdl));
 }
 
-IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, Button*, p, void )
+IMPL_LINK(SwFormatTablePage, RelWidthClickHdl, Weld::Button&, rBtn, void)
 {
-    CheckBox* pBtn = static_cast<CheckBox*>(p);
     OSL_ENSURE(pTableData, "table data not available?");
-    bool bIsChecked = pBtn->IsChecked();
-    sal_Int64 nLeft  = m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue(FUNIT_TWIP ));
-    sal_Int64 nRight = m_aRightMF.DenormalizePercent(m_aRightMF.GetValue(FUNIT_TWIP ));
-    m_aWidthMF.ShowPercent(bIsChecked);
-    m_aLeftMF.ShowPercent(bIsChecked);
-    m_aRightMF.ShowPercent(bIsChecked);
-
+    Weld::ToggleButton& rToggleBtn = dynamic_cast<Weld::ToggleButton&>(rBtn);
+    bool bIsChecked = rToggleBtn.get_active();
+    int nLeft  = GetPercentValue(*m_xLeftMF, pTableData->GetSpace(), false);
+    int nRight = GetPercentValue(*m_xRightMF, pTableData->GetSpace(), false);
+    ShowPercent(*m_xWidthMF, bIsChecked, nMinTableWidth, pTableData->GetSpace());
+    ShowPercent(*m_xLeftMF, bIsChecked, 0, pTableData->GetSpace());
+    ShowPercent(*m_xRightMF, bIsChecked, 0, pTableData->GetSpace());
     if (bIsChecked)
     {
-        m_aWidthMF.SetRefValue(pTableData->GetSpace());
-        m_aLeftMF.SetRefValue(pTableData->GetSpace());
-        m_aRightMF.SetRefValue(pTableData->GetSpace());
-        m_aLeftMF.SetMetricFieldMin(0); //will be overwritten by the Percentfield
-        m_aRightMF.SetMetricFieldMin(0); //dito
-        m_aLeftMF.SetMetricFieldMax(99);
-        m_aRightMF.SetMetricFieldMax(99);
-        m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(nLeft ), FUNIT_TWIP );
-        m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(nRight ), FUNIT_TWIP );
+        m_xLeftMF->set_range(0, 99, FUNIT_PERCENT);
+        m_xRightMF->set_range(0, 99, FUNIT_PERCENT);
+        SetPercentValue(*m_xLeftMF, nLeft, pTableData->GetSpace(), false);
+        SetPercentValue(*m_xRightMF, nRight, pTableData->GetSpace(), false);
     }
     else
-        ModifyHdl(m_aLeftMF.get());    //correct values again
+        ModifyHdl(*m_xLeftMF);    //correct values again
 
-    if(m_pFreeBtn->IsChecked())
+    if (m_xFreeBtn->get_active())
     {
-        bool bEnable = !pBtn->IsChecked();
-        m_aRightMF.Enable(bEnable);
-        m_pRightFT->Enable(bEnable);
+        bool bEnable = !rToggleBtn.get_active();
+        m_xRightMF->set_sensitive(bEnable);
+        m_xRightFT->set_sensitive(bEnable);
     }
     bModified = true;
 }
 
-IMPL_LINK( SwFormatTablePage, AutoClickHdl, Button*, pControl, void )
+IMPL_LINK(SwFormatTablePage, AutoClickHdl, Weld::Button&, rControl, void)
 {
     bool bRestore = true,
          bLeftEnable = false,
          bRightEnable= false,
          bWidthEnable= false,
          bOthers = true;
-    if (pControl == m_pFullBtn)
+    if (&rControl == m_xFullBtn.get())
     {
-        m_aLeftMF.SetPrcntValue(0);
-        m_aRightMF.SetPrcntValue(0);
-        nSaveWidth = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue(FUNIT_TWIP )));
-        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(pTableData->GetSpace() ), FUNIT_TWIP );
+        SetPercentValue(*m_xLeftMF, 0, pTableData->GetSpace(), false);
+        SetPercentValue(*m_xRightMF, 0, pTableData->GetSpace(), false);
+        nSaveWidth = GetPercentValue(*m_xWidthMF, pTableData->GetSpace(), false);
+        SetPercentValue(*m_xWidthMF, pTableData->GetSpace(), pTableData->GetSpace(), false);
         bFull = true;
         bRestore = false;
     }
-    else if (pControl == m_pLeftBtn)
+    else if (&rControl == m_xLeftBtn.get())
     {
         bRightEnable = bWidthEnable = true;
-        m_aLeftMF.SetPrcntValue(0);
+        SetPercentValue(*m_xLeftMF, 0, pTableData->GetSpace(), false);
     }
-    else if (pControl == m_pFromLeftBtn)
+    else if (&rControl == m_xFromLeftBtn.get())
     {
         bLeftEnable = bWidthEnable = true;
-        m_aRightMF.SetPrcntValue(0);
+        SetPercentValue(*m_xRightMF, 0, pTableData->GetSpace(), false);
     }
-    else if (pControl == m_pRightBtn)
+    else if (&rControl == m_xRightBtn.get())
     {
         bLeftEnable = bWidthEnable = true;
-        m_aRightMF.SetPrcntValue(0);
+        SetPercentValue(*m_xRightMF, 0, pTableData->GetSpace(), false);
     }
-    else if (pControl == m_pCenterBtn)
+    else if (&rControl == m_xCenterBtn.get())
     {
         bLeftEnable = bWidthEnable = true;
     }
-    else if (pControl == m_pFreeBtn)
+    else if (&rControl == m_xFreeBtn.get())
     {
         RightModify();
         bLeftEnable = true;
         bWidthEnable = true;
         bOthers = false;
     }
-    m_aLeftMF.Enable(bLeftEnable);
-    m_pLeftFT->Enable(bLeftEnable);
-    m_aWidthMF.Enable(bWidthEnable);
-    m_pWidthFT->Enable(bWidthEnable);
-    if ( bOthers )
+    m_xLeftMF->set_sensitive(bLeftEnable);
+    m_xLeftFT->set_sensitive(bLeftEnable);
+    m_xWidthMF->set_sensitive(bWidthEnable);
+    m_xWidthFT->set_sensitive(bWidthEnable);
+    if (bOthers)
     {
-        m_aRightMF.Enable(bRightEnable);
-        m_pRightFT->Enable(bRightEnable);
-        m_pRelWidthCB->Enable(bWidthEnable);
+        m_xRightMF->set_sensitive(bRightEnable);
+        m_xRightFT->set_sensitive(bRightEnable);
+        m_xRelWidthCB->set_sensitive(bWidthEnable);
     }
 
-    if(bFull && bRestore)
+    if (bFull && bRestore)
     {
         //After being switched on automatic, the width was pinned
         //in order to restore the width while switching back to.
         bFull = false;
-        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(nSaveWidth ), FUNIT_TWIP );
+        SetPercentValue(*m_xWidthMF, nSaveWidth, pTableData->GetSpace(), false);
     }
-    ModifyHdl(m_aWidthMF.get());
+    ModifyHdl(*m_xWidthMF);
     bModified = true;
 }
 
 void SwFormatTablePage::RightModify()
 {
-    if(m_pFreeBtn->IsChecked())
+    if (m_xFreeBtn->get_active())
     {
-        bool bEnable = m_aRightMF.GetValue() == 0;
-        m_pRelWidthCB->Enable(bEnable);
+        bool bEnable = m_xRightMF->get_value(m_xRightMF->get_unit()) == 0;
+        m_xRelWidthCB->set_sensitive(bEnable);
         if ( !bEnable )
         {
-            m_pRelWidthCB->Check(false);
-            RelWidthClickHdl(m_pRelWidthCB);
+            m_xRelWidthCB->set_active(false);
+            RelWidthClickHdl(*m_xRelWidthCB);
         }
-        bEnable = m_pRelWidthCB->IsChecked();
-        m_aRightMF.Enable(!bEnable);
-        m_pRightFT->Enable(!bEnable);
+        bEnable = m_xRelWidthCB->get_active();
+        m_xRightMF->set_sensitive(!bEnable);
+        m_xRightFT->set_sensitive(!bEnable);
     }
 }
 
-IMPL_LINK( SwFormatTablePage, LoseFocusHdl, Control&, rControl, void )
+IMPL_LINK(SwFormatTablePage, UpDownHdl, Weld::MetricSpinButton&, rEdit, void)
 {
-    UpDownHdl(static_cast<SpinField&>(rControl));
-}
-IMPL_LINK( SwFormatTablePage, UpDownHdl, SpinField&, rEdit, void )
-{
-    if( m_aRightMF.get() == &rEdit)
+    if (m_xRightMF.get() == &rEdit)
         RightModify();
-    ModifyHdl( &rEdit );
+    ModifyHdl(rEdit);
 }
 
-void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
+void SwFormatTablePage::ModifyHdl(const Weld::MetricSpinButton& rEdit)
 {
-    SwTwips nCurWidth  = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue( FUNIT_TWIP )));
+    SwTwips nCurWidth  = GetPercentValue(*m_xWidthMF, pTableData->GetSpace(), false);
     SwTwips nPrevWidth = nCurWidth;
-    SwTwips nRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FUNIT_TWIP )));
-    SwTwips nLeft  = static_cast< SwTwips >(m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue( FUNIT_TWIP )));
+    SwTwips nRight = GetPercentValue(*m_xRightMF, pTableData->GetSpace(), false);
+    SwTwips nLeft = GetPercentValue(*m_xLeftMF, pTableData->GetSpace(), false);
     SwTwips nDiff;
 
-    if (pEdit == m_aWidthMF.get())
+    if (&rEdit == m_xWidthMF.get())
     {
         if( nCurWidth < MINLAY )
             nCurWidth = MINLAY;
         nDiff = nRight + nLeft + nCurWidth - pTableData->GetSpace() ;
         //right aligned: only change the left margin
-        if(m_pRightBtn->IsChecked())
+        if (m_xRightBtn->get_active())
             nLeft -= nDiff;
         //left aligned: only change the right margin
-        else if(m_pLeftBtn->IsChecked())
+        else if (m_xLeftBtn->get_active())
             nRight -= nDiff;
         //left margin and width allowed - first right - then left
-        else if(m_pFromLeftBtn->IsChecked())
+        else if (m_xFromLeftBtn->get_active())
         {
             if( nRight >= nDiff )
                 nRight -= nDiff;
@@ -333,7 +300,7 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
             }
         }
         //centered: change both sides equally
-        else if(m_pCenterBtn->IsChecked())
+        else if (m_xCenterBtn->get_active())
         {
             if(nLeft != nRight)
             {
@@ -343,18 +310,18 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
             }
             else
             {
-                    nLeft -= nDiff/2;
-                    nRight -= nDiff/2;
+                nLeft -= nDiff/2;
+                nRight -= nDiff/2;
             }
         }
         //free alignment: decrease both margins
-        else if(m_pFreeBtn->IsChecked())
+        else if (m_xFreeBtn->get_active())
         {
             nLeft -= nDiff/2;
             nRight -= nDiff/2;
         }
     }
-    if (pEdit == m_aRightMF.get())
+    else if (&rEdit == m_xRightMF.get())
     {
 
         if( nRight + nLeft > pTableData->GetSpace() - MINLAY )
@@ -362,14 +329,14 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
 
         nCurWidth = pTableData->GetSpace() - nLeft - nRight;
     }
-    if (pEdit == m_aLeftMF.get())
+    else if (&rEdit == m_xLeftMF.get())
     {
-        if(!m_pFromLeftBtn->IsChecked())
+        if (!m_xFromLeftBtn->get_active())
         {
-            bool bCenter = m_pCenterBtn->IsChecked();
+            bool bCenter = m_xCenterBtn->get_active();
             if( bCenter )
                 nRight = nLeft;
-            if(nRight + nLeft > pTableData->GetSpace() - MINLAY )
+            if (nRight + nLeft > pTableData->GetSpace() - MINLAY )
             {
                 nLeft  = bCenter ?  (pTableData->GetSpace() - MINLAY) /2 :
                                     (pTableData->GetSpace() - MINLAY) - nRight;
@@ -388,58 +355,56 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
         }
     }
     if (nCurWidth != nPrevWidth )
-        m_aWidthMF.SetPrcntValue( m_aWidthMF.NormalizePercent( nCurWidth ), FUNIT_TWIP );
-    m_aRightMF.SetPrcntValue( m_aRightMF.NormalizePercent( nRight ), FUNIT_TWIP );
-    m_aLeftMF.SetPrcntValue( m_aLeftMF.NormalizePercent( nLeft ), FUNIT_TWIP );
+        SetPercentValue(*m_xWidthMF, nCurWidth, pTableData->GetSpace(), false);
+    SetPercentValue(*m_xRightMF, nRight, pTableData->GetSpace(), false);
+    SetPercentValue(*m_xLeftMF, nLeft, pTableData->GetSpace(), false);
     bModified = true;
 }
 
-VclPtr<SfxTabPage> SwFormatTablePage::Create( vcl::Window* pParent,
-                                              const SfxItemSet* rAttrSet)
+NewSfxTabPage* SwFormatTablePage::Create(Weld::Container* pParent, const SfxItemSet* pAttrSet)
 {
-    return VclPtr<SwFormatTablePage>::Create( pParent, *rAttrSet );
+    return new SwFormatTablePage(pParent, *pAttrSet);
 }
 
 bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
 {
     //Test if one of the controls still has the focus
-    if (m_aWidthMF.HasFocus())
-        ModifyHdl(m_aWidthMF.get());
-    else if (m_aLeftMF.HasFocus())
-        ModifyHdl(m_aLeftMF.get());
-    else if(m_aRightMF.HasFocus())
-        ModifyHdl(m_aRightMF.get());
-    else if(m_pTopMF->HasFocus())
-        ModifyHdl(m_pTopMF);
-    else if(m_pBottomMF->HasFocus())
-        ModifyHdl(m_pBottomMF);
+    if (m_xWidthMF->has_focus())
+        ModifyHdl(*m_xWidthMF);
+    else if (m_xLeftMF->has_focus())
+        ModifyHdl(*m_xLeftMF.get());
+    else if(m_xRightMF->has_focus())
+        ModifyHdl(*m_xRightMF.get());
+    else if (m_xTopMF->has_focus())
+        ModifyHdl(*m_xTopMF);
+    else if (m_xBottomMF->has_focus())
+        ModifyHdl(*m_xBottomMF);
 
     if(bModified)
     {
-        if( m_pBottomMF->IsValueChangedFromSaved() ||
-            m_pTopMF->IsValueChangedFromSaved() )
+        if (m_xBottomMF->get_value_changed_from_saved() ||
+            m_xTopMF->get_value_changed_from_saved())
         {
             SvxULSpaceItem aULSpace(RES_UL_SPACE);
-            aULSpace.SetUpper( m_pTopMF->Denormalize(m_pTopMF->GetValue( FUNIT_TWIP )));
-            aULSpace.SetLower( m_pBottomMF->Denormalize(m_pBottomMF->GetValue( FUNIT_TWIP )));
+            aULSpace.SetUpper(m_xTopMF->get_value(FUNIT_TWIP));
+            aULSpace.SetLower(m_xBottomMF->get_value(FUNIT_TWIP));
             rCoreSet->Put(aULSpace);
         }
 
     }
-    if(m_pNameED->IsValueChangedFromSaved())
+    if (m_xNameED->get_value_changed_from_saved())
     {
-        rCoreSet->Put(SfxStringItem( FN_PARAM_TABLE_NAME, m_pNameED->GetText()));
+        rCoreSet->Put(SfxStringItem( FN_PARAM_TABLE_NAME, m_xNameED->get_text()));
         bModified = true;
     }
 
-    if( m_pTextDirectionLB->IsVisible() )
+    if (m_xTextDirectionLB->get_visible())
     {
-        const sal_Int32 nPos = m_pTextDirectionLB->GetSelectEntryPos();
-        if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
+        if (m_xTextDirectionLB->get_value_changed_from_saved())
         {
-            SvxFrameDirection nDirection = static_cast<SvxFrameDirection>(
-                             reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetEntryData( nPos )));
-            rCoreSet->Put( SvxFrameDirectionItem( nDirection, RES_FRAMEDIR));
+            OUString sId = m_xTextDirectionLB->get_active_id();
+            SvxFrameDirection nDirection = static_cast<SvxFrameDirection>(sId.toUInt32());
+            rCoreSet->Put(SvxFrameDirectionItem(nDirection, RES_FRAMEDIR));
             bModified = true;
         }
     }
@@ -447,152 +412,255 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
     return bModified;
 }
 
-void  SwFormatTablePage::Reset( const SfxItemSet* )
+void SwFormatTablePage::ShowPercent(Weld::MetricSpinButton& rSpinButton, bool bIsChecked, int nMinTwip, int nMaxTwip)
+{
+    disconnect_values_changed();
+    bool bOldPercent = rSpinButton.get_unit() == FUNIT_PERCENT;
+    if (bOldPercent && bIsChecked)
+        return;
+    if (!bOldPercent && !bIsChecked)
+        return;
+    if (bOldPercent)
+    {
+        double fRatio = rSpinButton.get_value(FUNIT_PERCENT) / 100;
+        FieldUnit eMetric = ::GetDfltMetric(bHtmlMode);
+        rSpinButton.set_unit(eMetric);
+        rSpinButton.set_range(nMinTwip, nMaxTwip, FUNIT_TWIP);
+        rSpinButton.set_value(nMaxTwip * fRatio, FUNIT_TWIP);
+    }
+    else
+    {
+        double nValTwip = rSpinButton.get_value(FUNIT_TWIP);
+        rSpinButton.set_unit(FUNIT_PERCENT);
+        double fMin = nMinTwip * 100.0 / nMaxTwip;
+        if (nMinTwip != 0 && fMin < 1.0)
+            fMin = 1.0;
+        rSpinButton.set_range(fMin, 100, FUNIT_PERCENT);
+        double fRatio = nValTwip * 100.0 / nMaxTwip;
+        rSpinButton.set_value(fRatio, FUNIT_PERCENT);
+    }
+    connect_values_changed();
+}
+
+void SwFormatTablePage::SetPercentValue(Weld::MetricSpinButton& rSpinButton, double fValue, int nMaxTwip, bool bIsPercent)
+{
+    disconnect_values_changed();
+    bool bUsingPercent = rSpinButton.get_unit() == FUNIT_PERCENT;
+    if (!bUsingPercent)
+    {
+        if (bIsPercent)
+            fValue = nMaxTwip * fValue / 100.0;
+        rSpinButton.set_value(fValue, FUNIT_TWIP);
+    }
+    else
+    {
+        if (!bIsPercent)
+            fValue = fValue / nMaxTwip * 100.0;
+        rSpinButton.set_value(fValue, FUNIT_PERCENT);
+    }
+    connect_values_changed();
+}
+
+int SwFormatTablePage::GetPercentValue(Weld::MetricSpinButton& rSpinButton, int nMaxTwip, bool bAsPercent)
+{
+    double fValue;
+    bool bUsingPercent = rSpinButton.get_unit() == FUNIT_PERCENT;
+    if (!bUsingPercent)
+    {
+        fValue = rSpinButton.get_value(FUNIT_TWIP);
+        if (bAsPercent)
+            fValue = fValue / nMaxTwip * 100.0;
+    }
+    else
+    {
+        fValue = rSpinButton.get_value(FUNIT_PERCENT);
+        if (!bAsPercent)
+            fValue = nMaxTwip * fValue / 100.0;
+    }
+    return ::rtl::math::round(fValue);
+}
+
+void SwFormatTablePage::SetPercentRange(Weld::MetricSpinButton& rSpinButton, double fMinValue, double fMaxValue,
+                                        int nMaxTwip, bool bIsPercent)
+{
+    bool bUsingPercent = rSpinButton.get_unit() == FUNIT_PERCENT;
+    if (!bUsingPercent)
+    {
+        if (bIsPercent)
+        {
+            fMinValue = nMaxTwip * fMinValue / 100.0;
+            fMaxValue = nMaxTwip * fMaxValue / 100.0;
+        }
+        rSpinButton.set_range(fMinValue, fMaxValue, FUNIT_TWIP);
+    }
+    else
+    {
+        if (!bIsPercent)
+        {
+            fMinValue = fMinValue / nMaxTwip * 100.0;
+            fMaxValue = fMaxValue / nMaxTwip * 100.0;
+        }
+        rSpinButton.set_range(fMinValue, fMaxValue, FUNIT_PERCENT);
+    }
+}
+
+void SwFormatTablePage::SetPercentLast(Weld::MetricSpinButton& rSpinButton, double fMaxValue,
+                                        int nMaxTwip, bool bIsPercent)
+{
+    bool bUsingPercent = rSpinButton.get_unit() == FUNIT_PERCENT;
+    double fMinValue, fOldMaxValue;
+    if (!bUsingPercent)
+    {
+        if (bIsPercent)
+            fMaxValue = nMaxTwip * fMaxValue / 100.0;
+        rSpinButton.get_range(fMinValue, fOldMaxValue, FUNIT_TWIP);
+        rSpinButton.set_range(fMinValue, fMaxValue, FUNIT_TWIP);
+    }
+    else
+    {
+        if (!bIsPercent)
+            fMaxValue = fMaxValue / nMaxTwip * 100.0;
+        rSpinButton.get_range(fMinValue, fOldMaxValue, FUNIT_PERCENT);
+        rSpinButton.set_range(fMinValue, fMaxValue, FUNIT_PERCENT);
+    }
+}
+
+void SwFormatTablePage::Reset( const SfxItemSet* )
 {
     const SfxItemSet& rSet = GetItemSet();
     const SfxPoolItem*  pItem;
 
-    if(bHtmlMode)
+    if (bHtmlMode)
     {
-        m_pNameED->Disable();
-        m_pTopFT->Hide();
-        m_pTopMF->Hide();
-        m_pBottomFT->Hide();
-        m_pBottomMF->Hide();
-        m_pFreeBtn->Enable(false);
+        m_xNameED->set_sensitive(false);
+        m_xTopFT->hide();
+        m_xTopMF->hide();
+        m_xBottomFT->hide();
+        m_xBottomMF->hide();
+        m_xFreeBtn->set_sensitive(false);
     }
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
-    m_aWidthMF.SetMetric(aMetric);
-    m_aRightMF.SetMetric(aMetric);
-    m_aLeftMF.SetMetric(aMetric);
-    SetMetric(*m_pTopMF, aMetric);
-    SetMetric(*m_pBottomMF, aMetric);
+    SetMetric(*m_xWidthMF, aMetric);
+    SetMetric(*m_xRightMF, aMetric);
+    SetMetric(*m_xLeftMF, aMetric);
+    SetMetric(*m_xTopMF, aMetric);
+    SetMetric(*m_xBottomMF, aMetric);
 
     //Name
-    if(SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
+    if (SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
     {
-        m_pNameED->SetText(static_cast<const SfxStringItem*>(pItem)->GetValue());
-        m_pNameED->SaveValue();
+        m_xNameED->set_text(static_cast<const SfxStringItem*>(pItem)->GetValue());
+        m_xNameED->save_value();
     }
 
-    if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
+    if (SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
         pTableData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
         nMinTableWidth = pTableData->GetColCount() * MINLAY;
 
-        if(pTableData->GetWidthPercent())
+        if (pTableData->GetWidthPercent())
         {
-            m_pRelWidthCB->Check();
-            RelWidthClickHdl(m_pRelWidthCB);
-            m_aWidthMF.SetPrcntValue(pTableData->GetWidthPercent(), FUNIT_CUSTOM);
-
-            m_aWidthMF.SaveValue();
-            nSaveWidth = static_cast< SwTwips >(m_aWidthMF.GetValue(FUNIT_CUSTOM));
+            m_xRelWidthCB->set_active(true);
+            RelWidthClickHdl(*m_xRelWidthCB);
+            SetPercentValue(*m_xWidthMF, pTableData->GetWidthPercent(), pTableData->GetSpace(), true);
+            m_xWidthMF->save_value();
+            nSaveWidth = GetPercentValue(*m_xWidthMF, pTableData->GetSpace(), true);
         }
         else
         {
-            m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(
-                    pTableData->GetWidth()), FUNIT_TWIP);
-            m_aWidthMF.SaveValue();
+            SetPercentValue(*m_xWidthMF, pTableData->GetWidth(), pTableData->GetSpace(), false);
+            m_xWidthMF->save_value();
             nSaveWidth = pTableData->GetWidth();
             nMinTableWidth = std::min( nSaveWidth, nMinTableWidth );
         }
 
-        m_aWidthMF.SetRefValue(pTableData->GetSpace());
-        m_aWidthMF.SetLast(m_aWidthMF.NormalizePercent( pTableData->GetSpace() ));
-        m_aLeftMF.SetLast(m_aLeftMF.NormalizePercent( pTableData->GetSpace() ));
-        m_aRightMF.SetLast(m_aRightMF.NormalizePercent( pTableData->GetSpace() ));
+        SetPercentLast(*m_xWidthMF, pTableData->GetSpace(), pTableData->GetSpace(), false);
+        SetPercentLast(*m_xLeftMF, pTableData->GetSpace(), pTableData->GetSpace(), false);
+        SetPercentLast(*m_xRightMF, pTableData->GetSpace(), pTableData->GetSpace(), false);
 
-        m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(
-                    pTableData->GetLeftSpace()), FUNIT_TWIP);
-        m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(
-                    pTableData->GetRightSpace()), FUNIT_TWIP);
-        m_aLeftMF.SaveValue();
-        m_aRightMF.SaveValue();
+        SetPercentValue(*m_xLeftMF, pTableData->GetLeftSpace(), pTableData->GetSpace(), false);
+        SetPercentValue(*m_xRightMF, pTableData->GetRightSpace(), pTableData->GetSpace(), false);
+        m_xLeftMF->save_value();
+        m_xRightMF->save_value();
 
         bool bSetRight = false, bSetLeft = false;
         switch( pTableData->GetAlign() )
         {
             case text::HoriOrientation::NONE:
-                m_pFreeBtn->Check();
-                if(m_pRelWidthCB->IsChecked())
+                m_xFreeBtn->set_active(true);
+                if (m_xRelWidthCB->get_active())
                     bSetRight = true;
             break;
             case text::HoriOrientation::FULL:
             {
                 bSetRight = bSetLeft = true;
-                m_pFullBtn->Check();
-                m_aWidthMF.Enable(false);
-                m_pRelWidthCB->Enable(false);
-                m_pWidthFT->Enable(false);
+                m_xFullBtn->set_active(true);
+                m_xWidthMF->set_sensitive(false);
+                m_xRelWidthCB->set_sensitive(false);
+                m_xWidthFT->set_sensitive(false);
             }
             break;
             case text::HoriOrientation::LEFT:
             {
                 bSetLeft = true;
-                m_pLeftBtn->Check();
+                m_xLeftBtn->set_active(true);
             }
             break;
             case text::HoriOrientation::LEFT_AND_WIDTH :
             {
                 bSetRight = true;
-                m_pFromLeftBtn->Check();
+                m_xFromLeftBtn->set_active(true);
             }
             break;
             case text::HoriOrientation::RIGHT:
             {
                 bSetRight = true;
-                m_pRightBtn->Check();
+                m_xRightBtn->set_active(true);
             }
             break;
             case text::HoriOrientation::CENTER:
             {
                 bSetRight = true;
-                m_pCenterBtn->Check();
+                m_xCenterBtn->set_active(true);
             }
             break;
         }
         if ( bSetRight )
         {
-            m_aRightMF.Enable(false);
-            m_pRightFT->Enable(false);
+            m_xRightMF->set_sensitive(false);
+            m_xRightFT->set_sensitive(false);
         }
         if ( bSetLeft )
         {
-            m_aLeftMF.Enable(false);
-            m_pLeftFT->Enable(false);
+            m_xLeftMF->set_sensitive(false);
+            m_xLeftFT->set_sensitive(false);
         }
 
     }
 
     //Margins
-    if(SfxItemState::SET == rSet.GetItemState( RES_UL_SPACE, false,&pItem ))
+    if (SfxItemState::SET == rSet.GetItemState(RES_UL_SPACE, false, &pItem))
     {
-        m_pTopMF->SetValue(m_pTopMF->Normalize(
-                        static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()), FUNIT_TWIP);
-        m_pBottomMF->SetValue(m_pBottomMF->Normalize(
-                        static_cast<const SvxULSpaceItem*>(pItem)->GetLower()), FUNIT_TWIP);
-        m_pTopMF->SaveValue();
-        m_pBottomMF->SaveValue();
+        m_xTopMF->set_value(static_cast<const SvxULSpaceItem*>(pItem)->GetUpper(), FUNIT_TWIP);
+        m_xBottomMF->set_value(static_cast<const SvxULSpaceItem*>(pItem)->GetLower(), FUNIT_TWIP);
+        m_xTopMF->save_value();
+        m_xBottomMF->save_value();
     }
 
     //Text direction
-    if( SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
+    if (SfxItemState::SET == rSet.GetItemState(RES_FRAMEDIR, true, &pItem))
     {
         SvxFrameDirection nVal  = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
-        const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nVal) );
-        m_pTextDirectionLB->SelectEntryPos( nPos );
-        m_pTextDirectionLB->SaveValue();
+        m_xTextDirectionLB->set_active_id(OUString::number(static_cast<sal_uInt32>(nVal)));
+        m_xTextDirectionLB->save_value();
     }
 
-    m_aWidthMF.SetMax( 2*m_aWidthMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
-    m_aRightMF.SetMax( m_aRightMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
-    m_aLeftMF.SetMax( m_aLeftMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
-    m_aWidthMF.SetMin( m_aWidthMF.NormalizePercent( nMinTableWidth ), FUNIT_TWIP );
-
+    SetPercentLast(*m_xLeftMF, pTableData->GetSpace(), pTableData->GetSpace(), false);
+    SetPercentLast(*m_xRightMF, pTableData->GetSpace(), pTableData->GetSpace(), false);
+    SetPercentRange(*m_xWidthMF, nMinTableWidth, 2 * pTableData->GetSpace(), pTableData->GetSpace(), false);
 }
 
-void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
+void SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
     OSL_ENSURE(pTableData, "table data not available?");
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP ))
@@ -600,59 +668,56 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
         SwTwips nCurWidth = text::HoriOrientation::FULL != pTableData->GetAlign() ?
                                         pTableData->GetWidth() :
                                             pTableData->GetSpace();
-        if(pTableData->GetWidthPercent() == 0 &&
-                nCurWidth != m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue(FUNIT_TWIP )))
+        if (pTableData->GetWidthPercent() == 0 && nCurWidth != GetPercentValue(*m_xWidthMF, pTableData->GetSpace(), false))
         {
-            m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(
-                            nCurWidth), FUNIT_TWIP);
-            m_aWidthMF.SaveValue();
+            SetPercentValue(*m_xWidthMF, nCurWidth, pTableData->GetSpace(), false);
+            m_xWidthMF->save_value();
             nSaveWidth = nCurWidth;
-            m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(
-                            pTableData->GetLeftSpace()), FUNIT_TWIP);
-            m_aLeftMF.SaveValue();
-            m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(
-                            pTableData->GetRightSpace()), FUNIT_TWIP);
-            m_aRightMF.SaveValue();
+            SetPercentValue(*m_xLeftMF, pTableData->GetLeftSpace(), pTableData->GetSpace(), false);
+            m_xLeftMF->save_value();
+            SetPercentValue(*m_xRightMF, pTableData->GetRightSpace(), pTableData->GetSpace(), false);
+            m_xRightMF->save_value();
         }
     }
-
 }
 
 DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 {
     //os: VCL doesn't take care of making the active widget
     //in the dialog lose the focus
-    m_pNameED->GrabFocus();
+    m_xNameED->grab_focus();
     //test the table name for spaces
-    OUString sTableName = m_pNameED->GetText();
-    if(sTableName.indexOf(' ') != -1)
+    OUString sTableName = m_xNameED->get_text();
+    if (sTableName.indexOf(' ') != -1)
     {
-        ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_WRONG_TABLENAME), VclMessageType::Info)->Execute();
-        m_pNameED->GrabFocus();
+        std::unique_ptr<Weld::Dialog> xDialog(Application::CreateMessageDialog(GetParentDialog(), VclMessageType::Info,
+                                                 VclButtonsType::Ok, SwResId(STR_WRONG_TABLENAME)));
+        xDialog->run();
+        xDialog.reset();
+        m_xNameED->grab_focus();
         return DeactivateRC::KeepPage;
     }
-    if(_pSet)
+    if (_pSet)
     {
         FillItemSet(_pSet);
-        if(bModified)
+        if (bModified)
         {
-            SwTwips lLeft  = static_cast< SwTwips >(m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue( FUNIT_TWIP )));
-            SwTwips lRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FUNIT_TWIP )));
+            SwTwips lLeft  = static_cast<SwTwips>(GetPercentValue(*m_xLeftMF, pTableData->GetSpace(), false));
+            SwTwips lRight = static_cast<SwTwips>(GetPercentValue(*m_xRightMF, pTableData->GetSpace(), false));
 
-            if( m_aLeftMF.GetText() != m_aLeftMF.GetSavedValue() ||
-                m_aRightMF.GetText() != m_aRightMF.GetSavedValue() )
+            if (m_xLeftMF->get_value_changed_from_saved() || m_xRightMF->get_value_changed_from_saved())
             {
                 pTableData->SetWidthChanged();
-                pTableData->SetLeftSpace( lLeft);
-                pTableData->SetRightSpace( lRight);
+                pTableData->SetLeftSpace(lLeft);
+                pTableData->SetRightSpace(lRight);
             }
 
             SwTwips lWidth;
-            if (m_pRelWidthCB->IsChecked() && m_pRelWidthCB->IsEnabled())
+            if (m_xRelWidthCB->get_active() && m_xRelWidthCB->get_sensitive())
             {
                 lWidth = pTableData->GetSpace() - lRight - lLeft;
-                const sal_uInt16 nPercentWidth = m_aWidthMF.GetValue(FUNIT_CUSTOM);
-                if(pTableData->GetWidthPercent() != nPercentWidth)
+                const sal_uInt16 nPercentWidth = GetPercentValue(*m_xWidthMF, pTableData->GetSpace(), true);
+                if (pTableData->GetWidthPercent() != nPercentWidth)
                 {
                     pTableData->SetWidthPercent(nPercentWidth);
                     pTableData->SetWidthChanged();
@@ -661,7 +726,7 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             else
             {
                 pTableData->SetWidthPercent(0);
-                lWidth = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue( FUNIT_TWIP )));
+                lWidth = static_cast<SwTwips>(GetPercentValue(*m_xWidthMF, pTableData->GetSpace(), false));
             }
             pTableData->SetWidth(lWidth);
 
@@ -698,17 +763,17 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             }
 
             sal_Int16 nAlign = 0;
-            if(m_pRightBtn->IsChecked())
+            if (m_xRightBtn->get_active())
                 nAlign = text::HoriOrientation::RIGHT;
-            else if(m_pLeftBtn->IsChecked())
+            else if (m_xLeftBtn->get_active())
                 nAlign = text::HoriOrientation::LEFT;
-            else if(m_pFromLeftBtn->IsChecked())
+            else if (m_xFromLeftBtn->get_active())
                 nAlign = text::HoriOrientation::LEFT_AND_WIDTH;
-            else if(m_pCenterBtn->IsChecked())
+            else if (m_xCenterBtn->get_active())
                 nAlign = text::HoriOrientation::CENTER;
-            else if(m_pFreeBtn->IsChecked())
+            else if (m_xFreeBtn->get_active())
                 nAlign = text::HoriOrientation::NONE;
-            else if(m_pFullBtn->IsChecked())
+            else if (m_xFullBtn->get_active())
             {
                 nAlign = text::HoriOrientation::FULL;
                 lWidth = lAutoWidth;
@@ -1226,36 +1291,41 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 
 }
 
-SwTableTabDlg::SwTableTabDlg(vcl::Window* pParent,
-    const SfxItemSet* pItemSet, SwWrtShell* pSh)
-    : SfxTabDialog(pParent, "TablePropertiesDialog",
-        "modules/swriter/ui/tableproperties.ui", pItemSet)
+SwTableTabDlg::SwTableTabDlg(Weld::Window* pParent,
+    const SfxItemSet& rItemSet, SwWrtShell* pSh)
+    : NewSfxTabDialog(pParent, "TablePropertiesDialog", "modules/swriter/ui/tableproperties.ui", &rItemSet)
     , pShell(pSh)
 {
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
+    //SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     AddTabPage("table", &SwFormatTablePage::Create, nullptr);
+#if 0
+    AddTabPage("textflow", &SwTextFlowPage::Create, nullptr);
     m_nTextFlowId = AddTabPage("textflow", &SwTextFlowPage::Create, nullptr);
     AddTabPage("columns", &SwTableColumnPage::Create, nullptr);
     m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BACKGROUND), nullptr);
     m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), nullptr);
+#endif
 }
 
-void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
+SwTableTabDlg::~SwTableTabDlg()
+{
+}
+
+void SwTableTabDlg::PageCreated(const OString& rId, NewSfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (nId == m_nBackgroundId)
+    if (rId == "background")
     {
         SvxBackgroundTabFlags const nFlagType = SvxBackgroundTabFlags::SHOW_TBLCTL | SvxBackgroundTabFlags::SHOW_SELECTOR;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(nFlagType)));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nBorderId)
+    else if (rId == "borders")
     {
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE, static_cast<sal_uInt16>(SwBorderModes::TABLE)));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nTextFlowId)
+    else if (rId == "textflow")
     {
         static_cast<SwTextFlowPage&>(rPage).SetShell(pShell);
         const FrameTypeFlags eType = pShell->GetFrameType(nullptr,true);
@@ -1264,13 +1334,13 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
 }
 
-SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "TableTextFlowPage",
-        "modules/swriter/ui/tabletextflowpage.ui", &rSet)
+SwTextFlowPage::SwTextFlowPage(Weld::Container* pParent, const SfxItemSet& rSet)
+    : NewSfxTabPage(pParent, "TableTextFlowPage", "modules/swriter/ui/tabletextflowpage.ui", &rSet)
     , pShell(nullptr)
     , bPageBreak(true)
     , bHtmlMode(false)
 {
+#if 0
     get(m_pPgBrkCB, "break");
 
     get(m_pPgBrkRB, "page");
@@ -1326,39 +1396,12 @@ SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
     }
 
     HeadLineCBClickHdl();
+#endif
 }
 
-SwTextFlowPage::~SwTextFlowPage()
+NewSfxTabPage* SwTextFlowPage::Create(Weld::Container* pParent, const SfxItemSet* pAttrSet)
 {
-    disposeOnce();
-}
-
-void SwTextFlowPage::dispose()
-{
-    m_pPgBrkCB.clear();
-    m_pPgBrkRB.clear();
-    m_pColBrkRB.clear();
-    m_pPgBrkBeforeRB.clear();
-    m_pPgBrkAfterRB.clear();
-    m_pPageCollCB.clear();
-    m_pPageCollLB.clear();
-    m_pPageNoCB.clear();
-    m_pPageNoNF.clear();
-    m_pSplitCB.clear();
-    m_pSplitRowCB.clear();
-    m_pKeepCB.clear();
-    m_pHeadLineCB.clear();
-    m_pRepeatHeaderNF.clear();
-    m_pRepeatHeaderCombo.clear();
-    m_pTextDirectionLB.clear();
-    m_pVertOrientLB.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> SwTextFlowPage::Create( vcl::Window* pParent,
-                                           const SfxItemSet* rAttrSet)
-{
-    return VclPtr<SwTextFlowPage>::Create(pParent, *rAttrSet);
+    return new SwTextFlowPage(pParent, *pAttrSet);
 }
 
 bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
