@@ -920,8 +920,8 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 
                     if( mrView.IsPlusHandlesAlwaysVisible() || bSelected )
                     {
-                        sal_uInt32 nPlusAnz=mpPathObj->GetPlusHdlCount(*pSmartHdl);
-                        for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusAnz; nPlusNum++)
+                        sal_uInt32 nPlusHdlCnt=mpPathObj->GetPlusHdlCount(*pSmartHdl);
+                        for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusHdlCnt; nPlusNum++)
                         {
                             SdrHdl* pPlusHdl = mpPathObj->GetPlusHdl(*pSmartHdl,nPlusNum);
                             if (pPlusHdl!=nullptr)

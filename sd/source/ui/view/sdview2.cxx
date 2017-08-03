@@ -392,9 +392,9 @@ void View::DragFinished( sal_Int8 nDropAction )
         if( bUndo )
             BegUndo();
 
-        const size_t nAnz = mpDragSrcMarkList->GetMarkCount();
+        const size_t nCnt = mpDragSrcMarkList->GetMarkCount();
 
-        for( size_t nm = nAnz; nm>0; )
+        for( size_t nm = nCnt; nm>0; )
         {
             --nm;
             SdrMark* pM=mpDragSrcMarkList->GetMark(nm);
@@ -404,7 +404,7 @@ void View::DragFinished( sal_Int8 nDropAction )
 
         mpDragSrcMarkList->GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
 
-        for (size_t nm = nAnz; nm>0;)
+        for (size_t nm = nCnt; nm>0;)
         {
             --nm;
             SdrMark* pM=mpDragSrcMarkList->GetMark(nm);

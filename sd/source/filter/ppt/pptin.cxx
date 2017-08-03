@@ -573,9 +573,9 @@ bool ImplSdPPTImport::Import()
 
     sal_uInt32 nImportedPages = 0;
     {
-        sal_uInt16          nMasterAnz = GetPageCount( PPT_MASTERPAGE );
+        sal_uInt16          nMasterCnt = GetPageCount( PPT_MASTERPAGE );
 
-        for ( sal_uInt16 nMasterNum = 0; nMasterNum < nMasterAnz; nMasterNum++ )
+        for ( sal_uInt16 nMasterNum = 0; nMasterNum < nMasterCnt; nMasterNum++ )
         {
             SetPageNum( nMasterNum, PPT_MASTERPAGE );
             SdPage* pPage = static_cast<SdPage*>(MakeBlancPage( true ));
@@ -911,10 +911,10 @@ bool ImplSdPPTImport::Import()
         pHandoutPage->SetPageKind( PageKind::Handout );
         pSdrModel->InsertPage( pHandoutPage );
 
-        sal_uInt16 nPageAnz = GetPageCount();
-        if ( nPageAnz )
+        sal_uInt16 nPageCnt = GetPageCount();
+        if ( nPageCnt )
         {
-            for ( sal_uInt16 nPage = 0; nPage < nPageAnz; nPage++ )
+            for ( sal_uInt16 nPage = 0; nPage < nPageCnt; nPage++ )
             {
                 mePresChange = PRESCHANGE_SEMIAUTO;
                 SetPageNum( nPage );

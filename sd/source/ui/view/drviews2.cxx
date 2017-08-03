@@ -2356,11 +2356,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 WaitObject aWait( GetActiveWindow() );
                 const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-                const size_t nAnz=rMarkList.GetMarkCount();
+                const size_t nCnt=rMarkList.GetMarkCount();
 
                 // determine the sum of meta objects of all selected meta files
                 sal_uLong nCount = 0;
-                for(size_t nm=0; nm<nAnz; ++nm)
+                for(size_t nm=0; nm<nCnt; ++nm)
                 {
                     SdrMark*     pM=rMarkList.GetMark(nm);
                     SdrObject*   pObj=pM->GetMarkedSdrObj();
@@ -2396,7 +2396,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                     if( pFact )
                     {
-                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, static_cast<sal_uLong>(nAnz) ));
+                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, static_cast<sal_uLong>(nCnt) ));
                         if( pDlg )
                         {
                             pDlg->Execute();
