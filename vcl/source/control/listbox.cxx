@@ -1242,6 +1242,11 @@ Size ListBox::CalcSubEditSize() const
     return aSz;
 }
 
+long ListBox::CalcWindowSizePixel(sal_uInt16 nLines) const
+{
+    return mpImplLB->GetEntryHeight() * nLines;
+}
+
 Size ListBox::GetOptimalSize() const
 {
     return CalcMinimumSize();

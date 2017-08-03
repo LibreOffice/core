@@ -43,6 +43,7 @@ class SfxBindings;
 class SfxItemSet;
 class ResId;
 namespace vcl { class Window; }
+namespace Weld { class Window; }
 class SfxItemPool;
 class SfxStyleSheetBase;
 class SwGlossaryHdl;
@@ -314,7 +315,7 @@ class AbstractSwAutoFormatDlg : public VclAbstractDialog
 protected:
     virtual ~AbstractSwAutoFormatDlg() override = default;
 public:
-    virtual void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const = 0;
+    virtual SwTableAutoFormat* FillAutoFormatOfIndex() const = 0;
 };
 
 class AbstractSwFieldDlg : public SfxAbstractTabDialog
@@ -394,7 +395,7 @@ public:
                                                                 SvStream* pStream ) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwInsertBookmarkDlg( vcl::Window *pParent, SwWrtShell &rSh, SfxRequest& rReq ) = 0;
 
-    virtual VclPtr<AbstractSwBreakDlg> CreateSwBreakDlg(vcl::Window *pParent, SwWrtShell &rSh) = 0;
+    virtual VclPtr<AbstractSwBreakDlg> CreateSwBreakDlg(Weld::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<VclAbstractDialog> CreateSwChangeDBDlg(SwView& rVw) = 0;
     virtual VclPtr<SfxAbstractTabDialog>  CreateSwCharDlg(vcl::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
         SwCharDlgMode nDialogMode, const OUString* pFormatStr = nullptr) = 0;
@@ -431,15 +432,15 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog ( vcl::Window * pParent, SwWrtShell &rSh ) = 0;
 
-    virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
-                                                            bool bSetAutoFormat = true,
-                                                            const SwTableAutoFormat* pSelFormat = nullptr ) = 0;
+    virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg(Weld::Window* pParent, SwWrtShell* pShell,
+                                                                  bool bSetAutoFormat = true,
+                                                                  const SwTableAutoFormat* pSelFormat = nullptr) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType ) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh ) = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateSwTableWidthDlg(vcl::Window *pParent, SwTableFUNC &rFnc) = 0;
-    virtual VclPtr<SfxAbstractTabDialog> CreateSwTableTabDlg(vcl::Window* pParent,
-        const SfxItemSet* pItemSet, SwWrtShell* pSh) = 0;
+    virtual VclPtr<SfxAbstractTabDialog> CreateSwTableTabDlg(Weld::Window* pParent,
+        const SfxItemSet& rItemSet, SwWrtShell* pSh) = 0;
 
     virtual VclPtr<AbstractSwFieldDlg> CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent) = 0;
     virtual VclPtr<SfxAbstractDialog>   CreateSwFieldEditDlg ( SwView& rVw ) = 0;
