@@ -80,6 +80,9 @@ public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
     virtual        void    doDeferredInit(WinBits nBits) override;
     virtual        void    LogicInvalidate(const tools::Rectangle* pRectangle) override;
+                   void    InvalidateFloatingWindow(const Point& rPos);
+                   void    CloseFloatingWindow();
+                   Size    PaintActiveFloatingWindow(VirtualDevice& rDevice);
 
     /// Necessary to register dialog renderable instance to emit LOK callbacks
     void registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable);
