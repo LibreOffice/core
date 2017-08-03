@@ -541,7 +541,7 @@ protected:
     ::std::vector< SdHyperlinkEntry* > aHyperList;
     std::unique_ptr<sal_uInt32[]>
                             pPersistPtr;
-    sal_uInt32              nPersistPtrAnz;
+    sal_uInt32              nPersistPtrCnt;
 
     const PPTStyleSheet*    pPPTStyleSheet; // this is the current stylesheet;
     const PPTStyleSheet*    pDefaultSheet;  // this is a sheet we are using if no masterpage can be found, but that should

@@ -1300,7 +1300,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
     SdrEscherImport     ( rParam, rBaseURL ),
     bOk                 ( rStCtrl.GetErrorCode() == ERRCODE_NONE ),
     pPersistPtr         ( nullptr ),
-    nPersistPtrAnz      ( 0 ),
+    nPersistPtrCnt      ( 0 ),
     pDefaultSheet       ( nullptr ),
     m_pMasterPages      ( nullptr ),
     m_pSlidePages       ( nullptr ),
@@ -1348,18 +1348,18 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
 
     if ( bOk )
     {
-        nPersistPtrAnz = aUserEditAtom.nMaxPersistWritten + 1;
-        if ( ( nPersistPtrAnz >> 2 ) > nStreamLen )     // sj: at least nPersistPtrAnz is not allowed to be greater than filesize
+        nPersistPtrCnt = aUserEditAtom.nMaxPersistWritten + 1;
+        if ( ( nPersistPtrCnt >> 2 ) > nStreamLen )     // sj: at least nPersistPtrCnt is not allowed to be greater than filesize
             bOk = false;                                // (it should not be greater than the PPT_PST_PersistPtrIncrementalBlock, but
                                                         // we are reading this block later, so we do not have access yet)
 
-        if ( bOk && ( nPersistPtrAnz < ( SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) -1 ) )
-            pPersistPtr.reset( new (std::nothrow) sal_uInt32[ nPersistPtrAnz + 1 ] );
+        if ( bOk && ( nPersistPtrCnt < ( SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) -1 ) )
+            pPersistPtr.reset( new (std::nothrow) sal_uInt32[ nPersistPtrCnt + 1 ] );
         if ( !pPersistPtr )
             bOk = false;
         if ( bOk )
         {
-            memset( pPersistPtr.get(), 0x00, (nPersistPtrAnz+1) * sizeof(sal_uInt32) );
+            memset( pPersistPtr.get(), 0x00, (nPersistPtrCnt+1) * sizeof(sal_uInt32) );
 
             // SJ: new search mechanism from bottom to top (Issue 21122)
             PptUserEditAtom aCurrentEditAtom( aUserEditAtom );
@@ -1378,10 +1378,10 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                         {
                             sal_uInt32 nOfs(0);
                             rStCtrl.ReadUInt32( nOfs );
-                            sal_uInt32 nAnz = nOfs;
+                            sal_uInt32 nCnt = nOfs;
                             nOfs &= 0x000FFFFF;
-                            nAnz >>= 20;
-                            while (bOk && rStCtrl.good() && (nAnz > 0) && (nOfs <= nPersistPtrAnz))
+                            nCnt >>= 20;
+                            while (bOk && rStCtrl.good() && (nCnt > 0) && (nOfs <= nPersistPtrCnt))
                             {
                                 sal_uInt32 nPt(0);
                                 rStCtrl.ReadUInt32( nPt );
@@ -1394,10 +1394,10 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                                         OSL_FAIL("SdrPowerPointImport::Ctor(): Invalid Entry in Persist-Directory!");
                                     }
                                 }
-                                nAnz--;
+                                nCnt--;
                                 nOfs++;
                             }
-                            if ( bOk && nAnz > 0 )
+                            if ( bOk && nCnt > 0 )
                             {
                                 OSL_FAIL("SdrPowerPointImport::Ctor(): Not all entries of Persist-Directory read!");
                                 bOk = false;
@@ -1419,7 +1419,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
     if ( bOk )
     {   // check Document PersistEntry
         nDocStreamPos = aUserEditAtom.nDocumentRef;
-        if ( nDocStreamPos > nPersistPtrAnz )
+        if ( nDocStreamPos > nPersistPtrCnt )
         {
             OSL_FAIL("SdrPowerPointImport::Ctor(): aUserEditAtom.nDocumentRef invalid!");
             bOk = false;
@@ -1557,7 +1557,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                 {
                     PptSlidePersistEntry& rE2 = (*pPageList)[ nPageNum ];
                     sal_uLong nPersist = rE2.aPersistAtom.nPsrReference;
-                    if ( ( nPersist > 0 ) && ( nPersist < nPersistPtrAnz ) )
+                    if ( ( nPersist > 0 ) && ( nPersist < nPersistPtrCnt ) )
                     {
                         sal_uLong nFPos = pPersistPtr[ nPersist ];
                         if ( nFPos < nStreamLen )
@@ -1959,7 +1959,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
 SvMemoryStream* SdrPowerPointImport::ImportExOleObjStg( sal_uInt32 nPersistPtr, sal_uInt32& nOleId ) const
 {
     SvMemoryStream* pRet = nullptr;
-    if ( nPersistPtr && ( nPersistPtr < nPersistPtrAnz ) )
+    if ( nPersistPtr && ( nPersistPtr < nPersistPtrCnt ) )
     {
         sal_uInt32 nOldPos, nOfs = pPersistPtr[ nPersistPtr ];
         nOldPos = rStCtrl.Tell();
@@ -2052,7 +2052,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                                         tools::SvRef<SotStorageStream> xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );
                                                         if ( xOriginal.is() && ( xOriginal->GetError() == ERRCODE_NONE ) )
                                                         {
-                                                            if ( nPersistPtr && ( nPersistPtr < nPersistPtrAnz ) )
+                                                            if ( nPersistPtr && ( nPersistPtr < nPersistPtrCnt ) )
                                                             {
                                                                 rStCtrl.Seek( pPersistPtr[ nPersistPtr ] );
                                                                 ReadDffRecordHeader( rStCtrl, *pHd );
@@ -2115,7 +2115,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                         PptExOleObjAtom aAt;
                         ReadPptExOleObjAtom( rStCtrl, aAt );
 
-                        if ( aAt.nPersistPtr && ( aAt.nPersistPtr < nPersistPtrAnz ) )
+                        if ( aAt.nPersistPtr && ( aAt.nPersistPtr < nPersistPtrCnt ) )
                         {
                             sal_uInt32 nId;
                             rStCtrl.Seek( pPersistPtr[ aAt.nPersistPtr ] );
@@ -2427,7 +2427,7 @@ bool SdrPowerPointImport::SeekToAktPage( DffRecordHeader* pRecHd ) const
     if ( pList && ( nAktPageNum < pList->size() ) )
     {
         sal_uLong nPersist = (*pList)[ (sal_uInt16)nAktPageNum ].aPersistAtom.nPsrReference;
-        if ( nPersist > 0 && nPersist < nPersistPtrAnz )
+        if ( nPersist > 0 && nPersist < nPersistPtrCnt )
         {
             sal_uLong nFPos = 0;
             nFPos = pPersistPtr[ nPersist ];
@@ -4098,14 +4098,14 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             ReadDffRecordHeader( rIn, aTxMasterStyleHd );
             if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
             {
-                sal_uInt16 nLevelAnz(0);
-                rIn.ReadUInt16(nLevelAnz);
+                sal_uInt16 nLevelCnt(0);
+                rIn.ReadUInt16(nLevelCnt);
 
                 sal_uInt16 nLev = 0;
                 bool bFirst = true;
                 bFoundTxMasterStyleAtom04 = true;
                 auto nTxEndRecPos = DffPropSet::SanitizeEndPos(rIn, aTxMasterStyleHd.GetRecEndFilePos());
-                while (rIn.GetError() == ERRCODE_NONE && rIn.Tell() < nTxEndRecPos && nLev < nLevelAnz && nLev < nMaxPPTLevels)
+                while (rIn.GetError() == ERRCODE_NONE && rIn.Tell() < nTxEndRecPos && nLev < nLevelCnt && nLev < nMaxPPTLevels)
                 {
                     if ( nLev )
                     {
@@ -4199,18 +4199,18 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     default: break;
                 }
             }
-            sal_uInt16 nLevelAnz(0);
-            rIn.ReadUInt16(nLevelAnz);
-            if (nLevelAnz > nMaxPPTLevels)
+            sal_uInt16 nLevelCnt(0);
+            rIn.ReadUInt16(nLevelCnt);
+            if (nLevelCnt > nMaxPPTLevels)
             {
                 OSL_FAIL( "PPTStyleSheet::Ppt-TextStylesheet has more than 5 levels! (SJ)" );
-                nLevelAnz = nMaxPPTLevels;
+                nLevelCnt = nMaxPPTLevels;
             }
             sal_uInt16  nLev = 0;
             bool    bFirst = true;
 
             auto nTxEndRecPos = DffPropSet::SanitizeEndPos(rIn, aTxMasterStyleHd.GetRecEndFilePos());
-            while ( rIn.GetError() == ERRCODE_NONE && rIn.Tell() < nTxEndRecPos && nLev < nLevelAnz )
+            while ( rIn.GetError() == ERRCODE_NONE && rIn.Tell() < nTxEndRecPos && nLev < nLevelCnt )
             {
                 if ( nLev && ( nInstance < TSS_Type::Subtitle ) )
                 {
@@ -4296,13 +4296,13 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 ReadDffRecordHeader( rIn, aTxMasterStyleHd2 );
                 if ( aTxMasterStyleHd2.nRecType == PPT_PST_TxMasterStyleAtom )
                 {
-                    sal_uInt16 nLevelAnz;
-                    rIn.ReadUInt16( nLevelAnz );
+                    sal_uInt16 nLevelCnt;
+                    rIn.ReadUInt16( nLevelCnt );
 
                     sal_uInt16 nLev = 0;
                     bool bFirst = true;
                     auto nTxEndRecPos = DffPropSet::SanitizeEndPos(rIn, aTxMasterStyleHd2.GetRecEndFilePos());
-                    while ( rIn.GetError() == ERRCODE_NONE && rIn.Tell() < nTxEndRecPos && nLev < nLevelAnz )
+                    while ( rIn.GetError() == ERRCODE_NONE && rIn.Tell() < nTxEndRecPos && nLev < nLevelCnt )
                     {
                         if ( nLev )
                         {
@@ -4851,7 +4851,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
                                             sal_uInt32& nCharCount, bool& bTextPropAtom )
 {
     sal_uInt32  nMask = 0; //TODO: nMask initialized here to suppress warning for now, see corresponding TODO below
-    sal_uInt32  nCharAnzRead = 0;
+    sal_uInt32  nCharReadCnt = 0;
     sal_uInt16  nDummy16;
 
     sal_uInt16 nStringLen = aString.getLength();
@@ -4860,7 +4860,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
     rTextHeader.SeekToContent( rIn );
     if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_StyleTextPropAtom, rTextHeader.GetRecEndFilePos(), &aTextHd2 ) )
         bTextPropAtom = true;
-    while ( nCharAnzRead <= nStringLen )
+    while ( nCharReadCnt <= nStringLen )
     {
         PPTParaPropSet aParaPropSet;
         ImplPPTParaPropSet& aSet = *aParaPropSet.mxParaSet;
@@ -5069,10 +5069,10 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
         if ( rRuler.GetDefaultTab( aSet.mpArry[ PPT_ParaAttr_DefaultTab ] ) )
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_DefaultTab;
 
-        if ( ( nCharCount > nStringLen ) || ( nStringLen < nCharAnzRead + nCharCount ) )
+        if ( ( nCharCount > nStringLen ) || ( nStringLen < nCharReadCnt + nCharCount ) )
         {
             bTextPropAtom = false;
-            nCharCount = nStringLen - nCharAnzRead;
+            nCharCount = nStringLen - nCharReadCnt;
             // please fix the right hand side of
             // PPTParaPropSet& PPTParaPropSet::operator=(PPTParaPropSet&),
             // it should be a const reference
@@ -5081,28 +5081,28 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
             OSL_FAIL( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the paragraph attributes" );
         }
         PPTParaPropSet* pPara = new PPTParaPropSet( aParaPropSet );
-        pPara->mnOriginalTextPos = nCharAnzRead;
+        pPara->mnOriginalTextPos = nCharReadCnt;
         aParaPropList.push_back( pPara );
         if ( nCharCount )
         {
             sal_uInt32   nCount;
-            const sal_Unicode* pDat = aString.getStr() + nCharAnzRead;
+            const sal_Unicode* pDat = aString.getStr() + nCharReadCnt;
             for ( nCount = 0; nCount < nCharCount; nCount++ )
             {
                 if ( pDat[ nCount ] == 0xd )
                 {
                     pPara = new PPTParaPropSet( aParaPropSet );
-                    pPara->mnOriginalTextPos = nCharAnzRead + nCount + 1;
+                    pPara->mnOriginalTextPos = nCharReadCnt + nCount + 1;
                     aParaPropList.push_back( pPara );
                 }
             }
         }
-        nCharAnzRead += nCharCount + 1;
+        nCharReadCnt += nCharCount + 1;
     }
 }
 
 void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aCharPropSet, const OUString& aString,
-                                            sal_uInt32& nCharCount, sal_uInt32 nCharAnzRead,
+                                            sal_uInt32& nCharCount, sal_uInt32 nCharReadCnt,
                                             bool& bTextPropAtom, sal_uInt32 nExtParaPos,
                                             const std::vector< StyleTextProp9 >& aStyleTextProp9,
                                             sal_uInt32& nExtParaFlags, sal_uInt16& nBuBlip,
@@ -5116,10 +5116,10 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     rIn.ReadUInt16( nDummy16 );
     nCharCount = (rIn.good()) ? nDummy16 : 0;
     rIn.ReadUInt16( nDummy16 );
-    nCharsToRead = nStringLen - ( nCharAnzRead + nCharCount );
+    nCharsToRead = nStringLen - ( nCharReadCnt + nCharCount );
     if ( nCharsToRead < 0 )
     {
-        nCharCount = nStringLen - nCharAnzRead;
+        nCharCount = nStringLen - nCharReadCnt;
         if ( nCharsToRead < -1 )
         {
             bTextPropAtom = false;
@@ -5293,7 +5293,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
 
             sal_uInt32 nExtParaFlags = 0, nAnmScheme = 0;
             sal_uInt16 nBuBlip = 0xffff, nHasAnm = 0;
-            ReadCharProps( rIn, aCharPropSet, aString, nCharCount, 0/*nCharAnzRead*/,
+            ReadCharProps( rIn, aCharPropSet, aString, nCharCount, 0/*nCharReadCnt*/,
                            bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
                            nBuBlip, nHasAnm, nAnmScheme );
 
@@ -5309,13 +5309,13 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
         ReadParaProps( rIn, rTextHeader, aString, rRuler, nCharCount, bTextPropAtom );
 
         bool bEmptyParaPossible = true;
-        sal_uInt32 nCharAnzRead = 0;
+        sal_uInt32 nCharReadCnt = 0;
         sal_uInt32 nCurrentPara = 0;
         size_t i = 1;                   // points to the next element to process
         sal_uInt32 nCurrentSpecMarker = aSpecMarkerList.empty() ? 0 : aSpecMarkerList[0];
         sal_uInt32 nStringLen = aString.getLength();
 
-        while ( nCharAnzRead < nStringLen )
+        while ( nCharReadCnt < nStringLen )
         {
             sal_uInt32 nExtParaFlags = 0, nLatestParaUpdate = 0xffffffff, nAnmScheme = 0;
             sal_uInt16 nBuBlip = 0xffff, nHasAnm = 0;
@@ -5323,7 +5323,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
             PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
             {
-                ReadCharProps( rIn, aCharPropSet, aString, nCharCount, nCharAnzRead,
+                ReadCharProps( rIn, aCharPropSet, aString, nCharCount, nCharReadCnt,
                                bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
                                nBuBlip, nHasAnm, nAnmScheme );
                 if (!rIn.good())
@@ -5347,59 +5347,59 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                         pPropSet->mxParaSet->mnHasAnm = nHasAnm;
                     nLatestParaUpdate = nCurrentPara;
                 }
-                aCharPropSet.mnOriginalTextPos = nCharAnzRead;
-                if ( nCurrentSpecMarker &&  ( ( nCurrentSpecMarker & 0xffff ) < ( nCharAnzRead + nCharCount ) ) )
+                aCharPropSet.mnOriginalTextPos = nCharReadCnt;
+                if ( nCurrentSpecMarker &&  ( ( nCurrentSpecMarker & 0xffff ) < ( nCharReadCnt + nCharCount ) ) )
                 {
                     if ( nCurrentSpecMarker & PPT_SPEC_NEWLINE )
                     {
-                        nLen = ( nCurrentSpecMarker & 0xffff ) - nCharAnzRead;
+                        nLen = ( nCurrentSpecMarker & 0xffff ) - nCharReadCnt;
                         if ( nLen )
-                            aCharPropSet.maString = aString.copy( nCharAnzRead, nLen );
+                            aCharPropSet.maString = aString.copy( nCharReadCnt, nLen );
                         else if ( bEmptyParaPossible )
                             aCharPropSet.maString.clear();
                         if ( nLen || bEmptyParaPossible )
                             aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
                         nCurrentPara++;
                         nLen++;
-                        nCharAnzRead += nLen;
+                        nCharReadCnt += nLen;
                         nCharCount -= nLen;
                         bEmptyParaPossible = true;
                     }
                     else if ( nCurrentSpecMarker & PPT_SPEC_SYMBOL )
                     {
-                        if ( ( nCurrentSpecMarker & 0xffff ) != nCharAnzRead )
+                        if ( ( nCurrentSpecMarker & 0xffff ) != nCharReadCnt )
                         {
-                            nLen = ( nCurrentSpecMarker & 0xffff ) - nCharAnzRead;
-                            aCharPropSet.maString = aString.copy(nCharAnzRead, nLen);
+                            nLen = ( nCurrentSpecMarker & 0xffff ) - nCharReadCnt;
+                            aCharPropSet.maString = aString.copy(nCharReadCnt, nLen);
                             aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
                             nCharCount -= nLen;
-                            nCharAnzRead += nLen;
+                            nCharReadCnt += nLen;
                         }
                         PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet, nCurrentPara );
-                        pCPropSet->maString = aString.copy(nCharAnzRead, 1);
+                        pCPropSet->maString = aString.copy(nCharReadCnt, 1);
                         if ( aCharPropSet.mpImplPPTCharPropSet->mnAttrSet & ( 1 << PPT_CharAttr_Symbol ) )
                             pCPropSet->SetFont( aCharPropSet.mpImplPPTCharPropSet->mnSymbolFont );
                         aCharPropList.push_back( pCPropSet );
                         nCharCount--;
-                        nCharAnzRead++;
+                        nCharReadCnt++;
                         bEmptyParaPossible = false;
                     }
                     nCurrentSpecMarker = ( i < aSpecMarkerList.size() ) ? aSpecMarkerList[ i++ ] : 0;
                 }
                 else
                 {
-                    if (nCharAnzRead > static_cast<sal_uInt32>(aString.getLength()))
+                    if (nCharReadCnt > static_cast<sal_uInt32>(aString.getLength()))
                         aCharPropSet.maString = OUString();
                     else
                     {
                         sal_Int32 nStrLen = nCharCount;
-                        sal_Int32 nMaxStrLen = aString.getLength() - nCharAnzRead;
+                        sal_Int32 nMaxStrLen = aString.getLength() - nCharReadCnt;
                         if (nStrLen > nMaxStrLen)
                             nStrLen = nMaxStrLen;
-                        aCharPropSet.maString = aString.copy(nCharAnzRead, nStrLen);
+                        aCharPropSet.maString = aString.copy(nCharReadCnt, nStrLen);
                     }
                     aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
-                    nCharAnzRead += nCharCount;
+                    nCharReadCnt += nCharCount;
                     bEmptyParaPossible = false;
                     break;
                 }
