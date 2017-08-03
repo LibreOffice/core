@@ -82,11 +82,6 @@ ControlInfo::ControlInfo()
 {
 }
 
-void ControlInfo::setShapeId( sal_Int32 nShapeId )
-{
-    maShapeId = lclGetShapeId( nShapeId );
-}
-
 Drawing::Drawing( XmlFilterBase& rFilter, const Reference< XDrawPage >& rxDrawPage, DrawingType eType ) :
     mrFilter( rFilter ),
     mxDrawPage( rxDrawPage ),
@@ -129,10 +124,9 @@ void Drawing::registerOleObject( const OleObjectInfo& rOleObject )
 
 void Drawing::registerControl( const ControlInfo& rControl )
 {
-    OSL_ENSURE( !rControl.maShapeId.isEmpty(), "Drawing::registerControl - missing form control shape id" );
     OSL_ENSURE( !rControl.maName.isEmpty(), "Drawing::registerControl - missing form control name" );
-    OSL_ENSURE( maControls.count( rControl.maShapeId ) == 0, "Drawing::registerControl - form control already registered" );
-    maControls.insert( ControlInfoMap::value_type( rControl.maShapeId, rControl ) );
+    OSL_ENSURE( maControls.count( rControl.maName ) == 0, "Drawing::registerControl - form control already registered" );
+    maControls.insert( ControlInfoMap::value_type( rControl.maName, rControl ) );
 }
 
 void Drawing::finalizeFragmentImport()
