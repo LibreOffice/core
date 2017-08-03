@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2e232707",
+        "filename": "chart2/source/controller/main/ChartController_Window.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-03T10:32:49Z",
+      "side": 1,
+      "message": "Is this change safe for the desktop (non-LOK) case?",
+      "revId": "85d11dda6f74d696f96f6138d830280f5a1f24c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
