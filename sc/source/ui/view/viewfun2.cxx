@@ -2775,7 +2775,12 @@ void ScViewFunc::MoveTable(
             if ( pDestDoc->IsChartListenerCollectionNeedsUpdate() )
                 pDestDoc->UpdateChartListenerCollection();
 
-            pDestDoc->DeleteTab(static_cast<SCTAB>(TheTabs.size()));   // old first table
+            SCTAB nNumTabsInserted = static_cast<SCTAB>(TheTabs.size());
+            pDestShell->Broadcast( ScTablesHint( SC_TABS_INSERTED, 0, nNumTabsInserted ) );
+
+            pDestDoc->DeleteTab( nNumTabsInserted );   // old first table
+            pDestShell->Broadcast( ScTablesHint( SC_TAB_DELETED, nNumTabsInserted ) );
+
             if (pDestViewSh)
             {
                 // Make sure to clear the cached page view after sheet
