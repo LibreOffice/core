@@ -127,6 +127,9 @@ void VBATest::testMiscVBAFunctions()
         "sqr.vb",
         "str.vb",
         "strcomp.vb",
+        "string.vb",
+        "strreverse.vb",
+        "switch.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
