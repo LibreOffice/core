@@ -393,14 +393,6 @@ void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
         rInfo.nFlags |= SfxChildWindowFlags::ZOOMIN;
 }
 
-
-void SfxModelessDialog::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
-{
-    if (!comphelper::LibreOfficeKit::isDialogPainting())
-        SfxLokHelper::notifyDialogInvalidation(maID);
-}
-
-
 bool SfxFloatingWindow::EventNotify( NotifyEvent& rEvt )
 
 /*  [Description]
