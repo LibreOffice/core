@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0ea3cb9f",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2017-08-03T08:42:27Z",
+      "side": 1,
+      "message": "I would unify this to something like \u0027getColorFromBrushOrPen(...)\u0027 also using it in other spaces",
+      "range": {
+        "startLine": 904,
+        "startChar": 28,
+        "endLine": 916,
+        "endChar": 29
+      },
+      "revId": "41eac539a0e97a74f1c97a3010e7b053b44a6c52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
