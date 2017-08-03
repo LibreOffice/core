@@ -380,7 +380,7 @@ uno::Reference< sdbc::XConnection> OAddFieldWindow::getConnection() const
     return uno::Reference< sdbc::XConnection>(m_xRowSet->getPropertyValue( PROPERTY_ACTIVECONNECTION ),uno::UNO_QUERY);
 }
 
-void OAddFieldWindow::fillDescriptor(SvTreeListEntry* _pSelected,svx::ODataAccessDescriptor& _rDescriptor)
+void OAddFieldWindow::fillDescriptor(SvTreeListEntry const * _pSelected,svx::ODataAccessDescriptor& _rDescriptor)
 {
     if ( _pSelected && m_xColumns.is() )
     {

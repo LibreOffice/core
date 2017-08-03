@@ -304,7 +304,7 @@ bool OReportWindow::handleKeyEvent(const KeyEvent& _rEvent)
     return m_aViewsWindow->handleKeyEvent(_rEvent);
 }
 
-void OReportWindow::setMarked(OSectionView* _pSectionView, bool _bMark)
+void OReportWindow::setMarked(OSectionView const * _pSectionView, bool _bMark)
 {
     if ( _pSectionView )
         m_aViewsWindow->setMarked(_pSectionView,_bMark);

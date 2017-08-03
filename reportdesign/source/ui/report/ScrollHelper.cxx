@@ -284,7 +284,7 @@ bool OScrollWindowHelper::handleKeyEvent(const KeyEvent& _rEvent)
     return m_aReportWindow->handleKeyEvent(_rEvent);
 }
 
-void OScrollWindowHelper::setMarked(OSectionView* _pSectionView, bool _bMark)
+void OScrollWindowHelper::setMarked(OSectionView const * _pSectionView, bool _bMark)
 {
     m_aReportWindow->setMarked(_pSectionView,_bMark);
 }

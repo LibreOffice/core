@@ -138,7 +138,7 @@ void OXUndoEnvironment::UnLock()
 }
 bool OXUndoEnvironment::IsLocked() const { return m_pImpl->m_nLocks != 0; }
 
-void OXUndoEnvironment::RemoveSection(OReportPage* _pPage)
+void OXUndoEnvironment::RemoveSection(OReportPage const * _pPage)
 {
     if ( _pPage )
     {

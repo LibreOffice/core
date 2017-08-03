@@ -831,7 +831,7 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
     }
 }
 
-void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& rMemFunc)
+void notifySystemWindow(vcl::Window const * _pWindow, vcl::Window* _pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
     SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : nullptr;
@@ -841,7 +841,7 @@ void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, const 
     }
 }
 
-SdrObject* isOver(const tools::Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, bool _bAllObjects, SdrObject* _pIgnore, sal_Int16 _nIgnoreType)
+SdrObject* isOver(const tools::Rectangle& _rRect, SdrPage const & _rPage, SdrView const & _rView, bool _bAllObjects, SdrObject const * _pIgnore, sal_Int16 _nIgnoreType)
 {
     SdrObject* pOverlappedObj = nullptr;
     SdrObjListIter aIter(_rPage,SdrIterMode::DeepNoGroups);
@@ -869,7 +869,7 @@ SdrObject* isOver(const tools::Rectangle& _rRect, SdrPage& _rPage, SdrView& _rVi
     return pOverlappedObj;
 }
 
-bool checkArrayForOccurrence(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
+bool checkArrayForOccurrence(SdrObject const * _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
 {
     for(int i=0;i<_nListLength;i++)
     {
@@ -882,7 +882,7 @@ bool checkArrayForOccurrence(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int
     return false;
 }
 
-SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects, SdrUnoObj * _pIgnoreList[], int _nIgnoreListLength)
+SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage const & _rPage,SdrView const & _rView,bool _bAllObjects, SdrUnoObj * _pIgnoreList[], int _nIgnoreListLength)
 {
     SdrObject* pOverlappedObj = nullptr;
     SdrObjListIter aIter(_rPage,SdrIterMode::DeepNoGroups);
@@ -907,10 +907,10 @@ SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView
 }
 
 
-SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView)
+SdrObject* isOver(SdrObject const * _pObj,SdrPage const & _rPage,SdrView const & _rView)
 {
     SdrObject* pOverlappedObj = nullptr;
-    if (dynamic_cast<OUnoObject*>(_pObj) != nullptr || dynamic_cast<OOle2Obj*>(_pObj) != nullptr) // this doesn't need to be done for shapes
+    if (dynamic_cast<OUnoObject const *>(_pObj) != nullptr || dynamic_cast<OOle2Obj const *>(_pObj) != nullptr) // this doesn't need to be done for shapes
     {
         tools::Rectangle aRect = _pObj->GetCurrentBoundRect();
         pOverlappedObj = isOver(aRect,_rPage,_rView,false/*_bUnMarkedObjects*/,_pObj);
@@ -967,7 +967,7 @@ tools::Rectangle getRectangleFromControl(SdrObject* _pControl)
 }
 
 // check overlapping
-void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,bool _bInsert)
+void correctOverlapping(SdrObject* _pControl,OReportSection const & _aReportSection,bool _bInsert)
 {
     OSectionView& rSectionView = _aReportSection.getSectionView();
     uno::Reference< report::XReportComponent> xComponent(_pControl->getUnoShape(),uno::UNO_QUERY);

@@ -45,7 +45,7 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 
     // method to remove temporary objects, created by 'special mode'
     // (BegDragObj)
-    void removeTempObject(SdrObject *_pToRemoveObj);
+    void removeTempObject(SdrObject const *_pToRemoveObj);
 
     virtual ~OReportPage() override;
 

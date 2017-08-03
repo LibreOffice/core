@@ -2236,7 +2236,7 @@ void SAL_CALL OReportController::disposing( const lang::EventObject& Source )
 
 static sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
                           ,sal_Int32 _nGroupPos
-                          ,::std::mem_fun_t<bool,OGroupHelper>&_pGroupMemberFunction)
+                          ,::std::mem_fun_t<bool,OGroupHelper> const & _pGroupMemberFunction)
 {
     uno::Reference< report::XGroup> xGroup;
     sal_uInt16 nNonVisibleGroups = 0;
