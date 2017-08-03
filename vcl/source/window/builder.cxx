@@ -12,6 +12,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <osl/module.hxx>
+#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
@@ -42,6 +43,7 @@
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
+#include "salinst.hxx"
 #include "strings.hrc"
 
 #ifdef DISABLE_DYNLOADING
@@ -117,6 +119,18 @@ namespace
     }
 }
 #endif
+
+Weld::Builder* Application::CreateBuilder(const OUString &rUIFile)
+{
+    OUString sUri = VclBuilderContainer::getUIRootDir() + rUIFile;
+    return ImplGetSVData()->mpDefInst->CreateBuilder(sUri);
+}
+
+Weld::Dialog* Application::CreateMessageDialog(Weld::Window* pParent, VclMessageType eMessageType,
+                                                  VclButtonsType eButtonType, const OUString& rPrimaryMessage)
+{
+    return ImplGetSVData()->mpDefInst->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
+}
 
 VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID, const css::uno::Reference<css::frame::XFrame>& rFrame)
     : m_sID(sID)
