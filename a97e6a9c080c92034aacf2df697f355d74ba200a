@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2e096732",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-08-03T13:42:43Z",
+      "side": 0,
+      "message": "But this does include the field text, correct?",
+      "revId": "a97e6a9c080c92034aacf2df697f355d74ba200a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
