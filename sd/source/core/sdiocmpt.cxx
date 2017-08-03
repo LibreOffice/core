@@ -70,8 +70,8 @@ void old_SdrDownCompat::CloseSubRecord()
 
     if(nMode == StreamMode::READ)
     {
-        sal_uInt32 nReadAnz(nAktPos - nSubRecPos);
-        if(nReadAnz != nSubRecSiz)
+        sal_uInt32 nReadCnt(nAktPos - nSubRecPos);
+        if(nReadCnt != nSubRecSiz)
         {
             rStream.Seek(nSubRecPos + nSubRecSiz);
         }

@@ -1017,10 +1017,10 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
         if (!GetTextObj()->GetOutlinerParaObject() && mpView->GetTextEditOutliner())
         {
             ::Outliner* pOutl = mpView->GetTextEditOutliner();
-            sal_Int32 nParaAnz = pOutl->GetParagraphCount();
+            sal_Int32 nParagraphCnt = pOutl->GetParagraphCount();
             Paragraph* p1stPara = pOutl->GetParagraph( 0 );
 
-            if (nParaAnz==1 && p1stPara)
+            if (nParagraphCnt==1 && p1stPara)
             {
                 // with only one paragraph
                 if (pOutl->GetText(p1stPara).isEmpty())
