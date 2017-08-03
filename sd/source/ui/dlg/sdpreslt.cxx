@@ -121,7 +121,7 @@ void SdPresLayoutDlg::GetAttr(SfxItemSet& rOutAttrs)
     {
         aLayoutName = maName + "#" + maLayoutNames[ nId - 1 ];
     }
-    else
+    else if (nId)
     {
         aLayoutName = maLayoutNames[ nId - 1 ];
         if( aLayoutName == maStrNone )
