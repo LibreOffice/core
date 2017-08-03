@@ -99,7 +99,16 @@ class VclAbstractDialog_Impl : public VclAbstractDialog
 
 class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwBreakDlg_Impl,SwBreakDlg)
+protected:
+    std::unique_ptr<SwBreakDlg> m_xDlg;
+public:
+    explicit AbstractSwBreakDlg_Impl(SwBreakDlg* p)
+        : m_xDlg(p)
+    {
+    }
+
+    virtual short Execute() override;
+
     virtual OUString                        GetTemplateName() override;
     virtual sal_uInt16                      GetKind() override;
     virtual ::boost::optional<sal_uInt16>   GetPageNumber() override;
@@ -256,7 +265,15 @@ class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
 class SwInsTableDlg;
 class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
 {
-    DECL_ABSTDLG_BASE(AbstractInsTableDlg_Impl,SwInsTableDlg)
+protected:
+    std::unique_ptr<SwInsTableDlg> m_xDlg;
+public:
+    explicit AbstractInsTableDlg_Impl(SwInsTableDlg* p)
+        : m_xDlg(p)
+    {
+    }
+
+    virtual short Execute() override;
     virtual void            GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                                 SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
                                 SwTableAutoFormat *& prTAFormat ) override;

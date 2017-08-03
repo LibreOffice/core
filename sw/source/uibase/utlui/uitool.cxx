@@ -21,6 +21,7 @@
 
 #include <osl/diagnose.h>
 #include <tools/datetime.hxx>
+#include <vcl/hackery.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/urihelper.hxx>
@@ -702,7 +703,7 @@ void    SetDfltMetric( FieldUnit eMetric, bool bWeb )
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }
 
-sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset )
+sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset)
 {
     CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
     const sal_Int32 nCount = rToFill.GetEntryCount();
@@ -713,6 +714,19 @@ sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32
         ++nOffset;
     }
     return rToFill.InsertEntry(rEntry, nOffset);
+}
+
+void InsertStringSorted(const OUString& rEntry, Hackery::ComboBoxText& rToFill, int nOffset)
+{
+    CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
+    const int nCount = rToFill.get_count();
+    while (nOffset < nCount)
+    {
+        if (0 < rCaseColl.compareString(rToFill.get_text(nOffset), rEntry))
+            break;
+        ++nOffset;
+    }
+    rToFill.insert_text(rEntry, nOffset);
 }
 
 void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
