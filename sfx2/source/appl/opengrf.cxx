@@ -71,11 +71,11 @@ const char* SvxOpenGrfErr2ResId( ErrCode err )
 struct SvxOpenGrf_Impl
 {
     SvxOpenGrf_Impl(const vcl::Window* pPreferredParent);
+    SvxOpenGrf_Impl(const Weld::Window* pPreferredParent);
 
     sfx2::FileDialogHelper                  aFileDlg;
     uno::Reference < XFilePickerControlAccess > xCtrlAcc;
 };
-
 
 SvxOpenGrf_Impl::SvxOpenGrf_Impl(const vcl::Window* pPreferredParent)
     : aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
@@ -85,8 +85,21 @@ SvxOpenGrf_Impl::SvxOpenGrf_Impl(const vcl::Window* pPreferredParent)
     xCtrlAcc.set(xFP, UNO_QUERY);
 }
 
+SvxOpenGrf_Impl::SvxOpenGrf_Impl(const Weld::Window* pPreferredParent)
+    : aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
+            FileDialogFlags::Graphic, pPreferredParent)
+{
+    uno::Reference < XFilePicker3 > xFP = aFileDlg.GetFilePicker();
+    xCtrlAcc.set(xFP, UNO_QUERY);
+}
 
 SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent)
+    : mpImpl(new SvxOpenGrf_Impl(pPreferredParent))
+{
+    mpImpl->aFileDlg.SetTitle(rTitle);
+}
+
+SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, const Weld::Window* pPreferredParent)
     : mpImpl(new SvxOpenGrf_Impl(pPreferredParent))
 {
     mpImpl->aFileDlg.SetTitle(rTitle);

@@ -47,6 +47,13 @@
 
 
 class BitmapEx;
+namespace Weld
+{
+    class Builder;
+    class Container;
+    class Dialog;
+    class Window;
+}
 class AllSettings;
 class DataChangedEvent;
 class Accelerator;
@@ -1390,6 +1397,10 @@ public:
     static void SetShutdownDelayed();
     static void TriggerShutdownDelayed();
 
+    static Weld::Builder* CreateBuilder(Weld::Container* pParent, const OUString &rUIFile);
+
+    static Weld::Dialog* CreateMessageDialog(Weld::Window* pParent, VclMessageType eMessageType,
+                                             VclButtonsType eButtonType, const OUString& rPrimaryMessage);
 private:
     DECL_STATIC_LINK( Application, PostEventHandler, void*, void );
 };

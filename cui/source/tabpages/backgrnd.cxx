@@ -99,22 +99,15 @@ struct SvxBackgroundPage_Impl
 };
 
 /// Returns the fill style of the currently selected entry.
-static drawing::FillStyle lcl_getFillStyle(ListBox const * pLbSelect)
+static drawing::FillStyle lcl_getFillStyle(const Weld::ComboBoxText& rLbSelect)
 {
-    return (drawing::FillStyle)reinterpret_cast<sal_uLong>(pLbSelect->GetSelectedEntryData());
+    return (drawing::FillStyle)rLbSelect.get_active_id().toUInt32();
 }
 
 // Selects the entry matching the specified fill style.
-static void lcl_setFillStyle(ListBox* pLbSelect, drawing::FillStyle eStyle)
+static void lcl_setFillStyle(Weld::ComboBoxText& rLbSelect, drawing::FillStyle eStyle)
 {
-    for (int i = 0; i < pLbSelect->GetEntryCount(); ++i)
-    {
-        if ((drawing::FillStyle)reinterpret_cast<sal_uLong>(pLbSelect->GetEntryData(i)) == eStyle)
-        {
-            pLbSelect->SelectEntryPos(i);
-            return;
-        }
-    }
+    rLbSelect.set_active_id(OUString::number((sal_uInt32)eStyle));
 }
 
 sal_uInt16 GetItemId_Impl( ValueSet const & rValueSet, const Color& rCol )
@@ -312,8 +305,14 @@ void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 
 #define HDL(hdl) LINK(this,SvxBackgroundTabPage,hdl)
 
-SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
-    : SvxTabPage(pParent, "BackgroundPage", "cui/ui/backgroundpage.ui", rCoreSet)
+SvxBackgroundTabPage::SvxBackgroundTabPage(Weld::Container* pParent, const SfxItemSet& rCoreSet)
+    : NewSvxTabPage(pParent, "BackgroundPage", "cui/ui/backgroundpage.ui", rCoreSet)
+    , m_xAsGrid(m_xBuilder->weld_widget("asgrid"))
+    , m_xSelectTxt(m_xBuilder->weld_label("asft"))
+    , m_xLbSelect(m_xBuilder->weld_combo_box_text("selectlb"))
+    , m_xTblDesc(m_xBuilder->weld_label("forft"))
+    , m_xTblLBox(m_xBuilder->weld_combo_box_text("tablelb"))
+    , m_xBackGroundColorLabelFT(m_xBuilder->weld_label("background_label"))
     , nHtmlMode(0)
     , bAllowShowSelector(true)
     , bIsGraphicValid(false)
@@ -325,13 +324,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
     , pTableBck_Impl(nullptr)
     , pHighlighting(nullptr)
 {
-    get(m_pAsGrid, "asgrid");
-    get(m_pSelectTxt, "asft");
-    get(m_pLbSelect, "selectlb");
-    get(m_pTblDesc, "forft");
-    get(m_pTblLBox, "tablelb");
-
-    get(m_pBackGroundColorLabelFT, "background_label");
+#if 0
     get(m_pBackGroundColorFrame, "backgroundcolorframe");
     get(m_pBackgroundColorSet, "backgroundcolorset");
     get(m_pPreviewWin1, "preview1");
@@ -353,6 +346,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
 
     get(m_pPreviewWin2, "preview2");
     m_pPreviewWin2->setBmp(true);
+#endif
 
     // this page needs ExchangeSupport
     SetExchangeSupport();
@@ -376,11 +370,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
 {
-    disposeOnce();
-}
-
-void SvxBackgroundTabPage::dispose()
-{
     if (pPageImpl)
     {
         delete pPageImpl->pLoadIdle;
@@ -399,35 +388,11 @@ void SvxBackgroundTabPage::dispose()
         delete pTableBck_Impl;
         pTableBck_Impl = nullptr;
     }
-
-    m_pAsGrid.clear();
-    m_pSelectTxt.clear();
-    m_pLbSelect.clear();
-    m_pTblDesc.clear();
-    m_pTblLBox.clear();
-    m_pBackGroundColorFrame.clear();
-    m_pBackgroundColorSet.clear();
-    m_pBackGroundColorLabelFT.clear();
-    m_pPreviewWin1.clear();
-    m_pBtnPreview.clear();
-    m_pBitmapContainer.clear();
-    m_pFileFrame.clear();
-    m_pBtnBrowse.clear();
-    m_pBtnLink.clear();
-    m_pFtUnlinked.clear();
-    m_pFtFile.clear();
-    m_pTypeFrame.clear();
-    m_pBtnPosition.clear();
-    m_pBtnArea.clear();
-    m_pBtnTile.clear();
-    m_pWndPosition.clear();
-    m_pPreviewWin2.clear();
-    SvxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SvxBackgroundTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
+NewSfxTabPage* SvxBackgroundTabPage::Create(Weld::Container* pParent, const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxBackgroundTabPage>::Create( pParent, *rAttrSet );
+    return new SvxBackgroundTabPage(pParent, *rAttrSet);
 }
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
@@ -452,7 +417,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
                                             false, &pItem ) )
     {
         nDestValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-        m_pTblLBox->SelectEntryPos(nDestValue);
+        m_xTblLBox->set_active(nDestValue);
 
         switch ( nDestValue )
         {
@@ -477,7 +442,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     }
 
     //#111173# the destination item is missing when the parent style has been changed
-    if(USHRT_MAX == nDestValue && m_pTblLBox->IsVisible())
+    if(USHRT_MAX == nDestValue && m_xTblLBox->get_visible())
         nDestValue = 0;
     sal_uInt16 nWhich = GetWhich(nSlot);
     SvxBrushItem aBgdAttr(nWhich);
@@ -507,9 +472,9 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     }
     else
     {
-        m_pSelectTxt->Hide();
-        m_pLbSelect->Hide();
-        lcl_setFillStyle(m_pLbSelect, drawing::FillStyle_SOLID);
+        m_xSelectTxt->hide();
+        m_xLbSelect->hide();
+        lcl_setFillStyle(*m_xLbSelect, drawing::FillStyle_SOLID);
         ShowColorUI_Impl();
 
         const SfxPoolItem* pOld = GetOldItem( *rSet, SID_ATTR_BRUSH );
@@ -520,9 +485,9 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
 
     if ( nDestValue != USHRT_MAX )
     {
-        if(m_pTblLBox->IsVisible())
+        if (m_xTblLBox->get_visible())
         {
-            sal_Int32 nValue = m_pTblLBox->GetSelectedEntryPos();
+            sal_Int32 nValue = m_xTblLBox->get_active();
 
             if ( pTableBck_Impl )
             {
@@ -557,8 +522,8 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             }
             pTableBck_Impl->nTableWhich = SID_ATTR_BRUSH_TABLE;
 
-            TblDestinationHdl_Impl(*m_pTblLBox);
-            m_pTblLBox->SaveValue();
+            TblDestinationHdl_Impl(*m_xTblLBox);
+            m_xTblLBox->save_value();
         }
         else if( bHighlighting )
         {
@@ -608,9 +573,9 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
     bool bCompareOldBrush = true;
     sal_uInt16 nSlot = SID_ATTR_BRUSH;
 
-    if ( m_pTblLBox->IsVisible() )
+    if (m_xTblLBox->get_visible())
     {
-        switch( m_pTblLBox->GetSelectedEntryPos() )
+        switch (m_xTblLBox->get_active())
         {
             case TBL_DEST_CELL:
                 nSlot = SID_ATTR_BRUSH;
@@ -643,14 +608,14 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
         const SvxBrushItem& rOldItem    = static_cast<const SvxBrushItem&>(*pOld);
 
         SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
-        const bool          bIsBrush    = ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) );
+        const bool          bIsBrush    = ( drawing::FillStyle_SOLID == lcl_getFillStyle(*m_xLbSelect) );
 
         if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
             || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap changed?
         {
             // background art hasn't been changed:
 
-            if ( (GPOS_NONE == eOldPos) || !m_pLbSelect->IsVisible() )
+            if ( (GPOS_NONE == eOldPos) || !m_xLbSelect->get_visible() )
             {
                 // Brush-treatment:
                 if ( rOldItem.GetColor() != aBgdColor ||
@@ -764,7 +729,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
         bModified = true;
     }
 
-    if( m_pTblLBox->IsVisible() )
+    if (m_xTblLBox->get_visible())
     {
         // the current condition has already been put
         if( nSlot != SID_ATTR_BRUSH && pTableBck_Impl->pCellBrush)
@@ -803,10 +768,10 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             }
         }
 
-        if( m_pTblLBox->IsValueChangedFromSaved() )
+        if (m_xTblLBox->get_value_changed_from_saved())
         {
-            rCoreSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
-                                         m_pTblLBox->GetSelectedEntryPos() ) );
+            rCoreSet->Put(SfxUInt16Item(SID_BACKGRND_DESTINATION,
+                                        m_xTblLBox->get_active()));
             bModified = true;
         }
     }
@@ -848,10 +813,10 @@ void SvxBackgroundTabPage::ShowSelector()
 {
     if( bAllowShowSelector)
     {
-        m_pAsGrid->Show();
-        m_pSelectTxt->Show();
-        m_pLbSelect->Show();
-        m_pLbSelect->SetSelectHdl( HDL(SelectHdl_Impl) );
+        m_xAsGrid->show();
+        m_xSelectTxt->show();
+        m_xLbSelect->show();
+        m_xLbSelect->connect_changed(HDL(SelectHdl_Impl));
         m_pBtnLink->SetClickHdl( HDL(FileClickHdl_Impl) );
         m_pBtnPreview->SetClickHdl( HDL(FileClickHdl_Impl) );
         m_pBtnBrowse->SetClickHdl( HDL(BrowseHdl_Impl) );
@@ -878,7 +843,8 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
 {
     SfxErrorContext aContext( ERRCTX_SVX_BACKGROUND,
                               OUString(),
-                              this,
+//TODO                              this,
+                              nullptr,
                               getRID_SVXERRCTX(),
                               SvxResLocale() );
 
@@ -942,7 +908,7 @@ void SvxBackgroundTabPage::HideColorUI_Impl()
 */
 void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 {
-    if (m_pLbSelect->IsVisible() &&
+    if (m_xLbSelect->get_visible() &&
          (m_pBackGroundColorFrame->IsVisible() || !m_pFileFrame->IsVisible()))
     {
         HideColorUI_Impl();
@@ -1050,9 +1016,9 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, void)
     m_pPreviewWin1->NotifyChange( aBgdColor );
 }
 
-IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl, Weld::ComboBoxText&, void)
 {
-    if ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) )
+    if ( drawing::FillStyle_SOLID == lcl_getFillStyle(*m_xLbSelect) )
     {
         ShowColorUI_Impl();
     }
@@ -1134,8 +1100,9 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
         return;
     bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
-    OUString aStrBrowse(get<vcl::Window>("findgraphicsft")->GetText());
-    pImportDlg = new SvxOpenGraphicDialog(aStrBrowse, this);
+//    TODO OUString aStrBrowse(get<vcl::Window>("findgraphicsft")->GetText());
+    OUString aStrBrowse;
+    pImportDlg = new SvxOpenGraphicDialog(aStrBrowse, GetParentDialog());
     if ( bHtml )
         pImportDlg->EnableLink(false);
     pImportDlg->SetPath( aBgdGraphicPath, m_pBtnLink->IsChecked() );
@@ -1216,16 +1183,16 @@ IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Timer*, pIdle, void )
 
 void SvxBackgroundTabPage::ShowTblControl()
 {
-    m_pTblLBox->SetSelectHdl( HDL(TblDestinationHdl_Impl) );
-    m_pTblLBox->SelectEntryPos(0);
-    m_pTblDesc->Show();
-    m_pTblLBox->Show();
-    m_pAsGrid->Show();
+    m_xTblLBox->connect_changed(HDL(TblDestinationHdl_Impl));
+    m_xTblLBox->set_active(0);
+    m_xTblDesc->show();
+    m_xTblLBox->show();
+    m_xAsGrid->show();
 }
 
-IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, Weld::ComboBoxText&, rBox, void )
 {
-    sal_Int32 nSelPos = rBox.GetSelectedEntryPos();
+    sal_Int32 nSelPos = rBox.get_active();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
     {
         std::unique_ptr<SvxBrushItem> xItemHolder;
@@ -1255,7 +1222,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox&, rBox, void )
             xItemHolder.reset(new SvxBrushItem(nWhich));
             pActItem = xItemHolder.get();
         }
-        if(drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
+        if(drawing::FillStyle_SOLID == lcl_getFillStyle(*m_xLbSelect))  // brush selected
         {
             *pActItem = SvxBrushItem( aBgdColor, nWhich );
         }
@@ -1281,7 +1248,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox&, rBox, void )
         {
         case TBL_DEST_CELL:
             pActItem = pTableBck_Impl->pCellBrush;
-            m_pLbSelect->Enable();
+            m_xLbSelect->set_sensitive(true);
             nWhich = pTableBck_Impl->nCellWhich;
             break;
         case TBL_DEST_ROW:
@@ -1290,7 +1257,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox&, rBox, void )
             break;
         case TBL_DEST_TBL:
             pActItem = pTableBck_Impl->pTableBrush;
-            m_pLbSelect->Enable();
+            m_xLbSelect->set_sensitive(true);
             nWhich = pTableBck_Impl->nTableWhich;
             break;
         default:
@@ -1316,9 +1283,9 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
     SvxGraphicPosition  ePos = rBgdAttr.GetGraphicPos();
     const Color& rColor = rBgdAttr.GetColor();
 
-    if ( GPOS_NONE == ePos || !m_pLbSelect->IsVisible() )
+    if ( GPOS_NONE == ePos || !m_xLbSelect->get_visible() )
     {
-        lcl_setFillStyle(m_pLbSelect, drawing::FillStyle_SOLID);
+        lcl_setFillStyle(*m_xLbSelect, drawing::FillStyle_SOLID);
         ShowColorUI_Impl();
         Color aTrColor( COL_TRANSPARENT );
         aBgdColor = rColor;
@@ -1337,7 +1304,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         m_pPreviewWin1->NotifyChange( aBgdColor );
 
-        if ( m_pLbSelect->IsVisible() ) // initialize graphic part
+        if (m_xLbSelect->get_visible()) // initialize graphic part
         {
             aBgdGraphicFilter.clear();
             aBgdGraphicPath.clear();
@@ -1355,7 +1322,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         const OUString&  aStrLink   = rBgdAttr.GetGraphicLink();
         const OUString&  aStrFilter = rBgdAttr.GetGraphicFilter();
 
-        lcl_setFillStyle(m_pLbSelect, drawing::FillStyle_BITMAP);
+        lcl_setFillStyle(*m_xLbSelect, drawing::FillStyle_BITMAP);
         ShowBitmapUI_Impl();
 
         if ( !aStrLink.isEmpty() )
@@ -1434,7 +1401,7 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
         if ((nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING) ||
             (nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR))
         {
-            m_pBackGroundColorLabelFT->SetText(CuiResId(RID_SVXSTR_CHARNAME_HIGHLIGHTING));
+            m_xBackGroundColorLabelFT->set_label(CuiResId(RID_SVXSTR_CHARNAME_HIGHLIGHTING));
             bHighlighting = bool(nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING);
             bCharBackColor = bool(nFlags & SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR);
         }

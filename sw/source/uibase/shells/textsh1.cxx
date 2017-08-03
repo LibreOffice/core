@@ -558,7 +558,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                ScopedVclPtr<AbstractSwBreakDlg> pDlg(pFact->CreateSwBreakDlg(GetView().GetWindow(), rWrtSh));
+                ScopedVclPtr<AbstractSwBreakDlg> pDlg(pFact->CreateSwBreakDlg(GetView().GetWindow()->GetFrameWeld(), rWrtSh));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
