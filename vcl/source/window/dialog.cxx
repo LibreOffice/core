@@ -348,6 +348,7 @@ struct DialogImpl
 
 void Dialog::ImplInitDialogData()
 {
+    mpDialogRenderable = nullptr;
     mpWindowImpl->mbDialog  = true;
     mpPrevExecuteDlg        = nullptr;
     mbInExecute             = false;
@@ -853,6 +854,14 @@ bool Dialog::selectPageByUIXMLDescription(const OString& /*rUIXMLDescription*/)
     return true;
 }
 
+void Dialog::registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable)
+{
+    if (pDialogRenderable && !mpDialogRenderable)
+    {
+        mpDialogRenderable = pDialogRenderable;
+    }
+}
+
 void Dialog::paintDialog(VirtualDevice& rDevice)
 {
     setDeferredProperties();
@@ -862,6 +871,14 @@ void Dialog::paintDialog(VirtualDevice& rDevice)
     ensureRepaint();
 
     PaintToDevice(&rDevice, Point(0, 0), Size());
+}
+
+void Dialog::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
+{
+    if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable && !maID.isEmpty())
+    {
+        mpDialogRenderable->notifyDialogInvalidation(maID);
+    }
 }
 
 void Dialog::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
