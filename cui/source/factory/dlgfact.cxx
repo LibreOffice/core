@@ -1369,9 +1369,11 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
             return SvxTextAttrPage::Create;
         case RID_SVXPAGE_ALIGNMENT :
             return svx::AlignmentTabPage::Create;
+#if 0
         case RID_SW_TP_BACKGROUND :
         case RID_SVXPAGE_BACKGROUND :
             return SvxBackgroundTabPage::Create;
+#endif
         case RID_SVXPAGE_BORDER :
             return SvxBorderTabPage::Create;
         case RID_SVXPAGE_CHAR_NAME :
@@ -1394,6 +1396,83 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
             break;
     }
 
+    return nullptr;
+}
+
+NewCreateTabPage AbstractDialogFactory_Impl::GetNewTabPageCreatorFunc( sal_uInt16 nId )
+{
+    switch (nId)
+    {
+#if 0
+        case RID_SVXPAGE_TEXTANIMATION :
+            return SvxTextAnimationPage::Create;
+        case RID_SVXPAGE_TRANSPARENCE :
+            return SvxTransparenceTabPage::Create;
+        case RID_SVXPAGE_AREA :
+            return SvxAreaTabPage::Create;
+        case RID_SVXPAGE_SHADOW :
+            return SvxShadowTabPage::Create;
+        case RID_SVXPAGE_LINE :
+            return SvxLineTabPage::Create;
+        case RID_SVXPAGE_CONNECTION :
+            return SvxConnectionPage::Create;
+        case RID_SVXPAGE_MEASURE :
+            return SvxMeasurePage::Create;
+        case RID_SFXPAGE_GENERAL :
+            return SvxGeneralTabPage::Create;
+        case RID_SVXPAGE_PICK_SINGLE_NUM :
+            return SvxSingleNumPickTabPage::Create;
+        case RID_SVXPAGE_PICK_BMP :
+            return SvxBitmapPickTabPage::Create;
+        case RID_SVXPAGE_PICK_BULLET :
+            return SvxBulletPickTabPage::Create;
+        case RID_SVXPAGE_NUM_OPTIONS :
+            return SvxNumOptionsTabPage::Create;
+        case RID_SVXPAGE_PICK_NUM :
+            return SvxNumPickTabPage::Create;
+        case RID_SVXPAGE_NUM_POSITION :
+            return SvxNumPositionTabPage::Create;
+        case RID_SVXPAGE_PARA_ASIAN :
+            return SvxAsianTabPage::Create;
+        case RID_SVXPAGE_EXT_PARAGRAPH :
+            return SvxExtParagraphTabPage::Create;
+        case RID_SVXPAGE_ALIGN_PARAGRAPH :
+            return SvxParaAlignTabPage::Create;
+        case RID_SVXPAGE_STD_PARAGRAPH :
+            return SvxStdParagraphTabPage::Create;
+        case RID_SVXPAGE_TABULATOR :
+            return SvxTabulatorTabPage::Create;
+        case RID_SVXPAGE_TEXTATTR :
+            return SvxTextAttrPage::Create;
+        case RID_SVXPAGE_ALIGNMENT :
+            return svx::AlignmentTabPage::Create;
+#endif
+        case RID_SW_TP_BACKGROUND :
+        case RID_SVXPAGE_BACKGROUND :
+            return SvxBackgroundTabPage::Create;
+#if 0
+        case RID_SVXPAGE_BORDER :
+            return SvxBorderTabPage::Create;
+        case RID_SVXPAGE_CHAR_NAME :
+            return SvxCharNamePage::Create;
+        case RID_SVXPAGE_CHAR_EFFECTS :
+            return SvxCharEffectsPage::Create;
+        case RID_SVXPAGE_CHAR_POSITION :
+            return SvxCharPositionPage::Create;
+        case RID_SVXPAGE_CHAR_TWOLINES :
+            return SvxCharTwoLinesPage::Create;
+        case RID_SVXPAGE_NUMBERFORMAT :
+            return SvxNumberFormatTabPage::Create;
+        case RID_SVXPAGE_PAGE :
+            return SvxPageDescPage::Create;
+        case RID_SVXPAGE_GRFCROP :
+            return SvxGrfCropPage::Create;
+        case RID_SVXPAGE_MACROASSIGN :
+            return SfxMacroTabPage::Create;
+        default:
+            break;
+#endif
+    }
     return nullptr;
 }
 

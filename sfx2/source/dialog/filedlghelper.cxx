@@ -1133,6 +1133,302 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     xNotifier->addFilePickerListener( this );
 }
 
+FileDialogHelper_Impl::FileDialogHelper_Impl(
+    FileDialogHelper* _pAntiImpl,
+    sal_Int16 nDialogType,
+    FileDialogFlags nFlags,
+    sal_Int16 nDialog,
+    const Weld::Window* /*_pPreferredParentWindow*/,
+    const OUString& sStandardDir,
+    const css::uno::Sequence< OUString >& rBlackList
+    )
+    :m_nDialogType          ( nDialogType )
+    ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
+{
+    const char* pServiceName=nullptr;
+    switch (nDialog)
+    {
+        case SFX2_IMPL_DIALOG_SYSTEM:
+        case SFX2_IMPL_DIALOG_OOO:
+            pServiceName = "com.sun.star.ui.dialogs.OfficeFilePicker";
+            break;
+        case SFX2_IMPL_DIALOG_REMOTE:
+            pServiceName = "com.sun.star.ui.dialogs.RemoteFilePicker";
+            break;
+        default:
+            pServiceName = "com.sun.star.ui.dialogs.FilePicker";
+            break;
+    }
+
+    OUString aService = OUString::createFromAscii( pServiceName );
+
+    uno::Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+
+    // create the file open dialog
+    // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
+
+    //TODO
+    //mpPreferredParentWindow = _pPreferredParentWindow ? _pPreferredParentWindow->GetSystemWindow() : nullptr;
+    mpPreferredParentWindow = nullptr;
+    mpAntiImpl              = _pAntiImpl;
+    mbHasAutoExt            = false;
+    mbHasPassword           = false;
+    m_bHaveFilterOptions    = false;
+    mbIsPwdEnabled          = true;
+    mbIsGpgEnabled          = true;
+    mbHasVersions           = false;
+    mbHasPreview            = false;
+    mbShowPreview           = false;
+    mbDeleteMatcher         = false;
+    mbInsert                = bool(nFlags & (FileDialogFlags::Insert|
+                                             FileDialogFlags::InsertCompare|
+                                             FileDialogFlags::InsertMerge));
+    mbExport                = bool(nFlags & FileDialogFlags::Export);
+    mbIsSaveDlg             = false;
+    mbPwdCheckBoxState      = false;
+    mbSelection             = false;
+    mbSelectionEnabled      = true;
+    mbHasSelectionBox       = false;
+    mbSelectionFltrEnabled  = false;
+
+    // default settings
+    m_nDontFlags = SFX_FILTER_NOTINSTALLED | SfxFilterFlags::INTERNAL | SfxFilterFlags::NOTINFILEDLG;
+    if (OPEN == lcl_OpenOrSave(m_nDialogType))
+        m_nMustFlags = SfxFilterFlags::IMPORT;
+    else
+        m_nMustFlags = SfxFilterFlags::EXPORT;
+
+
+    mpMatcher = nullptr;
+    mpGraphicFilter = nullptr;
+    mnPostUserEventId = nullptr;
+
+    // create the picker component
+    mxFileDlg.set(xFactory->createInstance( aService ), css::uno::UNO_QUERY);
+    mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
+
+    uno::Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
+    uno::Reference< XInitialization > xInit( mxFileDlg, UNO_QUERY );
+
+    if ( ! mxFileDlg.is() || ! xNotifier.is() )
+    {
+        return;
+    }
+
+
+    if ( xInit.is() )
+    {
+        sal_Int16 nTemplateDescription = TemplateDescription::FILEOPEN_SIMPLE;
+
+        switch ( m_nDialogType )
+        {
+            case FILEOPEN_SIMPLE:
+                nTemplateDescription = TemplateDescription::FILEOPEN_SIMPLE;
+                break;
+
+            case FILESAVE_SIMPLE:
+                nTemplateDescription = TemplateDescription::FILESAVE_SIMPLE;
+                mbIsSaveDlg = true;
+                break;
+
+            case FILESAVE_AUTOEXTENSION_PASSWORD:
+                nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
+                mbHasPassword = true;
+                mbHasAutoExt = true;
+                mbIsSaveDlg = true;
+                break;
+
+            case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
+                nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
+                mbHasPassword = true;
+
+                m_bHaveFilterOptions = true;
+                if( xFactory.is() )
+                {
+                    mxFilterCFG.set(
+                        xFactory->createInstance( "com.sun.star.document.FilterFactory" ),
+                        UNO_QUERY );
+                }
+
+                mbHasAutoExt = true;
+                mbIsSaveDlg = true;
+                break;
+
+            case FILESAVE_AUTOEXTENSION_SELECTION:
+                nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
+                mbHasAutoExt = true;
+                mbIsSaveDlg = true;
+                mbHasSelectionBox = true;
+                if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
+                {
+                    mxFilterCFG.set(
+                        xFactory->createInstance( "com.sun.star.document.FilterFactory" ),
+                        UNO_QUERY );
+                }
+                break;
+
+            case FILESAVE_AUTOEXTENSION_TEMPLATE:
+                nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
+                mbHasAutoExt = true;
+                mbIsSaveDlg = true;
+                break;
+
+            case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
+                nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
+                mbHasPreview = true;
+
+                // aPreviewTimer
+                maPreviewIdle.SetPriority( TaskPriority::LOWEST );
+                maPreviewIdle.SetInvokeHandler( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+                break;
+
+            case FILEOPEN_PLAY:
+                nTemplateDescription = TemplateDescription::FILEOPEN_PLAY;
+                break;
+
+            case FILEOPEN_LINK_PLAY:
+                nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PLAY;
+                break;
+
+            case FILEOPEN_READONLY_VERSION:
+                nTemplateDescription = TemplateDescription::FILEOPEN_READONLY_VERSION;
+                mbHasVersions = true;
+                break;
+
+            case FILEOPEN_LINK_PREVIEW:
+                nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW;
+                mbHasPreview = true;
+                // aPreviewTimer
+                maPreviewIdle.SetPriority( TaskPriority::LOWEST );
+                maPreviewIdle.SetInvokeHandler( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+                break;
+
+            case FILESAVE_AUTOEXTENSION:
+                nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION;
+                mbHasAutoExt = true;
+                mbIsSaveDlg = true;
+                break;
+
+            case FILEOPEN_PREVIEW:
+                nTemplateDescription = TemplateDescription::FILEOPEN_PREVIEW;
+                mbHasPreview = true;
+                // aPreviewTimer
+                maPreviewIdle.SetPriority( TaskPriority::LOWEST );
+                maPreviewIdle.SetInvokeHandler( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+                break;
+
+            default:
+                SAL_WARN( "sfx.dialog", "FileDialogHelper::ctor with unknown type" );
+                break;
+        }
+
+        Sequence < Any > aInitArguments( !mpPreferredParentWindow ? 3 : 4 );
+
+        // This is a hack. We currently know that the internal file picker implementation
+        // supports the extended arguments as specified below.
+        // TODO:
+        // a) adjust the service description so that it includes the TemplateDescription and ParentWindow args
+        // b) adjust the implementation of the system file picker to that it recognizes it
+        if ( mbSystemPicker )
+        {
+            aInitArguments[0] <<= nTemplateDescription;
+            if ( mpPreferredParentWindow )
+                aInitArguments[1] <<= VCLUnoHelper::GetInterface( mpPreferredParentWindow );
+        }
+        else
+        {
+            aInitArguments[0] <<= NamedValue(
+                                    "TemplateDescription",
+                                    makeAny( nTemplateDescription )
+                                );
+
+            aInitArguments[1] <<= NamedValue(
+                                    "StandardDir",
+                                    makeAny( sStandardDir )
+                                );
+
+            aInitArguments[2] <<= NamedValue(
+                                    "BlackList",
+                                    makeAny( rBlackList )
+                                );
+
+
+            if ( mpPreferredParentWindow )
+                aInitArguments[3] <<= NamedValue(
+                                        "ParentWindow",
+                                        makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) )
+                                    );
+        }
+
+        try
+        {
+            xInit->initialize( aInitArguments );
+        }
+        catch( const Exception& )
+        {
+            OSL_FAIL( "FileDialogHelper_Impl::FileDialogHelper_Impl: could not initialize the picker!" );
+        }
+    }
+
+
+    // set multiselection mode
+    if ( nFlags & FileDialogFlags::MultiSelection )
+        mxFileDlg->setMultiSelectionMode( true );
+
+    if ( nFlags & FileDialogFlags::Graphic ) // generate graphic filter only on demand
+    {
+        addGraphicFilter();
+    }
+
+    // Export dialog
+    if ( mbExport )
+    {
+        mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ) );
+        try {
+                css::uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY_THROW );
+                xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, true );
+        }
+        catch( const Exception & ) { }
+    }
+
+    // Save a copy dialog
+    if ( nFlags & FileDialogFlags::SaveACopy )
+    {
+        mxFileDlg->setTitle( SfxResId( STR_PB_SAVEACOPY ) );
+    }
+
+    // the "insert file" dialog needs another title
+    if ( mbInsert )
+    {
+        if ( nFlags & FileDialogFlags::InsertCompare )
+        {
+            mxFileDlg->setTitle( SfxResId( STR_PB_COMPAREDOC ) );
+        }
+        else if ( nFlags & FileDialogFlags::InsertMerge )
+        {
+            mxFileDlg->setTitle( SfxResId( STR_PB_MERGEDOC ) );
+        }
+        else
+        {
+            mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_INSERT ) );
+        }
+        uno::Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
+        if ( xExtDlg.is() )
+        {
+            try
+            {
+                xExtDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK,
+                                   SfxResId( STR_SFX_EXPLORERFILE_BUTTONINSERT ) );
+            }
+            catch( const IllegalArgumentException& ){}
+        }
+    }
+
+    // add the event listener
+    xNotifier->addFilePickerListener( this );
+}
+
+
 FileDialogHelper_Impl::~FileDialogHelper_Impl()
 {
     // Remove user event if we haven't received it yet
@@ -2280,6 +2576,15 @@ FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
     FileDialogFlags nFlags,
     const vcl::Window* _pPreferredParent )
+    :   m_nError(0),
+        mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent ) )
+{
+}
+
+FileDialogHelper::FileDialogHelper(
+    sal_Int16 nDialogType,
+    FileDialogFlags nFlags,
+    const Weld::Window* _pPreferredParent )
     :   m_nError(0),
         mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent ) )
 {
