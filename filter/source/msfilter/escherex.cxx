@@ -4595,10 +4595,10 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
                     if ( pList )
                     {
                         tools::Polygon aPoly;
-                        sal_uInt16 nNum, nAnz = pList->GetCount();
-                        if ( nAnz )
+                        sal_uInt16 nNum, nCnt = pList->GetCount();
+                        if ( nCnt )
                         {
-                            for ( nNum = 0; nNum < nAnz; nNum++ )
+                            for ( nNum = 0; nNum < nCnt; nNum++ )
                             {
                                 const SdrGluePoint& rGP = (*pList)[ nNum ];
                                 Point aPt( rGP.GetAbsolutePos( *pCustoShape ) );
