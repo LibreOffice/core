@@ -62,71 +62,49 @@
 
 using namespace ::com::sun::star;
 
-SwFormatTablePage::SwFormatTablePage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", &rSet)
+SwFormatTablePage::SwFormatTablePage(Weld::Container* pParent, const SfxItemSet& rSet)
+    : NewSfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", &rSet)
+    , m_xNameED(m_xBuilder->weld_entry("name"))
+    , m_xWidthFT(m_xBuilder->weld_label("widthft"))
+    , m_aWidthMF(m_xBuilder->weld_metric_spin_button("widthmf"))
+    , m_xRelWidthCB(m_xBuilder->weld_check_button("relwidth"))
+    , m_xFullBtn(m_xBuilder->weld_radio_button("full"))
+    , m_xLeftBtn(m_xBuilder->weld_radio_button("left"))
+    , m_xFromLeftBtn(m_xBuilder->weld_radio_button("fromleft"))
+    , m_xRightBtn(m_xBuilder->weld_radio_button("right"))
+    , m_xCenterBtn(m_xBuilder->weld_radio_button("center"))
+    , m_xFreeBtn(m_xBuilder->weld_radio_button("free"))
+    , m_xLeftFT(m_xBuilder->weld_label("leftft"))
+    , m_aLeftMF(m_xBuilder->weld_metric_spin_button("leftmf"))
+    , m_xRightFT(m_xBuilder->weld_label("rightft"))
+    , m_aRightMF(m_xBuilder->weld_metric_spin_button("rightmf"))
+    , m_xTopFT(m_xBuilder->weld_label("aboveft"))
+    , m_xTopMF(m_xBuilder->weld_metric_spin_button("abovemf"))
+    , m_xBottomFT(m_xBuilder->weld_label("belowft"))
+    , m_xBottomMF(m_xBuilder->weld_metric_spin_button("belowmf"))
+    , m_xContainer(m_xBuilder->weld_widget("properties"))
+    , m_xTextDirectionLB(m_xBuilder->weld_combo_box_text("textdirection"))
     , pTableData(nullptr)
     , nSaveWidth(0)
     , nMinTableWidth(MINLAY)
     , bModified(false)
+    , bModifying(false)
     , bFull(false)
     , bHtmlMode(false)
 {
-    get(m_pNameED, "name");
-    get(m_pWidthFT, "widthft");
-    m_aWidthMF.set(get<MetricField>("widthmf"));
-    m_aLeftMF.set(get<MetricField>("leftmf"));
-    m_aRightMF.set(get<MetricField>("rightmf"));
-    get(m_pRelWidthCB, "relwidth");
-    get(m_pFullBtn, "full");
-    get(m_pLeftBtn, "left");
-    get(m_pFromLeftBtn, "fromleft");
-    get(m_pRightBtn, "right");
-    get(m_pCenterBtn, "center");
-    get(m_pFreeBtn, "free");
-    get(m_pLeftFT, "leftft");
-    get(m_pRightFT, "rightft");
-    get(m_pTopFT, "aboveft");
-    get(m_pTopMF, "abovemf");
-    get(m_pBottomFT, "belowft");
-    get(m_pBottomMF, "belowmf");
-    get(m_pTextDirectionLB, "textdirection");
-
     SetExchangeSupport();
 
     const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem))
+    if (SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem))
         bHtmlMode = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 
-    bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
-    get<VclContainer>("properties")->Show(!bHtmlMode && bCTL);
+    const bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
+    if (!bHtmlMode && bCTL)
+        m_xContainer->show();
+    else
+        m_xContainer->hide();
 
     Init();
-}
-
-SwFormatTablePage::~SwFormatTablePage()
-{
-    disposeOnce();
-}
-
-void SwFormatTablePage::dispose()
-{
-    m_pNameED.clear();
-    m_pWidthFT.clear();
-    m_pRelWidthCB.clear();
-    m_pFullBtn.clear();
-    m_pLeftBtn.clear();
-    m_pFromLeftBtn.clear();
-    m_pRightBtn.clear();
-    m_pCenterBtn.clear();
-    m_pFreeBtn.clear();
-    m_pLeftFT.clear();
-    m_pRightFT.clear();
-    m_pTopFT.clear();
-    m_pTopMF.clear();
-    m_pBottomFT.clear();
-    m_pBottomMF.clear();
-    m_pTextDirectionLB.clear();
-    SfxTabPage::dispose();
 }
 
 void  SwFormatTablePage::Init()
@@ -135,31 +113,33 @@ void  SwFormatTablePage::Init()
     m_aRightMF.SetMetricFieldMin(-999999);
 
     //handler
-    Link<Button*,void> aLk2 = LINK( this, SwFormatTablePage, AutoClickHdl );
-    m_pFullBtn->SetClickHdl( aLk2 );
-    m_pFreeBtn->SetClickHdl( aLk2 );
-    m_pLeftBtn->SetClickHdl( aLk2 );
-    m_pFromLeftBtn->SetClickHdl( aLk2 );
-    m_pRightBtn->SetClickHdl( aLk2 );
-    m_pCenterBtn->SetClickHdl( aLk2 );
+    Link<Weld::Button&, void> aLk2 = LINK(this, SwFormatTablePage, AutoClickHdl);
+    m_xFullBtn->connect_clicked(aLk2);
+    m_xFreeBtn->connect_clicked(aLk2);
+    m_xLeftBtn->connect_clicked(aLk2);
+    m_xFromLeftBtn->connect_clicked(aLk2);
+    m_xRightBtn->connect_clicked(aLk2);
+    m_xCenterBtn->connect_clicked(aLk2);
 
-    Link<Edit&, void> aLk = LINK(this, SwFormatTablePage, UpDownHdl);
-    m_pTopMF->SetModifyHdl(aLk);
-    m_pBottomMF->SetModifyHdl(aLk);
-    m_aRightMF.SetModifyHdl(aLk);
-    m_aLeftMF.SetModifyHdl(aLk);
-    m_aWidthMF.SetModifyHdl(aLk);
+    Link<Weld::MetricSpinButton&, void> aLk = LINK(this, SwFormatTablePage, UpDownHdl);
+    m_xTopMF->connect_value_changed(aLk);
+    m_xBottomMF->connect_value_changed(aLk);
+    m_aRightMF.connect_value_changed(aLk);
+    m_aLeftMF.connect_value_changed(aLk);
+    m_aWidthMF.connect_value_changed(aLk);
 
-    m_pRelWidthCB->SetClickHdl(LINK( this, SwFormatTablePage, RelWidthClickHdl ));
+    m_xRelWidthCB->connect_clicked(LINK(this, SwFormatTablePage, RelWidthClickHdl));
 }
 
-IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, Button*, p, void )
+IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, Weld::Button&, rControl, void )
 {
-    CheckBox* pBtn = static_cast<CheckBox*>(p);
+    bModifying = true;
+
+    Weld::CheckButton& rBtn = dynamic_cast<Weld::CheckButton&>(rControl);
     OSL_ENSURE(pTableData, "table data not available?");
-    bool bIsChecked = pBtn->IsChecked();
-    sal_Int64 nLeft  = m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue(FUNIT_TWIP ));
-    sal_Int64 nRight = m_aRightMF.DenormalizePercent(m_aRightMF.GetValue(FUNIT_TWIP ));
+    bool bIsChecked = rBtn.get_active();
+    int nLeft  = m_aLeftMF.DenormalizePercent(m_aLeftMF.get_value(FUNIT_TWIP));
+    int nRight = m_aRightMF.DenormalizePercent(m_aRightMF.get_value(FUNIT_TWIP));
     m_aWidthMF.ShowPercent(bIsChecked);
     m_aLeftMF.ShowPercent(bIsChecked);
     m_aRightMF.ShowPercent(bIsChecked);
@@ -173,130 +153,138 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, Button*, p, void )
         m_aRightMF.SetMetricFieldMin(0); //dito
         m_aLeftMF.SetMetricFieldMax(99);
         m_aRightMF.SetMetricFieldMax(99);
-        m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(nLeft ), FUNIT_TWIP );
-        m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(nRight ), FUNIT_TWIP );
+        m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(nLeft), FUNIT_TWIP);
+        m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(nRight), FUNIT_TWIP);
     }
     else
-        ModifyHdl(m_aLeftMF.get());    //correct values again
+        ModifyHdl(*m_aLeftMF.get());    //correct values again
 
-    if(m_pFreeBtn->IsChecked())
+    if (m_xFreeBtn->get_active())
     {
-        bool bEnable = !pBtn->IsChecked();
-        m_aRightMF.Enable(bEnable);
-        m_pRightFT->Enable(bEnable);
+        bool bEnable = !rBtn.get_active();
+        m_aRightMF.set_sensitive(bEnable);
+        m_xRightFT->set_sensitive(bEnable);
     }
     bModified = true;
+    bModifying = false;
 }
 
-IMPL_LINK( SwFormatTablePage, AutoClickHdl, Button*, pControl, void )
+IMPL_LINK(SwFormatTablePage, AutoClickHdl, Weld::Button&, rControl, void)
 {
+    bModifying = true;
     bool bRestore = true,
          bLeftEnable = false,
          bRightEnable= false,
          bWidthEnable= false,
          bOthers = true;
-    if (pControl == m_pFullBtn)
+    if (&rControl == m_xFullBtn.get())
     {
         m_aLeftMF.SetPrcntValue(0);
         m_aRightMF.SetPrcntValue(0);
-        nSaveWidth = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue(FUNIT_TWIP )));
-        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(pTableData->GetSpace() ), FUNIT_TWIP );
+        nSaveWidth = static_cast<SwTwips>(m_aWidthMF.DenormalizePercent(m_aWidthMF.get_value(FUNIT_TWIP)));
+        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(pTableData->GetSpace()), FUNIT_TWIP);
         bFull = true;
         bRestore = false;
     }
-    else if (pControl == m_pLeftBtn)
+    else if (&rControl == m_xLeftBtn.get())
     {
         bRightEnable = bWidthEnable = true;
         m_aLeftMF.SetPrcntValue(0);
     }
-    else if (pControl == m_pFromLeftBtn)
+    else if (&rControl == m_xFromLeftBtn.get())
     {
         bLeftEnable = bWidthEnable = true;
         m_aRightMF.SetPrcntValue(0);
     }
-    else if (pControl == m_pRightBtn)
+    else if (&rControl == m_xRightBtn.get())
     {
         bLeftEnable = bWidthEnable = true;
         m_aRightMF.SetPrcntValue(0);
     }
-    else if (pControl == m_pCenterBtn)
+    else if (&rControl == m_xCenterBtn.get())
     {
         bLeftEnable = bWidthEnable = true;
     }
-    else if (pControl == m_pFreeBtn)
+    else if (&rControl == m_xFreeBtn.get())
     {
         RightModify();
         bLeftEnable = true;
         bWidthEnable = true;
         bOthers = false;
     }
-    m_aLeftMF.Enable(bLeftEnable);
-    m_pLeftFT->Enable(bLeftEnable);
-    m_aWidthMF.Enable(bWidthEnable);
-    m_pWidthFT->Enable(bWidthEnable);
-    if ( bOthers )
+    m_aLeftMF.set_sensitive(bLeftEnable);
+    m_xLeftFT->set_sensitive(bLeftEnable);
+    m_aWidthMF.set_sensitive(bWidthEnable);
+    m_xWidthFT->set_sensitive(bWidthEnable);
+    if (bOthers)
     {
-        m_aRightMF.Enable(bRightEnable);
-        m_pRightFT->Enable(bRightEnable);
-        m_pRelWidthCB->Enable(bWidthEnable);
+        m_aRightMF.set_sensitive(bRightEnable);
+        m_xRightFT->set_sensitive(bRightEnable);
+        m_xRelWidthCB->set_sensitive(bWidthEnable);
     }
 
-    if(bFull && bRestore)
+    if (bFull && bRestore)
     {
         //After being switched on automatic, the width was pinned
         //in order to restore the width while switching back to.
         bFull = false;
-        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(nSaveWidth ), FUNIT_TWIP );
+        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(nSaveWidth), FUNIT_TWIP);
     }
-    ModifyHdl(m_aWidthMF.get());
+    ModifyHdl(*m_aWidthMF.get());
     bModified = true;
+    bModifying = false;
 }
 
 void SwFormatTablePage::RightModify()
 {
-    if(m_pFreeBtn->IsChecked())
+    if (m_xFreeBtn->get_active())
     {
-        bool bEnable = m_aRightMF.GetValue() == 0;
-        m_pRelWidthCB->Enable(bEnable);
+        bool bEnable = m_aRightMF.get_value() == 0;
+        m_xRelWidthCB->set_sensitive(bEnable);
         if ( !bEnable )
         {
-            m_pRelWidthCB->Check(false);
-            RelWidthClickHdl(m_pRelWidthCB);
+            m_xRelWidthCB->set_active(false);
+            RelWidthClickHdl(*m_xRelWidthCB);
         }
-        bEnable = m_pRelWidthCB->IsChecked();
-        m_aRightMF.Enable(!bEnable);
-        m_pRightFT->Enable(!bEnable);
+        bEnable = m_xRelWidthCB->get_active();
+        m_aRightMF.set_sensitive(!bEnable);
+        m_xRightFT->set_sensitive(!bEnable);
     }
 }
 
-IMPL_LINK( SwFormatTablePage, UpDownHdl, Edit&, rEdit, void )
+IMPL_LINK(SwFormatTablePage, UpDownHdl, Weld::MetricSpinButton&, rEdit, void)
 {
+    if (bModifying)
+        return;
     if( m_aRightMF.get() == &rEdit)
         RightModify();
-    ModifyHdl( &rEdit );
+    ModifyHdl(rEdit);
 }
 
-void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
+void SwFormatTablePage::ModifyHdl(const Weld::MetricSpinButton& rEdit)
 {
-    SwTwips nCurWidth  = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue( FUNIT_TWIP )));
+    if (bModifying)
+        return;
+    bModifying = true;
+    SwTwips nCurWidth  = static_cast<SwTwips>(m_aWidthMF.DenormalizePercent(m_aWidthMF.get_value(FUNIT_TWIP)));
     SwTwips nPrevWidth = nCurWidth;
-    SwTwips nRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FUNIT_TWIP )));
-    SwTwips nLeft  = static_cast< SwTwips >(m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue( FUNIT_TWIP )));
+    SwTwips nRight = static_cast<SwTwips>(m_aRightMF.DenormalizePercent(m_aRightMF.get_value(FUNIT_TWIP)));
+    SwTwips nLeft  = static_cast<SwTwips>(m_aLeftMF.DenormalizePercent(m_aLeftMF.get_value(FUNIT_TWIP)));
     SwTwips nDiff;
 
-    if (pEdit == m_aWidthMF.get())
+    if (&rEdit == m_aWidthMF.get())
     {
         if( nCurWidth < MINLAY )
             nCurWidth = MINLAY;
         nDiff = nRight + nLeft + nCurWidth - pTableData->GetSpace() ;
         //right aligned: only change the left margin
-        if(m_pRightBtn->IsChecked())
+        if (m_xRightBtn->get_active())
             nLeft -= nDiff;
         //left aligned: only change the right margin
-        else if(m_pLeftBtn->IsChecked())
+        else if (m_xLeftBtn->get_active())
             nRight -= nDiff;
         //left margin and width allowed - first right - then left
-        else if(m_pFromLeftBtn->IsChecked())
+        else if (m_xFromLeftBtn->get_active())
         {
             if( nRight >= nDiff )
                 nRight -= nDiff;
@@ -316,7 +304,7 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
             }
         }
         //centered: change both sides equally
-        else if(m_pCenterBtn->IsChecked())
+        else if (m_xCenterBtn->get_active())
         {
             if(nLeft != nRight)
             {
@@ -331,13 +319,13 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
             }
         }
         //free alignment: decrease both margins
-        else if(m_pFreeBtn->IsChecked())
+        else if (m_xFreeBtn->get_active())
         {
             nLeft -= nDiff/2;
             nRight -= nDiff/2;
         }
     }
-    if (pEdit == m_aRightMF.get())
+    if (&rEdit == m_aRightMF.get())
     {
 
         if( nRight + nLeft > pTableData->GetSpace() - MINLAY )
@@ -345,11 +333,11 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
 
         nCurWidth = pTableData->GetSpace() - nLeft - nRight;
     }
-    if (pEdit == m_aLeftMF.get())
+    if (&rEdit == m_aLeftMF.get())
     {
-        if(!m_pFromLeftBtn->IsChecked())
+        if (!m_xFromLeftBtn->get_active())
         {
-            bool bCenter = m_pCenterBtn->IsChecked();
+            bool bCenter = m_xCenterBtn->get_active();
             if( bCenter )
                 nRight = nLeft;
             if(nRight + nLeft > pTableData->GetSpace() - MINLAY )
@@ -371,58 +359,57 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
         }
     }
     if (nCurWidth != nPrevWidth )
-        m_aWidthMF.SetPrcntValue( m_aWidthMF.NormalizePercent( nCurWidth ), FUNIT_TWIP );
-    m_aRightMF.SetPrcntValue( m_aRightMF.NormalizePercent( nRight ), FUNIT_TWIP );
-    m_aLeftMF.SetPrcntValue( m_aLeftMF.NormalizePercent( nLeft ), FUNIT_TWIP );
+        m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(nCurWidth), FUNIT_TWIP);
+    m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(nRight), FUNIT_TWIP);
+    m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(nLeft), FUNIT_TWIP);
     bModified = true;
+    bModifying = false;
 }
 
-VclPtr<SfxTabPage> SwFormatTablePage::Create( vcl::Window* pParent,
-                                              const SfxItemSet* rAttrSet)
+NewSfxTabPage* SwFormatTablePage::Create(Weld::Container* pParent, const SfxItemSet* pAttrSet)
 {
-    return VclPtr<SwFormatTablePage>::Create( pParent, *rAttrSet );
+    return new SwFormatTablePage(pParent, *pAttrSet);
 }
 
 bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
 {
     //Test if one of the controls still has the focus
-    if (m_aWidthMF.HasFocus())
-        ModifyHdl(m_aWidthMF.get());
-    else if (m_aLeftMF.HasFocus())
-        ModifyHdl(m_aLeftMF.get());
-    else if(m_aRightMF.HasFocus())
-        ModifyHdl(m_aRightMF.get());
-    else if(m_pTopMF->HasFocus())
-        ModifyHdl(m_pTopMF);
-    else if(m_pBottomMF->HasFocus())
-        ModifyHdl(m_pBottomMF);
+    if (m_aWidthMF.has_focus())
+        ModifyHdl(*m_aWidthMF.get());
+    else if (m_aLeftMF.has_focus())
+        ModifyHdl(*m_aLeftMF.get());
+    else if (m_aRightMF.has_focus())
+        ModifyHdl(*m_aRightMF.get());
+    else if (m_xTopMF->has_focus())
+        ModifyHdl(*m_xTopMF);
+    else if (m_xBottomMF->has_focus())
+        ModifyHdl(*m_xBottomMF);
 
-    if(bModified)
+    if (bModified)
     {
-        if( m_pBottomMF->IsValueChangedFromSaved() ||
-            m_pTopMF->IsValueChangedFromSaved() )
+        if( m_xBottomMF->get_value_changed_from_saved() ||
+            m_xTopMF->get_value_changed_from_saved() )
         {
             SvxULSpaceItem aULSpace(RES_UL_SPACE);
-            aULSpace.SetUpper( m_pTopMF->Denormalize(m_pTopMF->GetValue( FUNIT_TWIP )));
-            aULSpace.SetLower( m_pBottomMF->Denormalize(m_pBottomMF->GetValue( FUNIT_TWIP )));
+            aULSpace.SetUpper(m_xTopMF->denormalize(m_xTopMF->get_value(FUNIT_TWIP)));
+            aULSpace.SetLower(m_xBottomMF->denormalize(m_xBottomMF->get_value(FUNIT_TWIP)));
             rCoreSet->Put(aULSpace);
         }
 
     }
-    if(m_pNameED->IsValueChangedFromSaved())
+    if (m_xNameED->get_value_changed_from_saved())
     {
-        rCoreSet->Put(SfxStringItem( FN_PARAM_TABLE_NAME, m_pNameED->GetText()));
+        rCoreSet->Put(SfxStringItem(FN_PARAM_TABLE_NAME, m_xNameED->get_text()));
         bModified = true;
     }
 
-    if( m_pTextDirectionLB->IsVisible() )
+    if (m_xTextDirectionLB->get_visible())
     {
-        const sal_Int32 nPos = m_pTextDirectionLB->GetSelectedEntryPos();
-        if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
+        if (m_xTextDirectionLB->get_value_changed_from_saved())
         {
-            SvxFrameDirection nDirection = static_cast<SvxFrameDirection>(
-                             reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetEntryData( nPos )));
-            rCoreSet->Put( SvxFrameDirectionItem( nDirection, RES_FRAMEDIR));
+            OUString sId = m_xTextDirectionLB->get_active_id();
+            SvxFrameDirection nDirection = static_cast<SvxFrameDirection>(sId.toUInt32());
+            rCoreSet->Put(SvxFrameDirectionItem(nDirection, RES_FRAMEDIR));
             bModified = true;
         }
     }
@@ -430,120 +417,127 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
     return bModified;
 }
 
-void  SwFormatTablePage::Reset( const SfxItemSet* )
+void SwFormatTablePage::Reset( const SfxItemSet* )
 {
     const SfxItemSet& rSet = GetItemSet();
     const SfxPoolItem*  pItem;
 
-    if(bHtmlMode)
+    if (bHtmlMode)
     {
-        m_pNameED->Disable();
-        m_pTopFT->Hide();
-        m_pTopMF->Hide();
-        m_pBottomFT->Hide();
-        m_pBottomMF->Hide();
-        m_pFreeBtn->Enable(false);
+        m_xNameED->set_sensitive(false);
+        m_xTopFT->hide();
+        m_xTopMF->hide();
+        m_xBottomFT->hide();
+        m_xBottomMF->hide();
+        m_xFreeBtn->set_sensitive(false);
     }
+
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     m_aWidthMF.SetMetric(aMetric);
     m_aRightMF.SetMetric(aMetric);
     m_aLeftMF.SetMetric(aMetric);
-    SetMetric(*m_pTopMF, aMetric);
-    SetMetric(*m_pBottomMF, aMetric);
+    SetMetric(*m_xTopMF, aMetric);
+    SetMetric(*m_xBottomMF, aMetric);
+
+    //lock widths so they don't resize when range is changed on twip vs %
+    m_aWidthMF.get()->set_size_request(m_aWidthMF.get()->get_preferred_size().Width(), -1);
+    m_aLeftMF.get()->set_size_request(m_aLeftMF.get()->get_preferred_size().Width(), -1);
+    m_aRightMF.get()->set_size_request(m_aRightMF.get()->get_preferred_size().Width(), -1);
 
     //Name
-    if(SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
+    if (SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
     {
-        m_pNameED->SetText(static_cast<const SfxStringItem*>(pItem)->GetValue());
-        m_pNameED->SaveValue();
+        m_xNameED->set_text(static_cast<const SfxStringItem*>(pItem)->GetValue());
+        m_xNameED->save_value();
     }
 
-    if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
+    if (SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
-        pTableData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>( pItem)->GetValue());
+        pTableData = static_cast<SwTableRep*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
         nMinTableWidth = pTableData->GetColCount() * MINLAY;
 
-        if(pTableData->GetWidthPercent())
+        if (pTableData->GetWidthPercent())
         {
-            m_pRelWidthCB->Check();
-            RelWidthClickHdl(m_pRelWidthCB);
-            m_aWidthMF.SetPrcntValue(pTableData->GetWidthPercent(), FUNIT_CUSTOM);
+            m_xRelWidthCB->set_active(true);
+            RelWidthClickHdl(*m_xRelWidthCB);
+            m_aWidthMF.SetPrcntValue(pTableData->GetWidthPercent(), FUNIT_PERCENT);
 
-            m_aWidthMF.SaveValue();
-            nSaveWidth = static_cast< SwTwips >(m_aWidthMF.GetValue(FUNIT_CUSTOM));
+            m_aWidthMF.save_value();
+            nSaveWidth = static_cast<SwTwips>(m_aWidthMF.get_value(FUNIT_PERCENT));
         }
         else
         {
             m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(
                     pTableData->GetWidth()), FUNIT_TWIP);
-            m_aWidthMF.SaveValue();
+            m_aWidthMF.save_value();
             nSaveWidth = pTableData->GetWidth();
             nMinTableWidth = std::min( nSaveWidth, nMinTableWidth );
         }
 
         m_aWidthMF.SetRefValue(pTableData->GetSpace());
+#if 0
         m_aWidthMF.SetLast(m_aWidthMF.NormalizePercent( pTableData->GetSpace() ));
         m_aLeftMF.SetLast(m_aLeftMF.NormalizePercent( pTableData->GetSpace() ));
         m_aRightMF.SetLast(m_aRightMF.NormalizePercent( pTableData->GetSpace() ));
-
+#endif
         m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(
                     pTableData->GetLeftSpace()), FUNIT_TWIP);
         m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(
                     pTableData->GetRightSpace()), FUNIT_TWIP);
-        m_aLeftMF.SaveValue();
-        m_aRightMF.SaveValue();
+        m_aLeftMF.save_value();
+        m_aRightMF.save_value();
 
         bool bSetRight = false, bSetLeft = false;
-        switch( pTableData->GetAlign() )
+        switch (pTableData->GetAlign())
         {
             case text::HoriOrientation::NONE:
-                m_pFreeBtn->Check();
-                if(m_pRelWidthCB->IsChecked())
+                m_xFreeBtn->set_active(true);
+                if (m_xRelWidthCB->get_active())
                     bSetRight = true;
             break;
             case text::HoriOrientation::FULL:
             {
                 bSetRight = bSetLeft = true;
-                m_pFullBtn->Check();
-                m_aWidthMF.Enable(false);
-                m_pRelWidthCB->Enable(false);
-                m_pWidthFT->Enable(false);
+                m_xFullBtn->set_active(true);
+                m_aWidthMF.set_sensitive(false);
+                m_xRelWidthCB->set_sensitive(false);
+                m_xWidthFT->set_sensitive(false);
             }
             break;
             case text::HoriOrientation::LEFT:
             {
                 bSetLeft = true;
-                m_pLeftBtn->Check();
+                m_xLeftBtn->set_active(true);
             }
             break;
             case text::HoriOrientation::LEFT_AND_WIDTH :
             {
                 bSetRight = true;
-                m_pFromLeftBtn->Check();
+                m_xFromLeftBtn->set_active(true);
             }
             break;
             case text::HoriOrientation::RIGHT:
             {
                 bSetRight = true;
-                m_pRightBtn->Check();
+                m_xRightBtn->set_active(true);
             }
             break;
             case text::HoriOrientation::CENTER:
             {
                 bSetRight = true;
-                m_pCenterBtn->Check();
+                m_xCenterBtn->set_active(true);
             }
             break;
         }
         if ( bSetRight )
         {
-            m_aRightMF.Enable(false);
-            m_pRightFT->Enable(false);
+            m_aRightMF.set_sensitive(false);
+            m_xRightFT->set_sensitive(false);
         }
         if ( bSetLeft )
         {
-            m_aLeftMF.Enable(false);
-            m_pLeftFT->Enable(false);
+            m_aLeftMF.set_sensitive(false);
+            m_xLeftFT->set_sensitive(false);
         }
 
     }
@@ -551,21 +545,20 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     //Margins
     if(SfxItemState::SET == rSet.GetItemState( RES_UL_SPACE, false,&pItem ))
     {
-        m_pTopMF->SetValue(m_pTopMF->Normalize(
+        m_xTopMF->set_value(m_xTopMF->normalize(
                         static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()), FUNIT_TWIP);
-        m_pBottomMF->SetValue(m_pBottomMF->Normalize(
+        m_xBottomMF->set_value(m_xBottomMF->normalize(
                         static_cast<const SvxULSpaceItem*>(pItem)->GetLower()), FUNIT_TWIP);
-        m_pTopMF->SaveValue();
-        m_pBottomMF->SaveValue();
+        m_xTopMF->save_value();
+        m_xBottomMF->save_value();
     }
 
     //Text direction
     if( SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
         SvxFrameDirection nVal  = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
-        const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nVal) );
-        m_pTextDirectionLB->SelectEntryPos( nPos );
-        m_pTextDirectionLB->SaveValue();
+        m_xTextDirectionLB->set_active_id(OUString::number(static_cast<sal_uInt32>(nVal)));
+        m_xTextDirectionLB->save_value();
     }
 
     m_aWidthMF.SetMax( 2*m_aWidthMF.NormalizePercent( pTableData->GetSpace() ), FUNIT_TWIP );
@@ -583,18 +576,18 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
                                         pTableData->GetWidth() :
                                             pTableData->GetSpace();
         if(pTableData->GetWidthPercent() == 0 &&
-                nCurWidth != m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue(FUNIT_TWIP )))
+                nCurWidth != m_aWidthMF.DenormalizePercent(m_aWidthMF.get_value(FUNIT_TWIP)))
         {
             m_aWidthMF.SetPrcntValue(m_aWidthMF.NormalizePercent(
                             nCurWidth), FUNIT_TWIP);
-            m_aWidthMF.SaveValue();
+            m_aWidthMF.save_value();
             nSaveWidth = nCurWidth;
             m_aLeftMF.SetPrcntValue(m_aLeftMF.NormalizePercent(
                             pTableData->GetLeftSpace()), FUNIT_TWIP);
-            m_aLeftMF.SaveValue();
+            m_aLeftMF.save_value();
             m_aRightMF.SetPrcntValue(m_aRightMF.NormalizePercent(
                             pTableData->GetRightSpace()), FUNIT_TWIP);
-            m_aRightMF.SaveValue();
+            m_aRightMF.save_value();
         }
     }
 
@@ -604,36 +597,38 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 {
     //os: VCL doesn't take care of making the active widget
     //in the dialog lose the focus
-    m_pNameED->GrabFocus();
+    m_xNameED->grab_focus();
     //test the table name for spaces
-    OUString sTableName = m_pNameED->GetText();
-    if(sTableName.indexOf(' ') != -1)
+    OUString sTableName = m_xNameED->get_text();
+    if (sTableName.indexOf(' ') != -1)
     {
-        ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_WRONG_TABLENAME), VclMessageType::Info)->Execute();
-        m_pNameED->GrabFocus();
+        std::unique_ptr<Weld::Dialog> xDialog(Application::CreateMessageDialog(GetParentDialog(), VclMessageType::Info,
+                                                 VclButtonsType::Ok, SwResId(STR_WRONG_TABLENAME)));
+        xDialog->run();
+        xDialog.reset();
+        m_xNameED->grab_focus();
         return DeactivateRC::KeepPage;
     }
-    if(_pSet)
+    if (_pSet)
     {
         FillItemSet(_pSet);
-        if(bModified)
+        if (bModified)
         {
-            SwTwips lLeft  = static_cast< SwTwips >(m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue( FUNIT_TWIP )));
-            SwTwips lRight = static_cast< SwTwips >(m_aRightMF.DenormalizePercent(m_aRightMF.GetValue( FUNIT_TWIP )));
+            SwTwips lLeft  = static_cast<SwTwips>(m_aLeftMF.DenormalizePercent(m_aLeftMF.get_value(FUNIT_TWIP)));
+            SwTwips lRight = static_cast<SwTwips>(m_aRightMF.DenormalizePercent(m_aRightMF.get_value(FUNIT_TWIP)));
 
-            if( m_aLeftMF.GetText() != m_aLeftMF.GetSavedValue() ||
-                m_aRightMF.GetText() != m_aRightMF.GetSavedValue() )
+            if (m_aLeftMF.get_value_changed_from_saved() || m_aRightMF.get_value_changed_from_saved())
             {
                 pTableData->SetWidthChanged();
-                pTableData->SetLeftSpace( lLeft);
-                pTableData->SetRightSpace( lRight);
+                pTableData->SetLeftSpace(lLeft);
+                pTableData->SetRightSpace(lRight);
             }
 
             SwTwips lWidth;
-            if (m_pRelWidthCB->IsChecked() && m_pRelWidthCB->IsEnabled())
+            if (m_xRelWidthCB->get_active() && m_xRelWidthCB->get_sensitive())
             {
                 lWidth = pTableData->GetSpace() - lRight - lLeft;
-                const sal_uInt16 nPercentWidth = m_aWidthMF.GetValue(FUNIT_CUSTOM);
+                const sal_uInt16 nPercentWidth = m_aWidthMF.get_value(FUNIT_PERCENT);
                 if(pTableData->GetWidthPercent() != nPercentWidth)
                 {
                     pTableData->SetWidthPercent(nPercentWidth);
@@ -643,7 +638,7 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             else
             {
                 pTableData->SetWidthPercent(0);
-                lWidth = static_cast< SwTwips >(m_aWidthMF.DenormalizePercent(m_aWidthMF.GetValue( FUNIT_TWIP )));
+                lWidth = static_cast<SwTwips>(m_aWidthMF.DenormalizePercent(m_aWidthMF.get_value(FUNIT_TWIP)));
             }
             pTableData->SetWidth(lWidth);
 
@@ -680,17 +675,17 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             }
 
             sal_Int16 nAlign = 0;
-            if(m_pRightBtn->IsChecked())
+            if (m_xRightBtn->get_active())
                 nAlign = text::HoriOrientation::RIGHT;
-            else if(m_pLeftBtn->IsChecked())
+            else if (m_xLeftBtn->get_active())
                 nAlign = text::HoriOrientation::LEFT;
-            else if(m_pFromLeftBtn->IsChecked())
+            else if (m_xFromLeftBtn->get_active())
                 nAlign = text::HoriOrientation::LEFT_AND_WIDTH;
-            else if(m_pCenterBtn->IsChecked())
+            else if (m_xCenterBtn->get_active())
                 nAlign = text::HoriOrientation::CENTER;
-            else if(m_pFreeBtn->IsChecked())
+            else if (m_xFreeBtn->get_active())
                 nAlign = text::HoriOrientation::NONE;
-            else if(m_pFullBtn->IsChecked())
+            else if (m_xFullBtn->get_active())
             {
                 nAlign = text::HoriOrientation::FULL;
                 lWidth = lAutoWidth;
@@ -715,10 +710,28 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 }
 
 //Description: Page column configuration
-SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "TableColumnPage",
+SwTableColumnPage::SwTableColumnPage(Weld::Container* pParent, const SfxItemSet& rSet)
+    : NewSfxTabPage(pParent, "TableColumnPage",
         "modules/swriter/ui/tablecolumnpage.ui", &rSet)
+    , m_xModifyTableCB(m_xBuilder->weld_check_button("adaptwidth"))
+    , m_xProportionalCB(m_xBuilder->weld_check_button("adaptcolumns"))
+    , m_xSpaceFT(m_xBuilder->weld_label("spaceft"))
+    , m_xSpaceED(m_xBuilder->weld_metric_spin_button("space"))
+    , m_xUpBtn(m_xBuilder->weld_button("next"))
+    , m_xDownBtn(m_xBuilder->weld_button("back"))
     , pTableData(nullptr)
+    , m_aFieldArr({m_xBuilder->weld_metric_spin_button("width1"),
+                   m_xBuilder->weld_metric_spin_button("width2"),
+                   m_xBuilder->weld_metric_spin_button("width3"),
+                   m_xBuilder->weld_metric_spin_button("width4"),
+                   m_xBuilder->weld_metric_spin_button("width5"),
+                   m_xBuilder->weld_metric_spin_button("width6")})
+    , m_aTextArr({std::unique_ptr<Weld::Label>(m_xBuilder->weld_label("1")),
+                  std::unique_ptr<Weld::Label>(m_xBuilder->weld_label("2")),
+                  std::unique_ptr<Weld::Label>(m_xBuilder->weld_label("3")),
+                  std::unique_ptr<Weld::Label>(m_xBuilder->weld_label("4")),
+                  std::unique_ptr<Weld::Label>(m_xBuilder->weld_label("5")),
+                  std::unique_ptr<Weld::Label>(m_xBuilder->weld_label("6"))})
     , nTableWidth(0)
     , nMinWidth(MINLAY)
     , nNoOfCols(0)
@@ -727,56 +740,16 @@ SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSe
     , bModifyTable(false)
     , bPercentMode(false)
 {
-    get(m_pModifyTableCB, "adaptwidth");
-    get(m_pProportionalCB, "adaptcolumns");
-    get(m_pSpaceFT, "spaceft");
-    get(m_pSpaceED, "space-nospin");
-    get(m_pUpBtn, "next");
-    get(m_pDownBtn, "back");
-
-    m_aFieldArr[0].set(get<MetricField>("width1"));
-    m_aFieldArr[1].set(get<MetricField>("width2"));
-    m_aFieldArr[2].set(get<MetricField>("width3"));
-    m_aFieldArr[3].set(get<MetricField>("width4"));
-    m_aFieldArr[4].set(get<MetricField>("width5"));
-    m_aFieldArr[5].set(get<MetricField>("width6"));
-
-    m_pTextArr[0] = get<FixedText>("1");
-    m_pTextArr[1] = get<FixedText>("2");
-    m_pTextArr[2] = get<FixedText>("3");
-    m_pTextArr[3] = get<FixedText>("4");
-    m_pTextArr[4] = get<FixedText>("5");
-    m_pTextArr[5] = get<FixedText>("6");
-
     SetExchangeSupport();
 
     const SfxPoolItem* pItem;
-    Init(SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
+    Init(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem)
          && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 }
 
-SwTableColumnPage::~SwTableColumnPage()
+NewSfxTabPage* SwTableColumnPage::Create(Weld::Container* pParent, const SfxItemSet* pAttrSet)
 {
-    disposeOnce();
-}
-
-void SwTableColumnPage::dispose()
-{
-    m_pModifyTableCB.clear();
-    m_pProportionalCB.clear();
-    m_pSpaceFT.clear();
-    m_pSpaceED.clear();
-    m_pUpBtn.clear();
-    m_pDownBtn.clear();
-    for (auto& p : m_pTextArr)
-        p.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> SwTableColumnPage::Create( vcl::Window* pParent,
-                                              const SfxItemSet* rAttrSet)
-{
-    return VclPtr<SwTableColumnPage>::Create( pParent, *rAttrSet );
+    return new SwTableColumnPage(pParent, *pAttrSet);
 }
 
 void  SwTableColumnPage::Reset( const SfxItemSet* )
@@ -798,56 +771,55 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
             if( pTableData->GetColumns()[i].nWidth  < nMinWidth )
                     nMinWidth = pTableData->GetColumns()[i].nWidth;
         }
-        sal_Int64 nMinTwips = m_aFieldArr[0].NormalizePercent( nMinWidth );
-        sal_Int64 nMaxTwips = m_aFieldArr[0].NormalizePercent( nTableWidth );
+        auto nMinTwips = m_aFieldArr[0].NormalizePercent(nMinWidth);
+        auto nMaxTwips = m_aFieldArr[0].NormalizePercent(nTableWidth);
         for( sal_uInt16 i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
         {
             m_aFieldArr[i].SetPrcntValue( m_aFieldArr[i].NormalizePercent(
                                                 GetVisibleWidth(i) ), FUNIT_TWIP );
             m_aFieldArr[i].SetMin( nMinTwips , FUNIT_TWIP );
             m_aFieldArr[i].SetMax( nMaxTwips , FUNIT_TWIP );
-            m_aFieldArr[i].Enable();
-            m_pTextArr[i]->Enable();
+            m_aFieldArr[i].set_sensitive(true);
+            m_aTextArr[i]->set_sensitive(true);
         }
 
-        if( nNoOfVisibleCols > MET_FIELDS )
-            m_pUpBtn->Enable();
+        if (nNoOfVisibleCols > MET_FIELDS)
+            m_xUpBtn->set_sensitive(true);
 
-        for( sal_uInt16 i = nNoOfVisibleCols; i < MET_FIELDS; ++i )
+        for (sal_uInt16 i = nNoOfVisibleCols; i < MET_FIELDS; ++i)
         {
-            m_aFieldArr[i].SetText( OUString() );
-            m_pTextArr[i]->Disable();
+            m_aFieldArr[i].set_text(OUString());
+            m_aTextArr[i]->set_sensitive(false);
         }
     }
     ActivatePage(rSet);
-
 }
 
-void  SwTableColumnPage::Init(bool bWeb)
+void SwTableColumnPage::Init(bool bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
-    Link<Edit&,void> aLkModify = LINK(this, SwTableColumnPage, ModifyHdl);
+    Link<Weld::MetricSpinButton&, void> aLkModify = LINK(this, SwTableColumnPage, ModifyHdl);
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
     {
         aValueTable[i] = i;
         m_aFieldArr[i].SetMetric(aMetric);
-        m_aFieldArr[i].SetModifyHdl(aLkModify);
+        m_aFieldArr[i].connect_value_changed(aLkModify);
     }
-    SetMetric(*m_pSpaceED, aMetric);
+    SetMetric(*m_xSpaceED, aMetric);
 
-    Link<Button*,void> aLk = LINK( this, SwTableColumnPage, AutoClickHdl );
-    m_pUpBtn->SetClickHdl( aLk );
-    m_pDownBtn->SetClickHdl( aLk );
+    Link<Weld::Button&, void> aLk = LINK(this, SwTableColumnPage, AutoClickHdl);
+    m_xUpBtn->connect_clicked(aLk);
+    m_xDownBtn->connect_clicked(aLk);
 
-    aLk = LINK( this, SwTableColumnPage, ModeHdl );
-    m_pModifyTableCB->SetClickHdl( aLk );
-    m_pProportionalCB->SetClickHdl( aLk );
+    aLk = LINK(this, SwTableColumnPage, ModeHdl);
+    m_xModifyTableCB->connect_clicked(aLk);
+    m_xProportionalCB->connect_clicked(aLk);
 }
 
-IMPL_LINK( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
+IMPL_LINK(SwTableColumnPage, AutoClickHdl, Weld::Button&, rControl, void)
 {
     //move display window
-    if(pControl == m_pDownBtn.get())
+    if (&rControl == m_xDownBtn.get())
     {
         if(aValueTable[0] > 0)
         {
@@ -855,7 +827,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
                 rn -= 1;
         }
     }
-    if (pControl == m_pUpBtn.get())
+    if (&rControl == m_xUpBtn.get())
     {
         if( aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1  )
         {
@@ -868,28 +840,28 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
         OUString sEntry('~');
         OUString sIndex = OUString::number( aValueTable[i] + 1 );
         sEntry += sIndex;
-        m_pTextArr[i]->SetText( sEntry );
+        m_aTextArr[i]->set_label(sEntry);
     }
 
-    m_pDownBtn->Enable(aValueTable[0] > 0);
-    m_pUpBtn->Enable(aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1 );
+    m_xDownBtn->set_sensitive(aValueTable[0] > 0);
+    m_xUpBtn->set_sensitive(aValueTable[MET_FIELDS - 1] < nNoOfVisibleCols - 1);
     UpdateCols(0);
 }
 
-IMPL_LINK(SwTableColumnPage, ModifyHdl, Edit&, rEdit, void)
+IMPL_LINK(SwTableColumnPage, ModifyHdl, Weld::MetricSpinButton&, rEdit, void)
 {
     bModified = true;
-    ModifyHdl(static_cast<MetricField*>(&rEdit));
+    ModifyHdl(&rEdit);
 }
 
-IMPL_LINK( SwTableColumnPage, ModeHdl, Button*, pBox, void )
+IMPL_LINK(SwTableColumnPage, ModeHdl, Weld::Button&, rBox, void)
 {
-    bool bCheck = static_cast<CheckBox*>(pBox)->IsChecked();
-    if (pBox == m_pProportionalCB)
+    bool bCheck = dynamic_cast<Weld::CheckButton&>(rBox).get_active();
+    if (&rBox == m_xProportionalCB.get())
     {
-        if(bCheck)
-            m_pModifyTableCB->Check();
-        m_pModifyTableCB->Enable(!bCheck && bModifyTable);
+        if (bCheck)
+            m_xModifyTableCB->set_active(true);
+        m_xModifyTableCB->set_sensitive(!bCheck && bModifyTable);
     }
 }
 
@@ -902,29 +874,29 @@ bool  SwTableColumnPage::FillItemSet( SfxItemSet* )
     return bModified;
 }
 
-void   SwTableColumnPage::ModifyHdl( MetricField const * pField )
+void SwTableColumnPage::ModifyHdl(const Weld::MetricSpinButton* pField)
 {
-        PercentField *pEdit = nullptr;
-        sal_uInt16 i;
+    NewPercentField *pEdit = nullptr;
+    sal_uInt16 i;
 
-        for( i = 0; i < MET_FIELDS; i++)
+    for( i = 0; i < MET_FIELDS; i++)
+    {
+        if (pField == m_aFieldArr[i].get())
         {
-            if (pField == m_aFieldArr[i].get())
-            {
-                pEdit = &m_aFieldArr[i];
-                break;
-            }
+            pEdit = &m_aFieldArr[i];
+            break;
         }
+    }
 
-        if (MET_FIELDS <= i || !pEdit)
-        {
-            OSL_ENSURE(false, "cannot happen.");
-            return;
-        }
+    if (MET_FIELDS <= i || !pEdit)
+    {
+        OSL_ENSURE(false, "cannot happen.");
+        return;
+    }
 
-        SetVisibleWidth(aValueTable[i], static_cast< SwTwips >(pEdit->DenormalizePercent(pEdit->GetValue( FUNIT_TWIP ))) );
+    SetVisibleWidth(aValueTable[i], static_cast<SwTwips>(pEdit->DenormalizePercent(pEdit->get_value(FUNIT_TWIP))));
 
-        UpdateCols( aValueTable[i] );
+    UpdateCols(aValueTable[i]);
 }
 
 void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
@@ -937,8 +909,8 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
     }
     SwTwips nDiff = nSum - nTableWidth;
 
-    bool bModifyTableChecked = m_pModifyTableCB->IsChecked();
-    bool bProp =    m_pProportionalCB->IsChecked();
+    bool bModifyTableChecked = m_xModifyTableCB->get_active();
+    bool bProp = m_xProportionalCB->get_active();
 
     if (!bModifyTableChecked && !bProp)
     {
@@ -1029,14 +1001,15 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nAktPos )
         nTableWidth += nAdd;
     }
 
-    if(!bPercentMode)
-        m_pSpaceED->SetValue(m_pSpaceED->Normalize( pTableData->GetSpace() - nTableWidth) , FUNIT_TWIP);
+    if (!bPercentMode)
+        m_xSpaceED->set_value(m_xSpaceED->normalize(pTableData->GetSpace() - nTableWidth), FUNIT_TWIP);
 
-    for( sal_uInt16 i = 0; ( i < nNoOfVisibleCols ) && ( i < MET_FIELDS ); i++)
+    for (sal_uInt16 i = 0; ( i < nNoOfVisibleCols ) && ( i < MET_FIELDS ); ++i)
     {
         m_aFieldArr[i].SetPrcntValue(m_aFieldArr[i].NormalizePercent(
-                        GetVisibleWidth(aValueTable[i]) ), FUNIT_TWIP);
-        m_aFieldArr[i].ClearModifyFlag();
+                        GetVisibleWidth(aValueTable[i])), FUNIT_TWIP);
+        //TODO, does this matter
+        //m_aFieldArr[i].ClearModifyFlag();
     }
 }
 
@@ -1063,24 +1036,23 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
                 text::HoriOrientation::FULL == nTableAlign ||
                         pTableData->IsLineSelected()  )
         bModifyTable = false;
-    if(bPercentMode)
+    if (bPercentMode)
     {
-        m_pModifyTableCB->Check(false);
-        m_pProportionalCB->Check(false);
+        m_xModifyTableCB->set_active(false);
+        m_xProportionalCB->set_active(false);
     }
     else if( !bModifyTable )
     {
-        m_pProportionalCB->Check(false);
-        m_pModifyTableCB->Check(false);
+        m_xProportionalCB->set_active(false);
+        m_xModifyTableCB->set_active(false);
     }
-    m_pSpaceFT->Enable(!bPercentMode);
-    m_pSpaceED->Enable(!bPercentMode);
-    m_pModifyTableCB->Enable( !bPercentMode && bModifyTable );
-    m_pProportionalCB->Enable(!bPercentMode && bModifyTable );
+    m_xSpaceFT->set_sensitive(!bPercentMode);
+    m_xSpaceED->set_sensitive(!bPercentMode);
+    m_xModifyTableCB->set_sensitive(!bPercentMode && bModifyTable);
+    m_xProportionalCB->set_sensitive(!bPercentMode && bModifyTable );
 
-    m_pSpaceED->SetValue(m_pSpaceED->Normalize(
+    m_xSpaceED->set_value(m_xSpaceED->normalize(
                 pTableData->GetSpace() - nTableWidth) , FUNIT_TWIP);
-
 }
 
 DeactivateRC SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
@@ -1179,36 +1151,36 @@ void SwTableColumnPage::SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth)
 
 }
 
-SwTableTabDlg::SwTableTabDlg(vcl::Window* pParent,
-    const SfxItemSet* pItemSet, SwWrtShell* pSh)
-    : SfxTabDialog(pParent, "TablePropertiesDialog",
-        "modules/swriter/ui/tableproperties.ui", pItemSet)
+SwTableTabDlg::SwTableTabDlg(Weld::Window* pParent,
+    const SfxItemSet& rItemSet, SwWrtShell* pSh)
+    : NewSfxTabDialog(pParent, "TablePropertiesDialog",
+        "modules/swriter/ui/tableproperties.ui", &rItemSet)
     , pShell(pSh)
 {
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    OSL_ENSURE(pFact, "Dialog creation failed!");
     AddTabPage("table", &SwFormatTablePage::Create, nullptr);
-    m_nTextFlowId = AddTabPage("textflow", &SwTextFlowPage::Create, nullptr);
+    AddTabPage("textflow", &SwTextFlowPage::Create, nullptr);
     AddTabPage("columns", &SwTableColumnPage::Create, nullptr);
-    m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BACKGROUND), nullptr);
-    m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), nullptr);
+    //SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    //AddTabPage("background", pFact->GetNewTabPageCreatorFunc(RID_SVXPAGE_BACKGROUND), nullptr);
+    //TODO
+    //m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BORDER), nullptr);
 }
 
-void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
+void SwTableTabDlg::PageCreated(const OString& rId, NewSfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (nId == m_nBackgroundId)
+    if (rId == "background")
     {
         SvxBackgroundTabFlags const nFlagType = SvxBackgroundTabFlags::SHOW_TBLCTL | SvxBackgroundTabFlags::SHOW_SELECTOR;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(nFlagType)));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nBorderId)
+    else if (rId == "borders")
     {
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE, static_cast<sal_uInt16>(SwBorderModes::TABLE)));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nTextFlowId)
+    else if (rId == "textflow")
     {
         static_cast<SwTextFlowPage&>(rPage).SetShell(pShell);
         const FrameTypeFlags eType = pShell->GetFrameType(nullptr,true);
@@ -1217,55 +1189,40 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
 }
 
-SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "TableTextFlowPage",
+SwTextFlowPage::SwTextFlowPage(Weld::Container* pParent, const SfxItemSet& rSet)
+    : NewSfxTabPage(pParent, "TableTextFlowPage",
         "modules/swriter/ui/tabletextflowpage.ui", &rSet)
+    , m_xPgBrkCB(m_xBuilder->weld_check_button("break"))
+    , m_xPgBrkRB(m_xBuilder->weld_radio_button("page"))
+    , m_xColBrkRB(m_xBuilder->weld_radio_button("column"))
+    , m_xPgBrkBeforeRB(m_xBuilder->weld_radio_button("before"))
+    , m_xPgBrkAfterRB(m_xBuilder->weld_radio_button("after"))
+    , m_xPageCollCB(m_xBuilder->weld_check_button("pagestyle"))
+    , m_xPageCollLB(m_xBuilder->weld_combo_box_text("pagestylelb"))
+    , m_xPageNoCB(m_xBuilder->weld_check_button("pagenoft"))
+    , m_xPageNoNF(m_xBuilder->weld_spin_button("pagenonf"))
+    , m_xSplitCB(m_xBuilder->weld_check_button("split"))
+    , m_xSplitRowCB(m_xBuilder->weld_check_button("splitrow"))
+    , m_xKeepCB(m_xBuilder->weld_check_button("keep"))
+    , m_xHeadLineCB(m_xBuilder->weld_check_button("headline"))
+    , m_xRepeatHeaderNF(m_xBuilder->weld_spin_button("repeatheadernf"))
+    , m_xRepeatHeaderCombo(m_xBuilder->weld_widget("repeatheader"))
+    , m_xTextDirectionLB(m_xBuilder->weld_combo_box_text("textdirection"))
+    , m_xVertOrientLB(m_xBuilder->weld_combo_box_text("vertorient"))
     , pShell(nullptr)
     , bPageBreak(true)
     , bHtmlMode(false)
 {
-    get(m_pPgBrkCB, "break");
-
-    get(m_pPgBrkRB, "page");
-    get(m_pColBrkRB, "column");
-
-    get(m_pPgBrkBeforeRB, "before");
-    get(m_pPgBrkAfterRB, "after");
-
-    get(m_pPageCollCB, "pagestyle");
-    get(m_pPageCollLB, "pagestylelb");
-    get(m_pPageNoCB, "pagenoft");
-    get(m_pPageNoNF, "pagenonf");
-
-    get(m_pSplitCB, "split");
-    get(m_pSplitRowCB, "splitrow");
-    get(m_pKeepCB, "keep");
-    get(m_pHeadLineCB, "headline");
-
-    get(m_pRepeatHeaderCombo, "repeatheader");
-    get(m_pRepeatHeaderNF, "repeatheadernf");
-
-    get(m_pTextDirectionLB, "textdirection");
-    get(m_pVertOrientLB, "vertorient");
-
-    m_pPgBrkCB->SetClickHdl(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));
-    m_pPgBrkBeforeRB->SetClickHdl(
-        LINK( this, SwTextFlowPage, PageBreakPosHdl_Impl ) );
-    m_pPgBrkAfterRB->SetClickHdl(
-        LINK( this, SwTextFlowPage, PageBreakPosHdl_Impl ) );
-    m_pPageCollCB->SetClickHdl(
-        LINK( this, SwTextFlowPage, ApplyCollClickHdl_Impl ) );
-    m_pColBrkRB->SetClickHdl(
-        LINK( this, SwTextFlowPage, PageBreakTypeHdl_Impl ) );
-    m_pPgBrkRB->SetClickHdl(
-        LINK( this, SwTextFlowPage, PageBreakTypeHdl_Impl ) );
-    m_pPageNoCB->SetClickHdl(
-        LINK(this, SwTextFlowPage, PageNoClickHdl_Impl));
-    m_pSplitCB->SetClickHdl(
-        LINK( this, SwTextFlowPage, SplitHdl_Impl));
-    m_pSplitRowCB->SetClickHdl(
-        LINK( this, SwTextFlowPage, SplitRowHdl_Impl));
-    m_pHeadLineCB->SetClickHdl( LINK( this, SwTextFlowPage, HeadLineCBClickHdl ) );
+    m_xPgBrkCB->connect_clicked(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));
+    m_xPgBrkBeforeRB->connect_clicked(LINK(this, SwTextFlowPage, PageBreakPosHdl_Impl));
+    m_xPgBrkAfterRB->connect_clicked(LINK(this, SwTextFlowPage, PageBreakPosHdl_Impl));
+    m_xPageCollCB->connect_clicked(LINK(this, SwTextFlowPage, ApplyCollClickHdl_Impl));
+    m_xColBrkRB->connect_clicked(LINK(this, SwTextFlowPage, PageBreakTypeHdl_Impl));
+    m_xPgBrkRB->connect_clicked(LINK(this, SwTextFlowPage, PageBreakTypeHdl_Impl));
+    m_xPageNoCB->connect_clicked(LINK(this, SwTextFlowPage, PageNoClickHdl_Impl));
+    m_xSplitCB->connect_clicked(LINK(this, SwTextFlowPage, SplitHdl_Impl));
+    m_xSplitRowCB->connect_clicked(LINK(this, SwTextFlowPage, SplitRowHdl_Impl));
+    m_xHeadLineCB->connect_clicked(LINK(this, SwTextFlowPage, HeadLineCBClickHdl));
 
 #ifndef SW_FILEFORMAT_40
     const SfxPoolItem *pItem;
@@ -1273,45 +1230,17 @@ SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
         && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
 #endif
     {
-        m_pKeepCB->Hide();
-        m_pSplitCB->Hide();
-        m_pSplitRowCB->Hide();
+        m_xKeepCB->set_visible(false);
+        m_xSplitCB->set_visible(false);
+        m_xSplitRowCB->set_visible(false);
     }
 
-    HeadLineCBClickHdl();
+    HeadLineCBClickHdl(*m_xHeadLineCB);
 }
 
-SwTextFlowPage::~SwTextFlowPage()
+NewSfxTabPage* SwTextFlowPage::Create(Weld::Container* pParent, const SfxItemSet* pAttrSet)
 {
-    disposeOnce();
-}
-
-void SwTextFlowPage::dispose()
-{
-    m_pPgBrkCB.clear();
-    m_pPgBrkRB.clear();
-    m_pColBrkRB.clear();
-    m_pPgBrkBeforeRB.clear();
-    m_pPgBrkAfterRB.clear();
-    m_pPageCollCB.clear();
-    m_pPageCollLB.clear();
-    m_pPageNoCB.clear();
-    m_pPageNoNF.clear();
-    m_pSplitCB.clear();
-    m_pSplitRowCB.clear();
-    m_pKeepCB.clear();
-    m_pHeadLineCB.clear();
-    m_pRepeatHeaderNF.clear();
-    m_pRepeatHeaderCombo.clear();
-    m_pTextDirectionLB.clear();
-    m_pVertOrientLB.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> SwTextFlowPage::Create( vcl::Window* pParent,
-                                           const SfxItemSet* rAttrSet)
-{
-    return VclPtr<SwTextFlowPage>::Create(pParent, *rAttrSet);
+    return new SwTextFlowPage(pParent, *pAttrSet);
 }
 
 bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
@@ -1319,41 +1248,40 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
     bool bModified = false;
 
     //Repeat Heading
-    if(m_pHeadLineCB->IsValueChangedFromSaved() ||
-       m_pRepeatHeaderNF->IsValueChangedFromSaved() )
+    if (m_xHeadLineCB->get_state_changed_from_saved() || m_xRepeatHeaderNF->get_value_changed_from_saved())
     {
         bModified |= nullptr != rSet->Put(
-            SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, m_pHeadLineCB->IsChecked()? sal_uInt16(m_pRepeatHeaderNF->GetValue()) : 0 ));
+            SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, m_xHeadLineCB->get_active() ? sal_uInt16(m_xRepeatHeaderNF->get_value()) : 0 ));
     }
-    if(m_pKeepCB->IsValueChangedFromSaved())
-        bModified |= nullptr != rSet->Put( SvxFormatKeepItem( m_pKeepCB->IsChecked(), RES_KEEP));
+    if (m_xKeepCB->get_state_changed_from_saved())
+        bModified |= nullptr != rSet->Put(SvxFormatKeepItem(m_xKeepCB->get_active(), RES_KEEP));
 
-    if(m_pSplitCB->IsValueChangedFromSaved())
-        bModified |= nullptr != rSet->Put( SwFormatLayoutSplit( m_pSplitCB->IsChecked()));
+    if (m_xSplitCB->get_state_changed_from_saved())
+        bModified |= nullptr != rSet->Put(SwFormatLayoutSplit(m_xSplitCB->get_active()));
 
-    if(m_pSplitRowCB->IsValueChangedFromSaved())
-        bModified |= nullptr != rSet->Put( SwFormatRowSplit( m_pSplitRowCB->IsChecked()));
+    if (m_xSplitRowCB->get_state_changed_from_saved())
+        bModified |= nullptr != rSet->Put(SwFormatRowSplit(m_xSplitRowCB->get_active()));
 
     const SvxFormatBreakItem* pBreak = static_cast<const SvxFormatBreakItem*>(GetOldItem( *rSet, RES_BREAK ));
     const SwFormatPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(GetOldItem( *rSet, RES_PAGEDESC ));
 
-    bool bState = m_pPageCollCB->IsChecked();
+    bool bState = m_xPageCollCB->get_active();
 
     //If we have a page style, then there's no break
     bool bPageItemPut = false;
-    if (   bState != (m_pPageCollCB->GetSavedValue() == TRISTATE_TRUE)
-        || (bState && m_pPageCollLB->IsValueChangedFromSaved())
-        || (m_pPageNoCB->IsEnabled() && m_pPageNoCB->IsValueChangedFromSaved())
-        || (m_pPageNoNF->IsEnabled() && m_pPageNoNF->IsValueModified()))
+    if (   bState != (m_xPageCollCB->get_saved_state() == TRISTATE_TRUE)
+        || (bState && m_xPageCollLB->get_value_changed_from_saved())
+        || (m_xPageNoCB->get_sensitive() && m_xPageNoCB->get_state_changed_from_saved())
+        || (m_xPageNoNF->get_sensitive() && m_xPageNoNF->get_value_changed_from_saved()))
     {
         OUString sPage;
 
         if ( bState )
         {
-            sPage = m_pPageCollLB->GetSelectedEntry();
+            sPage = m_xPageCollLB->get_active_text();
         }
-        sal_uInt16 nPgNum = static_cast< sal_uInt16 >(m_pPageNoNF->GetValue());
-        bool const usePageNo(bState && m_pPageNoCB->IsChecked());
+        sal_uInt16 nPgNum = static_cast<sal_uInt16>(m_xPageNoNF->get_value());
+        bool const usePageNo(bState && m_xPageNoCB->get_active());
         boost::optional<sal_uInt16> const oPageNum(
                 (usePageNo) ? nPgNum : boost::optional<sal_Int16>());
         if (!pDesc || !pDesc->GetPageDesc()
@@ -1366,21 +1294,21 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             bPageItemPut = bState;
         }
     }
-    bool bIsChecked = m_pPgBrkCB->IsChecked();
+    bool bIsChecked = m_xPgBrkCB->get_active();
     if ( !bPageItemPut &&
-        (   bState != (m_pPageCollCB->GetSavedValue() == TRISTATE_TRUE) ||
-            bIsChecked != (m_pPgBrkCB->GetSavedValue() == TRISTATE_TRUE) ||
-            m_pPgBrkBeforeRB->IsValueChangedFromSaved()    ||
-            m_pPgBrkRB->IsValueChangedFromSaved() ))
+        (   bState != (m_xPageCollCB->get_saved_state() == TRISTATE_TRUE) ||
+            bIsChecked != (m_xPgBrkCB->get_saved_state() == TRISTATE_TRUE) ||
+            m_xPgBrkBeforeRB->get_state_changed_from_saved()    ||
+            m_xPgBrkRB->get_state_changed_from_saved() ))
     {
         SvxFormatBreakItem aBreak(
             static_cast<const SvxFormatBreakItem&>(GetItemSet().Get( RES_BREAK )) );
 
         if(bIsChecked)
         {
-            bool bBefore = m_pPgBrkBeforeRB->IsChecked();
+            bool bBefore = m_xPgBrkBeforeRB->get_active();
 
-            if ( m_pPgBrkRB->IsChecked() )
+            if (m_xPgBrkRB->get_active())
             {
                 if ( bBefore )
                     aBreak.SetValue( SvxBreak::PageBefore );
@@ -1406,29 +1334,27 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
         }
     }
 
-    if(m_pTextDirectionLB->IsValueChangedFromSaved())
+    if (m_xTextDirectionLB->get_value_changed_from_saved())
     {
-          bModified |= nullptr != rSet->Put(
-                    SvxFrameDirectionItem( static_cast<SvxFrameDirection>(
-                        reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetSelectedEntryData()))
-                        , FN_TABLE_BOX_TEXTORIENTATION));
+        bModified |= nullptr != rSet->Put(
+                  SvxFrameDirectionItem(static_cast<SvxFrameDirection>(m_xTextDirectionLB->get_active_id().toUInt32()),
+                      FN_TABLE_BOX_TEXTORIENTATION));
     }
 
-    if(m_pVertOrientLB->IsValueChangedFromSaved())
+    if (m_xVertOrientLB->get_value_changed_from_saved())
     {
         sal_uInt16 nOrient = USHRT_MAX;
-        switch(m_pVertOrientLB->GetSelectedEntryPos())
+        switch (m_xVertOrientLB->get_active_id().toUInt32())
         {
             case 0 : nOrient = text::VertOrientation::NONE; break;
             case 1 : nOrient = text::VertOrientation::CENTER; break;
             case 2 : nOrient = text::VertOrientation::BOTTOM; break;
         }
-        if(nOrient != USHRT_MAX)
+        if (nOrient != USHRT_MAX)
             bModified |= nullptr != rSet->Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, nOrient));
     }
 
     return bModified;
-
 }
 
 void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
@@ -1444,37 +1370,38 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         for( size_t i = 0; i < nCount; ++i)
         {
             const SwPageDesc &rPageDesc = pShell->GetPageDesc(i);
-            m_pPageCollLB->InsertEntry(rPageDesc.GetName());
+            m_xPageCollLB->append_text(rPageDesc.GetName());
         }
 
-        OUString aFormatName;
-        for(sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
-            if( LISTBOX_ENTRY_NOTFOUND == m_pPageCollLB->GetEntryPos(
-                    aFormatName = SwStyleNameMapper::GetUIName( i, aFormatName ) ))
-                m_pPageCollLB->InsertEntry( aFormatName );
-
-        if(SfxItemState::SET == rSet->GetItemState( RES_KEEP, false, &pItem ))
+        for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
         {
-            m_pKeepCB->Check( static_cast<const SvxFormatKeepItem*>(pItem)->GetValue() );
-            m_pKeepCB->SaveValue();
+            OUString aFormatName = SwStyleNameMapper::GetUIName(i, aFormatName);
+            if (m_xPageCollLB->find_text(aFormatName) == -1)
+                m_xPageCollLB->append_text(aFormatName);
         }
-        if(SfxItemState::SET == rSet->GetItemState( RES_LAYOUT_SPLIT, false, &pItem ))
+
+        if (SfxItemState::SET == rSet->GetItemState( RES_KEEP, false, &pItem ))
         {
-            m_pSplitCB->Check( static_cast<const SwFormatLayoutSplit*>(pItem)->GetValue() );
+            m_xKeepCB->set_active(static_cast<const SvxFormatKeepItem*>(pItem)->GetValue());
+            m_xKeepCB->save_state();
+        }
+        if (SfxItemState::SET == rSet->GetItemState( RES_LAYOUT_SPLIT, false, &pItem ))
+        {
+            m_xSplitCB->set_active(static_cast<const SwFormatLayoutSplit*>(pItem)->GetValue());
         }
         else
-            m_pSplitCB->Check();
+            m_xSplitCB->set_active(true);
 
-        m_pSplitCB->SaveValue();
-        SplitHdl_Impl(m_pSplitCB);
+        m_xSplitCB->save_state();
+        SplitHdl_Impl(*m_xSplitCB);
 
         if(SfxItemState::SET == rSet->GetItemState( RES_ROW_SPLIT, false, &pItem ))
         {
-            m_pSplitRowCB->Check( static_cast<const SwFormatRowSplit*>(pItem)->GetValue() );
+            m_xSplitRowCB->set_active(static_cast<const SwFormatRowSplit*>(pItem)->GetValue());
         }
         else
-            m_pSplitRowCB->SetState(TRISTATE_INDET);
-        m_pSplitRowCB->SaveValue();
+            m_xSplitRowCB->set_inconsistent(true);
+        m_xSplitRowCB->save_state();
 
         if(bPageBreak)
         {
@@ -1486,41 +1413,40 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset();
                 if (oNumOffset)
                 {
-                    m_pPageNoCB->Check();
-                    m_pPageNoNF->Enable(true);
-                    m_pPageNoNF->SetValue(oNumOffset.get());
+                    m_xPageNoCB->set_active(true);
+                    m_xPageNoNF->set_sensitive(true);
+                    m_xPageNoNF->set_value(oNumOffset.get());
                 }
                 else
                 {
-                    m_pPageNoCB->Check(false);
-                    m_pPageNoNF->Enable(false);
+                    m_xPageNoCB->set_active(false);
+                    m_xPageNoNF->set_sensitive(false);
                 }
 
                 if(pDesc)
                     sPageDesc = pDesc->GetName();
-                if ( !sPageDesc.isEmpty() &&
-                        m_pPageCollLB->GetEntryPos( sPageDesc ) != LISTBOX_ENTRY_NOTFOUND )
+                if (!sPageDesc.isEmpty() && m_xPageCollLB->find_text(sPageDesc) != -1)
                 {
-                    m_pPageCollLB->SelectEntry( sPageDesc );
-                    m_pPageCollCB->Check();
+                    m_xPageCollLB->set_active(sPageDesc);
+                    m_xPageCollCB->set_active(true);
 
-                    m_pPgBrkCB->Enable();
-                    m_pPgBrkRB->Enable();
-                    m_pColBrkRB->Enable();
-                    m_pPgBrkBeforeRB->Enable();
-                    m_pPgBrkAfterRB->Enable();
-                    m_pPageCollCB->Enable();
-                    m_pPgBrkCB->Check();
+                    m_xPgBrkCB->set_sensitive(true);
+                    m_xPgBrkRB->set_sensitive(true);
+                    m_xColBrkRB->set_sensitive(true);
+                    m_xPgBrkBeforeRB->set_sensitive(true);
+                    m_xPgBrkAfterRB->set_sensitive(true);
+                    m_xPageCollCB->set_sensitive(true);
+                    m_xPgBrkCB->set_active(true);
 
-                    m_pPgBrkCB->Check();
-                    m_pColBrkRB->Check( false );
-                    m_pPgBrkBeforeRB->Check();
-                    m_pPgBrkAfterRB->Check( false );
+                    m_xPgBrkCB->set_active(true);
+                    m_xColBrkRB->set_active(false);
+                    m_xPgBrkBeforeRB->set_active(true);
+                    m_xPgBrkAfterRB->set_active(false);
                 }
                 else
                 {
-                    m_pPageCollLB->SetNoSelection();
-                    m_pPageCollCB->Check(false);
+                    m_xPageCollLB->set_active(-1);
+                    m_xPageCollCB->set_active(false);
                 }
             }
 
@@ -1531,79 +1457,81 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 
                 if ( eBreak != SvxBreak::NONE )
                 {
-                    m_pPgBrkCB->Check();
-                    m_pPageCollCB->Enable(false);
-                    m_pPageCollLB->Enable(false);
-                    m_pPageNoCB->Enable(false);
-                    m_pPageNoNF->Enable(false);
+                    m_xPgBrkCB->set_active(true);
+                    m_xPageCollCB->set_sensitive(false);
+                    m_xPageCollLB->set_sensitive(false);
+                    m_xPageNoCB->set_sensitive(false);
+                    m_xPageNoNF->set_sensitive(false);
                 }
                 switch ( eBreak )
                 {
                     case SvxBreak::PageBefore:
-                        m_pPgBrkRB->Check();
-                        m_pColBrkRB->Check( false );
-                        m_pPgBrkBeforeRB->Check();
-                        m_pPgBrkAfterRB->Check( false );
+                        m_xPgBrkRB->set_active(true);
+                        m_xColBrkRB->set_active(false);
+                        m_xPgBrkBeforeRB->set_active(true);
+                        m_xPgBrkAfterRB->set_active(false);
                         break;
                     case SvxBreak::PageAfter:
-                        m_pPgBrkRB->Check();
-                        m_pColBrkRB->Check( false );
-                        m_pPgBrkBeforeRB->Check( false );
-                        m_pPgBrkAfterRB->Check();
+                        m_xPgBrkRB->set_active(true);
+                        m_xColBrkRB->set_active(false);
+                        m_xPgBrkBeforeRB->set_active(false);
+                        m_xPgBrkAfterRB->set_active(true);
                         break;
                     case SvxBreak::ColumnBefore:
-                        m_pPgBrkRB->Check( false );
-                        m_pColBrkRB->Check();
-                        m_pPgBrkBeforeRB->Check();
-                        m_pPgBrkAfterRB->Check( false );
+                        m_xPgBrkRB->set_active(false);
+                        m_xColBrkRB->set_active(true);
+                        m_xPgBrkBeforeRB->set_active(true);
+                        m_xPgBrkAfterRB->set_active(false);
                         break;
                     case SvxBreak::ColumnAfter:
-                        m_pPgBrkRB->Check( false );
-                        m_pColBrkRB->Check();
-                        m_pPgBrkBeforeRB->Check( false );
-                        m_pPgBrkAfterRB->Check();
+                        m_xPgBrkRB->set_active(false);
+                        m_xColBrkRB->set_active(true);
+                        m_xPgBrkBeforeRB->set_active(false);
+                        m_xPgBrkAfterRB->set_active(true);
                         break;
                     default:; //prevent warning
                 }
 
             }
-            if ( m_pPgBrkBeforeRB->IsChecked() )
-                PageBreakPosHdl_Impl(m_pPgBrkBeforeRB);
-            else if ( m_pPgBrkAfterRB->IsChecked() )
-                PageBreakPosHdl_Impl(m_pPgBrkAfterRB);
-            PageBreakHdl_Impl( m_pPgBrkCB );
+            if (m_xPgBrkBeforeRB->get_active())
+                PageBreakPosHdl_Impl(*m_xPgBrkBeforeRB);
+            else if (m_xPgBrkAfterRB->get_active())
+                PageBreakPosHdl_Impl(*m_xPgBrkAfterRB);
+            PageBreakHdl_Impl(*m_xPgBrkCB);
         }
     }
     else
     {
-        m_pPgBrkRB->Enable(false);
-        m_pColBrkRB->Enable(false);
-        m_pPgBrkBeforeRB->Enable(false);
-        m_pPgBrkAfterRB->Enable(false);
-        m_pKeepCB->Enable(false);
-        m_pSplitCB->Enable(false);
-        m_pPgBrkCB->Enable(false);
-        m_pPageCollCB->Enable(false);
-        m_pPageCollLB->Enable(false);
+        m_xPgBrkRB->set_sensitive(false);
+        m_xColBrkRB->set_sensitive(false);
+        m_xPgBrkBeforeRB->set_sensitive(false);
+        m_xPgBrkAfterRB->set_sensitive(false);
+        m_xKeepCB->set_sensitive(false);
+        m_xSplitCB->set_sensitive(false);
+        m_xPgBrkCB->set_sensitive(false);
+        m_xPageCollCB->set_sensitive(false);
+        m_xPageCollLB->set_sensitive(false);
     }
 
-    if(SfxItemState::SET == rSet->GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem ))
+    if (SfxItemState::SET == rSet->GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem))
     {
         sal_uInt16 nRep = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-        m_pHeadLineCB->Check( nRep > 0 );
-        m_pHeadLineCB->SaveValue();
-        m_pRepeatHeaderNF->SetValue( nRep );
-        m_pRepeatHeaderNF->SetMin( 1 );
-        m_pRepeatHeaderNF->SaveValue();
+        m_xHeadLineCB->set_active(nRep > 0);
+        m_xHeadLineCB->save_state();
+        m_xRepeatHeaderNF->set_value(nRep);
+        int nMin, nMax;
+        m_xRepeatHeaderNF->get_range(nMin, nMax);
+        m_xRepeatHeaderNF->set_range(1, nMax);
+        m_xRepeatHeaderNF->save_value();
     }
-    if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SfxItemState::DEFAULT )
+    if (rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SfxItemState::DEFAULT)
     {
         SvxFrameDirection nDirection =
                 static_cast<const SvxFrameDirectionItem&>(rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
-        m_pTextDirectionLB->SelectEntryPos(m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nDirection) ));
+        m_xTextDirectionLB->set_active_id(OUString::number((sal_uInt32)nDirection));
     }
 
-    if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SfxItemState::DEFAULT )
+    if (rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SfxItemState::DEFAULT)
     {
         sal_uInt16 nVert = static_cast<const SfxUInt16Item&>(rSet->Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
         sal_uInt16 nPos = 0;
@@ -1613,22 +1541,22 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
             case text::VertOrientation::CENTER:   nPos = 1;   break;
             case text::VertOrientation::BOTTOM:   nPos = 2;   break;
         }
-        m_pVertOrientLB->SelectEntryPos(nPos);
+        m_xVertOrientLB->set_active_id(OUString::number(nPos));
     }
 
-    m_pPageCollCB->SaveValue();
-    m_pPageCollLB->SaveValue();
-    m_pPgBrkCB->SaveValue();
-    m_pPgBrkRB->SaveValue();
-    m_pColBrkRB->SaveValue();
-    m_pPgBrkBeforeRB->SaveValue();
-    m_pPgBrkAfterRB->SaveValue();
-    m_pPageNoCB->SaveValue();
-    m_pPageNoNF->SaveValue();
-    m_pTextDirectionLB->SaveValue();
-    m_pVertOrientLB->SaveValue();
+    m_xPageCollCB->save_state();
+    m_xPageCollLB->save_value();
+    m_xPgBrkCB->save_state();
+    m_xPgBrkRB->save_state();
+    m_xColBrkRB->save_state();
+    m_xPgBrkBeforeRB->save_state();
+    m_xPgBrkAfterRB->save_state();
+    m_xPageNoCB->save_state();
+    m_xPageNoNF->save_value();
+    m_xTextDirectionLB->save_value();
+    m_xVertOrientLB->save_value();
 
-    HeadLineCBClickHdl();
+    HeadLineCBClickHdl(*m_xHeadLineCB);
 }
 
 void SwTextFlowPage::SetShell(SwWrtShell* pSh)
@@ -1637,145 +1565,141 @@ void SwTextFlowPage::SetShell(SwWrtShell* pSh)
     bHtmlMode = 0 != (::GetHtmlMode(pShell->GetView().GetDocShell()) & HTMLMODE_ON);
     if(bHtmlMode)
     {
-        m_pPageNoNF->Enable(false);
-        m_pPageNoCB->Enable(false);
+        m_xPageNoNF->set_sensitive(false);
+        m_xPageNoCB->set_sensitive(false);
     }
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl, Weld::Button&, void)
 {
-    if( m_pPgBrkCB->IsChecked() )
+    if (m_xPgBrkCB->get_active())
     {
-            m_pPgBrkRB->       Enable();
-            m_pColBrkRB->      Enable();
-            m_pPgBrkBeforeRB-> Enable();
-            m_pPgBrkAfterRB->  Enable();
+        m_xPgBrkRB->set_sensitive(true);
+        m_xColBrkRB->set_sensitive(true);
+        m_xPgBrkBeforeRB->set_sensitive(true);
+        m_xPgBrkAfterRB->set_sensitive(true);
 
-            if ( m_pPgBrkRB->IsChecked() && m_pPgBrkBeforeRB->IsChecked() )
+        if (m_xPgBrkRB->get_active() && m_xPgBrkBeforeRB->get_active())
+        {
+            m_xPageCollCB->set_sensitive(true);
+
+            bool bEnable = m_xPageCollCB->get_active() && m_xPageCollLB->get_count();
+            m_xPageCollLB->set_sensitive(bEnable);
+            if (!bHtmlMode)
             {
-                m_pPageCollCB->Enable();
-
-                bool bEnable = m_pPageCollCB->IsChecked() &&
-                                            m_pPageCollLB->GetEntryCount();
-                m_pPageCollLB->Enable(bEnable);
-                if(!bHtmlMode)
-                {
-                    m_pPageNoCB->Enable(bEnable);
-                    m_pPageNoNF->Enable(bEnable && m_pPageNoCB->IsChecked());
-                }
+                m_xPageNoCB->set_sensitive(bEnable);
+                m_xPageNoNF->set_sensitive(bEnable && m_xPageNoCB->get_active());
             }
+        }
     }
     else
     {
-            m_pPageCollCB->Check( false );
-            m_pPageCollCB->Enable(false);
-            m_pPageCollLB->Enable(false);
-            m_pPageNoCB->Enable(false);
-            m_pPageNoNF->Enable(false);
-            m_pPgBrkRB->       Enable(false);
-            m_pColBrkRB->      Enable(false);
-            m_pPgBrkBeforeRB-> Enable(false);
-            m_pPgBrkAfterRB->  Enable(false);
+        m_xPageCollCB->set_active(false);
+        m_xPageCollCB->set_sensitive(false);
+        m_xPageCollLB->set_sensitive(false);
+        m_xPageNoCB->set_sensitive(false);
+        m_xPageNoNF->set_sensitive(false);
+        m_xPgBrkRB->set_sensitive(false);
+        m_xColBrkRB->set_sensitive(false);
+        m_xPgBrkBeforeRB->set_sensitive(false);
+        m_xPgBrkAfterRB->set_sensitive(false);
     }
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl, Weld::Button&, void)
 {
     bool bEnable = false;
-    if ( m_pPageCollCB->IsChecked() &&
-         m_pPageCollLB->GetEntryCount() )
+    if (m_xPageCollCB->get_active() && m_xPageCollLB->get_count())
     {
         bEnable = true;
-        m_pPageCollLB->SelectEntryPos( 0 );
+        m_xPageCollLB->set_active(0);
     }
     else
     {
-        m_pPageCollLB->SetNoSelection();
+        m_xPageCollLB->set_active(-1);
     }
-    m_pPageCollLB->Enable(bEnable);
-    if(!bHtmlMode)
+    m_xPageCollLB->set_sensitive(bEnable);
+    if (!bHtmlMode)
     {
-        m_pPageNoCB->Enable(bEnable);
-        m_pPageNoNF->Enable(bEnable && m_pPageNoCB->IsChecked());
+        m_xPageNoCB->set_sensitive(bEnable);
+        m_xPageNoNF->set_sensitive(bEnable && m_xPageNoCB->get_active());
     }
 }
 
-IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, Button*, pBtn, void )
+IMPL_LINK(SwTextFlowPage, PageBreakPosHdl_Impl, Weld::Button&, rBtn, void)
 {
-    if ( m_pPgBrkCB->IsChecked() )
+    if (m_xPgBrkCB->get_active())
     {
-        if ( pBtn == m_pPgBrkBeforeRB && m_pPgBrkRB->IsChecked() )
+        if (&rBtn == m_xPgBrkBeforeRB.get() && m_xPgBrkRB->get_active())
         {
-            m_pPageCollCB->Enable();
+            m_xPageCollCB->set_sensitive(true);
 
-            bool bEnable = m_pPageCollCB->IsChecked()  &&
-                                        m_pPageCollLB->GetEntryCount();
+            bool bEnable = m_xPageCollCB->get_active() && m_xPageCollLB->get_count();
 
-            m_pPageCollLB->Enable(bEnable);
-            if(!bHtmlMode)
+            m_xPageCollLB->set_sensitive(bEnable);
+            if (!bHtmlMode)
             {
-                m_pPageNoCB->Enable(bEnable);
-                m_pPageNoNF->Enable(bEnable && m_pPageNoCB->IsChecked());
+                m_xPageNoCB->set_sensitive(bEnable);
+                m_xPageNoNF->set_sensitive(bEnable && m_xPageNoCB->get_active());
             }
         }
-        else if (pBtn == m_pPgBrkAfterRB)
+        else if (&rBtn == m_xPgBrkAfterRB.get())
         {
-            m_pPageCollCB->Check( false );
-            m_pPageCollCB->Enable(false);
-            m_pPageCollLB->Enable(false);
-            m_pPageNoCB->Enable(false);
-            m_pPageNoNF->Enable(false);
+            m_xPageCollCB->set_active(false);
+            m_xPageCollCB->set_sensitive(false);
+            m_xPageCollLB->set_sensitive(false);
+            m_xPageNoCB->set_sensitive(false);
+            m_xPageNoNF->set_sensitive(false);
         }
     }
 }
 
-IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, Button*, pBtn, void )
+IMPL_LINK(SwTextFlowPage, PageBreakTypeHdl_Impl, Weld::Button&, rBtn, void)
 {
-    if ( pBtn == m_pColBrkRB || m_pPgBrkAfterRB->IsChecked() )
+    if (&rBtn == m_xColBrkRB.get() || m_xPgBrkAfterRB->get_active())
     {
-        m_pPageCollCB->Check(false);
-        m_pPageCollCB->Enable(false);
-        m_pPageCollLB->Enable(false);
-        m_pPageNoCB->Enable(false);
-        m_pPageNoNF->Enable(false);
+        m_xPageCollCB->set_active(false);
+        m_xPageCollCB->set_sensitive(false);
+        m_xPageCollLB->set_sensitive(false);
+        m_xPageNoCB->set_sensitive(false);
+        m_xPageNoNF->set_sensitive(false);
     }
-    else if ( m_pPgBrkBeforeRB->IsChecked() )
-        PageBreakPosHdl_Impl(m_pPgBrkBeforeRB);
+    else if (m_xPgBrkBeforeRB->get_active())
+        PageBreakPosHdl_Impl(*m_xPgBrkBeforeRB);
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, PageNoClickHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwTextFlowPage, PageNoClickHdl_Impl, Weld::Button&, void)
 {
-    m_pPageNoNF->Enable(m_pPageNoCB->IsChecked());
+    m_xPageNoNF->set_sensitive(m_xPageNoCB->get_active());
 }
 
-IMPL_LINK( SwTextFlowPage, SplitHdl_Impl, Button*, pBox, void )
+IMPL_LINK(SwTextFlowPage, SplitHdl_Impl, Weld::Button&, rBox, void)
 {
-    m_pSplitRowCB->Enable(static_cast<CheckBox*>(pBox)->IsChecked());
+    m_xSplitRowCB->set_sensitive(dynamic_cast<Weld::CheckButton&>(rBox).get_active());
 }
 
-IMPL_STATIC_LINK(
-    SwTextFlowPage, SplitRowHdl_Impl, Button*, pBox, void )
+IMPL_STATIC_LINK(SwTextFlowPage, SplitRowHdl_Impl, Weld::Button&, rBox, void)
 {
-    static_cast<TriStateBox*>(pBox)->EnableTriState(false);
+    dynamic_cast<Weld::ToggleButton&>(rBox).set_inconsistent(false);
 }
 
-IMPL_LINK_NOARG(SwTextFlowPage, HeadLineCBClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwTextFlowPage, HeadLineCBClickHdl, Weld::Button&, void)
 {
-    m_pRepeatHeaderCombo->Enable(m_pHeadLineCB->IsChecked());
+    m_xRepeatHeaderCombo->set_sensitive(m_xHeadLineCB->get_active());
 }
 
 void SwTextFlowPage::DisablePageBreak()
 {
     bPageBreak = false;
-    m_pPgBrkCB->Disable();
-    m_pPgBrkRB->Disable();
-    m_pColBrkRB->Disable();
-    m_pPgBrkBeforeRB->Disable();
-    m_pPgBrkAfterRB->Disable();
-    m_pPageCollCB->Disable();
-    m_pPageCollLB->Disable();
-    m_pPageNoCB->Disable();
-    m_pPageNoNF->Disable();
+    m_xPgBrkCB->set_sensitive(false);
+    m_xPgBrkRB->set_sensitive(false);
+    m_xColBrkRB->set_sensitive(false);
+    m_xPgBrkBeforeRB->set_sensitive(false);
+    m_xPgBrkAfterRB->set_sensitive(false);
+    m_xPageCollCB->set_sensitive(false);
+    m_xPageCollLB->set_sensitive(false);
+    m_xPageNoCB->set_sensitive(false);
+    m_xPageNoNF->set_sensitive(false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

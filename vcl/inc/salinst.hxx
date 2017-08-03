@@ -26,6 +26,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/salgtype.hxx>
 #include <osl/thread.hxx>
+#include <vcl/vclenum.hxx>
 
 #include "displayconnectiondispatch.hxx"
 
@@ -34,6 +35,12 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 
 namespace comphelper { class SolarMutex; }
+namespace vcl { class Window; }
+namespace Weld {
+    class Builder;
+    class Dialog;
+    class Window;
+}
 struct SystemParentData;
 struct SalPrinterQueueInfo;
 class ImplJobSetup;
@@ -146,6 +153,10 @@ public:
     virtual SalSession*     CreateSalSession() = 0;
 
     virtual OpenGLContext*  CreateOpenGLContext() = 0;
+
+    virtual Weld::Builder* CreateBuilder(const OUString& /*rUIRoot*/, const OUString& /*rUIFile*/) { return nullptr; }
+    virtual Weld::Dialog* CreateMessageDialog(Weld::Window* /*pParent*/, VclMessageType /*eMessageType*/,
+                                                 VclButtonsType /*eButtonType*/, const OUString& /*rPrimaryMessage*/) { return nullptr; }
 
     // methods for XDisplayConnection
 
