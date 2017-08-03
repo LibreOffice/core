@@ -1378,25 +1378,31 @@ void OBoundControlModel::onValuePropertyChange( ControlModelLock& i_rControLock 
 {
     if ( hasExternalValueBinding() )
     {
+        // validate the value
+        if ( m_bSupportsValidation )
+            recheckValidity( true );
+
         // the control value changed, while we have an external value binding
         // -> forward the value to it
         if ( m_eControlValueChangeInstigator != eExternalBinding )
             transferControlValueToExternal( i_rControLock );
     }
-
-    else if ( !m_bCommitable && m_xColumnUpdate.is() )
+    else if ( !m_bCommitable )
     {
-        // the control value changed, while we are  bound to a database column,
-        // but not committable (which means changes in the control have to be reflected to
-        // the underlying database column immediately)
-        // -> forward the value to the database column
-        if ( m_eControlValueChangeInstigator != eDbColumnBinding )
-            commitControlValueToDbColumn( false );
-    }
+        // validate the value
+        if ( m_bSupportsValidation )
+            recheckValidity( true );
 
-    // validate the new value
-    if ( m_bSupportsValidation )
-        recheckValidity( true );
+        if( && m_xColumnUpdate.is() )
+        {
+            // the control value changed, while we are  bound to a database column,
+            // but not committable (which means changes in the control have to be reflected to
+            // the underlying database column immediately)
+            // -> forward the value to the database column
+            if ( m_eControlValueChangeInstigator != eDbColumnBinding )
+                commitControlValueToDbColumn( false );
+        }
+    }
 }
 
 void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt )
@@ -1846,6 +1852,11 @@ sal_Bool SAL_CALL OBoundControlModel::commit()
 {
     ControlModelLock aLock( *this );
     OSL_PRECOND( m_bCommitable, "OBoundControlModel::commit: invalid call (I'm not commitable !) " );
+
+    // validate the value
+    if ( m_bSupportsValidation )
+        recheckValidity( true );
+
     if ( hasExternalValueBinding() )
     {
         // in most cases, no action is required: For most derivees, we know the value property of
