@@ -21,14 +21,16 @@
 
 #include <memory>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/dllapi.h>
 
-struct  SvxOpenGrf_Impl;
+struct SvxOpenGrf_Impl;
 
 class SFX2_DLLPUBLIC SvxOpenGraphicDialog
 {
 public:
     SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent);
+    SvxOpenGraphicDialog(const OUString& rTitle, const Weld::Window* pPreferredParent);
     ~SvxOpenGraphicDialog();
 
     ErrCode                 Execute();
