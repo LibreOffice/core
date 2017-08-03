@@ -331,7 +331,7 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
 
 //===== PageSelector::UpdateLock ==============================================
 
-PageSelector::UpdateLock::UpdateLock (SlideSorter& rSlideSorter)
+PageSelector::UpdateLock::UpdateLock (SlideSorter const & rSlideSorter)
     : mpSelector(&rSlideSorter.GetController().GetPageSelector())
 {
     ++mpSelector->mnUpdateLockCount;
@@ -363,7 +363,7 @@ void PageSelector::UpdateLock::Release()
 
 //===== PageSelector::BroadcastLock ==============================================
 
-PageSelector::BroadcastLock::BroadcastLock (SlideSorter& rSlideSorter)
+PageSelector::BroadcastLock::BroadcastLock (SlideSorter const & rSlideSorter)
     : mrSelector(rSlideSorter.GetController().GetPageSelector())
 {
     mrSelector.DisableBroadcasting();

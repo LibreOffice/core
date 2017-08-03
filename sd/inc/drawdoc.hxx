@@ -177,8 +177,8 @@ private:
     ::std::unique_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
 
     SAL_DLLPRIVATE void                UpdatePageObjectsInNotes(sal_uInt16 nStartPos);
-    SAL_DLLPRIVATE void                UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_Int32 nIncrement);
-    SAL_DLLPRIVATE void                FillOnlineSpellingList(SdPage* pPage);
+    SAL_DLLPRIVATE void                UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPos, sal_Int32 nIncrement);
+    SAL_DLLPRIVATE void                FillOnlineSpellingList(SdPage const * pPage);
     SAL_DLLPRIVATE void                SpellObject(SdrTextObj* pObj);
 
                         DECL_DLLPRIVATE_LINK(WorkStartupHdl, Timer *, void);
@@ -236,7 +236,7 @@ public:
         If a reference document is given, the sizes and border settings of that document are used
         for newly created slides.
     */
-    void   CreateFirstPages( SdDrawDocument* pRefDocument = nullptr );
+    void   CreateFirstPages( SdDrawDocument const * pRefDocument = nullptr );
     bool                CreateMissingNotesAndHandoutPages();
 
     SAL_DLLPRIVATE void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) override;
@@ -258,7 +258,7 @@ public:
                             std::vector<OUString> &rExchangeList, bool bLink,
                             bool bReplace, sal_uInt16 nPgPos,
                             ::sd::DrawDocShell* pBookmarkDocSh,
-                            Point* pObjPos);
+                            Point const * pObjPos);
 
     SAL_DLLPRIVATE bool IsStartWithPresentation() const { return mbStartWithPresentation;}
     SAL_DLLPRIVATE void SetStartWithPresentation( bool bStartWithPresentation );
@@ -332,7 +332,7 @@ public:
     SAL_DLLPRIVATE bool InsertBookmarkAsObject(const std::vector<OUString> &rBookmarkList,
                                     const std::vector<OUString> &rExchangeList,
                                     ::sd::DrawDocShell* pBookmarkDocSh,
-                                    Point* pObjPos, bool bCalcObjCount);
+                                    Point const * pObjPos, bool bCalcObjCount);
 
     void   CloseBookmarkDoc();
 
@@ -371,7 +371,7 @@ public:
 
     sal_uInt16 GetActiveSdPageCount() const;
 
-    SAL_DLLPRIVATE sal_uInt16              GetMasterPageUserCount(SdrPage* pMaster) const;
+    SAL_DLLPRIVATE sal_uInt16              GetMasterPageUserCount(SdrPage const * pMaster) const;
 
     SAL_DLLPRIVATE const sd::PresentationSettings& getPresentationSettings() const { return maPresentationSettings; }
     SAL_DLLPRIVATE sd::PresentationSettings& getPresentationSettings() { return maPresentationSettings; }
@@ -408,7 +408,7 @@ public:
     SAL_DLLPRIVATE void                StopOnlineSpelling();
     SAL_DLLPRIVATE void                StartOnlineSpelling(bool bForceSpelling=true);
 
-    SAL_DLLPRIVATE void                ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl);
+    SAL_DLLPRIVATE void                ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner const * pOutl);
 
     SAL_DLLPRIVATE void                InsertObject(SdrObject* pObj);
     SAL_DLLPRIVATE void                RemoveObject(SdrObject* pObj);
@@ -441,7 +441,7 @@ public:
 
     static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
-    SAL_DLLPRIVATE static SdIMapInfo*  GetIMapInfo( SdrObject* pObject );
+    SAL_DLLPRIVATE static SdIMapInfo*  GetIMapInfo( SdrObject const * pObject );
     SAL_DLLPRIVATE static IMapObject*  GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint );
 
     SAL_DLLPRIVATE CharClass*          GetCharClass() const { return mpCharClass; }
@@ -653,7 +653,7 @@ private:
             page.
     */
     SAL_DLLPRIVATE void SetupNewPage (
-        SdPage* pPreviousPage,
+        SdPage const * pPreviousPage,
         SdPage* pPage,
         const OUString& sPageName,
         sal_uInt16 nInsertionPoint,

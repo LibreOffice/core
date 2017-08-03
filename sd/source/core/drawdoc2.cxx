@@ -322,7 +322,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, const OUSt
     }
 }
 
-void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_Int32 nIncrement)
+void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPos, sal_Int32 nIncrement)
 {
     bool bNotes = (pPage->GetPageKind() == PageKind::Notes);
 
@@ -515,7 +515,7 @@ void SdDrawDocument::SetSelected(SdPage* pPage, bool bSelect)
 }
 
 // If no pages exist yet, create them now
-void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
+void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 0 */ )
 {
     // If no page exists yet in the model, (File -> New), insert a page
     sal_uInt16 nPageCount = GetPageCount();
@@ -1011,7 +1011,7 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
     return pRet;
 }
 
-SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject )
+SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject const * pObject )
 {
     DBG_ASSERT(pObject, "Without an object there is no IMapInfo");
 
@@ -1466,7 +1466,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
 }
 
 void SdDrawDocument::SetupNewPage (
-    SdPage* pPreviousPage,
+    SdPage const * pPreviousPage,
     SdPage* pPage,
     const OUString& sPageName,
     sal_uInt16 nInsertionPoint,

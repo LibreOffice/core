@@ -80,7 +80,7 @@ using namespace ::com::sun::star::linguistic2;
 namespace sd
 {
 
-static void apply_table_style( SdrTableObj* pObj, SdrModel* pModel, const OUString& sTableStyle )
+static void apply_table_style( SdrTableObj* pObj, SdrModel const * pModel, const OUString& sTableStyle )
 {
     if( pModel && pObj )
     {

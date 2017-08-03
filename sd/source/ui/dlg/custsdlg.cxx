@@ -126,7 +126,7 @@ IMPL_LINK( SdCustomShowDlg, SelectListBoxHdl, ListBox&, rListBox, void )
     SelectHdl(&rListBox);
 }
 
-void SdCustomShowDlg::SelectHdl(void *p)
+void SdCustomShowDlg::SelectHdl(void const *p)
 {
     // new CustomShow
     if( p == m_pBtnNew )
@@ -399,7 +399,7 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonEditHdl, Edit&, rEdit, void )
     ClickButtonHdl2(&rEdit);
 }
 // ButtonHdl()
-void SdDefineCustomShowDlg::ClickButtonHdl2(void* p)
+void SdDefineCustomShowDlg::ClickButtonHdl2(void const * p)
 {
     if( p == m_pBtnAdd )
     {

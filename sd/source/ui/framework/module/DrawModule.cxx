@@ -29,7 +29,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace framework {
 
-void DrawModule::Initialize (Reference<frame::XController>& rxController)
+void DrawModule::Initialize (Reference<frame::XController> const & rxController)
 {
     new sd::framework::CenterViewFocusModule(rxController);
     new sd::framework::SlideSorterModule(

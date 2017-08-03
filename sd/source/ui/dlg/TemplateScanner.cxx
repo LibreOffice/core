@@ -112,7 +112,7 @@ TemplateEntryCompare::TemplateEntryCompare():
                        ::comphelper::getProcessComponentContext(),
                        Application::GetSettings().GetLanguageTag().getLocale())) {}
 
-bool TemplateEntryCompare::operator()(TemplateEntry* pA, TemplateEntry* pB) const
+bool TemplateEntryCompare::operator()(TemplateEntry const * pA, TemplateEntry const * pB) const
 {
     return 0 > mpStringSorter->compare(pA->msTitle, pB->msTitle);
 }

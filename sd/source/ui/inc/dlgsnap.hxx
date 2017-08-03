@@ -58,7 +58,7 @@ private:
     DECL_LINK( ClickHdl, Button *, void );
 
 public:
-    SdSnapLineDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView);
+    SdSnapLineDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View const * pView);
     virtual ~SdSnapLineDlg() override;
     virtual void dispose() override;
 

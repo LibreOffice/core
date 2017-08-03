@@ -79,7 +79,7 @@ using namespace ::com::sun::star::container;
 namespace
 {
 
-OUString lcl_findRenamedStyleName(std::vector< std::pair< OUString, OUString > > &rRenamedList, OUString& aOriginalName )
+OUString lcl_findRenamedStyleName(std::vector< std::pair< OUString, OUString > > &rRenamedList, OUString const & aOriginalName )
 {
     std::vector< std::pair< OUString, OUString > >::iterator aIter;
     for( aIter = rRenamedList.begin(); aIter != rRenamedList.end(); ++aIter )
@@ -529,7 +529,7 @@ void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool)
     CopySheets( rSourcePool, SD_STYLE_FAMILY_CELL );
 }
 
-void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool& rSourcePool)
+void SdStyleSheetPool::CopyTableStyles(SdStyleSheetPool const & rSourcePool)
 {
     Reference< XIndexAccess > xSource( rSourcePool.mxTableFamily, UNO_QUERY );
     Reference< XNameContainer > xTarget( mxTableFamily, UNO_QUERY );
@@ -591,7 +591,7 @@ void SdStyleSheetPool::CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleShee
     CopySheets( rSourcePool, SD_STYLE_FAMILY_CELL, rCreatedSheets );
 }
 
-void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix)
+void SdStyleSheetPool::RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString const &rRenameSuffix)
 {
     CopySheets( rSourcePool, SD_STYLE_FAMILY_GRAPHICS, rCreatedSheets, rRenameSuffix );
 }
@@ -1397,7 +1397,7 @@ void SAL_CALL SdStyleSheetPool::removeEventListener( const Reference< XEventList
 {
 }
 
-SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
+SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet const * pSheet )
 {
     SdStyleSheetVector aResult;
 

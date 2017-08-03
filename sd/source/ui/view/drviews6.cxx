@@ -252,7 +252,7 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
 /**
  * Handle SfxRequests for pipette
  */
-void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
+void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
 {
     // nothing is executed during a slide show!
     if (HasCurrentFunction(SID_PRESENTATION))

@@ -56,7 +56,7 @@ public:
     class Context
     {
     public:
-        Context (SlideSorter& rSlideSorter);
+        Context (SlideSorter const & rSlideSorter);
         ~Context();
         void Abort();
     private:

@@ -1578,7 +1578,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
  *  First off the routine try to place the label inside the related pie slice,
  *  if this is not possible the label is placed outside.
  */
-void PieChart::performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo)
+void PieChart::performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo const & rPieLabelInfo)
 {
     if( m_bUseRings )
         return;

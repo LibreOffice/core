@@ -203,7 +203,7 @@ void PptEscherEx::CloseContainer()
     }
 }
 
-sal_uInt32 PptEscherEx::EnterGroup( ::tools::Rectangle* pBoundRect, SvMemoryStream* pClientData )
+sal_uInt32 PptEscherEx::EnterGroup( ::tools::Rectangle const * pBoundRect, SvMemoryStream* pClientData )
 {
     sal_uInt32 nShapeId = 0;
     /* SJ: #Issue 26747#

@@ -285,7 +285,7 @@ Iterator OutlinerContainer::CreateDocumentIterator (
 }
 
 sal_Int32 OutlinerContainer::GetPageIndex (
-    SdDrawDocument* pDocument,
+    SdDrawDocument const * pDocument,
     const std::shared_ptr<ViewShell>& rpViewShell,
     PageKind ePageKind,
     EditMode eEditMode,

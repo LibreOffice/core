@@ -390,7 +390,7 @@ const deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_NONE, nullptr, nullptr }
 };
 
-EffectSequence::iterator ImplFindEffect( MainSequencePtr& pMainSequence, const Reference< XShape >& rShape, sal_Int16 nSubItem )
+EffectSequence::iterator ImplFindEffect( MainSequencePtr const & pMainSequence, const Reference< XShape >& rShape, sal_Int16 nSubItem )
 {
     EffectSequence::iterator aIter;
 
@@ -404,7 +404,7 @@ EffectSequence::iterator ImplFindEffect( MainSequencePtr& pMainSequence, const R
     return aIter;
 }
 
-static bool implIsInsideGroup( SdrObject* pObj )
+static bool implIsInsideGroup( SdrObject const * pObj )
 {
     return pObj && pObj->GetObjList() && pObj->GetObjList()->GetUpList();
 }
@@ -1203,7 +1203,7 @@ sal_Int32 EffectMigration::GetPresentationOrder( SvxShape* pShape )
     return nFound;
 }
 
-void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInfo )
+void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo const * pInfo )
 {
     if( pInfo )
     {
@@ -1277,7 +1277,7 @@ bool EffectMigration::GetSoundOn( SvxShape* pShape )
     return !GetSoundFile( pShape ).isEmpty();
 }
 
-void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj )
+void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj const * pPathObj )
 {
     if( pShape && pPathObj )
     {
@@ -1298,7 +1298,7 @@ void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj )
 }
 
 // #i42894# helper which creates the needed XAnimate for changing visibility and all the (currently) needed embeddings
-void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, SdrObject& rCandidate, bool bVisible, bool bOnClick, double fDuration)
+void createVisibilityOnOffNode(Reference< XTimeContainer > const & rxParentContainer, SdrObject& rCandidate, bool bVisible, bool bOnClick, double fDuration)
 {
     Reference< XMultiServiceFactory > xMsf(::comphelper::getProcessServiceFactory());
 
@@ -1356,7 +1356,7 @@ void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, S
 // fallback will create the needed SMIL animation stuff. Unfortunately the members of the group
 // have to be moved directly to the page, else the (explained to be generic, thus I expected this to
 // work) animations will not work in slideshow
-void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
+void EffectMigration::CreateAnimatedGroup(SdrObjGroup const & rGroupObj, SdPage& rPage)
 {
     // aw080 will give a vector immediately
     SdrObjListIter aIter(rGroupObj);

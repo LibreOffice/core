@@ -31,7 +31,7 @@ class ImpressModule
 {
 public:
     static void Initialize (
-        css::uno::Reference<css::frame::XController>& rxController);
+        css::uno::Reference<css::frame::XController> const & rxController);
 };
 
 } } // end of namespace sd::framework

@@ -75,7 +75,7 @@ using namespace com::sun::star::lang;
  * Constructor of the Tab dialog: appends the pages to the dialog
  */
 SdActionDlg::SdActionDlg (
-    vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
+    vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View const * pView )
     : SfxSingleTabDialog(pParent, *pAttr, "InteractionDialog",
         "modules/simpress/ui/interactiondialog.ui")
     , rOutAttrs(*pAttr)

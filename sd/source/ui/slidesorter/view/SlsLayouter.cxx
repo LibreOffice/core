@@ -163,13 +163,13 @@ public:
         InsertPosition& rPosition,
         const Size& rIndicatorSize,
         const bool bIsVertical,
-        model::SlideSorterModel& rModel) const;
+        model::SlideSorterModel const & rModel) const;
 
     /** Return the bounding box of the preview or, when selected, of the page
         object.  Thus, it returns something like a visual bounding box.
     */
     ::tools::Rectangle GetInnerBoundingBox (
-        model::SlideSorterModel& rModel,
+        model::SlideSorterModel const & rModel,
         const sal_Int32 nIndex) const;
 
     Range GetValidHorizontalSizeRange() const;
@@ -358,7 +358,7 @@ Size Layouter::GetPageObjectSize() const
 InsertPosition Layouter::GetInsertPosition (
     const Point& rModelPosition,
     const Size& rIndicatorSize,
-    model::SlideSorterModel& rModel) const
+    model::SlideSorterModel const & rModel) const
 {
     InsertPosition aPosition;
     mpImplementation->CalculateLogicalInsertPosition(
@@ -668,7 +668,7 @@ void Layouter::Implementation::CalculateGeometricPosition (
     InsertPosition& rPosition,
     const Size& rIndicatorSize,
     const bool bIsVertical,
-    model::SlideSorterModel& rModel) const
+    model::SlideSorterModel const & rModel) const
 {
     // 1. Determine right/bottom of the leading page and the left/top of the
     // trailing page object and how to distribute the missing space.
@@ -782,7 +782,7 @@ void Layouter::Implementation::CalculateGeometricPosition (
 }
 
 ::tools::Rectangle Layouter::Implementation::GetInnerBoundingBox (
-    model::SlideSorterModel& rModel,
+    model::SlideSorterModel const & rModel,
     const sal_Int32 nIndex) const
 {
     model::SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));

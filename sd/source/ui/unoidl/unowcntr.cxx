@@ -61,7 +61,7 @@ void SvUnoWeakContainer::insert( const uno::WeakReference< uno::XInterface >& xR
 */
 bool SvUnoWeakContainer::findRef(
     uno::WeakReference< uno::XInterface >& rRef,
-    void* pSearchData,
+    void const * pSearchData,
     weakref_searchfunc pSearchFunc
 )
 {

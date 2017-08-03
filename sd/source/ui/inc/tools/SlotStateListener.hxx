@@ -50,7 +50,7 @@ public:
         explanations about the parameters.
     */
     SlotStateListener (
-        Link<const OUString&,void>& rCallback,
+        Link<const OUString&,void> const & rCallback,
         const css::uno::Reference<css::frame::XDispatchProvider>& rxDispatchProvider,
         const OUString& rSlotName);
 

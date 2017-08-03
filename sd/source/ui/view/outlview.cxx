@@ -210,7 +210,7 @@ void OutlineView::DisconnectFromApplication()
     Application::RemoveEventListener(LINK(this, OutlineView, AppEventListenerHdl));
 }
 
-void OutlineView::Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin)
+void OutlineView::Paint(const ::tools::Rectangle& rRect, ::sd::Window const * pWin)
 {
     OutlinerView* pOlView = GetViewByWindow(pWin);
 
@@ -292,7 +292,7 @@ void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)
 /**
  * Return a pointer to the OutlinerView corresponding to the window
  */
-OutlinerView* OutlineView::GetViewByWindow (vcl::Window* pWin) const
+OutlinerView* OutlineView::GetViewByWindow (vcl::Window const * pWin) const
 {
     OutlinerView* pOlView = nullptr;
     for (OutlinerView* pView : mpOutlinerView)
@@ -905,7 +905,7 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner, void )
 /**
  * Look for the title text object in one page of the model
  */
-SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
+SdrTextObj* OutlineView::GetTitleTextObject(SdrPage const * pPage)
 {
     const size_t nObjectCount = pPage->GetObjCount();
     SdrTextObj*     pResult      = nullptr;
@@ -926,7 +926,7 @@ SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
 /**
  * Look for the outline text object in one page of the model
  */
-SdrTextObj* OutlineView::GetOutlineTextObject(SdrPage* pPage)
+SdrTextObj* OutlineView::GetOutlineTextObject(SdrPage const * pPage)
 {
     const size_t nObjectCount = pPage->GetObjCount();
     SdrTextObj*     pResult      = nullptr;
@@ -1225,7 +1225,7 @@ SdPage* OutlineView::GetPageForParagraph( Paragraph* pPara )
     return nullptr;
 }
 
-Paragraph* OutlineView::GetParagraphForPage( ::Outliner& rOutl, SdPage* pPage )
+Paragraph* OutlineView::GetParagraphForPage( ::Outliner const & rOutl, SdPage const * pPage )
 {
     // get the number of paragraphs with ident 0 we need to skip before
     // we finde the actual page
@@ -1254,7 +1254,7 @@ Paragraph* OutlineView::GetParagraphForPage( ::Outliner& rOutl, SdPage* pPage )
 }
 
 /** selects the paragraph for the given page at the outliner view*/
-void OutlineView::SetActualPage( SdPage* pActual )
+void OutlineView::SetActualPage( SdPage const * pActual )
 {
     if( pActual && dynamic_cast<SdOutliner&>(mrOutliner).GetIgnoreCurrentPageChangesLevel()==0 && !mbFirstPaint)
     {

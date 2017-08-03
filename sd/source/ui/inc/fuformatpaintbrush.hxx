@@ -43,7 +43,7 @@ public:
     virtual void Activate() override;
     virtual void Deactivate() override;
 
-    static void GetMenuState( DrawViewShell& rDrawViewShell, SfxItemSet &rSet );
+    static void GetMenuState( DrawViewShell const & rDrawViewShell, SfxItemSet &rSet );
 
 private:
     FuFormatPaintBrush ( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq);

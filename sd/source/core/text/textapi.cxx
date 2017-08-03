@@ -102,7 +102,7 @@ public:
     explicit            TextAPIEditSource(SdDrawDocument* pDoc);
 
     void                Dispose();
-    void                SetText( OutlinerParaObject& rText );
+    void                SetText( OutlinerParaObject const & rText );
     OutlinerParaObject* CreateText();
     OUString            GetText();
     SdDrawDocument*     GetDoc() { return m_xImpl->mpDoc; }
@@ -160,7 +160,7 @@ OutlinerParaObject* TextApiObject::CreateText()
     return mpSource->CreateText();
 }
 
-void TextApiObject::SetText( OutlinerParaObject& rText )
+void TextApiObject::SetText( OutlinerParaObject const & rText )
 {
     SdrModel* pModel = mpSource->GetDoc();
     if( pModel && pModel->IsUndoEnabled() )
@@ -237,7 +237,7 @@ SvxTextForwarder* TextAPIEditSource::GetTextForwarder()
     return m_xImpl->mpTextForwarder;
 }
 
-void TextAPIEditSource::SetText( OutlinerParaObject& rText )
+void TextAPIEditSource::SetText( OutlinerParaObject const & rText )
 {
     if (m_xImpl->mpDoc)
     {

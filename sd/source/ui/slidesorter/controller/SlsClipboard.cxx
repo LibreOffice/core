@@ -796,7 +796,7 @@ sal_Int8 Clipboard::ExecuteDrop (
 }
 
 bool Clipboard::IsInsertionTrivial (
-    SdTransferable* pTransferable,
+    SdTransferable const * pTransferable,
     const sal_Int8 nDndAction) const
 {
     std::shared_ptr<TransferableData> pSlideSorterTransferable (

@@ -50,7 +50,7 @@
 SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
                                 const SfxObjectShell* pDocShell,
                                 SfxStyleSheetBase& rStyleBase,
-                                SdrModel* pModel,
+                                SdrModel const * pModel,
                                 SdrView* pView )
     : SfxStyleDialog(pParent, "TemplateDialog",
         "modules/simpress/ui/templatedialog.ui",

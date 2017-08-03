@@ -677,7 +677,7 @@ ParagraphObj::ParagraphObj(const css::uno::Reference< css::beans::XPropertySet >
     ImplGetParagraphValues( pProv, false );
 }
 
-ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > & rXTextContent,
+ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > const & rXTextContent,
     ParaFlags aParaFlags, FontCollection& rFontCollection, PPTExBulletProvider& rProv )
     : PropStateValue()
     , SOParagraph()
@@ -1298,7 +1298,7 @@ ImplTextObj::~ImplTextObj()
         delete *it;
 }
 
-TextObj::TextObj( css::uno::Reference< css::text::XSimpleText > & rXTextRef,
+TextObj::TextObj( css::uno::Reference< css::text::XSimpleText > const & rXTextRef,
             int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rProv ):
     mpImplTextObj(new ImplTextObj(nInstance))
 {

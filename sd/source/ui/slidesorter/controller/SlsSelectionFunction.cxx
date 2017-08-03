@@ -115,12 +115,12 @@ public:
     EventDescriptor (
         sal_uInt32 nEventType,
         const MouseEvent& rEvent,
-        SlideSorter& rSlideSorter);
+        SlideSorter const & rSlideSorter);
     EventDescriptor (
         sal_uInt32 nEventType,
         const AcceptDropEvent& rEvent,
         const sal_Int8 nDragAction,
-        SlideSorter& rSlideSorter);
+        SlideSorter const & rSlideSorter);
 
 private:
     /** Compute a numerical code that describes a mouse event and that can
@@ -757,7 +757,7 @@ void SelectionFunction::ResetMouseAnchor()
 SelectionFunction::EventDescriptor::EventDescriptor (
     const sal_uInt32 nEventType,
     const MouseEvent& rEvent,
-    SlideSorter& rSlideSorter)
+    SlideSorter const & rSlideSorter)
     : maMousePosition(rEvent.GetPosPixel()),
       maMouseModelPosition(),
       mpHitDescriptor(),
@@ -788,7 +788,7 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     const sal_uInt32 nEventType,
     const AcceptDropEvent& rEvent,
     const sal_Int8 nDragAction,
-    SlideSorter& rSlideSorter)
+    SlideSorter const & rSlideSorter)
     : maMousePosition(rEvent.maPosPixel),
       maMouseModelPosition(),
       mpHitDescriptor(),

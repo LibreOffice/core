@@ -87,7 +87,7 @@ TransitionPreset::TransitionPreset( const css::uno::Reference< css::animations::
 }
 
 bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
-                                              Reference< XMultiServiceFactory >& xServiceFactory,
+                                              Reference< XMultiServiceFactory > const & xServiceFactory,
                                               const OUString& aURL )
 {
     SAL_INFO("sd.transitions", "Importing " << aURL);

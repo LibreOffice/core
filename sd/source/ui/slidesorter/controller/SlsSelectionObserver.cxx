@@ -30,7 +30,7 @@
 
 namespace sd { namespace slidesorter { namespace controller {
 
-SelectionObserver::Context::Context (SlideSorter& rSlideSorter)
+SelectionObserver::Context::Context (SlideSorter const & rSlideSorter)
     : mpSelectionObserver(
         rSlideSorter.GetController().GetSelectionManager()->GetSelectionObserver())
 {

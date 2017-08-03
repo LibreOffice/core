@@ -1302,7 +1302,7 @@ SvTreeListEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
     return pEntry;
 }
 
-bool SdPageObjsTLB::IsDropAllowed (SvTreeListEntry* pEntry)
+bool SdPageObjsTLB::IsDropAllowed (SvTreeListEntry const * pEntry)
 {
     if (pEntry == nullptr)
         return false;

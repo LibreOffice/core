@@ -53,7 +53,7 @@ SdPage* View::GetPage()
 }
 
 // returns selected object in case there's just one object in the selection
-SdrObject* View::GetSelectedSingleObject(SdPage* pPage)
+SdrObject* View::GetSelectedSingleObject(SdPage const * pPage)
 {
     SdrObject* pRet = nullptr;
     if( pPage )

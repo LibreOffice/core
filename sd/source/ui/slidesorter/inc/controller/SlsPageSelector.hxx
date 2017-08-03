@@ -158,7 +158,7 @@ public:
     class UpdateLock
     {
     public:
-        UpdateLock (SlideSorter& rSlideSorter);
+        UpdateLock (SlideSorter const & rSlideSorter);
         UpdateLock (PageSelector& rPageSelector);
         ~UpdateLock();
         void Release();
@@ -169,7 +169,7 @@ public:
     class BroadcastLock
     {
     public:
-        BroadcastLock (SlideSorter& rSlideSorter);
+        BroadcastLock (SlideSorter const & rSlideSorter);
         BroadcastLock (PageSelector& rPageSelector);
         ~BroadcastLock();
     private:

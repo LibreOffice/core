@@ -710,7 +710,7 @@ namespace
     @return
         Return </True> if both pointers point to the same object.
 */
-bool compare_layers (const uno::WeakReference<uno::XInterface>& xRef, void* pSearchData)
+bool compare_layers (const uno::WeakReference<uno::XInterface>& xRef, void const * pSearchData)
 {
     uno::Reference<uno::XInterface> xLayer (xRef);
     if (xLayer.is())
@@ -719,7 +719,7 @@ bool compare_layers (const uno::WeakReference<uno::XInterface>& xRef, void* pSea
         if (pSdLayer != nullptr)
         {
             SdrLayer* pSdrLayer = pSdLayer->GetSdrLayer ();
-            if (pSdrLayer == static_cast<SdrLayer*>(pSearchData))
+            if (pSdrLayer == static_cast<SdrLayer const *>(pSearchData))
                 return true;
         }
     }

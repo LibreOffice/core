@@ -103,6 +103,8 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
     if (functionDecl->getTemplatedKind() != FunctionDecl::TK_NonTemplate) {
         return true;
     }
+    if (functionDecl->isDeleted())
+        return true;
     if (isa<CXXMethodDecl>(functionDecl)
         && dyn_cast<CXXMethodDecl>(functionDecl)->getParent()->getDescribedClassTemplate() != nullptr ) {
         return true;
@@ -409,7 +411,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     } else if (isa<CXXDependentScopeMemberExpr>(parent)) {
         return false;
     } else if (isa<MaterializeTemporaryExpr>(parent)) {
-        return true;
+        return checkIfCanBeConst(parent, parmVarDecl);
     } else if (auto conditionalExpr = dyn_cast<ConditionalOperator>(parent)) {
         if (conditionalExpr->getCond() == stmt)
             return true;
@@ -442,6 +444,8 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
         return checkIfCanBeConst(parent, parmVarDecl);
     } else if (isa<CaseStmt>(parent)) {
         return true;
+    } else if (isa<CXXPseudoDestructorExpr>(parent)) {
+        return false;
     } else {
         parent->dump();
         parmVarDecl->dump();

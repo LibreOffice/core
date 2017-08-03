@@ -43,7 +43,7 @@ class SdActionDlg : public SfxSingleTabDialog
 private:
     const SfxItemSet&   rOutAttrs;
 public:
-    SdActionDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView);
+    SdActionDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View const * pView);
 };
 
 /**

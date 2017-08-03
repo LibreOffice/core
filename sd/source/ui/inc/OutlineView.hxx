@@ -72,8 +72,8 @@ public:
     void DisconnectFromApplication();
 
 
-    static SdrTextObj*     GetTitleTextObject(SdrPage* pPage);
-    static SdrTextObj*     GetOutlineTextObject(SdrPage* pPage);
+    static SdrTextObj*     GetTitleTextObject(SdrPage const * pPage);
+    static SdrTextObj*     GetOutlineTextObject(SdrPage const * pPage);
 
     static SdrTextObj*     CreateTitleTextObject(SdPage* pPage);
     static SdrTextObj*     CreateOutlineTextObject(SdPage* pPage);
@@ -81,19 +81,19 @@ public:
     virtual void AddWindowToPaintView(OutputDevice* pWin, vcl::Window* pWindow) override;
     virtual void DeleteWindowFromPaintView(OutputDevice* pWin) override;
 
-    OutlinerView*   GetViewByWindow(vcl::Window* pWin) const;
+    OutlinerView*   GetViewByWindow(vcl::Window const * pWin) const;
     SdrOutliner&    GetOutliner() { return mrOutliner; }
 
     Paragraph*      GetPrevTitle(const Paragraph* pPara);
     Paragraph*      GetNextTitle(const Paragraph* pPara);
     SdPage*         GetActualPage();
     SdPage*         GetPageForParagraph( Paragraph* pPara );
-    Paragraph*      GetParagraphForPage( ::Outliner& rOutl, SdPage* pPage );
+    Paragraph*      GetParagraphForPage( ::Outliner const & rOutl, SdPage const * pPage );
 
     /** selects the paragraph for the given page at the outliner view*/
-    void            SetActualPage( SdPage* pActual );
+    void            SetActualPage( SdPage const * pActual );
 
-    void Paint (const ::tools::Rectangle& rRect, ::sd::Window* pWin);
+    void Paint (const ::tools::Rectangle& rRect, ::sd::Window const * pWin);
 
                     // Callbacks for LINKs
     DECL_LINK( ParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );

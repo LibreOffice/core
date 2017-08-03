@@ -830,7 +830,7 @@ std::shared_ptr<PageObjectPainter> const & SlideSorterView::GetPageObjectPainter
 
 //===== SlideSorterView::DrawLock =============================================
 
-SlideSorterView::DrawLock::DrawLock (SlideSorter& rSlideSorter)
+SlideSorterView::DrawLock::DrawLock (SlideSorter const & rSlideSorter)
     : mrView(rSlideSorter.GetView()),
       mpWindow(rSlideSorter.GetContentWindow())
 {

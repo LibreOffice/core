@@ -53,7 +53,7 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    void ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene);
+    void ImpPrepareBasic3DShape(E3dCompoundObject const * p3DObj, E3dScene *pScene);
     E3dCompoundObject* ImpCreateBasic3DShape();
 };
 

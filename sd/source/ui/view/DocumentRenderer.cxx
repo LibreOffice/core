@@ -290,7 +290,7 @@ namespace {
         Printer& rPrinter,
         ::sd::View& rPrintView,
         SdPage& rPage,
-        View* pView,
+        View const * pView,
         const bool bPrintMarkedOnly,
         const SdrLayerIDSet& rVisibleLayers,
         const SdrLayerIDSet& rPrintableLayers)

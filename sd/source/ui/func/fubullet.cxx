@@ -148,7 +148,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     }
 }
 
-void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
+void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = nullptr;
@@ -291,7 +291,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
     }
 }
 
-void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFrame* pViewFrame )
+void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell const * pViewShell, SfxViewFrame* pViewFrame )
 {
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_CHARMAP ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_SOFT_HYPHEN ) ||
@@ -319,7 +319,7 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFra
             rSet.DisableItem(SID_INSERT_ZWSP);
         }
 
-        if( !bTextEdit && (dynamic_cast<OutlineViewShell*>( pViewShell ) == nullptr) )
+        if( !bTextEdit && (dynamic_cast<OutlineViewShell const *>( pViewShell ) == nullptr) )
             rSet.DisableItem(SID_CHARMAP);
 
         if(!bTextEdit || !bCtlEnabled )

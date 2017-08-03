@@ -30,7 +30,7 @@ struct GroupEntry
     sal_uInt32                  mnCount;
     css::uno::Reference< css::container::XIndexAccess >           mXIndexAccess;
 
-    explicit GroupEntry( css::uno::Reference< css::container::XIndexAccess > & rIndex )
+    explicit GroupEntry( css::uno::Reference< css::container::XIndexAccess > const & rIndex )
     {
         mXIndexAccess = rIndex;
         mnCount =mXIndexAccess->getCount();
@@ -62,7 +62,7 @@ class GroupTable
         sal_uInt32              GetGroupsClosed();
         void                    ResetGroupTable( sal_uInt32 nCount );
         void                    ClearGroupTable();
-        bool                    EnterGroup( css::uno::Reference< css::container::XIndexAccess > & rIndex );
+        bool                    EnterGroup( css::uno::Reference< css::container::XIndexAccess > const & rIndex );
         bool                    GetNextGroupEntry();
                                 GroupTable();
                                 ~GroupTable();

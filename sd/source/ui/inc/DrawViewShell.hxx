@@ -119,7 +119,7 @@ public:
 
     virtual void    Resize() override;
 
-    void            ShowMousePosInfo(const ::tools::Rectangle& rRect, ::sd::Window* pWin);
+    void            ShowMousePosInfo(const ::tools::Rectangle& rRect, ::sd::Window const * pWin);
 
     virtual void    ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
 
@@ -182,7 +182,7 @@ public:
     void            ExecNavigatorWin(SfxRequest& rReq);
     void            GetNavigatorWinState(SfxItemSet& rSet);
 
-    void            ExecutePropPanelAttr (SfxRequest& rReq);
+    void            ExecutePropPanelAttr (SfxRequest const & rReq);
     void            GetStatePropPanelAttr(SfxItemSet& rSet);
 
     void            ExecEffectWin(SfxRequest& rReq);
@@ -190,19 +190,19 @@ public:
     void            Update3DWindow();
     void            AssignFrom3DWindow();
 
-    void            ExecGallery(SfxRequest& rReq);
+    void            ExecGallery(SfxRequest const & rReq);
 
-    void            ExecBmpMask( SfxRequest& rReq );
+    void            ExecBmpMask( SfxRequest const & rReq );
     void            GetBmpMaskState( SfxItemSet& rSet );
 
-    void            ExecIMap( SfxRequest& rReq );
+    void            ExecIMap( SfxRequest const & rReq );
     void            GetIMapState( SfxItemSet& rSet );
 
     void            FuTemporary(SfxRequest& rReq);
     void            FuPermanent(SfxRequest& rReq);
     void            FuSupport(SfxRequest& rReq);
     void            FuDeleteSelectedObjects();
-    void            FuSupportRotate(SfxRequest& rReq);
+    void            FuSupportRotate(SfxRequest const & rReq);
     void            FuTable(SfxRequest& rReq);
 
     void            AttrExec (SfxRequest& rReq);
@@ -222,7 +222,7 @@ public:
 
     SD_DLLPUBLIC void ExecChar(SfxRequest& rReq);
 
-    void            ExecuteAnnotation (SfxRequest& rRequest);
+    void            ExecuteAnnotation (SfxRequest const & rRequest);
     void            GetAnnotationState (SfxItemSet& rItemSet);
 
     void            StartRulerDrag (const Ruler& rRuler, const MouseEvent& rMEvt);
@@ -398,7 +398,7 @@ protected:
     virtual void    UpdateVRuler() override;
     virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY) override;
 
-    void            SetupPage( Size &rSize, long nLeft, long nRight, long nUpper, long nLower,
+    void            SetupPage( Size const &rSize, long nLeft, long nRight, long nUpper, long nLower,
                                bool bSize, bool bMargin, bool bScaleAll );
 
     void            GetMenuStateSel(SfxItemSet& rSet);

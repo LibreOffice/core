@@ -146,7 +146,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
 
 namespace
 {
-    void clearChildNodes(css::uno::Reference<css::animations::XAnimationNode>& rAnimationNode)
+    void clearChildNodes(css::uno::Reference<css::animations::XAnimationNode> const & rAnimationNode)
     {
         css::uno::Reference<css::container::XEnumerationAccess > xEnumerationAccess(rAnimationNode, UNO_QUERY);
         if (!xEnumerationAccess.is())
@@ -190,7 +190,7 @@ SdPage::~SdPage()
 
 struct OrdNumSorter
 {
-    bool operator()( SdrObject* p1, SdrObject* p2 )
+    bool operator()( SdrObject const * p1, SdrObject const * p2 )
     {
         return p1->GetOrdNum() < p2->GetOrdNum();
     }
@@ -1340,7 +1340,7 @@ rtl::OUString enumtoString(AutoLayout aut)
     return retstr;
 }
 
-static void CalcAutoLayoutRectangles( SdPage& rPage,::tools::Rectangle* rRectangle ,const rtl::OUString& sLayoutType )
+static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* rRectangle ,const rtl::OUString& sLayoutType )
 {
     ::tools::Rectangle aTitleRect;
     ::tools::Rectangle aLayoutRect;

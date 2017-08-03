@@ -231,7 +231,7 @@ void lcl_ApplyToPages(
 
 void lcl_CreateUndoForPages(
     const ::sd::slidesorter::SharedPageSelection& rpPages,
-    ::sd::ViewShellBase& rBase )
+    ::sd::ViewShellBase const & rBase )
 {
     ::sd::DrawDocShell* pDocSh      = rBase.GetDocShell();
     if (!pDocSh)

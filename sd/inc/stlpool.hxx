@@ -79,9 +79,9 @@ public:
     void                CopyLayoutSheets(const OUString& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );
     void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool);
-    void                CopyTableStyles(SdStyleSheetPool& rSourcePool);
+    void                CopyTableStyles(SdStyleSheetPool const & rSourcePool);
     void                CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets);
-    void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix);
+    void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString const &rRenameSuffix);
 
     void                CreatePseudosIfNecessary();
     void                UpdateStdNames();
@@ -90,7 +90,7 @@ public:
 
     SdDrawDocument*     GetDoc() const { return mpDoc; }
 
-    static  SdStyleSheetVector CreateChildList( SdStyleSheet* pSheet );
+    static  SdStyleSheetVector CreateChildList( SdStyleSheet const * pSheet );
 
     static void setDefaultOutlineNumberFormatBulletAndIndent(sal_uInt16 i, SvxNumberFormat &rNumberFormat);
 

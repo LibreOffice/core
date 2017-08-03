@@ -1309,10 +1309,10 @@ const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( const OUStr
 //Broadcast that a SdStyleSheet has changed, taking into account outline sublevels
 //which need to be explicitly broadcast as changing if their parent style was
 //the one that changed
-void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase* pStyleSheet,
+void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase const * pStyleSheet,
     PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool)
 {
-    SdStyleSheet* pRealSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetRealStyleSheet();
+    SdStyleSheet* pRealSheet = static_cast<SdStyleSheet const *>(pStyleSheet)->GetRealStyleSheet();
     pRealSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
 
     if( (ePO >= PO_OUTLINE_1) && (ePO <= PO_OUTLINE_8) )

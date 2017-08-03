@@ -79,7 +79,7 @@ public:
 
     // methods
     void preview( const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
-    void remove( CustomAnimationEffectPtr& pEffect );
+    void remove( CustomAnimationEffectPtr const & pEffect );
 
     // Control
     virtual void StateChanged( StateChangedType nStateChange ) override;
@@ -110,7 +110,7 @@ private:
     void onPreview( bool bForcePreview );
 
     STLPropertySet* createSelectionSet();
-    void changeSelection( STLPropertySet* pResultSet, STLPropertySet* pOldSet );
+    void changeSelection( STLPropertySet const * pResultSet, STLPropertySet const * pOldSet );
 
     static css::uno::Any getProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect );
     bool setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const css::uno::Any& rValue );
@@ -129,7 +129,7 @@ private:
     DECL_LINK( DelayLoseFocusHdl, Control&, void );
     DECL_LINK( UpdateAnimationLB, ListBox&, void );
     DECL_LINK( AnimationSelectHdl, ListBox&, void );
-    void implControlHdl(Control*);
+    void implControlHdl(Control const *);
 
 private:
     ViewShellBase& mrBase;

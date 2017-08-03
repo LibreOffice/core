@@ -72,9 +72,9 @@ using ::com::sun::star::beans::XPropertySet;
 
 //============================ PPTWriter ==================================
 
-PPTWriter::PPTWriter( tools::SvRef<SotStorage>& rSvStorage,
-            css::uno::Reference< css::frame::XModel > & rXModel,
-            css::uno::Reference< css::task::XStatusIndicator > & rXStatInd,
+PPTWriter::PPTWriter( tools::SvRef<SotStorage> const & rSvStorage,
+            css::uno::Reference< css::frame::XModel > const & rXModel,
+            css::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
     PPTWriterBase           ( rXModel, rXStatInd ),
     mnCnvrtFlags            ( nCnvrtFlags ),
@@ -553,7 +553,7 @@ void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sa
     }
 }
 
-void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, css::uno::Reference< css::beans::XPropertySet >& rXPagePropSet )
+void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, css::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet )
 {
     if ( rXPagePropSet.is() )
     {
@@ -577,7 +577,7 @@ void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, css::uno::Refere
     }
 }
 
-void PPTWriter::ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPropertySet >& rXPagePropSet )
+void PPTWriter::ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet )
 {
     if ( rXPagePropSet.is() )
     {
@@ -1426,9 +1426,9 @@ bool PPTWriter::ImplWriteAtomEnding()
 // - exported function -
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< css::beans::PropertyValue >& rMediaData,
-                    tools::SvRef<SotStorage>& rSvStorage,
-                    css::uno::Reference< css::frame::XModel > & rXModel,
-                    css::uno::Reference< css::task::XStatusIndicator > & rXStatInd,
+                    tools::SvRef<SotStorage> const & rSvStorage,
+                    css::uno::Reference< css::frame::XModel > const & rXModel,
+                    css::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
                     SvMemoryStream* pVBA,
                     sal_uInt32 nCnvrtFlags )
 {

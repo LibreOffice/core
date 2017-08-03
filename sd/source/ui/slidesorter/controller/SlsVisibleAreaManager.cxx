@@ -201,7 +201,7 @@ void VisibleAreaManager::MakeVisible()
 
 //===== VisibleAreaManager::TemporaryDisabler =================================
 
-VisibleAreaManager::TemporaryDisabler::TemporaryDisabler (SlideSorter& rSlideSorter)
+VisibleAreaManager::TemporaryDisabler::TemporaryDisabler (SlideSorter const & rSlideSorter)
     : mrVisibleAreaManager(rSlideSorter.GetController().GetVisibleAreaManager())
 {
     ++mrVisibleAreaManager.mnDisableCount;

@@ -41,7 +41,7 @@
 
 namespace sd {
 
-void DrawViewShell::ExecIMap( SfxRequest& rReq )
+void DrawViewShell::ExecIMap( SfxRequest const & rReq )
 {
     // during a slide show, nothing is executed!
     if(HasCurrentFunction(SID_PRESENTATION) )

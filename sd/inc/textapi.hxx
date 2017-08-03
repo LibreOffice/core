@@ -46,7 +46,7 @@ public:
     void SAL_CALL dispose();
 
     OutlinerParaObject* CreateText();
-    void                SetText( OutlinerParaObject& rText );
+    void                SetText( OutlinerParaObject const & rText );
     OUString            GetText();
 
     static TextApiObject* getImplementation( const css::uno::Reference< css::text::XText >& );

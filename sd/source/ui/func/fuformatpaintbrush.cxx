@@ -263,7 +263,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
     }
 }
 
-/* static */ void FuFormatPaintBrush::GetMenuState( DrawViewShell& rDrawViewShell, SfxItemSet &rSet )
+/* static */ void FuFormatPaintBrush::GetMenuState( DrawViewShell const & rDrawViewShell, SfxItemSet &rSet )
 {
     const SdrMarkList& rMarkList = rDrawViewShell.GetDrawView()->GetMarkedObjectList();
 

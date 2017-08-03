@@ -66,7 +66,7 @@ SdDisplay::~SdDisplay()
 {
 }
 
-void SdDisplay::SetBitmapEx( BitmapEx* pBmpEx )
+void SdDisplay::SetBitmapEx( BitmapEx const * pBmpEx )
 {
     if( pBmpEx )
     {

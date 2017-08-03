@@ -412,7 +412,7 @@ const SdPage* getAnnotationPage(const Reference<XAnnotation>& xAnnotation)
 
 namespace
 {
-std::string lcl_LOKGetCommentPayload(CommentNotificationType nType, Reference<XAnnotation>& rxAnnotation)
+std::string lcl_LOKGetCommentPayload(CommentNotificationType nType, Reference<XAnnotation> const & rxAnnotation)
 {
     boost::property_tree::ptree aAnnotation;
     aAnnotation.put("action", (nType == CommentNotificationType::Add ? "Add" :
@@ -439,7 +439,7 @@ std::string lcl_LOKGetCommentPayload(CommentNotificationType nType, Reference<XA
 }
 } // anonymous ns
 
-void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell, Reference<XAnnotation>& rxAnnotation)
+void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell, Reference<XAnnotation> const & rxAnnotation)
 {
     // callbacks only if tiled annotations are explicitly turned off by LOK client
     if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
@@ -449,7 +449,7 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
 }
 
-void LOKCommentNotifyAll(CommentNotificationType nType, Reference<XAnnotation>& rxAnnotation)
+void LOKCommentNotifyAll(CommentNotificationType nType, Reference<XAnnotation> const & rxAnnotation)
 {
     // callbacks only if tiled annotations are explicitly turned off by LOK client
     if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())

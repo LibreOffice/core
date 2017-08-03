@@ -71,7 +71,7 @@
 
 /** retrieves the page that is currently painted. This will only be the master page
     if the current drawn view only shows the master page*/
-static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, bool& bMasterView )
+static SdPage* GetCurrentPage( sd::ViewShell const * pViewSh, EditFieldInfo const * pInfo, bool& bMasterView )
 {
     if( !pInfo )
         return nullptr;
@@ -91,7 +91,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
     // first try to check if we are inside the outline view
     sd::OutlineView* pSdView = nullptr;
     if( dynamic_cast<const sd::OutlineViewShell* >(pViewSh) !=  nullptr )
-        pSdView = static_cast<sd::OutlineView*> (static_cast<sd::OutlineViewShell*>(pViewSh)->GetView());
+        pSdView = static_cast<sd::OutlineView*> (static_cast<sd::OutlineViewShell const *>(pViewSh)->GetView());
 
     if (pSdView != nullptr && (pOutliner ==  &pSdView->GetOutliner()))
     {

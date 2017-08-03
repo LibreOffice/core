@@ -693,7 +693,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 }
 
 // Number of pages that reference a master page
-sal_uInt16 SdDrawDocument::GetMasterPageUserCount(SdrPage* pMaster) const
+sal_uInt16 SdDrawDocument::GetMasterPageUserCount(SdrPage const * pMaster) const
 {
     sal_uInt16 nResult = 0;
     sal_uInt16 nPage;
@@ -774,7 +774,7 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 }
 
 // Fill OnlineSpelling list
-void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
+void SdDrawDocument::FillOnlineSpellingList(SdPage const * pPage)
 {
     SdrObjListIter aIter(*pPage, SdrIterMode::Flat);
 
@@ -957,7 +957,7 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus&, rEditStat, void)
 // Callback for ExecuteSpellPopup()
 
 // removed link and replaced with Imp method
-void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl)
+void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner const * pOutl)
 {
     delete mpOnlineSearchItem;
     mpOnlineSearchItem = nullptr;

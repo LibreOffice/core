@@ -95,7 +95,7 @@ public:
             When the SfxViewShell of the given frame is not a
             ViewShellBase object then NULL is returned.
     */
-    static ViewShellBase* GetViewShellBase (SfxViewFrame* pFrame);
+    static ViewShellBase* GetViewShellBase (SfxViewFrame const * pFrame);
 
     DrawDocShell* GetDocShell() const { return mpDocShell;}
     SdDrawDocument* GetDocument() const { return mpDocument;}

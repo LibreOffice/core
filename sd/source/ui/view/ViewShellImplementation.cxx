@@ -229,7 +229,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
     rRequest.Done ();
 }
 
-void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind ePageKind )
+void ViewShell::Implementation::AssignLayout ( SfxRequest const & rRequest, PageKind ePageKind )
 {
     const SfxUInt32Item* pWhatPage = rRequest.GetArg<SfxUInt32Item>(ID_VAL_WHATPAGE);
     const SfxUInt32Item* pWhatLayout = rRequest.GetArg<SfxUInt32Item>(ID_VAL_WHATLAYOUT);

@@ -145,7 +145,7 @@ public:
     */
     void SetCurrentPage (SdPage* pPage);
 
-    void UpdateTitleObject( SdPage* pPage, Paragraph* pPara );
+    void UpdateTitleObject( SdPage* pPage, Paragraph const * pPara );
     void UpdateOutlineObject( SdPage* pPage, Paragraph* pPara );
 
 private:

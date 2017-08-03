@@ -85,20 +85,20 @@ public:
     static rtl::Reference< SlideShow > Create( SdDrawDocument* pDoc );
 
     // static helper api
-    static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument* pDocument );
-    static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument& rDocument );
-    static rtl::Reference< SlideShow > GetSlideShow( ViewShellBase& rBase );
+    static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument const * pDocument );
+    static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument const & rDocument );
+    static rtl::Reference< SlideShow > GetSlideShow( ViewShellBase const & rBase );
 
-    static css::uno::Reference< css::presentation::XSlideShowController > GetSlideShowController(ViewShellBase& rBase );
+    static css::uno::Reference< css::presentation::XSlideShowController > GetSlideShowController(ViewShellBase const & rBase );
 
-    static bool StartPreview( ViewShellBase& rBase,
+    static bool StartPreview( ViewShellBase const & rBase,
         const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
         const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode );
 
-    static void Stop( ViewShellBase& rBase );
+    static void Stop( ViewShellBase const & rBase );
 
     /// returns true if there is a running presentation for the given ViewShellBase
-    static bool IsRunning( ViewShellBase& rBase );
+    static bool IsRunning( ViewShellBase const & rBase );
 
     /// returns true if there is a running presentation inside the given ViewShell
     /// returns false even if there is a running presentation but in another ViewShell
@@ -165,7 +165,7 @@ public:
 
     bool keyInput(const KeyEvent& rKEvt);
 
-    bool dependsOn( ViewShellBase* pViewShellBase );
+    bool dependsOn( ViewShellBase const * pViewShellBase );
 
     static sal_Int32 GetDisplay();
 
@@ -210,7 +210,7 @@ private:
 
 namespace slideshowhelp
 {
-    void ShowSlideShow(SfxRequest& rReq, SdDrawDocument &rDoc);
+    void ShowSlideShow(SfxRequest const & rReq, SdDrawDocument &rDoc);
 }
 
 }

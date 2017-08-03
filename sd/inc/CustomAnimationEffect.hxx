@@ -232,7 +232,7 @@ public:
     CustomAnimationTextGroup( const css::uno::Reference< css::drawing::XShape >& rTarget, sal_Int32 nGroupId );
 
     void reset();
-    void addEffect( CustomAnimationEffectPtr& pEffect );
+    void addEffect( CustomAnimationEffectPtr const & pEffect );
 
     const EffectSequence& getEffects() const { return maEffects; }
 

@@ -137,8 +137,8 @@ struct TextRuleEntry
 class TextObjBinary : public TextObj
 {
 public:
-    TextObjBinary( css::uno::Reference< css::text::XSimpleText > &
-                   rXText, int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv ) : TextObj( rXText, nInstance, rFontCollection, rBuProv ) {}
+    TextObjBinary( css::uno::Reference< css::text::XSimpleText > const & rXText,
+                   int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv ) : TextObj( rXText, nInstance, rFontCollection, rBuProv ) {}
     void            Write( SvStream* pStrm );
     void            WriteTextSpecInfo( SvStream* pStrm );
 };
@@ -204,8 +204,8 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         bool                ImplCreateDocumentSummaryInformation();
         bool                ImplCreateCurrentUserStream();
         static void         ImplCreateHeaderFooterStrings( SvStream& rOut,
-                                css::uno::Reference< css::beans::XPropertySet >& rXPagePropSet );
-        void                ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPropertySet >& rXPagePropSet );
+                                css::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet );
+        void                ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet );
         virtual bool        ImplCreateDocument() override;
         void                ImplCreateHyperBlob( SvMemoryStream& rStream );
         sal_uInt32          ImplInsertBookmarkURL( const OUString& rBookmark, const sal_uInt32 nType,
@@ -239,7 +239,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
                                            bool bMaster,
                                            int nPageNumber = 0 );
         bool                ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 );
-        void                ImplCreateTable( css::uno::Reference< css::drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
+        void                ImplCreateTable( css::uno::Reference< css::drawing::XShape > const & rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt );
 
         bool                ImplCloseDocument();        // we write the font, hyper and sound list
@@ -250,9 +250,9 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         virtual void        ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
 
     public:
-                                PPTWriter( tools::SvRef<SotStorage>& rSvStorage,
-                                            css::uno::Reference< css::frame::XModel > & rModel,
-                                            css::uno::Reference< css::task::XStatusIndicator > & rStatInd,
+                                PPTWriter( tools::SvRef<SotStorage> const & rSvStorage,
+                                            css::uno::Reference< css::frame::XModel > const & rModel,
+                                            css::uno::Reference< css::task::XStatusIndicator > const & rStatInd,
                                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags );
 
                                 virtual ~PPTWriter() override;

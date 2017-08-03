@@ -74,7 +74,7 @@ namespace sd {
  * position, we create a new object and return a pointer to it.
  */
 SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
-                                   const Point& rPos, SdrObject* pObj, ImageMap* pImageMap )
+                                   const Point& rPos, SdrObject* pObj, ImageMap const * pImageMap )
 {
     SdrEndTextEdit();
     mnAction = rAction;

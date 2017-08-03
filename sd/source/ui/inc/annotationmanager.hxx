@@ -36,7 +36,7 @@ public:
     AnnotationManager( ViewShellBase& rViewShellBase );
     ~AnnotationManager();
 
-    void ExecuteAnnotation (SfxRequest& rRequest);
+    void ExecuteAnnotation (SfxRequest const & rRequest);
     void GetAnnotationState (SfxItemSet& rItemSet);
 
 private:

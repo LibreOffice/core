@@ -58,7 +58,7 @@ public:
     class TemporaryDisabler
     {
     public:
-        explicit TemporaryDisabler (SlideSorter& rSlideSorter);
+        explicit TemporaryDisabler (SlideSorter const & rSlideSorter);
         ~TemporaryDisabler();
     private:
         VisibleAreaManager& mrVisibleAreaManager;

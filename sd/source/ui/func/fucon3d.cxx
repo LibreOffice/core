@@ -235,7 +235,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
     return p3DObj;
 }
 
-void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene)
+void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject const * p3DObj, E3dScene *pScene)
 {
     Camera3D aCamera  = pScene->GetCamera ();
 

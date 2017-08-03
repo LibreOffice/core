@@ -219,7 +219,7 @@ void RemoteServer::presentationStopped()
     }
 }
 
-void RemoteServer::removeCommunicator( Communicator* mCommunicator )
+void RemoteServer::removeCommunicator( Communicator const * mCommunicator )
 {
     if ( !spServer )
         return;

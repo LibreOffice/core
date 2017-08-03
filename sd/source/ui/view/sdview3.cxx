@@ -103,7 +103,7 @@ struct ImpRememberOrigAndClone
     SdrObject*      pClone;
 };
 
-SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone*>& aConnectorContainer, SdrObject* pConnObj)
+SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone*>& aConnectorContainer, SdrObject const * pConnObj)
 {
     for(ImpRememberOrigAndClone* p : aConnectorContainer)
     {
@@ -145,7 +145,7 @@ void ImpCheckInsertPos(Point& rPos, const Size& rSize, const ::tools::Rectangle&
     }
 }
 
-bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPos, ImageMap* pImageMap, bool bOptimize )
+bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPos, ImageMap const * pImageMap, bool bOptimize )
 {
     GDIMetaFile aMtf;
 

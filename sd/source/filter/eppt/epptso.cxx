@@ -2961,7 +2961,7 @@ bool PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 n
 sal_Int32 GetCellRight( sal_Int32 nColumn,
     ::tools::Rectangle& rect,
     std::vector< std::pair< sal_Int32, sal_Int32 > >& aColumns,
-    uno::Reference< table::XMergeableCell >& xCell )
+    uno::Reference< table::XMergeableCell > const & xCell )
 {
     sal_Int32 nRight = aColumns[ nColumn ].first + aColumns[ nColumn ].second;
     for ( sal_Int32 nColumnSpan = 1; nColumnSpan < xCell->getColumnSpan(); nColumnSpan++ )
@@ -2978,7 +2978,7 @@ sal_Int32 GetCellRight( sal_Int32 nColumn,
 sal_Int32 GetCellBottom( sal_Int32 nRow,
     ::tools::Rectangle& rect,
     std::vector< std::pair< sal_Int32, sal_Int32 > >& aRows,
-    uno::Reference< table::XMergeableCell >& xCell )
+    uno::Reference< table::XMergeableCell > const & xCell )
 {
     sal_Int32 nBottom = aRows[nRow].first + aRows[nRow].second;
     for ( sal_Int32 nRowSpan = 1; nRowSpan < xCell->getRowSpan(); nRowSpan++ )
@@ -3020,7 +3020,7 @@ public:
     }
 };
 
-void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
+void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt )
 {
     try

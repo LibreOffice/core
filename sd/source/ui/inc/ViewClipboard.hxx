@@ -56,7 +56,7 @@ protected:
     */
     void AssignMasterPage (
         const SdTransferable& rTransferable,
-        SdPage* pMasterPage);
+        SdPage const * pMasterPage);
 
     /** Return an index of a page after which the pages of the transferable
         are to be inserted into the target document.

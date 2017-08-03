@@ -1929,7 +1929,7 @@ bool stl_CustomAnimationEffect_search_node_predict::operator()( const CustomAnim
 }
 
 /// @throws Exception
-static bool implFindNextContainer( Reference< XTimeContainer >& xParent, Reference< XTimeContainer >& xCurrent, Reference< XTimeContainer >& xNext )
+static bool implFindNextContainer( Reference< XTimeContainer > const & xParent, Reference< XTimeContainer > const & xCurrent, Reference< XTimeContainer >& xNext )
 {
     Reference< XEnumerationAccess > xEnumerationAccess( xParent, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration() );
@@ -1948,7 +1948,7 @@ static bool implFindNextContainer( Reference< XTimeContainer >& xParent, Referen
     return xNext.is();
 }
 
-void stl_process_after_effect_node_func(AfterEffectNode& rNode)
+void stl_process_after_effect_node_func(AfterEffectNode const & rNode)
 {
     try
     {
@@ -2238,7 +2238,7 @@ void CustomAnimationTextGroup::reset()
     maEffects.clear();
 }
 
-void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
+void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr const & pEffect )
 {
     maEffects.push_back( pEffect );
 

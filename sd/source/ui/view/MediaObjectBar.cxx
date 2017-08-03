@@ -106,7 +106,7 @@ void MediaObjectBar::GetState( SfxItemSet& rSet )
     }
 }
 
-void MediaObjectBar::Execute( SfxRequest& rReq )
+void MediaObjectBar::Execute( SfxRequest const & rReq )
 {
     if( SID_AVMEDIA_TOOLBOX == rReq.GetSlot() )
     {

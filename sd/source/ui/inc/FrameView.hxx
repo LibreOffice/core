@@ -43,7 +43,7 @@ public:
     void Connect();
     void Disconnect();
 
-    void Update(SdOptions* pOptions);
+    void Update(SdOptions const * pOptions);
 
     void  SetStandardHelpLines(const SdrHelpLineList& rHelpLines)
                              { maStandardHelpLines = rHelpLines; }

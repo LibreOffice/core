@@ -60,7 +60,7 @@ Reference< XAnimationNode > const & SdPage::getAnimationNode()
     return mxAnimationNode;
 }
 
-void SdPage::setAnimationNode( Reference< XAnimationNode >& xNode )
+void SdPage::setAnimationNode( Reference< XAnimationNode > const & xNode )
 {
     mxAnimationNode = xNode;
     if( mpMainSequence.get() )
@@ -97,7 +97,7 @@ FadeEffect SdPage::GetFadeEffect() const
 }
 
 /** callback from the sd::View when a new paragraph for one object on this page is created */
-void SdPage::onParagraphInserted( ::Outliner* pOutliner, Paragraph* pPara, SdrObject* pObj )
+void SdPage::onParagraphInserted( ::Outliner* pOutliner, Paragraph const * pPara, SdrObject* pObj )
 {
     if( mxAnimationNode.is() )
     {
@@ -112,7 +112,7 @@ void SdPage::onParagraphInserted( ::Outliner* pOutliner, Paragraph* pPara, SdrOb
 }
 
 /** callback from the sd::View when a paragraph from one object on this page is removed */
-void SdPage::onParagraphRemoving( ::Outliner* pOutliner, Paragraph* pPara, SdrObject* pObj )
+void SdPage::onParagraphRemoving( ::Outliner* pOutliner, Paragraph const * pPara, SdrObject* pObj )
 {
     if( mxAnimationNode.is() )
     {

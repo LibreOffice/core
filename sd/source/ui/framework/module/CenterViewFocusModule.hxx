@@ -50,7 +50,7 @@ class CenterViewFocusModule
 {
 public:
     explicit CenterViewFocusModule (
-        css::uno::Reference<css::frame::XController>& rxController);
+        css::uno::Reference<css::frame::XController> const & rxController);
     virtual ~CenterViewFocusModule() override;
 
     virtual void SAL_CALL disposing() override;

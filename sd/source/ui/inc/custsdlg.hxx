@@ -54,7 +54,7 @@ private:
     DECL_LINK( ClickButtonHdl, Button*, void );
     DECL_LINK( SelectListBoxHdl, ListBox&, void );
     DECL_LINK( StartShowHdl, Button*, void );
-    void SelectHdl(void*);
+    void SelectHdl(void const *);
 
 public:
                 SdCustomShowDlg( vcl::Window* pWindow, SdDrawDocument& rDrawDoc );
@@ -89,7 +89,7 @@ private:
     DECL_LINK( ClickButtonHdl3, SvTreeListBox*, void );
     DECL_LINK( ClickButtonHdl4, ListBox&, void );
     DECL_LINK( OKHdl, Button*, void );
-    void ClickButtonHdl2(void*);
+    void ClickButtonHdl2(void const *);
 
 public:
 

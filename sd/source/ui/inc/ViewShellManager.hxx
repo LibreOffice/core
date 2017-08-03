@@ -72,10 +72,10 @@ public:
     /** Set the factory for sub shells of the specified view shell.
     */
     void AddSubShellFactory (
-        ViewShell* pViewShell,
+        ViewShell const * pViewShell,
         const SharedShellFactory& rpFactory);
     void RemoveSubShellFactory (
-        ViewShell* pViewShell,
+        ViewShell const * pViewShell,
         const SharedShellFactory& rpFactory);
 
     /** Activate the given view shell.
@@ -131,7 +131,7 @@ public:
         call.  This does not modify the shell stack.
     */
     void InvalidateAllSubShells (
-        ViewShell* pViewShell);
+        ViewShell const * pViewShell);
 
     /** Move the specified view shell to the top most position on the stack
         of view shells in relation to the other view shells.  After this the

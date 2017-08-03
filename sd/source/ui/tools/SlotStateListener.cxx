@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 namespace sd { namespace tools {
 
 SlotStateListener::SlotStateListener (
-    Link<const OUString&,void>& rCallback,
+    Link<const OUString&,void> const & rCallback,
     const uno::Reference<frame::XDispatchProvider>& rxDispatchProvider,
     const OUString& rSlotName)
     : SlotStateListenerInterfaceBase(maMutex),

@@ -179,7 +179,7 @@ public:
     InsertPosition GetInsertPosition (
         const Point& rModelPosition,
         const Size& rIndicatorSize,
-        model::SlideSorterModel& rModel) const;
+        model::SlideSorterModel const & rModel) const;
 
     Range GetValidHorizontalSizeRange() const;
     Range GetValidVerticalSizeRange() const;

@@ -263,7 +263,7 @@ void View::DoCopy()
     }
 }
 
-void View::DoPaste (vcl::Window* pWindow)
+void View::DoPaste (vcl::Window const * pWindow)
 {
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mpViewSh->GetActiveWindow() ) );
     if( !aDataHelper.GetTransferable().is() )

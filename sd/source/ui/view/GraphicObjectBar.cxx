@@ -111,7 +111,7 @@ void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
         SvxGraphicFilter::DisableGraphicFilterSlots( rSet );
 }
 
-void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
+void GraphicObjectBar::ExecuteFilter( SfxRequest const & rReq )
 {
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 

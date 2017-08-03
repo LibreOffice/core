@@ -212,7 +212,7 @@ private:
     static void Deactivate (SfxShell* pShell);
 
     ShellDescriptor CreateSubShell (
-        SfxShell* pShell,
+        SfxShell const * pShell,
         ShellId nShellId);
     void DestroyViewShell (ShellDescriptor& rDescriptor);
     static void DestroySubShell (const ShellDescriptor& rDescriptor);
@@ -231,7 +231,7 @@ ViewShellManager::~ViewShellManager()
 }
 
 void ViewShellManager::AddSubShellFactory (
-    ViewShell* pViewShell,
+    ViewShell const * pViewShell,
     const SharedShellFactory& rpFactory)
 {
     if (mbValid)
@@ -239,7 +239,7 @@ void ViewShellManager::AddSubShellFactory (
 }
 
 void ViewShellManager::RemoveSubShellFactory (
-    ViewShell* pViewShell,
+    ViewShell const * pViewShell,
     const SharedShellFactory& rpFactory)
 {
     if (mbValid)
@@ -279,7 +279,7 @@ void ViewShellManager::DeactivateSubShell (const ViewShell& rViewShell, ShellId 
         mpImpl->DeactivateSubShell(rViewShell,nId);
 }
 
-void ViewShellManager::InvalidateAllSubShells (ViewShell* pViewShell)
+void ViewShellManager::InvalidateAllSubShells (ViewShell const * pViewShell)
 {
     if (mbValid)
         mpImpl->InvalidateAllSubShells(pViewShell);
@@ -982,7 +982,7 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent&,
 }
 
 ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
-    SfxShell* pParentShell,
+    SfxShell const * pParentShell,
     ShellId nShellId)
 {
     ::osl::MutexGuard aGuard (maMutex);

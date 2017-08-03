@@ -215,7 +215,7 @@ private:
         trivial, ie would not change either source nor target document.
     */
     bool IsInsertionTrivial (
-        SdTransferable* pTransferable,
+        SdTransferable const * pTransferable,
         const sal_Int8 nDndAction) const;
 
     /** Asynchronous part of DragFinished.  The argument is the sal_Int8

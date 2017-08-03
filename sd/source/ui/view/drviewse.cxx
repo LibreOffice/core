@@ -105,7 +105,7 @@ namespace sd {
 
 // Permanent Functions
 
-void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
+void ImpAddPrintableCharactersToTextEdit(SfxRequest const & rReq, ::sd::View* pView)
 {
     // evtl. feed characters to activated textedit
     const SfxItemSet* pSet = rReq.GetArgs();
@@ -1399,7 +1399,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
     }
 }
 
-void DrawViewShell::FuSupportRotate(SfxRequest &rReq)
+void DrawViewShell::FuSupportRotate(SfxRequest const &rReq)
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
     {
@@ -1576,7 +1576,7 @@ void DrawViewShell::ShowUIControls (bool bVisible)
 
 namespace slideshowhelp
 {
-    void ShowSlideShow(SfxRequest& rReq, SdDrawDocument &rDoc)
+    void ShowSlideShow(SfxRequest const & rReq, SdDrawDocument &rDoc)
     {
         Reference< XPresentation2 > xPresentation( rDoc.getPresentation() );
         if( xPresentation.is() )

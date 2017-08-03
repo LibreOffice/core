@@ -38,7 +38,7 @@ namespace sd { namespace framework {
 
 //===== CenterViewFocusModule ====================================================
 
-ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
+ShellStackGuard::ShellStackGuard (Reference<frame::XController> const & rxController)
     : ShellStackGuardInterfaceBase(m_aMutex),
       mxConfigurationController(),
       mpBase(nullptr),
