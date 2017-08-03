@@ -28,7 +28,7 @@ const char* RID_SHELLRES_AUTOFMTSTRS[] =
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Use replacement table"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Correct TWo INitial CApitals"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Capitalize first letter of sentences"),
-    NC_("RID_SHELLRES_AUTOFMTSTRS", "Replace \"standard\" quotes with %1 \bcustom%2 quotes"),
+    NC_("RID_SHELLRES_AUTOFMTSTRS", "Replace \"standard\" quotes with %1custom%2 quotes"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Replace Custom Styles"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Bullets replaced"),
     NC_("RID_SHELLRES_AUTOFMTSTRS", "Automatic _underline_"),
