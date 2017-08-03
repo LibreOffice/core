@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/msg.hxx>
@@ -3661,6 +3662,8 @@ void SwXTextDocument::paintDialog(const vcl::DialogID& rDialogID, VirtualDevice&
     }
 
     Dialog* pDlg = static_cast<Dialog*>(pChild->GetWindow());
+    // register the instance so that vcl::Dialog can emit LOK callbacks
+    pDlg->registerDialogRenderable(this);
     pDlg->paintDialog(rDevice);
     const Size aSize = pDlg->GetOptimalSize();
     nWidth = aSize.getWidth();
@@ -3738,6 +3741,11 @@ void SwXTextDocument::postDialogMouseEvent(const vcl::DialogID& rDialogID, int n
             break;
         }
     }
+}
+
+void SwXTextDocument::notifyDialogInvalidation(const vcl::DialogID& rDialogID)
+{
+    SfxLokHelper::notifyDialogInvalidation(rDialogID);
 }
 
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
