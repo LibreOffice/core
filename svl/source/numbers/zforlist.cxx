@@ -1938,19 +1938,19 @@ void SvNumberFormatter::GetFormatSpecialInfo(sal_uInt32 nFormat,
                                              bool& bThousand,
                                              bool& IsRed,
                                              sal_uInt16& nPrecision,
-                                             sal_uInt16& nAnzLeading)
+                                             sal_uInt16& nLeadingCnt)
 
 {
     SvNumberformat* pFormat = GetFormatEntry( nFormat );
     if (pFormat)
         pFormat->GetFormatSpecialInfo(bThousand, IsRed,
-                                      nPrecision, nAnzLeading);
+                                      nPrecision, nLeadingCnt);
     else
     {
         bThousand = false;
         IsRed = false;
         nPrecision = pFormatScanner->GetStandardPrec();
-        nAnzLeading = 0;
+        nLeadingCnt = 0;
     }
 }
 
@@ -2003,7 +2003,7 @@ OUString SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
 
 sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatString,
                                                     bool& bThousand, bool& IsRed, sal_uInt16& nPrecision,
-                                                    sal_uInt16& nAnzLeading, LanguageType eLnge )
+                                                    sal_uInt16& nLeadingCnt, LanguageType eLnge )
 
 {
     if (eLnge == LANGUAGE_DONTKNOW)
@@ -2018,14 +2018,14 @@ sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatStrin
                                                   pStringScanner, nCheckPos, eLnge ));
     if ( nCheckPos == 0 )
     {
-        pFormat->GetFormatSpecialInfo( bThousand, IsRed, nPrecision, nAnzLeading );
+        pFormat->GetFormatSpecialInfo( bThousand, IsRed, nPrecision, nLeadingCnt );
     }
     else
     {
         bThousand = false;
         IsRed = false;
         nPrecision = pFormatScanner->GetStandardPrec();
-        nAnzLeading = 0;
+        nLeadingCnt = 0;
     }
     return nCheckPos;
 }

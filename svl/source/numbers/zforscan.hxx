@@ -50,7 +50,7 @@ public:
     sal_Int32 ScanFormat( OUString& rString ); // Call scan analysis
 
     void CopyInfo(ImpSvNumberformatInfo* pInfo,
-                     sal_uInt16 nAnz); // Copies the FormatInfo
+                     sal_uInt16 nCnt); // Copies the FormatInfo
     sal_uInt16 GetResultStringsCnt() const      { return nResultStringsCnt; }
 
     const CharClass& GetChrCls() const          { return *pFormatter->GetCharClass(); }

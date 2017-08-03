@@ -329,7 +329,7 @@ private:
      */
     bool GetTimeRef( double& fOutNumber,                     // result as double
                      sal_uInt16 nIndex,                      // Index of hour in input
-                     sal_uInt16 nAnz );                      // Count of time substrings in input
+                     sal_uInt16 nCnt );                      // Count of time substrings in input
     sal_uInt16 ImplGetDay  ( sal_uInt16 nIndex );   // Day input, 0 if no match
     sal_uInt16 ImplGetMonth( sal_uInt16 nIndex );   // Month input, zero based return, NumberOfMonths if no match
     sal_uInt16 ImplGetYear ( sal_uInt16 nIndex );   // Year input, 0 if no match
