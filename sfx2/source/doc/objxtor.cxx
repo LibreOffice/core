@@ -308,8 +308,6 @@ SfxObjectShell::~SfxObjectShell()
     if ( IsEnableSetModified() )
         EnableSetModified( false );
 
-    // Never call GetInPlaceObject(), the access to the derivative branch
-    // SfxInternObject is not allowed because of a compiler bug
     SfxObjectShell::CloseInternal();
     pImpl->pBaseModel.set( nullptr );
 
