@@ -989,7 +989,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
                 case css::presentation::EffectNodeType::TIMING_ROOT : nPPTNodeType = DFF_ANIM_NODE_TYPE_TIMING_ROOT; break;
                 case css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE: nPPTNodeType = DFF_ANIM_NODE_TYPE_INTERACTIVE_SEQ; break;
             }
-            exportAnimPropertyuInt32( rStrm, DFF_ANIM_NODE_TYPE, nPPTNodeType, TRANSLATE_NONE );
+            exportAnimPropertyuInt32( rStrm, DFF_ANIM_NODE_TYPE, nPPTNodeType );
         }
     }
     sal_uInt32 nPresetId = 0;
@@ -1036,11 +1036,11 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
         }
     }
     if ( bPresetId )
-        exportAnimPropertyuInt32( rStrm, DFF_ANIM_PRESET_ID, nPresetId, TRANSLATE_NONE );
+        exportAnimPropertyuInt32( rStrm, DFF_ANIM_PRESET_ID, nPresetId );
     if ( bPresetSubType )
-        exportAnimPropertyuInt32( rStrm, DFF_ANIM_PRESET_SUB_TYPE, nPresetSubType, TRANSLATE_NONE );
+        exportAnimPropertyuInt32( rStrm, DFF_ANIM_PRESET_SUB_TYPE, nPresetSubType );
     if ( bPresetClass )
-        exportAnimPropertyuInt32( rStrm, DFF_ANIM_PRESET_CLASS, nPresetClass, TRANSLATE_NONE );
+        exportAnimPropertyuInt32( rStrm, DFF_ANIM_PRESET_CLASS, nPresetClass );
 
     if ( pAny[ DFF_ANIM_ID ] )
     {
@@ -1058,7 +1058,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     {
         sal_Int32 nRunTimeContext = 0;
         if ( *pAny[ DFF_ANIM_RUNTIMECONTEXT ] >>= nRunTimeContext )
-            exportAnimPropertyuInt32( rStrm, DFF_ANIM_RUNTIMECONTEXT, nRunTimeContext, TRANSLATE_NONE );
+            exportAnimPropertyuInt32( rStrm, DFF_ANIM_RUNTIMECONTEXT, nRunTimeContext );
     }
     if ( pAny[ DFF_ANIM_PATH_EDIT_MODE ] )
     {
@@ -1072,7 +1072,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
         {
 
             bool bDirection = !xColor->getDirection();
-            exportAnimPropertyuInt32( rStrm, DFF_ANIM_DIRECTION, bDirection ? 1 : 0, TRANSLATE_NONE );
+            exportAnimPropertyuInt32( rStrm, DFF_ANIM_DIRECTION, bDirection ? 1 : 0 );
         }
     }
 
@@ -1080,14 +1080,14 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     {
         sal_Int32 nOverride = 0;
         if ( *pAny[ DFF_ANIM_OVERRIDE ] >>= nOverride )
-            exportAnimPropertyuInt32( rStrm, DFF_ANIM_OVERRIDE, nOverride, TRANSLATE_NONE );
+            exportAnimPropertyuInt32( rStrm, DFF_ANIM_OVERRIDE, nOverride );
     }
 
     if ( pAny[ DFF_ANIM_MASTERREL ] )
     {
         sal_Int32 nMasterRel = 0;
         if ( *pAny[ DFF_ANIM_MASTERREL ] >>= nMasterRel )
-            exportAnimPropertyuInt32( rStrm, DFF_ANIM_MASTERREL, nMasterRel, TRANSLATE_NONE );
+            exportAnimPropertyuInt32( rStrm, DFF_ANIM_MASTERREL, nMasterRel );
     }
 
 /* todo
@@ -1130,7 +1130,7 @@ bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nP
                 sal_Int32 nVal = 0;
                 if ( rAny >>= nVal )
                 {
-                    exportAnimPropertyuInt32( rStrm, nPropertyId, nVal, eTranslateMode );
+                    exportAnimPropertyuInt32( rStrm, nPropertyId, nVal );
                     bRet = true;
                 }
             }
@@ -1198,7 +1198,7 @@ void AnimationExporter::exportAnimPropertyFloat( SvStream& rStrm, const sal_uInt
          .WriteFloat( fFloat );
 }
 
-void AnimationExporter::exportAnimPropertyuInt32( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt32 nVal, const TranslateMode )
+void AnimationExporter::exportAnimPropertyuInt32( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt32 nVal )
 {
     EscherExAtom aExAtom( rStrm, DFF_msofbtAnimAttributeValue, nPropertyId );
     rStrm.WriteUChar( DFF_ANIM_PROP_TYPE_INT32 )
@@ -1690,11 +1690,11 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
         if( nAfterEffectType != AFTEREFFECT_NONE )
         {
             EscherExContainer aAnimPropertySet( rStrm, DFF_msofbtAnimPropertySet );
-            exportAnimPropertyuInt32( rStrm, 6, 1, TRANSLATE_NONE );
+            exportAnimPropertyuInt32( rStrm, 6, 1 );
             if( nAfterEffectType == AFTEREFFECT_COLOR )
             {
-                exportAnimPropertyuInt32( rStrm, 4, 0, TRANSLATE_NONE );
-                exportAnimPropertyuInt32( rStrm, 5, 0, TRANSLATE_NONE );
+                exportAnimPropertyuInt32( rStrm, 4, 0 );
+                exportAnimPropertyuInt32( rStrm, 5, 0 );
             }
         }
         exportAnimateTargetElement( rStrm, aTarget.hasValue() ? aTarget : xAnimate->getTarget(), false );

@@ -115,10 +115,8 @@ void RptMLMasterStylesContext_Impl::EndElement()
 ErrCode ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
     const uno::Reference<XComponent>& xModelComponent,
-    const sal_Char* /*pStreamName*/,
     const uno::Reference<XComponentContext> & rContext,
-    const uno::Reference< XDocumentHandler >& _xFilter,
-    bool /*bEncrypted*/ )
+    const uno::Reference< XDocumentHandler >& _xFilter )
 {
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
@@ -255,10 +253,8 @@ ErrCode ReadThroughComponent(
         // read from the stream
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
-                                    ,pStreamName
                                     ,rxContext
-                                    ,xDocHandler
-                                    ,bEncrypted );
+                                    ,xDocHandler );
     }
 
     // TODO/LATER: better error handling
@@ -642,7 +638,7 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
             break;
         case XML_TOK_DOC_META:
             GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateMetaContext( rLocalName,xAttrList );
+            pContext = CreateMetaContext( rLocalName );
             break;
         default:
             break;
@@ -983,7 +979,7 @@ void ORptFilter::insertFunction(const css::uno::Reference< css::report::XFunctio
     m_aFunctions.insert(TGroupFunctionMap::value_type(_xFunction->getName(),_xFunction));
 }
 
-SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName,const uno::Reference<xml::sax::XAttributeList>&)
+SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName)
 {
     SvXMLImportContext* pContext = nullptr;
 

@@ -403,7 +403,8 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
          return true;
     // used in template magic
     if (fqn == "MtfRenderer::MtfRenderer" || fqn == "shell::sessioninstall::SyncDbusSessionHelper::SyncDbusSessionHelper"
-        || fqn == "dp_gui::LicenseDialog::LicenseDialog")
+        || fqn == "dp_gui::LicenseDialog::LicenseDialog"
+        || fqn == "(anonymous namespace)::OGLTransitionFactoryImpl::OGLTransitionFactoryImpl")
          return true;
     // FIXME
     if (fqn == "GtkSalDisplay::filterGdkEvent" || fqn == "SvXMLEmbeddedObjectHelper::ImplReadObject"

@@ -46,7 +46,7 @@ class PanelFactory
       public PanelFactoryInterfaceBase
 {
 public:
-    explicit PanelFactory (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    explicit PanelFactory ();
     virtual ~PanelFactory() override;
     PanelFactory(const PanelFactory&) = delete;
     PanelFactory& operator=(const PanelFactory&) = delete;

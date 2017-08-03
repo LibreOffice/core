@@ -132,7 +132,6 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
                     // resource managed by this ResourceManager accordingly.
                     HandleMainViewSwitch(
                         rEvent.ResourceId->getResourceURL(),
-                        rEvent.Configuration,
                         true);
                 }
             }
@@ -150,7 +149,6 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
             {
                 HandleMainViewSwitch(
                     OUString(),
-                    rEvent.Configuration,
                     false);
             }
             else if (rEvent.ResourceId->compareTo(mxResourceId) == 0)
@@ -166,7 +164,6 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
 
 void ResourceManager::HandleMainViewSwitch (
     const OUString& rsViewURL,
-    const Reference<XConfiguration>& /*rxConfiguration*/,
     const bool bIsActivated)
 {
     if (bIsActivated)

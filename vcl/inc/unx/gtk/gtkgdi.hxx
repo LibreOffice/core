@@ -226,8 +226,7 @@ private:
                         cairo_t *cr,
                         const tools::Rectangle& rControlRectangle,
                         ControlType nType,
-                        ControlPart nPart,
-                        const ImplControlValue& aValue);
+                        ControlPart nPart);
     static void PaintCheckOrRadio(cairo_t *cr, GtkStyleContext *context,
                                   const tools::Rectangle& rControlRectangle,
                                   bool bIsCheck, bool bInMenu);
@@ -303,7 +302,6 @@ protected:
                            const std::list< tools::Rectangle >& aClip,
                            ControlState nState,
                            const ImplControlValue& aValue,
-                           const OUString& rCaption,
                            ControlCacheKey& rControlCacheKey);
 
     bool NWPaintGTKArrow( GdkDrawable* gdkDrawable,
@@ -342,21 +340,18 @@ protected:
     bool NWPaintGTKScrollbar( ControlPart nPart,
                               const tools::Rectangle& rControlRectangle,
                               ControlState nState, const ImplControlValue& aValue );
-    bool NWPaintGTKEditBox( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
+    bool NWPaintGTKEditBox( GdkDrawable* gdkDrawable, ControlType nType,
                             const tools::Rectangle& rControlRectangle,
                             const std::list< tools::Rectangle >& rClipList,
-                            ControlState nState, const ImplControlValue& aValue,
-                            const OUString& rCaption );
+                            ControlState nState );
     bool NWPaintGTKSpinBox(ControlType nType, ControlPart nPart,
                            const tools::Rectangle& rControlRectangle,
                            ControlState nState, const ImplControlValue& aValue,
-                           const OUString& rCaption,
                            ControlCacheKey& rControlCacheKey);
     bool NWPaintGTKComboBox( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                              const tools::Rectangle& rControlRectangle,
                              const std::list< tools::Rectangle >& rClipList,
-                             ControlState nState, const ImplControlValue& aValue,
-                             const OUString& rCaption );
+                             ControlState nState );
     bool NWPaintGTKTabItem( ControlType nType,
                             const tools::Rectangle& rControlRectangle,
                             ControlState nState, const ImplControlValue& aValue );

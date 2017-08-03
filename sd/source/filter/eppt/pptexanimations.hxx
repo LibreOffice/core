@@ -72,7 +72,7 @@ class AnimationExporter
     static bool exportAnimProperty( SvStream& rStrm, const sal_uInt16 nPropertyId, const css::uno::Any& rAny, const TranslateMode eTranslateMode );
     static void exportAnimPropertyString( SvStream& rStrm, const sal_uInt16 nPropertyId, const OUString& rVal, const TranslateMode eTranslateMode );
     static void exportAnimPropertyFloat( SvStream& rStrm, const sal_uInt16 nPropertyId, const double& rVal );
-    static void exportAnimPropertyuInt32( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt32 nVal, const TranslateMode eTranslateMode );
+    static void exportAnimPropertyuInt32( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt32 nVal );
     static void exportAnimPropertyByte( SvStream& rStrm, const sal_uInt16 nPropertyId, const sal_uInt8 nVal );
 
     /** if available exportAnimPropertySet

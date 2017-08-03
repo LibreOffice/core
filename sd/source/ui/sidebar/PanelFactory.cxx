@@ -49,8 +49,7 @@ static Reference<lang::XEventListener> mxControllerDisposeListener;
 
 //----- PanelFactory --------------------------------------------------------
 
-PanelFactory::PanelFactory(
-        const css::uno::Reference<css::uno::XComponentContext>& /*rxContext*/)
+PanelFactory::PanelFactory()
     : PanelFactoryInterfaceBase(m_aMutex)
 {
 }
@@ -144,10 +143,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
-org_openoffice_comp_Draw_framework_PanelFactory_get_implementation(css::uno::XComponentContext* context,
+org_openoffice_comp_Draw_framework_PanelFactory_get_implementation(css::uno::XComponentContext* /*context*/,
                                                                    css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new sd::sidebar::PanelFactory(context));
+    return cppu::acquire(new sd::sidebar::PanelFactory);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
