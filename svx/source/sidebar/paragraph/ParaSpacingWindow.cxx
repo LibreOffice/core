@@ -41,6 +41,7 @@ ParaULSpacingWindow::ParaULSpacingWindow(vcl::Window* pParent, css::uno::Referen
     m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(),
                                   "svx/ui/paraulspacing.ui",
                                   "ParaULSpacingWindow",
+                                  pParent,
                                   xFrame));
 
     get(m_pAboveSpacing, "aboveparaspacing");
@@ -132,6 +133,7 @@ ParaLRSpacingWindow::ParaLRSpacingWindow(vcl::Window* pParent, css::uno::Referen
     m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(),
                                   "svx/ui/paralrspacing.ui",
                                   "ParaLRSpacingWindow",
+                                  pParent,
                                   xFrame));
 
     get(m_pBeforeSpacing, "beforetextindent");

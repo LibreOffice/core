@@ -23,7 +23,7 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
     , m_bInClose(false)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame));
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, pParent, rFrame));
     m_aPanelLayoutIdle.SetPriority(TaskPriority::RESIZE);
     m_aPanelLayoutIdle.SetInvokeHandler( LINK( this, PanelLayout, ImplHandlePanelLayoutTimerHdl ) );
     m_aPanelLayoutIdle.SetDebugName( "svx::PanelLayout  m_aPanelLayoutIdle" );

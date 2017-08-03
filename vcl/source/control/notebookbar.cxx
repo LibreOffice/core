@@ -35,7 +35,7 @@ NotebookBar::NotebookBar(Window* pParent, const OString& rID, const OUString& rU
     : Control(pParent), m_pEventListener(new NotebookBarContextChangeEventListener(this))
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
-    m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame) );
+    m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, nullptr, rFrame) );
 
     // In the Notebookbar's .ui file must exist control handling context
     // - implementing NotebookbarContextControl interface with id "ContextContainer"

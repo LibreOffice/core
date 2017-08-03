@@ -59,6 +59,7 @@ public:
             const OUString& sUIRootDir,
             const OUString& sUIFile,
             const OString& sID = OString(),
+            const vcl::Window* pGrandParent = nullptr,
             const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     ~VclBuilder();
 

@@ -89,7 +89,9 @@ void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStri
 {
     mbIsDeferredInit = true;
     mpDialogParent = pParent; //should be unset in doDeferredInit
-    m_pUIBuilder.reset( new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame) );
+    if (pParent)
+        fprintf(stderr, "loadUI pParent is %p %s\n", pParent, OUStringToOString(pParent->GetText(), RTL_TEXTENCODING_UTF8).getStr());
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, mpDialogParent, rFrame));
 }
 
 SystemWindow::~SystemWindow()

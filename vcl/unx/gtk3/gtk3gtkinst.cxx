@@ -27,6 +27,7 @@
 #include "cppuhelper/compbase.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <vcl/hackery.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -1038,4 +1039,360 @@ OpenGLContext* GtkInstance::CreateOpenGLContext()
     return new GtkOpenGLContext;
 }
 
+class GtkInstanceDialog : public Hackery::Dialog
+{
+private:
+    GtkDialog* m_pDialog;
+public:
+    GtkInstanceDialog(GtkDialog* pDialog)
+        : m_pDialog(pDialog)
+    {
+    }
+
+    virtual int run() override
+    {
+        int ret;
+        do
+        {
+            ret = gtk_dialog_run(m_pDialog);
+            if (ret == GTK_RESPONSE_OK)
+            {
+                ret = RET_OK;
+                break;
+            }
+            if (ret == GTK_RESPONSE_CANCEL)
+            {
+                ret = RET_CANCEL;
+                break;
+            }
+            if (ret == GTK_RESPONSE_HELP)
+            {
+                fprintf(stderr, "request help\n");
+                ret = 0;
+            }
+        } while (ret >= 0);
+        gtk_widget_hide(GTK_WIDGET(m_pDialog));
+        return ret;
+    }
+};
+
+class GtkInstanceRadioButton : public Hackery::RadioButton
+{
+private:
+    GtkRadioButton* m_pButton;
+    gulong m_nSignalId;
+
+    static void signalToggled(GtkToggleButton*, gpointer widget)
+    {
+        GtkInstanceRadioButton* pThis = static_cast<GtkInstanceRadioButton*>(widget);
+        pThis->signal_toggled();
+    }
+public:
+    GtkInstanceRadioButton(GtkRadioButton* pButton)
+        : m_pButton(pButton)
+        , m_nSignalId(g_signal_connect(pButton, "toggled", G_CALLBACK(signalToggled), this))
+    {
+    }
+
+    virtual void set_sensitive(bool sensitive) override
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(m_pButton), sensitive);
+    }
+
+    virtual void set_active(bool active) override
+    {
+        return gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pButton), active);
+    }
+
+    virtual bool get_active() const override
+    {
+        return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pButton));
+    }
+
+    virtual ~GtkInstanceRadioButton() override
+    {
+        g_signal_handler_disconnect(m_pButton, m_nSignalId);
+    }
+};
+
+class GtkInstanceCheckButton : public Hackery::CheckButton
+{
+private:
+    GtkCheckButton* m_pButton;
+    gulong m_nSignalId;
+
+    static void signalToggled(GtkToggleButton*, gpointer widget)
+    {
+        GtkInstanceCheckButton* pThis = static_cast<GtkInstanceCheckButton*>(widget);
+        pThis->signal_toggled();
+    }
+public:
+    GtkInstanceCheckButton(GtkCheckButton* pButton)
+        : m_pButton(pButton)
+        , m_nSignalId(g_signal_connect(pButton, "toggled", G_CALLBACK(signalToggled), this))
+    {
+    }
+
+    virtual void set_sensitive(bool sensitive) override
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(m_pButton), sensitive);
+    }
+
+    virtual void set_active(bool active) override
+    {
+        return gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pButton), active);
+    }
+
+    virtual bool get_active() const override
+    {
+        return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(m_pButton));
+    }
+
+    virtual ~GtkInstanceCheckButton() override
+    {
+        g_signal_handler_disconnect(m_pButton, m_nSignalId);
+    }
+};
+
+class GtkInstanceSpinButton : public Hackery::SpinButton
+{
+private:
+    GtkSpinButton* m_pButton;
+    gulong m_nSignalId;
+
+    static void signalValueChanged(GtkSpinButton*, gpointer widget)
+    {
+        GtkInstanceSpinButton* pThis = static_cast<GtkInstanceSpinButton*>(widget);
+        pThis->signal_value_changed();
+    }
+public:
+    GtkInstanceSpinButton(GtkSpinButton* pButton)
+        : m_pButton(pButton)
+        , m_nSignalId(g_signal_connect(pButton, "value-changed", G_CALLBACK(signalValueChanged), this))
+    {
+    }
+
+    virtual void set_sensitive(bool sensitive) override
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(m_pButton), sensitive);
+    }
+
+    virtual int get_value_as_int() const override
+    {
+        return gtk_spin_button_get_value_as_int(m_pButton);
+    }
+
+    virtual void set_value(double value) override
+    {
+        gtk_spin_button_set_value(m_pButton, value);
+    }
+
+    virtual void set_text(const OUString& rText) override
+    {
+        gtk_entry_set_text(GTK_ENTRY(m_pButton), OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual void grab_focus()
+    {
+        gtk_widget_grab_focus(GTK_WIDGET(m_pButton));
+    }
+
+    virtual ~GtkInstanceSpinButton() override
+    {
+        g_signal_handler_disconnect(m_pButton, m_nSignalId);
+    }
+};
+
+class GtkInstanceLabel : public Hackery::Label
+{
+private:
+    GtkLabel* m_pLabel;
+public:
+    GtkInstanceLabel(GtkLabel* pLabel)
+        : m_pLabel(pLabel)
+    {
+    }
+
+    virtual void set_sensitive(bool sensitive) override
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(m_pLabel), sensitive);
+    }
+
+    virtual void set_label(const OUString& rText) override
+    {
+        gtk_label_set_label(m_pLabel, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual ~GtkInstanceLabel() override
+    {
+    }
+};
+
+class GtkInstanceComboBoxText : public Hackery::ComboBoxText
+{
+private:
+    GtkComboBoxText* m_pComboBoxText;
+    gulong m_nSignalId;
+
+    static void signalChanged(GtkComboBox*, gpointer widget)
+    {
+        GtkInstanceComboBoxText* pThis = static_cast<GtkInstanceComboBoxText*>(widget);
+        pThis->signal_changed();
+    }
+public:
+    GtkInstanceComboBoxText(GtkComboBoxText* pComboBoxText)
+        : m_pComboBoxText(pComboBoxText)
+        , m_nSignalId(g_signal_connect(pComboBoxText, "changed", G_CALLBACK(signalChanged), this))
+    {
+    }
+
+    virtual void set_sensitive(bool sensitive) override
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(m_pComboBoxText), sensitive);
+    }
+
+    virtual int get_active() const
+    {
+        return gtk_combo_box_get_active(GTK_COMBO_BOX(m_pComboBoxText));
+    }
+
+    virtual OUString get_active_text() const
+    {
+        gchar* pText = gtk_combo_box_text_get_active_text(m_pComboBoxText);
+        OUString sRet(OUString(pText, strlen(pText), RTL_TEXTENCODING_UTF8));
+        g_free(pText);
+        return sRet;
+    }
+
+    virtual OUString get_text(int pos) const
+    {
+        OUString sRet;
+        GtkTreeModel *pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        {
+            GValue value;
+            memset(&value, 0, sizeof(value));
+            gtk_tree_model_get_value(pModel, &iter, 0, &value);
+            const gchar* pStr = g_value_get_string(&value);
+            sRet = OUString(OUString(pStr, strlen(pStr), RTL_TEXTENCODING_UTF8));
+            g_value_unset(&value);
+        }
+        return sRet;
+    }
+
+    virtual void insert_text(const OUString& rStr, int pos)
+    {
+        gtk_combo_box_text_insert_text(m_pComboBoxText, pos, OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual int get_count() const
+    {
+        GtkTreeModel *pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+        return gtk_tree_model_iter_n_children(pModel, nullptr);
+    }
+
+    virtual int find_text(const OUString& rStr) const override
+    {
+        GtkTreeModel *pModel = gtk_combo_box_get_model(GTK_COMBO_BOX(m_pComboBoxText));
+        GtkTreeIter iter;
+        if (!gtk_tree_model_get_iter_first(pModel, &iter))
+            return -1;
+
+        OString aStr(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
+        GValue value;
+        memset(&value, 0, sizeof(value));
+        int nRet = 0;
+        do
+        {
+            gtk_tree_model_get_value(pModel, &iter, 0, &value);
+            const gchar* pStr = g_value_get_string(&value);
+            const bool bEqual = strcmp(pStr, aStr.getStr()) == 0;
+            g_value_unset(&value);
+            if (bEqual)
+                return nRet;
+            ++nRet;
+        } while (gtk_tree_model_iter_next(pModel, &iter));
+
+        return -1;
+    }
+
+    virtual ~GtkInstanceComboBoxText() override
+    {
+        g_signal_handler_disconnect(m_pComboBoxText, m_nSignalId);
+    }
+};
+
+
+class GtkInstanceBuilder : public Hackery::Builder
+{
+private:
+    GtkBuilder* m_pBuilder;
+public:
+    GtkInstanceBuilder(SalFrame *pParent, const OUString &rUri)
+    {
+        OUString aPath;
+        osl::FileBase::getSystemPathFromFileURL(rUri, aPath);
+        m_pBuilder = gtk_builder_new_from_file(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());
+
+        GtkSalFrame* pParentFrame = dynamic_cast<GtkSalFrame*>(pParent);
+        GtkWidget* pWidget = GTK_WIDGET(gtk_builder_get_object(m_pBuilder, "BreakDialog"));
+        GtkWindow* pParentWidget = (GTK_WINDOW(pParentFrame->getWindow()));
+        gtk_window_set_transient_for(GTK_WINDOW(pWidget), pParentWidget);
+        fprintf(stderr, "trans for %s\n", gtk_window_get_title(GTK_WINDOW(pParentWidget)));
+        gtk_widget_show(pWidget);
+    }
+
+    virtual ~GtkInstanceBuilder() override
+    {
+        g_object_unref(m_pBuilder);
+    }
+
+    virtual Hackery::Dialog* get_dialog(const OString &id) override
+    {
+        GtkDialog* pDialog = GTK_DIALOG(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        return new GtkInstanceDialog(pDialog);
+    }
+
+    virtual Hackery::RadioButton* get_radio_button(const OString &id) override
+    {
+        GtkRadioButton* pRadioButton = GTK_RADIO_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        return new GtkInstanceRadioButton(pRadioButton);
+    }
+
+    virtual Hackery::CheckButton* get_check_button(const OString &id) override
+    {
+        GtkCheckButton* pCheckButton = GTK_CHECK_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        return new GtkInstanceCheckButton(pCheckButton);
+    }
+
+    virtual Hackery::SpinButton* get_spin_button(const OString &id) override
+    {
+        GtkSpinButton* pSpinButton = GTK_SPIN_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        return new GtkInstanceSpinButton(pSpinButton);
+    }
+
+    virtual Hackery::ComboBoxText* get_combo_box_text(const OString &id) override
+    {
+        GtkComboBoxText* pComboBoxText = GTK_COMBO_BOX_TEXT(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        return new GtkInstanceComboBoxText(pComboBoxText);
+    }
+
+    virtual Hackery::Label* get_label(const OString &id) override
+    {
+        GtkLabel* pLabel = GTK_LABEL(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        return new GtkInstanceLabel(pLabel);
+    }
+
+};
+
+Hackery::Builder* GtkInstance::CreateBuilder(SalFrame *pParent, const OUString &rUri)
+{
+    if (rUri.endsWith("insertbreak.ui"))
+    {
+        GtkInstanceBuilder *pRet = new GtkInstanceBuilder(pParent, rUri);
+        return pRet;
+    }
+    return nullptr;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -12,6 +12,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <osl/module.hxx>
+#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
@@ -42,6 +43,7 @@
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
+#include "salinst.hxx"
 #include "strings.hrc"
 
 #ifdef DISABLE_DYNLOADING
@@ -118,7 +120,14 @@ namespace
 }
 #endif
 
-VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID, const css::uno::Reference<css::frame::XFrame>& rFrame)
+Hackery::Builder* Application::CreateBuilder(SalFrame *pFrame, const OUString &rUIFile)
+{
+    OUString sUri = VclBuilderContainer::getUIRootDir() + rUIFile;
+    return ImplGetSVData()->mpDefInst->CreateBuilder(pFrame, sUri);
+}
+
+VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID,
+        const vcl::Window* /*pGrandParent*/, const css::uno::Reference<css::frame::XFrame>& rFrame)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pStringReplace(Translate::GetReadStringHook())
