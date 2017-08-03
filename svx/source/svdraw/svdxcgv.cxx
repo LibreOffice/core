@@ -275,8 +275,8 @@ bool SdrExchangeView::Paste(
         aYResize=aResize.Y();
     }
     SdrObjList*  pDstLst=pLst;
-    sal_uInt16 nPg,nPgAnz=pSrcMod->GetPageCount();
-    for (nPg=0; nPg<nPgAnz; nPg++)
+    sal_uInt16 nPg,nPgCount=pSrcMod->GetPageCount();
+    for (nPg=0; nPg<nPgCount; nPg++)
     {
         const SdrPage* pSrcPg=pSrcMod->GetPage(nPg);
 

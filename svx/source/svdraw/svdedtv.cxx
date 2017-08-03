@@ -207,9 +207,9 @@ void SdrEditView::DeleteLayer(const OUString& rName)
         for(sal_uInt16 nPageKind(0); nPageKind < 2; nPageKind++)
         {
             // MasterPages and DrawPages
-            sal_uInt16 nPgAnz(bMaPg ? mpModel->GetMasterPageCount() : mpModel->GetPageCount());
+            sal_uInt16 nPgCount(bMaPg ? mpModel->GetMasterPageCount() : mpModel->GetPageCount());
 
-            for(sal_uInt16 nPgNum(0); nPgNum < nPgAnz; nPgNum++)
+            for(sal_uInt16 nPgNum(0); nPgNum < nPgCount; nPgNum++)
             {
                 // over all pages
                 SdrPage* pPage = (bMaPg) ? mpModel->GetMasterPage(nPgNum) : mpModel->GetPage(nPgNum);
