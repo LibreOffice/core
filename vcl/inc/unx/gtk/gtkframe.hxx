@@ -350,6 +350,7 @@ public:
     Idle                            m_aSmoothScrollIdle;
     int                             m_nGrabLevel;
     bool                            m_bSalObjectSetPosSize;
+    mutable std::unique_ptr<Weld::Window>   m_xFrameWeld;
 #endif
     GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
     GtkSalFrame( SystemParentData* pSysData );
@@ -535,6 +536,7 @@ public:
     virtual sal_uIntPtr         ShowPopover(const OUString& rHelpText, const tools::Rectangle& rHelpArea, QuickHelpFlags nFlags) override;
     virtual bool                UpdatePopover(sal_uIntPtr nId, const OUString& rHelpText, const tools::Rectangle& rHelpArea) override;
     virtual bool                HidePopover(sal_uIntPtr nId) override;
+    virtual Weld::Window*       GetFrameWeld() const override;
 #endif
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );

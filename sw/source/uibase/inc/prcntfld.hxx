@@ -98,6 +98,82 @@ public:
     void LockAutoCalculation(bool bLock) {bLockAutoCalculation = bLock;}
 };
 
+class SW_DLLPUBLIC NewPercentField
+{
+    std::unique_ptr<Weld::MetricSpinButton> m_xField;
+
+    double      nRefValue;      // 100% value for conversion (in Twips)
+    double      nOldMax;
+    double      nOldMin;
+    double      nOldStepSize;
+    double      nOldPageSize;
+    sal_Int64   nLastPercent;
+    sal_Int64   nLastValue;
+    sal_uInt16  nOldDigits;
+    FieldUnit   eOldUnit;
+    bool bLockAutoCalculation; //prevent recalculation of percent values when the
+                               //reference value is changed
+
+    SAL_DLLPRIVATE static sal_Int64 ImpPower10(sal_uInt16 n);
+
+public:
+
+    NewPercentField(Weld::MetricSpinButton* pField);
+    const Weld::MetricSpinButton* get() const { return m_xField.get(); }
+    Weld::MetricSpinButton* get() { return m_xField.get(); }
+    void connect_value_changed(const Link<Weld::MetricSpinButton&, void>& rLink) { m_xField->connect_value_changed(rLink); }
+//    void SetLoseFocusHdl(const Link<Control&,void>& rLink) { m_pField->SetLoseFocusHdl(rLink); }
+    void SetMetric(FieldUnit eUnit) { ::SetMetric(*m_xField, eUnit); }
+    void set_sensitive(bool bEnable = true) { m_xField->set_sensitive(bEnable); }
+    bool has_focus() const { return m_xField->has_focus(); }
+//    void SetAccessibleName(const OUString& rName) { m_pField->SetAccessibleName(rName); }
+    void set_text(const OUString& rStr) { m_xField->set_text(rStr); }
+    void save_value() { m_xField->save_value(); }
+//    void ClearModifyFlag() { m_pField->ClearModifyFlag(); }
+    bool get_value_changed_from_saved() const { return m_xField->get_value_changed_from_saved(); }
+    OUString get_text() const { return m_xField->get_text(); }
+    void SetMetricFieldMin(sal_Int64 nNewMin)
+    {
+        double min, max;
+        m_xField->get_range(min, max, m_xField->get_unit());
+        m_xField->set_range(nNewMin / (10.0 * m_xField->get_digits()), max, m_xField->get_unit());
+    }
+    void SetMetricFieldMax(sal_Int64 nNewMax)
+    {
+        double min, max;
+        m_xField->get_range(min, max, m_xField->get_unit());
+        m_xField->set_range(min, nNewMax / (10.0 * m_xField->get_digits()), m_xField->get_unit());
+    }
+
+//    void SetValue(sal_Int64 nNewValue) { m_pField->SetValue(nNewValue, FUNIT_NONE); }
+
+//    void SetLast(sal_Int64 nNewLast) { m_pField->SetLast(nNewLast); }
+
+    void SetPrcntValue(double nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+
+    void SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit);
+
+    void SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit);
+
+    double get_value(FieldUnit eOutUnit = FUNIT_NONE);
+
+    bool IsValueModified();
+
+    void SetMax(sal_Int64 nNewMax, FieldUnit eInUnit);
+
+    void SetMin(sal_Int64 nNewMin, FieldUnit eInUnit);
+
+//    sal_Int64 GetMin() const { return m_pField->GetMin(); }
+
+    void SetRefValue(sal_Int64 nValue);
+    sal_Int64 GetRealValue(FieldUnit eOutUnit);
+
+    sal_Int64 Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
+
+    void ShowPercent(bool bPercent);
+
+    void LockAutoCalculation(bool bLock) {bLockAutoCalculation = bLock;}
+};
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_PRCNTFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
