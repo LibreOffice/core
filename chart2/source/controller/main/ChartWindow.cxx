@@ -322,6 +322,9 @@ void ChartWindow::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags
 
 void ChartWindow::LogicInvalidate(const Rectangle* pRectangle)
 {
+    SfxViewShell* pCurrentShell = SfxViewShell::Current();
+    if ( nullptr == pCurrentShell )
+        return;
     OString sRectangle;
     if (!pRectangle)
     {
@@ -366,7 +369,6 @@ void ChartWindow::LogicInvalidate(const Rectangle* pRectangle)
 
         sRectangle = aRectangle.toString();
     }
-    SfxViewShell* pCurrentShell = SfxViewShell::Current();
     SfxLokHelper::notifyInvalidation(pCurrentShell, sRectangle);
 }
 
