@@ -26,6 +26,23 @@ get_file_size() {
   echo ${info[4]}
 }
 
+check_externals() {
+
+    # check whether we can call the mar executable
+    "$MAR" --version > /dev/null 2>&1
+    if [ $? != 0 ]; then
+        notice "Could not find a valid mar executable in the path or in the MAR environment variable"
+        exit 1
+    fi
+
+    # check whether we can access the bzip2 executable
+    "$BZIP2" --help > /dev/null 2>&1
+    if [ $? != 0 ]; then
+        notice "Could not find a valid bzip2 executable in the PATH or in the BZIP2 environment variable"
+        exit 1
+    fi
+}
+
 copy_perm() {
   reference="$1"
   target="$2"
