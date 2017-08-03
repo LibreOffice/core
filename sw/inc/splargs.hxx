@@ -94,7 +94,7 @@ struct SwSpellArgs : SwArgsBase
     bool bIsGrammarCheck;
 
     SwSpellArgs(css::uno::Reference<
-            css::linguistic2::XSpellChecker1 > &rxSplChk,
+            css::linguistic2::XSpellChecker1 > const &rxSplChk,
             SwTextNode* pStart, SwIndex& rStart,
             SwTextNode* pEnd, SwIndex& rEnd,
             bool bGrammar )

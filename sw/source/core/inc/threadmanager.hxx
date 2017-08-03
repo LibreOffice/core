@@ -47,7 +47,7 @@ class ThreadManager final
 {
     public:
 
-        explicit ThreadManager( css::uno::Reference< css::util::XJobManager >& rThreadJoiner );
+        explicit ThreadManager( css::uno::Reference< css::util::XJobManager > const & rThreadJoiner );
         ~ThreadManager();
 
         std::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef();

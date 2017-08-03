@@ -163,6 +163,7 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             || name == "PyUNOStruct_getattr"
             || name == "GoNext"
             || name == "GoPrevious"
+            || name == "lcl_SetOtherLineHeight"
              // #ifdef win32
             || name == "convert_slashes"
                 // UNO component entry points

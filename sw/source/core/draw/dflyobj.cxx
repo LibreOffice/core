@@ -388,7 +388,7 @@ namespace
     class RestoreMapMode
     {
         public:
-            explicit RestoreMapMode( SwViewShell* pViewShell )
+            explicit RestoreMapMode( SwViewShell const * pViewShell )
                 : mbMapModeRestored( false )
                 , mpOutDev( pViewShell->GetOut() )
             {

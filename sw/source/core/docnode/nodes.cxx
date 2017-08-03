@@ -113,7 +113,7 @@ SwNodes::~SwNodes()
     delete m_pEndOfContent;
 }
 
-void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
+void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
                         SwNodeIndex& rInsPos, bool bNewFrames )
 {
     // no need for frames in the UndoArea

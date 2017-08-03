@@ -723,7 +723,7 @@ const SwBoxAutoFormat& SwTableAutoFormat::GetDefaultBoxFormat()
 void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
                                     const SfxItemSet& rSet,
                                     UpdateFlags eFlags,
-                                    SvNumberFormatter* pNFormatr)
+                                    SvNumberFormatter const * pNFormatr)
 {
     OSL_ENSURE( nPos < 16, "wrong area" );
 

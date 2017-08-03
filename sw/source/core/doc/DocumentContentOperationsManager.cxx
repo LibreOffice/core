@@ -401,7 +401,7 @@ namespace
         }
     }
 
-    void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange& rCpyRg )
+    void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange const & rCpyRg )
     {
         SwDoc* pSrcDoc = rRg.aStart.GetNode().GetDoc();
         if( !pSrcDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )

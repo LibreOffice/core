@@ -287,7 +287,7 @@ public:
 
     enum UpdateFlags { UPDATE_CHAR = 1, UPDATE_BOX = 2, UPDATE_ALL = 3 };
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
-                                UpdateFlags eFlags, SvNumberFormatter* );
+                                UpdateFlags eFlags, SvNumberFormatter const * );
     void UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet, UpdateFlags eFlags,
                         SvNumberFormatter* ) const ;
 

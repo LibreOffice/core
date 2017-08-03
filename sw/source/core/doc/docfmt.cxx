@@ -695,7 +695,7 @@ void SwDoc::DelCharFormat(size_t nFormat, bool bBroadcast)
     getIDocumentState().SetModified();
 }
 
-void SwDoc::DelCharFormat( SwCharFormat *pFormat, bool bBroadcast )
+void SwDoc::DelCharFormat( SwCharFormat const *pFormat, bool bBroadcast )
 {
     size_t nFormat = mpCharFormatTable->GetPos( pFormat );
     OSL_ENSURE( SIZE_MAX != nFormat, "Format not found," );
@@ -999,7 +999,7 @@ void SwDoc::DelTextFormatColl(size_t nFormatColl, bool bBroadcast)
     getIDocumentState().SetModified();
 }
 
-void SwDoc::DelTextFormatColl( SwTextFormatColl *pColl, bool bBroadcast )
+void SwDoc::DelTextFormatColl( SwTextFormatColl const *pColl, bool bBroadcast )
 {
     size_t nFormat = mpTextFormatCollTable->GetPos( pColl );
     OSL_ENSURE( SIZE_MAX != nFormat, "Collection not found," );
@@ -1259,7 +1259,7 @@ SwGrfFormatColl* SwDoc::CopyGrfColl( const SwGrfFormatColl& rColl )
 }
 
 void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
-                        SwFormatsBase& rDestArr,
+                        SwFormatsBase const & rDestArr,
                         FNCopyFormat fnCopyFormat,
                         SwFormat& rDfltFormat )
 {

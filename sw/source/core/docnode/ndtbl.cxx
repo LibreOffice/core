@@ -2573,7 +2573,7 @@ bool FuzzyCompare::operator() ( long s1, long s2 ) const
     return ( s1 < s2 && std::abs( s1 - s2 ) > ROWFUZZY );
 }
 
-static bool lcl_IsFrameInColumn( const SwCellFrame& rFrame, SwSelBoxes& rBoxes )
+static bool lcl_IsFrameInColumn( const SwCellFrame& rFrame, SwSelBoxes const & rBoxes )
 {
     for (size_t i = 0; i < rBoxes.size(); ++i)
     {
@@ -4213,7 +4213,7 @@ void SwDoc::SetTableBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet )
     getIDocumentState().SetModified();
 }
 
-void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
+void SwDoc::ClearLineNumAttrs( SwPosition const & rPos )
 {
     SwPaM aPam(rPos);
     aPam.Move(fnMoveBackward);

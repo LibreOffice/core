@@ -123,7 +123,7 @@ class SW_DLLPUBLIC SwNodes
     static void SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd );
     void DelNodes( const SwNodeIndex& rStart, sal_uLong nCnt = 1 );
 
-    void ChgNode( SwNodeIndex& rDelPos, sal_uLong nSize,
+    void ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSize,
                   SwNodeIndex& rInsPos, bool bNewFrames );
 
     void UpdateOutlineIdx( const SwNode& );   ///< Update all OutlineNodes starting from Node.

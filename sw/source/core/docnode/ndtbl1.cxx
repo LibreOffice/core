@@ -69,7 +69,7 @@ public:
 
     SwTableFormatCmp( SwFrameFormat *pOld, SwFrameFormat *pNew, sal_Int16 nType );
 
-    static SwFrameFormat *FindNewFormat( std::vector<SwTableFormatCmp*> &rArr, SwFrameFormat*pOld, sal_Int16 nType );
+    static SwFrameFormat *FindNewFormat( std::vector<SwTableFormatCmp*> &rArr, SwFrameFormat const *pOld, sal_Int16 nType );
     static void Delete( std::vector<SwTableFormatCmp*> &rArr );
 };
 
@@ -78,7 +78,7 @@ SwTableFormatCmp::SwTableFormatCmp( SwFrameFormat *pO, SwFrameFormat *pN, sal_In
 {
 }
 
-SwFrameFormat *SwTableFormatCmp::FindNewFormat( std::vector<SwTableFormatCmp*> &rArr, SwFrameFormat *pOld, sal_Int16 nType )
+SwFrameFormat *SwTableFormatCmp::FindNewFormat( std::vector<SwTableFormatCmp*> &rArr, SwFrameFormat const *pOld, sal_Int16 nType )
 {
     for ( auto pCmp : rArr )
     {

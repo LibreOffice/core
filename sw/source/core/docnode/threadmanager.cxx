@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 */
 const std::deque< ThreadManager::tThreadData >::size_type ThreadManager::mnStartedSize = 10;
 
-ThreadManager::ThreadManager( uno::Reference< util::XJobManager >& rThreadJoiner )
+ThreadManager::ThreadManager( uno::Reference< util::XJobManager > const & rThreadJoiner )
     : maMutex(),
       mrThreadJoiner( rThreadJoiner ),
       mpThreadListener(),
