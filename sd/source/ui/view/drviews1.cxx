@@ -1171,7 +1171,7 @@ void DrawViewShell::ResetActualLayer()
                         if (pPV && !pPV->IsLayerVisible(aName))
                         {
                             // invisible layers are displayed differently
-                            nBits = TPB_SPECIAL;
+                            nBits = TPB_DISPLAY_NAME_BLUE;
                         }
 
                         pLayerBar->SetPageBits(nLayerPos+1, nBits);
@@ -1189,7 +1189,7 @@ void DrawViewShell::ResetActualLayer()
                         if (!mpDrawView->GetSdrPageView()->IsLayerVisible(aName))
                         {
                             // invisible layers are displayed differently
-                            nBits = TPB_SPECIAL;
+                            nBits = TPB_DISPLAY_NAME_BLUE;
                         }
 
                         pLayerBar->SetPageBits(nLayerPos+1, nBits);

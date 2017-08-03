@@ -52,7 +52,11 @@ WB_TOPBORDER and WB_3DTAB should be set instead of WB_BORDER.
 Allowed PageBits
 -----------------
 
-TPB_SPECIAL     - Different display of the TabText, e.g. for scenario pages.
+Setting page bits modify the display attributes of the tab name
+
+TPB_DISPLAY_NAME_BLUE
+                - Display tab name in light blue, used in draw for
+                  invisible layers and in calc for scenario pages
 
 Handlers
 -------
@@ -272,7 +276,7 @@ class Button;
 
 typedef sal_uInt16 TabBarPageBits;
 
-#define TPB_SPECIAL         ((TabBarPageBits)0x0001)
+#define TPB_DISPLAY_NAME_BLUE      ((TabBarPageBits)0x0001)
 
 // - TabBar-Types - used in TabBar::AllowRenaming
 
