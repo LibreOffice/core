@@ -2887,7 +2887,7 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
     if (!m_MergeGroups.empty())
     {
         // still valid area near the boundery
-        const short nToleranz = 4;
+        const short nTolerance = 4;
         // box boundery
         short nX2 = nX1 + nWidth;
         // approximate group boundery
@@ -2902,9 +2902,9 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
             if (!rActGroup.bGroupLocked)
             {
                 // approximate group boundery with room (tolerance) to the *outside*
-                nGrX1 = rActGroup.nGroupXStart - nToleranz;
+                nGrX1 = rActGroup.nGroupXStart - nTolerance;
                 nGrX2 = rActGroup.nGroupXStart
-                             +rActGroup.nGroupWidth  + nToleranz;
+                        + rActGroup.nGroupWidth + nTolerance;
 
                 // If box fits report success
 
@@ -2919,8 +2919,8 @@ WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
                 {
                     // successful if nX1 *or* nX2 are inside the group
                     if(    (     ( nX1 > nGrX1 )
-                                        && ( nX1 < nGrX2 - 2*nToleranz ) )
-                            || (     ( nX2 > nGrX1 + 2*nToleranz )
+                                        && ( nX1 < nGrX2 - 2*nTolerance ) )
+                            || (     ( nX2 > nGrX1 + 2*nTolerance )
                                         && ( nX2 < nGrX2 ) )
                             // or nX1 and nX2 surround the group
                             || (     ( nX1 <=nGrX1 )
