@@ -86,7 +86,6 @@ private:
 
     void HandleMainViewSwitch (
         const OUString& rsViewURL,
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration,
         const bool bIsActivated);
     void HandleResourceRequest(
         bool bActivation,

@@ -229,16 +229,13 @@ static tools::Rectangle NWGetTabItemRect( SalX11Screen nScreen, tools::Rectangle
 static tools::Rectangle NWGetEditBoxPixmapRect( SalX11Screen nScreen, tools::Rectangle aAreaRect );
 
 static void NWPaintOneEditBox( SalX11Screen nScreen, GdkDrawable * gdkDrawable, GdkRectangle const *gdkRect,
-                               ControlType nType, ControlPart nPart, tools::Rectangle aEditBoxRect,
-                               ControlState nState, const ImplControlValue& aValue,
-                               const OUString& rCaption );
+                               ControlType nType, tools::Rectangle aEditBoxRect,
+                               ControlState nState );
 
-static tools::Rectangle NWGetSpinButtonRect( SalX11Screen nScreen, ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect, ControlState nState,
-                            const ImplControlValue& aValue, const OUString& rCaption );
+static tools::Rectangle NWGetSpinButtonRect( SalX11Screen nScreen, ControlPart nPart, tools::Rectangle aAreaRect );
 
-static void NWPaintOneSpinButton( SalX11Screen nScreen, GdkPixmap * pixmap, ControlType nType, ControlPart nPart, tools::Rectangle aAreaRect,
-                            ControlState nState, const ImplControlValue& aValue,
-                            const OUString& rCaption );
+static void NWPaintOneSpinButton( SalX11Screen nScreen, GdkPixmap * pixmap, ControlPart nPart, tools::Rectangle aAreaRect,
+                            ControlState nState );
 
 static tools::Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen, ControlPart nPart, tools::Rectangle aAreaRect );
 
@@ -830,7 +827,7 @@ bool GtkSalGraphics::hitTestNativeControl( ControlType        nType,
 
 bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
         const tools::Rectangle& rControlRegion, ControlState nState,
-        const ImplControlValue& aValue, const OUString& rCaption)
+        const ImplControlValue& aValue, const OUString& /*rCaption*/)
 {
     // get a GC with current clipping region set
     GetFontGC();
@@ -926,7 +923,7 @@ bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
             return false;
 
         returnVal = DoDrawNativeControl(gdkDrawable[i], nType, nPart, aCtrlRect, aClip,
-                                        nState, aValue, rCaption, aControlCacheKey);
+                                        nState, aValue, aControlCacheKey);
         if( !returnVal )
             break;
     }
@@ -948,7 +945,6 @@ bool GtkSalGraphics::DoDrawNativeControl(
                             const std::list< tools::Rectangle >& aClip,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            const OUString& rCaption,
                             ControlCacheKey& rControlCacheKey)
 {
     if ( (nType==ControlType::Pushbutton) && (nPart==ControlPart::Entire) )
@@ -972,23 +968,23 @@ bool GtkSalGraphics::DoDrawNativeControl(
     || ((nType==ControlType::Combobox) && (nPart==ControlPart::HasBackgroundTexture))
     || ((nType==ControlType::Listbox) && (nPart==ControlPart::HasBackgroundTexture)) )
     {
-        return NWPaintGTKEditBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKEditBox( pDrawable, nType, aCtrlRect, aClip, nState );
     }
     else if ( (nType==ControlType::MultilineEditbox) && ((nPart==ControlPart::Entire) || (nPart==ControlPart::HasBackgroundTexture)) )
     {
-        return NWPaintGTKEditBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKEditBox( pDrawable, nType, aCtrlRect, aClip, nState );
     }
     else if ( ((nType==ControlType::Spinbox) || (nType==ControlType::SpinButtons))
         && ((nPart==ControlPart::Entire) || (nPart==ControlPart::AllButtons)) )
     {
-        return NWPaintGTKSpinBox(nType, nPart, aCtrlRect, nState, aValue, rCaption, rControlCacheKey);
+        return NWPaintGTKSpinBox(nType, nPart, aCtrlRect, nState, aValue, rControlCacheKey);
     }
     else if ( (nType == ControlType::Combobox) &&
         ( (nPart==ControlPart::Entire)
         ||(nPart==ControlPart::ButtonDown)
         ) )
     {
-        return NWPaintGTKComboBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKComboBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState );
     }
     else if ( (nType==ControlType::TabItem) || (nType==ControlType::TabPane) || (nType==ControlType::TabBody) )
     {
@@ -1070,7 +1066,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                                 const tools::Rectangle& rControlRegion,
                                 ControlState nState,
                                 const ImplControlValue& aValue,
-                                const OUString& rCaption,
+                                const OUString& /*rCaption*/,
                                 tools::Rectangle &rNativeBoundingRegion,
                                 tools::Rectangle &rNativeContentRegion )
 {
@@ -1100,8 +1096,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     if ( (nType==ControlType::Spinbox) && ((nPart==ControlPart::ButtonUp) || (nPart==ControlPart::ButtonDown) || (nPart==ControlPart::SubEdit)) )
     {
 
-        rNativeBoundingRegion = NWGetSpinButtonRect( m_nXScreen, nType, nPart, rControlRegion, nState,
-        aValue, rCaption );
+        rNativeBoundingRegion = NWGetSpinButtonRect( m_nXScreen, nPart, rControlRegion );
         rNativeContentRegion = rNativeBoundingRegion;
 
         returnVal = true;
@@ -2260,12 +2255,10 @@ static tools::Rectangle NWGetScrollButtonRect(    SalX11Screen nScreen, ControlP
 }
 
 bool GtkSalGraphics::NWPaintGTKEditBox( GdkDrawable* gdkDrawable,
-                                        ControlType nType, ControlPart nPart,
+                                        ControlType nType,
                                         const tools::Rectangle& rControlRectangle,
                                         const std::list< tools::Rectangle >& rClipList,
-                                        ControlState nState,
-                                        const ImplControlValue& aValue,
-                                        const OUString& rCaption )
+                                        ControlState nState )
 {
     tools::Rectangle        pixmapRect;
     GdkRectangle    clipRect;
@@ -2280,7 +2273,7 @@ bool GtkSalGraphics::NWPaintGTKEditBox( GdkDrawable* gdkDrawable,
         clipRect.width = it->GetWidth();
         clipRect.height = it->GetHeight();
 
-        NWPaintOneEditBox( m_nXScreen, gdkDrawable, &clipRect, nType, nPart, pixmapRect, nState, aValue, rCaption );
+        NWPaintOneEditBox( m_nXScreen, gdkDrawable, &clipRect, nType, pixmapRect, nState );
     }
 
     return true;
@@ -2318,15 +2311,12 @@ static tools::Rectangle NWGetEditBoxPixmapRect(SalX11Screen nScreen,
  * All coordinates should be local to the Pixmap, NOT
  * screen/window coordinates.
  */
-static void NWPaintOneEditBox(    SalX11Screen nScreen,
+static void NWPaintOneEditBox(  SalX11Screen nScreen,
                                 GdkDrawable * gdkDrawable,
                                 GdkRectangle const *   gdkRect,
                                 ControlType            nType,
-                                ControlPart,
-                                tools::Rectangle                aEditBoxRect,
-                                ControlState            nState,
-                                const ImplControlValue&,
-                                const OUString& )
+                                tools::Rectangle       aEditBoxRect,
+                                ControlState           nState )
 {
     GtkStateType    stateType;
     GtkShadowType    shadowType;
@@ -2390,7 +2380,6 @@ bool GtkSalGraphics::NWPaintGTKSpinBox(ControlType nType, ControlPart nPart,
                                        const tools::Rectangle& rControlRectangle,
                                        ControlState nState,
                                        const ImplControlValue& aValue,
-                                       const OUString& rCaption,
                                        ControlCacheKey& rControlCacheKey)
 {
     tools::Rectangle            pixmapRect;
@@ -2430,8 +2419,8 @@ bool GtkSalGraphics::NWPaintGTKSpinBox(ControlType nType, ControlPart nPart,
                 pixmapRect.Right(),
                 pixmapRect.Bottom() );
 
-        upBtnRect = NWGetSpinButtonRect( m_nXScreen, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
-        downBtnRect = NWGetSpinButtonRect( m_nXScreen, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
+        upBtnRect = NWGetSpinButtonRect( m_nXScreen, upBtnPart, pixmapRect );
+        downBtnRect = NWGetSpinButtonRect( m_nXScreen, downBtnPart, pixmapRect );
 
         if ( (nType==ControlType::Spinbox) && (nPart!=ControlPart::AllButtons) )
         {
@@ -2444,7 +2433,7 @@ bool GtkSalGraphics::NWPaintGTKSpinBox(ControlType nType, ControlPart nPart,
                 aEditBoxRect.setX( 0 );
             aEditBoxRect.setY( 0 );
 
-            NWPaintOneEditBox( m_nXScreen, gdkPixmap, nullptr, nType, nPart, aEditBoxRect, nState, aValue, rCaption );
+            NWPaintOneEditBox( m_nXScreen, gdkPixmap, nullptr, nType, aEditBoxRect, nState );
         }
 
         NWSetWidgetState( gWidgetData[m_nXScreen].gSpinButtonWidget, nState, stateType );
@@ -2461,21 +2450,17 @@ bool GtkSalGraphics::NWPaintGTKSpinBox(ControlType nType, ControlPart nPart,
                 shadowRect.GetWidth(), shadowRect.GetHeight() );
         }
 
-        NWPaintOneSpinButton( m_nXScreen, gdkPixmap, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
-        NWPaintOneSpinButton( m_nXScreen, gdkPixmap, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
+        NWPaintOneSpinButton( m_nXScreen, gdkPixmap, upBtnPart, pixmapRect, upBtnState );
+        NWPaintOneSpinButton( m_nXScreen, gdkPixmap, downBtnPart, pixmapRect, downBtnState );
     }
     END_PIXMAP_RENDER_WITH_CONTROL_KEY(pixmapRect, rControlCacheKey);
 
     return true;
 }
 
-static tools::Rectangle NWGetSpinButtonRect( SalX11Screen nScreen,
-                                      ControlType,
-                                      ControlPart            nPart,
-                                      tools::Rectangle             aAreaRect,
-                                      ControlState,
-                                      const ImplControlValue&,
-                                      const OUString& )
+static tools::Rectangle NWGetSpinButtonRect( SalX11Screen     nScreen,
+                                             ControlPart      nPart,
+                                             tools::Rectangle aAreaRect )
 {
     gint            buttonSize;
     tools::Rectangle        buttonRect;
@@ -2517,14 +2502,11 @@ static tools::Rectangle NWGetSpinButtonRect( SalX11Screen nScreen,
     return buttonRect;
 }
 
-static void NWPaintOneSpinButton( SalX11Screen nScreen,
+static void NWPaintOneSpinButton( SalX11Screen          nScreen,
                                   GdkPixmap*            pixmap,
-                                  ControlType            nType,
-                                  ControlPart            nPart,
-                                  tools::Rectangle                aAreaRect,
-                                  ControlState            nState,
-                                  const ImplControlValue&    aValue,
-                                  const OUString&                rCaption )
+                                  ControlPart           nPart,
+                                  tools::Rectangle      aAreaRect,
+                                  ControlState          nState )
 {
     tools::Rectangle            buttonRect;
     GtkStateType        stateType;
@@ -2535,7 +2517,7 @@ static void NWPaintOneSpinButton( SalX11Screen nScreen,
     NWEnsureGTKSpinButton( nScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
-    buttonRect = NWGetSpinButtonRect( nScreen, nType, nPart, aAreaRect, nState, aValue, rCaption );
+    buttonRect = NWGetSpinButtonRect( nScreen, nPart, aAreaRect );
 
     NWSetWidgetState( gWidgetData[nScreen].gSpinButtonWidget, nState, stateType );
     gtk_paint_box( gWidgetData[nScreen].gSpinButtonWidget->style, pixmap, stateType, shadowType, nullptr, gWidgetData[nScreen].gSpinButtonWidget,
@@ -2562,9 +2544,7 @@ bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
                                          ControlType nType, ControlPart nPart,
                                          const tools::Rectangle& rControlRectangle,
                                          const std::list< tools::Rectangle >& rClipList,
-                                         ControlState nState,
-                                         const ImplControlValue& aValue,
-                                         const OUString& rCaption )
+                                         ControlState nState )
 {
     tools::Rectangle        pixmapRect;
     tools::Rectangle        buttonRect;
@@ -2612,8 +2592,8 @@ bool GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
         clipRect.height = it->GetHeight();
 
         if( nPart == ControlPart::Entire )
-            NWPaintOneEditBox( m_nXScreen, gdkDrawable, &clipRect, nType, nPart, aEditBoxRect,
-                               nState, aValue, rCaption );
+            NWPaintOneEditBox( m_nXScreen, gdkDrawable, &clipRect, nType, aEditBoxRect,
+                               nState );
 
         // Buttons must paint opaque since some themes have alpha-channel enabled buttons
         gtk_paint_flat_box( m_pWindow->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,

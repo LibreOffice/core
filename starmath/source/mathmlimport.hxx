@@ -99,129 +99,67 @@ public:
         const css::uno::Reference <
         css::xml::sax::XAttributeList> &xAttrList) override;
     SvXMLImportContext *CreateRowContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateEncloseContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateFracContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateNumberContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateTextContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateAnnotationContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateStringContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateIdentifierContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateOperatorContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateSpaceContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateSqrtContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateRootContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateStyleContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreatePaddedContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreatePhantomContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateFencedContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateErrorContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateSubContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateSupContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateSubSupContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateUnderContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateOverContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateUnderOverContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateMultiScriptsContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateNoneContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreatePrescriptsContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateTableContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateTableRowContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateTableCellContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateAlignGroupContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
     SvXMLImportContext *CreateActionContext(sal_uInt16 nPrefix,
-        const OUString &rLocalName,
-        const css::uno::Reference <
-        css::xml::sax::XAttributeList> &xAttrList);
+        const OUString &rLocalName);
 
     const SvXMLTokenMap &GetPresLayoutElemTokenMap();
     const SvXMLTokenMap &GetPresLayoutAttrTokenMap();

@@ -905,8 +905,7 @@ public:
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 
     SvXMLImportContext *StrictCreateChildContext(sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > &xAttrList);
+        const OUString& rLocalName);
 
     void EndElement() override;
 };
@@ -2189,7 +2188,7 @@ const SvXMLTokenMap& SmXMLImport::GetMspaceAttrTokenMap()
 SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+    const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -2199,86 +2198,69 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
     {
         //Consider semantics a dummy except for any starmath annotations
         case XML_TOK_SEMANTICS:
-            pContext = GetSmImport().CreateRowContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateRowContext(nPrefix,rLocalName);
             break;
         /*General Layout Schemata*/
         case XML_TOK_MROW:
-            pContext = GetSmImport().CreateRowContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateRowContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MENCLOSE:
-            pContext = GetSmImport().CreateEncloseContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateEncloseContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MFRAC:
-            pContext = GetSmImport().CreateFracContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateFracContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MSQRT:
-            pContext = GetSmImport().CreateSqrtContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateSqrtContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MROOT:
-            pContext = GetSmImport().CreateRootContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateRootContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MSTYLE:
-            pContext = GetSmImport().CreateStyleContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateStyleContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MERROR:
-            pContext = GetSmImport().CreateErrorContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateErrorContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MPADDED:
-            pContext = GetSmImport().CreatePaddedContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreatePaddedContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MPHANTOM:
-            pContext = GetSmImport().CreatePhantomContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreatePhantomContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MFENCED:
-            pContext = GetSmImport().CreateFencedContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateFencedContext(nPrefix,rLocalName);
             break;
         /*Script and Limit Schemata*/
         case XML_TOK_MSUB:
-            pContext = GetSmImport().CreateSubContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateSubContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MSUP:
-            pContext = GetSmImport().CreateSupContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateSupContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MSUBSUP:
-            pContext = GetSmImport().CreateSubSupContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateSubSupContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MUNDER:
-            pContext = GetSmImport().CreateUnderContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateUnderContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MOVER:
-            pContext = GetSmImport().CreateOverContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateOverContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MUNDEROVER:
-            pContext = GetSmImport().CreateUnderOverContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateUnderOverContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MMULTISCRIPTS:
             pContext = GetSmImport().CreateMultiScriptsContext(nPrefix,
-                rLocalName, xAttrList);
+                rLocalName);
             break;
         case XML_TOK_MTABLE:
             pContext = GetSmImport().CreateTableContext(nPrefix,
-                rLocalName, xAttrList);
+                rLocalName);
             break;
         case XML_TOK_MACTION:
             pContext = GetSmImport().CreateActionContext(nPrefix,
-                rLocalName, xAttrList);
+                rLocalName);
             break;
         default:
             /*Basically theres an implicit mrow around certain bare
@@ -2288,7 +2270,7 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
                 GetXMLToken(XML_MROW)));
 
             pContext = aTempContext->StrictCreateChildContext(nPrefix,
-                rLocalName, xAttrList);
+                rLocalName);
             break;
     }
     return pContext;
@@ -2486,8 +2468,7 @@ void SmXMLRowContext_Impl::EndElement()
 
 SvXMLImportContext *SmXMLRowContext_Impl::StrictCreateChildContext(
     sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+    const OUString& rLocalName)
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -2496,40 +2477,32 @@ SvXMLImportContext *SmXMLRowContext_Impl::StrictCreateChildContext(
     {
         /*Note that these should accept malignmark subelements, but do not*/
         case XML_TOK_MN:
-            pContext = GetSmImport().CreateNumberContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateNumberContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MI:
-            pContext = GetSmImport().CreateIdentifierContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateIdentifierContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MO:
-            pContext = GetSmImport().CreateOperatorContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateOperatorContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MTEXT:
-            pContext = GetSmImport().CreateTextContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateTextContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MSPACE:
-            pContext = GetSmImport().CreateSpaceContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateSpaceContext(nPrefix,rLocalName);
             break;
         case XML_TOK_MS:
-            pContext = GetSmImport().CreateStringContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateStringContext(nPrefix,rLocalName);
             break;
 
         /*Note: The maligngroup should only be seen when the row
          * (or descendants) are in a table*/
         case XML_TOK_MALIGNGROUP:
-            pContext = GetSmImport().CreateAlignGroupContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateAlignGroupContext(nPrefix,rLocalName);
             break;
 
         case XML_TOK_ANNOTATION:
-            pContext = GetSmImport().CreateAnnotationContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateAnnotationContext(nPrefix,rLocalName);
             break;
 
         default:
@@ -2545,7 +2518,7 @@ SvXMLImportContext *SmXMLRowContext_Impl::CreateChildContext(
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
     SvXMLImportContext* pContext = StrictCreateChildContext(nPrefix,
-    rLocalName, xAttrList);
+            rLocalName);
 
     if (!pContext)
     {
@@ -2573,11 +2546,10 @@ SvXMLImportContext *SmXMLMultiScriptsContext_Impl::CreateChildContext(
             bHasPrescripts = true;
             ProcessSubSupPairs(false);
             pContext = GetSmImport().CreatePrescriptsContext(nPrefix,
-                rLocalName, xAttrList);
+                rLocalName);
             break;
         case XML_TOK_NONE:
-            pContext = GetSmImport().CreateNoneContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateNoneContext(nPrefix,rLocalName);
             break;
         default:
             pContext = SmXMLRowContext_Impl::CreateChildContext(nPrefix,
@@ -2725,7 +2697,7 @@ SvXMLImportContext *SmXMLTableRowContext_Impl::CreateChildContext(
     {
         case XML_TOK_MTD:
             pContext = GetSmImport().CreateTableCellContext(nPrefix,
-                rLocalName, xAttrList);
+                rLocalName);
             break;
         default:
             pContext = SmXMLRowContext_Impl::CreateChildContext(nPrefix,
@@ -2747,8 +2719,7 @@ SvXMLImportContext *SmXMLTableContext_Impl::CreateChildContext(
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
         case XML_TOK_MTR:
-            pContext = GetSmImport().CreateTableRowContext(nPrefix,rLocalName,
-                xAttrList);
+            pContext = GetSmImport().CreateTableRowContext(nPrefix,rLocalName);
             break;
         default:
             pContext = SmXMLTableRowContext_Impl::CreateChildContext(nPrefix,
@@ -2847,217 +2818,186 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
 }
 
 SvXMLImportContext *SmXMLImport::CreateRowContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
         return new SmXMLRowContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateTextContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLTextContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateAnnotationContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLAnnotationContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateStringContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLStringContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateNumberContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLNumberContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateIdentifierContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLIdentifierContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateOperatorContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLOperatorContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateSpaceContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLSpaceContext_Impl(*this,nPrefix,rLocalName);
 }
 
 
 SvXMLImportContext *SmXMLImport::CreateEncloseContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLEncloseContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateFracContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLFracContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateSqrtContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLSqrtContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateRootContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLRootContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateStyleContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLStyleContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreatePaddedContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLPaddedContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreatePhantomContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLPhantomContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateFencedContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLFencedContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateErrorContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLErrorContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateSubContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLSubContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateSubSupContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLSubSupContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateSupContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLSupContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateUnderContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
         return new SmXMLUnderContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateOverContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLOverContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateUnderOverContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLUnderOverContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateMultiScriptsContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLMultiScriptsContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateTableContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLTableContext_Impl(*this,nPrefix,rLocalName);
 }
 SvXMLImportContext *SmXMLImport::CreateTableRowContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLTableRowContext_Impl(*this,nPrefix,rLocalName);
 }
 SvXMLImportContext *SmXMLImport::CreateTableCellContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLTableCellContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateNoneContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLNoneContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreatePrescriptsContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLPrescriptsContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateAlignGroupContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLAlignGroupContext_Impl(*this,nPrefix,rLocalName);
 }
 
 SvXMLImportContext *SmXMLImport::CreateActionContext(sal_uInt16 nPrefix,
-    const OUString &rLocalName,
-    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+    const OUString &rLocalName)
 {
     return new SmXMLActionContext_Impl(*this,nPrefix,rLocalName);
 }
