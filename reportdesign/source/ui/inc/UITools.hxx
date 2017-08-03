@@ -126,7 +126,7 @@ namespace rptui
             ::comphelper::mem_fun(&TaskPaneList::AddWindow)
             ::comphelper::mem_fun(&TaskPaneList::RemoveWindow)
     */
-    void notifySystemWindow(vcl::Window* pWindow, vcl::Window* pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList, vcl::Window*>& rMemFunc);
+    void notifySystemWindow(vcl::Window const * pWindow, vcl::Window* pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList, vcl::Window*>& rMemFunc);
 
 
     const sal_Int16 ISOVER_IGNORE_CUSTOMSHAPES = 1;
@@ -138,9 +138,9 @@ namespace rptui
     * \param _bAllObjects  if <TRUE/> all objects are taken into account, otherwise only not marked ones
     * \return the object which is overlapped, otherwise <NULL/>
     */
-    SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects = false,SdrObject* _pIgnore = nullptr, sal_Int16 _nIgnoreType=0);
+    SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage const & _rPage,SdrView const & _rView,bool _bAllObjects = false,SdrObject const * _pIgnore = nullptr, sal_Int16 _nIgnoreType=0);
 
-    SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects, SdrUnoObj* _pIgnoreList[], int _nIgnoreListLength);
+    SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage const & _rPage,SdrView const & _rView,bool _bAllObjects, SdrUnoObj* _pIgnoreList[], int _nIgnoreListLength);
 
     /** checks whether the given OUnoObject object rectangle overlapps another object in that view.
     *
@@ -149,7 +149,7 @@ namespace rptui
     * \param _rView
     * \return the object which is overlapped, otherwise <NULL/>. If the given object is not of type OUnoObject <NULL/> will be returned.
     */
-    SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView);
+    SdrObject* isOver(SdrObject const * _pObj,SdrPage const & _rPage,SdrView const & _rView);
 
     /** retrieves the names of the parameters of the command which the given RowSet is bound to
     */
@@ -162,7 +162,7 @@ namespace rptui
     * \param _pReportSection    the section
     * \param _bInsert           sal_True when the control should be inserted, otherwise not.
     */
-    void correctOverlapping(SdrObject* pControl,OReportSection& _aReportSection,bool _bInsert = true);
+    void correctOverlapping(SdrObject* pControl,OReportSection const & _aReportSection,bool _bInsert = true);
 
     /** returns a Rectangle of a given SdrObject
      *

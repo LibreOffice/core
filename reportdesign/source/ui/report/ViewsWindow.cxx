@@ -54,7 +54,7 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,long& _nXMov, long& _nYMov,SdrObject* _pObj,SdrView* _pView, ControlModification _nControlModification, bool _bBoundRects)
+bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,long& _nXMov, long& _nYMov,SdrObject const * _pObj,SdrView const * _pView, ControlModification _nControlModification, bool _bBoundRects)
 {
     bool bMoveAllowed = _nXMov != 0 || _nYMov != 0;
     if ( bMoveAllowed )
@@ -75,7 +75,7 @@ bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,long& _nXMov, long& _n
                     aNewRect.Move(_nXMov,_nYMov);
                     break;
             }
-            if (dynamic_cast<OUnoObject*>(_pObj) != nullptr || dynamic_cast<OOle2Obj*>(_pObj) != nullptr)
+            if (dynamic_cast<OUnoObject const *>(_pObj) != nullptr || dynamic_cast<OOle2Obj const *>(_pObj) != nullptr)
             {
                 pOverlappedObj = isOver(aNewRect,*_pObj->GetPage(),*_pView,true,_pObj);
                 if ( pOverlappedObj && _pObj != pOverlappedObj )
@@ -504,7 +504,7 @@ void OViewsWindow::SelectAll(const sal_uInt16 _nObjectType)
     m_bInUnmark = false;
 }
 
-void OViewsWindow::unmarkAllObjects(OSectionView* _pSectionView)
+void OViewsWindow::unmarkAllObjects(OSectionView const * _pSectionView)
 {
     if ( !m_bInUnmark )
     {
@@ -598,7 +598,7 @@ OViewsWindow::TSectionsMap::iterator OViewsWindow::getIteratorAtPos(sal_uInt16 _
     return aRet;
 }
 
-void OViewsWindow::setMarked(OSectionView* _pSectionView, bool _bMark)
+void OViewsWindow::setMarked(OSectionView const * _pSectionView, bool _bMark)
 {
     OSL_ENSURE(_pSectionView != nullptr,"SectionView is NULL!");
     if ( _pSectionView )

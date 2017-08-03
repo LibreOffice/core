@@ -146,7 +146,7 @@ uno::Reference< uno::XInterface > OReportPage::createUnoPage()
     return static_cast<cppu::OWeakObject*>( new reportdesign::OReportDrawPage(this,m_xSection) );
 }
 
-void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
+void OReportPage::removeTempObject(SdrObject const *_pToRemoveObj)
 {
     if (_pToRemoveObj)
     {

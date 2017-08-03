@@ -187,7 +187,7 @@ namespace rptui
         *
         * @param _pSectionView The view where the objects should not be unmarked.
         */
-        void            unmarkAllObjects(OSectionView* _pSectionView);
+        void            unmarkAllObjects(OSectionView const * _pSectionView);
 
         /** returns the report section window for the given xsection
             @param  _xSection   the section
@@ -204,7 +204,7 @@ namespace rptui
             @param  _pSectionView   the section where to set the marked flag
             @param  _bMark  the marked flag
         */
-        void            setMarked(OSectionView* _pSectionView, bool _bMark);
+        void            setMarked(OSectionView const * _pSectionView, bool _bMark);
         void            setMarked(const css::uno::Reference< css::report::XSection>& _xSection, bool _bMark);
         void            setMarked(const css::uno::Sequence< css::uno::Reference< css::report::XReportComponent> >& _xShape, bool _bMark);
 

@@ -105,7 +105,7 @@ namespace rptui
         *
         * \param _pPage
         */
-        void RemoveSection(OReportPage* _pPage);
+        void RemoveSection(OReportPage const * _pPage);
 
     protected:
         // XEventListener
