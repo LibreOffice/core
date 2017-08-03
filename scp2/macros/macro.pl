@@ -175,8 +175,11 @@ sub write_MO_ALL_LANG_EXCEPT_EN_US_AND_QTZ
         if (($lang ne "en-US") and ($lang ne "qtz")) {
             print OUTFILE "; " unless $first;
             $first = 0;
+            my $SRC_ROOT = $ENV{"SRC_ROOT"};
+            my $langdir = `$SRC_ROOT/solenv/bin/localestr $lang`;
+            chomp $langdir;
             print OUTFILE
-                "\\\n\tName ($lang) = STRING(CONCAT3($lang/LC_MESSAGES/,name,.mo))";
+                "\\\n\tName ($lang) = STRING(CONCAT3($langdir/LC_MESSAGES/,name,.mo))";
         }
     }
     print OUTFILE "\n\n";

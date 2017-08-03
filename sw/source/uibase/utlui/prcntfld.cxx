@@ -43,6 +43,26 @@ void PercentField::set(MetricField *pField)
     m_pField->SetCustomUnitText(OUString('%'));
 }
 
+#if 0
+NewPercentField::NewPercentField(Weld::MetricSpinButton* pField)
+    : m_xField(pField)
+    , nOldMax(0)
+    , nOldMin(0)
+    , nOldBaseValue(0)
+    , nLastPercent(-1)
+    , nLastValue(-1)
+    , nOldDigits(0)
+    , eOldUnit(m_xField->get_unit())
+    , bLockAutoCalculation(false)
+{
+    m_xField->get_increments(nOldStepSize, nOldPageSize);
+        void get_range(double& min, double& max, FieldUnit eDestUnit) const
+    nRefValue = DenormalizePercent(m_xField->GetMax(FUNIT_TWIP));
+    nOldDigits = m_xField->get_digits();
+    m_xField->SetCustomUnitText(OUString('%'));
+}
+#endif
+
 void PercentField::SetRefValue(sal_Int64 nValue)
 {
     sal_Int64 nRealValue = GetRealValue(eOldUnit);

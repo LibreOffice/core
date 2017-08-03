@@ -227,6 +227,8 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > CreateDragSource() override;
     virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget() override;
     virtual OpenGLContext* CreateOpenGLContext() override;
+    virtual Weld::Builder* CreateBuilder(const OUString& rUIRoot, const OUString& rUIFile) override;
+    virtual Weld::Dialog* CreateMessageDialog(Weld::Window *pParent, VclMessageType eMessageType, VclButtonsType eButtonType, const OUString &rPrimaryMessage) override;
 #endif
 
     virtual const cairo_font_options_t* GetCairoFontOptions() override;

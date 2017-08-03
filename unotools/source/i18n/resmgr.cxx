@@ -104,7 +104,11 @@ namespace Translate
         rtl::Bootstrap::expandMacros(uri);
         OUString path;
         osl::File::getSystemPathFromFileURL(uri, path);
-        gen.add_messages_path(OUStringToOString(path, osl_getThreadTextEncoding()).getStr());
+        OString sPath(OUStringToOString(path, osl_getThreadTextEncoding()));
+        gen.add_messages_path(sPath.getStr());
+#ifdef LINUX
+        bindtextdomain(pPrefixName, sPath.getStr());
+#endif
         gen.add_messages_domain(pPrefixName);
         std::locale aRet(gen(sIdentifier.getStr()));
         aCache[sUnique] = aRet;
