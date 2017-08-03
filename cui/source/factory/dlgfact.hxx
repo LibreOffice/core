@@ -594,6 +594,7 @@ public:
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) override;
+    virtual NewCreateTabPage            GetNewTabPageCreatorFunc(sal_uInt16 nId) override;
 
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) override;
     virtual DialogGetRanges             GetDialogGetRangesFunc() override;
