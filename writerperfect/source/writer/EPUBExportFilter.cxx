@@ -16,6 +16,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include "exp/xmlimp.hxx"
+#include "EPUBPackage.hxx"
 
 using namespace com::sun::star;
 
@@ -29,6 +30,9 @@ EPUBExportFilter::EPUBExportFilter(const uno::Reference<uno::XComponentContext> 
 
 sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue> &rDescriptor)
 {
+    // The package writes to the output file.
+    EPUBPackage aPackage(mxContext, rDescriptor);
+
     // Create ODT exporter, this will feed our document handler.
     uno::Reference<lang::XInitialization> xInitialization(mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.Writer.XMLOasisExporter", mxContext), uno::UNO_QUERY);
 
