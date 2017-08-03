@@ -41,13 +41,11 @@ class SvxBrushItem;
     <SvxBrushItem>:     <SID_ATTR_BRUSH>;
 */
 
-class SvxBackgroundTabPage : public SvxTabPage
+class SvxBackgroundTabPage : public NewSvxTabPage
 {
-    using TabPage::DeactivatePage;
-    friend class VclPtr<SvxBackgroundTabPage>;
     static const sal_uInt16 pPageRanges[];
 public:
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
+    static NewSfxTabPage* Create(Weld::Container* pParent, const SfxItemSet* rAttrSet);
     // returns the area of the which-values
     static const sal_uInt16* GetRanges() { return pPageRanges; }
 
@@ -66,17 +64,16 @@ protected:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
-    SvxBackgroundTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
+    SvxBackgroundTabPage(Weld::Container* pParent, const SfxItemSet& rCoreSet);
     virtual ~SvxBackgroundTabPage() override;
-    virtual void dispose() override;
 
-    VclPtr<VclContainer>           m_pAsGrid;
-    VclPtr<FixedText>              m_pSelectTxt;
-    VclPtr<ListBox>                m_pLbSelect;
-    VclPtr<FixedText>              m_pTblDesc;
-    VclPtr<ListBox>                m_pTblLBox;
+    std::unique_ptr<Weld::Widget>  m_xAsGrid;
+    std::unique_ptr<Weld::Label>   m_xSelectTxt;
+    std::unique_ptr<Weld::ComboBoxText> m_xLbSelect;
+    std::unique_ptr<Weld::Label>   m_xTblDesc;
+    std::unique_ptr<Weld::ComboBoxText> m_xTblLBox;
 
-    VclPtr<FixedText>              m_pBackGroundColorLabelFT;
+    std::unique_ptr<Weld::Label>   m_xBackGroundColorLabelFT;
     VclPtr<VclFrame>               m_pBackGroundColorFrame;
     VclPtr<SvxColorValueSet>       m_pBackgroundColorSet;
     VclPtr<BackgroundPreviewImpl>  m_pPreviewWin1;
@@ -102,7 +99,7 @@ private:
     // DDListBox for Writer -------------------------------
 
     Color       aBgdColor;
-    sal_uInt16      nHtmlMode;
+    sal_uInt16  nHtmlMode;
     bool        bAllowShowSelector  : 1;
     bool        bIsGraphicValid     : 1;
     bool        bHighlighting       : 1;
@@ -131,12 +128,12 @@ private:
                                             const OUString& rUserData);
 
     DECL_LINK( LoadIdleHdl_Impl, Timer*, void );
-    DECL_LINK(SelectHdl_Impl, ListBox&, void );
+    DECL_LINK(SelectHdl_Impl, Weld::ComboBoxText&, void);
     DECL_LINK(BrowseHdl_Impl, Button*, void);
     DECL_LINK( RadioClickHdl_Impl, Button*, void );
     DECL_LINK( FileClickHdl_Impl, Button*, void );
     DECL_LINK(BackgroundColorHdl_Impl, ValueSet*, void);
-    DECL_LINK( TblDestinationHdl_Impl, ListBox&, void );
+    DECL_LINK(TblDestinationHdl_Impl, Weld::ComboBoxText&, void);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_BACKGRND_HXX

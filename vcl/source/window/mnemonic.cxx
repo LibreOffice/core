@@ -301,7 +301,7 @@ uno::Reference< i18n::XCharacterClassification > const & MnemonicGenerator::GetC
     return mxCharClass;
 }
 
-OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
+OUString MnemonicGenerator::EraseAllMnemonicChars(const OUString& rStr, sal_Unicode cChar)
 {
     OUString    aStr = rStr;
     sal_Int32   nLen = aStr.getLength();
@@ -309,7 +309,7 @@ OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
 
     while ( i < nLen )
     {
-        if ( aStr[ i ] == '~' )
+        if (aStr[ i ] == cChar)
         {
             // check for CJK-style mnemonic
             if( i > 0 && (i+2) < nLen )
