@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="TablePropertiesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="tableproperties|TablePropertiesDialog">Table Properties</property>
-    <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -211,10 +211,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">ok</action-widget>
-      <action-widget response="0">cancel</action-widget>
-      <action-widget response="0">help</action-widget>
-      <action-widget response="0">reset</action-widget>
+      <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
 </interface>
