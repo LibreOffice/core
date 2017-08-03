@@ -442,15 +442,17 @@ void FormatterBase::ImplSetText( const OUString& rText, Selection const * pNewSe
 {
     if ( mpField )
     {
-        if ( pNewSelection )
-            mpField->SetText( rText, *pNewSelection );
-        else
+        if (!maOutputHdl.IsSet() || !maOutputHdl.Call(*mpField))
         {
-            Selection aSel = mpField->GetSelection();
-            aSel.Min() = aSel.Max();
-            mpField->SetText( rText, aSel );
+            if (pNewSelection)
+                mpField->SetText(rText, *pNewSelection);
+            else
+            {
+                Selection aSel = mpField->GetSelection();
+                aSel.Min() = aSel.Max();
+                mpField->SetText(rText, aSel);
+            }
         }
-
         MarkToBeReformatted( false );
     }
 }

@@ -654,6 +654,34 @@ public:
         VclMultiLineEdit *pSecondaryMessage);
 };
 
+class VCL_DLLPUBLIC VclDrawingArea : public vcl::Window
+{
+private:
+    Link<vcl::RenderContext&, void> m_aPaintHdl;
+    Link<const Size&, void> m_aResizeHdl;
+public:
+    VclDrawingArea(vcl::Window *pParent, WinBits nStyle)
+        : vcl::Window(pParent, nStyle)
+    {
+    }
+    void SetPaintHdl(const Link<vcl::RenderContext&, void>& rLink)
+    {
+        m_aPaintHdl = rLink;
+    }
+    void SetResizeHdl(const Link<const Size&, void>& rLink)
+    {
+        m_aResizeHdl = rLink;
+    }
+    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
+    {
+        m_aPaintHdl.Call(rRenderContext);
+    }
+    virtual void Resize() override
+    {
+        m_aResizeHdl.Call(GetOutputSizePixel());
+    }
+};
+
 VCL_DLLPUBLIC Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize);
 
 //Get first window of a pTopLevel window as

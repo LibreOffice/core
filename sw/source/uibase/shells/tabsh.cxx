@@ -595,7 +595,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg.disposeAndReset(pFact->CreateSwTableTabDlg(GetView().GetWindow(), &aCoreSet, &rSh));
+                pDlg.disposeAndReset(pFact->CreateSwTableTabDlg(GetView().GetWindow()->GetFrameWeld(), aCoreSet, &rSh));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if (pItem)
@@ -815,7 +815,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(&GetView().GetViewFrame()->GetWindow(), &rSh));
+            ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(GetView().GetViewFrame()->GetWindow().GetFrameWeld(), &rSh));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             break;
