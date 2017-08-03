@@ -610,7 +610,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
             else
             {
                 // Impress: always use screen format, landscape.
-                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN_4_3, MapUnit::Map100thMM) );
+                Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN_16_9, MapUnit::Map100thMM) );
                 pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
                 pPage->SetBorder(0, 0, 0, 0);
             }
