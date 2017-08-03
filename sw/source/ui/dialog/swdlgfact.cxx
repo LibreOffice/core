@@ -92,21 +92,36 @@ IMPL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSplitTableDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSwBreakDlg_Impl);
+short AbstractSwBreakDlg_Impl::Execute()
+{
+    return m_xDlg->Execute();
+}
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSwConvertTableDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl);
+short AbstractSwConvertTableDlg_Impl::Execute()
+{
+    return m_xDlg->Execute();
+}
+short AbstractSwInsertDBColAutoPilot_Impl::Execute()
+{
+    return m_xDlg->Execute();
+}
 IMPL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwLabDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl);
+short AbstractSwAutoFormatDlg_Impl::Execute()
+{
+    return m_xDlg->Execute();
+}
 IMPL_ABSTDLG_BASE(AbstractSwFieldDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFieldInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractInsFootNoteDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractInsTableDlg_Impl);
+short AbstractInsTableDlg_Impl::Execute()
+{
+    return m_xDlg->Execute();
+}
 IMPL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractMailMergeCreateFromDlg_Impl);
@@ -202,31 +217,31 @@ SplitTable_HeadlineOption AbstractSplitTableDialog_Impl::GetSplitMode()
 
 OUString AbstractSwBreakDlg_Impl::GetTemplateName()
 {
-    return pDlg->GetTemplateName();
+    return m_xDlg->GetTemplateName();
 }
 
 sal_uInt16 AbstractSwBreakDlg_Impl:: GetKind()
 {
-    return pDlg->GetKind();
+    return m_xDlg->GetKind();
 }
 
 ::boost::optional<sal_uInt16> AbstractSwBreakDlg_Impl:: GetPageNumber()
 {
-    return pDlg->GetPageNumber();
+    return m_xDlg->GetPageNumber();
 }
 
-void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,
-                                                SwTableAutoFormat const*& prTAFormat)
+void AbstractSwConvertTableDlg_Impl::GetValues(sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,
+                                               SwTableAutoFormat const*& prTAFormat)
 {
-    pDlg->GetValues(rDelim,rInsTableFlags, prTAFormat);
+    m_xDlg->GetValues(rDelim,rInsTableFlags, prTAFormat);
 }
 
-void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::Any >& rSelection,
+void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc(const uno::Sequence< uno::Any >& rSelection,
         uno::Reference< sdbc::XDataSource> rxSource,
         uno::Reference< sdbc::XConnection> xConnection,
         uno::Reference< sdbc::XResultSet > xResultSet)
 {
-    pDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
+    m_xDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
 }
 
 OString AbstractDropDownFieldDialog_Impl::GetWindowState() const
@@ -299,9 +314,9 @@ void AbstractSwSelGlossaryDlg_Impl::SelectEntryPos(sal_Int32 nIdx)
     pDlg->SelectEntryPos( nIdx );
 }
 
-void AbstractSwAutoFormatDlg_Impl::FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const
+SwTableAutoFormat* AbstractSwAutoFormatDlg_Impl::FillAutoFormatOfIndex() const
 {
-    pDlg->FillAutoFormatOfIndex(rToFill);
+    return m_xDlg->FillAutoFormatOfIndex();
 }
 
 void AbstractSwFieldDlg_Impl::SetCurPageId( sal_uInt16 nId )
@@ -440,7 +455,7 @@ void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal
                                 SwInsertTableOptions& rInsTableFlags, OUString& rTableAutoFormatName,
                                 SwTableAutoFormat *& prTAFormat )
 {
-    pDlg->GetValues( rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
+    m_xDlg->GetValues(rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
 }
 
 OUString AbstractJavaEditDialog_Impl::GetScriptText() const
@@ -675,11 +690,10 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDl
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(vcl::Window *pParent,
-                                                                     SwWrtShell &rSh)
+VclPtr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakDlg(Weld::Window *pParent,
+                                                                          SwWrtShell &rSh)
 {
-    VclPtr<SwBreakDlg> pDlg = VclPtr<SwBreakDlg>::Create(pParent, rSh);
-    return VclPtr<AbstractSwBreakDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractSwBreakDlg_Impl>::Create(new SwBreakDlg(pParent, rSh));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& rVw)
@@ -697,8 +711,7 @@ VclPtr<SfxAbstractTabDialog>  SwAbstractDialogFactory_Impl::CreateSwCharDlg(vcl:
 
 VclPtr<AbstractSwConvertTableDlg> SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg(SwView& rView, bool bToTable)
 {
-    VclPtr<SwConvertTableDlg> pDlg = VclPtr<SwConvertTableDlg>::Create(rView, bToTable);
-    return VclPtr<AbstractSwConvertTableDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractSwConvertTableDlg_Impl>::Create(new SwConvertTableDlg(rView, bToTable));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( vcl::Window *pParent, SwView &rV)
@@ -707,13 +720,12 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( 
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView,
+VclPtr<AbstractSwInsertDBColAutoPilot> SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot(SwView& rView,
         uno::Reference< sdbc::XDataSource> rxSource,
         uno::Reference<sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData)
 {
-    VclPtr<SwInsertDBColAutoPilot> pDlg = VclPtr<SwInsertDBColAutoPilot>::Create( rView, rxSource, xColSupp, rData );
-    return VclPtr<AbstractSwInsertDBColAutoPilot_Impl>::Create( pDlg );
+    return VclPtr<AbstractSwInsertDBColAutoPilot_Impl>::Create(new SwInsertDBColAutoPilot(rView, rxSource, xColSupp, rData));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh)
@@ -793,11 +805,10 @@ VclPtr<AbstractSwSelGlossaryDlg> SwAbstractDialogFactory_Impl::CreateSwSelGlossa
     return VclPtr<AbstractSwSelGlossaryDlg_Impl>::Create(pDlg);
 }
 
-VclPtr<AbstractSwAutoFormatDlg> SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(vcl::Window* pParent,
+VclPtr<AbstractSwAutoFormatDlg> SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(Weld::Window* pParent,
     SwWrtShell* pShell, bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat)
 {
-    VclPtr<SwAutoFormatDlg> pDlg = VclPtr<SwAutoFormatDlg>::Create(pParent, pShell, bSetAutoFormat, pSelFormat);
-    return VclPtr<AbstractSwAutoFormatDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractSwAutoFormatDlg_Impl>::Create(new SwAutoFormatDlg(pParent, pShell, bSetAutoFormat, pSelFormat));
 }
 
 VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType )
@@ -818,10 +829,10 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(vc
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(vcl::Window* pParent,
+VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(Weld::Window* /*pParent*/,
     const SfxItemSet* pItemSet, SwWrtShell* pSh)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwTableTabDlg>::Create(pParent, pItemSet, pSh);
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwTableTabDlg>::Create(nullptr /*TODO*/, pItemSet, pSh);
     return VclPtr<AbstractTabDialog_Impl>::Create(pDlg);
 }
 
@@ -915,8 +926,7 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateVclSwViewDialog(Sw
 
 VclPtr<AbstractInsTableDlg> SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView)
 {
-    VclPtr<SwInsTableDlg> pDlg = VclPtr<SwInsTableDlg>::Create(rView);
-    return VclPtr<AbstractInsTableDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractInsTableDlg_Impl>::Create(new SwInsTableDlg(rView));
 }
 
 VclPtr<AbstractJavaEditDialog> SwAbstractDialogFactory_Impl::CreateJavaEditDialog(
