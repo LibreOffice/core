@@ -35,7 +35,7 @@ static const sal_Char*      GetAddInName( const sal_uInt8 nIndex );
 
 static DefTokenId           lcl_KnownAddIn(const OString& rTest);
 
-void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtString )
+void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const sal_Char* pExtString )
 {
     TokenId                     eParam[ 256 ];
     sal_Int32                       nLauf;
@@ -43,7 +43,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
 
     bool                        bAddIn = false;
 
-    SAL_WARN_IF( nAnz > 128, "sc", "-LotusToSc::DoFunc(): Too many (128)!" );
+    SAL_WARN_IF( nCnt > 128, "sc", "-LotusToSc::DoFunc(): Too many (128)!" );
 
     if( eOc == ocNoName )
     {
@@ -77,14 +77,14 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         }
     }
 
-    for( nLauf = 0 ; nLauf < nAnz ; nLauf++ )
+    for( nLauf = 0 ; nLauf < nCnt ; nLauf++ )
         aStack >> eParam[ nLauf ];
 
     // special cases...
     switch( eOc )
     {
         case ocIndex:
-            SAL_WARN_IF( nAnz < 2, "sc", "+LotusToSc::DoFunc(): ocIndex needs at least 2 parameters!" );
+            SAL_WARN_IF( nCnt < 2, "sc", "+LotusToSc::DoFunc(): ocIndex needs at least 2 parameters!" );
             nMerk0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
             eParam[ 1 ] = nMerk0;
@@ -93,7 +93,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             break;
         case ocIRR:
         {
-            SAL_WARN_IF( nAnz != 2, "sc", "+LotusToSc::DoFunc(): ocIRR needs 2 parameters!" );
+            SAL_WARN_IF( nCnt != 2, "sc", "+LotusToSc::DoFunc(): ocIRR needs 2 parameters!" );
             nMerk0 = eParam[ 0 ];
             eParam[ 0 ] = eParam[ 1 ];
             eParam[ 1 ] = nMerk0;
@@ -107,8 +107,8 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             break;
         case ocChoose:
         {// 1. Parameter ++
-            if (nAnz >= 1)
-                IncToken( eParam[ nAnz - 1 ] );
+            if (nCnt >= 1)
+                IncToken( eParam[ nCnt - 1 ] );
         }
             break;
         case ocFind:
@@ -121,16 +121,16 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         case ocMid:
         case ocReplace:
         {// 2. Parameter ++
-            if (nAnz >= 2)
-                IncToken( eParam[ nAnz - 2 ] );
+            if (nCnt >= 2)
+                IncToken( eParam[ nCnt - 2 ] );
         }
             break;
         case ocRate:
         {
             // new quantity = 4!
-            SAL_WARN_IF( nAnz != 3, "sc",
+            SAL_WARN_IF( nCnt != 3, "sc",
                 "*LotusToSc::DoFunc(): ZINS() needs 3 parameters!" );
-            nAnz = 4;
+            nCnt = 4;
             eParam[ 3 ] = eParam[ 0 ];  // 3. -> 1.
             eParam[ 0 ] = eParam[ 2 ];  // 1. -> 4.
             NegToken( eParam[ 1 ] );    // 2. -> -2. (+ 2. -> 3.)
@@ -139,9 +139,9 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             break;
         case ocNper:
         {
-            SAL_WARN_IF( nAnz != 3, "sc",
+            SAL_WARN_IF( nCnt != 3, "sc",
                 "*LotusToSc::DoFunc(): TERM() or CTERM() need 3 parameters!" );
-            nAnz = 4;
+            nCnt = 4;
             if ( OString(pExtString) == "TERM" )
             {
                 // @TERM(pmt,int,fv) -> NPER(int,-pmt,pv=0,fv)
@@ -165,11 +165,11 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         case ocRoundDown:
         {
             // omit optional 3rd parameter
-            if ( nAnz == 3 )
+            if ( nCnt == 3 )
             {
                 eParam[ 0 ] = eParam[ 1 ];
                 eParam[ 1 ] = eParam[ 2 ];
-                nAnz = 2;
+                nCnt = 2;
             }
 
         }
@@ -182,16 +182,16 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
 
     aPool << ocOpen;
 
-    if( nAnz > 0 )
+    if( nCnt > 0 )
     {
-            // ATTENTION: 0 is the last parameter, nAnz-1 the first one
+            // ATTENTION: 0 is the last parameter, nCnt-1 the first one
 
-        sal_Int16 nLast = nAnz - 1;
+        sal_Int16 nLast = nCnt - 1;
 
         if( eOc == ocPMT )
         {   // special case ocPMT, ignore (negate?) last parameter!
             // additionally: 1. -> 3., 3. -> 2., 2. -> 1.
-            SAL_WARN_IF( nAnz != 3, "sc",
+            SAL_WARN_IF( nCnt != 3, "sc",
                 "+LotusToSc::DoFunc(): ocPMT needs 3 parameters!" );
             aPool << eParam[ 1 ] << ocSep << eParam[ 0 ] << ocSep
                 << ocNegSub << eParam[ 2 ];
@@ -371,7 +371,7 @@ typedef DefTokenId ( FuncType2 ) ( sal_uInt8 );
 void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
 {
     sal_uInt8               nOc;
-    sal_uInt8               nAnz;
+    sal_uInt8               nCnt;
     sal_uInt8               nRelBits;
     sal_uInt16              nStrLen;
     sal_uInt16              nRngIndex;
@@ -446,8 +446,8 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
             case FT_FuncFix3:   DoFunc( eOc, 3, pExtName ); break;
             case FT_FuncFix4:   DoFunc( eOc, 4, pExtName ); break;
                 case FT_FuncVar:
-                Read( nAnz );
-                DoFunc( eOc, nAnz, pExtName );
+                Read( nCnt );
+                DoFunc( eOc, nCnt, pExtName );
                 break;
             case FT_Neg:
                 aPool << ocOpen << ocNegSub << aStack << ocClose;
@@ -589,7 +589,7 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
                 break;
             case FT_Splfunc:
             {
-                Read( nAnz );
+                Read( nCnt );
                 Read( nStrLen );
 
                 const size_t nMaxEntries = aIn.remainingSize();
@@ -604,13 +604,13 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
                         aIn.ReadBytes(p.get(), nStrLen);
                         p[ nStrLen ] = 0x00;
 
-                        DoFunc( ocNoName, nAnz, p.get() );
+                        DoFunc( ocNoName, nCnt, p.get() );
                     }
                     else
-                        DoFunc( ocNoName, nAnz, nullptr );
+                        DoFunc( ocNoName, nCnt, nullptr );
                 }
                 else
-                    DoFunc( ocNoName, nAnz, nullptr );
+                    DoFunc( ocNoName, nCnt, nullptr );
             }
                 break;
             case FT_Const10Float:

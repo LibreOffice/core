@@ -347,22 +347,22 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
     }
 
     bool bRet = true;
-    sal_uInt16      nAnz = pSize[ nId ];
+    sal_uInt16      nCnt = pSize[ nId ];
     sal_uInt16 nFirstId = pElement[ nId ];
     if (nFirstId >= nP_Id)
     {
         SAL_WARN("sc.filter", "TokenPool::GetElementRek: nFirstId >= nP_Id");
-        nAnz = 0;
+        nCnt = 0;
         bRet = false;
     }
-    sal_uInt16* pAkt = nAnz ? &pP_Id[ nFirstId ] : nullptr;
-    if (nAnz > nP_Id - nFirstId)
+    sal_uInt16* pAkt = nCnt ? &pP_Id[ nFirstId ] : nullptr;
+    if (nCnt > nP_Id - nFirstId)
     {
-        SAL_WARN("sc.filter", "TokenPool::GetElementRek: nAnz > nP_Id - nFirstId");
-        nAnz = nP_Id - nFirstId;
+        SAL_WARN("sc.filter", "TokenPool::GetElementRek: nCnt > nP_Id - nFirstId");
+        nCnt = nP_Id - nFirstId;
         bRet = false;
     }
-    for( ; nAnz > 0 ; nAnz--, pAkt++ )
+    for( ; nCnt > 0 ; nCnt--, pAkt++ )
     {
         assert(pAkt);
         if( *pAkt < nScTokenOff )
