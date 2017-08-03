@@ -26,6 +26,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/svmedit.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <unotools/configitem.hxx>
@@ -84,62 +85,70 @@ public:
     ~SwInsDBColumns() { DeleteAndDestroyAll(); }
 };
 
-class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
+class SwInsertDBColAutoPilot : public utl::ConfigItem
 {
-    VclPtr<RadioButton>    m_pRbAsTable;
-    VclPtr<RadioButton>    m_pRbAsField;
-    VclPtr<RadioButton>    m_pRbAsText;
+    std::unique_ptr<Weld::Builder> m_xBuilder;
+    std::unique_ptr<Weld::Dialog> m_xDialog;
+    std::unique_ptr<Weld::RadioButton> m_xRbAsTable;
+    std::unique_ptr<Weld::RadioButton> m_xRbAsField;
+    std::unique_ptr<Weld::RadioButton> m_xRbAsText;
+    std::unique_ptr<Weld::Frame> m_xHeadFrame;
 
-    VclPtr<VclFrame>       m_pHeadFrame;
+    std::unique_ptr<Weld::TreeView> m_xLbTableDbColumn;
+    std::unique_ptr<Weld::Widget> m_xLbTableDbColumnScroll;
+    std::unique_ptr<Weld::TreeView> m_xLbTextDbColumn;
+    std::unique_ptr<Weld::Widget> m_xLbTextDbColumnScroll;
 
-    VclPtr<ListBox>        m_pLbTableDbColumn;
-    VclPtr<ListBox>        m_pLbTextDbColumn;
-
-    VclPtr<VclFrame>       m_pFormatFrame;
-    VclPtr<RadioButton>    m_pRbDbFormatFromDb;
-    VclPtr<RadioButton>    m_pRbDbFormatFromUsr;
-    VclPtr<NumFormatListBox> m_pLbDbFormatFromUsr;
+    std::unique_ptr<Weld::Frame> m_xFormatFrame;
+    std::unique_ptr<Weld::RadioButton> m_xRbDbFormatFromDb;
+    std::unique_ptr<Weld::RadioButton> m_xRbDbFormatFromUsr;
+    std::unique_ptr<NumFormatComboBoxText> m_xLbDbFormatFromUsr;
 
     // Page Text/Field
-    VclPtr<PushButton>     m_pIbDbcolToEdit;
-    VclPtr<VclMultiLineEdit> m_pEdDbText;
-    VclPtr<FixedText>      m_pFtDbParaColl;
-    VclPtr<ListBox>        m_pLbDbParaColl;
+    std::unique_ptr<Weld::Button> m_xIbDbcolToEdit;
+    std::unique_ptr<Weld::TextView> m_xEdDbText;
+    std::unique_ptr<Weld::Widget> m_xEdDbTextScroll;
+    std::unique_ptr<Weld::Label> m_xFtDbParaColl;
+    std::unique_ptr<Weld::ComboBoxText> m_xLbDbParaColl;
 
     // Page Table
-    VclPtr<PushButton>     m_pIbDbcolAllTo;
-    VclPtr<PushButton>     m_pIbDbcolOneTo;
-    VclPtr<PushButton>     m_pIbDbcolOneFrom;
-    VclPtr<PushButton>     m_pIbDbcolAllFrom;
-    VclPtr<FixedText>      m_pFtTableCol;
-    VclPtr<ListBox>        m_pLbTableCol;
-    VclPtr<CheckBox>       m_pCbTableHeadon;
-    VclPtr<RadioButton>    m_pRbHeadlColnms;
-    VclPtr<RadioButton>    m_pRbHeadlEmpty;
-    VclPtr<PushButton>     m_pPbTableFormat;
-    VclPtr<PushButton>     m_pPbTableAutofmt;
+    std::unique_ptr<Weld::Button> m_xIbDbcolAllTo;
+    std::unique_ptr<Weld::Button> m_xIbDbcolOneTo;
+    std::unique_ptr<Weld::Button> m_xIbDbcolOneFrom;
+    std::unique_ptr<Weld::Button> m_xIbDbcolAllFrom;
+    std::unique_ptr<Weld::Label> m_xFtTableCol;
+    bool m_bLbTableColLastActive;
+    std::unique_ptr<Weld::TreeView> m_xLbTableCol;
+    std::unique_ptr<Weld::Widget> m_xLbTableColScroll;
+    std::unique_ptr<Weld::CheckButton> m_xCbTableHeadon;
+    std::unique_ptr<Weld::RadioButton> m_xRbHeadlColnms;
+    std::unique_ptr<Weld::RadioButton> m_xRbHeadlEmpty;
+    std::unique_ptr<Weld::Button> m_xPbTableFormat;
+    std::unique_ptr<Weld::Button> m_xPbTableAutofmt;
 
     SwInsDBColumns  aDBColumns;
     const SwDBData  aDBData;
 
-    Link<ListBox&,void>    aOldNumFormatLnk;
+    Link<NumFormatComboBoxText&, void> aOldNumFormatLnk;
     OUString        sNoTmpl;
 
     SwView*         pView;
-    SwTableAutoFormat* pTAutoFormat;
+    std::unique_ptr<SwTableAutoFormat> m_xTAutoFormat;
 
     SfxItemSet*     pTableSet;
     SwTableRep*     pRep;
     sal_Int32       nGBFormatLen;
 
-    DECL_LINK( PageHdl, Button*, void );
-    DECL_LINK( AutoFormatHdl, Button*, void );
-    DECL_LINK( TableFormatHdl, Button*, void );
-    DECL_LINK( DBFormatHdl, Button*, void );
-    DECL_LINK( TableToFromHdl, Button*, void );
-    DECL_LINK( SelectHdl, ListBox&, void );
-    DECL_LINK( DblClickHdl, ListBox&, void );
-    DECL_LINK( HeaderHdl, Button*, void );
+    DECL_LINK(PageHdl, Weld::ToggleButton&, void);
+    DECL_LINK(AutoFormatHdl, Weld::Button&, void);
+    DECL_LINK(TableFormatHdl, Weld::Button&, void);
+    DECL_LINK(DBFormatHdl, Weld::ToggleButton&, void);
+    DECL_LINK(TableToFromHdl, Weld::Button&, void);
+    DECL_LINK(SelectHdl, Weld::TreeView&, void);
+    DECL_LINK(ChangeHdl, NumFormatComboBoxText&, void);
+    void DoSelect(const OUString& rString, void* pWidget);
+    DECL_LINK(DblClickHdl, Weld::TreeView&, void);
+    DECL_LINK(HeaderHdl, Weld::ToggleButton&, void);
 
     bool SplitTextToColArr( const OUString& rText, DB_Columns& rColArr, bool bInsField );
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
@@ -155,8 +164,14 @@ public:
         css::uno::Reference<css::sdbcx::XColumnsSupplier> const & xColSupp,
         const SwDBData& rData  );
 
-    virtual ~SwInsertDBColAutoPilot() override;
-    virtual void dispose() override;
+    short Execute()
+    {
+        short nRet = m_xDialog->run();
+        m_xDialog->hide();
+        return nRet;
+    }
+
+    ~SwInsertDBColAutoPilot();
 
     void DataToDoc( const css::uno::Sequence< css::uno::Any >& rSelection,
         css::uno::Reference< css::sdbc::XDataSource> const & rxSource,

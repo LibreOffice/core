@@ -235,6 +235,9 @@ The properties saved are divided into three categories:
 Character and box properties are stored per cell (and are lossy for tables larger than 4x4). Table
 properties are stored per-table, and are lossless.
 */
+
+class SwTable;
+
 class SW_DLLPUBLIC SwTableAutoFormat
 {
     friend class SwDocTest;
