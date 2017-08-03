@@ -38,6 +38,7 @@
 #include <rtl/process.h>
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -1328,6 +1329,7 @@ bool GtkSalFrame::PostEvent(ImplSVEvent* pData)
 
 void GtkSalFrame::SetTitle( const OUString& rTitle )
 {
+    fprintf(stderr, "SetTitle %s\n", OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
     m_aTitle = rTitle;
     if( m_pWindow && ! isChild() )
         gtk_window_set_title( GTK_WINDOW(m_pWindow), OUStringToOString( rTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -3573,6 +3575,7 @@ void GtkSalFrame::signalDestroy( GtkWidget* pObj, gpointer frame )
         pThis->m_pEventBox = nullptr;
         pThis->m_pTopLevelGrid = nullptr;
         pThis->m_pWindow = nullptr;
+        pThis->m_xFrameWeld.reset();
         pThis->InvalidateGraphics();
     }
 }

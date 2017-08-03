@@ -149,7 +149,7 @@
           <desc>Specifies the short name of the factory.</desc>
         </info>
       </prop>
-      <prop oor:name="ooSetupFactoryUIName" oor:type="xs:string">
+      <prop oor:name="ooSetupFactoryUIName" oor:type="xs:string" oor:localized="true">
         <!-- UIHints: setup -->
         <info>
           <desc>Specifies the UI name of the factory.</desc>
