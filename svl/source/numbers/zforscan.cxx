@@ -1082,7 +1082,7 @@ bool ImpSvNumberformatScan::IsLastBlankBeforeFrac(sal_uInt16 i)
 void ImpSvNumberformatScan::Reset()
 {
     nStringsCnt = 0;
-    nAnzResStrings = 0;
+    nResultStringsCnt = 0;
     eScannedType = css::util::NumberFormat::UNDEFINED;
     bExp = false;
     bThousand = false;
@@ -1481,7 +1481,7 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
             sStrArray[i] = sStrArray[i-1];
         }
     }
-    ++nAnzResStrings;
+    ++nResultStringsCnt;
     nTypeArray[nPos] = static_cast<short>(eType);
     sStrArray[nPos] = rStr;
     return true;
@@ -1590,7 +1590,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     sal_Int32 nPos = 0;                    // error correction position
     sal_uInt16 i = 0;                      // symbol loop counter
     sal_uInt16 nCounter = 0;               // counts digits
-    nAnzResStrings = nStringsCnt;          // counts remaining symbols
+    nResultStringsCnt = nStringsCnt;       // counts remaining symbols
     bDecSep = false;                       // reset in case already used in TypeCheck
     bool bThaiT = false;                   // Thai T NatNum modifier present
     bool bTimePart = false;
@@ -1831,7 +1831,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             rStr += sStrArray[i];
                             nPos = nPos + sStrArray[i].getLength();
                             nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                            nAnzResStrings--;
+                            nResultStringsCnt--;
                             nCounter++;
                             i++;
                         }
@@ -1859,7 +1859,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             {
                                 nPos = nPos + sStrArray[i].getLength();
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nAnzResStrings--;
+                                nResultStringsCnt--;
                                 i++; // eat it
                             }
                             else
@@ -1880,7 +1880,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             }
                             // Eat it, will be reinserted at proper grouping positions further down.
                             nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                            nAnzResStrings--;
+                            nResultStringsCnt--;
                             i++;
                         }
                         else if (i > 0 && (cPre == '#' || cPre == '0')
@@ -1909,7 +1909,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                     {
                                         rStr += rSepF;
                                         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                        nAnzResStrings--;
+                                        nResultStringsCnt--;
                                     }
                                     nThousand++;
                                     i++;
@@ -1941,7 +1941,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                         {
                                             rStr += rSepF;
                                             nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                            nAnzResStrings--;
+                                            nResultStringsCnt--;
                                         }
                                         nThousand++;
                                     }
@@ -1971,7 +1971,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 rStr += sStrArray[i];
                                 nPos = nPos + sStrArray[i].getLength();
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nAnzResStrings--;
+                                nResultStringsCnt--;
                                 i++;
                             }
                         }
@@ -1986,7 +1986,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         {
                             nPos = nPos + sStrArray[i].getLength();
                             nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                            nAnzResStrings--;
+                            nResultStringsCnt--;
                             i++;                // eat it
                         }
                         else if (bDecSep)       // any .
@@ -1999,7 +1999,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 rStr += sStrArray[i];
                                 nPos = nPos + sStrArray[i].getLength();
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nAnzResStrings--;
+                                nResultStringsCnt--;
                                 i++;
                             }
                         }
@@ -2050,7 +2050,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 rStr += sStrArray[i];
                                 nPos = nPos + sStrArray[i].getLength();
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nAnzResStrings--;
+                                nResultStringsCnt--;
                                 i++;
                             }
                         }
@@ -2098,7 +2098,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         nPos = nPos + sStrArray[++i].getLength();   // $
                         sStrArray[i-1] += sStrArray[i];             // [$
                         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                        nAnzResStrings--;
+                        nResultStringsCnt--;
                         if ( ++i >= nStringsCnt )
                         {
                             return nPos; // Error
@@ -2115,7 +2115,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             {
                                 *pStr += sStrArray[i];
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nAnzResStrings--;
+                                nResultStringsCnt--;
                             }
                             else
                             {
@@ -2129,7 +2129,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 {
                                     *pStr += sStrArray[i];
                                     nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                    nAnzResStrings--;
+                                    nResultStringsCnt--;
                                 }
                             }
                             i++;
@@ -2262,7 +2262,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             if (nFirstGroupingSymbol < nFirstDigitSymbol)
             {
                 nTypeArray[nFirstGroupingSymbol] = NF_SYMBOLTYPE_EMPTY;
-                nAnzResStrings--;
+                nResultStringsCnt--;
             }
         }
         // Combine digits into groups to save memory (Info will be copied
@@ -2276,7 +2276,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 {
                     rStr += sStrArray[i];
                     nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                    nAnzResStrings--;
+                    nResultStringsCnt--;
                 }
             }
         }
@@ -2304,7 +2304,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     }
                     i++;
                 }
-                else if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
+                else if ( (nCalRet = FinalScanGetCalendar( nPos, i, nResultStringsCnt )) != 0 )
                 {
                     if ( nCalRet < 0  )
                     {
@@ -2422,7 +2422,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 rStr += sStrArray[i];
                                 nPos = nPos + sStrArray[i].getLength();
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nAnzResStrings--;
+                                nResultStringsCnt--;
                                 nCounter++;
                                 i++;
                             }
@@ -2547,7 +2547,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 i++;
                 break;
             case NF_SYMBOLTYPE_DEL:
-                if ( (nCalRet = FinalScanGetCalendar( nPos, i, nAnzResStrings )) != 0 )
+                if ( (nCalRet = FinalScanGetCalendar( nPos, i, nResultStringsCnt )) != 0 )
                 {
                     if ( nCalRet < 0  )
                     {
@@ -2573,7 +2573,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 rStr += sStrArray[i];
                                 nPos = nPos + sStrArray[i].getLength();
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nAnzResStrings--;
+                                nResultStringsCnt--;
                                 nCounter++;
                                 i++;
                             }
@@ -2885,7 +2885,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             for ( ; i<j; i++ )
                             {
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nAnzResStrings--;
+                                nResultStringsCnt--;
                             }
                             i = j - 1;
                             continue; // for
@@ -3013,7 +3013,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 {
                     sStrArray[iPos] += sStrArray[i];
                     nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                    nAnzResStrings--;
+                    nResultStringsCnt--;
                 }
                 i++;
             }
@@ -3050,7 +3050,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             {
                 // Remove T from format code, will be replaced with a [NatNum1] prefix.
                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                nAnzResStrings--;
+                nResultStringsCnt--;
             }
             else
             {
