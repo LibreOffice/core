@@ -198,7 +198,7 @@ void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )
     maMIPs.insert( aValue );
 }
 
-void Model::removeMIPs( void* pTag )
+void Model::removeMIPs( void const * pTag )
 {
     OSL_ENSURE( pTag != nullptr, "empty tag?" );
 

@@ -152,7 +152,7 @@ public:
     // that were added using the same tag. No functions will be
     // performed on it; hence the void* type.)
     void addMIP( void* pTag, const XNode_t&, const MIP& );
-    void removeMIPs( void* pTag );
+    void removeMIPs( void const * pTag );
 
     /// query which MIPs apply to the given node
     MIP queryMIP( const XNode_t& xNode ) const;

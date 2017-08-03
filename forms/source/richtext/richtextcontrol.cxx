@@ -567,7 +567,7 @@ namespace frm
 
     namespace
     {
-        SfxSlotId lcl_getSlotFromUnoName( SfxSlotPool& _rSlotPool, const OUString& _rUnoSlotName )
+        SfxSlotId lcl_getSlotFromUnoName( SfxSlotPool const & _rSlotPool, const OUString& _rUnoSlotName )
         {
             const SfxSlot* pSlot = _rSlotPool.GetUnoSlot( _rUnoSlotName );
             if ( pSlot )

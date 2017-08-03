@@ -76,7 +76,7 @@ public:
     void            SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // MT: ???
-    void            setImage( css::uno::Reference< css::io::XInputStream > & rStmRef );
+    void            setImage( css::uno::Reference< css::io::XInputStream > const & rStmRef );
 
     // css::awt::XImageProducer
     void SAL_CALL addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer ) override;
