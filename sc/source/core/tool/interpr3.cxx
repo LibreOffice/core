@@ -40,7 +40,7 @@
 using ::std::vector;
 using namespace formula;
 
-#define MAX_ANZ_DOUBLE_FOR_SORT 100000
+#define MAX_COUNT_DOUBLE_FOR_SORT 100000
 
 const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental
 const double fMachEps = ::std::numeric_limits<double>::epsilon();
@@ -3775,7 +3775,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
 void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray )
 {
     GetNumberSequenceArray( nParamCount, rSortArray, bConvertTextInArray );
-    if (rSortArray.size() > MAX_ANZ_DOUBLE_FOR_SORT)
+    if (rSortArray.size() > MAX_COUNT_DOUBLE_FOR_SORT)
         SetError( FormulaError::MatrixSize);
     else if ( rSortArray.empty() )
     {
