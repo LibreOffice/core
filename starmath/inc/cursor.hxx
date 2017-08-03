@@ -208,7 +208,7 @@ private:
      *
      * These are SmExpression, SmBinHorNode, SmUnHorNode etc.
      */
-    static bool IsLineCompositionNode(SmNode* pNode);
+    static bool IsLineCompositionNode(SmNode const * pNode);
 
     /** Count number of selected nodes, excluding line composition nodes
      *

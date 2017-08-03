@@ -110,7 +110,7 @@ using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 
-DocumentHandler::DocumentHandler(Reference < XDocumentHandler > &xHandler) :
+DocumentHandler::DocumentHandler(Reference < XDocumentHandler > const &xHandler) :
     mxHandler(xHandler)
 {
     if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport *>(mxHandler.get()))

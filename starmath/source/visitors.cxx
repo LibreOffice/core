@@ -1600,7 +1600,7 @@ SmNode* SmCloningVisitor::Clone( SmNode* pNode )
     return pClone;
 }
 
-void SmCloningVisitor::CloneNodeAttr( SmNode* pSource, SmNode* pTarget )
+void SmCloningVisitor::CloneNodeAttr( SmNode const * pSource, SmNode* pTarget )
 {
     pTarget->SetScaleMode( pSource->GetScaleMode( ) );
     //Other attributes are set when prepare or arrange is executed

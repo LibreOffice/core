@@ -246,8 +246,8 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium &rMedium)
 ErrCode SmXMLImportWrapper::ReadThroughComponent(
     const Reference<io::XInputStream>& xInputStream,
     const Reference<XComponent>& xModelComponent,
-    Reference<uno::XComponentContext> & rxContext,
-    Reference<beans::XPropertySet> & rPropSet,
+    Reference<uno::XComponentContext> const & rxContext,
+    Reference<beans::XPropertySet> const & rPropSet,
     const sal_Char* pFilterName,
     bool bEncrypted )
 {
@@ -344,8 +344,8 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
     const Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
-    Reference<uno::XComponentContext> & rxContext,
-    Reference<beans::XPropertySet> & rPropSet,
+    Reference<uno::XComponentContext> const & rxContext,
+    Reference<beans::XPropertySet> const & rPropSet,
     const sal_Char* pFilterName )
 {
     OSL_ENSURE(xStorage.is(), "Need storage!");

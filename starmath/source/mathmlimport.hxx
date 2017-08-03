@@ -40,7 +40,7 @@ class SmXMLImportWrapper
     css::uno::Reference<css::frame::XModel> xModel;
 
 public:
-    explicit SmXMLImportWrapper(css::uno::Reference<css::frame::XModel> &rRef)
+    explicit SmXMLImportWrapper(css::uno::Reference<css::frame::XModel> const &rRef)
         : xModel(rRef) {}
 
     ErrCode Import(SfxMedium &rMedium);
@@ -48,8 +48,8 @@ public:
     static ErrCode ReadThroughComponent(
         const css::uno::Reference< css::io::XInputStream >& xInputStream,
         const css::uno::Reference< css::lang::XComponent >& xModelComponent,
-        css::uno::Reference< css::uno::XComponentContext > & rxContext,
-        css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        css::uno::Reference< css::uno::XComponentContext > const & rxContext,
+        css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
         const sal_Char* pFilterName,
         bool bEncrypted );
 
@@ -58,8 +58,8 @@ public:
         const css::uno::Reference< css::lang::XComponent >& xModelComponent,
         const sal_Char* pStreamName,
         const sal_Char* pCompatibilityStreamName,
-        css::uno::Reference< css::uno::XComponentContext > & rxContext,
-        css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        css::uno::Reference< css::uno::XComponentContext > const & rxContext,
+        css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
         const sal_Char* pFilterName );
 };
 
