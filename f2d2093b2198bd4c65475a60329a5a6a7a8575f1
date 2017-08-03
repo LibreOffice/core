@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6eaa8f72",
+        "filename": "canvas/source/directx/dx_textlayout_drawhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2017-08-03T08:46:09Z",
+      "side": 0,
+      "message": "Can this really be removed? What about actually clipped text? If it did not work, maybe the transformation is wrong?",
+      "range": {
+        "startLine": 172,
+        "startChar": 12,
+        "endLine": 172,
+        "endChar": 38
+      },
+      "revId": "f2d2093b2198bd4c65475a60329a5a6a7a8575f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
