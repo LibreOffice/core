@@ -307,7 +307,7 @@ void ShowWindow::SetEndMode()
     }
 }
 
-bool ShowWindow::SetPauseMode( sal_Int32 nTimeout, Graphic* pLogo )
+bool ShowWindow::SetPauseMode( sal_Int32 nTimeout, Graphic const * pLogo )
 {
     rtl::Reference< SlideShow > xSlideShow;
 

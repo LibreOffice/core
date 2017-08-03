@@ -42,7 +42,7 @@ typedef std::list< AfterEffectNode > AfterEffectNodeList;
 
 /** inserts the animation node in the given AfterEffectNode at the correct position
     in the timing hierarchy of its master */
-SD_DLLPUBLIC void stl_process_after_effect_node_func(AfterEffectNode& rNode);
+SD_DLLPUBLIC void stl_process_after_effect_node_func(AfterEffectNode const & rNode);
 
 } // namespace sd;
 

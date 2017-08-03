@@ -77,7 +77,7 @@ protected:
     virtual void getBackground( css::uno::Any& rValue );
 
     OUString getBookmarkURL() const;
-    void setBookmarkURL( OUString& rURL );
+    void setBookmarkURL( OUString const & rURL );
 
     void SetLftBorder( sal_Int32 nValue );
     void SetRgtBorder( sal_Int32 nValue );
@@ -179,7 +179,7 @@ public:
 
     UNO3_GETIMPLEMENTATION_DECL( SdDrawPage )
 
-    static OUString getPageApiName( SdPage* pPage );
+    static OUString getPageApiName( SdPage const * pPage );
     static OUString getPageApiNameFromUiName( const OUString& rUIName );
     static OUString getUiNameFromPageApiName( const OUString& rApiName );
 

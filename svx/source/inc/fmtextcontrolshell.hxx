@@ -155,7 +155,7 @@ namespace svx
         FmTextControlFeature*
                         implGetFeatureDispatcher(
                             const css::uno::Reference< css::frame::XDispatchProvider >& _rxProvider,
-                            SfxApplication* _pApplication,
+                            SfxApplication const * _pApplication,
                             SfxSlotId _nSlot
                         );
 

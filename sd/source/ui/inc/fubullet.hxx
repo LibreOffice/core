@@ -36,7 +36,7 @@ public:
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq ) override;
 
-    static void GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFrame* pViewFrame );
+    static void GetSlotState( SfxItemSet& rSet, ViewShell const * pViewShell, SfxViewFrame* pViewFrame );
 
 private:
     FuBullet (
@@ -46,7 +46,7 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    void InsertSpecialCharacter( SfxRequest& rReq );
+    void InsertSpecialCharacter( SfxRequest const & rReq );
     void InsertFormattingMark( sal_Unicode cMark );
 };
 

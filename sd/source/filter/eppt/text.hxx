@@ -215,7 +215,7 @@ class ParagraphObj : public PropStateValue, public SOParagraph
         bool                                mbParagraphPunctation;
         sal_uInt16                              mnBiDi;
 
-                        ParagraphObj( css::uno::Reference< css::text::XTextContent > & rXTextContentRef,
+                        ParagraphObj( css::uno::Reference< css::text::XTextContent > const & rXTextContentRef,
                             ParaFlags, FontCollection& rFontCollection,
                                 PPTExBulletProvider& rBuProv );
                         ParagraphObj( const ParagraphObj& rParargraphObj );
@@ -246,7 +246,7 @@ class TextObj
     void            ImplCalculateTextPositions();
 
 public:
-    TextObj( css::uno::Reference< css::text::XSimpleText > &
+    TextObj( css::uno::Reference< css::text::XSimpleText > const &
             rXText, int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv );
 
     ParagraphObj*   GetParagraph(int idx);

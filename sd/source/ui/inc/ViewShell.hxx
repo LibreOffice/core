@@ -179,7 +179,7 @@ public:
     virtual void MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
     bool RequestHelp( const HelpEvent& rEvt );
-    bool Notify( NotifyEvent& rNEvt, ::sd::Window* pWin );
+    bool Notify( NotifyEvent const & rNEvt, ::sd::Window* pWin );
 
     bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
 

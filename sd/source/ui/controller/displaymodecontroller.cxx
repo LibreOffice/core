@@ -59,7 +59,7 @@ public:
 protected:
     DECL_LINK( SelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK( SelectValueSetHdl, ValueSet*, void );
-    void SelectHdl(void*);
+    void SelectHdl(void const *);
 
 private:
     DisplayModeController& mrController;
@@ -199,7 +199,7 @@ IMPL_LINK( DisplayModeToolbarMenu, SelectToolbarMenuHdl, ToolbarMenu *, pControl
     SelectHdl(pControl);
 }
 
-void DisplayModeToolbarMenu::SelectHdl(void * pControl)
+void DisplayModeToolbarMenu::SelectHdl(void const * pControl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();

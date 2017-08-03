@@ -46,10 +46,10 @@ sal_uInt32 getAnnotationId(const css::uno::Reference <css::office::XAnnotation>&
 const SdPage* getAnnotationPage(const css::uno::Reference<css::office::XAnnotation>& xAnnotation);
 
 void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell,
-        css::uno::Reference<css::office::XAnnotation>& rxAnnotation);
+        css::uno::Reference<css::office::XAnnotation> const & rxAnnotation);
 
 void LOKCommentNotifyAll(CommentNotificationType nType,
-        css::uno::Reference<css::office::XAnnotation>& rxAnnotation);
+        css::uno::Reference<css::office::XAnnotation> const & rxAnnotation);
 }
 
 #endif

@@ -64,8 +64,8 @@ void SdHtmlAttrPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools:
     rRenderContext.DrawText(aTextRect, SdResId(STR_HTMLATTR_VLINK), DrawTextFlags::Center | DrawTextFlags::VCenter);
 }
 
-void SdHtmlAttrPreview::SetColors(Color& aBack, Color& aText, Color& aLink,
-                                  Color& aVLink, Color& aALink)
+void SdHtmlAttrPreview::SetColors(Color const & aBack, Color const & aText, Color const & aLink,
+                                  Color const & aVLink, Color const & aALink)
 {
     m_aBackColor = aBack;
     m_aTextColor = aText;

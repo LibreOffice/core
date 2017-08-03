@@ -67,7 +67,7 @@ using namespace com::sun::star;
 
 namespace sd {
 
-void DrawViewShell::ExecGallery(SfxRequest& rReq)
+void DrawViewShell::ExecGallery(SfxRequest const & rReq)
 {
     // nothing is executed during a slide show!
     if(HasCurrentFunction(SID_PRESENTATION))

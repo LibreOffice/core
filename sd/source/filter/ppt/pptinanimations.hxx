@@ -74,7 +74,7 @@ private:
     void importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames );
     void importTargetElementContainer( const Atom* pAtom, css::uno::Any& rTarget, sal_Int16& nSubType );
 
-    static void fillNode( css::uno::Reference< css::animations::XAnimationNode >& xTiming, const AnimationNode& rNode, const PropertySet& rSet );
+    static void fillNode( css::uno::Reference< css::animations::XAnimationNode > const & xTiming, const AnimationNode& rNode, const PropertySet& rSet );
     static css::uno::Reference< css::animations::XAnimationNode > createNode( const Atom* pAtom, const AnimationNode& rNode );
 
     bool convertAnimationNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const css::uno::Reference< css::animations::XAnimationNode >& xParent );

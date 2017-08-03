@@ -77,7 +77,7 @@ public:
     OutlineToImpressFinalizer (
         ::sd::ViewShellBase& rBase,
         SdDrawDocument& rDocument,
-        SvLockBytes& rBytes);
+        SvLockBytes const & rBytes);
     void operator() (bool bEventSeen);
 private:
     ::sd::ViewShellBase& mrBase;
@@ -248,7 +248,7 @@ void SdModule::Execute(SfxRequest& rReq)
     }
 }
 
-bool SdModule::OutlineToImpress(SfxRequest& rRequest)
+bool SdModule::OutlineToImpress(SfxRequest const & rRequest)
 {
     const SfxItemSet* pSet = rRequest.GetArgs();
 
@@ -450,7 +450,7 @@ SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Ref
 
 }
 
-SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
+SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
 {
     SfxFrame* pFrame = nullptr;
     if ( SvtModuleOptions().IsImpress() )
@@ -532,7 +532,7 @@ namespace {
 OutlineToImpressFinalizer::OutlineToImpressFinalizer (
     ::sd::ViewShellBase& rBase,
     SdDrawDocument& rDocument,
-    SvLockBytes& rBytes)
+    SvLockBytes const & rBytes)
     : mrBase(rBase),
       mrDocument(rDocument),
       mpStream()

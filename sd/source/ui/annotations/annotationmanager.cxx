@@ -119,7 +119,7 @@ SfxItemPool* GetAnnotationPool()
     return s_pAnnotationPool;
 }
 
-static SfxBindings* getBindings( ViewShellBase& rBase )
+static SfxBindings* getBindings( ViewShellBase const & rBase )
 {
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
         return &rBase.GetMainViewShell()->GetViewFrame()->GetBindings();
@@ -127,7 +127,7 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
     return nullptr;
 }
 
-static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
+static SfxDispatcher* getDispatcher( ViewShellBase const & rBase )
 {
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
         return rBase.GetMainViewShell()->GetViewFrame()->GetDispatcher();
@@ -300,7 +300,7 @@ void AnnotationManagerImpl::ShowAnnotations( bool bShow )
     }
 }
 
-void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
+void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest const & rReq )
 {
     switch( rReq.GetSlot() )
     {
@@ -328,7 +328,7 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
     }
 }
 
-void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& rReq)
+void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest const & rReq)
 {
     if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
         ShowAnnotations(true);
@@ -347,7 +347,7 @@ void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& rReq)
     InsertAnnotation(sText);
 }
 
-void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
+void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
 {
     ShowAnnotations( true );
 
@@ -395,7 +395,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
     UpdateTags();
 }
 
-void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest& rReq)
+void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest const & rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     Reference< XAnnotation > xAnnotation;
@@ -527,7 +527,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     }
 }
 
-void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
+void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
 {
     Reference< XAnnotation > xAnnotation;
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -846,13 +846,13 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     while( true );
 }
 
-void AnnotationManagerImpl::onTagSelected( AnnotationTag& rTag )
+void AnnotationManagerImpl::onTagSelected( AnnotationTag const & rTag )
 {
     mxSelectedAnnotation = rTag.GetAnnotation();
     invalidateSlots();
 }
 
-void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
+void AnnotationManagerImpl::onTagDeselected( AnnotationTag const & rTag )
 {
     if( rTag.GetAnnotation() == mxSelectedAnnotation )
     {
@@ -1258,7 +1258,7 @@ Color AnnotationManagerImpl::GetColorDark(sal_uInt16 aAuthorIndex)
     return Color(COL_WHITE);
 }
 
-SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForward )
+SdPage* AnnotationManagerImpl::GetNextPage( SdPage const * pPage, bool bForward )
 {
     if( pPage == nullptr )
     {
@@ -1333,7 +1333,7 @@ AnnotationManager::~AnnotationManager()
     mxImpl->dispose();
 }
 
-void AnnotationManager::ExecuteAnnotation(SfxRequest& rRequest)
+void AnnotationManager::ExecuteAnnotation(SfxRequest const & rRequest)
 {
     mxImpl->ExecuteAnnotation( rRequest );
 }

@@ -39,7 +39,7 @@ sd::DrawViewShell* getViewShell(const VclPtr<sd::Window>& xWindow)
     return pViewShell;
 }
 
-OUString getObjectName(SdrObject* pObject)
+OUString getObjectName(SdrObject const * pObject)
 {
     if (pObject->GetName().isEmpty())
         return "Unnamed Drawinglayer object " + OUString::number(pObject->GetOrdNum());

@@ -70,7 +70,7 @@ public:
 protected:
     DECL_LINK( SelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK( SelectValueSetHdl, ValueSet*, void );
-    void SelectHdl(void*);
+    void SelectHdl(void const *);
 private:
     SlideLayoutController& mrController;
     bool mbInsertPage;
@@ -272,7 +272,7 @@ IMPL_LINK( LayoutToolbarMenu, SelectToolbarMenuHdl, ToolbarMenu *, pControl, voi
     SelectHdl(pControl);
 }
 
-void LayoutToolbarMenu::SelectHdl(void* pControl)
+void LayoutToolbarMenu::SelectHdl(void const * pControl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();

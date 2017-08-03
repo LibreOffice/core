@@ -786,7 +786,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const 
 
 /* ================================================================= */
 
-SdUnoFindAllAccess::SdUnoFindAllAccess( uno::Sequence< uno::Reference< uno::XInterface >  >& rSequence ) throw()
+SdUnoFindAllAccess::SdUnoFindAllAccess( uno::Sequence< uno::Reference< uno::XInterface >  > const & rSequence ) throw()
 :maSequence( rSequence )
 {
 }

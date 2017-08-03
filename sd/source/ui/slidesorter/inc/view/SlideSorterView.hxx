@@ -193,7 +193,7 @@ public:
     class DrawLock
     {
     public:
-        DrawLock (SlideSorter& rSlideSorter);
+        DrawLock (SlideSorter const & rSlideSorter);
         ~DrawLock();
         /** When the DrawLock is disposed then it will not request a repaint
             on destruction.

@@ -718,7 +718,7 @@ void SAL_CALL SlideshowImpl::disposing()
 bool SlideshowImpl::startPreview(
         const Reference< XDrawPage >& xDrawPage,
         const Reference< XAnimationNode >& xAnimationNode,
-        vcl::Window* pParent )
+        vcl::Window * pParent )
 {
     bool bRet = false;
 
@@ -1240,7 +1240,7 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
     }
 }
 
-void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes )
+void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
 {
     try
     {
@@ -3022,7 +3022,7 @@ PresentationSettingsEx::PresentationSettingsEx( const PresentationSettingsEx& r 
 {
 }
 
-PresentationSettingsEx::PresentationSettingsEx( PresentationSettings& r )
+PresentationSettingsEx::PresentationSettingsEx( PresentationSettings const & r )
 : PresentationSettings( r )
 , mbRehearseTimings(false)
 , mbPreview(false)

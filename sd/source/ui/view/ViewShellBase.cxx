@@ -389,7 +389,7 @@ std::shared_ptr<ViewShell> ViewShellBase::GetMainViewShell() const
     return pMainViewShell;
 }
 
-ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame* pViewFrame)
+ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame const * pViewFrame)
 {
     ViewShellBase* pBase = nullptr;
 

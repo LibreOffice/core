@@ -112,7 +112,7 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
 
 void ViewClipboard::AssignMasterPage (
     const SdTransferable& rTransferable,
-    SdPage* pMasterPage)
+    SdPage const * pMasterPage)
 {
     if (pMasterPage == nullptr)
         return;

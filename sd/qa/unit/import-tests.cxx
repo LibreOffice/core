@@ -165,7 +165,7 @@ public:
     void testSmartArt1();
     void testTdf109223();
 
-    bool checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
+    bool checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
@@ -1856,7 +1856,7 @@ bool checkPatternValues(std::vector<sal_uInt8>& rExpected, Bitmap& rBitmap)
 
 } // end anonymous namespace
 
-bool SdImportTest::checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected)
+bool SdImportTest::checkPattern(sd::DrawDocShellRef const & rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected)
 {
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(nShapeNumber, 0, rDocRef));
     CPPUNIT_ASSERT_MESSAGE("Not a shape", xShape.is());

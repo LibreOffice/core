@@ -739,7 +739,7 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     }
 }
 
-bool ViewShell::Notify(NotifyEvent& rNEvt, ::sd::Window* pWin)
+bool ViewShell::Notify(NotifyEvent const & rNEvt, ::sd::Window* pWin)
 {
     // handle scroll commands when they arrived at child windows
     bool bRet = false;
@@ -1260,7 +1260,7 @@ class KeepSlideSorterInSyncWithPageChanges
     sd::slidesorter::controller::SelectionObserver::Context m_aContext;
 
 public:
-    explicit KeepSlideSorterInSyncWithPageChanges(sd::slidesorter::SlideSorter& rSlideSorter)
+    explicit KeepSlideSorterInSyncWithPageChanges(sd::slidesorter::SlideSorter const & rSlideSorter)
         : m_aDrawLock(rSlideSorter)
         , m_aModelLock(rSlideSorter.GetController())
         , m_aUpdateLock(rSlideSorter)

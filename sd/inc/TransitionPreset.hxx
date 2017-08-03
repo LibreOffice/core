@@ -70,7 +70,7 @@ private:
     OUString maVariantLabel;
 
     static bool importTransitionsFile( TransitionPresetList& rList,
-                                       css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceFactory,
+                                       css::uno::Reference< css::lang::XMultiServiceFactory > const & xServiceFactory,
                                        const OUString& aFilename );
 };
 

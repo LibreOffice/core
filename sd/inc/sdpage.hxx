@@ -301,7 +301,7 @@ public:
 
         @throws css::uno::RuntimeException
     */
-    void setAnimationNode( css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void setAnimationNode( css::uno::Reference< css::animations::XAnimationNode > const & xNode );
 
     /// @return a helper class to manipulate effects inside the main sequence
     std::shared_ptr< sd::MainSequence > const & getMainSequence();
@@ -338,10 +338,10 @@ public:
         bool bEdit ) override;
 
     /** callback from the sd::View when a new paragraph for one object on this page is created */
-    void onParagraphInserted( ::Outliner* pOutliner, Paragraph* pPara, SdrObject* pObj );
+    void onParagraphInserted( ::Outliner* pOutliner, Paragraph const * pPara, SdrObject* pObj );
 
     /** callback from the sd::View when a paragraph from one object on this page is removed */
-    void onParagraphRemoving( ::Outliner* pOutliner, Paragraph* pPara, SdrObject* pObj );
+    void onParagraphRemoving( ::Outliner* pOutliner, Paragraph const * pPara, SdrObject* pObj );
 
     /** callback from the sd::View when an object just left text edit mode */
     void onEndTextEdit( SdrObject* pObj );

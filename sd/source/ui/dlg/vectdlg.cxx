@@ -129,7 +129,7 @@ void SdVectorizeDlg::InitPreviewBmp()
     m_pBmpWin->SetGraphic( aPreviewBmp );
 }
 
-Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
+Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale )
 {
     Bitmap      aNew( rBmp );
     const Size  aSizePix( aNew.GetSizePixel() );
@@ -148,7 +148,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
     return aNew;
 }
 
-void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
+void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
 {
     mpDocSh->SetWaitCursor( true );
     m_pPrgs->SetValue( 0 );
@@ -220,7 +220,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
     mpDocSh->SetWaitCursor( false );
 }
 
-void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
+void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
                               long nPosX, long nPosY, long nWidth, long nHeight )
 {
     sal_uLong           nSumR = 0UL, nSumG = 0UL, nSumB = 0UL;

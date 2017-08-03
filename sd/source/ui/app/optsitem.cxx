@@ -279,7 +279,7 @@ SdOptionsLayoutItem::SdOptionsLayoutItem()
 {
 }
 
-SdOptionsLayoutItem::SdOptionsLayoutItem( SdOptions* pOpts, ::sd::FrameView* pView )
+SdOptionsLayoutItem::SdOptionsLayoutItem( SdOptions const * pOpts, ::sd::FrameView const * pView )
 :   SfxPoolItem     ( ATTR_OPTIONS_LAYOUT )
 ,   maOptionsLayout ( false, false )
 {
@@ -646,7 +646,7 @@ SdOptionsMiscItem::SdOptionsMiscItem()
 {
 }
 
-SdOptionsMiscItem::SdOptionsMiscItem( SdOptions* pOpts, ::sd::FrameView* pView )
+SdOptionsMiscItem::SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView const * pView )
 :   SfxPoolItem     ( ATTR_OPTIONS_MISC )
 ,   maOptionsMisc   ( false, false )
 {
@@ -857,7 +857,7 @@ SdOptionsSnapItem::SdOptionsSnapItem()
 {
 }
 
-SdOptionsSnapItem::SdOptionsSnapItem( SdOptions* pOpts, ::sd::FrameView* pView )
+SdOptionsSnapItem::SdOptionsSnapItem( SdOptions const * pOpts, ::sd::FrameView const * pView )
 :   SfxPoolItem     ( ATTR_OPTIONS_SNAP )
 ,   maOptionsSnap   ( false, false )
 {
@@ -1097,7 +1097,7 @@ bool SdOptionsGrid::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsGridItem::SdOptionsGridItem( SdOptions* pOpts ) :
+SdOptionsGridItem::SdOptionsGridItem( SdOptions const * pOpts ) :
     SvxGridItem( SID_ATTR_GRID_OPTIONS )
 {
     SetSynchronize( pOpts->IsSynchronize() );
@@ -1314,7 +1314,7 @@ SdOptionsPrintItem::SdOptionsPrintItem()
 {
 }
 
-SdOptionsPrintItem::SdOptionsPrintItem( SdOptions* pOpts )
+SdOptionsPrintItem::SdOptionsPrintItem( SdOptions const * pOpts )
 :   SfxPoolItem     ( ATTR_OPTIONS_PRINT )
 ,   maOptionsPrint  ( false, false )
 {

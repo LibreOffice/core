@@ -126,7 +126,7 @@ public:
     void                    GetState(SfxItemSet&);
 
     void                    Connect(sd::ViewShell* pViewSh);
-    void                    Disconnect(sd::ViewShell* pViewSh);
+    void                    Disconnect(sd::ViewShell const * pViewSh);
     void                    UpdateTablePointers();
 
     bool                    GotoBookmark(const OUString& rBookmark);

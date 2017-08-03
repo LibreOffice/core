@@ -36,8 +36,8 @@ public:
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
 
-    void    SetColors( Color& aBack, Color& aText, Color& aLink,
-                       Color& aVLink, Color& aALink );
+    void    SetColors( Color const & aBack, Color const & aText, Color const & aLink,
+                       Color const & aVLink, Color const & aALink );
 };
 
 #endif // INCLUDED_SD_SOURCE_FILTER_HTML_HTMLATTR_HXX

@@ -269,7 +269,7 @@ void FrameView::Disconnect()
 /**
  * Update with data from the specified SdOptions
  */
-void FrameView::Update(SdOptions* pOptions)
+void FrameView::Update(SdOptions const * pOptions)
 {
     if (pOptions)
     {

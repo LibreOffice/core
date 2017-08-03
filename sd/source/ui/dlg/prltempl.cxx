@@ -48,7 +48,7 @@
 /**
  * Constructor of Tab dialog: appends pages to the dialog
  */
-SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
+SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell const * pDocSh,
                                 vcl::Window* pParent,
                                 bool bBackground,
                                 SfxStyleSheetBase& rStyleBase,

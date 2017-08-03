@@ -499,7 +499,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 /**
  * set line starts and ends for the object to be created
  */
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel* pDoc)
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel const * pDoc)
 {
     ::basegfx::B2DPolyPolygon aRetval;
     XLineEndListRef pLineEndList = pDoc->GetLineEndList();
@@ -523,7 +523,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
     return aRetval;
 }
 
-void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
+void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj)
 {
     if ( (pObj->GetObjIdentifier() == OBJ_EDGE &&
           nSlotId != SID_TOOL_CONNECTOR        &&

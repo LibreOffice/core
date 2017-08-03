@@ -265,7 +265,7 @@ private:
             This specifies at which object the iterator points initially.
     */
     static sal_Int32 GetPageIndex (
-        SdDrawDocument* pDocument,
+        SdDrawDocument const * pDocument,
         const std::shared_ptr<ViewShell>& rpViewShell,
         PageKind ePageKind,
         EditMode eEditMode,

@@ -410,7 +410,7 @@ void DrawViewShell::CheckLineTo(SfxRequest& rReq)
 /**
  * Change page parameter if SID_PAGESIZE or SID_PAGEMARGIN
  */
-void DrawViewShell::SetupPage (Size &rSize,
+void DrawViewShell::SetupPage (Size const &rSize,
                                  long nLeft,
                                  long nRight,
                                  long nUpper,
@@ -738,7 +738,7 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 
 }
 
-void DrawViewShell::ExecuteAnnotation (SfxRequest& rRequest)
+void DrawViewShell::ExecuteAnnotation (SfxRequest const & rRequest)
 {
     if( mpAnnotationManager.get() )
         mpAnnotationManager->ExecuteAnnotation( rRequest );

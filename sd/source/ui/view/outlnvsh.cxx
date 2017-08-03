@@ -1567,7 +1567,7 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, bool )
     }
 }
 
-void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
+void OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph const * pPara )
 {
     DBG_ASSERT( pPage, "sd::OutlineViewShell::UpdateTitleObject(), pPage == 0?" );
     DBG_ASSERT( pPara, "sd::OutlineViewShell::UpdateTitleObject(), pPara == 0?" );

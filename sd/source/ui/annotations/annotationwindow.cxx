@@ -99,7 +99,7 @@ using namespace ::com::sun::star::text;
 
 namespace sd {
 
-Color ColorFromAlphaColor(sal_uInt8 aTransparency, Color &aFront, Color &aBack )
+Color ColorFromAlphaColor(sal_uInt8 aTransparency, Color const &aFront, Color const &aBack )
 {
     return Color((sal_uInt8)(aFront.GetRed()    * aTransparency/(double)255 + aBack.GetRed()    * (1-aTransparency/(double)255)),
                  (sal_uInt8)(aFront.GetGreen()  * aTransparency/(double)255 + aBack.GetGreen()  * (1-aTransparency/(double)255)),

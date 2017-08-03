@@ -43,7 +43,7 @@ private:
     sal_uInt16            mnTransparence;
 public:
 
-    SdPageDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage );
+    SdPageDlg( SfxObjectShell const * pDocSh, vcl::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage );
 
     virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) override;
 };

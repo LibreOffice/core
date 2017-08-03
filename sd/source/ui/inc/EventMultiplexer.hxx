@@ -169,7 +169,7 @@ public:
     */
     void MultiplexEvent(
         EventMultiplexerEventId eEventId,
-        void* pUserData);
+        void const * pUserData);
 
 private:
     class Implementation;

@@ -868,7 +868,7 @@ bool AnimationImporter::convertAnimationValue( oox::ppt::MS_AttributeNames eAttr
     return bRet;
 }
 
-void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const AnimationNode& rNode, const PropertySet& rSet )
+void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, const AnimationNode& rNode, const PropertySet& rSet )
 {
     bool bAfterEffect = false;
 

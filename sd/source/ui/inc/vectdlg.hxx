@@ -66,9 +66,9 @@ class SdVectorizeDlg : public ModalDialog
     void                InitPreviewBmp();
 
     static ::tools::Rectangle    GetRect( const Size& rDispSize, const Size& rBmpSize );
-    Bitmap              GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale );
-    void                Calculate( Bitmap& rBmp, GDIMetaFile& rMtf );
-    void                AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
+    Bitmap              GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale );
+    void                Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf );
+    void                AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
                                  long nPosX, long nPosY, long nWidth, long nHeight );
 
                         DECL_LINK( ProgressHdl, long, void );

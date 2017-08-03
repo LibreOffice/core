@@ -91,7 +91,7 @@ public:
     void                    SelectAll();
     void                    DoCut();
     void                    DoCopy();
-    void                    DoPaste(vcl::Window* pWindow=nullptr);
+    void                    DoPaste(vcl::Window const * pWindow=nullptr);
     virtual void            DoConnect(SdrOle2Obj* pOleObj) override;
     virtual bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false);
     void                    StartDrag( const Point& rStartPos, vcl::Window* pWindow );
@@ -141,10 +141,10 @@ public:
     */
     bool                    InsertMetaFile( TransferableDataHelper& rDataHelper,
                                             const Point& rInsertPos,
-                                            ImageMap* pImageMap, bool bOptimize );
+                                            ImageMap const * pImageMap, bool bOptimize );
     SdrGrafObj*             InsertGraphic( const Graphic& rGraphic,
                                            sal_Int8& rAction, const Point& rPos,
-                                           SdrObject* pSelectedObj, ImageMap* pImageMap );
+                                           SdrObject* pSelectedObj, ImageMap const * pImageMap );
     void                    InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize,
                                             bool const bLink );
@@ -226,7 +226,7 @@ public:
 
     SdrObject* GetEmptyPresentationObject( PresObjKind eKind );
     SdPage* GetPage();
-    SdrObject* GetSelectedSingleObject(SdPage* pPage);
+    SdrObject* GetSelectedSingleObject(SdPage const * pPage);
     void SetAuthor(const OUString& rAuthor) { m_sAuthor = rAuthor; }
     const OUString& GetAuthor() { return m_sAuthor; }
 

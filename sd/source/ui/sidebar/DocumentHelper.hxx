@@ -43,15 +43,15 @@ public:
     /** Return and, when not yet present, create a slide that uses the given
         master page.
     */
-    static SdPage* GetSlideForMasterPage (SdPage* pMasterPage);
+    static SdPage* GetSlideForMasterPage (SdPage const * pMasterPage);
 
     /** Copy the styles used by the given page from the source document to
         the target document.
     */
     static void ProvideStyles (
-        SdDrawDocument& rSourceDocument,
+        SdDrawDocument const & rSourceDocument,
         SdDrawDocument& rTargetDocument,
-        SdPage* pPage);
+        SdPage const * pPage);
 
     /** Assign the given master page to the list of pages.
         @param rTargetDocument
@@ -71,10 +71,10 @@ public:
 private:
     static SdPage* AddMasterPage (
         SdDrawDocument& rTargetDocument,
-        SdPage* pMasterPage);
+        SdPage const * pMasterPage);
     static SdPage* AddMasterPage (
         SdDrawDocument& rTargetDocument,
-        SdPage* pMasterPage,
+        SdPage const * pMasterPage,
         sal_uInt16 nInsertionIndex);
     static SdPage* ProvideMasterPage (
         SdDrawDocument& rTargetDocument,
@@ -96,7 +96,7 @@ private:
             or a master page itself.
     */
     static void AssignMasterPageToPage (
-        SdPage* pMasterPage,
+        SdPage const * pMasterPage,
         const OUString& rsBaseLayoutName,
         SdPage* pPage);
 };

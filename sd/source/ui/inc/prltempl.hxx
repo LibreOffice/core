@@ -69,7 +69,7 @@ private:
     using SfxTabDialog::GetOutputItemSet;
 
 public:
-    SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, bool bBackground, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool );
+    SdPresLayoutTemplateDlg( SfxObjectShell const * pDocSh, vcl::Window* pParent, bool bBackground, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool );
     virtual ~SdPresLayoutTemplateDlg() override;
     virtual void dispose() override;
 

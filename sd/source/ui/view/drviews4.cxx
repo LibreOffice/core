@@ -779,7 +779,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 }
 
 void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
-    ::sd::Window* pWin)
+    ::sd::Window const * pWin)
 {
     if (mbHasRulers && pWin )
     {

@@ -80,7 +80,7 @@ namespace sd
             SD_DLLPUBLIC static void restoreDiscoverable();
 
             // For the communicator
-            static void removeCommunicator( Communicator* pCommunicator );
+            static void removeCommunicator( Communicator const * pCommunicator );
         private:
             RemoteServer();
             virtual ~RemoteServer() override;

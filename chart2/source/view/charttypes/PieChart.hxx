@@ -107,7 +107,7 @@ struct PieLabelInfo;
                                 , const css::awt::Size& rPageSize );
 
     bool                performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo const & rPieLabelInfo);
-    void                performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo& rPieLabelInfo);
+    void                performLabelBestFit(ShapeParam& rShapeParam, PieLabelInfo const & rPieLabelInfo);
 
 private: //member
     std::unique_ptr<PiePositionHelper>

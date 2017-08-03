@@ -45,7 +45,7 @@ public:
     virtual ~MediaObjectBar() override;
 
     void            GetState( SfxItemSet& rSet );
-    void            Execute( SfxRequest& rReq );
+    void            Execute( SfxRequest const & rReq );
 
 protected:
     ::sd::View* mpView;

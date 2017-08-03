@@ -155,7 +155,7 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
     return pNewMasterPage;
 }
 
-SdPage* DocumentHelper::GetSlideForMasterPage (SdPage* pMasterPage)
+SdPage* DocumentHelper::GetSlideForMasterPage (SdPage const * pMasterPage)
 {
     SdPage* pCandidate = nullptr;
 
@@ -203,7 +203,7 @@ SdPage* DocumentHelper::GetSlideForMasterPage (SdPage* pMasterPage)
 
 SdPage* DocumentHelper::AddMasterPage (
     SdDrawDocument& rTargetDocument,
-    SdPage* pMasterPage)
+    SdPage const * pMasterPage)
 {
     SdPage* pClonedMasterPage = nullptr;
 
@@ -248,9 +248,9 @@ SdPage* DocumentHelper::AddMasterPage (
 }
 
 void DocumentHelper::ProvideStyles (
-    SdDrawDocument& rSourceDocument,
+    SdDrawDocument const & rSourceDocument,
     SdDrawDocument& rTargetDocument,
-    SdPage* pPage)
+    SdPage const * pPage)
 {
     // Get the layout name of the given page.
     OUString sLayoutName (pPage->GetLayoutName());
@@ -344,7 +344,7 @@ void DocumentHelper::AssignMasterPageToPageList (
 
 SdPage* DocumentHelper::AddMasterPage (
     SdDrawDocument& rTargetDocument,
-    SdPage* pMasterPage,
+    SdPage const * pMasterPage,
     sal_uInt16 nInsertionIndex)
 {
     SdPage* pClonedMasterPage = nullptr;
@@ -399,7 +399,7 @@ SdPage* DocumentHelper::AddMasterPage (
     inserted into the target document.
 */
 void DocumentHelper::AssignMasterPageToPage (
-    SdPage* pMasterPage,
+    SdPage const * pMasterPage,
     const OUString& rsBaseLayoutName,
     SdPage* pPage)
 {

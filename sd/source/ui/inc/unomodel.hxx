@@ -62,7 +62,7 @@ class DrawDocShell;
 class DrawViewShell;
 }
 
-extern OUString getPageApiName( SdPage* pPage );
+extern OUString getPageApiName( SdPage const * pPage );
 extern OUString getPageApiNameFromUiName( const OUString& rUIName );
 
 /***********************************************************************
@@ -133,7 +133,7 @@ public:
     SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard ) throw();
     virtual ~SdXImpressDocument() throw() override;
 
-    static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument* pDoc );
+    static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument const * pDoc );
 
     // intern
     bool operator==( const SdXImpressDocument& rModel ) const { return mpDoc == rModel.mpDoc; }

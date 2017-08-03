@@ -1357,7 +1357,7 @@ bool FuText::cancel()
 }
 
 /// Is rCell covered by the rFirst - rLast selection?
-static bool IsInSelection(const sdr::table::CellPos& rFirst, const sdr::table::CellPos& rLast, sdr::table::CellPos& rCell)
+static bool IsInSelection(const sdr::table::CellPos& rFirst, const sdr::table::CellPos& rLast, sdr::table::CellPos const & rCell)
 {
     if (rCell.mnCol < rFirst.mnCol)
         return false;

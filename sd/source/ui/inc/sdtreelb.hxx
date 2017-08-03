@@ -252,7 +252,7 @@ private:
     /** Return <TRUE/> when the current transferable may be dropped at the
         given list box entry.
     */
-    bool IsDropAllowed (SvTreeListEntry* pEntry);
+    bool IsDropAllowed (SvTreeListEntry const * pEntry);
 
     /** This inner class is defined in sdtreelb.cxx and is basically a
         container for the icons used in the list box for the entries.

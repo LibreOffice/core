@@ -69,7 +69,7 @@ public:
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect ) override;
 
-    void    SetBitmapEx( BitmapEx* pBmpEx );
+    void    SetBitmapEx( BitmapEx const * pBmpEx );
     void    SetScale( const Fraction& rFrac );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;

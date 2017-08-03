@@ -71,7 +71,7 @@ private:
     ::tools::Rectangle maOutRect;
 
 private:
-    void Paint(vcl::RenderContext& rRenderContext, SdrTextObj* pObj, bool bVisible, bool bDotted = false);
+    void Paint(vcl::RenderContext& rRenderContext, SdrTextObj const * pObj, bool bVisible, bool bDotted = false);
 
 public:
     explicit PresLayoutPreview(vcl::Window* pParent);
@@ -80,7 +80,7 @@ public:
     virtual Size GetOptimalSize() const override;
 
     void init(SdPage* pMaster);
-    void update(HeaderFooterSettings& rSettings);
+    void update(HeaderFooterSettings const & rSettings);
 };
 
 }
@@ -706,13 +706,13 @@ void PresLayoutPreview::init( SdPage *pMaster )
     maPageSize = pMaster->GetSize();
 }
 
-void PresLayoutPreview::update( HeaderFooterSettings& rSettings )
+void PresLayoutPreview::update( HeaderFooterSettings const & rSettings )
 {
     maSettings = rSettings;
     Invalidate();
 }
 
-void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj* pObj, bool bVisible, bool bDotted /* = false*/ )
+void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj const * pObj, bool bVisible, bool bDotted /* = false*/ )
 {
     // get object transformation
     basegfx::B2DHomMatrix aObjectTransform;

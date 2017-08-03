@@ -193,7 +193,7 @@ public:
     /** This method calls MainViewShellChanged() and SelectionHasChanged()
         for the current main view shell and its view.
     */
-    void Update (ViewShellBase& rBase);
+    void Update (ViewShellBase const & rBase);
 
     /** Reset all tool bars in all groups and add tool bars and tool bar
         shells to the ToolBarGroup::Permanent group for the specified ViewShell type.
@@ -951,7 +951,7 @@ ToolBarRules::ToolBarRules (
 {
 }
 
-void ToolBarRules::Update (ViewShellBase& rBase)
+void ToolBarRules::Update (ViewShellBase const & rBase)
 {
     ViewShell* pMainViewShell = rBase.GetMainViewShell().get();
     if (pMainViewShell != nullptr)

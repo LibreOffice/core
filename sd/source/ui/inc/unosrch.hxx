@@ -124,7 +124,7 @@ protected:
     css::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > maSequence;
 
 public:
-    SdUnoFindAllAccess( css::uno::Sequence< css::uno::Reference< css::uno::XInterface >  >& rSequence ) throw();
+    SdUnoFindAllAccess( css::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > const & rSequence ) throw();
     virtual ~SdUnoFindAllAccess() throw() override;
 
     // XIndexAccess

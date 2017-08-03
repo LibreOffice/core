@@ -78,7 +78,7 @@ public:
     //Broadcast that a SdStyleSheet has changed, taking into account outline sublevels
     //which need to be explicitly broadcast as changing if their parent style was
     //the one that changed
-    static void BroadcastSdStyleSheetChange(SfxStyleSheetBase* pStyleSheet, PresentationObjects ePO,
+    static void BroadcastSdStyleSheetChange(SfxStyleSheetBase const * pStyleSheet, PresentationObjects ePO,
         SfxStyleSheetBasePool* pSSPool);
 
     // XInterface

@@ -61,7 +61,7 @@ class TemplateEntryCompare
 {
 public:
     TemplateEntryCompare();
-    bool operator()(TemplateEntry* pA, TemplateEntry* pB) const;
+    bool operator()(TemplateEntry const * pA, TemplateEntry const * pB) const;
 
 private:
     std::shared_ptr<comphelper::string::NaturalStringSorter> mpStringSorter;

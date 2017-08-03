@@ -1246,7 +1246,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
     return pSet;
 }
 
-void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLPropertySet* pOldSet )
+void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, STLPropertySet const * pOldSet )
 {
     // change selected effect
     bool bChanged = false;
@@ -1895,7 +1895,7 @@ void CustomAnimationPane::onRemove()
     }
 }
 
-void CustomAnimationPane::remove( CustomAnimationEffectPtr& pEffect )
+void CustomAnimationPane::remove( CustomAnimationEffectPtr const & pEffect )
 {
     if( pEffect->getEffectSequence() )
     {
@@ -2257,7 +2257,7 @@ IMPL_LINK( CustomAnimationPane, implControlListBoxHdl, ListBox&, rListBox, void 
 }
 
 /// this link is called when one of the controls is modified
-void CustomAnimationPane::implControlHdl(Control* pControl )
+void CustomAnimationPane::implControlHdl(Control const * pControl )
 {
     if( pControl == mpPBAddEffect )
         onAdd();

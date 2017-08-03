@@ -1546,7 +1546,7 @@ ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView*
 {
 }
 
-sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument& rDoc )
+sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument const & rDoc )
 {
     sal_Int32 nPage = -1;
 
@@ -1848,7 +1848,7 @@ bool ImplRenderPaintProc::IsPrintable( const SdrObject* pObj ) const
 
 namespace
 {
-    sal_Int16 CalcOutputPageNum(vcl::PDFExtOutDevData* pPDFExtOutDevData, SdDrawDocument *pDoc, sal_Int16 nPageNumber)
+    sal_Int16 CalcOutputPageNum(vcl::PDFExtOutDevData const * pPDFExtOutDevData, SdDrawDocument const *pDoc, sal_Int16 nPageNumber)
     {
         //export all pages, simple one to one case
         if (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides())
@@ -3451,7 +3451,7 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
     return aSeq;
 }
 
-rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocument* pDocument )
+rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocument const * pDocument )
 {
     rtl::Reference< SdXImpressDocument > xRet;
     if( pDocument )
@@ -3468,7 +3468,7 @@ rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocumen
     return xRet;
 }
 
-void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName )
+void NotifyDocumentEvent( SdDrawDocument const * pDocument, const OUString& rEventName )
 {
     rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( pDocument ) );
 
@@ -3480,7 +3480,7 @@ void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName 
     }
 }
 
-void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName, const uno::Reference< uno::XInterface >& xSource )
+void NotifyDocumentEvent( SdDrawDocument const * pDocument, const OUString& rEventName, const uno::Reference< uno::XInterface >& xSource )
 {
     rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( pDocument ) );
 

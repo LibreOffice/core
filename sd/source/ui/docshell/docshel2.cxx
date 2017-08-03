@@ -157,7 +157,7 @@ void DrawDocShell::Connect(ViewShell* pViewSh)
     mpViewShell = pViewSh;
 }
 
-void DrawDocShell::Disconnect(ViewShell* pViewSh)
+void DrawDocShell::Disconnect(ViewShell const * pViewSh)
 {
     if (mpViewShell == pViewSh)
     {

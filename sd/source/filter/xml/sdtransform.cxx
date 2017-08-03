@@ -50,7 +50,7 @@ public:
     void transformStyles( SfxStyleFamily eFam );
     void transformStyle( SfxStyleSheetBase& rSheet );
 
-    void transformShapes( SdrObjList& rShapes );
+    void transformShapes( SdrObjList const & rShapes );
     void transformShape( SdrObject& rObj );
 
     void transformTextShape( SdrTextObj& rTextShape );
@@ -152,7 +152,7 @@ void SdTransformOOo2xDocument::transformStyle( SfxStyleSheetBase& rSheet )
     removeAlienAttributes( rSet );
 }
 
-void SdTransformOOo2xDocument::transformShapes( SdrObjList& rShapes )
+void SdTransformOOo2xDocument::transformShapes( SdrObjList const & rShapes )
 {
     const size_t nShapeCount = rShapes.GetObjCount();
     for( size_t nShape = 0; nShape < nShapeCount; ++nShape )

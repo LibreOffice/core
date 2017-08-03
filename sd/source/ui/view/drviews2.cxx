@@ -3136,7 +3136,7 @@ SdPage* DrawViewShell::CreateOrDuplicatePage (
     return pNewPage;
 }
 
-void DrawViewShell::ExecutePropPanelAttr (SfxRequest& rReq)
+void DrawViewShell::ExecutePropPanelAttr (SfxRequest const & rReq)
 {
     if(SlideShow::IsRunning( GetViewShellBase() ))
         return;

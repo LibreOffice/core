@@ -60,7 +60,7 @@ public:
     SdTabTemplateDlg(vcl::Window* pParent,
             const SfxObjectShell* pDocShell,
             SfxStyleSheetBase& rStyleBase,
-            SdrModel* pModel,
+            SdrModel const * pModel,
             SdrView* pView);
 };
 

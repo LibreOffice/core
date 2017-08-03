@@ -140,7 +140,7 @@ TableDesignWidget::~TableDesignWidget()
     removeListener();
 }
 
-static SfxBindings* getBindings( ViewShellBase& rBase )
+static SfxBindings* getBindings( ViewShellBase const & rBase )
 {
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
         return &rBase.GetMainViewShell()->GetViewFrame()->GetBindings();
@@ -148,7 +148,7 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
         return nullptr;
 }
 
-static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
+static SfxDispatcher* getDispatcher( ViewShellBase const & rBase )
 {
     if( rBase.GetMainViewShell().get() && rBase.GetMainViewShell()->GetViewFrame() )
         return rBase.GetMainViewShell()->GetViewFrame()->GetDispatcher();

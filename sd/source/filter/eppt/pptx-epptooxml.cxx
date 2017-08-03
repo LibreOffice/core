@@ -1027,7 +1027,7 @@ void PowerPointExport::WriteAnimationCondition( const FSHelperPtr& pFS, const ch
     }
 }
 
-void PowerPointExport::WriteAnimationCondition( const FSHelperPtr& pFS, Any& rAny, bool bWriteEvent, bool bMainSeqChild )
+void PowerPointExport::WriteAnimationCondition( const FSHelperPtr& pFS, Any const & rAny, bool bWriteEvent, bool bMainSeqChild )
 {
     bool bHasFDelay = false;
     double fDelay = 0;

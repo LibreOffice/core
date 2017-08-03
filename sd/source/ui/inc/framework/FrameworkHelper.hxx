@@ -206,7 +206,7 @@ public:
     */
     void HandleModeChangeSlot (
         sal_uLong nSlotId,
-        SfxRequest& rRequest);
+        SfxRequest const & rRequest);
 
     /** Run the given callback when the specified event is notified by the
         ConfigurationManager.  When there are no pending requests and

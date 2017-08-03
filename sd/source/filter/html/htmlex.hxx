@@ -143,7 +143,7 @@ class HtmlExport final
 
     std::unique_ptr< ButtonSet > mpButtonSet;
 
-    static SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
+    static SdrTextObj* GetLayoutTextObject(SdrPage const * pPage);
 
     void SetDocColors( SdPage* pPage = nullptr );
 
@@ -164,7 +164,7 @@ class HtmlExport final
     bool    CreateImageNumberFile();
 
     bool    checkForExistingFiles();
-    bool    checkFileExists( css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess, OUString const & aFileName );
+    bool    checkFileExists( css::uno::Reference< css::ucb::XSimpleFileAccess3 > const & xFileAccess, OUString const & aFileName );
 
     OUString const & getDocumentTitle();
     bool    SavePresentation();
@@ -175,11 +175,11 @@ class HtmlExport final
     OUString CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const;
     OUString CreateBodyTag() const;
 
-    OUString ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nPara, const Color& rBackgroundColor );
-    OUString TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, const Color& rBackgroundColor );
+    OUString ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_Int32 nPara, const Color& rBackgroundColor );
+    OUString TextAttribToHTMLString( SfxItemSet const * pSet, HtmlState* pState, const Color& rBackgroundColor );
 
     OUString CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor );
-    OUString CreateTextForPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
+    OUString CreateTextForPage( SdrOutliner* pOutliner, SdPage const * pPage, bool bHeadLine, const Color& rBackgroundColor );
     OUString CreateTextForNotesPage( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor );
 
     static OUString CreateHTMLCircleArea( sal_uLong nRadius, sal_uLong nCenterX,
@@ -213,13 +213,13 @@ class HtmlExport final
     static OUString GetButtonName( int nButton );
 
     void WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,
-                                OutlinerParaObject* pOutlinerParagraphObject,
+                                OutlinerParaObject const * pOutlinerParagraphObject,
                                 const Color& rBackgroundColor, bool bHeadLine);
 
-    void WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGroup,
+    void WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup const * pObjectGroup,
                           SdrOutliner* pOutliner, const Color& rBackgroundColor, bool bHeadLine);
 
-    void WriteTable(OUStringBuffer& aStr, sdr::table::SdrTableObj* pTableObject,
+    void WriteTable(OUStringBuffer& aStr, sdr::table::SdrTableObj const * pTableObject,
                     SdrOutliner* pOutliner, const Color& rBackgroundColor);
 
  public:

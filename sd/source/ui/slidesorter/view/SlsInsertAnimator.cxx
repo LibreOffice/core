@@ -138,7 +138,7 @@ private:
     InsertPosition maInsertPosition;
 
     SharedPageObjectRun GetRun (
-        view::Layouter& rLayouter,
+        view::Layouter const & rLayouter,
         const InsertPosition& rInsertPosition);
     RunContainer::const_iterator FindRun (const sal_Int32 nRunIndex) const;
 };
@@ -203,7 +203,7 @@ void InsertAnimator::Implementation::SetInsertPosition (
 }
 
 SharedPageObjectRun InsertAnimator::Implementation::GetRun (
-    view::Layouter& rLayouter,
+    view::Layouter const & rLayouter,
     const InsertPosition& rInsertPosition)
 {
     const sal_Int32 nRow (rInsertPosition.GetRow());

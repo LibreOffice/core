@@ -1031,7 +1031,7 @@ bool HtmlExport::CreateImagesForPresPages( bool bThumbnail)
 }
 
 // get SdrTextObject with layout text of this page
-SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
+SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage const * pPage)
 {
     const size_t nObjectCount = pPage->GetObjCount();
     SdrTextObj*     pResult      = nullptr;
@@ -1206,7 +1206,7 @@ OUString HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, 
 }
 
 // creates a outliner text for a page
-OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
+OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pPage,
                                        bool bHeadLine, const Color& rBackgroundColor)
 {
     OUStringBuffer aStr;
@@ -1264,7 +1264,7 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
     return aStr.makeStringAndClear();
 }
 
-void HtmlExport::WriteTable(OUStringBuffer& aStr, SdrTableObj* pTableObject, SdrOutliner* pOutliner, const Color& rBackgroundColor)
+void HtmlExport::WriteTable(OUStringBuffer& aStr, SdrTableObj const * pTableObject, SdrOutliner* pOutliner, const Color& rBackgroundColor)
 {
     CellPos aStart, aEnd;
 
@@ -1292,7 +1292,7 @@ void HtmlExport::WriteTable(OUStringBuffer& aStr, SdrTableObj* pTableObject, Sdr
     aStr.append("</table>\r\n");
 }
 
-void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGroup, SdrOutliner* pOutliner,
+void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup const * pObjectGroup, SdrOutliner* pOutliner,
                                   const Color& rBackgroundColor, bool bHeadLine)
 {
     SdrObjListIter aGroupIterator(*pObjectGroup->GetSubList(), SdrIterMode::DeepNoGroups);
@@ -1316,7 +1316,7 @@ void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGrou
 }
 
 void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutliner,
-                                        OutlinerParaObject* pOutlinerParagraphObject,
+                                        OutlinerParaObject const * pOutlinerParagraphObject,
                                         const Color& rBackgroundColor, bool bHeadLine)
 {
     if (pOutlinerParagraphObject == nullptr)
@@ -1405,7 +1405,7 @@ OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
 }
 
 // converts a paragraph of the outliner to html
-OUString HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nPara, const Color& rBackgroundColor )
+OUString HtmlExport::ParagraphToHTMLString( SdrOutliner const * pOutliner, sal_Int32 nPara, const Color& rBackgroundColor )
 {
     OUStringBuffer aStr;
 
@@ -1450,7 +1450,7 @@ OUString HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_Int32 nP
 // Depending on the attributes of the specified set and the specified
 // HtmlState, it creates the needed html tags in order to get the
 // attributes
-OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, const Color& rBackgroundColor )
+OUString HtmlExport::TextAttribToHTMLString( SfxItemSet const * pSet, HtmlState* pState, const Color& rBackgroundColor )
 {
     OUStringBuffer aStr;
 
@@ -3052,7 +3052,7 @@ bool HtmlExport::CopyFile( const OUString& rSourceFile, const OUString& rDestFil
     }
 }
 
-bool HtmlExport::checkFileExists( Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess, OUString const & aFileName )
+bool HtmlExport::checkFileExists( Reference< css::ucb::XSimpleFileAccess3 > const & xFileAccess, OUString const & aFileName )
 {
     try
     {

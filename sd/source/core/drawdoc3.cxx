@@ -74,12 +74,12 @@ class InsertBookmarkAsPage_FindDuplicateLayouts
 public:
     explicit InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<OUString> &rLayoutsToTransfer )
         : mrLayoutsToTransfer(rLayoutsToTransfer) {}
-    void operator()( SdDrawDocument&, SdPage*, bool, SdDrawDocument* );
+    void operator()( SdDrawDocument&, SdPage const *, bool, SdDrawDocument* );
 private:
     std::vector<OUString> &mrLayoutsToTransfer;
 };
 
-void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage, bool bRenameDuplicates, SdDrawDocument* pBookmarkDoc )
+void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage const * pBMMPage, bool bRenameDuplicates, SdDrawDocument* pBookmarkDoc )
 {
     // now check for duplicate masterpage and layout names
 
@@ -284,7 +284,7 @@ void SdDrawDocument::InsertBookmark(
     bool bReplace,                                  // Replace current default and notes pages?
     sal_uInt16 nInsertPos,                          // Insertion position of pages
     ::sd::DrawDocShell* pBookmarkDocSh,             // If set, this is the source document
-    Point* pObjPos)                                 // Insertion position of objects
+    Point const * pObjPos)                                 // Insertion position of objects
 {
     bool bOK = true;
     bool bInsertPages = false;
@@ -977,7 +977,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
     const std::vector<OUString> &rBookmarkList,
     const std::vector<OUString> &rExchangeList,            // List of names to use
     ::sd::DrawDocShell* pBookmarkDocSh,
-    Point* pObjPos,
+    Point const * pObjPos,
     bool bCalcObjCount)
 {
     bool bOK = true;

@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace framework {
 
-void ImpressModule::Initialize (Reference<frame::XController>& rxController)
+void ImpressModule::Initialize (Reference<frame::XController> const & rxController)
 {
     new CenterViewFocusModule(rxController);
     new ViewTabBarModule(

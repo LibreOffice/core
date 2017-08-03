@@ -138,7 +138,7 @@ protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 private:
-    SfxFrame* ExecuteNewDocument( SfxRequest& rReq );
+    SfxFrame* ExecuteNewDocument( SfxRequest const & rReq );
 
     static SfxFrame* CreateEmptyDocument( const css::uno::Reference< css::frame::XFrame >& i_rFrame );
     static SfxFrame* CreateFromTemplate( const OUString& rTemplatePath, const css::uno::Reference< css::frame::XFrame >& i_rFrame );
@@ -151,7 +151,7 @@ private:
             This typically is the unmodified request from a execute()
             function from where this function is called.
     */
-    static bool OutlineToImpress(SfxRequest& rRequest);
+    static bool OutlineToImpress(SfxRequest const & rRequest);
 
     /** Add an eventlistener as soon as possible in sd, allows to use
         remote devices to start the slideshow elegantly, and respecting

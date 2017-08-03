@@ -34,7 +34,7 @@
 SdSnapLineDlg::SdSnapLineDlg(
     vcl::Window* pWindow,
     const SfxItemSet& rInAttrs,
-    ::sd::View* pView)
+    ::sd::View const * pView)
     : ModalDialog(pWindow, "SnapObjectDialog", "modules/sdraw/ui/dlgsnap.ui")
     , eUIUnit(pView->GetDoc().GetUIUnit())
     , aUIScale(pView->GetDoc().GetUIScale())

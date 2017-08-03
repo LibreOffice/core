@@ -132,7 +132,7 @@ private:
 
     void CallListeners (
         EventMultiplexerEventId eId,
-        void* pUserData = nullptr);
+        void const * pUserData = nullptr);
 
     DECL_LINK(SlideSorterSelectionChangeListener, LinkParamNone*, void);
 };
@@ -175,7 +175,7 @@ void EventMultiplexer::RemoveEventListener (
 
 void EventMultiplexer::MultiplexEvent(
     EventMultiplexerEventId eEventId,
-    void* pUserData )
+    void const * pUserData )
 {
     EventMultiplexerEvent aEvent(eEventId, pUserData);
     mpImpl->CallListeners(aEvent);
@@ -605,17 +605,17 @@ void EventMultiplexer::Implementation::Notify (
 
             case SdrHintKind::ObjectChange:
                 CallListeners(EventMultiplexerEventId::ShapeChanged,
-                    const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
+                    static_cast<const void*>(pSdrHint->GetPage()));
                 break;
 
             case SdrHintKind::ObjectInserted:
                 CallListeners(EventMultiplexerEventId::ShapeInserted,
-                    const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
+                    static_cast<const void*>(pSdrHint->GetPage()));
                 break;
 
             case SdrHintKind::ObjectRemoved:
                 CallListeners(EventMultiplexerEventId::ShapeRemoved,
-                    const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
+                    static_cast<const void*>(pSdrHint->GetPage()));
                 break;
             default:
                 break;
@@ -630,7 +630,7 @@ void EventMultiplexer::Implementation::Notify (
 
 void EventMultiplexer::Implementation::CallListeners (
     EventMultiplexerEventId eId,
-    void* pUserData)
+    void const * pUserData)
 {
     EventMultiplexerEvent aEvent(eId, pUserData);
     CallListeners(aEvent);

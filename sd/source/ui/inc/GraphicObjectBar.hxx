@@ -47,7 +47,7 @@ public:
     void            Execute( SfxRequest& rReq );
 
     void            GetFilterState( SfxItemSet& rSet );
-    void            ExecuteFilter( SfxRequest& rReq );
+    void            ExecuteFilter( SfxRequest const & rReq );
 
 protected:
     ::sd::View* mpView;

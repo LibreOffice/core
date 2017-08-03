@@ -990,7 +990,7 @@ public:
     void update( STLPropertySet* pSet );
     DECL_LINK( implSelectHdl, ListBox&, void );
     DECL_LINK( implClickHdl, Button*, void );
-    void implHdl(Control*);
+    void implHdl(Control const *);
 
 private:
     void updateControlStates();
@@ -1282,7 +1282,7 @@ IMPL_LINK( CustomAnimationEffectTabPage, implSelectHdl, ListBox&, rListBox, void
     implHdl(&rListBox);
 }
 
-void CustomAnimationEffectTabPage::implHdl(Control* pControl )
+void CustomAnimationEffectTabPage::implHdl(Control const * pControl )
 {
     if( pControl == mpLBTextAnim )
     {
@@ -1558,7 +1558,7 @@ public:
     DECL_LINK( implControlHdl, ListBox&, void );
     DECL_LINK( implClickHdl, Button*, void );
     DECL_LINK( DurationModifiedHdl, Edit&, void );
-    void implHdl(Control*);
+    void implHdl(Control const *);
 
 private:
     const STLPropertySet* mpSet;
@@ -1786,7 +1786,7 @@ IMPL_LINK_NOARG(CustomAnimationDurationTabPage, DurationModifiedHdl, Edit&, void
     }
 }
 
-void CustomAnimationDurationTabPage::implHdl( Control* pControl )
+void CustomAnimationDurationTabPage::implHdl( Control const * pControl )
 {
     if( pControl == mpLBTrigger )
     {

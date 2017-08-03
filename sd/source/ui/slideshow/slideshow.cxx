@@ -145,7 +145,7 @@ rtl::Reference< SlideShow > SlideShow::Create( SdDrawDocument* pDoc )
     return new SlideShow( pDoc );
 }
 
-rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument* pDocument )
+rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument const * pDocument )
 {
     rtl::Reference< SlideShow > xRet;
 
@@ -155,18 +155,18 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument* pDocument )
     return xRet;
 }
 
-rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument& rDocument )
+rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument const & rDocument )
 {
     return rtl::Reference< SlideShow >(
         dynamic_cast< SlideShow* >( rDocument.getPresentation().get() ) );
 }
 
-rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase& rBase )
+rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase const & rBase )
 {
     return GetSlideShow( rBase.GetDocument() );
 }
 
-css::uno::Reference< css::presentation::XSlideShowController > SlideShow::GetSlideShowController(ViewShellBase& rBase )
+css::uno::Reference< css::presentation::XSlideShowController > SlideShow::GetSlideShowController(ViewShellBase const & rBase )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
 
@@ -177,7 +177,7 @@ css::uno::Reference< css::presentation::XSlideShowController > SlideShow::GetSli
     return xRet;
 }
 
-bool SlideShow::StartPreview( ViewShellBase& rBase,
+bool SlideShow::StartPreview( ViewShellBase const & rBase,
     const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage,
     const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode )
 {
@@ -188,14 +188,14 @@ bool SlideShow::StartPreview( ViewShellBase& rBase,
     return false;
 }
 
-void SlideShow::Stop( ViewShellBase& rBase )
+void SlideShow::Stop( ViewShellBase const & rBase )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
     if( xSlideShow.is() )
         xSlideShow->end();
 }
 
-bool SlideShow::IsRunning( ViewShellBase& rBase )
+bool SlideShow::IsRunning( ViewShellBase const & rBase )
 {
     rtl::Reference< SlideShow > xSlideShow( GetSlideShow( rBase ) );
     return xSlideShow.is() && xSlideShow->isRunning();
@@ -1159,7 +1159,7 @@ sal_Int32 SlideShow::GetDisplay()
     return nDisplay;
 }
 
-bool SlideShow::dependsOn( ViewShellBase* pViewShellBase )
+bool SlideShow::dependsOn( ViewShellBase const * pViewShellBase )
 {
     return mxController.is() && (pViewShellBase == mpCurrentViewShellBase) && mpFullScreenViewShellBase;
 }

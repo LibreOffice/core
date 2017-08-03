@@ -1555,7 +1555,7 @@ OUString SdGenericDrawPage::getBookmarkURL() const
     return aRet.makeStringAndClear();
 }
 
-void SdGenericDrawPage::setBookmarkURL( OUString& rURL )
+void SdGenericDrawPage::setBookmarkURL( OUString const & rURL )
 {
     if( SvxFmDrawPage::mpPage )
     {
@@ -2128,12 +2128,12 @@ Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-OUString SdDrawPage::getPageApiName( SdPage* pPage )
+OUString SdDrawPage::getPageApiName( SdPage const * pPage )
 {
     return ::getPageApiName( pPage );
 }
 
-OUString getPageApiName( SdPage* pPage )
+OUString getPageApiName( SdPage const * pPage )
 {
     OUString aPageName;
 
@@ -2590,7 +2590,7 @@ void SdGenericDrawPage::setNavigationOrder( const Any& rValue )
 class SdNavigationOrderAccess : public ::cppu::WeakImplHelper< XIndexAccess >
 {
 public:
-    explicit SdNavigationOrderAccess(SdrPage* pPage);
+    explicit SdNavigationOrderAccess(SdrPage const * pPage);
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override;
@@ -2604,7 +2604,7 @@ private:
     std::vector< Reference< XShape > > maShapes;
 };
 
-SdNavigationOrderAccess::SdNavigationOrderAccess( SdrPage* pPage )
+SdNavigationOrderAccess::SdNavigationOrderAccess( SdrPage const * pPage )
 : maShapes( pPage ? pPage->GetObjCount() : 0 )
 {
     if( pPage )
