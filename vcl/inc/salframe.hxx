@@ -28,6 +28,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vcl/window.hxx>
+#include <vcl/weld.hxx>
     // complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
 
 class AllSettings;
@@ -107,7 +108,8 @@ private:
     // the VCL window corresponding to this frame
     VclPtr<vcl::Window>     m_pWindow;
     SALFRAMEPROC            m_pProc;
-
+protected:
+    mutable std::unique_ptr<Weld::Window> m_xFrameWeld;
 public:
                             SalFrame();
     virtual                 ~SalFrame() override;
@@ -260,6 +262,8 @@ public:
     {
         return false;
     }
+
+    virtual Weld::Window*   GetFrameWeld() const;
 
     // Callbacks (indepent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0
