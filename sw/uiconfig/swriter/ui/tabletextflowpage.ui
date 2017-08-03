@@ -4,58 +4,14 @@
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">9999</property>
+    <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
-    <property name="value">1</property>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
-  </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="tabletextflowpage|liststore1">Horizontal</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tabletextflowpage|liststore1">Vertical</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tabletextflowpage|liststore1">Use superordinate object settings</col>
-        <col id="1">4</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststore2">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="tabletextflowpage|liststore2">Top</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tabletextflowpage|liststore2">Centered</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="tabletextflowpage|liststore2">Bottom</col>
-        <col id="1">2</col>
-      </row>
-    </data>
   </object>
   <object class="GtkGrid" id="TableTextFlowPage">
     <property name="visible">True</property>
@@ -117,7 +73,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">column</property>
                         <accessibility>
                           <relation type="member-of" target="break"/>
                         </accessibility>
@@ -156,7 +111,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">after</property>
                         <accessibility>
                           <relation type="member-of" target="break"/>
                         </accessibility>
@@ -175,6 +129,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">before</property>
                         <accessibility>
                           <relation type="member-of" target="break"/>
                         </accessibility>
@@ -219,10 +174,12 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="pagenoft">
+                        <property name="label" translatable="yes" context="tabletextflowpage|pagenoft">Page _number</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes" context="tabletextflowpage|pagenoft">Page _number</property>
+                        <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -248,8 +205,6 @@
                       <object class="GtkComboBoxText" id="pagestylelb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
                         <accessibility>
                           <relation type="labelled-by" target="pagestyle"/>
                         </accessibility>
@@ -328,7 +283,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes" context="tabletextflowpage|label40">Text _orientation</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">textdirection</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -336,10 +290,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="textdirection">
+                      <object class="GtkComboBoxText" id="textdirection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">liststore1</property>
+                        <items>
+                          <item id="0" translatable="yes" context="tabletextflowpage|liststore1">Horizontal</item>
+                          <item id="2" translatable="yes" context="tabletextflowpage|liststore1">Vertical</item>
+                          <item id="4" translatable="yes" context="tabletextflowpage|liststore1">Use superordinate object settings</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -468,7 +426,6 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="tabletextflowpage|label41">_Vertical alignment</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">vertorient</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -476,10 +433,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="vertorient">
+                  <object class="GtkComboBoxText" id="vertorient">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="model">liststore2</property>
+                    <items>
+                      <item id="0" translatable="yes" context="tabletextflowpage|liststore2">Top</item>
+                      <item id="1" translatable="yes" context="tabletextflowpage|liststore2">Centered</item>
+                      <item id="2" translatable="yes" context="tabletextflowpage|liststore2">Bottom</item>
+                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>

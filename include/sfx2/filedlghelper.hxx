@@ -107,6 +107,10 @@ public:
 
                             FileDialogHelper(sal_Int16 nDialogType,
                                              FileDialogFlags nFlags,
+                                             const Weld::Window* _pPreferredParent);
+
+                            FileDialogHelper(sal_Int16 nDialogType,
+                                             FileDialogFlags nFlags,
                                              const OUString& rFactory,
                                              SfxFilterFlags nMust,
                                              SfxFilterFlags nDont,
