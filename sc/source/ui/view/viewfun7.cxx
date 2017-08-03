@@ -148,8 +148,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
             SdrMarkList aMark = pDragEditView->GetMarkedObjectList();
             aMark.ForceSort();
-            const size_t nMarkAnz=aMark.GetMarkCount();
-            for (size_t nm=0; nm<nMarkAnz; ++nm) {
+            const size_t nMarkCnt=aMark.GetMarkCount();
+            for (size_t nm=0; nm<nMarkCnt; ++nm) {
                 const SdrMark* pM=aMark.GetMark(nm);
                 const SdrObject* pObj=pM->GetMarkedSdrObj();
 

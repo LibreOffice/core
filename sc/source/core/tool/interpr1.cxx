@@ -8510,17 +8510,17 @@ void ScInterpreter::ScFind()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        sal_Int32 nAnz;
+        sal_Int32 nCnt;
         if (nParamCount == 3)
-            nAnz = GetDouble();
+            nCnt = GetDouble();
         else
-            nAnz = 1;
+            nCnt = 1;
         OUString sStr = GetString().getString();
-        if (nAnz < 1 || nAnz > sStr.getLength())
+        if (nCnt < 1 || nCnt > sStr.getLength())
             PushNoValue();
         else
         {
-            sal_Int32 nPos = sStr.indexOf(GetString().getString(), nAnz - 1);
+            sal_Int32 nPos = sStr.indexOf(GetString().getString(), nCnt - 1);
             if (nPos == -1)
                 PushNoValue();
             else
@@ -8727,15 +8727,15 @@ void ScInterpreter::ScMidB()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double fAnz    = GetStringPositionArgument();
+        double fCnt    = GetStringPositionArgument();
         double fAnfang = GetStringPositionArgument();
         OUString aStr = GetString().getString();
-        if (fAnfang < 1.0 || fAnz < 0.0)
+        if (fAnfang < 1.0 || fCnt < 0.0)
             PushIllegalArgument();
         else
         {
 
-            aStr = lcl_LeftB(aStr, (sal_Int32)fAnfang + (sal_Int32)fAnz - 1);
+            aStr = lcl_LeftB(aStr, (sal_Int32)fAnfang + (sal_Int32)fCnt - 1);
             sal_Int32 nCnt = getLengthB(aStr) - (sal_Int32)fAnfang + 1;
             aStr = lcl_RightB(aStr, nCnt>0 ? nCnt:0);
             PushString(aStr);
@@ -8831,21 +8831,21 @@ void ScInterpreter::ScSearch()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        double fAnz;
+        double fCnt;
         if (nParamCount == 3)
         {
-            fAnz = GetStringPositionArgument();
-            if( fAnz < 1 )
+            fCnt = GetStringPositionArgument();
+            if( fCnt < 1 )
             {
                 PushIllegalArgument();
                 return;
             }
         }
         else
-            fAnz = 1.0;
+            fCnt = 1.0;
         OUString sStr = GetString().getString();
         OUString SearchStr = GetString().getString();
-        sal_Int32 nPos = fAnz - 1;
+        sal_Int32 nPos = fCnt - 1;
         sal_Int32 nEndPos = sStr.getLength();
         if( nPos >= nEndPos )
             PushNoValue();
@@ -8867,14 +8867,14 @@ void ScInterpreter::ScMid()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double fAnz    = GetStringPositionArgument();
+        double fCnt    = GetStringPositionArgument();
         double fAnfang = GetStringPositionArgument();
         OUString aStr = GetString().getString();
-        if (fAnfang < 1.0 || fAnz < 0.0)
+        if (fAnfang < 1.0 || fCnt < 0.0)
             PushIllegalArgument();
         else
         {
-            sal_Int32 nCharacters = std::min<sal_Int32>(static_cast<sal_Int32>(fAnz), aStr.getLength() - fAnfang + 1);
+            sal_Int32 nCharacters = std::min<sal_Int32>(static_cast<sal_Int32>(fCnt), aStr.getLength() - fAnfang + 1);
             OUString sRes;
             if (nCharacters > 0)
                 sRes = aStr.copy(static_cast<sal_Int32>(fAnfang-1), nCharacters);
@@ -8961,20 +8961,20 @@ void ScInterpreter::ScSubstitute()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 4 ) )
     {
-        sal_Int32 nAnz;
+        sal_Int32 nCnt;
         if (nParamCount == 4)
         {
-            double fAnz = GetStringPositionArgument();
-            if( fAnz < 1 )
+            double fCnt = GetStringPositionArgument();
+            if( fCnt < 1 )
             {
                 PushIllegalArgument();
                 return;
             }
             else
-                nAnz = (sal_Int32) fAnz;
+                nCnt = (sal_Int32) fCnt;
         }
         else
-            nAnz = 0;
+            nCnt = 0;
         OUString sNewStr = GetString().getString();
         OUString sOldStr = GetString().getString();
         OUString sStr    = GetString().getString();
@@ -8988,7 +8988,7 @@ void ScInterpreter::ScSubstitute()
             if (nPos != -1)
             {
                 nCount++;
-                if( !nAnz || nCount == nAnz )
+                if( !nCnt || nCount == nCnt )
                 {
                     sStr = sStr.replaceAt(nPos,nOldLen, "");
                     if ( CheckStringResultLen( sStr, sNewStr ) )
@@ -9013,20 +9013,20 @@ void ScInterpreter::ScRept()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fAnz = GetStringPositionArgument();
+        double fCnt = GetStringPositionArgument();
         OUString aStr = GetString().getString();
-        if ( fAnz < 0.0 )
+        if ( fCnt < 0.0 )
             PushIllegalArgument();
-        else if ( fAnz * aStr.getLength() > SAL_MAX_UINT16 )
+        else if ( fCnt * aStr.getLength() > SAL_MAX_UINT16 )
         {
             PushError( FormulaError::StringOverflow );
         }
-        else if ( fAnz == 0.0 )
+        else if ( fCnt == 0.0 )
             PushString( EMPTY_OUSTRING );
         else
         {
             const sal_Int32 nLen = aStr.getLength();
-            sal_Int32 n = (sal_Int32) fAnz;
+            sal_Int32 n = (sal_Int32) fCnt;
             OUStringBuffer aRes(n*nLen);
             while( n-- )
                 aRes.append(aStr);

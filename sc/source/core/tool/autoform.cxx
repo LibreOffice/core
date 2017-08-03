@@ -1050,10 +1050,10 @@ void ScAutoFormat::Load()
                 m_aVersions.Load( rStream, nVal );        // Item-Versionen
 
                 ScAutoFormatData* pData;
-                sal_uInt16 nAnz = 0;
-                rStream.ReadUInt16( nAnz );
+                sal_uInt16 nCnt = 0;
+                rStream.ReadUInt16( nCnt );
                 bRet = (rStream.GetError() == ERRCODE_NONE);
-                for (sal_uInt16 i=0; bRet && (i < nAnz); i++)
+                for (sal_uInt16 i=0; bRet && (i < nCnt); i++)
                 {
                     pData = new ScAutoFormatData();
                     bRet = pData->Load(rStream, m_aVersions);

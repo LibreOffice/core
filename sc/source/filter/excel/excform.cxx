@@ -1544,7 +1544,7 @@ void ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, std::s
     rStrm.Seek( nEndPos );
 }
 
-void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
+void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nCnt )
 {
     TokenId                 eParam[ 256 ];
     sal_Int32                   nLauf;
@@ -1552,18 +1552,18 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
     if( eId == ocCeil || eId == ocFloor )
     {
         aStack << aPool.Store( 1.0 );   // default, because not present in Excel
-        nAnz++;
+        nCnt++;
     }
 
-    for( nLauf = 0; aStack.HasMoreTokens() && (nLauf < nAnz); nLauf++ )
+    for( nLauf = 0; aStack.HasMoreTokens() && (nLauf < nCnt); nLauf++ )
         aStack >> eParam[ nLauf ];
     // #i70925# reduce parameter count, if no more tokens available on token stack
-    if( nLauf < nAnz )
-        nAnz = static_cast< sal_uInt8 >( nLauf );
+    if( nLauf < nCnt )
+        nCnt = static_cast< sal_uInt8 >( nLauf );
 
-    if( nAnz > 0 && eId == ocExternal )
+    if( nCnt > 0 && eId == ocExternal )
     {
-        TokenId             n = eParam[ nAnz - 1 ];
+        TokenId             n = eParam[ nCnt - 1 ];
 //##### ADJUST STUPIDITY FOR BASIC-FUNCS!
         if( const OUString* pExt = aPool.GetExternal( n ) )
         {
@@ -1571,7 +1571,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
                 aPool << pFuncInfo->meOpCode;
             else
                 aPool << n;
-            nAnz--;
+            nCnt--;
         }
         else
             aPool << eId;
@@ -1581,22 +1581,22 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
 
     aPool << ocOpen;
 
-    if( nAnz > 0 )
+    if( nCnt > 0 )
     {
-        // attention: 0 = last parameter, nAnz-1 = first parameter
+        // attention: 0 = last parameter, nCnt-1 = first parameter
         sal_Int16 nSkipEnd = -1;    // skip all parameters <= nSkipEnd
 
-        sal_Int16 nLast = nAnz - 1;
+        sal_Int16 nLast = nCnt - 1;
 
         // functions for which parameters have to be skipped
-        if( eId == ocPercentrank && nAnz == 3 )
+        if( eId == ocPercentrank && nCnt == 3 )
             nSkipEnd = 0;       // skip last parameter if necessary
 
         // Joost special cases
         else if( eId == ocIf )
         {
             sal_uInt16          nNullParam = 0;
-            for( nLauf = 0 ; nLauf < nAnz ; nLauf++ )
+            for( nLauf = 0 ; nLauf < nCnt ; nLauf++ )
             {
                 if( aPool.IsSingleOp( eParam[ nLauf ], ocMissing ) )
                 {

@@ -409,9 +409,9 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream)
     rStream.ReadUInt16( ID );
     if (ID == FontID)
     {
-        sal_uInt16 nAnz(0);
-        rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == ERRCODE_NONE); i++)
+        sal_uInt16 nCnt(0);
+        rStream.ReadUInt16( nCnt );
+        for (sal_uInt16 i=0; (i < nCnt) && (nError == ERRCODE_NONE); i++)
         {
             nError = insert_new<Sc10FontData>( this, rStream);
         }
@@ -450,9 +450,9 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
     rStream.ReadUInt16( ID );
     if (ID == NameID)
     {
-        sal_uInt16 nAnz;
-        rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == ERRCODE_NONE); i++)
+        sal_uInt16 nCnt;
+        rStream.ReadUInt16( nCnt );
+        for (sal_uInt16 i=0; (i < nCnt) && (nError == ERRCODE_NONE); i++)
         {
             nError = insert_new<Sc10NameData>( this, rStream);
         }
@@ -500,9 +500,9 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream)
     rStream.ReadUInt16( ID );
     if (ID == PatternID)
     {
-        sal_uInt16 nAnz;
-        rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == ERRCODE_NONE); i++)
+        sal_uInt16 nCnt;
+        rStream.ReadUInt16( nCnt );
+        for (sal_uInt16 i=0; (i < nCnt) && (nError == ERRCODE_NONE); i++)
         {
             nError = insert_new<Sc10PatternData>( this, rStream);
         }
@@ -560,9 +560,9 @@ Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream)
     if (ID == DataBaseID)
     {
         lcl_ReadFixedString( rStream, ActName, sizeof(ActName));
-        sal_uInt16 nAnz;
-        rStream.ReadUInt16( nAnz );
-        for (sal_uInt16 i=0; (i < nAnz) && (nError == ERRCODE_NONE); i++)
+        sal_uInt16 nCnt;
+        rStream.ReadUInt16( nCnt );
+        for (sal_uInt16 i=0; (i < nCnt) && (nError == ERRCODE_NONE); i++)
         {
             nError = insert_new<Sc10DataBaseData>( this, rStream);
         }
@@ -2305,17 +2305,17 @@ void Sc10Import::LoadObjects()
         return;
     if (ID == ObjectID)
     {
-        sal_uInt16 nAnz;
-        rStream.ReadUInt16( nAnz );
+        sal_uInt16 nCnt;
+        rStream.ReadUInt16( nCnt );
         sal_Char Reserved[32];
         rStream.ReadBytes(Reserved, sizeof(Reserved));
         nError = rStream.GetError();
-        if ((nAnz > 0) && (nError == ERRCODE_NONE))
+        if ((nCnt > 0) && (nError == ERRCODE_NONE))
         {
             sal_uInt8 ObjectType;
             Sc10GraphHeader GraphHeader;
             bool IsOleObject = false; // TODO: this is only a band-aid
-            for (sal_uInt16 i = 0; (i < nAnz) && (nError == ERRCODE_NONE) && !rStream.IsEof() && !IsOleObject; i++)
+            for (sal_uInt16 i = 0; (i < nCnt) && (nError == ERRCODE_NONE) && !rStream.IsEof() && !IsOleObject; i++)
             {
                 rStream.ReadUChar( ObjectType );
                 lcl_ReadGraphHeader(rStream, GraphHeader);
