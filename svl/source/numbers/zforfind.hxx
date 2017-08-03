@@ -52,7 +52,7 @@ public:
     /// after IsNumberFormat: get decimal position
     short   GetDecPos() const { return nDecPos; }
     /// after IsNumberFormat: get count of numeric substrings in input string
-    sal_uInt16  GetAnzNums() const { return nAnzNums; }
+    sal_uInt16  GetNumericsCount() const { return nNumericsCnt; }
 
     /// set threshold of two-digit year input
     void    SetYear2000( sal_uInt16 nVal ) { nYear2000 = nVal; }
@@ -93,7 +93,7 @@ private:
     bool       IsNum[SV_MAX_COUNT_INPUT_STRINGS];    //* Whether a substring is numeric
     sal_uInt16 nNums[SV_MAX_COUNT_INPUT_STRINGS];    //* Sequence of offsets to numeric strings
     sal_uInt16 nStringsCnt;                          //* Total count of scanned substrings
-    sal_uInt16 nAnzNums;                             //* Count of numeric substrings
+    sal_uInt16 nNumericsCnt;                         //* Count of numeric substrings
     bool       bDecSepInDateSeps;                    //* True <=> DecSep in {.,-,/,DateSep}
     sal_uInt8  nMatchedAllStrings;                   //* Scan...String() matched all substrings,
 

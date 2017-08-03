@@ -1110,7 +1110,7 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
             if ( pStringScanner->GetDecPos() )
             {
                 // 100th seconds
-                if ( pStringScanner->GetAnzNums() > 3 || fOutNumber < 0.0 )
+                if ( pStringScanner->GetNumericsCount() > 3 || fOutNumber < 0.0 )
                 {
                     F_Index = GetFormatIndex( NF_TIME_HH_MMSS00, ActLnge );
                 }
