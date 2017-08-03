@@ -16,6 +16,24 @@
       "revId": "a97e6a9c080c92034aacf2df697f355d74ba200a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1113ec5d",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2017-08-03T13:48:18Z",
+      "side": 0,
+      "message": "I believe it converts all sections of the paragraph into plain text. This is temp for dev work. But actually this might not be a bad idea, since nested signatures should include the previous signatures as well (so as not to be tempered with the previous ones, by removing them for example). And if someone edits any of the fields (in fact any part of the paragraph, *all* signatures are invalidated and removed. So including the fields (or the field texts) should be a good thing.",
+      "parentUuid": "1a430d35_2e096732",
+      "revId": "a97e6a9c080c92034aacf2df697f355d74ba200a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
