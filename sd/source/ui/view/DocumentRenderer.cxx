@@ -367,9 +367,9 @@ namespace {
             beans::PropertyValue aOptionsUIFile;
             aOptionsUIFile.Name = "OptionsUIFile";
             if( mbImpress )
-                aOptionsUIFile.Value <<= OUString("modules/simpress/ui/printeroptions.ui");
+                aOptionsUIFile.Value <<= OUString("modules/simpress/ui/impressprinteroptions.ui");
             else
-                aOptionsUIFile.Value <<= OUString("modules/sdraw/ui/printeroptions.ui");
+                aOptionsUIFile.Value <<= OUString("modules/sdraw/ui/drawprinteroptions.ui");
             maProperties.push_back(aOptionsUIFile);
 
             SvtModuleOptions aOpt;
