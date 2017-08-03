@@ -22,12 +22,17 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <actctrl.hxx>
 #include "prcntfld.hxx"
 #include "swtypes.hxx"
 
 class SwWrtShell;
 class SwTableRep;
+namespace Weld
+{
+    class Widget;
+}
 
 struct TColumn
 {
@@ -35,30 +40,34 @@ struct TColumn
     bool    bVisible;
 };
 
-class SwFormatTablePage : public SfxTabPage
+class SwFormatTablePage : public NewSfxTabPage
 {
-    VclPtr<Edit>           m_pNameED;
-    VclPtr<FixedText>      m_pWidthFT;
-    PercentField           m_aWidthMF;
-    VclPtr<CheckBox>       m_pRelWidthCB;
+    std::unique_ptr<Weld::Entry> m_xNameED;
+    std::unique_ptr<Weld::Label> m_xWidthFT;
+    std::unique_ptr<Weld::MetricSpinButton> m_xWidthMF;
+    std::unique_ptr<Weld::CheckButton> m_xRelWidthCB;
 
-    VclPtr<RadioButton>    m_pFullBtn;
-    VclPtr<RadioButton>    m_pLeftBtn;
-    VclPtr<RadioButton>    m_pFromLeftBtn;
-    VclPtr<RadioButton>    m_pRightBtn;
-    VclPtr<RadioButton>    m_pCenterBtn;
-    VclPtr<RadioButton>    m_pFreeBtn;
+    std::unique_ptr<Weld::RadioButton> m_xFullBtn;
+    std::unique_ptr<Weld::RadioButton> m_xLeftBtn;
+    std::unique_ptr<Weld::RadioButton> m_xFromLeftBtn;
+    std::unique_ptr<Weld::RadioButton> m_xRightBtn;
+    std::unique_ptr<Weld::RadioButton> m_xCenterBtn;
+    std::unique_ptr<Weld::RadioButton> m_xFreeBtn;
 
-    VclPtr<FixedText>      m_pLeftFT;
-    PercentField m_aLeftMF;
-    VclPtr<FixedText>      m_pRightFT;
-    PercentField m_aRightMF;
-    VclPtr<FixedText>      m_pTopFT;
-    VclPtr<MetricField>    m_pTopMF;
-    VclPtr<FixedText>      m_pBottomFT;
-    VclPtr<MetricField>    m_pBottomMF;
+    std::unique_ptr<Weld::Label> m_xLeftFT;
+    std::unique_ptr<Weld::MetricSpinButton> m_xLeftMF;
+    std::unique_ptr<Weld::Label> m_xRightFT;
+    std::unique_ptr<Weld::MetricSpinButton> m_xRightMF;
+    std::unique_ptr<Weld::Label> m_xTopFT;
+    std::unique_ptr<Weld::MetricSpinButton> m_xTopMF;
+    std::unique_ptr<Weld::Label> m_xBottomFT;
+    std::unique_ptr<Weld::MetricSpinButton> m_xBottomMF;
+    std::unique_ptr<Weld::Widget> m_xContainer;
 
-    VclPtr<ListBox>        m_pTextDirectionLB;
+    std::unique_ptr<Weld::ComboBoxText> m_xTextDirectionLB;
+
+    double nOrigStep;
+    double nOrigPage;
 
     SwTableRep*     pTableData;
     SwTwips         nSaveWidth;
@@ -67,24 +76,30 @@ class SwFormatTablePage : public SfxTabPage
     bool            bFull:1;
     bool            bHtmlMode : 1;
 
-    void        Init();
-    void        ModifyHdl(const Edit* pEdit);
+    //This dialog can set inconsistent values on its spinbuttons, it always
+    //has, so to allow it to continue doing that, unset and reset the listeners
+    //when changing the values outside of the direct users input
+    void disconnect_values_changed();
+    void connect_values_changed();
 
-    DECL_LINK( AutoClickHdl, Button*, void );
-    DECL_LINK( RelWidthClickHdl, Button*, void );
+    void Init();
+    void ModifyHdl(const Weld::MetricSpinButton& rEdit);
+
+    DECL_LINK(AutoClickHdl, Weld::Button&, void);
+    DECL_LINK(RelWidthClickHdl, Weld::Button&, void);
     void RightModify();
-    DECL_LINK( UpDownHdl, SpinField&, void );
-    DECL_LINK( LoseFocusHdl, Control&, void );
+    DECL_LINK(UpDownHdl, Weld::MetricSpinButton&, void);
 
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
+    void ShowPercent(Weld::MetricSpinButton& rSpinButton, bool bIsChecked, int nMinTwip, int nMaxTwip);
+    void SetPercentValue(Weld::MetricSpinButton& rSpinButton, double fValue, int nMaxTwip, bool bIsPercent);
+    int GetPercentValue(Weld::MetricSpinButton& rSpinButton, int nMaxTwip, bool bAsPercent);
+    void SetPercentRange(Weld::MetricSpinButton& rSpinButton, double fMinValue, double fMaxValue,
+                         int nMaxTwip, bool bIsPercent);
+    void SetPercentLast(Weld::MetricSpinButton& rSpinButton, double fMaxValue, int nMaxTwip, bool bIsPercent);
 public:
-    SwFormatTablePage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwFormatTablePage() override;
-    virtual void dispose() override;
+    SwFormatTablePage(Weld::Container* pParent, const SfxItemSet& rSet);
 
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    static NewSfxTabPage* Create(Weld::Container* pParent, const SfxItemSet* pAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
@@ -143,55 +158,49 @@ public:
 
 };
 
-class SwTextFlowPage : public SfxTabPage
+class SwTextFlowPage : public NewSfxTabPage
 {
-    VclPtr<CheckBox>       m_pPgBrkCB;
-
-    VclPtr<RadioButton>    m_pPgBrkRB;
-    VclPtr<RadioButton>    m_pColBrkRB;
-
-    VclPtr<RadioButton>    m_pPgBrkBeforeRB;
-    VclPtr<RadioButton>    m_pPgBrkAfterRB;
-
-    VclPtr<CheckBox>       m_pPageCollCB;
-    VclPtr<ListBox>        m_pPageCollLB;
-    VclPtr<CheckBox>       m_pPageNoCB;
-    VclPtr<NumericField>   m_pPageNoNF;
-    VclPtr<CheckBox>       m_pSplitCB;
-    VclPtr<TriStateBox>    m_pSplitRowCB;
-    VclPtr<CheckBox>       m_pKeepCB;
-    VclPtr<CheckBox>       m_pHeadLineCB;
-    VclPtr<NumericField>   m_pRepeatHeaderNF;
-    VclPtr<VclContainer>   m_pRepeatHeaderCombo;
-    VclPtr<ListBox>        m_pTextDirectionLB;
-
-    VclPtr<ListBox>        m_pVertOrientLB;
+    std::unique_ptr<Weld::CheckButton> m_xPgBrkCB;
+    std::unique_ptr<Weld::RadioButton> m_xPgBrkRB;
+    std::unique_ptr<Weld::RadioButton> m_xColBrkRB;
+    std::unique_ptr<Weld::RadioButton> m_xPgBrkBeforeRB;
+    std::unique_ptr<Weld::RadioButton> m_xPgBrkAfterRB;
+    std::unique_ptr<Weld::CheckButton> m_xPageCollCB;
+    std::unique_ptr<Weld::ComboBoxText> m_xPageCollLB;
+    std::unique_ptr<Weld::CheckButton> m_xPageNoCB;
+    std::unique_ptr<Weld::SpinButton> m_xPageNoNF;
+    std::unique_ptr<Weld::CheckButton> m_xSplitCB;
+    std::unique_ptr<Weld::CheckButton> m_xSplitRowCB;
+    std::unique_ptr<Weld::CheckButton> m_xKeepCB;
+    std::unique_ptr<Weld::CheckButton> m_xHeadLineCB;
+    std::unique_ptr<Weld::SpinButton> m_xRepeatHeaderNF;
+    std::unique_ptr<Weld::Widget> m_xRepeatHeaderCombo;
+    std::unique_ptr<Weld::ComboBoxText> m_xTextDirectionLB;
+    std::unique_ptr<Weld::ComboBoxText> m_xVertOrientLB;
 
     SwWrtShell*     pShell;
 
     bool            bPageBreak;
     bool            bHtmlMode;
 
-    DECL_LINK(PageBreakHdl_Impl, Button*, void);
-    DECL_LINK(ApplyCollClickHdl_Impl, Button*, void);
-    DECL_LINK( PageBreakPosHdl_Impl, Button*, void );
-    DECL_LINK( PageBreakTypeHdl_Impl, Button*, void );
-    DECL_LINK(PageNoClickHdl_Impl, Button*, void);
-    DECL_LINK( SplitHdl_Impl, Button*, void );
-    DECL_STATIC_LINK( SwTextFlowPage, SplitRowHdl_Impl, Button*, void );
-    DECL_LINK( HeadLineCBClickHdl, Button* = nullptr, void );
+    DECL_LINK(PageBreakHdl_Impl, Weld::Button&, void);
+    DECL_LINK(ApplyCollClickHdl_Impl, Weld::Button&, void);
+    DECL_LINK(PageBreakPosHdl_Impl, Weld::Button&, void);
+    DECL_LINK(PageBreakTypeHdl_Impl, Weld::Button&, void);
+    DECL_LINK(PageNoClickHdl_Impl, Weld::Button&, void);
+    DECL_LINK(SplitHdl_Impl, Weld::Button&, void);
+    DECL_STATIC_LINK(SwTextFlowPage, SplitRowHdl_Impl, Weld::Button&, void);
+    DECL_LINK(HeadLineCBClickHdl, Weld::Button&, void);
 
 public:
-    SwTextFlowPage( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual ~SwTextFlowPage() override;
-    virtual void dispose() override;
-    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet);
+    SwTextFlowPage(Weld::Container* pParent, const SfxItemSet& rSet);
+    static NewSfxTabPage*  Create(Weld::Container* pParent, const SfxItemSet* pAttrSet);
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
-
     void                SetShell(SwWrtShell* pSh);
 
     void                DisablePageBreak();
+
 };
 
 #endif
