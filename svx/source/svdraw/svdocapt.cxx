@@ -275,16 +275,16 @@ sal_uInt32 SdrCaptionObj::GetHdlCount() const
 
 SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const
 {
-    const sal_uInt32 nRectHdlAnz(SdrRectObj::GetHdlCount());
+    const sal_uInt32 nRectHdlCnt(SdrRectObj::GetHdlCount());
 
-    if(nHdlNum < nRectHdlAnz)
+    if(nHdlNum < nRectHdlCnt)
     {
         return SdrRectObj::GetHdl(nHdlNum);
     }
     else
     {
         sal_uInt32 nPntNum(nHdlNum);
-        nPntNum -= nRectHdlAnz;
+        nPntNum -= nRectHdlCnt;
 
         if(nPntNum < aTailPoly.GetSize())
         {

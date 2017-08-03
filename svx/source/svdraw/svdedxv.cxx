@@ -238,7 +238,7 @@ void SdrObjEditView::ModelHasChanged()
     if (IsTextEdit()) {
         SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( mxTextEditObj.get() );
         if (pTextObj!=nullptr) {
-            sal_uIntPtr nOutlViewAnz=pTextEditOutliner->GetViewCount();
+            sal_uIntPtr nOutlViewCnt=pTextEditOutliner->GetViewCount();
             bool bAreaChg=false;
             bool bAnchorChg=false;
             bool bColorChg=false;
@@ -286,7 +286,7 @@ void SdrObjEditView::ModelHasChanged()
                         pTextObj->TakeTextAnchorRect(aAnchorRect);
                         pTextObj->ImpSetContourPolygon(*pTextEditOutliner,aAnchorRect, true);
                     }
-                    for (sal_uIntPtr nOV=0; nOV<nOutlViewAnz; nOV++) {
+                    for (sal_uIntPtr nOV=0; nOV<nOutlViewCnt; nOV++) {
                         OutlinerView* pOLV=pTextEditOutliner->GetView(nOV);
                         EVControlBits nStat0=pOLV->GetControlWord();
                         EVControlBits nStat=nStat0;
@@ -324,7 +324,7 @@ void SdrObjEditView::ModelHasChanged()
             // again on ModelHasChanged().
             if (bContourFrame || bAreaChg || bAnchorChg || bColorChg)
             {
-                for (sal_uIntPtr nOV=0; nOV<nOutlViewAnz; nOV++)
+                for (sal_uIntPtr nOV=0; nOV<nOutlViewCnt; nOV++)
                 {
                     OutlinerView* pOLV=pTextEditOutliner->GetView(nOV);
                     { // invalidate old OutlinerView area
@@ -1581,17 +1581,17 @@ bool SdrObjEditView::ImpIsTextEditAllSelected() const
     {
         if(SdrTextObj::HasTextImpl( pTextEditOutliner ) )
         {
-            const sal_Int32 nParaAnz=pTextEditOutliner->GetParagraphCount();
-            Paragraph* pLastPara=pTextEditOutliner->GetParagraph( nParaAnz > 1 ? nParaAnz - 1 : 0 );
+            const sal_Int32 nParaCnt=pTextEditOutliner->GetParagraphCount();
+            Paragraph* pLastPara=pTextEditOutliner->GetParagraph( nParaCnt > 1 ? nParaCnt - 1 : 0 );
 
             ESelection aESel(pTextEditOutlinerView->GetSelection());
-            if (aESel.nStartPara==0 && aESel.nStartPos==0 && aESel.nEndPara==(nParaAnz-1))
+            if (aESel.nStartPara==0 && aESel.nStartPos==0 && aESel.nEndPara==(nParaCnt-1))
             {
                 if( pTextEditOutliner->GetText(pLastPara).getLength() == aESel.nEndPos )
                     bRet = true;
             }
             // in case the selection was done backwards
-            if (!bRet && aESel.nEndPara==0 && aESel.nEndPos==0 && aESel.nStartPara==(nParaAnz-1))
+            if (!bRet && aESel.nEndPara==0 && aESel.nEndPos==0 && aESel.nStartPara==(nParaCnt-1))
             {
                 if(pTextEditOutliner->GetText(pLastPara).getLength() == aESel.nStartPos)
                     bRet = true;

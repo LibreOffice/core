@@ -215,8 +215,8 @@ bool SdrMarkView::MarkPoints(const tools::Rectangle* pRect, bool bUnmark)
     const SdrPageView* pPV0=nullptr;
     SdrMark* pM=nullptr;
     maHdlList.Sort();
-    const size_t nHdlAnz=maHdlList.GetHdlCount();
-    for (size_t nHdlNum=nHdlAnz; nHdlNum>0;) {
+    const size_t nHdlCnt=maHdlList.GetHdlCount();
+    for (size_t nHdlNum=nHdlCnt; nHdlNum>0;) {
         --nHdlNum;
         SdrHdl* pHdl=maHdlList.GetHdl(nHdlNum);
         if (IsPointMarkable(*pHdl) && pHdl->IsSelected()==bUnmark) {
@@ -282,8 +282,8 @@ void SdrMarkView::ImpSetPointsRects() const
 {
     tools::Rectangle aPnts;
     tools::Rectangle aGlue;
-    const size_t nHdlAnz=maHdlList.GetHdlCount();
-    for (size_t nHdlNum=0; nHdlNum<nHdlAnz; ++nHdlNum) {
+    const size_t nHdlCnt=maHdlList.GetHdlCount();
+    for (size_t nHdlNum=0; nHdlNum<nHdlCnt; ++nHdlNum) {
         const SdrHdl* pHdl=maHdlList.GetHdl(nHdlNum);
         SdrHdlKind eKind=pHdl->GetKind();
         if ((eKind==SdrHdlKind::Poly && pHdl->IsSelected()) || eKind==SdrHdlKind::Glue) {
@@ -544,8 +544,8 @@ bool SdrMarkView::IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const
 SdrHdl* SdrMarkView::GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) const
 {
     ForceUndirtyMrkPnt();
-    const size_t nHdlAnz=maHdlList.GetHdlCount();
-    for (size_t nHdlNum=0; nHdlNum<nHdlAnz; ++nHdlNum) {
+    const size_t nHdlCnt=maHdlList.GetHdlCount();
+    for (size_t nHdlNum=0; nHdlNum<nHdlCnt; ++nHdlNum) {
         SdrHdl* pHdl=maHdlList.GetHdl(nHdlNum);
         if (pHdl->GetObj()==pObj &&
             pHdl->GetKind()==SdrHdlKind::Glue &&

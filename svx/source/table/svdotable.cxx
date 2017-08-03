@@ -1772,7 +1772,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
     {
         OutlinerParaObject* pNewText = nullptr;
         Paragraph* p1stPara = rOutl.GetParagraph( 0 );
-        sal_Int32 nParaAnz = rOutl.GetParagraphCount();
+        sal_Int32 nParaCnt = rOutl.GetParagraphCount();
 
         if(p1stPara)
         {
@@ -1780,7 +1780,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
             rOutl.UpdateFields();
 
             // create new text object
-            pNewText = rOutl.CreateParaObject( 0, nParaAnz );
+            pNewText = rOutl.CreateParaObject( 0, nParaCnt );
         }
         SetOutlinerParaObject(pNewText);
     }

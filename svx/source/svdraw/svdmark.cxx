@@ -498,8 +498,8 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
     bool& rNameOk = const_cast<bool&>(bGlue ? mbGluePointNameOk : mbPointNameOk);
     OUString& rName = const_cast<OUString&>(bGlue ? maGluePointName : maPointName);
     const size_t nMarkCount(GetMarkCount());
-    size_t nMarkPtAnz(0);
-    size_t nMarkPtObjAnz(0);
+    size_t nMarkPtCnt(0);
+    size_t nMarkPtObjCnt(0);
     size_t n1stMarkNum(SAL_MAX_SIZE);
 
     for(size_t nMarkNum = 0; nMarkNum < nMarkCount; ++nMarkNum)
@@ -514,18 +514,18 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
                 n1stMarkNum = nMarkNum;
             }
 
-            nMarkPtAnz += rPts.size();
-            nMarkPtObjAnz++;
+            nMarkPtCnt += rPts.size();
+            nMarkPtObjCnt++;
         }
 
-        if(nMarkPtObjAnz > 1 && rNameOk)
+        if(nMarkPtObjCnt > 1 && rNameOk)
         {
             // preliminary decision
             return rName;
         }
     }
 
-    if(rNameOk && 1 == nMarkPtObjAnz)
+    if(rNameOk && 1 == nMarkPtObjCnt)
     {
         // if it's a single selection, cache only text frame
         const SdrObject* pObj = GetMark(0)->GetMarkedSdrObj();
@@ -537,7 +537,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
         }
     }
 
-    if(!nMarkPtObjAnz)
+    if(!nMarkPtObjCnt)
     {
         rName.clear();
         rNameOk = true;
@@ -547,7 +547,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
         const SdrMark* pMark = GetMark(n1stMarkNum);
         OUString aNam;
 
-        if(1L == nMarkPtObjAnz)
+        if(1L == nMarkPtObjCnt)
         {
             if(pMark->GetMarkedSdrObj())
             {
@@ -580,19 +580,19 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
                 aNam = ImpGetResStr(STR_ObjNamePlural);
             }
 
-            aNam = OUString::number( nMarkPtObjAnz ) + " " + aNam;
+            aNam = OUString::number( nMarkPtObjCnt ) + " " + aNam;
         }
 
         OUString aStr1;
 
-        if(1L == nMarkPtAnz)
+        if(1L == nMarkPtCnt)
         {
             aStr1 = (ImpGetResStr(bGlue ? STR_ViewMarkedGluePoint : STR_ViewMarkedPoint));
         }
         else
         {
             aStr1 = (ImpGetResStr(bGlue ? STR_ViewMarkedGluePoints : STR_ViewMarkedPoints));
-            aStr1 = aStr1.replaceFirst("%2", OUString::number( nMarkPtAnz ));
+            aStr1 = aStr1.replaceFirst("%2", OUString::number( nMarkPtCnt ));
         }
 
         aStr1 = aStr1.replaceFirst("%1", aNam);

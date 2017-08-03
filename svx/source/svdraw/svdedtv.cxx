@@ -333,9 +333,9 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
         }
     }
 
-    const size_t nMarkedEdgeAnz = GetMarkedEdgesOfMarkedNodes().GetMarkCount();
+    const size_t nMarkedEdgeCnt = GetMarkedEdgesOfMarkedNodes().GetMarkCount();
 
-    for (size_t i=0; i<nMarkedEdgeAnz; ++i) {
+    for (size_t i=0; i<nMarkedEdgeCnt; ++i) {
         SdrMark* pEM = GetMarkedEdgesOfMarkedNodes().GetMark(i);
         SdrObject* pEdgeTmp=pEM->GetMarkedSdrObj();
         SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pEdgeTmp );
@@ -879,8 +879,8 @@ void SdrEditView::CopyMarkedObj()
     SdrMarkList aSourceObjectsForCopy(GetMarkedObjectList());
     // The following loop is used instead of MarkList::Merge(), to be
     // able to flag the MarkEntries.
-    const size_t nEdgeAnz = GetEdgesOfMarkedNodes().GetMarkCount();
-    for (size_t nEdgeNum=0; nEdgeNum<nEdgeAnz; ++nEdgeNum) {
+    const size_t nEdgeCnt = GetEdgesOfMarkedNodes().GetMarkCount();
+    for (size_t nEdgeNum=0; nEdgeNum<nEdgeCnt; ++nEdgeNum) {
         SdrMark aM(*GetEdgesOfMarkedNodes().GetMark(nEdgeNum));
         aM.SetUser(1);
         aSourceObjectsForCopy.InsertEntry(aM);
