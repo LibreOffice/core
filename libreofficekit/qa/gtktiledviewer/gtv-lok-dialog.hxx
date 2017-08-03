@@ -39,7 +39,7 @@ GtkWidget* gtv_lok_dialog_new(LOKDocView* pDocView, const gchar* dialogId);
 
 void gtv_lok_dialog_invalidate(GtvLokDialog* dialog);
 
-void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog);
+void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog, int nX, int nY);
 
 void gtv_lok_dialog_child_close(GtvLokDialog* dialog);
 
