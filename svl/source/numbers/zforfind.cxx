@@ -126,7 +126,7 @@ void ImpSvNumberInputScan::Reset()
     nDatePatternNumbers = 0;
     nCanForceToIso8601 = 0;
 
-    for (sal_uInt32 i = 0; i < SV_MAX_ANZ_INPUT_STRINGS; i++)
+    for (sal_uInt32 i = 0; i < SV_MAX_COUNT_INPUT_STRINGS; i++)
     {
         IsNum[i] = false;
         nNums[i] = 0;
@@ -286,7 +286,7 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
 
 
 // FIXME: should be grouping; it is only used though in case nStringsCnt is
-// near SV_MAX_ANZ_INPUT_STRINGS, in NumberStringDivision().
+// near SV_MAX_COUNT_INPUT_STRINGS, in NumberStringDivision().
 
 bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
                                           OUString& rSymbol )
@@ -358,14 +358,14 @@ void ImpSvNumberInputScan::NumberStringDivision( const OUString& rString )
 {
     const sal_Unicode* pStr = rString.getStr();
     const sal_Unicode* const pEnd = pStr + rString.getLength();
-    while ( pStr < pEnd && nStringsCnt < SV_MAX_ANZ_INPUT_STRINGS )
+    while ( pStr < pEnd && nStringsCnt < SV_MAX_COUNT_INPUT_STRINGS )
     {
         if ( NextNumberStringSymbol( pStr, sStrArray[nStringsCnt] ) )
         {   // Number
             IsNum[nStringsCnt] = true;
             nNums[nAnzNums] = nStringsCnt;
             nAnzNums++;
-            if (nStringsCnt >= SV_MAX_ANZ_INPUT_STRINGS - 7 &&
+            if (nStringsCnt >= SV_MAX_COUNT_INPUT_STRINGS - 7 &&
                 nPosThousandString == 0) // Only once
             {
                 if ( SkipThousands( pStr, sStrArray[nStringsCnt] ) )
@@ -3035,7 +3035,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
 {
     Reset();
     NumberStringDivision( rString );             // breakdown into strings and numbers
-    if (nStringsCnt >= SV_MAX_ANZ_INPUT_STRINGS) // too many elements
+    if (nStringsCnt >= SV_MAX_COUNT_INPUT_STRINGS) // too many elements
     {
         return false;                            // Njet, Nope, ...
     }
