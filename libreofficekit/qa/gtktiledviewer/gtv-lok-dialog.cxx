@@ -110,7 +110,7 @@ gtv_lok_dialog_signal_button(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
            (int)pEvent->x, (int)pEvent->y,
            (int)pixelToTwip(pEvent->x),
            (int)pixelToTwip(pEvent->y));
-    gtk_widget_grab_focus(GTK_WIDGET(pDialog));
+    gtk_widget_grab_focus(pDialogDrawingArea);
 
     switch (pEvent->type)
     {
@@ -194,7 +194,6 @@ gtv_lok_dialog_signal_motion(GtkWidget* pDialogDrawingArea, GdkEventButton* pEve
            (int)pEvent->x, (int)pEvent->y,
            (int)pixelToTwip(pEvent->x),
            (int)pixelToTwip(pEvent->y));
-    gtk_widget_grab_focus(GTK_WIDGET(pDialog));
 
     pDocument->pClass->postDialogMouseEvent(pDocument,
                                             priv->dialogid,
@@ -216,6 +215,7 @@ gtv_lok_dialog_signal_key(GtkWidget* pDialogDrawingArea, GdkEventKey* pEvent)
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(gtk_window_get_transient_for(GTK_WINDOW(pDialog)));
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
 
+    g_info("lok_dialog_signal_key");
     int nCharCode = 0;
     int nKeyCode = 0;
     priv->m_nKeyModifier &= KEY_MOD2;
@@ -334,12 +334,14 @@ gtv_lok_dialog_init(GtvLokDialog* dialog)
     priv->m_nKeyModifier = 0;
     priv->m_nLastButtonPressed = 0;
 
-    gtk_widget_add_events(GTK_WIDGET(priv->pDialogDrawingArea),
+    gtk_widget_add_events(priv->pDialogDrawingArea,
                           GDK_BUTTON_PRESS_MASK
                           |GDK_BUTTON_RELEASE_MASK
                           |GDK_BUTTON_MOTION_MASK
                           |GDK_KEY_PRESS_MASK
                           |GDK_KEY_RELEASE_MASK);
+    // This is required to be able to capture key events on the drawing area
+    gtk_widget_set_can_focus(priv->pDialogDrawingArea, true);
 
     g_signal_connect(G_OBJECT(priv->pDialogDrawingArea), "draw", G_CALLBACK(gtv_lok_dialog_draw), nullptr);
     g_signal_connect(G_OBJECT(priv->pDialogDrawingArea), "button-press-event", G_CALLBACK(gtv_lok_dialog_signal_button), nullptr);
