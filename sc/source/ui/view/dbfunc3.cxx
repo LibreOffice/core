@@ -1571,6 +1571,14 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
         // apply changes
         ScDBDocFunc aFunc( *GetViewData().GetDocShell() );
         pDPObj->SetSaveData( aData );
+        ScDPCollection* pDPs = pDoc->GetDPCollection();
+        if (!pDPs)
+            return;
+
+        std::set<ScDPObject*> aRefs;
+        // tdf#111305: Reload groups in cache after modifications.
+        if (!pDPs->ReloadGroupsInCache(pDPObj, aRefs))
+            return;
         aFunc.UpdatePivotTable(*pDPObj, true, false);
     }
     else
