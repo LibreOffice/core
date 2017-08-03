@@ -73,6 +73,8 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
+#include <set>
+#include <algorithm>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -1333,6 +1335,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
     pDPObj->BuildAllDimensionMembers();
     ScDPSaveData aData( *pDPObj->GetSaveData() );
     bool bChange = false;
+    bool bNeedReloadGroups = false;
 
     DataPilotFieldOrientation nOrient = DataPilotFieldOrientation_HIDDEN;
     long nField = pDPObj->GetHeaderDim( rPos, nOrient );
@@ -1453,6 +1456,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
                             pSaveMember->SetName( rString );
 
                         bChange = true;
+                        bNeedReloadGroups = true;
                     }
                     else
                         pErrorId = STR_INVALIDNAME;
@@ -1571,6 +1575,16 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
         // apply changes
         ScDBDocFunc aFunc( *GetViewData().GetDocShell() );
         pDPObj->SetSaveData( aData );
+        if (bNeedReloadGroups)
+        {
+            ScDPCollection* pDPs = pDoc->GetDPCollection();
+            if (pDPs)
+            {
+                std::set<ScDPObject*> aRefs;
+                // tdf#111305: Reload groups in cache after modifications.
+                pDPs->ReloadGroupsInCache(pDPObj, aRefs);
+            } // pDPs
+        } // bNeedReloadGroups
         aFunc.UpdatePivotTable(*pDPObj, true, false);
     }
     else
