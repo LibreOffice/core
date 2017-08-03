@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6e9c4f6a",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 2316,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-08-03T07:17:02Z",
+      "side": 1,
+      "message": "eh, I think this needs to be the other way around.\n\nIf we enable adjust-height, that\u0027s the equivalent of unlocking.\n\nSorry, probably my bad.",
+      "revId": "bcb6fdd2d0fcb042a35daf8631dd6b22967613ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
