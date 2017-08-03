@@ -227,6 +227,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > CreateDragSource() override;
     virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget() override;
     virtual OpenGLContext* CreateOpenGLContext() override;
+    virtual Hackery::Builder* CreateBuilder(SalFrame* pParent, const OUString& rUri) override;
 #endif
 
     virtual const cairo_font_options_t* GetCairoFontOptions() override;
