@@ -28,8 +28,12 @@
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <wmfemfhelper.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 namespace emfplushelper
 {
@@ -322,6 +326,24 @@ namespace emfplushelper
     {
         // map in one step using complete MapTransform (see mappingChanged)
         return maMapTransform * ::basegfx::B2DSize(iwidth, iheight);
+    }
+
+    ::basegfx::BColor EmfPlusHelperData::EMFPGetBrushColorOrARGBColor(sal_uInt16 flags, sal_uInt32 brushIndexOrColor){
+        basegfx::BColor color;
+        if (flags & 0x8000) // we use a color
+        {
+            color = Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff,
+                                 (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor();
+        }
+        else // we use a pen
+        {
+            const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[brushIndexOrColor & 0xff].get());
+            if (pen)
+            {
+            color = pen->GetColor().getBColor();
+            }
+        }
+        return color;
     }
 
     void EmfPlusHelperData::EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex)
@@ -1233,6 +1255,7 @@ namespace emfplushelper
                             std::unique_ptr<float[]> charsPosX(new float[glyphsCount]);
                             std::unique_ptr<float[]> charsPosY(new float[glyphsCount]);
                             OUString text = read_uInt16s_ToOUString(rMS, glyphsCount);
+                            SAL_INFO("cppcanvas.emf", "EMF+ DrawDriverString string: " << text);
 
                             for (sal_uInt32 i = 0; i<glyphsCount; i++)
                             {
@@ -1250,7 +1273,51 @@ namespace emfplushelper
                                     ", " << transform.get(0,2) << ", " << transform.get(1,2));
                             }
 
-                            (void)text; // avoid warning
+                            // get the font from the flags
+                            EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
+                            if (!font)
+                            {
+                              break;
+                            }
+                            // done reading
+
+                            const OUString emptyString;
+                            drawinglayer::attribute::FontAttribute fontAttribute(
+                                font->family,                                    // font family
+                                emptyString,                                     // (no) font style
+                                font->Bold() ? 8u : 1u,                          // weight: 8 = bold
+                                font->family.compareTo("SYMBOL") == 0,           // symbol
+                                optionFlags & 0x2,                               // vertical
+                                font->Italic(),                                  // italic
+                                false,                                           // monospaced
+                                false,                                           // outline = false, no such thing in MS-EMFPLUS
+                                false,                                           // right-to-left
+                                false);                                          // BiDiStrong
+
+                            basegfx::BColor color = EMFPGetBrushColorOrARGBColor(flags,brushIndexOrColor);
+                            std::vector<double> emptyVector; // dummy for DX array (not used)
+
+                            // render char by char
+                            for (size_t i=0; i<glyphsCount; i++)
+                            {
+                                basegfx::B2DHomMatrix transformMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    MapSize(font->emSize,font->emSize),Map(charsPosX[i],charsPosY[i]));
+                                if (hasMatrix)
+                                    transformMatrix *= transform;
+
+                                const OUString character(text[i]);
+
+                                mrTargetHolders.Current().append(
+                                    new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                    transformMatrix,
+                                    character,
+                                    0,             // text always starts at 0
+                                    1,             // char by char
+                                    emptyVector,   // EMF-PLUS has no DX-array
+                                    fontAttribute,
+                                    Application::GetSettings().GetLanguageTag().getLocale(),
+                                    color));
+                            }
 
     //                        rendering::FontRequest aFontRequest;
     //                        // add the text action

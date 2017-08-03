@@ -32,6 +32,11 @@ namespace emfplushelper
         OUString family;
 
         void Read(SvMemoryStream &s);
+
+        bool Bold()     { return fontFlags & 0x1; }
+        bool Italic()   { return fontFlags & 0x2; }
+        bool Underline(){ return fontFlags & 0x4; }
+        bool Strikaout(){ return fontFlags & 0x8; }
     };
 }
 
