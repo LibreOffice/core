@@ -460,7 +460,7 @@ gtv_lok_dialog_invalidate(GtvLokDialog* dialog)
     gtk_widget_queue_draw(priv->pDialogDrawingArea);
 }
 
-void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog)
+void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog, int nX, int nY)
 {
     g_info("Dialog's floating window invalidate");
 
@@ -474,14 +474,22 @@ void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog)
     gtk_container_add(GTK_CONTAINER(priv->pFloatingWin), pDrawingArea);
 
     gtk_window_set_transient_for(GTK_WINDOW(priv->pFloatingWin), GTK_WINDOW(dialog));
-    gtk_window_set_position(GTK_WINDOW(priv->pFloatingWin), GTK_WIN_POS_MOUSE);
     gtk_window_set_destroy_with_parent(GTK_WINDOW(priv->pFloatingWin), true);
-
     g_signal_connect(G_OBJECT(pDrawingArea), "draw", G_CALLBACK(gtv_lok_dialog_floating_win_draw), dialog);
 
     gtk_widget_set_size_request(priv->pFloatingWin, 1, 1);
+    gtk_window_set_type_hint(GTK_WINDOW(priv->pFloatingWin), GDK_WINDOW_TYPE_HINT_POPUP_MENU);
+    gtk_window_set_screen(GTK_WINDOW(priv->pFloatingWin), gtk_window_get_screen(GTK_WINDOW(dialog)));
+
     gtk_widget_show_all(priv->pFloatingWin);
     gtk_window_present(GTK_WINDOW(priv->pFloatingWin));
+
+    // Get the root coords of our new floating window
+    GdkWindow* pGdkWin = gtk_widget_get_window(GTK_WIDGET(dialog));
+    int nrX = 0;
+    int nrY = 0;
+    gdk_window_get_root_coords(pGdkWin, nX, nY, &nrX, &nrY);
+    gtk_window_move(GTK_WINDOW(priv->pFloatingWin), nrX, nrY);
 }
 
 void gtv_lok_dialog_child_close(GtvLokDialog* dialog)
