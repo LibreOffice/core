@@ -70,7 +70,6 @@ ScFunctionWin::ScFunctionWin( SfxBindings* pBindingsP, vcl::Window* pParent, con
     InitLRUList();
     SetStyle(GetStyle()|WB_CLIPCHILDREN);
 
-    aIdle.SetPriority(TaskPriority::LOWER);
     aIdle.SetInvokeHandler(LINK( this, ScFunctionWin, TimerHdl));
 
     aFiFuncDesc->SetUpdateMode(true);

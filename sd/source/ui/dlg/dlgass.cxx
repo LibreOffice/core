@@ -596,13 +596,10 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,vo
     maAssistentFunc.GotoPage(1);
     mpLastPageButton->Disable();
 
-    maPrevIdle.SetPriority( TaskPriority::LOWER );
     maPrevIdle.SetInvokeHandler( LINK( this, AssistentDlgImpl, UpdatePreviewHdl));
 
-    maEffectPrevIdle.SetPriority( TaskPriority::MEDIUM );
     maEffectPrevIdle.SetInvokeHandler( LINK( this, AssistentDlgImpl, EffectPreviewIdleHdl ));
 
-    maUpdatePageListIdle.SetPriority( TaskPriority::MEDIUM );
     maUpdatePageListIdle.SetInvokeHandler( LINK( this, AssistentDlgImpl, UpdatePageListHdl));
 
     SetStartType( ST_EMPTY );
