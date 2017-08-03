@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NUMFMTLB_HXX
 
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <svl/zforlist.hxx>
 #include "swdllapi.h"
 
@@ -62,7 +63,59 @@ public:
     bool            IsAutomaticLanguage()const {return bUseAutomaticLanguage;}
 
     void            SetShowLanguageControl(bool bSet){bShowLanguageControl = bSet;}
+};
 
+class SW_DLLPUBLIC NumFormatComboBoxText
+{
+    Weld::Dialog& m_rDialog;
+    std::unique_ptr<Weld::ComboBoxText> m_xComboBoxText;
+    Link<NumFormatComboBoxText&, void> maSelectHdl;
+    short               nCurrFormatType;
+    sal_Int32           nStdEntry;
+    bool                bOneArea;
+    sal_uInt32          nDefFormat;
+    LanguageType        eCurLanguage;
+    bool                bShowLanguageControl; //determine whether the language control has
+                                              //to be shown in the number format dialog
+    bool                bUseAutomaticLanguage;//determine whether language is automatically assigned
+
+    DECL_DLLPRIVATE_LINK(SelectHdl, NumFormatComboBoxText&, void);
+    DECL_LINK(Changed, Weld::ComboBoxText&, void);
+
+    SAL_DLLPRIVATE static double   GetDefValue(const short nFormatType);
+    SAL_DLLPRIVATE void            Init();
+
+public:
+    NumFormatComboBoxText(Weld::Dialog& rDialog, Weld::ComboBoxText* pComboBoxText);
+
+    void            Clear();
+
+    void     SetOneArea(bool bOnlyOne) { bOneArea = bOnlyOne; }
+
+    void            SetFormatType(const short nFormatType);
+    short    GetFormatType() const { return nCurrFormatType; }
+    void            SetDefFormat(const sal_uInt32 nDefFormat);
+    sal_uInt32      GetFormat() const;
+
+    LanguageType GetCurLanguage() const { return eCurLanguage;}
+    void                SetLanguage(LanguageType eSet)  { eCurLanguage = eSet;}
+
+    void            SetAutomaticLanguage(bool bSet){bUseAutomaticLanguage = bSet;}
+    bool            IsAutomaticLanguage()const {return bUseAutomaticLanguage;}
+
+    void            SetShowLanguageControl(bool bSet){bShowLanguageControl = bSet;}
+
+    void set_sensitive(bool bSensitive)
+    {
+        m_xComboBoxText->set_sensitive(bSensitive);
+    }
+
+    const Link<NumFormatComboBoxText&, void>& GetSelectHdl() const { return maSelectHdl; }
+    void SetSelectHdl(const Link<NumFormatComboBoxText&, void>& rLink) { maSelectHdl = rLink; }
+
+    sal_Int32 GetSelectEntryPos() const { return m_xComboBoxText->get_active(); }
+    sal_Int32 GetEntryCount() const { return m_xComboBoxText->get_count(); }
+    OUString GetEntry(sal_Int32 nPos) const { return m_xComboBoxText->get_text(nPos); }
 };
 
 #endif

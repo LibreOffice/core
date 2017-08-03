@@ -50,7 +50,7 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(vcl::Window *pParent,
     }
     else
     {
-        m_nBackgroundPageId = AddTabPage("background", SvxBackgroundTabPage::Create, nullptr );
+//TODO        m_nBackgroundPageId = AddTabPage("background", SvxBackgroundTabPage::Create, nullptr );
     }
 }
 
@@ -61,7 +61,7 @@ void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPa
         // allow switching between Color/graphic
         if(mbEnableBackgroundSelector)
         {
-            static_cast< SvxBackgroundTabPage& >(rTabPage).ShowSelector();
+//TODO            static_cast< SvxBackgroundTabPage& >(rTabPage).ShowSelector();
         }
     }
     // inits for Area and Transparency TabPages

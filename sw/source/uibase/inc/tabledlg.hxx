@@ -20,25 +20,24 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_TABLEDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
-
+#include <vcl/weld.hxx>
 #include "swtypes.hxx"
 #include "swtablerep.hxx"
 
 class SwWrtShell;
+class SwFormatTablePage;
+class SwTextFlowPage;
 struct TColumn;
 
 // table dialog
-class SwTableTabDlg : public SfxTabDialog
+class SwTableTabDlg : public NewSfxTabDialog
 {
     SwWrtShell* pShell;
-    sal_uInt16 m_nTextFlowId;
-    sal_uInt16 m_nBackgroundId;
     sal_uInt16 m_nBorderId;
 
-    virtual void        PageCreated(sal_uInt16 nId, SfxTabPage& rPage) override;
+    virtual void PageCreated(const OString& nId, NewSfxTabPage& rPage) override;
 public:
-     SwTableTabDlg( vcl::Window* pParent,
-                    const SfxItemSet* pItemSet, SwWrtShell* pSh );
+    SwTableTabDlg(Weld::Window* pParent, const SfxItemSet& rItemSet, SwWrtShell* pSh);
 };
 
 #endif
