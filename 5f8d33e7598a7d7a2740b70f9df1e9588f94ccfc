@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_511d7465",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2017-08-03T14:00:02Z",
+      "side": 1,
+      "message": "Right, the namespace here is \"lox.sign\", since I didn\u0027t want to take lox (or loext) exclusively for paragraph signing.\n\nBut we can\u0027t use loext:signature:foo (I tried, it doesn\u0027t work), so we need some other convention, if using \u0027.\u0027 in the namespace is not preferable. I\u0027m open to suggestions.",
+      "parentUuid": "1a430d35_b103f80c",
+      "revId": "5f8d33e7598a7d7a2740b70f9df1e9588f94ccfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_d108842b",
         "filename": "sw/source/core/edit/edfcol.cxx",
         "patchSetId": 1
