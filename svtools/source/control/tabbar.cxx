@@ -1192,7 +1192,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
             bool bSelected = pItem->IsSelected(pCurItem);
             // We disable custom background color in high contrast mode.
             bool bCustomBgColor = !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode();
-            bool bSpecialTab = (pItem->mnBits & TPB_SPECIAL);
+            bool bSpecialTab = (pItem->mnBits & TPB_DISPLAY_NAME_BLUE);
             OUString aText = pItem->mbShort ? rRenderContext.GetEllipsisString(pItem->maText, mnCurMaxWidth) : pItem->maText;
 
             aDrawer.setRect(aRect);
@@ -1618,7 +1618,7 @@ void TabBar::InsertPage(sal_uInt16 nPageId, const OUString& rText,
     DBG_ASSERT( nPageId, "TabBar::InsertPage(): PageId == 0" );
     DBG_ASSERT( GetPagePos( nPageId ) == PAGE_NOT_FOUND,
                 "TabBar::InsertPage(): PageId already exists" );
-    DBG_ASSERT( nBits <= TPB_SPECIAL, "TabBar::InsertPage(): nBits is wrong" );
+    DBG_ASSERT( nBits <= TPB_DISPLAY_NAME_BLUE, "TabBar::InsertPage(): nBits is wrong" );
 
     // create PageItem and insert in the item list
     ImplTabBarItem* pItem = new ImplTabBarItem( nPageId, rText, nBits );
@@ -2097,7 +2097,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
             aForegroundColor = aFaceTextColor;
             aBackgroundColor = aFaceColor;
         }
-        if (GetPageBits( mnEditId ) & TPB_SPECIAL)
+        if (GetPageBits( mnEditId ) & TPB_DISPLAY_NAME_BLUE)
         {
             aForegroundColor = Color(COL_LIGHTBLUE);
         }

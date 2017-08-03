@@ -58,7 +58,7 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
             if (pDoc->GetName(i,aString))
             {
                 if ( pDoc->IsScenario(i) )
-                    InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
+                    InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_DISPLAY_NAME_BLUE);
                 else
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString );
                 if ( !pDoc->IsDefaultTabBgColor(i) )
@@ -365,13 +365,13 @@ void ScTabControl::UpdateStatus()
                 if (pDoc->GetName(i,aString))
                 {
                     if ( pDoc->IsScenario(i) )
-                        InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
+                        InsertPage(static_cast<sal_uInt16>(i)+1, aString, TPB_DISPLAY_NAME_BLUE);
                     else
                         InsertPage( static_cast<sal_uInt16>(i)+1, aString );
                     if ( !pDoc->IsDefaultTabBgColor(i) )
                     {
                         aTabBgColor = pDoc->GetTabBgColor(i);
-                        SetTabBgColor( static_cast<sal_uInt16>(i)+1, aTabBgColor );
+                        SetTabBgColor(static_cast<sal_uInt16>(i)+1, aTabBgColor );
                     }
                 }
             }
