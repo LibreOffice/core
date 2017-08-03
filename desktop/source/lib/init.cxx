@@ -625,6 +625,8 @@ static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
 
 static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 
+static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
+
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
 {
@@ -674,6 +676,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getPartHash = doc_getPartHash;
 
         m_pDocumentClass->paintDialog = doc_paintDialog;
+        m_pDocumentClass->paintActiveFloatingWindow = doc_paintActiveFloatingWindow;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3100,6 +3103,24 @@ static void doc_paintDialog(LibreOfficeKitDocument* pThis, const char* pDialogId
 
     comphelper::LibreOfficeKit::setDialogPainting(true);
     pDialogRenderable->paintDialog(aDialogID, *pDevice.get(), *nWidth, *nHeight);
+    comphelper::LibreOfficeKit::setDialogPainting(false);
+}
+
+static void doc_paintActiveFloatingWindow(LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight)
+{
+    SolarMutexGuard aGuard;
+
+    IDialogRenderable* pDialogRenderable = getDialogRenderable(pThis);
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(*nWidth, *nHeight), Fraction(1.0), Point(), pBuffer);
+
+    vcl::DialogID aDialogID = OUString::createFromAscii(pDialogId);
+
+    comphelper::LibreOfficeKit::setDialogPainting(true);
+    pDialogRenderable->paintActiveFloatingWindow(aDialogID, *pDevice.get(), *nWidth, *nHeight);
     comphelper::LibreOfficeKit::setDialogPainting(false);
 }
 

@@ -315,6 +315,7 @@ static void setupDocView(GtvApplicationWindow* window)
     g_signal_connect(window->lokdocview, "password-required", G_CALLBACK(LOKDocViewSigHandlers::passwordRequired), nullptr);
     g_signal_connect(window->lokdocview, "comment", G_CALLBACK(LOKDocViewSigHandlers::comment), nullptr);
     g_signal_connect(window->lokdocview, "dialog-invalidate", G_CALLBACK(LOKDocViewSigHandlers::dialogInvalidate), nullptr);
+    g_signal_connect(window->lokdocview, "dialog-child", G_CALLBACK(LOKDocViewSigHandlers::dialogChild), nullptr);
 
     g_signal_connect(window->lokdocview, "configure-event", G_CALLBACK(LOKDocViewSigHandlers::configureEvent), nullptr);
 }

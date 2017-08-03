@@ -41,6 +41,7 @@ public:
 
     VclPtr<ToolBox> mpBox;
     Rectangle       maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
+    Point maPos; // position of the floating window wrt. parent
 };
 
 FloatingWindow::ImplData::ImplData()
@@ -601,6 +602,15 @@ void FloatingWindow::StateChanged( StateChangedType nType )
     }
 
     SystemWindow::StateChanged( nType );
+    Dialog* pParentDlg = GetParentDialog();
+    if (pParentDlg && nType == StateChangedType::InitShow && IsVisible())
+    {
+        pParentDlg->InvalidateFloatingWindow(mpImplData->maPos);
+    }
+    else if (pParentDlg && !IsVisible())
+    {
+        pParentDlg->CloseFloatingWindow();
+    }
 
     if ( nType == StateChangedType::ControlBackground )
     {
@@ -676,8 +686,8 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
 
     // compute window position according to flags and arrangement
     sal_uInt16 nArrangeIndex;
-    Point aPos = ImplCalcPos( this, rRect, nFlags, nArrangeIndex );
-    SetPosPixel( aPos );
+    mpImplData->maPos = ImplCalcPos( this, rRect, nFlags, nArrangeIndex );
+    SetPosPixel( mpImplData->maPos );
 
     // set data and display window
     // convert maFloatRect to absolute device coordinates
@@ -723,10 +733,10 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
 
     // retrieve some data from the ToolBox
     Rectangle aRect = pBox->GetItemRect( nItemId );
-    Point aPos;
+
     // convert to parent's screen coordinates
-    aPos = GetParent()->OutputToScreenPixel( GetParent()->AbsoluteScreenToOutputPixel( pBox->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) ) );
-    aRect.SetPos( aPos );
+    mpImplData->maPos = GetParent()->OutputToScreenPixel( GetParent()->AbsoluteScreenToOutputPixel( pBox->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) ) );
+    aRect.SetPos( mpImplData->maPos );
 
     nFlags |=
         FloatWinPopupFlags::AllMouseButtonClose |

@@ -42,6 +42,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
+#include <vcl/floatwin.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>
@@ -890,9 +891,48 @@ void Dialog::paintDialog(VirtualDevice& rDevice)
     PaintToDevice(&rDevice, Point(0, 0), Size());
 }
 
-void Dialog::LogicInvalidate(const Rectangle* /*pRectangle*/)
+Size Dialog::PaintActiveFloatingWindow(VirtualDevice& rDevice)
+{
+    Size aRet;
+    ImplSVData* pSVData = ImplGetSVData();
+    FloatingWindow* pFirstFloat = pSVData->maWinData.mpFirstFloat;
+    if (pFirstFloat)
+    {
+        // TODO:: run a while loop here and check all the active floating
+        // windows ( chained together, cf. pFirstFloat->mpNextFloat )
+        // For now just assume that the active floating window is the one we
+        // want to render
+        if (pFirstFloat->GetParentDialog() == this)
+        {
+            pFirstFloat->PaintToDevice(&rDevice, Point(0, 0), Size());
+            aRet = ::isLayoutEnabled(pFirstFloat) ? pFirstFloat->get_preferred_size() : pFirstFloat->GetSizePixel();
+        }
+
+        pFirstFloat = nullptr;
+    }
+
+    return aRet;
+}
+
+void Dialog::InvalidateFloatingWindow(const Point& rPos)
 {
     if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable && !maID.isEmpty())
+    {
+        mpDialogRenderable->notifyDialogChild(maID, "invalidate", rPos);
+    }
+}
+
+void Dialog::CloseFloatingWindow()
+{
+    if (comphelper::LibreOfficeKit::isActive() && mpDialogRenderable && !maID.isEmpty())
+    {
+        mpDialogRenderable->notifyDialogChild(maID, "close", Point(0, 0));
+    }
+}
+
+void Dialog::LogicInvalidate(const Rectangle* /*pRectangle*/)
+{
+    if (!comphelper::LibreOfficeKit::isDialogPainting() && mpDialogRenderable && !maID.isEmpty())
     {
         mpDialogRenderable->notifyDialogInvalidation(maID);
     }
