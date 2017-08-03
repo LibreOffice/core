@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,expat,\
 
 $(eval $(call gb_UnpackedTarball_set_post_action,expat,\
 	$(if $(filter $(BUILD_X64),TRUE),         \
+	  cp lib/loadlibrary.c lib/loadlibrary_x64.c && \
 	  cp lib/xmlparse.c lib/xmlparse_x64.c && \
 	  cp lib/xmltok.c lib/xmltok_x64.c     && \
 	  cp lib/xmlrole.c lib/xmlrole_x64.c) \
