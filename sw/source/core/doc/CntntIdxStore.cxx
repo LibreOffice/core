@@ -94,7 +94,7 @@ namespace
     {
         const SwContentNode* m_pNewContentNode;
         const sal_Int32 m_nOffset;
-        OffsetUpdater(SwContentNode* pNewContentNode, sal_Int32 nOffset)
+        OffsetUpdater(SwContentNode const * pNewContentNode, sal_Int32 nOffset)
             : m_pNewContentNode(pNewContentNode), m_nOffset(nOffset) {};
         void operator()(SwPosition& rPos, sal_Int32 nContent) const
         {
@@ -107,7 +107,7 @@ namespace
         const SwContentNode* m_pNewContentNode;
         const sal_uLong m_nLen;
         const sal_Int32 m_nCorrLen;
-        LimitUpdater(SwContentNode* pNewContentNode, sal_uLong nLen, sal_Int32 nCorrLen)
+        LimitUpdater(SwContentNode const * pNewContentNode, sal_uLong nLen, sal_Int32 nCorrLen)
             : m_pNewContentNode(pNewContentNode), m_nLen(nLen), m_nCorrLen(nCorrLen) {};
         void operator()(SwPosition& rPos, sal_Int32 nContent) const
         {
@@ -174,16 +174,16 @@ namespace
 
         private:
             inline void SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
-            inline void RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater);
+            inline void RestoreBkmks(SwDoc* pDoc, updater_t const & rUpdater);
             inline void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
-            inline void RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater);
+            inline void RestoreRedlines(SwDoc* pDoc, updater_t const & rUpdater);
             inline void SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit);
-            inline void RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto);
+            inline void RestoreFlys(SwDoc* pDoc, updater_t const & rUpdater, bool bAuto);
             inline void SaveUnoCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
-            inline void RestoreUnoCursors(updater_t& rUpdater);
+            inline void RestoreUnoCursors(updater_t const & rUpdater);
             inline void SaveShellCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
-            inline void RestoreShellCursors(updater_t& rUpdater);
-            static const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
+            inline void RestoreShellCursors(updater_t const & rUpdater);
+            static const SwPosition& GetRightMarkPos(::sw::mark::IMark const * pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
             static void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
                 { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
@@ -254,7 +254,7 @@ void ContentIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCon
     }
 }
 
-void ContentIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t& rUpdater)
+void ContentIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t const & rUpdater)
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     for (const MarkEntry& aEntry : m_aBkmkEntries)
@@ -301,7 +301,7 @@ void ContentIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
     }
 }
 
-void ContentIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t& rUpdater)
+void ContentIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t const & rUpdater)
 {
     const SwRedlineTable& rRedlTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     for (const MarkEntry& aEntry : m_aRedlineEntries)
@@ -356,7 +356,7 @@ void ContentIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCont
     }
 }
 
-void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t& rUpdater, bool bAuto)
+void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t const & rUpdater, bool bAuto)
 {
     SwFrameFormats* pSpz = pDoc->GetSpzFrameFormats();
     for (const MarkEntry& aEntry : m_aFlyEntries)
@@ -410,7 +410,7 @@ void ContentIdxStoreImpl::SaveUnoCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32
     }
 }
 
-void ContentIdxStoreImpl::RestoreUnoCursors(updater_t& rUpdater)
+void ContentIdxStoreImpl::RestoreUnoCursors(updater_t const & rUpdater)
 {
     for (const PaMEntry& aEntry : m_aUnoCursorEntries)
     {
@@ -442,7 +442,7 @@ void ContentIdxStoreImpl::SaveShellCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int
     }
 }
 
-void ContentIdxStoreImpl::RestoreShellCursors(updater_t& rUpdater)
+void ContentIdxStoreImpl::RestoreShellCursors(updater_t const & rUpdater)
 {
     for (const PaMEntry& aEntry : m_aShellCursorEntries)
     {

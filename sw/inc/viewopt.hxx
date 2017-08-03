@@ -305,7 +305,7 @@ public:
     void SetSnap( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::Snap ) : ( m_nCoreOptions &= ~ViewOptFlags1::Snap); }
 
-    void SetSnapSize( Size &rSz ){ m_aSnapSize = rSz; }
+    void SetSnapSize( Size const &rSz ){ m_aSnapSize = rSz; }
     const Size &GetSnapSize() const { return m_aSnapSize; }
 
     bool IsGridVisible() const

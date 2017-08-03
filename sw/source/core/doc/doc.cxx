@@ -536,7 +536,7 @@ sal_uInt16 PostItField_::GetPageNo(
 }
 
 bool sw_GetPostIts(
-    IDocumentFieldsAccess* pIDFA,
+    IDocumentFieldsAccess const * pIDFA,
     SetGetExpFields * pSrtLst )
 {
     bool bHasPostIts = false;

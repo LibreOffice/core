@@ -204,7 +204,7 @@ public:
     static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal );
     static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
-                                double& rVal, SwDoc *const pDoc );
+                                double& rVal, SwDoc const *const pDoc );
 
     SW_DLLPUBLIC static bool IsValidVarName( const OUString& rStr,
                                     OUString* pValidName = nullptr );

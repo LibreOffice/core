@@ -111,7 +111,7 @@ void SwVisibleCursor::Hide()
     }
 }
 
-void SwVisibleCursor::SetPosAndShow(SfxViewShell* pViewShell)
+void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 {
     SwRect aRect;
     long nTmpY = m_pCursorShell->m_aCursorHeight.getY();
@@ -609,7 +609,7 @@ void SwShellCursor::FillRects()
         GetShell()->GetLayout()->CalcFrameRects( *this );
 }
 
-void SwShellCursor::Show(SfxViewShell* pViewShell)
+void SwShellCursor::Show(SfxViewShell const * pViewShell)
 {
     std::vector<OString> aSelectionRectangles;
     for(SwPaM& rPaM : GetRingContainer())

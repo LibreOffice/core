@@ -64,7 +64,7 @@ SwCallLink::SwCallLink( SwCursorShell & rSh )
     }
 }
 
-static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell& rShell)
+static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell const & rShell)
 {
     if ( !pNode )
         return;
@@ -219,7 +219,7 @@ SwCallLink::~SwCallLink()
     }
 }
 
-long SwCallLink::getLayoutFrame( const SwRootFrame* pRoot, SwTextNode& rNd, sal_Int32 nCntPos, bool bCalcFrame )
+long SwCallLink::getLayoutFrame( const SwRootFrame* pRoot, SwTextNode const & rNd, sal_Int32 nCntPos, bool bCalcFrame )
 {
     SwTextFrame* pFrame = static_cast<SwTextFrame*>(rNd.getLayoutFrame(pRoot,nullptr,nullptr,bCalcFrame));
     SwTextFrame* pNext;

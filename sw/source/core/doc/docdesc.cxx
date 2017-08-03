@@ -551,7 +551,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
 
 /// All descriptors whose Follow point to the to-be-deleted have to be adapted.
 // #i7983#
-void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
+void SwDoc::PreDelPageDesc(SwPageDesc const * pDel)
 {
     if (nullptr == pDel)
         return;

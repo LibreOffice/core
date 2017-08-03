@@ -616,8 +616,8 @@ void lcl_MakeFieldLst(
 
 static SetGetExpFields::const_iterator
 lcl_FindField(bool & o_rFound, SetGetExpFields const& rSrtLst,
-        SwRootFrame *const pLayout, SwTextNode *const pTextNode,
-        SwTextField *const pTextField, SwPosition const& rPos,
+        SwRootFrame const *const pLayout, SwTextNode *const pTextNode,
+        SwTextField const *const pTextField, SwPosition const& rPos,
         sal_Int32 const nContentOffset)
 {
     std::unique_ptr<SetGetExpField> pSrch;

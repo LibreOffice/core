@@ -68,7 +68,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwPosition & rPos);
 SW_DLLPUBLIC const char * dbg_out(const SwPaM & rPam);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeNum & rNum);
 SW_DLLPUBLIC const char * dbg_out(const SwUndo & rUndo);
-SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes & rNodes);
+SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes const & rNodes);
 SW_DLLPUBLIC const char * dbg_out(const SwNumRule & rRule);
 SW_DLLPUBLIC const char * dbg_out(const SwTextFormatColl & rFormat);
 SW_DLLPUBLIC const char * dbg_out(const SwFrameFormats & rFrameFormats);

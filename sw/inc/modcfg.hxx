@@ -243,16 +243,16 @@ public:
                                                 aTableConfig.SetModified();}
 
     const AuthorCharAttr    &GetInsertAuthorAttr() const { return aRevisionConfig.aInsertAttr; }
-    void        SetInsertAuthorAttr( AuthorCharAttr &rAttr ) {  aRevisionConfig.aInsertAttr = rAttr;
-                                                                aRevisionConfig.SetModified();}
+    void        SetInsertAuthorAttr( AuthorCharAttr const &rAttr ) {  aRevisionConfig.aInsertAttr = rAttr;
+                                                                     aRevisionConfig.SetModified();}
 
     const AuthorCharAttr    &GetDeletedAuthorAttr() const { return aRevisionConfig.aDeletedAttr; }
-    void        SetDeletedAuthorAttr( AuthorCharAttr &rAttr ) { aRevisionConfig.aDeletedAttr = rAttr;
-                                                                aRevisionConfig.SetModified();}
+    void        SetDeletedAuthorAttr( AuthorCharAttr const &rAttr ) { aRevisionConfig.aDeletedAttr = rAttr;
+                                                                      aRevisionConfig.SetModified();}
 
     const AuthorCharAttr    &GetFormatAuthorAttr() const { return aRevisionConfig.aFormatAttr; }
-    void        SetFormatAuthorAttr( AuthorCharAttr &rAttr ) {  aRevisionConfig.aFormatAttr = rAttr;
-                                                                aRevisionConfig.SetModified();}
+    void        SetFormatAuthorAttr( AuthorCharAttr const &rAttr ) {  aRevisionConfig.aFormatAttr = rAttr;
+                                                                      aRevisionConfig.SetModified();}
 
     sal_uInt16          GetMarkAlignMode()  const               { return aRevisionConfig.nMarkAlign; }
     void            SetMarkAlignMode(sal_uInt16 nMode)          { aRevisionConfig.nMarkAlign = nMode;

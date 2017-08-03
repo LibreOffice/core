@@ -102,7 +102,7 @@ struct PercentHdl
     void NextPos( sal_uLong nPos ) const
         { ::SetProgressState( bBack ? nActPos - nPos : nPos, pDSh ); }
 
-    void NextPos( SwPosition& rPos ) const
+    void NextPos( SwPosition const & rPos ) const
         {
             sal_uLong nPos;
             if( bNodeIdx )
@@ -214,7 +214,7 @@ bool SwTableCursor::IsSelOvrCheck(SwCursorSelOverFlags eFlags)
 
 namespace
 {
-    const SwTextAttr* InputFieldAtPos(SwPosition *pPos)
+    const SwTextAttr* InputFieldAtPos(SwPosition const *pPos)
     {
         SwTextNode* pTextNd = pPos->nNode.GetNode().GetTextNode();
         if (!pTextNd)
@@ -1148,7 +1148,7 @@ bool SwCursor::GoPrevWord()
     return GoPrevWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
 }
 
-bool SwCursor::SelectWord( SwViewShell* pViewShell, const Point* pPt )
+bool SwCursor::SelectWord( SwViewShell const * pViewShell, const Point* pPt )
 {
     return SelectWordWT( pViewShell, WordType::ANYWORD_IGNOREWHITESPACES, pPt );
 }
@@ -1325,7 +1325,7 @@ bool SwCursor::GoPrevWordWT( sal_Int16 nWordType )
     return bRet;
 }
 
-bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt )
+bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType, const Point* pPt )
 {
     SwCursorSaveState aSave( *this );
 
@@ -1768,7 +1768,7 @@ void SwCursor::DoSetBidiLevelUpDown()
 }
 
 bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
-                            Point* pPt, long nUpDownX )
+                       Point const * pPt, long nUpDownX )
 {
     SwTableCursor* pTableCursor = dynamic_cast<SwTableCursor*>(this);
     bool bAdjustTableCursor = false;

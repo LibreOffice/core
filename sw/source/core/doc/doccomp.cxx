@@ -924,7 +924,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
 
 namespace
 {
-    inline void lcl_ShiftBoundariesOneway( CompareData* const pData, CompareData* const pOtherData)
+    inline void lcl_ShiftBoundariesOneway( CompareData* const pData, CompareData const * const pOtherData)
     {
         sal_uLong i = 0;
         sal_uLong j = 0;

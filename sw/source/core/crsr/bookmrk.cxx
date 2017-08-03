@@ -94,7 +94,7 @@ namespace
         io_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
     };
 
-    void lcl_RemoveFieldMarks(Fieldmark* const pField,
+    void lcl_RemoveFieldMarks(Fieldmark const * const pField,
         SwDoc* const io_pDoc,
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)

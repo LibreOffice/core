@@ -206,7 +206,7 @@ SwHash* Find( const OUString& rStr, SwHash* const * ppTable,
     return nullptr;
 }
 
-inline LanguageType GetDocAppScriptLang( SwDoc& rDoc )
+inline LanguageType GetDocAppScriptLang( SwDoc const & rDoc )
 {
     return static_cast<const SvxLanguageItem&>(rDoc.GetDefault(
                GetWhichOfScript( RES_CHRATR_LANGUAGE,
@@ -1345,7 +1345,7 @@ bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
 }
 
 bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
-                         double& rVal, SwDoc* const pDoc )
+                         double& rVal, SwDoc const * const pDoc )
 {
     const SvtSysLocale aSysLocale;
     std::unique_ptr<const LocaleDataWrapper> pLclD;

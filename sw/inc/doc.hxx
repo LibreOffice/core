@@ -910,7 +910,7 @@ public:
     void ChgPageDesc( size_t i, const SwPageDesc& );
     void DelPageDesc( const OUString & rName, bool bBroadcast = false);
     void DelPageDesc( size_t i, bool bBroadcast = false );
-    void PreDelPageDesc(SwPageDesc * pDel);
+    void PreDelPageDesc(SwPageDesc const * pDel);
     SwPageDesc* MakePageDesc(const OUString &rName, const SwPageDesc* pCpy = nullptr,
                              bool bRegardLanguage = true,
                              bool bBroadcast = false);
@@ -1580,7 +1580,7 @@ public:
     bool IsSquaredPageMode() const;
 
     css::uno::Reference< css::script::vba::XVBAEventProcessor > const & GetVbaEventProcessor();
-    void SetVBATemplateToProjectCache( css::uno::Reference< css::container::XNameContainer >& xCache ) { m_xTemplateToProjectCache = xCache; };
+    void SetVBATemplateToProjectCache( css::uno::Reference< css::container::XNameContainer > const & xCache ) { m_xTemplateToProjectCache = xCache; };
     const css::uno::Reference< css::container::XNameContainer >& GetVBATemplateToProjectCache() { return m_xTemplateToProjectCache; };
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
@@ -1646,7 +1646,7 @@ inline void SwDoc::SetOLEPrtNotifyPending( bool bSet )
         mbAllOLENotify = false;
 }
 
-bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, SetGetExpFields * pSrtLst );
+bool sw_GetPostIts( IDocumentFieldsAccess const * pIDFA, SetGetExpFields * pSrtLst );
 
 #endif  //_DOC_HXX
 
