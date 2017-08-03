@@ -24,7 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/syswin.hxx>
 #include <vcl/vclptr.hxx>
-
+#include <vcl/IDialogRenderable.hxx>
 
 struct DialogImpl;
 class VclBox;
@@ -48,6 +48,8 @@ private:
     VclPtr<VclButtonBox> mpActionArea;
     VclPtr<VclBox>       mpContentArea;
 
+    vcl::IDialogRenderable*   mpDialogRenderable; // to emit LOK callbacks
+
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
 
@@ -66,7 +68,10 @@ protected:
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
     virtual        void    doDeferredInit(WinBits nBits) override;
-    virtual        void    LogicInvalidate(const Rectangle* pRectangle) override { (void)pRectangle; }
+    virtual        void    LogicInvalidate(const Rectangle* pRectangle) override;
+
+    /// Necessary to register dialog renderable instance to emit LOK callbacks
+    void registerDialogRenderable(vcl::IDialogRenderable* pDialogRenderable);
     /// Paints the current dialog to the given virtual device
     void paintDialog(VirtualDevice& rDevice);
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
