@@ -432,6 +432,7 @@ public:
     OUString getPostIts() override;
 
     void paintDialog(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight) override;
+    void paintActiveFloatingWindow(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight) override;
     void postDialogKeyEvent(const vcl::DialogID& rDialogID, int nType,
                             int nCharCode, int nKeyCode) override;
 
@@ -439,6 +440,8 @@ public:
                               int nCount, int nButtons, int nModifier) override;
 
     void notifyDialogInvalidation(const vcl::DialogID& rDialogID) override;
+
+    void notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos) override;
 
     // css::tiledrendering::XTiledRenderable
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) override;
