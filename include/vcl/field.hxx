@@ -40,6 +40,7 @@ class VCL_DLLPUBLIC FormatterBase
 {
 private:
     VclPtr<Edit>            mpField;
+    Link<Edit&, bool>       maOutputHdl;
     std::unique_ptr<LocaleDataWrapper>
                             mpLocaleDataWrapper;
     bool                    mbReformat;
@@ -84,8 +85,9 @@ public:
 
     void                    EnableEmptyFieldValue( bool bEnable )   { mbEmptyFieldValueEnabled = bEnable; }
     bool                    IsEmptyFieldValueEnabled() const        { return mbEmptyFieldValueEnabled; }
-};
 
+    void                    SetOutputHdl(const Link<Edit&, bool>& rLink) { maOutputHdl = rLink; }
+};
 
 #define PATTERN_FORMAT_EMPTYLITERALS    ((sal_uInt16)0x0001)
 
