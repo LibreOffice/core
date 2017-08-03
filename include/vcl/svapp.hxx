@@ -46,6 +46,10 @@
 
 
 class BitmapEx;
+namespace Hackery
+{
+    class Builder;
+}
 class AllSettings;
 class DataChangedEvent;
 class Accelerator;
@@ -59,6 +63,7 @@ class Reflection;
 class NotifyEvent;
 class KeyEvent;
 class MouseEvent;
+class SalFrame;
 struct ImplSVEvent;
 struct ConvertData;
 
@@ -1386,6 +1391,8 @@ public:
 
     // For vclbootstrapprotector:
     static void setDeInitHook(Link<LinkParamNone*,void> const & hook);
+
+    static Hackery::Builder* CreateBuilder(SalFrame *pFrame, const OUString &rUIFile);
 
 private:
     DECL_STATIC_LINK( Application, PostEventHandler, void*, void );

@@ -33,6 +33,8 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 
 namespace comphelper { class SolarMutex; }
+namespace vcl { class Window; }
+namespace Hackery { class Builder; }
 struct SystemParentData;
 struct SalPrinterQueueInfo;
 class ImplJobSetup;
@@ -146,6 +148,8 @@ public:
     virtual SalSession*     CreateSalSession() = 0;
 
     virtual OpenGLContext*  CreateOpenGLContext() = 0;
+
+    virtual Hackery::Builder* CreateBuilder(SalFrame* /*pParent*/, const OUString& /*rUri*/) { return nullptr; }
 
     // methods for XDisplayConnection
 
