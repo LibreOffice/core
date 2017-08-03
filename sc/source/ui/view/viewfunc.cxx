@@ -918,7 +918,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                 //  only the language has changed -> do not touch numberformat-attribute
                 sal_uInt32 nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
                 if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
-                     nNewMod <= SV_MAX_ANZ_STANDARD_FORMATE )
+                     nNewMod <= SV_MAX_COUNT_STANDARD_FORMATS )
                     aNewAttrs.GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
             }
         }
