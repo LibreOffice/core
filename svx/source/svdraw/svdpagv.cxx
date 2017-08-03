@@ -499,9 +499,9 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
         long y2=GetPage()->GetHgt()-GetPage()->GetLwrBorder()-1+nWrY;
         const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,nullptr);
 
-        sal_uInt16 nGridPaintAnz=1;
-        if (pFrames!=nullptr) nGridPaintAnz=pFrames->GetCount();
-        for (sal_uInt16 nGridPaintNum=0; nGridPaintNum<nGridPaintAnz; nGridPaintNum++) {
+        sal_uInt16 nGridPaintCnt=1;
+        if (pFrames!=nullptr) nGridPaintCnt=pFrames->GetCount();
+        for (sal_uInt16 nGridPaintNum=0; nGridPaintNum<nGridPaintCnt; nGridPaintNum++) {
             if (pFrames!=nullptr) {
                 const SdrPageGridFrame& rGF=(*pFrames)[nGridPaintNum];
                 nWrX=rGF.GetPaperRect().Left();

@@ -1453,9 +1453,9 @@ SdrPage* SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)
     if(pRetPg)
     {
         // Now delete the links from the normal drawing pages to the deleted master page.
-        sal_uInt16 nPageAnz(GetPageCount());
+        sal_uInt16 nPageCnt(GetPageCount());
 
-        for(sal_uInt16 np(0); np < nPageAnz; np++)
+        for(sal_uInt16 np(0); np < nPageCnt; np++)
         {
             GetPage(np)->TRG_ImpMasterPageRemoved(*pRetPg);
         }
@@ -1497,8 +1497,8 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
     if( bUndo )
         BegUndo(ImpGetResStr(STR_UndoMergeModel));
 
-    sal_uInt16 nPageAnz=GetPageCount();
-    sal_uInt16 nMaxPage=nPageAnz;
+    sal_uInt16 nPageCnt=GetPageCount();
+    sal_uInt16 nMaxPage=nPageCnt;
 
     if (nMaxPage!=0)
         nMaxPage--;
@@ -1507,15 +1507,15 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
     if (nLastPageNum>nMaxPage)
         nLastPageNum =nMaxPage;
     bool bReverse=nLastPageNum<nFirstPageNum;
-    if (nDestPos>nPageAnz)
-        nDestPos=nPageAnz;
+    if (nDestPos>nPageCnt)
+        nDestPos=nPageCnt;
 
     // at first, save the pointers of the affected pages in an array
     sal_uInt16 nPageNum=nFirstPageNum;
-    sal_uInt16 nCopyAnz=((!bReverse)?(nLastPageNum-nFirstPageNum):(nFirstPageNum-nLastPageNum))+1;
-    std::unique_ptr<SdrPage*[]> pPagePtrs(new SdrPage*[nCopyAnz]);
+    sal_uInt16 nCopyCnt=((!bReverse)?(nLastPageNum-nFirstPageNum):(nFirstPageNum-nLastPageNum))+1;
+    std::unique_ptr<SdrPage*[]> pPagePtrs(new SdrPage*[nCopyCnt]);
     sal_uInt16 nCopyNum;
-    for(nCopyNum=0; nCopyNum<nCopyAnz; nCopyNum++)
+    for(nCopyNum=0; nCopyNum<nCopyCnt; nCopyNum++)
     {
         pPagePtrs[nCopyNum]=GetPage(nPageNum);
         if (bReverse)
@@ -1526,7 +1526,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
 
     // now copy the pages
     sal_uInt16 nDestNum=nDestPos;
-    for (nCopyNum=0; nCopyNum<nCopyAnz; nCopyNum++)
+    for (nCopyNum=0; nCopyNum<nCopyCnt; nCopyNum++)
     {
         SdrPage* pPg=pPagePtrs[nCopyNum];
         sal_uInt16 nPageNum2=pPg->GetPageNum();
@@ -1582,11 +1582,11 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     if (bUndo)
         BegUndo(ImpGetResStr(STR_UndoMergeModel));
 
-    sal_uInt16 nSrcPageAnz=rSourceModel.GetPageCount();
-    sal_uInt16 nSrcMasterPageAnz=rSourceModel.GetMasterPageCount();
-    sal_uInt16 nDstMasterPageAnz=GetMasterPageCount();
-    bool bInsPages=(nFirstPageNum<nSrcPageAnz || nLastPageNum<nSrcPageAnz);
-    sal_uInt16 nMaxSrcPage=nSrcPageAnz; if (nMaxSrcPage!=0) nMaxSrcPage--;
+    sal_uInt16 nSrcPageCnt=rSourceModel.GetPageCount();
+    sal_uInt16 nSrcMasterPageCnt=rSourceModel.GetMasterPageCount();
+    sal_uInt16 nDstMasterPageCnt=GetMasterPageCount();
+    bool bInsPages=(nFirstPageNum<nSrcPageCnt || nLastPageNum<nSrcPageCnt);
+    sal_uInt16 nMaxSrcPage=nSrcPageCnt; if (nMaxSrcPage!=0) nMaxSrcPage--;
     if (nFirstPageNum>nMaxSrcPage) nFirstPageNum=nMaxSrcPage;
     if (nLastPageNum>nMaxSrcPage)  nLastPageNum =nMaxSrcPage;
     bool bReverse=nLastPageNum<nFirstPageNum;
@@ -1594,15 +1594,15 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     std::unique_ptr<sal_uInt16[]> pMasterMap;
     std::unique_ptr<bool[]> pMasterNeed;
     sal_uInt16    nMasterNeed=0;
-    if (bMergeMasterPages && nSrcMasterPageAnz!=0) {
+    if (bMergeMasterPages && nSrcMasterPageCnt!=0) {
         // determine which MasterPages from rSrcModel we need
-        pMasterMap.reset(new sal_uInt16[nSrcMasterPageAnz]);
-        pMasterNeed.reset(new bool[nSrcMasterPageAnz]);
-        memset(pMasterMap.get(),0xFF,nSrcMasterPageAnz*sizeof(sal_uInt16));
+        pMasterMap.reset(new sal_uInt16[nSrcMasterPageCnt]);
+        pMasterNeed.reset(new bool[nSrcMasterPageCnt]);
+        memset(pMasterMap.get(),0xFF,nSrcMasterPageCnt*sizeof(sal_uInt16));
         if (bAllMasterPages) {
-            memset(pMasterNeed.get(), true, nSrcMasterPageAnz * sizeof(bool));
+            memset(pMasterNeed.get(), true, nSrcMasterPageCnt * sizeof(bool));
         } else {
-            memset(pMasterNeed.get(), false, nSrcMasterPageAnz * sizeof(bool));
+            memset(pMasterNeed.get(), false, nSrcMasterPageCnt * sizeof(bool));
             sal_uInt16 nAnf= bReverse ? nLastPageNum : nFirstPageNum;
             sal_uInt16 nEnd= bReverse ? nFirstPageNum : nLastPageNum;
             for (sal_uInt16 i=nAnf; i<=nEnd; i++) {
@@ -1612,7 +1612,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     SdrPage& rMasterPage = pPg->TRG_GetMasterPage();
                     sal_uInt16 nMPgNum(rMasterPage.GetPageNum());
 
-                    if(nMPgNum < nSrcMasterPageAnz)
+                    if(nMPgNum < nSrcMasterPageCnt)
                     {
                         pMasterNeed[nMPgNum] = true;
                     }
@@ -1620,8 +1620,8 @@ void SdrModel::Merge(SdrModel& rSourceModel,
             }
         }
         // now determine the Mapping of the MasterPages
-        sal_uInt16 nAktMaPagNum=nDstMasterPageAnz;
-        for (sal_uInt16 i=0; i<nSrcMasterPageAnz; i++) {
+        sal_uInt16 nAktMaPagNum=nDstMasterPageCnt;
+        for (sal_uInt16 i=0; i<nSrcMasterPageCnt; i++) {
             if (pMasterNeed[i]) {
                 pMasterMap[i]=nAktMaPagNum;
                 nAktMaPagNum++;
@@ -1632,7 +1632,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
 
     // get the MasterPages
     if (pMasterMap && pMasterNeed && nMasterNeed!=0) {
-        for (sal_uInt16 i=nSrcMasterPageAnz; i>0;) {
+        for (sal_uInt16 i=nSrcMasterPageCnt; i>0;) {
             i--;
             if (pMasterNeed[i]) {
                 SdrPage* pPg=nullptr;
@@ -1646,7 +1646,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     // Now append all of them to the end of the DstModel.
                     // Don't use InsertMasterPage(), because everything is
                     // inconsistent until all are in.
-                    maMaPag.insert(maMaPag.begin()+nDstMasterPageAnz, pPg);
+                    maMaPag.insert(maMaPag.begin()+nDstMasterPageCnt, pPg);
                     MasterPageListChanged();
                     pPg->SetInserted();
                     pPg->SetModel(this);
@@ -1709,7 +1709,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                         }
                         DBG_ASSERT(nNewNum!=0xFFFF,"SdrModel::Merge(): Something is crooked with the mapping of the MasterPages.");
                     } else {
-                        if (nMaPgNum>=nDstMasterPageAnz) {
+                        if (nMaPgNum>=nDstMasterPageCnt) {
                             // This is outside of the original area of the MasterPage of the DstModel.
                             pPg->TRG_ClearMasterPage();
                         }

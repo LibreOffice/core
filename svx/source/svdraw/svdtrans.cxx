@@ -287,19 +287,19 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
 void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
     double nSin,nCos;
-    sal_uInt16 nPointAnz=rPoly.GetPointCount();
+    sal_uInt16 nPointCnt=rPoly.GetPointCount();
     sal_uInt16 i=0;
-    while (i<nPointAnz) {
+    while (i<nPointCnt) {
         Point* pPnt=&rPoly[i];
         Point* pC1=nullptr;
         Point* pC2=nullptr;
-        if (i+1<nPointAnz && rPoly.IsControl(i)) { // control point to the left
+        if (i+1<nPointCnt && rPoly.IsControl(i)) { // control point to the left
             pC1=pPnt;
             i++;
             pPnt=&rPoly[i];
         }
         i++;
-        if (i<nPointAnz && rPoly.IsControl(i)) { // control point to the right
+        if (i<nPointCnt && rPoly.IsControl(i)) { // control point to the right
             pC2=&rPoly[i];
             i++;
         }
@@ -310,19 +310,19 @@ void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, b
 void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
     double nSin,nCos;
-    sal_uInt16 nPointAnz=rPoly.GetPointCount();
+    sal_uInt16 nPointCnt=rPoly.GetPointCount();
     sal_uInt16 i=0;
-    while (i<nPointAnz) {
+    while (i<nPointCnt) {
         Point* pPnt=&rPoly[i];
         Point* pC1=nullptr;
         Point* pC2=nullptr;
-        if (i+1<nPointAnz && rPoly.IsControl(i)) { // control point to the left
+        if (i+1<nPointCnt && rPoly.IsControl(i)) { // control point to the left
             pC1=pPnt;
             i++;
             pPnt=&rPoly[i];
         }
         i++;
-        if (i<nPointAnz && rPoly.IsControl(i)) { // control point to the right
+        if (i<nPointCnt && rPoly.IsControl(i)) { // control point to the right
             pC2=&rPoly[i];
             i++;
         }
@@ -333,19 +333,19 @@ void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bo
 void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const tools::Rectangle& rRefRect)
 {
     double nSin,nCos;
-    sal_uInt16 nPointAnz=rPoly.GetPointCount();
+    sal_uInt16 nPointCnt=rPoly.GetPointCount();
     sal_uInt16 i=0;
-    while (i<nPointAnz) {
+    while (i<nPointCnt) {
         Point* pPnt=&rPoly[i];
         Point* pC1=nullptr;
         Point* pC2=nullptr;
-        if (i+1<nPointAnz && rPoly.IsControl(i)) { //  control point to the left
+        if (i+1<nPointCnt && rPoly.IsControl(i)) { //  control point to the left
             pC1=pPnt;
             i++;
             pPnt=&rPoly[i];
         }
         i++;
-        if (i<nPointAnz && rPoly.IsControl(i)) { // control point to the right
+        if (i<nPointCnt && rPoly.IsControl(i)) { // control point to the right
             pC2=&rPoly[i];
             i++;
         }

@@ -295,7 +295,7 @@ struct ImpMeasurePoly
     long                        nHlpAngle;
     double                      nLineSin;
     double                      nLineCos;
-    sal_uInt16                      nMainlineAnz;
+    sal_uInt16                      nMainlineCnt;
     css::drawing::MeasureTextHorzPos eUsedTextHPos;
     css::drawing::MeasureTextVertPos eUsedTextVPos;
     long                        nLineWdt2;  // half the line width
@@ -483,11 +483,11 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
         rPol.aMainline1.aP2=aMainlinePt2;
         rPol.aMainline2=rPol.aMainline1;
         rPol.aMainline3=rPol.aMainline1;
-        rPol.nMainlineAnz=1;
+        rPol.nMainlineCnt=1;
         if (bBrkLine) {
             long nNeedSiz=!rRec.bTextRota90 ? rPol.aTextSize.Width() : rPol.aTextSize.Height();
             long nHalfLen=(rPol.nLineLen-nNeedSiz-nArrow1Wdt/4-nArrow2Wdt/4) /2;
-            rPol.nMainlineAnz=2;
+            rPol.nMainlineCnt=2;
             rPol.aMainline1.aP2=aMainlinePt1;
             rPol.aMainline1.aP2.X()+=nHalfLen;
             RotatePoint(rPol.aMainline1.aP2,rPol.aMainline1.aP1,nLineSin,nLineCos);
@@ -509,8 +509,8 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
         rPol.aMainline2.aP2=aMainlinePt2;
         rPol.aMainline3.aP1=aMainlinePt1;
         rPol.aMainline3.aP2=aMainlinePt2;
-        rPol.nMainlineAnz=3;
-        if (bBrkLine && rPol.eUsedTextHPos==css::drawing::MeasureTextHorzPos_INSIDE) rPol.nMainlineAnz=2;
+        rPol.nMainlineCnt=3;
+        if (bBrkLine && rPol.eUsedTextHPos==css::drawing::MeasureTextHorzPos_INSIDE) rPol.nMainlineCnt=2;
     }
 }
 
@@ -522,7 +522,7 @@ basegfx::B2DPolyPolygon SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol)
     aPartPolyA.append(basegfx::B2DPoint(rPol.aMainline1.aP2.X(), rPol.aMainline1.aP2.Y()));
     aRetval.append(aPartPolyA);
 
-    if(rPol.nMainlineAnz > 1)
+    if(rPol.nMainlineCnt > 1)
     {
         aPartPolyA.clear();
         aPartPolyA.append(basegfx::B2DPoint(rPol.aMainline2.aP1.X(), rPol.aMainline2.aP1.Y()));
@@ -530,7 +530,7 @@ basegfx::B2DPolyPolygon SdrMeasureObj::ImpCalcXPoly(const ImpMeasurePoly& rPol)
         aRetval.append(aPartPolyA);
     }
 
-    if(rPol.nMainlineAnz > 2)
+    if(rPol.nMainlineCnt > 2)
     {
         aPartPolyA.clear();
         aPartPolyA.append(basegfx::B2DPoint(rPol.aMainline3.aP1.X(), rPol.aMainline3.aP1.Y()));

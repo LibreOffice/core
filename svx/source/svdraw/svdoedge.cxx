@@ -1210,21 +1210,21 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
 
     XPolygon aXP1(ImpCalcObjToCenter(aPt1,nAngle1,aBewareRect1,aMeeting));
     XPolygon aXP2(ImpCalcObjToCenter(aPt2,nAngle2,aBewareRect2,aMeeting));
-    sal_uInt16 nXP1Anz=aXP1.GetPointCount();
-    sal_uInt16 nXP2Anz=aXP2.GetPointCount();
+    sal_uInt16 nXP1Cnt=aXP1.GetPointCount();
+    sal_uInt16 nXP2Cnt=aXP2.GetPointCount();
     if (bInfo) {
-        pInfo->nObj1Lines=nXP1Anz; if (nXP1Anz>1) pInfo->nObj1Lines--;
-        pInfo->nObj2Lines=nXP2Anz; if (nXP2Anz>1) pInfo->nObj2Lines--;
+        pInfo->nObj1Lines=nXP1Cnt; if (nXP1Cnt>1) pInfo->nObj1Lines--;
+        pInfo->nObj2Lines=nXP2Cnt; if (nXP2Cnt>1) pInfo->nObj2Lines--;
     }
-    Point aEP1(aXP1[nXP1Anz-1]);
-    Point aEP2(aXP2[nXP2Anz-1]);
+    Point aEP1(aXP1[nXP1Cnt-1]);
+    Point aEP2(aXP2[nXP2Cnt-1]);
     bool bInsMeetingPoint=aEP1.X()!=aEP2.X() && aEP1.Y()!=aEP2.Y();
-    bool bHorzE1=aEP1.Y()==aXP1[nXP1Anz-2].Y(); // is last line of XP1 horizontal?
-    bool bHorzE2=aEP2.Y()==aXP2[nXP2Anz-2].Y(); // is last line of XP2 horizontal?
+    bool bHorzE1=aEP1.Y()==aXP1[nXP1Cnt-2].Y(); // is last line of XP1 horizontal?
+    bool bHorzE2=aEP2.Y()==aXP2[nXP2Cnt-2].Y(); // is last line of XP2 horizontal?
     if (aEP1==aEP2 && ((bHorzE1 && bHorzE2 && aEP1.Y()==aEP2.Y()) || (!bHorzE1 && !bHorzE2 && aEP1.X()==aEP2.X()))) {
         // special casing 'I' connectors
-        nXP1Anz--; aXP1.Remove(nXP1Anz,1);
-        nXP2Anz--; aXP2.Remove(nXP2Anz,1);
+        nXP1Cnt--; aXP1.Remove(nXP1Cnt,1);
+        nXP2Cnt--; aXP2.Remove(nXP2Cnt,1);
     }
     if (bInsMeetingPoint) {
         aXP1.Insert(XPOLY_APPEND,aMeeting,PolyFlags::Normal);
@@ -1237,19 +1237,19 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
             } else {
                 if (pInfo->nObj1Lines>pInfo->nObj2Lines) {
                     pInfo->nObj2Lines++;
-                    pInfo->nMiddleLine=nXP1Anz-1;
+                    pInfo->nMiddleLine=nXP1Cnt-1;
                 } else {
                     pInfo->nObj1Lines++;
-                    pInfo->nMiddleLine=nXP1Anz;
+                    pInfo->nMiddleLine=nXP1Cnt;
                 }
             }
         }
-    } else if (bInfo && aEP1!=aEP2 && nXP1Anz+nXP2Anz>=4) {
+    } else if (bInfo && aEP1!=aEP2 && nXP1Cnt+nXP2Cnt>=4) {
         // By connecting both ends, another line is added, this becomes the center line.
-        pInfo->nMiddleLine=nXP1Anz-1;
+        pInfo->nMiddleLine=nXP1Cnt-1;
     }
     sal_uInt16 nNum=aXP2.GetPointCount();
-    if (aXP1[nXP1Anz-1]==aXP2[nXP2Anz-1] && nXP1Anz>1 && nXP2Anz>1) nNum--;
+    if (aXP1[nXP1Cnt-1]==aXP2[nXP2Cnt-1] && nXP1Cnt>1 && nXP2Cnt>1) nNum--;
     while (nNum>0) {
         nNum--;
         aXP1.Insert(XPOLY_APPEND,aXP2[nNum],PolyFlags::Normal);
@@ -1709,31 +1709,31 @@ basegfx::B2DPolyPolygon SdrEdgeObj::GetEdgeTrackPath() const
 sal_uInt32 SdrEdgeObj::GetHdlCount() const
 {
     SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
-    sal_uInt32 nHdlAnz(0);
+    sal_uInt32 nHdlCnt(0);
     sal_uInt32 nPointCount(pEdgeTrack->GetPointCount());
 
     if(nPointCount)
     {
-        nHdlAnz = 2;
+        nHdlCnt = 2;
 
         if ((eKind==SdrEdgeKind::OrthoLines || eKind==SdrEdgeKind::Bezier) && nPointCount >= 4)
         {
             sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0 ? aEdgeInfo.nObj1Lines - 1 : 0);
             sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0 ? aEdgeInfo.nObj2Lines - 1 : 0);
             sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1 : 0);
-            nHdlAnz += nO1 + nO2 + nM;
+            nHdlCnt += nO1 + nO2 + nM;
         }
         else if (eKind==SdrEdgeKind::ThreeLines && nPointCount == 4)
         {
             if(GetConnectedNode(true))
-                nHdlAnz++;
+                nHdlCnt++;
 
             if(GetConnectedNode(false))
-                nHdlAnz++;
+                nHdlCnt++;
         }
     }
 
-    return nHdlAnz;
+    return nHdlCnt;
 }
 
 SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const

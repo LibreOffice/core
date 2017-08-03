@@ -125,9 +125,9 @@ SdrView* SdrViewIter::ImpFindView()
 {
     if(mpModel)
     {
-        const size_t nLsAnz(mpModel->GetSizeOfVector());
+        const size_t nLsCnt(mpModel->GetSizeOfVector());
 
-        while(mnListenerNum < nLsAnz)
+        while(mnListenerNum < nLsCnt)
         {
             SfxListener* pLs = mpModel->GetListener(mnListenerNum);
             mpAktView = dynamic_cast<SdrView*>( pLs );

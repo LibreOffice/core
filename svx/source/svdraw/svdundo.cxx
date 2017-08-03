@@ -1449,9 +1449,9 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
     // now remember the master page relationships
     if(mrPage.IsMasterPage())
     {
-        sal_uInt16 nPageAnz(rMod.GetPageCount());
+        sal_uInt16 nPageCnt(rMod.GetPageCount());
 
-        for(sal_uInt16 nPageNum2(0); nPageNum2 < nPageAnz; nPageNum2++)
+        for(sal_uInt16 nPageNum2(0); nPageNum2 < nPageCnt; nPageNum2++)
         {
             SdrPage* pDrawPage = rMod.GetPage(nPageNum2);
 

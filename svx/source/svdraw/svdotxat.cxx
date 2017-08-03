@@ -309,10 +309,10 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             const EditTextObject& rTextObj=pOutlinerParaObject->GetTextObject();
             OUString aStyleName;
             SfxStyleFamily eStyleFam;
-            sal_Int32 nParaAnz=rTextObj.GetParagraphCount();
+            sal_Int32 nParaCnt=rTextObj.GetParagraphCount();
 
 
-            for(sal_Int32 nParaNum(0); nParaNum < nParaAnz; nParaNum++)
+            for(sal_Int32 nParaNum(0); nParaNum < nParaCnt; nParaNum++)
             {
                 rTextObj.GetStyleSheet(nParaNum, aStyleName, eStyleFam);
 

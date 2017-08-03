@@ -896,8 +896,8 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                             pHdl->SetSelected(bSelected);
                             if (mbPlusHdlAlways || bSelected)
                             {
-                                sal_uInt32 nPlusAnz=pObj->GetPlusHdlCount(*pHdl);
-                                for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusAnz; nPlusNum++)
+                                sal_uInt32 nPlusHdlCnt=pObj->GetPlusHdlCount(*pHdl);
+                                for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusHdlCnt; nPlusNum++)
                                 {
                                     SdrHdl* pPlusHdl=pObj->GetPlusHdl(*pHdl,nPlusNum);
                                     if (pPlusHdl!=nullptr)
@@ -1798,9 +1798,9 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
         pPV=static_cast<const SdrObjEditView*>(this)->GetTextEditPageView();
     }
     if (bMarked) {
-        const size_t nMrkAnz=GetMarkedObjectCount();
-        size_t nMrkNum=bBack ? 0 : nMrkAnz;
-        while (pHitObj==nullptr && (bBack ? nMrkNum<nMrkAnz : nMrkNum>0)) {
+        const size_t nMrkCnt=GetMarkedObjectCount();
+        size_t nMrkNum=bBack ? 0 : nMrkCnt;
+        while (pHitObj==nullptr && (bBack ? nMrkNum<nMrkCnt : nMrkNum>0)) {
             if (!bBack) nMrkNum--;
             SdrMark* pM=GetSdrMarkByIndex(nMrkNum);
             pObj=pM->GetMarkedSdrObj();
