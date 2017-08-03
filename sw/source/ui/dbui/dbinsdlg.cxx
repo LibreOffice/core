@@ -192,7 +192,6 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     , aDBData(rData)
     , sNoTmpl(SwResId(SW_STR_NONE))
     , pView(&rView)
-    , pTAutoFormat(nullptr)
     , pTableSet(nullptr)
     , pRep(nullptr)
 {
@@ -422,7 +421,7 @@ void SwInsertDBColAutoPilot::dispose()
     delete pTableSet;
     delete pRep;
 
-    delete pTAutoFormat;
+    m_xTAutoFormat.reset();
     m_pRbAsTable.clear();
     m_pRbAsField.clear();
     m_pRbAsText.clear();
@@ -777,15 +776,15 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, AutoFormatHdl, Button*, pButton, void )
+IMPL_LINK( SwInsertDBColAutoPilot, AutoFormatHdl, Button*, /*pButton*/, void )
 {
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(), false, pTAutoFormat));
+    ScopedVclPtr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(nullptr /*TODO*/, pView->GetWrtShellPtr(), false, m_xTAutoFormat.get()));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
-    if( RET_OK == pDlg->Execute())
-        pDlg->FillAutoFormatOfIndex( pTAutoFormat );
+    if (RET_OK == pDlg->Execute())
+        m_xTAutoFormat.reset(pDlg->FillAutoFormatOfIndex());
 }
 
 IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox&, rBox, void )
@@ -1045,7 +1044,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         bool bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
         rSh.InsertTable(
             pModOpt->GetInsTableFlags(bHTML),
-            nRows, nCols, (pSelection ? pTAutoFormat : nullptr) );
+            nRows, nCols, (pSelection ? m_xTAutoFormat.get() : nullptr) );
         rSh.MoveTable( GotoPrevTable, fnTableStart );
 
         if( pSelection && pTableSet )
@@ -1190,13 +1189,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         }
 
         rSh.MoveTable( GotoCurrTable, fnTableStart );
-        if( !pSelection && ( pTableSet || pTAutoFormat ))
+        if (!pSelection && (pTableSet || m_xTAutoFormat))
         {
             if( pTableSet )
                 SetTabSet();
 
-            if( pTAutoFormat )
-                rSh.SetTableStyle(*pTAutoFormat);
+            if (m_xTAutoFormat)
+                rSh.SetTableStyle(*m_xTAutoFormat);
         }
         rSh.SetAutoUpdateCells( bIsAutoUpdateCells );
     }
@@ -1453,15 +1452,15 @@ void SwInsertDBColAutoPilot::SetTabSet()
     SwWrtShell& rSh = pView->GetWrtShell();
     const SfxPoolItem* pItem;
 
-    if( pTAutoFormat )
+    if (m_xTAutoFormat)
     {
-        if( pTAutoFormat->IsFrame() )
+        if (m_xTAutoFormat->IsFrame())
         {
             // border is from AutoFormat
             pTableSet->ClearItem( RES_BOX );
             pTableSet->ClearItem( SID_ATTR_BORDER_INNER );
         }
-        if( pTAutoFormat->IsBackground() )
+        if (m_xTAutoFormat->IsBackground())
         {
             pTableSet->ClearItem( RES_BACKGROUND );
             pTableSet->ClearItem( SID_ATTR_BRUSH_ROW );
@@ -1595,8 +1594,8 @@ void SwInsertDBColAutoPilot::ImplCommit()
     if( sNoTmpl != (sTmp = m_pLbDbParaColl->GetSelectEntry()) )
         pValues[5].Value <<= sTmp;
 
-    if( pTAutoFormat )
-        pValues[6].Value <<= pTAutoFormat->GetName();
+    if (m_xTAutoFormat)
+        pValues[6].Value <<= m_xTAutoFormat->GetName();
 
     pValues[7].Value <<= m_pRbAsTable->IsChecked();
     pValues[8].Value <<= m_pRbAsField->IsChecked();
@@ -1775,8 +1774,7 @@ void SwInsertDBColAutoPilot::Load()
             else
                 m_pLbDbParaColl->SelectEntryPos( 0 );
 
-            delete pTAutoFormat;
-            pTAutoFormat = nullptr;
+            m_xTAutoFormat.reset();
             sTmp = pNewData->sTAutoFormatNm;
             if( !sTmp.isEmpty() )
             {
@@ -1786,7 +1784,7 @@ void SwInsertDBColAutoPilot::Load()
                 for( size_t nAutoFormat = aAutoFormatTable.size(); nAutoFormat; )
                     if( sTmp == aAutoFormatTable[ --nAutoFormat ].GetName() )
                     {
-                        pTAutoFormat = new SwTableAutoFormat( aAutoFormatTable[ nAutoFormat ] );
+                        m_xTAutoFormat.reset(new SwTableAutoFormat(aAutoFormatTable[nAutoFormat]));
                         break;
                     }
             }

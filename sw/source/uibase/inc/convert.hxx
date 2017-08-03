@@ -52,7 +52,7 @@ class SwConvertTableDlg: public SfxModalDialog
     VclPtr<PushButton>     mpAutoFormatBtn;
 
     OUString        sConvertTextTable;
-    SwTableAutoFormat* pTAutoFormat;
+    std::unique_ptr<SwTableAutoFormat> mxTAutoFormat;
     SwWrtShell*     pShell;
 
     DECL_LINK( AutoFormatHdl, Button*, void );

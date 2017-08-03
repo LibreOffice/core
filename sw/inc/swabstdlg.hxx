@@ -43,6 +43,7 @@ class SfxBindings;
 class SfxItemSet;
 class ResId;
 namespace vcl { class Window; }
+namespace Hackery { class Window; }
 class SfxItemPool;
 class SfxStyleSheetBase;
 class SwGlossaryHdl;
@@ -310,7 +311,7 @@ class AbstractSwAutoFormatDlg : public VclAbstractDialog
 protected:
     virtual ~AbstractSwAutoFormatDlg() override = default;
 public:
-    virtual void FillAutoFormatOfIndex( SwTableAutoFormat*& rToFill ) const = 0;
+    virtual SwTableAutoFormat* FillAutoFormatOfIndex() const = 0;
 };
 
 class AbstractSwFieldDlg : public SfxAbstractTabDialog
@@ -427,9 +428,9 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateSwColumnDialog(vcl::Window *pParent, SwWrtShell &rSh) = 0;
     virtual VclPtr<AbstractSplitTableDialog> CreateSplitTableDialog ( vcl::Window * pParent, SwWrtShell &rSh ) = 0;
 
-    virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pShell,
-                                                            bool bSetAutoFormat = true,
-                                                            const SwTableAutoFormat* pSelFormat = nullptr ) = 0;
+    virtual VclPtr<AbstractSwAutoFormatDlg> CreateSwAutoFormatDlg(Hackery::Window* pParent, SwWrtShell* pShell,
+                                                                  bool bSetAutoFormat = true,
+                                                                  const SwTableAutoFormat* pSelFormat = nullptr) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType ) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh ) = 0;
 
