@@ -23,54 +23,56 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/hackery.hxx>
 #include <vcl/layout.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <actctrl.hxx>
+#include <tblafmt.hxx>
 
 class SwWrtShell;
-class SwTableAutoFormat;
 class SwView;
 struct SwInsertTableOptions;
 
-class SwInsTableDlg : public SfxModalDialog
+class SwInsTableDlg
 {
-    VclPtr<Edit>           m_pNameEdit;
+    std::unique_ptr<Hackery::Builder> m_xBuilder;
+    std::unique_ptr<Hackery::Dialog> m_xDialog;
+    std::unique_ptr<Hackery::Entry> m_xNameEdit;
     TextFilter      m_aTextFilter;
 
-    VclPtr<NumericField>   m_pColNF;
-    VclPtr<NumericField>   m_pRowNF;
+    std::unique_ptr<Hackery::SpinButton> m_xColNF;
+    std::unique_ptr<Hackery::SpinButton> m_xRowNF;
 
-    VclPtr<CheckBox>       m_pHeaderCB;
-    VclPtr<CheckBox>       m_pRepeatHeaderCB;
-    VclPtr<NumericField>   m_pRepeatHeaderNF;
-    VclPtr<VclContainer>   m_pRepeatGroup;
+    std::unique_ptr<Hackery::CheckButton> m_xHeaderCB;
+    std::unique_ptr<Hackery::CheckButton> m_xRepeatHeaderCB;
+    std::unique_ptr<Hackery::SpinButton> m_xRepeatHeaderNF;
+    std::unique_ptr<Hackery::Widget> m_xRepeatGroup;
 
-    VclPtr<CheckBox>       m_pDontSplitCB;
-    VclPtr<CheckBox>       m_pBorderCB;
+    std::unique_ptr<Hackery::CheckButton> m_xDontSplitCB;
+    std::unique_ptr<Hackery::CheckButton> m_xBorderCB;
 
-    VclPtr<PushButton>     m_pInsertBtn;
-    VclPtr<PushButton>     m_pAutoFormatBtn;
+    std::unique_ptr<Hackery::Button> m_xInsertBtn;
+    std::unique_ptr<Hackery::Button> m_xAutoFormatBtn;
 
     SwWrtShell*     pShell;
-    SwTableAutoFormat* pTAutoFormat;
+    std::unique_ptr<SwTableAutoFormat> m_xTAutoFormat;
     sal_Int64       nEnteredValRepeatHeaderNF;
 
-    DECL_LINK( ModifyName, Edit&, void );
-    DECL_LINK( ModifyRowCol, Edit&, void );
-    DECL_LINK( AutoFormatHdl, Button*, void );
-    DECL_LINK( OKHdl, Button*, void);
-    DECL_LINK( CheckBoxHdl, Button* = nullptr, void);
-    DECL_LINK( ReapeatHeaderCheckBoxHdl, Button* = nullptr, void);
-    DECL_LINK( ModifyRepeatHeaderNF_Hdl, Edit&, void );
+    DECL_LINK(ModifyName, Hackery::Entry&, void);
+    DECL_LINK(ModifyRowCol, Hackery::SpinButton&, void);
+    DECL_LINK(AutoFormatHdl, Hackery::Button&, void);
+    DECL_LINK(OKHdl, Hackery::Button&, void);
+    DECL_LINK(CheckBoxHdl, Hackery::CheckButton&, void);
+    DECL_LINK(RepeatHeaderCheckBoxHdl, Hackery::CheckButton&, void);
+    DECL_LINK(ModifyRepeatHeaderNF_Hdl, Hackery::SpinButton&, void);
 
 public:
-    SwInsTableDlg( SwView& rView );
-    virtual ~SwInsTableDlg() override;
-    virtual void dispose() override;
+    SwInsTableDlg(SwView& rView);
 
     void GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                     SwInsertTableOptions& rInsTableOpts, OUString& rTableAutoFormatName,
                     SwTableAutoFormat *& prTAFormat );
+    short Execute() { return m_xDialog->run(); }
 };
 
 #endif
