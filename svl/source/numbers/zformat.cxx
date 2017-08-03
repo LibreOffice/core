@@ -1070,7 +1070,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         sStr = sInsertCalendar + sStr;
                     }
                     sal_Int32 nStrPos = pSc->ScanFormat( sStr);
-                    sal_uInt16 nAnz = pSc->GetAnzResStrings();
+                    sal_uInt16 nAnz = pSc->GetResultStringsCnt();
                     if (nAnz == 0)              // error
                     {
                         nStrPos = 1;
@@ -1199,7 +1199,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
             OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
-                sal_uInt16 nAnz = pSc->GetAnzResStrings();
+                sal_uInt16 nAnz = pSc->GetResultStringsCnt();
                 if ( nAnz )
                 {
                     NumFor[0].Enlarge(nAnz);
@@ -1219,7 +1219,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
             OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
-                sal_uInt16 nAnz = pSc->GetAnzResStrings();
+                sal_uInt16 nAnz = pSc->GetResultStringsCnt();
                 if ( nAnz )
                 {
                     NumFor[nIndex].Enlarge(nAnz);
@@ -1237,7 +1237,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
             OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
-                sal_uInt16 nAnz = pSc->GetAnzResStrings();
+                sal_uInt16 nAnz = pSc->GetResultStringsCnt();
                 if ( nAnz )
                 {
                     NumFor[nIndex].Enlarge(nAnz);

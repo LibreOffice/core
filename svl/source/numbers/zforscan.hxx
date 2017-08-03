@@ -51,7 +51,7 @@ public:
 
     void CopyInfo(ImpSvNumberformatInfo* pInfo,
                      sal_uInt16 nAnz); // Copies the FormatInfo
-    sal_uInt16 GetAnzResStrings() const         { return nAnzResStrings; }
+    sal_uInt16 GetResultStringsCnt() const      { return nResultStringsCnt; }
 
     const CharClass& GetChrCls() const          { return *pFormatter->GetCharClass(); }
     const LocaleDataWrapper& GetLoc() const     { return *pFormatter->GetLocaleData(); }
@@ -159,7 +159,7 @@ private: // Private section
     OUString sStrArray[NF_MAX_FORMAT_SYMBOLS];  // Array of symbols
     short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array of infos
                                                 // External Infos:
-    sal_uInt16 nAnzResStrings;                  // Result symbol count
+    sal_uInt16 nResultStringsCnt;               // Result symbol count
     short eScannedType;                         // Type according to scan
     bool bThousand;                             // With thousands marker
     sal_uInt16 nThousand;                       // Counts .... series
@@ -234,7 +234,7 @@ private: // Private section
     sal_Int32 FinalScan( OUString& rString ); // Final analysis with supplied type
 
     // -1:= error, return nPos in FinalScan; 0:= no calendar, 1:= calendar found
-    int FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i, sal_uInt16& nAnzResStrings );
+    int FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i, sal_uInt16& nResultStringsCnt );
 
     /** Insert symbol into nTypeArray and sStrArray, e.g. grouping separator.
         If at nPos-1 a symbol type NF_SYMBOLTYPE_EMPTY is present, that is
