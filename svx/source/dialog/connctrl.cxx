@@ -244,8 +244,8 @@ sal_uInt16 SvxXConnectionPreview::GetLineDeltaCount()
     const SfxItemSet& rSet = pEdgeObj->GetMergedItemSet();
     sal_uInt16 nCount(0);
 
-    if(SfxItemState::DONTCARE != rSet.GetItemState(SDRATTR_EDGELINEDELTAANZ))
-        nCount = static_cast<const SdrEdgeLineDeltaCountItem&>(rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
+    if(SfxItemState::DONTCARE != rSet.GetItemState(SDRATTR_EDGELINEDELTACOUNT))
+        nCount = static_cast<const SdrEdgeLineDeltaCountItem&>(rSet.Get(SDRATTR_EDGELINEDELTACOUNT)).GetValue();
 
     return nCount;
 }

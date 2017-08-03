@@ -122,7 +122,7 @@
 #define SDRATTR_EDGENODE2VERTDIST       (SDRATTR_EDGE_FIRST + 4)   /*   1131 */ /* Pool V4 */
 #define SDRATTR_EDGENODE1GLUEDIST       (SDRATTR_EDGE_FIRST + 5)   /*   1132 */ /* Pool V4 */
 #define SDRATTR_EDGENODE2GLUEDIST       (SDRATTR_EDGE_FIRST + 6)   /*   1133 */ /* Pool V4 */
-#define SDRATTR_EDGELINEDELTAANZ        (SDRATTR_EDGE_FIRST + 7)   /*   1134 */ /* Pool V4 */
+#define SDRATTR_EDGELINEDELTACOUNT      (SDRATTR_EDGE_FIRST + 7)   /*   1134 */ /* Pool V4 */
 #define SDRATTR_EDGELINE1DELTA          (SDRATTR_EDGE_FIRST + 8)   /*   1135 */ /* Pool V4 */
 #define SDRATTR_EDGELINE2DELTA          (SDRATTR_EDGE_FIRST + 9)   /*   1136 */ /* Pool V4 */
 #define SDRATTR_EDGELINE3DELTA          (SDRATTR_EDGE_FIRST +10)   /*   1137 */ /* Pool V4 */

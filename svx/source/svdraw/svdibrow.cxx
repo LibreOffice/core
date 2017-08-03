@@ -804,7 +804,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
             }
         } break;
 
-        case SDRATTR_EDGELINEDELTAANZ: return true;
+        case SDRATTR_EDGELINEDELTACOUNT: return true;
         case SDRATTR_EDGELINE1DELTA:
         case SDRATTR_EDGELINE2DELTA:
         case SDRATTR_EDGELINE3DELTA: {
@@ -815,7 +815,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
                 }
                 if (eKind!=SdrEdgeKind::OrthoLines && eKind!=SdrEdgeKind::Bezier) return true;
             }
-            if (ImpGetItem(*pSet,SDRATTR_EDGELINEDELTAANZ,pItem)) {
+            if (ImpGetItem(*pSet,SDRATTR_EDGELINEDELTACOUNT,pItem)) {
                 sal_uInt16 nCount=static_cast<const SdrEdgeLineDeltaCountItem*>(pItem)->GetValue();
                 if (nCount==0) return true;
                 if (nCount==1 && nWhich>SDRATTR_EDGELINE1DELTA) return true;
