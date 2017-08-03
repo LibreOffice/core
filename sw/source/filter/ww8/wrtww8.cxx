@@ -442,7 +442,7 @@ void WW8_WrtFactoids::Write(WW8Export& rExport)
     rExport.pFib->m_lcbFactoidData = rStream.Tell() - rExport.pFib->m_fcFactoidData;
 }
 
-#define ANZ_DEFAULT_STYLES 16
+#define DEFAULT_STYLES_COUNT 16
 
 // Names of the storage streams
 #define sMainStream OUString("WordDocument")
@@ -3077,7 +3077,7 @@ namespace
 
 void MSWordExportBase::ExportDocument( bool bWriteAll )
 {
-    m_nCharFormatStart = ANZ_DEFAULT_STYLES;
+    m_nCharFormatStart = DEFAULT_STYLES_COUNT;
     m_nFormatCollStart = m_nCharFormatStart + m_pDoc->GetCharFormats()->size() - 1;
 
     m_bStyDef = m_bBreakBefore = m_bOutKF =
