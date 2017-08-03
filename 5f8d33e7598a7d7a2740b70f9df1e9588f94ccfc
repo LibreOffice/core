@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_f15bc02c",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2017-08-03T14:11:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_b103f80c",
+      "revId": "5f8d33e7598a7d7a2740b70f9df1e9588f94ccfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_d108842b",
         "filename": "sw/source/core/edit/edfcol.cxx",
         "patchSetId": 1
