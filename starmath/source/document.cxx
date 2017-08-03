@@ -176,7 +176,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
     }
 }
 
-void SmDocShell::SetFormat(SmFormat& rFormat)
+void SmDocShell::SetFormat(SmFormat const & rFormat)
 {
     maFormat = rFormat;
     SetFormulaArranged( false );

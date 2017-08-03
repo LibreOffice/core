@@ -1173,7 +1173,7 @@ void SmCursor::CloneLineToClipboard(SmStructureNode* pLine, SmClipboard* pClipbo
     }
 }
 
-bool SmCursor::IsLineCompositionNode(SmNode* pNode){
+bool SmCursor::IsLineCompositionNode(SmNode const * pNode){
     switch(pNode->GetType()){
         case SmNodeType::Line:
         case SmNodeType::UnHor:

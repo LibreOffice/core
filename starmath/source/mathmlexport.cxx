@@ -241,8 +241,8 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 bool SmXMLExportWrapper::WriteThroughComponent(
     const Reference<io::XOutputStream>& xOutputStream,
     const Reference<XComponent>& xComponent,
-    Reference<uno::XComponentContext> & rxContext,
-    Reference<beans::XPropertySet> & rPropSet,
+    Reference<uno::XComponentContext> const & rxContext,
+    Reference<beans::XPropertySet> const & rPropSet,
     const sal_Char* pComponentName )
 {
     OSL_ENSURE(xOutputStream.is(), "I really need an output stream!");
@@ -293,8 +293,8 @@ bool SmXMLExportWrapper::WriteThroughComponent(
     const Reference < embed::XStorage >& xStorage,
     const Reference<XComponent>& xComponent,
     const sal_Char* pStreamName,
-    Reference<uno::XComponentContext> & rxContext,
-    Reference<beans::XPropertySet> & rPropSet,
+    Reference<uno::XComponentContext> const & rxContext,
+    Reference<beans::XPropertySet> const & rPropSet,
     const sal_Char* pComponentName
     )
 {

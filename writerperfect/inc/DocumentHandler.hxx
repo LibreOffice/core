@@ -51,7 +51,7 @@ namespace writerperfect
 class WRITERPERFECT_DLLPUBLIC DocumentHandler: public OdfDocumentHandler
 {
 public:
-    DocumentHandler(css::uno::Reference < css::xml::sax::XDocumentHandler > &xHandler);
+    DocumentHandler(css::uno::Reference < css::xml::sax::XDocumentHandler > const &xHandler);
     void startDocument() override;
     void endDocument() override;
     void startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList) override;

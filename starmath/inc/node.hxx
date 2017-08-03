@@ -202,7 +202,7 @@ public:
     }
 
     /** Set the token for this node */
-    void SetToken(SmToken& token){
+    void SetToken(SmToken const & token){
         maNodeToken = token;
     }
 
@@ -249,7 +249,7 @@ public:
      *
      * Returns -1, if pSubNode isn't a subnode of this.
      */
-    int IndexOfSubNode(SmNode* pSubNode)
+    int IndexOfSubNode(SmNode const * pSubNode)
     {
         sal_uInt16 nSize = GetNumSubNodes();
         for(sal_uInt16 i = 0; i < nSize; i++)

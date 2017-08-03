@@ -920,7 +920,7 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
     SfxViewShell::SetZoomFactor( rX, rY );
 }
 
-Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
+Size SmViewShell::GetTextLineSize(OutputDevice const & rDevice, const OUString& rLine)
 {
     Size   aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
     const long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_char_width() * 8;
@@ -943,7 +943,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
     return aSize;
 }
 
-Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long MaxWidth)
+Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rText, long MaxWidth)
 {
     Size aSize;
     Size aTextSize;

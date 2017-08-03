@@ -172,7 +172,7 @@ public:
     void        UpdateText();
     void        SetText(const OUString& rBuffer);
     const OUString&  GetText() { return maText; }
-    void        SetFormat(SmFormat& rFormat);
+    void        SetFormat(SmFormat const & rFormat);
     const SmFormat&  GetFormat() { return maFormat; }
 
     void            Parse();

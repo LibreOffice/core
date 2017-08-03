@@ -65,7 +65,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
 
-static awt::Rectangle lcl_GetBounds( vcl::Window *pWin )
+static awt::Rectangle lcl_GetBounds( vcl::Window const *pWin )
 {
     // !! see VCLXAccessibleComponent::implGetBounds()
 
@@ -92,7 +92,7 @@ static awt::Rectangle lcl_GetBounds( vcl::Window *pWin )
     return aBounds;
 }
 
-static awt::Point lcl_GetLocationOnScreen( vcl::Window *pWin )
+static awt::Point lcl_GetLocationOnScreen( vcl::Window const *pWin )
 {
     // !! see VCLXAccessibleComponent::getLocationOnScreen()
 
@@ -1038,7 +1038,7 @@ void SmTextForwarder::FieldClicked(const SvxFieldItem&, sal_Int32, sal_Int32)
 {
 }
 
-static SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
+static SfxItemState GetSvxEditEngineItemState( EditEngine const & rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
 {
     std::vector<EECharAttrib> aAttribs;
 

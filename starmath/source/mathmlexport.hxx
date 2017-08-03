@@ -40,7 +40,7 @@ class SmXMLExportWrapper
     bool bFlat;     //set true for export to flat .mml, set false for
                         //export to a .sxm (or whatever) package
 public:
-    explicit SmXMLExportWrapper(css::uno::Reference<css::frame::XModel> &rRef)
+    explicit SmXMLExportWrapper(css::uno::Reference<css::frame::XModel> const &rRef)
         : xModel(rRef), bFlat(true) {}
 
     bool Export(SfxMedium &rMedium);
@@ -49,16 +49,16 @@ public:
     static bool WriteThroughComponent(
         const css::uno::Reference< css::io::XOutputStream >&   xOutputStream,
         const css::uno::Reference< css::lang::XComponent >&    xComponent,
-        css::uno::Reference< css::uno::XComponentContext > & rxContext,
-        css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        css::uno::Reference< css::uno::XComponentContext > const & rxContext,
+        css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
         const sal_Char* pComponentName );
 
     static bool WriteThroughComponent(
         const css::uno::Reference< css::embed::XStorage >& xStor,
         const css::uno::Reference< css::lang::XComponent >& xComponent,
         const sal_Char* pStreamName,
-        css::uno::Reference< css::uno::XComponentContext > & rxContext,
-        css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        css::uno::Reference< css::uno::XComponentContext > const & rxContext,
+        css::uno::Reference< css::beans::XPropertySet > const & rPropSet,
         const sal_Char* pComponentName );
 };
 

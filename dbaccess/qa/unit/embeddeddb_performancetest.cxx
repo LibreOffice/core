@@ -98,19 +98,19 @@ private:
                                 const OUString& rDBName,
                                 const bool bUsePreparedStatement);
 
-    void setupTestTable(uno::Reference< XConnection >& xConnection);
+    void setupTestTable(uno::Reference< XConnection > const & xConnection);
 
     SvFileStream *getWordListStream();
 
     // Individual Tests
     void performPreparedStatementInsertTest(
-        uno::Reference< XConnection >& xConnection,
+        uno::Reference< XConnection > const & xConnection,
         const OUString& rDBName);
     void performStatementInsertTest(
-        uno::Reference< XConnection >& xConnection,
+        uno::Reference< XConnection > const & xConnection,
         const OUString& rDBName);
     void performReadTest(
-        uno::Reference< XConnection >& xConnection,
+        uno::Reference< XConnection > const & xConnection,
         const OUString& rDBName);
 
     // Perform all tests on a given DB.
@@ -234,7 +234,7 @@ void EmbeddedDBPerformanceTest::doPerformanceTestOnODB(
 }
 
 void EmbeddedDBPerformanceTest::setupTestTable(
-    uno::Reference< XConnection >& xConnection)
+    uno::Reference< XConnection > const & xConnection)
 {
     uno::Reference< XStatement > xStatement = xConnection->createStatement();
 
@@ -249,7 +249,7 @@ void EmbeddedDBPerformanceTest::setupTestTable(
 }
 
 void EmbeddedDBPerformanceTest::performPreparedStatementInsertTest(
-    uno::Reference< XConnection >& xConnection,
+    uno::Reference< XConnection > const & xConnection,
     const OUString& rDBName)
 {
     uno::Reference< XPreparedStatement > xPreparedStatement =
@@ -291,7 +291,7 @@ void EmbeddedDBPerformanceTest::performPreparedStatementInsertTest(
 }
 
 void EmbeddedDBPerformanceTest::performStatementInsertTest(
-    uno::Reference< XConnection >& xConnection,
+    uno::Reference< XConnection > const & xConnection,
     const OUString& rDBName)
 {
     uno::Reference< XStatement > xStatement =
@@ -329,7 +329,7 @@ void EmbeddedDBPerformanceTest::performStatementInsertTest(
 }
 
 void EmbeddedDBPerformanceTest::performReadTest(
-    uno::Reference< XConnection >& xConnection,
+    uno::Reference< XConnection > const & xConnection,
     const OUString& rDBName)
 {
     uno::Reference< XStatement > xStatement = xConnection->createStatement();

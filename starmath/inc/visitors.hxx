@@ -372,7 +372,7 @@ private:
     /** Clone children of pSource and give them to pTarget */
     void CloneKids( SmStructureNode* pSource, SmStructureNode* pTarget );
     /** Clone attributes on a pNode */
-    static void CloneNodeAttr( SmNode* pSource, SmNode* pTarget );
+    static void CloneNodeAttr( SmNode const * pSource, SmNode* pTarget );
 };
 
 
