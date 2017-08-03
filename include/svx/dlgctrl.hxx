@@ -51,6 +51,17 @@ public:
     virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) = 0;
 };
 
+class SAL_WARN_UNUSED NewSvxTabPage : public NewSfxTabPage
+{
+
+public:
+    NewSvxTabPage(Weld::Container* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rAttrSet)
+        : NewSfxTabPage(pParent, rID, rUIXMLDescription, &rAttrSet)
+    {
+    }
+    virtual void PointChanged(vcl::Window* pWindow, RectPoint eRP) = 0;
+};
+
 /*************************************************************************
 |* Control for display and selection of the corner and center points of
 |* an object

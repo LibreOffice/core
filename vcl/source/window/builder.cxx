@@ -11,7 +11,9 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include "i18nutil/unicode.hxx"
 #include <osl/module.hxx>
+#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
@@ -36,12 +38,14 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/slider.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
+#include "salinst.hxx"
 #include "strings.hrc"
 
 #ifdef DISABLE_DYNLOADING
@@ -117,6 +121,102 @@ namespace
     }
 }
 #endif
+
+Weld::Builder* Application::CreateBuilder(const OUString &rUIFile)
+{
+    return ImplGetSVData()->mpDefInst->CreateBuilder(VclBuilderContainer::getUIRootDir(), rUIFile);
+}
+
+Weld::Dialog* Application::CreateMessageDialog(Weld::Window* pParent, VclMessageType eMessageType,
+                                                  VclButtonsType eButtonType, const OUString& rPrimaryMessage)
+{
+    return ImplGetSVData()->mpDefInst->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
+}
+
+namespace
+{
+    const OUString MetricToString(FieldUnit rUnit)
+    {
+        FieldUnitStringList* pList = ImplGetFieldUnits();
+        if (pList)
+        {
+            // return unit's default string (ie, the first one )
+            for (auto it = pList->begin(); it != pList->end(); ++it)
+            {
+                if (it->second == rUnit)
+                    return it->first;
+            }
+        }
+
+        return OUString();
+    }
+}
+
+namespace Weld
+{
+    IMPL_LINK_NOARG(MetricSpinButton, spin_button_value_changed, SpinButton&, void)
+    {
+        signal_value_changed();
+    }
+
+    IMPL_LINK(MetricSpinButton, spin_button_output, SpinButton&, rSpinButton, void)
+    {
+        rSpinButton.set_text(format_number(rSpinButton.get_value()));
+    }
+
+    void MetricSpinButton::update_width_chars()
+    {
+        double min, max;
+        m_xSpinButton->get_range(min, max);
+        auto width = std::max(m_xSpinButton->get_pixel_size(format_number(min)).Width(),
+                              m_xSpinButton->get_pixel_size(format_number(max)).Width());
+        int chars = ceil(width / m_xSpinButton->approximate_char_width());
+        m_xSpinButton->set_width_chars(chars);
+    }
+
+    unsigned int Power10(unsigned int n)
+    {
+        unsigned int nValue = 1;
+        for (unsigned int i = 0; i < n; ++i)
+            nValue *= 10;
+        return nValue;
+    }
+
+    OUString MetricSpinButton::format_number(double fValue) const
+    {
+        OUString aStr;
+
+        //pawn percent off to icu to decide whether percent is separated from its number for this locale
+        if (m_eSrcUnit == FUNIT_PERCENT)
+        {
+            aStr = unicode::formatPercent(fValue, Application::GetSettings().GetUILanguageTag());
+        }
+        else
+        {
+            const SvtSysLocale aSysLocale;
+            const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
+            unsigned int nDecimalDigits = m_xSpinButton->get_digits();
+            fValue *= Power10(nDecimalDigits);
+            aStr = rLocaleData.getNum(rtl::math::round(fValue), nDecimalDigits, true, true);
+            if (m_eSrcUnit != FUNIT_NONE && m_eSrcUnit != FUNIT_DEGREE)
+                aStr += " ";
+            assert(m_eSrcUnit != FUNIT_PERCENT);
+            aStr += MetricToString(m_eSrcUnit);
+        }
+
+        return aStr;
+    }
+
+    double MetricSpinButton::ConvertValue(double fValue, FieldUnit eInUnit, FieldUnit eOutUnit) const
+    {
+        unsigned int nDecimalDigits = m_xSpinButton->get_digits();
+        unsigned int nMultiplier = Power10(nDecimalDigits);
+        fValue *= nMultiplier;
+        fValue = MetricField::ConvertValue(fValue, 0, nDecimalDigits, eInUnit, eOutUnit);
+        fValue /= nMultiplier;
+        return fValue;
+    }
+}
 
 VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUString& sUIFile, const OString& sID, const css::uno::Reference<css::frame::XFrame>& rFrame)
     : m_sID(sID)

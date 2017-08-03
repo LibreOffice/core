@@ -105,6 +105,8 @@ namespace vcl {
 
 namespace svt { class PopupWindowControllerImpl; }
 
+namespace Weld { class Window; }
+
 template<class T> class VclPtr;
 
 enum class TrackingEventFlags
@@ -543,6 +545,7 @@ public:
     SAL_DLLPRIVATE static void          ImplInitAppFontData( vcl::Window const * pWindow );
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetFrameWindow() const;
+    Weld::Window*                       GetFrameWeld() const;
     SalFrame*                           ImplGetFrame() const;
     SAL_DLLPRIVATE ImplFrameData*       ImplGetFrameData();
 

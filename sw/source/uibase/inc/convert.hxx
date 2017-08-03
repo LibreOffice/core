@@ -21,6 +21,7 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/edit.hxx>
 #include <sfx2/basedlgs.hxx>
 
@@ -30,41 +31,46 @@ class SwWrtShell;
 class NumericField;
 struct SwInsertTableOptions;
 
-class SwConvertTableDlg: public SfxModalDialog
+class SwConvertTableDlg
 {
-    VclPtr<RadioButton>    mpTabBtn;
-    VclPtr<RadioButton>    mpSemiBtn;
-    VclPtr<RadioButton>    mpParaBtn;
-    VclPtr<RadioButton>    mpOtherBtn;
-    VclPtr<Edit>           mpOtherEd;
-    VclPtr<CheckBox>       mpKeepColumn;
+    std::unique_ptr<Weld::Builder> m_xBuilder;
+    std::unique_ptr<Weld::Dialog> m_xDialog;
+    std::unique_ptr<Weld::RadioButton> m_xTabBtn;
+    std::unique_ptr<Weld::RadioButton> m_xSemiBtn;
+    std::unique_ptr<Weld::RadioButton> m_xParaBtn;
+    std::unique_ptr<Weld::RadioButton> m_xOtherBtn;
+    std::unique_ptr<Weld::Entry> m_xOtherEd;
+    std::unique_ptr<Weld::CheckButton> m_xKeepColumn;
 
-    VclPtr<VclContainer>   mpOptions;
+    std::unique_ptr<Weld::Widget> m_xOptions;
 
-    VclPtr<CheckBox>       mpHeaderCB;
-    VclPtr<CheckBox>       mpRepeatHeaderCB;
+    std::unique_ptr<Weld::CheckButton> m_xHeaderCB;
+    std::unique_ptr<Weld::CheckButton> m_xRepeatHeaderCB;
 
-    VclPtr<VclContainer>   mpRepeatRows;
-    VclPtr<NumericField>   mpRepeatHeaderNF;
+    std::unique_ptr<Weld::Widget> m_xRepeatRows;
+    std::unique_ptr<Weld::SpinButton> m_xRepeatHeaderNF;
 
-    VclPtr<CheckBox>       mpDontSplitCB;
-    VclPtr<CheckBox>       mpBorderCB;
-    VclPtr<PushButton>     mpAutoFormatBtn;
+    std::unique_ptr<Weld::CheckButton> m_xDontSplitCB;
+    std::unique_ptr<Weld::CheckButton> m_xBorderCB;
+    std::unique_ptr<Weld::Button> m_xAutoFormatBtn;
 
     OUString        sConvertTextTable;
-    SwTableAutoFormat* pTAutoFormat;
+    std::unique_ptr<SwTableAutoFormat> mxTAutoFormat;
     SwWrtShell*     pShell;
 
-    DECL_LINK( AutoFormatHdl, Button*, void );
-    DECL_LINK( BtnHdl, Button*, void );
-    DECL_LINK( CheckBoxHdl, Button* = nullptr, void );
-    DECL_LINK( ReapeatHeaderCheckBoxHdl, Button* = nullptr, void );
+    DECL_LINK(AutoFormatHdl, Weld::Button&, void);
+    DECL_LINK(BtnHdl, Weld::ToggleButton&, void);
+    DECL_LINK(CheckBoxHdl, Weld::ToggleButton&, void);
+    DECL_LINK(RepeatHeaderCheckBoxHdl, Weld::ToggleButton&, void);
 
 public:
-    SwConvertTableDlg( SwView& rView, bool bToTable );
-    virtual ~SwConvertTableDlg() override;
-    virtual void dispose() override;
-
+    SwConvertTableDlg(SwView& rView, bool bToTable);
+    short Execute()
+    {
+        short nRet = m_xDialog->run();
+        m_xDialog->hide();
+        return nRet;
+    }
     void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTableOpts,
                     SwTableAutoFormat const*& prTAFormat );

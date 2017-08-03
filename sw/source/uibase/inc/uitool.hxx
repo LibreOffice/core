@@ -21,6 +21,7 @@
 
 #include <tools/wintypes.hxx>
 #include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 #include <swtypes.hxx>
 #include "swdllapi.h"
 
@@ -30,6 +31,7 @@ class SwPageDesc;
 class SvxTabStopItem;
 class SwWrtShell;
 class ListBox;
+namespace Weld { class ComboBoxText; }
 class SwDocShell;
 class SwFrameFormat;
 class SwTabCols;
@@ -38,6 +40,7 @@ class SfxViewFrame;
 
 // switch a metric
 SW_DLLPUBLIC void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
+SW_DLLPUBLIC void SetMetric(Weld::MetricSpinButton& rCtrl, FieldUnit eUnit);
 
 // fill BoxInfo attribute
 SW_DLLPUBLIC void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);
@@ -94,6 +97,7 @@ SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, boo
 
 //inserts a string sorted into a ListBox,
 SW_DLLPUBLIC sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset);
+SW_DLLPUBLIC void InsertStringSorted(const OUString& rEntry, Weld::ComboBoxText& rToFill, int nOffset);
 
 // Get table width and alignment
 SwTwips GetTableWidth( SwFrameFormat const * pFormat, SwTabCols const & rCols, sal_uInt16 *pPercent,
