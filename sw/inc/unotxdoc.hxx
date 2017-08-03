@@ -438,6 +438,8 @@ public:
     void postDialogMouseEvent(const vcl::DialogID& rDialogID, int nType, int nX, int nY,
                               int nCount, int nButtons, int nModifier) override;
 
+    void notifyDialogInvalidation(const vcl::DialogID& rDialogID) override;
+
     // css::tiledrendering::XTiledRenderable
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) override;
 

@@ -105,8 +105,6 @@ public:
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
-    virtual void            LogicInvalidate(const tools::Rectangle* pRectangle) override;
-
     DECL_LINK(TimerHdl, Timer *, void);
 
 };
