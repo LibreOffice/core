@@ -115,7 +115,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/mscrypt/securityenvironment_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/seinitializer_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/x509certificate_mscryptimpl \
-	xmlsecurity/source/xmlsec/mscrypt/xmlencryption_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/xmlsecuritycontext_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/xmlsignature_mscryptimpl \
 	xmlsecurity/source/xmlsec/mscrypt/xsec_mscrypt \
