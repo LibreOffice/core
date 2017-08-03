@@ -488,7 +488,7 @@ static void lcl_syncGrammarError( SwTextNode &rTextNode, linguistic2::Proofreadi
 }
 
 uno::Any SwDoc::Spell( SwPaM& rPaM,
-                    uno::Reference< XSpellChecker1 >  &xSpeller,
+                    uno::Reference< XSpellChecker1 > const &xSpeller,
                     sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
                     bool bGrammarCheck,
                     SwConversionArgs *pConvArgs  ) const

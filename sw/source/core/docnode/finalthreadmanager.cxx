@@ -148,7 +148,7 @@ void SAL_CALL CancelJobsThread::run()
 class TerminateOfficeThread : public osl::Thread
 {
     public:
-        TerminateOfficeThread( CancelJobsThread& rCancelJobsThread,
+        TerminateOfficeThread( CancelJobsThread const & rCancelJobsThread,
                                css::uno::Reference< css::uno::XComponentContext > const & xContext )
             : osl::Thread(),
               maMutex(),

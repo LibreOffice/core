@@ -61,7 +61,7 @@
 // #i21457# - new implementation of local method <lcl_IsInSameTableBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,
 // for which previous/next is checked, if it's visible.
-static bool lcl_IsInSameTableBox( SwNodes& _rNds,
+static bool lcl_IsInSameTableBox( SwNodes const & _rNds,
                          const SwNode& _rNd,
                          const bool _bPrev )
 {
@@ -128,7 +128,7 @@ static bool lcl_IsInSameTableBox( SwNodes& _rNds,
     return true;
 }
 
-static void lcl_CheckEmptyLayFrame( SwNodes& rNds, SwSectionData& rSectionData,
+static void lcl_CheckEmptyLayFrame( SwNodes const & rNds, SwSectionData& rSectionData,
                         const SwNode& rStt, const SwNode& rEnd )
 {
     SwNodeIndex aIdx( rStt );

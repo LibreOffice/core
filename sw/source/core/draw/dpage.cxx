@@ -167,7 +167,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
     return pGridLst.get();
 }
 
-bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
+bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
                            const HelpEvent& rEvt )
 {
     assert( pDoc );

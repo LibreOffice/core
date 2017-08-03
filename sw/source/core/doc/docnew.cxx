@@ -176,7 +176,7 @@ void StartGrammarChecking( SwDoc &rDoc )
 /*
  * internal functions
  */
-static void lcl_DelFormatIndices( SwFormat* pFormat )
+static void lcl_DelFormatIndices( SwFormat const * pFormat )
 {
     SwFormatContent &rFormatContent = const_cast<SwFormatContent&>(pFormat->GetContent());
     if ( rFormatContent.GetContentIdx() )

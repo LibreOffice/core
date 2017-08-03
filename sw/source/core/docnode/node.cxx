@@ -84,7 +84,7 @@ namespace AttrSetHandleHelper
 
 void GetNewAutoStyle( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                       const SwContentNode& rNode,
-                      SwAttrSet& rNewAttrSet )
+                      SwAttrSet const & rNewAttrSet )
 {
     const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(rpAttrSet.get());
     if( rNode.GetModifyAtAttr() )

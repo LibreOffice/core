@@ -377,7 +377,7 @@ private:
     typedef SwFormat* (SwDoc:: *FNCopyFormat)( const OUString&, SwFormat*, bool, bool );
     SwFormat* CopyFormat( const SwFormat& rFormat, const SwFormatsBase& rFormatArr,
                         FNCopyFormat fnCopyFormat, const SwFormat& rDfltFormat );
-    void CopyFormatArr( const SwFormatsBase& rSourceArr, SwFormatsBase& rDestArr,
+    void CopyFormatArr( const SwFormatsBase& rSourceArr, SwFormatsBase const & rDestArr,
                         FNCopyFormat fnCopyFormat, SwFormat& rDfltFormat );
     void CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                 const SwFrameFormat& rSrcFormat, SwFrameFormat& rDestFormat );
@@ -655,7 +655,7 @@ public:
         spell-checking/hyphenating/word-counting
     */
     css::uno::Any
-            Spell( SwPaM&, css::uno::Reference< css::linguistic2::XSpellChecker1 > &,
+            Spell( SwPaM&, css::uno::Reference< css::linguistic2::XSpellChecker1 > const &,
                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt, bool bGrammarCheck,
                    SwConversionArgs *pConvArgs = nullptr ) const;
 
@@ -775,7 +775,7 @@ public:
     SwCharFormat *MakeCharFormat(const OUString &rFormatName, SwCharFormat *pDerivedFrom,
                            bool bBroadcast = false );
     void       DelCharFormat(size_t nFormat, bool bBroadcast = false);
-    void       DelCharFormat(SwCharFormat* pFormat, bool bBroadcast = false);
+    void       DelCharFormat(SwCharFormat const * pFormat, bool bBroadcast = false);
     SwCharFormat* FindCharFormatByName( const OUString& rName ) const
         {   return static_cast<SwCharFormat*>(FindFormatByName( *mpCharFormatTable, rName )); }
 
@@ -792,7 +792,7 @@ public:
                                                SwTextFormatColl *pDerivedFrom,
                                                bool bBroadcast = false);
     void DelTextFormatColl(size_t nFormat, bool bBroadcast = false);
-    void DelTextFormatColl( SwTextFormatColl* pColl, bool bBroadcast = false );
+    void DelTextFormatColl( SwTextFormatColl const * pColl, bool bBroadcast = false );
     /** Add 4th optional parameter <bResetListAttrs>.
      'side effect' of <SetTextFormatColl> with <bReset = true> is that the hard
      attributes of the affected text nodes are cleared, except the break
@@ -1246,7 +1246,7 @@ public:
     void ChkBoxNumFormat( SwTableBox& rAktBox, bool bCallUpdate );
     void SetTableBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet );
     void ClearBoxNumAttrs( const SwNodeIndex& rNode );
-    void ClearLineNumAttrs( SwPosition & rPos );
+    void ClearLineNumAttrs( SwPosition const & rPos );
 
     bool InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                         const SwTable* pCpyTable, bool bCpyName = false,

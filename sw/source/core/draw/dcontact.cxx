@@ -96,7 +96,7 @@ namespace
     };
 }
 
-void setContextWritingMode(SdrObject* pObj, SwFrame* pAnchor)
+void setContextWritingMode(SdrObject* pObj, SwFrame const * pAnchor)
 {
     if(!pObj || !pAnchor)
         return;
@@ -398,7 +398,7 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
 
 namespace
 {
-    Point lcl_GetWW8Pos(SwAnchoredObject* pAnchoredObj, const bool bFollowTextFlow, sw::WW8AnchorConv& reConv)
+    Point lcl_GetWW8Pos(SwAnchoredObject const * pAnchoredObj, const bool bFollowTextFlow, sw::WW8AnchorConv& reConv)
     {
         switch(reConv)
         {
@@ -798,7 +798,7 @@ const SwFrame* SwDrawContact::GetAnchorFrame( const SdrObject* _pDrawObj ) const
     return pAnchorFrame;
 }
 
-SwFrame* SwDrawContact::GetAnchorFrame(SdrObject *const pDrawObj)
+SwFrame* SwDrawContact::GetAnchorFrame(SdrObject const *const pDrawObj)
 {
     return const_cast<SwFrame *>(const_cast<SwDrawContact const*>(this)->GetAnchorFrame(pDrawObj));
 }
@@ -902,7 +902,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs(const tools::Rectangle* pOldBound
 }
 
 /// local method to notify the background for a drawing object - #i26791#
-static void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
+static void lcl_NotifyBackgroundOfObj( SwDrawContact const & _rDrawContact,
                                 const SdrObject& _rObj,
                                 const tools::Rectangle* _pOldObjRect )
 {

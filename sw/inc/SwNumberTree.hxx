@@ -453,7 +453,7 @@ protected:
 
        @param pChild      the child to invalidate
      */
-    void Invalidate( SwNumberTreeNode * pChild );
+    void Invalidate( SwNumberTreeNode const * pChild );
 
     /** Invalidation of all children
 

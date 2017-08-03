@@ -55,7 +55,7 @@ inline const SwFrameFormat *FindFrameFormat( const SdrObject *pObj )
 {   return ::FindFrameFormat( const_cast<SdrObject*>(pObj) ); }
 bool HasWrap( const SdrObject* pObj );
 
-void setContextWritingMode( SdrObject* pObj, SwFrame* pAnchor );
+void setContextWritingMode( SdrObject* pObj, SwFrame const * pAnchor );
 
 /// @return BoundRect plus distance.
 SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
@@ -361,7 +361,7 @@ class SwDrawContact final : public SwContact
         virtual SdrObject* GetMaster() override;
 
         const SwFrame* GetAnchorFrame( const SdrObject* _pDrawObj = nullptr ) const;
-        SwFrame* GetAnchorFrame( SdrObject* _pDrawObj = nullptr );
+        SwFrame* GetAnchorFrame( SdrObject const * _pDrawObj = nullptr );
 
         const SwPageFrame* GetPageFrame() const
         {

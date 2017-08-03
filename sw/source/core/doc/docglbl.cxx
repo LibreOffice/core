@@ -83,7 +83,7 @@ bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
 }
 
 // two helpers for outline mode
-SwNodePtr GetStartNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
+SwNodePtr GetStartNode( SwOutlineNodes const * pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
 {
     SwNodePtr pNd;
 
@@ -96,7 +96,7 @@ SwNodePtr GetStartNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, SwOutlineNo
     return nullptr;
 }
 
-SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
+SwNodePtr GetEndNode( SwOutlineNodes const * pOutlNds, int nOutlineLevel, SwOutlineNodes::size_type* nOutl )
 {
     SwNodePtr pNd;
 

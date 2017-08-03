@@ -1063,7 +1063,7 @@ void SwNumberTreeNode::InvalidateTree() const
         (*aIt)->InvalidateTree();
 }
 
-void SwNumberTreeNode::Invalidate(SwNumberTreeNode * pChild)
+void SwNumberTreeNode::Invalidate(SwNumberTreeNode const * pChild)
 {
     if (pChild->IsValid())
     {
