@@ -75,15 +75,13 @@ namespace dbtools
 
     OUString DBTypeConversion::toDateString(const css::util::Date& rDate)
     {
-        sal_Char s[11];
-        snprintf(s,
-                sizeof(s),
-                "%04d-%02d-%02d",
-                (int)rDate.Year,
-                (int)rDate.Month,
-                (int)rDate.Day);
-        s[10] = 0;
-        return OUString::createFromAscii(s);
+        std::ostringstream ostr;
+        using std::setw;
+        ostr.fill('0');
+        ostr << setw(4) << rDate.Year  << "-"
+             << setw(2) << rDate.Month << "-"
+             << setw(2) << rDate.Day;
+        return OUString::createFromAscii(ostr.str().c_str());
     }
 
     OUString DBTypeConversion::toTimeStringS(const css::util::Time& rTime)
