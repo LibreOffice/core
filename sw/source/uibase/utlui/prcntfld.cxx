@@ -43,6 +43,19 @@ void PercentField::set(MetricField *pField)
     m_pField->SetCustomUnitText(OUString('%'));
 }
 
+NewPercentField::NewPercentField(Weld::MetricSpinButton* pField)
+    : m_xField(pField)
+    , nLastPercent(-1)
+    , nLastValue(-1)
+    , nOldDigits(m_xField->get_digits())
+    , eOldUnit(m_xField->get_unit())
+    , bLockAutoCalculation(false)
+{
+    m_xField->get_range(nOldMin, nRefValue, FUNIT_TWIP);
+    m_xField->get_range(nOldMin, nOldMax, eOldUnit);
+    m_xField->get_increments(nOldStepSize, nOldPageSize, eOldUnit);
+}
+
 void PercentField::SetRefValue(sal_Int64 nValue)
 {
     sal_Int64 nRealValue = GetRealValue(eOldUnit);
@@ -50,6 +63,16 @@ void PercentField::SetRefValue(sal_Int64 nValue)
     nRefValue = nValue;
 
     if (!bLockAutoCalculation && (m_pField->GetUnit() == FUNIT_CUSTOM))
+        SetPrcntValue(nRealValue, eOldUnit);
+}
+
+void NewPercentField::SetRefValue(int nValue)
+{
+    int nRealValue = GetRealValue(eOldUnit);
+
+    nRefValue = nValue;
+
+    if (!bLockAutoCalculation && (m_xField->get_unit() == FUNIT_PERCENT))
         SetPrcntValue(nRealValue, eOldUnit);
 }
 
@@ -119,6 +142,66 @@ void PercentField::ShowPercent(bool bPercent)
     }
 }
 
+void NewPercentField::ShowPercent(bool bPercent)
+{
+    if ((bPercent && m_xField->get_unit() == FUNIT_PERCENT) ||
+        (!bPercent && m_xField->get_unit() != FUNIT_PERCENT))
+        return;
+
+    int nOldValue;
+
+    if (bPercent)
+    {
+        int nAktWidth, nPercent;
+
+        nOldDigits = m_xField->get_digits();
+        eOldUnit = m_xField->get_unit();
+        nOldValue = m_xField->get_value(eOldUnit);
+        m_xField->get_range(nOldMin, nOldMax, eOldUnit);
+        m_xField->get_increments(nOldStepSize, nOldPageSize, eOldUnit);
+
+        m_xField->set_unit(FUNIT_PERCENT);
+        m_xField->set_digits(0);
+
+        nAktWidth = MetricField::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+        // round to 0.5 percent
+        nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
+
+        m_xField->set_range(std::max(1, nPercent), 100, FUNIT_PERCENT);
+        m_xField->set_increments(5, 25, FUNIT_PERCENT);
+        if (nOldValue != nLastValue)
+        {
+            nAktWidth = MetricField::ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+            nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
+            m_xField->set_value(nPercent, FUNIT_PERCENT);
+            nLastPercent = nPercent;
+            nLastValue = nOldValue;
+        }
+        else
+            m_xField->set_value(nLastPercent, FUNIT_PERCENT);
+    }
+    else
+    {
+        sal_Int64 nOldPercent = get_value(FUNIT_PERCENT);
+
+        nOldValue = Convert(get_value(), m_xField->get_unit(), eOldUnit);
+
+        m_xField->set_unit(eOldUnit);
+        m_xField->set_digits(nOldDigits);
+        m_xField->set_increments(nOldStepSize, nOldPageSize, eOldUnit);
+        m_xField->set_range(nOldMin, nOldMax, eOldUnit);
+
+        if (nOldPercent != nLastPercent)
+        {
+            SetPrcntValue(nOldValue, eOldUnit);
+            nLastPercent = nOldPercent;
+            nLastValue = nOldValue;
+        }
+        else
+            SetPrcntValue(nLastValue, eOldUnit);
+    }
+}
+
 void PercentField::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 {
     if (m_pField->GetUnit() != FUNIT_CUSTOM || eInUnit == FUNIT_CUSTOM)
@@ -141,6 +224,28 @@ void PercentField::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
     }
 }
 
+void NewPercentField::SetPrcntValue(int nNewValue, FieldUnit eInUnit)
+{
+    if (m_xField->get_unit() != FUNIT_PERCENT || eInUnit == FUNIT_PERCENT)
+        m_xField->set_value(Convert(nNewValue, eInUnit, m_xField->get_unit()), m_xField->get_unit());
+    else
+    {
+        // Overwrite output value, do not restore later
+        int nPercent, nAktWidth;
+        if (eInUnit == FUNIT_TWIP)
+        {
+            nAktWidth = MetricField::ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
+        }
+        else
+        {
+            int nValue = Convert(nNewValue, eInUnit, eOldUnit);
+            nAktWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+        }
+        nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
+        m_xField->set_value(nPercent, FUNIT_PERCENT);
+    }
+}
+
 void PercentField::SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 {
     if (m_pField->GetUnit() == FUNIT_CUSTOM)
@@ -152,6 +257,11 @@ void PercentField::SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 sal_Int64 PercentField::GetValue(FieldUnit eOutUnit)
 {
     return Convert(m_pField->GetValue(), m_pField->GetUnit(), eOutUnit);
+}
+
+int NewPercentField::get_value(FieldUnit eOutUnit)
+{
+    return Convert(m_xField->get_value(m_xField->get_unit()), m_xField->get_unit(), eOutUnit);
 }
 
 void PercentField::SetMin(sal_Int64 nNewMin, FieldUnit eInUnit)
@@ -169,10 +279,39 @@ void PercentField::SetMin(sal_Int64 nNewMin, FieldUnit eInUnit)
     }
 }
 
+void NewPercentField::SetMin(int nNewMin, FieldUnit eInUnit)
+{
+    if (m_xField->get_unit() != FUNIT_PERCENT)
+    {
+        int min, max;
+        m_xField->get_range(min, max, eInUnit);
+        m_xField->set_range(nNewMin, max, eInUnit);
+    }
+    else
+    {
+        if (eInUnit == FUNIT_NONE)
+            eInUnit = eOldUnit;
+        nOldMin = Convert(nNewMin, eInUnit, eOldUnit);
+
+        int nPercent = Convert(nNewMin, eInUnit, FUNIT_PERCENT);
+        m_xField->set_range(std::max(1, nPercent), 100, FUNIT_PERCENT);
+    }
+}
+
 void PercentField::SetMax(sal_Int64 nNewMax, FieldUnit eInUnit)
 {
     if (m_pField->GetUnit() != FUNIT_CUSTOM)
         m_pField->SetMax(nNewMax, eInUnit);
+}
+
+void NewPercentField::SetMax(int nNewMax, FieldUnit eInUnit)
+{
+    if (m_xField->get_unit() != FUNIT_PERCENT)
+    {
+        int min, max;
+        m_xField->get_range(min, max, eInUnit);
+        m_xField->set_range(min, nNewMax, eInUnit);
+    }
 }
 
 sal_Int64 PercentField::NormalizePercent(sal_Int64 nValue)
@@ -184,6 +323,15 @@ sal_Int64 PercentField::NormalizePercent(sal_Int64 nValue)
     return nValue;
 }
 
+int NewPercentField::NormalizePercent(int nValue)
+{
+    if (m_xField->get_unit() != FUNIT_PERCENT)
+        nValue = m_xField->normalize(nValue);
+    else
+        nValue = nValue * Weld::SpinButton::Power10(nOldDigits);
+    return nValue;
+}
+
 sal_Int64 PercentField::DenormalizePercent(sal_Int64 nValue)
 {
     if (m_pField->GetUnit() != FUNIT_CUSTOM)
@@ -191,6 +339,18 @@ sal_Int64 PercentField::DenormalizePercent(sal_Int64 nValue)
     else
     {
         sal_Int64 nFactor = ImpPower10(nOldDigits);
+        nValue = ((nValue+(nFactor/2)) / nFactor);
+    }
+    return nValue;
+}
+
+int NewPercentField::DenormalizePercent(int nValue)
+{
+    if (m_xField->get_unit() != FUNIT_PERCENT)
+        nValue = m_xField->denormalize(nValue);
+    else
+    {
+        int nFactor = Weld::SpinButton::Power10(nOldDigits);
         nValue = ((nValue+(nFactor/2)) / nFactor);
     }
     return nValue;
@@ -244,6 +404,14 @@ sal_Int64 PercentField::GetRealValue(FieldUnit eOutUnit)
         return Convert(GetValue(), m_pField->GetUnit(), eOutUnit);
 }
 
+int NewPercentField::GetRealValue(FieldUnit eOutUnit)
+{
+    if (m_xField->get_unit() != FUNIT_PERCENT)
+        return get_value(eOutUnit);
+    else
+        return Convert(get_value(), m_xField->get_unit(), eOutUnit);
+}
+
 sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
 {
     if (eInUnit == eOutUnit ||
@@ -272,6 +440,41 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
             nAktWidth = nValue;
         else
             nAktWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
+        // Round to 0.5 percent
+        return ((nAktWidth * 1000) / nRefValue + 5) / 10;
+    }
+
+    return MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
+}
+
+int NewPercentField::Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
+{
+    if (eInUnit == eOutUnit ||
+        (eInUnit == FUNIT_NONE && eOutUnit == m_xField->get_unit()) ||
+        (eOutUnit == FUNIT_NONE && eInUnit == m_xField->get_unit()))
+        return nValue;
+
+    if (eInUnit == FUNIT_PERCENT)
+    {
+        // Convert to metric
+        int nTwipValue = (nRefValue * nValue + 50) / 100;
+
+        if (eOutUnit == FUNIT_TWIP) // Only convert if necessary
+            return NormalizePercent(nTwipValue);
+        else
+            return MetricField::ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FUNIT_TWIP, eOutUnit);
+    }
+
+    if (eOutUnit == FUNIT_PERCENT)
+    {
+        // Convert to percent
+        int nAktWidth;
+
+        if (eInUnit == FUNIT_TWIP)  // Only convert if necessary
+            nAktWidth = nValue;
+        else
+            nAktWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
+
         // Round to 0.5 percent
         return ((nAktWidth * 1000) / nRefValue + 5) / 10;
     }
