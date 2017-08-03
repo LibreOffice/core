@@ -52,7 +52,7 @@ WB_TOPBORDER and WB_3DTAB should be set instead of WB_BORDER.
 Allowed PageBits
 -----------------
 
-TPB_SPECIAL     - Different display of the TabText, e.g. for scenario pages.
+TPB_SPECIAL_1   - Different display of the TabText, e.g. for scenario pages
 
 Handlers
 -------
@@ -272,7 +272,7 @@ class Button;
 
 typedef sal_uInt16 TabBarPageBits;
 
-#define TPB_SPECIAL         ((TabBarPageBits)0x0001)
+#define TPB_SPECIAL_1       ((TabBarPageBits)0x0001)
 
 // - TabBar-Types - used in TabBar::AllowRenaming
 

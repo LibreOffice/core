@@ -193,7 +193,7 @@ void DrawViewShell::ModifyLayer (
         if (!bIsVisible)
         {
             // invisible layers are presented different
-            nBits = TPB_SPECIAL;
+            nBits = TPB_SPECIAL_1;
         }
 
         GetLayerTabControl()->SetPageBits(nCurPage, nBits);
