@@ -36,52 +36,58 @@
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 
-void SwBreakDlg::Apply()
+short SwBreakDlg::Execute()
 {
-    nKind = 0;
-    if(m_pLineBtn->IsChecked())
-        nKind = 1;
-    else if(m_pColumnBtn->IsChecked())
-        nKind = 2;
-    else if(m_pPageBtn->IsChecked())
+    short nRet = m_xDialog->run();
+    m_xDialog->hide();
+    if (nRet == RET_OK)
     {
-        nKind = 3;
-        const sal_Int32 nPos = m_pPageCollBox->GetSelectedEntryPos();
-        if(0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos)
+        nKind = 0;
+        if (m_xLineBtn->get_active())
+            nKind = 1;
+        else if(m_xColumnBtn->get_active())
+            nKind = 2;
+        else if(m_xPageBtn->get_active())
         {
-            aTemplate = m_pPageCollBox->GetSelectedEntry();
-            oPgNum = boost::none;
-            if (m_pPageNumBox->IsChecked())
+            nKind = 3;
+            const int nPos = m_xPageCollBox->get_active();
+            if (nPos != 0 && nPos != -1)
             {
-                oPgNum = (sal_uInt16)m_pPageNumEdit->GetValue();
+                aTemplate = m_xPageCollBox->get_active_text();
+                oPgNum = boost::none;
+                if (m_xPageNumBox->get_active())
+                {
+                    oPgNum = (sal_uInt16)m_xPageNumEdit->get_value();
+                }
             }
         }
     }
+    return nRet;
 }
 
-IMPL_LINK_NOARG(SwBreakDlg, ClickHdl, Button*, void)
+IMPL_LINK_NOARG(SwBreakDlg, ToggleHdl, Weld::ToggleButton&, void)
 {
     CheckEnable();
 }
 
-IMPL_LINK_NOARG(SwBreakDlg, SelectHdl, ListBox&, void)
+IMPL_LINK_NOARG(SwBreakDlg, ChangeHdl, Weld::ComboBoxText&, void)
 {
     CheckEnable();
 }
 
 // Handler for Change Page Number
-IMPL_LINK( SwBreakDlg, PageNumHdl, Button*, pBox, void )
+IMPL_LINK(SwBreakDlg, PageNumHdl, Weld::ToggleButton&, rBox, void)
 {
-    if(static_cast<CheckBox*>(pBox)->IsChecked())
-        m_pPageNumEdit->SetValue(1);
+    if (rBox.get_active())
+        m_xPageNumEdit->set_value(1);
     else
-        m_pPageNumEdit->SetText(OUString());
+        m_xPageNumEdit->set_text(OUString());
 }
 
 // By changing the Page number the checkbox is checked.
-IMPL_LINK_NOARG(SwBreakDlg, PageNumModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwBreakDlg, PageNumModifyHdl, Weld::SpinButton&, void)
 {
-    m_pPageNumBox->Check();
+    m_xPageNumBox->set_active(true);
 }
 
 /*
@@ -89,21 +95,21 @@ IMPL_LINK_NOARG(SwBreakDlg, PageNumModifyHdl, Edit&, void)
  * checks whether pagenumber nPage is a legal pagenumber (left pages with even
  * numbers etc. for a page template with alternating pages)
  */
-IMPL_LINK_NOARG(SwBreakDlg, OkHdl, Button*, void)
+IMPL_LINK_NOARG(SwBreakDlg, OkHdl, Weld::Button&, void)
 {
-    if(m_pPageNumBox->IsChecked()) {
+    if (m_xPageNumBox->get_active())
+    {
         // In case of differing page descriptions, test validity
-        const sal_Int32 nPos = m_pPageCollBox->GetSelectedEntryPos();
+        const int nPos = m_xPageCollBox->get_active();
         // position 0 says 'Without'.
         const SwPageDesc *pPageDesc;
-        if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
-            pPageDesc = rSh.FindPageDescByName( m_pPageCollBox->GetSelectedEntry(),
-                                                true );
+        if (nPos != 0 && nPos != -1)
+            pPageDesc = rSh.FindPageDescByName(m_xPageCollBox->get_active_text(), true);
         else
             pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());
 
         OSL_ENSURE(pPageDesc, "Page description not found.");
-        const sal_uInt16 nUserPage = sal_uInt16(m_pPageNumEdit->GetValue());
+        const sal_uInt16 nUserPage = sal_uInt16(m_xPageNumEdit->get_value());
         bool bOk = true;
         switch(pPageDesc->GetUseOn())
         {
@@ -114,76 +120,63 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl, Button*, void)
             default:; //prevent warning
         }
         if(!bOk) {
-            ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_ILLEGAL_PAGENUM), VclMessageType::Info)->Execute();
-            m_pPageNumEdit->GrabFocus();
+            std::unique_ptr<Weld::Dialog> xDialog(Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Info,
+                                                     VclButtonsType::Ok, SwResId(STR_ILLEGAL_PAGENUM)));
+            xDialog->run();
+            m_xPageNumEdit->grab_focus();
             return;
         }
     }
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
-SwBreakDlg::SwBreakDlg( vcl::Window *pParent, SwWrtShell &rS )
-    : SvxStandardDialog(pParent, "BreakDialog", "modules/swriter/ui/insertbreak.ui")
-    , rSh(rS)
+SwBreakDlg::SwBreakDlg(Weld::Window *pParent, SwWrtShell &rS)
+    : rSh(rS)
+    , m_xBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/insertbreak.ui"))
     , nKind(0)
     , bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
-    get(m_pLineBtn, "linerb");
-    get(m_pColumnBtn, "columnrb");
-    get(m_pPageBtn, "pagerb");
-    get(m_pPageCollText, "styleft");
-    get(m_pPageCollBox, "stylelb");
-    get(m_pPageNumBox, "pagenumcb");
-    get(m_pPageNumEdit, "pagenumsb");
+    m_xDialog.reset(m_xBuilder->weld_dialog("BreakDialog"));
+    m_xLineBtn.reset(m_xBuilder->weld_radio_button("linerb"));
+    m_xColumnBtn.reset(m_xBuilder->weld_radio_button("columnrb"));
+    m_xPageBtn.reset(m_xBuilder->weld_radio_button("pagerb"));
+    m_xPageCollBox.reset(m_xBuilder->weld_combo_box_text("stylelb"));
+    m_xPageNumBox.reset(m_xBuilder->weld_check_button("pagenumcb"));
+    m_xPageNumEdit.reset(m_xBuilder->weld_spin_button("pagenumsb"));
+    m_xPageCollText.reset(m_xBuilder->weld_label("styleft"));
+    m_xOkBtn.reset(m_xBuilder->weld_button("ok"));
 
-    Link<Button*,void> aLk = LINK(this,SwBreakDlg,ClickHdl);
-    m_pPageBtn->SetClickHdl( aLk );
-    m_pLineBtn->SetClickHdl( aLk );
-    m_pColumnBtn->SetClickHdl( aLk );
-    m_pPageCollBox->SetSelectHdl( LINK(this,SwBreakDlg,SelectHdl) );
+    Link<Weld::ToggleButton&,void> aLk = LINK(this, SwBreakDlg, ToggleHdl);
+    m_xPageBtn->connect_toggled(aLk);
+    m_xLineBtn->connect_toggled(aLk);
+    m_xColumnBtn->connect_toggled(aLk);
+    m_xPageCollBox->connect_changed(LINK(this, SwBreakDlg, ChangeHdl));
 
-    get<OKButton>("ok")->SetClickHdl(LINK(this,SwBreakDlg,OkHdl));
-    m_pPageNumBox->SetClickHdl(LINK(this,SwBreakDlg,PageNumHdl));
-    m_pPageNumEdit->SetModifyHdl(LINK(this,SwBreakDlg,PageNumModifyHdl));
+    m_xOkBtn->connect_clicked(LINK(this, SwBreakDlg, OkHdl));
+    m_xPageNumBox->connect_toggled(LINK(this, SwBreakDlg, PageNumHdl));
+    m_xPageNumEdit->connect_value_changed(LINK(this, SwBreakDlg, PageNumModifyHdl));
 
     // Insert page description to Listbox
     const size_t nCount = rSh.GetPageDescCnt();
-    for( size_t i = 0; i < nCount; ++i)
+    for (size_t i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = rSh.GetPageDesc(i);
-        ::InsertStringSorted(rPageDesc.GetName(), *m_pPageCollBox, 1 );
+        ::InsertStringSorted(rPageDesc.GetName(), *m_xPageCollBox, 1 );
     }
 
     OUString aFormatName;
-    for(sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
+    for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
     {
         aFormatName = SwStyleNameMapper::GetUIName( i, aFormatName );
-        if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos(aFormatName))
-            ::InsertStringSorted(aFormatName, *m_pPageCollBox, 1 );
+        if (m_xPageCollBox->find_text(aFormatName) == -1)
+            ::InsertStringSorted(aFormatName, *m_xPageCollBox, 1 );
     }
     //add landscape page
     aFormatName = SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFormatName );
-    if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos(aFormatName))
-            ::InsertStringSorted(aFormatName, *m_pPageCollBox, 1 );
+    if (m_xPageCollBox->find_text(aFormatName) == -1)
+        ::InsertStringSorted(aFormatName, *m_xPageCollBox, 1);
     CheckEnable();
-    m_pPageNumEdit->SetText(OUString());
-}
-
-SwBreakDlg::~SwBreakDlg()
-{
-    disposeOnce();
-}
-
-void SwBreakDlg::dispose()
-{
-    m_pLineBtn.clear();
-    m_pColumnBtn.clear();
-    m_pPageBtn.clear();
-    m_pPageCollText.clear();
-    m_pPageCollBox.clear();
-    m_pPageNumBox.clear();
-    m_pPageNumEdit.clear();
-    SvxStandardDialog::dispose();
+    m_xPageNumEdit->set_text(OUString());
 }
 
 void SwBreakDlg::CheckEnable()
@@ -191,32 +184,32 @@ void SwBreakDlg::CheckEnable()
     bool bEnable = true;
     if ( bHtmlMode )
     {
-        m_pColumnBtn->Enable(false);
-        m_pPageCollBox->Enable(false);
+        m_xColumnBtn->set_sensitive(false);
+        m_xPageCollBox->set_sensitive(false);
         bEnable = false;
     }
     else if(rSh.GetFrameType(nullptr,true)
         & (FrameTypeFlags::FLY_ANY | FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER  | FrameTypeFlags::FOOTNOTE))
     {
-        m_pPageBtn->Enable(false);
-        if(m_pPageBtn->IsChecked())
-            m_pLineBtn->Check();
+        m_xPageBtn->set_sensitive(false);
+        if (m_xPageBtn->get_active())
+            m_xLineBtn->set_active(true);
         bEnable = false;
     }
-    const bool bPage = m_pPageBtn->IsChecked();
-    m_pPageCollText->Enable( bPage );
-    m_pPageCollBox->Enable ( bPage );
+    const bool bPage = m_xPageBtn->get_active();
+    m_xPageCollText->set_sensitive(bPage);
+    m_xPageCollBox->set_sensitive(bPage);
 
     bEnable &= bPage;
     if ( bEnable )
     {
         // position 0 says 'Without' page template.
-        const sal_Int32 nPos = m_pPageCollBox->GetSelectedEntryPos();
-        if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
+        const int nPos = m_xPageCollBox->get_active();
+        if (nPos == 0 || nPos == -1)
             bEnable = false;
     }
-    m_pPageNumBox->Enable(bEnable);
-    m_pPageNumEdit->Enable(bEnable);
+    m_xPageNumBox->set_sensitive(bEnable);
+    m_xPageNumEdit->set_sensitive(bEnable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

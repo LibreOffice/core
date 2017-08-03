@@ -1,38 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="sw">
-  <requires lib="gtk+" version="3.0"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/one_right.png</property>
+    <property name="icon_name">sw/res/one_right.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/all_right.png</property>
+    <property name="icon_name">sw/res/all_right.png</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/one_left.png</property>
+    <property name="icon_name">sw/res/one_left.png</property>
   </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/all_left.png</property>
+    <property name="icon_name">sw/res/all_left.png</property>
   </object>
   <object class="GtkImage" id="image5">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sw/res/one_right.png</property>
+    <property name="icon_name">sw/res/one_right.png</property>
+  </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore3">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore4">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+    </columns>
   </object>
   <object class="GtkDialog" id="InsertDbColumnsDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="insertdbcolumnsdialog|InsertDbColumnsDialog">Insert Database Columns</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -112,10 +130,10 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="insertdbcolumnsdialog|label1">Insert data as:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">grid3</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -138,7 +156,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">asfields</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -154,7 +171,7 @@
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">astext</property>
+                        <property name="group">astable</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -215,10 +232,10 @@
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="insertdbcolumnsdialog|label4">Database _columns</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">box2</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -229,10 +246,9 @@
                           <object class="GtkLabel" id="tablecolft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="insertdbcolumnsdialog|tablecolft">Tab_le column(s)</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">tablecols:border</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -248,11 +264,12 @@
                             <property name="spacing">12</property>
                             <property name="layout_style">start</property>
                             <child>
-                              <object class="GtkButton" id="allright">
+                              <object class="GtkButton" id="oneright">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image1</property>
+                                <property name="always_show_image">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -261,11 +278,12 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="oneright">
+                              <object class="GtkButton" id="allright">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image2</property>
+                                <property name="always_show_image">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -279,6 +297,7 @@
                                 <property name="receives_default">True</property>
                                 <property name="no_show_all">True</property>
                                 <property name="image">image5</property>
+                                <property name="always_show_image">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -292,6 +311,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image3</property>
+                                <property name="always_show_image">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -306,6 +326,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image4</property>
+                                <property name="always_show_image">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -328,13 +349,36 @@
                             <property name="vexpand">True</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkTreeView" id="tablecols:border">
+                              <object class="GtkScrolledWindow" id="tablecolsscroll">
                                 <property name="can_focus">True</property>
                                 <property name="no_show_all">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection2"/>
+                                <property name="shadow_type">in</property>
+                                <property name="propagate_natural_width">True</property>
+                                <child>
+                                  <object class="GtkTreeView" id="tablecols">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
+                                    <property name="model">liststore2</property>
+                                    <property name="headers_visible">False</property>
+                                    <property name="headers_clickable">False</property>
+                                    <property name="enable_search">False</property>
+                                    <property name="show_expanders">False</property>
+                                    <child internal-child="selection">
+                                      <object class="GtkTreeSelection" id="treeview-selection2"/>
+                                    </child>
+                                    <child>
+                                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
                                 </child>
                               </object>
                               <packing>
@@ -344,18 +388,18 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow1">
+                              <object class="GtkScrolledWindow" id="textviewscroll">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
                                 <property name="shadow_type">in</property>
+                                <property name="propagate_natural_width">True</property>
                                 <child>
-                                  <object class="GtkTextView" id="textview:border">
+                                  <object class="GtkTextView" id="textview">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
                                     <property name="vexpand">True</property>
+                                    <property name="wrap_mode">word</property>
                                   </object>
                                 </child>
                               </object>
@@ -379,13 +423,36 @@
                             <property name="vexpand">True</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkTreeView" id="tabledbcols:border">
+                              <object class="GtkScrolledWindow" id="tabledbcolsscroll">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection4"/>
+                                <property name="shadow_type">in</property>
+                                <property name="propagate_natural_width">True</property>
+                                <child>
+                                  <object class="GtkTreeView" id="tabledbcols">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
+                                    <property name="model">liststore4</property>
+                                    <property name="headers_visible">False</property>
+                                    <property name="headers_clickable">False</property>
+                                    <property name="enable_search">False</property>
+                                    <property name="show_expanders">False</property>
+                                    <child internal-child="selection">
+                                      <object class="GtkTreeSelection" id="treeview-selection4"/>
+                                    </child>
+                                    <child>
+                                      <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext4"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
                                 </child>
                               </object>
                               <packing>
@@ -395,13 +462,36 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkTreeView" id="tabletxtcols:border">
+                              <object class="GtkScrolledWindow" id="tabletxtcolsscroll">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="treeview-selection3"/>
+                                <property name="shadow_type">in</property>
+                                <property name="propagate_natural_width">True</property>
+                                <child>
+                                  <object class="GtkTreeView" id="tabletxtcols">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
+                                    <property name="model">liststore3</property>
+                                    <property name="headers_visible">False</property>
+                                    <property name="headers_clickable">False</property>
+                                    <property name="enable_search">False</property>
+                                    <property name="show_expanders">False</property>
+                                    <child internal-child="selection">
+                                      <object class="GtkTreeSelection" id="treeview-selection3"/>
+                                    </child>
+                                    <child>
+                                      <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
                                 </child>
                               </object>
                               <packing>
@@ -544,10 +634,10 @@
                               <object class="GtkLabel" id="parastylelabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="insertdbcolumnsdialog|parastylelabel">Paragraph _style:</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">parastyle</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -609,9 +699,6 @@
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">fromdatabase</property>
-                                <accessibility>
-                                  <relation type="label-for" target="numformat"/>
-                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -619,13 +706,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="swlo-NumFormatListBox" id="numformat">
+                              <object class="GtkComboBoxText" id="numformat">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_left">12</property>
-                                <accessibility>
-                                  <relation type="labelled-by" target="userdefined"/>
-                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -668,22 +751,12 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">ok</action-widget>
-      <action-widget response="0">cancel</action-widget>
-      <action-widget response="0">help</action-widget>
+      <action-widget response="-5">ok</action-widget>
+      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">vertical</property>
-    <widgets>
-      <widget name="tableheading"/>
-      <widget name="columnname"/>
-      <widget name="rowonly"/>
-      <widget name="tableformat"/>
-      <widget name="autoformat"/>
-      <widget name="fromdatabase"/>
-      <widget name="userdefined"/>
-      <widget name="numformat"/>
-    </widgets>
   </object>
 </interface>

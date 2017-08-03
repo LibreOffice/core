@@ -22,6 +22,7 @@
 #include "abstract.hxx"
 #include "ascfldlg.hxx"
 #include "break.hxx"
+#include "tabledlg.hxx"
 #include "convert.hxx"
 #include "dbinsdlg.hxx"
 #include "DropDownFieldDialog.hxx"

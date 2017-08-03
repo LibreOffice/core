@@ -139,6 +139,8 @@ public:
 
     tools::Rectangle           GetDropDownPosSizePixel() const;
 
+    long                CalcWindowSizePixel(sal_uInt16 nLines) const;
+
     void                AdaptDropDownLineCountToMaximum();
     void                SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16          GetDropDownLineCount() const;
