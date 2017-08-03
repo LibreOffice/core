@@ -639,7 +639,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer*, pIdle, void )
     // SyntaxTimerHdl is called when text changed
     // => good opportunity to determine text width!
     long nPrevTextWidth = m_nCurTextWidth;
-    m_nCurTextWidth = m_pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
+    m_nCurTextWidth = m_pTextEngine->CalcTextWidth() + 25;  // small tolerance
     if ( m_nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();
     m_bHighlighting = false;
