@@ -33,6 +33,9 @@ public:
     virtual void paintDialog(const DialogID& rDialogID, VirtualDevice &rDevice,
                              int& nOutputWidth, int& nOutputHeight) = 0;
 
+    virtual void paintActiveFloatingWindow(const DialogID& rDialogID, VirtualDevice &rDevice,
+                                           int& nOutputWidth, int& nOutputHeight) = 0;
+
     virtual void postDialogKeyEvent(const DialogID& rDialogID, int nType,
                                     int nCharCode, int nKeyCode) = 0;
 
@@ -41,6 +44,8 @@ public:
 
     // Callbacks
     virtual void notifyDialogInvalidation(const DialogID& rDialogID) = 0;
+
+    virtual void notifyDialogChild(const DialogID& rDialogID, const OUString& rAction, const Point& rPos) = 0;
 };
 
 } // namespace vcl
