@@ -121,9 +121,9 @@ static long GetPrecExp( double fAbsVal )
  * SvNumberformatInfo
  * */
 
-void ImpSvNumberformatInfo::Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt16 nAnz )
+void ImpSvNumberformatInfo::Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt16 nCnt )
 {
-    for (sal_uInt16 i = 0; i < nAnz; ++i)
+    for (sal_uInt16 i = 0; i < nCnt; ++i)
     {
         sStrArray[i]  = rNumFor.sStrArray[i];
         nTypeArray[i] = rNumFor.nTypeArray[i];
@@ -282,13 +282,13 @@ ImpSvNumFor::~ImpSvNumFor()
 {
 }
 
-void ImpSvNumFor::Enlarge(sal_uInt16 nAnz)
+void ImpSvNumFor::Enlarge(sal_uInt16 nCnt)
 {
-    if ( nStringsCnt != nAnz )
+    if ( nStringsCnt != nCnt )
     {
-        nStringsCnt = nAnz;
-        aI.nTypeArray.resize(nAnz);
-        aI.sStrArray.resize(nAnz);
+        nStringsCnt = nCnt;
+        aI.nTypeArray.resize(nCnt);
+        aI.sStrArray.resize(nCnt);
     }
 }
 
@@ -837,8 +837,8 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 if (!bCancel)
                 {
                     double fNumber;
-                    sal_Int32 nAnzChars = ImpGetNumber(sBuff, nPos, sStr);
-                    if (nAnzChars > 0)
+                    sal_Int32 nCntChars = ImpGetNumber(sBuff, nPos, sStr);
+                    if (nCntChars > 0)
                     {
                         short F_Type = css::util::NumberFormat::UNDEFINED;
                         if (!pISc->IsNumberFormat(sStr, F_Type, fNumber, nullptr) ||
@@ -846,8 +846,8 @@ SvNumberformat::SvNumberformat(OUString& rString,
                               F_Type != css::util::NumberFormat::SCIENTIFIC) )
                         {
                             fNumber = 0.0;
-                            nPos = nPos - nAnzChars;
-                            sBuff.remove(nPos, nAnzChars);
+                            nPos = nPos - nCntChars;
+                            sBuff.remove(nPos, nCntChars);
                             sBuff.insert(nPos, '0');
                             nPos++;
                         }
@@ -1070,8 +1070,8 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         sStr = sInsertCalendar + sStr;
                     }
                     sal_Int32 nStrPos = pSc->ScanFormat( sStr);
-                    sal_uInt16 nAnz = pSc->GetResultStringsCnt();
-                    if (nAnz == 0)              // error
+                    sal_uInt16 nCnt = pSc->GetResultStringsCnt();
+                    if (nCnt == 0)              // error
                     {
                         nStrPos = 1;
                     }
@@ -1127,8 +1127,8 @@ SvNumberformat::SvNumberformat(OUString& rString,
                                 nIndex = 3;
                             }
                         }
-                        NumFor[nIndex].Enlarge(nAnz);
-                        pSc->CopyInfo(&(NumFor[nIndex].Info()), nAnz);
+                        NumFor[nIndex].Enlarge(nCnt);
+                        pSc->CopyInfo(&(NumFor[nIndex].Info()), nCnt);
                         // type check
                         if (nIndex == 0)
                         {
@@ -1199,11 +1199,11 @@ SvNumberformat::SvNumberformat(OUString& rString,
             OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
-                sal_uInt16 nAnz = pSc->GetResultStringsCnt();
-                if ( nAnz )
+                sal_uInt16 nCnt = pSc->GetResultStringsCnt();
+                if ( nCnt )
                 {
-                    NumFor[0].Enlarge(nAnz);
-                    pSc->CopyInfo( &(NumFor[0].Info()), nAnz );
+                    NumFor[0].Enlarge(nCnt);
+                    pSc->CopyInfo( &(NumFor[0].Info()), nCnt );
                     sBuff.append(aAdd);
                 }
             }
@@ -1219,11 +1219,11 @@ SvNumberformat::SvNumberformat(OUString& rString,
             OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
-                sal_uInt16 nAnz = pSc->GetResultStringsCnt();
-                if ( nAnz )
+                sal_uInt16 nCnt = pSc->GetResultStringsCnt();
+                if ( nCnt )
                 {
-                    NumFor[nIndex].Enlarge(nAnz);
-                    pSc->CopyInfo( &(NumFor[nIndex].Info()), nAnz );
+                    NumFor[nIndex].Enlarge(nCnt);
+                    pSc->CopyInfo( &(NumFor[nIndex].Info()), nCnt );
                     sBuff.append(";");
                     sBuff.append(aAdd);
                 }
@@ -1237,11 +1237,11 @@ SvNumberformat::SvNumberformat(OUString& rString,
             OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
-                sal_uInt16 nAnz = pSc->GetResultStringsCnt();
-                if ( nAnz )
+                sal_uInt16 nCnt = pSc->GetResultStringsCnt();
+                if ( nCnt )
                 {
-                    NumFor[nIndex].Enlarge(nAnz);
-                    pSc->CopyInfo( &(NumFor[nIndex].Info()), nAnz );
+                    NumFor[nIndex].Enlarge(nCnt);
+                    pSc->CopyInfo( &(NumFor[nIndex].Info()), nCnt );
                     sBuff.append(";");
                     sBuff.append(aAdd);
                 }
@@ -2052,8 +2052,8 @@ void SvNumberformat::GetOutputString(const OUString& sString,
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     if (rInfo.eScannedType == css::util::NumberFormat::TEXT)
     {
-        const sal_uInt16 nAnz = NumFor[nIx].GetCount();
-        for (sal_uInt16 i = 0; i < nAnz; i++)
+        const sal_uInt16 nCnt = NumFor[nIx].GetCount();
+        for (sal_uInt16 i = 0; i < nCnt; i++)
         {
             switch (rInfo.nTypeArray[i])
             {
@@ -2104,33 +2104,33 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
                                               nPrec, rFormatter.GetNumDecimalSep()[0], true );
 }
 
-OUString lcl_GetDenominatorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
+OUString lcl_GetDenominatorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
 {
     sal_uInt16 i;
     OUStringBuffer aDenominatorString;
-    for( i = 0; i < nAnz; i++ )
+    for( i = 0; i < nCnt; i++ )
     {
         if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC )
         {
-            while ( ( ++i < nAnz ) && rInfo.nTypeArray[i] != NF_SYMBOLTYPE_FRAC_FDIV
+            while ( ( ++i < nCnt ) && rInfo.nTypeArray[i] != NF_SYMBOLTYPE_FRAC_FDIV
                                    && rInfo.nTypeArray[i] != NF_SYMBOLTYPE_DIGIT );
-            for( ; i < nAnz; i++ )
+            for( ; i < nCnt; i++ )
             {
                 if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC_FDIV || rInfo.nTypeArray[i] == NF_SYMBOLTYPE_DIGIT )
                     aDenominatorString.append( rInfo.sStrArray[i] );
                 else
-                    i = nAnz;
+                    i = nCnt;
             }
         }
     }
     return aDenominatorString.makeStringAndClear();
 }
 
-OUString lcl_GetNumeratorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
+OUString lcl_GetNumeratorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
 {
     sal_Int16 i;
     OUStringBuffer aNumeratorString;
-    for( i = 0; i < nAnz; i++ )
+    for( i = 0; i < nCnt; i++ )
     {
         if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC )
         {
@@ -2138,17 +2138,17 @@ OUString lcl_GetNumeratorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 n
             {
                 aNumeratorString.insert( 0, rInfo.sStrArray[i] );
             }
-            i = nAnz;
+            i = nCnt;
         }
     }
     return aNumeratorString.makeStringAndClear();
 }
 
-OUString lcl_GetFractionIntegerString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
+OUString lcl_GetFractionIntegerString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
 {
     sal_Int16 i;
     OUStringBuffer aIntegerString;
-    for( i = 0; i < nAnz; i++ )
+    for( i = 0; i < nCnt; i++ )
     {
         if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRACBLANK )
         {
@@ -2157,16 +2157,16 @@ OUString lcl_GetFractionIntegerString(const ImpSvNumberformatInfo &rInfo, sal_uI
             {
                 aIntegerString.insert( 0, rInfo.sStrArray[i] );
             }
-            i = nAnz;
+            i = nCnt;
         }
     }
     return aIntegerString.makeStringAndClear();
 }
 
-OUString lcl_GetIntegerFractionDelimiterString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
+OUString lcl_GetIntegerFractionDelimiterString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nCnt)
 {
     sal_Int16 i;
-    for( i = 0; i < nAnz; i++ )
+    for( i = 0; i < nCnt; i++ )
     {
         if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRACBLANK )
         {
@@ -2181,22 +2181,22 @@ OUString lcl_GetIntegerFractionDelimiterString(const ImpSvNumberformatInfo &rInf
 OUString SvNumberformat::GetDenominatorString( sal_uInt16 nNumFor ) const
 {
     const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
-    sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
-    return lcl_GetDenominatorString( rInfo, nAnz );
+    sal_uInt16 nCnt = NumFor[nNumFor].GetCount();
+    return lcl_GetDenominatorString( rInfo, nCnt );
 }
 
 OUString SvNumberformat::GetNumeratorString( sal_uInt16 nNumFor ) const
 {
     const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
-    sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
-    return lcl_GetNumeratorString( rInfo, nAnz );
+    sal_uInt16 nCnt = NumFor[nNumFor].GetCount();
+    return lcl_GetNumeratorString( rInfo, nCnt );
 }
 
 OUString SvNumberformat::GetIntegerFractionDelimiterString( sal_uInt16 nNumFor ) const
 {
     const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
-    sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
-    return lcl_GetIntegerFractionDelimiterString( rInfo, nAnz );
+    sal_uInt16 nCnt = NumFor[nNumFor].GetCount();
+    return lcl_GetIntegerFractionDelimiterString( rInfo, nCnt );
 }
 
 bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUString& rOutString) const
@@ -2373,12 +2373,12 @@ bool SvNumberformat::GetOutputString(double fNumber,
         }
         *ppColor = NumFor[nIx].GetColor();
         const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-        const sal_uInt16 nAnz = NumFor[nIx].GetCount();
-        if (nAnz == 0 && rInfo.eScannedType == css::util::NumberFormat::EMPTY)
+        const sal_uInt16 nCnt = NumFor[nIx].GetCount();
+        if (nCnt == 0 && rInfo.eScannedType == css::util::NumberFormat::EMPTY)
         {
             return false; // Empty => nothing
         }
-        else if (nAnz == 0) // Else Standard Format
+        else if (nCnt == 0) // Else Standard Format
         {
             ImpGetOutputStandard(fNumber, sBuff);
             OutString = sBuff.makeStringAndClear();
@@ -2388,7 +2388,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
         {
         case css::util::NumberFormat::TEXT:
         case css::util::NumberFormat::DEFINED:
-            for (sal_uInt16 i = 0; i < nAnz; i++)
+            for (sal_uInt16 i = 0; i < nCnt; i++)
             {
                 switch (rInfo.nTypeArray[i])
                 {
@@ -2451,7 +2451,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     bool bSign = false;
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    const sal_uInt16 nAnz = NumFor[nIx].GetCount();
+    const sal_uInt16 nCnt = NumFor[nIx].GetCount();
 
     if (fNumber < 0)
     {
@@ -2530,7 +2530,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         }
     }
 
-    sal_uInt16 j = nAnz-1;  // Last symbol
+    sal_uInt16 j = nCnt-1;  // Last symbol
     sal_Int32 k;  // Position in ExpStr
     sal_Int32 nZeros = 0; // Erase leading zeros
 
@@ -2675,12 +2675,12 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 {
     bool bRes = false;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    const sal_uInt16 nAnz = NumFor[nIx].GetCount();
+    const sal_uInt16 nCnt = NumFor[nIx].GetCount();
     OUStringBuffer sStr, sFrac, sDiv; // Strings, value for Integral part Numerator and denominator
     bool bSign = ( (fNumber < 0) && (nIx == 0) ); // sign Not in the ones at the end
-    const OUString sIntegerFormat = lcl_GetFractionIntegerString(rInfo, nAnz);
-    const OUString sNumeratorFormat = lcl_GetNumeratorString(rInfo, nAnz);
-    const OUString sDenominatorFormat = lcl_GetDenominatorString(rInfo, nAnz);
+    const OUString sIntegerFormat = lcl_GetFractionIntegerString(rInfo, nCnt);
+    const OUString sNumeratorFormat = lcl_GetNumeratorString(rInfo, nCnt);
+    const OUString sDenominatorFormat = lcl_GetDenominatorString(rInfo, nCnt);
 
     sal_uInt64 nFrac = 0, nDiv = 1;
     double fNum = floor(fNumber); // Integral part
@@ -2734,7 +2734,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         sDiv = ImpIntToString( nIx, nDiv );
     }
 
-    sal_uInt16 j = nAnz-1; // Last symbol -> backwards
+    sal_uInt16 j = nCnt-1; // Last symbol -> backwards
     sal_Int32 k;           // Denominator
 
     bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC, true);
@@ -2960,8 +2960,8 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
             }
         }
     }
-    const sal_uInt16 nAnz = NumFor[nIx].GetCount();
-    for (sal_uInt16 i = 0; i < nAnz; i++)
+    const sal_uInt16 nCnt = NumFor[nIx].GetCount();
+    for (sal_uInt16 i = 0; i < nCnt; i++)
     {
         sal_Int32 nLen;
         switch (rInfo.nTypeArray[i])
@@ -3176,9 +3176,9 @@ bool SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
         return false;
     }
     const ImpSvNumberformatInfo& rInfo = rNumFor.Info();
-    const sal_uInt16 nAnz = rNumFor.GetCount();
+    const sal_uInt16 nCnt = rNumFor.GetCount();
     sal_uInt16 i;
-    for ( i = 0; i < nAnz; i++ )
+    for ( i = 0; i < nCnt; i++ )
     {
         switch ( rInfo.nTypeArray[i] )
         {
@@ -3278,8 +3278,8 @@ bool SvNumberformat::ImpSwitchToSpecifiedCalendar( OUString& rOrgCalendar,
                                                    const ImpSvNumFor& rNumFor ) const
 {
     const ImpSvNumberformatInfo& rInfo = rNumFor.Info();
-    const sal_uInt16 nAnz = rNumFor.GetCount();
-    for ( sal_uInt16 i = 0; i < nAnz; i++ )
+    const sal_uInt16 nCnt = rNumFor.GetCount();
+    for ( sal_uInt16 i = 0; i < nCnt; i++ )
     {
         if ( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_CALENDAR )
         {
@@ -3350,8 +3350,8 @@ bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor ) const
         };
         State eState = eNone;
         auto & rTypeArray = rNumFor.Info().nTypeArray;
-        sal_uInt16 nAnz = rNumFor.GetCount();
-        for (sal_uInt16 i=0; i < nAnz && !bIsIso && eState != eNotIso; ++i)
+        sal_uInt16 nCnt = rNumFor.GetCount();
+        for (sal_uInt16 i=0; i < nCnt && !bIsIso && eState != eNotIso; ++i)
         {
             switch ( rTypeArray[i] )
             {
@@ -3425,8 +3425,8 @@ bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor ) const
 static bool lcl_hasEra( const ImpSvNumFor& rNumFor )
 {
     const ImpSvNumberformatInfo& rInfo = rNumFor.Info();
-    const sal_uInt16 nAnz = rNumFor.GetCount();
-    for ( sal_uInt16 i = 0; i < nAnz; i++ )
+    const sal_uInt16 nCnt = rNumFor.GetCount();
+    for ( sal_uInt16 i = 0; i < nCnt; i++ )
     {
         switch ( rInfo.nTypeArray[i] )
         {
@@ -3471,11 +3471,11 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
         bOtherCalendar = false;
     }
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    const sal_uInt16 nAnz = NumFor[nIx].GetCount();
+    const sal_uInt16 nCnt = NumFor[nIx].GetCount();
     sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
     OUString aYear;
 
-    for (sal_uInt16 i = 0; i < nAnz; i++)
+    for (sal_uInt16 i = 0; i < nCnt; i++)
     {
         switch (rInfo.nTypeArray[i])
         {
@@ -3776,10 +3776,10 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
         }
     }
-    const sal_uInt16 nAnz = NumFor[nIx].GetCount();
+    const sal_uInt16 nCnt = NumFor[nIx].GetCount();
     sal_Int32 nLen;
     OUString aYear;
-    for (sal_uInt16 i = 0; i < nAnz; i++)
+    for (sal_uInt16 i = 0; i < nCnt; i++)
     {
         switch (rInfo.nTypeArray[i])
         {
@@ -4550,12 +4550,12 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
 void SvNumberformat::GetFormatSpecialInfo(bool& bThousand,
                                           bool& IsRed,
                                           sal_uInt16& nPrecision,
-                                          sal_uInt16& nAnzLeading) const
+                                          sal_uInt16& nLeadingCnt) const
 {
     // as before: take info from nNumFor=0 for whole format (for dialog etc.)
 
     short nDummyType;
-    GetNumForInfo( 0, nDummyType, bThousand, nPrecision, nAnzLeading );
+    GetNumForInfo( 0, nDummyType, bThousand, nPrecision, nLeadingCnt );
 
     // "negative in red" is only useful for the whole format
 
@@ -4565,7 +4565,7 @@ void SvNumberformat::GetFormatSpecialInfo(bool& bThousand,
 }
 
 void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
-                    bool& bThousand, sal_uInt16& nPrecision, sal_uInt16& nAnzLeading ) const
+                    bool& bThousand, sal_uInt16& nPrecision, sal_uInt16& nLeadingCnt ) const
 {
     // take info from a specified sub-format (for XML export)
 
@@ -4587,15 +4587,15 @@ void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
     if (bStandard && rInfo.eScannedType == css::util::NumberFormat::NUMBER)
     {
         // StandardFormat
-        nAnzLeading = 1;
+        nLeadingCnt = 1;
     }
     else
     {
-        nAnzLeading = 0;
+        nLeadingCnt = 0;
         bool bStop = false;
         sal_uInt16 i = 0;
-        const sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
-        while (!bStop && i < nAnz)
+        const sal_uInt16 nCnt = NumFor[nNumFor].GetCount();
+        while (!bStop && i < nCnt)
         {
             short nType = rInfo.nTypeArray[i];
             if ( nType == NF_SYMBOLTYPE_DIGIT)
@@ -4607,7 +4607,7 @@ void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
                 }
                 while ( *p++ == '0' )
                 {
-                    nAnzLeading++;
+                    nLeadingCnt++;
                 }
             }
             else if (nType == NF_SYMBOLTYPE_DECSEP
@@ -4628,14 +4628,14 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
     {
         return nullptr;
     }
-    sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
-    if ( !nAnz )
+    sal_uInt16 nCnt = NumFor[nNumFor].GetCount();
+    if ( !nCnt )
     {
         return nullptr;
     }
     if ( nPos == 0xFFFF )
     {
-        nPos = nAnz - 1;
+        nPos = nCnt - 1;
         if ( bString )
         {   // Backwards
             short const * pType = NumFor[nNumFor].Info().nTypeArray.data() + nPos;
@@ -4651,7 +4651,7 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
             }
         }
     }
-    else if ( nPos > nAnz - 1 )
+    else if ( nPos > nCnt - 1 )
     {
         return nullptr;
     }
@@ -4659,13 +4659,13 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
     {
         // vorwaerts
         short const * pType = NumFor[nNumFor].Info().nTypeArray.data() + nPos;
-        while ( nPos < nAnz && (*pType != NF_SYMBOLTYPE_STRING) &&
+        while ( nPos < nCnt && (*pType != NF_SYMBOLTYPE_STRING) &&
                 (*pType != NF_SYMBOLTYPE_CURRENCY) )
         {
             pType++;
             nPos++;
         }
-        if ( nPos >= nAnz || ((*pType != NF_SYMBOLTYPE_STRING) &&
+        if ( nPos >= nCnt || ((*pType != NF_SYMBOLTYPE_STRING) &&
                               (*pType != NF_SYMBOLTYPE_CURRENCY)) )
         {
             return nullptr;
@@ -4680,16 +4680,16 @@ short SvNumberformat::GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos ) const
     {
         return 0;
     }
-    sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
-    if ( !nAnz )
+    sal_uInt16 nCnt = NumFor[nNumFor].GetCount();
+    if ( !nCnt )
     {
         return 0;
     }
     if ( nPos == 0xFFFF )
     {
-        nPos = nAnz - 1;
+        nPos = nCnt - 1;
     }
-    else if ( nPos > nAnz - 1 )
+    else if ( nPos > nCnt - 1 )
     {
         return 0;
     }
@@ -4711,19 +4711,19 @@ bool SvNumberformat::IsNegativeWithoutSign() const
 
 bool SvNumberformat::IsNegativeInBracket() const
 {
-    sal_uInt16 nAnz = NumFor[1].GetCount();
-    if (!nAnz)
+    sal_uInt16 nCnt = NumFor[1].GetCount();
+    if (!nCnt)
     {
         return false;
     }
     auto& tmp = NumFor[1].Info().sStrArray;
-    return tmp[0] == "(" && tmp[nAnz-1] == ")";
+    return tmp[0] == "(" && tmp[nCnt-1] == ")";
 }
 
 bool SvNumberformat::HasPositiveBracketPlaceholder() const
 {
-    sal_uInt16 nAnz = NumFor[0].GetCount();
-    return NumFor[0].Info().sStrArray[nAnz-1] == "_)";
+    sal_uInt16 nCnt = NumFor[0].GetCount();
+    return NumFor[0].Info().sStrArray[nCnt-1] == "_)";
 }
 
 DateOrder SvNumberformat::GetDateOrder() const
@@ -4731,8 +4731,8 @@ DateOrder SvNumberformat::GetDateOrder() const
     if ( (eType & css::util::NumberFormat::DATE) == css::util::NumberFormat::DATE )
     {
         auto& rTypeArray = NumFor[0].Info().nTypeArray;
-        sal_uInt16 nAnz = NumFor[0].GetCount();
-        for ( sal_uInt16 j=0; j<nAnz; j++ )
+        sal_uInt16 nCnt = NumFor[0].GetCount();
+        for ( sal_uInt16 j=0; j<nCnt; j++ )
         {
             switch ( rTypeArray[j] )
             {
@@ -4771,9 +4771,9 @@ sal_uInt32 SvNumberformat::GetExactDateOrder() const
         return nRet;
     }
     auto& rTypeArray = NumFor[0].Info().nTypeArray;
-    sal_uInt16 nAnz = NumFor[0].GetCount();
+    sal_uInt16 nCnt = NumFor[0].GetCount();
     int nShift = 0;
-    for ( sal_uInt16 j=0; j<nAnz && nShift < 3; j++ )
+    for ( sal_uInt16 j=0; j<nCnt && nShift < 3; j++ )
     {
         switch ( rTypeArray[j] )
         {
@@ -4993,8 +4993,8 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
             }
         }
 
-        sal_uInt16 nAnz = NumFor[n].GetCount();
-        if ( nSem && (nAnz || !aPrefix.isEmpty()) )
+        sal_uInt16 nCnt = NumFor[n].GetCount();
+        if ( nSem && (nCnt || !aPrefix.isEmpty()) )
         {
             for ( ; nSem; --nSem )
             {
@@ -5012,11 +5012,11 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
         }
         sal_Int32 nPosInsertLCID = aStr.getLength();
         sal_uInt32 nCalendarID = 0x0000000; // Excel ID of calendar used in sub-format see tdf#36038
-        if ( nAnz )
+        if ( nCnt )
         {
             auto& rTypeArray = NumFor[n].Info().nTypeArray;
             auto& rStrArray = NumFor[n].Info().sStrArray;
-            for ( sal_uInt16 j=0; j<nAnz; j++ )
+            for ( sal_uInt16 j=0; j<nCnt; j++ )
             {
                 if ( 0 <= rTypeArray[j] && rTypeArray[j] < NF_KEYWORD_ENTRIES_COUNT )
                 {
@@ -5418,8 +5418,8 @@ sal_uInt16 SvNumberformat::GetNumForNumberElementCount( sal_uInt16 nNumFor ) con
 {
     if ( nNumFor < 4 )
     {
-        sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
-        return nAnz - ImpGetNumForStringElementCount( nNumFor );
+        sal_uInt16 nCnt = NumFor[nNumFor].GetCount();
+        return nCnt - ImpGetNumForStringElementCount( nNumFor );
     }
     return 0;
 }
@@ -5427,9 +5427,9 @@ sal_uInt16 SvNumberformat::GetNumForNumberElementCount( sal_uInt16 nNumFor ) con
 sal_uInt16 SvNumberformat::ImpGetNumForStringElementCount( sal_uInt16 nNumFor ) const
 {
     sal_uInt16 nCnt = 0;
-    sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
+    sal_uInt16 nNumForCnt = NumFor[nNumFor].GetCount();
     auto& rTypeArray = NumFor[nNumFor].Info().nTypeArray;
-    for ( sal_uInt16 j=0; j<nAnz; ++j )
+    for ( sal_uInt16 j=0; j<nNumForCnt; ++j )
     {
         switch ( rTypeArray[j] )
         {

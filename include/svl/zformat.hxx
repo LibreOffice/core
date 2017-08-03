@@ -214,7 +214,7 @@ public:
     void GetFormatSpecialInfo(bool& bThousand,
                               bool& IsRed,
                               sal_uInt16& nPrecision,
-                              sal_uInt16& nAnzLeading) const;
+                              sal_uInt16& nLeadingCnt) const;
 
     /// Get index of subformat (0..3) according to conditions and fNumber value
     sal_uInt16 GetSubformatIndex( double fNumber ) const;
@@ -400,7 +400,7 @@ public:
                         SvNumberformatLimitOps& rOper2, double& rVal2 ) const;
     Color* GetColor( sal_uInt16 nNumFor ) const;
     void GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
-                    bool& bThousand, sal_uInt16& nPrecision, sal_uInt16& nAnzLeading ) const;
+                    bool& bThousand, sal_uInt16& nPrecision, sal_uInt16& nLeadingCnt ) const;
 
     // rAttr.Number not empty if NatNum attributes are to be stored
     void GetNatNumXml(

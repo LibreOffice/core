@@ -890,7 +890,7 @@ inline bool ImpSvNumberInputScan::GetNextNumber( sal_uInt16& i, sal_uInt16& j )
 
 bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
                                        sal_uInt16 nIndex, // j-value of the first numeric time part of input, default 0
-                                       sal_uInt16 nAnz )  // count of numeric time parts
+                                       sal_uInt16 nCnt )  // count of numeric time parts
 {
     bool bRet = true;
     sal_uInt16 nHour;
@@ -899,11 +899,11 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     double fSecond100 = 0.0;
     sal_uInt16 nStartIndex = nIndex;
 
-    if (nDecPos == 2 && (nAnz == 3 || nAnz == 2)) // 20:45.5 or 45.5
+    if (nDecPos == 2 && (nCnt == 3 || nCnt == 2)) // 20:45.5 or 45.5
     {
         nHour = 0;
     }
-    else if (nIndex - nStartIndex < nAnz)
+    else if (nIndex - nStartIndex < nCnt)
     {
         nHour   = (sal_uInt16) sStrArray[nNums[nIndex++]].toInt32();
     }
@@ -913,19 +913,19 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
         bRet = false;
         SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetTimeRef: bad number index");
     }
-    if (nDecPos == 2 && nAnz == 2) // 45.5
+    if (nDecPos == 2 && nCnt == 2) // 45.5
     {
         nMinute = 0;
     }
-    else if (nIndex - nStartIndex < nAnz)
+    else if (nIndex - nStartIndex < nCnt)
     {
         nMinute = (sal_uInt16) sStrArray[nNums[nIndex++]].toInt32();
     }
-    if (nIndex - nStartIndex < nAnz)
+    if (nIndex - nStartIndex < nCnt)
     {
         nSecond = (sal_uInt16) sStrArray[nNums[nIndex++]].toInt32();
     }
-    if (nIndex - nStartIndex < nAnz)
+    if (nIndex - nStartIndex < nCnt)
     {
         fSecond100 = StringToDouble( sStrArray[nNums[nIndex]], true );
     }

@@ -1488,7 +1488,7 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
 }
 
 int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
-                                                 sal_uInt16& rAnzResStrings )
+                                                 sal_uInt16& rResultStringsCnt )
 {
     if ( i < nStringsCnt-1 &&
          sStrArray[i][0] == '[' &&
@@ -1501,7 +1501,7 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
         nPos = nPos + sStrArray[++i].getLength();         // ~
         sStrArray[i-1] += sStrArray[i];                   // [~
         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-        rAnzResStrings--;
+        rResultStringsCnt--;
         if ( ++i >= nStringsCnt )
         {
             return -1; // error
@@ -1515,7 +1515,7 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
             nPos = nPos + sStrArray[i].getLength();
             rStr += sStrArray[i];
             nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-            rAnzResStrings--;
+            rResultStringsCnt--;
             i++;
         }
         if ( rStr.getLength() && i < nStringsCnt &&
@@ -3102,12 +3102,12 @@ sal_Int32 ImpSvNumberformatScan::ScanFormat( OUString& rString )
     return res; // res = control position; res = 0 => Format ok
 }
 
-void ImpSvNumberformatScan::CopyInfo(ImpSvNumberformatInfo* pInfo, sal_uInt16 nAnz)
+void ImpSvNumberformatScan::CopyInfo(ImpSvNumberformatInfo* pInfo, sal_uInt16 nCnt)
 {
     size_t i,j;
     j = 0;
     i = 0;
-    while (i < nAnz && j < NF_MAX_FORMAT_SYMBOLS)
+    while (i < nCnt && j < NF_MAX_FORMAT_SYMBOLS)
     {
         if (nTypeArray[j] != NF_SYMBOLTYPE_EMPTY)
         {

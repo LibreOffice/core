@@ -446,7 +446,7 @@ public:
     OUString GenerateFormat(sal_uInt32 nIndex,
                             LanguageType eLnge = LANGUAGE_DONTKNOW,
                             bool bThousand = false, bool IsRed = false,
-                            sal_uInt16 nPrecision = 0, sal_uInt16 nAnzLeading = 1);
+                            sal_uInt16 nPrecision = 0, sal_uInt16 nLeadingCnt = 1);
 
     /** Analyze an input string
         @return
@@ -511,7 +511,7 @@ public:
 
     /// Get additional info of a format index, e.g. for dialog box
     void GetFormatSpecialInfo(sal_uInt32 nFormat, bool& bThousand, bool& IsRed,
-                              sal_uInt16& nPrecision, sal_uInt16& nAnzLeading);
+                              sal_uInt16& nPrecision, sal_uInt16& nLeadingCnt);
 
     /// Count of decimals
     sal_uInt16 GetFormatPrecision( sal_uInt32 nFormat ) const;
@@ -527,7 +527,7 @@ public:
             position (like nCheckPos on <method>PutEntry</method>)
      */
     sal_uInt32 GetFormatSpecialInfo( const OUString&, bool& bThousand, bool& IsRed,
-                                     sal_uInt16& nPrecision, sal_uInt16& nAnzLeading,
+                                     sal_uInt16& nPrecision, sal_uInt16& nLeadingCnt,
                                      LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /// Check if format code string may be deleted by user

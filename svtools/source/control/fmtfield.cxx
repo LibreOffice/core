@@ -621,8 +621,8 @@ bool FormattedField::GetThousandsSep() const
         "FormattedField::GetThousandsSep : Are you sure what you are doing when setting the precision of a text format?");
 
     bool bThousand, IsRed;
-    sal_uInt16 nPrecision, nAnzLeading;
-    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
+    sal_uInt16 nPrecision, nLeadingCnt;
+    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
 
     return bThousand;
 }
@@ -634,8 +634,8 @@ void FormattedField::SetThousandsSep(bool _bUseSeparator)
 
     // get the current settings
     bool bThousand, IsRed;
-    sal_uInt16 nPrecision, nAnzLeading;
-    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
+    sal_uInt16 nPrecision, nLeadingCnt;
+    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
     if (bThousand == _bUseSeparator)
         return;
 
@@ -644,7 +644,7 @@ void FormattedField::SetThousandsSep(bool _bUseSeparator)
     GetFormat(eLang);
 
     // generate a new format ...
-    OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nAnzLeading);
+    OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nLeadingCnt);
     // ... and introduce it to the formatter
     sal_Int32 nCheckPos = 0;
     sal_uInt32 nNewKey;
@@ -662,8 +662,8 @@ sal_uInt16 FormattedField::GetDecimalDigits() const
         "FormattedField::GetDecimalDigits : Are you sure what you are doing when setting the precision of a text format?");
 
     bool bThousand, IsRed;
-    sal_uInt16 nPrecision, nAnzLeading;
-    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
+    sal_uInt16 nPrecision, nLeadingCnt;
+    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
 
     return nPrecision;
 }
@@ -675,8 +675,8 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
 
     // get the current settings
     bool bThousand, IsRed;
-    sal_uInt16 nPrecision, nAnzLeading;
-    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
+    sal_uInt16 nPrecision, nLeadingCnt;
+    ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nLeadingCnt);
     if (nPrecision == _nPrecision)
         return;
 
@@ -685,7 +685,7 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
     GetFormat(eLang);
 
     // generate a new format ...
-    OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nAnzLeading);
+    OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nLeadingCnt);
     // ... and introduce it to the formatter
     sal_Int32 nCheckPos = 0;
     sal_uInt32 nNewKey;
