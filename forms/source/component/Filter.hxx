@@ -76,7 +76,7 @@ namespace frm
 
     private:
         void implInitFilterList();
-        void initControlModel(css::uno::Reference< css::beans::XPropertySet >& xControlModel);
+        void initControlModel(css::uno::Reference< css::beans::XPropertySet > const & xControlModel);
 
     public:
         explicit OFilterControl( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );

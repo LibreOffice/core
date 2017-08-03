@@ -809,7 +809,7 @@ namespace frm
         }
     }
 
-    void OFilterControl::initControlModel(Reference< XPropertySet >& xControlModel)
+    void OFilterControl::initControlModel(Reference< XPropertySet > const & xControlModel)
     {
 #if !HAVE_FEATURE_DBCONNECTIVITY
         (void) xControlModel;

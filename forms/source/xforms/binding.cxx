@@ -833,7 +833,7 @@ void Binding::clear()
 
 
 static void lcl_removeOtherNamespaces( const css::uno::Reference<css::container::XNameContainer>& xFrom,
-                                css::uno::Reference<css::container::XNameContainer>& xTo )
+                                css::uno::Reference<css::container::XNameContainer> const & xTo )
 {
     OSL_ENSURE( xFrom.is(), "no source" );
     OSL_ENSURE( xTo.is(), "no target" );
@@ -860,7 +860,7 @@ static void lcl_removeOtherNamespaces( const css::uno::Reference<css::container:
  *                    false: use only elements from target
  */
 static void lcl_copyNamespaces( const css::uno::Reference<css::container::XNameContainer>& xFrom,
-                         css::uno::Reference<css::container::XNameContainer>& xTo,
+                         css::uno::Reference<css::container::XNameContainer> const & xTo,
                          bool bOverwrite )
 {
     OSL_ENSURE( xFrom.is(), "no source" );

@@ -35,7 +35,7 @@ namespace xforms
 {
 
 /** copy the properties from one PropertySet into the next */
-void copy( const css::uno::Reference<css::beans::XPropertySet>& , css::uno::Reference<css::beans::XPropertySet>& );
+void copy( const css::uno::Reference<css::beans::XPropertySet>& , css::uno::Reference<css::beans::XPropertySet> const & );
 
 }
 

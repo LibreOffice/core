@@ -42,7 +42,7 @@ using com::sun::star::beans::PropertyAttribute::READONLY;
 
 
 void xforms::copy( const Reference<XPropertySet>& xFrom,
-                   Reference<XPropertySet>& xTo )
+                   Reference<XPropertySet> const & xTo )
 {
     OSL_ENSURE( xFrom.is(), "no source" );
     OSL_ENSURE( xTo.is(), "no target" );

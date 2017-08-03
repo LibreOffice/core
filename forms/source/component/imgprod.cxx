@@ -41,7 +41,7 @@ class ImgProdLockBytes : public SvLockBytes
 public:
 
     ImgProdLockBytes( SvStream* pStm, bool bOwner );
-    explicit ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > & rStreamRef );
+    explicit ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > const & rStreamRef );
 
     virtual ErrCode     ReadAt( sal_uInt64 nPos, void* pBuffer, std::size_t nCount, std::size_t * pRead ) const override;
     virtual ErrCode     WriteAt( sal_uInt64 nPos, const void* pBuffer, std::size_t nCount, std::size_t * pWritten ) override;
@@ -57,7 +57,7 @@ ImgProdLockBytes::ImgProdLockBytes( SvStream* pStm, bool bOwner ) :
 }
 
 
-ImgProdLockBytes::ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > & rStmRef ) :
+ImgProdLockBytes::ImgProdLockBytes( css::uno::Reference< css::io::XInputStream > const & rStmRef ) :
         xStmRef( rStmRef )
 {
     if( xStmRef.is() )
@@ -233,7 +233,7 @@ void ImageProducer::SetImage( SvStream& rStm )
 }
 
 
-void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > & rInputStmRef )
+void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > const & rInputStmRef )
 {
     maURL.clear();
     mpGraphic->Clear();
