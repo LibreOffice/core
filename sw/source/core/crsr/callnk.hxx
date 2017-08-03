@@ -39,7 +39,7 @@ public:
     explicit SwCallLink( SwCursorShell & rSh );
     ~SwCallLink();
 
-    static long getLayoutFrame( const SwRootFrame*, SwTextNode& rNd, sal_Int32 nCntPos, bool bCalcFrame );
+    static long getLayoutFrame( const SwRootFrame*, SwTextNode const & rNd, sal_Int32 nCntPos, bool bCalcFrame );
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX

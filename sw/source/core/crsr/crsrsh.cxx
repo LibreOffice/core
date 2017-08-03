@@ -223,7 +223,7 @@ void SwCursorShell::StartAction()
         m_nAktContent = m_pCurrentCursor->GetPoint()->nContent.GetIndex();
         m_nAktNdTyp = rNd.GetNodeType();
         if( rNd.IsTextNode() )
-            m_nLeftFramePos = SwCallLink::getLayoutFrame( GetLayout(), const_cast<SwTextNode&>(*rNd.GetTextNode()), m_nAktContent, true );
+            m_nLeftFramePos = SwCallLink::getLayoutFrame( GetLayout(), *rNd.GetTextNode(), m_nAktContent, true );
         else
             m_nLeftFramePos = 0;
     }

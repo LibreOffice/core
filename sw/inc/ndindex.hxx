@@ -112,7 +112,7 @@ public:
     inline sal_uLong GetIndex() const;
 
     // Enables assignments without creation of a temporary object.
-    inline SwNodeIndex& Assign( SwNodes& rNds, sal_uLong );
+    inline SwNodeIndex& Assign( SwNodes const & rNds, sal_uLong );
     inline SwNodeIndex& Assign( const SwNode& rNd, long nOffset = 0 );
 
     // Gets pointer on NodesArray.
@@ -272,7 +272,7 @@ SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
     return *this;
 }
 
-SwNodeIndex& SwNodeIndex::Assign( SwNodes& rNds, sal_uLong nIdx )
+SwNodeIndex& SwNodeIndex::Assign( SwNodes const & rNds, sal_uLong nIdx )
 {
     *this = *rNds[ nIdx ];
     return *this;

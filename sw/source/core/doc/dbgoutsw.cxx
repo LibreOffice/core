@@ -776,7 +776,7 @@ const char * dbg_out(const SwUndo & rUndo)
     return dbg_out(lcl_dbg_out(rUndo));
 }
 
-static OUString lcl_dbg_out(SwOutlineNodes & rNodes)
+static OUString lcl_dbg_out(SwOutlineNodes const & rNodes)
 {
     OUString aStr("[\n");
 
@@ -791,7 +791,7 @@ static OUString lcl_dbg_out(SwOutlineNodes & rNodes)
     return aStr;
 }
 
-const char * dbg_out(SwOutlineNodes & rNodes)
+const char * dbg_out( SwOutlineNodes const & rNodes)
 {
     return dbg_out(lcl_dbg_out(rNodes));
 }

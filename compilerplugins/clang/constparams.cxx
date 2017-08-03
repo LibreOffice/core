@@ -161,6 +161,8 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             || name == "PyUNO_setattr"
             || name == "PyUNOStruct_setattr"
             || name == "PyUNOStruct_getattr"
+            || name == "GoNext"
+            || name == "GoPrevious"
              // #ifdef win32
             || name == "convert_slashes"
                 // UNO component entry points

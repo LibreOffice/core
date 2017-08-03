@@ -139,7 +139,7 @@ public:
     bool GoEndWord();
     bool GoNextWord();
     bool GoPrevWord();
-    bool SelectWord( SwViewShell* pViewShell, const Point* pPt );
+    bool SelectWord( SwViewShell const * pViewShell, const Point* pPt );
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
@@ -150,7 +150,7 @@ public:
     bool GoEndWordWT( sal_Int16 nWordType );
     bool GoNextWordWT( sal_Int16 nWordType );
     bool GoPrevWordWT( sal_Int16 nWordType );
-    bool SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt );
+    bool SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType, const Point* pPt );
 
     enum SentenceMoveType
     {
@@ -167,7 +167,7 @@ public:
 
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor );
-    bool UpDown( bool bUp, sal_uInt16 nCnt, Point* pPt, long nUpDownX );
+    bool UpDown( bool bUp, sal_uInt16 nCnt, Point const * pPt, long nUpDownX );
     bool LeftRightMargin( bool bLeftMargin, bool bAPI );
     bool IsAtLeftRightMargin( bool bLeftMargin, bool bAPI ) const;
     bool SttEndDoc( bool bSttDoc );

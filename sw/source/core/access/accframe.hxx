@@ -76,9 +76,9 @@ protected:
                              std::list< sw::access::SwAccessibleChild >& rChildren,
                              bool bInPagePreview );
 
-    bool IsEditable( SwViewShell *pVSh ) const;
+    bool IsEditable( SwViewShell const *pVSh ) const;
 
-    bool IsOpaque( SwViewShell *pVSh ) const;
+    bool IsOpaque( SwViewShell const *pVSh ) const;
 
 public:
     bool IsShowing( const SwAccessibleMap& rAccMap,
