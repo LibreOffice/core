@@ -133,7 +133,7 @@
 #define BMP_REGRESSION_MOVING_AVERAGE   "chart2/res/regavg.png"
 
 #define RID_SVXBMP_LAMP_ON              "svx/res/lighton.png"
-#define RID_SVXBMP_LAMP_OFF             "svx/res/light.bmp"
+#define RID_SVXBMP_LAMP_OFF             "svx/res/light.png"
 
 #endif
 
