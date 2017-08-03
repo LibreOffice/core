@@ -134,6 +134,7 @@ public:
                                             const SfxItemSet* pAttrSet,
                                             const css::uno::Reference< css::frame::XFrame >& xViewFrame ) = 0;
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
+    virtual NewCreateTabPage            GetNewTabPageCreatorFunc(sal_uInt16 nId) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
     virtual VclPtr<SfxAbstractInsertObjectDialog> CreateInsertObjectDialog( vcl::Window* pParent, const OUString& rCommand,
             const css::uno::Reference < css::embed::XStorage >& xStor,
