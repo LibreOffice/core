@@ -26,7 +26,6 @@
 
 #include "seinitializer_mscryptimpl.hxx"
 #include "xmlsignature_mscryptimpl.hxx"
-#include "xmlencryption_mscryptimpl.hxx"
 #include "xmlsecuritycontext_mscryptimpl.hxx"
 #include "securityenvironment_mscryptimpl.hxx"
 
@@ -50,8 +49,6 @@ void* SAL_CALL mscrypt_component_getFactory( const sal_Char* pImplName , void* p
             xFactory = XMLSecurityContext_MSCryptImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
         } else if( SecurityEnvironment_MSCryptImpl::impl_getImplementationName().equalsAscii( pImplName ) ) {
             xFactory = SecurityEnvironment_MSCryptImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-        } else if( XMLEncryption_MSCryptImpl::impl_getImplementationName().equalsAscii( pImplName ) ) {
-            xFactory = XMLEncryption_MSCryptImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
         } else if( SEInitializer_MSCryptImpl_getImplementationName().equalsAscii( pImplName ) ) {
             xFactory.set( createSingleFactory(
                 static_cast< XMultiServiceFactory * >( pServiceManager ),
