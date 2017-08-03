@@ -431,6 +431,13 @@ bool Picture::Read(HWPFile & hwpf)
     UpdateBBox(this);
     if( pictype != PICTYPE_DRAW )
         style.cell = reserved3;
+    else
+    {
+        //picinfo.picun read above is unioned with
+        //picinfo.picdraw and so wrote to the hdo pointer
+        //value, which is definitely not useful to us
+        picinfo.picdraw.hdo = nullptr;
+    }
 
     if (follow_block_size != 0)
     {
