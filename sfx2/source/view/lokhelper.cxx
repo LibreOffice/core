@@ -157,6 +157,24 @@ void SfxLokHelper::notifyDialogInvalidation(const OUString& rDialogID)
     }
 }
 
+void SfxLokHelper::notifyDialogChild(const OUString& rDialogID, const OUString& rAction, const Point& rPos)
+{
+    if (SfxLokHelper::getViewsCount() <= 0)
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    const OString aPayload = OString("{ \"dialogId\": \"") + OUStringToOString(rDialogID, RTL_TEXTENCODING_UTF8).getStr() +
+        OString("\", \"action\": \"") + OUStringToOString(rAction, RTL_TEXTENCODING_UTF8).getStr() +
+        OString("\", \"position\": \"") + OString::number(rPos.getX()) + OString(", ") + OString::number(rPos.getY()) +
+        + "\" }";
+
+    while (pViewShell)
+    {
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DIALOG_CHILD, aPayload.getStr());
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 void SfxLokHelper::notifyInvalidation(SfxViewShell* pThisView, const OString& rPayload)
 {
     OStringBuffer aBuf;

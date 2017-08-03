@@ -38,6 +38,7 @@ public:
 
     VclPtr<ToolBox> mpBox;
     tools::Rectangle       maItemEdgeClipRect; // used to clip the common edge between a toolbar item and the border of this window
+    Point maPos; // position of the floating window wrt. parent
 };
 
 FloatingWindow::ImplData::ImplData()
@@ -593,6 +594,17 @@ void FloatingWindow::StateChanged( StateChangedType nType )
 
     SystemWindow::StateChanged( nType );
 
+    if (nType == StateChangedType::InitShow && IsVisible())
+    {
+        Dialog* pParentDlg = GetParentDialog();
+        pParentDlg->InvalidateFloatingWindow(mpImplData->maPos);
+    }
+    else if (!IsVisible())
+    {
+        Dialog* pParentDlg = GetParentDialog();
+        pParentDlg->CloseFloatingWindow();
+    }
+
     if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings();
@@ -667,8 +679,8 @@ void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopu
 
     // compute window position according to flags and arrangement
     sal_uInt16 nArrangeIndex;
-    Point aPos = ImplCalcPos( this, rRect, nFlags, nArrangeIndex );
-    SetPosPixel( aPos );
+    mpImplData->maPos = ImplCalcPos( this, rRect, nFlags, nArrangeIndex );
+    SetPosPixel( mpImplData->maPos );
 
     // set data and display window
     // convert maFloatRect to absolute device coordinates
@@ -714,10 +726,10 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
 
     // retrieve some data from the ToolBox
     tools::Rectangle aRect = nItemId ? pBox->GetItemRect( nItemId ) : pBox->GetOverflowRect();
-    Point aPos;
+
     // convert to parent's screen coordinates
-    aPos = GetParent()->OutputToScreenPixel( GetParent()->AbsoluteScreenToOutputPixel( pBox->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) ) );
-    aRect.SetPos( aPos );
+    mpImplData->maPos = GetParent()->OutputToScreenPixel( GetParent()->AbsoluteScreenToOutputPixel( pBox->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) ) );
+    aRect.SetPos( mpImplData->maPos );
 
     nFlags |=
         FloatWinPopupFlags::AllMouseButtonClose |

@@ -32,6 +32,7 @@ struct GtvLokDialogPrivate
 {
     LOKDocView* lokdocview;
     GtkWidget* pDialogDrawingArea;
+    GtkWidget* pFloatingWin;
 
     guint32 m_nLastButtonPressTime;
     guint32 m_nLastButtonReleaseTime;
@@ -79,6 +80,8 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     GtvLokDialog* pDialog = GTV_LOK_DIALOG(gtk_widget_get_toplevel(pDialogDrawingArea));
     GtvLokDialogPrivate* priv = getPrivate(pDialog);
 
+
+    g_info("panting dialog");
     int nWidth = 1024;
     int nHeight = 768;
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
@@ -324,6 +327,7 @@ gtv_lok_dialog_init(GtvLokDialog* dialog)
 
     GtkWidget* pContentArea = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
     priv->pDialogDrawingArea = gtk_drawing_area_new();
+    priv->pFloatingWin = nullptr;
 
     priv->m_nLastButtonPressTime = 0;
     priv->m_nLastButtonReleaseTime = 0;
@@ -421,13 +425,74 @@ gtv_lok_dialog_class_init(GtvLokDialogClass* klass)
     g_object_class_install_properties (G_OBJECT_CLASS(klass), PROP_LAST, properties);
 }
 
+static void
+gtv_lok_dialog_floating_win_draw(GtkWidget* pDrawingArea, cairo_t* pCairo, gpointer userdata)
+{
+    GtvLokDialog* pDialog = GTV_LOK_DIALOG(userdata);
+    GtvLokDialogPrivate* priv = getPrivate(pDialog);
+
+    g_info("gtv_lok_dialog_floating_win_draw triggered");
+    int nWidth = 800;
+    int nHeight = 600;
+    cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+    unsigned char* pBuffer = cairo_image_surface_get_data(pSurface);
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(priv->lokdocview));
+    pDocument->pClass->paintActiveFloatingWindow(pDocument, priv->dialogid, pBuffer, &nWidth, &nHeight);
+    g_info("Size of floating window: %d x %d", nWidth, nHeight);
+
+    gtk_widget_set_size_request(GTK_WIDGET(pDrawingArea), nWidth, nHeight);
+    gtk_widget_set_size_request(GTK_WIDGET(pDialog), nWidth, nHeight);
+    gtk_window_resize(GTK_WINDOW(pDialog), nWidth, nHeight);
+
+    cairo_surface_flush(pSurface);
+    cairo_surface_mark_dirty(pSurface);
+
+    cairo_set_source_surface(pCairo, pSurface, 0, 0);
+    cairo_paint(pCairo);
+}
+
 void
 gtv_lok_dialog_invalidate(GtvLokDialog* dialog)
 {
-    // trigger a draw on the drawing area
     GtvLokDialogPrivate* priv = getPrivate(dialog);
+
+    // trigger a draw on the dialog drawing area
     gtk_widget_queue_draw(priv->pDialogDrawingArea);
 }
+
+void gtv_lok_dialog_child_invalidate(GtvLokDialog* dialog)
+{
+    g_info("Dialog's floating window invalidate");
+
+    GtvLokDialogPrivate* priv = getPrivate(dialog);
+    // remove any existing floating windows, for now
+    if (priv->pFloatingWin)
+        gtk_widget_destroy(priv->pFloatingWin);
+
+    priv->pFloatingWin = gtk_window_new(GTK_WINDOW_POPUP);
+    GtkWidget* pDrawingArea = gtk_drawing_area_new();
+    gtk_container_add(GTK_CONTAINER(priv->pFloatingWin), pDrawingArea);
+
+    gtk_window_set_transient_for(GTK_WINDOW(priv->pFloatingWin), GTK_WINDOW(dialog));
+    gtk_window_set_position(GTK_WINDOW(priv->pFloatingWin), GTK_WIN_POS_MOUSE);
+    gtk_window_set_destroy_with_parent(GTK_WINDOW(priv->pFloatingWin), true);
+
+    g_signal_connect(G_OBJECT(pDrawingArea), "draw", G_CALLBACK(gtv_lok_dialog_floating_win_draw), dialog);
+
+    gtk_widget_set_size_request(priv->pFloatingWin, 1, 1);
+    gtk_widget_show_all(priv->pFloatingWin);
+    gtk_window_present(GTK_WINDOW(priv->pFloatingWin));
+}
+
+void gtv_lok_dialog_child_close(GtvLokDialog* dialog)
+{
+    g_info("Dialog's floating window close");
+
+    GtvLokDialogPrivate* priv = getPrivate(dialog);
+    if (priv->pFloatingWin)
+        gtk_widget_destroy(priv->pFloatingWin);
+}
+
 
 GtkWidget*
 gtv_lok_dialog_new(LOKDocView* pDocView, const gchar* dialogId)

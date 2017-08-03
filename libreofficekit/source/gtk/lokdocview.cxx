@@ -279,6 +279,7 @@ enum
     PASSWORD_REQUIRED,
     COMMENT,
     DIALOG_INVALIDATE,
+    DIALOG_CHILD,
 
     LAST_SIGNAL
 };
@@ -436,6 +437,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_COMMENT";
     case LOK_CALLBACK_DIALOG_INVALIDATE:
         return "LOK_CALLBACK_DIALOG_INVALIDATE";
+    case LOK_CALLBACK_DIALOG_CHILD:
+        return "LOK_CALLBACK_DIALOG_CHILD";
     }
     g_assert(false);
     return nullptr;
@@ -1408,6 +1411,9 @@ callback (gpointer pData)
         break;
     case LOK_CALLBACK_DIALOG_INVALIDATE:
         g_signal_emit(pCallback->m_pDocView, doc_view_signals[DIALOG_INVALIDATE], 0, pCallback->m_aPayload.c_str());
+        break;
+    case LOK_CALLBACK_DIALOG_CHILD:
+        g_signal_emit(pCallback->m_pDocView, doc_view_signals[DIALOG_CHILD], 0, pCallback->m_aPayload.c_str());
         break;
     default:
         g_assert(false);
@@ -3203,6 +3209,37 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      */
     doc_view_signals[DIALOG_INVALIDATE] =
         g_signal_new("dialog-invalidate",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     nullptr, nullptr,
+                     g_cclosure_marshal_generic,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
+
+    /**
+     * LOKDocView::dialog-child:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @pPayload: JSON described below:
+     *
+     * Invalidation corresponding to dialog's children.
+     * Eg: Floating window etc.
+     *
+     * Payload example:
+     * {
+     *   "dialogID": "SpellDialog",
+     *   "action": "close"
+     * }
+     *
+     * - dialogID is the UNO command of the dialog
+     * - action can be
+     *   - close, means dialog child window is closed now
+     *   - invalidate, means dialog child window is invalidated
+     *     It also means that dialog child window is created if it's the first
+     *     invalidate
+     */
+    doc_view_signals[DIALOG_CHILD] =
+        g_signal_new("dialog-child",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
