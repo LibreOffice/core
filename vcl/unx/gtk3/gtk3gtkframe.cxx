@@ -38,6 +38,7 @@
 #include <rtl/process.h>
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <cppuhelper/exc_hlp.hxx>
