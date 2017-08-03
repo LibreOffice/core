@@ -416,7 +416,7 @@
 #define SIP_SA_EDGENODE2VERTDIST                            NC_("SIP_SA_EDGENODE2VERTDIST", "Vert. spacing object 2")
 #define SIP_SA_EDGENODE1GLUEDIST                            NC_("SIP_SA_EDGENODE1GLUEDIST", "Glue spacing object 1")
 #define SIP_SA_EDGENODE2GLUEDIST                            NC_("SIP_SA_EDGENODE2GLUEDIST", "Glue spacing object 2")
-#define SIP_SA_EDGELINEDELTAANZ                             NC_("SIP_SA_EDGELINEDELTAANZ", "Number of movable lines")
+#define SIP_SA_EDGELINEDELTACOUNT                           NC_("SIP_SA_EDGELINEDELTACOUNT", "Number of movable lines")
 #define SIP_SA_EDGELINE1DELTA                               NC_("SIP_SA_EDGELINE1DELTA", "Offset line 1")
 #define SIP_SA_EDGELINE2DELTA                               NC_("SIP_SA_EDGELINE2DELTA", "Offset line 2")
 #define SIP_SA_EDGELINE3DELTA                               NC_("SIP_SA_EDGELINE3DELTA", "Offset line 3")

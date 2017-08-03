@@ -261,9 +261,9 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
     m_pMtrFldLine3->SaveValue();
 
     // SdrEdgeLineDeltaAnzItem
-    pItem = GetItem( *rAttrs, SDRATTR_EDGELINEDELTAANZ );
+    pItem = GetItem( *rAttrs, SDRATTR_EDGELINEDELTACOUNT );
     if( !pItem )
-        pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINEDELTAANZ );
+        pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINEDELTACOUNT );
     if( pItem )
     {
         sal_uInt16 nValue = static_cast<const SdrEdgeLineDeltaCountItem*>( pItem )->GetValue();
