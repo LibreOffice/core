@@ -87,6 +87,13 @@ SvxOpenGrf_Impl::SvxOpenGrf_Impl(const vcl::Window* pPreferredParent,
     xCtrlAcc.set(xFP, UNO_QUERY);
 }
 
+SvxOpenGrf_Impl::SvxOpenGrf_Impl(const Weld::Window* pPreferredParent)
+    : aFileDlg(ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
+            FileDialogFlags::Graphic, pPreferredParent)
+{
+    uno::Reference < XFilePicker3 > xFP = aFileDlg.GetFilePicker();
+    xCtrlAcc.set(xFP, UNO_QUERY);
+}
 
 SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent)
     : mpImpl(new SvxOpenGrf_Impl(pPreferredParent, ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW))
@@ -97,6 +104,12 @@ SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Wi
 SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, const vcl::Window* pPreferredParent,
                                            sal_Int16 nDialogType)
     : mpImpl(new SvxOpenGrf_Impl(pPreferredParent, nDialogType))
+{
+    mpImpl->aFileDlg.SetTitle(rTitle);
+}
+
+SvxOpenGraphicDialog::SvxOpenGraphicDialog(const OUString& rTitle, const Weld::Window* pPreferredParent)
+    : mpImpl(new SvxOpenGrf_Impl(pPreferredParent))
 {
     mpImpl->aFileDlg.SetTitle(rTitle);
 }

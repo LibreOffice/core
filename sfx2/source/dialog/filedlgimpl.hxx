@@ -175,6 +175,15 @@ namespace sfx2
                                     const OUString& sStandardDir = OUString(),
                                     const css::uno::Sequence< OUString >&   rBlackList = css::uno::Sequence< OUString >()
                                 );
+                                FileDialogHelper_Impl(
+                                    FileDialogHelper* _pAntiImpl,
+                                    const short nDialogType,
+                                    FileDialogFlags nFlags,
+                                    sal_Int16 nDialog,
+                                    const Weld::Window* _pPreferredParentWindow,
+                                    const OUString& sStandardDir = OUString(),
+                                    const css::uno::Sequence< OUString >&   rBlackList = css::uno::Sequence< OUString >()
+                                );
         virtual                 ~FileDialogHelper_Impl() override;
 
         ErrCode                 execute( std::vector<OUString>& rpURLList,

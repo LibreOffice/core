@@ -175,7 +175,7 @@ bool impl_checkHelpLocalePath(OUString const & rpPath)
 /// Check if help//lang folder exist
 bool impl_hasHelpInstalled()
 {
-    if (comphelper::LibreOfficeKit::isActive())
+    if (1 || comphelper::LibreOfficeKit::isActive())
         return false;
 
     static OUString aLocaleStr;

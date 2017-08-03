@@ -1328,6 +1328,7 @@ bool GtkSalFrame::PostEvent(ImplSVEvent* pData)
 
 void GtkSalFrame::SetTitle( const OUString& rTitle )
 {
+    fprintf(stderr, "SetTitle %s\n", OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
     m_aTitle = rTitle;
     if( m_pWindow && ! isChild() )
         gtk_window_set_title( GTK_WINDOW(m_pWindow), OUStringToOString( rTitle, RTL_TEXTENCODING_UTF8 ).getStr() );

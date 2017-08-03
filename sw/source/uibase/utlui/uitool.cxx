@@ -21,6 +21,7 @@
 
 #include <osl/diagnose.h>
 #include <tools/datetime.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -95,6 +96,14 @@ void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit)
 
     rCtrl.SetMin(nMin, FUNIT_TWIP);
     rCtrl.SetMax(nMax, FUNIT_TWIP);
+}
+
+void SetMetric(Weld::MetricSpinButton& rCtrl, FieldUnit eUnit)
+{
+    int nMin, nMax;
+    rCtrl.get_range(nMin, nMax, FUNIT_TWIP);
+    rCtrl.set_unit(eUnit);
+    rCtrl.set_range(nMin, nMax, FUNIT_TWIP);
 }
 
 // Set boxinfo attribute
@@ -701,7 +710,7 @@ void    SetDfltMetric( FieldUnit eMetric, bool bWeb )
     SW_MOD()->ApplyUserMetric(eMetric, bWeb);
 }
 
-sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset )
+sal_Int32 InsertStringSorted(const OUString& rEntry, ListBox& rToFill, sal_Int32 nOffset)
 {
     CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
     const sal_Int32 nCount = rToFill.GetEntryCount();

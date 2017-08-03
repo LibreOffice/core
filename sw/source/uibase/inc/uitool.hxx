@@ -21,6 +21,7 @@
 
 #include <tools/wintypes.hxx>
 #include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 #include <swtypes.hxx>
 #include <swdllapi.h>
 
@@ -39,6 +40,7 @@ class SfxViewFrame;
 
 // switch a metric
 SW_DLLPUBLIC void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit);
+SW_DLLPUBLIC void SetMetric(Weld::MetricSpinButton& rCtrl, FieldUnit eUnit);
 
 // fill BoxInfo attribute
 SW_DLLPUBLIC void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh);

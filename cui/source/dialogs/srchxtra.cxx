@@ -51,7 +51,7 @@ SvxSearchFormatDialog::SvxSearchFormatDialog(vcl::Window* pParent, const SfxItem
     m_nParaAlignPageId = AddTabPage("labelTP_PARA_ALIGN", SvxParaAlignTabPage::Create, nullptr);
     AddTabPage("labelTP_PARA_EXT", SvxExtParagraphTabPage::Create, nullptr);
     AddTabPage("labelTP_PARA_ASIAN", SvxAsianTabPage::Create, nullptr );
-    m_nBackPageId = AddTabPage("background", SvxBackgroundTabPage::Create, nullptr);
+    //TODO m_nBackPageId = AddTabPage("background", SvxBackgroundTabPage::Create, nullptr);
 
     // remove asian tabpages if necessary
     SvtCJKOptions aCJKOptions;
