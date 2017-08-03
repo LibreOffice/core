@@ -3748,6 +3748,32 @@ void SwXTextDocument::notifyDialogInvalidation(const vcl::DialogID& rDialogID)
     SfxLokHelper::notifyDialogInvalidation(rDialogID);
 }
 
+void SwXTextDocument::notifyDialogChild(const vcl::DialogID& rDialogID, const OUString& rAction, const Point& rPos)
+{
+    SfxLokHelper::notifyDialogChild(rDialogID, rAction, rPos);
+}
+
+void SwXTextDocument::paintActiveFloatingWindow(const vcl::DialogID& rDialogID, VirtualDevice& rDevice, int& nWidth, int& nHeight)
+{
+    SfxViewFrame* pViewFrame = pDocShell->GetView()->GetViewFrame();
+    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
+    const SfxSlot* pSlot = pSlotPool->GetUnoSlot(rDialogID);
+    if (!pSlot)
+    {
+        SAL_WARN("lok.dialog", "No slot found for " << rDialogID);
+        return;
+    }
+    SfxChildWindow* pChild = pViewFrame->GetChildWindow(pSlot->GetSlotId());
+    if (!pChild)
+        return;
+
+    Dialog* pDlg = static_cast<Dialog*>(pChild->GetWindow());
+    // register the instance so that vcl::Dialog can emit LOK callbacks
+    const Size aSize = pDlg->PaintActiveFloatingWindow(rDevice);
+    nWidth = aSize.getWidth();
+    nHeight = aSize.getHeight();
+}
+
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);

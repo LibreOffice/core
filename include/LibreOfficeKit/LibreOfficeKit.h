@@ -269,6 +269,8 @@ struct _LibreOfficeKitDocumentClass
     /// WIP
     void (*paintDialog) (LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
 
+    void (*paintActiveFloatingWindow) (LibreOfficeKitDocument* pThis, const char* pDialogId, unsigned char* pBuffer, int* nWidth, int* nHeight);
+
     /// WIP
     void (*postDialogKeyEvent) (LibreOfficeKitDocument* pThis,
                                 const char* pDialogId,
