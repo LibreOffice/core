@@ -51,8 +51,8 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-#define SV_COUNTRY_LANGUAGE_OFFSET 10000    // Max count of formats per country/language
-#define SV_MAX_ANZ_STANDARD_FORMATE  100    // Max count of builtin default formats per CL
+#define SV_COUNTRY_LANGUAGE_OFFSET     10000  // Max count of formats per country/language
+#define SV_MAX_COUNT_STANDARD_FORMATS  100    // Max count of builtin default formats per CL
 
 #define NUMBERFORMAT_ENTRY_NOT_FOUND (sal_uInt32)(0xffffffff)   /// MAX_ULONG
 

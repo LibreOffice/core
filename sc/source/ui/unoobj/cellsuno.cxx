@@ -2166,7 +2166,7 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                         // don't touch number format attribute
                         sal_uLong nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
                         if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
-                             nNewMod <= SV_MAX_ANZ_STANDARD_FORMATE )
+                             nNewMod <= SV_MAX_COUNT_STANDARD_FORMATS )
                         {
                             rFirstItemId = 0;       // don't use ATTR_VALUE_FORMAT value
                         }

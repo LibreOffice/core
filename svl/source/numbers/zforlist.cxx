@@ -83,8 +83,8 @@ using namespace ::std;
 #define ZF_STANDARD_NEWEXTENDED_DATE_DIN_YYYYMMDD 84
 #define ZF_STANDARD_NEWEXTENDED_DATE_WW 85
 
-#define ZF_STANDARD_LOGICAL     SV_MAX_ANZ_STANDARD_FORMATE-1 //  99
-#define ZF_STANDARD_TEXT        SV_MAX_ANZ_STANDARD_FORMATE   // 100
+#define ZF_STANDARD_LOGICAL     SV_MAX_COUNT_STANDARD_FORMATS-1 //  99
+#define ZF_STANDARD_TEXT        SV_MAX_COUNT_STANDARD_FORMATS   // 100
 
 /* Locale that is set if an unknown locale (from another system) is loaded of
  * legacy documents. Can not be SYSTEM because else, for example, a German "DM"
@@ -427,7 +427,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     {
         return ;    // no SYSTEM entries to replace
     }
-    const sal_uInt32 nMaxBuiltin = nCLOffset + SV_MAX_ANZ_STANDARD_FORMATE;
+    const sal_uInt32 nMaxBuiltin = nCLOffset + SV_MAX_COUNT_STANDARD_FORMATS;
     const sal_uInt32 nNextCL = nCLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
     sal_uInt32 nKey;
 
@@ -2241,7 +2241,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         }
         pStdFormat->SetType( css::util::NumberFormat::NUMBER );
         pStdFormat->SetStandard();
-        pStdFormat->SetLastInsertKey( SV_MAX_ANZ_STANDARD_FORMATE, SvNumberformat::FormatterPrivateAccess() );
+        pStdFormat->SetLastInsertKey( SV_MAX_COUNT_STANDARD_FORMATS, SvNumberformat::FormatterPrivateAccess() );
     }
     else
     {
@@ -3052,7 +3052,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
         {
             nCLOffset = ImpGenerateCL(pFormat->GetLanguage());
         }
-        if (nOffset <= SV_MAX_ANZ_STANDARD_FORMATE)     // Std.form.
+        if (nOffset <= SV_MAX_COUNT_STANDARD_FORMATS)     // Std.form.
         {
             nNewKey = nCLOffset + nOffset;
             if (aFTable.find( nNewKey) == aFTable.end())    // not already present
@@ -3142,7 +3142,7 @@ sal_uInt32 SvNumberFormatter::GetFormatForLanguageIfBuiltIn( sal_uInt32 nFormat,
         return nFormat;     // it stays as it is
     }
     sal_uInt32 nOffset = nFormat % SV_COUNTRY_LANGUAGE_OFFSET;  // relative index
-    if ( nOffset > SV_MAX_ANZ_STANDARD_FORMATE )
+    if ( nOffset > SV_MAX_COUNT_STANDARD_FORMATS )
     {
         return nFormat;    // not a built-in format
     }
@@ -3172,7 +3172,7 @@ sal_uInt32 SvNumberFormatter::GetFormatIndex( NfIndexTableOffset nTabOff,
 NfIndexTableOffset SvNumberFormatter::GetIndexTableOffset( sal_uInt32 nFormat ) const
 {
     sal_uInt32 nOffset = nFormat % SV_COUNTRY_LANGUAGE_OFFSET;      // relative index
-    if ( nOffset > SV_MAX_ANZ_STANDARD_FORMATE )
+    if ( nOffset > SV_MAX_COUNT_STANDARD_FORMATS )
     {
         return NF_INDEX_TABLE_ENTRIES;      // not a built-in format
     }
