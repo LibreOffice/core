@@ -321,7 +321,7 @@ static sal_uInt16 lcl_GetCategory( const OUString& rName )
         //  all upper case
         "Database",         // ID_FUNCTION_GRP_DATABASE
         "Date&Time",        // ID_FUNCTION_GRP_DATETIME
-        "Financial",        // ID_FUNCTION_GRP_FINANZ
+        "Financial",        // ID_FUNCTION_GRP_FINANCIAL
         "Information",      // ID_FUNCTION_GRP_INFO
         "Logical",          // ID_FUNCTION_GRP_LOGIC
         "Mathematical",     // ID_FUNCTION_GRP_MATH
