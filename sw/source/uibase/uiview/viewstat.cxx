@@ -77,6 +77,10 @@ void SwView::GetState(SfxItemSet &rSet)
     {
         switch(nWhich)
         {
+        case FN_NAV_ELEMENT:
+            // used to update all instances of this control
+            rSet.InvalidateItem( nWhich );
+        break;
         case FN_EDIT_LINK_DLG:
             if( m_pWrtShell->GetLinkManager().GetLinks().empty() )
                 rSet.DisableItem(nWhich);

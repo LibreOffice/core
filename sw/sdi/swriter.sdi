@@ -4940,23 +4940,6 @@ SfxBoolItem ScrollNavigation FN_SCROLL_NAVIGATION
     GroupId = SfxGroupId::View;
 ]
 
-SfxVoidItem NavigationPopup FN_NAVIGATION_POPUP
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Navigator;
-]
-
 SfxVoidItem ScrollToPrevious FN_SCROLL_PREV
 ()
 [
@@ -4970,7 +4953,7 @@ SfxVoidItem ScrollToPrevious FN_SCROLL_PREV
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Navigator;
 ]
 
@@ -4987,7 +4970,7 @@ SfxVoidItem ScrollToNext FN_SCROLL_NEXT
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Navigator;
 ]
 
@@ -7603,6 +7586,23 @@ SfxUInt16Item JumpToSpecificPage SID_JUMP_TO_SPECIFIC_PAGE
     AutoUpdate = FALSE,
     FastCall = TRUE,
     ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Navigator;
+]
+
+SfxVoidItem NavElement FN_NAV_ELEMENT
+
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,

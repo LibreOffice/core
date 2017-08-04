@@ -2718,9 +2718,9 @@
           <value xml:lang="en-US">Continue previous numbering</value>
         </prop>
       </node>
-      <node oor:name=".uno:NavigationPopup" oor:op="replace">
+      <node oor:name=".uno:NavElement" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Navigate by</value>
+          <value xml:lang="en-US">Navigate By</value>
         </prop>
       </node>
       <node oor:name=".uno:ScrollToPrevious" oor:op="replace">

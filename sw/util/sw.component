@@ -18,6 +18,18 @@
  -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="sw" xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="lo.writer.NavElementToolBoxController"
+      constructor="lo_writer_NavElementToolBoxController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="lo.writer.PreviousScrollToolboxController"
+      constructor="lo_writer_PreviousScrollToolboxController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="lo.writer.NextScrollToolboxController"
+      constructor="lo_writer_NextScrollToolboxController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="SwXAutoTextContainer"
       constructor="SwXAutoTextContainer_get_implementation">
     <service name="com.sun.star.text.AutoTextContainer"/>
