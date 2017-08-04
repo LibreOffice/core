@@ -54,6 +54,7 @@
 #include <vcl/msgbox.hxx>
 
 #include "cfgutil.hxx"
+#include "CommandCategoryListBox.hxx"
 
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
@@ -384,6 +385,7 @@ protected:
     // the top section of the tab page where top level menus and toolbars
     //  are displayed in a listbox
     VclPtr<ListBox>                            m_pTopLevelListBox;
+    VclPtr<CommandCategoryListBox>             m_pCommandCategoryListBox;
 
     // the contents section where the contents of the selected
     // menu or toolbar are displayed
