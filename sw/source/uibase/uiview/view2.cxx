@@ -1011,6 +1011,11 @@ void SwView::Execute(SfxRequest &rReq)
             lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_CJK_LANGUAGE );
         }
         break;
+        case FN_NAV_ELEMENT:
+        {
+            // nothing here on purpose - if removed only the listbox that changed is changed
+        }
+        break;
         case FN_SCROLL_PREV:
         case FN_SCROLL_NEXT:
         {
@@ -1020,17 +1025,6 @@ void SwView::Execute(SfxRequest &rReq)
                 *pbNext = false;
             // #i75416# move the execution of the search to an asynchronously called static link
             Application::PostUserEvent( LINK(this, SwView, MoveNavigationHdl), pbNext );
-        }
-        break;
-        case FN_NAVIGATION_POPUP:
-        {
-            // First make sure that the sidebar is visible
-            GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
-
-            ::sfx2::sidebar::Sidebar::ShowPanel(
-                "SwNavigatorPanel",
-                GetViewFrame()->GetFrame().GetFrameInterface());
-
         }
         break;
         case SID_JUMPTOMARK:

@@ -104,6 +104,8 @@ public:
     static OUString     GetToolTip(bool bNext);
 
     void                GrabFocus() { m_pToolBox->GrabFocus(); }
+
+    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
 
 class SwPreviewZoomControl : public SfxToolBoxControl
