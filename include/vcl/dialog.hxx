@@ -81,6 +81,9 @@ public:
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
     void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
     void LogicMouseMove(const MouseEvent& rMouseEvent);
+    void LogicMouseButtonDownChild(const MouseEvent& rMouseEvent);
+    void LogicMouseButtonUpChild(const MouseEvent& rMouseEvent);
+    void LogicMouseMoveChild(const MouseEvent& rMouseEvent);
 
     void KeyInput(const KeyEvent& rKeyEvent);
     void KeyUp(const KeyEvent& rKeyEvent);
