@@ -4225,7 +4225,7 @@ void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const A
     SbMethod* pMeth = dynamic_cast<SbMethod*>( p );
     if( pMeth == nullptr )
     {
-        // TODO: Check vba behavior concernig missing function
+        // TODO: Check vba behavior concerning missing function
         //StarBASIC::Error( ERRCODE_BASIC_NO_METHOD, aFunctionName );
         throw UnknownPropertyException();
     }
@@ -4263,7 +4263,7 @@ Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
     SbMethod* pMeth = dynamic_cast<SbMethod*>( p );
     if( pMeth == nullptr )
     {
-        // TODO: Check vba behavior concernig missing function
+        // TODO: Check vba behavior concerning missing function
         //StarBASIC::Error( ERRCODE_BASIC_NO_METHOD, aFunctionName );
         throw UnknownPropertyException();
     }
@@ -4318,7 +4318,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
     SbMethod* pMeth = dynamic_cast<SbMethod*>( p );
     if( pMeth == nullptr )
     {
-        // TODO: Check vba behavior concernig missing function
+        // TODO: Check vba behavior concerning missing function
         //StarBASIC::Error( ERRCODE_BASIC_NO_METHOD, aFunctionName );
         return aRet;
     }
