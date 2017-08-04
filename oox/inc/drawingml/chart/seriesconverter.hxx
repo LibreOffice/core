@@ -47,7 +47,7 @@ public:
     /** Converts OOXML data label settings for the passed data point. */
     void                convertFromModel(
                             const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
-                            const TypeGroupConverter& rTypeGroup );
+                            const TypeGroupConverter& rTypeGroup, const PropertySet& rSeriesPropSet );
 };
 
 
