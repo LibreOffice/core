@@ -26,6 +26,7 @@
 
 #include <memory>
 #include <vector>
+#include <ostream>
 
 class SvNumberFormatter;
 
@@ -79,6 +80,23 @@ protected:
     EntriesType m_Entries;
 };
 
+// For use in SAL_DEBUG etc. Output format not guaranteed to be stable.
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ScQueryParamBase& rParam)
+{
+    stream << "{" <<
+        "searchType=" << rParam.eSearchType <<
+        ",hasHeader=" << (rParam.bHasHeader?"YES":"NO") <<
+        ",byRow=" << (rParam.bByRow?"YES":"NO") <<
+        ",inplace=" << (rParam.bInplace?"YES":"NO") <<
+        ",caseSens=" << (rParam.bCaseSens?"YES":"NO") <<
+        ",duplicate=" << (rParam.bDuplicate?"YES":"NO") <<
+        ",rangeLookup=" << (rParam.mbRangeLookup?"YES":"NO") <<
+        "}";
+
+    return stream;
+}
+
 struct ScQueryParamTable
 {
     SCCOL           nCol1;
@@ -91,6 +109,21 @@ struct ScQueryParamTable
     ScQueryParamTable(const ScQueryParamTable& r);
     virtual ~ScQueryParamTable();
 };
+
+// For use in SAL_DEBUG etc. Output format not guaranteed to be stable.
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ScQueryParamTable& rParam)
+{
+    stream << "{" <<
+        "col1=" << rParam.nCol1 <<
+        ",row1=" << rParam.nRow1 <<
+        ",col2=" << rParam.nCol2 <<
+        ",row2=" << rParam.nRow2 <<
+        ",tab=" << rParam.nTab <<
+        "}";
+
+    return stream;
+}
 
 struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamTable
 {
@@ -110,6 +143,22 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamT
     void            ClearDestParams();
     void            MoveToDest();
 };
+
+// For use in SAL_DEBUG etc. Output format not guaranteed to be stable.
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ScQueryParam& rParam)
+{
+    stream << "{" <<
+        "base=" << *(static_cast<const ScQueryParamBase*>(&rParam)) <<
+        ",table=" << *(static_cast<const ScQueryParamTable*>(&rParam)) <<
+        ",destPers=" << (rParam.bDestPers?"YES":"NO") <<
+        ",destTab=" << rParam.nDestTab <<
+        ",destCol=" << rParam.nDestCol <<
+        ",destRow=" << rParam.nDestRow <<
+        "}";
+
+    return stream;
+}
 
 struct ScDBQueryParamBase : public ScQueryParamBase
 {
