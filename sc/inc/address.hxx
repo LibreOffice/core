@@ -24,6 +24,8 @@
 #include <rtl/strbuf.hxx>
 
 #include <limits>
+#include <ostream>
+
 #include "scdllapi.h"
 #include "types.hxx"
 #include <formula/grammar.hxx>
@@ -354,6 +356,18 @@ public:
      */
     OUString GetColRowString() const;
 };
+
+// For use in SAL_DEBUG etc. Output format not guaranteed to be stable.
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT, traits> & stream, const ScAddress& rAddress)
+{
+    stream <<
+        rAddress.Tab() << "!" <<
+        "R" << rAddress.Row() <<
+        "C" << rAddress.Col();
+
+    return stream;
+}
 
 inline void ScAddress::PutInOrder( ScAddress& rAddress )
 {
