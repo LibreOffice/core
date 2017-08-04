@@ -797,6 +797,17 @@ bool SdOutliner::SearchAndReplaceOnce(std::vector<sd::SearchSelection>* pSelecti
         std::vector<::tools::Rectangle> aLogicRects;
         pOutlinerView->GetSelectionRectangles(aLogicRects);
 
+        // convert to twips if in 100thmm (seems as if LibreOfficeKit is based on twips?). Do this
+        // here where we have the only place needing this, *not* in ImpEditView::GetSelectionRectangles
+        // which makes that method unusable for others
+        if (pOutlinerView->GetWindow() && MapUnit::Map100thMM == pOutlinerView->GetWindow()->GetMapMode().GetMapUnit())
+        {
+            for (tools::Rectangle& rRectangle : aLogicRects)
+            {
+                rRectangle = OutputDevice::LogicToLogic(rRectangle, MapUnit::Map100thMM, MapUnit::MapTwip);
+            }
+        }
+
         std::vector<OString> aLogicRectStrings;
         std::transform(aLogicRects.begin(), aLogicRects.end(), std::back_inserter(aLogicRectStrings), [](const ::tools::Rectangle& rRectangle) { return rRectangle.toString(); });
         OString sRectangles = comphelper::string::join("; ", aLogicRectStrings);

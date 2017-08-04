@@ -24,6 +24,7 @@
 #include <svx/svdmodel.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/itempool.hxx>
+#include <editeng/editview.hxx>
 
 
 SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, OutlinerMode nMode )
@@ -92,6 +93,21 @@ const SdrTextObj* SdrOutliner::GetTextObj() const
         return static_cast< SdrTextObj* >( mpTextObj.get() );
     else
         return nullptr;
+}
+
+bool SdrOutliner::hasEditViewCallbacks() const
+{
+    for (size_t a(0); a < GetViewCount(); a++)
+    {
+        OutlinerView* pOutlinerView = GetView(a);
+
+        if (pOutlinerView && pOutlinerView->GetEditView().hasEditViewCallbacks())
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

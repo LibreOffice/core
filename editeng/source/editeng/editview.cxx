@@ -153,8 +153,12 @@ LanguageType EditView::CheckLanguage(
     return nLang;
 }
 
-// class EditView
+// class EditViewCallbacks
+EditViewCallbacks::~EditViewCallbacks()
+{
+}
 
+// class EditView
 EditView::EditView( EditEngine* pEng, vcl::Window* pWindow )
 {
     pImpEditView.reset( new ImpEditView( this, pEng, pWindow ) );
@@ -162,6 +166,16 @@ EditView::EditView( EditEngine* pEng, vcl::Window* pWindow )
 
 EditView::~EditView()
 {
+}
+
+void EditView::setEditViewCallbacks(const EditViewCallbacks* pEditViewCallbacks)
+{
+    pImpEditView->setEditViewCallbacks(pEditViewCallbacks);
+}
+
+bool EditView::hasEditViewCallbacks() const
+{
+    return pImpEditView->hasEditViewCallbacks();
 }
 
 ImpEditEngine* EditView::GetImpEditEngine() const
@@ -187,6 +201,23 @@ tools::Rectangle EditView::GetInvalidateRect() const
         aRect.Top() -= nMore;
         aRect.Bottom() += nMore;
         return aRect;
+    }
+}
+
+void EditView::InvalidateWindow(const tools::Rectangle& rClipRect)
+{
+    if (pImpEditView->hasEditViewCallbacks())
+    {
+        // do not invalidate and trigger a global repaint, but forward
+        // the need for change to the applied EditViewCallback, can e.g.
+        // be used to visualize the active edit text in an OverlayObject
+        pImpEditView->mpEditViewCallbacks->EditViewInvalidate();
+    }
+    else
+    {
+        // classic mode: invalidate and trigger full repaint
+        // of the changed area
+        GetWindow()->Invalidate(rClipRect);
     }
 }
 

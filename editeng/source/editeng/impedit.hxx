@@ -257,6 +257,27 @@ private:
     EditSelection       aEditSelection;
     EEAnchorMode        eAnchorMode;
 
+    /// mechanism to change from the classic refresh mode that simply
+    // invalidates the area where text was changed. When set, the invalidate
+    // and the direct repaint of the Window-plugged EditView will be suppressed.
+    // Instead, a consumer that has registered using a EditViewCallbacks
+    // incarnation has to handle that. Used e.g. to represent the edited text
+    // in Draw/Impres in an OverlayObject which avoids evtl. expensive full
+    // repaints of the EditView(s)
+    const EditViewCallbacks* mpEditViewCallbacks;
+
+    bool hasEditViewCallbacks() const
+    {
+        return nullptr != mpEditViewCallbacks;
+    }
+
+    void setEditViewCallbacks(const EditViewCallbacks* pEditViewCallbacks)
+    {
+        mpEditViewCallbacks = pEditViewCallbacks;
+    }
+
+    void InvalidateAtWindow(const tools::Rectangle& rRect);
+
 protected:
 
     // DragAndDropClient

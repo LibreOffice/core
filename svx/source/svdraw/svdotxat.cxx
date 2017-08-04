@@ -287,8 +287,24 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight()
         if (dynamic_cast<const SdrCaptionObj *>(this) != nullptr) { // this is a hack
             static_cast<SdrCaptionObj*>(this)->ImpRecalcTail();
         }
-        SetChanged();
-        BroadcastObjectChange();
+
+        // to not slow down EditView visualization on Overlay (see
+        // TextEditOverlayObject) it is necessary to suppress the
+        // Invalidates for the deep repaint when the size of the
+        // TextFrame changed (AdjustTextFrameWidthAndHeight returned
+        // true). The ObjectChanges are valid, invalidate will be
+        // done on EndTextEdit anyways
+        const bool bSuppressChangeWhenEditOnOverlay(
+            IsInEditMode() &&
+            GetTextEditOutliner() &&
+            GetTextEditOutliner()->hasEditViewCallbacks());
+
+        if (!bSuppressChangeWhenEditOnOverlay)
+        {
+            SetChanged();
+            BroadcastObjectChange();
+        }
+
         SendUserCall(SdrUserCallType::Resize,aBoundRect0);
     }
     return bRet;
