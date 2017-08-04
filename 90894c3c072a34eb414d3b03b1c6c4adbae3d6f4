@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_14e75a13",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2017-08-04T15:42:16Z",
+      "side": 1,
+      "message": "Sorry for being nitpicking, but you create a whole lot of TextPrimitives. In Principle, charsPosX *is* the DXArray in our sense, and charsPosY will probably be pretty much the same all the time.\nSo I would try to iterate over same charsPosY, collect the charsPosX in a new DXArray and create a single TextPrimitive for the fitting SubString with all those (more than one) characters.\nCreating such a lot of TextPrimitives will work, but is not efficient and not a good base for later converting this geometry to Objects for further use (break object) - you would get one TextObject per character...",
+      "range": {
+        "startLine": 1255,
+        "startChar": 28,
+        "endLine": 1256,
+        "endChar": 87
+      },
+      "revId": "90894c3c072a34eb414d3b03b1c6c4adbae3d6f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
